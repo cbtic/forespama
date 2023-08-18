@@ -11,38 +11,141 @@
 
 ### Enjoying this project? [Buy me a beer 🍺](https://www.buymeacoffee.com/rappasoft)
 
-### Demo Credentials
+Demo
+----
 
-**Admin:** admin@admin.com  
+[Click here for the demo](https://demo.laravel-boilerplate.com)
+---------------------------------------------------------------
+
+* * *
+
+### **Credentials:**
+
+**Admin:**
+
+User: admin@admin.com  
+Password: secret
+
+**User:**
+
+User: user@user.com  
+Password: secret
+
+Download
+--------
+
+[View on GitHub](https://github.com/rappasoft/laravel-boilerplate) [Download Laravel Boilerplate](https://github.com/rappasoft/laravel-boilerplate/archive/master.zip)
+
+Installation
+------------
+
+### 1\. Download
+
+Download the files above and place on your server.
+
+### 2\. Environment Files
+
+This package ships with a **.env.example** file in the root of the project.
+
+You must rename this file to just **.env**
+
+**Note:** Make sure you have hidden files shown on your system.
+
+### 3\. Composer
+
+Laravel project dependencies are managed through the [PHP Composer tool](http://getcomposer.org). The first step is to install the depencencies by navigating into your project in terminal and typing this command:
+
+`composer install`
+
+### 4\. NPM/Yarn
+
+In order to install the Javascript packages for frontend development, you will need the [Node Package Manager](https://www.npmjs.com/), and optionally the [Yarn Package Manager](https://code.facebook.com/posts/1840075619545360) by Facebook (Recommended)
+
+If you only have NPM installed you have to run this command from the root of the project:
+
+`npm install`
+
+If you have Yarn installed, run this instead from the root of the project:
+
+`yarn`
+
+### 5\. Create Database
+
+You must create your database on your server and on your **.env** file update the following lines:
+
+`DB_CONNECTION=mysql   DB_HOST=127.0.0.1   DB_PORT=3306   DB_DATABASE=homestead   DB_USERNAME=homestead   DB_PASSWORD=secret`
+
+Change these lines to reflect your new database settings.
+
+### 6\. Artisan Commands
+
+The first thing we are going to do is set the key that Laravel will use when doing encryption.
+
+`php artisan key:generate`
+
+You should see a green message stating your key was successfully generated. As well as you should see the **APP\_KEY** variable in your **.env** file reflected.
+
+It's time to see if your database credentials are correct.
+
+We are going to run the built in migrations to create the database tables:
+
+`php artisan migrate`
+
+You should see a message for each table migrated, if you don't and see errors, than your credentials are most likely not correct.
+
+We are now going to set the administrator account information. To do this you need to navigate to [this file](https://github.com/rappasoft/laravel-boilerplate/blob/master/database/seeds/Auth/UserTableSeeder.php#L25) and change the name/email/password of the Administrator account.
+
+You can delete the other dummy users, but do not delete the administrator account or you will not be able to access the backend.
+
+Now seed the database with:
+
+`php artisan db:seed`
+
+You should get a message for each file seeded, you should see the information in your database tables.
+
+### 7\. NPM Run '\*'
+
+Now that you have the database tables and default rows, you need to build the styles and scripts.
+
+These files are generated using [Laravel Mix](https://laravel.com/docs/6.0/mix), which is a wrapper around many tools, and works off the **webpack.mix.js** in the root of the project.
+
+You can build with:
+
+`npm run <command>`
+
+The available commands are listed at the top of the package.json file under the 'scripts' key.
+
+You will see a lot of information flash on the screen and then be provided with a table at the end explaining what was compiled and where the files live.
+
+At this point you are done, you should be able to hit the project in your local browser and see the project, as well as be able to log in with the administrator and view the backend.
+
+### 8\. PHPUnit
+
+After your project is installed, make sure you run the test suite to make sure all of the parts are working correctly. From the root of your project run:
+
+`phpunit`
+
+You will see a dot(.) appear for each of the hundreds of tests, and then be provided with the amount of passing tests at the end. There should be no failures with a fresh install.
+
+### 9\. Storage:link
+
+After your project is installed you must run this command to link your public storage folder for user avatar uploads:
+
+`php artisan storage:link`
+
+### 10\. Login
+
+After your project is installed and you can access it in a browser, click the login button on the right of the navigation bar.
+
+The administrator credentials are:
+
+**Username:** admin@admin.com
+
 **Password:** secret
 
-**User:** user@user.com  
-**Password:** secret
+You will be automatically redirected to the backend. If you changed these values in the seeder prior, then obviously use the ones you updated to.
 
-### Official Documentation
+What's Next?
+------------
 
-[Click here for the official documentation](http://laravel-boilerplate.com)
-
-### Slack Channel
-
-Please join us in our Slack channel to get faster responses to your questions. Get your invite here: https://laravel-5-boilerplate.herokuapp.com
-
-### Introduction
-
-Laravel Boilerplate provides you with a massive head start on any size web application. Out of the box it has features like a backend built on CoreUI with Spatie/Permission authorization. It has a frontend scaffold built on Bootstrap 4. Other features such as Two Factor Authentication, User/Role management, searchable/sortable tables built on my [Laravel Livewire tables plugin](https://github.com/rappasoft/laravel-livewire-tables), user impersonation, timezone support, multi-lingual support with 20+ built in languages, demo mode, and much more.
-
-### Issues
-
-If you come across any issues please [report them here](https://github.com/rappasoft/laravel-boilerplate/issues).
-
-### Contributing
-
-Thank you for considering contributing to the Laravel Boilerplate project! Please feel free to make any pull requests, or e-mail me a feature request you would like to see in the future to Anthony Rappa at rappa819@gmail.com.
-
-### Security Vulnerabilities
-
-If you discover a security vulnerability within this boilerplate, please send an e-mail to Anthony Rappa at rappa819@gmail.com, or create a pull request if possible. All security vulnerabilities will be promptly addressed.
-
-### License
-
-MIT: [http://anthony.mit-license.org](http://anthony.mit-license.org)
+At this point you have all that you need, you can browse the code base and build the rest of your application the way you normally would. Or you can visit the [documentation](../7.0/documentation.html) to get a really good grasp on what's going on behind the scenes.
