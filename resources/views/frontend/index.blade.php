@@ -89,6 +89,9 @@
             </div><!--top-right-->
 
             <div class="content">
+                <a href='http://google.com/' data-intro='Hello step one!'>Paso 1</a>
+                <h2 data-tooltip="tooltip text">Test the tooltip</h2>
+
                 <div id="calendar"></div>
                 @include('includes.partials.messages')
 
@@ -96,6 +99,7 @@
                     <example-component></example-component>
                 </div><!--title-->
 
+                <a href='http://google.com/' data-intro='Hello step Two!'>Paso 2</a>
                 <div class="links">
                     <a href="http://laravel-boilerplate.com" target="_blank"><i class="fa fa-book"></i> @lang('Docs')</a>
                     <a href="https://github.com/rappasoft/laravel-boilerplate" target="_blank"><i class="fab fa-github"></i> GitHub</a>
@@ -104,6 +108,10 @@
         </div><!--app-->
 
         @stack('before-scripts')
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/intro.js/7.2.0/intro.min.js"></script>
+        <script lang="javascript">
+            introJs().start();
+        </script>
         <script src="{{ mix('js/manifest.js') }}"></script>
         <script src="{{ mix('js/vendor.js') }}"></script>
         <script src="{{ mix('js/frontend.js') }}"></script>

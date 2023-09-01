@@ -29,6 +29,13 @@ window.listPlugin = listPlugin;
 
 import Vue from 'vue';
 
+import introPlugin from 'intro.js';
+window.introPlugin = introPlugin;
+
+var tooltip = require('tooltip')
+ 
+tooltip()
+
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
