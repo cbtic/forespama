@@ -4,6 +4,9 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
+// CoreUI
+require('@coreui/coreui');
+
 require('../bootstrap');
 require('../plugins');
 
