@@ -89,6 +89,7 @@
             </div><!--top-right-->
 
             <div class="content">
+                <div id="calendar"></div>
                 @include('includes.partials.messages')
 
                 <div class="title m-b-md">
