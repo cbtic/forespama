@@ -175,7 +175,7 @@
     "Account Deleted": "Cuenta borrada",
     "Copyright": "Derechos de autor",
     "All Rights Reserved": "Todos los derechos reservados",
-    "Powered by": "Energizado por",
+    "Powered by": "Creado por",
     "System": "Sistema",
     "Access": "Acceso",
     "Welcome :Name": "Bienvenido :Name",
@@ -187,5 +187,24 @@
     "You can not set a password that you have previously used within the last 3 times.": "No puede establecer una contraseña que haya utilizado anteriormente en las últimas 3 veces.",
     "These credentials do not match our records.": "Estas credenciales no coinciden con nuestros registros.",
     "Editing :role": "Edición :role",
-    "Home": "Hogar"
+    "Home": "Hogar",
+	
+	"Sistema" : "Sistema Aserradero",
+	
+	"Materia Prima" : "Materia Prima",
+	"Ingreso Camion" : "Ingreso de Camiones",
+	"Cubicaje Tronco" : "Cubicaje de Troncos",
+	
+	"Acerrado" : "Acerrado",
+	
+	"Control Mantenimiento" : "Control Mant. Maquinaria",
+	
+	"Almacenes" : "Almacenes",
+	
+	"Consultas" : "Consultas",
+	
+	"Reportes" : "Reportes"
+	
+	
+	
 }
