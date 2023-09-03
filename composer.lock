@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "627da25a700db7139b06b3e470a4c975",
+    "content-hash": "8248d963aada9aa38fec3f40fe763ad0",
     "packages": [
         {
             "name": "arcanedev/log-viewer",
@@ -7533,6 +7533,61 @@
                 "source": "https://github.com/webmozarts/assert/tree/1.11.0"
             },
             "time": "2022-06-03T18:03:27+00:00"
+        },
+        {
+            "name": "yish/scaffold",
+            "version": "1.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Mombuyish/Scaffold.git",
+                "reference": "ede9317a399464a7df5cf60db199b59aebbb8371"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Mombuyish/Scaffold/zipball/ede9317a399464a7df5cf60db199b59aebbb8371",
+                "reference": "ede9317a399464a7df5cf60db199b59aebbb8371",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/console": "5.*|^6.0|^7.0|^8.0",
+                "illuminate/filesystem": "5.*|^6.0|^7.0|^8.0",
+                "illuminate/support": "5.*|^6.0|^7.0|^8.0",
+                "php": ">=7"
+            },
+            "type": "library",
+            "extra": {
+                "component": "package",
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                },
+                "laravel": {
+                    "providers": [
+                        "Yish\\Scaffold\\ScaffoldServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Yish\\Scaffold\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Yish",
+                    "email": "mombuartworks@gmail.com"
+                }
+            ],
+            "description": "Super fast build CRUD resource for Laravel.",
+            "support": {
+                "issues": "https://github.com/Mombuyish/Scaffold/issues",
+                "source": "https://github.com/Mombuyish/Scaffold/tree/1.1.1"
+            },
+            "abandoned": true,
+            "time": "2020-09-09T04:56:16+00:00"
         }
     ],
     "packages-dev": [
@@ -12311,5 +12366,5 @@
         "php": "^7.4|^8.0"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.0.0"
+    "plugin-api-version": "2.3.0"
 }
