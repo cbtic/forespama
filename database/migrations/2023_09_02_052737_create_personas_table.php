@@ -18,9 +18,9 @@ class CreatePersonasTable extends Migration
             $table->bigIncrements('id');            
             $table->enum('tipo_documento', ['DNI', 'CARNET_EXTRANJERIA', 'PASAPORTE', 'CEDULA', 'PTP/PTEP']);
             $table->string('numero_documento');
-            $table->string('nombres');
             $table->string('apellido_paterno');
             $table->string('apellido_materno');
+            $table->string('nombres');
             $table->date('fecha_nacimiento');
             $table->enum('sexo', ['F', 'M']);
             $table->string('estado',1)->default('1');

@@ -14,13 +14,13 @@ class CreateVehiculosTable extends Migration
     public function up()
     {
         Schema::create('vehiculos', function (Blueprint $table) {
-            $table->id();
-			$table->string('placa',10)->nullable();
-            $table->integer('ejes')->nullable()->default(2);
+            $table->bigIncrements('id');
+			$table->string('placa',10);
+            $table->integer('ejes');
             $table->integer('peso_tracto')->nullable()->default(2);
             $table->integer('peso_carreta')->nullable()->default(2);
             $table->integer('peso_seco')->nullable()->default(2);
-			$table->string('estado',1)->nullable()->default('1');
+			$table->string('estado',1)->default('1');
             $table->timestamps();
         });
     }

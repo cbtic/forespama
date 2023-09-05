@@ -14,13 +14,13 @@ class CreateTablasMaestrasTable extends Migration
     public function up()
     {
         Schema::create('tablas_maestras', function (Blueprint $table) {
-            $table->id();
-			$table->string('tipo',50)->nullable();
-			$table->string('denominacion',100)->nullable();
-			$table->bigInteger('orden')->unsigned()->index();
-			$table->string('estado',1)->nullable();
+            $table->bigIncrements('id');
+			$table->string('tipo',50);
+			$table->string('denominacion',100);
+			$table->bigInteger('orden')->nullable();			
 			$table->string('codigo',3)->nullable();
 			$table->string('tipo_nombre',100)->nullable();
+            $table->string('estado',1)->default('1');
             $table->timestamps();
         });
     }

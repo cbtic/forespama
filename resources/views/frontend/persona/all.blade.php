@@ -210,20 +210,7 @@
                             <th>Numero Documento</th>
 							<th>Persona</th>
 							<th>Foto</th>
-							<th>C&oacute;digo</th>
-							<th>Ocupaci&oacute;n</th>
-                            <th>Ruc</th>
 							<th>Estado</th>
-							<th width="10%">Acciones</th>
-							@hasanyrole('cajero y balanza|cajero')
-							<script type="text/javascript">var flagAccion=false</script>
-							@else
-							<!--<th class="text-left">Acciones</th>-->
-							<script type="text/javascript">var flagAccion=true</script>
-							@endhasanyrole
-							<th width="5%">Flag Negativo</th>
-							<th width="5%">Vacunas</th>
-							<th width="5%">Carnet de Sanidad</th>
                         </tr>
                         </thead>
                         <tbody>

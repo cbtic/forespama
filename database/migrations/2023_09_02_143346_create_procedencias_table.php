@@ -14,9 +14,10 @@ class CreateProcedenciasTable extends Migration
     public function up()
     {
         Schema::create('procedencias', function (Blueprint $table) {
-            $table->id();
-			$table->string('nombre');
+            $table->bigIncrements('id');
+			$table->string('denominacion')->nullable();
 			$table->string('ubigeo',6);
+            $table->string('estado',1)->default('1');
             $table->timestamps();
         });
     }

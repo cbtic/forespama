@@ -14,15 +14,15 @@ class CreateIngresoVehiculoTroncoTipoMaderasTable extends Migration
     public function up()
     {
         Schema::create('ingreso_vehiculo_tronco_tipo_maderas', function (Blueprint $table) {
-            $table->id();
-            $table->bigInteger('ingreso_vehiculo_troncos_id')->unsigned()->index();
-            $table->bigInteger('tipo_maderas_id')->unsigned()->index();
+            $table->bigIncrements('id');
+            $table->bigInteger('id_ingreso_vehiculo_troncos')->unsigned()->index();
+            $table->bigInteger('id_tipo_maderas')->unsigned()->index();
             $table->double('cantidad',15,8);
-			$table->string('estado');
+			$table->string('estado',1)->default('1');
             $table->timestamps();
             //Foreign Keys
-            $table->foreign('ingreso_vehiculo_troncos_id')->references('id')->on('ingreso_vehiculo_troncos');
-            $table->foreign('tipo_maderas_id')->references('id')->on('tipo_maderas');
+            $table->foreign('id_ingreso_vehiculo_troncos')->references('id')->on('ingreso_vehiculo_troncos');
+            $table->foreign('id_tipo_maderas')->references('id')->on('tipo_maderas');
         });
     }
 

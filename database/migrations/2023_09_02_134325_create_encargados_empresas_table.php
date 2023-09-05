@@ -14,13 +14,14 @@ class CreateEncargadosEmpresasTable extends Migration
     public function up()
     {
         Schema::create('encargados_empresas', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
-            $table->bigInteger('personas_id')->unsigned()->index();
-            $table->bigInteger('empresas_id')->unsigned()->index();
+            $table->bigIncrements('id');            
+            $table->bigInteger('id_personas')->unsigned()->index();
+            $table->bigInteger('id_empresas')->unsigned()->index();
+            $table->string('estado',1)->default('1');
             //Foreign Keys
-            $table->foreign('personas_id')->references('id')->on('personas');
-            $table->foreign('empresas_id')->references('id')->on('empresas');
+            $table->foreign('id_personas')->references('id')->on('personas');
+            $table->foreign('id_empresas')->references('id')->on('empresas');
+            $table->timestamps();
         });
     }
 

@@ -14,12 +14,13 @@ class CreateEmpresasTable extends Migration
     public function up()
     {
         Schema::create('empresas', function (Blueprint $table) {
-            $table->id();
+            $table->bigIncrements('id');
             $table->string('ruc');
             $table->string('nombre_comercial');
             $table->string('razon_social');
             $table->string('direccion');
             $table->string('representante');
+            $table->string('estado',1)->default('1');
             $table->timestamps();
         });
     }
