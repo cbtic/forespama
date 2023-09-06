@@ -28,3 +28,5 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => 'admin'], f
 });
 
 Route::resource('conductores', 'App\Http\Controllers\ConductoresController');
+
+Route::resource('tablas_maestras', 'App\Http\Controllers\TablasMaestrasController');
