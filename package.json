@@ -33,6 +33,13 @@
         "vue-template-compiler": "^2.6.10"
     },
     "dependencies": {
+        "@fullcalendar/core": "^6.1.8",
+        "@fullcalendar/daygrid": "^6.1.8",
+        "@fullcalendar/interaction": "^6.1.8",
+        "@fullcalendar/list": "^6.1.8",
+        "@fullcalendar/timegrid": "^6.1.8",
+        "intro.js": "^7.2.0",
+        "tooltip": "^1.6.1",
         "yarn": "^1.22.19"
     }
 }

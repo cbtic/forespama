@@ -1,0 +1,35 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+class CreateEncargadosTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('encargados', function (Blueprint $table) {
+            $table->id();
+            $table->bigInteger('personas_id')->unsigned()->index();
+            $table->string('estado');
+            $table->timestamps();
+            //Foreign Keys
+            $table->foreign('personas_id')->references('id')->on('personas');
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::dropIfExists('encargados');
+    }
+}
