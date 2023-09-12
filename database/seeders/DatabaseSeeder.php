@@ -28,6 +28,8 @@ class DatabaseSeeder extends Seeder
         $this->call(AuthSeeder::class);
         $this->call(AnnouncementSeeder::class);
 
+        $this->call(PostSeeder::class);
+
         Model::reguard();
     }
 }
