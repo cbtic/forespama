@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "627da25a700db7139b06b3e470a4c975",
+    "content-hash": "6c9d1690f97c42287678aeec3a0fa9a1",
     "packages": [
         {
             "name": "arcanedev/log-viewer",
@@ -8062,6 +8062,7 @@
                 "validation",
                 "versioning"
             ],
+<<<<<<< HEAD
             "support": {
                 "irc": "ircs://irc.libera.chat:6697/composer",
                 "issues": "https://github.com/composer/semver/issues",
@@ -8081,6 +8082,8 @@
                     "type": "tidelift"
                 }
             ],
+=======
+>>>>>>> 61a79572bc318fcc81a10bb52cca44fa9a6eaf3d
             "time": "2023-08-31T09:50:34+00:00"
         },
         {
@@ -9195,6 +9198,7 @@
             "time": "2020-07-09T08:09:16+00:00"
         },
         {
+<<<<<<< HEAD
             "name": "jean85/pretty-package-versions",
             "version": "2.0.5",
             "source": {
@@ -9223,11 +9227,41 @@
             "extra": {
                 "branch-alias": {
                     "dev-master": "1.x-dev"
+=======
+            "name": "jeroenzwart/laravel-csv-seeder",
+            "version": "v1.6.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jeroenzwart/laravel-csv-seeder.git",
+                "reference": "5b2e094edf96ab0994f16538c521bc5b06c0943a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jeroenzwart/laravel-csv-seeder/zipball/5b2e094edf96ab0994f16538c521bc5b06c0943a",
+                "reference": "5b2e094edf96ab0994f16538c521bc5b06c0943a",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/database": ">=5.0",
+                "illuminate/support": ">=5.0",
+                "php": ">=5.4.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "JeroenZwart\\CsvSeeder\\CsvSeederServiceProvider"
+                    ]
+>>>>>>> 61a79572bc318fcc81a10bb52cca44fa9a6eaf3d
                 }
             },
             "autoload": {
                 "psr-4": {
+<<<<<<< HEAD
                     "Jean85\\": "src/"
+=======
+                    "JeroenZwart\\CsvSeeder\\": "src/"
+>>>>>>> 61a79572bc318fcc81a10bb52cca44fa9a6eaf3d
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -9236,6 +9270,7 @@
             ],
             "authors": [
                 {
+<<<<<<< HEAD
                     "name": "Alessandro Lai",
                     "email": "alessandro.lai85@gmail.com"
                 }
@@ -9252,6 +9287,24 @@
                 "source": "https://github.com/Jean85/pretty-package-versions/tree/2.0.5"
             },
             "time": "2021-10-08T21:21:46+00:00"
+=======
+                    "name": "Jeroen Zwart",
+                    "email": "mailme@jeroenzwart.nl"
+                }
+            ],
+            "description": "Seed the database with Laravel using CSV files",
+            "homepage": "https://github.com/jeroenzwart/laravel-csv-seeder",
+            "keywords": [
+                "csv",
+                "excel",
+                "laravel",
+                "seed",
+                "seeder",
+                "seeding",
+                "seeds"
+            ],
+            "time": "2021-12-11T16:29:20+00:00"
+>>>>>>> 61a79572bc318fcc81a10bb52cca44fa9a6eaf3d
         },
         {
             "name": "laravel/sail",
@@ -11006,6 +11059,7 @@
             "keywords": [
                 "dev"
             ],
+<<<<<<< HEAD
             "support": {
                 "issues": "https://github.com/Roave/SecurityAdvisories/issues",
                 "source": "https://github.com/Roave/SecurityAdvisories/tree/latest"
@@ -11020,6 +11074,8 @@
                     "type": "tidelift"
                 }
             ],
+=======
+>>>>>>> 61a79572bc318fcc81a10bb52cca44fa9a6eaf3d
             "time": "2023-08-31T19:04:14+00:00"
         },
         {
@@ -12310,6 +12366,10 @@
     "platform": {
         "php": "^7.4|^8.0"
     },
+<<<<<<< HEAD
     "platform-dev": [],
     "plugin-api-version": "2.6.0"
+=======
+    "platform-dev": []
+>>>>>>> 61a79572bc318fcc81a10bb52cca44fa9a6eaf3d
 }

@@ -14,12 +14,12 @@ class CreateEncargadosTable extends Migration
     public function up()
     {
         Schema::create('encargados', function (Blueprint $table) {
-            $table->id();
-            $table->bigInteger('personas_id')->unsigned()->index();
-            $table->string('estado');
+            $table->bigIncrements('id');
+            $table->bigInteger('id_personas')->unsigned()->index();
+            $table->string('estado',1)->default('1');
             $table->timestamps();
             //Foreign Keys
-            $table->foreign('personas_id')->references('id')->on('personas');
+            $table->foreign('id_personas')->references('id')->on('personas');
         });
     }
 
