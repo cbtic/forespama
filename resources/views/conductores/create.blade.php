@@ -10,9 +10,12 @@
                     <div class="card-body">
                         <x-form>
                                 <x-form-input name="licencia" label="Licencia" />
+                                <x-form-input name="name" label="Persona" />
                                 <x-form-select name="estado" :options="$options" label="Estado" />
 
-                                <x-form-submit />
+                                <x-form-submit>
+                                    <span class="text-green-500">Grabar</span>
+                                </x-form-submit>
                         </x-form>
                     </div>
                 </div>
