@@ -16,7 +16,8 @@ class ConductoreController extends Controller
 
     public function create()
     {
-        return view('conductores.create');
+        $options = ['ACTIVO', 'CANCELADO'];
+        return view('conductores.create', compact('options'));
     }
 
     public function store(ConductoreRequest $request)
