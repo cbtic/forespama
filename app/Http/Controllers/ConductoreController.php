@@ -20,10 +20,12 @@ class ConductoreController extends Controller
         return view('conductores.create', compact('options'));
     }
 
-    public function store()
-    // public function store(ConductoreRequest $request)
+    // public function store()
+    public function store(ConductoreRequest $request)
     {
         // Conductore::create($request->all());
+
+        dd('Conductore', $request->all());
 
         return redirect()->route('admin.conductores.index');
     }
