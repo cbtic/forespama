@@ -20,11 +20,12 @@ class ConductoreController extends Controller
         return view('conductores.create', compact('options'));
     }
 
-    public function store(ConductoreRequest $request)
+    public function store()
+    // public function store(ConductoreRequest $request)
     {
-        Conductore::create($request->all());
+        // Conductore::create($request->all());
 
-        return redirect()->route('conductores.index');
+        return redirect()->route('admin.conductores.index');
     }
 
     public function edit(Conductore $conductore)
@@ -36,7 +37,7 @@ class ConductoreController extends Controller
     {
         $conductore->update($request->all());
 
-        return redirect()->route('conductores.show', $conductore->id);
+        return redirect()->route('admin.conductores.show', $conductore->id);
     }
 
     public function show(Conductore $conductore)
@@ -48,6 +49,6 @@ class ConductoreController extends Controller
     {
         $conductore->delete();
 
-        return redirect()->route('conductores.index');
+        return redirect()->route('admin.conductores.index');
     }
 }

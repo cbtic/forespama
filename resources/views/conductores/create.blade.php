@@ -8,7 +8,7 @@
                     <div class="card-header">Create Conductore</div>
 
                     <div class="card-body">
-                        <x-form :action="route('conductores.store')" >
+                        <x-form :action="route('admin.conductores.store')" >
                                 <x-form-input name="licencia" label="Licencia" />
                                 <x-form-input name="name" label="Persona" />
                                 <x-form-select name="estado" :options="$options" label="Estado" />
