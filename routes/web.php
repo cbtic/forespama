@@ -27,6 +27,4 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => 'admin'], f
     includeRouteFiles(__DIR__.'/backend/');
 });
 
-Route::resource('conductores', 'App\Http\Controllers\ConductoreController');
-
 // Route::resource('conductores', 'ConductoreController');
