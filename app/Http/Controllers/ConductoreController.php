@@ -16,7 +16,7 @@ class ConductoreController extends Controller
 
     public function create()
     {
-        $options = ['ACTIVO', 'CANCELADO'];
+        $options = ['ACTIVO' => 'ACTIVO', 'CANCELADO' => 'CANCELADO'];
         return view('conductores.create', compact('options'));
     }
 
@@ -26,6 +26,7 @@ class ConductoreController extends Controller
         // Conductore::create($request->all());
         $data = request()->validate([
             'licencia' => 'required',
+            'estado' => 'required',
         ]);
 
         dd('Conductore', $data);
