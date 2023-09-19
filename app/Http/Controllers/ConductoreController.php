@@ -16,16 +16,20 @@ class ConductoreController extends Controller
 
     public function create()
     {
-        $options = ['ACTIVO', 'CANCELADO'];
+        $options = ['ACTIVO' => 'ACTIVO', 'CANCELADO' => 'CANCELADO'];
         return view('conductores.create', compact('options'));
     }
 
     // public function store()
-    public function store(ConductoreRequest $request)
+    public function store()
     {
         // Conductore::create($request->all());
+        $data = request()->validate([
+            'licencia' => 'required',
+            'estado' => 'required',
+        ]);
 
-        dd('Conductore', $request->all());
+        dd('Conductore', $data);
 
         return redirect()->route('admin.conductores.index');
     }
