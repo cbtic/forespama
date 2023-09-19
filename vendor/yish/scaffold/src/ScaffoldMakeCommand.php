@@ -203,7 +203,7 @@ class ScaffoldMakeCommand extends Command
     {
         $name = Str::plural(Str::snake(class_basename($this->argument('class'))));
 
-
+        // Listado de campos del Modelo/Schema.
         $array_fields = array_reverse(array_diff(Schema::getColumnListing($name), ["created_at", "updated_at"]));
         $validate_data_fields = '';
         $create_data_fields = '';
