@@ -1,0 +1,2 @@
+
+Route::resource('PluralSnakeClass', 'App\Http\Controllers\ControllerClass');
