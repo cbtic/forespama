@@ -4,6 +4,7 @@ namespace Yish\Scaffold;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Str;
+use PhpParser\Node\Stmt\Switch_;
 use Schema;
 use Symfony\Component\Console\Input\InputInterface;
 
@@ -267,8 +268,8 @@ class ScaffoldMakeCommand extends Command
 
         $array_fields = $this->argument('fields');
 
-        $fake_value_array = [
-            "string" => "name",
+        $basic_fake_value_array = [
+            "string" => 'text($maxNbChars = 20)',
             "integer" => "randomNumber(1, 10)",
             "bigInteger" => "randomNumber(1, 10000)",
             "float" => "randomFloat(NULL, 1, 10)",
@@ -279,7 +280,35 @@ class ScaffoldMakeCommand extends Command
         foreach(array_reverse($array_fields) as $field) {
             $split_content = explode('//', $contenido);
             $column = explode(":", $field);
-            $insertar='            \''.$column[0].'\' => $this->faker->' . $fake_value_array[$column[1]] .',';
+
+            if ( in_array($column[0],["nombre","name"]) ) {
+                    $insertar = '            \''.$column[0].'\' => $this->faker->name,';
+                } else if ( in_array($column[0],["denominacion","descripcion","texto","description"]) ) {
+                    $insertar = '            \''.$column[0].'\' => $this->faker->text($maxNbChars = '.$column[2].'),';
+                } else if ( in_array($column[0],["email","mail","correo"]) ) {
+                    $insertar = '            \''.$column[0].'\' => $this->faker->email,';
+                } else if ( in_array($column[0],["telefono","phone","celular"]) ) {
+                    $insertar = '            \''.$column[0].'\' => $this->faker->e164PhoneNumber,';
+                } else if ( in_array($column[0],["direccion","address","ubicacion"]) ) {
+                    $insertar = '            \''.$column[0].'\' => $this->faker->streetAddress,';
+                } else if ( in_array($column[0],["longitude","long","lon"]) ) {
+                    $insertar = '            \''.$column[0].'\' => $this->faker->longitude,';
+                } else if ( in_array($column[0],["latitude","lat"]) ) {
+                    $insertar = '            \''.$column[0].'\' => $this->faker->latitude,';
+                } else if ( in_array($column[0],["ciudad","city"]) ) {
+                    $insertar = '            \''.$column[0].'\' => $this->faker->city,';
+                } else if ( in_array($column[0],["pais","country"]) ) {
+                    $insertar = '            \''.$column[0].'\' => $this->faker->country,';
+                } else if ( in_array($column[0],["orden"]) ) {
+                    $insertar = '            \''.$column[0].'\' => $this->faker->randomNumber(1, 100),';
+                } else if ( in_array($column[0],["codigo","code"]) ) {
+                    $insertar = '            \''.$column[0].'\' => $this->faker->regexify(\'[A-Z0-9]*'.$column[2].'\'),';
+                } else if ( in_array($column[0],["username","nombreusuario","nombre_usuario"]) ) {
+                    $insertar = '            \''.$column[0].'\' => $this->faker->userName,';
+                } else {
+                    $insertar = '            \''.$column[0].'\' => $this->faker->' . $basic_fake_value_array[$column[1]] .',';
+                }
+
             $contenido=$split_content[0].'//'.PHP_EOL.$insertar.$split_content[1];
         }
 
