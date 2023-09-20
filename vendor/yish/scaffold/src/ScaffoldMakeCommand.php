@@ -302,9 +302,19 @@ class ScaffoldMakeCommand extends Command
                 } else if ( in_array($column[0],["orden"]) ) {
                     $insertar = '            \''.$column[0].'\' => $this->faker->randomNumber(1, 100),';
                 } else if ( in_array($column[0],["codigo","code"]) ) {
-                    $insertar = '            \''.$column[0].'\' => $this->faker->regexify(\'[A-Z0-9]*'.$column[2].'\'),';
+                    $insertar = '            \''.$column[0].'\' => $this->faker->regexify(\'[A-Z0-9]{'.$column[2].'}\'),';
                 } else if ( in_array($column[0],["username","nombreusuario","nombre_usuario"]) ) {
                     $insertar = '            \''.$column[0].'\' => $this->faker->userName,';
+                } else if ( $column[2] != '' ) {
+                    if ($column[1] == 'string') {
+                        if (intval($column[1]) > 4) {
+                            $insertar = '            \''.$column[0].'\' => $this->faker->text($maxNbChars = '.$column[2].'),';
+                        } else {
+                            $insertar = '            \''.$column[0].'\' => $this->faker->regexify(\'[A-Z0-9]{'.$column[2].'}\'),';
+                        }
+                    } elseif ($column[1] == 'float'){
+                        $insertar = '            \''.$column[0].'\' => $this->faker->randomFloat(NULL, 1, '.$column[3].'),';
+                    }
                 } else {
                     $insertar = '            \''.$column[0].'\' => $this->faker->' . $basic_fake_value_array[$column[1]] .',';
                 }
