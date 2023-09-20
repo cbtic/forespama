@@ -267,10 +267,19 @@ class ScaffoldMakeCommand extends Command
 
         $array_fields = $this->argument('fields');
 
+        $fake_value_array = [
+            "string" => "name",
+            "integer" => "randomNumber(1, 10)",
+            "bigInteger" => "randomNumber(1, 10000)",
+            "float" => "randomFloat(NULL, 1, 10)",
+            "boolean" => "randomElement(True, False]",
+            "date" => "dateTime()",
+        ];
+
         foreach(array_reverse($array_fields) as $field) {
             $split_content = explode('//', $contenido);
             $column = explode(":", $field);
-            $insertar='            \''.$column[0].'\' => $this->faker->' . $column[1] .',';
+            $insertar='            \''.$column[0].'\' => $this->faker->' . $fake_value_array[$column[1]] .',';
             $contenido=$split_content[0].'//'.PHP_EOL.$insertar.$split_content[1];
         }
 
