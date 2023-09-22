@@ -20,10 +20,5 @@
             @endforeach
         </div>
 
-        <div class="mt-2">
-            <nav aria-label="Page navigation example">
-                {{ $PluralSnakeClass->links() }}
-            </nav>
-        </div>
     </div>
 @endsection
