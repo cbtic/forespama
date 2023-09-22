@@ -6,9 +6,8 @@
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-header">Edit DummyClass</div>
-
                     <div class="card-body">
-                        <x-form :action="{{ route('PluralSnakeClass.store') }}" >
+                        <x-form :action="route('PluralSnakeClass.store')" >
                             @bind($PluralSnakeClass)
                                 FormFields
                                 <x-form-submit>
