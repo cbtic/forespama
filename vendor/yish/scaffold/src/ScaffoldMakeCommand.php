@@ -119,9 +119,11 @@ class ScaffoldMakeCommand extends Command
         $creating = file_get_contents(__DIR__ . '/stubs/' . $view . '.blade.stub');
         $array_fields = array_reverse(array_diff(Schema::getColumnListing($name), ["created_at", "updated_at"]));
         $html_fields = '';
+        $html_show_fields = '';
 
         foreach ($array_fields as $field) {
             $html_fields .= '                                <x-form-input name="' . $field . '" label="' . $field . '" />'.PHP_EOL;
+            $html_show_fields .= '                                    <p>{{ $'.Str::snake(class_basename($this->argument('class'))).'->' . $field . ' }} </p>'.PHP_EOL;
         }
 
         if (! is_dir(base_path('resources/views/' . $name))) {
@@ -133,7 +135,8 @@ class ScaffoldMakeCommand extends Command
         $cstep2 = str_replace("PluralSnakeClass", $name, $creating);
         $cstep3 = str_replace("SnakeClass", Str::snake(class_basename($this->argument('class'))), $cstep2);
         $cstep4 = str_replace("FormFields", $html_fields, $cstep3);
-        $created = str_replace("DummyClass", $this->argument('class'), $cstep4);
+        $cstep5 = str_replace("ShowFields", $html_show_fields, $cstep4);
+        $created = str_replace("DummyClass", $this->argument('class'), $cstep5);
 
         file_put_contents(base_path('resources/views/' . $name . '/' . $view . '.blade.php'), $created);
     }
