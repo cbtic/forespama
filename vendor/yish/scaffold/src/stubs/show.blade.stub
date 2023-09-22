@@ -11,7 +11,7 @@
                                 <label for="title" class="col-sm-4 col-form-label text-md-right">Title</label>
 
                                 <div class="col-md-6">
-                                    <p>{{ $SnakeClass->id }}</p>
+ShowFields
                                 </div>
                             </div>
 

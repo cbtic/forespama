@@ -109,6 +109,8 @@ class ScaffoldMakeCommand extends Command
 
         $this->insertFactories();
 
+        $this->insertModelCode();
+
         $this->appendRouteFile();
     }
 
@@ -329,6 +331,31 @@ class ScaffoldMakeCommand extends Command
 
         fwrite($f, $contenido);
     }
+
+
+    protected function insertModelCode()
+    {
+        $dir = "app/Models";
+
+        $newest_model = $this->last_file($dir);
+
+        $ruta_model = $dir . '/' . $newest_model;
+
+        $f=fopen($ruta_model, 'r+');
+
+        $contenido = file_get_contents($ruta_model);
+
+        $split_content = explode('}', $contenido);
+
+        $array_fields = array_reverse($this->argument('fields'));
+
+        $insertar = '    protected $fillable = ['.join(",",$array_fields).']';
+
+        $contenido=$split_content[0].$insertar;
+
+        fwrite($f, $contenido);
+    }
+
 
     protected function last_file(String $dir) {
         $latest = array(); $latest["time"] = 0;
