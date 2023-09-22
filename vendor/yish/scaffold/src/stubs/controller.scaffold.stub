@@ -9,7 +9,7 @@ class DummyClassController extends Controller
 {
     public function index()
     {
-        $DummyLowerClass = DummyClass::all()->paginate(10);
+        $DummyLowerClass = DummyClass::all();
 
         return view('DummyLowerClass.index', compact('DummyLowerClass'));
     }
