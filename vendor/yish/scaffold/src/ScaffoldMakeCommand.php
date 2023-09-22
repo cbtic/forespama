@@ -241,11 +241,13 @@ class ScaffoldMakeCommand extends Command
     protected function appendRouteFile()
     {
         $name = Str::plural(Str::snake(class_basename($this->argument('class'))));
+        $name_singular = Str::snake(class_basename($this->argument('class')));
         $controller = Str::studly(class_basename($this->argument('class')));
 
         $rroute_stub = file_get_contents(__DIR__ . '/stubs/routes.stub');
         $rstep2 = str_replace("PluralSnakeClass", $name, $rroute_stub);
-        $route_stub = str_replace("ControllerClass", "{$controller}Controller", $rstep2);
+        $rstep3 = str_replace("DummyLowerClass", $name_singular, $rstep2);
+        $route_stub = str_replace("ControllerClass", "{$controller}Controller", $rstep3);
 
         file_put_contents(
             base_path('routes/' . ($this->option('route') ?: 'web') . '.php'),

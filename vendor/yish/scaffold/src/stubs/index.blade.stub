@@ -13,7 +13,7 @@
                 <a href="{{ route('PluralSnakeClass.show', $SnakeClass->id) }}"
                    class="list-group-item list-group-item-action flex-column align-items-start">
                     <div class="d-flex w-100 justify-content-between">
-                        <h5 class="mb-1">{{ $SnakeClass->title }}</h5>
+                        <h5 class="mb-1">{{ $SnakeClass->id }}</h5>
                         <small>{{ $SnakeClass->created_at->diffForHumans() }}</small>
                     </div>
                 </a>
