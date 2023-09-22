@@ -8,7 +8,7 @@
                     <div class="card-header">Edit DummyClass</div>
                     <div class="card-body">
                         <x-form :action="route('PluralSnakeClass.store')" >
-                            @bind($PluralSnakeClass)
+                            @bind($SnakeClass)
                                 FormFields
                                 <x-form-submit>
                                     <span class="text-green-500">Grabar</span>
