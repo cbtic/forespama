@@ -377,6 +377,12 @@ class ScaffoldMakeCommand extends Command
 
         $insertar = '    protected $fillable = ['.rtrim($insertar,",").'];';
 
+        foreach($belong_to as $key => $val) {
+            $nombre = explode(":",$val);
+            $insertar .= PHP_EOL.PHP_EOL.'    public function '.Str::plural(strtolower($nombre[1])).'() {'.PHP_EOL;
+            $insertar .= '        return $this->belongsTo('.$nombre[1].'::class);'.PHP_EOL.'    }';
+        }
+
         $contenido=$split_content[0].$insertar.PHP_EOL."}";
 
         fwrite($f, $contenido);
