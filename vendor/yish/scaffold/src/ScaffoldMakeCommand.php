@@ -53,7 +53,14 @@ class ScaffoldMakeCommand extends Command
         $f=fopen($ruta_migracion, 'r+');
 
         $contenido = file_get_contents($ruta_migracion);
+
         $array_fields = $this->argument('fields');
+
+        $has_many = preg_grep('/^hasMany:.*/', $array_fields);
+        $belong_to = preg_grep('/^belongsTo:.*/', $array_fields);
+
+        $array_fields = array_diff($array_fields, $has_many);
+        $array_fields = array_diff($array_fields, $belong_to);
 
         foreach(array_reverse($array_fields) as $field) {
             $split_content = explode('$table->id();', $contenido);
@@ -275,6 +282,12 @@ class ScaffoldMakeCommand extends Command
 
         $array_fields = $this->argument('fields');
 
+        $has_many = preg_grep('/^hasMany:.*/', $array_fields);
+        $belong_to = preg_grep('/^belongsTo:.*/', $array_fields);
+
+        $array_fields = array_diff($array_fields, $has_many);
+        $array_fields = array_diff($array_fields, $belong_to);
+
         $basic_fake_value_array = [
             "string" => 'text($maxNbChars = 20)',
             "integer" => "randomNumber(1, 10)",
@@ -337,6 +350,8 @@ class ScaffoldMakeCommand extends Command
     {
         $dir = "app/Models";
 
+        $insertar = "";
+
         $newest_model = $this->last_file($dir);
 
         $ruta_model = $dir . '/' . $newest_model;
@@ -349,9 +364,20 @@ class ScaffoldMakeCommand extends Command
 
         $array_fields = array_reverse($this->argument('fields'));
 
-        $insertar = '    protected $fillable = ['.join(",",$array_fields).']';
+        $has_many = preg_grep('/^hasMany:.*/', $array_fields);
+        $belong_to = preg_grep('/^belongsTo:.*/', $array_fields);
 
-        $contenido=$split_content[0].$insertar;
+        $array_fields = array_diff($array_fields, $has_many);
+        $array_fields = array_diff($array_fields, $belong_to);
+
+        foreach ($array_fields as $field) {
+            $only_field = explode(":",$field);
+            $insertar .= '"'.$only_field[0].'",';
+        }
+
+        $insertar = '    protected $fillable = ['.rtrim($insertar,",").'];';
+
+        $contenido=$split_content[0].$insertar.PHP_EOL."}";
 
         fwrite($f, $contenido);
     }
