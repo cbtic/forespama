@@ -57,10 +57,12 @@ class ScaffoldMakeCommand extends Command
         $array_fields = $this->argument('fields');
 
         $has_many = preg_grep('/^hasMany:.*/', $array_fields);
-        $belong_to = preg_grep('/^belongsTo:.*/', $array_fields);
+        $belongs_to = preg_grep('/^belongsTo:.*/', $array_fields);
+        $belongs_to_many = preg_grep('/^belongsToMany:.*/', $array_fields);
 
         $array_fields = array_diff($array_fields, $has_many);
-        $array_fields = array_diff($array_fields, $belong_to);
+        $array_fields = array_diff($array_fields, $belongs_to);
+        $array_fields = array_diff($array_fields, $belongs_to_many);
 
         foreach(array_reverse($array_fields) as $field) {
             $split_content = explode('$table->id();', $contenido);
@@ -104,6 +106,53 @@ class ScaffoldMakeCommand extends Command
 
             $contenido=$split_content[0].'$table->id();'.PHP_EOL.$insertar.$split_content[1];
         }
+
+        foreach ($has_many as $this_has_many) {
+            $split_content = explode('$table->timestamps();', $contenido);
+
+            $has = explode(":",$this_has_many);
+            $insertar = '            $table->integer(\''.$has[2].'\')->unsigned()->index()->nullable();'.PHP_EOL;
+            $insertar .= '            $table->foreign(\''.$has[2].'\')->references(\'id\')->on(\''.Str::plural(strtolower($has[1])).'\');  '.PHP_EOL;
+
+            $contenido=$split_content[0].'$table->timestamps();'.PHP_EOL.$insertar.$split_content[1];
+        }
+
+        foreach ($belongs_to as $this_belong_to) {
+            $split_content = explode('$table->timestamps();', $contenido);
+
+            $belong = explode(":",$this_belong_to);
+            $insertar = '            $table->integer(\''.$belong[1].'\')->unsigned()->index()->nullable();'.PHP_EOL;
+            $insertar .= '            $table->foreign(\''.$belong[1].'\')->references(\'id\')->on(\''.Str::plural(strtolower($belong[1])).'\');  '.PHP_EOL;
+
+            $contenido=$split_content[0].'$table->timestamps();'.PHP_EOL.$insertar.$split_content[1];
+        }
+
+        foreach ($belongs_to_many as $this_belong_to) {
+            $split_content = explode('});', $contenido);
+
+            $belong = explode(":",$this_belong_to);
+
+            $belong_mix = explode('-',$belong[1]);
+
+            $mix = str_replace("-", "_", $belong[1]);
+
+            $insertar = PHP_EOL.'        Schema::create(\''.$mix.'\', function (Blueprint $table) {'.PHP_EOL;
+
+            $insertar .= '            $table->increments(\'id\');'.PHP_EOL;
+
+            $insertar .= '            $table->integer(\''.$belong_mix[0].'_id\')->unsigned()->index();'.PHP_EOL;
+
+            $insertar .= '            $table->foreign(\''.$belong_mix[0].'_id\')->references(\'id\')->on(\''.Str::plural($belong_mix[0]).'\')->onDelete(\'cascade\');'.PHP_EOL;
+
+            $insertar .= '            $table->integer(\''.$belong_mix[1].'_id\')->unsigned()->index();'.PHP_EOL;
+
+            $insertar .= '            $table->foreign(\''.$belong_mix[1].'_id\')->references(\'id\')->on(\''.Str::plural($belong_mix[1]).'\')->onDelete(\'cascade\');'.PHP_EOL;
+
+            $insertar .= '        });'.PHP_EOL;
+
+            $contenido=$split_content[0].'});'.PHP_EOL.$insertar.$split_content[1];
+        }
+
         fwrite($f, $contenido);
 
         $this->ask('Revisar migration (Enter para continuar): '.$ruta_migracion);
@@ -283,10 +332,12 @@ class ScaffoldMakeCommand extends Command
         $array_fields = $this->argument('fields');
 
         $has_many = preg_grep('/^hasMany:.*/', $array_fields);
-        $belong_to = preg_grep('/^belongsTo:.*/', $array_fields);
+        $belongs_to = preg_grep('/^belongsTo:.*/', $array_fields);
+        $belongs_to_many = preg_grep('/^belongsToMany:.*/', $array_fields);
 
         $array_fields = array_diff($array_fields, $has_many);
-        $array_fields = array_diff($array_fields, $belong_to);
+        $array_fields = array_diff($array_fields, $belongs_to);
+        $array_fields = array_diff($array_fields, $belongs_to_many);
 
         $basic_fake_value_array = [
             "string" => 'text($maxNbChars = 20)',
@@ -365,10 +416,12 @@ class ScaffoldMakeCommand extends Command
         $array_fields = array_reverse($this->argument('fields'));
 
         $has_many = preg_grep('/^hasMany:.*/', $array_fields);
-        $belong_to = preg_grep('/^belongsTo:.*/', $array_fields);
+        $belongs_to = preg_grep('/^belongsTo:.*/', $array_fields);
+        $belongs_to_many = preg_grep('/^belongsToMany:.*/', $array_fields);
 
         $array_fields = array_diff($array_fields, $has_many);
-        $array_fields = array_diff($array_fields, $belong_to);
+        $array_fields = array_diff($array_fields, $belongs_to);
+        $array_fields = array_diff($array_fields, $belongs_to_many);
 
         foreach ($array_fields as $field) {
             $only_field = explode(":",$field);
@@ -377,7 +430,7 @@ class ScaffoldMakeCommand extends Command
 
         $insertar = '    protected $fillable = ['.rtrim($insertar,",").'];';
 
-        foreach($belong_to as $key => $val) {
+        foreach($belongs_to as $key => $val) {
             $nombre = explode(":",$val);
             $insertar .= PHP_EOL.PHP_EOL.'    public function '.Str::plural(strtolower($nombre[1])).'() {'.PHP_EOL;
             $insertar .= '        return $this->belongsTo('.$nombre[1].'::class);'.PHP_EOL.'    }';
