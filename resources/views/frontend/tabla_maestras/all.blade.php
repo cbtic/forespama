@@ -118,16 +118,21 @@
 				<div class="row" style="padding:20px 20px 0px 20px;">
 
 					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<input class="form-control form-control-sm" id="tipo" name="tipo" placeholder="Tipo de documento">
+						<input class="form-control form-control-sm" id="tipo" name="tipo" placeholder="Tipo de valor">
 					</div>
 					<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
 						<input class="form-control form-control-sm" id="codigo" name="codigo" placeholder="Codigo">
 					</div>
+					<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+						<input class="form-control form-control-sm" id="tipo_nombre" name="tipo_nombre" placeholder="Tipo Codigo">
+					</div>
 					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
 						<select name="estado" id="estado" class="form-control form-control-sm">
 							<option value="">Todos</option>
-							<option value="1" selected="selected">Activo</option>
-							<option value="0">Eliminado</option>
+							<option value="A" selected="selected">Activo</option>
+							<option value="C">Cancelado</option>
+							<option value="E">Eliminado</option>
+							<option value="O">Opcional</option>
 						</select>
 					</div>
 					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12" style="padding-right:0px">

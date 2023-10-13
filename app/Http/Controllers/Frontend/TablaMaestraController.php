@@ -90,11 +90,11 @@ class TablaMaestraController extends Controller
 
 		$tabla_maestras_model = new TablaMaestra;
 		$p[]=$request->tipo;
-		$p[]=$request->denominacion;
-		$p[]=$request->orden;
 		$p[]=$request->estado;
 		$p[]=$request->codigo;
 		$p[]=$request->tipo_nombre;
+		$p[]=$request->NumeroPagina;
+		$p[]=$request->NumeroRegistros;
 		$data = $tabla_maestras_model->listar_tabla_maestras_ajax($p);
 		$iTotalDisplayRecords = isset($data[0]->totalrows)?$data[0]->totalrows:0;
 
