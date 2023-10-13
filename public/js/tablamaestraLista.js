@@ -13,6 +13,7 @@ $(document).ready(function() {
 
     datatablenew();
 
+    /*
     $("#plan_id").select2();
     $("#ubicacion_id").select2();
 
@@ -23,13 +24,16 @@ $(document).ready(function() {
         changeYear: true,
     });
 
+	*/
     //$("#fecha_vencimiento").datepicker($.datepicker.regional["es"]);
+    /*
     $('#fecha_vencimiento').datepicker({
         autoclose: true,
         dateFormat: 'dd/mm/yy',
         changeMonth: true,
         changeYear: true,
     });
+	*/
 
     /*
     $('#tblAlquiler').dataTable({
@@ -596,7 +600,7 @@ function modalTablamaestra(id) {
     $('#openOverlayOpc .modal-body').css('height', 'auto');
 
     $.ajax({
-        url: "/persona/modal_persona/" + id,
+        url: "/persona/modal_tablamaestras/" + id,
         type: "GET",
         success: function(result) {
             $("#diveditpregOpc").html(result);
