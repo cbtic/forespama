@@ -74,7 +74,7 @@
 @section('breadcrumb')
 <ol class="breadcrumb" style="padding-left:130px;margin-top:0px;background-color:#283659">
         <li class="breadcrumb-item text-primary">Inicio</li>
-            <li class="breadcrumb-item active">Consulta de Personas</li>
+            <li class="breadcrumb-item active">Consulta de Tabla Maestras</li>
         </li>
     </ol>
 @endsection
@@ -108,7 +108,7 @@
             <div class="card">
                 <div class="card-header">
                     <strong>
-                        Lista de Personas
+                        Lista de Tabla Maestras
                     </strong>
                 </div><!--card-header-->
 

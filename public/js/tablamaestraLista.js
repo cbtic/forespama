@@ -211,7 +211,7 @@ function obtenerPersona() {
     $('#persona_id').val("");
 
     $.ajax({
-        url: '/persona/obtener_persona/' + tipo_documento + '/' + denominacion,
+        url: '/tabla_maestras/obtener_persona/' + tipo_documento + '/' + denominacion,
         dataType: "json",
         success: function(result) {
             var nombre_persona = result.persona.apellido_paterno + " " + result.persona.apellido_materno + ", " + result.persona.nombres;
@@ -252,7 +252,7 @@ function obtenerTitularActual(tipo_documento, denominacion) {
     $('#titular_id').val("");
 
     $.ajax({
-        url: '/persona/obtener_persona/' + tipo_documento + '/' + denominacion,
+        url: '/tabla_maestras/obtener_persona/' + tipo_documento + '/' + denominacion,
         dataType: "json",
         success: function(result) {
             var nombre_titular = result.persona.apellido_paterno + " " + result.persona.apellido_materno + ", " + result.persona.nombres;
@@ -283,7 +283,7 @@ function obtenerTitular() {
     $('#titular_id').val("");
 
     $.ajax({
-        url: '/persona/obtener_persona/' + tipo_documento + '/' + denominacion,
+        url: '/tabla_maestras/obtener_persona/' + tipo_documento + '/' + denominacion,
         dataType: "json",
         success: function(result) {
             var nombre_titular = result.persona.apellido_paterno + " " + result.persona.apellido_materno + ", " + result.persona.nombres;
@@ -600,7 +600,7 @@ function modalTablamaestra(id) {
     $('#openOverlayOpc .modal-body').css('height', 'auto');
 
     $.ajax({
-        url: "/persona/modal_tablamaestras/" + id,
+        url: "/tabla_maestras/modal_tablamaestras/" + id,
         type: "GET",
         success: function(result) {
             $("#diveditpregOpc").html(result);
@@ -636,7 +636,7 @@ function eliminarTablamaestra(id, estado) {
 function fn_eliminar_persona(id, estado) {
 
     $.ajax({
-        url: "/persona/eliminar_persona/" + id + "/" + estado,
+        url: "/tabla_maestras/eliminar_persona/" + id + "/" + estado,
         type: "GET",
         success: function(result) {
             //if(result="success")obtenerPlanDetalle(id_plan);

@@ -8,6 +8,28 @@ use DB;
 
 class TablaMaestra extends Model
 {
+    protected $fillable = ['tipo', 'denominacion', 'orden', 'estado', 'codigo', 'tipo_nombre'];
+
+    // contantes SEXO
+    const NC = 'NC';
+    const ND = 'ND';
+    const GUIA = 'GUIA';
+    const DOC_RELA = 'DOC_RELA';
+    const TIPO_OPE = 'TIPO_OPE';
+    const TIPO_IGV = 'TIPO_IGV';
+    const UNIDADES = 'UNIDADES';
+    const CODIGOBYS = 'CODIGOBYS';
+    const ESTADO_BALANZA = 'ESTADO BALANZA';
+    const G_DOC_RELA = 'G_DOC_RELA';
+    const MOTIVO_T = 'MOTIVO_T';
+    const MODAL_T = 'MODAL_T';
+    const SERIES = 'SERIES';
+    const CAJA = 'CAJA';
+    const BALANZA = 'BALANZA';
+    const CARRETA = 'CARRETA';
+    const ESPACIO = 'ESPACIO';
+    const ESTACIONAMIENTO = 'ESTACIONAMIENTO';
+
     use HasFactory;
 
 	public function listar_tabla_maestras_ajax($p){
