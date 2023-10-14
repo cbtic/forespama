@@ -565,11 +565,11 @@ function datatablenew() {
                 "mRender": function(data, type, row) {
                     var estado = "";
                     var clase = "";
-                    if (row.estado == 1) {
+                    if (row.estado == 'A') {
                         estado = "Eliminar";
                         clase = "btn-danger";
                     }
-                    if (row.estado == 0) {
+                    if (row.estado == 'C') {
                         estado = "Activar";
                         clase = "btn-success";
                     }
@@ -613,30 +613,30 @@ function modalTablamaestra(id) {
 
 function eliminarTablamaestra(id, estado) {
     var act_estado = "";
-    if (estado == 1) {
+    if (estado == 'A') {
         act_estado = "Eliminar";
-        estado_ = 0;
+        estado_ = 'C';
     }
-    if (estado == 0) {
+    if (estado == 'C') {
         act_estado = "Activar";
-        estado_ = 1;
+        estado_ = 'A';
     }
     bootbox.confirm({
         size: "small",
         message: "&iquest;Deseas " + act_estado + " este valor?",
         callback: function(result) {
             if (result == true) {
-                fn_eliminar_persona(id, estado_);
+                fn_eliminar_tabla_maestra(id, estado_);
             }
         }
     });
     $(".modal-dialog").css("width", "30%");
 }
 
-function fn_eliminar_persona(id, estado) {
+function fn_eliminar_tabla_maestra(id, estado) {
 
     $.ajax({
-        url: "/tabla_maestras/eliminar_persona/" + id + "/" + estado,
+        url: "/tabla_maestras/eliminar_tabla_maestra/" + id + "/" + estado,
         type: "GET",
         success: function(result) {
             //if(result="success")obtenerPlanDetalle(id_plan);

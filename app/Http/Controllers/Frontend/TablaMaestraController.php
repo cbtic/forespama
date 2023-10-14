@@ -149,7 +149,7 @@ class TablaMaestraController extends Controller
 		return view('frontend.tabla_maestras.modal_tablamaestras',compact('id','tabla_maestra'));
 	}
 
-	public function eliminar_tablamaestras($id,$estado)
+	public function eliminar_tabla_maestra($id,$estado)
     {
 		$tabla_maestra = TablaMaestra::find($id);
 		$tabla_maestra->estado = $estado;
