@@ -196,21 +196,18 @@ function fn_save(){
 
 	var _token = $('#_token').val();
 	var id  = $('#id').val();
-	var tipo_documento = $('#tipo_documento_').val();
-	var numero_documento = $('#numero_documento_').val();
-	var apellido_paterno = $('#apellido_paterno_').val();
-	var apellido_materno = $('#apellido_materno_').val();
-	var nombres = $('#nombres_').val();
-	var codigo = $('#codigo_').val();
-	var ocupacion = $('#ocupacion_').val();
-	var telefono = $('#telefono_').val();
-	var email = $('#email_').val();
+	var tipo = $('#tipo').val();
+	var denominacion = $('#denominacion').val();
+	var orden = $('#orden').val();
+	var estado = $('#estado').val();
+	var codigo = $('#codigo').val();
+	var tipo_nombre = $('#tipo_nombre').val();
 
     $.ajax({
-			url: "/persona/send_persona",
+			url: "/tabla_maestras/send",
             type: "POST",
-            data : {_token:_token,id:id,tipo_documento:tipo_documento,numero_documento:numero_documento,apellido_paterno:apellido_paterno,
-					apellido_materno:apellido_materno,nombres:nombres,codigo:codigo,ocupacion:ocupacion,telefono:telefono,email:email},
+            data : {_token:_token,id:id,tipo:tipo,denominacion:denominacion,orden:orden,
+                estado:estado,codigo:codigo,tipo_nombre:tipo_nombre},
             success: function (result) {
 				$('#openOverlayOpc').modal('hide');
 				datatablenew();
@@ -367,7 +364,7 @@ container: '#myModal modal-body'
 					<input type="hidden" name="id" id="id" value="<?php echo $id?>">
 
 					<!--
-					<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+					<div class="col-lg-12 col-md-12 col-sm-12 col-tipo_documentoxs-12">
 						<div class="form-group">
 							<div id="custom-search-input">
 								<div class="input-group">
@@ -383,7 +380,7 @@ container: '#myModal modal-body'
 						<div class="col-lg-6">
 							<div class="form-group" style="padding-top:0px;padding-bottom:0px;margin-top:0px;margin-bottom:0px">
 								<label class="control-label">Tipo</label>
-								<select name="tipo_documento_" id="tipo_documento_" class="form-control form-control-sm">
+								<select name="tipo" id="tipo" class="form-control form-control-sm">
                                     <option value="<?php echo $tabla_maestra::NC?>" <?php if($tabla_maestra::NC==$tabla_maestra->tipo)echo "selected='selected'" ?> ><?php echo $tabla_maestra::NC?></option>
                                     <option value="<?php echo $tabla_maestra::ND?>" <?php if($tabla_maestra::ND==$tabla_maestra->tipo)echo "selected='selected'" ?>><?php echo $tabla_maestra::ND?></option>
                                     <option value="<?php echo $tabla_maestra::GUIA?>" <?php if($tabla_maestra::GUIA==$tabla_maestra->tipo)echo "selected='selected'" ?> ><?php echo $tabla_maestra::GUIA?></option>

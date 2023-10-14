@@ -110,6 +110,37 @@ class TablaMaestraController extends Controller
 
 	}
 
+	public function send(Request $request){
+
+		if($request->id == 0){
+
+			// $tipo=$request->tipo;
+
+			// if($tipo==""){
+			// 	$array_tipo = array('DNI' => 'DNI','CARNET_EXTRANJERIA' => 'CE','PASAPORTE' => 'PAS','RUC' => 'RUC','CEDULA' => 'CED','PTP/PTEP' => 'PTP/PTEP');
+			// 	$codigo = $array_tipo[$request->tipo]."-".$request->numero_documento;
+			// }
+
+			$tabla_maestra = new TablaMaestra;
+			$tabla_maestra->tipo = $request->tipo;
+			$tabla_maestra->denominacion = $request->denominacion;
+			$tabla_maestra->orden = $request->orden;
+			$tabla_maestra->estado = $request->estado;
+			$tabla_maestra->codigo = $request->codigo;
+			$tabla_maestra->tipo_nombre = $request->tipo_nombre;
+			$tabla_maestra->save();
+		}else{
+			$tabla_maestra = TablaMaestra::find($request->id);
+			$tabla_maestra->tipo = $request->tipo;
+			$tabla_maestra->denominacion = $request->denominacion;
+			$tabla_maestra->orden = $request->orden;
+			$tabla_maestra->estado = $request->estado;
+			$tabla_maestra->codigo = $request->codigo;
+			$tabla_maestra->tipo_nombre = $request->tipo_nombre;
+			$tabla_maestra->save();
+		}
+    }
+
 	public function modal_tablamaestras($id){
 
 		if ($id>0) $tabla_maestra = TablaMaestra::find($id);
