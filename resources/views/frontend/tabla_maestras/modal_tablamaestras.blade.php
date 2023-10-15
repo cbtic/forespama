@@ -415,38 +415,29 @@ container: '#myModal modal-body'
 
 					<div class="row">
 
-						<div class="col-lg-12">
+						<div class="col-lg-6">
 							<div class="form-group" style="padding-top:0px;padding-bottom:0px;margin-top:0px;margin-bottom:0px">
 								<label class="control-label">Código</label>
 								<input id="codigo" name="codigo" class="form-control form-control-sm"  value="<?php echo $tabla_maestra->codigo?>" type="text">
 							</div>
 						</div>
 
-					</div>
-
-					<div class="row">
-
-						<div class="col-lg-12">
+						<div class="col-lg-6">
 							<div class="form-group" style="padding-top:0px;padding-bottom:0px;margin-top:0px;margin-bottom:0px">
-								<label class="control-label">Apellido Materno</label>
+								<label class="control-label">Tipo Nombre</label>
 								<input id="tipo_nombre" name="tipo_nombre" class="form-control form-control-sm"  value="<?php echo $tabla_maestra->tipo_nombre?>" type="text">
 							</div>
 						</div>
-
 					</div>
 
 					<div class="row">
 
-						<div class="col-lg-12">
+						<div class="col-lg-6">
 							<div class="form-group" style="padding-top:0px;padding-bottom:0px;margin-top:0px;margin-bottom:0px">
 								<label class="control-label">Orden</label>
 								<input id="orden" name="orden" class="form-control form-control-sm"  value="<?php echo $tabla_maestra->orden?>" type="text">
 							</div>
 						</div>
-
-					</div>
-
-					<div class="row">
 
 						<div class="col-lg-6">
 							<div class="form-group" style="padding-top:0px;padding-bottom:0px;margin-top:0px;margin-bottom:0px">
@@ -454,10 +445,6 @@ container: '#myModal modal-body'
 								<input id="estado" name="estado" class="form-control form-control-sm"  value="<?php echo $tabla_maestra->estado?>" type="text">
 							</div>
 						</div>
-
-						<div class="col-lg-6">
-						</div>
-
 					</div>
 
 					<div style="margin-top:10px" class="form-group">
