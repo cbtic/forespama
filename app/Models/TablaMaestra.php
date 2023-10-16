@@ -30,6 +30,9 @@ class TablaMaestra extends Model
     const ESPACIO = 'ESPACIO';
     const ESTACIONAMIENTO = 'ESTACIONAMIENTO';
 
+    const ACTIVO = 'A';
+    const CANCELADO = 'C';
+
     use HasFactory;
 
 	public function listar_tabla_maestras_ajax($p){

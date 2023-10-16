@@ -131,8 +131,6 @@
 							<option value="">Todos</option>
 							<option value="A" selected="selected">Activo</option>
 							<option value="C">Cancelado</option>
-							<option value="E">Eliminado</option>
-							<option value="O">Opcional</option>
 						</select>
 					</div>
 					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12" style="padding-right:0px">

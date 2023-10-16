@@ -195,13 +195,13 @@ function guardarCita(id_medico,fecha_cita){
 function fn_save(){
 
 	var _token = $('#_token').val();
-	var id  = $('#id').val();
-	var tipo = $('#tipo').val();
-	var denominacion = $('#denominacion').val();
-	var orden = $('#orden').val();
-	var estado = $('#estado').val();
-	var codigo = $('#codigo').val();
-	var tipo_nombre = $('#tipo_nombre').val();
+	var id  = $('#_id').val();
+	var tipo = $('#tipo_').val();
+	var denominacion = $('#denominacion_').val();
+	var orden = $('#orden_').val();
+	var estado = $('#estado_').val();
+	var codigo = $('#codigo_').val();
+	var tipo_nombre = $('#tipo_nombre_').val();
 
     $.ajax({
 			url: "/tabla_maestras/send",
@@ -213,94 +213,6 @@ function fn_save(){
 				datatablenew();
             }
     });
-}
-
-function fn_liberar(id){
-
-	//var id_estacionamiento = $('#id_estacionamiento').val();
-	var _token = $('#_token').val();
-
-    $.ajax({
-			url: "/estacionamiento/liberar_asignacion_estacionamiento_vehiculo",
-            type: "POST",
-            data : {_token:_token,id:id},
-            success: function (result) {
-				$('#openOverlayOpc').modal('hide');
-				cargarAsignarEstacionamiento();
-            }
-    });
-}
-
-
-function validarLiquidacion() {
-
-	var msg = "";
-	var sw = true;
-
-	var saldo_liquidado = $('#saldo_liquidado').val();
-	var estado = $('#estado').val();
-
-	if(saldo_liquidado == "")msg += "Debe ingresar un saldo liquidado <br>";
-	if(estado == "")msg += "Debe ingresar una observacion <br>";
-
-	if(msg!=""){
-		bootbox.alert(msg);
-		//return false;
-	} else {
-		//submitFrm();
-		document.frmLiquidacion.submit();
-	}
-	return false;
-}
-
-
-function obtenerVehiculo(id,obj){
-
-	//$("#tblPlan tbody text-white").attr('class','bg-primary text-white');
-	if(obj!=undefined){
-		$("#tblSinReservaEstacionamiento tbody tr").each(function (ii, oo) {
-			var clase = $(this).attr("clase");
-			$(this).attr('class',clase);
-		});
-
-		$(obj).attr('class','bg-success text-white');
-	}
-	//$('#tblPlanDetalle tbody').html("");
-	$('#id_empresa').val(id);
-	var id_estacionamiento = $('#id_estacionamiento').val();
-	$.ajax({
-		url: '/estacionamiento/obtener_vehiculo/'+id+'/'+id_estacionamiento,
-		dataType: "json",
-		success: function(result){
-
-			var newRow = "";
-			$('#tblPlanDetalle').dataTable().fnDestroy(); //la destruimos
-			$('#tblPlanDetalle tbody').html("");
-			$(result).each(function (ii, oo) {
-				newRow += "<tr class='normal'><td>"+oo.placa+"</td>";
-				newRow += '<td class="text-left" style="padding:0px!important;margin:0px!important">';
-				newRow += '<div class="btn-group btn-group-sm" role="group" aria-label="Log Viewer Actions">';
-				newRow += '<a href="javascript:void(0)" onClick=fn_save("'+oo.id_vehiculo+'") class="btn btn-sm btn-normal">';
-				newRow += '<i class="fa fa-2x fa-check" style="color:green"></i></a></a></div></td></tr>';
-			});
-			$('#tblPlanDetalle tbody').html(newRow);
-
-			$('#tblPlanDetalle').DataTable({
-				//"sPaginationType": "full_numbers",
-				"paging":false,
-				"dom": '<"top">rt<"bottom"flpi><"clear">',
-				"language": {"url": "/js/Spanish.json"},
-			});
-
-			$("#system-search2").keyup(function() {
-				var dataTable = $('#tblPlanDetalle').dataTable();
-			   dataTable.fnFilter(this.value);
-			});
-
-		}
-
-	});
-
 }
 
 /*
@@ -380,7 +292,7 @@ container: '#myModal modal-body'
 						<div class="col-lg-6">
 							<div class="form-group" style="padding-top:0px;padding-bottom:0px;margin-top:0px;margin-bottom:0px">
 								<label class="control-label">Tipo</label>
-								<select name="tipo" id="tipo" class="form-control form-control-sm">
+								<select name="tipo" id="tipo_" class="form-control form-control-sm">
                                     <option value="<?php echo $tabla_maestra::NC?>" <?php if($tabla_maestra::NC==$tabla_maestra->tipo)echo "selected='selected'" ?> ><?php echo $tabla_maestra::NC?></option>
                                     <option value="<?php echo $tabla_maestra::ND?>" <?php if($tabla_maestra::ND==$tabla_maestra->tipo)echo "selected='selected'" ?>><?php echo $tabla_maestra::ND?></option>
                                     <option value="<?php echo $tabla_maestra::GUIA?>" <?php if($tabla_maestra::GUIA==$tabla_maestra->tipo)echo "selected='selected'" ?> ><?php echo $tabla_maestra::GUIA?></option>
@@ -406,7 +318,7 @@ container: '#myModal modal-body'
 						<div class="col-lg-6">
 							<div class="form-group" style="padding-top:0px;padding-bottom:0px;margin-top:0px;margin-bottom:0px">
 								<label class="control-label">Denominación</label>
-								<input id="denominacion" name="denominacion" class="form-control form-control-sm"  value="<?php echo $tabla_maestra->denominacion?>" type="text">
+								<input id="denominacion_" name="denominacion_" class="form-control form-control-sm"  value="<?php echo $tabla_maestra->denominacion?>" type="text">
 							</div>
 						</div>
 
@@ -418,14 +330,14 @@ container: '#myModal modal-body'
 						<div class="col-lg-6">
 							<div class="form-group" style="padding-top:0px;padding-bottom:0px;margin-top:0px;margin-bottom:0px">
 								<label class="control-label">Código</label>
-								<input id="codigo" name="codigo" class="form-control form-control-sm"  value="<?php echo $tabla_maestra->codigo?>" type="text">
+								<input id="codigo_" name="codigo_" class="form-control form-control-sm"  value="<?php echo $tabla_maestra->codigo?>" type="text">
 							</div>
 						</div>
 
 						<div class="col-lg-6">
 							<div class="form-group" style="padding-top:0px;padding-bottom:0px;margin-top:0px;margin-bottom:0px">
 								<label class="control-label">Tipo Nombre</label>
-								<input id="tipo_nombre" name="tipo_nombre" class="form-control form-control-sm"  value="<?php echo $tabla_maestra->tipo_nombre?>" type="text">
+								<input id="tipo_nombre_" name="tipo_nombre_" class="form-control form-control-sm"  value="<?php echo $tabla_maestra->tipo_nombre?>" type="text">
 							</div>
 						</div>
 					</div>
@@ -435,14 +347,17 @@ container: '#myModal modal-body'
 						<div class="col-lg-6">
 							<div class="form-group" style="padding-top:0px;padding-bottom:0px;margin-top:0px;margin-bottom:0px">
 								<label class="control-label">Orden</label>
-								<input id="orden" name="orden" class="form-control form-control-sm"  value="<?php echo $tabla_maestra->orden?>" type="text">
+								<input id="orden_" name="orden_" class="form-control form-control-sm"  value="<?php echo $tabla_maestra->orden?>" type="text">
 							</div>
 						</div>
 
 						<div class="col-lg-6">
 							<div class="form-group" style="padding-top:0px;padding-bottom:0px;margin-top:0px;margin-bottom:0px">
 								<label class="control-label">Estado</label>
-								<input id="estado" name="estado" class="form-control form-control-sm"  value="<?php echo $tabla_maestra->estado?>" type="text">
+								<select name="estado_" id="estado_" class="form-control form-control-sm">
+                                    <option value="<?php echo $tabla_maestra::ACTIVO?>" <?php if($tabla_maestra::ACTIVO==$tabla_maestra->tipo)echo "selected='selected'" ?> >ACTIVO</option>
+                                    <option value="<?php echo $tabla_maestra::CANCELADO?>" <?php if($tabla_maestra::CANCELADO==$tabla_maestra->tipo)echo "selected='selected'" ?>>CANCELADO</option>
+                                </select>
 							</div>
 						</div>
 					</div>
