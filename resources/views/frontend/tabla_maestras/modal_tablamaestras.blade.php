@@ -292,7 +292,7 @@ container: '#myModal modal-body'
 						<div class="col-lg-6">
 							<div class="form-group" style="padding-top:0px;padding-bottom:0px;margin-top:0px;margin-bottom:0px">
 								<label class="control-label">Tipo</label>
-								<select name="tipo" id="tipo_" class="form-control form-control-sm">
+								<select name="tipo_" id="tipo_" class="form-control form-control-sm">
                                     <option value="<?php echo $tabla_maestra::NC?>" <?php if($tabla_maestra::NC==$tabla_maestra->tipo)echo "selected='selected'" ?> ><?php echo $tabla_maestra::NC?></option>
                                     <option value="<?php echo $tabla_maestra::ND?>" <?php if($tabla_maestra::ND==$tabla_maestra->tipo)echo "selected='selected'" ?>><?php echo $tabla_maestra::ND?></option>
                                     <option value="<?php echo $tabla_maestra::GUIA?>" <?php if($tabla_maestra::GUIA==$tabla_maestra->tipo)echo "selected='selected'" ?> ><?php echo $tabla_maestra::GUIA?></option>

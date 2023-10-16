@@ -118,13 +118,33 @@
 				<div class="row" style="padding:20px 20px 0px 20px;">
 
 					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<input class="form-control form-control-sm" id="tipo" name="tipo" placeholder="Tipo de valor">
+                        <select name="tipo" id="tipo" class="form-control form-control-sm">
+                            <option value="">Seleccione Tipo</option>
+                            <option value="<?php echo App\Models\TablaMaestra::NC?>"><?php echo App\Models\TablaMaestra::NC?></option>
+                            <option value="<?php echo App\Models\TablaMaestra::ND?>"><?php echo App\Models\TablaMaestra::ND?></option>
+                            <option value="<?php echo App\Models\TablaMaestra::GUIA?>"><?php echo App\Models\TablaMaestra::GUIA?></option>
+                            <option value="<?php echo App\Models\TablaMaestra::DOC_RELA?>"><?php echo App\Models\TablaMaestra::DOC_RELA?></option>
+                            <option value="<?php echo App\Models\TablaMaestra::TIPO_OPE?>"><?php echo App\Models\TablaMaestra::TIPO_OPE?></option>
+                            <option value="<?php echo App\Models\TablaMaestra::TIPO_IGV?>"><?php echo App\Models\TablaMaestra::TIPO_IGV?></option>
+                            <option value="<?php echo App\Models\TablaMaestra::UNIDADES?>"><?php echo App\Models\TablaMaestra::UNIDADES?></option>
+                            <option value="<?php echo App\Models\TablaMaestra::CODIGOBYS?>"><?php echo App\Models\TablaMaestra::CODIGOBYS?></option>
+                            <option value="<?php echo App\Models\TablaMaestra::ESTADO_BALANZA?>"><?php echo App\Models\TablaMaestra::ESTADO_BALANZA?></option>
+                            <option value="<?php echo App\Models\TablaMaestra::G_DOC_RELA?>"><?php echo App\Models\TablaMaestra::G_DOC_RELA?></option>
+                            <option value="<?php echo App\Models\TablaMaestra::MOTIVO_T?>"><?php echo App\Models\TablaMaestra::MOTIVO_T?></option>
+                            <option value="<?php echo App\Models\TablaMaestra::MODAL_T?>"><?php echo App\Models\TablaMaestra::MODAL_T?></option>
+                            <option value="<?php echo App\Models\TablaMaestra::SERIES?>"><?php echo App\Models\TablaMaestra::SERIES?></option>
+                            <option value="<?php echo App\Models\TablaMaestra::CAJA?>"><?php echo App\Models\TablaMaestra::CAJA?></option>
+                            <option value="<?php echo App\Models\TablaMaestra::BALANZA?>"><?php echo App\Models\TablaMaestra::BALANZA?></option>
+                            <option value="<?php echo App\Models\TablaMaestra::CARRETA?>"><?php echo App\Models\TablaMaestra::CARRETA?></option>
+                            <option value="<?php echo App\Models\TablaMaestra::ESPACIO?>"><?php echo App\Models\TablaMaestra::ESPACIO?></option>
+                            <option value="<?php echo App\Models\TablaMaestra::ESTACIONAMIENTO?>"><?php echo App\Models\TablaMaestra::ESTACIONAMIENTO?></option>
+                        </select>
 					</div>
 					<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
 						<input class="form-control form-control-sm" id="codigo" name="codigo" placeholder="Codigo">
 					</div>
 					<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-						<input class="form-control form-control-sm" id="tipo_nombre" name="tipo_nombre" placeholder="Tipo Codigo">
+						<input class="form-control form-control-sm" id="tipo_nombre" name="tipo_nombre" placeholder="Tipo Nombre">
 					</div>
 					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
 						<select name="estado" id="estado" class="form-control form-control-sm">
