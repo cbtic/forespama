@@ -330,7 +330,7 @@ container: '#myModal modal-body'
 						<div class="col-lg-6">
 							<div class="form-group" style="padding-top:0px;padding-bottom:0px;margin-top:0px;margin-bottom:0px">
 								<label class="control-label">Código</label>
-								<input id="codigo_" name="codigo_" class="form-control form-control-sm"  value="<?php echo $tabla_maestra->codigo?>" type="text">
+								<input id="codigo_" name="codigo_" class="form-control form-control-sm"  value="<?php echo $tabla_maestra->codigo?>" type="text" maxlength="3">
 							</div>
 						</div>
 

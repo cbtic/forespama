@@ -120,24 +120,24 @@
 					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
                         <select name="tipo" id="tipo" class="form-control form-control-sm">
                             <option value="">Seleccione Tipo</option>
-                            <option value="<?php echo App\Models\TablaMaestra::NC?>"><?php echo App\Models\TablaMaestra::NC?></option>
-                            <option value="<?php echo App\Models\TablaMaestra::ND?>"><?php echo App\Models\TablaMaestra::ND?></option>
-                            <option value="<?php echo App\Models\TablaMaestra::GUIA?>"><?php echo App\Models\TablaMaestra::GUIA?></option>
-                            <option value="<?php echo App\Models\TablaMaestra::DOC_RELA?>"><?php echo App\Models\TablaMaestra::DOC_RELA?></option>
-                            <option value="<?php echo App\Models\TablaMaestra::TIPO_OPE?>"><?php echo App\Models\TablaMaestra::TIPO_OPE?></option>
-                            <option value="<?php echo App\Models\TablaMaestra::TIPO_IGV?>"><?php echo App\Models\TablaMaestra::TIPO_IGV?></option>
-                            <option value="<?php echo App\Models\TablaMaestra::UNIDADES?>"><?php echo App\Models\TablaMaestra::UNIDADES?></option>
-                            <option value="<?php echo App\Models\TablaMaestra::CODIGOBYS?>"><?php echo App\Models\TablaMaestra::CODIGOBYS?></option>
-                            <option value="<?php echo App\Models\TablaMaestra::ESTADO_BALANZA?>"><?php echo App\Models\TablaMaestra::ESTADO_BALANZA?></option>
-                            <option value="<?php echo App\Models\TablaMaestra::G_DOC_RELA?>"><?php echo App\Models\TablaMaestra::G_DOC_RELA?></option>
-                            <option value="<?php echo App\Models\TablaMaestra::MOTIVO_T?>"><?php echo App\Models\TablaMaestra::MOTIVO_T?></option>
-                            <option value="<?php echo App\Models\TablaMaestra::MODAL_T?>"><?php echo App\Models\TablaMaestra::MODAL_T?></option>
-                            <option value="<?php echo App\Models\TablaMaestra::SERIES?>"><?php echo App\Models\TablaMaestra::SERIES?></option>
-                            <option value="<?php echo App\Models\TablaMaestra::CAJA?>"><?php echo App\Models\TablaMaestra::CAJA?></option>
-                            <option value="<?php echo App\Models\TablaMaestra::BALANZA?>"><?php echo App\Models\TablaMaestra::BALANZA?></option>
-                            <option value="<?php echo App\Models\TablaMaestra::CARRETA?>"><?php echo App\Models\TablaMaestra::CARRETA?></option>
-                            <option value="<?php echo App\Models\TablaMaestra::ESPACIO?>"><?php echo App\Models\TablaMaestra::ESPACIO?></option>
-                            <option value="<?php echo App\Models\TablaMaestra::ESTACIONAMIENTO?>"><?php echo App\Models\TablaMaestra::ESTACIONAMIENTO?></option>
+                            <option value="{{ \App\Models\TablaMaestra::NC }}">{{ \App\Models\TablaMaestra::NC }}</option>
+                            <option value="{{ \App\Models\TablaMaestra::ND }}">{{ \App\Models\TablaMaestra::ND }}</option>
+                            <option value="{{ \App\Models\TablaMaestra::GUIA }}">{{ \App\Models\TablaMaestra::GUIA }}</option>
+                            <option value="{{ \App\Models\TablaMaestra::DOC_RELA }}">{{ \App\Models\TablaMaestra::DOC_RELA }}</option>
+                            <option value="{{ \App\Models\TablaMaestra::TIPO_OPE }}">{{ \App\Models\TablaMaestra::TIPO_OPE }}</option>
+                            <option value="{{ \App\Models\TablaMaestra::TIPO_IGV }}">{{ \App\Models\TablaMaestra::TIPO_IGV }}</option>
+                            <option value="{{ \App\Models\TablaMaestra::UNIDADES }}">{{ \App\Models\TablaMaestra::UNIDADES }}</option>
+                            <option value="{{ \App\Models\TablaMaestra::CODIGOBYS }}">{{ \App\Models\TablaMaestra::CODIGOBYS }}</option>
+                            <option value="{{ \App\Models\TablaMaestra::ESTADO_BALANZA }}">{{ \App\Models\TablaMaestra::ESTADO_BALANZA }}</option>
+                            <option value="{{ \App\Models\TablaMaestra::G_DOC_RELA }}">{{ \App\Models\TablaMaestra::G_DOC_RELA }}</option>
+                            <option value="{{ \App\Models\TablaMaestra::MOTIVO_T }}">{{ \App\Models\TablaMaestra::MOTIVO_T }}</option>
+                            <option value="{{ \App\Models\TablaMaestra::MODAL_T }}">{{ \App\Models\TablaMaestra::MODAL_T }}</option>
+                            <option value="{{ \App\Models\TablaMaestra::SERIES }}">{{ \App\Models\TablaMaestra::SERIES }}</option>
+                            <option value="{{ \App\Models\TablaMaestra::CAJA }}">{{ \App\Models\TablaMaestra::CAJA }}</option>
+                            <option value="{{ \App\Models\TablaMaestra::BALANZA }}">{{ \App\Models\TablaMaestra::BALANZA }}</option>
+                            <option value="{{ \App\Models\TablaMaestra::CARRETA }}">{{ \App\Models\TablaMaestra::CARRETA }}</option>
+                            <option value="{{ \App\Models\TablaMaestra::ESPACIO }}">{{ \App\Models\TablaMaestra::ESPACIO }}</option>
+                            <option value="{{ \App\Models\TablaMaestra::ESTACIONAMIENTO }}">{{ \App\Models\TablaMaestra::ESTACIONAMIENTO }}</option>
                         </select>
 					</div>
 					<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
