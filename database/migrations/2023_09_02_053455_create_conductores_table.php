@@ -16,7 +16,7 @@ class CreateConductoresTable extends Migration
         Schema::create('conductores', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('personas_id')->unsigned()->index();
-            $table->string('estado');
+            $table->enum('estado', ['ACTIVO', 'CANCELADO']);
             $table->timestamps();
             //Foreign Keys
             $table->foreign('personas_id')->references('id')->on('personas');
