@@ -15,7 +15,6 @@ class CreateConductoresTable extends Migration
     {
         Schema::create('conductores', function (Blueprint $table) {
             $table->id();
-            $table->string('licencia');
             $table->bigInteger('personas_id')->unsigned()->index();
             $table->string('estado');
             $table->timestamps();
