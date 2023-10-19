@@ -10,7 +10,7 @@ class TablaMaestra extends Model
 {
     protected $fillable = ['tipo', 'denominacion', 'orden', 'estado', 'codigo', 'tipo_nombre'];
 
-    // contantes SEXO
+    // contantes TIPO
     const NC = 'NC';
     const ND = 'ND';
     const GUIA = 'GUIA';
