@@ -14,26 +14,18 @@ class CreatePersonasTable extends Migration
     public function up()
     {
         Schema::create('personas', function (Blueprint $table) {
-            $table->id();
-            // $table->bigInteger('area_id')->unsigned()->index();
-            $table->bigInteger('empresa_id')->unsigned()->index();
-            // $table->string('codigo');
-            $table->enum('tipo_documento', ['DNI', 'CARNET_EXTRANJERIA', 'PASAPORTE']);
+
+            $table->bigIncrements('id');            
+            $table->enum('tipo_documento', ['DNI', 'CARNET_EXTRANJERIA', 'PASAPORTE', 'CEDULA', 'PTP/PTEP']);
             $table->string('numero_documento');
-            $table->string('nombres');
             $table->string('apellido_paterno');
             $table->string('apellido_materno');
+            $table->string('nombres');
             $table->date('fecha_nacimiento');
             $table->enum('sexo', ['F', 'M']);
-            $table->string('telefono');
-            $table->string('email');
-            $table->string('carnet_saneamiento');
-            $table->string('foto');
-            $table->string('nro_brevete');
+            $table->string('estado',1)->default('1');
+            
             $table->timestamps();
-            //Foreign Keys
-            // $table->foreign('area_id')->references('id')->on('areas');
-            $table->foreign('empresa_id')->references('id')->on('empresas');
         });
     }
 

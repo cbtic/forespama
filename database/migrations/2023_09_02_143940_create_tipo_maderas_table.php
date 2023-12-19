@@ -14,8 +14,9 @@ class CreateTipoMaderasTable extends Migration
     public function up()
     {
         Schema::create('tipo_maderas', function (Blueprint $table) {
-            $table->id();
-			$table->text('descripcion');
+            $table->bigIncrements('id');
+			$table->text('denominacion');
+            $table->string('estado',1)->default('1');
             $table->timestamps();
         });
     }

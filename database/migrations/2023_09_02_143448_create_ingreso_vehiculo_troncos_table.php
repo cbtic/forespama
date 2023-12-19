@@ -14,24 +14,24 @@ class CreateIngresoVehiculoTroncosTable extends Migration
     public function up()
     {
         Schema::create('ingreso_vehiculo_troncos', function (Blueprint $table) {
-            $table->id();
+            $table->bigIncrements('id');
             $table->date('fecha_ingreso');
             $table->date('fecha_salida');
-            $table->bigInteger('empresa_transportista_id')->unsigned()->index();
-            $table->bigInteger('empresa_proveedor_id')->unsigned()->index();
-            $table->bigInteger('vehiculos_id')->unsigned()->index();
-            $table->bigInteger('conductores_id')->unsigned()->index();
-            $table->bigInteger('encargados_id')->unsigned()->index();
-            $table->bigInteger('procedencias_id')->unsigned()->index();
+            $table->bigInteger('id_empresa_transportista')->unsigned()->index();
+            $table->bigInteger('id_empresa_proveedor')->unsigned()->index();
+            $table->bigInteger('id_vehiculos')->unsigned()->index();
+            $table->bigInteger('id_conductores')->unsigned()->index();
+            $table->bigInteger('id_encargados')->unsigned()->index();
+            $table->bigInteger('id_procedencias')->unsigned()->index();
 			$table->string('guia_numero',10)->nullable();
-			$table->string('estado_ingreso',1)->nullable()->default('1');
+			$table->string('estado_ingreso',1)->default('1');
             $table->timestamps();
             //Foreign Keys
-            $table->foreign('empresa_transportista_id')->references('id')->on('empresas');
-            $table->foreign('empresa_proveedor_id')->references('id')->on('empresas');
-            $table->foreign('vehiculos_id')->references('id')->on('vehiculos');
-            $table->foreign('conductores_id')->references('id')->on('conductores');
-            $table->foreign('encargados_id')->references('id')->on('encargados_empresas');
+            $table->foreign('id_empresa_transportista')->references('id')->on('empresas');
+            $table->foreign('id_empresa_proveedor')->references('id')->on('empresas');
+            $table->foreign('id_vehiculos')->references('id')->on('vehiculos');
+            $table->foreign('id_conductores')->references('id')->on('conductores');
+            $table->foreign('id_encargados')->references('id')->on('encargados_empresas');
         });
     }
 

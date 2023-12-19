@@ -14,16 +14,16 @@ class CreateEmpresasConductoresVehiculosTable extends Migration
     public function up()
     {
         Schema::create('empresas_conductores_vehiculos', function (Blueprint $table) {
-            $table->id();
-            $table->bigInteger('empresas_id')->unsigned()->index();
-            $table->bigInteger('vehiculos_id')->unsigned()->index();
-            $table->bigInteger('conductores_id')->unsigned()->index();
-			$table->string('estado',1)->nullable()->default('1');
+            $table->bigIncrements('id');
+            $table->bigInteger('id_empresas')->unsigned()->index();
+            $table->bigInteger('id_vehiculos')->unsigned()->index();
+            $table->bigInteger('id_conductores')->unsigned()->index();
+			$table->string('estado',1)->default('1');
             $table->timestamps();
             //Foreign Keys
-            $table->foreign('empresas_id')->references('id')->on('empresas');
-            $table->foreign('vehiculos_id')->references('id')->on('vehiculos');
-            $table->foreign('conductores_id')->references('id')->on('conductores');
+            $table->foreign('id_empresas')->references('id')->on('empresas');
+            $table->foreign('id_vehiculos')->references('id')->on('vehiculos');
+            $table->foreign('id_conductores')->references('id')->on('conductores');
         });
     }
 
