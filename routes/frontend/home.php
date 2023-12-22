@@ -6,6 +6,7 @@ use Tabuna\Breadcrumbs\Trail;
 
 use App\Http\Controllers\Frontend\IngresoVehiculoTroncoController;
 use App\Http\Controllers\Frontend\PersonaController;
+use App\Http\Controllers\Frontend\EmpresaController;
 
 /*
  * Frontend Controllers
@@ -32,3 +33,8 @@ Route::get('persona/modal_persona/{id}', [PersonaController::class, 'modal_perso
 Route::post('persona/send_persona', [PersonaController::class, 'send_persona'])->name('persona.send_persona');
 Route::get('persona/eliminar_persona/{id}/{estado}', [PersonaController::class, 'eliminar_persona'])->name('persona.eliminar_persona');
 Route::post('persona/upload', [PersonaController::class, 'upload'])->name('persona.upload');
+
+Route::post('empresa/send_ajax', [EmpresaController::class, 'send_ajax'])->name('empresa.send_ajax');
+Route::post('empresa/send_nueva_empresa_ajax', [EmpresaController::class, 'send_nueva_empresa_ajax'])->name('empresa.send_nueva_empresa_ajax');
+Route::post('empresa/buscar_ajax', [EmpresaController::class, 'buscar_ajax'])->name('empresa.buscar_ajax');
+Route::get('empresa', [EmpresaController::class, 'index'])->name('empresa');
