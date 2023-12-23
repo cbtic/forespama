@@ -29,6 +29,8 @@ class DatabaseSeeder extends Seeder
         $this->call(AnnouncementSeeder::class);
         $this->call(UbigeosSeeder::class);
 
+        $this->call(PostSeeder::class);
+
         Model::reguard();
     }
 }
