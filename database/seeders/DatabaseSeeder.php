@@ -27,9 +27,16 @@ class DatabaseSeeder extends Seeder
 
         $this->call(AuthSeeder::class);
         $this->call(AnnouncementSeeder::class);
+<<<<<<< HEAD
         $this->call(UbigeosSeeder::class);
 
         $this->call(PostSeeder::class);
+=======
+        $this->call(EmpresaSeeder::class);
+        $this->call(PersonaSeeder::class);
+        $this->call(ConductoreSeeder::class);
+        $this->call(TablaMaestraSeeder::class);
+>>>>>>> 9a4f1f2bb159b571d65fee9572af8b1a5a93ac9f
 
         Model::reguard();
     }

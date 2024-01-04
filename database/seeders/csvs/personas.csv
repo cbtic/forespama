@@ -1,0 +1,4 @@
+id;empresa_id;tipo_documento;numero_documento;nombres;apellido_paterno;apellido_materno;fecha_nacimiento;sexo;telefono;email;carnet_saneamiento;foto;nro_brevete
+1;1;DNI;10000001;PEDRO;GUZMAN;BLANCO;1983-05-03;M;999111999;pedro@mail.com;1000001;Foto01.jpg;Q10000001
+2;1;CARNET_EXTRANJERIA;10000002;OSCAR;VELA;NUÑEZ;1988-01-01;M;999222999;oscar@mail.com;1000002;Foto02.jpg;Q10000002
+3;2;PASAPORTE;10000003;LILA;LOPEZ;BENAVENTE;1983-04-05;F;999333999;lila@mail.com;1000003;Foto03.jpg;Q10000003
