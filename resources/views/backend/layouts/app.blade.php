@@ -27,6 +27,7 @@
             <main class="c-main">
                 <div class="container-fluid">
                     <div class="fade-in">
+                        @include('frontend.includes.sidebar')
                         @include('includes.partials.messages')
                         @yield('content')
                     </div><!--fade-in-->
