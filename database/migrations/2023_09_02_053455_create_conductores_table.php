@@ -14,10 +14,9 @@ class CreateConductoresTable extends Migration
     public function up()
     {
         Schema::create('conductores', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->string('licencia');
-            $table->bigInteger('id_personas')->unsigned()->index();
-            $table->string('estado',1)->default('1');
+            $table->id();
+            $table->bigInteger('personas_id')->unsigned()->index();
+            $table->enum('estado', ['ACTIVO', 'CANCELADO']);
             $table->timestamps();
             //Foreign Keys
             $table->foreign('id_personas')->references('id')->on('personas');
