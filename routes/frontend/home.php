@@ -35,6 +35,9 @@ Route::get('tabla_maestras/modal_tablamaestras/{id}', [TablaMaestraController::c
 Route::get('tabla_maestras/eliminar_tabla_maestra/{id}/{estado}', [TablaMaestraController::class, 'eliminar_tabla_maestra'])->name('tabla_maestras.eliminar_tabla_maestra');
 
 
+Route::resource('conductores', 'App\Http\Controllers\ConductoresController');
+
+/*
 Route::get('conductores', 'App\Http\Controllers\ConductoresController@index')->name('conductores.index');
 Route::post('conductores', 'App\Http\Controllers\ConductoresController@store')->name('conductores.store');
 Route::get('conductores/create', 'App\Http\Controllers\ConductoresController@create')->name('conductores.create');
@@ -43,3 +46,4 @@ Route::put('conductores/{conductore}', 'App\Http\Controllers\ConductoresControll
 Route::patch('conductores/{conductore}', 'App\Http\Controllers\ConductoresController@update');
 Route::delete('conductores/{conductore}', 'App\Http\Controllers\ConductoresController@destroy')->name('conductores.destroy');
 Route::get('conductores/{conductore}/edit', 'App\Http\Controllers\ConductoresController@edit')->name('conductores.edit');
+*/
