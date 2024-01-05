@@ -162,9 +162,13 @@
 						<input class="form-control form-control-sm" id="persona" name="persona" placeholder="Nombres y Apellidos">
 					</div>
 
-					<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12" style="padding-left:0px;margin-left:0px;">
-						<input class="form-control form-control-sm" id="empresa" name="empresa" placeholder="Empresa">
-					</div>                    
+					<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12" style="padding-left:0px;margin-left:0px;">
+						<select name="flag_foto" id="flag_foto" class="form-control form-control-sm">
+							<option value="">T. Foto</option>
+							<option value="1">Con Foto</option>
+							<option value="2">Sin Foto</option>
+						</select>
+					</div>                 
 
 					<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12" style="padding-left:0px;margin-left:0px;">
 						<select name="estado" id="estado" class="form-control form-control-sm">
@@ -190,9 +194,11 @@
                             <th>Tipo Documento</th>
                             <th>Numero Documento</th>
 							<th>Persona</th>
+                            <th>Foto</th>
 							<th>F. Nacimiento</th>
-                            <th>Empresa</th>
+                            <th>Género</th>
 							<th>Estado</th>
+                            <th>Acción</th>
                             
                         </tr>
                         </thead>

@@ -528,9 +528,9 @@ function datatablenew(){
                 },
 				{
                 "mRender": function (data, type, row) {
-                	var razon_social = "";
-					if(row.razon_social!= null)razon_social = row.razon_social;
-					return razon_social;
+                	var sexo = "";
+					if(row.sexo!= null)sexo = row.sexo;
+					return sexo;
                 },
                 "bSortable": false,
                 "aTargets": [5]

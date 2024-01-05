@@ -24,8 +24,7 @@ class CreatePersonaDetallesTable extends Migration
 			$table->string('distrito')->nullable();
 			$table->string('direccion');
             $table->string('email')->nullable();
-            $table->string('foto')->nullable();
-			/*
+            $table->string('foto')->nullable();			
 			$table->date('fecha_ingreso')->nullable();
 			$table->bigInteger('id_condicion_laboral')->nullable();
 			$table->bigInteger('id_tipo_planilla')->nullable();
@@ -45,8 +44,7 @@ class CreatePersonaDetallesTable extends Migration
 			$table->bigInteger('id_nivel')->nullable();
 			$table->bigInteger('id_banco_cts')->nullable();
 			$table->string('num_cuenta_cts')->nullable();
-			$table->bigInteger('id_moneda_cts')->nullable();
-			*/
+			$table->bigInteger('id_moneda_cts')->nullable();			
 			$table->string('estado',1)->default('1');
 			$table->string('eliminado',1)->default('1');
             $table->timestamps();
