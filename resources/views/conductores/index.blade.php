@@ -7,6 +7,12 @@
         </x-slot>
 
         <x-slot name="headerActions">
+            <x-utils.link
+                icon="c-icon cil-plus"
+                class="card-header-action"
+                :href="route('conductores.create')"
+                :text="__('Nuevo')"
+            />
         </x-slot>
 
         <x-slot name="body">

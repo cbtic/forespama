@@ -27,7 +27,12 @@ class ConductoresTable extends DataTableComponent
     public function columns(): array
     {
         return [
+            Column::make('ID', 'id')
+                ->sortable(),
             Column::make('Licencia')
+                ->sortable()
+                ->searchable(),
+            Column::make('Fecha Emision', 'fecha_licencia')
                 ->sortable()
                 ->searchable(),
         ];
