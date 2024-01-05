@@ -29,7 +29,4 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => 'admin'], f
     includeRouteFiles(__DIR__.'/backend/');
 });
 
-Route::resource('conductores', 'App\Http\Controllers\ConductoresController');
-
-Route::resource('tablas_maestras', 'App\Http\Controllers\TablasMaestrasController');
 Route::resource('posts', 'App\Http\Controllers\PostController');

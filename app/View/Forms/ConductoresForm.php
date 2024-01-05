@@ -8,6 +8,7 @@ use Grafite\Forms\Fields\TextArea;
 use Grafite\Forms\Fields\Text;
 use Grafite\Forms\Fields\Email;
 use Grafite\Forms\Fields\Date;
+use Grafite\Forms\Fields\Select;
 
 class ConductoresForm extends ModelForm
 {
@@ -53,9 +54,12 @@ class ConductoresForm extends ModelForm
             Text::make('licencia', [
                 'required' => true,
             ]),
-            Text::make('estado', [
-                'required' => true
+            Date::make('fecha_licencia', [
+                'required' => true,
             ]),
+            Select::make('estado', [
+                'required' => true
+            ])->selectOptions(['ACTIVO' => 'ACTIVO', 'CANCELADO' => 'CANCELADO']) ,
             Date::make('created_at'),
         ];
     }

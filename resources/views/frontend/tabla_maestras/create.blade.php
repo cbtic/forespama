@@ -157,7 +157,7 @@ br {
 @stack('before-scripts')
 @stack('after-scripts')
 
-@extends('frontend.layouts.app1')
+@extends('backend.layouts.app')
 
 @section('title', app_name() . ' | ' . __('labels.frontend.afiliacion.box_title'))
 
