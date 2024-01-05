@@ -121,7 +121,7 @@ br {
     width: 80mm;
     height: 297mm;
   }
-    
+
     *, :after, :before {
         color: #FFF!important;
         text-shadow: none!important;
@@ -161,7 +161,7 @@ br {
 {!! script(asset('js/pesaje.js')) !!}
 @stack('after-scripts')
 
-@extends('frontend.layouts.app')
+@extends('backend.layouts.app')
 
 @section('title', app_name() . ' | ' . __('labels.frontend.afiliacion.box_title'))
 
@@ -275,7 +275,7 @@ br {
                                                                 </td>
                                                                 <td class="text-right">{{ $factura_detalle->facd_descuento }}
                                                                 </td>
-                                                                
+
                                                                 <td class="text-right">{{ number_format($factura_detalle->facd_pu,2)  }}
                                                                 </td>
                                                                 <!--
@@ -297,7 +297,7 @@ br {
                                                             <tr id="fila_total">
                                                                 <td class="text-right" colspan="4">IMPORTE TOTAL S/ </td>
                                                                 <td class="text-right">{{ number_format($factura->fac_total,2) }}</td>
-                                                                
+
 
                                                             </tr>
                                                         </tbody>
@@ -319,10 +319,10 @@ br {
                                         <p>DIRECCION: {{ $factura->fac_direccion }}</p>
                                     </div>
                                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                    
+
                                         <p>Representación impresa generada en el sisteman de SUNAT, puede verificarla
                                             utilizando su clave SOL</p>
-                                    
+
                                     </div>
                                     <?php } ?>
                                 </div>

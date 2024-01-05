@@ -38,3 +38,4 @@ Route::get('personas', [personaController::class, 'index'])->name('personas');
 Route::post('persona/send', [personaController::class, 'send'])->name('persona.send');
 Route::get('persona/consulta_persona', [PersonaController::class, 'consulta_persona'])->name('persona.consulta_persona');
 Route::post('persona/listar_persona_ajax', [PersonaController::class, 'listar_persona_ajax'])->name('persona.listar_persona_ajax');
+Route::resource('conductores', 'App\Http\Controllers\ConductoresController');
