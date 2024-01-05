@@ -96,9 +96,12 @@
 
 </style>
 
-@extends('frontend.layouts.app1')
+@stack('before-scripts')
+@stack('after-scripts')
 
-@section('title', app_name() . ' | ' . __('labels.frontend.contact.box_title'))
+@extends('backend.layouts.app')
+
+@section('title', ' | ' . __('labels.frontend.afiliacion.box_title'))
 
 @section('breadcrumb')
 <ol class="breadcrumb" style="padding-left:130px;margin-top:0px;background-color:#283659">
@@ -144,7 +147,7 @@
                     </strong>
                 </div><!--card-header-->
 				
-				<form class="form-horizontal" method="post" action="{{ route('frontend.contact.send')}}" id="frmAfiliacion" autocomplete="off">
+				<form class="form-horizontal" method="post" action="{{ route('frontend.empresa.send')}}" id="frmAfiliacion" autocomplete="off">
 				<input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
 				
 				<div class="row" style="padding:20px 20px 0px 20px;">
@@ -179,16 +182,8 @@
                             <th>Razon Social</th>
 							<th>Direcci&oacute;n</th>
                             <th>Email</th>
-							<th>Costo Estacionamiento</th>
-							<th>Costo Volumen</th>
                             <th>Estado</th>
 							<th>Acciones</th>
-							@hasanyrole('cajero y balanza|cajero')
-							<script type="text/javascript">var flagAccion=false</script>
-							@else
-							<!--<th class="text-left">Acciones</th>-->
-							<script type="text/javascript">var flagAccion=true</script>
-							@endhasanyrole
                         </tr>
                         </thead>
                         <tbody>
@@ -223,6 +218,7 @@
 	
 </div>
 
+
 @push('after-scripts')
-{!! script(asset('js/empresaLista.js')) !!}
+<script src="{{ asset('js/empresaLista.js') }}"></script>
 @endpush

@@ -95,7 +95,7 @@
 }
 
 </style>
-+
+
 @stack('before-scripts')
 @stack('after-scripts')
 
@@ -190,8 +190,10 @@
                             <th>Tipo Documento</th>
                             <th>Numero Documento</th>
 							<th>Persona</th>
-							<th>Foto</th>
+							<th>F. Nacimiento</th>
+                            <th>Empresa</th>
 							<th>Estado</th>
+                            
                         </tr>
                         </thead>
                         <tbody>

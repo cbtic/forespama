@@ -7,6 +7,7 @@ use Tabuna\Breadcrumbs\Trail;
 use App\Http\Controllers\Frontend\IngresoVehiculoTroncoController;
 use App\Http\Controllers\Frontend\TablaMaestraController;
 use App\Http\Controllers\Frontend\PersonaController;
+use App\Http\Controllers\Frontend\EmpresaController;
 /*
  * Frontend Controllers
  * All route names are prefixed with 'frontend.'.
@@ -38,4 +39,11 @@ Route::get('personas', [personaController::class, 'index'])->name('personas');
 Route::post('persona/send', [personaController::class, 'send'])->name('persona.send');
 Route::get('persona/consulta_persona', [PersonaController::class, 'consulta_persona'])->name('persona.consulta_persona');
 Route::post('persona/listar_persona_ajax', [PersonaController::class, 'listar_persona_ajax'])->name('persona.listar_persona_ajax');
+
+Route::get('empresas', [EmpresaController::class, 'index'])->name('empresas');
+Route::post('empresa/send', [EmpresaController::class, 'send'])->name('empresa.send');
+Route::get('empresa/consulta_empresa', [EmpresaController::class, 'consulta_empresa'])->name('empresa.consulta_empresa');
+Route::post('empresa/listar_empresa_ajax', [EmpresaController::class, 'listar_empresa_ajax'])->name('empresa.listar_empresa_ajax');
+
+
 Route::resource('conductores', 'App\Http\Controllers\ConductoresController');

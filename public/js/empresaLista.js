@@ -502,31 +502,13 @@ function datatablenew(){
 				},
 				{
 					"mRender": function (data, type, row) {
-						var costo_estacionamiento = "";
-						if(row.costo_estacionamiento!= null)costo_estacionamiento = row.costo_estacionamiento;
-						return costo_estacionamiento;
-					},
-					"bSortable": false,
-					"aTargets": [4]
-				},
-				{
-					"mRender": function (data, type, row) {
-						var costo_volumen = "";
-						if(row.costo_volumen!= null)costo_volumen = row.costo_volumen;
-						return costo_volumen;
-					},
-					"bSortable": false,
-					"aTargets": [5]
-				},
-				{
-					"mRender": function (data, type, row) {
 						var nombre_estado = "";
 						if(row.estado == 1)nombre_estado = "Activo";
 						if(row.estado == 0)nombre_estado = "Eliminado";
 						return nombre_estado;
 					},
 					"bSortable": false,
-					"aTargets": [6]
+					"aTargets": [4]
 				},
 				{
 					"mRender": function (data, type, row) {
@@ -551,26 +533,11 @@ function datatablenew(){
 						return html;
 					},
 					"bSortable": false,
-					"aTargets": [7],
+					"aTargets": [5],
 				},
-
-				/*
-				{
-                "mRender": function (data, type, row) {
-					var html = '<div class="btn-group btn-group-sm" role="group" aria-label="Log Viewer Actions">';
-					html += '<a href="/afiliacion/delete/'+row.id+'" class="btn btn-sm btn-danger" style="font-size:12px">';
-					html += '<i class="fa fa-trash-alt"></i> Eliminar</a></div>';
-					return html;
-                },
-                "bSortable": false,
-                "aTargets": [3],
-				"visible": flagAccion,
-                },
-				*/
             ]
-
-
-    });
+		}
+	);
 
 }
 

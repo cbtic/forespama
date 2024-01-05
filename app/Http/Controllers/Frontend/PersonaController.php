@@ -113,7 +113,7 @@ class PersonaController extends Controller
 
 	public function listar_persona_ajax(Request $request){
 
-        echo("ok"); exit();
+       // echo("ok"); exit();
 
 		$persona_model = new Persona;
 		$p[]=$request->numero_documento;        
