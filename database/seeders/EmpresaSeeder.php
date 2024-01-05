@@ -10,7 +10,7 @@ use DB;
 class EmpresaSeeder extends CsvSeeder
 {
     public function __construct(){
-        $this->file = '/database/seeders/csvs/empresas.csv';
+        $this->file = '/database/seeders/csv/empresas.csv';
         $this->encode=false;
     }
 

@@ -6,7 +6,7 @@ use Tabuna\Breadcrumbs\Trail;
 
 use App\Http\Controllers\Frontend\IngresoVehiculoTroncoController;
 use App\Http\Controllers\Frontend\TablaMaestraController;
-
+use App\Http\Controllers\Frontend\PersonaController;
 /*
  * Frontend Controllers
  * All route names are prefixed with 'frontend.'.
@@ -33,3 +33,8 @@ Route::post('tabla_maestras/send', [TablaMaestraController::class, 'send'])->nam
 Route::post('tabla_maestras/listar_tabla_maestras_ajax', [TablaMaestraController::class, 'listar_tabla_maestras_ajax'])->name('tabla_maestras.listar_tabla_maestras_ajax');
 Route::get('tabla_maestras/modal_tablamaestras/{id}', [TablaMaestraController::class, 'modal_tablamaestras'])->name('tabla_maestras.modal_tablamaestras');
 Route::get('tabla_maestras/eliminar_tabla_maestra/{id}/{estado}', [TablaMaestraController::class, 'eliminar_tabla_maestra'])->name('tabla_maestras.eliminar_tabla_maestra');
+
+Route::get('personas', [personaController::class, 'index'])->name('personas');
+Route::post('persona/send', [personaController::class, 'send'])->name('persona.send');
+Route::get('persona/consulta_persona', [PersonaController::class, 'consulta_persona'])->name('persona.consulta_persona');
+Route::post('persona/listar_persona_ajax', [PersonaController::class, 'listar_persona_ajax'])->name('persona.listar_persona_ajax');

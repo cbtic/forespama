@@ -421,7 +421,7 @@ $('#modalPersonaTitularSaveBtn').click(function (e) {
 });
 
 
-function datatablenew(){
+function datatablenew(){	
     var oTable1 = $('#tblAfiliado').dataTable({
         "bServerSide": true,
         "sAjaxSource": "/persona/listar_persona_ajax",
@@ -454,11 +454,7 @@ function datatablenew(){
 			var numero_documento = $('#numero_documento').val();
             var persona = $('#persona').val();
 			var estado = $('#estado').val();
-			var flag_foto = $('#flag_foto').val();
-			var flag_vacuna = $('#flag_vacuna').val();
-			var flag_carnet = $('#flag_carnet').val();
-			var flag_negativo = 0;
-			if($("#flag_negativo").is(':checked'))flag_negativo = 1;
+			var empresa = $('#empresa').val();
 			var _token = $('#_token').val();
 			
             oSettings.jqXHR = $.ajax({
@@ -467,7 +463,7 @@ function datatablenew(){
                 "type": "POST",
                 "url": sSource,
                 "data":{NumeroPagina:iNroPagina,NumeroRegistros:iCantMostrar,
-						numero_documento:numero_documento,persona:persona,estado:estado,flag_negativo:flag_negativo,flag_foto:flag_foto,flag_vacuna:flag_vacuna,flag_carnet:flag_carnet,
+						numero_documento:numero_documento,persona:persona,estado:estado,empresa:empresa,
 						_token:_token
                        },
                 "success": function (result) {
@@ -523,40 +519,23 @@ function datatablenew(){
                 },
 				{
                 "mRender": function (data, type, row) {
-                	var codigo = "";
-					if(row.codigo!= null)codigo = row.codigo;
-					return codigo;
+                	var fecha_nacimiento = "";
+					if(row.fecha_nacimiento!= null)fecha_nacimiento = row.fecha_nacimiento;
+					return fecha_nacimiento;
                 },
                 "bSortable": false,
                 "aTargets": [4]
                 },
 				{
                 "mRender": function (data, type, row) {
-                	var ocupacion = "";
-					if(row.ocupacion!= null)ocupacion = row.ocupacion;
-					return ocupacion;
+                	var razon_social = "";
+					if(row.razon_social!= null)razon_social = row.razon_social;
+					return razon_social;
                 },
                 "bSortable": false,
                 "aTargets": [5]
                 },
-				{
-					"mRender": function (data, type, row) {
-						var ruc = "";
-						if(row.ruc!= null)ruc = row.ruc;
-						return ruc;
-					},
-					"bSortable": false,
-					"aTargets": [6]
-					},				
-				/*{
-                "mRender": function (data, type, row) {
-                	var tipo_relacion = "";
-					if(row.tipo_relacion!= null)tipo_relacion = row.tipo_relacion;
-					return tipo_relacion;
-                },
-                "bSortable": false,
-                "aTargets": [5]
-                },*/
+
 				{
                 "mRender": function (data, type, row) {
                 	var nombre_estado = "";
@@ -565,7 +544,7 @@ function datatablenew(){
 					return nombre_estado;
                 },
                 "bSortable": false,
-                "aTargets": [7]
+                "aTargets": [6]
                 },
 				{
                 "mRender": function (data, type, row) {
@@ -587,37 +566,7 @@ function datatablenew(){
 					return html;
                 },
                 "bSortable": false,
-                "aTargets": [8],
-                },
-				{
-                "mRender": function (data, type, row) {
-                	var html = '<div class="btn-group btn-group-sm" role="group" aria-label="Log Viewer Actions">';
-					html += '<button style="font-size:12px" type="button" class="btn btn-sm btn-warning" data-toggle="modal" onclick="modalFlagNegativo('+row.id+')" ><i class="fa fa-eye"></i> Flag Negativo</button>';
-					html += '</div>';
-					return html;
-                },
-                "bSortable": false,
-                "aTargets": [9]
-                },
-				{
-                "mRender": function (data, type, row) {
-                	var html = '<div class="btn-group btn-group-sm" role="group" aria-label="Log Viewer Actions">';
-					html += '<button style="font-size:12px" type="button" class="btn btn-sm btn-info" data-toggle="modal" onclick="modalPersonaVacuna('+row.id+')" ><i class="fa fa-syringe"></i> Nuevo</button>';
-					html += '</div>';
-					return html;
-                },
-                "bSortable": false,
-                "aTargets": [10]
-                },
-				{
-                "mRender": function (data, type, row) {
-                	var html = '<div class="btn-group btn-group-sm" role="group" aria-label="Log Viewer Actions">';
-					html += '<button style="font-size:12px" type="button" class="btn btn-sm btn-success" data-toggle="modal" onclick="modalPersonaSanidad('+row.id+')" ><i class="fa fa-id-card"></i> Nuevo</button>';
-					html += '</div>';
-					return html;
-                },
-                "bSortable": false,
-                "aTargets": [11]
+                "aTargets": [7],
                 },
             ]
 

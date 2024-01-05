@@ -95,10 +95,13 @@
 }
 
 </style>
++
+@stack('before-scripts')
+@stack('after-scripts')
 
-@extends('frontend.layouts.app1')
+@extends('backend.layouts.app')
 
-@section('title', app_name() . ' | ' . __('labels.frontend.contact.box_title'))
+@section('title', ' | ' . __('labels.frontend.afiliacion.box_title'))
 
 @section('breadcrumb')
 <ol class="breadcrumb" style="padding-left:130px;margin-top:0px;background-color:#283659">
@@ -146,17 +149,23 @@
 				
 				<!--<strong><a class="edicion mt_20 mb_10" id="link_ruta_desembolso" href="javascript:void(0)" onClick="upload_imagen()">Adjuntar Imagen</a></strong>-->
 				
-				<form class="form-horizontal" method="post" action="{{ route('frontend.contact.send')}}" id="frmAfiliacion" autocomplete="off">
+				<form class="form-horizontal" method="post" action="{{ route('frontend.persona.send')}}" id="frmPersona" autocomplete="off">
 				<input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
 				
 				<div class="row" style="padding:20px 20px 0px 20px;">
 				
 					<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
-						<input class="form-control form-control-sm" id="numero_documento" name="numero_documento" placeholder="Numero de documento">
+						<input class="form-control form-control-sm" id="numero_documento" name="numero_documento" placeholder="Num. documento">
 					</div>
+
 					<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12" style="padding-left:0px;margin-left:0px;">
 						<input class="form-control form-control-sm" id="persona" name="persona" placeholder="Nombres y Apellidos">
 					</div>
+
+					<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12" style="padding-left:0px;margin-left:0px;">
+						<input class="form-control form-control-sm" id="empresa" name="empresa" placeholder="Empresa">
+					</div>                    
+
 					<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12" style="padding-left:0px;margin-left:0px;">
 						<select name="estado" id="estado" class="form-control form-control-sm">
 							<option value="">Todos</option>
@@ -165,34 +174,6 @@
 						</select>
 					</div>
 					
-					<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12" style="padding-left:0px;margin-left:0px;">
-						<select name="flag_foto" id="flag_foto" class="form-control form-control-sm">
-							<option value="">T. Foto</option>
-							<option value="1">Con Foto</option>
-							<option value="2">Sin Foto</option>
-						</select>
-					</div>
-					
-					<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12" style="padding-left:0px;margin-left:0px;padding-right:0px;margin-right:0px">
-						<select name="flag_vacuna" id="flag_vacuna" class="form-control form-control-sm">
-							<option value="">T. Vacuna</option>
-							<option value="1">Con Vacuna</option>
-							<option value="2">Sin Vacuna</option>
-						</select>
-					</div>
-					
-                    <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12" style="padding-right:0px;margin-right:0px;width:150px">
-						<select name="flag_carnet" id="flag_carnet" class="form-control form-control-sm">
-							<option value="">T. Carnet</option>
-							<option value="1">Con Carnet</option>
-							<option value="2">Sin Carnet</option>
-						</select>
-					</div>
-
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12" style="padding-top:8px;padding-rigth:0px;margin-right:0px">
-						<label class="control-label" style="float:left">Flag Negativo</label>
-						<input type="checkbox" name="flag_negativo" id="flag_negativo" style="text-align:left;width:15px;float:left;margin-left:15px;margin-top:5px" />
-					</div>
 					
 					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12" style="padding-right:0px">
 						<input class="btn btn-warning pull-rigth" value="Buscar" type="button" id="btnBuscar" />
@@ -245,6 +226,10 @@
 	
 </div>
 
+
+
 @push('after-scripts')
-{!! script(asset('js/personaLista.js')) !!}
+
+<script src="{{ asset('js/personaLista.js') }}"></script>
+
 @endpush
