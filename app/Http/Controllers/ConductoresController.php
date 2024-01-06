@@ -9,7 +9,7 @@ class ConductoresController extends Controller
 {
     public function index()
     {
-        $conductores = Conductores::latest()->paginate(12);
+        $conductores = Conductores::latest()->paginate(10);
 
         return view('conductores.index', compact('conductores'));
     }

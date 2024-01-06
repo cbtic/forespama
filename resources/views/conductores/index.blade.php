@@ -1,29 +1,22 @@
 @extends('backend.layouts.app')
 
 @section('content')
-    <div class="container">
-        <div class="jumbotron jumbotron-fluid">
-            <div class="container">
-                <h1 class="display-4">All Conductores</h1>
-            </div>
-        </div>
+    <x-backend.card>
+        <x-slot name="header">
+            @lang('Coductores')
+        </x-slot>
 
-        <div class="list-group">
-            @foreach($conductores as $conductores)
-                <a href="{{ route('conductores.show', $conductores->id) }}"
-                   class="list-group-item list-group-item-action flex-column align-items-start">
-                    <div class="d-flex w-100 justify-content-between">
-                        <h5 class="mb-1">{{ $conductores->title }}</h5>
-                        <small>{{ $conductores->created_at->diffForHumans() }}</small>
-                    </div>
-                </a>
-            @endforeach
-        </div>
+        <x-slot name="headerActions">
+            <x-utils.link
+                icon="c-icon cil-plus"
+                class="card-header-action"
+                :href="route('conductores.create')"
+                :text="__('Nuevo')"
+            />
+        </x-slot>
 
-        <div class="mt-2">
-            <nav aria-label="Page navigation example">
-                {{ $conductores->links() }}
-            </nav>
-        </div>
-    </div>
+        <x-slot name="body">
+            <livewire:backend.conductores-table />
+        </x-slot>
+    </x-backend.card>
 @endsection

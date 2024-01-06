@@ -166,7 +166,6 @@ br {
     <li class="breadcrumb-item text-primary">Inicio</li>
     <li class="breadcrumb-item active">Facturacion</li>
     <li class="breadcrumb-item active">Editar</li>
-    </li>
 </ol>
 @endsection
 
