@@ -290,7 +290,7 @@ label.form-control-sm{
 @stack('before-scripts')
 @stack('after-scripts')
 
-@extends('frontend.layouts.app')
+@extends('backend.layouts.app')
 
 @section('title', ' | ' . __('labels.frontend.afiliacion.box_title'))
 

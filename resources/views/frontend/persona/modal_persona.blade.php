@@ -610,21 +610,7 @@ container: '#myModal modal-body'
 
 					</div>
 
-					<div class="row">
 
-						<div class="col-lg-3">
-							<div class="form-group" style="padding-top:10px;padding-bottom:0px;margin-top:0px;margin-bottom:0px">
-								<label class="control-label" style="float:left">Flag Negativo</label>
-								<input type="checkbox" name="flag_negativo_" id="flag_negativo_" <?php if($persona->flag_negativo=="1")echo "checked='checked'"?> style="text-align:left;width:15px;float:left;margin-left:15px;margin-top:5px" />
-							</div>
-						</div>
-						<div class="col-lg-9">
-							<div class="form-group" style="padding-top:10px;padding-bottom:0px;margin-top:0px;margin-bottom:0px">
-								<input id="observacion_" name="observacion_" class="form-control form-control-sm"  value="<?php if(isset($negativo->observacion))echo $negativo->observacion?>" type="text" style="float:left">
-							</div>
-						</div>
-
-					</div>
 
 					<div style="margin-top:10px" class="form-group">
 						<div class="col-sm-12 controls">
