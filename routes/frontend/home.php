@@ -57,9 +57,6 @@ Route::post('vehiculo/listar_vehiculo_ajax', [VehiculoController::class, 'listar
 Route::get('vehiculo/modal_vehiculo/{id}', [VehiculoController::class, 'modal_vehiculo'])->name('vehiculo.modal_vehiculo');
 Route::get('vehiculo/eliminar_vehiculo/{id}/{estado}', [VehiculoController::class, 'eliminar_vehiculo'])->name('vehiculo.eliminar_vehiculo');
 
-Route::resource('conductores', 'App\Http\Controllers\ConductoresController');
-//Route::resource('conductores', 'App\Http\Controllers\ConductoresController');
-
 Route::get('conductores', 'App\Http\Controllers\ConductoresController@index')->name('conductores.index');
 Route::post('conductores', 'App\Http\Controllers\ConductoresController@store')->name('conductores.store');
 Route::get('conductores/create', 'App\Http\Controllers\ConductoresController@create')->name('conductores.create');
