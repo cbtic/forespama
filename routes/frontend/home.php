@@ -35,15 +35,13 @@ Route::post('tabla_maestras/listar_tabla_maestras_ajax', [TablaMaestraController
 Route::get('tabla_maestras/modal_tablamaestras/{id}', [TablaMaestraController::class, 'modal_tablamaestras'])->name('tabla_maestras.modal_tablamaestras');
 Route::get('tabla_maestras/eliminar_tabla_maestra/{id}/{estado}', [TablaMaestraController::class, 'eliminar_tabla_maestra'])->name('tabla_maestras.eliminar_tabla_maestra');
 
-Route::get('personas', [personaController::class, 'index'])->name('personas');
-Route::post('persona/send', [personaController::class, 'send'])->name('persona.send');
-Route::get('persona/consulta_persona', [PersonaController::class, 'consulta_persona'])->name('persona.consulta_persona');
-Route::post('persona/listar_persona_ajax', [PersonaController::class, 'listar_persona_ajax'])->name('persona.listar_persona_ajax');
+//Route::resource('conductores', 'App\Http\Controllers\ConductoresController');
 
-Route::get('empresas', [EmpresaController::class, 'index'])->name('empresas');
-Route::post('empresa/send', [EmpresaController::class, 'send'])->name('empresa.send');
-Route::get('empresa/consulta_empresa', [EmpresaController::class, 'consulta_empresa'])->name('empresa.consulta_empresa');
-Route::post('empresa/listar_empresa_ajax', [EmpresaController::class, 'listar_empresa_ajax'])->name('empresa.listar_empresa_ajax');
-
-
-Route::resource('conductores', 'App\Http\Controllers\ConductoresController');
+Route::get('conductores', 'App\Http\Controllers\ConductoresController@index')->name('conductores.index');
+Route::post('conductores', 'App\Http\Controllers\ConductoresController@store')->name('conductores.store');
+Route::get('conductores/create', 'App\Http\Controllers\ConductoresController@create')->name('conductores.create');
+Route::get('conductores/{conductore}', 'App\Http\Controllers\ConductoresController@show')->name('conductores.show');
+Route::put('conductores/{conductore}', 'App\Http\Controllers\ConductoresController@update')->name('conductores.update');
+Route::patch('conductores/{conductore}', 'App\Http\Controllers\ConductoresController@update');
+Route::delete('conductores/{conductore}', 'App\Http\Controllers\ConductoresController@destroy')->name('conductores.destroy');
+Route::get('conductores/{conductore}/edit', 'App\Http\Controllers\ConductoresController@edit')->name('conductores.edit');

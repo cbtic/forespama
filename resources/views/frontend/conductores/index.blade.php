@@ -10,7 +10,7 @@
             <x-utils.link
                 icon="c-icon cil-plus"
                 class="card-header-action"
-                :href="route('conductores.create')"
+                :href="route('frontend.conductores.create')"
                 :text="__('Nuevo')"
             />
         </x-slot>
