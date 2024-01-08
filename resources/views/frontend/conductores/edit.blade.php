@@ -8,7 +8,7 @@
                     <div class="card-header">Edit Conductores</div>
 
                     <div class="card-body">
-                        <form method="POST" action="{{ route('conductores.update', $conductores->id) }}">
+                        <form method="POST" action="{{ route('frontend.conductores.update', $conductores->id) }}">
                             @csrf
                             @method('PUT')
 
