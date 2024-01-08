@@ -27,12 +27,16 @@ class Persona extends Model
         return $this->hasMany(Afiliacion::class);
     }
 
+    public function conductores()
+    {
+        return $this->hasMany(Conductore::class);
+    }
 
     function getPersonas($empresa_id){
       //  $ubicacion = UbicacionTrabajo::where("ubicacion_empresa_id", $empresa_id)->first();
        // $afiliaciones = Afiliacion::where("ubicacion_id", $ubicacion->id)->get("persona_id");
         //$data = Persona::find($afiliaciones);
-      
+
        // return $data;
     }
 
@@ -61,7 +65,7 @@ class Persona extends Model
 		$data = DB::select($cad);
         return $data;
     }
-	
+
 
 	public function readFunctionPostgres($function, $parameters = null){
 

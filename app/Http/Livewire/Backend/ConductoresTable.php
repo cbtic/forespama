@@ -29,6 +29,14 @@ class ConductoresTable extends DataTableComponent
         return [
             Column::make('ID', 'id')
                 ->sortable(),
+            Column::make('Nombre', 'personas.nombres')
+                ->sortable(),
+            Column::make('Ap. Pat.', 'personas.apellido_paterno')
+                ->sortable(),
+            Column::make('Ap. Mat.', 'personas.apellido_materno')
+                ->sortable(),
+            Column::make('Documento', 'personas.numero_documento')
+                ->sortable(),
             Column::make('Licencia')
                 ->sortable()
                 ->searchable(),
