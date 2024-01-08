@@ -29,7 +29,7 @@ class PersonaController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
+    {        
         return view('frontend.persona.all');
     }
 
@@ -113,19 +113,18 @@ class PersonaController extends Controller
 
 	public function listar_persona_ajax(Request $request){
 
+       // echo("ok"); exit();
+
 		$persona_model = new Persona;
-		$p[]=$request->numero_documento;
+		$p[]=$request->numero_documento;        
 		$p[]=$request->persona;
-		$p[]=$request->estado;
-		$p[]=$request->flag_negativo;
-		$p[]=$request->flag_foto;
-		$p[]=$request->flag_vacuna;
-        $p[]=$request->flag_carnet;
+        $p[]=$request->empresa;
+		$p[]=$request->estado;		
 		$p[]=$request->NumeroPagina;
 		$p[]=$request->NumeroRegistros;
+
 		$data = $persona_model->listar_persona_ajax($p);
 		$iTotalDisplayRecords = isset($data[0]->totalrows)?$data[0]->totalrows:0;
-
 		$result["PageStart"] = $request->NumeroPagina;
 		$result["pageSize"] = $request->NumeroRegistros;
 		$result["SearchText"] = "";
@@ -137,7 +136,7 @@ class PersonaController extends Controller
 		echo json_encode($result);
 
 	}
-
+  
 	public function modal_persona($id){
 		$id_user = Auth::user()->id;
 		$persona = new Persona;

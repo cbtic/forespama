@@ -106,7 +106,7 @@
 @section('breadcrumb')
 <ol class="breadcrumb" style="padding-left:130px;margin-top:0px;background-color:#283659">
         <li class="breadcrumb-item text-primary">Inicio</li>
-            <li class="breadcrumb-item active">Consulta de Personas</li>
+            <li class="breadcrumb-item active">Consulta de Empresas</li>
         </li>
     </ol>
 @endsection
@@ -131,7 +131,7 @@
             <div class="row">
                 <div class="col-sm-5">
                     <h4 class="card-title mb-0 text-primary">
-                        Consultar Personas <!--<small class="text-muted">Usuarios activos</small>-->
+                        Consultar Empresas <!--<small class="text-muted">Usuarios activos</small>-->
                     </h4>
                 </div><!--col-->
             </div>
@@ -143,42 +143,29 @@
             <div class="card">
                 <div class="card-header">
                     <strong>
-                        Lista de Personas
+                        Lista de Empresas
                     </strong>
                 </div><!--card-header-->
 				
-				<!--<strong><a class="edicion mt_20 mb_10" id="link_ruta_desembolso" href="javascript:void(0)" onClick="upload_imagen()">Adjuntar Imagen</a></strong>-->
-				
-				<form class="form-horizontal" method="post" action="{{ route('frontend.persona.send')}}" id="frmPersona" autocomplete="off">
+				<form class="form-horizontal" method="post" action="{{ route('frontend.empresa.send')}}" id="frmAfiliacion" autocomplete="off">
 				<input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
 				
 				<div class="row" style="padding:20px 20px 0px 20px;">
 				
-					<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
-						<input class="form-control form-control-sm" id="numero_documento" name="numero_documento" placeholder="Num. documento">
+					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+						<input class="form-control form-control-sm" id="ruc" name="ruc" placeholder="Ruc">
 					</div>
-
-					<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12" style="padding-left:0px;margin-left:0px;">
-						<input class="form-control form-control-sm" id="persona" name="persona" placeholder="Nombres y Apellidos">
+					<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+						<input class="form-control form-control-sm" id="razon_social" name="razon_social" placeholder="Razon Social">
 					</div>
-
-					<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12" style="padding-left:0px;margin-left:0px;">
-						<select name="flag_foto" id="flag_foto" class="form-control form-control-sm">
-							<option value="">T. Foto</option>
-							<option value="1">Con Foto</option>
-							<option value="2">Sin Foto</option>
-						</select>
-					</div>                 
-
-					<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12" style="padding-left:0px;margin-left:0px;">
+                    <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
 						<select name="estado" id="estado" class="form-control form-control-sm">
 							<option value="">Todos</option>
 							<option value="1" selected="selected">Activo</option>
 							<option value="0">Eliminado</option>
 						</select>
 					</div>
-					
-					
+                    
 					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12" style="padding-right:0px">
 						<input class="btn btn-warning pull-rigth" value="Buscar" type="button" id="btnBuscar" />
 						<input class="btn btn-success pull-rigth" value="Nuevo" type="button" id="btnNuevo" style="margin-left:15px" />
@@ -191,15 +178,12 @@
                     <table id="tblAfiliado" class="table table-hover table-sm">
                         <thead>
                         <tr style="font-size:13px">
-                            <th>Tipo Documento</th>
-                            <th>Numero Documento</th>
-							<th>Persona</th>
-                            <th>Foto</th>
-							<th>F. Nacimiento</th>
-                            <th>Género</th>
-							<th>Estado</th>
-                            <th>Acción</th>
-                            
+                            <th>Ruc</th>
+                            <th>Razon Social</th>
+							<th>Direcci&oacute;n</th>
+                            <th>Email</th>
+                            <th>Estado</th>
+							<th>Acciones</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -235,9 +219,6 @@
 </div>
 
 
-
 @push('after-scripts')
-
-<script src="{{ asset('js/personaLista.js') }}"></script>
-
+<script src="{{ asset('js/empresaLista.js') }}"></script>
 @endpush

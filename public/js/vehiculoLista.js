@@ -8,7 +8,7 @@ $(document).ready(function () {
 	});
 	
 	$('#btnNuevo').click(function () {
-		modalPersona(0);
+		modalVehiculo(0);
 	});
 		
 	datatablenew();
@@ -16,59 +16,7 @@ $(document).ready(function () {
 	$("#plan_id").select2();
 	$("#ubicacion_id").select2();
 	
-	/*
-	$('#fecha_inicio').datepicker({
-        autoclose: true,
-		dateFormat: 'dd/mm/yy',
-		changeMonth: true,
-		changeYear: true,
-    });
 	
-	$('#fecha_vencimiento').datepicker({
-        autoclose: true,
-        dateFormat: 'dd/mm/yy',
-		changeMonth: true,
-		changeYear: true,
-    });
-	*/
-	
-	/*
-    $('#tblAlquiler').dataTable({
-    	"language": {
-    	"emptyTable": "No se encontraron resultados"
-    	}
-	});
-	*/
-	/*
-	$('#tblAlquiler').dataTable( {
-            "language": {
-                "sProcessing":     "Procesando...",
-                "sLengthMenu":     "Mostrar _MENU_ registros",
-                "sZeroRecords":    "No se encontraron resultados",
-                "sEmptyTable":     "Ningun dato disponible en esta tabla",
-                "sInfo":           "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
-                "sInfoEmpty":      "Mostrando registros del 0 al 0 de un total de 0 registros",
-                "sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
-                "sInfoPostFix":    "",
-                "sSearch":         "Buscar:",
-                "sUrl":            "",
-                "sInfoThousands":  ",",
-                "sLoadingRecords": "Cargando...",
-                "oPaginate": {
-                        "sFirst":    "Primero",
-                        "sLast":     "ultimo",
-                        "sNext":     "Siguiente",
-                        "sPrevious": "Anterior"
-                },
-                "oAria": {
-                        "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
-                        "sSortDescending": ": Activar para ordenar la columna de manera descendente"
-                }
-            }
-        } );
-	*/
-
-
 	$(function() {
 		$('#modalPersonaForm #apellido_paterno').keyup(function() {
 			this.value = this.value.toLocaleUpperCase();
@@ -421,10 +369,10 @@ $('#modalPersonaTitularSaveBtn').click(function (e) {
 });
 
 
-function datatablenew(){	
+function datatablenew(){
     var oTable1 = $('#tblAfiliado').dataTable({
         "bServerSide": true,
-        "sAjaxSource": "/persona/listar_persona_ajax",
+        "sAjaxSource": "/vehiculo/listar_vehiculo_ajax",
         "bProcessing": true,
         "sPaginationType": "full_numbers",
         //"paging":false,
@@ -454,7 +402,11 @@ function datatablenew(){
 			var numero_documento = $('#numero_documento').val();
             var persona = $('#persona').val();
 			var estado = $('#estado').val();
-			var empresa = $('#empresa').val();
+			var flag_foto = $('#flag_foto').val();
+			var flag_vacuna = $('#flag_vacuna').val();
+			var flag_carnet = $('#flag_carnet').val();
+			var flag_negativo = 0;
+			if($("#flag_negativo").is(':checked'))flag_negativo = 1;
 			var _token = $('#_token').val();
 			
             oSettings.jqXHR = $.ajax({
@@ -463,7 +415,7 @@ function datatablenew(){
                 "type": "POST",
                 "url": sSource,
                 "data":{NumeroPagina:iNroPagina,NumeroRegistros:iCantMostrar,
-						numero_documento:numero_documento,persona:persona,estado:estado,empresa:empresa,
+						numero_documento:numero_documento,persona:persona,estado:estado,flag_negativo:flag_negativo,flag_foto:flag_foto,flag_vacuna:flag_vacuna,flag_carnet:flag_carnet,
 						_token:_token
                        },
                 "success": function (result) {
@@ -479,9 +431,9 @@ function datatablenew(){
             [	
 				{
                 "mRender": function (data, type, row) {
-                	var tipo_documento = "";
-					if(row.tipo_documento!= null)tipo_documento = row.tipo_documento;
-					return tipo_documento;
+                	var placa = "";
+					if(row.placa!= null)placa = row.placa;
+					return placa;
                 },
                 "bSortable": false,
                 "aTargets": [0],
@@ -490,52 +442,67 @@ function datatablenew(){
                 },
 				{
                 "mRender": function (data, type, row) {
-                    var numero_documento = "";
-					if(row.numero_documento!= null)numero_documento = row.numero_documento;
-					return numero_documento;
+                    var ejes = "";
+					if(row.ejes!= null)ejes = row.ejes;
+					return ejes;
                 },
                 "bSortable": false,
                 "aTargets": [1]
                 },
                 {
                 "mRender": function (data, type, row) {
-                	var persona = "";
-					if(row.persona!= null)persona = row.persona;
-					return persona;
+                	var peso_tracto = "";
+					if(row.peso_tracto!= null)peso_tracto = row.peso_tracto;
+					return peso_tracto;
                 },
                 "bSortable": false,
                 "aTargets": [2]
                 },
 				{
                 "mRender": function (data, type, row) {
-                	var foto = "";
-					var html_foto="";
-					if(row.foto!= null)foto = row.foto;
-					if(foto!="" && foto!="ruta" && foto!="mail@mail.com")html_foto='<img width="30" src="/img/dni_asociados/'+foto+'" alt="">';
-					return html_foto;
+                	var peso_carreta = "";
+					if(row.peso_carreta!= null)peso_carreta = row.peso_carreta;
+					return peso_carreta;
                 },
                 "bSortable": false,
                 "aTargets": [3]
                 },
 				{
                 "mRender": function (data, type, row) {
-                	var fecha_nacimiento = "";
-					if(row.fecha_nacimiento!= null)fecha_nacimiento = row.fecha_nacimiento;
-					return fecha_nacimiento;
+                	var peso_seco = "";
+					if(row.peso_seco!= null)peso_seco = row.peso_seco;
+					return peso_seco;
                 },
                 "bSortable": false,
                 "aTargets": [4]
                 },
 				{
                 "mRender": function (data, type, row) {
-                	var sexo = "";
-					if(row.sexo!= null)sexo = row.sexo;
-					return sexo;
+                	var exonerado = "";
+					if(row.exonerado!= null)exonerado = row.exonerado;
+					return exonerado;
                 },
                 "bSortable": false,
                 "aTargets": [5]
                 },
-
+				{
+				"mRender": function (data, type, row) {
+					var control = "";
+					if(row.control!= null)control = row.control;
+					return control;
+				},
+				"bSortable": false,
+				"aTargets": [6]
+				},
+				{
+				"mRender": function (data, type, row) {
+					var bloqueado = "";
+					if(row.bloqueado!= null)bloqueado = row.bloqueado;
+					return bloqueado;
+				},
+				"bSortable": false,
+				"aTargets": [7]
+				},
 				{
                 "mRender": function (data, type, row) {
                 	var nombre_estado = "";
@@ -544,7 +511,7 @@ function datatablenew(){
 					return nombre_estado;
                 },
                 "bSortable": false,
-                "aTargets": [6]
+                "aTargets": [8]
                 },
 				{
                 "mRender": function (data, type, row) {
@@ -560,14 +527,15 @@ function datatablenew(){
 					}
 					
 					var html = '<div class="btn-group btn-group-sm" role="group" aria-label="Log Viewer Actions">';
-					html += '<button style="font-size:12px" type="button" class="btn btn-sm btn-success" data-toggle="modal" onclick="modalPersona('+row.id+')" ><i class="fa fa-edit"></i> Editar</button>';
-					html += '<a href="javascript:void(0)" onclick=eliminarPersona('+row.id+','+row.estado+') class="btn btn-sm '+clase+'" style="font-size:12px;margin-left:10px">'+estado+'</a>';
+					html += '<button style="font-size:12px" type="button" class="btn btn-sm btn-success" data-toggle="modal" onclick="modalVehiculo('+row.id+')" ><i class="fa fa-edit"></i> Editar</button>';
+					html += '<a href="javascript:void(0)" onclick=eliminarVehiculo('+row.id+','+row.estado+') class="btn btn-sm '+clase+'" style="font-size:12px;margin-left:10px">'+estado+'</a>';
 					html += '</div>';
 					return html;
                 },
                 "bSortable": false,
-                "aTargets": [7],
+                "aTargets": [9],
                 },
+				
             ]
 
 
@@ -579,13 +547,13 @@ function fn_ListarBusqueda() {
     datatablenew();
 };
 
-function modalPersona(id){
+function modalVehiculo(id){
 	
 	$(".modal-dialog").css("width","85%");
 	$('#openOverlayOpc .modal-body').css('height', 'auto');
 
 	$.ajax({
-			url: "/persona/modal_persona/"+id,
+			url: "/vehiculo/modal_vehiculo/"+id,
 			type: "GET",
 			success: function (result) {  
 					$("#diveditpregOpc").html(result);
@@ -643,7 +611,7 @@ function modalPersonaSanidad(id){
 
 }
 
-function eliminarPersona(id,estado){
+function eliminarVehiculo(id,estado){
 	var act_estado = "";
 	if(estado==1){
 		act_estado = "Eliminar";
@@ -655,20 +623,20 @@ function eliminarPersona(id,estado){
 	}
     bootbox.confirm({ 
         size: "small",
-        message: "&iquest;Deseas "+act_estado+" la Persona?", 
+        message: "&iquest;Deseas "+act_estado+" el Vehiculo?", 
         callback: function(result){
             if (result==true) {
-                fn_eliminar_persona(id,estado_);
+                fn_eliminar_vehiculo(id,estado_);
             }
         }
     });
     $(".modal-dialog").css("width","30%");
 }
 
-function fn_eliminar_persona(id,estado){
+function fn_eliminar_vehiculo(id,estado){
 	
     $.ajax({
-            url: "/persona/eliminar_persona/"+id+"/"+estado,
+            url: "/vehiculo/eliminar_vehiculo/"+id+"/"+estado,
             type: "GET",
             success: function (result) {
                 //if(result="success")obtenerPlanDetalle(id_plan);

@@ -10,7 +10,7 @@ use DB;
 class PersonaSeeder extends CsvSeeder
 {
     public function __construct(){
-        $this->file = '/database/seeders/csvs/personas.csv';
+        $this->file = '/database/seeders/csv/personas.csv';
         $this->encode=false;
     }
 

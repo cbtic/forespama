@@ -6,9 +6,9 @@ $(document).ready(function () {
 	$('#btnBuscar').click(function () {
 		fn_ListarBusqueda();
 	});
-	
+		
 	$('#btnNuevo').click(function () {
-		modalPersona(0);
+		modalEmpresa(0);
 	});
 		
 	datatablenew();
@@ -16,7 +16,6 @@ $(document).ready(function () {
 	$("#plan_id").select2();
 	$("#ubicacion_id").select2();
 	
-	/*
 	$('#fecha_inicio').datepicker({
         autoclose: true,
 		dateFormat: 'dd/mm/yy',
@@ -24,13 +23,13 @@ $(document).ready(function () {
 		changeYear: true,
     });
 	
+	//$("#fecha_vencimiento").datepicker($.datepicker.regional["es"]);
 	$('#fecha_vencimiento').datepicker({
         autoclose: true,
         dateFormat: 'dd/mm/yy',
 		changeMonth: true,
 		changeYear: true,
     });
-	*/
 	
 	/*
     $('#tblAlquiler').dataTable({
@@ -70,34 +69,34 @@ $(document).ready(function () {
 
 
 	$(function() {
-		$('#modalPersonaForm #apellido_paterno').keyup(function() {
+		$('#modalEmpresaForm #apellido_paterno').keyup(function() {
 			this.value = this.value.toLocaleUpperCase();
 		});
 	});
 	$(function() {
-		$('#modalPersonaForm #apellido_materno').keyup(function() {
+		$('#modalEmpresaForm #apellido_materno').keyup(function() {
 			this.value = this.value.toLocaleUpperCase();
 		});
 	});
 	$(function() {
-		$('#modalPersonaForm #nombres').keyup(function() {
+		$('#modalEmpresaForm #nombres').keyup(function() {
 			this.value = this.value.toLocaleUpperCase();
 		});
 	});
 
 
 	$(function() {
-		$('#modalPersonaTitularForm #apellido_paterno').keyup(function() {
+		$('#modalEmpresaTitularForm #apellido_paterno').keyup(function() {
 			this.value = this.value.toLocaleUpperCase();
 		});
 	});
 	$(function() {
-		$('#modalPersonaTitularForm #apellido_materno').keyup(function() {
+		$('#modalEmpresaTitularForm #apellido_materno').keyup(function() {
 			this.value = this.value.toLocaleUpperCase();
 		});
 	});
 	$(function() {
-		$('#modalPersonaTitularForm #nombres').keyup(function() {
+		$('#modalEmpresaTitularForm #nombres').keyup(function() {
 			this.value = this.value.toLocaleUpperCase();
 		});
 	});
@@ -149,7 +148,7 @@ function guardarAfiliacion(){
 	//fn_save();
 }
 
-function fn_save_(){
+function fn_save___(){
     
     //var fecha_atencion_original = $('#fecha_atencion').val();
 	//var id_user = $('#id_user').val();
@@ -194,12 +193,9 @@ function validaTipoDocumento(){
 	}
 }
 
-
-
-function obtenerPersona(){
+function obtenerEmpresa(){
 		
-	var tipo_documento = $("#tipo_documento").val();
-	var numero_documento = $("#numero_documento").val();
+	var _id = $("#id").val();	
 	var msg = "";
 	
 	if (msg != "") {
@@ -208,29 +204,20 @@ function obtenerPersona(){
 	}
 	
 	//$('#empresa_id').val("");
-	$('#persona_id').val("");
+	$('#empresa_id').val("");
 	
 	$.ajax({
-		url: '/persona/obtener_persona/' + tipo_documento + '/' + numero_documento,
+		url: '/empresa/obtener_empresa/' + _id,
 		dataType: "json",
 		success: function(result){
-			var nombre_persona= result.persona.apellido_paterno+" "+result.persona.apellido_materno+", "+result.persona.nombres;
-			$('#nombre_persona').val(nombre_persona);
-			$('#persona_id').val(result.persona.id);
-			if(result.persona.titular_id > 0){
-				$("#chkTitular").attr("checked",false);
-				$("#numero_documento_tit").val(result.persona.numero_documento_titular);
-				obtenerTitularActual(result.persona.tipo_documento_titular,result.persona.numero_documento_titular);
-			}
-			if(result.persona.titular_id == 0){
-				$("#chkTitular").attr("checked",true);
-				$("#numero_documento_tit").val(numero_documento);
-				obtenerTitularActual(tipo_documento,numero_documento);
-			}
+			//var nombre_persona= result.persona.apellido_paterno+" "+result.persona.apellido_materno+", "+result.persona.nombres;
+			//$('#nombre_persona').val(nombre_persona);
+			$('#empresa_id').val(result.empresa.id);
+
 		},
 		error: function(data) {
-			alert("Persona no encontrada en la Base de Datos.");
-			$('#personaModal').modal('show');
+			alert("Empresa no encontrada en la Base de Datos.");
+			$('#empresaModal').modal('show');
 		}
 		
 	});
@@ -360,18 +347,18 @@ function cargarDevolucion(){
 */
 
 
-$('#modalPersonaSaveBtn').click(function (e) {
+$('#modalEmpresaSaveBtn').click(function (e) {
 	e.preventDefault();
 	$(this).html('Enviando datos..');
 
 	$.ajax({
-	  data: $('#modalPersonaForm').serialize(),
+	  data: $('#modalEmpresaForm').serialize(),
 	  url: "/afiliacion/nueva_inscripcion_ajax",
 	  type: "POST",
 	  dataType: 'json',
 	  success: function (data) {
 
-		  $('#modalPersonaForm #modalPersonaForm').trigger("reset");
+		  $('#modalEmpresaForm #modalEmpresaForm').trigger("reset");
 		  $('#personaModal').modal('hide');
 		  $('#numero_documento').val(data.numero_documento);
 		  $('#nombre_persona').val(data.nombre_apellido);
@@ -384,24 +371,24 @@ $('#modalPersonaSaveBtn').click(function (e) {
 	$.each( data["responseJSON"].errors, function( key, value ) {
 	  mensaje += value +"\n";
 	});
-	$("#modalPersonaForm #modalPersonaSaveBtn").html("Grabar");
+	$("#modalEmpresaForm #modalEmpresaSaveBtn").html("Grabar");
 	alert(mensaje);
   }
   });
 });
 
-$('#modalPersonaTitularSaveBtn').click(function (e) {
+$('#modalEmpresaTitularSaveBtn').click(function (e) {
 	e.preventDefault();
 	$(this).html('Enviando datos..');
 
 	$.ajax({
-	  data: $('#modalPersonaTitularForm').serialize(),
+	  data: $('#modalEmpresaTitularForm').serialize(),
 	  url: "/afiliacion/nueva_inscripcion_ajax",
 	  type: "POST",
 	  dataType: 'json',
 	  success: function (data) {
 
-		  $('#modalPersonaTitularForm #modalPersonaForm').trigger("reset");
+		  $('#modalEmpresaTitularForm #modalEmpresaForm').trigger("reset");
 		  $('#personaTitularModal').modal('hide');
 		  $('#numero_documento_tit').val(data.numero_documento);
 		  $('#nombre_titular').val(data.nombre_apellido);
@@ -414,17 +401,17 @@ $('#modalPersonaTitularSaveBtn').click(function (e) {
 	$.each( data["responseJSON"].errors, function( key, value ) {
 	  mensaje += value +"\n";
 	});
-	$("#modalPersonaTitularForm  #modalPersonaSaveBtn").html("Grabar");
+	$("#modalEmpresaTitularForm  #modalEmpresaSaveBtn").html("Grabar");
 	alert(mensaje);
   }
   });
 });
 
 
-function datatablenew(){	
+function datatablenew(){
     var oTable1 = $('#tblAfiliado').dataTable({
         "bServerSide": true,
-        "sAjaxSource": "/persona/listar_persona_ajax",
+        "sAjaxSource": "/empresa/listar_empresa_ajax",
         "bProcessing": true,
         "sPaginationType": "full_numbers",
         //"paging":false,
@@ -451,19 +438,17 @@ function datatablenew(){
             var iNroPagina 	= parseFloat(fn_util_obtieneNroPagina(aoData[3].value, aoData[4].value)).toFixed();
             var iCantMostrar 	= aoData[4].value;
 			
-			var numero_documento = $('#numero_documento').val();
-            var persona = $('#persona').val();
+			var razon_social = $('#razon_social').val();
+            var ruc = $('#ruc').val();
 			var estado = $('#estado').val();
-			var empresa = $('#empresa').val();
 			var _token = $('#_token').val();
-			
             oSettings.jqXHR = $.ajax({
 				"dataType": 'json',
                 //"contentType": "application/json; charset=utf-8",
                 "type": "POST",
                 "url": sSource,
                 "data":{NumeroPagina:iNroPagina,NumeroRegistros:iCantMostrar,
-						numero_documento:numero_documento,persona:persona,estado:estado,empresa:empresa,
+						razon_social:razon_social,ruc:ruc,estado:estado,
 						_token:_token
                        },
                 "success": function (result) {
@@ -479,9 +464,9 @@ function datatablenew(){
             [	
 				{
                 "mRender": function (data, type, row) {
-                	var tipo_documento = "";
-					if(row.tipo_documento!= null)tipo_documento = row.tipo_documento;
-					return tipo_documento;
+                	var ruc = "";
+					if(row.ruc!= null)ruc = row.ruc;
+					return ruc;
                 },
                 "bSortable": false,
                 "aTargets": [0],
@@ -490,88 +475,67 @@ function datatablenew(){
                 },
 				{
                 "mRender": function (data, type, row) {
-                    var numero_documento = "";
-					if(row.numero_documento!= null)numero_documento = row.numero_documento;
-					return numero_documento;
+                    var razon_social = "";
+					if(row.razon_social!= null)razon_social = row.razon_social;
+					return razon_social;
                 },
                 "bSortable": false,
                 "aTargets": [1]
                 },
                 {
                 "mRender": function (data, type, row) {
-                	var persona = "";
-					if(row.persona!= null)persona = row.persona;
-					return persona;
+                	var direccion = "";
+					if(row.direccion!= null)direccion = row.direccion;
+					return direccion;
                 },
                 "bSortable": false,
                 "aTargets": [2]
                 },
 				{
-                "mRender": function (data, type, row) {
-                	var foto = "";
-					var html_foto="";
-					if(row.foto!= null)foto = row.foto;
-					if(foto!="" && foto!="ruta" && foto!="mail@mail.com")html_foto='<img width="30" src="/img/dni_asociados/'+foto+'" alt="">';
-					return html_foto;
-                },
-                "bSortable": false,
-                "aTargets": [3]
-                },
+					"mRender": function (data, type, row) {
+						var _email = "";
+						if(row.email!= null)_email = row.email;
+						return _email;
+					},
+					"bSortable": false,
+					"aTargets": [3]
+				},
 				{
-                "mRender": function (data, type, row) {
-                	var fecha_nacimiento = "";
-					if(row.fecha_nacimiento!= null)fecha_nacimiento = row.fecha_nacimiento;
-					return fecha_nacimiento;
-                },
-                "bSortable": false,
-                "aTargets": [4]
-                },
+					"mRender": function (data, type, row) {
+						var nombre_estado = "";
+						if(row.estado == 1)nombre_estado = "Activo";
+						if(row.estado == 0)nombre_estado = "Eliminado";
+						return nombre_estado;
+					},
+					"bSortable": false,
+					"aTargets": [4]
+				},
 				{
-                "mRender": function (data, type, row) {
-                	var sexo = "";
-					if(row.sexo!= null)sexo = row.sexo;
-					return sexo;
-                },
-                "bSortable": false,
-                "aTargets": [5]
-                },
-
-				{
-                "mRender": function (data, type, row) {
-                	var nombre_estado = "";
-					if(row.estado == 1)nombre_estado = "Activo";
-					if(row.estado == 0)nombre_estado = "Eliminado";
-					return nombre_estado;
-                },
-                "bSortable": false,
-                "aTargets": [6]
-                },
-				{
-                "mRender": function (data, type, row) {
-					var estado = "";
-					var clase = "";
-					if(row.estado == 1){
-						estado = "Eliminar";
-						clase = "btn-danger";
-					}
-					if(row.estado == 0){
-						estado = "Activar";
-						clase = "btn-success";
-					}
-					
-					var html = '<div class="btn-group btn-group-sm" role="group" aria-label="Log Viewer Actions">';
-					html += '<button style="font-size:12px" type="button" class="btn btn-sm btn-success" data-toggle="modal" onclick="modalPersona('+row.id+')" ><i class="fa fa-edit"></i> Editar</button>';
-					html += '<a href="javascript:void(0)" onclick=eliminarPersona('+row.id+','+row.estado+') class="btn btn-sm '+clase+'" style="font-size:12px;margin-left:10px">'+estado+'</a>';
-					html += '</div>';
-					return html;
-                },
-                "bSortable": false,
-                "aTargets": [7],
-                },
+					"mRender": function (data, type, row) {
+						var estado = "";
+						var clase = "";
+						if(row.estado == 1){
+							estado = "Eliminar";
+							clase = "btn-danger";
+						}
+						if(row.estado == 0){
+							estado = "Activar";
+							clase = "btn-success";
+						}
+						
+						var html = '<div class="btn-group btn-group-sm" role="group" aria-label="Log Viewer Actions">';
+						html += '<button style="font-size:12px" type="button" class="btn btn-sm btn-success" data-toggle="modal" onclick="modalEmpresa('+row.id+')" ><i class="fa fa-edit"></i> Editar</button>';
+						html += '<a href="javascript:void(0)" onclick=eliminarEmpresa('+row.id+','+row.estado+') class="btn btn-sm '+clase+'" style="font-size:12px;margin-left:10px">'+estado+'</a>';
+												
+						html += '</div>';
+						return html;
+					},
+					"bSortable": false,
+					"aTargets": [5],
+				},
             ]
-
-
-    });
+		}
+	);
 
 }
 
@@ -579,13 +543,13 @@ function fn_ListarBusqueda() {
     datatablenew();
 };
 
-function modalPersona(id){
+function modalEmpresa(id){
 	
 	$(".modal-dialog").css("width","85%");
 	$('#openOverlayOpc .modal-body').css('height', 'auto');
 
 	$.ajax({
-			url: "/persona/modal_persona/"+id,
+			url: "/empresa/modal_empresa/"+id,
 			type: "GET",
 			success: function (result) {  
 					$("#diveditpregOpc").html(result);
@@ -595,13 +559,13 @@ function modalPersona(id){
 
 }
 
-function modalPersonaVacuna(id){
+function modalResponsable(id){
 	
 	$(".modal-dialog").css("width","85%");
 	$('#openOverlayOpc .modal-body').css('height', 'auto');
 
 	$.ajax({
-			url: "/persona/modal_persona_vacuna/"+id,
+			url: "/afiliacion/modal_afiliacion_empresa/"+id,
 			type: "GET",
 			success: function (result) {  
 					$("#diveditpregOpc").html(result);
@@ -611,39 +575,7 @@ function modalPersonaVacuna(id){
 
 }
 
-function modalFlagNegativo(id){
-	
-	$(".modal-dialog").css("width","85%");
-	$('#openOverlayOpc .modal-body').css('height', 'auto');
-
-	$.ajax({
-			url: "/persona/modal_flag_negativo/"+id,
-			type: "GET",
-			success: function (result) {  
-					$("#diveditpregOpc").html(result);
-					$('#openOverlayOpc').modal('show');
-			}
-	});
-
-}
-
-function modalPersonaSanidad(id){
-	
-	$(".modal-dialog").css("width","85%");
-	$('#openOverlayOpc .modal-body').css('height', 'auto');
-
-	$.ajax({
-			url: "/persona/modal_persona_sanidad/"+id,
-			type: "GET",
-			success: function (result) {  
-					$("#diveditpregOpc").html(result);
-					$('#openOverlayOpc').modal('show');
-			}
-	});
-
-}
-
-function eliminarPersona(id,estado){
+function eliminarEmpresa(id,estado){
 	var act_estado = "";
 	if(estado==1){
 		act_estado = "Eliminar";
@@ -655,20 +587,20 @@ function eliminarPersona(id,estado){
 	}
     bootbox.confirm({ 
         size: "small",
-        message: "&iquest;Deseas "+act_estado+" la Persona?", 
+        message: "&iquest;Deseas "+act_estado+" la Empresa?", 
         callback: function(result){
             if (result==true) {
-                fn_eliminar_persona(id,estado_);
+                fn_eliminar_empresa(id,estado_);
             }
         }
     });
     $(".modal-dialog").css("width","30%");
 }
 
-function fn_eliminar_persona(id,estado){
+function fn_eliminar_empresa(id,estado){
 	
     $.ajax({
-            url: "/persona/eliminar_persona/"+id+"/"+estado,
+            url: "/empresa/eliminar_empresa/"+id+"/"+estado,
             type: "GET",
             success: function (result) {
                 //if(result="success")obtenerPlanDetalle(id_plan);

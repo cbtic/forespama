@@ -106,7 +106,7 @@
 @section('breadcrumb')
 <ol class="breadcrumb" style="padding-left:130px;margin-top:0px;background-color:#283659">
         <li class="breadcrumb-item text-primary">Inicio</li>
-            <li class="breadcrumb-item active">Consulta de Personas</li>
+            <li class="breadcrumb-item active">Consulta de Vehiculos</li>
         </li>
     </ol>
 @endsection
@@ -131,7 +131,7 @@
             <div class="row">
                 <div class="col-sm-5">
                     <h4 class="card-title mb-0 text-primary">
-                        Consultar Personas <!--<small class="text-muted">Usuarios activos</small>-->
+                        Consultar Vehiculo <!--<small class="text-muted">Usuarios activos</small>-->
                     </h4>
                 </div><!--col-->
             </div>
@@ -143,33 +143,23 @@
             <div class="card">
                 <div class="card-header">
                     <strong>
-                        Lista de Personas
+                        Lista de Vehiculos
                     </strong>
                 </div><!--card-header-->
 				
 				<!--<strong><a class="edicion mt_20 mb_10" id="link_ruta_desembolso" href="javascript:void(0)" onClick="upload_imagen()">Adjuntar Imagen</a></strong>-->
 				
-				<form class="form-horizontal" method="post" action="{{ route('frontend.persona.send')}}" id="frmPersona" autocomplete="off">
+				<form class="form-horizontal" method="post" action="{{ route('frontend.vehiculo.send')}}" id="frmAfiliacion" autocomplete="off">
 				<input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
 				
 				<div class="row" style="padding:20px 20px 0px 20px;">
 				
 					<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
-						<input class="form-control form-control-sm" id="numero_documento" name="numero_documento" placeholder="Num. documento">
+						<input class="form-control form-control-sm" id="numero_documento" name="numero_documento" placeholder="Numero de documento">
 					</div>
-
 					<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12" style="padding-left:0px;margin-left:0px;">
 						<input class="form-control form-control-sm" id="persona" name="persona" placeholder="Nombres y Apellidos">
 					</div>
-
-					<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12" style="padding-left:0px;margin-left:0px;">
-						<select name="flag_foto" id="flag_foto" class="form-control form-control-sm">
-							<option value="">T. Foto</option>
-							<option value="1">Con Foto</option>
-							<option value="2">Sin Foto</option>
-						</select>
-					</div>                 
-
 					<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12" style="padding-left:0px;margin-left:0px;">
 						<select name="estado" id="estado" class="form-control form-control-sm">
 							<option value="">Todos</option>
@@ -178,11 +168,11 @@
 						</select>
 					</div>
 					
-					
 					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12" style="padding-right:0px">
 						<input class="btn btn-warning pull-rigth" value="Buscar" type="button" id="btnBuscar" />
 						<input class="btn btn-success pull-rigth" value="Nuevo" type="button" id="btnNuevo" style="margin-left:15px" />
 					</div>
+					
 				</div>
 				
                 <div class="card-body">				
@@ -191,15 +181,16 @@
                     <table id="tblAfiliado" class="table table-hover table-sm">
                         <thead>
                         <tr style="font-size:13px">
-                            <th>Tipo Documento</th>
-                            <th>Numero Documento</th>
-							<th>Persona</th>
-                            <th>Foto</th>
-							<th>F. Nacimiento</th>
-                            <th>Género</th>
+                            <th>Placa</th>
+                            <th>Ejes</th>
+							<th>Peso Tracto</th>
+							<th>Peso Carreta</th>
+							<th>Peso Seco</th>
+							<th>Exonerado</th>
+                            <th>Control</th>
+							<th>Bloqueado</th>
 							<th>Estado</th>
-                            <th>Acción</th>
-                            
+							<th width="10%">Acciones</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -235,9 +226,7 @@
 </div>
 
 
-
 @push('after-scripts')
-
-<script src="{{ asset('js/personaLista.js') }}"></script>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.js"></script>
+<script src="{{ asset('js/vehiculoLista.js') }}"></script>
 @endpush

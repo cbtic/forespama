@@ -10,7 +10,7 @@ use DB;
 class ConductoreSeeder extends CsvSeeder
 {
     public function __construct(){
-        $this->file = '/database/seeders/csvs/conductores.csv';
+        $this->file = '/database/seeders/csv/conductores.csv';
         $this->encode=false;
     }
 
