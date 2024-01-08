@@ -21,7 +21,13 @@ class ConductoresTable extends DataTableComponent
 
     public function configure(): void
     {
-        $this->setPrimaryKey('id');
+        $this->setPrimaryKey('id')
+        ->setTableRowUrl(function($row) {
+            return route('frontend.conductores.edit', $row);
+        })
+        ->setTableRowUrlTarget(function($row) {
+            return '_self';
+        });
     }
 
     public function columns(): array

@@ -21,6 +21,12 @@ class ConductoresForm extends ModelForm
      */
     public $model = Conductores::class;
 
+    public $routeParameters = ['id'];
+
+    public $columns = 1;
+
+    public $hasFiles = true;
+
     /**
      * Required prefix of routes
      *
@@ -55,7 +61,8 @@ class ConductoresForm extends ModelForm
         return [
             Text::make('licencia', [
                 'required' => true,
-            ]),
+
+            ])->value('foo'),
             Date::make('fecha_licencia', [
                 'required' => true,
             ]),

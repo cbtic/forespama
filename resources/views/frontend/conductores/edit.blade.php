@@ -1,42 +1,17 @@
 @extends('backend.layouts.app')
 
 @section('content')
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header">Edit Conductores</div>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">Crear Conductores</div>
 
-                    <div class="card-body">
-                        <form method="POST" action="{{ route('frontend.conductores.update', $conductores->id) }}">
-                            @csrf
-                            @method('PUT')
-
-                            <div class="form-group row">
-                                <label for="title" class="col-sm-4 col-form-label text-md-right">Title</label>
-
-                                <div class="col-md-6">
-                                    <input id="title" type="text" class="form-control{{ $errors->has('title') ? ' is-invalid' : '' }}" name="title" value="{{ old('title', $conductores->title) }}" required autofocus>
-
-                                    @if ($errors->has('title'))
-                                        <span class="invalid-feedback">
-                                        <strong>{{ $errors->first('title') }}</strong>
-                                    </span>
-                                    @endif
-                                </div>
-                            </div>
-
-                            <div class="form-group row mb-0">
-                                <div class="col-md-8 offset-md-4">
-                                    <button type="submit" class="btn btn-primary">
-                                        Edit
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
+                <div class="card-body">
+                    <x-forms.conductores></x-forms.conductores>
                 </div>
             </div>
         </div>
     </div>
+</div>
 @endsection

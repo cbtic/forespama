@@ -26,9 +26,10 @@ class ConductoresController extends Controller
         return redirect()->route('frontend.conductores.index');
     }
 
-    public function edit(Conductores $conductores)
+    public function edit($id)
     {
-        return view('frontend.conductores.edit', compact('conductores'));
+        $conductor = Conductores::findOrFail($id);
+        return view('frontend.conductores.edit', compact('conductor'));
     }
 
     public function update(ConductoresRequest $request, Conductores $conductores)
