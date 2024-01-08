@@ -58,3 +58,13 @@ Route::get('vehiculo/modal_vehiculo/{id}', [VehiculoController::class, 'modal_ve
 Route::get('vehiculo/eliminar_vehiculo/{id}/{estado}', [VehiculoController::class, 'eliminar_vehiculo'])->name('vehiculo.eliminar_vehiculo');
 
 Route::resource('conductores', 'App\Http\Controllers\ConductoresController');
+//Route::resource('conductores', 'App\Http\Controllers\ConductoresController');
+
+Route::get('conductores', 'App\Http\Controllers\ConductoresController@index')->name('conductores.index');
+Route::post('conductores', 'App\Http\Controllers\ConductoresController@store')->name('conductores.store');
+Route::get('conductores/create', 'App\Http\Controllers\ConductoresController@create')->name('conductores.create');
+Route::get('conductores/{conductore}', 'App\Http\Controllers\ConductoresController@show')->name('conductores.show');
+Route::put('conductores/{conductore}', 'App\Http\Controllers\ConductoresController@update')->name('conductores.update');
+Route::patch('conductores/{conductore}', 'App\Http\Controllers\ConductoresController@update');
+Route::delete('conductores/{conductore}', 'App\Http\Controllers\ConductoresController@destroy')->name('conductores.destroy');
+Route::get('conductores/{conductore}/edit', 'App\Http\Controllers\ConductoresController@edit')->name('conductores.edit');

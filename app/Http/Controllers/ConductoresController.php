@@ -11,42 +11,42 @@ class ConductoresController extends Controller
     {
         $conductores = Conductores::latest()->paginate(10);
 
-        return view('conductores.index', compact('conductores'));
+        return view('frontend.conductores.index', compact('conductores'));
     }
 
     public function create()
     {
-        return view('conductores.create');
+        return view('frontend.conductores.create');
     }
 
     public function store(ConductoresRequest $request)
     {
         Conductores::create($request->all());
 
-        return redirect()->route('conductores.index');
+        return redirect()->route('frontend.conductores.index');
     }
 
     public function edit(Conductores $conductores)
     {
-        return view('conductores.edit', compact('conductores'));
+        return view('frontend.conductores.edit', compact('conductores'));
     }
 
     public function update(ConductoresRequest $request, Conductores $conductores)
     {
         $conductores->update($request->all());
 
-        return redirect()->route('conductores.show', $conductores->id);
+        return redirect()->route('frontend.conductores.show', $conductores->id);
     }
 
     public function show(Conductores $conductores)
     {
-        return view('conductores.show', compact('conductores'));
+        return view('frontend.conductores.show', compact('conductores'));
     }
 
     public function destroy(Conductores $conductores)
     {
         $conductores->delete();
 
-        return redirect()->route('conductores.index');
+        return redirect()->route('frontend.conductores.index');
     }
 }
