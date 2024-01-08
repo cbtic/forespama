@@ -51,6 +51,10 @@ class Persona extends Model
 
     }
 
+    public function getNombreCompletoAttribute() : string {
+      return $this->numero_documento . " - " . $this->apellido_paterno ." " . $this->apellido_materno . ", " . $this->nombres;
+    }
+
 	public function listar_persona_ajax($p){
 		return $this->readFunctionPostgres('sp_listar_persona_paginado',$p);
     }

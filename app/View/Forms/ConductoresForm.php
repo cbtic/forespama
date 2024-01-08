@@ -3,10 +3,12 @@
 namespace App\View\Forms;
 
 use App\Models\Conductores;
+use App\Models\Persona;
 use Grafite\Forms\Forms\ModelForm;
 use Grafite\Forms\Fields\TextArea;
 use Grafite\Forms\Fields\Text;
 use Grafite\Forms\Fields\Email;
+use Grafite\Forms\Fields\HasOne;
 use Grafite\Forms\Fields\Date;
 use Grafite\Forms\Fields\Select;
 
@@ -40,7 +42,7 @@ class ConductoresForm extends ModelForm
      * @var array
      */
     public $buttons = [
-        'submit' => 'Save'
+        'submit' => 'Guardar'
     ];
 
     /**
@@ -61,6 +63,15 @@ class ConductoresForm extends ModelForm
                 'required' => true
             ])->selectOptions(['ACTIVO' => 'ACTIVO', 'CANCELADO' => 'CANCELADO']) ,
             Date::make('created_at'),
+            HasOne::make('persona', [
+                'model' => Persona::class,
+                'model_options' => [
+                    'label' => 'nombre_completo',
+                    'value' => 'id',
+                    'method' => 'all',
+                    'params' => null,
+                ]
+            ])
         ];
     }
 }
