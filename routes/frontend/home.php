@@ -8,6 +8,7 @@ use App\Http\Controllers\Frontend\IngresoVehiculoTroncoController;
 use App\Http\Controllers\Frontend\TablaMaestraController;
 use App\Http\Controllers\Frontend\PersonaController;
 use App\Http\Controllers\Frontend\EmpresaController;
+use App\Http\Controllers\Frontend\VehiculoController;
 /*
  * Frontend Controllers
  * All route names are prefixed with 'frontend.'.
@@ -39,12 +40,22 @@ Route::get('personas', [personaController::class, 'index'])->name('personas');
 Route::post('persona/send', [personaController::class, 'send'])->name('persona.send');
 Route::get('persona/consulta_persona', [PersonaController::class, 'consulta_persona'])->name('persona.consulta_persona');
 Route::post('persona/listar_persona_ajax', [PersonaController::class, 'listar_persona_ajax'])->name('persona.listar_persona_ajax');
+Route::get('persona/modal_persona/{id}', [PersonaController::class, 'modal_persona'])->name('persona.modal_persona');
+Route::get('persona/eliminar_persona/{id}/{estado}', [PersonaController::class, 'eliminar_persona'])->name('persona.eliminar_persona');
 
 Route::get('empresas', [EmpresaController::class, 'index'])->name('empresas');
 Route::post('empresa/send', [EmpresaController::class, 'send'])->name('empresa.send');
 Route::get('empresa/consulta_empresa', [EmpresaController::class, 'consulta_empresa'])->name('empresa.consulta_empresa');
 Route::post('empresa/listar_empresa_ajax', [EmpresaController::class, 'listar_empresa_ajax'])->name('empresa.listar_empresa_ajax');
+Route::get('empresa/modal_empresa/{id}', [EmpresaController::class, 'modal_empresa'])->name('empresa.modal_empresa');
+Route::get('empresa/eliminar_empresa/{id}/{estado}', [EmpresaController::class, 'eliminar_empresa'])->name('empresa.eliminar_empresa');
 
+Route::get('vehiculos', [VehiculoController::class, 'index'])->name('vehiculos');
+Route::post('vehiculo/send', [VehiculoController::class, 'send'])->name('vehiculo.send');
+Route::get('vehiculo/consulta_vehiculo', [VehiculoController::class, 'consulta_vehiculo'])->name('vehiculo.consulta_vehiculo');
+Route::post('vehiculo/listar_vehiculo_ajax', [VehiculoController::class, 'listar_vehiculo_ajax'])->name('vehiculo.listar_vehiculo_ajax');
+Route::get('vehiculo/modal_vehiculo/{id}', [VehiculoController::class, 'modal_vehiculo'])->name('vehiculo.modal_vehiculo');
+Route::get('vehiculo/eliminar_vehiculo/{id}/{estado}', [VehiculoController::class, 'eliminar_vehiculo'])->name('vehiculo.eliminar_vehiculo');
 
 Route::resource('conductores', 'App\Http\Controllers\ConductoresController');
 //Route::resource('conductores', 'App\Http\Controllers\ConductoresController');
