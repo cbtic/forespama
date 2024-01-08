@@ -120,10 +120,12 @@
                 <li class="c-sidebar-nav-item">    
                     <x-utils.link :href="route('frontend.personas')" class="c-sidebar-nav-link" :text="__('Personas')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />                    
                 </li>
-
                 <li class="c-sidebar-nav-item">    
                     <x-utils.link :href="route('frontend.empresas')" class="c-sidebar-nav-link" :text="__('Empresas')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />                    
                 </li>
+                <li class="c-sidebar-nav-item">    
+                    <x-utils.link :href="route('frontend.vehiculos')" class="c-sidebar-nav-link" :text="__('Vehiculos')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />                    
+                </li>                
             </ul>
 
         </li>
