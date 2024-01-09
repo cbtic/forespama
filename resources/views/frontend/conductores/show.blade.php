@@ -8,10 +8,24 @@
                     <div class="card-header">{{ $conductores->title }}</div>
                     <div class="card-body">
                             <div class="form-group row">
-                                <label for="title" class="col-sm-4 col-form-label text-md-right">Title</label>
+                                <label for="title" class="col-sm-4 col-form-label text-md-right">ID</label>
 
                                 <div class="col-md-6">
-                                    <p>{{ $conductores->title }}</p>
+                                    <p>{{ $conductores->id }}</p>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="title" class="col-sm-4 col-form-label text-md-right">Licencia</label>
+
+                                <div class="col-md-6">
+                                    <p>{{ $conductores->licencia }}</p>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="title" class="col-sm-4 col-form-label text-md-right">Fecha Emision</label>
+
+                                <div class="col-md-6">
+                                    <p>{{ $conductores->fecha_licencia }}</p>
                                 </div>
                             </div>
 
