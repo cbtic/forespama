@@ -139,6 +139,7 @@ class PersonaController extends Controller
   
 	public function modal_persona($id){
 		$id_user = Auth::user()->id;
+        /*
 		$persona = new Persona;
 		$negativo = "";
 		if($id>0){
@@ -152,6 +153,30 @@ class PersonaController extends Controller
 		$tipo_documento = $tablaMaestra_model->getMaestroByTipo("9");
         
 		return view('frontend.persona.modal_persona',compact('id','persona','negativo','tipo_documento'));
+*/
+
+
+		$tablaMaestra_model = new TablaMaestra;
+		$persona = new Persona;
+
+		if($id>0){
+			$persona = Persona::find($id);
+		}else{
+			$persona = new Persona;
+		}
+		
+		$sexo = $tablaMaestra_model->getMaestroByTipo(2);
+		$tipo_documento = $tablaMaestra_model->getMaestroByTipo(9);
+		$grupo_sanguineo = $tablaMaestra_model->getMaestroByTipo(26);
+		$nacionalidad = $tablaMaestra_model->getMaestroByTipo(5);
+        
+		$ubigeo_model = new Ubigeo;
+		$departamento = $ubigeo_model->getDepartamento();
+		
+		//$universidad = $tablaMaestra_model->getMaestroByTipo(85);
+		//$especialidad = $tablaMaestra_model->getMaestroByTipo(86);
+		
+		return view('frontend.persona.modal_persona',compact('id','persona','sexo','tipo_documento','grupo_sanguineo','nacionalidad','departamento'));        
 
 	}
 
