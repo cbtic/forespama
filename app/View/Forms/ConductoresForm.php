@@ -70,7 +70,7 @@ class ConductoresForm extends ModelForm
             ]),
             Select::make('estado', [
                 'required' => true
-            ])->selectOptions(['ACTIVO' => 'ACTIVO', 'CANCELADO' => 'CANCELADO']) ,
+            ])->selectOptions(['Seleccione' => null, 'ACTIVO' => 'ACTIVO', 'CANCELADO' => 'CANCELADO']) ,
             Date::make('created_at'),
             HasOne::make('personas_id', [
                 'model' => Persona::class,
@@ -80,7 +80,7 @@ class ConductoresForm extends ModelForm
                     'method' => 'all',
                     'params' => null,
                 ]
-            ])
+            ])->selectOptions(['Seleccione' => null])
         ];
     }
 }
