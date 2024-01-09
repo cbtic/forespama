@@ -21,7 +21,7 @@ class ConductoresForm extends ModelForm
      */
     public $model = Conductores::class;
 
-    public $routeParameters = ['id', 'licencia', 'fecha_licencia', 'estado'];
+    //public $routeParameters = ['id', 'licencia', 'fecha_licencia', 'estado'];
     //public $routeParameters = ['id'];
 
     public $columns = 1;
@@ -72,7 +72,7 @@ class ConductoresForm extends ModelForm
                 'required' => true
             ])->selectOptions(['ACTIVO' => 'ACTIVO', 'CANCELADO' => 'CANCELADO']) ,
             Date::make('created_at'),
-            HasOne::make('persona', [
+            HasOne::make('personas_id', [
                 'model' => Persona::class,
                 'model_options' => [
                     'label' => 'nombre_completo',
