@@ -143,12 +143,15 @@ class PersonaController extends Controller
 		$negativo = "";
 		if($id>0){
 			$persona = Persona::find($id);
-			$negativo = Negativo::where('persona_id',$id)->orderBy('id', 'desc')->first();
+			//$negativo = Negativo::where('persona_id',$id)->orderBy('id', 'desc')->first();
 		} else {
 			$persona = new Persona;
 		}
-        //print ("hola");exit();
-		return view('frontend.persona.modal_persona',compact('id','persona','negativo'));
+        		
+		$tablaMaestra_model = new TablaMaestra;		
+		$tipo_documento = $tablaMaestra_model->getMaestroByTipo("9");
+        
+		return view('frontend.persona.modal_persona',compact('id','persona','negativo','tipo_documento'));
 
 	}
 
@@ -279,7 +282,7 @@ class PersonaController extends Controller
 	}
 
 
-	public function send_persona(Request $request){
+	public function send(Request $request){
 
         $sw = true;
 		$msg = "";

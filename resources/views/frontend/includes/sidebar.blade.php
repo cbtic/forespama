@@ -1,7 +1,7 @@
 <div class="c-sidebar c-sidebar-dark c-sidebar-fixed c-sidebar-lg-show" id="sidebar">
     <div class="c-sidebar-brand d-lg-down-none">
 
-		<!--
+        <!--
         <svg class="c-sidebar-brand-full" width="118" height="46" alt="CoreUI Logo">
             <use xlink:href="{{ asset('img/brand/coreui.svg#full') }}"></use>
         </svg>
@@ -9,15 +9,15 @@
             <use xlink:href="{{ asset('img/brand/coreui.svg#signet') }}"></use>
         </svg>
 		-->
-		
-		<a href="{{ route('frontend.index') }}" class="navbar-brand">
-			<img src="<?php echo URL::to('/') ?>/img/brand/logo_forespama2.jpg" alt="" width="190" height="40" style="padding:0px;margin:0px">
-		</a>
-		
+
+        <a href="{{ route('frontend.index') }}" class="navbar-brand">
+            <img src="<?php echo URL::to('/') ?>/img/brand/logo_forespama2.jpg" alt="" width="190" height="40" style="padding:0px;margin:0px">
+        </a>
+
     </div><!--c-sidebar-brand-->
-	
-	@auth
-	
+
+    @auth
+
     <ul class="c-sidebar-nav">
         <!--
 		<li class="c-sidebar-nav-item">
@@ -74,14 +74,10 @@
         @endif
 
         @if ($logged_in_user->hasAllAccess())
-            <li class="c-sidebar-nav-dropdown">
-                <x-utils.link
-                    href="#"
-                    icon="c-sidebar-nav-icon cil-list"
-                    class="c-sidebar-nav-dropdown-toggle"
-                    :text="__('Acerrado')" />
-				
-				<!--
+        <li class="c-sidebar-nav-dropdown">
+            <x-utils.link href="#" icon="c-sidebar-nav-icon cil-list" class="c-sidebar-nav-dropdown-toggle" :text="__('Acerrado')" />
+
+            <!--
                 <ul class="c-sidebar-nav-dropdown-items">
                     <li class="c-sidebar-nav-item">
                         <x-utils.link
@@ -97,55 +93,63 @@
                     </li>
                 </ul>
 				-->
-				
-            </li>
+
+        </li>
         @endif
-		
-		@if ($logged_in_user->hasAllAccess())
-			
-			<li class="c-sidebar-nav-dropdown">
-                <x-utils.link
-                    href="#"
-                    icon="c-sidebar-nav-icon cil-list"
-                    class="c-sidebar-nav-dropdown-toggle"
-                    :text="__('Control Mantenimiento')" />
-					
-			</li>
-			
-			<li class="c-sidebar-nav-dropdown">
-                <x-utils.link
-                    href="#"
-                    icon="c-sidebar-nav-icon cil-list"
-                    class="c-sidebar-nav-dropdown-toggle"
-                    :text="__('Almacenes')" />
-					
-			</li>
-			
-			<li class="c-sidebar-nav-dropdown">
-                <x-utils.link
-                    href="#"
-                    icon="c-sidebar-nav-icon cil-list"
-                    class="c-sidebar-nav-dropdown-toggle"
-                    :text="__('Consultas')" />
-					
-			</li>
-			
-			<li class="c-sidebar-nav-dropdown">
-                <x-utils.link
-                    href="#"
-                    icon="c-sidebar-nav-icon cil-list"
-                    class="c-sidebar-nav-dropdown-toggle"
-                    :text="__('Reportes')" />
-					
-			</li>
-			
-		@endif
-		
-		@else
-			
-			
-		@endauth
-		
+
+        @if ($logged_in_user->hasAllAccess())
+
+        <li class="c-sidebar-nav-dropdown">
+            <x-utils.link href="#" icon="c-sidebar-nav-icon cil-list" class="c-sidebar-nav-dropdown-toggle" :text="__('Control Mantenimiento')" />
+
+        </li>
+
+        <li class="c-sidebar-nav-dropdown">
+            <x-utils.link href="#" icon="c-sidebar-nav-icon cil-list" class="c-sidebar-nav-dropdown-toggle" :text="__('Almacenes')" />
+
+        </li>
+
+        <li class="c-sidebar-nav-dropdown">
+            <x-utils.link href="#" icon="c-sidebar-nav-icon cil-list" class="c-sidebar-nav-dropdown-toggle" :text="__('Consultas')" />
+
+        </li>
+
+        <li class="c-sidebar-nav-dropdown">
+            <x-utils.link href="#" icon="c-sidebar-nav-icon cil-list" class="c-sidebar-nav-dropdown-toggle" :text="__('Mantenimiento')" />
+            <ul class="c-sidebar-nav-dropdown-items">
+                <li class="c-sidebar-nav-item">
+                    <x-utils.link :href="route('frontend.personas')" class="c-sidebar-nav-link" :text="__('Personas')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+                </li>
+                <li class="c-sidebar-nav-item">
+                    <x-utils.link :href="route('frontend.empresas')" class="c-sidebar-nav-link" :text="__('Empresas')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+                </li>
+                <li class="c-sidebar-nav-item">
+                    <x-utils.link :href="route('frontend.vehiculos')" class="c-sidebar-nav-link" :text="__('Vehiculos')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+                </li>
+
+                <li class="c-sidebar-nav-item">
+                    <x-utils.link :href="route('frontend.tabla_maestras.all')" class="c-sidebar-nav-link" :text="__('Tablas Maestras')" />
+                </li>
+                <li class="c-sidebar-nav-item">
+                    <x-utils.link :href="route('frontend.conductores.index')" class="c-sidebar-nav-link" :text="__('Conductores')" />
+                </li>
+
+            </ul>
+
+        </li>
+
+        <li class="c-sidebar-nav-dropdown">
+            <x-utils.link href="#" icon="c-sidebar-nav-icon cil-list" class="c-sidebar-nav-dropdown-toggle" :text="__('Reportes')" />
+
+        </li>
+
+        @endif
+
+        @else
+
+
+        @endauth
+
     </ul>
 
     <button class="c-sidebar-minimizer c-class-toggler" type="button" data-target="_parent" data-class="c-sidebar-minimized"></button>
