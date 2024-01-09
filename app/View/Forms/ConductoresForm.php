@@ -11,6 +11,8 @@ use Grafite\Forms\Fields\Email;
 use Grafite\Forms\Fields\HasOne;
 use Grafite\Forms\Fields\Date;
 use Grafite\Forms\Fields\Select;
+use Grafite\Forms\Fields\PasswordWithReveal;
+use Grafite\Forms\Fields\AutoSuggestSelect;
 
 class ConductoresForm extends ModelForm
 {
@@ -68,10 +70,7 @@ class ConductoresForm extends ModelForm
             Date::make('fecha_licencia', [
                 'required' => true,
             ]),
-            Select::make('estado', [
-                'required' => true
-            ])->selectOptions(['Seleccione' => null, 'ACTIVO' => 'ACTIVO', 'CANCELADO' => 'CANCELADO']) ,
-            Date::make('created_at'),
+            AutoSuggestSelect::make('estado')->selectOptions(['ACTIVO' => 'ACTIVO', 'CANCELADO' => 'CANCELADO']) ,
             HasOne::make('personas_id', [
                 'model' => Persona::class,
                 'model_options' => [

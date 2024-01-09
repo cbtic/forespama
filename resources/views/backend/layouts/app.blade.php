@@ -58,5 +58,7 @@
 
     <livewire:scripts />
     @stack('after-scripts')
+
+    @forms
 </body>
 </html>
