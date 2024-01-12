@@ -9,10 +9,12 @@ use Grafite\Forms\Fields\TextArea;
 use Grafite\Forms\Fields\Text;
 use Grafite\Forms\Fields\Email;
 use Grafite\Forms\Fields\HasOne;
+use Grafite\Forms\Fields\HasMany;
 use Grafite\Forms\Fields\Date;
 use Grafite\Forms\Fields\Select;
 use Grafite\Forms\Fields\PasswordWithReveal;
 use Grafite\Forms\Fields\AutoSuggestSelect;
+use Grafite\Forms\Fields\Hidden;
 
 class ConductoresForm extends ModelForm
 {
@@ -70,16 +72,22 @@ class ConductoresForm extends ModelForm
             Date::make('fecha_licencia', [
                 'required' => true,
             ]),
-            AutoSuggestSelect::make('estado')->selectOptions(['ACTIVO' => 'ACTIVO', 'CANCELADO' => 'CANCELADO']) ,
-            HasOne::make('personas_id', [
-                'model' => Persona::class,
-                'model_options' => [
-                    'label' => 'nombre_completo',
-                    'value' => 'id',
-                    'method' => 'all',
-                    'params' => null,
-                ]
-            ])->selectOptions(['Seleccione' => null])
+            AutoSuggestSelect::make('estado')->selectOptions(['ACTIVO' => 'ACTIVO', 'CANCELADO' => 'CANCELADO']),
+            // HasOne::make('personas_id', [
+            //     'model' => Persona::class,
+            //     'model_options' => [
+            //         'label' => 'nombre_completo',
+            //         'value' => 'id',
+            //         'method' => 'all',
+            //         'params' => null,
+            //     ]
+            // ])->selectOptions(['Seleccione' => null])
+            Hidden::make('personas_id', [
+                'required' => true,
+            ]),
+            Text::make('persona', [
+                'required' => true,
+            ]),
         ];
     }
 }
