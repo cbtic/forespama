@@ -13,7 +13,7 @@ class ConductoresRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,12 @@ class ConductoresRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+
+            'personas_id' => ['required'],
+            'licencia' => ['required', 'string', 'min:9'],
+            'fecha_licencia' => ['required', 'date'],
+            'estado' => ['required', 'string'],
+
         ];
     }
 }
