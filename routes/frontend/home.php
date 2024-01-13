@@ -42,6 +42,7 @@ Route::get('persona/consulta_persona', [PersonaController::class, 'consulta_pers
 Route::post('persona/listar_persona_ajax', [PersonaController::class, 'listar_persona_ajax'])->name('persona.listar_persona_ajax');
 Route::get('persona/modal_persona/{id}', [PersonaController::class, 'modal_persona'])->name('persona.modal_persona');
 Route::get('persona/eliminar_persona/{id}/{estado}', [PersonaController::class, 'eliminar_persona'])->name('persona.eliminar_persona');
+Route::post('persona/buscar_persona_ajax', [PersonaController::class, 'buscar_persona_ajax'])->name('persona.buscar_persona_ajax');
 
 Route::get('empresas', [EmpresaController::class, 'index'])->name('empresas');
 Route::post('empresa/send', [EmpresaController::class, 'send'])->name('empresa.send');
@@ -57,14 +58,11 @@ Route::post('vehiculo/listar_vehiculo_ajax', [VehiculoController::class, 'listar
 Route::get('vehiculo/modal_vehiculo/{id}', [VehiculoController::class, 'modal_vehiculo'])->name('vehiculo.modal_vehiculo');
 Route::get('vehiculo/eliminar_vehiculo/{id}/{estado}', [VehiculoController::class, 'eliminar_vehiculo'])->name('vehiculo.eliminar_vehiculo');
 
-Route::resource('conductores', 'App\Http\Controllers\ConductoresController');
-//Route::resource('conductores', 'App\Http\Controllers\ConductoresController');
-
 Route::get('conductores', 'App\Http\Controllers\ConductoresController@index')->name('conductores.index');
 Route::post('conductores', 'App\Http\Controllers\ConductoresController@store')->name('conductores.store');
 Route::get('conductores/create', 'App\Http\Controllers\ConductoresController@create')->name('conductores.create');
-Route::get('conductores/{conductore}', 'App\Http\Controllers\ConductoresController@show')->name('conductores.show');
-Route::put('conductores/{conductore}', 'App\Http\Controllers\ConductoresController@update')->name('conductores.update');
-Route::patch('conductores/{conductore}', 'App\Http\Controllers\ConductoresController@update');
-Route::delete('conductores/{conductore}', 'App\Http\Controllers\ConductoresController@destroy')->name('conductores.destroy');
-Route::get('conductores/{conductore}/edit', 'App\Http\Controllers\ConductoresController@edit')->name('conductores.edit');
+Route::get('conductores/{conductores}', 'App\Http\Controllers\ConductoresController@show')->name('conductores.show');
+Route::put('conductores/{conductores}', 'App\Http\Controllers\ConductoresController@update')->name('conductores.update');
+Route::patch('conductores/{conductores}', 'App\Http\Controllers\ConductoresController@update');
+Route::delete('conductores/{conductores}', 'App\Http\Controllers\ConductoresController@destroy')->name('conductores.destroy');
+Route::get('conductores/{conductores}/edit', 'App\Http\Controllers\ConductoresController@edit')->name('conductores.edit');

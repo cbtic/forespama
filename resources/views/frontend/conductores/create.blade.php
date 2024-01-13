@@ -5,7 +5,7 @@
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
-                    <div class="card-header">Create Conductores</div>
+                    <div class="card-header">Crear Conductores</div>
 
                     <div class="card-body">
                         <x-forms.conductores></x-forms.conductores>
@@ -15,3 +15,7 @@
         </div>
     </div>
 @endsection
+
+@push('after-scripts')
+<script type="text/javascript" src="{{ asset('js/autocompletePersona.js') }}"></script>
+@endpush
