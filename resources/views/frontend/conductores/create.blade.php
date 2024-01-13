@@ -15,3 +15,7 @@
         </div>
     </div>
 @endsection
+
+@push('after-scripts')
+<script type="text/javascript" src="{{ asset('js/autocompletePersona.js') }}"></script>
+@endpush

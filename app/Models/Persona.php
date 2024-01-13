@@ -8,7 +8,9 @@ use DB;
 
 class Persona extends Model
 {
-    protected $fillable = ['nro_brevete', 'codigo', 'tipo_documento', 'numero_documento', 'nombres', 'apellido_paterno', 'apellido_materno', 'fecha_nacimiento', 'sexo', 'telefono', 'email', 'foto', 'ocupacion', 'titular_id', 'tipo_relacion'];
+    protected $fillable = ['nro_brevete', 'codigo', 'tipo_documento', 'numero_documento', 'nombres', 'apellido_paterno', 'apellido_materno', 'fecha_nacimiento', 'sexo', 'telefono', 'email', 'foto', 'ocupacion', 'titular_id', 'tipo_relacion','nombre_completo'];
+
+    protected $appends = ['nombre_completo'];
 
     // contantes SEXO
     const SEXO_FEMENINO = 'F';
