@@ -15,12 +15,13 @@ class CreateUbigeosTable extends Migration
     {
         Schema::create('ubigeos', function (Blueprint $table) {
             $table->id();
-            $table->string('id_reniec',7)->nullable();
-            $table->string('departamento',80)->nullable();
-            $table->string('provincia',80)->nullable();
-            $table->string('distrito',80)->nullable();
-            $table->string('id_inei',6)->nullable();
-            $table->string('id_pais',3)->nullable(); 
+            $table->string('id_ubigeo',6)->nullable();
+            $table->string('id_departamento',2)->nullable();
+            $table->string('id_provincia',2)->nullable();
+            $table->string('id_distrito',2)->nullable();
+            $table->string('desc_ubigeo',50)->nullable();
+            $table->string('estado',1)->nullable()->default('1');
+
             $table->timestamps();
         });
     }
