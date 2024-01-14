@@ -65,28 +65,29 @@ class ConductoresForm extends ModelForm
     public function fields()
     {
         return [
+            HasOne::make('personas_id', [
+                'model' => Persona::class,
+                'model_options' => [
+                    'label' => 'nombre_completo',
+                    'value' => 'id',
+                    'method' => 'all',
+                    'params' => null,
+                ]
+            ])->selectOptions(['Seleccione' => null]),
             Text::make('licencia', [
                 'required' => true,
             ]),
             Date::make('fecha_licencia', [
+                'label' => 'Fecha de Vigencia',
                 'required' => true,
             ]),
             AutoSuggestSelect::make('estado')->selectOptions(['ACTIVO' => 'ACTIVO', 'CANCELADO' => 'CANCELADO']),
-            // HasOne::make('personas_id', [
-            //     'model' => Persona::class,
-            //     'model_options' => [
-            //         'label' => 'nombre_completo',
-            //         'value' => 'id',
-            //         'method' => 'all',
-            //         'params' => null,
-            //     ]
-            // ])->selectOptions(['Seleccione' => null])
-            Hidden::make('personas_id', [
-                'required' => true,
-            ]),
-            Text::make('persona', [
-                'required' => true,
-            ]),
+            // Hidden::make('personas_id', [
+            //     'required' => true,
+            // ]),
+            // Text::make('persona', [
+            //     'required' => true,
+            // ]),
         ];
     }
 }

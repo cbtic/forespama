@@ -8,7 +8,7 @@
                     <div class="card-header">Crear Conductores</div>
 
                     <div class="card-body">
-                        <x-forms.conductores :data='$conductor'></x-forms.conductores>
+                        <x-forms.conductores></x-forms.conductores>
                     </div>
                 </div>
             </div>
