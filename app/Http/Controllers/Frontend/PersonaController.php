@@ -170,7 +170,7 @@ class PersonaController extends Controller
 		$sexo = $tablaMaestra_model->getMaestroByTipo(2);
 		$tipo_documento = $tablaMaestra_model->getMaestroByTipo(9);
 		$grupo_sanguineo = $tablaMaestra_model->getMaestroByTipo(26);
-		$nacionalidad = $tablaMaestra_model->getMaestroByTipo(5);
+		$nacionalidad = $tablaMaestra_model->getMaestroByTipo(41);
         
 		$ubigeo_model = new Ubigeo;
 		$departamento = $ubigeo_model->getDepartamento();
