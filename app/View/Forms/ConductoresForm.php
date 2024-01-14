@@ -81,7 +81,8 @@ class ConductoresForm extends ModelForm
                 'label' => 'Fecha de Vigencia',
                 'required' => true,
             ]),
-            AutoSuggestSelect::make('estado')->selectOptions(['ACTIVO' => 'ACTIVO', 'CANCELADO' => 'CANCELADO']),
+            Select::make('estado')->selectOptions(['ACTIVO' => 'ACTIVO', 'CANCELADO' => 'CANCELADO']),
+            // AutoSuggestSelect::make('estado')->selectOptions(['ACTIVO' => 'ACTIVO', 'CANCELADO' => 'CANCELADO']),
             // Hidden::make('personas_id', [
             //     'required' => true,
             // ]),
