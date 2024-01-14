@@ -11,6 +11,7 @@ use Grafite\Forms\Fields\Email;
 use Grafite\Forms\Fields\HasOne;
 use Grafite\Forms\Fields\HasMany;
 use Grafite\Forms\Fields\Date;
+use Grafite\Forms\Html\Button;
 use Grafite\Forms\Fields\Select;
 use Grafite\Forms\Fields\PasswordWithReveal;
 use Grafite\Forms\Fields\AutoSuggestSelect;
@@ -54,6 +55,7 @@ class ConductoresForm extends ModelForm
      * @var array
      */
     public $buttons = [
+        'cancel' => 'Cancelar',
         'submit' => 'Guardar'
     ];
 
@@ -66,6 +68,7 @@ class ConductoresForm extends ModelForm
     {
         return [
             HasOne::make('personas_id', [
+                'label' => 'Persona',
                 'model' => Persona::class,
                 'model_options' => [
                     'label' => 'nombre_completo',
