@@ -25,8 +25,7 @@ class ConductoresForm extends ModelForm
      */
     public $model = Conductores::class;
 
-    //public $routeParameters = ['id', 'licencia', 'fecha_licencia', 'estado'];
-    //public $routeParameters = ['id'];
+    public $routeParameters = ['id', 'licencia', 'fecha_licencia', 'estado'];
 
     public $columns = 1;
 
@@ -66,28 +65,30 @@ class ConductoresForm extends ModelForm
     public function fields()
     {
         return [
+            HasOne::make('personas_id', [
+                'model' => Persona::class,
+                'model_options' => [
+                    'label' => 'nombre_completo',
+                    'value' => 'id',
+                    'method' => 'all',
+                    'params' => null,
+                ]
+            ])->selectOptions(['Seleccione' => null]),
             Text::make('licencia', [
                 'required' => true,
             ]),
             Date::make('fecha_licencia', [
+                'label' => 'Fecha de Vigencia',
                 'required' => true,
             ]),
-            AutoSuggestSelect::make('estado')->selectOptions(['ACTIVO' => 'ACTIVO', 'CANCELADO' => 'CANCELADO']),
-            // HasOne::make('personas_id', [
-            //     'model' => Persona::class,
-            //     'model_options' => [
-            //         'label' => 'nombre_completo',
-            //         'value' => 'id',
-            //         'method' => 'all',
-            //         'params' => null,
-            //     ]
-            // ])->selectOptions(['Seleccione' => null])
-            Hidden::make('personas_id', [
-                'required' => true,
-            ]),
-            Text::make('persona', [
-                'required' => true,
-            ]),
+            Select::make('estado')->selectOptions(['ACTIVO' => 'ACTIVO', 'CANCELADO' => 'CANCELADO']),
+            // AutoSuggestSelect::make('estado')->selectOptions(['ACTIVO' => 'ACTIVO', 'CANCELADO' => 'CANCELADO']),
+            // Hidden::make('personas_id', [
+            //     'required' => true,
+            // ]),
+            // Text::make('persona', [
+            //     'required' => true,
+            // ]),
         ];
     }
 }
