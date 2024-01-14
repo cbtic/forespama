@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 use App\Models\Persona;
 //use App\Models\Negativo;
 use App\Models\TablaMaestra;
+use App\Models\Ubigeo;
+
 use Auth;
 
 class PersonaController extends Controller
