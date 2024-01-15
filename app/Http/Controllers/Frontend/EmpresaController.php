@@ -423,7 +423,7 @@ class EmpresaController extends Controller
 
     }
 	
-	public function send_empresa(Request $request){
+	public function send(Request $request){
 		
 		$sw = true;
 		$msg = "";
@@ -447,8 +447,8 @@ class EmpresaController extends Controller
 				$empresa->email = $request->email;
 				$empresa->telefono = $request->telefono;
 				$empresa->representante = "Representante";
-				$empresa->costo_estacionamiento = $request->costo_estacionamiento;
-				$empresa->costo_volumen = $request->costo_volumen;
+				//$empresa->costo_estacionamiento = $request->costo_estacionamiento;
+				//$empresa->costo_volumen = $request->costo_volumen;
 				$empresa->save();
 				$ubicacion_trabajo = UbicacionTrabajo::firstOrCreate(['ubicacion_empresa_id' => $empresa->id, 'ubicacion_unidad_id' => 1, 'ubicacion_estado' => 'A']);
 			}else{
@@ -467,8 +467,8 @@ class EmpresaController extends Controller
 				$empresa->direccion = $request->direccion;
 				$empresa->email = $request->email;
 				$empresa->telefono = $request->telefono;
-				$empresa->costo_estacionamiento = $request->costo_estacionamiento;
-				$empresa->costo_volumen = $request->costo_volumen;
+				//$empresa->costo_estacionamiento = $request->costo_estacionamiento;
+				//$empresa->costo_volumen = $request->costo_volumen;
 				$empresa->save();
 			}else{
 				$sw = false;

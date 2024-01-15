@@ -43,6 +43,10 @@ Route::post('persona/listar_persona_ajax', [PersonaController::class, 'listar_pe
 Route::get('persona/modal_persona/{id}', [PersonaController::class, 'modal_persona'])->name('persona.modal_persona');
 Route::get('persona/eliminar_persona/{id}/{estado}', [PersonaController::class, 'eliminar_persona'])->name('persona.eliminar_persona');
 Route::post('persona/buscar_persona_ajax', [PersonaController::class, 'buscar_persona_ajax'])->name('persona.buscar_persona_ajax');
+Route::get('persona/obtener_provincia/{idDepartamento}', [PersonaController::class, 'obtener_provincia'])->name('persona.obtener_provincia');
+Route::get('persona/obtener_distrito/{idDepartamento}/{idProvincia}', [PersonaController::class, 'obtener_distrito'])->name('persona.obtener_distrito');
+
+
 
 Route::get('empresas', [EmpresaController::class, 'index'])->name('empresas');
 Route::post('empresa/send', [EmpresaController::class, 'send'])->name('empresa.send');
