@@ -13,7 +13,7 @@ class TablasMaestrasRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,12 @@ class TablasMaestrasRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'tipo' => ['required'],
+            'denominacion' => ['required'],
+            'orden' => ['required'],
+            'estado' => ['required'],
+            'codigo' => ['required'],
+            'tipo_nombre' => ['required'],
         ];
     }
 }

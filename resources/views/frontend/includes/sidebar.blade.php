@@ -128,7 +128,7 @@
                 </li>
 
                 <li class="c-sidebar-nav-item">
-                    <x-utils.link :href="route('frontend.tabla_maestras.all')" class="c-sidebar-nav-link" :text="__('Tablas Maestras')" />
+                    <x-utils.link :href="route('frontend.tablamaestras.index')" class="c-sidebar-nav-link" :text="__('Tablas Maestras')" />
                 </li>
                 <li class="c-sidebar-nav-item">
                     <x-utils.link :href="route('frontend.conductores.index')" class="c-sidebar-nav-link" :text="__('Conductores')" />
