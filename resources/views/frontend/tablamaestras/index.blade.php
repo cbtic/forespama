@@ -16,7 +16,7 @@
         </x-slot>
 
         <x-slot name="body">
-            <livewire:backend.tablamaestra-table />
+            <livewire:backend.tabla-maestra-table />
         </x-slot>
     </x-backend.card>
 @endsection

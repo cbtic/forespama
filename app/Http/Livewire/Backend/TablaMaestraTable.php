@@ -2,15 +2,18 @@
 
 namespace App\Http\Livewire\Backend;
 
+use App\Models\TablaMaestra;
 use Illuminate\Database\Eloquent\Builder;
 use Rappasoft\LaravelLivewireTables\DataTableComponent;
 use Rappasoft\LaravelLivewireTables\Views\Column;
-use App\Models\TablaMaestra;
 
 class TablaMaestraTable extends DataTableComponent
 {
     protected $model = TablaMaestra::class;
 
+    /**
+     * @return Builder
+     */
     public function query(): Builder
     {
         return TablaMaestra::when($this->getFilter('search'), fn ($query, $term) => $query->search($term));
@@ -18,7 +21,13 @@ class TablaMaestraTable extends DataTableComponent
 
     public function configure(): void
     {
-        $this->setPrimaryKey('id');
+        $this->setPrimaryKey('id')
+        ->setTableRowUrl(function($row) {
+            return route('frontend.tablamaestras.edit', $row);
+        })
+        ->setTableRowUrlTarget(function($row) {
+            return '_self';
+        });
     }
 
     public function columns(): array
