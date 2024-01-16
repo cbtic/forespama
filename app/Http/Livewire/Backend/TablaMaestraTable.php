@@ -47,10 +47,6 @@ class TablaMaestraTable extends DataTableComponent
                 ->sortable(),
             Column::make("Tipo nombre", "tipo_nombre")
                 ->sortable(),
-            Column::make("Created at", "created_at")
-                ->sortable(),
-            Column::make("Updated at", "updated_at")
-                ->sortable(),
         ];
     }
 }
