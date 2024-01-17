@@ -51,12 +51,21 @@ Route::post('empresa/listar_empresa_ajax', [EmpresaController::class, 'listar_em
 Route::get('empresa/modal_empresa/{id}', [EmpresaController::class, 'modal_empresa'])->name('empresa.modal_empresa');
 Route::get('empresa/eliminar_empresa/{id}/{estado}', [EmpresaController::class, 'eliminar_empresa'])->name('empresa.eliminar_empresa');
 
-Route::get('vehiculos', [VehiculoController::class, 'index'])->name('vehiculos');
-Route::post('vehiculo/send', [VehiculoController::class, 'send'])->name('vehiculo.send');
-Route::get('vehiculo/consulta_vehiculo', [VehiculoController::class, 'consulta_vehiculo'])->name('vehiculo.consulta_vehiculo');
-Route::post('vehiculo/listar_vehiculo_ajax', [VehiculoController::class, 'listar_vehiculo_ajax'])->name('vehiculo.listar_vehiculo_ajax');
-Route::get('vehiculo/modal_vehiculo/{id}', [VehiculoController::class, 'modal_vehiculo'])->name('vehiculo.modal_vehiculo');
-Route::get('vehiculo/eliminar_vehiculo/{id}/{estado}', [VehiculoController::class, 'eliminar_vehiculo'])->name('vehiculo.eliminar_vehiculo');
+// Route::get('vehiculos', [VehiculoController::class, 'index'])->name('vehiculos');
+// Route::post('vehiculo/send', [VehiculoController::class, 'send'])->name('vehiculo.send');
+// Route::get('vehiculo/consulta_vehiculo', [VehiculoController::class, 'consulta_vehiculo'])->name('vehiculo.consulta_vehiculo');
+// Route::post('vehiculo/listar_vehiculo_ajax', [VehiculoController::class, 'listar_vehiculo_ajax'])->name('vehiculo.listar_vehiculo_ajax');
+// Route::get('vehiculo/modal_vehiculo/{id}', [VehiculoController::class, 'modal_vehiculo'])->name('vehiculo.modal_vehiculo');
+// Route::get('vehiculo/eliminar_vehiculo/{id}/{estado}', [VehiculoController::class, 'eliminar_vehiculo'])->name('vehiculo.eliminar_vehiculo');
+
+Route::get('vehiculos', 'App\Http\Controllers\VehiculoController@index')->name('vehiculos.index');
+Route::post('vehiculos', 'App\Http\Controllers\VehiculoController@store')->name('vehiculos.store');
+Route::get('vehiculos/create', 'App\Http\Controllers\VehiculoController@create')->name('vehiculos.create');
+Route::get('vehiculos/{vehiculos}', 'App\Http\Controllers\VehiculoController@show')->name('vehiculos.show');
+Route::put('vehiculos/{vehiculos}', 'App\Http\Controllers\VehiculoController@update')->name('vehiculos.update');
+Route::patch('vehiculos/{vehiculos}', 'App\Http\Controllers\VehiculoController@update');
+Route::delete('vehiculos/{vehiculos}', 'App\Http\Controllers\VehiculoController@destroy')->name('vehiculos.destroy');
+Route::get('vehiculos/{vehiculos}/edit', 'App\Http\Controllers\VehiculoController@edit')->name('vehiculos.edit');
 
 Route::get('conductores', 'App\Http\Controllers\ConductoresController@index')->name('conductores.index');
 Route::post('conductores', 'App\Http\Controllers\ConductoresController@store')->name('conductores.store');

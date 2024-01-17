@@ -1,0 +1,52 @@
+<?php
+
+namespace App\Http\Livewire\Backend;
+
+use Rappasoft\LaravelLivewireTables\DataTableComponent;
+use Rappasoft\LaravelLivewireTables\Views\Column;
+use App\Models\Vehiculo;
+use Illuminate\Database\Eloquent\Builder;
+
+class VehiculoTable extends DataTableComponent
+{
+    protected $model = Vehiculo::class;
+
+    /**
+     * @return Builder
+     */
+    public function query(): Builder
+    {
+        return Vehiculo::when($this->getFilter('search'), fn ($query, $term) => $query->search($term));
+    }
+
+    public function configure(): void
+    {
+        $this->setPrimaryKey('id')
+        ->setTableRowUrl(function($row) {
+            return route('frontend.vehiculos.edit', $row);
+        })
+        ->setTableRowUrlTarget(function($row) {
+            return '_self';
+        });
+    }
+
+    public function columns(): array
+    {
+        return [
+            Column::make("Id", "id")
+                ->sortable(),
+            Column::make("Placa", "placa")
+                ->sortable(),
+            Column::make("Ejes", "ejes")
+                ->sortable(),
+            Column::make("Peso tracto", "peso_tracto")
+                ->sortable(),
+            Column::make("Peso carreta", "peso_carreta")
+                ->sortable(),
+            Column::make("Peso seco", "peso_seco")
+                ->sortable(),
+            Column::make("Estado", "estado")
+                ->sortable(),
+        ];
+    }
+}

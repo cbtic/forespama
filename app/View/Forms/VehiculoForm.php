@@ -2,31 +2,29 @@
 
 namespace App\View\Forms;
 
-use App\Models\TablaMaestra;
+use App\Models\Vehiculo;
 use Grafite\Forms\Forms\ModelForm;
-use Grafite\Forms\Fields\TextArea;
 use Grafite\Forms\Fields\Text;
-use Grafite\Forms\Fields\Email;
-use Grafite\Forms\Fields\HasOne;
-use Grafite\Forms\Fields\HasMany;
-use Grafite\Forms\Fields\Date;
-use Grafite\Forms\Html\Button;
 use Grafite\Forms\Fields\Select;
-use Grafite\Forms\Fields\PasswordWithReveal;
-use Grafite\Forms\Fields\AutoSuggestSelect;
-use Grafite\Forms\Fields\Hidden;
 
-class TablaMaestraForm extends ModelForm
+class VehiculoForm extends ModelForm
 {
     /**
      * The model for the form
      *
      * @var \Illuminate\Database\Eloquent\Model
      */
-    public $model = TablaMaestra::class;
+    public $model = Vehiculo::class;
 
-    public $routeParameters = ['id','tipo', 'denominacion', 'orden', 'estado', 'codigo', 'tipo_nombre'];
-
+    public $routeParameters = [
+                                'id',
+                                'placa',
+                                'ejes',
+                                'peso_tracto',
+                                'peso_carreta',
+                                'peso_seco',
+                                'estado',
+                            ];
     public $columns = 1;
 
     public $hasFiles = true;
@@ -41,7 +39,7 @@ class TablaMaestraForm extends ModelForm
      *
      * @var string
      */
-    public $routePrefix = 'frontend.tablamaestras';
+    public $routePrefix = 'frontend.vehiculos';
 
     /**
      * Buttons and values
@@ -54,7 +52,7 @@ class TablaMaestraForm extends ModelForm
      * @var array
      */
     public $buttons = [
-        'submit' => 'Save'
+        'submit' => 'Guardar'
     ];
 
     /**
@@ -65,23 +63,19 @@ class TablaMaestraForm extends ModelForm
     public function fields()
     {
         return [
-            Select::make('tipo')->selectOptions(['1' => 'TIPO 1', '2' => 'TIPO 2', '3' => 'TIPO 3']),
-            Text::make('denominacion', [
+            Text::make('placa', [
                 'required' => true,
             ]),
-            Text::make('codigo', [
+            Text::make('ejes', [
                 'required' => true,
             ]),
-            Text::make('tipo_nombre', [
-                'required' => true,
-            ]),
-            Text::make('sub_codigo', [
+            Text::make('peso_tracto', [
                 'required' => false,
             ]),
-            Text::make('abreviatura', [
+            Text::make('peso_carreta', [
                 'required' => false,
             ]),
-            Text::make('orden', [
+            Text::make('peso_seco', [
                 'required' => false,
             ]),
             Select::make('estado')->selectOptions(['ACTIVO' => '1', 'CANCELADO' => '2']),

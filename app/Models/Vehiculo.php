@@ -7,11 +7,19 @@ use DB;
 
 class Vehiculo extends Model
 {
-    
+    protected $fillable = [
+        'placa',
+        'ejes',
+        'peso_tracto',
+        'peso_carreta',
+        'peso_seco',
+        'estado',
+    ];
+
 	public function listar_vehiculo_ajax($p){
 		return $this->readFunctionPostgres('sp_listar_vehiculo_paginado',$p);
     }
-	
+
 	public function readFunctionPostgres($function, $parameters = null){
 
       $_parameters = '';
@@ -27,5 +35,5 @@ class Vehiculo extends Model
 	  DB::select("END;");
       return $data;
    }
-   
+
 }
