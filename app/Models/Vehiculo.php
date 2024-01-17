@@ -14,6 +14,8 @@ class Vehiculo extends Model
         'peso_carreta',
         'peso_seco',
         'estado',
+        'id_usuario_actualiza',
+        'id_usuario_inserta'
     ];
 
 	public function listar_vehiculo_ajax($p){

@@ -122,9 +122,13 @@ class VehiculoController extends Controller
 
     public function store(VehiculoRequest $request)
     {
+		$id_user = Auth::user()->id;
+        $request['id_usuario_actualiza'] = $id_user;
+        $request['id_usuario_inserta'] = $id_user;
+
         Vehiculo::create($request->all());
 
-        return redirect()->route('frontend.vehiculos');
+        return redirect()->route('frontend.vehiculos.index');
     }
 
     public function edit(Vehiculo $vehiculos)
@@ -134,6 +138,9 @@ class VehiculoController extends Controller
 
     public function update(VehiculoRequest $request, Vehiculo $vehiculos)
     {
+		$id_user = Auth::user()->id;
+        $request['id_usuario_actualiza'] = $id_user;
+
         $vehiculos->update($request->all());
 
         return redirect()->route('frontend.vehiculos.index');
