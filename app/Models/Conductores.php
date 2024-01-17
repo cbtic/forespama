@@ -18,6 +18,6 @@ class Conductores extends Model
 
    public function vehiculos()
    {
-       return $this->hasMany(Vehiculo::class,'vehiculos_id');
+       return $this->hasMany(Vehiculo::class,'id_vehiculos');
    }
 }
