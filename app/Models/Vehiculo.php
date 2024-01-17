@@ -36,4 +36,14 @@ class Vehiculo extends Model
       return $data;
    }
 
+   public function empresas()
+   {
+     return $this->hasMany(Empresa::class,'empresas_id');
+     //  return $this->belongsTo(Empresa::class);
+   }
+
+   public function conductores()
+   {
+       return $this->hasMany(Conductores::class,'conductores_id');
+   }
 }

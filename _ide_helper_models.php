@@ -89,6 +89,8 @@ namespace App\Models{
  * @property string|null $licencia
  * @property string|null $fecha_licencia
  * @property-read \App\Models\Persona $personas
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Vehiculo> $vehiculos
+ * @property-read int|null $vehiculos_count
  * @method static \Illuminate\Database\Eloquent\Builder|Conductores newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Conductores newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Conductores query()
@@ -115,6 +117,10 @@ namespace App\Models{
  * @property string $representante
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Conductores> $conductores
+ * @property-read int|null $conductores_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Vehiculo> $vehiculos
+ * @property-read int|null $vehiculos_count
  * @method static \Illuminate\Database\Eloquent\Builder|Empresa newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Empresa newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Empresa query()
@@ -333,6 +339,10 @@ namespace App\Models{
  * @property string|null $estado
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Conductores> $conductores
+ * @property-read int|null $conductores_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Empresa> $empresas
+ * @property-read int|null $empresas_count
  * @method static \Illuminate\Database\Eloquent\Builder|Vehiculo newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Vehiculo newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Vehiculo query()

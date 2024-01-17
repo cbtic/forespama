@@ -15,4 +15,9 @@ class Conductores extends Model
 	  //return $this->hasMany(EstacionamientoEmpresa::class,'empresa_id');
         return $this->belongsTo(Persona::class);
     }
+
+   public function vehiculos()
+   {
+       return $this->hasMany(Vehiculo::class,'vehiculos_id');
+   }
 }
