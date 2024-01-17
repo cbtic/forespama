@@ -323,7 +323,7 @@ label.form-control-sm{
 
         <div class="card-body">
 
-            <form class="form-horizontal" method="post" action="" id="frmProyecto" autocomplete="off" enctype="multipart/form-data">
+            <form class="form-horizontal" method="post" action="" id="frmIngreso" autocomplete="off" enctype="multipart/form-data">
 				<!--
                 <div class="row">
                     <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12" style="margin-top:15px">
@@ -343,6 +343,10 @@ label.form-control-sm{
                         <input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
 
                         <!--<input type="hidden" name="estado" id="estado" value="0">-->
+						
+						<input type="hidden" name="empresa_transportista_id" id="empresa_transportista_id" value="0">
+						<input type="hidden" name="vehiculos_id" id="vehiculos_id" value="0">
+						<input type="hidden" name="conductores_id" id="conductores_id" value="0">
 						
                         <div class="row" id="divSolicitud">
 							
@@ -368,15 +372,21 @@ label.form-control-sm{
 												<div style="clear:both"></div>
                                                 <div class="row">
 												
-													<div class="col-lg-2 col-md-12 col-sm-12 col-xs-12">
+													<div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
 														<label class="form-control-sm">Id Ingreso</label>
 														<input type="text" name="id_proyecto" id="id_proyecto"
 															value="" readonly="readonly" placeholder="" class="form-control form-control-sm" >
 													</div>
 													
-													<div class="col-lg-10 col-md-12 col-sm-12 col-xs-12">
+													<div class="col-lg-7 col-md-12 col-sm-12 col-xs-12">
 														<label class="form-control-sm">Placa</label>
-														<input type="text" name="nombre_py" id="nombre_py"
+														<input type="text" name="placa" id="placa"
+															value="" placeholder="" class="form-control form-control-sm" onblur="obtenerEmpresa()">
+													</div>
+													
+													<div class="col-lg-2 col-md-12 col-sm-12 col-xs-12">
+														<label class="form-control-sm">Fecha</label>
+														<input type="text" name="fecha_ingreso" id="fecha_ingreso"
 															value="" placeholder="" class="form-control form-control-sm" >
 													</div>
 																	
@@ -384,70 +394,62 @@ label.form-control-sm{
 												
 												<div class="row">
 												
-													<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-														<div class="form-group">
-															<label class="form-control-sm">Detalle</label>
-															<textarea type="text" name="detalle_py" id="detalle_py" rows="2"
-															placeholder="" class="form-control form-control-sm"></textarea>
-														</div>
+													<div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
+														<label class="form-control-sm">Ruc Empresa</label>
+														<input type="text" name="ruc" id="ruc"
+															value="" readonly="readonly" class="form-control form-control-sm" >
+													</div>
+													
+													<div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
+														<label class="form-control-sm">Raz&oacute;n Social</label>
+														<input type="text" name="empresa" id="empresa"
+															value="" readonly="readonly" class="form-control form-control-sm" >
+													</div>
+													
+												</div>
+												
+												<div class="row">
+												
+													<div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
+														<label class="form-control-sm">DNI Conductor</label>
+														<input type="text" name="numero_documento" id="numero_documento"
+															value="" readonly="readonly" class="form-control form-control-sm" >
+													</div>
+													
+													<div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
+														<label class="form-control-sm">Nombre Conductor</label>
+														<input type="text" name="conductor" id="conductor"
+															value="" readonly="readonly" class="form-control form-control-sm" >
+													</div>
+													
+												</div>
+												
+												<div class="row">
+												
+													<div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
+														<label class="form-control-sm">Tipo Madera</label>
+														<select name="tipo_maderas_id" id="tipo_maderas_id" class="form-control form-control-sm">
+															<option value="">--Selecionar--</option>
+															<?php
+															foreach ($tipo_madera as $row) { ?>
+																<option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
+															<?php
+															}
+															?>
+														</select>
+													</div>
+													
+													<div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
+														<label class="form-control-sm">Cantidad Troncos</label>
+														<input type="text" name="cantidad" id="cantidad"
+															value="" class="form-control form-control-sm" >
 													</div>
 													
 												</div>
 												
 												<div style="clear:both"></div>
-												
-												<!--
 												<div class="row">
-
-													<div class="col-lg-4 col-md-12 col-sm-12 col-xs-12">
-														<label class="form-control-sm">Departamento</label>
-														
-														<?php 										
-														$idDepartamento = 0;
-														$idProvincia = 0;
-														$idDistrito = 0;
-														/*
-														if($asegurado->ubigeodireccionprincipal!=""){
-															$idDepartamento = substr($asegurado->ubigeodireccionprincipal, 0, 2);
-															$idProvincia = substr($asegurado->ubigeodireccionprincipal, 0, 4);
-															$idDistrito = $asegurado->ubigeodireccionprincipal;
-														}
-														*/
-													?>
-													<select class="form-control form-control-sm" id="txtIdUbiDepar" name="txtIdUbiDepar" onChange="obtenerProvincia();">
-														<option value="">- Seleccione -</option>
-														
-													</select>
-														
-													</div>
-													
-													<div class="col-lg-4 col-md-12 col-sm-12 col-xs-12">
-														<label class="form-control-sm">Provincia</label>
-														<select class="form-control form-control-sm" id="txtIdUbiProv" name="txtIdUbiProv" onChange="obtenerDistrito()">
-															<option value="">- Seleccione -</option>
-															<?php 
-															
-															?>
-														</select>
-													</div>
-													
-													<div class="col-lg-4 col-md-12 col-sm-12 col-xs-12">
-														<label class="form-control-sm">Distrito</label>
-														<select class="form-control form-control-sm" id="ubigeodireccionprincipal" name="ubigeodireccionprincipal">
-															<option value="">- Seleccione -</option>
-															<?php 
-																														?>
-														</select>
-														
-														
-													</div>
-													
-                                                </div>
-												-->
-												
-												<div style="clear:both"></div>
-												<div class="row">
-												
+													<!--
 													<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
 														<label class="form-control-sm">Estado</label>
 														<select name="estado_py" id="estado_py" class="form-control form-control-sm" onchange="">
@@ -457,12 +459,13 @@ label.form-control-sm{
 															?>
 														</select>
 													</div>
+													-->
 													
-													<div class="col-xl-8 text-right" style="padding-top:15px">
+													<div class="col-xl-12 text-right" style="padding-top:15px">
 														
-														<input class="btn btn-success btn-sm float-rigth" value="NUEVO" type="button" id="btnNuevo" style="padding-left:20px;padding-right:20px"/>
+														<input class="btn btn-warning btn-sm float-rigth" value="NUEVO" type="button" id="btnNuevo" style="padding-left:20px;padding-right:20px"/>
 														
-                                                        <input class="btn btn-sm btn-danger float-rigth" value="GUARDAR" name="guardar" type="button" id="btnGuardar" onclick="guardar_proyecto()" style="margin-left:10px" />
+                                                        <input class="btn btn-sm btn-success float-rigth" value="GUARDAR" name="guardar" type="button" id="btnGuardar" style="margin-left:10px" />
 														
 														
                                                         
@@ -625,13 +628,14 @@ label.form-control-sm{
 							<thead>
 							<tr style="font-size:13px">
 								<th>Id</th>
-								<th>Nombre Proyecto</th>
-								<th>Detalle Proyecto</th>
-								<th>Departamento</th>
-								<th>Provincia</th>
-								<th>Distrito</th>
-								<th>Estado Proyecto</th>
-								<th>Estado</th>
+								<th>Fecha</th>
+								<th>Placa</th>
+								<th>Ruc</th>
+								<th>Empresa</th>
+								<th>Doc Conductor</th>
+								<th>Conductor</th>
+								<th>Tipo Madera</th>
+								<th>Cantidad</th>
 							</tr>
 							</thead>
 							<tbody style="font-size:13px">
@@ -750,6 +754,6 @@ label.form-control-sm{
 	
 	</script>
 	
-	<script src="{{ asset('js/proyecto/create.js') }}"></script>
+	<script src="{{ asset('js/ingreso/create.js') }}"></script>
 	
 	@endpush
