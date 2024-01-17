@@ -193,6 +193,8 @@ namespace App\Models{
  * @property string $nro_brevete
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Conductores> $conductores
+ * @property-read int|null $conductores_count
  * @property-read string $nombre_completo
  * @method static \Illuminate\Database\Eloquent\Builder|Persona newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Persona newQuery()
