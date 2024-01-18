@@ -2,10 +2,16 @@
 
 namespace App\View\Forms;
 
+use App\Models\Conductores;
+use App\Models\Persona;
+use App\Models\Empresa;
 use App\Models\Vehiculo;
 use Grafite\Forms\Forms\ModelForm;
 use Grafite\Forms\Fields\Text;
 use Grafite\Forms\Fields\Select;
+use Grafite\Forms\Fields\HasMany;
+use Grafite\Forms\Fields\HasOne;
+use Str;
 
 class VehiculoForm extends ModelForm
 {
@@ -63,6 +69,26 @@ class VehiculoForm extends ModelForm
     public function fields()
     {
         return [
+            HasOne::make('id_empresas', [
+                'label' => 'Empresa',
+                'model' => Empresa::class,
+                'model_options' => [
+                    'label' => 'nombre_comercial',
+                    'value' => 'id',
+                    'method' => 'all',
+                    'params' => null,
+                ]
+            ])->selectOptions(['Seleccione' => null]),
+            HasMany::make('id_conductores', [
+                'label' => 'Conductores',
+                'model' => Persona::class,
+                'model_options' => [
+                    'label' => 'nombre_completo',
+                    'value' => 'id',
+                    'method' => 'all',
+                    'params' => null,
+                ]
+            ])->selectOptions(['Seleccione' => null]),
             Text::make('placa', [
                 'required' => true,
             ]),

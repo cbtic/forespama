@@ -37,7 +37,7 @@ class VehiculoTable extends DataTableComponent
                 ->sortable(),
             Column::make("Placa", "placa")
                 ->sortable(),
-            Column::make('Empresa', 'empresas.nombre_comercial')
+            Column::make('Empresa', 'empresas.id_empresas')
                 ->eagerLoadRelations(),
             Column::make("Ejes", "ejes")
                 ->sortable(),
