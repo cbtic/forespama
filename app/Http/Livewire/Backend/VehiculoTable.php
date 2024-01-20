@@ -35,10 +35,14 @@ class VehiculoTable extends DataTableComponent
         return [
             Column::make("Id", "id")
                 ->sortable(),
+            Column::make("Conductor")
+                ->sortable()
+                ->label(fn ($row) => $row->conductores->pluck('licencia')->implode(', ')),
+            Column::make("Empresa")
+                ->label(fn ($row) => $row->empresas->pluck('nombre_comercial')->implode(', '))
+                ->sortable(),
             Column::make("Placa", "placa")
                 ->sortable(),
-            Column::make('Empresa', 'empresas.id_empresas')
-                ->eagerLoadRelations(),
             Column::make("Ejes", "ejes")
                 ->sortable(),
             Column::make("Peso tracto", "peso_tracto")
