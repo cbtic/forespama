@@ -35,9 +35,13 @@
         <li class="c-header-nav-item dropdown">
             <x-utils.link class="c-header-nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
                 <x-slot name="text">
-                    <div class="c-avatar">
-                        <img class="c-avatar-img" src="{{ $logged_in_user->avatar }}" alt="{{ $logged_in_user->email ?? '' }}">
-                    </div>
+                    @if (null !== $logged_in_user)
+                        <div class="c-avatar">
+                            <img class="c-avatar-img" src="{{ $logged_in_user->avatar }}" alt="{{ $logged_in_user->email ?? '' }}">
+                        </div>
+                    @else
+                        <a href="{{ route('frontend.auth.login') }}" style="color:#000;font-size:16px">@lang('Login')</a>
+                    @endif
                 </x-slot>
             </x-utils.link>
 
