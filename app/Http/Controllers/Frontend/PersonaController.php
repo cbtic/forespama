@@ -182,6 +182,20 @@ class PersonaController extends Controller
 
 	}
 
+    public function obtener_provincia($idDepartamento){
+		
+		$ubigeo_model = new Ubigeo;
+		$provincia = $ubigeo_model->getProvincia($idDepartamento);
+		echo json_encode($provincia);
+	}
+	
+	public function obtener_distrito($id_departamento,$idProvincia){
+		
+		$ubigeo_model = new Ubigeo;
+		$distrito = $ubigeo_model->getDistrito($id_departamento,$idProvincia);
+		echo json_encode($distrito);
+	}
+
 	public function modal_persona_vacuna($id_persona){
 
 		$maestra_model = new TablaMaestra;

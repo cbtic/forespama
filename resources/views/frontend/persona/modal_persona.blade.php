@@ -872,7 +872,7 @@ $.mask.definitions['p'] = "[Mm]";
 		$('.loader').show();
 		
 		$.ajax({
-			url: '/agremiado/obtener_provincia/'+id,
+			url: '/persona/obtener_provincia/'+id,
 			dataType: "json",
 			success: function(result){
 				var option = "<option value='' selected='selected'>Seleccionar</option>";
@@ -910,7 +910,7 @@ $.mask.definitions['p'] = "[Mm]";
 		$('.loader').show();
 		
 		$.ajax({
-			url: '/agremiado/obtener_distrito/'+id_departamento+'/'+id,
+			url: '/persona/obtener_distrito/'+id_departamento+'/'+id,
 			dataType: "json",
 			success: function(result){
 				var option = "<option value=''>Seleccionar</option>";
@@ -943,7 +943,7 @@ $.mask.definitions['p'] = "[Mm]";
 		$('.loader').show();
 		
 		$.ajax({
-			url: '/agremiado/obtener_provincia/'+id,
+			url: '/persona/obtener_provincia/'+id,
 			dataType: "json",
 			success: function(result){
 				var option = "<option value='' selected='selected'>Seleccionar</option>";
@@ -984,7 +984,7 @@ $.mask.definitions['p'] = "[Mm]";
 		$('.loader').show();
 		
 		$.ajax({
-			url: '/agremiado/obtener_distrito/'+id_departamento+'/'+id,
+			url: '/persona/obtener_distrito/'+id_departamento+'/'+id,
 			dataType: "json",
 			success: function(result){
 				var option = "<option value=''>Seleccionar</option>";
