@@ -340,9 +340,7 @@ label.form-control-sm{
 					<div class="col col-sm-12 align-self-center">
 
                         <input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
-						<input type="hidden" name="empresa_transportista_id" id="empresa_transportista_id" value="0">
-						<input type="hidden" name="vehiculos_id" id="vehiculos_id" value="0">
-						<input type="hidden" name="conductores_id" id="conductores_id" value="0">
+						<input type="hidden" name="id_ingreso_vehiculo_tronco_tipo_maderas" id="id_ingreso_vehiculo_tronco_tipo_maderas" value="0">
 						
 					<div class="row" style="padding-top:15px">
 
@@ -462,11 +460,11 @@ label.form-control-sm{
 
 						<div class="card-body">
 							
-							<div class="table-responsive overflow-auto" style="max-height: 500px;padding-top:20px">
+							<div id="divCubicaje" class="table-responsive overflow-auto" style="max-height: 500px;padding-top:20px">
 								<table id="tblCubicaje" class="table table-hover table-sm">
 									<thead>
 										<tr style="font-size:13px">
-											<th width="2%">Id</th>
+											<th width="2%">Cantidad</th>
 											<th width="10%">Diametro 1(cm)</th>
 											<th width="10%">Diametro 2(cm)</th>
 											<th width="10%">Diametro DM(m)</th>

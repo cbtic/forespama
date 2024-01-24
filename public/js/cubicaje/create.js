@@ -4,7 +4,7 @@ $(document).ready(function () {
 	datatablenew();
 	
 	$('#btnGuardar').on('click', function () {
-		guardar_ingreso();
+		guardar_cubicaje();
 	});
 	
 	$('#addRow').on('click', function () {
@@ -48,15 +48,16 @@ $(document).ready(function () {
 	
 });
 
-function guardar_ingreso(){
+function guardar_cubicaje(){
     
+	var id_ingreso_vehiculo_tronco_tipo_maderas = $("#id_ingreso_vehiculo_tronco_tipo_maderas").val();
+	
     $.ajax({
-			url: "/ingreso_vehiculo_tronco/send_ingreso",
+			url: "/ingreso_vehiculo_tronco/send_cubicaje",
             type: "POST",
             data : $("#frmIngreso").serialize(),
-            success: function (result) {  
-					datatablenew();
-					
+            success: function (result) {
+				cargarCubicaje(id_ingreso_vehiculo_tronco_tipo_maderas);
             }
     });
 }
@@ -1804,26 +1805,50 @@ function datatablenew(){
 
 function calcular_cubicaje(obj){
 	
-	var diametro_1 = $(obj).parent().parent().find("input[name=diametro_1]").val();
-	var diametro_2 = $(obj).parent().parent().find("input[name=diametro_2]").val();
-	var longitud = $(obj).parent().parent().find("input[name=longitud]").val();
+	var diametro_1 = $(obj).parent().parent().find('input[name="diametro_1[]"]').val();
+	var diametro_2 = $(obj).parent().parent().find('input[name="diametro_2[]"]').val();
+	var longitud = $(obj).parent().parent().find('input[name="longitud[]"]').val();
 	var diametro_dm = ((Number(diametro_1) + Number(diametro_2))/2)/100;
 	var radio = diametro_dm/2;
-	var volumen_m3 = 3.14 * radio * radio * Number(longitud);
-	$(obj).parent().parent().find("input[name=diametro_dm]").val(diametro_dm);
-	$(obj).parent().parent().find("input[name=volumen_m3]").val(volumen_m3.toFixed(3));
-	$(obj).parent().parent().find("input[name=volumen_total_m3]").val(volumen_m3.toFixed(2));
+	var volumen_m3 = 3.1416 * radio * radio * Number(longitud);
+	var volumen_pies = 220 * volumen_m3;
+	var volumen_total_pies = 220 * volumen_m3;
+	
+	var precio_unitario = 0;
+	var precio_total = 0;
+	
+	if (diametro_dm > 0.229){
+		precio_unitario = 1.70;
+	}else{
+		precio_unitario = 1.20;
+	}
+	
+	if(longitud<1.22)precio_unitario = 1.20;
+	
+	precio_total = volumen_total_pies * precio_unitario;
+	
+	$(obj).parent().parent().find('input[name="diametro_dm[]"]').val(diametro_dm);
+	$(obj).parent().parent().find('input[name="volumen_m3[]"]').val(volumen_m3.toFixed(3));
+	$(obj).parent().parent().find('input[name="volumen_total_m3[]"]').val(volumen_m3.toFixed(2));
+	$(obj).parent().parent().find('input[name="volumen_pies[]"]').val(volumen_pies.toFixed(2));
+	$(obj).parent().parent().find('input[name="volumen_total_pies[]"]').val(volumen_total_pies.toFixed(2));
+	$(obj).parent().parent().find('input[name="precio_unitario[]"]').val(precio_unitario.toFixed(2));
+	$(obj).parent().parent().find('input[name="precio_total[]"]').val(precio_total.toFixed(2));
 	
 }
 
 function cargarCubicaje(id){
 
-	$("#tblCubicaje tbody").html("");
+	//$("#tblCubicaje tbody").html("");
+	$("#divCubicaje").html("");
+	
 	$.ajax({
 			url: "/ingreso_vehiculo_tronco/cargar_cubicaje/"+id,
 			type: "GET",
 			success: function (result) {  
-					$("#tblCubicaje tbody").html(result);
+					//$("#tblCubicaje tbody").html(result);
+					$("#divCubicaje").html(result);
+					$("#id_ingreso_vehiculo_tronco_tipo_maderas").val(id);
 			}
 	});
 	
