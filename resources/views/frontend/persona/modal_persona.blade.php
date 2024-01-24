@@ -872,7 +872,7 @@ $.mask.definitions['p'] = "[Mm]";
 		$('.loader').show();
 		
 		$.ajax({
-			url: '/agremiado/obtener_provincia/'+id,
+			url: '/persona/obtener_provincia/'+id,
 			dataType: "json",
 			success: function(result){
 				var option = "<option value='' selected='selected'>Seleccionar</option>";
@@ -910,7 +910,7 @@ $.mask.definitions['p'] = "[Mm]";
 		$('.loader').show();
 		
 		$.ajax({
-			url: '/agremiado/obtener_distrito/'+id_departamento+'/'+id,
+			url: '/persona/obtener_distrito/'+id_departamento+'/'+id,
 			dataType: "json",
 			success: function(result){
 				var option = "<option value=''>Seleccionar</option>";
@@ -943,7 +943,7 @@ $.mask.definitions['p'] = "[Mm]";
 		$('.loader').show();
 		
 		$.ajax({
-			url: '/agremiado/obtener_provincia/'+id,
+			url: '/persona/obtener_provincia/'+id,
 			dataType: "json",
 			success: function(result){
 				var option = "<option value='' selected='selected'>Seleccionar</option>";
@@ -984,7 +984,7 @@ $.mask.definitions['p'] = "[Mm]";
 		$('.loader').show();
 		
 		$.ajax({
-			url: '/agremiado/obtener_distrito/'+id_departamento+'/'+id,
+			url: '/persona/obtener_distrito/'+id_departamento+'/'+id,
 			dataType: "json",
 			success: function(result){
 				var option = "<option value=''>Seleccionar</option>";
@@ -1081,7 +1081,7 @@ $.mask.definitions['p'] = "[Mm]";
 													<option value="">--Selecionar--</option>
 													<?php
 													foreach ($tipo_documento as $row) { ?>
-														<option value="<?php echo $row->codigo ?>" <?php if ($row->codigo == '78') echo "selected='selected'" ?>><?php echo $row->denominacion ?></option>
+														<option value="<?php echo $row->codigo ?>" <?php if ($row->codigo == $persona->id_tipo_documento) echo "selected='selected'" ?>><?php echo $row->denominacion ?></option>
 													<?php
 													}
 													?>

@@ -103,6 +103,10 @@ Now seed the database with:
 
 You should get a message for each file seeded, you should see the information in your database tables.
 
+Limpiar rutas, cache, configuraciones de Laravel:
+
+`php artisan clear-compiled && php artisan cache:clear && php artisan route:clear && php artisan view:clear && php artisan config:clear && composer dumpautoload -o`
+
 ### 7\. NPM Run '\*'
 
 Now that you have the database tables and default rows, you need to build the styles and scripts.

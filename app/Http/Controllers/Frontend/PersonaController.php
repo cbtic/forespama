@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 use App\Models\Persona;
 //use App\Models\Negativo;
 use App\Models\TablaMaestra;
+use App\Models\Ubigeo;
+
 use Auth;
 
 class PersonaController extends Controller
@@ -29,7 +31,7 @@ class PersonaController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {        
+    {
         return view('frontend.persona.all');
     }
 
@@ -116,10 +118,10 @@ class PersonaController extends Controller
        // echo("ok"); exit();
 
 		$persona_model = new Persona;
-		$p[]=$request->numero_documento;        
+		$p[]=$request->numero_documento;
 		$p[]=$request->persona;
         $p[]=$request->empresa;
-		$p[]=$request->estado;		
+		$p[]=$request->estado;
 		$p[]=$request->NumeroPagina;
 		$p[]=$request->NumeroRegistros;
 
@@ -136,9 +138,10 @@ class PersonaController extends Controller
 		echo json_encode($result);
 
 	}
-  
+
 	public function modal_persona($id){
 		$id_user = Auth::user()->id;
+        /*
 		$persona = new Persona;
 		$negativo = "";
 		if($id>0){
@@ -152,7 +155,45 @@ class PersonaController extends Controller
 		$tipo_documento = $tablaMaestra_model->getMaestroByTipo("9");
         
 		return view('frontend.persona.modal_persona',compact('id','persona','negativo','tipo_documento'));
+*/
 
+
+		$tablaMaestra_model = new TablaMaestra;
+		$persona = new Persona;
+
+		if($id>0){
+			$persona = Persona::find($id);
+		}else{
+			$persona = new Persona;
+		}
+		
+		$sexo = $tablaMaestra_model->getMaestroByTipo(2);
+		$tipo_documento = $tablaMaestra_model->getMaestroByTipo(9);
+		$grupo_sanguineo = $tablaMaestra_model->getMaestroByTipo(26);
+		$nacionalidad = $tablaMaestra_model->getMaestroByTipo(41);
+        
+		$ubigeo_model = new Ubigeo;
+		$departamento = $ubigeo_model->getDepartamento();
+		
+		//$universidad = $tablaMaestra_model->getMaestroByTipo(85);
+		//$especialidad = $tablaMaestra_model->getMaestroByTipo(86);
+		
+		return view('frontend.persona.modal_persona',compact('id','persona','sexo','tipo_documento','grupo_sanguineo','nacionalidad','departamento'));        
+
+	}
+
+    public function obtener_provincia($idDepartamento){
+		
+		$ubigeo_model = new Ubigeo;
+		$provincia = $ubigeo_model->getProvincia($idDepartamento);
+		echo json_encode($provincia);
+	}
+	
+	public function obtener_distrito($id_departamento,$idProvincia){
+		
+		$ubigeo_model = new Ubigeo;
+		$distrito = $ubigeo_model->getDistrito($id_departamento,$idProvincia);
+		echo json_encode($distrito);
 	}
 
 	public function modal_persona_vacuna($id_persona){
@@ -184,11 +225,11 @@ class PersonaController extends Controller
 		return view('frontend.persona.modal_persona_sanidad',compact('id_persona','fecha_actual','sanidades'));
 
 	}
-	
+
 	public function modal_flag_negativo($id_persona){
 
 		$negativo_model = new Negativo;
-		$negativo = $negativo_model->getNegativoByPersona($id_persona); 
+		$negativo = $negativo_model->getNegativoByPersona($id_persona);
 
 		return view('frontend.persona.modal_persona_negativo',compact('id_persona','negativo'));
 
@@ -216,7 +257,7 @@ class PersonaController extends Controller
     }
 
 	public function send_persona_sanidad(Request $request){
-        
+
 		if($request->img_foto!=""){
 			$filepath_tmp = public_path('img/frontend/tmp_sanidad/');
 			$filepath_nuevo = public_path('img/carnet_sanidad/');
@@ -291,7 +332,7 @@ class PersonaController extends Controller
         //print_r ($validaDni);
         //exit();
 
-        
+
         //print_r($buscapersona->count());
         //exit();
 
@@ -359,7 +400,7 @@ class PersonaController extends Controller
 
 
 		}else{
-            
+
             //$buscapersona = Persona::where("numero_documento", $request->numero_documento)->where("estado", "1")->get();
             //echo $buscapersona[0]->id;
             //exit();
@@ -371,19 +412,19 @@ class PersonaController extends Controller
 			$persona->apellido_paterno = $request->apellido_paterno;
 			$persona->apellido_materno = $request->apellido_materno;
 			$persona->nombres = $request->nombres;
-			$persona->codigo = $request->codigo;			
-            $persona->ocupacion = $request->ocupacion; 
+			$persona->codigo = $request->codigo;
+            $persona->ocupacion = $request->ocupacion;
 			$persona->telefono = $request->telefono;
 			$persona->email = $request->email;
 			$persona->foto = $request->img_foto;
             $persona->ruc = $request->ruc;
 			$flag_negativo = $persona->flag_negativo;
-			
+
             $persona->flag_negativo = $request->flag_negativo;
             //print ($persona->ruc);exit();
 			$persona->save();
 
-            
+
             if($flag_negativo!=$request->flag_negativo){
                 $negativo = new Negativo;
                 $negativo->persona_id = $persona->id;
@@ -529,4 +570,16 @@ class PersonaController extends Controller
 
         return $result;
      }
+
+    public function buscar_persona_ajax(Request $request){
+
+        $buscar = $request->buscar;
+
+        $personas = Persona::where("apellido_paterno", "ilike", "%".$buscar."%")->get();
+
+        $array["buscar"] = $buscar;
+        $array["resultado"] = $personas;
+        echo json_encode($array);
+
+    }
 }
