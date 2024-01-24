@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\TablaMaestra;
 use App\Models\IngresoVehiculoTronco;
 use App\Models\IngresoVehiculoTroncoTipoMadera;
+use App\Models\IngresoVehiculoTroncoCubicaje;
 use Auth;
 
 class IngresoVehiculoTroncoController extends Controller
@@ -36,13 +37,6 @@ class IngresoVehiculoTroncoController extends Controller
 	public function send_ingreso(Request $request){
 
 		$id_user = Auth::user()->id;
-		/*
-		if($request->id == 0){
-			$comision = new Comisione;
-		}else{
-			$comision = Comisione::find($request->id);
-		}
-		*/
 		
 		$ingresoVehiculoTronco = new IngresoVehiculoTronco;
 		$ingresoVehiculoTronco->fecha_ingreso = $request->fecha_ingreso;
@@ -62,7 +56,24 @@ class IngresoVehiculoTroncoController extends Controller
 		$ingresoVehiculoTroncoTipoMadera->cantidad = $request->cantidad;
 		$ingresoVehiculoTroncoTipoMadera->estado = 1;
 		$ingresoVehiculoTroncoTipoMadera->save();
-				
+		$ingreso_vehiculo_tronco_tipo_maderas_id = $ingresoVehiculoTroncoTipoMadera->id;
+		
+		for($i=1;$i<=$request->cantidad;$i++){
+			$ingresoVehiculoTroncoCubicaje = new IngresoVehiculoTroncoCubicaje;
+			$ingresoVehiculoTroncoCubicaje->ingreso_vehiculo_tronco_tipo_maderas_id=$ingreso_vehiculo_tronco_tipo_maderas_id;
+			$ingresoVehiculoTroncoCubicaje->diametro_1= 0;
+			$ingresoVehiculoTroncoCubicaje->diametro_2 = 0;
+			$ingresoVehiculoTroncoCubicaje->diametro_dm = 0;
+			$ingresoVehiculoTroncoCubicaje->longitud = 0;
+			$ingresoVehiculoTroncoCubicaje->volumen_m3 = 0;
+			$ingresoVehiculoTroncoCubicaje->volumen_pies = 0;
+			$ingresoVehiculoTroncoCubicaje->volumen_total_m3 = 0;
+			$ingresoVehiculoTroncoCubicaje->volumen_total_pies = 0;
+			$ingresoVehiculoTroncoCubicaje->precio_unitario = 0;
+			$ingresoVehiculoTroncoCubicaje->precio_total = 0;
+			$ingresoVehiculoTroncoCubicaje->save();
+		}
+			
     }
 	
 	public function listar_ingreso_vehiculo_tronco_ajax(Request $request){
@@ -86,6 +97,54 @@ class IngresoVehiculoTroncoController extends Controller
 	
 	}
 	
+	public function cubicaje(){
 	
+		//$tablaMaestra_model = new TablaMaestra;
+		//$tipo_madera = $tablaMaestra_model->getMaestroByTipo(42);
+		
+		return view('frontend.cubicaje.create'/*,compact('tipo_madera')*/);
 	
+	}
+	
+	public function cargar_cubicaje($id){
+		 
+		$ingresoVehiculoTronco_model = new IngresoVehiculoTronco;
+        $cubicaje = $ingresoVehiculoTronco_model->getIngresoVehiculoTroncoCubicajeById($id);
+		
+        return view('frontend.cubicaje.cubicaje_ajax',compact('cubicaje'));
+		
+    }
+	
+	public function send_cubicaje(Request $request){
+
+		$id_ingreso_vehiculo_tronco_cubicaje = $request->id_ingreso_vehiculo_tronco_cubicaje;
+		$diametro_1 = $request->diametro_1;
+		$diametro_2 = $request->diametro_2;
+		$diametro_dm = $request->diametro_dm;
+		$longitud = $request->longitud;
+		$volumen_m3 = $request->volumen_m3;
+		$volumen_pies = $request->volumen_pies;
+		$volumen_total_m3 = $request->volumen_total_m3;
+		$volumen_total_pies = $request->volumen_total_pies;
+		$precio_unitario = $request->precio_unitario;
+		$precio_total = $request->precio_total;
+		
+		foreach($id_ingreso_vehiculo_tronco_cubicaje as $key=>$row){
+			
+			$ingresoVehiculoTroncoCubicaje = IngresoVehiculoTroncoCubicaje::find($row);
+			$ingresoVehiculoTroncoCubicaje->diametro_1= $diametro_1[$key];
+			$ingresoVehiculoTroncoCubicaje->diametro_2 = $diametro_2[$key];
+			$ingresoVehiculoTroncoCubicaje->diametro_dm = $diametro_dm[$key];
+			$ingresoVehiculoTroncoCubicaje->longitud = $longitud[$key];
+			$ingresoVehiculoTroncoCubicaje->volumen_m3 = $volumen_m3[$key];
+			$ingresoVehiculoTroncoCubicaje->volumen_pies = $volumen_pies[$key];
+			$ingresoVehiculoTroncoCubicaje->volumen_total_m3 = $volumen_total_m3[$key];
+			$ingresoVehiculoTroncoCubicaje->volumen_total_pies = $volumen_total_pies[$key];
+			$ingresoVehiculoTroncoCubicaje->precio_unitario = $precio_unitario[$key];
+			$ingresoVehiculoTroncoCubicaje->precio_total = $precio_total[$key];
+			$ingresoVehiculoTroncoCubicaje->save();
+		}
+				
+    }
+		
 }

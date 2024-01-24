@@ -1,6 +1,4 @@
-CREATE OR REPLACE FUNCTION public.sp_listar_ingreso_vehiculo_tronco_paginado(
-p_placa character varying, p_pagina character varying, p_limit character varying, p_ref refcursor
-)
+CREATE OR REPLACE FUNCTION public.sp_listar_ingreso_vehiculo_tronco_paginado(p_placa character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
  RETURNS refcursor
  LANGUAGE plpgsql
 AS $function$
@@ -18,7 +16,7 @@ Begin
 
 	p_pagina=(p_pagina::Integer-1)*p_limit::Integer;
 	
-	v_campos=' ivt.id,ivt.fecha_ingreso,e.ruc,e.razon_social,v.placa,v.ejes,p.numero_documento,
+	v_campos=' ivt.id,ivttm.id id_ingreso_vehiculo_tronco_tipo_maderas,ivt.fecha_ingreso,e.ruc,e.razon_social,v.placa,v.ejes,p.numero_documento,
 p.apellido_paterno||'' ''||p.apellido_materno||'' ''||p.nombres conductor,
 tm.denominacion tipo_madera,ivttm.cantidad ';
 

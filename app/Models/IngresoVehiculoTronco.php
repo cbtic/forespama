@@ -24,6 +24,15 @@ and v.placa='".$placa."'";
         if(isset($data[0]))return $data[0];
     }
 	
+	function getIngresoVehiculoTroncoCubicajeById($id){
+
+        $cad = "select * from ingreso_vehiculo_tronco_cubicajes ivtc 
+where ingreso_vehiculo_tronco_tipo_maderas_id=".$id;
+
+		$data = DB::select($cad);
+        return $data;
+    }
+	
 	public function listar_ingreso_vehiculo_tronco_ajax($p){
 
         return $this->readFuntionPostgres('sp_listar_ingreso_vehiculo_tronco_paginado',$p);

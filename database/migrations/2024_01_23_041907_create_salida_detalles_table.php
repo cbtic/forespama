@@ -22,15 +22,15 @@ class CreateSalidaDetallesTable extends Migration
             $table->Integer('cantidad')->nullable();
             $table->Integer('numero_lote')->nullable();
             $table->date('fecha_vencimiento')->nullable();
-            $table->string('aplica_precio',1)->nullable()->default('1');
+            $table->string('aplica_precio',1)->nullable();
             $table->double('precio_unitario')->nullable();
             $table->Integer('id_um')->nullable();
-            $table->Integer('id_estado_bien',1)->nullable()->default('1');
+            $table->string('id_estado_bien',1)->nullable()->default('1');
             $table->Integer('id_marca')->nullable();
             $table->string('estado',1)->nullable()->default('1');
             $table->timestamps();
 
-            $table->foreign('id_entrada_bien')->references('id')->on('salida_bienes');
+            $table->foreign('id_salida_bien')->references('id')->on('salida_bienes');
         });
     }
 
