@@ -40,12 +40,12 @@ class Vehiculo extends Model
 
    public function empresas()
    {
-     return $this->belongsToMany(Empresa::class, 'empresas_conductores_vehiculos', 'id_empresas', 'id_vehiculos');
+     return $this->belongsToMany(Empresa::class, 'empresas_vehiculos', 'empresas_id', 'vehiculos_id');
      //  return $this->belongsTo(Empresa::class);
    }
 
    public function conductores()
    {
-       return $this->belongsToMany(Conductores::class,'empresas_conductores_vehiculos', 'id_vehiculos', 'id_conductores');
+       return $this->belongsToMany(Conductores::class,'vehiculos_conductores', 'vehiculos_id', 'conductores_id');
    }
 }

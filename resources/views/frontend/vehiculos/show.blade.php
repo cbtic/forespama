@@ -5,7 +5,7 @@
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
-                    <div class="card-header">{{ $vehiculo->title }}</div>
+                    <div class="card-header">{{ $vehiculo->id }}</div>
                     <div class="card-body">
                             <div class="form-group row">
                                 <label for="title" class="col-sm-4 col-form-label text-md-right">ID</label>
