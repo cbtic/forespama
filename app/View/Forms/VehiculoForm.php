@@ -81,9 +81,9 @@ class VehiculoForm extends ModelForm
             ])->selectOptions(['Seleccione' => null]),
             HasMany::make('id_conductores', [
                 'label' => 'Conductores',
-                'model' => Persona::class,
+                'model' => Conductores::class,
                 'model_options' => [
-                    'label' => 'nombre_completo',
+                    'label' => 'licencia',
                     'value' => 'id',
                     'method' => 'all',
                     'params' => null,

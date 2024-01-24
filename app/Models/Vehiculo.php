@@ -40,7 +40,7 @@ class Vehiculo extends Model
 
    public function empresas()
    {
-     return $this->belongsToMany(Empresa::class, 'empresas_vehiculos', 'empresas_id', 'vehiculos_id');
+     return $this->belongsToMany(Empresa::class, 'empresas_vehiculos', 'vehiculos_id', 'empresas_id');
      //  return $this->belongsTo(Empresa::class);
    }
 

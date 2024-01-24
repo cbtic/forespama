@@ -128,7 +128,11 @@ class VehiculoController extends Controller
         $request['id_usuario_actualiza'] = $id_user;
         $request['id_usuario_inserta'] = $id_user;
 
-        Vehiculo::create($request->all());
+        $vehiculos = Vehiculo::create($request->all());
+
+        $vehiculos->empresas()->sync($request->id_empresas);
+
+        $vehiculos->conductores()->sync($request->id_conductores);
 
         return redirect()->route('frontend.vehiculos.index');
     }
@@ -144,6 +148,11 @@ class VehiculoController extends Controller
         $request['id_usuario_actualiza'] = $id_user;
 
         $vehiculos->update($request->all());
+
+        $vehiculos->empresas()->sync($request->id_empresas);
+
+        $vehiculos->conductores()->sync($request->id_conductores);
+
 
         return redirect()->route('frontend.vehiculos.index');
     }
