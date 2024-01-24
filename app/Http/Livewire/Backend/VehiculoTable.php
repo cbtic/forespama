@@ -30,6 +30,16 @@ class VehiculoTable extends DataTableComponent
         });
     }
 
+    public function delete($id) {
+
+        if(intval($id) == 0){
+            return;
+        }
+        $types = Vehiculo::findOrFail(intval($id));
+        $types->delete();
+
+    }
+
     public function columns(): array
     {
         return [
@@ -52,6 +62,15 @@ class VehiculoTable extends DataTableComponent
                 ->sortable(),
             Column::make("Estado", "estado")
                 ->sortable(),
+            Column::make('Acciones')
+                ->unclickable()
+                ->label(
+                    function ($row, Column $column) {
+                        $edit = '<button class="btn btn-xs btn-success text-white" onclick="window.location.href=\'' . route('frontend.vehiculos.show', $row) . '\'">Mostrar</button>';
+                        $delete = '<button class="btn btn-xs btn-danger text-white" wire:click="delete(' . $row->id . ')">Eliminar</button>';
+                        return $edit . " " . $delete;
+                    }
+                )->html(),
         ];
     }
 }
