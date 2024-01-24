@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\TablaMaestra;
 use App\Models\IngresoVehiculoTronco;
 use App\Models\IngresoVehiculoTroncoTipoMadera;
+use App\Models\IngresoVehiculoTroncoCubicaje;
 use Auth;
 
 class IngresoVehiculoTroncoController extends Controller
@@ -104,5 +105,36 @@ class IngresoVehiculoTroncoController extends Controller
 		
     }
 	
-	
+	public function send_cubicaje(Request $request){
+
+		$id_ingreso_vehiculo_tronco_cubicaje = $request->id_ingreso_vehiculo_tronco_cubicaje;
+		$diametro_1 = $request->diametro_1;
+		$diametro_2 = $request->diametro_2;
+		$diametro_dm = $request->diametro_dm;
+		$longitud = $request->longitud;
+		$volumen_m3 = $request->volumen_m3;
+		$volumen_pies = $request->volumen_pies;
+		$volumen_total_m3 = $request->volumen_total_m3;
+		$volumen_total_pies = $request->volumen_total_pies;
+		$precio_unitario = $request->precio_unitario;
+		$precio_total = $request->precio_total;
+		
+		foreach($id_ingreso_vehiculo_tronco_cubicaje as $key=>$row){
+			
+			$ingresoVehiculoTroncoCubicaje = IngresoVehiculoTroncoCubicaje::find($row);
+			$ingresoVehiculoTroncoCubicaje->diametro_1= $diametro_1[$key];
+			$ingresoVehiculoTroncoCubicaje->diametro_2 = $diametro_2[$key];
+			$ingresoVehiculoTroncoCubicaje->diametro_dm = $diametro_dm[$key];
+			$ingresoVehiculoTroncoCubicaje->longitud = $longitud[$key];
+			$ingresoVehiculoTroncoCubicaje->volumen_m3 = $volumen_m3[$key];
+			$ingresoVehiculoTroncoCubicaje->volumen_pies = $volumen_pies[$key];
+			$ingresoVehiculoTroncoCubicaje->volumen_total_m3 = $volumen_total_m3[$key];
+			$ingresoVehiculoTroncoCubicaje->volumen_total_pies = $volumen_total_pies[$key];
+			$ingresoVehiculoTroncoCubicaje->precio_unitario = $precio_unitario[$key];
+			$ingresoVehiculoTroncoCubicaje->precio_total = $precio_total[$key];
+			$ingresoVehiculoTroncoCubicaje->save();
+		}
+				
+    }
+		
 }
