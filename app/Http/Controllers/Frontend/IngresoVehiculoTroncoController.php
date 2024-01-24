@@ -86,6 +86,23 @@ class IngresoVehiculoTroncoController extends Controller
 	
 	}
 	
+	public function cubicaje(){
+	
+		//$tablaMaestra_model = new TablaMaestra;
+		//$tipo_madera = $tablaMaestra_model->getMaestroByTipo(42);
+		
+		return view('frontend.cubicaje.create'/*,compact('tipo_madera')*/);
+	
+	}
+	
+	public function cargar_cubicaje($id){
+		 
+		$ingresoVehiculoTronco_model = new IngresoVehiculoTronco;
+        $cubicaje = $ingresoVehiculoTronco_model->getIngresoVehiculoTroncoCubicajeById($id);
+		
+        return view('frontend.cubicaje.cubicaje_ajax',compact('cubicaje'));
+		
+    }
 	
 	
 }
