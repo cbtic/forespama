@@ -83,6 +83,36 @@ The first thing we are going to do is set the key that Laravel will use when doi
 
 `php artisan key:generate`
 
+## =>Crear Modelo, Controlador y migracion:
+`php artisan make:model Anaquele -c -m`
+ 
+ 
+## =>Controlador, modelo, validaciones:
+`app/Http/Controllers/VehiculoController.php`
+`app/Http/Requests/VehiculoRequest.php`
+`app/Models/Vehiculo.php`
+
+## =>Listado de una tabla:
+`app/Http/Livewire/Backend/VehiculoTable.php   (*)`
+
+## =>Formularios para editar un Model:
+`app/View/Components/Forms/Vehiculo.php`
+`app/View/Forms/VehiculoForm.php         (**)`
+
+## =>Vistas: (**)
+
+`resources/views/frontend/vehiculos/create.blade.php`
+`resources/views/frontend/vehiculos/edit.blade.php`
+`resources/views/frontend/vehiculos/index.blade.php   (*)`
+`resources/views/frontend/vehiculos/show.blade.php`
+
+## =>Otros archivos:
+`routes/frontend/home.php`
+`resources/views/frontend/includes/sidebar.blade.php`
+
+
+
+
 You should see a green message stating your key was successfully generated. As well as you should see the **APP\_KEY** variable in your **.env** file reflected.
 
 It's time to see if your database credentials are correct.

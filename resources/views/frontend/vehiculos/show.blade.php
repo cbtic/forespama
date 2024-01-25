@@ -5,38 +5,38 @@
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
-                    <div class="card-header">{{ $conductores->title }}</div>
+                    <div class="card-header">{{ $vehiculo->id }}</div>
                     <div class="card-body">
                             <div class="form-group row">
                                 <label for="title" class="col-sm-4 col-form-label text-md-right">ID</label>
 
                                 <div class="col-md-6">
-                                    <p>{{ $conductores->id }}</p>
+                                    <p>{{ $vehiculo->id }}</p>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label for="title" class="col-sm-4 col-form-label text-md-right">Licencia</label>
 
                                 <div class="col-md-6">
-                                    <p>{{ $conductores->licencia }}</p>
+                                    <p>{{ $vehiculo->placa }}</p>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label for="title" class="col-sm-4 col-form-label text-md-right">Fecha Emision</label>
 
                                 <div class="col-md-6">
-                                    <p>{{ $conductores->fecha_licencia }}</p>
+                                    <p>{{ $vehiculo->ejes }}</p>
                                 </div>
                             </div>
 
                             <div class="form-group row mb-0">
                                 <div class="col-md-8 offset-md-4">
-                                    <a href="{{ route('frontend.conductores.edit', $conductores->id) }}">Edit</a>
+                                    <a href="{{ route('frontend.vehiculos.edit', $vehiculo->id) }}">Edit</a>
                                     <a href="#" onclick="event.preventDefault();document.getElementById('delete-form').submit();">
                                        Delete
                                     </a>
 
-                                    <form id="delete-form" action="{{ route('frontend.conductores.destroy', $conductores->id) }}" method="POST" style="display: none;">
+                                    <form id="delete-form" action="{{ route('frontend.vehiculos.destroy', $vehiculo->id) }}" method="POST" style="display: none;">
                                         @csrf
                                         @method('DELETE')
                                     </form>

@@ -8,11 +8,16 @@ use Illuminate\Database\Eloquent\Model;
 class Conductores extends Model
 {
     use HasFactory;
-    protected $fillable = ["licencia","fecha_licencia","estado","id_personas"];
+    protected $fillable = ["licencia","fecha_licencia","estado","personas_id"];
 
     public function personas()
     {
 	  //return $this->hasMany(EstacionamientoEmpresa::class,'empresa_id');
         return $this->belongsTo(Persona::class);
     }
+
+   public function vehiculos()
+   {
+       return $this->belongsToMany(Vehiculo::class,'vehiculos_conductores', 'vehiculos_id', 'conductores_id');
+   }
 }

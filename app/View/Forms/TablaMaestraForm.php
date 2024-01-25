@@ -2,8 +2,7 @@
 
 namespace App\View\Forms;
 
-use App\Models\Conductores;
-use App\Models\Persona;
+use App\Models\TablaMaestra;
 use Grafite\Forms\Forms\ModelForm;
 use Grafite\Forms\Fields\TextArea;
 use Grafite\Forms\Fields\Text;
@@ -17,16 +16,16 @@ use Grafite\Forms\Fields\PasswordWithReveal;
 use Grafite\Forms\Fields\AutoSuggestSelect;
 use Grafite\Forms\Fields\Hidden;
 
-class ConductoresForm extends ModelForm
+class TablaMaestraForm extends ModelForm
 {
     /**
      * The model for the form
      *
      * @var \Illuminate\Database\Eloquent\Model
      */
-    public $model = Conductores::class;
+    public $model = TablaMaestra::class;
 
-    public $routeParameters = ['id', 'licencia', 'fecha_licencia', 'estado'];
+    public $routeParameters = ['id','tipo', 'denominacion', 'orden', 'estado', 'codigo', 'tipo_nombre'];
 
     public $columns = 1;
 
@@ -42,7 +41,7 @@ class ConductoresForm extends ModelForm
      *
      * @var string
      */
-    public $routePrefix = 'frontend.conductores';
+    public $routePrefix = 'frontend.tablamaestras';
 
     /**
      * Buttons and values
@@ -55,8 +54,7 @@ class ConductoresForm extends ModelForm
      * @var array
      */
     public $buttons = [
-        'cancel' => 'Cancelar',
-        'submit' => 'Guardar'
+        'submit' => 'Save'
     ];
 
     /**
@@ -67,31 +65,26 @@ class ConductoresForm extends ModelForm
     public function fields()
     {
         return [
-            HasOne::make('personas_id', [
-                'label' => 'Persona',
-                'model' => Persona::class,
-                'model_options' => [
-                    'label' => 'nombre_completo',
-                    'value' => 'id',
-                    'method' => 'all',
-                    'params' => null,
-                ]
-            ])->selectOptions(['Seleccione' => null]),
-            Text::make('licencia', [
+            Select::make('tipo')->selectOptions(['1' => 'TIPO 1', '2' => 'TIPO 2', '3' => 'TIPO 3']),
+            Text::make('denominacion', [
                 'required' => true,
             ]),
-            Date::make('fecha_licencia', [
-                'label' => 'Fecha de Vigencia',
+            Text::make('codigo', [
                 'required' => true,
             ]),
-            Select::make('estado')->selectOptions(['ACTIVO' => 'ACTIVO', 'CANCELADO' => 'CANCELADO']),
-            // AutoSuggestSelect::make('estado')->selectOptions(['ACTIVO' => 'ACTIVO', 'CANCELADO' => 'CANCELADO']),
-            // Hidden::make('personas_id', [
-            //     'required' => true,
-            // ]),
-            // Text::make('persona', [
-            //     'required' => true,
-            // ]),
+            Text::make('tipo_nombre', [
+                'required' => true,
+            ]),
+            Text::make('sub_codigo', [
+                'required' => false,
+            ]),
+            Text::make('abreviatura', [
+                'required' => false,
+            ]),
+            Text::make('orden', [
+                'required' => false,
+            ]),
+            Select::make('estado')->selectOptions(['ACTIVO' => '1', 'CANCELADO' => '2']),
         ];
     }
 }

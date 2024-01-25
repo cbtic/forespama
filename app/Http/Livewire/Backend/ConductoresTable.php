@@ -5,7 +5,9 @@ namespace App\Http\Livewire\Backend;
 use App\Models\Conductores;
 use Illuminate\Database\Eloquent\Builder;
 use Rappasoft\LaravelLivewireTables\DataTableComponent;
+use Rappasoft\LaravelLivewireTables\Views\Columns\ButtonGroupColumn;
 use Rappasoft\LaravelLivewireTables\Views\Column;
+use Rappasoft\LaravelLivewireTables\Views\Columns\LinkColumn;
 
 class ConductoresTable extends DataTableComponent
 {
@@ -30,6 +32,17 @@ class ConductoresTable extends DataTableComponent
         });
     }
 
+    public function delete($id) {
+
+        if(intval($id) == 0){
+            return;
+        }
+        $types = Conductores::findOrFail(intval($id));
+        $types->delete();
+
+    }
+
+
     public function columns(): array
     {
         return [
@@ -51,6 +64,15 @@ class ConductoresTable extends DataTableComponent
                 ->searchable(),
             Column::make('Fecha Emision', 'fecha_licencia')
                 ->sortable(),
+            Column::make('Acciones')
+                ->unclickable()
+                ->label(
+                    function ($row, Column $column) {
+                        $edit = '<button class="btn btn-xs btn-success text-white" onclick="window.location.href=\'' . route('frontend.conductores.show', $row->id) . '\'">Mostrar</button>';
+                        $delete = '<button class="btn btn-xs btn-danger text-white" wire:click="delete(' . $row->id . ')">Eliminar</button>';
+                        return $edit . " " . $delete;
+                    }
+                )->html(),
         ];
     }
 }
