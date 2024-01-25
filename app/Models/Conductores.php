@@ -13,11 +13,11 @@ class Conductores extends Model
     public function personas()
     {
 	  //return $this->hasMany(EstacionamientoEmpresa::class,'empresa_id');
-        return $this->belongsTo(Persona::class);
+        return $this->belongsTo(Persona::class,"id_personas");
     }
 
    public function vehiculos()
    {
-       return $this->belongsToMany(Vehiculo::class,'vehiculos_conductores', 'vehiculos_id', 'conductores_id');
+       return $this->belongsToMany(Vehiculo::class,'vehiculos_conductores', 'id_vehiculos', 'id_conductores');
    }
 }

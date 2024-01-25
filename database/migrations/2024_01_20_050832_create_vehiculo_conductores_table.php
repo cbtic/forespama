@@ -15,10 +15,10 @@ class CreateVehiculoConductoresTable extends Migration
     {
         Schema::create('vehiculos_conductores', function (Blueprint $table) {
             $table->id();
-            $table->integer('vehiculos_id')->unsigned()->index();
-            $table->foreign('vehiculos_id')->references('id')->on('vehiculos')->onDelete('cascade');
-            $table->integer('conductores_id')->unsigned()->index();
-            $table->foreign('conductores_id')->references('id')->on('conductores')->onDelete('cascade');
+            $table->integer('id_vehiculos')->unsigned()->index();
+            $table->foreign('id_vehiculos')->references('id')->on('vehiculos')->onDelete('cascade');
+            $table->integer('id_conductores')->unsigned()->index();
+            $table->foreign('id_conductores')->references('id')->on('conductores')->onDelete('cascade');
         });
     }
 

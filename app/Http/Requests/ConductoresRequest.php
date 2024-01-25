@@ -25,7 +25,7 @@ class ConductoresRequest extends FormRequest
     {
         return [
 
-            'personas_id' => ['required'],
+            'id_personas' => ['required'],
             'licencia' => ['required', 'string', 'min:9'],
             'fecha_licencia' => ['required', 'date'],
             'estado' => ['required', 'string'],

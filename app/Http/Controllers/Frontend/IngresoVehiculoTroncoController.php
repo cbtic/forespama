@@ -13,7 +13,7 @@ use Auth;
 class IngresoVehiculoTroncoController extends Controller
 {
     public function index(){
-	
+
 		$tablaMaestra_model = new TablaMaestra;
 		$tipo_madera = $tablaMaestra_model->getMaestroByTipo(42);
 		/*
@@ -23,33 +23,33 @@ class IngresoVehiculoTroncoController extends Controller
 		$estado_proyecto = $tablaMaestra_model->getMaestroByTipo("EST_PY");
 		*/
 		return view('frontend.ingreso.create',compact('tipo_madera'));
-	
+
 	}
-	
+
 	public function obtener_datos_vehiculo($placa){
-	
+
 		$ingresoVehiculoTronco_model = new IngresoVehiculoTronco;
 		$vehiculo = $ingresoVehiculoTronco_model->getEmpresaConductorVehiculos($placa);
 		echo json_encode($vehiculo);
-		
+
 	}
-	
+
 	public function send_ingreso(Request $request){
 
 		$id_user = Auth::user()->id;
-		
+
 		$ingresoVehiculoTronco = new IngresoVehiculoTronco;
 		$ingresoVehiculoTronco->fecha_ingreso = $request->fecha_ingreso;
 		$ingresoVehiculoTronco->fecha_salida = $request->fecha_ingreso;
 		$ingresoVehiculoTronco->empresa_transportista_id = $request->empresa_transportista_id;
 		$ingresoVehiculoTronco->empresa_proveedor_id = $request->empresa_transportista_id;//0;
-		$ingresoVehiculoTronco->vehiculos_id = $request->vehiculos_id;
-		$ingresoVehiculoTronco->conductores_id = $request->conductores_id;
+		$ingresoVehiculoTronco->id_vehiculos = $request->id_vehiculos;
+		$ingresoVehiculoTronco->id_conductores = $request->id_conductores;
 		$ingresoVehiculoTronco->encargados_id = 1;
 		$ingresoVehiculoTronco->procedencias_id = 0;
 		$ingresoVehiculoTronco->save();
 		$id_ingreso_vehiculo_tronco = $ingresoVehiculoTronco->id;
-		
+
 		$ingresoVehiculoTroncoTipoMadera = new IngresoVehiculoTroncoTipoMadera;
 		$ingresoVehiculoTroncoTipoMadera->ingreso_vehiculo_troncos_id = $id_ingreso_vehiculo_tronco;
 		$ingresoVehiculoTroncoTipoMadera->tipo_maderas_id = $request->tipo_maderas_id;
@@ -57,7 +57,7 @@ class IngresoVehiculoTroncoController extends Controller
 		$ingresoVehiculoTroncoTipoMadera->estado = 1;
 		$ingresoVehiculoTroncoTipoMadera->save();
 		$ingreso_vehiculo_tronco_tipo_maderas_id = $ingresoVehiculoTroncoTipoMadera->id;
-		
+
 		for($i=1;$i<=$request->cantidad;$i++){
 			$ingresoVehiculoTroncoCubicaje = new IngresoVehiculoTroncoCubicaje;
 			$ingresoVehiculoTroncoCubicaje->ingreso_vehiculo_tronco_tipo_maderas_id=$ingreso_vehiculo_tronco_tipo_maderas_id;
@@ -73,12 +73,12 @@ class IngresoVehiculoTroncoController extends Controller
 			$ingresoVehiculoTroncoCubicaje->precio_total = 0;
 			$ingresoVehiculoTroncoCubicaje->save();
 		}
-			
+
     }
-	
+
 	public function listar_ingreso_vehiculo_tronco_ajax(Request $request){
-	
-		$ingresoVehiculoTronco_model = new IngresoVehiculoTronco(); 
+
+		$ingresoVehiculoTronco_model = new IngresoVehiculoTronco();
 		$p[]=$request->placa;
 		$p[]=$request->NumeroPagina;
 		$p[]=$request->NumeroRegistros;
@@ -93,28 +93,28 @@ class IngresoVehiculoTroncoController extends Controller
 		$result["iTotalDisplayRecords"] = $iTotalDisplayRecords;
 		$result["aaData"] = $data;
 
-        echo json_encode($result); 
-	
+        echo json_encode($result);
+
 	}
-	
+
 	public function cubicaje(){
-	
+
 		//$tablaMaestra_model = new TablaMaestra;
 		//$tipo_madera = $tablaMaestra_model->getMaestroByTipo(42);
-		
+
 		return view('frontend.cubicaje.create'/*,compact('tipo_madera')*/);
-	
+
 	}
-	
+
 	public function cargar_cubicaje($id){
-		 
+
 		$ingresoVehiculoTronco_model = new IngresoVehiculoTronco;
         $cubicaje = $ingresoVehiculoTronco_model->getIngresoVehiculoTroncoCubicajeById($id);
-		
+
         return view('frontend.cubicaje.cubicaje_ajax',compact('cubicaje'));
-		
+
     }
-	
+
 	public function send_cubicaje(Request $request){
 
 		$id_ingreso_vehiculo_tronco_cubicaje = $request->id_ingreso_vehiculo_tronco_cubicaje;
@@ -128,9 +128,9 @@ class IngresoVehiculoTroncoController extends Controller
 		$volumen_total_pies = $request->volumen_total_pies;
 		$precio_unitario = $request->precio_unitario;
 		$precio_total = $request->precio_total;
-		
+
 		foreach($id_ingreso_vehiculo_tronco_cubicaje as $key=>$row){
-			
+
 			$ingresoVehiculoTroncoCubicaje = IngresoVehiculoTroncoCubicaje::find($row);
 			$ingresoVehiculoTroncoCubicaje->diametro_1= $diametro_1[$key];
 			$ingresoVehiculoTroncoCubicaje->diametro_2 = $diametro_2[$key];
@@ -144,7 +144,7 @@ class IngresoVehiculoTroncoController extends Controller
 			$ingresoVehiculoTroncoCubicaje->precio_total = $precio_total[$key];
 			$ingresoVehiculoTroncoCubicaje->save();
 		}
-				
+
     }
-		
+
 }
