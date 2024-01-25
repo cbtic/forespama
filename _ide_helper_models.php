@@ -82,7 +82,7 @@ namespace App\Models{
  * App\Models\Conductores
  *
  * @property int $id
- * @property int $personas_id
+ * @property int $id_personas
  * @property string $estado
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at

@@ -24,7 +24,7 @@ tm.denominacion tipo_madera,ivttm.cantidad ';
 inner join empresas e on ivt.empresa_transportista_id=e.id 
 inner join vehiculos v on ivt.vehiculos_id=v.id 
 inner join conductores c on ivt.conductores_id=c.id 
-inner join personas p on c.personas_id=p.id
+inner join personas p on c.id_personas=p.id
 inner join ingreso_vehiculo_tronco_tipo_maderas ivttm on ivt.id=ivttm.ingreso_vehiculo_troncos_id 
 inner join tabla_maestras tm on ivttm.tipo_maderas_id=tm.codigo::int and tm.tipo=''42'' ';
 	
