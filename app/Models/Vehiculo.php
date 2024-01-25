@@ -7,11 +7,21 @@ use DB;
 
 class Vehiculo extends Model
 {
-    
+    protected $fillable = [
+        'placa',
+        'ejes',
+        'peso_tracto',
+        'peso_carreta',
+        'peso_seco',
+        'estado',
+        'id_usuario_actualiza',
+        'id_usuario_inserta'
+    ];
+
 	public function listar_vehiculo_ajax($p){
 		return $this->readFunctionPostgres('sp_listar_vehiculo_paginado',$p);
     }
-	
+
 	public function readFunctionPostgres($function, $parameters = null){
 
       $_parameters = '';
@@ -27,5 +37,15 @@ class Vehiculo extends Model
 	  DB::select("END;");
       return $data;
    }
-   
+
+   public function empresas()
+   {
+     return $this->belongsToMany(Empresa::class, 'empresas_vehiculos', 'vehiculos_id', 'empresas_id');
+     //  return $this->belongsTo(Empresa::class);
+   }
+
+   public function conductores()
+   {
+       return $this->belongsToMany(Conductores::class,'vehiculos_conductores', 'vehiculos_id', 'conductores_id');
+   }
 }

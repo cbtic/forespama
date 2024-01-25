@@ -31,7 +31,7 @@ class Persona extends Model
 
     public function conductores()
     {
-        return $this->hasMany(Conductore::class);
+        return $this->hasMany(Conductores::class);
     }
 
     function getPersonas($empresa_id){
