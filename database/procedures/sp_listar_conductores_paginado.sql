@@ -27,7 +27,7 @@ Begin
 
 	v_campos=' c.estado , p.tipo_documento, p.numero_documento, p.apellido_paterno || '' '' || p.apellido_materno || '' '' || p.nombres persona, p.telefono, p.email, e.razon_social ';
 
-	v_tabla=' from conductores c inner join personas p on c.personas_id = p.id inner join empresas e on e.id = p.empresa_id ';
+	v_tabla=' from conductores c inner join personas p on c.id_personas = p.id inner join empresas e on e.id = p.empresa_id ';
 
 	v_where = ' Where ';
 

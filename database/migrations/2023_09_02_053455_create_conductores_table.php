@@ -18,10 +18,10 @@ class CreateConductoresTable extends Migration
             $table->string('licencia');
             $table->date('fecha_licencia');
             $table->enum('estado', ['ACTIVO', 'CANCELADO']);
-            $table->bigInteger('personas_id')->unsigned()->index();
+            $table->bigInteger('id_personas')->unsigned()->index();
             $table->timestamps();
             //Foreign Keys
-            $table->foreign('personas_id')->references('id')->on('personas');
+            $table->foreign('id_personas')->references('id')->on('personas');
         });
     }
 

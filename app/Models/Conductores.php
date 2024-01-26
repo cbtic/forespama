@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Conductores extends Model
 {
     use HasFactory;
-    protected $fillable = ["licencia","fecha_licencia","estado","personas_id"];
+    protected $fillable = ["licencia","fecha_licencia","estado","id_personas"];
 
     public function personas()
     {

@@ -67,7 +67,7 @@ class ConductoresForm extends ModelForm
     public function fields()
     {
         return [
-            HasOne::make('personas_id', [
+            HasOne::make('id_personas', [
                 'label' => 'Persona',
                 'model' => Persona::class,
                 'model_options' => [
