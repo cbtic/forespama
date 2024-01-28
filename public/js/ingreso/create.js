@@ -213,9 +213,9 @@ function obtenerEmpresa(){
 				$('#numero_documento').val(result.numero_documento);
 				$('#conductor').val(result.conductor);
 				
-				$('#empresa_transportista_id').val(result.empresas_id);
-				$('#vehiculos_id').val(result.vehiculos_id);
-				$('#conductores_id').val(result.conductores_id);
+				$('#id_empresa_transportista').val(result.id_empresas);
+				$('#id_vehiculos').val(result.id_vehiculos);
+				$('#id_conductores').val(result.id_conductores);
 				
 				
 				

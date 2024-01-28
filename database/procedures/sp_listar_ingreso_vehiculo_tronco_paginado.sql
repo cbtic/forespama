@@ -1,3 +1,4 @@
+
 CREATE OR REPLACE FUNCTION public.sp_listar_ingreso_vehiculo_tronco_paginado(p_placa character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
  RETURNS refcursor
  LANGUAGE plpgsql
@@ -15,19 +16,19 @@ v_col_count varchar;
 Begin
 
 	p_pagina=(p_pagina::Integer-1)*p_limit::Integer;
-	
+
 	v_campos=' ivt.id,ivttm.id id_ingreso_vehiculo_tronco_tipo_maderas,ivt.fecha_ingreso,e.ruc,e.razon_social,v.placa,v.ejes,p.numero_documento,
 p.apellido_paterno||'' ''||p.apellido_materno||'' ''||p.nombres conductor,
 tm.denominacion tipo_madera,ivttm.cantidad ';
 
-	v_tabla=' from ingreso_vehiculo_troncos ivt 
-inner join empresas e on ivt.empresa_transportista_id=e.id 
-inner join vehiculos v on ivt.vehiculos_id=v.id 
-inner join conductores c on ivt.conductores_id=c.id 
-inner join personas p on c.personas_id=p.id
-inner join ingreso_vehiculo_tronco_tipo_maderas ivttm on ivt.id=ivttm.ingreso_vehiculo_troncos_id 
-inner join tabla_maestras tm on ivttm.tipo_maderas_id=tm.codigo::int and tm.tipo=''42'' ';
-	
+	v_tabla=' from ingreso_vehiculo_troncos ivt
+inner join empresas e on ivt.id_empresa_transportista=e.id
+inner join vehiculos v on ivt.id_vehiculos=v.id
+inner join conductores c on ivt.id_conductores=c.id
+inner join personas p on c.id_personas=p.id
+inner join ingreso_vehiculo_tronco_tipo_maderas ivttm on ivt.id=ivttm.id_ingreso_vehiculo_troncos
+inner join tabla_maestras tm on ivttm.id_tipo_maderas=tm.codigo::int and tm.tipo=''42'' ';
+
 	v_where = ' where 1=1  ';
 	/*
 	If p_placa<>'' Then
@@ -59,14 +60,15 @@ inner join tabla_maestras tm on ivttm.tipo_maderas_id=tm.codigo::int and tm.tipo
 	v_col_count:=' ,'||v_count||' as TotalRows ';
 
 	If v_count::Integer > p_limit::Integer then
-		v_scad:='SELECT '||v_campos||v_col_count||v_tabla||v_where||' Order By ivt.id Desc LIMIT '||p_limit||' OFFSET '||p_pagina||';'; 
+		v_scad:='SELECT '||v_campos||v_col_count||v_tabla||v_where||' Order By ivt.id Desc LIMIT '||p_limit||' OFFSET '||p_pagina||';';
 	else
-		v_scad:='SELECT '||v_campos||v_col_count||v_tabla||v_where||' Order By ivt.id Desc;'; 
+		v_scad:='SELECT '||v_campos||v_col_count||v_tabla||v_where||' Order By ivt.id Desc;';
 	End If;
-	
+
 	--Raise Notice '%',v_scad;
 	Open p_ref For Execute(v_scad);
 	Return p_ref;
 End
 $function$
 ;
+

@@ -344,9 +344,9 @@ label.form-control-sm{
 
                         <!--<input type="hidden" name="estado" id="estado" value="0">-->
 						
-						<input type="hidden" name="empresa_transportista_id" id="empresa_transportista_id" value="0">
-						<input type="hidden" name="vehiculos_id" id="vehiculos_id" value="0">
-						<input type="hidden" name="conductores_id" id="conductores_id" value="0">
+						<input type="hidden" name="id_empresa_transportista" id="id_empresa_transportista" value="0">
+						<input type="hidden" name="id_vehiculos" id="id_vehiculos" value="0">
+						<input type="hidden" name="id_conductores" id="id_conductores" value="0">
 						
                         <div class="row" id="divSolicitud">
 							
