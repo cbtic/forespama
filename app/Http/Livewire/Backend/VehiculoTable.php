@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Backend;
 use Rappasoft\LaravelLivewireTables\DataTableComponent;
 use Rappasoft\LaravelLivewireTables\Views\Column;
 use App\Models\Vehiculo;
+use App\Models\Conductores;
 use Illuminate\Database\Eloquent\Builder;
 
 class VehiculoTable extends DataTableComponent
@@ -45,11 +46,14 @@ class VehiculoTable extends DataTableComponent
         return [
             Column::make("Id", "id")
                 ->sortable(),
-            Column::make("Conductor")
-                ->sortable()
-                ->label(fn ($row) => $row->conductores->pluck('licencia')->implode(', ')),
             Column::make("Empresa")
                 ->label(fn ($row) => $row->empresas->pluck('nombre_comercial')->implode(', ')),
+            Column::make("Licencia")
+                ->sortable()
+                ->label(fn ($row) => $row->conductores->pluck('licencia')->implode(', ')),
+            Column::make("Conductor")
+                ->sortable()
+                ->label(fn ($row) => Conductores::find(($row->conductores->pluck('id')[0]))->personas['nombre_completo']),
             Column::make("Placa", "placa")
                 ->sortable(),
             Column::make("Ejes", "ejes")
