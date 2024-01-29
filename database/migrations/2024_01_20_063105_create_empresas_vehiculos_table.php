@@ -15,10 +15,10 @@ class CreateEmpresasVehiculosTable extends Migration
     {
         Schema::create('empresas_vehiculos', function (Blueprint $table) {
             $table->id();
-            $table->integer('vehiculos_id')->unsigned()->index();
-            $table->foreign('vehiculos_id')->references('id')->on('vehiculos')->onDelete('cascade');
-            $table->integer('empresas_id')->unsigned()->index();
-            $table->foreign('empresas_id')->references('id')->on('empresas')->onDelete('cascade');
+            $table->integer('id_vehiculos')->unsigned()->index();
+            $table->foreign('id_vehiculos')->references('id')->on('vehiculos')->onDelete('cascade');
+            $table->integer('id_empresas')->unsigned()->index();
+            $table->foreign('id_empresas')->references('id')->on('empresas')->onDelete('cascade');
         });
     }
 
