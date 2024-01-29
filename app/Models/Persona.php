@@ -58,7 +58,7 @@ class Persona extends Model
     }
 
     public function getNombreCompletoSinDniAttribute() : string {
-      return $this->apellido_paterno ." " . $this->apellido_materno . ", " . $this->nombres;
+      return $this->$this->apellido_paterno ." " . $this->apellido_materno . ", " . $this->nombres;
     }
 
 	public function listar_persona_ajax($p){

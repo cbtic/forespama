@@ -8,6 +8,8 @@ use Rappasoft\LaravelLivewireTables\DataTableComponent;
 use Rappasoft\LaravelLivewireTables\Views\Columns\ButtonGroupColumn;
 use Rappasoft\LaravelLivewireTables\Views\Column;
 use Rappasoft\LaravelLivewireTables\Views\Columns\LinkColumn;
+use App\Exports\ConductoresExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ConductoresTable extends DataTableComponent
 {
@@ -42,6 +44,21 @@ class ConductoresTable extends DataTableComponent
 
     }
 
+    public function bulkActions(): array
+    {
+        return [
+            'export' => 'Exportar a Excel',
+        ];
+    }
+
+    public function export()
+    {
+        $conductores = $this->getSelected();
+
+        $this->clearSelected();
+
+        return Excel::download(new ConductoresExport($conductores), 'conductores.xlsx');
+    }
 
     public function columns(): array
     {
