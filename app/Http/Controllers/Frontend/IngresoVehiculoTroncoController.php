@@ -41,26 +41,26 @@ class IngresoVehiculoTroncoController extends Controller
 		$ingresoVehiculoTronco = new IngresoVehiculoTronco;
 		$ingresoVehiculoTronco->fecha_ingreso = $request->fecha_ingreso;
 		$ingresoVehiculoTronco->fecha_salida = $request->fecha_ingreso;
-		$ingresoVehiculoTronco->empresa_transportista_id = $request->empresa_transportista_id;
-		$ingresoVehiculoTronco->empresa_proveedor_id = $request->empresa_transportista_id;//0;
+		$ingresoVehiculoTronco->id_empresa_transportista = $request->id_empresa_transportista;
+		$ingresoVehiculoTronco->id_empresa_proveedor = $request->id_empresa_transportista;//0;
 		$ingresoVehiculoTronco->id_vehiculos = $request->id_vehiculos;
 		$ingresoVehiculoTronco->id_conductores = $request->id_conductores;
-		$ingresoVehiculoTronco->encargados_id = 1;
-		$ingresoVehiculoTronco->procedencias_id = 0;
+		$ingresoVehiculoTronco->id_encargados = 1;
+		$ingresoVehiculoTronco->id_procedencias = 0;
 		$ingresoVehiculoTronco->save();
-		$id_ingreso_vehiculo_tronco = $ingresoVehiculoTronco->id;
-
+		$id_ingreso_vehiculo_troncos = $ingresoVehiculoTronco->id;
+		
 		$ingresoVehiculoTroncoTipoMadera = new IngresoVehiculoTroncoTipoMadera;
-		$ingresoVehiculoTroncoTipoMadera->ingreso_vehiculo_troncos_id = $id_ingreso_vehiculo_tronco;
-		$ingresoVehiculoTroncoTipoMadera->tipo_maderas_id = $request->tipo_maderas_id;
+		$ingresoVehiculoTroncoTipoMadera->id_ingreso_vehiculo_troncos = $id_ingreso_vehiculo_troncos;
+		$ingresoVehiculoTroncoTipoMadera->id_tipo_maderas = $request->tipo_maderas_id;
 		$ingresoVehiculoTroncoTipoMadera->cantidad = $request->cantidad;
 		$ingresoVehiculoTroncoTipoMadera->estado = 1;
 		$ingresoVehiculoTroncoTipoMadera->save();
-		$ingreso_vehiculo_tronco_tipo_maderas_id = $ingresoVehiculoTroncoTipoMadera->id;
-
+		$id_ingreso_vehiculo_tronco_tipo_maderas = $ingresoVehiculoTroncoTipoMadera->id;
+		
 		for($i=1;$i<=$request->cantidad;$i++){
 			$ingresoVehiculoTroncoCubicaje = new IngresoVehiculoTroncoCubicaje;
-			$ingresoVehiculoTroncoCubicaje->ingreso_vehiculo_tronco_tipo_maderas_id=$ingreso_vehiculo_tronco_tipo_maderas_id;
+			$ingresoVehiculoTroncoCubicaje->id_ingreso_vehiculo_tronco_tipo_maderas=$id_ingreso_vehiculo_tronco_tipo_maderas;
 			$ingresoVehiculoTroncoCubicaje->diametro_1= 0;
 			$ingresoVehiculoTroncoCubicaje->diametro_2 = 0;
 			$ingresoVehiculoTroncoCubicaje->diametro_dm = 0;
