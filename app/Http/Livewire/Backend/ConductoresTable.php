@@ -13,6 +13,8 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class ConductoresTable extends DataTableComponent
 {
+    public $deleteId = '';
+
     protected $model = Conductores::class;
 
     /**
@@ -34,14 +36,14 @@ class ConductoresTable extends DataTableComponent
         });
     }
 
-    public function delete($id) {
+    public function deleteId($id)
+    {
+        $this->deleteId = $id;
+    }
 
-        if(intval($id) == 0){
-            return;
-        }
-        $types = Conductores::findOrFail(intval($id));
-        $types->delete();
-
+    public function delete()
+    {
+        Conductores::find($this->deleteId)->delete();
     }
 
     public function bulkActions(): array
@@ -81,12 +83,13 @@ class ConductoresTable extends DataTableComponent
                 ->searchable(),
             Column::make('Fecha Emision', 'fecha_licencia')
                 ->sortable(),
+            Column::make('Estado'),
             Column::make('Acciones')
                 ->unclickable()
                 ->label(
                     function ($row, Column $column) {
                         $edit = '<button class="btn btn-xs btn-success text-white" onclick="window.location.href=\'' . route('frontend.conductores.show', $row->id) . '\'">Mostrar</button>';
-                        $delete = '<button class="btn btn-xs btn-danger text-white" wire:click="delete(' . $row->id . ')" wire:confirm="Are you sure you want to delete this post?">Eliminar</button>';
+                        $delete = '<button class="btn btn-xs btn-danger text-white"  wire:click="deleteId(' . $row->id . ')" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal">Eliminar</button>';
                         return $edit . " " . $delete;
                     }
                 )->html(),
