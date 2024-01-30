@@ -31,7 +31,7 @@ class Persona extends Model
 
     public function conductores()
     {
-        return $this->hasMany(Conductores::class,'id_conductores');
+        return $this->hasOne(Conductores::class,'id_conductores');
     }
 
     function getPersonas($empresa_id){
@@ -55,6 +55,10 @@ class Persona extends Model
 
     public function getNombreCompletoAttribute() : string {
       return $this->numero_documento . " - " . $this->apellido_paterno ." " . $this->apellido_materno . ", " . $this->nombres;
+    }
+
+    public function getNombreCompletoSinDniAttribute() : string {
+      return $this->apellido_paterno ." " . $this->apellido_materno . ", " . $this->nombres;
     }
 
 	public function listar_persona_ajax($p){

@@ -48,4 +48,9 @@ class Vehiculo extends Model
    {
        return $this->belongsToMany(Conductores::class,'vehiculos_conductores', 'id_vehiculos', 'id_conductores');
    }
+
+   public function personas($id_conductores)
+   {
+       return Persona::with('conductores')->where('id_conductores',$id_conductores);
+   }
 }
