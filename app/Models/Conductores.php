@@ -36,7 +36,7 @@ class Conductores extends Model
         $json = json_encode($array_conductores);
         $obj = json_decode($json);
 
-        return (object) $obj;
+        return $obj;
     }
 
    public function vehiculos()
