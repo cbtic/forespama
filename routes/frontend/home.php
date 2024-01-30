@@ -104,3 +104,13 @@ Route::put('tablamaestras/{tablamaestras}', 'App\Http\Controllers\TablaMaestraCo
 Route::patch('tablamaestras/{tablamaestras}', 'App\Http\Controllers\TablaMaestraController@update');
 Route::delete('tablamaestras/{tablamaestras}', 'App\Http\Controllers\TablaMaestraController@destroy')->name('tablamaestras.destroy');
 Route::get('tablamaestras/{tablamaestras}/edit', 'App\Http\Controllers\TablaMaestraController@edit')->name('tablamaestras.edit');
+
+
+Route::get('almacenes', 'App\Http\Controllers\AlmacenesController@index')->name('almacenes.index');
+Route::post('almacenes', 'App\Http\Controllers\AlmacenesController@store')->name('almacenes.store');
+Route::get('almacenes/create', 'App\Http\Controllers\AlmacenesController@create')->name('almacenes.create');
+Route::get('almacenes/{almacenes}', 'App\Http\Controllers\AlmacenesController@show')->name('almacenes.show');
+Route::put('almacenes/{almacenes}', 'App\Http\Controllers\AlmacenesController@update')->name('almacenes.update');
+Route::patch('almacenes/{almacenes}', 'App\Http\Controllers\AlmacenesController@update');
+Route::delete('almacenes/{almacenes}', 'App\Http\Controllers\AlmacenesController@destroy')->name('almacenes.destroy');
+Route::get('almacenes/{almacenes}/edit', 'App\Http\Controllers\AlmacenesController@edit')->name('almacenes.edit');

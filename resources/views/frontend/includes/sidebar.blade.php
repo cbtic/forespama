@@ -133,6 +133,9 @@
                 <li class="c-sidebar-nav-item">
                     <x-utils.link :href="route('frontend.conductores.index')" class="c-sidebar-nav-link" :text="__('Conductores')" />
                 </li>
+                <li class="c-sidebar-nav-item">
+                    <x-utils.link :href="route('frontend.almacenes.index')" class="c-sidebar-nav-link" :text="__('Almacenes')" />
+                </li>
 
             </ul>
 
