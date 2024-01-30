@@ -86,7 +86,7 @@ class ConductoresTable extends DataTableComponent
                 ->label(
                     function ($row, Column $column) {
                         $edit = '<button class="btn btn-xs btn-success text-white" onclick="window.location.href=\'' . route('frontend.conductores.show', $row->id) . '\'">Mostrar</button>';
-                        $delete = '<button class="btn btn-xs btn-danger text-white" wire:click="delete(' . $row->id . ')">Eliminar</button>';
+                        $delete = '<button class="btn btn-xs btn-danger text-white" wire:click="delete(' . $row->id . ')" wire:confirm="Are you sure you want to delete this post?">Eliminar</button>';
                         return $edit . " " . $delete;
                     }
                 )->html(),

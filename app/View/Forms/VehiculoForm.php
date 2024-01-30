@@ -83,10 +83,10 @@ class VehiculoForm extends ModelForm
                 'label' => 'Conductores',
                 'model' => Conductores::class,
                 'model_options' => [
-                    'label' => 'licencia',
+                    'label' => 'nombre_completo_sin_dni',
                     'value' => 'id',
-                    'method' => 'all',
-                    'params' => null,
+                    'method' => 'full_name',
+                    'params' => 'ACTIVO',
                 ]
             ])->selectOptions(['Seleccione' => null]),
             Text::make('placa', [
