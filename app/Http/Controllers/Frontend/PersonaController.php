@@ -409,24 +409,24 @@ class PersonaController extends Controller
             //$request->id = $buscapersona[0]->id;
 
 			$persona = Persona::find($request->id);
-			$persona->tipo_documento = $request->tipo_documento;
+			$persona->id_tipo_documento = $request->tipo_documento;
 			$persona->numero_documento = $request->numero_documento;
 			$persona->apellido_paterno = $request->apellido_paterno;
 			$persona->apellido_materno = $request->apellido_materno;
-			$persona->nombres = $request->nombres;
+			$persona->nombres = $request->nombre;
 			//$persona->codigo = $request->codigo;
-            $persona->ocupacion = $request->ocupacion;
+            //$persona->ocupacion = $request->ocupacion;
 			$persona->telefono = $request->telefono;
 			$persona->email = $request->email;
 			$persona->foto = $request->img_foto;
-            $persona->ruc = $request->numero_ruc;
-			$flag_negativo = $persona->flag_negativo;
+            $persona->numero_ruc = $request->ruc;
+			//$flag_negativo = $persona->flag_negativo;
 
-            $persona->flag_negativo = $request->flag_negativo;
+            //$persona->flag_negativo = $request->flag_negativo;
             //print ($persona->ruc);exit();
 			$persona->save();
 
-
+/*
             if($flag_negativo!=$request->flag_negativo){
                 $negativo = new Negativo;
                 $negativo->persona_id = $persona->id;
@@ -441,6 +441,7 @@ class PersonaController extends Controller
                     $negativo->save();
                 }
              }
+             */
         }
 
         $array["sw"] = $sw;
