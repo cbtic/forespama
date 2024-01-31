@@ -12,6 +12,7 @@ use Grafite\Forms\Fields\HasMany;
 use Grafite\Forms\Fields\Date;
 use Grafite\Forms\Html\Button;
 use Grafite\Forms\Fields\Select;
+use Grafite\Forms\Fields\Number;
 use Grafite\Forms\Fields\PasswordWithReveal;
 use Grafite\Forms\Fields\AutoSuggestSelect;
 use Grafite\Forms\Fields\Hidden;
@@ -65,11 +66,11 @@ class TablaMaestraForm extends ModelForm
     public function fields()
     {
         return [
-            Select::make('tipo')->selectOptions(['1' => 'TIPO 1', '2' => 'TIPO 2', '3' => 'TIPO 3']),
+            Number::make('tipo'),
             Text::make('denominacion', [
                 'required' => true,
             ]),
-            Text::make('codigo', [
+            Number::make('codigo', [
                 'required' => true,
             ]),
             Text::make('tipo_nombre', [
@@ -81,8 +82,8 @@ class TablaMaestraForm extends ModelForm
             Text::make('abreviatura', [
                 'required' => false,
             ]),
-            Text::make('orden', [
-                'required' => false,
+            Number::make('orden', [
+                'required' => true,
             ]),
             Select::make('estado')->selectOptions(['ACTIVO' => '1', 'CANCELADO' => '2']),
         ];

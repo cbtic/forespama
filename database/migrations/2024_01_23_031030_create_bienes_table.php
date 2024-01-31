@@ -13,19 +13,20 @@ class CreateBienesTable extends Migration
      */
     public function up()
     {
-        Schema::create('bienes', function (Blueprint $table) {
+        Schema::create('productos', function (Blueprint $table) {
             $table->id();
+            $table->string('numero_serie',50)->nullable();
             $table->string('codigo',12)->nullable();
             $table->string('denominacion')->nullable();
-            $table->Integer('id_unidad_medida')->nullable();
+            $table->String('unidad_medida',50)->nullable();
             $table->bigInteger('stock_actual')->nullable();
             $table->double('precio_unitario',15,8)->nullable();
-            $table->Integer('id_moneda')->nullable();
-            $table->Integer('id_tipo_bien')->nullable();
+            $table->string('moneda')->nullable();
+            $table->string('tipo_producto',50)->nullable();
             $table->date('fecha_vencimiento')->nullable();
-            $table->Integer('id_estado_bien')->nullable();
+            $table->string('estado_bien',15)->nullable();
             $table->bigInteger('stock_minimo')->nullable();
-            $table->Integer('id_marca')->nullable();
+            $table->string('marca',250)->nullable();
             $table->string('observacion')->nullable();
             $table->Integer('id_anaquel')->nullable();
 

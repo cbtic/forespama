@@ -38,6 +38,7 @@ class TablaMaestraTable extends DataTableComponent
             Column::make("Tipo", "tipo")
                 ->sortable(),
             Column::make("Denominacion", "denominacion")
+                ->searchable()
                 ->sortable(),
             Column::make("Orden", "orden")
                 ->sortable(),
@@ -46,7 +47,9 @@ class TablaMaestraTable extends DataTableComponent
             Column::make("Codigo", "codigo")
                 ->sortable(),
             Column::make("Tipo nombre", "tipo_nombre")
+                ->searchable()
                 ->sortable(),
+            Column::make("Estado"),
         ];
     }
 }
