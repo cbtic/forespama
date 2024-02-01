@@ -6,6 +6,7 @@ use App\Models\TablaMaestra;
 use Illuminate\Database\Eloquent\Builder;
 use Rappasoft\LaravelLivewireTables\DataTableComponent;
 use Rappasoft\LaravelLivewireTables\Views\Column;
+use Rappasoft\LaravelLivewireTables\Views\Filters\SelectFilter;
 
 class TablaMaestraTable extends DataTableComponent
 {
@@ -50,6 +51,27 @@ class TablaMaestraTable extends DataTableComponent
                 ->searchable()
                 ->sortable(),
             Column::make("Estado"),
+        ];
+    }
+
+    public function filters(): array
+    {
+        return [
+            SelectFilter::make('Grupo','tipo_nombre')
+                ->options(
+                    TablaMaestra::query()
+                        ->orderBy('tipo_nombre')
+                        ->get()
+                        ->keyBy('tipo')
+                        ->map(fn($row) => $row->tipo_nombre)
+                        ->toArray()
+                )
+                ->filter(function(Builder $builder, string $value) {
+                    $builder->where('tabla_maestras.tipo', $value);
+                })
+                ->setFilterPillValues([
+                    '3' => 'Tag 1',
+                ]),
         ];
     }
 }
