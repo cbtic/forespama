@@ -16,8 +16,8 @@ class CreateEntradaDetallesTable extends Migration
         Schema::create('entrada_detalles', function (Blueprint $table) {
             $table->id();
 
-            $table->bigInteger('id_entrada_bien')->nullable();
-            $table->bigInteger('id_bien')->nullable();
+            $table->bigInteger('id_entrada_productos')->nullable();
+            $table->bigInteger('id_productos')->nullable();
             $table->Integer('item')->nullable();
             $table->Integer('cantidad')->nullable();
             $table->Integer('numero_lote')->nullable();
@@ -30,7 +30,7 @@ class CreateEntradaDetallesTable extends Migration
             $table->string('estado',1)->nullable()->default('1');
             $table->timestamps();
 
-            $table->foreign('id_entrada_bien')->references('id')->on('entrada_bienes');
+            $table->foreign('id_entrada_productos')->references('id')->on('entrada_productos');
         });
     }
 
