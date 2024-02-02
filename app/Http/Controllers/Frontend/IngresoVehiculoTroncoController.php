@@ -115,6 +115,15 @@ class IngresoVehiculoTroncoController extends Controller
 		
     }
 	
+	public function cargar_reporte_cubicaje($id){
+		 
+		$ingresoVehiculoTronco_model = new IngresoVehiculoTronco;
+        $cubicaje = $ingresoVehiculoTronco_model->getIngresoVehiculoTroncoCubicajeReporteById($id);
+		
+        return view('frontend.cubicaje.cubicaje_reporte_ajax',compact('cubicaje'));
+		
+    }
+	
 	public function send_cubicaje(Request $request){
 
 		$id_ingreso_vehiculo_tronco_cubicaje = $request->id_ingreso_vehiculo_tronco_cubicaje;

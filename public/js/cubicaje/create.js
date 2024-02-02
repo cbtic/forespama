@@ -7,6 +7,10 @@ $(document).ready(function () {
 		guardar_cubicaje();
 	});
 	
+	$('#btnImprimir').on('click', function () {
+		//guardar_cubicaje();
+	});
+	
 	$('#addRow').on('click', function () {
 		AddFila();
 	});
@@ -1736,17 +1740,19 @@ function datatablenew(){
 					return cantidad;
                 },
                 "bSortable": false,
-                "aTargets": [8]
+                "aTargets": [8],
                 },
 				{
                 "mRender": function (data, type, row) {
                 	var html = '<div class="btn-group btn-group-sm" role="group" aria-label="Log Viewer Actions">';		
 					html += '<button style="font-size:12px;color:#FFFFFF;margin-left:10px" type="button" class="btn btn-sm btn-info" data-toggle="modal" onclick="cargarCubicaje('+row.id_ingreso_vehiculo_tronco_tipo_maderas+')"><i class="fa fa-edit" style="font-size:9px!important"></i> Cubicar</button>';
+					html += '<button style="font-size:12px;color:#FFFFFF;margin-left:10px" type="button" class="btn btn-sm btn-danger" data-toggle="modal" onclick="cargarReporteCubicaje('+row.id_ingreso_vehiculo_tronco_tipo_maderas+')"><i class="fa fa-edit" style="font-size:9px!important"></i> Reporte</button>';
 					html += '</div>';
 					return html;
                 },
                 "bSortable": false,
-                "aTargets": [9]
+                "aTargets": [9],
+				"sClass" : "cubicaje"
                 },
 				
 				
@@ -1844,6 +1850,23 @@ function cargarCubicaje(id){
 	
 	$.ajax({
 			url: "/ingreso_vehiculo_tronco/cargar_cubicaje/"+id,
+			type: "GET",
+			success: function (result) {  
+					//$("#tblCubicaje tbody").html(result);
+					$("#divCubicaje").html(result);
+					$("#id_ingreso_vehiculo_tronco_tipo_maderas").val(id);
+			}
+	});
+	
+}
+
+function cargarReporteCubicaje(id){
+
+	//$("#tblCubicaje tbody").html("");
+	$("#divCubicaje").html("");
+	
+	$.ajax({
+			url: "/ingreso_vehiculo_tronco/cargar_reporte_cubicaje/"+id,
 			type: "GET",
 			success: function (result) {  
 					//$("#tblCubicaje tbody").html(result);
