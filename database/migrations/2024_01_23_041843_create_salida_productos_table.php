@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateEntradaBienesTable extends Migration
+class CreateSalidaProductosTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,12 @@ class CreateEntradaBienesTable extends Migration
      */
     public function up()
     {
-        Schema::create('entrada_bienes', function (Blueprint $table) {
+        Schema::create('salida_productos', function (Blueprint $table) {
             $table->id();
-            $table->date('fecha_ingreso')->nullable();
+            $table->date('fecha_salida')->nullable();
             $table->Integer('id_tipo_documento')->nullable();
-            $table->string('unidad_origen',50)->nullable();
-            $table->Integer('id_proveedor')->nullable();
+            $table->string('unidad_destino',50)->nullable();
+
             $table->bigInteger('numero_comprobante')->nullable();
             $table->date('fecha_comprobante')->nullable();
             $table->Integer('id_moneda')->nullable();
@@ -30,11 +30,9 @@ class CreateEntradaBienesTable extends Migration
             $table->string('observacion')->nullable();
 
             $table->string('estado',1)->nullable()->default('1');
-
             $table->timestamps();
         });
     }
-
 
     /**
      * Reverse the migrations.
@@ -43,6 +41,6 @@ class CreateEntradaBienesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('entrada_bienes');
+        Schema::dropIfExists('salida_productos');
     }
 }
