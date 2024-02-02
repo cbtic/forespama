@@ -380,8 +380,20 @@ label.form-control-sm{
 													
 													<div class="col-lg-7 col-md-12 col-sm-12 col-xs-12">
 														<label class="form-control-sm">Placa</label>
-														<input type="text" name="placa" id="placa"
-															value="" placeholder="" class="form-control form-control-sm" onblur="obtenerEmpresa()">
+														
+														<div class="row">
+															<div class="col-lg-8 col-md-12 col-sm-12 col-xs-12">
+															<input type="text" name="placa" id="placa"
+																value="" placeholder="" class="form-control form-control-sm" onblur="obtenerEmpresa()">
+																
+															</div>
+															<div class="col-lg-4 col-md-12 col-sm-12 col-xs-12">
+																<button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#vehiculoModal">
+																	<i class="fas fa-plus-circle"></i> Veh&iacute;culo
+																</button>
+															</div>
+														</div>
+														
 													</div>
 													
 													<div class="col-lg-2 col-md-12 col-sm-12 col-xs-12">
@@ -402,8 +414,20 @@ label.form-control-sm{
 													
 													<div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
 														<label class="form-control-sm">Raz&oacute;n Social</label>
-														<input type="text" name="empresa" id="empresa"
+													
+														<div class="row">
+															<div class="col-lg-8 col-md-12 col-sm-12 col-xs-12">
+																<input type="text" name="empresa" id="empresa"
 															value="" readonly="readonly" class="form-control form-control-sm" >
+															</div>
+															
+															<div class="col-lg-4 col-md-12 col-sm-12 col-xs-12">
+																<button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#vehiculoModal">
+																	<i class="fas fa-plus-circle"></i> Empresa
+																</button>
+															</div>
+														</div>
+															
 													</div>
 													
 												</div>
@@ -418,8 +442,20 @@ label.form-control-sm{
 													
 													<div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
 														<label class="form-control-sm">Nombre Conductor</label>
-														<input type="text" name="conductor" id="conductor"
-															value="" readonly="readonly" class="form-control form-control-sm" >
+															
+														<div class="row">	
+															<div class="col-lg-8 col-md-12 col-sm-12 col-xs-12">
+																<input type="text" name="conductor" id="conductor"
+																value="" readonly="readonly" class="form-control form-control-sm" >
+															</div>
+															
+															<div class="col-lg-4 col-md-12 col-sm-12 col-xs-12">
+																<button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#vehiculoModal">
+																	<i class="fas fa-plus-circle"></i> Conductor
+																</button>
+															</div>
+														</div>
+																
 													</div>
 													
 												</div>
