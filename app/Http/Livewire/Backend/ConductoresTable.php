@@ -89,7 +89,7 @@ class ConductoresTable extends DataTableComponent
                 ->label(
                     function ($row, Column $column) {
                         $edit = '<button class="btn btn-xs btn-success text-white" onclick="window.location.href=\'' . route('frontend.conductores.show', $row->id) . '\'">Mostrar</button>';
-                        $delete = '<button class="btn btn-xs btn-danger text-white"  wire:click="deleteId(' . $row->id . ')" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal">Eliminar</button>';
+                        $delete = '<button class="btn btn-xs btn-danger text-white"  wire:click="deleteId(' . $row->id . ')" data-toggle="modal" data-target="#exampleModal">Eliminar</button>';
                         return $edit . " " . $delete;
                     }
                 )->html(),

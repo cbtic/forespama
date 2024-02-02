@@ -12,6 +12,7 @@
     @stack('before-styles')
     <link href="{{ mix('css/backend.css') }}" rel="stylesheet">
     <livewire:styles />
+    <script src="//unpkg.com/alpinejs" defer></script>
     @stack('after-styles')
 </head>
 <body class="c-app">
