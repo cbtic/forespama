@@ -283,6 +283,142 @@ label.form-control-sm{
 	cursor:pointer
 }
 
+/*
+ VERSION PARA IMPRESORAS
+*/
+@page {
+  margin: 0;
+}
+
+@media print {
+	/*
+  html, body {
+    width: 80mm;
+    height: 297mm;
+  }
+  */
+	
+    *, :after, :before {
+        color: #FFF!important;
+        text-shadow: none!important;
+        background: blue!important;
+        -webkit-box-shadow: none!important;
+        box-shadow: none!important;
+        font-family:sans-serif;
+    }
+	
+    p,table, th, td {
+        color: black !important;
+        font-size: 16px !important;
+        font-family:sans-serif;
+    }
+	
+    .resaltado {
+        color: black !important;
+        font-size: 36px !important;
+        font-weight: bold;
+    }
+	
+    .divlogoimpresora {
+        display: block !important;
+    }
+	
+    .logoimpresora {
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 0px;
+        margin-bottom: 5px;
+        display: block;
+        width: 250px !important;
+        height: 55px !important;
+    }
+	
+    h3{
+        color: black !important;
+        font-size: 52px !important;
+        text-align: center;
+        font-family:sans-serif;
+    }
+	
+    .separador {
+        display: block;
+        margin-top: 20px;
+    }
+
+    .navbar.navbar-expand-lg.navbar-dark.bg-primary.mb-0 {
+        display: none
+    }
+    h4,ol{
+        display: none !important
+    }
+
+    .flotante,.flotanteC {
+        display: none !important
+    }
+	
+	#divTablaIngreso{
+		display: none !important
+	}
+	
+	.c-header.c-header-light.c-header-fixed{
+		display: none !important
+	}
+	
+	#btnGuardar{
+		display: none !important
+	}
+	
+	#btnImprimir{
+		display: none !important
+	}
+	
+	.bottom{
+		display: none !important
+	}
+	
+	.cubicaje{
+		display: none !important
+	}
+	.form-control{
+		border:0px !important;
+		font-weight:bold !important;
+		color:#000000 !important;
+	}
+	
+	.card-header strong{
+		padding: 10px 10px !important;
+		font-weight:bold !important;
+		color:#000000 !important;
+		font-size: 22px !important;
+		border:0px !important;
+	}
+	
+	.card-header{
+		border:0px !important;
+	}
+	.card{
+		border:0px !important;
+	}
+	
+	.c-footer{
+		display: none !important
+	}
+
+	#divCubicaje{
+		max-height: 5000px !important
+	}
+	
+	#tblSolicitud tbody tr.even{
+		display: none !important
+	}
+	/*
+	#tblSolicitud{
+		display: block !important
+	}
+	*/
+	
+}
+
 </style>
 
 
@@ -348,11 +484,15 @@ label.form-control-sm{
 
 						<div class="card">
 						
-						<div class="card-header">
-							<strong>Lista de Ingreso de Camiones</strong>
+						<div class="divlogoimpresora" style="display:none;">
+							<img class="logoimpresora" src="/img/logo_forestalpama.jpg" align="right">
 						</div>
 						
-						<div class="row col align-self-center" style="padding:10px 20px 10px 20px;">
+						<div class="card-header">
+							<strong>Ingreso de Camiones - Cubicaje</strong>
+						</div>
+							
+						<div id="divTablaIngreso" class="row col align-self-center" style="padding:10px 20px 10px 20px;">
 					
 							<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
 								<input class="form-control form-control-sm" id="nombre_py_bus" name="nombre_py_bus" placeholder="Nombre del Proyecto">
@@ -413,7 +553,7 @@ label.form-control-sm{
 								<th>Conductor</th>
 								<th>Tipo Madera</th>
 								<th>Cantidad</th>
-								<th>Cubicaje</th>
+								<th class="cubicaje">Cubicaje</th>
 							</tr>
 							</thead>
 							<tbody style="font-size:13px">
@@ -460,7 +600,15 @@ label.form-control-sm{
 
 						<div class="card-body">
 							
-							<div id="divCubicaje" class="table-responsive overflow-auto" style="max-height: 500px;padding-top:20px">
+							<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+								
+								<input class="btn btn-warning btn-sm float-right" style="margin-left:15px" value="Imprimir" type="button" id="btnImprimir" onclick="print()" />
+								
+								<input class="btn btn-success btn-sm float-right" value="Guardar" type="button" id="btnGuardar" />
+								
+							</div>
+							
+							<div id="divCubicaje" class="table-responsive overflow-auto" style="max-height: 500px">
 								<table id="tblCubicaje" class="table table-hover table-sm">
 									<thead>
 										<tr style="font-size:13px">
@@ -486,8 +634,13 @@ label.form-control-sm{
 							<!--<a class='flotante' name="guardar" id="guardar" onclick="guardarSolicitud()" href='#' ><img src='/img/btn_save.png' border="0"/></a>-->
 							
 							<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+								
+								<input class="btn btn-warning btn-sm float-right" style="margin-left:15px" value="Imprimir" type="button" id="btnImprimir" onclick="print()" />
+								
 								<input class="btn btn-success btn-sm float-right" value="Guardar" type="button" id="btnGuardar" />
+								
 							</div>
+							
 							
 
 						</div>

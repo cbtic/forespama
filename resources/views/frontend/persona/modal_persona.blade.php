@@ -556,7 +556,7 @@ $.mask.definitions['p'] = "[Mm]";
 		});
 		}*/
 		$.ajax({
-			url: "/persona/send_persona_nuevoPersona",
+			url: "/persona/send",
 			type: "POST",
 			data: {
 				_token: _token,

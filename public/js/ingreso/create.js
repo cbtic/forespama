@@ -177,57 +177,57 @@ function validaTipoDocumento() {
     }
 }
 
-function obtenerEmpresa() {
-
-    var placa = $("#placa").val();
-    var flagBalanza = $("#flagBalanza").val();
-    var msg = "";
-
-    if (msg != "") {
-        bootbox.alert(msg);
-        return false;
-    }
-
-    //alert("ok");return false;
-
-    $('#tblProductos tbody').html("");
-    $('#nombre_empresa').val("");
-    $('#numero_ejes').val("");
-    $('#numero_ejes').val("");
-    $('#peso_seco').val("");
-    $('#procedencia').val("");
-    $('#conductor').val("");
-    $('#numero_documento').val("");
-    $('#nombres_razon_social').val("");
-    $('#servicio').val("");
-
-    $.ajax({
-        url: '/ingreso_vehiculo_tronco/obtener_datos_vehiculo/' + placa,
-        dataType: "json",
-        success: function(result) {
-            if (result) {
-
-                $('#ruc').val(result.ruc);
-                $('#empresa').val(result.razon_social);
-                $('#numero_documento').val(result.numero_documento);
-                $('#conductor').val(result.conductor);
-
-                $('#empresa_transportista_id').val(result.empresas_id);
-                $('#id_vehiculos').val(result.id_vehiculos);
-                $('#id_conductores').val(result.id_conductores);
-
-
-
-            }
-            /*
-            else {
-            	alert("El vehículo no esta registrado");
-            }
-            */
-        }
-
-    });
-
+function obtenerEmpresa(){
+		
+	var placa = $("#placa").val();
+	var flagBalanza = $("#flagBalanza").val();
+	var msg = "";
+	
+	if (msg != "") {
+		bootbox.alert(msg);
+		return false;
+	}
+	
+	//alert("ok");return false;
+	
+	$('#tblProductos tbody').html("");
+	$('#nombre_empresa').val("");
+	$('#numero_ejes').val("");
+	$('#numero_ejes').val("");
+	$('#peso_seco').val("");
+	$('#procedencia').val("");
+	$('#conductor').val("");
+	$('#numero_documento').val("");
+	$('#nombres_razon_social').val("");
+	$('#servicio').val("");
+	
+	$.ajax({
+		url: '/ingreso_vehiculo_tronco/obtener_datos_vehiculo/' + placa,
+		dataType: "json",
+		success: function(result){
+			if (result) {
+				
+				$('#ruc').val(result.ruc);
+				$('#empresa').val(result.razon_social);
+				$('#numero_documento').val(result.numero_documento);
+				$('#conductor').val(result.conductor);
+				
+				$('#id_empresa_transportista').val(result.id_empresas);
+				$('#id_vehiculos').val(result.id_vehiculos);
+				$('#id_conductores').val(result.id_conductores);
+				
+				
+				
+			} 
+			/*
+			else {
+				alert("El vehículo no esta registrado");
+			}
+			*/
+		}
+		
+	});
+	
 }
 
 function AddFila() {

@@ -42,6 +42,8 @@ Route::post('ingreso_vehiculo_tronco/listar_ingreso_vehiculo_tronco_ajax', [Ingr
 Route::get('ingreso_vehiculo_tronco/cubicaje', [IngresoVehiculoTroncoController::class, 'cubicaje'])->name('ingreso_vehiculo_tronco.cubicaje');
 Route::get('ingreso_vehiculo_tronco/cargar_cubicaje/{id}', [IngresoVehiculoTroncoController::class, 'cargar_cubicaje'])->name('ingreso_vehiculo_tronco.cargar_cubicaje');
 
+Route::get('ingreso_vehiculo_tronco/cargar_reporte_cubicaje/{id}', [IngresoVehiculoTroncoController::class, 'cargar_reporte_cubicaje'])->name('ingreso_vehiculo_tronco.cargar_reporte_cubicaje');
+
 Route::get('tabla_maestras', [TablaMaestraController::class, 'index'])->name('tabla_maestras.all');
 Route::get('tabla_maestras/{id}', [TablaMaestraController::class, 'show'])->name('tabla_maestras.show');
 Route::post('tabla_maestras/create', [TablaMaestraController::class, 'create'])->name('tabla_maestras.create');
@@ -113,3 +115,12 @@ Route::put('anaqueles/{anaqueles}', 'App\Http\Controllers\AnaqueleController@upd
 Route::patch('anaqueles/{anaqueles}', 'App\Http\Controllers\AnaqueleController@update');
 Route::delete('anaqueles/{anaqueles}', 'App\Http\Controllers\AnaqueleController@destroy')->name('anaqueles.destroy');
 Route::get('anaqueles/{anaqueles}/edit', 'App\Http\Controllers\AnaqueleController@edit')->name('anaqueles.edit');
+
+Route::get('almacenes', 'App\Http\Controllers\AlmacenesController@index')->name('almacenes.index');
+Route::post('almacenes', 'App\Http\Controllers\AlmacenesController@store')->name('almacenes.store');
+Route::get('almacenes/create', 'App\Http\Controllers\AlmacenesController@create')->name('almacenes.create');
+Route::get('almacenes/{almacenes}', 'App\Http\Controllers\AlmacenesController@show')->name('almacenes.show');
+Route::put('almacenes/{almacenes}', 'App\Http\Controllers\AlmacenesController@update')->name('almacenes.update');
+Route::patch('almacenes/{almacenes}', 'App\Http\Controllers\AlmacenesController@update');
+Route::delete('almacenes/{almacenes}', 'App\Http\Controllers\AlmacenesController@destroy')->name('almacenes.destroy');
+Route::get('almacenes/{almacenes}/edit', 'App\Http\Controllers\AlmacenesController@edit')->name('almacenes.edit');

@@ -358,24 +358,25 @@ class PersonaController extends Controller
                 $codigo=$request->codigo;
                 $telefono = $request->telefono;
                 $email = $request->email;
-
+/*
                 if($codigo==""){
                     $array_tipo_documento = array('DNI' => 'DNI','CARNET_EXTRANJERIA' => 'CE','PASAPORTE' => 'PAS','RUC' => 'RUC','CEDULA' => 'CED','PTP/PTEP' => 'PTP/PTEP', 'CPP/CSR' => 'CPP/CSR');
                     $codigo = $array_tipo_documento[$request->tipo_documento]."-".$request->numero_documento;
                 }
+*/
                 if($telefono=="")$telefono="999999999";
                 if($email=="")$email="mail@mail.com";
 
                 $persona = new Persona;
-                $persona->tipo_documento = $request->tipo_documento;
+                $persona->id_tipo_documento = $request->tipo_documento;
                 $persona->numero_documento = $request->numero_documento;
                 $persona->apellido_paterno = $request->apellido_paterno;
                 $persona->apellido_materno = $request->apellido_materno;
-                $persona->nombres = $request->nombres;
-                $persona->codigo = $codigo;
-                $persona->ocupacion = $request->ocupacion;
-                $persona->fecha_nacimiento = "1990-01-01";
-                $persona->sexo = "M";
+                $persona->nombres = $request->nombre;
+               // $persona->codigo = $codigo;
+                //$persona->ocupacion = $request->ocupacion;
+                $persona->fecha_nacimiento = $request->fecha_nacimiento;
+                $persona->id_sexo =  $request->sexo;
                 //$persona->telefono = "999999999";
                 $persona->telefono = $telefono;
                 //$persona->email = "mail@mail.com";
@@ -383,15 +384,16 @@ class PersonaController extends Controller
                 //$persona->foto = "mail@mail.com";
                 $persona->foto = $request->img_foto;
                 $persona->estado = "1";
-                $persona->ruc = $request->ruc;
-                $persona->flag_negativo = $request->flag_negativo;
+                $persona->numero_ruc = $request->ruc;
+                //$persona->flag_negativo = $request->flag_negativo;
                 $persona->save();
-
+/*
                 $negativo = new Negativo;
                 $negativo->persona_id = $persona->id;
                 $negativo->flag_negativo = $request->flag_negativo;
                 $negativo->observacion = $request->observacion;
                 $negativo->fecha = Carbon::now()->format('Y-m-d');
+                */
             }
             else{
                 $sw = false;
@@ -407,24 +409,24 @@ class PersonaController extends Controller
             //$request->id = $buscapersona[0]->id;
 
 			$persona = Persona::find($request->id);
-			$persona->tipo_documento = $request->tipo_documento;
+			$persona->id_tipo_documento = $request->tipo_documento;
 			$persona->numero_documento = $request->numero_documento;
 			$persona->apellido_paterno = $request->apellido_paterno;
 			$persona->apellido_materno = $request->apellido_materno;
-			$persona->nombres = $request->nombres;
-			$persona->codigo = $request->codigo;
-            $persona->ocupacion = $request->ocupacion;
+			$persona->nombres = $request->nombre;
+			//$persona->codigo = $request->codigo;
+            //$persona->ocupacion = $request->ocupacion;
 			$persona->telefono = $request->telefono;
 			$persona->email = $request->email;
 			$persona->foto = $request->img_foto;
-            $persona->ruc = $request->ruc;
-			$flag_negativo = $persona->flag_negativo;
+            $persona->numero_ruc = $request->ruc;
+			//$flag_negativo = $persona->flag_negativo;
 
-            $persona->flag_negativo = $request->flag_negativo;
+            //$persona->flag_negativo = $request->flag_negativo;
             //print ($persona->ruc);exit();
 			$persona->save();
 
-
+/*
             if($flag_negativo!=$request->flag_negativo){
                 $negativo = new Negativo;
                 $negativo->persona_id = $persona->id;
@@ -439,6 +441,7 @@ class PersonaController extends Controller
                     $negativo->save();
                 }
              }
+             */
         }
 
         $array["sw"] = $sw;
