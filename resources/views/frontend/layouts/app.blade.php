@@ -15,7 +15,6 @@
     <link href="{{ mix('css/frontend.css') }}" rel="stylesheet">
     <livewire:styles />
     @stack('after-styles')
-    <script src="//unpkg.com/alpinejs" defer></script>
     <livewire:scripts />
     <script src="{{ mix('js/app.js') }}" defer></script>
 </head>
