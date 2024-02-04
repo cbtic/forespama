@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddLicenciaToConductores extends Migration
+class ChangeVehiculoIdToVehiculosConductoresTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,9 @@ class AddLicenciaToConductores extends Migration
      */
     public function up()
     {
-        Schema::table('conductores', function (Blueprint $table) {
-            $table->string('licencia')->nullable();
-            $table->date('fecha_licencia')->nullable();
+        Schema::table('vehiculos_conductores', function (Blueprint $table) {
+            $table->renameColumn('vehiculos_id', 'id_vehiculos');
+            $table->renameColumn('conductores_id', 'id_conductores');
         });
     }
 
@@ -26,7 +26,7 @@ class AddLicenciaToConductores extends Migration
      */
     public function down()
     {
-        Schema::table('conductores', function (Blueprint $table) {
+        Schema::table('vehiculos_conductores', function (Blueprint $table) {
             //
         });
     }

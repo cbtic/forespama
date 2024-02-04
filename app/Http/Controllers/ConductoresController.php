@@ -28,6 +28,7 @@ class ConductoresController extends Controller
 
     public function edit(Conductores $conductores)
     {
+
         return view('frontend.conductores.edit', compact('conductores'));
     }
 
@@ -35,7 +36,8 @@ class ConductoresController extends Controller
     {
         $conductores->update($request->all());
 
-        return redirect()->route('frontend.conductores.show', $conductores->id);
+        // return redirect()->route('frontend.conductores.show', $conductores->id);
+        return redirect()->route('frontend.conductores.index');
     }
 
     public function show(Conductores $conductores)

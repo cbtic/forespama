@@ -1,17 +1,18 @@
 <?php
 
-namespace App\Http\Controllers\Frontend;
+namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
 use App\Models\Vehiculo;
 use Illuminate\Http\Request;
 use App\Models\TablaMaestra;
+use App\Http\Requests\VehiculoRequest;
 use Auth;
 
 class VehiculoController extends Controller
 {
-    
+
 	public function __construct(){
 
 		$this->middleware(function ($request, $next) {
@@ -21,21 +22,23 @@ class VehiculoController extends Controller
 			return $next($request);
     	});
 	}
-	
-	public function index()
+
+    public function index()
     {
-        return view('frontend.vehiculo.all');
+        $vehiculos = Vehiculo::latest()->paginate(10);
+
+        return view('frontend.vehiculos.index', compact('vehiculos'));
     }
-	
+
 	public function modal_vehiculo($id){
 		$id_user = Auth::user()->id;
 		if($id>0)$vehiculo = Vehiculo::find($id);
 		else $vehiculo = new Vehiculo;
-		
+
 		return view('frontend.vehiculo.modal_vehiculo',compact('id','vehiculo'));
-	
+
 	}
-		
+
 	public function listar_vehiculo_ajax(Request $request){
 
 		$vehiculo_model = new Vehiculo;
@@ -63,11 +66,11 @@ class VehiculoController extends Controller
 		echo json_encode($result);
 
 	}
-	
+
 	public function send(Request $request){
-		
+
 		$id_user = Auth::user()->id;
-		
+
 		if($request->id == 0){
 			$vehiculo = new Vehiculo;
 			$vehiculo->placa = $request->placa;
@@ -96,7 +99,7 @@ class VehiculoController extends Controller
 			$vehiculo->save();
 		}
     }
-	
+
 	public function eliminar_vehiculo($id,$estado)
     {
 		$vehiculo = Vehiculo::find($id);
@@ -106,6 +109,58 @@ class VehiculoController extends Controller
 		echo $vehiculo->id;
 
     }
-	
-	
+
+    public function create()
+    {
+        return view('frontend.vehiculos.create');
+    }
+
+    public function show(int $id)
+    {
+        $vehiculo = Vehiculo::find($id);
+
+        return view('frontend.vehiculos.show', compact('vehiculo'));
+    }
+
+    public function store(VehiculoRequest $request)
+    {
+		$id_user = Auth::user()->id;
+        $request['id_usuario_actualiza'] = $id_user;
+        $request['id_usuario_inserta'] = $id_user;
+
+        $vehiculos = Vehiculo::create($request->all());
+
+        $vehiculos->empresas()->sync($request->id_empresas);
+
+        $vehiculos->conductores()->sync($request->id_conductores);
+
+        return redirect()->route('frontend.vehiculos.index');
+    }
+
+    public function edit(Vehiculo $vehiculos)
+    {
+        return view('frontend.vehiculos.edit', compact('vehiculos'));
+    }
+
+    public function update(VehiculoRequest $request, Vehiculo $vehiculos)
+    {
+		$id_user = Auth::user()->id;
+        $request['id_usuario_actualiza'] = $id_user;
+
+        $vehiculos->update($request->all());
+
+        $vehiculos->empresas()->sync($request->id_empresas);
+
+        $vehiculos->conductores()->sync($request->id_conductores);
+
+
+        return redirect()->route('frontend.vehiculos.index');
+    }
+
+    public function destroy(Vehiculo $conductores)
+    {
+        $conductores->delete();
+
+        return redirect()->route('frontend.vehiculos.index');
+    }
 }

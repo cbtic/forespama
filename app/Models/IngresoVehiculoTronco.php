@@ -8,7 +8,7 @@ use DB;
 
 class IngresoVehiculoTronco extends Model
 {
-    
+
 	function getEmpresaConductorVehiculos($placa){
 
         $cad = "select ecv.id,ecv.id_empresas,ecv.id_vehiculos,ecv.id_conductores,e.razon_social,e.ruc,v.placa,v.ejes,v.peso_tracto,v.peso_carreta,v.peso_seco,c.licencia,to_char(c.fecha_licencia,'dd-mm-yyyy')fecha_licencia,p.numero_documento,p.apellido_paterno||' '||p.apellido_materno||' '||p.nombres conductor 
@@ -23,7 +23,7 @@ and v.placa='".$placa."'";
 		$data = DB::select($cad);
         if(isset($data[0]))return $data[0];
     }
-	
+
 	function getIngresoVehiculoTroncoCubicajeById($id){
 
         $cad = "select * from ingreso_vehiculo_tronco_cubicajes ivtc 
@@ -50,7 +50,7 @@ group by diametro_dm,longitud,volumen_m3,volumen_pies,precio_unitario";
         return $this->readFuntionPostgres('sp_listar_ingreso_vehiculo_tronco_paginado',$p);
 
     }
-	
+
 	public function readFuntionPostgres($function, $parameters = null){
 
         $_parameters = '';
@@ -66,6 +66,6 @@ group by diametro_dm,longitud,volumen_m3,volumen_pies,precio_unitario";
         return $data;
 
     }
-	
-		
+
+
 }
