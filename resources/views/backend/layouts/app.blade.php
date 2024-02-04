@@ -12,7 +12,6 @@
     @stack('before-styles')
     <link href="{{ mix('css/backend.css') }}" rel="stylesheet">
     <livewire:styles />
-    <script src="//unpkg.com/alpinejs" defer></script>
     @stack('after-styles')
 </head>
 <body class="c-app">
@@ -57,8 +56,9 @@
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/locales/bootstrap-datepicker.es.min.js" charset="UTF-8"></script>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker3.css" />
 
-    <livewire:scripts />
     @stack('after-scripts')
+    <livewire:scripts />
+    <script src="//unpkg.com/alpinejs" defer></script>
 
     @forms
 </body>
