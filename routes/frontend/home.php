@@ -104,3 +104,12 @@ Route::put('tablamaestras/{tablamaestras}', 'App\Http\Controllers\TablaMaestraCo
 Route::patch('tablamaestras/{tablamaestras}', 'App\Http\Controllers\TablaMaestraController@update');
 Route::delete('tablamaestras/{tablamaestras}', 'App\Http\Controllers\TablaMaestraController@destroy')->name('tablamaestras.destroy');
 Route::get('tablamaestras/{tablamaestras}/edit', 'App\Http\Controllers\TablaMaestraController@edit')->name('tablamaestras.edit');
+
+Route::get('anaqueles', 'App\Http\Controllers\AnaqueleController@index')->name('anaqueles.index');
+Route::post('anaqueles', 'App\Http\Controllers\AnaqueleController@store')->name('anaqueles.store');
+Route::get('anaqueles/create', 'App\Http\Controllers\AnaqueleController@create')->name('anaqueles.create');
+Route::get('anaqueles/{anaqueles}', 'App\Http\Controllers\AnaqueleController@show')->name('anaqueles.show');
+Route::put('anaqueles/{anaqueles}', 'App\Http\Controllers\AnaqueleController@update')->name('anaqueles.update');
+Route::patch('anaqueles/{anaqueles}', 'App\Http\Controllers\AnaqueleController@update');
+Route::delete('anaqueles/{anaqueles}', 'App\Http\Controllers\AnaqueleController@destroy')->name('anaqueles.destroy');
+Route::get('anaqueles/{anaqueles}/edit', 'App\Http\Controllers\AnaqueleController@edit')->name('anaqueles.edit');
