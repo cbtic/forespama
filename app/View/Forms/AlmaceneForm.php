@@ -2,8 +2,8 @@
 
 namespace App\View\Forms;
 
-use App\Models\Conductores;
-use App\Models\Persona;
+use App\Models\Almacene;
+use App\Models\Ubigeo;
 use Grafite\Forms\Forms\ModelForm;
 use Grafite\Forms\Fields\TextArea;
 use Grafite\Forms\Fields\Text;
@@ -17,16 +17,16 @@ use Grafite\Forms\Fields\PasswordWithReveal;
 use Grafite\Forms\Fields\AutoSuggestSelect;
 use Grafite\Forms\Fields\Hidden;
 
-class ConductoresForm extends ModelForm
+class AlmaceneForm extends ModelForm
 {
     /**
      * The model for the form
      *
      * @var \Illuminate\Database\Eloquent\Model
      */
-    public $model = Conductores::class;
+    public $model = Almacene::class;
 
-    public $routeParameters = ['id', 'licencia', 'fecha_licencia', 'estado'];
+    public $routeParameters = ['codigo', 'denominacion', 'id_ubigeo', 'direccion', 'estado'];
 
     public $columns = 1;
 
@@ -42,7 +42,7 @@ class ConductoresForm extends ModelForm
      *
      * @var string
      */
-    public $routePrefix = 'frontend.conductores';
+    public $routePrefix = 'frontend.almacenes';
 
     /**
      * Buttons and values
@@ -67,24 +67,26 @@ class ConductoresForm extends ModelForm
     public function fields()
     {
         return [
-            HasOne::make('id_personas', [
-                'label' => 'Persona',
-                'model' => Persona::class,
-                'model_options' => [
-                    'label' => 'nombre_completo',
-                    'value' => 'id',
-                    'method' => 'all',
-                    'params' => null,
-                ]
-            ])->selectOptions(['Seleccione' => null]),
-            Text::make('licencia', [
+            // HasOne::make('id_ubigeo', [
+            //     'label' => 'Ubigeo',
+            //     'model' => Ubigeo::class,
+            //     'model_options' => [
+            //         'label' => 'nombre_completo',
+            //         'value' => 'id',
+            //         'method' => 'all',
+            //         'params' => null,
+            //     ]
+            // ])->selectOptions(['Seleccione' => null]),
+            Text::make('codigo', [
                 'required' => true,
             ]),
-            Date::make('fecha_licencia', [
-                'label' => 'Fecha de Vigencia',
+            Text::make('denominacion', [
                 'required' => true,
             ]),
-            Select::make('estado')->selectOptions(['ACTIVO' => 'ACTIVO', 'CANCELADO' => 'CANCELADO']),
+            Text::make('direccion', [
+                'required' => true,
+            ]),
+            Select::make('estado')->selectOptions(['1' => 'ACTIVO', '0' => 'CANCELADO']),
             // AutoSuggestSelect::make('estado')->selectOptions(['ACTIVO' => 'ACTIVO', 'CANCELADO' => 'CANCELADO']),
             // Hidden::make('personas_id', [
             //     'required' => true,

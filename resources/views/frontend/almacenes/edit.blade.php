@@ -5,10 +5,10 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">Editar Conductor #{{ $conductores->id }}</div>
+                <div class="card-header">Editar Almacen #{{ $almacenes->id }}</div>
 
                 <div class="card-body">
-                    <x-forms.conductores :conductores="$conductores"></x-forms.conductores>
+                    <x-forms.almacenes :almacenes="$almacenes"></x-forms.almacenes>
                 </div>
             </div>
         </div>

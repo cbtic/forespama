@@ -16,7 +16,7 @@
         </x-slot>
 
         <x-slot name="body">
-            <livewire:backend.anaquele-table />
+            <livewire:backend.anaqueles-table />
         </x-slot>
     </x-backend.card>
 @endsection

@@ -8,7 +8,7 @@
                     <div class="card-header">Crear Anaquel</div>
 
                     <div class="card-body">
-                        <x-forms.anaquel></x-forms.anaquel>
+                        <x-forms.anaquele></x-forms.anaquele>
                     </div>
                 </div>
             </div>

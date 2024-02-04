@@ -3,20 +3,20 @@
 @section('content')
     <x-backend.card>
         <x-slot name="header">
-            @lang('Coductores')
+            @lang('Almacenes')
         </x-slot>
 
         <x-slot name="headerActions">
             <x-utils.link
                 icon="c-icon cil-plus"
                 class="card-header-action"
-                :href="route('frontend.conductores.create')"
+                :href="route('frontend.almacenes.create')"
                 :text="__('Nuevo')"
             />
         </x-slot>
 
         <x-slot name="body">
-            <livewire:backend.conductores-table />
+            <livewire:backend.almacenes-table />
         </x-slot>
     </x-backend.card>
 @endsection

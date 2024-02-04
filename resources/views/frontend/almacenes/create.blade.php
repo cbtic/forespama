@@ -5,10 +5,10 @@
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
-                    <div class="card-header">Crear Conductores</div>
+                    <div class="card-header">Crear Almacenes</div>
 
                     <div class="card-body">
-                        <x-forms.conductores></x-forms.conductores>
+                        <x-forms.almacene></x-forms.almacene>
                     </div>
                 </div>
             </div>

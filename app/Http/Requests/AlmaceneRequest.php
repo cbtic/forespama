@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ConductoresRequest extends FormRequest
+class AlmaceneRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,9 +25,10 @@ class ConductoresRequest extends FormRequest
     {
         return [
 
-            'id_personas' => ['required'],
-            'licencia' => ['required', 'string', 'min:9'],
-            'fecha_licencia' => ['required', 'date'],
+            'codigo' => ['required'],
+            'denominacion' => ['required'],
+            'id_ubigeo' => ['required', 'string', 'min:6'],
+            'direccion' => ['required', 'string'],
             'estado' => ['required', 'string'],
 
         ];
