@@ -88,7 +88,10 @@ The first thing we are going to do is set the key that Laravel will use when doi
 
 ## =>Controlador con CRUD:
 `php artisan make:controller productoController --resource`
- 
+
+## =>Controlador con CRUD:
+`php artisan make:request AlmaceneRequest`
+
 ## =>Controlador, modelo, validaciones:
 `app/Http/Controllers/VehiculoController.php`
 `app/Http/Requests/VehiculoRequest.php`
