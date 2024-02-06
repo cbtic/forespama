@@ -8,7 +8,7 @@
                 <div class="card-header">Editar Almacen #{{ $almacenes->id }}</div>
 
                 <div class="card-body">
-                    <x-forms.almacenes :almacenes="$almacenes"></x-forms.almacenes>
+                    <x-forms.almacene :almacenes="$almacenes"></x-forms.almacene>
                 </div>
             </div>
         </div>

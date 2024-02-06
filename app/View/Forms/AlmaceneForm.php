@@ -26,7 +26,7 @@ class AlmaceneForm extends ModelForm
      */
     public $model = Almacene::class;
 
-    public $routeParameters = ['codigo', 'denominacion', 'id_ubigeo', 'direccion', 'estado'];
+    public $routeParameters = ['id', 'codigo', 'denominacion', 'id_ubigeo', 'direccion', 'estado'];
 
     public $columns = 1;
 
@@ -83,10 +83,13 @@ class AlmaceneForm extends ModelForm
             Text::make('denominacion', [
                 'required' => true,
             ]),
+            Text::make('id_ubigeo', [
+                'required' => true,
+            ]),
             Text::make('direccion', [
                 'required' => true,
             ]),
-            Select::make('estado')->selectOptions(['1' => 'ACTIVO', '0' => 'CANCELADO']),
+            Select::make('estado')->selectOptions(['ACTIVO' => '1', 'CANCELADO' => '0']),
             // AutoSuggestSelect::make('estado')->selectOptions(['ACTIVO' => 'ACTIVO', 'CANCELADO' => 'CANCELADO']),
             // Hidden::make('personas_id', [
             //     'required' => true,

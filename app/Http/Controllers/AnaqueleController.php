@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\AnaqueleRequest;
+use App\Http\Requests\AnaqueleRequest;
 use App\Models\Anaquele;
 use RealRashid\SweetAlert\Facades\Alert;
 

@@ -31,6 +31,7 @@ class DatabaseSeeder extends Seeder
         //$this->call(PersonaSeeder::class);
         //$this->call(ConductoreSeeder::class);
         $this->call(TablaMaestraSeeder::class);
+        $this->call(UbigeosSeeder::class);
 
         Model::reguard();
     }

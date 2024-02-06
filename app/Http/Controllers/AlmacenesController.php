@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\AlmaceneRequest;
+use App\Http\Requests\AlmaceneRequest;
 use App\Models\Almacene;
 use RealRashid\SweetAlert\Facades\Alert;
 

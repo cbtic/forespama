@@ -27,6 +27,7 @@ class AnaqueleForm extends ModelForm
     public $model = Anaquele::class;
 
     public $routeParameters = [
+                                'id',
                                 'codigo',
                                 'denominacion',
                                 'id_seccion',

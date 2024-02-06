@@ -17,4 +17,9 @@ class Almacene extends Model
         'estado'
     ];
 
+    public function ubigeos()
+    {
+        return $this->belongsTo(Ubigeo::class,"id_ubigeo","id_ubigeo");
+    }
+
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Backend;
 
 use App\Models\Almacene;
+use Grafite\Forms\Fields\Bootstrap\HasOne;
 use Illuminate\Database\Eloquent\Builder;
 use Rappasoft\LaravelLivewireTables\DataTableComponent;
 use Rappasoft\LaravelLivewireTables\Views\Columns\ButtonGroupColumn;
@@ -48,11 +49,14 @@ class AlmacenesTable extends DataTableComponent
         return [
             Column::make('ID', 'id')
                 ->sortable(),
-            Column::make('Licencia')
+            Column::make('codigo')
                 ->sortable()
                 ->searchable(),
-            Column::make('Fecha Emision', 'fecha_licencia')
+            Column::make('denominacion')
                 ->sortable(),
+            Column::make('Ubigeo', 'ubigeos.desc_ubigeo')
+                ->sortable()
+                ->searchable(),
             Column::make('Acciones')
                 ->unclickable()
                 ->label(

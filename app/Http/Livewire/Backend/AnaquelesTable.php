@@ -7,7 +7,7 @@ use Rappasoft\LaravelLivewireTables\Views\Column;
 use App\Models\Anaquele;
 use Illuminate\Database\Eloquent\Builder;
 
-class AnaqueleTable extends DataTableComponent
+class AnaquelesTable extends DataTableComponent
 {
     protected $model = Anaquele::class;
 

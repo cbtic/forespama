@@ -112,7 +112,6 @@ Route::post('anaqueles', 'App\Http\Controllers\AnaqueleController@store')->name(
 Route::get('anaqueles/create', 'App\Http\Controllers\AnaqueleController@create')->name('anaqueles.create');
 Route::get('anaqueles/{anaqueles}', 'App\Http\Controllers\AnaqueleController@show')->name('anaqueles.show');
 Route::put('anaqueles/{anaqueles}', 'App\Http\Controllers\AnaqueleController@update')->name('anaqueles.update');
-Route::patch('anaqueles/{anaqueles}', 'App\Http\Controllers\AnaqueleController@update');
 Route::delete('anaqueles/{anaqueles}', 'App\Http\Controllers\AnaqueleController@destroy')->name('anaqueles.destroy');
 Route::get('anaqueles/{anaqueles}/edit', 'App\Http\Controllers\AnaqueleController@edit')->name('anaqueles.edit');
 
@@ -121,6 +120,5 @@ Route::post('almacenes', 'App\Http\Controllers\AlmacenesController@store')->name
 Route::get('almacenes/create', 'App\Http\Controllers\AlmacenesController@create')->name('almacenes.create');
 Route::get('almacenes/{almacenes}', 'App\Http\Controllers\AlmacenesController@show')->name('almacenes.show');
 Route::put('almacenes/{almacenes}', 'App\Http\Controllers\AlmacenesController@update')->name('almacenes.update');
-Route::patch('almacenes/{almacenes}', 'App\Http\Controllers\AlmacenesController@update');
 Route::delete('almacenes/{almacenes}', 'App\Http\Controllers\AlmacenesController@destroy')->name('almacenes.destroy');
 Route::get('almacenes/{almacenes}/edit', 'App\Http\Controllers\AlmacenesController@edit')->name('almacenes.edit');
