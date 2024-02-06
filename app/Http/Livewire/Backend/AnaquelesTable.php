@@ -45,11 +45,11 @@ class AnaquelesTable extends DataTableComponent
         return [
             Column::make("Id", "id")
                 ->sortable(),
-            Column::make("Almacen")
-                ->label(fn ($row) => $row->almacenes->pluck('denominacion')->implode(', ')),
-            Column::make("Seccion")
+            Column::make("Almacen", "almacenes.denominacion")
+                ->sortable(),
+            Column::make("id_seccion")
                 ->sortable()
-                ->label(fn ($row) => $row->secciones->pluck('denominacion')->implode(', ')),
+                ->label(fn ($row) => Anaquele::find($row->id)["id_seccion"]),
             // Column::make("Conductor")
             //     ->sortable()
             //     ->label(fn ($row) => Anaquele::find(($row->conductores->pluck('id')[0]))->personas['nombre_completo_sin_dni']),

@@ -17,6 +17,9 @@ class Anaquele extends Model
         'estado'
     ];
 
-
+    public function almacenes()
+    {
+        return $this->belongsTo(Almacene::class, "id_almacen", "id");
+    }
 
 }

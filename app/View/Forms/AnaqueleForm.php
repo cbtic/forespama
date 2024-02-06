@@ -74,24 +74,28 @@ class AnaqueleForm extends ModelForm
     public function fields()
     {
         return [
+            Text::make('codigo', [
+                'required' => true,
+            ]),
+            Text::make('denominacion', [
+                'label' => 'denominacion',
+                'required' => true,
+            ]),
             HasOne::make('id_almacen', [
                 'label' => 'Almacenen',
                 'model' => Almacene::class,
                 'model_options' => [
-                    'label' => 'nombre_completo',
+                    'label' => 'denominacion',
                     'value' => 'id',
                     'method' => 'all',
                     'params' => null,
                 ]
             ])->selectOptions(['Seleccione' => null]),
-            Text::make('codigo', [
+            Text::make('id_seccion', [
+                'label' => 'Seccion',
                 'required' => true,
             ]),
-            Date::make('denominacion', [
-                'label' => 'denominacion',
-                'required' => true,
-            ]),
-            Select::make('estado')->selectOptions(['1' => 'ACTIVO', '0' => 'CANCELADO']),
+            Select::make('estado')->selectOptions(['ACTIVO' => '1', 'CANCELADO' => '0']),
             // AutoSuggestSelect::make('estado')->selectOptions(['ACTIVO' => 'ACTIVO', 'CANCELADO' => 'CANCELADO']),
             // Hidden::make('personas_id', [
             //     'required' => true,
