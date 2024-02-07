@@ -107,13 +107,13 @@ Route::patch('tablamaestras/{tablamaestras}', 'App\Http\Controllers\TablaMaestra
 Route::delete('tablamaestras/{tablamaestras}', 'App\Http\Controllers\TablaMaestraController@destroy')->name('tablamaestras.destroy');
 Route::get('tablamaestras/{tablamaestras}/edit', 'App\Http\Controllers\TablaMaestraController@edit')->name('tablamaestras.edit');
 
-Route::get('anaqueles', 'App\Http\Controllers\AnaqueleController@index')->name('anaqueles.index');
-Route::post('anaqueles', 'App\Http\Controllers\AnaqueleController@store')->name('anaqueles.store');
-Route::get('anaqueles/create', 'App\Http\Controllers\AnaqueleController@create')->name('anaqueles.create');
-Route::get('anaqueles/{anaqueles}', 'App\Http\Controllers\AnaqueleController@show')->name('anaqueles.show');
-Route::put('anaqueles/{anaqueles}', 'App\Http\Controllers\AnaqueleController@update')->name('anaqueles.update');
-Route::delete('anaqueles/{anaqueles}', 'App\Http\Controllers\AnaqueleController@destroy')->name('anaqueles.destroy');
-Route::get('anaqueles/{anaqueles}/edit', 'App\Http\Controllers\AnaqueleController@edit')->name('anaqueles.edit');
+Route::get('anaqueles', 'App\Http\Controllers\AnaquelesController@index')->name('anaqueles.index');
+Route::post('anaqueles', 'App\Http\Controllers\AnaquelesController@store')->name('anaqueles.store');
+Route::get('anaqueles/create', 'App\Http\Controllers\AnaquelesController@create')->name('anaqueles.create');
+Route::get('anaqueles/{anaqueles}', 'App\Http\Controllers\AnaquelesController@show')->name('anaqueles.show');
+Route::put('anaqueles/{anaqueles}', 'App\Http\Controllers\AnaquelesController@update')->name('anaqueles.update');
+Route::delete('anaqueles/{anaqueles}', 'App\Http\Controllers\AnaquelesController@destroy')->name('anaqueles.destroy');
+Route::get('anaqueles/{anaqueles}/edit', 'App\Http\Controllers\AnaquelesController@edit')->name('anaqueles.edit');
 
 Route::get('almacenes', 'App\Http\Controllers\AlmacenesController@index')->name('almacenes.index');
 Route::post('almacenes', 'App\Http\Controllers\AlmacenesController@store')->name('almacenes.store');
@@ -122,3 +122,11 @@ Route::get('almacenes/{almacenes}', 'App\Http\Controllers\AlmacenesController@sh
 Route::put('almacenes/{almacenes}', 'App\Http\Controllers\AlmacenesController@update')->name('almacenes.update');
 Route::delete('almacenes/{almacenes}', 'App\Http\Controllers\AlmacenesController@destroy')->name('almacenes.destroy');
 Route::get('almacenes/{almacenes}/edit', 'App\Http\Controllers\AlmacenesController@edit')->name('almacenes.edit');
+
+Route::get('secciones', 'App\Http\Controllers\SeccionesController@index')->name('secciones.index');
+Route::post('secciones', 'App\Http\Controllers\SeccionesController@store')->name('secciones.store');
+Route::get('secciones/create', 'App\Http\Controllers\SeccionesController@create')->name('secciones.create');
+Route::get('secciones/{secciones}', 'App\Http\Controllers\SeccionesController@show')->name('secciones.show');
+Route::put('secciones/{secciones}', 'App\Http\Controllers\SeccionesController@update')->name('secciones.update');
+Route::delete('secciones/{secciones}', 'App\Http\Controllers\SeccionesController@destroy')->name('secciones.destroy');
+Route::get('secciones/{secciones}/edit', 'App\Http\Controllers\SeccionesController@edit')->name('secciones.edit');

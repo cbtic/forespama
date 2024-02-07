@@ -22,4 +22,8 @@ class Almacene extends Model
         return $this->belongsTo(Ubigeo::class,"id_ubigeo","id_ubigeo");
     }
 
+    public function secciones()
+    {
+        return $this->belongsToMany(Almacene::class, "almacenes_secciones", "id_almacenes", "id_secciones");
+    }
 }

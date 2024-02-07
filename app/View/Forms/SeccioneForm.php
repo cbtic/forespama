@@ -2,8 +2,9 @@
 
 namespace App\View\Forms;
 
+use App\Models\Seccione;
 use App\Models\Almacene;
-use App\Models\Ubigeo;
+use App\Models\Anaquele;
 use Grafite\Forms\Forms\ModelForm;
 use Grafite\Forms\Fields\TextArea;
 use Grafite\Forms\Fields\Text;
@@ -17,20 +18,18 @@ use Grafite\Forms\Fields\PasswordWithReveal;
 use Grafite\Forms\Fields\AutoSuggestSelect;
 use Grafite\Forms\Fields\Hidden;
 
-class AlmaceneForm extends ModelForm
+class SeccioneForm extends ModelForm
 {
     /**
      * The model for the form
      *
      * @var \Illuminate\Database\Eloquent\Model
      */
-    public $model = Almacene::class;
+    public $model = Seccione::class;
 
     public $routeParameters = ['id',
                                 'codigo',
                                 'denominacion',
-                                'id_ubigeo',
-                                'direccion',
                                 'estado'];
 
     public $columns = 1;
@@ -47,7 +46,7 @@ class AlmaceneForm extends ModelForm
      *
      * @var string
      */
-    public $routePrefix = 'frontend.almacenes';
+    public $routePrefix = 'frontend.secciones';
 
     /**
      * Buttons and values
@@ -72,36 +71,33 @@ class AlmaceneForm extends ModelForm
     public function fields()
     {
         return [
-            // HasOne::make('id_ubigeo', [
-            //     'label' => 'Ubigeo',
-            //     'model' => Ubigeo::class,
-            //     'model_options' => [
-            //         'label' => 'nombre_completo',
-            //         'value' => 'id',
-            //         'method' => 'all',
-            //         'params' => null,
-            //     ]
-            // ])->selectOptions(['Seleccione' => null]),
+            HasOne::make('id_almacenes', [
+                'label' => 'Almacen',
+                'model' => Almacene::class,
+                'model_options' => [
+                    'label' => 'denominacion',
+                    'value' => 'id_almacenes',
+                    'method' => 'all',
+                    'params' => null,
+                ]
+            ])->selectOptions(['Seleccione' => null]),
             Text::make('codigo', [
                 'required' => true,
             ]),
             Text::make('denominacion', [
                 'required' => true,
             ]),
-            Text::make('id_ubigeo', [
-                'required' => true,
-            ]),
-            Text::make('direccion', [
-                'required' => true,
-            ]),
+            HasMany::make('id_anaqueles', [
+                'label' => 'Anaqueles',
+                'model' => Anaquele::class,
+                'model_options' => [
+                    'label' => 'codigo',
+                    'value' => 'id_anaqueles',
+                    'method' => 'all',
+                    'params' => null,
+                ]
+            ])->selectOptions(['Seleccione' => null]),
             Select::make('estado')->selectOptions(['ACTIVO' => '1', 'CANCELADO' => '0']),
-            // AutoSuggestSelect::make('estado')->selectOptions(['ACTIVO' => 'ACTIVO', 'CANCELADO' => 'CANCELADO']),
-            // Hidden::make('personas_id', [
-            //     'required' => true,
-            // ]),
-            // Text::make('persona', [
-            //     'required' => true,
-            // ]),
         ];
     }
 }

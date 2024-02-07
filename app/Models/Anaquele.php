@@ -12,14 +12,11 @@ class Anaquele extends Model
     protected $fillable = [
         'codigo',
         'denominacion',
-        'id_seccion',
-        'id_almacen',
         'estado'
     ];
 
-    public function almacenes()
+    public function secciones()
     {
-        return $this->belongsTo(Almacene::class, "id_almacen", "id");
+        return $this->belongsToMany(Seccione::class, "anaqueles_secciones", "id_anaqueles", "id_secciones");
     }
-
 }

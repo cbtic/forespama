@@ -4,26 +4,26 @@ namespace App\Http\Livewire\Backend;
 
 use Rappasoft\LaravelLivewireTables\DataTableComponent;
 use Rappasoft\LaravelLivewireTables\Views\Column;
-use App\Models\Anaquele;
+use App\Models\Seccione;
 use Illuminate\Database\Eloquent\Builder;
 
-class AnaquelesTable extends DataTableComponent
+class SeccionesTable extends DataTableComponent
 {
-    protected $model = Anaquele::class;
+    protected $model = Seccione::class;
 
     /**
      * @return Builder
      */
     public function query(): Builder
     {
-        return Anaquele::when($this->getFilter('search'), fn ($query, $term) => $query->search($term));
+        return Seccione::when($this->getFilter('search'), fn ($query, $term) => $query->search($term));
     }
 
     public function configure(): void
     {
         $this->setPrimaryKey('id')
         ->setTableRowUrl(function($row) {
-            return route('frontend.anaqueles.edit', $row);
+            return route('frontend.secciones.edit', $row);
         })
         ->setTableRowUrlTarget(function($row) {
             return '_self';
@@ -35,7 +35,7 @@ class AnaquelesTable extends DataTableComponent
         if(intval($id) == 0){
             return;
         }
-        $types = Anaquele::findOrFail(intval($id));
+        $types = Seccione::findOrFail(intval($id));
         $types->delete();
 
     }
@@ -45,17 +45,21 @@ class AnaquelesTable extends DataTableComponent
         return [
             Column::make("Id", "id")
                 ->sortable(),
-            Column::make("codigo", "codigo")
+            Column::make("Almacen")
+                ->label(fn ($row) => $row->almacenes->pluck('descripcion')->implode(', ')),
+            Column::make("Codigo", "codigo")
                 ->sortable(),
-            Column::make("denominacion", "denominacion")
+            Column::make("Denominacion", "denominacion")
                 ->sortable(),
+            Column::make("Anaqueles")
+                ->label(fn ($row) => $row->anaqueles->pluck('codigo')->implode(', ')),
             Column::make("Estado", "estado")
                 ->sortable(),
             Column::make('Acciones')
                 ->unclickable()
                 ->label(
                     function ($row, Column $column) {
-                        $edit = '<button class="btn btn-xs btn-success text-white" onclick="window.location.href=\'' . route('frontend.anaqueles.show', $row) . '\'">Mostrar</button>';
+                        $edit = '<button class="btn btn-xs btn-success text-white" onclick="window.location.href=\'' . route('frontend.secciones.show', $row) . '\'">Mostrar</button>';
                         $delete = '<button class="btn btn-xs btn-danger text-white" wire:click="delete(' . $row->id . ')">Eliminar</button>';
                         return $edit . " " . $delete;
                     }

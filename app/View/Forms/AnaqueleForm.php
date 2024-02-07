@@ -4,6 +4,7 @@ namespace App\View\Forms;
 
 use App\Models\Anaquele;
 use App\Models\Almacene;
+use App\Models\Seccione;
 use Grafite\Forms\Forms\ModelForm;
 use Grafite\Forms\Fields\TextArea;
 use Grafite\Forms\Fields\Text;
@@ -30,8 +31,7 @@ class AnaqueleForm extends ModelForm
                                 'id',
                                 'codigo',
                                 'denominacion',
-                                'id_seccion',
-                                'id_almacen',
+                                'id_secciones',
                                 'estado',
                             ];
 
@@ -81,20 +81,16 @@ class AnaqueleForm extends ModelForm
                 'label' => 'denominacion',
                 'required' => true,
             ]),
-            HasOne::make('id_almacen', [
-                'label' => 'Almacenen',
-                'model' => Almacene::class,
-                'model_options' => [
-                    'label' => 'denominacion',
-                    'value' => 'id',
-                    'method' => 'all',
-                    'params' => null,
-                ]
-            ])->selectOptions(['Seleccione' => null]),
-            Text::make('id_seccion', [
-                'label' => 'Seccion',
-                'required' => true,
-            ]),
+            // HasMany::make('id_secciones', [
+            //     'label' => 'Seccion',
+            //     'model' => Seccione::class,
+            //     'model_options' => [
+            //         'label' => 'denominacion',
+            //         'value' => 'id',
+            //         'method' => 'all',
+            //         'params' => null,
+            //     ]
+            // ])->selectOptions(['Seleccione' => null]),
             Select::make('estado')->selectOptions(['ACTIVO' => '1', 'CANCELADO' => '0']),
             // AutoSuggestSelect::make('estado')->selectOptions(['ACTIVO' => 'ACTIVO', 'CANCELADO' => 'CANCELADO']),
             // Hidden::make('personas_id', [

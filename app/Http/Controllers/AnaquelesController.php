@@ -6,7 +6,7 @@ use App\Http\Requests\AnaqueleRequest;
 use App\Models\Anaquele;
 use RealRashid\SweetAlert\Facades\Alert;
 
-class AnaqueleController extends Controller
+class AnaquelesController extends Controller
 {
     public function index()
     {
@@ -21,7 +21,9 @@ class AnaqueleController extends Controller
 
     public function store(AnaqueleRequest $request)
     {
-        Anaquele::create($request->all());
+        $anaqueles = Anaquele::create($request->all());
+
+        $anaqueles->secciones()->sync($request->id_secciones);
 
         return redirect()->route('frontend.anaqueles.index');
     }
@@ -35,6 +37,8 @@ class AnaqueleController extends Controller
     public function update(AnaqueleRequest $request, Anaquele $anaqueles)
     {
         $anaqueles->update($request->all());
+
+        $anaqueles->secciones()->sync($request->id_secciones);
 
         // return redirect()->route('frontend.anaqueles.show', $anaqueles->id);
         return redirect()->route('frontend.anaqueles.index');
