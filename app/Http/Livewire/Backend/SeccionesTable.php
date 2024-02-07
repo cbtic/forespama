@@ -48,7 +48,7 @@ class SeccionesTable extends DataTableComponent
             Column::make("Id", "id")
                 ->sortable(),
             Column::make("Almacen")
-                ->label(fn ($row) => $row->almacenes->pluck('descripcion')->implode(', ')),
+                ->label(fn ($row) => $row->almacenes->pluck('codigo')->implode(', ')),
             Column::make("Codigo", "codigo")
                 ->sortable(),
             Column::make("Denominacion", "denominacion")
