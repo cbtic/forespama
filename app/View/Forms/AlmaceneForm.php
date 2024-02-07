@@ -94,6 +94,12 @@ class AlmaceneForm extends ModelForm
             Text::make('direccion', [
                 'required' => true,
             ]),
+            Text::make('telefono', [
+                'required' => false,
+            ]),
+            Text::make('encargado', [
+                'required' => false,
+            ]),
             Select::make('estado')->selectOptions(['ACTIVO' => '1', 'CANCELADO' => '0']),
             // AutoSuggestSelect::make('estado')->selectOptions(['ACTIVO' => 'ACTIVO', 'CANCELADO' => 'CANCELADO']),
             // Hidden::make('personas_id', [

@@ -29,6 +29,8 @@ class AlmaceneRequest extends FormRequest
             'denominacion' => ['required'],
             'id_ubigeo' => ['required', 'string', 'min:6'],
             'direccion' => ['required', 'string'],
+            'telefono' => ['required', 'string'],
+            'encargado' => ['required', 'string'],
             'estado' => ['required', 'string'],
 
         ];

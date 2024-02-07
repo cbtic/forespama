@@ -40,6 +40,7 @@ class SeccionesController extends Controller
 
         $secciones->almacenes()->sync($request->id_almacenes);
 
+        // return redirect()->route('frontend.secciones.show', $secciones->id);
         return redirect()->route('frontend.secciones.index');
     }
 

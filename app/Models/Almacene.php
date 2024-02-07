@@ -14,6 +14,8 @@ class Almacene extends Model
         'denominacion',
         'id_ubigeo',
         'direccion',
+        'telefono',
+        'encargado',
         'estado'
     ];
 
