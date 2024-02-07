@@ -76,7 +76,7 @@ class SeccioneForm extends ModelForm
                 'model' => Almacene::class,
                 'model_options' => [
                     'label' => 'denominacion',
-                    'value' => 'id_almacenes',
+                    'value' => 'id',
                     'method' => 'all',
                     'params' => null,
                 ]
@@ -92,7 +92,7 @@ class SeccioneForm extends ModelForm
                 'model' => Anaquele::class,
                 'model_options' => [
                     'label' => 'codigo',
-                    'value' => 'id_anaqueles',
+                    'value' => 'id',
                     'method' => 'all',
                     'params' => null,
                 ]

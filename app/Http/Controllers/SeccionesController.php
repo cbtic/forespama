@@ -24,6 +24,7 @@ class SeccionesController extends Controller
         $secciones = Seccione::create($request->all());
 
         $secciones->almacenes()->sync($request->id_almacenes);
+        $secciones->anaqueles()->sync($request->id_anaqueles);
 
         return redirect()->route('frontend.secciones.index');
     }
@@ -39,6 +40,7 @@ class SeccionesController extends Controller
         $secciones->update($request->all());
 
         $secciones->almacenes()->sync($request->id_almacenes);
+        $secciones->anaqueles()->sync($request->id_anaqueles);
 
         // return redirect()->route('frontend.secciones.show', $secciones->id);
         return redirect()->route('frontend.secciones.index');
