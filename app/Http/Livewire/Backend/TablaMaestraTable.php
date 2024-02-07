@@ -36,21 +36,19 @@ class TablaMaestraTable extends DataTableComponent
         return [
             Column::make("Id", "id")
                 ->sortable(),
-            Column::make("Tipo", "tipo")
+            Column::make("Tipo", "tipo_nombre")
+                ->searchable()
                 ->sortable(),
             Column::make("Denominacion", "denominacion")
                 ->searchable()
                 ->sortable(),
             Column::make("Orden", "orden")
                 ->sortable(),
-            Column::make("Estado", "estado")
-                ->sortable(),
             Column::make("Codigo", "codigo")
                 ->sortable(),
-            Column::make("Tipo nombre", "tipo_nombre")
-                ->searchable()
+            Column::make("Estado")
+                ->label(fn($row) => array("CANCELADO","ACTIVO")[TablaMaestra::find($row->id)["estado"]])
                 ->sortable(),
-            Column::make("Estado"),
         ];
     }
 
