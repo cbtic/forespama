@@ -57,6 +57,9 @@ class AlmacenesTable extends DataTableComponent
             Column::make('Ubigeo', 'ubigeos.desc_ubigeo')
                 ->sortable()
                 ->searchable(),
+            Column::make("Estado")
+                ->label(fn($row) => array("CANCELADO","ACTIVO")[Almacene::find($row->id)["estado"]])
+                ->sortable(),
             Column::make('Acciones')
                 ->unclickable()
                 ->label(

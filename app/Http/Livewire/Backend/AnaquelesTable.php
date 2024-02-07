@@ -49,7 +49,8 @@ class AnaquelesTable extends DataTableComponent
                 ->sortable(),
             Column::make("denominacion", "denominacion")
                 ->sortable(),
-            Column::make("Estado", "estado")
+            Column::make("Estado")
+                ->label(fn($row) => array("CANCELADO","ACTIVO")[Anaquele::find($row->id)["estado"]])
                 ->sortable(),
             Column::make('Acciones')
                 ->unclickable()

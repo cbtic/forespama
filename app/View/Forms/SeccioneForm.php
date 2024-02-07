@@ -88,7 +88,7 @@ class SeccioneForm extends ModelForm
                 'required' => true,
             ]),
             HasMany::make('id_anaqueles', [
-                'label' => 'Anaqueles',
+                'label' => 'Escoja los anaqueles que tendrá en la sección',
                 'model' => Anaquele::class,
                 'model_options' => [
                     'label' => 'codigo',
@@ -96,7 +96,7 @@ class SeccioneForm extends ModelForm
                     'method' => 'all',
                     'params' => null,
                 ]
-            ])->selectOptions(['Seleccione' => null]),
+            ])->selectOptions(['Sin anaquel' => null]),
             Select::make('estado')->selectOptions(['ACTIVO' => '1', 'CANCELADO' => '0']),
         ];
     }

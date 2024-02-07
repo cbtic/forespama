@@ -5,6 +5,8 @@ namespace App\Http\Livewire\Backend;
 use Rappasoft\LaravelLivewireTables\DataTableComponent;
 use Rappasoft\LaravelLivewireTables\Views\Column;
 use App\Models\Seccione;
+use App\Models\Anaquele;
+use App\Models\Almacene;
 use Illuminate\Database\Eloquent\Builder;
 
 class SeccionesTable extends DataTableComponent
@@ -53,7 +55,8 @@ class SeccionesTable extends DataTableComponent
                 ->sortable(),
             Column::make("Anaqueles")
                 ->label(fn ($row) => $row->anaqueles->pluck('codigo')->implode(', ')),
-            Column::make("Estado", "estado")
+            Column::make("Estado")
+                ->label(fn($row) => array("CANCELADO","ACTIVO")[Seccione::find($row->id)["estado"]])
                 ->sortable(),
             Column::make('Acciones')
                 ->unclickable()
