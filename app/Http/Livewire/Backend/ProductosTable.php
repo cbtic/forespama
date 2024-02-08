@@ -5,7 +5,11 @@ namespace App\Http\Livewire\Backend;
 use Rappasoft\LaravelLivewireTables\DataTableComponent;
 use Rappasoft\LaravelLivewireTables\Views\Column;
 use App\Models\Producto;
+use App\Models\Anaquele;
+use App\Models\Almacene;
+use App\Models\Seccione;
 use Illuminate\Database\Eloquent\Builder;
+use TablaMaestra;
 
 class ProductosTable extends DataTableComponent
 {
@@ -60,26 +64,50 @@ class ProductosTable extends DataTableComponent
             Column::make("Denominacion", "denominacion")
                 ->sortable(),
             Column::make("Unidad", "id_unidad_medida")
+                ->hideIf(true)
+                ->sortable(),
+            Column::make("Unidad")
+                ->label(fn ($row) => TablaMaestra::find($row->id_unidad_medida)->denominacion)
                 ->sortable(),
             Column::make("Stock", "stock_actual")
                 ->sortable(),
-            Column::make("Precio", "precio_unitario")
+            Column::make("Costo", "costo_unitario")
                 ->sortable(),
             Column::make("Moneda", "id_moneda")
+                ->hideIf(true)
+                ->sortable(),
+            Column::make("Moneda")
+                ->label(fn ($row) => TablaMaestra::find($row->id_moneda)->abreviatura)
                 ->sortable(),
             Column::make("Tipo Producto", "id_tipo_producto")
                 ->sortable(),
             Column::make("Vencimiento", "fecha_vencimiento")
                 ->sortable(),
             Column::make("Estado del bien", "id_estado_bien")
+                ->hideIf(true)
+                ->sortable(),
+            Column::make("Estado del bien")
+                ->label(fn ($row) => TablaMaestra::find($row->id_estado_bien)->denominacion)
                 ->sortable(),
             Column::make("Stock mínimo", "stock_minimo")
                 ->sortable(),
             Column::make("Marca", "id_marca")
+                ->hideIf(true)
+                ->sortable(),
+            Column::make("Marca")
+                ->label(fn ($row) => TablaMaestra::find($row->id_marca)->denominacion)
                 ->sortable(),
             Column::make("Seccion", "id_seccion")
+                ->hideIf(true)
+                ->sortable(),
+            Column::make("Seccion")
+                ->label(fn ($row) => Seccione::find($row->id_seccion)->codigo)
                 ->sortable(),
             Column::make("Anaquel", "id_anaquel")
+                ->hideIf(true)
+                ->sortable(),
+            Column::make("Anaquel")
+                ->label(fn ($row) => Anaquele::find($row->id_anaquel)->codigo)
                 ->sortable(),
             Column::make("Stock Actual", "stock_actual")
                 ->sortable(),

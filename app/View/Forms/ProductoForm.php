@@ -31,7 +31,7 @@ class ProductoForm extends ModelForm
 
     public $routeParameters = ['id'];
 
-    public $columns = 2;
+    public $columns = 3;
 
     public $hasFiles = true;
 
@@ -92,12 +92,20 @@ class ProductoForm extends ModelForm
             Text::make('stock_actual', [
                 'required' => true,
             ]),
-            Text::make('precio_unitario', [
+            Text::make('costo_unitario', [
+                'label' => 'Costo Unitario',
                 'required' => true,
             ]),
-            Text::make('id_moneda', [
-                'required' => true,
-            ]),
+            HasOne::make('id_moneda', [
+                'label' => 'Moneda',
+                'model' => TablaMaestra::class,
+                'model_options' => [
+                    'label' => 'denominacion',
+                    'value' => 'id',
+                    'method' => 'por_tipo',
+                    'params' => '1',
+                ]
+            ])->selectOptions(['Seleccione' => null]),
             HasOne::make('id_tipo_producto', [
                 'label' => 'Tipo de Producto',
                 'model' => TablaMaestra::class,

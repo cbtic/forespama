@@ -14,7 +14,7 @@ class Producto extends Model
         'denominacion',
         'id_unidad_medida',
         'stock_actual',
-        'precio_unitario',
+        'costo_unitario',
         'id_moneda',
         'id_tipo_producto',
         'fecha_vencimiento',

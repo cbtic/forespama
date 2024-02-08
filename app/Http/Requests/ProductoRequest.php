@@ -29,7 +29,7 @@ class ProductoRequest extends FormRequest
             'denominacion' => ['required', 'string'],
             'id_unidad_medida' => ['required', 'string'],
             'stock_actual' => ['required', 'string'],
-            'precio_unitario' => ['required', 'string'],
+            'costo_unitario' => ['required', 'string'],
             'id_moneda' => ['required', 'string'],
             'id_tipo_producto' => ['required', 'string'],
             'fecha_vencimiento' => ['', 'string'],
