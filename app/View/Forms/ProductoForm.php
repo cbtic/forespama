@@ -99,7 +99,7 @@ class ProductoForm extends ModelForm
                 'required' => true,
             ]),
             HasOne::make('id_tipo_producto', [
-                'label' => 'Unidades',
+                'label' => 'Tipo de Producto',
                 'model' => TablaMaestra::class,
                 'model_options' => [
                     'label' => 'denominacion',
@@ -111,9 +111,16 @@ class ProductoForm extends ModelForm
             Date::make('fecha_vencimiento', [
                 'required' => true,
             ]),
-            Text::make('id_estado_bien', [
-                'required' => true,
-            ]),
+            HasOne::make('id_estado_bien', [
+                'label' => 'Estado del Bien',
+                'model' => TablaMaestra::class,
+                'model_options' => [
+                    'label' => 'denominacion',
+                    'value' => 'id',
+                    'method' => 'por_tipo',
+                    'params' => '4',
+                ]
+            ])->selectOptions(['Seleccione' => null]),
             Text::make('stock_minimo', [
                 'required' => true,
             ]),
