@@ -5,6 +5,7 @@ namespace App\View\Forms;
 use App\Models\Producto;
 use App\Models\Almacene;
 use App\Models\Anaquele;
+use App\Models\Seccione;
 use Grafite\Forms\Forms\ModelForm;
 use Grafite\Forms\Fields\TextArea;
 use Grafite\Forms\Fields\Text;
@@ -17,6 +18,7 @@ use Grafite\Forms\Fields\Select;
 use Grafite\Forms\Fields\PasswordWithReveal;
 use Grafite\Forms\Fields\AutoSuggestSelect;
 use Grafite\Forms\Fields\Hidden;
+use TablaMaestra;
 
 class ProductoForm extends ModelForm
 {
@@ -27,10 +29,7 @@ class ProductoForm extends ModelForm
      */
     public $model = Producto::class;
 
-    public $routeParameters = ['id',
-                                'codigo',
-                                'denominacion',
-                                'estado'];
+    public $routeParameters = ['id'];
 
     public $columns = 2;
 
@@ -80,9 +79,16 @@ class ProductoForm extends ModelForm
             Text::make('denominacion', [
                 'required' => true,
             ]),
-            Text::make('id_unidad_medida', [
-                'required' => true,
-            ]),
+            HasOne::make('id_unidad_medida', [
+                'label' => 'Unidades',
+                'model' => TablaMaestra::class,
+                'model_options' => [
+                    'label' => 'denominacion',
+                    'value' => 'id',
+                    'method' => 'por_tipo',
+                    'params' => '43',
+                ]
+            ])->selectOptions(['Seleccione' => null]),
             Text::make('stock_actual', [
                 'required' => true,
             ]),
@@ -92,9 +98,16 @@ class ProductoForm extends ModelForm
             Text::make('id_moneda', [
                 'required' => true,
             ]),
-            Text::make('id_tipo_producto', [
-                'required' => true,
-            ]),
+            HasOne::make('id_tipo_producto', [
+                'label' => 'Unidades',
+                'model' => TablaMaestra::class,
+                'model_options' => [
+                    'label' => 'denominacion',
+                    'value' => 'id',
+                    'method' => 'por_tipo',
+                    'params' => '44',
+                ]
+            ])->selectOptions(['Seleccione' => null]),
             Date::make('fecha_vencimiento', [
                 'required' => true,
             ]),
@@ -104,26 +117,37 @@ class ProductoForm extends ModelForm
             Text::make('stock_minimo', [
                 'required' => true,
             ]),
-            Text::make('id_marca', [
-                'required' => true,
-            ]),
-            Text::make('id_seccion', [
-                'required' => true,
-            ]),
-            Text::make('id_anaquel', [
-                'required' => true,
-            ]),
+            HasOne::make('id_marca', [
+                'label' => 'Marca',
+                'model' => TablaMaestra::class,
+                'model_options' => [
+                    'label' => 'denominacion',
+                    'value' => 'id',
+                    'method' => 'por_tipo',
+                    'params' => '47',
+                ]
+            ])->selectOptions(['Seleccione' => null]),
+            HasOne::make('id_seccion', [
+                'label' => 'Escoja la seccion',
+                'model' => Seccione::class,
+                'model_options' => [
+                    'label' => 'codigo',
+                    'value' => 'id',
+                    'method' => 'all',
+                    'params' => null,
+                ]
+            ])->selectOptions(['Seleccione' => null]),
+            HasOne::make('id_anaquel', [
+                'label' => 'Escoja el anaquel',
+                'model' => Anaquele::class,
+                'model_options' => [
+                    'label' => 'codigo',
+                    'value' => 'id',
+                    'method' => 'all',
+                    'params' => null,
+                ]
+            ])->selectOptions(['Sin anaquel' => null]),
             Select::make('estado')->selectOptions(['ACTIVO' => '1', 'CANCELADO' => '0']),
-            // HasMany::make('id_anaqueles', [
-            //     'label' => 'Escoja los anaqueles que tendrá en la sección',
-            //     'model' => Anaquele::class,
-            //     'model_options' => [
-            //         'label' => 'codigo',
-            //         'value' => 'id',
-            //         'method' => 'all',
-            //         'params' => null,
-            //     ]
-            // ])->selectOptions(['Sin anaquel' => null]),
         ];
     }
 }
