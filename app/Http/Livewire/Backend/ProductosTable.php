@@ -111,7 +111,8 @@ class ProductosTable extends DataTableComponent
                 ->sortable(),
             Column::make("Stock Actual", "stock_actual")
                 ->sortable(),
-            Column::make("Estado", "estado")
+            Column::make("Estado")
+                ->label(fn($row) => array("CANCELADO","ACTIVO")[Producto::find($row->id)["estado"]])
                 ->sortable(),
             Column::make('Acciones')
                 ->unclickable()
