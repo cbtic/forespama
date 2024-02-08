@@ -153,7 +153,6 @@ class VehiculoController extends Controller
 
         $vehiculos->conductores()->sync($request->id_conductores);
 
-
         return redirect()->route('frontend.vehiculos.index');
     }
 

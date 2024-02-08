@@ -117,6 +117,9 @@
                 <li class="c-sidebar-nav-item">
                     <x-utils.link :href="route('frontend.anaqueles.index')" class="c-sidebar-nav-link" :text="__('Anaqueles')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
                 </li>
+                <li class="c-sidebar-nav-item">
+                    <x-utils.link :href="route('frontend.productos.index')" class="c-sidebar-nav-link" :text="__('Productos')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+                </li>
             </ul>
 
         </li>

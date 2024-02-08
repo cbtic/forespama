@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\SeccioneRequest;
 use App\Models\Seccione;
-use Illuminate\Http\Request;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class SeccionesController extends Controller
 {

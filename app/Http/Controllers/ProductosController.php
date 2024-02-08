@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Http\Requests\ProductoRequest;
 use App\Models\Producto;
+use RealRashid\SweetAlert\Facades\Alert;
 
-class ProductoController extends Controller
+class ProductosController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -26,7 +27,7 @@ class ProductoController extends Controller
      */
     public function create()
     {
-        //
+        return view('frontend.productos.create');
     }
 
     /**
@@ -35,9 +36,11 @@ class ProductoController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ProductoRequest $request)
     {
-        //
+        $secciones = Producto::create($request->all());
+
+        return redirect()->route('frontend.productos.index');
     }
 
     /**
@@ -48,7 +51,7 @@ class ProductoController extends Controller
      */
     public function show($id)
     {
-        //
+        return view('frontend.productos.show', compact('secciones'));
     }
 
     /**
@@ -57,9 +60,9 @@ class ProductoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Producto $productos)
     {
-        //
+        return view('frontend.productos.edit', compact('productos'));
     }
 
     /**
@@ -69,9 +72,11 @@ class ProductoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(ProductoRequest $request, Producto $productos)
     {
-        //
+        $productos->update($request->all());
+
+        return redirect()->route('frontend.productos.index');
     }
 
     /**
@@ -80,8 +85,12 @@ class ProductoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Producto $productos)
     {
-        //
+        $productos->delete();
+
+        Alert::success('Proceso completo', 'Se ha eliminado el producto');
+
+        return redirect()->route('frontend.productos.index');
     }
 }

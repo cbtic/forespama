@@ -130,3 +130,11 @@ Route::get('secciones/{secciones}', 'App\Http\Controllers\SeccionesController@sh
 Route::put('secciones/{secciones}', 'App\Http\Controllers\SeccionesController@update')->name('secciones.update');
 Route::delete('secciones/{secciones}', 'App\Http\Controllers\SeccionesController@destroy')->name('secciones.destroy');
 Route::get('secciones/{secciones}/edit', 'App\Http\Controllers\SeccionesController@edit')->name('secciones.edit');
+
+Route::get('productos', 'App\Http\Controllers\ProductosController@index')->name('productos.index');
+Route::post('productos', 'App\Http\Controllers\ProductosController@store')->name('productos.store');
+Route::get('productos/create', 'App\Http\Controllers\ProductosController@create')->name('productos.create');
+Route::get('productos/{productos}', 'App\Http\Controllers\ProductosController@show')->name('productos.show');
+Route::put('productos/{productos}', 'App\Http\Controllers\ProductosController@update')->name('productos.update');
+Route::delete('productos/{productos}', 'App\Http\Controllers\ProductosController@destroy')->name('productos.destroy');
+Route::get('productos/{productos}/edit', 'App\Http\Controllers\ProductosController@edit')->name('productos.edit');

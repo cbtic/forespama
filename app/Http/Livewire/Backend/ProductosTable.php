@@ -45,23 +45,43 @@ class ProductosTable extends DataTableComponent
         return [
             Column::make("Id", "id")
                 ->sortable(),
-            Column::make("Empresa")
-                ->label(fn ($row) => $row->empresas->pluck('nombre_comercial')->implode(', ')),
-            Column::make("Licencia")
-                ->sortable()
-                ->label(fn ($row) => $row->conductores->pluck('licencia')->implode(', ')),
-            Column::make("Conductor")
-                ->sortable()
-                ->label(fn ($row) => Producto::find(($row->conductores->pluck('id')[0]))->personas['nombre_completo_sin_dni']),
-            Column::make("Placa", "placa")
+            // Column::make("numero_serie")
+            //     ->label(fn ($row) => $row->empresas->pluck('nombre_comercial')->implode(', ')),
+            // Column::make("codigo")
+            //     ->sortable()
+            //     ->label(fn ($row) => $row->conductores->pluck('licencia')->implode(', ')),
+            // Column::make("Conductor")
+            //     ->sortable()
+            //     ->label(fn ($row) => Producto::find(($row->conductores->pluck('id')[0]))->personas['nombre_completo_sin_dni']),
+            Column::make("Serie", "numero_serie")
                 ->sortable(),
-            Column::make("Ejes", "ejes")
+            Column::make("Codigo", "codigo")
                 ->sortable(),
-            Column::make("Peso tracto", "peso_tracto")
+            Column::make("Denominacion", "denominacion")
                 ->sortable(),
-            Column::make("Peso carreta", "peso_carreta")
+            Column::make("Unidad", "id_unidad_medida")
                 ->sortable(),
-            Column::make("Peso seco", "peso_seco")
+            Column::make("Stock", "stock_actual")
+                ->sortable(),
+            Column::make("Precio", "precio_unitario")
+                ->sortable(),
+            Column::make("Moneda", "id_moneda")
+                ->sortable(),
+            Column::make("Tipo Producto", "id_tipo_producto")
+                ->sortable(),
+            Column::make("Vencimiento", "fecha_vencimiento")
+                ->sortable(),
+            Column::make("Estado del bien", "id_estado_bien")
+                ->sortable(),
+            Column::make("Stock mínimo", "stock_minimo")
+                ->sortable(),
+            Column::make("Marca", "id_marca")
+                ->sortable(),
+            Column::make("Seccion", "id_seccion")
+                ->sortable(),
+            Column::make("Anaquel", "id_anaquel")
+                ->sortable(),
+            Column::make("Stock Actual", "stock_actual")
                 ->sortable(),
             Column::make("Estado", "estado")
                 ->sortable(),
@@ -69,7 +89,7 @@ class ProductosTable extends DataTableComponent
                 ->unclickable()
                 ->label(
                     function ($row, Column $column) {
-                        $edit = '<button class="btn btn-xs btn-success text-white" onclick="window.location.href=\'' . route('frontend.vehiculos.show', $row) . '\'">Mostrar</button>';
+                        $edit = '<button class="btn btn-xs btn-success text-white" onclick="window.location.href=\'' . route('frontend.productos.show', $row) . '\'">Mostrar</button>';
                         $delete = '<button class="btn btn-xs btn-danger text-white" wire:click="delete(' . $row->id . ')">Eliminar</button>';
                         return $edit . " " . $delete;
                     }

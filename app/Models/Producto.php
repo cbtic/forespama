@@ -22,6 +22,7 @@ class Producto extends Model
         'stock_minimo',
         'id_marca',
         'observacion',
+        'id_seccion',
         'id_anaquel',
         'estado'
     ];
