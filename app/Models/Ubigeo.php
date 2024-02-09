@@ -60,4 +60,50 @@ order by desc_ubigeo ";
         return $this->HasOne(Almacene::class,"id_ubigeo","id_ubigeo");
     }
 
+    public function departamentos() {
+        $departamentos_opciones = Ubigeo::where([['estado', 1], ['id_departamento', '<>', '00'], ['id_provincia', '=', '00'], ['id_distrito', '=', '00']])->get();
+
+        $array_opciones=[];
+
+        foreach ($departamentos_opciones  as $key => $opcion) {
+            $array_opciones[] = ['id' => $opcion->id_departamento, 'denominacion' => $opcion->desc_ubigeo];
+        }
+
+        $json = json_encode($array_opciones);
+        $obj = json_decode($json);
+
+        return $obj;
+    }
+
+    public function provincias($id_departamento) {
+        $provincias_opciones = Ubigeo::where([['estado', 1], ['id_departamento', '=', $id_departamento], ['id_provincia', '<>', '00'], ['id_distrito', '=', '00']])->get();
+
+        $array_opciones=[];
+
+        foreach ($provincias_opciones  as $key => $opcion) {
+            $array_opciones[] = ['id' => $opcion->id_departamento, 'denominacion' => $opcion->desc_ubigeo];
+        }
+
+        $json = json_encode($array_opciones);
+        $obj = json_decode($json);
+
+        return $obj;
+    }
+
+    public function distritos($id_ubigeo) {
+        $id_departamento = substr($id_ubigeo,0,2);
+        $id_provincia = substr($id_ubigeo,2,2);
+        $distritos_opciones = Ubigeo::where([['estado', 1], ['id_departamento', $id_departamento], ['id_provincia', $id_provincia], ['id_distrito', '<>' , '00']])->get();
+
+        $array_opciones=[];
+
+        foreach ($distritos_opciones  as $key => $opcion) {
+            $array_opciones[] = ['id' => $opcion->id_departamento, 'denominacion' => $opcion->desc_ubigeo];
+        }
+
+        $json = json_encode($array_opciones);
+        $obj = json_decode($json);
+
+        return $obj;
+    }
 }

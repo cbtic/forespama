@@ -26,18 +26,17 @@ class AlmaceneForm extends ModelForm
      */
     public $model = Almacene::class;
 
-    public $routeParameters = ['id',
-                                'codigo',
-                                'denominacion',
-                                'id_ubigeo',
-                                'direccion',
-                                'estado'];
+    public $routeParameters = ['id'];
 
-    public $columns = 1;
+    public $columns = 3;
 
     public $hasFiles = true;
 
     public $instance;
+
+    public $confirmMessage = "Confirma que desea eliminar el registro?";
+
+    public $confirmMethod = "confirmar";
 
     /**
      * Required prefix of routes
@@ -61,8 +60,14 @@ class AlmaceneForm extends ModelForm
      */
     public $buttons = [
         'cancel' => 'Cancelar',
+        'delete' => 'Delete',
+
         'submit' => 'Guardar'
     ];
+
+    public function confirmar() {
+        return "";
+    }
 
     /**
      * Set the desired fields for the form
@@ -91,6 +96,20 @@ class AlmaceneForm extends ModelForm
             Text::make('id_ubigeo', [
                 'required' => true,
             ]),
+            HasOne::make('id_departamento', [
+                'label' => 'Departamento',
+                'model' => Ubigeo::class,
+                'model_options' => [
+                    'label' => 'denominacion',
+                    'value' => 'id',
+                    'method' => 'departamentos',
+                    'params' => '',
+                ]
+            ])->selectOptions(['Seleccione' => null]),
+            Select::make('id_provincia', ['label' => 'Provincia'])
+                ->selectOptions(['Seleccione' => null]),
+            Select::make('id_distrito', ['label' => 'Distrito'])
+                ->selectOptions(['Seleccione' => null]),
             Text::make('direccion', [
                 'required' => true,
             ]),

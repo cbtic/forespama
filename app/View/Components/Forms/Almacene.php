@@ -29,7 +29,7 @@ class Almacene extends Component
     {
         // return view('components.forms.almacenes');
         if ($this->almacenes) {
-            return app(AlmaceneForm::class)->create()->edit($this->almacenes)->render();
+            return app(AlmaceneForm::class)->edit($this->almacenes)->render();
         } else {
             return app(AlmaceneForm::class)->create()->render();
         }
