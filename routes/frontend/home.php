@@ -5,7 +5,7 @@ use App\Http\Controllers\Frontend\TermsController;
 use Tabuna\Breadcrumbs\Trail;
 
 use App\Http\Controllers\Frontend\IngresoVehiculoTroncoController;
-use App\Http\Controllers\Frontend\TablaMaestraController;
+use App\Http\Controllers\TablaMaestraController;
 use App\Http\Controllers\Frontend\PersonaController;
 use App\Http\Controllers\Frontend\EmpresaController;
 use App\Http\Controllers\Frontend\VehiculoController;

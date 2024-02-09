@@ -10,6 +10,8 @@ class Ubigeo extends Model
 {
     use HasFactory;
 
+    protected $fillable = [];
+
 	function getDepartamento(){
 
         $cad = "select id_departamento,desc_ubigeo

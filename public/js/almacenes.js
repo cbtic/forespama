@@ -19,8 +19,10 @@ distrito_select.addEventListener("change", function() {
 });
 
 function carga_Provincia(departamento) {
+    const url = '/';
     alert("Carga provincias de: " + departamento);
     html = "<option value=0>Seleccione</option>";
+
     obj = {
         "1": "Name",
         "2": "Age",
