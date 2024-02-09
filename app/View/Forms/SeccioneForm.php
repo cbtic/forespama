@@ -38,6 +38,8 @@ class SeccioneForm extends ModelForm
 
     public $instance;
 
+    public $disableOnSubmit = true;
+
     /**
      * Required prefix of routes
      *

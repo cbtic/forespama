@@ -34,6 +34,8 @@ class AlmaceneForm extends ModelForm
 
     public $instance;
 
+    public $disableOnSubmit = true;
+
     public $confirmMessage = "Confirma que desea eliminar el registro?";
 
     public $confirmMethod = "confirmar";
