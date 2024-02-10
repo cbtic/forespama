@@ -9,6 +9,9 @@ use App\Http\Controllers\TablaMaestraController;
 use App\Http\Controllers\Frontend\PersonaController;
 use App\Http\Controllers\Frontend\EmpresaController;
 use App\Http\Controllers\Frontend\VehiculoController;
+
+use App\Models\Ubigeo;
+
 /*
  * Frontend Controllers
  * All route names are prefixed with 'frontend.'.
@@ -138,3 +141,15 @@ Route::get('productos/{productos}', 'App\Http\Controllers\ProductosController@sh
 Route::put('productos/{productos}', 'App\Http\Controllers\ProductosController@update')->name('productos.update');
 Route::delete('productos/{productos}', 'App\Http\Controllers\ProductosController@destroy')->name('productos.destroy');
 Route::get('productos/{productos}/edit', 'App\Http\Controllers\ProductosController@edit')->name('productos.edit');
+
+Route::get('ubigeo/listar_departamentos_ajax', function() {
+    return response()->json([ 'status' => 'OK', 'departamentos' => Ubigeo::departamentos() ]);
+});
+
+Route::get('ubigeo/listar_provincias_ajax/{id_departamento}', function(Request $request) {
+    return response()->json([ 'status' => 'OK', 'distritos' => Ubigeo::provincias(request()->route('id_departamento')) ]);
+});
+
+Route::get('ubigeo/listar_distritos_ajax/{id_departamento}/{id_provincia}', function(Request $request) {
+    return response()->json([ 'status' => 'OK', 'distritos' => Ubigeo::distritos_ajax(request()->route('id_departamento'), request()->route('id_provincia')) ]);
+});

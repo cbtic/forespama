@@ -83,7 +83,7 @@ order by desc_ubigeo ";
         $array_opciones=[];
 
         foreach ($provincias_opciones  as $key => $opcion) {
-            $array_opciones[] = ['id' => $opcion->id_departamento, 'denominacion' => $opcion->desc_ubigeo];
+            $array_opciones[] = ['id' => $opcion->id_provincia, 'denominacion' => $opcion->desc_ubigeo];
         }
 
         $json = json_encode($array_opciones);
@@ -100,7 +100,23 @@ order by desc_ubigeo ";
         $array_opciones=[];
 
         foreach ($distritos_opciones  as $key => $opcion) {
-            $array_opciones[] = ['id' => $opcion->id_departamento, 'denominacion' => $opcion->desc_ubigeo];
+            $array_opciones[] = ['id' => $opcion->id_distrito, 'denominacion' => $opcion->desc_ubigeo];
+        }
+
+        $json = json_encode($array_opciones);
+        $obj = json_decode($json);
+
+        return $obj;
+    }
+
+    public function distritos_ajax($id_departamento, $id_provincia) {
+
+        $distritos_opciones = Ubigeo::where([['estado', 1], ['id_departamento', $id_departamento], ['id_provincia', $id_provincia], ['id_distrito', '<>' , '00']])->get();
+
+        $array_opciones=[];
+
+        foreach ($distritos_opciones  as $key => $opcion) {
+            $array_opciones[] = ['id' => $opcion->id_distrito, 'denominacion' => $opcion->desc_ubigeo];
         }
 
         $json = json_encode($array_opciones);
