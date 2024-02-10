@@ -10820,6 +10820,11 @@ textarea.form-control {
   margin-top: 0.25rem;
 }
 
+.form-select {
+    display: block;
+    margin-top: 0.25rem;
+  }
+
 .form-row {
   display: flex;
   flex-wrap: wrap;
