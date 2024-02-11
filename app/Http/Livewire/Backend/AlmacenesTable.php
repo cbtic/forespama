@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Backend;
 
 use App\Models\Almacene;
+use App\Models\Ubigeo;
 use Grafite\Forms\Fields\Bootstrap\HasOne;
 use Illuminate\Database\Eloquent\Builder;
 use Rappasoft\LaravelLivewireTables\DataTableComponent;
@@ -54,9 +55,13 @@ class AlmacenesTable extends DataTableComponent
                 ->searchable(),
             Column::make('denominacion')
                 ->sortable(),
-            Column::make('Ubigeo', 'ubigeos.desc_ubigeo')
+            Column::make('Ubigeo', 'ubigeos.id_ubigeo')
+                ->hideIf(true)
                 ->sortable()
                 ->searchable(),
+            Column::make("Ubicacion")
+                ->label(fn ($row) => Ubigeo::UbigeoCompletoAttribute($row["ubigeos.id_ubigeo"]))
+                ->sortable(),
             Column::make("Estado")
                 ->label(fn($row) => array("CANCELADO","ACTIVO")[Almacene::find($row->id)["estado"]])
                 ->sortable(),

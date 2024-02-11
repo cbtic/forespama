@@ -124,4 +124,20 @@ order by desc_ubigeo ";
 
         return $obj;
     }
+
+    public function UbigeoCompletoAttribute($id_ubigeo) {
+        $id_departamento = substr($id_ubigeo, 0, 2);
+        $id_provincia = substr($id_ubigeo, 2, 2);
+        $id_distrito = substr($id_ubigeo, 4, 2);
+
+        $departamento = Ubigeo::where([["id_departamento", $id_departamento], ["id_provincia", "00"], ["id_distrito", "00"]])->pluck("desc_ubigeo")[0];
+
+        $provincia = Ubigeo::where([["id_departamento", $id_departamento], ["id_provincia", $id_provincia], ["id_distrito", "00"]])->pluck("desc_ubigeo")[0];
+
+        $distrito = Ubigeo::where([["id_departamento", $id_departamento], ["id_provincia", $id_provincia], ["id_distrito", $id_distrito]])->pluck("desc_ubigeo")[0];
+
+        $ubigeo_completo = $departamento."-".$provincia."-".$distrito;
+
+        return $ubigeo_completo;
+    }
 }
