@@ -137,6 +137,8 @@ class IngresoVehiculoTroncoController extends Controller
 		$volumen_total_pies = $request->volumen_total_pies;
 		$precio_unitario = $request->precio_unitario;
 		$precio_total = $request->precio_total;
+		$precio_total_final = 0;
+		
 
 		foreach($id_ingreso_vehiculo_tronco_cubicaje as $key=>$row){
 
@@ -152,7 +154,15 @@ class IngresoVehiculoTroncoController extends Controller
 			$ingresoVehiculoTroncoCubicaje->precio_unitario = $precio_unitario[$key];
 			$ingresoVehiculoTroncoCubicaje->precio_total = $precio_total[$key];
 			$ingresoVehiculoTroncoCubicaje->save();
+			
+			$precio_total_final+=$precio_total[$key];
 		}
+		
+		$ingresoVehiculoTroncoTipoMadera = IngresoVehiculoTroncoTipoMadera::find($request->id_ingreso_vehiculo_tronco_tipo_maderas);
+		$ingresoVehiculoTroncoTipoMadera->total = $precio_total_final;
+		$ingresoVehiculoTroncoTipoMadera->save();
+		
+				
 
     }
 
