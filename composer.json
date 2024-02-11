@@ -15,6 +15,7 @@
         "fruitcake/laravel-cors": "^2.0",
         "grafite/forms": "^6.20",
         "guzzlehttp/guzzle": "^7.0.1",
+        "harvesthq/chosen": "^1.8",
         "jamesmills/laravel-timezone": "^1.9",
         "lab404/laravel-impersonate": "^1.6",
         "langleyfoxall/laravel-nist-password-rules": "^4.1",

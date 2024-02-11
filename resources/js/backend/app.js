@@ -6,3 +6,4 @@ require('@coreui/coreui');
 
 // Boilerplate
 require('../plugins');
+// import "chosen-js";
