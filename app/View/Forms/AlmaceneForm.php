@@ -62,8 +62,6 @@ class AlmaceneForm extends ModelForm
      */
     public $buttons = [
         'cancel' => 'Cancelar',
-        'delete' => 'Delete',
-
         'submit' => 'Guardar'
     ];
 
@@ -95,7 +93,7 @@ class AlmaceneForm extends ModelForm
             Text::make('denominacion', [
                 'required' => true,
             ]),
-            Text::make('id_ubigeo', [
+            Hidden::make('id_ubigeo', [
                 'required' => true,
             ]),
             HasOne::make('id_departamento', [
@@ -131,4 +129,5 @@ class AlmaceneForm extends ModelForm
             // ]),
         ];
     }
+
 }
