@@ -16,6 +16,7 @@ use Grafite\Forms\Fields\Select;
 use Grafite\Forms\Fields\PasswordWithReveal;
 use Grafite\Forms\Fields\AutoSuggestSelect;
 use Grafite\Forms\Fields\Hidden;
+use Grafite\Forms\Forms\Form;
 
 class AlmaceneForm extends ModelForm
 {
@@ -39,6 +40,8 @@ class AlmaceneForm extends ModelForm
     public $confirmMessage = "Confirma que desea eliminar el registro?";
 
     public $confirmMethod = "confirmar";
+
+    // public $columns = 'sections';
 
     /**
      * Required prefix of routes
@@ -130,4 +133,23 @@ class AlmaceneForm extends ModelForm
         ];
     }
 
+    // public function setSections()
+    // {
+    //     return [
+    //         [
+    //             'codigo',
+    //             'denominacion',
+    //         ],
+    //         [
+    //             'id_departamento',
+    //             'id_provincia',
+    //             'id_distrito'
+    //         ],
+    //         [
+    //             'direccion',
+    //             'telefono',
+    //             'encargado'
+    //         ]
+    //     ];
+    // }
 }
