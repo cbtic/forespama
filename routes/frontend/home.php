@@ -147,7 +147,7 @@ Route::get('ubigeo/listar_departamentos_ajax', function() {
 });
 
 Route::get('ubigeo/listar_provincias_ajax/{id_departamento}', function(Request $request) {
-    return response()->json([ 'status' => 'OK', 'distritos' => Ubigeo::provincias(request()->route('id_departamento')) ]);
+    return response()->json([ 'status' => 'OK', 'provincias' => Ubigeo::provincias(request()->route('id_departamento')) ]);
 });
 
 Route::get('ubigeo/listar_distritos_ajax/{id_departamento}/{id_provincia}', function(Request $request) {
