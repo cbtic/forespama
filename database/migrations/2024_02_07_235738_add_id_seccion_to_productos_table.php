@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class ChangeVehiculoIdToVehiculosConductoresTable extends Migration
+class AddIdSeccionToProductosTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,8 @@ class ChangeVehiculoIdToVehiculosConductoresTable extends Migration
      */
     public function up()
     {
-        Schema::table('vehiculos_conductores', function (Blueprint $table) {
-            $table->renameColumn('vehiculos_id', 'id_vehiculos');
-            $table->renameColumn('conductores_id', 'id_conductores');
+        Schema::table('productos', function (Blueprint $table) {
+            $table->Integer('id_seccion')->nullable();
         });
     }
 
@@ -26,7 +25,7 @@ class ChangeVehiculoIdToVehiculosConductoresTable extends Migration
      */
     public function down()
     {
-        Schema::table('vehiculos_conductores', function (Blueprint $table) {
+        Schema::table('productos', function (Blueprint $table) {
             //
         });
     }

@@ -104,8 +104,23 @@
 
         </li>
 
+
         <li class="c-sidebar-nav-dropdown">
             <x-utils.link href="#" icon="c-sidebar-nav-icon cil-list" class="c-sidebar-nav-dropdown-toggle" :text="__('Almacenes')" />
+            <ul class="c-sidebar-nav-dropdown-items">
+                <li class="c-sidebar-nav-item">
+                    <x-utils.link :href="route('frontend.almacenes.index')" class="c-sidebar-nav-link" :text="__('Almacenes')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+                </li>
+                <li class="c-sidebar-nav-item">
+                    <x-utils.link :href="route('frontend.secciones.index')" class="c-sidebar-nav-link" :text="__('Secciones')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+                </li>
+                <li class="c-sidebar-nav-item">
+                    <x-utils.link :href="route('frontend.anaqueles.index')" class="c-sidebar-nav-link" :text="__('Anaqueles')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+                </li>
+                <li class="c-sidebar-nav-item">
+                    <x-utils.link :href="route('frontend.productos.index')" class="c-sidebar-nav-link" :text="__('Productos')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+                </li>
+            </ul>
 
         </li>
 
@@ -133,7 +148,7 @@
                 <li class="c-sidebar-nav-item">
                     <x-utils.link :href="route('frontend.conductores.index')" class="c-sidebar-nav-link" :text="__('Conductores')" />
                 </li>
-                
+
 
             </ul>
 
