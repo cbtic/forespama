@@ -8,6 +8,10 @@ use App\Models\TablaMaestra;
 use App\Models\IngresoVehiculoTronco;
 use App\Models\IngresoVehiculoTroncoTipoMadera;
 use App\Models\IngresoVehiculoTroncoCubicaje;
+use App\Models\Vehiculo;
+use App\Models\Empresa;
+use App\Models\Conductores;
+use App\Models\EmpresasConductoresVehiculo;
 use Auth;
 
 class IngresoVehiculoTroncoController extends Controller
@@ -25,6 +29,39 @@ class IngresoVehiculoTroncoController extends Controller
 		return view('frontend.ingreso.create',compact('tipo_madera'));
 
 	}
+	
+	public function modal_placa($id){
+		
+		$id_user = Auth::user()->id;
+		//$tablaMaestra_model = new TablaMaestra;
+		if($id>0) $vehiculo = Vehiculo::find($id);else $vehiculo = new Vehiculo;
+		//$tipo_concurso = $tablaMaestra_model->getMaestroByTipo(101);
+
+		return view('frontend.vehiculo.modal_vehiculo_ingreso',compact('id','vehiculo'/*,'tipo_concurso'*/));
+
+    }
+	
+	public function modal_empresa($id){
+		
+		$id_user = Auth::user()->id;
+		//$tablaMaestra_model = new TablaMaestra;
+		if($id>0) $empresa = Empresa::find($id);else $empresa = new Empresa;
+		//$tipo_concurso = $tablaMaestra_model->getMaestroByTipo(101);
+
+		return view('frontend.empresa.modal_empresa_ingreso',compact('id','empresa'/*,'tipo_concurso'*/));
+
+    }
+	
+	public function modal_conductor($id){
+		
+		$id_user = Auth::user()->id;
+		$tablaMaestra_model = new TablaMaestra;
+		if($id>0) $conductor = Conductores::find($id);else $conductor = new Conductores;
+		$tipo_documento = $tablaMaestra_model->getMaestroByTipo(9);
+
+		return view('frontend.conductores.modal_conductor_ingreso',compact('id','conductor','tipo_documento'));
+
+    }
 
 	public function obtener_datos_vehiculo($placa){
 
@@ -72,6 +109,17 @@ class IngresoVehiculoTroncoController extends Controller
 			$ingresoVehiculoTroncoCubicaje->precio_unitario = 0;
 			$ingresoVehiculoTroncoCubicaje->precio_total = 0;
 			$ingresoVehiculoTroncoCubicaje->save();
+		}
+		
+		
+		$empresasConductoresVehiculoExiste = EmpresasConductoresVehiculo::where("id_empresas",$request->id_empresa_transportista)->where("id_vehiculos",$request->id_vehiculos)->where("id_conductores",$request->id_conductores)->where("estado",1)->get();
+		if(count($empresasConductoresVehiculoExiste)==0){
+			$empresasConductoresVehiculo = new EmpresasConductoresVehiculo;
+			$empresasConductoresVehiculo->id_empresas = $request->id_empresa_transportista;
+			$empresasConductoresVehiculo->id_vehiculos = $request->id_vehiculos;
+			$empresasConductoresVehiculo->id_conductores = $request->id_conductores;
+			$empresasConductoresVehiculo->estado = "1";
+			$empresasConductoresVehiculo->save();
 		}
 
     }

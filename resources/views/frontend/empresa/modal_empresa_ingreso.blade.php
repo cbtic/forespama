@@ -17,7 +17,7 @@
 
 .modal-dialog {
 	width: 100%;
-	max-width:30%!important
+	max-width:40%!important
   }
   
 #tablemodal{
@@ -110,7 +110,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/3.1.4/css/bootstrap-datetimepicker.css" integrity="sha512-HWqapTcU+yOMgBe4kFnMcJGbvFPbgk39bm0ExFn0ks6/n97BBHzhDuzVkvMVVHTJSK5mtrXGX4oVwoQsNcsYvg==" crossorigin="anonymous" />
 -->
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.js"></script>
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.js"></script>-->
 <script type="text/javascript">
 /*
 jQuery(function($){
@@ -123,12 +123,9 @@ $.mask.definitions['p'] = "[Mm]";
 });
 */
 $(document).ready(function() {
-	$('#placa').mask('AAA-000');
-	$('#placa').keyup(function() {
-        this.value = this.value.toLocaleUpperCase();
-    });
-	//$("#id_tarifa").select2({ width: '100%' });
-	//$("#id_unidad").select2({ width: '100%' });
+	//$('#hora_solicitud').focus();
+	//$('#hora_solicitud').mask('00:00');
+	//$("#id_empresa").select2({ width: '100%' });
 });
 </script>
 
@@ -197,42 +194,39 @@ function guardarCita(id_medico,fecha_cita){
 
 function fn_save(){
     
-	var msg = "";
-    
 	var _token = $('#_token').val();
 	var id  = $('#id').val();
-	var placa = $('#placa').val();
-	var ejes = $('#ejes').val();
-	var peso_tracto = $('#peso_tracto').val();
-	var peso_carreta = $('#peso_carreta').val();
-	var peso_seco = $('#peso_seco').val();
-	var exonerado = $('#exonerado').val();
-	var control = $('#control').val();
-	var bloqueado = $('#bloqueado').val();
-	
-	if(placa == "")msg += "Debe ingresar una placa <br>";
-    if(ejes=="0"){msg+="Debe ingresar un eje<br>";}
-    if(peso_tracto==""){msg+="Debe ingresar un peso tracto<br>";}
-	if(ejes == 5 || ejes == 6){
-		if(peso_carreta==""){msg+="Debe ingresar un peso carreta<br>";}
-	}
-   	//if(peso_seco==""){msg+="Debe ingresar un peso seco<br>";}
-	if(exonerado=="0"){msg+="Debe seleccionar exonerado<br>";}
-	if(control=="0"){msg+="Debe seleccionar control<br>";}
-	if(bloqueado=="0"){msg+="Debe seleccionar bloqueado<br>";}
-	
-    if(msg!=""){
-        bootbox.alert(msg); 
-        return false;
-    }
+	var ruc = $('#ruc_').val();
+	var razon_social = $('#razon_social_').val();
+	var direccion = $('#direccion_').val();
+	var email = $('#email_').val();
+	var telefono = $('#telefono_').val();
+	var costo_estacionamiento = $('#costo_estacionamiento_').val();
+	var costo_volumen = $('#costo_volumen_').val();
 	
     $.ajax({
-			url: "/vehiculo/send",
+			url: "/empresa/send_empresa_ingreso",
             type: "POST",
-            data : {_token:_token,id:id,placa:placa,ejes:ejes,peso_tracto:peso_tracto,peso_carreta:peso_carreta,peso_seco:peso_seco,exonerado:exonerado,control:control,bloqueado:bloqueado},
+            data : {_token:_token,id:id,ruc:ruc,razon_social:razon_social,direccion:direccion,email:email,telefono:telefono,costo_estacionamiento:costo_estacionamiento,costo_volumen:costo_volumen},
+			dataType: 'json',
             success: function (result) {
+				
+				if(result.sw==false){
+					bootbox.alert(result.msg);
+					var empresa = result.empresa;
+					$("#id_empresa_transportista").val(empresa.id);
+					$("#frmIngreso #ruc").val(empresa.ruc);
+					$("#frmIngreso #empresa").val(empresa.razon_social);
+				}else{
+					var empresa = result.empresa;
+					$("#id_empresa_transportista").val(empresa.id);
+					$("#frmIngreso #ruc").val(empresa.ruc);
+					$("#frmIngreso #empresa").val(empresa.razon_social);
+				}
+				
 				$('#openOverlayOpc').modal('hide');
-				datatablenew();
+				//datatablenew();
+				
             }
     });
 }
@@ -325,38 +319,6 @@ function obtenerVehiculo(id,obj){
 	
 }
 
-function obtener_pesoseco(){
-
-	var ejes = $("#ejes").val();
-	
-	$("#peso_carreta").attr("readonly",true);
-	if(ejes == 5 || ejes == 6){
-		$("#peso_carreta").attr("readonly",false);
-	}
-	
-	$("#peso_carreta").val("");
-	//$('#peso_seco').val("");
-	
-	calculaPesarSeco()
-	
-}
-
-function calculaPesarSeco(){
-
-	var peso_tracto = $("#peso_tracto").val();
-	var peso_carreta = $("#peso_carreta").val();
-	var ejes = $("#ejes").val();
-	
-	var peso_seco = peso_tracto;
-	
-	if(ejes == 5 || ejes == 6){
-		peso_seco = Number(peso_tracto) + Number(peso_carreta);
-	}
-	
-	$('#peso_seco').val(peso_seco);
-	
-}
-
 /*
 $('#fecha_solicitud').datepicker({
 	autoclose: true,
@@ -405,7 +367,7 @@ container: '#myModal modal-body'
 		<div class="card">
 			
 			<div class="card-header" style="padding:5px!important;padding-left:20px!important">
-				Edici&oacute;n Vehiculo
+				Edici&oacute;n Empresa
 			</div>
 			
             <div class="card-body">
@@ -417,26 +379,29 @@ container: '#myModal modal-body'
 					<input type="hidden" name="_token" value="{{ csrf_token() }}">
 					<input type="hidden" name="id" id="id" value="<?php echo $id?>">
 					
-					<div class="row">
-						
-						<div class="col-lg-6">
-							<div class="form-group">
-								<label class="control-label">Placa</label>
-								<input id="placa" name="placa" maxlength="7" class="form-control form-control-sm"  value="<?php echo $vehiculo->placa?>" type="text">
+					<!--
+					<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+						<div class="form-group">
+							<div id="custom-search-input">
+								<div class="input-group">
+									<input id="vehiculo_empresa" class="form-control form-control-sm ui-autocomplete-input" placeholder="Buscar Empresa" name="vehiculo_empresa" type="text" autocomplete="off">
+								</div>
+								<div class="input-group" id="vehiculo_empresa_busqueda"><ul class="ui-autocomplete ui-front ui-menu ui-widget ui-widget-content" id="ui-id-278" tabindex="0" style="display: none;"></ul></div>
 							</div>
 						</div>
+					</div>
+					-->
+					<div class="row">
 						
-						<div class="col-lg-6">
+						<?php 
+							$readonly=$id>0?"readonly='readonly'":'';
+							$readonly_=$id>0?'':"readonly='readonly'";
+						?>
+
+						<div class="col-lg-12">
 							<div class="form-group">
-								<label class="control-label">Ejes</label>
-								<select id="ejes" name="ejes" onChange="obtener_pesoseco()" class="form-control form-control-sm d-inline-block">
-									<option value="0">Escoger</option>
-									<option value="2" <?php if($vehiculo->ejes==2)echo "selected='selected'"?>>2</option>
-									<option value="3" <?php if($vehiculo->ejes==3)echo "selected='selected'"?>>3</option>
-									<option value="4" <?php if($vehiculo->ejes==4)echo "selected='selected'"?>>4</option>
-									<option value="5" <?php if($vehiculo->ejes==5)echo "selected='selected'"?>>5</option>
-									<option value="6" <?php if($vehiculo->ejes==6)echo "selected='selected'"?>>6</option>
-									</select>
+								<label class="control-label">Ruc</label>
+								<input id="ruc_" name="ruc_" class="form-control form-control-sm"  value="<?php echo $empresa->ruc?>" type="text" <?php echo $readonly?> >
 							</div>
 						</div>
 						
@@ -444,72 +409,62 @@ container: '#myModal modal-body'
 					
 					<div class="row">
 						
-						<div class="col-lg-6">
+						<div class="col-lg-12">
 							<div class="form-group">
-								<label class="control-label">Peso Tracto</label>
-								<input id="peso_tracto" name="peso_tracto" class="form-control form-control-sm"  value="<?php echo $vehiculo->peso_tracto?>" type="text" onKeyPress="return isNumber(event)" onKeyUp="calculaPesarSeco()">
-							</div>
-						</div>
-						
-						<div class="col-lg-6">
-							<div class="form-group">
-								<label class="control-label">Peso Carreta</label>
-								<input id="peso_carreta" name="peso_carreta" class="form-control form-control-sm"  value="<?php echo $vehiculo->peso_carreta?>" type="text" <?php if($vehiculo->ejes!=5 && $vehiculo->ejes!=6)echo "readonly='readonly'"?>  onkeypress="return isNumber(event)" onKeyUp="calculaPesarSeco()">
+								<label class="control-label">Raz&oacute;n Social</label>
+								<input id="razon_social_" name="razon_social_" class="form-control form-control-sm"  value="<?php echo $empresa->razon_social?>" type="text" readonly>
 							</div>
 						</div>
 						
 					</div>
-					
+										
+					<div class="row">
+						
+						<div class="col-lg-12">
+							<div class="form-group">
+								<label class="control-label">Direcci&oacute;n</label>
+								<input id="direccion_" name="direccion_" class="form-control form-control-sm"  value="<?php echo $empresa->direccion?>" type="text" >
+							</div>
+						</div>
+						
+					</div>
+
 					<div class="row">
 						
 						<div class="col-lg-6">
-							<div class="form-group">
-								<label class="control-label">Peso Seco</label>
-								<input id="peso_seco" name="peso_seco" class="form-control form-control-sm"  value="<?php echo $vehiculo->peso_seco?>" type="text" readonly="readonly">
+							<div class="form-group" style="padding-top:0px;padding-bottom:0px;margin-top:0px;margin-bottom:0px">
+								<label class="control-label">Tel&eacute;fono</label>
+								<input id="telefono_" name="telefono_" class="form-control form-control-sm"  value="<?php echo $empresa->telefono?>" type="text">
 							</div>
 						</div>
 						
 						<div class="col-lg-6">
-							<div class="form-group">
-								<label class="control-label">Exonerado</label>
-								<select name="exonerado" id="exonerado" class="form-control form-control-sm">
-									<option value="0">Escoger</option>
-									<option value="S" <?php if($vehiculo->exonerado=="1")echo "selected='selected'"?> >SI</option>
-									<option value="N" <?php if($id==0)echo "selected='selected'"?> <?php if($vehiculo->exonerado=="0")echo "selected='selected'"?> >NO</option>
-								</select>
+							<div class="form-group" style="padding-top:0px;padding-bottom:0px;margin-top:0px;margin-bottom:0px">
+								<label class="control-label">Correo</label>
+								<input id="email_" name="email_" class="form-control form-control-sm" value="<?php echo $empresa->email?>" type="text">
 							</div>
 						</div>
 						
 					</div>
-					
-					<div class="row">
-						
-						
+<!--					
+					<div class="row">						
 						<div class="col-lg-6">
-							<div class="form-group">
-								<label class="control-label">Control</label>
-								<select name="control" id="control" class="form-control form-control-sm">
-									<option value="0">Escoger</option>
-									<option value="S" <?php if($vehiculo->control=="1")echo "selected='selected'"?> >SI</option>
-									<option value="N" <?php if($id==0)echo "selected='selected'"?> <?php if($vehiculo->control=="0")echo "selected='selected'"?> >NO</option>
-								</select>
+							<div class="form-group" style="padding-top:0px;padding-bottom:0px;margin-top:0px;margin-bottom:0px">
+								<label class="control-label">Costo Estacionamiento</label>
+								<input id="costo_estacionamiento_" name="costo_estacionamiento_" class="form-control form-control-sm"  value="<?php echo $empresa->costo_estacionamiento?>" type="text">
 							</div>
 						</div>
 						
 						<div class="col-lg-6">
-							<div class="form-group">
-								<label class="control-label">Bloqueado</label>
-								<select name="bloqueado" id="bloqueado" class="form-control form-control-sm">
-									<option value="0">Escoger</option>
-									<option value="S" <?php if($vehiculo->bloqueado=="1")echo "selected='selected'"?> >SI</option>
-									<option value="N" <?php if($id==0)echo "selected='selected'"?> <?php if($vehiculo->bloqueado=="0")echo "selected='selected'"?> >NO</option>
-								</select>
+							<div class="form-group" style="padding-top:0px;padding-bottom:0px;margin-top:0px;margin-bottom:0px">
+								<label class="control-label">Costo Volumen</label>
+								<input id="costo_volumen_" name="costo_volumen_" class="form-control form-control-sm"  value="<?php echo $empresa->costo_volumen?>" type="text">
 							</div>
-						</div>
-						
+						</div>						
 					</div>
+-->
 					
-					<div style="margin-top:20px;float:right" class="form-group">
+					<div style="margin-top:10px" class="form-group">
 						<div class="col-sm-12 controls">
 							<div class="btn-group btn-group-sm" role="group" aria-label="Log Viewer Actions">
 								<a href="javascript:void(0)" onClick="fn_save()" class="btn btn-sm btn-success">Guardar</a>
@@ -538,7 +493,14 @@ container: '#myModal modal-body'
     
 <script type="text/javascript">
 $(document).ready(function () {
-	
+
+	$('#ruc_').blur(function () {
+		var id = $('#id').val();
+			if(id==0) {
+				validaRuc(this.value);
+			}
+		//validaRuc(this.value);
+	});
 	
 	$('#tblReservaEstacionamiento').DataTable({
 		"dom": '<"top">rt<"bottom"flpi><"clear">'
@@ -567,13 +529,58 @@ $(document).ready(function () {
 	
 });
 
+function validaRuc(ruc){
+	var settings = {
+		"url": "https://apiperu.dev/api/ruc/"+ruc,
+		"method": "GET",
+		"timeout": 0,
+		"headers": {
+		  "Authorization": "Bearer 20b6666ddda099db4204cf53854f8ca04d950a4eead89029e77999b0726181cb"
+		},
+	  };
+	  
+	  $.ajax(settings).done(function (response) {
+		console.log(response);
+		
+		if (response.success == true){
+
+			var data= response.data;
+
+			$('#razon_social_').val('')
+			$('#direccion_').val('')
+			$('#telefono_').val('')
+			$('#email_').val('')
+
+			$('#razon_social_').val(data.nombre_o_razon_social);
+			//$('#direccion_').attr('readonly', true);
+
+			if (typeof data.direccion_completa != "undefined"){
+				$('#direccion_').val(data.direccion_completa);
+			}
+			else{
+				$('#direccion_').attr('readonly', false);
+			}
+			
+
+			//alert(data.nombre_o_razon_social);
+
+		}
+		else{
+			bootbox.alert("RUC Invalido,... revise el RUC digitado ¡");
+			return false;
+		}
+
+		
+	  });
+}
+
 </script>
 
 <script type="text/javascript">
 $(document).ready(function() {
-	$('#numero_placa').focus();
-	$('#numero_placa').mask('AAA-000');
-	$('#vehiculo_numero_placa').mask('AAA-000');
+	//$('#numero_placa').focus();
+	//$('#numero_placa').mask('AAA-000');
+	//$('#vehiculo_numero_placa').mask('AAA-000');
 	
 	$('#vehiculo_numero_placa').keyup(function() {
 		this.value = this.value.toLocaleUpperCase();

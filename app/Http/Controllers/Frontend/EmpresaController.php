@@ -484,6 +484,69 @@ class EmpresaController extends Controller
 		
     }
 	
+	public function send_empresa_ingreso(Request $request){
+		
+		$sw = true;
+		$msg = "";
+		$empresa = NULL;
+        $validaRuc = $this -> consultaRucWS($request->ruc);
+
+        //print_r ($validaRuc);
+        //exit();
+
+
+		
+		if($request->id == 0){
+			
+			$empresaExiste = Empresa::where("ruc",$request->ruc)->get();
+			if(count($empresaExiste)==0){
+				$empresa = new Empresa;
+				$empresa->ruc = $request->ruc;
+				$empresa->razon_social = $request->razon_social;
+				$empresa->nombre_comercial = $request->razon_social;
+				$empresa->direccion = $request->direccion;
+				$empresa->email = $request->email;
+				$empresa->telefono = $request->telefono;
+				$empresa->representante = "Representante";
+				//$empresa->costo_estacionamiento = $request->costo_estacionamiento;
+				//$empresa->costo_volumen = $request->costo_volumen;
+				$empresa->save();
+				//$ubicacion_trabajo = UbicacionTrabajo::firstOrCreate(['ubicacion_empresa_id' => $empresa->id, 'ubicacion_unidad_id' => 1, 'ubicacion_estado' => 'A']);
+			}else{
+				$empresa = $empresaExiste[0];
+				$sw = false;
+				$msg = "El Ruc ingresado ya existe !!!";
+			}
+			
+		}else{
+			//$empresaExiste = Empresa::where("ruc",$request->ruc)->where("ruc",$request->ruc)->get();
+			$empresaExiste = Empresa::where('ruc', '=', trim($request->ruc))->where('estado', '1')->where('id', '!=', $request->id)->get();
+			if(count($empresaExiste)==0){
+				$empresa = Empresa::find($request->id);
+				$empresa->ruc = $request->ruc;
+				$empresa->razon_social = $request->razon_social;
+				$empresa->nombre_comercial = $request->razon_social;
+				$empresa->direccion = $request->direccion;
+				$empresa->email = $request->email;
+				$empresa->telefono = $request->telefono;
+				//$empresa->costo_estacionamiento = $request->costo_estacionamiento;
+				//$empresa->costo_volumen = $request->costo_volumen;
+				$empresa->save();
+			}else{
+				$sw = false;
+				$msg = "El Ruc ingresado ya existe !!!";
+			}
+			
+		}
+		
+		$array["sw"] = $sw;
+        $array["msg"] = $msg;
+		$array["empresa"] = $empresa;
+        echo json_encode($array);
+		
+		
+    }
+	
 	public function send_usuario_empresa(Request $request){
 		
 		$ubicacion_id = 0;

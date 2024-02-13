@@ -4,6 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ConductoresRequest;
 use App\Models\Conductores;
+use App\Models\Persona;
+use Illuminate\Http\Request;
+use Auth;
+use Carbon\Carbon;
 
 class ConductoresController extends Controller
 {
@@ -51,4 +55,42 @@ class ConductoresController extends Controller
 
         return redirect()->route('frontend.conductores.index');
     }
+	
+	public function send_conductor_ingreso(Request $request){
+
+		$id_user = Auth::user()->id;
+		$sw = true;
+		$msg = "";
+		
+		if($request->id == 0){
+			$conductorExiste = Conductores::where("id_personas",$request->id_personas)->get();
+			if(count($conductorExiste)==0){
+				$conductor = new Conductores;
+				$conductor->licencia = $request->licencia;
+				$conductor->id_personas = $request->id_personas;
+				$conductor->fecha_licencia = Carbon::now()->format('Y-m-d');
+				$conductor->estado = "ACTIVO";
+				$conductor->save();
+			}else{
+				$conductor = $conductorExiste[0];
+				$sw = false;
+				$msg = "El Conductor ingresado ya existe !!!";
+			}
+		}else{
+			$conductor = Conductores::find($request->id);
+			$conductor->licencia = $request->licencia;
+			$conductor->id_personas = $request->id_personas;
+			$conductor->save();
+		}
+		
+		$persona = Persona::find($conductor->id_personas);
+		
+		$array["sw"] = $sw;
+		$array["msg"] = $msg;
+		$array["persona"] = $persona;
+		$array["conductor"] = $conductor;
+        echo json_encode($array);
+		
+    }
+	
 }
