@@ -163,7 +163,7 @@ class ProductoForm extends ModelForm
                     'method' => 'all',
                     'params' => null,
                 ]
-            ])->selectOptions(['Sin anaquel' => null]),
+            ])->selectOptions(['Escoger' => null]),
             Select::make('estado')->selectOptions(['ACTIVO' => '1', 'CANCELADO' => '0']),
         ];
     }
