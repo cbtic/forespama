@@ -29,7 +29,7 @@ class Producto extends Component
     {
         // return view('components.forms.productos');
         if ($this->productos) {
-            return app(ProductoForm::class)->create()->edit($this->productos)->render();
+            return app(ProductoForm::class)->edit($this->productos)->render();
         } else {
             return app(ProductoForm::class)->create()->render();
         }

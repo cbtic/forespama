@@ -29,7 +29,7 @@ class Anaquele extends Component
     {
         // return view('components.forms.anaqueles');
         if ($this->anaqueles) {
-            return app(AnaqueleForm::class)->create()->edit($this->anaqueles)->render();
+            return app(AnaqueleForm::class)->edit($this->anaqueles)->render();
         } else {
             return app(AnaqueleForm::class)->create()->render();
         }

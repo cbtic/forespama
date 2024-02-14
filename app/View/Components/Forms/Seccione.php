@@ -29,7 +29,7 @@ class Seccione extends Component
     {
         // return view('components.forms.secciones');
         if ($this->secciones) {
-            return app(SeccioneForm::class)->create()->edit($this->secciones)->render();
+            return app(SeccioneForm::class)->edit($this->secciones)->render();
         } else {
             return app(SeccioneForm::class)->create()->render();
         }
