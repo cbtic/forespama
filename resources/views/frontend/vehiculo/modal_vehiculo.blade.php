@@ -447,14 +447,14 @@ container: '#myModal modal-body'
 						<div class="col-lg-6">
 							<div class="form-group">
 								<label class="control-label">Peso Tracto</label>
-								<input id="peso_tracto" name="peso_tracto" class="form-control form-control-sm"  value="<?php echo $vehiculo->peso_tracto?>" type="text" onkeypress="return isNumber(event)" onkeyup="calculaPesarSeco()">
+								<input id="peso_tracto" name="peso_tracto" class="form-control form-control-sm"  value="<?php echo $vehiculo->peso_tracto?>" type="text" onKeyPress="return isNumber(event)" onKeyUp="calculaPesarSeco()">
 							</div>
 						</div>
 						
 						<div class="col-lg-6">
 							<div class="form-group">
 								<label class="control-label">Peso Carreta</label>
-								<input id="peso_carreta" name="peso_carreta" class="form-control form-control-sm"  value="<?php echo $vehiculo->peso_carreta?>" type="text" <?php if($vehiculo->ejes!=5 && $vehiculo->ejes!=6)echo "readonly='readonly'"?>  onkeypress="return isNumber(event)" onkeyup="calculaPesarSeco()">
+								<input id="peso_carreta" name="peso_carreta" class="form-control form-control-sm"  value="<?php echo $vehiculo->peso_carreta?>" type="text" <?php if($vehiculo->ejes!=5 && $vehiculo->ejes!=6)echo "readonly='readonly'"?>  onkeypress="return isNumber(event)" onKeyUp="calculaPesarSeco()">
 							</div>
 						</div>
 						

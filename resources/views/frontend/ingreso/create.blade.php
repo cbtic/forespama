@@ -388,7 +388,7 @@ label.form-control-sm{
 																
 															</div>
 															<div class="col-lg-4 col-md-12 col-sm-12 col-xs-12">
-																<button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#vehiculoModal">
+																<button id="btnPlaca" type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#vehiculoModal">
 																	<i class="fas fa-plus-circle"></i> Veh&iacute;culo
 																</button>
 															</div>
@@ -422,7 +422,7 @@ label.form-control-sm{
 															</div>
 															
 															<div class="col-lg-4 col-md-12 col-sm-12 col-xs-12">
-																<button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#vehiculoModal">
+																<button id="btnEmpresa" type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#vehiculoModal">
 																	<i class="fas fa-plus-circle"></i> Empresa
 																</button>
 															</div>
@@ -450,7 +450,7 @@ label.form-control-sm{
 															</div>
 															
 															<div class="col-lg-4 col-md-12 col-sm-12 col-xs-12">
-																<button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#vehiculoModal">
+																<button id="btnConductor" type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#vehiculoModal">
 																	<i class="fas fa-plus-circle"></i> Conductor
 																</button>
 															</div>
@@ -611,7 +611,7 @@ label.form-control-sm{
 							<strong>Lista de Ingreso de Camiones</strong>
 						</div>
 
-						<div class="row col align-self-center" style="padding:10px 20px 10px 20px;">
+						<div class="row col align-self-center" style="padding:10px 20px 10px 20px;display:none">
 
 							<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
 								<input class="form-control form-control-sm" id="nombre_py_bus" name="nombre_py_bus" placeholder="Nombre del Proyecto">

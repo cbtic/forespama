@@ -46,7 +46,7 @@ class Persona extends Model
 
         $cad = "select t1.*
 		from personas t1
-		Where t1.tipo_documento='".$tipo_documento."' And t1.numero_documento='".$numero_documento."'";
+		Where t1.id_tipo_documento='".$tipo_documento."' And t1.numero_documento='".$numero_documento."'";
 		//echo $cad;
 		$data = DB::select($cad);
         if(isset($data[0]))return $data[0];
