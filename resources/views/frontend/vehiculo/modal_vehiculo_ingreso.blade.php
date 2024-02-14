@@ -227,12 +227,27 @@ function fn_save(){
     }
 	
     $.ajax({
-			url: "/vehiculo/send",
+			url: "/vehiculo/send_vehiculo_ingreso",
             type: "POST",
+			dataType: "json",
             data : {_token:_token,id:id,placa:placa,ejes:ejes,peso_tracto:peso_tracto,peso_carreta:peso_carreta,peso_seco:peso_seco,exonerado:exonerado,control:control,bloqueado:bloqueado},
             success: function (result) {
+				
+				if(result.sw==false){
+					bootbox.alert(result.msg);
+					var vehiculo = result.vehiculo;
+					$("#id_vehiculos").val(vehiculo.id);
+					$("#frmIngreso #placa").val(vehiculo.placa);
+					
+				}else{
+					var vehiculo = result.vehiculo;
+					$("#id_vehiculos").val(vehiculo.id);
+					$("#frmIngreso #placa").val(vehiculo.placa);
+					
+				}
+				
 				$('#openOverlayOpc').modal('hide');
-				datatablenew();
+				
             }
     });
 }

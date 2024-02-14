@@ -1,7 +1,19 @@
 $(document).ready(function() {
 
     datatablenew();
-
+	
+	$('#btnPlaca').on('click', function() {
+        modalPlaca(0);
+    });
+	
+	$('#btnEmpresa').on('click', function() {
+        modalEmpresa(0);
+    });
+	
+	$('#btnConductor').on('click', function() {
+        modalConductor(0);
+    });
+	
     $('#btnGuardar').on('click', function() {
         guardar_ingreso();
     });
@@ -54,12 +66,11 @@ function guardar_ingreso() {
         type: "POST",
         data: $("#frmIngreso").serialize(),
         success: function(result) {
+			Limpiar();
             datatablenew();
-
         }
     });
 }
-
 
 function formato_miles(numero) {
 
@@ -128,12 +139,14 @@ function Limpiar() {
 
     //$('#tblProductos tbody').html("");
     //$('#id_solicitud').val("0");
-    $('#nombre_py').val("");
-    $('#detalle_py').val("");
-    $('#txtIdUbiDepar').val("");
-    $('#txtIdUbiProv').html('<option value="">- Seleccione -</option>');
-    $('#ubigeodireccionprincipal').html('<option value="">- Seleccione -</option>');
-
+    $('#placa').val("");
+    $('#ruc').val("");
+    $('#empresa').val("");
+	$('#numero_documento').val("");
+	$('#conductor').val("");
+    $('#fecha_ingreso').val("");
+	$('#tipo_maderas_id').val("");
+	$('#cantidad').val("");
     /*
     var newRow = "";
     newRow += '<img src="" id="img_ruta_1" class="img_ruta" width="130px" height="165px" alt="" style="text-align:center;margin-top:8px;display:none;margin-left:10px" />';
@@ -2422,3 +2435,52 @@ function obtenerDistritoEdit(idProvincia, idDistrito) {
     });
 
 }
+
+function modalPlaca(id){
+	
+	$(".modal-dialog").css("width","85%");
+	$('#openOverlayOpc .modal-body').css('height', 'auto');
+
+	$.ajax({
+			url: "/ingreso_vehiculo_tronco/modal_placa/"+id,
+			type: "GET",
+			success: function (result) {  
+					$("#diveditpregOpc").html(result);
+					$('#openOverlayOpc').modal('show');
+			}
+	});
+
+}
+
+function modalEmpresa(id){
+	
+	$(".modal-dialog").css("width","85%");
+	$('#openOverlayOpc .modal-body').css('height', 'auto');
+
+	$.ajax({
+			url: "/ingreso_vehiculo_tronco/modal_empresa/"+id,
+			type: "GET",
+			success: function (result) {  
+					$("#diveditpregOpc").html(result);
+					$('#openOverlayOpc').modal('show');
+			}
+	});
+
+}
+
+function modalConductor(id){
+	
+	$(".modal-dialog").css("width","85%");
+	$('#openOverlayOpc .modal-body').css('height', 'auto');
+
+	$.ajax({
+			url: "/ingreso_vehiculo_tronco/modal_conductor/"+id,
+			type: "GET",
+			success: function (result) {  
+					$("#diveditpregOpc").html(result);
+					$('#openOverlayOpc').modal('show');
+			}
+	});
+
+}
+
