@@ -49,6 +49,7 @@ class User extends Authenticatable implements MustVerifyEmail, TwoFactorAuthenti
      * @var array
      */
     protected $fillable = [
+        'id',
         'type',
         'name',
         'email',
