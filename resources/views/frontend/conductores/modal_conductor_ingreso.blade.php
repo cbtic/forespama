@@ -192,17 +192,73 @@ function guardarCita(id_medico,fecha_cita){
     }
 }
 
+function validaDni() {
+
+	var dni = $("#numero_documento_").val();
+	var msg = "";
+	
+	/*
+	if (msg != "") {
+		bootbox.alert(msg);
+		return false;
+	}
+
+	if (tipo_documento == "0" || numero_documento == "") {
+		bootbox.alert(msg);
+		return false;
+	}
+	*/
+	
+	var settings = {
+		"url": "https://apiperu.dev/api/dni/" + dni,
+		"method": "GET",
+		"timeout": 0,
+		"headers": {
+			"Authorization": "Bearer 20b6666ddda099db4204cf53854f8ca04d950a4eead89029e77999b0726181cb"
+		},
+	};
+
+	$.ajax(settings).done(function(response) {
+		console.log(response);
+
+		if (response.success == true) {
+
+			var data = response.data;
+
+			$('#apellido_paterno_').val('')
+			$('#apellido_materno_').val('')
+			$('#nombre').val('')
+
+			$('#apellido_paterno_').val(data.apellido_paterno);
+			$('#apellido_materno_').val(data.apellido_materno);
+			$('#nombres_').val(data.nombres);
+			$("#id_persona_").val(0);
+			//alert(data.nombre_o_razon_social);
+
+		} else {
+			Swal.fire("DNI Inv&aacute;lido. Revise el DNI digitado!");
+			return false;
+		}
+
+	});
+}
+
 function fn_save(){
     
 	var _token = $('#_token').val();
 	var id  = $('#id').val();
 	var id_personas = $('#id_persona_').val();
 	var licencia = $('#licencia').val();
+	var apellido_paterno = $('#apellido_paterno_').val();
+	var apellido_materno = $('#apellido_materno_').val();
+	var nombres = $('#nombres_').val();
+	var id_tipo_documento = $('#tipo_documento_').val();
+	var numero_documento = $('#numero_documento_').val();
 	
     $.ajax({
 			url: "/conductores/send_conductor_ingreso",
             type: "POST",
-            data : {_token:_token,id:id,id_personas:id_personas,licencia:licencia},
+            data : {_token:_token,id:id,id_personas:id_personas,licencia:licencia,apellido_paterno:apellido_paterno,apellido_materno:apellido_materno,nombres:nombres,id_tipo_documento:id_tipo_documento,numero_documento:numero_documento},
 			dataType: 'json',
             success: function (result) {
 				
@@ -515,6 +571,10 @@ function obtenerPersona(tipo_documento, numero_documento){
 		success: function(result){
 			
 			var persona = result.persona;
+			if(persona==null){
+				validaDni();
+				return false;
+			}
 			$("#apellido_paterno_").val(persona.apellido_paterno);
 			$("#apellido_materno_").val(persona.apellido_paterno);
 			$("#nombres_").val(persona.nombres);

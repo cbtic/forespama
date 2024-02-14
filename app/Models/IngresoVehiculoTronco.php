@@ -18,7 +18,8 @@ inner join vehiculos v on ecv.id_vehiculos=v.id and v.estado='1'
 inner join conductores c on ecv.id_conductores=c.id and c.estado='ACTIVO'
 inner join personas p on c.id_personas=p.id
 where ecv.estado='1'
-and v.placa='".$placa."'";
+and v.placa='".$placa."'
+order by ecv.id desc";
 
 		$data = DB::select($cad);
         if(isset($data[0]))return $data[0];
