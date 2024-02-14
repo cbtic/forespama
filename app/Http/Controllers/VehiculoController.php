@@ -99,6 +99,54 @@ class VehiculoController extends Controller
 			$vehiculo->save();
 		}
     }
+	
+	public function send_vehiculo_ingreso(Request $request){
+
+		$id_user = Auth::user()->id;
+		$sw = true;
+		$msg = "";
+
+		if($request->id == 0){
+			$vehiculoExiste = Vehiculo::where("placa",$request->placa)->get();
+			if(count($vehiculoExiste)==0){
+				$vehiculo = new Vehiculo;
+				$vehiculo->placa = $request->placa;
+				$vehiculo->ejes = $request->ejes;
+				$vehiculo->peso_tracto = $request->peso_tracto;
+				$vehiculo->peso_carreta = $request->peso_carreta;
+				$vehiculo->peso_seco = $request->peso_seco;
+				$vehiculo->exonerado = $request->exonerado;
+				$vehiculo->control = $request->control;
+				$vehiculo->bloqueado = $request->bloqueado;
+				$vehiculo->id_usuario_inserta = $id_user;
+				$vehiculo->id_usuario_actualiza = $id_user;
+				$vehiculo->estado = "1";
+				$vehiculo->save();
+			}else{
+				$vehiculo = $vehiculoExiste[0];
+				$sw = false;
+				$msg = "El Vehiculo ingresado ya existe !!!";
+			}
+		}else{
+			$vehiculo = Vehiculo::find($request->id);
+			$vehiculo->placa = $request->placa;
+			$vehiculo->ejes = $request->ejes;
+			$vehiculo->peso_tracto = $request->peso_tracto;
+			$vehiculo->peso_carreta = $request->peso_carreta;
+			$vehiculo->peso_seco = $request->peso_seco;
+			$vehiculo->exonerado = $request->exonerado;
+			$vehiculo->control = $request->control;
+			$vehiculo->bloqueado = $request->bloqueado;
+			$vehiculo->id_usuario_actualiza = $id_user;
+			$vehiculo->save();
+		}
+		
+		//echo json_encode($vehiculo);
+		$array["sw"] = $sw;
+		$array["msg"] = $msg;
+		$array["vehiculo"] = $vehiculo;
+        echo json_encode($array);
+    }
 
 	public function eliminar_vehiculo($id,$estado)
     {
