@@ -126,6 +126,10 @@ We are going to run the built in migrations to create the database tables:
 
 `php artisan migrate`
 
+## Para crear las funciones en batch: en el directorio conde estan los archivos .sql ejecutar esta línea:
+
+`find . -iname "*.sql" | xargs printf -- ' -f %s' | xargs -t psql -d forespama -q`
+
 You should see a message for each table migrated, if you don't and see errors, than your credentials are most likely not correct.
 
 We are now going to set the administrator account information. To do this you need to navigate to [this file](https://github.com/rappasoft/laravel-boilerplate/blob/master/database/seeds/Auth/UserTableSeeder.php#L25) and change the name/email/password of the Administrator account.
