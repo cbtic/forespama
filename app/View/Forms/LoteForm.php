@@ -81,6 +81,16 @@ class LoteForm extends ModelForm
                     'params' => null,
                 ]
             ])->selectOptions(['Seleccione' => null]),
+            HasOne::make('id_marca', [
+                'label' => 'Marca',
+                'model' => TablaMaestra::class,
+                'model_options' => [
+                    'label' => 'denominacion',
+                    'value' => 'id',
+                    'method' => 'por_tipo',
+                    'params' => '47',
+                ]
+            ])->selectOptions(['Seleccione' => null]),
             Text::make('numero_lote', [
                 'required' => true,
             ]),
