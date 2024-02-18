@@ -2,30 +2,32 @@
 
 namespace App\Http\Livewire\Backend;
 
-use App\Models\Conductores;
+use App\Models\Almacene;
+use App\Models\Ubigeo;
+use Grafite\Forms\Fields\Bootstrap\HasOne;
 use Illuminate\Database\Eloquent\Builder;
 use Rappasoft\LaravelLivewireTables\DataTableComponent;
 use Rappasoft\LaravelLivewireTables\Views\Columns\ButtonGroupColumn;
 use Rappasoft\LaravelLivewireTables\Views\Column;
 use Rappasoft\LaravelLivewireTables\Views\Columns\LinkColumn;
 
-class ConductoresTable extends DataTableComponent
+class AlmacenesTable extends DataTableComponent
 {
-    protected $model = Conductores::class;
+    protected $model = Almacene::class;
 
     /**
      * @return Builder
      */
     public function query(): Builder
     {
-        return Conductores::when($this->getFilter('search'), fn ($query, $term) => $query->search($term));
+        return Almacene::when($this->getFilter('search'), fn ($query, $term) => $query->search($term));
     }
 
     public function configure(): void
     {
         $this->setPrimaryKey('id')
         ->setTableRowUrl(function($row) {
-            return route('frontend.conductores.edit', $row);
+            return route('frontend.almacenes.edit', $row);
         })
         ->setTableRowUrlTarget(function($row) {
             return '_self';
@@ -37,7 +39,7 @@ class ConductoresTable extends DataTableComponent
         if(intval($id) == 0){
             return;
         }
-        $types = Conductores::findOrFail(intval($id));
+        $types = Almacene::findOrFail(intval($id));
         $types->delete();
 
     }
@@ -48,27 +50,26 @@ class ConductoresTable extends DataTableComponent
         return [
             Column::make('ID', 'id')
                 ->sortable(),
-            Column::make('Nombre', 'personas.nombres')
+            Column::make('codigo')
                 ->sortable()
                 ->searchable(),
-            Column::make('Ap. Pat.', 'personas.apellido_paterno')
-                ->sortable()
-                ->searchable(),
-            Column::make('Ap. Mat.', 'personas.apellido_materno')
-                ->sortable()
-                ->searchable(),
-            Column::make('Documento', 'personas.numero_documento')
+            Column::make('denominacion')
                 ->sortable(),
-            Column::make('Licencia')
+            Column::make('Ubigeo', 'ubigeos.id_ubigeo')
+                ->hideIf(true)
                 ->sortable()
                 ->searchable(),
-            Column::make('Fecha Emision', 'fecha_licencia')
+            Column::make("Ubicacion")
+                ->label(fn ($row) => Ubigeo::UbigeoCompletoAttribute($row["ubigeos.id_ubigeo"]))
+                ->sortable(),
+            Column::make("Estado")
+                ->label(fn($row) => array("CANCELADO","ACTIVO")[Almacene::find($row->id)["estado"]])
                 ->sortable(),
             Column::make('Acciones')
                 ->unclickable()
                 ->label(
                     function ($row, Column $column) {
-                        $edit = '<button class="btn btn-xs btn-success text-white" onclick="window.location.href=\'' . route('frontend.conductores.show', $row->id) . '\'">Mostrar</button>';
+                        $edit = '<button class="btn btn-xs btn-success text-white" onclick="window.location.href=\'' . route('frontend.almacenes.show', $row->id) . '\'">Mostrar</button>';
                         $delete = '<button class="btn btn-xs btn-danger text-white" wire:click="delete(' . $row->id . ')">Eliminar</button>';
                         return $edit . " " . $delete;
                     }

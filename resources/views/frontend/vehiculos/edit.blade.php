@@ -15,3 +15,9 @@
     </div>
 </div>
 @endsection
+
+@push('after-scripts')
+<script>
+    $(".form-select").chosen();
+</script>
+@endpush

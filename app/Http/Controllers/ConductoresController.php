@@ -14,7 +14,6 @@ class ConductoresController extends Controller
     public function index()
     {
         $conductores = Conductores::latest()->paginate(10);
-
         return view('frontend.conductores.index', compact('conductores'));
     }
 
@@ -52,6 +51,8 @@ class ConductoresController extends Controller
     public function destroy(Conductores $conductores)
     {
         $conductores->delete();
+
+        Alert::success('Proceso completo', 'Se ha eliminado el conductor');
 
         return redirect()->route('frontend.conductores.index');
     }

@@ -10,6 +10,7 @@ use Rappasoft\LaravelLivewireTables\Views\Column;
 use Rappasoft\LaravelLivewireTables\Views\Columns\LinkColumn;
 use App\Exports\ConductoresExport;
 use Maatwebsite\Excel\Facades\Excel;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class ConductoresTable extends DataTableComponent
 {
@@ -55,11 +56,23 @@ class ConductoresTable extends DataTableComponent
 
     public function export()
     {
-        $conductores = $this->getSelected();
+        if ($this->getSelected()) {
+            $conductores = $this->getSelected();
 
-        $this->clearSelected();
+            $this->clearSelected();
 
-        return Excel::download(new ConductoresExport($conductores), 'conductores.xlsx');
+            return Excel::download(new ConductoresExport($conductores), 'conductores.xlsx');
+        }
+
+        // Announcement::create([
+        //     'area' => null,
+        //     'type' => 'info',
+        //     'message' => 'This is a <strong>Global</strong> announcement that will show on both the frontend and backend. <em>See <strong>AnnouncementSeeder</strong> for more usage examples.</em>',
+        //     'enabled' => true,
+        // ]);
+        // $this->notify(__('You did not select any users to export.'), 'danger');
+        Alert::success('Success Title', 'Success Message');
+
     }
 
     public function columns(): array

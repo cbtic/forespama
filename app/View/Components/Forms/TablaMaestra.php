@@ -29,7 +29,7 @@ class TablaMaestra extends Component
     {
         // return view('components.forms.tablamaestra');
         if ($this->tablamaestras) {
-            return app(TablaMaestraForm::class)->create()->edit($this->tablamaestras)->render();
+            return app(TablaMaestraForm::class)->($this->tablamaestras)->render();
         } else {
             return app(TablaMaestraForm::class)->create()->render();
         }

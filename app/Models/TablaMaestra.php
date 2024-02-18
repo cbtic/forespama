@@ -41,51 +41,51 @@ class TablaMaestra extends Model
 
     function getMaestroByTipo($tipo){
 
-        $cad = "select codigo,denominacion 
-                from tabla_maestras 
-                where tipo='".$tipo."' 
-				and estado='1' 
+        $cad = "select codigo,denominacion
+                from tabla_maestras
+                where tipo='".$tipo."'
+				and estado='1'
                 order by orden ";
-    
+
 		$data = DB::select($cad);
         return $data;
     }
-	
+
 	function getMaestroByTipoAndSubTipo($tipo,$sub_codigo){
 
-        $cad = "select codigo,denominacion 
-                from tabla_maestras 
-                where tipo='".$tipo."' 
+        $cad = "select codigo,denominacion
+                from tabla_maestras
+                where tipo='".$tipo."'
 				and sub_codigo='".$sub_codigo."'
-				and estado='1' 
+				and estado='1'
                 order by orden ";
-    
+
 		$data = DB::select($cad);
         return $data;
     }
-	
+
     function getMaestro($tipo){
 
-        $cad = "select id,denominacion 
-                from tabla_maestras 
-                where tipo='".$tipo."' 
+        $cad = "select id,denominacion
+                from tabla_maestras
+                where tipo='".$tipo."'
                 order by orden ";
-    
+
 		$data = DB::select($cad);
         return $data;
     }
     function getMaestroC($tipo, $codigo){
 
-        $cad = "select id,denominacion,codigo  
-                from tabla_maestras 
-                where tipo='".$tipo."' 
+        $cad = "select id,denominacion,codigo
+                from tabla_maestras
+                where tipo='".$tipo."'
                 and codigo ='".$codigo."'
                 order by orden ";
-    
+
 		$data = DB::select($cad);
         return $data;
     }
-    
+
 	public function readFunctionPostgres($function, $parameters = null){
 
         $_parameters = '';
@@ -100,4 +100,19 @@ class TablaMaestra extends Model
         $data = DB::select($cad);
         return $data;
      }
+
+    public function por_tipo($tipo) {
+        $tabla_maestra_opciones = TablaMaestra::where([['estado', 1], ['tipo',strval($tipo)]])->get();
+
+        $array_opciones=[];
+
+        foreach ($tabla_maestra_opciones  as $key => $opcion) {
+            $array_opciones[] = ['id' => $opcion->id, 'denominacion' => $opcion->denominacion];
+        }
+
+        $json = json_encode($array_opciones);
+        $obj = json_decode($json);
+
+        return $obj;
+    }
 }

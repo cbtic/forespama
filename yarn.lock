@@ -1873,6 +1873,11 @@
   optionalDependencies:
     "fsevents" "~2.3.2"
 
+"chosen-js@^1.8.7":
+  "integrity" "sha512-eVdrZJ2U5ISdObkgsi0od5vIJdLwq1P1Xa/Vj/mgxkMZf14DlgobfB6nrlFi3kW4kkvKLsKk4NDqZj1MU1DCpw=="
+  "resolved" "https://registry.npmjs.org/chosen-js/-/chosen-js-1.8.7.tgz"
+  "version" "1.8.7"
+
 "chrome-trace-event@^1.0.2":
   "integrity" "sha512-p3KULyQg4S7NIHixdwbGX+nFHkoBiA4YQmyWtjb8XngSKV124nJmRysgAeujbUVb15vh+RvFUfCPqU7rXk+hZg=="
   "resolved" "https://registry.npmjs.org/chrome-trace-event/-/chrome-trace-event-1.0.3.tgz"

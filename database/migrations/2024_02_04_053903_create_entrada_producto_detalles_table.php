@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSalidaDetallesTable extends Migration
+class CreateEntradaProductoDetallesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,8 @@ class CreateSalidaDetallesTable extends Migration
      */
     public function up()
     {
-        Schema::create('salida_detalles', function (Blueprint $table) {
-            $table->id();
-
-            $table->bigInteger('id_salida_productos')->nullable();
+        Schema::create('entrada_producto_detalles', function (Blueprint $table) {
+            $table->bigInteger('id_entrada_productos')->nullable();
             $table->bigInteger('id_productos')->nullable();
             $table->Integer('item')->nullable();
             $table->Integer('cantidad')->nullable();
@@ -25,12 +23,14 @@ class CreateSalidaDetallesTable extends Migration
             $table->string('aplica_precio',1)->nullable();
             $table->double('precio_unitario')->nullable();
             $table->Integer('id_um')->nullable();
-            $table->string('id_estado_productos',1)->nullable()->default('1');
+            $table->string('id_estado_bien',1)->nullable()->default('1');
             $table->Integer('id_marca')->nullable();
             $table->string('estado',1)->nullable()->default('1');
             $table->timestamps();
 
-            $table->foreign('id_salida_productos')->references('id')->on('salida_productos');
+            $table->foreign('id_entrada_productos')->references('id')->on('entrada_productos');
+            $table->foreign('id_productos')->references('id')->on('productos');
+
         });
     }
 
@@ -41,6 +41,6 @@ class CreateSalidaDetallesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('salida_detalles');
+        Schema::dropIfExists('entrada_producto_detalles');
     }
 }

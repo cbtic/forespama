@@ -27,10 +27,11 @@ class DatabaseSeeder extends Seeder
 
         $this->call(AuthSeeder::class);
         $this->call(AnnouncementSeeder::class);
-        //$this->call(EmpresaSeeder::class);
-        //$this->call(PersonaSeeder::class);
+        $this->call(EmpresaSeeder::class);
+        $this->call(PersonaSeeder::class);
         //$this->call(ConductoreSeeder::class);
         $this->call(TablaMaestraSeeder::class);
+        $this->call(UbigeosSeeder::class);
 
         Model::reguard();
     }

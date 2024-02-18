@@ -5,10 +5,15 @@ use App\Http\Controllers\Frontend\TermsController;
 use Tabuna\Breadcrumbs\Trail;
 
 use App\Http\Controllers\Frontend\IngresoVehiculoTroncoController;
-use App\Http\Controllers\Frontend\TablaMaestraController;
+use App\Http\Controllers\TablaMaestraController;
 use App\Http\Controllers\Frontend\PersonaController;
 use App\Http\Controllers\Frontend\EmpresaController;
 use App\Http\Controllers\Frontend\VehiculoController;
+
+use App\Http\Controllers\Frontend\IngresoController;
+
+use App\Models\Ubigeo;
+
 /*
  * Frontend Controllers
  * All route names are prefixed with 'frontend.'.
@@ -118,12 +123,64 @@ Route::patch('tablamaestras/{tablamaestras}', 'App\Http\Controllers\TablaMaestra
 Route::delete('tablamaestras/{tablamaestras}', 'App\Http\Controllers\TablaMaestraController@destroy')->name('tablamaestras.destroy');
 Route::get('tablamaestras/{tablamaestras}/edit', 'App\Http\Controllers\TablaMaestraController@edit')->name('tablamaestras.edit');
 
+Route::get('anaqueles', 'App\Http\Controllers\AnaquelesController@index')->name('anaqueles.index');
+Route::post('anaqueles', 'App\Http\Controllers\AnaquelesController@store')->name('anaqueles.store');
+Route::get('anaqueles/create', 'App\Http\Controllers\AnaquelesController@create')->name('anaqueles.create');
+Route::get('anaqueles/{anaqueles}', 'App\Http\Controllers\AnaquelesController@show')->name('anaqueles.show');
+Route::put('anaqueles/{anaqueles}', 'App\Http\Controllers\AnaquelesController@update')->name('anaqueles.update');
+Route::delete('anaqueles/{anaqueles}', 'App\Http\Controllers\AnaquelesController@destroy')->name('anaqueles.destroy');
+Route::get('anaqueles/{anaqueles}/edit', 'App\Http\Controllers\AnaquelesController@edit')->name('anaqueles.edit');
 
 Route::get('almacenes', 'App\Http\Controllers\AlmacenesController@index')->name('almacenes.index');
 Route::post('almacenes', 'App\Http\Controllers\AlmacenesController@store')->name('almacenes.store');
 Route::get('almacenes/create', 'App\Http\Controllers\AlmacenesController@create')->name('almacenes.create');
 Route::get('almacenes/{almacenes}', 'App\Http\Controllers\AlmacenesController@show')->name('almacenes.show');
 Route::put('almacenes/{almacenes}', 'App\Http\Controllers\AlmacenesController@update')->name('almacenes.update');
-Route::patch('almacenes/{almacenes}', 'App\Http\Controllers\AlmacenesController@update');
 Route::delete('almacenes/{almacenes}', 'App\Http\Controllers\AlmacenesController@destroy')->name('almacenes.destroy');
 Route::get('almacenes/{almacenes}/edit', 'App\Http\Controllers\AlmacenesController@edit')->name('almacenes.edit');
+
+Route::get('secciones', 'App\Http\Controllers\SeccionesController@index')->name('secciones.index');
+Route::post('secciones', 'App\Http\Controllers\SeccionesController@store')->name('secciones.store');
+Route::get('secciones/create', 'App\Http\Controllers\SeccionesController@create')->name('secciones.create');
+Route::get('secciones/{secciones}', 'App\Http\Controllers\SeccionesController@show')->name('secciones.show');
+Route::put('secciones/{secciones}', 'App\Http\Controllers\SeccionesController@update')->name('secciones.update');
+Route::delete('secciones/{secciones}', 'App\Http\Controllers\SeccionesController@destroy')->name('secciones.destroy');
+Route::get('secciones/{secciones}/edit', 'App\Http\Controllers\SeccionesController@edit')->name('secciones.edit');
+
+Route::get('productos', 'App\Http\Controllers\ProductosController@index')->name('productos.index');
+Route::post('productos', 'App\Http\Controllers\ProductosController@store')->name('productos.store');
+Route::get('productos/create', 'App\Http\Controllers\ProductosController@create')->name('productos.create');
+Route::get('productos/{productos}', 'App\Http\Controllers\ProductosController@show')->name('productos.show');
+Route::put('productos/{productos}', 'App\Http\Controllers\ProductosController@update')->name('productos.update');
+Route::delete('productos/{productos}', 'App\Http\Controllers\ProductosController@destroy')->name('productos.destroy');
+Route::get('productos/{productos}/edit', 'App\Http\Controllers\ProductosController@edit')->name('productos.edit');
+
+
+Route::get('ingreso/create', [IngresoController::class, 'create'])->name('ingreso.create');
+Route::get('ingreso/obtener_valorizacion/{tipo_documento}/{id_persona}', [IngresoController::class, 'obtener_valorizacion'])->name('ingreso.obtener_valorizacion')->where('tipo_documento', '(.*)');
+Route::post('ingreso/listar_valorizacion', [IngresoController::class, 'listar_valorizacion'])->name('ingreso.listar_valorizacion');
+Route::post('ingreso/listar_valorizacion_concepto', [IngresoController::class, 'listar_valorizacion_concepto'])->name('ingreso.listar_valorizacion_concepto');
+Route::post('ingreso/listar_valorizacion_periodo', [IngresoController::class, 'listar_valorizacion_periodo'])->name('ingreso.listar_valorizacion_periodo');
+Route::get('ingreso/obtener_pago/{tipo_documento}/{persona_id}', [IngresoController::class, 'obtener_pago'])->name('ingreso.obtener_pago')->where('tipo_documento', '(.*)');
+Route::post('ingreso/sendCaja', [IngresoController::class, 'sendCaja'])->name('ingreso.sendCaja');
+Route::get('ingreso/modal_valorizacion_factura/{id}', [IngresoController::class, 'modal_valorizacion_factura'])->name('ingreso.modal_valorizacion_factura');
+
+Route::get('lotes', 'App\Http\Controllers\LoteController@index')->name('lotes.index');
+Route::post('lotes', 'App\Http\Controllers\LoteController@store')->name('lotes.store');
+Route::get('lotes/create', 'App\Http\Controllers\LoteController@create')->name('lotes.create');
+Route::get('lotes/{lotes}', 'App\Http\Controllers\LoteController@show')->name('lotes.show');
+Route::put('lotes/{lotes}', 'App\Http\Controllers\LoteController@update')->name('lotes.update');
+Route::delete('lotes/{lotes}', 'App\Http\Controllers\LoteController@destroy')->name('lotes.destroy');
+Route::get('lotes/{lotes}/edit', 'App\Http\Controllers\LoteController@edit')->name('lotes.edit');
+
+Route::get('ubigeo/listar_departamentos_ajax', function() {
+    return response()->json([ 'status' => 'OK', 'departamentos' => Ubigeo::departamentos() ]);
+});
+
+Route::get('ubigeo/listar_provincias_ajax/{id_departamento}', function(Request $request) {
+    return response()->json([ 'status' => 'OK', 'provincias' => Ubigeo::provincias(request()->route('id_departamento')) ]);
+});
+
+Route::get('ubigeo/listar_distritos_ajax/{id_departamento}/{id_provincia}', function(Request $request) {
+    return response()->json([ 'status' => 'OK', 'distritos' => Ubigeo::distritos_ajax(request()->route('id_departamento'), request()->route('id_provincia')) ]);
+});

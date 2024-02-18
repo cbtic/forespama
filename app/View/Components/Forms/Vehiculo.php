@@ -29,7 +29,7 @@ class Vehiculo extends Component
     {
         // return view('components.forms.tablamaestra');
         if ($this->vehiculos) {
-            return app(VehiculoForm::class)->create()->edit($this->vehiculos)->render();
+            return app(VehiculoForm::class)->edit($this->vehiculos)->render();
         } else {
             return app(VehiculoForm::class)->create()->render();
         }

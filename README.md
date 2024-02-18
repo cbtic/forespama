@@ -88,7 +88,10 @@ The first thing we are going to do is set the key that Laravel will use when doi
 
 ## =>Controlador con CRUD:
 `php artisan make:controller productoController --resource`
- 
+
+## =>Request para las validaciones:
+`php artisan make:request AlmaceneRequest`
+
 ## =>Controlador, modelo, validaciones:
 `app/Http/Controllers/VehiculoController.php`
 `app/Http/Requests/VehiculoRequest.php`
@@ -122,6 +125,10 @@ It's time to see if your database credentials are correct.
 We are going to run the built in migrations to create the database tables:
 
 `php artisan migrate`
+
+## Para crear las funciones en batch: en el directorio conde estan los archivos .sql ejecutar esta línea:
+
+`find . -iname "*.sql" | xargs printf -- ' -f %s' | xargs -t psql -d forespama -q`
 
 You should see a message for each table migrated, if you don't and see errors, than your credentials are most likely not correct.
 
