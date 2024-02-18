@@ -4,7 +4,10 @@ namespace App\Http\Livewire\Backend;
 
 use Rappasoft\LaravelLivewireTables\DataTableComponent;
 use Rappasoft\LaravelLivewireTables\Views\Column;
+use App\Models\Producto;
 use App\Models\Lote;
+use App\Models\TablaMaestra;
+use App\Models\Anaquele;
 use Illuminate\Database\Eloquent\Builder;
 
 class LoteTable extends DataTableComponent
@@ -45,15 +48,11 @@ class LoteTable extends DataTableComponent
         return [
             Column::make("Id", "id")
                 ->sortable(),
-            // Column::make("Empresa")
-            //     ->label(fn ($row) => $row->empresas->pluck('nombre_comercial')->implode(', ')),
-            // Column::make("Licencia")
-            //     ->sortable()
-            //     ->label(fn ($row) => $row->conductores->pluck('licencia')->implode(', ')),
-            // Column::make("Conductor")
-            //     ->sortable()
-            //     ->label(fn ($row) => Conductores::find(($row->conductores->pluck('id')[0]))->personas['nombre_completo_sin_dni']),
             Column::make("id_producto", "id_producto")
+                ->hideIf(true)
+                ->sortable(),
+            Column::make("Producto")
+                ->label(fn ($row) => Producto::find($row->id_producto)->denominacion)
                 ->sortable(),
             Column::make("Numero Lote", "numero_lote")
                 ->sortable(),
@@ -65,15 +64,24 @@ class LoteTable extends DataTableComponent
                 ->sortable(),
             Column::make("Costo", "costo")
                 ->sortable(),
-            Column::make("id_moneda", "id_moneda")
+            Column::make("Moneda", "id_moneda")
+                ->hideIf(true)
+                ->sortable(),
+            Column::make("Moneda")
+                ->label(fn ($row) => TablaMaestra::find($row->id_moneda)->abreviatura)
                 ->sortable(),
             Column::make("fecha_fabricacion", "fecha_fabricacion")
                 ->sortable(),
             Column::make("fecha_vencimiento", "fecha_vencimiento")
                 ->sortable(),
-            Column::make("id_anaquel", "id_anaquel")
+            Column::make("Anaquel", "id_anaquel")
+                ->hideIf(true)
                 ->sortable(),
-            Column::make("Estado", "estado")
+            Column::make("Anaquel")
+                ->label(fn ($row) => Anaquele::find($row->id_anaquel)->codigo)
+                ->sortable(),
+            Column::make("Estado")
+                ->label(fn($row) => array("CANCELADO","ACTIVO")[Producto::find($row->id)["estado"]])
                 ->sortable(),
             Column::make('Acciones')
                 ->unclickable()

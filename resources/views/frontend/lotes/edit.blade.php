@@ -8,7 +8,7 @@
                 <div class="card-header">Editar Lote #{{ $lotes->id }}</div>
 
                 <div class="card-body">
-                    <x-forms.almacene :lotes="$lotes"></x-forms.almacene>
+                    <x-forms.lote :lotes="$lotes"></x-forms.lote>
                 </div>
             </div>
         </div>
@@ -16,3 +16,8 @@
 </div>
 @endsection
 
+@push('after-scripts')
+<script>
+    $(".form-select").chosen();
+</script>
+@endpush
