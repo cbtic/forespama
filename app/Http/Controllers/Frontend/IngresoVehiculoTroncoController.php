@@ -8,11 +8,14 @@ use App\Models\TablaMaestra;
 use App\Models\IngresoVehiculoTronco;
 use App\Models\IngresoVehiculoTroncoTipoMadera;
 use App\Models\IngresoVehiculoTroncoCubicaje;
+use App\Models\IngresoVehiculoTroncoImagene;
 use App\Models\Vehiculo;
 use App\Models\Empresa;
 use App\Models\Conductores;
 use App\Models\EmpresasConductoresVehiculo;
+use App\Models\Pago;
 use Auth;
+use Carbon\Carbon;
 
 class IngresoVehiculoTroncoController extends Controller
 {
@@ -100,6 +103,38 @@ class IngresoVehiculoTroncoController extends Controller
 		$ingresoVehiculoTronco->save();
 		$id_ingreso_vehiculo_troncos = $ingresoVehiculoTronco->id;
 		
+		/*************************/
+		
+		$vehiculo = Vehiculo::find($request->id_vehiculos);
+		
+		$path = "img/ingreso/".$vehiculo->placa;
+        if (!is_dir($path)) {
+            mkdir($path);
+        }
+		
+		$img_foto = $request->img_foto;
+		
+		foreach($img_foto as $row){
+			
+			if($row!=""){
+				$filepath_tmp = public_path('img/ingreso/tmp/');
+				$filepath_nuevo = public_path('img/ingreso/'.$vehiculo->placa.'/');
+				if (file_exists($filepath_tmp.$row)) {
+					copy($filepath_tmp.$row, $filepath_nuevo.$row);
+				} 
+				
+				$ingresoVehiculoTroncoImagen = new IngresoVehiculoTroncoImagene;
+				$ingresoVehiculoTroncoImagen->id_ingreso_vehiculo_troncos = $id_ingreso_vehiculo_troncos;
+				$ingresoVehiculoTroncoImagen->ruta_imagen = "img/ingreso/".$vehiculo->placa."/".$row;
+				$ingresoVehiculoTroncoImagen->id_tipo_maderas = 0;
+				$ingresoVehiculoTroncoImagen->estado = 1;
+				$ingresoVehiculoTroncoImagen->save();
+			}
+			
+		}
+		
+		/*************************/
+		
 		$ingresoVehiculoTroncoTipoMadera = new IngresoVehiculoTroncoTipoMadera;
 		$ingresoVehiculoTroncoTipoMadera->id_ingreso_vehiculo_troncos = $id_ingreso_vehiculo_troncos;
 		$ingresoVehiculoTroncoTipoMadera->id_tipo_maderas = $request->tipo_maderas_id;
@@ -134,7 +169,7 @@ class IngresoVehiculoTroncoController extends Controller
 			$empresasConductoresVehiculo->estado = "1";
 			$empresasConductoresVehiculo->save();
 		}
-
+		
     }
 
 	public function listar_ingreso_vehiculo_tronco_ajax(Request $request){
@@ -186,7 +221,9 @@ class IngresoVehiculoTroncoController extends Controller
     }
 	
 	public function send_cubicaje(Request $request){
-
+		
+		$id_user = Auth::user()->id;
+		
 		$id_ingreso_vehiculo_tronco_cubicaje = $request->id_ingreso_vehiculo_tronco_cubicaje;
 		$diametro_1 = $request->diametro_1;
 		$diametro_2 = $request->diametro_2;
@@ -223,8 +260,66 @@ class IngresoVehiculoTroncoController extends Controller
 		$ingresoVehiculoTroncoTipoMadera->total = $precio_total_final;
 		$ingresoVehiculoTroncoTipoMadera->save();
 		
-				
+		/**************************************/
+		
+		$id_ingreso_vehiculo_troncos = $ingresoVehiculoTroncoTipoMadera->id_ingreso_vehiculo_troncos;
+		$ingresoVehiculoTronco = IngresoVehiculoTronco::find($id_ingreso_vehiculo_troncos);
+		
+		$empresa = Empresa::find($ingresoVehiculoTronco->id_empresa_transportista);
+		
+		$pago = new Pago;
+		$pago->id_modulo = 1;
+		$pago->pk_registro = $id_ingreso_vehiculo_troncos;
+		$pago->fecha = Carbon::now()->format('Y-m-d');
+		$pago->comprobante_destinatario = $empresa->razon_social;
+		$pago->comprobante_direccion = $empresa->direccion;
+		$pago->comprobante_ruc = $empresa->ruc;
+		$pago->subtotal = $precio_total_final;
+		$pago->impuesto = 0;
+		$pago->total = $precio_total_final;
+		$pago->letras = "";
+		$pago->id_moneda = 1;
+		$pago->estado_pago = "N";
+		$pago->estado = "1";
+		$pago->id_usuario_inserta = $id_user;
+		$pago->save();
 
     }
+	
+	public function upload_imagen_ingreso(Request $request){
+		
+		$path = "img/ingreso";
+        if (!is_dir($path)) {
+            mkdir($path);
+        }
+		
+		$path = "img/ingreso/tmp";
+        if (!is_dir($path)) {
+            mkdir($path);
+        }
+		
+		/*
+        $path = "files/" . $ht . "/resolucion";
+        if (!is_dir($path)) {
+            mkdir($path);
+        }
+		*/
+		
+    	$filepath = public_path('img/ingreso/tmp/');
+		move_uploaded_file($_FILES["file"]["tmp_name"], $filepath.$_FILES["file"]["name"]);
+		echo $_FILES['file']['name'];
+		
+	}
+	
+	public function modal_ingreso_imagen($id){
+		 
+		$ingresoVehiculoTroncoImagene_model = new IngresoVehiculoTroncoImagene;
+        $ingresoVehiculoTroncoImagen = $ingresoVehiculoTroncoImagene_model->getIngresoVehiculoTroncoImagenById($id);
+		
+        return view('frontend.ingreso.modal_ingreso_imagen',compact('ingresoVehiculoTroncoImagen'));
+		
+    }
+		
+
 
 }

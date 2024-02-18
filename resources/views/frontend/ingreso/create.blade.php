@@ -687,6 +687,7 @@ label.form-control-sm{
 								<th>Conductor</th>
 								<th>Tipo Madera</th>
 								<th>Cantidad</th>
+								<th>Imagenes</th>
 							</tr>
 							</thead>
 							<tbody style="font-size:13px">
@@ -762,17 +763,17 @@ label.form-control-sm{
 				headers: {
 					'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 				},
-				url: "/proyecto/upload",
+				url: "/ingreso_vehiculo_tronco/upload_imagen_ingreso",
 				type: 'post',
 				data: formData,
 				contentType: false,
 				processData: false,
 				success: function(response) {
-
+					
 					var ind_img = $("#ind_img").val();
-
+					
 					if (response != 0) {
-						$("#img_ruta_"+ind_img).attr("src", "/img/proyecto/tmp/"+response).show();
+						$("#img_ruta_"+ind_img).attr("src", "/img/ingreso/tmp/"+response).show();
 						$(".delete_ruta").show();
 						$("#img_foto_"+ind_img).val(response);
 
@@ -791,6 +792,7 @@ label.form-control-sm{
 					} else {
 						alert('Formato de imagen incorrecto.');
 					}
+					
 				}
 			});
 			return false;

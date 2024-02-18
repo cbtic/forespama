@@ -66,8 +66,9 @@ function guardar_ingreso() {
         type: "POST",
         data: $("#frmIngreso").serialize(),
         success: function(result) {
-			Limpiar();
-            datatablenew();
+			//Limpiar();
+            //datatablenew();
+			location.reload();
         }
     });
 }
@@ -1753,6 +1754,21 @@ function datatablenew() {
                 "bSortable": false,
                 "aTargets": [8]
             },
+			
+			{
+				"mRender": function (data, type, row) {
+					
+					var html = '<div class="btn-group btn-group-sm" role="group" aria-label="Log Viewer Actions">';
+					//html += '<button style="font-size:12px" type="button" class="btn btn-sm btn-success" data-toggle="modal" onclick="editarConcursoInscripcion('+row.id+')" ><i class="fa fa-edit"></i> Editar</button>';
+					
+					html += '<button style="font-size:12px;color:#FFFFFF;margin-left:10px" type="button" class="btn btn-sm btn-info" data-toggle="modal" onclick="modalVerIngresoImagen('+row.id+')"><i class="fa fa-edit" style="font-size:9px!important"></i> Ver Imagenes</button>';
+		
+					html += '</div>';
+					return html;
+				},
+				"bSortable": false,
+				"aTargets": [9],
+			},
 
 
         ]
@@ -2543,6 +2559,22 @@ function obtenerEmpresaBuscar(){
 		}
 		
 	});
+}
+
+function modalVerIngresoImagen(id){
+	
+	$(".modal-dialog").css("width","85%");
+	$('#openOverlayOpc .modal-body').css('height', 'auto');
+
+	$.ajax({
+			url: "/ingreso_vehiculo_tronco/modal_ingreso_imagen/"+id,
+			type: "GET",
+			success: function (result) {
+					$("#diveditpregOpc").html(result);
+					$('#openOverlayOpc').modal('show');
+			}
+	});
+
 }
 
 
