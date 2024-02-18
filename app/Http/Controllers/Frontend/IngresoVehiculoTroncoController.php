@@ -20,13 +20,9 @@ class IngresoVehiculoTroncoController extends Controller
 
 		$tablaMaestra_model = new TablaMaestra;
 		$tipo_madera = $tablaMaestra_model->getMaestroByTipo(42);
-		/*
-		$proyecto_model = new Proyecto;
-		$tablaMaestra_model = new TablaMaestra;
-		$departamento = $proyecto_model->getDepartamento();
-		$estado_proyecto = $tablaMaestra_model->getMaestroByTipo("EST_PY");
-		*/
-		return view('frontend.ingreso.create',compact('tipo_madera'));
+		$tipo_documento = $tablaMaestra_model->getMaestroByTipo(9);
+		
+		return view('frontend.ingreso.create',compact('tipo_madera','tipo_documento'));
 
 	}
 	
@@ -65,10 +61,27 @@ class IngresoVehiculoTroncoController extends Controller
 
 	public function obtener_datos_vehiculo($placa){
 
+		$sw = true;
+		$msg = "";
 		$ingresoVehiculoTronco_model = new IngresoVehiculoTronco;
 		$vehiculo = $ingresoVehiculoTronco_model->getEmpresaConductorVehiculos($placa);
-		echo json_encode($vehiculo);
-
+		
+		if(!$vehiculo){
+			$vehiculo = Vehiculo::Where("placa",$placa)->Where("estado",1)->first();
+			if($vehiculo){
+				$vehiculo->id_vehiculos = $vehiculo->id;
+			}else{
+				$sw = false;
+				$msg = "El Vehiculo ingresado no existe !!!";
+			}
+			
+		}
+		
+		$array["sw"] = $sw;
+		$array["msg"] = $msg;
+        $array["vehiculo"] = $vehiculo;
+        echo json_encode($array);
+		
 	}
 
 	public function send_ingreso(Request $request){

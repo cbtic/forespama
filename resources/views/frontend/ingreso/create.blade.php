@@ -371,23 +371,25 @@ label.form-control-sm{
 
 												<div style="clear:both"></div>
                                                 <div class="row">
-
+												
+													<!--
 													<div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
 														<label class="form-control-sm">Id Ingreso</label>
 														<input type="text" name="id_proyecto" id="id_proyecto"
 															value="" readonly="readonly" placeholder="" class="form-control form-control-sm" >
 													</div>
-
-													<div class="col-lg-7 col-md-12 col-sm-12 col-xs-12">
+													-->
+													
+													<div class="col-lg-5 col-md-12 col-sm-12 col-xs-12">
 														<label class="form-control-sm">Placa</label>
 														
 														<div class="row">
-															<div class="col-lg-8 col-md-12 col-sm-12 col-xs-12">
+															<div class="col-lg-7 col-md-12 col-sm-12 col-xs-12">
 															<input type="text" name="placa" id="placa"
 																value="" placeholder="" class="form-control form-control-sm" onblur="obtenerEmpresa()">
 																
 															</div>
-															<div class="col-lg-4 col-md-12 col-sm-12 col-xs-12">
+															<div class="col-lg-5 col-md-12 col-sm-12 col-xs-12">
 																<button id="btnPlaca" type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#vehiculoModal">
 																	<i class="fas fa-plus-circle"></i> Veh&iacute;culo
 																</button>
@@ -396,7 +398,7 @@ label.form-control-sm{
 														
 													</div>
 
-													<div class="col-lg-2 col-md-12 col-sm-12 col-xs-12">
+													<div class="col-lg-4 col-md-12 col-sm-12 col-xs-12">
 														<label class="form-control-sm">Fecha</label>
 														<input type="text" name="fecha_ingreso" id="fecha_ingreso"
 															value="" placeholder="" class="form-control form-control-sm" >
@@ -404,12 +406,12 @@ label.form-control-sm{
 
                                                 </div>
 
-												<div class="row">
+												<div class="row" style="padding-top:8px">
 
 													<div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
 														<label class="form-control-sm">Ruc Empresa</label>
 														<input type="text" name="ruc" id="ruc"
-															value="" readonly="readonly" class="form-control form-control-sm" >
+															value="" class="form-control form-control-sm" onblur="obtenerEmpresaBuscar()">
 													</div>
 
 													<div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
@@ -433,14 +435,27 @@ label.form-control-sm{
 												</div>
 
 												<div class="row">
-
+													
 													<div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
-														<label class="form-control-sm">DNI Conductor</label>
-														<input type="text" name="numero_documento" id="numero_documento"
-															value="" readonly="readonly" class="form-control form-control-sm" >
+														<label class="form-control-sm">T.Doc Conductor</label>
+														<select name="tipo_documento_bus" id="tipo_documento_bus" class="form-control form-control-sm" onchange="obtenerPersonaBuscar()">
+															<option value="">--Selecionar--</option>
+															<?php
+															foreach ($tipo_documento as $row) { ?>
+																<option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
+															<?php
+															}
+															?>
+														</select>
 													</div>
 
-													<div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
+													<div class="col-lg-3 col-md-12 col-sm-12 col-xs-12" style="padding-right:0px!important">
+														<label class="form-control-sm">N. Doc</label>
+															<input type="text" name="numero_documento" id="numero_documento"
+															value="" class="form-control form-control-sm" onblur="obtenerPersonaBuscar()">
+													</div>
+
+													<div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
 														<label class="form-control-sm">Nombre Conductor</label>
 															
 														<div class="row">	
@@ -449,7 +464,7 @@ label.form-control-sm{
 																value="" readonly="readonly" class="form-control form-control-sm" >
 															</div>
 															
-															<div class="col-lg-4 col-md-12 col-sm-12 col-xs-12">
+															<div class="col-lg-4 col-md-12 col-sm-12 col-xs-12" style="padding-left:0px!important;padding-right:0px!important">
 																<button id="btnConductor" type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#vehiculoModal">
 																	<i class="fas fa-plus-circle"></i> Conductor
 																</button>
@@ -475,7 +490,7 @@ label.form-control-sm{
 														</select>
 													</div>
 
-													<div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
+													<div class="col-lg-3 col-md-12 col-sm-12 col-xs-12" style="padding-right:0px">
 														<label class="form-control-sm">Cantidad Troncos</label>
 														<input type="text" name="cantidad" id="cantidad"
 															value="" class="form-control form-control-sm" >

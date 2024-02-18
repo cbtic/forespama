@@ -617,4 +617,22 @@ class EmpresaController extends Controller
 
     }
 	
+	public function obtener_empresa($ruc){
+
+        $sw = true;
+		$msg = "";
+		
+		$empresa = Empresa::Where("ruc",$ruc)->Where("estado","1")->first();
+		if(!$empresa){
+			$sw = false;
+			$msg = "La Empresa ingresado no existe !!!";
+		}
+	
+		$array["sw"] = $sw;
+		$array["msg"] = $msg;
+        $array["empresa"] = $empresa;
+        echo json_encode($array);
+
+    }
+	
 }

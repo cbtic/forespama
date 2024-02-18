@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 use App\Models\Persona;
+use App\Models\Conductores;
 //use App\Models\Negativo;
 use App\Models\TablaMaestra;
 use App\Models\Ubigeo;
@@ -109,6 +110,34 @@ class PersonaController extends Controller
         //print_r($persona);exit();
         $array["sw"] = $sw;
         $array["persona"] = $persona;
+        echo json_encode($array);
+
+    }
+	
+	public function obtener_persona_conductor($tipo_documento,$numero_documento){
+
+        $persona_model = new Persona;
+        $sw = true;
+		$msg = "";
+		$conductor = NULL;
+		
+        $persona = $persona_model->getPersona($tipo_documento,$numero_documento);
+		
+		if($persona){
+        	$conductor = Conductores::Where("id_personas",$persona->id)->Where("estado","ACTIVO")->first();
+			if(!$conductor){
+				$sw = false;
+				$msg = "El Conductor ingresado no existe !!!";
+			}
+		}else{
+			$sw = false;
+			$msg = "El Conductor ingresado no existe !!!";
+		}
+		
+		$array["sw"] = $sw;
+		$array["msg"] = $msg;
+        $array["persona"] = $persona;
+		$array["conductor"] = $conductor;
         echo json_encode($array);
 
     }

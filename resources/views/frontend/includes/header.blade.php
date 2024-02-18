@@ -75,6 +75,7 @@
                         <x-forms.post :action="route('frontend.auth.logout')" id="logout-form" class="d-none" />
                     </x-slot>
                 </x-utils.link>
+				
             </div>
         </li>
     </ul>
