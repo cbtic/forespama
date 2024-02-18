@@ -114,18 +114,26 @@ class IngresoVehiculoTroncoController extends Controller
 		
 		$img_foto = $request->img_foto;
 		
+		if(count($img_foto)>0){
+			$path = "img/ingreso/".$vehiculo->placa."/".str_replace("/","-",$request->fecha_ingreso);
+			if (!is_dir($path)) {
+				mkdir($path);
+			}
+		}
+		
 		foreach($img_foto as $row){
 			
 			if($row!=""){
 				$filepath_tmp = public_path('img/ingreso/tmp/');
-				$filepath_nuevo = public_path('img/ingreso/'.$vehiculo->placa.'/');
+				$filepath_nuevo = public_path('img/ingreso/'.$vehiculo->placa.'/'.str_replace("/","-",$request->fecha_ingreso).'/');
+				
 				if (file_exists($filepath_tmp.$row)) {
 					copy($filepath_tmp.$row, $filepath_nuevo.$row);
-				} 
+				}
 				
 				$ingresoVehiculoTroncoImagen = new IngresoVehiculoTroncoImagene;
 				$ingresoVehiculoTroncoImagen->id_ingreso_vehiculo_troncos = $id_ingreso_vehiculo_troncos;
-				$ingresoVehiculoTroncoImagen->ruta_imagen = "img/ingreso/".$vehiculo->placa."/".$row;
+				$ingresoVehiculoTroncoImagen->ruta_imagen = "img/ingreso/".$vehiculo->placa."/".str_replace("/","-",$request->fecha_ingreso)."/".$row;
 				$ingresoVehiculoTroncoImagen->id_tipo_maderas = 0;
 				$ingresoVehiculoTroncoImagen->estado = 1;
 				$ingresoVehiculoTroncoImagen->save();
