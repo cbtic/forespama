@@ -26,7 +26,7 @@ class LoteRequest extends FormRequest
         return [
 
             'id_producto' => ['required'],
-            'numero_lote' => ['required'],
+            'numero_lote' => ['required', 'integer'],
             'numero_serie' => ['required'],
             'id_unidad_medida' => ['required'],
             'cantidad' => ['required'],
