@@ -21,6 +21,8 @@ class Lote extends Model
         'id_moneda',
         'fecha_fabricacion',
         'fecha_vencimiento',
+        'id_almacen',
+        'id_seccion',
         'id_anaquel',
         'estado'
     ];

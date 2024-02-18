@@ -120,6 +120,26 @@ class LoteForm extends ModelForm
             Date::make('fecha_vencimiento', [
                 'required' => true,
             ]),
+            HasOne::make('id_almacen', [
+                'label' => 'Escoja el almacen',
+                'model' => Almacene::class,
+                'model_options' => [
+                    'label' => 'codigo',
+                    'value' => 'id',
+                    'method' => 'all',
+                    'params' => null,
+                ]
+            ])->selectOptions(['Escoger' => null]),
+            HasOne::make('id_seccion', [
+                'label' => 'Escoja la seccion',
+                'model' => Seccione::class,
+                'model_options' => [
+                    'label' => 'codigo',
+                    'value' => 'id',
+                    'method' => 'all',
+                    'params' => null,
+                ]
+            ])->selectOptions(['Escoger' => null]),
             HasOne::make('id_anaquel', [
                 'label' => 'Escoja el anaquel',
                 'model' => Anaquele::class,
