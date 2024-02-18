@@ -149,6 +149,14 @@ Route::put('productos/{productos}', 'App\Http\Controllers\ProductosController@up
 Route::delete('productos/{productos}', 'App\Http\Controllers\ProductosController@destroy')->name('productos.destroy');
 Route::get('productos/{productos}/edit', 'App\Http\Controllers\ProductosController@edit')->name('productos.edit');
 
+Route::get('lotes', 'App\Http\Controllers\LoteController@index')->name('lotes.index');
+Route::post('lotes', 'App\Http\Controllers\LoteController@store')->name('lotes.store');
+Route::get('lotes/create', 'App\Http\Controllers\LoteController@create')->name('lotes.create');
+Route::get('lotes/{lotes}', 'App\Http\Controllers\LoteController@show')->name('lotes.show');
+Route::put('lotes/{lotes}', 'App\Http\Controllers\LoteController@update')->name('lotes.update');
+Route::delete('lotes/{lotes}', 'App\Http\Controllers\LoteController@destroy')->name('lotes.destroy');
+Route::get('lotes/{lotes}/edit', 'App\Http\Controllers\LoteController@edit')->name('lotes.edit');
+
 Route::get('ubigeo/listar_departamentos_ajax', function() {
     return response()->json([ 'status' => 'OK', 'departamentos' => Ubigeo::departamentos() ]);
 });
