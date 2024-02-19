@@ -20,10 +20,7 @@ class Producto extends Model
         'fecha_vencimiento',
         'id_estado_bien',
         'stock_minimo',
-        'id_marca',
         'observacion',
-        'id_seccion',
-        'id_anaquel',
         'estado'
     ];
 
