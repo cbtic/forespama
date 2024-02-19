@@ -42,7 +42,7 @@ class IngresoController extends Controller
         $persona = new Persona;
         $caja_model = new TablaMaestra;
         $valorizaciones_model = new Valorizacione;
-        $caja = $caja_model->getCaja('CAJA');
+        $caja = $caja_model->getCaja('27');
         $caja_usuario = $valorizaciones_model->getCajaIngresoByusuario($id_user,'CAJA');
         //$caja_usuario = $caja_model;
         //print_r($caja_usuario);exit();
