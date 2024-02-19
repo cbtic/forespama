@@ -91,24 +91,6 @@ class ProductosTable extends DataTableComponent
                 ->sortable(),
             Column::make("Stock mínimo", "stock_minimo")
                 ->sortable(),
-            Column::make("Marca", "id_marca")
-                ->hideIf(true)
-                ->sortable(),
-            Column::make("Marca")
-                ->label(fn ($row) => TablaMaestra::find($row->id_marca)->denominacion)
-                ->sortable(),
-            Column::make("Seccion", "id_seccion")
-                ->hideIf(true)
-                ->sortable(),
-            Column::make("Seccion")
-                ->label(fn ($row) => Seccione::find($row->id_seccion)->codigo)
-                ->sortable(),
-            Column::make("Anaquel", "id_anaquel")
-                ->hideIf(true)
-                ->sortable(),
-            Column::make("Anaquel")
-                ->label(fn ($row) => Anaquele::find($row->id_anaquel)->codigo)
-                ->sortable(),
             Column::make("Stock Actual", "stock_actual")
                 ->sortable(),
             Column::make("Estado")

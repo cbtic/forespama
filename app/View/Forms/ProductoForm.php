@@ -134,36 +134,6 @@ class ProductoForm extends ModelForm
             Text::make('stock_minimo', [
                 'required' => true,
             ]),
-            HasOne::make('id_marca', [
-                'label' => 'Marca',
-                'model' => TablaMaestra::class,
-                'model_options' => [
-                    'label' => 'denominacion',
-                    'value' => 'id',
-                    'method' => 'por_tipo',
-                    'params' => '47',
-                ]
-            ])->selectOptions(['Seleccione' => null]),
-            HasOne::make('id_seccion', [
-                'label' => 'Escoja la seccion',
-                'model' => Seccione::class,
-                'model_options' => [
-                    'label' => 'codigo',
-                    'value' => 'id',
-                    'method' => 'all',
-                    'params' => null,
-                ]
-            ])->selectOptions(['Seleccione' => null]),
-            HasOne::make('id_anaquel', [
-                'label' => 'Escoja el anaquel',
-                'model' => Anaquele::class,
-                'model_options' => [
-                    'label' => 'codigo',
-                    'value' => 'id',
-                    'method' => 'all',
-                    'params' => null,
-                ]
-            ])->selectOptions(['Escoger' => null]),
             Select::make('estado')->selectOptions(['ACTIVO' => '1', 'CANCELADO' => '0']),
         ];
     }
