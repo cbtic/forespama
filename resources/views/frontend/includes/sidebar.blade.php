@@ -17,7 +17,7 @@
 		-->
 
         <a href="{{ route('frontend.index') }}" class="navbar-brand">
-            <img src="<?php echo URL::to('/') ?>/img/brand/logo_forespama2.jpg" alt="" width="190" height="40" style="padding:0px;margin:0px">
+            <img src="<?php echo URL::to('/') ?>/img/logo_forestalpama.jpg" alt="" width="190" style="padding:0px;margin:0px">
         </a>
 
     </div><!--c-sidebar-brand-->

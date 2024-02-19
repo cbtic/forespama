@@ -115,8 +115,10 @@ The first thing we are going to do is set the key that Laravel will use when doi
 `routes/frontend/home.php`
 `resources/views/frontend/includes/sidebar.blade.php`
 
+## Colores institucionales:
 
-
+ - Background: #183e39
+ - Front: #aed29b
 
 You should see a green message stating your key was successfully generated. As well as you should see the **APP\_KEY** variable in your **.env** file reflected.
 
