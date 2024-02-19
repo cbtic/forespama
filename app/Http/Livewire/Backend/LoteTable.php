@@ -54,6 +54,12 @@ class LoteTable extends DataTableComponent
             Column::make("Producto")
                 ->label(fn ($row) => Producto::find($row->id_producto)->denominacion)
                 ->sortable(),
+            Column::make("id_marca")
+                ->hideIf(true)
+                ->sortable(),
+            Column::make("Marca")
+                ->label(fn ($row) => TablaMaestra::find($row->id_marca)->abreviatura)
+                ->sortable(),
             Column::make("Numero Lote", "numero_lote")
                 ->sortable(),
             Column::make("Numero Serie", "numero_serie")
@@ -81,7 +87,7 @@ class LoteTable extends DataTableComponent
                 ->label(fn ($row) => Anaquele::find($row->id_anaquel)->codigo)
                 ->sortable(),
             Column::make("Estado")
-                ->label(fn($row) => array("CANCELADO","ACTIVO")[Producto::find($row->id)["estado"]])
+                ->label(fn($row) => array("CANCELADO","ACTIVO")[Lote::find($row->id)["estado"]])
                 ->sortable(),
             Column::make('Acciones')
                 ->unclickable()

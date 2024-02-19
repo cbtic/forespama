@@ -3,7 +3,7 @@
 	$grupo = explode(".",$routeName);
 	if(isset($grupo[0]) && $grupo[0]!="admin"){
 ?>
-			
+
 <div class="c-sidebar c-sidebar-dark c-sidebar-fixed c-sidebar-lg-show" id="sidebar">
     <div class="c-sidebar-brand d-lg-down-none">
 
@@ -125,6 +125,9 @@
                 </li>
                 <li class="c-sidebar-nav-item">
                     <x-utils.link :href="route('frontend.productos.index')" class="c-sidebar-nav-link" :text="__('Productos')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+                </li>
+                <li class="c-sidebar-nav-item">
+                    <x-utils.link :href="route('frontend.lotes.index')" class="c-sidebar-nav-link" :text="__('Lotes')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
                 </li>
             </ul>
 
