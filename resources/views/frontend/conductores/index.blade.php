@@ -34,7 +34,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary close-btn" data-dismiss="modal">Cerrar</button>
-                <button type="button" wire:click="delete()" class="btn btn-danger close-modal" data-dismiss="modal">Si, Borrar</button>
+                <button type="button" click="delete()" class="btn btn-danger close-modal" data-dismiss="modal">Si, Borrar</button>
             </div>
         </div>
     </div>
