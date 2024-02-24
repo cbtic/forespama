@@ -46,10 +46,9 @@ class LoteController extends Controller
 
     public function destroy(Lote $lotes)
     {
-        $lotes->delete();
-
-        Alert::success('Proceso completo', 'Se ha eliminado el conductor');
-
+        if ($lotes->delete()) {
+            Alert::success('Proceso completo', 'Se ha eliminado el lote #'.$lotes['numero_lote']);
+        };
         return redirect()->route('frontend.lotes.index');
     }
 }
