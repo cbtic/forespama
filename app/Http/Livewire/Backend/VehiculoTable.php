@@ -53,7 +53,7 @@ class VehiculoTable extends DataTableComponent
                 ->label(fn ($row) => $row->conductores->pluck('licencia')->implode(', ')),
             Column::make("Conductor")
                 ->sortable()
-                ->label(fn ($row) => Conductores::find(($row->conductores->pluck('id')[0]))->personas['nombre_completo_sin_dni']),
+                ->label(fn ($row) => isset($row->conductores->pluck('id')[0])?Conductores::find(($row->conductores->pluck('id')[0]))->personas['nombre_completo_sin_dni']:""),
             Column::make("Placa", "placa")
                 ->sortable(),
             Column::make("Ejes", "ejes")
