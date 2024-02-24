@@ -87,10 +87,9 @@ class ProductosController extends Controller
      */
     public function destroy(Producto $productos)
     {
-        $productos->delete();
-
-        Alert::success('Proceso completo', 'Se ha eliminado el producto');
-
+        if ($productos->delete()) {
+            Alert::success('Proceso completo', 'Se ha eliminado el producto '.$productos['codigo']);
+        };
         return redirect()->route('frontend.productos.index');
     }
 }
