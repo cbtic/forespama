@@ -103,7 +103,6 @@ class ConductoresTable extends DataTableComponent
                 ->label(
                     function ($row, Column $column) {
                         $edit = '<button class="btn btn-xs btn-success text-white" onclick="window.location.href=\'' . route('frontend.conductores.show', $row->id) . '\'">Mostrar</button>';
-                        // $delete = form()->confirm('Are you sure you want to delete this?', 'confirmation')->action('GET', route('frontend.conductores.show', $row->id), 'delete', ['class' => 'btn btn-sm btn-outline-secondary'])->render();
                         $delete = app(ConductoresForm::class)->delete($row);
                         return $edit . " " . $delete;
                     }
