@@ -7,6 +7,7 @@ use Rappasoft\LaravelLivewireTables\Views\Column;
 use App\Models\Vehiculo;
 use App\Models\Conductores;
 use Illuminate\Database\Eloquent\Builder;
+use App\View\Forms\VehiculoForm;
 
 class VehiculoTable extends DataTableComponent
 {
@@ -71,7 +72,7 @@ class VehiculoTable extends DataTableComponent
                 ->label(
                     function ($row, Column $column) {
                         $edit = '<button class="btn btn-xs btn-success text-white" onclick="window.location.href=\'' . route('frontend.vehiculos.show', $row) . '\'">Mostrar</button>';
-                        $delete = '<button class="btn btn-xs btn-danger text-white" wire:click="delete(' . $row->id . ')">Eliminar</button>';
+                        $delete = app(VehiculoForm::class)->delete($row);
                         return $edit . " " . $delete;
                     }
                 )->html(),
