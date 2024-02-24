@@ -53,9 +53,9 @@ class SeccionesController extends Controller
 
     public function destroy(Seccione $secciones)
     {
-        $secciones->delete();
-
-        Alert::success('Proceso completo', 'Se ha eliminado el conductor');
+        if ($secciones->delete()) {
+            Alert::success('Proceso completo', 'Se ha eliminado la sección '.$secciones['codigo']);
+        };
 
         return redirect()->route('frontend.secciones.index');
     }
