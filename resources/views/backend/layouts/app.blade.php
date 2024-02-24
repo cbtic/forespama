@@ -61,7 +61,9 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker3.css" />
 
     @stack('after-scripts')
-    @include('sweetalert::alert')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.0/sweetalert.min.js"></script>
+
+    @include('sweetalert::alert')}
     <livewire:scripts />
     <script src="//unpkg.com/alpinejs" defer></script>
 

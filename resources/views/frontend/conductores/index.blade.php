@@ -22,25 +22,27 @@
 @endsection
 
 @push('after-scripts')
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.0/sweetalert.min.js"></script>
 <script type="text/javascript">
 
     $('.btn.btn-danger').click(function(event) {
         var form =  $(this).closest("form");
         event.preventDefault();
-        swal({
-            title: `Eliminar Conductor`,
-            text: "Está seguro de eliminar a este conductor?",
-            icon: "warning",
-            buttons: true,
-            dangerMode: true,
-        })
-            .then((willDelete) => {
-                if (willDelete) {
+
+        Swal.fire({
+                title: 'Eliminar Conductor',
+                text: "Está seguro de eliminar a este conductor?",
+                showCancelButton: true,
+                confirmButtonText: 'Continue',
+                cancelButtonText: 'Cancel',
+                icon: 'warning'
+            }).then((result) => {
+                if (result.value) {
                     form.submit();
+                } else {
+                    Swal.fire("Cancelado", "El conductor no ha sido eliminado.", "error");
                 }
             });
-    });
+        });
 
 </script>
 @endpush
