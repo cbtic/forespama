@@ -47,10 +47,9 @@ class AlmacenesController extends Controller
 
     public function destroy(Almacene $almacenes)
     {
-        $almacenes->delete();
-
-        Alert::success('Proceso completo', 'Se ha eliminado el conductor');
-
+        if ($almacenes->delete()) {
+            Alert::success('Proceso completo', 'Se ha eliminado el almacen: '.$almacenes['codigo']);
+        }
         return redirect()->route('frontend.almacenes.index');
     }
 }

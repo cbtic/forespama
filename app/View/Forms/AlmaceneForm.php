@@ -37,9 +37,9 @@ class AlmaceneForm extends ModelForm
 
     public $disableOnSubmit = true;
 
-    public $confirmMessage = "Confirma que desea eliminar el registro?";
+    // public $confirmMessage = "Confirma que desea eliminar el registro?";
 
-    public $confirmMethod = "confirmar";
+    // public $confirmMethod = "confirmar";
 
     // public $columns = 'sections';
 
@@ -68,9 +68,9 @@ class AlmaceneForm extends ModelForm
         'submit' => 'Guardar'
     ];
 
-    public function confirmar() {
-        return "";
-    }
+    // public function confirmar() {
+    //     return "";
+    // }
 
     /**
      * Set the desired fields for the form
