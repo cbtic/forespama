@@ -60,7 +60,9 @@ class VehiculoForm extends ModelForm
      * @var array
      */
     public $buttons = [
-        'submit' => 'Guardar'
+        'cancel' => 'Cancelar',
+        'submit' => 'Guardar',
+        'delete' => 'Borrar'
     ];
 
     /**
