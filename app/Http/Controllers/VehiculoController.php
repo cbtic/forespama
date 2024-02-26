@@ -164,11 +164,9 @@ class VehiculoController extends Controller
         return view('frontend.vehiculos.create');
     }
 
-    public function show(int $id)
+    public function show(Vehiculo $vehiculos)
     {
-        $vehiculo = Vehiculo::find($id);
-
-        return view('frontend.vehiculos.show', compact('vehiculo'));
+        return view('frontend.vehiculos.show', compact('vehiculos'));
     }
 
     public function store(VehiculoRequest $request)

@@ -58,7 +58,8 @@ class ConductoresForm extends ModelForm
      */
     public $buttons = [
         'cancel' => 'Cancelar',
-        'submit' => 'Guardar'
+        'submit' => 'Guardar',
+        'delete' => 'Borrar'
     ];
 
     /**
