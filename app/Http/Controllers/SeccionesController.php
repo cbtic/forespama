@@ -39,7 +39,7 @@ class SeccionesController extends Controller
     {
         $secciones->update($request->all());
 
-        $secciones->almacenes()->sync($request->id_almacenes);
+        $secciones->almacenes()->sync([$request->id_almacenes]);
         $secciones->anaqueles()->sync($request->id_anaqueles);
 
         // return redirect()->route('frontend.secciones.show', $secciones->id);
