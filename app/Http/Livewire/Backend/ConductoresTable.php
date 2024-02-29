@@ -103,7 +103,7 @@ class ConductoresTable extends DataTableComponent
                 ->label(
                     function ($row, Column $column) {
                         $edit = '<button class="btn btn-xs btn-success text-white" onclick="window.location.href=\'' . route('frontend.conductores.show', $row->id) . '\'">Mostrar</button>';
-                        $delete = app(ConductoresForm::class)->delete($row);
+                        $delete = app(ConductoresForm::class)->delete($row)->modalTitle("Eliminar conductor: ".$row["id"])->confirmAsModal("Eliminar?", "Eliminar", $buttonClass = 'btn btn-warning');
                         return $edit . " " . $delete;
                     }
                 )->html(),
