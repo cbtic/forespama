@@ -26,7 +26,7 @@ class ConductoresForm extends ModelForm
      */
     public $model = Conductores::class;
 
-    public $routeParameters = ['id', 'licencia', 'fecha_licencia', 'estado'];
+    public $routeParameters = ['id', 'id_personas', 'licencia', 'fecha_licencia', 'estado'];
 
     public $columns = 1;
 
@@ -73,6 +73,7 @@ class ConductoresForm extends ModelForm
             HasOne::make('id_personas', [
                 'label' => 'Persona',
                 'model' => Persona::class,
+                'value' => $this->routeParameterValues[1],
                 'model_options' => [
                     'label' => 'nombre_completo',
                     'value' => 'id',
