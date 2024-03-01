@@ -71,7 +71,7 @@ class AlmacenesTable extends DataTableComponent
                 ->label(
                     function ($row, Column $column) {
                         $edit = '<button class="btn btn-xs btn-success text-white" onclick="window.location.href=\'' . route('frontend.almacenes.show', $row->id) . '\'">Mostrar</button>';
-                        $delete = app(AlmaceneForm::class)->delete($row);
+                        $delete = app(AlmaceneForm::class)->delete($row)->modalTitle("Eliminar almacen: ")->confirmAsModal("Eliminar almacen ".$row->codigo."?", "Eliminar", "btn btn-danger");
                         return $edit . " " . $delete;
                     }
                 )->html(),

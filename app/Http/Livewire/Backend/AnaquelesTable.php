@@ -58,7 +58,7 @@ class AnaquelesTable extends DataTableComponent
                 ->label(
                     function ($row, Column $column) {
                         $edit = '<button class="btn btn-xs btn-success text-white" onclick="window.location.href=\'' . route('frontend.anaqueles.show', $row) . '\'">Mostrar</button>';
-                        $delete = app(AnaqueleForm::class)->delete($row);
+                        $delete = app(AnaqueleForm::class)->delete($row)->modalTitle("Eliminar anaquel: ")->confirmAsModal("Eliminar anaquel ".$row->codigo."?", "Eliminar", "btn btn-danger");
                         return $edit . " " . $delete;
                     }
                 )->html(),

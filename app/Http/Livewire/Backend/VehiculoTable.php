@@ -72,7 +72,7 @@ class VehiculoTable extends DataTableComponent
                 ->label(
                     function ($row, Column $column) {
                         $edit = '<button class="btn btn-xs btn-success text-white" onclick="window.location.href=\'' . route('frontend.vehiculos.show', $row) . '\'">Mostrar</button>';
-                        $delete = app(VehiculoForm::class)->delete($row);
+                        $delete = app(VehiculoForm::class)->delete($row)->modalTitle("Eliminar vehículo: ")->confirmAsModal("Eliminar vehículo ".$row->placa."?", "Eliminar", "btn btn-danger");
                         return $edit . " " . $delete;
                     }
                 )->html(),

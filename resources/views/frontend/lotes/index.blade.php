@@ -20,29 +20,3 @@
         </x-slot>
     </x-backend.card>
 @endsection
-
-@push('after-scripts')
-<script type="text/javascript">
-
-    $('.btn.btn-danger').click(function(event) {
-        var form =  $(this).closest("form");
-        event.preventDefault();
-
-        Swal.fire({
-                title: 'Eliminar Lote',
-                text: "Está seguro de eliminar a este lote?",
-                showCancelButton: true,
-                confirmButtonText: 'Continue',
-                cancelButtonText: 'Cancel',
-                icon: 'warning'
-            }).then((result) => {
-                if (result.value) {
-                    form.submit();
-                } else {
-                    Swal.fire("Cancelado", "El lote no ha sido eliminado.", "error");
-                }
-            });
-        });
-
-</script>
-@endpush

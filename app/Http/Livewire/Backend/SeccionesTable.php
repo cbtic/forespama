@@ -64,7 +64,7 @@ class SeccionesTable extends DataTableComponent
                 ->label(
                     function ($row, Column $column) {
                         $edit = '<button class="btn btn-xs btn-success text-white" onclick="window.location.href=\'' . route('frontend.secciones.show', $row) . '\'">Mostrar</button>';
-                        $delete = app(SeccioneForm::class)->delete($row);
+                        $delete = app(SeccioneForm::class)->delete($row)->modalTitle("Eliminar sección: ")->confirmAsModal("Eliminar sección ".$row->codigo."?", "Eliminar", "btn btn-danger");
                         return $edit . " " . $delete;
                     }
                 )->html(),

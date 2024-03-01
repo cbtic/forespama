@@ -95,7 +95,7 @@ class LoteTable extends DataTableComponent
                 ->label(
                     function ($row, Column $column) {
                         $edit = '<button class="btn btn-xs btn-success text-white" onclick="window.location.href=\'' . route('frontend.lotes.show', $row) . '\'">Mostrar</button>';
-                        $delete = app(LoteForm::class)->delete($row);
+                        $delete = app(LoteForm::class)->delete($row)->modalTitle("Eliminar lote: ")->confirmAsModal("Eliminar lote ".$row->numero_lote."?", "Eliminar", "btn btn-danger");
                         return $edit . " " . $delete;
                     }
                 )->html(),

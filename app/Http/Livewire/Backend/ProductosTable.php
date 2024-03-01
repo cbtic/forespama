@@ -102,7 +102,7 @@ class ProductosTable extends DataTableComponent
                 ->label(
                     function ($row, Column $column) {
                         $edit = '<button class="btn btn-xs btn-success text-white" onclick="window.location.href=\'' . route('frontend.productos.show', $row) . '\'">Mostrar</button>';
-                        $delete = app(ProductoForm::class)->delete($row);
+                        $delete = app(ProductoForm::class)->delete($row)->modalTitle("Eliminar producto: ")->confirmAsModal("Eliminar producto ".$row->codigo."?", "Eliminar", "btn btn-danger");
                         return $edit . " " . $delete;
                     }
                 )->html(),
