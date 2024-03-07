@@ -15,7 +15,7 @@ class DropUbigeosTable extends Migration
     {
         //Schema::drop('ubigeos');
 
-        Schema::dropIfExists('ubigeos');
+        //Schema::dropIfExists('ubigeos');
     }
 
     /**
