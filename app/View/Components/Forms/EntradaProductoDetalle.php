@@ -1,0 +1,37 @@
+<?php
+
+namespace App\View\Components\Forms;
+
+use Illuminate\View\Component;
+
+use App\View\Forms\EntradaProductoDetallesForm;
+
+class EntradaProductoDetalle extends Component
+{
+    /**
+     * Create a new component instance.
+     *
+     * @return void
+     */
+    public $entradaproductodetalles;
+
+    public function __construct($entradaproductodetalles = null)
+    {
+        $this->entradaproductodetalles = $entradaproductodetalles;
+    }
+
+    /**
+     * Get the view / contents that represent the component.
+     *
+     * @return \Illuminate\Contracts\View\View|\Closure|string
+     */
+    public function render()
+    {
+        // return view('components.forms.productos');
+        if ($this->entradaproductodetalles) {
+            return app(EntradaProductoDetallesForm::class)->edit($this->entradaproductodetalles)->render();
+        } else {
+            return app(EntradaProductoDetallesForm::class)->create()->render();
+        }
+    }
+}

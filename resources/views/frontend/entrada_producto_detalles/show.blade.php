@@ -5,19 +5,13 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">Ver Entrada #{{ $entrada_productos->id }}</div>
+                <div class="card-header">Ver Entrada #{{ $entrada_producto_detalles->id }}</div>
 
                 <div class="card-body">
-                    <x-forms.entradaproducto :entradaproductos="$entrada_productos"></x-forms.entradaproducto>
+                    <x-forms.entradaproductodetalle :entradaproductodetalles="$entrada_producto_detalles"></x-forms.entradaproductodetalle>
                 </div>
             </div>
         </div>
-
-        <x-backend.card>
-            <x-slot name="body">
-                <livewire:backend.entrada-producto-detalles-table />
-            </x-slot>
-        </x-backend.card>
     </div>
 </div>
 @endsection

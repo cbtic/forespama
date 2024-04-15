@@ -12,6 +12,12 @@
                 </div>
             </div>
         </div>
+
+        <x-backend.card>
+            <x-slot name="body">
+                <livewire:backend.entrada-producto-detalles-table />
+            </x-slot>
+        </x-backend.card>
     </div>
 </div>
 @endsection
