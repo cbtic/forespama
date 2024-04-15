@@ -83,7 +83,7 @@ class EntradaProductosForm extends ModelForm
                 'required' => true,
             ]),
             Text::make('numero_comprobante', [
-                'label' => 'numero comprobanteo',
+                'label' => 'Numero Comprobante',
                 'required' => true,
             ]),
             Date::make('fecha_comprobante', [

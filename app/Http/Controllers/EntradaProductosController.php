@@ -51,7 +51,7 @@ class EntradaProductosController extends Controller
      */
     public function store(Request $request)
     {
-        // $secciones = Producto::create($request->all());
+        $entradas = EntradaProducto::create($request->all());
 
         return redirect()->route('frontend.entrada_productos.index');
     }
@@ -64,6 +64,8 @@ class EntradaProductosController extends Controller
      */
     public function show(EntradaProducto $entrada_productos)
     {
+        // dd($entrada_productos);exit;
+
         return view('frontend.entrada_productos.show', compact('entrada_productos'));
     }
 

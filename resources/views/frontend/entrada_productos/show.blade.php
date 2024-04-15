@@ -8,7 +8,7 @@
                 <div class="card-header">Ver Entrada #{{ $entrada_productos->id }}</div>
 
                 <div class="card-body">
-                    <x-forms.entradaproducto :entrada_productos="$entrada_productos"></x-forms.entradaproducto>
+                    <x-forms.entradaproducto :entradaproductos="$entrada_productos"></x-forms.entradaproducto>
                 </div>
             </div>
         </div>
