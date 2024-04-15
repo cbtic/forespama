@@ -13,7 +13,7 @@ class DropTipoMaderasTable extends Migration
      */
     public function up()
     {
-        Schema::dropIfExists('tipo_maderas');
+        //Schema::dropIfExists('tipo_maderas');
     }
 
     /**

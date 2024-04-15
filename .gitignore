@@ -33,3 +33,4 @@ yarn-error.log
 .package.json
 .yarn.lock
 .composer.lock
+phpunit.dusk.xml

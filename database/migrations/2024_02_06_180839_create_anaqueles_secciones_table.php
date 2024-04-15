@@ -29,6 +29,6 @@ class CreateAnaquelesSeccionesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('anaqueles_secciones');
+        //Schema::dropIfExists('anaqueles_secciones');
     }
 }

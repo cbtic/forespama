@@ -40,6 +40,6 @@ class CreateIngresoVehiculoTroncoCubicajesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('ingreso_vehiculo_tronco_cubicajes');
+        //Schema::dropIfExists('ingreso_vehiculo_tronco_cubicajes');
     }
 }

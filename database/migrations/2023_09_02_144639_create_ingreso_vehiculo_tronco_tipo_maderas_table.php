@@ -33,6 +33,6 @@ class CreateIngresoVehiculoTroncoTipoMaderasTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('ingreso_vehiculo_tronco_tipo_maderas');
+        //Schema::dropIfExists('ingreso_vehiculo_tronco_tipo_maderas');
     }
 }

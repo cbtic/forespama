@@ -37,6 +37,6 @@ class CreateTwoFactorAuthenticationsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('two_factor_authentications');
+        //Schema::dropIfExists('two_factor_authentications');
     }
 }

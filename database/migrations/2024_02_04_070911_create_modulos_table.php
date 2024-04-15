@@ -16,9 +16,9 @@ class CreateModulosTable extends Migration
         Schema::create('modulos', function (Blueprint $table) {
             $table->id();
             $table->string('nombre_tabla',255)->nullable();
-            
+
             $table->string('estado',1)->nullable()->default('1');
- 
+
             $table->bigInteger('id_usuario_inserta')->unsigned()->index();
 			$table->bigInteger('id_usuario_actualiza')->nullable()->unsigned()->index();
             $table->timestamps();
@@ -32,6 +32,6 @@ class CreateModulosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('modulos');
+        //Schema::dropIfExists('modulos');
     }
 }

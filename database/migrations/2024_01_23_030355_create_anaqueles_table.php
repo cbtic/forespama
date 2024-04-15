@@ -34,6 +34,6 @@ class CreateAnaquelesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('anaqueles');
+        //Schema::dropIfExists('anaqueles');
     }
 }
