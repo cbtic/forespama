@@ -176,6 +176,14 @@ Route::put('lotes/{lotes}', 'App\Http\Controllers\LoteController@update')->name(
 Route::delete('lotes/{lotes}', 'App\Http\Controllers\LoteController@destroy')->name('lotes.destroy');
 Route::get('lotes/{lotes}/edit', 'App\Http\Controllers\LoteController@edit')->name('lotes.edit');
 
+Route::get('entrada_productos', 'App\Http\Controllers\EntradaProductosController@index')->name('entrada_productos.index');
+Route::post('entrada_productos', 'App\Http\Controllers\EntradaProductosController@store')->name('entrada_productos.store');
+Route::get('entrada_productos/create', 'App\Http\Controllers\EntradaProductosController@create')->name('entrada_productos.create');
+Route::get('entrada_productos/{entrada_productos}', 'App\Http\Controllers\EntradaProductosController@show')->name('entrada_productos.show');
+Route::put('entrada_productos/{entrada_productos}', 'App\Http\Controllers\EntradaProductosController@update')->name('entrada_productos.update');
+Route::delete('entrada_productos/{entrada_productos}', 'App\Http\Controllers\EntradaProductosController@destroy')->name('entrada_productos.destroy');
+Route::get('entrada_productos/{entrada_productos}/edit', 'App\Http\Controllers\EntradaProductosController@edit')->name('entrada_productos.edit');
+
 Route::get('ubigeo/listar_departamentos_ajax', function() {
     return response()->json([ 'status' => 'OK', 'departamentos' => Ubigeo::departamentos() ]);
 });
