@@ -16,7 +16,7 @@
         </x-slot>
 
         <x-slot name="body">
-            <livewire:backend.entrada-producto-detalles-table />
+            <livewire:backend.entrada-producto-detalles-table :entrada_producto="1"/>
         </x-slot>
     </x-backend.card>
 @endsection

@@ -18,8 +18,14 @@ use Rappasoft\LaravelLivewireTables\Views\Columns\ButtonGroupColumn;
 class EntradaProductoDetallesTable extends DataTableComponent
 {
     public $deleteId = '';
+    public $entrada_producto;
 
     protected $model = EntradaProductoDetalle::class;
+
+    public function mount($entrada_producto)
+    {
+        $this->entrada_producto = $entrada_producto;
+    }
 
     /**
      * @return Builder

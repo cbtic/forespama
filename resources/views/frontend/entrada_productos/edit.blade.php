@@ -15,7 +15,7 @@
 
         <x-backend.card>
             <x-slot name="body">
-                <livewire:backend.entrada-producto-detalles-table />
+                @livewire('backend.entrada-producto-detalles-table', ['id_entrada_productos' => $entrada_productos->id_entrada_productos ])
             </x-slot>
         </x-backend.card>
     </div>
