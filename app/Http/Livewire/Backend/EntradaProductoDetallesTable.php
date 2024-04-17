@@ -32,7 +32,7 @@ class EntradaProductoDetallesTable extends DataTableComponent
      */
     public function query(): Builder
     {
-        return EntradaProductoDetalle::when($this->getFilter('search'), fn ($query, $term) => $query->search($term));
+        return EntradaProductoDetalle::where('id_entrada_productos', $this->entrada_producto)->when($this->getFilter('search'), fn ($query, $term) => $query->search($term));
     }
 
     public function configure(): void

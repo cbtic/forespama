@@ -3,7 +3,7 @@
 @section('content')
     <x-backend.card>
         <x-slot name="header">
-            @lang('Detalle de Entrada de Productos')
+            @lang("Detalle de Entrada de Productos #$entrada_producto")
         </x-slot>
 
         <x-slot name="headerActions">
@@ -16,7 +16,7 @@
         </x-slot>
 
         <x-slot name="body">
-            <livewire:backend.entrada-producto-detalles-table :entrada_producto="1"/>
+            <livewire:backend.entrada-producto-detalles-table :entrada_producto="$entrada_producto"/>
         </x-slot>
     </x-backend.card>
 @endsection

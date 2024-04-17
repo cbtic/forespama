@@ -25,12 +25,12 @@ class EntradaProductoDetallesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($entrada_producto)
     {
         // dd(2);
         $entrada_producto_detalles = EntradaProductoDetalle::latest()->paginate(10);
 
-        return view('frontend.entrada_producto_detalles.index', compact('entrada_producto_detalles'));
+        return view('frontend.entrada_producto_detalles.index', compact('entrada_producto_detalles', 'entrada_producto'));
     }
 
     /**

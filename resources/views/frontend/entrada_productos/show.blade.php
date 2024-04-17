@@ -3,7 +3,7 @@
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-8">
+        <div class="col-md-12">
             <div class="card">
                 <div class="card-header">Ver Entrada #{{ $entrada_productos->id }}</div>
 
@@ -15,7 +15,7 @@
 
         <x-backend.card>
             <x-slot name="body">
-                <livewire:backend.entrada-producto-detalles-table />
+                <livewire:backend.entrada-producto-detalles-table :entrada_producto="$entrada_productos->id"/>
             </x-slot>
         </x-backend.card>
     </div>
