@@ -26,7 +26,7 @@ class EntradaProductoDetallesForm extends ModelForm
      */
     public $model = EntradaProductoDetalle::class;
 
-    public $routeParameters = ['id'];
+    public $routeParameters = ['id', 'entrada_producto'];
 
     public $columns = 3;
 

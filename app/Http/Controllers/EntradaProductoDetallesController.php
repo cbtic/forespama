@@ -38,9 +38,9 @@ class EntradaProductoDetallesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create($entrada_producto)
     {
-        return view('frontend.entrada_producto_detalles.create');
+        return view('frontend.entrada_producto_detalles.create', compact('entrada_producto'));
     }
 
     /**

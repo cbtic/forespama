@@ -14,10 +14,12 @@ class EntradaProductoDetalle extends Component
      * @return void
      */
     public $entradaproductodetalles;
+    public $entrada_producto;
 
     public function __construct($entradaproductodetalles = null)
     {
         $this->entradaproductodetalles = $entradaproductodetalles;
+        // $this->$entrada_producto = $entrada_producto;
     }
 
     /**
