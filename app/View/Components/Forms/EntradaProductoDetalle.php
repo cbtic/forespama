@@ -33,7 +33,8 @@ class EntradaProductoDetalle extends Component
         if ($this->entradaproductodetalles) {
             return app(EntradaProductoDetallesForm::class)->edit($this->entradaproductodetalles)->render();
         } else {
-            return app(EntradaProductoDetallesForm::class)->create()->render();
+            $this->entradaproductodetalles["id_entrada_productos"] = "1";
+            return app(EntradaProductoDetallesForm::class)->create($this->entradaproductodetalles)->render();
         }
     }
 }

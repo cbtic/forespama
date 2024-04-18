@@ -36,7 +36,7 @@ class EntradaProductoDetallesTable extends DataTableComponent
     {
         $this->setPrimaryKey('id')
         ->setTableRowUrl(function($row) {
-            return route('frontend.entrada_producto_detalles.edit', [$row->id_entrada_productos, $row->id]);
+            return route('frontend.entrada_producto_detalles.edit', [$row->id_entrada_productos]);
         })
         ->setTableRowUrlTarget(function($row) {
             return '_self';

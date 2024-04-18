@@ -75,9 +75,11 @@ class EntradaProductoDetallesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(EntradaProductoDetalle $entrada_producto_detalles)
+    public function edit( $entrada_producto_detalles)
     {
-        return view('frontend.entrada_producto_detalles.edit', compact('entrada_producto_detalles'));
+        exit();
+        dd($entrada_producto_detalles);
+        //return view('frontend.entrada_producto_detalles.edit', compact('entrada_producto_detalles'));
     }
 
     /**
