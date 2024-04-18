@@ -23,7 +23,7 @@
                     icon="c-icon cil-plus"
                     class="card-header-action"
                     :href="route('frontend.entrada_producto_detalles.create', $entrada_productos->id)"
-                    :text="__('Nuevo')"
+                    :text="__('Nuevo #'.$entrada_productos->id)"
                 />
             </x-slot>
             <x-slot name="body">

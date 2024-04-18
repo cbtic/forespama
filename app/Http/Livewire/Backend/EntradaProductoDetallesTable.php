@@ -18,29 +18,26 @@ use Rappasoft\LaravelLivewireTables\Views\Columns\ButtonGroupColumn;
 class EntradaProductoDetallesTable extends DataTableComponent
 {
     public $deleteId = '';
-    public $entrada_producto;
+    public $id_entrada_productos;
 
     protected $model = EntradaProductoDetalle::class;
 
     public function mount($entrada_producto)
     {
-        $this->entrada_producto = $entrada_producto;
+        $this->id_entrada_productos = $entrada_producto;
     }
 
-    /**
-     * @return Builder
-     */
-    public function query(): Builder
+    public function builder(): Builder
     {
-        return EntradaProductoDetalle::where('id_entrada_productos', $this->entrada_producto)->when($this->getFilter('search'), fn ($query, $term) => $query->search($term));
+        return EntradaProductoDetalle::where('id_entrada_productos','=', $this->id_entrada_productos);
     }
 
     public function configure(): void
     {
         $this->setPrimaryKey('id')
-        // ->setTableRowUrl(function($row) {
-        //     return route('frontend.entrada_producto_detalles.edit', $row);
-        // })
+        ->setTableRowUrl(function($row) {
+            return route('frontend.entrada_producto_detalles.edit', [$row->id_entrada_productos, $row->id]);
+        })
         ->setTableRowUrlTarget(function($row) {
             return '_self';
         });
