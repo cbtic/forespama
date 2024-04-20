@@ -95,8 +95,8 @@ class EntradaProductoDetallesTable extends DataTableComponent
                 ->unclickable()
                 ->label(
                     function ($row, Column $column) {
-                        $edit = '<button class="btn btn-xs btn-success text-white" onclick="window.location.href=\'' . route('frontend.entrada_producto_detalles.show', ['entrada_producto' => $row->id_entrada_productos, 'entrada_producto_detalles' => $row->id]) . '\'">Mostrar</button>';
-                        $delete = '';// app(EntradaProductoDetallesForm::class)->delete($row)->modalTitle("Eliminar conductor: ")->confirmAsModal("Eliminar?", "Eliminar", "btn btn-danger");
+                        $edit = '<button class="btn btn-xs btn-success text-white" onclick="window.location.href=\'' . route('frontend.entrada_producto_detalles.show', ['entrada_producto_detalles' => $row->id]) . '\'">Mostrar</button>';
+                        $delete = app(EntradaProductoDetallesForm::class)->delete($row)->modalTitle("Eliminar Producto: ")->confirmAsModal("Eliminar?", "Eliminar", "btn btn-danger");
                         return $edit . " " . $delete;
                     }
                 )->html(),
