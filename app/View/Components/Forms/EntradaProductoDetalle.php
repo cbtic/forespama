@@ -33,8 +33,7 @@ class EntradaProductoDetalle extends Component
         if ($this->entradaproductodetalles) {
             return app(EntradaProductoDetallesForm::class)->edit($this->entradaproductodetalles)->asModal($triggerContent = 'Nuevo #'.$this->entradaproducto, $triggerClass = 'btn btn-default', $message = 'Ingresar nuevo producto', $modalTitle = 'Nuevo Producto');
         } else {
-            $this->entradaproductodetalles["id_entrada_productos"] = "1";
-            return app(EntradaProductoDetallesForm::class)->create()->asModal($triggerContent = 'Nuevo #'.$this->entradaproducto, $triggerClass = 'btn btn-default', $message = 'Ingresar nuevo producto', $modalTitle = 'Nuevo Producto');
+            return app(EntradaProductoDetallesForm::class)->create()->asModal($triggerContent = 'Nuevo #'.$this->entradaproducto, $triggerClass = 'btn btn-default', $message = null, $modalTitle = 'Nuevo Producto (Entrada #'.$this->entradaproducto.')');
         }
     }
 }

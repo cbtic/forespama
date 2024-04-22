@@ -27,10 +27,9 @@ class EntradaProductoDetallesForm extends ModelForm
      */
     public $model = EntradaProductoDetalle::class;
 
-    public $routeParameters = ['id', 'entrada_producto'];
+    public $routeParameters = ['id', 'id_entrada_productos'];
 
-    public $triggerContent = 'Entrada';
-    public $triggerClass = 'btn btn-default';
+    public $entradaproducto;
 
     public $columns = 3;
 
@@ -79,6 +78,7 @@ class EntradaProductoDetallesForm extends ModelForm
             ]),
             Text::make('id_entrada_productos', [
                 'required' => true,
+                'value' => array_reverse(explode('/',\Request::getRequestUri()))[0]
             ]),
             Text::make('id_producto', [
                 'required' => true,
