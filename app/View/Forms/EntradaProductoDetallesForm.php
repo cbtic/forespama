@@ -3,6 +3,7 @@
 namespace App\View\Forms;
 
 use App\Models\EntradaProductoDetalle;
+use Grafite\Forms\Forms\ModalForm;
 use Grafite\Forms\Forms\ModelForm;
 use Grafite\Forms\Fields\TextArea;
 use Grafite\Forms\Fields\Text;
@@ -27,6 +28,9 @@ class EntradaProductoDetallesForm extends ModelForm
     public $model = EntradaProductoDetalle::class;
 
     public $routeParameters = ['id', 'entrada_producto'];
+
+    public $triggerContent = 'Entrada';
+    public $triggerClass = 'btn btn-default';
 
     public $columns = 3;
 

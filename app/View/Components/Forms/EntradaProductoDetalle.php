@@ -14,12 +14,12 @@ class EntradaProductoDetalle extends Component
      * @return void
      */
     public $entradaproductodetalles;
-    public $entrada_producto;
+    public $entradaproducto;
 
-    public function __construct($entradaproductodetalles = null)
+    public function __construct($entradaproductodetalles = null, $entradaproducto = null)
     {
         $this->entradaproductodetalles = $entradaproductodetalles;
-        // $this->$entrada_producto = $entrada_producto;
+        $this->entradaproducto = $entradaproducto;
     }
 
     /**
@@ -31,10 +31,10 @@ class EntradaProductoDetalle extends Component
     {
         // return view('components.forms.productos');
         if ($this->entradaproductodetalles) {
-            return app(EntradaProductoDetallesForm::class)->edit($this->entradaproductodetalles)->render();
+            return app(EntradaProductoDetallesForm::class)->edit($this->entradaproductodetalles)->asModal($triggerContent = 'Nuevo #'.$this->entradaproducto, $triggerClass = 'btn btn-default', $message = 'Ingresar nuevo producto', $modalTitle = 'Nuevo Producto');
         } else {
             $this->entradaproductodetalles["id_entrada_productos"] = "1";
-            return app(EntradaProductoDetallesForm::class)->create($this->entradaproductodetalles)->render();
+            return app(EntradaProductoDetallesForm::class)->create()->asModal($triggerContent = 'Nuevo #'.$this->entradaproducto, $triggerClass = 'btn btn-default', $message = 'Ingresar nuevo producto', $modalTitle = 'Nuevo Producto');
         }
     }
 }

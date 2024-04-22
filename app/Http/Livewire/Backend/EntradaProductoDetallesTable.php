@@ -82,14 +82,14 @@ class EntradaProductoDetallesTable extends DataTableComponent
                 ->searchable(),
             Column::make('fecha_vencimiento')
                 ->sortable(),
-            Column::make('aplica_precio')
-                ->sortable(),
-            Column::make('id_um')
-                ->sortable(),
-            Column::make('id_estado_bien')
-                ->sortable(),
-            Column::make('id_marca')
-                ->sortable(),
+            // Column::make('aplica_precio')
+            //     ->sortable(),
+            // Column::make('id_um')
+            //     ->sortable(),
+            // Column::make('id_estado_bien')
+            //     ->sortable(),
+            // Column::make('id_marca')
+            //     ->sortable(),
             Column::make('Estado'),
             Column::make('Acciones')
                 ->unclickable()
