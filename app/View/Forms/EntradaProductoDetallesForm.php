@@ -2,21 +2,22 @@
 
 namespace App\View\Forms;
 
-use App\Models\EntradaProductoDetalle;
-use Grafite\Forms\Forms\ModalForm;
-use Grafite\Forms\Forms\ModelForm;
-use Grafite\Forms\Fields\TextArea;
+use TablaMaestra;
+use Grafite\Forms\Fields\Date;
 use Grafite\Forms\Fields\Text;
+use Grafite\Forms\Html\Button;
 use Grafite\Forms\Fields\Email;
 use Grafite\Forms\Fields\HasOne;
-use Grafite\Forms\Fields\HasMany;
-use Grafite\Forms\Fields\Date;
-use Grafite\Forms\Html\Button;
-use Grafite\Forms\Fields\Select;
-use Grafite\Forms\Fields\PasswordWithReveal;
-use Grafite\Forms\Fields\AutoSuggestSelect;
 use Grafite\Forms\Fields\Hidden;
-use TablaMaestra;
+use Grafite\Forms\Fields\Select;
+use Grafite\Forms\Fields\HasMany;
+use Grafite\Forms\Fields\TextArea;
+// use Grafite\Forms\Forms\BaseForm;
+// use Grafite\Forms\Forms\ModalForm;
+use Grafite\Forms\Forms\ModelForm;
+use App\Models\EntradaProductoDetalle;
+use Grafite\Forms\Fields\AutoSuggestSelect;
+use Grafite\Forms\Fields\PasswordWithReveal;
 
 class EntradaProductoDetallesForm extends ModelForm
 {
@@ -31,11 +32,15 @@ class EntradaProductoDetallesForm extends ModelForm
 
     public $entradaproducto;
 
-    public $columns = 3;
+    public $method = 'put';
+
+    public $columns = 2;
 
     public $hasFiles = true;
 
     public $instance;
+
+    public $submitMethod = 'ajax';
 
     public $disableOnSubmit = true;
 
@@ -60,9 +65,7 @@ class EntradaProductoDetallesForm extends ModelForm
      * @var array
      */
     public $buttons = [
-        'cancel' => 'Cancelar',
-        'submit' => 'Guardar',
-        'delete' => 'Borrar'
+        'submit' => 'Guardar'
     ];
 
     /**
@@ -76,7 +79,7 @@ class EntradaProductoDetallesForm extends ModelForm
             Text::make('id', [
                 'required' => true,
             ]),
-            Text::make('id_entrada_productos', [
+            Hidden::make('id_entrada_productos', [
                 'required' => true,
                 'value' => array_reverse(explode('/',\Request::getRequestUri()))[0]
             ]),
@@ -112,5 +115,57 @@ class EntradaProductoDetallesForm extends ModelForm
             ]),
             Select::make('estado')->selectOptions(['ACTIVO' => '1', 'CANCELADO' => '0']),
         ];
+    }
+
+    public function js() {
+        return <<<EOT
+            $(".btn.btn-primary").click(function(e){
+                e.preventDefault();
+                let form = $('#company_form')[0];
+                let data = new FormData(form);
+
+                $.ajax({
+                url: "{{ route('company.store') }}",
+                type: "POST",
+                data : data,
+                dataType:"JSON",
+                processData : false,
+                contentType:false,
+
+                success: function(response) {
+
+                if (response.errors) {
+                    var errorMsg = '';
+                    $.each(response.errors, function(field, errors) {
+                        $.each(errors, function(index, error) {
+                            errorMsg += error + '<br>';
+                        });
+                    });
+                    iziToast.error({
+                        message: errorMsg,
+                        position: 'topRight'
+                    });
+
+                } else {
+                    iziToast.success({
+                    message: response.success,
+                    position: 'topRight'
+
+                            });
+                }
+
+            },
+            error: function(xhr, status, error) {
+
+                iziToast.error({
+                    message: 'An error occurred: ' + error,
+                    position: 'topRight'
+                });
+            }
+
+                });
+
+        })
+        EOT;
     }
 }

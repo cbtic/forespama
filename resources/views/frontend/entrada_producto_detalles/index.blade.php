@@ -10,7 +10,7 @@
             <x-utils.link
                 icon="c-icon cil-plus"
                 class="card-header-action"
-                :href="route('frontend.entrada_producto_detalles.create')"
+                :href="route('frontend.entrada_producto_detalles.create', $entrada_producto)"
                 :text="__('Nuevo')"
             />
         </x-slot>

@@ -56,6 +56,7 @@ class EntradaProductoDetallesController extends Controller
         $entrada_producto_detalles = EntradaProductoDetalle::create($request->all());
 
         return redirect()->route('frontend.entrada_producto_detalles.index');
+
     }
 
     /**
@@ -75,12 +76,11 @@ class EntradaProductoDetallesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit( $entrada_producto_detalles)
-    {
-        exit();
-        dd($entrada_producto_detalles);
-        //return view('frontend.entrada_producto_detalles.edit', compact('entrada_producto_detalles'));
-    }
+
+     public function edit(EntradaProductoDetalle $entrada_producto_detalles)
+     {
+         return view('frontend.entrada_producto_detalles.edit', compact('entrada_producto_detalles'));
+     }
 
     /**
      * Update the specified resource in storage.
@@ -107,6 +107,6 @@ class EntradaProductoDetallesController extends Controller
         if ($entrada_producto_detalles->delete()) {
             Alert::success('Proceso completo', 'Se ha eliminado la entrada '.$entrada_producto_detalles['id']);
         };
-        return redirect()->route('frontend.entrada_producto_detalles.index');
+        return redirect()->route('frontend.entrada_productos.edit', $entrada_producto_detalles['id_entrada_productos']);
     }
 }

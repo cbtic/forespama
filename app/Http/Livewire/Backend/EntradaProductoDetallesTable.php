@@ -34,13 +34,13 @@ class EntradaProductoDetallesTable extends DataTableComponent
 
     public function configure(): void
     {
-        $this->setPrimaryKey('id')
-        ->setTableRowUrl(function($row) {
-            return route('frontend.entrada_producto_detalles.edit', [$row->id_entrada_productos]);
-        })
-        ->setTableRowUrlTarget(function($row) {
-            return '_self';
-        });
+        $this->setPrimaryKey('id');
+        // ->setTableRowUrl(function($row) {
+        //     return "javascript:console.log($(this));";
+        // })
+        // ->setTableRowUrlTarget(function($row) {
+        //     return '_self';
+        // });
     }
 
     // public function deleteId($id)
@@ -95,8 +95,10 @@ class EntradaProductoDetallesTable extends DataTableComponent
                 ->unclickable()
                 ->label(
                     function ($row, Column $column) {
-                        $edit = '<button class="btn btn-xs btn-success text-white" onclick="window.location.href=\'' . route('frontend.entrada_producto_detalles.show', ['entrada_producto' => $row->id_entrada_productos, 'entrada_producto_detalles' => $row->id]) . '\'">Mostrar</button>';
-                        $delete = '';// app(EntradaProductoDetallesForm::class)->delete($row)->modalTitle("Eliminar conductor: ")->confirmAsModal("Eliminar?", "Eliminar", "btn btn-danger");
+                        // $edit = '<button class="btn btn-xs btn-success text-white" onclick="window.location.href=\'' . route('frontend.entrada_producto_detalles.show', ['entrada_producto' => $row->id_entrada_productos, 'entrada_producto_detalles' => $row->id]) . '\'">Mostrarme</button>';
+                        $delete = app(EntradaProductoDetallesForm::class)->delete($row)->modalTitle("Eliminar producto: ")->confirmAsModal("Eliminar?", "Eliminar", "btn btn-danger");
+
+                        $edit = app(EntradaProductoDetallesForm::class)->edit($row)->asModal($triggerContent = 'Editar', $triggerClass = 'btn btn-success', $message = null, $modalTitle = 'Editar el producto');
                         return $edit . " " . $delete;
                     }
                 )->html(),
