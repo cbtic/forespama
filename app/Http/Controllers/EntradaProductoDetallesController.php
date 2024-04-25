@@ -55,7 +55,7 @@ class EntradaProductoDetallesController extends Controller
         // exit;
         $entrada_producto_detalles = EntradaProductoDetalle::create($request->all());
 
-        return redirect()->route('frontend.entrada_producto_detalles.index');
+        return redirect()->route('frontend.entrada_productos.edit', $entrada_producto_detalles['id_entrada_productos']);
 
     }
 
