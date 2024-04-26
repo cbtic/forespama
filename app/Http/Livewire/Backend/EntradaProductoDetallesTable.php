@@ -78,18 +78,27 @@ class EntradaProductoDetallesTable extends DataTableComponent
             Column::make('cantidad')
                 ->sortable(),
             Column::make('numero_lote')
+                ->hideIf(true)
                 ->sortable()
                 ->searchable(),
             Column::make('fecha_vencimiento')
+                ->hideIf(true)
                 ->sortable(),
-            // Column::make('aplica_precio')
-            //     ->sortable(),
-            // Column::make('id_um')
-            //     ->sortable(),
-            // Column::make('id_estado_bien')
-            //     ->sortable(),
-            // Column::make('id_marca')
-            //     ->sortable(),
+            Column::make('aplica_precio')
+                ->hideIf(true)
+                ->sortable(),
+            Column::make('id_um')
+                ->hideIf(true)
+                ->sortable(),
+            Column::make('id_estado_bien')
+                ->hideIf(true)
+                ->sortable(),
+            Column::make('id_marca')
+                ->hideIf(true)
+                ->sortable(),
+            Column::make('costo')
+                ->hideIf(true)
+                ->sortable(),
             Column::make('Estado'),
             Column::make('Acciones')
                 ->unclickable()
