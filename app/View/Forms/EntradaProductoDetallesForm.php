@@ -3,6 +3,7 @@
 namespace App\View\Forms;
 
 use TablaMaestra;
+use App\Models\Producto;
 use Grafite\Forms\Fields\Date;
 use Grafite\Forms\Fields\Text;
 use Grafite\Forms\Html\Button;
@@ -11,9 +12,9 @@ use Grafite\Forms\Fields\HasOne;
 use Grafite\Forms\Fields\Hidden;
 use Grafite\Forms\Fields\Select;
 use Grafite\Forms\Fields\HasMany;
-use Grafite\Forms\Fields\TextArea;
 // use Grafite\Forms\Forms\BaseForm;
 // use Grafite\Forms\Forms\ModalForm;
+use Grafite\Forms\Fields\TextArea;
 use Grafite\Forms\Forms\ModelForm;
 use App\Models\EntradaProductoDetalle;
 use Grafite\Forms\Fields\AutoSuggestSelect;
@@ -83,9 +84,16 @@ class EntradaProductoDetallesForm extends ModelForm
                 'required' => true,
                 'value' => array_reverse(explode('/',\Request::getRequestUri()))[0]
             ]),
-            Text::make('id_producto', [
-                'required' => true,
-            ]),
+            HasOne::make('id_producto', [
+                'label' => 'Producto',
+                'model' => Producto::class,
+                'model_options' => [
+                    'label' => 'denominacion',
+                    'value' => 'id',
+                    'method' => 'all',
+                    'params' => null,
+                ]
+            ])->selectOptions(['Seleccione' => null]),
             Text::make('item', [
                 'required' => true,
             ]),
@@ -101,12 +109,26 @@ class EntradaProductoDetallesForm extends ModelForm
             Text::make('aplica_precio', [
                 'required' => true,
             ]),
-            Text::make('id_um', [
-                'required' => true,
-            ]),
-            Text::make('id_estado_bien', [
-                'required' => true,
-            ]),
+            HasOne::make('id_um', [
+                'label' => 'Unidades',
+                'model' => TablaMaestra::class,
+                'model_options' => [
+                    'label' => 'denominacion',
+                    'value' => 'id',
+                    'method' => 'por_tipo',
+                    'params' => '43',
+                ]
+            ])->selectOptions(['Seleccione' => null]),
+            HasOne::make('id_estado_bien', [
+                'label' => 'Estado del Bien',
+                'model' => TablaMaestra::class,
+                'model_options' => [
+                    'label' => 'denominacion',
+                    'value' => 'id',
+                    'method' => 'por_tipo',
+                    'params' => '4',
+                ]
+            ])->selectOptions(['Seleccione' => null]),
             Text::make('id_marca', [
                 'required' => true,
             ]),

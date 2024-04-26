@@ -73,9 +73,16 @@ class EntradaProductosForm extends ModelForm
             Date::make('fecha_ingreso', [
                 'required' => true,
             ]),
-            Text::make('id_tipo_documento', [
-                'required' => true,
-            ]),
+            HasOne::make('id_tipo_documento', [
+                'label' => 'Tipo Doc.',
+                'model' => TablaMaestra::class,
+                'model_options' => [
+                    'label' => 'denominacion',
+                    'value' => 'id',
+                    'method' => 'por_tipo',
+                    'params' => '30',
+                ]
+            ])->selectOptions(['Seleccione' => null]),
             Text::make('unidad_origen', [
                 'required' => true,
             ]),
@@ -89,9 +96,16 @@ class EntradaProductosForm extends ModelForm
             Date::make('fecha_comprobante', [
                 'required' => true,
             ]),
-            Text::make('id_moneda', [
-                'required' => true,
-            ]),
+            HasOne::make('id_moneda', [
+                'label' => 'Moneda',
+                'model' => TablaMaestra::class,
+                'model_options' => [
+                    'label' => 'denominacion',
+                    'value' => 'id',
+                    'method' => 'por_tipo',
+                    'params' => '1',
+                ]
+            ])->selectOptions(['Seleccione' => null]),
             Text::make('tipo_cambio_dolar', [
                 'required' => true,
             ]),
