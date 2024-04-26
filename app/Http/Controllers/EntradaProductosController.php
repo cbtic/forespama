@@ -51,9 +51,9 @@ class EntradaProductosController extends Controller
      */
     public function store(Request $request)
     {
-        $entradas = EntradaProducto::create($request->all());
+        $entrada_productos = EntradaProducto::create($request->all());
 
-        return redirect()->route('frontend.entrada_productos.index');
+        return redirect()->route('frontend.entrada_productos.edit', compact('entrada_productos'));
     }
 
     /**
@@ -91,7 +91,7 @@ class EntradaProductosController extends Controller
     {
         $entrada_productos->update($request->all());
 
-        return redirect()->route('frontend.entrada_productos.index');
+        return redirect()->route('frontend.entrada_productos.edit', compact('entrada_productos'));
     }
 
     /**
