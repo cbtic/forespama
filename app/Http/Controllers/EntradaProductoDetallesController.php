@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\EntradaProductoDetalle;
 use RealRashid\SweetAlert\Facades\Alert;
 use App\Http\Requests\EntradaProductoDetalleRequest;
+use App\Http\Requests\EntradaProductoRequest;
 
 class EntradaProductoDetallesController extends Controller
 {
@@ -93,7 +94,7 @@ class EntradaProductoDetallesController extends Controller
     {
         $entrada_producto_detalles->update($request->all());
 
-        return redirect()->route('frontend.entrada_producto_detalles.index');
+        return redirect()->route('frontend.entrada_productos.edit', $entrada_producto_detalles['id_entrada_productos']);
     }
 
     /**

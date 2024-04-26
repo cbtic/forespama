@@ -110,9 +110,6 @@ class EntradaProductoDetallesForm extends ModelForm
             Text::make('id_marca', [
                 'required' => true,
             ]),
-            Text::make('cerrado', [
-                'required' => true,
-            ]),
             Select::make('estado')->selectOptions(['ACTIVO' => '1', 'CANCELADO' => '0']),
         ];
     }
