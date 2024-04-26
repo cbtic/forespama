@@ -2,14 +2,16 @@
 
 namespace App\Http\Livewire\Backend;
 
+use App\Models\Producto;
+use App\Models\TablaMaestra;
 use App\Models\EntradaProducto;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Models\EntradaProductoDetalle;
 use App\View\Forms\EntradaProductosForm;
 use RealRashid\SweetAlert\Facades\Alert;
+// use App\Exports\ConductoresExport;
 use Illuminate\Database\Eloquent\Builder;
 use App\View\Forms\EntradaProductoDetallesForm;
-// use App\Exports\ConductoresExport;
 use Rappasoft\LaravelLivewireTables\Views\Column;
 use Rappasoft\LaravelLivewireTables\DataTableComponent;
 use Rappasoft\LaravelLivewireTables\Views\Columns\LinkColumn;
@@ -67,9 +69,14 @@ class EntradaProductoDetallesTable extends DataTableComponent
                 ->sortable()
                 ->searchable(),
             Column::make('id_entrada_productos')
+                ->hideIf(true)
                 ->sortable()
                 ->searchable(),
-            Column::make('Tipo Doc.', 'id_producto')
+            Column::make("id_producto")
+                ->hideIf(true)
+                ->sortable(),
+            Column::make('Producto')
+                ->label(fn ($row) => Producto::find($row->id_producto)->denominacion)
                 ->sortable()
                 ->searchable(),
             Column::make('item')
@@ -78,11 +85,9 @@ class EntradaProductoDetallesTable extends DataTableComponent
             Column::make('cantidad')
                 ->sortable(),
             Column::make('numero_lote')
-                ->hideIf(true)
                 ->sortable()
                 ->searchable(),
             Column::make('fecha_vencimiento')
-                ->hideIf(true)
                 ->sortable(),
             Column::make('aplica_precio')
                 ->hideIf(true)
@@ -90,11 +95,20 @@ class EntradaProductoDetallesTable extends DataTableComponent
             Column::make('id_um')
                 ->hideIf(true)
                 ->sortable(),
+            Column::make("Unidad de medida")
+                ->label(fn ($row) => TablaMaestra::find($row->id_um)->denominacion)
+                ->sortable(),
             Column::make('id_estado_bien')
                 ->hideIf(true)
                 ->sortable(),
+            Column::make("Estado del bien")
+                ->label(fn ($row) => TablaMaestra::find($row->id_estado_bien)->denominacion)
+                ->sortable(),
             Column::make('id_marca')
                 ->hideIf(true)
+                ->sortable(),
+            Column::make("Marca")
+                ->label(fn ($row) => TablaMaestra::find($row->id_marca)->abreviatura)
                 ->sortable(),
             Column::make('costo')
                 ->hideIf(true)
