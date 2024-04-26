@@ -2,16 +2,17 @@
 
 namespace App\Http\Livewire\Backend;
 
+use App\Models\TablaMaestra;
 use App\Models\EntradaProducto;
-use Illuminate\Database\Eloquent\Builder;
-use Rappasoft\LaravelLivewireTables\DataTableComponent;
-use Rappasoft\LaravelLivewireTables\Views\Columns\ButtonGroupColumn;
-use Rappasoft\LaravelLivewireTables\Views\Column;
-use Rappasoft\LaravelLivewireTables\Views\Columns\LinkColumn;
-// use App\Exports\ConductoresExport;
 use Maatwebsite\Excel\Facades\Excel;
-use RealRashid\SweetAlert\Facades\Alert;
 use App\View\Forms\EntradaProductosForm;
+use RealRashid\SweetAlert\Facades\Alert;
+use Illuminate\Database\Eloquent\Builder;
+// use App\Exports\ConductoresExport;
+use Rappasoft\LaravelLivewireTables\Views\Column;
+use Rappasoft\LaravelLivewireTables\DataTableComponent;
+use Rappasoft\LaravelLivewireTables\Views\Columns\LinkColumn;
+use Rappasoft\LaravelLivewireTables\Views\Columns\ButtonGroupColumn;
 
 class EntradaProductosTable extends DataTableComponent
 {
@@ -63,9 +64,11 @@ class EntradaProductosTable extends DataTableComponent
             Column::make('Ingreso', 'fecha_ingreso')
                 ->sortable()
                 ->searchable(),
-            Column::make('Tipo Doc.', 'id_tipo_documento')
-                ->sortable()
-                ->searchable(),
+            Column::make('id_tipo_documento')
+                ->hideIf(true),
+            Column::make("Tipo Doc.")
+                ->label(fn ($row) => TablaMaestra::find($row->id_tipo_documento)->denominacion)
+                ->sortable(),
             Column::make('Unidad Origen', 'unidad_origen')
                 ->sortable()
                 ->searchable(),
