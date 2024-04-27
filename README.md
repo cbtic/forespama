@@ -115,6 +115,44 @@ The first thing we are going to do is set the key that Laravel will use when doi
 `routes/frontend/home.php`
 `resources/views/frontend/includes/sidebar.blade.php`
 
+## Usar Grafite Forms y Livewire Tables para Producto-ProductoDetalle:
+
+# Models
+`app/Models/EntradaProducto.php`
+`app/Models/EntradaProductoDetalle.php`
+
+# Controllers
+`app/Http/Controllers/EntradaProductosController.php`
+`app/Http/Controllers/EntradaProductoDetallesController.php`
+
+# Livewire Tables
+`app/Http/Livewire/Backend/EntradaProductosTable.php`
+`app/Http/Livewire/Backend/EntradaProductoDetallesTable.php`
+
+# Rules
+`app/Http/Requests/EntradaProductoRequest.php`
+`app/Http/Requests/EntradaProductoDetalleRequest.php`
+
+# Forms
+`app/View/Components/Forms/EntradaProducto.php`
+`app/View/Components/Forms/EntradaProductoDetalle.php`
+`app/View/Forms/EntradaProductosForm.php`
+`app/View/Forms/EntradaProductoDetallesForm.php`
+
+# Views
+`resources/views/frontend/entrada_productos/create.blade.php`
+`resources/views/frontend/entrada_productos/edit.blade.php`
+`resources/views/frontend/entrada_productos/index.blade.php`
+`resources/views/frontend/entrada_productos/show.blade.php`
+
+`resources/views/frontend/entrada_producto_detalles/create.blade.php`
+`resources/views/frontend/entrada_producto_detalles/edit.blade.php`
+`resources/views/frontend/entrada_producto_detalles/index.blade.php`
+`resources/views/frontend/entrada_producto_detalles/show.blade.php`
+
+# Routes
+`routes/frontend/home.php`
+
 ## Colores institucionales:
 
  - Background: #183e39
