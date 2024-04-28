@@ -191,6 +191,21 @@ Route::get('entrada_producto_detalles/create/{entrada_producto}', 'App\Http\Cont
 Route::put('entrada_producto_detalles/{entrada_producto_detalles}', 'App\Http\Controllers\EntradaProductoDetallesController@update')->name('entrada_producto_detalles.update');
 Route::delete('entrada_producto_detalles/{entrada_producto_detalles}', 'App\Http\Controllers\EntradaProductoDetallesController@destroy')->name('entrada_producto_detalles.destroy');
 
+Route::get('salida_productos', 'App\Http\Controllers\SalidaProductoController@index')->name('salida_productos.index');
+Route::post('salida_productos', 'App\Http\Controllers\SalidaProductoController@store')->name('salida_productos.store');
+Route::get('salida_productos/create', 'App\Http\Controllers\SalidaProductoController@create')->name('salida_productos.create');
+Route::get('salida_productos/{salida_productos}', 'App\Http\Controllers\SalidaProductoController@show')->name('salida_productos.show');
+Route::put('salida_productos/{salida_productos}', 'App\Http\Controllers\SalidaProductoController@update')->name('salida_productos.update');
+Route::delete('salida_productos/{salida_productos}', 'App\Http\Controllers\SalidaProductoController@destroy')->name('salida_productos.destroy');
+Route::get('salida_productos/edit/{salida_productos}', 'App\Http\Controllers\SalidaProductoController@edit')->name('salida_productos.edit');
+
+Route::get('salida_producto_detalles/edit/{salida_producto_detalles}', 'App\Http\Controllers\SalidaProductoDetalleController@edit')->name('salida_producto_detalles.edit');
+Route::get('salida_producto_detalles/{salida_producto}', 'App\Http\Controllers\SalidaProductoDetalleController@index')->name('salida_producto_detalles.index');
+Route::post('salida_producto_detalles', 'App\Http\Controllers\SalidaProductoDetalleController@store')->name('salida_producto_detalles.store');
+Route::get('salida_producto_detalles/create/{salida_producto}', 'App\Http\Controllers\SalidaProductoDetalleController@create')->name('salida_producto_detalles.create');
+Route::put('salida_producto_detalles/{salida_producto_detalles}', 'App\Http\Controllers\SalidaProductoDetalleController@update')->name('salida_producto_detalles.update');
+Route::delete('salida_producto_detalles/{salida_producto_detalles}', 'App\Http\Controllers\SalidaProductoDetalleController@destroy')->name('salida_producto_detalles.destroy');
+
 Route::get('ubigeo/listar_departamentos_ajax', function() {
     return response()->json([ 'status' => 'OK', 'departamentos' => Ubigeo::departamentos() ]);
 });

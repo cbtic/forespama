@@ -1,0 +1,113 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Auth;
+use Illuminate\Http\Request;
+use App\Models\SalidaProductoDetalle;
+use RealRashid\SweetAlert\Facades\Alert;
+use App\Http\Requests\SalidaProductoDetalleRequest;
+use App\Http\Requests\SalidaProductoRequest;
+
+class SalidaProductoDetalleController extends Controller
+{
+	public function __construct(){
+
+		$this->middleware(function ($request, $next) {
+			if(!Auth::check()) {
+                return redirect('login');
+            }
+			return $next($request);
+    	});
+	}
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index($salida_producto)
+    {
+        // dd(2);
+        $salida_producto_detalles = SalidaProductoDetalle::latest()->paginate(10);
+
+        return view('frontend.salida_producto_detalles.index', compact('salida_producto_detalles', 'salida_producto'));
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create($salida_producto)
+    {
+        return view('frontend.salida_producto_detalles.create', compact('salida_producto'));
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        // dd($request);
+        // exit;
+        $salida_producto_detalles = SalidaProductoDetalle::create($request->all());
+
+        return redirect()->route('frontend.salida_productos.edit', $salida_producto_detalles['id_salida_productos']);
+
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show(SalidaProductoDetalle $salida_producto_detalles)
+    {
+        return view('frontend.salida_producto_detalles.show', compact('salida_producto_detalles'));
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+
+     public function edit(SalidaProductoDetalle $salida_producto_detalles)
+     {
+         return view('frontend.salida_producto_detalles.edit', compact('salida_producto_detalles'));
+     }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(SalidaProductoDetalleRequest $request, SalidaProductoDetalle $salida_producto_detalles)
+    {
+        $salida_producto_detalles->update($request->all());
+
+        return redirect()->route('frontend.salida_productos.edit', $salida_producto_detalles['id_salida_productos']);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(SalidaProductoDetalle $salida_producto_detalles)
+    {
+        if ($salida_producto_detalles->delete()) {
+            Alert::success('Proceso completo', 'Se ha eliminado la salida '.$salida_producto_detalles['id']);
+        };
+        return redirect()->route('frontend.salida_productos.edit', $salida_producto_detalles['id_salida_productos']);
+    }
+}

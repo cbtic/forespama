@@ -1,0 +1,32 @@
+@extends('backend.layouts.app')
+
+@section('content')
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">Ver Entrada #{{ $entrada_producto_detalles->id }}</div>
+
+                <div class="card-body">
+                    <x-forms.entradaproductodetalle :entradaproductodetalles="$entrada_producto_detalles"></x-forms.entradaproductodetalle>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@endsection
+
+@push('after-scripts')
+<script>
+    var form = document.forms[1];
+
+    [].slice.call( form.elements ).forEach(function(item){
+      item.disabled = !item.disabled;
+    });
+
+    $(".btn.btn-secondary").hide();
+    $(".btn.btn-primary").hide();
+
+    $(".form-select").chosen();
+</script>
+@endpush
