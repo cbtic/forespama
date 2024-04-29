@@ -21,6 +21,7 @@ class EntradaProductoDetallesTable extends DataTableComponent
 {
     public $deleteId = '';
     public $id_entrada_productos;
+    protected $index = 0;
 
     protected $model = EntradaProductoDetalle::class;
 
@@ -36,10 +37,14 @@ class EntradaProductoDetallesTable extends DataTableComponent
 
     public function configure(): void
     {
-        $this->setPrimaryKey('id');
-        // ->setTableRowUrl(function($row) {
-        //     return "javascript:console.log($(this));";
-        // })
+        $this->index++;
+
+        $this->setPrimaryKey('id')
+        // ->setTableRowId($this->index)
+        ->setTableRowUrl(function($row) {
+            return "javascript:rowclick($row->no);";
+        });
+
         // ->setTableRowUrlTarget(function($row) {
         //     return '_self';
         // });
@@ -68,6 +73,11 @@ class EntradaProductoDetallesTable extends DataTableComponent
             Column::make('ID', 'id')
                 ->sortable()
                 ->searchable(),
+            Column::make('no')
+                ->label(function ( $row ) {
+                    return $this->index++;
+                })
+                ->sortable(),
             Column::make('id_entrada_productos')
                 ->hideIf(true)
                 ->sortable()

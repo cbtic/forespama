@@ -28,3 +28,13 @@
     </div>
 </div>
 @endsection
+
+@push('after-scripts')
+<script>
+    var objeto;
+    function rowclick(e){
+        alert(e);
+        document.getElementsByClassName("btn btn-success")[0].click();
+    }
+</script>
+@endpush
