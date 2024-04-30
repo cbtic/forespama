@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class EntradaProductoDetalle extends Model
 {
@@ -22,4 +23,10 @@ class EntradaProductoDetalle extends Model
         'id_marca',
         'estado'
     ];
+
+    public function scopeWithRowNumber($query, $column = 'id'){
+        $sub = static::selectRaw('row_number() OVER () as row_number, *')
+            ->toSql();
+        $query->from(DB::raw("({$sub}) as entrada_producto_detalles"));
+    }
 }
