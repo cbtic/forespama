@@ -28,3 +28,11 @@
     </div>
 </div>
 @endsection
+
+@push('after-scripts')
+<script>
+    function rowclick(td){
+        let rowId = td.parentElement.rowIndex;
+        document.getElementsByClassName("btn btn-success")[rowId-1].click();
+    }
+</script>
