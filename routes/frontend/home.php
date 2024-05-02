@@ -199,10 +199,7 @@ Route::put('salida_productos/{salida_productos}', 'App\Http\Controllers\SalidaPr
 Route::delete('salida_productos/{salida_productos}', 'App\Http\Controllers\SalidaProductoController@destroy')->name('salida_productos.destroy');
 Route::get('salida_productos/edit/{salida_productos}', 'App\Http\Controllers\SalidaProductoController@edit')->name('salida_productos.edit');
 
-Route::get('salida_producto_detalles/edit/{salida_producto_detalles}', 'App\Http\Controllers\SalidaProductoDetalleController@edit')->name('salida_producto_detalles.edit');
-Route::get('salida_producto_detalles/{salida_producto}', 'App\Http\Controllers\SalidaProductoDetalleController@index')->name('salida_producto_detalles.index');
 Route::post('salida_producto_detalles', 'App\Http\Controllers\SalidaProductoDetalleController@store')->name('salida_producto_detalles.store');
-Route::get('salida_producto_detalles/create/{salida_producto}', 'App\Http\Controllers\SalidaProductoDetalleController@create')->name('salida_producto_detalles.create');
 Route::put('salida_producto_detalles/{salida_producto_detalles}', 'App\Http\Controllers\SalidaProductoDetalleController@update')->name('salida_producto_detalles.update');
 Route::delete('salida_producto_detalles/{salida_producto_detalles}', 'App\Http\Controllers\SalidaProductoDetalleController@destroy')->name('salida_producto_detalles.destroy');
 
