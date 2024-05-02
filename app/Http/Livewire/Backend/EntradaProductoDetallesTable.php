@@ -32,8 +32,8 @@ class EntradaProductoDetallesTable extends DataTableComponent
 
     public function builder(): Builder
     {
-        // return EntradaProductoDetalle::where('id_entrada_productos','=', $this->id_entrada_productos);
-        return EntradaProductoDetalle::withRowNumber()->where('id_entrada_productos','=', $this->id_entrada_productos);
+        return EntradaProductoDetalle::where('id_entrada_productos','=', $this->id_entrada_productos);
+        // return EntradaProductoDetalle::withRowNumber()->where('id_entrada_productos','=', $this->id_entrada_productos);
     }
 
     public function configure(): void
@@ -45,9 +45,8 @@ class EntradaProductoDetallesTable extends DataTableComponent
         $this->setPerPage(5);
 
         $this->setPrimaryKey('id')
-        // ->setTableRowId($this->index)
         ->setTableRowUrl(function($row) {
-            return "javascript:rowclick(".$row->row_number.");";
+            return "javascript:'); rowclick(this); ('";
         });
 
         // ->setTableRowUrlTarget(function($row) {
@@ -75,8 +74,9 @@ class EntradaProductoDetallesTable extends DataTableComponent
     public function columns(): array
     {
         return [
-            Column::make('row_number')
-                ->sortable(),
+            // Column::make('row_number')
+            //     ->hideIf(true)
+            //     ->sortable(),
             // Column::make('no')
             //     ->label(function ( $row ) {
             //         return $this->index++;

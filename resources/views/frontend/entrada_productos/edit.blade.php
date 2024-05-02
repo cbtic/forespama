@@ -31,10 +31,9 @@
 
 @push('after-scripts')
 <script>
-    function rowclick(row_number){
-        // let tableId = $(td).closest('tr').attr('id');
-        // alert(row_number);
-        document.getElementsByClassName("btn btn-success")[row_number-1].click();
+    function rowclick(td){
+        let rowId = td.parentElement.rowIndex;
+        document.getElementsByClassName("btn btn-success")[rowId-1].click();
     }
 </script>
 @endpush

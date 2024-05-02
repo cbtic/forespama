@@ -24,9 +24,4 @@ class EntradaProductoDetalle extends Model
         'estado'
     ];
 
-    public function scopeWithRowNumber($query, $column = 'id'){
-        $sub = static::selectRaw('row_number() OVER () as row_number, *')
-            ->toSql();
-        $query->from(DB::raw("({$sub}) as entrada_producto_detalles"));
-    }
 }

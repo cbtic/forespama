@@ -36,10 +36,10 @@ class SalidaProductoDetallesTable extends DataTableComponent
 
     public function configure(): void
     {
-        $this->setPrimaryKey('id');
-        // ->setTableRowUrl(function($row) {
-        //     return "javascript:console.log($(this));";
-        // })
+        $this->setPrimaryKey('id')
+            ->setTableRowUrl(function($row) {
+                return "javascript:'); rowclick(this); ('";
+            });
         // ->setTableRowUrlTarget(function($row) {
         //     return '_self';
         // });
