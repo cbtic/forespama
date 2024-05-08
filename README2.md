@@ -34,16 +34,14 @@
 `resources/views/frontend/salida_productos/create.blade.php`
 `resources/views/frontend/salida_productos/edit.blade.php`
 `resources/views/frontend/salida_productos/index.blade.php`
-`resources/views/frontend/salida_productos/show.blade.php`
 
 > cp -r resources/views/frontend/salida_productos resources/views/frontend/salida_productos
 
-# Routes
+# Routes (Añadir al archivo con las rutas)
 
 `Route::get('salida_productos', 'App\Http\Controllers\SalidaProductoController@index')->name('salida_productos.index');`
 `Route::post('salida_productos', 'App\Http\Controllers\SalidaProductoController@store')->name('salida_productos.store');`
 `Route::get('salida_productos/create', 'App\Http\Controllers\SalidaProductoController@create')->name('salida_productos.create');`
-`Route::get('salida_productos/{salida_productos}', 'App\Http\Controllers\SalidaProductoController@show')->name('salida_productos.show');`
 `Route::put('salida_productos/{salida_productos}', 'App\Http\Controllers\SalidaProductoController@update')->name('salida_productos.update');`
 `Route::delete('salida_productos/{salida_productos}', 'App\Http\Controllers\SalidaProductoController@destroy')->name('salida_productos.destroy');`
 `Route::get('salida_productos/edit/{salida_productos}', 'App\Http\Controllers\SalidaProductoController@edit')->name('salida_productos.edit');`
