@@ -211,3 +211,11 @@ Route::get('ubigeo/listar_provincias_ajax/{id_departamento}', function(Request $
 Route::get('ubigeo/listar_distritos_ajax/{id_departamento}/{id_provincia}', function(Request $request) {
     return response()->json([ 'status' => 'OK', 'distritos' => Ubigeo::distritos_ajax(request()->route('id_departamento'), request()->route('id_provincia')) ]);
 });
+
+Route::get('kardex', 'App\Http\Controllers\KardexController@index')->name('kardex.index');
+// Route::post('kardex', 'App\Http\Controllers\KardexController@store')->name('kardex.store');
+// Route::get('kardex/create', 'App\Http\Controllers\KardexController@create')->name('kardex.create');
+// Route::get('kardex/{kardex}', 'App\Http\Controllers\KardexController@show')->name('kardex.show');
+// Route::put('kardex/{kardex}', 'App\Http\Controllers\KardexController@update')->name('kardex.update');
+// Route::delete('kardex/{kardex}', 'App\Http\Controllers\KardexController@destroy')->name('kardex.destroy');
+// Route::get('kardex/edit/{kardex}', 'App\Http\Controllers\KardexController@edit')->name('kardex.edit');

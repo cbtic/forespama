@@ -135,6 +135,9 @@
                 <li class="c-sidebar-nav-item">
                     <x-utils.link :href="route('frontend.salida_productos.index')" class="c-sidebar-nav-link" :text="__('Salidas')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
                 </li>
+                <li class="c-sidebar-nav-item">
+                    <x-utils.link :href="route('frontend.kardex.index')" class="c-sidebar-nav-link" :text="__('Kardex')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+                </li>
             </ul>
 
         </li>
