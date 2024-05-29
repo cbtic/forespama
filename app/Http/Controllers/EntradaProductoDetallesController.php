@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Auth;
 use Illuminate\Http\Request;
 use App\Models\EntradaProductoDetalle;
+use App\Models\Kardex;
 use RealRashid\SweetAlert\Facades\Alert;
 use App\Http\Requests\EntradaProductoDetalleRequest;
 use App\Http\Requests\EntradaProductoRequest;
@@ -55,6 +56,15 @@ class EntradaProductoDetallesController extends Controller
         // dd($request);
         // exit;
         $entrada_producto_detalles = EntradaProductoDetalle::create($request->all());
+
+        $kardex = Kardex::updateOrCreate(
+            ['id_producto' => $entrada_producto_detalles->id_producto, 'id_unidad_medida' => $entrada_producto_detalles->id_um]
+        );
+
+        Kardex::updateOrCreate(
+            ['id_producto' => $entrada_producto_detalles->id_producto, 'id_unidad_medida' => $entrada_producto_detalles->id_um],
+            ['entradas_cantidad' => ($kardex->entradas_cantidad + $entrada_producto_detalles->cantidad)]
+        );
 
         return redirect()->route('frontend.entrada_productos.edit', $entrada_producto_detalles['id_entrada_productos']);
 
