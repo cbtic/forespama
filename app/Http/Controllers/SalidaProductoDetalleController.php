@@ -3,11 +3,12 @@
 namespace App\Http\Controllers;
 
 use Auth;
+use App\Models\Kardex;
 use Illuminate\Http\Request;
 use App\Models\SalidaProductoDetalle;
 use RealRashid\SweetAlert\Facades\Alert;
-use App\Http\Requests\SalidaProductoDetalleRequest;
 use App\Http\Requests\SalidaProductoRequest;
+use App\Http\Requests\SalidaProductoDetalleRequest;
 
 class SalidaProductoDetalleController extends Controller
 {
@@ -56,6 +57,14 @@ class SalidaProductoDetalleController extends Controller
         // exit;
         $salida_producto_detalles = SalidaProductoDetalle::create($request->all());
 
+        $kardex = Kardex::updateOrCreate(
+            ['id_producto' => $salida_producto_detalles->id_producto, 'id_unidad_medida' => $salida_producto_detalles->id_um]
+        );
+
+        Kardex::updateOrCreate(
+            ['id_producto' => $salida_producto_detalles->id_producto, 'id_unidad_medida' => $salida_producto_detalles->id_um],
+            ['entradas_cantidad' => ($kardex->entradas_cantidad - $salida_producto_detalles->cantidad)]
+        );
         return redirect()->route('frontend.salida_productos.edit', $salida_producto_detalles['id_salida_productos']);
 
     }
