@@ -61,9 +61,14 @@ class EntradaProductoDetallesController extends Controller
             ['id_producto' => $entrada_producto_detalles->id_producto, 'id_unidad_medida' => $entrada_producto_detalles->id_um]
         );
 
-        Kardex::updateOrCreate(
+        $kardex = Kardex::updateOrCreate(
             ['id_producto' => $entrada_producto_detalles->id_producto, 'id_unidad_medida' => $entrada_producto_detalles->id_um],
             ['entradas_cantidad' => ($kardex->entradas_cantidad + $entrada_producto_detalles->cantidad)]
+        );
+
+        Kardex::updateOrCreate(
+            ['id_producto' => $entrada_producto_detalles->id_producto, 'id_unidad_medida' => $entrada_producto_detalles->id_um],
+            ['saldos_cantidad' => ($kardex->entradas_cantidad - $kardex->salidas_cantidad)]
         );
 
         return redirect()->route('frontend.entrada_productos.edit', $entrada_producto_detalles['id_entrada_productos']);
@@ -115,6 +120,20 @@ class EntradaProductoDetallesController extends Controller
      */
     public function destroy(EntradaProductoDetalle $entrada_producto_detalles)
     {
+        $kardex = Kardex::updateOrCreate(
+            ['id_producto' => $entrada_producto_detalles->id_producto, 'id_unidad_medida' => $entrada_producto_detalles->id_um]
+        );
+
+        $kardex = Kardex::updateOrCreate(
+            ['id_producto' => $entrada_producto_detalles->id_producto, 'id_unidad_medida' => $entrada_producto_detalles->id_um],
+            ['entradas_cantidad' => ($kardex->entradas_cantidad - $entrada_producto_detalles->cantidad)]
+        );
+
+        Kardex::updateOrCreate(
+            ['id_producto' => $entrada_producto_detalles->id_producto, 'id_unidad_medida' => $entrada_producto_detalles->id_um],
+            ['saldos_cantidad' => ($kardex->entradas_cantidad - $kardex->salidas_cantidad)]
+        );
+
         if ($entrada_producto_detalles->delete()) {
             Alert::success('Proceso completo', 'Se ha eliminado la entrada '.$entrada_producto_detalles['id']);
         };

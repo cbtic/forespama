@@ -61,10 +61,16 @@ class SalidaProductoDetalleController extends Controller
             ['id_producto' => $salida_producto_detalles->id_producto, 'id_unidad_medida' => $salida_producto_detalles->id_um]
         );
 
+        $kardex = Kardex::updateOrCreate(
+            ['id_producto' => $salida_producto_detalles->id_producto, 'id_unidad_medida' => $salida_producto_detalles->id_um],
+            ['salidas_cantidad' => ($kardex->salidas_cantidad + $salida_producto_detalles->cantidad)]
+        );
+
         Kardex::updateOrCreate(
             ['id_producto' => $salida_producto_detalles->id_producto, 'id_unidad_medida' => $salida_producto_detalles->id_um],
-            ['entradas_cantidad' => ($kardex->entradas_cantidad - $salida_producto_detalles->cantidad)]
+            ['saldos_cantidad' => ($kardex->entradas_cantidad - $kardex->salidas_cantidad)]
         );
+
         return redirect()->route('frontend.salida_productos.edit', $salida_producto_detalles['id_salida_productos']);
 
     }
@@ -114,6 +120,20 @@ class SalidaProductoDetalleController extends Controller
      */
     public function destroy(SalidaProductoDetalle $salida_producto_detalles)
     {
+        $kardex = Kardex::updateOrCreate(
+            ['id_producto' => $salida_producto_detalles->id_producto, 'id_unidad_medida' => $salida_producto_detalles->id_um]
+        );
+
+        $kardex = Kardex::updateOrCreate(
+            ['id_producto' => $salida_producto_detalles->id_producto, 'id_unidad_medida' => $salida_producto_detalles->id_um],
+            ['salidas_cantidad' => ($kardex->salidas_cantidad - $salida_producto_detalles->cantidad)]
+        );
+
+        Kardex::updateOrCreate(
+            ['id_producto' => $salida_producto_detalles->id_producto, 'id_unidad_medida' => $salida_producto_detalles->id_um],
+            ['saldos_cantidad' => ($kardex->entradas_cantidad - $kardex->salidas_cantidad)]
+        );
+
         if ($salida_producto_detalles->delete()) {
             Alert::success('Proceso completo', 'Se ha eliminado la salida '.$salida_producto_detalles['id']);
         };
