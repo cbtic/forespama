@@ -8,7 +8,7 @@
                 <div class="card-header">Editar Entrada #{{ $entrada_productos->id }}</div>
 
                 <div class="card-body">
-                    <x-forms.entradaproducto :entradaproductos="$entrada_productos"></x-forms.entradaproducto>
+                    <x-forms.EntradaProducto :entradaproductos="$entrada_productos" />
                 </div>
             </div>
         </div>
@@ -19,7 +19,7 @@
                 @lang("Detalle de Entrada")
             </x-slot>
             <x-slot name="headerActions" :entrada_producto="$entrada_productos->id">
-                <x-forms.entradaproductodetalle :entradaproducto="$entrada_productos->id"></x-forms.entradaproductodetalle>
+                <x-forms.EntradaProductoDetalle :entradaproducto="$entrada_productos->id" />
             </x-slot>
             <x-slot name="body">
                 <livewire:backend.entrada-producto-detalles-table :entrada_producto="$entrada_productos->id">

@@ -8,7 +8,7 @@
                     <div class="card-header">Crear una Salida</div>
 
                     <div class="card-body">
-                        <x-forms.salidaproducto></x-forms.salidaproducto>
+                        <x-forms.SalidaProducto />
                     </div>
                 </div>
             </div>
