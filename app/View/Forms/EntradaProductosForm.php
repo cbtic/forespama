@@ -2,6 +2,7 @@
 
 namespace App\View\Forms;
 
+use App\Models\Empresa;
 use App\Models\EntradaProducto;
 use Grafite\Forms\Forms\ModelForm;
 use Grafite\Forms\Fields\TextArea;
@@ -86,9 +87,14 @@ class EntradaProductosForm extends ModelForm
             Text::make('unidad_origen', [
                 'required' => true,
             ]),
-            Text::make('id_proveedor', [
-                'required' => true,
-            ]),
+            HasOne::make('id_proveedor', [
+                'label' => 'Proveedor',
+                'model' => Empresa::class,
+                'model_options' => [
+                    'label' => 'nombre_comercial',
+                    'value' => 'id'
+                ]
+            ])->selectOptions(['Seleccione' => null]),
             Text::make('numero_comprobante', [
                 'label' => 'Numero Comprobante',
                 'required' => true,
@@ -112,15 +118,11 @@ class EntradaProductosForm extends ModelForm
             Text::make('sub_total_compra', [
                 'required' => true,
             ]),
-            Text::make('igv_compra', [
-                'required' => true,
-            ]),
+            Select::make('igv_compra')->selectOptions(['No aplica' => '0', '18%' => '0.18']),
             Text::make('total_compra', [
                 'required' => true,
             ]),
-            Text::make('cerrado', [
-                'required' => true,
-            ]),
+            Select::make('cerrado')->selectOptions(['ABIERTO' => '0', 'CERRADO' => '1']),
             Text::make('observacion', [
                 'required' => true,
             ]),
