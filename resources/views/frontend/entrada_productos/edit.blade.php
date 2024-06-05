@@ -58,5 +58,7 @@
             $("#Total_compra").val($("#Sub_total_compra").val()*1.18);
         }
     }
+
+    $(".form-select").chosen();
 </script>
 @endpush
