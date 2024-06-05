@@ -59,7 +59,6 @@
         }
     }
 
-    //$(".form-select").chosen();
     $(document).ready(function() {
         $('.form-select').select2();
     });
