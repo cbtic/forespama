@@ -91,7 +91,7 @@ class EntradaProductosForm extends ModelForm
                 'label' => 'Proveedor',
                 'model' => Empresa::class,
                 'model_options' => [
-                    'label' => 'nombre_comercial',
+                    'label' => 'ruc_nombre_comercial',
                     'value' => 'id'
                 ]
             ])->selectOptions(['Seleccione' => null]),
