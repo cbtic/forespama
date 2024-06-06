@@ -124,7 +124,7 @@ class EntradaProductosForm extends ModelForm
             ]),
             Select::make('cerrado')->selectOptions(['ABIERTO' => '0', 'CERRADO' => '1']),
             Text::make('observacion', [
-                'required' => true,
+                'required' => false,
             ]),
             Select::make('estado')->selectOptions(['ACTIVO' => '1', 'CANCELADO' => '0']),
         ];

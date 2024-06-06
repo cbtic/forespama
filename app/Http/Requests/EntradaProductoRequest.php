@@ -36,7 +36,7 @@ class EntradaProductoRequest extends FormRequest
             'igv_compra' => ['required', 'string'],
             'total_compra' => ['required', 'string'],
             'cerrado' => ['required', 'string'],
-            'observacion' => ['required', 'string'],
+            'observacion' => ['nullable', 'min:3'],
             'estado' => ['required', 'string'],
         ];
     }
