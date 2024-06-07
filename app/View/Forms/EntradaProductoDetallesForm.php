@@ -138,6 +138,7 @@ class EntradaProductoDetallesForm extends ModelForm
 
     public function js() {
         return <<<EOT
+            $('.form-select').select2({dropdownAutoWidth : true});
             $(".btn.btn-primary").click(function(e){
                 e.preventDefault();
                 let form = $('#company_form')[0];
