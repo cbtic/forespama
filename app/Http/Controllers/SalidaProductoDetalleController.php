@@ -58,16 +58,16 @@ class SalidaProductoDetalleController extends Controller
         $salida_producto_detalles = SalidaProductoDetalle::create($request->all());
 
         $kardex = Kardex::updateOrCreate(
-            ['id_producto' => $salida_producto_detalles->id_producto, 'id_unidad_medida' => $salida_producto_detalles->id_um]
+            ['id_producto' => $salida_producto_detalles->id_producto]
         );
 
         $kardex = Kardex::updateOrCreate(
-            ['id_producto' => $salida_producto_detalles->id_producto, 'id_unidad_medida' => $salida_producto_detalles->id_um],
+            ['id_producto' => $salida_producto_detalles->id_producto],
             ['salidas_cantidad' => ($kardex->salidas_cantidad + $salida_producto_detalles->cantidad)]
         );
 
         Kardex::updateOrCreate(
-            ['id_producto' => $salida_producto_detalles->id_producto, 'id_unidad_medida' => $salida_producto_detalles->id_um],
+            ['id_producto' => $salida_producto_detalles->id_producto],
             ['saldos_cantidad' => ($kardex->entradas_cantidad - $kardex->salidas_cantidad)]
         );
 
@@ -108,16 +108,16 @@ class SalidaProductoDetalleController extends Controller
     public function update(SalidaProductoDetalleRequest $request, SalidaProductoDetalle $salida_producto_detalles)
     {
         $kardex = Kardex::updateOrCreate(
-            ['id_producto' => $salida_producto_detalles->id_producto, 'id_unidad_medida' => $salida_producto_detalles->id_um]
+            ['id_producto' => $salida_producto_detalles->id_producto]
         );
 
         $kardex = Kardex::updateOrCreate(
-            ['id_producto' => $salida_producto_detalles->id_producto, 'id_unidad_medida' => $salida_producto_detalles->id_um],
+            ['id_producto' => $salida_producto_detalles->id_producto],
             ['salidas_cantidad' => ($kardex->salidas_cantidad + $request->cantidad - $salida_producto_detalles->cantidad)]
         );
 
         Kardex::updateOrCreate(
-            ['id_producto' => $salida_producto_detalles->id_producto, 'id_unidad_medida' => $salida_producto_detalles->id_um],
+            ['id_producto' => $salida_producto_detalles->id_producto],
             ['saldos_cantidad' => ($kardex->entradas_cantidad - $kardex->salidas_cantidad)]
         );
 
@@ -135,16 +135,16 @@ class SalidaProductoDetalleController extends Controller
     public function destroy(SalidaProductoDetalle $salida_producto_detalles)
     {
         $kardex = Kardex::updateOrCreate(
-            ['id_producto' => $salida_producto_detalles->id_producto, 'id_unidad_medida' => $salida_producto_detalles->id_um]
+            ['id_producto' => $salida_producto_detalles->id_producto]
         );
 
         $kardex = Kardex::updateOrCreate(
-            ['id_producto' => $salida_producto_detalles->id_producto, 'id_unidad_medida' => $salida_producto_detalles->id_um],
+            ['id_producto' => $salida_producto_detalles->id_producto],
             ['salidas_cantidad' => ($kardex->salidas_cantidad - $salida_producto_detalles->cantidad)]
         );
 
         Kardex::updateOrCreate(
-            ['id_producto' => $salida_producto_detalles->id_producto, 'id_unidad_medida' => $salida_producto_detalles->id_um],
+            ['id_producto' => $salida_producto_detalles->id_producto],
             ['saldos_cantidad' => ($kardex->entradas_cantidad - $kardex->salidas_cantidad)]
         );
 

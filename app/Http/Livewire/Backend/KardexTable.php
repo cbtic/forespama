@@ -34,12 +34,6 @@ class KardexTable extends DataTableComponent
             Column::make("Producto")
                 ->label(fn ($row) => Producto::find($row->id_producto)->denominacion)
                 ->sortable(),
-            Column::make("Unidades", "id_unidad_medida")
-                ->hideIf(true)
-                ->sortable(),
-            Column::make("Unidad")
-                ->label(fn ($row) => TablaMaestra::find($row->id_unidad_medida)->denominacion)
-                ->sortable(),
             Column::make("entradas_cantidad")
                 ->sortable(),
             Column::make("costo_entradas_cantidad")
