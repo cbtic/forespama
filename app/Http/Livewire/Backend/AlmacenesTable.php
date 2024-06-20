@@ -26,6 +26,10 @@ class AlmacenesTable extends DataTableComponent
 
     public function configure(): void
     {
+        $this->setPerPageAccepted([25, 50, 100]);
+
+        $this->setPerPage(25);
+
         $this->setPrimaryKey('id')
         ->setTableRowUrl(function($row) {
             return route('frontend.almacenes.edit', $row);

@@ -40,9 +40,9 @@ class EntradaProductoDetallesTable extends DataTableComponent
     {
         $this->index++;
 
-        $this->setPerPageAccepted([5, 10, 25, 50]);
+        $this->setPerPageAccepted([25, 50, 100]);
 
-        $this->setPerPage(50);
+        $this->setPerPage(25);
 
         $this->setPrimaryKey('id')
         ->setTableRowUrl(function($row) {
