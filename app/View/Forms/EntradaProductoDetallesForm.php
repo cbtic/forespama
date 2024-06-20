@@ -17,6 +17,7 @@ use Grafite\Forms\Fields\HasMany;
 use Grafite\Forms\Fields\TextArea;
 use Grafite\Forms\Forms\ModelForm;
 use App\Models\EntradaProductoDetalle;
+use App\Models\Lote;
 use Grafite\Forms\Fields\AutoSuggestSelect;
 use Grafite\Forms\Fields\PasswordWithReveal;
 
@@ -103,6 +104,16 @@ class EntradaProductoDetallesForm extends ModelForm
             Text::make('numero_lote', [
                 'required' => true,
             ]),
+            HasOne::make('numero_lote', [
+                'label' => 'numero_lote',
+                'model' => Lote::class,
+                'model_options' => [
+                    'label' => 'numero_lote',
+                    'value' => 'numero_lote',
+                    'method' => 'all',
+                    'params' => null,
+                ]
+            ])->selectOptions(['Seleccione' => null]),
             Date::make('fecha_vencimiento', [
                 'required' => true,
             ]),

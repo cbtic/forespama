@@ -46,7 +46,7 @@
                 $("#Tipo_cambio_dolar").val(0);
             } else {
                 $("#Tipo_cambio_dolar").show();
-                $("#Tipo_cambio_dolar").val(3.8);
+                $("#Tipo_cambio_dolar").val(3.85);
             }
     });
 
@@ -62,6 +62,10 @@
     $(document).ready(function() {
         $('.form-select').select2();
         $('.form-select').select2({dropdownAutoWidth : true});
+        if($('#Id_moneda').val()==1) {
+            $('#Tipo_cambio_dolar').hide();
+            $('#Tipo_cambio_dolar').val(0);
+        }
     });
 
     $(".btn.btn-success").click(setTimeout(function(){
