@@ -14,7 +14,6 @@ class Kardex extends Model
 
     protected $fillable = [
         'id_producto',
-        'id_unidad_medida',
         'entradas_cantidad',
         'costo_entradas_cantidad',
         'total_entradas_cantidad',

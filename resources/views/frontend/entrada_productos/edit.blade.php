@@ -36,7 +36,7 @@
         document.getElementsByClassName("btn btn-success")[rowId-1].click();
         setTimeout(function(){
             redimensionaSelect2();
-        }, 100);
+        }, 500);
     }
 
     $('#Id_moneda').select2().on('change', function(e) {
@@ -70,7 +70,11 @@
 
     $(".btn.btn-success").click(setTimeout(function(){
         redimensionaSelect2();
-    }, 100));
+    }, 500));
+
+    $(".btn.btn-default").click(setTimeout(function(){
+        redimensionaSelect2();
+    }, 500));
 
     function redimensionaSelect2(){
         $('.form-select').select2({dropdownAutoWidth : true});
