@@ -84,7 +84,7 @@ The first thing we are going to do is set the key that Laravel will use when doi
 `php artisan key:generate`
 
 ## =>Crear Modelo, Controlador y migracion:
-`php artisan make:model Producto -c -m`
+`php artisan make:model Producto -c -m --resource`
 
 ## =>Controlador con CRUD:
 `php artisan make:controller productoController --resource`

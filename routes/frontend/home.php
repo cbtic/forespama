@@ -219,3 +219,5 @@ Route::get('kardex', 'App\Http\Controllers\KardexController@index')->name('karde
 // Route::put('kardex/{kardex}', 'App\Http\Controllers\KardexController@update')->name('kardex.update');
 // Route::delete('kardex/{kardex}', 'App\Http\Controllers\KardexController@destroy')->name('kardex.destroy');
 // Route::get('kardex/edit/{kardex}', 'App\Http\Controllers\KardexController@edit')->name('kardex.edit');
+
+Route::get('movimientos', 'App\Http\Controllers\MovimientoController@index')->name('movimientos.index');
