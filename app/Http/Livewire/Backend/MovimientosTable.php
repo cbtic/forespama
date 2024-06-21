@@ -20,7 +20,20 @@ class MovimientosTable extends DataTableComponent
         $this->setPerPage(25);
 
         $this->setPrimaryKey('id');
-    }
+          // Takes a callback that gives you the current row and its index
+
+        $this->setTrAttributes(function($row, $index) {
+            if ($row["tipo_movimiento"] == 'ENTRADA') {
+                return [
+                'class' => 'entrada',
+                ];
+            }
+
+            return [
+                'class' => 'salida',
+                ];
+        });
+        }
 
     public function query(): Builder
     {

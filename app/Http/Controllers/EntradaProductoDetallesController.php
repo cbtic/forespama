@@ -74,14 +74,14 @@ class EntradaProductoDetallesController extends Controller
         );
 
         $movimiento = new Movimiento;
-        $movimiento->id_producto = $entrada_producto_detalles->id_product;
+        $movimiento->id_producto = $entrada_producto_detalles->id_producto;
         $movimiento->numero_lote = $entrada_producto_detalles->numero_lote;
         $movimiento->tipo_movimiento = 'ENTRADA';
         $movimiento->entrada_salida_cantidad = $entrada_producto_detalles->cantidad;
         $movimiento->costo_entrada_salida = $entrada_producto_detalles->costo;
         $movimiento->id_users = Auth::id();
         $movimiento->id_personas = Auth::id();
-        $movimiento->fecha_movimiento = DateTime::createFromFormat('D, d M Y H:i:s', new DateTime());
+        $movimiento->fecha_movimiento = date_format(new DateTime(), 'Y-m-d H:i:s');
         $movimiento->save();
 
         return redirect()->route('frontend.entrada_productos.edit', $entrada_producto_detalles['id_entrada_productos']);
