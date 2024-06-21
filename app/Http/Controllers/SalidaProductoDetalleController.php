@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use Auth;
+use DateTime;
 use App\Models\Kardex;
+use App\Models\Movimiento;
 use Illuminate\Http\Request;
 use App\Models\SalidaProductoDetalle;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -70,6 +72,17 @@ class SalidaProductoDetalleController extends Controller
             ['id_producto' => $salida_producto_detalles->id_producto],
             ['saldos_cantidad' => ($kardex->entradas_cantidad - $kardex->salidas_cantidad)]
         );
+
+        $movimiento = new Movimiento;
+        $movimiento->id_producto = $salida_producto_detalles->id_producto;
+        $movimiento->numero_lote = $salida_producto_detalles->numero_lote;
+        $movimiento->tipo_movimiento = 'SALIDA';
+        $movimiento->entrada_salida_cantidad = $salida_producto_detalles->cantidad;
+        $movimiento->costo_entrada_salida = $salida_producto_detalles->costo;
+        $movimiento->id_users = Auth::id();
+        $movimiento->id_personas = Auth::id();
+        $movimiento->fecha_movimiento = date_format(new DateTime(), 'Y-m-d H:i:s');
+        $movimiento->save();
 
         return redirect()->route('frontend.salida_productos.edit', $salida_producto_detalles['id_salida_productos']);
 
