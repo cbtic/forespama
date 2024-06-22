@@ -4,10 +4,5 @@
 @import '~@coreui/icons/css/free.min.css';
 //select Forms
 @import "../select";
-.entrada {
-    background-color: #e0f5c1 !important;
-}
-
-.salida {
-    background-color: rgb(231, 198, 158) !important;
-}
+//Live View Tables
+@import "../live_view_tables";
