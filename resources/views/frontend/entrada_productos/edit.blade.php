@@ -59,7 +59,7 @@
         }
     });
 
-    $(document).ready(function() {
+    jQuery(document).ready(function() {
         $('.form-select').select2();
         $('.form-select').select2({dropdownAutoWidth : true});
         if($('#Id_moneda').val()==1) {
