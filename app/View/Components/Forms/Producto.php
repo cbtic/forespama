@@ -31,7 +31,8 @@ class Producto extends Component
         if ($this->productos) {
             return app(ProductoForm::class)->edit($this->productos)->render();
         } else {
-            return app(ProductoForm::class)->create()->render();
+            // return app(ProductoForm::class)->create()->render();
+            return app(ProductoForm::class)->viaAjax()->create()->asModal($triggerContent = 'Nuevo Producto', $triggerClass = 'btn btn-success', $message = null, $modalTitle = 'Nuevo Tipo de Producto');
         }
     }
 }

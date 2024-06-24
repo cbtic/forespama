@@ -31,7 +31,7 @@ class ProductoForm extends ModelForm
 
     public $routeParameters = ['id'];
 
-    public $columns = 3;
+    public $columns = 2;
 
     public $hasFiles = true;
 
