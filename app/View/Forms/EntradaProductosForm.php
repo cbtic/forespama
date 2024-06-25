@@ -81,7 +81,7 @@ class EntradaProductosForm extends ModelForm
                     'label' => 'denominacion',
                     'value' => 'id',
                     'method' => 'por_tipo',
-                    'params' => '30',
+                    'params' => '48',
                 ]
             ])->selectOptions(['Seleccione' => null]),
             Text::make('unidad_origen', [

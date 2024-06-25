@@ -80,7 +80,7 @@ class SalidaProductosForm extends ModelForm
                     'label' => 'denominacion',
                     'value' => 'id',
                     'method' => 'por_tipo',
-                    'params' => '30',
+                    'params' => '49',
                 ]
             ])->selectOptions(['Seleccione' => null]),
             Text::make('unidad_destino', [
