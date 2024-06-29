@@ -33,7 +33,7 @@
 <script>
     function rowclick(td){
         let rowId = td.parentElement.rowIndex;
-        document.getElementsByClassName("btn btn-success")[rowId-1].click();
+        document.getElementsByClassName("btn btn-success btn-salida")[rowId-1].click();
         setTimeout(function(){
             redimensionaSelect2();
         }, 500);
