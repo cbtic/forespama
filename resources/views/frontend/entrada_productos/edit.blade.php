@@ -30,7 +30,26 @@
 @endsection
 
 @push('after-scripts')
+<!-- Modal -->
+<div class="modal fade" id="ModalProducto" role="dialog">
+     <div class="modal-dialog">
+     <!-- Modal contenido-->
+     <div class="modal-content">
+     <div class="modal-header">
+     <button type="button" class="close" data-dismiss="modal">&times;</button>
+     </div>
+     <div class="modal-body-producto">
+</div>
+</div>
+</div>
 <script>
+    /* Llamando al formulario Modal para nuevo producto */
+    $('.btnNuevoProducto').on('click',function(){
+        $('.modal-body-producto').load('/productos/modal_create',function(){
+            $('#ModalProducto').modal({show:true});
+        });
+    });
+
     function rowclick(td){
         let rowId = td.parentElement.rowIndex;
         document.getElementsByClassName("btn btn-success btn-entrada")[rowId-1].click();
