@@ -13,7 +13,7 @@
         "arcanedev/log-viewer": "8.x",
         "darkghosthunter/laraguard": "^3.0",
         "fruitcake/laravel-cors": "^2.0",
-        "grafite/forms": "^6.20",
+        "grafite/forms": "^6.26",
         "guzzlehttp/guzzle": "^7.0.1",
         "harvesthq/chosen": "^1.8",
         "jamesmills/laravel-timezone": "^1.9",

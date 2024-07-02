@@ -91,6 +91,11 @@
                     <th>@lang('Additional Permissions')</th>
                     <td>{!! $user->permissions_label !!}</td>
                 </tr>
+
+                <tr>
+                    <th></th>
+                    <td><a class="btn btn-sm btn-primary float-left" href="{!! route('admin.auth.user.change-password', ['user' => $user]); !!}" >Cambiar Contraseña</a></td>
+                </tr>
             </table>
         </x-slot>
 
