@@ -42,6 +42,6 @@ class CreateIngresoVehiculoTroncosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('ingreso_vehiculo_troncos');
+        //Schema::dropIfExists('ingreso_vehiculo_troncos');
     }
 }

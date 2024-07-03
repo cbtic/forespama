@@ -39,7 +39,7 @@ class SeccionesController extends Controller
     {
         $secciones->update($request->all());
 
-        $secciones->almacenes()->sync($request->id_almacenes);
+        $secciones->almacenes()->sync([$request->id_almacenes]);
         $secciones->anaqueles()->sync($request->id_anaqueles);
 
         // return redirect()->route('frontend.secciones.show', $secciones->id);
@@ -53,9 +53,9 @@ class SeccionesController extends Controller
 
     public function destroy(Seccione $secciones)
     {
-        $secciones->delete();
-
-        Alert::success('Proceso completo', 'Se ha eliminado el conductor');
+        if ($secciones->delete()) {
+            Alert::success('Proceso completo', 'Se ha eliminado la sección '.$secciones['codigo']);
+        };
 
         return redirect()->route('frontend.secciones.index');
     }

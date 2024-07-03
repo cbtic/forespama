@@ -65,7 +65,8 @@ class AnaqueleForm extends ModelForm
      */
     public $buttons = [
         'cancel' => 'Cancelar',
-        'submit' => 'Guardar'
+        'submit' => 'Guardar',
+        'delete' => 'Borrar'
     ];
 
     /**

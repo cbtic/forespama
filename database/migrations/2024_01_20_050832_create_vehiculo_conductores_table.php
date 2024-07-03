@@ -29,6 +29,6 @@ class CreateVehiculoConductoresTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('vehiculo_conductores');
+        //Schema::dropIfExists('vehiculo_conductores');
     }
 }

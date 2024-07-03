@@ -8,32 +8,32 @@
             <use xlink:href="{{ asset('img/brand/coreui.svg#full') }}"></use>
         </svg>
     </a>
-	
-	
+
+
     <button class="c-header-toggler c-class-toggler mfs-3 d-md-down-none" type="button" data-target="#sidebar" data-class="c-sidebar-lg-show" responsive="true">
         <i class="c-icon c-icon-lg cil-menu"></i>
     </button>
 
     <ul class="c-header-nav d-md-down-none">
-	
+
 		@auth
-		
-		<li class="c-header-nav-item px-3"><a class="c-header-nav-link" href="{{ route('frontend.index') }}">@lang('Sistema')</a></li>	
-		
+
+		<li class="c-header-nav-item px-3"><a class="c-header-nav-link" href="{{ route('frontend.index') }}">@lang('Sistema')</a></li>
+
 		@else
 		<a href="{{ route('frontend.index') }}" class="navbar-brand">
-				<img src="<?php echo URL::to('/') ?>/img/brand/logo_forespama2.jpg" alt="" width="190" height="40" style="padding:0px;margin:0px">
+				<img src="<?php echo URL::to('/') ?>/img/logo_forestalpama.jpg" alt="" width="190" style="padding:0px;margin:0px">
 		</a>
-			
-		
+
+
 		<a href="{{ route('frontend.auth.login') }}" style="color:#FFFFFF;font-size:16px">@lang('Login')</a>
 
 		@if (config('boilerplate.access.user.registration'))
 			<a href="{{ route('frontend.auth.register') }}" style="color:#FFFFFF;padding-left:30px;font-size:16px">@lang('Register')</a>
 		@endif
-	
+
 		@endauth
-	
+
         @if(config('boilerplate.locale.status') && count(config('boilerplate.locale.languages')) > 1)
             <li class="c-header-nav-item dropdown">
                 <x-utils.link
@@ -75,13 +75,13 @@
                         <x-forms.post :action="route('frontend.auth.logout')" id="logout-form" class="d-none" />
                     </x-slot>
                 </x-utils.link>
-				
+
             </div>
         </li>
     </ul>
-	
+
 	@auth
-	
+
     <div class="c-subheader justify-content-between px-3">
         @include('backend.includes.partials.breadcrumbs')
 
@@ -89,9 +89,9 @@
             @yield('breadcrumb-links')
         </div>
     </div><!--c-subheader-->
-	
-	@endauth	
-	
-	
-	
+
+	@endauth
+
+
+
 </header>

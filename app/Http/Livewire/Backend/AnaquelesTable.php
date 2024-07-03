@@ -6,6 +6,7 @@ use Rappasoft\LaravelLivewireTables\DataTableComponent;
 use Rappasoft\LaravelLivewireTables\Views\Column;
 use App\Models\Anaquele;
 use Illuminate\Database\Eloquent\Builder;
+use App\View\Forms\AnaqueleForm;
 
 class AnaquelesTable extends DataTableComponent
 {
@@ -57,7 +58,7 @@ class AnaquelesTable extends DataTableComponent
                 ->label(
                     function ($row, Column $column) {
                         $edit = '<button class="btn btn-xs btn-success text-white" onclick="window.location.href=\'' . route('frontend.anaqueles.show', $row) . '\'">Mostrar</button>';
-                        $delete = '<button class="btn btn-xs btn-danger text-white" wire:click="delete(' . $row->id . ')">Eliminar</button>';
+                        $delete = app(AnaqueleForm::class)->delete($row)->modalTitle("Eliminar anaquel: ")->confirmAsModal("Eliminar anaquel ".$row->codigo."?", "Eliminar", "btn btn-danger");
                         return $edit . " " . $delete;
                     }
                 )->html(),

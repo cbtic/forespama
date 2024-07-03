@@ -11,6 +11,7 @@ use Rappasoft\LaravelLivewireTables\Views\Columns\LinkColumn;
 use App\Exports\ConductoresExport;
 use Maatwebsite\Excel\Facades\Excel;
 use RealRashid\SweetAlert\Facades\Alert;
+use App\View\Forms\ConductoresForm;
 
 class ConductoresTable extends DataTableComponent
 {
@@ -37,15 +38,15 @@ class ConductoresTable extends DataTableComponent
         });
     }
 
-    public function deleteId($id)
-    {
-        $this->deleteId = $id;
-    }
+    // public function deleteId($id)
+    // {
+    //     $this->deleteId = $id;
+    // }
 
-    public function delete()
-    {
-        Conductores::find($this->deleteId)->delete();
-    }
+    // public function delete()
+    // {
+    //     Conductores::find($this->deleteId)->delete();
+    // }
 
     public function bulkActions(): array
     {
@@ -102,7 +103,7 @@ class ConductoresTable extends DataTableComponent
                 ->label(
                     function ($row, Column $column) {
                         $edit = '<button class="btn btn-xs btn-success text-white" onclick="window.location.href=\'' . route('frontend.conductores.show', $row->id) . '\'">Mostrar</button>';
-                        $delete = '<button class="btn btn-xs btn-danger text-white"  wire:click="deleteId(' . $row->id . ')" data-toggle="modal" data-target="#exampleModal">Eliminar</button>';
+                        $delete = app(ConductoresForm::class)->delete($row)->modalTitle("Eliminar conductor: ")->confirmAsModal("Eliminar a ".((Conductores::find($row->id))->personas["nombre_completo_sin_dni"])."?", "Eliminar", "btn btn-danger");
                         return $edit . " " . $delete;
                     }
                 )->html(),

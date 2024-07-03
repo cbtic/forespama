@@ -51,10 +51,9 @@ class AnaquelesController extends Controller
 
     public function destroy(Anaquele $anaqueles)
     {
-        $anaqueles->delete();
-
-        Alert::success('Proceso completo', 'Se ha eliminado el conductor');
-
+        if ($anaqueles->delete()) {
+            Alert::success('Proceso completo', 'Se ha eliminado el anaquel '.$anaqueles['codigo']);
+        }
         return redirect()->route('frontend.anaqueles.index');
     }
 }

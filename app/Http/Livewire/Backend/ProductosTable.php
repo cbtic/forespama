@@ -10,6 +10,7 @@ use App\Models\Almacene;
 use App\Models\Seccione;
 use Illuminate\Database\Eloquent\Builder;
 use TablaMaestra;
+use App\View\Forms\ProductoForm;
 
 class ProductosTable extends DataTableComponent
 {
@@ -101,7 +102,7 @@ class ProductosTable extends DataTableComponent
                 ->label(
                     function ($row, Column $column) {
                         $edit = '<button class="btn btn-xs btn-success text-white" onclick="window.location.href=\'' . route('frontend.productos.show', $row) . '\'">Mostrar</button>';
-                        $delete = '<button class="btn btn-xs btn-danger text-white" wire:click="delete(' . $row->id . ')">Eliminar</button>';
+                        $delete = app(ProductoForm::class)->delete($row)->modalTitle("Eliminar producto: ")->confirmAsModal("Eliminar producto ".$row->codigo."?", "Eliminar", "btn btn-danger");
                         return $edit . " " . $delete;
                     }
                 )->html(),

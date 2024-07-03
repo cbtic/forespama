@@ -17,7 +17,7 @@
 		-->
 
         <a href="{{ route('frontend.index') }}" class="navbar-brand">
-            <img src="<?php echo URL::to('/') ?>/img/brand/logo_forespama2.jpg" alt="" width="190" height="40" style="padding:0px;margin:0px">
+            <img src="<?php echo URL::to('/') ?>/img/logo_forestalpama.jpg" alt="" width="190" style="padding:0px;margin:0px">
         </a>
 
     </div><!--c-sidebar-brand-->
@@ -128,6 +128,9 @@
                 </li>
                 <li class="c-sidebar-nav-item">
                     <x-utils.link :href="route('frontend.lotes.index')" class="c-sidebar-nav-link" :text="__('Lotes')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+                </li>
+                <li class="c-sidebar-nav-item">
+                    <x-utils.link :href="route('frontend.entrada_productos.index')" class="c-sidebar-nav-link" :text="__('Entradas')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
                 </li>
             </ul>
 

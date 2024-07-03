@@ -16211,14 +16211,14 @@ html:not([dir=rtl]) .c-sidebar.c-sidebar-show.c-sidebar-right.c-sidebar-fixed.c-
 }
 .c-sidebar .c-sidebar-brand {
   color: #fff;
-  background: rgba(0, 0, 21, 0.2);
+  background: #183e39;
 }
 .c-sidebar .c-sidebar-header {
-  background: rgba(0, 0, 21, 0.2);
+  background: #183e39;
 }
 .c-sidebar .c-sidebar-form .c-form-control {
   color: #fff;
-  background: rgba(0, 0, 21, 0.1);
+  background: #183e39;
   border: 0;
 }
 .c-sidebar .c-sidebar-form .c-form-control::-moz-placeholder {
@@ -16242,7 +16242,7 @@ html:not([dir=rtl]) .c-sidebar.c-sidebar-show.c-sidebar-right.c-sidebar-fixed.c-
 }
 .c-sidebar .c-sidebar-nav-link.c-active, .c-sidebar .c-active.c-sidebar-nav-dropdown-toggle {
   color: #fff;
-  background: rgba(255, 255, 255, 0.05);
+  background: #183e39;
 }
 .c-sidebar .c-sidebar-nav-link.c-active .c-sidebar-nav-icon, .c-sidebar .c-active.c-sidebar-nav-dropdown-toggle .c-sidebar-nav-icon {
   color: #fff;

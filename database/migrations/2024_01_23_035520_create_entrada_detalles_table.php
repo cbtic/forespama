@@ -43,6 +43,6 @@ class CreateEntradaDetallesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('entrada_detalles');
+        //Schema::dropIfExists('entrada_detalles');
     }
 }

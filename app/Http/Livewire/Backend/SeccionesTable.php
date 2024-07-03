@@ -8,6 +8,7 @@ use App\Models\Seccione;
 use App\Models\Anaquele;
 use App\Models\Almacene;
 use Illuminate\Database\Eloquent\Builder;
+use App\View\Forms\SeccioneForm;
 
 class SeccionesTable extends DataTableComponent
 {
@@ -63,7 +64,7 @@ class SeccionesTable extends DataTableComponent
                 ->label(
                     function ($row, Column $column) {
                         $edit = '<button class="btn btn-xs btn-success text-white" onclick="window.location.href=\'' . route('frontend.secciones.show', $row) . '\'">Mostrar</button>';
-                        $delete = '<button class="btn btn-xs btn-danger text-white" wire:click="delete(' . $row->id . ')">Eliminar</button>';
+                        $delete = app(SeccioneForm::class)->delete($row)->modalTitle("Eliminar sección: ")->confirmAsModal("Eliminar sección ".$row->codigo."?", "Eliminar", "btn btn-danger");
                         return $edit . " " . $delete;
                     }
                 )->html(),

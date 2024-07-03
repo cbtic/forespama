@@ -33,6 +33,6 @@ class CreateIngresoVehiculoTroncoImagenesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('ingreso_vehiculo_tronco_imagenes');
+        //Schema::dropIfExists('ingreso_vehiculo_tronco_imagenes');
     }
 }

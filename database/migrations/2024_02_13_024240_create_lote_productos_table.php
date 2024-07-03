@@ -17,7 +17,7 @@ class CreateLoteProductosTable extends Migration
             $table->id();
             $table->bigInteger('id_producto')->unsigned()->index();
             $table->bigInteger('numero_lote')->nullable()->index();
-            $table->string('numero_serie',50)->nullable();       
+            $table->string('numero_serie',50)->nullable();
             $table->Integer('id_unidad_medida')->nullable();
             $table->bigInteger('cantidad')->nullable();
             $table->double('costo',15,8)->nullable();
@@ -40,6 +40,6 @@ class CreateLoteProductosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('lote_productos');
+        //Schema::dropIfExists('lote_productos');
     }
 }

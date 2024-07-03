@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Models\TablaMaestra;
 use App\Http\Requests\VehiculoRequest;
 use Auth;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class VehiculoController extends Controller
 {
@@ -99,7 +100,7 @@ class VehiculoController extends Controller
 			$vehiculo->save();
 		}
     }
-	
+
 	public function send_vehiculo_ingreso(Request $request){
 
 		$id_user = Auth::user()->id;
@@ -140,7 +141,7 @@ class VehiculoController extends Controller
 			$vehiculo->id_usuario_actualiza = $id_user;
 			$vehiculo->save();
 		}
-		
+
 		//echo json_encode($vehiculo);
 		$array["sw"] = $sw;
 		$array["msg"] = $msg;
@@ -163,11 +164,9 @@ class VehiculoController extends Controller
         return view('frontend.vehiculos.create');
     }
 
-    public function show(int $id)
+    public function show(Vehiculo $vehiculos)
     {
-        $vehiculo = Vehiculo::find($id);
-
-        return view('frontend.vehiculos.show', compact('vehiculo'));
+        return view('frontend.vehiculos.show', compact('vehiculos'));
     }
 
     public function store(VehiculoRequest $request)
@@ -204,10 +203,11 @@ class VehiculoController extends Controller
         return redirect()->route('frontend.vehiculos.index');
     }
 
-    public function destroy(Vehiculo $conductores)
+    public function destroy(Vehiculo $vehiculos)
     {
-        $conductores->delete();
-
+        if ($vehiculos->delete()) {
+            Alert::success('Proceso completo', 'Se ha eliminado el vehículo: '.$vehiculos['placa']);
+        }
         return redirect()->route('frontend.vehiculos.index');
     }
 }

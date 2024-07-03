@@ -49,9 +49,9 @@ class ProductosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Producto $productos)
     {
-        return view('frontend.productos.show', compact('secciones'));
+        return view('frontend.productos.show', compact('productos'));
     }
 
     /**
@@ -87,10 +87,9 @@ class ProductosController extends Controller
      */
     public function destroy(Producto $productos)
     {
-        $productos->delete();
-
-        Alert::success('Proceso completo', 'Se ha eliminado el producto');
-
+        if ($productos->delete()) {
+            Alert::success('Proceso completo', 'Se ha eliminado el producto '.$productos['codigo']);
+        };
         return redirect()->route('frontend.productos.index');
     }
 }

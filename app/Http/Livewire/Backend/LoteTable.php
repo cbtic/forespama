@@ -9,6 +9,7 @@ use App\Models\Lote;
 use App\Models\TablaMaestra;
 use App\Models\Anaquele;
 use Illuminate\Database\Eloquent\Builder;
+use App\View\Forms\LoteForm;
 
 class LoteTable extends DataTableComponent
 {
@@ -94,7 +95,7 @@ class LoteTable extends DataTableComponent
                 ->label(
                     function ($row, Column $column) {
                         $edit = '<button class="btn btn-xs btn-success text-white" onclick="window.location.href=\'' . route('frontend.lotes.show', $row) . '\'">Mostrar</button>';
-                        $delete = '<button class="btn btn-xs btn-danger text-white" wire:click="delete(' . $row->id . ')">Eliminar</button>';
+                        $delete = app(LoteForm::class)->delete($row)->modalTitle("Eliminar lote: ")->confirmAsModal("Eliminar lote ".$row->numero_lote."?", "Eliminar", "btn btn-danger");
                         return $edit . " " . $delete;
                     }
                 )->html(),

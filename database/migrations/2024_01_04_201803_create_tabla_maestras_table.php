@@ -34,6 +34,6 @@ class CreateTablaMaestrasTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tabla_maestras');
+        //Schema::dropIfExists('tabla_maestras');
     }
 }
