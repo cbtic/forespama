@@ -5,6 +5,7 @@ namespace App\View\Components\Forms;
 use Illuminate\View\Component;
 
 use App\View\Forms\ProductoForm;
+use App\View\Forms\ProductoModalForm;
 
 class Producto extends Component
 {
@@ -31,7 +32,7 @@ class Producto extends Component
     {
         // return view('components.forms.productos');
         if ($this->modal) {
-            return app(ProductoForm::class)->create()->render();
+            return app(ProductoModalForm::class)->viaAjax()->create()->render();
         }
         if ($this->productos) {
             return app(ProductoForm::class)->edit($this->productos)->render();

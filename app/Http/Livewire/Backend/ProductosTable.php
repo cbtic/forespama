@@ -76,16 +76,6 @@ class ProductosTable extends DataTableComponent
                 ->sortable(),
             Column::make("Stock", "stock_actual")
                 ->sortable(),
-            Column::make("Costo", "costo_unitario")
-                ->sortable(),
-            Column::make("Moneda", "id_moneda")
-                ->hideIf(true)
-                ->sortable(),
-            Column::make("Moneda")
-                ->label(fn ($row) => TablaMaestra::find($row->id_moneda)->abreviatura)
-                ->sortable(),
-            Column::make("Tipo Producto", "id_tipo_producto")
-                ->sortable(),
             Column::make("Vencimiento", "fecha_vencimiento")
                 ->sortable(),
             Column::make("Estado del bien", "id_estado_bien")
