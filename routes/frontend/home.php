@@ -159,7 +159,8 @@ Route::delete('productos/{productos}', 'App\Http\Controllers\ProductosController
 Route::get('productos/{productos}/edit', 'App\Http\Controllers\ProductosController@edit')->name('productos.edit');
 
 
-Route::get('ingreso/create', [IngresoController::class, 'create'])->name('ingreso.create');
+//Route::get('ingreso/create', [IngresoController::class, 'create'])->name('ingreso.create');
+Route::get('ingresos/create', [IngresoController::class, 'create'])->name('ingresos.create');
 Route::get('ingreso/obtener_valorizacion/{tipo_documento}/{id_persona}', [IngresoController::class, 'obtener_valorizacion'])->name('ingreso.obtener_valorizacion')->where('tipo_documento', '(.*)');
 Route::post('ingreso/listar_valorizacion', [IngresoController::class, 'listar_valorizacion'])->name('ingreso.listar_valorizacion');
 Route::post('ingreso/listar_valorizacion_concepto', [IngresoController::class, 'listar_valorizacion_concepto'])->name('ingreso.listar_valorizacion_concepto');

@@ -43,10 +43,11 @@ class IngresoController extends Controller
         $caja_model = new TablaMaestra;
         $valorizaciones_model = new Valorizacione;
         $caja = $caja_model->getCaja('27');
-        $caja_usuario = $valorizaciones_model->getCajaIngresoByusuario($id_user,'CAJA');
+        $caja_usuario = $valorizaciones_model->getCajaIngresoByusuario($id_user,'27');
+		$tipo_documento = $caja_model->getMaestroByTipo('9');
         //$caja_usuario = $caja_model;
         //print_r($caja_usuario);exit();
-        return view('frontend.ingresos.create',compact('persona','caja','caja_usuario'));
+        return view('frontend.ingresos.create',compact('persona','caja','caja_usuario','tipo_documento'));
 
     }
 
