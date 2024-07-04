@@ -32,7 +32,7 @@ class EntradaProductoDetallesTable extends DataTableComponent
 
     public function builder(): Builder
     {
-        return EntradaProductoDetalle::where('id_entrada_productos','=', $this->id_entrada_productos)->join('productos', 'productos.id', '=', 'entrada_producto_detalles.id_producto');
+        return EntradaProductoDetalle::where('id_entrada_productos','=', $this->id_entrada_productos)->join('productos', 'entrada_producto_detalles.id_producto', '=', 'productos.id');
 
         //->select("entrada_producto_detalles.id","id_entrada_productos","productos.denominacion","item","cantidad","numero_lote","fecha_vencimiento","aplica_precio","id_um","id_estado_bien","id_marca","costo","estado");
 
@@ -96,10 +96,15 @@ class EntradaProductoDetallesTable extends DataTableComponent
                 ->hideIf(true),
             Column::make("id_producto")
                 ->hideIf(true),
-            Column::make('productos.denominacion')
-                //->label(fn ($row) => Producto::find($row->id_producto)->denominacion)
+            Column::make('Producto')
+                ->label(fn ($row) => Producto::find($row->id_producto)->denominacion)
                 ->sortable()
                 ->searchable(),
+
+            // Column::make('Producto', 'id_producto')
+            //     ->format(function($value, $row, Column $column) {
+            //         return $row->productos->denominacion;
+            //     })->eagerLoadRelations(),
             // Column::make('productos.denominacion')
             //     ->sortable()
             //     ->searchable(),
