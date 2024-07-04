@@ -77,7 +77,7 @@ class MovimientosTable extends DataTableComponent
             Column::make("Persona")
                 ->label(fn ($row) => Persona::find($row->id_personas)->nombres)
                 ->sortable(),
-            Column::make("fecha_movimiento")
+            Column::make("Fecha Mov.", "fecha_movimiento")
                 ->sortable()
         ];
     }

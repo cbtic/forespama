@@ -108,16 +108,16 @@ class EntradaProductoDetallesTable extends DataTableComponent
             // Column::make('productos.denominacion')
             //     ->sortable()
             //     ->searchable(),
-            Column::make('item')
+            Column::make('Item', 'item')
                 ->sortable()
                 ->searchable(),
-            Column::make('cantidad')
+            Column::make('Cantidad', 'cantidad')
                 ->sortable()
                 ->searchable(),
-            Column::make('numero_lote')
+            Column::make('Numero Lote', 'numero_lote')
                 ->sortable()
                 ->searchable(),
-            Column::make('fecha_vencimiento')
+            Column::make('Fecha vcto.', 'fecha_vencimiento')
                 ->sortable(),
             Column::make('aplica_precio')
                 ->hideIf(true)

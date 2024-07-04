@@ -57,10 +57,10 @@ class AlmacenesTable extends DataTableComponent
         return [
             Column::make('ID', 'id')
                 ->sortable(),
-            Column::make('codigo')
+            Column::make('Codigo', 'codigo')
                 ->sortable()
                 ->searchable(),
-            Column::make('denominacion')
+            Column::make('Denominacion', 'denominacion')
                 ->sortable(),
             Column::make('Ubigeo', 'ubigeos.id_ubigeo')
                 ->hideIf(true)
