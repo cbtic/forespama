@@ -23,7 +23,7 @@ class EntradaProductoDetallesTable extends DataTableComponent
     public $id_entrada_productos;
     protected $index = 0;
 
-    protected $model = EntradaProductoDetalle::class;
+    // protected $model = EntradaProductoDetalle::class;
 
     public function mount($entrada_producto)
     {
@@ -32,8 +32,14 @@ class EntradaProductoDetallesTable extends DataTableComponent
 
     public function builder(): Builder
     {
-        return EntradaProductoDetalle::where('id_entrada_productos','=', $this->id_entrada_productos);
+        return EntradaProductoDetalle::where('id_entrada_productos','=', $this->id_entrada_productos)->join('productos', 'productos.id', '=', 'entrada_producto_detalles.id_producto');
+
+        //->select("entrada_producto_detalles.id","id_entrada_productos","productos.denominacion","item","cantidad","numero_lote","fecha_vencimiento","aplica_precio","id_um","id_estado_bien","id_marca","costo","estado");
+
+        // return EntradaProductoDetalle::query()->when($this->getFilter('search'), fn ($query, $term) => $query->search($term))->where('id_entrada_productos','=', $this->id_entrada_productos)->orderBy('id','desc');
         // return EntradaProductoDetalle::withRowNumber()->where('id_entrada_productos','=', $this->id_entrada_productos);
+        // return EntradaProductoDetalle::query()
+        //     ->where('id_entrada_productos','=', $this->id_entrada_productos);
     }
 
     public function configure(): void
@@ -43,6 +49,8 @@ class EntradaProductoDetallesTable extends DataTableComponent
         $this->setPerPageAccepted([25, 50, 100]);
 
         $this->setPerPage(25);
+
+        $this->setDefaultSort('id', 'desc');
 
         $this->setPrimaryKey('id')
         ->setTableRowUrl(function($row) {
@@ -83,24 +91,24 @@ class EntradaProductoDetallesTable extends DataTableComponent
             //     })
             //     ->sortable(),
             Column::make('ID', 'id')
-                ->sortable()
-                ->searchable(),
-            Column::make('id_entrada_productos')
-                ->hideIf(true)
-                ->sortable()
-                ->searchable(),
-            Column::make("id_producto")
-                ->hideIf(true)
                 ->sortable(),
-            Column::make('Producto')
-                ->label(fn ($row) => Producto::find($row->id_producto)->denominacion)
+            Column::make('id_entrada_productos')
+                ->hideIf(true),
+            Column::make("id_producto")
+                ->hideIf(true),
+            Column::make('productos.denominacion')
+                //->label(fn ($row) => Producto::find($row->id_producto)->denominacion)
                 ->sortable()
                 ->searchable(),
+            // Column::make('productos.denominacion')
+            //     ->sortable()
+            //     ->searchable(),
             Column::make('item')
                 ->sortable()
                 ->searchable(),
             Column::make('cantidad')
-                ->sortable(),
+                ->sortable()
+                ->searchable(),
             Column::make('numero_lote')
                 ->sortable()
                 ->searchable(),

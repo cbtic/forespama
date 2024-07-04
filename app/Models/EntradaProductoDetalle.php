@@ -24,4 +24,9 @@ class EntradaProductoDetalle extends Model
         'estado'
     ];
 
+    public function productos()
+    {
+        return $this->hasOne('Producto');
+    }
+
 }

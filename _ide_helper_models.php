@@ -542,7 +542,6 @@ namespace App\Models{
  *
  * @property int $id
  * @property int $id_producto
- * @property int|null $id_unidad_medida
  * @property float|null $entradas_cantidad
  * @property float|null $costo_entradas_cantidad
  * @property float|null $total_entradas_cantidad
@@ -564,7 +563,6 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Kardex whereEntradasCantidad($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Kardex whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Kardex whereIdProducto($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Kardex whereIdUnidadMedida($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Kardex whereSaldosCantidad($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Kardex whereSalidasCantidad($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Kardex whereTotalEntradasCantidad($value)
@@ -618,6 +616,39 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Lote whereUpdatedAt($value)
  */
 	class Lote extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * App\Models\Movimiento
+ *
+ * @property int $id
+ * @property int $id_producto
+ * @property string|null $numero_lote
+ * @property string $tipo_movimiento
+ * @property float|null $entrada_salida_cantidad
+ * @property float|null $costo_entrada_salida
+ * @property int $id_users
+ * @property int $id_personas
+ * @property string|null $fecha_movimiento
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|Movimiento newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Movimiento newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Movimiento query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Movimiento whereCostoEntradaSalida($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Movimiento whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Movimiento whereEntradaSalidaCantidad($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Movimiento whereFechaMovimiento($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Movimiento whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Movimiento whereIdPersonas($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Movimiento whereIdProducto($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Movimiento whereIdUsers($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Movimiento whereNumeroLote($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Movimiento whereTipoMovimiento($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Movimiento whereUpdatedAt($value)
+ */
+	class Movimiento extends \Eloquent {}
 }
 
 namespace App\Models{

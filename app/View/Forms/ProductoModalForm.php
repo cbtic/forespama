@@ -6,7 +6,7 @@ use App\Models\Producto;
 use App\Models\Almacene;
 use App\Models\Anaquele;
 use App\Models\Seccione;
-use Grafite\Forms\Forms\ModelForm;
+use Grafite\Forms\Forms\ModalForm;
 use Grafite\Forms\Fields\TextArea;
 use Grafite\Forms\Fields\Text;
 use Grafite\Forms\Fields\Email;
@@ -20,7 +20,7 @@ use Grafite\Forms\Fields\AutoSuggestSelect;
 use Grafite\Forms\Fields\Hidden;
 use TablaMaestra;
 
-class ProductoModalForm extends ModelForm
+class ProductoModalForm extends ModalForm
 {
     /**
      * The model for the form
