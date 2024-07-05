@@ -31,9 +31,14 @@ class ProductoForm extends ModelForm
 
     public $routeParameters = ['id'];
 
-    public $columns = 2;
+    public $submitViaAjax = true;
 
-    public $hasFiles = true;
+    public $confirmMessage = 'Esta grabando datos';
+    public $confirmSubmission = 'Se enviaron los datos';
+
+    public $submitMethod = 'ajax';
+
+    public $columns = 3;
 
     public $instance;
 
