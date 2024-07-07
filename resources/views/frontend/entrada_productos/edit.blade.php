@@ -34,13 +34,10 @@
 <div class="modal fade" id="ModalProducto" role="dialog">
      <div class="modal-dialog">
      <!-- Modal contenido-->
-     <div class="modal-content">
-     <div class="modal-header">
-     <button type="button" class="close" data-dismiss="modal">&times;</button>
-     </div>
-     <div class="modal-body-producto">
-</div>
-</div>
+     <div class="modal-content" style="padding: 0 !important">
+        <div class="modal-body-producto">
+        </div>
+    </div>
 </div>
 <script>
     /* Llamando al formulario Modal para nuevo producto */
@@ -105,29 +102,14 @@
         $('.form-select').select2({dropdownAutoWidth : true});
     }
 
-    window.ajax = (_event) => {
-    _event.preventDefault();
-
-    let _form = _event.target.form;
-    let _method = _form.method.toLowerCase();
-    let _data = new FormData(_form);
-
-    window.axios[_method](_form.action, _data, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
+    function manejar_popup(modo) {
+        if (modo == 'modal') {
+            $("form").eq($("form").length-2).on( "submit", function( event ) {
+                alert( "Handler for `submit` called." );
+                event.preventDefault();
+            });
         }
-    })
-    .then((response) => {
-        window.notify.success(response.data.message);
-    })
-    .catch((error) => {
-        window.notify.warning(error.response.data.message);
+    }
 
-        for (var key in error.response.data.errors) {
-            document.querySelector('input[name="'+key+'"]').classList.add('border-danger');
-            window.notify.error(error.response.data.errors[key][0]);
-        }
-    });
-}
 </script>
 @endpush

@@ -60,9 +60,7 @@ class ProductoForm extends ModelForm
      * @var array
      */
     public $buttons = [
-        'cancel' => 'Cancelar',
-        'submit' => 'Guardar',
-        'delete' => 'Borrar'
+        'submit' => 'Guardar'
     ];
 
     /**

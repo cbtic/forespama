@@ -6,7 +6,7 @@ use App\Models\Producto;
 use App\Models\Almacene;
 use App\Models\Anaquele;
 use App\Models\Seccione;
-use Grafite\Forms\Forms\ModalForm;
+use Grafite\Forms\Forms\ModelForm;
 use Grafite\Forms\Fields\TextArea;
 use Grafite\Forms\Fields\Text;
 use Grafite\Forms\Fields\Email;
@@ -20,7 +20,7 @@ use Grafite\Forms\Fields\AutoSuggestSelect;
 use Grafite\Forms\Fields\Hidden;
 use TablaMaestra;
 
-class ProductoModalForm extends ModalForm
+class ProductoModalForm extends ModelForm
 {
     /**
      * The model for the form
@@ -30,12 +30,6 @@ class ProductoModalForm extends ModalForm
     public $model = Producto::class;
 
     public $routeParameters = ['id'];
-
-    public $submitViaAjax = false;
-
-    public $confirmMessage = 'Esta seguro de enviar';
-
-    public $method = 'put';
 
     public $columns = 2;
 
@@ -67,6 +61,10 @@ class ProductoModalForm extends ModalForm
      */
     public $buttons = [
         'submit' => 'Guardar Producto'
+    ];
+
+    public $buttonClasses= [
+        'submit' => 'btn btn-primary modal_send'
     ];
 
     /**
