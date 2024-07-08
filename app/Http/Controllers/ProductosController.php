@@ -30,6 +30,11 @@ class ProductosController extends Controller
         return view('frontend.productos.create');
     }
 
+    public function modal_create($modal = 'modal')
+    {
+        return view('frontend.productos.modal_create', compact('modal'));
+    }
+
     /**
      * Store a newly created resource in storage.
      *

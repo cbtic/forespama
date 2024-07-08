@@ -153,6 +153,7 @@ Route::get('secciones/{secciones}/edit', 'App\Http\Controllers\SeccionesControll
 Route::get('productos', 'App\Http\Controllers\ProductosController@index')->name('productos.index');
 Route::post('productos', 'App\Http\Controllers\ProductosController@store')->name('productos.store');
 Route::get('productos/create', 'App\Http\Controllers\ProductosController@create')->name('productos.create');
+Route::get('productos/modal_create', 'App\Http\Controllers\ProductosController@modal_create')->name('productos.modal_create');
 Route::get('productos/{productos}', 'App\Http\Controllers\ProductosController@show')->name('productos.show');
 Route::put('productos/{productos}', 'App\Http\Controllers\ProductosController@update')->name('productos.update');
 Route::delete('productos/{productos}', 'App\Http\Controllers\ProductosController@destroy')->name('productos.destroy');

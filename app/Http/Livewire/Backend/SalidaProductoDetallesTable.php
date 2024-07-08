@@ -125,7 +125,7 @@ class SalidaProductoDetallesTable extends DataTableComponent
                         // $edit = '<button class="btn btn-xs btn-success text-white" onclick="window.location.href=\'' . route('frontend.salida_producto_detalles.show', ['salida_producto' => $row->id_salida_productos, 'salida_producto_detalles' => $row->id]) . '\'">Mostrarme</button>';
                         $delete = app(SalidaProductoDetallesForm::class)->delete($row)->modalTitle("Eliminar producto: ")->confirmAsModal("Eliminar?", "Eliminar", "btn btn-danger");
 
-                        $edit = app(SalidaProductoDetallesForm::class)->edit($row)->asModal($triggerContent = 'Editar', $triggerClass = 'btn btn-success', $message = null, $modalTitle = 'Editar el producto');
+                        $edit = app(SalidaProductoDetallesForm::class)->edit($row)->asModal($triggerContent = 'Editar', $triggerClass = 'btn btn-success btn-salida', $message = null, $modalTitle = 'Editar el producto');
                         return $edit . " " . $delete;
                     }
                 )->html(),

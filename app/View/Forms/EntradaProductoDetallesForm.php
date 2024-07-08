@@ -86,7 +86,7 @@ class EntradaProductoDetallesForm extends ModelForm
                 'value' => array_reverse(explode('/',\Request::getRequestUri()))[0]
             ]),
             HasOne::make('id_producto', [
-                'label' => 'Producto',
+                'label' => 'Producto <button id="btn_lote" type="button" class="btn btn-info btn-sm btnNuevoProducto">Nuevo</button>',
                 'model' => Producto::class,
                 'model_options' => [
                     'label' => 'denominacion',
@@ -105,7 +105,7 @@ class EntradaProductoDetallesForm extends ModelForm
                 'required' => true,
             ]),
             HasOne::make('numero_lote', [
-                'label' => 'numero_lote',
+                'label' => 'Número Lote',
                 'model' => Lote::class,
                 'model_options' => [
                     'label' => 'numero_lote',
