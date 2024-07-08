@@ -172,6 +172,7 @@ Route::get('ingreso/modal_valorizacion_factura/{id}', [IngresoController::class,
 Route::get('lotes', 'App\Http\Controllers\LoteController@index')->name('lotes.index');
 Route::post('lotes', 'App\Http\Controllers\LoteController@store')->name('lotes.store');
 Route::get('lotes/create', 'App\Http\Controllers\LoteController@create')->name('lotes.create');
+Route::get('lotes/modal_create', 'App\Http\Controllers\LoteController@modal_create')->name('lotes.modal_create');
 Route::get('lotes/{lotes}', 'App\Http\Controllers\LoteController@show')->name('lotes.show');
 Route::put('lotes/{lotes}', 'App\Http\Controllers\LoteController@update')->name('lotes.update');
 Route::delete('lotes/{lotes}', 'App\Http\Controllers\LoteController@destroy')->name('lotes.destroy');

@@ -30,8 +30,8 @@
 @endsection
 
 @push('after-scripts')
-<!-- Modal -->
-<div class="modal fade" id="ModalProducto" role="dialog">
+<!-- Modal Producto -->
+<div class="modal fade" id="ModalProductoLote" role="dialog">
      <div class="modal-dialog">
      <!-- Modal contenido-->
      <div class="modal-content" style="padding: 0 !important">
@@ -43,7 +43,14 @@
     /* Llamando al formulario Modal para nuevo producto */
     $('.btnNuevoProducto').on('click',function(){
         $('.modal-body-producto').load('/productos/modal_create',function(){
-            $('#ModalProducto').modal({show:true});
+            $('#ModalProductoLote').modal({show:true});
+        });
+    });
+
+    /* Llamando al formulario Modal para nuevo lote */
+    $('.btnNuevoLote').on('click',function(){
+        $('.modal-body-producto').load('/lotes/modal_create',function(){
+            $('#ModalProductoLote').modal({show:true});
         });
     });
 
