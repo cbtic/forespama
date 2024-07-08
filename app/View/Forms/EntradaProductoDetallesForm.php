@@ -12,7 +12,7 @@ use Grafite\Forms\Fields\HasOne;
 use Grafite\Forms\Fields\Hidden;
 use Grafite\Forms\Fields\Select;
 use Grafite\Forms\Fields\HasMany;
-// use Grafite\Forms\Forms\BaseForm;
+use Grafite\Forms\Forms\BaseForm;
 // use Grafite\Forms\Forms\ModalForm;
 use Grafite\Forms\Fields\TextArea;
 use Grafite\Forms\Forms\ModelForm;
@@ -30,11 +30,15 @@ class EntradaProductoDetallesForm extends ModelForm
      */
     public $model = EntradaProductoDetalle::class;
 
+    public $method = 'put';
+
+    // public $orientation = 'horizontal';
+
+    public $submitMethod = 'ajax';
+
     public $routeParameters = ['id', 'id_entrada_productos'];
 
     public $entradaproducto;
-
-    public $method = 'put';
 
     public $columns = 2;
 
@@ -42,7 +46,8 @@ class EntradaProductoDetallesForm extends ModelForm
 
     public $instance;
 
-    public $submitMethod = 'ajax';
+    //public $submitMethod = 'ajax';
+    public $submitViaAjax = true;
 
     public $disableOnSubmit = true;
 
@@ -86,7 +91,7 @@ class EntradaProductoDetallesForm extends ModelForm
                 'value' => array_reverse(explode('/',\Request::getRequestUri()))[0]
             ]),
             HasOne::make('id_producto', [
-                'label' => 'Producto <button id="btn_lote" type="button" class="btn btn-info btn-sm btnNuevoProducto">Nuevo</button>',
+                'label' => 'Producto <button id="btn_lote" type="button" class="btn btn-info btn-sm btnNuevoProducto" onclick="setTimeout(function(){$(\'#ModalProductoLote > div > div > div > div > div > div\').removeClass();$(\'.btn.btn-primary.modal_send\').attr(\'data-formsjs-onclick\', \'\');manejar_popup(\'modal\');}, 2500);">Nuevo Producto</button>',
                 'model' => Producto::class,
                 'model_options' => [
                     'label' => 'denominacion',
@@ -105,7 +110,7 @@ class EntradaProductoDetallesForm extends ModelForm
                 'required' => true,
             ]),
             HasOne::make('numero_lote', [
-                'label' => 'Número Lote',
+                'label' => 'Lote <button id="btn_lote" type="button" class="btn btn-info btn-sm btnNuevoLote" onclick="setTimeout(function(){$(\'#ModalProductoLote > div > div > div > div > div > div\').removeClass();$(\'.btn.btn-primary.modal_send\').attr(\'data-formsjs-onclick\', \'\');manejar_popup(\'modal\');}, 2500);">Nuevo Lote</button>',
                 'model' => Lote::class,
                 'model_options' => [
                     'label' => 'numero_lote',
@@ -147,56 +152,56 @@ class EntradaProductoDetallesForm extends ModelForm
         ];
     }
 
-    public function js() {
-        return <<<EOT
-            $('.form-select').select2({dropdownAutoWidth : true});
-            $(".btn.btn-primary").click(function(e){
-                e.preventDefault();
-                let form = $('#company_form')[0];
-                let data = new FormData(form);
+    // public function js() {
+    //     return <<<EOT
+    //         $('.form-select').select2({dropdownAutoWidth : true});
+    //         $(".btn.btn-primary").click(function(e){
+    //             e.preventDefault();
+    //             let form = $('#company_form')[0];
+    //             let data = new FormData(form);
 
-                $.ajax({
-                url: "{{ route('company.store') }}",
-                type: "POST",
-                data : data,
-                dataType:"JSON",
-                processData : false,
-                contentType:false,
+    //             $.ajax({
+    //             url: "{{ route('company.store') }}",
+    //             type: "POST",
+    //             data : data,
+    //             dataType:"JSON",
+    //             processData : false,
+    //             contentType:false,
 
-                success: function(response) {
+    //             success: function(response) {
 
-                if (response.errors) {
-                    var errorMsg = '';
-                    $.each(response.errors, function(field, errors) {
-                        $.each(errors, function(index, error) {
-                            errorMsg += error + '<br>';
-                        });
-                    });
-                    iziToast.error({
-                        message: errorMsg,
-                        position: 'topRight'
-                    });
+    //             if (response.errors) {
+    //                 var errorMsg = '';
+    //                 $.each(response.errors, function(field, errors) {
+    //                     $.each(errors, function(index, error) {
+    //                         errorMsg += error + '<br>';
+    //                     });
+    //                 });
+    //                 iziToast.error({
+    //                     message: errorMsg,
+    //                     position: 'topRight'
+    //                 });
 
-                } else {
-                    iziToast.success({
-                    message: response.success,
-                    position: 'topRight'
+    //             } else {
+    //                 iziToast.success({
+    //                 message: response.success,
+    //                 position: 'topRight'
 
-                            });
-                }
+    //                         });
+    //             }
 
-            },
-            error: function(xhr, status, error) {
+    //         },
+    //         error: function(xhr, status, error) {
 
-                iziToast.error({
-                    message: 'An error occurred: ' + error,
-                    position: 'topRight'
-                });
-            }
+    //             iziToast.error({
+    //                 message: 'An error occurred: ' + error,
+    //                 position: 'topRight'
+    //             });
+    //         }
 
-                });
+    //             });
 
-        })
-        EOT;
-    }
+    //     })
+    //     EOT;
+    // }
 }

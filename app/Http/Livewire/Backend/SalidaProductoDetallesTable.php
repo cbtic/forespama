@@ -36,9 +36,11 @@ class SalidaProductoDetallesTable extends DataTableComponent
 
     public function configure(): void
     {
-        $this->setPerPageAccepted([25, 50, 100]);
+        $this->setPerPageAccepted([50, 100, 150]);
 
-        $this->setPerPage(25);
+        $this->setPerPage(50);
+
+        $this->setDefaultSort('id', 'desc');
 
         $this->setPrimaryKey('id')
             ->setTableRowUrl(function($row) {
@@ -83,15 +85,15 @@ class SalidaProductoDetallesTable extends DataTableComponent
                 ->label(fn ($row) => Producto::find($row->id_producto)->denominacion)
                 ->sortable()
                 ->searchable(),
-            Column::make('item')
+            Column::make('Item', 'item')
                 ->sortable()
                 ->searchable(),
-            Column::make('cantidad')
+            Column::make('Cantidad', 'cantidad')
                 ->sortable(),
-            Column::make('numero_lote')
+            Column::make('Numero Lote', 'numero_lote')
                 ->sortable()
                 ->searchable(),
-            Column::make('fecha_vencimiento')
+            Column::make('Fecha Vcto.', 'fecha_vencimiento')
                 ->sortable(),
             Column::make('aplica_precio')
                 ->hideIf(true)

@@ -15,9 +15,11 @@ class KardexTable extends DataTableComponent
 
     public function configure(): void
     {
-        $this->setPerPageAccepted([25, 50, 100]);
+        $this->setPerPageAccepted([50, 100, 150]);
 
-        $this->setPerPage(25);
+        $this->setPerPage(50);
+
+        $this->setDefaultSort('id', 'desc');
 
         $this->setPrimaryKey('id');
     }
@@ -38,23 +40,23 @@ class KardexTable extends DataTableComponent
             Column::make("Producto")
                 ->label(fn ($row) => Producto::find($row->id_producto)->denominacion)
                 ->sortable(),
-            Column::make("entradas_cantidad")
+            Column::make("Entradas", "entradas_cantidad")
                 ->sortable(),
-            Column::make("costo_entradas_cantidad")
+            Column::make("Costo Entradas", "costo_entradas_cantidad")
                 ->sortable(),
-            Column::make("total_entradas_cantidad")
+            Column::make("Total Entrada", "total_entradas_cantidad")
                 ->sortable(),
-            Column::make("salidas_cantidad")
+            Column::make("Salidas", "salidas_cantidad")
                 ->sortable(),
-            Column::make("costo_salidas_cantidad")
+            Column::make("Costo Salidas", "costo_salidas_cantidad")
                 ->sortable(),
-            Column::make("total_salidas_cantidad")
+            Column::make("Total Salida", "total_salidas_cantidad")
                 ->sortable(),
-            Column::make("saldos_cantidad")
+            Column::make("Saldos", "saldos_cantidad")
                 ->sortable(),
-            Column::make("costo_saldos_cantidad")
+            Column::make("Costo saldos", "costo_saldos_cantidad")
                 ->sortable(),
-            Column::make("total_saldos_cantidad")
+            Column::make("Total Saldos", "total_saldos_cantidad")
             ->sortable()
         ];
     }

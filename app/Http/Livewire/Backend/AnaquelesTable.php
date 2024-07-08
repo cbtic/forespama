@@ -22,9 +22,11 @@ class AnaquelesTable extends DataTableComponent
 
     public function configure(): void
     {
-        $this->setPerPageAccepted([25, 50, 100]);
+        $this->setPerPageAccepted([50, 100, 150]);
 
-        $this->setPerPage(25);
+        $this->setPerPage(50);
+
+        $this->setDefaultSort('id', 'desc');
 
         $this->setPrimaryKey('id')
         ->setTableRowUrl(function($row) {
@@ -50,9 +52,9 @@ class AnaquelesTable extends DataTableComponent
         return [
             Column::make("Id", "id")
                 ->sortable(),
-            Column::make("codigo", "codigo")
+            Column::make("Codigo", "codigo")
                 ->sortable(),
-            Column::make("denominacion", "denominacion")
+            Column::make("Denominacion", "denominacion")
                 ->sortable(),
             Column::make("Estado")
                 ->label(fn($row) => array("CANCELADO","ACTIVO")[Anaquele::find($row->id)["estado"]])

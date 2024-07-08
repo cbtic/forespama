@@ -26,9 +26,11 @@ class ProductosTable extends DataTableComponent
 
     public function configure(): void
     {
-        $this->setPerPageAccepted([25, 50, 100]);
+        $this->setPerPageAccepted([50, 100, 150]);
 
-        $this->setPerPage(25);
+        $this->setPerPage(50);
+
+        $this->setDefaultSort('id', 'desc');
 
         $this->setPrimaryKey('id')
         ->setTableRowUrl(function($row) {
@@ -75,16 +77,6 @@ class ProductosTable extends DataTableComponent
                 ->label(fn ($row) => TablaMaestra::find($row->id_unidad_medida)->denominacion)
                 ->sortable(),
             Column::make("Stock", "stock_actual")
-                ->sortable(),
-            Column::make("Costo", "costo_unitario")
-                ->sortable(),
-            Column::make("Moneda", "id_moneda")
-                ->hideIf(true)
-                ->sortable(),
-            Column::make("Moneda")
-                ->label(fn ($row) => TablaMaestra::find($row->id_moneda)->abreviatura)
-                ->sortable(),
-            Column::make("Tipo Producto", "id_tipo_producto")
                 ->sortable(),
             Column::make("Vencimiento", "fecha_vencimiento")
                 ->sortable(),

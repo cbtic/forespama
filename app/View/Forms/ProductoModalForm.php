@@ -20,7 +20,7 @@ use Grafite\Forms\Fields\AutoSuggestSelect;
 use Grafite\Forms\Fields\Hidden;
 use TablaMaestra;
 
-class ProductoForm extends ModelForm
+class ProductoModalForm extends ModelForm
 {
     /**
      * The model for the form
@@ -33,12 +33,13 @@ class ProductoForm extends ModelForm
 
     public $submitViaAjax = true;
 
-    public $confirmMessage = 'Esta grabando datos';
-    public $confirmSubmission = 'Se enviaron los datos';
+    public $confirmMessage = 'Esta seguro de enviar';
 
-    public $submitMethod = 'ajax';
+    public $method = 'put';
 
-    public $columns = 3;
+    public $columns = 2;
+
+    public $hasFiles = true;
 
     public $instance;
 
@@ -65,7 +66,11 @@ class ProductoForm extends ModelForm
      * @var array
      */
     public $buttons = [
-        'submit' => 'Guardar'
+        'submit' => 'Guardar Producto'
+    ];
+
+    public $buttonClasses= [
+        'submit' => 'btn btn-primary modal_send'
     ];
 
     /**

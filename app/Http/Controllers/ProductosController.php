@@ -43,9 +43,11 @@ class ProductosController extends Controller
      */
     public function store(ProductoRequest $request)
     {
-        $secciones = Producto::create($request->all());
+        $producto = Producto::create($request->all());
 
-        return redirect()->route('frontend.productos.index');
+        $producto->save();
+        return response()->json( [ 'success' => 'Producto guardado!' ] );
+        // return redirect()->route('frontend.productos.index');
     }
 
     /**

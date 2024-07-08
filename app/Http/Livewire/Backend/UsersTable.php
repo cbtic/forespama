@@ -103,6 +103,12 @@ class UsersTable extends DataTableComponent
 
     public function configure(): void
     {
+        $this->setPerPageAccepted([50, 100, 150]);
+
+        $this->setPerPage(50);
+
+        $this->setDefaultSort('id', 'desc');
+
         $this->setPrimaryKey('id')
         ->setTableRowUrl(function($row) {
             return route('admin.auth.user.edit', User::where('email', $row->email)->pluck("id")[0]);

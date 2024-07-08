@@ -30,23 +30,27 @@
 @endsection
 
 @push('after-scripts')
-<!-- Modal -->
-<div class="modal fade" id="ModalProducto" role="dialog">
+<!-- Modal Producto -->
+<div class="modal fade" id="ModalProductoLote" role="dialog">
      <div class="modal-dialog">
      <!-- Modal contenido-->
-     <div class="modal-content">
-     <div class="modal-header">
-     <button type="button" class="close" data-dismiss="modal">&times;</button>
-     </div>
-     <div class="modal-body-producto">
-</div>
-</div>
+     <div class="modal-content" style="padding: 0 !important">
+        <div class="modal-body-producto">
+        </div>
+    </div>
 </div>
 <script>
     /* Llamando al formulario Modal para nuevo producto */
     $('.btnNuevoProducto').on('click',function(){
         $('.modal-body-producto').load('/productos/modal_create',function(){
-            $('#ModalProducto').modal({show:true});
+            $('#ModalProductoLote').modal({show:true});
+        });
+    });
+
+    /* Llamando al formulario Modal para nuevo lote */
+    $('.btnNuevoLote').on('click',function(){
+        $('.modal-body-producto').load('/lotes/modal_create',function(){
+            $('#ModalProductoLote').modal({show:true});
         });
     });
 
@@ -103,6 +107,46 @@
 
     function redimensionaSelect2(){
         $('.form-select').select2({dropdownAutoWidth : true});
+    }
+
+    function manejar_popup(modo) {
+        if (modo == 'modal') {
+            $("form").eq($("form").length-2).on( "submit", function( event ) {
+                let _form = $("form")[$("form").length-2];
+                // alert( "Enviar datos a: " + $("form").eq($("form").length-2).prop('action'));
+                if (! _form.checkValidity()) {
+                    let _inputs = _form.querySelectorAll('input');
+                    let _selects = _form.querySelectorAll('select');
+                    let _textarea = _form.querySelectorAll('textarea');
+                    let _inputFields = [..._inputs].concat([..._selects]).concat([..._textarea]);
+
+                    _inputFields.forEach(function (_input) {
+                        if (_input.validity.patternMismatch
+                            || _input.validity.valueMissing
+                            || _input.validity.rangeOverflow
+                            || _input.validity.stepMismatch
+                            || _input.validity.typeMismatch
+                            || _input.validity.tooShort
+                            || _input.validity.tooLong
+                            || _input.validity.badInput
+                        ) {
+                            if (! _input.classList.contains('is-invalid')) {
+                                let _errorMessage = document.createElement('div');
+                                _errorMessage.classList.add('invalid-feedback');
+                                _errorMessage.innerText = _input.validationMessage;
+
+                                _input.classList.add('is-invalid');
+                                _input.parentNode.appendChild(_errorMessage);
+                                window.FormsJS_validation();
+                            }
+                        }
+                    });
+
+                    return false;
+                };
+                event.preventDefault();
+            });
+        }
     }
 
 </script>

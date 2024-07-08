@@ -24,5 +24,9 @@ class Producto extends Model
         'estado'
     ];
 
+    public function entrada_producto_detalles()
+    {
+        return $this->belongsTo('EntradaProductoDetalle', 'id_producto');
+    }
 
 }
