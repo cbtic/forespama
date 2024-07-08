@@ -69,6 +69,10 @@ class ProductoModalForm extends ModelForm
         'submit' => 'Guardar Producto'
     ];
 
+    public $buttonClasses= [
+        'submit' => 'btn btn-primary modal_send'
+    ];
+
     /**
      * Set the desired fields for the form
      *

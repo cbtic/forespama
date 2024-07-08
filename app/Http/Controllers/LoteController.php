@@ -19,6 +19,11 @@ class LoteController extends Controller
         return view('frontend.lotes.create');
     }
 
+    public function modal_create($modal = 'modal')
+    {
+        return view('frontend.lotes.modal_create', compact('modal'));
+    }
+
     public function store(LoteRequest $request)
     {
         $lotes = Lote::create($request->all());

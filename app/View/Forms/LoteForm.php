@@ -59,9 +59,7 @@ class LoteForm extends ModelForm
      * @var array
      */
     public $buttons = [
-        'cancel' => 'Cancelar',
-        'submit' => 'Guardar',
-        'delete' => 'Borrar'
+        'submit' => 'Guardar Lote'
     ];
 
     /**
