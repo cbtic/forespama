@@ -112,7 +112,38 @@
     function manejar_popup(modo) {
         if (modo == 'modal') {
             $("form").eq($("form").length-2).on( "submit", function( event ) {
-                alert( "Handler for `submit` called." );
+                let _form = $("form")[$("form").length-2];
+                // alert( "Enviar datos a: " + $("form").eq($("form").length-2).prop('action'));
+                if (! _form.checkValidity()) {
+                    let _inputs = _form.querySelectorAll('input');
+                    let _selects = _form.querySelectorAll('select');
+                    let _textarea = _form.querySelectorAll('textarea');
+                    let _inputFields = [..._inputs].concat([..._selects]).concat([..._textarea]);
+
+                    _inputFields.forEach(function (_input) {
+                        if (_input.validity.patternMismatch
+                            || _input.validity.valueMissing
+                            || _input.validity.rangeOverflow
+                            || _input.validity.stepMismatch
+                            || _input.validity.typeMismatch
+                            || _input.validity.tooShort
+                            || _input.validity.tooLong
+                            || _input.validity.badInput
+                        ) {
+                            if (! _input.classList.contains('is-invalid')) {
+                                let _errorMessage = document.createElement('div');
+                                _errorMessage.classList.add('invalid-feedback');
+                                _errorMessage.innerText = _input.validationMessage;
+
+                                _input.classList.add('is-invalid');
+                                _input.parentNode.appendChild(_errorMessage);
+                                window.FormsJS_validation();
+                            }
+                        }
+                    });
+
+                    return false;
+                };
                 event.preventDefault();
             });
         }
