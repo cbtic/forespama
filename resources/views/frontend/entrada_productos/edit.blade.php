@@ -30,19 +30,79 @@
 @endsection
 
 @push('after-scripts')
+
+<style>
+.modal2 {
+  background-color: rgba(0,0,0,0.4); /* Transparent dimmed overlay */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: table;
+  z-index: 10000;
+}
+
+.modal2.hidden {
+  display: none;
+}
+
+.modal2 .container {
+ display: table-cell;
+ text-align: center;
+ vertical-align: middle;
+ width: 200px;
+}
+
+.modal2 .body {
+  box-shadow: 5px 10px #888888;
+  display: inline-block;
+  background-color: white;
+  border: 1px solid black;
+  padding: 10px;
+}
+</style>
+<div class="modal2 hidden">
+    <div class="container">
+      <div class="body">
+        <p>Click outside this box to close the modal.<p>
+        <p>You could of course add a close button etc</p>
+        <form action="">
+            <input type="text">
+        </form>
+      </div>
+    </div>
+  </div>
+<script>
+
+    var modal = document.querySelector(".modal2");
+    var container = modal.querySelector(".container");
+
+    document.querySelector("button").addEventListener("click", function (e) {
+    modal.classList.remove("hidden");
+    });
+
+    document.querySelector(".modal2").addEventListener("click", function (e) {
+    if (e.target !== modal && e.target !== container) return;
+    modal.classList.add("hidden");
+    });
+</script>
 <!-- Modal Producto -->
-<div class="modal fade" id="ModalProductoLote" role="dialog">
+<div class="modal fade"  tabindex="-1" id="ModalProductoLote" role="dialog">
      <div class="modal-dialog">
      <!-- Modal contenido-->
-     <div class="modal-content" style="padding: 0 !important">
-        <div class="modal-body-producto">
+     <div class="modal-content">
+        <div class="modal-body">
+            <form action="">
+                <input type="text">
+            </form>
         </div>
     </div>
 </div>
 <script>
     /* Llamando al formulario Modal para nuevo producto */
     $('.btnNuevoProducto').on('click',function(){
-        $('.modal-body-producto').load('/productos/modal_create',function(){
+        $('.modal-body').load('/productos/modal_create',function(){
             $('#ModalProductoLote').modal({show:true});
         });
     });
