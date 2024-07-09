@@ -112,7 +112,7 @@
     function manejar_popup(parent_modal) {
         // $("#ModalProductoLote > div > div > div > div > div > div > div > div.modal-header > button").on("click", $('#'+parent_modal).modal('show'));
         $("form").eq($("form").length-1).on( "submit", function( event ) {
-            let _form = $("form")[$("form").length-2];
+            let _form = $("form")[$("form").length-1];
 
             // alert( "Enviar datos a: " + $("form").eq($("form").length-2).prop('action'));
             $('#ModalProductoLote').modal('show');
