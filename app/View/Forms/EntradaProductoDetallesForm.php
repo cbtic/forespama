@@ -91,7 +91,7 @@ class EntradaProductoDetallesForm extends ModelForm
                 'value' => array_reverse(explode('/',\Request::getRequestUri()))[0]
             ]),
             HasOne::make('id_producto', [
-                'label' => 'Producto <button id="btn_lote" type="button" class="btn btn-info btn-sm btnNuevoProducto" onclick="setTimeout(function(){$(\'#ModalProductoLote > div > div > div > div > div > div\').removeClass();$(\'.btn.btn-primary.modal_send\').attr(\'data-formsjs-onclick\', \'\');manejar_popup(\'modal\');}, 2500);">Nuevo Producto</button>',
+                'label' => 'Producto <button id="btn_lote" type="button" class="btn btn-info btn-sm btnNuevoProducto" onclick="let parent_modal=$(this).closest(\'.modal.fade\').attr(\'id\');setTimeout(function(){$(\'#ModalProductoLote > div > div > div > div > div > div\').removeClass();$(\'.btn.btn-primary.modal_send\').attr(\'data-formsjs-onclick\', \'\');manejar_popup(parent_modal);$(\'#\'+parent_modal).modal(\'hide\');}, 2500);">Nuevo Producto</button>',
                 'model' => Producto::class,
                 'model_options' => [
                     'label' => 'denominacion',
