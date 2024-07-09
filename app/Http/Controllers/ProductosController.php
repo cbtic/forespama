@@ -45,8 +45,11 @@ class ProductosController extends Controller
     {
         $producto = Producto::create($request->all());
 
-        $producto->save();
-        return response()->json( [ 'success' => 'Producto guardado!' ] );
+        if($producto->save()) {
+            return response()->json( [ 'success' => 'Producto guardado!' ] );
+        } else {
+            return response()->json( [ 'errors' => 'Errores!' ] );
+        }
         // return redirect()->route('frontend.productos.index');
     }
 
