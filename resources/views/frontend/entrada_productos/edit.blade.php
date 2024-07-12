@@ -113,9 +113,13 @@
         // $("#ModalProductoLote > div > div > div > div > div > div > div > div.modal-header > button").on("click", $('#'+parent_modal).modal('show'));
         $("form").eq($("form").length-1).on( "submit", function( event ) {
             let _form = $("form")[$("form").length-1];
-
+            let insertar_item = _form["Denominacion"].value;
+            let insertar_value = "1000";
+            var nuevoProducto = new Option(insertar_value, insertar_item, true, true);
+            // Append it to the select
+            $("#Id_producto").append(nuevoProducto).trigger('change');
             // alert( "Enviar datos a: " + $("form").eq($("form").length-2).prop('action'));
-            $('#ModalProductoLote').modal('show');
+            $('#ModalProductoLote').modal('hide');
             $('#'+parent_modal).modal('show');
             event.preventDefault();
         });
