@@ -46,7 +46,7 @@ class ProductosController extends Controller
         $producto = Producto::create($request->all());
 
         if($producto->save()) {
-            return response()->json( [ 'success' => 'Producto guardado!' ] );
+            return response()->json( [ 'success' => 'Producto guardado!', 'id' => $producto->id, 'denominacion' => $producto->denominacion ] );
         } else {
             return response()->json( [ 'errors' => 'Errores!' ] );
         }

@@ -112,15 +112,29 @@
     function manejar_popup(parent_modal) {
         // $("#ModalProductoLote > div > div > div > div > div > div > div > div.modal-header > button").on("click", $('#'+parent_modal).modal('show'));
         $("form").eq($("form").length-1).on( "submit", function( event ) {
-            let _form = $("form")[$("form").length-1];
-            let insertar_item = _form["Denominacion"].value;
-            let insertar_value = "1000";
-            var nuevoProducto = new Option(insertar_item, insertar_value, true, true);
-            // Append it to the select
-            $("#Id_producto").append(nuevoProducto).trigger('change');
-            // alert( "Enviar datos a: " + $("form").eq($("form").length-2).prop('action'));
-            $('#ModalProductoLote').modal('hide');
-            $('#'+parent_modal).modal('show');
+            let _form = $("form").eq($("form").length-1);
+
+            $.ajax({
+                url: "{{ route('frontend.productos.store') }}",
+                method: 'POST',
+                dataType: 'json',
+                data : _form.serialize(),
+                success: function(data) {
+                        // log response into console
+                        console.log(data);
+                        let insertar_item = data.denominacion;
+                        let insertar_value = data.id;
+                        var nuevoProducto = new Option(insertar_item, insertar_value, true, true);
+                        // Append it to the select
+                        $("#Id_producto").append(nuevoProducto).trigger('change');
+                        // alert( "Enviar datos a: " + $("form").eq($("form").length-2).prop('action'));
+                        $('#ModalProductoLote').modal('hide');
+                        $('#'+parent_modal).modal('show');
+                    },
+                error: function(XMLHttpRequest, textStatus, errorThrown) {
+                    console.log("some error");
+                }
+                });
             event.preventDefault();
         });
     }
