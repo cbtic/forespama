@@ -2,14 +2,15 @@
 
 namespace App\Http\Livewire\Backend;
 
+use App\Models\Lote;
 use App\Models\Producto;
 use App\Models\TablaMaestra;
 use App\Models\EntradaProducto;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Models\EntradaProductoDetalle;
 use App\View\Forms\EntradaProductosForm;
-use RealRashid\SweetAlert\Facades\Alert;
 // use App\Exports\ConductoresExport;
+use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Database\Eloquent\Builder;
 use App\View\Forms\EntradaProductoDetallesForm;
 use Rappasoft\LaravelLivewireTables\Views\Column;
@@ -115,8 +116,11 @@ class EntradaProductoDetallesTable extends DataTableComponent
                 ->sortable()
                 ->searchable(),
             Column::make('Numero Lote', 'numero_lote')
-                ->sortable()
+                ->hideIf(true)
                 ->searchable(),
+            Column::make("Lote")
+                ->label(fn ($row) => Lote::find($row->numero_lote)->numero_serie)
+                ->sortable(),
             Column::make('Fecha vcto.', 'fecha_vencimiento')
                 ->sortable(),
             Column::make('aplica_precio')

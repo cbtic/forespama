@@ -113,7 +113,7 @@ class EntradaProductoDetallesForm extends ModelForm
                 'label' => 'Lote <button id="btn_lote" type="button" class="btn btn-info btn-sm btnNuevoLote" onclick="let parent_modal=$(this).closest(\'.modal.fade\').attr(\'id\');setTimeout(function(){$(\'#ModalProductoLote > div > div > div > div > div > div\').removeClass();$(\'.btn.btn-primary.modal_send\').attr(\'data-formsjs-onclick\', \'\');manejar_popup_lote(parent_modal);$(\'#\'+parent_modal).modal(\'hide\')}, 500);">Nuevo Lote</button>',
                 'model' => Lote::class,
                 'model_options' => [
-                    'label' => 'numero_lote',
+                    'label' => 'numero_serie',
                     'value' => 'numero_lote',
                     'method' => 'all',
                     'params' => null,
