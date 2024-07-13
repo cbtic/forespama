@@ -18,6 +18,11 @@ use App\Models\Ubigeo;
  * Frontend Controllers
  * All route names are prefixed with 'frontend.'.
  */
+
+// Route::get('/phpinfo', function () {
+//     phpinfo();
+// })->name('phpinfo');
+
 Route::get('/', [HomeController::class, 'index'])
     ->name('index')
     ->breadcrumbs(function (Trail $trail) {
