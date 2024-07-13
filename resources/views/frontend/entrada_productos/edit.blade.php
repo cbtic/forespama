@@ -115,9 +115,25 @@
             let _form = $("form")[$("form").length-1];
             let insertar_item = _form["Denominacion"].value;
             let insertar_value = "1000";
-            var nuevoProducto = new Option(insertar_value, insertar_item, true, true);
+            var nuevoProducto = new Option(insertar_item, insertar_value, true, true);
             // Append it to the select
             $("#Id_producto").append(nuevoProducto).trigger('change');
+            // alert( "Enviar datos a: " + $("form").eq($("form").length-2).prop('action'));
+            $('#ModalProductoLote').modal('hide');
+            $('#'+parent_modal).modal('show');
+            event.preventDefault();
+        });
+    }
+
+    function manejar_popup_lote(parent_modal) {
+        // $("#ModalProductoLote > div > div > div > div > div > div > div > div.modal-header > button").on("click", $('#'+parent_modal).modal('show'));
+        $("form").eq($("form").length-1).on( "submit", function( event ) {
+            let _form = $("form")[$("form").length-1];
+            let insertar_item = _form["Numero_lote"].value;
+            let insertar_value = "1000";
+            var nuevoLote = new Option(insertar_item, insertar_value, true, true);
+            // Append it to the select
+            $("#Numero_lote").append(nuevoLote).trigger('change');
             // alert( "Enviar datos a: " + $("form").eq($("form").length-2).prop('action'));
             $('#ModalProductoLote').modal('hide');
             $('#'+parent_modal).modal('show');
