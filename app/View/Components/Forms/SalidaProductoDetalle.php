@@ -34,7 +34,7 @@ class SalidaProductoDetalle extends Component
             return app(SalidaProductoDetallesForm::class)->edit($this->salidaproductodetalles)->asModal($triggerContent = 'Editar #'.$this->salidaproducto, $triggerClass = 'btn btn-default', $message = null, $modalTitle = 'Editar Producto');
         } else {
             // return app(SalidaProductoDetallesForm::class)->viaAjax()->create();
-            return app(SalidaProductoDetallesForm::class)->viaAjax()->create()->asModal($triggerContent = 'Nuevo #'.$this->salidaproducto, $triggerClass = 'btn btn-default', $message = null, $modalTitle = 'Nuevo Producto (Entrada #'.$this->salidaproducto.')');
+            return app(SalidaProductoDetallesForm::class)->viaAjax()->create()->asModal($triggerContent = '+ Producto en salida', $triggerClass = 'btn btn-default', $message = null, $modalTitle = 'Nuevo Producto (Salida #'.$this->salidaproducto.')');
         }
     }
 }
