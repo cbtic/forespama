@@ -145,9 +145,16 @@ class EntradaProductoDetallesModalForm extends ModelForm
                     'params' => '4',
                 ]
             ])->selectOptions(['Seleccione' => null]),
-            Text::make('id_marca', [
-                'required' => true,
-            ]),
+            HasOne::make('id_marca', [
+                'label' => 'Marca',
+                'model' => TablaMaestra::class,
+                'model_options' => [
+                    'label' => 'denominacion',
+                    'value' => 'id',
+                    'method' => 'por_tipo',
+                    'params' => '47',
+                ]
+            ])->selectOptions(['Seleccione' => null]),
             Select::make('estado')->selectOptions(['ACTIVO' => '1', 'CANCELADO' => '0']),
         ];
     }
