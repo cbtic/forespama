@@ -36,9 +36,11 @@ class SalidaProductoDetallesTable extends DataTableComponent
 
     public function configure(): void
     {
-        $this->setPerPageAccepted([25, 50, 100]);
+        $this->setPerPageAccepted([50, 100, 150]);
 
-        $this->setPerPage(25);
+        $this->setPerPage(50);
+
+        $this->setDefaultSort('id', 'desc');
 
         $this->setPrimaryKey('id')
             ->setTableRowUrl(function($row) {
@@ -83,15 +85,15 @@ class SalidaProductoDetallesTable extends DataTableComponent
                 ->label(fn ($row) => Producto::find($row->id_producto)->denominacion)
                 ->sortable()
                 ->searchable(),
-            Column::make('item')
+            Column::make('Item', 'item')
                 ->sortable()
                 ->searchable(),
-            Column::make('cantidad')
+            Column::make('Cantidad', 'cantidad')
                 ->sortable(),
-            Column::make('numero_lote')
+            Column::make('Numero Lote', 'numero_lote')
                 ->sortable()
                 ->searchable(),
-            Column::make('fecha_vencimiento')
+            Column::make('Fecha Vcto.', 'fecha_vencimiento')
                 ->sortable(),
             Column::make('aplica_precio')
                 ->hideIf(true)
@@ -125,7 +127,7 @@ class SalidaProductoDetallesTable extends DataTableComponent
                         // $edit = '<button class="btn btn-xs btn-success text-white" onclick="window.location.href=\'' . route('frontend.salida_producto_detalles.show', ['salida_producto' => $row->id_salida_productos, 'salida_producto_detalles' => $row->id]) . '\'">Mostrarme</button>';
                         $delete = app(SalidaProductoDetallesForm::class)->delete($row)->modalTitle("Eliminar producto: ")->confirmAsModal("Eliminar?", "Eliminar", "btn btn-danger");
 
-                        $edit = app(SalidaProductoDetallesForm::class)->edit($row)->asModal($triggerContent = 'Editar', $triggerClass = 'btn btn-success', $message = null, $modalTitle = 'Editar el producto');
+                        $edit = app(SalidaProductoDetallesForm::class)->edit($row)->asModal($triggerContent = 'Editar', $triggerClass = 'btn btn-success btn-salida', $message = null, $modalTitle = 'Editar el producto');
                         return $edit . " " . $delete;
                     }
                 )->html(),

@@ -26,9 +26,11 @@ class AlmacenesTable extends DataTableComponent
 
     public function configure(): void
     {
-        $this->setPerPageAccepted([25, 50, 100]);
+        $this->setPerPageAccepted([50, 100, 150]);
 
-        $this->setPerPage(25);
+        $this->setPerPage(50);
+
+        $this->setDefaultSort('id', 'desc');
 
         $this->setPrimaryKey('id')
         ->setTableRowUrl(function($row) {
@@ -55,10 +57,10 @@ class AlmacenesTable extends DataTableComponent
         return [
             Column::make('ID', 'id')
                 ->sortable(),
-            Column::make('codigo')
+            Column::make('Codigo', 'codigo')
                 ->sortable()
                 ->searchable(),
-            Column::make('denominacion')
+            Column::make('Denominacion', 'denominacion')
                 ->sortable(),
             Column::make('Ubigeo', 'ubigeos.id_ubigeo')
                 ->hideIf(true)

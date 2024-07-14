@@ -2,14 +2,15 @@
 
 namespace App\Http\Livewire\Backend;
 
+use App\Models\Lote;
 use App\Models\Producto;
 use App\Models\TablaMaestra;
 use App\Models\EntradaProducto;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Models\EntradaProductoDetalle;
 use App\View\Forms\EntradaProductosForm;
-use RealRashid\SweetAlert\Facades\Alert;
 // use App\Exports\ConductoresExport;
+use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Database\Eloquent\Builder;
 use App\View\Forms\EntradaProductoDetallesForm;
 use Rappasoft\LaravelLivewireTables\Views\Column;
@@ -23,7 +24,7 @@ class EntradaProductoDetallesTable extends DataTableComponent
     public $id_entrada_productos;
     protected $index = 0;
 
-    protected $model = EntradaProductoDetalle::class;
+    // protected $model = EntradaProductoDetalle::class;
 
     public function mount($entrada_producto)
     {
@@ -32,17 +33,25 @@ class EntradaProductoDetallesTable extends DataTableComponent
 
     public function builder(): Builder
     {
-        return EntradaProductoDetalle::where('id_entrada_productos','=', $this->id_entrada_productos);
+        return EntradaProductoDetalle::where('id_entrada_productos','=', $this->id_entrada_productos)->join('productos', 'entrada_producto_detalles.id_producto', '=', 'productos.id');
+
+        //->select("entrada_producto_detalles.id","id_entrada_productos","productos.denominacion","item","cantidad","numero_lote","fecha_vencimiento","aplica_precio","id_um","id_estado_bien","id_marca","costo","estado");
+
+        // return EntradaProductoDetalle::query()->when($this->getFilter('search'), fn ($query, $term) => $query->search($term))->where('id_entrada_productos','=', $this->id_entrada_productos)->orderBy('id','desc');
         // return EntradaProductoDetalle::withRowNumber()->where('id_entrada_productos','=', $this->id_entrada_productos);
+        // return EntradaProductoDetalle::query()
+        //     ->where('id_entrada_productos','=', $this->id_entrada_productos);
     }
 
     public function configure(): void
     {
         $this->index++;
 
-        $this->setPerPageAccepted([25, 50, 100]);
+        $this->setPerPageAccepted([50, 100, 150]);
 
-        $this->setPerPage(25);
+        $this->setPerPage(50);
+
+        $this->setDefaultSort('id', 'desc');
 
         $this->setPrimaryKey('id')
         ->setTableRowUrl(function($row) {
@@ -83,28 +92,36 @@ class EntradaProductoDetallesTable extends DataTableComponent
             //     })
             //     ->sortable(),
             Column::make('ID', 'id')
-                ->sortable()
-                ->searchable(),
-            Column::make('id_entrada_productos')
-                ->hideIf(true)
-                ->sortable()
-                ->searchable(),
-            Column::make("id_producto")
-                ->hideIf(true)
                 ->sortable(),
+            Column::make('id_entrada_productos')
+                ->hideIf(true),
+            Column::make("id_producto")
+                ->hideIf(true),
             Column::make('Producto')
                 ->label(fn ($row) => Producto::find($row->id_producto)->denominacion)
                 ->sortable()
                 ->searchable(),
-            Column::make('item')
+
+            // Column::make('Producto', 'id_producto')
+            //     ->format(function($value, $row, Column $column) {
+            //         return $row->productos->denominacion;
+            //     })->eagerLoadRelations(),
+            // Column::make('productos.denominacion')
+            //     ->sortable()
+            //     ->searchable(),
+            Column::make('Item', 'item')
                 ->sortable()
                 ->searchable(),
-            Column::make('cantidad')
+            Column::make('Cantidad', 'cantidad')
+                ->sortable()
+                ->searchable(),
+            Column::make('Numero Lote', 'numero_lote')
+                ->hideIf(true)
+                ->searchable(),
+            Column::make("Lote")
+                ->label(fn ($row) => Lote::find($row->numero_lote)->numero_serie)
                 ->sortable(),
-            Column::make('numero_lote')
-                ->sortable()
-                ->searchable(),
-            Column::make('fecha_vencimiento')
+            Column::make('Fecha vcto.', 'fecha_vencimiento')
                 ->sortable(),
             Column::make('aplica_precio')
                 ->hideIf(true)
@@ -138,7 +155,7 @@ class EntradaProductoDetallesTable extends DataTableComponent
                         // $edit = '<button class="btn btn-xs btn-success text-white" onclick="window.location.href=\'' . route('frontend.entrada_producto_detalles.show', ['entrada_producto' => $row->id_entrada_productos, 'entrada_producto_detalles' => $row->id]) . '\'">Mostrarme</button>';
                         $delete = app(EntradaProductoDetallesForm::class)->delete($row)->modalTitle("Eliminar producto: ")->confirmAsModal("Eliminar?", "Eliminar", "btn btn-danger");
 
-                        $edit = app(EntradaProductoDetallesForm::class)->edit($row)->asModal($triggerContent = 'Editar', $triggerClass = 'btn btn-success', $message = null, $modalTitle = 'Editar el producto');
+                        $edit = app(EntradaProductoDetallesForm::class)->edit($row)->asModal($triggerContent = 'Editar', $triggerClass = 'btn btn-success btn-entrada', $message = null, $modalTitle = 'Editar el producto');
                         return $edit . " " . $delete;
                     }
                 )->html(),

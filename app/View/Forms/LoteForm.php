@@ -30,7 +30,7 @@ class LoteForm extends ModelForm
 
     public $routeParameters = ['id'];
 
-    public $columns = 3;
+    public $columns = 2;
 
     public $hasFiles = true;
 
@@ -59,9 +59,7 @@ class LoteForm extends ModelForm
      * @var array
      */
     public $buttons = [
-        'cancel' => 'Cancelar',
-        'submit' => 'Guardar',
-        'delete' => 'Borrar'
+        'submit' => 'Guardar Lote'
     ];
 
     /**

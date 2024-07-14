@@ -18,6 +18,11 @@ use App\Models\Ubigeo;
  * Frontend Controllers
  * All route names are prefixed with 'frontend.'.
  */
+
+// Route::get('/phpinfo', function () {
+//     phpinfo();
+// })->name('phpinfo');
+
 Route::get('/', [HomeController::class, 'index'])
     ->name('index')
     ->breadcrumbs(function (Trail $trail) {
@@ -153,6 +158,7 @@ Route::get('secciones/{secciones}/edit', 'App\Http\Controllers\SeccionesControll
 Route::get('productos', 'App\Http\Controllers\ProductosController@index')->name('productos.index');
 Route::post('productos', 'App\Http\Controllers\ProductosController@store')->name('productos.store');
 Route::get('productos/create', 'App\Http\Controllers\ProductosController@create')->name('productos.create');
+Route::get('productos/modal_create', 'App\Http\Controllers\ProductosController@modal_create')->name('productos.modal_create');
 Route::get('productos/{productos}', 'App\Http\Controllers\ProductosController@show')->name('productos.show');
 Route::put('productos/{productos}', 'App\Http\Controllers\ProductosController@update')->name('productos.update');
 Route::delete('productos/{productos}', 'App\Http\Controllers\ProductosController@destroy')->name('productos.destroy');
@@ -171,6 +177,7 @@ Route::get('ingreso/modal_valorizacion_factura/{id}', [IngresoController::class,
 Route::get('lotes', 'App\Http\Controllers\LoteController@index')->name('lotes.index');
 Route::post('lotes', 'App\Http\Controllers\LoteController@store')->name('lotes.store');
 Route::get('lotes/create', 'App\Http\Controllers\LoteController@create')->name('lotes.create');
+Route::get('lotes/modal_create', 'App\Http\Controllers\LoteController@modal_create')->name('lotes.modal_create');
 Route::get('lotes/{lotes}', 'App\Http\Controllers\LoteController@show')->name('lotes.show');
 Route::put('lotes/{lotes}', 'App\Http\Controllers\LoteController@update')->name('lotes.update');
 Route::delete('lotes/{lotes}', 'App\Http\Controllers\LoteController@destroy')->name('lotes.destroy');
