@@ -133,7 +133,7 @@ class LoteForm extends ModelForm
                 'label' => 'Escoja el almacen',
                 'model' => Almacene::class,
                 'model_options' => [
-                    'label' => 'codigo',
+                    'label' => 'denominacion',
                     'value' => 'id',
                     'method' => 'all',
                     'params' => null,
@@ -143,7 +143,7 @@ class LoteForm extends ModelForm
                 'label' => 'Escoja la seccion',
                 'model' => Seccione::class,
                 'model_options' => [
-                    'label' => 'codigo',
+                    'label' => 'denominacion',
                     'value' => 'id',
                     'method' => 'all',
                     'params' => null,
@@ -153,7 +153,7 @@ class LoteForm extends ModelForm
                 'label' => 'Escoja el anaquel',
                 'model' => Anaquele::class,
                 'model_options' => [
-                    'label' => 'codigo',
+                    'label' => 'denominacion',
                     'value' => 'id',
                     'method' => 'all',
                     'params' => null,

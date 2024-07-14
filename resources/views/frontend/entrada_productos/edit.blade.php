@@ -114,7 +114,12 @@
             $('#ModalProductoLote').modal('hide');
             $('#'+parent_modal).modal('show');
         });
+
         $('.form-select').select2();
+
+        $('#ModalProductoLote').on('hidden.bs.modal', function (e) {
+            $('#'+parent_modal).modal('show');
+        });
 
         // $("#ModalProductoLote > div > div > div > div > div > div > div > div.modal-header > button").on("click", $('#'+parent_modal).modal('show'));
         $("form").eq($("form").length-1).on( "submit", function( event ) {
@@ -151,7 +156,12 @@
             $('#ModalProductoLote').modal('hide');
             $('#'+parent_modal).modal('show');
         });
+
         $('.form-select').select2();
+
+        $('#ModalProductoLote').on('hidden.bs.modal', function (e) {
+            $('#'+parent_modal).modal('show');
+        });
         // $("#ModalProductoLote > div > div > div > div > div > div > div > div.modal-header > button").on("click", $('#'+parent_modal).modal('show'));
         $("form").eq($("form").length-1).on( "submit", function( event ) {
             let _form = $("form").eq($("form").length-1);
