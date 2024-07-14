@@ -110,6 +110,12 @@
     }
 
     function manejar_popup(parent_modal) {
+        $("#ModalProductoLote > div > div > div > div > div > div > div > div.modal-header > button").on("click", function (event) {
+            $('#ModalProductoLote').modal('hide');
+            $('#'+parent_modal).modal('show');
+        });
+        $('.form-select').select2();
+
         // $("#ModalProductoLote > div > div > div > div > div > div > div > div.modal-header > button").on("click", $('#'+parent_modal).modal('show'));
         $("form").eq($("form").length-1).on( "submit", function( event ) {
             $('.form-select').select2();
@@ -141,6 +147,10 @@
     }
 
     function manejar_popup_lote(parent_modal) {
+        $("#ModalProductoLote > div > div > div > div > div > div > div > div.modal-header > button").on("click", function (event) {
+            $('#ModalProductoLote').modal('hide');
+            $('#'+parent_modal).modal('show');
+        });
         $('.form-select').select2();
         // $("#ModalProductoLote > div > div > div > div > div > div > div > div.modal-header > button").on("click", $('#'+parent_modal).modal('show'));
         $("form").eq($("form").length-1).on( "submit", function( event ) {
