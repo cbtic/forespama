@@ -36,50 +36,33 @@
         </li>
 		-->
 
+	@if(Gate::check('Ingreso de Camiones') || Gate::check('Cubicaje de Troncos'))
 
-        @if (
-        $logged_in_user->hasAllAccess() ||
-        (
-        $logged_in_user->can('admin.access.user.list') ||
-        $logged_in_user->can('admin.access.user.deactivate') ||
-        $logged_in_user->can('admin.access.user.reactivate') ||
-        $logged_in_user->can('admin.access.user.clear-session') ||
-        $logged_in_user->can('admin.access.user.impersonate') ||
-        $logged_in_user->can('admin.access.user.change-password')
-        )
-        )
         <li class="c-sidebar-nav-title">@lang('System')</li>
 
         <li class="c-sidebar-nav-dropdown {{ activeClass(Route::is('admin.auth.user.*') || Route::is('admin.auth.role.*'), 'c-open c-show') }}">
             <x-utils.link href="#" icon="c-sidebar-nav-icon cil-user" class="c-sidebar-nav-dropdown-toggle" :text="__('Materia Prima')" />
 
             <ul class="c-sidebar-nav-dropdown-items">
-                @if (
-                $logged_in_user->hasAllAccess() ||
-                (
-                $logged_in_user->can('admin.access.user.list') ||
-                $logged_in_user->can('admin.access.user.deactivate') ||
-                $logged_in_user->can('admin.access.user.reactivate') ||
-                $logged_in_user->can('admin.access.user.clear-session') ||
-                $logged_in_user->can('admin.access.user.impersonate') ||
-                $logged_in_user->can('admin.access.user.change-password')
-                )
-                )
+			
+                @can('Ingreso de Camiones')
                 <li class="c-sidebar-nav-item">
                     <x-utils.link :href="route('frontend.ingreso_vehiculo_tronco')" class="c-sidebar-nav-link" :text="__('Ingreso Camion')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
                 </li>
                 @endif
 
-                @if ($logged_in_user->hasAllAccess())
+                @can('Cubicaje de Troncos')
                 <li class="c-sidebar-nav-item">
                     <x-utils.link :href="route('frontend.ingreso_vehiculo_tronco.cubicaje')" class="c-sidebar-nav-link" :text="__('Cubicaje Tronco')" :active="activeClass(Route::is('admin.auth.role.*'), 'c-active')" />
                 </li>
                 @endif
             </ul>
         </li>
-        @endif
+        
 
-        @if ($logged_in_user->hasAllAccess())
+	@endif
+
+        @if(Gate::check('Acerrado'))
         <li class="c-sidebar-nav-dropdown">
             <x-utils.link href="#" icon="c-sidebar-nav-icon cil-list" class="c-sidebar-nav-dropdown-toggle" :text="__('Acerrado')" />
 
@@ -102,8 +85,9 @@
 
         </li>
         @endif
-
-        @if ($logged_in_user->hasAllAccess())
+	
+	
+	@if(Gate::check('Almacenes') || Gate::check('Secciones') || Gate::check('Anaqueles') || Gate::check('Productos') || Gate::check('Lotes') || Gate::check('Entradas') || Gate::check('Salidas') || Gate::check('Kardex') || Gate::check('Movimientos'))
 
         <li class="c-sidebar-nav-dropdown">
             <x-utils.link href="#" icon="c-sidebar-nav-icon cil-list" class="c-sidebar-nav-dropdown-toggle" :text="__('Control Mantenimiento')" />
@@ -114,57 +98,114 @@
         <li class="c-sidebar-nav-dropdown">
             <x-utils.link href="#" icon="c-sidebar-nav-icon cil-list" class="c-sidebar-nav-dropdown-toggle" :text="__('Almacenes')" />
             <ul class="c-sidebar-nav-dropdown-items">
+				
+				@can('Almacenes')
                 <li class="c-sidebar-nav-item">
                     <x-utils.link :href="route('frontend.almacenes.index')" class="c-sidebar-nav-link" :text="__('Almacenes')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
                 </li>
+				@endif
+				
+				@can('Secciones')
                 <li class="c-sidebar-nav-item">
                     <x-utils.link :href="route('frontend.secciones.index')" class="c-sidebar-nav-link" :text="__('Secciones')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
                 </li>
+				@endif
+				
+				@can('Anaqueles')
                 <li class="c-sidebar-nav-item">
                     <x-utils.link :href="route('frontend.anaqueles.index')" class="c-sidebar-nav-link" :text="__('Anaqueles')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
                 </li>
+				@endif
+				
+				@can('Productos')
                 <li class="c-sidebar-nav-item">
                     <x-utils.link :href="route('frontend.productos.index')" class="c-sidebar-nav-link" :text="__('Productos')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
                 </li>
+				@endif
+				
+				@can('Lotes')
                 <li class="c-sidebar-nav-item">
                     <x-utils.link :href="route('frontend.lotes.index')" class="c-sidebar-nav-link" :text="__('Lotes')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
                 </li>
+				@endif
+				
+				@can('Entradas')
                 <li class="c-sidebar-nav-item">
                     <x-utils.link :href="route('frontend.entrada_productos.index')" class="c-sidebar-nav-link" :text="__('Entradas')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
                 </li>
+				@endif
+				
+				@can('Salidas')
+                <li class="c-sidebar-nav-item">
+                    <x-utils.link :href="route('frontend.salida_productos.index')" class="c-sidebar-nav-link" :text="__('Salidas')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+                </li>
+				@endif
+				
+				@can('Kardex')
+                <li class="c-sidebar-nav-item">
+                    <x-utils.link :href="route('frontend.kardex.index')" class="c-sidebar-nav-link" :text="__('Kardex')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+                </li>
+				@endif
+				
+				@can('Movimientos')
+                <li class="c-sidebar-nav-item">
+                    <x-utils.link :href="route('frontend.movimientos.index')" class="c-sidebar-nav-link" :text="__('Movimientos')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+                </li>
+				@endif
+				
             </ul>
 
         </li>
-
+		
+	@endif
+	
+	@if(Gate::check('Consultas'))
         <li class="c-sidebar-nav-dropdown">
             <x-utils.link href="#" icon="c-sidebar-nav-icon cil-list" class="c-sidebar-nav-dropdown-toggle" :text="__('Consultas')" />
 
         </li>
-
+	@endif
+	
+	@if(Gate::check('Mantenimiento Personas') || Gate::check('Mantenimiento Empresas') || Gate::check('Mantenimiento Vehiculos') || Gate::check('Mantenimiento Tablas Maestras') || Gate::check('Mantenimiento Conductores'))
+	
         <li class="c-sidebar-nav-dropdown">
             <x-utils.link href="#" icon="c-sidebar-nav-icon cil-list" class="c-sidebar-nav-dropdown-toggle" :text="__('Mantenimiento')" />
             <ul class="c-sidebar-nav-dropdown-items">
-                <li class="c-sidebar-nav-item">
+                
+				@can('Mantenimiento Personas')
+				<li class="c-sidebar-nav-item">
                     <x-utils.link :href="route('frontend.personas')" class="c-sidebar-nav-link" :text="__('Personas')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
                 </li>
+				@endif
+				
+				@can('Mantenimiento Empresas')
                 <li class="c-sidebar-nav-item">
                     <x-utils.link :href="route('frontend.empresas')" class="c-sidebar-nav-link" :text="__('Empresas')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
                 </li>
+				@endif
+				
+				@can('Mantenimiento Vehiculos')
                 <li class="c-sidebar-nav-item">
                     <x-utils.link :href="route('frontend.vehiculos.index')" class="c-sidebar-nav-link" :text="__('Vehiculos')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
                 </li>
-
+				@endif
+				
+				@can('Mantenimiento Tablas Maestras')
                 <li class="c-sidebar-nav-item">
                     <x-utils.link :href="route('frontend.tablamaestras.index')" class="c-sidebar-nav-link" :text="__('Tablas Maestras')" />
                 </li>
+				@endif
+				
+				@can('Mantenimiento Conductores')
                 <li class="c-sidebar-nav-item">
                     <x-utils.link :href="route('frontend.conductores.index')" class="c-sidebar-nav-link" :text="__('Conductores')" />
                 </li>
-
+				@endif
 
             </ul>
 
         </li>
+<<<<<<< HEAD
 
 
 
@@ -178,17 +219,21 @@
         </li>
 
 
+=======
+	
+	@endif
+	
+	@if(Gate::check('Consultas'))
+	
+>>>>>>> a934c5e0f6023de8b6a2caa1e044135d5248f367
         <li class="c-sidebar-nav-dropdown">
             <x-utils.link href="#" icon="c-sidebar-nav-icon cil-list" class="c-sidebar-nav-dropdown-toggle" :text="__('Reportes')" />
 
         </li>
 
-        @endif
+    @endif    
 
-        @else
-
-
-        @endauth
+	@endauth
 
     </ul>
 

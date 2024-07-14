@@ -8,7 +8,7 @@
                 <div class="card-header">Editar Tabla #{{ $tablamaestras->id }}</div>
 
                 <div class="card-body">
-                    <x-forms.tablamaestra :tablamaestras="$tablamaestras"></x-forms.tablamaestra>
+                    <x-forms.TablaMaestra :tablamaestras="$tablamaestras" />
                 </div>
             </div>
         </div>

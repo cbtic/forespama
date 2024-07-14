@@ -185,13 +185,21 @@ Route::put('entrada_productos/{entrada_productos}', 'App\Http\Controllers\Entrad
 Route::delete('entrada_productos/{entrada_productos}', 'App\Http\Controllers\EntradaProductosController@destroy')->name('entrada_productos.destroy');
 Route::get('entrada_productos/edit/{entrada_productos}', 'App\Http\Controllers\EntradaProductosController@edit')->name('entrada_productos.edit');
 
-Route::get('entrada_producto_detalles/{entrada_producto}', 'App\Http\Controllers\EntradaProductoDetallesController@index')->name('entrada_producto_detalles.index');
 Route::post('entrada_producto_detalles', 'App\Http\Controllers\EntradaProductoDetallesController@store')->name('entrada_producto_detalles.store');
-Route::get('entrada_producto_detalles/create/{entrada_producto}', 'App\Http\Controllers\EntradaProductoDetallesController@create')->name('entrada_producto_detalles.create');
-Route::get('entrada_producto_detalles/{entrada_producto_detalles}', 'App\Http\Controllers\EntradaProductoDetallesController@show')->name('entrada_producto_detalles.show');
-Route::put('entrada_producto_detalles/{entrada_producto}/{entrada_producto_detalles}', 'App\Http\Controllers\EntradaProductoDetallesController@update')->name('entrada_producto_detalles.update');
+Route::put('entrada_producto_detalles/{entrada_producto_detalles}', 'App\Http\Controllers\EntradaProductoDetallesController@update')->name('entrada_producto_detalles.update');
 Route::delete('entrada_producto_detalles/{entrada_producto_detalles}', 'App\Http\Controllers\EntradaProductoDetallesController@destroy')->name('entrada_producto_detalles.destroy');
-Route::get('entrada_producto_detalles/edit/{entrada_producto_detalles}', 'App\Http\Controllers\EntradaProductoDetallesController@edit')->name('entrada_producto_detalles.edit');
+
+Route::get('salida_productos', 'App\Http\Controllers\SalidaProductoController@index')->name('salida_productos.index');
+Route::post('salida_productos', 'App\Http\Controllers\SalidaProductoController@store')->name('salida_productos.store');
+Route::get('salida_productos/create', 'App\Http\Controllers\SalidaProductoController@create')->name('salida_productos.create');
+Route::get('salida_productos/{salida_productos}', 'App\Http\Controllers\SalidaProductoController@show')->name('salida_productos.show');
+Route::put('salida_productos/{salida_productos}', 'App\Http\Controllers\SalidaProductoController@update')->name('salida_productos.update');
+Route::delete('salida_productos/{salida_productos}', 'App\Http\Controllers\SalidaProductoController@destroy')->name('salida_productos.destroy');
+Route::get('salida_productos/edit/{salida_productos}', 'App\Http\Controllers\SalidaProductoController@edit')->name('salida_productos.edit');
+
+Route::post('salida_producto_detalles', 'App\Http\Controllers\SalidaProductoDetalleController@store')->name('salida_producto_detalles.store');
+Route::put('salida_producto_detalles/{salida_producto_detalles}', 'App\Http\Controllers\SalidaProductoDetalleController@update')->name('salida_producto_detalles.update');
+Route::delete('salida_producto_detalles/{salida_producto_detalles}', 'App\Http\Controllers\SalidaProductoDetalleController@destroy')->name('salida_producto_detalles.destroy');
 
 Route::get('ubigeo/listar_departamentos_ajax', function() {
     return response()->json([ 'status' => 'OK', 'departamentos' => Ubigeo::departamentos() ]);
@@ -204,3 +212,13 @@ Route::get('ubigeo/listar_provincias_ajax/{id_departamento}', function(Request $
 Route::get('ubigeo/listar_distritos_ajax/{id_departamento}/{id_provincia}', function(Request $request) {
     return response()->json([ 'status' => 'OK', 'distritos' => Ubigeo::distritos_ajax(request()->route('id_departamento'), request()->route('id_provincia')) ]);
 });
+
+Route::get('kardex', 'App\Http\Controllers\KardexController@index')->name('kardex.index');
+// Route::post('kardex', 'App\Http\Controllers\KardexController@store')->name('kardex.store');
+// Route::get('kardex/create', 'App\Http\Controllers\KardexController@create')->name('kardex.create');
+// Route::get('kardex/{kardex}', 'App\Http\Controllers\KardexController@show')->name('kardex.show');
+// Route::put('kardex/{kardex}', 'App\Http\Controllers\KardexController@update')->name('kardex.update');
+// Route::delete('kardex/{kardex}', 'App\Http\Controllers\KardexController@destroy')->name('kardex.destroy');
+// Route::get('kardex/edit/{kardex}', 'App\Http\Controllers\KardexController@edit')->name('kardex.edit');
+
+Route::get('movimientos', 'App\Http\Controllers\MovimientoController@index')->name('movimientos.index');

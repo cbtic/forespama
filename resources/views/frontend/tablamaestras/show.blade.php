@@ -8,7 +8,7 @@
                 <div class="card-header">Ver Tabla #{{ $tablamaestras->id }}</div>
 
                 <div class="card-body">
-                    <x-forms.tablamaestra :tablamaestras="$tablamaestras"></x-forms.tablamaestra>
+                    <x-forms.TablaMaestra :tablamaestras="$tablamaestras" />
                 </div>
             </div>
         </div>
@@ -27,6 +27,8 @@
     $(".btn.btn-secondary").hide();
     $(".btn.btn-primary").hide();
 
-    $(".form-select").chosen();
+    $(document).ready(function() {
+        $('.form-select').select2();
+    });
 </script>
 @endpush

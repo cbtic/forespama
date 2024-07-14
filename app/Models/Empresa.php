@@ -38,6 +38,9 @@ class Empresa extends Model
        return $this->belongsToMany(Conductores::class,'empresas_conductores', 'id_empresas', 'id_conductores');
    }
 
+   public function getRucNombreComercialAttribute() : string {
+    return $this->ruc . " - " . $this->nombre_comercial;
+  }
 //    public function conductores()
 //    {
 //        return $this->hasMany(Conductores::class);

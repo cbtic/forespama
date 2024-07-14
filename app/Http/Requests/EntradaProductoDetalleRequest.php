@@ -32,7 +32,6 @@ class EntradaProductoDetalleRequest extends FormRequest
             'numero_lote' => ['required'],
             'fecha_vencimiento' => ['required'],
             'aplica_precio' => ['required'],
-            'precio_unitario' => ['required'],
             'id_um' => ['required'],
             'id_estado_bien' => ['required'],
             'id_marca' => ['required'],

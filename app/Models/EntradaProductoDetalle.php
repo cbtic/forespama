@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class EntradaProductoDetalle extends Model
 {
@@ -22,4 +23,5 @@ class EntradaProductoDetalle extends Model
         'id_marca',
         'estado'
     ];
+
 }

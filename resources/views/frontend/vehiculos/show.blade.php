@@ -27,6 +27,8 @@
     $(".btn.btn-secondary").hide();
     $(".btn.btn-primary").hide();
 
-    $(".form-select").chosen();
+    $(document).ready(function() {
+        $('.form-select').select2();
+    });
 </script>
 @endpush
