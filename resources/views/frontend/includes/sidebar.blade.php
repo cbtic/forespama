@@ -201,6 +201,12 @@
                     <x-utils.link :href="route('frontend.conductores.index')" class="c-sidebar-nav-link" :text="__('Conductores')" />
                 </li>
 				@endif
+				
+				@can('Mantenimiento Tipo Cambio')
+                <li class="c-sidebar-nav-item">
+                    <x-utils.link :href="route('frontend.tipocambio.index')" class="c-sidebar-nav-link" :text="__('Tipo Cambio')" />
+                </li>
+				@endif
 
             </ul>
 

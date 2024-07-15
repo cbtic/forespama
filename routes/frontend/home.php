@@ -11,6 +11,7 @@ use App\Http\Controllers\Frontend\EmpresaController;
 use App\Http\Controllers\Frontend\VehiculoController;
 
 use App\Http\Controllers\Frontend\IngresoController;
+use App\Http\Controllers\Frontend\TipoCambioController;
 
 use App\Models\Ubigeo;
 
@@ -228,3 +229,10 @@ Route::get('kardex', 'App\Http\Controllers\KardexController@index')->name('karde
 // Route::get('kardex/edit/{kardex}', 'App\Http\Controllers\KardexController@edit')->name('kardex.edit');
 
 Route::get('movimientos', 'App\Http\Controllers\MovimientoController@index')->name('movimientos.index');
+
+Route::get('tipo_cambio', [TipoCambioController::class, 'index'])->name('tipocambio.index');
+Route::post('tipo_cambio/listar_tipo_cambio_ajax', [TipoCambioController::class, 'listar_tipo_cambio_ajax'])->name('tipo_cambio.listar_tipo_cambio_ajax');
+Route::get('tipo_cambio/modal_tipo_cambio/{id}', [TipoCambioController::class, 'modal_tipo_cambio'])->name('tipo_cambio.modal_tipo_cambio');
+Route::post('tipo_cambio/send', [TipoCambioController::class, 'send'])->name('tipo_cambio.send');
+Route::get('tipo_cambio/eliminar_tipo_cambio/{id}/{estado}', [TipoCambioController::class, 'eliminar_tipo_cambio'])->name('tipo_cambio.eliminar_tipo_cambio');
+
