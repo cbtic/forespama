@@ -13,13 +13,20 @@ use App\View\Forms\SeccioneForm;
 class SeccionesTable extends DataTableComponent
 {
     protected $model = Seccione::class;
+    public $id_almacenes;
+
+    public function mount($id_almacenes)
+    {
+        $this->id_almacenes = $id_almacenes;
+    }
 
     /**
      * @return Builder
      */
-    public function query(): Builder
+    public function builder(): Builder
     {
-        return Seccione::when($this->getFilter('search'), fn ($query, $term) => $query->search($term));
+        $id_almacenes = $this->id_almacenes;
+        return Seccione::whereHas('almacenes', function ($query) use ($id_almacenes) { $query->where('id_almacenes', $id_almacenes); });
     }
 
     public function configure(): void

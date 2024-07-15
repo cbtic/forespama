@@ -14,9 +14,11 @@ class Seccione extends Component
      * @return void
      */
     public $secciones;
+    public $almacen;
 
-    public function __construct($secciones = null)
+    public function __construct($secciones = null, $almacen = null)
     {
+        $this->almacen = $almacen;
         $this->secciones = $secciones;
     }
 
@@ -27,11 +29,13 @@ class Seccione extends Component
      */
     public function render()
     {
-        // return view('components.forms.secciones');
+
+        // return view('components.forms.productos');
         if ($this->secciones) {
-            return app(SeccioneForm::class)->edit($this->secciones)->render();
+            return app(SeccioneForm::class)->edit($this->secciones)->asModal($triggerContent = 'Editar secciond del almacem: #'.$this->almacen, $triggerClass = 'btn btn-default', $message = null, $modalTitle = 'Editar Seccion');
         } else {
-            return app(SeccioneForm::class)->create()->render();
+            // return app(EntradaProductoDetallesForm::class)->viaAjax()->create();
+            return app(SeccioneForm::class)->viaAjax()->create()->asModal($triggerContent = '+ Nueva seccion', $triggerClass = 'btn btn-default', $message = null, $modalTitle = 'Nueva Sección (Almacen #'.$this->almacen.')');
         }
     }
 }
