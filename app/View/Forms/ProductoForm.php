@@ -38,7 +38,7 @@ class ProductoForm extends ModelForm
 
     public $submitMethod = 'ajax';
 
-    public $columns = 3;
+    public $columns = 2;
 
     public $instance;
 

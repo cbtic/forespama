@@ -7,7 +7,12 @@
         </x-slot>
 
         <x-slot name="headerActions">
-            <x-forms.Producto />
+            <x-utils.link
+                icon="c-icon cil-plus"
+                class="card-header-action"
+                :href="route('frontend.productos.create')"
+                :text="__('Nuevo Producto')"
+            />
         </x-slot>
 
         <x-slot name="body">

@@ -109,44 +109,83 @@
         $('.form-select').select2({dropdownAutoWidth : true});
     }
 
-    function manejar_popup(modo) {
-        if (modo == 'modal') {
-            $("form").eq($("form").length-2).on( "submit", function( event ) {
-                let _form = $("form")[$("form").length-2];
-                // alert( "Enviar datos a: " + $("form").eq($("form").length-2).prop('action'));
-                if (! _form.checkValidity()) {
-                    let _inputs = _form.querySelectorAll('input');
-                    let _selects = _form.querySelectorAll('select');
-                    let _textarea = _form.querySelectorAll('textarea');
-                    let _inputFields = [..._inputs].concat([..._selects]).concat([..._textarea]);
+    function manejar_popup(parent_modal) {
+        $("#ModalProductoLote > div > div > div > div > div > div > div > div.modal-header > button").on("click", function (event) {
+            $('#ModalProductoLote').modal('hide');
+            $('#'+parent_modal).modal('show');
+        });
+        $('.form-select').select2();
 
-                    _inputFields.forEach(function (_input) {
-                        if (_input.validity.patternMismatch
-                            || _input.validity.valueMissing
-                            || _input.validity.rangeOverflow
-                            || _input.validity.stepMismatch
-                            || _input.validity.typeMismatch
-                            || _input.validity.tooShort
-                            || _input.validity.tooLong
-                            || _input.validity.badInput
-                        ) {
-                            if (! _input.classList.contains('is-invalid')) {
-                                let _errorMessage = document.createElement('div');
-                                _errorMessage.classList.add('invalid-feedback');
-                                _errorMessage.innerText = _input.validationMessage;
+        // $("#ModalProductoLote > div > div > div > div > div > div > div > div.modal-header > button").on("click", $('#'+parent_modal).modal('show'));
+        $("form").eq($("form").length-1).on( "submit", function( event ) {
+            $('.form-select').select2();
+            let _form = $("form").eq($("form").length-1);
 
-                                _input.classList.add('is-invalid');
-                                _input.parentNode.appendChild(_errorMessage);
-                                window.FormsJS_validation();
-                            }
-                        }
-                    });
+            $.ajax({
+                url: "{{ route('frontend.productos.store') }}",
+                method: 'POST',
+                dataType: 'json',
+                data : _form.serialize(),
+                success: function(data) {
+                        // log response into console
+                        console.log(data);
+                        let insertar_item = data.denominacion;
+                        let insertar_value = data.id;
+                        var nuevoProducto = new Option(insertar_item, insertar_value, true, true);
+                        // Append it to the select
+                        $("#Id_producto").append(nuevoProducto).trigger('change');
+                        // alert( "Enviar datos a: " + $("form").eq($("form").length-2).prop('action'));
+                        $('#ModalProductoLote').modal('hide');
+                        $('#'+parent_modal).modal('show');
+                    },
+                error: function(XMLHttpRequest, textStatus, errorThrown) {
+                    console.log("some error");
+                }
+                });
+            event.preventDefault();
+        });
+    }
 
-                    return false;
-                };
-                event.preventDefault();
-            });
-        }
+    function manejar_popup_lote(parent_modal) {
+        $("#ModalProductoLote > div > div > div > div > div > div > div > div.modal-header > button").on("click", function (event) {
+            $('#ModalProductoLote').modal('hide');
+            $('#'+parent_modal).modal('show');
+        });
+        $('.form-select').select2();
+        // $("#ModalProductoLote > div > div > div > div > div > div > div > div.modal-header > button").on("click", $('#'+parent_modal).modal('show'));
+        $("form").eq($("form").length-1).on( "submit", function( event ) {
+            let _form = $("form").eq($("form").length-1);
+            // let insertar_item = _form["Numero_lote"].value;
+            // let insertar_value = "1000";
+            // var nuevoLote = new Option(insertar_item, insertar_value, true, true);
+            // // Append it to the select
+            // $("#Numero_lote").append(nuevoLote).trigger('change');
+            // // alert( "Enviar datos a: " + $("form").eq($("form").length-2).prop('action'));
+            // $('#ModalProductoLote').modal('hide');
+            // $('#'+parent_modal).modal('show');
+            $.ajax({
+                url: "{{ route('frontend.lotes.store') }}",
+                method: 'POST',
+                dataType: 'json',
+                data : _form.serialize(),
+                success: function(data) {
+                        // log response into console
+                        console.log(data);
+                        let insertar_item = data.numero_serie;
+                        let insertar_value = data.id;
+                        var nuevoLote = new Option(insertar_item, insertar_value, true, true);
+                        // Append it to the select
+                        $("#Numero_lote").append(nuevoLote).trigger('change');
+                        // alert( "Enviar datos a: " + $("form").eq($("form").length-2).prop('action'));
+                        $('#ModalProductoLote').modal('hide');
+                        $('#'+parent_modal).modal('show');
+                    },
+                error: function(XMLHttpRequest, textStatus, errorThrown) {
+                    console.log("some error");
+                }
+                });
+            event.preventDefault();
+        });
     }
 
 </script>

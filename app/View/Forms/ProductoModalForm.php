@@ -82,13 +82,13 @@ class ProductoModalForm extends ModelForm
     {
         return [
             Text::make('numero_serie', [
-                'required' => true,
+                // 'required' => true,
             ]),
             Text::make('codigo', [
-                'required' => true,
+                // 'required' => true,
             ]),
             Text::make('denominacion', [
-                'required' => true,
+                // 'required' => true,
             ]),
             HasOne::make('id_unidad_medida', [
                 'label' => 'Unidades',
@@ -101,11 +101,11 @@ class ProductoModalForm extends ModelForm
                 ]
             ])->selectOptions(['Seleccione' => null]),
             Text::make('stock_actual', [
-                'required' => true,
+                // 'required' => true,
             ]),
             Text::make('costo_unitario', [
                 'label' => 'Costo Unitario',
-                'required' => true,
+                // 'required' => true,
             ]),
             HasOne::make('id_moneda', [
                 'label' => 'Moneda',
@@ -128,7 +128,7 @@ class ProductoModalForm extends ModelForm
                 ]
             ])->selectOptions(['Seleccione' => null]),
             Date::make('fecha_vencimiento', [
-                'required' => true,
+                // 'required' => true,
             ]),
             HasOne::make('id_estado_bien', [
                 'label' => 'Estado del Bien',
@@ -141,7 +141,7 @@ class ProductoModalForm extends ModelForm
                 ]
             ])->selectOptions(['Seleccione' => null]),
             Text::make('stock_minimo', [
-                'required' => true,
+                // 'required' => true,
             ]),
             Select::make('estado')->selectOptions(['ACTIVO' => '1', 'CANCELADO' => '0']),
         ];
