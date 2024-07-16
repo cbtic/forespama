@@ -27,10 +27,7 @@ class SeccioneForm extends ModelForm
      */
     public $model = Seccione::class;
 
-    public $routeParameters = ['id',
-                                'codigo',
-                                'denominacion',
-                                'estado'];
+    public $routeParameters = ['id'];
 
     public $columns = 1;
 
@@ -62,8 +59,7 @@ class SeccioneForm extends ModelForm
      */
     public $buttons = [
         'cancel' => 'Cancelar',
-        'submit' => 'Guardar',
-        'delete' => 'Borrar'
+        'submit' => 'Guardar Sección'
     ];
 
     /**
@@ -91,7 +87,7 @@ class SeccioneForm extends ModelForm
                 'required' => true,
             ]),
             HasMany::make('id_anaqueles', [
-                'label' => 'Escoja los anaqueles que tendrá en la sección',
+                'label' => 'Escoja los anaqueles que tendrá en la sección <button id="btn_producto" type="button" class="btn btn-info btn-sm btnNuevoAnaquel" onclick="let parent_modal=$(this).closest(\'.modal.fade\').attr(\'id\');setTimeout(function(){$(\'#ModalAnaquel > div > div > div > div > div > div\').removeClass();$(\'.btn.btn-primary.modal_send\').attr(\'data-formsjs-onclick\', \'\');manejar_popup(parent_modal);$(\'#\'+parent_modal).modal(\'hide\');}, 500);">Nuevo Anaquel</button>',
                 'model' => Anaquele::class,
                 'model_options' => [
                     'label' => 'codigo',

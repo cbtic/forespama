@@ -125,6 +125,8 @@ Route::post('conductores/send_conductor_ingreso', 'App\Http\Controllers\Conducto
 Route::get('tablamaestras', 'App\Http\Controllers\TablaMaestraController@index')->name('tablamaestras.index');
 Route::post('tablamaestras', 'App\Http\Controllers\TablaMaestraController@store')->name('tablamaestras.store');
 Route::get('tablamaestras/create', 'App\Http\Controllers\TablaMaestraController@create')->name('tablamaestras.create');
+Route::get('productos/modal_create', 'App\Http\Controllers\ProductosController@modal_create')->name('productos.modal_create');
+
 Route::get('tablamaestras/{tablamaestras}', 'App\Http\Controllers\TablaMaestraController@show')->name('tablamaestras.show');
 Route::put('tablamaestras/{tablamaestras}', 'App\Http\Controllers\TablaMaestraController@update')->name('tablamaestras.update');
 Route::patch('tablamaestras/{tablamaestras}', 'App\Http\Controllers\TablaMaestraController@update');
@@ -134,6 +136,7 @@ Route::get('tablamaestras/{tablamaestras}/edit', 'App\Http\Controllers\TablaMaes
 Route::get('anaqueles', 'App\Http\Controllers\AnaquelesController@index')->name('anaqueles.index');
 Route::post('anaqueles', 'App\Http\Controllers\AnaquelesController@store')->name('anaqueles.store');
 Route::get('anaqueles/create', 'App\Http\Controllers\AnaquelesController@create')->name('anaqueles.create');
+Route::get('anaqueles/modal_create', 'App\Http\Controllers\AnaquelesController@modal_create')->name('anaqueles.modal_create');
 Route::get('anaqueles/{anaqueles}', 'App\Http\Controllers\AnaquelesController@show')->name('anaqueles.show');
 Route::put('anaqueles/{anaqueles}', 'App\Http\Controllers\AnaquelesController@update')->name('anaqueles.update');
 Route::delete('anaqueles/{anaqueles}', 'App\Http\Controllers\AnaquelesController@destroy')->name('anaqueles.destroy');

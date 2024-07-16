@@ -19,13 +19,27 @@ class AnaquelesController extends Controller
         return view('frontend.anaqueles.create');
     }
 
+    public function modal_create($modal = 'modal')
+    {
+        return view('frontend.anaqueles.modal_create', compact('modal'));
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
     public function store(AnaqueleRequest $request)
     {
-        $anaqueles = Anaquele::create($request->all());
+        $anaquele = Anaquele::create($request->all());
 
-        $anaqueles->secciones()->sync($request->id_secciones);
-
-        return redirect()->route('frontend.anaqueles.index');
+        if($anaquele->save()) {
+            return response()->json( [ 'success' => 'Anaquel guardado!', 'id' => $anaquele->id, 'denominacion' => $anaquele->denominacion ] );
+        } else {
+            return response()->json( [ 'errors' => 'Errores!' ] );
+        }
+        // return redirect()->route('frontend.productos.index');
     }
 
     public function edit(Anaquele $anaqueles)
