@@ -32,6 +32,18 @@
 <script type="text/javascript" src="{{ asset('js/almacenes.js') }}"></script>
 <script>
 
+function rowclick(td){
+        let rowId = td.parentElement.rowIndex;
+        document.getElementsByClassName("btn btn-success btn-seccion")[rowId-1].click();
+        setTimeout(function(){
+            redimensionaSelect2();
+        }, 500);
+    }
+
+function redimensionaSelect2(){
+        $('.form-select').select2({dropdownAutoWidth : true});
+    }
+
 $('.btn.btn-default').on('click', function() {
             setTimeout(function(){
                 // alert(500);

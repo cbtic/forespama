@@ -39,10 +39,7 @@ class SeccionesTable extends DataTableComponent
 
         $this->setPrimaryKey('id')
         ->setTableRowUrl(function($row) {
-            return route('frontend.secciones.edit', $row);
-        })
-        ->setTableRowUrlTarget(function($row) {
-            return '_self';
+            return "javascript:'); rowclick(this); ('";
         });
     }
 
@@ -76,8 +73,9 @@ class SeccionesTable extends DataTableComponent
                 ->unclickable()
                 ->label(
                     function ($row, Column $column) {
-                        $edit = '<button class="btn btn-xs btn-success text-white" onclick="window.location.href=\'' . route('frontend.secciones.show', $row) . '\'">Mostrar</button>';
-                        $delete = app(SeccioneForm::class)->delete($row)->modalTitle("Eliminar sección: ")->confirmAsModal("Eliminar sección ".$row->codigo."?", "Eliminar", "btn btn-danger");
+                        $delete = app(SeccioneForm::class)->delete($row)->modalTitle("Eliminar sección ".$row->codigo.": ".$row->denominacion."?")->confirmAsModal("Eliminar?", "Eliminar", "btn btn-danger");
+
+                        $edit = app(SeccioneForm::class)->edit($row)->asModal($triggerContent = 'Editar', $triggerClass = 'btn btn-success btn-seccion', $message = null, $modalTitle = 'Editar la Sección');
                         return $edit . " " . $delete;
                     }
                 )->html(),
