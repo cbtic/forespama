@@ -12,6 +12,7 @@ use App\Http\Controllers\Frontend\VehiculoController;
 
 use App\Http\Controllers\Frontend\IngresoController;
 use App\Http\Controllers\Frontend\TipoCambioController;
+use App\Http\Controllers\Frontend\AlmacenesController;
 
 use App\Models\Ubigeo;
 
@@ -140,14 +141,14 @@ Route::put('anaqueles/{anaqueles}', 'App\Http\Controllers\AnaquelesController@up
 Route::delete('anaqueles/{anaqueles}', 'App\Http\Controllers\AnaquelesController@destroy')->name('anaqueles.destroy');
 Route::get('anaqueles/{anaqueles}/edit', 'App\Http\Controllers\AnaquelesController@edit')->name('anaqueles.edit');
 
-Route::get('almacenes', 'App\Http\Controllers\AlmacenesController@index')->name('almacenes.index');
+/*Route::get('almacenes', 'App\Http\Controllers\AlmacenesController@index')->name('almacenes.index');
 Route::post('almacenes', 'App\Http\Controllers\AlmacenesController@store')->name('almacenes.store');
 Route::get('almacenes/create', 'App\Http\Controllers\AlmacenesController@create')->name('almacenes.create');
 Route::get('almacenes/{almacenes}', 'App\Http\Controllers\AlmacenesController@show')->name('almacenes.show');
 Route::put('almacenes/{almacenes}', 'App\Http\Controllers\AlmacenesController@update')->name('almacenes.update');
 Route::delete('almacenes/{almacenes}', 'App\Http\Controllers\AlmacenesController@destroy')->name('almacenes.destroy');
 Route::get('almacenes/{almacenes}/edit', 'App\Http\Controllers\AlmacenesController@edit')->name('almacenes.edit');
-
+*/
 Route::get('secciones', 'App\Http\Controllers\SeccionesController@index')->name('secciones.index');
 Route::post('secciones', 'App\Http\Controllers\SeccionesController@store')->name('secciones.store');
 Route::get('secciones/create', 'App\Http\Controllers\SeccionesController@create')->name('secciones.create');
@@ -166,6 +167,16 @@ Route::delete('productos/{productos}', 'App\Http\Controllers\ProductosController
 Route::get('productos/{productos}/edit', 'App\Http\Controllers\ProductosController@edit')->name('productos.edit');
 
 
+<<<<<<< HEAD
+Route::get('ingreso/create', [IngresoController::class, 'create'])->name('ingreso.create');
+Route::get('ingreso/obtener_valorizacion/{tipo_documento}/{id_persona}', [IngresoController::class, 'obtener_valorizacion'])->name('ingreso.obtener_valorizacion')->where('tipo_documento', '(.*)');
+Route::post('ingreso/listar_valorizacion', [IngresoController::class, 'listar_valorizacion'])->name('ingreso.listar_valorizacion');
+Route::post('ingreso/listar_valorizacion_concepto', [IngresoController::class, 'listar_valorizacion_concepto'])->name('ingreso.listar_valorizacion_concepto');
+Route::post('ingreso/listar_valorizacion_periodo', [IngresoController::class, 'listar_valorizacion_periodo'])->name('ingreso.listar_valorizacion_periodo');
+Route::get('ingreso/obtener_pago/{tipo_documento}/{persona_id}', [IngresoController::class, 'obtener_pago'])->name('ingreso.obtener_pago')->where('tipo_documento', '(.*)');
+//Route::post('ingreso/sendCaja', [IngresoController::class, 'sendCaja'])->name('ingreso.sendCaja');
+Route::get('ingreso/modal_valorizacion_factura/{id}', [IngresoController::class, 'modal_valorizacion_factura'])->name('ingreso.modal_valorizacion_factura');
+=======
 //Route::get('ingreso/create', [IngresoController::class, 'create'])->name('ingreso.create');
 Route::get('ingresos/create', [IngresoController::class, 'create'])->name('ingresos.create');
 Route::get('ingresos/obtener_valorizacion/{tipo_documento}/{id_persona}', [IngresoController::class, 'obtener_valorizacion'])->name('ingreso.obtener_valorizacion')->where('tipo_documento', '(.*)');
@@ -175,6 +186,7 @@ Route::post('ingresos/listar_valorizacion_periodo', [IngresoController::class, '
 Route::get('ingresos/obtener_pago/{tipo_documento}/{persona_id}', [IngresoController::class, 'obtener_pago'])->name('ingreso.obtener_pago')->where('tipo_documento', '(.*)');
 Route::post('ingresos/sendCaja', [IngresoController::class, 'sendCaja'])->name('ingreso.sendCaja');
 Route::get('ingresos/modal_valorizacion_factura/{id}', [IngresoController::class, 'modal_valorizacion_factura'])->name('ingreso.modal_valorizacion_factura');
+>>>>>>> 1d43bcc4ef3fad640c429c1d540d27aa156f0c16
 
 Route::get('lotes', 'App\Http\Controllers\LoteController@index')->name('lotes.index');
 Route::post('lotes', 'App\Http\Controllers\LoteController@store')->name('lotes.store');
@@ -237,3 +249,12 @@ Route::get('tipo_cambio/modal_tipo_cambio/{id}', [TipoCambioController::class, '
 Route::post('tipo_cambio/send', [TipoCambioController::class, 'send'])->name('tipo_cambio.send');
 Route::get('tipo_cambio/eliminar_tipo_cambio/{id}/{estado}', [TipoCambioController::class, 'eliminar_tipo_cambio'])->name('tipo_cambio.eliminar_tipo_cambio');
 
+Route::get('almacenes/create', [AlmacenesController::class, 'create'])->name('almacenes.create');
+Route::post('almacenes/listar_almacenes_ajax', [AlmacenesController::class, 'listar_almacenes_ajax'])->name('almacenes.listar_almacenes_ajax');
+Route::post('almacenes/send_almacen', [AlmacenesController::class, 'send_almacen'])->name('almacenes.send_almacen');
+Route::get('almacenes/modal_almacen/{id}', [AlmacenesController::class, 'modal_almacen'])->name('almacenes.modal_almacen');
+Route::get('almacenes/obtener_provincia/{idDepartamento}', [AlmacenesController::class, 'obtener_provincia'])->name('almacenes.obtener_provincia');
+Route::get('almacenes/obtener_distrito/{idDepartamento}/{idProvincia}', [AlmacenesController::class, 'obtener_distrito'])->name('almacenes.obtener_distrito');
+Route::get('almacenes/eliminar_almacen/{id}/{estado}', [AlmacenesController::class, 'eliminar_almacen'])->name('almacenes.eliminar_almacen');
+Route::get('almacenes/modal_usuario/{id}', [AlmacenesController::class, 'modal_usuario'])->name('almacenes.modal_usuario');
+Route::get('almacenes/obtener_provincia_distrito/{id}', [AlmacenesController::class, 'obtener_provincia_distrito'])->name('almacenes.obtener_provincia_distrito');

@@ -101,7 +101,7 @@
 				
 				@can('Almacenes')
                 <li class="c-sidebar-nav-item">
-                    <x-utils.link :href="route('frontend.almacenes.index')" class="c-sidebar-nav-link" :text="__('Almacenes')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+                    <x-utils.link :href="route('frontend.almacenes.create')" class="c-sidebar-nav-link" :text="__('Almacenes')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
                 </li>
 				@endif
 				

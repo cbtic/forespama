@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use DB;
 
 class Almacene extends Model
 {
@@ -27,5 +28,55 @@ class Almacene extends Model
     public function secciones()
     {
         return $this->belongsToMany(Seccione::class, "almacenes_secciones", "id_almacenes", "id_secciones");
+    }
+
+    public function listar_almacenes_ajax($p){
+
+        return $this->readFuntionPostgres('sp_listar_almacenes_paginado',$p);
+
+    }
+
+    public function readFuntionPostgres($function, $parameters = null){
+
+        $_parameters = '';
+        if (count($parameters) > 0) {
+            $_parameters = implode("','", $parameters);
+            $_parameters = "'" . $_parameters . "',";
+        }
+        $data = DB::select("BEGIN;");
+        $cad = "select " . $function . "(" . $_parameters . "'ref_cursor');";
+        $data = DB::select($cad);
+        $cad = "FETCH ALL IN ref_cursor;";
+        $data = DB::select($cad);
+        return $data;
+
+    }
+
+    function getCodigo(){
+
+        $cad = "select lpad((max(a.codigo::int)+1)::varchar, 4,'0') codigo from almacenes a ";
+
+		$data = DB::select($cad);
+        return $data;
+    }
+
+    function getUsuarioAlmacen($id){
+
+        $cad = "select u.id, u.name, u.email from almacenes a
+        left join users u on a.id_user::int = u.id
+        where a.id_user = '".$id."'";
+
+		$data = DB::select($cad);
+        return $data;
+    }
+
+    function getProvinciaDistritoById($id){
+
+        $cad = "select u.id_provincia provincia, u.id_ubigeo distrito from almacenes a2 
+        inner join ubigeos u on a2.id_ubigeo = u.id_ubigeo 
+        where a2.id='".$id."'";
+
+		$data = DB::select($cad);
+        return $data;
     }
 }
