@@ -18,7 +18,7 @@ class CreateAlmacenUsuariosTable extends Migration
             $table->bigInteger('id_user')->nullable();
             $table->bigInteger('id_almacen')->nullable();
             $table->string('estado',1)->nullable()->default('1');
-
+ 
             $table->bigInteger('id_usuario_inserta')->unsigned()->index();
 			$table->bigInteger('id_usuario_actualiza')->nullable()->unsigned()->index();
 
