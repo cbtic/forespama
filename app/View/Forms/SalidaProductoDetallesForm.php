@@ -41,7 +41,8 @@ class SalidaProductoDetallesForm extends ModelForm
 
     public $instance;
 
-    public $submitMethod = 'ajax';
+    //public $submitMethod = 'ajax';
+    public $submitViaAjax = true;
 
     public $disableOnSubmit = true;
 

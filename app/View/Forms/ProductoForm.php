@@ -31,9 +31,14 @@ class ProductoForm extends ModelForm
 
     public $routeParameters = ['id'];
 
-    public $columns = 3;
+    public $submitViaAjax = true;
 
-    public $hasFiles = true;
+    public $confirmMessage = 'Esta grabando datos';
+    public $confirmSubmission = 'Se enviaron los datos';
+
+    public $submitMethod = 'ajax';
+
+    public $columns = 2;
 
     public $instance;
 
@@ -60,9 +65,7 @@ class ProductoForm extends ModelForm
      * @var array
      */
     public $buttons = [
-        'cancel' => 'Cancelar',
-        'submit' => 'Guardar',
-        'delete' => 'Borrar'
+        'submit' => 'Guardar'
     ];
 
     /**

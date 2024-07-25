@@ -12,7 +12,7 @@ use Grafite\Forms\Fields\HasOne;
 use Grafite\Forms\Fields\Hidden;
 use Grafite\Forms\Fields\Select;
 use Grafite\Forms\Fields\HasMany;
-// use Grafite\Forms\Forms\BaseForm;
+use Grafite\Forms\Forms\BaseForm;
 // use Grafite\Forms\Forms\ModalForm;
 use Grafite\Forms\Fields\TextArea;
 use Grafite\Forms\Forms\ModelForm;
@@ -30,11 +30,15 @@ class EntradaProductoDetallesForm extends ModelForm
      */
     public $model = EntradaProductoDetalle::class;
 
+    public $method = 'put';
+
+    // public $orientation = 'horizontal';
+
+    public $submitMethod = 'ajax';
+
     public $routeParameters = ['id', 'id_entrada_productos'];
 
     public $entradaproducto;
-
-    public $method = 'put';
 
     public $columns = 2;
 
@@ -42,7 +46,8 @@ class EntradaProductoDetallesForm extends ModelForm
 
     public $instance;
 
-    public $submitMethod = 'ajax';
+    //public $submitMethod = 'ajax';
+    public $submitViaAjax = true;
 
     public $disableOnSubmit = true;
 
@@ -105,10 +110,10 @@ class EntradaProductoDetallesForm extends ModelForm
                 'required' => true,
             ]),
             HasOne::make('numero_lote', [
-                'label' => 'numero_lote',
+                'label' => 'Lote',
                 'model' => Lote::class,
                 'model_options' => [
-                    'label' => 'numero_lote',
+                    'label' => 'numero_serie',
                     'value' => 'numero_lote',
                     'method' => 'all',
                     'params' => null,
@@ -140,63 +145,70 @@ class EntradaProductoDetallesForm extends ModelForm
                     'params' => '4',
                 ]
             ])->selectOptions(['Seleccione' => null]),
-            Text::make('id_marca', [
-                'required' => true,
-            ]),
+            HasOne::make('id_marca', [
+                'label' => 'Marca',
+                'model' => TablaMaestra::class,
+                'model_options' => [
+                    'label' => 'denominacion',
+                    'value' => 'id',
+                    'method' => 'por_tipo',
+                    'params' => '47',
+                ]
+            ])->selectOptions(['Seleccione' => null]),
             Select::make('estado')->selectOptions(['ACTIVO' => '1', 'CANCELADO' => '0']),
         ];
     }
 
-    public function js() {
-        return <<<EOT
-            $('.form-select').select2({dropdownAutoWidth : true});
-            $(".btn.btn-primary").click(function(e){
-                e.preventDefault();
-                let form = $('#company_form')[0];
-                let data = new FormData(form);
+    // public function js() {
+    //     return <<<EOT
+    //         $('.form-select').select2({dropdownAutoWidth : true});
+    //         $(".btn.btn-primary").click(function(e){
+    //             e.preventDefault();
+    //             let form = $('#company_form')[0];
+    //             let data = new FormData(form);
 
-                $.ajax({
-                url: "{{ route('company.store') }}",
-                type: "POST",
-                data : data,
-                dataType:"JSON",
-                processData : false,
-                contentType:false,
+    //             $.ajax({
+    //             url: "{{ route('company.store') }}",
+    //             type: "POST",
+    //             data : data,
+    //             dataType:"JSON",
+    //             processData : false,
+    //             contentType:false,
 
-                success: function(response) {
+    //             success: function(response) {
 
-                if (response.errors) {
-                    var errorMsg = '';
-                    $.each(response.errors, function(field, errors) {
-                        $.each(errors, function(index, error) {
-                            errorMsg += error + '<br>';
-                        });
-                    });
-                    iziToast.error({
-                        message: errorMsg,
-                        position: 'topRight'
-                    });
+    //             if (response.errors) {
+    //                 var errorMsg = '';
+    //                 $.each(response.errors, function(field, errors) {
+    //                     $.each(errors, function(index, error) {
+    //                         errorMsg += error + '<br>';
+    //                     });
+    //                 });
+    //                 iziToast.error({
+    //                     message: errorMsg,
+    //                     position: 'topRight'
+    //                 });
 
-                } else {
-                    iziToast.success({
-                    message: response.success,
-                    position: 'topRight'
+    //             } else {
+    //                 iziToast.success({
+    //                 message: response.success,
+    //                 position: 'topRight'
 
-                            });
-                }
+    //                         });
+    //             }
 
-            },
-            error: function(xhr, status, error) {
+    //         },
+    //         error: function(xhr, status, error) {
 
-                iziToast.error({
-                    message: 'An error occurred: ' + error,
-                    position: 'topRight'
-                });
-            }
+    //             iziToast.error({
+    //                 message: 'An error occurred: ' + error,
+    //                 position: 'topRight'
+    //             });
+    //         }
 
-                });
+    //             });
 
-        })
-        EOT;
-    }
+    //     })
+    //     EOT;
+    // }
 }

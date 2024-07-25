@@ -156,6 +156,15 @@
             </ul>
 
         </li>
+
+        <li class="c-sidebar-nav-dropdown">
+            <x-utils.link href="#" icon="c-sidebar-nav-icon cil-list" class="c-sidebar-nav-dropdown-toggle" :text="__('Caja')" />
+            <ul class="c-sidebar-nav-dropdown-items">
+                <li class="c-sidebar-nav-item">
+                    <x-utils.link :href="route('frontend.ingresos.create')" class="c-sidebar-nav-link" :text="__('Estado de Cuentas')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />                    
+                </li>
+            </ul>
+        </li>
 		
 	@endif
 	
@@ -205,27 +214,11 @@
             </ul>
 
         </li>
-<<<<<<< HEAD
-
-
-
-        <li class="c-sidebar-nav-dropdown">
-            <x-utils.link href="#" icon="c-sidebar-nav-icon cil-list" class="c-sidebar-nav-dropdown-toggle" :text="__('Caja')" />
-            <ul class="c-sidebar-nav-dropdown-items">
-                <li class="c-sidebar-nav-item">
-                    <x-utils.link :href="route('frontend.ingresos.create')" class="c-sidebar-nav-link" :text="__('Estado de Cuentas')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />                    
-                </li>
-            </ul>
-        </li>
-
-
-=======
 	
 	@endif
 	
 	@if(Gate::check('Consultas'))
 	
->>>>>>> a934c5e0f6023de8b6a2caa1e044135d5248f367
         <li class="c-sidebar-nav-dropdown">
             <x-utils.link href="#" icon="c-sidebar-nav-icon cil-list" class="c-sidebar-nav-dropdown-toggle" :text="__('Reportes')" />
 

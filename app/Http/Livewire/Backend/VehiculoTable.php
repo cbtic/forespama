@@ -23,9 +23,11 @@ class VehiculoTable extends DataTableComponent
 
     public function configure(): void
     {
-        $this->setPerPageAccepted([25, 50, 100]);
+        $this->setPerPageAccepted([50, 100, 150]);
 
-        $this->setPerPage(25);
+        $this->setPerPage(50);
+
+        $this->setDefaultSort('id', 'desc');
 
         $this->setPrimaryKey('id')
         ->setTableRowUrl(function($row) {

@@ -19,11 +19,20 @@ class LoteController extends Controller
         return view('frontend.lotes.create');
     }
 
+    public function modal_create($modal = 'modal')
+    {
+        return view('frontend.lotes.modal_create', compact('modal'));
+    }
+
     public function store(LoteRequest $request)
     {
-        $lotes = Lote::create($request->all());
+        $lote = Lote::create($request->all());
 
-        return redirect()->route('frontend.lotes.index');
+        if($lote->save()) {
+            return response()->json( [ 'success' => 'Lote guardado!', 'id' => $lote->id, 'numero_serie' => $lote->numero_serie ] );
+        } else {
+            return response()->json( [ 'errors' => 'Errores!' ] );
+        }
     }
 
     public function edit(Lote $lotes)

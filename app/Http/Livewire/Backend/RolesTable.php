@@ -40,6 +40,12 @@ class RolesTable extends DataTableComponent
 
     public function configure(): void
     {
+        $this->setPerPageAccepted([50, 100, 150]);
+
+        $this->setPerPage(50);
+
+        $this->setDefaultSort('id', 'desc');
+
         $this->setPrimaryKey('id')
         ->setTableRowUrl(function($row) {
             // return route('admin.auth.role.edit', $row);

@@ -2,9 +2,11 @@
 
 namespace App\Http\Livewire\Backend;
 
-use App\Models\Movimiento;
 use App\Models\Producto;
+use App\Models\Movimiento;
 use App\Models\TablaMaestra;
+use App\Domains\Auth\Models\User;
+use App\Models\Persona;
 use Illuminate\Database\Eloquent\Builder;
 use Rappasoft\LaravelLivewireTables\Views\Column;
 use Rappasoft\LaravelLivewireTables\DataTableComponent;
@@ -15,9 +17,11 @@ class MovimientosTable extends DataTableComponent
 
     public function configure(): void
     {
-        $this->setPerPageAccepted([25, 50, 100]);
+        $this->setPerPageAccepted([50, 100, 150]);
 
-        $this->setPerPage(25);
+        $this->setPerPage(50);
+
+        $this->setDefaultSort('id', 'desc');
 
         $this->setPrimaryKey('id');
           // Takes a callback that gives you the current row and its index
@@ -37,7 +41,9 @@ class MovimientosTable extends DataTableComponent
 
     public function query(): Builder
     {
-        return Movimiento::when($this->getFilter('search'), fn ($query, $term) => $query->search($term));
+        return Movimiento::when($this->getFilter('search'), fn ($query, $term) => $query->search($term), function (Builder $query) {
+            $query->orderBy('entrada_salida_cantidad', 'desc');
+        });
     }
 
     public function columns(): array
@@ -51,19 +57,27 @@ class MovimientosTable extends DataTableComponent
             Column::make("Producto")
                 ->label(fn ($row) => Producto::find($row->id_producto)->denominacion)
                 ->sortable(),
-            Column::make("numero_lote")
+            Column::make("Número Lote", "numero_lote")
                 ->sortable(),
-            Column::make("tipo_movimiento")
+            Column::make("Tipo Movimiento", "tipo_movimiento")
                 ->sortable(),
-            Column::make("entrada_salida_cantidad")
+            Column::make("Entrada Salida Cantidad", "entrada_salida_cantidad")
                 ->sortable(),
-            Column::make("costo_entrada_salida")
+            Column::make("Costo Entrada Salida", "costo_entrada_salida")
                 ->sortable(),
             Column::make("id_users")
+                ->hideIf(true)
+                ->sortable(),
+            Column::make("Usuario")
+                ->label(fn ($row) => User::find($row->id_users)->name)
                 ->sortable(),
             Column::make("id_personas")
+                ->hideIf(true)
                 ->sortable(),
-            Column::make("fecha_movimiento")
+            Column::make("Persona")
+                ->label(fn ($row) => Persona::find($row->id_personas)->nombres)
+                ->sortable(),
+            Column::make("Fecha Mov.", "fecha_movimiento")
                 ->sortable()
         ];
     }

@@ -18,6 +18,11 @@ use App\Models\Ubigeo;
  * Frontend Controllers
  * All route names are prefixed with 'frontend.'.
  */
+
+// Route::get('/phpinfo', function () {
+//     phpinfo();
+// })->name('phpinfo');
+
 Route::get('/', [HomeController::class, 'index'])
     ->name('index')
     ->breadcrumbs(function (Trail $trail) {
@@ -153,6 +158,7 @@ Route::get('secciones/{secciones}/edit', 'App\Http\Controllers\SeccionesControll
 Route::get('productos', 'App\Http\Controllers\ProductosController@index')->name('productos.index');
 Route::post('productos', 'App\Http\Controllers\ProductosController@store')->name('productos.store');
 Route::get('productos/create', 'App\Http\Controllers\ProductosController@create')->name('productos.create');
+Route::get('productos/modal_create', 'App\Http\Controllers\ProductosController@modal_create')->name('productos.modal_create');
 Route::get('productos/{productos}', 'App\Http\Controllers\ProductosController@show')->name('productos.show');
 Route::put('productos/{productos}', 'App\Http\Controllers\ProductosController@update')->name('productos.update');
 Route::delete('productos/{productos}', 'App\Http\Controllers\ProductosController@destroy')->name('productos.destroy');
@@ -161,17 +167,18 @@ Route::get('productos/{productos}/edit', 'App\Http\Controllers\ProductosControll
 
 //Route::get('ingreso/create', [IngresoController::class, 'create'])->name('ingreso.create');
 Route::get('ingresos/create', [IngresoController::class, 'create'])->name('ingresos.create');
-Route::get('ingreso/obtener_valorizacion/{tipo_documento}/{id_persona}', [IngresoController::class, 'obtener_valorizacion'])->name('ingreso.obtener_valorizacion')->where('tipo_documento', '(.*)');
-Route::post('ingreso/listar_valorizacion', [IngresoController::class, 'listar_valorizacion'])->name('ingreso.listar_valorizacion');
-Route::post('ingreso/listar_valorizacion_concepto', [IngresoController::class, 'listar_valorizacion_concepto'])->name('ingreso.listar_valorizacion_concepto');
-Route::post('ingreso/listar_valorizacion_periodo', [IngresoController::class, 'listar_valorizacion_periodo'])->name('ingreso.listar_valorizacion_periodo');
-Route::get('ingreso/obtener_pago/{tipo_documento}/{persona_id}', [IngresoController::class, 'obtener_pago'])->name('ingreso.obtener_pago')->where('tipo_documento', '(.*)');
-Route::post('ingreso/sendCaja', [IngresoController::class, 'sendCaja'])->name('ingreso.sendCaja');
-Route::get('ingreso/modal_valorizacion_factura/{id}', [IngresoController::class, 'modal_valorizacion_factura'])->name('ingreso.modal_valorizacion_factura');
+Route::get('ingresos/obtener_valorizacion/{tipo_documento}/{id_persona}', [IngresoController::class, 'obtener_valorizacion'])->name('ingreso.obtener_valorizacion')->where('tipo_documento', '(.*)');
+Route::post('ingresos/listar_valorizacion', [IngresoController::class, 'listar_valorizacion'])->name('ingreso.listar_valorizacion');
+Route::post('ingresos/listar_valorizacion_concepto', [IngresoController::class, 'listar_valorizacion_concepto'])->name('ingreso.listar_valorizacion_concepto');
+Route::post('ingresos/listar_valorizacion_periodo', [IngresoController::class, 'listar_valorizacion_periodo'])->name('ingreso.listar_valorizacion_periodo');
+Route::get('ingresos/obtener_pago/{tipo_documento}/{persona_id}', [IngresoController::class, 'obtener_pago'])->name('ingreso.obtener_pago')->where('tipo_documento', '(.*)');
+Route::post('ingresos/sendCaja', [IngresoController::class, 'sendCaja'])->name('ingreso.sendCaja');
+Route::get('ingresos/modal_valorizacion_factura/{id}', [IngresoController::class, 'modal_valorizacion_factura'])->name('ingreso.modal_valorizacion_factura');
 
 Route::get('lotes', 'App\Http\Controllers\LoteController@index')->name('lotes.index');
 Route::post('lotes', 'App\Http\Controllers\LoteController@store')->name('lotes.store');
 Route::get('lotes/create', 'App\Http\Controllers\LoteController@create')->name('lotes.create');
+Route::get('lotes/modal_create', 'App\Http\Controllers\LoteController@modal_create')->name('lotes.modal_create');
 Route::get('lotes/{lotes}', 'App\Http\Controllers\LoteController@show')->name('lotes.show');
 Route::put('lotes/{lotes}', 'App\Http\Controllers\LoteController@update')->name('lotes.update');
 Route::delete('lotes/{lotes}', 'App\Http\Controllers\LoteController@destroy')->name('lotes.destroy');
