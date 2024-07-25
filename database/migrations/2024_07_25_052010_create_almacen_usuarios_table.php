@@ -15,6 +15,15 @@ class CreateAlmacenUsuariosTable extends Migration
     {
         Schema::create('almacen_usuarios', function (Blueprint $table) {
             $table->id();
+            $table->bigInteger('id_user')->nullable();
+            $table->bigInteger('id_almacen')->nullable();
+            $table->string('estado',1)->nullable()->default('1');
+
+            $table->bigInteger('id_usuario_inserta')->unsigned()->index();
+			$table->bigInteger('id_usuario_actualiza')->nullable()->unsigned()->index();
+
+            $table->foreign('id_user')->references('id')->on('users');
+            $table->foreign('id_almacen')->references('id')->on('almacenes');
             $table->timestamps();
         });
     }
