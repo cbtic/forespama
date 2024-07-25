@@ -1,4 +1,4 @@
-<title>Sistema SIGCAP</title>
+<title>FORESPAMA</title>
 
 <style>
 /*
@@ -284,6 +284,27 @@ function obtenerDistrito_(callback){
     });
 }
 
+function AddFila(){
+    // Crear un nuevo div para el grupo de usuario
+    var newDiv = document.createElement('div');
+    newDiv.className = 'col-lg-12 usuario-grupo';
+    
+    // Crear el HTML interno del nuevo div
+    newDiv.innerHTML = `
+        <div class="form-group">
+            <label class="control-label form-control-sm">Usuario</label>
+            <select name="usuario[]" id="usuario" class="form-control form-control-sm">
+                <option value="">--Seleccionar--</option>
+                <?php foreach ($user as $row) { ?>
+                <option value="<?php echo $row->id ?>"><?php echo $row->name ?></option>
+                <?php } ?>
+            </select>
+        </div>`;
+    
+    // Agregar el nuevo div al contenedor
+    document.getElementById('contenedor-usuarios').appendChild(newDiv);
+}
+
 function editarPuesto(id){
 
 	$.ajax({
@@ -362,9 +383,7 @@ function fn_save_almacen(){
 	$.ajax({
 			url: "/almacenes/send_almacen",
             type: "POST",
-            data : {_token:_token,id:id,
-                    codigo:codigo,denominacion:denominacion,distrito:distrito,direccion:direccion,
-                    encargado:encargado,usuario:usuario,telefono:telefono},
+            data : $("#frmAlmacen").serialize(),
 			success: function (result) {
 				$('#openOverlayOpc').modal('hide');
                 window.location.reload();
@@ -399,6 +418,7 @@ function fn_save_almacen(){
 			</div>
 			
             <div class="card-body">
+            <form method="post" action="#" id="frmAlmacen" name="frmAlmacen">
 
                 <div class="row">
 
@@ -494,43 +514,48 @@ function fn_save_almacen(){
                                     
                                     </div>
                                 </div>
-                                
-                                <div class="col-lg-6">
-                                    <div class="form-group">
-                                        <label class="control-label form-control-sm">Usuario</label>
-                                        <select name="usuario" id="usuario" onChange="" class="form-control form-control-sm">
-                                            <option value="">--Selecionar--</option>
-                                            <?php
-                                            foreach ($user as $row) {?>
-                                            <option value="<?php echo $row->id?>" <?php if($row->id==$almacen->id_user)echo "selected='selected'"?>><?php echo $row->name ?></option>
-                                            <?php 
-                                            }
-                                            ?>
-                                        </select>
+                                <div id="contenedor-usuarios" >
+                                    <div class="col-lg-12 usuario-grupo">
+                                        <div class="form-group">
+                                            <label class="control-label form-control-sm">Usuario</label>
+                                            <select name="usuario[]" id="usuario" onChange="" class="form-control form-control-sm">
+                                                <option value="">--Selecionar--</option>
+                                                <?php
+                                                foreach ($user as $row) {?>
+                                                <option value="<?php echo $row->id?>" <?php if($row->id==$almacen->id_user)echo "selected='selected'"?>><?php echo $row->name ?></option>
+                                                <?php 
+                                                }
+                                                ?>
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
-                                
+                                <div style="margin-top:37px" class="form-group">
+                                    <div class="col-sm-12 controls">
+                                        <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
+                                            <a href="javascript:void(0)" onClick="AddFila()" class="btn btn-sm btn-success">Agregar</a>
+                                        </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            
-                            <div style="margin-top:15px" class="form-group">
-                                <div class="col-sm-12 controls">
-                                    <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
-                                        <a href="javascript:void(0)" onClick="fn_save_almacen()" class="btn btn-sm btn-success">Registrar</a>
-                                    </div>
-                                                        
+                        </div>
+                        <div style="margin-top:15px" class="form-group">
+                            <div class="col-sm-12 controls">
+                                <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
+                                    <a href="javascript:void(0)" onClick="fn_save_almacen()" class="btn btn-sm btn-success">Registrar</a>
                                 </div>
-                            </div> 
+                                                    
+                            </div>
+                        </div> 
                             
                     </div>
                     
-                
                 </div>
                 <!-- /.box -->
-
-
+                </form>
             </div>
             <!--/.col (left) -->
-
 
         </div>
         <!-- /.row -->

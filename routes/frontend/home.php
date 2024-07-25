@@ -167,16 +167,6 @@ Route::delete('productos/{productos}', 'App\Http\Controllers\ProductosController
 Route::get('productos/{productos}/edit', 'App\Http\Controllers\ProductosController@edit')->name('productos.edit');
 
 
-<<<<<<< HEAD
-Route::get('ingreso/create', [IngresoController::class, 'create'])->name('ingreso.create');
-Route::get('ingreso/obtener_valorizacion/{tipo_documento}/{id_persona}', [IngresoController::class, 'obtener_valorizacion'])->name('ingreso.obtener_valorizacion')->where('tipo_documento', '(.*)');
-Route::post('ingreso/listar_valorizacion', [IngresoController::class, 'listar_valorizacion'])->name('ingreso.listar_valorizacion');
-Route::post('ingreso/listar_valorizacion_concepto', [IngresoController::class, 'listar_valorizacion_concepto'])->name('ingreso.listar_valorizacion_concepto');
-Route::post('ingreso/listar_valorizacion_periodo', [IngresoController::class, 'listar_valorizacion_periodo'])->name('ingreso.listar_valorizacion_periodo');
-Route::get('ingreso/obtener_pago/{tipo_documento}/{persona_id}', [IngresoController::class, 'obtener_pago'])->name('ingreso.obtener_pago')->where('tipo_documento', '(.*)');
-//Route::post('ingreso/sendCaja', [IngresoController::class, 'sendCaja'])->name('ingreso.sendCaja');
-Route::get('ingreso/modal_valorizacion_factura/{id}', [IngresoController::class, 'modal_valorizacion_factura'])->name('ingreso.modal_valorizacion_factura');
-=======
 //Route::get('ingreso/create', [IngresoController::class, 'create'])->name('ingreso.create');
 Route::get('ingresos/create', [IngresoController::class, 'create'])->name('ingresos.create');
 Route::get('ingresos/obtener_valorizacion/{tipo_documento}/{id_persona}', [IngresoController::class, 'obtener_valorizacion'])->name('ingreso.obtener_valorizacion')->where('tipo_documento', '(.*)');
@@ -186,7 +176,6 @@ Route::post('ingresos/listar_valorizacion_periodo', [IngresoController::class, '
 Route::get('ingresos/obtener_pago/{tipo_documento}/{persona_id}', [IngresoController::class, 'obtener_pago'])->name('ingreso.obtener_pago')->where('tipo_documento', '(.*)');
 Route::post('ingresos/sendCaja', [IngresoController::class, 'sendCaja'])->name('ingreso.sendCaja');
 Route::get('ingresos/modal_valorizacion_factura/{id}', [IngresoController::class, 'modal_valorizacion_factura'])->name('ingreso.modal_valorizacion_factura');
->>>>>>> 1d43bcc4ef3fad640c429c1d540d27aa156f0c16
 
 Route::get('lotes', 'App\Http\Controllers\LoteController@index')->name('lotes.index');
 Route::post('lotes', 'App\Http\Controllers\LoteController@store')->name('lotes.store');

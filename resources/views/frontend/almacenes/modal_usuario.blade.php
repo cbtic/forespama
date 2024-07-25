@@ -309,7 +309,6 @@ function fn_save_requisito(){
 					</div> 
 					
               </div>
-			  
               
           </div>
           <!-- /.box -->
