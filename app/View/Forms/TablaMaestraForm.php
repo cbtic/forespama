@@ -57,7 +57,9 @@ class TablaMaestraForm extends ModelForm
      * @var array
      */
     public $buttons = [
-        'submit' => 'Save'
+        'cancel' => 'Cancelar',
+        'submit' => 'Guardar',
+        'delete' => 'Borrar'
     ];
 
     /**

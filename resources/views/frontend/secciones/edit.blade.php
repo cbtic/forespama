@@ -16,9 +16,10 @@
 </div>
 @endsection
 
-
 @push('after-scripts')
 <script>
-    $(".form-select").chosen();
+    $(document).ready(function() {
+        $('.form-select').select2();
+    });
 </script>
 @endpush

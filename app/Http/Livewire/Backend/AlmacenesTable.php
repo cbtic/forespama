@@ -10,6 +10,7 @@ use Rappasoft\LaravelLivewireTables\DataTableComponent;
 use Rappasoft\LaravelLivewireTables\Views\Columns\ButtonGroupColumn;
 use Rappasoft\LaravelLivewireTables\Views\Column;
 use Rappasoft\LaravelLivewireTables\Views\Columns\LinkColumn;
+use App\View\Forms\AlmaceneForm;
 
 class AlmacenesTable extends DataTableComponent
 {
@@ -25,6 +26,12 @@ class AlmacenesTable extends DataTableComponent
 
     public function configure(): void
     {
+        $this->setPerPageAccepted([50, 100, 150]);
+
+        $this->setPerPage(50);
+
+        $this->setDefaultSort('id', 'desc');
+
         $this->setPrimaryKey('id')
         ->setTableRowUrl(function($row) {
             return route('frontend.almacenes.edit', $row);
@@ -50,10 +57,10 @@ class AlmacenesTable extends DataTableComponent
         return [
             Column::make('ID', 'id')
                 ->sortable(),
-            Column::make('codigo')
+            Column::make('Codigo', 'codigo')
                 ->sortable()
                 ->searchable(),
-            Column::make('denominacion')
+            Column::make('Denominacion', 'denominacion')
                 ->sortable(),
             Column::make('Ubigeo', 'ubigeos.id_ubigeo')
                 ->hideIf(true)
@@ -70,7 +77,7 @@ class AlmacenesTable extends DataTableComponent
                 ->label(
                     function ($row, Column $column) {
                         $edit = '<button class="btn btn-xs btn-success text-white" onclick="window.location.href=\'' . route('frontend.almacenes.show', $row->id) . '\'">Mostrar</button>';
-                        $delete = '<button class="btn btn-xs btn-danger text-white" wire:click="delete(' . $row->id . ')">Eliminar</button>';
+                        $delete = app(AlmaceneForm::class)->delete($row)->modalTitle("Eliminar almacen: ")->confirmAsModal("Eliminar almacen ".$row->codigo."?", "Eliminar", "btn btn-danger");
                         return $edit . " " . $delete;
                     }
                 )->html(),

@@ -28,6 +28,6 @@ class CreateTipoMaderasTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tipo_maderas');
+        //Schema::dropIfExists('tipo_maderas');
     }
 }

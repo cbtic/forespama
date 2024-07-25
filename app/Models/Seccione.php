@@ -17,7 +17,7 @@ class Seccione extends Model
 
     public function almacenes()
     {
-        return $this->belongsToMany(Seccione::class, "almacenes_secciones", "id_secciones", "id_almacenes");
+        return $this->belongsToMany(Almacene::class, "almacenes_secciones", "id_secciones", "id_almacenes");
     }
 
     public function anaqueles()

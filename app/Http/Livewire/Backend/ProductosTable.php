@@ -10,6 +10,7 @@ use App\Models\Almacene;
 use App\Models\Seccione;
 use Illuminate\Database\Eloquent\Builder;
 use TablaMaestra;
+use App\View\Forms\ProductoForm;
 
 class ProductosTable extends DataTableComponent
 {
@@ -25,6 +26,12 @@ class ProductosTable extends DataTableComponent
 
     public function configure(): void
     {
+        $this->setPerPageAccepted([50, 100, 150]);
+
+        $this->setPerPage(50);
+
+        $this->setDefaultSort('id', 'desc');
+
         $this->setPrimaryKey('id')
         ->setTableRowUrl(function($row) {
             return route('frontend.productos.edit', $row);
@@ -71,16 +78,6 @@ class ProductosTable extends DataTableComponent
                 ->sortable(),
             Column::make("Stock", "stock_actual")
                 ->sortable(),
-            Column::make("Costo", "costo_unitario")
-                ->sortable(),
-            Column::make("Moneda", "id_moneda")
-                ->hideIf(true)
-                ->sortable(),
-            Column::make("Moneda")
-                ->label(fn ($row) => TablaMaestra::find($row->id_moneda)->abreviatura)
-                ->sortable(),
-            Column::make("Tipo Producto", "id_tipo_producto")
-                ->sortable(),
             Column::make("Vencimiento", "fecha_vencimiento")
                 ->sortable(),
             Column::make("Estado del bien", "id_estado_bien")
@@ -90,24 +87,6 @@ class ProductosTable extends DataTableComponent
                 ->label(fn ($row) => TablaMaestra::find($row->id_estado_bien)->denominacion)
                 ->sortable(),
             Column::make("Stock mínimo", "stock_minimo")
-                ->sortable(),
-            Column::make("Marca", "id_marca")
-                ->hideIf(true)
-                ->sortable(),
-            Column::make("Marca")
-                ->label(fn ($row) => TablaMaestra::find($row->id_marca)->denominacion)
-                ->sortable(),
-            Column::make("Seccion", "id_seccion")
-                ->hideIf(true)
-                ->sortable(),
-            Column::make("Seccion")
-                ->label(fn ($row) => Seccione::find($row->id_seccion)->codigo)
-                ->sortable(),
-            Column::make("Anaquel", "id_anaquel")
-                ->hideIf(true)
-                ->sortable(),
-            Column::make("Anaquel")
-                ->label(fn ($row) => Anaquele::find($row->id_anaquel)->codigo)
                 ->sortable(),
             Column::make("Stock Actual", "stock_actual")
                 ->sortable(),
@@ -119,7 +98,7 @@ class ProductosTable extends DataTableComponent
                 ->label(
                     function ($row, Column $column) {
                         $edit = '<button class="btn btn-xs btn-success text-white" onclick="window.location.href=\'' . route('frontend.productos.show', $row) . '\'">Mostrar</button>';
-                        $delete = '<button class="btn btn-xs btn-danger text-white" wire:click="delete(' . $row->id . ')">Eliminar</button>';
+                        $delete = app(ProductoForm::class)->delete($row)->modalTitle("Eliminar producto: ")->confirmAsModal("Eliminar producto ".$row->codigo."?", "Eliminar", "btn btn-danger");
                         return $edit . " " . $delete;
                     }
                 )->html(),

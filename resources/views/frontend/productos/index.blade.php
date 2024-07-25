@@ -11,7 +11,7 @@
                 icon="c-icon cil-plus"
                 class="card-header-action"
                 :href="route('frontend.productos.create')"
-                :text="__('Nuevo')"
+                :text="__('Nuevo Producto')"
             />
         </x-slot>
 

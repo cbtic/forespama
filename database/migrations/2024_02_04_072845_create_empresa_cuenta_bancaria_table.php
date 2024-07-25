@@ -17,10 +17,10 @@ class CreateEmpresaCuentaBancariaTable extends Migration
             $table->id();
             $table->bigInteger('id_empresa')->unsigned()->index();
             $table->bigInteger('id_banco')->unsigned()->index();
-            $table->string('numero_cuenta',100)->nullable(); 
-            $table->string('cci',100)->nullable(); 
+            $table->string('numero_cuenta',100)->nullable();
+            $table->string('cci',100)->nullable();
 
-            $table->string('estado',1)->nullable()->default('1'); 
+            $table->string('estado',1)->nullable()->default('1');
             $table->bigInteger('id_usuario_inserta')->unsigned()->index();
 			$table->bigInteger('id_usuario_actualiza')->nullable()->unsigned()->index();
 
@@ -40,6 +40,6 @@ class CreateEmpresaCuentaBancariaTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('empresa_cuenta_bancaria');
+        //Schema::dropIfExists('empresa_cuenta_bancaria');
     }
 }

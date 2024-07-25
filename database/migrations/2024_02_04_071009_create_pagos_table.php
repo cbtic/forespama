@@ -26,21 +26,21 @@ class CreatePagosTable extends Migration
 			$table->string('comprobante_ruc',20)->nullable();
 			$table->double('subtotal',15,8)->nullable();
 			$table->double('impuesto',15,8)->nullable();
-			$table->double('total',15,8)->nullable();			
+			$table->double('total',15,8)->nullable();
 			$table->string('letras',200)->nullable();
-			$table->Integer('id_moneda')->nullable();			
+			$table->Integer('id_moneda')->nullable();
 			$table->double('impuesto_factor',15,8)->nullable();
 			$table->double('tipo_cambio',15,8)->nullable();
             $table->bigInteger('id_forma_pago')->unsigned()->index()->nullable();
 			$table->string('estado_pago',1)->nullable();
-			$table->datetime('fecha_pago')->nullable();            
+			$table->datetime('fecha_pago')->nullable();
 			$table->datetime('fecha_recepcion')->nullable();
 			$table->datetime('fecha_vencimiento')->nullable();
-			$table->datetime('fecha_programado')->nullable();			
+			$table->datetime('fecha_programado')->nullable();
 			$table->string('observacion',500)->nullable();
-			$table->string('anulado',1)->nullable();            
+			$table->string('anulado',1)->nullable();
 			$table->string('afecta',20)->nullable();
-            $table->bigInteger('id_caja_ingreso')->nullable()->unsigned()->index(); 
+            $table->bigInteger('id_caja_ingreso')->nullable()->unsigned()->index();
             $table->string('estado',1)->nullable()->default('1');
 
             $table->bigInteger('id_usuario_inserta')->unsigned()->index();
@@ -59,6 +59,6 @@ class CreatePagosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('pagos');
+        //Schema::dropIfExists('pagos');
     }
 }

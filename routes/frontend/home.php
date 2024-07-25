@@ -10,12 +10,20 @@ use App\Http\Controllers\Frontend\PersonaController;
 use App\Http\Controllers\Frontend\EmpresaController;
 use App\Http\Controllers\Frontend\VehiculoController;
 
+use App\Http\Controllers\Frontend\IngresoController;
+use App\Http\Controllers\Frontend\TipoCambioController;
+
 use App\Models\Ubigeo;
 
 /*
  * Frontend Controllers
  * All route names are prefixed with 'frontend.'.
  */
+
+// Route::get('/phpinfo', function () {
+//     phpinfo();
+// })->name('phpinfo');
+
 Route::get('/', [HomeController::class, 'index'])
     ->name('index')
     ->breadcrumbs(function (Trail $trail) {
@@ -38,6 +46,9 @@ Route::post('ingreso_vehiculo_tronco/listar_ingreso_vehiculo_tronco_ajax', [Ingr
 Route::get('ingreso_vehiculo_tronco/modal_placa/{id}', [IngresoVehiculoTroncoController::class, 'modal_placa'])->name('ingreso_vehiculo_tronco.modal_placa');
 Route::get('ingreso_vehiculo_tronco/modal_empresa/{id}', [IngresoVehiculoTroncoController::class, 'modal_empresa'])->name('ingreso_vehiculo_tronco.modal_empresa');
 Route::get('ingreso_vehiculo_tronco/modal_conductor/{id}', [IngresoVehiculoTroncoController::class, 'modal_conductor'])->name('ingreso_vehiculo_tronco.modal_conductor');
+
+Route::post('ingreso_vehiculo_tronco/upload_imagen_ingreso', [IngresoVehiculoTroncoController::class, 'upload_imagen_ingreso'])->name('ingreso_vehiculo_tronco.upload_imagen_ingreso');
+Route::get('ingreso_vehiculo_tronco/modal_ingreso_imagen/{id}', [IngresoVehiculoTroncoController::class, 'modal_ingreso_imagen'])->name('ingreso_vehiculo_tronco.modal_ingreso_imagen');
 
 // Route::get('tabla_maestras', [TablaMaestraController::class, 'index'])->name('tabla_maestras.all');
 // Route::get('tabla_maestras/{id}', [TablaMaestraController::class, 'show'])->name('tabla_maestras.show');
@@ -69,6 +80,7 @@ Route::post('persona/buscar_persona_ajax', [PersonaController::class, 'buscar_pe
 Route::get('persona/obtener_provincia/{idDepartamento}', [PersonaController::class, 'obtener_provincia'])->name('persona.obtener_provincia');
 Route::get('persona/obtener_distrito/{idDepartamento}/{idProvincia}', [PersonaController::class, 'obtener_distrito'])->name('persona.obtener_distrito');
 Route::get('persona/obtener_persona/{tipo_documento}/{numero_documento}', [PersonaController::class, 'obtener_persona'])->name('persona.obtener_persona');
+Route::get('persona/obtener_persona_conductor/{tipo_documento}/{numero_documento}', [PersonaController::class, 'obtener_persona_conductor'])->name('persona.obtener_persona_conductor');
 
 
 
@@ -79,6 +91,9 @@ Route::post('empresa/listar_empresa_ajax', [EmpresaController::class, 'listar_em
 Route::get('empresa/modal_empresa/{id}', [EmpresaController::class, 'modal_empresa'])->name('empresa.modal_empresa');
 Route::get('empresa/eliminar_empresa/{id}/{estado}', [EmpresaController::class, 'eliminar_empresa'])->name('empresa.eliminar_empresa');
 Route::post('empresa/send_empresa_ingreso', [EmpresaController::class, 'send_empresa_ingreso'])->name('empresa.send_empresa_ingreso');
+
+Route::get('empresa/obtener_empresa/{ruc}', [EmpresaController::class, 'obtener_empresa'])->name('empresa.obtener_empresa');
+
 // Route::get('vehiculos', [VehiculoController::class, 'index'])->name('vehiculos');
 Route::post('vehiculo/send_vehiculo_ingreso', 'App\Http\Controllers\VehiculoController@send_vehiculo_ingreso')->name('vehiculo.send_vehiculo_ingreso');
 // Route::get('vehiculo/consulta_vehiculo', [VehiculoController::class, 'consulta_vehiculo'])->name('vehiculo.consulta_vehiculo');
@@ -144,10 +159,54 @@ Route::get('secciones/{secciones}/edit', 'App\Http\Controllers\SeccionesControll
 Route::get('productos', 'App\Http\Controllers\ProductosController@index')->name('productos.index');
 Route::post('productos', 'App\Http\Controllers\ProductosController@store')->name('productos.store');
 Route::get('productos/create', 'App\Http\Controllers\ProductosController@create')->name('productos.create');
+Route::get('productos/modal_create', 'App\Http\Controllers\ProductosController@modal_create')->name('productos.modal_create');
 Route::get('productos/{productos}', 'App\Http\Controllers\ProductosController@show')->name('productos.show');
 Route::put('productos/{productos}', 'App\Http\Controllers\ProductosController@update')->name('productos.update');
 Route::delete('productos/{productos}', 'App\Http\Controllers\ProductosController@destroy')->name('productos.destroy');
 Route::get('productos/{productos}/edit', 'App\Http\Controllers\ProductosController@edit')->name('productos.edit');
+
+
+Route::get('ingreso/create', [IngresoController::class, 'create'])->name('ingreso.create');
+Route::get('ingreso/obtener_valorizacion/{tipo_documento}/{id_persona}', [IngresoController::class, 'obtener_valorizacion'])->name('ingreso.obtener_valorizacion')->where('tipo_documento', '(.*)');
+Route::post('ingreso/listar_valorizacion', [IngresoController::class, 'listar_valorizacion'])->name('ingreso.listar_valorizacion');
+Route::post('ingreso/listar_valorizacion_concepto', [IngresoController::class, 'listar_valorizacion_concepto'])->name('ingreso.listar_valorizacion_concepto');
+Route::post('ingreso/listar_valorizacion_periodo', [IngresoController::class, 'listar_valorizacion_periodo'])->name('ingreso.listar_valorizacion_periodo');
+Route::get('ingreso/obtener_pago/{tipo_documento}/{persona_id}', [IngresoController::class, 'obtener_pago'])->name('ingreso.obtener_pago')->where('tipo_documento', '(.*)');
+Route::post('ingreso/sendCaja', [IngresoController::class, 'sendCaja'])->name('ingreso.sendCaja');
+Route::get('ingreso/modal_valorizacion_factura/{id}', [IngresoController::class, 'modal_valorizacion_factura'])->name('ingreso.modal_valorizacion_factura');
+
+Route::get('lotes', 'App\Http\Controllers\LoteController@index')->name('lotes.index');
+Route::post('lotes', 'App\Http\Controllers\LoteController@store')->name('lotes.store');
+Route::get('lotes/create', 'App\Http\Controllers\LoteController@create')->name('lotes.create');
+Route::get('lotes/modal_create', 'App\Http\Controllers\LoteController@modal_create')->name('lotes.modal_create');
+Route::get('lotes/{lotes}', 'App\Http\Controllers\LoteController@show')->name('lotes.show');
+Route::put('lotes/{lotes}', 'App\Http\Controllers\LoteController@update')->name('lotes.update');
+Route::delete('lotes/{lotes}', 'App\Http\Controllers\LoteController@destroy')->name('lotes.destroy');
+Route::get('lotes/{lotes}/edit', 'App\Http\Controllers\LoteController@edit')->name('lotes.edit');
+
+Route::get('entrada_productos', 'App\Http\Controllers\EntradaProductosController@index')->name('entrada_productos.index');
+Route::post('entrada_productos', 'App\Http\Controllers\EntradaProductosController@store')->name('entrada_productos.store');
+Route::get('entrada_productos/create', 'App\Http\Controllers\EntradaProductosController@create')->name('entrada_productos.create');
+Route::get('entrada_productos/{entrada_productos}', 'App\Http\Controllers\EntradaProductosController@show')->name('entrada_productos.show');
+Route::put('entrada_productos/{entrada_productos}', 'App\Http\Controllers\EntradaProductosController@update')->name('entrada_productos.update');
+Route::delete('entrada_productos/{entrada_productos}', 'App\Http\Controllers\EntradaProductosController@destroy')->name('entrada_productos.destroy');
+Route::get('entrada_productos/edit/{entrada_productos}', 'App\Http\Controllers\EntradaProductosController@edit')->name('entrada_productos.edit');
+
+Route::post('entrada_producto_detalles', 'App\Http\Controllers\EntradaProductoDetallesController@store')->name('entrada_producto_detalles.store');
+Route::put('entrada_producto_detalles/{entrada_producto_detalles}', 'App\Http\Controllers\EntradaProductoDetallesController@update')->name('entrada_producto_detalles.update');
+Route::delete('entrada_producto_detalles/{entrada_producto_detalles}', 'App\Http\Controllers\EntradaProductoDetallesController@destroy')->name('entrada_producto_detalles.destroy');
+
+Route::get('salida_productos', 'App\Http\Controllers\SalidaProductoController@index')->name('salida_productos.index');
+Route::post('salida_productos', 'App\Http\Controllers\SalidaProductoController@store')->name('salida_productos.store');
+Route::get('salida_productos/create', 'App\Http\Controllers\SalidaProductoController@create')->name('salida_productos.create');
+Route::get('salida_productos/{salida_productos}', 'App\Http\Controllers\SalidaProductoController@show')->name('salida_productos.show');
+Route::put('salida_productos/{salida_productos}', 'App\Http\Controllers\SalidaProductoController@update')->name('salida_productos.update');
+Route::delete('salida_productos/{salida_productos}', 'App\Http\Controllers\SalidaProductoController@destroy')->name('salida_productos.destroy');
+Route::get('salida_productos/edit/{salida_productos}', 'App\Http\Controllers\SalidaProductoController@edit')->name('salida_productos.edit');
+
+Route::post('salida_producto_detalles', 'App\Http\Controllers\SalidaProductoDetalleController@store')->name('salida_producto_detalles.store');
+Route::put('salida_producto_detalles/{salida_producto_detalles}', 'App\Http\Controllers\SalidaProductoDetalleController@update')->name('salida_producto_detalles.update');
+Route::delete('salida_producto_detalles/{salida_producto_detalles}', 'App\Http\Controllers\SalidaProductoDetalleController@destroy')->name('salida_producto_detalles.destroy');
 
 Route::get('ubigeo/listar_departamentos_ajax', function() {
     return response()->json([ 'status' => 'OK', 'departamentos' => Ubigeo::departamentos() ]);
@@ -160,3 +219,20 @@ Route::get('ubigeo/listar_provincias_ajax/{id_departamento}', function(Request $
 Route::get('ubigeo/listar_distritos_ajax/{id_departamento}/{id_provincia}', function(Request $request) {
     return response()->json([ 'status' => 'OK', 'distritos' => Ubigeo::distritos_ajax(request()->route('id_departamento'), request()->route('id_provincia')) ]);
 });
+
+Route::get('kardex', 'App\Http\Controllers\KardexController@index')->name('kardex.index');
+// Route::post('kardex', 'App\Http\Controllers\KardexController@store')->name('kardex.store');
+// Route::get('kardex/create', 'App\Http\Controllers\KardexController@create')->name('kardex.create');
+// Route::get('kardex/{kardex}', 'App\Http\Controllers\KardexController@show')->name('kardex.show');
+// Route::put('kardex/{kardex}', 'App\Http\Controllers\KardexController@update')->name('kardex.update');
+// Route::delete('kardex/{kardex}', 'App\Http\Controllers\KardexController@destroy')->name('kardex.destroy');
+// Route::get('kardex/edit/{kardex}', 'App\Http\Controllers\KardexController@edit')->name('kardex.edit');
+
+Route::get('movimientos', 'App\Http\Controllers\MovimientoController@index')->name('movimientos.index');
+
+Route::get('tipo_cambio', [TipoCambioController::class, 'index'])->name('tipocambio.index');
+Route::post('tipo_cambio/listar_tipo_cambio_ajax', [TipoCambioController::class, 'listar_tipo_cambio_ajax'])->name('tipo_cambio.listar_tipo_cambio_ajax');
+Route::get('tipo_cambio/modal_tipo_cambio/{id}', [TipoCambioController::class, 'modal_tipo_cambio'])->name('tipo_cambio.modal_tipo_cambio');
+Route::post('tipo_cambio/send', [TipoCambioController::class, 'send'])->name('tipo_cambio.send');
+Route::get('tipo_cambio/eliminar_tipo_cambio/{id}/{estado}', [TipoCambioController::class, 'eliminar_tipo_cambio'])->name('tipo_cambio.eliminar_tipo_cambio');
+

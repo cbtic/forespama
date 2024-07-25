@@ -35,9 +35,6 @@ class ProductoRequest extends FormRequest
             'fecha_vencimiento' => ['', 'string'],
             'id_estado_bien' => ['required', 'string'],
             'stock_minimo' => ['required', 'string'],
-            'id_marca' => ['required', 'string'],
-            'id_seccion' => ['required', 'string'],
-            'id_anaquel' => ['', 'string'],
             'estado' => ['required', 'string'],
         ];
     }

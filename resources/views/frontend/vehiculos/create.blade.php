@@ -15,3 +15,11 @@
         </div>
     </div>
 @endsection
+
+@push('after-scripts')
+<script>
+    $(document).ready(function() {
+        $('.form-select').select2();
+    });
+</script>
+@endpush

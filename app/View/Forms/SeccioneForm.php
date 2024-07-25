@@ -62,7 +62,8 @@ class SeccioneForm extends ModelForm
      */
     public $buttons = [
         'cancel' => 'Cancelar',
-        'submit' => 'Guardar'
+        'submit' => 'Guardar',
+        'delete' => 'Borrar'
     ];
 
     /**
@@ -98,7 +99,7 @@ class SeccioneForm extends ModelForm
                     'method' => 'all',
                     'params' => null,
                 ]
-            ])->selectOptions(['Sin anaquel' => null]),
+            ])->selectOptions(['Escoger' => null]),
             Select::make('estado')->selectOptions(['ACTIVO' => '1', 'CANCELADO' => '0']),
         ];
     }

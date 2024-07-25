@@ -84,7 +84,7 @@ The first thing we are going to do is set the key that Laravel will use when doi
 `php artisan key:generate`
 
 ## =>Crear Modelo, Controlador y migracion:
-`php artisan make:model Producto -c -m`
+`php artisan make:model Producto -c -m --resource`
 
 ## =>Controlador con CRUD:
 `php artisan make:controller productoController --resource`
@@ -115,8 +115,48 @@ The first thing we are going to do is set the key that Laravel will use when doi
 `routes/frontend/home.php`
 `resources/views/frontend/includes/sidebar.blade.php`
 
+## Usar Grafite Forms y Livewire Tables para Producto-ProductoDetalle:
 
+# Models
+`app/Models/EntradaProducto.php`
+`app/Models/EntradaProductoDetalle.php`
 
+# Controllers
+`app/Http/Controllers/EntradaProductosController.php`
+`app/Http/Controllers/EntradaProductoDetallesController.php`
+
+# Livewire Tables
+`app/Http/Livewire/Backend/EntradaProductosTable.php`
+`app/Http/Livewire/Backend/EntradaProductoDetallesTable.php`
+
+# Rules
+`app/Http/Requests/EntradaProductoRequest.php`
+`app/Http/Requests/EntradaProductoDetalleRequest.php`
+
+# Forms
+`app/View/Components/Forms/EntradaProducto.php`
+`app/View/Components/Forms/EntradaProductoDetalle.php`
+`app/View/Forms/EntradaProductosForm.php`
+`app/View/Forms/EntradaProductoDetallesForm.php`
+
+# Views
+`resources/views/frontend/entrada_productos/create.blade.php`
+`resources/views/frontend/entrada_productos/edit.blade.php`
+`resources/views/frontend/entrada_productos/index.blade.php`
+`resources/views/frontend/entrada_productos/show.blade.php`
+
+`resources/views/frontend/entrada_producto_detalles/create.blade.php`
+`resources/views/frontend/entrada_producto_detalles/edit.blade.php`
+`resources/views/frontend/entrada_producto_detalles/index.blade.php`
+`resources/views/frontend/entrada_producto_detalles/show.blade.php`
+
+# Routes
+`routes/frontend/home.php`
+
+## Colores institucionales:
+
+ - Background: #183e39
+ - Front: #aed29b
 
 You should see a green message stating your key was successfully generated. As well as you should see the **APP\_KEY** variable in your **.env** file reflected.
 
@@ -125,6 +165,10 @@ It's time to see if your database credentials are correct.
 We are going to run the built in migrations to create the database tables:
 
 `php artisan migrate`
+
+## Para crear las funciones en batch: en el directorio conde estan los archivos .sql ejecutar esta línea:
+
+`find . -iname "*.sql" | xargs printf -- ' -f %s' | xargs -t psql -d forespama -q`
 
 You should see a message for each table migrated, if you don't and see errors, than your credentials are most likely not correct.
 

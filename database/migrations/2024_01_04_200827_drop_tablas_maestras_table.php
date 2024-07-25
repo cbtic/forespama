@@ -15,7 +15,7 @@ class DropTablasMaestrasTable extends Migration
     {
         Schema::drop('tablas_maestras');
 
-        Schema::dropIfExists('tablas_maestras');
+        //Schema::dropIfExists('tablas_maestras');
     }
 
     /**

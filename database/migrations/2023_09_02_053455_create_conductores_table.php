@@ -32,6 +32,6 @@ class CreateConductoresTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('conductores');
+        //Schema::dropIfExists('conductores');
     }
 }

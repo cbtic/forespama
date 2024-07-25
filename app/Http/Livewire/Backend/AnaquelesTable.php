@@ -6,6 +6,7 @@ use Rappasoft\LaravelLivewireTables\DataTableComponent;
 use Rappasoft\LaravelLivewireTables\Views\Column;
 use App\Models\Anaquele;
 use Illuminate\Database\Eloquent\Builder;
+use App\View\Forms\AnaqueleForm;
 
 class AnaquelesTable extends DataTableComponent
 {
@@ -21,6 +22,12 @@ class AnaquelesTable extends DataTableComponent
 
     public function configure(): void
     {
+        $this->setPerPageAccepted([50, 100, 150]);
+
+        $this->setPerPage(50);
+
+        $this->setDefaultSort('id', 'desc');
+
         $this->setPrimaryKey('id')
         ->setTableRowUrl(function($row) {
             return route('frontend.anaqueles.edit', $row);
@@ -45,9 +52,9 @@ class AnaquelesTable extends DataTableComponent
         return [
             Column::make("Id", "id")
                 ->sortable(),
-            Column::make("codigo", "codigo")
+            Column::make("Codigo", "codigo")
                 ->sortable(),
-            Column::make("denominacion", "denominacion")
+            Column::make("Denominacion", "denominacion")
                 ->sortable(),
             Column::make("Estado")
                 ->label(fn($row) => array("CANCELADO","ACTIVO")[Anaquele::find($row->id)["estado"]])
@@ -57,7 +64,7 @@ class AnaquelesTable extends DataTableComponent
                 ->label(
                     function ($row, Column $column) {
                         $edit = '<button class="btn btn-xs btn-success text-white" onclick="window.location.href=\'' . route('frontend.anaqueles.show', $row) . '\'">Mostrar</button>';
-                        $delete = '<button class="btn btn-xs btn-danger text-white" wire:click="delete(' . $row->id . ')">Eliminar</button>';
+                        $delete = app(AnaqueleForm::class)->delete($row)->modalTitle("Eliminar anaquel: ")->confirmAsModal("Eliminar anaquel ".$row->codigo."?", "Eliminar", "btn btn-danger");
                         return $edit . " " . $delete;
                     }
                 )->html(),

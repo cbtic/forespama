@@ -29,6 +29,6 @@ class CreateProcedenciasTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('procedencias');
+        //Schema::dropIfExists('procedencias');
     }
 }

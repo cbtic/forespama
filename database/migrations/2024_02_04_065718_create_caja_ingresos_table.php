@@ -28,7 +28,7 @@ class CreateCajaIngresosTable extends Migration
             $table->bigInteger('id_moneda')->unsigned()->index()->nullable();
 			$table->string('moneda',50)->nullable();
             $table->string('estado',1)->nullable()->default('1');
- 
+
             $table->bigInteger('id_usuario_inserta')->unsigned()->index();
 			$table->bigInteger('id_usuario_actualiza')->nullable()->unsigned()->index();
 
@@ -43,6 +43,6 @@ class CreateCajaIngresosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('caja_ingresos');
+        //Schema::dropIfExists('caja_ingresos');
     }
 }

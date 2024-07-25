@@ -30,6 +30,11 @@ class ProductosController extends Controller
         return view('frontend.productos.create');
     }
 
+    public function modal_create($modal = 'modal')
+    {
+        return view('frontend.productos.modal_create', compact('modal'));
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -38,9 +43,14 @@ class ProductosController extends Controller
      */
     public function store(ProductoRequest $request)
     {
-        $secciones = Producto::create($request->all());
+        $producto = Producto::create($request->all());
 
-        return redirect()->route('frontend.productos.index');
+        if($producto->save()) {
+            return response()->json( [ 'success' => 'Producto guardado!', 'id' => $producto->id, 'denominacion' => $producto->denominacion ] );
+        } else {
+            return response()->json( [ 'errors' => 'Errores!' ] );
+        }
+        // return redirect()->route('frontend.productos.index');
     }
 
     /**
@@ -49,9 +59,9 @@ class ProductosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Producto $productos)
     {
-        return view('frontend.productos.show', compact('secciones'));
+        return view('frontend.productos.show', compact('productos'));
     }
 
     /**
@@ -87,10 +97,9 @@ class ProductosController extends Controller
      */
     public function destroy(Producto $productos)
     {
-        $productos->delete();
-
-        Alert::success('Proceso completo', 'Se ha eliminado el producto');
-
+        if ($productos->delete()) {
+            Alert::success('Proceso completo', 'Se ha eliminado el producto '.$productos['codigo']);
+        };
         return redirect()->route('frontend.productos.index');
     }
 }

@@ -14,10 +14,12 @@ class Producto extends Component
      * @return void
      */
     public $productos;
+    public $modal;
 
-    public function __construct($productos = null)
+    public function __construct($productos = null, $modal = null)
     {
         $this->productos = $productos;
+        $this->modal = $modal;
     }
 
     /**
@@ -29,8 +31,9 @@ class Producto extends Component
     {
         // return view('components.forms.productos');
         if ($this->productos) {
-            return app(ProductoForm::class)->create()->edit($this->productos)->render();
+            return app(ProductoForm::class)->edit($this->productos)->render();
         } else {
+            // return app(ProductoForm::class)->create()->render();
             return app(ProductoForm::class)->create()->render();
         }
     }

@@ -29,7 +29,7 @@ class Conductores extends Component
     {
         // return view('components.forms.conductores');
         if ($this->conductores) {
-            return app(ConductoresForm::class)->create()->edit($this->conductores)->render();
+            return app(ConductoresForm::class)->edit($this->conductores)->render();
         } else {
             return app(ConductoresForm::class)->create()->render();
         }

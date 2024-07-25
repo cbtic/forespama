@@ -33,6 +33,6 @@ class CreateUbigeosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('ubigeos');
+        //Schema::dropIfExists('ubigeos');
     }
 }

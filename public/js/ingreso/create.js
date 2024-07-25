@@ -66,8 +66,9 @@ function guardar_ingreso() {
         type: "POST",
         data: $("#frmIngreso").serialize(),
         success: function(result) {
-			Limpiar();
-            datatablenew();
+			//Limpiar();
+            //datatablenew();
+			location.reload();
         }
     });
 }
@@ -214,29 +215,33 @@ function obtenerEmpresa(){
 	$('#nombres_razon_social').val("");
 	$('#servicio').val("");
 	
+	$("#placa").attr("disabled",false);
+	
 	$.ajax({
 		url: '/ingreso_vehiculo_tronco/obtener_datos_vehiculo/' + placa,
 		dataType: "json",
 		success: function(result){
-			if (result) {
+			
+			if(result.sw==false){
+				bootbox.alert(result.msg);
+			}else{
+				var vehiculo = result.vehiculo;
+				$('#ruc').val(vehiculo.ruc);
+				$('#empresa').val(vehiculo.razon_social);
+				$('#tipo_documento_bus').val(vehiculo.id_tipo_documento);
+				$('#numero_documento').val(vehiculo.numero_documento);
+				$('#conductor').val(vehiculo.conductor);
+				$('#id_empresa_transportista').val(vehiculo.id_empresas);
+				$('#id_vehiculos').val(vehiculo.id_vehiculos);
+				$('#id_conductores').val(vehiculo.id_conductores);
+				$("#placa").attr("disabled",true);
 				
-				$('#ruc').val(result.ruc);
-				$('#empresa').val(result.razon_social);
-				$('#numero_documento').val(result.numero_documento);
-				$('#conductor').val(result.conductor);
+				bootbox.alert("El Vehiculo ingresado ya esta registrado !!!");
 				
-				$('#id_empresa_transportista').val(result.id_empresas);
-				$('#id_vehiculos').val(result.id_vehiculos);
-				$('#id_conductores').val(result.id_conductores);
+				//$("#tipo_documento_bus").attr("disabled",true);
 				
-				
-				
-			} 
-			/*
-			else {
-				alert("El vehículo no esta registrado");
 			}
-			*/
+			
 		}
 		
 	});
@@ -1749,6 +1754,21 @@ function datatablenew() {
                 "bSortable": false,
                 "aTargets": [8]
             },
+			
+			{
+				"mRender": function (data, type, row) {
+					
+					var html = '<div class="btn-group btn-group-sm" role="group" aria-label="Log Viewer Actions">';
+					//html += '<button style="font-size:12px" type="button" class="btn btn-sm btn-success" data-toggle="modal" onclick="editarConcursoInscripcion('+row.id+')" ><i class="fa fa-edit"></i> Editar</button>';
+					
+					html += '<button style="font-size:12px;color:#FFFFFF;margin-left:10px" type="button" class="btn btn-sm btn-info" data-toggle="modal" onclick="modalVerIngresoImagen('+row.id+')"><i class="fa fa-edit" style="font-size:9px!important"></i> Ver Imagenes</button>';
+		
+					html += '</div>';
+					return html;
+				},
+				"bSortable": false,
+				"aTargets": [9],
+			},
 
 
         ]
@@ -2483,4 +2503,79 @@ function modalConductor(id){
 	});
 
 }
+
+function obtenerPersonaBuscar(){
+	
+	var tipo_documento = $("#tipo_documento_bus").val();
+	var numero_documento = $("#numero_documento").val();
+	
+	$("#tipo_documento_bus").attr("disabled",false);
+	$("#numero_documento").attr("disabled",false);
+	
+	$.ajax({
+		url: '/persona/obtener_persona_conductor/' + tipo_documento + '/' + numero_documento,
+		dataType: "json",
+		success: function(result){
+			
+			if(result.sw==false){
+				bootbox.alert(result.msg);
+			}else{
+				var persona = result.persona;
+				var conductor = result.conductor;
+				var nombre_conductor = persona.apellido_paterno+" "+persona.apellido_materno+" "+persona.nombres;
+				$("#frmIngreso #conductor").val(nombre_conductor);
+				$("#id_conductores").val(conductor.id);
+				$("#tipo_documento_bus").attr("disabled",true);
+				$("#numero_documento").attr("disabled",true);
+			}
+			
+		}
+		
+	});
+}
+
+function obtenerEmpresaBuscar(){
+	
+	var ruc = $("#ruc").val();
+	$("#ruc").attr("disabled",false);
+	
+	$.ajax({
+		url: '/empresa/obtener_empresa/' + ruc,
+		dataType: "json",
+		success: function(result){
+			
+			if(result.sw==false){
+				bootbox.alert(result.msg);
+			}else{
+				var empresa = result.empresa;
+				
+				$("#id_empresa_transportista").val(empresa.id);
+				$("#frmIngreso #ruc").val(empresa.ruc);
+				$("#frmIngreso #empresa").val(empresa.razon_social);
+				$("#ruc").attr("disabled",true);
+				
+			}
+			
+		}
+		
+	});
+}
+
+function modalVerIngresoImagen(id){
+	
+	$(".modal-dialog").css("width","85%");
+	$('#openOverlayOpc .modal-body').css('height', 'auto');
+
+	$.ajax({
+			url: "/ingreso_vehiculo_tronco/modal_ingreso_imagen/"+id,
+			type: "GET",
+			success: function (result) {
+					$("#diveditpregOpc").html(result);
+					$('#openOverlayOpc').modal('show');
+			}
+	});
+
+}
+
+
 

@@ -8,7 +8,7 @@
                     <div class="card-header">Crear Tabla</div>
 
                     <div class="card-body">
-                        <x-forms.tablamaestra></x-forms.tablamaestra>
+                        <x-forms.TablaMaestra />
                     </div>
                 </div>
             </div>

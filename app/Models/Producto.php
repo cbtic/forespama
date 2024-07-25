@@ -20,12 +20,13 @@ class Producto extends Model
         'fecha_vencimiento',
         'id_estado_bien',
         'stock_minimo',
-        'id_marca',
         'observacion',
-        'id_seccion',
-        'id_anaquel',
         'estado'
     ];
 
+    public function entrada_producto_detalles()
+    {
+        return $this->belongsTo('EntradaProductoDetalle', 'id_producto');
+    }
 
 }
