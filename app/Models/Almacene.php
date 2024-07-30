@@ -80,4 +80,15 @@ class Almacene extends Model
 		$data = DB::select($cad);
         return $data;
     }
+
+    function getAlmacenByUser($id){
+
+        $cad = "select * from almacenes a 
+        inner join almacen_usuarios au on au.id_almacen = a.id 
+        inner join users u on au.id_user = u.id 
+        where u.id = '".$id."'";
+
+		$data = DB::select($cad);
+        return $data;
+    }
 }

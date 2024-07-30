@@ -13,6 +13,8 @@ use App\Http\Controllers\Frontend\VehiculoController;
 use App\Http\Controllers\Frontend\IngresoController;
 use App\Http\Controllers\Frontend\TipoCambioController;
 use App\Http\Controllers\Frontend\AlmacenesController;
+use App\Http\Controllers\Frontend\SeccionesController;
+use App\Http\Controllers\Frontend\AnaquelesController;
 
 use App\Models\Ubigeo;
 
@@ -247,3 +249,16 @@ Route::get('almacenes/obtener_distrito/{idDepartamento}/{idProvincia}', [Almacen
 Route::get('almacenes/eliminar_almacen/{id}/{estado}', [AlmacenesController::class, 'eliminar_almacen'])->name('almacenes.eliminar_almacen');
 Route::get('almacenes/modal_usuario/{id}', [AlmacenesController::class, 'modal_usuario'])->name('almacenes.modal_usuario');
 Route::get('almacenes/obtener_provincia_distrito/{id}', [AlmacenesController::class, 'obtener_provincia_distrito'])->name('almacenes.obtener_provincia_distrito');
+
+Route::get('secciones/create', [SeccionesController::class, 'create'])->name('secciones.create');
+Route::post('secciones/listar_seccion_ajax', [SeccionesController::class, 'listar_seccion_ajax'])->name('secciones.listar_seccion_ajax');
+Route::post('secciones/send_seccion', [SeccionesController::class, 'send_seccion'])->name('secciones.send_seccion');
+Route::get('secciones/modal_seccion/{id}', [SeccionesController::class, 'modal_seccion'])->name('secciones.modal_seccion');
+Route::get('secciones/eliminar_seccion/{id}/{estado}', [SeccionesController::class, 'eliminar_seccion'])->name('secciones.eliminar_seccion');
+Route::get('secciones/modal_ver_anaqueles/{id}', [SeccionesController::class, 'modal_ver_anaqueles'])->name('secciones.modal_ver_anaqueles');
+
+Route::get('anaqueles/create', [AnaquelesController::class, 'create'])->name('anaqueles.create');
+Route::post('anaqueles/listar_anaqueles_ajax', [AnaquelesController::class, 'listar_anaqueles_ajax'])->name('anaqueles.listar_anaqueles_ajax');
+Route::post('anaqueles/send_anaquel', [AnaquelesController::class, 'send_anaquel'])->name('anaqueles.send_anaquel');
+Route::get('anaqueles/modal_anaquel/{id}', [AnaquelesController::class, 'modal_anaquel'])->name('anaqueles.modal_anaquel');
+Route::get('anaqueles/eliminar_anaquel/{id}/{estado}', [AnaquelesController::class, 'eliminar_anaquel'])->name('anaqueles.eliminar_anaquel');

@@ -15,6 +15,17 @@ use Carbon\Carbon;
 
 class AlmacenesController extends Controller
 {
+
+	public function __construct(){
+
+		$this->middleware(function ($request, $next) {
+			if(!Auth::check()) {
+                return redirect('login');
+            }
+			return $next($request);
+    	});
+	}
+
     public function create(){
 
 		/*$tablaMaestra_model = new TablaMaestra;

@@ -107,13 +107,13 @@
 				
 				@can('Secciones')
                 <li class="c-sidebar-nav-item">
-                    <x-utils.link :href="route('frontend.secciones.index')" class="c-sidebar-nav-link" :text="__('Secciones')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+                    <x-utils.link :href="route('frontend.secciones.create')" class="c-sidebar-nav-link" :text="__('Secciones')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
                 </li>
 				@endif
 				
 				@can('Anaqueles')
                 <li class="c-sidebar-nav-item">
-                    <x-utils.link :href="route('frontend.anaqueles.index')" class="c-sidebar-nav-link" :text="__('Anaqueles')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+                    <x-utils.link :href="route('frontend.anaqueles.create')" class="c-sidebar-nav-link" :text="__('Anaqueles')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
                 </li>
 				@endif
 				
