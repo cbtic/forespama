@@ -14,7 +14,7 @@ class AddIdAlmacenToAnaquelesTable extends Migration
     public function up()
     {
         Schema::table('anaqueles', function (Blueprint $table) {
-            $table->bigInteger('id_almacen')->unsigned()->index();
+            $table->bigInteger('id_almacen')->unsigned()->nullable();
             $table->foreign('id_almacen')->references('id')->on('almacenes');            
         });
     }
