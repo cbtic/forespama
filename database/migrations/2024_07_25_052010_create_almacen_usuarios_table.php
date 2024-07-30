@@ -13,6 +13,7 @@ class CreateAlmacenUsuariosTable extends Migration
      */
     public function up()
     {
+        
         Schema::create('almacen_usuarios', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('id_user')->nullable();
@@ -26,6 +27,7 @@ class CreateAlmacenUsuariosTable extends Migration
             $table->foreign('id_almacen')->references('id')->on('almacenes');
             $table->timestamps();
         });
+        
     }
 
     /**
