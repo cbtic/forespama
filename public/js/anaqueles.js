@@ -112,6 +112,18 @@ function datatablenew(){
                 "aTargets": [2]
                 },
 				{
+				"mRender": function (data, type, row) {
+					var almacen = "";
+					if(row.almacen!= null)almacen = row.almacen;
+					return almacen;
+				},
+				"bSortable": false,
+				"aTargets": [3],
+				"className": "dt-center",
+				//"className": 'control'
+				},
+				
+				{
 					"mRender": function (data, type, row) {
 						var estado = "";
 						if(row.estado == 1){
@@ -123,7 +135,7 @@ function datatablenew(){
 						return estado;
 					},
 					"bSortable": false,
-					"aTargets": [3]
+					"aTargets": [4]
 				},
 				{
 					"mRender": function (data, type, row) {
@@ -149,7 +161,7 @@ function datatablenew(){
 						return html;
 					},
 					"bSortable": false,
-					"aTargets": [4],
+					"aTargets": [5],
 				},
 
             ]

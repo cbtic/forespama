@@ -94,7 +94,7 @@ class AnaquelesController extends Controller
 		$anaquel->codigo = $request->codigo;
 		$anaquel->denominacion = $request->denominacion;
 		$anaquel->estado = 1;
-		//$almacen->id_user = $request->usuario;
+		$anaquel->id_almacen = $request->almacen;
 		$anaquel->save();
 
     }
@@ -108,6 +108,14 @@ class AnaquelesController extends Controller
 
 		echo $anaquel->id;
     }
+
+	public function obtener_anaquel($id_almacen){
+		
+		$anaquel_model = new Anaquele;
+		$anaquel = $anaquel_model->getAnaquelByAlmacen($id_almacen);
+		
+		echo json_encode($anaquel);
+	}
 
     /*public function index()
     {

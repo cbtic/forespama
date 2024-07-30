@@ -61,4 +61,13 @@ class Anaquele extends Model
 		$data = DB::select($cad);
         return $data;
     }
+
+    function getAnaquelByAlmacen($id_almacen){
+
+        $cad = "select a.id, a.codigo, a.denominacion, a.estado from anaqueles a 
+        where a.id_almacen=".$id_almacen;
+
+		$data = DB::select($cad);
+        return $data;
+    }
 }

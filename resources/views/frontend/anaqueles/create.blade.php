@@ -380,6 +380,7 @@ label.form-control-sm{
                             <th>Id</th>
                             <th>C&oacute;digo</th>
                             <th>Denominaci&oacute;n</th>
+							<th>Almacen</th>
 							<th>Estado</th>
                             <th>Acciones</th>
                         </tr>

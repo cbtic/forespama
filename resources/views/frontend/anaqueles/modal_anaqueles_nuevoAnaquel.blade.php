@@ -17,7 +17,7 @@
 
 .modal-dialog {
 	width: 100%;
-	max-width:60%!important
+	max-width:30%!important
   }
   
 #tablemodal{
@@ -398,29 +398,33 @@ function fn_save_anaquel(){
                             
                             <div class="row" style="padding-left:10px">
                                 
-                                <div class="col-lg-3">
+                                <div class="col-lg-12">
                                     <div class="form-group">
                                         <label class="control-label form-control-sm">Almacen</label>
                                         <select name="almacen" id="almacen" onChange="" class="form-control form-control-sm">
                                             <option value="">--Selecionar--</option>
                                             <?php
                                             foreach ($almacen as $row) {?>
-                                            <option value="<?php echo $row->id?>" <?php //if($row->id==$almacen->id_user)echo "selected='selected'"?>><?php echo $row->codigo.'-'.$row->denominacion ?></option>
+                                            <option value="<?php echo $row->id?>" <?php if($row->id==$anaquel->id_almacen)echo "selected='selected'"?>><?php echo $row->codigo.'-'.$row->denominacion ?></option>
                                             <?php 
                                             }
                                             ?>
                                         </select>
                                     </div>
                                 </div>
-                                
-                                <div class="col-lg-3">
+                            </div>
+                            <div class="row" style="padding-left:10px">
+                                <div class="col-lg-12">
                                     <div class="form-group">
                                         <label class="control-label form-control-sm">C&oacute;digo</label>
                                         <input id="codigo" name="codigo" on class="form-control form-control-sm"  value="<?php echo $anaquel->codigo?>" type="text">
                                     
                                     </div>
                                 </div>
-                                <div class="col-lg-3">
+                            </div>
+                            <div class="row" style="padding-left:10px">
+                            
+                                <div class="col-lg-12">
                                     <div class="form-group">
                                         <label class="control-label form-control-sm">Denominaci&oacute;n</label>
                                         <input id="denominacion" name="denominacion" on class="form-control form-control-sm"  value="<?php echo $anaquel->denominacion?>" type="text" >

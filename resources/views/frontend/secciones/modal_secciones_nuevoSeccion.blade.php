@@ -126,6 +126,7 @@ $(document).ready(function() {
 	//$('#hora_solicitud').focus();
 	//$('#hora_solicitud').mask('00:00');
 	//$("#id_empresa").select2({ width: '100%' });
+    $('select[name="anaquel[]"]').select2({ width: '100%' });
 });
 </script>
 
@@ -162,14 +163,47 @@ function AddFila(){
             <label class="control-label form-control-sm">Anaqueles</label>
             <select name="anaquel[]" id="anaquel" class="form-control form-control-sm">
                 <option value="">--Seleccionar--</option>
-                <?php foreach ($anaquel as $row) { ?>
-                <option value="<?php echo $row->id ?>"><?php echo $row->denominacion ?></option>
-                <?php } ?>
             </select>
         </div>`;
+        
     
     // Agregar el nuevo div al contenedor
     document.getElementById('contenedor-anaqueles').appendChild(newDiv);
+
+    $(newDiv).find('select[name="anaquel[]"]').select2({ width: '100%' });
+    
+    obtenerAnaquel();
+}
+
+function obtenerAnaquel(){
+
+    var id_almacen = $('#almacen').val();
+
+    $.ajax({
+		url: '/anaqueles/obtener_anaquel/'+id_almacen,
+		dataType: "json",
+		success: function(result){
+			
+            var option = "<option value=''>--Seleccionar--</option>";
+			//$('#anaquel').html("");
+			$(result).each(function (ii, oo) {
+				option += "<option value='"+oo.id+"'>"+oo.denominacion+"</option>";
+			});
+			$('select[name="anaquel[]"]').each(function() {
+                if ($(this).children().length <= 1){
+                    $(this).html(option);
+                    $(this).attr("disabled", false);
+                }
+                
+            });
+			//$('#anaquel').attr("disabled",false);
+			//$('.loader').hide();
+			
+
+		}
+		
+	});
+
 }
 
 function editarPuesto(id){
@@ -300,7 +334,7 @@ function fn_save_seccion(){
                                 <div class="col-lg-3">
                                     <div class="form-group">
                                         <label class="control-label form-control-sm">Almacen</label>
-                                        <select name="almacen" id="almacen" onChange="" class="form-control form-control-sm">
+                                        <select name="almacen" id="almacen" class="form-control form-control-sm" onchange="obtenerAnaquel()">
                                             <option value="">--Selecionar--</option>
                                             <?php
                                             foreach ($almacen as $row) {?>
@@ -333,9 +367,9 @@ function fn_save_seccion(){
                                         <label class="control-label form-control-sm">Anaqueles</label>
                                         <select name="anaquel[]" id="anaquel" class="form-control form-control-sm">
                                             <option value="">--Seleccionar--</option>
-                                            <?php foreach ($anaquel as $row) { ?>
-                                            <option value="<?php echo $row->id?>"><?php echo $row->denominacion ?></option>
-                                            <?php } ?>
+                                            <?php //foreach ($anaquel as $row) { ?>
+                                            <!--<option value="<?php //echo $row->id?>"><?php //echo $row->denominacion ?></option>-->
+                                            <?php //} ?>
                                         </select>
                                     </div>
                                 </div>
