@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use DB;
 
-class AnaquelesSeccione extends Model
+class AlmacenesSeccione extends Model
 {
     public $timestamps = false;
     use HasFactory;

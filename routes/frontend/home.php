@@ -263,3 +263,4 @@ Route::post('anaqueles/send_anaquel', [AnaquelesController::class, 'send_anaquel
 Route::get('anaqueles/modal_anaquel/{id}', [AnaquelesController::class, 'modal_anaquel'])->name('anaqueles.modal_anaquel');
 Route::get('anaqueles/eliminar_anaquel/{id}/{estado}', [AnaquelesController::class, 'eliminar_anaquel'])->name('anaqueles.eliminar_anaquel');
 Route::get('anaqueles/obtener_anaquel/{id_almacen}', [AnaquelesController::class, 'obtener_anaquel'])->name('anaqueles.obtener_anaquel');
+Route::post('secciones/send_editar_anaquel_activo', [SeccionesController::class, 'send_editar_anaquel_activo'])->name('secciones.send_editar_anaquel_activo');

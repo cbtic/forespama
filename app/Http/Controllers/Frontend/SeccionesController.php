@@ -7,6 +7,7 @@ use App\Models\Seccione;
 use App\Models\Almacene;
 use App\Models\Anaquele;
 use App\Models\AnaquelesSeccione;
+use App\Models\AlmacenesSeccione;
 use RealRashid\SweetAlert\Facades\Alert;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -46,18 +47,22 @@ class SeccionesController extends Controller
 		//$user_model = new User;
 		//$departamento = $ubigeo_model->getDepartamento();
 		$codigo = $seccion_model->getCodigo();
-		$almacen = $almacen_model->getAlmacenByUser($id_user);
+		//$almacen = $almacen_model->getAlmacenByUser($id_user);
 		$anaquel = $anaquel_model->getAnaquel();
 
 		if($id>0){
 			$seccion = Seccione::find($id);
+			$almacen_seccion = AlmacenesSeccione::where('id_secciones',$seccion->id)->first();
+			$almacen = $almacen_model->getAlmacenAll();
 		}else{
 			$seccion = new Seccione;
+			$almacen_seccion = null;
+			$almacen = $almacen_model->getAlmacenByUser($id_user);
 		}
 
-		//var_dump($codigo[0]->codigo);exit();
+		//var_dump($id);exit();
 
-		return view('frontend.secciones.modal_secciones_nuevoSeccion',compact('id','codigo','seccion','almacen','anaquel'));
+		return view('frontend.secciones.modal_secciones_nuevoSeccion',compact('id','codigo','seccion','almacen','anaquel','almacen_seccion'));
 
     }
 
@@ -89,6 +94,7 @@ class SeccionesController extends Controller
 		
 		/*$id_user = Auth::user()->id;
 		$usuario = $request->usuario;*/
+		$anaquel = $request->anaquel;
 
 		if($request->id == 0){
 			$seccion = new Seccione;
@@ -105,10 +111,14 @@ class SeccionesController extends Controller
 			$anaquel_seccion = new AnaquelesSeccione;
 			$anaquel_seccion->id_anaqueles = $seccion_id;
 			$anaquel_seccion->id_secciones = $seccion->id;
-			//$anaquel_seccion->id_usuario_inserta = $id_user;
-			//$anaquel_seccion->estado = 1;
+			$anaquel_seccion->estado = 1;
 			$anaquel_seccion->save();
 		}
+
+		$almacenes_secciones = new AlmacenesSeccione;
+		$almacenes_secciones->id_almacenes = $request->almacen;
+		$almacenes_secciones->id_secciones = $seccion->id;
+		$almacenes_secciones->save();
 
     }
 
@@ -130,6 +140,21 @@ class SeccionesController extends Controller
         return view('frontend.secciones.modal_ver_anaqueles',compact('anaquel'));
 		
     }
+
+	public function send_editar_anaquel_activo(Request $request)
+	{
+		$estados = $request->input('estado', []);
+		
+		foreach ($estados as $id => $estado) {
+			$anaquel_seccion = AnaquelesSeccione::find($id);
+			if ($anaquel_seccion) {
+				$anaquel_seccion->estado = $estado;
+				$anaquel_seccion->save();
+			}
+		}
+		
+		return response()->json(['success' => true]);
+	}
 
     /*public function index()
     {

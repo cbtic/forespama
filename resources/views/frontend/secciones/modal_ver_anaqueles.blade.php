@@ -155,92 +155,21 @@ $(document).ready(function() {
 });
 
 
-function editarPuesto(id){
-
-	$.ajax({
-		url: '/concurso/obtener_puesto/'+id,
-		dataType: "json",
-		success: function(result){
-			//alert(result);
-			console.log(result);
-			$('#id').val(result.id);
-			$('#id_tipo_plaza').val(result.id_tipo_plaza);
-			$('#numero_plazas').val(result.numero_plazas);
-		}
-		
-	});
-
-}
-
-function eliminarPuesto(id){
-	
-    bootbox.confirm({ 
-        size: "small",
-        message: "&iquest;Deseas eliminar el Puesto?", 
-        callback: function(result){
-            if (result==true) {
-                fn_eliminar_puesto(id);
-            }
+function fn_save_anquelesActivos(){
+    
+    $.ajax({
+        url: "/secciones/send_editar_anaquel_activo",
+        type: "POST",
+        data: $("#frmAnaquelSeccion").serialize(),
+        success: function(result) {
+            $('#openOverlayOpc').modal('hide');
+            window.location.reload();
+        },
+        error: function(xhr, status, error) {
+            console.error("Error al guardar los anaqueles activos:", error);
         }
     });
-    //$(".modal-dialog").css("width","30%");
 }
-
-function fn_eliminar_puesto(id){
-	
-	$.ajax({
-            url: "/concurso/eliminar_puesto/"+id,
-            type: "GET",
-            success: function (result) {
-				datatablenewRequisito();
-            }
-    });
-}
-
-
-function validacion(){
-    
-    var msg = "";
-    var cobservaciones=$("#frmComentar #cobservaciones").val();
-    
-    if(cobservaciones==""){msg+="Debe ingresar una Observacion <br>";}
-    
-    if(msg!=""){
-        bootbox.alert(msg); 
-        return false;
-    }
-}
-
-function limpiar(){
-	$('#id').val("0");
-	$('#id_tipo_documento').val("");
-	$('#denominacion').val("");
-	$('#img_foto').val("");
-}
-
-function fn_save_requisito(){
-    
-	var _token = $('#_token').val();
-	var id = $('#id').val();
-	var id_concurso = $('#id_concurso').val();
-	var id_tipo_documento = $('#id_tipo_documento').val();
-	var denominacion = $('#denominacion').val();
-	var img_foto = $('#img_foto').val();
-	
-	$.ajax({
-			url: "/concurso/send_requisito",
-            type: "POST",
-            data : {_token:_token,id:id,id_concurso:id_concurso,id_tipo_documento:id_tipo_documento,denominacion:denominacion,img_foto:img_foto},
-			success: function (result) {
-				//$('#openOverlayOpc').modal('hide');
-				datatablenewRequisito();
-				limpiar();
-								
-            }
-    });
-}
-
-
 
 </script>
 
@@ -264,46 +193,53 @@ function fn_save_requisito(){
 			</div>
 			
             <div class="card-body">
+            <form method="post" action="#" id="frmAnaquelSeccion" name="frmAnaquelSeccion">
 
 			<div class="row">
 
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding-top:10px">
+
+                <input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
+                
 					
                 <div class="card-body">				
 
                     <div class="table-responsive">
-                    <table id="tblVerAnaquel" class="table table-hover table-sm">
-                        <thead>
-                        <tr style="font-size:13px">
-                            <th>Id</th>
-							<th>C&oacute;digo</th>
-                            <th>Denominaci&oacute;n</th>
-                            <th>Estado</th>
-                        </tr>
-                        </thead>
-                        <tbody style="font-size:13px">
-						<?php  
-						foreach($anaquel as $row){
-                           
-                        ?>
-                        <tr>
-                            <td class="text-left" style="vertical-align:middle"><?php echo $row->id ?></td>
-                            <td class="text-left" style="vertical-align:middle"><?php echo $row->codigo ?></td>
-                            <td class="text-left" style="vertical-align:middle"><?php echo $row->denominacion ?></td>
-                            <td class="text-left" style="vertical-align:middle"><?php echo $row->estado ?></td>
-                        </tr>
-						<?php 
-							
-                        }
-						?>
-						</tbody>
-                    </table>
-                </div>
-				
-					<div class="form-group">
+                        <table id="tblVerAnaquel" class="table table-hover table-sm">
+                            <thead>
+                            <tr style="font-size:13px">
+                                <th>Id</th>
+                                <th>C&oacute;digo</th>
+                                <th>Denominaci&oacute;n</th>
+                                <th>Estado</th>
+                            </tr>
+                            </thead>
+                            <tbody style="font-size:13px">
+                            <?php  
+                            foreach($anaquel as $row){
+                            
+                            ?>
+                            <tr>
+                                <td class="text-left" style="vertical-align:middle"><?php echo $row->id ?></td>
+                                <td class="text-left" style="vertical-align:middle"><?php echo $row->codigo ?></td>
+                                <td class="text-left" style="vertical-align:middle"><?php echo $row->denominacion ?></td>
+                                <td class="text-left" style="vertical-align:middle">
+                                    <input type="hidden" name="estado[<?php echo $row->id_anaquel; ?>]" value="0">
+                                    <input type="checkbox" name="estado[<?php echo $row->id_anaquel; ?>]" value="1" class="estado-checkbox" <?php echo $row->estado == 1 ? 'checked' : ''; ?>>
+                                </td>
+                            </tr>
+                            <?php 
+                                
+                            }
+                            ?>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div style="margin-top:15px" class="form-group">
 						<div class="col-sm-12 controls">
 							<div class="btn-group btn-group-md float-right" role="group" aria-label="Log Viewer Actions">
-								<a href="javascript:void(0)" onClick="$('#openOverlayOpc').modal('hide');" class="btn btn-md btn-success" style="margin-bottom:15px;">Cerrar</a>
+                                <a href="javascript:void(0)" onClick="fn_save_anquelesActivos()" class="btn btn-sm btn-success" style ="margin-right:10px">Guardar</a>
+								<a href="javascript:void(0)" onClick="$('#openOverlayOpc').modal('hide');" class="btn btn-sm btn-warning" >Cerrar</a>
 								
 							</div>
 												

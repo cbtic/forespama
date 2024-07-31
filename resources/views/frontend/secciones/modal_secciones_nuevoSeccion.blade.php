@@ -337,9 +337,9 @@ function fn_save_seccion(){
                                         <select name="almacen" id="almacen" class="form-control form-control-sm" onchange="obtenerAnaquel()">
                                             <option value="">--Selecionar--</option>
                                             <?php
-                                            foreach ($almacen as $row) {?>
-                                            <option value="<?php echo $row->id?>" <?php //if($row->id==$almacen->id_user)echo "selected='selected'"?>><?php echo $row->codigo.'-'.$row->denominacion ?></option>
-                                            <?php 
+                                            foreach ($almacen as $row){?>
+                                                <option value="<?php echo $row->id ?>" <?php if ($id > 0 && $row->id == $almacen_seccion->id_almacenes) echo "selected='selected'"; ?>><?php echo $row->codigo . '-' . $row->denominacion ?></option>
+                                             <?php 
                                             }
                                             ?>
                                         </select>
@@ -355,7 +355,7 @@ function fn_save_seccion(){
                                 <div class="col-lg-3">
                                     <div class="form-group">
                                         <label class="control-label form-control-sm">Denominaci&oacute;n</label>
-                                        <input id="denominacion" name="denominacion" on class="form-control form-control-sm"  value="<?php //echo $almacen->denominacion?>" type="text" >
+                                        <input id="denominacion" name="denominacion" on class="form-control form-control-sm"  value="<?php echo $seccion->denominacion?>" type="text" >
                                     
                                     </div>
                                 </div>

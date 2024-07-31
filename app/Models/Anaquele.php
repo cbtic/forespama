@@ -53,10 +53,12 @@ class Anaquele extends Model
 
     function getAnaquelBySeccion($id){
 
-        $cad = "select a.id, a.codigo, a.denominacion, a.estado from anaqueles a 
+        $cad = "select a.id, a.codigo, a.denominacion, ase.estado, ase.id id_anaquel  
+        from anaqueles a 
         inner join anaqueles_secciones ase on ase.id_anaqueles = a.id 
         inner join secciones s on ase.id_secciones =s.id 
-        where s.id=".$id;
+        where s.id=".$id."
+        and ase.estado='1'";
 
 		$data = DB::select($cad);
         return $data;
