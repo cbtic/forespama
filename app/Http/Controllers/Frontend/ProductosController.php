@@ -1,0 +1,211 @@
+<?php
+
+namespace App\Http\Controllers\Frontend;
+
+use App\Http\Requests\ProductoRequest;
+use App\Models\Producto;
+use App\Models\TablaMaestra;
+use RealRashid\SweetAlert\Facades\Alert;
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Auth;
+use Carbon\Carbon;
+
+class ProductosController extends Controller
+{
+    
+    public function __construct(){
+
+		$this->middleware(function ($request, $next) {
+			if(!Auth::check()) {
+                return redirect('login');
+            }
+			return $next($request);
+    	});
+	}
+
+    public function create(){
+
+		$tablaMaestra_model = new TablaMaestra;
+		$estado_bien = $tablaMaestra_model->getMaestroByTipo(4);
+		
+		return view('frontend.productos.create',compact('estado_bien'));
+
+	}
+
+    public function listar_producto_ajax(Request $request){
+
+		$producto_model = new Producto;
+		$p[]=$request->serie;
+		$p[]=$request->denominacion;
+        $p[]=$request->codigo;
+        $p[]=$request->estado_bien;
+        $p[]=$request->estado;
+		$p[]=$request->NumeroPagina;
+		$p[]=$request->NumeroRegistros;
+		$data = $producto_model->listar_producto_ajax($p);
+		$iTotalDisplayRecords = isset($data[0]->totalrows)?$data[0]->totalrows:0;
+
+		$result["PageStart"] = $request->NumeroPagina;
+		$result["pageSize"] = $request->NumeroRegistros;
+		$result["SearchText"] = "";
+		$result["ShowChildren"] = true;
+		$result["iTotalRecords"] = $iTotalDisplayRecords;
+		$result["iTotalDisplayRecords"] = $iTotalDisplayRecords;
+		$result["aaData"] = $data;
+
+        echo json_encode($result);
+
+	}
+
+    public function modal_producto($id){
+		
+        $tablaMaestra_model = new TablaMaestra;
+		
+		if($id>0){
+			$producto = Producto::find($id);
+		}else{
+			$producto = new Producto;
+		}
+
+        $unidad_medida = $tablaMaestra_model->getMaestroByTipo(43);
+        $moneda = $tablaMaestra_model->getMaestroByTipo(1);
+        $tipo_producto = $tablaMaestra_model->getMaestroByTipo(44);
+        $estado_bien = $tablaMaestra_model->getMaestroByTipo(4);
+		//var_dump($id);exit();
+
+		return view('frontend.productos.modal_productos_nuevoProducto',compact('id','producto','unidad_medida','moneda','estado_bien','tipo_producto'));
+
+    }
+
+    public function send_producto(Request $request){
+
+		if($request->id == 0){
+			$producto = new Producto;
+		}else{
+			$producto = Producto::find($request->id);
+		}
+		
+		$producto->numero_serie = $request->numero_serie;
+		$producto->codigo = $request->codigo;
+        $producto->denominacion = $request->denominacion;
+        $producto->id_unidad_medida = $request->unidad;
+        $producto->stock_actual = $request->stock_actual;
+        $producto->id_moneda = $request->moneda;
+        $producto->id_tipo_producto = $request->tipo_producto;
+        $producto->fecha_vencimiento = $request->fecha_vencimiento;
+        $producto->id_estado_bien = $request->estado_bien;
+        $producto->stock_minimo = $request->stock_minimo;
+        $producto->observacion = "";
+        $producto->costo_unitario = $request->costo_unitario;
+		$producto->estado = 1;
+		$producto->save();
+
+    }
+
+    public function eliminar_producto($id,$estado)
+    {
+		$producto = Producto::find($id);
+
+		$producto->estado = $estado;
+		$producto->save();
+
+		echo $producto->id;
+    }
+    
+    
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    /*public function index()
+    {
+        $productos = Producto::latest()->paginate(10);
+
+        return view('frontend.productos.index', compact('productos'));
+    }*/
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    /*public function create()
+    {
+        return view('frontend.productos.create');
+    }
+
+    public function modal_create($modal = 'modal')
+    {
+        return view('frontend.productos.modal_create', compact('modal'));
+    }*/
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    /*public function store(ProductoRequest $request)
+    {
+        $producto = Producto::create($request->all());
+
+        if($producto->save()) {
+            return response()->json( [ 'success' => 'Producto guardado!', 'id' => $producto->id, 'denominacion' => $producto->denominacion ] );
+        } else {
+            return response()->json( [ 'errors' => 'Errores!' ] );
+        }
+        // return redirect()->route('frontend.productos.index');
+    }*/
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    /*public function show(Producto $productos)
+    {
+        return view('frontend.productos.show', compact('productos'));
+    }*/
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    /*public function edit(Producto $productos)
+    {
+        return view('frontend.productos.edit', compact('productos'));
+    }*/
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    /*public function update(ProductoRequest $request, Producto $productos)
+    {
+        $productos->update($request->all());
+
+        return redirect()->route('frontend.productos.index');
+    }*/
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    /*public function destroy(Producto $productos)
+    {
+        if ($productos->delete()) {
+            Alert::success('Proceso completo', 'Se ha eliminado el producto '.$productos['codigo']);
+        };
+        return redirect()->route('frontend.productos.index');
+    }*/
+}

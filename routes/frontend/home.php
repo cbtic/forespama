@@ -15,6 +15,8 @@ use App\Http\Controllers\Frontend\TipoCambioController;
 use App\Http\Controllers\Frontend\AlmacenesController;
 use App\Http\Controllers\Frontend\SeccionesController;
 use App\Http\Controllers\Frontend\AnaquelesController;
+use App\Http\Controllers\Frontend\ProductosController;
+use App\Http\Controllers\Frontend\LoteController;
 
 use App\Models\Ubigeo;
 
@@ -264,3 +266,18 @@ Route::get('anaqueles/modal_anaquel/{id}', [AnaquelesController::class, 'modal_a
 Route::get('anaqueles/eliminar_anaquel/{id}/{estado}', [AnaquelesController::class, 'eliminar_anaquel'])->name('anaqueles.eliminar_anaquel');
 Route::get('anaqueles/obtener_anaquel/{id_almacen}', [AnaquelesController::class, 'obtener_anaquel'])->name('anaqueles.obtener_anaquel');
 Route::post('secciones/send_editar_anaquel_activo', [SeccionesController::class, 'send_editar_anaquel_activo'])->name('secciones.send_editar_anaquel_activo');
+
+Route::get('productos/create', [ProductosController::class, 'create'])->name('productos.create');
+Route::post('productos/listar_producto_ajax', [ProductosController::class, 'listar_producto_ajax'])->name('productos.listar_producto_ajax');
+Route::post('productos/send_producto', [ProductosController::class, 'send_producto'])->name('productos.send_producto');
+Route::get('productos/modal_producto/{id}', [ProductosController::class, 'modal_producto'])->name('productos.modal_producto');
+Route::get('productos/eliminar_producto/{id}/{estado}', [ProductosController::class, 'eliminar_producto'])->name('productos.eliminar_producto');
+
+Route::get('lotes/create', [LoteController::class, 'create'])->name('lotes.create');
+Route::post('lotes/listar_lote_ajax', [LoteController::class, 'listar_lote_ajax'])->name('lotes.listar_lote_ajax');
+Route::post('lotes/send_lote', [LoteController::class, 'send_lote'])->name('lotes.send_lote');
+Route::get('lotes/modal_lote/{id}', [LoteController::class, 'modal_lote'])->name('lotes.modal_lote');
+Route::get('lotes/eliminar_lote/{id}/{estado}', [LoteController::class, 'eliminar_lote'])->name('lotes.eliminar_lote');
+Route::get('lotes/obtener_seccion_almacen/{id}', [LoteController::class, 'obtener_seccion_almacen'])->name('lotes.obtener_seccion_almacen');
+Route::get('lotes/obtener_anaquel_seccion/{id}', [LoteController::class, 'obtener_anaquel_seccion'])->name('lotes.obtener_anaquel_seccion');
+
