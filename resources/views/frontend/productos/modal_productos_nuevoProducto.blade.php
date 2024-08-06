@@ -299,7 +299,7 @@ function fn_save_producto(){
                                             <option value="">--Selecionar--</option>
                                             <?php
                                             foreach ($unidad_medida as $row){?>
-                                                <option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
+                                                <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$producto->id_unidad_medida)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
                                              <?php 
                                             }
                                             ?>
@@ -325,7 +325,7 @@ function fn_save_producto(){
                                             <option value="">--Selecionar--</option>
                                             <?php
                                             foreach ($moneda as $row){?>
-                                                <option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
+                                                <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$producto->id_moneda)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
                                              <?php 
                                             }
                                             ?>
@@ -339,7 +339,7 @@ function fn_save_producto(){
                                             <option value="">--Selecionar--</option>
                                             <?php
                                             foreach ($tipo_producto as $row){?>
-                                                <option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
+                                                <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$producto->id_tipo_producto)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
                                              <?php 
                                             }
                                             ?>
@@ -359,7 +359,7 @@ function fn_save_producto(){
                                             <option value="">--Selecionar--</option>
                                             <?php
                                             foreach ($estado_bien as $row){?>
-                                                <option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
+                                                <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$producto->id_estado_bien)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
                                              <?php 
                                             }
                                             ?>

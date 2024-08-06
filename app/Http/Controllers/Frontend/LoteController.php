@@ -68,12 +68,13 @@ class LoteController extends Controller
         $almacen_model = new Almacene;
 
         $id_user = Auth::user()->id;
-
 		
 		if($id>0){
 			$lote = Lote::find($id);
+            $almacen = $almacen_model->getAlmacenAll();
 		}else{
 			$lote = new Lote;
+            $almacen = $almacen_model->getAlmacenByUser($id_user);
 		}
 
         $unidad_medida = $tablaMaestra_model->getMaestroByTipo(43);
@@ -81,7 +82,7 @@ class LoteController extends Controller
         $marca = $tablaMaestra_model->getMaestroByTipo(47);
 
         $producto = $producto_model->getProductoAll();
-        $almacen = $almacen_model->getAlmacenByUser($id_user);
+        
 
 		return view('frontend.lotes.modal_lotes_nuevoLote',compact('id','lote','producto','marca','unidad_medida','moneda','almacen'));
 

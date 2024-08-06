@@ -283,7 +283,7 @@ $.ajax({
                                             <option value="">--Selecionar--</option>
                                             <?php
                                             foreach ($producto as $row){?>
-                                                <option value="<?php echo $row->id ?>"><?php echo $row->denominacion ?></option>
+                                                <option value="<?php echo $row->id ?>" <?php if($row->id==$lote->id_producto)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
                                              <?php 
                                             }
                                             ?>
@@ -297,7 +297,7 @@ $.ajax({
                                             <option value="">--Selecionar--</option>
                                             <?php
                                             foreach ($marca as $row){?>
-                                                <option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
+                                                <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$lote->id_marca)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
                                              <?php 
                                             }
                                             ?>
@@ -323,7 +323,7 @@ $.ajax({
                                             <option value="">--Selecionar--</option>
                                             <?php
                                             foreach ($unidad_medida as $row){?>
-                                                <option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
+                                                <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$lote->id_unidad_medida)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
                                              <?php 
                                             }
                                             ?>
@@ -349,7 +349,7 @@ $.ajax({
                                             <option value="">--Selecionar--</option>
                                             <?php
                                             foreach ($moneda as $row){?>
-                                                <option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
+                                                <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$lote->id_moneda)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
                                              <?php 
                                             }
                                             ?>
@@ -372,10 +372,10 @@ $.ajax({
                                     <div class="form-group">
                                         <label class="control-label form-control-sm">Almacen</label>
                                         <select name="almacen" id="almacen" class="form-control form-control-sm" onchange="obtenerSeccion()">
-                                            <option value="">--Selecionar--</option>
+                                            <option value="">--Seleccionar--</option>
                                             <?php
                                             foreach ($almacen as $row){?>
-                                                <option value="<?php echo $row->id ?>"><?php echo $row->denominacion ?></option>
+                                                <option value="<?php echo $row->id ?>" <?php if ($id > 0 && $row->id == $lote->id_almacen) echo "selected='selected'"; ?>><?php echo $row->denominacion ?></option>
                                              <?php 
                                             }
                                             ?>
@@ -386,7 +386,7 @@ $.ajax({
                                     <div class="form-group">
                                         <label class="control-label form-control-sm">Secci&oacute;n</label>
                                         <select name="seccion" id="seccion" class="form-control form-control-sm" onchange="obtenerAnaquel()">
-                                            <option value="">--Selecionar--</option>
+                                            <option value="">--Seleccionar--</option>
                                         </select>
                                     </div>
                                 </div>
@@ -394,7 +394,7 @@ $.ajax({
                                     <div class="form-group">
                                         <label class="control-label form-control-sm">Anaquel</label>
                                         <select name="anaquel" id="anaquel" class="form-control form-control-sm" onchange="">
-                                            <option value="">--Selecionar--</option>
+                                            <option value="">--Seleccionar--</option>
                                         </select>
                                     </div>
                                 </div>
