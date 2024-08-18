@@ -6,6 +6,7 @@ use App\Http\Requests\AlmaceneRequest;
 use App\Models\Almacene;
 use App\Models\Ubigeo;
 use App\Models\User;
+use App\Models\Almacen_usuario;
 use RealRashid\SweetAlert\Facades\Alert;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -14,6 +15,17 @@ use Carbon\Carbon;
 
 class AlmacenesController extends Controller
 {
+
+	public function __construct(){
+
+		$this->middleware(function ($request, $next) {
+			if(!Auth::check()) {
+                return redirect('login');
+            }
+			return $next($request);
+    	});
+	}
+
     public function create(){
 
 		/*$tablaMaestra_model = new TablaMaestra;
@@ -111,6 +123,7 @@ class AlmacenesController extends Controller
     public function send_almacen(Request $request){
 		
 		$id_user = Auth::user()->id;
+		$usuario = $request->usuario;
 
 		if($request->id == 0){
 			$almacen = new Almacene;
@@ -125,8 +138,24 @@ class AlmacenesController extends Controller
 		$almacen->estado = 1;
 		$almacen->telefono = $request->telefono;
 		$almacen->encargado = $request->encargado;
-		$almacen->id_user = $request->usuario;
+		//$almacen->id_user = $request->usuario;
 		$almacen->save();
+
+		foreach($usuario as $usuario_id){
+			$almacen_usuario = new Almacen_usuario;
+			$almacen_usuario->id_user = $usuario_id;
+			$almacen_usuario->id_almacen = $almacen->id;
+			$almacen_usuario->id_usuario_inserta = $id_user;
+			$almacen_usuario->estado = 1;
+			$almacen_usuario->save();
+		}
+
+		/*$almacen_usuario->id_user = $request->usuario;
+		$almacen_usuario->id_almacen = $almacen->id;
+		$almacen_usuario->id_usuario_inserta = $id_user;
+		$almacen_usuario->estado = 1;
+		$almacen_usuario->save();*/
+
     }
 
 	public function obtener_provincia($idDepartamento){

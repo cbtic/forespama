@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use DB;
 
 class Producto extends Model
 {
@@ -27,6 +28,36 @@ class Producto extends Model
     public function entrada_producto_detalles()
     {
         return $this->belongsTo('EntradaProductoDetalle', 'id_producto');
+    }
+
+    public function listar_producto_ajax($p){
+
+        return $this->readFuntionPostgres('sp_listar_productos_paginado',$p);
+
+    }
+
+    public function readFuntionPostgres($function, $parameters = null){
+
+        $_parameters = '';
+        if (count($parameters) > 0) {
+            $_parameters = implode("','", $parameters);
+            $_parameters = "'" . $_parameters . "',";
+        }
+        $data = DB::select("BEGIN;");
+        $cad = "select " . $function . "(" . $_parameters . "'ref_cursor');";
+        $data = DB::select($cad);
+        $cad = "FETCH ALL IN ref_cursor;";
+        $data = DB::select($cad);
+        return $data;
+
+    }
+
+    function getProductoAll(){
+
+        $cad = "select * from productos p";
+
+		$data = DB::select($cad);
+        return $data;
     }
 
 }

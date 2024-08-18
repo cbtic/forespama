@@ -5,10 +5,16 @@ $(document).ready(function () {
 	});
 		
 	$('#btnNuevo').click(function () {
-		modalAlmacen(0);
+		modalAnaquel(0);
 	});
 
-	$('#denominacion').keypress(function(e){
+	$('#denominacion_bus').keypress(function(e){
+		if(e.which == 13) {
+			datatablenew();
+		}
+	});
+
+    $('#codigo_bus').keypress(function(e){
 		if(e.which == 13) {
 			datatablenew();
 		}
@@ -20,9 +26,9 @@ $(document).ready(function () {
 
 function datatablenew(){
                       
-    var oTable1 = $('#tblAlmacenes').dataTable({
+    var oTable1 = $('#tblAnaqueles').dataTable({
         "bServerSide": true,
-        "sAjaxSource": "/almacenes/listar_almacenes_ajax",
+        "sAjaxSource": "/anaqueles/listar_anaqueles_ajax",
         "bProcessing": true,
         "sPaginationType": "full_numbers",
         //"paging":false,
@@ -49,9 +55,9 @@ function datatablenew(){
             var iNroPagina 	= parseFloat(fn_util_obtieneNroPagina(aoData[3].value, aoData[4].value)).toFixed();
             var iCantMostrar 	= aoData[4].value;
 			
-            var denominacion = $('#denominacion').val();
-            var encargado = $('#encargado').val();
-			var estado = $('#estado').val();
+            var denominacion = $('#denominacion_bus').val();
+            var codigo = $('#codigo_bus').val();
+			var estado = $('#estado_bus').val();
 			
 			var _token = $('#_token').val();
             oSettings.jqXHR = $.ajax({
@@ -60,7 +66,7 @@ function datatablenew(){
                 "type": "POST",
                 "url": sSource,
                 "data":{NumeroPagina:iNroPagina,NumeroRegistros:iCantMostrar,
-                        denominacion:denominacion,encargado:encargado,estado:estado,
+                        denominacion:denominacion,codigo:codigo,estado:estado,
 						_token:_token
                        },
                 "success": function (result) {
@@ -105,57 +111,18 @@ function datatablenew(){
                 "bSortable": true,
                 "aTargets": [2]
                 },
-				
-				{
-                "mRender": function (data, type, row) {
-                	var ubicacion = "";
-					if(row.ubicacion!= null)ubicacion = row.ubicacion;
-					return ubicacion;
-                },
-                "bSortable": true,
-                "aTargets": [3]
-                },
-
 				{
 				"mRender": function (data, type, row) {
-					var direccion = "";
-					if(row.direccion!= null)direccion = row.direccion;
-					return direccion;
+					var almacen = "";
+					if(row.almacen!= null)almacen = row.almacen;
+					return almacen;
 				},
-				"bSortable": true,
-				"aTargets": [4]
+				"bSortable": false,
+				"aTargets": [3],
+				"className": "dt-center",
+				//"className": 'control'
 				},
-
-                {
-                    "mRender": function (data, type, row) {
-                        var telefono = "";
-                        if(row.telefono!= null)telefono = row.telefono;
-                        return telefono;
-                    },
-                    "bSortable": true,
-                    "aTargets": [5]
-                    },
-
-                {
-                "mRender": function (data, type, row) {
-                    var encargado = "";
-                    if(row.encargado!= null)encargado = row.encargado;
-                    return encargado;
-                },
-                "bSortable": true,
-                "aTargets": [6]
-                },
-                {
-                "mRender": function (data, type, row) {
-                    var html = '<div class="btn-group btn-group-sm" role="group" aria-label="Log Viewer Actions">';
-                        
-                    html += '<button style="font-size:12px;color:#FFFFFF;margin-left:10px" type="button" class="btn btn-sm btn-info" data-toggle="modal" onclick="modalVerUsuarios('+row.id+')"><i class="fa fa-edit" style="font-size:9px!important"></i>Usuarios</button>';
-                    html += '</div>';
-                    return html;
-                },
-                "bSortable": true,
-                "aTargets": [7]
-                },
+				
 				{
 					"mRender": function (data, type, row) {
 						var estado = "";
@@ -168,7 +135,7 @@ function datatablenew(){
 						return estado;
 					},
 					"bSortable": false,
-					"aTargets": [8]
+					"aTargets": [4]
 				},
 				{
 					"mRender": function (data, type, row) {
@@ -185,8 +152,8 @@ function datatablenew(){
 						
 						var html = '<div class="btn-group btn-group-sm" role="group" aria-label="Log Viewer Actions">';
 						
-						html += '<button style="font-size:12px" type="button" class="btn btn-sm btn-success" data-toggle="modal" onclick="modalAlmacen('+row.id+')" ><i class="fa fa-edit"></i> Editar</button>'; 
-						html += '<a href="javascript:void(0)" onclick=eliminarAlmacen('+row.id+','+row.estado+') class="btn btn-sm '+clase+'" style="font-size:12px;margin-left:10px">'+estado+'</a>';
+						html += '<button style="font-size:12px" type="button" class="btn btn-sm btn-success" data-toggle="modal" onclick="modalAnaquel('+row.id+')" ><i class="fa fa-edit"></i> Editar</button>'; 
+						html += '<a href="javascript:void(0)" onclick=eliminarAnaquel('+row.id+','+row.estado+') class="btn btn-sm '+clase+'" style="font-size:12px;margin-left:10px">'+estado+'</a>';
 						
 						//html += '<a href="javascript:void(0)" onclick=modalResponsable('+row.id+') class="btn btn-sm btn-info" style="font-size:12px;margin-left:10px">Detalle Responsable</a>';
 						
@@ -194,7 +161,7 @@ function datatablenew(){
 						return html;
 					},
 					"bSortable": false,
-					"aTargets": [9],
+					"aTargets": [5],
 				},
 
             ]
@@ -208,13 +175,13 @@ function fn_ListarBusqueda() {
     datatablenew();
 };
 
-function modalAlmacen(id){
+function modalAnaquel(id){
 	
 	$(".modal-dialog").css("width","85%");
 	$('#openOverlayOpc .modal-body').css('height', 'auto');
 
 	$.ajax({
-			url: "/almacenes/modal_almacen/"+id,
+			url: "/anaqueles/modal_anaquel/"+id,
 			type: "GET",
 			success: function (result) {  
 					$("#diveditpregOpc").html(result);
@@ -224,7 +191,7 @@ function modalAlmacen(id){
 
 }
 
-function eliminarAlmacen(id,estado){
+function eliminarAnaquel(id,estado){
 	var act_estado = "";
 	if(estado==1){
 		act_estado = "Eliminar";
@@ -236,7 +203,7 @@ function eliminarAlmacen(id,estado){
 	}
     bootbox.confirm({ 
         size: "small",
-        message: "&iquest;Deseas "+act_estado+" el Almacen?", 
+        message: "&iquest;Deseas "+act_estado+" el Anaquel?", 
         callback: function(result){
             if (result==true) {
                 fn_eliminar(id,estado_);
@@ -249,7 +216,7 @@ function eliminarAlmacen(id,estado){
 function fn_eliminar(id,estado){
 	
     $.ajax({
-            url: "/almacenes/eliminar_almacen/"+id+"/"+estado,
+            url: "/anaqueles/eliminar_anaquel/"+id+"/"+estado,
             type: "GET",
             success: function (result) {
                 //if(result="success")obtenerPlanDetalle(id_plan);
@@ -257,21 +224,4 @@ function fn_eliminar(id,estado){
             }
     });
 }
-
-function modalVerUsuarios(id){
-	
-	$(".modal-dialog").css("width","85%");
-	$('#openOverlayOpc .modal-body').css('height', 'auto');
-
-	$.ajax({
-			url: "/almacenes/modal_usuario/"+id,
-			type: "GET",
-			success: function (result) {
-					$("#diveditpregOpc").html(result);
-					$('#openOverlayOpc').modal('show');
-			}
-	});
-
-}
-
 

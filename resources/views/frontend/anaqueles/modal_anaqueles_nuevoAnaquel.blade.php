@@ -17,7 +17,7 @@
 
 .modal-dialog {
 	width: 100%;
-	max-width:60%!important
+	max-width:30%!important
   }
   
 #tablemodal{
@@ -148,12 +148,6 @@ $('#openOverlayOpc').on('shown.bs.modal', function() {
 });
 
 $(document).ready(function() {
-	 
-    obtenerProvincia();
-
-    if($('#id').val()>0){
-		obtenerDatosUbigeo();
-	}
 
 });
 
@@ -284,27 +278,6 @@ function obtenerDistrito_(callback){
     });
 }
 
-function AddFila(){
-    // Crear un nuevo div para el grupo de usuario
-    var newDiv = document.createElement('div');
-    newDiv.className = 'col-lg-12 usuario-grupo';
-    
-    // Crear el HTML interno del nuevo div
-    newDiv.innerHTML = `
-        <div class="form-group">
-            <label class="control-label form-control-sm">Usuario</label>
-            <select name="usuario[]" id="usuario" class="form-control form-control-sm">
-                <option value="">--Seleccionar--</option>
-                <?php foreach ($user as $row) { ?>
-                <option value="<?php echo $row->id ?>"><?php echo $row->name ?></option>
-                <?php } ?>
-            </select>
-        </div>`;
-    
-    // Agregar el nuevo div al contenedor
-    document.getElementById('contenedor-usuarios').appendChild(newDiv);
-}
-
 function editarPuesto(id){
 
 	$.ajax({
@@ -368,22 +341,17 @@ function limpiar(){
 	$('#img_foto').val("");
 }
 
-function fn_save_almacen(){
+function fn_save_anaquel(){
     
 	var _token = $('#_token').val();
 	var id = $('#id').val();
 	var codigo = $('#codigo').val();
 	var denominacion = $('#denominacion').val();
-	var distrito = $('#distrito').val();
-	var direccion = $('#direccion').val();
-    var encargado = $('#encargado').val();
-    var usuario = $('#usuario').val();
-    var telefono = $('#telefono').val();
 	
 	$.ajax({
-			url: "/almacenes/send_almacen",
+			url: "/anaqueles/send_anaquel",
             type: "POST",
-            data : $("#frmAlmacen").serialize(),
+            data : $("#frmAnaquel").serialize(),
 			success: function (result) {
 				$('#openOverlayOpc').modal('hide');
                 window.location.reload();
@@ -414,11 +382,11 @@ function fn_save_almacen(){
 		<div class="card">
 			
 			<div class="card-header" style="padding:5px!important;padding-left:20px!important">
-				Registrar Almacenes
+				Registrar Anaqueles
 			</div>
 			
             <div class="card-body">
-            <form method="post" action="#" id="frmAlmacen" name="frmAlmacen">
+            <form method="post" action="#" id="frmAnaquel" name="frmAnaquel">
 
                 <div class="row">
 
@@ -430,120 +398,46 @@ function fn_save_almacen(){
                             
                             <div class="row" style="padding-left:10px">
                                 
-                                <div class="col-lg-3">
+                                <div class="col-lg-12">
                                     <div class="form-group">
-                                        <label class="control-label form-control-sm">C&oacute;digo</label>
-                                        <input id="codigo" name="codigo" on class="form-control form-control-sm"  value="<?php echo $codigo[0]->codigo?>" type="text" readonly="readonly">
-                                    
-                                    </div>
-                                </div>
-                                <div class="col-lg-3">
-                                    <div class="form-group">
-                                        <label class="control-label form-control-sm">Denominaci&oacute;n</label>
-                                        <input id="denominacion" name="denominacion" on class="form-control form-control-sm"  value="<?php echo $almacen->denominacion?>" type="text" >
-                                    
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row" style="padding-left:10px">
-                                
-                                <div class="col-lg-4">
-                                    <div class="form-group">
-                                        <label class="control-label form-control-sm">Departamento</label>
-                                        <select name="departamento" id="departamento" onChange="obtenerProvincia()" class="form-control form-control-sm">
-                                            <?php if($id>0){ ?> 
+                                        <label class="control-label form-control-sm">Almacen</label>
+                                        <select name="almacen" id="almacen" onChange="" class="form-control form-control-sm">
                                             <option value="">--Selecionar--</option>
                                             <?php
-                                            foreach ($departamento as $row) {?>
-                                            <option value="<?php echo $row->id_departamento?>" <?php if($row->id_departamento==substr($almacen->id_ubigeo,0,2))echo "selected='selected'"?>><?php echo $row->desc_ubigeo ?></option>
+                                            foreach ($almacen as $row) {?>
+                                            <option value="<?php echo $row->id?>" <?php if($row->id==$anaquel->id_almacen)echo "selected='selected'"?>><?php echo $row->codigo.'-'.$row->denominacion ?></option>
                                             <?php 
-                                            }
-                                            }else{?>
-                                            <option value="">--Seleccionar--</option>
-                                                <?php
-                                                foreach ($departamento as $row) {
-                                                ?>
-                                                <option value="<?php echo $row->id_departamento?>"><?php echo $row->desc_ubigeo ?></option>
-                                                <?php 
-                                                    
-                                                }
                                             }
                                             ?>
                                         </select>
                                     </div>
                                 </div>
-                                
-                                <div class="col-lg-4">
+                            </div>
+                            <div class="row" style="padding-left:10px">
+                                <div class="col-lg-12">
                                     <div class="form-group">
-                                        <label class="control-label form-control-sm">Provincia</label>
-                                        <select name="provincia" id="provincia" class="form-control form-control-sm" onchange="obtenerDistrito()">
-                                            <option value="">--Selecionar--</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                
-                                <div class="col-lg-4">
-                                    <div class="form-group">
-                                        <label class="control-label form-control-sm">Distrito</label>
-                                        <select name="distrito" id="distrito" class="form-control form-control-sm" onchange="">
-                                            <option value="">--Selecionar--</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                
-                                <div class="col-lg-6">
-                                    <div class="form-group">
-                                        <label class="control-label form-control-sm">Direcci&oacute;n</label>
-                                        <input id="direccion" name="direccion" on class="form-control form-control-sm"  value="<?php echo $almacen->direccion?>" type="text" >
-                                    </div>
-                                </div>
-
-                                <div class="col-lg-3">
-                                    <div class="form-group">
-                                        <label class="control-label form-control-sm">T&eacute;lefono</label>
-                                        <input id="telefono" name="telefono" on class="form-control form-control-sm"  value="<?php echo $almacen->telefono?>" type="text">
+                                        <label class="control-label form-control-sm">C&oacute;digo</label>
+                                        <input id="codigo" name="codigo" on class="form-control form-control-sm"  value="<?php echo $anaquel->codigo?>" type="text">
                                     
                                     </div>
                                 </div>
-
-                                <div class="col-lg-3">
+                            </div>
+                            <div class="row" style="padding-left:10px">
+                            
+                                <div class="col-lg-12">
                                     <div class="form-group">
-                                        <label class="control-label form-control-sm">Encargado</label>
-                                        <input id="encargado" name="encargado" on class="form-control form-control-sm"  value="<?php echo $almacen->encargado?>" type="text">
+                                        <label class="control-label form-control-sm">Denominaci&oacute;n</label>
+                                        <input id="denominacion" name="denominacion" on class="form-control form-control-sm"  value="<?php echo $anaquel->denominacion?>" type="text" >
                                     
-                                    </div>
-                                </div>
-                                <div id="contenedor-usuarios" >
-                                    <div class="col-lg-12 usuario-grupo">
-                                        <div class="form-group">
-                                            <label class="control-label form-control-sm">Usuario</label>
-                                            <select name="usuario[]" id="usuario" onChange="" class="form-control form-control-sm">
-                                                <option value="">--Selecionar--</option>
-                                                <?php
-                                                foreach ($user as $row) {?>
-                                                <option value="<?php echo $row->id?>" <?php if($row->id==$almacen->id_user)echo "selected='selected'"?>><?php echo $row->name ?></option>
-                                                <?php 
-                                                }
-                                                ?>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div style="margin-top:37px" class="form-group">
-                                    <div class="col-sm-12 controls">
-                                        <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
-                                            <a href="javascript:void(0)" onClick="AddFila()" class="btn btn-sm btn-success">Agregar</a>
-                                        </div>
-                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        </div>
                         <div style="margin-top:15px" class="form-group">
                             <div class="col-sm-12 controls">
                                 <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
-                                    <a href="javascript:void(0)" onClick="fn_save_almacen()" class="btn btn-sm btn-success">Registrar</a>
+                                    <a href="javascript:void(0)" onClick="fn_save_anaquel()" class="btn btn-sm btn-success">Registrar</a>
                                 </div>
                                                     
                             </div>

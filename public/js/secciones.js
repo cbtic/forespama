@@ -5,7 +5,7 @@ $(document).ready(function () {
 	});
 		
 	$('#btnNuevo').click(function () {
-		modalAlmacen(0);
+		modalSeccion(0);
 	});
 
 	$('#denominacion').keypress(function(e){
@@ -20,9 +20,9 @@ $(document).ready(function () {
 
 function datatablenew(){
                       
-    var oTable1 = $('#tblAlmacenes').dataTable({
+    var oTable1 = $('#tblSecciones').dataTable({
         "bServerSide": true,
-        "sAjaxSource": "/almacenes/listar_almacenes_ajax",
+        "sAjaxSource": "/secciones/listar_seccion_ajax",
         "bProcessing": true,
         "sPaginationType": "full_numbers",
         //"paging":false,
@@ -49,9 +49,10 @@ function datatablenew(){
             var iNroPagina 	= parseFloat(fn_util_obtieneNroPagina(aoData[3].value, aoData[4].value)).toFixed();
             var iCantMostrar 	= aoData[4].value;
 			
-            var denominacion = $('#denominacion').val();
-            var encargado = $('#encargado').val();
-			var estado = $('#estado').val();
+            var almacen = $('#almacen_bus').val();
+            var denominacion = $('#denominacion_bus').val();
+            var codigo = $('#codigo_bus').val();
+			var estado = $('#estado_bus').val();
 			
 			var _token = $('#_token').val();
             oSettings.jqXHR = $.ajax({
@@ -60,7 +61,7 @@ function datatablenew(){
                 "type": "POST",
                 "url": sSource,
                 "data":{NumeroPagina:iNroPagina,NumeroRegistros:iCantMostrar,
-                        denominacion:denominacion,encargado:encargado,estado:estado,
+                        almacen:almacen,denominacion:denominacion,codigo:codigo,estado:estado,
 						_token:_token
                        },
                 "success": function (result) {
@@ -88,9 +89,9 @@ function datatablenew(){
 				
 				{
                 "mRender": function (data, type, row) {
-                	var codigo = "";
-					if(row.codigo!= null)codigo = row.codigo;
-					return codigo;
+                	var codigo_almacen = "";
+					if(row.codigo_almacen!= null)codigo_almacen = row.codigo_almacen;
+					return codigo_almacen;
                 },
                 "bSortable": true,
                 "aTargets": [1]
@@ -98,9 +99,9 @@ function datatablenew(){
 				
                 {
                 "mRender": function (data, type, row) {
-                	var denominacion = "";
-					if(row.denominacion!= null)denominacion = row.denominacion;
-					return denominacion;
+                	var almacen = "";
+					if(row.almacen!= null)almacen = row.almacen;
+					return almacen;
                 },
                 "bSortable": true,
                 "aTargets": [2]
@@ -108,9 +109,9 @@ function datatablenew(){
 				
 				{
                 "mRender": function (data, type, row) {
-                	var ubicacion = "";
-					if(row.ubicacion!= null)ubicacion = row.ubicacion;
-					return ubicacion;
+                	var codigo_seccion = "";
+					if(row.codigo_seccion!= null)codigo_seccion = row.codigo_seccion;
+					return codigo_seccion;
                 },
                 "bSortable": true,
                 "aTargets": [3]
@@ -118,43 +119,23 @@ function datatablenew(){
 
 				{
 				"mRender": function (data, type, row) {
-					var direccion = "";
-					if(row.direccion!= null)direccion = row.direccion;
-					return direccion;
+					var seccion = "";
+					if(row.seccion!= null)seccion = row.seccion;
+					return seccion;
 				},
 				"bSortable": true,
 				"aTargets": [4]
 				},
-
-                {
-                    "mRender": function (data, type, row) {
-                        var telefono = "";
-                        if(row.telefono!= null)telefono = row.telefono;
-                        return telefono;
-                    },
-                    "bSortable": true,
-                    "aTargets": [5]
-                    },
-
-                {
-                "mRender": function (data, type, row) {
-                    var encargado = "";
-                    if(row.encargado!= null)encargado = row.encargado;
-                    return encargado;
-                },
-                "bSortable": true,
-                "aTargets": [6]
-                },
                 {
                 "mRender": function (data, type, row) {
                     var html = '<div class="btn-group btn-group-sm" role="group" aria-label="Log Viewer Actions">';
                         
-                    html += '<button style="font-size:12px;color:#FFFFFF;margin-left:10px" type="button" class="btn btn-sm btn-info" data-toggle="modal" onclick="modalVerUsuarios('+row.id+')"><i class="fa fa-edit" style="font-size:9px!important"></i>Usuarios</button>';
+                    html += '<button style="font-size:12px;color:#FFFFFF;margin-left:10px" type="button" class="btn btn-sm btn-info" data-toggle="modal" onclick="modalVerAnaqueles('+row.id+')"><i class="fa fa-edit" style="font-size:9px!important"></i>Anaqueles</button>';
                     html += '</div>';
                     return html;
                 },
                 "bSortable": true,
-                "aTargets": [7]
+                "aTargets": [5]
                 },
 				{
 					"mRender": function (data, type, row) {
@@ -168,7 +149,7 @@ function datatablenew(){
 						return estado;
 					},
 					"bSortable": false,
-					"aTargets": [8]
+					"aTargets": [6]
 				},
 				{
 					"mRender": function (data, type, row) {
@@ -185,8 +166,8 @@ function datatablenew(){
 						
 						var html = '<div class="btn-group btn-group-sm" role="group" aria-label="Log Viewer Actions">';
 						
-						html += '<button style="font-size:12px" type="button" class="btn btn-sm btn-success" data-toggle="modal" onclick="modalAlmacen('+row.id+')" ><i class="fa fa-edit"></i> Editar</button>'; 
-						html += '<a href="javascript:void(0)" onclick=eliminarAlmacen('+row.id+','+row.estado+') class="btn btn-sm '+clase+'" style="font-size:12px;margin-left:10px">'+estado+'</a>';
+						html += '<button style="font-size:12px" type="button" class="btn btn-sm btn-success" data-toggle="modal" onclick="modalSeccion('+row.id+')" ><i class="fa fa-edit"></i> Editar</button>'; 
+						html += '<a href="javascript:void(0)" onclick=eliminarSeccion('+row.id+','+row.estado+') class="btn btn-sm '+clase+'" style="font-size:12px;margin-left:10px">'+estado+'</a>';
 						
 						//html += '<a href="javascript:void(0)" onclick=modalResponsable('+row.id+') class="btn btn-sm btn-info" style="font-size:12px;margin-left:10px">Detalle Responsable</a>';
 						
@@ -194,7 +175,7 @@ function datatablenew(){
 						return html;
 					},
 					"bSortable": false,
-					"aTargets": [9],
+					"aTargets": [7],
 				},
 
             ]
@@ -208,13 +189,13 @@ function fn_ListarBusqueda() {
     datatablenew();
 };
 
-function modalAlmacen(id){
+function modalSeccion(id){
 	
 	$(".modal-dialog").css("width","85%");
 	$('#openOverlayOpc .modal-body').css('height', 'auto');
 
 	$.ajax({
-			url: "/almacenes/modal_almacen/"+id,
+			url: "/secciones/modal_seccion/"+id,
 			type: "GET",
 			success: function (result) {  
 					$("#diveditpregOpc").html(result);
@@ -224,7 +205,7 @@ function modalAlmacen(id){
 
 }
 
-function eliminarAlmacen(id,estado){
+function eliminarSeccion(id,estado){
 	var act_estado = "";
 	if(estado==1){
 		act_estado = "Eliminar";
@@ -236,7 +217,7 @@ function eliminarAlmacen(id,estado){
 	}
     bootbox.confirm({ 
         size: "small",
-        message: "&iquest;Deseas "+act_estado+" el Almacen?", 
+        message: "&iquest;Deseas "+act_estado+" la Seccion?", 
         callback: function(result){
             if (result==true) {
                 fn_eliminar(id,estado_);
@@ -249,7 +230,7 @@ function eliminarAlmacen(id,estado){
 function fn_eliminar(id,estado){
 	
     $.ajax({
-            url: "/almacenes/eliminar_almacen/"+id+"/"+estado,
+            url: "/secciones/eliminar_seccion/"+id+"/"+estado,
             type: "GET",
             success: function (result) {
                 //if(result="success")obtenerPlanDetalle(id_plan);
@@ -258,13 +239,13 @@ function fn_eliminar(id,estado){
     });
 }
 
-function modalVerUsuarios(id){
+function modalVerAnaqueles(id){
 	
 	$(".modal-dialog").css("width","85%");
 	$('#openOverlayOpc .modal-body').css('height', 'auto');
 
 	$.ajax({
-			url: "/almacenes/modal_usuario/"+id,
+			url: "/secciones/modal_ver_anaqueles/"+id,
 			type: "GET",
 			success: function (result) {
 					$("#diveditpregOpc").html(result);
@@ -273,5 +254,3 @@ function modalVerUsuarios(id){
 	});
 
 }
-
-

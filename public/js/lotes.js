@@ -5,7 +5,7 @@ $(document).ready(function () {
 	});
 		
 	$('#btnNuevo').click(function () {
-		modalAlmacen(0);
+		modalLote(0);
 	});
 
 	$('#denominacion').keypress(function(e){
@@ -20,9 +20,9 @@ $(document).ready(function () {
 
 function datatablenew(){
                       
-    var oTable1 = $('#tblAlmacenes').dataTable({
+    var oTable1 = $('#tblLotes').dataTable({
         "bServerSide": true,
-        "sAjaxSource": "/almacenes/listar_almacenes_ajax",
+        "sAjaxSource": "/lotes/listar_lote_ajax",
         "bProcessing": true,
         "sPaginationType": "full_numbers",
         //"paging":false,
@@ -49,9 +49,10 @@ function datatablenew(){
             var iNroPagina 	= parseFloat(fn_util_obtieneNroPagina(aoData[3].value, aoData[4].value)).toFixed();
             var iCantMostrar 	= aoData[4].value;
 			
-            var denominacion = $('#denominacion').val();
-            var encargado = $('#encargado').val();
-			var estado = $('#estado').val();
+            var denominacion = $('#denominacion_bus').val();
+			var marca = $('#marca_bus').val();
+			var anaquel = $('#anaquel_bus').val();
+			var estado = $('#estado_bus').val();
 			
 			var _token = $('#_token').val();
             oSettings.jqXHR = $.ajax({
@@ -60,7 +61,7 @@ function datatablenew(){
                 "type": "POST",
                 "url": sSource,
                 "data":{NumeroPagina:iNroPagina,NumeroRegistros:iCantMostrar,
-                        denominacion:denominacion,encargado:encargado,estado:estado,
+						denominacion:denominacion,marca:marca,anaquel:anaquel,estado:estado,
 						_token:_token
                        },
                 "success": function (result) {
@@ -88,9 +89,9 @@ function datatablenew(){
 				
 				{
                 "mRender": function (data, type, row) {
-                	var codigo = "";
-					if(row.codigo!= null)codigo = row.codigo;
-					return codigo;
+                	var producto = "";
+					if(row.producto!= null)producto = row.producto;
+					return producto;
                 },
                 "bSortable": true,
                 "aTargets": [1]
@@ -98,9 +99,9 @@ function datatablenew(){
 				
                 {
                 "mRender": function (data, type, row) {
-                	var denominacion = "";
-					if(row.denominacion!= null)denominacion = row.denominacion;
-					return denominacion;
+                	var marca = "";
+					if(row.marca!= null)marca = row.marca;
+					return marca;
                 },
                 "bSortable": true,
                 "aTargets": [2]
@@ -108,9 +109,9 @@ function datatablenew(){
 				
 				{
                 "mRender": function (data, type, row) {
-                	var ubicacion = "";
-					if(row.ubicacion!= null)ubicacion = row.ubicacion;
-					return ubicacion;
+                	var numero_lote = "";
+					if(row.numero_lote!= null)numero_lote = row.numero_lote;
+					return numero_lote;
                 },
                 "bSortable": true,
                 "aTargets": [3]
@@ -118,44 +119,85 @@ function datatablenew(){
 
 				{
 				"mRender": function (data, type, row) {
-					var direccion = "";
-					if(row.direccion!= null)direccion = row.direccion;
-					return direccion;
+					var numero_serie = "";
+					if(row.numero_serie!= null)numero_serie = row.numero_serie;
+					return numero_serie;
 				},
 				"bSortable": true,
 				"aTargets": [4]
 				},
-
-                {
-                    "mRender": function (data, type, row) {
-                        var telefono = "";
-                        if(row.telefono!= null)telefono = row.telefono;
-                        return telefono;
-                    },
-                    "bSortable": true,
-                    "aTargets": [5]
-                    },
-
-                {
-                "mRender": function (data, type, row) {
-                    var encargado = "";
-                    if(row.encargado!= null)encargado = row.encargado;
-                    return encargado;
-                },
-                "bSortable": true,
-                "aTargets": [6]
-                },
-                {
-                "mRender": function (data, type, row) {
-                    var html = '<div class="btn-group btn-group-sm" role="group" aria-label="Log Viewer Actions">';
-                        
-                    html += '<button style="font-size:12px;color:#FFFFFF;margin-left:10px" type="button" class="btn btn-sm btn-info" data-toggle="modal" onclick="modalVerUsuarios('+row.id+')"><i class="fa fa-edit" style="font-size:9px!important"></i>Usuarios</button>';
-                    html += '</div>';
-                    return html;
-                },
-                "bSortable": true,
-                "aTargets": [7]
-                },
+				{
+				"mRender": function (data, type, row) {
+					var unidad_medida = "";
+					if(row.unidad_medida!= null)unidad_medida = row.unidad_medida;
+					return unidad_medida;
+				},
+				"bSortable": true,
+				"aTargets": [5]
+				},
+				{
+				"mRender": function (data, type, row) {
+					var cantidad = "";
+					if(row.cantidad!= null)cantidad = row.cantidad;
+					return cantidad;
+				},
+				"bSortable": true,
+				"aTargets": [6]
+				},
+				{
+				"mRender": function (data, type, row) {
+					var costo = "";
+					if(row.costo!= null)costo = row.costo;
+					return costo;
+				},
+				"bSortable": true,
+				"aTargets": [7]
+				},
+				{
+				"mRender": function (data, type, row) {
+					var moneda = "";
+					if(row.moneda!= null)moneda = row.moneda;
+					return moneda;
+				},
+				"bSortable": true,
+				"aTargets": [8]
+				},
+				{
+				"mRender": function (data, type, row) {
+					var fecha_fabricacion = "";
+					if(row.fecha_fabricacion!= null)fecha_fabricacion = row.fecha_fabricacion;
+					return fecha_fabricacion;
+				},
+				"bSortable": true,
+				"aTargets": [9]
+				},
+				{
+				"mRender": function (data, type, row) {
+					var fecha_vencimiento = "";
+					if(row.fecha_vencimiento!= null)fecha_vencimiento = row.fecha_vencimiento;
+					return fecha_vencimiento;
+				},
+				"bSortable": true,
+				"aTargets": [10]
+				},
+				{
+				"mRender": function (data, type, row) {
+					var codigo_anaquel = "";
+					if(row.codigo_anaquel!= null)codigo_anaquel = row.codigo_anaquel;
+					return codigo_anaquel;
+				},
+				"bSortable": true,
+				"aTargets": [11]
+				},
+				{
+				"mRender": function (data, type, row) {
+					var anaquel = "";
+					if(row.anaquel!= null)anaquel = row.anaquel;
+					return anaquel;
+				},
+				"bSortable": true,
+				"aTargets": [12]
+				},
 				{
 					"mRender": function (data, type, row) {
 						var estado = "";
@@ -168,7 +210,7 @@ function datatablenew(){
 						return estado;
 					},
 					"bSortable": false,
-					"aTargets": [8]
+					"aTargets": [13]
 				},
 				{
 					"mRender": function (data, type, row) {
@@ -185,8 +227,8 @@ function datatablenew(){
 						
 						var html = '<div class="btn-group btn-group-sm" role="group" aria-label="Log Viewer Actions">';
 						
-						html += '<button style="font-size:12px" type="button" class="btn btn-sm btn-success" data-toggle="modal" onclick="modalAlmacen('+row.id+')" ><i class="fa fa-edit"></i> Editar</button>'; 
-						html += '<a href="javascript:void(0)" onclick=eliminarAlmacen('+row.id+','+row.estado+') class="btn btn-sm '+clase+'" style="font-size:12px;margin-left:10px">'+estado+'</a>';
+						html += '<button style="font-size:12px" type="button" class="btn btn-sm btn-success" data-toggle="modal" onclick="modalLote('+row.id+')" ><i class="fa fa-edit"></i> Editar</button>'; 
+						html += '<a href="javascript:void(0)" onclick=eliminarLote('+row.id+','+row.estado+') class="btn btn-sm '+clase+'" style="font-size:12px;margin-left:10px">'+estado+'</a>';
 						
 						//html += '<a href="javascript:void(0)" onclick=modalResponsable('+row.id+') class="btn btn-sm btn-info" style="font-size:12px;margin-left:10px">Detalle Responsable</a>';
 						
@@ -194,7 +236,7 @@ function datatablenew(){
 						return html;
 					},
 					"bSortable": false,
-					"aTargets": [9],
+					"aTargets": [14],
 				},
 
             ]
@@ -208,13 +250,13 @@ function fn_ListarBusqueda() {
     datatablenew();
 };
 
-function modalAlmacen(id){
+function modalLote(id){
 	
 	$(".modal-dialog").css("width","85%");
 	$('#openOverlayOpc .modal-body').css('height', 'auto');
 
 	$.ajax({
-			url: "/almacenes/modal_almacen/"+id,
+			url: "/lotes/modal_lote/"+id,
 			type: "GET",
 			success: function (result) {  
 					$("#diveditpregOpc").html(result);
@@ -224,7 +266,7 @@ function modalAlmacen(id){
 
 }
 
-function eliminarAlmacen(id,estado){
+function eliminarLote(id,estado){
 	var act_estado = "";
 	if(estado==1){
 		act_estado = "Eliminar";
@@ -236,7 +278,7 @@ function eliminarAlmacen(id,estado){
 	}
     bootbox.confirm({ 
         size: "small",
-        message: "&iquest;Deseas "+act_estado+" el Almacen?", 
+        message: "&iquest;Deseas "+act_estado+" el Lote?", 
         callback: function(result){
             if (result==true) {
                 fn_eliminar(id,estado_);
@@ -249,7 +291,7 @@ function eliminarAlmacen(id,estado){
 function fn_eliminar(id,estado){
 	
     $.ajax({
-            url: "/almacenes/eliminar_almacen/"+id+"/"+estado,
+            url: "/lotes/eliminar_lote/"+id+"/"+estado,
             type: "GET",
             success: function (result) {
                 //if(result="success")obtenerPlanDetalle(id_plan);
@@ -258,13 +300,13 @@ function fn_eliminar(id,estado){
     });
 }
 
-function modalVerUsuarios(id){
+function modalVerAnaqueles(id){
 	
 	$(".modal-dialog").css("width","85%");
 	$('#openOverlayOpc .modal-body').css('height', 'auto');
 
 	$.ajax({
-			url: "/almacenes/modal_usuario/"+id,
+			url: "/secciones/modal_ver_anaqueles/"+id,
 			type: "GET",
 			success: function (result) {
 					$("#diveditpregOpc").html(result);
@@ -273,5 +315,3 @@ function modalVerUsuarios(id){
 	});
 
 }
-
-

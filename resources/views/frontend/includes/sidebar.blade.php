@@ -107,25 +107,25 @@
 				
 				@can('Secciones')
                 <li class="c-sidebar-nav-item">
-                    <x-utils.link :href="route('frontend.secciones.index')" class="c-sidebar-nav-link" :text="__('Secciones')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+                    <x-utils.link :href="route('frontend.secciones.create')" class="c-sidebar-nav-link" :text="__('Secciones')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
                 </li>
 				@endif
 				
 				@can('Anaqueles')
                 <li class="c-sidebar-nav-item">
-                    <x-utils.link :href="route('frontend.anaqueles.index')" class="c-sidebar-nav-link" :text="__('Anaqueles')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+                    <x-utils.link :href="route('frontend.anaqueles.create')" class="c-sidebar-nav-link" :text="__('Anaqueles')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
                 </li>
 				@endif
 				
 				@can('Productos')
                 <li class="c-sidebar-nav-item">
-                    <x-utils.link :href="route('frontend.productos.index')" class="c-sidebar-nav-link" :text="__('Productos')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+                    <x-utils.link :href="route('frontend.productos.create')" class="c-sidebar-nav-link" :text="__('Productos')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
                 </li>
 				@endif
 				
 				@can('Lotes')
                 <li class="c-sidebar-nav-item">
-                    <x-utils.link :href="route('frontend.lotes.index')" class="c-sidebar-nav-link" :text="__('Lotes')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+                    <x-utils.link :href="route('frontend.lotes.create')" class="c-sidebar-nav-link" :text="__('Lotes')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
                 </li>
 				@endif
 				
@@ -161,10 +161,10 @@
             <x-utils.link href="#" icon="c-sidebar-nav-icon cil-list" class="c-sidebar-nav-dropdown-toggle" :text="__('Caja')" />
             <ul class="c-sidebar-nav-dropdown-items">
                 <li class="c-sidebar-nav-item">
-                    <x-utils.link :href="route('frontend.ingresos.create')" class="c-sidebar-nav-link" :text="__('Estado de Cuentas')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />                    
+                    <x-utils.link :href="route('frontend.ingresos.create')" class="c-sidebar-nav-link" :text="__('Estado de Cuentas')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />                  
                 </li>
             </ul>
-        </li>
+        </li> 
 		
 	@endif
 	

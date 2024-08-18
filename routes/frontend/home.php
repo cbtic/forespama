@@ -13,6 +13,10 @@ use App\Http\Controllers\Frontend\VehiculoController;
 use App\Http\Controllers\Frontend\IngresoController;
 use App\Http\Controllers\Frontend\TipoCambioController;
 use App\Http\Controllers\Frontend\AlmacenesController;
+use App\Http\Controllers\Frontend\SeccionesController;
+use App\Http\Controllers\Frontend\AnaquelesController;
+use App\Http\Controllers\Frontend\ProductosController;
+use App\Http\Controllers\Frontend\LoteController;
 
 use App\Models\Ubigeo;
 
@@ -167,16 +171,6 @@ Route::delete('productos/{productos}', 'App\Http\Controllers\ProductosController
 Route::get('productos/{productos}/edit', 'App\Http\Controllers\ProductosController@edit')->name('productos.edit');
 
 
-<<<<<<< HEAD
-Route::get('ingreso/create', [IngresoController::class, 'create'])->name('ingreso.create');
-Route::get('ingreso/obtener_valorizacion/{tipo_documento}/{id_persona}', [IngresoController::class, 'obtener_valorizacion'])->name('ingreso.obtener_valorizacion')->where('tipo_documento', '(.*)');
-Route::post('ingreso/listar_valorizacion', [IngresoController::class, 'listar_valorizacion'])->name('ingreso.listar_valorizacion');
-Route::post('ingreso/listar_valorizacion_concepto', [IngresoController::class, 'listar_valorizacion_concepto'])->name('ingreso.listar_valorizacion_concepto');
-Route::post('ingreso/listar_valorizacion_periodo', [IngresoController::class, 'listar_valorizacion_periodo'])->name('ingreso.listar_valorizacion_periodo');
-Route::get('ingreso/obtener_pago/{tipo_documento}/{persona_id}', [IngresoController::class, 'obtener_pago'])->name('ingreso.obtener_pago')->where('tipo_documento', '(.*)');
-//Route::post('ingreso/sendCaja', [IngresoController::class, 'sendCaja'])->name('ingreso.sendCaja');
-Route::get('ingreso/modal_valorizacion_factura/{id}', [IngresoController::class, 'modal_valorizacion_factura'])->name('ingreso.modal_valorizacion_factura');
-=======
 //Route::get('ingreso/create', [IngresoController::class, 'create'])->name('ingreso.create');
 Route::get('ingresos/create', [IngresoController::class, 'create'])->name('ingresos.create');
 Route::get('ingresos/obtener_valorizacion/{tipo_documento}/{id_persona}', [IngresoController::class, 'obtener_valorizacion'])->name('ingreso.obtener_valorizacion')->where('tipo_documento', '(.*)');
@@ -186,7 +180,6 @@ Route::post('ingresos/listar_valorizacion_periodo', [IngresoController::class, '
 Route::get('ingresos/obtener_pago/{tipo_documento}/{persona_id}', [IngresoController::class, 'obtener_pago'])->name('ingreso.obtener_pago')->where('tipo_documento', '(.*)');
 Route::post('ingresos/sendCaja', [IngresoController::class, 'sendCaja'])->name('ingreso.sendCaja');
 Route::get('ingresos/modal_valorizacion_factura/{id}', [IngresoController::class, 'modal_valorizacion_factura'])->name('ingreso.modal_valorizacion_factura');
->>>>>>> 1d43bcc4ef3fad640c429c1d540d27aa156f0c16
 
 Route::get('lotes', 'App\Http\Controllers\LoteController@index')->name('lotes.index');
 Route::post('lotes', 'App\Http\Controllers\LoteController@store')->name('lotes.store');
@@ -258,3 +251,33 @@ Route::get('almacenes/obtener_distrito/{idDepartamento}/{idProvincia}', [Almacen
 Route::get('almacenes/eliminar_almacen/{id}/{estado}', [AlmacenesController::class, 'eliminar_almacen'])->name('almacenes.eliminar_almacen');
 Route::get('almacenes/modal_usuario/{id}', [AlmacenesController::class, 'modal_usuario'])->name('almacenes.modal_usuario');
 Route::get('almacenes/obtener_provincia_distrito/{id}', [AlmacenesController::class, 'obtener_provincia_distrito'])->name('almacenes.obtener_provincia_distrito');
+
+Route::get('secciones/create', [SeccionesController::class, 'create'])->name('secciones.create');
+Route::post('secciones/listar_seccion_ajax', [SeccionesController::class, 'listar_seccion_ajax'])->name('secciones.listar_seccion_ajax');
+Route::post('secciones/send_seccion', [SeccionesController::class, 'send_seccion'])->name('secciones.send_seccion');
+Route::get('secciones/modal_seccion/{id}', [SeccionesController::class, 'modal_seccion'])->name('secciones.modal_seccion');
+Route::get('secciones/eliminar_seccion/{id}/{estado}', [SeccionesController::class, 'eliminar_seccion'])->name('secciones.eliminar_seccion');
+Route::get('secciones/modal_ver_anaqueles/{id}', [SeccionesController::class, 'modal_ver_anaqueles'])->name('secciones.modal_ver_anaqueles');
+
+Route::get('anaqueles/create', [AnaquelesController::class, 'create'])->name('anaqueles.create');
+Route::post('anaqueles/listar_anaqueles_ajax', [AnaquelesController::class, 'listar_anaqueles_ajax'])->name('anaqueles.listar_anaqueles_ajax');
+Route::post('anaqueles/send_anaquel', [AnaquelesController::class, 'send_anaquel'])->name('anaqueles.send_anaquel');
+Route::get('anaqueles/modal_anaquel/{id}', [AnaquelesController::class, 'modal_anaquel'])->name('anaqueles.modal_anaquel');
+Route::get('anaqueles/eliminar_anaquel/{id}/{estado}', [AnaquelesController::class, 'eliminar_anaquel'])->name('anaqueles.eliminar_anaquel');
+Route::get('anaqueles/obtener_anaquel/{id_almacen}', [AnaquelesController::class, 'obtener_anaquel'])->name('anaqueles.obtener_anaquel');
+Route::post('secciones/send_editar_anaquel_activo', [SeccionesController::class, 'send_editar_anaquel_activo'])->name('secciones.send_editar_anaquel_activo');
+
+Route::get('productos/create', [ProductosController::class, 'create'])->name('productos.create');
+Route::post('productos/listar_producto_ajax', [ProductosController::class, 'listar_producto_ajax'])->name('productos.listar_producto_ajax');
+Route::post('productos/send_producto', [ProductosController::class, 'send_producto'])->name('productos.send_producto');
+Route::get('productos/modal_producto/{id}', [ProductosController::class, 'modal_producto'])->name('productos.modal_producto');
+Route::get('productos/eliminar_producto/{id}/{estado}', [ProductosController::class, 'eliminar_producto'])->name('productos.eliminar_producto');
+
+Route::get('lotes/create', [LoteController::class, 'create'])->name('lotes.create');
+Route::post('lotes/listar_lote_ajax', [LoteController::class, 'listar_lote_ajax'])->name('lotes.listar_lote_ajax');
+Route::post('lotes/send_lote', [LoteController::class, 'send_lote'])->name('lotes.send_lote');
+Route::get('lotes/modal_lote/{id}', [LoteController::class, 'modal_lote'])->name('lotes.modal_lote');
+Route::get('lotes/eliminar_lote/{id}/{estado}', [LoteController::class, 'eliminar_lote'])->name('lotes.eliminar_lote');
+Route::get('lotes/obtener_seccion_almacen/{id}', [LoteController::class, 'obtener_seccion_almacen'])->name('lotes.obtener_seccion_almacen');
+Route::get('lotes/obtener_anaquel_seccion/{id}', [LoteController::class, 'obtener_anaquel_seccion'])->name('lotes.obtener_anaquel_seccion');
+
