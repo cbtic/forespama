@@ -131,7 +131,7 @@ $.mask.definitions['p'] = "[Mm]";
 */
 $(document).ready(function() {
 
-    $('#fecha_vencimiento').datepicker({
+    $('#fecha_entrada').datepicker({
         autoclose: true,
 		format: 'yyyy-mm-dd',
 		changeMonth: true,
@@ -139,13 +139,23 @@ $(document).ready(function() {
         language: 'es'
     });
 
-    $('#fecha_fabricacion').datepicker({
+    $('#fecha_comprobante').datepicker({
         autoclose: true,
 		format: 'yyyy-mm-dd',
 		changeMonth: true,
 		changeYear: true,
         language: 'es'
     });
+
+    if($('#id').val()==0){
+        /*$('#tipo_cambio_dolar_').hide();*/
+        cambiarTipoCambio();
+        cambiarOrigen()
+        //$("#proveedor").select2({ width: '100%' });
+    }
+
+    
+
 });
 
 </script>
@@ -170,11 +180,37 @@ $('#openOverlayOpc').on('shown.bs.modal', function() {
 
 $(document).ready(function() {
 	 
-    if($('#id').val()>0){
-		obtenerSeccion();
-	}
 });
 
+function cambiarTipoCambio(){
+
+    var moneda = $('#moneda').val();
+    //alert(moneda);
+    if(moneda==2){
+        $('#tipo_cambio_dolar_').show();
+    }else if(moneda==1){
+        $('#tipo_cambio_dolar_').hide();
+    }else{
+        $('#tipo_cambio_dolar_').hide();
+    }
+
+}
+
+function cambiarOrigen(){
+
+    var unidad_origen = $('#unidad_origen').val();
+    //alert(moneda);
+    if(unidad_origen==1){
+        $('#proveedor_').hide();
+    }else if(unidad_origen==2){
+        $('#proveedor_').show();
+    }else if(unidad_origen==3){
+        $('#proveedor_').show();
+        $('#proveedor').val(28);
+    }else{
+        $('#proveedor_').hide();
+    }
+}
 
 function limpiar(){
 	$('#id').val("0");
@@ -183,12 +219,12 @@ function limpiar(){
 	$('#img_foto').val("");
 }
 
-function fn_save_lote(){
+function fn_save_entrada_producto(){
 	
 	$.ajax({
-			url: "/lotes/send_lote",
+			url: "/entrada_productos/send_entrada_producto",
             type: "POST",
-            data : $("#frmLote").serialize(),
+            data : $("#frmEntradaProductos").serialize(),
 			success: function (result) {
 				$('#openOverlayOpc').modal('hide');
                 window.location.reload();
@@ -199,58 +235,23 @@ function fn_save_lote(){
     });
 }
 
-function obtenerSeccion(){
+function modalDetalleProducto(id){
+	
+	$(".modal-dialog").css("width","85%");
+	$('#openOverlayOpc .modal-body').css('height', 'auto');
 
-    var id = $('#almacen').val();
-
-    $.ajax({
-			url: "/lotes/obtener_seccion_almacen/"+id,
-            dataType: "json",
-			success: function (result) {
-
-				var option = "<option value=''>--Seleccionar--</option>";
-			$('#seccion').html("");
-			$(result).each(function (ii, oo) {
-                var id = $('#id').val();
-                var selected = (id > 0 && oo.id == <?php echo $lote->id_seccion; ?>) ? "selected='selected'" : "";
-                option += "<option value='" + oo.id + "' " + selected + ">" + oo.seccion + "</option>";
-			});
-			$('#seccion').html(option);
-			
-            if($('#id').val()>0){
-            obtenerAnaquel();
-	}
-
-			//$('#seccion').attr("disabled",false);
-								
-            }
-    });
+	$.ajax({
+			url: "/entrada_productos/modal_detalle_producto",
+			type: "GET",
+            data : $("#frmEntradaProductos").serialize(),
+			success: function (result) {  
+					$("#diveditpregOpc").html(result);
+					$('#openOverlayOpc').modal('show');
+			}
+	});
 
 }
 
-function obtenerAnaquel(){
-
-var id = $('#seccion').val();
-
-$.ajax({
-        url: "/lotes/obtener_anaquel_seccion/"+id,
-        dataType: "json",
-        success: function (result) {
-
-            var option = "<option value=''>--Seleccionar--</option>";
-        $('#anaquel').html("");
-        $(result).each(function (ii, oo) {
-            var selected = (<?php echo $id; ?> > 0 && oo.id == <?php echo $lote->id_anaquel; ?>) ? "selected='selected'" : "";
-                option += "<option value='" + oo.id + "' " + selected + ">" + oo.anaquel + "</option>";
-			});
-        $('#anaquel').html(option);
-        
-        //$('#seccion').attr("disabled",false);
-                            
-        }
-});
-
-}
 
 </script>
 
@@ -270,11 +271,11 @@ $.ajax({
             <div class="card">
                 
                 <div class="card-header" style="padding:5px!important;padding-left:20px!important">
-                    Registrar Lote
+                    Registrar Entrada
                 </div>
                 
                 <div class="card-body">
-                <form method="post" action="#" id="frmLote" name="frmLote">
+                <form method="post" action="#" id="frmEntradaProductos" name="frmEntradaProductos">
 
                     <div class="row">
 
@@ -286,126 +287,142 @@ $.ajax({
                             
                             <div class="row" style="padding-left:10px">
                                 
-                                <div class="col-lg-6">
+                                <div class="col-lg-4">
                                     <div class="form-group">
-                                        <label class="control-label form-control-sm">Producto</label>
-                                        <select name="producto" id="producto" class="form-control form-control-sm" onchange="">
+                                        <label class="control-label form-control-sm">Fecha Ingreso</label>
+                                        <input id="fecha_entrada" name="fecha_entrada" on class="form-control form-control-sm"  value="<?php //echo $lote->fecha_fabricacion?>" type="text">
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label class="control-label form-control-sm">Tipo Doc.</label>
+                                        <select name="tipo_documento" id="tipo_documento" class="form-control form-control-sm" onchange="">
                                             <option value="">--Selecionar--</option>
                                             <?php
-                                            foreach ($producto as $row){?>
-                                                <option value="<?php echo $row->id ?>" <?php if($row->id==$lote->id_producto)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                            foreach ($tipo_documento as $row){?>
+                                                <option value="<?php echo $row->codigo ?>" <?php //if($row->codigo==$lote->id_producto)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
                                              <?php 
                                             }
                                             ?>
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-lg-6">
+                                <div class="col-lg-4">
                                     <div class="form-group">
-                                        <label class="control-label form-control-sm">Marca</label>
-                                        <select name="marca" id="marca" class="form-control form-control-sm" onchange="">
+                                        <label class="control-label form-control-sm">Unidad Origen</label>
+                                        <select name="unidad_origen" id="unidad_origen" class="form-control form-control-sm" onchange="cambiarOrigen()">
                                             <option value="">--Selecionar--</option>
                                             <?php
-                                            foreach ($marca as $row){?>
-                                                <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$lote->id_marca)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                            foreach ($unidad_origen as $row){?>
+                                                <option value="<?php echo $row->codigo ?>" <?php //if($row->codigo==$lote->id_producto)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
                                              <?php 
                                             }
                                             ?>
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-lg-6">
-                                    <div class="form-group">
-                                        <label class="control-label form-control-sm">N&uacute;mero Lote</label>
-                                        <input id="numero_lote" name="numero_lote" on class="form-control form-control-sm"  value="<?php echo $lote->numero_lote?>" type="text">
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="form-group">
-                                        <label class="control-label form-control-sm">N&uacute;mero Serie</label>
-                                        <input id="numero_serie" name="numero_serie" on class="form-control form-control-sm"  value="<?php echo $lote->numero_serie?>" type="text">
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="form-group">
-                                        <label class="control-label form-control-sm">Unidades</label>
-                                        <select name="unidad" id="unidad" class="form-control form-control-sm" onchange="">
+                                <div class="form-group col-lg-4" id="proveedor_">
+                                    
+                                        <label class="control-label form-control-sm">Proveedor</label>
+                                        <select name="proveedor" id="proveedor" class="form-control form-control-sm" onchange="">
                                             <option value="">--Selecionar--</option>
                                             <?php
-                                            foreach ($unidad_medida as $row){?>
-                                                <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$lote->id_unidad_medida)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                            foreach ($proveedor as $row){?>
+                                                <option value="<?php echo $row->id ?>" <?php //if($row->id==$lote->id_producto)echo "selected='selected'"?>><?php echo $row->razon_social ?></option>
                                              <?php 
+                                            }
+                                            ?>
+                                        </select>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label class="control-label form-control-sm">Almacen Destino</label>
+                                        <select name="almacen" id="almacen" class="form-control form-control-sm" onchange="">
+                                            <option value="">--Selecionar--</option>
+                                            <?php
+                                            foreach ($almacen as $row){?>
+                                                <option value="<?php echo $row->id ?>" <?php //if($row->id==$lote->id_producto)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                                <?php 
                                             }
                                             ?>
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-lg-6">
+                                <div class="col-lg-4">
                                     <div class="form-group">
-                                        <label class="control-label form-control-sm">Cantidad</label>
-                                        <input id="cantidad" name="cantidad" on class="form-control form-control-sm"  value="<?php echo $lote->cantidad?>" type="text">
+                                        <label class="control-label form-control-sm">N&uacute;mero Comprobante</label>
+                                        <input id="numero_comprobante" name="numero_comprobante" on class="form-control form-control-sm"  value="<?php //echo $lote->numero_lote?>" type="text">
                                     </div>
                                 </div>
-                                <div class="col-lg-6">
+                                <div class="col-lg-4">
                                     <div class="form-group">
-                                        <label class="control-label form-control-sm">Costo</label>
-                                        <input id="costo" name="costo" on class="form-control form-control-sm"  value="<?php echo $lote->costo?>" type="text">
+                                        <label class="control-label form-control-sm">Fecha Comprobante</label>
+                                        <input id="fecha_comprobante" name="fecha_comprobante" on class="form-control form-control-sm"  value="<?php //echo $lote->fecha_fabricacion?>" type="text">
                                     </div>
                                 </div>
-                                <div class="col-lg-6">
+                                <div class="col-lg-4">
                                     <div class="form-group">
                                         <label class="control-label form-control-sm">Moneda</label>
-                                        <select name="moneda" id="moneda" class="form-control form-control-sm" onchange="">
+                                        <select name="moneda" id="moneda" class="form-control form-control-sm" onchange="cambiarTipoCambio()">
                                             <option value="">--Selecionar--</option>
                                             <?php
                                             foreach ($moneda as $row){?>
-                                                <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$lote->id_moneda)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                                <option value="<?php echo $row->codigo ?>" <?php //if($row->codigo==$lote->id_moneda)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
                                              <?php 
                                             }
                                             ?>
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-lg-6">
+                                <div class="form-group col-lg-4" id="tipo_cambio_dolar_">
+                                        <label class="control-label form-control-sm">Tipo Cambio Dolar</label>
+                                        <input id="tipo_cambio_dolar" name="tipo_cambio_dolar" on class="form-control form-control-sm"  value="<?php echo $tipo_cambio[0]->valor_venta?>" type="text">
+                                </div>
+                                <div class="col-lg-4">
                                     <div class="form-group">
-                                        <label class="control-label form-control-sm">Fecha Fabricaci&oacute;n</label>
-                                        <input id="fecha_fabricacion" name="fecha_fabricacion" on class="form-control form-control-sm"  value="<?php echo $lote->fecha_fabricacion?>" type="text">
+                                        <label class="control-label form-control-sm">Sub Total Compra</label>
+                                        <input id="sub_total_compra" name="sub_total_compra" on class="form-control form-control-sm"  value="<?php //echo $lote->numero_lote?>" type="text">
                                     </div>
                                 </div>
-                                <div class="col-lg-6">
+                                <div class="col-lg-4">
                                     <div class="form-group">
-                                        <label class="control-label form-control-sm">Fecha Vencimiento</label>
-                                        <input id="fecha_vencimiento" name="fecha_vencimiento" on class="form-control form-control-sm"  value="<?php echo $lote->fecha_vencimiento?>" type="text">
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="form-group">
-                                        <label class="control-label form-control-sm">Almacen</label>
-                                        <select name="almacen" id="almacen" class="form-control form-control-sm" onchange="obtenerSeccion()">
-                                            <option value="">--Seleccionar--</option>
+                                        <label class="control-label form-control-sm">Igv Compra</label>
+                                        <select name="igv_compra" id="igv_compra" class="form-control form-control-sm" onchange="">
+                                            <option value="">--Selecionar--</option>
                                             <?php
-                                            foreach ($almacen as $row){?>
-                                                <option value="<?php echo $row->id ?>" <?php if ($id > 0 && $row->id == $lote->id_almacen) echo "selected='selected'"; ?>><?php echo $row->denominacion ?></option>
+                                            foreach ($igv_compra as $row){?>
+                                                <option value="<?php echo $row->codigo ?>" <?php //if($row->codigo==$lote->id_producto)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
                                              <?php 
                                             }
                                             ?>
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-lg-6">
+                                <div class="col-lg-4">
                                     <div class="form-group">
-                                        <label class="control-label form-control-sm">Secci&oacute;n</label>
-                                        <select name="seccion" id="seccion" class="form-control form-control-sm" onchange="obtenerAnaquel()">
-                                            <option value="">--Seleccionar--</option>
+                                        <label class="control-label form-control-sm">Total Compra</label>
+                                        <input id="total_compra" name="total_compra" on class="form-control form-control-sm"  value="<?php //echo $lote->numero_lote?>" type="text">
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label class="control-label form-control-sm">Cerrado</label>
+                                        <select name="cerrado" id="cerrado" class="form-control form-control-sm" onchange="">
+                                            <option value="">--Selecionar--</option>
+                                            <?php
+                                            foreach ($cerrado_entrada as $row){?>
+                                                <option value="<?php echo $row->codigo ?>" <?php if($row->codigo=='1')echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                             <?php 
+                                            }
+                                            ?>
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-lg-6">
+                                <div class="col-lg-4">
                                     <div class="form-group">
-                                        <label class="control-label form-control-sm">Anaquel</label>
-                                        <select name="anaquel" id="anaquel" class="form-control form-control-sm" onchange="">
-                                            <option value="">--Seleccionar--</option>
-                                        </select>
+                                        <label class="control-label form-control-sm">Observaci&oacute;n</label>
+                                        <input id="observacion" name="observacion" on class="form-control form-control-sm"  value="<?php //echo $lote->numero_lote?>" type="text">
                                     </div>
                                 </div>
                             </div>
@@ -414,7 +431,7 @@ $.ajax({
                         <div style="margin-top:15px" class="form-group">
                             <div class="col-sm-12 controls">
                                 <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
-                                    <a href="javascript:void(0)" onClick="fn_save_lote()" class="btn btn-sm btn-success">Registrar</a>
+                                    <a href="javascript:void(0)" onClick="modalDetalleProducto()" class="btn btn-sm btn-success">Registrar</a>
                                 </div>
                                                     
                             </div>

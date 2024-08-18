@@ -17,6 +17,7 @@ use App\Http\Controllers\Frontend\SeccionesController;
 use App\Http\Controllers\Frontend\AnaquelesController;
 use App\Http\Controllers\Frontend\ProductosController;
 use App\Http\Controllers\Frontend\LoteController;
+use App\Http\Controllers\Frontend\EntradaProductosController;
 
 use App\Models\Ubigeo;
 
@@ -190,14 +191,14 @@ Route::put('lotes/{lotes}', 'App\Http\Controllers\LoteController@update')->name(
 Route::delete('lotes/{lotes}', 'App\Http\Controllers\LoteController@destroy')->name('lotes.destroy');
 Route::get('lotes/{lotes}/edit', 'App\Http\Controllers\LoteController@edit')->name('lotes.edit');
 
-Route::get('entrada_productos', 'App\Http\Controllers\EntradaProductosController@index')->name('entrada_productos.index');
+/*Route::get('entrada_productos', 'App\Http\Controllers\EntradaProductosController@index')->name('entrada_productos.index');
 Route::post('entrada_productos', 'App\Http\Controllers\EntradaProductosController@store')->name('entrada_productos.store');
 Route::get('entrada_productos/create', 'App\Http\Controllers\EntradaProductosController@create')->name('entrada_productos.create');
 Route::get('entrada_productos/{entrada_productos}', 'App\Http\Controllers\EntradaProductosController@show')->name('entrada_productos.show');
 Route::put('entrada_productos/{entrada_productos}', 'App\Http\Controllers\EntradaProductosController@update')->name('entrada_productos.update');
 Route::delete('entrada_productos/{entrada_productos}', 'App\Http\Controllers\EntradaProductosController@destroy')->name('entrada_productos.destroy');
 Route::get('entrada_productos/edit/{entrada_productos}', 'App\Http\Controllers\EntradaProductosController@edit')->name('entrada_productos.edit');
-
+*/
 Route::post('entrada_producto_detalles', 'App\Http\Controllers\EntradaProductoDetallesController@store')->name('entrada_producto_detalles.store');
 Route::put('entrada_producto_detalles/{entrada_producto_detalles}', 'App\Http\Controllers\EntradaProductoDetallesController@update')->name('entrada_producto_detalles.update');
 Route::delete('entrada_producto_detalles/{entrada_producto_detalles}', 'App\Http\Controllers\EntradaProductoDetallesController@destroy')->name('entrada_producto_detalles.destroy');
@@ -272,6 +273,7 @@ Route::post('productos/listar_producto_ajax', [ProductosController::class, 'list
 Route::post('productos/send_producto', [ProductosController::class, 'send_producto'])->name('productos.send_producto');
 Route::get('productos/modal_producto/{id}', [ProductosController::class, 'modal_producto'])->name('productos.modal_producto');
 Route::get('productos/eliminar_producto/{id}/{estado}', [ProductosController::class, 'eliminar_producto'])->name('productos.eliminar_producto');
+Route::get('productos/obtener_producto/{id_producto}', [ProductosController::class, 'obtener_producto'])->name('productos.obtener_producto');
 
 Route::get('lotes/create', [LoteController::class, 'create'])->name('lotes.create');
 Route::post('lotes/listar_lote_ajax', [LoteController::class, 'listar_lote_ajax'])->name('lotes.listar_lote_ajax');
@@ -281,3 +283,15 @@ Route::get('lotes/eliminar_lote/{id}/{estado}', [LoteController::class, 'elimina
 Route::get('lotes/obtener_seccion_almacen/{id}', [LoteController::class, 'obtener_seccion_almacen'])->name('lotes.obtener_seccion_almacen');
 Route::get('lotes/obtener_anaquel_seccion/{id}', [LoteController::class, 'obtener_anaquel_seccion'])->name('lotes.obtener_anaquel_seccion');
 
+Route::get('entrada_productos/create', [EntradaProductosController::class, 'create'])->name('entrada_productos.create');
+Route::post('entrada_productos/listar_entrada_productos_ajax', [EntradaProductosController::class, 'listar_entrada_productos_ajax'])->name('entrada_productos.listar_entrada_productos_ajax');
+Route::post('entrada_productos/send_entrada_producto', [EntradaProductosController::class, 'send_entrada_producto'])->name('entrada_productos.send_entrada_producto');
+Route::get('entrada_productos/modal_entrada_producto/{id}', [EntradaProductosController::class, 'modal_entrada_producto'])->name('entrada_productos.modal_entrada_producto');
+Route::get('entrada_productos/eliminar_entrada_producto/{id}/{estado}', [EntradaProductosController::class, 'eliminar_entrada_producto'])->name('entrada_productos.eliminar_entrada_producto');
+Route::get('entrada_productos/modal_detalle_producto/{id}', [EntradaProductosController::class, 'modal_detalle_producto'])->name('entrada_productos.modal_detalle_producto');
+
+Route::get('entrada_productos_detalle/send_entrada_producto_detalle', [EntradaProductoDetallesController::class, 'send_entrada_producto_detalle'])->name('entrada_productos_detalle.send_entrada_producto_detalle');
+
+Route::get('entrada_productos/obtener_documento_entrada', [EntradaProductosController::class, 'obtener_documento_entrada'])->name('entrada_productos.obtener_documento_entrada');
+
+Route::get('entrada_productos/obtener_documento_salida', [EntradaProductosController::class, 'obtener_documento_salida'])->name('entrada_productos.obtener_documento_salida');

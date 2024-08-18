@@ -60,4 +60,12 @@ class Producto extends Model
         return $data;
     }
 
+    function getProductoById($id_producto){
+
+        $cad = "select * from productos p 
+        where p.id='".$id_producto."'";
+
+		$data = DB::select($cad);
+        return $data;
+    }
 }

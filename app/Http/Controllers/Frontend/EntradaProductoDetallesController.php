@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Frontend;
 
 use Auth;
 use DateTime;
@@ -11,6 +11,8 @@ use App\Models\EntradaProductoDetalle;
 use RealRashid\SweetAlert\Facades\Alert;
 use App\Http\Requests\EntradaProductoRequest;
 use App\Http\Requests\EntradaProductoDetalleRequest;
+use App\Http\Controllers\Controller;
+use Carbon\Carbon;
 
 class EntradaProductoDetallesController extends Controller
 {
@@ -24,28 +26,55 @@ class EntradaProductoDetallesController extends Controller
     	});
 	}
 
+    public function send_entrada_producto_detalle(Request $request){
+
+		if($request->id == 0){
+			$entrada_producto = new EntradaProducto;
+		}else{
+			$entrada_producto = EntradaProducto::find($request->id);
+		}
+		
+		$entrada_producto->id_producto = $request->producto;
+		$entrada_producto->numero_lote = $request->numero_lote;
+        $entrada_producto->numero_serie = $request->numero_serie;
+        $entrada_producto->id_unidad_medida = $request->unidad;
+        $entrada_producto->cantidad = $request->cantidad;
+        $entrada_producto->costo = $request->costo;
+        $entrada_producto->id_moneda = $request->moneda;
+        $entrada_producto->fecha_fabricacion = $request->fecha_fabricacion;
+        $entrada_producto->fecha_vencimiento = $request->fecha_vencimiento;
+        $entrada_producto->id_anaquel = $request->anaquel;
+        $entrada_producto->id_almacen = $request->almacen;
+        $entrada_producto->id_seccion = $request->seccion;
+        $entrada_producto->id_marca = $request->marca;
+		$entrada_producto->estado = 1;
+		$entrada_producto->save();
+
+    }
+
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($entrada_producto)
+    /*public function index($entrada_producto)
     {
         // dd(2);
         $entrada_producto_detalles = EntradaProductoDetalle::latest()->paginate(10);
 
         return view('frontend.entrada_producto_detalles.index', compact('entrada_producto_detalles', 'entrada_producto'));
-    }
+    }*/
 
     /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function create($entrada_producto)
+    /*public function create($entrada_producto)
     {
         return view('frontend.entrada_producto_detalles.create', compact('entrada_producto'));
-    }
+    }*/
 
     /**
      * Store a newly created resource in storage.
@@ -53,7 +82,7 @@ class EntradaProductoDetallesController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    /*public function store(Request $request)
     {
         // dd($request);
         // exit;
@@ -86,7 +115,7 @@ class EntradaProductoDetallesController extends Controller
 
         return redirect()->route('frontend.entrada_productos.edit', $entrada_producto_detalles['id_entrada_productos']);
 
-    }
+    }*/
 
     /**
      * Display the specified resource.
@@ -94,10 +123,10 @@ class EntradaProductoDetallesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(EntradaProductoDetalle $entrada_producto_detalles)
+    /*public function show(EntradaProductoDetalle $entrada_producto_detalles)
     {
         return view('frontend.entrada_producto_detalles.show', compact('entrada_producto_detalles'));
-    }
+    }*/
 
     /**
      * Show the form for editing the specified resource.
@@ -106,10 +135,10 @@ class EntradaProductoDetallesController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-     public function edit(EntradaProductoDetalle $entrada_producto_detalles)
+     /*public function edit(EntradaProductoDetalle $entrada_producto_detalles)
      {
          return view('frontend.entrada_producto_detalles.edit', compact('entrada_producto_detalles'));
-     }
+     }*/
 
     /**
      * Update the specified resource in storage.
@@ -118,7 +147,7 @@ class EntradaProductoDetallesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(EntradaProductoDetalleRequest $request, EntradaProductoDetalle $entrada_producto_detalles)
+    /*public function update(EntradaProductoDetalleRequest $request, EntradaProductoDetalle $entrada_producto_detalles)
     {
 
         $kardex = Kardex::updateOrCreate(
@@ -138,7 +167,7 @@ class EntradaProductoDetallesController extends Controller
         $entrada_producto_detalles->update($request->all());
 
         return redirect()->route('frontend.entrada_productos.edit', $entrada_producto_detalles['id_entrada_productos']);
-    }
+    }*/
 
     /**
      * Remove the specified resource from storage.
@@ -146,7 +175,7 @@ class EntradaProductoDetallesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(EntradaProductoDetalle $entrada_producto_detalles)
+    /*public function destroy(EntradaProductoDetalle $entrada_producto_detalles)
     {
         $kardex = Kardex::updateOrCreate(
             ['id_producto' => $entrada_producto_detalles->id_producto]
@@ -166,5 +195,5 @@ class EntradaProductoDetallesController extends Controller
             Alert::success('Proceso completo', 'Se ha eliminado la entrada '.$entrada_producto_detalles['id']);
         };
         return redirect()->route('frontend.entrada_productos.edit', $entrada_producto_detalles['id_entrada_productos']);
-    }
+    }*/
 }

@@ -28,6 +28,15 @@ class Empresa extends Model
       return $data;
    }
 
+   function getEmpresa($id){
+
+    $cad = "select * from empresas e 
+    where e.id='".$id."'";
+
+    $data = DB::select($cad);
+    return $data;
+}
+
    public function vehiculos()
    {
        return $this->belongsToMany(Vehiculo::class, 'empresas_vehiculos', 'id_empresas', 'id_vehiculos');
