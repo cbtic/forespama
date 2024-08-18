@@ -13,6 +13,8 @@ use App\Models\Producto;
 use App\Models\Almacene;
 use App\Models\AlmacenesSeccione;
 use App\Models\Anaquele;
+use App\Models\SalidaProducto;
+use App\Models\SalidaProductoDetalle;
 use Auth;
 use RealRashid\SweetAlert\Facades\Alert;
 use App\Http\Controllers\Controller;
@@ -99,11 +101,29 @@ class EntradaProductosController extends Controller
     public function send_entrada_producto(Request $request){
 
         if($request->tipo_movimiento==1){
+
             if($request->id == 0){
                 $entrada_producto = new EntradaProducto;
             }else{
                 $entrada_producto = EntradaProducto::find($request->id);
             }
+
+            $item = $request->input('item');
+            $cantidad = $request->input('cantidad');
+            $descripcion = $request->input('descripcion');
+            $ubicacion_fisica_seccion = $request->input('ubicacion_fisica_seccion');
+            $ubicacion_fisica_anaquel = $request->input('ubicacion_fisica_anaquel');
+            $cod_interno = $request->input('cod_interno');
+            $unidad = $request->input('unidad');
+            $cantidad_ingreso = $request->input('cantidad_ingreso');
+            $cantidad_compra = $request->input('cantidad_compra');
+            $cantidad_pendiente = $request->input('cantidad_pendiente');
+            $stock_actual = $request->input('stock_actual');
+            $precio_unitario = $request->input('precio_unitario');
+            $sub_total = $request->input('sub_total');
+            $igv = $request->input('igv');
+            $total = $request->input('total');
+
             
             $entrada_producto->fecha_ingreso = $request->fecha_entrada;
             $entrada_producto->id_tipo_documento = $request->tipo_documento;
@@ -121,12 +141,64 @@ class EntradaProductosController extends Controller
             $entrada_producto->estado = 1;
             $entrada_producto->save();
 
+            foreach($item as $index => $value) {
+                
+                $entradaProducto_detalle = new EntradaProductoDetalle();
+                $entradaProducto_detalle->id_entrada_productos = $entrada_producto->id;
+                $entradaProducto_detalle->item = $item[$index];
+                $entradaProducto_detalle->cantidad = $cantidad[$index];
+
+                $entradaProducto_detalle->numero_lote = 1;
+                $entradaProducto_detalle->fecha_vencimiento = "2024-08-18";
+                $entradaProducto_detalle->aplica_precio = 1;
+                $entradaProducto_detalle->id_um = 282;
+                $entradaProducto_detalle->id_marca = 1;
+                $entradaProducto_detalle->estado = 1;
+                $entradaProducto_detalle->id_producto = $descripcion[$index];
+                $entradaProducto_detalle->costo = $precio_unitario[$index];
+                $entradaProducto_detalle->fecha_fabricacion = "2024-08-18";
+                $entradaProducto_detalle->id_estado_bien = 13;
+
+                /*$entradaProducto_detalle->descripcion = $descripcion[$index];
+                $entradaProducto_detalle->ubicacion_fisica_seccion = $ubicacion_fisica_seccion[$index];
+                $entradaProducto_detalle->ubicacion_fisica_anaquel = $ubicacion_fisica_anaquel[$index];
+                $entradaProducto_detalle->cod_interno = $cod_interno[$index];
+                $entradaProducto_detalle->unidad = $unidad[$index];
+                $entradaProducto_detalle->cantidad_ingreso = $cantidad_ingreso[$index];
+                $entradaProducto_detalle->cantidad_compra = $cantidad_compra[$index];
+                $entradaProducto_detalle->cantidad_pendiente = $cantidad_pendiente[$index];
+                $entradaProducto_detalle->stock_actual = $stock_actual[$index];
+                $entradaProducto_detalle->precio_unitario = $precio_unitario[$index];
+                $entradaProducto_detalle->sub_total = $sub_total[$index];
+                $entradaProducto_detalle->igv = $igv[$index];
+                $entradaProducto_detalle->total = $total[$index];*/
+
+                $entradaProducto_detalle->save();
+            }
+
         }else if($request->tipo_movimiento==2){
+
             if($request->id == 0){
                 $salida_producto = new SalidaProducto;
             }else{
                 $salida_producto = SalidaProducto::find($request->id);
             }
+
+            $item = $request->input('item');
+            $cantidad = $request->input('cantidad');
+            $descripcion = $request->input('descripcion');
+            $ubicacion_fisica_seccion = $request->input('ubicacion_fisica_seccion');
+            $ubicacion_fisica_anaquel = $request->input('ubicacion_fisica_anaquel');
+            $cod_interno = $request->input('cod_interno');
+            $unidad = $request->input('unidad');
+            $cantidad_ingreso = $request->input('cantidad_ingreso');
+            $cantidad_compra = $request->input('cantidad_compra');
+            $cantidad_pendiente = $request->input('cantidad_pendiente');
+            $stock_actual = $request->input('stock_actual');
+            $precio_unitario = $request->input('precio_unitario');
+            $sub_total = $request->input('sub_total');
+            $igv = $request->input('igv');
+            $total = $request->input('total');
             
             $salida_producto->fecha_salida = $request->fecha_entrada;
             $salida_producto->id_tipo_documento = $request->tipo_documento;
@@ -142,6 +214,42 @@ class EntradaProductosController extends Controller
             $salida_producto->observacion = $request->observacion;
             $salida_producto->estado = 1;
             $salida_producto->save();
+
+            foreach($item as $index => $value) {
+                
+                $salida_producto_detalle = new SalidaProductoDetalle();
+                $salida_producto_detalle->id_salida_productos = $salida_producto->id;
+                $salida_producto_detalle->item = $item[$index];
+                $salida_producto_detalle->cantidad = $cantidad[$index];
+
+                $salida_producto_detalle->numero_lote = 1;
+                $salida_producto_detalle->fecha_vencimiento = "2024-08-18";
+                $salida_producto_detalle->aplica_precio = 1;
+                $salida_producto_detalle->id_um = 282;
+                $salida_producto_detalle->id_marca = 1;
+                $salida_producto_detalle->estado = 1;
+                $salida_producto_detalle->id_producto = $descripcion[$index];
+                $salida_producto_detalle->costo = $precio_unitario[$index];
+                //$salida_producto_detalle->fecha_fabricacion = "2024-08-18";
+                $salida_producto_detalle->id_estado_productos = 13;
+
+                /*$salida_producto_detalle->descripcion = $descripcion[$index];
+                $salida_producto_detalle->ubicacion_fisica_seccion = $ubicacion_fisica_seccion[$index];
+                $salida_producto_detalle->ubicacion_fisica_anaquel = $ubicacion_fisica_anaquel[$index];
+                $salida_producto_detalle->cod_interno = $cod_interno[$index];
+                $salida_producto_detalle->unidad = $unidad[$index];
+                $salida_producto_detalle->cantidad_ingreso = $cantidad_ingreso[$index];
+                $salida_producto_detalle->cantidad_compra = $cantidad_compra[$index];
+                $salida_producto_detalle->cantidad_pendiente = $cantidad_pendiente[$index];
+                $salida_producto_detalle->stock_actual = $stock_actual[$index];
+                $salida_producto_detalle->precio_unitario = $precio_unitario[$index];
+                $salida_producto_detalle->sub_total = $sub_total[$index];
+                $salida_producto_detalle->igv = $igv[$index];
+                $salida_producto_detalle->total = $total[$index];*/
+
+                $salida_producto_detalle->save();
+            }
+
         }
     }
 
