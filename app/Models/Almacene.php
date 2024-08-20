@@ -99,4 +99,14 @@ class Almacene extends Model
 		$data = DB::select($cad);
         return $data;
     }
+
+    function getAlmacenById($id){
+
+        $cad = "select * from almacenes a
+        where a.id='".$id."'
+        and a.estado='1'";
+
+		$data = DB::select($cad);
+        return $data;
+    }
 }

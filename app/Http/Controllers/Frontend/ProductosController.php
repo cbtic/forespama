@@ -112,6 +112,14 @@ class ProductosController extends Controller
 
 		echo $producto->id;
     }
+
+    public function obtener_producto($id_producto){
+        
+		$producto_model = new Producto;
+		$producto = $producto_model->getProductoById($id_producto);
+		
+		echo json_encode($producto);
+	}
     
     
     /**
