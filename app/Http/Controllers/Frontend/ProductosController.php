@@ -80,6 +80,22 @@ class ProductosController extends Controller
 
     public function send_producto(Request $request){
 
+        $existe_producto_codigo = Producto::where('codigo', $request->codigo)->first();
+
+        $existe_producto_serie = Producto::where('numero_serie', $request->numero_serie)->first();
+
+        if ($existe_producto_serie && $existe_producto_serie->id != $request->id) {
+            return response()->json([
+            'error' => 'El número de serie ya está registrado.'
+            ]);
+        }
+
+        if ($existe_producto_codigo && $existe_producto_codigo->id != $request->id) {
+            return response()->json([
+            'error' => 'El código ya está registrado.'
+            ]);
+        }
+
 		if($request->id == 0){
 			$producto = new Producto;
 		}else{
@@ -100,6 +116,8 @@ class ProductosController extends Controller
         $producto->costo_unitario = $request->costo_unitario;
 		$producto->estado = 1;
 		$producto->save();
+
+        return response()->json(['success' => 'Producto guardado exitosamente.']);
 
     }
 

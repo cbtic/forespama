@@ -84,16 +84,26 @@ function datatablenew(){
 				"className": "dt-center",
 				//"className": 'control'
                 },
-				
+
 				{
+					"mRender": function (data, type, row) {
+						var tipo = "";
+						if(row.tipo!= null)tipo = row.tipo;
+						return tipo;
+					},
+					"bSortable": true,
+					"aTargets": [1]
+					},
+				
+				/*{
                 "mRender": function (data, type, row) {
                 	var ingreso = "";
 					if(row.ingreso!= null)ingreso = row.ingreso;
 					return ingreso;
                 },
                 "bSortable": true,
-                "aTargets": [1]
-                },
+                "aTargets": [2]
+                },*/
 				
                 {
                 "mRender": function (data, type, row) {

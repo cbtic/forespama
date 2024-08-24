@@ -231,12 +231,16 @@ function fn_save_producto(){
             type: "POST",
             data : $("#frmProducto").serialize(),
 			success: function (result) {
-				$('#openOverlayOpc').modal('hide');
-                window.location.reload();
-				datatablenew();
-				//limpiar();
-								
+				//alert(result);
+            if (result.success) {
+                bootbox.alert(result.success, function() {
+                    $('#openOverlayOpc').modal('hide');
+                    window.location.reload();
+                });
+            } else if (result.error) {
+                bootbox.alert(result.error);
             }
+            },
     });
 }
 

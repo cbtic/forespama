@@ -19,6 +19,7 @@ use Auth;
 use RealRashid\SweetAlert\Facades\Alert;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class EntradaProductosController extends Controller
 {
@@ -251,6 +252,12 @@ class EntradaProductosController extends Controller
             }
 
         }
+        if($request->tipo_movimiento==1){
+            return response()->json(['id' => $entrada_producto->id]);    
+        }else{
+            return response()->json(['id' => $salida_producto->id]);    
+        }
+        
     }
 
     public function eliminar_entrada_producto($id,$estado)
@@ -337,6 +344,51 @@ class EntradaProductosController extends Controller
 		$ubigeo_usuario = $tabla_maestra_model->getMaestroByTipo(49);
 		
 		echo json_encode($ubigeo_usuario);
+	}
+
+    public function movimiento_pdf($id, $tipo_movimiento){
+
+        if($tipo_movimiento==1){
+
+            $entrada_producto_model = new EntradaProducto;
+
+            $datos=$entrada_producto_model->getEntradaById($id);
+
+            $tipo_documento=$datos[0]->tipo_documento;
+            $unidad_origen=$datos[0]->unidad_origen;
+            $razon_social=$datos[0]->razon_social;
+            $numero_comprobante = $datos[0]->numero_comprobante;
+            $fecha_comprobante = $datos[0]->fecha_comprobante;
+            $fecha_movimiento=$datos[0]->fecha_movimiento;
+
+        }
+
+		$year = Carbon::now()->year;
+
+		Carbon::setLocale('es');
+
+		// Crear una instancia de Carbon a partir de la fecha
+
+		 $carbonDate =Carbon::now()->format('d-m-Y');
+
+		 $currentHour = Carbon::now()->format('H:i:s');
+
+		$pdf = Pdf::loadView('frontend.entrada_productos.movimiento_pdf',compact('tipo_documento','unidad_origen','razon_social','numero_comprobante','fecha_comprobante','fecha_movimiento'));
+		
+
+
+		$pdf->setPaper('A4'); // Tamaño de papel (puedes cambiarlo según tus necesidades)
+
+		
+    	$pdf->setOption('margin-top', 20); // Márgen superior en milímetros
+   		$pdf->setOption('margin-right', 50); // Márgen derecho en milímetros
+    	$pdf->setOption('margin-bottom', 20); // Márgen inferior en milímetros
+    	$pdf->setOption('margin-left', 100); // Márgen izquierdo en milímetros
+
+		return $pdf->stream();
+    	//return $pdf->download('invoice.pdf');
+		//return view('frontend.certificado.certificado_pdf');
+
 	}
 
 

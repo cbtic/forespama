@@ -486,15 +486,29 @@ function fn_save_detalle_producto(){
             type: "POST",
             data : $("#frmDetalleProductos").serialize(),
 			success: function (result) {
-				$('#openOverlayOpc').modal('hide');
-                window.location.reload();
-				datatablenew();
-				//limpiar();
+                //alert(result.id)
+                //$('#openOverlayOpc').modal('hide');
+                if (result.id>0) {
+                    modalEntradaProducto(result.id);   
+
+                // Mostrar nuevamente el modal
+                //$('#openOverlayOpc').modal('show');
+               
+            }
 								
             }
     });
 }
 
+function pdf_documento(){
+
+    var id = $('#id').val();
+    var tipo_movimiento = $('#tipo_movimiento').val();
+
+    var href = '/entrada_productos/movimiento_pdf/'+id+'/'+tipo_movimiento;
+    window.open(href, '_blank');
+
+}
 
 </script>
 
@@ -710,6 +724,14 @@ function fn_save_detalle_producto(){
                     <div style="margin-top:15px" class="form-group">
                         <div class="col-sm-12 controls">
                             <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
+                                <?php 
+                                    if($id>0){
+                                ?>
+                                <button style="font-size:12px;margin-left:10px; margin-right:100px" type="button" class="btn btn-sm btn-primary" data-toggle="modal" onclick="pdf_documento()" ><i class="fa fa-edit"></i>Imprimir</button>
+                                <!--<a href="javascript:void(0)" onClick="fn_pdf_documento()" class="btn btn-sm btn-primary" style="margin-right:100px">Imprimir</a>-->
+                                <?php 
+                                    }
+                                ?>
                                 <a href="javascript:void(0)" onClick="fn_save_detalle_producto()" class="btn btn-sm btn-success" style="margin-right:10px">Guardar</a>
                                 <a href="javascript:void(0)" onClick="$('#openOverlayOpc').modal('hide');" class="btn btn-sm btn-info" style="">Cerrar</a>
                             </div>

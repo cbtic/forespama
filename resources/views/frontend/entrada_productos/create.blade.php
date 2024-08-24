@@ -373,7 +373,8 @@ label.form-control-sm{
                         <thead>
                         <tr style="font-size:13px">
                             <th>Id</th>
-							<th>Ingreso</th>
+							<th>Tipo Movimiento</th>
+							<!--<th>Ingreso</th>-->
                             <th>Tipo Doc.</th>
 							<th>Unidad Origen</th>
                             <th>Proveedor</th>
