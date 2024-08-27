@@ -15,6 +15,7 @@ use App\Models\AlmacenesSeccione;
 use App\Models\Anaquele;
 use App\Models\SalidaProducto;
 use App\Models\SalidaProductoDetalle;
+use App\Models\Marca;
 use Auth;
 use RealRashid\SweetAlert\Facades\Alert;
 use App\Http\Controllers\Controller;
@@ -149,9 +150,9 @@ class EntradaProductosController extends Controller
                 $entradaProducto_detalle->item = $item[$index];
                 $entradaProducto_detalle->cantidad = $cantidad[$index];
 
-                $entradaProducto_detalle->numero_lote = 1;
+                //$entradaProducto_detalle->numero_lote = "";
                 $entradaProducto_detalle->fecha_vencimiento = "2024-08-18";
-                $entradaProducto_detalle->aplica_precio = 1;
+                $entradaProducto_detalle->aplica_precio = "";
                 $entradaProducto_detalle->id_um = 282;
                 $entradaProducto_detalle->id_marca = 1;
                 $entradaProducto_detalle->estado = 1;
@@ -276,6 +277,7 @@ class EntradaProductosController extends Controller
         $empresa_model = new Empresa;
         $producto_model = new Producto;
         $almacen_model = new Almacene;
+        $marca_model = new Marca;
         $almacen_seccion_model = new AlmacenesSeccione;
         $anaquel_model = new Anaquele;
         $tipo_cambio_model = new TipoCambio;
@@ -293,6 +295,7 @@ class EntradaProductosController extends Controller
             //dd($entrada_producto->tipo_cambio_dolar);exit();
             $tipo_cambio = null;
             $almacen_ = null;
+            $marca = null;
             //$almacen__ = Almacene::getAlmacenById($entrada_producto->id_almacen);
             
             $almacen = $almacen_model->getAlmacenByUser($id_user);
@@ -303,6 +306,8 @@ class EntradaProductosController extends Controller
             //dd($proveedor);exit();
             $tipo_cambio = $tipo_cambio_model->getTipoCambioUltimo();
             $almacen = $almacen_model->getAlmacenByUser($id_user);
+            $marca = $marca_model->getMarcaAll();
+            //dd($marca);exit();
 		}
         
         //$tipo_documento = $tablaMaestra_model->getMaestroC(48,$datos['tipo_documento']);
@@ -326,7 +331,7 @@ class EntradaProductosController extends Controller
         $tipo_movimiento = $tablaMaestra_model->getMaestroByTipo(53);
 
 
-		return view('frontend.entrada_productos.modal_entradas_detalleEntrada',compact('id','entrada_producto_detalle','tipo_documento','moneda','unidad_origen','cerrado_entrada','igv_compra','proveedor','producto','unidad','almacen'/*,'almacen_seccion'*/,'tipo_cambio','tipo_movimiento','entrada_producto'));
+		return view('frontend.entrada_productos.modal_entradas_detalleEntrada',compact('id','entrada_producto_detalle','tipo_documento','moneda','unidad_origen','cerrado_entrada','igv_compra','proveedor','producto','unidad','almacen'/*,'almacen_seccion'*/,'tipo_cambio','tipo_movimiento','entrada_producto','marca'));
 
     }
 
@@ -390,6 +395,26 @@ class EntradaProductosController extends Controller
 		//return view('frontend.certificado.certificado_pdf');
 
 	}
+
+    public function cargar_detalle($id, $tipo_movimiento)
+    {
+        if($tipo_movimiento==1){
+
+            $entrada_producto_detalle_model = new EntradaProductoDetalle;
+            $entrada_producto = $entrada_producto_detalle_model->getDetalleProductoId($id);
+
+            return response()->json($entrada_producto);
+
+        }else if ($tipo_movimiento==2){
+
+            $salida_producto_detalle_model = new SalidaProductoDetalle;
+
+        }
+
+        //$id
+       // $detalle = ssdsd->fgfffg($id);
+        //return view('frontend.entrada_producto_detalles.show', compact('id','detalle'));
+    }
 
 
     /**

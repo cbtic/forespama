@@ -297,3 +297,5 @@ Route::get('entrada_productos/obtener_documento_entrada', [EntradaProductosContr
 Route::get('entrada_productos/obtener_documento_salida', [EntradaProductosController::class, 'obtener_documento_salida'])->name('entrada_productos.obtener_documento_salida');
 
 Route::get('entrada_productos/movimiento_pdf/{id}/{tipo_movimiento}', [EntradaProductosController::class, 'movimiento_pdf'])->name('entrada_productos.movimiento_pdf');
+
+Route::get('entrada_productos/cargar_detalle/{id}/{tipo_movimiento}', [EntradaProductosController::class, 'cargar_detalle'])->name('entrada_productos.cargar_detalle');
