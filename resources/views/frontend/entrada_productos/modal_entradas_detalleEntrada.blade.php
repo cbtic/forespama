@@ -181,6 +181,7 @@ $(document).ready(function() {
 
     if($('#id').val()>0){
         cargarDetalle();
+        cambiarDocumento()
     }
 });
 
@@ -214,41 +215,60 @@ $.ajax({
 
             let n = 1;
 
-            result.forEach(entrada_producto => {
+            result.entrada_producto.forEach(entrada_producto => {
 
-            const row = `
-                 <tr>
-                    <td>${n}</td>
-                    <td><input name="item[]" id="item${n}" class="form-control form-control-sm" value="${entrada_producto.item}" type="text"></td>
-                    <td>
-                        <select name="descripcion[]" id="descripcion${n}" class="form-control form-control-sm" onChange="obtenerCodInterno(this, ${n})">
-                            <option value="">- Seleccione -</option>
-                            <!-- Agregar aquí las opciones de productos dinámicamente si es necesario -->
-                        </select>
-                    </td>
-                    <td><input name="cod_interno[]" id="cod_interno${n}" class="form-control form-control-sm" value="${entrada_producto.codigo}" type="text"></td>
-                    <td>
-                        <select name="unidad[]" id="unidad${n}" class="form-control form-control-sm">
-                            <option value="">- Seleccione -</option>
-                            <!-- Agregar aquí las opciones de unidades dinámicamente si es necesario -->
-                        </select>
-                    </td>
-                    <td><input name="cantidad_ingreso[]" id="cantidad_ingreso${n}" class="cantidad_ingreso form-control form-control-sm" value="${entrada_producto.cantidad}" type="text" oninput="calcularCantidadPendiente(this)"></td>
-                    <td><input name="cantidad_compra[]" id="cantidad_compra${n}" class="cantidad_compra form-control form-control-sm" value="${entrada_producto.cantidad}" type="text" oninput="calcularCantidadPendiente(this)"></td>
-                    <td><input name="cantidad_pendiente[]" id="cantidad_pendiente${n}" class="cantidad_pendiente form-control form-control-sm" value="" type="text" readonly="readonly"></td>
-                    <td><input name="stock_actual[]" id="stock_actual${n}" class="form-control form-control-sm" value="${entrada_producto.stock_actual}" type="text"></td>
-                    <td><input name="precio_unitario[]" id="precio_unitario${n}" class="precio_unitario form-control form-control-sm" value="${entrada_producto.costo}" type="text" oninput="calcularSubTotal(this)"></td>
-                    <td><input name="sub_total[]" id="sub_total${n}" class="sub_total form-control form-control-sm" value="${entrada_producto.subtotal}" type="text" readonly="readonly"></td>
-                    <td><input name="igv[]" id="igv${n}" class="igv form-control form-control-sm" value="${entrada_producto.igv}" type="text" readonly="readonly"></td>
-                    <td><input name="total[]" id="total${n}" class="total form-control form-control-sm" value="${entrada_producto.total}" type="text" readonly="readonly"></td>
-                </tr>
-            `;
-            tbody.append(row);
-            n++;
-            //total_acumulado += parseFloat(factura.total);
-            });
-        }
-});
+                let marcaOptions = '<option value="">- Selecione -</option>';
+                let productoOptions = '<option value="">- Selecione -</option>';
+                let estadoBienOptions = '<option value="">- Selecione -</option>';
+                let unidadMedidaOptions = '<option value="">- Selecione -</option>';
+
+                result.marca.forEach(marca => {
+                    let selected = (marca.id == entrada_producto.id_marca) ? 'selected' : '';
+                    marcaOptions += `<option value="${marca.id}" ${selected}>${marca.denominiacion}</option>`;
+                });
+
+                result.producto.forEach(producto => {
+                    let selected = (producto.id == entrada_producto.id_producto) ? 'selected' : '';
+                    productoOptions += `<option value="${producto.id}" ${selected}>${producto.denominacion}</option>`;
+                });
+
+                result.estado_bien.forEach(estado_bien => {
+                    let selected = (estado_bien.codigo == entrada_producto.id_estado_bien) ? 'selected' : '';
+                    estadoBienOptions += `<option value="${estado_bien.codigo}" ${selected}>${estado_bien.denominacion}</option>`;
+                });
+
+                result.unidad_medida.forEach(unidad_medida => {
+                    let selected = (unidad_medida.codigo == entrada_producto.id_um) ? 'selected' : '';
+                    unidadMedidaOptions += `<option value="${unidad_medida.codigo}" ${selected}>${unidad_medida.denominacion}</option>`;
+                });
+
+                const row = `
+                    <tr>
+                        <td>${n}</td>
+                        <td><input name="item[]" id="item${n}" class="form-control form-control-sm" value="${entrada_producto.item}" type="text"></td>
+                        <td><select name="descripcion[]" id="descripcion${n}" class="form-control form-control-sm" onChange="">${productoOptions}</select></td>
+                        <td><select name="marca[]" id="marca${n}" class="form-control form-control-sm">${marcaOptions}</select></td>
+                        <td><input name="cod_interno[]" id="cod_interno${n}" class="form-control form-control-sm" value="${entrada_producto.codigo}" type="text"></td>
+                        <td><input id="fecha_fabricacion_${n}" name="fecha_fabricacion[]"  on class="form-control form-control-sm"  value="${entrada_producto.fecha_fabricacion}" type="text"></td>
+                        <td><input id="fecha_vencimiento_${n}" name="fecha_vencimiento[]"  on class="form-control form-control-sm"  value="${entrada_producto.fecha_vencimiento}" type="text"></td>
+                        <td><select name="estado_bien[]" id="estado_bien${n}" class="form-control form-control-sm" onChange="">${estadoBienOptions}</select></td>
+                        <td><select name="unidad[]" id="unidad${n}" class="form-control form-control-sm">${unidadMedidaOptions}</select></td>
+                        <td><input name="cantidad_ingreso[]" id="cantidad_ingreso${n}" class="cantidad_ingreso form-control form-control-sm" value="${entrada_producto.cantidad}" type="text" oninput="calcularCantidadPendiente(this)"></td>
+                        <td><input name="cantidad_compra[]" id="cantidad_compra${n}" class="cantidad_compra form-control form-control-sm" value="${entrada_producto.cantidad}" type="text" oninput="calcularCantidadPendiente(this)"></td>
+                        <td><input name="cantidad_pendiente[]" id="cantidad_pendiente${n}" class="cantidad_pendiente form-control form-control-sm" value="" type="text" readonly="readonly"></td>
+                        <td><input name="stock_actual[]" id="stock_actual${n}" class="form-control form-control-sm" value="${entrada_producto.stock_actual}" type="text"></td>
+                        <td><input name="precio_unitario[]" id="precio_unitario${n}" class="precio_unitario form-control form-control-sm" value="${entrada_producto.costo}" type="text" oninput="calcularSubTotal(this)"></td>
+                        <td><input name="sub_total[]" id="sub_total${n}" class="sub_total form-control form-control-sm" value="${entrada_producto.subtotal}" type="text" readonly="readonly"></td>
+                        <td><input name="igv[]" id="igv${n}" class="igv form-control form-control-sm" value="${entrada_producto.igv}" type="text" readonly="readonly"></td>
+                        <td><input name="total[]" id="total${n}" class="total form-control form-control-sm" value="${entrada_producto.total}" type="text" readonly="readonly"></td>
+                    </tr>
+                `;
+                tbody.append(row);
+                n++;
+                //total_acumulado += parseFloat(factura.total);
+                });
+            }
+    });
 
 }
 
@@ -446,9 +466,14 @@ function cambiarDocumento(){
             dataType: "json",
             success: function(result){
                 var option = "<option value=''>- Selecione -</option>";
+                var entradaProductoIdTipoDocumento = "{{ $entrada_producto->id_tipo_documento }}";
+
+                var selectedValue = entradaProductoIdTipoDocumento;
+
                 $('#tipo_documento').html("");
                 $(result).each(function (ii, oo) {
-                    option += "<option value='"+oo.codigo+"'>"+oo.denominacion+"</option>";
+                    var selected = (oo.codigo == selectedValue) ? "selected" : "";
+                    option += "<option value='"+oo.codigo+"' "+selected+">"+oo.denominacion+"</option>";
                 });
                 $('#tipo_documento').html(option);
                 
@@ -495,6 +520,7 @@ function agregarProducto(){
         var marca = '<select name="marca[]" id="marca' + n + '" class="form-control form-control-sm" onchange="actualizarSecciones(this)"> <option value="">- Selecione -</option><?php foreach ($marca as $row){?><option value="<?php echo $row->id ?>"><?php echo $row->denominiacion ?></option><?php }?></select>'
         var fecha_fabricacion = '<input id="fecha_fabricacion_' + n + '" name="fecha_fabricacion[]"  on class="form-control form-control-sm"  value="" type="text">'
         var fecha_vencimiento = '<input id="fecha_vencimiento_' + n + '" name="fecha_vencimiento[]"  on class="form-control form-control-sm"  value="" type="text">'
+        var estado_bien =  '<select name="estado_bien[]" id="estado_bien' + n + '" class="form-control form-control-sm" onChange=""><option value="">- Selecione -</option> <?php foreach ($estado_bien as $row) { ?> <option value="<?php echo $row->codigo ?>" <?php echo ($row->codigo == 1) ? "selected" : ""; ?>><?php echo $row->denominacion ?></option> <?php } ?> </select>';
         var unidad = '<select name="unidad[]" id="unidad' + n + '" class="form-control form-control-sm" onChange=""> <option value="">- Selecione -</option> <?php foreach ($unidad as $row) {?> <option value="<?php echo $row->codigo?>"><?php echo $row->denominacion?></option> <?php } ?> </select>';
         var cantidad_ingreso = '<input name="cantidad_ingreso[]" id="cantidad_ingreso' + n + '" class="cantidad_ingreso form-control form-control-sm" value="" type="text" oninput="calcularCantidadPendiente(this)">';
         var cantidad_compra = '<input name="cantidad_compra[]" id="cantidad_compra' + n + '" class="cantidad_compra form-control form-control-sm" value="" type="text" oninput="calcularCantidadPendiente(this)">';
@@ -511,10 +537,11 @@ function agregarProducto(){
         //newRow += '<td>' + cantidad + '</td>';
         newRow += '<td>' + descripcion + '</td>';
         //newRow += '<td>' + ubicacion_fisica_seccion + '</td>';
-        newRow += '<td>' + cod_interno + '</td>';
         newRow += '<td>' + marca + '</td>';
+        newRow += '<td>' + cod_interno + '</td>';
         newRow += '<td>' + fecha_fabricacion + '</td>';
         newRow += '<td>' + fecha_vencimiento + '</td>';
+        newRow += '<td>' + estado_bien + '</td>';
         newRow += '<td>' + unidad + '</td>';
         newRow += '<td>' + cantidad_ingreso + '</td>';
         newRow += '<td>' + cantidad_compra + '</td>';
@@ -607,12 +634,12 @@ function pdf_documento(){
 		<div class="justify-content-center">
 
             <div class="card">
-                <div style="display: flex; justify-content: space-between; align-items: center;">
+                <!--<div style="display: flex; justify-content: space-between; align-items: center;">
                     <div>
                         <img width="200px" height="80px" style="top:-30px" src="/img/logo_forestalpama.jpg">
                     </div>
-                </div>
-                <div style="text-align: center; font-size:16px">
+                </div>-->
+                <div style="text-align: center; font-size:16px; margin-top: 20px">
                     <b>Tipo Movimiento</b>
                 </div>
                 
@@ -634,7 +661,7 @@ function pdf_documento(){
                                 <option value="">- Selecione -</option>
                                 <?php
                                 foreach ($tipo_movimiento as $row){?>
-                                    <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==1)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                    <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$tipo_movimiento_)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
                                     <?php 
                                 }
                                 ?>
@@ -645,7 +672,7 @@ function pdf_documento(){
                         </div>
                         <div class="col-lg-2">
                             <input id="fecha_entrada" name="fecha_entrada" on class="form-control form-control-sm"  value="<?php echo isset($entrada_producto) && $entrada_producto->fecha_ingreso ? $entrada_producto->fecha_ingreso : date('Y-m-d'); ?>" type="text">
-                        </div>  
+                        </div>
                         <div class="col-lg-2">
                             Tipo Documento
                         </div>
@@ -777,10 +804,11 @@ function pdf_documento(){
 								<th>Descripci&oacute;n</th>
 								<!--<th>Ub. Fisica Secci&oacute;n</th>
                                 <th>Ub. Fisica Anaquel</th>-->
-								<th>COD. INT.</th>
-                                <th>Marca</th>
+								<th>Marca</th>
+                                <th>COD. INT.</th>
                                 <th>F. Fabricaci&oacute;n</th>
                                 <th>F. Vencimiento</th>
+                                <th>Estado Bien</th>
                                 <th>Unidad</th>
                                 <th>Cantidad Ingreso</th>
                                 <th>Cantidad Compra</th>

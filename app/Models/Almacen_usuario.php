@@ -9,4 +9,15 @@ use DB;
 class Almacen_usuario extends Model
 {
     use HasFactory;
+
+    function getUsuariosByAlmacen($id){
+
+        $cad = "select * from almacen_usuarios au 
+        where au.id_almacen ='".$id."'
+        and au.estado='1'";
+
+		$data = DB::select($cad);
+        return $data;
+    }
+
 }

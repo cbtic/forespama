@@ -47,6 +47,7 @@ class AnaquelesController extends Controller
 		$almacen = $almacen_model->getAlmacenByUser($id_user);
 		if($id>0){
 			$anaquel = Anaquele::find($id);
+			//dd($almacen);exit();
 		}else{
 			$anaquel = new Anaquele;
 		}

@@ -43,6 +43,9 @@
     font-size: 8.5;
 }
 
+.td{
+    font-size:11px
+}
 
 .modal-dialog {
 	width: 100%;
@@ -136,9 +139,9 @@ $(document).ready(function() {
 
 <body class="hold-transition skin-blue sidebar-mini">
 
-    <div>
+    <!--<div>
         <img width="200px" height="80px" style="top:-30px" src="img/logo_forestalpama.jpg">
-    </div>
+    </div>-->
     <div style="text-align: center; font-size:16px">
         <b><?php echo $tipo_documento;?></b>
     </div>
@@ -147,127 +150,113 @@ $(document).ready(function() {
         <span style="width: 50%; float: right;">Div 2</span>
     </div>-->
     
-    <p style="font_size: 8.5;text-align:justify"><b>LIQUIDACION DE DERECHOS POR REVISION Y CALIFICACION DE PROYECTOS DE HABILITACION URBANA</b></p>
-    
-        <hr>
+    <hr>
         <div class="contenido">
             
             <table style="background-color:white !important;border-collapse:collapse;border-spacing:1px; width: 100%; margin: 0 auto; font-size:12px; vertical-align:top">
                 <tbody>
                     <tr>
-                        <td class="td" style ="text-align: left; width: 44%;"><b>ARQUITECTO:</b></td>
-                        <td class="td" style ="text-align: left; width: 41%;"><?php //foreach($proyectista_nombres as $nombres):?>
-                                                                                <?php //endforeach;?>
-                                                                                </td>
-                        <td class="td" style ="text-align: right; width: 7%; font-size:11px; height:25px;"><b>N° CAP</b></td>
-                        <td class="td" style ="text-align: right; width: 8%; font-size:11px; height:25px"><?php //foreach($proyectista_cap as $cap):?>
-                                                                                                            <?php //endforeach;?>
-                                                                                                            </td>
+                        <td class="td" style ="text-align: left; width: 15%;"><b>Fecha de Emisi&oacute;n:</b></td>
+                        <td class="td" style ="text-align: left; width: 15%;"><?php echo $fecha_movimiento;?></td>
+                        <td class="td" style ="text-align: left; width: 70%;"></td>
+                    </tr>
+                    <tr>
+                        <td class="td" style ="text-align: left; width: 15%;"><b>Origen:</b></td>
+                        <td class="td" style ="text-align: left; width: 15%;"><?php echo $unidad_origen;?></td>
+                        <td class="td" style ="text-align: left; width: 70%;"></td>
+                    </tr>
+                    <tr>
+                        <td class="td" style ="text-align: left; width: 15%;"><b>Almacen Destino:</b></td>
+                        <td class="td" style ="text-align: left; width: 15%;"><?php //echo $tipo_proyectista;?></td>
+                        <td class="td" style ="text-align: left; width: 70%;"></td>
+                    </tr>
+                    <tr>
+                        <td class="td" style ="text-align: left; width: 15%;"><b>Tipo Moneda:</b></td>
+                        <td class="td" style ="text-align: left; width: 15%;"><?php echo $moneda;?></td>
+                        <td class="td" style ="text-align: left; width: 70%;"></td>
+                    </tr>
+                    <tr>
+                        <td class="td" style ="text-align: left; width: 15%;"><b>Observaci&oacute;n:</b></td>
+                        <td class="td" style ="text-align: left; width: 15%;"><?php echo $observacion;?></td>
+                        <td class="td" style ="text-align: left; width: 70%;"></td>
                     </tr>
                 </tbody>
             </table>
-            <table style="background-color:white !important;border-collapse:collapse;border-spacing:1px; width: 100%; margin: 0 auto; font-size:12px">
-                <tbody>
-                    <tr>
-                        <td class="td" style ="text-align: left; width: 35%; font-size:11px; height:25px"></td>
-                        <td class="td" style ="text-align: left; width: 45%; font-size:11px; height:25px"><?php //echo $tipo_proyectista;?></td>
-                    </tr>
-                    <tr>
-                        <td class="td" style ="text-align: left; width: 35%; height:25px"><b>NOMBRE DEL PROPIETARIO:</b></td>
-                        <td class="td" style ="text-align: left; width: 45%; height:25px"><?php //echo $razon_social;?></td>
-                    </tr>
-                    <tr>
-                        <td class="td" style ="text-align: left; width: 35%; height:25px"><b>DENOMINACION DE H.U. NUEVA:</b></td>
-                        <td class="td" style ="text-align: left; width: 45%; height:25px"><?php //echo $nombre;?></td>
-                    </tr>
-                    <tr>
-                        <td colspan="2" style="height:5px;"></td>
-                    </tr>
-                    <tr>
-                        <td class="td" style ="text-align: left; width: 35%;"><b>DEPARTAMENTO/PROVINCIA/DISTRITO:</b></td>
-                        <td class="td" style ="text-align: left; width: 45%;"><?php //echo $departamento;?>/<?php //echo $provincia;?>/<?php //echo $distrito;?></td>
-                    </tr>
-                    <tr>
-                        <td class="td" style ="text-align: left; width: 35%;"><b>INSTANCIA:</b></td>
-                        <td class="td" style ="text-align: left; width: 45%;"><?php //echo $instancia;?></td>
-                    </tr>
-                    <tr>
-                        <td class="td" style ="text-align: left; width: 35%;"><b>COMISION TECNICA:</b></td>
-                        <td class="td" style ="text-align: left; width: 45%;"><?php //echo $distrito;?></td>
-                    </tr>
-                    <tr>
-                        <td class="td" style ="text-align: left; width: 35%;"><b>DIRECCION:</b></td>
-                        <td class="td" style ="text-align: left; width: 45%;"><?php //echo $direccion;?></td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <table style="background-color:white !important;border-collapse:collapse;border-spacing:1px; width: 100%; margin: 0 auto; font-size:12px">
-                <tbody>
-                    <tr>
-                        <td colspan="2" style="height:5px;"></td>
-                    </tr>
-                    <tr>
-                        <td class="td" style ="text-align: left; width: 44%; height:25px"><b>AREA BRUTA DEL TERRENO (m2):</b></td>
-                        <td class="td" style ="text-align: left; width: 36%; height:25px"><?php //echo number_format($total_area_techada, 2, '.', ',');?></td>
-                        <td class="td" style ="text-align: left; width: 15%; height:25px"><b>N° de Revision:</b></td>
-                        <td class="td" style ="text-align: right; width: 5%; height:25px"><?php //echo $numero_revision;?></td>
-                    </tr>
-                </tbody>
-            </table>
-           
-            <table style="background-color:white !important;border-collapse:collapse;border-spacing:1px; width: 100%; margin: 0 auto; font-size:12px">
-                <tbody>
-                    <tr>
-                        <td class="td" style ="text-align: center; width: 80%;"><b>FACTOR A APLICAR SOBRE EL AREA DEL TERRENO ES <?php //echo number_format($valor_metro_cuadrado,3,'.',',');?></b></td>
-                        <td class="td" style ="text-align: left; width: 5%;">S/.</td>
-                        <td class="td" style ="text-align: right; width: 15%;"><?php //echo number_format($sub_total, 2, '.', ',');?></td>
-                    </tr>
-                </tbody>
-            </table>
-            <table style="background-color:white !important;border-collapse:collapse;border-spacing:1px; width: 100%; margin: 0 auto; font-size:12px">
-                <tbody>   
-                    <tr>
-                        <td class="td" style ="text-align: left; width: 25%;"><b>Monto Minimo (inc. IGV):</b></td>
-                        <td class="td" style ="text-align: left; width: 20%;">S/ <?php //echo number_format($valor_minimo,2,'.',',');?></td>
-                        <td class="td" style ="text-align: right; width: 35%;"><b>+IGV:</b></td>
-                        <td class="td" style ="text-align: left; width: 5%;">S/.</td>
-                        <td class="td" style ="text-align: right; width: 15%;"><?php //echo number_format($igv,2,'.',',');?></td>
-                        
-                    </tr>
-                </tbody>
-            </table>
-            <table style="background-color:white !important;border-collapse:collapse;border-spacing:1px; width: 100%; margin: 0 auto; font-size:12px">
-                <tbody>
-                    <tr>
-                        <!--<td class="td" style ="text-align: left; width: 20%;"><?php //echo $tipo_liquidacion;?></td>-->
-                        
-                        <td class="td" style ="text-align: left; width: 25%;"><b>Monto Maximo (inc. IGV):</b></td>
-                        <td class="td" style ="text-align: left; width: 20%;">S/ <?php //echo number_format($valor_maximo,2,'.',',');?></td>
-                        <td class="td" style ="text-align: right; width: 35%;"><b>TOTAL:</b></td>
-                        <td class="td" style ="text-align: left; width: 5%; border-top: 1px solid black;">S/.</td>
-                        <td class="td" style ="text-align: right; width: 15%; border-top: 1px solid black;"><?php //echo number_format($total,2,'.',',');?></td>
-                    </tr>
-                    <tr>
-                        <td class="td" style ="text-align: left; width: 25%; font-size:10px"><i>CALCULADO POR EL SISTEMA</i></td>
-                        <td class="td" style ="text-align: left; width: 20%;"></td>
-                        <td class="td" style ="text-align: right; width: 35%; font-size:14px"><b>TOTAL A PAGAR:</b></td>
-                        <td class="td" style ="text-align: left; width: 5%;">S/.</td>
-                        <td class="td" style ="text-align: right; width: 15%;"><?php //echo number_format($total,2,'.',',');?></td>
-                    </tr>
-                </tbody>
-            </table>
-
             <hr>
-            <span style="font_size: 8.5;">V.B</span>
-            <span style="float: right; font_size: 8.5"><b>Recibido por:...................................................</b></span> 
-            <br>
-            <span style="font_size: 8.5;">Fecha de Emisi&oacute;n: <?php //echo $carbonDate;?> &nbsp; &nbsp; &nbsp; <?php //echo $currentHour;?></span>
-            <span style="float: right; font_size: 8.5"><b>N° DNI:...................................................</b></span>   
+            <table style="background-color:white !important;border-collapse:collapse;border-spacing:1px; width: 100%; margin: 0 auto; font-size:12px">
+                <tbody>
+                    <tr>
+                        <td class="td" style ="text-align: left; width: 5%; height:25px; border-bottom: 1px solid black;"><b>#</b></td>
+                        <td class="td" style ="text-align: left; width: 5%; height:25px; border-bottom: 1px solid black;"><b>ITEM</b></td>
+                        <td class="td" style ="text-align: left; width: 10%; height:25px; border-bottom: 1px solid black;"><b>DESCRIPCI&Oacute;N</b></td>
+                        <td class="td" style ="text-align: left; width: 5%; height:25px; border-bottom: 1px solid black;"><b>MARCA</b></td>
+                        <td class="td" style ="text-align: left; width: 5%; height:25px; border-bottom: 1px solid black;"><b>COD. INTERNO</b></td>
+                        <td class="td" style ="text-align: left; width: 10%; height:25px; border-bottom: 1px solid black;"><b>F. FABRICACI&Oacute;N</b></td>
+                        <td class="td" style ="text-align: left; width: 10%; height:25px; border-bottom: 1px solid black;"><b>F. VENCIMIENTO</b></td>
+                        <td class="td" style ="text-align: left; width: 5%; height:25px; border-bottom: 1px solid black;"><b>ESTADO BIEN</b></td>
+                        <td class="td" style ="text-align: left; width: 5%; height:25px; border-bottom: 1px solid black;"><b>UNIDAD</b></td>
+                        <td class="td" style ="text-align: left; width: 5%; height:25px; border-bottom: 1px solid black;"><b>CANT. INGRESO</b></td>
+                        <td class="td" style ="text-align: left; width: 5%; height:25px; border-bottom: 1px solid black;"><b>CANT. COMPRA</b></td>
+                        <td class="td" style ="text-align: left; width: 5%; height:25px; border-bottom: 1px solid black;"><b>CANT. PENDIENTE</b></td>
+                        <td class="td" style ="text-align: left; width: 5%; height:25px; border-bottom: 1px solid black;"><b>STOCK ACTUAL</b></td>
+                        <td class="td" style ="text-align: left; width: 5%; height:25px; border-bottom: 1px solid black;"><b>PRECIO UNITARIO</b></td>
+                        <td class="td" style ="text-align: left; width: 5%; height:25px; border-bottom: 1px solid black;"><b>SUB TOTAL</b></td>
+                        <td class="td" style ="text-align: left; width: 5%; height:25px; border-bottom: 1px solid black;"><b>IGV</b></td>
+                        <td class="td" style ="text-align: left; width: 5%; height:25px; border-bottom: 1px solid black;"><b>TOTAL</b></td>
+                    </tr>
+                    
+                    <?php 
+                    $subtotal_suma=0;
+                    $igv_suma=0;
+                    $total_suma=0;
+                    foreach($datos_detalle as $key=>$r) { ?>
+                        <tr>
+                            <td class="td" style ="text-align: left; width: 5%; height:25px"><?php echo $r->row_num;?></td>
+                            <td class="td" style ="text-align: left; width: 5%; height:25px"><?php echo $r->item;?></td>
+                            <td class="td" style ="text-align: left; width: 10%; height:25px"><?php echo $r->producto;?></td>
+                            <td class="td" style ="text-align: left; width: 5%; height:25px"><?php echo $r->marca;?></td>
+                            <td class="td" style ="text-align: left; width: 5%; height:25px"><?php echo $r->codigo;?></td>
+                            <td class="td" style ="text-align: left; width: 10%; height:25px"><?php echo $r->fecha_fabricacion;?></td>
+                            <td class="td" style ="text-align: left; width: 10%; height:25px"><?php echo $r->fecha_vencimiento;?></td>
+                            <td class="td" style ="text-align: left; width: 5%; height:25px"><?php echo $r->estado_bien;?></td>
+                            <td class="td" style ="text-align: left; width: 5%; height:25px"><?php echo $r->unidad_medida;?></td>
+                            <td class="td" style ="text-align: left; width: 5%; height:25px"><?php echo $r->cantidad;?></td>
+                            <td class="td" style ="text-align: left; width: 5%; height:25px"><?php echo $r->cantidad;?></td>
+                            <td class="td" style ="text-align: left; width: 5%; height:25px"><?php echo $r->cantidad;?></td>
+                            <td class="td" style ="text-align: left; width: 5%; height:25px"><?php echo $r->stock_actual;?></td>
+                            <td class="td" style ="text-align: left; width: 5%; height:25px"><?php echo number_format($r->costo,2,'.',',');?></td>
+                            <td class="td" style ="text-align: left; width: 5%; height:25px"><?php echo number_format($r->subtotal,2,'.',',');?></td>
+                            <td class="td" style ="text-align: left; width: 5%; height:25px"><?php echo number_format($r->igv,2,'.',',');?></td>
+                            <td class="td" style ="text-align: left; width: 5%; height:25px"><?php echo number_format($r->total,2,'.',',');?></td>
+                            <?php 
+                            $subtotal_suma+=$r->subtotal;
+                            $igv_suma+=$r->igv;
+                            $total_suma+=$r->total;
+                            ?>
+                        </tr>
+                    <?php } ?>
+                </tbody>
+            </table>
             <hr>
-            <p class="p">En caso de devolucion, se le deducir&aacute; gastos bancarios y administrativos, comisi&oacute;n Niubiz segun corresponda.</p>
-            <p class="p">Costo por devoluci&oacute;n: S/. 50.00 soles por conceptos administrativos.</p>
-            <p></p>
+            <table style="background-color:white !important;border-collapse:collapse;border-spacing:1px; width: 100%; margin: 0 auto; font-size:12px">
+                <tbody>
+                    <tr>
+                        <td class="td" style ="text-align: right; width: 70%; height:25px"></td>
+                        <td class="td" style ="text-align: right; width: 15%; height:25px"><b>SUB TOTAL:</b></td>
+                        <td class="td" style ="text-align: right; width: 15%; height:25px"><?php echo number_format($subtotal_suma,2,'.',',');;?></td>
+                    </tr>
+                    <tr>
+                        <td class="td" style ="text-align: right; width: 70%; height:25px"></td>
+                        <td class="td" style ="text-align: right; width: 15%; height:25px"><b>IGV:</b></td>
+                        <td class="td" style ="text-align: right; width: 15%; height:25px"><?php echo number_format($igv_suma,2,'.',',');;?></td>
+                    </tr>
+                    <tr>
+                        <td class="td" style ="text-align: right; width: 70%; height:25px"></td>
+                        <td class="td" style ="text-align: right; width: 15%; height:25px"><b>TOTAL:</b></td>
+                        <td class="td" style ="text-align: right; width: 15%; height:25px"><?php echo number_format($total_suma,2,'.',',');;?></td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
     <!-- /.content-wrapper -->

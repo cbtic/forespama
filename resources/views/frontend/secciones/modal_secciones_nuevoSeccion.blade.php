@@ -149,8 +149,48 @@ $('#openOverlayOpc').on('shown.bs.modal', function() {
 });
 
 $(document).ready(function() {
-	 
+	 if($('#id').val()>0){
+        cargarAnaqueles();
+     }
 });
+
+function cargarAnaqueles(){
+
+var id = $("#id").val();
+const contenedorAnaqueles = $('#contenedor-anaqueles');
+contenedorAnaqueles.empty();
+
+$.ajax({
+    url: "/secciones/cargar_anaqueles/"+id,
+    type: "GET",
+    success: function (result) {
+
+        let n = 1;
+        let almacenAnaqueles = @json($anaquel);
+
+        result.forEach(anaqueles_secciones => {
+            let anaquelOptions = '<option value="">--Selecionar--</option>';
+            
+            almacenAnaqueles.forEach(almacenAnaquel => {
+                let selected = (anaqueles_secciones.id_anaqueles == almacenAnaquel.id) ? 'selected' : '';
+                anaquelOptions += `<option value="${anaqueles_secciones.id}" ${selected}>${almacenAnaquel.denominacion}</option>`;
+            });
+
+            const row = `<div class="col-lg-3 anaqueles-grupo">\
+                <div class="form-group">\
+                    <label class="control-label form-control-sm">Anaqueles</label>\
+                    <select name="anaquel[]" id="anaquel${n}" class="form-control form-control-sm">\
+                        ${anaquelOptions}\
+                    </select>\
+                </div>\
+            </div>`;
+            
+            contenedorAnaqueles.append(row);
+            n++;
+        });
+    }
+});
+}
 
 function AddFila(){
     // Crear un nuevo div para el grupo de usuario
@@ -186,16 +226,29 @@ function obtenerAnaquel(){
 			
             var option = "<option value=''>--Seleccionar--</option>";
 			//$('#anaquel').html("");
-			$(result).each(function (ii, oo) {
-				option += "<option value='"+oo.id+"'>"+oo.denominacion+"</option>";
-			});
-			$('select[name="anaquel[]"]').each(function() {
-                if ($(this).children().length <= 1){
-                    $(this).html(option);
-                    $(this).attr("disabled", false);
-                }
-                
-            });
+            if(result.length>0){
+                $(result).each(function (ii, oo) {
+                    option += "<option value='"+oo.id+"'>"+oo.denominacion+"</option>";
+                });
+
+                $('select[name="anaquel[]"]').each(function() {
+                    if ($(this).children().length <= 1){
+                        $(this).empty();
+                        $(this).html(option);
+                        $(this).attr("disabled", false);
+                    }
+                    
+                });
+            }else {
+                // Si no hay resultados, vacía el select y muestra solo la opción "Seleccionar"
+                $('select[name="anaquel[]"]').each(function() {
+                    $(this).empty(); // Vacía las opciones anteriores
+                    $(this).html(option); // Muestra solo la opción "Seleccionar"
+                    $(this).attr("disabled", false); // Habilita el select
+                });
+            }
+			
+			
 			//$('#anaquel').attr("disabled",false);
 			//$('.loader').hide();
 			

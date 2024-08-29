@@ -80,6 +80,7 @@ class AlmacenesController extends Controller
 		
 		$ubigeo_model = new Ubigeo;
 		$almacen_model = new Almacene;
+		$almacen_usuario_model = new Almacen_usuario;
 		$user_model = new User;
 		$departamento = $ubigeo_model->getDepartamento();
 		$codigo = $almacen_model->getCodigo();
@@ -87,13 +88,17 @@ class AlmacenesController extends Controller
 
 		if($id>0){
 			$almacen = Almacene::find($id);
+			$almacen_usuario = Almacen_usuario::where('id_almacen',$id)->get();
+			//$usuario = $almacen_usuario_model->getUsuariosByAlmacen($id);
 		}else{
 			$almacen = new Almacene;
+			$almacen_usuario = null;
+			//$usuario = null;
 		}
 
 		//var_dump($codigo[0]->codigo);exit();
 
-		return view('frontend.almacenes.modal_almacenes_nuevoAlmacen',compact('id','departamento','codigo','almacen','user'));
+		return view('frontend.almacenes.modal_almacenes_nuevoAlmacen',compact('id','departamento','codigo','almacen','user','almacen_usuario'));
 
     }
 
@@ -198,5 +203,15 @@ class AlmacenesController extends Controller
 		
 		echo json_encode($ubigeo_usuario);
 	}
+
+	public function cargar_usuario($id)
+    {
+
+		$almacen_usuario_model = new Almacen_usuario;
+
+		$usuario = $almacen_usuario_model->getUsuariosByAlmacen($id);
+
+		return response()->json($usuario);
+    }
 	
 }

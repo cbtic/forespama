@@ -153,6 +153,7 @@ $(document).ready(function() {
 
     if($('#id').val()>0){
 		obtenerDatosUbigeo();
+        cargarUsuario();
 	}
 
 });
@@ -284,10 +285,48 @@ function obtenerDistrito_(callback){
     });
 }
 
+function cargarUsuario(){
+
+    var id = $("#id").val();
+    const contenedorUsuarios = $('#contenedor-usuarios');
+    contenedorUsuarios.empty();
+
+    $.ajax({
+        url: "/almacenes/cargar_usuario/"+id,
+        type: "GET",
+        success: function (result) {
+
+            let n = 1;
+            let almacenUsuarios = @json($user);
+
+            result.forEach(usuario => {
+                let usuarioOptions = '<option value="">--Selecionar--</option>';
+                
+            almacenUsuarios.forEach(almacenUsuario => {
+                    let selected = (usuario.id == almacenUsuario.id) ? 'selected' : '';
+                    usuarioOptions += `<option value="${usuario.id}" ${selected}>${almacenUsuario.name}</option>`;
+                });
+
+                const row = `<div class="col-lg-3 usuario-grupo">\
+                    <div class="form-group">\
+                        <label class="control-label form-control-sm">Usuario</label>\
+                        <select name="usuario[]" id="usuario${n}" class="form-control form-control-sm">\
+                            ${usuarioOptions}\
+                        </select>\
+                    </div>\
+                </div>`;
+                
+                contenedorUsuarios.append(row);
+                n++;
+            });
+        }
+    });
+}
+
 function AddFila(){
     // Crear un nuevo div para el grupo de usuario
     var newDiv = document.createElement('div');
-    newDiv.className = 'col-lg-12 usuario-grupo';
+    newDiv.className = 'col-lg-3 usuario-grupo';
     
     // Crear el HTML interno del nuevo div
     newDiv.innerHTML = `
@@ -514,27 +553,28 @@ function fn_save_almacen(){
                                     
                                     </div>
                                 </div>
-                                <div id="contenedor-usuarios" >
-                                    <div class="col-lg-12 usuario-grupo">
-                                        <div class="form-group">
-                                            <label class="control-label form-control-sm">Usuario</label>
-                                            <select name="usuario[]" id="usuario" onChange="" class="form-control form-control-sm">
-                                                <option value="">--Selecionar--</option>
-                                                <?php
-                                                foreach ($user as $row) {?>
-                                                <option value="<?php echo $row->id?>" <?php if($row->id==$almacen->id_user)echo "selected='selected'"?>><?php echo $row->name ?></option>
-                                                <?php 
-                                                }
-                                                ?>
-                                            </select>
-                                        </div>
+                            </div>
+                            <div id="contenedor-usuarios" class="row" style="padding-left:10px">
+                                <div class="col-lg-3 usuario-grupo">
+                                    <div class="form-group">
+                                        <label class="control-label form-control-sm">Usuario</label>
+                                        <select name="usuario[]" id="usuario" onChange="" class="form-control form-control-sm">
+                                            <option value="">--Selecionar--</option>
+                                            <?php
+                                            foreach ($user as $row) {?>
+                                            <option value="<?php echo $row->id?>" <?php if($row->id==$almacen->id_user)echo "selected='selected'"?>><?php echo $row->name ?></option>
+                                            <?php 
+                                            }
+                                            ?>
+                                        </select>
                                     </div>
                                 </div>
+                            </div>
                                 <div style="margin-top:37px" class="form-group">
                                     <div class="col-sm-12 controls">
                                         <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
                                             <a href="javascript:void(0)" onClick="AddFila()" class="btn btn-sm btn-success">Agregar</a>
-                                        </div>
+                                        <!--</div>-->
                                         </div>
                                     </div>
                                 </div>

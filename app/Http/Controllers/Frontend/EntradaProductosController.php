@@ -111,11 +111,15 @@ class EntradaProductosController extends Controller
             }
 
             $item = $request->input('item');
-            $cantidad = $request->input('cantidad');
+            //$cantidad = $request->input('cantidad');
             $descripcion = $request->input('descripcion');
-            $ubicacion_fisica_seccion = $request->input('ubicacion_fisica_seccion');
-            $ubicacion_fisica_anaquel = $request->input('ubicacion_fisica_anaquel');
+            //$ubicacion_fisica_seccion = $request->input('ubicacion_fisica_seccion');
+            //$ubicacion_fisica_anaquel = $request->input('ubicacion_fisica_anaquel');
             $cod_interno = $request->input('cod_interno');
+            $marca = $request->input('marca');
+            $fecha_fabricacion = $request->input('fecha_fabricacion');
+            $fecha_vencimiento = $request->input('fecha_vencimiento');
+            $estado_bien = $request->input('estado_bien');
             $unidad = $request->input('unidad');
             $cantidad_ingreso = $request->input('cantidad_ingreso');
             $cantidad_compra = $request->input('cantidad_compra');
@@ -148,25 +152,21 @@ class EntradaProductosController extends Controller
                 $entradaProducto_detalle = new EntradaProductoDetalle();
                 $entradaProducto_detalle->id_entrada_productos = $entrada_producto->id;
                 $entradaProducto_detalle->item = $item[$index];
-                $entradaProducto_detalle->cantidad = $cantidad[$index];
+                $entradaProducto_detalle->cantidad = $cantidad_ingreso[$index];
 
                 //$entradaProducto_detalle->numero_lote = "";
-                $entradaProducto_detalle->fecha_vencimiento = "2024-08-18";
+                $entradaProducto_detalle->fecha_vencimiento = $fecha_vencimiento[$index];
                 $entradaProducto_detalle->aplica_precio = "";
-                $entradaProducto_detalle->id_um = 282;
-                $entradaProducto_detalle->id_marca = 1;
+                $entradaProducto_detalle->id_um = $unidad[$index];
+                $entradaProducto_detalle->id_marca = $marca[$index];
                 $entradaProducto_detalle->estado = 1;
                 $entradaProducto_detalle->id_producto = $descripcion[$index];
                 $entradaProducto_detalle->costo = $precio_unitario[$index];
-                $entradaProducto_detalle->fecha_fabricacion = "2024-08-18";
-                $entradaProducto_detalle->id_estado_bien = 13;
+                $entradaProducto_detalle->fecha_fabricacion = $fecha_fabricacion[$index];
+                $entradaProducto_detalle->id_estado_bien = $estado_bien[$index];
 
                 /*$entradaProducto_detalle->descripcion = $descripcion[$index];
-                $entradaProducto_detalle->ubicacion_fisica_seccion = $ubicacion_fisica_seccion[$index];
-                $entradaProducto_detalle->ubicacion_fisica_anaquel = $ubicacion_fisica_anaquel[$index];
                 $entradaProducto_detalle->cod_interno = $cod_interno[$index];
-                $entradaProducto_detalle->unidad = $unidad[$index];
-                $entradaProducto_detalle->cantidad_ingreso = $cantidad_ingreso[$index];
                 $entradaProducto_detalle->cantidad_compra = $cantidad_compra[$index];
                 $entradaProducto_detalle->cantidad_pendiente = $cantidad_pendiente[$index];
                 $entradaProducto_detalle->stock_actual = $stock_actual[$index];
@@ -187,11 +187,12 @@ class EntradaProductosController extends Controller
             }
 
             $item = $request->input('item');
-            $cantidad = $request->input('cantidad');
             $descripcion = $request->input('descripcion');
-            $ubicacion_fisica_seccion = $request->input('ubicacion_fisica_seccion');
-            $ubicacion_fisica_anaquel = $request->input('ubicacion_fisica_anaquel');
             $cod_interno = $request->input('cod_interno');
+            $marca = $request->input('marca');
+            $fecha_fabricacion = $request->input('fecha_fabricacion');
+            $fecha_vencimiento = $request->input('fecha_vencimiento');
+            $estado_bien = $request->input('estado_bien');
             $unidad = $request->input('unidad');
             $cantidad_ingreso = $request->input('cantidad_ingreso');
             $cantidad_compra = $request->input('cantidad_compra');
@@ -222,29 +223,25 @@ class EntradaProductosController extends Controller
                 $salida_producto_detalle = new SalidaProductoDetalle();
                 $salida_producto_detalle->id_salida_productos = $salida_producto->id;
                 $salida_producto_detalle->item = $item[$index];
-                $salida_producto_detalle->cantidad = $cantidad[$index];
+                $salida_producto_detalle->cantidad = $cantidad_ingreso[$index];
 
-                $salida_producto_detalle->numero_lote = 1;
-                $salida_producto_detalle->fecha_vencimiento = "2024-08-18";
-                $salida_producto_detalle->aplica_precio = 1;
-                $salida_producto_detalle->id_um = 282;
-                $salida_producto_detalle->id_marca = 1;
+                //$salida_producto_detalle->numero_lote = "";
+                $salida_producto_detalle->fecha_vencimiento = $fecha_vencimiento[$index];
+                $salida_producto_detalle->aplica_precio = "";
+                $salida_producto_detalle->id_um = $unidad[$index];
+                $salida_producto_detalle->id_marca = $marca[$index];
                 $salida_producto_detalle->estado = 1;
                 $salida_producto_detalle->id_producto = $descripcion[$index];
                 $salida_producto_detalle->costo = $precio_unitario[$index];
                 //$salida_producto_detalle->fecha_fabricacion = "2024-08-18";
-                $salida_producto_detalle->id_estado_productos = 13;
+                $salida_producto_detalle->id_estado_productos = $estado_bien[$index];
 
                 /*$salida_producto_detalle->descripcion = $descripcion[$index];
-                $salida_producto_detalle->ubicacion_fisica_seccion = $ubicacion_fisica_seccion[$index];
-                $salida_producto_detalle->ubicacion_fisica_anaquel = $ubicacion_fisica_anaquel[$index];
                 $salida_producto_detalle->cod_interno = $cod_interno[$index];
-                $salida_producto_detalle->unidad = $unidad[$index];
                 $salida_producto_detalle->cantidad_ingreso = $cantidad_ingreso[$index];
                 $salida_producto_detalle->cantidad_compra = $cantidad_compra[$index];
                 $salida_producto_detalle->cantidad_pendiente = $cantidad_pendiente[$index];
                 $salida_producto_detalle->stock_actual = $stock_actual[$index];
-                $salida_producto_detalle->precio_unitario = $precio_unitario[$index];
                 $salida_producto_detalle->sub_total = $sub_total[$index];
                 $salida_producto_detalle->igv = $igv[$index];
                 $salida_producto_detalle->total = $total[$index];*/
@@ -295,10 +292,11 @@ class EntradaProductosController extends Controller
             //dd($entrada_producto->tipo_cambio_dolar);exit();
             $tipo_cambio = null;
             $almacen_ = null;
-            $marca = null;
+            $marca = $marca_model->getMarcaAll();
             //$almacen__ = Almacene::getAlmacenById($entrada_producto->id_almacen);
             
             $almacen = $almacen_model->getAlmacenByUser($id_user);
+            $tipo_movimiento_=1;
 		}else{
 			$entrada_producto_detalle = new EntradaProductoDetalle;
             $entrada_producto = new EntradaProducto;
@@ -307,6 +305,7 @@ class EntradaProductosController extends Controller
             $tipo_cambio = $tipo_cambio_model->getTipoCambioUltimo();
             $almacen = $almacen_model->getAlmacenByUser($id_user);
             $marca = $marca_model->getMarcaAll();
+            $tipo_movimiento_='';
             //dd($marca);exit();
 		}
         
@@ -329,9 +328,10 @@ class EntradaProductosController extends Controller
         $cerrado_entrada = $tablaMaestra_model->getMaestroByTipo(52);
         $igv_compra = $tablaMaestra_model->getMaestroByTipo(51);
         $tipo_movimiento = $tablaMaestra_model->getMaestroByTipo(53);
+        $estado_bien = $tablaMaestra_model->getMaestroByTipo(4);
 
 
-		return view('frontend.entrada_productos.modal_entradas_detalleEntrada',compact('id','entrada_producto_detalle','tipo_documento','moneda','unidad_origen','cerrado_entrada','igv_compra','proveedor','producto','unidad','almacen'/*,'almacen_seccion'*/,'tipo_cambio','tipo_movimiento','entrada_producto','marca'));
+		return view('frontend.entrada_productos.modal_entradas_detalleEntrada',compact('id','entrada_producto_detalle','tipo_documento','moneda','unidad_origen','cerrado_entrada','igv_compra','proveedor','producto','unidad','almacen'/*,'almacen_seccion'*/,'tipo_cambio','tipo_movimiento','entrada_producto','marca','estado_bien','tipo_movimiento_'));
 
     }
 
@@ -356,8 +356,10 @@ class EntradaProductosController extends Controller
         if($tipo_movimiento==1){
 
             $entrada_producto_model = new EntradaProducto;
+            $entrada_producto_detalle_model = new EntradaProductoDetalle;
 
             $datos=$entrada_producto_model->getEntradaById($id);
+            $datos_detalle=$entrada_producto_detalle_model->getDetalleProductoPdf($id);
 
             $tipo_documento=$datos[0]->tipo_documento;
             $unidad_origen=$datos[0]->unidad_origen;
@@ -365,6 +367,8 @@ class EntradaProductosController extends Controller
             $numero_comprobante = $datos[0]->numero_comprobante;
             $fecha_comprobante = $datos[0]->fecha_comprobante;
             $fecha_movimiento=$datos[0]->fecha_movimiento;
+            $moneda=$datos[0]->moneda;
+            $observacion=$datos[0]->observacion;
 
         }
 
@@ -378,13 +382,13 @@ class EntradaProductosController extends Controller
 
 		 $currentHour = Carbon::now()->format('H:i:s');
 
-		$pdf = Pdf::loadView('frontend.entrada_productos.movimiento_pdf',compact('tipo_documento','unidad_origen','razon_social','numero_comprobante','fecha_comprobante','fecha_movimiento'));
+		$pdf = Pdf::loadView('frontend.entrada_productos.movimiento_pdf',compact('tipo_documento','unidad_origen','razon_social','numero_comprobante','fecha_comprobante','fecha_movimiento','datos_detalle','observacion','moneda'));
 		
 
 
 		$pdf->setPaper('A4'); // Tamaño de papel (puedes cambiarlo según tus necesidades)
 
-		
+		$pdf->setPaper('A4', 'landscape');
     	$pdf->setOption('margin-top', 20); // Márgen superior en milímetros
    		$pdf->setOption('margin-right', 50); // Márgen derecho en milímetros
     	$pdf->setOption('margin-bottom', 20); // Márgen inferior en milímetros
@@ -401,9 +405,23 @@ class EntradaProductosController extends Controller
         if($tipo_movimiento==1){
 
             $entrada_producto_detalle_model = new EntradaProductoDetalle;
-            $entrada_producto = $entrada_producto_detalle_model->getDetalleProductoId($id);
+            $marca_model = new Marca;
+            $producto_model = new Producto;
+            $tablaMaestra_model = new TablaMaestra;
 
-            return response()->json($entrada_producto);
+            $entrada_producto = $entrada_producto_detalle_model->getDetalleProductoId($id);
+            $marca = $marca_model->getMarcaAll();
+            $producto = $producto_model->getProductoAll();
+            $estado_bien = $tablaMaestra_model->getMaestroByTipo(4);
+            $unidad_medida = $tablaMaestra_model->getMaestroByTipo(43);
+
+            return response()->json([
+                'entrada_producto' => $entrada_producto,
+                'marca' => $marca,
+                'producto' => $producto,
+                'estado_bien' => $estado_bien,
+                'unidad_medida' => $unidad_medida
+            ]);
 
         }else if ($tipo_movimiento==2){
 

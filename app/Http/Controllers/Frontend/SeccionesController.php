@@ -156,6 +156,16 @@ class SeccionesController extends Controller
 		return response()->json(['success' => true]);
 	}
 
+	public function cargar_anaqueles($id)
+    {
+
+		$anaqueles_secciones_model = new AnaquelesSeccione;
+
+		$anaqueles_secciones = $anaqueles_secciones_model->getAnaquelBySeccionEdit($id);
+
+		return response()->json($anaqueles_secciones);
+    }
+
     /*public function index()
     {
         $secciones = Seccione::latest()->paginate(10);
