@@ -288,7 +288,7 @@ Route::post('entrada_productos/listar_entrada_productos_ajax', [EntradaProductos
 Route::post('entrada_productos/send_entrada_producto', [EntradaProductosController::class, 'send_entrada_producto'])->name('entrada_productos.send_entrada_producto');
 Route::get('entrada_productos/modal_entrada_producto/{id}', [EntradaProductosController::class, 'modal_entrada_producto'])->name('entrada_productos.modal_entrada_producto');
 Route::get('entrada_productos/eliminar_entrada_producto/{id}/{estado}', [EntradaProductosController::class, 'eliminar_entrada_producto'])->name('entrada_productos.eliminar_entrada_producto');
-Route::get('entrada_productos/modal_detalle_producto/{id}', [EntradaProductosController::class, 'modal_detalle_producto'])->name('entrada_productos.modal_detalle_producto');
+Route::get('entrada_productos/modal_detalle_producto/{id}/{tipo}', [EntradaProductosController::class, 'modal_detalle_producto'])->name('entrada_productos.modal_detalle_producto');
 
 Route::get('entrada_productos_detalle/send_entrada_producto_detalle', [EntradaProductoDetallesController::class, 'send_entrada_producto_detalle'])->name('entrada_productos_detalle.send_entrada_producto_detalle');
 

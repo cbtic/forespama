@@ -21,6 +21,7 @@ use RealRashid\SweetAlert\Facades\Alert;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Luecano\NumeroALetras\NumeroALetras;
 
 class EntradaProductosController extends Controller
 {
@@ -74,11 +75,13 @@ class EntradaProductosController extends Controller
         $id_user = Auth::user()->id;
 		
 		if($id>0){
-			$entrada_producto = EntradaProducto::find($id);
+
+            $entrada_producto = EntradaProducto::find($id);
             $proveedor = Empresa::find($entrada_producto->id_proveedor);
             $tipo_cambio = null;
             //$proveedor = $almacen_model->getAlmacenAll();
             $almacen = null;
+			
 		}else{
 			$entrada_producto = new EntradaProducto;
             $proveedor = Empresa::all();
@@ -251,9 +254,9 @@ class EntradaProductosController extends Controller
 
         }
         if($request->tipo_movimiento==1){
-            return response()->json(['id' => $entrada_producto->id]);    
+            return response()->json(['id' => $entrada_producto->id, 'tipo_movimiento' => $request->tipo_movimiento]);    
         }else{
-            return response()->json(['id' => $salida_producto->id]);    
+            return response()->json(['id' => $salida_producto->id, 'tipo_movimiento' => $request->tipo_movimiento]);    
         }
         
     }
@@ -268,7 +271,7 @@ class EntradaProductosController extends Controller
 		echo $entrada_producto->id;
     }
 
-    public function modal_detalle_producto($id){
+    public function modal_detalle_producto($id,$tipo){
         
         $tablaMaestra_model = new TablaMaestra;
         $empresa_model = new Empresa;
@@ -284,10 +287,17 @@ class EntradaProductosController extends Controller
         //$id = $datos['id'];
        
         if($id>0){
-			$entrada_producto_detalle = EntradaProductoDetalle::find($id);
-            $entrada_producto = EntradaProducto::find($id);
-            $proveedor_ = Empresa::find($entrada_producto->id_proveedor);
-            $proveedor = $proveedor_->getEmpresa($entrada_producto->id_proveedor);
+            if($tipo==1){
+                $entrada_producto_detalle = EntradaProductoDetalle::find($id);
+                $entrada_producto = EntradaProducto::find($id);
+                $proveedor_ = Empresa::find($entrada_producto->id_proveedor);
+                $proveedor = $proveedor_->getEmpresa($entrada_producto->id_proveedor);
+            }else if($tipo==2){
+                $entrada_producto_detalle = SalidaProductoDetalle::find($id);
+                $entrada_producto = SalidaProducto::find($id);
+                $proveedor=[];
+            }
+			
             //dd($proveedor);exit();
             //dd($entrada_producto->tipo_cambio_dolar);exit();
             $tipo_cambio = null;
@@ -296,7 +306,7 @@ class EntradaProductosController extends Controller
             //$almacen__ = Almacene::getAlmacenById($entrada_producto->id_almacen);
             
             $almacen = $almacen_model->getAlmacenByUser($id_user);
-            $tipo_movimiento_=1;
+            //$tipo_movimiento_=1;
 		}else{
 			$entrada_producto_detalle = new EntradaProductoDetalle;
             $entrada_producto = new EntradaProducto;
@@ -331,7 +341,7 @@ class EntradaProductosController extends Controller
         $estado_bien = $tablaMaestra_model->getMaestroByTipo(4);
 
 
-		return view('frontend.entrada_productos.modal_entradas_detalleEntrada',compact('id','entrada_producto_detalle','tipo_documento','moneda','unidad_origen','cerrado_entrada','igv_compra','proveedor','producto','unidad','almacen'/*,'almacen_seccion'*/,'tipo_cambio','tipo_movimiento','entrada_producto','marca','estado_bien','tipo_movimiento_'));
+		return view('frontend.entrada_productos.modal_entradas_detalleEntrada',compact('id','entrada_producto_detalle','tipo_documento','moneda','unidad_origen','cerrado_entrada','igv_compra','proveedor','producto','unidad','almacen'/*,'almacen_seccion'*/,'tipo_cambio','tipo_movimiento','entrada_producto','marca','estado_bien',/*'tipo_movimiento_',*/'tipo'));
 
     }
 
@@ -360,6 +370,25 @@ class EntradaProductosController extends Controller
 
             $datos=$entrada_producto_model->getEntradaById($id);
             $datos_detalle=$entrada_producto_detalle_model->getDetalleProductoPdf($id);
+
+            $tipo_documento=$datos[0]->tipo_documento;
+            $unidad_origen=$datos[0]->unidad_origen;
+            $razon_social=$datos[0]->razon_social;
+            $numero_comprobante = $datos[0]->numero_comprobante;
+            $fecha_comprobante = $datos[0]->fecha_comprobante;
+            $fecha_movimiento=$datos[0]->fecha_movimiento;
+            $moneda=$datos[0]->moneda;
+            $observacion=$datos[0]->observacion;
+
+        }else if($tipo_movimiento==2){
+
+            $salida_producto_model = new SalidaProducto;
+            $salida_producto_detalle_model = new SalidaProductoDetalle;
+
+            $datos=$salida_producto_model->getSalidaById($id);
+            $datos_detalle=$salida_producto_detalle_model->getDetalleProductoPdf($id);
+
+            //dd($datos_detalle);exit();
 
             $tipo_documento=$datos[0]->tipo_documento;
             $unidad_origen=$datos[0]->unidad_origen;
@@ -426,6 +455,24 @@ class EntradaProductosController extends Controller
         }else if ($tipo_movimiento==2){
 
             $salida_producto_detalle_model = new SalidaProductoDetalle;
+            $marca_model = new Marca;
+            $producto_model = new Producto;
+            $tablaMaestra_model = new TablaMaestra;
+
+            $entrada_producto = $salida_producto_detalle_model->getDetalleProductoId($id);
+            $marca = $marca_model->getMarcaAll();
+            $producto = $producto_model->getProductoAll();
+            $estado_bien = $tablaMaestra_model->getMaestroByTipo(4);
+            $unidad_medida = $tablaMaestra_model->getMaestroByTipo(43);
+
+            return response()->json([
+                'entrada_producto' => $entrada_producto,
+                'marca' => $marca,
+                'producto' => $producto,
+                'estado_bien' => $estado_bien,
+                'unidad_medida' => $unidad_medida
+            ]);
+
 
         }
 

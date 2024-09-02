@@ -3,9 +3,9 @@ $(document).ready(function () {
 	$('#btnBuscar').click(function () {
 		fn_ListarBusqueda();
 	});
-		
+
 	$('#btnNuevo').click(function () {
-		modalEntradaProducto(0);
+		modalEntradaProducto(0,0);
 	});
 
 	$('#denominacion').keypress(function(e){
@@ -179,9 +179,12 @@ function datatablenew(){
 							clase = "btn-success";
 						}
 						
+						var tipo_mov="";
+						if(row.tipo=='INGRESO'){tipo_mov=1}
+						if(row.tipo=='SALIDA'){tipo_mov=2}
 						var html = '<div class="btn-group btn-group-sm" role="group" aria-label="Log Viewer Actions">';
 						
-						html += '<button style="font-size:12px" type="button" class="btn btn-sm btn-success" data-toggle="modal" onclick="modalEntradaProducto('+row.id+')" ><i class="fa fa-edit"></i> Editar</button>'; 
+						html += '<button style="font-size:12px" type="button" class="btn btn-sm btn-success" data-toggle="modal" onclick="modalEntradaProducto('+row.id+','+tipo_mov+')" ><i class="fa fa-edit"></i> Editar</button>'; 
 						html += '<a href="javascript:void(0)" onclick=eliminarEntradaProducto('+row.id+','+row.estado+') class="btn btn-sm '+clase+'" style="font-size:12px;margin-left:10px">'+estado+'</a>';
 						
 						//html += '<a href="javascript:void(0)" onclick=modalResponsable('+row.id+') class="btn btn-sm btn-info" style="font-size:12px;margin-left:10px">Detalle Responsable</a>';
@@ -204,20 +207,23 @@ function fn_ListarBusqueda() {
     datatablenew();
 };
 
-function modalEntradaProducto(id){
+function modalEntradaProducto(id, tipo){
 	
+	/*var tipo_mov="";
+	if(tipo=='INGRESO'){tipo_mov=1};
+	if(tipo=='SALIDA'){tipo_mov=2};*/
+
 	$(".modal-dialog").css("width","85%");
 	$('#openOverlayOpc .modal-body').css('height', 'auto');
 
 	$.ajax({
-			url: "/entrada_productos/modal_detalle_producto/"+id,
+			url: "/entrada_productos/modal_detalle_producto/"+id+"/"+tipo,
 			type: "GET",
 			success: function (result) {  
 					$("#diveditpregOpc").html(result);
 					$('#openOverlayOpc').modal('show');
 			}
 	});
-
 }
 
 function eliminarEntradaProducto(id,estado){

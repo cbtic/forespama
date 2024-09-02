@@ -490,9 +490,14 @@ function cambiarDocumento(){
             dataType: "json",
             success: function(result){
                 var option = "<option value=''>- Selecione -</option>";
+                var salidaProductoIdTipoDocumento = "{{ $entrada_producto->id_tipo_documento }}";
+
+                var selectedValue = salidaProductoIdTipoDocumento;
+
                 $('#tipo_documento').html("");
                 $(result).each(function (ii, oo) {
-                    option += "<option value='"+oo.codigo+"'>"+oo.denominacion+"</option>";
+                    var selected = (oo.codigo == selectedValue) ? "selected" : "";
+                    option += "<option value='"+oo.codigo+"' "+selected+">"+oo.denominacion+"</option>";
                 });
                 $('#tipo_documento').html(option);
                 
@@ -597,13 +602,8 @@ function fn_save_detalle_producto(){
                 //alert(result.id)
                 //$('#openOverlayOpc').modal('hide');
                 if (result.id>0) {
-                    modalEntradaProducto(result.id);   
-
-                // Mostrar nuevamente el modal
-                //$('#openOverlayOpc').modal('show');
-               
-            }
-								
+                    modalEntradaProducto(result.id,result.tipo_movimiento);
+                }
             }
     });
 }
@@ -661,7 +661,7 @@ function pdf_documento(){
                                 <option value="">- Selecione -</option>
                                 <?php
                                 foreach ($tipo_movimiento as $row){?>
-                                    <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$tipo_movimiento_)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                    <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$tipo)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
                                     <?php 
                                 }
                                 ?>

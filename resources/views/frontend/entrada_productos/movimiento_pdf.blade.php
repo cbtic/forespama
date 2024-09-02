@@ -47,6 +47,22 @@
     font-size:11px
 }
 
+table.data {
+    border-collapse:separate;
+    border:solid black 1px;
+    border-radius:8px;
+    padding: 3px;
+    border-spacing: 0;
+}
+
+td.data, th.data {
+    border-left:solid black 1px;
+    border-top:solid black 1px;
+    text-align:center;
+    border-top: none;
+    font-size:11px;
+}
+
 .modal-dialog {
 	width: 100%;
 	max-width:60%!important
@@ -136,24 +152,26 @@ $(document).ready(function() {
 
 </script>
 
-
 <body class="hold-transition skin-blue sidebar-mini">
 
     <!--<div>
         <img width="200px" height="80px" style="top:-30px" src="img/logo_forestalpama.jpg">
     </div>-->
-    <div style="text-align: center; font-size:16px">
-        <b><?php echo $tipo_documento;?></b>
-    </div>
+    <table class="data" style="width:100%; font-size:11px">
+        <tr>
+            <th><h2><?php echo $tipo_documento;?></h2></th>
+        </tr>
+    </table>
     <!--<div style="display: flex !important; width:100%">
         <span style="width: 50%; ">Div 1</span>
         <span style="width: 50%; float: right;">Div 2</span>
     </div>-->
     
-    <hr>
+    <!--<hr>-->
+    &nbsp;
         <div class="contenido">
             
-            <table style="background-color:white !important;border-collapse:collapse;border-spacing:1px; width: 100%; margin: 0 auto; font-size:12px; vertical-align:top">
+            <table class="data" style="width:100%; background-color:white !important;border-spacing:1px; width: 100%; margin: 0 auto; font-size:12px; vertical-align:top">
                 <tbody>
                     <tr>
                         <td class="td" style ="text-align: left; width: 15%;"><b>Fecha de Emisi&oacute;n:</b></td>
@@ -182,10 +200,10 @@ $(document).ready(function() {
                     </tr>
                 </tbody>
             </table>
-            <hr>
-            <table style="background-color:white !important;border-collapse:collapse;border-spacing:1px; width: 100%; margin: 0 auto; font-size:12px">
+            &nbsp;
+            <table class="data" style="border-collapse: separate; border-spacing: 0; background-color:white !important; width: 100%; border-radius: 8px; font-size:11px">
                 <tbody>
-                    <tr>
+                    <tr class="data">
                         <td class="td" style ="text-align: left; width: 5%; height:25px; border-bottom: 1px solid black;"><b>#</b></td>
                         <td class="td" style ="text-align: left; width: 5%; height:25px; border-bottom: 1px solid black;"><b>ITEM</b></td>
                         <td class="td" style ="text-align: left; width: 10%; height:25px; border-bottom: 1px solid black;"><b>DESCRIPCI&Oacute;N</b></td>
@@ -216,7 +234,7 @@ $(document).ready(function() {
                             <td class="td" style ="text-align: left; width: 10%; height:25px"><?php echo $r->producto;?></td>
                             <td class="td" style ="text-align: left; width: 5%; height:25px"><?php echo $r->marca;?></td>
                             <td class="td" style ="text-align: left; width: 5%; height:25px"><?php echo $r->codigo;?></td>
-                            <td class="td" style ="text-align: left; width: 10%; height:25px"><?php echo $r->fecha_fabricacion;?></td>
+                            <td class="td" style ="text-align: left; width: 10%; height:25px"><?php echo ($tipo_documento == 'Entrada') ? $r->fecha_fabricacion: '';?></td>
                             <td class="td" style ="text-align: left; width: 10%; height:25px"><?php echo $r->fecha_vencimiento;?></td>
                             <td class="td" style ="text-align: left; width: 5%; height:25px"><?php echo $r->estado_bien;?></td>
                             <td class="td" style ="text-align: left; width: 5%; height:25px"><?php echo $r->unidad_medida;?></td>
@@ -234,29 +252,42 @@ $(document).ready(function() {
                             $total_suma+=$r->total;
                             ?>
                         </tr>
-                    <?php } ?>
+                    <?php }
+           
+                    use Luecano\NumeroALetras\NumeroALetras;
+
+                    $numeroALetras = new NumeroALetras();
+                    $total_en_letras =$numeroALetras->toInvoice( $total_suma, 2, 'Soles');
+                      ?>
                 </tbody>
             </table>
-            <hr>
-            <table style="background-color:white !important;border-collapse:collapse;border-spacing:1px; width: 100%; margin: 0 auto; font-size:12px">
+            &nbsp;
+            <table class="data" style="border-collapse: separate; border-spacing: 0; background-color:white !important; border-radius: 8px; font-size:11px; margin: 0 0 0 auto">
                 <tbody>
                     <tr>
                         <td class="td" style ="text-align: right; width: 70%; height:25px"></td>
-                        <td class="td" style ="text-align: right; width: 15%; height:25px"><b>SUB TOTAL:</b></td>
-                        <td class="td" style ="text-align: right; width: 15%; height:25px"><?php echo number_format($subtotal_suma,2,'.',',');;?></td>
+                        <td class="td" style ="text-align: right; width: 15%; height:25px; border-bottom: 1px solid black;"><b>SUB TOTAL:</b></td>
+                        <td class="data" style ="text-align: right; width: 15%; height:25px; border-bottom: 1px solid black;"><?php echo number_format($subtotal_suma,2,'.',',');;?></td>
                     </tr>
                     <tr>
                         <td class="td" style ="text-align: right; width: 70%; height:25px"></td>
-                        <td class="td" style ="text-align: right; width: 15%; height:25px"><b>IGV:</b></td>
-                        <td class="td" style ="text-align: right; width: 15%; height:25px"><?php echo number_format($igv_suma,2,'.',',');;?></td>
+                        <td class="td" style ="text-align: right; width: 15%; height:25px; border-bottom: 1px solid black;"><b>IGV:</b></td>
+                        <td class="data" style ="text-align: right; width: 15%; height:25px; border-bottom: 1px solid black;"><?php echo number_format($igv_suma,2,'.',',');;?></td>
                     </tr>
                     <tr>
                         <td class="td" style ="text-align: right; width: 70%; height:25px"></td>
                         <td class="td" style ="text-align: right; width: 15%; height:25px"><b>TOTAL:</b></td>
-                        <td class="td" style ="text-align: right; width: 15%; height:25px"><?php echo number_format($total_suma,2,'.',',');;?></td>
+                        <td class="data" style ="text-align: right; width: 15%; height:25px"><?php echo number_format($total_suma,2,'.',',');;?></td>
                     </tr>
                 </tbody>
             </table>
+            &nbsp;
+            <table class="data" style="width:100%">
+                <tr>
+                    <td>SON: <?php echo $total_en_letras; ?></td>
+                </tr>
+            </table>
+            &nbsp;
         </div>
     </div>
     <!-- /.content-wrapper -->
