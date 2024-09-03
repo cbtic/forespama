@@ -18,6 +18,7 @@ use App\Http\Controllers\Frontend\AnaquelesController;
 use App\Http\Controllers\Frontend\ProductosController;
 use App\Http\Controllers\Frontend\LoteController;
 use App\Http\Controllers\Frontend\EntradaProductosController;
+use App\Http\Controllers\Frontend\OrdenCompraController;
 
 use App\Models\Ubigeo;
 
@@ -301,3 +302,9 @@ Route::get('entrada_productos/movimiento_pdf/{id}/{tipo_movimiento}', [EntradaPr
 Route::get('entrada_productos/cargar_detalle/{id}/{tipo_movimiento}', [EntradaProductosController::class, 'cargar_detalle'])->name('entrada_productos.cargar_detalle');
 Route::get('almacenes/cargar_usuario/{id}', [AlmacenesController::class, 'cargar_usuario'])->name('almacenes.cargar_usuario');
 Route::get('secciones/cargar_anaqueles/{id}', [SeccionesController::class, 'cargar_anaqueles'])->name('secciones.cargar_anaqueles');
+
+Route::get('orden_compra/create', [OrdenCompraController::class, 'create'])->name('orden_compra.create');
+Route::post('orden_compra/listar_orden_compra_ajax', [OrdenCompraController::class, 'listar_orden_compra_ajax'])->name('orden_compra.listar_orden_compra_ajax');
+Route::post('orden_compra/send_orden_compra', [OrdenCompraController::class, 'send_orden_compra'])->name('orden_compra.send_orden_compra');
+Route::get('orden_compra/modal_orden_compra/{id}', [OrdenCompraController::class, 'modal_orden_compra'])->name('orden_compra.modal_orden_compra');
+Route::get('orden_compra/eliminar_orden_compra/{id}/{estado}', [OrdenCompraController::class, 'eliminar_orden_compra'])->name('orden_compra.eliminar_orden_compra');

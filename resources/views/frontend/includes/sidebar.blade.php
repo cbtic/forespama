@@ -134,6 +134,12 @@
                     <x-utils.link :href="route('frontend.entrada_productos.create')" class="c-sidebar-nav-link" :text="__('Entradas')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
                 </li>
 				@endif
+
+                @can('Orden Compra')
+                <li class="c-sidebar-nav-item">
+                    <x-utils.link :href="route('frontend.orden_compra.create')" class="c-sidebar-nav-link" :text="__('Orden Compra')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+                </li>
+				@endif
 				
 				@can('Salidas')
                 <li class="c-sidebar-nav-item">

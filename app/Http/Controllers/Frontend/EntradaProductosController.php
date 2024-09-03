@@ -142,9 +142,9 @@ class EntradaProductosController extends Controller
             $entrada_producto->fecha_comprobante = "18/08/2024";
             $entrada_producto->id_moneda = $request->moneda;
             $entrada_producto->tipo_cambio_dolar = $request->tipo_cambio_dolar;
-            $entrada_producto->sub_total_compra = 100;
+            $entrada_producto->sub_total_compra = "";
             $entrada_producto->igv_compra = $request->igv_compra;
-            $entrada_producto->total_compra = 100;
+            $entrada_producto->total_compra = "";
             $entrada_producto->cerrado = $request->cerrado;
             $entrada_producto->observacion = $request->observacion;
             $entrada_producto->estado = 1;
