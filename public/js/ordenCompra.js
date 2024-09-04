@@ -87,9 +87,9 @@ function datatablenew(){
 
 				{
 					"mRender": function (data, type, row) {
-						var tipo = "";
-						if(row.tipo!= null)tipo = row.tipo;
-						return tipo;
+						var tipo_documento = "";
+						if(row.tipo_documento!= null)tipo_documento = row.tipo_documento;
+						return tipo_documento;
 					},
 					"bSortable": true,
 					"aTargets": [1]
@@ -107,9 +107,9 @@ function datatablenew(){
 				
                 {
                 "mRender": function (data, type, row) {
-                	var tipo_documento = "";
-					if(row.tipo_documento!= null)tipo_documento = row.tipo_documento;
-					return tipo_documento;
+                	var empresa_compra = "";
+					if(row.empresa_compra!= null)empresa_compra = row.empresa_compra;
+					return empresa_compra;
                 },
                 "bSortable": true,
                 "aTargets": [2]
@@ -117,9 +117,9 @@ function datatablenew(){
 				
 				{
                 "mRender": function (data, type, row) {
-                	var unidad_origen = "";
-					if(row.unidad_origen!= null)unidad_origen = row.unidad_origen;
-					return unidad_origen;
+                	var empresa_vende = "";
+					if(row.empresa_vende!= null)empresa_vende = row.empresa_vende;
+					return empresa_vende;
                 },
                 "bSortable": true,
                 "aTargets": [3]
@@ -127,30 +127,21 @@ function datatablenew(){
 
 				{
 				"mRender": function (data, type, row) {
-					var razon_social = "";
-					if(row.razon_social!= null)razon_social = row.razon_social;
-					return razon_social;
+					var fecha_orden_compra = "";
+					if(row.fecha_orden_compra!= null)fecha_orden_compra = row.fecha_orden_compra;
+					return fecha_orden_compra;
 				},
 				"bSortable": true,
 				"aTargets": [4]
 				},
 				{
 				"mRender": function (data, type, row) {
-					var numero_comprobante = "";
-					if(row.numero_comprobante!= null)numero_comprobante = row.numero_comprobante;
-					return numero_comprobante;
+					var numero_orden_compra = "";
+					if(row.numero_orden_compra!= null)numero_orden_compra = row.numero_orden_compra;
+					return numero_orden_compra;
 				},
 				"bSortable": true,
 				"aTargets": [5]
-				},
-				{
-				"mRender": function (data, type, row) {
-					var fecha_comprobante = "";
-					if(row.fecha_comprobante!= null)fecha_comprobante = row.fecha_comprobante;
-					return fecha_comprobante;
-				},
-				"bSortable": true,
-				"aTargets": [6]
 				},
 				{
 					"mRender": function (data, type, row) {
@@ -164,7 +155,7 @@ function datatablenew(){
 						return estado;
 					},
 					"bSortable": false,
-					"aTargets": [7]
+					"aTargets": [6]
 				},
 				{
 					"mRender": function (data, type, row) {
@@ -190,7 +181,7 @@ function datatablenew(){
 						return html;
 					},
 					"bSortable": false,
-					"aTargets": [8],
+					"aTargets": [7],
 				},
 
             ]

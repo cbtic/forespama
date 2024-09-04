@@ -308,3 +308,4 @@ Route::post('orden_compra/listar_orden_compra_ajax', [OrdenCompraController::cla
 Route::post('orden_compra/send_orden_compra', [OrdenCompraController::class, 'send_orden_compra'])->name('orden_compra.send_orden_compra');
 Route::get('orden_compra/modal_orden_compra/{id}', [OrdenCompraController::class, 'modal_orden_compra'])->name('orden_compra.modal_orden_compra');
 Route::get('orden_compra/eliminar_orden_compra/{id}/{estado}', [OrdenCompraController::class, 'eliminar_orden_compra'])->name('orden_compra.eliminar_orden_compra');
+Route::get('orden_compra/cargar_detalle/{id}', [OrdenCompraController::class, 'cargar_detalle'])->name('orden_compra.cargar_detalle');
