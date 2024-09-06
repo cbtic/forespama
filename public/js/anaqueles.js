@@ -93,13 +93,33 @@ function datatablenew(){
                 },
 				
 				{
+				"mRender": function (data, type, row) {
+					var fila = "";
+					if(row.fila!= null)fila = row.fila;
+					return fila;
+				},
+				"bSortable": true,
+				"aTargets": [1]
+				},
+
+				{
+				"mRender": function (data, type, row) {
+					var sigla = "";
+					if(row.sigla!= null)sigla = row.sigla;
+					return sigla;
+				},
+				"bSortable": true,
+				"aTargets": [2]
+				},
+			
+				{
                 "mRender": function (data, type, row) {
                 	var codigo = "";
 					if(row.codigo!= null)codigo = row.codigo;
 					return codigo;
                 },
                 "bSortable": true,
-                "aTargets": [1]
+                "aTargets": [3]
                 },
 				
                 {
@@ -109,7 +129,7 @@ function datatablenew(){
 					return denominacion;
                 },
                 "bSortable": true,
-                "aTargets": [2]
+                "aTargets": [4]
                 },
 				{
 				"mRender": function (data, type, row) {
@@ -118,7 +138,7 @@ function datatablenew(){
 					return almacen;
 				},
 				"bSortable": false,
-				"aTargets": [3],
+				"aTargets": [5],
 				"className": "dt-center",
 				//"className": 'control'
 				},
@@ -135,7 +155,7 @@ function datatablenew(){
 						return estado;
 					},
 					"bSortable": false,
-					"aTargets": [4]
+					"aTargets": [6]
 				},
 				{
 					"mRender": function (data, type, row) {
@@ -161,7 +181,7 @@ function datatablenew(){
 						return html;
 					},
 					"bSortable": false,
-					"aTargets": [5],
+					"aTargets": [7],
 				},
 
             ]

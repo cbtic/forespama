@@ -85,6 +85,16 @@ function datatablenew(){
 				"className": "dt-center",
 				//"className": 'control'
                 },
+
+                {
+                    "mRender": function (data, type, row) {
+                        var sigla = "";
+                        if(row.sigla!= null)sigla = row.sigla;
+                        return sigla;
+                    },
+                    "bSortable": true,
+                    "aTargets": [1]
+                    },
 				
 				{
                 "mRender": function (data, type, row) {
@@ -93,7 +103,7 @@ function datatablenew(){
 					return codigo;
                 },
                 "bSortable": true,
-                "aTargets": [1]
+                "aTargets": [2]
                 },
 				
                 {
@@ -103,7 +113,7 @@ function datatablenew(){
 					return denominacion;
                 },
                 "bSortable": true,
-                "aTargets": [2]
+                "aTargets": [3]
                 },
 				
 				{
@@ -113,7 +123,7 @@ function datatablenew(){
 					return ubicacion;
                 },
                 "bSortable": true,
-                "aTargets": [3]
+                "aTargets": [4]
                 },
 
 				{
@@ -123,7 +133,7 @@ function datatablenew(){
 					return direccion;
 				},
 				"bSortable": true,
-				"aTargets": [4]
+				"aTargets": [5]
 				},
 
                 {
@@ -133,7 +143,7 @@ function datatablenew(){
                         return telefono;
                     },
                     "bSortable": true,
-                    "aTargets": [5]
+                    "aTargets": [6]
                     },
 
                 {
@@ -143,7 +153,7 @@ function datatablenew(){
                     return encargado;
                 },
                 "bSortable": true,
-                "aTargets": [6]
+                "aTargets": [7]
                 },
                 {
                 "mRender": function (data, type, row) {
@@ -154,7 +164,7 @@ function datatablenew(){
                     return html;
                 },
                 "bSortable": true,
-                "aTargets": [7]
+                "aTargets": [8]
                 },
 				{
 					"mRender": function (data, type, row) {
@@ -168,7 +178,7 @@ function datatablenew(){
 						return estado;
 					},
 					"bSortable": false,
-					"aTargets": [8]
+					"aTargets": [9]
 				},
 				{
 					"mRender": function (data, type, row) {
@@ -194,7 +204,7 @@ function datatablenew(){
 						return html;
 					},
 					"bSortable": false,
-					"aTargets": [9],
+					"aTargets": [10],
 				},
 
             ]

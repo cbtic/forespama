@@ -136,6 +136,7 @@ class AlmacenesController extends Controller
 			$almacen = Almacene::find($request->id);
 		}
 		
+		$almacen->sigla = $request->sigla;
 		$almacen->codigo = $request->codigo;
 		$almacen->denominacion = $request->denominacion;
 		$almacen->id_ubigeo = $request->distrito;

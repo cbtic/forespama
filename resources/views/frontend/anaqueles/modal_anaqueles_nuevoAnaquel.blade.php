@@ -414,7 +414,21 @@ function fn_save_anaquel(){
                                 </div>
                             </div>
                             <div class="row" style="padding-left:10px">
-                                <div class="col-lg-12">
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label class="control-label form-control-sm">Fila</label>
+                                        <input id="fila" name="fila" on class="form-control form-control-sm"  value="<?php echo $anaquel->codigo?>" type="text">
+                                    
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label class="control-label form-control-sm">Sigla</label>
+                                        <input id="sigla" name="sigla" on class="form-control form-control-sm"  value="<?php echo $anaquel->codigo?>" type="text">
+                                    
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
                                     <div class="form-group">
                                         <label class="control-label form-control-sm">C&oacute;digo</label>
                                         <input id="codigo" name="codigo" on class="form-control form-control-sm"  value="<?php echo $anaquel->codigo?>" type="text">

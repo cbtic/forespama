@@ -483,6 +483,13 @@ function fn_save_almacen(){
                                     
                                     </div>
                                 </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <label class="control-label form-control-sm">Sigla</label>
+                                        <input id="sigla" name="sigla" on class="form-control form-control-sm"  value="<?php echo $almacen->sigla?>" type="text" >
+                                    
+                                    </div>
+                                </div>
                             </div>
 
                             <div class="row" style="padding-left:10px">

@@ -92,6 +92,8 @@ class AnaquelesController extends Controller
 			$anaquel = Anaquele::find($request->id);
 		}
 		
+		$anaquel->fila = $request->fila;
+		$anaquel->sigla = $request->sigla;
 		$anaquel->codigo = $request->codigo;
 		$anaquel->denominacion = $request->denominacion;
 		$anaquel->estado = 1;

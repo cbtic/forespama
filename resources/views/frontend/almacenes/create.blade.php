@@ -378,6 +378,7 @@ label.form-control-sm{
                         <thead>
                         <tr style="font-size:13px">
                             <th>Id</th>
+							<th>Sigla</th>
                             <th>C&oacute;digo</th>
                             <th>Denominaci&oacute;n</th>
                             <th>Ubicaci&oacute;n</th>
