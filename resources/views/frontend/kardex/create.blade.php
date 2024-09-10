@@ -2,6 +2,10 @@
 <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" defer></script>
 <style type="text/css">
 
+#tblProductos tbody tr{
+		font-size:13px
+	}
+
 .table td.verde{
 	background:#CAE983  !important
 }
@@ -297,7 +301,7 @@ label.form-control-sm{
 @section('breadcrumb')
 <ol class="breadcrumb" style="padding-left:130px;margin-top:0px;background-color:#283659">
     <li class="breadcrumb-item text-primary">Inicio</li>
-    <li class="breadcrumb-item active">Registro de Almacenes</li>
+    <li class="breadcrumb-item active">Registro de Kardex</li>
     </li>
 </ol>
 
@@ -323,7 +327,7 @@ label.form-control-sm{
 
         <div class="card-body">
 
-            <form class="form-horizontal" method="post" action="" id="frmAlmacenes" autocomplete="off" enctype="multipart/form-data">
+            <form class="form-horizontal" method="post" action="" id="frmKardex" autocomplete="off" enctype="multipart/form-data">
 				<!--
                 <div class="row">
                     <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12" style="margin-top:15px">
@@ -348,46 +352,51 @@ label.form-control-sm{
 				
 				<div class="row" style="padding:20px 20px 0px 20px;">
 
-                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-						<input class="form-control form-control-sm" id="denominacion" name="denominacion" placeholder="Denominacion">
-					</div>
-
-                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-                        <input id="encargado" name="encargado" on class="form-control form-control-sm"  placeholder="Encargado">
+					<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+						<select name="producto_bus" id="producto_bus" class="form-control form-control-sm">
+							<option value="">- Selecione Producto-</option>
+							<?php
+							foreach ($producto as $row) {
+							?>
+							<option value="<?php echo $row->id?>"><?php echo $row->denominacion?></option>
+							<?php
+							}
+							?>
+						</select>
 					</div>
 					
-                    <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<select name="estado" id="estado" class="form-control form-control-sm">
+                    <!--<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+						<select name="estado_bus" id="estado_bus" class="form-control form-control-sm">
 							<option value="">Todos</option>
 							<option value="1" selected="selected">Activo</option>
 							<option value="0">Eliminado</option>
 						</select>
-					</div>
+					</div>-->
 
                     
 					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12" style="padding-right:0px">
 						<input class="btn btn-warning pull-rigth" value="Buscar" type="button" id="btnBuscar" />
-						<input class="btn btn-success pull-rigth" value="Nuevo" type="button" id="btnNuevo" style="margin-left:15px" />
+						<!--<input class="btn btn-success pull-rigth" value="Nuevo" type="button" id="btnNuevo" style="margin-left:15px" />-->
 					</div>
 				</div>
 				
                 <div class="card-body">				
 
                     <div class="table-responsive">
-                    <table id="tblAlmacenes" class="table table-hover table-sm">
+                    <table id="tblKardex" class="table table-hover table-sm">
                         <thead>
                         <tr style="font-size:13px">
                             <th>Id</th>
-							<th>C&oacute;digo</th>
-							<th>Sigla</th>
-                            <th>Denominaci&oacute;n</th>
-                            <th>Ubicaci&oacute;n</th>
-                            <th>Direcci&oacute;n</th>
-                            <th>Telefono</th>
-                            <th>Encargado</th>
-                            <th>Usuarios</th>
-							<th>Estado</th>
-                            <th>Acciones</th>
+							<th>Producto</th>
+							<th>Entradas</th>
+                            <th>Costo Entradas</th>
+                            <th>Total Entrada</th>
+							<th>Salidas</th>
+							<th>Costo Salidas</th>
+							<th>Total Salida</th>
+							<th>Saldos</th>
+							<th>Costo saldos</th>
+                            <th>Total Saldos</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -476,6 +485,6 @@ label.form-control-sm{
 
 	</script>
 
-	<script src="{{ asset('js/almacenes.js') }}"></script>
+	<script src="{{ asset('js/kardex.js') }}"></script>
 
 	@endpush

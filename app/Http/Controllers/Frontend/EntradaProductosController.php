@@ -16,6 +16,7 @@ use App\Models\Anaquele;
 use App\Models\SalidaProducto;
 use App\Models\SalidaProductoDetalle;
 use App\Models\Marca;
+use App\Models\Kardex;
 use Auth;
 use RealRashid\SweetAlert\Facades\Alert;
 use App\Http\Controllers\Controller;
@@ -142,9 +143,9 @@ class EntradaProductosController extends Controller
             $entrada_producto->fecha_comprobante = "18/08/2024";
             $entrada_producto->id_moneda = $request->moneda;
             $entrada_producto->tipo_cambio_dolar = $request->tipo_cambio_dolar;
-            $entrada_producto->sub_total_compra = "";
+            $entrada_producto->sub_total_compra = 100;
             $entrada_producto->igv_compra = $request->igv_compra;
-            $entrada_producto->total_compra = "";
+            $entrada_producto->total_compra = 100;
             $entrada_producto->cerrado = $request->cerrado;
             $entrada_producto->observacion = $request->observacion;
             $entrada_producto->estado = 1;
@@ -173,12 +174,32 @@ class EntradaProductosController extends Controller
                 $entradaProducto_detalle->cantidad_compra = $cantidad_compra[$index];
                 $entradaProducto_detalle->cantidad_pendiente = $cantidad_pendiente[$index];
                 $entradaProducto_detalle->stock_actual = $stock_actual[$index];
-                $entradaProducto_detalle->precio_unitario = $precio_unitario[$index];
+                $entradaProducto_detalle->precio_unitario = $precio_unitario[$index];*/
                 $entradaProducto_detalle->sub_total = $sub_total[$index];
                 $entradaProducto_detalle->igv = $igv[$index];
-                $entradaProducto_detalle->total = $total[$index];*/
+                $entradaProducto_detalle->total = $total[$index];
 
                 $entradaProducto_detalle->save();
+
+                $producto = Producto::find($descripcion[$index]);
+                $kardex_buscar = Kardex::where("id_producto",$descripcion[$index])->first();
+                //var_dump($kardex_buscar);exit();
+                $kardex = new Kardex;
+                $kardex->id_producto = $descripcion[$index];
+                $kardex->entradas_cantidad = $cantidad_ingreso[$index];
+                $kardex->costo_entradas_cantidad = $precio_unitario[$index];
+                $kardex->total_entradas_cantidad = $total[$index];
+                if($kardex_buscar){
+                    $cantidad_saldo = $kardex_buscar->saldos_cantidad + $cantidad_ingreso[$index];
+                    $kardex->saldos_cantidad = $cantidad_saldo;
+                    $kardex->costo_saldos_cantidad = $producto->costo_unitario;
+                }else{
+                    $kardex->saldos_cantidad = $cantidad_ingreso[$index];
+                    $kardex->costo_saldos_cantidad = $producto->costo_unitario;
+                }
+                
+                $kardex->save();
+
             }
 
         }else if($request->tipo_movimiento==2){
@@ -244,12 +265,30 @@ class EntradaProductosController extends Controller
                 $salida_producto_detalle->cantidad_ingreso = $cantidad_ingreso[$index];
                 $salida_producto_detalle->cantidad_compra = $cantidad_compra[$index];
                 $salida_producto_detalle->cantidad_pendiente = $cantidad_pendiente[$index];
-                $salida_producto_detalle->stock_actual = $stock_actual[$index];
-                $salida_producto_detalle->sub_total = $sub_total[$index];
-                $salida_producto_detalle->igv = $igv[$index];
-                $salida_producto_detalle->total = $total[$index];*/
+                $salida_producto_detalle->stock_actual = $stock_actual[$index];*/
+                $salida_producto_detalle->sub_total = floatval($sub_total[$index]);
+                $salida_producto_detalle->igv = floatval($igv[$index]);
+                $salida_producto_detalle->total = floatval($total[$index]);
 
                 $salida_producto_detalle->save();
+
+                $producto = Producto::find($descripcion[$index]);
+                $kardex_buscar = Kardex::where("id_producto",$descripcion[$index])->first();
+
+                $kardex = new Kardex;
+                $kardex->id_producto = $descripcion[$index];
+                $kardex->salidas_cantidad = $cantidad_ingreso[$index];
+                $kardex->costo_salidas_cantidad = $precio_unitario[$index];
+                $kardex->total_salidas_cantidad = $total[$index];
+                if($kardex_buscar){
+                    $cantidad_saldo = $kardex_buscar->saldos_cantidad - $cantidad_ingreso[$index];
+                    $kardex->saldos_cantidad = $cantidad_saldo;
+                    $kardex->costo_saldos_cantidad = $producto->costo_unitario;
+                }else{
+                    $kardex->saldos_cantidad = $cantidad_ingreso[$index];
+                    $kardex->costo_saldos_cantidad = $producto->costo_unitario;
+                }
+                $kardex->save();
             }
 
         }
@@ -282,9 +321,6 @@ class EntradaProductosController extends Controller
         $anaquel_model = new Anaquele;
         $tipo_cambio_model = new TipoCambio;
         $id_user = Auth::user()->id;
-		
-        //$datos = $request->all();
-        //$id = $datos['id'];
        
         if($id>0){
             if($tipo==1){
@@ -298,8 +334,6 @@ class EntradaProductosController extends Controller
                 $proveedor=[];
             }
 			
-            //dd($proveedor);exit();
-            //dd($entrada_producto->tipo_cambio_dolar);exit();
             $tipo_cambio = null;
             $almacen_ = null;
             $marca = $marca_model->getMarcaAll();
@@ -316,21 +350,10 @@ class EntradaProductosController extends Controller
             $almacen = $almacen_model->getAlmacenByUser($id_user);
             $marca = $marca_model->getMarcaAll();
             $tipo_movimiento_='';
-            //dd($marca);exit();
 		}
         
-        //$tipo_documento = $tablaMaestra_model->getMaestroC(48,$datos['tipo_documento']);
-        //var_dump($tipo_documento[0]->denominacion);exit();
-        //$moneda = $tablaMaestra_model->getMaestroC(1,$datos['moneda']);
-        //$unidad_origen = $tablaMaestra_model->getMaestroC(50,$datos['unidad_origen']);
-        //$cerrado_entrada = $tablaMaestra_model->getMaestroC(52,$datos['cerrado']);
-        //$igv_compra = $tablaMaestra_model->getMaestroC(51,$datos['igv_compra']);
-        //$proveedor = $empresa_model->getEmpresa($datos['proveedor']);
         $producto = $producto_model->getProductoAll();
         $unidad = $tablaMaestra_model->getMaestroByTipo(43);
-        //$almacen = $almacen_model->getAlmacenById($datos['almacen']);
-        
-        //$almacen_seccion = $almacen_seccion_model->getSeccionByAlmacen($datos['almacen']);
 
         $tipo_documento = $tablaMaestra_model->getMaestroByTipo(48);
         $moneda = $tablaMaestra_model->getMaestroByTipo(1);
@@ -339,7 +362,7 @@ class EntradaProductosController extends Controller
         $igv_compra = $tablaMaestra_model->getMaestroByTipo(51);
         $tipo_movimiento = $tablaMaestra_model->getMaestroByTipo(53);
         $estado_bien = $tablaMaestra_model->getMaestroByTipo(4);
-
+        
 
 		return view('frontend.entrada_productos.modal_entradas_detalleEntrada',compact('id','entrada_producto_detalle','tipo_documento','moneda','unidad_origen','cerrado_entrada','igv_compra','proveedor','producto','unidad','almacen'/*,'almacen_seccion'*/,'tipo_cambio','tipo_movimiento','entrada_producto','marca','estado_bien',/*'tipo_movimiento_',*/'tipo'));
 
@@ -441,7 +464,7 @@ class EntradaProductosController extends Controller
             $entrada_producto = $entrada_producto_detalle_model->getDetalleProductoId($id);
             $marca = $marca_model->getMarcaAll();
             $producto = $producto_model->getProductoAll();
-            $estado_bien = $tablaMaestra_model->getMaestroByTipo(4);
+            $estado_bien = $tablaMaestra_model->getMaestroByTipo(56);
             $unidad_medida = $tablaMaestra_model->getMaestroByTipo(43);
 
             return response()->json([
@@ -462,7 +485,7 @@ class EntradaProductosController extends Controller
             $entrada_producto = $salida_producto_detalle_model->getDetalleProductoId($id);
             $marca = $marca_model->getMarcaAll();
             $producto = $producto_model->getProductoAll();
-            $estado_bien = $tablaMaestra_model->getMaestroByTipo(4);
+            $estado_bien = $tablaMaestra_model->getMaestroByTipo(56);
             $unidad_medida = $tablaMaestra_model->getMaestroByTipo(43);
 
             return response()->json([

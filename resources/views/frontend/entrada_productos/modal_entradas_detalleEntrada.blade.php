@@ -148,8 +148,8 @@ $(document).ready(function() {
     });
 
     $("#item").select2({ width: '100%' });
-    $("#ubicacion_fisica_seccion").select2({ width: '100%' });
-    $("#ubicacion_fisica_anaquel").select2({ width: '100%' });
+    //$("#ubicacion_fisica_seccion").select2({ width: '100%' });
+    //$("#ubicacion_fisica_anaquel").select2({ width: '100%' });
 
 });
 
@@ -181,7 +181,7 @@ $(document).ready(function() {
 
     if($('#id').val()>0){
         cargarDetalle();
-        cambiarDocumento()
+        cambiarDocumento();
     }
 });
 
@@ -289,7 +289,7 @@ function cambiarOrigen(){
     }
 }
 
-function obtenerAnaquel(selectElement){
+/*function obtenerAnaquel(selectElement){
 
     var fila = $(selectElement).closest('tr');
     var id =  $(selectElement).val();
@@ -313,7 +313,7 @@ function obtenerAnaquel(selectElement){
             }
     });
 
-}
+}*/
 
 function obtenerDescripcion(selectElement){
 
@@ -398,7 +398,7 @@ function calcularIGV(subTotal, igvInputId, totalInputId) {
         return;
     }
     
-    $('#' + igvInputId).val(igvValor.toFixed(2) + ' (' + (igvPorcentaje * 100) + '%)');
+    $('#' + igvInputId).val(igvValor.toFixed(2));
     
     $('#' + totalInputId).val(total.toFixed(2));
 }
@@ -413,7 +413,7 @@ function actualizarTotalGeneral() {
     $('#totalGeneral').text(totalGeneral.toFixed(2));
 }
 
-$('#almacen').change(function() {
+/*$('#almacen').change(function() {
     
     var almacenElement = this;
     
@@ -421,9 +421,9 @@ $('#almacen').change(function() {
         var n = index + 1;
         actualizarSecciones(almacenElement, n);
     });
-});
+});*/
 
-function actualizarSecciones(selectElement, n) {
+/*function actualizarSecciones(selectElement, n) {
     //var id_almacen = $('#almacen').val();
     var id_almacen = $(selectElement).val();
 
@@ -453,7 +453,7 @@ function actualizarSecciones(selectElement, n) {
             ubicacionFisicaSeccion.html(option);
         }
     });
-}
+}*/
 
 function cambiarDocumento(){
 
@@ -517,14 +517,11 @@ function agregarProducto(){
     for (var i = 0; i < cantidad; i++) { 
         var n = $('#tblDetalleEntrada tbody tr').length + 1;
         var item = '<input name="item[]" id="item' + n + '" class="form-control form-control-sm" value="" type="text">';
-        //var cantidad = '<input name="cantidad[]" id="cantidad' + n + '" class="form-control form-control-sm" value="" type="text">';
         var descripcion = '<select name="descripcion[]" id="descripcion' + n + '" class="form-control form-control-sm" onChange="obtenerCodInterno(this, ' + n + ')"> <option value="">- Selecione -</option> <?php foreach ($producto as $row) {?> <option value="<?php echo $row->id?>"><?php echo $row->denominacion?></option> <?php } ?> </select>';
-        //var ubicacion_fisica_seccion = '<select name="ubicacion_fisica_seccion[]" id="ubicacion_fisica_seccion' + n + '" class="form-control form-control-sm" onChange="obtenerAnaquel(this)"> <option value="">- Selecione -</option> <?php //foreach ($almacen_seccion as $row) {?> <option value="<?php //echo $row->id?>"><?php //echo $row->codigo_seccion."-".$row->seccion?></option> <?php //} ?> </select>';
-        //var ubicacion_fisica_anaquel = '<select name="ubicacion_fisica_anaquel[]" id="ubicacion_fisica_anaquel' + n + '" class="form-control form-control-sm" onChange=""> <option value="">- Selecione -</option>} ?> </select>';
         var cod_interno = '<input name="cod_interno[]" id="cod_interno' + n + '" class="form-control form-control-sm" value="" type="text">';
-        var marca = '<select name="marca[]" id="marca' + n + '" class="form-control form-control-sm" onchange="actualizarSecciones(this)"> <option value="">- Selecione -</option><?php foreach ($marca as $row){?><option value="<?php echo $row->id ?>"><?php echo $row->denominiacion ?></option><?php }?></select>'
-        var fecha_fabricacion = '<input id="fecha_fabricacion_' + n + '" name="fecha_fabricacion[]"  on class="form-control form-control-sm"  value="" type="text">'
-        var fecha_vencimiento = '<input id="fecha_vencimiento_' + n + '" name="fecha_vencimiento[]"  on class="form-control form-control-sm"  value="" type="text">'
+        var marca = '<select name="marca[]" id="marca' + n + '" class="form-control form-control-sm" onchange=""> <option value="">- Selecione -</option><?php foreach ($marca as $row){?><option value="<?php echo htmlspecialchars($row->id); ?>"><?php echo htmlspecialchars(addslashes($row->denominiacion)); ?></option> <?php } ?></select>';
+        var fecha_fabricacion = '<input id="fecha_fabricacion_' + n + '" name="fecha_fabricacion[]"  on class="form-control form-control-sm"  value="" type="text">';
+        var fecha_vencimiento = '<input id="fecha_vencimiento_' + n + '" name="fecha_vencimiento[]"  on class="form-control form-control-sm"  value="" type="text">';
         var estado_bien =  '<select name="estado_bien[]" id="estado_bien' + n + '" class="form-control form-control-sm" onChange=""><option value="">- Selecione -</option> <?php foreach ($estado_bien as $row) { ?> <option value="<?php echo $row->codigo ?>" <?php echo ($row->codigo == 1) ? "selected" : ""; ?>><?php echo $row->denominacion ?></option> <?php } ?> </select>';
         var unidad = '<select name="unidad[]" id="unidad' + n + '" class="form-control form-control-sm" onChange=""> <option value="">- Selecione -</option> <?php foreach ($unidad as $row) {?> <option value="<?php echo $row->codigo?>"><?php echo $row->denominacion?></option> <?php } ?> </select>';
         var cantidad_ingreso = '<input name="cantidad_ingreso[]" id="cantidad_ingreso' + n + '" class="cantidad_ingreso form-control form-control-sm" value="" type="text" oninput="calcularCantidadPendiente(this)">';
@@ -566,7 +563,7 @@ function agregarProducto(){
             format: 'yyyy-mm-dd',
             changeMonth: true,
             changeYear: true,
-            language: 'es'
+            language: 'es',
         });
 
         $('#fecha_vencimiento_' + n).datepicker({
@@ -574,11 +571,11 @@ function agregarProducto(){
             format: 'yyyy-mm-dd',
             changeMonth: true,
             changeYear: true,
-            language: 'es'
+            language: 'es',
         });
 
-        var almacenElement = document.getElementById('almacen');
-        actualizarSecciones(almacenElement, n);
+        //var almacenElement = document.getElementById('almacen');
+        //actualizarSecciones(almacenElement, n);
 
     }
 
@@ -872,17 +869,6 @@ function pdf_documento(){
     
 <script type="text/javascript">
 $(document).ready(function () {
-
-	$('#ruc_').blur(function () {
-		var id = $('#id').val();
-			if(id==0) {
-				validaRuc(this.value);
-			}
-		//validaRuc(this.value);
-	});
-	
-	
-	
 	
 });
 

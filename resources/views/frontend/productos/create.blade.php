@@ -2,6 +2,10 @@
 <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" defer></script>
 <style type="text/css">
 
+#tblProductos tbody tr{
+		font-size:13px
+	}
+
 .table td.verde{
 	background:#CAE983  !important
 }
@@ -396,12 +400,16 @@ label.form-control-sm{
                         <tr style="font-size:13px">
                             <th>Id</th>
 							<th>Serie</th>
-                            <th>C&oacute;digo</th>
 							<th>Denominaci&oacute;n</th>
-                            <th>Unidad</th>
+                            <th>C&oacute;digo</th>
+                            <th>Unidad Producto</th>
+							<th>Contenido</th>
+							<th>Unidad Medida</th>
+							<th>Marca</th>
+							<th>Tipo Producto</th>
+							<th>Estado Bien</th>
                             <th>Stock</th>
-							<th>Vencimiento</th>
-							<th>Estado del Bien</th>
+							<th>F. Vencimiento</th>
 							<th>Stock M&iacute;nimo</th>
 							<th>Stock Actual</th>
 							<th>Estado</th>

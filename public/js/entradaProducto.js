@@ -220,6 +220,7 @@ function modalEntradaProducto(id, tipo){
 			url: "/entrada_productos/modal_detalle_producto/"+id+"/"+tipo,
 			type: "GET",
 			success: function (result) {  
+					//console.log(result);
 					$("#diveditpregOpc").html(result);
 					$('#openOverlayOpc').modal('show');
 			}

@@ -19,6 +19,7 @@ use App\Http\Controllers\Frontend\ProductosController;
 use App\Http\Controllers\Frontend\LoteController;
 use App\Http\Controllers\Frontend\EntradaProductosController;
 use App\Http\Controllers\Frontend\OrdenCompraController;
+use App\Http\Controllers\Frontend\KardexController;
 
 use App\Models\Ubigeo;
 
@@ -309,3 +310,8 @@ Route::post('orden_compra/send_orden_compra', [OrdenCompraController::class, 'se
 Route::get('orden_compra/modal_orden_compra/{id}', [OrdenCompraController::class, 'modal_orden_compra'])->name('orden_compra.modal_orden_compra');
 Route::get('orden_compra/eliminar_orden_compra/{id}/{estado}', [OrdenCompraController::class, 'eliminar_orden_compra'])->name('orden_compra.eliminar_orden_compra');
 Route::get('orden_compra/cargar_detalle/{id}', [OrdenCompraController::class, 'cargar_detalle'])->name('orden_compra.cargar_detalle');
+
+Route::get('kardex/create', [KardexController::class, 'create'])->name('kardex.create');
+Route::post('kardex/listar_kardex_ajax', [KardexController::class, 'listar_kardex_ajax'])->name('kardex.listar_kardex_ajax');
+
+

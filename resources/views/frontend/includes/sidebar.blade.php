@@ -149,7 +149,7 @@
 				
 				@can('Kardex')
                 <li class="c-sidebar-nav-item">
-                    <x-utils.link :href="route('frontend.kardex.index')" class="c-sidebar-nav-link" :text="__('Kardex')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+                    <x-utils.link :href="route('frontend.kardex.create')" class="c-sidebar-nav-link" :text="__('Kardex')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
                 </li>
 				@endif
 				

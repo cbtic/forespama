@@ -85,22 +85,22 @@ function datatablenew(){
 				"className": "dt-center",
 				//"className": 'control'
                 },
-
-                {
-                    "mRender": function (data, type, row) {
-                        var sigla = "";
-                        if(row.sigla!= null)sigla = row.sigla;
-                        return sigla;
-                    },
-                    "bSortable": true,
-                    "aTargets": [1]
-                    },
 				
 				{
                 "mRender": function (data, type, row) {
                 	var codigo = "";
 					if(row.codigo!= null)codigo = row.codigo;
 					return codigo;
+                },
+                "bSortable": true,
+                "aTargets": [1]
+                },
+
+                {
+                "mRender": function (data, type, row) {
+                    var sigla = "";
+                    if(row.sigla!= null)sigla = row.sigla;
+                    return sigla;
                 },
                 "bSortable": true,
                 "aTargets": [2]
