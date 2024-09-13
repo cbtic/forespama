@@ -504,6 +504,22 @@ class EntradaProductosController extends Controller
         //return view('frontend.entrada_producto_detalles.show', compact('id','detalle'));
     }
 
+    public function obtener_orden_compra_entrada(){
+		
+		$tabla_maestra_model = new TablaMaestra;
+		$ubigeo_usuario = $tabla_maestra_model->getMaestroByTipo(48);
+		
+		echo json_encode($ubigeo_usuario);
+	}
+
+    public function obtener_orden_compra_salida(){
+		
+		$tabla_maestra_model = new TablaMaestra;
+		$ubigeo_usuario = $tabla_maestra_model->getMaestroByTipo(48);
+		
+		echo json_encode($ubigeo_usuario);
+	}
+
 
     /**
      * Display a listing of the resource.

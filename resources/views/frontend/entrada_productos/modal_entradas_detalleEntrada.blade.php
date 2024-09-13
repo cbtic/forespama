@@ -510,6 +510,39 @@ function cambiarDocumento(){
     }
 }
 
+function obtenerOrdenCompra(){
+
+    var tipo_movimiento = $('#tipo_movimiento').val();
+
+    if(tipo_movimiento==1){
+        
+        $.ajax({
+            url: "/entrada_productos/obtener_orden_compra_entrada",
+            dataType: "json",
+            success: function(result){
+                var option = "<option value=''>- Selecione -</option>";
+                var entradaProductoIdTipoDocumento = "{{ $entrada_producto->id_tipo_documento }}";
+
+                var selectedValue = entradaProductoIdTipoDocumento;
+
+                $('#tipo_documento').html("");
+                $(result).each(function (ii, oo) {
+                    var selected = (oo.codigo == selectedValue) ? "selected" : "";
+                    option += "<option value='"+oo.codigo+"' "+selected+">"+oo.denominacion+"</option>";
+                });
+                $('#tipo_documento').html(option);
+                
+                $('#tipo_documento').attr("disabled",false);
+                $('.loader').hide();
+                
+            }
+        });
+
+    }else if(tipo_movimiento==2){
+
+    }
+}
+
 function agregarProducto(){
 
     var cantidad = 1;
@@ -654,7 +687,7 @@ function pdf_documento(){
                             Tipo Movimiento:
                         </div>
                         <div class="col-lg-2">
-                            <select name="tipo_movimiento" id="tipo_movimiento" class="form-control form-control-sm" onchange="cambiarDocumento()">
+                            <select name="tipo_movimiento" id="tipo_movimiento" class="form-control form-control-sm" onchange="cambiarDocumento();obtenerOrdenCompra()">
                                 <option value="">- Selecione -</option>
                                 <?php
                                 foreach ($tipo_movimiento as $row){?>
@@ -675,6 +708,14 @@ function pdf_documento(){
                         </div>
                         <div class="col-lg-2">
                             <select name="tipo_documento" id="tipo_documento" class="form-control form-control-sm" onchange="">
+                                <option value="">- Selecione -</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-2">
+                            Orden de Compra
+                        </div>
+                        <div class="col-lg-2">
+                            <select name="orden_compra" id="orden_compra" class="form-control form-control-sm" onchange="">
                                 <option value="">- Selecione -</option>
                             </select>
                         </div>
