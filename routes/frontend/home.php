@@ -314,7 +314,4 @@ Route::get('orden_compra/cargar_detalle/{id}', [OrdenCompraController::class, 'c
 Route::get('kardex/create', [KardexController::class, 'create'])->name('kardex.create');
 Route::post('kardex/listar_kardex_ajax', [KardexController::class, 'listar_kardex_ajax'])->name('kardex.listar_kardex_ajax');
 
-Route::get('entrada_productos/obtener_orden_compra_entrada', [EntradaProductosController::class, 'obtener_orden_compra_entrada'])->name('entrada_productos.obtener_orden_compra_entrada');
-Route::get('entrada_productos/obtener_orden_compra_salida', [EntradaProductosController::class, 'obtener_orden_compra_salida'])->name('entrada_productos.obtener_orden_compra_salida');
-
-
+Route::get('entrada_productos/modal_detalle_producto_orden_compra/{id}/{tipo}', [EntradaProductosController::class, 'modal_detalle_producto_orden_compra'])->name('entrada_productos.modal_detalle_producto_orden_compra');

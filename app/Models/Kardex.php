@@ -47,4 +47,15 @@ class Kardex extends Model
         return $data;
 
     }
+
+    function getExistenciaProductoById($id){
+
+        $cad = "select * from kardex k where k.id_producto = '".$id."'
+        order by 1 desc
+        limit 1";
+
+		$data = DB::select($cad);
+        return $data;
+    }
+
 }

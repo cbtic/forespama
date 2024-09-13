@@ -44,18 +44,4 @@ class OrdenCompra extends Model
 		$data = DB::select($cad);
         return $data;
     }
-
-    function getOrdenCompraAll(){
-
-        $cad = "select ocd.id,  ROW_NUMBER() OVER (PARTITION BY ocd.id_orden_compra ) AS row_num, p.numero_serie item, ocd.id_producto, p.codigo, ocd.id_marca, ocd.id_unidad_medida, ocd.fecha_fabricacion, ocd.fecha_vencimiento, 
-        ocd.id_estado_producto , ocd.cantidad, ocd.precio, ocd.sub_total, ocd.igv, ocd.total, ocd.id_descuento 
-        from orden_compra_detalles ocd 
-        inner join productos p on ocd.id_producto = p.id
-        where id_orden_compra ='".$id."'
-        and ocd.estado='1'";
-
-		$data = DB::select($cad);
-        return $data;
-        
-    }
 }

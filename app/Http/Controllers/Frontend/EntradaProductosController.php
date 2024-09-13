@@ -17,6 +17,7 @@ use App\Models\SalidaProducto;
 use App\Models\SalidaProductoDetalle;
 use App\Models\Marca;
 use App\Models\Kardex;
+use App\Models\OrdenCompra;
 use Auth;
 use RealRashid\SweetAlert\Facades\Alert;
 use App\Http\Controllers\Controller;
@@ -504,21 +505,65 @@ class EntradaProductosController extends Controller
         //return view('frontend.entrada_producto_detalles.show', compact('id','detalle'));
     }
 
-    public function obtener_orden_compra_entrada(){
-		
-		$tabla_maestra_model = new TablaMaestra;
-		$ubigeo_usuario = $tabla_maestra_model->getMaestroByTipo(48);
-		
-		echo json_encode($ubigeo_usuario);
-	}
+    public function modal_detalle_producto_orden_compra($id,$tipo){
+        
+        $tablaMaestra_model = new TablaMaestra;
+        $empresa_model = new Empresa;
+        $producto_model = new Producto;
+        $almacen_model = new Almacene;
+        $marca_model = new Marca;
+        $almacen_seccion_model = new AlmacenesSeccione;
+        $anaquel_model = new Anaquele;
+        $tipo_cambio_model = new TipoCambio;
+        $id_user = Auth::user()->id;
+       
+        if($id>0){
+            if($tipo==1){
+                $orden_compra = OrdenCompra::find($id);
+                $entrada_producto_detalle = new EntradaProductoDetalle;
+                $entrada_producto = new EntradaProducto;
+                $proveedor = Empresa::all();
+                $id = '0';
+            }else if($tipo==2){
+                $orden_compra = OrdenCompra::find($id);
+                $entrada_producto_detalle = new SalidaProductoDetalle;
+                $entrada_producto = new SalidaProducto;
+                $proveedor = Empresa::all();
+                $id = '0';
+            }
+			
+            $tipo_cambio = $tipo_cambio_model->getTipoCambioUltimo();
+            $almacen_ = null;
+            $marca = $marca_model->getMarcaAll();
+            //$almacen__ = Almacene::getAlmacenById($entrada_producto->id_almacen);
+            
+            $almacen = $almacen_model->getAlmacenByUser($id_user);
+            //$tipo_movimiento_=1;
+		}else{
+			$entrada_producto_detalle = new EntradaProductoDetalle;
+            $entrada_producto = new EntradaProducto;
+            $proveedor = Empresa::all();
+            //dd($proveedor);exit();
+            $tipo_cambio = $tipo_cambio_model->getTipoCambioUltimo();
+            $almacen = $almacen_model->getAlmacenByUser($id_user);
+            $marca = $marca_model->getMarcaAll();
+            $tipo_movimiento_='';
+		}
+        
+        $producto = $producto_model->getProductoAll();
+        $unidad = $tablaMaestra_model->getMaestroByTipo(43);
 
-    public function obtener_orden_compra_salida(){
-		
-		$tabla_maestra_model = new TablaMaestra;
-		$ubigeo_usuario = $tabla_maestra_model->getMaestroByTipo(48);
-		
-		echo json_encode($ubigeo_usuario);
-	}
+        $tipo_documento = $tablaMaestra_model->getMaestroByTipo(48);
+        $moneda = $tablaMaestra_model->getMaestroByTipo(1);
+        $unidad_origen = $tablaMaestra_model->getMaestroByTipo(50);
+        $cerrado_entrada = $tablaMaestra_model->getMaestroByTipo(52);
+        $igv_compra = $tablaMaestra_model->getMaestroByTipo(51);
+        $tipo_movimiento = $tablaMaestra_model->getMaestroByTipo(53);
+        $estado_bien = $tablaMaestra_model->getMaestroByTipo(4);
+        
+		return view('frontend.entrada_productos.modal_entradas_detalleEntradaOrden',compact('id','orden_compra','entrada_producto_detalle','tipo_documento','moneda','unidad_origen','cerrado_entrada','igv_compra','proveedor','producto','unidad','almacen'/*,'almacen_seccion'*/,'tipo_cambio','tipo_movimiento','entrada_producto','marca','estado_bien',/*'tipo_movimiento_',*/'tipo'));
+
+    }
 
 
     /**

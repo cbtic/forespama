@@ -174,7 +174,7 @@ function datatablenew(){
 						
 						html += '<button style="font-size:12px" type="button" class="btn btn-sm btn-success" data-toggle="modal" onclick="modalOrdenCompra('+row.id+')" ><i class="fa fa-edit"></i> Editar</button>'; 
 						html += '<a href="javascript:void(0)" onclick=eliminarOrdenCompra('+row.id+','+row.estado+') class="btn btn-sm '+clase+'" style="font-size:12px;margin-left:10px">'+estado+'</a>';
-						
+						html += '<button style="font-size:12px; margin-left:10px" type="button" class="btn btn-sm btn-info" data-toggle="modal" onclick="modalEntradaProducto('+row.id+','+row.id_tipo_documento+')">Atender</button>'; 
 						//html += '<a href="javascript:void(0)" onclick=modalResponsable('+row.id+') class="btn btn-sm btn-info" style="font-size:12px;margin-left:10px">Detalle Responsable</a>';
 						
 						html += '</div>';
@@ -246,4 +246,21 @@ function fn_eliminar(id,estado){
 				datatablenew();
             }
     });
+}
+
+function modalEntradaProducto(id,id_tipo_documento){
+
+	//var tipo = $('#tipo_documento').val();
+	
+	$(".modal-dialog").css("width","85%");
+	$('#openOverlayOpc .modal-body').css('height', 'auto');
+
+	$.ajax({
+			url: "/entrada_productos/modal_detalle_producto_orden_compra/"+id+"/"+id_tipo_documento,
+			type: "GET",
+			success: function (result) {  
+					$("#diveditpregOpc").html(result);
+					$('#openOverlayOpc').modal('show');
+			}
+	});
 }

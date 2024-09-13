@@ -10,6 +10,7 @@ use App\Models\Empresa;
 use App\Models\Producto;
 use App\Models\Marca;
 use App\Models\OrdenCompraDetalle;
+use App\Models\Kardex;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Auth;
 use Carbon\Carbon;
@@ -174,6 +175,7 @@ class OrdenCompraController extends Controller
         $marca_model = new Marca;
         $producto_model = new Producto;
         $tablaMaestra_model = new TablaMaestra;
+        $kardex_model = new Kardex;
 
         $orden_compra = $orden_compra_model->getDetalleOrdenCompraId($id);
         $marca = $marca_model->getMarcaAll();
@@ -181,6 +183,13 @@ class OrdenCompraController extends Controller
         $estado_bien = $tablaMaestra_model->getMaestroByTipo(4);
         $unidad_medida = $tablaMaestra_model->getMaestroByTipo(43);
         $descuento = $tablaMaestra_model->getMaestroByTipo(55);
+        foreach($orden_compra as $detalle){
+            //$producto_stock = $detalle->id_producto;
+            $producto_stock = $kardex_model->getExistenciaProductoById($detalle->id_producto);
+            //var_dump($producto_stock);
+        }
+        
+        //exit();
 
         return response()->json([
             'orden_compra' => $orden_compra,
@@ -188,7 +197,8 @@ class OrdenCompraController extends Controller
             'producto' => $producto,
             'estado_bien' => $estado_bien,
             'unidad_medida' => $unidad_medida,
-            'descuento' => $descuento
+            'descuento' => $descuento,
+            '$producto_stock' =>$producto_stock
         ]);
     }
 }

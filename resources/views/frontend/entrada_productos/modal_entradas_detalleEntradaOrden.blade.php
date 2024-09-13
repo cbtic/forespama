@@ -176,7 +176,9 @@ $('#openOverlayOpc').on('shown.bs.modal', function() {
 $(document).ready(function() {
     if($('#id').val()==0){
         cambiarTipoCambio();
-        cambiarOrigen();
+        //cambiarOrigen();
+        cambiarDocumento();
+        cargarDetalle();
     }
 
     if($('#id').val()>0){
@@ -200,8 +202,8 @@ function cambiarTipoCambio(){
 
 function cargarDetalle(){
 
-var id = $("#id").val();
-var tipo_movimiento = $("#tipo_movimiento").val();
+var id = <?php echo $orden_compra->id?>;
+//var tipo_movimiento = $("#tipo_movimiento").val();
 
 //$("#divDetalle tbody").html("");
 const tbody = $('#divDetalle');
@@ -209,13 +211,13 @@ const tbody = $('#divDetalle');
 tbody.empty();
 
 $.ajax({
-        url: "/entrada_productos/cargar_detalle/"+id+"/"+tipo_movimiento,
+        url: "/orden_compra/cargar_detalle/"+id,
         type: "GET",
         success: function (result) {
 
             let n = 1;
 
-            result.entrada_producto.forEach(entrada_producto => {
+            result.orden_compra.forEach(orden_compra => {
 
                 let marcaOptions = '<option value="">- Selecione -</option>';
                 let productoOptions = '<option value="">- Selecione -</option>';
@@ -223,44 +225,44 @@ $.ajax({
                 let unidadMedidaOptions = '<option value="">- Selecione -</option>';
 
                 result.marca.forEach(marca => {
-                    let selected = (marca.id == entrada_producto.id_marca) ? 'selected' : '';
+                    let selected = (marca.id == orden_compra.id_marca) ? 'selected' : '';
                     marcaOptions += `<option value="${marca.id}" ${selected}>${marca.denominiacion}</option>`;
                 });
 
                 result.producto.forEach(producto => {
-                    let selected = (producto.id == entrada_producto.id_producto) ? 'selected' : '';
+                    let selected = (producto.id == orden_compra.id_producto) ? 'selected' : '';
                     productoOptions += `<option value="${producto.id}" ${selected}>${producto.denominacion}</option>`;
                 });
 
                 result.estado_bien.forEach(estado_bien => {
-                    let selected = (estado_bien.codigo == entrada_producto.id_estado_bien) ? 'selected' : '';
+                    let selected = (estado_bien.codigo == orden_compra.id_estado_producto) ? 'selected' : '';
                     estadoBienOptions += `<option value="${estado_bien.codigo}" ${selected}>${estado_bien.denominacion}</option>`;
                 });
 
                 result.unidad_medida.forEach(unidad_medida => {
-                    let selected = (unidad_medida.codigo == entrada_producto.id_um) ? 'selected' : '';
+                    let selected = (unidad_medida.codigo == orden_compra.id_unidad_medida) ? 'selected' : '';
                     unidadMedidaOptions += `<option value="${unidad_medida.codigo}" ${selected}>${unidad_medida.denominacion}</option>`;
                 });
 
                 const row = `
                     <tr>
                         <td>${n}</td>
-                        <td><input name="item[]" id="item${n}" class="form-control form-control-sm" value="${entrada_producto.item}" type="text"></td>
+                        <td><input name="item[]" id="item${n}" class="form-control form-control-sm" value="${orden_compra.item}" type="text"></td>
                         <td><select name="descripcion[]" id="descripcion${n}" class="form-control form-control-sm" onChange="">${productoOptions}</select></td>
                         <td><select name="marca[]" id="marca${n}" class="form-control form-control-sm">${marcaOptions}</select></td>
-                        <td><input name="cod_interno[]" id="cod_interno${n}" class="form-control form-control-sm" value="${entrada_producto.codigo}" type="text"></td>
-                        <td><input id="fecha_fabricacion_${n}" name="fecha_fabricacion[]"  on class="form-control form-control-sm"  value="${entrada_producto.fecha_fabricacion}" type="text"></td>
-                        <td><input id="fecha_vencimiento_${n}" name="fecha_vencimiento[]"  on class="form-control form-control-sm"  value="${entrada_producto.fecha_vencimiento}" type="text"></td>
+                        <td><input name="cod_interno[]" id="cod_interno${n}" class="form-control form-control-sm" value="${orden_compra.codigo}" type="text"></td>
+                        <td><input id="fecha_fabricacion_${n}" name="fecha_fabricacion[]"  on class="form-control form-control-sm"  value="${orden_compra.fecha_fabricacion}" type="text"></td>
+                        <td><input id="fecha_vencimiento_${n}" name="fecha_vencimiento[]"  on class="form-control form-control-sm"  value="${orden_compra.fecha_vencimiento}" type="text"></td>
                         <td><select name="estado_bien[]" id="estado_bien${n}" class="form-control form-control-sm" onChange="">${estadoBienOptions}</select></td>
                         <td><select name="unidad[]" id="unidad${n}" class="form-control form-control-sm">${unidadMedidaOptions}</select></td>
-                        <td><input name="cantidad_ingreso[]" id="cantidad_ingreso${n}" class="cantidad_ingreso form-control form-control-sm" value="${entrada_producto.cantidad}" type="text" oninput="calcularCantidadPendiente(this)"></td>
-                        <td><input name="cantidad_compra[]" id="cantidad_compra${n}" class="cantidad_compra form-control form-control-sm" value="${entrada_producto.cantidad}" type="text" oninput="calcularCantidadPendiente(this)"></td>
+                        <td><input name="cantidad_ingreso[]" id="cantidad_ingreso${n}" class="cantidad_ingreso form-control form-control-sm" value="${orden_compra.cantidad}" type="text" oninput="calcularCantidadPendiente(this)"></td>
+                        <td><input name="cantidad_compra[]" id="cantidad_compra${n}" class="cantidad_compra form-control form-control-sm" value="${orden_compra.cantidad}" type="text" oninput="calcularCantidadPendiente(this)"></td>
                         <td><input name="cantidad_pendiente[]" id="cantidad_pendiente${n}" class="cantidad_pendiente form-control form-control-sm" value="" type="text" readonly="readonly"></td>
-                        <td><input name="stock_actual[]" id="stock_actual${n}" class="form-control form-control-sm" value="${entrada_producto.stock_actual}" type="text"></td>
-                        <td><input name="precio_unitario[]" id="precio_unitario${n}" class="precio_unitario form-control form-control-sm" value="${entrada_producto.costo}" type="text" oninput="calcularSubTotal(this)"></td>
-                        <td><input name="sub_total[]" id="sub_total${n}" class="sub_total form-control form-control-sm" value="${entrada_producto.subtotal}" type="text" readonly="readonly"></td>
-                        <td><input name="igv[]" id="igv${n}" class="igv form-control form-control-sm" value="${entrada_producto.igv}" type="text" readonly="readonly"></td>
-                        <td><input name="total[]" id="total${n}" class="total form-control form-control-sm" value="${entrada_producto.total}" type="text" readonly="readonly"></td>
+                        <td><input name="stock_actual[]" id="stock_actual${n}" class="form-control form-control-sm" value="${producto_stock.saldos_cantidad}" type="text"></td>
+                        <td><input name="precio_unitario[]" id="precio_unitario${n}" class="precio_unitario form-control form-control-sm" value="${result.orden_compra.precio}" type="text" oninput="calcularSubTotal(this)"></td>
+                        <td><input name="sub_total[]" id="sub_total${n}" class="sub_total form-control form-control-sm" value="${orden_compra.sub_total}" type="text" readonly="readonly"></td>
+                        <td><input name="igv[]" id="igv${n}" class="igv form-control form-control-sm" value="${orden_compra.igv}" type="text" readonly="readonly"></td>
+                        <td><input name="total[]" id="total${n}" class="total form-control form-control-sm" value="${orden_compra.total}" type="text" readonly="readonly"></td>
                     </tr>
                 `;
                 tbody.append(row);
@@ -701,7 +703,7 @@ function pdf_documento(){
                             Fecha Ingreso
                         </div>
                         <div class="col-lg-2">
-                            <input id="fecha_entrada" name="fecha_entrada" on class="form-control form-control-sm"  value="<?php echo isset($entrada_producto) && $entrada_producto->fecha_ingreso ? $entrada_producto->fecha_ingreso : date('Y-m-d'); ?>" type="text">
+                            <input id="fecha_entrada" name="fecha_entrada" on class="form-control form-control-sm"  value="<?php echo isset($orden_compra) && $orden_compra->fecha_orden_compra ? $orden_compra->fecha_orden_compra : date('Y-m-d'); ?>" type="text">
                         </div>
                         <div class="col-lg-2">
                             Tipo Documento
@@ -722,26 +724,51 @@ function pdf_documento(){
                         <div class="col-lg-2">
                             Unidad Origen
                         </div>
+                        <?php 
+                        if($orden_compra->id_empresa_compra==28 && $orden_compra->id_empresa_vende==28){
+                            $origen=3;
+                        }else if($orden_compra->id_empresa_compra==28){
+                            $origen=2;
+                        }else if($orden_compra->id_empresa_vende==28){
+                            $origen=1;
+                        }else{
+                            $origen=null;
+                        }
+                        ?>
                         <div class="col-lg-2">
-                            <select name="unidad_origen" id="unidad_origen" class="form-control form-control-sm" onchange="cambiarOrigen()">
+                            <select name="unidad_origen" id="unidad_origen" class="form-control form-control-sm" onchange="//cambiarOrigen()">
                                 <option value="">- Selecione -</option>
                                 <?php
                                 foreach ($unidad_origen as $row){?>
-                                    <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$entrada_producto->unidad_origen)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                    <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$origen)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
                                     <?php 
                                 }
                                 ?>
                             </select>
                         </div>
                         <div class="col-lg-2" id="proveedor_">
-                            Proveedor
+                            Empresa Vende
                         </div>
                         <div class="col-lg-2" id="proveedor_select">
                             <select name="proveedor" id="proveedor" class="form-control form-control-sm" onchange="">
                                 <option value="">- Selecione -</option>
                                 <?php
                                 foreach ($proveedor as $row){?>
-                                    <option value="<?php echo $row->id ?>" <?php if($row->id==$entrada_producto->id_proveedor)echo "selected='selected'"?>><?php echo $row->razon_social ?></option>
+                                    <option value="<?php echo $row->id ?>" <?php if($row->id==$orden_compra->id_empresa_vende)echo "selected='selected'"?>><?php echo $row->razon_social ?></option>
+                                    <?php 
+                                }
+                                ?>
+                            </select>
+                        </div>
+                        <div class="col-lg-2" id="empresa_compra_">
+                            Empresa Compra
+                        </div>
+                        <div class="col-lg-2" id="empresa_compra_select">
+                            <select name="empresa_compra" id="empresa_compra" class="form-control form-control-sm" onchange="">
+                                <option value="">- Selecione -</option>
+                                <?php
+                                foreach ($proveedor as $row){?>
+                                    <option value="<?php echo $row->id ?>" <?php if($row->id==$orden_compra->id_empresa_compra)echo "selected='selected'"?>><?php echo $row->razon_social ?></option>
                                     <?php 
                                 }
                                 ?>
