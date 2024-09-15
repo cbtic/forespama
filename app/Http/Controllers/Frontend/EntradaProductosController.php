@@ -109,11 +109,11 @@ class EntradaProductosController extends Controller
 
         if($request->tipo_movimiento==1){
 
-            if($request->id == 0){
+            //if($request->id == 0){
                 $entrada_producto = new EntradaProducto;
-            }else{
-                $entrada_producto = EntradaProducto::find($request->id);
-            }
+            //}else{
+            //    $entrada_producto = EntradaProducto::find($request->id);
+            //}
 
             $item = $request->input('item');
             //$cantidad = $request->input('cantidad');
@@ -156,7 +156,7 @@ class EntradaProductosController extends Controller
                 
                 $entradaProducto_detalle = new EntradaProductoDetalle();
                 $entradaProducto_detalle->id_entrada_productos = $entrada_producto->id;
-                $entradaProducto_detalle->item = $item[$index];
+                $entradaProducto_detalle->numero_serie = $item[$index];
                 $entradaProducto_detalle->cantidad = $cantidad_ingreso[$index];
 
                 //$entradaProducto_detalle->numero_lote = "";
@@ -183,7 +183,7 @@ class EntradaProductosController extends Controller
                 $entradaProducto_detalle->save();
 
                 $producto = Producto::find($descripcion[$index]);
-                $kardex_buscar = Kardex::where("id_producto",$descripcion[$index])->first();
+                $kardex_buscar = Kardex::where("id_producto",$descripcion[$index])->orderBy('id', 'desc')->first();
                 //var_dump($kardex_buscar);exit();
                 $kardex = new Kardex;
                 $kardex->id_producto = $descripcion[$index];
@@ -198,6 +198,8 @@ class EntradaProductosController extends Controller
                     $kardex->saldos_cantidad = $cantidad_ingreso[$index];
                     $kardex->costo_saldos_cantidad = $producto->costo_unitario;
                 }
+
+                $kardex->id_entrada_producto = $entrada_producto->id;
                 
                 $kardex->save();
 
@@ -274,7 +276,7 @@ class EntradaProductosController extends Controller
                 $salida_producto_detalle->save();
 
                 $producto = Producto::find($descripcion[$index]);
-                $kardex_buscar = Kardex::where("id_producto",$descripcion[$index])->first();
+                $kardex_buscar = Kardex::where("id_producto",$descripcion[$index])->orderBy('id', 'desc')->first();
 
                 $kardex = new Kardex;
                 $kardex->id_producto = $descripcion[$index];
@@ -289,6 +291,8 @@ class EntradaProductosController extends Controller
                     $kardex->saldos_cantidad = $cantidad_ingreso[$index];
                     $kardex->costo_saldos_cantidad = $producto->costo_unitario;
                 }
+                $kardex->id_salida_producto = $salida_producto->id;
+
                 $kardex->save();
             }
 
@@ -461,6 +465,7 @@ class EntradaProductosController extends Controller
             $marca_model = new Marca;
             $producto_model = new Producto;
             $tablaMaestra_model = new TablaMaestra;
+            $kardex_model = new Kardex;
 
             $entrada_producto = $entrada_producto_detalle_model->getDetalleProductoId($id);
             $marca = $marca_model->getMarcaAll();
@@ -468,12 +473,26 @@ class EntradaProductosController extends Controller
             $estado_bien = $tablaMaestra_model->getMaestroByTipo(56);
             $unidad_medida = $tablaMaestra_model->getMaestroByTipo(43);
 
+            $producto_stock = [];
+
+            foreach($entrada_producto as $detalle){
+                $stock = $kardex_model->getExistenciaProductoById($detalle->id_producto);
+                if(count($stock)>0){
+                    $producto_stock[$detalle->id_producto] = $stock[0];
+                }else {
+                    $producto_stock[$detalle->id_producto] = ['saldos_cantidad'=>0];
+                }
+                
+                //var_dump($producto_stock);
+            }
+
             return response()->json([
                 'entrada_producto' => $entrada_producto,
                 'marca' => $marca,
                 'producto' => $producto,
                 'estado_bien' => $estado_bien,
-                'unidad_medida' => $unidad_medida
+                'unidad_medida' => $unidad_medida,
+                'producto_stock' =>$producto_stock
             ]);
 
         }else if ($tipo_movimiento==2){
@@ -482,6 +501,7 @@ class EntradaProductosController extends Controller
             $marca_model = new Marca;
             $producto_model = new Producto;
             $tablaMaestra_model = new TablaMaestra;
+            $kardex_model = new Kardex;
 
             $entrada_producto = $salida_producto_detalle_model->getDetalleProductoId($id);
             $marca = $marca_model->getMarcaAll();
@@ -489,12 +509,26 @@ class EntradaProductosController extends Controller
             $estado_bien = $tablaMaestra_model->getMaestroByTipo(56);
             $unidad_medida = $tablaMaestra_model->getMaestroByTipo(43);
 
+            $producto_stock = [];
+
+            foreach($entrada_producto as $detalle){
+                $stock = $kardex_model->getExistenciaProductoById($detalle->id_producto);
+                if(count($stock)>0){
+                    $producto_stock[$detalle->id_producto] = $stock[0];
+                }else {
+                    $producto_stock[$detalle->id_producto] = ['saldos_cantidad'=>0];
+                }
+                
+                //var_dump($producto_stock);
+            }
+
             return response()->json([
                 'entrada_producto' => $entrada_producto,
                 'marca' => $marca,
                 'producto' => $producto,
                 'estado_bien' => $estado_bien,
-                'unidad_medida' => $unidad_medida
+                'unidad_medida' => $unidad_medida,
+                'producto_stock' =>$producto_stock
             ]);
 
 

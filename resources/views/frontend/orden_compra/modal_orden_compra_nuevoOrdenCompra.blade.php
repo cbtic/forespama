@@ -457,7 +457,7 @@ $.ajax({
                         <td><input id="fecha_vencimiento_${n}" name="fecha_vencimiento[]"  on class="form-control form-control-sm"  value="${orden_compra.fecha_vencimiento}" type="text"></td>
                         <td><select name="estado_bien[]" id="estado_bien${n}" class="form-control form-control-sm" onChange="">${estadoBienOptions}</select></td>
                         <td><select name="unidad[]" id="unidad${n}" class="form-control form-control-sm">${unidadMedidaOptions}</select></td>
-                        <td><input name="cantidad_ingreso[]" id="cantidad_ingreso${n}" class="cantidad_ingreso form-control form-control-sm" value="${orden_compra.cantidad}" type="text" oninput="calcularCantidadPendiente(this)"></td>
+                        <td><input name="cantidad_ingreso[]" id="cantidad_ingreso${n}" class="cantidad_ingreso form-control form-control-sm" value="${orden_compra.cantidad_requerida}" type="text" oninput="calcularCantidadPendiente(this)"></td>
                         <td><input name="precio_unitario[]" id="precio_unitario${n}" class="precio_unitario form-control form-control-sm" value="${orden_compra.precio}" type="text" oninput="calcularSubTotal(this)"></td>
                         <td><select name="descuento[]" id="descuento${n}" class="form-control form-control-sm" onChange="">${descuentoOptions}</select></td>
                         <td><input name="sub_total[]" id="sub_total${n}" class="sub_total form-control form-control-sm" value="${orden_compra.sub_total}" type="text" readonly="readonly"></td>
@@ -675,7 +675,7 @@ function pdf_documento(){
                                 <option value="">- Selecione -</option>
                                 <?php
                                 foreach ($igv_compra as $row){?>
-                                    <option value="<?php echo $row->codigo ?>" <?php //if($row->codigo==$orden_compra->igv_compra)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                    <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$orden_compra->igv_compra)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
                                     <?php 
                                 }
                                 ?>

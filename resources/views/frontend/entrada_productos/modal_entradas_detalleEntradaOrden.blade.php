@@ -217,12 +217,21 @@ $.ajax({
 
             let n = 1;
 
+            var total_acumulado=0;
+
             result.orden_compra.forEach(orden_compra => {
 
                 let marcaOptions = '<option value="">- Selecione -</option>';
                 let productoOptions = '<option value="">- Selecione -</option>';
                 let estadoBienOptions = '<option value="">- Selecione -</option>';
                 let unidadMedidaOptions = '<option value="">- Selecione -</option>';
+                //console.log('producto_stock:', result.producto_stock);
+                var producto_stock = result.producto_stock[orden_compra.id_producto];
+                /*if (producto_stock) {
+                    console.log('saldos_cantidad:', producto_stock.saldos_cantidad);
+                } else {
+                    console.log('No se encontró stock para el producto:', orden_compra.id_producto);
+                }*/
 
                 result.marca.forEach(marca => {
                     let selected = (marca.id == orden_compra.id_marca) ? 'selected' : '';
@@ -255,21 +264,24 @@ $.ajax({
                         <td><input id="fecha_vencimiento_${n}" name="fecha_vencimiento[]"  on class="form-control form-control-sm"  value="${orden_compra.fecha_vencimiento}" type="text"></td>
                         <td><select name="estado_bien[]" id="estado_bien${n}" class="form-control form-control-sm" onChange="">${estadoBienOptions}</select></td>
                         <td><select name="unidad[]" id="unidad${n}" class="form-control form-control-sm">${unidadMedidaOptions}</select></td>
-                        <td><input name="cantidad_ingreso[]" id="cantidad_ingreso${n}" class="cantidad_ingreso form-control form-control-sm" value="${orden_compra.cantidad}" type="text" oninput="calcularCantidadPendiente(this)"></td>
-                        <td><input name="cantidad_compra[]" id="cantidad_compra${n}" class="cantidad_compra form-control form-control-sm" value="${orden_compra.cantidad}" type="text" oninput="calcularCantidadPendiente(this)"></td>
+                        <td><input name="cantidad_ingreso[]" id="cantidad_ingreso${n}" class="cantidad_ingreso form-control form-control-sm" value="${orden_compra.cantidad_requerida}" type="text" oninput="calcularCantidadPendiente(this)"></td>
+                        <td><input name="cantidad_compra[]" id="cantidad_compra${n}" class="cantidad_compra form-control form-control-sm" value="${orden_compra.cantidad_requerida}" type="text" oninput="calcularCantidadPendiente(this)"></td>
                         <td><input name="cantidad_pendiente[]" id="cantidad_pendiente${n}" class="cantidad_pendiente form-control form-control-sm" value="" type="text" readonly="readonly"></td>
                         <td><input name="stock_actual[]" id="stock_actual${n}" class="form-control form-control-sm" value="${producto_stock.saldos_cantidad}" type="text"></td>
-                        <td><input name="precio_unitario[]" id="precio_unitario${n}" class="precio_unitario form-control form-control-sm" value="${result.orden_compra.precio}" type="text" oninput="calcularSubTotal(this)"></td>
+                        <td><input name="precio_unitario[]" id="precio_unitario${n}" class="precio_unitario form-control form-control-sm" value="${orden_compra.precio}" type="text" oninput="calcularSubTotal(this)"></td>
                         <td><input name="sub_total[]" id="sub_total${n}" class="sub_total form-control form-control-sm" value="${orden_compra.sub_total}" type="text" readonly="readonly"></td>
                         <td><input name="igv[]" id="igv${n}" class="igv form-control form-control-sm" value="${orden_compra.igv}" type="text" readonly="readonly"></td>
                         <td><input name="total[]" id="total${n}" class="total form-control form-control-sm" value="${orden_compra.total}" type="text" readonly="readonly"></td>
                     </tr>
                 `;
                 tbody.append(row);
+                calcularCantidadPendiente($('#cantidad_ingreso' + n));
                 n++;
-                //total_acumulado += parseFloat(factura.total);
+                total_acumulado += parseFloat(orden_compra.total);
                 });
+                $('#totalGeneral').text(total_acumulado.toFixed(2));
             }
+            
     });
 
 }
@@ -363,6 +375,8 @@ function calcularCantidadPendiente(input) {
     var cantidad_compra = parseFloat(fila.find('.cantidad_compra').val()) || 0;
 
     var cantidad_pendiente = cantidad_compra - cantidad_ingreso;
+
+    cantidad_pendiente = cantidad_pendiente <= 0 ? 0 : cantidad_pendiente;
 
     fila.find('.cantidad_pendiente').val(cantidad_pendiente.toFixed(2));
 }
@@ -484,6 +498,10 @@ function cambiarDocumento(){
                 
             }
         });
+        $('#almacen_').show();
+        $('#almacen_select').show();
+        $('#almacen_salida_').hide();
+        $('#almacen_salida_select').hide();
 
     }else if(tipo_movimiento==2){
 
@@ -508,6 +526,12 @@ function cambiarDocumento(){
                 
             }
         });
+
+        $('#almacen_').hide();
+        $('#almacen_select').hide();
+        $('#almacen_salida').show();
+    $('#almacen_salida_select').show();
+
 
     }
 }
@@ -632,10 +656,10 @@ function fn_save_detalle_producto(){
             data : $("#frmDetalleProductos").serialize(),
 			success: function (result) {
                 //alert(result.id)
-                //$('#openOverlayOpc').modal('hide');
-                if (result.id>0) {
-                    modalEntradaProducto(result.id,result.tipo_movimiento);
-                }
+                $('#openOverlayOpc').modal('hide');
+                //if (result.id>0) {
+                //   modalEntradaProducto(result.id,result.tipo_movimiento);
+                //}
             }
     });
 }
@@ -774,11 +798,25 @@ function pdf_documento(){
                                 ?>
                             </select>
                         </div>
-                        <div class="col-lg-2">
+                        <div class="col-lg-2" id="almacen_">
                             Almacen Destino
                         </div> 
-                        <div class="col-lg-2">
+                        <div class="col-lg-2" id="almancen_select">
                             <select name="almacen" id="almacen" class="form-control form-control-sm" onchange="actualizarSecciones(this)">
+                                <option value="">- Selecione -</option>
+                                <?php 
+                                foreach ($almacen as $row){?>
+                                    <option value="<?php echo $row->id ?>" <?php //if($row->id==$entrada_producto->id_producto)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                    <?php 
+                                }
+                                ?>
+                            </select>
+                        </div>
+                        <div class="col-lg-2" id="almacen_salida_">
+                            Almacen Salida
+                        </div> 
+                        <div class="col-lg-2" id="almacen_salida_select">
+                            <select name="almacen_salida" id="almacen_salida" class="form-control form-control-sm" onchange="actualizarSecciones(this)">
                                 <option value="">- Selecione -</option>
                                 <?php 
                                 foreach ($almacen as $row){?>
@@ -822,7 +860,7 @@ function pdf_documento(){
                                 <option value="">- Selecione -</option>
                                 <?php
                                 foreach ($igv_compra as $row){?>
-                                    <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$entrada_producto->igv_compra)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                    <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$orden_compra->igv_compra)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
                                     <?php 
                                 }
                                 ?>

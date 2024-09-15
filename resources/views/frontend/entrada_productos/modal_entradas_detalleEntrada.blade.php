@@ -215,12 +215,15 @@ $.ajax({
 
             let n = 1;
 
+            var total_acumulado=0;
+
             result.entrada_producto.forEach(entrada_producto => {
 
                 let marcaOptions = '<option value="">- Selecione -</option>';
                 let productoOptions = '<option value="">- Selecione -</option>';
                 let estadoBienOptions = '<option value="">- Selecione -</option>';
                 let unidadMedidaOptions = '<option value="">- Selecione -</option>';
+                var producto_stock = result.producto_stock[entrada_producto.id_producto];
 
                 result.marca.forEach(marca => {
                     let selected = (marca.id == entrada_producto.id_marca) ? 'selected' : '';
@@ -245,7 +248,7 @@ $.ajax({
                 const row = `
                     <tr>
                         <td>${n}</td>
-                        <td><input name="item[]" id="item${n}" class="form-control form-control-sm" value="${entrada_producto.item}" type="text"></td>
+                        <td><input name="item[]" id="item${n}" class="form-control form-control-sm" value="${entrada_producto.numero_serie}" type="text"></td>
                         <td><select name="descripcion[]" id="descripcion${n}" class="form-control form-control-sm" onChange="">${productoOptions}</select></td>
                         <td><select name="marca[]" id="marca${n}" class="form-control form-control-sm">${marcaOptions}</select></td>
                         <td><input name="cod_interno[]" id="cod_interno${n}" class="form-control form-control-sm" value="${entrada_producto.codigo}" type="text"></td>
@@ -256,17 +259,19 @@ $.ajax({
                         <td><input name="cantidad_ingreso[]" id="cantidad_ingreso${n}" class="cantidad_ingreso form-control form-control-sm" value="${entrada_producto.cantidad}" type="text" oninput="calcularCantidadPendiente(this)"></td>
                         <td><input name="cantidad_compra[]" id="cantidad_compra${n}" class="cantidad_compra form-control form-control-sm" value="${entrada_producto.cantidad}" type="text" oninput="calcularCantidadPendiente(this)"></td>
                         <td><input name="cantidad_pendiente[]" id="cantidad_pendiente${n}" class="cantidad_pendiente form-control form-control-sm" value="" type="text" readonly="readonly"></td>
-                        <td><input name="stock_actual[]" id="stock_actual${n}" class="form-control form-control-sm" value="${entrada_producto.stock_actual}" type="text"></td>
+                        <td><input name="stock_actual[]" id="stock_actual${n}" class="form-control form-control-sm" value="${producto_stock.saldos_cantidad}" type="text"></td>
                         <td><input name="precio_unitario[]" id="precio_unitario${n}" class="precio_unitario form-control form-control-sm" value="${entrada_producto.costo}" type="text" oninput="calcularSubTotal(this)"></td>
-                        <td><input name="sub_total[]" id="sub_total${n}" class="sub_total form-control form-control-sm" value="${entrada_producto.subtotal}" type="text" readonly="readonly"></td>
+                        <td><input name="sub_total[]" id="sub_total${n}" class="sub_total form-control form-control-sm" value="${entrada_producto.sub_total}" type="text" readonly="readonly"></td>
                         <td><input name="igv[]" id="igv${n}" class="igv form-control form-control-sm" value="${entrada_producto.igv}" type="text" readonly="readonly"></td>
                         <td><input name="total[]" id="total${n}" class="total form-control form-control-sm" value="${entrada_producto.total}" type="text" readonly="readonly"></td>
                     </tr>
                 `;
                 tbody.append(row);
+                calcularCantidadPendiente($('#cantidad_ingreso' + n));
                 n++;
-                //total_acumulado += parseFloat(factura.total);
+                total_acumulado += parseFloat(entrada_producto.total);
                 });
+                $('#totalGeneral').text(total_acumulado.toFixed(2));
             }
     });
 

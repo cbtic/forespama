@@ -125,6 +125,7 @@ class OrdenCompraController extends Controller
         $orden_compra->fecha_orden_compra = $request->fecha_orden_compra;
         $orden_compra->numero_orden_compra = $request->numero_orden_compra;
         $orden_compra->id_tipo_documento = $request->tipo_documento;
+        $orden_compra->igv_compra = $request->igv_compra;
         $orden_compra->id_usuario_inserta = $id_user;
         $orden_compra->estado = 1;
         $orden_compra->save();
@@ -139,7 +140,7 @@ class OrdenCompraController extends Controller
             
             $orden_compra_detalle->id_orden_compra = $orden_compra->id;
             $orden_compra_detalle->id_producto = $descripcion[$index];
-            $orden_compra_detalle->cantidad = $cantidad_ingreso[$index];
+            $orden_compra_detalle->cantidad_requerida = $cantidad_ingreso[$index];
             $orden_compra_detalle->precio = $precio_unitario[$index];
             $orden_compra_detalle->id_descuento = $descuento[$index];
             $orden_compra_detalle->sub_total = $sub_total[$index];
@@ -183,9 +184,17 @@ class OrdenCompraController extends Controller
         $estado_bien = $tablaMaestra_model->getMaestroByTipo(4);
         $unidad_medida = $tablaMaestra_model->getMaestroByTipo(43);
         $descuento = $tablaMaestra_model->getMaestroByTipo(55);
+
+        $producto_stock = [];
+
         foreach($orden_compra as $detalle){
-            //$producto_stock = $detalle->id_producto;
-            $producto_stock = $kardex_model->getExistenciaProductoById($detalle->id_producto);
+            $stock = $kardex_model->getExistenciaProductoById($detalle->id_producto);
+            if(count($stock)>0){
+                $producto_stock[$detalle->id_producto] = $stock[0];
+            }else {
+                $producto_stock[$detalle->id_producto] = ['saldos_cantidad'=>0];
+            }
+            
             //var_dump($producto_stock);
         }
         
@@ -198,7 +207,7 @@ class OrdenCompraController extends Controller
             'estado_bien' => $estado_bien,
             'unidad_medida' => $unidad_medida,
             'descuento' => $descuento,
-            '$producto_stock' =>$producto_stock
+            'producto_stock' =>$producto_stock
         ]);
     }
 }
