@@ -706,6 +706,7 @@ function pdf_documento(){
                     
                     <input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
                     <input type="hidden" name="id" id="id" value="<?php echo $id?>">
+                    <input type="hidden" name="id_orden_compra" id="id_orden_compra" value="<?php echo $id_orden_compra?>">
                     
                     <div class="row" style="padding-left:10px">
 

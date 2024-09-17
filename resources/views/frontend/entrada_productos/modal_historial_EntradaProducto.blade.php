@@ -173,6 +173,26 @@ function fn_save_detalle_producto(){
     });
 }
 
+function modalEntradaProducto(id, tipo){
+	
+	/*var tipo_mov="";
+	if(tipo=='INGRESO'){tipo_mov=1};
+	if(tipo=='SALIDA'){tipo_mov=2};*/
+
+	$(".modal-dialog").css("width","85%");
+	$('#openOverlayOpc .modal-body').css('height', 'auto');
+
+	$.ajax({
+			url: "/entrada_productos/modal_detalle_producto/"+id+"/"+tipo,
+			type: "GET",
+			success: function (result) {  
+					//console.log(result);
+					$("#diveditpregOpc").html(result);
+					$('#openOverlayOpc').modal('show');
+			}
+	});
+}
+
 
 </script>
 
@@ -217,6 +237,7 @@ function fn_save_detalle_producto(){
 								<th>Tipo Documento</th>
 								<th>N° Comprobante</th>
                                 <th>Fecha Comprobante</th>
+                                <th>Acciones</th>
 							</tr>
 							</thead>
 							<tbody id="divDetalle">
@@ -224,22 +245,16 @@ function fn_save_detalle_producto(){
                             foreach($entrada_producto as $row){
                             ?>
                             <tr>
-                                <td class="text-left" style="vertical-align:middle"><?php echo date('Y-m-d', strtotime($row->fecha))?></td>
-                                <td class="text-left" style="vertical-align:middle"><?php echo $row->credipago?></td>
-                                <td class="text-right" style="vertical-align:middle"><?php echo number_format($row->sub_total, 2, '.', ',');?></td>
-                                <td class="text-right" style="vertical-align:middle"><?php echo number_format($row->igv, 2, '.', ',');?></td>
-                                <td class="text-right" style="vertical-align:middle"><?php echo number_format($row->total, 2, '.', ',');?></td>
-                                <td class="text-left" style="vertical-align:middle"><?php echo $row->situacion?></td>
-                                <td class="text-left" style="vertical-align:middle"><?php if($row->fecha_pago!=null) {echo date('Y-m-d', strtotime($row->fecha_pago));}else{ echo'';}  ?></td>
+                                <td class="text-left" style="vertical-align:middle"><?php echo $row->id?></td>
+                                <td class="text-left" style="vertical-align:middle"><?php echo $row->tipo?></td>
+                                <td class="text-left" style="vertical-align:middle"><?php echo $row->tipo_documento?></td>
                                 <td class="text-left" style="vertical-align:middle"><?php echo $row->numero_comprobante?></td>
-                                <td class="text-left" style="vertical-align:middle"><?php echo $row->observacion?></td>
+                                <td class="text-left" style="vertical-align:middle"><?php if($row->fecha_movimiento!=null) {echo date('Y-m-d', strtotime($row->fecha_movimiento));}else{ echo'';}?></td>
                                 <td class="text-left" style="vertical-align:middle">
-                                    <button style="font-size:12px;margin-left:10px" type="button" class="btn btn-sm btn-info" data-toggle="modal" onclick="credipago_pdf_('<?php echo $row->id?>')" ><i class="fa fa-edit"></i> Ver Credipago</button>
-                                    <?php if($row->id_situacion==1) {?>
-                                        <a href="javascript:void(0)" onclick="eliminarCredipago(<?php echo $row->id?>,<?php echo $row->id_situacion?>)" class="btn btn-sm btn-danger" style="font-size:12px;margin-left:10px">Anular</a>
-                                    <?php }else if($row->id_situacion==2 || $row->id_situacion==3){ ?>
-                                        <a href="javascript:void(0)" onclick="eliminarCredipago(<?php echo $row->id?>,<?php echo $row->id_situacion?>)" class="btn btn-sm btn-danger" style="font-size:12px;margin-left:10px; pointer-events: none; opacity: 0.6; cursor: not-allowed;"  disabled>Anular</a>
-                                    <?php }?>
+                                    <?php if($row->tipo=='ENTRADA')$tipo=1;
+                                    else $tipo=2;?>
+                                    <button style="font-size:12px;margin-left:10px" type="button" class="btn btn-sm btn-success" data-toggle="modal" onclick="modalEntradaProducto(<?php echo $row->id?>,<?php echo $tipo?>)" ><i class="fa fa-edit"></i> Ver Movimiento</button>
+                                    
                                 </td>
                             </tr>
                             <?php 

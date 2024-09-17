@@ -49,8 +49,13 @@ function datatablenew(){
             var iNroPagina 	= parseFloat(fn_util_obtieneNroPagina(aoData[3].value, aoData[4].value)).toFixed();
             var iCantMostrar 	= aoData[4].value;
 			
-            var denominacion = $('#denominacion_bus').val();
-			var cerrado = $('#cerrado_bus').val();
+            var tipo_movimiento = $('#tipo_movimiento_bus').val();
+			var tipo_documento = $('#tipo_documento_bus').val();
+			var unidad_origen = $('#unidad_origen_bus').val();
+			var almacen_destino = $('#almacen_destino_bus').val();
+			var proveedor = $('#proveedor_bus').val();
+			var numero_comprobante = $('#numero_comprobante_bus').val();
+			var situacion = $('#situacion_bus').val();
 			var estado = $('#estado_bus').val();
 			
 			var _token = $('#_token').val();
@@ -60,7 +65,9 @@ function datatablenew(){
                 "type": "POST",
                 "url": sSource,
                 "data":{NumeroPagina:iNroPagina,NumeroRegistros:iCantMostrar,
-						denominacion:denominacion,cerrado:cerrado,estado:estado,
+						tipo_movimiento:tipo_movimiento,tipo_documento:tipo_documento,unidad_origen:unidad_origen,
+						almacen_destino:almacen_destino,proveedor:proveedor,numero_comprobante:numero_comprobante,
+						situacion:situacion,estado:estado,
 						_token:_token
                        },
                 "success": function (result) {
@@ -135,6 +142,17 @@ function datatablenew(){
 				"bSortable": true,
 				"aTargets": [4]
 				},
+
+				{
+				"mRender": function (data, type, row) {
+					var almacen = "";
+					if(row.almacen!= null)almacen = row.almacen;
+					return almacen;
+				},
+				"bSortable": true,
+				"aTargets": [5]
+				},
+
 				{
 				"mRender": function (data, type, row) {
 					var numero_comprobante = "";
@@ -142,7 +160,7 @@ function datatablenew(){
 					return numero_comprobante;
 				},
 				"bSortable": true,
-				"aTargets": [5]
+				"aTargets": [6]
 				},
 				{
 				"mRender": function (data, type, row) {
@@ -151,7 +169,7 @@ function datatablenew(){
 					return fecha_comprobante;
 				},
 				"bSortable": true,
-				"aTargets": [6]
+				"aTargets": [7]
 				},
 				{
 				"mRender": function (data, type, row) {
@@ -166,7 +184,7 @@ function datatablenew(){
 					return cerrado;
 				},
 				"bSortable": true,
-				"aTargets": [7]
+				"aTargets": [8]
 				},
 				{
 					"mRender": function (data, type, row) {
@@ -180,7 +198,7 @@ function datatablenew(){
 						return estado;
 					},
 					"bSortable": false,
-					"aTargets": [8]
+					"aTargets": [9]
 				},
 				{
 					"mRender": function (data, type, row) {
@@ -209,7 +227,7 @@ function datatablenew(){
 						return html;
 					},
 					"bSortable": false,
-					"aTargets": [9],
+					"aTargets": [10],
 				},
 
             ]

@@ -328,15 +328,14 @@ label.form-control-sm{
         <div class="card-body">
 
             <form class="form-horizontal" method="post" action="" id="frmKardex" autocomplete="off" enctype="multipart/form-data">
-				<!--
+				
                 <div class="row">
                     <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12" style="margin-top:15px">
                         <h4 class="card-title mb-0 text-primary" style="font-size:22px">
-                            Registro Solicitudes
+                            Kardex
                         </h4>
                     </div>
                 </div>
-				-->
                 <div class="row justify-content-center" style="margin-top:15px">
 
                     <input type="hidden" name="flag_ocultar" id="flag_ocultar" value="0">

@@ -324,15 +324,14 @@ label.form-control-sm{
         <div class="card-body">
 
             <form class="form-horizontal" method="post" action="" id="frmEntradaProductos" autocomplete="off" enctype="multipart/form-data">
-				<!--
+				
                 <div class="row">
                     <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12" style="margin-top:15px">
                         <h4 class="card-title mb-0 text-primary" style="font-size:22px">
-                            Registro Solicitudes
+                            Entradas y Salidas
                         </h4>
                     </div>
                 </div>
-				-->
                 <div class="row justify-content-center" style="margin-top:15px">
 
                     <input type="hidden" name="flag_ocultar" id="flag_ocultar" value="0">
@@ -348,13 +347,79 @@ label.form-control-sm{
 				
 				<div class="row" style="padding:20px 20px 0px 20px;">
 
-                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-                        <input id="denominacion_bus" name="denominacion_bus" on class="form-control form-control-sm"  placeholder="Denominaci&oacute;n">
+					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+						<select name="tipo_movimiento_bus" id="tipo_movimiento_bus" class="form-control form-control-sm">
+							<option value="">--Seleccionar Tipo Movimiento--</option>
+							<?php
+							foreach ($tipo_movimiento as $row){?>
+								<option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
+								<?php 
+							}
+							?>
+						</select>
 					</div>
 
 					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<select name="cerrado_bus" id="cerrado_bus" class="form-control form-control-sm">
-							<option value="">--Selecionar Cerrado--</option>
+						<select name="tipo_documento_bus" id="tipo_documento_bus" class="form-control form-control-sm">
+							<option value="">--Seleccionar Tipo Movimiento--</option>
+							<?php
+							foreach ($tipo_documento_entrada as $row){?>
+								<option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
+								<?php 
+							}
+							?>
+							<?php
+							foreach ($tipo_documento_salida as $row){?>
+								<option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
+								<?php 
+							}
+							?>
+						</select>
+					</div>
+
+					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+						<select name="unidad_origen_bus" id="unidad_origen_bus" class="form-control form-control-sm">
+							<option value="">--Seleccionar Unidad Origen--</option>
+							<?php
+							foreach ($unidad_origen as $row){?>
+								<option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
+								<?php 
+							}
+							?>
+						</select>
+					</div>
+
+					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+						<select name="almacen_destino_bus" id="almacen_destino_bus" class="form-control form-control-sm">
+							<option value="">--Seleccionar Unidad Destino--</option>
+							<?php
+							foreach ($almacen as $row){?>
+								<option value="<?php echo $row->id ?>"><?php echo $row->denominacion ?></option>
+								<?php 
+							}
+							?>
+						</select>
+					</div>
+
+					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+						<select name="proveedor_bus" id="proveedor_bus" class="form-control form-control-sm">
+							<option value="">--Seleccionar Proveedor--</option>
+							<?php
+							foreach ($proveedor as $row){?>
+								<option value="<?php echo $row->id ?>"><?php echo $row->razon_social ?></option>
+								<?php 
+							}
+							?>
+						</select>
+					</div>
+					
+					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+                        <input id="numero_comprobante_bus" name="numero_comprobante_bus" on class="form-control form-control-sm"  placeholder="N&uacute;mero Comprobante">
+					</div>
+
+					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+						<select name="situacion_bus" id="situacion_bus" class="form-control form-control-sm">
+							<option value="">--Seleccionar Situaci&oacute;n--</option>
 							<?php
 							foreach ($cerrado_entrada as $row){?>
 								<option value="<?php echo $row->codigo ?>" <?php if($row->codigo=='1')echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
@@ -390,6 +455,7 @@ label.form-control-sm{
                             <th>Tipo Doc.</th>
 							<th>Unidad Origen</th>
                             <th>Proveedor</th>
+							<th>Almacen Salida/Destino</th>
                             <th>Nro. Comprobante</th>
 							<th>Fecha Comprobante</th>
 							<th>Cerrado</th>
