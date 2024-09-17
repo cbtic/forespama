@@ -50,6 +50,7 @@ function datatablenew(){
             var iCantMostrar 	= aoData[4].value;
 			
             var denominacion = $('#denominacion_bus').val();
+			var cerrado = $('#cerrado_bus').val();
 			var estado = $('#estado_bus').val();
 			
 			var _token = $('#_token').val();
@@ -59,7 +60,7 @@ function datatablenew(){
                 "type": "POST",
                 "url": sSource,
                 "data":{NumeroPagina:iNroPagina,NumeroRegistros:iCantMostrar,
-						denominacion:denominacion,estado:estado,
+						denominacion:denominacion,cerrado:cerrado,estado:estado,
 						_token:_token
                        },
                 "success": function (result) {
@@ -153,6 +154,21 @@ function datatablenew(){
 				"aTargets": [6]
 				},
 				{
+				"mRender": function (data, type, row) {
+					var cerrado = "";
+					//if(row.cerrado_nombre!= null)cerrado_nombre = row.cerrado_nombre;
+					if(row.cerrado == 1){
+						cerrado = "ABIERTO";
+					}
+					if(row.cerrado == 2){
+						cerrado = "CERRADO";
+					}
+					return cerrado;
+				},
+				"bSortable": true,
+				"aTargets": [7]
+				},
+				{
 					"mRender": function (data, type, row) {
 						var estado = "";
 						if(row.estado == 1){
@@ -164,7 +180,7 @@ function datatablenew(){
 						return estado;
 					},
 					"bSortable": false,
-					"aTargets": [7]
+					"aTargets": [8]
 				},
 				{
 					"mRender": function (data, type, row) {
@@ -193,7 +209,7 @@ function datatablenew(){
 						return html;
 					},
 					"bSortable": false,
-					"aTargets": [8],
+					"aTargets": [9],
 				},
 
             ]

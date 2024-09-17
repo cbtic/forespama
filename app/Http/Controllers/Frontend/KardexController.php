@@ -9,6 +9,7 @@ use RealRashid\SweetAlert\Facades\Alert;
 use App\Http\Controllers\Controller;
 use App\Models\Kardex;
 use App\Models\Producto;
+use App\Models\Almacene;
 use Auth;
 
 class KardexController extends Controller
@@ -33,11 +34,14 @@ class KardexController extends Controller
 
 		//$tablaMaestra_model = new TablaMaestra;
 		//$estado_bien = $tablaMaestra_model->getMaestroByTipo(4);
+		$id_user = Auth::user()->id;
 
         $producto_model = new Producto;
+		$almacen_model = new Almacene;
         $producto = $producto_model->getProductoAll();
+		$almacen = $almacen_model->getAlmacenByUser($id_user);
 		
-		return view('frontend.kardex.create',compact('producto'));
+		return view('frontend.kardex.create',compact('producto','almacen'));
 
 	}
 
@@ -45,6 +49,7 @@ class KardexController extends Controller
 
 		$kardex_model = new Kardex;
 		$p[]=$request->producto;
+		$p[]=$request->almacen;
 		$p[]=$request->NumeroPagina;
 		$p[]=$request->NumeroRegistros;
 		$data = $kardex_model->listar_kardex_ajax($p);

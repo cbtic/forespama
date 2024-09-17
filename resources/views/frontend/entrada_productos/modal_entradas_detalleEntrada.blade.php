@@ -267,6 +267,7 @@ $.ajax({
                     </tr>
                 `;
                 tbody.append(row);
+                //$('#descripcion' + n).select2({ width: '100%', });
                 calcularCantidadPendiente($('#cantidad_ingreso' + n));
                 n++;
                 total_acumulado += parseFloat(entrada_producto.total);
@@ -487,6 +488,10 @@ function cambiarDocumento(){
                 
             }
         });
+        $('#almacen_').show();
+        $('#almacen_select').show();
+        $('#almacen_salida_').hide();
+        $('#almacen_salida_select').hide();
 
     }else if(tipo_movimiento==2){
 
@@ -511,6 +516,10 @@ function cambiarDocumento(){
                 
             }
         });
+        $('#almacen_').hide();
+        $('#almacen_select').hide();
+        $('#almacen_salida_').show();
+        $('#almacen_salida_select').show();
 
     }
 }
@@ -716,6 +725,12 @@ function pdf_documento(){
                                 <option value="">- Selecione -</option>
                             </select>
                         </div>
+                        <div class="col-lg-2">
+                            C&oacute;digo
+                        </div>
+                        <div class="col-lg-2">
+                            <input id="codigo" name="codigo" on class="form-control form-control-sm"  value="<?php //echo $entrada_producto->numero_comprobante?>" type="text" readonly="readonly">
+                        </div>
                         <!--<div class="col-lg-2">
                             Orden de Compra
                         </div>
@@ -752,26 +767,40 @@ function pdf_documento(){
                                 ?>
                             </select>
                         </div>
-                        <div class="col-lg-2">
+                        <div class="col-lg-2" id="almacen_">
                             Almacen Destino
                         </div> 
-                        <div class="col-lg-2">
-                            <select name="almacen" id="almacen" class="form-control form-control-sm" onchange="actualizarSecciones(this)">
+                        <div class="col-lg-2" id="almacen_select">
+                            <select name="almacen" id="almacen" class="form-control form-control-sm" onchange="//actualizarSecciones(this)">
                                 <option value="">- Selecione -</option>
                                 <?php 
                                 foreach ($almacen as $row){?>
-                                    <option value="<?php echo $row->id ?>" <?php //if($row->id==$entrada_producto->id_producto)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                    <option value="<?php echo $row->id ?>" <?php if($row->id==$entrada_producto->id_almacen_destino || $row->id==$entrada_producto->id_almacen_salida)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
                                     <?php 
                                 }
                                 ?>
                             </select>
                         </div>
-                        <div class="col-lg-2">
+                        <div class="col-lg-2" id="almacen_salida_">
+                            Almacen Salida
+                        </div> 
+                        <div class="col-lg-2" id="almacen_salida_select">
+                            <select name="almacen_salida" id="almacen_salida" class="form-control form-control-sm" onchange="//actualizarSecciones(this)">
+                                <option value="">- Selecione -</option>
+                                <?php 
+                                foreach ($almacen as $row){?>
+                                    <option value="<?php echo $row->id ?>" <?php if($row->id==$entrada_producto->id_almacen_destino || $row->id==$entrada_producto->id_almacen_salida)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                    <?php 
+                                }
+                                ?>
+                            </select>
+                        </div>
+                        <!--<div class="col-lg-2">
                             N&uacute;mero Comprobante
                         </div>
                         <div class="col-lg-2">
                             <input id="numero_comprobante" name="numero_comprobante" on class="form-control form-control-sm"  value="<?php echo $entrada_producto->numero_comprobante?>" type="text">
-                        </div>
+                        </div>-->
                         <div class="col-lg-2">
                             Moneda
                         </div>

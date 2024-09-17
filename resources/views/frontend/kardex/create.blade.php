@@ -364,6 +364,19 @@ label.form-control-sm{
 							?>
 						</select>
 					</div>
+
+					<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+						<select name="almacen_bus" id="almacen_bus" class="form-control form-control-sm">
+							<option value="">- Selecione Almacen-</option>
+							<?php
+							foreach ($almacen as $row) {
+							?>
+							<option value="<?php echo $row->id?>"><?php echo $row->denominacion?></option>
+							<?php
+							}
+							?>
+						</select>
+					</div>
 					
                     <!--<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
 						<select name="estado_bus" id="estado_bus" class="form-control form-control-sm">
@@ -397,6 +410,8 @@ label.form-control-sm{
 							<th>Saldos</th>
 							<th>Costo saldos</th>
                             <th>Total Saldos</th>
+							<th>Almacen Destino</th>
+							<th>Almacen Salida</th>
                         </tr>
                         </thead>
                         <tbody>

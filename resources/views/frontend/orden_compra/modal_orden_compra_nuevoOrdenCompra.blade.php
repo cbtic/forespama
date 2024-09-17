@@ -466,6 +466,7 @@ $.ajax({
                     </tr>
                 `;
                 tbody.append(row);
+                $('#descripcion' + n).select2({ width: '100%' });
                 n++;
                 total_acumulado += parseFloat(orden_compra.total);
                 });
@@ -522,6 +523,11 @@ function agregarProducto(){
 
         $('#tblOrdenCompraDetalle tbody').append(newRow);
 
+        $('#descripcion' + n).select2({ 
+            width: '100%',
+            //dropdownCssClass: 'form-control form-control-sm',
+            //containerCssClass: 'form-control form-control-sm'
+        });
         
         $('#fecha_fabricacion_' + n).datepicker({
             autoclose: true,
@@ -559,11 +565,11 @@ function fn_save_orden_compra(){
             data : $("#frmOrdenCompra").serialize(),
 			success: function (result) {
                 //alert(result.id)
-                $('#openOverlayOpc').modal('hide');
+                //$('#openOverlayOpc').modal('hide');
                 datatablenew();
-                /*if (result.id>0) {
-                    modalEntradaProducto(result.id,result.tipo_movimiento);
-                }*/
+                if (result.id>0) {
+                    modalOrdenCompra(result.id);
+                }
             }
     });
 }
@@ -571,9 +577,9 @@ function fn_save_orden_compra(){
 function pdf_documento(){
 
     var id = $('#id').val();
-    var tipo_movimiento = $('#tipo_movimiento').val();
+    //var tipo_movimiento = $('#tipo_movimiento').val();
 
-    var href = '/entrada_productos/movimiento_pdf/'+id+'/'+tipo_movimiento;
+    var href = '/orden_compra/movimiento_pdf/'+id;
     window.open(href, '_blank');
 
 }
@@ -628,6 +634,12 @@ function pdf_documento(){
                             </select>
                         </div>
                         <div class="col-lg-2">
+                            N&uacute;mero Orden Compra
+                        </div>
+                        <div class="col-lg-2">
+                            <input id="numero_orden_compra" name="numero_orden_compra" on class="form-control form-control-sm"  value="<?php echo $orden_compra->numero_orden_compra?>" type="text">
+                        </div>
+                        <div class="col-lg-2">
                             Empresa Compra
                         </div>
                         <div class="col-lg-2">
@@ -660,12 +672,6 @@ function pdf_documento(){
                         </div>
                         <div class="col-lg-2">
                             <input id="fecha_orden_compra" name="fecha_orden_compra" on class="form-control form-control-sm"  value="<?php echo isset($orden_compra) && $orden_compra->fecha_orden_compra ? $orden_compra->fecha_orden_compra : date('Y-m-d'); ?>" type="text">
-                        </div>
-                        <div class="col-lg-2">
-                            N&uacute;mero Orden Compra
-                        </div>
-                        <div class="col-lg-2">
-                            <input id="numero_orden_compra" name="numero_orden_compra" on class="form-control form-control-sm"  value="<?php echo $orden_compra->numero_orden_compra?>" type="text">
                         </div>
                         <div class="col-lg-2">
                             Aplica IGV

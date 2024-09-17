@@ -43,7 +43,7 @@ class EntradaProductoDetalle extends Model
 
     function getDetalleProductoPdf($id){
 
-        $cad = "select epd.id,  ROW_NUMBER() OVER (PARTITION BY epd.id_entrada_productos ) AS row_num, epd.item, p.denominacion producto, p.codigo, m.denominiacion marca, tm2.denominacion unidad_medida, epd.fecha_fabricacion, epd.fecha_vencimiento, tm.denominacion estado_bien, epd.cantidad, epd.cantidad, epd.cantidad, '12' stock_actual, epd.costo, '123' subtotal, '124' igv, '125' total 
+        $cad = "select epd.id,  ROW_NUMBER() OVER (PARTITION BY epd.id_entrada_productos ) AS row_num, epd.numero_serie , p.denominacion producto, p.codigo, m.denominiacion marca, tm2.denominacion unidad_medida, epd.fecha_fabricacion, epd.fecha_vencimiento, tm.denominacion estado_bien, epd.cantidad, epd.cantidad, epd.cantidad, '12' stock_actual, epd.costo, epd.sub_total , epd.igv, epd.total  
         from entrada_producto_detalles epd 
         inner join productos p on epd.id_producto = p.id
         inner join marcas m on epd.id_marca = m.id

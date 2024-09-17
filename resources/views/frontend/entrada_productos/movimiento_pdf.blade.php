@@ -159,7 +159,7 @@ $(document).ready(function() {
     </div>-->
     <table class="data" style="width:100%; font-size:11px">
         <tr>
-            <th><h2><?php echo $tipo_documento;?></h2></th>
+            <th><h2><?php echo $tipo_documento . ' N° ' .$numero_comprobante;?></h2></th>
         </tr>
     </table>
     <!--<div style="display: flex !important; width:100%">
@@ -185,7 +185,12 @@ $(document).ready(function() {
                     </tr>
                     <tr>
                         <td class="td" style ="text-align: left; width: 15%;"><b>Almacen Destino:</b></td>
-                        <td class="td" style ="text-align: left; width: 15%;"><?php //echo $tipo_proyectista;?></td>
+                        <td class="td" style ="text-align: left; width: 15%;"><?php echo $almacen;?></td>
+                        <td class="td" style ="text-align: left; width: 70%;"></td>
+                    </tr>
+                    <tr>
+                        <td class="td" style ="text-align: left; width: 15%;"><b>Empresa <?php echo $tipo_empresa;?>:</b></td>
+                        <td class="td" style ="text-align: left; width: 15%;"><?php echo $razon_social;?></td>
                         <td class="td" style ="text-align: left; width: 70%;"></td>
                     </tr>
                     <tr>
@@ -196,6 +201,11 @@ $(document).ready(function() {
                     <tr>
                         <td class="td" style ="text-align: left; width: 15%;"><b>Observaci&oacute;n:</b></td>
                         <td class="td" style ="text-align: left; width: 15%;"><?php echo $observacion;?></td>
+                        <td class="td" style ="text-align: left; width: 70%;"></td>
+                    </tr>
+                    <tr>
+                        <td class="td" style ="text-align: left; width: 15%;"><b>IGV:</b></td>
+                        <td class="td" style ="text-align: left; width: 15%;"><?php echo $igv_compra;?></td>
                         <td class="td" style ="text-align: left; width: 70%;"></td>
                     </tr>
                 </tbody>
@@ -230,7 +240,7 @@ $(document).ready(function() {
                     foreach($datos_detalle as $key=>$r) { ?>
                         <tr>
                             <td class="td" style ="text-align: left; width: 5%; height:25px"><?php echo $r->row_num;?></td>
-                            <td class="td" style ="text-align: left; width: 5%; height:25px"><?php echo $r->item;?></td>
+                            <td class="td" style ="text-align: left; width: 5%; height:25px"><?php echo $r->numero_serie;?></td>
                             <td class="td" style ="text-align: left; width: 10%; height:25px"><?php echo $r->producto;?></td>
                             <td class="td" style ="text-align: left; width: 5%; height:25px"><?php echo $r->marca;?></td>
                             <td class="td" style ="text-align: left; width: 5%; height:25px"><?php echo $r->codigo;?></td>
@@ -241,13 +251,15 @@ $(document).ready(function() {
                             <td class="td" style ="text-align: left; width: 5%; height:25px"><?php echo $r->cantidad;?></td>
                             <td class="td" style ="text-align: left; width: 5%; height:25px"><?php echo $r->cantidad;?></td>
                             <td class="td" style ="text-align: left; width: 5%; height:25px"><?php echo $r->cantidad;?></td>
-                            <td class="td" style ="text-align: left; width: 5%; height:25px"><?php echo $r->stock_actual;?></td>
+                            @foreach($entrada_producto as $detalle)
+                            <td class="td" style ="text-align: left; width: 5%; height:25px"> {{ isset($producto_stock[$detalle->id_producto]->saldos_cantidad) ? $producto_stock[$detalle->id_producto]->saldos_cantidad : 0 }}</td>
+                            @endforeach
                             <td class="td" style ="text-align: left; width: 5%; height:25px"><?php echo number_format($r->costo,2,'.',',');?></td>
-                            <td class="td" style ="text-align: left; width: 5%; height:25px"><?php echo number_format($r->subtotal,2,'.',',');?></td>
+                            <td class="td" style ="text-align: left; width: 5%; height:25px"><?php echo number_format($r->sub_total,2,'.',',');?></td>
                             <td class="td" style ="text-align: left; width: 5%; height:25px"><?php echo number_format($r->igv,2,'.',',');?></td>
                             <td class="td" style ="text-align: left; width: 5%; height:25px"><?php echo number_format($r->total,2,'.',',');?></td>
                             <?php 
-                            $subtotal_suma+=$r->subtotal;
+                            $subtotal_suma+=$r->sub_total;
                             $igv_suma+=$r->igv;
                             $total_suma+=$r->total;
                             ?>

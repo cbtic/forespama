@@ -9,6 +9,8 @@ $(document).ready(function () {
 			datatablenew();
 		}
 	});
+
+	$("#producto_bus").select2({ width: '100%' });
 		
 	datatablenew();
 
@@ -46,6 +48,7 @@ function datatablenew(){
             var iCantMostrar 	= aoData[4].value;
 			
             var producto = $('#producto_bus').val();
+			var almacen = $('#almacen_bus').val();
 			
 			var _token = $('#_token').val();
             oSettings.jqXHR = $.ajax({
@@ -54,7 +57,7 @@ function datatablenew(){
                 "type": "POST",
                 "url": sSource,
                 "data":{NumeroPagina:iNroPagina,NumeroRegistros:iCantMostrar,
-						producto:producto,
+						producto:producto,almacen:almacen,
 						_token:_token
                        },
                 "success": function (result) {
@@ -172,6 +175,24 @@ function datatablenew(){
 				},
 				"bSortable": true,
 				"aTargets": [10]
+				},
+				{
+				"mRender": function (data, type, row) {
+					var almacen_destino = "";
+					if(row.almacen_destino!= null)almacen_destino = row.almacen_destino;
+					return almacen_destino;
+				},
+				"bSortable": true,
+				"aTargets": [11]
+				},
+				{
+				"mRender": function (data, type, row) {
+					var almacen_salida = "";
+					if(row.almacen_salida!= null)almacen_salida = row.almacen_salida;
+					return almacen_salida;
+				},
+				"bSortable": true,
+				"aTargets": [12]
 				},
             ]
     });

@@ -174,7 +174,8 @@ function datatablenew(){
 						
 						html += '<button style="font-size:12px" type="button" class="btn btn-sm btn-success" data-toggle="modal" onclick="modalOrdenCompra('+row.id+')" ><i class="fa fa-edit"></i> Editar</button>'; 
 						html += '<a href="javascript:void(0)" onclick=eliminarOrdenCompra('+row.id+','+row.estado+') class="btn btn-sm '+clase+'" style="font-size:12px;margin-left:10px">'+estado+'</a>';
-						html += '<button style="font-size:12px; margin-left:10px" type="button" class="btn btn-sm btn-info" data-toggle="modal" onclick="modalEntradaProducto('+row.id+','+row.id_tipo_documento+')">Atender</button>'; 
+						html += '<button style="font-size:12px; margin-left:10px" type="button" class="btn btn-sm btn-info" data-toggle="modal" onclick="modalEntradaProducto('+row.id+','+row.id_tipo_documento+')">Atender</button>';
+						html += '<button style="font-size:12px; margin-left:10px" type="button" class="btn btn-sm btn-warning" data-toggle="modal" onclick="modalHistorialEntradaProducto('+row.id+','+row.id_tipo_documento+')">Historial</button>';  
 						//html += '<a href="javascript:void(0)" onclick=modalResponsable('+row.id+') class="btn btn-sm btn-info" style="font-size:12px;margin-left:10px">Detalle Responsable</a>';
 						
 						html += '</div>';
@@ -262,5 +263,17 @@ function modalEntradaProducto(id,id_tipo_documento){
 					$("#diveditpregOpc").html(result);
 					$('#openOverlayOpc').modal('show');
 			}
+	});
+}
+
+function modalHistorialEntradaProducto(id, id_tipo_documento){
+
+	$.ajax({
+		url: "/entrada_productos/modal_historial_entrada_producto/"+id+"/"+id_tipo_documento,
+		type: "GET",
+		success: function (result) {
+				$("#diveditpregOpc").html(result);
+				$('#openOverlayOpc').modal('show');
+		}
 	});
 }

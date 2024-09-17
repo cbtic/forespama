@@ -40,10 +40,11 @@ class EntradaProductosController extends Controller
 
     public function create(){
 
-		/*$tablaMaestra_model = new TablaMaestra;
-		$estado_bien = $tablaMaestra_model->getMaestroByTipo(4);*/
+		$tablaMaestra_model = new TablaMaestra;
+
+        $cerrado_entrada = $tablaMaestra_model->getMaestroByTipo(52);
 		
-		return view('frontend.entrada_productos.create');
+		return view('frontend.entrada_productos.create',compact('cerrado_entrada'));
 
 	}
 
@@ -51,6 +52,7 @@ class EntradaProductosController extends Controller
 
 		$entrada_producto_model = new EntradaProducto;
 		$p[]=$request->denominacion;
+        $p[]=$request->cerrado;
         $p[]=$request->estado;
 		$p[]=$request->NumeroPagina;
 		$p[]=$request->NumeroRegistros;
@@ -149,8 +151,11 @@ class EntradaProductosController extends Controller
             $entrada_producto->total_compra = 100;
             $entrada_producto->cerrado = $request->cerrado;
             $entrada_producto->observacion = $request->observacion;
+            $entrada_producto->id_almacen_destino = $request->almacen;
             $entrada_producto->estado = 1;
             $entrada_producto->save();
+
+            $valida_estado = true;
 
             foreach($item as $index => $value) {
                 
@@ -180,6 +185,10 @@ class EntradaProductosController extends Controller
                 $entradaProducto_detalle->igv = $igv[$index];
                 $entradaProducto_detalle->total = $total[$index];
 
+                if($cantidad_pendiente[$index]!=0){
+                    $valida_estado = false;
+                }
+
                 $entradaProducto_detalle->save();
 
                 $producto = Producto::find($descripcion[$index]);
@@ -194,15 +203,26 @@ class EntradaProductosController extends Controller
                     $cantidad_saldo = $kardex_buscar->saldos_cantidad + $cantidad_ingreso[$index];
                     $kardex->saldos_cantidad = $cantidad_saldo;
                     $kardex->costo_saldos_cantidad = $producto->costo_unitario;
+                    $total_kardex = $cantidad_saldo * $producto->costo_unitario;
+                    $kardex->total_saldos_cantidad = $total_kardex;
                 }else{
                     $kardex->saldos_cantidad = $cantidad_ingreso[$index];
                     $kardex->costo_saldos_cantidad = $producto->costo_unitario;
+                    $total_kardex = $cantidad_ingreso[$index] * $producto->costo_unitario;
+                    $kardex->total_saldos_cantidad = $total_kardex;
                 }
 
                 $kardex->id_entrada_producto = $entrada_producto->id;
-                
+                $kardex->id_almacen_destino = $request->almacen;
+
                 $kardex->save();
 
+            }
+
+            if($valida_estado==true){
+                $entrada_producto = EntradaProducto::find($entrada_producto->id);
+                $entrada_producto->cerrado = 2;
+                $entrada_producto->save();
             }
 
         }else if($request->tipo_movimiento==2){
@@ -242,14 +262,17 @@ class EntradaProductosController extends Controller
             $salida_producto->total_compra = 100;
             $salida_producto->cerrado = $request->cerrado;
             $salida_producto->observacion = $request->observacion;
+            $salida_producto->id_almacen_salida = $request->almacen_salida;
             $salida_producto->estado = 1;
             $salida_producto->save();
+
+            $valida_estado = true;
 
             foreach($item as $index => $value) {
                 
                 $salida_producto_detalle = new SalidaProductoDetalle();
                 $salida_producto_detalle->id_salida_productos = $salida_producto->id;
-                $salida_producto_detalle->item = $item[$index];
+                $salida_producto_detalle->numero_serie = $item[$index];
                 $salida_producto_detalle->cantidad = $cantidad_ingreso[$index];
 
                 //$salida_producto_detalle->numero_lote = "";
@@ -273,6 +296,10 @@ class EntradaProductosController extends Controller
                 $salida_producto_detalle->igv = floatval($igv[$index]);
                 $salida_producto_detalle->total = floatval($total[$index]);
 
+                if($cantidad_pendiente[$index]!=0){
+                    $valida_estado = false;
+                }
+
                 $salida_producto_detalle->save();
 
                 $producto = Producto::find($descripcion[$index]);
@@ -287,13 +314,24 @@ class EntradaProductosController extends Controller
                     $cantidad_saldo = $kardex_buscar->saldos_cantidad - $cantidad_ingreso[$index];
                     $kardex->saldos_cantidad = $cantidad_saldo;
                     $kardex->costo_saldos_cantidad = $producto->costo_unitario;
+                    $total_kardex = $cantidad_saldo * $producto->costo_unitario;
+                    $kardex->total_saldos_cantidad = $total_kardex;
                 }else{
                     $kardex->saldos_cantidad = $cantidad_ingreso[$index];
                     $kardex->costo_saldos_cantidad = $producto->costo_unitario;
+                    $total_kardex = $cantidad_ingreso[$index] * $producto->costo_unitario;
+                    $kardex->total_saldos_cantidad = $total_kardex;
                 }
                 $kardex->id_salida_producto = $salida_producto->id;
+                $kardex->id_almacen_salida = $request->almacen_salida;
 
                 $kardex->save();
+            }
+
+            if($valida_estado==true){
+                $salida_producto = SalidaProducto::find($entrada_producto->id);
+                $salida_producto->cerrado = 2;
+                $salida_producto->save();
             }
 
         }
@@ -367,6 +405,8 @@ class EntradaProductosController extends Controller
         $igv_compra = $tablaMaestra_model->getMaestroByTipo(51);
         $tipo_movimiento = $tablaMaestra_model->getMaestroByTipo(53);
         $estado_bien = $tablaMaestra_model->getMaestroByTipo(4);
+
+        //dd($almacen);exit();
         
 
 		return view('frontend.entrada_productos.modal_entradas_detalleEntrada',compact('id','entrada_producto_detalle','tipo_documento','moneda','unidad_origen','cerrado_entrada','igv_compra','proveedor','producto','unidad','almacen'/*,'almacen_seccion'*/,'tipo_cambio','tipo_movimiento','entrada_producto','marca','estado_bien',/*'tipo_movimiento_',*/'tipo'));
@@ -407,6 +447,28 @@ class EntradaProductosController extends Controller
             $fecha_movimiento=$datos[0]->fecha_movimiento;
             $moneda=$datos[0]->moneda;
             $observacion=$datos[0]->observacion;
+            $igv_compra=$datos[0]->igv_compra;
+            $almacen=$datos[0]->almacen;
+            $tipo_empresa = 'Vende';
+
+            $entrada_producto_detalle_model = new EntradaProductoDetalle;
+
+            $kardex_model = new Kardex;
+
+            $entrada_producto = $entrada_producto_detalle_model->getDetalleProductoId($id);
+
+            $producto_stock = [];
+
+            foreach($entrada_producto as $detalle){
+                $stock = $kardex_model->getExistenciaProductoById($detalle->id_producto);
+                if(count($stock)>0){
+                    $producto_stock[$detalle->id_producto] = $stock[0];
+                }else {
+                    $producto_stock[$detalle->id_producto] = ['saldos_cantidad'=>0];
+                }
+                
+                //var_dump($producto_stock);
+            }
 
         }else if($tipo_movimiento==2){
 
@@ -426,9 +488,32 @@ class EntradaProductosController extends Controller
             $fecha_movimiento=$datos[0]->fecha_movimiento;
             $moneda=$datos[0]->moneda;
             $observacion=$datos[0]->observacion;
+            $igv_compra=$datos[0]->igv_compra;
+            $almacen=$datos[0]->almacen;
+            $tipo_empresa = 'Compra';
+
+            //$salida_producto_detalle_model = new SalidaProductoDetalle;
+
+            $kardex_model = new Kardex;
+
+            $entrada_producto = $salida_producto_detalle_model->getDetalleProductoId($id);
+
+            $producto_stock = [];
+
+            foreach($entrada_producto as $detalle){
+                $stock = $kardex_model->getExistenciaProductoById($detalle->id_producto);
+                if(count($stock)>0){
+                    $producto_stock[$detalle->id_producto] = $stock[0];
+                }else {
+                    $producto_stock[$detalle->id_producto] = ['saldos_cantidad'=>0];
+                } 
+                
+                //var_dump($producto_stock);
+            }
 
         }
 
+        
 		$year = Carbon::now()->year;
 
 		Carbon::setLocale('es');
@@ -439,10 +524,8 @@ class EntradaProductosController extends Controller
 
 		 $currentHour = Carbon::now()->format('H:i:s');
 
-		$pdf = Pdf::loadView('frontend.entrada_productos.movimiento_pdf',compact('tipo_documento','unidad_origen','razon_social','numero_comprobante','fecha_comprobante','fecha_movimiento','datos_detalle','observacion','moneda'));
+		$pdf = Pdf::loadView('frontend.entrada_productos.movimiento_pdf',compact('tipo_documento','unidad_origen','razon_social','numero_comprobante','fecha_comprobante','fecha_movimiento','datos_detalle','observacion','moneda','igv_compra','almacen','tipo_empresa','producto_stock','entrada_producto'));
 		
-
-
 		$pdf->setPaper('A4'); // Tamaño de papel (puedes cambiarlo según tus necesidades)
 
 		$pdf->setPaper('A4', 'landscape');
@@ -596,6 +679,23 @@ class EntradaProductosController extends Controller
         $estado_bien = $tablaMaestra_model->getMaestroByTipo(4);
         
 		return view('frontend.entrada_productos.modal_entradas_detalleEntradaOrden',compact('id','orden_compra','entrada_producto_detalle','tipo_documento','moneda','unidad_origen','cerrado_entrada','igv_compra','proveedor','producto','unidad','almacen'/*,'almacen_seccion'*/,'tipo_cambio','tipo_movimiento','entrada_producto','marca','estado_bien',/*'tipo_movimiento_',*/'tipo'));
+
+    }
+
+    public function modal_historial_entrada_producto($id, $id_tipo_documento){
+
+        if($id_tipo_documento==1){
+
+            $entrada_producto_model = new EntradaProducto;
+            $entrada_producto = $entrada_producto_model->getEntradaById($id);
+
+        }else if($id_tipo_documento==2){
+
+            $salida_producto_model = new SalidaProducto;
+            $entrada_producto = $salida_producto_model->getSalidaById($id);
+        }
+
+        return view('frontend.entrada_productos.modal_historial_EntradaProducto',compact('id','entrada_producto'));
 
     }
 

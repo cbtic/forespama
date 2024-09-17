@@ -156,6 +156,8 @@ class OrdenCompraController extends Controller
 
             $orden_compra_detalle->save();
         }
+
+        return response()->json(['id' => $orden_compra->id]);    
         
     }
 
@@ -210,4 +212,47 @@ class OrdenCompraController extends Controller
             'producto_stock' =>$producto_stock
         ]);
     }
+
+    public function movimiento_pdf($id){
+
+        $orden_compra_model = new OrdenCompra;
+        $orden_compra_detalle_model = new OrdenCompraDetalle;
+
+        $datos=$orden_compra_model->getOrdenCompraById($id);
+        $datos_detalle=$orden_compra_detalle_model->getDetalleOrdenCompraPdf($id);
+
+        $tipo_documento=$datos[0]->tipo_documento;
+        $empresa_compra=$datos[0]->empresa_compra;
+        $empresa_vende=$datos[0]->empresa_vende;
+        $fecha_orden_compra = $datos[0]->fecha_orden_compra;
+        $numero_orden_compra = $datos[0]->numero_orden_compra;
+        $igv=$datos[0]->igv;
+        
+		$year = Carbon::now()->year;
+
+		Carbon::setLocale('es');
+
+		// Crear una instancia de Carbon a partir de la fecha
+
+		 $carbonDate =Carbon::now()->format('d-m-Y');
+
+		 $currentHour = Carbon::now()->format('H:i:s');
+
+		$pdf = Pdf::loadView('frontend.orden_compra.movimiento_orden_compra_pdf',compact('tipo_documento','empresa_compra','empresa_vende','fecha_orden_compra','numero_orden_compra','igv','datos_detalle'));
+		
+
+
+		$pdf->setPaper('A4'); // Tamaño de papel (puedes cambiarlo según tus necesidades)
+
+		$pdf->setPaper('A4', 'landscape');
+    	$pdf->setOption('margin-top', 20); // Márgen superior en milímetros
+   		$pdf->setOption('margin-right', 50); // Márgen derecho en milímetros
+    	$pdf->setOption('margin-bottom', 20); // Márgen inferior en milímetros
+    	$pdf->setOption('margin-left', 100); // Márgen izquierdo en milímetros
+
+		return $pdf->stream();
+    	//return $pdf->download('invoice.pdf');
+		//return view('frontend.certificado.certificado_pdf');
+
+	}
 }

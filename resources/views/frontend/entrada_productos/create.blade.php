@@ -352,6 +352,18 @@ label.form-control-sm{
                         <input id="denominacion_bus" name="denominacion_bus" on class="form-control form-control-sm"  placeholder="Denominaci&oacute;n">
 					</div>
 
+					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+						<select name="cerrado_bus" id="cerrado_bus" class="form-control form-control-sm">
+							<option value="">--Selecionar Cerrado--</option>
+							<?php
+							foreach ($cerrado_entrada as $row){?>
+								<option value="<?php echo $row->codigo ?>" <?php if($row->codigo=='1')echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+								<?php 
+							}
+							?>
+						</select>
+					</div>
+
                     <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
 						<select name="estado_bus" id="estado_bus" class="form-control form-control-sm">
 							<option value="">Todos</option>
@@ -380,6 +392,7 @@ label.form-control-sm{
                             <th>Proveedor</th>
                             <th>Nro. Comprobante</th>
 							<th>Fecha Comprobante</th>
+							<th>Cerrado</th>
 							<th>Estado</th>
                             <th>Acciones</th>
                         </tr>
