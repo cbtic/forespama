@@ -809,7 +809,7 @@ function pdf_documento(){
                             Almacen Destino
                         </div> 
                         <div class="col-lg-2" id="almacen_select">
-                            <select name="almacen" id="almacen" class="form-control form-control-sm" onchange="actualizarSecciones(this)">
+                            <select name="almacen" id="almacen" class="form-control form-control-sm" onchange="//actualizarSecciones(this)">
                                 <option value="">- Selecione -</option>
                                 <?php 
                                 foreach ($almacen as $row){?>
@@ -823,7 +823,7 @@ function pdf_documento(){
                             Almacen Salida
                         </div> 
                         <div class="col-lg-2" id="almacen_salida_select">
-                            <select name="almacen_salida" id="almacen_salida" class="form-control form-control-sm" onchange="actualizarSecciones(this)">
+                            <select name="almacen_salida" id="almacen_salida" class="form-control form-control-sm" onchange="//actualizarSecciones(this)">
                                 <option value="">- Selecione -</option>
                                 <?php 
                                 foreach ($almacen as $row){?>

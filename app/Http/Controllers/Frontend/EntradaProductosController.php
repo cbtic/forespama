@@ -237,13 +237,20 @@ class EntradaProductosController extends Controller
                 $entrada_producto = EntradaProducto::where('id_orden_compra',$request->id_orden_compra);
                 $entrada_producto_detalle = EntradaProductoDetalle::where('id_entrada_productos',$entrada_producto->id);
                 $orden_compra = OrdenCompra::find($entrada_producto->id_orden_compra);
+
+                $suma_cantidad_entrada = 0;
+
                 foreach($entrada_producto_detalle as $detalle){
 
-                    $cantidad_entrada = $detalle->cantidad;
+                    $suma_cantidad_entrada += $detalle->cantidad;
 
                 }
-                $entrada_producto->cerrado = 2;
-                $entrada_producto->save();
+
+                if($suma_cantidad_entrada == $orden_compra->cantidad_requerida){
+                    $entrada_producto->cerrado = 2;
+                    $entrada_producto->save();
+                }
+               
             }
 
         }else if($request->tipo_movimiento==2){
@@ -662,15 +669,15 @@ class EntradaProductosController extends Controller
                 $entrada_producto_detalle = new EntradaProductoDetalle;
                 $entrada_producto = new EntradaProducto;
                 $proveedor = Empresa::all();
-                $id = '0';
                 $id_orden_compra = $id;
+                $id = '0';
             }else if($tipo==2){
                 $orden_compra = OrdenCompra::find($id);
                 $entrada_producto_detalle = new SalidaProductoDetalle;
                 $entrada_producto = new SalidaProducto;
                 $proveedor = Empresa::all();
-                $id = '0';
                 $id_orden_compra = $id;
+                $id = '0';
             }
 			
             $tipo_cambio = $tipo_cambio_model->getTipoCambioUltimo();
