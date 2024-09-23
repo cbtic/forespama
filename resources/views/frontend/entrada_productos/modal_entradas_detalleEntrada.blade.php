@@ -182,6 +182,7 @@ $(document).ready(function() {
     if($('#id').val()>0){
         cargarDetalle();
         cambiarDocumento();
+        cambiarTipoCambio();
     }
 });
 
@@ -652,6 +653,26 @@ function fn_save_detalle_producto(){
     });
 }
 
+function obtenerCodigo(){
+
+var tipo_movimiento = $('#tipo_movimiento').val();
+var tipo_documento = $('#tipo_documento').val();
+
+$.ajax({
+    url: "/entrada_productos/obtener_codigo_entrada_producto/"+tipo_movimiento+"/"+tipo_documento,
+    dataType: "json",
+    success: function (result) {
+
+        //alert(result[0].codigo);
+        //console.log(result);
+
+        $('#codigo').val(result[0].codigo);
+
+    }
+});
+
+}
+
 function pdf_documento(){
 
     var id = $('#id').val();
@@ -721,7 +742,7 @@ function pdf_documento(){
                             Tipo Documento
                         </div>
                         <div class="col-lg-2">
-                            <select name="tipo_documento" id="tipo_documento" class="form-control form-control-sm" onchange="">
+                            <select name="tipo_documento" id="tipo_documento" class="form-control form-control-sm" onchange="obtenerCodigo()">
                                 <option value="">- Selecione -</option>
                             </select>
                         </div>
@@ -729,7 +750,7 @@ function pdf_documento(){
                             C&oacute;digo
                         </div>
                         <div class="col-lg-2">
-                            <input id="codigo" name="codigo" on class="form-control form-control-sm"  value="<?php //echo $entrada_producto->numero_comprobante?>" type="text" readonly="readonly">
+                            <input id="codigo" name="codigo" on class="form-control form-control-sm"  value="<?php echo $entrada_producto->codigo?>" type="text" readonly="readonly">
                         </div>
                         <!--<div class="col-lg-2">
                             Orden de Compra
@@ -742,6 +763,17 @@ function pdf_documento(){
                         <div class="col-lg-2">
                             Unidad Origen
                         </div>
+                        <?php 
+                        /*if($entrada_producto->id_empresa_compra==28 && $entrada_producto->id_proveedor==28){
+                            $origen=3;
+                        }else if($entrada_producto->id_empresa_compra==28){
+                            $origen=2;
+                        }else if($entrada_producto->id_proveedor==28){
+                            $origen=1;
+                        }else{
+                            $origen=null;
+                        }*/
+                        ?>
                         <div class="col-lg-2">
                             <select name="unidad_origen" id="unidad_origen" class="form-control form-control-sm" onchange="cambiarOrigen()">
                                 <option value="">- Selecione -</option>
@@ -754,7 +786,7 @@ function pdf_documento(){
                             </select>
                         </div>
                         <div class="col-lg-2" id="proveedor_">
-                            Proveedor
+                            Empresa Vende
                         </div>
                         <div class="col-lg-2" id="proveedor_select">
                             <select name="proveedor" id="proveedor" class="form-control form-control-sm" onchange="">
@@ -762,6 +794,20 @@ function pdf_documento(){
                                 <?php
                                 foreach ($proveedor as $row){?>
                                     <option value="<?php echo $row->id ?>" <?php if($row->id==$entrada_producto->id_proveedor)echo "selected='selected'"?>><?php echo $row->razon_social ?></option>
+                                    <?php 
+                                }
+                                ?>
+                            </select>
+                        </div>
+                        <div class="col-lg-2" id="empresa_compra_">
+                            Empresa Compra
+                        </div>
+                        <div class="col-lg-2" id="empresa_compra_select">
+                            <select name="empresa_compra" id="empresa_compra" class="form-control form-control-sm" onchange="">
+                                <option value="">- Selecione -</option>
+                                <?php
+                                foreach ($proveedor as $row){?>
+                                    <option value="<?php echo $row->id ?>" <?php if($row->id==$entrada_producto->id_empresa_compra)echo "selected='selected'"?>><?php echo $row->razon_social ?></option>
                                     <?php 
                                 }
                                 ?>
@@ -775,7 +821,7 @@ function pdf_documento(){
                                 <option value="">- Selecione -</option>
                                 <?php 
                                 foreach ($almacen as $row){?>
-                                    <option value="<?php echo $row->id ?>" <?php if($row->id==$entrada_producto->id_almacen_destino || $row->id==$entrada_producto->id_almacen_salida)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                    <option value="<?php echo $row->id ?>" <?php if($row->id==$entrada_producto->id_almacen_destino || $row->id==$entrada_producto->id_almacen_salida) echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
                                     <?php 
                                 }
                                 ?>
@@ -789,7 +835,7 @@ function pdf_documento(){
                                 <option value="">- Selecione -</option>
                                 <?php 
                                 foreach ($almacen as $row){?>
-                                    <option value="<?php echo $row->id ?>" <?php if($row->id==$entrada_producto->id_almacen_destino || $row->id==$entrada_producto->id_almacen_salida)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                    <option value="<?php echo $row->id ?>" <?php if($row->id==$entrada_producto->id_almacen_destino || $row->id==$entrada_producto->id_almacen_salida) echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
                                     <?php 
                                 }
                                 ?>
@@ -799,7 +845,7 @@ function pdf_documento(){
                             N&uacute;mero Comprobante
                         </div>
                         <div class="col-lg-2">
-                            <input id="numero_comprobante" name="numero_comprobante" on class="form-control form-control-sm"  value="<?php echo $entrada_producto->numero_comprobante?>" type="text">
+                            <input id="numero_comprobante" name="numero_comprobante" on class="form-control form-control-sm"  value="<?php //echo $entrada_producto->numero_comprobante?>" type="text">
                         </div>-->
                         <div class="col-lg-2">
                             Moneda

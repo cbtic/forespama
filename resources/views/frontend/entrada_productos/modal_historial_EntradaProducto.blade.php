@@ -248,7 +248,7 @@ function modalEntradaProducto(id, tipo){
                                 <td class="text-left" style="vertical-align:middle"><?php echo $row->id?></td>
                                 <td class="text-left" style="vertical-align:middle"><?php echo $row->tipo?></td>
                                 <td class="text-left" style="vertical-align:middle"><?php echo $row->tipo_documento?></td>
-                                <td class="text-left" style="vertical-align:middle"><?php echo $row->numero_comprobante?></td>
+                                <td class="text-left" style="vertical-align:middle"><?php echo $row->codigo?></td>
                                 <td class="text-left" style="vertical-align:middle"><?php if($row->fecha_movimiento!=null) {echo date('Y-m-d', strtotime($row->fecha_movimiento));}else{ echo'';}?></td>
                                 <td class="text-left" style="vertical-align:middle">
                                     <?php if($row->tipo=='ENTRADA')$tipo=1;

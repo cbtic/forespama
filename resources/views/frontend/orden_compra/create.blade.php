@@ -347,8 +347,60 @@ label.form-control-sm{
 				
 				<div class="row" style="padding:20px 20px 0px 20px;">
 
-                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-                        <input id="denominacion_bus" name="denominacion_bus" on class="form-control form-control-sm"  placeholder="Denominaci&oacute;n">
+					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+						<select name="tipo_documento_bus" id="tipo_documento_bus" class="form-control form-control-sm">
+							<option value="">--Seleccionar Tipo Documento--</option>
+							<?php
+							foreach ($tipo_documento as $row){?>
+								<option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
+								<?php 
+							}
+							?>
+						</select>
+					</div>
+
+					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+						<select name="empresa_compra_bus" id="empresa_compra_bus" class="form-control form-control-sm">
+							<option value="">--Seleccionar Empresa Compra--</option>
+							<?php
+							foreach ($proveedor as $row){?>
+								<option value="<?php echo $row->id ?>"><?php echo $row->razon_social ?></option>
+								<?php 
+							}
+							?>
+						</select>
+					</div>
+
+					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+						<select name="empresa_vende_bus" id="empresa_vende_bus" class="form-control form-control-sm">
+							<option value="">--Seleccionar Empresa Vende--</option>
+							<?php
+							foreach ($proveedor as $row){?>
+								<option value="<?php echo $row->id ?>"><?php echo $row->razon_social ?></option>
+								<?php 
+							}
+							?>
+						</select>
+					</div>
+
+					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+                        <input id="fecha_bus" name="fecha_bus" on class="form-control form-control-sm"  placeholder="Fecha">
+					</div>
+
+					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+                        <input id="numero_orden_compra_bus" name="numero_orden_compra_bus" on class="form-control form-control-sm"  placeholder="N&uacute;mero Orden Compra">
+					</div>
+
+					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+						<select name="situacion_bus" id="situacion_bus" class="form-control form-control-sm">
+							<option value="">--Seleccionar Situaci&oacute;n--</option>
+							<?php
+							foreach ($cerrado_orden_compra as $row){?>
+								<option value="<?php echo $row->codigo ?>" <?php if($row->codigo=='1')echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+								<?php 
+							}
+							?>
+						</select>
 					</div>
 
                     <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
@@ -377,6 +429,7 @@ label.form-control-sm{
 							<th>Empresa Vende</th>
                             <th>Fecha</th>
 							<th>N&uacute;mero Orden Compra</th>
+							<th>Situaci&oacute;n</th>
 							<th>Estado</th>
                             <th>Acciones</th>
                         </tr>

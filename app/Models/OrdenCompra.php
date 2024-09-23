@@ -35,7 +35,13 @@ class OrdenCompra extends Model
     function getDetalleOrdenCompraId($id){
 
         $cad = "select ocd.id,  ROW_NUMBER() OVER (PARTITION BY ocd.id_orden_compra ) AS row_num, p.numero_serie item, ocd.id_producto, p.codigo, ocd.id_marca, ocd.id_unidad_medida, ocd.fecha_fabricacion, ocd.fecha_vencimiento, 
-        ocd.id_estado_producto , ocd.cantidad_requerida, ocd.precio, ocd.sub_total, ocd.igv, ocd.total, ocd.id_descuento 
+        ocd.id_estado_producto , ocd.cantidad_requerida, 
+        coalesce((select sum(cantidad)
+from entrada_productos ep 
+inner join entrada_producto_detalles epd on ep.id=epd.id_entrada_productos 
+where id_orden_compra =ocd.id_orden_compra 
+and epd.id_producto=ocd.id_producto),0)cantidad_ingresada,
+        ocd.precio, ocd.sub_total, ocd.igv, ocd.total, ocd.id_descuento 
         from orden_compra_detalles ocd 
         inner join productos p on ocd.id_producto = p.id
         where id_orden_compra ='".$id."'
@@ -60,9 +66,11 @@ class OrdenCompra extends Model
         return $data;
     }
 
-    function getCodigoOrdenCompra(){
+    function getCodigoOrdenCompra($tipo_documento){
 
-        $cad = "select lpad((max(oc.numero_orden_compra::int)+1)::varchar,4,'0') from orden_compras oc ";
+        $cad = "select lpad(coalesce(max(oc.numero_orden_compra::int) + 1, 1)::varchar, 6, '0') codigo
+        from orden_compras oc
+        where id_tipo_documento = '".$tipo_documento."'";
 
 		$data = DB::select($cad);
         return $data;

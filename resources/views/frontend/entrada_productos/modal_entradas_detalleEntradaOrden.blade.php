@@ -252,7 +252,7 @@ $.ajax({
                     let selected = (unidad_medida.codigo == orden_compra.id_unidad_medida) ? 'selected' : '';
                     unidadMedidaOptions += `<option value="${unidad_medida.codigo}" ${selected}>${unidad_medida.denominacion}</option>`;
                 });
-
+                //calcularCantidadPendiente(this)
                 const row = `
                     <tr>
                         <td>${n}</td>
@@ -263,8 +263,8 @@ $.ajax({
                         <td><input id="fecha_fabricacion_${n}" name="fecha_fabricacion[]"  on class="form-control form-control-sm"  value="${orden_compra.fecha_fabricacion}" type="text"></td>
                         <td><input id="fecha_vencimiento_${n}" name="fecha_vencimiento[]"  on class="form-control form-control-sm"  value="${orden_compra.fecha_vencimiento}" type="text"></td>
                         <td><select name="estado_bien[]" id="estado_bien${n}" class="form-control form-control-sm" onChange="">${estadoBienOptions}</select></td>
-                        <td><select name="unidad[]" id="unidad${n}" class="form-control form-control-sm">${unidadMedidaOptions}</select></td>
-                        <td><input name="cantidad_ingreso[]" id="cantidad_ingreso${n}" class="cantidad_ingreso form-control form-control-sm" value="${orden_compra.cantidad_requerida}" type="text" oninput="calcularCantidadPendiente(this)"></td>
+                        <td><select name="unidad[]" id="unidad${n}" class="form-control form-control-sm">${unidadMedidaOptions}</select><input type="hidden" class="cantidad_ingresada" name="cantidad_ingresada[]" id="cantidad_ingresada${n}" value="${orden_compra.cantidad_ingresada}"></td>
+                        <td><input name="cantidad_ingreso[]" id="cantidad_ingreso${n}" class="cantidad_ingreso form-control form-control-sm" value="${orden_compra.cantidad_requerida-orden_compra.cantidad_ingresada}" type="text" oninput="calcularCantidadPendiente(this);calcularSubTotal(this)"></td>
                         <td><input name="cantidad_compra[]" id="cantidad_compra${n}" class="cantidad_compra form-control form-control-sm" value="${orden_compra.cantidad_requerida}" type="text" oninput="calcularCantidadPendiente(this)"></td>
                         <td><input name="cantidad_pendiente[]" id="cantidad_pendiente${n}" class="cantidad_pendiente form-control form-control-sm" value="" type="text" readonly="readonly"></td>
                         <td><input name="stock_actual[]" id="stock_actual${n}" class="form-control form-control-sm" value="${producto_stock.saldos_cantidad}" type="text"></td>
@@ -373,8 +373,9 @@ function calcularCantidadPendiente(input) {
 
     var cantidad_ingreso = parseFloat(fila.find('.cantidad_ingreso').val()) || 0;
     var cantidad_compra = parseFloat(fila.find('.cantidad_compra').val()) || 0;
-
-    var cantidad_pendiente = cantidad_compra - cantidad_ingreso;
+    var cantidad_ingresada = parseFloat(fila.find('.cantidad_ingresada').val()) || 0;
+    //alert(cantidad_ingresada);
+    var cantidad_pendiente = cantidad_compra - cantidad_ingresada - cantidad_ingreso;
 
     cantidad_pendiente = cantidad_pendiente <= 0 ? 0 : cantidad_pendiente;
 
@@ -583,7 +584,7 @@ function agregarProducto(){
         var fecha_vencimiento = '<input id="fecha_vencimiento_' + n + '" name="fecha_vencimiento[]"  on class="form-control form-control-sm"  value="" type="text">';
         var estado_bien =  '<select name="estado_bien[]" id="estado_bien' + n + '" class="form-control form-control-sm" onChange=""><option value="">- Selecione -</option> <?php foreach ($estado_bien as $row) { ?> <option value="<?php echo $row->codigo ?>" <?php echo ($row->codigo == 1) ? "selected" : ""; ?>><?php echo $row->denominacion ?></option> <?php } ?> </select>';
         var unidad = '<select name="unidad[]" id="unidad' + n + '" class="form-control form-control-sm" onChange=""> <option value="">- Selecione -</option> <?php foreach ($unidad as $row) {?> <option value="<?php echo $row->codigo?>"><?php echo $row->denominacion?></option> <?php } ?> </select>';
-        var cantidad_ingreso = '<input name="cantidad_ingreso[]" id="cantidad_ingreso' + n + '" class="cantidad_ingreso form-control form-control-sm" value="" type="text" oninput="calcularCantidadPendiente(this)">';
+        var cantidad_ingreso = '<input name="cantidad_ingreso[]" id="cantidad_ingreso' + n + '" class="cantidad_ingreso form-control form-control-sm" value="" type="text" oninput="calcularCantidadPendiente(this);calcularSubTotal(this)">';
         var cantidad_compra = '<input name="cantidad_compra[]" id="cantidad_compra' + n + '" class="cantidad_compra form-control form-control-sm" value="" type="text" oninput="calcularCantidadPendiente(this)">';
         var cantidad_pendiente = '<input name="cantidad_pendiente[]" id="cantidad_pendiente' + n + '" class="cantidad_pendiente form-control form-control-sm" value="" type="text" readonly="readonly">';
         var stock_actual = '<input name="stock_actual[]" id="stock_actual' + n + '" class="form-control form-control-sm" value="" type="text">';
@@ -664,6 +665,26 @@ function fn_save_detalle_producto(){
     });
 }
 
+function obtenerCodigo(){
+
+    var tipo_movimiento = $('#tipo_movimiento').val();
+    var tipo_documento = $('#tipo_documento').val();
+
+    $.ajax({
+        url: "/entrada_productos/obtener_codigo_entrada_producto/"+tipo_movimiento+"/"+tipo_documento,
+        dataType: "json",
+        success: function (result) {
+
+            //alert(result[0].codigo);
+            //console.log(result);
+
+            $('#codigo').val(result[0].codigo);
+
+        }
+    });
+
+}
+
 function pdf_documento(){
 
     var id = $('#id').val();
@@ -734,7 +755,7 @@ function pdf_documento(){
                             Tipo Documento
                         </div>
                         <div class="col-lg-2">
-                            <select name="tipo_documento" id="tipo_documento" class="form-control form-control-sm" onchange="">
+                            <select name="tipo_documento" id="tipo_documento" class="form-control form-control-sm" onchange="obtenerCodigo()">
                                 <option value="">- Selecione -</option>
                             </select>
                         </div>
@@ -837,7 +858,7 @@ function pdf_documento(){
                             N&uacute;mero Comprobante
                         </div>
                         <div class="col-lg-2">
-                            <input id="numero_comprobante" name="numero_comprobante" on class="form-control form-control-sm"  value="<?php echo $entrada_producto->numero_comprobante?>" type="text">
+                            <input id="numero_comprobante" name="numero_comprobante" on class="form-control form-control-sm"  value="<?php //echo $entrada_producto->numero_comprobante?>" type="text">
                         </div>-->
                         <div class="col-lg-2">
                             Moneda

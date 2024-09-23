@@ -13,6 +13,14 @@ $(document).ready(function () {
 			datatablenew();
 		}
 	});
+
+	$('#fecha_bus').datepicker({
+        autoclose: true,
+		format: 'yyyy-mm-dd',
+		changeMonth: true,
+		changeYear: true,
+        language: 'es'
+    });
 		
 	datatablenew();
 
@@ -49,7 +57,12 @@ function datatablenew(){
             var iNroPagina 	= parseFloat(fn_util_obtieneNroPagina(aoData[3].value, aoData[4].value)).toFixed();
             var iCantMostrar 	= aoData[4].value;
 			
-            var denominacion = $('#denominacion_bus').val();
+            var tipo_documento = $('#tipo_documento_bus').val();
+			var empresa_compra = $('#empresa_compra_bus').val();
+			var empresa_vende = $('#empresa_vende_bus').val();
+			var fecha = $('#fecha_bus').val();
+			var numero_orden_compra = $('#numero_orden_compra_bus').val();
+			var situacion = $('#situacion_bus').val();
 			var estado = $('#estado_bus').val();
 			
 			var _token = $('#_token').val();
@@ -59,7 +72,8 @@ function datatablenew(){
                 "type": "POST",
                 "url": sSource,
                 "data":{NumeroPagina:iNroPagina,NumeroRegistros:iCantMostrar,
-						denominacion:denominacion,estado:estado,
+						tipo_documento:tipo_documento,empresa_compra:empresa_compra,empresa_vende:empresa_vende,
+						fecha:fecha,numero_orden_compra:numero_orden_compra,situacion:situacion,estado:estado,
 						_token:_token
                        },
                 "success": function (result) {
@@ -144,6 +158,15 @@ function datatablenew(){
 				"aTargets": [5]
 				},
 				{
+				"mRender": function (data, type, row) {
+					var cerrado = "";
+					if(row.cerrado!= null)cerrado = row.cerrado;
+					return cerrado;
+				},
+				"bSortable": true,
+				"aTargets": [6]
+				},
+				{
 					"mRender": function (data, type, row) {
 						var estado = "";
 						if(row.estado == 1){
@@ -155,7 +178,7 @@ function datatablenew(){
 						return estado;
 					},
 					"bSortable": false,
-					"aTargets": [6]
+					"aTargets": [7]
 				},
 				{
 					"mRender": function (data, type, row) {
@@ -174,7 +197,7 @@ function datatablenew(){
 						
 						html += '<button style="font-size:12px" type="button" class="btn btn-sm btn-success" data-toggle="modal" onclick="modalOrdenCompra('+row.id+')" ><i class="fa fa-edit"></i> Editar</button>'; 
 						html += '<a href="javascript:void(0)" onclick=eliminarOrdenCompra('+row.id+','+row.estado+') class="btn btn-sm '+clase+'" style="font-size:12px;margin-left:10px">'+estado+'</a>';
-						html += '<button style="font-size:12px; margin-left:10px" type="button" class="btn btn-sm btn-info" data-toggle="modal" onclick="modalEntradaProducto('+row.id+','+row.id_tipo_documento+')">Atender</button>';
+						html += '<button style="font-size:12px; margin-left:10px" type="button" class="btn btn-sm btn-info" data-toggle="modal" onclick="modalEntradaProductoOrdenCompra('+row.id+','+row.id_tipo_documento+')">Atender</button>';
 						html += '<button style="font-size:12px; margin-left:10px" type="button" class="btn btn-sm btn-warning" data-toggle="modal" onclick="modalHistorialEntradaProducto('+row.id+','+row.id_tipo_documento+')">Historial</button>';  
 						//html += '<a href="javascript:void(0)" onclick=modalResponsable('+row.id+') class="btn btn-sm btn-info" style="font-size:12px;margin-left:10px">Detalle Responsable</a>';
 						
@@ -182,7 +205,7 @@ function datatablenew(){
 						return html;
 					},
 					"bSortable": false,
-					"aTargets": [7],
+					"aTargets": [8],
 				},
 
             ]
@@ -249,7 +272,7 @@ function fn_eliminar(id,estado){
     });
 }
 
-function modalEntradaProducto(id,id_tipo_documento){
+function modalEntradaProductoOrdenCompra(id,id_tipo_documento){
 
 	//var tipo = $('#tipo_documento').val();
 	

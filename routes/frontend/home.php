@@ -317,3 +317,10 @@ Route::post('kardex/listar_kardex_ajax', [KardexController::class, 'listar_karde
 Route::get('entrada_productos/modal_detalle_producto_orden_compra/{id}/{tipo}', [EntradaProductosController::class, 'modal_detalle_producto_orden_compra'])->name('entrada_productos.modal_detalle_producto_orden_compra');
 Route::get('orden_compra/movimiento_pdf/{id}', [OrdenCompraController::class, 'movimiento_pdf'])->name('orden_compra.movimiento_pdf');
 Route::get('entrada_productos/modal_historial_entrada_producto/{id}/{id_tipo_documento}', [EntradaProductosController::class, 'modal_historial_entrada_producto'])->name('entrada_productos.modal_historial_entrada_producto');
+Route::get('orden_compra/obtener_codigo_orden_compra/{tipo_documento}', [OrdenCompraController::class, 'obtener_codigo_orden_compra'])->name('orden_compra.obtener_codigo_orden_compra');
+Route::get('entrada_productos/obtener_codigo_entrada_producto/{tipo_movimiento}/{tipo_documento}', [EntradaProductosController::class, 'obtener_codigo_entrada_producto'])->name('entrada_productos.obtener_codigo_entrada_producto');
+
+
+
+
+

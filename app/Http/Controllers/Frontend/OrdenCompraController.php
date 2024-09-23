@@ -30,17 +30,24 @@ class OrdenCompraController extends Controller
 
     public function create(){
 
-		/*$tablaMaestra_model = new TablaMaestra;
-		$estado_bien = $tablaMaestra_model->getMaestroByTipo(4);*/
+		$tablaMaestra_model = new TablaMaestra;
+		$tipo_documento = $tablaMaestra_model->getMaestroByTipo(54);
+        $cerrado_orden_compra = $tablaMaestra_model->getMaestroByTipo(52);
+        $proveedor = Empresa::all();
 		
-		return view('frontend.orden_compra.create');
+		return view('frontend.orden_compra.create',compact('tipo_documento','cerrado_orden_compra','proveedor'));
 
 	}
 
     public function listar_orden_compra_ajax(Request $request){
 
 		$orden_compra_model = new OrdenCompra;
-		$p[]=$request->denominacion;
+		$p[]=$request->tipo_documento;
+        $p[]=$request->empresa_compra;
+        $p[]=$request->empresa_vende;
+        $p[]=$request->fecha;
+        $p[]=$request->numero_orden_compra;
+        $p[]=$request->situacion;
         $p[]=$request->estado;
 		$p[]=$request->NumeroPagina;
 		$p[]=$request->NumeroRegistros;
@@ -75,6 +82,7 @@ class OrdenCompraController extends Controller
             $proveedor = Empresa::all();
 		}
 
+        //$orden_compra_model = new OrdenCompra;
         $tipo_documento = $tablaMaestra_model->getMaestroByTipo(54);
         //$moneda = $tablaMaestra_model->getMaestroByTipo(1);
         //$unidad_origen = $tablaMaestra_model->getMaestroByTipo(50);
@@ -87,6 +95,7 @@ class OrdenCompraController extends Controller
         $unidad = $tablaMaestra_model->getMaestroByTipo(43);
         $igv_compra = $tablaMaestra_model->getMaestroByTipo(51);
         $descuento = $tablaMaestra_model->getMaestroByTipo(55);
+        //$codigo_orden_compra = $orden_compra_model->getCodigoOrdenCompra();
         
         //dd($proveedor);exit();
 
@@ -118,7 +127,7 @@ class OrdenCompraController extends Controller
         $sub_total = $request->input('sub_total');
         $igv = $request->input('igv');
         $total = $request->input('total');
-
+        $id_orden_compra_detalle =$request->id_orden_compra_detalle;
         
         $orden_compra->id_empresa_compra = $request->empresa_compra;
         $orden_compra->id_empresa_vende = $request->empresa_vende;
@@ -132,10 +141,10 @@ class OrdenCompraController extends Controller
 
         foreach($item as $index => $value) {
             
-            if($request->id == 0){
+            if($id_orden_compra_detalle[$index] == 0){
                 $orden_compra_detalle = new OrdenCompraDetalle;
             }else{
-                $orden_compra_detalle = OrdenCompraDetalle::find($request->id);
+                $orden_compra_detalle = OrdenCompraDetalle::find($id_orden_compra_detalle[$index]);
             }
             
             $orden_compra_detalle->id_orden_compra = $orden_compra->id;
@@ -255,4 +264,13 @@ class OrdenCompraController extends Controller
 		//return view('frontend.certificado.certificado_pdf');
 
 	}
+
+    public function obtener_codigo_orden_compra($tipo_documento){
+		
+		$orden_compra_model = new OrdenCompra;
+		$codigo_orden_compra = $orden_compra_model->getCodigoOrdenCompra($tipo_documento);
+		
+		return response()->json($codigo_orden_compra);
+	}
+
 }
