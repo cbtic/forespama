@@ -405,7 +405,7 @@ function fn_save_anaquel(){
                                             <option value="">--Selecionar--</option>
                                             <?php
                                             foreach ($almacen as $row) {?>
-                                            <option value="<?php echo $row->id?>" <?php if($row->id_almacen==$anaquel->id_almacen)echo "selected='selected'"?>><?php echo $row->codigo.'-'.$row->denominacion ?></option>
+                                            <option value="<?php echo $row->id?>" <?php //if($row->id_almacen==$anaquel->id_almacen)echo "selected='selected'"?>><?php echo $row->codigo.'-'.$row->denominacion ?></option>
                                             <?php 
                                             }
                                             ?>
