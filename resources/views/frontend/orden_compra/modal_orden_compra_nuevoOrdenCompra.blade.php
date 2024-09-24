@@ -16,9 +16,13 @@
 
 
 .modal-dialog {
-	width: 100%;
-	max-width:90%!important
-  }
+    width: 100%;
+    max-width:90%!important
+}
+
+.custom-select2-dropdown {
+    width: 700px !important; 
+}
   
 #tablemodal{
     border-spacing: 0;
@@ -466,7 +470,10 @@ $.ajax({
                     </tr>
                 `;
                 tbody.append(row);
-                $('#descripcion' + n).select2({ width: '100%' });
+                $('#descripcion' + n).select2({ 
+                    width: '100%',
+                    dropdownCssClass: 'custom-select2-dropdown'
+                });
                 n++;
                 total_acumulado += parseFloat(orden_compra.total);
                 });
@@ -525,6 +532,7 @@ function agregarProducto(){
 
         $('#descripcion' + n).select2({ 
             width: '100%',
+            dropdownCssClass: 'custom-select2-dropdown'
             //dropdownCssClass: 'form-control form-control-sm',
             //containerCssClass: 'form-control form-control-sm'
         });

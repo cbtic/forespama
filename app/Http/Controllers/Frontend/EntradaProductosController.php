@@ -200,6 +200,7 @@ class EntradaProductosController extends Controller
                 $entradaProducto_detalle->precio_unitario = $precio_unitario[$index];*/
                 $entradaProducto_detalle->sub_total = $sub_total[$index];
                 $entradaProducto_detalle->igv = $igv[$index];
+                $entradaProducto_detalle->cerrado = 1;
                 $entradaProducto_detalle->total = $total[$index];
 
                 if($cantidad_pendiente[$index]!=0){
@@ -346,6 +347,7 @@ class EntradaProductosController extends Controller
                 $salida_producto_detalle->id_um = $unidad[$index];
                 $salida_producto_detalle->id_marca = $marca[$index];
                 $salida_producto_detalle->estado = 1;
+                $salida_producto_detalle->cerrado = 1;
                 $salida_producto_detalle->id_producto = $descripcion[$index];
                 $salida_producto_detalle->costo = $precio_unitario[$index];
                 //$salida_producto_detalle->fecha_fabricacion = "2024-08-18";

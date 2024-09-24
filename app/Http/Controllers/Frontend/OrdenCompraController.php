@@ -135,6 +135,7 @@ class OrdenCompraController extends Controller
         $orden_compra->numero_orden_compra = $request->numero_orden_compra;
         $orden_compra->id_tipo_documento = $request->tipo_documento;
         $orden_compra->igv_compra = $request->igv_compra;
+        $orden_compra->cerrado = 1;
         $orden_compra->id_usuario_inserta = $id_user;
         $orden_compra->estado = 1;
         $orden_compra->save();
@@ -161,6 +162,7 @@ class OrdenCompraController extends Controller
             $orden_compra_detalle->id_unidad_medida = $unidad[$index];
             $orden_compra_detalle->id_marca = $marca[$index];
             $orden_compra_detalle->estado = 1;
+            $orden_compra_detalle->cerrado = 1;
             $orden_compra_detalle->id_usuario_inserta = $id_user;
 
             $orden_compra_detalle->save();
