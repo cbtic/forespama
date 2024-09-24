@@ -114,8 +114,11 @@ class SeccionesController extends Controller
 				$anaquel_seccion->id_secciones = $seccion->id;
 				$anaquel_seccion->estado = 1;
 				$anaquel_seccion->save();
+
+				
 			}
 		}
+
 
 		$almacenes_secciones = new AlmacenesSeccione;
 		$almacenes_secciones->id_almacenes = $request->almacen;
