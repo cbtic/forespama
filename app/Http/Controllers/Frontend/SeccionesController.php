@@ -95,11 +95,13 @@ class SeccionesController extends Controller
 		/*$id_user = Auth::user()->id;
 		$usuario = $request->usuario;*/
 		$anaquel = $request->anaquel;
-//dd($anaquel);exit();
+		//dd($anaquel);exit();
 		if($request->id == 0){
 			$seccion = new Seccione;
+			$almacenes_secciones = new AlmacenesSeccione;
 		}else{
 			$seccion = Seccione::find($request->id);
+			$almacenes_secciones = AlmacenesSeccione::where('id_secciones',$seccion->id)->first();
 		}
 		
 		$seccion->codigo = $request->codigo;
@@ -115,12 +117,9 @@ class SeccionesController extends Controller
 				$anaquel_seccion->estado = 1;
 				$anaquel_seccion->save();
 
-				
 			}
 		}
 
-
-		$almacenes_secciones = new AlmacenesSeccione;
 		$almacenes_secciones->id_almacenes = $request->almacen;
 		$almacenes_secciones->id_secciones = $seccion->id;
 		$almacenes_secciones->save();

@@ -148,6 +148,8 @@ $(document).ready(function() {
     });
 
     $("#item").select2({ width: '100%' });
+    $("#empresa_compra").select2({ width: '100%' });
+    $("#proveedor").select2({ width: '100%' });
     //$("#ubicacion_fisica_seccion").select2({ width: '100%' });
     //$("#ubicacion_fisica_anaquel").select2({ width: '100%' });
 
