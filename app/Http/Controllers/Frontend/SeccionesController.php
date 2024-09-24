@@ -95,7 +95,7 @@ class SeccionesController extends Controller
 		/*$id_user = Auth::user()->id;
 		$usuario = $request->usuario;*/
 		$anaquel = $request->anaquel;
-
+//dd($anaquel);exit();
 		if($request->id == 0){
 			$seccion = new Seccione;
 		}else{
@@ -107,12 +107,14 @@ class SeccionesController extends Controller
 		$seccion->estado = 1;
 		$seccion->save();
 
-		foreach($anaquel as $seccion_id){
-			$anaquel_seccion = new AnaquelesSeccione;
-			$anaquel_seccion->id_anaqueles = $seccion_id;
-			$anaquel_seccion->id_secciones = $seccion->id;
-			$anaquel_seccion->estado = 1;
-			$anaquel_seccion->save();
+		if (isset($anaquel[0])){
+			foreach($anaquel as $seccion_id){
+				$anaquel_seccion = new AnaquelesSeccione;
+				$anaquel_seccion->id_anaqueles = $seccion_id;
+				$anaquel_seccion->id_secciones = $seccion->id;
+				$anaquel_seccion->estado = 1;
+				$anaquel_seccion->save();
+			}
 		}
 
 		$almacenes_secciones = new AlmacenesSeccione;
