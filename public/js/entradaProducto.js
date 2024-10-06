@@ -8,9 +8,59 @@ $(document).ready(function () {
 		modalEntradaProducto(0,0);
 	});
 
-	$('#denominacion').keypress(function(e){
+	$('#tipo_movimiento_bus').keypress(function(e){
 		if(e.which == 13) {
 			datatablenew();
+			return false;
+		}
+	});
+
+	$('#tipo_documento_bus').keypress(function(e){
+		if(e.which == 13) {
+			datatablenew();
+			return false;
+		}
+	});
+
+	$('#unidad_origen_bus').keypress(function(e){
+		if(e.which == 13) {
+			datatablenew();
+			return false;
+		}
+	});
+
+	$('#almacen_destino_bus').keypress(function(e){
+		if(e.which == 13) {
+			datatablenew();
+			return false;
+		}
+	});
+
+	$('#proveedor_bus').keypress(function(e){
+		if(e.which == 13) {
+			datatablenew();
+			return false;
+		}
+	});
+
+	$('#numero_comprobante_bus').keypress(function(e){
+		if(e.which == 13) {
+			datatablenew();
+			return false;
+		}
+	});
+
+	$('#situacion_bus').keypress(function(e){
+		if(e.which == 13) {
+			datatablenew();
+			return false;
+		}
+	});
+
+	$('#estado_bus').keypress(function(e){
+		if(e.which == 13) {
+			datatablenew();
+			return false;
 		}
 	});
 		
@@ -155,9 +205,9 @@ function datatablenew(){
 
 				{
 				"mRender": function (data, type, row) {
-					var numero_comprobante = "";
-					if(row.numero_comprobante!= null)numero_comprobante = row.numero_comprobante;
-					return numero_comprobante;
+					var codigo = "";
+					if(row.codigo!= null)codigo = row.codigo;
+					return codigo;
 				},
 				"bSortable": true,
 				"aTargets": [6]

@@ -8,9 +8,24 @@ $(document).ready(function () {
 		modalAlmacen(0);
 	});
 
-	$('#denominacion').keypress(function(e){
+	$('#denominacion_bus').keypress(function(e){
 		if(e.which == 13) {
 			datatablenew();
+			return false;
+		}
+	});
+
+    $('#encargado_bus').keypress(function(e){
+		if(e.which == 13) {
+			datatablenew();
+			return false;
+		}
+	});
+
+    $('#estado_bus').keypress(function(e){
+		if(e.which == 13) {
+			datatablenew();
+			return false;
 		}
 	});
 		
@@ -49,9 +64,9 @@ function datatablenew(){
             var iNroPagina 	= parseFloat(fn_util_obtieneNroPagina(aoData[3].value, aoData[4].value)).toFixed();
             var iCantMostrar 	= aoData[4].value;
 			
-            var denominacion = $('#denominacion').val();
-            var encargado = $('#encargado').val();
-			var estado = $('#estado').val();
+            var denominacion = $('#denominacion_bus').val();
+            var encargado = $('#encargado_bus').val();
+			var estado = $('#estado_bus').val();
 			
 			var _token = $('#_token').val();
             oSettings.jqXHR = $.ajax({

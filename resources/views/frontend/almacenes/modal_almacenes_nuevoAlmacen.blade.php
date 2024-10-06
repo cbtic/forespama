@@ -300,7 +300,7 @@ function cargarUsuario(){
             let almacenUsuarios = @json($user);
 
             result.forEach(usuario => {
-                let usuarioOptions = '<option value="">--Selecionar--</option>';
+                let usuarioOptions = '<option value="">--Seleccionar--</option>';
                 
             almacenUsuarios.forEach(almacenUsuario => {
                     let selected = (usuario.id == almacenUsuario.id) ? 'selected' : '';
@@ -499,7 +499,7 @@ function fn_save_almacen(){
                                         <label class="control-label form-control-sm">Departamento</label>
                                         <select name="departamento" id="departamento" onChange="obtenerProvincia()" class="form-control form-control-sm">
                                             <?php if($id>0){ ?> 
-                                            <option value="">--Selecionar--</option>
+                                            <option value="">--Seleccionar--</option>
                                             <?php
                                             foreach ($departamento as $row) {?>
                                             <option value="<?php echo $row->id_departamento?>" <?php if($row->id_departamento==substr($almacen->id_ubigeo,0,2))echo "selected='selected'"?>><?php echo $row->desc_ubigeo ?></option>
@@ -524,7 +524,7 @@ function fn_save_almacen(){
                                     <div class="form-group">
                                         <label class="control-label form-control-sm">Provincia</label>
                                         <select name="provincia" id="provincia" class="form-control form-control-sm" onchange="obtenerDistrito()">
-                                            <option value="">--Selecionar--</option>
+                                            <option value="">--Seleccionar--</option>
                                         </select>
                                     </div>
                                 </div>
@@ -533,7 +533,7 @@ function fn_save_almacen(){
                                     <div class="form-group">
                                         <label class="control-label form-control-sm">Distrito</label>
                                         <select name="distrito" id="distrito" class="form-control form-control-sm" onchange="">
-                                            <option value="">--Selecionar--</option>
+                                            <option value="">--Seleccionar--</option>
                                         </select>
                                     </div>
                                 </div>
@@ -566,7 +566,7 @@ function fn_save_almacen(){
                                     <div class="form-group">
                                         <label class="control-label form-control-sm">Usuario</label>
                                         <select name="usuario[]" id="usuario" onChange="" class="form-control form-control-sm">
-                                            <option value="">--Selecionar--</option>
+                                            <option value="">--Seleccionar--</option>
                                             <?php
                                             foreach ($user as $row) {?>
                                             <option value="<?php echo $row->id?>" <?php if($row->id==$almacen->id_user)echo "selected='selected'"?>><?php echo $row->name ?></option>

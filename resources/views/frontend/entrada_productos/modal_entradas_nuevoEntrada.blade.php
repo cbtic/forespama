@@ -298,7 +298,7 @@ function modalDetalleProducto(id){
                                     <div class="form-group">
                                         <label class="control-label form-control-sm">Tipo Doc.</label>
                                         <select name="tipo_documento" id="tipo_documento" class="form-control form-control-sm" onchange="">
-                                            <option value="">--Selecionar--</option>
+                                            <option value="">--Seleccionar--</option>
                                             <?php
                                             foreach ($tipo_documento as $row){?>
                                                 <option value="<?php echo $row->codigo ?>" <?php //if($row->codigo==$lote->id_producto)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
@@ -312,7 +312,7 @@ function modalDetalleProducto(id){
                                     <div class="form-group">
                                         <label class="control-label form-control-sm">Unidad Origen</label>
                                         <select name="unidad_origen" id="unidad_origen" class="form-control form-control-sm" onchange="cambiarOrigen()">
-                                            <option value="">--Selecionar--</option>
+                                            <option value="">--Seleccionar--</option>
                                             <?php
                                             foreach ($unidad_origen as $row){?>
                                                 <option value="<?php echo $row->codigo ?>" <?php //if($row->codigo==$lote->id_producto)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
@@ -326,7 +326,7 @@ function modalDetalleProducto(id){
                                     
                                         <label class="control-label form-control-sm">Proveedor</label>
                                         <select name="proveedor" id="proveedor" class="form-control form-control-sm" onchange="">
-                                            <option value="">--Selecionar--</option>
+                                            <option value="">--Seleccionar--</option>
                                             <?php
                                             foreach ($proveedor as $row){?>
                                                 <option value="<?php echo $row->id ?>" <?php //if($row->id==$lote->id_producto)echo "selected='selected'"?>><?php echo $row->razon_social ?></option>
@@ -339,7 +339,7 @@ function modalDetalleProducto(id){
                                     <div class="form-group">
                                         <label class="control-label form-control-sm">Almacen Destino</label>
                                         <select name="almacen" id="almacen" class="form-control form-control-sm" onchange="">
-                                            <option value="">--Selecionar--</option>
+                                            <option value="">--Seleccionar--</option>
                                             <?php
                                             foreach ($almacen as $row){?>
                                                 <option value="<?php echo $row->id ?>" <?php //if($row->id==$lote->id_producto)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
@@ -365,7 +365,7 @@ function modalDetalleProducto(id){
                                     <div class="form-group">
                                         <label class="control-label form-control-sm">Moneda</label>
                                         <select name="moneda" id="moneda" class="form-control form-control-sm" onchange="cambiarTipoCambio()">
-                                            <option value="">--Selecionar--</option>
+                                            <option value="">--Seleccionar--</option>
                                             <?php
                                             foreach ($moneda as $row){?>
                                                 <option value="<?php echo $row->codigo ?>" <?php //if($row->codigo==$lote->id_moneda)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
@@ -389,7 +389,7 @@ function modalDetalleProducto(id){
                                     <div class="form-group">
                                         <label class="control-label form-control-sm">Igv Compra</label>
                                         <select name="igv_compra" id="igv_compra" class="form-control form-control-sm" onchange="">
-                                            <option value="">--Selecionar--</option>
+                                            <option value="">--Seleccionar--</option>
                                             <?php
                                             foreach ($igv_compra as $row){?>
                                                 <option value="<?php echo $row->codigo ?>" <?php //if($row->codigo==$lote->id_producto)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
@@ -409,7 +409,7 @@ function modalDetalleProducto(id){
                                     <div class="form-group">
                                         <label class="control-label form-control-sm">Cerrado</label>
                                         <select name="cerrado" id="cerrado" class="form-control form-control-sm" onchange="">
-                                            <option value="">--Selecionar--</option>
+                                            <option value="">--Seleccionar--</option>
                                             <?php
                                             foreach ($cerrado_entrada as $row){?>
                                                 <option value="<?php echo $row->codigo ?>" <?php if($row->codigo=='1')echo "selected='selected'"?>><?php echo $row->denominacion ?></option>

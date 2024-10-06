@@ -14,7 +14,6 @@
   height:250px;
 }
 
-
 .modal-dialog {
     width: 100%;
     max-width:90%!important
@@ -101,6 +100,7 @@
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/locales/bootstrap-datepicker.es.min.js" charset="UTF-8"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker3.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/5.5.2/bootbox.min.js"></script>
 
 
 <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>-->
@@ -223,7 +223,7 @@ function obtenerAnaquel(selectElement){
             dataType: "json",
             success: function (result) {
 
-                var option = "<option value=''>- Seleccione -</option>";
+                var option = "<option value=''>--Seleccionar--</option>";
                 //$('#ubicacion_fisica_anaquel').html("");
                 var anaquelSelect = fila.find('select[name="ubicacion_fisica_anaquel[]"]');
                 anaquelSelect.html("");
@@ -389,7 +389,7 @@ function actualizarSecciones(selectElement, n) {
         dataType: "json",
         success: function (result) {
 
-            var option = "<option value=''>- Seleccione -</option>";
+            var option = "<option value=''>--Seleccionar--</option>";
 
             var ubicacionFisicaSeccion = $('#ubicacion_fisica_seccion' + n);
             //console.log(ubicacionFisicaSeccion);
@@ -422,11 +422,11 @@ $.ajax({
 
             result.orden_compra.forEach(orden_compra => {
 
-                let marcaOptions = '<option value="">- Selecione -</option>';
-                let productoOptions = '<option value="">- Selecione -</option>';
-                let estadoBienOptions = '<option value="">- Selecione -</option>';
-                let unidadMedidaOptions = '<option value="">- Selecione -</option>';
-                let descuentoOptions = '<option value="">- Selecione -</option>';
+                let marcaOptions = '<option value="">--Seleccionar--</option>';
+                let productoOptions = '<option value="">--Seleccionar--</option>';
+                let estadoBienOptions = '<option value="">--Seleccionar--</option>';
+                let unidadMedidaOptions = '<option value="">--Seleccionar--</option>';
+                let descuentoOptions = '<option value="">--Seleccionar--</option>';
 
                 result.marca.forEach(marca => {
                     let selected = (marca.id == orden_compra.id_marca) ? 'selected' : '';
@@ -460,8 +460,8 @@ $.ajax({
                         <td><select name="descripcion[]" id="descripcion${n}" class="form-control form-control-sm" onChange="">${productoOptions}</select></td>
                         <td><select name="marca[]" id="marca${n}" class="form-control form-control-sm">${marcaOptions}</select></td>
                         <td><input name="cod_interno[]" id="cod_interno${n}" class="form-control form-control-sm" value="${orden_compra.codigo}" type="text"></td>
-                        <td><input id="fecha_fabricacion_${n}" name="fecha_fabricacion[]"  on class="form-control form-control-sm"  value="<?php echo isset($orden_compra->fecha_fabricacion) ? $orden_compra->fecha_fabricacion : ''; ?>" type="text"></td>
-                        <td><input id="fecha_vencimiento_${n}" name="fecha_vencimiento[]"  on class="form-control form-control-sm"  value="<?php echo isset($orden_compra->fecha_vencimiento) ? $orden_compra->fecha_vencimiento : ''; ?>" type="text"></td>
+                        <td><input id="fecha_fabricacion_${n}" name="fecha_fabricacion[]"  on class="form-control form-control-sm"  value="${orden_compra.fecha_fabricacion ? orden_compra.fecha_fabricacion : ''}" type="text"></td>
+                        <td><input id="fecha_vencimiento_${n}" name="fecha_vencimiento[]"  on class="form-control form-control-sm"  value="${orden_compra.fecha_vencimiento ? orden_compra.fecha_vencimiento : ''}" type="text"></td>
                         <td><select name="estado_bien[]" id="estado_bien${n}" class="form-control form-control-sm" onChange="">${estadoBienOptions}</select></td>
                         <td><select name="unidad[]" id="unidad${n}" class="form-control form-control-sm">${unidadMedidaOptions}</select></td>
                         <td><input name="cantidad_ingreso[]" id="cantidad_ingreso${n}" class="cantidad_ingreso form-control form-control-sm" value="${orden_compra.cantidad_requerida}" type="text" oninput="calcularCantidadPendiente(this);calcularSubTotal(this)"></td>
@@ -477,6 +477,23 @@ $.ajax({
                     width: '100%',
                     dropdownCssClass: 'custom-select2-dropdown'
                 });
+
+                $('#fecha_fabricacion_' + n).datepicker({
+                    autoclose: true,
+                    format: 'yyyy-mm-dd',
+                    changeMonth: true,
+                    changeYear: true,
+                    language: 'es'
+                });
+
+                $('#fecha_vencimiento_' + n).datepicker({
+                    autoclose: true,
+                    format: 'yyyy-mm-dd',
+                    changeMonth: true,
+                    changeYear: true,
+                    language: 'es'
+                });
+
                 n++;
                 total_acumulado += parseFloat(orden_compra.total);
                 });
@@ -495,22 +512,24 @@ function agregarProducto(){
         var n = $('#tblOrdenCompraDetalle tbody tr').length + 1;
         var item = '<input name="id_orden_compra_detalle[]" id="id_orden_compra_detalle${n}" class="form-control form-control-sm" value="${orden_compra.id}" type="hidden"><input name="item[]" id="item' + n + '" class="form-control form-control-sm" value="" type="text">';
         //var cantidad = '<input name="cantidad[]" id="cantidad' + n + '" class="form-control form-control-sm" value="" type="text">';
-        var descripcion = '<select name="descripcion[]" id="descripcion' + n + '" class="form-control form-control-sm" onChange="obtenerCodInterno(this, ' + n + ')"> <option value="">- Selecione -</option> <?php foreach ($producto as $row) {?> <option value="<?php echo $row->id?>"><?php echo $row->denominacion?></option> <?php } ?> </select>';
+        var descripcion = '<select name="descripcion[]" id="descripcion' + n + '" class="form-control form-control-sm" style="width: 200px;" onChange="obtenerCodInterno(this, ' + n + ')"> <option value="">--Seleccionar--</option> <?php foreach ($producto as $row) {?> <option value="<?php echo $row->id?>"><?php echo $row->denominacion?></option> <?php } ?> </select>';
         //var ubicacion_fisica_seccion = '<select name="ubicacion_fisica_seccion[]" id="ubicacion_fisica_seccion' + n + '" class="form-control form-control-sm" onChange="obtenerAnaquel(this)"> <option value="">- Selecione -</option> <?php //foreach ($almacen_seccion as $row) {?> <option value="<?php //echo $row->id?>"><?php //echo $row->codigo_seccion."-".$row->seccion?></option> <?php //} ?> </select>';
         //var ubicacion_fisica_anaquel = '<select name="ubicacion_fisica_anaquel[]" id="ubicacion_fisica_anaquel' + n + '" class="form-control form-control-sm" onChange=""> <option value="">- Selecione -</option>} ?> </select>';
         var cod_interno = '<input name="cod_interno[]" id="cod_interno' + n + '" class="form-control form-control-sm" value="" type="text">';
-        var marca = '<select name="marca[]" id="marca' + n + '" class="form-control form-control-sm" onchange=""> <option value="">- Selecione -</option><?php foreach ($marca as $row){?><option value="<?php echo htmlspecialchars($row->id); ?>"><?php echo htmlspecialchars(addslashes($row->denominiacion)); ?></option><?php }?></select>'
+        var marca = '<select name="marca[]" id="marca' + n + '" class="form-control form-control-sm" onchange=""> <option value="">--Seleccionar--</option><?php foreach ($marca as $row){?><option value="<?php echo htmlspecialchars($row->id); ?>"><?php echo htmlspecialchars(addslashes($row->denominiacion)); ?></option><?php }?></select>'
         var fecha_fabricacion = '<input id="fecha_fabricacion_' + n + '" name="fecha_fabricacion[]"  on class="form-control form-control-sm"  value="" type="text">'
         var fecha_vencimiento = '<input id="fecha_vencimiento_' + n + '" name="fecha_vencimiento[]"  on class="form-control form-control-sm"  value="" type="text">'
-        var estado_bien =  '<select name="estado_bien[]" id="estado_bien' + n + '" class="form-control form-control-sm" onChange=""><option value="">- Selecione -</option> <?php foreach ($estado_bien as $row) { ?> <option value="<?php echo $row->codigo ?>" <?php echo ($row->codigo == 1) ? "selected" : ""; ?>><?php echo $row->denominacion ?></option> <?php } ?> </select>';
-        var unidad = '<select name="unidad[]" id="unidad' + n + '" class="form-control form-control-sm" onChange=""> <option value="">- Selecione -</option> <?php foreach ($unidad as $row) {?> <option value="<?php echo $row->codigo?>"><?php echo $row->denominacion?></option> <?php } ?> </select>';
-        var cantidad_ingreso = '<input name="cantidad_ingreso[]" id="cantidad_ingreso' + n + '" class="cantidad_ingreso form-control form-control-sm" value="" type="text" oninput="">';
+        var estado_bien =  '<select name="estado_bien[]" id="estado_bien' + n + '" class="form-control form-control-sm" onChange=""><option value="">--Seleccionar--</option> <?php foreach ($estado_bien as $row) { ?> <option value="<?php echo $row->codigo ?>" <?php echo ($row->codigo == 1) ? "selected" : ""; ?>><?php echo $row->denominacion ?></option> <?php } ?> </select>';
+        var unidad = '<select name="unidad[]" id="unidad' + n + '" class="form-control form-control-sm" onChange=""> <option value="">--Seleccionar--</option> <?php foreach ($unidad as $row) {?> <option value="<?php echo $row->codigo?>"><?php echo $row->denominacion?></option> <?php } ?> </select>';
+        var cantidad_ingreso = '<input name="cantidad_ingreso[]" id="cantidad_ingreso' + n + '" class="cantidad_ingreso form-control form-control-sm" value="" type="text" oninput="calcularSubTotal(this)">';
         var precio_unitario = '<input name="precio_unitario[]" id="precio_unitario' + n + '" class="precio_unitario form-control form-control-sm" value="" type="text" oninput="calcularSubTotal(this)">';
-        var descuento = '<select name="descuento[]" id="descuento' + n + '" class="form-control form-control-sm" onChange="aplicaDescuento(this);"> <option value="">- Selecione -</option> <?php foreach ($descuento as $row) {?> <option value="<?php echo $row->codigo?>"><?php echo $row->denominacion?></option> <?php } ?> </select>';
+        var descuento = '<select name="descuento[]" id="descuento' + n + '" class="form-control form-control-sm" onChange="aplicaDescuento(this);"> <option value="">--Seleccionar--</option> <?php foreach ($descuento as $row) {?> <option value="<?php echo $row->codigo?>"><?php echo $row->denominacion?></option> <?php } ?> </select>';
         var sub_total = '<input name="sub_total[]" id="sub_total' + n + '" class="sub_total form-control form-control-sm" value="" type="text" readonly="readonly">';
         var igv = '<input name="igv[]" id="igv' + n + '" class="igv form-control form-control-sm" value="" type="text" readonly="readonly">';
         var total = '<input name="total[]" id="total' + n + '" class="total form-control form-control-sm" value="" type="text" readonly="readonly">';
         
+        var btnEliminar = '<button type="button" class="btn btn-danger btn-sm" onclick="eliminarFila(this)">Eliminar</button>';
+
         newRow += '<tr>';
         newRow += '<td>' + n + '</td>';
         newRow += '<td>' + item + '</td>';
@@ -529,6 +548,7 @@ function agregarProducto(){
         newRow += '<td>' + sub_total + '</td>';
         newRow += '<td>' + igv + '</td>';
         newRow += '<td>' + total + '</td>';
+        newRow += '<td>' + btnEliminar + '</td>';
         newRow += '</tr>';
 
         $('#tblOrdenCompraDetalle tbody').append(newRow);
@@ -561,6 +581,11 @@ function agregarProducto(){
     actualizarTotalGeneral();
 }
 
+function eliminarFila(button){
+    $(button).closest('tr').remove();
+    actualizarTotalGeneral();
+}
+
 function limpiar(){
 	$('#id').val("0");
 	$('#id_tipo_documento').val("");
@@ -570,19 +595,43 @@ function limpiar(){
 
 function fn_save_orden_compra(){
 	
-	$.ajax({
-			url: "/orden_compra/send_orden_compra",
-            type: "POST",
-            data : $("#frmOrdenCompra").serialize(),
-			success: function (result) {
-                //alert(result.id)
-                //$('#openOverlayOpc').modal('hide');
-                datatablenew();
-                if (result.id>0) {
-                    modalOrdenCompra(result.id);
+    var msg = "";
+
+    var tipo_documento = $('#tipo_documento').val();
+    var empresa_compra = $('#empresa_compra').val();
+    var empresa_vende = $('#empresa_vende').val();
+    var igv_compra = $('#igv_compra').val();
+
+    if(tipo_documento==""){msg+="Ingrese el Tipo de Documento <br>";}
+    if(empresa_compra==""){msg+="Ingrese la Empresa que Compra <br>";}
+    if(empresa_vende==""){msg+="Ingrese la Empresa que Vende <br>";}
+    if(igv_compra==""){msg+="Ingrese el IGV <br>";}
+
+    if(msg!=""){
+        bootbox.alert(msg);
+        return false;
+    }else{
+        var msgLoader = "";
+        msgLoader = "Procesando, espere un momento por favor";
+        var heightBrowser = $(window).width()/2;
+        $('.loader').css("opacity","0.8").css("height",heightBrowser).html("<div id='Grd1_wrapper' class='dataTables_wrapper'><div id='Grd1_processing' class='dataTables_processing panel-default'>"+msgLoader+"</div></div>");
+        $('.loader').show();
+
+        $.ajax({
+                url: "/orden_compra/send_orden_compra",
+                type: "POST",
+                data : $("#frmOrdenCompra").serialize(),
+                success: function (result) {
+                    //alert(result.id)
+                    //$('#openOverlayOpc').modal('hide');
+                    datatablenew();
+                    $('.loader').hide();
+                    if (result.id>0) {
+                        modalOrdenCompra(result.id);
+                    }
                 }
-            }
-    });
+        });
+    }
 }
 
 function obtenerCodigo(){
@@ -654,7 +703,7 @@ function pdf_documento(){
                         </div>
                         <div class="col-lg-2">
                             <select name="tipo_documento" id="tipo_documento" class="form-control form-control-sm" onchange="obtenerCodigo()">
-                                <option value="">- Selecione -</option>
+                                <option value="">--Seleccionar--</option>
                                 <?php
                                 foreach ($tipo_documento as $row){?>
                                     <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$orden_compra->id_tipo_documento)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
@@ -674,7 +723,7 @@ function pdf_documento(){
                         </div>
                         <div class="col-lg-2">
                             <select name="empresa_compra" id="empresa_compra" class="form-control form-control-sm" onchange="">
-                                <option value="">- Selecione -</option>
+                                <option value="">--Seleccionar--</option>
                                 <?php
                                 foreach ($proveedor as $row){?>
                                     <option value="<?php echo $row->id ?>" <?php if($row->id==$orden_compra->id_empresa_compra)echo "selected='selected'"?>><?php echo $row->razon_social ?></option>
@@ -688,7 +737,7 @@ function pdf_documento(){
                         </div>
                         <div class="col-lg-2">
                             <select name="empresa_vende" id="empresa_vende" class="form-control form-control-sm" onchange="">
-                                <option value="">- Selecione -</option>
+                                <option value="">--Seleccionar--</option>
                                 <?php
                                 foreach ($proveedor as $row){?>
                                     <option value="<?php echo $row->id ?>" <?php if($row->id==$orden_compra->id_empresa_vende)echo "selected='selected'"?>><?php echo $row->razon_social ?></option>
@@ -708,10 +757,63 @@ function pdf_documento(){
                         </div>
                         <div class="col-lg-2">
                             <select name="igv_compra" id="igv_compra" class="form-control form-control-sm" onchange="">
-                                <option value="">- Selecione -</option>
+                                <option value="">--Seleccionar--</option>
                                 <?php
                                 foreach ($igv_compra as $row){?>
                                     <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$orden_compra->igv_compra)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                    <?php 
+                                }
+                                ?>
+                            </select>
+                        </div>
+                        <div class="col-lg-2">
+                            Unidad Origen
+                        </div>
+                        <?php 
+                        if($orden_compra->id_empresa_compra==28 && $orden_compra->id_empresa_vende==28){
+                            $origen=3;
+                        }else if($orden_compra->id_empresa_compra==28){
+                            $origen=2;
+                        }else if($orden_compra->id_empresa_vende==28){
+                            $origen=1;
+                        }else{
+                            $origen=null;
+                        }
+                        ?>
+                        <div class="col-lg-2">
+                            <select name="unidad_origen" id="unidad_origen" class="form-control form-control-sm" onchange="//cambiarOrigen()">
+                                <option value="">--Seleccionar--</option>
+                                <?php
+                                foreach ($unidad_origen as $row){?>
+                                    <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$origen)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                    <?php 
+                                }
+                                ?>
+                            </select>
+                        </div>
+                        <div class="col-lg-2" id="almacen_">
+                            Almacen Destino
+                        </div> 
+                        <div class="col-lg-2" id="almacen_select">
+                            <select name="almacen" id="almacen" class="form-control form-control-sm" onchange="//actualizarSecciones(this)">
+                                <option value="">--Seleccionar--</option>
+                                <?php 
+                                foreach ($almacen as $row){?>
+                                    <option value="<?php echo $row->id ?>" <?php //if($row->id==$entrada_producto->id_producto)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                    <?php 
+                                }
+                                ?>
+                            </select>
+                        </div>
+                        <div class="col-lg-2" id="almacen_salida_">
+                            Almacen Salida
+                        </div> 
+                        <div class="col-lg-2" id="almacen_salida_select">
+                            <select name="almacen_salida" id="almacen_salida" class="form-control form-control-sm" onchange="//actualizarSecciones(this)">
+                                <option value="">--Seleccionar--</option>
+                                <?php 
+                                foreach ($almacen as $row){?>
+                                    <option value="<?php echo $row->id ?>" <?php //if($row->id==$entrada_producto->id_producto)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
                                     <?php 
                                 }
                                 ?>
