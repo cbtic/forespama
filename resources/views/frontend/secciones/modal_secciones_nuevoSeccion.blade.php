@@ -401,7 +401,7 @@ function fn_save_seccion(){
                                 <div class="col-lg-3">
                                     <div class="form-group">
                                         <label class="control-label form-control-sm">C&oacute;digo</label>
-                                        <input id="codigo" name="codigo" on class="form-control form-control-sm"  value="<?php echo $codigo[0]->codigo?>" type="text" readonly="readonly">
+                                        <input id="codigo" name="codigo" on class="form-control form-control-sm"  value="<?php if($id>0){echo $seccion->codigo;}else{echo $codigo[0]->codigo;}?>" type="text" readonly="readonly">
                                     
                                     </div>
                                 </div>

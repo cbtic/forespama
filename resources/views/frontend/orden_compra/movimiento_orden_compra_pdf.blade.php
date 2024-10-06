@@ -146,10 +146,6 @@ $(document).ready(function() {
 
 <script type="text/javascript">
 
-
-
-
-
 </script>
 
 <body class="hold-transition skin-blue sidebar-mini">
@@ -159,7 +155,7 @@ $(document).ready(function() {
     </div>-->
     <table class="data" style="width:100%; font-size:11px">
         <tr>
-            <th><h2><?php echo $tipo_documento . ' N° ' .$codigo;?></h2></th>
+            <th><h2><?php echo $tipo_documento ." N° ". $numero_orden_compra;?></h2></th>
         </tr>
     </table>
     <!--<div style="display: flex !important; width:100%">
@@ -175,43 +171,23 @@ $(document).ready(function() {
                 <tbody>
                     <tr>
                         <td class="td" style ="text-align: left; width: 15%;"><b>Fecha de Emisi&oacute;n:</b></td>
-                        <td class="td" style ="text-align: left; width: 15%;"><?php echo $fecha_movimiento;?></td>
-                        <td class="td" style ="text-align: left; width: 70%;"></td>
-                    </tr>
-                    <tr>
-                        <td class="td" style ="text-align: left; width: 15%;"><b>Origen:</b></td>
-                        <td class="td" style ="text-align: left; width: 15%;"><?php echo $unidad_origen;?></td>
-                        <td class="td" style ="text-align: left; width: 70%;"></td>
-                    </tr>
-                    <tr>
-                        <td class="td" style ="text-align: left; width: 15%;"><b>Almacen Destino:</b></td>
-                        <td class="td" style ="text-align: left; width: 15%;"><?php echo $almacen;?></td>
-                        <td class="td" style ="text-align: left; width: 70%;"></td>
+                        <td class="td" style ="text-align: left; width: 20%;"><?php echo $fecha_orden_compra;?></td>
+                        <td class="td" style ="text-align: left; width: 65%;"></td>
                     </tr>
                     <tr>
                         <td class="td" style ="text-align: left; width: 15%;"><b>Empresa Compra:</b></td>
-                        <td class="td" style ="text-align: left; width: 15%;"><?php echo $empresa_compra;?></td>
-                        <td class="td" style ="text-align: left; width: 70%;"></td>
+                        <td class="td" style ="text-align: left; width: 20%;"><?php echo $empresa_compra;?></td>
+                        <td class="td" style ="text-align: left; width: 65%;"></td>
                     </tr>
                     <tr>
                         <td class="td" style ="text-align: left; width: 15%;"><b>Empresa Vende:</b></td>
-                        <td class="td" style ="text-align: left; width: 15%;"><?php echo $empresa_vende;?></td>
-                        <td class="td" style ="text-align: left; width: 70%;"></td>
-                    </tr>
-                    <tr>
-                        <td class="td" style ="text-align: left; width: 15%;"><b>Tipo Moneda:</b></td>
-                        <td class="td" style ="text-align: left; width: 15%;"><?php echo $moneda;?></td>
-                        <td class="td" style ="text-align: left; width: 70%;"></td>
-                    </tr>
-                    <tr>
-                        <td class="td" style ="text-align: left; width: 15%;"><b>Observaci&oacute;n:</b></td>
-                        <td class="td" style ="text-align: left; width: 15%;"><?php echo $observacion;?></td>
-                        <td class="td" style ="text-align: left; width: 70%;"></td>
+                        <td class="td" style ="text-align: left; width: 20%;"><?php echo $empresa_vende;?></td>
+                        <td class="td" style ="text-align: left; width: 65%;"></td>
                     </tr>
                     <tr>
                         <td class="td" style ="text-align: left; width: 15%;"><b>IGV:</b></td>
-                        <td class="td" style ="text-align: left; width: 15%;"><?php echo $igv_compra;?></td>
-                        <td class="td" style ="text-align: left; width: 70%;"></td>
+                        <td class="td" style ="text-align: left; width: 20%;"><?php echo $igv;?></td>
+                        <td class="td" style ="text-align: left; width: 65%;"></td>
                     </tr>
                 </tbody>
             </table>
@@ -221,18 +197,16 @@ $(document).ready(function() {
                     <tr class="data">
                         <td class="td" style ="text-align: left; width: 5%; height:25px; border-bottom: 1px solid black;"><b>#</b></td>
                         <td class="td" style ="text-align: left; width: 5%; height:25px; border-bottom: 1px solid black;"><b>ITEM</b></td>
-                        <td class="td" style ="text-align: left; width: 10%; height:25px; border-bottom: 1px solid black;"><b>DESCRIPCI&Oacute;N</b></td>
+                        <td class="td" style ="text-align: left; width: 20%; height:25px; border-bottom: 1px solid black;"><b>DESCRIPCI&Oacute;N</b></td>
                         <td class="td" style ="text-align: left; width: 5%; height:25px; border-bottom: 1px solid black;"><b>MARCA</b></td>
                         <td class="td" style ="text-align: left; width: 5%; height:25px; border-bottom: 1px solid black;"><b>COD. INTERNO</b></td>
                         <td class="td" style ="text-align: left; width: 10%; height:25px; border-bottom: 1px solid black;"><b>F. FABRICACI&Oacute;N</b></td>
                         <td class="td" style ="text-align: left; width: 10%; height:25px; border-bottom: 1px solid black;"><b>F. VENCIMIENTO</b></td>
                         <td class="td" style ="text-align: left; width: 5%; height:25px; border-bottom: 1px solid black;"><b>ESTADO BIEN</b></td>
                         <td class="td" style ="text-align: left; width: 5%; height:25px; border-bottom: 1px solid black;"><b>UNIDAD</b></td>
-                        <td class="td" style ="text-align: left; width: 5%; height:25px; border-bottom: 1px solid black;"><b>CANT. INGRESO</b></td>
-                        <td class="td" style ="text-align: left; width: 5%; height:25px; border-bottom: 1px solid black;"><b>CANT. COMPRA</b></td>
-                        <td class="td" style ="text-align: left; width: 5%; height:25px; border-bottom: 1px solid black;"><b>CANT. PENDIENTE</b></td>
-                        <td class="td" style ="text-align: left; width: 5%; height:25px; border-bottom: 1px solid black;"><b>STOCK ACTUAL</b></td>
+                        <td class="td" style ="text-align: left; width: 5%; height:25px; border-bottom: 1px solid black;"><b>CANTIDAD</b></td>
                         <td class="td" style ="text-align: left; width: 5%; height:25px; border-bottom: 1px solid black;"><b>PRECIO UNITARIO</b></td>
+                        <td class="td" style ="text-align: left; width: 5%; height:25px; border-bottom: 1px solid black;"><b>DESCUENTO</b></td>
                         <td class="td" style ="text-align: left; width: 5%; height:25px; border-bottom: 1px solid black;"><b>SUB TOTAL</b></td>
                         <td class="td" style ="text-align: left; width: 5%; height:25px; border-bottom: 1px solid black;"><b>IGV</b></td>
                         <td class="td" style ="text-align: left; width: 5%; height:25px; border-bottom: 1px solid black;"><b>TOTAL</b></td>
@@ -251,15 +225,11 @@ $(document).ready(function() {
                             <td class="td" style ="text-align: left; width: 5%; height:25px"><?php echo $r->codigo;?></td>
                             <td class="td" style ="text-align: left; width: 10%; height:25px"><?php echo $r->fecha_fabricacion;?></td>
                             <td class="td" style ="text-align: left; width: 10%; height:25px"><?php echo $r->fecha_vencimiento;?></td>
-                            <td class="td" style ="text-align: left; width: 5%; height:25px"><?php echo $r->estado_bien;?></td>
+                            <td class="td" style ="text-align: left; width: 5%; height:25px"><?php echo $r->estado_producto;?></td>
                             <td class="td" style ="text-align: left; width: 5%; height:25px"><?php echo $r->unidad_medida;?></td>
-                            <td class="td" style ="text-align: left; width: 5%; height:25px"><?php echo $r->cantidad;?></td>
-                            <td class="td" style ="text-align: left; width: 5%; height:25px"><?php echo $r->cantidad;?></td>
-                            <td class="td" style ="text-align: left; width: 5%; height:25px"><?php echo $r->cantidad;?></td>
-                            <td class="td" style ="text-align: left; width: 5%; height:25px">
-                                {{ isset($producto_stock[$r->id_producto]->saldos_cantidad) ? $producto_stock[$r->id_producto]->saldos_cantidad : 0 }}
-                            </td>
-                            <td class="td" style ="text-align: left; width: 5%; height:25px"><?php echo number_format($r->costo,2,'.',',');?></td>
+                            <td class="td" style ="text-align: left; width: 5%; height:25px"><?php echo $r->cantidad_requerida;?></td>
+                            <td class="td" style ="text-align: left; width: 5%; height:25px"><?php echo number_format($r->precio,2,'.',',');?></td>
+                            <td class="td" style ="text-align: left; width: 5%; height:25px"><?php echo $r->descuento;?></td>
                             <td class="td" style ="text-align: left; width: 5%; height:25px"><?php echo number_format($r->sub_total,2,'.',',');?></td>
                             <td class="td" style ="text-align: left; width: 5%; height:25px"><?php echo number_format($r->igv,2,'.',',');?></td>
                             <td class="td" style ="text-align: left; width: 5%; height:25px"><?php echo number_format($r->total,2,'.',',');?></td>
@@ -311,7 +281,7 @@ $(document).ready(function() {
     
 @push('after-scripts')
 
-<script src="{{ asset('js/entradaProducto.js') }}"></script>
+<script src="{{ asset('js/ordenCompra.js') }}"></script>
 
 @endpush
 

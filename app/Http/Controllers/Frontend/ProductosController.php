@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Requests\ProductoRequest;
 use App\Models\Producto;
 use App\Models\TablaMaestra;
+use App\Models\Marca;
 use RealRashid\SweetAlert\Facades\Alert;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -61,6 +62,7 @@ class ProductosController extends Controller
     public function modal_producto($id){
 		
         $tablaMaestra_model = new TablaMaestra;
+        $marca_model = new Marca;
 		
 		if($id>0){
 			$producto = Producto::find($id);
@@ -68,13 +70,15 @@ class ProductosController extends Controller
 			$producto = new Producto;
 		}
 
-        $unidad_medida = $tablaMaestra_model->getMaestroByTipo(43);
+        $unidad_producto = $tablaMaestra_model->getMaestroByTipo(43);
         $moneda = $tablaMaestra_model->getMaestroByTipo(1);
         $tipo_producto = $tablaMaestra_model->getMaestroByTipo(44);
-        $estado_bien = $tablaMaestra_model->getMaestroByTipo(4);
+        $estado_bien = $tablaMaestra_model->getMaestroByTipo(56);
+        $unidad_medida = $tablaMaestra_model->getMaestroByTipo(57);
+        $marca = $marca_model->getMarcaAll();
 		//var_dump($id);exit();
 
-		return view('frontend.productos.modal_productos_nuevoProducto',compact('id','producto','unidad_medida','moneda','estado_bien','tipo_producto'));
+		return view('frontend.productos.modal_productos_nuevoProducto',compact('id','producto','unidad_medida','moneda','estado_bien','tipo_producto','unidad_producto','marca'));
 
     }
 
@@ -98,6 +102,9 @@ class ProductosController extends Controller
 
 		if($request->id == 0){
 			$producto = new Producto;
+            $producto_model = new Producto;
+            $correlativo = $producto_model->getCorrelativo();
+            $producto->numero_corrrelativo = $correlativo[0]->numero_correlativo;
 		}else{
 			$producto = Producto::find($request->id);
 		}
@@ -105,7 +112,7 @@ class ProductosController extends Controller
 		$producto->numero_serie = $request->numero_serie;
 		$producto->codigo = $request->codigo;
         $producto->denominacion = $request->denominacion;
-        $producto->id_unidad_medida = $request->unidad;
+        $producto->id_unidad_medida = $request->unidad_medida;
         $producto->stock_actual = $request->stock_actual;
         $producto->id_moneda = $request->moneda;
         $producto->id_tipo_producto = $request->tipo_producto;
@@ -114,6 +121,10 @@ class ProductosController extends Controller
         $producto->stock_minimo = $request->stock_minimo;
         $producto->observacion = "";
         $producto->costo_unitario = $request->costo_unitario;
+        $producto->contenido = $request->contenido;
+        $producto->id_unidad_producto = $request->unidad_producto;
+        $producto->id_marca = $request->marca;
+        //$producto->numero_corrrelativo = $numero_correlativo;
 		$producto->estado = 1;
 		$producto->save();
 

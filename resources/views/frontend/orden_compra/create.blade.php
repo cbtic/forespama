@@ -297,7 +297,7 @@ label.form-control-sm{
 @section('breadcrumb')
 <ol class="breadcrumb" style="padding-left:130px;margin-top:0px;background-color:#283659">
     <li class="breadcrumb-item text-primary">Inicio</li>
-    <li class="breadcrumb-item active">Registro de Entrada de Productos</li>
+    <li class="breadcrumb-item active">Registro de Orden de Compra</li>
     </li>
 </ol>
 
@@ -323,12 +323,12 @@ label.form-control-sm{
 
         <div class="card-body">
 
-            <form class="form-horizontal" method="post" action="" id="frmEntradaProductos" autocomplete="off" enctype="multipart/form-data">
+            <form class="form-horizontal" method="post" action="" id="frmOrdenCompra" autocomplete="off" enctype="multipart/form-data">
 				
                 <div class="row">
                     <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12" style="margin-top:15px">
                         <h4 class="card-title mb-0 text-primary" style="font-size:22px">
-                            Entradas y Salidas
+                            Orden de Compra
                         </h4>
                     </div>
                 </div>
@@ -348,28 +348,10 @@ label.form-control-sm{
 				<div class="row" style="padding:20px 20px 0px 20px;">
 
 					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<select name="tipo_movimiento_bus" id="tipo_movimiento_bus" class="form-control form-control-sm">
-							<option value="">--Seleccionar Tipo Movimiento--</option>
-							<?php
-							foreach ($tipo_movimiento as $row){?>
-								<option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
-								<?php 
-							}
-							?>
-						</select>
-					</div>
-
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
 						<select name="tipo_documento_bus" id="tipo_documento_bus" class="form-control form-control-sm">
-							<option value="">--Seleccionar Tipo Movimiento--</option>
+							<option value="">--Seleccionar Tipo Documento--</option>
 							<?php
-							foreach ($tipo_documento_entrada as $row){?>
-								<option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
-								<?php 
-							}
-							?>
-							<?php
-							foreach ($tipo_documento_salida as $row){?>
+							foreach ($tipo_documento as $row){?>
 								<option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
 								<?php 
 							}
@@ -378,32 +360,8 @@ label.form-control-sm{
 					</div>
 
 					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<select name="unidad_origen_bus" id="unidad_origen_bus" class="form-control form-control-sm">
-							<option value="">--Seleccionar Unidad Origen--</option>
-							<?php
-							foreach ($unidad_origen as $row){?>
-								<option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
-								<?php 
-							}
-							?>
-						</select>
-					</div>
-
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<select name="almacen_destino_bus" id="almacen_destino_bus" class="form-control form-control-sm">
-							<option value="">--Seleccionar Unidad Destino--</option>
-							<?php
-							foreach ($almacen as $row){?>
-								<option value="<?php echo $row->id ?>"><?php echo $row->denominacion ?></option>
-								<?php 
-							}
-							?>
-						</select>
-					</div>
-
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<select name="proveedor_bus" id="proveedor_bus" class="form-control form-control-sm">
-							<option value="">--Seleccionar Proveedor--</option>
+						<select name="empresa_compra_bus" id="empresa_compra_bus" class="form-control form-control-sm">
+							<option value="">--Seleccionar Empresa Compra--</option>
 							<?php
 							foreach ($proveedor as $row){?>
 								<option value="<?php echo $row->id ?>"><?php echo $row->razon_social ?></option>
@@ -412,16 +370,32 @@ label.form-control-sm{
 							?>
 						</select>
 					</div>
-					
+
 					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-                        <input id="numero_comprobante_bus" name="numero_comprobante_bus" on class="form-control form-control-sm"  placeholder="N&uacute;mero Comprobante">
+						<select name="empresa_vende_bus" id="empresa_vende_bus" class="form-control form-control-sm">
+							<option value="">--Seleccionar Empresa Vende--</option>
+							<?php
+							foreach ($proveedor as $row){?>
+								<option value="<?php echo $row->id ?>"><?php echo $row->razon_social ?></option>
+								<?php 
+							}
+							?>
+						</select>
+					</div>
+
+					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+                        <input id="fecha_bus" name="fecha_bus" on class="form-control form-control-sm"  placeholder="Fecha">
+					</div>
+
+					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+                        <input id="numero_orden_compra_bus" name="numero_orden_compra_bus" on class="form-control form-control-sm"  placeholder="N&uacute;mero Orden Compra">
 					</div>
 
 					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
 						<select name="situacion_bus" id="situacion_bus" class="form-control form-control-sm">
 							<option value="">--Seleccionar Situaci&oacute;n--</option>
 							<?php
-							foreach ($cerrado_entrada as $row){?>
+							foreach ($cerrado_orden_compra as $row){?>
 								<option value="<?php echo $row->codigo ?>" <?php if($row->codigo=='1')echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
 								<?php 
 							}
@@ -446,19 +420,16 @@ label.form-control-sm{
                 <div class="card-body">				
 
                     <div class="table-responsive">
-                    <table id="tblEntradaProductos" class="table table-hover table-sm">
+                    <table id="tblOrdenCompra" class="table table-hover table-sm">
                         <thead>
                         <tr style="font-size:13px">
                             <th>Id</th>
-							<th>Tipo Movimiento</th>
-							<!--<th>Ingreso</th>-->
-                            <th>Tipo Doc.</th>
-							<th>Unidad Origen</th>
-                            <th>Proveedor</th>
-							<th>Almacen Salida/Destino</th>
-                            <th>Nro. Comprobante</th>
-							<th>Fecha Comprobante</th>
-							<th>Cerrado</th>
+							<th>Tipo Documento</th>
+							<th>Empresa Compra</th>
+							<th>Empresa Vende</th>
+                            <th>Fecha</th>
+							<th>N&uacute;mero Orden Compra</th>
+							<th>Situaci&oacute;n</th>
 							<th>Estado</th>
                             <th>Acciones</th>
                         </tr>
@@ -549,6 +520,6 @@ label.form-control-sm{
 
 	</script>
 
-	<script src="{{ asset('js/entradaProducto.js') }}"></script>
+	<script src="{{ asset('js/ordenCompra.js') }}"></script>
 
 	@endpush

@@ -97,6 +97,16 @@ function datatablenew(){
                 "bSortable": true,
                 "aTargets": [1]
                 },
+
+				{
+				"mRender": function (data, type, row) {
+					var denominacion = "";
+					if(row.denominacion!= null)denominacion = row.denominacion;
+					return denominacion;
+				},
+				"bSortable": true,
+				"aTargets": [2]
+				},
 				
                 {
                 "mRender": function (data, type, row) {
@@ -105,19 +115,27 @@ function datatablenew(){
 					return codigo;
                 },
                 "bSortable": true,
-                "aTargets": [2]
-                },
-				
-				{
-                "mRender": function (data, type, row) {
-                	var denominacion = "";
-					if(row.denominacion!= null)denominacion = row.denominacion;
-					return denominacion;
-                },
-                "bSortable": true,
                 "aTargets": [3]
                 },
 
+				{
+				"mRender": function (data, type, row) {
+					var unidad = "";
+					if(row.unidad!= null)unidad = row.unidad;
+					return unidad;
+				},
+				"bSortable": true,
+				"aTargets": [4]
+				},
+				{
+				"mRender": function (data, type, row) {
+					var contenido = "";
+					if(row.contenido!= null)contenido = row.contenido;
+					return contenido;
+				},
+				"bSortable": true,
+				"aTargets": [5]
+				},
 				{
 				"mRender": function (data, type, row) {
 					var unidad_medida = "";
@@ -125,25 +143,25 @@ function datatablenew(){
 					return unidad_medida;
 				},
 				"bSortable": true,
-				"aTargets": [4]
-				},
-				{
-				"mRender": function (data, type, row) {
-					var stock = "";
-					if(row.stock!= null)stock = row.stock;
-					return stock;
-				},
-				"bSortable": true,
-				"aTargets": [5]
-				},
-				{
-				"mRender": function (data, type, row) {
-					var fecha_vencimiento = "";
-					if(row.fecha_vencimiento!= null)fecha_vencimiento = row.fecha_vencimiento;
-					return fecha_vencimiento;
-				},
-				"bSortable": true,
 				"aTargets": [6]
+				},
+				{
+				"mRender": function (data, type, row) {
+					var marca = "";
+					if(row.marca!= null)marca = row.marca;
+					return marca;
+				},
+				"bSortable": true,
+				"aTargets": [7]
+				},
+				{
+				"mRender": function (data, type, row) {
+					var unidad_medida_producto = "";
+					if(row.unidad_medida_producto!= null)unidad_medida_producto = row.unidad_medida_producto;
+					return unidad_medida_producto;
+				},
+				"bSortable": true,
+				"aTargets": [8]
 				},
 				{
 				"mRender": function (data, type, row) {
@@ -152,7 +170,25 @@ function datatablenew(){
 					return estado_bien;
 				},
 				"bSortable": true,
-				"aTargets": [7]
+				"aTargets": [9]
+				},
+				{
+				"mRender": function (data, type, row) {
+					var stock = "";
+					if(row.stock!= null)stock = row.stock;
+					return stock;
+				},
+				"bSortable": true,
+				"aTargets": [10]
+				},
+				{
+				"mRender": function (data, type, row) {
+					var fecha_vencimiento = "";
+					if(row.fecha_vencimiento!= null)fecha_vencimiento = row.fecha_vencimiento;
+					return fecha_vencimiento;
+				},
+				"bSortable": true,
+				"aTargets": [11]
 				},
 				{
 				"mRender": function (data, type, row) {
@@ -161,7 +197,7 @@ function datatablenew(){
 					return stock_minimo;
 				},
 				"bSortable": true,
-				"aTargets": [8]
+				"aTargets": [12]
 				},
 				{
 				"mRender": function (data, type, row) {
@@ -170,7 +206,7 @@ function datatablenew(){
 					return stock_actual;
 				},
 				"bSortable": true,
-				"aTargets": [9]
+				"aTargets": [13]
 				},
 				{
 					"mRender": function (data, type, row) {
@@ -184,7 +220,7 @@ function datatablenew(){
 						return estado;
 					},
 					"bSortable": false,
-					"aTargets": [10]
+					"aTargets": [14]
 				},
 				{
 					"mRender": function (data, type, row) {
@@ -210,7 +246,7 @@ function datatablenew(){
 						return html;
 					},
 					"bSortable": false,
-					"aTargets": [11],
+					"aTargets": [15],
 				},
 
             ]

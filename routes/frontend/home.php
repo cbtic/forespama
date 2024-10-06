@@ -18,6 +18,8 @@ use App\Http\Controllers\Frontend\AnaquelesController;
 use App\Http\Controllers\Frontend\ProductosController;
 use App\Http\Controllers\Frontend\LoteController;
 use App\Http\Controllers\Frontend\EntradaProductosController;
+use App\Http\Controllers\Frontend\OrdenCompraController;
+use App\Http\Controllers\Frontend\KardexController;
 
 use App\Models\Ubigeo;
 
@@ -288,7 +290,7 @@ Route::post('entrada_productos/listar_entrada_productos_ajax', [EntradaProductos
 Route::post('entrada_productos/send_entrada_producto', [EntradaProductosController::class, 'send_entrada_producto'])->name('entrada_productos.send_entrada_producto');
 Route::get('entrada_productos/modal_entrada_producto/{id}', [EntradaProductosController::class, 'modal_entrada_producto'])->name('entrada_productos.modal_entrada_producto');
 Route::get('entrada_productos/eliminar_entrada_producto/{id}/{estado}', [EntradaProductosController::class, 'eliminar_entrada_producto'])->name('entrada_productos.eliminar_entrada_producto');
-Route::get('entrada_productos/modal_detalle_producto/{id}', [EntradaProductosController::class, 'modal_detalle_producto'])->name('entrada_productos.modal_detalle_producto');
+Route::get('entrada_productos/modal_detalle_producto/{id}/{tipo}', [EntradaProductosController::class, 'modal_detalle_producto'])->name('entrada_productos.modal_detalle_producto');
 
 Route::get('entrada_productos_detalle/send_entrada_producto_detalle', [EntradaProductoDetallesController::class, 'send_entrada_producto_detalle'])->name('entrada_productos_detalle.send_entrada_producto_detalle');
 
@@ -301,3 +303,24 @@ Route::get('entrada_productos/movimiento_pdf/{id}/{tipo_movimiento}', [EntradaPr
 Route::get('entrada_productos/cargar_detalle/{id}/{tipo_movimiento}', [EntradaProductosController::class, 'cargar_detalle'])->name('entrada_productos.cargar_detalle');
 Route::get('almacenes/cargar_usuario/{id}', [AlmacenesController::class, 'cargar_usuario'])->name('almacenes.cargar_usuario');
 Route::get('secciones/cargar_anaqueles/{id}', [SeccionesController::class, 'cargar_anaqueles'])->name('secciones.cargar_anaqueles');
+
+Route::get('orden_compra/create', [OrdenCompraController::class, 'create'])->name('orden_compra.create');
+Route::post('orden_compra/listar_orden_compra_ajax', [OrdenCompraController::class, 'listar_orden_compra_ajax'])->name('orden_compra.listar_orden_compra_ajax');
+Route::post('orden_compra/send_orden_compra', [OrdenCompraController::class, 'send_orden_compra'])->name('orden_compra.send_orden_compra');
+Route::get('orden_compra/modal_orden_compra/{id}', [OrdenCompraController::class, 'modal_orden_compra'])->name('orden_compra.modal_orden_compra');
+Route::get('orden_compra/eliminar_orden_compra/{id}/{estado}', [OrdenCompraController::class, 'eliminar_orden_compra'])->name('orden_compra.eliminar_orden_compra');
+Route::get('orden_compra/cargar_detalle/{id}', [OrdenCompraController::class, 'cargar_detalle'])->name('orden_compra.cargar_detalle');
+
+Route::get('kardex/create', [KardexController::class, 'create'])->name('kardex.create');
+Route::post('kardex/listar_kardex_ajax', [KardexController::class, 'listar_kardex_ajax'])->name('kardex.listar_kardex_ajax');
+
+Route::get('entrada_productos/modal_detalle_producto_orden_compra/{id}/{tipo}', [EntradaProductosController::class, 'modal_detalle_producto_orden_compra'])->name('entrada_productos.modal_detalle_producto_orden_compra');
+Route::get('orden_compra/movimiento_pdf/{id}', [OrdenCompraController::class, 'movimiento_pdf'])->name('orden_compra.movimiento_pdf');
+Route::get('entrada_productos/modal_historial_entrada_producto/{id}/{id_tipo_documento}', [EntradaProductosController::class, 'modal_historial_entrada_producto'])->name('entrada_productos.modal_historial_entrada_producto');
+Route::get('orden_compra/obtener_codigo_orden_compra/{tipo_documento}', [OrdenCompraController::class, 'obtener_codigo_orden_compra'])->name('orden_compra.obtener_codigo_orden_compra');
+Route::get('entrada_productos/obtener_codigo_entrada_producto/{tipo_movimiento}/{tipo_documento}', [EntradaProductosController::class, 'obtener_codigo_entrada_producto'])->name('entrada_productos.obtener_codigo_entrada_producto');
+
+
+
+
+

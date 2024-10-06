@@ -2,6 +2,10 @@
 <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" defer></script>
 <style type="text/css">
 
+#tblProductos tbody tr{
+		font-size:13px
+	}
+
 .table td.verde{
 	background:#CAE983  !important
 }
@@ -324,15 +328,14 @@ label.form-control-sm{
         <div class="card-body">
 
             <form class="form-horizontal" method="post" action="" id="frmProductos" autocomplete="off" enctype="multipart/form-data">
-				<!--
+				
                 <div class="row">
                     <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12" style="margin-top:15px">
                         <h4 class="card-title mb-0 text-primary" style="font-size:22px">
-                            Registro Solicitudes
+                            Productos
                         </h4>
                     </div>
                 </div>
-				-->
                 <div class="row justify-content-center" style="margin-top:15px">
 
                     <input type="hidden" name="flag_ocultar" id="flag_ocultar" value="0">
@@ -396,12 +399,16 @@ label.form-control-sm{
                         <tr style="font-size:13px">
                             <th>Id</th>
 							<th>Serie</th>
-                            <th>C&oacute;digo</th>
 							<th>Denominaci&oacute;n</th>
-                            <th>Unidad</th>
+                            <th>C&oacute;digo</th>
+                            <th>Unidad Producto</th>
+							<th>Contenido</th>
+							<th>Unidad Medida</th>
+							<th>Marca</th>
+							<th>Tipo Producto</th>
+							<th>Estado Bien</th>
                             <th>Stock</th>
-							<th>Vencimiento</th>
-							<th>Estado del Bien</th>
+							<th>F. Vencimiento</th>
 							<th>Stock M&iacute;nimo</th>
 							<th>Stock Actual</th>
 							<th>Estado</th>

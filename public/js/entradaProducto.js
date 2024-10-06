@@ -3,9 +3,9 @@ $(document).ready(function () {
 	$('#btnBuscar').click(function () {
 		fn_ListarBusqueda();
 	});
-		
+
 	$('#btnNuevo').click(function () {
-		modalEntradaProducto(0);
+		modalEntradaProducto(0,0);
 	});
 
 	$('#denominacion').keypress(function(e){
@@ -49,7 +49,13 @@ function datatablenew(){
             var iNroPagina 	= parseFloat(fn_util_obtieneNroPagina(aoData[3].value, aoData[4].value)).toFixed();
             var iCantMostrar 	= aoData[4].value;
 			
-            var denominacion = $('#denominacion_bus').val();
+            var tipo_movimiento = $('#tipo_movimiento_bus').val();
+			var tipo_documento = $('#tipo_documento_bus').val();
+			var unidad_origen = $('#unidad_origen_bus').val();
+			var almacen_destino = $('#almacen_destino_bus').val();
+			var proveedor = $('#proveedor_bus').val();
+			var numero_comprobante = $('#numero_comprobante_bus').val();
+			var situacion = $('#situacion_bus').val();
 			var estado = $('#estado_bus').val();
 			
 			var _token = $('#_token').val();
@@ -59,7 +65,9 @@ function datatablenew(){
                 "type": "POST",
                 "url": sSource,
                 "data":{NumeroPagina:iNroPagina,NumeroRegistros:iCantMostrar,
-						denominacion:denominacion,estado:estado,
+						tipo_movimiento:tipo_movimiento,tipo_documento:tipo_documento,unidad_origen:unidad_origen,
+						almacen_destino:almacen_destino,proveedor:proveedor,numero_comprobante:numero_comprobante,
+						situacion:situacion,estado:estado,
 						_token:_token
                        },
                 "success": function (result) {
@@ -134,6 +142,17 @@ function datatablenew(){
 				"bSortable": true,
 				"aTargets": [4]
 				},
+
+				{
+				"mRender": function (data, type, row) {
+					var almacen = "";
+					if(row.almacen!= null)almacen = row.almacen;
+					return almacen;
+				},
+				"bSortable": true,
+				"aTargets": [5]
+				},
+
 				{
 				"mRender": function (data, type, row) {
 					var numero_comprobante = "";
@@ -141,7 +160,7 @@ function datatablenew(){
 					return numero_comprobante;
 				},
 				"bSortable": true,
-				"aTargets": [5]
+				"aTargets": [6]
 				},
 				{
 				"mRender": function (data, type, row) {
@@ -150,7 +169,22 @@ function datatablenew(){
 					return fecha_comprobante;
 				},
 				"bSortable": true,
-				"aTargets": [6]
+				"aTargets": [7]
+				},
+				{
+				"mRender": function (data, type, row) {
+					var cerrado = "";
+					//if(row.cerrado_nombre!= null)cerrado_nombre = row.cerrado_nombre;
+					if(row.cerrado == 1){
+						cerrado = "ABIERTO";
+					}
+					if(row.cerrado == 2){
+						cerrado = "CERRADO";
+					}
+					return cerrado;
+				},
+				"bSortable": true,
+				"aTargets": [8]
 				},
 				{
 					"mRender": function (data, type, row) {
@@ -164,7 +198,7 @@ function datatablenew(){
 						return estado;
 					},
 					"bSortable": false,
-					"aTargets": [7]
+					"aTargets": [9]
 				},
 				{
 					"mRender": function (data, type, row) {
@@ -179,9 +213,12 @@ function datatablenew(){
 							clase = "btn-success";
 						}
 						
+						var tipo_mov="";
+						if(row.tipo=='INGRESO'){tipo_mov=1}
+						if(row.tipo=='SALIDA'){tipo_mov=2}
 						var html = '<div class="btn-group btn-group-sm" role="group" aria-label="Log Viewer Actions">';
 						
-						html += '<button style="font-size:12px" type="button" class="btn btn-sm btn-success" data-toggle="modal" onclick="modalEntradaProducto('+row.id+')" ><i class="fa fa-edit"></i> Editar</button>'; 
+						html += '<button style="font-size:12px" type="button" class="btn btn-sm btn-success" data-toggle="modal" onclick="modalEntradaProducto('+row.id+','+tipo_mov+')" ><i class="fa fa-edit"></i> Editar</button>'; 
 						html += '<a href="javascript:void(0)" onclick=eliminarEntradaProducto('+row.id+','+row.estado+') class="btn btn-sm '+clase+'" style="font-size:12px;margin-left:10px">'+estado+'</a>';
 						
 						//html += '<a href="javascript:void(0)" onclick=modalResponsable('+row.id+') class="btn btn-sm btn-info" style="font-size:12px;margin-left:10px">Detalle Responsable</a>';
@@ -190,7 +227,7 @@ function datatablenew(){
 						return html;
 					},
 					"bSortable": false,
-					"aTargets": [8],
+					"aTargets": [10],
 				},
 
             ]
@@ -204,20 +241,24 @@ function fn_ListarBusqueda() {
     datatablenew();
 };
 
-function modalEntradaProducto(id){
+function modalEntradaProducto(id, tipo){
 	
+	/*var tipo_mov="";
+	if(tipo=='INGRESO'){tipo_mov=1};
+	if(tipo=='SALIDA'){tipo_mov=2};*/
+
 	$(".modal-dialog").css("width","85%");
 	$('#openOverlayOpc .modal-body').css('height', 'auto');
 
 	$.ajax({
-			url: "/entrada_productos/modal_detalle_producto/"+id,
+			url: "/entrada_productos/modal_detalle_producto/"+id+"/"+tipo,
 			type: "GET",
 			success: function (result) {  
+					//console.log(result);
 					$("#diveditpregOpc").html(result);
 					$('#openOverlayOpc').modal('show');
 			}
 	});
-
 }
 
 function eliminarEntradaProducto(id,estado){

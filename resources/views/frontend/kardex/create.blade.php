@@ -2,6 +2,10 @@
 <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" defer></script>
 <style type="text/css">
 
+#tblProductos tbody tr{
+		font-size:13px
+	}
+
 .table td.verde{
 	background:#CAE983  !important
 }
@@ -297,7 +301,7 @@ label.form-control-sm{
 @section('breadcrumb')
 <ol class="breadcrumb" style="padding-left:130px;margin-top:0px;background-color:#283659">
     <li class="breadcrumb-item text-primary">Inicio</li>
-    <li class="breadcrumb-item active">Registro de Entrada de Productos</li>
+    <li class="breadcrumb-item active">Registro de Kardex</li>
     </li>
 </ol>
 
@@ -323,12 +327,12 @@ label.form-control-sm{
 
         <div class="card-body">
 
-            <form class="form-horizontal" method="post" action="" id="frmEntradaProductos" autocomplete="off" enctype="multipart/form-data">
+            <form class="form-horizontal" method="post" action="" id="frmKardex" autocomplete="off" enctype="multipart/form-data">
 				
                 <div class="row">
                     <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12" style="margin-top:15px">
                         <h4 class="card-title mb-0 text-primary" style="font-size:22px">
-                            Entradas y Salidas
+                            Kardex
                         </h4>
                     </div>
                 </div>
@@ -347,120 +351,66 @@ label.form-control-sm{
 				
 				<div class="row" style="padding:20px 20px 0px 20px;">
 
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<select name="tipo_movimiento_bus" id="tipo_movimiento_bus" class="form-control form-control-sm">
-							<option value="">--Seleccionar Tipo Movimiento--</option>
+					<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+						<select name="producto_bus" id="producto_bus" class="form-control form-control-sm">
+							<option value="">- Selecione Producto-</option>
 							<?php
-							foreach ($tipo_movimiento as $row){?>
-								<option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
-								<?php 
+							foreach ($producto as $row) {
+							?>
+							<option value="<?php echo $row->id?>"><?php echo $row->denominacion?></option>
+							<?php
 							}
 							?>
 						</select>
 					</div>
 
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<select name="tipo_documento_bus" id="tipo_documento_bus" class="form-control form-control-sm">
-							<option value="">--Seleccionar Tipo Movimiento--</option>
+					<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+						<select name="almacen_bus" id="almacen_bus" class="form-control form-control-sm">
+							<option value="">- Selecione Almacen-</option>
 							<?php
-							foreach ($tipo_documento_entrada as $row){?>
-								<option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
-								<?php 
-							}
+							foreach ($almacen as $row) {
 							?>
+							<option value="<?php echo $row->id?>"><?php echo $row->denominacion?></option>
 							<?php
-							foreach ($tipo_documento_salida as $row){?>
-								<option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
-								<?php 
-							}
-							?>
-						</select>
-					</div>
-
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<select name="unidad_origen_bus" id="unidad_origen_bus" class="form-control form-control-sm">
-							<option value="">--Seleccionar Unidad Origen--</option>
-							<?php
-							foreach ($unidad_origen as $row){?>
-								<option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
-								<?php 
-							}
-							?>
-						</select>
-					</div>
-
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<select name="almacen_destino_bus" id="almacen_destino_bus" class="form-control form-control-sm">
-							<option value="">--Seleccionar Unidad Destino--</option>
-							<?php
-							foreach ($almacen as $row){?>
-								<option value="<?php echo $row->id ?>"><?php echo $row->denominacion ?></option>
-								<?php 
-							}
-							?>
-						</select>
-					</div>
-
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<select name="proveedor_bus" id="proveedor_bus" class="form-control form-control-sm">
-							<option value="">--Seleccionar Proveedor--</option>
-							<?php
-							foreach ($proveedor as $row){?>
-								<option value="<?php echo $row->id ?>"><?php echo $row->razon_social ?></option>
-								<?php 
 							}
 							?>
 						</select>
 					</div>
 					
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-                        <input id="numero_comprobante_bus" name="numero_comprobante_bus" on class="form-control form-control-sm"  placeholder="N&uacute;mero Comprobante">
-					</div>
-
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<select name="situacion_bus" id="situacion_bus" class="form-control form-control-sm">
-							<option value="">--Seleccionar Situaci&oacute;n--</option>
-							<?php
-							foreach ($cerrado_entrada as $row){?>
-								<option value="<?php echo $row->codigo ?>" <?php if($row->codigo=='1')echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
-								<?php 
-							}
-							?>
-						</select>
-					</div>
-
-                    <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+                    <!--<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
 						<select name="estado_bus" id="estado_bus" class="form-control form-control-sm">
 							<option value="">Todos</option>
 							<option value="1" selected="selected">Activo</option>
 							<option value="0">Eliminado</option>
 						</select>
-					</div>
+					</div>-->
+
                     
 					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12" style="padding-right:0px">
 						<input class="btn btn-warning pull-rigth" value="Buscar" type="button" id="btnBuscar" />
-						<input class="btn btn-success pull-rigth" value="Nuevo" type="button" id="btnNuevo" style="margin-left:15px" />
+						<!--<input class="btn btn-success pull-rigth" value="Nuevo" type="button" id="btnNuevo" style="margin-left:15px" />-->
 					</div>
 				</div>
 				
                 <div class="card-body">				
 
                     <div class="table-responsive">
-                    <table id="tblEntradaProductos" class="table table-hover table-sm">
+                    <table id="tblKardex" class="table table-hover table-sm">
                         <thead>
                         <tr style="font-size:13px">
                             <th>Id</th>
-							<th>Tipo Movimiento</th>
-							<!--<th>Ingreso</th>-->
-                            <th>Tipo Doc.</th>
-							<th>Unidad Origen</th>
-                            <th>Proveedor</th>
-							<th>Almacen Salida/Destino</th>
-                            <th>Nro. Comprobante</th>
-							<th>Fecha Comprobante</th>
-							<th>Cerrado</th>
-							<th>Estado</th>
-                            <th>Acciones</th>
+							<th>Producto</th>
+							<th>Entradas</th>
+                            <th>Costo Entradas</th>
+                            <th>Total Entrada</th>
+							<th>Salidas</th>
+							<th>Costo Salidas</th>
+							<th>Total Salida</th>
+							<th>Saldos</th>
+							<th>Costo saldos</th>
+                            <th>Total Saldos</th>
+							<th>Almacen Destino</th>
+							<th>Almacen Salida</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -549,6 +499,6 @@ label.form-control-sm{
 
 	</script>
 
-	<script src="{{ asset('js/entradaProducto.js') }}"></script>
+	<script src="{{ asset('js/kardex.js') }}"></script>
 
 	@endpush

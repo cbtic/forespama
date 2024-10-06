@@ -30,12 +30,12 @@ class Empresa extends Model
 
    function getEmpresa($id){
 
-    $cad = "select * from empresas e 
-    where e.id='".$id."'";
+        $cad = "select * from empresas e 
+        where e.id='".$id."'";
 
-    $data = DB::select($cad);
-    return $data;
-}
+        $data = DB::select($cad);
+        return $data;
+    }
 
    public function vehiculos()
    {

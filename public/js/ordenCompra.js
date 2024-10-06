@@ -3,22 +3,24 @@ $(document).ready(function () {
 	$('#btnBuscar').click(function () {
 		fn_ListarBusqueda();
 	});
-		
+
 	$('#btnNuevo').click(function () {
-		modalAnaquel(0);
+		modalOrdenCompra(0);
 	});
 
-	$('#denominacion_bus').keypress(function(e){
+	$('#denominacion').keypress(function(e){
 		if(e.which == 13) {
 			datatablenew();
 		}
 	});
 
-    $('#codigo_bus').keypress(function(e){
-		if(e.which == 13) {
-			datatablenew();
-		}
-	});
+	$('#fecha_bus').datepicker({
+        autoclose: true,
+		format: 'yyyy-mm-dd',
+		changeMonth: true,
+		changeYear: true,
+        language: 'es'
+    });
 		
 	datatablenew();
 
@@ -26,9 +28,9 @@ $(document).ready(function () {
 
 function datatablenew(){
                       
-    var oTable1 = $('#tblAnaqueles').dataTable({
+    var oTable1 = $('#tblOrdenCompra').dataTable({
         "bServerSide": true,
-        "sAjaxSource": "/anaqueles/listar_anaqueles_ajax",
+        "sAjaxSource": "/orden_compra/listar_orden_compra_ajax",
         "bProcessing": true,
         "sPaginationType": "full_numbers",
         //"paging":false,
@@ -55,8 +57,12 @@ function datatablenew(){
             var iNroPagina 	= parseFloat(fn_util_obtieneNroPagina(aoData[3].value, aoData[4].value)).toFixed();
             var iCantMostrar 	= aoData[4].value;
 			
-            var denominacion = $('#denominacion_bus').val();
-            var codigo = $('#codigo_bus').val();
+            var tipo_documento = $('#tipo_documento_bus').val();
+			var empresa_compra = $('#empresa_compra_bus').val();
+			var empresa_vende = $('#empresa_vende_bus').val();
+			var fecha = $('#fecha_bus').val();
+			var numero_orden_compra = $('#numero_orden_compra_bus').val();
+			var situacion = $('#situacion_bus').val();
 			var estado = $('#estado_bus').val();
 			
 			var _token = $('#_token').val();
@@ -66,7 +72,8 @@ function datatablenew(){
                 "type": "POST",
                 "url": sSource,
                 "data":{NumeroPagina:iNroPagina,NumeroRegistros:iCantMostrar,
-                        denominacion:denominacion,codigo:codigo,estado:estado,
+						tipo_documento:tipo_documento,empresa_compra:empresa_compra,empresa_vende:empresa_vende,
+						fecha:fecha,numero_orden_compra:numero_orden_compra,situacion:situacion,estado:estado,
 						_token:_token
                        },
                 "success": function (result) {
@@ -91,58 +98,74 @@ function datatablenew(){
 				"className": "dt-center",
 				//"className": 'control'
                 },
-				
-				{
-				"mRender": function (data, type, row) {
-					var fila = "";
-					if(row.fila!= null)fila = row.fila;
-					return fila;
-				},
-				"bSortable": true,
-				"aTargets": [1]
-				},
 
 				{
-				"mRender": function (data, type, row) {
-					var sigla = "";
-					if(row.sigla!= null)sigla = row.sigla;
-					return sigla;
-				},
-				"bSortable": true,
-				"aTargets": [2]
-				},
-			
+					"mRender": function (data, type, row) {
+						var tipo_documento = "";
+						if(row.tipo_documento!= null)tipo_documento = row.tipo_documento;
+						return tipo_documento;
+					},
+					"bSortable": true,
+					"aTargets": [1]
+					},
+				
+				/*{
+                "mRender": function (data, type, row) {
+                	var ingreso = "";
+					if(row.ingreso!= null)ingreso = row.ingreso;
+					return ingreso;
+                },
+                "bSortable": true,
+                "aTargets": [2]
+                },*/
+				
+                {
+                "mRender": function (data, type, row) {
+                	var empresa_compra = "";
+					if(row.empresa_compra!= null)empresa_compra = row.empresa_compra;
+					return empresa_compra;
+                },
+                "bSortable": true,
+                "aTargets": [2]
+                },
+				
 				{
                 "mRender": function (data, type, row) {
-                	var codigo = "";
-					if(row.codigo!= null)codigo = row.codigo;
-					return codigo;
+                	var empresa_vende = "";
+					if(row.empresa_vende!= null)empresa_vende = row.empresa_vende;
+					return empresa_vende;
                 },
                 "bSortable": true,
                 "aTargets": [3]
                 },
-				
-                {
-                "mRender": function (data, type, row) {
-                	var denominacion = "";
-					if(row.denominacion!= null)denominacion = row.denominacion;
-					return denominacion;
-                },
-                "bSortable": true,
-                "aTargets": [4]
-                },
+
 				{
 				"mRender": function (data, type, row) {
-					var almacen = "";
-					if(row.almacen!= null)almacen = row.almacen;
-					return almacen;
+					var fecha_orden_compra = "";
+					if(row.fecha_orden_compra!= null)fecha_orden_compra = row.fecha_orden_compra;
+					return fecha_orden_compra;
 				},
-				"bSortable": false,
-				"aTargets": [5],
-				"className": "dt-center",
-				//"className": 'control'
+				"bSortable": true,
+				"aTargets": [4]
 				},
-				
+				{
+				"mRender": function (data, type, row) {
+					var numero_orden_compra = "";
+					if(row.numero_orden_compra!= null)numero_orden_compra = row.numero_orden_compra;
+					return numero_orden_compra;
+				},
+				"bSortable": true,
+				"aTargets": [5]
+				},
+				{
+				"mRender": function (data, type, row) {
+					var cerrado = "";
+					if(row.cerrado!= null)cerrado = row.cerrado;
+					return cerrado;
+				},
+				"bSortable": true,
+				"aTargets": [6]
+				},
 				{
 					"mRender": function (data, type, row) {
 						var estado = "";
@@ -155,7 +178,7 @@ function datatablenew(){
 						return estado;
 					},
 					"bSortable": false,
-					"aTargets": [6]
+					"aTargets": [7]
 				},
 				{
 					"mRender": function (data, type, row) {
@@ -172,16 +195,17 @@ function datatablenew(){
 						
 						var html = '<div class="btn-group btn-group-sm" role="group" aria-label="Log Viewer Actions">';
 						
-						html += '<button style="font-size:12px" type="button" class="btn btn-sm btn-success" data-toggle="modal" onclick="modalAnaquel('+row.id+')" ><i class="fa fa-edit"></i> Editar</button>'; 
-						html += '<a href="javascript:void(0)" onclick=eliminarAnaquel('+row.id+','+row.estado+') class="btn btn-sm '+clase+'" style="font-size:12px;margin-left:10px">'+estado+'</a>';
-						
+						html += '<button style="font-size:12px" type="button" class="btn btn-sm btn-success" data-toggle="modal" onclick="modalOrdenCompra('+row.id+')" ><i class="fa fa-edit"></i> Editar</button>'; 
+						html += '<a href="javascript:void(0)" onclick=eliminarOrdenCompra('+row.id+','+row.estado+') class="btn btn-sm '+clase+'" style="font-size:12px;margin-left:10px">'+estado+'</a>';
+						html += '<button style="font-size:12px; margin-left:10px" type="button" class="btn btn-sm btn-info" data-toggle="modal" onclick="modalEntradaProductoOrdenCompra('+row.id+','+row.id_tipo_documento+')">Atender</button>';
+						html += '<button style="font-size:12px; margin-left:10px" type="button" class="btn btn-sm btn-warning" data-toggle="modal" onclick="modalHistorialEntradaProducto('+row.id+','+row.id_tipo_documento+')">Historial</button>';  
 						//html += '<a href="javascript:void(0)" onclick=modalResponsable('+row.id+') class="btn btn-sm btn-info" style="font-size:12px;margin-left:10px">Detalle Responsable</a>';
 						
 						html += '</div>';
 						return html;
 					},
 					"bSortable": false,
-					"aTargets": [7],
+					"aTargets": [8],
 				},
 
             ]
@@ -195,23 +219,26 @@ function fn_ListarBusqueda() {
     datatablenew();
 };
 
-function modalAnaquel(id){
+function modalOrdenCompra(id){
 	
+	/*var tipo_mov="";
+	if(tipo=='INGRESO'){tipo_mov=1};
+	if(tipo=='SALIDA'){tipo_mov=2};*/
+
 	$(".modal-dialog").css("width","85%");
 	$('#openOverlayOpc .modal-body').css('height', 'auto');
 
 	$.ajax({
-			url: "/anaqueles/modal_anaquel/"+id,
+			url: "/orden_compra/modal_orden_compra/"+id,
 			type: "GET",
 			success: function (result) {  
 					$("#diveditpregOpc").html(result);
 					$('#openOverlayOpc').modal('show');
 			}
 	});
-
 }
 
-function eliminarAnaquel(id,estado){
+function eliminarOrdenCompra(id,estado){
 	var act_estado = "";
 	if(estado==1){
 		act_estado = "Eliminar";
@@ -223,7 +250,7 @@ function eliminarAnaquel(id,estado){
 	}
     bootbox.confirm({ 
         size: "small",
-        message: "&iquest;Deseas "+act_estado+" el Anaquel?", 
+        message: "&iquest;Deseas "+act_estado+" la Orden de Compra?", 
         callback: function(result){
             if (result==true) {
                 fn_eliminar(id,estado_);
@@ -236,7 +263,7 @@ function eliminarAnaquel(id,estado){
 function fn_eliminar(id,estado){
 	
     $.ajax({
-            url: "/anaqueles/eliminar_anaquel/"+id+"/"+estado,
+            url: "/orden_compra/eliminar_orden_compra/"+id+"/"+estado,
             type: "GET",
             success: function (result) {
                 //if(result="success")obtenerPlanDetalle(id_plan);
@@ -245,3 +272,31 @@ function fn_eliminar(id,estado){
     });
 }
 
+function modalEntradaProductoOrdenCompra(id,id_tipo_documento){
+
+	//var tipo = $('#tipo_documento').val();
+	
+	$(".modal-dialog").css("width","85%");
+	$('#openOverlayOpc .modal-body').css('height', 'auto');
+
+	$.ajax({
+			url: "/entrada_productos/modal_detalle_producto_orden_compra/"+id+"/"+id_tipo_documento,
+			type: "GET",
+			success: function (result) {  
+					$("#diveditpregOpc").html(result);
+					$('#openOverlayOpc').modal('show');
+			}
+	});
+}
+
+function modalHistorialEntradaProducto(id, id_tipo_documento){
+
+	$.ajax({
+		url: "/entrada_productos/modal_historial_entrada_producto/"+id+"/"+id_tipo_documento,
+		type: "GET",
+		success: function (result) {
+				$("#diveditpregOpc").html(result);
+				$('#openOverlayOpc').modal('show');
+		}
+	});
+}

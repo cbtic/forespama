@@ -68,4 +68,12 @@ class Producto extends Model
 		$data = DB::select($cad);
         return $data;
     }
+
+    function getCorrelativo(){
+
+        $cad = "select (max(p.numero_corrrelativo::int)+1) numero_correlativo from productos p ";
+
+		$data = DB::select($cad);
+        return $data;
+    }
 }
