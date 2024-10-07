@@ -458,7 +458,7 @@ label.form-control-sm{
 							<th>Almacen Salida/Destino</th>
                             <th>Nro. Comprobante</th>
 							<th>Fecha Comprobante</th>
-							<th>Recibido</th>
+							<th>Recibido Por</th>
 							<th>Cerrado</th>
 							<th>Estado</th>
                             <th>Acciones</th>

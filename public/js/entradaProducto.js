@@ -223,6 +223,15 @@ function datatablenew(){
 				},
 				{
 				"mRender": function (data, type, row) {
+					var usuario_recibe = "";
+					if(row.usuario_recibe!= null)usuario_recibe = row.usuario_recibe;
+					return usuario_recibe;
+				},
+				"bSortable": true,
+				"aTargets": [8]
+				},
+				{
+				"mRender": function (data, type, row) {
 					var cerrado = "";
 					//if(row.cerrado_nombre!= null)cerrado_nombre = row.cerrado_nombre;
 					if(row.cerrado == 1){

@@ -123,6 +123,8 @@ class EntradaProductosController extends Controller
 
     public function send_entrada_producto(Request $request){
 
+        $id_user = Auth::user()->id;
+
         if($request->tipo_movimiento==1){
 
             //if($request->id == 0){
@@ -168,6 +170,7 @@ class EntradaProductosController extends Controller
             $entrada_producto->id_almacen_destino = $request->almacen;
             $entrada_producto->id_empresa_compra = $request->empresa_compra;
             $entrada_producto->codigo = $request->codigo;
+            $entrada_producto->id_usuario_recibe = $id_user;
             $entrada_producto->estado = 1;
             $entrada_producto->id_orden_compra = $request->id_orden_compra;
             $entrada_producto->save();
