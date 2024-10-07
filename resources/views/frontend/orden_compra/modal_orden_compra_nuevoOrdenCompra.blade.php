@@ -512,7 +512,7 @@ function agregarProducto(){
         var n = $('#tblOrdenCompraDetalle tbody tr').length + 1;
         var item = '<input name="id_orden_compra_detalle[]" id="id_orden_compra_detalle${n}" class="form-control form-control-sm" value="${orden_compra.id}" type="hidden"><input name="item[]" id="item' + n + '" class="form-control form-control-sm" value="" type="text">';
         //var cantidad = '<input name="cantidad[]" id="cantidad' + n + '" class="form-control form-control-sm" value="" type="text">';
-        var descripcion = '<select name="descripcion[]" id="descripcion' + n + '" class="form-control form-control-sm" style="widht: 40%" onChange="obtenerCodInterno(this, ' + n + ')"> <option value="">--Seleccionar--</option> <?php foreach ($producto as $row) {?> <option value="<?php echo $row->id?>"><?php echo $row->denominacion?></option> <?php } ?> </select>';
+        var descripcion = '<select name="descripcion[]" id="descripcion' + n + '" class="form-control form-control-sm" onChange="obtenerCodInterno(this, ' + n + ')"> <option value="">--Seleccionar--</option> <?php foreach ($producto as $row) {?> <option value="<?php echo $row->id?>"><?php echo $row->denominacion?></option> <?php } ?> </select>';
         //var ubicacion_fisica_seccion = '<select name="ubicacion_fisica_seccion[]" id="ubicacion_fisica_seccion' + n + '" class="form-control form-control-sm" onChange="obtenerAnaquel(this)"> <option value="">- Selecione -</option> <?php //foreach ($almacen_seccion as $row) {?> <option value="<?php //echo $row->id?>"><?php //echo $row->codigo_seccion."-".$row->seccion?></option> <?php //} ?> </select>';
         //var ubicacion_fisica_anaquel = '<select name="ubicacion_fisica_anaquel[]" id="ubicacion_fisica_anaquel' + n + '" class="form-control form-control-sm" onChange=""> <option value="">- Selecione -</option>} ?> </select>';
         var cod_interno = '<input name="cod_interno[]" id="cod_interno' + n + '" class="form-control form-control-sm" value="" type="text">';
@@ -534,7 +534,7 @@ function agregarProducto(){
         newRow += '<td>' + n + '</td>';
         newRow += '<td>' + item + '</td>';
         //newRow += '<td>' + cantidad + '</td>';
-        newRow += '<td>' + descripcion + '</td>';
+        newRow += '<td style="width: 30% !important">' + descripcion + '</td>';
         //newRow += '<td>' + ubicacion_fisica_seccion + '</td>';
         newRow += '<td>' + marca + '</td>';
         newRow += '<td>' + cod_interno + '</td>';

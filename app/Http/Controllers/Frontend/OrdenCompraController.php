@@ -11,6 +11,7 @@ use App\Models\Producto;
 use App\Models\Marca;
 use App\Models\OrdenCompraDetalle;
 use App\Models\Kardex;
+use App\Models\Almacen_usuario;
 use App\Models\Almacene;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Auth;
@@ -31,12 +32,17 @@ class OrdenCompraController extends Controller
 
     public function create(){
 
+        $id_user = Auth::user()->id;
 		$tablaMaestra_model = new TablaMaestra;
+        $almacen_user_model = new Almacen_usuario;
 		$tipo_documento = $tablaMaestra_model->getMaestroByTipo(54);
         $cerrado_orden_compra = $tablaMaestra_model->getMaestroByTipo(52);
         $proveedor = Empresa::all();
+        $almacen = Almacene::all();
+        $almacen_usuario = $almacen_user_model->getUsuariosByAlmacen($id_user);
+        //dd($almacen_usuario);exit();
 		
-		return view('frontend.orden_compra.create',compact('tipo_documento','cerrado_orden_compra','proveedor'));
+		return view('frontend.orden_compra.create',compact('tipo_documento','cerrado_orden_compra','proveedor','almacen','almacen_usuario'));
 
 	}
 
@@ -49,6 +55,8 @@ class OrdenCompraController extends Controller
         $p[]=$request->fecha;
         $p[]=$request->numero_orden_compra;
         $p[]=$request->situacion;
+        $p[]=$request->almacen_origen;
+        $p[]=$request->almacen_destino;
         $p[]=$request->estado;
 		$p[]=$request->NumeroPagina;
 		$p[]=$request->NumeroRegistros;

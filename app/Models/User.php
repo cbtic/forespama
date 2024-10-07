@@ -19,4 +19,5 @@ class User extends Model
 		$data = DB::select($cad);
         return $data;
     }
+
 }

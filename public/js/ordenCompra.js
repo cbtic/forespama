@@ -106,6 +106,8 @@ function datatablenew(){
 			var fecha = $('#fecha_bus').val();
 			var numero_orden_compra = $('#numero_orden_compra_bus').val();
 			var situacion = $('#situacion_bus').val();
+			var almacen_origen = $('#almacen_origen_bus').val();
+			var almacen_destino = $('#almacen_destino_bus').val();
 			var estado = $('#estado_bus').val();
 			
 			var _token = $('#_token').val();
@@ -116,7 +118,8 @@ function datatablenew(){
                 "url": sSource,
                 "data":{NumeroPagina:iNroPagina,NumeroRegistros:iCantMostrar,
 						tipo_documento:tipo_documento,empresa_compra:empresa_compra,empresa_vende:empresa_vende,
-						fecha:fecha,numero_orden_compra:numero_orden_compra,situacion:situacion,estado:estado,
+						fecha:fecha,numero_orden_compra:numero_orden_compra,almacen_origen:almacen_origen,
+						almacen_destino:almacen_destino,situacion:situacion,estado:estado,
 						_token:_token
                        },
                 "success": function (result) {
@@ -202,12 +205,21 @@ function datatablenew(){
 				},
 				{
 				"mRender": function (data, type, row) {
+					var almacen_destino = "";
+					if(row.almacen_destino!= null)almacen_destino = row.almacen_destino;
+					return almacen_destino;
+				},
+				"bSortable": true,
+				"aTargets": [6]
+				},
+				{
+				"mRender": function (data, type, row) {
 					var cerrado = "";
 					if(row.cerrado!= null)cerrado = row.cerrado;
 					return cerrado;
 				},
 				"bSortable": true,
-				"aTargets": [6]
+				"aTargets": [7]
 				},
 				{
 					"mRender": function (data, type, row) {
@@ -221,7 +233,7 @@ function datatablenew(){
 						return estado;
 					},
 					"bSortable": false,
-					"aTargets": [7]
+					"aTargets": [8]
 				},
 				{
 					"mRender": function (data, type, row) {
@@ -248,7 +260,7 @@ function datatablenew(){
 						return html;
 					},
 					"bSortable": false,
-					"aTargets": [8],
+					"aTargets": [9],
 				},
 
             ]

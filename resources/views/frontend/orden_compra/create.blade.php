@@ -392,6 +392,30 @@ label.form-control-sm{
 					</div>
 
 					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+						<select name="almacen_origen_bus" id="almacen_origen_bus" class="form-control form-control-sm">
+							<option value="">--Seleccionar Almacen Origen--</option>
+							<?php
+							foreach ($almacen as $row){?>
+								<option value="<?php echo $row->id ?>"><?php echo $row->denominacion ?></option>
+								<?php 
+							}
+							?>
+						</select>
+					</div>
+
+					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+						<select name="almacen_destino_bus" id="almacen_destino_bus" class="form-control form-control-sm">
+							<option value="">--Seleccionar Almacen Destino--</option>
+							<?php
+							foreach ($almacen as $row){?>
+								<option value="<?php echo $row->id ?>"><?php echo $row->denominacion ?></option>
+								<?php 
+							}
+							?>
+						</select>
+					</div>
+
+					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
 						<select name="situacion_bus" id="situacion_bus" class="form-control form-control-sm">
 							<option value="">--Seleccionar Situaci&oacute;n--</option>
 							<?php
@@ -429,6 +453,7 @@ label.form-control-sm{
 							<th>Empresa Vende</th>
                             <th>Fecha</th>
 							<th>N&uacute;mero Orden Compra</th>
+							<th>Almacen Destino</th>
 							<th>Situaci&oacute;n</th>
 							<th>Estado</th>
                             <th>Acciones</th>
