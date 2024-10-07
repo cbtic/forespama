@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddIdUsuarioRecibeToEntradaProductoDetallesTable extends Migration
+class AddIdUsuarioRecibeToEntradaProductosTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddIdUsuarioRecibeToEntradaProductoDetallesTable extends Migration
      */
     public function up()
     {
-        Schema::table('entrada_producto_detalles', function (Blueprint $table) {
-            $table->bigInteger('id_usuario_recibe')->nullable();
+        Schema::table('entrada_productos', function (Blueprint $table) {
+            //
         });
     }
 
@@ -25,7 +25,7 @@ class AddIdUsuarioRecibeToEntradaProductoDetallesTable extends Migration
      */
     public function down()
     {
-        Schema::table('entrada_producto_detalles', function (Blueprint $table) {
+        Schema::table('entrada_productos', function (Blueprint $table) {
             //
         });
     }
