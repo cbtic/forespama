@@ -14,7 +14,7 @@ class AddIdUsuarioRecibeToEntradaProductosTable extends Migration
     public function up()
     {
         Schema::table('entrada_productos', function (Blueprint $table) {
-            //
+            $table->bigInteger('id_usuario_recibe')->nullable();
         });
     }
 
