@@ -8,9 +8,52 @@ $(document).ready(function () {
 		modalOrdenCompra(0);
 	});
 
-	$('#denominacion').keypress(function(e){
+	$('#tipo_documento_bus').keypress(function(e){
 		if(e.which == 13) {
 			datatablenew();
+			return false;
+		}
+	});
+
+	$('#empresa_compra_bus').keypress(function(e){
+		if(e.which == 13) {
+			datatablenew();
+			return false;
+		}
+	});
+
+	$('#empresa_vende_bus').keypress(function(e){
+		if(e.which == 13) {
+			datatablenew();
+			return false;
+		}
+	});
+
+	$('#fecha_bus').keypress(function(e){
+		if(e.which == 13) {
+			datatablenew();
+			return false;
+		}
+	});
+
+	$('#numero_orden_compra_bus').keypress(function(e){
+		if(e.which == 13) {
+			datatablenew();
+			return false;
+		}
+	});
+
+	$('#situacion_bus').keypress(function(e){
+		if(e.which == 13) {
+			datatablenew();
+			return false;
+		}
+	});
+
+	$('#estado_bus').keypress(function(e){
+		if(e.which == 13) {
+			datatablenew();
+			return false;
 		}
 	});
 

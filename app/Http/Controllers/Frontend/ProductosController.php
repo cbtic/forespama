@@ -6,6 +6,9 @@ use App\Http\Requests\ProductoRequest;
 use App\Models\Producto;
 use App\Models\TablaMaestra;
 use App\Models\Marca;
+use App\Models\EntradaProductoDetalle;
+use App\Models\SalidaProductoDetalle;
+use App\Models\Kardex;
 use RealRashid\SweetAlert\Facades\Alert;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -28,7 +31,7 @@ class ProductosController extends Controller
     public function create(){
 
 		$tablaMaestra_model = new TablaMaestra;
-		$estado_bien = $tablaMaestra_model->getMaestroByTipo(4);
+		$estado_bien = $tablaMaestra_model->getMaestroByTipo(56);
 		
 		return view('frontend.productos.create',compact('estado_bien'));
 
@@ -148,6 +151,64 @@ class ProductosController extends Controller
 		$producto = $producto_model->getProductoById($id_producto);
 		
 		echo json_encode($producto);
+	}
+
+    public function obtener_producto_stock($id_producto, $tipo_movimiento){
+        
+        if($tipo_movimiento==1){
+
+            /*$entrada_producto_detalle_model = new EntradaProductoDetalle;
+            $kardex_model = new Kardex;
+
+            $entrada_producto = $entrada_producto_detalle_model->getDetalleProductoId($id_producto);
+
+            $producto_stock = [];
+
+            foreach($entrada_producto as $detalle){
+                $stock = $kardex_model->getExistenciaProductoById($detalle->id_producto);
+                if(count($stock)>0){
+                    $producto_stock[$detalle->id_producto] = $stock[0];
+                }else {
+                    $producto_stock[$detalle->id_producto] = ['saldos_cantidad'=>0];
+                }
+            }*/
+
+            $kardex_model = new Kardex;
+
+            $stock = $kardex_model->getExistenciaProductoById($id_producto);
+
+            $producto_stock = [];
+
+            if(count($stock)>0){
+                $producto_stock[$stock[0]->id_producto] = $stock[0];
+            }else {
+                $producto_stock[$stock[0]->id_producto] = ['saldos_cantidad'=>0];
+            }
+
+            return response()->json([
+                'producto_stock' =>$producto_stock
+            ]);
+        }else if ($tipo_movimiento==2){
+
+            $salida_producto_detalle_model = new SalidaProductoDetalle;
+            $kardex_model = new Kardex;
+
+            $entrada_producto = $salida_producto_detalle_model->getDetalleProductoId($id_producto);
+
+		    $producto_stock = [];
+
+            foreach($entrada_producto as $detalle){
+                $stock = $kardex_model->getExistenciaProductoById($detalle->id_producto);
+                if(count($stock)>0){
+                    $producto_stock[$detalle->id_producto] = $stock[0];
+                }else {
+                    $producto_stock[$detalle->id_producto] = ['saldos_cantidad'=>0];
+                }
+            }
+            return response()->json([
+                'producto_stock' =>$producto_stock
+            ]);
+        }
 	}
     
     

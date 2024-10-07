@@ -365,7 +365,7 @@ label.form-control-sm{
 
 					<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
 						<select name="estado_bien_bus" id="estado_bien_bus" class="form-control form-control-sm">
-							<option value="">Selecione</option>
+							<option value="">--Seleccionar Estado Bien--</option>
 							<?php
 							foreach ($estado_bien as $row) {
 							?>

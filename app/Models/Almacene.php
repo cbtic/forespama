@@ -86,7 +86,8 @@ class Almacene extends Model
         $cad = "select a.* from almacenes a 
         inner join almacen_usuarios au on au.id_almacen = a.id 
         inner join users u on au.id_user = u.id 
-        where u.id = '".$id."'";
+        where u.id = '".$id."'
+        and au.estado='1'";
 
 		$data = DB::select($cad);
         return $data;

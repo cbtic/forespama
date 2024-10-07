@@ -402,7 +402,7 @@ function fn_save_anaquel(){
                                     <div class="form-group">
                                         <label class="control-label form-control-sm">Almacen</label>
                                         <select name="almacen" id="almacen" onChange="" class="form-control form-control-sm">
-                                            <option value="">--Selecionar--</option>
+                                            <option value="">--Seleccionar--</option>
                                             <?php
                                             foreach ($almacen as $row) {?>
                                             <option value="<?php echo $row->id?>" <?php //if($row->id_almacen==$anaquel->id_almacen)echo "selected='selected'"?>><?php echo $row->codigo.'-'.$row->denominacion ?></option>

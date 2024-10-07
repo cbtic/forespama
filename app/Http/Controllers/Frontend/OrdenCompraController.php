@@ -11,6 +11,7 @@ use App\Models\Producto;
 use App\Models\Marca;
 use App\Models\OrdenCompraDetalle;
 use App\Models\Kardex;
+use App\Models\Almacene;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Auth;
 use Carbon\Carbon;
@@ -71,6 +72,7 @@ class OrdenCompraController extends Controller
         $tablaMaestra_model = new TablaMaestra;
         $producto_model = new Producto;
         $marca_model = new Marca;
+        $almacen_model = new Almacene;
 		
 		if($id>0){
 
@@ -95,11 +97,13 @@ class OrdenCompraController extends Controller
         $unidad = $tablaMaestra_model->getMaestroByTipo(43);
         $igv_compra = $tablaMaestra_model->getMaestroByTipo(51);
         $descuento = $tablaMaestra_model->getMaestroByTipo(55);
+        $almacen = $almacen_model->getAlmacenAll();
+        $unidad_origen = $tablaMaestra_model->getMaestroByTipo(50);
         //$codigo_orden_compra = $orden_compra_model->getCodigoOrdenCompra();
         
         //dd($proveedor);exit();
 
-		return view('frontend.orden_compra.modal_orden_compra_nuevoOrdenCompra',compact('id','orden_compra','tipo_documento','proveedor','producto','marca','estado_bien','unidad','igv_compra','descuento'));
+		return view('frontend.orden_compra.modal_orden_compra_nuevoOrdenCompra',compact('id','orden_compra','tipo_documento','proveedor','producto','marca','estado_bien','unidad','igv_compra','descuento','almacen','unidad_origen'));
 
     }
 
@@ -135,6 +139,9 @@ class OrdenCompraController extends Controller
         $orden_compra->numero_orden_compra = $request->numero_orden_compra;
         $orden_compra->id_tipo_documento = $request->tipo_documento;
         $orden_compra->igv_compra = $request->igv_compra;
+        $orden_compra->id_unidad_origen = $request->unidad_origen;
+        $orden_compra->id_almacen_destino = $request->almacen;
+        $orden_compra->id_almacen_salida = $request->almacen_salida;
         $orden_compra->cerrado = 1;
         $orden_compra->id_usuario_inserta = $id_user;
         $orden_compra->estado = 1;

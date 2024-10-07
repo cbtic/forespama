@@ -308,7 +308,7 @@ function fn_save_producto(){
                                     <div class="form-group">
                                         <label class="control-label form-control-sm">Unidad Producto</label>
                                         <select name="unidad_producto" id="unidad_producto" class="form-control form-control-sm" onchange="">
-                                            <option value="">--Selecionar--</option>
+                                            <option value="">--Seleccionar--</option>
                                             <?php
                                             foreach ($unidad_producto as $row){?>
                                                 <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$producto->id_unidad_producto)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
@@ -328,7 +328,7 @@ function fn_save_producto(){
                                     <div class="form-group">
                                         <label class="control-label form-control-sm">Unidad Medida</label>
                                         <select name="unidad_medida" id="unidad_medida" class="form-control form-control-sm" onchange="">
-                                            <option value="">--Selecionar--</option>
+                                            <option value="">--Seleccionar--</option>
                                             <?php
                                             foreach ($unidad_medida as $row){?>
                                                 <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$producto->id_unidad_medida)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
@@ -342,7 +342,7 @@ function fn_save_producto(){
                                     <div class="form-group">
                                         <label class="control-label form-control-sm">Marca</label>
                                         <select name="marca" id="marca" class="form-control form-control-sm" onchange="">
-                                            <option value="">--Selecionar--</option>
+                                            <option value="">--Seleccionar--</option>
                                             <?php
                                             foreach ($marca as $row){?>
                                                 <option value="<?php echo $row->id ?>" <?php if($row->id==$producto->id_marca)echo "selected='selected'"?>><?php echo $row->denominiacion ?></option>
@@ -356,7 +356,7 @@ function fn_save_producto(){
                                     <div class="form-group">
                                         <label class="control-label form-control-sm">Tipo Producto</label>
                                         <select name="tipo_producto" id="tipo_producto" class="form-control form-control-sm" onchange="">
-                                            <option value="">--Selecionar--</option>
+                                            <option value="">--Seleccionar--</option>
                                             <?php
                                             foreach ($tipo_producto as $row){?>
                                                 <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$producto->id_tipo_producto)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
@@ -370,7 +370,7 @@ function fn_save_producto(){
                                     <div class="form-group">
                                         <label class="control-label form-control-sm">Estado Bien</label>
                                         <select name="estado_bien" id="estado_bien" class="form-control form-control-sm" onchange="">
-                                            <option value="">--Selecionar--</option>
+                                            <option value="">--Seleccionar--</option>
                                             <?php
                                             foreach ($estado_bien as $row){?>
                                                 <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$producto->id_estado_bien)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
@@ -396,7 +396,7 @@ function fn_save_producto(){
                                     <div class="form-group">
                                         <label class="control-label form-control-sm">Moneda</label>
                                         <select name="moneda" id="moneda" class="form-control form-control-sm" onchange="">
-                                            <option value="">--Selecionar--</option>
+                                            <option value="">--Seleccionar--</option>
                                             <?php
                                             foreach ($moneda as $row){?>
                                                 <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$producto->id_moneda)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>

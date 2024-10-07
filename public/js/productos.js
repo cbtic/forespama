@@ -8,9 +8,38 @@ $(document).ready(function () {
 		modalProducto(0);
 	});
 
-	$('#denominacion').keypress(function(e){
+	$('#serie_bus').keypress(function(e){
 		if(e.which == 13) {
 			datatablenew();
+			return false;
+		}
+	});
+
+	$('#codigo_bus').keypress(function(e){
+		if(e.which == 13) {
+			datatablenew();
+			return false;
+		}
+	});
+
+	$('#denominacion_bus').keypress(function(e){
+		if(e.which == 13) {
+			datatablenew();
+			return false;
+		}
+	});
+
+	$('#estado_bien_bus').keypress(function(e){
+		if(e.which == 13) {
+			datatablenew();
+			return false;
+		}
+	});
+
+	$('#estado_bus').keypress(function(e){
+		if(e.which == 13) {
+			datatablenew();
+			return false;
 		}
 	});
 		

@@ -348,15 +348,15 @@ label.form-control-sm{
 				<div class="row" style="padding:20px 20px 0px 20px;">
 
                     <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-						<input class="form-control form-control-sm" id="denominacion" name="denominacion" placeholder="Denominacion">
+						<input class="form-control form-control-sm" id="denominacion_bus" name="denominacion_bus" placeholder="Denominacion">
 					</div>
 
                     <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-                        <input id="encargado" name="encargado" on class="form-control form-control-sm"  placeholder="Encargado">
+                        <input id="encargado_bus" name="encargado_bus" on class="form-control form-control-sm"  placeholder="Encargado">
 					</div>
 					
                     <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<select name="estado" id="estado" class="form-control form-control-sm">
+						<select name="estado_bus" id="estado_bus" class="form-control form-control-sm">
 							<option value="">Todos</option>
 							<option value="1" selected="selected">Activo</option>
 							<option value="0">Eliminado</option>

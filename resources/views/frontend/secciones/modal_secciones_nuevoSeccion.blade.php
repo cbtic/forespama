@@ -169,7 +169,7 @@ $.ajax({
         let almacenAnaqueles = @json($anaquel);
 
         result.forEach(anaqueles_secciones => {
-            let anaquelOptions = '<option value="">--Selecionar--</option>';
+            let anaquelOptions = '<option value="">--Seleccionar--</option>';
             
             almacenAnaqueles.forEach(almacenAnaquel => {
                 let selected = (anaqueles_secciones.id_anaqueles == almacenAnaquel.id) ? 'selected' : '';
@@ -388,7 +388,7 @@ function fn_save_seccion(){
                                     <div class="form-group">
                                         <label class="control-label form-control-sm">Almacen</label>
                                         <select name="almacen" id="almacen" class="form-control form-control-sm" onchange="obtenerAnaquel()">
-                                            <option value="">--Selecionar--</option>
+                                            <option value="">--Seleccionar--</option>
                                             <?php
                                             foreach ($almacen as $row){?>
                                                 <option value="<?php echo $row->id ?>" <?php if ($id > 0 && $row->id == $almacen_seccion->id_almacenes) echo "selected='selected'"; ?>><?php echo $row->codigo . '-' . $row->denominacion ?></option>
