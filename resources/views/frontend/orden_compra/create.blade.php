@@ -285,6 +285,9 @@ label.form-control-sm{
 
 </style>
 
+<script>
+    var almacenUsuario = @json($almacen_usuario);
+</script>
 
 
 @stack('before-scripts')
@@ -452,7 +455,8 @@ label.form-control-sm{
 							<th>Empresa Compra</th>
 							<th>Empresa Vende</th>
                             <th>Fecha</th>
-							<th>N&uacute;mero Orden Compra</th>
+							<th>N&uacute;mero OC</th>
+							<th>Almacen Origen</th>
 							<th>Almacen Destino</th>
 							<th>Situaci&oacute;n</th>
 							<th>Estado</th>

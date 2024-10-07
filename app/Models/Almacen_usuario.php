@@ -20,4 +20,14 @@ class Almacen_usuario extends Model
         return $data;
     }
 
+    function getAlmacenByUser($id){
+
+        $cad = "select * from almacen_usuarios au 
+        where au.id_user ='".$id."'
+        and au.estado='1'";
+
+		$data = DB::select($cad);
+        return $data;
+    }
+
 }

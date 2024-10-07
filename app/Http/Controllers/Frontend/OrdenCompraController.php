@@ -39,7 +39,7 @@ class OrdenCompraController extends Controller
         $cerrado_orden_compra = $tablaMaestra_model->getMaestroByTipo(52);
         $proveedor = Empresa::all();
         $almacen = Almacene::all();
-        $almacen_usuario = $almacen_user_model->getUsuariosByAlmacen($id_user);
+        $almacen_usuario = $almacen_user_model->getAlmacenByUser($id_user);
         //dd($almacen_usuario);exit();
 		
 		return view('frontend.orden_compra.create',compact('tipo_documento','cerrado_orden_compra','proveedor','almacen','almacen_usuario'));
