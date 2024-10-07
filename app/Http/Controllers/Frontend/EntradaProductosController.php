@@ -802,7 +802,7 @@ class EntradaProductosController extends Controller
             $entrada_producto = $salida_producto_model->getSalidaByIdOrdenCompra($id);
         }
 
-        return view('frontend.entrada_productos.modal_historial_EntradaProducto',compact('id','entrada_producto'));
+        return view('frontend.entrada_productos.modal_historial_entradaProducto',compact('id','entrada_producto'));
 
     }
 
@@ -824,6 +824,8 @@ class EntradaProductosController extends Controller
 	}
 
     public function send_entrada_producto_directo(Request $request){
+
+        $id_user = Auth::user()->id;
 
         if($request->tipo_movimiento==1){
 
@@ -862,10 +864,8 @@ class EntradaProductosController extends Controller
             $entrada_producto->id_empresa_compra = $request->empresa_compra;
             $entrada_producto->codigo = $request->codigo;
             $entrada_producto->estado = 1;
-            $entrada_producto->id_orden_compra = $request->id_orden_compra;
+            //$entrada_producto->id_orden_compra = $request->id_orden_compra;
             $entrada_producto->save();
-
-            //$valida_estado = true;
 
             foreach($item as $index => $value) {
                 
@@ -919,49 +919,59 @@ class EntradaProductosController extends Controller
                 $kardex->id_almacen_destino = $request->almacen;
 
                 $kardex->save();
-
             }
 
-            /*if($valida_estado==true){
-                $entrada_producto = EntradaProducto::where('id_orden_compra',$request->id_orden_compra)->first();
-                $entrada_producto_detalle = EntradaProductoDetalle::where('id_entrada_productos',$entrada_producto->id)->get();
-                $orden_compra = OrdenCompra::find($entrada_producto->id_orden_compra);
-                $orden_compra_detalle = OrdenCompraDetalle::where('id_orden_compra',$orden_compra->id)->get();
-                $entrada_producto_detalle_model = new EntradaProductoDetalle;
+            $orden_compra_model = new OrdenCompra;
+            $codigo_orden_compra = $orden_compra_model->getCodigoOrdenCompra($request->tipo_movimiento);
+            
+            $orden_compra = new OrdenCompra;
 
-                foreach($entrada_producto_detalle as $index => $detalle){
+            $orden_compra->id_empresa_compra = $request->empresa_compra;
+            $orden_compra->id_empresa_vende = $request->proveedor;
+            $orden_compra->fecha_orden_compra = $request->fecha_entrada;
+            $orden_compra->numero_orden_compra = $codigo_orden_compra[0]->codigo;
+            $orden_compra->id_tipo_documento = $request->tipo_documento;
+            $orden_compra->igv_compra = $request->igv_compra;
+            $orden_compra->id_unidad_origen = $request->unidad_origen;
+            $orden_compra->id_almacen_destino = $request->almacen;
+            $orden_compra->id_almacen_salida = $request->almacen_salida;
+            $orden_compra->cerrado = 2;
+            $orden_compra->id_usuario_inserta = $id_user;
+            $orden_compra->estado = 1;
+            $orden_compra->save();
 
-                    $detalle_orden = $orden_compra_detalle[$index];
-                    
-                    $cantidad_requerida = $detalle_orden->cantidad_requerida;
-                    
-                    $cantidad_ingresada = $entrada_producto_detalle_model->getCantidadEntradaProductoByOrdenProducto($orden_compra->id,$detalle->id_producto);
+            foreach($item as $index => $value) {
+        
+                //if($id_orden_compra_detalle[$index] == 0){
+                    $orden_compra_detalle = new OrdenCompraDetalle;
+                //}else{
+                    //$orden_compra_detalle = OrdenCompraDetalle::find($id_orden_compra_detalle[$index]);
+                //}
+                
+                $orden_compra_detalle->id_orden_compra = $orden_compra->id;
+                $orden_compra_detalle->id_producto = $descripcion[$index];
+                $orden_compra_detalle->cantidad_requerida = $cantidad_ingreso[$index];
+                $orden_compra_detalle->precio = $precio_unitario[$index];
+                //$orden_compra_detalle->id_descuento = $descuento[$index];
+                $orden_compra_detalle->sub_total = $sub_total[$index];
+                $orden_compra_detalle->igv = $igv[$index];
+                $orden_compra_detalle->total = $total[$index];
+                $orden_compra_detalle->fecha_fabricacion = $fecha_fabricacion[$index];
+                $orden_compra_detalle->fecha_vencimiento = $fecha_vencimiento[$index];
+                $orden_compra_detalle->id_estado_producto = $estado_bien[$index];
+                $orden_compra_detalle->id_unidad_medida = $unidad[$index];
+                $orden_compra_detalle->id_marca = $marca[$index];
+                $orden_compra_detalle->estado = 1;
+                $orden_compra_detalle->cerrado = 1;
+                $orden_compra_detalle->id_usuario_inserta = $id_user;
+    
+                $orden_compra_detalle->save();
+            }
 
-                    if($cantidad_requerida - $cantidad_ingresada==0){
-                        $entradaProductoDetalleObj = EntradaProductoDetalle::find($detalle->id);
-                        $entradaProductoDetalleObj->cerrado = 2;
-                        $entradaProductoDetalleObj->save();
+            $entrada_producto_ = EntradaProducto::find($entrada_producto->id);
 
-                        $ordenCompraDetalleObj = OrdenCompraDetalle::find($detalle_orden->id);
-                        $ordenCompraDetalleObj->cerrado = 2;
-                        $ordenCompraDetalleObj->save();
-                    }
-                }
-
-                $entrada_producto_detalle_valida = EntradaProductoDetalle::where('id_entrada_productos',$entrada_producto->id)->where('cerrado','2')->get();
-                if($entrada_producto_detalle_valida->count()==$entrada_producto_detalle->count()){
-                    $entrada_producto_all = EntradaProducto::where('id_orden_compra',$request->id_orden_compra)->get();
-                    foreach ($entrada_producto_all as $entrada_producto_) {
-                        $entrada_producto_->cerrado = 2;
-                        $entrada_producto_->save();
-                    }
-
-                    $OrdenCompraObj = OrdenCompra::find($orden_compra->id);
-                    $OrdenCompraObj->cerrado = 2;
-                    $OrdenCompraObj->save();
-                }
-
-            }*/
+            $entrada_producto_->id_orden_compra = $orden_compra->id;
+            $entrada_producto_->save();
 
         }else if($request->tipo_movimiento==2){
 
@@ -1106,6 +1116,67 @@ class EntradaProductosController extends Controller
         }else{
             return response()->json(['id' => $salida_producto->id, 'tipo_movimiento' => $request->tipo_movimiento]);    
         }
+    }
+
+    public function modal_detalle_producto_historial($id,$tipo){
+        
+        $tablaMaestra_model = new TablaMaestra;
+        $empresa_model = new Empresa;
+        $producto_model = new Producto;
+        $almacen_model = new Almacene;
+        $marca_model = new Marca;
+        $almacen_seccion_model = new AlmacenesSeccione;
+        $anaquel_model = new Anaquele;
+        $tipo_cambio_model = new TipoCambio;
+        $id_user = Auth::user()->id;
+       
+        if($id>0){
+            if($tipo==1){
+                $entrada_producto_detalle = EntradaProductoDetalle::find($id);
+                $entrada_producto = EntradaProducto::find($id);
+                //$proveedor_ = Empresa::find($entrada_producto->id_proveedor);
+                //$proveedor = $proveedor_->getEmpresa($entrada_producto->id_proveedor);
+                $proveedor = Empresa::all();
+            }else if($tipo==2){
+                $entrada_producto_detalle = SalidaProductoDetalle::find($id);
+                $entrada_producto = SalidaProducto::find($id);
+                //$proveedor=[];
+                $proveedor = Empresa::all();
+            }
+			
+            $tipo_cambio = null;
+            $almacen_ = null;
+            $marca = $marca_model->getMarcaAll();
+            //$almacen__ = Almacene::getAlmacenById($entrada_producto->id_almacen);
+            
+            $almacen = $almacen_model->getAlmacenByUser($id_user);
+            //$tipo_movimiento_=1;
+		}else{
+			$entrada_producto_detalle = new EntradaProductoDetalle;
+            $entrada_producto = new EntradaProducto;
+            $proveedor = Empresa::all();
+            //dd($proveedor);exit();
+            $tipo_cambio = $tipo_cambio_model->getTipoCambioUltimo();
+            $almacen = $almacen_model->getAlmacenByUser($id_user);
+            $marca = $marca_model->getMarcaAll();
+            $tipo_movimiento_='';
+		}
+        
+        $producto = $producto_model->getProductoAll();
+        $unidad = $tablaMaestra_model->getMaestroByTipo(43);
+
+        $tipo_documento = $tablaMaestra_model->getMaestroByTipo(48);
+        $moneda = $tablaMaestra_model->getMaestroByTipo(1);
+        $unidad_origen = $tablaMaestra_model->getMaestroByTipo(50);
+        $cerrado_entrada = $tablaMaestra_model->getMaestroByTipo(52);
+        $igv_compra = $tablaMaestra_model->getMaestroByTipo(51);
+        $tipo_movimiento = $tablaMaestra_model->getMaestroByTipo(53);
+        $estado_bien = $tablaMaestra_model->getMaestroByTipo(4);
+
+        //dd($almacen);exit();
+        
+		return view('frontend.entrada_productos.modal_entradas_detalleEntradaHistorial',compact('id','entrada_producto_detalle','tipo_documento','moneda','unidad_origen','cerrado_entrada','igv_compra','proveedor','producto','unidad','almacen'/*,'almacen_seccion'*/,'tipo_cambio','tipo_movimiento','entrada_producto','marca','estado_bien',/*'tipo_movimiento_',*/'tipo'));
+
     }
 
 

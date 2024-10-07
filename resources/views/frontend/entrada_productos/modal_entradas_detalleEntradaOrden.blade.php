@@ -886,7 +886,7 @@ function pdf_documento(){
                                 <option value="">--Seleccionar--</option>
                                 <?php 
                                 foreach ($almacen as $row){?>
-                                    <option value="<?php echo $row->id ?>" <?php //if($row->id==$entrada_producto->id_producto)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                    <option value="<?php echo $row->id ?>" <?php if($row->id==$orden_compra->id_almacen_destino)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
                                     <?php 
                                 }
                                 ?>
@@ -900,7 +900,7 @@ function pdf_documento(){
                                 <option value="">--Seleccionar--</option>
                                 <?php 
                                 foreach ($almacen as $row){?>
-                                    <option value="<?php echo $row->id ?>" <?php //if($row->id==$entrada_producto->id_producto)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                    <option value="<?php echo $row->id ?>" <?php if($row->id==$orden_compra->id_almacen_salida)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
                                     <?php 
                                 }
                                 ?>

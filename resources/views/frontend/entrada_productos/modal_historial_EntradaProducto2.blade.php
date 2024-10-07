@@ -173,7 +173,7 @@ function fn_save_detalle_producto(){
     });
 }
 
-function modalEntradaProductoHistorial(id, tipo){
+function modalEntradaProducto(id, tipo){
 	
 	/*var tipo_mov="";
 	if(tipo=='INGRESO'){tipo_mov=1};
@@ -183,7 +183,7 @@ function modalEntradaProductoHistorial(id, tipo){
 	$('#openOverlayOpc .modal-body').css('height', 'auto');
 
 	$.ajax({
-			url: "/entrada_productos/modal_detalle_producto_historial/"+id+"/"+tipo,
+			url: "/entrada_productos/modal_detalle_producto/"+id+"/"+tipo,
 			type: "GET",
 			success: function (result) {  
 					//console.log(result);
@@ -226,7 +226,7 @@ function modalEntradaProductoHistorial(id, tipo){
                     
                     <input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
                     <input type="hidden" name="id" id="id" value="<?php echo $id?>">
-                <div class="card-body">
+                <div class="card-body">	
 
 					<div class="table-responsive">
 						<table id="tblHistorialEntrada" class="table table-hover table-sm">
@@ -253,7 +253,7 @@ function modalEntradaProductoHistorial(id, tipo){
                                 <td class="text-left" style="vertical-align:middle">
                                     <?php if($row->tipo=='ENTRADA')$tipo=1;
                                     else $tipo=2;?>
-                                    <button style="font-size:12px;margin-left:10px" type="button" class="btn btn-sm btn-success" data-toggle="modal" onclick="modalEntradaProductoHistorial(<?php echo $row->id?>,<?php echo $tipo?>)" ><i class="fa fa-edit"></i> Ver Movimiento</button>
+                                    <button style="font-size:12px;margin-left:10px" type="button" class="btn btn-sm btn-success" data-toggle="modal" onclick="modalEntradaProducto(<?php echo $row->id?>,<?php echo $tipo?>)" ><i class="fa fa-edit"></i> Ver Movimiento</button>
                                     
                                 </td>
                             </tr>

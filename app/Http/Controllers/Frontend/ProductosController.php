@@ -157,7 +157,7 @@ class ProductosController extends Controller
         
         if($tipo_movimiento==1){
 
-            $entrada_producto_detalle_model = new EntradaProductoDetalle;
+            /*$entrada_producto_detalle_model = new EntradaProductoDetalle;
             $kardex_model = new Kardex;
 
             $entrada_producto = $entrada_producto_detalle_model->getDetalleProductoId($id_producto);
@@ -171,7 +171,20 @@ class ProductosController extends Controller
                 }else {
                     $producto_stock[$detalle->id_producto] = ['saldos_cantidad'=>0];
                 }
+            }*/
+
+            $kardex_model = new Kardex;
+
+            $stock = $kardex_model->getExistenciaProductoById($id_producto);
+
+            $producto_stock = [];
+
+            if(count($stock)>0){
+                $producto_stock[$stock[0]->id_producto] = $stock[0];
+            }else {
+                $producto_stock[$stock[0]->id_producto] = ['saldos_cantidad'=>0];
             }
+
             return response()->json([
                 'producto_stock' =>$producto_stock
             ]);

@@ -16,7 +16,7 @@
 
 .modal-dialog {
     width: 100%;
-    max-width:90%!important
+    max-width:100%!important
 }
 
 .custom-select2-dropdown {
@@ -512,7 +512,7 @@ function agregarProducto(){
         var n = $('#tblOrdenCompraDetalle tbody tr').length + 1;
         var item = '<input name="id_orden_compra_detalle[]" id="id_orden_compra_detalle${n}" class="form-control form-control-sm" value="${orden_compra.id}" type="hidden"><input name="item[]" id="item' + n + '" class="form-control form-control-sm" value="" type="text">';
         //var cantidad = '<input name="cantidad[]" id="cantidad' + n + '" class="form-control form-control-sm" value="" type="text">';
-        var descripcion = '<select name="descripcion[]" id="descripcion' + n + '" class="form-control form-control-sm" style="width: 200px;" onChange="obtenerCodInterno(this, ' + n + ')"> <option value="">--Seleccionar--</option> <?php foreach ($producto as $row) {?> <option value="<?php echo $row->id?>"><?php echo $row->denominacion?></option> <?php } ?> </select>';
+        var descripcion = '<select name="descripcion[]" id="descripcion' + n + '" class="form-control form-control-sm" style="widht: 40%" onChange="obtenerCodInterno(this, ' + n + ')"> <option value="">--Seleccionar--</option> <?php foreach ($producto as $row) {?> <option value="<?php echo $row->id?>"><?php echo $row->denominacion?></option> <?php } ?> </select>';
         //var ubicacion_fisica_seccion = '<select name="ubicacion_fisica_seccion[]" id="ubicacion_fisica_seccion' + n + '" class="form-control form-control-sm" onChange="obtenerAnaquel(this)"> <option value="">- Selecione -</option> <?php //foreach ($almacen_seccion as $row) {?> <option value="<?php //echo $row->id?>"><?php //echo $row->codigo_seccion."-".$row->seccion?></option> <?php //} ?> </select>';
         //var ubicacion_fisica_anaquel = '<select name="ubicacion_fisica_anaquel[]" id="ubicacion_fisica_anaquel' + n + '" class="form-control form-control-sm" onChange=""> <option value="">- Selecione -</option>} ?> </select>';
         var cod_interno = '<input name="cod_interno[]" id="cod_interno' + n + '" class="form-control form-control-sm" value="" type="text">';
@@ -554,7 +554,7 @@ function agregarProducto(){
         $('#tblOrdenCompraDetalle tbody').append(newRow);
 
         $('#descripcion' + n).select2({ 
-            width: '100%',
+            width: 'resolve',
             dropdownCssClass: 'custom-select2-dropdown'
             //dropdownCssClass: 'form-control form-control-sm',
             //containerCssClass: 'form-control form-control-sm'
@@ -637,6 +637,14 @@ function fn_save_orden_compra(){
 function obtenerCodigo(){
 
     var tipo_documento = $('#tipo_documento').val();
+    
+    if(tipo_documento==1){
+        $('#empresa_compra').val('28').trigger('change');
+        $('#empresa_vende').val('').trigger('change');
+    }else if(tipo_documento==2){
+        $('#empresa_compra').val('').trigger('change');
+        $('#empresa_vende').val('28').trigger('change');
+    }
 
     $.ajax({
         url: "/orden_compra/obtener_codigo_orden_compra/"+tipo_documento,
@@ -645,7 +653,6 @@ function obtenerCodigo(){
 
             //alert(result[0].codigo);
             //console.log(result);
-
             $('#numero_orden_compra').val(result[0].codigo);
 
         }
@@ -769,7 +776,7 @@ function pdf_documento(){
                         <div class="col-lg-2">
                             Unidad Origen
                         </div>
-                        <?php 
+                        <?php
                         if($orden_compra->id_empresa_compra==28 && $orden_compra->id_empresa_vende==28){
                             $origen=3;
                         }else if($orden_compra->id_empresa_compra==28){
@@ -791,29 +798,29 @@ function pdf_documento(){
                                 ?>
                             </select>
                         </div>
-                        <div class="col-lg-2" id="almacen_">
-                            Almacen Destino
-                        </div> 
-                        <div class="col-lg-2" id="almacen_select">
-                            <select name="almacen" id="almacen" class="form-control form-control-sm" onchange="//actualizarSecciones(this)">
-                                <option value="">--Seleccionar--</option>
-                                <?php 
-                                foreach ($almacen as $row){?>
-                                    <option value="<?php echo $row->id ?>" <?php //if($row->id==$entrada_producto->id_producto)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
-                                    <?php 
-                                }
-                                ?>
-                            </select>
-                        </div>
-                        <div class="col-lg-2" id="almacen_salida_">
-                            Almacen Salida
+                        <div class="col-lg-2" id="almacen_salida_" style="color:green; font-weight:bold">
+                            Almacen Origen
                         </div> 
                         <div class="col-lg-2" id="almacen_salida_select">
                             <select name="almacen_salida" id="almacen_salida" class="form-control form-control-sm" onchange="//actualizarSecciones(this)">
                                 <option value="">--Seleccionar--</option>
                                 <?php 
                                 foreach ($almacen as $row){?>
-                                    <option value="<?php echo $row->id ?>" <?php //if($row->id==$entrada_producto->id_producto)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                    <option value="<?php echo $row->id ?>" <?php if($row->id==$orden_compra->id_almacen_salida)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                    <?php 
+                                }
+                                ?>
+                            </select>
+                        </div>
+                        <div class="col-lg-2" id="almacen_" style="color:red; font-weight:bold">
+                            Almacen Destino
+                        </div>
+                        <div class="col-lg-2" id="almacen_select">
+                            <select name="almacen" id="almacen" class="form-control form-control-sm" onchange="//actualizarSecciones(this)">
+                                <option value="">--Seleccionar--</option>
+                                <?php
+                                foreach ($almacen as $row){?>
+                                    <option value="<?php echo $row->id ?>" <?php if($row->id==$orden_compra->id_almacen_destino)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
                                     <?php 
                                 }
                                 ?>

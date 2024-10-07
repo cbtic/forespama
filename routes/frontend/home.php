@@ -321,6 +321,7 @@ Route::get('orden_compra/obtener_codigo_orden_compra/{tipo_documento}', [OrdenCo
 Route::get('entrada_productos/obtener_codigo_entrada_producto/{tipo_movimiento}/{tipo_documento}', [EntradaProductosController::class, 'obtener_codigo_entrada_producto'])->name('entrada_productos.obtener_codigo_entrada_producto');
 Route::post('entrada_productos/send_entrada_producto_directo', [EntradaProductosController::class, 'send_entrada_producto_directo'])->name('entrada_productos.send_entrada_producto_directo');
 Route::get('productos/obtener_producto_stock/{id_producto}/{tipo_movimiento}', [ProductosController::class, 'obtener_producto_stock'])->name('productos.obtener_producto_stock');
+Route::get('entrada_productos/modal_detalle_producto_historial/{id}/{tipo}', [EntradaProductosController::class, 'modal_detalle_producto_historial'])->name('entrada_productos.modal_detalle_producto_historial');
 
 
 

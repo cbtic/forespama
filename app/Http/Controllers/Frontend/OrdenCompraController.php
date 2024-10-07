@@ -139,6 +139,9 @@ class OrdenCompraController extends Controller
         $orden_compra->numero_orden_compra = $request->numero_orden_compra;
         $orden_compra->id_tipo_documento = $request->tipo_documento;
         $orden_compra->igv_compra = $request->igv_compra;
+        $orden_compra->id_unidad_origen = $request->unidad_origen;
+        $orden_compra->id_almacen_destino = $request->almacen;
+        $orden_compra->id_almacen_salida = $request->almacen_salida;
         $orden_compra->cerrado = 1;
         $orden_compra->id_usuario_inserta = $id_user;
         $orden_compra->estado = 1;
