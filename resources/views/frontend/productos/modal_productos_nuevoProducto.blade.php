@@ -243,7 +243,9 @@ function fn_save_producto(){
             if (result.success) {
                 bootbox.alert(result.success, function() {
                     $('#openOverlayOpc').modal('hide');
-                    window.location.reload();
+                    bootbox.alert("Se guard&oacute; satisfactoriamente"); 
+                    //window.location.reload();
+                    datatablenew();
                 });
             } else if (result.error) {
                 bootbox.alert(result.error);

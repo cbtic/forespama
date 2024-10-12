@@ -354,7 +354,8 @@ function fn_save_anaquel(){
             data : $("#frmAnaquel").serialize(),
 			success: function (result) {
 				$('#openOverlayOpc').modal('hide');
-                window.location.reload();
+                bootbox.alert("Se guard&oacute; satisfactoriamente"); 
+                //window.location.reload();
 				datatablenew();
 				//limpiar();
 								

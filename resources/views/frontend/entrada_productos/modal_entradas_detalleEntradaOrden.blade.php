@@ -76,6 +76,10 @@
   
 }
 
+.custom-select2-dropdown {
+    width: 700px !important; 
+}
+
 #tablemodalm{
 	
 }
@@ -256,7 +260,7 @@ $.ajax({
                     <tr>
                         <td>${n}</td>
                         <td><input name="item[]" id="item${n}" class="form-control form-control-sm" value="${orden_compra.item}" type="text"></td>
-                        <td><select name="descripcion[]" id="descripcion${n}" class="form-control form-control-sm" onChange="">${productoOptions}</select></td>
+                        <td style="width: 30% !important"><select name="descripcion[]" id="descripcion${n}" class="form-control form-control-sm" onChange="">${productoOptions}</select></td>
                         <td><select name="marca[]" id="marca${n}" class="form-control form-control-sm">${marcaOptions}</select></td>
                         <td><input name="cod_interno[]" id="cod_interno${n}" class="form-control form-control-sm" value="${orden_compra.codigo}" type="text"></td>
                         <td><input id="fecha_fabricacion_${n}" name="fecha_fabricacion[]"  on class="form-control form-control-sm"  value="${orden_compra.fecha_fabricacion ? orden_compra.fecha_fabricacion : ''}" type="text"></td>
@@ -267,7 +271,7 @@ $.ajax({
                         <td><input name="cantidad_compra[]" id="cantidad_compra${n}" class="cantidad_compra form-control form-control-sm" value="${orden_compra.cantidad_requerida}" type="text" oninput="calcularCantidadPendiente(this)"></td>
                         <td><input name="cantidad_pendiente[]" id="cantidad_pendiente${n}" class="cantidad_pendiente form-control form-control-sm" value="" type="text" readonly="readonly"></td>
                         <td><input name="stock_actual[]" id="stock_actual${n}" class="form-control form-control-sm" value="${producto_stock.saldos_cantidad}" type="text"></td>
-                        <td><input name="precio_unitario[]" id="precio_unitario${n}" class="precio_unitario form-control form-control-sm" value="${orden_compra.precio}" type="text" oninput="calcularSubTotal(this)"></td>
+                        <td><input name="precio_unitario[]" id="precio_unitario${n}" class="precio_unitario form-control form-control-sm" value="${orden_compra.precio || 0}" type="text" oninput="calcularSubTotal(this)"></td>
                         <td><input name="sub_total[]" id="sub_total${n}" class="sub_total form-control form-control-sm" value="${orden_compra.sub_total}" type="text" readonly="readonly"></td>
                         <td><input name="igv[]" id="igv${n}" class="igv form-control form-control-sm" value="${orden_compra.igv}" type="text" readonly="readonly"></td>
                         <td><input name="total[]" id="total${n}" class="total form-control form-control-sm" value="${orden_compra.total}" type="text" readonly="readonly"></td>
@@ -275,6 +279,17 @@ $.ajax({
                 `;
                 
                 tbody.append(row);
+
+                $('#descripcion' + n).select2({
+                    width: 'resolve',
+                    dropdownCssClass: 'custom-select2-dropdown'
+                    //dropdownCssClass: 'form-control form-control-sm',
+                    //containerCssClass: 'form-control form-control-sm'
+                });
+
+                $('#marca' + n).select2({
+                    width: '100%',
+                });
 
                 $('#fecha_fabricacion_' + n).datepicker({
                     autoclose: true,
@@ -314,7 +329,7 @@ function cambiarOrigen(){
         $('#proveedor').val("");
     }else if(unidad_origen==3){
         $('#proveedor_select, #proveedor_').show();
-        $('#proveedor').val(28);
+        $('#proveedor').val(30);
     }else{
         $('#proveedor_select, #proveedor_').hide();
     }
@@ -709,6 +724,7 @@ function fn_save_detalle_producto(){
                     datatablenew();
                     $('#openOverlayOpc').modal('hide');
                     $('.loader').hide();
+                    bootbox.alert("Se guard&oacute; satisfactoriamente"); 
                     //if (result.id>0) {
                     //   modalEntradaProducto(result.id,result.tipo_movimiento);
                     //}
@@ -829,22 +845,22 @@ function pdf_documento(){
                             Unidad Origen
                         </div>
                         <?php 
-                        if($orden_compra->id_empresa_compra==28 && $orden_compra->id_empresa_vende==28){
+                        /*if($orden_compra->id_empresa_compra==30 && $orden_compra->id_empresa_vende==30){
                             $origen=3;
-                        }else if($orden_compra->id_empresa_compra==28){
+                        }else if($orden_compra->id_empresa_compra==30){
                             $origen=2;
-                        }else if($orden_compra->id_empresa_vende==28){
+                        }else if($orden_compra->id_empresa_vende==30){
                             $origen=1;
                         }else{
                             $origen=null;
-                        }
+                        }*/
                         ?>
                         <div class="col-lg-2">
                             <select name="unidad_origen" id="unidad_origen" class="form-control form-control-sm" onchange="//cambiarOrigen()">
                                 <option value="">--Seleccionar--</option>
                                 <?php
                                 foreach ($unidad_origen as $row){?>
-                                    <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$origen)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                    <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$orden_compra->id_unidad_origen)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
                                     <?php 
                                 }
                                 ?>
@@ -919,8 +935,9 @@ function pdf_documento(){
                             <select name="moneda" id="moneda" class="form-control form-control-sm" onchange="cambiarTipoCambio()">
                                 <option value="">--Seleccionar--</option>
                                 <?php
+                                $valorPorDefecto = isset($entrada_producto->id_moneda) ? $entrada_producto->id_moneda : $moneda[0]->codigo;
                                 foreach ($moneda as $row){?>
-                                    <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$entrada_producto->id_moneda)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                    <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$valorPorDefecto)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
                                     <?php 
                                 }
                                 ?>

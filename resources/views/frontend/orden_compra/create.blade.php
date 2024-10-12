@@ -287,6 +287,7 @@ label.form-control-sm{
 
 <script>
     var almacenUsuario = @json($almacen_usuario);
+	//console.log(almacenUsuario);
 </script>
 
 

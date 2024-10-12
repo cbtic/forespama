@@ -22,7 +22,7 @@
 .custom-select2-dropdown {
     width: 700px !important; 
 }
-  
+
 #tablemodal{
     border-spacing: 0;
     display: flex;/*Se ajuste dinamicamente al tamano del dispositivo**/
@@ -207,7 +207,7 @@ function cambiarOrigen(){
         $('#proveedor').val("");
     }else if(unidad_origen==3){
         $('#proveedor_select, #proveedor_').show();
-        $('#proveedor').val(28);
+        $('#proveedor').val(30);
     }else{
         $('#proveedor_select, #proveedor_').hide();
     }
@@ -457,7 +457,7 @@ $.ajax({
                     <tr>
                         <td>${n}</td>
                         <td><input name="id_orden_compra_detalle[]" id="id_orden_compra_detalle${n}" class="form-control form-control-sm" value="${orden_compra.id}" type="hidden"><input name="item[]" id="item${n}" class="form-control form-control-sm" value="${orden_compra.item}" type="text"></td>
-                        <td><select name="descripcion[]" id="descripcion${n}" class="form-control form-control-sm" onChange="">${productoOptions}</select></td>
+                        <td style="width: 30% !important"><select name="descripcion[]" id="descripcion${n}" class="form-control form-control-sm" onChange="">${productoOptions}</select></td>
                         <td><select name="marca[]" id="marca${n}" class="form-control form-control-sm">${marcaOptions}</select></td>
                         <td><input name="cod_interno[]" id="cod_interno${n}" class="form-control form-control-sm" value="${orden_compra.codigo}" type="text"></td>
                         <td><input id="fecha_fabricacion_${n}" name="fecha_fabricacion[]"  on class="form-control form-control-sm"  value="${orden_compra.fecha_fabricacion ? orden_compra.fecha_fabricacion : ''}" type="text"></td>
@@ -465,7 +465,7 @@ $.ajax({
                         <td><select name="estado_bien[]" id="estado_bien${n}" class="form-control form-control-sm" onChange="">${estadoBienOptions}</select></td>
                         <td><select name="unidad[]" id="unidad${n}" class="form-control form-control-sm">${unidadMedidaOptions}</select></td>
                         <td><input name="cantidad_ingreso[]" id="cantidad_ingreso${n}" class="cantidad_ingreso form-control form-control-sm" value="${orden_compra.cantidad_requerida}" type="text" oninput="calcularCantidadPendiente(this);calcularSubTotal(this)"></td>
-                        <td><input name="precio_unitario[]" id="precio_unitario${n}" class="precio_unitario form-control form-control-sm" value="${orden_compra.precio}" type="text" oninput="calcularSubTotal(this)"></td>
+                        <td><input name="precio_unitario[]" id="precio_unitario${n}" class="precio_unitario form-control form-control-sm" value="${orden_compra.precio || 0}" type="text" oninput="calcularSubTotal(this)"></td>
                         <td><select name="descuento[]" id="descuento${n}" class="form-control form-control-sm" onChange="">${descuentoOptions}</select></td>
                         <td><input name="sub_total[]" id="sub_total${n}" class="sub_total form-control form-control-sm" value="${orden_compra.sub_total}" type="text" readonly="readonly"></td>
                         <td><input name="igv[]" id="igv${n}" class="igv form-control form-control-sm" value="${orden_compra.igv}" type="text" readonly="readonly"></td>
@@ -474,8 +474,12 @@ $.ajax({
                 `;
                 tbody.append(row);
                 $('#descripcion' + n).select2({ 
-                    width: '100%',
+                    width: 'resolve',
                     dropdownCssClass: 'custom-select2-dropdown'
+                });
+
+                $('#marca' + n).select2({
+                    width: '100%',
                 });
 
                 $('#fecha_fabricacion_' + n).datepicker({
@@ -553,11 +557,15 @@ function agregarProducto(){
 
         $('#tblOrdenCompraDetalle tbody').append(newRow);
 
-        $('#descripcion' + n).select2({ 
+        $('#descripcion' + n).select2({
             width: 'resolve',
             dropdownCssClass: 'custom-select2-dropdown'
             //dropdownCssClass: 'form-control form-control-sm',
             //containerCssClass: 'form-control form-control-sm'
+        });
+
+        $('#marca' + n).select2({
+            width: '100%',
         });
         
         $('#fecha_fabricacion_' + n).datepicker({
@@ -607,6 +615,10 @@ function fn_save_orden_compra(){
     if(empresa_vende==""){msg+="Ingrese la Empresa que Vende <br>";}
     if(igv_compra==""){msg+="Ingrese el IGV <br>";}
 
+    if ($('#tblOrdenCompraDetalle tbody tr').length == 0) {
+        msg += "No se ha agregado ningún producto <br>";
+    }
+
     if(msg!=""){
         bootbox.alert(msg);
         return false;
@@ -626,9 +638,11 @@ function fn_save_orden_compra(){
                     //$('#openOverlayOpc').modal('hide');
                     datatablenew();
                     $('.loader').hide();
+                    bootbox.alert("Se guard&oacute; satisfactoriamente"); 
                     if (result.id>0) {
                         modalOrdenCompra(result.id);
                     }
+                   
                 }
         });
     }
@@ -639,11 +653,11 @@ function obtenerCodigo(){
     var tipo_documento = $('#tipo_documento').val();
     
     if(tipo_documento==1){
-        $('#empresa_compra').val('28').trigger('change');
+        $('#empresa_compra').val('30').trigger('change');
         $('#empresa_vende').val('').trigger('change');
     }else if(tipo_documento==2){
         $('#empresa_compra').val('').trigger('change');
-        $('#empresa_vende').val('28').trigger('change');
+        $('#empresa_vende').val('30').trigger('change');
     }
 
     $.ajax({
@@ -777,22 +791,22 @@ function pdf_documento(){
                             Unidad Origen
                         </div>
                         <?php
-                        if($orden_compra->id_empresa_compra==28 && $orden_compra->id_empresa_vende==28){
+                        /*if($orden_compra->id_empresa_compra==30 && $orden_compra->id_empresa_vende==30){
                             $origen=3;
-                        }else if($orden_compra->id_empresa_compra==28){
+                        }else if($orden_compra->id_empresa_compra==30){
                             $origen=2;
-                        }else if($orden_compra->id_empresa_vende==28){
+                        }else if($orden_compra->id_empresa_vende==30){
                             $origen=1;
                         }else{
                             $origen=null;
-                        }
+                        }*/
                         ?>
                         <div class="col-lg-2">
                             <select name="unidad_origen" id="unidad_origen" class="form-control form-control-sm" onchange="//cambiarOrigen()">
                                 <option value="">--Seleccionar--</option>
                                 <?php
                                 foreach ($unidad_origen as $row){?>
-                                    <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$origen)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                    <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$orden_compra->id_unidad_origen)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
                                     <?php 
                                 }
                                 ?>

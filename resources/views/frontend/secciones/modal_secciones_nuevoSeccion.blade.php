@@ -340,7 +340,8 @@ function fn_save_seccion(){
             data : $("#frmSeccion").serialize(),
 			success: function (result) {
 				$('#openOverlayOpc').modal('hide');
-                window.location.reload();
+                bootbox.alert("Se guard&oacute; satisfactoriamente"); 
+                //window.location.reload();
 				datatablenew();
 				//limpiar();
 								

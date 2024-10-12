@@ -227,7 +227,8 @@ function fn_save_entrada_producto(){
             data : $("#frmEntradaProductos").serialize(),
 			success: function (result) {
 				$('#openOverlayOpc').modal('hide');
-                window.location.reload();
+                bootbox.alert("Se guard&oacute; satisfactoriamente"); 
+                //window.location.reload();
 				datatablenew();
 				//limpiar();
 								

@@ -690,9 +690,11 @@ function fn_save_detalle_producto(){
                 //alert(result.id)
                 //$('#openOverlayOpc').modal('hide');
                 $('.loader').hide();
+                bootbox.alert("Se guard&oacute; satisfactoriamente"); 
                 if (result.id>0) {
                     modalEntradaProducto(result.id,result.tipo_movimiento);
                 }
+               
             }
     });
 }
