@@ -151,6 +151,8 @@ $(document).ready(function() {
     });
 
     $("#item").select2({ width: '100%' });
+    $("#persona_recibe").select2({ width: '100%' });
+    
     //$("#ubicacion_fisica_seccion").select2({ width: '100%' });
     //$("#ubicacion_fisica_anaquel").select2({ width: '100%' });
 
@@ -983,6 +985,28 @@ function pdf_documento(){
                         <div class="col-lg-2">
                             <input id="observacion" name="observacion" on class="form-control form-control-sm"  value="<?php echo $entrada_producto->observacion?>" type="text">
                         </div>
+                        <?php
+                            // Verifica si la opción seleccionada en los selects es igual a 30
+                            $empresaCompraSeleccionada = $orden_compra->id_empresa_compra; // Obtenemos el valor seleccionado
+                            $empresaVendeSeleccionada = $orden_compra->id_empresa_vende; // Obtenemos el valor seleccionado
+
+                            if ($empresaCompraSeleccionada == 28 && $empresaVendeSeleccionada == 28) {
+                        ?>
+                            <div class="col-lg-2">
+                                Persona Recibe
+                            </div>
+                            <div class="col-lg-2">
+                                <select name="persona_recibe" id="persona_recibe" class="form-control form-control-sm" onchange="">
+                                    <option value="">--Seleccionar--</option>
+                                    <?php
+                                    foreach ($persona as $row){?>
+                                        <option value="<?php echo $row->id ?>" <?php if($row->id==$orden_compra->id_persona_recibe)echo "selected='selected'"?>><?php echo $row->nombres." ".$row->apellido_paterno." ".$row->apellido_materno ?></option>
+                                        <?php 
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                        <?php } ?>
                     </div>
                         <div style="margin-top:15px" class="form-group">
                             <div class="col-sm-12 controls">
@@ -1043,18 +1067,18 @@ function pdf_documento(){
                                 <button style="font-size:12px;margin-left:10px; margin-right:100px" type="button" class="btn btn-sm btn-warning" data-toggle="modal" onclick="pdf_guia()" ><i class="fa fa-edit"></i>Imprimir Gu&iacute;a Remisi&oacute;n Electronica</button>
                                 <!--<a href="javascript:void(0)" onClick="fn_pdf_documento()" class="btn btn-sm btn-primary" style="margin-right:100px">Imprimir</a>-->
                                 <?php 
-                }
-                
-                if($tipo == 1){
-            ?>
-                <a href="javascript:void(0)" onClick="fn_save_detalle_producto()" class="btn btn-sm btn-danger" style="margin-right:10px">Recibir</a>
-            <?php 
-                } elseif($tipo== 2){
-            ?>
-                <a href="javascript:void(0)" onClick="fn_save_detalle_producto()" class="btn btn-sm btn-success" style="margin-right:10px">Entregar</a>
-            <?php 
-                }
-            ?>
+                                    }
+                        
+                                    if($tipo == 1){
+                                ?>
+                                    <a href="javascript:void(0)" onClick="fn_save_detalle_producto()" class="btn btn-sm btn-danger" style="margin-right:10px">Recibir</a>
+                                <?php 
+                                    } elseif($tipo== 2){
+                                ?>
+                                    <a href="javascript:void(0)" onClick="fn_save_detalle_producto()" class="btn btn-sm btn-success" style="margin-right:10px">Entregar</a>
+                                <?php 
+                                    }
+                                ?>
                                 
                                 <a href="javascript:void(0)" onClick="$('#openOverlayOpc').modal('hide');" class="btn btn-sm btn-info" style="">Cerrar</a>
                             </div>

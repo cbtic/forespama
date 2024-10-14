@@ -538,7 +538,7 @@ function cambiarDocumento(){
                 });
                 $('#tipo_documento').html(option);
                 
-                $('#tipo_documento').attr("disabled",false);
+                $('#tipo_documento').attr("disabled",true);
                 $('.loader').hide();
                 
             }
@@ -812,7 +812,7 @@ function pdf_documento(){
                                 <option value="">--Seleccionar--</option>
                                 <?php
                                 foreach ($unidad_origen as $row){?>
-                                    <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$entrada_producto->unidad_origen)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                    <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$entrada_producto->unidad_origen || $row->codigo == $entrada_producto->unidad_destino)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
                                     <?php 
                                 }
                                 ?>
@@ -934,6 +934,28 @@ function pdf_documento(){
                         <div class="col-lg-2">
                             <input id="observacion" name="observacion" on class="form-control form-control-sm"  value="<?php echo $entrada_producto->observacion?>" type="text" readonly="readonly">
                         </div>
+                        <?php
+                        // Verifica si la opción seleccionada en los selects es igual a 30
+                        $empresaCompraSeleccionada = $entrada_producto->id_empresa_compra; // Obtenemos el valor seleccionado
+                        $empresaVendeSeleccionada = $entrada_producto->id_proveedor; // Obtenemos el valor seleccionado
+
+                        if ($empresaCompraSeleccionada == 28 && $empresaVendeSeleccionada == 28) {
+                        ?>
+                            <div class="col-lg-2">
+                                Persona Recibe
+                            </div>
+                            <div class="col-lg-2">
+                                <select name="persona_recibe" id="persona_recibe" class="form-control form-control-sm" onchange="" disabled>
+                                    <option value="">--Seleccionar--</option>
+                                    <?php
+                                    foreach ($persona as $row){?>
+                                        <option value="<?php echo $row->id ?>" <?php if($row->id==$entrada_producto->id_persona_recibe)echo "selected='selected'"?>><?php echo $row->nombres." ".$row->apellido_paterno." ".$row->apellido_materno ?></option>
+                                        <?php 
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                        <?php } ?>
                     </div>
                         <div style="margin-top:15px" class="form-group">
                             <div class="col-sm-12 controls">
