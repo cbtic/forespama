@@ -1043,9 +1043,19 @@ function pdf_documento(){
                                 <button style="font-size:12px;margin-left:10px; margin-right:100px" type="button" class="btn btn-sm btn-warning" data-toggle="modal" onclick="pdf_guia()" ><i class="fa fa-edit"></i>Imprimir Gu&iacute;a Remisi&oacute;n Electronica</button>
                                 <!--<a href="javascript:void(0)" onClick="fn_pdf_documento()" class="btn btn-sm btn-primary" style="margin-right:100px">Imprimir</a>-->
                                 <?php 
-                                    }
-                                ?>
-                                <a href="javascript:void(0)" onClick="fn_save_detalle_producto()" class="btn btn-sm btn-danger" style="margin-right:10px">Recibir</a>
+                }
+                
+                if($tipo == 1){
+            ?>
+                <a href="javascript:void(0)" onClick="fn_save_detalle_producto()" class="btn btn-sm btn-danger" style="margin-right:10px">Recibir</a>
+            <?php 
+                } elseif($tipo== 2){
+            ?>
+                <a href="javascript:void(0)" onClick="fn_save_detalle_producto()" class="btn btn-sm btn-success" style="margin-right:10px">Entregar</a>
+            <?php 
+                }
+            ?>
+                                
                                 <a href="javascript:void(0)" onClick="$('#openOverlayOpc').modal('hide');" class="btn btn-sm btn-info" style="">Cerrar</a>
                             </div>
                                                 
