@@ -1,4 +1,4 @@
-<title>Sistema de Felmo</title>
+<title>Sistema de CAP - Lima</title>
 
 <style>/*
 .table-fixed thead,
@@ -30,7 +30,7 @@
 */
 /*****************/
 .modal-dialog {
-	min-width: 90%;
+	width: 90%;
   }
   
 #tablemodal{
@@ -241,62 +241,39 @@ function validarLiquidacion() {
 					<div class="card">
                         <div class="card-header">
                             <strong>
-                                Consulta de Facturas
+                                Registro de Deuda Pagada
                             </strong>
                         </div>
                         <div class="card-body">
 						
-							<div class="table-responsive overflow-auto" style="max-height: 670px;">
-							
+							<div class="table-responsive">
 							<table id="tblValorizacionFactura" class="table table-hover table-sm">
 								<thead>
 								<tr style="font-size:13px">
-									<th>Serie</th>
-									<th>Nro.</th>
-									<th>Tipo</th>
 									<th>Fecha</th>
-									<th>Ruc</th>
-									<th>Raz&oacute;n Social</th>
-									<th>Placa</th>
-									<th>Afiliaci&oacute;n</th>
-									<th>SubTotal</th>
-									<th>IGV</th>
-									<th>Total</th>
-									<th>Estado</th>
-									<th>Anulado</th>
-									<th>Caja</th>
-									<th>Usuario</th>
-									<th class="text-right">Factura</th>
+									<th>Concepto</th>
+									<th class="text-right">Monto</th>
 								</tr>
 								</thead>
 								<tbody>
 								<?php 
-								foreach($factura as $key=>$row):
-									$fac_cod_tributario=$row->fac_cod_tributario;
-									$fac_destinatario=$row->fac_destinatario;
-									if($fac_cod_tributario=="")$fac_cod_tributario=$row->ruc;
-									if($fac_destinatario=="")$fac_destinatario=$row->nombre_comercial;
-								?>
+								foreach($valorizacion as $key=>$row):?>
 								<tr style="font-size:13px">
-									<td class="text-left"><?php echo $row->fac_serie?></td>
-									<td class="text-left"><?php echo $row->fac_numero?></td>
-									<td class="text-left"><?php echo $row->fac_tipo?></td>
-									<td class="text-left"><?php echo $row->fac_fecha?></td>
-									<td class="text-left"><?php echo $fac_cod_tributario?></td>
-									<td class="text-left"><?php echo $fac_destinatario?></td>
-									<td class="text-left"><?php echo $row->placa?></td>
-									<td class="text-left"><?php echo $row->plan_denominacion?></td>
-									<td class="text-right"><?php echo number_format($row->fac_subtotal,2)?></td>
-									<td class="text-right"><?php echo number_format($row->fac_impuesto,2)?></td>
-									<td class="text-right"><?php echo number_format($row->fac_total,2)?></td>
-									<td class="text-center"><?php echo $row->fac_estado_pago?></td>
-									<td class="text-center"><?php echo $row->fac_anulado?></td>
-									<td class="text-left"><?php echo $row->caja?></td>
-									<td class="text-left"><?php echo $row->usuario?></td>
-									<td class="text-center">
-									<div class="btn-group btn-group-sm" role="group" aria-label="Log Viewer Actions">
-										<a href="/factura/<?php echo $row->id?>" class="btn btn-sm btn-success" target="_blank"><i class="fa fa-search"></i></a>
-									</div>
+									<td class="text-left"><?php echo date("d/m/Y", strtotime($row->val_fecha))?></td>
+									<td class="text-left"><?php echo $row->smod_control?>
+									<?php
+										if($row->flag_estado_cuenta==1){
+											if($row->smod_tipo_factura=="FT")echo '<span class="badge badge-success">RENTA</span>';
+											if($row->smod_tipo_factura=="TK")echo '<span class="badge badge-info">SERVICIOS</span>';
+										}else{
+											echo '<span class="badge badge-warning">PESAJE</span>';
+										}
+									?>
+									</td>
+									<td class="text-right">
+									<?php if($row->descuento<>"" && $row->descuento > 0)echo "<span style='float:left'>% Dscto: &nbsp;</span>";?>
+									<span style="float:left"><?php echo $row->descuento?></span>
+									<span><?php echo $row->vsm_precio?></span>
 									</td>
 								</tr>
 								<?php 		
