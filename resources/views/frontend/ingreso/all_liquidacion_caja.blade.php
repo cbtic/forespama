@@ -1,103 +1,91 @@
 <link rel="stylesheet" href="<?php echo URL::to('/') ?>/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
 <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" defer></script>
-<style>
-	#tblLiquidacion tbody tr{
-		font-size:13px
-	}
-    .table-sortable tbody tr {
-        cursor: move;
-    }
-	/*
-    #global {        
-        width: 95%;        
-        margin: 15px 15px 15px 15px;     
-        height: 380px !important;        
-        border: 1px solid #ddd;
-        overflow-y: scroll !important;
-    }
-	*/
-	#global {
-        height: 650px !important;
-        width: auto;
-        border: 1px solid #ddd;
-		margin:15px
-       /* background: #f1f1f1;*/
-        /*overflow-y: scroll !important;*/
-    }
-	
-    .margin{
-
-        margin-bottom: 20px;
-    }
-    .margin-buscar{
-        margin-bottom: 5px;
-        margin-top: 5px;
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<!--<script src="<?php echo URL::to('/') ?>/js/manifest.js"></script>
+<script src="<?php echo URL::to('/') ?>/js/vendor.js"></script>
+<script src="<?php echo URL::to('/') ?>/js/frontend.js"></script>-->
+<style type="text/css">
+    .dataTables_length {
+        float: left !important;
     }
 
-    /*.row{
-        margin-top:10px;
-        padding: 0 10px;
-    }*/
-    .clickable{
-        cursor: pointer;   
+    .tooltip>.tooltip-inner {
+        background-color: #5cb85c !important;
+        color: #FFFFFF;
+        border: 1px solid #5cb85c !important;
+        padding: 4px;
+        font-size: 11px;
     }
 
-    /*.panel-heading div {
-        margin-top: -18px;
-        font-size: 15px;        
+    .tooltip.top>.tooltip-arrow {
+        border-top: 2px solid #5cb85c !important;
     }
-    .panel-heading div span{
-        margin-left:5px;
-    }*/
-    .panel-body{
-        display: block;
+
+    .tooltip.bottom>.tooltip-arrow {
+        border-bottom: 2px solid #5cb85c !important;
     }
-	
-	.dataTables_filter {
-	   display: none;
-	}
 
-.loader {
-	width: 100%;
-	height: 100%;
-	/*height: 1500px;*/
-	overflow: hidden; 
-	top: 0px;
-	left: 0px;
-	z-index: 10000;
-	text-align: center;
-	position:absolute; 
-	background-color: #000;
-	opacity:0.6;
-	filter:alpha(opacity=40);
-	display:none;
-}
+    .tooltip.left>.tooltip-arrow {
+        border-left: 2px solid #5cb85c !important;
+    }
 
-.dataTables_processing {
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	width: 500px!important;
-	font-size: 1.7em;
-	border: 0px;
-	margin-left: -17%!important;
-	text-align: center;
-	background: #3c8dbc;
-	color: #FFFFFF;
-}
+    .tooltip.right>.tooltip-arrow {
+        border-right: 2px solid #5cb85c !important;
+    }
 
+    .loader {
+        width: 100%;
+        height: 100%;
+        /*height: 1500px;*/
+        overflow: hidden;
+        top: 0px;
+        left: 0px;
+        z-index: 10000;
+        text-align: center;
+        position: absolute;
+        background-color: #000;
+        opacity: 0.6;
+        filter: alpha(opacity=40);
+        display: none;
+    }
+
+    .selected {
+        background-color: brown;
+        color: #FFF;
+    }
+
+    /*
+    #btnBoleta{
+        padding: 3px!important;
+        font-size: 10px;
+
+    }
+*/
+    #tblPago .form-horizontal {
+        margin-bottom: 0px !important;
+        padding-bottom: 0px !important;
+    }
+
+    .auto_height {
+        /* CSS */
+        width: 100%;
+    }
 </style>
+@stack('before-scripts')
+@stack('after-scripts')
 
-@extends('frontend.layouts.app1')
 
-@section('title', app_name() . ' | ' . __('labels.frontend.contact.box_title'))
+@extends('frontend.layouts.app')
+
+@section('title', __('labels.frontend.contact.box_title'))
 
 @section('breadcrumb')
 <ol class="breadcrumb" style="padding-left:130px;margin-top:0px;background-color:#283659">
-        <li class="breadcrumb-item text-primary">Inicio</li>
-            <li class="breadcrumb-item active">Consulta de Liquidaci&oacute;n de Caja</li>
-        </li>
-    </ol>
+    <li class="breadcrumb-item text-primary">Inicio</li>
+    <!--<li class="breadcrumb-item active">Nuevo Ingreso</li>-->
+    <li class="breadcrumb-item active" style="color:#FFFFFF;font-weight:bold">Estado de Cuenta</li>
+    </li>
+</ol>
 @endsection
 
 @section('content')
@@ -141,7 +129,7 @@
 					<input class="form-control" id="system-search" name="q" placeholder="Buscar ...">                        
 				</div>-->
 				
-				<form class="form-horizontal" method="post" action="{{ route('frontend.contact.send')}}" id="frmAfiliacion" autocomplete="off">
+				<form class="form-horizontal" method="post" action="{{ route('frontend.comprobante.edit')}}" id="frmAfiliacion" autocomplete="off">
 				<input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
 				
 				<div class="row" style="padding:20px 20px 0px 20px;">
@@ -178,7 +166,7 @@
 							<select name="id_caja" id="id_caja" class="form-control form-control-sm">
                                 <option value="0">Seleccionar</option>
                                 <?php foreach($caja as $row):?>
-                                <option value="<?php echo $row->id?>"><?php echo $row->denominacion?></option>
+                                <option value="<?php echo $row->codigo?>"><?php echo $row->denominacion?></option>
                                 <?php  endforeach;?>
                             </select>
 						</div>
@@ -272,20 +260,18 @@
     
 </div>
 
+@push('after-scripts')
+<script type="text/javascript">
+
+</script>
+
+@endpush
 
 @push('after-scripts')
-{!! script(asset('js/liquidacionCajaLista.js')) !!}
-<script type="text/javascript">
-//$(document).ready(function () {
-	/*
-	$('#tblSupervision').DataTable({
-		"dom": '<"top">rt<"bottom"flpi><"clear">'
-		});
-	$("#system-search").keyup(function() {
-		   var dataTable = $('#tblSupervision').dataTable();
-		   dataTable.fnFilter(this.value);
-		}); 
-	*/
-//});
-</script>
+
+<script src="{{ asset('js/liquidacionCajaLista.js') }}"></script>
 @endpush
+
+
+
+

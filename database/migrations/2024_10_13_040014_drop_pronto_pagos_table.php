@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateProntoPagosTable extends Migration
+class DropProntoPagosTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,7 @@ class CreateProntoPagosTable extends Migration
      */
     public function up()
     {
-        Schema::create('pronto_pagos', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
-        });
+        Schema::dropIfExists('pronto_pagos');
     }
 
     /**
@@ -26,6 +23,6 @@ class CreateProntoPagosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('pronto_pagos');
+        //
     }
 }
