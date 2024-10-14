@@ -167,8 +167,9 @@
             <x-utils.link href="#" icon="c-sidebar-nav-icon cil-list" class="c-sidebar-nav-dropdown-toggle" :text="__('Caja')" />
             <ul class="c-sidebar-nav-dropdown-items">
                 <li class="c-sidebar-nav-item">
-                    <x-utils.link :href="route('frontend.ingresos.create')" class="c-sidebar-nav-link" :text="__('Estado de Cuentas')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />                  
+                    <x-utils.link :href="route('frontend.ingreso.create')" class="c-sidebar-nav-link" :text="__('Estado de Cuentas')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />                  
                 </li>
+                
             </ul>
         </li> 
 		
