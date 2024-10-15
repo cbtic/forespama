@@ -990,7 +990,7 @@ function pdf_documento(){
                             $empresaCompraSeleccionada = $orden_compra->id_empresa_compra; // Obtenemos el valor seleccionado
                             $empresaVendeSeleccionada = $orden_compra->id_empresa_vende; // Obtenemos el valor seleccionado
 
-                            if ($empresaCompraSeleccionada == 28 && $empresaVendeSeleccionada == 28) {
+                            if ($empresaCompraSeleccionada == 30 && $empresaVendeSeleccionada == 30) {
                         ?>
                             <div class="col-lg-2">
                                 Persona Recibe
