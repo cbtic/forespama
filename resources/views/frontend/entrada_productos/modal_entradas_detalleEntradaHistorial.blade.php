@@ -540,7 +540,7 @@ function cambiarDocumento(){
                 
                 $('#tipo_documento').attr("disabled",true);
                 $('.loader').hide();
-                
+                 
             }
         });
         $('#almacen_').hide();
