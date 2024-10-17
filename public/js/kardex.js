@@ -82,6 +82,16 @@ function datatablenew(){
 				"className": "dt-center",
 				//"className": 'control'
                 },
+
+				{
+				"mRender": function (data, type, row) {
+					var codigo = "";
+					if(row.codigo!= null)codigo = row.codigo;
+					return codigo;
+				},
+				"bSortable": true,
+				"aTargets": [1]
+				},
 				
 				{
                 "mRender": function (data, type, row) {
@@ -90,7 +100,7 @@ function datatablenew(){
 					return producto;
                 },
                 "bSortable": true,
-                "aTargets": [1]
+                "aTargets": [2]
                 },
 
 				{
@@ -100,7 +110,7 @@ function datatablenew(){
 					return entrada;
 				},
 				"bSortable": true,
-				"aTargets": [2]
+				"aTargets": [3]
 				},
 				
                 {
@@ -110,7 +120,7 @@ function datatablenew(){
 					return costo_entrada;
                 },
                 "bSortable": true,
-                "aTargets": [3]
+                "aTargets": [4]
                 },
 
 				{
@@ -120,7 +130,7 @@ function datatablenew(){
 					return total_entrada;
 				},
 				"bSortable": true,
-				"aTargets": [4]
+				"aTargets": [5]
 				},
 				{
 				"mRender": function (data, type, row) {
@@ -129,7 +139,7 @@ function datatablenew(){
 					return salida;
 				},
 				"bSortable": true,
-				"aTargets": [5]
+				"aTargets": [6]
 				},
 				{
 				"mRender": function (data, type, row) {
@@ -138,7 +148,7 @@ function datatablenew(){
 					return costo_salida;
 				},
 				"bSortable": true,
-				"aTargets": [6]
+				"aTargets": [7]
 				},
 				{
 				"mRender": function (data, type, row) {
@@ -147,7 +157,7 @@ function datatablenew(){
 					return total_salida;
 				},
 				"bSortable": true,
-				"aTargets": [7]
+				"aTargets": [8]
 				},
 				{
 				"mRender": function (data, type, row) {
@@ -156,7 +166,7 @@ function datatablenew(){
 					return saldos;
 				},
 				"bSortable": true,
-				"aTargets": [8]
+				"aTargets": [9]
 				},
 				{
 				"mRender": function (data, type, row) {
@@ -165,7 +175,7 @@ function datatablenew(){
 					return costo_saldos;
 				},
 				"bSortable": true,
-				"aTargets": [9]
+				"aTargets": [10]
 				},
 				{
 				"mRender": function (data, type, row) {
@@ -174,7 +184,7 @@ function datatablenew(){
 					return total_saldos;
 				},
 				"bSortable": true,
-				"aTargets": [10]
+				"aTargets": [11]
 				},
 				{
 				"mRender": function (data, type, row) {
@@ -183,7 +193,7 @@ function datatablenew(){
 					return almacen_destino;
 				},
 				"bSortable": true,
-				"aTargets": [11]
+				"aTargets": [12]
 				},
 				{
 				"mRender": function (data, type, row) {
@@ -192,7 +202,7 @@ function datatablenew(){
 					return almacen_salida;
 				},
 				"bSortable": true,
-				"aTargets": [12]
+				"aTargets": [13]
 				},
             ]
     });

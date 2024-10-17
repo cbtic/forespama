@@ -383,18 +383,14 @@ class PersonaController extends Controller
             $buscapersona = Persona::where("numero_documento", $request->numero_documento)->where("estado", "1")->get();
 
             if ($buscapersona->count()==0){
-
-                $codigo=$request->codigo;
-                $telefono = $request->telefono;
-                $email = $request->email;
 /*
                 if($codigo==""){
                     $array_tipo_documento = array('DNI' => 'DNI','CARNET_EXTRANJERIA' => 'CE','PASAPORTE' => 'PAS','RUC' => 'RUC','CEDULA' => 'CED','PTP/PTEP' => 'PTP/PTEP', 'CPP/CSR' => 'CPP/CSR');
                     $codigo = $array_tipo_documento[$request->tipo_documento]."-".$request->numero_documento;
                 }
 */
-                if($telefono=="")$telefono="999999999";
-                if($email=="")$email="mail@mail.com";
+                //if($telefono=="")$telefono="999999999";
+                //if($email=="")$email="mail@mail.com";
 
                 $persona = new Persona;
                 $persona->id_tipo_documento = $request->tipo_documento;
@@ -402,19 +398,18 @@ class PersonaController extends Controller
                 $persona->apellido_paterno = $request->apellido_paterno;
                 $persona->apellido_materno = $request->apellido_materno;
                 $persona->nombres = $request->nombre;
-               // $persona->codigo = $codigo;
-                //$persona->ocupacion = $request->ocupacion;
                 $persona->fecha_nacimiento = $request->fecha_nacimiento;
                 $persona->id_sexo =  $request->sexo;
-                //$persona->telefono = "999999999";
-                $persona->telefono = $telefono;
-                //$persona->email = "mail@mail.com";
-                $persona->email = $email;
-                //$persona->foto = "mail@mail.com";
+                $persona->telefono = $request->numero_celular;
+                $persona->email = $request->correo;
                 $persona->foto = $request->img_foto;
                 $persona->estado = "1";
                 $persona->numero_ruc = $request->ruc;
-                //$persona->flag_negativo = $request->flag_negativo;
+                $persona->grupo_sanguineo = $request->grupo_sanguineo;
+                $persona->id_ubigeo_nacimiento = $request->id_ubigeo_nacimiento;
+                $persona->lugar_nacimiento = $request->lugar_nacimiento;
+                $persona->id_nacionalidad = $request->nacionalidad;
+                $persona->direccion = $request->direccion;
                 $persona->save();
 /*
                 $negativo = new Negativo;

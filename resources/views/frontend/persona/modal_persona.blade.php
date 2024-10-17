@@ -1,6 +1,6 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-<title>Sistema SIGCAP</title>
+<title>Sistema FORESPAMA</title>
 
 <style>
 	/*
@@ -1234,13 +1234,13 @@ $.mask.definitions['p'] = "[Mm]";
 										<div class="col-lg-3">
 											<div class="form-group">
 												<label class="control-label form-control-sm">N&uacute;mero Celular</label>
-												<input id="numero_celular" name="numero_celular" class="form-control form-control-sm" value="<?php echo $persona->numero_celular ?>" type="text">
+												<input id="numero_celular" name="numero_celular" class="form-control form-control-sm" value="<?php echo $persona->telefono ?>" type="text">
 											</div>
 										</div>
 										<div class="col-lg-6">
 											<div class="form-group">
 												<label class="control-label form-control-sm">Correo</label>
-												<input id="correo" name="correo" class="form-control form-control-sm" value="<?php echo $persona->correo ?>" type="text">
+												<input id="correo" name="correo" class="form-control form-control-sm" value="<?php echo $persona->email ?>" type="text">
 											</div>
 										</div>
 									</div>

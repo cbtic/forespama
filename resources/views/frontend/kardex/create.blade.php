@@ -357,7 +357,7 @@ label.form-control-sm{
 							<?php
 							foreach ($producto as $row) {
 							?>
-							<option value="<?php echo $row->id?>"><?php echo $row->denominacion?></option>
+							<option value="<?php echo $row->id?>"><?php echo $row->codigo ." - ".$row->denominacion?></option>
 							<?php
 							}
 							?>
@@ -399,6 +399,7 @@ label.form-control-sm{
                         <thead>
                         <tr style="font-size:13px">
                             <th>Id</th>
+							<th>C&oacute;digo</th>
 							<th>Producto</th>
 							<th>Entradas</th>
                             <th>Costo Entradas</th>
