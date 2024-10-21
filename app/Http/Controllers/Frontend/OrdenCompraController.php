@@ -216,7 +216,7 @@ class OrdenCompraController extends Controller
         $producto_stock = [];
 
         foreach($orden_compra as $detalle){
-            $stock = $kardex_model->getExistenciaProductoById($detalle->id_producto);
+            $stock = $kardex_model->getExistenciaProductoById($detalle->id_producto, $detalle->id_almacen_salida);
             if(count($stock)>0){
                 $producto_stock[$detalle->id_producto] = $stock[0];
             }else {

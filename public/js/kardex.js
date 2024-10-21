@@ -1,11 +1,11 @@
 $(document).ready(function () {
 
-	activarBotonExcel();
+	//activarBotonExcel();
 	
 	$('#btnBuscar').click(function () {
 		fn_ListarBusqueda();
 	});
-		
+	
 	$('#denominacion').keypress(function(e){
 		if(e.which == 13) {
 			datatablenew();

@@ -60,9 +60,10 @@ class Kardex extends Model
 
     }
 
-    function getExistenciaProductoById($id){
+    function getExistenciaProductoById($id, $id_almacen_salida){
 
-        $cad = "select * from kardex k where k.id_producto = '".$id."'
+        $cad = "select * from kardex k 
+        where k.id_producto = '".$id."' and  and k.id_almacen_destino ='".$id_almacen_salida."'
         order by 1 desc
         limit 1";
 
