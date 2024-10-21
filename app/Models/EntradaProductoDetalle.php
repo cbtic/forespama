@@ -31,9 +31,10 @@ class EntradaProductoDetalle extends Model
 
     function getDetalleProductoId($id){
 
-        $cad = "select epd.id,  ROW_NUMBER() OVER (PARTITION BY epd.id_entrada_productos ) AS row_num, epd.numero_serie, epd.id_producto, p.codigo, epd.id_marca, p.id_unidad_medida, epd.fecha_fabricacion, epd.fecha_vencimiento, epd.id_um, epd.id_estado_bien , epd.cantidad, epd.cantidad, epd.cantidad, '12' stock_actual, epd.costo, epd.sub_total , epd.igv , epd.total 
+        $cad = "select epd.id,  ROW_NUMBER() OVER (PARTITION BY epd.id_entrada_productos ) AS row_num, epd.numero_serie, epd.id_producto, p.codigo, epd.id_marca, p.id_unidad_medida, epd.fecha_fabricacion, epd.fecha_vencimiento, epd.id_um, epd.id_estado_bien , epd.cantidad, epd.cantidad, epd.cantidad, '12' stock_actual, epd.costo, epd.sub_total , epd.igv , epd.total, ep.id_almacen_destino  
         from entrada_producto_detalles epd 
         inner join productos p on epd.id_producto = p.id
+        inner join entrada_productos ep on epd.id_entrada_productos = ep.id
         where id_entrada_productos ='".$id."'
         and epd.estado='1'";
 

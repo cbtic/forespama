@@ -106,6 +106,7 @@ class OrdenCompraController extends Controller
         $igv_compra = $tablaMaestra_model->getMaestroByTipo(51);
         $descuento = $tablaMaestra_model->getMaestroByTipo(55);
         $almacen = $almacen_model->getAlmacenAll();
+        //$almacen = Almacene::all();
         $unidad_origen = $tablaMaestra_model->getMaestroByTipo(50);
         //$codigo_orden_compra = $orden_compra_model->getCodigoOrdenCompra();
         

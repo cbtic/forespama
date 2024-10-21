@@ -592,7 +592,7 @@ class EntradaProductosController extends Controller
             $marca = $marca_model->getMarcaAll();
             //$almacen__ = Almacene::getAlmacenById($entrada_producto->id_almacen);
             
-            $almacen = $almacen_model->getAlmacenByUser($id_user);
+            $almacen = $almacen_model->getAlmacenAll();
             //$tipo_movimiento_=1;
 		}else{
 			$entrada_producto_detalle = new EntradaProductoDetalle;
@@ -600,7 +600,7 @@ class EntradaProductosController extends Controller
             $proveedor = Empresa::all();
             //dd($proveedor);exit();
             $tipo_cambio = $tipo_cambio_model->getTipoCambioUltimo();
-            $almacen = $almacen_model->getAlmacenByUser($id_user);
+            $almacen = $almacen_model->getAlmacenAll();
             $marca = $marca_model->getMarcaAll();
             $tipo_movimiento_='';
 		}
@@ -772,7 +772,7 @@ class EntradaProductosController extends Controller
             $producto_stock = [];
 
             foreach($entrada_producto as $detalle){
-                $stock = $kardex_model->getExistenciaProductoById($detalle->id_producto);
+                $stock = $kardex_model->getExistenciaProductoById($detalle->id_producto, $detalle->id_almacen_destino);
                 if(count($stock)>0){
                     $producto_stock[$detalle->id_producto] = $stock[0];
                 }else {
@@ -806,7 +806,7 @@ class EntradaProductosController extends Controller
             $producto_stock = [];
 
             foreach($entrada_producto as $detalle){
-                $stock = $kardex_model->getExistenciaProductoById($detalle->id_producto);
+                $stock = $kardex_model->getExistenciaProductoById($detalle->id_producto, $detalle->id_almacen_salida);
                 if(count($stock)>0){
                     $producto_stock[$detalle->id_producto] = $stock[0];
                 }else {
@@ -866,7 +866,7 @@ class EntradaProductosController extends Controller
             $marca = $marca_model->getMarcaAll();
             //$almacen__ = Almacene::getAlmacenById($entrada_producto->id_almacen);
             
-            $almacen = $almacen_model->getAlmacenByUser($id_user);
+            $almacen = $almacen_model->getAlmacenAll();
             //$tipo_movimiento_=1;
 		}else{
 			$entrada_producto_detalle = new EntradaProductoDetalle;
@@ -874,7 +874,7 @@ class EntradaProductosController extends Controller
             $proveedor = Empresa::all();
             //dd($proveedor);exit();
             $tipo_cambio = $tipo_cambio_model->getTipoCambioUltimo();
-            $almacen = $almacen_model->getAlmacenByUser($id_user);
+            $almacen = $almacen_model->getAlmacenAll();
             $marca = $marca_model->getMarcaAll();
             $tipo_movimiento_='';
 		}

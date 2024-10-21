@@ -26,9 +26,10 @@ class SalidaProductoDetalle extends Model
 
     function getDetalleProductoId($id){
 
-        $cad = "select spd.id,  ROW_NUMBER() OVER (PARTITION BY spd.id_salida_productos ) AS row_num, spd.numero_serie, spd.id_producto, p.codigo, spd.id_marca, p.id_unidad_medida, spd.fecha_vencimiento, spd.id_um, spd.id_estado_productos id_estado_bien, spd.cantidad, spd.cantidad, spd.cantidad, '12' stock_actual, spd.costo, spd.sub_total , spd.igv, spd.total 
+        $cad = "select spd.id,  ROW_NUMBER() OVER (PARTITION BY spd.id_salida_productos ) AS row_num, spd.numero_serie, spd.id_producto, p.codigo, spd.id_marca, p.id_unidad_medida, spd.fecha_vencimiento, spd.id_um, spd.id_estado_productos id_estado_bien, spd.cantidad, spd.cantidad, spd.cantidad, '12' stock_actual, spd.costo, spd.sub_total , spd.igv, spd.total, sp.id_almacen_salida 
         from salida_producto_detalles spd 
         inner join productos p on spd.id_producto = p.id
+        inner join salida_productos sp on spd.id_salida_productos = sp.id
         where id_salida_productos ='".$id."'
         and spd.estado='1'";
 
