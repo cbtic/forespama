@@ -706,7 +706,7 @@ function pdf_documento(){
                     </div>
                 </div>-->
                 <div style="text-align: center; font-size:16px; margin-top: 20px">
-                    <b>Orden de Compra</b>
+                    <b>Orden de Compra y Venta</b>
                 </div>
                 
                 <div class="card-body">
@@ -814,7 +814,7 @@ function pdf_documento(){
                         </div>
                         <div class="col-lg-2" id="almacen_salida_" style="color:green; font-weight:bold">
                             Almacen Origen
-                        </div> 
+                        </div>
                         <div class="col-lg-2" id="almacen_salida_select">
                             <select name="almacen_salida" id="almacen_salida" class="form-control form-control-sm" onchange="//actualizarSecciones(this)">
                                 <option value="">--Seleccionar--</option>

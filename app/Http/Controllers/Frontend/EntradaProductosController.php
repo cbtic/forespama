@@ -214,7 +214,55 @@ class EntradaProductosController extends Controller
                 $entradaProducto_detalle->save();
 
                 $producto = Producto::find($descripcion[$index]);
-                $kardex_buscar = Kardex::where("id_producto",$descripcion[$index])->orderBy('id', 'desc')->first();
+                if($request->almacen_salida!=""){
+                    $kardex_buscar = Kardex::where("id_producto",$descripcion[$index])->where("id_almacen_destino",$request->almacen_salida)->orderBy('id', 'desc')->first();
+                    $kardex = new Kardex;
+                    $kardex->id_producto = $descripcion[$index];
+                    $kardex->salidas_cantidad = $cantidad_ingreso[$index];
+                    $kardex->costo_salidas_cantidad = $precio_unitario[$index];
+                    $kardex->total_salidas_cantidad = $total[$index];
+                    if($kardex_buscar){
+                        $cantidad_saldo = $kardex_buscar->saldos_cantidad - $cantidad_ingreso[$index];
+                        $kardex->saldos_cantidad = $cantidad_saldo;
+                        $kardex->costo_saldos_cantidad = $producto->costo_unitario;
+                        $total_kardex = $cantidad_saldo * $producto->costo_unitario;
+                        $kardex->total_saldos_cantidad = $total_kardex;
+                    }else{
+                        $kardex->saldos_cantidad = $cantidad_ingreso[$index];
+                        $kardex->costo_saldos_cantidad = $producto->costo_unitario;
+                        $total_kardex = $cantidad_ingreso[$index] * $producto->costo_unitario;
+                        $kardex->total_saldos_cantidad = $total_kardex;
+                    }
+                    $kardex->id_entrada_producto = $entrada_producto->id;
+                    $kardex->id_almacen_destino = $request->almacen_salida;
+
+                    $kardex->save();
+                }
+                if($request->almacen!=""){
+                    $kardex_buscar = Kardex::where("id_producto",$descripcion[$index])->where("id_almacen_destino",$request->almacen)->orderBy('id', 'desc')->first();
+                    $kardex = new Kardex;
+                    $kardex->id_producto = $descripcion[$index];
+                    $kardex->entradas_cantidad = $cantidad_ingreso[$index];
+                    $kardex->costo_entradas_cantidad = $precio_unitario[$index];
+                    $kardex->total_entradas_cantidad = $total[$index];
+                    if($kardex_buscar){
+                        $cantidad_saldo = $kardex_buscar->saldos_cantidad + $cantidad_ingreso[$index];
+                        $kardex->saldos_cantidad = $cantidad_saldo;
+                        $kardex->costo_saldos_cantidad = $producto->costo_unitario;
+                        $total_kardex = $cantidad_saldo * $producto->costo_unitario;
+                        $kardex->total_saldos_cantidad = $total_kardex;
+                    }else{
+                        $kardex->saldos_cantidad = $cantidad_ingreso[$index];
+                        $kardex->costo_saldos_cantidad = $producto->costo_unitario;
+                        $total_kardex = $cantidad_ingreso[$index] * $producto->costo_unitario;
+                        $kardex->total_saldos_cantidad = $total_kardex;
+                    }
+                    $kardex->id_entrada_producto = $entrada_producto->id;
+                    $kardex->id_almacen_destino = $request->almacen;
+
+                    $kardex->save();
+
+                /*$kardex_buscar = Kardex::where("id_producto",$descripcion[$index])->orderBy('id', 'desc')->first();
                 //var_dump($kardex_buscar);exit();
                 $kardex = new Kardex;
                 $kardex->id_producto = $descripcion[$index];
@@ -237,8 +285,8 @@ class EntradaProductosController extends Controller
                 $kardex->id_entrada_producto = $entrada_producto->id;
                 $kardex->id_almacen_destino = $request->almacen;
 
-                $kardex->save();
-
+                $kardex->save();*/
+                }
             }
 
             if($valida_estado==true){
@@ -379,7 +427,57 @@ class EntradaProductosController extends Controller
                 $salida_producto_detalle->save();
 
                 $producto = Producto::find($descripcion[$index]);
-                $kardex_buscar = Kardex::where("id_producto",$descripcion[$index])->orderBy('id', 'desc')->first();
+
+                if($request->almacen_salida!=""){
+                    $kardex_buscar = Kardex::where("id_producto",$descripcion[$index])->where("id_almacen_destino",$request->almacen_salida)->orderBy('id', 'desc')->first();
+                    $kardex = new Kardex;
+                    $kardex->id_producto = $descripcion[$index];
+                    $kardex->entradas_cantidad = $cantidad_ingreso[$index];
+                    $kardex->costo_entradas_cantidad = $precio_unitario[$index];
+                    $kardex->total_entradas_cantidad = $total[$index];
+                    if($kardex_buscar){
+                        $cantidad_saldo = $kardex_buscar->saldos_cantidad - $cantidad_ingreso[$index];
+                        $kardex->saldos_cantidad = $cantidad_saldo;
+                        $kardex->costo_saldos_cantidad = $producto->costo_unitario;
+                        $total_kardex = $cantidad_saldo * $producto->costo_unitario;
+                        $kardex->total_saldos_cantidad = $total_kardex;
+                    }else{
+                        $kardex->saldos_cantidad = $cantidad_ingreso[$index];
+                        $kardex->costo_saldos_cantidad = $producto->costo_unitario;
+                        $total_kardex = $cantidad_ingreso[$index] * $producto->costo_unitario;
+                        $kardex->total_saldos_cantidad = $total_kardex;
+                    }
+                    $kardex->id_entrada_producto = $entrada_producto->id;
+                    $kardex->id_almacen_destino = $request->almacen;
+
+                    $kardex->save();
+                }
+                if($request->almacen!=""){
+                    $kardex_buscar = Kardex::where("id_producto",$descripcion[$index])->where("id_almacen_destino",$request->almacen)->orderBy('id', 'desc')->first();
+                    $kardex = new Kardex;
+                    $kardex->id_producto = $descripcion[$index];
+                    $kardex->entradas_cantidad = $cantidad_ingreso[$index];
+                    $kardex->costo_entradas_cantidad = $precio_unitario[$index];
+                    $kardex->total_entradas_cantidad = $total[$index];
+                    if($kardex_buscar){
+                        $cantidad_saldo = $kardex_buscar->saldos_cantidad + $cantidad_ingreso[$index];
+                        $kardex->saldos_cantidad = $cantidad_saldo;
+                        $kardex->costo_saldos_cantidad = $producto->costo_unitario;
+                        $total_kardex = $cantidad_saldo * $producto->costo_unitario;
+                        $kardex->total_saldos_cantidad = $total_kardex;
+                    }else{
+                        $kardex->saldos_cantidad = $cantidad_ingreso[$index];
+                        $kardex->costo_saldos_cantidad = $producto->costo_unitario;
+                        $total_kardex = $cantidad_ingreso[$index] * $producto->costo_unitario;
+                        $kardex->total_saldos_cantidad = $total_kardex;
+                    }
+                    $kardex->id_entrada_producto = $entrada_producto->id;
+                    $kardex->id_almacen_destino = $request->almacen;
+
+                    $kardex->save();
+                }
+
+                /*$kardex_buscar = Kardex::where("id_producto",$descripcion[$index])->orderBy('id', 'desc')->first();
 
                 $kardex = new Kardex;
                 $kardex->id_producto = $descripcion[$index];
@@ -401,7 +499,7 @@ class EntradaProductosController extends Controller
                 $kardex->id_salida_producto = $salida_producto->id;
                 $kardex->id_almacen_salida = $request->almacen_salida;
 
-                $kardex->save();
+                $kardex->save();*/
             }
 
             if($valida_estado==true){
@@ -905,7 +1003,55 @@ class EntradaProductosController extends Controller
                 $entradaProducto_detalle->save();
 
                 $producto = Producto::find($descripcion[$index]);
-                $kardex_buscar = Kardex::where("id_producto",$descripcion[$index])->orderBy('id', 'desc')->first();
+                if($request->almacen_salida!=""){
+                    $kardex_buscar = Kardex::where("id_producto",$descripcion[$index])->where("id_almacen_destino",$request->almacen_salida)->orderBy('id', 'desc')->first();
+                    $kardex = new Kardex;
+                    $kardex->id_producto = $descripcion[$index];
+                    $kardex->entradas_cantidad = $cantidad_ingreso[$index];
+                    $kardex->costo_entradas_cantidad = $precio_unitario[$index];
+                    $kardex->total_entradas_cantidad = $total[$index];
+                    if($kardex_buscar){
+                        $cantidad_saldo = $kardex_buscar->saldos_cantidad - $cantidad_ingreso[$index];
+                        $kardex->saldos_cantidad = $cantidad_saldo;
+                        $kardex->costo_saldos_cantidad = $producto->costo_unitario;
+                        $total_kardex = $cantidad_saldo * $producto->costo_unitario;
+                        $kardex->total_saldos_cantidad = $total_kardex;
+                    }else{
+                        $kardex->saldos_cantidad = $cantidad_ingreso[$index];
+                        $kardex->costo_saldos_cantidad = $producto->costo_unitario;
+                        $total_kardex = $cantidad_ingreso[$index] * $producto->costo_unitario;
+                        $kardex->total_saldos_cantidad = $total_kardex;
+                    }
+                    $kardex->id_entrada_producto = $entrada_producto->id;
+                    $kardex->id_almacen_destino = $request->almacen;
+
+                    $kardex->save();
+                }
+                if($request->almacen!=""){
+                    $kardex_buscar = Kardex::where("id_producto",$descripcion[$index])->where("id_almacen_destino",$request->almacen)->orderBy('id', 'desc')->first();
+                    $kardex = new Kardex;
+                    $kardex->id_producto = $descripcion[$index];
+                    $kardex->entradas_cantidad = $cantidad_ingreso[$index];
+                    $kardex->costo_entradas_cantidad = $precio_unitario[$index];
+                    $kardex->total_entradas_cantidad = $total[$index];
+                    if($kardex_buscar){
+                        $cantidad_saldo = $kardex_buscar->saldos_cantidad + $cantidad_ingreso[$index];
+                        $kardex->saldos_cantidad = $cantidad_saldo;
+                        $kardex->costo_saldos_cantidad = $producto->costo_unitario;
+                        $total_kardex = $cantidad_saldo * $producto->costo_unitario;
+                        $kardex->total_saldos_cantidad = $total_kardex;
+                    }else{
+                        $kardex->saldos_cantidad = $cantidad_ingreso[$index];
+                        $kardex->costo_saldos_cantidad = $producto->costo_unitario;
+                        $total_kardex = $cantidad_ingreso[$index] * $producto->costo_unitario;
+                        $kardex->total_saldos_cantidad = $total_kardex;
+                    }
+                    $kardex->id_entrada_producto = $entrada_producto->id;
+                    $kardex->id_almacen_destino = $request->almacen;
+
+                    $kardex->save();
+                }
+                /*$kardex_buscar = Kardex::where("id_producto",$descripcion[$index])->orderBy('id', 'desc')->first();
                 $kardex = new Kardex;
                 $kardex->id_producto = $descripcion[$index];
                 $kardex->entradas_cantidad = $cantidad_ingreso[$index];
@@ -927,7 +1073,7 @@ class EntradaProductosController extends Controller
                 $kardex->id_entrada_producto = $entrada_producto->id;
                 $kardex->id_almacen_destino = $request->almacen;
 
-                $kardex->save();
+                $kardex->save();*/
             }
 
             $orden_compra_model = new OrdenCompra;
@@ -1057,7 +1203,57 @@ class EntradaProductosController extends Controller
                 $salida_producto_detalle->save();
 
                 $producto = Producto::find($descripcion[$index]);
-                $kardex_buscar = Kardex::where("id_producto",$descripcion[$index])->orderBy('id', 'desc')->first();
+
+                if($request->almacen_salida!=""){
+                    $kardex_buscar = Kardex::where("id_producto",$descripcion[$index])->where("id_almacen_destino",$request->almacen_salida)->orderBy('id', 'desc')->first();
+                    $kardex = new Kardex;
+                    $kardex->id_producto = $descripcion[$index];
+                    $kardex->entradas_cantidad = $cantidad_ingreso[$index];
+                    $kardex->costo_entradas_cantidad = $precio_unitario[$index];
+                    $kardex->total_entradas_cantidad = $total[$index];
+                    if($kardex_buscar){
+                        $cantidad_saldo = $kardex_buscar->saldos_cantidad - $cantidad_ingreso[$index];
+                        $kardex->saldos_cantidad = $cantidad_saldo;
+                        $kardex->costo_saldos_cantidad = $producto->costo_unitario;
+                        $total_kardex = $cantidad_saldo * $producto->costo_unitario;
+                        $kardex->total_saldos_cantidad = $total_kardex;
+                    }else{
+                        $kardex->saldos_cantidad = $cantidad_ingreso[$index];
+                        $kardex->costo_saldos_cantidad = $producto->costo_unitario;
+                        $total_kardex = $cantidad_ingreso[$index] * $producto->costo_unitario;
+                        $kardex->total_saldos_cantidad = $total_kardex;
+                    }
+                    $kardex->id_entrada_producto = $entrada_producto->id;
+                    $kardex->id_almacen_destino = $request->almacen;
+
+                    $kardex->save();
+                }
+                if($request->almacen!=""){
+                    $kardex_buscar = Kardex::where("id_producto",$descripcion[$index])->where("id_almacen_destino",$request->almacen)->orderBy('id', 'desc')->first();
+                    $kardex = new Kardex;
+                    $kardex->id_producto = $descripcion[$index];
+                    $kardex->entradas_cantidad = $cantidad_ingreso[$index];
+                    $kardex->costo_entradas_cantidad = $precio_unitario[$index];
+                    $kardex->total_entradas_cantidad = $total[$index];
+                    if($kardex_buscar){
+                        $cantidad_saldo = $kardex_buscar->saldos_cantidad + $cantidad_ingreso[$index];
+                        $kardex->saldos_cantidad = $cantidad_saldo;
+                        $kardex->costo_saldos_cantidad = $producto->costo_unitario;
+                        $total_kardex = $cantidad_saldo * $producto->costo_unitario;
+                        $kardex->total_saldos_cantidad = $total_kardex;
+                    }else{
+                        $kardex->saldos_cantidad = $cantidad_ingreso[$index];
+                        $kardex->costo_saldos_cantidad = $producto->costo_unitario;
+                        $total_kardex = $cantidad_ingreso[$index] * $producto->costo_unitario;
+                        $kardex->total_saldos_cantidad = $total_kardex;
+                    }
+                    $kardex->id_entrada_producto = $entrada_producto->id;
+                    $kardex->id_almacen_destino = $request->almacen;
+
+                    $kardex->save();
+                }
+
+                /*$kardex_buscar = Kardex::where("id_producto",$descripcion[$index])->orderBy('id', 'desc')->first();
 
                 $kardex = new Kardex;
                 $kardex->id_producto = $descripcion[$index];
@@ -1079,7 +1275,7 @@ class EntradaProductosController extends Controller
                 $kardex->id_salida_producto = $salida_producto->id;
                 $kardex->id_almacen_salida = $request->almacen_salida;
 
-                $kardex->save();
+                $kardex->save();*/
             }
 
             /*if($valida_estado==true){

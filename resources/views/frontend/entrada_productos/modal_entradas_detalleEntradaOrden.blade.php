@@ -535,8 +535,8 @@ function cambiarDocumento(){
         });
         $('#almacen_').show();
         $('#almacen_select').show();
-        $('#almacen_salida_').hide();
-        $('#almacen_salida_select').hide();
+        $('#almacen_salida_').show();
+        $('#almacen_salida_select').show();
 
     }else if(tipo_movimiento==2){
 
@@ -562,8 +562,8 @@ function cambiarDocumento(){
             }
         });
 
-        $('#almacen_').hide();
-        $('#almacen_select').hide();
+        $('#almacen_').show();
+        $('#almacen_select').show();
         $('#almacen_salida_').show();
         $('#almacen_salida_select').show();
 
@@ -896,7 +896,21 @@ function pdf_documento(){
                                 ?>
                             </select>
                         </div>
-                        <div class="col-lg-2" id="almacen_">
+                        <div class="col-lg-2" id="almacen_salida_" style="color:green; font-weight:bold">
+                            Almacen Origen
+                        </div> 
+                        <div class="col-lg-2" id="almacen_salida_select">
+                            <select name="almacen_salida" id="almacen_salida" class="form-control form-control-sm" onchange="//actualizarSecciones(this)">
+                                <option value="">--Seleccionar--</option>
+                                <?php 
+                                foreach ($almacen as $row){?>
+                                    <option value="<?php echo $row->id ?>" <?php if($row->id==$orden_compra->id_almacen_salida)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                    <?php
+                                }
+                                ?>
+                            </select>
+                        </div>
+                        <div class="col-lg-2" id="almacen_" style="color:red; font-weight:bold">
                             Almacen Destino
                         </div> 
                         <div class="col-lg-2" id="almacen_select">
@@ -905,20 +919,6 @@ function pdf_documento(){
                                 <?php 
                                 foreach ($almacen as $row){?>
                                     <option value="<?php echo $row->id ?>" <?php if($row->id==$orden_compra->id_almacen_destino)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
-                                    <?php 
-                                }
-                                ?>
-                            </select>
-                        </div>
-                        <div class="col-lg-2" id="almacen_salida_">
-                            Almacen Salida
-                        </div> 
-                        <div class="col-lg-2" id="almacen_salida_select">
-                            <select name="almacen_salida" id="almacen_salida" class="form-control form-control-sm" onchange="//actualizarSecciones(this)">
-                                <option value="">--Seleccionar--</option>
-                                <?php 
-                                foreach ($almacen as $row){?>
-                                    <option value="<?php echo $row->id ?>" <?php if($row->id==$orden_compra->id_almacen_salida)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
                                     <?php 
                                 }
                                 ?>

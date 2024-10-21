@@ -137,7 +137,7 @@
 
                 @can('Orden Compra')
                 <li class="c-sidebar-nav-item">
-                    <x-utils.link :href="route('frontend.orden_compra.create')" class="c-sidebar-nav-link" :text="__('Orden Compra')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+                    <x-utils.link :href="route('frontend.orden_compra.create')" class="c-sidebar-nav-link" :text="__('Orden Compra y Venta')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
                 </li>
 				@endif
 				
@@ -178,8 +178,15 @@
 	@if(Gate::check('Consultas'))
         <li class="c-sidebar-nav-dropdown">
             <x-utils.link href="#" icon="c-sidebar-nav-icon cil-list" class="c-sidebar-nav-dropdown-toggle" :text="__('Consultas')" />
-
+            <ul class="c-sidebar-nav-dropdown-items">
+            @can('Inventario')
+                <li class="c-sidebar-nav-item">
+                    <x-utils.link :href="route('frontend.kardex.create_consulta')" class="c-sidebar-nav-link" :text="__('Consultas de Existencias')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+                </li>
+            @endif
+            </ul>
         </li>
+        
 	@endif
 	
 	@if(Gate::check('Mantenimiento Personas') || Gate::check('Mantenimiento Empresas') || Gate::check('Mantenimiento Vehiculos') || Gate::check('Mantenimiento Tablas Maestras') || Gate::check('Mantenimiento Conductores'))

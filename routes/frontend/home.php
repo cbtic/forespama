@@ -378,7 +378,10 @@ Route::post('entrada_productos/send_entrada_producto_directo', [EntradaProductos
 Route::get('productos/obtener_producto_stock/{id_producto}/{tipo_movimiento}', [ProductosController::class, 'obtener_producto_stock'])->name('productos.obtener_producto_stock');
 Route::get('entrada_productos/modal_detalle_producto_historial/{id}/{tipo}', [EntradaProductosController::class, 'modal_detalle_producto_historial'])->name('entrada_productos.modal_detalle_producto_historial');
 
-
+Route::get('kardex/create_consulta', [KardexController::class, 'create_consulta'])->name('kardex.create_consulta');
+Route::post('kardex/listar_kardex_existencia_ajax', [KardexController::class, 'listar_kardex_existencia_ajax'])->name('kardex.listar_kardex_existencia_ajax');
+Route::post('kardex/listar_kardex_existencia_producto_ajax', [KardexController::class, 'listar_kardex_existencia_producto_ajax'])->name('kardex.listar_kardex_existencia_producto_ajax');
+Route::get('kardex/exportar_listar_existencia/{consulta_almacen}', [KardexController::class, 'exportar_listar_existencia'])->name('kardex.exportar_listar_existencia');
 
 
 

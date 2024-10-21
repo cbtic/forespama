@@ -2,6 +2,10 @@
 <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" defer></script>
 <style type="text/css">
 
+#tblProductos tbody tr{
+		font-size:13px
+	}
+
 .table td.verde{
 	background:#CAE983  !important
 }
@@ -285,12 +289,6 @@ label.form-control-sm{
 
 </style>
 
-<script>
-    var almacenUsuario = @json($almacen_usuario);
-	//console.log(almacenUsuario);
-</script>
-
-
 @stack('before-scripts')
 @stack('after-scripts')
 
@@ -301,7 +299,7 @@ label.form-control-sm{
 @section('breadcrumb')
 <ol class="breadcrumb" style="padding-left:130px;margin-top:0px;background-color:#283659">
     <li class="breadcrumb-item text-primary">Inicio</li>
-    <li class="breadcrumb-item active">Registro de Orden de Compra y Venta</li>
+    <li class="breadcrumb-item active">Consultas de Existencias</li>
     </li>
 </ol>
 
@@ -327,12 +325,12 @@ label.form-control-sm{
 
         <div class="card-body">
 
-            <form class="form-horizontal" method="post" action="" id="frmOrdenCompra" autocomplete="off" enctype="multipart/form-data">
+            <form class="form-horizontal" method="post" action="" id="frmKardexConsulta" autocomplete="off" enctype="multipart/form-data">
 				
                 <div class="row">
                     <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12" style="margin-top:15px">
                         <h4 class="card-title mb-0 text-primary" style="font-size:22px">
-                            Orden de Compra y Venta
+							Consultas de Existencias
                         </h4>
                     </div>
                 </div>
@@ -351,117 +349,68 @@ label.form-control-sm{
 				
 				<div class="row" style="padding:20px 20px 0px 20px;">
 
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<select name="tipo_documento_bus" id="tipo_documento_bus" class="form-control form-control-sm">
-							<option value="">--Seleccionar Tipo Documento--</option>
+					<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+						<select name="consulta_producto_bus" id="consulta_producto_bus" class="form-control form-control-sm">
+							<option value="">--Seleccionar Producto--</option>
 							<?php
-							foreach ($tipo_documento as $row){?>
-								<option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
-								<?php 
+							foreach ($producto as $row) {
+							?>
+							<option value="<?php echo $row->id?>"><?php echo $row->codigo ." - ".$row->denominacion?></option>
+							<?php
 							}
 							?>
 						</select>
 					</div>
 
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<select name="empresa_compra_bus" id="empresa_compra_bus" class="form-control form-control-sm">
-							<option value="">--Seleccionar Empresa Compra--</option>
+					<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+						<select name="consulta_almacen_bus" id="consulta_almacen_bus" class="form-control form-control-sm">
+							<option value="">--Seleccionar Almacen--</option>
 							<?php
-							foreach ($proveedor as $row){?>
-								<option value="<?php echo $row->id ?>"><?php echo $row->razon_social ?></option>
-								<?php 
+							foreach ($almacen as $row) {
+							?>
+							<option value="<?php echo $row->id?>"><?php echo $row->denominacion?></option>
+							<?php
 							}
 							?>
 						</select>
 					</div>
-
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<select name="empresa_vende_bus" id="empresa_vende_bus" class="form-control form-control-sm">
-							<option value="">--Seleccionar Empresa Vende--</option>
-							<?php
-							foreach ($proveedor as $row){?>
-								<option value="<?php echo $row->id ?>"><?php echo $row->razon_social ?></option>
-								<?php 
-							}
-							?>
-						</select>
-					</div>
-
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-                        <input id="fecha_bus" name="fecha_bus" on class="form-control form-control-sm"  placeholder="Fecha">
-					</div>
-
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-                        <input id="numero_orden_compra_bus" name="numero_orden_compra_bus" on class="form-control form-control-sm"  placeholder="N&uacute;mero Orden Compra">
-					</div>
-
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<select name="almacen_origen_bus" id="almacen_origen_bus" class="form-control form-control-sm">
-							<option value="">--Seleccionar Almacen Origen--</option>
-							<?php
-							foreach ($almacen as $row){?>
-								<option value="<?php echo $row->id ?>"><?php echo $row->denominacion ?></option>
-								<?php 
-							}
-							?>
-						</select>
-					</div>
-
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<select name="almacen_destino_bus" id="almacen_destino_bus" class="form-control form-control-sm">
-							<option value="">--Seleccionar Almacen Destino--</option>
-							<?php
-							foreach ($almacen as $row){?>
-								<option value="<?php echo $row->id ?>"><?php echo $row->denominacion ?></option>
-								<?php 
-							}
-							?>
-						</select>
-					</div>
-
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<select name="situacion_bus" id="situacion_bus" class="form-control form-control-sm">
-							<option value="">--Seleccionar Situaci&oacute;n--</option>
-							<?php
-							foreach ($cerrado_orden_compra as $row){?>
-								<option value="<?php echo $row->codigo ?>" <?php if($row->codigo=='1')echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
-								<?php 
-							}
-							?>
-						</select>
-					</div>
-
-                    <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+					
+                    <!--<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
 						<select name="estado_bus" id="estado_bus" class="form-control form-control-sm">
 							<option value="">Todos</option>
 							<option value="1" selected="selected">Activo</option>
 							<option value="0">Eliminado</option>
 						</select>
-					</div>
+					</div>-->
+
                     
 					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12" style="padding-right:0px">
-						<input class="btn btn-warning pull-rigth" value="Buscar" type="button" id="btnBuscar" />
-						<input class="btn btn-success pull-rigth" value="Nuevo" type="button" id="btnNuevo" style="margin-left:15px" />
+						<input class="btn btn-warning pull-rigth" value="Buscar" type="button" id="btnBuscarConsulta" />
+						<input class="btn btn-sm btn-success float-rigth" value="Excel" name="excel" type="button" id="btnDescargar" style="padding-left:15px;padding-right:15px;margin-right:10px;" /> 
+						<!--<input class="btn btn-success pull-rigth" value="Nuevo" type="button" id="btnNuevo" style="margin-left:15px" />-->
 					</div>
 				</div>
 				
                 <div class="card-body">				
 
                     <div class="table-responsive">
-                    <table id="tblOrdenCompra" class="table table-hover table-sm">
+                    <table id="tblKardexConsulta" class="table table-hover table-sm">
                         <thead>
                         <tr style="font-size:13px">
                             <th>Id</th>
-							<th>Tipo Documento</th>
-							<th>Empresa Compra</th>
-							<th>Empresa Vende</th>
-                            <th>Fecha</th>
-							<th>N&uacute;mero OC</th>
-							<th>Almacen Origen</th>
-							<th>Almacen Destino</th>
-							<th>Situaci&oacute;n</th>
-							<th>Estado</th>
-                            <th>Acciones</th>
+							<th>C&oacute;digo</th>
+							<th>Producto</th>
+							<!--<th>Entradas</th>
+                            <th>Costo Entradas</th>
+                            <th>Total Entrada</th>
+							<th>Salidas</th>
+							<th>Costo Salidas</th>
+							<th>Total Salida</th>-->
+							<th>Saldos</th>
+							<!--<th>Costo saldos</th>
+                            <th>Total Saldos</th>-->
+							<th>Almacen</th>
+							<!--<th>Almacen Salida</th>-->
                         </tr>
                         </thead>
                         <tbody>
@@ -550,6 +499,6 @@ label.form-control-sm{
 
 	</script>
 
-	<script src="{{ asset('js/ordenCompra.js') }}"></script>
+	<script src="{{ asset('js/kardex.js') }}"></script>
 
 	@endpush

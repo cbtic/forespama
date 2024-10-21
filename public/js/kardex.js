@@ -1,4 +1,6 @@
 $(document).ready(function () {
+
+	activarBotonExcel();
 	
 	$('#btnBuscar').click(function () {
 		fn_ListarBusqueda();
@@ -13,6 +15,35 @@ $(document).ready(function () {
 	$("#producto_bus").select2({ width: '100%' });
 		
 	datatablenew();
+
+	$('#btnBuscarConsulta').click(function () {
+		if(consulta_producto_bus==""){
+			fn_ListarBusqueda_Consulta();
+		}
+		if(consulta_producto_bus!=""){
+			fn_ListarBusqueda_Consulta_Producto();
+		}
+		
+	});
+
+	$('#consulta_producto_bus').keypress(function(e){
+		if(e.which == 13) {
+			datatablenew_existencia();
+		}
+	});
+		
+	$('#consulta_almacen_bus').keypress(function(e){
+		if(e.which == 13) {
+			datatablenew_existencia();
+		}
+	});
+	
+	$("#consulta_producto_bus").select2({ width: '100%' });
+
+	$('#btnDescargar').on('click', function () {
+		DescargarArchivosExcel()
+
+	});
 
 });
 
@@ -195,7 +226,7 @@ function datatablenew(){
 				"bSortable": true,
 				"aTargets": [12]
 				},
-				{
+				/*{
 				"mRender": function (data, type, row) {
 					var almacen_salida = "";
 					if(row.almacen_salida!= null)almacen_salida = row.almacen_salida;
@@ -203,11 +234,264 @@ function datatablenew(){
 				},
 				"bSortable": true,
 				"aTargets": [13]
-				},
+				},*/
             ]
     });
 }
 
+function datatablenew_existencia(){
+                      
+    var oTable1 = $('#tblKardexConsulta').dataTable({
+        "bServerSide": true,
+        "sAjaxSource": "/kardex/listar_kardex_existencia_ajax",
+        "bProcessing": true,
+        "sPaginationType": "full_numbers",
+        //"paging":false,
+        "bFilter": false,
+        "bSort": false,
+        "info": true,
+		//"responsive": true,
+        "language": {"url": "/js/Spanish.json"},
+        "autoWidth": false,
+        "bLengthChange": true,
+        "destroy": true,
+        "lengthMenu": [[10, 50, 100, 200, 60000], [10, 50, 100, 200, "Todos"]],
+        "aoColumns": [
+                        {},
+        ],
+		"dom": '<"top">rt<"bottom"flpi><"clear">',
+        "fnDrawCallback": function(json) {
+            $('[data-toggle="tooltip"]').tooltip();
+        },
+
+        "fnServerData": function (sSource, aoData, fnCallback, oSettings) {
+
+            var sEcho           = aoData[0].value;
+            var iNroPagina 	= parseFloat(fn_util_obtieneNroPagina(aoData[3].value, aoData[4].value)).toFixed();
+            var iCantMostrar 	= aoData[4].value;
+			
+            var producto_existencia = $('#consulta_producto_bus').val();
+			var almacen_existencia = $('#consulta_almacen_bus').val();
+			
+			var _token = $('#_token').val();
+            oSettings.jqXHR = $.ajax({
+				"dataType": 'json',
+                //"contentType": "application/json; charset=utf-8",
+                "type": "POST",
+                "url": sSource,
+                "data":{NumeroPagina:iNroPagina,NumeroRegistros:iCantMostrar,
+						producto_existencia:producto_existencia,almacen_existencia:almacen_existencia,
+						_token:_token
+                       },
+                "success": function (result) {
+                    fnCallback(result);
+                },
+                "error": function (msg, textStatus, errorThrown) {
+                    //location.href="login";
+                }
+            });
+        },
+
+        "aoColumnDefs":
+            [	
+				{
+                "mRender": function (data, type, row) {
+                	var id = "";
+					if(row.id!= null)id = row.id;
+					return id;
+                },
+                "bSortable": false,
+                "aTargets": [0],
+				"className": "dt-center",
+				//"className": 'control'
+                },
+
+				{
+				"mRender": function (data, type, row) {
+					var codigo = "";
+					if(row.codigo!= null)codigo = row.codigo;
+					return codigo;
+				},
+				"bSortable": true,
+				"aTargets": [1]
+				},
+				
+				{
+                "mRender": function (data, type, row) {
+                	var denominacion = "";
+					if(row.denominacion!= null)denominacion = row.denominacion;
+					return denominacion;
+                },
+                "bSortable": true,
+                "aTargets": [2]
+                },
+
+				{
+				"mRender": function (data, type, row) {
+					var saldos_cantidad = "";
+					if(row.saldos_cantidad!= null)saldos_cantidad = row.saldos_cantidad;
+					return saldos_cantidad;
+				},
+				"bSortable": true,
+				"aTargets": [3]
+				},
+				
+                {
+                "mRender": function (data, type, row) {
+                	var almacen_kardex = "";
+					if(row.almacen_kardex!= null)almacen_kardex = row.almacen_kardex;
+					return almacen_kardex;
+                },
+                "bSortable": true,
+                "aTargets": [4]
+                },
+            ]
+    });
+}
+
+function datatablenew_existencia_producto(){
+                      
+    var oTable1 = $('#tblKardexConsulta').dataTable({
+        "bServerSide": true,
+        "sAjaxSource": "/kardex/listar_kardex_existencia_producto_ajax",
+        "bProcessing": true,
+        "sPaginationType": "full_numbers",
+        //"paging":false,
+        "bFilter": false,
+        "bSort": false,
+        "info": true,
+		//"responsive": true,
+        "language": {"url": "/js/Spanish.json"},
+        "autoWidth": false,
+        "bLengthChange": true,
+        "destroy": true,
+        "lengthMenu": [[10, 50, 100, 200, 60000], [10, 50, 100, 200, "Todos"]],
+        "aoColumns": [
+                        {},
+        ],
+		"dom": '<"top">rt<"bottom"flpi><"clear">',
+        "fnDrawCallback": function(json) {
+            $('[data-toggle="tooltip"]').tooltip();
+        },
+
+        "fnServerData": function (sSource, aoData, fnCallback, oSettings) {
+
+            var sEcho           = aoData[0].value;
+            var iNroPagina 	= parseFloat(fn_util_obtieneNroPagina(aoData[3].value, aoData[4].value)).toFixed();
+            var iCantMostrar 	= aoData[4].value;
+			
+            var producto_existencia = $('#consulta_producto_bus').val();
+			var almacen_existencia = $('#consulta_almacen_bus').val();
+			
+			var _token = $('#_token').val();
+            oSettings.jqXHR = $.ajax({
+				"dataType": 'json',
+                //"contentType": "application/json; charset=utf-8",
+                "type": "POST",
+                "url": sSource,
+                "data":{NumeroPagina:iNroPagina,NumeroRegistros:iCantMostrar,
+						producto_existencia:producto_existencia,almacen_existencia:almacen_existencia,
+						_token:_token
+                       },
+                "success": function (result) {
+                    fnCallback(result);
+                },
+                "error": function (msg, textStatus, errorThrown) {
+                    //location.href="login";
+                }
+            });
+        },
+
+        "aoColumnDefs":
+            [	
+				{
+                "mRender": function (data, type, row) {
+                	var id = "";
+					if(row.id!= null)id = row.id;
+					return id;
+                },
+                "bSortable": false,
+                "aTargets": [0],
+				"className": "dt-center",
+				//"className": 'control'
+                },
+
+				{
+				"mRender": function (data, type, row) {
+					var codigo = "";
+					if(row.codigo!= null)codigo = row.codigo;
+					return codigo;
+				},
+				"bSortable": true,
+				"aTargets": [1]
+				},
+				
+				{
+                "mRender": function (data, type, row) {
+                	var denominacion = "";
+					if(row.denominacion!= null)denominacion = row.denominacion;
+					return denominacion;
+                },
+                "bSortable": true,
+                "aTargets": [2]
+                },
+
+				{
+				"mRender": function (data, type, row) {
+					var saldos_cantidad = "";
+					if(row.saldos_cantidad!= null)saldos_cantidad = row.saldos_cantidad;
+					return saldos_cantidad;
+				},
+				"bSortable": true,
+				"aTargets": [3]
+				},
+				
+                {
+                "mRender": function (data, type, row) {
+                	var almacen_kardex = "";
+					if(row.almacen_kardex!= null)almacen_kardex = row.almacen_kardex;
+					return almacen_kardex;
+                },
+                "bSortable": true,
+                "aTargets": [4]
+                },
+            ]
+    });
+}
+
+function activarBotonExcel(){
+
+    var consulta_producto = $('#consulta_producto_bus').val().trim();
+	//alert(consulta_producto);
+	if(consulta_producto=="" || consulta_producto==null){
+		$('#btnDescargar').prop('disabled',false);
+	}else{
+		$('#btnDescargar').prop('disabled',true);
+	}
+}
+
+$('#consulta_producto_bus').on('change',function(){
+
+	activarBotonExcel();
+});
+
+
 function fn_ListarBusqueda() {
     datatablenew();
 };
+
+function fn_ListarBusqueda_Consulta() {
+    datatablenew_existencia();
+};
+
+function fn_ListarBusqueda_Consulta_Producto() {
+    datatablenew_existencia_producto();
+};
+
+function DescargarArchivosExcel(){
+		
+	var consulta_almacen = $('#consulta_almacen_bus').val();
+	if (consulta_almacen == "")consulta_almacen = 0;
+	
+	location.href = '/kardex/exportar_listar_existencia/'+consulta_almacen;
+}

@@ -450,7 +450,7 @@ class EmpresaController extends Controller
 				//$empresa->costo_estacionamiento = $request->costo_estacionamiento;
 				//$empresa->costo_volumen = $request->costo_volumen;
 				$empresa->save();
-				$ubicacion_trabajo = UbicacionTrabajo::firstOrCreate(['ubicacion_empresa_id' => $empresa->id, 'ubicacion_unidad_id' => 1, 'ubicacion_estado' => 'A']);
+				//$ubicacion_trabajo = UbicacionTrabajo::firstOrCreate(['ubicacion_empresa_id' => $empresa->id, 'ubicacion_unidad_id' => 1, 'ubicacion_estado' => 'A']);
 			}else{
 				$sw = false;
 				$msg = "El Ruc ingresado ya existe !!!";

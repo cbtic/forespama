@@ -32,6 +32,18 @@ class Kardex extends Model
 
     }
 
+    public function listar_kardex_existencia_ajax($p){
+
+        return $this->readFuntionPostgres('sp_listar_kardex_existencia_paginado',$p);
+
+    }
+
+    public function listar_kardex_existencia_producto_ajax($p){
+
+        return $this->readFuntionPostgres('sp_listar_kardex_existencia_producto_paginado',$p);
+
+    }
+
     public function readFuntionPostgres($function, $parameters = null){
 
         $_parameters = '';
