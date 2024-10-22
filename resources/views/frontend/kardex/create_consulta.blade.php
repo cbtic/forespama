@@ -386,7 +386,7 @@ label.form-control-sm{
                     
 					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12" style="padding-right:0px">
 						<input class="btn btn-warning pull-rigth" value="Buscar" type="button" id="btnBuscarConsulta" />
-						<input class="btn btn-sm btn-success float-rigth" value="Excel" name="excel" type="button" id="btnDescargar" style="padding-left:15px;padding-right:15px;margin-right:10px;" /> 
+						<input class="btn btn-success float-rigth" value="Excel" name="excel" type="button" id="btnDescargar" style="padding-left:15px;padding-right:15px;margin-right:10px;" /> 
 						<!--<input class="btn btn-success pull-rigth" value="Nuevo" type="button" id="btnNuevo" style="margin-left:15px" />-->
 					</div>
 				</div>

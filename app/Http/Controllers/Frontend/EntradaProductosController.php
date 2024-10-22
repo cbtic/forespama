@@ -671,7 +671,7 @@ class EntradaProductosController extends Controller
             $producto_stock = [];
 
             foreach($entrada_producto as $detalle){
-                $stock = $kardex_model->getExistenciaProductoById($detalle->id_producto);
+                $stock = $kardex_model->getExistenciaProductoById($detalle->id_producto, $datos[0]->id_almacen_destino);
                 if(count($stock)>0){
                     $producto_stock[$detalle->id_producto] = $stock[0];
                 }else {
@@ -714,7 +714,7 @@ class EntradaProductosController extends Controller
             $producto_stock = [];
 
             foreach($entrada_producto as $detalle){
-                $stock = $kardex_model->getExistenciaProductoById($detalle->id_producto);
+                $stock = $kardex_model->getExistenciaProductoById($detalle->id_producto, $datos[0]->id_almacen_salida);
                 if(count($stock)>0){
                     $producto_stock[$detalle->id_producto] = $stock[0];
                 }else {

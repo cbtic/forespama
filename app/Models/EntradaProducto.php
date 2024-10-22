@@ -51,7 +51,7 @@ class EntradaProducto extends Model
 
     function getEntradaById($id){
 
-        $cad = "select ep.id, 'INGRESO' tipo, ep.fecha_ingreso fecha_movimiento, tm.denominacion tipo_documento, tm2.denominacion unidad_origen, e.razon_social empresa_vende, e2.razon_social empresa_compra, ep.numero_comprobante, ep.fecha_comprobante, ep.estado, ep.created_at, tm3.denominacion moneda, ep.observacion, tm4.denominacion igv_compra, a.denominacion almacen, ep.codigo 
+        $cad = "select ep.id, 'INGRESO' tipo, ep.fecha_ingreso fecha_movimiento, tm.denominacion tipo_documento, tm2.denominacion unidad_origen, e.razon_social empresa_vende, e2.razon_social empresa_compra, ep.numero_comprobante, ep.fecha_comprobante, ep.estado, ep.created_at, tm3.denominacion moneda, ep.observacion, tm4.denominacion igv_compra, a.denominacion almacen, ep.codigo, ep.id_almacen_destino  
         from entrada_productos ep 
         inner join tabla_maestras tm on ep.id_tipo_documento = tm.codigo ::int and tm.tipo = '48'
         inner join tabla_maestras tm2 on ep.unidad_origen::int = tm2.codigo::int and tm2.tipo = '50'

@@ -28,7 +28,7 @@ class SalidaProducto extends Model
 
     function getSalidaById($id){
 
-        $cad = "select sp.id, 'SALIDA' tipo, sp.fecha_salida fecha_movimiento, tm.denominacion tipo_documento, tm2.denominacion unidad_origen, e.razon_social empresa_vende, e2.razon_social empresa_compra, sp.numero_comprobante, sp.fecha_comprobante, sp.estado, sp.created_at, tm3.denominacion moneda, sp.observacion, a.denominacion almacen, tm4.denominacion igv_compra, sp.codigo  
+        $cad = "select sp.id, 'SALIDA' tipo, sp.fecha_salida fecha_movimiento, tm.denominacion tipo_documento, tm2.denominacion unidad_origen, e.razon_social empresa_vende, e2.razon_social empresa_compra, sp.numero_comprobante, sp.fecha_comprobante, sp.estado, sp.created_at, tm3.denominacion moneda, sp.observacion, a.denominacion almacen, tm4.denominacion igv_compra, sp.codigo, sp.id_almacen_salida   
         from salida_productos sp 
         inner join tabla_maestras tm on sp.id_tipo_documento = tm.codigo ::int and tm.tipo = '49'
         inner join tabla_maestras tm2 on sp.unidad_destino ::int = tm2.codigo::int and tm2.tipo = '50'

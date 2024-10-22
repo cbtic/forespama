@@ -174,44 +174,32 @@ $(document).ready(function() {
             <table class="data" style="width:100%; background-color:white !important;border-spacing:1px; width: 100%; margin: 0 auto; font-size:12px; vertical-align:top">
                 <tbody>
                     <tr>
-                        <td class="td" style ="text-align: left; width: 15%;"><b>Fecha de Emisi&oacute;n:</b></td>
-                        <td class="td" style ="text-align: left; width: 15%;"><?php echo $fecha_movimiento;?></td>
-                        <td class="td" style ="text-align: left; width: 70%;"></td>
+                        <td class="td" style ="text-align: left; width: 10%;"><b>Fecha de Emisi&oacute;n:</b></td>
+                        <td class="td" style ="text-align: left; width: 20%;"><?php echo $fecha_movimiento;?></td>
+                        <td class="td" style ="text-align: left; width: 10%;"></td>
+                        <td class="td" style ="text-align: left; width: 10%;"><b>Origen:</b></td>
+                        <td class="td" style ="text-align: left; width: 20%;"><?php echo $unidad_origen;?></td>
                     </tr>
                     <tr>
-                        <td class="td" style ="text-align: left; width: 15%;"><b>Origen:</b></td>
-                        <td class="td" style ="text-align: left; width: 15%;"><?php echo $unidad_origen;?></td>
-                        <td class="td" style ="text-align: left; width: 70%;"></td>
+                        <td class="td" style ="text-align: left; width: 10%;"><b>Almacen Destino:</b></td>
+                        <td class="td" style ="text-align: left; width: 20%;"><?php echo $almacen;?></td>
+                        <td class="td" style ="text-align: left; width: 10%;"></td>
+                        <td class="td" style ="text-align: left; width: 10%;"><b>Empresa Compra:</b></td>
+                        <td class="td" style ="text-align: left; width: 20%;"><?php echo $empresa_compra;?></td>
                     </tr>
                     <tr>
-                        <td class="td" style ="text-align: left; width: 15%;"><b>Almacen Destino:</b></td>
-                        <td class="td" style ="text-align: left; width: 15%;"><?php echo $almacen;?></td>
-                        <td class="td" style ="text-align: left; width: 70%;"></td>
+                        <td class="td" style ="text-align: left; width: 10%;"><b>Empresa Vende:</b></td>
+                        <td class="td" style ="text-align: left; width: 20%;"><?php echo $empresa_vende;?></td>
+                        <td class="td" style ="text-align: left; width: 10%;"></td>
+                        <td class="td" style ="text-align: left; width: 10%;"><b>Tipo Moneda:</b></td>
+                        <td class="td" style ="text-align: left; width: 20%;"><?php echo $moneda;?></td>
                     </tr>
                     <tr>
-                        <td class="td" style ="text-align: left; width: 15%;"><b>Empresa Compra:</b></td>
-                        <td class="td" style ="text-align: left; width: 15%;"><?php echo $empresa_compra;?></td>
-                        <td class="td" style ="text-align: left; width: 70%;"></td>
-                    </tr>
-                    <tr>
-                        <td class="td" style ="text-align: left; width: 15%;"><b>Empresa Vende:</b></td>
-                        <td class="td" style ="text-align: left; width: 15%;"><?php echo $empresa_vende;?></td>
-                        <td class="td" style ="text-align: left; width: 70%;"></td>
-                    </tr>
-                    <tr>
-                        <td class="td" style ="text-align: left; width: 15%;"><b>Tipo Moneda:</b></td>
-                        <td class="td" style ="text-align: left; width: 15%;"><?php echo $moneda;?></td>
-                        <td class="td" style ="text-align: left; width: 70%;"></td>
-                    </tr>
-                    <tr>
-                        <td class="td" style ="text-align: left; width: 15%;"><b>Observaci&oacute;n:</b></td>
-                        <td class="td" style ="text-align: left; width: 15%;"><?php echo $observacion;?></td>
-                        <td class="td" style ="text-align: left; width: 70%;"></td>
-                    </tr>
-                    <tr>
-                        <td class="td" style ="text-align: left; width: 15%;"><b>IGV:</b></td>
-                        <td class="td" style ="text-align: left; width: 15%;"><?php echo $igv_compra;?></td>
-                        <td class="td" style ="text-align: left; width: 70%;"></td>
+                        <td class="td" style ="text-align: left; width: 10%;"><b>Observaci&oacute;n:</b></td>
+                        <td class="td" style ="text-align: left; width: 20%;"><?php echo $observacion;?></td>
+                        <td class="td" style ="text-align: left; width: 10%;"></td>
+                        <td class="td" style ="text-align: left; width: 10%;"><b>IGV:</b></td>
+                        <td class="td" style ="text-align: left; width: 20%;"><?php echo $igv_compra;?></td>
                     </tr>
                 </tbody>
             </table>

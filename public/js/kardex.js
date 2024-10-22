@@ -45,6 +45,8 @@ $(document).ready(function () {
 
 	});
 
+	activarBotonExcel();
+
 });
 
 function datatablenew(){
@@ -462,19 +464,18 @@ function datatablenew_existencia_producto(){
 function activarBotonExcel(){
 
     var consulta_producto = $('#consulta_producto_bus').val().trim();
+	var consulta_almacen = $('#consulta_almacen_bus').val().trim();
 	//alert(consulta_producto);
-	if(consulta_producto=="" || consulta_producto==null){
-		$('#btnDescargar').prop('disabled',false);
-	}else{
-		$('#btnDescargar').prop('disabled',true);
-	}
+	if (consulta_producto == "" && consulta_almacen != "") {
+        $('#btnDescargar').prop('disabled', false);
+    } else {
+        $('#btnDescargar').prop('disabled', true);
+    }
 }
 
-$('#consulta_producto_bus').on('change',function(){
-
-	activarBotonExcel();
+$('#consulta_producto_bus, #consulta_almacen_bus').on('change', function() {
+    activarBotonExcel();
 });
-
 
 function fn_ListarBusqueda() {
     datatablenew();

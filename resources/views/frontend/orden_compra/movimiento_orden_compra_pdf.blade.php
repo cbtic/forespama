@@ -170,24 +170,18 @@ $(document).ready(function() {
             <table class="data" style="width:100%; background-color:white !important;border-spacing:1px; width: 100%; margin: 0 auto; font-size:12px; vertical-align:top">
                 <tbody>
                     <tr>
-                        <td class="td" style ="text-align: left; width: 15%;"><b>Fecha de Emisi&oacute;n:</b></td>
+                        <td class="td" style ="text-align: left; width: 10%;"><b>Fecha de Emisi&oacute;n:</b></td>
                         <td class="td" style ="text-align: left; width: 20%;"><?php echo $fecha_orden_compra;?></td>
-                        <td class="td" style ="text-align: left; width: 65%;"></td>
-                    </tr>
-                    <tr>
-                        <td class="td" style ="text-align: left; width: 15%;"><b>Empresa Compra:</b></td>
+                        <td class="td" style ="text-align: left; width: 10%;"></td>
+                        <td class="td" style ="text-align: left; width: 10%;"><b>Empresa Compra:</b></td>
                         <td class="td" style ="text-align: left; width: 20%;"><?php echo $empresa_compra;?></td>
-                        <td class="td" style ="text-align: left; width: 65%;"></td>
                     </tr>
                     <tr>
-                        <td class="td" style ="text-align: left; width: 15%;"><b>Empresa Vende:</b></td>
+                        <td class="td" style ="text-align: left; width: 10%;"><b>Empresa Vende:</b></td>
                         <td class="td" style ="text-align: left; width: 20%;"><?php echo $empresa_vende;?></td>
-                        <td class="td" style ="text-align: left; width: 65%;"></td>
-                    </tr>
-                    <tr>
-                        <td class="td" style ="text-align: left; width: 15%;"><b>IGV:</b></td>
+                        <td class="td" style ="text-align: left; width: 10%;"></td>
+                        <td class="td" style ="text-align: left; width: 10%;"><b>IGV:</b></td>
                         <td class="td" style ="text-align: left; width: 20%;"><?php echo $igv;?></td>
-                        <td class="td" style ="text-align: left; width: 65%;"></td>
                     </tr>
                 </tbody>
             </table>

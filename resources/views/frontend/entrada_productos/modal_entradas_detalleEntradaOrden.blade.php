@@ -717,10 +717,15 @@ function fn_save_detalle_producto(){
         $('.loader').css("opacity","0.8").css("height",heightBrowser).html("<div id='Grd1_wrapper' class='dataTables_wrapper'><div id='Grd1_processing' class='dataTables_processing panel-default'>"+msgLoader+"</div></div>");
         $('.loader').show();
 
+        //$('#frmDetalleProductos select:disabled').prop('disabled', false);
+        //$('#frmDetalleProductos input[type="date"]:disabled').prop('disabled', false);
+
+        //var formData = $('#frmDetalleProductos').serialize();
+
         $.ajax({
                 url: "/entrada_productos/send_entrada_producto",
                 type: "POST",
-                data : $("#frmDetalleProductos").serialize(),
+                data :  $('#frmDetalleProductos').serialize(),
                 success: function (result) {
                     //alert(result.id)
                     datatablenew();
@@ -805,7 +810,8 @@ function pdf_documento(){
                             Tipo Movimiento
                         </div>
                         <div class="col-lg-2">
-                            <select name="tipo_movimiento" id="tipo_movimiento" class="form-control form-control-sm" onchange="cambiarDocumento();obtenerOrdenCompra()">
+                            <input type="hidden" name="tipo_movimiento" id="tipo_movimiento" value="<?php echo $tipo?>">
+                            <select name="tipo_movimiento_" id="tipo_movimiento_" class="form-control form-control-sm" onchange="cambiarDocumento();obtenerOrdenCompra()" disabled>
                                 <option value="">--Seleccionar--</option>
                                 <?php
                                 foreach ($tipo_movimiento as $row){?>
@@ -858,7 +864,8 @@ function pdf_documento(){
                         }*/
                         ?>
                         <div class="col-lg-2">
-                            <select name="unidad_origen" id="unidad_origen" class="form-control form-control-sm" onchange="//cambiarOrigen()">
+                            <input type="hidden" name="unidad_origen" id="unidad_origen" value="<?php echo $orden_compra->id_unidad_origen?>">
+                            <select name="unidad_origen_" id="unidad_origen_" class="form-control form-control-sm" onchange="//cambiarOrigen()" disabled>
                                 <option value="">--Seleccionar--</option>
                                 <?php
                                 foreach ($unidad_origen as $row){?>
@@ -872,7 +879,8 @@ function pdf_documento(){
                             Empresa Vende
                         </div>
                         <div class="col-lg-2" id="proveedor_select">
-                            <select name="proveedor" id="proveedor" class="form-control form-control-sm" onchange="">
+                            <input type="hidden" name="proveedor" id="proveedor" value="<?php echo $orden_compra->id_empresa_vende?>">
+                            <select name="proveedor_" id="proveedor_" class="form-control form-control-sm" onchange="" disabled>
                                 <option value="">--Seleccionar--</option>
                                 <?php
                                 foreach ($proveedor as $row){?>
@@ -886,7 +894,8 @@ function pdf_documento(){
                             Empresa Compra
                         </div>
                         <div class="col-lg-2" id="empresa_compra_select">
-                            <select name="empresa_compra" id="empresa_compra" class="form-control form-control-sm" onchange="">
+                            <input type="hidden" name="empresa_compra" id="empresa_compra" value="<?php echo $orden_compra->id_empresa_compra?>">
+                            <select name="empresa_compra_" id="empresa_compra_" class="form-control form-control-sm" onchange="" disabled>
                                 <option value="">--Seleccionar--</option>
                                 <?php
                                 foreach ($proveedor as $row){?>
@@ -900,7 +909,8 @@ function pdf_documento(){
                             Almacen Origen
                         </div> 
                         <div class="col-lg-2" id="almacen_salida_select">
-                            <select name="almacen_salida" id="almacen_salida" class="form-control form-control-sm" onchange="//actualizarSecciones(this)">
+                            <input type="hidden" name="almacen_salida" id="almacen_salida" value="<?php echo $orden_compra->id_almacen_salida?>">
+                            <select name="almacen_salida_" id="almacen_salida_" class="form-control form-control-sm" onchange="//actualizarSecciones(this)" disabled>
                                 <option value="">--Seleccionar--</option>
                                 <?php 
                                 foreach ($almacen as $row){?>
@@ -914,7 +924,8 @@ function pdf_documento(){
                             Almacen Destino
                         </div> 
                         <div class="col-lg-2" id="almacen_select">
-                            <select name="almacen" id="almacen" class="form-control form-control-sm" onchange="//actualizarSecciones(this)">
+                            <input type="hidden" name="almacen" id="almacen" value="<?php echo $orden_compra->id_almacen_destino?>">
+                            <select name="almacen_" id="almacen_" class="form-control form-control-sm" onchange="//actualizarSecciones(this)" disabled>
                                 <option value="">--Seleccionar--</option>
                                 <?php 
                                 foreach ($almacen as $row){?>
@@ -934,7 +945,8 @@ function pdf_documento(){
                             Moneda
                         </div>
                         <div class="col-lg-2">
-                            <select name="moneda" id="moneda" class="form-control form-control-sm" onchange="cambiarTipoCambio()">
+                            
+                            <select name="moneda_" id="moneda_" class="form-control form-control-sm" onchange="cambiarTipoCambio()" disabled>
                                 <option value="">--Seleccionar--</option>
                                 <?php
                                 $valorPorDefecto = isset($entrada_producto->id_moneda) ? $entrada_producto->id_moneda : $moneda[0]->codigo;
@@ -944,6 +956,7 @@ function pdf_documento(){
                                 }
                                 ?>
                             </select>
+                            <input type="hidden" name="moneda" id="moneda" value="<?php echo $valorPorDefecto?>">
                         </div>
                         <div class="col-lg-2" id="tipo_cambio_dolar_">
                             Tipo Cambio Dolar
@@ -955,7 +968,8 @@ function pdf_documento(){
                             IGV Compra
                         </div>
                         <div class="col-lg-2">
-                            <select name="igv_compra" id="igv_compra" class="form-control form-control-sm" onchange="">
+                            <input type="hidden" name="igv_compra" id="igv_compra" value="<?php echo $orden_compra->igv_compra?>">
+                            <select name="igv_compra_" id="igv_compra_" class="form-control form-control-sm" onchange="" disabled>
                                 <option value="">--Seleccionar--</option>
                                 <?php
                                 foreach ($igv_compra as $row){?>
@@ -969,7 +983,8 @@ function pdf_documento(){
                             Cerrado
                         </div>
                         <div class="col-lg-2">
-                            <select name="cerrado" id="cerrado" class="form-control form-control-sm" onchange="">
+                            <input type="hidden" name="cerrado" id="cerrado" value="<?php echo $entrada_producto->cerrado?>">
+                            <select name="cerrado_" id="cerrado_" class="form-control form-control-sm" onchange="" disabled>
                                 <option value="">--Seleccionar--</option>
                                 <?php
                                 foreach ($cerrado_entrada as $row){?>
