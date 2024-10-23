@@ -833,7 +833,7 @@ function obtenerBeneficiario(){
 	
 	
 	$.ajax({
-		url: '/agremiado/obtener_agremiado/' + tipo_documento + '/' + numero_documento,
+		url: '/persona/obtener_personas/' + tipo_documento + '/' + numero_documento,
 		dataType: "json",
 		success: function(result){
 
@@ -857,7 +857,7 @@ function obtenerBeneficiario(){
 
 				//alert(result.agremiado.id_tipo_documento);
 
-				if(tipo_documento == "79"){ //RUC
+				if(tipo_documento == "5"){ //RUC
 					$('#divNombreApellido').hide();
 					$('#divCodigoAfliado').hide();
 					$('#divFechaAfliado').hide();
@@ -876,7 +876,7 @@ function obtenerBeneficiario(){
 					$('#divCodigoAfliado').show();
 					$('#divFechaAfliado').show();
 					$('#divRucP').show();
-					$('#divCategoria').show();
+					//$('#divCategoria').show();
 			
 					$('#divDireccionEmpresa').hide();
 					$('#divRepresentanteEmpresa').hide();
@@ -886,7 +886,7 @@ function obtenerBeneficiario(){
 
 
 
-				if (tipo_documento == "79")//RUC
+				if (tipo_documento == "5")//RUC
 				{
 					$('#empresa_razon_social').val(result.agremiado.razon_social);
 					$('#empresa_direccion').val(result.agremiado.direccion);
@@ -895,7 +895,8 @@ function obtenerBeneficiario(){
 					$('#id_ubicacion').val(result.agremiado.id);
 
 					$('#nombre_').val(result.agremiado.razon_social);
-					$('#fecha_colegiatura').val(result.agremiado.representante);
+
+					//$('#fecha_colegiatura').val(result.agremiado.representante);
 					$('#id_tipo_documento_').val(tipo_documento);
 					$('#id_tipo_documento').val(tipo_documento);
 
@@ -938,10 +939,10 @@ function obtenerBeneficiario(){
 				} else {
 					var agremiado = result.agremiado.apellido_paterno + " " + result.agremiado.apellido_materno + ", " + result.agremiado.nombres;
 					$('#nombre_').val(agremiado);
-					$('#situacion_').val(result.agremiado.situacion);
-					$('#fecha_colegiatura').val(result.agremiado.actividad);
-					$('#fecha_').val(result.agremiado.fecha_colegiado);
-					$('#id_persona').val(result.agremiado.id_p);
+					//$('#situacion_').val(result.agremiado.situacion);
+					//$('#fecha_colegiatura').val(result.agremiado.actividad);
+					//$('#fecha_').val(result.agremiado.fecha_colegiado);
+					$('#id_persona').val(result.agremiado.id);
 					//$('#id_agremiado').val(result.agremiado.id);
 					$('#id_agremiado').val("0");
 					$('#ruc_p').val(result.agremiado.numero_ruc);
@@ -980,7 +981,7 @@ function obtenerBeneficiario(){
 		},
 		"error": function (msg, textStatus, errorThrown) {
 
-			if(tipo_documento == "85" || tipo_documento == "79"){
+			if(tipo_documento == "85" || tipo_documento == "5"){
 				Swal.fire("Numero de documento no fue registrado!");
 			}else{
 				confirma_accion();

@@ -93,6 +93,7 @@ Route::get('persona/obtener_distrito/{idDepartamento}/{idProvincia}', [PersonaCo
 Route::get('persona/obtener_persona/{tipo_documento}/{numero_documento}', [PersonaController::class, 'obtener_persona'])->name('persona.obtener_persona');
 Route::get('persona/obtener_persona_conductor/{tipo_documento}/{numero_documento}', [PersonaController::class, 'obtener_persona_conductor'])->name('persona.obtener_persona_conductor');
 
+Route::get('persona/obtener_personas/{tipo_documento}/{numero_documento}', [PersonaController::class, 'obtener_personas'])->name('persona.obtener_personas');
 
 
 Route::get('empresas', [EmpresaController::class, 'index'])->name('empresas');
