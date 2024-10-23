@@ -111,7 +111,40 @@ class PersonaController extends Controller
         $array["sw"] = $sw;
         $array["persona"] = $persona;
         echo json_encode($array);
+    }
 
+    public function obtener_personas($tipo_documento,$numero_documento){
+        $agremiado_model = new Persona;
+		if($tipo_documento=="87"){
+
+			//print_r("hi");exit();
+			$resultado = $agremiado_model->getAgremiadoLiquidacion($numero_documento);
+
+			if(isset($resultado->numero_documento)){
+				//echo("DNI");
+				$tipo_documento = $resultado->id_tipo_documento;
+				$numero_documento = $resultado->numero_documento;
+				//echo($resultado->numero_documento);
+
+			}else if(isset($resultado->ruc)){
+			//	echo("RUC");
+				$tipo_documento="79";
+				$numero_documento=$resultado->ruc;
+
+			}
+
+		}
+
+		//print_r($resultado);
+		//exit();
+        
+		$agremiado_model = new Persona;
+        //$valorizaciones_model = new Valorizacione;
+        $sw = true;
+        $agremiado = $agremiado_model->getPersona($tipo_documento,$numero_documento);
+        $array["sw"] = $sw;
+        $array["agremiado"] = $agremiado;
+        echo json_encode($array);
     }
 	
 	public function obtener_persona_conductor($tipo_documento,$numero_documento){
