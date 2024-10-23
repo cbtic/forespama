@@ -447,7 +447,7 @@ class EntradaProductosController extends Controller
                         $total_kardex = $cantidad_ingreso[$index] * $producto->costo_unitario;
                         $kardex->total_saldos_cantidad = $total_kardex;
                     }
-                    $kardex->id_entrada_producto = $entrada_producto->id;
+                    $kardex->id_salida_producto = $salida_producto->id;
                     $kardex->id_almacen_destino = $request->almacen;
 
                     $kardex->save();
@@ -471,7 +471,7 @@ class EntradaProductosController extends Controller
                         $total_kardex = $cantidad_ingreso[$index] * $producto->costo_unitario;
                         $kardex->total_saldos_cantidad = $total_kardex;
                     }
-                    $kardex->id_entrada_producto = $entrada_producto->id;
+                    $kardex->id_salida_producto = $salida_producto->id;
                     $kardex->id_almacen_destino = $request->almacen;
 
                     $kardex->save();
