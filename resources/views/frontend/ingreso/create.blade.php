@@ -286,6 +286,7 @@ label.form-control-sm{
 </style>
 
 
+
 @stack('before-scripts')
 @stack('after-scripts')
 
@@ -296,9 +297,10 @@ label.form-control-sm{
 @section('breadcrumb')
 <ol class="breadcrumb" style="padding-left:130px;margin-top:0px;background-color:#283659">
     <li class="breadcrumb-item text-primary">Inicio</li>
-    <li class="breadcrumb-item active">Estado de Cuenta</li>    
+    <li class="breadcrumb-item active">Registro de Solicitud</li>
     </li>
 </ol>
+
 @endsection
 
 <div class="loader"></div>
@@ -312,674 +314,499 @@ label.form-control-sm{
     </ol>
     -->
 
-
-
 <div class="justify-content-center">
     <!--<div class="container-fluid">-->
-    <a href="javascript:void(0)" onclick=""><i class="fa fa-bars fa-lg" style="position:absolute;right:50%;top:-24px;color:#FFFFFF"></i></a>
+
+	<a href="javascript:void(0)" onclick="ocultar_solicitud()"><i class="fa fa-bars fa-lg" style="position:absolute;right:50%;top:-24px;color:#FFFFFF"></i></a>
 
     <div class="card">
 
         <div class="card-body">
 
-            <form class="form-horizontal" method="post" action="{{ route('frontend.comprobante.edit')}}" id="frmValorizacion" name="frmValorizacion" autocomplete="off">
-
+            <form class="form-horizontal" method="post" action="" id="frmIngreso" autocomplete="off" enctype="multipart/form-data">
+				<!--
                 <div class="row">
-                    <div class="col-sm-12">
-
-                        <div class="row">
-
-                            <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12" style="margin-top:0px!important;text-align:center">
-                                <!--
-								<h4 class="card-title mb-0 text-primary">
-									Estado de cuenta
-								</h4>
-								-->
-                                <div style="position:relative">
-                                    <!--<img src="{{ $logged_in_user->picture }}" class="user-profile-image_" id="foto" width="80px" height="110px" style="position:absolute;top:-30px;left:35%" />-->
-                                    <img src="../img/profile-icon.png" id="foto" width="90px" height="110px" style="position:absolute;top:-30px;left:35%" />
-                                </div>
-                            </div>
-
-                            <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-                                <div class="form-group">
-                                    <br>
-
-                                    <?php
-                                    $readonly = '';
-                                    $saldo_inicial = "";
-                                    $total_recaudado = "";
-                                    $saldo_total = "";
-                                    $disabled = "disabled='disabled'";
-                                    if (isset($caja_usuario) && $caja_usuario->estado == 1) :
-                                        $readonly = "readonly='readonly'";
-                                        $disabled = "";
-                                        $saldo_inicial = number_format($caja_usuario->saldo_inicial, 2);
-                                        $total_recaudado = number_format($caja_usuario->total_recaudado, 2);
-                                        $saldo_total = number_format($caja_usuario->saldo_total, 2);
-                                    ?>
-                                        @hasanyrole('Administrator|Caja|Caja Jefe')
-                                        <input class="btn btn-warning btn-sm pull-right" value="CERRAR DE CAJA" name="cerrar" type="button" form="prestacionescrea" id="btnGuardar" onclick="aperturar('u')" />
-                                        @endhasanyrole
-
-                                    <?php else : ?>
-                                        @hasanyrole('Administrator|Caja|Caja Jefe')
-                                        <input class="btn btn-warning btn-sm pull-right" value="APERTURA DE CAJA" name="aperturar" type="button" form="prestacionescrea" id="btnGuardar" onclick="aperturar('i')" />
-                                        @endhasanyrole
-                                    <?php endif; ?>
-
-
-                                </div>
-                            </div>
-
-                           
-                            <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
-                                <div class="form-group">
-                                @hasanyrole('Administrator|Caja|Caja Jefe')
-
-                                    <label class="form-control-sm">Caja</label>
-
-                                    <?php
-                                    //$readonly='';
-                                    if (isset($caja_usuario) && $caja_usuario->estado == 1) :
-                                        //$readonly="readonly='readonly'";
-                                    ?>
-                                        <input type="text" name="caja" id="caja" readonly="" value="<?php echo $caja_usuario->caja ?>" placeholder="" class="form-control form-control-sm">
-                                        <input type="hidden" name="id_caja" id="id_caja" value="<?php echo $caja_usuario->id_caja ?>" />
-                                        <input type="hidden" name="id_caja_ingreso" id="id_caja_ingreso" value="<?php echo $caja_usuario->id ?>" />
-                                    <?php else : ?>
-                                        <select name="id_caja" id="id_caja" class="form-control form-control-sm">
-                                            <option value="0">Seleccionar</option>
-                                            <?php foreach ($caja as $row) : ?>
-                                                <option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
-                                            <?php endforeach; ?>
-                                        </select>
-                                    <?php endif; ?>
-                                    @endhasanyrole
-                                </div>
-                            </div>
-
-                            <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-                                <div class="form-group">
-                                @hasanyrole('Administrator|Caja|Caja Jefe')
-
-                                    <label class="form-control-sm">Saldo Caja</label>
-                                    <input type="text" name="saldo_inicial" id="saldo_inicial" <?php echo $readonly ?> value="<?php echo $saldo_inicial ?>" placeholder="" class="form-control form-control-sm text-right">
-                                    @endhasanyrole
-                                </div>
-                            </div>
-
-                            <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-                                <div class="form-group">
-                                @hasanyrole('Administrator|Caja|Caja Jefe')
-
-                                    <label class="form-control-sm">Total Recaudado</label>
-                                    <input type="text" name="total_recaudado" id="total_recaudado" value="<?php echo $total_recaudado ?>" readonly="" placeholder="" class="form-control form-control-sm text-right">
-                                    @endhasanyrole
-                                </div>
-                            </div>
-
-                            <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-                                <div class="form-group">
-                                @hasanyrole('Administrator|Caja|Caja Jefe')
-
-                                    <label class="form-control-sm">Saldo Total</label>
-                                    <input type="text" name="saldo_total" id="saldo_total" value="<?php echo $saldo_total ?>" readonly="" placeholder="" class="form-control form-control-sm text-right">
-                                    @endhasanyrole
-                                </div>
-                            </div>
-                            
-
-                        </div>
-
-                    </div><!--col-->
-                </div>
-
-                <div class="row justify-content-center">
-
-                    <div class="col col-sm-12 align-self-center">
-
-                        <!--<form class="form-horizontal" method="post" action="{{ route('frontend.ingreso.create')}}" id="frmValorizacion" name="frmValorizacion" autocomplete="off" >-->
-                        <input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
-
-                        <div class="row">
-
-                            <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-
-                                <div class="card">
-                                    <div class="card-header">
-                                        <strong>
-                                            Datos de la Persona__
-                                        </strong>
-                                    </div>
-
-                                    <div class="card-body">
-                                        <input type='hidden' name='txt_IdEmpresa' id="txt_IdEmpresa" value='{{Auth::user()->IdEmpresa}}'>
-
-
-                                        <div class="row">
-                                            <div class="col">
-                                                <div class="form-group">
-                                                    <?php ?>
-                                                    <label class="form-control-sm">Tipo Documento</label>
-
-                                                    <select name="tipo_documento_b" id="tipo_documento_b" class="form-control form-control-sm" onblur="validaTipoDocumento();">
-                                                        <?php
-                                                        foreach ($tipo_documento as $row) { ?>
-                                                            <option value="<?php echo $row->codigo ?>" <?php if ($row->codigo == "85") echo "selected='selected'" ?>><?php echo $row->denominacion ?></option>
-                                                        <?php
-                                                        }
-                                                        ?>
-                                                    </select>
-
-                                                    <input type="hidden" readonly name="tipo_documento" id="tipo_documento" value="85" class="form-control form-control-sm">
-                                                    <input type="hidden" readonly name="numero_documento" id="numero_documento" value="" class="form-control form-control-sm">
-
-                                                    
-
-                                                    <input type="hidden" readonly name="empresa_id" id="empresa_id" value="" class="form-control form-control-sm">
-                                                    <input type="hidden" readonly name="id_ubicacion" id="id_ubicacion" value="" class="form-control form-control-sm">
-                                                    <input type="hidden" readonly name="id_ubicacion_p" id="id_ubicacion_p" value="" class="form-control form-control-sm">
-                                                    <input type="hidden" readonly name="id_persona" id="id_persona" value="" class="form-control form-control-sm">
-                                                    <input type="hidden" readonly name="id_agremiado" id="id_agremiado" value="" class="form-control form-control-sm">
-                                                    <input type="hidden" readonly name="numero_documento_" id="numero_documento_" value="" class="form-control form-control-sm">
-                                                    <input type="hidden" readonly name="id_tipo_documento_" id="id_tipo_documento_" value="" class="form-control form-control-sm">
-                                                    <input type="hidden" readonly name="id_concepto" id="id_concepto" value="" class="form-control form-control-sm">
-                                                    <input type="hidden" readonly name="id_concepto_sel" id="id_concepto_sel" value="" class="form-control form-control-sm">
-
-                                                    <input type="hidden" readonly name="DescuentoPP" id="DescuentoPP" value="" class="form-control form-control-sm">
-
-                                                    <input type="hidden" readonly name="id_pronto_pago" id="id_pronto_pago" value="<?php echo !empty($pronto_pago->id) ? $pronto_pago->id : '0'  ?>" class="form-control form-control-sm">
-                                                    <input type="hidden" readonly name="periodo_pp" id="periodo_pp" value="<?php echo !empty($pronto_pago->periodo) ? $pronto_pago->periodo : '0'  ?>" class="form-control form-control-sm">
-                                                    <input type="hidden" readonly name="numero_cuotas_pp" id="numero_cuotas_pp" value="<?php echo !empty($pronto_pago->numero_cuotas) ? $pronto_pago->numero_cuotas : '0'  ?>" class="form-control form-control-sm">
-
-                                                    <input type="hidden" readonly name="id_concepto_pp" id="id_concepto_pp" value="<?php echo !empty($concepto->id) ? $concepto->id : '0'   ?>" class="form-control form-control-sm">
-                                                    <input type="hidden" readonly name="importe_pp" id="importe_pp" value="<?php echo !empty($concepto->importe) ? $concepto->importe : '0' ?>" class="form-control form-control-sm">
-                                                    <input type="hidden" readonly name="id_tipo_afectacion_pp" id="id_tipo_afectacion_pp" value="<?php echo !empty($concepto->id_tipo_afectacion) ? $concepto->id_tipo_afectacion : '0' ?>" class="form-control form-control-sm">
-
-                                                    <input type="hidden" readonly name="SelFracciona" id="SelFracciona" value="" class="form-control form-control-sm">
-
-                                                    <input type="hidden" readonly name="Exonerado" id="Exonerado" value="" class="form-control form-control-sm">
-
-                                                    <input type="hidden" readonly name="mes_deuda" id="mes_deuda" value="" class="form-control form-control-sm">
-                                                    <input type="hidden" readonly name="anio_deuda" id="anio_deuda" value="" class="form-control form-control-sm">
-
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="row">
-                                            <div class="col">
-                                                <!--
-                            <div class="form-group">
-                                <label class="form-control-sm">N° Documento</label>
-                                <input type="text" name="numero_documento" id="numero_documento" onblur="obtenerBeneficiario()" value="{{old('clinum')}}"  placeholder="" class="form-control form-control-sm" />
-
-                                <input class="form-control input-sm text-uppercase" type="text" name="txtBusNroDocF" id="txtBusNroDocF" autocomplete="OFF" maxlength="12" required="" tabindex="0" disabled="">
-                            </div>
-                                        -->
-                                                <label><small>Nro. de Documento</small></label>
-                                                <div class="input-group input-group-sm">
-                                                    <!--
-                                <input type="text" name="numero_documento" id="numero_documento" onblur="obtenerBeneficiario()" value="{{old('clinum')}}"  placeholder="" class="form-control form-control-sm" />
-                                        -->
-                                                    <input class="form-control input-sm text-uppercase" type="text" name="numero_documento_b" id="numero_documento_b" autocomplete="OFF" maxlength="20" required="" tabindex="0">
-                                                    <span class="input-group-btn">
-                                                        <button class="btn btn-success btn-sm" type="button" id="btnCon" onClick="obtenerBeneficiario()" tabindex="0"><i class="glyphicon glyphicon-search"></i> Buscar </button>
-                                                    </span>
-
-                                                    <span class="input-group-btn">
-                                                        <button class="btn btn-info btn-sm" type="button" id="btnBusPer" onClick="modal_consulta_persona()" tabindex="0"><i class="glyphicon glyphicon-search"></i> ... </button>
-                                                    </span>
-
-                                                </div>
-                                            </div>
-
-                                        </div>
-
-                                        <div class="row" id="divNombreApellido">
-                                            <div class="col">
-                                                <div class="form-group">
-                                                    <label class="form-control-sm">Nombres y Apellidos</label>
-                                                    <!--
-                                                    <input type="text" readonly name="nombre_1" id="nombre_1" value="{{old('clinom')}}" class="form-control form-control-sm" />
-                                                    -->
-
-                                                    <textarea rows="2" readonly name="nombre_" id="nombre_" class="auto_height" style="background-color: #ced5d9;" onInput="auto_height(this)"></textarea>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div id="divTarjeta" class="alert alert-danger" style="padding:6px 5px;display:none">
-                                            Tarjeta: <span id="numero_tarjeta" class="alert-link"></span>                                            
-                                        </div>
-
-                                        <div class="row" id="divCategoria" style="display:none">
-                                            <div class="col">
-                                                <div class="form-group">
-                                                    <label class="form-control-sm">Categoría</label>
-                                                    <input type="text" readonly name="categoria" id="categoria" value="{{old('clinom')}}" class="form-control form-control-sm">
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="row" id="divCodigoAfliado" style="display:none">
-                                            <div class="col">
-                                                <div class="form-group">
-                                                    <label class="form-control-sm">Situación</label>
-                                                    <input type="text" readonly name="situacion_" id="situacion_" value="{{old('clinom')}}" class="form-control form-control-sm" />
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="row" id="divEmpresaRazonSocial" style="display:none">
-                                            <div class="col">
-                                                <div class="form-group">
-                                                    <label class="form-control-sm">Razón Social</label>
-                                                    <input type="text" readonly name="empresa_razon_social" id="empresa_razon_social" value="{{old('clinom')}}" class="form-control form-control-sm">
-                                                </div>
-                                            </div>
-                                        </div>
-
-
-                                        <div class="row" id="divDireccionEmpresa" style="display:none">
-                                            <div class="col">
-                                                <div class="form-group">
-                                                    <label class="form-control-sm">Direcci&oacute;n</label>
-                                                    <input type="text" readonly name="empresa_direccion" id="empresa_direccion" value="{{old('clinom')}}" class="form-control form-control-sm">
-
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="row" id="divRepresentanteEmpresa" style="display:none">
-                                            <div class="col">
-                                                <div class="form-group">
-                                                    <label class="form-control-sm">Representante</label>
-                                                    <input type="text" readonly name="empresa_representante" id="empresa_representante" value="{{old('clinom')}}" class="form-control form-control-sm">
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="row" id="divFechaAfliado" style="display:none">
-                                            <div class="col">
-                                                <div class="form-group">
-                                                    <label class="form-control-sm">Actividad Gremial</label>
-                                                    <input type="text" readonly name="fecha_colegiatura" id="fecha_colegiatura" value="{{old('clinom')}}" class="form-control form-control-sm">
-                                                </div>
-                                            </div>
-                                        </div>
-
-
-                                        <div class="row" id="divRucP">
-                                            <div class="col">
-                                                <div class="form-group">
-                                                    <label class="form-control-sm">RUC Personal</label>
-                                                    <input type="text" readonly name="ruc_p" id="ruc_p" value="{{old('clinom')}}" class="form-control form-control-sm">
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="row" id="divRucP">
-                                            <div class="col">
-                                                <div class="form-group">
-                                                    <label class="form-control-sm">Correo Electrónico</label>
-                                                    <input type="text" readonly name="email" id="email" value="{{old('clinom')}}" class="form-control form-control-sm">
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        @hasanyrole('Administrator|Caja|Caja Jefe')
-                                                                                
-                                        <div class="row">
-                                            <div class="col">
-                                                <button class="btn btn-success btn-sm" type="button" name="btnOtroConcepto" id="btnOtroConcepto" onClick="modal_otro_pago()" tabindex="0" disabled><i class="glyphicon glyphicon-search"></i> Pago Otros Conceptos </button>
-                                            </div>
-                                        </div>
-<!--
-                                        <div class="row" id="divBeneficiarioRuc" style="padding:6px;display:none">
-                                            <div class="col">
-                                                <button class="btn btn-success btn-sm" type="button" name="btnBeneficiario" id="btnBeneficiario" onClick="modal_beneficiario_()" tabindex="0" disabled><i class="glyphicon glyphicon-search"></i> Agregar Beneficiario</button>
-                                            </div>
-                                        </div>
-                                                    -->
-                                        @endhasanyrole
-
-
-                                        <!--</div>-->
-
-
-
-                                    </div>
-
-                                </div>
-                            </div>
-
-                            <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12" style="padding:0px">
-
-                                <div class="card">
-                                    <div class="card-header">
-                                        <strong>
-                                            <!--@lang('labels.frontend.asistencia.box_asistencia')-->
-                                            Registro de Estado de Cuenta
-                                            @hasanyrole('administrator')
-                                            <input class="btn btn-warning btn-sm pull-right" value="DUDOSO" type="button" id="btnEstado" onclick="guardarEstado('D')" style="margin-left:20px" /> 
-                                            @endhasanyrole
-                                        </strong>
-                                    </div>
-
-                                    <div class="card-body">
-
-
-                                        <div class="row">
-
-                                            <div class="col-lg-2 col-md-3 col-sm-12 col-xs-12" style="display:none">
-                                                <div class="form-group form-group-sm">
-                                                    <select id="cboPeriodo_b" name="cboPeriodo_b" class="form-control form-control-sm" onchange="cargarValorizacion()">
-                                                    </select>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-lg-2 col-md-3 col-sm-12 col-xs-12" style="display:none">
-                                                <div class="form-group form-group-sm">
-                                                    <select id="cboMes_b" name="cboMes_b" class="form-control form-control-sm" onchange="cargarValorizacion()">
-                                                    </select>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-lg-2 col-md-3 col-sm-12 col-xs-12" style="display:none">
-                                                <div class="form-group form-group-sm">
-                                                    <select name="cboTipoCuota_b" id="cboTipoCuota_b" class="form-control form-control-sm" onchange="cargarValorizacion()">
-                                                        <option value="" selected>Todas cuotas</option>
-                                                        <option value="1">Cuotas vencidas</option>
-                                                        <option value="0">Cuotas pendientes</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-
-
-
-                                            <div class="col-lg-5 col-md-3 col-sm-12 col-xs-12" style="display:none">
-                                                <div class="form-group form-group-sm">
-                                                    
-                                                    <select id="cboTipoConcepto_b" name="cboTipoConcepto_b" class="form-control form-control-sm" onchange="cargarValorizacion()"><br />
-
-                                                    <input type="checkbox" id="cbox2" value="1" style="display:none" onchange="cargarValorizacion()"/>
-                                                    <label for="cbox2" id="lblFrac" style="display:none">Incluir Fraccionamiento y Cuota Gremial Vencido</label>
-
-                                                    
-                                                    
-                                                    <!--
-                                                    <select class="form-control form-control-sm" id="cboTipoConcepto_b" data-placeholder="Seleccionar Concepto" onchange="cargarValorizacion()" multiple >
-                                                    -->
-
-                                                    </select>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-lg-1 col-md-3 col-sm-12 col-xs-12" style="display:none">
-                                                <div class="form-group form-group-sm">
-                                                    <input class="form-check-input" type="checkbox"  id="chkExonerado"  value="false" onchange="">
-                                                    <label class="form-check-label">
-                                                        Exonerados
-                                                    </label>
-                                                </div>
-                                            </div>
-
-
-                                        </div>
-
-                                        <?php $seleccionar_todos = "style='display:block'"; ?>
-
-
-                                        <div class="table-responsive overflow-auto" style="max-height: 500px">
-                                            <table id="tblValorizacion" class="table table-hover table-sm">
-                                                <thead>
-                                                    <tr style="font-size:13px">
-                                                        <!--<th class="text-right" width="5%">-->
-                                                        <th width="5%" style="text-align: center; padding-bottom:0px;padding-right:5px;margin-bottom: 0px; vertical-align: middle">
-                                                            <input type="checkbox" name="select_all" value="1" id="example-select-all" <?php echo $seleccionar_todos ?>>
-                                                        </th>
-                                                        <th width="5%">Nro</th>
-                                                        <th width="10%">Fecha</th>
-                                                        <th width="40%">Concepto</th>
-                                                        <th width="10%">Fecha Vencimiento</th>                                                        
-                                                        <th width="10%" class="text-center">P.Unit.</th>                                                        
-                                                        <th width="10%" class="text-center">Cantidad</th>
-                                                        <th width="10%"class="text-center">Total</th>
-                                                        <!--<th>Estado</th>-->
-                                                        <!--<th>Opc</th>-->
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                </tbody>
-                                                <tfoot>
-
-
-                                                </tfoot>
-                                            </table>
-                                        </div><!--table-responsive-->
-
-                                        <div class="table-responsive overflow-auto" style="max-height: 500px">
-
-                                            <table id="tbl" class="table table-hover table-sm">
-
-                                                <tfoot>
-                                                    <tr>
-                                                        <td style="padding-bottom:0px;margin-bottom:0px">
-                                                            <select name="cboFilas" id="cboFilas" class="form-control form-control-sm" onchange="cargarValorizacion()">
-                                                                <option value="" selected='selected'>Todos</option>
-                                                                <option value="20">20</option>
-                                                                <option value="60">60</option>
-                                                                <option value="100">100</option>
-
-                                                            </select>
-
-                                                        <th colspan="4" style="text-align:right;padding-right:55px!important;padding-bottom:0px;margin-bottom:0px">Deuda Total</th>
-                                                        <td style="padding-bottom:0px;margin-bottom:0px">
-                                                            <input type="text" readonly name="deudaTotales" id="deudaTotales" value="0" class="form-control form-control-sm text-right">
-                                                        </td>
-                                                        </td>
-                                                    </tr>
-
-
-                                                    <tr>
-                                                        <td style="padding-bottom:0px;margin-bottom:0px">
-                                                        <th colspan="4" style="text-align:right;padding-right:55px!important;padding-bottom:0px;margin-bottom:0px">Descuento</th>
-                                                        <td style="padding-bottom:0px;margin-bottom:0px">
-                                                            <input type="text" readonly name="totalDescuento" id="totalDescuento" value="0" class="form-control form-control-sm text-right">
-                                                        </td>
-                                                        </td>
-                                                    </tr>
-
-                                                    <tr>
-                                                        <td style="padding-bottom:0px;margin-bottom:0px">
-
-                                                        <th colspan="4" style="text-align:right;padding-right:55px!important;padding-bottom:0px;margin-bottom:0px">Total a Pagar</th>
-                                                        <td style="padding-bottom:0px;margin-bottom:0px">
-                                                            <input type="text" readonly name="total" id="total" value="0" class="form-control form-control-sm text-right">
-                                                            <input type="hidden" readonly name="stotal" id="stotal" value="" class="form-control form-control-sm">
-                                                            <input type="hidden" readonly name="igv" id="igv" value="" class="form-control form-control-sm">
-                                                            <input type="hidden" readonly name="idConcepto" id="idConcepto" value="" class="form-control form-control-sm">
-
-                                                        </td>
-                                                        </td>
-                                                    </tr>
-
-
-
-
-                                                </tfoot>
-                                            </table>
-
-
-                                        </div><!--table-responsive-->
-
-                                        @hasanyrole('Administrator|Caja|Caja Jefe')
-                                        <div class="row">
-                                            <div class="col">
-                                                <div class="form-group mb-0 clearfix">
-                                                    <input type="hidden" name="TipoF" id="TipoF" value="" />
-                                                    <input type="hidden" name="Trans" id="Trans" value="FA" />
-                                                    <input class="btn btn-success pull-rigth" value="FACTURA" type="button" id="btnFactura" disabled="disabled" onclick="enviarTipo(1)" />
-                                                    <input class="btn btn-info pull-rigth" value="BOLETA" type="button" id="btnBoleta" disabled="disabled" onclick="enviarTipo(2)" />
-                                                    <input class="btn btn-info pull-rigth" value="BOLETA" type="button" id="btnTicket" disabled="disabled" onclick="enviarTipo(3)" style="display:none" />
-                                                    
-                                                    <input class="btn btn-danger pull-rigth" value="ANULAR VAL" type="button" id="btnAnulaVal" disabled="disabled" onclick="anular_valorizacion()" />
-                                                
-                                                    <input class="btn btn-warning pull-right" value="PRONTO PAGO" type="button" id="btnDescuento" disabled="disabled" onclick="AplicarDescuento()" style="display:none" />
-
-                                                    <input class="btn btn-primary pull-rigth" value="FRACCIONAR" type="button" id="btnFracciona" disabled="disabled" onclick="modal_fraccionamiento()" style="display:none" />
-
-                                                    <input style="display:none" class="btn btn-danger pull-rigth" value="ANULAR FRAC" type="button" id="btnAnulaFrac" disabled="disabled" onclick="anular_fraccionamiento()" style="display:none"/>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row" style="padding-top:20px; display:none" >
-                                            <div class="col">
-                                                <div class="form-group mb-0 clearfix">
-
-                                                    <input class="btn btn-success pull-rigth" value="REPORTE DEUDAS" type="button" id="btnReporteDeuda" disabled="disabled" onclick="reporte_deudas()" />
-
-                                                    <input class="btn btn-success pull-rigth" value="HISTORIAL DE PAGOS" type="button" id="btnReporteDeudaTotal" disabled="disabled" onclick="reporte_deudas_total()" />
-
-                                                    <input class="btn btn-success pull-rigth" value="REPORTE FRACCIONAMIENTO" type="button" id="btnReporteFraccionamiento" disabled="disabled" onclick="reporte_fraccionamiento()" />
-
-                                                </div><!--form-group-->
-                                            </div><!--col-->
-                                        </div><!--row-->
-
-                                        <br />
-
-                                        @endhasanyrole
-
-
-
-                                        @hasanyrole('Administrator|Asuntos Gremiales|Asuntos Gremiales Jefe')
-                                            <?php $rol_exonera = 1;?>
-                                            <div class="row">
-                                                <div class="col">
-                                                    <div class="form-group mb-0 clearfix">
-
-                                                        <input style="display:none" class="btn btn-warning pull-rigth" value="EXONERAR" type="button" id="btnExonerarS" disabled="disabled" onclick="modal_exonerar()"/>
-                                                        <input style="display:none" class="btn btn-success pull-rigth" value="NO EXONERAR" type="button" id="btnExonerarN" disabled="disabled" onclick="fn_exonerar_valorizacion()"/>
-                                                        
-                                                    </div><!--form-group-->
-                                                </div><!--col-->
-                                            </div><!--row-->
-                                        @else
-                                            <?php $rol_exonera = 0;?>
-                                        @endhasanyrole
-
-                                        <input type="hidden" name="rol_exonera" id="rol_exonera" value="<?php echo $rol_exonera?>" />
-
-                                        <div class="row">
-                                            <div class="col">
-                                                <div class="form-group mb-0 clearfix">
-
-
-                                                </div><!--form-group-->
-                                            </div><!--col-->
-                                        </div><!--row-->
-
-
-                                    </div><!--card-body-->
-                                </div><!--card-->
-                                <br />
-                            </div>
-
-
-                            <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
-
-                                <div class="card">
-                                    <div class="card-header">
-                                        <strong>
-                                            Registro de Pagos
-                                        </strong>
-                                    </div>
-
-                                    <div class="card-body">
-                                        <div class="table-responsive overflow-auto" style="max-height: 500px">
-                                            <table id="tblPago" class="table table-hover table-sm">
-                                                <thead>
-                                                    <tr style="font-size:13px">
-                                                        <th>Fecha</th>
-
-                                                        <th>Serie</th>
-                                                        <th>Numero</th>
-                                                        <th>Concepto</th>
-                                                        <th class="sum">Monto</th>
-                                                        <th>Pago</th>
-                                                        <th>Deuda</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-
-                        </div>
-
-                    </div><!--col-->
-
-
-                    <div id="openOverlayOpc" class="modal fade" role="dialog">
-                        <div class="modal-dialog">
-
-                            <div id="id_content_OverlayoneOpc" class="modal-content" style="padding: 0px;margin: 0px">
-
-                                <div class="modal-body" style="padding: 0px;margin: 0px">
-
-                                    <div id="diveditpregOpc"></div>
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
+                    <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12" style="margin-top:15px">
+                        <h4 class="card-title mb-0 text-primary" style="font-size:22px">
+                            Registro Solicitudes
+                        </h4>
                     </div>
                 </div>
+				-->
+                <div class="row justify-content-center" style="margin-top:15px">
 
-            </form>
+                    <input type="hidden" name="flag_ocultar" id="flag_ocultar" value="0">
+
+					<div class="col col-sm-12 align-self-center">
+
+
+                        <input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
+
+                        <!--<input type="hidden" name="estado" id="estado" value="0">-->
+						
+						<input type="hidden" name="id_empresa_transportista" id="id_empresa_transportista" value="0">
+						<input type="hidden" name="id_vehiculos" id="id_vehiculos" value="0">
+						<input type="hidden" name="id_conductores" id="id_conductores" value="0">
+						
+                        <div class="row" id="divSolicitud">
+
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <div id="" class="row">
+                                    <div class="col-lg-7 col-md-7 col-sm-12 col-xs-12">
+
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <div id="" class="row">
+                                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                        <strong>
+                                                            <!--@lang('labels.frontend.asistencia.box_asistencia')-->
+                                                            Ingreso de Camiones
+                                                        </strong>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="card-body" style="margin-top:15px;margin-bottom:15px">
+
+												<div style="clear:both"></div>
+                                                <div class="row">
+												
+													<!--
+													<div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
+														<label class="form-control-sm">Id Ingreso</label>
+														<input type="text" name="id_proyecto" id="id_proyecto"
+															value="" readonly="readonly" placeholder="" class="form-control form-control-sm" >
+													</div>
+													-->
+													
+													<div class="col-lg-5 col-md-12 col-sm-12 col-xs-12">
+														<label class="form-control-sm">Placa</label>
+														
+														<div class="row">
+															<div class="col-lg-7 col-md-12 col-sm-12 col-xs-12">
+															<input type="text" name="placa" id="placa"
+																value="" placeholder="" class="form-control form-control-sm" onblur="obtenerEmpresa()">
+																
+															</div>
+															<div class="col-lg-5 col-md-12 col-sm-12 col-xs-12">
+																<button id="btnPlaca" type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#vehiculoModal">
+																	<i class="fas fa-plus-circle"></i> Veh&iacute;culo
+																</button>
+															</div>
+														</div>
+														
+													</div>
+
+													<div class="col-lg-4 col-md-12 col-sm-12 col-xs-12">
+														<label class="form-control-sm">Fecha</label>
+														<input type="text" name="fecha_ingreso" id="fecha_ingreso"
+															value="" placeholder="" class="form-control form-control-sm" >
+													</div>
+
+                                                </div>
+
+												<div class="row" style="padding-top:8px">
+
+													<div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
+														<label class="form-control-sm">Ruc Empresa</label>
+														<input type="text" name="ruc" id="ruc"
+															value="" class="form-control form-control-sm" onblur="obtenerEmpresaBuscar()">
+													</div>
+
+													<div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
+														<label class="form-control-sm">Raz&oacute;n Social</label>
+													
+														<div class="row">
+															<div class="col-lg-8 col-md-12 col-sm-12 col-xs-12">
+																<input type="text" name="empresa" id="empresa"
+															value="" readonly="readonly" class="form-control form-control-sm" >
+															</div>
+															
+															<div class="col-lg-4 col-md-12 col-sm-12 col-xs-12">
+																<button id="btnEmpresa" type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#vehiculoModal">
+																	<i class="fas fa-plus-circle"></i> Empresa
+																</button>
+															</div>
+														</div>
+															
+													</div>
+
+												</div>
+
+												<div class="row">
+													
+													<div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
+														<label class="form-control-sm">T.Doc Conductor</label>
+														<select name="tipo_documento_bus" id="tipo_documento_bus" class="form-control form-control-sm" onchange="obtenerPersonaBuscar()">
+															<option value="">--Selecionar--</option>
+															<?php
+															foreach ($tipo_documento as $row) { ?>
+																<option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
+															<?php
+															}
+															?>
+														</select>
+													</div>
+
+													<div class="col-lg-3 col-md-12 col-sm-12 col-xs-12" style="padding-right:0px!important">
+														<label class="form-control-sm">N. Doc</label>
+															<input type="text" name="numero_documento" id="numero_documento"
+															value="" class="form-control form-control-sm" onblur="obtenerPersonaBuscar()">
+													</div>
+
+													<div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
+														<label class="form-control-sm">Nombre Conductor</label>
+															
+														<div class="row">	
+															<div class="col-lg-8 col-md-12 col-sm-12 col-xs-12">
+																<input type="text" name="conductor" id="conductor"
+																value="" readonly="readonly" class="form-control form-control-sm" >
+															</div>
+															
+															<div class="col-lg-4 col-md-12 col-sm-12 col-xs-12" style="padding-left:0px!important;padding-right:0px!important">
+																<button id="btnConductor" type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#vehiculoModal">
+																	<i class="fas fa-plus-circle"></i> Conductor
+																</button>
+															</div>
+														</div>
+																
+													</div>
+
+												</div>
+
+												<div class="row">
+
+													<div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
+														<label class="form-control-sm">Tipo Madera</label>
+														<select name="tipo_maderas_id" id="tipo_maderas_id" class="form-control form-control-sm">
+															<option value="">--Selecionar--</option>
+															<?php
+															foreach ($tipo_madera as $row) { ?>
+																<option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
+															<?php
+															}
+															?>
+														</select>
+													</div>
+
+													<div class="col-lg-3 col-md-12 col-sm-12 col-xs-12" style="padding-right:0px">
+														<label class="form-control-sm">Cantidad Troncos</label>
+														<input type="text" name="cantidad" id="cantidad"
+															value="" class="form-control form-control-sm" >
+													</div>
+
+												</div>
+
+												<div style="clear:both"></div>
+												<div class="row">
+													<!--
+													<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+														<label class="form-control-sm">Estado</label>
+														<select name="estado_py" id="estado_py" class="form-control form-control-sm" onchange="">
+															<option value="">ESTADO PROYECTO</option>
+															<?php
+
+															?>
+														</select>
+													</div>
+													-->
+
+													<div class="col-xl-12 text-right" style="padding-top:15px">
+
+														<input class="btn btn-warning btn-sm float-rigth" value="NUEVO" type="button" id="btnNuevo" style="padding-left:20px;padding-right:20px"/>
+
+                                                        <input class="btn btn-sm btn-success float-rigth" value="GUARDAR" name="guardar" type="button" id="btnGuardar" style="margin-left:10px" />
+
+
+
+                                                    </div>
+
+												</div>
+
+
+                                            </div>
+                                            <!--card-body-->
+                                        </div>
+                                        <!--card-->
+
+
+                                    </div>
+
+									<div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
+
+
+                                        <div class="card" style="min-height:140px">
+                                            <div class="card-header">
+                                                <strong>
+                                                    Imagenes Referenciales
+                                                </strong>
+                                            </div>
+
+                                            <div class="card-body">
+
+												<div class="wrapper">
+  													<div id="divImagenes" class="scrolls">
+
+														<div class="img_ruta">
+
+															<img src="" id="img_ruta_1" width="130px" height="165px" alt="" style="text-align:center;margin-top:8px;display:none;margin-left:10px" />
+															<span class="delete_ruta" style="display:none" onclick="DeleteImagen(this)"></span>
+
+															<input type="hidden" id="img_foto_1" name="img_foto[]" value="" />
+
+														</div>
+
+													</div>
+												</div>
+
+												<div class="row">
+
+													<div class="col-lg-12">
+														<div class="form-group" style="text-align:center">
+															<span class="btn btn-sm btn-warning btn-file">
+																Examinar <input id="image" name="image" type="file" />
+															</span>
+
+															<input type="hidden" id="ind_img" name="ind_img" value="1" />
+
+															<input type="button" class="btn btn-sm btn-primary upload" value="Subir" style="margin-left:10px">
+
+															<!--<input type="button" class="btn btn-sm btn-danger delete" value="Eliminar" style="margin-left:10px">-->
+
+														</div>
+													</div>
+
+												</div>
+
+                                                <!--table-responsive-->
+												<!--
+												<div class="row">
+                                                    <div class="col">
+                                                        <div class="form-group mb-0 float-right">
+
+															<input class="btn btn-danger pull-rigth" value="GUARDAR"
+                                                                name="crea" type="button" form="prestacionescrea"
+                                                                id="btnGuardar" onclick="guardarCargaVehiculo()" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+												<a class='flotante' name="guardar" id="guardar" onclick="guardarSolicitud()" href='#' ><img src='/img/btn_save.png' border="0"/></a>
+
+												-->
+
+
+
+
+                                            </div>
+                                            <!--card-body-->
+                                        </div>
+                                        <!--card-->
+
+
+                                    </div>
+                                    <!--card-->
+
+
+                                </div>
+
+
+                            </div>
+                        </div>
+
+
+					<div class="row" style="padding-top:15px">
+
+						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+						<div class="card">
+
+						<div class="card-header">
+							<strong>Lista de Ingreso de Camiones</strong>
+						</div>
+
+						<div class="row col align-self-center" style="padding:10px 20px 10px 20px;display:none">
+
+							<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+								<input class="form-control form-control-sm" id="nombre_py_bus" name="nombre_py_bus" placeholder="Nombre del Proyecto">
+							</div>
+
+							<div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
+								<input class="form-control form-control-sm" id="detalle_py_bus" name="detalle_py_bus" placeholder="Detalle del Proyecto">
+							</div>
+
+							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+								<select name="estado_py_bus" id="estado_py_bus" class="form-control form-control-sm" onchange="">
+									<option value="">ESTADO PROYECTO</option>
+									<?php
+
+									?>
+								</select>
+							</div>
+
+							<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+								<select name="estado" id="estado" class="form-control form-control-sm" onchange="">
+									<option value="">ESTADO</option>
+									<option value="1">ACTIVO</option>
+									<option value="0">INACTIVO</option>
+								</select>
+							</div>
+
+							<!--
+							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+								<select name="id_estado" id="id_estado" class="form-control form-control-sm" onchange="">
+									<option value="0">Todos</option>
+									<option value="1">PENDIENTE</option>
+									<option value="2">VALORIZADO</option>
+									<option value="3">APROBADO</option>
+									<option value="4">RECHAZADO</option>
+									<option value="5">DESEMBOLSADO</option>
+								</select>
+							</div>
+							-->
+							<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+								<input class="btn btn-warning btn-sm pull-rigth" value="Buscar" type="button" id="btnBuscar" />
+							</div>
+
+						</div>
+
+						<div class="card-body">
+
+							<div class="table-responsive">
+							<!--table-hover-grid-->
+							<table id="tblSolicitud" class="table table-hover table-sm">
+							<thead>
+							<tr style="font-size:13px">
+								<th>Id</th>
+								<th>Fecha</th>
+								<th>Placa</th>
+								<th>Ruc</th>
+								<th>Empresa</th>
+								<th>Doc Conductor</th>
+								<th>Conductor</th>
+								<th>Tipo Madera</th>
+								<th>Cantidad</th>
+								<th>Imagenes</th>
+							</tr>
+							</thead>
+							<tbody style="font-size:13px">
+							</tbody>
+							</table>
+
+							</div>
+						</div>
+
+
+						<!--
+                        <div id="" class="row">
+                            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+
+
+                            </div>
+
+                            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+
+                                <br>
+
+                            </div>
+
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            </div>
+
+                        </div>
+						-->
+                    </div>
+
+                </div>
+
+
+
         </div>
+        <!--col-->
+
+        </form>
+
+
+
     </div>
+    <!--row-->
+    @endsection
 
-</div>
-                                                    
-@endsection
+	<div id="openOverlayOpc" class="modal fade" role="dialog">
+	  <div class="modal-dialog" >
 
+		<div id="id_content_OverlayoneOpc" class="modal-content" style="padding: 0px;margin: 0px">
 
-<!--
-            <form class="form-horizontal" method="post" action="{{route('frontend.comprobante.nc_edita')}}" id="frmPagos" name="frmPagos" autocomplete="off">
-                <input type="hidden" name="id_comprobante_" id="id_comprobante_" value="" />
-                <input type="hidden" name="id_caja_" id="id_caja_" value="<?php //echo $caja_usuario->id_caja 
-                                                                            ?>" />
-            </form>
-			-->
+		  <div class="modal-body" style="padding: 0px;margin: 0px">
 
+				<div id="diveditpregOpc"></div>
 
-@push('after-scripts')
-<script type="text/javascript">
+		  </div>
 
-    var id_caja_usuario = "<?php echo ($caja_usuario) ? $caja_usuario->id_caja : 0 ?>";
-    //alert(id_caja_usuario);
-/*
-    function auto_height(elem) {        
-        elem.style.height = '1px';
-        elem.style.height = '${elem.scrollHeight}px';
-    }
-  */  
-</script>
+		</div>
 
-@endpush
+	  </div>
 
+	</div>
 
-@push('after-scripts')
+    @push('after-scripts')
 
-<script src="{{ asset('js/ingreso.js') }}"></script>
-@endpush
+	<script type="text/javascript">
+
+	$(document).ready(function() {
+		$(".upload").on('click', function() {
+			var formData = new FormData();
+			var files = $('#image')[0].files[0];
+			formData.append('file',files);
+			$.ajax({
+				headers: {
+					'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+				},
+				url: "/ingreso_vehiculo_tronco/upload_imagen_ingreso",
+				type: 'post',
+				data: formData,
+				contentType: false,
+				processData: false,
+				success: function(response) {
+					
+					var ind_img = $("#ind_img").val();
+					
+					if (response != 0) {
+						$("#img_ruta_"+ind_img).attr("src", "/img/ingreso/tmp/"+response).show();
+						$(".delete_ruta").show();
+						$("#img_foto_"+ind_img).val(response);
+
+						ind_img++;
+
+						var newRow = "";
+						newRow += '<div class="img_ruta">';
+						newRow += '<img src="" id="img_ruta_'+ind_img+'" width="130px" height="165px" alt="" style="text-align:center;margin-top:8px;display:none;margin-left:10px" />';
+						newRow += '<span class="delete_ruta" style="display:none" onclick="DeleteImagen(this)"></span>';
+						newRow += '<input type="hidden" id="img_foto_'+ind_img+'" name="img_foto[]" value="" />';
+						newRow += '</div>';
+
+						$("#divImagenes").append(newRow);
+						$("#ind_img").val(ind_img);
+
+					} else {
+						alert('Formato de imagen incorrecto.');
+					}
+					
+				}
+			});
+			return false;
+		});
+
+		$(".delete").on('click', function() {
+			$("#img_ruta0").attr("src", "/dist/img/profile-icon.png");
+			$("#img_foto0").val("");
+		});
+
+	});
+
+	</script>
+
+	<script src="{{ asset('js/ingreso/create.js') }}"></script>
+
+	@endpush

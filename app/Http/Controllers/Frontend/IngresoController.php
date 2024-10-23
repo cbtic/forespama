@@ -62,7 +62,7 @@ class IngresoController extends Controller
         //$caja_usuario = $caja_model;
         //print_r($concepto);exit();
 
-        return view('frontend.ingreso.create',compact('persona','caja','caja_usuario','tipo_documento','pronto_pago', 'concepto','mes'));
+        return view('frontend.ingresos.create',compact('persona','caja','caja_usuario','tipo_documento','pronto_pago', 'concepto','mes'));
 
     }
 
@@ -72,7 +72,7 @@ class IngresoController extends Controller
         $sw = true;
         //$valorizacion = $valorizaciones_model->getValorizacion($tipo_documento,$id_persona);
         //print_r($valorizacion);exit();
-        return view('frontend.ingreso.lista_valorizacion',compact('valorizacion'));
+        return view('frontend.ingresos.lista_valorizacion',compact('valorizacion'));
 
     }
 
@@ -126,7 +126,7 @@ class IngresoController extends Controller
         
       // var_dump($valorizacion);exit();
        
-        return view('frontend.ingreso.lista_valorizacion',compact('valorizacion'));
+        return view('frontend.ingresos.lista_valorizacion',compact('valorizacion'));
 
     }
  
@@ -266,7 +266,7 @@ class IngresoController extends Controller
         $valorizaciones_model = new Valorizacione;
         $sw = true;
         $pago = $valorizaciones_model->getPago($tipo_documento,$id_persona);
-        return view('frontend.ingreso.lista_pago',compact('pago'));
+        return view('frontend.ingresos.lista_pago',compact('pago'));
 
     }
 
@@ -328,7 +328,7 @@ class IngresoController extends Controller
 
     
 		
-		return view('frontend.ingreso.modal_otro_pago',compact('conceptos','periodo','id_persona','id_agremiado','tipo_documento' ));
+		return view('frontend.ingresos.modal_otro_pago',compact('conceptos','periodo','id_persona','id_agremiado','tipo_documento' ));
 	}
 
     public function modal_fraccionar($idConcepto, $id_persona, $id_agremiado, $total_fraccionar ){
@@ -339,7 +339,7 @@ class IngresoController extends Controller
 
         //print_r(json_encode($concepto)); exit();
 		
-		return view('frontend.ingreso.modal_fraccionar',compact('concepto','total_fraccionar','id_persona','id_agremiado' ));
+		return view('frontend.ingresos.modal_fraccionar',compact('concepto','total_fraccionar','id_persona','id_agremiado' ));
 	}
 
     public function modal_exonerar( ){
@@ -349,7 +349,7 @@ class IngresoController extends Controller
 
        // print_r(json_encode($concepto)); exit();
 		
-		return view('frontend.ingreso.modal_motivo_exonera',compact('concepto' ));
+		return view('frontend.ingresos.modal_motivo_exonera',compact('concepto' ));
 	}
 
     public function modal_fraccionamiento(Request $request){
@@ -401,7 +401,7 @@ class IngresoController extends Controller
 
         //print_r($total_fraccionar); exit();
     
-		return view('frontend.ingreso.modal_fraccionar',compact('concepto','total_fraccionar','id_persona','id_agremiado','comprobanted', 'valorizacion' ));
+		return view('frontend.ingresos.modal_fraccionar',compact('concepto','total_fraccionar','id_persona','id_agremiado','comprobanted', 'valorizacion' ));
 	}
     
 
@@ -410,7 +410,7 @@ class IngresoController extends Controller
         $conceptos_model = new Concepto;        
         $conceptos = $conceptos_model->getConceptoPeriodo($perido);
         //print_r($conceptos);exit();
-        return view('frontend.ingreso.lista_conceptos',compact('conceptos'));
+        return view('frontend.ingresos.lista_conceptos',compact('conceptos'));
 
     }
 
@@ -478,7 +478,7 @@ class IngresoController extends Controller
         $sw = true;
         $valorizacion = $valorizaciones_model->getValorizacion("89",$id_persona);
         //print_r($valorizacion);exit();
-        return view('frontend.ingreso.lista_valorizacion',compact('valorizacion'));
+        return view('frontend.ingresos.lista_valorizacion',compact('valorizacion'));
 */
     }
 
@@ -605,7 +605,7 @@ class IngresoController extends Controller
         $valorizacion = $valorizaciones_model->getValorizacion($tipo_documento,$id_persona,$periodo,$mes,$tipo_couta,$concepto,$filas,$Exonerado,"");
        
        
-        return view('frontend.ingreso.lista_valorizacion',compact('valorizacion'));
+        return view('frontend.ingresos.lista_valorizacion',compact('valorizacion'));
 
     }
 
@@ -613,7 +613,7 @@ class IngresoController extends Controller
 		
 		$valorizaciones_model = new Valorizacione;
 		$valorizacion = $valorizaciones_model->getValorizacionFactura($id);
-		return view('frontend.ingreso.modal_valorizacion_factura',compact('valorizacion'));
+		return view('frontend.ingresos.modal_valorizacion_factura',compact('valorizacion'));
 	
 	}
 
@@ -627,7 +627,7 @@ class IngresoController extends Controller
        
 		//$beneficiario = new Beneficiario;
 		//$valorizacion = $valorizaciones_model->getValorizacionFactura($id);
-		return view('frontend.ingreso.modal_beneficiario_',compact('persona','empresa','id_persona','id_agremiado','tipo_documento','empresa_beneficiario'));
+		return view('frontend.ingresos.modal_beneficiario_',compact('persona','empresa','id_persona','id_agremiado','tipo_documento','empresa_beneficiario'));
 	
 	}
 
@@ -698,7 +698,7 @@ class IngresoController extends Controller
 		$caja_model = new TablaMaestra;
         $caja = $caja_model->getMaestroByTipo("91");
 
-        return view('frontend.ingreso.all_liquidacion_caja',compact('caja'));
+        return view('frontend.ingresos.all_liquidacion_caja',compact('caja'));
     }
 	
     public function caja_total(){
@@ -714,7 +714,7 @@ class IngresoController extends Controller
         //print_r($caja_usuario); exit();
 
 
-        return view('frontend.ingreso.all_caja_total',compact('caja_usuario'));
+        return view('frontend.ingresos.all_caja_total',compact('caja_usuario'));
     }
 
     public function obtener_caja_condicion_pago(request $request){
@@ -725,7 +725,7 @@ class IngresoController extends Controller
         $caja_ingreso_model = new CajaIngreso();
         $resultado = $caja_ingreso_model->getCajaCondicionPago($id_usuario_caja, $fecha);
 
-        return view('frontend.ingreso.lista_caja_condicion_pago',compact('resultado'));
+        return view('frontend.ingresos.lista_caja_condicion_pago',compact('resultado'));
 
     }
 
@@ -737,14 +737,14 @@ class IngresoController extends Controller
         $resultado = $caja_ingreso_model->getCajaComprobante($id_usuario_caja, $fecha);
        
      
-        return view('frontend.ingreso.lista_caja_venta',compact('resultado'));
+        return view('frontend.ingresos.lista_caja_venta',compact('resultado'));
 
     }
 
 	public function modal_liquidacion($id){        
 		$valorizaciones_model = new Valorizacione;
 
-		return view('frontend.ingreso.modal_liquidacion',compact('id'));
+		return view('frontend.ingresos.modal_liquidacion',compact('id'));
 	}
 
 
@@ -765,7 +765,7 @@ class IngresoController extends Controller
 
         $medio_pago = $tablaMaestra_model->getMaestroByTipo(19);
 
-		return view('frontend.ingreso.modal_detalle_factura',compact('id','factura','forma_pago','medio_pago'));
+		return view('frontend.ingresos.modal_detalle_factura',compact('id','factura','forma_pago','medio_pago'));
 	
 	}
 	
@@ -881,7 +881,7 @@ class IngresoController extends Controller
         $sw = true;
         $valorizacion = $valorizaciones_model->getValorizacion($tipo_documento,$id_persona,$periodo,$tipo_couta,$concepto,$filas);
         
-		return view('frontend.ingreso.lista_valorizacion',compact('valorizacion'));
+		return view('frontend.ingresos.lista_valorizacion',compact('valorizacion'));
 		*/
     }
 
@@ -975,7 +975,7 @@ class IngresoController extends Controller
 		$sexo = $tablaMaestra_model->getMaestroByTipo(2);
 		$tipo_documento = $tablaMaestra_model->getMaestroByTipo(110);
 
-		return view('frontend.ingreso.modal_consulta_persona',compact('sexo','tipo_documento', 'id_tipo_documento'));
+		return view('frontend.ingresos.modal_consulta_persona',compact('sexo','tipo_documento', 'id_tipo_documento'));
 	}
 
     public function reporte_deudas_pdf($numero_cap, $id_concepto){
@@ -1006,7 +1006,7 @@ class IngresoController extends Controller
 	
 		//$formattedDate = $carbonDate->timezone('America/Lima')->formatLocalized(' %d de %B %Y'); //->format('l, j F Y ');
 		
-		$pdf = Pdf::loadView('frontend.ingreso.reporte_deudas_pdf',compact('datos_agremiado','numero_cap','nombre_completo','datos_reporte_deudas','fecha_actual','hora_actual','denominacion_reporte_deudas','tipo_cambio'));
+		$pdf = Pdf::loadView('frontend.ingresos.reporte_deudas_pdf',compact('datos_agremiado','numero_cap','nombre_completo','datos_reporte_deudas','fecha_actual','hora_actual','denominacion_reporte_deudas','tipo_cambio'));
 		
 		$pdf->setPaper('A4'); // Tamaño de papel (puedes cambiarlo según tus necesidades)
     	$pdf->setOption('margin-top', 20); // Márgen superior en milímetros
@@ -1046,7 +1046,7 @@ class IngresoController extends Controller
 	
 		//$formattedDate = $carbonDate->timezone('America/Lima')->formatLocalized(' %d de %B %Y'); //->format('l, j F Y ');
 		
-		$pdf = Pdf::loadView('frontend.ingreso.reporte_deudas_total_pdf',compact('datos_agremiado','numero_cap','nombre_completo','datos_reporte_deudas','fecha_actual','hora_actual','denominacion_reporte_deudas','tipo_cambio'));
+		$pdf = Pdf::loadView('frontend.ingresos.reporte_deudas_total_pdf',compact('datos_agremiado','numero_cap','nombre_completo','datos_reporte_deudas','fecha_actual','hora_actual','denominacion_reporte_deudas','tipo_cambio'));
 		
 		$pdf->setPaper('A4'); // Tamaño de papel (puedes cambiarlo según tus necesidades)
     	$pdf->setOption('margin-top', 20); // Márgen superior en milímetros
@@ -1084,7 +1084,7 @@ class IngresoController extends Controller
         $fecha_actual = Carbon::now()->format('d/m/Y');
         $hora_actual = Carbon::now()->format('H:i:s');
 		
-		$pdf = Pdf::loadView('frontend.ingreso.reporte_fraccionamiento_pdf',compact('datos_agremiado','numero_cap','nombre_completo','fecha_actual','hora_actual','tipo_cambio','deuda_cuota_fraccionamiento','cronograma_fraccionamiento'));
+		$pdf = Pdf::loadView('frontend.ingresos.reporte_fraccionamiento_pdf',compact('datos_agremiado','numero_cap','nombre_completo','fecha_actual','hora_actual','tipo_cambio','deuda_cuota_fraccionamiento','cronograma_fraccionamiento'));
 		
 		$pdf->setPaper('A4'); // Tamaño de papel (puedes cambiarlo según tus necesidades)
     	$pdf->setOption('margin-top', 20); // Márgen superior en milímetros
@@ -1100,7 +1100,7 @@ class IngresoController extends Controller
     {
         //$id
        // $detalle = ssdsd->fgfffg($id);
-        //return view('frontend.ingreso.obtener_detalle_factura', compact('id','detalle'));
+        //return view('frontend.ingresos.obtener_detalle_factura', compact('id','detalle'));
         if($forma_pago==0){$forma_pago='';}
         if($estado_pago==0){$estado_pago='';}
         if($medio_pago==0){$medio_pago='';}
@@ -1125,7 +1125,7 @@ class IngresoController extends Controller
         $conceptos_model = new Concepto;
         $concepto = $conceptos_model->getConceptoAllDenominacion2();
 
-		return view('frontend.ingreso.modal_concepto_reporte',compact('numero_cap','concepto'));
+		return view('frontend.ingresos.modal_concepto_reporte',compact('numero_cap','concepto'));
 	}
 
 }
