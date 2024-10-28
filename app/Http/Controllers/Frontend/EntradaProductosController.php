@@ -909,7 +909,7 @@ class EntradaProductosController extends Controller
             $entrada_producto = $salida_producto_model->getSalidaByIdOrdenCompra($id);
         }
 
-        return view('frontend.entrada_productos.modal_historial_entradaProducto',compact('id','entrada_producto'));
+        return view('frontend.entrada_productos.modal_historial_EntradaProducto',compact('id','entrada_producto'));
 
     }
 

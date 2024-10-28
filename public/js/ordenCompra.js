@@ -361,7 +361,7 @@ function modalEntradaProductoOrdenCompra(id,id_tipo_documento){
 	$.ajax({
 			url: "/entrada_productos/modal_detalle_producto_orden_compra/"+id+"/"+id_tipo_documento,
 			type: "GET",
-			success: function (result) {  
+			success: function (result) {
 					$("#diveditpregOpc").html(result);
 					$('#openOverlayOpc').modal('show');
 			}
@@ -369,6 +369,9 @@ function modalEntradaProductoOrdenCompra(id,id_tipo_documento){
 }
 
 function modalHistorialEntradaProducto(id, id_tipo_documento){
+
+	$(".modal-dialog").css("width","85%");
+	$('#openOverlayOpc .modal-body').css('height', 'auto');
 
 	$.ajax({
 		url: "/entrada_productos/modal_historial_entrada_producto/"+id+"/"+id_tipo_documento,
