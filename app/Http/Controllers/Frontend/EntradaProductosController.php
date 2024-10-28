@@ -843,7 +843,7 @@ class EntradaProductosController extends Controller
         $anaquel_model = new Anaquele;
         $tipo_cambio_model = new TipoCambio;
         $id_user = Auth::user()->id;
-       
+      
         if($id>0){
             if($tipo==1){
                 $orden_compra = OrdenCompra::find($id);

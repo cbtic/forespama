@@ -397,12 +397,12 @@ function fn_save_producto(){
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-lg-4">
+                                <!--<div class="col-lg-4">
                                     <div class="form-group">
                                         <label class="control-label form-control-sm">Stock Actual</label>
                                         <input id="stock_actual" name="stock_actual" on class="form-control form-control-sm"  value="<?php echo $producto->stock_actual?>" type="text">
                                     </div>
-                                </div>
+                                </div>-->
                                 <div class="col-lg-4">
                                     <div class="form-group">
                                         <label class="control-label form-control-sm">Costo Unitario</label>

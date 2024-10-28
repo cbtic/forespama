@@ -15,11 +15,15 @@ begin
 	
 	p_pagina=(p_pagina::Integer-1)*p_limit::Integer;
 
-	v_campos=' p.id, p.numero_serie, p.codigo, p.denominacion, tm.denominacion unidad_medida, p.stock_actual stock, p.fecha_vencimiento, tm2.denominacion estado_bien, p.stock_minimo, p.stock_actual, p.estado ';
+	v_campos=' p.id, p.numero_serie, p.denominacion, p.codigo, tm3.denominacion unidad, p.contenido, tm4.denominacion unidad_medida, m.denominiacion marca, tm.denominacion unidad_medida_producto, tm2.denominacion estado_bien, p.stock_actual stock, p.fecha_vencimiento, p.stock_minimo, p.stock_actual, p.estado, tm5.denominacion tipo_origen_producto ';
 
 	v_tabla=' from productos p 
-	left join tabla_maestras tm on p.id_unidad_medida = tm.codigo::int and tm.tipo =''43''
-	left join tabla_maestras tm2 on p.id_estado_bien = tm2.codigo::int and tm2.tipo =''4''';
+	left join tabla_maestras tm on p.id_tipo_producto = tm.codigo::int and tm.tipo =''44''
+	left join tabla_maestras tm2 on p.id_estado_bien = tm2.codigo::int and tm2.tipo =''56''
+	left join tabla_maestras tm3 on p.id_unidad_producto = tm3.codigo::int and tm3.tipo =''43''
+	left join tabla_maestras tm4 on p.id_unidad_medida = tm4.codigo::int and tm4.tipo =''57''
+	left join tabla_maestras tm5 on p.id_tipo_origen_producto = tm5.codigo::int and tm5.tipo =''58''
+	left join marcas m on p.id_marca = m.id';
 	
 	v_where = ' Where 1=1 ';
 

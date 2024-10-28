@@ -13,6 +13,7 @@ use App\Models\AreaTrabajo;
 use App\Models\UnidadTrabajo;
 use RealRashid\SweetAlert\Facades\Alert;
 use App\Models\Kardex;
+use App\Models\Persona;
 use Illuminate\Http\Request;
 use Auth;
 use Carbon\Carbon;
@@ -91,9 +92,10 @@ class DispensacionController extends Controller
         $marca = $marca_model->getMarcaAll();
         $almacen = $almacen_model->getAlmacenAll();
 		$area_trabajo = $area_trabajo_model->getAreaTrabajoAll();
+		$persona = Persona::all();
 		//var_dump($id);exit();
 
-		return view('frontend.dispensacion.modal_dispensacion_nuevoDispensacion',compact('id','dispensacion','unidad_medida','moneda','estado_bien','tipo_producto','unidad','marca','producto','tipo_documento','almacen','area_trabajo'));
+		return view('frontend.dispensacion.modal_dispensacion_nuevoDispensacion',compact('id','dispensacion','unidad_medida','moneda','estado_bien','tipo_producto','unidad','marca','producto','tipo_documento','almacen','area_trabajo','persona'));
 
     }
 
@@ -132,6 +134,7 @@ class DispensacionController extends Controller
         $dispensacion->id_unidad_trabajo = $request->unidad_trabajo;
         $dispensacion->fecha = $request->fecha;
         $dispensacion->codigo = $request->numero_dispensacion;
+		$dispensacion->id_usuario_recibe = $request->persona_recibe;
         $dispensacion->id_usuario_inserta = $id_user;
 		$dispensacion->estado = 1;
 		$dispensacion->save();

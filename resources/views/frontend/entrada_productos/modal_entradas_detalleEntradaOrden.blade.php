@@ -181,14 +181,17 @@ $('#openOverlayOpc').on('shown.bs.modal', function() {
 $(document).ready(function() {
     if($('#id').val()==0){
         cambiarTipoCambio();
-        //cambiarOrigen();
+        cambiarOrigen();
         cambiarDocumento();
         cargarDetalle();
+        cambiarTipoDocumento();
     }
 
     if($('#id').val()>0){
         cargarDetalle();
         cambiarDocumento();
+        cambiarOrigen();
+        cambiarTipoDocumento();
     }
 });
 
@@ -324,16 +327,24 @@ function cambiarOrigen(){
 
     var unidad_origen = $('#unidad_origen').val();
     //alert(moneda);
-    if(unidad_origen==1){
-        $('#proveedor_select, #proveedor_').hide();
-    }else if(unidad_origen==2){
-        $('#proveedor_select, #proveedor_').show();
-        $('#proveedor').val("");
-    }else if(unidad_origen==3){
-        $('#proveedor_select, #proveedor_').show();
-        $('#proveedor').val(30);
-    }else{
-        $('#proveedor_select, #proveedor_').hide();
+    if(unidad_origen==4){
+        $('#almacen_select, #almacen_nombre').hide();
+    }
+}
+
+function cambiarTipoDocumento(){
+
+    var tipoMovimiento = document.getElementById('tipo_movimiento_').value;
+    var tipoDocumento = document.getElementById('tipo_documento');
+    //alert(tipoMovimiento);
+    if (tipoMovimiento == "1") {
+        $('#tipo_documento').val(1).trigger('change');
+        obtenerCodigo();
+    } else if (tipoMovimiento == "2") {
+        $('#tipo_documento').val(2).trigger('change');
+        obtenerCodigo();
+    } else {
+        $('#tipo_documento').val("").trigger('change');
     }
 }
 
@@ -530,13 +541,15 @@ function cambiarDocumento(){
                 
                 $('#tipo_documento').attr("disabled",false);
                 $('.loader').hide();
+                cambiarTipoDocumento();
                 
             }
         });
-        $('#almacen_').show();
+        $('#almacen_nombre').show();
         $('#almacen_select').show();
         $('#almacen_salida_').show();
         $('#almacen_salida_select').show();
+       
 
     }else if(tipo_movimiento==2){
 
@@ -558,15 +571,16 @@ function cambiarDocumento(){
                 
                 $('#tipo_documento').attr("disabled",false);
                 $('.loader').hide();
+                cambiarTipoDocumento();
                 
             }
         });
 
-        $('#almacen_').show();
-        $('#almacen_select').show();
+        $('#almacen_nombre').hide();
+        $('#almacen_select').hide();
         $('#almacen_salida_').show();
         $('#almacen_salida_select').show();
-
+        
 
     }
 }
@@ -920,7 +934,7 @@ function pdf_documento(){
                                 ?>
                             </select>
                         </div>
-                        <div class="col-lg-2" id="almacen_" style="color:red; font-weight:bold">
+                        <div class="col-lg-2" id="almacen_nombre" style="color:red; font-weight:bold">
                             Almacen Destino
                         </div> 
                         <div class="col-lg-2" id="almacen_select">

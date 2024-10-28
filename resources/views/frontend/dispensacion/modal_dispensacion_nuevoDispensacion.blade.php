@@ -152,6 +152,7 @@ $(document).ready(function() {
     }
 
     $("#item").select2({ width: '100%' });
+    $("#persona_recibe").select2({ width: '100%' });
 
 });
 
@@ -699,6 +700,20 @@ function pdf_documento(){
                                 <option value="">--Seleccionar--</option>
                             </select>
                         </div>
+                        <div class="col-lg-2">
+                            Persona Recibe
+                        </div>
+                        <div class="col-lg-2">
+                            <select name="persona_recibe" id="persona_recibe" class="form-control form-control-sm" onchange="">
+                                <option value="">--Seleccionar--</option>
+                                <?php
+                                foreach ($persona as $row){?>
+                                    <option value="<?php echo $row->id ?>" <?php if($row->id==$dispensacion->id_usuario_recibe)echo "selected='selected'"?>><?php echo $row->nombres." ".$row->apellido_paterno." ".$row->apellido_materno ?></option>
+                                    <?php 
+                                }
+                                ?>
+                            </select>
+                        </div>
                     </div>
                         <div style="margin-top:15px" class="form-group">
                             <div class="col-sm-12 controls">
@@ -749,9 +764,9 @@ function pdf_documento(){
                                 <?php 
                                     if($id>0){
                                 ?>
-                                <button style="font-size:12px;margin-left:10px" type="button" class="btn btn-sm btn-primary" data-toggle="modal" onclick="pdf_documento()" ><i class="fa fa-edit"></i>Imprimir</button>
-                                <button style="font-size:12px;margin-left:10px; margin-right:100px" type="button" class="btn btn-sm btn-warning" data-toggle="modal" onclick="pdf_guia()" ><i class="fa fa-edit"></i>Imprimir Gu&iacute;a Remisi&oacute;n Electronica</button>
-                                <!--<a href="javascript:void(0)" onClick="fn_pdf_documento()" class="btn btn-sm btn-primary" style="margin-right:100px">Imprimir</a>-->
+                                <button style="font-size:12px;margin-left:10px; margin-right:10px" type="button" class="btn btn-sm btn-primary" data-toggle="modal" onclick="pdf_documento()" disabled><i class="fa fa-edit" ></i>Imprimir</button>
+                                <!--<button style="font-size:12px;margin-left:10px; margin-right:100px" type="button" class="btn btn-sm btn-warning" data-toggle="modal" onclick="pdf_guia()" ><i class="fa fa-edit"></i>Imprimir Gu&iacute;a Remisi&oacute;n Electronica</button>
+                                <a href="javascript:void(0)" onClick="fn_pdf_documento()" class="btn btn-sm btn-primary" style="margin-right:100px">Imprimir</a>-->
                                 <?php 
                                     }
                                 ?>

@@ -180,6 +180,7 @@ $(document).ready(function() {
 
     if($('#id').val()>0){
         cargarDetalle();
+        cambiarOrigen();
     }
 });
 
@@ -202,14 +203,22 @@ function cambiarOrigen(){
     //alert(moneda);
     if(unidad_origen==1){
         $('#proveedor_select, #proveedor_').hide();
+        $('#almacen_select, #almacen_').show();
     }else if(unidad_origen==2){
         $('#proveedor_select, #proveedor_').show();
+        $('#almacen_select, #almacen_').show();
         $('#proveedor').val("");
     }else if(unidad_origen==3){
         $('#proveedor_select, #proveedor_').show();
+        $('#almacen_select, #almacen_').show();
+        $('#proveedor').val(30);
+    }else if(unidad_origen==4){
+        $('#proveedor_select, #proveedor_').show();
+        $('#almacen_select, #almacen_').hide();
         $('#proveedor').val(30);
     }else{
         $('#proveedor_select, #proveedor_').hide();
+        $('#almacen_select, #almacen_').show();
     }
 }
 
@@ -264,6 +273,18 @@ function obtenerCodInterno(selectElement, n){
                 //alert(result[0].codigo);
                 $('#cod_interno' + n).val(result[0].codigo);
                 $('#item' + n).val(result[0].numero_serie);
+                $('#marca' + n).val(result[0].id_marca).trigger('change');;
+                $('#unidad' + n).val(result[0].id_unidad_producto);
+
+                $('#fecha_vencimiento_' + n).datepicker({
+                    autoclose: true,
+                    format: 'yyyy-mm-dd',
+                    changeMonth: true,
+                    changeYear: true,
+                    language: 'es'
+                });
+                
+                $('#fecha_vencimiento_' + n).datepicker('setDate', result[0].fecha_vencimiento);
             }
         });
 }
@@ -802,7 +823,7 @@ function pdf_documento(){
                         }*/
                         ?>
                         <div class="col-lg-2">
-                            <select name="unidad_origen" id="unidad_origen" class="form-control form-control-sm" onchange="//cambiarOrigen()">
+                            <select name="unidad_origen" id="unidad_origen" class="form-control form-control-sm" onchange="cambiarOrigen()">
                                 <option value="">--Seleccionar--</option>
                                 <?php
                                 foreach ($unidad_origen as $row){?>
