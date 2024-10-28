@@ -1023,13 +1023,13 @@ function pdf_documento(){
                             </div>
                         <?php } ?>
                     </div>
-                        <div style="margin-top:15px" class="form-group">
+                        <!--<div style="margin-top:15px" class="form-group">
                             <div class="col-sm-12 controls">
                                 <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
                                     <a href="javascript:void(0)" onClick="agregarProducto()" class="btn btn-sm btn-success">Agregar</a>
                                 </div>
                             </div>
-                        </div> 
+                        </div>-->
 
                         <div class="card-body">	
 

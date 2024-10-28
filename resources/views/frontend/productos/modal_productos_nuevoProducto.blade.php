@@ -290,6 +290,21 @@ function fn_save_producto(){
                                 
                                 <div class="col-lg-4">
                                     <div class="form-group">
+                                        <label class="control-label form-control-sm">Tipo Origen Producto</label>
+                                        <select name="tipo_origen_producto" id="tipo_origen_producto" class="form-control form-control-sm" onchange="">
+                                            <option value="">--Seleccionar--</option>
+                                            <?php
+                                            foreach ($tipo_origen_producto as $row){?>
+                                                <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$producto->id_tipo_origen_producto)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                             <?php
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-4">
+                                    <div class="form-group">
                                         <label class="control-label form-control-sm">N&uacute;mero Serie</label>
                                         <input id="numero_serie" name="numero_serie" on class="form-control form-control-sm"  value="<?php echo $producto->numero_serie?>" type="text">
                                     </div>

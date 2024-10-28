@@ -23,6 +23,7 @@ use App\Http\Controllers\Frontend\KardexController;
 
 use App\Http\Controllers\Frontend\ComprobanteController;
 use App\Http\Controllers\Frontend\EntradaProductoDetallesController;
+use App\Http\Controllers\Frontend\DispensacionController;
 
 use App\Models\Ubigeo;
 
@@ -384,5 +385,13 @@ Route::post('kardex/listar_kardex_existencia_ajax', [KardexController::class, 'l
 Route::post('kardex/listar_kardex_existencia_producto_ajax', [KardexController::class, 'listar_kardex_existencia_producto_ajax'])->name('kardex.listar_kardex_existencia_producto_ajax');
 Route::get('kardex/exportar_listar_existencia/{consulta_almacen}', [KardexController::class, 'exportar_listar_existencia'])->name('kardex.exportar_listar_existencia');
 
+Route::get('dispensacion/create', [DispensacionController::class, 'create'])->name('dispensacion.create');
+Route::post('dispensacion/listar_dispensacion_ajax', [DispensacionController::class, 'listar_dispensacion_ajax'])->name('dispensacion.listar_dispensacion_ajax');
+Route::post('dispensacion/send_dispensacion', [DispensacionController::class, 'send_dispensacion'])->name('dispensacion.send_dispensacion');
+Route::get('dispensacion/modal_dispensacion/{id}', [DispensacionController::class, 'modal_dispensacion'])->name('dispensacion.modal_dispensacion');
+Route::get('dispensacion/eliminar_dispensacion/{id}/{estado}', [DispensacionController::class, 'eliminar_dispensacion'])->name('dispensacion.eliminar_dispensacion');
+Route::get('dispensacion/obtener_unidad_trabajo/{area_trabajo}', [DispensacionController::class, 'obtener_unidad_trabajo'])->name('dispensacion.obtener_unidad_trabajo');
+Route::get('dispensacion/obtener_codigo_dispensacion/{tipo_documento}', [DispensacionController::class, 'obtener_codigo_dispensacion'])->name('dispensacion.obtener_codigo_dispensacion');
+Route::get('dispensacion/cargar_detalle/{id}', [DispensacionController::class, 'cargar_detalle'])->name('dispensacion.cargar_detalle');
 
 

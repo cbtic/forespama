@@ -32,8 +32,9 @@ class ProductosController extends Controller
 
 		$tablaMaestra_model = new TablaMaestra;
 		$estado_bien = $tablaMaestra_model->getMaestroByTipo(56);
+		$tipo_origen_producto = $tablaMaestra_model->getMaestroByTipo(58);
 		
-		return view('frontend.productos.create',compact('estado_bien'));
+		return view('frontend.productos.create',compact('estado_bien','tipo_origen_producto'));
 
 	}
 
@@ -79,9 +80,10 @@ class ProductosController extends Controller
         $estado_bien = $tablaMaestra_model->getMaestroByTipo(56);
         $unidad_medida = $tablaMaestra_model->getMaestroByTipo(57);
         $marca = $marca_model->getMarcaAll();
+		$tipo_origen_producto = $tablaMaestra_model->getMaestroByTipo(58);
 		//var_dump($id);exit();
 
-		return view('frontend.productos.modal_productos_nuevoProducto',compact('id','producto','unidad_medida','moneda','estado_bien','tipo_producto','unidad_producto','marca'));
+		return view('frontend.productos.modal_productos_nuevoProducto',compact('id','producto','unidad_medida','moneda','estado_bien','tipo_producto','unidad_producto','marca','tipo_origen_producto'));
 
     }
 
@@ -112,6 +114,7 @@ class ProductosController extends Controller
 			$producto = Producto::find($request->id);
 		}
 		
+        $producto->id_tipo_origen_producto = $request->tipo_origen_producto;
 		$producto->numero_serie = $request->numero_serie;
 		$producto->codigo = $request->codigo;
         $producto->denominacion = $request->denominacion;

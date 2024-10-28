@@ -398,6 +398,7 @@ label.form-control-sm{
                         <thead>
                         <tr style="font-size:13px">
                             <th>Id</th>
+							<th>Tipo Origen Producto</th>
 							<th>Serie</th>
 							<th>Denominaci&oacute;n</th>
                             <th>C&oacute;digo</th>

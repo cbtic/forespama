@@ -337,6 +337,16 @@ function datatablenew_existencia(){
 				"bSortable": true,
 				"aTargets": [3]
 				},
+
+				{
+				"mRender": function (data, type, row) {
+					var unidad_medida = "";
+					if(row.unidad_medida!= null)unidad_medida = row.unidad_medida;
+					return unidad_medida;
+				},
+				"bSortable": true,
+				"aTargets": [4]
+				},
 				
                 {
                 "mRender": function (data, type, row) {
@@ -345,7 +355,7 @@ function datatablenew_existencia(){
 					return almacen_kardex;
                 },
                 "bSortable": true,
-                "aTargets": [4]
+                "aTargets": [5]
                 },
             ]
     });
@@ -448,6 +458,16 @@ function datatablenew_existencia_producto(){
 				"aTargets": [3]
 				},
 				
+				{
+				"mRender": function (data, type, row) {
+					var unidad_medida = "";
+					if(row.unidad_medida!= null)unidad_medida = row.unidad_medida;
+					return unidad_medida;
+				},
+				"bSortable": true,
+				"aTargets": [4]
+				},
+
                 {
                 "mRender": function (data, type, row) {
                 	var almacen_kardex = "";
@@ -455,7 +475,7 @@ function datatablenew_existencia_producto(){
 					return almacen_kardex;
                 },
                 "bSortable": true,
-                "aTargets": [4]
+                "aTargets": [5]
                 },
             ]
     });

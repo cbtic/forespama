@@ -60,6 +60,24 @@ class Producto extends Model
         return $data;
     }
 
+    function getProductoInterno(){
+
+        $cad = "select * from productos p
+        where p.id_tipo_origen_producto = '1'";
+
+		$data = DB::select($cad);
+        return $data;
+    }
+
+    function getProductoExterno(){
+
+        $cad = "select * from productos p
+        where p.id_tipo_origen_producto = '2'";
+
+		$data = DB::select($cad);
+        return $data;
+    }
+
     function getProductoById($id_producto){
 
         $cad = "select * from productos p 
