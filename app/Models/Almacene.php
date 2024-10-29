@@ -83,7 +83,7 @@ class Almacene extends Model
 
     function getAlmacenByUser($id){
 
-        $cad = "select a.* from almacenes a 
+        $cad = "select distinct(a.*) from almacenes a 
         inner join almacen_usuarios au on au.id_almacen = a.id 
         inner join users u on au.id_user = u.id 
         where u.id = '".$id."'
