@@ -716,6 +716,16 @@ function pdf_documento(){
 
 }
 
+function pdf_guia(){
+
+    var id = $('#id').val();
+    var tipo_movimiento = $('#tipo_movimiento').val();
+
+    var href = '/entrada_productos/guia_electronica_pdf/'+id+'/'+tipo_movimiento;
+    window.open(href, '_blank');
+
+}
+
 </script>
 
 

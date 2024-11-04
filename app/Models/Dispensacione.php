@@ -55,4 +55,19 @@ class Dispensacione extends Model
 		$data = DB::select($cad);
         return $data;
     }
+
+    function getDispensacionById($id){
+
+        $cad = "select d.id, tm.denominacion tipo_documento, at.denominacion area_trabajo, a.denominacion almacen, ut.denominacion unidad_trabajo, d.fecha, d.codigo, p.nombres ||' '|| p.apellido_paterno ||' '|| p.apellido_materno usuario_recibe from dispensaciones d 
+        inner join tabla_maestras tm on d.id_tipo_documento ::int = tm.codigo::int and tm.tipo = '53'
+        inner join area_trabajo at on d.id_area_trabajo = at.id 
+        inner join almacenes a on d.id_almacen = a.id 
+        inner join unidad_trabajo ut on d.id_unidad_trabajo = ut.id 
+        left join personas p on d.id_usuario_recibe = p.id
+        where d.id ='".$id."'";
+
+		$data = DB::select($cad);
+        return $data;
+    }
+
 }

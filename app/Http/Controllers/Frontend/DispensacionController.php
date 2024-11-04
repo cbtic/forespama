@@ -17,6 +17,7 @@ use App\Models\Persona;
 use Illuminate\Http\Request;
 use Auth;
 use Carbon\Carbon;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class DispensacionController extends Controller
 {
@@ -165,30 +166,56 @@ class DispensacionController extends Controller
 
             $dispensacion_detalle->save();
 
-			$producto = Producto::find($descripcion[$index]);
+			if($request->id == 0){
+				$producto = Producto::find($descripcion[$index]);
 
-			$kardex_buscar = Kardex::where("id_producto",$descripcion[$index])->where("id_almacen_destino",$request->almacen)->orderBy('id', 'desc')->first();
-			$kardex = new Kardex;
-			$kardex->id_producto = $descripcion[$index];
-			$kardex->salidas_cantidad = $cantidad[$index];
-			//kardex->costo_salidas_cantidad = $precio_unitario[$index];
-			//$kardex->total_salidas_cantidad = $total[$index];
-			if($kardex_buscar){
-				$cantidad_saldo = $kardex_buscar->saldos_cantidad - $cantidad[$index];
-				$kardex->saldos_cantidad = $cantidad_saldo;
-				//$kardex->costo_saldos_cantidad = $producto->costo_unitario;
-				//$total_kardex = $cantidad_saldo * $producto->costo_unitario;
-				//$kardex->total_saldos_cantidad = $total_kardex;
+				$kardex_buscar = Kardex::where("id_producto",$descripcion[$index])->where("id_almacen_destino",$request->almacen)->orderBy('id', 'desc')->first();
+				$kardex = new Kardex;
+				$kardex->id_producto = $descripcion[$index];
+				$kardex->salidas_cantidad = $cantidad[$index];
+				//kardex->costo_salidas_cantidad = $precio_unitario[$index];
+				//$kardex->total_salidas_cantidad = $total[$index];
+				if($kardex_buscar){
+					$cantidad_saldo = $kardex_buscar->saldos_cantidad - $cantidad[$index];
+					$kardex->saldos_cantidad = $cantidad_saldo;
+					//$kardex->costo_saldos_cantidad = $producto->costo_unitario;
+					//$total_kardex = $cantidad_saldo * $producto->costo_unitario;
+					//$kardex->total_saldos_cantidad = $total_kardex;
+				}else{
+					$kardex->saldos_cantidad = $cantidad[$index];
+					//$kardex->costo_saldos_cantidad = $producto->costo_unitario;
+					//$total_kardex = $cantidad_ingreso[$index] * $producto->costo_unitario;
+					//$kardex->total_saldos_cantidad = $total_kardex;
+				}
+				//$kardex->id_entrada_producto = $entrada_producto->id;
+				$kardex->id_almacen_destino = $request->almacen;
+				$kardex->id_dispensacion = $dispensacion->id;
+
+				$kardex->save();
 			}else{
-				$kardex->saldos_cantidad = $cantidad[$index];
-				//$kardex->costo_saldos_cantidad = $producto->costo_unitario;
-				//$total_kardex = $cantidad_ingreso[$index] * $producto->costo_unitario;
-				//$kardex->total_saldos_cantidad = $total_kardex;
-			}
-			//$kardex->id_entrada_producto = $entrada_producto->id;
-			$kardex->id_almacen_destino = $request->almacen;
+				$producto = Producto::find($descripcion[$index]);
 
-			$kardex->save();
+				$kardex_buscar = Kardex::where("id_producto",$descripcion[$index])->where("id_almacen_destino",$request->almacen)->orderBy('id', 'desc')->first();
+				$kardex_dispensacion = Kardex::where("id_dispensacion",$dispensacion->id)->where("id_producto",$descripcion[$index])->first();
+				$kardex = kardex::find($kardex_dispensacion->id);
+
+				$kardex->id_producto = $descripcion[$index];
+				$kardex->salidas_cantidad = $cantidad[$index];
+				if($kardex_dispensacion->salidas_cantidad>$cantidad[$index]){
+					$cantidad_saldo = $kardex_dispensacion->saldos_cantidad - ($kardex_dispensacion->salidas_cantidad - $cantidad[$index]);
+					$kardex->saldos_cantidad = $cantidad_saldo;
+				}else if($kardex_dispensacion->salidas_cantidad<$cantidad[$index]){
+					$cantidad_saldo = $kardex_dispensacion->saldos_cantidad + ($cantidad[$index] - $kardex_dispensacion->salidas_cantidad);
+					$kardex->saldos_cantidad = $cantidad_saldo;
+				}else if($kardex_dispensacion->salidas_cantidad==$cantidad[$index]){
+					$kardex->saldos_cantidad = $cantidad[$index];
+				}
+				//$kardex->saldos_cantidad = $cantidad[$index];
+				$kardex->id_almacen_destino = $request->almacen;
+				$kardex->id_dispensacion = $dispensacion->id;
+
+				$kardex->save();
+			}
         }
 
         return response()->json(['success' => 'Dispensaci&oacute;n guardada exitosamente.']);
@@ -213,11 +240,50 @@ class DispensacionController extends Controller
 
 	public function eliminar_dispensacion($id,$estado)
     {
+
 		$dispensacion = Dispensacione::find($id);
 
 		$dispensacion->estado = $estado;
 		$dispensacion->save();
 
+		if($estado==0){
+
+			$kardexProducto = Kardex::where("id_dispensacion",$dispensacion->id)->get();
+
+			foreach ($kardexProducto as $item) {
+
+                $nuevoKardex = new Kardex;
+                $nuevoKardex->id_producto = $item->id_producto;
+                $nuevoKardex->id_dispensacion = $dispensacion->id;
+                $nuevoKardex->id_almacen_destino = $item->id_almacen_destino;
+
+                $nuevoKardex->entradas_cantidad = $item->salidas_cantidad;
+				$kardex_buscar = Kardex::where("id_producto",$item->id_producto)->where("id_almacen_destino",$item->id_almacen_destino)->orderBy('id', 'desc')->first();
+                $nuevoKardex->saldos_cantidad = $kardex_buscar->saldos_cantidad + $item->salidas_cantidad;
+
+                $nuevoKardex->save();
+            }
+
+
+		}else if($estado==1){
+
+			$kardexProducto = Kardex::where("id_dispensacion",$dispensacion->id)->get();
+
+			foreach ($kardexProducto as $item) {
+                
+                $nuevoKardex = new Kardex;
+                $nuevoKardex->id_producto = $item->id_producto;
+                $nuevoKardex->id_dispensacion = $dispensacion->id;
+                $nuevoKardex->id_almacen_destino = $item->id_almacen_destino;
+
+                $nuevoKardex->salidas_cantidad = $item->salidas_cantidad;
+				$kardex_buscar = Kardex::where("id_producto",$item->id_producto)->where("id_almacen_destino",$item->id_almacen_destino)->orderBy('id', 'desc')->first();
+                $nuevoKardex->saldos_cantidad = $kardex_buscar->saldos_cantidad - $item->salidas_cantidad;
+
+                $nuevoKardex->save();
+            }
+		}
+		
 		echo $dispensacion->id;
     }
 
@@ -233,7 +299,7 @@ class DispensacionController extends Controller
         $dispensacion = $dispensacion_model->getDetalleDispensacionById($id);
         $marca = $marca_model->getMarcaAll();
         $producto = $producto_model->getProductoAll();
-        $estado_bien = $tablaMaestra_model->getMaestroByTipo(4);
+        $estado_bien = $tablaMaestra_model->getMaestroByTipo(56);
         $unidad_medida = $tablaMaestra_model->getMaestroByTipo(43);
 
         $producto_stock = [];
@@ -256,4 +322,42 @@ class DispensacionController extends Controller
             'producto_stock' =>$producto_stock
         ]);
     }
+
+	public function movimiento_pdf_dispensacion($id){
+
+        $dispensacion_model = new Dispensacione;
+        $dispensacion_detalle_model = new DispensacionDetalle;
+
+        $datos=$dispensacion_model->getDispensacionById($id);
+        $datos_detalle=$dispensacion_detalle_model->getDetalleDispensacionPdf($id);
+
+        $tipo_documento=$datos[0]->tipo_documento;
+        $area_trabajo=$datos[0]->area_trabajo;
+        $almacen=$datos[0]->almacen;
+        $unidad_trabajo = $datos[0]->unidad_trabajo;
+        $fecha = $datos[0]->fecha;
+        $codigo=$datos[0]->codigo;
+		$usuario_recibe=$datos[0]->usuario_recibe;
+        
+		$year = Carbon::now()->year;
+
+		Carbon::setLocale('es');
+
+		$carbonDate =Carbon::now()->format('d-m-Y');
+
+		$currentHour = Carbon::now()->format('H:i:s');
+
+		$pdf = Pdf::loadView('frontend.dispensacion.movimiento_pdf_dispensacion',compact('tipo_documento','area_trabajo','almacen','unidad_trabajo','fecha','codigo','usuario_recibe','datos_detalle'));
+		
+		$pdf->setPaper('A4'); // Tamaño de papel (puedes cambiarlo según tus necesidades)
+
+		$pdf->setPaper('A4', 'portrait');
+    	$pdf->setOption('margin-top', 20); // Márgen superior en milímetros
+   		$pdf->setOption('margin-right', 50); // Márgen derecho en milímetros
+    	$pdf->setOption('margin-bottom', 20); // Márgen inferior en milímetros
+    	$pdf->setOption('margin-left', 100); // Márgen izquierdo en milímetros
+
+		return $pdf->stream();
+
+	}
 }

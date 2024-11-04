@@ -45,6 +45,7 @@ class ProductosController extends Controller
 		$p[]=$request->denominacion;
         $p[]=$request->codigo;
         $p[]=$request->estado_bien;
+        $p[]=$request->tipo_origen_producto;
         $p[]=$request->estado;
 		$p[]=$request->NumeroPagina;
 		$p[]=$request->NumeroRegistros;
@@ -212,6 +213,14 @@ class ProductosController extends Controller
                 'producto_stock' =>$producto_stock
             ]);
         }
+	}
+
+    public function obtener_producto_almacen($id_almacen){
+        
+		$producto_model = new Producto;
+		$producto = $producto_model->getProductoByIdAlmacen($id_almacen);
+		//dd($producto);exit();
+		return response()->json($producto);
 	}
     
     

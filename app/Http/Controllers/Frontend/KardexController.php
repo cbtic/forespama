@@ -88,11 +88,12 @@ class KardexController extends Controller
 	public function listar_kardex_existencia_ajax(Request $request){
 
 		$kardex_model = new Kardex;
-		$p[]=$request->producto_existencia;
+		$p[]="";
 		$p[]=$request->almacen_existencia;
 		$p[]=$request->NumeroPagina;
 		$p[]=$request->NumeroRegistros;
 		$data = $kardex_model->listar_kardex_existencia_ajax($p);
+
 		$iTotalDisplayRecords = isset($data[0]->totalrows)?$data[0]->totalrows:0;
 
 		$result["PageStart"] = $request->NumeroPagina;
@@ -131,8 +132,8 @@ class KardexController extends Controller
 
 	public function exportar_listar_existencia($consulta_almacen) {
 
-
 		if($consulta_almacen=="0")$consulta_almacen = "";
+
 		$kardex_model = new Kardex;
 		$p[]="";
 		$p[]=$consulta_almacen;
@@ -151,7 +152,7 @@ class KardexController extends Controller
 		}
 		
 		$export = new InvoicesExport([$variable]);
-		return Excel::download($export, 'reporte_existencias.xlsx');
+		return Excel::download($export, 'Reporte_existencias.xlsx');
 		
     }
 

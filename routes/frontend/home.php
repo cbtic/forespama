@@ -393,5 +393,8 @@ Route::get('dispensacion/eliminar_dispensacion/{id}/{estado}', [DispensacionCont
 Route::get('dispensacion/obtener_unidad_trabajo/{area_trabajo}', [DispensacionController::class, 'obtener_unidad_trabajo'])->name('dispensacion.obtener_unidad_trabajo');
 Route::get('dispensacion/obtener_codigo_dispensacion/{tipo_documento}', [DispensacionController::class, 'obtener_codigo_dispensacion'])->name('dispensacion.obtener_codigo_dispensacion');
 Route::get('dispensacion/cargar_detalle/{id}', [DispensacionController::class, 'cargar_detalle'])->name('dispensacion.cargar_detalle');
+Route::get('productos/obtener_producto_almacen/{id_almacen}', [ProductosController::class, 'obtener_producto_almacen'])->name('productos.obtener_producto_almacen');
+Route::get('entrada_productos/guia_electronica_pdf/{id}/{tipo_movimiento}', [EntradaProductosController::class, 'guia_electronica_pdf'])->name('entrada_productos.guia_electronica_pdf');
+Route::get('dispensacion/movimiento_pdf_dispensacion/{id}', [DispensacionController::class, 'movimiento_pdf_dispensacion'])->name('dispensacion.movimiento_pdf_dispensacion');
 
 

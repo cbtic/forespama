@@ -88,7 +88,8 @@ class AlmacenesController extends Controller
 
 		if($id>0){
 			$almacen = Almacene::find($id);
-			$almacen_usuario = Almacen_usuario::where('id_almacen',$id)->get();
+			$almacen_usuario = Almacen_usuario::where('id_almacen',$id)->first();
+			//dd($user);exit();
 			//$usuario = $almacen_usuario_model->getUsuariosByAlmacen($id);
 		}else{
 			$almacen = new Almacene;
@@ -211,7 +212,7 @@ class AlmacenesController extends Controller
 		$almacen_usuario_model = new Almacen_usuario;
 
 		$usuario = $almacen_usuario_model->getUsuariosByAlmacen($id);
-
+		//dd($usuario);exit();
 		return response()->json($usuario);
     }
 	

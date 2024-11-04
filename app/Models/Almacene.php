@@ -63,7 +63,7 @@ class Almacene extends Model
     function getUsuarioAlmacen($id){
 
         $cad = "select u.id, u.name, u.email from almacenes a
-        inner join almacen_usuarios au on au.id_almacen = a.id
+        inner join almacen_usuarios au on au.id_almacen = a.id and au.estado ='1'
         left join users u on au.id_user = u.id
         where a.id = '".$id."'";
 

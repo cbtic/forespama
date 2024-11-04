@@ -273,7 +273,7 @@ function obtenerCodInterno(selectElement, n){
                 //alert(result[0].codigo);
                 $('#cod_interno' + n).val(result[0].codigo);
                 $('#item' + n).val(result[0].numero_serie);
-                $('#marca' + n).val(result[0].id_marca).trigger('change');;
+                $('#marca' + n).val(result[0].id_marca).trigger('change');
                 $('#unidad' + n).val(result[0].id_unidad_producto);
 
                 $('#fecha_vencimiento_' + n).datepicker({

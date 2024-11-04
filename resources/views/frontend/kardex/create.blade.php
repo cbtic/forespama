@@ -352,20 +352,7 @@ label.form-control-sm{
 				<div class="row" style="padding:20px 20px 0px 20px;">
 
 					<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-						<select name="producto_bus" id="producto_bus" class="form-control form-control-sm">
-							<option value="">--Seleccionar Producto--</option>
-							<?php
-							foreach ($producto as $row) {
-							?>
-							<option value="<?php echo $row->id?>"><?php echo $row->codigo ." - ".$row->denominacion?></option>
-							<?php
-							}
-							?>
-						</select>
-					</div>
-
-					<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-						<select name="almacen_bus" id="almacen_bus" class="form-control form-control-sm">
+						<select name="almacen_bus" id="almacen_bus" class="form-control form-control-sm" onchange="obtenerProductosAlmacenKardex()">
 							<option value="">--Seleccionar Almacen--</option>
 							<?php
 							foreach ($almacen as $row) {
@@ -373,6 +360,19 @@ label.form-control-sm{
 							<option value="<?php echo $row->id?>"><?php echo $row->denominacion?></option>
 							<?php
 							}
+							?>
+						</select>
+					</div>
+
+					<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+						<select name="producto_bus" id="producto_bus" class="form-control form-control-sm">
+							<option value="">--Seleccionar Producto--</option>
+							<?php
+							/*foreach ($producto as $row) {
+							?>
+							<option value="<?php echo $row->id?>"><?php echo $row->codigo ." - ".$row->denominacion?></option>
+							<?php
+							}*/
 							?>
 						</select>
 					</div>

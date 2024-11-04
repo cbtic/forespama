@@ -94,4 +94,17 @@ class Producto extends Model
 		$data = DB::select($cad);
         return $data;
     }
+
+    function getProductoByIdAlmacen($id_almacen){
+
+        $cad = "select distinct on (p.id) p.id, p.codigo, p.denominacion, k.saldos_cantidad, a.denominacion AS almacen
+        from kardex k
+        inner join almacenes a on k.id_almacen_destino = a.id and a.estado ='1'
+        inner join productos p on k.id_producto = p.id and p.estado = '1'
+        where k.id_almacen_destino = '".$id_almacen."'
+        order by p.id desc";
+
+		$data = DB::select($cad);
+        return $data;
+    }
 }

@@ -351,11 +351,11 @@ label.form-control-sm{
 				
 				<div class="row" style="padding:20px 20px 0px 20px;">
 
-					<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
 						<input class="form-control form-control-sm" id="serie_bus" name="serie_bus" placeholder="Serie">
 					</div>
 
-					<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
 						<input class="form-control form-control-sm" id="codigo_bus" name="codigo_bus" placeholder="C&oacute;digo">
 					</div>
 
@@ -363,11 +363,24 @@ label.form-control-sm{
                         <input id="denominacion_bus" name="denominacion_bus" on class="form-control form-control-sm"  placeholder="Denominaci&oacute;n">
 					</div>
 
-					<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
 						<select name="estado_bien_bus" id="estado_bien_bus" class="form-control form-control-sm">
 							<option value="">--Seleccionar Estado Bien--</option>
 							<?php
 							foreach ($estado_bien as $row) {
+							?>
+							<option value="<?php echo $row->codigo?>"><?php echo $row->denominacion?></option>
+							<?php
+							}
+							?>
+						</select>
+					</div>
+
+					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+						<select name="tipo_origen_producto_bus" id="tipo_origen_producto_bus" class="form-control form-control-sm">
+							<option value="">--Seleccionar Tipo Origen Producto--</option>
+							<?php
+							foreach ($tipo_origen_producto as $row) {
 							?>
 							<option value="<?php echo $row->codigo?>"><?php echo $row->denominacion?></option>
 							<?php
@@ -408,10 +421,8 @@ label.form-control-sm{
 							<th>Marca</th>
 							<th>Tipo Producto</th>
 							<th>Estado Bien</th>
-                            <th>Stock</th>
 							<th>F. Vencimiento</th>
 							<th>Stock M&iacute;nimo</th>
-							<th>Stock Actual</th>
 							<th>Estado</th>
                             <th>Acciones</th>
                         </tr>

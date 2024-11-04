@@ -350,20 +350,7 @@ label.form-control-sm{
 				<div class="row" style="padding:20px 20px 0px 20px;">
 
 					<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-						<select name="consulta_producto_bus" id="consulta_producto_bus" class="form-control form-control-sm">
-							<option value="">--Seleccionar Producto--</option>
-							<?php
-							foreach ($producto as $row) {
-							?>
-							<option value="<?php echo $row->id?>"><?php echo $row->codigo ." - ".$row->denominacion?></option>
-							<?php
-							}
-							?>
-						</select>
-					</div>
-
-					<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-						<select name="consulta_almacen_bus" id="consulta_almacen_bus" class="form-control form-control-sm">
+						<select name="consulta_almacen_bus" id="consulta_almacen_bus" class="form-control form-control-sm" onchange="obtenerProductosAlmacen()">
 							<option value="">--Seleccionar Almacen--</option>
 							<?php
 							foreach ($almacen as $row) {
@@ -374,7 +361,19 @@ label.form-control-sm{
 							?>
 						</select>
 					</div>
-					
+
+					<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+						<select name="consulta_producto_bus" id="consulta_producto_bus" class="form-control form-control-sm">
+							<option value="">--Seleccionar Producto--</option>
+							<?php
+							/*foreach ($producto as $row) {
+							?>
+							<option value="<?php echo $row->id?>"><?php echo $row->codigo ." - ".$row->denominacion?></option>
+							<?php
+							}*/
+							?>
+						</select>
+					</div>
                     <!--<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
 						<select name="estado_bus" id="estado_bus" class="form-control form-control-sm">
 							<option value="">Todos</option>

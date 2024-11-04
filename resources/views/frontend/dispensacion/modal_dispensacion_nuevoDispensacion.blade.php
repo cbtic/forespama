@@ -259,6 +259,8 @@ function obtenerCodInterno(selectElement, n){
                 //alert(result[0].codigo);
                 $('#cod_interno' + n).val(result[0].codigo);
                 $('#item' + n).val(result[0].numero_serie);
+                $('#marca' + n).val(result[0].id_marca).trigger('change');
+                $('#unidad' + n).val(result[0].id_unidad_producto);
             }
         });
 }
@@ -415,7 +417,7 @@ $.ajax({
                         <td><input name="cod_interno[]" id="cod_interno${n}" class="form-control form-control-sm" value="${dispensacion.codigo}" type="text"></td>
                         <td><select name="estado_bien[]" id="estado_bien${n}" class="form-control form-control-sm" onChange="">${estadoBienOptions}</select></td>
                         <td><select name="unidad[]" id="unidad${n}" class="form-control form-control-sm">${unidadMedidaOptions}</select></td>
-                        <td><input name="cantidad_ingreso[]" id="cantidad_ingreso${n}" class="cantidad_ingreso form-control form-control-sm" value="${dispensacion.cantidad}" type="text" oninput="calcularCantidadPendiente(this);calcularSubTotal(this)"></td>
+                        <td><input name="cantidad[]" id="cantidad${n}" class="cantidad form-control form-control-sm" value="${dispensacion.cantidad}" type="text" oninput="calcularCantidadPendiente(this);calcularSubTotal(this)"></td>
                         </tr>
                 `;
                 tbody.append(row);
@@ -592,12 +594,12 @@ function obtenerCodigo(){
 
 }
 
-function pdf_documento(){
+function pdf_documento_dispensacion(){
 
     var id = $('#id').val();
     //var tipo_movimiento = $('#tipo_movimiento').val();
 
-    var href = '/orden_compra/movimiento_pdf/'+id;
+    var href = '/dispensacion/movimiento_pdf_dispensacion/'+id;
     window.open(href, '_blank');
 
 }
@@ -764,7 +766,7 @@ function pdf_documento(){
                                 <?php 
                                     if($id>0){
                                 ?>
-                                <button style="font-size:12px;margin-left:10px; margin-right:10px" type="button" class="btn btn-sm btn-primary" data-toggle="modal" onclick="pdf_documento()" disabled><i class="fa fa-edit" ></i>Imprimir</button>
+                                <button style="font-size:12px;margin-left:10px; margin-right:10px" type="button" class="btn btn-sm btn-primary" data-toggle="modal" onclick="pdf_documento_dispensacion()"><i class="fa fa-edit" ></i>Imprimir</button>
                                 <!--<button style="font-size:12px;margin-left:10px; margin-right:100px" type="button" class="btn btn-sm btn-warning" data-toggle="modal" onclick="pdf_guia()" ><i class="fa fa-edit"></i>Imprimir Gu&iacute;a Remisi&oacute;n Electronica</button>
                                 <a href="javascript:void(0)" onClick="fn_pdf_documento()" class="btn btn-sm btn-primary" style="margin-right:100px">Imprimir</a>-->
                                 <?php 

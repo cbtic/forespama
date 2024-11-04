@@ -17,10 +17,12 @@ $(document).ready(function () {
 	datatablenew();
 
 	$('#btnBuscarConsulta').click(function () {
-		if(consulta_producto_bus==""){
+		var consulta_producto =$('#consulta_producto_bus').val();
+		//alert(consulta_producto);
+		if(consulta_producto==""){
 			fn_ListarBusqueda_Consulta();
 		}
-		if(consulta_producto_bus!=""){
+		if(consulta_producto!=""){
 			fn_ListarBusqueda_Consulta_Producto();
 		}
 		
@@ -515,4 +517,62 @@ function DescargarArchivosExcel(){
 	if (consulta_almacen == "")consulta_almacen = 0;
 	
 	location.href = '/kardex/exportar_listar_existencia/'+consulta_almacen;
+}
+
+function obtenerProductosAlmacen(){
+
+    var id_almacen = $('#consulta_almacen_bus').val();
+
+    $.ajax({
+		url: "/productos/obtener_producto_almacen/"+id_almacen,
+		dataType: "json",
+		success: function(result){
+			
+			$('#consulta_producto_bus').empty().append('<option value="">--Seleccionar Producto--</option>');
+			
+			if(result.length > 0) {
+				$.each(result, function(ii, oo) {
+					$('#consulta_producto_bus').append(
+						$('<option>', {
+							value: oo.id,
+							text: oo.codigo+' - '+oo.denominacion
+						})
+					);
+				});
+
+				$('#consulta_producto_bus').select2();
+			} else {
+				bootbox.alert("No se encontraron productos en este almacén.");
+			}
+		}
+	});
+}
+
+function obtenerProductosAlmacenKardex(){
+
+    var id_almacen = $('#almacen_bus').val();
+
+    $.ajax({
+		url: "/productos/obtener_producto_almacen/"+id_almacen,
+		dataType: "json",
+		success: function(result){
+			
+			$('#producto_bus').empty().append('<option value="">--Seleccionar Producto--</option>');
+			
+			if(result.length > 0) {
+				$.each(result, function(ii, oo) {
+					$('#producto_bus').append(
+						$('<option>', {
+							value: oo.id,
+							text: oo.codigo+' - '+oo.denominacion
+						})
+					);
+				});
+
+				$('#producto_bus').select2();
+			} else {
+				bootbox.alert("No se encontraron productos en este almacén.");
+			}
+		}
+	});
 }

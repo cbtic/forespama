@@ -299,12 +299,14 @@ function cargarUsuario(){
             let n = 1;
             let almacenUsuarios = @json($user);
 
+            //alert(result[0].usuario);
+
             result.forEach(usuario => {
                 let usuarioOptions = '<option value="">--Seleccionar--</option>';
                 
-            almacenUsuarios.forEach(almacenUsuario => {
-                    let selected = (usuario.id == almacenUsuario.id) ? 'selected' : '';
-                    usuarioOptions += `<option value="${usuario.id}" ${selected}>${almacenUsuario.name}</option>`;
+                almacenUsuarios.forEach(almacenUsuario => {
+                    let selected = (usuario.id_user == almacenUsuario.id) ? 'selected' : '';
+                    usuarioOptions += `<option value="${almacenUsuario.id}" ${selected}>${almacenUsuario.name}</option>`;
                 });
 
                 const row = `<div class="col-lg-3 usuario-grupo">\
@@ -570,7 +572,7 @@ function fn_save_almacen(){
                                             <option value="">--Seleccionar--</option>
                                             <?php
                                             foreach ($user as $row) {?>
-                                            <option value="<?php echo $row->id?>" <?php if($row->id==$almacen->id_user)echo "selected='selected'"?>><?php echo $row->name ?></option>
+                                            <option value="<?php echo $row->id?>" <?php if($row->id==$almacen_usuario->id_user)echo "selected='selected'"?>><?php echo $row->name ?></option>
                                             <?php 
                                             }
                                             ?>

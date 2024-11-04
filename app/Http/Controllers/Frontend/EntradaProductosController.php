@@ -753,6 +753,120 @@ class EntradaProductosController extends Controller
 
 	}
 
+    public function guia_electronica_pdf($id, $tipo_movimiento){
+
+        if($tipo_movimiento==1){
+
+            $entrada_producto_model = new EntradaProducto;
+            $entrada_producto_detalle_model = new EntradaProductoDetalle;
+
+            $datos=$entrada_producto_model->getEntradaById($id);
+            $datos_detalle=$entrada_producto_detalle_model->getDetalleProductoPdf($id);
+
+            $codigo=$datos[0]->codigo;
+            $tipo_documento=$datos[0]->tipo_documento;
+            $unidad_origen=$datos[0]->unidad_origen;
+            $empresa_vende=$datos[0]->empresa_vende;
+            $empresa_compra=$datos[0]->empresa_compra;
+            $numero_comprobante = $datos[0]->numero_comprobante;
+            $fecha_comprobante = $datos[0]->fecha_comprobante;
+            $fecha_movimiento=$datos[0]->fecha_movimiento;
+            $moneda=$datos[0]->moneda;
+            $observacion=$datos[0]->observacion;
+            $igv_compra=$datos[0]->igv_compra;
+            $almacen=$datos[0]->almacen;
+            //$tipo_empresa = 'Vende';
+
+            $entrada_producto_detalle_model = new EntradaProductoDetalle;
+
+            $kardex_model = new Kardex;
+
+            $entrada_producto = $entrada_producto_detalle_model->getDetalleProductoId($id);
+
+            $producto_stock = [];
+
+            foreach($entrada_producto as $detalle){
+                $stock = $kardex_model->getExistenciaProductoById($detalle->id_producto, $datos[0]->id_almacen_destino);
+                if(count($stock)>0){
+                    $producto_stock[$detalle->id_producto] = $stock[0];
+                }else {
+                    $producto_stock[$detalle->id_producto] = ['saldos_cantidad'=>0];
+                }
+                
+                //var_dump($producto_stock);
+            }
+
+        }else if($tipo_movimiento==2){
+
+            $salida_producto_model = new SalidaProducto;
+            $salida_producto_detalle_model = new SalidaProductoDetalle;
+
+            $datos=$salida_producto_model->getSalidaById($id);
+            $datos_detalle=$salida_producto_detalle_model->getDetalleProductoPdf($id);
+
+            //dd($datos_detalle);exit();
+
+            $codigo=$datos[0]->codigo;
+            $tipo_documento=$datos[0]->tipo_documento;
+            $unidad_origen=$datos[0]->unidad_origen;
+            $empresa_vende=$datos[0]->empresa_vende;
+            $empresa_compra=$datos[0]->empresa_compra;
+            $numero_comprobante = $datos[0]->numero_comprobante;
+            $fecha_comprobante = $datos[0]->fecha_comprobante;
+            $fecha_movimiento=$datos[0]->fecha_movimiento;
+            $moneda=$datos[0]->moneda;
+            $observacion=$datos[0]->observacion;
+            $igv_compra=$datos[0]->igv_compra;
+            $almacen=$datos[0]->almacen;
+            //$tipo_empresa = 'Compra';
+
+            //$salida_producto_detalle_model = new SalidaProductoDetalle;
+
+            $kardex_model = new Kardex;
+
+            $entrada_producto = $salida_producto_detalle_model->getDetalleProductoId($id);
+
+            $producto_stock = [];
+
+            foreach($entrada_producto as $detalle){
+                $stock = $kardex_model->getExistenciaProductoById($detalle->id_producto, $datos[0]->id_almacen_salida);
+                if(count($stock)>0){
+                    $producto_stock[$detalle->id_producto] = $stock[0];
+                }else {
+                    $producto_stock[$detalle->id_producto] = ['saldos_cantidad'=>0];
+                } 
+                
+                //var_dump($producto_stock);
+            }
+
+        }
+        
+		$year = Carbon::now()->year;
+
+		Carbon::setLocale('es');
+
+		// Crear una instancia de Carbon a partir de la fecha
+
+		 $carbonDate =Carbon::now()->format('d-m-Y');
+
+		 $currentHour = Carbon::now()->format('H:i:s'); 
+
+		$pdf = Pdf::loadView('frontend.entrada_productos.guia_electronica_pdf',compact('tipo_documento','unidad_origen','numero_comprobante','fecha_comprobante','fecha_movimiento','datos_detalle','observacion','moneda','igv_compra','almacen','producto_stock','entrada_producto','codigo','empresa_vende','empresa_compra'));
+		
+		$pdf->setPaper('A4'); // Tamaño de papel (puedes cambiarlo según tus necesidades)
+
+		$pdf->setPaper('A4', 'portrait');
+    	$pdf->setOption('margin-top', 20); // Márgen superior en milímetros
+   		$pdf->setOption('margin-right', 50); // Márgen derecho en milímetros
+    	$pdf->setOption('margin-bottom', 20); // Márgen inferior en milímetros
+    	$pdf->setOption('margin-left', 100); // Márgen izquierdo en milímetros
+
+		return $pdf->stream();
+    	//return $pdf->download('invoice.pdf');
+		//return view('frontend.certificado.certificado_pdf');
+
+	}
+
     public function cargar_detalle($id, $tipo_movimiento)
     {
         if($tipo_movimiento==1){
