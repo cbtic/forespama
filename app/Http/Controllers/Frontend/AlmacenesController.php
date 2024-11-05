@@ -128,6 +128,8 @@ class AlmacenesController extends Controller
 
     public function send_almacen(Request $request){
 		
+		$id_usuario_detalle = $request->input('id_usuario_detalle');
+
 		$id_user = Auth::user()->id;
 		$usuario = $request->usuario;
 
@@ -148,9 +150,14 @@ class AlmacenesController extends Controller
 		//$almacen->id_user = $request->usuario;
 		$almacen->save();
 
-		foreach($usuario as $usuario_id){
-			$almacen_usuario = new Almacen_usuario;
-			$almacen_usuario->id_user = $usuario_id;
+		foreach($usuario as $index => $value){
+			if($id_usuario_detalle[$index] == 0){
+                $almacen_usuario = new Almacen_usuario;
+            }else{
+                $almacen_usuario = Almacen_usuario::find($id_usuario_detalle[$index]);
+            }
+			//$almacen_usuario = new Almacen_usuario;
+			$almacen_usuario->id_user = $value;
 			$almacen_usuario->id_almacen = $almacen->id;
 			$almacen_usuario->id_usuario_inserta = $id_user;
 			$almacen_usuario->estado = 1;

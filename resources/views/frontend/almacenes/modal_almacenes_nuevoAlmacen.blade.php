@@ -310,11 +310,12 @@ function cargarUsuario(){
                 });
 
                 const row = `<div class="col-lg-3 usuario-grupo">\
-                    <div class="form-group">\
+                        <div class="form-group">\
                         <label class="control-label form-control-sm">Usuario</label>\
                         <select name="usuario[]" id="usuario${n}" class="form-control form-control-sm">\
                             ${usuarioOptions}\
                         </select>\
+                        <input name="id_usuario_detalle[]" id="id_usuario_detalle${n}" class="form-control form-control-sm" value="${usuario.id}" type="hidden">
                     </div>\
                 </div>`;
                 
@@ -326,24 +327,28 @@ function cargarUsuario(){
 }
 
 function AddFila(){
+    let n = 1;
     // Crear un nuevo div para el grupo de usuario
     var newDiv = document.createElement('div');
     newDiv.className = 'col-lg-3 usuario-grupo';
     
+        
     // Crear el HTML interno del nuevo div
     newDiv.innerHTML = `
         <div class="form-group">
             <label class="control-label form-control-sm">Usuario</label>
-            <select name="usuario[]" id="usuario" class="form-control form-control-sm">
+            <select name="usuario[]" id="usuario${n}" class="form-control form-control-sm">
                 <option value="">--Seleccionar--</option>
                 <?php foreach ($user as $row) { ?>
                 <option value="<?php echo $row->id ?>"><?php echo $row->name ?></option>
                 <?php } ?>
             </select>
+            <input name="id_usuario_detalle[]" id="id_usuario_detalle${n}" class="form-control form-control-sm" value="0" type="hidden">
         </div>`;
     
     // Agregar el nuevo div al contenedor
     document.getElementById('contenedor-usuarios').appendChild(newDiv);
+    n++;
 }
 
 function editarPuesto(id){
