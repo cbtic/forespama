@@ -502,7 +502,7 @@ $.ajax({
                 `;
                 tbody.append(row);
                 $('#descripcion' + n).select2({ 
-                    width: 'resolve',
+                    width: 'resolve', 
                     dropdownCssClass: 'custom-select2-dropdown'
                 });
 
