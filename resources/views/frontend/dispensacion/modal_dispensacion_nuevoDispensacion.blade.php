@@ -165,45 +165,29 @@ $('#openOverlayOpc').on('shown.bs.modal', function() {
 });
 
 $(document).ready(function() {
-    /*if($('#id').val()==0){
-        cambiarTipoCambio();
-        cambiarOrigen();
-    }*/
 
     if($('#id').val()>0){
         cargarDetalle();
     }
 });
 
-/*function cambiarTipoCambio(){
+function obtenerCodigo(){
 
-    var moneda = $('#moneda').val();
-    //alert(moneda);
-    if(moneda==2){
-        $('#tipo_cambio_dolar_, #tipo_cambio_dolar_input').show();
-    }else if(moneda==1){
-        $('#tipo_cambio_dolar_, #tipo_cambio_dolar_input').hide();
-    }else{
-        $('#tipo_cambio_dolar_, #tipo_cambio_dolar_input').hide();
-    }
-}*/
+    var tipo_documento = $('#tipo_documento').val();
 
-/*function cambiarOrigen(){
+    $.ajax({
+        url: "/dispensacion/obtener_codigo_dispensacion/"+tipo_documento,
+        dataType: "json",
+        success: function (result) {
 
-    var unidad_origen = $('#unidad_origen').val();
-    //alert(moneda);
-    if(unidad_origen==1){
-        $('#proveedor_select, #proveedor_').hide();
-    }else if(unidad_origen==2){
-        $('#proveedor_select, #proveedor_').show();
-        $('#proveedor').val("");
-    }else if(unidad_origen==3){
-        $('#proveedor_select, #proveedor_').show();
-        $('#proveedor').val(30);
-    }else{
-        $('#proveedor_select, #proveedor_').hide();
-    }
-}*/
+            //alert(result[0].codigo);
+            //console.log(result);
+            $('#numero_dispensacion').val(result[0].codigo);
+
+        }
+    });
+
+}
 
 function obtenerUnidadTrabajo(){
     
@@ -234,7 +218,7 @@ function obtenerUnidadTrabajo(){
     });
 }
 
-function obtenerDescripcion(selectElement){
+/*function obtenerDescripcion(selectElement){
 
     var fila = $(selectElement).closest('tr');
 
@@ -246,7 +230,7 @@ function obtenerDescripcion(selectElement){
 
     fila.find('input[name="descripcion[]"]').val(descripcion);
 
-}
+}*/
 
 function obtenerCodInterno(selectElement, n){
 
@@ -265,7 +249,7 @@ function obtenerCodInterno(selectElement, n){
         });
 }
 
-function obtenerCodigo(selectElement){
+/*function obtenerCodigo(selectElement){
 
     var selectedOption = selectElement.options[selectElement.selectedIndex];
     
@@ -273,96 +257,6 @@ function obtenerCodigo(selectElement){
 
     selectedOption.text = codigo;
 
-}
-
-/*function calcularCantidadPendiente(input) {
-    var fila = $(input).closest('tr');
-
-    var cantidad_ingreso = parseFloat(fila.find('.cantidad_ingreso').val()) || 0;
-    var cantidad_compra = parseFloat(fila.find('.cantidad_compra').val()) || 0;
-
-    var cantidad_pendiente = cantidad_compra - cantidad_ingreso;
-
-    fila.find('.cantidad_pendiente').val(cantidad_pendiente.toFixed(2));
-}*/
-
-/*function calcularSubTotal(input) {
-    var fila = $(input).closest('tr');
-
-    var cantidad_ingreso = parseFloat(fila.find('.cantidad_ingreso').val()) || 0;
-    var precio_unitario = parseFloat(fila.find('.precio_unitario').val()) || 0;
-
-    var sub_total = cantidad_ingreso * precio_unitario;
-
-    fila.find('.sub_total').val(sub_total.toFixed(2));
-
-    var igvInputId = fila.find('.igv').attr('id');
-    var totalInputId = fila.find('.total').attr('id');
-
-    //console.log('IGV ID:', igvInputId);
-    //console.log('Total ID:', totalInputId);
-
-    calcularIGV(sub_total, igvInputId, totalInputId);
-
-    actualizarTotalGeneral();
-}*/
-
-/*function calcularIGV(subTotal, igvInputId, totalInputId) {
-    subTotal = parseFloat(subTotal) || 0;
-    
-    var igvPorcentaje = $('#igv_compra').val() == 2 ? 0.18 : 0;
-    var igvValor = subTotal * igvPorcentaje;
-    var total = subTotal + igvValor;
-
-    if (!igvInputId || !totalInputId) {
-        console.error("Error: Los IDs de IGV o Total no son válidos.");
-        return;
-    }
-    
-    $('#' + igvInputId).val(igvValor.toFixed(2));
-    
-    $('#' + totalInputId).val(total.toFixed(2));
-}*/
-
-/*function actualizarTotalGeneral() {
-    var totalGeneral = 0;
-    $('#tblOrdenCompraDetalle tbody tr').each(function() {
-        var totalFila = parseFloat($(this).find('.total').val()) || 0;
-        totalGeneral += totalFila;
-    });
-    
-    $('#totalGeneral').text(totalGeneral.toFixed(2));
-}*/
-
-/*function aplicaDescuento(selectElement) {
-    
-    var fila = $(selectElement).closest('tr');
-    var subtotalInput = fila.find('.sub_total');
-
-    var selectedOption = selectElement.options[selectElement.selectedIndex];
-    //alert(selectedOption.value);
-
-    if(selectedOption.value!=''){
-
-        var porcentaje = parseFloat(selectedOption.text)/100;
-        var subtotal = parseFloat(subtotalInput.val()) || 0;
-
-        
-        var descuento = subtotal * porcentaje;
-
-        var nuevo_sub_total = subtotal - descuento;
-
-        fila.find('.sub_total').val(nuevo_sub_total.toFixed(2));
-
-        var igvInputId = fila.find('.igv').attr('id');
-        var totalInputId = fila.find('.total').attr('id');
-
-        calcularIGV(nuevo_sub_total, igvInputId, totalInputId);
-
-        actualizarTotalGeneral();
-    }else {
-        calcularSubTotal(subtotalInput);
-    }
 }*/
 
 function cargarDetalle(){
@@ -442,44 +336,37 @@ $.ajax({
 
 function agregarProducto(){
 
+    var opcionesDescripcion = `<?php
+        echo '<option value="">--Seleccionar--</option>';
+        foreach ($producto as $row) {
+            echo '<option value="' . htmlspecialchars($row->id, ENT_QUOTES, 'UTF-8') . '">' . htmlspecialchars($row->denominacion, ENT_QUOTES, 'UTF-8') . '</option>';
+        }
+    ?>`;
+
     var cantidad = 1;
     var newRow = "";
     for (var i = 0; i < cantidad; i++) { 
+
         var n = $('#tblDispensacionDetalle tbody tr').length + 1;
-        var item = '<input name="id_dispensacion_detalle[]" id="id_dispensacion_detalle${n}" class="form-control form-control-sm" value="${dispensacion.id}" type="hidden"><input name="item[]" id="item' + n + '" class="form-control form-control-sm" value="" type="text">';
-        //var cantidad = '<input name="cantidad[]" id="cantidad' + n + '" class="form-control form-control-sm" value="" type="text">';
-        var descripcion = '<select name="descripcion[]" id="descripcion' + n + '" class="form-control form-control-sm" onChange="obtenerCodInterno(this, ' + n + ')"> <option value="">--Seleccionar--</option> <?php foreach ($producto as $row) {?> <option value="<?php echo $row->id?>"><?php echo $row->denominacion?></option> <?php } ?> </select>';
+        var item = '<input name="id_dispensacion_detalle[]" id="id_dispensacion_detalle' + n + '" class="form-control form-control-sm" value="0" type="hidden"><input name="item[]" id="item' + n + '" class="form-control form-control-sm" value="" type="text">';
+        var descripcion = '<select name="descripcion[]" id="descripcion' + n + '" class="form-control form-control-sm" onChange="obtenerCodInterno(this, ' + n + ')"> '+ opcionesDescripcion +' </select>';
         var cod_interno = '<input name="cod_interno[]" id="cod_interno' + n + '" class="form-control form-control-sm" value="" type="text">';
-        var marca = '<select name="marca[]" id="marca' + n + '" class="form-control form-control-sm" onchange=""> <option value="">--Seleccionar--</option><?php foreach ($marca as $row){?><option value="<?php echo htmlspecialchars($row->id); ?>"><?php echo htmlspecialchars(addslashes($row->denominiacion)); ?></option><?php }?></select>'
-        //var fecha_fabricacion = '<input id="fecha_fabricacion_' + n + '" name="fecha_fabricacion[]"  on class="form-control form-control-sm"  value="" type="text">'
-        //var fecha_vencimiento = '<input id="fecha_vencimiento_' + n + '" name="fecha_vencimiento[]"  on class="form-control form-control-sm"  value="" type="text">'
-        var estado_bien =  '<select name="estado_bien[]" id="estado_bien' + n + '" class="form-control form-control-sm" onChange=""><option value="">--Seleccionar--</option> <?php foreach ($estado_bien as $row) { ?> <option value="<?php echo $row->codigo ?>" <?php echo ($row->codigo == 1) ? "selected" : ""; ?>><?php echo $row->denominacion ?></option> <?php } ?> </select>';
+        var marca = '<select name="marca[]" id="marca' + n + '" class="form-control form-control-sm" onchange=""> <option value="">--Seleccionar--</option><?php foreach ($marca as $row){?><option value="<?php echo htmlspecialchars($row->id); ?>"><?php echo htmlspecialchars(addslashes($row->denominiacion)); ?></option><?php }?></select>';
+        var estado_bien =  '<select name="estado_bien[]" id="estado_bien' + n + '" class="form-control form-control-sm" onChange=""><option value="">--Seleccionar--</option> <?php foreach ($estado_bien as $row) { ?> <option value="<?php echo $row->codigo ?>" <?php echo ($row->codigo == 1) ? "selected" : ""; ?>><?php echo $row->denominacion; ?></option> <?php } ?> </select>';
         var unidad = '<select name="unidad[]" id="unidad' + n + '" class="form-control form-control-sm" onChange=""> <option value="">--Seleccionar--</option> <?php foreach ($unidad as $row) {?> <option value="<?php echo $row->codigo?>"><?php echo $row->denominacion?></option> <?php } ?> </select>';
         var cantidad_ingreso = '<input name="cantidad[]" id="cantidad' + n + '" class="cantidad form-control form-control-sm" value="" type="text" oninput="">';
-        //var precio_unitario = '<input name="precio_unitario[]" id="precio_unitario' + n + '" class="precio_unitario form-control form-control-sm" value="" type="text" oninput="calcularSubTotal(this)">';
-        //var sub_total = '<input name="sub_total[]" id="sub_total' + n + '" class="sub_total form-control form-control-sm" value="" type="text" readonly="readonly">';
-        //var igv = '<input name="igv[]" id="igv' + n + '" class="igv form-control form-control-sm" value="" type="text" readonly="readonly">';
-        //var total = '<input name="total[]" id="total' + n + '" class="total form-control form-control-sm" value="" type="text" readonly="readonly">';
         
         var btnEliminar = '<button type="button" class="btn btn-danger btn-sm" onclick="eliminarFila(this)">Eliminar</button>';
 
         newRow += '<tr>';
         newRow += '<td>' + n + '</td>';
         newRow += '<td>' + item + '</td>';
-        //newRow += '<td>' + cantidad + '</td>';
         newRow += '<td style="width: 30% !important">' + descripcion + '</td>';
-        //newRow += '<td>' + ubicacion_fisica_seccion + '</td>';
         newRow += '<td>' + marca + '</td>';
         newRow += '<td>' + cod_interno + '</td>';
-        //newRow += '<td>' + fecha_fabricacion + '</td>';
-        //newRow += '<td>' + fecha_vencimiento + '</td>';
         newRow += '<td>' + estado_bien + '</td>';
         newRow += '<td>' + unidad + '</td>';
         newRow += '<td>' + cantidad_ingreso + '</td>';
-        //newRow += '<td>' + precio_unitario + '</td>';
-        //newRow += '<td>' + sub_total + '</td>';
-        //newRow += '<td>' + igv + '</td>';
-        //newRow += '<td>' + total + '</td>';
         newRow += '<td>' + btnEliminar + '</td>';
         newRow += '</tr>';
 
@@ -488,45 +375,19 @@ function agregarProducto(){
         $('#descripcion' + n).select2({
             width: 'resolve',
             dropdownCssClass: 'custom-select2-dropdown'
-            //dropdownCssClass: 'form-control form-control-sm',
-            //containerCssClass: 'form-control form-control-sm'
         });
 
         $('#marca' + n).select2({
             width: '100%',
         });
-        
-        /*$('#fecha_fabricacion_' + n).datepicker({
-            autoclose: true,
-            format: 'yyyy-mm-dd',
-            changeMonth: true,
-            changeYear: true,
-            language: 'es'
-        });
-
-        $('#fecha_vencimiento_' + n).datepicker({
-            autoclose: true,
-            format: 'yyyy-mm-dd',
-            changeMonth: true,
-            changeYear: true,
-            language: 'es'
-        });*/
 
     }
 
-    //actualizarTotalGeneral();
 }
 
-/*function eliminarFila(button){
+function eliminarFila(button){
     $(button).closest('tr').remove();
     actualizarTotalGeneral();
-}*/
-
-function limpiar(){
-	$('#id').val("0");
-	$('#id_tipo_documento').val("");
-	$('#denominacion').val("");
-	$('#img_foto').val("");
 }
 
 function fn_save_dispensacion(){
@@ -576,23 +437,7 @@ function fn_save_dispensacion(){
     }
 }
 
-function obtenerCodigo(){
 
-    var tipo_documento = $('#tipo_documento').val();
-   
-    $.ajax({
-        url: "/dispensacion/obtener_codigo_dispensacion/"+tipo_documento,
-        dataType: "json",
-        success: function (result) {
-
-            //alert(result[0].codigo);
-            //console.log(result);
-            $('#numero_dispensacion').val(result[0].codigo);
-
-        }
-    });
-
-}
 
 function pdf_documento_dispensacion(){
 
@@ -799,17 +644,6 @@ function pdf_documento_dispensacion(){
     
 <script type="text/javascript">
 $(document).ready(function () {
-
-	$('#ruc_').blur(function () {
-		var id = $('#id').val();
-			if(id==0) {
-				validaRuc(this.value);
-			}
-		//validaRuc(this.value);
-	});
-	
-	
-	
 	
 });
 

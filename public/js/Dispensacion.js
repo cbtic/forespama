@@ -15,20 +15,6 @@ $(document).ready(function () {
 		}
 	});
 
-	$('#empresa_compra_bus').keypress(function(e){
-		if(e.which == 13) {
-			datatablenew();
-			return false;
-		}
-	});
-
-	$('#empresa_vende_bus').keypress(function(e){
-		if(e.which == 13) {
-			datatablenew();
-			return false;
-		}
-	});
-
 	$('#fecha_bus').keypress(function(e){
 		if(e.which == 13) {
 			datatablenew();
@@ -36,14 +22,14 @@ $(document).ready(function () {
 		}
 	});
 
-	$('#numero_orden_compra_bus').keypress(function(e){
+	$('#numero_dispensacion_bus').keypress(function(e){
 		if(e.which == 13) {
 			datatablenew();
 			return false;
 		}
 	});
 
-	$('#situacion_bus').keypress(function(e){
+	$('#almacen_bus').keypress(function(e){
 		if(e.which == 13) {
 			datatablenew();
 			return false;
