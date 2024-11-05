@@ -417,7 +417,7 @@ label.form-control-sm{
 							<th>Almacen</th>
 							<th>&Aacute;rea Trabajo</th>
 							<th>Unidad Trabajo</th>
-							<!--<th>Situaci&oacute;n</th>-->
+							<th>Persona Recibe</th>
 							<th>Estado</th>
                             <th>Acciones</th>
                         </tr>

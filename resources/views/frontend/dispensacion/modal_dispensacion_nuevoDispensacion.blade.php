@@ -259,6 +259,8 @@ function obtenerCodInterno(selectElement, n){
 
 }*/
 
+var productosSeleccionados = [];
+
 function cargarDetalle(){
 
 var id = $("#id").val();
@@ -301,17 +303,25 @@ $.ajax({
                     let selected = (unidad_medida.codigo == dispensacion.id_unidad_medida) ? 'selected' : '';
                     unidadMedidaOptions += `<option value="${unidad_medida.codigo}" ${selected}>${unidad_medida.denominacion}</option>`;
                 });
+
+                //alert(dispensacion.id_producto);
+
+                if (dispensacion.id_producto) {
+                    productosSeleccionados.push(dispensacion.id_producto);
+                }
+                //alert(productosSeleccionados);
                
                 const row = `
                     <tr>
                         <td>${n}</td>
                         <td><input name="id_dispensacion_detalle[]" id="id_dispensacion_detalle${n}" class="form-control form-control-sm" value="${dispensacion.id}" type="hidden"><input name="item[]" id="item${n}" class="form-control form-control-sm" value="${dispensacion.item}" type="text"></td>
-                        <td style="width: 30% !important"><select name="descripcion[]" id="descripcion${n}" class="form-control form-control-sm" onChange="">${productoOptions}</select></td>
+                        <td style="width: 30% !important"><select name="descripcion[]" id="descripcion${n}" class="form-control form-control-sm" onChange="verificarProductoSeleccionado(this, ${n});">${productoOptions}</select></td>
                         <td><select name="marca[]" id="marca${n}" class="form-control form-control-sm">${marcaOptions}</select></td>
                         <td><input name="cod_interno[]" id="cod_interno${n}" class="form-control form-control-sm" value="${dispensacion.codigo}" type="text"></td>
                         <td><select name="estado_bien[]" id="estado_bien${n}" class="form-control form-control-sm" onChange="">${estadoBienOptions}</select></td>
                         <td><select name="unidad[]" id="unidad${n}" class="form-control form-control-sm">${unidadMedidaOptions}</select></td>
                         <td><input name="cantidad[]" id="cantidad${n}" class="cantidad form-control form-control-sm" value="${dispensacion.cantidad}" type="text" oninput="calcularCantidadPendiente(this);calcularSubTotal(this)"></td>
+                        <td><button type="button" class="btn btn-danger btn-sm" onclick="eliminarFila(this)">Eliminar</button>'</td>
                         </tr>
                 `;
                 tbody.append(row);
@@ -349,7 +359,7 @@ function agregarProducto(){
 
         var n = $('#tblDispensacionDetalle tbody tr').length + 1;
         var item = '<input name="id_dispensacion_detalle[]" id="id_dispensacion_detalle' + n + '" class="form-control form-control-sm" value="0" type="hidden"><input name="item[]" id="item' + n + '" class="form-control form-control-sm" value="" type="text">';
-        var descripcion = '<select name="descripcion[]" id="descripcion' + n + '" class="form-control form-control-sm" onChange="obtenerCodInterno(this, ' + n + ')"> '+ opcionesDescripcion +' </select>';
+        var descripcion = '<select name="descripcion[]" id="descripcion' + n + '" class="form-control form-control-sm" onChange="verificarProductoSeleccionado(this, ' + n + ')"> '+ opcionesDescripcion +' </select>';
         var cod_interno = '<input name="cod_interno[]" id="cod_interno' + n + '" class="form-control form-control-sm" value="" type="text">';
         var marca = '<select name="marca[]" id="marca' + n + '" class="form-control form-control-sm" onchange=""> <option value="">--Seleccionar--</option><?php foreach ($marca as $row){?><option value="<?php echo htmlspecialchars($row->id); ?>"><?php echo htmlspecialchars(addslashes($row->denominiacion)); ?></option><?php }?></select>';
         var estado_bien =  '<select name="estado_bien[]" id="estado_bien' + n + '" class="form-control form-control-sm" onChange=""><option value="">--Seleccionar--</option> <?php foreach ($estado_bien as $row) { ?> <option value="<?php echo $row->codigo ?>" <?php echo ($row->codigo == 1) ? "selected" : ""; ?>><?php echo $row->denominacion; ?></option> <?php } ?> </select>';
@@ -384,6 +394,43 @@ function agregarProducto(){
     }
 
 }
+
+function verificarProductoSeleccionado(selectElement, rowIndex) {
+    var selectedValue = $(selectElement).val();
+
+    if (selectedValue) {
+
+        if (!productosSeleccionados.includes(Number(selectedValue))) {
+            productosSeleccionados.push(Number(selectedValue));
+
+            obtenerCodInterno(selectElement, rowIndex);
+        } else {
+            bootbox.alert("Este producto ya ha sido seleccionado. Por favor elige otro.");
+            $(selectElement).val('').trigger('change');
+        }
+    } else {
+        
+        const index = productosSeleccionados.indexOf(Number(selectedValue));
+        if (index > -1) {
+            productosSeleccionados.splice(index, 1);
+        }
+    }
+}
+
+/*function verificarProductoSeleccionado(selectElement, rowIndex) {
+    var selectedValue = $(selectElement).val();
+
+    if (selectedValue) {
+        if (productosSeleccionados.includes(selectedValue)) {
+            bootbox.alert("Este producto ya ha sido seleccionado.", function() {
+                $(selectElement).val('').trigger('change'); 
+            });
+        } else {
+            productosSeleccionados.push(selectedValue);
+            obtenerCodInterno(selectElement, rowIndex);
+        }
+    }
+}*/
 
 function eliminarFila(button){
     $(button).closest('tr').remove();
