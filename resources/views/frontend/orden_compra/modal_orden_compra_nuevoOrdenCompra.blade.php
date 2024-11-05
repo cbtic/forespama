@@ -476,8 +476,8 @@ $.ajax({
                     descuentoOptions += `<option value="${descuento.codigo}" ${selected}>${descuento.denominacion}</option>`;
                 });
 
-                if (dispensacion.id_producto) {
-                    productosSeleccionados.push(dispensacion.id_producto);
+                if (orden_compra.id_producto) {
+                    productosSeleccionados.push(orden_compra.id_producto);
                 }
 
                 const row = `
