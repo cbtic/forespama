@@ -236,6 +236,15 @@ function datatablenew(){
 				"bSortable": true,
 				"aTargets": [12]
 				},
+				{
+				"mRender": function (data, type, row) {
+					var fecha_kardex = "";
+					if(row.fecha_kardex!= null)fecha_kardex = row.fecha_kardex;
+					return fecha_kardex;
+				},
+				"bSortable": true,
+				"aTargets": [13]
+				},
 				/*{
 				"mRender": function (data, type, row) {
 					var almacen_salida = "";

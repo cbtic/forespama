@@ -411,6 +411,7 @@ label.form-control-sm{
 							<th>Costo saldos</th>
                             <th>Total Saldos</th>
 							<th>Almacen</th>
+							<th>Fecha</th>
 							<!--<th>Almacen Salida</th>-->
                         </tr>
                         </thead>

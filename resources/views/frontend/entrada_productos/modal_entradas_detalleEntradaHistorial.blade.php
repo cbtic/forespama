@@ -250,8 +250,8 @@ function cargarDetalle(){
                     unidadMedidaOptions += `<option value="${unidad_medida.codigo}" ${selected}>${unidad_medida.denominacion}</option>`;
                 });
 
-                if (orden_compra.id_producto) {
-                    productosSeleccionados.push(orden_compra.id_producto);
+                if (entrada_producto.id_producto) {
+                    productosSeleccionados.push(entrada_producto.id_producto);
                 }
 
                 const row = `
