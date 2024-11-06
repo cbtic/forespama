@@ -202,6 +202,8 @@ function cambiarTipoCambio(){
     }
 }
 
+var productosSeleccionados = [];
+
 function cargarDetalle(){
 
 var id = $("#id").val();
@@ -249,11 +251,15 @@ $.ajax({
                     unidadMedidaOptions += `<option value="${unidad_medida.codigo}" ${selected}>${unidad_medida.denominacion}</option>`;
                 });
 
+                if (entrada_producto.id_producto) {
+                    productosSeleccionados.push(entrada_producto.id_producto);
+                }
+
                 const row = `
                     <tr>
                         <td>${n}</td>
                         <td><input name="item[]" id="item${n}" class="form-control form-control-sm" value="${entrada_producto.numero_serie}" type="text"></td>
-                        <td><select name="descripcion[]" id="descripcion${n}" class="form-control form-control-sm" onChange="">${productoOptions}</select></td>
+                        <td style="width: 30% !important"><select name="descripcion[]" id="descripcion${n}" class="form-control form-control-sm" onChange="verificarProductoSeleccionado(this, ${n});">${productoOptions}</select></td>
                         <td><select name="marca[]" id="marca${n}" class="form-control form-control-sm">${marcaOptions}</select></td>
                         <td><input name="cod_interno[]" id="cod_interno${n}" class="form-control form-control-sm" value="${entrada_producto.codigo}" type="text"></td>
                         <td><input id="fecha_fabricacion_${n}" name="fecha_fabricacion[]"  on class="form-control form-control-sm"  value="${entrada_producto.fecha_fabricacion ? entrada_producto.fecha_fabricacion : ''}" type="text"></td>
@@ -597,12 +603,19 @@ function obtenerOrdenCompra(){
 
 function agregarProducto(){
 
+    var opcionesDescripcion = `<?php
+        echo '<option value="">--Seleccionar--</option>';
+        foreach ($producto as $row) {
+            echo '<option value="' . htmlspecialchars($row->id, ENT_QUOTES, 'UTF-8') . '">' . htmlspecialchars($row->denominacion, ENT_QUOTES, 'UTF-8') . '</option>';
+        }
+    ?>`;
+
     var cantidad = 1;
     var newRow = "";
     for (var i = 0; i < cantidad; i++) { 
         var n = $('#tblDetalleEntrada tbody tr').length + 1;
         var item = '<input name="item[]" id="item' + n + '" class="form-control form-control-sm" value="" type="text">';
-        var descripcion = '<select name="descripcion[]" id="descripcion' + n + '" class="form-control form-control-sm" onChange="obtenerCodInterno(this, ' + n + ') ;obtenerStock(this, ' + n + ')"> <option value="">--Seleccionar--</option> <?php foreach ($producto as $row) {?> <option value="<?php echo $row->id?>"><?php echo $row->denominacion?></option> <?php } ?> </select>';
+        var descripcion = '<select name="descripcion[]" id="descripcion' + n + '" class="form-control form-control-sm" onChange="verificarProductoSeleccionado(this, ' + n + '); obtenerStock(this, ' + n + ')"> '+ opcionesDescripcion +' </select>';
         var cod_interno = '<input name="cod_interno[]" id="cod_interno' + n + '" class="form-control form-control-sm" value="" type="text">';
         var marca = '<select name="marca[]" id="marca' + n + '" class="form-control form-control-sm" onchange=""> <option value="">--Seleccionar--</option><?php foreach ($marca as $row){?><option value="<?php echo htmlspecialchars($row->id); ?>"><?php echo htmlspecialchars(addslashes($row->denominiacion)); ?></option> <?php } ?></select>';
         var fecha_fabricacion = '<input id="fecha_fabricacion_' + n + '" name="fecha_fabricacion[]"  on class="form-control form-control-sm"  value="" type="text">';
@@ -665,6 +678,28 @@ function agregarProducto(){
     }
 
     actualizarTotalGeneral();
+}
+
+function verificarProductoSeleccionado(selectElement, rowIndex) {
+    var selectedValue = $(selectElement).val();
+
+    if (selectedValue) {
+
+        if (!productosSeleccionados.includes(Number(selectedValue))) {
+            productosSeleccionados.push(Number(selectedValue));
+
+            obtenerCodInterno(selectElement, rowIndex);
+        } else {
+            bootbox.alert("Este producto ya ha sido seleccionado. Por favor elige otro.");
+            $(selectElement).val('').trigger('change');
+        }
+    } else {
+        
+        const index = productosSeleccionados.indexOf(Number(selectedValue));
+        if (index > -1) {
+            productosSeleccionados.splice(index, 1);
+        }
+    }
 }
 
 function limpiar(){

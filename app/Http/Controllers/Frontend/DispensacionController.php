@@ -202,6 +202,7 @@ class DispensacionController extends Controller
 
 				$kardex_buscar = Kardex::where("id_producto",$descripcion[$index])->where("id_almacen_destino",$request->almacen)->orderBy('id', 'desc')->first();
 				$kardex_dispensacion = Kardex::where("id_dispensacion",$dispensacion->id)->where("id_producto",$descripcion[$index])->first();
+				dd($kardex_dispensacion);exit();
 				$kardex = kardex::find($kardex_dispensacion->id);
 
 				$kardex->id_producto = $descripcion[$index];
