@@ -184,6 +184,11 @@
                     <x-utils.link :href="route('frontend.kardex.create_consulta')" class="c-sidebar-nav-link" :text="__('Consultas de Existencias')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
                 </li>
             @endif
+            @can('Existencia Producto')
+                <li class="c-sidebar-nav-item">
+                    <x-utils.link :href="route('frontend.kardex.create_consulta_productos')" class="c-sidebar-nav-link" :text="__('Consultas de Productos')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+                </li>
+            @endif
             </ul>
         </li>
         

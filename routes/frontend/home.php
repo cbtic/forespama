@@ -396,5 +396,7 @@ Route::get('dispensacion/cargar_detalle/{id}', [DispensacionController::class, '
 Route::get('productos/obtener_producto_almacen/{id_almacen}', [ProductosController::class, 'obtener_producto_almacen'])->name('productos.obtener_producto_almacen');
 Route::get('entrada_productos/guia_electronica_pdf/{id}/{tipo_movimiento}', [EntradaProductosController::class, 'guia_electronica_pdf'])->name('entrada_productos.guia_electronica_pdf');
 Route::get('dispensacion/movimiento_pdf_dispensacion/{id}', [DispensacionController::class, 'movimiento_pdf_dispensacion'])->name('dispensacion.movimiento_pdf_dispensacion');
+Route::get('kardex/create_consulta_productos', [KardexController::class, 'create_consulta_productos'])->name('kardex.create_consulta_productos');
+Route::post('kardex/listar_kardex_consulta_producto_ajax', [KardexController::class, 'listar_kardex_consulta_producto_ajax'])->name('kardex.listar_kardex_consulta_producto_ajax');
 
 

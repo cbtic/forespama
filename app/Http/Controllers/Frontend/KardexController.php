@@ -156,6 +156,40 @@ class KardexController extends Controller
 		
     }
 
+	public function create_consulta_productos(){
+
+		//$tablaMaestra_model = new TablaMaestra;
+		//$estado_bien = $tablaMaestra_model->getMaestroByTipo(4);
+		$id_user = Auth::user()->id;
+
+        $producto_model = new Producto;
+        $producto = $producto_model->getProductoExterno();
+		
+		return view('frontend.kardex.create_consulta_productos',compact('producto'));
+
+	}
+
+	public function listar_kardex_consulta_producto_ajax(Request $request){
+
+		$kardex_model = new Kardex;
+		$p[]=$request->consulta_existencia_producto;
+		$p[]=$request->NumeroPagina;
+		$p[]=$request->NumeroRegistros;
+		$data = $kardex_model->listar_kardex_consulta_producto_ajax($p);
+		$iTotalDisplayRecords = isset($data[0]->totalrows)?$data[0]->totalrows:0;
+
+		$result["PageStart"] = $request->NumeroPagina;
+		$result["pageSize"] = $request->NumeroRegistros;
+		$result["SearchText"] = "";
+		$result["ShowChildren"] = true;
+		$result["iTotalRecords"] = $iTotalDisplayRecords;
+		$result["iTotalDisplayRecords"] = $iTotalDisplayRecords;
+		$result["aaData"] = $data;
+
+        echo json_encode($result);
+
+	}
+
 }
 
 class InvoicesExport implements FromArray
