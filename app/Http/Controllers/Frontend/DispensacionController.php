@@ -34,11 +34,14 @@ class DispensacionController extends Controller
     public function create(){
 
 		$tablaMaestra_model = new TablaMaestra;
+		$area_trabajo_model = new AreaTrabajo;
 		$tipo_documento = $tablaMaestra_model->getMaestroByTipo(53);
         //$cerrado_orden_compra = $tablaMaestra_model->getMaestroByTipo(52);
         $almacen = Almacene::all();
+		$area_trabajo = $area_trabajo_model->getAreaTrabajoAll();
+		$persona = Persona::all();
 		
-		return view('frontend.dispensacion.create',compact('tipo_documento','almacen'));
+		return view('frontend.dispensacion.create',compact('tipo_documento','almacen','area_trabajo','persona'));
 
 	}
 
@@ -48,8 +51,10 @@ class DispensacionController extends Controller
 		$p[]=$request->tipo_documento;
 		$p[]=$request->fecha;
         $p[]=$request->numero_dispensacion;
-        $p[]=$request->situacion;
         $p[]=$request->almacen;
+		$p[]=$request->area_trabajo;
+		$p[]=$request->unidad_trabajo;
+		$p[]=$request->persona_recibe;
         $p[]=$request->estado;
 		$p[]=$request->NumeroPagina;
 		$p[]=$request->NumeroRegistros;

@@ -498,6 +498,8 @@ $.ajax({
                         <td><input name="sub_total[]" id="sub_total${n}" class="sub_total form-control form-control-sm" value="${orden_compra.sub_total}" type="text" readonly="readonly"></td>
                         <td><input name="igv[]" id="igv${n}" class="igv form-control form-control-sm" value="${orden_compra.igv}" type="text" readonly="readonly"></td>
                         <td><input name="total[]" id="total${n}" class="total form-control form-control-sm" value="${orden_compra.total}" type="text" readonly="readonly"></td>
+                        <td><button type="button" class="btn btn-danger btn-sm" onclick="eliminarFila(this)">Eliminar</button></td>
+
                     </tr>
                 `;
                 tbody.append(row);
@@ -594,7 +596,7 @@ function agregarProducto(){
         $('#tblOrdenCompraDetalle tbody').append(newRow);
 
         $('#descripcion' + n).select2({
-            width: 'resolve',
+            width: '100%',
             dropdownCssClass: 'custom-select2-dropdown'
             //dropdownCssClass: 'form-control form-control-sm',
             //containerCssClass: 'form-control form-control-sm'

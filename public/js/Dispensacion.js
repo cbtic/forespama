@@ -22,6 +22,8 @@ $(document).ready(function () {
 		}
 	});
 
+	$("#persona_recibe_bus").select2({ width: '100%' });
+
 	$('#numero_dispensacion_bus').keypress(function(e){
 		if(e.which == 13) {
 			datatablenew();
@@ -91,6 +93,9 @@ function datatablenew(){
 			var numero_dispensacion = $('#numero_dispensacion_bus').val();
 			var situacion = $('#situacion_bus').val();
 			var almacen = $('#almacen_bus').val();
+			var area_trabajo = $('#area_trabajo_bus').val();
+			var unidad_trabajo = $('#unidad_trabajo_bus').val();
+			var persona_recibe = $('#persona_recibe_bus').val();
 			var estado = $('#estado_bus').val();
 			
 			var _token = $('#_token').val();
@@ -100,8 +105,8 @@ function datatablenew(){
                 "type": "POST",
                 "url": sSource,
                 "data":{NumeroPagina:iNroPagina,NumeroRegistros:iCantMostrar,
-						tipo_documento:tipo_documento,
-						fecha:fecha,numero_dispensacion:numero_dispensacion,almacen:almacen,
+						tipo_documento:tipo_documento,fecha:fecha,numero_dispensacion:numero_dispensacion,almacen:almacen,
+						area_trabajo:area_trabajo,unidad_trabajo:unidad_trabajo,persona_recibe:persona_recibe,
 						almacen:almacen,situacion:situacion,estado:estado,
 						_token:_token
                        },
@@ -312,6 +317,28 @@ function fn_eliminar(id,estado){
                 //if(result="success")obtenerPlanDetalle(id_plan);
 				datatablenew();
             }
+    });
+}
+
+function obtenerUnidadTrabajo(){
+    
+    var area_trabajo = $('#area_trabajo_bus').val();
+   
+	$.ajax({
+        url: "/dispensacion/obtener_unidad_trabajo/"+area_trabajo,
+        dataType: "json",
+        success: function(result){
+            var option = "<option value='' selected='selected'>--Seleccionar Unidad Trabajo--</option>";
+            $('#unidad_trabajo_bus').html("");
+            $(result).each(function (ii, oo) {
+              	option += "<option value='" + oo.id + "'>" + oo.denominacion + "</option>"; 
+            });
+            $('#unidad_trabajo_bus').html(option);
+            //$('#unidad_trabajo').select2();
+            
+            //$('.loader').hide();
+        }
+        
     });
 }
 

@@ -378,6 +378,36 @@ label.form-control-sm{
 						</select>
 					</div>
 
+					<div class="col-lg-2">
+						<select name="area_trabajo_bus" id="area_trabajo_bus" class="form-control form-control-sm" onchange="obtenerUnidadTrabajo()">
+							<option value="">--Seleccionar Area Trabajo--</option>
+							<?php 
+							foreach ($area_trabajo as $row){?>
+								<option value="<?php echo $row->id ?>"><?php echo $row->denominacion ?></option>
+								<?php 
+							}
+							?>
+						</select>
+					</div>
+
+					<div class="col-lg-2">
+						<select name="unidad_trabajo_bus" id="unidad_trabajo_bus" class="form-control form-control-sm" onchange="//actualizarSecciones(this)">
+							<option value="">--Seleccionar Unidad Trabajo--</option>
+						</select>
+					</div>
+
+					<div class="col-lg-2">
+						<select name="persona_recibe_bus" id="persona_recibe_bus" class="form-control form-control-sm" onchange="">
+							<option value="">--Seleccionar Persona--</option>
+							<?php
+							foreach ($persona as $row){?>
+								<option value="<?php echo $row->id ?>"><?php echo $row->nombres." ".$row->apellido_paterno." ".$row->apellido_materno ?></option>
+								<?php 
+							}
+							?>
+						</select>
+					</div>			
+
 					<!--<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
 						<select name="situacion_bus" id="situacion_bus" class="form-control form-control-sm">
 							<option value="">--Seleccionar Situaci&oacute;n--</option>
