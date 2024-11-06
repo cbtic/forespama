@@ -326,7 +326,7 @@ $.ajax({
                 `;
                 tbody.append(row);
                 $('#descripcion' + n).select2({ 
-                    width: 'resolve',
+                    width: '100%',
                     dropdownCssClass: 'custom-select2-dropdown'
                 });
 
@@ -383,7 +383,7 @@ function agregarProducto(){
         $('#tblDispensacionDetalle tbody').append(newRow);
 
         $('#descripcion' + n).select2({
-            width: 'resolve',
+            width: '100%',
             dropdownCssClass: 'custom-select2-dropdown'
         });
 
@@ -409,7 +409,7 @@ function verificarProductoSeleccionado(selectElement, rowIndex) {
             $(selectElement).val('').trigger('change');
         }
     } else {
-        
+
         const index = productosSeleccionados.indexOf(Number(selectedValue));
         if (index > -1) {
             productosSeleccionados.splice(index, 1);
