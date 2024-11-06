@@ -295,7 +295,7 @@ $.ajax({
                 tbody.append(row);
 
                 $('#descripcion' + n).select2({
-                    width: 'resolve',
+                    width: '100%',
                     dropdownCssClass: 'custom-select2-dropdown'
                     //dropdownCssClass: 'form-control form-control-sm',
                     //containerCssClass: 'form-control form-control-sm'
