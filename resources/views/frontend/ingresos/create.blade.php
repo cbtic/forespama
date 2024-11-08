@@ -888,8 +888,36 @@ label.form-control-sm{
                                 <br />
                             </div>
 
-
                             <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
+
+                                <div class="card">
+                                    <div class="card-header">
+                                        <strong>
+                                            Proformas
+                                        </strong>
+                                        <input class="btn btn-primary btn-sm float-right" value="Nuevo" type="button" id="btNuevoProforma" />
+                                    </div>
+
+                                    <div class="card-body">
+                                    
+                                        <div class="table-responsive overflow-auto" style="max-height: 500px">
+                                            <table id="tblPago" class="table table-hover table-sm">
+                                                <thead>
+                                                    <tr style="font-size:13px">
+                                                        <th>Fecha</th>
+                                                        <th>Serie</th>
+                                                        <th>Numero</th>
+                                                        <th>Concepto</th>
+                                                        <th class="sum">Monto</th>                                                        
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+
+                                </div>
 
                                 <div class="card">
                                     <div class="card-header">
@@ -899,6 +927,7 @@ label.form-control-sm{
                                     </div>
 
                                     <div class="card-body">
+                                    
                                         <div class="table-responsive overflow-auto" style="max-height: 500px">
                                             <table id="tblPago" class="table table-hover table-sm">
                                                 <thead>
