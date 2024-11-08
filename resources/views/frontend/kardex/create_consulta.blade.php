@@ -374,13 +374,13 @@ label.form-control-sm{
 							?>
 						</select>
 					</div>
-                    <!--<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<select name="estado_bus" id="estado_bus" class="form-control form-control-sm">
-							<option value="">Todos</option>
-							<option value="1" selected="selected">Activo</option>
-							<option value="0">Eliminado</option>
+                    <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+						<select name="cantidad_producto_bus" id="cantidad_producto_bus" class="form-control form-control-sm">
+							<option value="" selected="selected">--Seleccionar Cantidad Producto</option>
+							<option value="0">Igual a 0</option>
+							<option value="1">Mayor a 0</option>
 						</select>
-					</div>-->
+					</div>
 
                     
 					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12" style="padding-right:0px">

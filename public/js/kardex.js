@@ -291,6 +291,7 @@ function datatablenew_existencia(){
 			
             var producto_existencia = $('#consulta_producto_bus').val();
 			var almacen_existencia = $('#consulta_almacen_bus').val();
+			var cantidad_producto = $('#cantidad_producto_bus').val();
 			
 			var _token = $('#_token').val();
             oSettings.jqXHR = $.ajax({
@@ -298,8 +299,8 @@ function datatablenew_existencia(){
                 //"contentType": "application/json; charset=utf-8",
                 "type": "POST",
                 "url": sSource,
-                "data":{NumeroPagina:iNroPagina,NumeroRegistros:iCantMostrar,
-						producto_existencia:producto_existencia,almacen_existencia:almacen_existencia,
+                "data":{NumeroPagina:iNroPagina,NumeroRegistros:iCantMostrar,producto_existencia:producto_existencia,
+						almacen_existencia:almacen_existencia,cantidad_producto:cantidad_producto,
 						_token:_token
                        },
                 "success": function (result) {
@@ -411,6 +412,7 @@ function datatablenew_existencia_producto(){
 			
             var producto_existencia = $('#consulta_producto_bus').val();
 			var almacen_existencia = $('#consulta_almacen_bus').val();
+			var cantidad_producto = $('#cantidad_producto_bus').val();
 			
 			var _token = $('#_token').val();
             oSettings.jqXHR = $.ajax({
@@ -418,8 +420,8 @@ function datatablenew_existencia_producto(){
                 //"contentType": "application/json; charset=utf-8",
                 "type": "POST",
                 "url": sSource,
-                "data":{NumeroPagina:iNroPagina,NumeroRegistros:iCantMostrar,
-						producto_existencia:producto_existencia,almacen_existencia:almacen_existencia,
+                "data":{NumeroPagina:iNroPagina,NumeroRegistros:iCantMostrar,producto_existencia:producto_existencia,
+						almacen_existencia:almacen_existencia,cantidad_producto:cantidad_producto,
 						_token:_token
                        },
                 "success": function (result) {

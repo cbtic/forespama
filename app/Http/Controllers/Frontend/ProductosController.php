@@ -92,7 +92,7 @@ class ProductosController extends Controller
 
         $existe_producto_codigo = Producto::where('codigo', $request->codigo)->first();
 
-        $existe_producto_serie = Producto::where('numero_serie', $request->numero_serie)->first();
+        $existe_producto_serie = Producto::where('numero_serie', $request->numero_serie)->whereNotNull('numero_serie')->where('numero_serie', '!=', '')->first();
 
         if ($existe_producto_serie && $existe_producto_serie->id != $request->id) {
             return response()->json([
@@ -222,6 +222,28 @@ class ProductosController extends Controller
 		//dd($producto);exit();
 		return response()->json($producto);
 	}
+
+    public function obtener_stock_producto($almacen, $id_producto)
+    {
+
+		$kardex_model = new Kardex;
+
+        $producto_stock = [];
+
+        //foreach($dispensacion as $detalle){
+            $stock = $kardex_model->getExistenciaProductoById($id_producto, $almacen);
+            if(count($stock)>0){
+                $producto_stock[$id_producto] = $stock[0];
+            }else {
+                $producto_stock[$id_producto] = ['saldos_cantidad'=>0];
+            }
+        //}
+
+        return response()->json([
+            //'dispensacion' => $dispensacion,
+            'producto_stock' =>$producto_stock
+        ]);
+    }
     
     
     /**

@@ -204,21 +204,26 @@ function cambiarOrigen(){
     if(unidad_origen==1){
         $('#proveedor_select, #proveedor_').hide();
         $('#almacen_select, #almacen_').show();
+        $('#almacen_salida_select, #almacen_salida_').show();
     }else if(unidad_origen==2){
         $('#proveedor_select, #proveedor_').show();
         $('#almacen_select, #almacen_').show();
-        $('#proveedor').val("");
+        $('#almacen_salida_select, #almacen_salida_').hide();
+        //$('#proveedor').val("");
     }else if(unidad_origen==3){
         $('#proveedor_select, #proveedor_').show();
         $('#almacen_select, #almacen_').show();
-        $('#proveedor').val(30);
+        $('#almacen_salida_select, #almacen_salida_').show();
+        //$('#proveedor').val(30);
     }else if(unidad_origen==4){
         $('#proveedor_select, #proveedor_').show();
         $('#almacen_select, #almacen_').hide();
-        $('#proveedor').val(30);
+        $('#almacen_salida_select, #almacen_salida_').show();
+        //$('#proveedor').val(30);
     }else{
         $('#proveedor_select, #proveedor_').hide();
         $('#almacen_select, #almacen_').show();
+        $('#almacen_salida_select, #almacen_salida_').show();
     }
 }
 
@@ -484,7 +489,7 @@ $.ajax({
                     <tr>
                         <td>${n}</td>
                         <td><input name="id_orden_compra_detalle[]" id="id_orden_compra_detalle${n}" class="form-control form-control-sm" value="${orden_compra.id}" type="hidden"><input name="item[]" id="item${n}" class="form-control form-control-sm" value="${orden_compra.item}" type="text"></td>
-                        <td style="width: 30% !important"><select name="descripcion[]" id="descripcion${n}" class="form-control form-control-sm" onChange="verificarProductoSeleccionado(this, ${n});">${productoOptions}</select></td>
+                        <td style="width: 450px !important;display:block"><select name="descripcion[]" id="descripcion${n}" class="form-control form-control-sm" onChange="verificarProductoSeleccionado(this, ${n});">${productoOptions}</select></td>
                         
                         <td><select name="marca[]" id="marca${n}" class="form-control form-control-sm">${marcaOptions}</select></td>
                         <td><input name="cod_interno[]" id="cod_interno${n}" class="form-control form-control-sm" value="${orden_compra.codigo}" type="text"></td>
@@ -504,7 +509,7 @@ $.ajax({
                 `;
                 tbody.append(row);
                 $('#descripcion' + n).select2({ 
-                    width: 'resolve', 
+                    width: '100%', 
                     dropdownCssClass: 'custom-select2-dropdown'
                 });
 
@@ -555,6 +560,8 @@ function agregarProducto(){
         //var cantidad = '<input name="cantidad[]" id="cantidad' + n + '" class="form-control form-control-sm" value="" type="text">';
         var descripcion = '<select name="descripcion[]" id="descripcion' + n + '" class="form-control form-control-sm" onChange="verificarProductoSeleccionado(this, ' + n + ')"> '+ opcionesDescripcion +' </select>';
         
+        var descripcion_ant = '<input type="hidden" name="descripcion_ant[]" id="descripcion_ant' + n + '" class="form-control form-control-sm" />';
+        
         //var ubicacion_fisica_seccion = '<select name="ubicacion_fisica_seccion[]" id="ubicacion_fisica_seccion' + n + '" class="form-control form-control-sm" onChange="obtenerAnaquel(this)"> <option value="">- Selecione -</option> <?php //foreach ($almacen_seccion as $row) {?> <option value="<?php //echo $row->id?>"><?php //echo $row->codigo_seccion."-".$row->seccion?></option> <?php //} ?> </select>';
         //var ubicacion_fisica_anaquel = '<select name="ubicacion_fisica_anaquel[]" id="ubicacion_fisica_anaquel' + n + '" class="form-control form-control-sm" onChange=""> <option value="">- Selecione -</option>} ?> </select>';
         var cod_interno = '<input name="cod_interno[]" id="cod_interno' + n + '" class="form-control form-control-sm" value="" type="text">';
@@ -576,7 +583,7 @@ function agregarProducto(){
         newRow += '<td>' + n + '</td>';
         newRow += '<td>' + item + '</td>';
         //newRow += '<td>' + cantidad + '</td>';
-        newRow += '<td style="width: 30% !important">' + descripcion + '</td>';
+        newRow += '<td style="width: 450px!important; display:block!important">' +descripcion_ant + descripcion + '</td>';
         //newRow += '<td>' + ubicacion_fisica_seccion + '</td>';
         newRow += '<td>' + marca + '</td>';
         newRow += '<td>' + cod_interno + '</td>';
@@ -627,13 +634,21 @@ function agregarProducto(){
     actualizarTotalGeneral();
 }
 
-function verificarProductoSeleccionado(selectElement, rowIndex) {
+function verificarProductoSeleccionado(selectElement, rowIndex, valor) {
     var selectedValue = $(selectElement).val();
 
     if (selectedValue) {
+        var selectedValueAnt = $("#descripcion_ant"+rowIndex).val();
+        if(selectedValueAnt != ""){
+            const index_ant = productosSeleccionados.indexOf(Number(selectedValueAnt));
+            console.log(index_ant);
+            productosSeleccionados.splice(index_ant, 1);
+            $("#descripcion_ant"+rowIndex).val("");
+        }
 
         if (!productosSeleccionados.includes(Number(selectedValue))) {
             productosSeleccionados.push(Number(selectedValue));
+            $("#descripcion_ant"+rowIndex).val(selectedValue);
 
             obtenerCodInterno(selectElement, rowIndex);
         } else {
@@ -647,6 +662,8 @@ function verificarProductoSeleccionado(selectElement, rowIndex) {
             productosSeleccionados.splice(index, 1);
         }
     }
+
+    console.log(productosSeleccionados);
 }
 
 function eliminarFila(button){

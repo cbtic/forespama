@@ -240,16 +240,16 @@ function fn_save_producto(){
             data : $("#frmProducto").serialize(),
 			success: function (result) {
 				//alert(result);
-            if (result.success) {
-                bootbox.alert(result.success, function() {
-                    $('#openOverlayOpc').modal('hide');
-                    bootbox.alert("Se guard&oacute; satisfactoriamente"); 
-                    //window.location.reload();
-                    datatablenew();
-                });
-            } else if (result.error) {
-                bootbox.alert(result.error);
-            }
+                if (result.success) {
+                    bootbox.alert(result.success, function() {
+                        $('#openOverlayOpc').modal('hide');
+                        //bootbox.alert("Se guard&oacute; satisfactoriamente"); 
+                        //window.location.reload();
+                        datatablenew();
+                    });
+                } else if (result.error) {
+                    bootbox.alert(result.error);
+                }
             },
     });
 }

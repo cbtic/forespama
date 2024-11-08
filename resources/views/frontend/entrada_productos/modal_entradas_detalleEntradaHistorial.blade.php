@@ -258,7 +258,7 @@ function cargarDetalle(){
                     <tr>
                         <td>${n}</td>
                         <td><input name="item[]" id="item${n}" class="form-control form-control-sm" value="${entrada_producto.numero_serie}" type="text" readonly="readonly"></td>
-                        <td style="width: 30% !important"><select name="descripcion[]" id="descripcion${n}" class="form-control form-control-sm" onChange="verificarProductoSeleccionado(this, ${n});" disabled>${productoOptions}</select></td>
+                        <td style="width: 450px !important;display:block"><select name="descripcion[]" id="descripcion${n}" class="form-control form-control-sm" onChange="verificarProductoSeleccionado(this, ${n});" disabled>${productoOptions}</select></td>
                         <td><select name="marca[]" id="marca${n}" class="form-control form-control-sm" disabled>${marcaOptions}</select></td>
                         <td><input name="cod_interno[]" id="cod_interno${n}" class="form-control form-control-sm" value="${entrada_producto.codigo}" type="text" readonly="readonly"></td>
                         <td><input id="fecha_fabricacion_${n}" name="fecha_fabricacion[]"  on class="form-control form-control-sm"  value="${entrada_producto.fecha_fabricacion ? entrada_producto.fecha_fabricacion : ''}" type="text" readonly="readonly"></td>
@@ -293,14 +293,27 @@ function cambiarOrigen(){
     //alert(moneda);
     if(unidad_origen==1){
         $('#proveedor_select, #proveedor_').hide();
+        $('#almacen_select, #almacen_').show();
+        $('#almacen_salida_select, #almacen_salida_').show();
     }else if(unidad_origen==2){
         $('#proveedor_select, #proveedor_').show();
-        $('#proveedor').val("");
+        $('#almacen_select, #almacen_').show();
+        $('#almacen_salida_select, #almacen_salida_').hide();
+        //$('#proveedor').val("");
     }else if(unidad_origen==3){
         $('#proveedor_select, #proveedor_').show();
-        $('#proveedor').val(28);
+        $('#almacen_select, #almacen_').show();
+        $('#almacen_salida_select, #almacen_salida_').show();
+        //$('#proveedor').val(30);
+    }else if(unidad_origen==4){
+        $('#proveedor_select, #proveedor_').show();
+        $('#almacen_select, #almacen_').hide();
+        $('#almacen_salida_select, #almacen_salida_').show();
+        //$('#proveedor').val(30);
     }else{
         $('#proveedor_select, #proveedor_').hide();
+        $('#almacen_select, #almacen_').show();
+        $('#almacen_salida_select, #almacen_salida_').show();
     }
 }
 
@@ -624,7 +637,7 @@ function agregarProducto(){
         newRow += '<td>' + n + '</td>';
         newRow += '<td>' + item + '</td>';
         //newRow += '<td>' + cantidad + '</td>';
-        newRow += '<td>' + descripcion + '</td>';
+        newRow += '<td style="width: 450px!important; display:block!important">' + descripcion + '</td>';
         //newRow += '<td>' + ubicacion_fisica_seccion + '</td>';
         newRow += '<td>' + marca + '</td>';
         newRow += '<td>' + cod_interno + '</td>';

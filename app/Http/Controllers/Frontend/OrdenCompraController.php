@@ -157,6 +157,8 @@ class OrdenCompraController extends Controller
         $orden_compra->estado = 1;
         $orden_compra->save();
 
+        $array_orden_compra_detalle = array();
+
         foreach($item as $index => $value) {
             
             if($id_orden_compra_detalle[$index] == 0){
@@ -183,6 +185,19 @@ class OrdenCompraController extends Controller
             $orden_compra_detalle->id_usuario_inserta = $id_user;
 
             $orden_compra_detalle->save();
+
+            $array_orden_compra_detalle[] = $orden_compra_detalle->id;
+
+            $OrdenCompraAll = OrdenCompraDetalle::where("id_orden_compra",$orden_compra->id)->where("estado","1")->get();
+            
+            foreach($OrdenCompraAll as $key=>$row){
+                
+                if (!in_array($row->id, $array_orden_compra_detalle)){
+                    $orden_compra_detalle = OrdenCompraDetalle::find($row->id);
+                    $orden_compra_detalle->estado = 0;
+                    $orden_compra_detalle->save();
+                }
+            }
         }
 
         return response()->json(['id' => $orden_compra->id]);    
@@ -218,7 +233,12 @@ class OrdenCompraController extends Controller
         $producto_stock = [];
 
         foreach($orden_compra as $detalle){
-            $stock = $kardex_model->getExistenciaProductoById($detalle->id_producto, $detalle->id_almacen_salida);
+
+            $id_almacen_bus = $detalle->id_almacen_salida;
+            
+            if($detalle->id_unidad_origen==2){$id_almacen_bus = $detalle->id_almacen_destino;}
+            if($detalle->id_unidad_origen==4){$id_almacen_bus = $detalle->id_almacen_salida;}
+            $stock = $kardex_model->getExistenciaProductoById($detalle->id_producto, $id_almacen_bus);
             if(count($stock)>0){
                 $producto_stock[$detalle->id_producto] = $stock[0];
             }else {

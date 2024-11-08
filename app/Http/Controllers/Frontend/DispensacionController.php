@@ -164,14 +164,17 @@ class DispensacionController extends Controller
             //$dispensacion_detalle->fecha_vencimiento = $fecha_vencimiento[$index];
             $dispensacion_detalle->id_estado_producto = $estado_bien[$index];
             $dispensacion_detalle->id_unidad_medida = $unidad[$index];
-            $dispensacion_detalle->id_marca = $marca[$index];
+			if($marca[$index]!=null && $marca[$index] !=0){
+				$dispensacion_detalle->id_marca = (int)$marca[$index];
+			}
+            //$dispensacion_detalle->id_marca = $marca[$index] != null ? $marca[$index] : null;
             $dispensacion_detalle->estado = 1;
             //$dispensacion_detalle->cerrado = 1;
             $dispensacion_detalle->id_usuario_inserta = $id_user;
 
             $dispensacion_detalle->save();
 
-			if($request->id == 0){
+			if($id_dispensacion_detalle[$index] == 0){
 				$producto = Producto::find($descripcion[$index]);
 
 				$kardex_buscar = Kardex::where("id_producto",$descripcion[$index])->where("id_almacen_destino",$request->almacen)->orderBy('id', 'desc')->first();
@@ -198,15 +201,15 @@ class DispensacionController extends Controller
 
 				$kardex->save();
 			}else{
-				$producto = Producto::find($descripcion[$index]);
+				/*$producto = Producto::find($descripcion[$index]);
 
 				$kardex_buscar = Kardex::where("id_producto",$descripcion[$index])->where("id_almacen_destino",$request->almacen)->orderBy('id', 'desc')->first();
-				$kardex_dispensacion = Kardex::where("id_dispensacion",$dispensacion->id)->where("id_producto",$descripcion[$index])->first();
-				dd($kardex_dispensacion);exit();
+				$kardex_dispensacion = Kardex::where("id_dispensacion",$dispensacion->id)->where("id_producto",$descripcion[$index])->orderBy('id', 'desc')->first();
+				//dd($kardex_dispensacion);exit();
 				$kardex = kardex::find($kardex_dispensacion->id);
 
-				$kardex->id_producto = $descripcion[$index];
-				$kardex->salidas_cantidad = $cantidad[$index];
+				//$kardex->id_producto = $descripcion[$index];
+				//$kardex->salidas_cantidad = $cantidad[$index];
 				if($kardex_dispensacion->salidas_cantidad>$cantidad[$index]){
 					$cantidad_saldo = $kardex_dispensacion->saldos_cantidad - ($kardex_dispensacion->salidas_cantidad - $cantidad[$index]);
 					$kardex->saldos_cantidad = $cantidad_saldo;
@@ -220,7 +223,7 @@ class DispensacionController extends Controller
 				$kardex->id_almacen_destino = $request->almacen;
 				$kardex->id_dispensacion = $dispensacion->id;
 
-				$kardex->save();
+				$kardex->save();*/
 			}
         }
 
@@ -366,4 +369,5 @@ class DispensacionController extends Controller
 		return $pdf->stream();
 
 	}
+
 }

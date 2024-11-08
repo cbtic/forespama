@@ -41,7 +41,7 @@ class OrdenCompra extends Model
         inner join entrada_producto_detalles epd on ep.id=epd.id_entrada_productos 
         where id_orden_compra =ocd.id_orden_compra 
         and epd.id_producto=ocd.id_producto),0)cantidad_ingresada,
-        ocd.precio, ocd.sub_total, ocd.igv, ocd.total, ocd.id_descuento, oc.id_almacen_salida 
+        ocd.precio, ocd.sub_total, ocd.igv, ocd.total, ocd.id_descuento, oc.id_almacen_salida, oc.id_unidad_origen, oc.id_almacen_destino 
         from orden_compra_detalles ocd 
         inner join productos p on ocd.id_producto = p.id
         inner join orden_compras oc on ocd.id_orden_compra = oc.id
