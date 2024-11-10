@@ -733,7 +733,7 @@ function validaTipoDocumento(){
 
 	}else if(tipo_documento == "79"){ //RUC
 		$('#divNombreApellido').hide();
-		$('#divCodigoAfliado').hide();
+		//$('#divCodigoAfliado').hide();
 		$('#divFechaAfliado').hide();
 		$('#divRucP').hide();
 		$('#divCategoria').hide();
@@ -747,10 +747,10 @@ function validaTipoDocumento(){
 	
 	}else{
 		$('#divNombreApellido').show();
-		$('#divCodigoAfliado').show();
-		$('#divFechaAfliado').show();
+		//$('#divCodigoAfliado').show();
+		//$('#divFechaAfliado').show();
 		$('#divRucP').show();
-		$('#divCategoria').show();
+		//$('#divCategoria').show();
 
 		$('#divDireccionEmpresa').hide();
 		$('#divRepresentanteEmpresa').hide();
@@ -874,12 +874,12 @@ function obtenerBeneficiario(){
 				}else{
 					$('#divNombreApellido').show();
 					$('#divCodigoAfliado').show();
-					$('#divFechaAfliado').show();
+					//$('#divFechaAfliado').show();
 					$('#divRucP').show();
 					//$('#divCategoria').show();
 			
 					$('#divDireccionEmpresa').hide();
-					$('#divRepresentanteEmpresa').hide();
+					$('#divRepresentanteEmpresa').hide(); 
 					$('#divEmpresaRazonSocial').hide();
 					$('#divBeneficiarioRuc').hide();
 				}
@@ -892,7 +892,7 @@ function obtenerBeneficiario(){
 					$('#empresa_direccion').val(result.agremiado.direccion);
 					$('#empresa_representante').val(result.agremiado.representante);
 					$('#empresa_id').val(result.agremiado.id);
-					$('#id_ubicacion').val(result.agremiado.id);
+				 	$('#id_ubicacion').val(result.agremiado.id);
 
 					$('#nombre_').val(result.agremiado.razon_social);
 
