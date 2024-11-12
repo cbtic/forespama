@@ -24,6 +24,7 @@ use App\Http\Controllers\Frontend\KardexController;
 use App\Http\Controllers\Frontend\ComprobanteController;
 use App\Http\Controllers\Frontend\EntradaProductoDetallesController;
 use App\Http\Controllers\Frontend\DispensacionController;
+use App\Http\Controllers\Frontend\MarcaController;
 
 use App\Models\Ubigeo;
 
@@ -401,4 +402,9 @@ Route::post('kardex/listar_kardex_consulta_producto_ajax', [KardexController::cl
 Route::get('productos/obtener_stock_producto/{almacen}/{id_producto}', [ProductosController::class, 'obtener_stock_producto'])->name('productos.obtener_stock_producto');
 Route::get('orden_compra/modal_orden_compra_tienda/{id}', [OrdenCompraController::class, 'modal_orden_compra_tienda'])->name('orden_compra.modal_orden_compra_tienda');
 
+Route::get('marcas/create', [MarcaController::class, 'create'])->name('marcas.create');
+Route::post('marcas/listar_marca_ajax', [MarcaController::class, 'listar_marca_ajax'])->name('marcas.listar_marca_ajax');
+Route::post('marcas/send_marca', [MarcaController::class, 'send_marca'])->name('marcas.send_marca');
+Route::get('marcas/modal_marca/{id}', [MarcaController::class, 'modal_marca'])->name('marcas.modal_marca');
+Route::get('marcas/eliminar_marca/{id}/{estado}', [MarcaController::class, 'eliminar_marca'])->name('marcas.eliminar_marca');
 

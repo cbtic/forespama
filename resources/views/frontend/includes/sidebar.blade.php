@@ -236,6 +236,12 @@
                 </li>
 				@endif
 
+                @can('Mantenimiento Marcas')
+				<li class="c-sidebar-nav-item">
+                    <x-utils.link :href="route('frontend.marcas.create')" class="c-sidebar-nav-link" :text="__('Marcas')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+                </li>
+				@endif
+
             </ul>
 
         </li>
