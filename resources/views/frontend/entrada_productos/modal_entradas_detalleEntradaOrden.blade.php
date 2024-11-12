@@ -786,8 +786,8 @@ function fn_save_detalle_producto(){
 
         $('#tblDetalleEntrada tbody tr').each(function(index, row) {
 
-            const cantidad_ingreso_producto = $(row).find('input[name="cantidad_ingreso[]"]').val();
-            const stockActual = $(row).find('input[name="stock_actual[]"]').val();
+            const cantidad_ingreso_producto = parseInt($(row).find('input[name="cantidad_ingreso[]"]').val()) || 0;
+            const stockActual = parseInt($(row).find('input[name="stock_actual[]"]').val()) || 0;
             const descripcion_producto = $(row).find('select[name="descripcion[]"] option:selected').text();
 
             if(stockActual<cantidad_ingreso_producto){

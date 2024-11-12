@@ -570,20 +570,20 @@ function fn_save_almacen(){
                                 </div>
                             </div>
                             <div id="contenedor-usuarios" class="row" style="padding-left:10px">
-                                <div class="col-lg-3 usuario-grupo">
+                                <!--<div class="col-lg-3 usuario-grupo">
                                     <div class="form-group">
                                         <label class="control-label form-control-sm">Usuario</label>
                                         <select name="usuario[]" id="usuario" onChange="" class="form-control form-control-sm">
                                             <option value="">--Seleccionar--</option>
                                             <?php
-                                            foreach ($user as $row) {?>
-                                            <option value="<?php echo $row->id?>" <?php if($row->id==$almacen_usuario->id_user)echo "selected='selected'"?>><?php echo $row->name ?></option>
+                                            //foreach ($user as $row) {?>
+                                            <option value="<?php //echo $row->id?>" <?php //if($row->id==$almacen_usuario->id_user)echo "selected='selected'"?>><?php //echo $row->name ?></option>
                                             <?php 
-                                            }
+                                            //}
                                             ?>
                                         </select>
                                     </div>
-                                </div>
+                                </div>-->
                             </div>
                                 <div style="margin-top:37px" class="form-group">
                                     <div class="col-sm-12 controls">
