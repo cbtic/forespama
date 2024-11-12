@@ -399,5 +399,6 @@ Route::get('dispensacion/movimiento_pdf_dispensacion/{id}', [DispensacionControl
 Route::get('kardex/create_consulta_productos', [KardexController::class, 'create_consulta_productos'])->name('kardex.create_consulta_productos');
 Route::post('kardex/listar_kardex_consulta_producto_ajax', [KardexController::class, 'listar_kardex_consulta_producto_ajax'])->name('kardex.listar_kardex_consulta_producto_ajax');
 Route::get('productos/obtener_stock_producto/{almacen}/{id_producto}', [ProductosController::class, 'obtener_stock_producto'])->name('productos.obtener_stock_producto');
+Route::get('orden_compra/modal_orden_compra_tienda/{id}', [OrdenCompraController::class, 'modal_orden_compra_tienda'])->name('orden_compra.modal_orden_compra_tienda');
 
 

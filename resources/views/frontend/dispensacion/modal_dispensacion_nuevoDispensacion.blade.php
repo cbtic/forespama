@@ -501,7 +501,7 @@ function fn_save_dispensacion(){
         const stockActual = parseInt($(row).find('input[name="stock_actual[]"]').val());
         const descripcion_producto = $(row).find('select[name="descripcion[]"] option:selected').text();
         
-        if(stockActual<=cantidad_ingreso_producto && id_dispensacion_detalle_producto==0){
+        if(stockActual<cantidad_ingreso_producto && id_dispensacion_detalle_producto==0){
             msg+="No hay stock para el producto "+descripcion_producto+" <br>";
         }
     });
