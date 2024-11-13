@@ -76,6 +76,7 @@ class IngresoController extends Controller
 
     }
 
+
     public function listar_valorizacion(Request $request){
 
 
@@ -267,6 +268,14 @@ class IngresoController extends Controller
         $sw = true;
         $pago = $valorizaciones_model->getPago($tipo_documento,$id_persona);
         return view('frontend.ingresos.lista_pago',compact('pago'));
+
+    }
+
+    public function obtener_proforma($tipo_documento,$id_persona){       
+        $proforma_model = new Valorizacione;
+        $sw = true;
+        $proforma = $proforma_model->getPago($tipo_documento,$id_persona);
+        return view('frontend.proforma.lista_proforma',compact('proforma'));
 
     }
 

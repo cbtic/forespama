@@ -783,7 +783,7 @@ function pdf_documento(){
                     </div>
                 </div>-->
                 <div style="text-align: center; font-size:16px; margin-top: 20px">
-                    <b>Orden de Compra y Venta</b>
+                    <b>Proforma</b>
                 </div>
                 
                 <div class="card-body">
