@@ -25,6 +25,7 @@ use App\Http\Controllers\Frontend\ComprobanteController;
 use App\Http\Controllers\Frontend\EntradaProductoDetallesController;
 use App\Http\Controllers\Frontend\DispensacionController;
 use App\Http\Controllers\Frontend\MarcaController;
+use App\Http\Controllers\Frontend\TiendaController;
 
 use App\Models\Ubigeo;
 
@@ -408,3 +409,9 @@ Route::post('marcas/send_marca', [MarcaController::class, 'send_marca'])->name('
 Route::get('marcas/modal_marca/{id}', [MarcaController::class, 'modal_marca'])->name('marcas.modal_marca');
 Route::get('marcas/eliminar_marca/{id}/{estado}', [MarcaController::class, 'eliminar_marca'])->name('marcas.eliminar_marca');
 
+Route::get('tiendas/create', [TiendaController::class, 'create'])->name('tiendas.create');
+Route::post('tiendas/listar_tienda_ajax', [TiendaController::class, 'listar_tienda_ajax'])->name('tiendas.listar_tienda_ajax');
+Route::post('tiendas/send_tienda', [TiendaController::class, 'send_tienda'])->name('tiendas.send_tienda');
+Route::get('tiendas/modal_tienda/{id}', [TiendaController::class, 'modal_tienda'])->name('tiendas.modal_tienda');
+Route::get('tiendas/eliminar_tienda/{id}/{estado}', [TiendaController::class, 'eliminar_tienda'])->name('tiendas.eliminar_tienda');
+Route::get('tiendas/obtener_datos_tienda/{empresa}', [TiendaController::class, 'obtener_datos_tienda'])->name('tiendas.obtener_datos_tienda');
