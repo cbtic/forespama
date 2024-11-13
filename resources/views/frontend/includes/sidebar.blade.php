@@ -242,6 +242,12 @@
                 </li>
 				@endif
 
+                @can('Mantenimiento Tiendas')
+				<li class="c-sidebar-nav-item">
+                    <x-utils.link :href="route('frontend.tiendas.create')" class="c-sidebar-nav-link" :text="__('Tiendas')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+                </li>
+				@endif
+
             </ul>
 
         </li>
