@@ -312,4 +312,45 @@ class OrdenCompraController extends Controller
 		return response()->json($codigo_orden_compra);
 	}
 
+    public function modal_orden_compra_tienda($id){
+		
+        $tablaMaestra_model = new TablaMaestra;
+        $producto_model = new Producto;
+        $marca_model = new Marca;
+        $almacen_model = new Almacene;
+		
+		if($id>0){
+
+            $orden_compra = OrdenCompra::find($id);
+            $proveedor = Empresa::all();
+			
+		}else{
+			$orden_compra = new OrdenCompra;
+            $proveedor = Empresa::all();
+		}
+
+        //$orden_compra_model = new OrdenCompra;
+        $tipo_documento = $tablaMaestra_model->getMaestroByTipo(54);
+        //$moneda = $tablaMaestra_model->getMaestroByTipo(1);
+        //$unidad_origen = $tablaMaestra_model->getMaestroByTipo(50);
+        //$cerrado_entrada = $tablaMaestra_model->getMaestroByTipo(52);
+        //$igv_compra = $tablaMaestra_model->getMaestroByTipo(51);
+        //$descuento = $tablaMaestra_model->getMaestroByTipo(55);
+        $producto = $producto_model->getProductoAll();
+        $marca = $marca_model->getMarcaAll();
+        $estado_bien = $tablaMaestra_model->getMaestroByTipo(4);
+        $unidad = $tablaMaestra_model->getMaestroByTipo(43);
+        $igv_compra = $tablaMaestra_model->getMaestroByTipo(51);
+        $descuento = $tablaMaestra_model->getMaestroByTipo(55);
+        $almacen = $almacen_model->getAlmacenAll();
+        //$almacen = Almacene::all();
+        $unidad_origen = $tablaMaestra_model->getMaestroByTipo(50);
+        //$codigo_orden_compra = $orden_compra_model->getCodigoOrdenCompra();
+        
+        //dd($proveedor);exit();
+
+		return view('frontend.orden_compra.modal_orden_compra_tienda',compact('id','orden_compra','tipo_documento','proveedor','producto','marca','estado_bien','unidad','igv_compra','descuento','almacen','unidad_origen'));
+
+    }
+
 }
