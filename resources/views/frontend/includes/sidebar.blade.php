@@ -160,7 +160,7 @@
 
                 @can('Ingreso Produccion')
                 <li class="c-sidebar-nav-item">
-                    <x-utils.link :href="route('frontend.ingreso_produccion.create')" class="c-sidebar-nav-link" :text="__('ingreso_produccion')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+                    <x-utils.link :href="route('frontend.ingreso_produccion.create')" class="c-sidebar-nav-link" :text="__('Ingreso Produccion')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
                 </li>
 				@endif
 				
