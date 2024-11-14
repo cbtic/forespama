@@ -87,13 +87,12 @@
         @endif
 	
 	
-	@if(Gate::check('Almacenes') || Gate::check('Secciones') || Gate::check('Anaqueles') || Gate::check('Productos') || Gate::check('Lotes') || Gate::check('Entradas') || Gate::check('Salidas') || Gate::check('Kardex') || Gate::check('Movimientos'))
+	@if(Gate::check('Almacenes') || Gate::check('Secciones') || Gate::check('Anaqueles') || Gate::check('Productos') || Gate::check('Lotes'))
 
         <li class="c-sidebar-nav-dropdown">
             <x-utils.link href="#" icon="c-sidebar-nav-icon cil-list" class="c-sidebar-nav-dropdown-toggle" :text="__('Control Mantenimiento')" />
 
         </li>
-
 
         <li class="c-sidebar-nav-dropdown">
             <x-utils.link href="#" icon="c-sidebar-nav-icon cil-list" class="c-sidebar-nav-dropdown-toggle" :text="__('Almacenes')" />
@@ -132,6 +131,8 @@
             </ul>
 
         </li>
+
+        @if(Gate::check('Entradas') || Gate::check('Salidas') || Gate::check('Kardex') || Gate::check('Movimientos'))
 
         <li class="c-sidebar-nav-dropdown">
             <x-utils.link href="#" icon="c-sidebar-nav-icon cil-list" class="c-sidebar-nav-dropdown-toggle" :text="__('Operaciones')" />
