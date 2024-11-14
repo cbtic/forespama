@@ -237,7 +237,7 @@ function cargarDetalle(){
 
                 result.producto.forEach(producto => {
                     let selected = (producto.id == entrada_producto.id_producto) ? 'selected' : '';
-                    productoOptions += `<option value="${producto.id}" ${selected}>${producto.denominacion}</option>`;
+                    productoOptions += `<option value="${producto.id}" ${selected}>${producto.codigo} - ${producto.denominacion}</option>`;
                 });
 
                 result.estado_bien.forEach(estado_bien => {

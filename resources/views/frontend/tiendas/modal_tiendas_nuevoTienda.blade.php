@@ -17,7 +17,7 @@
 
 .modal-dialog {
 	width: 100%;
-	max-width:40%!important
+	max-width:30%!important
   }
   
 #tablemodal{
@@ -234,7 +234,7 @@ function datatableTiendaDetalle(){
                             
                             <div class="row" style="padding-left:10px">
 
-                                <div class="col-lg-6">
+                                <div class="col-lg-10">
                                     <div class="form-group">
                                         <label class="control-label form-control-sm">Empresa</label>
                                         <select name="empresa" id="empresa" class="form-control form-control-sm" onchange="datatableTiendaDetalle()">
@@ -249,7 +249,7 @@ function datatableTiendaDetalle(){
                                     </div>
                                 </div>
                                 
-                                <div class="col-lg-8">
+                                <div class="col-lg-10">
                                     <div class="form-group">
                                         <input type="hidden" name="id_tienda" id="id_tienda" value="<?php echo $tienda_detalle->id_tienda?>">
                                         <label class="control-label form-control-sm">Denominaci&oacute;n</label>

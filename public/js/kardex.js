@@ -18,6 +18,8 @@ $(document).ready(function () {
 		
 	datatablenew();
 
+	datatablenew_consulta_producto();
+
 	$('#btnBuscarConsulta').click(function () {
 		var consulta_producto =$('#consulta_producto_bus').val();
 		//alert(consulta_producto);
@@ -532,6 +534,8 @@ function datatablenew_consulta_producto(){
             var iCantMostrar 	= aoData[4].value;
 			
             var consulta_existencia_producto = $('#consulta_existencia_producto_bus').val();
+			var consulta_almacen_producto = $('#consulta_almacen_producto_bus').val();
+			var cantidad__existencia_producto = $('#cantidad__existencia_producto_bus').val();
 			
 			var _token = $('#_token').val();
             oSettings.jqXHR = $.ajax({
@@ -541,6 +545,8 @@ function datatablenew_consulta_producto(){
                 "url": sSource,
                 "data":{NumeroPagina:iNroPagina,NumeroRegistros:iCantMostrar,
 						consulta_existencia_producto:consulta_existencia_producto,
+						consulta_almacen_producto:consulta_almacen_producto,
+						cantidad__existencia_producto:cantidad__existencia_producto,
 						_token:_token
                        },
                 "success": function (result) {
