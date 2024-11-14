@@ -26,6 +26,7 @@ use App\Http\Controllers\Frontend\EntradaProductoDetallesController;
 use App\Http\Controllers\Frontend\DispensacionController;
 use App\Http\Controllers\Frontend\MarcaController;
 use App\Http\Controllers\Frontend\TiendaController;
+use App\Http\Controllers\Frontend\IngresoProduccionController;
 
 use App\Models\Ubigeo;
 
@@ -415,3 +416,11 @@ Route::post('tiendas/send_tienda', [TiendaController::class, 'send_tienda'])->na
 Route::get('tiendas/modal_tienda/{id}', [TiendaController::class, 'modal_tienda'])->name('tiendas.modal_tienda');
 Route::get('tiendas/eliminar_tienda/{id}/{estado}', [TiendaController::class, 'eliminar_tienda'])->name('tiendas.eliminar_tienda');
 Route::get('tiendas/obtener_datos_tienda/{empresa}', [TiendaController::class, 'obtener_datos_tienda'])->name('tiendas.obtener_datos_tienda');
+
+Route::get('ingreso_produccion/create', [IngresoProduccionController::class, 'create'])->name('ingreso_produccion.create');
+Route::post('ingreso_produccion/listar_ingreso_produccion_ajax', [IngresoProduccionController::class, 'listar_ingreso_produccion_ajax'])->name('ingreso_produccion.listar_ingreso_produccion_ajax');
+Route::post('ingreso_produccion/send_ingreso_produccion', [IngresoProduccionController::class, 'send_ingreso_produccion'])->name('ingreso_produccion.send_ingreso_produccion');
+Route::get('ingreso_produccion/modal_ingreso_produccion/{id}', [IngresoProduccionController::class, 'modal_ingreso_produccion'])->name('ingreso_produccion.modal_ingreso_produccion');
+Route::get('ingreso_produccion/eliminar_ingreso_produccion/{id}/{estado}', [IngresoProduccionController::class, 'eliminar_ingreso_produccion'])->name('ingreso_produccion.eliminar_ingreso_produccion');
+Route::get('ingreso_produccion/obtener_codigo_ingreso_produccion/{tipo_documento}', [IngresoProduccionController::class, 'obtener_codigo_ingreso_produccion'])->name('ingreso_produccion.obtener_codigo_ingreso_produccion');
+Route::get('ingreso_produccion/cargar_detalle/{id}', [IngresoProduccionController::class, 'cargar_detalle'])->name('ingreso_produccion.cargar_detalle');

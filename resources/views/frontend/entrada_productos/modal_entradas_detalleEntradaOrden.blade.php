@@ -252,7 +252,7 @@ $.ajax({
 
                 result.producto.forEach(producto => {
                     let selected = (producto.id == orden_compra.id_producto) ? 'selected' : '';
-                    productoOptions += `<option value="${producto.id}" ${selected}>${producto.denominacion}</option>`;
+                    productoOptions += `<option value="${producto.id}" ${selected}>${producto.codigo} - ${producto.denominacion}</option>`;
                 });
 
                 result.estado_bien.forEach(estado_bien => {

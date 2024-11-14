@@ -165,9 +165,12 @@ class KardexController extends Controller
 		$id_user = Auth::user()->id;
 
         $producto_model = new Producto;
+		$almacen_model = new Almacene;
+
         $producto = $producto_model->getProductoExterno();
+		$almacen = $almacen_model->getAlmacenByUser($id_user);
 		
-		return view('frontend.kardex.create_consulta_productos',compact('producto'));
+		return view('frontend.kardex.create_consulta_productos',compact('producto','almacen'));
 
 	}
 
@@ -175,6 +178,8 @@ class KardexController extends Controller
 
 		$kardex_model = new Kardex;
 		$p[]=$request->consulta_existencia_producto;
+		$p[]=$request->consulta_almacen_producto;
+		$p[]=$request->cantidad__existencia_producto;
 		$p[]=$request->NumeroPagina;
 		$p[]=$request->NumeroRegistros;
 		$data = $kardex_model->listar_kardex_consulta_producto_ajax($p);

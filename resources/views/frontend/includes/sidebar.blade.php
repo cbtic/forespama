@@ -129,6 +129,14 @@
                 </li>
 				@endif
 				
+            </ul>
+
+        </li>
+
+        <li class="c-sidebar-nav-dropdown">
+            <x-utils.link href="#" icon="c-sidebar-nav-icon cil-list" class="c-sidebar-nav-dropdown-toggle" :text="__('Operaciones')" />
+            <ul class="c-sidebar-nav-dropdown-items">
+				
 				@can('Entradas')
                 <li class="c-sidebar-nav-item">
                     <x-utils.link :href="route('frontend.entrada_productos.create')" class="c-sidebar-nav-link" :text="__('Entradas y Salidas')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
@@ -144,6 +152,12 @@
 				@can('Dispensacion')
                 <li class="c-sidebar-nav-item">
                     <x-utils.link :href="route('frontend.dispensacion.create')" class="c-sidebar-nav-link" :text="__('Dispensacion')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+                </li>
+				@endif
+
+                @can('Ingreso Produccion')
+                <li class="c-sidebar-nav-item">
+                    <x-utils.link :href="route('frontend.ingreso_produccion.create')" class="c-sidebar-nav-link" :text="__('Ingreso Produccion')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
                 </li>
 				@endif
 				

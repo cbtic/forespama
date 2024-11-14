@@ -463,7 +463,7 @@ $.ajax({
 
                 result.producto.forEach(producto => {
                     let selected = (producto.id == orden_compra.id_producto) ? 'selected' : '';
-                    productoOptions += `<option value="${producto.id}" ${selected}>${producto.denominacion}</option>`;
+                    productoOptions += `<option value="${producto.id}" ${selected}>${producto.codigo} - ${producto.denominacion}</option>`;
                 });
 
                 result.estado_bien.forEach(estado_bien => {
@@ -548,7 +548,7 @@ function agregarProducto(){
     var opcionesDescripcion = `<?php
         echo '<option value="">--Seleccionar--</option>';
         foreach ($producto as $row) {
-            echo '<option value="' . htmlspecialchars($row->id, ENT_QUOTES, 'UTF-8') . '">' . htmlspecialchars($row->denominacion, ENT_QUOTES, 'UTF-8') . '</option>';
+            echo '<option value="' . htmlspecialchars($row->id, ENT_QUOTES, 'UTF-8') . '">' . htmlspecialchars($row->codigo . ' - ' . $row->denominacion, ENT_QUOTES, 'UTF-8') . '</option>';
         }
     ?>`;
 

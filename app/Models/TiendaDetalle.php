@@ -9,6 +9,7 @@ use DB;
 class TiendaDetalle extends Model
 {
     protected $table = 'tienda_detalle';
+    
     use HasFactory;
 
     function getTiendaByEmpresa($empresa){
