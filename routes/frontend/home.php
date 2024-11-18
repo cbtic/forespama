@@ -402,6 +402,6 @@ Route::get('kardex/create_consulta_productos', [KardexController::class, 'create
 Route::post('kardex/listar_kardex_consulta_producto_ajax', [KardexController::class, 'listar_kardex_consulta_producto_ajax'])->name('kardex.listar_kardex_consulta_producto_ajax');
 Route::get('productos/obtener_stock_producto/{almacen}/{id_producto}', [ProductosController::class, 'obtener_stock_producto'])->name('productos.obtener_stock_producto');
 
-Route::get('proforma/modal_proforma/{id}', [ProformaController::class, 'modal_dispensacion'])->name('proforma.modal_dispensacion');
+Route::get('proforma/modal_proforma/{id}', [ProformaController::class, 'modal_proforma'])->name('proforma.modal_proforma');
 
 

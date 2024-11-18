@@ -65,6 +65,10 @@ $(document).ready(function () {
 
 		//alert($('#chkExonerado').val());	
 	  });
+	
+	$('#btNuevoProforma').click(function () {
+		$modalProforma(0);
+	});
 
 	$('#btnExonerarS').click(function () {
 		//modalPersona(0);
@@ -2552,4 +2556,23 @@ function selPerona(cap, numero_documento){
 	$('#openOverlayOpc').modal('hide');
 	obtenerBeneficiario();
 
+}
+
+function $modalProforma(id){
+	
+	/*var tipo_mov="";
+	if(tipo=='INGRESO'){tipo_mov=1};
+	if(tipo=='SALIDA'){tipo_mov=2};*/
+
+	$(".modal-dialog").css("width","85%");
+	$('#openOverlayOpc .modal-body').css('height', 'auto');
+
+	$.ajax({
+			url: "/proforma/modal_proforma/"+id,
+			type: "GET",
+			success: function (result) {  
+					$("#diveditpregOpc").html(result);
+					$('#openOverlayOpc').modal('show');
+			}
+	});
 }

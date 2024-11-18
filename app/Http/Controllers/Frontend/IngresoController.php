@@ -20,6 +20,11 @@ use App\Models\Beneficiario;
 use App\Models\Comprobante;
 use App\Models\AgremiadoMulta;
 use App\Models\TipoCambio;
+
+use App\Models\Producto;
+use App\Models\Marca;
+use App\Models\Almacene;
+
 use Barryvdh\DomPDF\Facade\Pdf;
 use Auth;
 
@@ -62,7 +67,23 @@ class IngresoController extends Controller
         //$caja_usuario = $caja_model;
         //print_r($concepto);exit();
 
-        return view('frontend.ingresos.create',compact('persona','caja','caja_usuario','tipo_documento','pronto_pago', 'concepto','mes'));
+        $tablaMaestra_model = new TablaMaestra;
+        $producto_model = new Producto;
+        $marca_model = new Marca;
+        $almacen_model = new Almacene;
+
+        $tipo_documento = $tablaMaestra_model->getMaestroByTipo(54);
+        $producto = $producto_model->getProductoAll();
+        $marca = $marca_model->getMarcaAll();
+        $estado_bien = $tablaMaestra_model->getMaestroByTipo(4);
+        $unidad = $tablaMaestra_model->getMaestroByTipo(43);
+        $igv_compra = $tablaMaestra_model->getMaestroByTipo(51);
+        $descuento = $tablaMaestra_model->getMaestroByTipo(55);
+        $almacen = $almacen_model->getAlmacenAll();
+        //$almacen = Almacene::all();
+        $unidad_origen = $tablaMaestra_model->getMaestroByTipo(50);
+
+        return view('frontend.ingresos.create',compact('persona','caja','caja_usuario','tipo_documento','pronto_pago', 'concepto','mes','producto','marca','estado_bien','unidad','descuento'));
 
     }
 

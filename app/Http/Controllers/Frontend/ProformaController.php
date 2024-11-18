@@ -4,12 +4,12 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\OrdenCompra;
+use App\Models\Proforma;
 use App\Models\TablaMaestra;
 use App\Models\Empresa;
 use App\Models\Producto;
 use App\Models\Marca;
-use App\Models\OrdenCompraDetalle;
+use App\Models\ProformaDetalle;
 use App\Models\Kardex;
 use App\Models\Almacen_usuario;
 use App\Models\Almacene;
@@ -49,7 +49,7 @@ class ProformaController extends Controller
 
     public function listar_orden_compra_ajax(Request $request){
 
-		$orden_compra_model = new OrdenCompra;
+		$proforma_model = new proforma;
 		$p[]=$request->tipo_documento;
         $p[]=$request->empresa_compra;
         $p[]=$request->empresa_vende;
@@ -61,7 +61,7 @@ class ProformaController extends Controller
         $p[]=$request->estado;
 		$p[]=$request->NumeroPagina;
 		$p[]=$request->NumeroRegistros;
-		$data = $orden_compra_model->listar_orden_compra_ajax($p);
+		$data = $proforma_model->listar_orden_compra_ajax($p);
 		$iTotalDisplayRecords = isset($data[0]->totalrows)?$data[0]->totalrows:0;
 
 		$result["PageStart"] = $request->NumeroPagina;
@@ -76,7 +76,7 @@ class ProformaController extends Controller
 
 	}
 
-    public function modal_orden_compra($id){
+    public function modal_proforma($id){
 		
         $tablaMaestra_model = new TablaMaestra;
         $producto_model = new Producto;
@@ -85,15 +85,15 @@ class ProformaController extends Controller
 		
 		if($id>0){
 
-            $orden_compra = OrdenCompra::find($id);
+            $proforma = Proforma::find($id);
             $proveedor = Empresa::all();
 			
 		}else{
-			$orden_compra = new OrdenCompra;
+			$proforma = new Proforma;
             $proveedor = Empresa::all();
 		}
 
-        //$orden_compra_model = new OrdenCompra;
+        //$proforma_model = new OrdenCompra;
         $tipo_documento = $tablaMaestra_model->getMaestroByTipo(54);
         //$moneda = $tablaMaestra_model->getMaestroByTipo(1);
         //$unidad_origen = $tablaMaestra_model->getMaestroByTipo(50);
@@ -109,11 +109,11 @@ class ProformaController extends Controller
         $almacen = $almacen_model->getAlmacenAll();
         //$almacen = Almacene::all();
         $unidad_origen = $tablaMaestra_model->getMaestroByTipo(50);
-        //$codigo_orden_compra = $orden_compra_model->getCodigoOrdenCompra();
+        //$codigo_orden_compra = $proforma_model->getCodigoOrdenCompra();
         
         //dd($proveedor);exit();
 
-		return view('frontend.proforma.modal_proforma',compact('id','orden_compra','tipo_documento','proveedor','producto','marca','estado_bien','unidad','igv_compra','descuento','almacen','unidad_origen'));
+		return view('frontend.proforma.modal_proforma',compact('id','proforma','tipo_documento','proveedor','producto','marca','estado_bien','unidad','igv_compra','descuento','almacen','unidad_origen'));
 
     }
 
@@ -122,9 +122,9 @@ class ProformaController extends Controller
         $id_user = Auth::user()->id;
 
         if($request->id == 0){
-            $orden_compra = new OrdenCompra;
+            $proforma = new Proforma;
         }else{
-            $orden_compra = OrdenCompra::find($request->id);
+            $proforma = Proforma::find($request->id);
         }
 
         $item = $request->input('item');
@@ -143,87 +143,87 @@ class ProformaController extends Controller
         $total = $request->input('total');
         $id_orden_compra_detalle =$request->id_orden_compra_detalle;
         
-        $orden_compra->id_empresa_compra = $request->empresa_compra;
-        $orden_compra->id_empresa_vende = $request->empresa_vende;
-        $orden_compra->fecha_orden_compra = $request->fecha_orden_compra;
-        $orden_compra->numero_orden_compra = $request->numero_orden_compra;
-        $orden_compra->id_tipo_documento = $request->tipo_documento;
-        $orden_compra->igv_compra = $request->igv_compra;
-        $orden_compra->id_unidad_origen = $request->unidad_origen;
-        $orden_compra->id_almacen_destino = $request->almacen;
-        $orden_compra->id_almacen_salida = $request->almacen_salida;
-        $orden_compra->cerrado = 1;
-        $orden_compra->id_usuario_inserta = $id_user;
-        $orden_compra->estado = 1;
-        $orden_compra->save();
+        $proforma->id_empresa_compra = $request->empresa_compra;
+        $proforma->id_empresa_vende = $request->empresa_vende;
+        $proforma->fecha_orden_compra = $request->fecha_orden_compra;
+        $proforma->numero_orden_compra = $request->numero_orden_compra;
+        $proforma->id_tipo_documento = $request->tipo_documento;
+        $proforma->igv_compra = $request->igv_compra;
+        $proforma->id_unidad_origen = $request->unidad_origen;
+        $proforma->id_almacen_destino = $request->almacen;
+        $proforma->id_almacen_salida = $request->almacen_salida;
+        $proforma->cerrado = 1;
+        $proforma->id_usuario_inserta = $id_user;
+        $proforma->estado = 1;
+        $proforma->save();
 
         $array_orden_compra_detalle = array();
 
         foreach($item as $index => $value) {
             
             if($id_orden_compra_detalle[$index] == 0){
-                $orden_compra_detalle = new OrdenCompraDetalle;
+                $proforma_detalle = new Proforma;
             }else{
-                $orden_compra_detalle = OrdenCompraDetalle::find($id_orden_compra_detalle[$index]);
+                $proforma_detalle = Proforma::find($id_orden_compra_detalle[$index]);
             }
             
-            $orden_compra_detalle->id_orden_compra = $orden_compra->id;
-            $orden_compra_detalle->id_producto = $descripcion[$index];
-            $orden_compra_detalle->cantidad_requerida = $cantidad_ingreso[$index];
-            $orden_compra_detalle->precio = $precio_unitario[$index];
-            $orden_compra_detalle->id_descuento = $descuento[$index];
-            $orden_compra_detalle->sub_total = $sub_total[$index];
-            $orden_compra_detalle->igv = $igv[$index];
-            $orden_compra_detalle->total = $total[$index];
-            $orden_compra_detalle->fecha_fabricacion = $fecha_fabricacion[$index];
-            $orden_compra_detalle->fecha_vencimiento = $fecha_vencimiento[$index];
-            $orden_compra_detalle->id_estado_producto = $estado_bien[$index];
-            $orden_compra_detalle->id_unidad_medida = $unidad[$index];
-            $orden_compra_detalle->id_marca = $marca[$index];
-            $orden_compra_detalle->estado = 1;
-            $orden_compra_detalle->cerrado = 1;
-            $orden_compra_detalle->id_usuario_inserta = $id_user;
+            $proforma_detalle->id_orden_compra = $proforma->id;
+            $proforma_detalle->id_producto = $descripcion[$index];
+            $proforma_detalle->cantidad_requerida = $cantidad_ingreso[$index];
+            $proforma_detalle->precio = $precio_unitario[$index];
+            $proforma_detalle->id_descuento = $descuento[$index];
+            $proforma_detalle->sub_total = $sub_total[$index];
+            $proforma_detalle->igv = $igv[$index];
+            $proforma_detalle->total = $total[$index];
+            $proforma_detalle->fecha_fabricacion = $fecha_fabricacion[$index];
+            $proforma_detalle->fecha_vencimiento = $fecha_vencimiento[$index];
+            $proforma_detalle->id_estado_producto = $estado_bien[$index];
+            $proforma_detalle->id_unidad_medida = $unidad[$index];
+            $proforma_detalle->id_marca = $marca[$index];
+            $proforma_detalle->estado = 1;
+            $proforma_detalle->cerrado = 1;
+            $proforma_detalle->id_usuario_inserta = $id_user;
 
-            $orden_compra_detalle->save();
+            $proforma_detalle->save();
 
-            $array_orden_compra_detalle[] = $orden_compra_detalle->id;
+            $array_orden_compra_detalle[] = $proforma_detalle->id;
 
-            $OrdenCompraAll = OrdenCompraDetalle::where("id_orden_compra",$orden_compra->id)->where("estado","1")->get();
+            $OrdenCompraAll = ProformaDetalle::where("id_orden_compra",$proforma->id)->where("estado","1")->get();
             
             foreach($OrdenCompraAll as $key=>$row){
                 
                 if (!in_array($row->id, $array_orden_compra_detalle)){
-                    $orden_compra_detalle = OrdenCompraDetalle::find($row->id);
-                    $orden_compra_detalle->estado = 0;
-                    $orden_compra_detalle->save();
+                    $proforma_detalle = ProformaDetalle::find($row->id);
+                    $proforma_detalle->estado = 0;
+                    $proforma_detalle->save();
                 }
             }
         }
 
-        return response()->json(['id' => $orden_compra->id]);    
+        return response()->json(['id' => $proforma->id]);    
         
     }
 
     public function eliminar_orden_compra($id,$estado)
     {
-		$orden_compra = OrdenCompra::find($id);
+		$proforma = Proforma::find($id);
 
-		$orden_compra->estado = $estado;
-		$orden_compra->save();
+		$proforma->estado = $estado;
+		$proforma->save();
 
-		echo $orden_compra->id;
+		echo $proforma->id;
     }
 
     public function cargar_detalle($id)
     {
 
-        $orden_compra_model = new OrdenCompra;
+        $proforma_model = new Proforma;
         $marca_model = new Marca;
         $producto_model = new Producto;
         $tablaMaestra_model = new TablaMaestra;
         $kardex_model = new Kardex;
 
-        $orden_compra = $orden_compra_model->getDetalleOrdenCompraId($id);
+        $proforma = $proforma_model->getDetalleOrdenCompraId($id);
         $marca = $marca_model->getMarcaAll();
         $producto = $producto_model->getProductoAll();
         $estado_bien = $tablaMaestra_model->getMaestroByTipo(4);
@@ -232,7 +232,7 @@ class ProformaController extends Controller
 
         $producto_stock = [];
 
-        foreach($orden_compra as $detalle){
+        foreach($proforma as $detalle){
 
             $id_almacen_bus = $detalle->id_almacen_salida;
             
@@ -251,7 +251,7 @@ class ProformaController extends Controller
         //exit();
 
         return response()->json([
-            'orden_compra' => $orden_compra,
+            'orden_compra' => $proforma,
             'marca' => $marca,
             'producto' => $producto,
             'estado_bien' => $estado_bien,
@@ -263,11 +263,11 @@ class ProformaController extends Controller
 
     public function movimiento_pdf($id){
 
-        $orden_compra_model = new OrdenCompra;
-        $orden_compra_detalle_model = new OrdenCompraDetalle;
+        $proforma_model = new Proforma;
+        $proforma_detalle_model = new ProformaDetalle;
 
-        $datos=$orden_compra_model->getOrdenCompraById($id);
-        $datos_detalle=$orden_compra_detalle_model->getDetalleOrdenCompraPdf($id);
+        $datos=$proforma_model->getOrdenCompraById($id);
+        $datos_detalle=$proforma_detalle_model->getDetalleOrdenCompraPdf($id);
 
         $tipo_documento=$datos[0]->tipo_documento;
         $empresa_compra=$datos[0]->empresa_compra;
@@ -306,8 +306,8 @@ class ProformaController extends Controller
 
     public function obtener_codigo_orden_compra($tipo_documento){
 		
-		$orden_compra_model = new OrdenCompra;
-		$codigo_orden_compra = $orden_compra_model->getCodigoOrdenCompra($tipo_documento);
+		$proforma_model = new Proforma;
+		$codigo_orden_compra = $proforma_model->getCodigoOrdenCompra($tipo_documento);
 		
 		return response()->json($codigo_orden_compra);
 	}
