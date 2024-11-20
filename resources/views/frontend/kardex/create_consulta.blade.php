@@ -14,6 +14,10 @@ body {
     background-color: #bdc3c7;
 }
 
+.fila-par {
+    background-color: #E2EFDA;
+}
+
 .table-fixed {
     width: 100%;
     background-color: #f3f3f3;

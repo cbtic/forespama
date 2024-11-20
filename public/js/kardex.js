@@ -283,6 +283,8 @@ function datatablenew_existencia(){
 		"dom": '<"top">rt<"bottom"flpi><"clear">',
         "fnDrawCallback": function(json) {
             $('[data-toggle="tooltip"]').tooltip();
+			$('#tblKardexConsulta tbody tr').removeClass('fila-par');
+    		$('#tblKardexConsulta tbody tr:even').addClass('fila-par');
         },
 
         "fnServerData": function (sSource, aoData, fnCallback, oSettings) {
@@ -404,6 +406,9 @@ function datatablenew_existencia_producto(){
 		"dom": '<"top">rt<"bottom"flpi><"clear">',
         "fnDrawCallback": function(json) {
             $('[data-toggle="tooltip"]').tooltip();
+			$('#tblKardexConsulta tbody tr').removeClass('fila-par');
+    		$('#tblKardexConsulta tbody tr:even').addClass('fila-par');
+			
         },
 
         "fnServerData": function (sSource, aoData, fnCallback, oSettings) {
@@ -498,12 +503,15 @@ function datatablenew_existencia_producto(){
                 "bSortable": true,
                 "aTargets": [5]
                 },
+				
             ]
     });
 }
 
 function datatablenew_consulta_producto(){
-                      
+
+	var suma_saldos = 0; 
+
     var oTable1 = $('#tblKardexConsultaProductos').dataTable({
         "bServerSide": true,
         "sAjaxSource": "/kardex/listar_kardex_consulta_producto_ajax",
@@ -523,8 +531,21 @@ function datatablenew_consulta_producto(){
                         {},
         ],
 		"dom": '<"top">rt<"bottom"flpi><"clear">',
-        "fnDrawCallback": function(json) {
+        "fnDrawCallback": function(settings) {
+			let totalSaldo = 0;
+
+			settings.aoData.forEach(function(row) {
+				let saldos = row._aData.total_saldos2;
+				if (saldos) {
+					totalSaldo = parseFloat(saldos);
+				}
+			});
+
+			$('#tblKardexConsultaProductos tfoot tr').html('<td colspan="3"><b>Total</b></td><td><b>' + totalSaldo + '</b></td><td colspan="2"></td>');
+			//console.log("Total Saldos:", totalSaldo);
             $('[data-toggle="tooltip"]').tooltip();
+			$('#tblKardexConsultaProductos tbody tr').removeClass('fila-par');
+    		$('#tblKardexConsultaProductos tbody tr:even').addClass('fila-par');
         },
 
         "fnServerData": function (sSource, aoData, fnCallback, oSettings) {
@@ -535,7 +556,7 @@ function datatablenew_consulta_producto(){
 			
             var consulta_existencia_producto = $('#consulta_existencia_producto_bus').val();
 			var consulta_almacen_producto = $('#consulta_almacen_producto_bus').val();
-			var cantidad__existencia_producto = $('#cantidad__existencia_producto_bus').val();
+			var cantidad_existencia_producto = $('#cantidad_existencia_producto_bus').val();
 			
 			var _token = $('#_token').val();
             oSettings.jqXHR = $.ajax({
@@ -546,7 +567,7 @@ function datatablenew_consulta_producto(){
                 "data":{NumeroPagina:iNroPagina,NumeroRegistros:iCantMostrar,
 						consulta_existencia_producto:consulta_existencia_producto,
 						consulta_almacen_producto:consulta_almacen_producto,
-						cantidad__existencia_producto:cantidad__existencia_producto,
+						cantidad_existencia_producto:cantidad_existencia_producto,
 						_token:_token
                        },
                 "success": function (result) {
@@ -621,7 +642,10 @@ function datatablenew_consulta_producto(){
                 "bSortable": true,
                 "aTargets": [5]
                 },
+				
+				
             ]
+			
     });
 }
 

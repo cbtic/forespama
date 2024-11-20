@@ -14,6 +14,10 @@ body {
     background-color: #bdc3c7;
 }
 
+.fila-par {
+    background-color: #E2EFDA;
+}
+
 .table-fixed {
     width: 100%;
     background-color: #f3f3f3;
@@ -363,7 +367,7 @@ label.form-control-sm{
 					</div>
 
 					<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-						<select name="consulta_almacen_producto_bus" id="consulta_almacen_producto_bus" class="form-control form-control-sm" onchange="obtenerProductosAlmacen()">
+						<select name="consulta_almacen_producto_bus" id="consulta_almacen_producto_bus" class="form-control form-control-sm" onchange="">
 							<option value="">--Seleccionar Almacen--</option>
 							<?php
 							foreach ($almacen as $row) {
@@ -376,7 +380,7 @@ label.form-control-sm{
 					</div>
 
 					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<select name="cantidad__existencia_producto_bus" id="cantidad__existencia_producto_bus" class="form-control form-control-sm">
+						<select name="cantidad_existencia_producto_bus" id="cantidad_existencia_producto_bus" class="form-control form-control-sm">
 							<option value="">--Seleccionar Cantidad Producto</option>
 							<option value="0">Igual a 0</option>
 							<option value="1" selected="selected">Mayor a 0</option>
@@ -423,6 +427,13 @@ label.form-control-sm{
                         </thead>
                         <tbody>
                         </tbody>
+						<tfoot>
+							<tr>
+								<td colspan="3">Total</td>
+								<td></td>
+								<td></td>
+							</tr>
+						</tfoot>
                     </table>
                 </div><!--table-responsive-->
                 </form>
