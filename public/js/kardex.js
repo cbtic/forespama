@@ -14,6 +14,8 @@ $(document).ready(function () {
 
 	$("#producto_bus").select2({ width: '100%' });
 
+	$("#consulta_tipo_producto_bus").select2({ width: '100%' });
+
 	$("#consulta_existencia_producto_bus").select2({ width: '100%' });
 		
 	datatablenew();
