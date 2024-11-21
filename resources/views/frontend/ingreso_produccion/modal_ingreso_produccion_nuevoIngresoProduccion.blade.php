@@ -432,8 +432,24 @@ function verificarProductoSeleccionado(selectElement, rowIndex, valor) {
 }
 
 function eliminarFila(button){
-    $(button).closest('tr').remove();
-    actualizarTotalGeneral();
+
+    var row = $(button).closest('tr');
+
+    var selectedValue = row.find('select[name="descripcion[]"]').val();
+
+    if (selectedValue) {
+        const index = productosSeleccionados.indexOf(Number(selectedValue));
+        if (index > -1) {
+            productosSeleccionados.splice(index, 1);
+        }
+    }
+
+    row.remove();
+
+    //actualizarTotalGeneral();
+
+    console.log(productosSeleccionados);
+    //$(button).closest('tr').remove();
 }
 
 function fn_save_ingreso_produccion(){

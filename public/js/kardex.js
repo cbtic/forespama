@@ -510,7 +510,7 @@ function datatablenew_existencia_producto(){
 
 function datatablenew_consulta_producto(){
 
-	var suma_saldos = 0; 
+	//var suma_saldos = 0; 
 
     var oTable1 = $('#tblKardexConsultaProductos').dataTable({
         "bServerSide": true,
@@ -532,6 +532,7 @@ function datatablenew_consulta_producto(){
         ],
 		"dom": '<"top">rt<"bottom"flpi><"clear">',
         "fnDrawCallback": function(settings) {
+			
 			let totalSaldo = 0;
 
 			settings.aoData.forEach(function(row) {
@@ -557,6 +558,7 @@ function datatablenew_consulta_producto(){
             var consulta_existencia_producto = $('#consulta_existencia_producto_bus').val();
 			var consulta_almacen_producto = $('#consulta_almacen_producto_bus').val();
 			var cantidad_existencia_producto = $('#cantidad_existencia_producto_bus').val();
+			var consulta_tipo_producto = $('#consulta_tipo_producto_bus').val();
 			
 			var _token = $('#_token').val();
             oSettings.jqXHR = $.ajax({
@@ -568,6 +570,7 @@ function datatablenew_consulta_producto(){
 						consulta_existencia_producto:consulta_existencia_producto,
 						consulta_almacen_producto:consulta_almacen_producto,
 						cantidad_existencia_producto:cantidad_existencia_producto,
+						consulta_tipo_producto:consulta_tipo_producto,
 						_token:_token
                        },
                 "success": function (result) {
@@ -633,6 +636,16 @@ function datatablenew_consulta_producto(){
 				"aTargets": [4]
 				},
 
+				{
+				"mRender": function (data, type, row) {
+					var tipo_producto = "";
+					if(row.tipo_producto!= null)tipo_producto = row.tipo_producto;
+					return tipo_producto;
+				},
+				"bSortable": true,
+				"aTargets": [5]
+				},
+
                 {
                 "mRender": function (data, type, row) {
                 	var almacen_kardex = "";
@@ -640,7 +653,7 @@ function datatablenew_consulta_producto(){
 					return almacen_kardex;
                 },
                 "bSortable": true,
-                "aTargets": [5]
+                "aTargets": [6]
                 },
 				
 				
