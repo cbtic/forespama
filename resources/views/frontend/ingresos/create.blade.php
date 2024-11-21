@@ -1124,13 +1124,13 @@ $.ajax({
 }
 function agregarProducto(){
 
-    
+   
 
 var opcionesDescripcion = '<?php
     echo '<option value="">--Seleccionar--</option>';
     foreach ($producto as $row) {
         
-        echo '<option value="' . htmlspecialchars($row->id, ENT_QUOTES, 'UTF-8') . '">' . htmlspecialchars($row->denominacion, ENT_QUOTES, 'UTF-8') . '</option>';
+        echo '<option value="' . htmlspecialchars($row->id, ENT_QUOTES, 'UTF-8') . '">' . htmlspecialchars(addslashes($row->denominacion), ENT_QUOTES, 'UTF-8') . '</option>';
     }
 ?>';
 
