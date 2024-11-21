@@ -133,8 +133,6 @@ class OrdenCompraController extends Controller
         $descripcion = $request->input('descripcion');
         $cod_interno = $request->input('cod_interno');
         $marca = $request->input('marca');
-        $fecha_fabricacion = $request->input('fecha_fabricacion');
-        $fecha_vencimiento = $request->input('fecha_vencimiento');
         $estado_bien = $request->input('estado_bien');
         $unidad = $request->input('unidad');
         $cantidad_ingreso = $request->input('cantidad_ingreso');
@@ -177,9 +175,7 @@ class OrdenCompraController extends Controller
             $orden_compra_detalle->sub_total = $sub_total[$index];
             $orden_compra_detalle->igv = $igv[$index];
             $orden_compra_detalle->total = $total[$index];
-            $orden_compra_detalle->fecha_fabricacion = $fecha_fabricacion[$index];
-            $orden_compra_detalle->fecha_vencimiento = $fecha_vencimiento[$index];
-            $orden_compra_detalle->id_estado_producto = $estado_bien[$index];
+             $orden_compra_detalle->id_estado_producto = $estado_bien[$index];
             $orden_compra_detalle->id_unidad_medida = $unidad[$index];
             $orden_compra_detalle->id_marca = $marca[$index];
             $orden_compra_detalle->estado = 1;

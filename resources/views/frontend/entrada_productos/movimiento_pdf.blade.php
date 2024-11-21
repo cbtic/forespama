@@ -212,8 +212,6 @@ $(document).ready(function() {
                         <td class="td" style ="text-align: left; width: 10%; height:25px; border-bottom: 1px solid black;"><b>DESCRIPCI&Oacute;N</b></td>
                         <td class="td" style ="text-align: left; width: 5%; height:25px; border-bottom: 1px solid black;"><b>MARCA</b></td>
                         <td class="td" style ="text-align: left; width: 5%; height:25px; border-bottom: 1px solid black;"><b>COD. INTERNO</b></td>
-                        <td class="td" style ="text-align: left; width: 10%; height:25px; border-bottom: 1px solid black;"><b>F. FABRICACI&Oacute;N</b></td>
-                        <td class="td" style ="text-align: left; width: 10%; height:25px; border-bottom: 1px solid black;"><b>F. VENCIMIENTO</b></td>
                         <td class="td" style ="text-align: left; width: 5%; height:25px; border-bottom: 1px solid black;"><b>ESTADO BIEN</b></td>
                         <td class="td" style ="text-align: left; width: 5%; height:25px; border-bottom: 1px solid black;"><b>UNIDAD</b></td>
                         <td class="td" style ="text-align: left; width: 5%; height:25px; border-bottom: 1px solid black;"><b>CANT. INGRESO</b></td>
@@ -237,8 +235,6 @@ $(document).ready(function() {
                             <td class="td" style ="text-align: left; width: 10%; height:25px"><?php echo $r->producto;?></td>
                             <td class="td" style ="text-align: left; width: 5%; height:25px"><?php echo $r->marca;?></td>
                             <td class="td" style ="text-align: left; width: 5%; height:25px"><?php echo $r->codigo;?></td>
-                            <td class="td" style ="text-align: left; width: 10%; height:25px"><?php echo $r->fecha_fabricacion;?></td>
-                            <td class="td" style ="text-align: left; width: 10%; height:25px"><?php echo $r->fecha_vencimiento;?></td>
                             <td class="td" style ="text-align: left; width: 5%; height:25px"><?php echo $r->estado_bien;?></td>
                             <td class="td" style ="text-align: left; width: 5%; height:25px"><?php echo $r->unidad_medida;?></td>
                             <td class="td" style ="text-align: left; width: 5%; height:25px"><?php echo $r->cantidad;?></td>
