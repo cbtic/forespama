@@ -10,6 +10,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Kardex;
 use App\Models\Producto;
 use App\Models\Almacene;
+use App\Models\TablaMaestra;
 use Maatwebsite\Excel\Facades\Excel;
 use Maatwebsite\Excel\Concerns\FromArray;
 use stdClass;
@@ -160,17 +161,18 @@ class KardexController extends Controller
 
 	public function create_consulta_productos(){
 
-		//$tablaMaestra_model = new TablaMaestra;
-		//$estado_bien = $tablaMaestra_model->getMaestroByTipo(4);
+		
 		$id_user = Auth::user()->id;
 
         $producto_model = new Producto;
 		$almacen_model = new Almacene;
+		$tablaMaestra_model = new TablaMaestra;
 
+		$tipo_producto = $tablaMaestra_model->getMaestroByTipo(44);
         $producto = $producto_model->getProductoExterno();
 		$almacen = $almacen_model->getAlmacenByUser($id_user);
 		
-		return view('frontend.kardex.create_consulta_productos',compact('producto','almacen'));
+		return view('frontend.kardex.create_consulta_productos',compact('producto','almacen','tipo_producto'));
 
 	}
 
@@ -180,6 +182,7 @@ class KardexController extends Controller
 		$p[]=$request->consulta_existencia_producto;
 		$p[]=$request->consulta_almacen_producto;
 		$p[]=$request->cantidad_existencia_producto;
+		$p[]=$request->consulta_tipo_producto;
 		$p[]=$request->NumeroPagina;
 		$p[]=$request->NumeroRegistros;
 		$data = $kardex_model->listar_kardex_consulta_producto_ajax($p);
