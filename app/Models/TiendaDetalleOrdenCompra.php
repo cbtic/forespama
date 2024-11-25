@@ -9,4 +9,20 @@ use DB;
 class TiendaDetalleOrdenCompra extends Model
 {
     use HasFactory;
+
+    function getDetalleTiendaOrdenCompraId($id){
+
+        $cad = "select distinct tdoc.id, t.id id_tienda, t.denominacion tienda, p.denominacion producto, tm.denominacion unidad_medida, tdoc.cantidad 
+        from tienda_detalle_orden_compras tdoc 
+        inner join orden_compras oc on tdoc.id_orden_compra = oc.id 
+        left join orden_compra_detalles ocd on ocd.id_orden_compra = oc.id 
+        inner join productos p on tdoc.id_producto = p.id 
+        inner join tiendas t on tdoc.id_tienda = t.id
+        left join tabla_maestras tm on ocd.id_unidad_medida ::int = tm.codigo::int and tm.tipo = '43'
+        where oc.id='".$id."'
+        order by tdoc.id asc";
+
+		$data = DB::select($cad);
+        return $data;
+    }
 }

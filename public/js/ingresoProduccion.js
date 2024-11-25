@@ -115,53 +115,62 @@ function datatablenew(){
         "aoColumnDefs":
             [	
 				{
-                "mRender": function (data, type, row) {
-                	var id = "";
-					if(row.id!= null)id = row.id;
-					return id;
-                },
-                "bSortable": false,
-                "aTargets": [0],
-				"className": "dt-center",
-				//"className": 'control'
+					"mRender": function (data, type, row) {
+						var id = "";
+						if(row.id!= null)id = row.id;
+						return id;
+					},
+					"bSortable": false,
+					"aTargets": [0],
+					"className": "dt-center",
+					//"className": 'control'
                 },
 
 				{
-				"mRender": function (data, type, row) {
-					var tipo_documento = "";
-					if(row.tipo_documento!= null)tipo_documento = row.tipo_documento;
-					return tipo_documento;
-				},
-				"bSortable": true,
-				"aTargets": [1]
+					"mRender": function (data, type, row) {
+						var tipo_documento = "";
+						if(row.tipo_documento!= null)tipo_documento = row.tipo_documento;
+						return tipo_documento;
+					},
+					"bSortable": true,
+					"aTargets": [1]
 				},
 				
 				{
-				"mRender": function (data, type, row) {
-					var fecha = "";
-					if(row.fecha!= null)fecha = row.fecha;
-					return fecha;
-				},
-				"bSortable": true,
-				"aTargets": [2]
-				},
-				{
-				"mRender": function (data, type, row) {
-					var numero_ingreso_produccion = "";
-					if(row.numero_ingreso_produccion!= null)numero_ingreso_produccion = row.numero_ingreso_produccion;
-					return numero_ingreso_produccion;
-				},
-				"bSortable": true,
-				"aTargets": [3]
+					"mRender": function (data, type, row) {
+						var fecha = "";
+						if(row.fecha!= null)fecha = row.fecha;
+						return fecha;
+					},
+					"bSortable": true,
+					"aTargets": [2]
 				},
 				{
-				"mRender": function (data, type, row) {
-					var almacen_destino = "";
-					if(row.almacen_destino!= null)almacen_destino = row.almacen_destino;
-					return almacen_destino;
+					"mRender": function (data, type, row) {
+						var numero_ingreso_produccion = "";
+						if(row.numero_ingreso_produccion!= null)numero_ingreso_produccion = row.numero_ingreso_produccion;
+						return numero_ingreso_produccion;
+					},
+					"bSortable": true,
+					"aTargets": [3]
 				},
-				"bSortable": true,
-				"aTargets": [4]
+				{
+					"mRender": function (data, type, row) {
+						var almacen_destino = "";
+						if(row.almacen_destino!= null)almacen_destino = row.almacen_destino;
+						return almacen_destino;
+					},
+					"bSortable": true,
+					"aTargets": [4]
+				},
+				{
+					"mRender": function (data, type, row) {
+						var usuario_ingreso = "";
+						if(row.usuario_ingreso!= null)usuario_ingreso = row.usuario_ingreso;
+						return usuario_ingreso;
+					},
+					"bSortable": true,
+					"aTargets": [5]
 				},
 				
 				{
@@ -176,7 +185,7 @@ function datatablenew(){
 						return estado;
 					},
 					"bSortable": false,
-					"aTargets": [5]
+					"aTargets": [6]
 				},
 				{
 					"mRender": function (data, type, row) {
@@ -201,7 +210,7 @@ function datatablenew(){
 						return html;
 					},
 					"bSortable": false,
-					"aTargets": [6],
+					"aTargets": [7],
 				},
             ]
     });

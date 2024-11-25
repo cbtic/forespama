@@ -271,4 +271,41 @@ class IngresoProduccionController extends Controller
             'unidad_medida' => $unidad_medida
         ]);
     }
+
+	public function movimiento_pdf_ingreso_produccion($id){
+
+        $ingreso_produccion_model = new IngresoProduccion;
+        $ingreso_produccion_detalle_model = new IngresoProduccionDetalle;
+
+        $datos=$ingreso_produccion_model->getIngresoProduccionById($id);
+        $datos_detalle=$ingreso_produccion_detalle_model->getDetalleIngresoProduccionPdf($id);
+
+        $tipo_documento=$datos[0]->tipo_documento;
+        $almacen=$datos[0]->almacen;
+        $fecha = $datos[0]->fecha;
+        $codigo=$datos[0]->codigo;
+        $usuario_ingreso=$datos[0]->usuario_ingreso;
+        
+		$year = Carbon::now()->year;
+
+		Carbon::setLocale('es');
+
+		$carbonDate =Carbon::now()->format('d-m-Y');
+
+		$currentHour = Carbon::now()->format('H:i:s');
+
+		$pdf = Pdf::loadView('frontend.ingreso_produccion.movimiento_pdf_ingreso_produccion',compact('tipo_documento','almacen','fecha','codigo','datos_detalle','usuario_ingreso'));
+		
+		$pdf->setPaper('A4'); // Tamaño de papel (puedes cambiarlo según tus necesidades)
+
+		$pdf->setPaper('A4', 'portrait');
+    	$pdf->setOption('margin-top', 20); // Márgen superior en milímetros
+   		$pdf->setOption('margin-right', 50); // Márgen derecho en milímetros
+    	$pdf->setOption('margin-bottom', 20); // Márgen inferior en milímetros
+    	$pdf->setOption('margin-left', 100); // Márgen izquierdo en milímetros
+
+		return $pdf->stream();
+
+	}
+
 }

@@ -403,6 +403,7 @@ label.form-control-sm{
                             <th>Fecha</th>
 							<th>N&uacute;mero Ingreso</th>
 							<th>Almacen Destino</th>
+							<th>Usuario Registra</th>
 							<th>Estado</th>
                             <th>Acciones</th>
                         </tr>

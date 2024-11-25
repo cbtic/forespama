@@ -498,12 +498,12 @@ function fn_save_ingreso_produccion(){
 
 
 
-function pdf_documento_dispensacion(){
+function pdf_documento_ingreso_produccion(){
 
     var id = $('#id').val();
     //var tipo_movimiento = $('#tipo_movimiento').val();
 
-    var href = '/dispensacion/movimiento_pdf_dispensacion/'+id;
+    var href = '/ingreso_produccion/movimiento_pdf_ingreso_produccion/'+id;
     window.open(href, '_blank');
 
 }
@@ -628,7 +628,7 @@ function pdf_documento_dispensacion(){
                                 <?php 
                                     if($id>0){
                                 ?>
-                                <button style="font-size:12px;margin-left:10px; margin-right:10px" type="button" class="btn btn-sm btn-primary" data-toggle="modal" onclick="pdf_documento_dispensacion()"><i class="fa fa-edit" ></i>Imprimir</button>
+                                <button style="font-size:12px;margin-left:10px; margin-right:10px" type="button" class="btn btn-sm btn-primary" data-toggle="modal" onclick="pdf_documento_ingreso_produccion()"><i class="fa fa-edit" ></i>Imprimir</button>
                                 <!--<button style="font-size:12px;margin-left:10px; margin-right:100px" type="button" class="btn btn-sm btn-warning" data-toggle="modal" onclick="pdf_guia()" ><i class="fa fa-edit"></i>Imprimir Gu&iacute;a Remisi&oacute;n Electronica</button>
                                 <a href="javascript:void(0)" onClick="fn_pdf_documento()" class="btn btn-sm btn-primary" style="margin-right:100px">Imprimir</a>-->
                                 <?php 

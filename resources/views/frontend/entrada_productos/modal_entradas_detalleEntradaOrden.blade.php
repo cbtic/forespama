@@ -991,6 +991,12 @@ function pdf_documento(){
                                 ?>
                             </select>
                         </div>
+                        <div class="col-lg-2">
+                            N&uacute;mero Orden Compra Cliente
+                        </div>
+                        <div class="col-lg-2">
+                            <input id="numero_orden_compra_cliente" name="numero_orden_compra_cliente" on class="form-control form-control-sm"  value="<?php echo $orden_compra->numero_orden_compra_cliente;?>" type="text" readonly>
+                        </div>
                         <div class="col-lg-2" id="almacen_salida_" style="color:green; font-weight:bold">
                             Almacen Origen
                         </div> 

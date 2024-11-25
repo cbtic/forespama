@@ -1445,12 +1445,14 @@ class EntradaProductosController extends Controller
             if($tipo==1){
                 $entrada_producto_detalle = EntradaProductoDetalle::find($id);
                 $entrada_producto = EntradaProducto::find($id);
+                $orden_compra = OrdenCompra::find($entrada_producto->id_orden_compra);
                 //$proveedor_ = Empresa::find($entrada_producto->id_proveedor);
                 //$proveedor = $proveedor_->getEmpresa($entrada_producto->id_proveedor);
                 $proveedor = Empresa::all();
             }else if($tipo==2){
                 $entrada_producto_detalle = SalidaProductoDetalle::find($id);
                 $entrada_producto = SalidaProducto::find($id);
+                $orden_compra = OrdenCompra::find($entrada_producto->id_orden_compra);
                 //$proveedor=[];
                 $proveedor = Empresa::all();
             }
@@ -1486,8 +1488,9 @@ class EntradaProductosController extends Controller
         $estado_bien = $tablaMaestra_model->getMaestroByTipo(4);
 
         //dd($entrada_producto);exit();
+        //dd($orden_compra);exit();
         
-		return view('frontend.entrada_productos.modal_entradas_detalleEntradaHistorial',compact('id','entrada_producto_detalle','tipo_documento','moneda','unidad_origen','cerrado_entrada','igv_compra','proveedor','producto','unidad','almacen'/*,'almacen_seccion'*/,'tipo_cambio','tipo_movimiento','entrada_producto','marca','estado_bien',/*'tipo_movimiento_',*/'tipo','persona'));
+		return view('frontend.entrada_productos.modal_entradas_detalleEntradaHistorial',compact('id','entrada_producto_detalle','tipo_documento','moneda','unidad_origen','cerrado_entrada','igv_compra','proveedor','producto','unidad','almacen'/*,'almacen_seccion'*/,'tipo_cambio','tipo_movimiento','entrada_producto','marca','estado_bien',/*'tipo_movimiento_',*/'tipo','persona','orden_compra'));
 
     }
 

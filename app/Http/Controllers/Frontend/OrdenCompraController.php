@@ -152,6 +152,7 @@ class OrdenCompraController extends Controller
         $orden_compra->id_unidad_origen = $request->unidad_origen;
         $orden_compra->id_almacen_destino = $request->almacen;
         $orden_compra->id_almacen_salida = $request->almacen_salida;
+        $orden_compra->numero_orden_compra_cliente = $request->numero_orden_compra_cliente;
         $orden_compra->cerrado = 1;
         $orden_compra->id_usuario_inserta = $id_user;
         $orden_compra->estado = 1;
@@ -175,7 +176,7 @@ class OrdenCompraController extends Controller
             $orden_compra_detalle->sub_total = $sub_total[$index];
             $orden_compra_detalle->igv = $igv[$index];
             $orden_compra_detalle->total = $total[$index];
-             $orden_compra_detalle->id_estado_producto = $estado_bien[$index];
+            $orden_compra_detalle->id_estado_producto = $estado_bien[$index];
             $orden_compra_detalle->id_unidad_medida = $unidad[$index];
             $orden_compra_detalle->id_marca = $marca[$index];
             $orden_compra_detalle->estado = 1;
@@ -263,6 +264,11 @@ class OrdenCompraController extends Controller
 
         $orden_compra_model = new OrdenCompra;
         $orden_compra_detalle_model = new OrdenCompraDetalle;
+        $tienda_detalle_orden_compra_model = new TiendaDetalleOrdenCompra;
+        $tienda_orden_compra_model = new Tienda;
+
+        $tiendas_orden_compra_detalle = $tienda_detalle_orden_compra_model->getDetalleTiendaOrdenCompraId($id);
+        $tiendas_orden_compra = $tienda_orden_compra_model->getTiendaOrdenCompraId($id);
 
         $datos=$orden_compra_model->getOrdenCompraById($id);
         $datos_detalle=$orden_compra_detalle_model->getDetalleOrdenCompraPdf($id);
@@ -272,6 +278,7 @@ class OrdenCompraController extends Controller
         $empresa_vende=$datos[0]->empresa_vende;
         $fecha_orden_compra = $datos[0]->fecha_orden_compra;
         $numero_orden_compra = $datos[0]->numero_orden_compra;
+        $numero_orden_compra_cliente = $datos[0]->numero_orden_compra_cliente;
         $igv=$datos[0]->igv;
         
 		$year = Carbon::now()->year;
@@ -284,7 +291,7 @@ class OrdenCompraController extends Controller
 
 		 $currentHour = Carbon::now()->format('H:i:s');
 
-		$pdf = Pdf::loadView('frontend.orden_compra.movimiento_orden_compra_pdf',compact('tipo_documento','empresa_compra','empresa_vende','fecha_orden_compra','numero_orden_compra','igv','datos_detalle'));
+		$pdf = Pdf::loadView('frontend.orden_compra.movimiento_orden_compra_pdf',compact('tipo_documento','empresa_compra','empresa_vende','fecha_orden_compra','numero_orden_compra','igv','datos_detalle','numero_orden_compra_cliente','tiendas_orden_compra_detalle','tiendas_orden_compra'));
 		
 
 
@@ -382,20 +389,17 @@ class OrdenCompraController extends Controller
         $cantidades = $request->input('cantidad_ingreso', []);
         $descripcion = $request->input('descripcion', []);
     
-        // Validar que los datos de los arrays sean consistentes
         if (empty($tiendas) || empty($productos) || empty($cantidades) || empty($descripcion)) {
             return response()->json(['success' => false, 'message' => 'Datos incompletos.']);
         }
     
-        // Recorrer todas las tiendas
         foreach ($tiendas as $index => $tienda_id) {
-            // Asegurarse de que el índice empiece desde 0 y que no esté fuera del rango
-            $index_offset = $index + 1; // Para alinear con los índices de $productos, $descripcion y $cantidades
+
+            $index_offset = $index + 1;
     
-            // Verificar si existen productos para esta tienda
             if (isset($productos[$index_offset]) && is_array($productos[$index_offset])) {
                 foreach ($productos[$index_offset] as $producto_index => $producto_id) {
-                    // Crear y guardar la relación entre tienda, producto y cantidad
+                    
                     $tienda_detalle_orden_compra = new TiendaDetalleOrdenCompra();
                     $tienda_detalle_orden_compra->id_tienda = $tienda_id;
                     $tienda_detalle_orden_compra->id_orden_compra = $request->id;
@@ -404,15 +408,44 @@ class OrdenCompraController extends Controller
                     $tienda_detalle_orden_compra->estado = 1;
                     $tienda_detalle_orden_compra->id_usuario_inserta = $id_user;
     
-                    // Guardar en la base de datos
                     $tienda_detalle_orden_compra->save();
+
                 }
+                $orden_compra = OrdenCompra::find($request->id);
+                $orden_compra->tienda_asignada=1;
+                $orden_compra->save();
             } else {
                 // Manejar el caso en que no haya productos para una tienda específica
                 Log::warning('No hay productos para la tienda con índice ' . $index_offset);
             }
         }
         return response()->json(['success' => true]);
+    }
+
+    public function cargar_detalle_tienda($id)
+    {
+
+        $orden_compra_model = new OrdenCompra;
+        $tienda_detalle_orden_compra_model = new TiendaDetalleOrdenCompra;
+        $tienda_orden_compra_model = new Tienda;
+        $producto_model = new Producto;
+        $tablaMaestra_model = new TablaMaestra;
+
+        $orden_compra = $orden_compra_model->getDetalleOrdenCompraId($id);
+        $tienda_detalle_orden_compra = $tienda_detalle_orden_compra_model->getDetalleTiendaOrdenCompraId($id);
+        $tienda_orden_compra = $tienda_orden_compra_model->getTiendaOrdenCompraId($id);
+        $producto = $producto_model->getProductoAll();
+        $estado_bien = $tablaMaestra_model->getMaestroByTipo(4);
+        $unidad_medida = $tablaMaestra_model->getMaestroByTipo(43);
+
+        return response()->json([
+            'orden_compra' => $orden_compra,
+            'producto' => $producto,
+            'estado_bien' => $estado_bien,
+            'unidad_medida' => $unidad_medida,
+            'tienda_orden_compra' => $tienda_orden_compra,
+            'tienda_detalle_orden_compra' => $tienda_detalle_orden_compra
+        ]);
     }
 
 }

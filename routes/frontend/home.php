@@ -426,3 +426,5 @@ Route::get('ingreso_produccion/obtener_codigo_ingreso_produccion/{tipo_documento
 Route::get('ingreso_produccion/cargar_detalle/{id}', [IngresoProduccionController::class, 'cargar_detalle'])->name('ingreso_produccion.cargar_detalle');
 Route::get('orden_compra/modal_tiendas_orden_compra/{id}', [OrdenCompraController::class, 'modal_tiendas_orden_compra'])->name('orden_compra.modal_tiendas_orden_compra');
 Route::post('orden_compra/send_tiendas_orden_compra', [OrdenCompraController::class, 'send_tiendas_orden_compra'])->name('orden_compra.send_tiendas_orden_compra');
+Route::get('ingreso_produccion/movimiento_pdf_ingreso_produccion/{id}', [IngresoProduccionController::class, 'movimiento_pdf_ingreso_produccion'])->name('ingreso_produccion.movimiento_pdf_ingreso_produccion');
+Route::get('orden_compra/cargar_detalle_tienda/{id}', [OrdenCompraController::class, 'cargar_detalle_tienda'])->name('orden_compra.cargar_detalle_tienda');

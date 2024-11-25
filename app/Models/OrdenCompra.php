@@ -54,7 +54,7 @@ class OrdenCompra extends Model
 
     function getOrdenCompraById($id){
 
-        $cad = "select oc.id, e.razon_social empresa_compra, e2.razon_social empresa_vende, to_char(oc.fecha_orden_compra,'dd-mm-yyyy') fecha_orden_compra , oc.numero_orden_compra, tm.denominacion tipo_documento, oc.estado, tm2.denominacion igv
+        $cad = "select oc.id, e.razon_social empresa_compra, e2.razon_social empresa_vende, to_char(oc.fecha_orden_compra,'dd-mm-yyyy') fecha_orden_compra , oc.numero_orden_compra, tm.denominacion tipo_documento, oc.estado, tm2.denominacion igv, oc.numero_orden_compra_cliente 
         from orden_compras oc 
         inner join empresas e on oc.id_empresa_compra = e.id 
         inner join empresas e2 on oc.id_empresa_vende = e2.id 
