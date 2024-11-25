@@ -630,26 +630,6 @@ label.form-control-sm{
                                             </div>
                                         </div>
 
-                                        @hasanyrole('Administrator|Caja|Caja Jefe')
-                                                                                
-                                        <div class="row">
-                                            <div class="col">
-                                                <button class="btn btn-success btn-sm" type="button" name="btnOtroConcepto" id="btnOtroConcepto" onClick="modal_otro_pago()" tabindex="0" disabled><i class="glyphicon glyphicon-search"></i> Pago Otros Conceptos </button>
-                                            </div>
-                                        </div>
-<!--
-                                        <div class="row" id="divBeneficiarioRuc" style="padding:6px;display:none">
-                                            <div class="col">
-                                                <button class="btn btn-success btn-sm" type="button" name="btnBeneficiario" id="btnBeneficiario" onClick="modal_beneficiario_()" tabindex="0" disabled><i class="glyphicon glyphicon-search"></i> Agregar Beneficiario</button>
-                                            </div>
-                                        </div>
-                                                    -->
-                                        @endhasanyrole
-
-
-                                        <!--</div>-->
-
-
 
                                     </div>
 
@@ -731,7 +711,9 @@ label.form-control-sm{
                                             <div style="margin-top:15px" class="form-group">
                                                 <div class="col-sm-12 controls">
                                                     <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
-                                                        <a href="javascript:void(0)" onClick="agregarProducto()" class="btn btn-sm btn-success">Agregar</a>
+                                                       <!-- <a href="javascript:void(0)" onClick="agregarProducto()" class="btn btn-sm btn-success">Agregar</a>-->
+                                                        <a href="javascript:void(0)" onClick="modal_productos(0)" class="btn btn-sm btn-success">Agregar</a>
+                                                        
                                                     </div>
                                                 </div>
                                             </div> 
@@ -1313,6 +1295,7 @@ function actualizarTotalGeneral() {
     });
     
     $('#totalGeneral').text(totalGeneral.toFixed(2));
+    
 }
 
 </script>

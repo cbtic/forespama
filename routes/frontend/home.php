@@ -214,6 +214,8 @@ Route::post('ingreso/anular_valorizacion', [IngresoController::class, 'anular_va
 Route::get('ingreso/modal_consulta_persona', [IngresoController::class, 'modal_consulta_persona'])->name('ingreso.modal_consulta_persona');
 Route::post('ingreso/valida_deuda_vencida', [IngresoController::class, 'valida_deuda_vencida'])->name('ingreso.valida_deuda_vencida');
 
+Route::get('ingreso/modal_productos/{id}', [IngresoController::class, 'modal_productos'])->name('ingreso.modal_productos');
+
 Route::get('ingreso/caja_total', [IngresoController::class, 'caja_total'])->name('ingreso.caja_total');
 Route::post('ingreso/obtener_caja_condicion_pago', [IngresoController::class, 'obtener_caja_condicion_pago'])->name('ingreso.obtener_caja_condicion_pago');
 Route::post('ingreso/obtener_caja_venta', [IngresoController::class, 'obtener_caja_venta'])->name('ingreso.obtener_caja_ventañ');
@@ -403,5 +405,7 @@ Route::post('kardex/listar_kardex_consulta_producto_ajax', [KardexController::cl
 Route::get('productos/obtener_stock_producto/{almacen}/{id_producto}', [ProductosController::class, 'obtener_stock_producto'])->name('productos.obtener_stock_producto');
 
 Route::get('proforma/modal_proforma/{id}', [ProformaController::class, 'modal_proforma'])->name('proforma.modal_proforma');
+
+
 
 

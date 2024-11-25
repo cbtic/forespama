@@ -1158,4 +1158,37 @@ class IngresoController extends Controller
 		return view('frontend.ingresos.modal_concepto_reporte',compact('numero_cap','concepto'));
 	}
 
+    public function modal_productos($id){
+
+		$id_user = Auth::user()->id;
+        $persona = new Persona;
+        $caja_model = new TablaMaestra;
+        $caja_ingreso_model = new CajaIngreso();
+        //$pronto_pago_model = new ProntoPago;
+        $caja = $caja_model->getCaja('91');        
+        $caja_usuario = $caja_ingreso_model->getCajaIngresoByusuario($id_user,'91');
+        $tipo_documento = $caja_model->getMaestroByTipo(9);
+       
+                
+
+        $tablaMaestra_model = new TablaMaestra;
+        $producto_model = new Producto;
+        $marca_model = new Marca;
+        $almacen_model = new Almacene;
+
+        $tipo_documento = $tablaMaestra_model->getMaestroByTipo(54);
+        $producto = $producto_model->getProductoAll();
+        $marca = $marca_model->getMarcaAll();
+        $estado_bien = $tablaMaestra_model->getMaestroByTipo(4);
+        $unidad = $tablaMaestra_model->getMaestroByTipo(43);
+        $igv_compra = $tablaMaestra_model->getMaestroByTipo(51);
+        $descuento = $tablaMaestra_model->getMaestroByTipo(55);
+        $almacen = $almacen_model->getAlmacenAll();
+        //$almacen = Almacene::all();
+        $unidad_origen = $tablaMaestra_model->getMaestroByTipo(50);
+		
+		return view('frontend.ingresos.modal_productos',compact('persona','tipo_documento', 'producto','marca','estado_bien','unidad','descuento' ));
+
+	}
+
 }
