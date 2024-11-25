@@ -31,7 +31,7 @@
 */
 	/*****************/
 	.modal-dialog {
-		min-width: 70%;
+		min-width: 30%;
 	}
 
 	#tablemodal {
@@ -573,105 +573,102 @@ legend.scheduler-border {
 											<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding-top:5px;padding-bottom:20px">
 
 												<input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
-												<input type="hidden" name="id_persona" id="id_persona" value="<?php echo $id_persona ?>">
-												<input type="hidden" name="id_agremiado" id="id_agremiado" value="<?php echo $id_agremiado ?>">
-												<input type="hidden" name="total_fraccionar" id="total_fraccionar" value="<?php echo $total_fraccionar ?>">
-
-
-												<input type="hidden" name="id_concepto" id="id_concepto" value="<?php echo $concepto["id"] ?>">
-												<input type="hidden" name="denominacion" id="denominacion" value="<?php echo $concepto["denominacion"] ?>">
-												<input type="hidden" name="id_moneda" id="id_moneda" value="<?php echo $concepto["id_moneda"] ?>">
-
-												<?php
 												
-												foreach ($comprobanted as $key => $row) :	
-													//print_r($row);
-												?>
-													
-													<input type="hidden" name="valorizacion[<?php echo $key ?>][id]" value="<?php echo $row['id'] ?>" />
-													<input type="hidden" name="valorizacion[<?php echo $key ?>][fecha]" value="<?php echo $row['fecha'] ?>" />
-													<input type="hidden" name="valorizacion[<?php echo $key ?>][denominacion]" value="<?php echo $row['denominacion'] ?>" />
-													<input type="hidden" name="valorizacion[<?php echo $key ?>][monto]" value="<?php echo $row['monto'] ?>" />
-													<input type="hidden" name="valorizacion[<?php echo $key ?>][pu]" value="<?php echo $row['pu'] ?>" />
-													<input type="hidden" name="valorizacion[<?php echo $key ?>][igv]" value="<?php echo $row['igv'] ?>" />
-													<input type="hidden" name="valorizacion[<?php echo $key ?>][pv]" value="<?php echo $row['pv'] ?>" />
-													<input type="hidden" name="valorizacion[<?php echo $key ?>][total]" value="<?php echo $row['total']  ?>" />
-													<input type="hidden" name="valorizacion[<?php echo $key ?>][moneda]" value="<?php echo $row['moneda']  ?>" />
-													<input type="hidden" name="valorizacion[<?php echo $key ?>][id_moneda]" value="<?php echo $row['id_moneda']  ?>" />
-													<input type="hidden" name="valorizacion[<?php echo $key ?>][abreviatura]" value="<?php echo $row['abreviatura']  ?>" />
-													<input type="hidden" name="valorizacion[<?php echo $key ?>][cantidad]" value="<?php echo $row['cantidad']  ?>" />
-													<input type="hidden" name="valorizacion[<?php echo $key ?>][descuento]" value="<?php echo $row['descuento']  ?>" />
-													<input type="hidden" name="valorizacion[<?php echo $key ?>][cod_contable]" value="<?php echo $row['cod_contable']  ?>" />
-													<input type="hidden" name="valorizacion[<?php echo $key ?>][descripcion]" value="<?php echo $row['descripcion'] ?>" />
-													<input type="hidden" name="valorizacion[<?php echo $key ?>][vencio]" value="<?php echo $row['vencio'] ?>" />
-													<input type="hidden" name="valorizacion[<?php echo $key ?>][id_concepto]" value="<?php echo $row['id_concepto'] ?>" />
-													
-													
-
-												<?php
-												endforeach;
-												?>
+												
 
 												<div class="row" style="padding-left:10px">
 													<div class="card-body">
 														<div class="row">
 
-															<div class="col-lg-2">
+															<div class="col-lg-12">
 																<div class="form-group form-group-sm">
-																	<label class="form-control-sm">Total Fraccionar</label>
-																	<input type="text" readonly name="txtTotalFrac" id="txtTotalFrac" value="<?php echo $total_fraccionar //$valorizacion[0]->monto?>" class="form-control form-control-sm">																	
+																	<label class="form-control-sm">Producto</label>
+																	<input type="text" readonly name="txtTotalFrac" id="txtTotalFrac" value="<?php //echo $total_fraccionar ?>" class="form-control form-control-sm">																	
 																</div>
 															</div>
+														</div>
 
-															
-
-															<div class="col-lg-2">
+														<div class="row">
+															<div class="col-lg-6">
 																<div class="form-group">
-																	<label class="form-control-sm">Porcentaje 1° Couta</label>
-																	<input type="text" name="txtPorcentaje" id="txtPorcentaje" value="20" placeholder="" class="form-control form-control-sm">
+																	<label class="form-control-sm">Cantidad</label>
+																	<input type="text" name="txtCantidad" id="txtCantidad" value="" placeholder="" class="form-control form-control-sm">
 																</div>
 															</div>
-
-															<div class="col-lg-2">
+															<div class="col-lg-6">
 																<div class="form-group">
-																	<label class="form-control-sm">Fecha Inicio</label>
-																	<input type="text" name="txtFechaIni" id="txtFechaIni" value="" placeholder="" class="form-control form-control-sm">
+																	<label class="form-control-sm">Unidad Medida</label>
+																	<input type="text" name="UM" id="txtPorcentaje" value="" placeholder="" class="form-control form-control-sm">
 																</div>
 															</div>
 
+<!--
 															<div class="col-lg-2" style="padding-top:12px;padding-left:0px;padding-right:0px">
 																<br>
 																<button type="button" id="btnFraciona" name="btnFraciona" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#vehiculoModal" onclick="generarConceptoNuevo(cuentaproductos)">
-																	<i class="fas fa-plus-circle"></i> Fraccionar
+																	<i class="fas fa-plus-circle"></i> %
 																</button>
 															</div>
+-->
 
 														</div>
 
-														<?php $seleccionar_todos = "style='display:block'"; ?>
-														<div class="table-responsive overflow-auto" style="max-height: 500px">
-															<table id="tblConceptos" class="table table-hover table-sm">
-																<thead>
-																	<tr style="font-size:13px">
-																		<th>Id</th>
-																		<th>Fecha</th>
-																		<th>Denominación</th>
-																		<th>Moneda</th>
-																		<th>Importe</th>
-																	</tr>
-																	
-
-																</thead>
-																<tbody style="font-size:13px">
-
-																</tbody>
-															</table>
+														<div class="row">
+															<div class="col-lg-6">
+																<div class="form-group">
+																	<label class="form-control-sm">Precio Venta</label>
+																	<input type="text" name="txtPorcentaje" id="txtPorcentaje" value="" placeholder="" class="form-control form-control-sm">
+																</div>
+															</div>
+															<div class="col-lg-6">
+																<div class="form-group">
+																	<label class="form-control-sm">Valor Unitario</label>
+																	<input type="text" name="txtPorcentaje" id="txtPorcentaje" value="" placeholder="" class="form-control form-control-sm">
+																</div>
+															</div>															
 														</div>
+
+														<div class="row">
+															<div class="col-lg-4">
+																<div class="form-group">
+																	<label class="form-control-sm">Valor Venta Bruto</label>
+																	<input type="text" name="txtPorcentaje" id="txtPorcentaje" value="" placeholder="" class="form-control form-control-sm">
+																</div>
+															</div>
+															<div class="col-lg-4">
+																<div class="form-group">
+																	<label class="form-control-sm">Descuento</label>
+																	<input type="text" name="txtPorcentaje" id="txtPorcentaje" value="" placeholder="" class="form-control form-control-sm">
+																</div>
+															</div>															
+															<div class="col-lg-4">
+																<div class="form-group">
+																	<label class="form-control-sm">Valor Venta</label>
+																	<input type="text" name="txtPorcentaje" id="txtPorcentaje" value="" placeholder="" class="form-control form-control-sm">
+																</div>
+															</div>	
+														</div>
+														
+														<div class="row">
+															<div class="col-lg-6">
+																<div class="form-group">
+																	<label class="form-control-sm">IGV</label>
+																	<input type="text" name="txtPorcentaje" id="txtPorcentaje" value="20" placeholder="" class="form-control form-control-sm">
+																</div>
+															</div>
+															<div class="col-lg-6">
+																<div class="form-group">
+																	<label class="form-control-sm">Total</label>
+																	<input type="text" name="txtPorcentaje" id="txtPorcentaje" value="20" placeholder="" class="form-control form-control-sm">
+																</div>
+															</div>															
+														</div>
+
 													</div>
 
 												</div>
 												<div style="margin-top:15px" class="form-group">
-													<div id ="divGuardar" class="col-sm-12 controls" style="display:none">
+													<div id ="divGuardar" class="col-sm-12 controls" >
 														<div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
 															<a href="javascript:void(0)" onClick="guardar_fracciona_deuda()" class="btn btn-sm btn-success">Guardar</a>
 														</div>
