@@ -1295,6 +1295,7 @@ function actualizarTotalGeneral() {
     });
     
     $('#totalGeneral').text(totalGeneral.toFixed(2));
+    
 }
 
 </script>
