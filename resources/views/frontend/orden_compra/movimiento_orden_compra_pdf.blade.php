@@ -180,6 +180,10 @@ $(document).ready(function() {
                         <td class="td" style ="text-align: left; width: 10%;"><b>Empresa Vende:</b></td>
                         <td class="td" style ="text-align: left; width: 20%;"><?php echo $empresa_vende;?></td>
                         <td class="td" style ="text-align: left; width: 10%;"></td>
+                        <td class="td" style ="text-align: left; width: 10%;"><b>N&uacute;mero Orden Compra Cliente:</b></td>
+                        <td class="td" style ="text-align: left; width: 20%;"><?php echo $numero_orden_compra_cliente;?></td>
+                    </tr>
+                    <tr>
                         <td class="td" style ="text-align: left; width: 10%;"><b>IGV:</b></td>
                         <td class="td" style ="text-align: left; width: 20%;"><?php echo $igv;?></td>
                     </tr>
@@ -259,12 +263,56 @@ $(document).ready(function() {
                 </tbody>
             </table>
             &nbsp;
+            
             <table class="data" style="width:100%">
                 <tr>
                     <td>SON: <?php echo $total_en_letras; ?></td>
                 </tr>
             </table>
             &nbsp;
+            <br></br>
+            <?php 
+            if(count($tiendas_orden_compra)>0){
+            ?>
+            DETALLE DE TIENDAS DONDE SE ENTREGA LOS PRODUCTOS
+            &nbsp;
+            <table class="data" style="border-collapse: separate; border-spacing: 0; background-color:white !important; width: 100%; border-radius: 8px; font-size:11px">
+                
+                <tr style="font-size:13px">
+                    <td class="td" style ="text-align: left; width: 5%; height:25px; border-bottom: 1px solid black;"><b>#</b></td>
+                    <td class="td" colspan="3" style ="text-align: left; width: 95%; height:25px; border-bottom: 1px solid black;"><b>TIENDA</b></td>
+                </tr>
+                <?php 
+                    foreach($tiendas_orden_compra as $key=>$r) { 
+                ?>
+                <tr style="border: 1px solid black;">
+                    <td style="width: 20px; border-bottom: 1px solid black; border-top: 1px solid black;"><b><?php echo $key+1;?></b></td>
+                    <td class="td" colspan="3" style="text-align: left; width: 100%; height:25px; border-bottom: 1px solid black; border-top: 1px solid black;"><b><?php echo $r->tienda;?></b></td>
+                </tr>
+                <?php 
+                    foreach($tiendas_orden_compra_detalle as $key=>$p) { 
+                        if ($p->id_tienda == $r->id_tienda){
+                ?>
+                <tr>
+                    <td class="td" style ="text-align: left; width: 5%; height:25px"></td>
+                    <td class="td" style ="text-align: left; width: 70%; height:25px"><?php echo $p->producto;?></td>
+                    <td class="td" style ="text-align: left; width: 20%; height:25px"><?php echo $p->unidad_medida;?></td>
+                    <td class="td" style ="text-align: left; width: 10%; height:25px"><?php echo $p->cantidad;?></td>
+                </tr>
+                &nbsp;
+                <?php 
+                        }
+                    }
+                ?>
+                
+                <?php 
+                    }
+                ?>
+            </table>
+            &nbsp;
+            <?php 
+                }
+            ?>
         </div>
     </div>
     <!-- /.content-wrapper -->

@@ -867,18 +867,10 @@ function modal_tiendas_orden_compra(id){
                             <input id="fecha_orden_compra" name="fecha_orden_compra" on class="form-control form-control-sm"  value="<?php echo isset($orden_compra) && $orden_compra->fecha_orden_compra ? $orden_compra->fecha_orden_compra : date('Y-m-d'); ?>" type="text">
                         </div>
                         <div class="col-lg-2">
-                            Aplica IGV
+                            N&uacute;mero Orden Compra Cliente
                         </div>
                         <div class="col-lg-2">
-                            <select name="igv_compra" id="igv_compra" class="form-control form-control-sm" onchange="">
-                                <option value="">--Seleccionar--</option>
-                                <?php
-                                foreach ($igv_compra as $row){?>
-                                    <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$orden_compra->igv_compra)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
-                                    <?php 
-                                }
-                                ?>
-                            </select>
+                            <input id="numero_orden_compra_cliente" name="numero_orden_compra_cliente" on class="form-control form-control-sm"  value="<?php echo $orden_compra->numero_orden_compra_cliente;?>" type="text">
                         </div>
                         <div class="col-lg-2">
                             Unidad Origen
@@ -933,6 +925,20 @@ function modal_tiendas_orden_compra(id){
                                 ?>
                             </select>
                         </div>
+                        <div class="col-lg-2">
+                            Aplica IGV
+                        </div>
+                        <div class="col-lg-2">
+                            <select name="igv_compra" id="igv_compra" class="form-control form-control-sm" onchange="">
+                                <option value="">--Seleccionar--</option>
+                                <?php
+                                foreach ($igv_compra as $row){?>
+                                    <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$orden_compra->igv_compra)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                    <?php 
+                                }
+                                ?>
+                            </select>
+                        </div>
                     </div>
                         <div style="margin-top:15px" class="form-group">
                             <div class="col-sm-12 controls">
@@ -981,8 +987,16 @@ function modal_tiendas_orden_compra(id){
                             <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
                                 <?php 
                                     if($id>0){
+                                        if($orden_compra->tienda_asignada>0){
                                 ?>
                                 <button style="font-size:12px;margin-left:10px" type="button" class="btn btn-sm btn-secondary" data-toggle="modal" onclick="modal_tiendas_orden_compra()" >Agregar Tiendas</button>
+                                <?php 
+                                        }else{
+                                ?>
+                                <button style="font-size:12px;margin-left:10px" type="button" class="btn btn-sm btn-secondary" data-toggle="modal" onclick="modal_tiendas_orden_compra()" disabled>Agregar Tiendas</button>
+                                <?php
+                                        }
+                                ?>
                                 <button style="font-size:12px;margin-left:10px" type="button" class="btn btn-sm btn-primary" data-toggle="modal" onclick="pdf_documento()" ><i class="fa fa-edit"></i>Imprimir</button>
                                 <button style="font-size:12px;margin-left:10px; margin-right:100px" type="button" class="btn btn-sm btn-warning" data-toggle="modal" onclick="pdf_guia()" ><i class="fa fa-edit"></i>Imprimir Gu&iacute;a Remisi&oacute;n Electronica</button>
                                 <!--<a href="javascript:void(0)" onClick="fn_pdf_documento()" class="btn btn-sm btn-primary" style="margin-right:100px">Imprimir</a>-->

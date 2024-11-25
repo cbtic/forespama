@@ -31,4 +31,24 @@ class Tienda extends Model
         return $data;
 
     }
+
+    function getTiendaOrdenCompraId($id){
+
+        $cad = "select tdoc.id as id_tdoc, t.id as id_tienda, t.denominacion as tienda
+        FROM tienda_detalle_orden_compras tdoc
+        inner join orden_compras oc ON tdoc.id_orden_compra = oc.id
+        inner join tiendas t on tdoc.id_tienda = t.id
+        where oc.id = '56'
+        and tdoc.id in (
+            select min(tdoc.id)
+            from tienda_detalle_orden_compras tdoc
+            inner join orden_compras oc on tdoc.id_orden_compra = oc.id
+            where oc.id = '".$id."'
+            group by tdoc.id_tienda
+        )
+        order by tdoc.id;";
+
+		$data = DB::select($cad);
+        return $data;
+    }
 }

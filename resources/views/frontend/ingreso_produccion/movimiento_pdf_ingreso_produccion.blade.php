@@ -170,7 +170,7 @@ $(document).ready(function() {
     </div>-->
     <table class="data" style="width:100%; font-size:11px">
         <tr>
-            <th><h2><?php echo "DISPENSACION N° ". $codigo;?></h2></th>
+            <th><h2><?php echo "INGRESO A PRODUCCION N° ". $codigo;?></h2></th>
         </tr>
     </table>
     <!--<div style="display: flex !important; width:100%">
@@ -190,17 +190,6 @@ $(document).ready(function() {
                         <td class="td" style ="text-align: left; width: 10%;"></td>
                         <td class="td" style ="text-align: left; width: 10%;"><b>Almacen:</b></td>
                         <td class="td" style ="text-align: left; width: 20%;"><?php echo $almacen;?></td>
-                    </tr>
-                    <tr>
-                        <td class="td" style ="text-align: left; width: 10%;"><b>&Aacute;rea de Trabajo:</b></td>
-                        <td class="td" style ="text-align: left; width: 20%;"><?php echo $area_trabajo;?></td>
-                        <td class="td" style ="text-align: left; width: 10%;"></td>
-                        <td class="td" style ="text-align: left; width: 10%;"><b>Unidad de Trabajo:</b></td>
-                        <td class="td" style ="text-align: left; width: 20%;"><?php echo $unidad_trabajo;?></td>
-                    </tr>
-                    <tr>
-                        <td class="td" style ="text-align: left; width: 10%;"><b>Persona Recibe:</b></td>
-                        <td class="td" colspan="4" style ="text-align: left; width: 20%;"><?php echo $usuario_recibe;?></td>
                     </tr>
                 </tbody>
             </table>
@@ -238,8 +227,8 @@ $(document).ready(function() {
         <table style="width:100%; font-size:12px;">
             <tbody>
                 <tr style="text-align:center">
-                    <td style="text-align: left; width: 20%;"><b>Recibido por:</b></td>
-                    <td colspan="4" style="text-align: left; width: 90%;"><?php echo $usuario_recibe; ?></td>
+                    <td style="text-align: left; width: 20%;"><b>Ingreso realizado por:</b></td>
+                    <td colspan="4" style="text-align: left; width: 90%;"><?php echo $usuario_ingreso; ?></td>
                 </tr>
             </tbody>
         </table>

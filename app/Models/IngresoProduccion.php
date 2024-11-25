@@ -57,4 +57,17 @@ class IngresoProduccion extends Model
 		$data = DB::select($cad);
         return $data;
     }
+
+    function getIngresoProduccionById($id){
+
+        $cad = "select ip.id, tm.denominacion tipo_documento, a.denominacion almacen, ip.fecha, ip.codigo, u.name usuario_ingreso
+        from ingreso_produccion ip 
+        inner join tabla_maestras tm on ip.id_tipo_documento ::int = tm.codigo::int and tm.tipo = '53'
+        inner join almacenes a on ip.id_almacen_destino = a.id 
+        inner join users u on ip.id_usuario_inserta = u.id
+        where ip.id ='".$id."'";
+
+		$data = DB::select($cad);
+        return $data;
+    }
 }
