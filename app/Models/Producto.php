@@ -100,6 +100,27 @@ class Producto extends Model
         return $data;
     }
 
+    function getProductoTipoDen($tipo, $filtro){
+
+        $tipo_v = " and p.id_tipo_origen_producto = '".$tipo."' ";
+
+        if ($tipo == '') $tipo_v =" ";
+
+        $cad = "SELECT p.id, p.codigo ||' - '|| p.denominacion producto_desc,  p.codigo, p.denominacion, p.id_unidad_medida, um.denominacion um,  p.stock_actual, 
+                    p.id_moneda, m.denominacion moneda_desc, m.abreviatura moneda_abreviatura, p.costo_unitario, p.numero_corrrelativo, p.id_tipo_origen_producto 
+                from productos p
+                    left join tabla_maestras um on um.codigo::int=p.id_unidad_medida and um.tipo = '43'
+                    left join tabla_maestras m on m.codigo::int=p.id_moneda and m.tipo = '1'
+                where p.estado = '1' 
+                and p.codigo ||' '|| p.denominacion ilike '%".$filtro."%'
+                ".$tipo_v."
+                order by p.denominacion"
+		;
+
+		$data = DB::select($cad);
+        return $data;
+    }
+
     function getProductoById($id_producto){
 
         $cad = "select * from productos p 

@@ -238,6 +238,43 @@ legend.scheduler-border {
 	});
 
 
+	$('#txtProducto').autocomplete({
+		appendTo: "#producto_list",
+		source: function(request, response) {
+			$.ajax({
+			url: 'productos/obtener_producto_tipo_denominacion/'+$('#txtProducto').val(),
+			dataType: "json",
+			success: function(data){
+			// alert(JSON.stringify(data));
+			  var resp = $.map(data,function(obj){
+					console.log(obj);
+					//return obj.denominacion;
+					var hash = {key: obj.id, value: obj.denominacion};
+					return hash;
+			  }); 
+			  //alert(JSON.stringify(resp));
+			  //console.log(JSON.stringify(resp));
+			  response(resp);
+			},
+			error: function() {
+				//alert("cc");
+			}
+		  });
+			},
+				select: function (event, ui) {
+					//alert(ui.item.key);
+					flag_select=true;
+					$('#txtProducto').attr("readonly",true);
+			},
+		minLength: 2,
+		delay: 100
+        }).blur(function(){
+		if(typeof flag_select == "undefined")
+		{
+			$('#txtProducto').val("");
+		}
+	});
+
 
 	function cargar_calificacion() {
 
@@ -583,7 +620,14 @@ legend.scheduler-border {
 															<div class="col-lg-12">
 																<div class="form-group form-group-sm">
 																	<label class="form-control-sm">Producto</label>
-																	<input type="text" readonly name="txtTotalFrac" id="txtTotalFrac" value="<?php //echo $total_fraccionar ?>" class="form-control form-control-sm">																	
+																	
+																	<td><input type="text" name="txtProducto" id="txtProducto"
+                                                                        class="form-control form-control-sm">
+
+																		<div class="input-group" style="position: absolute;"
+																			id="producto_list"></div>
+																	</td>
+
 																</div>
 															</div>
 														</div>
