@@ -38,7 +38,7 @@ class Tienda extends Model
         FROM tienda_detalle_orden_compras tdoc
         inner join orden_compras oc ON tdoc.id_orden_compra = oc.id
         inner join tiendas t on tdoc.id_tienda = t.id
-        where oc.id = '56'
+        where oc.id = '".$id."'
         and tdoc.id in (
             select min(tdoc.id)
             from tienda_detalle_orden_compras tdoc

@@ -987,7 +987,7 @@ function modal_tiendas_orden_compra(id){
                             <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
                                 <?php 
                                     if($id>0){
-                                        if($orden_compra->tienda_asignada>0){
+                                        if($orden_compra->tienda_asignada==0){
                                 ?>
                                 <button style="font-size:12px;margin-left:10px" type="button" class="btn btn-sm btn-secondary" data-toggle="modal" onclick="modal_tiendas_orden_compra()" >Agregar Tiendas</button>
                                 <?php 
