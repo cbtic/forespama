@@ -85,6 +85,8 @@ $(document).ready(function () {
 		}
 	});
 
+	var um_ = "";
+
 	$('#txtProducto').autocomplete({
 		appendTo: "#producto_list",
 		source: function(request, response) {
@@ -96,6 +98,8 @@ $(document).ready(function () {
 			  var resp = $.map(data,function(obj){
 					console.log(obj);
 					//return obj.denominacion;
+					um_ = obj.um;
+
 					var hash = {key: obj.id, value: obj.denominacion};
 					return hash;
 			  }); 
@@ -112,6 +116,10 @@ $(document).ready(function () {
 					//alert(ui.item.key);
 					flag_select=true;
 					$('#txtProducto').attr("readonly",true);
+
+					alert(um_);
+
+
 			},
 		minLength: 2,
 		delay: 100

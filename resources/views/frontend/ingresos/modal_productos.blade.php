@@ -248,6 +248,16 @@
 		}
 	});
 
+	var tasa_igv_= 0.18;
+	var um_ = "";
+	var Cantidad_ = $('#txtCantidad').val();	
+	var PrecioVenta_ = 0;
+	var ValorUnitario_ = 0;
+	var ValorVB_ = 0;
+	var Descuento_ = 0;
+	var ValorVenta_ = 0;
+	var Igv_ = 0;
+	var Total_ = 0;
 
 	$('#txtProducto').autocomplete({
 		appendTo: "#producto_list1",
@@ -259,6 +269,16 @@
 					// alert(JSON.stringify(data));
 					var resp = $.map(data, function(obj) {
 						console.log(obj);
+						um_ = obj.um;						
+						PrecioVenta_ = ob.costo_unitario;
+
+						ValorUnitario_ = PrecioVenta_ /(1+tasa_igv_);
+
+						ValorVB_ = ValorUnitario_ * Cantidad_;
+
+
+
+						
 						//return obj.denominacion;
 						var hash = {
 							key: obj.id,
@@ -279,6 +299,18 @@
 			//alert(ui.item.key);
 			flag_select = true;
 			$('#txtProducto').attr("readonly", true);
+			$('#txtUM').val(um_);
+
+			$('#txtPrecioVenta').val(PrecioVenta_);
+			$('#txtValorUnitario').val(ValorUnitario_);
+			$('#txtValorVB').val(ValorVB_);
+			$('#txtDescuento').val(Descuento_);
+			$('#txtValorVenta').val(ValorVenta_);
+			$('#txtIgv').val(Igv_);
+			$('#txtTotal').val(Total_);
+			
+
+			
 		},
 		minLength: 2,
 		delay: 100
@@ -403,7 +435,7 @@
 												<div class="col-lg-6">
 													<div class="form-group">
 														<label class="form-control-sm">Cantidad</label>
-														<input type="text" name="txtCantidad" id="txtCantidad" value="" placeholder="" class="form-control form-control-sm">
+														<input type="text" name="txtCantidad" id="txtCantidad" value="1" placeholder="" class="form-control form-control-sm">
 													</div>
 												</div>
 												<div class="col-lg-6">
@@ -434,7 +466,7 @@
 												<div class="col-lg-4">
 													<div class="form-group">
 														<label class="form-control-sm">Valor Venta Bruto</label>
-														<input type="text" name="txtValorBU" id="txtValorBU" value="" placeholder="" class="form-control form-control-sm">
+														<input type="text" name="txtValorUB" id="txtValorUB" value="" placeholder="" class="form-control form-control-sm">
 													</div>
 												</div>
 												<div class="col-lg-4">
@@ -446,7 +478,7 @@
 												<div class="col-lg-4">
 													<div class="form-group">
 														<label class="form-control-sm">Valor Venta</label>
-														<input type="text" name="txtPorcentaje" id="txtPorcentaje" value="" placeholder="" class="form-control form-control-sm">
+														<input type="text" name="txtValorVenta" id="txtValorVenta" value="" placeholder="" class="form-control form-control-sm">
 													</div>
 												</div>
 											</div>
@@ -455,13 +487,13 @@
 												<div class="col-lg-6">
 													<div class="form-group">
 														<label class="form-control-sm">IGV</label>
-														<input type="text" name="txtPorcentaje" id="txtPorcentaje" value="20" placeholder="" class="form-control form-control-sm">
+														<input type="text" name="txtIgv" id="txtIgv" value="20" placeholder="" class="form-control form-control-sm">
 													</div>
 												</div>
 												<div class="col-lg-6">
 													<div class="form-group">
 														<label class="form-control-sm">Total</label>
-														<input type="text" name="txtPorcentaje" id="txtPorcentaje" value="20" placeholder="" class="form-control form-control-sm">
+														<input type="text" name="txtTotal" id="txtTotal" value="20" placeholder="" class="form-control form-control-sm">
 													</div>
 												</div>
 											</div>
