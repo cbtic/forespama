@@ -34,7 +34,7 @@ class OrdenCompra extends Model
 
     function getDetalleOrdenCompraId($id){
 
-        $cad = "select ocd.id,  ROW_NUMBER() OVER (PARTITION BY ocd.id_orden_compra ) AS row_num, p.numero_serie item, ocd.id_producto, p.codigo, ocd.id_marca, ocd.id_unidad_medida, ocd.fecha_fabricacion, ocd.fecha_vencimiento, 
+        $cad = "select ocd.id,  ROW_NUMBER() OVER (PARTITION BY ocd.id_orden_compra ) AS row_num, p.numero_serie item, ocd.id_producto, p.codigo, p.denominacion nombre_producto, ocd.id_marca, ocd.id_unidad_medida, ocd.fecha_fabricacion, ocd.fecha_vencimiento, 
         ocd.id_estado_producto , ocd.cantidad_requerida, 
         coalesce((select sum(cantidad)
         from entrada_productos ep 
@@ -54,7 +54,7 @@ class OrdenCompra extends Model
 
     function getOrdenCompraById($id){
 
-        $cad = "select oc.id, e.razon_social empresa_compra, e2.razon_social empresa_vende, to_char(oc.fecha_orden_compra,'dd-mm-yyyy') fecha_orden_compra , oc.numero_orden_compra, tm.denominacion tipo_documento, oc.estado, tm2.denominacion igv
+        $cad = "select oc.id, e.razon_social empresa_compra, e2.razon_social empresa_vende, to_char(oc.fecha_orden_compra,'dd-mm-yyyy') fecha_orden_compra , oc.numero_orden_compra, tm.denominacion tipo_documento, oc.estado, tm2.denominacion igv, oc.numero_orden_compra_cliente 
         from orden_compras oc 
         inner join empresas e on oc.id_empresa_compra = e.id 
         inner join empresas e2 on oc.id_empresa_vende = e2.id 

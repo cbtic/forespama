@@ -141,8 +141,6 @@ class EntradaProductosController extends Controller
             //$ubicacion_fisica_anaquel = $request->input('ubicacion_fisica_anaquel');
             $cod_interno = $request->input('cod_interno');
             $marca = $request->input('marca');
-            $fecha_fabricacion = $request->input('fecha_fabricacion');
-            $fecha_vencimiento = $request->input('fecha_vencimiento');
             $estado_bien = $request->input('estado_bien');
             $unidad = $request->input('unidad');
             $cantidad_ingreso = $request->input('cantidad_ingreso');
@@ -186,14 +184,14 @@ class EntradaProductosController extends Controller
                 $entradaProducto_detalle->cantidad = $cantidad_ingreso[$index];
 
                 //$entradaProducto_detalle->numero_lote = "";
-                $entradaProducto_detalle->fecha_vencimiento = $fecha_vencimiento[$index];
+                //$entradaProducto_detalle->fecha_vencimiento = $fecha_vencimiento[$index];
                 $entradaProducto_detalle->aplica_precio = "";
                 $entradaProducto_detalle->id_um = $unidad[$index];
                 $entradaProducto_detalle->id_marca = $marca[$index];
                 $entradaProducto_detalle->estado = 1;
                 $entradaProducto_detalle->id_producto = $descripcion[$index];
                 $entradaProducto_detalle->costo = $precio_unitario[$index];
-                $entradaProducto_detalle->fecha_fabricacion = $fecha_fabricacion[$index];
+                //$entradaProducto_detalle->fecha_fabricacion = $fecha_fabricacion[$index];
                 $entradaProducto_detalle->id_estado_bien = $estado_bien[$index];
 
                 /*$entradaProducto_detalle->descripcion = $descripcion[$index];
@@ -354,8 +352,6 @@ class EntradaProductosController extends Controller
             $descripcion = $request->input('descripcion');
             $cod_interno = $request->input('cod_interno');
             $marca = $request->input('marca');
-            $fecha_fabricacion = $request->input('fecha_fabricacion');
-            $fecha_vencimiento = $request->input('fecha_vencimiento');
             $estado_bien = $request->input('estado_bien');
             $unidad = $request->input('unidad');
             $cantidad_ingreso = $request->input('cantidad_ingreso');
@@ -399,7 +395,7 @@ class EntradaProductosController extends Controller
                 $salida_producto_detalle->cantidad = $cantidad_ingreso[$index];
 
                 //$salida_producto_detalle->numero_lote = "";
-                $salida_producto_detalle->fecha_vencimiento = $fecha_vencimiento[$index];
+                //$salida_producto_detalle->fecha_vencimiento = $fecha_vencimiento[$index];
                 $salida_producto_detalle->aplica_precio = "";
                 $salida_producto_detalle->id_um = $unidad[$index];
                 $salida_producto_detalle->id_marca = $marca[$index];
@@ -1056,8 +1052,6 @@ class EntradaProductosController extends Controller
             $descripcion = $request->input('descripcion');
             $cod_interno = $request->input('cod_interno');
             $marca = $request->input('marca');
-            $fecha_fabricacion = $request->input('fecha_fabricacion');
-            $fecha_vencimiento = $request->input('fecha_vencimiento');
             $estado_bien = $request->input('estado_bien');
             $unidad = $request->input('unidad');
             $cantidad_ingreso = $request->input('cantidad_ingreso');
@@ -1095,14 +1089,14 @@ class EntradaProductosController extends Controller
                 $entradaProducto_detalle->numero_serie = $item[$index];
                 $entradaProducto_detalle->cantidad = $cantidad_ingreso[$index];
 
-                $entradaProducto_detalle->fecha_vencimiento = $fecha_vencimiento[$index];
+                //$entradaProducto_detalle->fecha_vencimiento = $fecha_vencimiento[$index];
                 $entradaProducto_detalle->aplica_precio = "";
                 $entradaProducto_detalle->id_um = $unidad[$index];
                 $entradaProducto_detalle->id_marca = $marca[$index];
                 $entradaProducto_detalle->estado = 1;
                 $entradaProducto_detalle->id_producto = $descripcion[$index];
                 $entradaProducto_detalle->costo = $precio_unitario[$index];
-                $entradaProducto_detalle->fecha_fabricacion = $fecha_fabricacion[$index];
+                //$entradaProducto_detalle->fecha_fabricacion = $fecha_fabricacion[$index];
                 $entradaProducto_detalle->id_estado_bien = $estado_bien[$index];
 
                 $entradaProducto_detalle->sub_total = $sub_total[$index];
@@ -1225,8 +1219,8 @@ class EntradaProductosController extends Controller
                 $orden_compra_detalle->sub_total = $sub_total[$index];
                 $orden_compra_detalle->igv = $igv[$index];
                 $orden_compra_detalle->total = $total[$index];
-                $orden_compra_detalle->fecha_fabricacion = $fecha_fabricacion[$index];
-                $orden_compra_detalle->fecha_vencimiento = $fecha_vencimiento[$index];
+                //$orden_compra_detalle->fecha_fabricacion = $fecha_fabricacion[$index];
+                //$orden_compra_detalle->fecha_vencimiento = $fecha_vencimiento[$index];
                 $orden_compra_detalle->id_estado_producto = $estado_bien[$index];
                 $orden_compra_detalle->id_unidad_medida = $unidad[$index];
                 $orden_compra_detalle->id_marca = $marca[$index];
@@ -1254,8 +1248,6 @@ class EntradaProductosController extends Controller
             $descripcion = $request->input('descripcion');
             $cod_interno = $request->input('cod_interno');
             $marca = $request->input('marca');
-            $fecha_fabricacion = $request->input('fecha_fabricacion');
-            $fecha_vencimiento = $request->input('fecha_vencimiento');
             $estado_bien = $request->input('estado_bien');
             $unidad = $request->input('unidad');
             $cantidad_ingreso = $request->input('cantidad_ingreso');
@@ -1296,7 +1288,7 @@ class EntradaProductosController extends Controller
                 $salida_producto_detalle->numero_serie = $item[$index];
                 $salida_producto_detalle->cantidad = $cantidad_ingreso[$index];
 
-                $salida_producto_detalle->fecha_vencimiento = $fecha_vencimiento[$index];
+                //$salida_producto_detalle->fecha_vencimiento = $fecha_vencimiento[$index];
                 $salida_producto_detalle->aplica_precio = "";
                 $salida_producto_detalle->id_um = $unidad[$index];
                 $salida_producto_detalle->id_marca = $marca[$index];
@@ -1453,12 +1445,14 @@ class EntradaProductosController extends Controller
             if($tipo==1){
                 $entrada_producto_detalle = EntradaProductoDetalle::find($id);
                 $entrada_producto = EntradaProducto::find($id);
+                $orden_compra = OrdenCompra::find($entrada_producto->id_orden_compra);
                 //$proveedor_ = Empresa::find($entrada_producto->id_proveedor);
                 //$proveedor = $proveedor_->getEmpresa($entrada_producto->id_proveedor);
                 $proveedor = Empresa::all();
             }else if($tipo==2){
                 $entrada_producto_detalle = SalidaProductoDetalle::find($id);
                 $entrada_producto = SalidaProducto::find($id);
+                $orden_compra = OrdenCompra::find($entrada_producto->id_orden_compra);
                 //$proveedor=[];
                 $proveedor = Empresa::all();
             }
@@ -1494,8 +1488,9 @@ class EntradaProductosController extends Controller
         $estado_bien = $tablaMaestra_model->getMaestroByTipo(4);
 
         //dd($entrada_producto);exit();
+        //dd($orden_compra);exit();
         
-		return view('frontend.entrada_productos.modal_entradas_detalleEntradaHistorial',compact('id','entrada_producto_detalle','tipo_documento','moneda','unidad_origen','cerrado_entrada','igv_compra','proveedor','producto','unidad','almacen'/*,'almacen_seccion'*/,'tipo_cambio','tipo_movimiento','entrada_producto','marca','estado_bien',/*'tipo_movimiento_',*/'tipo','persona'));
+		return view('frontend.entrada_productos.modal_entradas_detalleEntradaHistorial',compact('id','entrada_producto_detalle','tipo_documento','moneda','unidad_origen','cerrado_entrada','igv_compra','proveedor','producto','unidad','almacen'/*,'almacen_seccion'*/,'tipo_cambio','tipo_movimiento','entrada_producto','marca','estado_bien',/*'tipo_movimiento_',*/'tipo','persona','orden_compra'));
 
     }
 

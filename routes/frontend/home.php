@@ -25,8 +25,6 @@ use App\Http\Controllers\Frontend\ComprobanteController;
 use App\Http\Controllers\Frontend\EntradaProductoDetallesController;
 use App\Http\Controllers\Frontend\DispensacionController;
 
-use App\Http\Controllers\Frontend\ProformaController;
-
 use App\Models\Ubigeo;
 
 /*
@@ -407,9 +405,5 @@ Route::get('dispensacion/movimiento_pdf_dispensacion/{id}', [DispensacionControl
 Route::get('kardex/create_consulta_productos', [KardexController::class, 'create_consulta_productos'])->name('kardex.create_consulta_productos');
 Route::post('kardex/listar_kardex_consulta_producto_ajax', [KardexController::class, 'listar_kardex_consulta_producto_ajax'])->name('kardex.listar_kardex_consulta_producto_ajax');
 Route::get('productos/obtener_stock_producto/{almacen}/{id_producto}', [ProductosController::class, 'obtener_stock_producto'])->name('productos.obtener_stock_producto');
-
-Route::get('proforma/modal_proforma/{id}', [ProformaController::class, 'modal_proforma'])->name('proforma.modal_proforma');
-
-
 
 

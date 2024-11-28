@@ -13,6 +13,8 @@ use App\Models\OrdenCompraDetalle;
 use App\Models\Kardex;
 use App\Models\Almacen_usuario;
 use App\Models\Almacene;
+use App\Models\Tienda;
+use App\Models\TiendaDetalleOrdenCompra;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Auth;
 use Carbon\Carbon;
@@ -131,8 +133,6 @@ class OrdenCompraController extends Controller
         $descripcion = $request->input('descripcion');
         $cod_interno = $request->input('cod_interno');
         $marca = $request->input('marca');
-        $fecha_fabricacion = $request->input('fecha_fabricacion');
-        $fecha_vencimiento = $request->input('fecha_vencimiento');
         $estado_bien = $request->input('estado_bien');
         $unidad = $request->input('unidad');
         $cantidad_ingreso = $request->input('cantidad_ingreso');
@@ -152,6 +152,7 @@ class OrdenCompraController extends Controller
         $orden_compra->id_unidad_origen = $request->unidad_origen;
         $orden_compra->id_almacen_destino = $request->almacen;
         $orden_compra->id_almacen_salida = $request->almacen_salida;
+        $orden_compra->numero_orden_compra_cliente = $request->numero_orden_compra_cliente;
         $orden_compra->cerrado = 1;
         $orden_compra->id_usuario_inserta = $id_user;
         $orden_compra->estado = 1;
@@ -175,8 +176,6 @@ class OrdenCompraController extends Controller
             $orden_compra_detalle->sub_total = $sub_total[$index];
             $orden_compra_detalle->igv = $igv[$index];
             $orden_compra_detalle->total = $total[$index];
-            $orden_compra_detalle->fecha_fabricacion = $fecha_fabricacion[$index];
-            $orden_compra_detalle->fecha_vencimiento = $fecha_vencimiento[$index];
             $orden_compra_detalle->id_estado_producto = $estado_bien[$index];
             $orden_compra_detalle->id_unidad_medida = $unidad[$index];
             $orden_compra_detalle->id_marca = $marca[$index];
@@ -265,6 +264,11 @@ class OrdenCompraController extends Controller
 
         $orden_compra_model = new OrdenCompra;
         $orden_compra_detalle_model = new OrdenCompraDetalle;
+        $tienda_detalle_orden_compra_model = new TiendaDetalleOrdenCompra;
+        $tienda_orden_compra_model = new Tienda;
+
+        $tiendas_orden_compra_detalle = $tienda_detalle_orden_compra_model->getDetalleTiendaOrdenCompraId($id);
+        $tiendas_orden_compra = $tienda_orden_compra_model->getTiendaOrdenCompraId($id);
 
         $datos=$orden_compra_model->getOrdenCompraById($id);
         $datos_detalle=$orden_compra_detalle_model->getDetalleOrdenCompraPdf($id);
@@ -274,6 +278,7 @@ class OrdenCompraController extends Controller
         $empresa_vende=$datos[0]->empresa_vende;
         $fecha_orden_compra = $datos[0]->fecha_orden_compra;
         $numero_orden_compra = $datos[0]->numero_orden_compra;
+        $numero_orden_compra_cliente = $datos[0]->numero_orden_compra_cliente;
         $igv=$datos[0]->igv;
         
 		$year = Carbon::now()->year;
@@ -286,7 +291,7 @@ class OrdenCompraController extends Controller
 
 		 $currentHour = Carbon::now()->format('H:i:s');
 
-		$pdf = Pdf::loadView('frontend.orden_compra.movimiento_orden_compra_pdf',compact('tipo_documento','empresa_compra','empresa_vende','fecha_orden_compra','numero_orden_compra','igv','datos_detalle'));
+		$pdf = Pdf::loadView('frontend.orden_compra.movimiento_orden_compra_pdf',compact('tipo_documento','empresa_compra','empresa_vende','fecha_orden_compra','numero_orden_compra','igv','datos_detalle','numero_orden_compra_cliente','tiendas_orden_compra_detalle','tiendas_orden_compra'));
 		
 
 
@@ -311,5 +316,136 @@ class OrdenCompraController extends Controller
 		
 		return response()->json($codigo_orden_compra);
 	}
+
+    public function modal_orden_compra_tienda($id){
+		
+        $tablaMaestra_model = new TablaMaestra;
+        $producto_model = new Producto;
+        $marca_model = new Marca;
+        $almacen_model = new Almacene;
+		
+		if($id>0){
+
+            $orden_compra = OrdenCompra::find($id);
+            $proveedor = Empresa::all();
+			
+		}else{
+			$orden_compra = new OrdenCompra;
+            $proveedor = Empresa::all();
+		}
+
+        //$orden_compra_model = new OrdenCompra;
+        $tipo_documento = $tablaMaestra_model->getMaestroByTipo(54);
+        //$moneda = $tablaMaestra_model->getMaestroByTipo(1);
+        //$unidad_origen = $tablaMaestra_model->getMaestroByTipo(50);
+        //$cerrado_entrada = $tablaMaestra_model->getMaestroByTipo(52);
+        //$igv_compra = $tablaMaestra_model->getMaestroByTipo(51);
+        //$descuento = $tablaMaestra_model->getMaestroByTipo(55);
+        $producto = $producto_model->getProductoAll();
+        $marca = $marca_model->getMarcaAll();
+        $estado_bien = $tablaMaestra_model->getMaestroByTipo(4);
+        $unidad = $tablaMaestra_model->getMaestroByTipo(43);
+        $igv_compra = $tablaMaestra_model->getMaestroByTipo(51);
+        $descuento = $tablaMaestra_model->getMaestroByTipo(55);
+        $almacen = $almacen_model->getAlmacenAll();
+        //$almacen = Almacene::all();
+        $unidad_origen = $tablaMaestra_model->getMaestroByTipo(50);
+        //$codigo_orden_compra = $orden_compra_model->getCodigoOrdenCompra();
+        
+        //dd($proveedor);exit();
+
+		return view('frontend.orden_compra.modal_orden_compra_tienda',compact('id','orden_compra','tipo_documento','proveedor','producto','marca','estado_bien','unidad','igv_compra','descuento','almacen','unidad_origen'));
+
+    }
+
+    public function modal_tiendas_orden_compra($id){
+		
+        $tablaMaestra_model = new TablaMaestra;
+        $producto_model = new Producto;
+        $marca_model = new Marca;
+		
+        $orden_compra = OrdenCompra::find($id);
+
+        $tipo_documento = $tablaMaestra_model->getMaestroByTipo(54);
+        $producto = $producto_model->getProductoAll();
+        $marca = $marca_model->getMarcaAll();
+        $estado_bien = $tablaMaestra_model->getMaestroByTipo(4);
+        $unidad = $tablaMaestra_model->getMaestroByTipo(43);
+        $igv_compra = $tablaMaestra_model->getMaestroByTipo(51);
+        $descuento = $tablaMaestra_model->getMaestroByTipo(55);
+        $unidad_origen = $tablaMaestra_model->getMaestroByTipo(50);
+        $tiendas = Tienda::all();
+
+		return view('frontend.orden_compra.modal_tiendas_orden_compra',compact('id','orden_compra','tipo_documento','producto','marca','estado_bien','unidad','igv_compra','descuento','unidad_origen','tiendas'));
+
+    }
+
+    public function send_tiendas_orden_compra(Request $request)
+    {
+        $id_user = Auth::user()->id;
+    
+        $tiendas = $request->input('tiendas', []);
+        $productos = $request->input('id_orden_compra_detalle', []);
+        $cantidades = $request->input('cantidad_ingreso', []);
+        $descripcion = $request->input('descripcion', []);
+    
+        if (empty($tiendas) || empty($productos) || empty($cantidades) || empty($descripcion)) {
+            return response()->json(['success' => false, 'message' => 'Datos incompletos.']);
+        }
+    
+        foreach ($tiendas as $index => $tienda_id) {
+
+            $index_offset = $index + 1;
+    
+            if (isset($productos[$index_offset]) && is_array($productos[$index_offset])) {
+                foreach ($productos[$index_offset] as $producto_index => $producto_id) {
+                    
+                    $tienda_detalle_orden_compra = new TiendaDetalleOrdenCompra();
+                    $tienda_detalle_orden_compra->id_tienda = $tienda_id;
+                    $tienda_detalle_orden_compra->id_orden_compra = $request->id;
+                    $tienda_detalle_orden_compra->id_producto = $descripcion[$index_offset][$producto_index] ?? null;
+                    $tienda_detalle_orden_compra->cantidad = $cantidades[$index_offset][$producto_index] ?? 0;
+                    $tienda_detalle_orden_compra->estado = 1;
+                    $tienda_detalle_orden_compra->id_usuario_inserta = $id_user;
+    
+                    $tienda_detalle_orden_compra->save();
+
+                }
+                $orden_compra = OrdenCompra::find($request->id);
+                $orden_compra->tienda_asignada=1;
+                $orden_compra->save();
+            } else {
+                // Manejar el caso en que no haya productos para una tienda específica
+                Log::warning('No hay productos para la tienda con índice ' . $index_offset);
+            }
+        }
+        return response()->json(['success' => true]);
+    }
+
+    public function cargar_detalle_tienda($id)
+    {
+
+        $orden_compra_model = new OrdenCompra;
+        $tienda_detalle_orden_compra_model = new TiendaDetalleOrdenCompra;
+        $tienda_orden_compra_model = new Tienda;
+        $producto_model = new Producto;
+        $tablaMaestra_model = new TablaMaestra;
+
+        $orden_compra = $orden_compra_model->getDetalleOrdenCompraId($id);
+        $tienda_detalle_orden_compra = $tienda_detalle_orden_compra_model->getDetalleTiendaOrdenCompraId($id);
+        $tienda_orden_compra = $tienda_orden_compra_model->getTiendaOrdenCompraId($id);
+        $producto = $producto_model->getProductoAll();
+        $estado_bien = $tablaMaestra_model->getMaestroByTipo(4);
+        $unidad_medida = $tablaMaestra_model->getMaestroByTipo(43);
+
+        return response()->json([
+            'orden_compra' => $orden_compra,
+            'producto' => $producto,
+            'estado_bien' => $estado_bien,
+            'unidad_medida' => $unidad_medida,
+            'tienda_orden_compra' => $tienda_orden_compra,
+            'tienda_detalle_orden_compra' => $tienda_detalle_orden_compra
+        ]);
+    }
 
 }
