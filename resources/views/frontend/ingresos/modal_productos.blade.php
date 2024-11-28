@@ -180,15 +180,56 @@
 
 	#tablemodalm {}
 
-	.ui-autocomplete {
+	#modal_producto .ui-autocomplete {
 		z-index: 2147483647 !important;
+		background:#ffffffff;
+		width: 200px;
 	}
 
-	.ui-menu,
-	.ui-menu>.ui-menu-item,
-	.ui-menu-item>a {
-		min-width: 800px !important
+	#modal_producto .ui-autocomplete { height: 400px; overflow-y: scroll; overflow-x: hidden;}
+
+
+	#modal_producto ul.auto-complete-list {
+    list-style-type: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    position: absolute !important;
+    z-index: 1500 !important;
+    max-height: 250px !important;
+    overflow: auto !important;
+}
+
+#modal_producto .ui-autocomplete, #modal_producto .ui-menu, #modal_producto .ui-menu-item {  z-index: 1006 !important; }
+
+
+	#modal_producto.ui-menu,
+	#modal_producto.ui-menu> #modal_producto .ui-menu-item,
+	#modal_producto.ui-menu-item>a {
+		min-width: 500px !important;
 	}
+	
+/*
+	.ui-widget {
+  font-size: 0.75em;
+}
+  */
+.ui-menu-item a {
+  background-color: #fff;
+}
+
+.ui-menu-item .ui-menu-item-wrapper.ui-state-active {
+    background: #6693bc !important;
+    font-weight: bold !important;
+    color: #ffffff !important;
+} 
+.ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active, a.ui-button:active, .ui-button:active, .ui-state-active.ui-button:hover 
+{
+  border: 1px solid #000;
+  background: #000;
+}
+
+.ui-helper-hidden-accessible { display:none; }
+
 </style>
 
 <script type="text/javascript">
@@ -209,7 +250,7 @@
 
 
 	$('#txtProducto').autocomplete({
-		appendTo: "#producto_list",
+		appendTo: "#producto_list1",
 		source: function(request, response) {
 			$.ajax({
 				url: 'obtener_producto_tipo_denominacion/all/' + $('#txtProducto').val(),
@@ -317,7 +358,7 @@
 <body class="hold-transition skin-blue sidebar-mini">
 
 	<div>
-		<div class="justify-content-center">
+		<div class="justify-content-center" id="modal_producto">
 
 			<div class="card">
 
@@ -345,11 +386,13 @@
 													<div class="form-group form-group-sm">
 														<label class="form-control-sm">Producto</label>
 
-														<td><input type="text" name="txtProducto" id="txtProducto"
+														<td>
+														<input type="text" name="txtProducto" id="txtProducto"
 																class="form-control form-control-sm">
-
+															
 															<div class="input-group" style="position: absolute;"
-																id="producto_list"></div>
+																id="producto_list1"></div>
+
 														</td>
 
 													</div>
