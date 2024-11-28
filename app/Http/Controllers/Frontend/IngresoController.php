@@ -1191,4 +1191,13 @@ class IngresoController extends Controller
 
 	}
 
+    public function obtener_producto_tipo_denominacion($tipo, $denominacion){
+        $tipo_ = "";
+        if ($tipo=="all")  $tipo_="";
+		$producto_model = new Producto;
+		$producto = $producto_model->getProductoTipoDen($tipo_, $denominacion);
+		//dd($producto);exit();
+		return response()->json($producto);
+	}
+
 }

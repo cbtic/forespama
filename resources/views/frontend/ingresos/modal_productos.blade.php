@@ -242,7 +242,7 @@ legend.scheduler-border {
 		appendTo: "#producto_list",
 		source: function(request, response) {
 			$.ajax({
-			url: 'productos/obtener_producto_tipo_denominacion/'+$('#txtProducto').val(),
+			url: 'obtener_producto_tipo_denominacion/all/'+$('#txtProducto').val(),
 			dataType: "json",
 			success: function(data){
 			// alert(JSON.stringify(data));

@@ -218,7 +218,9 @@ Route::get('ingreso/modal_productos/{id}', [IngresoController::class, 'modal_pro
 
 Route::get('ingreso/caja_total', [IngresoController::class, 'caja_total'])->name('ingreso.caja_total');
 Route::post('ingreso/obtener_caja_condicion_pago', [IngresoController::class, 'obtener_caja_condicion_pago'])->name('ingreso.obtener_caja_condicion_pago');
-Route::post('ingreso/obtener_caja_venta', [IngresoController::class, 'obtener_caja_venta'])->name('ingreso.obtener_caja_ventañ');
+Route::post('ingreso/obtener_caja_venta', [IngresoController::class, 'obtener_caja_venta'])->name('ingreso.obtener_caja_venta');
+
+Route::get('ingreso/obtener_producto_tipo_denominacion/{tipo}/{den}', [IngresoController::class, 'obtener_producto_tipo_denominacion'])->name('ingreso.obtener_producto_tipo_denominacion');
 
 
 Route::post('comprobante/edit', [ComprobanteController::class, 'edit'])->name('comprobante.edit');
