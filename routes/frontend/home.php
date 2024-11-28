@@ -24,6 +24,12 @@ use App\Http\Controllers\Frontend\KardexController;
 use App\Http\Controllers\Frontend\ComprobanteController;
 use App\Http\Controllers\Frontend\EntradaProductoDetallesController;
 use App\Http\Controllers\Frontend\DispensacionController;
+use App\Http\Controllers\Frontend\MarcaController;
+use App\Http\Controllers\Frontend\TiendaController;
+use App\Http\Controllers\Frontend\IngresoProduccionController;
+
+
+
 
 use App\Models\Ubigeo;
 
@@ -405,5 +411,32 @@ Route::get('dispensacion/movimiento_pdf_dispensacion/{id}', [DispensacionControl
 Route::get('kardex/create_consulta_productos', [KardexController::class, 'create_consulta_productos'])->name('kardex.create_consulta_productos');
 Route::post('kardex/listar_kardex_consulta_producto_ajax', [KardexController::class, 'listar_kardex_consulta_producto_ajax'])->name('kardex.listar_kardex_consulta_producto_ajax');
 Route::get('productos/obtener_stock_producto/{almacen}/{id_producto}', [ProductosController::class, 'obtener_stock_producto'])->name('productos.obtener_stock_producto');
+
+Route::get('orden_compra/modal_orden_compra_tienda/{id}', [OrdenCompraController::class, 'modal_orden_compra_tienda'])->name('orden_compra.modal_orden_compra_tienda');
+
+Route::get('marcas/create', [MarcaController::class, 'create'])->name('marcas.create');
+Route::post('marcas/listar_marca_ajax', [MarcaController::class, 'listar_marca_ajax'])->name('marcas.listar_marca_ajax');
+Route::post('marcas/send_marca', [MarcaController::class, 'send_marca'])->name('marcas.send_marca');
+Route::get('marcas/modal_marca/{id}', [MarcaController::class, 'modal_marca'])->name('marcas.modal_marca');
+Route::get('marcas/eliminar_marca/{id}/{estado}', [MarcaController::class, 'eliminar_marca'])->name('marcas.eliminar_marca');
+
+Route::get('tiendas/create', [TiendaController::class, 'create'])->name('tiendas.create');
+Route::post('tiendas/listar_tienda_ajax', [TiendaController::class, 'listar_tienda_ajax'])->name('tiendas.listar_tienda_ajax');
+Route::post('tiendas/send_tienda', [TiendaController::class, 'send_tienda'])->name('tiendas.send_tienda');
+Route::get('tiendas/modal_tienda/{id}', [TiendaController::class, 'modal_tienda'])->name('tiendas.modal_tienda');
+Route::get('tiendas/eliminar_tienda/{id}/{estado}', [TiendaController::class, 'eliminar_tienda'])->name('tiendas.eliminar_tienda');
+Route::get('tiendas/obtener_datos_tienda/{empresa}', [TiendaController::class, 'obtener_datos_tienda'])->name('tiendas.obtener_datos_tienda');
+
+Route::get('ingreso_produccion/create', [IngresoProduccionController::class, 'create'])->name('ingreso_produccion.create');
+Route::post('ingreso_produccion/listar_ingreso_produccion_ajax', [IngresoProduccionController::class, 'listar_ingreso_produccion_ajax'])->name('ingreso_produccion.listar_ingreso_produccion_ajax');
+Route::post('ingreso_produccion/send_ingreso_produccion', [IngresoProduccionController::class, 'send_ingreso_produccion'])->name('ingreso_produccion.send_ingreso_produccion');
+Route::get('ingreso_produccion/modal_ingreso_produccion/{id}', [IngresoProduccionController::class, 'modal_ingreso_produccion'])->name('ingreso_produccion.modal_ingreso_produccion');
+Route::get('ingreso_produccion/eliminar_ingreso_produccion/{id}/{estado}', [IngresoProduccionController::class, 'eliminar_ingreso_produccion'])->name('ingreso_produccion.eliminar_ingreso_produccion');
+Route::get('ingreso_produccion/obtener_codigo_ingreso_produccion/{tipo_documento}', [IngresoProduccionController::class, 'obtener_codigo_ingreso_produccion'])->name('ingreso_produccion.obtener_codigo_ingreso_produccion');
+Route::get('ingreso_produccion/cargar_detalle/{id}', [IngresoProduccionController::class, 'cargar_detalle'])->name('ingreso_produccion.cargar_detalle');
+Route::get('orden_compra/modal_tiendas_orden_compra/{id}', [OrdenCompraController::class, 'modal_tiendas_orden_compra'])->name('orden_compra.modal_tiendas_orden_compra');
+Route::post('orden_compra/send_tiendas_orden_compra', [OrdenCompraController::class, 'send_tiendas_orden_compra'])->name('orden_compra.send_tiendas_orden_compra');
+Route::get('ingreso_produccion/movimiento_pdf_ingreso_produccion/{id}', [IngresoProduccionController::class, 'movimiento_pdf_ingreso_produccion'])->name('ingreso_produccion.movimiento_pdf_ingreso_produccion');
+Route::get('orden_compra/cargar_detalle_tienda/{id}', [OrdenCompraController::class, 'cargar_detalle_tienda'])->name('orden_compra.cargar_detalle_tienda');
 
 
