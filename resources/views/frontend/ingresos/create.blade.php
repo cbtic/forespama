@@ -283,6 +283,13 @@ label.form-control-sm{
 	cursor:pointer
 }
 
+
+
+
+
+
+
+
 </style>
 
 
@@ -711,9 +718,18 @@ label.form-control-sm{
                                             <div style="margin-top:15px" class="form-group">
                                                 <div class="col-sm-12 controls">
                                                     <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
-                                                       <!-- <a href="javascript:void(0)" onClick="agregarProducto()" class="btn btn-sm btn-success">Agregar</a>-->
+                                                       
                                                         <a href="javascript:void(0)" onClick="modal_productos(0)" class="btn btn-sm btn-success">Agregar</a>
-                                                        
+
+
+<!--
+                                                                    <button type="button" data-toggle="modal" style=""
+                                                                            data-target="#ProductoModal" id=""
+                                                                            class="btn btn-warning btn-sm">
+																			<i class="fas fa-search"></i>
+																			Agregar
+																			</button>
+                                                    -->
                                                     </div>
                                                 </div>
                                             </div> 
@@ -960,6 +976,61 @@ label.form-control-sm{
                         </div>
 
                     </div>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="ProductoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel2"
+                        aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel2">Registre Nuevo Producto</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <div class="card-body">
+
+                                            <div id="" class="row">
+                                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+                                                <div class="form-group form-group-sm">
+                                                    <label class="form-control-sm">Producto</label>
+                                                    
+                                                    <td><input type="text" name="txtProducto" id="txtProducto"
+                                                        class="form-control form-control-sm">
+
+                                                        <div class="input-group" style="position: absolute;"
+                                                            id="producto_list"></div>
+                                                    </td>
+
+                                                </div>
+
+
+
+
+                                                    
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="modal-footer">
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <!--ModalEnd-->
+                    
+
+
                 </div>
 
             </form>

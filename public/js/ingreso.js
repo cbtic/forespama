@@ -84,6 +84,44 @@ $(document).ready(function () {
 			obtenerBeneficiario();
 		}
 	});
+
+	$('#txtProducto').autocomplete({
+		appendTo: "#producto_list",
+		source: function(request, response) {
+			$.ajax({
+			url: 'obtener_producto_tipo_denominacion/all/'+$('#txtProducto').val(),
+			dataType: "json",
+			success: function(data){
+			// alert(JSON.stringify(data));
+			  var resp = $.map(data,function(obj){
+					console.log(obj);
+					//return obj.denominacion;
+					var hash = {key: obj.id, value: obj.denominacion};
+					return hash;
+			  }); 
+			  //alert(JSON.stringify(resp));
+			  //console.log(JSON.stringify(resp));
+			  response(resp);
+			},
+			error: function() {
+				//alert("cc");
+			}
+		  });
+			},
+				select: function (event, ui) {
+					//alert(ui.item.key);
+					flag_select=true;
+					$('#txtProducto').attr("readonly",true);
+			},
+		minLength: 2,
+		delay: 100
+        }).blur(function(){
+		if(typeof flag_select == "undefined")
+		{
+			$('#txtProducto').val("");
+		}
+	});
+
 /*
 	$( '#cboTipoConcepto_b' ).select2( {
 		theme: "bootstrap-5",
