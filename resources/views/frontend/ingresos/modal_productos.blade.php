@@ -269,16 +269,17 @@
 					// alert(JSON.stringify(data));
 					var resp = $.map(data, function(obj) {
 						console.log(obj);
-						um_ = obj.um;						
-						PrecioVenta_ = ob.costo_unitario;
-
-						ValorUnitario_ = PrecioVenta_ /(1+tasa_igv_);
-
-						ValorVB_ = ValorUnitario_ * Cantidad_;
-
-
-
 						
+						um_ = obj.um;						
+						/*
+						PrecioVenta_ = ob.costo_unitario;
+						ValorUnitario_ = PrecioVenta_ /(1+tasa_igv_);
+						ValorVB_ = ValorUnitario_ * Cantidad_;
+						ValorVenta_ = ValorVB_ - Descuento_;
+						Igv_ = ValorVenta_ * tasa_igv_;
+						Total_ = ValorVenta_ + Igv_
+						*/
+
 						//return obj.denominacion;
 						var hash = {
 							key: obj.id,
@@ -301,6 +302,8 @@
 			$('#txtProducto').attr("readonly", true);
 			$('#txtUM').val(um_);
 
+			calcular();
+/*
 			$('#txtPrecioVenta').val(PrecioVenta_);
 			$('#txtValorUnitario').val(ValorUnitario_);
 			$('#txtValorVB').val(ValorVB_);
@@ -308,8 +311,7 @@
 			$('#txtValorVenta').val(ValorVenta_);
 			$('#txtIgv').val(Igv_);
 			$('#txtTotal').val(Total_);
-			
-
+*/			
 			
 		},
 		minLength: 2,
@@ -338,7 +340,25 @@
 		}
 	}
 
+	function calcular() {
 
+		PrecioVenta_ = $('#txtPrecioVenta').val();
+		Descuento_ = $('#txtDescuento').val();
+
+		ValorUnitario_ = PrecioVenta_ /(1+tasa_igv_);
+		ValorVB_ = ValorUnitario_ * Cantidad_;
+		ValorVenta_ = ValorVB_ - Descuento_;
+		Igv_ = ValorVenta_ * tasa_igv_;
+		Total_ = ValorVenta_ + Igv_
+
+		
+		$('#txtValorUnitario').val(ValorUnitario_);
+		$('#txtValorVB').val(ValorVB_);
+		$('#txtValorVenta').val(ValorVenta_);
+		$('#txtIgv').val(Igv_);
+		$('#txtTotal').val(Total_);
+
+	}
 
 
 
@@ -472,7 +492,7 @@
 												<div class="col-lg-4">
 													<div class="form-group">
 														<label class="form-control-sm">Descuento</label>
-														<input type="text" name="txtDescuento" id="txtDescuento" value="" placeholder="" class="form-control form-control-sm">
+														<input type="text" name="txtDescuento" id="txtDescuento" value="0" placeholder="" class="form-control form-control-sm">
 													</div>
 												</div>
 												<div class="col-lg-4">
