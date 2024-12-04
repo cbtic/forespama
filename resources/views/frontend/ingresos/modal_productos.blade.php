@@ -246,6 +246,28 @@
 			//console.log('${day}-${month}-${year}')
 			$('#txtFechaIni').val(`${day}-${month}-${year}`);
 		}
+
+		$('#txtCantidad').keypress(function (e) {
+			if (e.keyCode == 13) {
+				calcular();
+			}
+		});
+		$('#txtPrecioVenta').keypress(function (e) {
+			if (e.keyCode == 13) {
+				calcular();
+			}
+		});
+		$('#txtDescuento').keypress(function (e) {
+			if (e.keyCode == 13) {
+				calcular();
+			}
+		});		
+		$('#txtTotal').keypress(function (e) {
+			if (e.keyCode == 13) {
+				calcular();
+			}
+		});												
+																					
 	});
 
 	var tasa_igv_= 0.18;
@@ -270,9 +292,9 @@
 					var resp = $.map(data, function(obj) {
 						console.log(obj);
 						
-						um_ = obj.um;						
+						um_ = obj.um;												
+						PrecioVenta_ = obj.costo_unitario;
 						/*
-						PrecioVenta_ = ob.costo_unitario;
 						ValorUnitario_ = PrecioVenta_ /(1+tasa_igv_);
 						ValorVB_ = ValorUnitario_ * Cantidad_;
 						ValorVenta_ = ValorVB_ - Descuento_;
@@ -301,18 +323,16 @@
 			flag_select = true;
 			$('#txtProducto').attr("readonly", true);
 			$('#txtUM').val(um_);
-
-			calcular();
-/*
 			$('#txtPrecioVenta').val(PrecioVenta_);
-			$('#txtValorUnitario').val(ValorUnitario_);
+
+/*			$('#txtValorUnitario').val(ValorUnitario_);
 			$('#txtValorVB').val(ValorVB_);
 			$('#txtDescuento').val(Descuento_);
 			$('#txtValorVenta').val(ValorVenta_);
 			$('#txtIgv').val(Igv_);
 			$('#txtTotal').val(Total_);
 */			
-			
+			calcular();
 		},
 		minLength: 2,
 		delay: 100
@@ -346,6 +366,7 @@
 		Descuento_ = $('#txtDescuento').val();
 
 		ValorUnitario_ = PrecioVenta_ /(1+tasa_igv_);
+		ValorUnitario_ = Number(ValorUnitario_ .toFixed(2));
 		ValorVB_ = ValorUnitario_ * Cantidad_;
 		ValorVenta_ = ValorVB_ - Descuento_;
 		Igv_ = ValorVenta_ * tasa_igv_;
@@ -486,7 +507,7 @@
 												<div class="col-lg-4">
 													<div class="form-group">
 														<label class="form-control-sm">Valor Venta Bruto</label>
-														<input type="text" name="txtValorUB" id="txtValorUB" value="" placeholder="" class="form-control form-control-sm">
+														<input type="text" name="txtValorVB" id="txtValorVB" value="" placeholder="" class="form-control form-control-sm">
 													</div>
 												</div>
 												<div class="col-lg-4">
