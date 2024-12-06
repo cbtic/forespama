@@ -27,6 +27,7 @@ use App\Http\Controllers\Frontend\DispensacionController;
 use App\Http\Controllers\Frontend\MarcaController;
 use App\Http\Controllers\Frontend\TiendaController;
 use App\Http\Controllers\Frontend\IngresoProduccionController;
+use App\Http\Controllers\Frontend\RequerimientoController;
 
 use App\Models\Ubigeo;
 
@@ -428,3 +429,17 @@ Route::get('orden_compra/modal_tiendas_orden_compra/{id}', [OrdenCompraControlle
 Route::post('orden_compra/send_tiendas_orden_compra', [OrdenCompraController::class, 'send_tiendas_orden_compra'])->name('orden_compra.send_tiendas_orden_compra');
 Route::get('ingreso_produccion/movimiento_pdf_ingreso_produccion/{id}', [IngresoProduccionController::class, 'movimiento_pdf_ingreso_produccion'])->name('ingreso_produccion.movimiento_pdf_ingreso_produccion');
 Route::get('orden_compra/cargar_detalle_tienda/{id}', [OrdenCompraController::class, 'cargar_detalle_tienda'])->name('orden_compra.cargar_detalle_tienda');
+
+Route::get('requerimiento/create', [RequerimientoController::class, 'create'])->name('requerimiento.create');
+Route::post('requerimiento/listar_requerimiento_ajax', [RequerimientoController::class, 'listar_requerimiento_ajax'])->name('requerimiento.listar_requerimiento_ajax');
+Route::post('requerimiento/send_requerimiento', [RequerimientoController::class, 'send_requerimiento'])->name('requerimiento.send_requerimiento');
+Route::get('requerimiento/modal_requerimiento/{id}', [RequerimientoController::class, 'modal_requerimiento'])->name('requerimiento.modal_requerimiento');
+Route::get('requerimiento/eliminar_requerimiento/{id}/{estado}', [RequerimientoController::class, 'eliminar_requerimiento'])->name('requerimiento.eliminar_requerimiento');
+Route::get('requerimiento/cargar_detalle/{id}', [RequerimientoController::class, 'cargar_detalle'])->name('requerimiento.cargar_detalle');
+Route::get('requerimiento/obtener_codigo_requerimiento/{tipo_documento}', [RequerimientoController::class, 'obtener_codigo_requerimiento'])->name('requerimiento.obtener_codigo_requerimiento');
+Route::get('requerimiento/movimiento_pdf_requerimiento/{id}', [RequerimientoController::class, 'movimiento_pdf_requerimiento'])->name('requerimiento.movimiento_pdf_requerimiento');
+
+Route::post('productos/upload_producto', [ProductosController::class, 'upload_producto'])->name('productos.upload_producto');
+Route::get('productos/modal_ver_productos/{id}', [ProductosController::class, 'modal_ver_productos'])->name('productos.modal_ver_productos');
+
+Route::post('requerimiento/send_requerimiento_orden_compra', [RequerimientoController::class, 'send_requerimiento_orden_compra'])->name('requerimiento.send_requerimiento_orden_compra');

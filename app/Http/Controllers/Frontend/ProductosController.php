@@ -9,6 +9,7 @@ use App\Models\Marca;
 use App\Models\EntradaProductoDetalle;
 use App\Models\SalidaProductoDetalle;
 use App\Models\Kardex;
+use App\Models\ProductoImagene;
 use RealRashid\SweetAlert\Facades\Alert;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -71,8 +72,10 @@ class ProductosController extends Controller
 		
 		if($id>0){
 			$producto = Producto::find($id);
+            $imagenes = ProductoImagene::where('id_producto', $id)->pluck('ruta_imagen'); 
 		}else{
 			$producto = new Producto;
+            $imagenes = [];
 		}
 
         $unidad_producto = $tablaMaestra_model->getMaestroByTipo(43);
@@ -84,7 +87,7 @@ class ProductosController extends Controller
 		$tipo_origen_producto = $tablaMaestra_model->getMaestroByTipo(58);
 		//var_dump($id);exit();
 
-		return view('frontend.productos.modal_productos_nuevoProducto',compact('id','producto','unidad_medida','moneda','estado_bien','tipo_producto','unidad_producto','marca','tipo_origen_producto'));
+		return view('frontend.productos.modal_productos_nuevoProducto',compact('id','producto','unidad_medida','moneda','estado_bien','tipo_producto','unidad_producto','marca','tipo_origen_producto','imagenes'));
 
     }
 
@@ -114,7 +117,7 @@ class ProductosController extends Controller
 		}else{
 			$producto = Producto::find($request->id);
 		}
-		
+
         $producto->id_tipo_origen_producto = $request->tipo_origen_producto;
 		$producto->numero_serie = $request->numero_serie;
 		$producto->codigo = $request->codigo;
@@ -134,6 +137,60 @@ class ProductosController extends Controller
         //$producto->numero_corrrelativo = $numero_correlativo;
 		$producto->estado = 1;
 		$producto->save();
+        $id_producto = $producto->id; 
+
+        //////////////////imagenes producto
+		
+		$path = "img/productos/".$producto->id;
+        if (!is_dir($path)) {
+            mkdir($path);
+        }
+		
+		$img_foto = $request->img_foto;
+		
+		if(isset($img_foto) && is_array($img_foto) && count($img_foto) > 0){
+			$path = "img/productos/".$producto->id."/".$request->denominacion;
+			if (!is_dir($path)) {
+				mkdir($path);
+			}
+		}
+
+        $imagenesExistentes = ProductoImagene::where('id_producto', $id_producto)->pluck('ruta_imagen')->toArray();
+		
+        if (isset($img_foto) && is_array($img_foto)) {
+
+            foreach($img_foto as $row){
+                
+                if($row!=""){
+
+                    $rutaNuevaImagen = "img/productos/".$producto->id."/".$row;
+
+                    if (in_array($rutaNuevaImagen, $imagenesExistentes)) {
+                        continue;
+                    }
+
+                    $rutaImagenCompleta = public_path($rutaNuevaImagen);
+                    if (file_exists($rutaImagenCompleta)) {
+                        continue;
+                    }
+
+                    $filepath_tmp = public_path('img/productos/tmp/');
+                    $filepath_nuevo = public_path('img/productos/'.$producto->id.'/');
+                    
+                    if (file_exists($filepath_tmp.$row)) {
+                        copy($filepath_tmp.$row, $filepath_nuevo.$row);
+                    }
+                    
+                    $productoImagen = new ProductoImagene;
+                    $productoImagen->id_producto = $id_producto;
+                    $productoImagen->ruta_imagen = $rutaNuevaImagen;
+                    $productoImagen->estado = 1;
+                    $productoImagen->save();
+                }
+                
+            }
+        }
+		//////////////////
 
         return response()->json(['success' => 'Producto guardado exitosamente.']);
 
@@ -244,100 +301,34 @@ class ProductosController extends Controller
             'producto_stock' =>$producto_stock
         ]);
     }
-    
-    
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    /*public function index()
-    {
-        $productos = Producto::latest()->paginate(10);
 
-        return view('frontend.productos.index', compact('productos'));
-    }*/
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    /*public function create()
-    {
-        return view('frontend.productos.create');
-    }
-
-    public function modal_create($modal = 'modal')
-    {
-        return view('frontend.productos.modal_create', compact('modal'));
-    }*/
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    /*public function store(ProductoRequest $request)
-    {
-        $producto = Producto::create($request->all());
-
-        if($producto->save()) {
-            return response()->json( [ 'success' => 'Producto guardado!', 'id' => $producto->id, 'denominacion' => $producto->denominacion ] );
-        } else {
-            return response()->json( [ 'errors' => 'Errores!' ] );
+    public function upload_producto(Request $request){
+		
+		$path = "img/productos";
+        if (!is_dir($path)) {
+            mkdir($path);
         }
-        // return redirect()->route('frontend.productos.index');
-    }*/
+		
+		$path = "img/productos/tmp";
+        if (!is_dir($path)) {
+            mkdir($path);
+        }
+		
+    	$filepath = public_path('img/productos/tmp/');
+		move_uploaded_file($_FILES["file"]["tmp_name"], $filepath.$_FILES["file"]["name"]);
+		echo $_FILES['file']['name'];
+		
+	}
+	
+	function extension($filename){$file = explode(".",$filename); return strtolower(end($file));}
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    /*public function show(Producto $productos)
-    {
-        return view('frontend.productos.show', compact('productos'));
-    }*/
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    /*public function edit(Producto $productos)
-    {
-        return view('frontend.productos.edit', compact('productos'));
-    }*/
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    /*public function update(ProductoRequest $request, Producto $productos)
-    {
-        $productos->update($request->all());
-
-        return redirect()->route('frontend.productos.index');
-    }*/
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    /*public function destroy(Producto $productos)
-    {
-        if ($productos->delete()) {
-            Alert::success('Proceso completo', 'Se ha eliminado el producto '.$productos['codigo']);
-        };
-        return redirect()->route('frontend.productos.index');
-    }*/
+    public function modal_ver_productos($id){
+		 
+		$DerechoRevision_model = new DerechoRevision;
+        $propietario = $DerechoRevision_model->getPropietarioByIdSolicitud($id);
+		
+        return view('frontend.derecho_revision.modal_ver_productos',compact('propietario'));
+		
+    }
+   
 }
