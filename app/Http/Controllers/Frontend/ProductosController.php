@@ -168,6 +168,7 @@ class ProductosController extends Controller
                     if (in_array($rutaNuevaImagen, $imagenesExistentes)) {
                         continue;
                     }
+                    
 
                     $rutaImagenCompleta = public_path($rutaNuevaImagen);
                     if (file_exists($rutaImagenCompleta)) {
