@@ -17,7 +17,7 @@
 
 .modal-dialog {
 	width: 100%;
-	max-width:40%!important
+	max-width:60%!important
   }
   
 #tablemodal{
@@ -80,6 +80,26 @@
 #tablemodalm{
 	
 }
+
+.scrolls {
+	overflow-x: scroll;
+	overflow-y: hidden;
+	height: 200px;
+	white-space:nowrap
+}
+
+.delete_ruta{
+	background-image:url(/img/delete.png);
+	top:0px;
+	left:110px;
+	background-size: 100%;
+	position:absolute;
+	display:block;
+	width:30px;
+	height:30px;
+	cursor:pointer
+}
+
 </style>
 
 <!--<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"/>-->
@@ -146,6 +166,7 @@ $(document).ready(function() {
     $("#marca").select2({ width: '100%' });
 
     $("#tipo_producto").select2({ width: '100%' });
+
 });
 </script>
 
@@ -169,6 +190,59 @@ $('#openOverlayOpc').on('shown.bs.modal', function() {
 
 $(document).ready(function() {
 	 
+    $(".upload").on('click', function() {
+        var formData = new FormData();
+        var files = $('#image')[0].files[0];
+        formData.append('file',files);
+        $.ajax({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            url: "/productos/upload_producto",
+            type: 'post',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function(response) {
+                
+                var ind_img = $("#ind_img").val();
+                
+                if (response != 0) {
+                    $("#img_ruta_"+ind_img).attr("src", "/img/productos/tmp/"+response).show();
+                    $(".delete_ruta").show();
+                    $("#img_foto_"+ind_img).val(response);
+
+                    ind_img++;
+
+                    var newRow = "";
+                    newRow += '<div class="img_ruta">';
+                    newRow += '<img src="" id="img_ruta_'+ind_img+'" width="130px" height="165px" alt="" style="text-align:center;margin-top:8px;display:none;margin-left:10px" />';
+                    newRow += '<span class="delete_ruta" style="display:none" onclick="DeleteImagen(this)"></span>';
+                    newRow += '<input type="hidden" id="img_foto_'+ind_img+'" name="img_foto[]" value="" />';
+                    newRow += '</div>';
+
+                    $("#divImagenes").append(newRow);
+                    $("#ind_img").val(ind_img);
+
+                } else {
+                    alert('Formato de imagen incorrecto.');
+                }
+                
+            }
+        });
+        return false;
+    });
+
+    $(".delete").on('click', function() {
+        $("#img_ruta0").attr("src", "/img/sin_fondo.png");
+        $("#img_foto0").val("");
+    });
+
+    if($("#id").val()>0){
+        cargarImagenes();
+    }
+    
+
 });
 
 function AddFila(){
@@ -254,6 +328,28 @@ function fn_save_producto(){
     });
 }
 
+function DeleteImagen(obj) {
+
+var obj = $(obj).parent().remove();
+
+}
+
+function cargarImagenes() {
+    $("#divImagenes .img_ruta").each(function (index) {
+        const img = $(this).find("img");
+        const botonEliminar = $(this).find(".delete_ruta");
+
+        if (img.attr("src")) {
+            img.show();
+            botonEliminar.show();
+        } else {
+            console.warn(`La imagen ${index + 1} no tiene un src válido.`);
+            img.hide();
+            botonEliminar.hide();
+        }
+    });
+}
+
 </script>
 
 
@@ -284,159 +380,207 @@ function fn_save_producto(){
                                 
                             <input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
                             <input type="hidden" name="id" id="id" value="<?php echo $id?>">
-                            
-                            
                             <div class="row" style="padding-left:10px">
-                                
-                                <div class="col-lg-4">
-                                    <div class="form-group">
-                                        <label class="control-label form-control-sm">Tipo Origen Producto</label>
-                                        <select name="tipo_origen_producto" id="tipo_origen_producto" class="form-control form-control-sm" onchange="">
-                                            <option value="">--Seleccionar--</option>
-                                            <?php
-                                            foreach ($tipo_origen_producto as $row){?>
-                                                <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$producto->id_tipo_origen_producto)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
-                                             <?php
-                                            }
-                                            ?>
-                                        </select>
+                            <div class="col-lg-8">
+                                <div class="row" style="padding-left:10px">
+                                    
+                                    <div class="col-lg-4">
+                                        <div class="form-group">
+                                            <label class="control-label form-control-sm">Tipo Origen Producto</label>
+                                            <select name="tipo_origen_producto" id="tipo_origen_producto" class="form-control form-control-sm" onchange="">
+                                                <option value="">--Seleccionar--</option>
+                                                <?php
+                                                foreach ($tipo_origen_producto as $row){?>
+                                                    <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$producto->id_tipo_origen_producto)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                                <?php
+                                                }
+                                                ?>
+                                            </select>
+                                        </div>
                                     </div>
-                                </div>
 
-                                <div class="col-lg-4">
-                                    <div class="form-group">
-                                        <label class="control-label form-control-sm">N&uacute;mero Serie</label>
-                                        <input id="numero_serie" name="numero_serie" on class="form-control form-control-sm"  value="<?php echo $producto->numero_serie?>" type="text">
+                                    <div class="col-lg-4">
+                                        <div class="form-group">
+                                            <label class="control-label form-control-sm">N&uacute;mero Serie</label>
+                                            <input id="numero_serie" name="numero_serie" on class="form-control form-control-sm"  value="<?php echo $producto->numero_serie?>" type="text">
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-lg-8">
-                                    <div class="form-group">
-                                        <label class="control-label form-control-sm">Denominaci&oacute;n</label>
-                                        <input id="denominacion" name="denominacion" on class="form-control form-control-sm"  value="<?php echo $producto->denominacion?>" type="text">
+                                    <div class="col-lg-8">
+                                        <div class="form-group">
+                                            <label class="control-label form-control-sm">Denominaci&oacute;n</label>
+                                            <input id="denominacion" name="denominacion" on class="form-control form-control-sm"  value="<?php echo $producto->denominacion?>" type="text">
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-lg-4">
-                                    <div class="form-group">
-                                        <label class="control-label form-control-sm">C&oacute;digo</label>
-                                        <input id="codigo" name="codigo" on class="form-control form-control-sm"  value="<?php echo $producto->codigo?>" type="text">
+                                    <div class="col-lg-4">
+                                        <div class="form-group">
+                                            <label class="control-label form-control-sm">C&oacute;digo</label>
+                                            <input id="codigo" name="codigo" on class="form-control form-control-sm"  value="<?php echo $producto->codigo?>" type="text">
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-lg-4">
-                                    <div class="form-group">
-                                        <label class="control-label form-control-sm">Unidad Producto</label>
-                                        <select name="unidad_producto" id="unidad_producto" class="form-control form-control-sm" onchange="">
-                                            <option value="">--Seleccionar--</option>
-                                            <?php
-                                            foreach ($unidad_producto as $row){?>
-                                                <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$producto->id_unidad_producto)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
-                                             <?php 
-                                            }
-                                            ?>
-                                        </select>
+                                    <div class="col-lg-4">
+                                        <div class="form-group">
+                                            <label class="control-label form-control-sm">Unidad Producto</label>
+                                            <select name="unidad_producto" id="unidad_producto" class="form-control form-control-sm" onchange="">
+                                                <option value="">--Seleccionar--</option>
+                                                <?php
+                                                foreach ($unidad_producto as $row){?>
+                                                    <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$producto->id_unidad_producto)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                                <?php 
+                                                }
+                                                ?>
+                                            </select>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-lg-4">
-                                    <div class="form-group">
-                                        <label class="control-label form-control-sm">Contenido</label>
-                                        <input id="contenido" name="contenido" on class="form-control form-control-sm"  value="<?php echo $producto->contenido?>" type="text">
+                                    <div class="col-lg-4">
+                                        <div class="form-group">
+                                            <label class="control-label form-control-sm">Contenido</label>
+                                            <input id="contenido" name="contenido" on class="form-control form-control-sm"  value="<?php echo $producto->contenido?>" type="text">
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-lg-4">
-                                    <div class="form-group">
-                                        <label class="control-label form-control-sm">Unidad Medida</label>
-                                        <select name="unidad_medida" id="unidad_medida" class="form-control form-control-sm" onchange="">
-                                            <option value="">--Seleccionar--</option>
-                                            <?php
-                                            foreach ($unidad_medida as $row){?>
-                                                <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$producto->id_unidad_medida)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
-                                             <?php 
-                                            }
-                                            ?>
-                                        </select>
+                                    <div class="col-lg-4">
+                                        <div class="form-group">
+                                            <label class="control-label form-control-sm">Unidad Medida</label>
+                                            <select name="unidad_medida" id="unidad_medida" class="form-control form-control-sm" onchange="">
+                                                <option value="">--Seleccionar--</option>
+                                                <?php
+                                                foreach ($unidad_medida as $row){?>
+                                                    <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$producto->id_unidad_medida)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                                <?php 
+                                                }
+                                                ?>
+                                            </select>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-lg-4">
-                                    <div class="form-group">
-                                        <label class="control-label form-control-sm">Marca</label>
-                                        <select name="marca" id="marca" class="form-control form-control-sm" onchange="">
-                                            <option value="">--Seleccionar--</option>
-                                            <?php
-                                            foreach ($marca as $row){?>
-                                                <option value="<?php echo $row->id ?>" <?php if($row->id==$producto->id_marca)echo "selected='selected'"?>><?php echo $row->denominiacion ?></option>
-                                             <?php 
-                                            }
-                                            ?>
-                                        </select>
+                                    <div class="col-lg-4">
+                                        <div class="form-group">
+                                            <label class="control-label form-control-sm">Marca</label>
+                                            <select name="marca" id="marca" class="form-control form-control-sm" onchange="">
+                                                <option value="">--Seleccionar--</option>
+                                                <?php
+                                                foreach ($marca as $row){?>
+                                                    <option value="<?php echo $row->id ?>" <?php if($row->id==$producto->id_marca)echo "selected='selected'"?>><?php echo $row->denominiacion ?></option>
+                                                <?php 
+                                                }
+                                                ?>
+                                            </select>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-lg-4">
-                                    <div class="form-group">
-                                        <label class="control-label form-control-sm">Tipo Producto</label>
-                                        <select name="tipo_producto" id="tipo_producto" class="form-control form-control-sm" onchange="">
-                                            <option value="">--Seleccionar--</option>
-                                            <?php
-                                            foreach ($tipo_producto as $row){?>
-                                                <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$producto->id_tipo_producto)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
-                                             <?php 
-                                            }
-                                            ?>
-                                        </select>
+                                    <div class="col-lg-4">
+                                        <div class="form-group">
+                                            <label class="control-label form-control-sm">Tipo Producto</label>
+                                            <select name="tipo_producto" id="tipo_producto" class="form-control form-control-sm" onchange="">
+                                                <option value="">--Seleccionar--</option>
+                                                <?php
+                                                foreach ($tipo_producto as $row){?>
+                                                    <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$producto->id_tipo_producto)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                                <?php 
+                                                }
+                                                ?>
+                                            </select>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-lg-4">
-                                    <div class="form-group">
-                                        <label class="control-label form-control-sm">Estado Bien</label>
-                                        <select name="estado_bien" id="estado_bien" class="form-control form-control-sm" onchange="">
-                                            <option value="">--Seleccionar--</option>
-                                            <?php
-                                            foreach ($estado_bien as $row){?>
-                                                <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$producto->id_estado_bien)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
-                                             <?php 
-                                            }
-                                            ?>
-                                        </select>
+                                    <div class="col-lg-4">
+                                        <div class="form-group">
+                                            <label class="control-label form-control-sm">Estado Bien</label>
+                                            <select name="estado_bien" id="estado_bien" class="form-control form-control-sm" onchange="">
+                                                <option value="">--Seleccionar--</option>
+                                                <?php
+                                                foreach ($estado_bien as $row){?>
+                                                    <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$producto->id_estado_bien)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                                <?php 
+                                                }
+                                                ?>
+                                            </select>
+                                        </div>
                                     </div>
-                                </div>
-                                <!--<div class="col-lg-4">
-                                    <div class="form-group">
-                                        <label class="control-label form-control-sm">Stock Actual</label>
-                                        <input id="stock_actual" name="stock_actual" on class="form-control form-control-sm"  value="<?php echo $producto->stock_actual?>" type="text">
+                                    <!--<div class="col-lg-4">
+                                        <div class="form-group">
+                                            <label class="control-label form-control-sm">Stock Actual</label>
+                                            <input id="stock_actual" name="stock_actual" on class="form-control form-control-sm"  value="<?php echo $producto->stock_actual?>" type="text">
+                                        </div>
+                                    </div>-->
+                                    <div class="col-lg-4">
+                                        <div class="form-group">
+                                            <label class="control-label form-control-sm">Costo Unitario</label>
+                                            <input id="costo_unitario" name="costo_unitario" on class="form-control form-control-sm"  value="<?php echo $producto->costo_unitario?>" type="text">
+                                        </div>
                                     </div>
-                                </div>-->
-                                <div class="col-lg-4">
-                                    <div class="form-group">
-                                        <label class="control-label form-control-sm">Costo Unitario</label>
-                                        <input id="costo_unitario" name="costo_unitario" on class="form-control form-control-sm"  value="<?php echo $producto->costo_unitario?>" type="text">
+                                    <div class="col-lg-4">
+                                        <div class="form-group">
+                                            <label class="control-label form-control-sm">Moneda</label>
+                                            <select name="moneda" id="moneda" class="form-control form-control-sm" onchange="">
+                                                <option value="">--Seleccionar--</option>
+                                                <?php
+                                                foreach ($moneda as $row){?>
+                                                    <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$producto->id_moneda)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                                <?php 
+                                                }
+                                                ?>
+                                            </select>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-lg-4">
-                                    <div class="form-group">
-                                        <label class="control-label form-control-sm">Moneda</label>
-                                        <select name="moneda" id="moneda" class="form-control form-control-sm" onchange="">
-                                            <option value="">--Seleccionar--</option>
-                                            <?php
-                                            foreach ($moneda as $row){?>
-                                                <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$producto->id_moneda)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
-                                             <?php 
-                                            }
-                                            ?>
-                                        </select>
+                                    <div class="col-lg-4">
+                                        <div class="form-group">
+                                            <label class="control-label form-control-sm">Fecha Vencimiento</label>
+                                            <input id="fecha_vencimiento" name="fecha_vencimiento" on class="form-control form-control-sm"  value="<?php echo $producto->fecha_vencimiento?>" type="text">
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-lg-4">
-                                    <div class="form-group">
-                                        <label class="control-label form-control-sm">Fecha Vencimiento</label>
-                                        <input id="fecha_vencimiento" name="fecha_vencimiento" on class="form-control form-control-sm"  value="<?php echo $producto->fecha_vencimiento?>" type="text">
-                                    </div>
-                                </div>
-                                <div class="col-lg-4">
-                                    <div class="form-group">
-                                        <label class="control-label form-control-sm">Stock M&iacute;nimo</label>
-                                        <input id="stock_minimo" name="stock_minimo" on class="form-control form-control-sm"  value="<?php echo $producto->stock_minimo?>" type="text">
+                                    <div class="col-lg-4">
+                                        <div class="form-group">
+                                            <label class="control-label form-control-sm">Stock M&iacute;nimo</label>
+                                            <input id="stock_minimo" name="stock_minimo" on class="form-control form-control-sm"  value="<?php echo $producto->stock_minimo?>" type="text">
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                            <div class="col-lg-4">
+                                <div class="card" style="min-height:140px">
+                                    <div class="card-header">
+                                        <strong>
+                                            Imagenes Referenciales
+                                        </strong>
+                                    </div>
+
+                                    <div class="card-body">
+
+                                        <div class="wrapper">
+                                            <div id="divImagenes" class="scrolls">
+                                                @if(!empty($imagenes) && count($imagenes) > 0)
+                                                    @foreach($imagenes as $index => $imagen)
+                                                        <div class="img_ruta">
+
+                                                            <img src="{{ asset($imagen) }}" id="img_ruta_{{ $index + 1 }}" width="130px" height="165px" alt="" style="text-align:center;margin-top:8px;display:none;margin-left:10px" />
+                                                            <span class="delete_ruta" style="display:none" onclick="DeleteImagen(this)"></span>
+
+                                                            <input type="hidden" id="img_foto_{{ $index + 1 }}" name="img_foto[]" value="{{ $imagen }}" />
+
+                                                        </div>
+                                                    @endforeach
+                                                @else
+                                                    <p>No hay imágenes disponibles para este producto.</p>
+                                                @endif
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+
+                                            <div class="col-lg-12">
+                                                <div class="form-group" style="text-align:center">
+                                                    <span class="btn btn-sm btn-warning btn-file">
+                                                        Examinar <input id="image" name="image" type="file" />
+                                                    </span>
+
+                                                    <input type="hidden" id="ind_img" name="ind_img" value="1" />
+
+                                                    <input type="button" class="btn btn-sm btn-primary upload" value="Subir" style="margin-left:10px">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div style="margin-top:15px" class="form-group">
                             <div class="col-sm-12 controls">

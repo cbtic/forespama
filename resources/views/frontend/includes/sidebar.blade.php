@@ -140,6 +140,12 @@
             <x-utils.link href="#" icon="c-sidebar-nav-icon cil-list" class="c-sidebar-nav-dropdown-toggle" :text="__('Operaciones')" />
             <ul class="c-sidebar-nav-dropdown-items">
 				
+                @can('Requerimientos')
+                <li class="c-sidebar-nav-item">
+                    <x-utils.link :href="route('frontend.requerimiento.create')" class="c-sidebar-nav-link" :text="__('Requerimientos')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+                </li>
+				@endif
+
 				@can('Entradas')
                 <li class="c-sidebar-nav-item">
                     <x-utils.link :href="route('frontend.entrada_productos.create')" class="c-sidebar-nav-link" :text="__('Entradas y Salidas')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
