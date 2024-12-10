@@ -660,11 +660,10 @@ function datatablenew_consulta_producto(){
 				
 				{
 					"mRender": function (data, type, row) {
+						
 						var html = '<td class="text-left" style="vertical-align:middle">\
-										<a href="/img/producto/'+row.foto+'" target="_blank" class="btn btn-sm btn-warning">Ver Imagen</a>\
-									</td>';
-						//html += '<button style="font-size:11px;" type="button" class="btn btn-sm btn-warning" data-toggle="modal" onclick="modalVerProducto('+row.id+')"><i class="fa fa-edit" style="font-size:9px!important"></i>Imagen Producto</button>';
-						//html += '</div>';
+									<button style="font-size:11px;" type="button" class="btn btn-sm btn-warning" data-toggle="modal" onclick="modalVerProducto('+row.id+')"><i class="fa fa-edit" style="font-size:9px!important"></i>Imagen Producto</button>';
+						html += '</div>';
 						return html;
 					},
 					"bSortable": true,

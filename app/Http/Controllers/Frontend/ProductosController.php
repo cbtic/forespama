@@ -325,10 +325,10 @@ class ProductosController extends Controller
 
     public function modal_ver_productos($id){
 		 
-		$DerechoRevision_model = new DerechoRevision;
-        $propietario = $DerechoRevision_model->getPropietarioByIdSolicitud($id);
+		$producto_model = new Producto;
+        $imagen_producto = $producto_model->getImagenProducto($id);
 		
-        return view('frontend.derecho_revision.modal_ver_productos',compact('propietario'));
+        return view('frontend.productos.modal_ver_productos',compact('imagen_producto'));
 		
     }
    

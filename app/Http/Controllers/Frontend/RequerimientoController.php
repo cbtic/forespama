@@ -265,6 +265,7 @@ class RequerimientoController extends Controller
         $estado_bien = $request->input('estado_bien');
         $unidad = $request->input('unidad');
         $cantidad_ingreso = $request->input('cantidad_ingreso');
+        $cantidad_atendida = $request->input('cantidad_atendida');
         
         $id_requerimiento_detalle =$request->id_requerimiento_detalle;
         
@@ -290,10 +291,13 @@ class RequerimientoController extends Controller
             
             $orden_compra_detalle->id_orden_compra = $orden_compra->id;
             $orden_compra_detalle->id_producto = $descripcion[$index];
-            $orden_compra_detalle->cantidad_requerida = $cantidad_ingreso[$index];
+            $orden_compra_detalle->cantidad_requerida = $cantidad_atendida[$index];
             $orden_compra_detalle->id_estado_producto = $estado_bien[$index];
             $orden_compra_detalle->id_unidad_medida = $unidad[$index];
-            $orden_compra_detalle->id_marca = $marca[$index];
+            //$orden_compra_detalle->id_marca = $marca[$index] ?? '';
+            if($marca[$index]!=null && $marca[$index] !=0){
+				$orden_compra_detalle->id_marca = (int)$marca[$index];
+			}
             $orden_compra_detalle->estado = 1;
             $orden_compra_detalle->cerrado = 1;
             $orden_compra_detalle->id_usuario_inserta = $id_user;
@@ -308,6 +312,39 @@ class RequerimientoController extends Controller
         $requerimiento->estado_atencion = 3;
         $requerimiento->save();
         return response()->json(['id' => $orden_compra->id]);
+    }
+
+    public function modal_atender_requerimiento($id){
+		
+        $tablaMaestra_model = new TablaMaestra;
+        $producto_model = new Producto;
+        $marca_model = new Marca;
+        $almacen_model = new Almacene;
+        $user_model = new User;
+		
+		if($id>0){
+
+            $requerimiento = Requerimiento::find($id);
+            if($requerimiento->estado_atencion==1){
+                $requerimiento->estado_atencion = 2;
+            }
+            
+		}else{
+			$requerimiento = new Requerimiento;
+        }
+
+        $tipo_documento = $tablaMaestra_model->getMaestroByTipo(59);
+        $cerrado_requerimiento = $tablaMaestra_model->getMaestroByTipo(52);
+        $estado_atencion = $tablaMaestra_model->getMaestroByTipo(60);
+        $producto = $producto_model->getProductoAll();
+        $marca = $marca_model->getMarcaAll();
+        $unidad = $tablaMaestra_model->getMaestroByTipo(43);
+        $almacen = $almacen_model->getAlmacenAll();
+        $estado_bien = $tablaMaestra_model->getMaestroByTipo(4);
+        $responsable_atencion = $user_model->getUserAll();
+        
+        return view('frontend.requerimiento.modal_requerimiento_atenderRequerimiento',compact('id','requerimiento','tipo_documento','producto','marca','unidad','almacen','cerrado_requerimiento','estado_bien','estado_atencion','responsable_atencion'));
+
     }
 
 }
