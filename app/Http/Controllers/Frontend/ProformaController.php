@@ -117,90 +117,50 @@ class ProformaController extends Controller
 
     }
 
-    public function send_orden_compra(Request $request){
+    public function send(Request $request){
 
         $id_user = Auth::user()->id;
+   
+        $proforma_model = new Proforma;
+		
+        $datos[] = $request->accion;
+        $datos[] = $id_user;        		
+		$datos[] = $request->id;
 
-        if($request->id == 0){
-            $proforma = new Proforma;
-        }else{
-            $proforma = Proforma::find($request->id);
-        }
-
-        $item = $request->input('item');
-        $descripcion = $request->input('descripcion');
-        $cod_interno = $request->input('cod_interno');
-        $marca = $request->input('marca');
-        $fecha_fabricacion = $request->input('fecha_fabricacion');
-        $fecha_vencimiento = $request->input('fecha_vencimiento');
-        $estado_bien = $request->input('estado_bien');
-        $unidad = $request->input('unidad');
-        $cantidad_ingreso = $request->input('cantidad_ingreso');
-        $precio_unitario = $request->input('precio_unitario');
-        $descuento = $request->input('descuento');
-        $sub_total = $request->input('sub_total');
-        $igv = $request->input('igv');
-        $total = $request->input('total');
-        $id_orden_compra_detalle =$request->id_orden_compra_detalle;
+        $datos[] = $request->serie;
+        $datos[] = $request->numero ;
+        $datos[] = $request->id_empresa;
+        $datos[] = $request->id_persona;
+        $datos[] = $request->fecha;
+        $datos[] = $request->id_moneda;
+        $datos[] = $request->moneda;
+        $datos[] = ($request->sub_total=='')?0:$request->sub_total;
+        $datos[] = ($request->igv=='')?0:$request->igv;
+        $datos[] = ($request->total=='')?0:$request->total;
+        $datos[] = $request->estado;
         
-        $proforma->id_empresa_compra = $request->empresa_compra;
-        $proforma->id_empresa_vende = $request->empresa_vende;
-        $proforma->fecha_orden_compra = $request->fecha_orden_compra;
-        $proforma->numero_orden_compra = $request->numero_orden_compra;
-        $proforma->id_tipo_documento = $request->tipo_documento;
-        $proforma->igv_compra = $request->igv_compra;
-        $proforma->id_unidad_origen = $request->unidad_origen;
-        $proforma->id_almacen_destino = $request->almacen;
-        $proforma->id_almacen_salida = $request->almacen_salida;
-        $proforma->cerrado = 1;
-        $proforma->id_usuario_inserta = $id_user;
-        $proforma->estado = 1;
-        $proforma->save();
+        $detalle = $request->detalle;
 
-        $array_orden_compra_detalle = array();
-
-        foreach($item as $index => $value) {
-            
-            if($id_orden_compra_detalle[$index] == 0){
-                $proforma_detalle = new Proforma;
-            }else{
-                $proforma_detalle = Proforma::find($id_orden_compra_detalle[$index]);
-            }
-            
-            $proforma_detalle->id_orden_compra = $proforma->id;
-            $proforma_detalle->id_producto = $descripcion[$index];
-            $proforma_detalle->cantidad_requerida = $cantidad_ingreso[$index];
-            $proforma_detalle->precio = $precio_unitario[$index];
-            $proforma_detalle->id_descuento = $descuento[$index];
-            $proforma_detalle->sub_total = $sub_total[$index];
-            $proforma_detalle->igv = $igv[$index];
-            $proforma_detalle->total = $total[$index];
-            $proforma_detalle->fecha_fabricacion = $fecha_fabricacion[$index];
-            $proforma_detalle->fecha_vencimiento = $fecha_vencimiento[$index];
-            $proforma_detalle->id_estado_producto = $estado_bien[$index];
-            $proforma_detalle->id_unidad_medida = $unidad[$index];
-            $proforma_detalle->id_marca = $marca[$index];
-            $proforma_detalle->estado = 1;
-            $proforma_detalle->cerrado = 1;
-            $proforma_detalle->id_usuario_inserta = $id_user;
-
-            $proforma_detalle->save();
-
-            $array_orden_compra_detalle[] = $proforma_detalle->id;
-
-            $OrdenCompraAll = ProformaDetalle::where("id_orden_compra",$proforma->id)->where("estado","1")->get();
-            
-            foreach($OrdenCompraAll as $key=>$row){
-                
-                if (!in_array($row->id, $array_orden_compra_detalle)){
-                    $proforma_detalle = ProformaDetalle::find($row->id);
-                    $proforma_detalle->estado = 0;
-                    $proforma_detalle->save();
-                }
-            }
-        }
-
-        return response()->json(['id' => $proforma->id]);    
+        foreach ($detalle as $key => $value) {
+ 
+            $ddatos[] = $request->id;
+            $ddatos[] = $request->id_proforma;
+            $ddatos[] = $request->id_producto;
+            $ddatos[] = ($request->cantidad=='')?0:$request->cantidad;;
+            $ddatos[] = ($request->precio_unitario=='')?0:$request->precio_unitario;
+            $ddatos[] = $request->id_descuento;
+            $ddatos[] = ($request->descuento=='')?0:$request->descuento;
+            $ddatos[] = ($request->precio_unitario=='')?0:$request->precio_unitario;
+            $ddatos[] = ($request->valor_venta_bruto=='')?0:$request->valor_venta_bruto;
+            $ddatos[] = ($request->sub_total=='')?0:$request->sub_total;
+            $ddatos[] = ($request->igv=='')?0:$request->igv;
+            $ddatos[] = ($request->total=='')?0:$request->total;
+            $ddatos[] = $request->estado;
+           
+        } 
+        
+        $id_proforma = $proforma_model->registrar_proforma ($datos, $ddatos);
+       
         
     }
 

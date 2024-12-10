@@ -364,19 +364,31 @@
 
 		PrecioVenta_ = $('#txtPrecioVenta').val();
 		Descuento_ = $('#txtDescuento').val();
+		Cantidad_ = $('#txtCantidad').val();
 
 		ValorUnitario_ = PrecioVenta_ /(1+tasa_igv_);
-		ValorUnitario_ = Number(ValorUnitario_ .toFixed(2));
+		//ValorUnitario_ = Number(ValorUnitario_ .toFixed(2));		
 		ValorVB_ = ValorUnitario_ * Cantidad_;
 		ValorVenta_ = ValorVB_ - Descuento_;
 		Igv_ = ValorVenta_ * tasa_igv_;
-		Total_ = ValorVenta_ + Igv_
+		//Igv_ = Number(Igv_.toFixed(2));
+		Total_ = ValorVenta_ + Igv_;
+		//Total_ =Number(Total_.toFixed(2));
 
-		
+
+		ValorUnitario_ = Number(ValorUnitario_ .toFixed(2));
 		$('#txtValorUnitario').val(ValorUnitario_);
+		
+		ValorVB_ = Number(ValorVB_ .toFixed(2));
 		$('#txtValorVB').val(ValorVB_);
+		
+		ValorVenta_ = Number(ValorVenta_ .toFixed(2));
 		$('#txtValorVenta').val(ValorVenta_);
+
+		Igv_ = Number(Igv_ .toFixed(2));
 		$('#txtIgv').val(Igv_);
+		
+		Total_ = Number(Total_ .toFixed(2));
 		$('#txtTotal').val(Total_);
 
 	}
@@ -482,7 +494,7 @@
 												<div class="col-lg-6">
 													<div class="form-group">
 														<label class="form-control-sm">Unidad Medida</label>
-														<input type="text" name="txtUM" id="txtUM" value="" placeholder="" class="form-control form-control-sm">
+														<input type="text" name="txtUM" id="txtUM" value="" placeholder="" class="form-control form-control-sm" readonly="readonly">
 													</div>
 												</div>
 
@@ -498,7 +510,7 @@
 												<div class="col-lg-6">
 													<div class="form-group">
 														<label class="form-control-sm">Valor Unitario</label>
-														<input type="text" name="txtValorUnitario" id="txtValorUnitario" value="" placeholder="" class="form-control form-control-sm">
+														<input type="text" name="txtValorUnitario" id="txtValorUnitario" value="" placeholder="" class="form-control form-control-sm" readonly="readonly">
 													</div>
 												</div>
 											</div>
@@ -507,7 +519,7 @@
 												<div class="col-lg-4">
 													<div class="form-group">
 														<label class="form-control-sm">Valor Venta Bruto</label>
-														<input type="text" name="txtValorVB" id="txtValorVB" value="" placeholder="" class="form-control form-control-sm">
+														<input type="text" name="txtValorVB" id="txtValorVB" value="" placeholder="" class="form-control form-control-sm" readonly="readonly">
 													</div>
 												</div>
 												<div class="col-lg-4">
@@ -519,7 +531,7 @@
 												<div class="col-lg-4">
 													<div class="form-group">
 														<label class="form-control-sm">Valor Venta</label>
-														<input type="text" name="txtValorVenta" id="txtValorVenta" value="" placeholder="" class="form-control form-control-sm">
+														<input type="text" name="txtValorVenta" id="txtValorVenta" value="" placeholder="" class="form-control form-control-sm" readonly="readonly">
 													</div>
 												</div>
 											</div>
@@ -528,13 +540,13 @@
 												<div class="col-lg-6">
 													<div class="form-group">
 														<label class="form-control-sm">IGV</label>
-														<input type="text" name="txtIgv" id="txtIgv" value="20" placeholder="" class="form-control form-control-sm">
+														<input type="text" name="txtIgv" id="txtIgv" value="20" placeholder="" class="form-control form-control-sm" readonly="readonly">
 													</div>
 												</div>
 												<div class="col-lg-6">
 													<div class="form-group">
 														<label class="form-control-sm">Total</label>
-														<input type="text" name="txtTotal" id="txtTotal" value="20" placeholder="" class="form-control form-control-sm">
+														<input type="text" name="txtTotal" id="txtTotal" value="20" placeholder="" class="form-control form-control-sm" readonly="readonly">
 													</div>
 												</div>
 											</div>
