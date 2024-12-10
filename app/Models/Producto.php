@@ -54,9 +54,10 @@ class Producto extends Model
 
     function getProductoAll(){
 
-        $cad = "SELECT id, numero_serie, codigo, trim(denominacion) denominacion, id_unidad_medida, stock_actual, id_moneda, id_tipo_producto, fecha_vencimiento, id_estado_bien, stock_minimo, observacion, estado, created_at, updated_at, costo_unitario, contenido, id_unidad_producto, id_marca, numero_corrrelativo, id_tipo_origen_producto
+        $cad = "select id, numero_serie, codigo, trim(denominacion) denominacion, id_unidad_medida, stock_actual, id_moneda, id_tipo_producto, fecha_vencimiento, id_estado_bien, stock_minimo, observacion, estado, created_at, updated_at, costo_unitario, contenido, id_unidad_producto, id_marca, numero_corrrelativo, id_tipo_origen_producto
         from productos p 
-        order by id ";
+        order by p.id ";
+
         //limit 2620";
 
 		$data = DB::select($cad);
