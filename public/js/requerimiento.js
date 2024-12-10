@@ -248,7 +248,11 @@ function datatablenew(){
 							html += '<button style="font-size:12px" type="button" class="btn btn-sm btn-success" data-toggle="modal" onclick="modalRequerimiento('+row.id+')" disabled><i class="fa fa-edit"></i> Editar</button>'; 	
 						}
 
-						html += '<button style="font-size:12px;margin-left:10px" type="button" class="btn btn-sm btn-info" data-toggle="modal" onclick="modalAtenderRequerimiento('+row.id+')" ><i class="fa fa-edit"></i> Atender</button>'; 
+						if(usuario == row.id_responsable){	
+							html += '<button style="font-size:12px;margin-left:10px" type="button" class="btn btn-sm btn-info" data-toggle="modal" onclick="modalAtenderRequerimiento('+row.id+')" ><i class="fa fa-edit"></i> Atender</button>'; 
+						}else{
+							html += '<button style="font-size:12px;margin-left:10px" type="button" class="btn btn-sm btn-info" data-toggle="modal" onclick="modalAtenderRequerimiento('+row.id+')" disabled><i class="fa fa-edit"></i> Atender</button>'; 	
+						}
 
 						if(usuario == row.id_usuario){
 							html += '<a href="javascript:void(0)" onclick=eliminarRequerimiento('+row.id+','+row.estado+') class="btn btn-sm '+clase+'" style="font-size:12px;margin-left:10px">'+estado+'</a>'; 
