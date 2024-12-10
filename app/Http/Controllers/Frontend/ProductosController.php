@@ -331,5 +331,13 @@ class ProductosController extends Controller
         return view('frontend.productos.modal_ver_productos',compact('imagen_producto'));
 		
     }
-   
+    
+    public function obtener_producto_tipo_denominacion($tipo, $denominacion){
+        
+		$producto_model = new Producto;
+		$producto = $producto_model->getProductoTipoDen($tipo, $denominacion);
+		//dd($producto);exit();
+		return response()->json($producto);
+	}
+
 }

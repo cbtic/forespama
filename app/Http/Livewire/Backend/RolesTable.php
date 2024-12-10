@@ -31,6 +31,8 @@ class RolesTable extends DataTableComponent
                 ->sortable(),
             Column::make('Name')
                 ->sortable(),
+			Column::make('id')
+                ->sortable(),
             //Column::make('Permissions'),
             //Column::make(__('Number of Users'), 'users_count')
             //    ->sortable(),
@@ -48,7 +50,13 @@ class RolesTable extends DataTableComponent
 
         $this->setPrimaryKey('id')
         ->setTableRowUrl(function($row) {
-            // return route('admin.auth.role.edit', $row);
+			//print_r($row->id);
+			//echo $row->id."ccc";
+             return route('admin.auth.role.edit', $row->id);
+			//return route('admin.auth.role.edit', User::where('email', $row->email)->pluck("id")[0]);
+        })
+		->setTableRowUrlTarget(function($row) {
+            return '_self';
         });
 
     }

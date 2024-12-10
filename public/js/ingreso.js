@@ -65,6 +65,10 @@ $(document).ready(function () {
 
 		//alert($('#chkExonerado').val());	
 	  });
+	
+	$('#btNuevoProforma').click(function () {
+		$modalProforma(0);
+	});
 
 	$('#btnExonerarS').click(function () {
 		//modalPersona(0);
@@ -80,6 +84,44 @@ $(document).ready(function () {
 			obtenerBeneficiario();
 		}
 	});
+
+	$('#txtProducto').autocomplete({
+		appendTo: "#producto_list",
+		source: function(request, response) {
+			$.ajax({
+			url: 'obtener_producto_tipo_denominacion/all/'+$('#txtProducto').val(),
+			dataType: "json",
+			success: function(data){
+			// alert(JSON.stringify(data));
+			  var resp = $.map(data,function(obj){
+					console.log(obj);
+					//return obj.denominacion;
+					var hash = {key: obj.id, value: obj.denominacion};
+					return hash;
+			  }); 
+			  //alert(JSON.stringify(resp));
+			  //console.log(JSON.stringify(resp));
+			  response(resp);
+			},
+			error: function() {
+				//alert("cc");
+			}
+		  });
+			},
+				select: function (event, ui) {
+					//alert(ui.item.key);
+					flag_select=true;
+					$('#txtProducto').attr("readonly",true);
+			},
+		minLength: 2,
+		delay: 100
+        }).blur(function(){
+		if(typeof flag_select == "undefined")
+		{
+			$('#txtProducto').val("");
+		}
+	});
+
 /*
 	$( '#cboTipoConcepto_b' ).select2( {
 		theme: "bootstrap-5",
@@ -733,7 +775,7 @@ function validaTipoDocumento(){
 
 	}else if(tipo_documento == "79"){ //RUC
 		$('#divNombreApellido').hide();
-		$('#divCodigoAfliado').hide();
+		//$('#divCodigoAfliado').hide();
 		$('#divFechaAfliado').hide();
 		$('#divRucP').hide();
 		$('#divCategoria').hide();
@@ -747,10 +789,10 @@ function validaTipoDocumento(){
 	
 	}else{
 		$('#divNombreApellido').show();
-		$('#divCodigoAfliado').show();
-		$('#divFechaAfliado').show();
+		//$('#divCodigoAfliado').show();
+		//$('#divFechaAfliado').show();
 		$('#divRucP').show();
-		$('#divCategoria').show();
+		//$('#divCategoria').show();
 
 		$('#divDireccionEmpresa').hide();
 		$('#divRepresentanteEmpresa').hide();
@@ -874,12 +916,12 @@ function obtenerBeneficiario(){
 				}else{
 					$('#divNombreApellido').show();
 					$('#divCodigoAfliado').show();
-					$('#divFechaAfliado').show();
+					//$('#divFechaAfliado').show();
 					$('#divRucP').show();
 					//$('#divCategoria').show();
 			
 					$('#divDireccionEmpresa').hide();
-					$('#divRepresentanteEmpresa').hide();
+					$('#divRepresentanteEmpresa').hide(); 
 					$('#divEmpresaRazonSocial').hide();
 					$('#divBeneficiarioRuc').hide();
 				}
@@ -892,7 +934,7 @@ function obtenerBeneficiario(){
 					$('#empresa_direccion').val(result.agremiado.direccion);
 					$('#empresa_representante').val(result.agremiado.representante);
 					$('#empresa_id').val(result.agremiado.id);
-					$('#id_ubicacion').val(result.agremiado.id);
+				 	$('#id_ubicacion').val(result.agremiado.id);
 
 					$('#nombre_').val(result.agremiado.razon_social);
 
@@ -2553,3 +2595,38 @@ function selPerona(cap, numero_documento){
 	obtenerBeneficiario();
 
 }
+
+function modalProforma(id){
+	
+	
+
+	$(".modal-dialog").css("width","85%");
+	$('#openOverlayOpc.modal-body').css('height', 'auto');
+
+	$.ajax({
+			url: "/proforma/modal_proforma/"+id,
+			type: "GET",
+			success: function (result) {  
+					$("#diveditpregOpc").html(result);
+					$('#openOverlayOpc').modal('show');
+			}
+	});
+}
+
+function modal_productos(id){
+	
+	
+
+	$(".modal-dialog").css("width","85%");
+	$('#openOverlayOpc.modal-body').css('height', 'auto');
+
+	$.ajax({
+			url: "/ingreso/modal_productos/"+id,
+			type: "GET",
+			success: function (result) {  
+					$("#diveditpregOpc").html(result);
+					$('#openOverlayOpc').modal('show');
+			}
+	});
+}
+

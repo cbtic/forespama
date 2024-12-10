@@ -54,7 +54,9 @@ class Producto extends Model
 
     function getProductoAll(){
 
-        $cad = "select * from productos p";
+        $cad = "SELECT id, numero_serie, codigo, trim(denominacion) denominacion, id_unidad_medida, stock_actual, id_moneda, id_tipo_producto, fecha_vencimiento, id_estado_bien, stock_minimo, observacion, estado, created_at, updated_at, costo_unitario, contenido, id_unidad_producto, id_marca, numero_corrrelativo, id_tipo_origen_producto
+        from productos p 
+        order by id limit 2620";
 
 		$data = DB::select($cad);
         return $data;
@@ -73,6 +75,47 @@ class Producto extends Model
 
         $cad = "select * from productos p
         where p.id_tipo_origen_producto = '2'";
+
+		$data = DB::select($cad);
+        return $data;
+    }
+
+    function getProductoTipo($tipo){
+
+        $tipo_v = " and p.id_tipo_origen_producto = '".$tipo."' ";
+
+        if ($tipo == '') $tipo_v =" ";
+
+        $cad = "SELECT p.id, p.codigo ||' - '|| p.denominacion producto_desc,  p.codigo, p.denominacion, p.id_unidad_medida, um.denominacion um,  p.stock_actual, 
+                    p.id_moneda, m.denominacion moneda_desc, m.abreviatura moneda_abreviatura, p.costo_unitario, p.numero_corrrelativo, p.id_tipo_origen_producto 
+                from productos p
+                    left join tabla_maestras um on um.codigo::int=p.id_unidad_medida and um.tipo = '43'
+                    left join tabla_maestras m on m.codigo::int=p.id_moneda and m.tipo = '1'
+                where p.estado = '1' 
+                ".$tipo_v."
+                order by p.denominacion"
+		;
+
+		$data = DB::select($cad);
+        return $data;
+    }
+
+    function getProductoTipoDen($tipo, $filtro){
+
+        $tipo_v = " and p.id_tipo_origen_producto = '".$tipo."' ";
+
+        if ($tipo == '') $tipo_v =" ";
+
+        $cad = "SELECT p.id, p.codigo ||' - '|| p.denominacion producto_desc,  p.codigo, p.denominacion, p.id_unidad_medida, um.denominacion um,  p.stock_actual, 
+                    p.id_moneda, m.denominacion moneda_desc, m.abreviatura moneda_abreviatura, p.costo_unitario, p.numero_corrrelativo, p.id_tipo_origen_producto 
+                from productos p
+                    left join tabla_maestras um on um.codigo::int=p.id_unidad_medida and um.tipo = '43'
+                    left join tabla_maestras m on m.codigo::int=p.id_moneda and m.tipo = '1'
+                where p.estado = '1' 
+                and p.codigo ||' '|| p.denominacion ilike '%".$filtro."%'
+                ".$tipo_v."
+                order by p.denominacion"
+		;
 
 		$data = DB::select($cad);
         return $data;

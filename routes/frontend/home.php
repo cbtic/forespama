@@ -29,6 +29,9 @@ use App\Http\Controllers\Frontend\TiendaController;
 use App\Http\Controllers\Frontend\IngresoProduccionController;
 use App\Http\Controllers\Frontend\RequerimientoController;
 
+
+
+
 use App\Models\Ubigeo;
 
 /*
@@ -216,9 +219,13 @@ Route::post('ingreso/anular_valorizacion', [IngresoController::class, 'anular_va
 Route::get('ingreso/modal_consulta_persona', [IngresoController::class, 'modal_consulta_persona'])->name('ingreso.modal_consulta_persona');
 Route::post('ingreso/valida_deuda_vencida', [IngresoController::class, 'valida_deuda_vencida'])->name('ingreso.valida_deuda_vencida');
 
+Route::get('ingreso/modal_productos/{id}', [IngresoController::class, 'modal_productos'])->name('ingreso.modal_productos');
+
 Route::get('ingreso/caja_total', [IngresoController::class, 'caja_total'])->name('ingreso.caja_total');
 Route::post('ingreso/obtener_caja_condicion_pago', [IngresoController::class, 'obtener_caja_condicion_pago'])->name('ingreso.obtener_caja_condicion_pago');
-Route::post('ingreso/obtener_caja_venta', [IngresoController::class, 'obtener_caja_venta'])->name('ingreso.obtener_caja_ventañ');
+Route::post('ingreso/obtener_caja_venta', [IngresoController::class, 'obtener_caja_venta'])->name('ingreso.obtener_caja_venta');
+
+Route::get('ingreso/obtener_producto_tipo_denominacion/{tipo}/{den}', [IngresoController::class, 'obtener_producto_tipo_denominacion'])->name('ingreso.obtener_producto_tipo_denominacion');
 
 
 Route::post('comprobante/edit', [ComprobanteController::class, 'edit'])->name('comprobante.edit');
@@ -384,6 +391,8 @@ Route::post('entrada_productos/send_entrada_producto_directo', [EntradaProductos
 Route::get('productos/obtener_producto_stock/{id_producto}/{tipo_movimiento}', [ProductosController::class, 'obtener_producto_stock'])->name('productos.obtener_producto_stock');
 Route::get('entrada_productos/modal_detalle_producto_historial/{id}/{tipo}', [EntradaProductosController::class, 'modal_detalle_producto_historial'])->name('entrada_productos.modal_detalle_producto_historial');
 
+Route::get('productos/obtener_producto_tipo_denominacion/{tipo}/{den}', [ProductosController::class, 'obtener_producto_tipo_denominacion'])->name('productos.obtener_producto_tipo_denominacion');
+
 Route::get('kardex/create_consulta', [KardexController::class, 'create_consulta'])->name('kardex.create_consulta');
 Route::post('kardex/listar_kardex_existencia_ajax', [KardexController::class, 'listar_kardex_existencia_ajax'])->name('kardex.listar_kardex_existencia_ajax');
 Route::post('kardex/listar_kardex_existencia_producto_ajax', [KardexController::class, 'listar_kardex_existencia_producto_ajax'])->name('kardex.listar_kardex_existencia_producto_ajax');
@@ -403,6 +412,7 @@ Route::get('dispensacion/movimiento_pdf_dispensacion/{id}', [DispensacionControl
 Route::get('kardex/create_consulta_productos', [KardexController::class, 'create_consulta_productos'])->name('kardex.create_consulta_productos');
 Route::post('kardex/listar_kardex_consulta_producto_ajax', [KardexController::class, 'listar_kardex_consulta_producto_ajax'])->name('kardex.listar_kardex_consulta_producto_ajax');
 Route::get('productos/obtener_stock_producto/{almacen}/{id_producto}', [ProductosController::class, 'obtener_stock_producto'])->name('productos.obtener_stock_producto');
+
 Route::get('orden_compra/modal_orden_compra_tienda/{id}', [OrdenCompraController::class, 'modal_orden_compra_tienda'])->name('orden_compra.modal_orden_compra_tienda');
 
 Route::get('marcas/create', [MarcaController::class, 'create'])->name('marcas.create');
@@ -446,3 +456,4 @@ Route::post('requerimiento/send_requerimiento_orden_compra', [RequerimientoContr
 Route::get('entrada_productos/modal_datos_guia/{id}', [EntradaProductosController::class, 'modal_datos_guia'])->name('entrada_productos.modal_datos_guia');
 Route::get('empresa/obtener_empresa_id/{id}', [EmpresaController::class, 'obtener_empresa_id'])->name('empresa.obtener_empresa_id');
 Route::get('requerimiento/modal_atender_requerimiento/{id}', [RequerimientoController::class, 'modal_atender_requerimiento'])->name('requerimiento.modal_atender_requerimiento');
+

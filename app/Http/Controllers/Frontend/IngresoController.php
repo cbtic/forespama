@@ -20,6 +20,11 @@ use App\Models\Beneficiario;
 use App\Models\Comprobante;
 use App\Models\AgremiadoMulta;
 use App\Models\TipoCambio;
+
+use App\Models\Producto;
+use App\Models\Marca;
+use App\Models\Almacene;
+
 use Barryvdh\DomPDF\Facade\Pdf;
 use Auth;
 
@@ -62,7 +67,23 @@ class IngresoController extends Controller
         //$caja_usuario = $caja_model;
         //print_r($concepto);exit();
 
-        return view('frontend.ingresos.create',compact('persona','caja','caja_usuario','tipo_documento','pronto_pago', 'concepto','mes'));
+        $tablaMaestra_model = new TablaMaestra;
+        $producto_model = new Producto;
+        $marca_model = new Marca;
+        $almacen_model = new Almacene;
+
+        $tipo_documento = $tablaMaestra_model->getMaestroByTipo(54);
+        $producto = $producto_model->getProductoAll();
+        $marca = $marca_model->getMarcaAll();
+        $estado_bien = $tablaMaestra_model->getMaestroByTipo(4);
+        $unidad = $tablaMaestra_model->getMaestroByTipo(43);
+        $igv_compra = $tablaMaestra_model->getMaestroByTipo(51);
+        $descuento = $tablaMaestra_model->getMaestroByTipo(55);
+        $almacen = $almacen_model->getAlmacenAll();
+        //$almacen = Almacene::all();
+        $unidad_origen = $tablaMaestra_model->getMaestroByTipo(50);
+
+        return view('frontend.ingresos.create',compact('persona','caja','caja_usuario','tipo_documento','pronto_pago', 'concepto','mes','producto','marca','estado_bien','unidad','descuento'));
 
     }
 
@@ -75,6 +96,7 @@ class IngresoController extends Controller
         return view('frontend.ingresos.lista_valorizacion',compact('valorizacion'));
 
     }
+
 
     public function listar_valorizacion(Request $request){
 
@@ -267,6 +289,14 @@ class IngresoController extends Controller
         $sw = true;
         $pago = $valorizaciones_model->getPago($tipo_documento,$id_persona);
         return view('frontend.ingresos.lista_pago',compact('pago'));
+
+    }
+
+    public function obtener_proforma($tipo_documento,$id_persona){       
+        $proforma_model = new Valorizacione;
+        $sw = true;
+        $proforma = $proforma_model->getPago($tipo_documento,$id_persona);
+        return view('frontend.proforma.lista_proforma',compact('proforma'));
 
     }
 
@@ -1126,6 +1156,48 @@ class IngresoController extends Controller
         $concepto = $conceptos_model->getConceptoAllDenominacion2();
 
 		return view('frontend.ingresos.modal_concepto_reporte',compact('numero_cap','concepto'));
+	}
+
+    public function modal_productos($id){
+
+		$id_user = Auth::user()->id;
+        $persona = new Persona;
+        $caja_model = new TablaMaestra;
+        $caja_ingreso_model = new CajaIngreso();
+        //$pronto_pago_model = new ProntoPago;
+        $caja = $caja_model->getCaja('91');        
+        $caja_usuario = $caja_ingreso_model->getCajaIngresoByusuario($id_user,'91');
+        $tipo_documento = $caja_model->getMaestroByTipo(9);
+       
+                
+
+        $tablaMaestra_model = new TablaMaestra;
+        $producto_model = new Producto;
+        $marca_model = new Marca;
+        $almacen_model = new Almacene;
+
+        $tipo_documento = $tablaMaestra_model->getMaestroByTipo(54);
+        $producto = $producto_model->getProductoAll();
+        $marca = $marca_model->getMarcaAll();
+        $estado_bien = $tablaMaestra_model->getMaestroByTipo(4);
+        $unidad = $tablaMaestra_model->getMaestroByTipo(43);
+        $igv_compra = $tablaMaestra_model->getMaestroByTipo(51);
+        $descuento = $tablaMaestra_model->getMaestroByTipo(55);
+        $almacen = $almacen_model->getAlmacenAll();
+        //$almacen = Almacene::all();
+        $unidad_origen = $tablaMaestra_model->getMaestroByTipo(50);
+		
+		return view('frontend.ingresos.modal_productos',compact('persona','tipo_documento', 'producto','marca','estado_bien','unidad','descuento' ));
+
+	}
+
+    public function obtener_producto_tipo_denominacion($tipo, $denominacion){
+        $tipo_ = "";
+        if ($tipo=="all")  $tipo_="";
+		$producto_model = new Producto;
+		$producto = $producto_model->getProductoTipoDen($tipo_, $denominacion);
+		//dd($producto);exit();
+		return response()->json($producto);
 	}
 
 }

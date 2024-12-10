@@ -283,6 +283,13 @@ label.form-control-sm{
 	cursor:pointer
 }
 
+
+
+
+
+
+
+
 </style>
 
 
@@ -563,14 +570,6 @@ label.form-control-sm{
                                             </div>
                                         </div>
 
-                                        <div class="row" id="divCodigoAfliado" style="display:none">
-                                            <div class="col">
-                                                <div class="form-group">
-                                                    <label class="form-control-sm">Situación</label>
-                                                    <input type="text" readonly name="situacion_" id="situacion_" value="{{old('clinom')}}" class="form-control form-control-sm" />
-                                                </div>
-                                            </div>
-                                        </div>
 
                                         <div class="row" id="divEmpresaRazonSocial" style="display:none">
                                             <div class="col">
@@ -588,6 +587,15 @@ label.form-control-sm{
                                                     <label class="form-control-sm">Direcci&oacute;n</label>
                                                     <input type="text" readonly name="empresa_direccion" id="empresa_direccion" value="{{old('clinom')}}" class="form-control form-control-sm">
 
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row" id="divCodigoAfliado" style="display:none">
+                                            <div class="col">
+                                                <div class="form-group">
+                                                    <label class="form-control-sm">Estado</label>
+                                                    <input type="text" readonly name="situacion_" id="situacion_" value="{{old('clinom')}}" class="form-control form-control-sm" />
                                                 </div>
                                             </div>
                                         </div>
@@ -629,33 +637,13 @@ label.form-control-sm{
                                             </div>
                                         </div>
 
-                                        @hasanyrole('Administrator|Caja|Caja Jefe')
-                                                                                
-                                        <div class="row">
-                                            <div class="col">
-                                                <button class="btn btn-success btn-sm" type="button" name="btnOtroConcepto" id="btnOtroConcepto" onClick="modal_otro_pago()" tabindex="0" disabled><i class="glyphicon glyphicon-search"></i> Pago Otros Conceptos </button>
-                                            </div>
-                                        </div>
-<!--
-                                        <div class="row" id="divBeneficiarioRuc" style="padding:6px;display:none">
-                                            <div class="col">
-                                                <button class="btn btn-success btn-sm" type="button" name="btnBeneficiario" id="btnBeneficiario" onClick="modal_beneficiario_()" tabindex="0" disabled><i class="glyphicon glyphicon-search"></i> Agregar Beneficiario</button>
-                                            </div>
-                                        </div>
-                                                    -->
-                                        @endhasanyrole
-
-
-                                        <!--</div>-->
-
-
 
                                     </div>
 
                                 </div>
                             </div>
 
-                            <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12" style="padding:0px">
+                            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12" style="padding:0px">
 
                                 <div class="card">
                                     <div class="card-header">
@@ -702,7 +690,7 @@ label.form-control-sm{
                                             <div class="col-lg-5 col-md-3 col-sm-12 col-xs-12" style="display:none">
                                                 <div class="form-group form-group-sm">
                                                     
-                                                    <select id="cboTipoConcepto_b" name="cboTipoConcepto_b" class="form-control form-control-sm" onchange="cargarValorizacion()"><br />
+                                                    <select id="cboTipoConcepto_b" name="cboTipoConcepto_b" class="form-control form-control-sm" onchange="cargarValorizacion()"> </select>
 
                                                     <input type="checkbox" id="cbox2" value="1" style="display:none" onchange="cargarValorizacion()"/>
                                                     <label for="cbox2" id="lblFrac" style="display:none">Incluir Fraccionamiento y Cuota Gremial Vencido</label>
@@ -713,7 +701,7 @@ label.form-control-sm{
                                                     <select class="form-control form-control-sm" id="cboTipoConcepto_b" data-placeholder="Seleccionar Concepto" onchange="cargarValorizacion()" multiple >
                                                     -->
 
-                                                    </select>
+                                                    
                                                 </div>
                                             </div>
 
@@ -726,6 +714,25 @@ label.form-control-sm{
                                                 </div>
                                             </div>
 
+                                             
+                                            <div style="margin-top:15px" class="form-group">
+                                                <div class="col-sm-12 controls">
+                                                    <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
+                                                       
+                                                        <a href="javascript:void(0)" onClick="modal_productos(0)" class="btn btn-sm btn-success">Agregar</a>
+
+
+<!--
+                                                                    <button type="button" data-toggle="modal" style=""
+                                                                            data-target="#ProductoModal" id=""
+                                                                            class="btn btn-warning btn-sm">
+																			<i class="fas fa-search"></i>
+																			Agregar
+																			</button>
+                                                    -->
+                                                    </div>
+                                                </div>
+                                            </div> 
 
                                         </div>
 
@@ -733,25 +740,22 @@ label.form-control-sm{
 
 
                                         <div class="table-responsive overflow-auto" style="max-height: 500px">
-                                            <table id="tblValorizacion" class="table table-hover table-sm">
+                                            <table id="tblOrdenCompraDetalle" class="table table-hover table-sm">
                                                 <thead>
-                                                    <tr style="font-size:13px">
-                                                        <!--<th class="text-right" width="5%">-->
-                                                        <th width="5%" style="text-align: center; padding-bottom:0px;padding-right:5px;margin-bottom: 0px; vertical-align: middle">
-                                                            <input type="checkbox" name="select_all" value="1" id="example-select-all" <?php echo $seleccionar_todos ?>>
-                                                        </th>
+                                                    <tr style="font-size:13px">                                               
                                                         <th width="5%">Nro</th>
-                                                        <th width="10%">Fecha</th>
-                                                        <th width="40%">Concepto</th>
-                                                        <th width="10%">Fecha Vencimiento</th>                                                        
-                                                        <th width="10%" class="text-center">P.Unit.</th>                                                        
-                                                        <th width="10%" class="text-center">Cantidad</th>
-                                                        <th width="10%"class="text-center">Total</th>
+                                                        <th width="40%">Producto</th>                                                        
+                                                        <th width="10%">Cantidad</th>                                                                                                       
+                                                        <th width="10%">Precio Venta</th>                                                                                                        
+                                                        <th width="10%" class="text-center">Sub Total</th>
+                                                        <th width="10%" class="text-center">IGV</th>
+                                                        <th width="10%" class="text-center">Total</th>
+                                                        <!--<th width="10%"> Opc</th>-->
                                                         <!--<th>Estado</th>-->
-                                                        <!--<th>Opc</th>-->
+                                                        
                                                     </tr>
                                                 </thead>
-                                                <tbody>
+                                                <tbody id="divOrdenCompraDetalle">
                                                 </tbody>
                                                 <tfoot>
 
@@ -823,9 +827,12 @@ label.form-control-sm{
                                                     <input type="hidden" name="Trans" id="Trans" value="FA" />
                                                     <input class="btn btn-success pull-rigth" value="FACTURA" type="button" id="btnFactura" disabled="disabled" onclick="enviarTipo(1)" />
                                                     <input class="btn btn-info pull-rigth" value="BOLETA" type="button" id="btnBoleta" disabled="disabled" onclick="enviarTipo(2)" />
+
+                                                    <input class="btn btn-primary pull-rigth" value="PROFORMA" type="button" id="btnProforma" disabled="disabled" onclick="Proforma()" />
+
                                                     <input class="btn btn-info pull-rigth" value="BOLETA" type="button" id="btnTicket" disabled="disabled" onclick="enviarTipo(3)" style="display:none" />
                                                     
-                                                    <input class="btn btn-danger pull-rigth" value="ANULAR VAL" type="button" id="btnAnulaVal" disabled="disabled" onclick="anular_valorizacion()" />
+                                                    <input class="btn btn-danger pull-rigth" value="ANULAR VAL" type="button" id="btnAnulaVal" disabled="disabled" onclick="anular_valorizacion()" style="display:none"/>
                                                 
                                                     <input class="btn btn-warning pull-right" value="PRONTO PAGO" type="button" id="btnDescuento" disabled="disabled" onclick="AplicarDescuento()" style="display:none" />
 
@@ -888,8 +895,36 @@ label.form-control-sm{
                                 <br />
                             </div>
 
+                            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
 
-                            <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <strong>
+                                            Proformas
+                                        </strong>
+                                        <!--<input class="btn btn-primary btn-sm float-right" value="Nuevo" type="button" id="btNuevoProforma" />-->
+                                    </div>
+
+                                    <div class="card-body">
+                                    
+                                        <div class="table-responsive overflow-auto" style="max-height: 500px">
+                                            <table id="tblPago" class="table table-hover table-sm">
+                                                <thead>
+                                                    <tr style="font-size:13px">
+                                                        <th>Fecha</th>                                                       
+                                                        <th>Numero</th>
+                                                        <th>Moneda</th>
+                                                        <th>IGV</th>
+                                                        <th class="sum">Monto</th>                                                        
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+
+                                </div>
 
                                 <div class="card">
                                     <div class="card-header">
@@ -899,18 +934,16 @@ label.form-control-sm{
                                     </div>
 
                                     <div class="card-body">
+                                    
                                         <div class="table-responsive overflow-auto" style="max-height: 500px">
                                             <table id="tblPago" class="table table-hover table-sm">
                                                 <thead>
                                                     <tr style="font-size:13px">
                                                         <th>Fecha</th>
-
                                                         <th>Serie</th>
                                                         <th>Numero</th>
                                                         <th>Concepto</th>
                                                         <th class="sum">Monto</th>
-                                                        <th>Pago</th>
-                                                        <th>Deuda</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -943,6 +976,61 @@ label.form-control-sm{
                         </div>
 
                     </div>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="ProductoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel2"
+                        aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel2">Registre Nuevo Producto</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <div class="card-body">
+
+                                            <div id="" class="row">
+                                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+                                                <div class="form-group form-group-sm">
+                                                    <label class="form-control-sm">Producto</label>
+                                                    
+                                                    <td><input type="text" name="txtProducto" id="txtProducto"
+                                                        class="form-control form-control-sm">
+
+                                                        <div class="input-group" style="position: absolute;"
+                                                            id="producto_list"></div>
+                                                    </td>
+
+                                                </div>
+
+
+
+
+                                                    
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="modal-footer">
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <!--ModalEnd-->
+                    
+
+
                 </div>
 
             </form>
@@ -974,6 +1062,313 @@ label.form-control-sm{
         elem.style.height = '${elem.scrollHeight}px';
     }
   */  
+
+  var productosSeleccionados = [];
+
+function cargarDetalle(){
+
+var id = $("#id").val();
+const tbody = $('#divOrdenCompraDetalle');
+
+tbody.empty();
+
+$.ajax({
+        url: "/orden_compra/cargar_detalle/"+id,
+        type: "GET",
+        success: function (result) {
+
+            let n = 1;
+
+            var total_acumulado=0;
+
+            result.orden_compra.forEach(orden_compra => {
+
+                let marcaOptions = '<option value="">--Seleccionar--</option>';
+                let productoOptions = '<option value="">--Seleccionar--</option>';
+                let estadoBienOptions = '<option value="">--Seleccionar--</option>';
+                let unidadMedidaOptions = '<option value="">--Seleccionar--</option>';
+                let descuentoOptions = '<option value="">--Seleccionar--</option>';
+
+                result.marca.forEach(marca => {
+                    let selected = (marca.id == orden_compra.id_marca) ? 'selected' : '';
+                    marcaOptions += `<option value="${marca.id}" ${selected}>${marca.denominiacion}</option>`;
+                });
+
+                result.producto.forEach(producto => {
+                    let selected = (producto.id == orden_compra.id_producto) ? 'selected' : '';
+                    productoOptions += `<option value="${producto.id}" ${selected}>${producto.denominacion}</option>`;
+                });
+
+                result.estado_bien.forEach(estado_bien => {
+                    let selected = (estado_bien.codigo == orden_compra.id_estado_producto) ? 'selected' : '';
+                    estadoBienOptions += `<option value="${estado_bien.codigo}" ${selected}>${estado_bien.denominacion}</option>`;
+                });
+
+                result.unidad_medida.forEach(unidad_medida => {
+                    let selected = (unidad_medida.codigo == orden_compra.id_unidad_medida) ? 'selected' : '';
+                    unidadMedidaOptions += `<option value="${unidad_medida.codigo}" ${selected}>${unidad_medida.denominacion}</option>`;
+                });
+
+                result.descuento.forEach(descuento => {
+                    let selected = (descuento.codigo == orden_compra.id_descuento) ? 'selected' : '';
+                    descuentoOptions += `<option value="${descuento.codigo}" ${selected}>${descuento.denominacion}</option>`;
+                });
+
+                if (orden_compra.id_producto) {
+                    productosSeleccionados.push(orden_compra.id_producto);
+                }
+
+                const row = `
+                    <tr>
+                        <td>${n}</td>
+                        <td><input name="id_orden_compra_detalle[]" id="id_orden_compra_detalle${n}" class="form-control form-control-sm" value="${orden_compra.id}" type="hidden"><input name="item[]" id="item${n}" class="form-control form-control-sm" value="${orden_compra.item}" type="text"></td>
+                        <td style="width: 450px !important;display:block"><select name="descripcion[]" id="descripcion${n}" class="form-control form-control-sm" onChange="verificarProductoSeleccionado(this, ${n});">${productoOptions}</select></td>
+                        
+                        <td><select name="marca[]" id="marca${n}" class="form-control form-control-sm">${marcaOptions}</select></td>
+                        <td><input name="cod_interno[]" id="cod_interno${n}" class="form-control form-control-sm" value="${orden_compra.codigo}" type="text"></td>
+                        <td><input id="fecha_fabricacion_${n}" name="fecha_fabricacion[]"  on class="form-control form-control-sm"  value="${orden_compra.fecha_fabricacion ? orden_compra.fecha_fabricacion : ''}" type="text"></td>
+                        <td><input id="fecha_vencimiento_${n}" name="fecha_vencimiento[]"  on class="form-control form-control-sm"  value="${orden_compra.fecha_vencimiento ? orden_compra.fecha_vencimiento : ''}" type="text"></td>
+                        <td><select name="estado_bien[]" id="estado_bien${n}" class="form-control form-control-sm" onChange="">${estadoBienOptions}</select></td>
+                        <td><select name="unidad[]" id="unidad${n}" class="form-control form-control-sm">${unidadMedidaOptions}</select></td>
+                        <td><input name="cantidad_ingreso[]" id="cantidad_ingreso${n}" class="cantidad_ingreso form-control form-control-sm" value="${orden_compra.cantidad_requerida}" type="text" oninput="calcularCantidadPendiente(this);calcularSubTotal(this)"></td>
+                        <td><input name="precio_unitario[]" id="precio_unitario${n}" class="precio_unitario form-control form-control-sm" value="${orden_compra.precio || 0}" type="text" oninput="calcularSubTotal(this)"></td>
+                        <td><select name="descuento[]" id="descuento${n}" class="form-control form-control-sm" onChange="">${descuentoOptions}</select></td>
+                        <td><input name="sub_total[]" id="sub_total${n}" class="sub_total form-control form-control-sm" value="${orden_compra.sub_total}" type="text" readonly="readonly"></td>
+                        <td><input name="igv[]" id="igv${n}" class="igv form-control form-control-sm" value="${orden_compra.igv}" type="text" readonly="readonly"></td>
+                        <td><input name="total[]" id="total${n}" class="total form-control form-control-sm" value="${orden_compra.total}" type="text" readonly="readonly"></td>
+                        <td><button type="button" class="btn btn-danger btn-sm" onclick="eliminarFila(this)">Eliminar</button></td>
+
+                    </tr>
+                `;
+                tbody.append(row);
+                $('#descripcion' + n).select2({ 
+                    width: '100%', 
+                    dropdownCssClass: 'custom-select2-dropdown'
+                });
+
+                $('#marca' + n).select2({
+                    width: '100%',
+                });
+
+                $('#fecha_fabricacion_' + n).datepicker({
+                    autoclose: true,
+                    format: 'yyyy-mm-dd',
+                    changeMonth: true,
+                    changeYear: true,
+                    language: 'es'
+                });
+
+                $('#fecha_vencimiento_' + n).datepicker({
+                    autoclose: true,
+                    format: 'yyyy-mm-dd',
+                    changeMonth: true,
+                    changeYear: true,
+                    language: 'es'
+                });
+
+                n++;
+                total_acumulado += parseFloat(orden_compra.total);
+                });
+                $('#totalGeneral').text(total_acumulado.toFixed(2));
+            }
+            
+    });
+
+}
+function agregarProducto(){
+
+   
+
+var opcionesDescripcion = '<?php
+    echo '<option value="">--Seleccionar--</option>';
+    foreach ($producto as $row) {
+        
+        echo '<option value="' . htmlspecialchars($row->id, ENT_QUOTES, 'UTF-8') . '">' . htmlspecialchars(addslashes($row->denominacion), ENT_QUOTES, 'UTF-8') . '</option>';
+    }
+?>';
+
+
+//alert(opcionesDescripcion);
+
+
+var cantidad = 1;
+var newRow = "";
+for (var i = 0; i < cantidad; i++) { 
+    var n = $('#tblOrdenCompraDetalle tbody tr').length + 1;
+    var item = '<input name="id_orden_compra_detalle[]" id="id_orden_compra_detalle${n}" class="form-control form-control-sm" value="${orden_compra.id}" type="hidden"><input name="item[]" id="item' + n + '" class="form-control form-control-sm" value="" type="text">';
+    //var cantidad = '<input name="cantidad[]" id="cantidad' + n + '" class="form-control form-control-sm" value="" type="text">';
+    var descripcion = '<select name="descripcion[]" id="descripcion' + n + '" class="form-control form-control-sm" onChange="verificarProductoSeleccionado(this, ' + n + ')"> '+ opcionesDescripcion +' </select>';
+    
+    var descripcion_ant = '<input type="hidden" name="descripcion_ant[]" id="descripcion_ant' + n + '" class="form-control form-control-sm" />';
+    
+    //var ubicacion_fisica_seccion = '<select name="ubicacion_fisica_seccion[]" id="ubicacion_fisica_seccion' + n + '" class="form-control form-control-sm" onChange="obtenerAnaquel(this)"> <option value="">- Selecione -</option> <?php //foreach ($almacen_seccion as $row) {?> <option value="<?php //echo $row->id?>"><?php //echo $row->codigo_seccion."-".$row->seccion?></option> <?php //} ?> </select>';
+    //var ubicacion_fisica_anaquel = '<select name="ubicacion_fisica_anaquel[]" id="ubicacion_fisica_anaquel' + n + '" class="form-control form-control-sm" onChange=""> <option value="">- Selecione -</option>} ?> </select>';
+    var cod_interno = '<input name="cod_interno[]" id="cod_interno' + n + '" class="form-control form-control-sm" value="" type="text">';
+    var marca = '<select name="marca[]" id="marca' + n + '" class="form-control form-control-sm" onchange=""> <option value="">--Seleccionar--</option><?php foreach ($marca as $row){?><option value="<?php echo htmlspecialchars($row->id); ?>"><?php echo htmlspecialchars(addslashes($row->denominiacion)); ?></option><?php }?></select>'
+    var fecha_fabricacion = '<input id="fecha_fabricacion_' + n + '" name="fecha_fabricacion[]"  on class="form-control form-control-sm"  value="" type="text">'
+    var fecha_vencimiento = '<input id="fecha_vencimiento_' + n + '" name="fecha_vencimiento[]"  on class="form-control form-control-sm"  value="" type="text">'
+    var estado_bien =  '<select name="estado_bien[]" id="estado_bien' + n + '" class="form-control form-control-sm" onChange=""><option value="">--Seleccionar--</option> <?php foreach ($estado_bien as $row) { ?> <option value="<?php echo $row->codigo ?>" <?php echo ($row->codigo == 1) ? "selected" : ""; ?>><?php echo $row->denominacion ?></option> <?php } ?> </select>';
+    var unidad = '<select name="unidad[]" id="unidad' + n + '" class="form-control form-control-sm" onChange=""> <option value="">--Seleccionar--</option> <?php foreach ($unidad as $row) {?> <option value="<?php echo $row->codigo?>"><?php echo $row->denominacion?></option> <?php } ?> </select>';
+    var cantidad_ingreso = '<input name="cantidad_ingreso[]" id="cantidad_ingreso' + n + '" class="cantidad_ingreso form-control form-control-sm" value="" type="text" oninput="calcularSubTotal(this)">';
+    var precio_unitario = '<input name="precio_unitario[]" id="precio_unitario' + n + '" class="precio_unitario form-control form-control-sm" value="" type="text" oninput="calcularSubTotal(this)">';
+    var descuento = '<select name="descuento[]" id="descuento' + n + '" class="form-control form-control-sm" onChange="aplicaDescuento(this);"> <option value="">--Seleccionar--</option> <?php foreach ($descuento as $row) {?> <option value="<?php echo $row->codigo?>"><?php echo $row->denominacion?></option> <?php } ?> </select>';
+    var sub_total = '<input name="sub_total[]" id="sub_total' + n + '" class="sub_total form-control form-control-sm" value="" type="text" readonly="readonly">';
+    var igv = '<input name="igv[]" id="igv' + n + '" class="igv form-control form-control-sm" value="" type="text" readonly="readonly">';
+    var total = '<input name="total[]" id="total' + n + '" class="total form-control form-control-sm" value="" type="text" readonly="readonly">';
+    
+    var btnEliminar = '<button type="button" class="btn btn-danger btn-sm" onclick="eliminarFila(this)"> X </button>';
+
+    newRow += '<tr>';
+    newRow += '<td>' + n + '</td>';
+    //newRow += '<td>' + item + '</td>';
+    //newRow += '<td>' + cantidad + '</td>';
+    newRow += '<td style="display:block!important">' +descripcion_ant + descripcion + '</td>';
+    //newRow += '<td>' + ubicacion_fisica_seccion + '</td>';
+    //newRow += '<td>' + marca + '</td>';
+    //newRow += '<td>' + cod_interno + '</td>';
+    //newRow += '<td>' + fecha_fabricacion + '</td>';
+    //newRow += '<td>' + fecha_vencimiento + '</td>';
+    //newRow += '<td>' + estado_bien + '</td>';
+    //newRow += '<td>' + unidad + '</td>';
+    newRow += '<td>' + cantidad_ingreso + '</td>';
+    newRow += '<td>' + precio_unitario + '</td>';
+    //newRow += '<td>' + descuento + '</td>';
+    newRow += '<td>' + sub_total + '</td>';
+    newRow += '<td>' + igv + '</td>';
+    newRow += '<td>' + total + '</td>';
+    newRow += '<td>' + btnEliminar + '</td>';
+    newRow += '</tr>';
+
+
+    $('#tblOrdenCompraDetalle tbody').append(newRow);
+
+    $('#descripcion' + n).select2({
+        width: '100%',
+        dropdownCssClass: 'custom-select2-dropdown'
+        //dropdownCssClass: 'form-control form-control-sm',
+        //containerCssClass: 'form-control form-control-sm'
+    });
+
+    $('#marca' + n).select2({
+        width: '100%',
+    });
+    
+    $('#fecha_fabricacion_' + n).datepicker({
+        autoclose: true,
+        format: 'yyyy-mm-dd',
+        changeMonth: true,
+        changeYear: true,
+        language: 'es'
+    });
+
+    $('#fecha_vencimiento_' + n).datepicker({
+        autoclose: true,
+        format: 'yyyy-mm-dd',
+        changeMonth: true,
+        changeYear: true,
+        language: 'es'
+    });
+
+}
+
+    actualizarTotalGeneral();
+}
+
+function eliminarFila(button){
+    $(button).closest('tr').remove();
+    actualizarTotalGeneral();
+}
+function verificarProductoSeleccionado(selectElement, rowIndex, valor) {
+    var selectedValue = $(selectElement).val();
+
+    if (selectedValue) {
+        var selectedValueAnt = $("#descripcion_ant"+rowIndex).val();
+        if(selectedValueAnt != ""){
+            const index_ant = productosSeleccionados.indexOf(Number(selectedValueAnt));
+            console.log(index_ant);
+            productosSeleccionados.splice(index_ant, 1);
+            $("#descripcion_ant"+rowIndex).val("");
+        }
+
+        if (!productosSeleccionados.includes(Number(selectedValue))) {
+            productosSeleccionados.push(Number(selectedValue));
+            $("#descripcion_ant"+rowIndex).val(selectedValue);
+
+            obtenerCodInterno(selectElement, rowIndex);
+        } else {
+            bootbox.alert("Este producto ya ha sido seleccionado. Por favor elige otro.");
+            $(selectElement).val('').trigger('change');
+        }
+    } else {
+        
+        const index = productosSeleccionados.indexOf(Number(selectedValue));
+        if (index > -1) {
+            productosSeleccionados.splice(index, 1);
+        }
+    }
+
+    console.log(productosSeleccionados);
+}
+
+function obtenerCodInterno(selectElement, n){
+
+var id_producto = $(selectElement).val();
+
+$.ajax({
+        url: "/productos/obtener_producto/"+id_producto,
+        dataType: "json",
+        success: function(result){
+            //alert(result[0].codigo);
+            $('#cod_interno' + n).val(result[0].codigo);
+            $('#item' + n).val(result[0].numero_serie);
+            $('#marca' + n).val(result[0].id_marca).trigger('change');
+            $('#unidad' + n).val(result[0].id_unidad_producto);
+
+            $('#fecha_vencimiento_' + n).datepicker({
+                autoclose: true,
+                format: 'yyyy-mm-dd',
+                changeMonth: true,
+                changeYear: true,
+                language: 'es'
+            });
+            
+            $('#fecha_vencimiento_' + n).datepicker('setDate', result[0].fecha_vencimiento);
+        }
+    });
+}
+
+function calcularSubTotal(input) {
+    var fila = $(input).closest('tr');
+
+    var cantidad_ingreso = parseFloat(fila.find('.cantidad_ingreso').val()) || 0;
+    var precio_unitario = parseFloat(fila.find('.precio_unitario').val()) || 0;
+
+    var sub_total = cantidad_ingreso * precio_unitario;
+
+    fila.find('.sub_total').val(sub_total.toFixed(2));
+
+    var igvInputId = fila.find('.igv').attr('id');
+    var totalInputId = fila.find('.total').attr('id');
+
+    //console.log('IGV ID:', igvInputId);
+    //console.log('Total ID:', totalInputId);
+
+    calcularIGV(sub_total, igvInputId, totalInputId);
+
+    actualizarTotalGeneral();
+}
+
+function actualizarTotalGeneral() {
+    var totalGeneral = 0;
+    $('#tblOrdenCompraDetalle tbody tr').each(function() {
+        var totalFila = parseFloat($(this).find('.total').val()) || 0;
+        totalGeneral += totalFila;
+    });
+    
+    $('#totalGeneral').text(totalGeneral.toFixed(2));
+    
+}
+
 </script>
 
 @endpush
