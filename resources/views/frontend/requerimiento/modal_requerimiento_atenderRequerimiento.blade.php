@@ -709,7 +709,7 @@ function pdf_documento(){
                                 <?php 
                                     if($id>0){
                                 ?>
-                                <!--<button style="font-size:12px;margin-left:10px;margin-right:10px" type="button" class="btn btn-sm btn-primary" data-toggle="modal" onclick="pdf_documento()" ><i class="fa fa-edit"></i>Imprimir</button>-->
+                                <button style="font-size:12px;margin-left:10px;margin-right:10px" type="button" class="btn btn-sm btn-primary" data-toggle="modal" onclick="pdf_documento()" ><i class="fa fa-edit"></i>Imprimir</button>
                                 <button style="font-size:12px;margin-right:10px" type="button" class="btn btn-sm btn-warning" data-toggle="modal" onclick="save_orden_compra_requerimiento()" ><i class="fa fa-edit"></i>Generar Orden Compra</button>
                                 <?php 
                                     }

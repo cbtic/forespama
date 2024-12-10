@@ -153,6 +153,8 @@ $(document).ready(function() {
 
     $("#item").select2({ width: '100%' });
 
+    $("#responsable").select2({ width: '100%' });
+
 });
 
 </script>
