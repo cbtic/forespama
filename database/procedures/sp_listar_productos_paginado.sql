@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION public.sp_listar_productos_paginado(p_serie character varying, p_denominacion character varying, p_codigo character varying, p_estado_bien character varying, p_estado character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
+CREATE OR REPLACE FUNCTION public.sp_listar_productos_paginado(p_serie character varying, p_denominacion character varying, p_codigo character varying, p_estado_bien character varying, p_tipo_origen_producto character varying, p_estado character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
  RETURNS refcursor
  LANGUAGE plpgsql
 AS $function$
@@ -15,7 +15,7 @@ begin
 	
 	p_pagina=(p_pagina::Integer-1)*p_limit::Integer;
 
-	v_campos=' p.id, p.numero_serie, p.denominacion, p.codigo, tm3.denominacion unidad, p.contenido, tm4.denominacion unidad_medida, m.denominiacion marca, tm.denominacion unidad_medida_producto, tm2.denominacion estado_bien, p.stock_actual stock, p.fecha_vencimiento, p.stock_minimo, p.stock_actual, p.estado, tm5.denominacion tipo_origen_producto ';
+	v_campos=' p.id, p.numero_serie, p.denominacion, p.codigo, tm3.denominacion unidad, p.contenido, tm4.denominacion unidad_medida, m.denominiacion marca, tm.denominacion unidad_medida_producto, tm2.denominacion estado_bien, p.fecha_vencimiento, p.stock_minimo, p.stock_actual, p.estado, tm5.denominacion tipo_origen_producto ';
 
 	v_tabla=' from productos p 
 	left join tabla_maestras tm on p.id_tipo_producto = tm.codigo::int and tm.tipo =''44''
@@ -41,6 +41,10 @@ begin
 
 	If p_codigo<>'' Then
 	 v_where:=v_where||'And p.codigo =  '''||p_codigo||''' ';
+	End If;
+
+	If p_tipo_origen_producto<>'' Then
+	 v_where:=v_where||'And p.id_tipo_origen_producto =  '''||p_tipo_origen_producto||''' ';
 	End If;
 
 	If p_estado<>'' Then

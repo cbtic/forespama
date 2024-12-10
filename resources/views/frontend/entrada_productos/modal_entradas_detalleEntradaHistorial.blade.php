@@ -768,6 +768,20 @@ function pdf_guia(){
 
 }
 
+function modal_datos_guia(id){
+	
+	var id = $('#id').val();
+
+	$.ajax({
+			url: "/entrada_productos/modal_datos_guia/"+id,
+			type: "GET",
+			success: function (result) {  
+					$("#diveditpregOpc2").html(result);
+					$('#openOverlayOpc2').modal('show');
+			}
+	});
+}
+
 </script>
 
 
@@ -1069,7 +1083,9 @@ function pdf_guia(){
                                     if($id>0){
                                 ?>
                                 <button style="font-size:12px;margin-left:10px" type="button" class="btn btn-sm btn-primary" data-toggle="modal" onclick="pdf_documento()" ><i class="fa fa-edit"></i>Imprimir</button>
+                                <button style="font-size:12px;margin-left:10px" type="button" class="btn btn-sm btn-secondary" data-toggle="modal" onclick="modal_datos_guia()" >Registrar Datos Guia</button>
                                 <button style="font-size:12px;margin-left:10px; margin-right:100px" type="button" class="btn btn-sm btn-warning" data-toggle="modal" onclick="pdf_guia()" ><i class="fa fa-edit"></i>Imprimir Gu&iacute;a Remisi&oacute;n Electronica</button>
+                                
                                 <!--<a href="javascript:void(0)" onClick="fn_pdf_documento()" class="btn btn-sm btn-primary" style="margin-right:100px">Imprimir</a>-->
                                 <?php 
                                     }
@@ -1098,6 +1114,22 @@ function pdf_guia(){
 </div>
 <!-- /.content-wrapper -->
 
+<div id="openOverlayOpc2" class="modal fade modal-tienda" tabindex="-1" role="dialog">
+	  <div class="modal-dialog" >
+	
+		<div id="id_content_OverlayoneOpc2" class="modal-content" style="padding: 0px;margin: 0px">
+		
+		  <div class="modal-body" style="padding: 0px;margin: 0px">
+	
+				<div id="diveditpregOpc2"></div>
+	
+		  </div>
+		
+		</div>
+	
+	  </div>
+		
+	</div>
     
 <script type="text/javascript">
 $(document).ready(function () {

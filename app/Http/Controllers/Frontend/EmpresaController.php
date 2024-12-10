@@ -320,7 +320,7 @@ class EmpresaController extends Controller
 
         $empresa_model = new Empresa;        
         $sw = true;
-        $empresa = $empresa_model->getEmpresaId($id);
+        $empresa = $empresa_model->getEmpresa($id);
         $array["sw"] = $sw;
         $array["empresa"] = $empresa;
         echo json_encode($array);

@@ -150,4 +150,14 @@ class Producto extends Model
 		$data = DB::select($cad);
         return $data;
     }
+
+    function getImagenProducto($id){
+
+        $cad = "select p.id, p.denominacion producto, pi.ruta_imagen from productos p 
+        inner join producto_imagenes pi on pi.id_producto = p.id
+        where p.id='".$id."'";
+
+		$data = DB::select($cad);
+        return $data;
+    }
 }

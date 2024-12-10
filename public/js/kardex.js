@@ -658,6 +658,17 @@ function datatablenew_consulta_producto(){
                 "aTargets": [6]
                 },
 				
+				{
+					"mRender": function (data, type, row) {
+						
+						var html = '<td class="text-left" style="vertical-align:middle">\
+									<button style="font-size:11px;" type="button" class="btn btn-sm btn-warning" data-toggle="modal" onclick="modalVerProducto('+row.id+')"><i class="fa fa-edit" style="font-size:9px!important"></i>Imagen Producto</button>';
+						html += '</div>';
+						return html;
+					},
+					"bSortable": true,
+					"aTargets": [7]
+				},
 				
             ]
 			
@@ -760,4 +771,20 @@ function obtenerProductosAlmacenKardex(){
 			}
 		}
 	});
+}
+
+function modalVerProducto(id){
+	
+	$(".modal-dialog").css("width","85%");
+	$('#openOverlayOpc .modal-body').css('height', 'auto');
+
+	$.ajax({
+			url: "/productos/modal_ver_productos/"+id,
+			type: "GET",
+			success: function (result) {
+					$("#diveditpregOpc").html(result);
+					$('#openOverlayOpc').modal('show');
+			}
+	});
+
 }

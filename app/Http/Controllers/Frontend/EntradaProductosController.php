@@ -1494,91 +1494,25 @@ class EntradaProductosController extends Controller
 
     }
 
+    public function modal_datos_guia($id){
+		
+        $tablaMaestra_model = new TablaMaestra;
+        $producto_model = new Producto;
+        $marca_model = new Marca;
+        $empresa_model = new Empresa;
+		
+        $entrada_producto = EntradaProducto::find($id);
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    /*public function index()
-    {
-        $entrada_productos = EntradaProducto::latest()->paginate(10);
+        $tipo_documento = $tablaMaestra_model->getMaestroByTipo(54);
+        $producto = $producto_model->getProductoAll();
+        $marca = $marca_model->getMarcaAll();
+        $estado_bien = $tablaMaestra_model->getMaestroByTipo(4);
+        $unidad = $tablaMaestra_model->getMaestroByTipo(43);
+        $empresas = Empresa::all();
+        $transporte_razon_social = $empresa_model->obtenerRazonSocialTransporteAll();
 
-        return view('frontend.entrada_productos.index', compact('entrada_productos'));
-    }*/
+		return view('frontend.entrada_productos.modal_datos_guia',compact('id','entrada_producto','tipo_documento','producto','marca','estado_bien','unidad','empresas','transporte_razon_social'));
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    /*public function create()
-    {
-        return view('frontend.entrada_productos.create');
-    }*/
+    }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    /*public function store(Request $request)
-    {
-        $entrada_productos = EntradaProducto::create($request->all());
-
-        return redirect()->route('frontend.entrada_productos.edit', compact('entrada_productos'));
-    }*/
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    /*public function show(EntradaProducto $entrada_productos)
-    {
-        // dd($entrada_productos);exit;
-
-        return view('frontend.entrada_productos.show', compact('entrada_productos'));
-    }*/
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    /*public function edit(EntradaProducto $entrada_productos)
-    {
-        return view('frontend.entrada_productos.edit', compact('entrada_productos'));
-    }*/
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    /*public function update(EntradaProductoRequest $request, EntradaProducto $entrada_productos)
-    {
-        $entrada_productos->update($request->all());
-
-        return redirect()->route('frontend.entrada_productos.edit', compact('entrada_productos'));
-    }*/
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    /*public function destroy(EntradaProducto $entrada_productos)
-    {
-        if ($entrada_productos->delete()) {
-            Alert::success('Proceso completo', 'Se ha eliminado la entrada '.$entrada_productos['id']);
-        };
-        return redirect()->route('frontend.entrada_productos.index');
-    }*/
 }
