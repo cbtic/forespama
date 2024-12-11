@@ -48,9 +48,13 @@ class IngresoController extends Controller
         $caja_model = new TablaMaestra;
         $caja_ingreso_model = new CajaIngreso();
         //$pronto_pago_model = new ProntoPago;
-        $caja = $caja_model->getCaja('91');        
-        $caja_usuario = $caja_ingreso_model->getCajaIngresoByusuario($id_user,'91');
-        $tipo_documento = $caja_model->getMaestroByTipo(9);
+        $caja = $caja_model->getCaja('27');        
+        $caja_usuario = $caja_ingreso_model->getCajaIngresoByusuario($id_user,'27');
+
+        $caja_dolares = $caja_model->getCaja('62');
+        $caja_usuario_dolares = $caja_ingreso_model->getCajaIngresoByusuario($id_user,'62');
+
+        //$tipo_documento = $caja_model->getMaestroByTipo(9);
         $pronto_pago = ProntoPago::where("estado","1")->first();
         //exit();
                 
@@ -72,7 +76,7 @@ class IngresoController extends Controller
         $marca_model = new Marca;
         $almacen_model = new Almacene;
 
-        $tipo_documento = $tablaMaestra_model->getMaestroByTipo(54);
+        $tipo_documento = $tablaMaestra_model->getMaestroByTipo(61);
         $producto = $producto_model->getProductoAll();
         $marca = $marca_model->getMarcaAll();
         $estado_bien = $tablaMaestra_model->getMaestroByTipo(4);
@@ -83,7 +87,7 @@ class IngresoController extends Controller
         //$almacen = Almacene::all();
         $unidad_origen = $tablaMaestra_model->getMaestroByTipo(50);
 
-        return view('frontend.ingresos.create',compact('persona','caja','caja_usuario','tipo_documento','pronto_pago', 'concepto','mes','producto','marca','estado_bien','unidad','descuento'));
+        return view('frontend.ingresos.create',compact('persona','caja','caja_usuario','tipo_documento','pronto_pago', 'concepto','mes','producto','marca','estado_bien','unidad','descuento','caja_dolares','caja_usuario_dolares'));
 
     }
 

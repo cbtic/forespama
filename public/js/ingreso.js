@@ -255,6 +255,64 @@ function aperturar(accion){
             }
     });
 }
+function aperturarMoneda(accion){
+	/*
+	var id_caja_ingreso = $('#id_caja_ingreso').val();
+    var id_caja = $('#id_caja').val();
+	var saldo_inicial = $('#saldo_inicial').val();
+	var total_recaudado = $('#total_recaudado').val();
+	var saldo_total = $('#saldo_total').val();
+	*/
+	
+	var id_caja_ingreso_soles = $('#id_caja_ingreso_soles').val();
+    var id_caja_soles = $('#id_caja_soles').val();
+	var saldo_inicial_soles = $('#saldo_inicial_soles').val();
+	var total_recaudado_soles = $('#total_recaudado_soles').val();
+	var saldo_total_soles = $('#saldo_total_soles').val();
+	
+	var id_caja_ingreso_dolares = $('#id_caja_ingreso_dolares').val();
+    var id_caja_dolares = $('#id_caja_dolares').val();
+	var saldo_inicial_dolares = $('#saldo_inicial_dolares').val();
+	var total_recaudado_dolares = $('#total_recaudado_dolares').val();
+	var saldo_total_dolares = $('#saldo_total_dolares').val();
+	
+	var estado = '1';
+	var _token = $('#_token').val();
+	
+	var msg = "";
+	
+	//if(id_caja == "0")msg += "Debe seleccionar una Caja disponible <br>";
+	//if(saldo_inicial == "")msg += "Debe ingresar el saldo inicial de caja <br>";
+	
+	if(id_caja_soles == "0")msg += "Debe seleccionar una Caja en Soles disponible <br>";
+	if(saldo_inicial_soles == "")msg += "Debe ingresar el saldo inicial de caja <br>";
+	
+	if(id_caja_dolares == "0")msg += "Debe seleccionar una Caja en Dolares disponible <br>";
+	if(saldo_inicial_dolares == "")msg += "Debe ingresar el saldo inicial de caja <br>";
+	
+	if(msg!=""){
+        bootbox.alert(msg);
+        return false;
+    }
+	//alert(id_caja);return false;
+    //var fecha_atencion_original = $('#fecha_atencion').val();
+	//var id_user = $('#id_user').val();
+    $.ajax({
+			url: "/ingreso/sendCajaMoneda",
+            type: "POST",
+            //data : $("#frmCita").serialize()+"&id_medico="+id_medico+"&fecha_cita="+fecha_cita,
+            data : {accion:accion,				//id_caja_ingreso:id_caja_ingreso,id_caja:id_caja,saldo_inicial:saldo_inicial,total_recaudado:total_recaudado,saldo_total:saldo_total,
+					id_caja_ingreso_soles:id_caja_ingreso_soles,id_caja_soles:id_caja_soles,saldo_inicial_soles:saldo_inicial_soles,total_recaudado_soles:total_recaudado_soles,saldo_total_soles:saldo_total_soles,
+					id_caja_ingreso_dolares:id_caja_ingreso_dolares,id_caja_dolares:id_caja_dolares,saldo_inicial_dolares:saldo_inicial_dolares,total_recaudado_dolares:total_recaudado_dolares,saldo_total_dolares:saldo_total_dolares,
+					estado:estado,_token:_token},
+            success: function (result) {  
+					//cargarValorizacion();
+					//cargarPagos();
+					location.reload();
+              
+            }
+    });
+}
 function cargarcboTipoConcepto(){    	
 
 	$.ajax({
