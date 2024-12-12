@@ -42,7 +42,7 @@ class Persona extends Model
        // return $data;
     //}
 
-    function getPersona($tipo_documento,$numero_documento){
+    function getPersona_($tipo_documento,$numero_documento){
 
         $cad = "select t1.*
 		from personas t1
@@ -54,7 +54,7 @@ class Persona extends Model
     }
 
 
-    function getPersonas($tipo_documento,$numero_documento){
+    function getPersona($tipo_documento,$numero_documento){
         if($tipo_documento=="5"){  //RUC
             $cad = "select t1.id,razon_social,t1.direccion,t1.representante, t1.ruc, t1.email, 79 id_tipo_documento,  trim(t1.ruc) numero_documento_
                     from empresas t1                    
@@ -85,16 +85,7 @@ class Persona extends Model
                     Where  t1.id_tipo_documento=1 and trim(t1.numero_documento) = trim('".$numero_documento."') 
                     and t1.estado='1' 
                     limit 1";
-            /*
-            $cad = "select t2.id,t1.id id_p,t1.numero_documento,t1.nombres,t1.apellido_paterno,t1.apellido_materno,t2.numero_cap,t1.foto,
-                    t1.numero_ruc,t1.id_tipo_documento,t3.denominacion situacion, t4.denominacion actividad,t1.correo email, trim(t1.numero_documento)  numero_documento_ 			
-                    from personas t1 
-                    left join agremiados  t2 on t1.id = t2.id_persona And t2.estado='1'
-                    left join tabla_maestras t3 on t2.id_situacion = t3.codigo::int And t3.tipo ='14'
-                    left join tabla_maestras t4 on t2.id_actividad_gremial = t4.codigo::int And t4.tipo ='46'                    
-                    Where  t1.id_tipo_documento='".$tipo_documento."' and trim(t1.numero_documento) = trim('".$numero_documento."') 
-                    and t1.estado='1' 
-                    limit 1";*/
+
         }
         //echo $cad;
         $data = DB::select($cad);

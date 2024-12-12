@@ -557,7 +557,7 @@
 									<div style="margin-top:15px" class="form-group">
 										<div id="divGuardar" class="col-sm-12 controls">
 											<div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
-												<a href="javascript:void(0)" onClick="guardar_fracciona_deuda()" class="btn btn-sm btn-success">Guardar</a>
+												<a href="javascript:void(0)" onClick="AddFila()" class="btn btn-sm btn-success">Aceptar</a>
 											</div>
 
 										</div>

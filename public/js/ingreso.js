@@ -130,6 +130,15 @@ $(document).ready(function () {
 		}
 	});
 
+	$('#tblValorizacion tbody').on('click', 'button.deleteFila', function () {
+		var obj = $(this);
+		obj.parent().parent().remove();
+		
+
+		//simulaPesarCarreta();
+		
+	});
+
 /*
 	$( '#cboTipoConcepto_b' ).select2( {
 		theme: "bootstrap-5",
@@ -882,6 +891,8 @@ function obtenerBeneficiario(){
 
 	var numero_documento_b = $("#numero_documento_b").val();
 	$("#numero_documento").val(numero_documento_b);
+
+	
 	
 	var tipo_documento = $("#tipo_documento").val();
 	var numero_documento = $("#numero_documento").val();
@@ -892,6 +903,8 @@ function obtenerBeneficiario(){
 	$('#example-select-all').prop( "checked", false );
 	
 	//alert($("#tipo_documento").val());
+
+	
 	
 	if (msg != "") {
 		bootbox.alert(msg);
@@ -1076,9 +1089,9 @@ function obtenerBeneficiario(){
 
 				cargarValorizacion();
 				cargarPagos();
-				cargarcboTipoConcepto();
-				cargarcboPeriodo();
-				cargarcboMes();
+				//cargarcboTipoConcepto();
+				//cargarcboPeriodo();
+				//cargarcboMes();
 			}
 			else {
 
@@ -1178,6 +1191,7 @@ function cargarValorizacion(){
 
 	
 	var numero_documento =$("#numero_documento").val();
+	//alert(numero_documento);
 	if (numero_documento=="")exit();
 
 	$("#btnExonerarS").prop('disabled', true);
@@ -1186,7 +1200,7 @@ function cargarValorizacion(){
 
 	//cargarcboPeriodo();
     
-    //alert("hi");
+    
 	//var numero_documento = $("#numero_documento").val();
 	var tipo_documento = $("#tipo_documento").val();
 	var id_persona = 0;
@@ -2696,3 +2710,79 @@ function modal_productos(id){
 	});
 }
 
+function agregarProducto(){
+
+    var newRow = "";
+
+        var n = $('#tblProductoDetalle tbody tr').length + 1;
+        var codigo = '<input name="codigo[]" id="codigo' + n + '" class="form-control form-control-sm" value="" type="text">';
+        var cantidad = '<input name="cantidad[]" id="cantidad' + n + '" class="form-control form-control-sm" value="" type="text">';
+        var descripcion = '<select name="descripcion[]" id="descripcion' + n + '" class="form-control form-control-sm" onChange="obtenerCodInterno(this, ' + n + ')"> <option value="">--Seleccionar--</option> <?php foreach ($producto as $row) {?> <option value="<?php echo $row->id?>"><?php echo $row->denominacion?></option> <?php } ?> </select>';
+        var precio_unitario = '<input name="precio_unitario[]" id="precio_unitario' + n + '" class="precio_unitario form-control form-control-sm" value="" type="text" oninput="calcularSubTotal(this)">';
+        var sub_total = '<input name="sub_total[]" id="sub_total' + n + '" class="sub_total form-control form-control-sm" value="" type="text" readonly="readonly">';
+        var igv = '<input name="igv[]" id="igv' + n + '" class="igv form-control form-control-sm" value="" type="text" readonly="readonly">';
+        var total = '<input name="total[]" id="total' + n + '" class="total form-control form-control-sm" value="" type="text" readonly="readonly">';
+        
+        newRow += '<tr>';
+        newRow += '<td>' + n + '</td>';
+        newRow += '<td>' + codigo + '</td>';
+        newRow += '<td>' + cantidad + '</td>';
+        newRow += '<td>' + descripcion + '</td>';
+        newRow += '<td>' + ubicacion_fisica_seccion + '</td>';
+        newRow += '<td>' + ubicacion_fisica_anaquel + '</td>';
+        newRow += '<td>' + cod_interno + '</td>';
+        newRow += '<td>' + unidad + '</td>';
+        newRow += '<td>' + cantidad_ingreso + '</td>';
+        newRow += '<td>' + cantidad_compra + '</td>';
+        newRow += '<td>' + cantidad_pendiente + '</td>';
+        newRow += '<td>' + stock_actual + '</td>';
+        newRow += '<td>' + precio_unitario + '</td>';
+        newRow += '<td>' + sub_total + '</td>';
+        newRow += '<td>' + igv + '</td>';
+        newRow += '<td>' + total + '</td>';
+        newRow += '</tr>';
+
+        $('#tblProductoDetalle tbody').append(newRow);
+
+
+
+    
+
+    //actualizarTotalGeneral();
+}
+
+
+function AddFila(){
+		
+	var newRow = "";
+	var ind = $('#tblValorizacion tbody tr').length;
+	//var tabindex = 11;
+	//var nuevalperiodo = "";
+
+	//var f = new Date();
+	var f = new Date();
+	var fecha_ = f.getDate() + "-"+ f.getMonth()+ "-" +f.getFullYear();
+
+	var producto = $('#txtProducto').val();
+	var cantidad = $('#txtCantidad').val();
+	var pv = $('#txtPrecioVenta').val();
+	var st = $('#txtValorVenta').val();
+	var igv = $('#txtIgv').val();
+	var total = $('#txtTotal').val();
+
+	newRow +='<tr>';
+
+	newRow +='<td class="text-left">1<span class=""></span></td>';		
+	newRow +='<td class="text-left">'+producto+'<span class=""></span></td>';
+	newRow +='<td class="text-center">'+cantidad+'<span class=""></span></td>';	
+	newRow +='<td class="text-right">'+pv+'<span class=""></span></td>';
+	newRow +='<td class="text-right">'+st+'<span class=""></span></td>';
+	newRow +='<td class="text-right">'+igv+'<span class=""></span></td>';
+	newRow +='<td class="text-right">'+total+'<span class=""></span></td>';
+
+	newRow +='<td><button type="button" class="btn btn-danger deleteFila btn-xs" style="margin-left:4px"><i class="fa fa-times"></i></button></td>';
+
+	newRow +='</tr>';
+	$('#tblValorizacion tbody').append(newRow);
+		
+}

@@ -146,6 +146,8 @@ class PersonaController extends Controller
         $array["agremiado"] = $agremiado;
         echo json_encode($array);
     }
+
+   
 	
 	public function obtener_persona_conductor($tipo_documento,$numero_documento){
 

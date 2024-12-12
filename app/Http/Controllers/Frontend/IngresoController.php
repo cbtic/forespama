@@ -115,7 +115,7 @@ class IngresoController extends Controller
 
       // echo($Exonerado);exit();
 
-        if($tipo_documento=="79")$id_persona = $request->empresa_id;
+        if($tipo_documento=="5")$id_persona = $request->empresa_id; ///5 -> RUC
 
         $periodo = $request->cboPeriodo_b;
         $mes = $request->cboMes_b;
@@ -128,8 +128,8 @@ class IngresoController extends Controller
 
         //print_r($tipo_documento_b);exit();
 
-
-        if($tipo_documento_b=="87"){
+        ///6 -> NUMERO LIQUIDACIÓN
+        if($tipo_documento_b=="6"){
             $numero_documento_b = $request->numero_documento_b;
         }else{
             $numero_documento_b = "";

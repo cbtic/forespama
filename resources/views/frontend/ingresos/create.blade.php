@@ -797,18 +797,7 @@
                                             <div style="margin-top:15px" class="form-group">
                                                 <div class="col-sm-12 controls">
                                                     <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
-
                                                         <a href="javascript:void(0)" onClick="modal_productos(0)" class="btn btn-sm btn-success">Agregar</a>
-
-
-                                                        <!--
-                                                                    <button type="button" data-toggle="modal" style=""
-                                                                            data-target="#ProductoModal" id=""
-                                                                            class="btn btn-warning btn-sm">
-																			<i class="fas fa-search"></i>
-																			Agregar
-																			</button>
-                                                    -->
                                                     </div>
                                                 </div>
                                             </div>
@@ -819,7 +808,7 @@
 
 
                                         <div class="table-responsive overflow-auto" style="max-height: 500px">
-                                            <table id="tblOrdenCompraDetalle" class="table table-hover table-sm">
+                                            <table id="tblValorizacion" class="table table-hover table-sm">
                                                 <thead>
                                                     <tr style="font-size:13px">
                                                         <th width="5%">Nro</th>
@@ -834,7 +823,7 @@
 
                                                     </tr>
                                                 </thead>
-                                                <tbody id="divOrdenCompraDetalle">
+                                                <tbody id="divValorizacion">
                                                 </tbody>
                                                 <tfoot>
 
