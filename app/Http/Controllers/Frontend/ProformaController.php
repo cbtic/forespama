@@ -120,8 +120,17 @@ class ProformaController extends Controller
     public function send(Request $request){
 
         $id_user = Auth::user()->id;
+
+        $proforma_detalle = $request->valorizacion_detalle;
+
+        print_r($proforma_detalle);
+
+        exit();
+
    
         $proforma_model = new Proforma;
+
+
 		
         $datos[] = $request->accion;
         $datos[] = $id_user;        		

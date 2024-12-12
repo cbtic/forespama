@@ -896,7 +896,7 @@
                                                     <input class="btn btn-success pull-rigth" value="FACTURA" type="button" id="btnFactura" disabled="disabled" onclick="enviarTipo(1)" />
                                                     <input class="btn btn-info pull-rigth" value="BOLETA" type="button" id="btnBoleta" disabled="disabled" onclick="enviarTipo(2)" />
 
-                                                    <input class="btn btn-primary pull-rigth" value="PROFORMA" type="button" id="btnProforma" disabled="disabled" onclick="Proforma()" />
+                                                    <input class="btn btn-primary pull-rigth" value="PROFORMA" type="button" id="btnProforma"  onclick="proforma_send()" />
 
                                                     <input class="btn btn-info pull-rigth" value="BOLETA" type="button" id="btnTicket" disabled="disabled" onclick="enviarTipo(3)" style="display:none" />
 

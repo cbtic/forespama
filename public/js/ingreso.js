@@ -2695,8 +2695,6 @@ function modalProforma(id){
 
 function modal_productos(id){
 	
-	
-
 	$(".modal-dialog").css("width","85%");
 	$('#openOverlayOpc.modal-body').css('height', 'auto');
 
@@ -2772,7 +2770,34 @@ function AddFila(){
 
 	newRow +='<tr>';
 
-	newRow +='<td class="text-left">1<span class=""></span></td>';		
+	//newRow +='<td>';
+	//	newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][producto]" value="'+producto+'" />';
+	//newRow +='</td>';
+
+	newRow +='<td class="text-left">1<span class=""></span>';
+		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][id]" value="'+producto+'" />';
+		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][fecha]" value="'+producto+'" />';
+		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][denominacion]" value="'+producto+'" />';
+		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][monto]" value="'+producto+'" />';
+		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][pu]" value="'+producto+'" />';
+		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][igv]" value="'+producto+'" />';
+		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][pv]" value="'+pv+'" />';
+		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][total]" value="'+total+'" />';
+		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][moneda]" value="'+producto+'" />';
+		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][id_moneda]" value="'+producto+'" />';
+		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][abreviatura]" value="'+producto+'" />';
+		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][cantidad]" value="'+cantidad+'" />';
+
+		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][descuento]" value="'+producto+'" />';
+		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][cod_contable]" value="'+producto+'" />';
+		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][descripcion]" value="'+producto+'" />';
+		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][vencio]" value="'+producto+'" />';
+		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][id_concepto]" value="'+producto+'" />';
+		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][id_tipo_afectacion]" value="'+producto+'" />';
+
+
+
+	newRow +='</td>';		
 	newRow +='<td class="text-left">'+producto+'<span class=""></span></td>';
 	newRow +='<td class="text-center">'+cantidad+'<span class=""></span></td>';	
 	newRow +='<td class="text-right">'+pv+'<span class=""></span></td>';
@@ -2780,9 +2805,44 @@ function AddFila(){
 	newRow +='<td class="text-right">'+igv+'<span class=""></span></td>';
 	newRow +='<td class="text-right">'+total+'<span class=""></span></td>';
 
+	
+
+
 	newRow +='<td><button type="button" class="btn btn-danger deleteFila btn-xs" style="margin-left:4px"><i class="fa fa-times"></i></button></td>';
 
 	newRow +='</tr>';
 	$('#tblValorizacion tbody').append(newRow);
+
+	$('#openOverlayOpc').modal('hide');
 		
 }
+
+function proforma_send(){
+
+	
+	var msgLoader = "";
+	msgLoader = "Procesando, espere un momento por favor";
+	var heightBrowser = $(window).width()/2;
+	$('.loader').css("opacity","0.8").css("height",heightBrowser).html("<div id='Grd1_wrapper' class='dataTables_wrapper'><div id='Grd1_processing' class='dataTables_processing panel-default'>"+msgLoader+"</div></div>");
+    $('.loader').show();
+	//$('#guardar').hide();
+	
+    $.ajax({
+			url: "/proforma/send",
+            type: "POST",
+
+			data : $("#frmValorizacion").serialize(),
+			dataType: 'json',
+            success: function (result) {
+
+				$('.loader').hide();
+				
+				//$('#numerof').val(result.id_factura);
+				//$('#divNumeroF').show();
+				//location.href=urlApp+"/comprobante/"+result.id_factura;
+
+            }
+    });
+}
+
+
