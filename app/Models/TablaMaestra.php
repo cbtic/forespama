@@ -46,8 +46,9 @@ class TablaMaestra extends Model
                 where tipo='".$tipo."'
 				and estado='1'
                 order by orden ";
-
+       // echo($cad);
 		$data = DB::select($cad);
+
         return $data;
     }
 
