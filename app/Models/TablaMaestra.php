@@ -46,8 +46,9 @@ class TablaMaestra extends Model
                 where tipo='".$tipo."'
 				and estado='1'
                 order by orden ";
-
+       // echo($cad);
 		$data = DB::select($cad);
+
         return $data;
     }
 
@@ -118,7 +119,7 @@ class TablaMaestra extends Model
 
     function getCaja($tipo){
 
-        $cad = "Select t1.codigo,t1.denominacion 
+        $cad = "Select t1.codigo id,t1.denominacion 
 		from tabla_maestras t1
 		where t1.tipo='".$tipo."' and t1.estado='1' 
 		And t1.codigo::int not in (select distinct id_caja from caja_ingresos where estado='1')

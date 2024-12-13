@@ -85,6 +85,8 @@ $(document).ready(function () {
 		}
 	});
 
+	var um_ = "";
+
 	$('#txtProducto').autocomplete({
 		appendTo: "#producto_list",
 		source: function(request, response) {
@@ -96,6 +98,8 @@ $(document).ready(function () {
 			  var resp = $.map(data,function(obj){
 					console.log(obj);
 					//return obj.denominacion;
+					um_ = obj.um;
+
 					var hash = {key: obj.id, value: obj.denominacion};
 					return hash;
 			  }); 
@@ -112,6 +116,10 @@ $(document).ready(function () {
 					//alert(ui.item.key);
 					flag_select=true;
 					$('#txtProducto').attr("readonly",true);
+
+					alert(um_);
+
+
 			},
 		minLength: 2,
 		delay: 100
@@ -120,6 +128,15 @@ $(document).ready(function () {
 		{
 			$('#txtProducto').val("");
 		}
+	});
+
+	$('#tblValorizacion tbody').on('click', 'button.deleteFila', function () {
+		var obj = $(this);
+		obj.parent().parent().remove();
+		
+
+		//simulaPesarCarreta();
+		
 	});
 
 /*
@@ -239,6 +256,64 @@ function aperturar(accion){
             type: "POST",
             //data : $("#frmCita").serialize()+"&id_medico="+id_medico+"&fecha_cita="+fecha_cita,
             data : {accion:accion,id_caja_ingreso:id_caja_ingreso,id_caja:id_caja,saldo_inicial:saldo_inicial,total_recaudado:total_recaudado,saldo_total:saldo_total,estado:estado,_token:_token},
+            success: function (result) {  
+					//cargarValorizacion();
+					//cargarPagos();
+					location.reload();
+              
+            }
+    });
+}
+function aperturarMoneda(accion){
+	/*
+	var id_caja_ingreso = $('#id_caja_ingreso').val();
+    var id_caja = $('#id_caja').val();
+	var saldo_inicial = $('#saldo_inicial').val();
+	var total_recaudado = $('#total_recaudado').val();
+	var saldo_total = $('#saldo_total').val();
+	*/
+	
+	var id_caja_ingreso_soles = $('#id_caja_ingreso_soles').val();
+    var id_caja_soles = $('#id_caja_soles').val();
+	var saldo_inicial_soles = $('#saldo_inicial_soles').val();
+	var total_recaudado_soles = $('#total_recaudado_soles').val();
+	var saldo_total_soles = $('#saldo_total_soles').val();
+	
+	var id_caja_ingreso_dolares = $('#id_caja_ingreso_dolares').val();
+    var id_caja_dolares = $('#id_caja_dolares').val();
+	var saldo_inicial_dolares = $('#saldo_inicial_dolares').val();
+	var total_recaudado_dolares = $('#total_recaudado_dolares').val();
+	var saldo_total_dolares = $('#saldo_total_dolares').val();
+	
+	var estado = '1';
+	var _token = $('#_token').val();
+	
+	var msg = "";
+	
+	//if(id_caja == "0")msg += "Debe seleccionar una Caja disponible <br>";
+	//if(saldo_inicial == "")msg += "Debe ingresar el saldo inicial de caja <br>";
+	
+	if(id_caja_soles == "0")msg += "Debe seleccionar una Caja en Soles disponible <br>";
+	if(saldo_inicial_soles == "")msg += "Debe ingresar el saldo inicial de caja <br>";
+	
+	if(id_caja_dolares == "0")msg += "Debe seleccionar una Caja en Dolares disponible <br>";
+	if(saldo_inicial_dolares == "")msg += "Debe ingresar el saldo inicial de caja <br>";
+	
+	if(msg!=""){
+        bootbox.alert(msg);
+        return false;
+    }
+	//alert(id_caja);return false;
+    //var fecha_atencion_original = $('#fecha_atencion').val();
+	//var id_user = $('#id_user').val();
+    $.ajax({
+			url: "/ingreso/sendCajaMoneda",
+            type: "POST",
+            //data : $("#frmCita").serialize()+"&id_medico="+id_medico+"&fecha_cita="+fecha_cita,
+            data : {accion:accion,				//id_caja_ingreso:id_caja_ingreso,id_caja:id_caja,saldo_inicial:saldo_inicial,total_recaudado:total_recaudado,saldo_total:saldo_total,
+					id_caja_ingreso_soles:id_caja_ingreso_soles,id_caja_soles:id_caja_soles,saldo_inicial_soles:saldo_inicial_soles,total_recaudado_soles:total_recaudado_soles,saldo_total_soles:saldo_total_soles,
+					id_caja_ingreso_dolares:id_caja_ingreso_dolares,id_caja_dolares:id_caja_dolares,saldo_inicial_dolares:saldo_inicial_dolares,total_recaudado_dolares:total_recaudado_dolares,saldo_total_dolares:saldo_total_dolares,
+					estado:estado,_token:_token},
             success: function (result) {  
 					//cargarValorizacion();
 					//cargarPagos();
@@ -816,6 +891,8 @@ function obtenerBeneficiario(){
 
 	var numero_documento_b = $("#numero_documento_b").val();
 	$("#numero_documento").val(numero_documento_b);
+
+	
 	
 	var tipo_documento = $("#tipo_documento").val();
 	var numero_documento = $("#numero_documento").val();
@@ -826,6 +903,8 @@ function obtenerBeneficiario(){
 	$('#example-select-all').prop( "checked", false );
 	
 	//alert($("#tipo_documento").val());
+
+	
 	
 	if (msg != "") {
 		bootbox.alert(msg);
@@ -1010,9 +1089,9 @@ function obtenerBeneficiario(){
 
 				cargarValorizacion();
 				cargarPagos();
-				cargarcboTipoConcepto();
-				cargarcboPeriodo();
-				cargarcboMes();
+				//cargarcboTipoConcepto();
+				//cargarcboPeriodo();
+				//cargarcboMes();
 			}
 			else {
 
@@ -1112,6 +1191,7 @@ function cargarValorizacion(){
 
 	
 	var numero_documento =$("#numero_documento").val();
+	//alert(numero_documento);
 	if (numero_documento=="")exit();
 
 	$("#btnExonerarS").prop('disabled', true);
@@ -1120,7 +1200,7 @@ function cargarValorizacion(){
 
 	//cargarcboPeriodo();
     
-    //alert("hi");
+    
 	//var numero_documento = $("#numero_documento").val();
 	var tipo_documento = $("#tipo_documento").val();
 	var id_persona = 0;
@@ -2615,8 +2695,6 @@ function modalProforma(id){
 
 function modal_productos(id){
 	
-	
-
 	$(".modal-dialog").css("width","85%");
 	$('#openOverlayOpc.modal-body').css('height', 'auto');
 
@@ -2629,4 +2707,153 @@ function modal_productos(id){
 			}
 	});
 }
+
+function agregarProducto(){
+
+    var newRow = "";
+
+        var n = $('#tblProductoDetalle tbody tr').length + 1;
+        var codigo = '<input name="codigo[]" id="codigo' + n + '" class="form-control form-control-sm" value="" type="text">';
+        var cantidad = '<input name="cantidad[]" id="cantidad' + n + '" class="form-control form-control-sm" value="" type="text">';
+        var descripcion = '<select name="descripcion[]" id="descripcion' + n + '" class="form-control form-control-sm" onChange="obtenerCodInterno(this, ' + n + ')"> <option value="">--Seleccionar--</option> <?php foreach ($producto as $row) {?> <option value="<?php echo $row->id?>"><?php echo $row->denominacion?></option> <?php } ?> </select>';
+        var precio_unitario = '<input name="precio_unitario[]" id="precio_unitario' + n + '" class="precio_unitario form-control form-control-sm" value="" type="text" oninput="calcularSubTotal(this)">';
+        var sub_total = '<input name="sub_total[]" id="sub_total' + n + '" class="sub_total form-control form-control-sm" value="" type="text" readonly="readonly">';
+        var igv = '<input name="igv[]" id="igv' + n + '" class="igv form-control form-control-sm" value="" type="text" readonly="readonly">';
+        var total = '<input name="total[]" id="total' + n + '" class="total form-control form-control-sm" value="" type="text" readonly="readonly">';
+        
+        newRow += '<tr>';
+        newRow += '<td>' + n + '</td>';
+        newRow += '<td>' + codigo + '</td>';
+        newRow += '<td>' + cantidad + '</td>';
+        newRow += '<td>' + descripcion + '</td>';
+        newRow += '<td>' + ubicacion_fisica_seccion + '</td>';
+        newRow += '<td>' + ubicacion_fisica_anaquel + '</td>';
+        newRow += '<td>' + cod_interno + '</td>';
+        newRow += '<td>' + unidad + '</td>';
+        newRow += '<td>' + cantidad_ingreso + '</td>';
+        newRow += '<td>' + cantidad_compra + '</td>';
+        newRow += '<td>' + cantidad_pendiente + '</td>';
+        newRow += '<td>' + stock_actual + '</td>';
+        newRow += '<td>' + precio_unitario + '</td>';
+        newRow += '<td>' + sub_total + '</td>';
+        newRow += '<td>' + igv + '</td>';
+        newRow += '<td>' + total + '</td>';
+        newRow += '</tr>';
+
+        $('#tblProductoDetalle tbody').append(newRow);
+
+
+
+    
+
+    //actualizarTotalGeneral();
+}
+
+
+function AddFila(){
+		
+	var newRow = "";
+	var ind = $('#tblValorizacion tbody tr').length;
+	//var tabindex = 11;
+	//var nuevalperiodo = "";
+
+	//var f = new Date();
+	var f = new Date();
+	var fecha_ = f.getDate() + "-"+ f.getMonth()+ "-" +f.getFullYear();
+
+	var producto = $('#txtProducto').val();
+	var cantidad = $('#txtCantidad').val();
+	var pv = $('#txtPrecioVenta').val();
+	var st = $('#txtValorVenta').val();
+	var igv = $('#txtIgv').val();
+	var total = $('#txtTotal').val();
+
+	//txtUM
+	//txtValorUnitario
+	//txtValorVB
+	//txtDescuento
+
+	
+	
+	var cont = ind+1;
+
+	//var total = $('#').val();
+	//var total = $('#').val();
+
+	newRow +='<tr>';
+
+	//newRow +='<td>';
+	//	newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][producto]" value="'+producto+'" />';
+	//newRow +='</td>';
+
+	newRow +='<td class="text-left">'+cont+'<span class=""></span>';
+		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][fecha]" value="" />';
+		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][denominacion]" value="'+producto+'" />';
+		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][monto]" value="'+pv+'" />';
+		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][pu]" value="'+pv+'" />';
+		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][igv]" value="'+igv+'" />';
+		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][pv]" value="'+pv+'" />';
+		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][total]" value="'+total+'" />';
+		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][moneda]" value="" />';
+		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][id_moneda]" value="" />';
+		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][abreviatura]" value="" />';
+		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][cantidad]" value="'+cantidad+'" />';
+
+		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][descuento]" value="" />';
+		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][cod_contable]" value="" />';
+		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][descripcion]" value="'+producto+'" />';
+		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][vencio]" value="" />';
+		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][id_concepto]" value="" />';
+		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][id_tipo_afectacion]" value="" />';
+
+
+
+	newRow +='</td>';		
+	newRow +='<td class="text-left">'+producto+'<span class=""></span></td>';
+	newRow +='<td class="text-center">'+cantidad+'<span class=""></span></td>';	
+	newRow +='<td class="text-right">'+pv+'<span class=""></span></td>';
+	newRow +='<td class="text-right">'+st+'<span class=""></span></td>';
+	newRow +='<td class="text-right">'+igv+'<span class=""></span></td>';
+	newRow +='<td class="text-right">'+total+'<span class=""></span></td>';
+
+	
+
+
+	newRow +='<td><button type="button" class="btn btn-danger deleteFila btn-xs" style="margin-left:4px"><i class="fa fa-times"></i></button></td>';
+
+	newRow +='</tr>';
+	$('#tblValorizacion tbody').append(newRow);
+
+	$('#openOverlayOpc').modal('hide');
+		
+}
+
+function proforma_send(){
+
+	
+	var msgLoader = "";
+	msgLoader = "Procesando, espere un momento por favor";
+	var heightBrowser = $(window).width()/2;
+	$('.loader').css("opacity","0.8").css("height",heightBrowser).html("<div id='Grd1_wrapper' class='dataTables_wrapper'><div id='Grd1_processing' class='dataTables_processing panel-default'>"+msgLoader+"</div></div>");
+    $('.loader').show();
+	//$('#guardar').hide();
+	
+    $.ajax({
+			url: "/proforma/send",
+            type: "POST",
+
+			data : $("#frmValorizacion").serialize(),
+			dataType: 'json',
+            success: function (result) {
+
+				$('.loader').hide();
+				
+				//$('#numerof').val(result.id_factura);
+				//$('#divNumeroF').show();
+				//location.href=urlApp+"/comprobante/"+result.id_factura;
+
+            }
+    });
+}
+
 
