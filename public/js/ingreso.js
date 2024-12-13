@@ -2763,15 +2763,22 @@ function AddFila(){
 
 	var producto = $('#txtProducto').val();
 	var cantidad = $('#txtCantidad').val();
-	var pv = $('#txtPrecioVenta').val();
-	var st = $('#txtValorVenta').val();
+	var precio_venta = $('#txtPrecioVenta').val();
+	var valor_venta = $('#txtValorVenta').val();
 	var igv = $('#txtIgv').val();
 	var total = $('#txtTotal').val();
 
-	//txtUM
-	//txtValorUnitario
-	//txtValorVB
-	//txtDescuento
+	var um = $('#txtUM').val();
+	var valor_unitario = $('#txtValorUnitario').val();
+	var valor_venta_bruto = $('#txtValorVB').val();
+	var id_descuento = $('id_descuento').val();
+	var descuento = $('#txtDescuento').val();
+
+	id_producto
+	id_um
+	codigo_producto
+
+
 
 	
 	
@@ -2787,6 +2794,16 @@ function AddFila(){
 	//newRow +='</td>';
 
 	newRow +='<td class="text-left">'+cont+'<span class=""></span>';
+
+		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][id_producto]" value="" />';
+		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][id_descuento]" value="" />';
+		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][precio_unitario]" value="" />';
+
+		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][sub_total]" value="" />';
+		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][id_unidad_medida]" value="" />';
+		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][valor_venta_bruto]" value="" />';
+
+
 		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][fecha]" value="" />';
 		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][denominacion]" value="'+producto+'" />';
 		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][monto]" value="'+pv+'" />';

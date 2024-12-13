@@ -280,6 +280,10 @@
 	var ValorVenta_ = 0;
 	var Igv_ = 0;
 	var Total_ = 0;
+	var id_um_=0;
+	var codigo_producto_ = "";
+	var id_producto_=0;
+	var nombre_producto_ = "";
 
 	$('#txtProducto').autocomplete({
 		appendTo: "#producto_list1",
@@ -291,9 +295,12 @@
 					// alert(JSON.stringify(data));
 					var resp = $.map(data, function(obj) {
 						console.log(obj);
-						
+						id_um_ = obj.id_unidad_medida;
 						um_ = obj.um;												
 						PrecioVenta_ = obj.costo_unitario;
+						codigo_producto_ = obj.codigo;
+						id_producto_ = obj.id;
+
 						/*
 						ValorUnitario_ = PrecioVenta_ /(1+tasa_igv_);
 						ValorVB_ = ValorUnitario_ * Cantidad_;
@@ -323,7 +330,12 @@
 			flag_select = true;
 			$('#txtProducto').attr("readonly", true);
 			$('#txtUM').val(um_);
-			$('#txtPrecioVenta').val(PrecioVenta_);
+
+			$('#id_um').val(id_um_);
+			$('#codigo_producto').val(codigo_producto_);
+			$('#id_producto').val(id_producto_);
+
+
 
 /*			$('#txtValorUnitario').val(ValorUnitario_);
 			$('#txtValorVB').val(ValorVB_);
@@ -460,8 +472,13 @@
 								<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding-top:5px;padding-bottom:20px">
 
 									<input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
+									
+									<input type="hidden" name="id_producto" id="id_producto" value="">
+									<input type="hidden" name="id_um" id="id_um" value="">
+									<input type="hidden" name="codigo_producto" id="codigo_producto" value="">
+									<input type="hidden" name="nombre_producto" id="nombre_producto" value="">
 
-
+									<input type="hidden" name="id_descuento" id="id_descuento" value="1">
 
 									<div class="row" style="padding-left:10px">
 										<div class="card-body">
