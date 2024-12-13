@@ -29,10 +29,10 @@ use App\Http\Controllers\Frontend\TiendaController;
 use App\Http\Controllers\Frontend\IngresoProduccionController;
 use App\Http\Controllers\Frontend\RequerimientoController;
 
+use App\Http\Controllers\Frontend\ProformaController;
 
 
-
-use App\Models\Ubigeo;
+//use App\Models\Ubigeo;
 
 /*
  * Frontend Controllers
@@ -226,6 +226,10 @@ Route::post('ingreso/obtener_caja_condicion_pago', [IngresoController::class, 'o
 Route::post('ingreso/obtener_caja_venta', [IngresoController::class, 'obtener_caja_venta'])->name('ingreso.obtener_caja_venta');
 
 Route::get('ingreso/obtener_producto_tipo_denominacion/{tipo}/{den}', [IngresoController::class, 'obtener_producto_tipo_denominacion'])->name('ingreso.obtener_producto_tipo_denominacion');
+Route::post('ingreso/sendCajaMoneda', [IngresoController::class, 'sendCajaMoneda'])->name('ingreso.sendCajaMoneda');
+
+Route::post('proforma/send', [ProformaController::class, 'send'])->name('proforma.send');
+
 
 
 Route::post('comprobante/edit', [ComprobanteController::class, 'edit'])->name('comprobante.edit');

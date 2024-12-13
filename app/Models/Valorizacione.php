@@ -9,99 +9,85 @@ class Valorizacione extends Model
 {
     //
 
-    function getValorizacion($tipo_documento,$persona_id){
-        if($tipo_documento=="RUC"){
+    function getValorizacion($tipo_documento,$id_persona,$periodo,$mes,$cuota,$concepto, $filas,$exonerado,$numero_documento_b){  
+        
+        if($filas!="")$filas="limit ".$filas;
+        $credipago = "";
+        $tlb_liquidacion = "";
+        if($numero_documento_b!=""){
+            //$credipago=" and v.descripcion ilike '%".$numero_documento_b."' ";
+            $credipago=" and l.credipago = '".$numero_documento_b."' and l.estado = '1' ";
+            $tlb_liquidacion = "left join liquidaciones l  on l.id = v.pk_registro and v.id_modulo = 7";
+
+        }
+        
+        //if($exonerado=="0")$exonerado="";
+        
+    //echo($tipo_documento);
+
+        if($tipo_documento=="5"){  //RUC
+
             $cad = "
-			select R.*,
-            round(cast(vsm_precio/1.18 as numeric),2) valor_unitario,
-            round(cast(vsm_precio*1/1.18 as numeric),2) valor_venta_bruto,
-            round(cast((vsm_precio*1/1.18)-(((COALESCE(descuento,0)*vsm_precio)/100)/1.18) as numeric),2) valor_venta,
-            round(cast(((vsm_precio*1/1.18)-(((COALESCE(descuento,0)*vsm_precio)/100)/1.18))*0.18 as numeric),2) igv,
-            round(cast((((vsm_precio*1/1.18)-(((COALESCE(descuento,0)*vsm_precio)/100)/1.18))*0.18)+(vsm_precio*1/1.18)-(((COALESCE(descuento,0)*vsm_precio)/100)/1.18) as numeric),2) total,
-            round(cast((((COALESCE(descuento,0)*vsm_precio)/100)/1.18) as numeric),2) descuento_item
-            from(
-			select
-            t1.val_estab, t1.val_codigo,t3.vsm_modulo,
-			t3.vsm_smodulo,t1.val_fecha,t1.val_pac_nombre,t1.val_subtotal,t1.val_subtotal_plan,t1.val_total,
-			t1.val_moneda,t2.vm_modulod,t2.vm_descripcion,t2.vm_precio,t3.vsm_smodulo,t3.vsm_smodulod,t3.vsm_precio,
-			vsm_costo_plan,t4.smod_plancontable plancontable,
-            t1.val_impuesto,
-            t3.vsm_precio precio_venta,
-            case when (select count(*) from valorizaciones t11
-				inner join val_atencion_modulos t22 on t1.val_estab = t22.vm_vestab And t11.val_codigo = t22.vm_vnumero
-				inner join val_atencion_smodulos t33 on t22.vm_vestab = t33.vsm_vestab And t22.vm_vnumero = t33.vsm_vnumero And t22.vm_modulo = t33.vsm_modulo
-			where t11.val_estab_i = t1.val_estab_i and t11.val_codigo_i = t1.val_codigo_i and t33.vsm_modulo = t3.vsm_modulo and t33.vsm_smodulo = t3.vsm_smodulo) > 1 then null else t4.smod_descuento end descuento,
-			COALESCE(plan_tipo_factura,smod_tipo_factura)smod_tipo_factura,smod_control,
-			(case when t3.vsm_modulo=2 And t3.vsm_smodulo in (1,2,6,11,19,20) Then 0 else 1 end)flag_estado_cuenta
-            from valorizaciones t1
-            inner join val_atencion_modulos t2 on t1.val_estab = t2.vm_vestab And t1.val_codigo = t2.vm_vnumero
-            inner join val_atencion_smodulos t3 on t2.vm_vestab = t3.vsm_vestab And t2.vm_vnumero = t3.vsm_vnumero And t2.vm_modulo = t3.vsm_modulo
-            inner join sub_modulos t4 on t3.vsm_modulo = t4.smod_modulo And t3.vsm_smodulo = t4.smod_codigo
-			left join plan_atenciones t5 on t1.val_plan = t5.id
-            Where t1.val_estab=1
-            And t1.val_ubicacion=".$persona_id."
-            And val_tipo='E'
-            /*And t1.val_estado_atencion='A' */
-            And t1.val_anulado='N'
-            /*And t1.val_facturado='N'*/
-			And t3.vsm_facturado='N'
-            And t2.vm_estado='A' And t2.vm_eliminado='N'
-            And t3.vsm_estado='A' And t3.vsm_eliminado='N'
-			And t3.vsm_precio > 0
-			--And t3.vsm_smodulo!=23
-			And t3.vsm_modulo::varchar||t3.vsm_smodulo::varchar!='223' 
-			order by t1.val_fecha desc
-			)R
+            select v.id, v.fecha, c.denominacion  concepto, v.monto,t.denominacion moneda, v.id_moneda, v.fecha_proceso, 
+                (case when descripcion is null then c.denominacion else v.descripcion end) descripcion, t.abreviatura,
+                (case when v.fecha < now() then '1' else '0' end) vencio, v.id_concepto, c.id_tipo_afectacion,
+                coalesce(v.cantidad, '1') cantidad, coalesce(v.valor_unitario, v.monto) valor_unitario, otro_concepto, 
+                codigo_fraccionamiento, v.exonerado,v.exonerado_motivo                 
+                --, v.id_tipo_concepto
+            from valorizaciones v
+                left join conceptos c  on c.id = v.id_concepto
+                --inner join agremiado_cuotas a  on a.id = v.pk_registro
+                inner join tabla_maestras t  on t.codigo::int = v.id_moneda and t.tipo = '1'
+                ".$tlb_liquidacion."
+                where v.id_empresa = ".$id_persona."            
+                and DATE_PART('YEAR', v.fecha)::varchar ilike '%".$periodo."'
+                and to_char(DATE_PART('MONTH', v.fecha),'00') ilike '%".$mes."'                
+                and (case when v.fecha < now() then '1' else '0' end) ilike '%".$cuota."'
+                and c.id::varchar ilike '%".$concepto."'
+                and v.estado = '1'            
+                and v.pagado = '0'
+                and v.exonerado = '".$exonerado."' 
+                ".$credipago."
+                --and v.descripcion ilike '%".$numero_documento_b."' 
+            order by v.fecha desc
+             ".$filas."
 			";
+            //print_r($cad);exit();
         }else{
             $cad = "
-            select R.*,
-            round(cast(vsm_precio/1.18 as numeric),2) valor_unitario,
-            round(cast(vsm_precio*1/1.18 as numeric),2) valor_venta_bruto,
-            round(cast((vsm_precio*1/1.18)-(((COALESCE(descuento,0)*vsm_precio)/100)/1.18) as numeric),2) valor_venta,
-            round(cast(((vsm_precio*1/1.18)-(((COALESCE(descuento,0)*vsm_precio)/100)/1.18))*0.18 as numeric),2) igv,
-            round(cast((((vsm_precio*1/1.18)-(((COALESCE(descuento,0)*vsm_precio)/100)/1.18))*0.18)+(vsm_precio*1/1.18)-(((COALESCE(descuento,0)*vsm_precio)/100)/1.18) as numeric),2) total,
-            round(cast((((COALESCE(descuento,0)*vsm_precio)/100)/1.18) as numeric),2) descuento_item
-            from(
-            select
-            t1.val_estab, t1.val_codigo,t3.vsm_modulo,
-            t3.vsm_smodulo,t1.val_fecha,t1.val_pac_nombre,t1.val_subtotal,t1.val_subtotal_plan,t1.val_total,
-            t1.val_moneda,t2.vm_modulod,t2.vm_descripcion,t2.vm_precio,t3.vsm_smodulo,t3.vsm_smodulod,t3.vsm_precio,
-            t3.vsm_costo_plan, t4.smod_plancontable plancontable,
-            t1.val_impuesto,
-            t3.vsm_precio precio_venta,
-            case when (select count(*) from valorizaciones t11
-				inner join val_atencion_modulos t22 on t1.val_estab = t22.vm_vestab And t11.val_codigo = t22.vm_vnumero
-				inner join val_atencion_smodulos t33 on t22.vm_vestab = t33.vsm_vestab And t22.vm_vnumero = t33.vsm_vnumero And t22.vm_modulo = t33.vsm_modulo
-			where t11.val_estab_i = t1.val_estab_i and t11.val_codigo_i = t1.val_codigo_i and t33.vsm_modulo = t3.vsm_modulo and t33.vsm_smodulo = t3.vsm_smodulo) > 1 then null else t4.smod_descuento end descuento,
-            COALESCE(plan_tipo_factura,smod_tipo_factura) smod_tipo_factura,smod_control,
-			(case when t3.vsm_modulo=2 And t3.vsm_smodulo in (1,2,6,11,19,20) Then 0 else 1 end)flag_estado_cuenta
-            from valorizaciones t1
-            inner join val_atencion_modulos t2 on t1.val_estab = t2.vm_vestab And t1.val_codigo = t2.vm_vnumero
-            inner join val_atencion_smodulos t3 on t2.vm_vestab = t3.vsm_vestab And t2.vm_vnumero = t3.vsm_vnumero And t2.vm_modulo = t3.vsm_modulo
-            inner join sub_modulos t4 on t3.vsm_modulo = t4.smod_modulo And t3.vsm_smodulo = t4.smod_codigo
-			left join plan_atenciones t5 on t1.val_plan = t5.id
-            Where t1.val_estab=1
-            And t1.val_persona=".$persona_id."
-            And val_tipo='P'
-            /*And t1.val_estado_atencion='A' */
-            And t1.val_anulado='N'
-            /*And t1.val_facturado='N'*/
-			And t3.vsm_facturado='N'
-            And t2.vm_estado='A' And t2.vm_eliminado='N'
-            And t3.vsm_estado='A' And t3.vsm_eliminado='N'
-			And t3.vsm_precio > 0 
-			--And t3.vsm_smodulo!=23 
-			And t3.vsm_modulo::varchar||t3.vsm_smodulo::varchar!='223'
-            order by t1.val_fecha desc
-            )R
+            
+            select v.id, v.fecha, c.denominacion  concepto, v.monto,t.denominacion moneda, v.id_moneda, v.fecha_proceso, 
+                (case when descripcion is null then c.denominacion else v.descripcion end) descripcion, t.abreviatura,
+                (case when v.fecha < now() then '1' else '0' end) vencio, v.id_concepto, c.id_tipo_afectacion,
+                coalesce(v.cantidad, '1') cantidad, coalesce(v.valor_unitario, v.monto) valor_unitario, otro_concepto,
+                codigo_fraccionamiento, v.exonerado,v.exonerado_motivo               
+            from valorizaciones v
+                left join conceptos c  on c.id = v.id_concepto            
+                inner join tabla_maestras t  on t.codigo::int = v.id_moneda and t.tipo = '1'
+                ".$tlb_liquidacion."
+                where v.id_persona = ".$id_persona."            
+                and DATE_PART('YEAR', v.fecha)::varchar ilike '%".$periodo."'
+                and to_char(DATE_PART('MONTH', v.fecha),'00') ilike '%".$mes."'
+                and (case when v.fecha < now() then '1' else '0' end) ilike '%".$cuota."'
+                and c.id::varchar ilike '%".$concepto."'
+                and v.estado = '1'            
+                and v.pagado = '0'
+                and v.exonerado = '".$exonerado."' 
+                ".$credipago."
+                --and v.descripcion ilike '%".$numero_documento_b."' 
+            order by v.fecha desc
+             ".$filas."
 			";
         }
 
-        //echo $cad;
+
+       // echo $cad;
+
 		$data = DB::select($cad);
         return $data;
     }
+
+
 	
 	function getDudoso($tipo_documento,$persona_id){
         if($tipo_documento=="RUC"){
@@ -387,109 +373,44 @@ class Valorizacione extends Model
 	
     function getPago($tipo_documento,$persona_id){
 
-        if($tipo_documento=="RUC"){
-           /*
-            $cad = "select
-            t1.val_codigo,t1.val_estab,t3.vsm_smodulo,t1.val_fecha,t1.val_pac_nombre,t1.val_subtotal,t1.val_total,t1.val_moneda,t2.vm_modulod,t2.vm_descripcion,t2.vm_precio,t3.vsm_smodulo,t3.vsm_smodulod,t3.vsm_precio
-			,t4.fac_total,t1.val_fac_serie,t1.val_fac_numero
-            from valorizaciones t1
-            inner join val_atencion_modulos t2 on t1.val_estab = t2.vm_vestab And t1.val_codigo = t2.vm_vnumero
-            inner join val_atencion_smodulos t3 on t2.vm_vestab = t3.vsm_vestab And t2.vm_vnumero = t3.vsm_vnumero And t2.vm_modulo = t3.vsm_modulo
-			inner join facturas t4 on t1.val_fac_serie=t4.fac_serie And t1.val_fac_numero=t4.fac_numero
-            Where t1.val_estab=1
-            And t1.val_ubicacion=".$persona_id."
-            And val_tipo='E'
-            And t1.val_anulado='N'
-            And t1.val_facturado='S'
-            And t2.vm_estado='A' And t2.vm_eliminado='N'
-            And t3.vsm_estado='A' And t3.vsm_eliminado='N'";
-            */
-			/*
-            $cad = "select  distinct t4.id id_factura,t4.fac_tipo,t4.fac_fecha,t4.fac_serie,t4.fac_numero,t4.fac_total,
-			(select string_agg(DISTINCT coalesce(smod_control,facd_descripcion), ',') from factura_detalles fac left join sub_modulos sm on fac.facd_descripcion=sm.smod_denominacion where fac.facd_tipo=t4.fac_tipo And fac.facd_numero=t4.fac_numero And fac.facd_serie=t4.fac_serie) fact_descripcion,
-			COALESCE(plan_tipo_factura,(select string_agg(DISTINCT smod_tipo_factura, ',') from factura_detalles fac left join sub_modulos sm on (fac.facd_descripcion=sm.smod_control or fac.facd_descripcion=sm.smod_denominacion) where fac.facd_tipo=t4.fac_tipo And fac.facd_numero=t4.fac_numero And fac.facd_serie=t4.fac_serie)) smod_tipo_factura
-            from valorizaciones t1
-			inner join facturas t4 on t1.val_fac_serie=t4.fac_serie And t1.val_fac_numero=t4.fac_numero
-			left join plan_atenciones t5 on t1.val_plan = t5.id
-            Where t1.val_estab=1
-            And t1.val_ubicacion=".$persona_id."
-            And val_tipo='E'
-	        And t4.fac_anulado='N'
-            And t1.val_facturado='S'
-            order by t4.fac_fecha desc";
-			*/
-			$cad = "select  distinct t4.id id_factura,t4.fac_tipo,t4.fac_fecha,t4.fac_serie,t4.fac_numero,t4.fac_total,
-			(select string_agg(DISTINCT coalesce(smod_control,facd_descripcion), ',') from factura_detalles fac left join sub_modulos sm on fac.facd_descripcion=sm.smod_denominacion where fac.facd_tipo=t4.fac_tipo And fac.facd_numero=t4.fac_numero And fac.facd_serie=t4.fac_serie) fact_descripcion,
-			COALESCE(plan_tipo_factura,(select string_agg(DISTINCT smod_tipo_factura, ',') from factura_detalles fac left join sub_modulos sm on (fac.facd_descripcion=sm.smod_control or fac.facd_descripcion=sm.smod_denominacion) where fac.facd_tipo=t4.fac_tipo And fac.facd_numero=t4.fac_numero And fac.facd_serie=t4.fac_serie)) smod_tipo_factura,
-			first_name||' '||last_name as usuario_registro 
-            from valorizaciones t1
-			inner join val_atencion_modulos t2 on t1.val_estab = t2.vm_vestab And t1.val_codigo = t2.vm_vnumero
-			inner join val_atencion_smodulos t3 on t2.vm_vestab = t3.vsm_vestab And t2.vm_vnumero = t3.vsm_vnumero And t2.vm_modulo = t3.vsm_modulo
-			inner join sub_modulos t6 on t3.vsm_modulo = t6.smod_modulo And t3.vsm_smodulo = t6.smod_codigo
-			inner join facturas t4 on t3.vsm_fac_tipo=t4.fac_tipo And t3.vsm_fac_serie=t4.fac_serie And t3.vsm_fac_numero=t4.fac_numero
-			left join plan_atenciones t5 on t1.val_plan = t5.id 
-			left join users t7 on t4.id_usuario = t7.id 
-            Where t1.val_estab=1
-            And t1.val_ubicacion=".$persona_id."
-            And val_tipo='E'
-	        And t4.fac_anulado='N'
-            And t3.vsm_facturado='S'
-			--And t3.vsm_smodulo!=23 
-			And t3.vsm_modulo::varchar||t3.vsm_smodulo::varchar!='223'
-            order by t4.fac_fecha desc";
-        }else{
+        if($tipo_documento=="79"){
+            $cad = "select distinct c.id id_comprobante,c.tipo, c.fecha, c.serie, c.numero, c.total, u.name usuario_registro, c.estado_pago,
+            (select string_agg(coalesce(d.descripcion), ',' order by d.item desc)  from comprobante_detalles d  where d.id_comprobante = c.id ) descripcion,id_comprobante_ncnd, 
+            (select id
+             from comprobantes cc 
+             where c.id=cc.id_comprobante_ncnd and cc.tipo='NC' limit 1) as tiene_nc,
+             (select id
+             from comprobantes cn 
+             where c.id=cn.id_comprobante_ncnd and cn.tipo='ND' limit 1) as tiene_nd
 
-			$cad = "select distinct t4.id id_factura,t4.fac_tipo,t4.fac_fecha,t4.fac_serie,t4.fac_numero,t4.fac_total,
-			(select string_agg(DISTINCT coalesce(smod_control,facd_descripcion), ',') from factura_detalles fac left join sub_modulos sm on fac.facd_descripcion=sm.smod_denominacion where fac.facd_tipo=t4.fac_tipo And fac.facd_numero=t4.fac_numero And fac.facd_serie=t4.fac_serie) fact_descripcion,
-			COALESCE(plan_tipo_factura,(select string_agg(DISTINCT smod_tipo_factura, ',') from factura_detalles fac left join sub_modulos sm on (fac.facd_descripcion=sm.smod_control or fac.facd_descripcion=sm.smod_denominacion) where fac.facd_tipo=t4.fac_tipo And fac.facd_numero=t4.fac_numero And fac.facd_serie=t4.fac_serie)) smod_tipo_factura, 
-			first_name||' '||last_name as usuario_registro 
-			from valorizaciones t1
-			inner join val_atencion_modulos t2 on t1.val_estab = t2.vm_vestab And t1.val_codigo = t2.vm_vnumero
-			inner join val_atencion_smodulos t3 on t2.vm_vestab = t3.vsm_vestab And t2.vm_vnumero = t3.vsm_vnumero And t2.vm_modulo = t3.vsm_modulo
-			inner join sub_modulos t6 on t3.vsm_modulo = t6.smod_modulo And t3.vsm_smodulo = t6.smod_codigo
-			inner join facturas t4 on t3.vsm_fac_tipo=t4.fac_tipo And t3.vsm_fac_serie=t4.fac_serie And t3.vsm_fac_numero=t4.fac_numero
-			left join plan_atenciones t5 on t1.val_plan = t5.id 
-			left join users t7 on t4.id_usuario = t7.id 
-			Where t1.val_estab=1
-			And t1.val_persona=".$persona_id."
-			And val_tipo='P'
-			And t4.fac_anulado='N'
-			And t3.vsm_facturado='S'
-			order by t4.fac_fecha desc";
-			/*
-            $cad = "select  distinct t4.id id_factura,t4.fac_tipo,t4.fac_fecha,t4.fac_serie,t4.fac_numero,t4.fac_total,
-			(select string_agg(DISTINCT coalesce(smod_control,facd_descripcion), ',') from factura_detalles fac left join sub_modulos sm on fac.facd_descripcion=sm.smod_denominacion where fac.facd_tipo=t4.fac_tipo And fac.facd_numero=t4.fac_numero And fac.facd_serie=t4.fac_serie) fact_descripcion,
-			COALESCE(plan_tipo_factura,(select string_agg(DISTINCT smod_tipo_factura, ',') from factura_detalles fac left join sub_modulos sm on (fac.facd_descripcion=sm.smod_control or fac.facd_descripcion=sm.smod_denominacion) where fac.facd_tipo=t4.fac_tipo And fac.facd_numero=t4.fac_numero And fac.facd_serie=t4.fac_serie)
-) smod_tipo_factura
-            from valorizaciones t1
-			inner join facturas t4 on t1.val_fac_serie=t4.fac_serie And t1.val_fac_numero=t4.fac_numero
-			left join plan_atenciones t5 on t1.val_plan = t5.id
-            Where t1.val_estab=1
-            And t1.val_persona=".$persona_id."
-            And val_tipo='P'
-	        And t4.fac_anulado='N'
-            And t1.val_facturado='S'
-            order by t4.fac_fecha desc";
-			*/
-            /*
-            $cad = "select
-            t1.val_codigo,t1.val_estab,
-            t3.vsm_smodulo,t1.val_fecha,t1.val_pac_nombre,t1.val_subtotal,t1.val_total,t1.val_moneda,t2.vm_modulod,t2.vm_descripcion,t2.vm_precio,t3.vsm_smodulo,t3.vsm_smodulod,
-            (case when val_plan>0 then vsm_costo_plan else t3.vsm_precio end)vsm_precio
-			,t4.fac_total,t1.val_fac_serie,t1.val_fac_numero
-            from valorizaciones t1
-            inner join val_atencion_modulos t2 on t1.val_estab = t2.vm_vestab And t1.val_codigo = t2.vm_vnumero
-            inner join val_atencion_smodulos t3 on t2.vm_vestab = t3.vsm_vestab And t2.vm_vnumero = t3.vsm_vnumero And t2.vm_modulo = t3.vsm_modulo
-			inner join facturas t4 on t1.val_fac_serie=t4.fac_serie And t1.val_fac_numero=t4.fac_numero
-            Where t1.val_estab=1
-            And t1.val_persona=".$persona_id."
-            And val_tipo='P'
-            And t1.val_anulado='N'
-            And t1.val_facturado='S'
-            And t2.vm_estado='A' And t2.vm_eliminado='N'
-            And t3.vsm_estado='A' And t3.vsm_eliminado='N'";
-            */
+            from comprobantes c
+            inner join comprobante_detalles d on d.id_comprobante = c.id
+            --inner join valorizaciones v on v.id_comprobante = c.id            
+            left join users u  on u.id  = c.id_usuario_inserta 
+            where c.id_empresa = ".$persona_id."
+            and c.tipo in ('FT', 'BV')
+            order by c.fecha desc";
+
+        }else{
+            $cad = "select distinct c.id id_comprobante,c.tipo, c.fecha, c.serie, c.numero, c.total, u.name usuario_registro, c.estado_pago,
+            (select string_agg( coalesce(d.descripcion), ',' order by d.item desc)  from comprobante_detalles d  where d.id_comprobante = c.id ) descripcion,id_comprobante_ncnd ,
+            (select id
+             from comprobantes cc 
+             where cc.id_comprobante_ncnd = c.id and cc.tipo='NC' limit 1) as tiene_nc,
+             (select id
+             from comprobantes cn 
+             where cn.id_comprobante_ncnd = c.id and cn.tipo='ND' limit 1) as tiene_nd
+            from comprobantes c
+            inner join comprobante_detalles d on d.id_comprobante = c.id            
+            left join users u  on u.id  = c.id_usuario_inserta 
+            --inner join personas p on c.cod_tributario=p.numero_documento
+            where c.id_persona = ".$persona_id."            
+            and c.tipo in ('FT', 'BV')
+            order by c.fecha desc";
+    
         }
+
+        
         //echo $cad;
 		$data = DB::select($cad);
         return $data;

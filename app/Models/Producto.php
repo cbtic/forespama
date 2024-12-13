@@ -108,7 +108,7 @@ class Producto extends Model
 
         if ($tipo == '') $tipo_v =" ";
 
-        $cad = "SELECT p.id, p.codigo ||' - '|| p.denominacion producto_desc,  p.codigo, p.denominacion, p.id_unidad_medida, um.denominacion um,  p.stock_actual, 
+        $cad = "SELECT p.id, p.codigo ||' - '|| p.denominacion denominacion,  p.codigo,  p.id_unidad_medida, um.denominacion um,  p.stock_actual, 
                     p.id_moneda, m.denominacion moneda_desc, m.abreviatura moneda_abreviatura, p.costo_unitario, p.numero_corrrelativo, p.id_tipo_origen_producto 
                 from productos p
                     left join tabla_maestras um on um.codigo::int=p.id_unidad_medida and um.tipo = '43'

@@ -246,8 +246,40 @@
 			//console.log('${day}-${month}-${year}')
 			$('#txtFechaIni').val(`${day}-${month}-${year}`);
 		}
+
+		$('#txtCantidad').keypress(function (e) {
+			if (e.keyCode == 13) {
+				calcular();
+			}
+		});
+		$('#txtPrecioVenta').keypress(function (e) {
+			if (e.keyCode == 13) {
+				calcular();
+			}
+		});
+		$('#txtDescuento').keypress(function (e) {
+			if (e.keyCode == 13) {
+				calcular();
+			}
+		});		
+		$('#txtTotal').keypress(function (e) {
+			if (e.keyCode == 13) {
+				calcular();
+			}
+		});												
+																					
 	});
 
+	var tasa_igv_= 0.18;
+	var um_ = "";
+	var Cantidad_ = $('#txtCantidad').val();	
+	var PrecioVenta_ = 0;
+	var ValorUnitario_ = 0;
+	var ValorVB_ = 0;
+	var Descuento_ = 0;
+	var ValorVenta_ = 0;
+	var Igv_ = 0;
+	var Total_ = 0;
 
 	$('#txtProducto').autocomplete({
 		appendTo: "#producto_list1",
@@ -259,6 +291,17 @@
 					// alert(JSON.stringify(data));
 					var resp = $.map(data, function(obj) {
 						console.log(obj);
+						
+						um_ = obj.um;												
+						PrecioVenta_ = obj.costo_unitario;
+						/*
+						ValorUnitario_ = PrecioVenta_ /(1+tasa_igv_);
+						ValorVB_ = ValorUnitario_ * Cantidad_;
+						ValorVenta_ = ValorVB_ - Descuento_;
+						Igv_ = ValorVenta_ * tasa_igv_;
+						Total_ = ValorVenta_ + Igv_
+						*/
+
 						//return obj.denominacion;
 						var hash = {
 							key: obj.id,
@@ -279,6 +322,17 @@
 			//alert(ui.item.key);
 			flag_select = true;
 			$('#txtProducto').attr("readonly", true);
+			$('#txtUM').val(um_);
+			$('#txtPrecioVenta').val(PrecioVenta_);
+
+/*			$('#txtValorUnitario').val(ValorUnitario_);
+			$('#txtValorVB').val(ValorVB_);
+			$('#txtDescuento').val(Descuento_);
+			$('#txtValorVenta').val(ValorVenta_);
+			$('#txtIgv').val(Igv_);
+			$('#txtTotal').val(Total_);
+*/			
+			calcular();
 		},
 		minLength: 2,
 		delay: 100
@@ -306,7 +360,38 @@
 		}
 	}
 
+	function calcular() {
 
+		PrecioVenta_ = $('#txtPrecioVenta').val();
+		Descuento_ = $('#txtDescuento').val();
+		Cantidad_ = $('#txtCantidad').val();
+
+		ValorUnitario_ = PrecioVenta_ /(1+tasa_igv_);
+		//ValorUnitario_ = Number(ValorUnitario_ .toFixed(2));		
+		ValorVB_ = ValorUnitario_ * Cantidad_;
+		ValorVenta_ = ValorVB_ - Descuento_;
+		Igv_ = ValorVenta_ * tasa_igv_;
+		//Igv_ = Number(Igv_.toFixed(2));
+		Total_ = ValorVenta_ + Igv_;
+		//Total_ =Number(Total_.toFixed(2));
+
+
+		ValorUnitario_ = Number(ValorUnitario_ .toFixed(2));
+		$('#txtValorUnitario').val(ValorUnitario_);
+		
+		ValorVB_ = Number(ValorVB_ .toFixed(2));
+		$('#txtValorVB').val(ValorVB_);
+		
+		ValorVenta_ = Number(ValorVenta_ .toFixed(2));
+		$('#txtValorVenta').val(ValorVenta_);
+
+		Igv_ = Number(Igv_ .toFixed(2));
+		$('#txtIgv').val(Igv_);
+		
+		Total_ = Number(Total_ .toFixed(2));
+		$('#txtTotal').val(Total_);
+
+	}
 
 
 
@@ -403,13 +488,13 @@
 												<div class="col-lg-6">
 													<div class="form-group">
 														<label class="form-control-sm">Cantidad</label>
-														<input type="text" name="txtCantidad" id="txtCantidad" value="" placeholder="" class="form-control form-control-sm">
+														<input type="text" name="txtCantidad" id="txtCantidad" value="1" placeholder="" class="form-control form-control-sm">
 													</div>
 												</div>
 												<div class="col-lg-6">
 													<div class="form-group">
 														<label class="form-control-sm">Unidad Medida</label>
-														<input type="text" name="txtUM" id="txtUM" value="" placeholder="" class="form-control form-control-sm">
+														<input type="text" name="txtUM" id="txtUM" value="" placeholder="" class="form-control form-control-sm" readonly="readonly">
 													</div>
 												</div>
 
@@ -425,7 +510,7 @@
 												<div class="col-lg-6">
 													<div class="form-group">
 														<label class="form-control-sm">Valor Unitario</label>
-														<input type="text" name="txtValorUnitario" id="txtValorUnitario" value="" placeholder="" class="form-control form-control-sm">
+														<input type="text" name="txtValorUnitario" id="txtValorUnitario" value="" placeholder="" class="form-control form-control-sm" readonly="readonly">
 													</div>
 												</div>
 											</div>
@@ -434,19 +519,19 @@
 												<div class="col-lg-4">
 													<div class="form-group">
 														<label class="form-control-sm">Valor Venta Bruto</label>
-														<input type="text" name="txtValorBU" id="txtValorBU" value="" placeholder="" class="form-control form-control-sm">
+														<input type="text" name="txtValorVB" id="txtValorVB" value="" placeholder="" class="form-control form-control-sm" readonly="readonly">
 													</div>
 												</div>
 												<div class="col-lg-4">
 													<div class="form-group">
 														<label class="form-control-sm">Descuento</label>
-														<input type="text" name="txtDescuento" id="txtDescuento" value="" placeholder="" class="form-control form-control-sm">
+														<input type="text" name="txtDescuento" id="txtDescuento" value="0" placeholder="" class="form-control form-control-sm">
 													</div>
 												</div>
 												<div class="col-lg-4">
 													<div class="form-group">
 														<label class="form-control-sm">Valor Venta</label>
-														<input type="text" name="txtPorcentaje" id="txtPorcentaje" value="" placeholder="" class="form-control form-control-sm">
+														<input type="text" name="txtValorVenta" id="txtValorVenta" value="" placeholder="" class="form-control form-control-sm" readonly="readonly">
 													</div>
 												</div>
 											</div>
@@ -455,13 +540,13 @@
 												<div class="col-lg-6">
 													<div class="form-group">
 														<label class="form-control-sm">IGV</label>
-														<input type="text" name="txtPorcentaje" id="txtPorcentaje" value="20" placeholder="" class="form-control form-control-sm">
+														<input type="text" name="txtIgv" id="txtIgv" value="20" placeholder="" class="form-control form-control-sm" readonly="readonly">
 													</div>
 												</div>
 												<div class="col-lg-6">
 													<div class="form-group">
 														<label class="form-control-sm">Total</label>
-														<input type="text" name="txtPorcentaje" id="txtPorcentaje" value="20" placeholder="" class="form-control form-control-sm">
+														<input type="text" name="txtTotal" id="txtTotal" value="20" placeholder="" class="form-control form-control-sm" readonly="readonly">
 													</div>
 												</div>
 											</div>
@@ -472,7 +557,7 @@
 									<div style="margin-top:15px" class="form-group">
 										<div id="divGuardar" class="col-sm-12 controls">
 											<div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
-												<a href="javascript:void(0)" onClick="guardar_fracciona_deuda()" class="btn btn-sm btn-success">Guardar</a>
+												<a href="javascript:void(0)" onClick="AddFila()" class="btn btn-sm btn-success">Aceptar</a>
 											</div>
 
 										</div>
