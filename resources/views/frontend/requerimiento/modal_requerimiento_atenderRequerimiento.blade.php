@@ -481,14 +481,18 @@ function save_orden_compra_requerimiento(){
     var estado_atencion = $('#estado_atencion').val();
     var almacen = $('#almacen').val();
     var cerrado = $('#cerrado').val();
+    var sustento_requerimiento = $('#sustento_requerimiento').val();
+    var unidad_origen = $('#unidad_origen').val();
 
     if(tipo_documento==""){msg+="Ingrese el Tipo de Documento <br>";}
     if(numero_requerimiento==""){msg+="Ingrese el Numero de Requerimiento <br>";}
     if(responsable==""){msg+="Ingrese el Responsable de Atencion <br>";}
     if(estado_atencion==""){msg+="Ingrese el Estado de Atencion <br>";}
     if(fecha_requerimiento==""){msg+="Ingrese la Fecha <br>";}
+    if(unidad_origen==""){msg+="Ingrese la Unidad de Origen <br>";}
     if(almacen==""){msg+="Ingrese el Almacen <br>";}
     if(cerrado==""){msg+="Ingrese el campo Cerrado <br>";}
+    if(sustento_requerimiento==""){msg+="Ingrese el Sustento de Requerimiento <br>";}
 
     if ($('#tblRequerimientoDetalle tbody tr').length == 0) {
         msg += "No se ha agregado ningún producto <br>";
@@ -607,6 +611,34 @@ function pdf_documento(){
                         </div>
                         <div class="col-lg-2">
                             <input id="fecha_requerimiento" name="fecha_requerimiento" on class="form-control form-control-sm"  value="<?php echo isset($requerimiento) && $requerimiento->fecha ? $requerimiento->fecha : date('Y-m-d'); ?>" type="text">
+                        </div>
+                        <div class="col-lg-2">
+                            Unidad Origen
+                        </div>
+                        <div class="col-lg-2">
+                            <select name="unidad_origen" id="unidad_origen" class="form-control form-control-sm" onchange="cambiarOrigen()">
+                                <option value="">--Seleccionar--</option>
+                                <?php
+                                foreach ($unidad_origen as $row){?>
+                                    <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$requerimiento->id_unidad_origen)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                    <?php 
+                                }
+                                ?>
+                            </select>
+                        </div>
+                        <div class="col-lg-2" id="almacen_" style="color:green; font-weight:bold">
+                            Almacen Origen
+                        </div>
+                        <div class="col-lg-2" id="almacen_select">
+                            <select name="almacen_salida" id="almacen_salida" class="form-control form-control-sm" onchange="//actualizarSecciones(this)">
+                                <option value="">--Seleccionar--</option>
+                                <?php 
+                                foreach ($almacen as $row){?>
+                                    <option value="<?php echo $row->id ?>" <?php if($row->id==$requerimiento->id_almacen_salida)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                    <?php 
+                                }
+                                ?>
+                            </select>
                         </div>
                         <div class="col-lg-2" id="almacen_salida_" style="color:green; font-weight:bold">
                             Almacen Solicitante

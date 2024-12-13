@@ -104,8 +104,9 @@ class RequerimientoController extends Controller
         $almacen = $almacen_model->getAlmacenAll();
         $estado_bien = $tablaMaestra_model->getMaestroByTipo(4);
         $responsable_atencion = $user_model->getUserAll();
-        
-        return view('frontend.requerimiento.modal_requerimiento_nuevoRequerimiento',compact('id','requerimiento','tipo_documento','producto','marca','unidad','almacen','cerrado_requerimiento','estado_bien','estado_atencion','responsable_atencion'));
+        $unidad_origen = $tablaMaestra_model->getMaestroByTipo(50);
+
+        return view('frontend.requerimiento.modal_requerimiento_nuevoRequerimiento',compact('id','requerimiento','tipo_documento','producto','marca','unidad','almacen','cerrado_requerimiento','estado_bien','estado_atencion','responsable_atencion','unidad_origen'));
 
     }
 
@@ -136,6 +137,8 @@ class RequerimientoController extends Controller
         $requerimiento->sustento_requerimiento = $request->sustento_requerimiento;
         $requerimiento->responsable_atencion = $request->responsable;
         $requerimiento->estado_atencion = $request->estado_atencion;
+        $requerimiento->id_unidad_origen = $request->unidad_origen;
+        $requerimiento->id_almacen_salida = $request->almacen_salida;
         $requerimiento->cerrado = 1;
         $requerimiento->id_usuario_inserta = $id_user;
         $requerimiento->estado = 1;
@@ -276,8 +279,9 @@ class RequerimientoController extends Controller
         $orden_compra->id_tipo_documento = 1;
         $orden_compra->igv_compra = 2;
         $orden_compra->cerrado = 1;
-        $orden_compra->id_unidad_origen = 2;
+        $orden_compra->id_unidad_origen = $request->unidad_origen;
         $orden_compra->id_almacen_destino = $request->almacen;
+        $orden_compra->id_almacen_salida = $request->almacen_salida;
         $orden_compra->id_requerimiento = $request->id;
         $orden_compra->id_usuario_inserta = $id_user;
         $orden_compra->estado = 1;
@@ -342,8 +346,9 @@ class RequerimientoController extends Controller
         $almacen = $almacen_model->getAlmacenAll();
         $estado_bien = $tablaMaestra_model->getMaestroByTipo(4);
         $responsable_atencion = $user_model->getUserAll();
+        $unidad_origen = $tablaMaestra_model->getMaestroByTipo(50);
         
-        return view('frontend.requerimiento.modal_requerimiento_atenderRequerimiento',compact('id','requerimiento','tipo_documento','producto','marca','unidad','almacen','cerrado_requerimiento','estado_bien','estado_atencion','responsable_atencion'));
+        return view('frontend.requerimiento.modal_requerimiento_atenderRequerimiento',compact('id','requerimiento','tipo_documento','producto','marca','unidad','almacen','cerrado_requerimiento','estado_bien','estado_atencion','responsable_atencion','unidad_origen'));
 
     }
 

@@ -431,12 +431,14 @@ function fn_save_requerimiento(){
     var almacen = $('#almacen').val();
     var cerrado = $('#cerrado').val();
     var sustento_requerimiento = $('#sustento_requerimiento').val();
+    var unidad_origen = $('#unidad_origen').val();
 
     if(tipo_documento==""){msg+="Ingrese el Tipo de Documento <br>";}
     if(numero_requerimiento==""){msg+="Ingrese el Numero de Requerimiento <br>";}
     if(responsable==""){msg+="Ingrese el Responsable de Atencion <br>";}
     if(estado_atencion==""){msg+="Ingrese el Estado de Atencion <br>";}
     if(fecha_requerimiento==""){msg+="Ingrese la Fecha <br>";}
+    if(unidad_origen==""){msg+="Ingrese la Unidad de Origen <br>";}
     if(almacen==""){msg+="Ingrese el Almacen <br>";}
     if(cerrado==""){msg+="Ingrese el campo Cerrado <br>";}
     if(sustento_requerimiento==""){msg+="Ingrese el Sustento de Requerimiento <br>";}
@@ -546,6 +548,36 @@ function pdf_documento(){
 
 }
 
+function cambiarOrigen(){
+
+    var unidad_origen = $('#unidad_origen').val();
+    //alert(moneda);
+    if(unidad_origen==1){
+        $('#proveedor_select, #proveedor_').hide();
+        $('#almacen_select, #almacen_').show();
+        $('#almacen_salida_select, #almacen_salida_').show();
+    }else if(unidad_origen==2){
+        $('#proveedor_select, #proveedor_').show();
+        $('#almacen_select, #almacen_').hide();
+        $('#almacen_salida_select, #almacen_salida_').show();
+        //$('#proveedor').val("");
+    }else if(unidad_origen==3){
+        $('#proveedor_select, #proveedor_').show();
+        $('#almacen_select, #almacen_').show();
+        $('#almacen_salida_select, #almacen_salida_').show();
+        //$('#proveedor').val(30);
+    }else if(unidad_origen==4){
+        $('#proveedor_select, #proveedor_').show();
+        $('#almacen_select, #almacen_').hide();
+        $('#almacen_salida_select, #almacen_salida_').show();
+        //$('#proveedor').val(30);
+    }else{
+        $('#proveedor_select, #proveedor_').hide();
+        $('#almacen_select, #almacen_').show();
+        $('#almacen_salida_select, #almacen_salida_').show();
+    }
+}
+
 </script>
 
 <body class="hold-transition skin-blue sidebar-mini">
@@ -607,6 +639,34 @@ function pdf_documento(){
                         </div>
                         <div class="col-lg-2">
                             <input id="fecha_requerimiento" name="fecha_requerimiento" on class="form-control form-control-sm"  value="<?php echo isset($requerimiento) && $requerimiento->fecha ? $requerimiento->fecha : date('Y-m-d'); ?>" type="text">
+                        </div>
+                        <div class="col-lg-2">
+                            Unidad Origen
+                        </div>
+                        <div class="col-lg-2">
+                            <select name="unidad_origen" id="unidad_origen" class="form-control form-control-sm" onchange="cambiarOrigen()">
+                                <option value="">--Seleccionar--</option>
+                                <?php
+                                foreach ($unidad_origen as $row){?>
+                                    <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$requerimiento->id_unidad_origen)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                    <?php 
+                                }
+                                ?>
+                            </select>
+                        </div>
+                        <div class="col-lg-2" id="almacen_" style="color:green; font-weight:bold">
+                            Almacen Origen
+                        </div>
+                        <div class="col-lg-2" id="almacen_select">
+                            <select name="almacen_salida" id="almacen_salida" class="form-control form-control-sm" onchange="//actualizarSecciones(this)">
+                                <option value="">--Seleccionar--</option>
+                                <?php 
+                                foreach ($almacen as $row){?>
+                                    <option value="<?php echo $row->id ?>" <?php if($row->id==$requerimiento->id_almacen_salida)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                    <?php 
+                                }
+                                ?>
+                            </select>
                         </div>
                         <div class="col-lg-2" id="almacen_salida_" style="color:green; font-weight:bold">
                             Almacen Solicitante

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class ChangeLoteToProyectosTable extends Migration
+class AddIdUnidadOrigenToRequerimientosTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,9 @@ class ChangeLoteToProyectosTable extends Migration
      */
     public function up()
     {
-        Schema::table('proyectos', function (Blueprint $table) {
-            //$table->string('lote', 50)->nullable()->change();
-            //$table->string('sub_lote', 50)->nullable()->change();
+        Schema::table('requerimientos', function (Blueprint $table) {
+            $table->bigInteger('id_unidad_origen')->nullable();
+            $table->bigInteger('id_almacen_salida')->nullable();
         });
     }
 
@@ -26,7 +26,7 @@ class ChangeLoteToProyectosTable extends Migration
      */
     public function down()
     {
-        Schema::table('proyectos', function (Blueprint $table) {
+        Schema::table('requerimientos', function (Blueprint $table) {
             //
         });
     }

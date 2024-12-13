@@ -28,7 +28,7 @@ use App\Http\Controllers\Frontend\MarcaController;
 use App\Http\Controllers\Frontend\TiendaController;
 use App\Http\Controllers\Frontend\IngresoProduccionController;
 use App\Http\Controllers\Frontend\RequerimientoController;
-
+use App\Http\Controllers\Frontend\GuiaController;
 
 
 
@@ -456,3 +456,11 @@ Route::post('requerimiento/send_requerimiento_orden_compra', [RequerimientoContr
 Route::get('entrada_productos/modal_datos_guia/{id}', [EntradaProductosController::class, 'modal_datos_guia'])->name('entrada_productos.modal_datos_guia');
 Route::get('empresa/obtener_empresa_id/{id}', [EmpresaController::class, 'obtener_empresa_id'])->name('empresa.obtener_empresa_id');
 Route::get('requerimiento/modal_atender_requerimiento/{id}', [RequerimientoController::class, 'modal_atender_requerimiento'])->name('requerimiento.modal_atender_requerimiento');
+
+Route::get('guia/create', [GuiaController::class, 'create'])->name('guia.create');
+Route::post('guia/listar_guia_ajax', [GuiaController::class, 'listar_guia_ajax'])->name('guia.listar_guia_ajax');
+Route::post('guia/send_guia', [GuiaController::class, 'send_guia'])->name('guia.send_guia');
+Route::get('guia/modal_guia/{id}', [GuiaController::class, 'modal_guia'])->name('guia.modal_guia');
+Route::get('guia/eliminar_guia/{id}/{estado}', [GuiaController::class, 'eliminar_guia'])->name('guia.eliminar_guia');
+Route::get('entrada_productos/obtener_documentos/{id}', [EntradaProductosController::class, 'obtener_documentos'])->name('entrada_productos.obtener_documentos');
+
