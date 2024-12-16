@@ -160,6 +160,7 @@
     .slider.round:before {
         border-radius: 50%;
     }
+    span { font-size: 6px; }
 
     .no {
         padding-right: 3px;
@@ -590,6 +591,8 @@
                                                     <input type="hidden" readonly name="mes_deuda" id="mes_deuda" value="" class="form-control form-control-sm">
                                                     <input type="hidden" readonly name="anio_deuda" id="anio_deuda" value="" class="form-control form-control-sm">
 
+                                                    <input type="hidden" readonly name="SelProducto" id="SelProducto" value="" class="form-control form-control-sm">
+
                                                 </div>
                                             </div>
                                         </div>
@@ -794,10 +797,10 @@
                                             </div>
 
 
-                                            <div style="margin-top:15px" class="form-group">
-                                                <div class="col-sm-12 controls">
-                                                    <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
-                                                        <a href="javascript:void(0)" onClick="modal_productos(0)" class="btn btn-sm btn-success">Agregar</a>
+                                            <div id="divAgregar" class="col-sm-12 controls" style="display:none">
+                                                <div style="margin-top:15px" class="form-group" >                                                
+                                                    <div class="btn-group btn-group-sm float-right"  role="group" aria-label="Log Viewer Actions">
+                                                        <a href="javascript:void(0)" onClick="modal_productos(0)"  class="btn btn-sm btn-success">Agregar</a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -812,9 +815,10 @@
                                                 <thead>
                                                     <tr style="font-size:13px">
                                                         <th width="5%">Nro</th>
-                                                        <th width="40%">Producto</th>
-                                                        <th width="10%">Cantidad</th>
-                                                        <th width="10%">Precio Venta</th>
+                                                        <th width="35%">Producto</th>
+                                                        <th width="10%"class="text-center">Cant.</th>
+                                                        <th width="10%"class="text-center">Precio Venta</th>
+                                                        <th width="5%"class="text-center">Desc.</th>
                                                         <th width="10%" class="text-center">Sub Total</th>
                                                         <th width="10%" class="text-center">IGV</th>
                                                         <th width="10%" class="text-center">Total</th>
@@ -839,7 +843,7 @@
                                                 <tfoot>
                                                     <tr>
                                                         <td style="padding-bottom:0px;margin-bottom:0px">
-                                                            <select name="cboFilas" id="cboFilas" class="form-control form-control-sm" onchange="cargarValorizacion()">
+                                                            <select name="cboFilas" id="cboFilas" class="form-control form-control-sm" style="display:none" onchange="cargarValorizacion()">
                                                                 <option value="" selected='selected'>Todos</option>
                                                                 <option value="20">20</option>
                                                                 <option value="60">60</option>
@@ -896,7 +900,7 @@
                                                     <input class="btn btn-success pull-rigth" value="FACTURA" type="button" id="btnFactura" disabled="disabled" onclick="enviarTipo(1)" />
                                                     <input class="btn btn-info pull-rigth" value="BOLETA" type="button" id="btnBoleta" disabled="disabled" onclick="enviarTipo(2)" />
 
-                                                    <input class="btn btn-primary pull-rigth" value="PROFORMA" type="button" id="btnProforma"  onclick="proforma_send()" />
+                                                    <input class="btn btn-primary pull-rigth" value="PROFORMA" type="button" id="btnProforma" disabled="disabled" onclick="proforma_send()" />
 
                                                     <input class="btn btn-info pull-rigth" value="BOLETA" type="button" id="btnTicket" disabled="disabled" onclick="enviarTipo(3)" style="display:none" />
 

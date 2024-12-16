@@ -58,6 +58,8 @@ class ComprobanteController extends Controller
         $descuentopp=$request->DescuentoPP;
         $id_pronto_pago=$request->id_pronto_pago;
 
+        $SelProducto=$request->SelProducto;
+
         $totalDescuento=$request->totalDescuento;
 
         $id_tipo_afectacion_pp=$request->id_tipo_afectacion_pp;
@@ -157,18 +159,24 @@ class ComprobanteController extends Controller
 
                 //$stotal = 0;
                 //$igv = 0;
-
-                foreach($request->comprobante_detalles as $key=>$det){
-                    $facturad[$ind] = $factura_detalle[$key];
-                   
-                    //print_r($factura_detalle['id_concepto']);
-                    //$id_concepto_det = $facturad[$ind]['id_concepto'];
+                
+                if ($SelProducto==""){
                     
-                    //$stotal= $stotal + $facturad[$ind]['total'];
-                    //$igv= $igv + $facturad[$ind]['igv'];
+                    foreach($request->comprobante_detalles as $key=>$det){
+                        $facturad[$ind] = $factura_detalle[$key];
+                       
+                        //print_r($factura_detalle['id_concepto']);
+                        //$id_concepto_det = $facturad[$ind]['id_concepto'];
+                        
+                        //$stotal= $stotal + $facturad[$ind]['total'];
+                        //$igv= $igv + $facturad[$ind]['igv'];
+    
+                        $ind++;
+                    }
 
-                    $ind++;
                 }
+
+
             }
 
             $ind = 0;

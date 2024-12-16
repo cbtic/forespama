@@ -118,6 +118,7 @@ class Producto extends Model
                 ".$tipo_v."
                 order by p.denominacion"
 		;
+       // print_r($cad);
 
 		$data = DB::select($cad);
         return $data;

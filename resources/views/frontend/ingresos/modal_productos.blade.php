@@ -298,8 +298,12 @@
 						id_um_ = obj.id_unidad_medida;
 						um_ = obj.um;												
 						PrecioVenta_ = obj.costo_unitario;
+
+						
+
 						codigo_producto_ = obj.codigo;
 						id_producto_ = obj.id;
+						nombre_producto_ = obj.nombre_producto;
 
 						/*
 						ValorUnitario_ = PrecioVenta_ /(1+tasa_igv_);
@@ -335,6 +339,8 @@
 			$('#codigo_producto').val(codigo_producto_);
 			$('#id_producto').val(id_producto_);
 
+			$('#nombre_producto').val(nombre_producto_);
+			$('#txtPrecioVenta').val(PrecioVenta_);
 
 
 /*			$('#txtValorUnitario').val(ValorUnitario_);
@@ -377,6 +383,9 @@
 		PrecioVenta_ = $('#txtPrecioVenta').val();
 		Descuento_ = $('#txtDescuento').val();
 		Cantidad_ = $('#txtCantidad').val();
+
+		//alert(PrecioVenta_);
+
 
 		ValorUnitario_ = PrecioVenta_ /(1+tasa_igv_);
 		//ValorUnitario_ = Number(ValorUnitario_ .toFixed(2));		
