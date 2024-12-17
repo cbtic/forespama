@@ -153,30 +153,35 @@ class ComprobanteController extends Controller
             $id_concepto_pp = $request->id_concepto_pp;
 
 
+            if ($SelProducto=="S"){
+                  $valorizad = $request->valorizacion_detalle;
+                  $facturad= $request->valorizacion_detalle;
+            }
 
+            else{
+    
+    
+    
+                
+
+            //if ($SelProducto==""){
 
             if ($descuentopp!="S"){
 
                 //$stotal = 0;
                 //$igv = 0;
-                
-                if ($SelProducto==""){
+
+                foreach($request->comprobante_detalles as $key=>$det){
+                    $facturad[$ind] = $factura_detalle[$key];
+                   
+                    //print_r($factura_detalle['id_concepto']);
+                    //$id_concepto_det = $facturad[$ind]['id_concepto'];
                     
-                    foreach($request->comprobante_detalles as $key=>$det){
-                        $facturad[$ind] = $factura_detalle[$key];
-                       
-                        //print_r($factura_detalle['id_concepto']);
-                        //$id_concepto_det = $facturad[$ind]['id_concepto'];
-                        
-                        //$stotal= $stotal + $facturad[$ind]['total'];
-                        //$igv= $igv + $facturad[$ind]['igv'];
-    
-                        $ind++;
-                    }
+                    //$stotal= $stotal + $facturad[$ind]['total'];
+                    //$igv= $igv + $facturad[$ind]['igv'];
 
+                    $ind++;
                 }
-
-
             }
 
             $ind = 0;
@@ -245,6 +250,10 @@ class ComprobanteController extends Controller
             }
 
              //print_r($facturad);exit();
+
+
+        }
+   
 
 
             $ubicacion = $request->id_ubicacion;

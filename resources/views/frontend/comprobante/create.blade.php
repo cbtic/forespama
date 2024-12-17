@@ -399,22 +399,22 @@
 @stack('before-scripts')
 @stack('after-scripts')
 
-@extends('frontend.layouts.app')
+@extends('backend.layouts.app')
 
-
+@section('title', ' | ' . __('labels.frontend.afiliacion.box_title'))
 
 @section('breadcrumb')
+
 <ol class="breadcrumb" style="padding-left:130px;margin-top:0px;background-color:#283659">
     <li class="breadcrumb-item text-primary">Inicio</li>
-    <li class="breadcrumb-item active">Facturacion</li>
-    <li class="breadcrumb-item active">Editar</li>
+    <li class="breadcrumb-item active">EFacturacion</li>
     </li>
 </ol>
+
 @endsection
 
-@section('content')
-
 <div class="loader"></div>
+@section('content')
 
 <div class="justify-content-center">
     <!--<div class="container-fluid">-->

@@ -2842,6 +2842,8 @@ function AddFila(){
 
 	newRow +='<td class="text-left" style="font-size:8.0pt">'+cont+'<span class=""></span>';
 
+		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][id]" value="'+cont+'" />';
+
 		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][id_producto]" value="'+id_producto+'" />';
 		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][codigo_producto]" value="'+codigo_producto+'" />';
 		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][id_descuento]" value="'+id_descuento+'" />';
