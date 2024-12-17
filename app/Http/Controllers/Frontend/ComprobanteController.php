@@ -72,7 +72,7 @@ class ComprobanteController extends Controller
 		if($id_caja==""){
 			$valorizaciones_model = new Valorizacione;
 			$id_user = Auth::user()->id;
-			$caja_usuario = $valorizaciones_model->getCajaIngresoByusuario($id_user,'91');
+			$caja_usuario = $valorizaciones_model->getCajaIngresoByusuario($id_user,'27');
 			//$id_caja = $caja_usuario->id_caja;
 			$id_caja = (isset($caja_usuario->id_caja))?$caja_usuario->id_caja:0;
 		}
@@ -99,7 +99,7 @@ class ComprobanteController extends Controller
         $tipooperacion = $tabla_model->getMaestroByTipo('103');
         $formapago = $tabla_model->getMaestroByTipo('104');
 
-        $medio_pago = $tabla_model->getMaestroByTipo('19');
+        $medio_pago = $tabla_model->getMaestroByTipo('11');
 
         
         if ($trans == 'FA'){
@@ -720,13 +720,14 @@ class ComprobanteController extends Controller
                         $persona->correo = $correo;
                         $persona->save();
                     }
-
+/*
                     $persona2 = Agremiado::where('id_persona', $id_persona_act)->first();
                     if($persona2){
                         $persona2->direccion = $direccion;
                         $persona2->email1 = $correo;
                         $persona2->save();
                     }
+*/
                 }
 
                 if ($tipoF == 'BV' &&  $id_persona != '' )
@@ -740,14 +741,14 @@ class ComprobanteController extends Controller
                         $persona->correo = $correo;    
                         $persona->save();                        
                     }
-                    
+  /*                  
                     $persona2 = Agremiado::where('id_persona', $id_persona_act)->first();
                     if($persona2){                        
                         $persona2->direccion = $direccion;
                         $persona2->email1 = $correo;
                         $persona2->save();
                     }
-                    
+    */                
 
                     
                 }
@@ -770,13 +771,14 @@ class ComprobanteController extends Controller
                         $persona->correo = $correo;
                         $persona->save();
                     }
-
+/*
                     $persona2 = Agremiado::where('id_persona', $id_persona_act)->first();
                     if($persona2){  
                         $persona2->direccion = $direccion;
                         $persona2->email1 = $correo;
                         $persona2->save();
                     }
+                    */
                 }
                 
 
@@ -1066,9 +1068,11 @@ class ComprobanteController extends Controller
 
 
             if ($id_concepto == 26527 || $id_concepto == 26412 ) {
+                /*
                 $agremiado = Agremiado::where('id_persona', $id_persona)->get()[0];
                 $agremiado->id_situacion = "73";
                 $agremiado->save();
+                */
             }
             
 
@@ -1079,7 +1083,7 @@ class ComprobanteController extends Controller
             $ubicacion_id = $request->ubicacion;
 
 
-
+/*
             if ($id_concepto == 26411) {
 
                 $id_persona = $request->persona;
@@ -1088,6 +1092,7 @@ class ComprobanteController extends Controller
                 $total_ = $totalDeuda->total;
 
                 if ($total_ <= 2) {
+
                     $agremiado = Agremiado::where('id_persona', $id_persona)->get()[0];
 
                     if($agremiado->id_actividad_gremial != 225){
@@ -1102,6 +1107,7 @@ class ComprobanteController extends Controller
                 }
 
             }
+            */
 
             if($request->id_formapago_=='2'){
                 $credito = $request->credito;
