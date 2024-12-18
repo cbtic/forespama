@@ -160,9 +160,6 @@ class ComprobanteController extends Controller
 
             else{
     
-    
-    
-                
 
             //if ($SelProducto==""){
 
