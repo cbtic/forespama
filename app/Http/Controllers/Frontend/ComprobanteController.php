@@ -1136,7 +1136,7 @@ class ComprobanteController extends Controller
 
             }
             
-
+ 
 
             if(isset($request->idMedio)):
                 foreach ($request->idMedio as $key => $value):

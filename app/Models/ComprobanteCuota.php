@@ -9,3 +9,4 @@ class ComprobanteCuota extends Model
 {
     use HasFactory;
 }
+ 

@@ -9,3 +9,4 @@ class ComprobantePago extends Model
 {
     use HasFactory;
 }
+ 
