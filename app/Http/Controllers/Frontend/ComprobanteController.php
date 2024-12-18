@@ -11,6 +11,7 @@ use App\Models\TablaMaestra;
 use App\Models\Valorizacione;
 use App\Models\Persona;
 use App\Models\Guia;
+use Illuminate\Support\Carbon;
 
 use App\Models\Agremiado;
 use App\Models\ComprobantePago;
@@ -714,7 +715,7 @@ class ComprobanteController extends Controller
                     $persona = Persona::where('id', $id_persona_act)->first();
                     if($persona){
                         $persona->direccion = $direccion;
-                        $persona->correo = $correo;
+                        $persona->email = $correo;
                         $persona->save();
                     }
 /*
@@ -735,7 +736,7 @@ class ComprobanteController extends Controller
                     $persona = Persona::where('id', $id_persona_act)->first();                    
                     if($persona){
                         $persona->direccion = $direccion;
-                        $persona->correo = $correo;    
+                        $persona->email = $correo;    
                         $persona->save();                        
                     }
   /*                  
@@ -765,7 +766,7 @@ class ComprobanteController extends Controller
                     $persona = Persona::where('id', $id_persona_act)->first();
                     if($persona){
                         $persona->direccion = $direccion;
-                        $persona->correo = $correo;
+                        $persona->email = $correo;
                         $persona->save();
                     }
 /*
@@ -986,6 +987,43 @@ class ComprobanteController extends Controller
 				}
 
 
+                //print_r($tarifa);
+                //exit();
+
+                foreach ($tarifa as $key => $value) {
+
+                    $valorizacion = new Valorizacione;
+                    $valorizacion->id_modulo = 1;
+                    $valorizacion->pk_registro = 0;
+                    $valorizacion->id_concepto = $value['id_concepto']; //26412;
+                    //$valorizacion->id_agremido = $id_persona;
+                    if($ubicacion_id!="")  $valorizacion->id_empresa = $ubicacion_id;
+                    if($id_persona_act!="")  $valorizacion->id_persona = $id_persona_act;
+                    
+
+                    //$valorizacion->id_persona = $id_persona;
+                    $valorizacion->monto = $value['monto'];
+                    $valorizacion->id_moneda = $value['id_moneda'];
+                    $valorizacion->moneda = $value['moneda'];                    
+                    $valorizacion->fecha = $fecha_hoy;
+                    $valorizacion->fecha_proceso = Carbon::now()->format('Y-m-d');            
+                    $valorizacion->id_usuario_inserta = $id_user;
+                    $valorizacion->descripcion = $value['descripcion'];
+                    $valorizacion->valor_unitario = $value['monto'];
+                    $valorizacion->cantidad = $value['cantidad'];
+                    //$valorizacion->codigo_fraccionamiento =  $id_fraccionamiento;
+
+                    $valorizacion->id_comprobante = $id_factura;
+                    $valorizacion->pagado = "1";
+    
+                    $valorizacion->save();
+
+
+                
+                }
+
+
+
                 $valorizad_ = $request->valorizad;
                 $numero_documento_b = $request->numero_documento_b;
 
@@ -1022,10 +1060,15 @@ class ComprobanteController extends Controller
 
                 //echo "id_val=>".$id_val."<br>"; exit();
 
+
+
+
                 $valorizad = $request->valorizad;
 
                 //print_r($tarifa); exit();
 
+
+                /*
                     foreach ($valorizad as $key => $value) {
                         $id_val = $value['id'];
                         
@@ -1045,6 +1088,7 @@ class ComprobanteController extends Controller
                         $valoriza_upd->save();
                         
                     } 
+                        */
 
                 //}
 
@@ -3290,5 +3334,18 @@ class ComprobanteController extends Controller
         echo $monto;
 		
     }
+
+    public function obtener_representante($tipo_documento,$numero_documento){
+
+        $comprobante_model = new Comprobante;
+        //$valorizaciones_model = new Valorizacione;
+        $sw = true;
+        $agremiado = $comprobante_model->getRepresentante($tipo_documento,$numero_documento);
+        $array["sw"] = $sw;
+        $array["agremiado"] = $agremiado;
+        echo json_encode($array);
+
+    }
+
 
 }

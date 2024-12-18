@@ -848,13 +848,13 @@ function obtenerTitular(){
 
 		//alert(tipo_comprobante);
 		
-		if(tipo_comprobante=="FT") tipo_documento = '79';
-		if(tipo_comprobante=="BV") tipo_documento = '78';
+		if(tipo_comprobante=="FT") tipo_documento = '5';
+		if(tipo_comprobante=="BV") tipo_documento = '1';
 
 		var numero_documento = $("#numero_documento2").val();
 
 		$.ajax({
-			url: '/agremiado/obtener_representante/' + tipo_documento + '/' + numero_documento,
+			url: '/comprobante/obtener_representante/' + tipo_documento + '/' + numero_documento,
 			dataType: "json",
 			success: function (result) {
 
