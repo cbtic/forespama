@@ -290,7 +290,7 @@ function fn_save(){
 				
 				$('#numerof').val(result.id_factura);
 				$('#divNumeroF').show();
-				location.href=urlApp+"/comprobante/"+result.id_factura;
+				//location.href=urlApp+"/comprobante/"+result.id_factura;
 
             }
     });
@@ -752,6 +752,8 @@ function obtenerTitular(){
 					if(idMedio=='91'){
 						//monto = $("#total_fac_").val();
 						monto_r = redondeoContableAFavor(Number(monto), 1);
+
+						//alert (monto_r);
 
 						$("#monto"+ind).val(monto_r.toFixed(2));
 

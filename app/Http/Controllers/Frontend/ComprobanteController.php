@@ -935,6 +935,9 @@ class ComprobanteController extends Controller
                     $tarifa[999]=$items1;
                 }
 
+                echo($total_abono);
+                exit();
+
                 if ($total_abono!="0"){
                     $total_pagar_abono = $request->total_pagar_abono;
                     $total_g = $request->totalF;
