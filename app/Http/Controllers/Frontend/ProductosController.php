@@ -83,7 +83,7 @@ class ProductosController extends Controller
         $tipo_producto = $tablaMaestra_model->getMaestroByTipo(44);
         $estado_bien = $tablaMaestra_model->getMaestroByTipo(56);
         $unidad_medida = $tablaMaestra_model->getMaestroByTipo(57);
-        $marca = $marca_model->getMarcaAll();
+        $marca = $marca_model->getMarcaProducto();
 		$tipo_origen_producto = $tablaMaestra_model->getMaestroByTipo(58);
 		//var_dump($id);exit();
 
