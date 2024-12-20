@@ -59,7 +59,7 @@ class MarcaController extends Controller
 			$marca = new Marca;
 		}
 
-		$tipo_marca = $tabla_maestra_model->getMaestroByTipo('62');
+		$tipo_marca = $tabla_maestra_model->getMaestroByTipo('64');
 
 		return view('frontend.marcas.modal_marcas_nuevoMarca',compact('id','marca','tipo_marca'));
 

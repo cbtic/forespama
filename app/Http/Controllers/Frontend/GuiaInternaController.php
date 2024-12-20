@@ -103,7 +103,7 @@ class GuiaInternaController extends Controller
         $unidad = $tablaMaestra_model->getMaestroByTipo(43);
         $empresas = Empresa::all();
         $transporte_razon_social = $empresa_model->obtenerRazonSocialTransporteAll();
-        $motivo_traslado = $tablaMaestra_model->getMaestroByTipo(61);
+        $motivo_traslado = $tablaMaestra_model->getMaestroByTipo(63);
         $departamento = $ubigeo_model->getDepartamento();
         $serie_guia = $tablaMaestra_model->getMaestroC(95,"GR");
 
