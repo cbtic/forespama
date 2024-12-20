@@ -568,6 +568,13 @@ class ComprobanteController extends Controller
 
 
 			$total = $request->totalF;
+            //print_r("totalF=>"); 
+            //print_r($total); 
+            //$total = $request->totalP;
+            
+            //print_r("totalP=>"); 
+            //print_r($total); 
+
 			$serieF = $request->serieF;
 			$tipoF = $request->TipoF;
 
@@ -806,7 +813,10 @@ class ComprobanteController extends Controller
 
                 ///redondeo///
                 $total_pagar = $request->total_pagar;
-                if ($total_pagar!="0"){                         
+                //print_r("total_pagar="); 
+                //print_r($total_pagar); 
+
+                if ($total_pagar!="0" && $total_pagar!=""){                         
                     $total_pagar = $request->total_pagar;
                     $total_g = $request->totalF;
                     $total_redondeo = $total_pagar - $total_g;
@@ -819,12 +829,20 @@ class ComprobanteController extends Controller
                 $total_pagar_abono = $request->total_pagar_abono;
                 $total_abono= 0;
 
-                if ($total_pagar_abono!="0"){                         
-                    $total_pagar_abono = $request->total_pagar_abono;
-                    $total_g = $request->totalF;
-                    $total_abono= $total_pagar_abono - $total_g;
 
-                    $total = $total+$total_abono;
+
+
+                //print_r("total_pagar_abono="); 
+                //print_r($total_pagar_abono); 
+                
+                if ($total_pagar_abono!="0" && $total_pagar_abono!=""){    
+                    
+                        $total_pagar_abono = $request->total_pagar_abono;
+                        $total_g = $request->totalF;
+                        $total_abono= $total_pagar_abono - $total_g;
+
+                        $total = $total+$total_abono;
+                
                 }
 
 
@@ -842,6 +860,9 @@ class ComprobanteController extends Controller
                 
                 exit();
                 */
+
+                //print_r("total=>>"); 
+                //print_r($total); exit();
                 
 				$id_factura = $facturas_model->registrar_factura_moneda($serieF,     $id_tipo_afectacion_pp, $tipoF, $ubicacion_id, $id_persona_act, round($total,2),   $ubicacion_id2,      $id_persona2,    0, $id_caja,          $descuento,    'f',     $id_user,  $id_moneda);
 																	 //(serie,  numero,   tipo,     ubicacion,     persona,  total, descripcion, cod_contable, id_v,   id_caja, descuento, accion, p_id_usuario, p_id_moneda)
@@ -856,7 +877,7 @@ class ComprobanteController extends Controller
 				$factura_upd = Comprobante::find($id_factura);
 				if(isset($factura_upd->tipo_cambio)) $factura_upd->tipo_cambio = $request->tipo_cambio;
                 
-                if($total>700 and $tipoF=='FT' ) {
+                if($total>700 && $tipoF=='FT') {
                     $factura_upd->porc_detrac = $request->porcentaje_detraccion;
                     $factura_upd->monto_detrac = $request->monto_detraccion;
                     $factura_upd->cuenta_detrac = $request->nc_detraccion;
@@ -907,13 +928,13 @@ class ComprobanteController extends Controller
 				}
                 */
                 
-
+                $fecha_hoy = date('Y-m-d');
     
-                if ($total_pagar!="0"){
+                if ($total_pagar!="0" && $total_pagar!=""){
                     $total_pagar = $request->total_pagar;
                     $total_g = $request->totalF;
                     $total_redondeo = $total_pagar - $total_g;
-                    $fecha_hoy = date('Y-m-d');
+                    //$fecha_hoy = date('Y-m-d');
 
                     $items1 = array(
                         "id" => 1081517, 
@@ -935,14 +956,14 @@ class ComprobanteController extends Controller
                     $tarifa[999]=$items1;
                 }
 
-                echo($total_abono);
-                exit();
+                //echo($total_abono);
+                //exit();
 
-                if ($total_abono!="0"){
+                if ($total_abono!="0" && $total_abono!=""){
                     $total_pagar_abono = $request->total_pagar_abono;
                     $total_g = $request->totalF;
                     $total_abono = $total_pagar_abono - $total_g;
-                    $fecha_hoy = date('Y-m-d');
+                    //$fecha_hoy = date('Y-m-d');
 
                     $items1 = array(
                         "id" => 1081517, 

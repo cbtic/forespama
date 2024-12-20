@@ -159,10 +159,18 @@ function guardarFactura(){
 	var total_ = 0;
 	total_ = Number(totalMedioPago);
 
-	
+	total_fac_ = Number(total_fac_);
+
+	//alert(total_);
+	//alert(total_fac_);
+
+	//exit();
+
 	if(total_!=total_fac_ && id_formapago_==1){
 
 		$total_pagar_abono = $("#total_pagar_abono").val();
+
+		//alert($total_pagar_abono);
 
 		if($total_pagar_abono=="0"){
 			msg+="El total de medio de pago no coincide al total del comprobante..<br>";
@@ -290,7 +298,7 @@ function fn_save(){
 				
 				$('#numerof').val(result.id_factura);
 				$('#divNumeroF').show();
-				//location.href=urlApp+"/comprobante/"+result.id_factura;
+				location.href=urlApp+"/comprobante/"+result.id_factura;
 
             }
     });
@@ -718,6 +726,8 @@ function obtenerTitular(){
 			var flagx = 0;
 			cmb = $(this);
 			idMedio = $("#idMedio"+ind).val();
+
+			//alert(idMedio);
 			
 			//id_user={{Auth::user()->id}};
 
@@ -732,7 +742,7 @@ function obtenerTitular(){
 				if($(this).val() == idMedio)flagx++;
 			});
 		
-			if(flagx > 1 && idMedio!='254'){
+			if(flagx > 1 && idMedio!='3'){
 				//alert(idMedio);
 				//if (idMedio!='254'){
 					bootbox.alert("El Medio de Pago ya ha sido ingresado");
@@ -747,17 +757,17 @@ function obtenerTitular(){
 					//$("#monto"+ind).val(monto);
 					$("#totalMedioPago").val(monto);
 
+					//alert (monto);
 					//alert (idMedio);
 
-					if(idMedio=='91'){
+					if(idMedio=='1'){
 						//monto = $("#total_fac_").val();
 						monto_r = redondeoContableAFavor(Number(monto), 1);
 
-						//alert (monto_r);
 
 						$("#monto"+ind).val(monto_r.toFixed(2));
 
-						if(monto!=monto_r){
+						if(Number(monto)!=Number(monto_r)){
 							$("#tr_total_pagar").show();
 							$("#total_pagar").val(monto_r.toFixed(2));
 						}

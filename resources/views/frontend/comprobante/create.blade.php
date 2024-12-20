@@ -960,7 +960,7 @@
                                                         <th>I.G.V.</th>
                                                         <th></th>
                                                         <th></th>
-                                                        <th class="text-right"><span id="igv"></span> <?php if ($trans == 'FA') {
+                                                        <th class="text-right"><span id="igv" name="igv"></span> <?php if ($trans == 'FA') {
                                                                                                             echo number_format($igv, 2);
                                                                                                         }
                                                                                                         if ($trans == 'FE') {
@@ -972,7 +972,7 @@
                                                         <th>Total</th>
                                                         <th></th>
                                                         <th></th>
-                                                        <th class="text-right"><span id="totalP"></span> <?php if ($trans == 'FA') {
+                                                        <th class="text-right"><span id="totalP"  name="totalP"></span> <?php if ($trans == 'FA') {
                                                                                                                 echo number_format($total, 2);
                                                                                                             }
                                                                                                             if ($trans == 'FE') {
@@ -984,6 +984,31 @@
                                                         <input type="hidden" name="total_fac_" id="total_fac_" value="<?php echo $total; ?>">
 
                                                     </tr>
+                                                    <tr style="display:none" id="tr_total_pagar">
+                                                        <th></th>
+                                                        <th>Total a Pagar</th>
+                                                        <th></th>
+                                                        <th></th>
+                                                        
+                                                        <th style="padding-bottom:0px;margin-bottom:0px">
+                                                            <input type="text" readonly name="total_pagar" id="total_pagar" value="0" class="form-control form-control-sm text-center">
+                                                        </th>
+
+                                                    </tr>  
+                                                    
+                                                    <tr style="display:none" id="tr_total_pagar_abono">
+                                                        <th></th>
+                                                        <th>Total a Pagar</th>
+                                                        <th></th>
+                                                        <th></th>
+                                                        
+                                                        <th style="padding-bottom:0px;margin-bottom:0px">
+                                                            <input type="text" readonly name="total_pagar_abono" id="total_pagar_abono" value="0" class="form-control form-control-sm text-center">
+                                                        </th>
+
+                                                    </tr> 
+
+
                                                 </tbody>
                                             </table>
                                         </div>
