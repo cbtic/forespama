@@ -11,15 +11,16 @@ class IngresoVehiculoTronco extends Model
 
 	function getEmpresaConductorVehiculos($placa){
 
-        $cad = "select ecv.id,ecv.id_empresas,ecv.id_vehiculos,ecv.id_conductores,e.razon_social,e.ruc,v.placa,v.ejes,v.peso_tracto,v.peso_carreta,v.peso_seco,c.licencia,to_char(c.fecha_licencia,'dd-mm-yyyy')fecha_licencia,p.id_tipo_documento,p.numero_documento,p.apellido_paterno||' '||p.apellido_materno||' '||p.nombres conductor 
-from empresas_conductores_vehiculos ecv
-inner join empresas e on ecv.id_empresas=e.id
-inner join vehiculos v on ecv.id_vehiculos=v.id and v.estado='1' 
-inner join conductores c on ecv.id_conductores=c.id and c.estado='ACTIVO'
-inner join personas p on c.id_personas=p.id
-where ecv.estado='1'
-and v.placa='".$placa."'
-order by ecv.id desc";
+        $cad = "select ecv.id,ecv.id_empresas,ecv.id_vehiculos,ecv.id_conductores,e.razon_social,e.ruc,v.placa,v.ejes,v.peso_tracto,v.peso_carreta,v.peso_seco,c.licencia,to_char(c.fecha_licencia,'dd-mm-yyyy')fecha_licencia,p.id_tipo_documento,p.numero_documento,p.apellido_paterno||' '||p.apellido_materno||' '||p.nombres conductor, v.id_marca, m.denominiacion marca, c.licencia 
+        from empresas_conductores_vehiculos ecv
+        inner join empresas e on ecv.id_empresas=e.id
+        inner join vehiculos v on ecv.id_vehiculos=v.id and v.estado='1' 
+        inner join conductores c on ecv.id_conductores=c.id and c.estado='ACTIVO'
+        inner join personas p on c.id_personas=p.id
+        inner join marcas m on v.id_marca = m.id
+        where ecv.estado='1'
+        and v.placa='".$placa."'
+        order by ecv.id desc";
 
 		$data = DB::select($cad);
         if(isset($data[0]))return $data[0];

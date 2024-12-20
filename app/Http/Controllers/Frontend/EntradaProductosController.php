@@ -1515,4 +1515,71 @@ class EntradaProductosController extends Controller
 
     }
 
+    public function obtener_documentos($tipo_documento){
+		
+        if($tipo_documento==1){
+
+            $entrada_producto_model = new EntradaProducto;
+            $detalle_documento = $entrada_producto_model->getDetalleEntradaProducto();
+
+        }else if($tipo_documento==2){
+
+            $salida_producto_model = new SalidaProducto;
+		    $detalle_documento = $salida_producto_model->getDetalleSalidaProducto();
+
+        }
+		
+		return response()->json($detalle_documento);
+	}
+
+    public function cargar_detalle_documento($tipo_documento, $id_documento)
+    {
+        if($tipo_documento==1){
+
+            $entrada_producto_detalle_model = new EntradaProductoDetalle;
+            $marca_model = new Marca;
+            $producto_model = new Producto;
+            $tablaMaestra_model = new TablaMaestra;
+            $kardex_model = new Kardex;
+
+            $entrada_producto = $entrada_producto_detalle_model->getDetalleProductoId($id_documento);
+            $marca = $marca_model->getMarcaAll();
+            $producto = $producto_model->getProductoAll();
+            $estado_bien = $tablaMaestra_model->getMaestroByTipo(56);
+            $unidad_medida = $tablaMaestra_model->getMaestroByTipo(43);
+
+            return response()->json([
+                'entrada_producto' => $entrada_producto,
+                'marca' => $marca,
+                'producto' => $producto,
+                'estado_bien' => $estado_bien,
+                'unidad_medida' => $unidad_medida
+            ]);
+
+        }else if ($tipo_documento==2){
+
+            $salida_producto_detalle_model = new SalidaProductoDetalle;
+            $marca_model = new Marca;
+            $producto_model = new Producto;
+            $tablaMaestra_model = new TablaMaestra;
+            $kardex_model = new Kardex;
+
+            $entrada_producto = $salida_producto_detalle_model->getDetalleProductoId($id_documento);
+            $marca = $marca_model->getMarcaAll();
+            $producto = $producto_model->getProductoAll();
+            $estado_bien = $tablaMaestra_model->getMaestroByTipo(56);
+            $unidad_medida = $tablaMaestra_model->getMaestroByTipo(43);
+
+            return response()->json([
+                'entrada_producto' => $entrada_producto,
+                'marca' => $marca,
+                'producto' => $producto,
+                'estado_bien' => $estado_bien,
+                'unidad_medida' => $unidad_medida
+            ]);
+
+
+        }
+    }
+
 }

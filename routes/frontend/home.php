@@ -8,7 +8,7 @@ use App\Http\Controllers\Frontend\IngresoVehiculoTroncoController;
 use App\Http\Controllers\TablaMaestraController;
 use App\Http\Controllers\Frontend\PersonaController;
 use App\Http\Controllers\Frontend\EmpresaController;
-use App\Http\Controllers\Frontend\VehiculoController;
+use App\Http\Controllers\VehiculoController;
 
 use App\Http\Controllers\Frontend\IngresoController;
 use App\Http\Controllers\Frontend\TipoCambioController;
@@ -28,9 +28,13 @@ use App\Http\Controllers\Frontend\MarcaController;
 use App\Http\Controllers\Frontend\TiendaController;
 use App\Http\Controllers\Frontend\IngresoProduccionController;
 use App\Http\Controllers\Frontend\RequerimientoController;
-use App\Http\Controllers\Frontend\GuiaController;
+use App\Http\Controllers\Frontend\GuiaInternaController;
 
 use App\Http\Controllers\Frontend\ProformaController;
+
+use App\Http\Controllers\ConductoresController;
+
+//use App\Http\Controllers\VehiculoController;
 
 
 //use App\Models\Ubigeo;
@@ -462,10 +466,36 @@ Route::get('entrada_productos/modal_datos_guia/{id}', [EntradaProductosControlle
 Route::get('empresa/obtener_empresa_id/{id}', [EmpresaController::class, 'obtener_empresa_id'])->name('empresa.obtener_empresa_id');
 Route::get('requerimiento/modal_atender_requerimiento/{id}', [RequerimientoController::class, 'modal_atender_requerimiento'])->name('requerimiento.modal_atender_requerimiento');
 
-Route::get('guia/create', [GuiaController::class, 'create'])->name('guia.create');
-Route::post('guia/listar_guia_ajax', [GuiaController::class, 'listar_guia_ajax'])->name('guia.listar_guia_ajax');
-Route::post('guia/send_guia', [GuiaController::class, 'send_guia'])->name('guia.send_guia');
-Route::get('guia/modal_guia/{id}', [GuiaController::class, 'modal_guia'])->name('guia.modal_guia');
-Route::get('guia/eliminar_guia/{id}/{estado}', [GuiaController::class, 'eliminar_guia'])->name('guia.eliminar_guia');
-Route::get('entrada_productos/obtener_documentos/{id}', [EntradaProductosController::class, 'obtener_documentos'])->name('entrada_productos.obtener_documentos');
+Route::get('guia_interna/create', [GuiaInternaController::class, 'create'])->name('guia_interna.create');
+Route::post('guia_interna/listar_guia_interna_ajax', [GuiaInternaController::class, 'listar_guia_interna_ajax'])->name('guia_interna.listar_guia_interna_ajax');
+Route::post('guia_interna/send_guia_interna', [GuiaInternaController::class, 'send_guia_interna'])->name('guia_interna.send_guia_interna');
+Route::get('guia_interna/modal_guia_interna/{id}', [GuiaInternaController::class, 'modal_guia_interna'])->name('guia_interna.modal_guia_interna');
+Route::get('guia_interna/eliminar_guia_interna/{id}/{estado}', [GuiaInternaController::class, 'eliminar_guia_interna'])->name('guia_interna.eliminar_guia_interna');
+Route::get('entrada_productos/obtener_documentos/{tipo_documento}', [EntradaProductosController::class, 'obtener_documentos'])->name('entrada_productos.obtener_documentos');
+Route::get('entrada_productos/cargar_detalle_documento/{tipo_documento}/{id_documento}', [EntradaProductosController::class, 'cargar_detalle_documento'])->name('entrada_productos.cargar_detalle_documento');
+
+Route::get('vehiculo/create', [VehiculoController::class, 'create'])->name('vehiculo.create');
+Route::get('vehiculo/consulta_vehiculo', [VehiculoController::class, 'consulta_vehiculo'])->name('vehiculo.consulta_vehiculo');
+Route::post('vehiculo/listar_vehiculo_ajax', [VehiculoController::class, 'listar_vehiculo_ajax'])->name('vehiculo.listar_vehiculo_ajax');
+Route::get('vehiculo/modal_vehiculo/{id}', [VehiculoController::class, 'modal_vehiculo'])->name('vehiculo.modal_vehiculo');
+Route::get('vehiculo/eliminar_vehiculo/{id}/{estado}', [VehiculoController::class, 'eliminar_vehiculo'])->name('vehiculo.eliminar_vehiculo');
+Route::post('vehiculo/send', [VehiculoController::class, 'send'])->name('vehiculo.send');
+Route::post('vehiculo/send_mantenimiento', [VehiculoController::class, 'send_mantenimiento'])->name('vehiculo.send_mantenimiento');
+Route::get('vehiculo/modal_vehiculo_guia/{id}', [VehiculoController::class, 'modal_vehiculo_guia'])->name('vehiculo.modal_vehiculo_guia');
+
+Route::get('conductores/create', [ConductoresController::class, 'create'])->name('conductores.create');
+Route::post('conductores/listar_conductor_ajax', [ConductoresController::class, 'listar_conductor_ajax'])->name('conductores.listar_conductor_ajax');
+Route::get('conductores/modal_conductor_ingreso/{id}', [ConductoresController::class, 'modal_conductor_ingreso'])->name('conductores.modal_conductor_ingreso');
+Route::get('conductores/eliminar_conductor/{id}/{estado}', [ConductoresController::class, 'eliminar_conductor'])->name('conductores.eliminar_conductor');
+Route::post('conductores/send_conductor_ingreso', [ConductoresController::class, 'send_conductor_ingreso'])->name('conductores.send_conductor_ingreso');
+Route::get('conductores/modal_conductor_guia/{id}', [ConductoresController::class, 'modal_conductor_guia'])->name('conductores.modal_conductor_guia');
+
+Route::get('vehiculo/obtener_vehiculo/{placa}', [VehiculoController::class, 'obtener_vehiculo'])->name('vehiculo.obtener_vehiculo');
+Route::get('empresa/modal_empresa_guia/{id}/{placa}', [EmpresaController::class, 'modal_empresa_guia'])->name('empresa.modal_empresa_guia');
+Route::post('vehiculo/send_guia_mantenimiento', [VehiculoController::class, 'send_guia_mantenimiento'])->name('vehiculo.send_guia_mantenimiento');
+
+Route::get('guia_interna/obtener_provincia_distrito/{idDepartamento}', [GuiaInternaController::class, 'obtener_provincia_distrito'])->name('guia_interna.obtener_provincia_distrito');
+Route::post('empresa/send_guia', [EmpresaController::class, 'send_guia'])->name('empresa.send_guia');
+Route::get('guia_interna/obtener_numero_guia/{serie_guia}', [GuiaInternaController::class, 'obtener_numero_guia'])->name('guia_interna.obtener_numero_guia');
+Route::get('guia_interna/guia_interna_pdf/{id}', [GuiaInternaController::class, 'guia_interna_pdf'])->name('guia_interna.guia_interna_pdf');
 

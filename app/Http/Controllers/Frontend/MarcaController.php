@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Marca;
+use App\Models\TablaMaestra;
 use Auth;
 
 class MarcaController extends Controller
@@ -50,13 +51,17 @@ class MarcaController extends Controller
 
     public function modal_marca($id){
 		
+		$tabla_maestra_model = new TablaMaestra;
+
 		if($id>0){
 			$marca = Marca::find($id);
 		}else{
 			$marca = new Marca;
 		}
 
-		return view('frontend.marcas.modal_marcas_nuevoMarca',compact('id','marca'));
+		$tipo_marca = $tabla_maestra_model->getMaestroByTipo('62');
+
+		return view('frontend.marcas.modal_marcas_nuevoMarca',compact('id','marca','tipo_marca'));
 
     }
 
@@ -71,6 +76,7 @@ class MarcaController extends Controller
 		}
 		
         $marca->denominiacion = $request->denominacion;
+		$marca->id_tipo_marca = $request->tipo_marca;
 		$marca->estado = 1;
         $marca->id_usuario_inserta = $id_user;
 		$marca->save();

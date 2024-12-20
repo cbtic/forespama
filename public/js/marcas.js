@@ -102,6 +102,16 @@ function datatablenew(){
 				"bSortable": true,
 				"aTargets": [1]
 				},
+
+				{
+					"mRender": function (data, type, row) {
+						var tipo_marca = "";
+						if(row.tipo_marca!= null)tipo_marca = row.tipo_marca;
+						return tipo_marca;
+					},
+					"bSortable": true,
+					"aTargets": [2]
+					},
 				
 				{
 				"mRender": function (data, type, row) {
@@ -115,7 +125,7 @@ function datatablenew(){
 					return estado;
 				},
 				"bSortable": false,
-				"aTargets": [2]
+				"aTargets": [3]
 				},
 				{
 					"mRender": function (data, type, row) {
@@ -141,7 +151,7 @@ function datatablenew(){
 						return html;
 					},
 					"bSortable": false,
-					"aTargets": [3],
+					"aTargets": [4],
 				},
 
             ]

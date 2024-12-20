@@ -14,12 +14,11 @@
   height:250px;
 }
 
-
 .modal-dialog {
 	width: 100%;
-	max-width:40%!important
-  }
-  
+	max-width:60%!important
+}
+
 #tablemodal{
     border-spacing: 0;
     display: flex;/*Se ajuste dinamicamente al tamano del dispositivo**/

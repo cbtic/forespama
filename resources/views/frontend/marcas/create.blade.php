@@ -378,6 +378,7 @@ label.form-control-sm{
                         <tr style="font-size:13px">
                             <th>Id</th>
 							<th>Denominaci&oacute;n</th>
+							<th>Tipo Marca</th>
 							<th>Estado</th>
                             <th>Acciones</th>
                         </tr>

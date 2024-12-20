@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ConductoresRequest;
 use App\Models\Conductores;
+use App\Models\TablaMaestra;
 use App\Models\Persona;
 use Illuminate\Http\Request;
 use Auth;
@@ -12,6 +13,16 @@ use RealRashid\SweetAlert\Facades\Alert;
 
 class ConductoresController extends Controller
 {
+	public function __construct(){
+
+		$this->middleware(function ($request, $next) {
+			if(!Auth::check()) {
+                return redirect('login');
+            }
+			return $next($request);
+    	});
+	}
+
     public function index()
     {
         $conductores = Conductores::latest()->paginate(10);
@@ -19,10 +30,38 @@ class ConductoresController extends Controller
         return view('frontend.conductores.index', compact('conductores'));
     }
 
-    public function create()
+	public function create()
+    {
+        return view('frontend.conductores.all');
+    }
+
+    /*public function create()
     {
         return view('frontend.conductores.create');
-    }
+    }*/
+
+	public function listar_conductor_ajax(Request $request){
+
+		$conductor_model = new Conductores;
+		$p[]=$request->nombres;
+		$p[]=$request->licencia;
+		$p[]=$request->estado;
+		$p[]=$request->NumeroPagina;
+		$p[]=$request->NumeroRegistros;
+		$data = $conductor_model->listar_conductor_ajax($p);
+		$iTotalDisplayRecords = isset($data[0]->totalrows)?$data[0]->totalrows:0;
+
+		$result["PageStart"] = $request->NumeroPagina;
+		$result["pageSize"] = $request->NumeroRegistros;
+		$result["SearchText"] = "";
+		$result["ShowChildren"] = true;
+		$result["iTotalRecords"] = $iTotalDisplayRecords;
+		$result["iTotalDisplayRecords"] = $iTotalDisplayRecords;
+		$result["aaData"] = $data;
+
+		echo json_encode($result);
+
+	}
 
     public function store(ConductoresRequest $request)
     {
@@ -109,6 +148,33 @@ class ConductoresController extends Controller
 		$array["persona"] = $persona;
 		$array["conductor"] = $conductor;
         echo json_encode($array);
+
+    }
+
+	public function modal_conductor_guia($id){
+		
+		$id_user = Auth::user()->id;
+		$tablaMaestra_model = new TablaMaestra;
+		if($id>0){
+			$conductor = Conductores::find($id);
+			$persona = Persona::find($conductor->id_personas);
+		}else{
+			$conductor = new Conductores;
+			$persona = new Persona;
+		} 
+		$tipo_documento = $tablaMaestra_model->getMaestroByTipo(9);
+
+		return view('frontend.conductores.modal_conductor_guia',compact('id','conductor','tipo_documento','persona'));
+
+    }
+
+	public function eliminar_conductor($id,$estado)
+    {
+		$conductor = Conductores::find($id);
+		$conductor->estado = $estado;
+		$conductor->save();
+
+		echo $conductor->id;
 
     }
 

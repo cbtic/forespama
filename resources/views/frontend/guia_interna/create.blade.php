@@ -513,6 +513,6 @@ label.form-control-sm{
 
 	</script>
 
-	<script src="{{ asset('js/guia.js') }}"></script>
+	<script src="{{ asset('js/guiaInterna.js') }}"></script>
 
 	@endpush

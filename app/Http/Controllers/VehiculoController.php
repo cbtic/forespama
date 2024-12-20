@@ -7,6 +7,12 @@ use Carbon\Carbon;
 use App\Models\Vehiculo;
 use Illuminate\Http\Request;
 use App\Models\TablaMaestra;
+use App\Models\Empresa;
+use App\Models\Conductores;
+use App\Models\VehiculoConductore;
+use App\Models\EmpresaVehiculo;
+use App\Models\EmpresasConductoresVehiculo;
+use App\Models\Marca;
 use App\Http\Requests\VehiculoRequest;
 use Auth;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -33,18 +39,50 @@ class VehiculoController extends Controller
 
 	public function modal_vehiculo($id){
 		$id_user = Auth::user()->id;
-		if($id>0)$vehiculo = Vehiculo::find($id);
-		else $vehiculo = new Vehiculo;
+		$conductor_model = new Conductores;
+		$marca_model = new Marca;
 
-		return view('frontend.vehiculo.modal_vehiculo',compact('id','vehiculo'));
+		if($id>0){
+			$vehiculo = Vehiculo::find($id);
+			$empresas_conductores_vehiculo = EmpresasConductoresVehiculo::where('id_vehiculos',$vehiculo->id)->first();
+		}else{
+			$vehiculo = new Vehiculo;
+			$empresas_conductores_vehiculo = new EmpresasConductoresVehiculo;
+		}
+		$empresas = Empresa::all();
+		$conductores = $conductor_model->getConductorAll();
+		$marcas = $marca_model->getMarcaVehiculo();
+
+		return view('frontend.vehiculo.modal_vehiculo',compact('id','vehiculo','empresas','conductores','empresas_conductores_vehiculo','marcas'));
+
+	}
+
+	public function modal_vehiculo_guia($id){
+		$id_user = Auth::user()->id;
+		$conductor_model = new Conductores;
+		$marca_model = new Marca;
+
+		if($id>0){
+			$vehiculo = Vehiculo::find($id);
+			$empresas_conductores_vehiculo = EmpresasConductoresVehiculo::where('id_vehiculos',$vehiculo->id)->first();
+		}else{
+			$vehiculo = new Vehiculo;
+			$empresas_conductores_vehiculo = new EmpresasConductoresVehiculo;
+		}
+
+		$empresas = Empresa::all();
+		$conductores = $conductor_model->getConductorAll();
+		$marcas = $marca_model->getMarcaVehiculo();
+
+		return view('frontend.vehiculo.modal_vehiculo_guia',compact('id','vehiculo','empresas','conductores','empresas_conductores_vehiculo','marcas'));
 
 	}
 
 	public function listar_vehiculo_ajax(Request $request){
 
 		$vehiculo_model = new Vehiculo;
-		$p[]="";
-		$p[]="";
+		$p[]=$request->placa;
+		$p[]=$request->ejes;
 		$p[]="";
 		$p[]="";
 		$p[]="";
@@ -159,9 +197,175 @@ class VehiculoController extends Controller
 
     }
 
+	public function send_mantenimiento(Request $request){
+
+		$id_user = Auth::user()->id;
+
+		if($request->id == 0){
+			$vehiculo = new Vehiculo;
+			$vehiculo->placa = $request->placa;
+			$vehiculo->ejes = $request->ejes;
+			$vehiculo->peso_tracto = $request->peso_tracto;
+			$vehiculo->peso_carreta = $request->peso_carreta;
+			$vehiculo->peso_seco = $request->peso_seco;
+			$vehiculo->exonerado = $request->exonerado;
+			$vehiculo->control = $request->control;
+			$vehiculo->bloqueado = $request->bloqueado;
+			$vehiculo->id_marca = $request->marca;
+			$vehiculo->id_usuario_inserta = $id_user;
+			$vehiculo->id_usuario_actualiza = $id_user;
+			$vehiculo->estado = "1";
+			$vehiculo->save();
+
+			/*$empresa_vehiculo = new EmpresaVehiculo;
+
+			$empresa_vehiculo->id_vehiculos = $vehiculo->id;
+			$empresa_vehiculo->id_empresas = $request->empresa;
+			$empresa_vehiculo->save();
+
+			$vehiculo_conductor = new VehiculoConductore;
+
+			$vehiculo_conductor->id_vehiculos = $vehiculo->id;
+			$vehiculo_conductor->id_conductores = $request->conductor;
+			$vehiculo_conductor->estado = 1;
+			$vehiculo_conductor->save();
+
+			$empresa_conductor_vehiculo = new EmpresasConductoresVehiculo;
+
+			$empresa_conductor_vehiculo->id_empresas = $request->empresa;
+			$empresa_conductor_vehiculo->id_vehiculos = $vehiculo->id;
+			$empresa_conductor_vehiculo->id_conductores = $request->conductor;
+			$empresa_conductor_vehiculo->estado = 1;
+			$empresa_conductor_vehiculo->save();*/
+
+		}else{
+			$vehiculo = Vehiculo::find($request->id);
+			$vehiculo->placa = $request->placa;
+			$vehiculo->ejes = $request->ejes;
+			$vehiculo->peso_tracto = $request->peso_tracto;
+			$vehiculo->peso_carreta = $request->peso_carreta;
+			$vehiculo->peso_seco = $request->peso_seco;
+			$vehiculo->exonerado = $request->exonerado;
+			$vehiculo->control = $request->control;
+			$vehiculo->bloqueado = $request->bloqueado;
+			$vehiculo->id_marca = $request->marca;
+			$vehiculo->id_usuario_actualiza = $id_user;
+			$vehiculo->save();
+
+			/*$empresa_vehiculo = EmpresaVehiculo::where("id_vehiculos",$vehiculo->id)->first();
+
+			$empresa_vehiculo->id_vehiculos = $vehiculo->id;
+			$empresa_vehiculo->id_empresas = $request->empresa;
+			$empresa_vehiculo->save();
+
+			$vehiculo_conductor = VehiculoConductore::where("id_vehiculos",$vehiculo->id)->first();
+
+			$vehiculo_conductor->id_vehiculos = $vehiculo->id;
+			$vehiculo_conductor->id_conductores = $request->conductor;
+			$vehiculo_conductor->estado = 1;
+			$vehiculo_conductor->save();
+
+			$empresa_conductor_vehiculo = EmpresasConductoresVehiculo::where("id_vehiculos",$vehiculo->id)->first();
+
+			$empresa_conductor_vehiculo->id_empresas = $request->empresa;
+			$empresa_conductor_vehiculo->id_vehiculos = $vehiculo->id;
+			$empresa_conductor_vehiculo->id_conductores = $request->conductor;
+			$empresa_conductor_vehiculo->estado = 1;
+			$empresa_conductor_vehiculo->save();*/
+			
+		}
+    }
+
+	public function send_guia_mantenimiento(Request $request){
+
+		$id_user = Auth::user()->id;
+
+		if($request->id == 0){
+			$vehiculo = new Vehiculo;
+			$vehiculo->placa = $request->placa;
+			$vehiculo->ejes = $request->ejes;
+			$vehiculo->peso_tracto = $request->peso_tracto;
+			$vehiculo->peso_carreta = $request->peso_carreta;
+			$vehiculo->peso_seco = $request->peso_seco;
+			$vehiculo->exonerado = $request->exonerado;
+			$vehiculo->control = $request->control;
+			$vehiculo->bloqueado = $request->bloqueado;
+			$vehiculo->id_marca = $request->marca;
+			$vehiculo->id_usuario_inserta = $id_user;
+			$vehiculo->id_usuario_actualiza = $id_user;
+			$vehiculo->estado = "1";
+			$vehiculo->save();
+
+			$empresa_vehiculo = new EmpresaVehiculo;
+
+			$empresa_vehiculo->id_vehiculos = $vehiculo->id;
+			$empresa_vehiculo->id_empresas = $request->empresa;
+			$empresa_vehiculo->save();
+
+			$vehiculo_conductor = new VehiculoConductore;
+
+			$vehiculo_conductor->id_vehiculos = $vehiculo->id;
+			$vehiculo_conductor->id_conductores = $request->conductor;
+			$vehiculo_conductor->estado = 1;
+			$vehiculo_conductor->save();
+
+			$empresa_conductor_vehiculo = new EmpresasConductoresVehiculo;
+
+			$empresa_conductor_vehiculo->id_empresas = $request->empresa;
+			$empresa_conductor_vehiculo->id_vehiculos = $vehiculo->id;
+			$empresa_conductor_vehiculo->id_conductores = $request->conductor;
+			$empresa_conductor_vehiculo->estado = 1;
+			$empresa_conductor_vehiculo->save();
+
+		}else{
+			$vehiculo = Vehiculo::find($request->id);
+			$vehiculo->placa = $request->placa;
+			$vehiculo->ejes = $request->ejes;
+			$vehiculo->peso_tracto = $request->peso_tracto;
+			$vehiculo->peso_carreta = $request->peso_carreta;
+			$vehiculo->peso_seco = $request->peso_seco;
+			$vehiculo->exonerado = $request->exonerado;
+			$vehiculo->control = $request->control;
+			$vehiculo->bloqueado = $request->bloqueado;
+			$vehiculo->id_marca = $request->marca;
+			$vehiculo->id_usuario_actualiza = $id_user;
+			$vehiculo->save();
+
+			$empresa_vehiculo = EmpresaVehiculo::where("id_vehiculos",$vehiculo->id)->first();
+
+			$empresa_vehiculo->id_vehiculos = $vehiculo->id;
+			$empresa_vehiculo->id_empresas = $request->empresa;
+			$empresa_vehiculo->save();
+
+			$vehiculo_conductor = VehiculoConductore::where("id_vehiculos",$vehiculo->id)->first();
+
+			$vehiculo_conductor->id_vehiculos = $vehiculo->id;
+			$vehiculo_conductor->id_conductores = $request->conductor;
+			$vehiculo_conductor->estado = 1;
+			$vehiculo_conductor->save();
+
+			$empresa_conductor_vehiculo = EmpresasConductoresVehiculo::where("id_vehiculos",$vehiculo->id)->first();
+
+			$empresa_conductor_vehiculo->id_empresas = $request->empresa;
+			$empresa_conductor_vehiculo->id_vehiculos = $vehiculo->id;
+			$empresa_conductor_vehiculo->id_conductores = $request->conductor;
+			$empresa_conductor_vehiculo->estado = 1;
+			$empresa_conductor_vehiculo->save();
+			
+		}
+    }
+
+	public function obtener_vehiculo($placa){
+		
+		$vehiculo_model = new Vehiculo;
+		$vehiculo_datos = $vehiculo_model->getVehiculoDatos($placa);
+		
+		return response()->json($vehiculo_datos);
+	}
+
     public function create()
     {
-        return view('frontend.vehiculos.create');
+        return view('frontend.vehiculo.all');
     }
 
     public function show(Vehiculo $vehiculos)

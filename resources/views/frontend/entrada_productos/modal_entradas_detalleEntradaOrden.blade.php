@@ -761,7 +761,7 @@ function fn_save_detalle_producto(){
     var tipo_documento = $('#tipo_documento').val();
     var unidad_origen = $('#unidad_origen').val();
     var almacen = $('#almacen').val();
-    var almacen_salida = $('#almacen_salida').val();
+    //var almacen_salida = $('#almacen_salida').val();
     var moneda = $('#moneda').val();
 
     var msg="";
@@ -769,10 +769,10 @@ function fn_save_detalle_producto(){
     if(tipo_documento==""){msg+="Ingrese el Tipo de Documento <br>";}
     if(unidad_origen==""){msg+="Ingrese la Unidad de Origen <br>";}
     if(tipo_movimiento==1){
-        if(almacen==""){msg+="Ingrese el Almacen de Destino <br>";}
+        //if(almacen==""){msg+="Ingrese el Almacen de Destino <br>";}
     }
     if(tipo_movimiento==2){
-        if(almacen_salida==""){msg+="Ingrese el Almacen de Salida <br>";}
+        //if(almacen_salida==""){msg+="Ingrese el Almacen de Salida <br>";}
     }
     if(moneda==""){msg+="Ingrese la Moneda <br>";}
 	

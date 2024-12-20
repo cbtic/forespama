@@ -87,7 +87,7 @@ function datatablenew(){
     
     var oTable1 = $('#tblGuia').dataTable({
         "bServerSide": true,
-        "sAjaxSource": "/guia/listar_guia_ajax",
+        "sAjaxSource": "/guia_interna/listar_guia_interna_ajax",
         "bProcessing": true,
         "sPaginationType": "full_numbers",
         //"paging":false,
@@ -160,9 +160,9 @@ function datatablenew(){
 
 				{
 					"mRender": function (data, type, row) {
-						var tipo_documento = "";
-						if(row.tipo_documento!= null)tipo_documento = row.tipo_documento;
-						return tipo_documento;
+						var id = "";
+						if(row.id!= null)id = row.id;
+						return id;
 					},
 					"bSortable": true,
 					"aTargets": [1]
@@ -170,28 +170,28 @@ function datatablenew(){
 
 				{
 					"mRender": function (data, type, row) {
-						var fecha = "";
-						if(row.fecha!= null)fecha = row.fecha;
-						return fecha;
+						var fecha_emision = "";
+						if(row.fecha_emision!= null)fecha_emision = row.fecha_emision;
+						return fecha_emision;
 					},
 					"bSortable": true,
 					"aTargets": [2]
 				},
+
 				{
 					"mRender": function (data, type, row) {
-						var codigo = "";
-						if(row.codigo!= null)codigo = row.codigo;
-						return codigo;
+						var tipo_documento = "";
+						if(row.tipo_documento!= null)tipo_documento = row.tipo_documento;
+						return tipo_documento;
 					},
 					"bSortable": true,
 					"aTargets": [3]
 				},
-
 				{
 					"mRender": function (data, type, row) {
-						var almacen = "";
-						if(row.almacen!= null)almacen = row.almacen;
-						return almacen;
+						var numero_documento = "";
+						if(row.numero_documento!= null)numero_documento = row.numero_documento;
+						return numero_documento;
 					},
 					"bSortable": true,
 					"aTargets": [4]
@@ -199,9 +199,9 @@ function datatablenew(){
 
 				{
 					"mRender": function (data, type, row) {
-						var cerrado_situacion = "";
-						if(row.cerrado_situacion!= null)cerrado_situacion = row.cerrado_situacion;
-						return cerrado_situacion;
+						var placa = "";
+						if(row.placa!= null)placa = row.placa;
+						return placa;
 					},
 					"bSortable": true,
 					"aTargets": [5]
@@ -209,9 +209,9 @@ function datatablenew(){
 
 				{
 					"mRender": function (data, type, row) {
-						var responsable_atencion = "";
-						if(row.responsable_atencion!= null)responsable_atencion = row.responsable_atencion;
-						return responsable_atencion;
+						var id_transporte = "";
+						if(row.id_transporte!= null)id_transporte = row.id_transporte;
+						return id_transporte;
 					},
 					"bSortable": true,
 					"aTargets": [6]
@@ -219,12 +219,22 @@ function datatablenew(){
 
 				{
 					"mRender": function (data, type, row) {
-						var estado_atencion = "";
-						if(row.estado_atencion!= null)estado_atencion = row.estado_atencion;
-						return estado_atencion;
+						var punto_partida = "";
+						if(row.punto_partida!= null)punto_partida = row.punto_partida;
+						return punto_partida;
 					},
 					"bSortable": true,
 					"aTargets": [7]
+				},
+
+				{
+					"mRender": function (data, type, row) {
+						var punto_llegada = "";
+						if(row.punto_llegada!= null)punto_llegada = row.punto_llegada;
+						return punto_llegada;
+					},
+					"bSortable": true,
+					"aTargets": [8]
 				},
 
 				{
@@ -239,7 +249,7 @@ function datatablenew(){
 						return estado;
 					},
 					"bSortable": false,
-					"aTargets": [8]
+					"aTargets": [9]
 				},
 				{
 					"mRender": function (data, type, row) {
@@ -264,7 +274,7 @@ function datatablenew(){
 						return html;
 					},
 					"bSortable": false,
-					"aTargets": [9],
+					"aTargets": [10],
 				},
             ]
     });
@@ -280,7 +290,7 @@ function modalGuia(id){
 	$('#openOverlayOpc .modal-body').css('height', 'auto');
 
 	$.ajax({
-			url: "/guia/modal_guia/"+id,
+			url: "/guia_interna/modal_guia_interna/"+id,
 			type: "GET",
 			success: function (result) {  
 					$("#diveditpregOpc").html(result);
@@ -314,7 +324,7 @@ function eliminarGuia(id,estado){
 function fn_eliminar(id,estado){
 	
     $.ajax({
-            url: "/guia/eliminar_guia/"+id+"/"+estado,
+            url: "/guia_interna/eliminar_guia_interna/"+id+"/"+estado,
             type: "GET",
             success: function (result) {
                 //if(result="success")obtenerPlanDetalle(id_plan);

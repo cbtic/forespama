@@ -14,6 +14,7 @@ use App\Models\Empresa;
 use App\Models\Conductores;
 use App\Models\EmpresasConductoresVehiculo;
 use App\Models\Pago;
+use App\Models\Persona;
 use Auth;
 use Carbon\Carbon;
 
@@ -55,10 +56,16 @@ class IngresoVehiculoTroncoController extends Controller
 		
 		$id_user = Auth::user()->id;
 		$tablaMaestra_model = new TablaMaestra;
-		if($id>0) $conductor = Conductores::find($id);else $conductor = new Conductores;
+		if($id>0){
+			$conductor = Conductores::find($id);
+			$persona = Persona::find($conductor->id_personas);
+		}else{
+			$conductor = new Conductores;
+			$persona = new Persona;
+		} 
 		$tipo_documento = $tablaMaestra_model->getMaestroByTipo(9);
 
-		return view('frontend.conductores.modal_conductor_ingreso',compact('id','conductor','tipo_documento'));
+		return view('frontend.conductores.modal_conductor_ingreso',compact('id','conductor','tipo_documento','persona'));
 
     }
 

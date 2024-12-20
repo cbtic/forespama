@@ -77,7 +77,7 @@ class TablaMaestra extends Model
     }
     function getMaestroC($tipo, $codigo){
 
-        $cad = "select id,denominacion,codigo
+        $cad = "select id, denominacion, codigo, abreviatura 
                 from tabla_maestras
                 where tipo='".$tipo."'
                 and codigo ='".$codigo."'
@@ -125,6 +125,18 @@ class TablaMaestra extends Model
 		And t1.codigo::int not in (select distinct id_caja from caja_ingresos where estado='1')
 		order by t1.orden"; 
     
+		$data = DB::select($cad);
+        return $data;
+    }
+
+    function getMaestroDeno($tipo, $denominacion){
+
+        $cad = "select id, denominacion, codigo, abreviatura 
+                from tabla_maestras
+                where tipo='".$tipo."'
+                and denominacion ='".$denominacion."'
+                order by orden ";
+
 		$data = DB::select($cad);
         return $data;
     }

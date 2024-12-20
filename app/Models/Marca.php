@@ -40,4 +40,13 @@ class Marca extends Model
 		$data = DB::select($cad);
         return $data;
     }
+
+    function getMarcaVehiculo(){
+
+        $cad = "select * from marcas m 
+        where m.estado='1' and m.id_tipo_marca = '2'";
+
+		$data = DB::select($cad);
+        return $data;
+    }
 }

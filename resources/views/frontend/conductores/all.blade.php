@@ -106,7 +106,7 @@
 @section('breadcrumb')
 <ol class="breadcrumb" style="padding-left:130px;margin-top:0px;background-color:#283659">
         <li class="breadcrumb-item text-primary">Inicio</li>
-            <li class="breadcrumb-item active">Consulta de Vehiculos</li>
+            <li class="breadcrumb-item active">Consulta de Conductores</li>
         </li>
     </ol>
 @endsection
@@ -131,7 +131,7 @@
             <div class="row">
                 <div class="col-sm-5">
                     <h4 class="card-title mb-0 text-primary">
-                        Consultar Vehiculo <!--<small class="text-muted">Usuarios activos</small>-->
+                        Consultar Conductores <!--<small class="text-muted">Usuarios activos</small>-->
                     </h4>
                 </div><!--col-->
             </div>
@@ -143,7 +143,7 @@
             <div class="card">
                 <div class="card-header">
                     <strong>
-                        Lista de Vehiculos
+                        Lista de Conductores
                     </strong>
                 </div><!--card-header-->
 				
@@ -154,24 +154,17 @@
 				
 				<div class="row" style="padding:20px 20px 0px 20px;">
 				
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<input class="form-control form-control-sm" id="placa_bus" name="placa_bus" placeholder="Numero de Placa">
+                    <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+						<input class="form-control form-control-sm" id="nombres_bus" name="nombres_bus" placeholder="Nombres">
 					</div>
 					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-                        <select id="ejes_bus" name="ejes_bus" class="form-control form-control-sm">
-                            <option value="">Escoger</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                            <option value="6">6</option>
-                        </select>
-                    </div>
+						<input class="form-control form-control-sm" id="licencia_bus" name="licencia_bus" placeholder="Numero de Licencia">
+					</div>
 					<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12" style="padding-left:0px;margin-left:0px;">
 						<select name="estado" id="estado" class="form-control form-control-sm">
 							<option value="">Todos</option>
-							<option value="1" selected="selected">Activo</option>
-							<option value="0">Eliminado</option>
+							<option value="ACTIVO" selected="selected">Activo</option>
+							<option value="CANCELADO">Cancelado</option>
 						</select>
 					</div>
 					
@@ -185,17 +178,14 @@
                 <div class="card-body">				
 
                     <div class="table-responsive">
-                    <table id="tblAfiliado" class="table table-hover table-sm">
+                    <table id="tblConductor" class="table table-hover table-sm">
                         <thead>
                         <tr style="font-size:13px">
-                            <th>Placa</th>
-                            <th>Ejes</th>
-							<th>Peso Tracto</th>
-							<th>Peso Carreta</th>
-							<th>Peso Seco</th>
-							<th>Exonerado</th>
-                            <th>Control</th>
-							<th>Bloqueado</th>
+                            <th>Id</th>
+                            <th>Nombres</th>
+                            <th>N&uacute;mero Documento</th>
+							<th>Licencia</th>
+							<th>Fecha Emisi&oacute;n</th>
 							<th>Estado</th>
 							<th width="10%">Acciones</th>
                         </tr>
@@ -235,5 +225,5 @@
 
 @push('after-scripts')
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.js"></script>
-<script src="{{ asset('js/vehiculoLista.js') }}"></script>
+<script src="{{ asset('js/conductor.js') }}"></script>
 @endpush

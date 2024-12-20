@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use DB;
 
 class Conductores extends Model
 {
@@ -43,4 +44,36 @@ class Conductores extends Model
    {
        return $this->belongsToMany(Vehiculo::class,'vehiculos_conductores', 'id_vehiculos', 'id_conductores');
    }
+
+   function getConductorAll(){
+
+        $cad = "select c.id, c.licencia, c.fecha_licencia, c.estado, c.id_personas, p.nombres||' '||p.apellido_paterno||' '||p.apellido_materno nombre_conductor from conductores c 
+        inner join personas p on c.id_personas = p.id ";
+
+        //limit 2620";
+
+        $data = DB::select($cad);
+        return $data;
+    }
+
+    public function listar_conductor_ajax($p){
+		return $this->readFunctionPostgres('sp_listar_conductor_paginado',$p);
+    }
+
+	public function readFunctionPostgres($function, $parameters = null){
+
+      $_parameters = '';
+      if (count($parameters) > 0) {
+          $_parameters = implode("','", $parameters);
+          $_parameters = "'" . $_parameters . "',";
+      }
+	  DB::select("BEGIN;");
+	  $cad = "select " . $function . "(" . $_parameters . "'ref_cursor');";
+	  DB::select($cad);
+	  $cad = "FETCH ALL IN ref_cursor;";
+	  $data = DB::select($cad);
+	  DB::select("END;");
+      return $data;
+   }
+
 }

@@ -6,7 +6,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use DB;
 
-class Guia extends Model
+class EmpresaVehiculo extends Model
 {
+    protected $table = 'empresas_vehiculos';
+
+    public $timestamps = false;
+
     use HasFactory;
 }

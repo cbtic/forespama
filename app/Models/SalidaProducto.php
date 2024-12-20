@@ -71,4 +71,20 @@ class SalidaProducto extends Model
         return $data;
     }
 
+    function getDetalleSalidaProducto(){
+
+        $cad = "select sp.id, sp.fecha_salida fecha_movimiento, tm.denominacion tipo_documento, tm2.denominacion unidad_origen, '' razon_social, sp.codigo, sp.fecha_comprobante, sp.estado, sp.created_at, tm3.denominacion moneda, sp.observacion, a.denominacion almacen, tm4.denominacion igv_compra 
+        from salida_productos sp 
+        inner join tabla_maestras tm on sp.id_tipo_documento = tm.codigo ::int and tm.tipo = '49'
+        inner join tabla_maestras tm2 on sp.unidad_destino ::int = tm2.codigo::int and tm2.tipo = '50'
+        inner join tabla_maestras tm3 on sp.id_moneda ::int = tm3.codigo::int and tm3.tipo = '1'
+        inner join tabla_maestras tm4 on sp.igv_compra ::int = tm4.codigo::int and tm4.tipo = '51'
+        inner join almacenes a on sp.id_almacen_salida = a.id
+        inner join orden_compras oc on sp.id_orden_compra = oc.id
+        and sp.estado='1'";
+
+		$data = DB::select($cad);
+        return $data;
+    }
+
 }

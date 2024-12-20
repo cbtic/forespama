@@ -193,7 +193,7 @@
                     <x-utils.link :href="route('frontend.ingreso.create')" class="c-sidebar-nav-link" :text="__('Estado de Cuentas')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />                  
                 </li>
                 <li class="c-sidebar-nav-item">
-                    <x-utils.link :href="route('frontend.guia.create')" class="c-sidebar-nav-link" :text="__('Consulta de Guias')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />                  
+                    <x-utils.link :href="route('frontend.guia_interna.create')" class="c-sidebar-nav-link" :text="__('Consulta de Guias')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />                  
                 </li>
             </ul>
         </li> 
@@ -239,7 +239,7 @@
 				
 				@can('Mantenimiento Vehiculos')
                 <li class="c-sidebar-nav-item">
-                    <x-utils.link :href="route('frontend.vehiculos.index')" class="c-sidebar-nav-link" :text="__('Vehiculos')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+                    <x-utils.link :href="route('frontend.vehiculos.create')" class="c-sidebar-nav-link" :text="__('Vehiculos')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
                 </li>
 				@endif
 				
@@ -251,7 +251,7 @@
 				
 				@can('Mantenimiento Conductores')
                 <li class="c-sidebar-nav-item">
-                    <x-utils.link :href="route('frontend.conductores.index')" class="c-sidebar-nav-link" :text="__('Conductores')" />
+                    <x-utils.link :href="route('frontend.conductores.create')" class="c-sidebar-nav-link" :text="__('Conductores')" />
                 </li>
 				@endif
 				

@@ -229,7 +229,23 @@ function fn_save_marca(){
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                            <div class="row" style="padding-left:10px">
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label class="control-label form-control-sm">Tipo Marca</label>
+                                        <select name="tipo_marca" id="tipo_marca" class="form-control form-control-sm">
+                                            <option value="">--Seleccionar--</option>
+                                            <?php 
+                                            foreach ($tipo_marca as $row){?>
+                                                <option value="<?php echo $row->codigo ?>" <?php //if($row->id==$vehiculo->id_marca)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                                <?php 
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
                         </div>
                         <div style="margin-top:15px" class="form-group">
                             <div class="col-sm-12 controls">

@@ -37,7 +37,7 @@ class OrdenCompra extends Model
         $cad = "select ocd.id,  ROW_NUMBER() OVER (PARTITION BY ocd.id_orden_compra ) AS row_num, p.numero_serie item, ocd.id_producto, p.codigo, p.denominacion nombre_producto, ocd.id_marca, ocd.id_unidad_medida, ocd.fecha_fabricacion, ocd.fecha_vencimiento, 
         ocd.id_estado_producto , ocd.cantidad_requerida, 
         coalesce((select sum(cantidad)
-        from entrada_productos ep 
+        from entrada_productos ep
         inner join entrada_producto_detalles epd on ep.id=epd.id_entrada_productos 
         where id_orden_compra =ocd.id_orden_compra 
         and epd.id_producto=ocd.id_producto),0)cantidad_ingresada,

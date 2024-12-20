@@ -14,7 +14,8 @@
   height:250px;
 }
 
-.modal-dialog {
+
+.modal-conductor .modal-dialog {
 	width: 100%;
 	max-width:40%!important
 }

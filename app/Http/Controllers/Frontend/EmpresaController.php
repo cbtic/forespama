@@ -398,6 +398,21 @@ class EmpresaController extends Controller
 	
 	}
 
+	public function modal_empresa_guia($id, $placa){
+		$id_user = Auth::user()->id;
+		$empresa = new Empresa;
+		if($id>0)$empresa = Empresa::find($id);
+		else $empresa = new Empresa;
+		$vehiculo = Vehiculo::where('placa',$placa)->orderBy('id', 'desc')->get();
+		$id_vehiculo = $vehiculo[0]->id;
+		//$solicitud_model = new Solicitude;
+		//$fecha_actual = Carbon::now()->timezone('America/Lima')->format('Y-m-d H:i:s');
+		//$solicitud = $solicitud_model->getSolicitudById($id);
+		//$usuario = User::find($id_user);
+		return view('frontend.empresa.modal_empresa_guia',compact('id','empresa','id_vehiculo'));
+	
+	}
+
     public function consultaRucWS($ruc){
     
         $curl = curl_init();
@@ -633,6 +648,56 @@ class EmpresaController extends Controller
         $array["empresa"] = $empresa;
         echo json_encode($array);
 
+    }
+
+	public function send_guia(Request $request){
+		
+		$sw = true;
+		$msg = "";
+		$empresa_razon_social ="";
+
+        $validaRuc = $this -> consultaRucWS($request->ruc);
+
+		if($request->id == 0){
+			
+			$empresaExiste = Empresa::where("ruc",$request->ruc)->get();
+			if(count($empresaExiste)==0){
+				$empresa = new Empresa;
+				$empresa->ruc = $request->ruc;
+				$empresa->razon_social = $request->razon_social;
+				$empresa->nombre_comercial = $request->razon_social;
+				$empresa->direccion = $request->direccion;
+				$empresa->email = $request->email;
+				$empresa->telefono = $request->telefono;
+				$empresa->representante = "Representante";
+				$empresa->save();
+
+				$empresa_razon_social = $empresa->razon_social;
+
+				$vehiculo = Vehiculo::find($request->id_vehiculo);
+
+				$empresas_conductores_vehiculo = EmpresasConductoresVehiculo::where('id_vehiculo',$vehiculo->id);
+				$empresas_conductores_vehiculo->id_empresas = $empresa->id;
+				$empresas_conductores_vehiculo->save();
+
+			}else{
+				$sw = false;
+				$msg = "El Ruc ingresado ya existe !!!";
+				$empresa_razon_social = $empresaExiste[0]->razon_social;
+
+				$empresas_conductores_vehiculo = EmpresasConductoresVehiculo::where('id_vehiculo',$vehiculo->id);
+				$empresas_conductores_vehiculo->id_empresas = $empresaExiste[0]->id;
+				$empresas_conductores_vehiculo->save();
+			}
+			
+		}
+		
+		$array["sw"] = $sw;
+        $array["msg"] = $msg;
+		$array["empresa"] = $empresa_razon_social;
+        echo json_encode($array);
+		
+		
     }
 	
 }

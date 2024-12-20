@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use DB;
 
-class Guia extends Model
+class GuiaDetalle extends Model
 {
     use HasFactory;
 }

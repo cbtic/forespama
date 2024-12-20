@@ -8,7 +8,7 @@ $(document).ready(function () {
 	});
 	
 	$('#btnNuevo').click(function () {
-		modalVehiculo(0);
+		modalConductor(0);
 	});
 		
 	datatablenew();
@@ -374,9 +374,9 @@ $('#modalPersonaTitularSaveBtn').click(function (e) {
 
 
 function datatablenew(){
-    var oTable1 = $('#tblAfiliado').dataTable({
+    var oTable1 = $('#tblConductor').dataTable({
         "bServerSide": true,
-        "sAjaxSource": "/vehiculo/listar_vehiculo_ajax",
+        "sAjaxSource": "/conductores/listar_conductor_ajax",
         "bProcessing": true,
         "sPaginationType": "full_numbers",
         //"paging":false,
@@ -403,17 +403,9 @@ function datatablenew(){
             var iNroPagina 	= parseFloat(fn_util_obtieneNroPagina(aoData[3].value, aoData[4].value)).toFixed();
             var iCantMostrar 	= aoData[4].value;
 			
-			var numero_documento = $('#numero_documento').val();
-            var persona = $('#persona').val();
+			var nombres = $('#nombres_bus').val();
+            var licencia = $('#licencia_bus').val();
 			var estado = $('#estado').val();
-			var flag_foto = $('#flag_foto').val();
-			var flag_vacuna = $('#flag_vacuna').val();
-			var flag_carnet = $('#flag_carnet').val();
-			var flag_negativo = 0;
-			if($("#flag_negativo").is(':checked'))flag_negativo = 1;
-			var numero_documento = $('#numero_documento').val();
-			var placa = $('#placa_bus').val();
-			var ejes = $('#ejes_bus').val();
 			var _token = $('#_token').val();
 			
             oSettings.jqXHR = $.ajax({
@@ -422,9 +414,7 @@ function datatablenew(){
                 "type": "POST",
                 "url": sSource,
                 "data":{NumeroPagina:iNroPagina,NumeroRegistros:iCantMostrar,
-						numero_documento:numero_documento,persona:persona,estado:estado,
-						flag_negativo:flag_negativo,flag_foto:flag_foto,flag_vacuna:flag_vacuna,
-						flag_carnet:flag_carnet,placa:placa,ejes:ejes,
+						nombres:nombres,licencia:licencia,estado:estado,
 						_token:_token
                        },
                 "success": function (result) {
@@ -440,9 +430,9 @@ function datatablenew(){
             [	
 				{
                 "mRender": function (data, type, row) {
-                	var placa = "";
-					if(row.placa!= null)placa = row.placa;
-					return placa;
+                	var id = "";
+					if(row.id!= null)id = row.id;
+					return id;
                 },
                 "bSortable": false,
                 "aTargets": [0],
@@ -451,98 +441,71 @@ function datatablenew(){
                 },
 				{
                 "mRender": function (data, type, row) {
-                    var ejes = "";
-					if(row.ejes!= null)ejes = row.ejes;
-					return ejes;
+                    var nombres = "";
+					if(row.nombres!= null)nombres = row.nombres;
+					return nombres;
                 },
                 "bSortable": false,
                 "aTargets": [1]
                 },
+				{
+				"mRender": function (data, type, row) {
+					var numero_documento = "";
+					if(row.numero_documento!= null)numero_documento = row.numero_documento;
+					return numero_documento;
+				},
+				"bSortable": false,
+				"aTargets": [2]
+				},
                 {
                 "mRender": function (data, type, row) {
-                	var peso_tracto = "";
-					if(row.peso_tracto!= null)peso_tracto = row.peso_tracto;
-					return peso_tracto;
-                },
-                "bSortable": false,
-                "aTargets": [2]
-                },
-				{
-                "mRender": function (data, type, row) {
-                	var peso_carreta = "";
-					if(row.peso_carreta!= null)peso_carreta = row.peso_carreta;
-					return peso_carreta;
+                	var licencia = "";
+					if(row.licencia!= null)licencia = row.licencia;
+					return licencia;
                 },
                 "bSortable": false,
                 "aTargets": [3]
                 },
 				{
                 "mRender": function (data, type, row) {
-                	var peso_seco = "";
-					if(row.peso_seco!= null)peso_seco = row.peso_seco;
-					return peso_seco;
+                	var fecha_licencia = "";
+					if(row.fecha_licencia!= null)fecha_licencia = row.fecha_licencia;
+					return fecha_licencia;
                 },
                 "bSortable": false,
                 "aTargets": [4]
                 },
+				
 				{
-                "mRender": function (data, type, row) {
-                	var exonerado = "";
-					if(row.exonerado!= null)exonerado = row.exonerado;
-					return exonerado;
-                },
+					"mRender": function (data, type, row) {
+						var estado = "";
+						if(row.estado!= null)estado = row.estado;
+						return estado;
+				},
                 "bSortable": false,
                 "aTargets": [5]
-                },
-				{
-				"mRender": function (data, type, row) {
-					var control = "";
-					if(row.control!= null)control = row.control;
-					return control;
-				},
-				"bSortable": false,
-				"aTargets": [6]
-				},
-				{
-				"mRender": function (data, type, row) {
-					var bloqueado = "";
-					if(row.bloqueado!= null)bloqueado = row.bloqueado;
-					return bloqueado;
-				},
-				"bSortable": false,
-				"aTargets": [7]
-				},
-				{
-                "mRender": function (data, type, row) {
-                	var nombre_estado = "";
-					if(row.estado == 1)nombre_estado = "Activo";
-					if(row.estado == 0)nombre_estado = "Eliminado";
-					return nombre_estado;
-                },
-                "bSortable": false,
-                "aTargets": [8]
                 },
 				{
                 "mRender": function (data, type, row) {
 					var estado = "";
 					var clase = "";
-					if(row.estado == 1){
+					if(row.estado == "ACTIVO"){
 						estado = "Eliminar";
 						clase = "btn-danger";
 					}
-					if(row.estado == 0){
+					if(row.estado == "CANCELADO"){
 						estado = "Activar";
 						clase = "btn-success";
 					}
 					
 					var html = '<div class="btn-group btn-group-sm" role="group" aria-label="Log Viewer Actions">';
-					html += '<button style="font-size:12px" type="button" class="btn btn-sm btn-success" data-toggle="modal" onclick="modalVehiculo('+row.id+')" ><i class="fa fa-edit"></i> Editar</button>';
-					html += '<a href="javascript:void(0)" onclick=eliminarVehiculo('+row.id+','+row.estado+') class="btn btn-sm '+clase+'" style="font-size:12px;margin-left:10px">'+estado+'</a>';
+					html += '<button style="font-size:12px" type="button" class="btn btn-sm btn-success" data-toggle="modal" onclick="modalConductor('+row.id+')" ><i class="fa fa-edit"></i> Editar</button>';
+					html += '<a href="javascript:void(0)" onclick=eliminarConductor('+row.id+','+row.estado+') class="btn btn-sm '+clase+'" style="font-size:12px;margin-left:10px">'+estado+'</a>';
 					html += '</div>';
 					return html;
                 },
                 "bSortable": false,
-                "aTargets": [9],
+                "aTargets": [6],
                 },
 				
             ]
@@ -556,71 +519,22 @@ function fn_ListarBusqueda() {
     datatablenew();
 };
 
-function modalVehiculo(id){
+function modalConductor(id){
 	
-	$(".modal-dialog").css("width","85%");
+	$(".modal-dialog").css("width","100%");
 	$('#openOverlayOpc .modal-body').css('height', 'auto');
 
 	$.ajax({
-			url: "/vehiculo/modal_vehiculo/"+id,
+			url: "/ingreso_vehiculo_tronco/modal_conductor/"+id,
 			type: "GET",
 			success: function (result) {  
 					$("#diveditpregOpc").html(result);
 					$('#openOverlayOpc').modal('show');
 			}
 	});
-
 }
 
-function modalPersonaVacuna(id){
-	
-	$(".modal-dialog").css("width","85%");
-	$('#openOverlayOpc .modal-body').css('height', 'auto');
-
-	$.ajax({
-			url: "/persona/modal_persona_vacuna/"+id,
-			type: "GET",
-			success: function (result) {  
-					$("#diveditpregOpc").html(result);
-					$('#openOverlayOpc').modal('show');
-			}
-	});
-
-}
-
-function modalFlagNegativo(id){
-	
-	$(".modal-dialog").css("width","85%");
-	$('#openOverlayOpc .modal-body').css('height', 'auto');
-
-	$.ajax({
-			url: "/persona/modal_flag_negativo/"+id,
-			type: "GET",
-			success: function (result) {  
-					$("#diveditpregOpc").html(result);
-					$('#openOverlayOpc').modal('show');
-			}
-	});
-
-}
-
-function modalPersonaSanidad(id){
-	
-	$(".modal-dialog").css("width","85%");
-	$('#openOverlayOpc .modal-body').css('height', 'auto');
-
-	$.ajax({
-			url: "/persona/modal_persona_sanidad/"+id,
-			type: "GET",
-			success: function (result) {  
-					$("#diveditpregOpc").html(result);
-					$('#openOverlayOpc').modal('show');
-			}
-	});
-
-}
-
-function eliminarVehiculo(id,estado){
+function eliminarConductor(id,estado){
 	var act_estado = "";
 	if(estado==1){
 		act_estado = "Eliminar";
@@ -632,20 +546,20 @@ function eliminarVehiculo(id,estado){
 	}
     bootbox.confirm({ 
         size: "small",
-        message: "&iquest;Deseas "+act_estado+" el Vehiculo?", 
+        message: "&iquest;Deseas "+act_estado+" el Conductor?", 
         callback: function(result){
             if (result==true) {
-                fn_eliminar_vehiculo(id,estado_);
+                fn_eliminar_conductor(id,estado_);
             }
         }
     });
     $(".modal-dialog").css("width","30%");
 }
 
-function fn_eliminar_vehiculo(id,estado){
+function fn_eliminar_conductor(id,estado){
 	
     $.ajax({
-            url: "/vehiculo/eliminar_vehiculo/"+id+"/"+estado,
+            url: "/conductores/eliminar_conductor/"+id+"/"+estado,
             type: "GET",
             success: function (result) {
                 //if(result="success")obtenerPlanDetalle(id_plan);

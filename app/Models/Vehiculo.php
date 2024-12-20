@@ -53,4 +53,16 @@ class Vehiculo extends Model
    {
        return Persona::with('conductores')->where('id_conductores',$id_conductores);
    }
+
+   function getVehiculoDatos($placa){
+
+    $cad = "select c.id, c.licencia, c.fecha_licencia, c.estado, c.id_personas, p.nombres||' '||p.apellido_paterno||' '||p.apellido_materno nombre_conductor from conductores c 
+    inner join personas p on c.id_personas = p.id ";
+
+    //limit 2620";
+
+    $data = DB::select($cad);
+    return $data;
+}
+
 }
