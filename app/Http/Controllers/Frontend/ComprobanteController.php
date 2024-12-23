@@ -11,6 +11,7 @@ use App\Models\TablaMaestra;
 use App\Models\Valorizacione;
 use App\Models\Persona;
 use App\Models\Guia;
+use Illuminate\Support\Carbon;
 
 use App\Models\Agremiado;
 use App\Models\ComprobantePago;
@@ -58,6 +59,8 @@ class ComprobanteController extends Controller
         $descuentopp=$request->DescuentoPP;
         $id_pronto_pago=$request->id_pronto_pago;
 
+        $SelProducto=$request->SelProducto;
+
         $totalDescuento=$request->totalDescuento;
 
         $id_tipo_afectacion_pp=$request->id_tipo_afectacion_pp;
@@ -70,7 +73,7 @@ class ComprobanteController extends Controller
 		if($id_caja==""){
 			$valorizaciones_model = new Valorizacione;
 			$id_user = Auth::user()->id;
-			$caja_usuario = $valorizaciones_model->getCajaIngresoByusuario($id_user,'91');
+			$caja_usuario = $valorizaciones_model->getCajaIngresoByusuario($id_user,'27');
 			//$id_caja = $caja_usuario->id_caja;
 			$id_caja = (isset($caja_usuario->id_caja))?$caja_usuario->id_caja:0;
 		}
@@ -97,7 +100,7 @@ class ComprobanteController extends Controller
         $tipooperacion = $tabla_model->getMaestroByTipo('103');
         $formapago = $tabla_model->getMaestroByTipo('104');
 
-        $medio_pago = $tabla_model->getMaestroByTipo('19');
+        $medio_pago = $tabla_model->getMaestroByTipo('11');
 
         
         if ($trans == 'FA'){
@@ -151,7 +154,15 @@ class ComprobanteController extends Controller
             $id_concepto_pp = $request->id_concepto_pp;
 
 
+            if ($SelProducto=="S"){
+                  $valorizad = $request->valorizacion_detalle;
+                  $facturad= $request->valorizacion_detalle;
+            }
 
+            else{
+    
+
+            //if ($SelProducto==""){
 
             if ($descuentopp!="S"){
 
@@ -237,6 +248,10 @@ class ComprobanteController extends Controller
             }
 
              //print_r($facturad);exit();
+
+
+        }
+   
 
 
             $ubicacion = $request->id_ubicacion;
@@ -553,6 +568,13 @@ class ComprobanteController extends Controller
 
 
 			$total = $request->totalF;
+            //print_r("totalF=>"); 
+            //print_r($total); 
+            //$total = $request->totalP;
+            
+            //print_r("totalP=>"); 
+            //print_r($total); 
+
 			$serieF = $request->serieF;
 			$tipoF = $request->TipoF;
 
@@ -700,16 +722,17 @@ class ComprobanteController extends Controller
                     $persona = Persona::where('id', $id_persona_act)->first();
                     if($persona){
                         $persona->direccion = $direccion;
-                        $persona->correo = $correo;
+                        $persona->email = $correo;
                         $persona->save();
                     }
-
+/*
                     $persona2 = Agremiado::where('id_persona', $id_persona_act)->first();
                     if($persona2){
                         $persona2->direccion = $direccion;
                         $persona2->email1 = $correo;
                         $persona2->save();
                     }
+*/
                 }
 
                 if ($tipoF == 'BV' &&  $id_persona != '' )
@@ -720,17 +743,17 @@ class ComprobanteController extends Controller
                     $persona = Persona::where('id', $id_persona_act)->first();                    
                     if($persona){
                         $persona->direccion = $direccion;
-                        $persona->correo = $correo;    
+                        $persona->email = $correo;    
                         $persona->save();                        
                     }
-                    
+  /*                  
                     $persona2 = Agremiado::where('id_persona', $id_persona_act)->first();
                     if($persona2){                        
                         $persona2->direccion = $direccion;
                         $persona2->email1 = $correo;
                         $persona2->save();
                     }
-                    
+    */                
 
                     
                 }
@@ -750,16 +773,17 @@ class ComprobanteController extends Controller
                     $persona = Persona::where('id', $id_persona_act)->first();
                     if($persona){
                         $persona->direccion = $direccion;
-                        $persona->correo = $correo;
+                        $persona->email = $correo;
                         $persona->save();
                     }
-
+/*
                     $persona2 = Agremiado::where('id_persona', $id_persona_act)->first();
                     if($persona2){  
                         $persona2->direccion = $direccion;
                         $persona2->email1 = $correo;
                         $persona2->save();
                     }
+                    */
                 }
                 
 
@@ -789,7 +813,10 @@ class ComprobanteController extends Controller
 
                 ///redondeo///
                 $total_pagar = $request->total_pagar;
-                if ($total_pagar!="0"){                         
+                //print_r("total_pagar="); 
+                //print_r($total_pagar); 
+
+                if ($total_pagar!="0" && $total_pagar!=""){                         
                     $total_pagar = $request->total_pagar;
                     $total_g = $request->totalF;
                     $total_redondeo = $total_pagar - $total_g;
@@ -802,12 +829,20 @@ class ComprobanteController extends Controller
                 $total_pagar_abono = $request->total_pagar_abono;
                 $total_abono= 0;
 
-                if ($total_pagar_abono!="0"){                         
-                    $total_pagar_abono = $request->total_pagar_abono;
-                    $total_g = $request->totalF;
-                    $total_abono= $total_pagar_abono - $total_g;
 
-                    $total = $total+$total_abono;
+
+
+                //print_r("total_pagar_abono="); 
+                //print_r($total_pagar_abono); 
+                
+                if ($total_pagar_abono!="0" && $total_pagar_abono!=""){    
+                    
+                        $total_pagar_abono = $request->total_pagar_abono;
+                        $total_g = $request->totalF;
+                        $total_abono= $total_pagar_abono - $total_g;
+
+                        $total = $total+$total_abono;
+                
                 }
 
 
@@ -825,6 +860,9 @@ class ComprobanteController extends Controller
                 
                 exit();
                 */
+
+                //print_r("total=>>"); 
+                //print_r($total); exit();
                 
 				$id_factura = $facturas_model->registrar_factura_moneda($serieF,     $id_tipo_afectacion_pp, $tipoF, $ubicacion_id, $id_persona_act, round($total,2),   $ubicacion_id2,      $id_persona2,    0, $id_caja,          $descuento,    'f',     $id_user,  $id_moneda);
 																	 //(serie,  numero,   tipo,     ubicacion,     persona,  total, descripcion, cod_contable, id_v,   id_caja, descuento, accion, p_id_usuario, p_id_moneda)
@@ -839,7 +877,7 @@ class ComprobanteController extends Controller
 				$factura_upd = Comprobante::find($id_factura);
 				if(isset($factura_upd->tipo_cambio)) $factura_upd->tipo_cambio = $request->tipo_cambio;
                 
-                if($total>700 and $tipoF=='FT' ) {
+                if($total>700 && $tipoF=='FT') {
                     $factura_upd->porc_detrac = $request->porcentaje_detraccion;
                     $factura_upd->monto_detrac = $request->monto_detraccion;
                     $factura_upd->cuenta_detrac = $request->nc_detraccion;
@@ -890,13 +928,13 @@ class ComprobanteController extends Controller
 				}
                 */
                 
-
+                $fecha_hoy = date('Y-m-d');
     
-                if ($total_pagar!="0"){
+                if ($total_pagar!="0" && $total_pagar!=""){
                     $total_pagar = $request->total_pagar;
                     $total_g = $request->totalF;
                     $total_redondeo = $total_pagar - $total_g;
-                    $fecha_hoy = date('Y-m-d');
+                    //$fecha_hoy = date('Y-m-d');
 
                     $items1 = array(
                         "id" => 1081517, 
@@ -918,11 +956,14 @@ class ComprobanteController extends Controller
                     $tarifa[999]=$items1;
                 }
 
-                if ($total_abono!="0"){
+                //echo($total_abono);
+                //exit();
+
+                if ($total_abono!="0" && $total_abono!=""){
                     $total_pagar_abono = $request->total_pagar_abono;
                     $total_g = $request->totalF;
                     $total_abono = $total_pagar_abono - $total_g;
-                    $fecha_hoy = date('Y-m-d');
+                    //$fecha_hoy = date('Y-m-d');
 
                     $items1 = array(
                         "id" => 1081517, 
@@ -970,6 +1011,43 @@ class ComprobanteController extends Controller
 				}
 
 
+                //print_r($tarifa);
+                //exit();
+
+                foreach ($tarifa as $key => $value) {
+
+                    $valorizacion = new Valorizacione;
+                    $valorizacion->id_modulo = 1;
+                    $valorizacion->pk_registro = 0;
+                    $valorizacion->id_concepto = $value['id_concepto']; //26412;
+                    //$valorizacion->id_agremido = $id_persona;
+                    if($ubicacion_id!="")  $valorizacion->id_empresa = $ubicacion_id;
+                    if($id_persona_act!="")  $valorizacion->id_persona = $id_persona_act;
+                    
+
+                    //$valorizacion->id_persona = $id_persona;
+                    $valorizacion->monto = $value['monto'];
+                    $valorizacion->id_moneda = $value['id_moneda'];
+                    $valorizacion->moneda = $value['moneda'];                    
+                    $valorizacion->fecha = $fecha_hoy;
+                    $valorizacion->fecha_proceso = Carbon::now()->format('Y-m-d');            
+                    $valorizacion->id_usuario_inserta = $id_user;
+                    $valorizacion->descripcion = $value['descripcion'];
+                    $valorizacion->valor_unitario = $value['monto'];
+                    $valorizacion->cantidad = $value['cantidad'];
+                    //$valorizacion->codigo_fraccionamiento =  $id_fraccionamiento;
+
+                    $valorizacion->id_comprobante = $id_factura;
+                    $valorizacion->pagado = "1";
+    
+                    $valorizacion->save();
+
+
+                
+                }
+
+
+
                 $valorizad_ = $request->valorizad;
                 $numero_documento_b = $request->numero_documento_b;
 
@@ -1006,10 +1084,15 @@ class ComprobanteController extends Controller
 
                 //echo "id_val=>".$id_val."<br>"; exit();
 
+
+
+
                 $valorizad = $request->valorizad;
 
                 //print_r($tarifa); exit();
 
+
+                /*
                     foreach ($valorizad as $key => $value) {
                         $id_val = $value['id'];
                         
@@ -1029,6 +1112,7 @@ class ComprobanteController extends Controller
                         $valoriza_upd->save();
                         
                     } 
+                        */
 
                 //}
 
@@ -1049,9 +1133,11 @@ class ComprobanteController extends Controller
 
 
             if ($id_concepto == 26527 || $id_concepto == 26412 ) {
+                /*
                 $agremiado = Agremiado::where('id_persona', $id_persona)->get()[0];
                 $agremiado->id_situacion = "73";
                 $agremiado->save();
+                */
             }
             
 
@@ -1062,7 +1148,7 @@ class ComprobanteController extends Controller
             $ubicacion_id = $request->ubicacion;
 
 
-
+/*
             if ($id_concepto == 26411) {
 
                 $id_persona = $request->persona;
@@ -1071,6 +1157,7 @@ class ComprobanteController extends Controller
                 $total_ = $totalDeuda->total;
 
                 if ($total_ <= 2) {
+
                     $agremiado = Agremiado::where('id_persona', $id_persona)->get()[0];
 
                     if($agremiado->id_actividad_gremial != 225){
@@ -1085,6 +1172,7 @@ class ComprobanteController extends Controller
                 }
 
             }
+            */
 
             if($request->id_formapago_=='2'){
                 $credito = $request->credito;
@@ -1113,7 +1201,7 @@ class ComprobanteController extends Controller
 
             }
             
-
+ 
 
             if(isset($request->idMedio)):
                 foreach ($request->idMedio as $key => $value):
@@ -3270,5 +3358,18 @@ class ComprobanteController extends Controller
         echo $monto;
 		
     }
+
+    public function obtener_representante($tipo_documento,$numero_documento){
+
+        $comprobante_model = new Comprobante;
+        //$valorizaciones_model = new Valorizacione;
+        $sw = true;
+        $agremiado = $comprobante_model->getRepresentante($tipo_documento,$numero_documento);
+        $array["sw"] = $sw;
+        $array["agremiado"] = $agremiado;
+        echo json_encode($array);
+
+    }
+
 
 }

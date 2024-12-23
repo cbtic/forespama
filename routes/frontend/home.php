@@ -259,6 +259,8 @@ Route::post('comprobante/send_credito_pago', [ComprobanteController::class, 'sen
 Route::get('comprobante/obtener_credito_pago/{id}', [ComprobanteController::class, 'obtener_credito_pago'])->name('comprobante.obtener_credito_pago');
 Route::get('comprobante/eliminar_credito_pago/{id}', [ComprobanteController::class, 'eliminar_credito_pago'])->name('comprobante.eliminar_credito_pago');
 
+Route::get('comprobante/obtener_representante/{tipo_documento}/{numero_documento}', [ComprobanteController::class, 'obtener_representante'])->name('comprobante.obtener_representante');
+
 
 Route::get('lotes', 'App\Http\Controllers\LoteController@index')->name('lotes.index');
 Route::post('lotes', 'App\Http\Controllers\LoteController@store')->name('lotes.store');

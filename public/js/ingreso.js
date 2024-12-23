@@ -157,7 +157,11 @@ $(document).ready(function () {
 });
 
 
-
+var total_productos = 0;
+var total_descuento = 0;
+var total_pagar = 0;
+var sub_total = 0;
+var total_igv = 0;
 
 function validarMonAd(){
 
@@ -943,13 +947,17 @@ function obtenerBeneficiario(){
 	$('#SelFracciona').val("");
 
 	$("#btnExonerarN").hide();
-	$("#btnExonerarS").show();
-	$("#btnExonerarS").prop('disabled', true);
+	//$("#btnExonerarS").show();
+	//$("#btnExonerarS").prop('disabled', true);
 	$("#btnExonerarN").prop('disabled', true);
 
 	$("#chkExonerado").prop('checked', false);
 	$('#Exonerado').val("0");
+
 	
+	$("#divAgregar").hide();
+	
+	$("#btnProforma").prop('disabled', true);
 	
 	
 	
@@ -977,6 +985,10 @@ function obtenerBeneficiario(){
 				//alert($("#numero_documento").val());
 
 				//alert(result.agremiado.id_tipo_documento);
+
+				$("#divAgregar").show();
+	
+				//$("#btnProforma").prop('disabled', false);
 
 				if(tipo_documento == "5"){ //RUC
 					$('#divNombreApellido').hide();
@@ -1489,8 +1501,10 @@ function enviarTipo(tipo){
 	  });
 */
 
-ValidarDeudasVencidas(tipo);
+//ValidarDeudasVencidas(tipo);
 //validar(tipo);
+
+	document.frmValorizacion.submit();
 	
 }
 
@@ -2762,20 +2776,60 @@ function AddFila(){
 	var fecha_ = f.getDate() + "-"+ f.getMonth()+ "-" +f.getFullYear();
 
 	var producto = $('#txtProducto').val();
+
+	var nombre_producto = $('#nombre_producto').val();
 	var cantidad = $('#txtCantidad').val();
-	var pv = $('#txtPrecioVenta').val();
-	var st = $('#txtValorVenta').val();
+	var precio_venta = $('#txtPrecioVenta').val();
+	var valor_venta = $('#txtValorVenta').val();
 	var igv = $('#txtIgv').val();
 	var total = $('#txtTotal').val();
 
-	//txtUM
-	//txtValorUnitario
-	//txtValorVB
-	//txtDescuento
+	var um = $('#txtUM').val();
+	var valor_unitario = $('#txtValorUnitario').val();
+	var valor_venta_bruto = $('#txtValorVB').val();
+	var id_descuento = $('id_descuento').val();
+	var descuento = $('#txtDescuento').val();
+
+	var id_producto = $('#id_producto').val();
+	var id_um = $('#id_um').val();
+	var codigo_producto = $('#codigo_producto').val();
+
+	var id_moneda = 1;
+	var moneda = "SOLES";
+	var abreviatura = "";
+	var cod_contable = "";
+
+	var vencio = "";
+
+	var id_concepto = 1;
+	var id_tipo_afectacion = 0;
 
 	
-	
+
 	var cont = ind+1;
+
+	$("#btnProforma").prop('disabled', true);
+
+	
+	$('#SelProducto').val("");
+
+	if(cont != 0){
+
+		$('#SelProducto').val("S");
+
+		$("#btnProforma").prop('disabled', false);
+
+		if(tipo_documento == "5"){//RUC
+			
+			$("#btnBoleta").prop('disabled', true);
+			$("#btnFactura").prop('disabled', false);
+		}else
+		{
+			$("#btnBoleta").prop('disabled', false);
+			
+			if(ruc_p!= "") $("#btnFactura").prop('disabled', false);
+		}
+	}
 
 	//var total = $('#').val();
 	//var total = $('#').val();
@@ -2786,38 +2840,46 @@ function AddFila(){
 	//	newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][producto]" value="'+producto+'" />';
 	//newRow +='</td>';
 
-	newRow +='<td class="text-left">'+cont+'<span class=""></span>';
-		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][fecha]" value="" />';
-		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][denominacion]" value="'+producto+'" />';
-		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][monto]" value="'+pv+'" />';
-		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][pu]" value="'+pv+'" />';
+	newRow +='<td class="text-left" style="font-size:8.0pt">'+cont+'<span class=""></span>';
+
+		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][id]" value="'+cont+'" />';
+
+		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][id_producto]" value="'+id_producto+'" />';
+		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][codigo_producto]" value="'+codigo_producto+'" />';
+		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][id_descuento]" value="'+id_descuento+'" />';
+		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][precio_unitario]" value="'+precio_venta+'" />';
+		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][sub_total]" value="'+valor_venta+'" />';
+		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][id_unidad_medida]" value="'+id_um+'" />';
+		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][valor_venta_bruto]" value="'+valor_venta_bruto+'" />';
+
+		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][item]" value="'+cont+'" />';
+		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][fecha]" value="'+fecha_+'" />';
+		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][denominacion]" value="'+nombre_producto+'" />';
+		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][monto]" value="'+valor_venta+'" />';
+		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][pu]" value="'+valor_unitario+'" />';
 		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][igv]" value="'+igv+'" />';
-		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][pv]" value="'+pv+'" />';
+		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][pv]" value="'+precio_venta+'" />';
 		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][total]" value="'+total+'" />';
-		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][moneda]" value="" />';
-		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][id_moneda]" value="" />';
-		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][abreviatura]" value="" />';
+		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][moneda]" value="'+moneda+'" />';
+		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][id_moneda]" value="'+id_moneda+'" />';
+		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][abreviatura]" value="'+abreviatura+'" />';
 		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][cantidad]" value="'+cantidad+'" />';
-
-		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][descuento]" value="" />';
-		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][cod_contable]" value="" />';
+		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][descuento]" value="'+descuento+'" />';
+		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][cod_contable]" value="'+cod_contable+'" />';
 		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][descripcion]" value="'+producto+'" />';
-		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][vencio]" value="" />';
-		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][id_concepto]" value="" />';
-		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][id_tipo_afectacion]" value="" />';
+		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][vencio]" value="'+vencio+'" />';
+		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][id_concepto]" value="'+id_concepto+'" />';
+		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][id_tipo_afectacion]" value="'+id_tipo_afectacion+'" />';
+	newRow +='</td>';
+	//newRow +='<td><input type="text"  value="'+producto+'" placeholder="" class="form-control form-control-sm" /></td>';
+	newRow +='<td class="text-left" style="font-size:8.0pt">'+producto+'<span class=""></span></td>';
+	newRow +='<td class="text-center" style="font-size:8.0pt">'+cantidad+'<span class=""></span></td>';	
+	newRow +='<td class="text-right" style="font-size:8.0pt">'+Number(precio_venta).toFixed(2)+'<span class=""></span></td>';
+	newRow +='<td class="text-right" style="font-size:8.0pt">'+Number(descuento).toFixed(2)+'<span class=""></span></td>';
 
-
-
-	newRow +='</td>';		
-	newRow +='<td class="text-left">'+producto+'<span class=""></span></td>';
-	newRow +='<td class="text-center">'+cantidad+'<span class=""></span></td>';	
-	newRow +='<td class="text-right">'+pv+'<span class=""></span></td>';
-	newRow +='<td class="text-right">'+st+'<span class=""></span></td>';
-	newRow +='<td class="text-right">'+igv+'<span class=""></span></td>';
-	newRow +='<td class="text-right">'+total+'<span class=""></span></td>';
-
-	
-
+	newRow +='<td class="text-right" style="font-size:8.0pt">'+Number(valor_venta).toFixed(2)+'<span class=""></span></td>';
+	newRow +='<td class="text-right" style="font-size:8.0pt">'+Number(igv).toFixed(2)+'<span class=""></span></td>';
+	newRow +='<td class="text-right" style="font-size:8.0pt">'+Number(total).toFixed(2)+'<span class=""></span></td>';
 
 	newRow +='<td><button type="button" class="btn btn-danger deleteFila btn-xs" style="margin-left:4px"><i class="fa fa-times"></i></button></td>';
 
@@ -2825,7 +2887,23 @@ function AddFila(){
 	$('#tblValorizacion tbody').append(newRow);
 
 	$('#openOverlayOpc').modal('hide');
-		
+
+	total_productos = Number(total_productos) + Number(precio_venta)*Number(cantidad);
+	total_descuento = Number(total_descuento) + Number(descuento);
+	total_pagar = Number(total_pagar) + Number(total);
+
+	sub_total =  Number(sub_total) + Number(valor_venta);
+	total_igv = Number(total_igv) + Number(igv);
+
+	
+	$('#deudaTotales').val(Number(total_productos).toFixed(2));
+
+	$('#totalDescuento').val(Number(total_descuento).toFixed(2));
+	$('#total').val(Number(total_pagar).toFixed(2));
+
+	$('#stotal').val(Number(sub_total).toFixed(2));
+	$('#igv').val(Number(total_igv).toFixed(2));
+
 }
 
 function proforma_send(){
