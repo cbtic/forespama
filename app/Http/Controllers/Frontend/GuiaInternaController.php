@@ -42,12 +42,12 @@ class GuiaInternaController extends Controller
         $responsable_atencion = $user_model->getUserAll();*/
 
         $tablaMaestra_model = new TablaMaestra;
-        $empresa_model = new Empresa;
+        //$empresa_model = new Empresa;
 
         $tipo_documento = $tablaMaestra_model->getMaestroByTipo(59);
-        $transporte_razon_social = $empresa_model->obtenerRazonSocialTransporteAll();
+        //$transporte_razon_social = $empresa_model->obtenerRazonSocialTransporteAll();
         
-		return view('frontend.guia_interna.create',compact('tipo_documento','transporte_razon_social'));
+		return view('frontend.guia_interna.create',compact('tipo_documento'/*,'transporte_razon_social'*/));
 
 	}
 
@@ -101,13 +101,13 @@ class GuiaInternaController extends Controller
         $marca = $marca_model->getMarcaVehiculo();
         $estado_bien = $tablaMaestra_model->getMaestroByTipo(4);
         $unidad = $tablaMaestra_model->getMaestroByTipo(43);
-        $transporte_razon_social = $empresa_model->obtenerRazonSocialTransporteAll();
+        //$transporte_razon_social = $empresa_model->obtenerRazonSocialTransporteAll();
         $empresas = Empresa::all();
         $motivo_traslado = $tablaMaestra_model->getMaestroByTipo(63);
         $departamento = $ubigeo_model->getDepartamento();
         $serie_guia = $tablaMaestra_model->getMaestroC(95,"GR");
 
-        return view('frontend.guia_interna.modal_guia_interna_nuevoGuiaInterna',compact('id','guia_interna','tipo_documento_entrada','tipo_documento_salida','producto','marca','estado_bien','unidad','empresas','transporte_razon_social','motivo_traslado','departamento','serie_guia'));
+        return view('frontend.guia_interna.modal_guia_interna_nuevoGuiaInterna',compact('id','guia_interna','tipo_documento_entrada','tipo_documento_salida','producto','marca','estado_bien','unidad','empresas',/*'transporte_razon_social',*/'motivo_traslado','departamento','serie_guia'));
 
     }
 

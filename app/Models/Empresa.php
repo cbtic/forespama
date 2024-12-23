@@ -38,6 +38,15 @@ class Empresa extends Model
         return $data;
     }
 
+    function obtenerRazonSocialTransporteAll(){
+
+        $cad = "select * from empresas_vehiculos ev 
+        inner join empresas e on ev.id_empresas = e.id ";
+
+        $data = DB::select($cad);
+        return $data;
+    }
+
     public function vehiculos()
     {
         return $this->belongsToMany(Vehiculo::class, 'empresas_vehiculos', 'id_empresas', 'id_vehiculos');
@@ -52,14 +61,6 @@ class Empresa extends Model
         return $this->ruc . " - " . $this->nombre_comercial;
     }
 
-    function obtenerRazonSocialTransporteAll(){
-
-        $cad = "select * from empresas_vehiculos ev 
-        inner join empresas e on ev.id_empresas = e.id ";
-
-        $data = DB::select($cad);
-        return $data;
-    }
 //    public function conductores()
 //    {
 //        return $this->hasMany(Conductores::class);

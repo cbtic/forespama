@@ -374,16 +374,20 @@ label.form-control-sm{
                         <input id="placa_bus" name="placa_bus" on class="form-control form-control-sm"  placeholder="N&uacute;mero Placa">
 					</div>
 
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+					<!--<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
 						<select name="empresa_transporte_bus" id="empresa_transporte_bus" class="form-control form-control-sm">
 							<option value="">--Seleccionar Empresa Transporte--</option>
 							<?php
-							foreach ($transporte_razon_social as $row){?>
-								<option value="<?php echo $row->id ?>"><?php echo $row->razon_social ?></option>
+							//foreach ($transporte_razon_social as $row){?>
+								<option value="<?php //echo $row->id ?>"><?php //echo $row->razon_social ?></option>
 								<?php 
-							}
+							//}
 							?>
 						</select>
+					</div>-->
+
+					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+                        <input id="empresa_transporte_bus" name="empresa_transporte_bus" on class="form-control form-control-sm"  placeholder="Razon Social Transporte">
 					</div>
 
 					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">

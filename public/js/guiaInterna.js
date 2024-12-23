@@ -114,13 +114,14 @@ function datatablenew(){
             var iNroPagina 	= parseFloat(fn_util_obtieneNroPagina(aoData[3].value, aoData[4].value)).toFixed();
             var iCantMostrar 	= aoData[4].value;
 			
-            var tipo_documento = $('#tipo_documento_bus').val();
+            var numero_guia = $('#numero_guia_bus').val();
 			var fecha = $('#fecha_bus').val();
-			var numero_requerimiento = $('#numero_requerimiento_bus').val();
-			var almacen = $('#almacen_bus').val();
-			var situacion = $('#situacion_bus').val();
-			var responsable_atencion = $('#responsable_atencion_bus').val();
-			var estado_atencion = $('#estado_atencion_bus').val();
+			var tipo_documento = $('#tipo_documento_bus').val();
+			var numero_documento = $('#numero_documento_bus').val();
+			var placa = $('#placa_bus').val();
+			var empresa_transporte = $('#empresa_transporte_bus').val();
+			var origen = $('#origen_bus').val();
+			var destino = $('#destino_bus').val();
 			var estado = $('#estado_bus').val();
 			
 			var _token = $('#_token').val();
@@ -130,9 +131,9 @@ function datatablenew(){
                 "type": "POST",
                 "url": sSource,
                 "data":{NumeroPagina:iNroPagina,NumeroRegistros:iCantMostrar,
-						tipo_documento:tipo_documento,fecha:fecha,numero_requerimiento:numero_requerimiento,
-						almacen:almacen,situacion:situacion,estado:estado,
-						responsable_atencion:responsable_atencion,estado_atencion:estado_atencion,
+						numero_guia:numero_guia,fecha:fecha,tipo_documento:tipo_documento,
+						numero_documento:numero_documento,placa:placa,estado:estado,
+						empresa_transporte:empresa_transporte,origen:origen,destino:destino,
 						_token:_token
                        },
                 "success": function (result) {
