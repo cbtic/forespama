@@ -84,6 +84,7 @@ class GuiaInternaController extends Controller
 
     public function modal_guia_interna($id){
 		
+        $id_user = Auth::user()->id;
         $tablaMaestra_model = new TablaMaestra;
         $producto_model = new Producto;
         $marca_model = new Marca;
@@ -108,7 +109,7 @@ class GuiaInternaController extends Controller
         $departamento = $ubigeo_model->getDepartamento();
         $serie_guia = $tablaMaestra_model->getMaestroC(95,"GR");
 
-        return view('frontend.guia_interna.modal_guia_interna_nuevoGuiaInterna',compact('id','guia_interna','tipo_documento_entrada','tipo_documento_salida','producto','marca','estado_bien','unidad','empresas',/*'transporte_razon_social',*/'motivo_traslado','departamento','serie_guia'));
+        return view('frontend.guia_interna.modal_guia_interna_nuevoGuiaInterna',compact('id','guia_interna','tipo_documento_entrada','tipo_documento_salida','producto','marca','estado_bien','unidad','empresas',/*'transporte_razon_social',*/'motivo_traslado','departamento','serie_guia','id_user'));
 
     }
 
