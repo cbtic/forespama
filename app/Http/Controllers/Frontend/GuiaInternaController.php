@@ -101,8 +101,8 @@ class GuiaInternaController extends Controller
         $marca = $marca_model->getMarcaVehiculo();
         $estado_bien = $tablaMaestra_model->getMaestroByTipo(4);
         $unidad = $tablaMaestra_model->getMaestroByTipo(43);
-        $empresas = Empresa::all();
         $transporte_razon_social = $empresa_model->obtenerRazonSocialTransporteAll();
+        $empresas = Empresa::all();
         $motivo_traslado = $tablaMaestra_model->getMaestroByTipo(63);
         $departamento = $ubigeo_model->getDepartamento();
         $serie_guia = $tablaMaestra_model->getMaestroC(95,"GR");

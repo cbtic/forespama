@@ -72,7 +72,7 @@ class ProductosController extends Controller
 		
 		if($id>0){
 			$producto = Producto::find($id);
-            $imagenes = ProductoImagene::where('id_producto', $id)->pluck('ruta_imagen'); 
+            $imagenes = ProductoImagene::where('id_producto', $id)->pluck('ruta_imagen');
 		}else{
 			$producto = new Producto;
             $imagenes = [];
