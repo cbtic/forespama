@@ -720,7 +720,12 @@ function pdf_documento_dispensacion(){
                                 <?php 
                                     }
                                 ?>
-                                <a href="javascript:void(0)" onClick="fn_save_dispensacion()" class="btn btn-sm btn-success" style="margin-right:10px">Guardar</a>
+                                <?php if($id_user==$dispensacion->id_usuario_inserta && $id>0){?>
+                                    <a href="javascript:void(0)" onClick="fn_save_dispensacion()" class="btn btn-sm btn-success" style="margin-right:10px">Guardar</a>
+                                <?php }?>
+                                <?php if($id==0){?>
+                                    <a href="javascript:void(0)" onClick="fn_save_dispensacion()" class="btn btn-sm btn-success" style="margin-right:10px">Guardar</a>
+                                <?php }?>
                                 <a href="javascript:void(0)" onClick="$('#openOverlayOpc').modal('hide');" class="btn btn-sm btn-info" style="">Cerrar</a>
                             </div>
                                                 

@@ -65,6 +65,7 @@ class IngresoProduccionController extends Controller
 
     public function modal_ingreso_produccion($id){
 		
+		$id_user = Auth::user()->id;
         $tablaMaestra_model = new TablaMaestra;
         $marca_model = new Marca;
         $producto_model = new Producto;
@@ -87,7 +88,7 @@ class IngresoProduccionController extends Controller
         $almacen_destino = $almacen_model->getAlmacenAll();
 		//var_dump($id);exit();
 
-		return view('frontend.ingreso_produccion.modal_ingreso_produccion_nuevoIngresoProduccion',compact('id','ingreso_produccion','unidad_medida','moneda','estado_bien','tipo_producto','unidad','marca','producto','tipo_documento','almacen_destino'));
+		return view('frontend.ingreso_produccion.modal_ingreso_produccion_nuevoIngresoProduccion',compact('id','ingreso_produccion','unidad_medida','moneda','estado_bien','tipo_producto','unidad','marca','producto','tipo_documento','almacen_destino','id_user'));
 
     }
 
