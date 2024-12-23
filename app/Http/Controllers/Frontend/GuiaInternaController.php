@@ -46,7 +46,7 @@ class GuiaInternaController extends Controller
 
         $tipo_documento = $tablaMaestra_model->getMaestroByTipo(59);
         //$transporte_razon_social = $empresa_model->obtenerRazonSocialTransporteAll();
-        
+
         
 		return view('frontend.guia_interna.create',compact('tipo_documento'/*,'transporte_razon_social'*/));
 
@@ -179,7 +179,6 @@ class GuiaInternaController extends Controller
         $guia->guia_cod_motivo = $request->motivo_traslado;
         $guia->id_usuario_inserta = $id_user;
         $guia->save();
-
 
         $array_guia_interna_detalle = array();
 

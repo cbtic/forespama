@@ -180,9 +180,10 @@ $(document).ready(function() {
     $("#persona_recibe").select2({ width: '100%' });
     $("#motivo_traslado").select2({ width: '100%' });
     $("#numero_documento").select2({ width: '100%' });
+    $("#empresa").select2({ width: '100%' });
+	$("#conductor").select2({ width: '100%' });
+	$("#marca").select2({ width: '100%' });
     //$("#marca_vehiculo").select2({ width: '100%' });
-
-    
 
 });
 
@@ -774,6 +775,8 @@ function agregarVehiculo(){
 			success: function (result) {
 					$("#diveditpregOpc2").html(result);
 					$('#openOverlayOpc2').modal('show');
+                    $('#empresa').select2({ width: '100%' });
+                    $('#conductor').select2({ width: '100%' });
 			}
 	});
 

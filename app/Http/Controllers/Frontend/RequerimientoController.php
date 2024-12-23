@@ -78,6 +78,7 @@ class RequerimientoController extends Controller
 
     public function modal_requerimiento($id){
 		
+        $id_user = Auth::user()->id;
         $tablaMaestra_model = new TablaMaestra;
         $producto_model = new Producto;
         $marca_model = new Marca;
@@ -106,7 +107,7 @@ class RequerimientoController extends Controller
         $responsable_atencion = $user_model->getUserAll();
         $unidad_origen = $tablaMaestra_model->getMaestroByTipo(50);
 
-        return view('frontend.requerimiento.modal_requerimiento_nuevoRequerimiento',compact('id','requerimiento','tipo_documento','producto','marca','unidad','almacen','cerrado_requerimiento','estado_bien','estado_atencion','responsable_atencion','unidad_origen'));
+        return view('frontend.requerimiento.modal_requerimiento_nuevoRequerimiento',compact('id','requerimiento','tipo_documento','producto','marca','unidad','almacen','cerrado_requerimiento','estado_bien','estado_atencion','responsable_atencion','unidad_origen','id_user'));
 
     }
 

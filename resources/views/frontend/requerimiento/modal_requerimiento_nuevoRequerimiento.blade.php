@@ -734,6 +734,7 @@ function cambiarOrigen(){
                             <textarea id="sustento_requerimiento" name="sustento_requerimiento" class="form-control form-control-sm" rows="2"><?php echo $requerimiento->sustento_requerimiento?></textarea>
                         </div>
                     </div>
+                    
                         <div style="margin-top:15px" class="form-group">
                             <div class="col-sm-12 controls">
                                 <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
@@ -741,7 +742,7 @@ function cambiarOrigen(){
                                 </div>
                             </div>
                         </div>
-
+                   
                         <div class="card-body">
 
 					<div class="table-responsive">
@@ -773,7 +774,12 @@ function cambiarOrigen(){
                                 <?php 
                                     }
                                 ?>
-                                <a href="javascript:void(0)" onClick="fn_save_requerimiento()" class="btn btn-sm btn-success" style="margin-right:10px">Guardar</a>
+                                <?php if($id_user==$requerimiento->id_usuario_inserta){?>
+                                    <a href="javascript:void(0)" onClick="fn_save_requerimiento()" class="btn btn-sm btn-success" style="margin-right:10px">Guardar</a>
+                                <?php }?>
+                                <?php if($id==0){?>
+                                    <a href="javascript:void(0)" onClick="fn_save_requerimiento()" class="btn btn-sm btn-success" style="margin-right:10px">Guardar</a>
+                                <?php }?>
                                 <a href="javascript:void(0)" onClick="$('#openOverlayOpc').modal('hide');" class="btn btn-sm btn-info" style="">Cerrar</a>
                             </div>
                                                 
