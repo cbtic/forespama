@@ -259,6 +259,11 @@ Route::post('comprobante/send_credito_pago', [ComprobanteController::class, 'sen
 Route::get('comprobante/obtener_credito_pago/{id}', [ComprobanteController::class, 'obtener_credito_pago'])->name('comprobante.obtener_credito_pago');
 Route::get('comprobante/eliminar_credito_pago/{id}', [ComprobanteController::class, 'eliminar_credito_pago'])->name('comprobante.eliminar_credito_pago');
 
+Route::get('comprobante/envio_factura_sunat_automatico/{fecha}', [ComprobanteController::class, 'envio_factura_sunat_automatico'])->name('comprobante.envio_factura_sunat_automatico');
+Route::get('comprobante/envio_guia_sunat_automatico/{fecha}', [ComprobanteController::class, 'envio_guia_sunat_automatico'])->name('comprobante.envio_guia_sunat_automatico');
+
+
+
 Route::get('comprobante/obtener_representante/{tipo_documento}/{numero_documento}', [ComprobanteController::class, 'obtener_representante'])->name('comprobante.obtener_representante');
 
 

@@ -249,6 +249,17 @@ class Comprobante extends Model
         return $data;
     }
     
+    function get_envio_pendiente_guia_sunat($fecha){
+		
+        $cad = "select id,guia_anulado from guias 
+                where to_char(guia_fecha_emision ,'yyyy-mm-dd')='".$fecha."'
+                and coalesce(guia_estado_sunat,'')=''               
+                order by id ";
+		
+		$data = DB::select($cad);
+        return $data;
+    }
+    
     function getFacturaByCaja($id_caja,$fecha_inicio,$fecha_fin){
 /*
         $cad = "select f.id, f.fac_serie, f.fac_numero, f.fac_tipo, f.fac_fecha, f.fac_cod_tributario, f.fac_destinatario, f.fac_subtotal, f.fac_impuesto, f.fac_total, f.fac_estado_pago, f.fac_anulado, m.denominacion caja,
