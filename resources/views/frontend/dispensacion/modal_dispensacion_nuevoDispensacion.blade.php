@@ -668,7 +668,12 @@ function pdf_documento_dispensacion(){
                         <div style="margin-top:15px" class="form-group">
                             <div class="col-sm-12 controls">
                                 <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
+                                <?php if($id_user==$dispensacion->id_usuario_inserta && $id>0){?>
                                     <a href="javascript:void(0)" onClick="agregarProducto()" class="btn btn-sm btn-success">Agregar</a>
+                                <?php }?>
+                                <?php if($id==0){?>
+                                    <a href="javascript:void(0)" onClick="agregarProducto()" class="btn btn-sm btn-success">Agregar</a>
+                                <?php }?>
                                 </div>
                             </div>
                         </div> 

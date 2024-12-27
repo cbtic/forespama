@@ -273,6 +273,12 @@
                 </li>
 				@endif
 
+                @can('Mantenimiento Equivalencia Producto')
+				<li class="c-sidebar-nav-item">
+                    <x-utils.link :href="route('frontend.equivalencia_producto.create')" class="c-sidebar-nav-link" :text="__('Equivalencia Producto')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+                </li>
+				@endif
+
             </ul>
 
         </li>
