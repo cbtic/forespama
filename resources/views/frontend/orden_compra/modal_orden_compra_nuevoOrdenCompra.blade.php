@@ -952,7 +952,12 @@ function modal_tiendas_orden_compra(id){
                         <div style="margin-top:15px" class="form-group">
                             <div class="col-sm-12 controls">
                                 <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
+                                <?php if($id_user==$orden_compra->id_usuario_inserta){?>    
                                     <a href="javascript:void(0)" onClick="agregarProducto()" class="btn btn-sm btn-success">Agregar</a>
+                                <?php }?>
+                                <?php if($id==0){?>
+                                    <a href="javascript:void(0)" onClick="agregarProducto()" class="btn btn-sm btn-success">Agregar</a>
+                                <?php }?>
                                 </div>
                             </div>
                         </div> 

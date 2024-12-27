@@ -164,11 +164,16 @@ class GuiaInternaController extends Controller
         $guia_interna->guia_tipo = $tipo_guia[0]->codigo;
         $guia_interna->id_usuario_inserta = $id_user;
         $guia_interna->estado = 1;
-        $guia_interna->save();        
+        $guia_interna->save();    
+        
+        $empresa_destinatario = Empresa::find($request->destinatario);
 
         $guia->guia_serie = $request->serie_guia;
         $guia->guia_numero = $request->numero_guia;
         $guia->guia_tipo = $tipo_guia[0]->codigo;
+        $guia->guia_receptor_numdoc = $request->ruc;
+        $guia->guia_receptor_tipodoc = "0";
+        $guia->guia_receptor_razsocial = $empresa_destinatario->razon_social;
         $guia->guia_fecha_emision = $request->fecha_emision;
         $guia->guia_fecha_traslado = $request->fecha_inicio_traslado;
         $guia->guia_vehiculo_placa = $request->placa_guia;

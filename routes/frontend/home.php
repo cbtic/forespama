@@ -34,6 +34,7 @@ use App\Http\Controllers\Frontend\ProformaController;
 
 use App\Http\Controllers\ConductoresController;
 
+use App\Http\Controllers\Frontend\EquivalenciaProductosController;
 //use App\Http\Controllers\VehiculoController;
 
 
@@ -499,3 +500,8 @@ Route::post('empresa/send_guia', [EmpresaController::class, 'send_guia'])->name(
 Route::get('guia_interna/obtener_numero_guia/{serie_guia}', [GuiaInternaController::class, 'obtener_numero_guia'])->name('guia_interna.obtener_numero_guia');
 Route::get('guia_interna/guia_interna_pdf/{id}', [GuiaInternaController::class, 'guia_interna_pdf'])->name('guia_interna.guia_interna_pdf');
 
+Route::get('equivalencia_producto/create', [EquivalenciaProductosController::class, 'create'])->name('equivalencia_producto.create');
+Route::post('equivalencia_producto/listar_equivalencia_producto_ajax', [EquivalenciaProductosController::class, 'listar_equivalencia_producto_ajax'])->name('equivalencia_producto.listar_equivalencia_producto_ajax');
+Route::post('equivalencia_producto/send_equivalencia_producto', [EquivalenciaProductosController::class, 'send_equivalencia_producto'])->name('equivalencia_producto.send_equivalencia_producto');
+Route::get('equivalencia_producto/modal_equivalencia_producto/{id}', [EquivalenciaProductosController::class, 'modal_equivalencia_producto'])->name('equivalencia_producto.modal_equivalencia_producto');
+Route::get('equivalencia_producto/eliminar_equivalencia_producto/{id}/{estado}', [EquivalenciaProductosController::class, 'eliminar_equivalencia_producto'])->name('equivalencia_producto.eliminar_equivalencia_producto');
