@@ -58,7 +58,7 @@ class GuiaInterna extends Model
         inner join empresas e on gi.id_destinatario = e.id 
         inner join marcas m on gi.marca::int = m.id 
         inner join empresas e2 on gi.id_empresa_transporte = e2.id
-        left join tabla_maestras tm on gi.id_motivo_traslado ::int = tm.codigo::int and tm.tipo = '61'
+        left join tabla_maestras tm on gi.id_motivo_traslado ::int = tm.codigo::int and tm.tipo = '63'
         left join conductores c on gi.id_conductor = c.id
         inner join personas p on c.id_personas = p.id
         where gi.id='".$id."'";
