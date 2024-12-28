@@ -243,7 +243,7 @@ function fn_save_equivalencia_producto(){
                                 <div class="col-lg-2">
                                     Producto
                                 </div>
-                                <div class="col-lg-2">
+                                <div class="col-lg-6">
                                     <select name="producto" id="producto" class="form-control form-control-sm" onchange="obtenerCodInterno()">
                                         <option value="">--Seleccionar--</option>
                                         <?php
@@ -260,6 +260,8 @@ function fn_save_equivalencia_producto(){
                                 <div class="col-lg-2">
                                     <input id="codigo_producto" name="codigo_producto" on class="form-control form-control-sm"  value="<?php if($id>0){echo $equivalencia_producto->codigo_producto;}?>" type="text" readonly ="readonly">
                                 </div>
+                            </div>
+                            <div class="row" style="padding-left:10px; padding-top : 10px">
                                 <div class="col-lg-2">
                                     Empresa
                                 </div>
