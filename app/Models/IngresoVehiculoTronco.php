@@ -52,6 +52,12 @@ group by diametro_dm,longitud,volumen_m3,volumen_pies,precio_unitario";
 
     }
 
+    public function listar_ingreso_vehiculo_tronco_pagos_ajax($p){
+
+        return $this->readFuntionPostgres('sp_listar_ingreso_vehiculo_tronco_pagos_paginado',$p);
+
+    }
+
 	public function readFuntionPostgres($function, $parameters = null){
 
         $_parameters = '';

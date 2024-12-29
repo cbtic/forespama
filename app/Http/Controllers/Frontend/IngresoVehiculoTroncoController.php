@@ -201,12 +201,39 @@ class IngresoVehiculoTroncoController extends Controller
 
 	}
 
+	public function listar_ingreso_vehiculo_tronco_pagos_ajax(Request $request){
+
+		$ingresoVehiculoTronco_model = new IngresoVehiculoTronco();
+		$p[]=$request->placa;
+		$p[]=$request->NumeroPagina;
+		$p[]=$request->NumeroRegistros;
+		$data = $ingresoVehiculoTronco_model->listar_ingreso_vehiculo_tronco_pagos_ajax($p);
+		$iTotalDisplayRecords = isset($data[0]->totalrows)?$data[0]->totalrows:0;
+
+		$result["PageStart"] = $request->NumeroPagina;
+		$result["pageSize"] = $request->NumeroRegistros;
+		$result["SearchText"] = "";
+		$result["ShowChildren"] = true;
+		$result["iTotalRecords"] = $iTotalDisplayRecords;
+		$result["iTotalDisplayRecords"] = $iTotalDisplayRecords;
+		$result["aaData"] = $data;
+
+        echo json_encode($result);
+
+	}
+
 	public function cubicaje(){
 
 		//$tablaMaestra_model = new TablaMaestra;
 		//$tipo_madera = $tablaMaestra_model->getMaestroByTipo(42);
 
 		return view('frontend.cubicaje.create'/*,compact('tipo_madera')*/);
+
+	}
+
+	public function pagos(){
+
+		return view('frontend.pagos.create'/*,compact('tipo_madera')*/);
 
 	}
 
