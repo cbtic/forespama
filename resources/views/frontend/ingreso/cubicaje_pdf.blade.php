@@ -228,15 +228,15 @@ $(document).ready(function() {
 
                     foreach($datos_detalle as $key=>$r) { ?>
                         <tr>
-                            <td class="td" style ="text-align: left; width: 10%; height:25px"><?php echo $r->cantidad;?></td>
-                            <td class="td" style ="text-align: left; width: 10%; height:25px"><?php echo $r->diametro_dm;?></td>
-                            <td class="td" style ="text-align: left; width: 10%; height:25px"><?php echo $r->longitud;?></td>
-                            <td class="td" style ="text-align: left; width: 10%; height:25px"><?php echo $r->volumen_m3;?></td>
-                            <td class="td" style ="text-align: left; width: 10%; height:25px"><?php echo $r->volumen_pies;?></td>
-                            <td class="td" style ="text-align: left; width: 10%; height:25px"><?php echo $r->volumen_total_m3;?></td>
-                            <td class="td" style ="text-align: left; width: 10%; height:25px"><?php echo $r->volumen_total_pies;?></td>
-                            <td class="td" style ="text-align: left; width: 10%; height:25px"><?php echo $r->precio_unitario;?></td>
-                            <td class="td" style ="text-align: left; width: 10%; height:25px"><?php echo $r->precio_total;?></td>
+                            <td class="td" style ="text-align: center; width: 10%; height:25px"><?php echo $r->cantidad;?></td>
+                            <td class="td" style ="text-align: right; width: 10%; height:25px"><?php echo $r->diametro_dm;?></td>
+                            <td class="td" style ="text-align: right; width: 10%; height:25px"><?php echo $r->longitud;?></td>
+                            <td class="td" style ="text-align: right; width: 10%; height:25px"><?php echo $r->volumen_m3;?></td>
+                            <td class="td" style ="text-align: right; width: 10%; height:25px"><?php echo $r->volumen_pies;?></td>
+                            <td class="td" style ="text-align: right; width: 10%; height:25px"><?php echo $r->volumen_total_m3;?></td>
+                            <td class="td" style ="text-align: right; width: 10%; height:25px"><?php echo $r->volumen_total_pies;?></td>
+                            <td class="td" style ="text-align: right; width: 10%; height:25px"><?php echo $r->precio_unitario;?></td>
+                            <td class="td" style ="text-align: right; width: 10%; height:25px"><?php echo $r->precio_total;?></td>
                             <?php 
                             $cantidad_suma+=$r->cantidad;
                             $volumen_pies_suma+=$r->volumen_pies;
@@ -249,15 +249,15 @@ $(document).ready(function() {
                         }
                     ?>
                     <tr>
-                        <td class="td total_suma"><b><?php echo $cantidad_suma;?></b></td>
-                        <td class="td total_suma"></td>
-                        <td class="td total_suma"></td>
-                        <td class="td total_suma"></td>
-                        <td class="td total_suma"><b><?php echo $volumen_pies_suma;?></b></td>
-                        <td class="td total_suma"><b><?php echo $volumen_total_m3_suma;?></b></td>
-                        <td class="td total_suma"><b><?php echo $volumen_total_pies_suma;?></b></td>
-                        <td class="td total_suma"></td>
-                        <td class="td total_suma"><b><?php echo $precio_total_suma;?></b></td>
+                        <td class="td total_suma" style="text-align:center"><b><?php echo $cantidad_suma;?></b></td>
+                        <td class="td total_suma" style="text-align:right"></td>
+                        <td class="td total_suma" style="text-align:right"></td>
+                        <td class="td total_suma" style="text-align:right"></td>
+                        <td class="td total_suma" style="text-align:right"><b><?php echo $volumen_pies_suma;?></b></td>
+                        <td class="td total_suma" style="text-align:right"><b><?php echo $volumen_total_m3_suma;?></b></td>
+                        <td class="td total_suma" style="text-align:right"><b><?php echo $volumen_total_pies_suma;?></b></td>
+                        <td class="td total_suma" style="text-align:right"></td>
+                        <td class="td total_suma" style="text-align:right"><b><?php echo $precio_total_suma;?></b></td>
                     </tr>
                 </tbody>
             </table>
