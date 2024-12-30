@@ -94,6 +94,21 @@ function datatablenew(){
             $('[data-toggle="tooltip"]').tooltip();
         },
 
+		"fnRowCallback": function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+
+            const fechaRequerimiento = aData.fecha;
+            if (fechaRequerimiento) {
+                const fechaActual = new Date();
+                const fechaItem = new Date(fechaRequerimiento);
+                const diferenciaDias = (fechaActual - fechaItem) / (1000 * 60 * 60 * 24);
+
+                if (diferenciaDias > 3) {
+                    $(nRow).addClass('fila-roja');
+                }
+            }
+            return nRow;
+        },
+
         "fnServerData": function (sSource, aoData, fnCallback, oSettings) {
 
             var sEcho           = aoData[0].value;
@@ -128,6 +143,7 @@ function datatablenew(){
                     //location.href="login";
                 }
             });
+			
         },
 
         "aoColumnDefs":
@@ -266,12 +282,8 @@ function datatablenew(){
 					"bSortable": false,
 					"aTargets": [9],
 				},
-
             ]
-
-
     });
-
 }
 
 function fn_ListarBusqueda() {
