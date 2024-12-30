@@ -55,8 +55,9 @@ class Persona extends Model
 
 
     function getPersona($tipo_documento,$numero_documento){
+        //echo $tipo_documento; exit();
         if($tipo_documento=="5"){  //RUC
-            $cad = "select t1.id,razon_social,t1.direccion,t1.representante, t1.ruc, t1.email, 79 id_tipo_documento,  trim(t1.ruc) numero_documento_
+            $cad = "select t1.id,razon_social,t1.direccion,t1.representante, t1.ruc, t1.email, 5 id_tipo_documento,  trim(t1.ruc) numero_documento_
                     from empresas t1                    
                     Where trim(t1.ruc)='".$numero_documento."' and t1.estado ='1' ";
 
@@ -87,7 +88,7 @@ class Persona extends Model
                     limit 1";
 
         }
-        //echo $cad;
+        //echo $cad; exit();
         $data = DB::select($cad);
         
         return $data[0];

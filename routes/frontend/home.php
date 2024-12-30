@@ -198,6 +198,7 @@ Route::post('ingreso/listar_valorizacion_concepto', [IngresoController::class, '
 Route::post('ingreso/listar_valorizacion_periodo', [IngresoController::class, 'listar_valorizacion_periodo'])->name('ingreso.listar_valorizacion_periodo');
 Route::post('ingreso/listar_valorizacion_mes', [IngresoController::class, 'listar_valorizacion_mes'])->name('ingreso.listar_valorizacion_mes');
 Route::get('ingreso/obtener_pago/{tipo_documento}/{persona_id}', [IngresoController::class, 'obtener_pago'])->name('ingreso.obtener_pago')->where('tipo_documento', '(.*)');
+Route::get('ingreso/obtener_proforma/{tipo_documento}/{persona_id}', [IngresoController::class, 'obtener_proforma'])->name('ingreso.obtener_proforma')->where('tipo_documento', '(.*)');
 Route::post('ingreso/sendCaja', [IngresoController::class, 'sendCaja'])->name('ingreso.sendCaja');
 Route::get('ingreso/modal_otro_pago/{periodo}/{idpersona}/{idagremiado}/{tipo_documento}', [IngresoController::class, 'modal_otro_pago'])->name('ingreso.modal_otro_pago');
 Route::get('ingreso/modal_fraccionar/{idConcepto}/{idpersona}/{idagremiado}/{TotalFraccionar}', [IngresoController::class, 'modal_fraccionar'])->name('ingreso.modal_fraccionar');
@@ -261,7 +262,7 @@ Route::get('comprobante/eliminar_credito_pago/{id}', [ComprobanteController::cla
 
 Route::get('comprobante/envio_factura_sunat_automatico/{fecha}', [ComprobanteController::class, 'envio_factura_sunat_automatico'])->name('comprobante.envio_factura_sunat_automatico');
 Route::get('comprobante/envio_guia_sunat_automatico/{fecha}', [ComprobanteController::class, 'envio_guia_sunat_automatico'])->name('comprobante.envio_guia_sunat_automatico');
-
+Route::post('comprobante/listar_comprobante', [ComprobanteController::class, 'listar_comprobante'])->name('comprobante.listar_comprobante');
 
 
 Route::get('comprobante/obtener_representante/{tipo_documento}/{numero_documento}', [ComprobanteController::class, 'obtener_representante'])->name('comprobante.obtener_representante');

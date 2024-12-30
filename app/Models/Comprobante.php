@@ -9,7 +9,7 @@ use DB;
 class Comprobante extends Model
 {
     public function listar_comprobante($p){
-		return $this->readFuntionPostgres('sp_listar_comprobante_paginado',$p);
+		return $this->readFuntionPostgres('sp_listar_comprobante_paginado',$p);        
     }
  
 
@@ -407,7 +407,7 @@ class Comprobante extends Model
    function getRepresentante($tipo_documento,$numero_documento){
 
 
-    echo $tipo_documento;
+    //echo $tipo_documento;
 
     if($tipo_documento=="5"){  //RUC
         $cad = "select id, ruc numero_documento, razon_social representante, direccion, email 

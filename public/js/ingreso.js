@@ -499,7 +499,7 @@ function calcular_total(obj){
 
 
 
-		if(tipo_documento == "79"){//RUC
+		if(tipo_documento == "5"){//RUC
 			
 			$("#btnBoleta").prop('disabled', true);
 			$("#btnFactura").prop('disabled', false);
@@ -543,20 +543,12 @@ function calcular_total(obj){
 		//alert(cboPeriodo_b);
 
 
-
-
-		
-
-		
-
-
-
 	}
 	
 
 	
 	
-	if(tipo_documento == "79"){//RUC
+	if(tipo_documento == "5"){//RUC
 		//$("#btnBoleta").prop('disabled', false);
         //$("#btnFactura").prop('disabled', false);
 		//$("#btnBoleta").show();
@@ -656,7 +648,7 @@ function calcular_total_otros(obj){
 	
 		var tipo_documento = $('#tipo_documento').val();
 
-		if(tipo_documento == "79"){//RUC
+		if(tipo_documento == "5"){//RUC
 			
 			$("#btnBoleta").prop('disabled', true);
 			$("#btnFactura").prop('disabled', false);
@@ -844,7 +836,7 @@ function validaTipoDocumento(){
 	$("#cboMes_b").prop('disabled', false);
 	$("#cboTipoCuota_b").prop('disabled', false);
 
-	if(tipo_documento == "87"){
+	if(tipo_documento == "6"){ //Proforma
 
 		$("#chkExonerado").prop('disabled', true);
 		$("#cboTipoConcepto_b").prop('disabled', true);
@@ -852,7 +844,7 @@ function validaTipoDocumento(){
 		$("#cboMes_b").prop('disabled', true);
 		$("#cboTipoCuota_b").prop('disabled', true);
 
-	}else if(tipo_documento == "79"){ //RUC
+	}else if(tipo_documento == "5"){ //RUC
 		$('#divNombreApellido').hide();
 		//$('#divCodigoAfliado').hide();
 		$('#divFechaAfliado').hide();
@@ -1101,6 +1093,7 @@ function obtenerBeneficiario(){
 
 				cargarValorizacion();
 				cargarPagos();
+				cargarProforma();
 				//cargarcboTipoConcepto();
 				//cargarcboPeriodo();
 				//cargarcboMes();
@@ -1353,7 +1346,7 @@ function cargarValorizacion(){
 function cargarPagos(){
 	var tipo_documento = $("#tipo_documento").val();
 	var id_persona = 0;
-	if(tipo_documento=="79")id_persona = $('#id_ubicacion').val();
+	if(tipo_documento=="5")id_persona = $('#id_ubicacion').val();
 	else id_persona = $('#id_persona').val();
 	
 	$('#tblPago').dataTable().fnDestroy();
@@ -1367,6 +1360,37 @@ function cargarPagos(){
 					$('[data-toggle="tooltip"]').tooltip();
 					
 					$('#tblPago').DataTable({
+						//"sPaginationType": "full_numbers",
+						//"paging":false,
+						"searching": false,
+						"info": false,
+						"bSort" : false,
+						"dom": '<"top">rt<"bottom"flpi><"clear">',
+						"language": {"url": "/js/Spanish.json"},
+					});
+							
+			}
+	});
+
+}
+
+function cargarProforma(){
+	var tipo_documento = $("#tipo_documento").val();
+	var id_persona = 0;
+	if(tipo_documento=="5")id_persona = $('#id_ubicacion').val();
+	else id_persona = $('#id_persona').val();
+	
+	$('#tblProforma').dataTable().fnDestroy();
+    $("#tblProforma tbody").html("");
+	$.ajax({
+			//url: "/ingreso/obtener_pago/"+numero_documento,
+			url: "/ingreso/obtener_proforma/"+tipo_documento+"/"+id_persona,
+			type: "GET",
+			success: function (result) {  
+					$("#tblProforma").html(result);
+					$('[data-toggle="tooltip"]').tooltip();
+					
+					$('#tblProforma').DataTable({
 						//"sPaginationType": "full_numbers",
 						//"paging":false,
 						"searching": false,
@@ -1552,8 +1576,8 @@ function validar(tipo) {
 
 	
 
-	if(tipo_documento != "79" && id_persona == "")msg += "Debe ingresar el Numero de Documento <br>";
-	if(tipo_documento == "79" && empresa_id == "")msg += "Debe ingresar el Numero de Documento <br>";
+	if(tipo_documento != "5" && id_persona == "")msg += "Debe ingresar el Numero de Documento <br>";
+	if(tipo_documento == "5" && empresa_id == "")msg += "Debe ingresar el Numero de Documento <br>";
 	/*
 	if (tipo != 4) {
 		if(mov=="0")msg+="Debe seleccionar minimo un Concepto del Estado de Cuenta <br>";
@@ -1698,7 +1722,7 @@ function modal_otro_pago(){
 
 	var tipo_documento = $('#tipo_documento').val();
 
-	if(tipo_documento == "79") {
+	if(tipo_documento == "5") {
 		idPersona = $('#empresa_id').val();
 		idAgremiado = 0;
 	}		
@@ -1728,7 +1752,7 @@ function modal_persona(){
 
 	var tipo_documento = $('#tipo_documento').val();
 
-	if(tipo_documento == "79") {
+	if(tipo_documento == "5") {
 		idPersona = $('#empresa_id').val();
 		idAgremiado = 0;
 	}		
@@ -1760,7 +1784,7 @@ function modal_beneficiario_(){
 
 	var tipo_documento = $('#tipo_documento').val();
 
-	if(tipo_documento == "79") {
+	if(tipo_documento == "5") {
 		idPersona = $('#empresa_id').val();
 		idAgremiado = 0;
 	}
@@ -2211,7 +2235,7 @@ function AplicarDescuento(){
 	
 		if(cantidad != 0){
 
-			if(tipo_documento == "79"){//RUC
+			if(tipo_documento == "5"){//RUC
 				
 				$("#btnBoleta").prop('disabled', true);
 				$("#btnFactura").prop('disabled', false);
@@ -2316,7 +2340,7 @@ function select_all(){
 
 	if (cantidad > 0) {
 
-		if (tipo_documento == "79") {//RUC
+		if (tipo_documento == "5") {//RUC
 
 			$("#btnBoleta").prop('disabled', true);
 			$("#btnFactura").prop('disabled', false);
@@ -2907,24 +2931,43 @@ function AddFila(){
 }
 
 function proforma_send(){
+/*
+	var igv_ = $('#igv').val();
+	var total_ = $('#total').val();
+	var stotal_ = $('#stotal').val();
+	alert(stotal_);
+	alert(igv_);
+	alert(total_);
+	exit();
+*/
+	$('#accion_').val("i");
+	$('#id_proforma').val("0");
 
+	var id_persona = $('#id_persona').val();
+	var empresa_id = $('#empresa_id').val();
+
+	//alert(id_persona);
+	//alert(empresa_id);
+	//exit();
 	
 	var msgLoader = "";
 	msgLoader = "Procesando, espere un momento por favor";
 	var heightBrowser = $(window).width()/2;
 	$('.loader').css("opacity","0.8").css("height",heightBrowser).html("<div id='Grd1_wrapper' class='dataTables_wrapper'><div id='Grd1_processing' class='dataTables_processing panel-default'>"+msgLoader+"</div></div>");
     $('.loader').show();
-	//$('#guardar').hide();
-	
+
     $.ajax({
 			url: "/proforma/send",
             type: "POST",
 
 			data : $("#frmValorizacion").serialize(),
-			dataType: 'json',
+			//dataType: 'json',
             success: function (result) {
 
 				$('.loader').hide();
+
+				obtenerBeneficiario();
+
 				
 				//$('#numerof').val(result.id_factura);
 				//$('#divNumeroF').show();
@@ -2932,6 +2975,7 @@ function proforma_send(){
 
             }
     });
+
 }
 
 

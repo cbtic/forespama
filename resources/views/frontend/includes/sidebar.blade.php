@@ -193,6 +193,9 @@
                     <x-utils.link :href="route('frontend.ingreso.create')" class="c-sidebar-nav-link" :text="__('Estado de Cuentas')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />                  
                 </li>
                 <li class="c-sidebar-nav-item">
+                    <x-utils.link :href="route('frontend.comprobante.all')" class="c-sidebar-nav-link" :text="__('Consulta de Facturas')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />                  
+                </li>
+                <li class="c-sidebar-nav-item">
                     <x-utils.link :href="route('frontend.guia_interna.create')" class="c-sidebar-nav-link" :text="__('Consulta de Guias')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />                  
                 </li>
             </ul>

@@ -342,7 +342,7 @@ function validaTipoDocumento(){
 	$('#codigo_afiliado').val("");
 	$('#fecha_afiliado').val("");
 
-	if(tipo_documento == "78"){
+	if(tipo_documento == "1"){
 		$('#divNombreApellido').hide();
 		$('#divCodigoAfliado').hide();
 		$('#divFechaAfliado').hide();

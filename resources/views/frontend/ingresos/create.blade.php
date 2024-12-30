@@ -877,6 +877,9 @@
                                                             <input type="hidden" readonly name="stotal" id="stotal" value="" class="form-control form-control-sm">
                                                             <input type="hidden" readonly name="igv" id="igv" value="" class="form-control form-control-sm">
                                                             <input type="hidden" readonly name="idConcepto" id="idConcepto" value="" class="form-control form-control-sm">
+                                                            
+                                                            <input type="hidden" readonly name="id_proforma" id="id_proforma" value="0" class="form-control form-control-sm">
+                                                            <input type="hidden" readonly name="accion_" id="accion_" value="" class="form-control form-control-sm">
 
                                                         </td>
                                                         </td>
@@ -980,7 +983,7 @@
                                     <div class="card-body">
 
                                         <div class="table-responsive overflow-auto" style="max-height: 500px">
-                                            <table id="tblPago" class="table table-hover table-sm">
+                                            <table id="tblProforma" class="table table-hover table-sm">
                                                 <thead>
                                                     <tr style="font-size:13px">
                                                         <th>Fecha</th>
