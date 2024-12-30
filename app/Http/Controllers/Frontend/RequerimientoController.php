@@ -88,10 +88,6 @@ class RequerimientoController extends Controller
 		if($id>0){
 
             $requerimiento = Requerimiento::find($id);
-            if($requerimiento->estado_atencion==1){
-                $requerimiento->estado_atencion = 2;
-            }
-            
 		}else{
 			$requerimiento = new Requerimiento;
         }
@@ -333,6 +329,7 @@ class RequerimientoController extends Controller
             if($requerimiento->estado_atencion==1){
                 $requerimiento->estado_atencion = 2;
             }
+            $requerimiento->save();
             
 		}else{
 			$requerimiento = new Requerimiento;

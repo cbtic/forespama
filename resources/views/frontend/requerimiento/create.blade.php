@@ -283,6 +283,12 @@ label.form-control-sm{
 	cursor:pointer
 }
 
+.fila-roja {
+    /*background-color: rgba(255,0,0,0.5) !important;
+	border-color: rgba(255,0,0,0.6) !important;*/
+    color: red !important;
+}
+
 </style>
 
 <script>
