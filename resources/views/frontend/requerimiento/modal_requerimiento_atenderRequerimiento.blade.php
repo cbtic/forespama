@@ -550,6 +550,13 @@ function pdf_documento(){
 
 }
 
+function cerrarModalRequerimiento(){
+
+    $('#openOverlayOpc').modal('hide');
+
+    datatablenew();
+}
+
 </script>
 
 <body class="hold-transition skin-blue sidebar-mini">
@@ -747,7 +754,7 @@ function pdf_documento(){
                                     }
                                 ?>
                                 <!--<a href="javascript:void(0)" onClick="fn_save_requerimiento()" class="btn btn-sm btn-success" style="margin-right:10px">Guardar</a>-->
-                                <a href="javascript:void(0)" onClick="$('#openOverlayOpc').modal('hide');" class="btn btn-sm btn-info" style="">Cerrar</a>
+                                <a href="javascript:void(0)" onClick="cerrarModalRequerimiento()" class="btn btn-sm btn-info" style="">Cerrar</a>
                             </div>
                                                 
                         </div>

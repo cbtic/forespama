@@ -75,6 +75,7 @@ class DispensacionController extends Controller
 
     public function modal_dispensacion($id){
 		
+		$id_user = Auth::user()->id;
         $tablaMaestra_model = new TablaMaestra;
         $marca_model = new Marca;
         $producto_model = new Producto;
@@ -101,7 +102,7 @@ class DispensacionController extends Controller
 		$persona = Persona::all();
 		//var_dump($id);exit();
 
-		return view('frontend.dispensacion.modal_dispensacion_nuevoDispensacion',compact('id','dispensacion','unidad_medida','moneda','estado_bien','tipo_producto','unidad','marca','producto','tipo_documento','almacen','area_trabajo','persona'));
+		return view('frontend.dispensacion.modal_dispensacion_nuevoDispensacion',compact('id','dispensacion','unidad_medida','moneda','estado_bien','tipo_producto','unidad','marca','producto','tipo_documento','almacen','area_trabajo','persona','id_user'));
 
     }
 

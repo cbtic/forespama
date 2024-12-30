@@ -46,7 +46,7 @@ class GuiaInternaController extends Controller
 
         $tipo_documento = $tablaMaestra_model->getMaestroByTipo(59);
         //$transporte_razon_social = $empresa_model->obtenerRazonSocialTransporteAll();
-        
+
         
 		return view('frontend.guia_interna.create',compact('tipo_documento'/*,'transporte_razon_social'*/));
 
@@ -84,6 +84,7 @@ class GuiaInternaController extends Controller
 
     public function modal_guia_interna($id){
 		
+        $id_user = Auth::user()->id;
         $tablaMaestra_model = new TablaMaestra;
         $producto_model = new Producto;
         $marca_model = new Marca;
@@ -108,7 +109,7 @@ class GuiaInternaController extends Controller
         $departamento = $ubigeo_model->getDepartamento();
         $serie_guia = $tablaMaestra_model->getMaestroC(95,"GR");
 
-        return view('frontend.guia_interna.modal_guia_interna_nuevoGuiaInterna',compact('id','guia_interna','tipo_documento_entrada','tipo_documento_salida','producto','marca','estado_bien','unidad','empresas',/*'transporte_razon_social',*/'motivo_traslado','departamento','serie_guia'));
+        return view('frontend.guia_interna.modal_guia_interna_nuevoGuiaInterna',compact('id','guia_interna','tipo_documento_entrada','tipo_documento_salida','producto','marca','estado_bien','unidad','empresas',/*'transporte_razon_social',*/'motivo_traslado','departamento','serie_guia','id_user'));
 
     }
 
@@ -163,11 +164,16 @@ class GuiaInternaController extends Controller
         $guia_interna->guia_tipo = $tipo_guia[0]->codigo;
         $guia_interna->id_usuario_inserta = $id_user;
         $guia_interna->estado = 1;
-        $guia_interna->save();        
+        $guia_interna->save();    
+        
+        $empresa_destinatario = Empresa::find($request->destinatario);
 
         $guia->guia_serie = $request->serie_guia;
         $guia->guia_numero = $request->numero_guia;
         $guia->guia_tipo = $tipo_guia[0]->codigo;
+        $guia->guia_receptor_numdoc = $request->ruc;
+        $guia->guia_receptor_tipodoc = "0";
+        $guia->guia_receptor_razsocial = $empresa_destinatario->razon_social;
         $guia->guia_fecha_emision = $request->fecha_emision;
         $guia->guia_fecha_traslado = $request->fecha_inicio_traslado;
         $guia->guia_vehiculo_placa = $request->placa_guia;
@@ -179,7 +185,6 @@ class GuiaInternaController extends Controller
         $guia->guia_cod_motivo = $request->motivo_traslado;
         $guia->id_usuario_inserta = $id_user;
         $guia->save();
-
 
         $array_guia_interna_detalle = array();
 

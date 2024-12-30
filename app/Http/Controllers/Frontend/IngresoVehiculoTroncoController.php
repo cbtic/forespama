@@ -17,6 +17,7 @@ use App\Models\Pago;
 use App\Models\Persona;
 use Auth;
 use Carbon\Carbon;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class IngresoVehiculoTroncoController extends Controller
 {
@@ -335,6 +336,48 @@ class IngresoVehiculoTroncoController extends Controller
 		
     }
 		
+	public function cubicaje_pdf($id){
 
+
+		$vehiculo_tronco_model = new IngresoVehiculoTronco;
+		//$salida_producto_detalle_model = new IngresoVehiculoTronco;
+		$datos=$vehiculo_tronco_model->getIngresoVehiculoTroncoCubicajeCabeceraById($id);
+		$datos_detalle=$vehiculo_tronco_model->getIngresoVehiculoTroncoCubicajeReporteById($id);
+
+		//dd($datos_detalle);exit();
+
+		$fecha_ingreso=$datos[0]->fecha_ingreso;
+		$ruc=$datos[0]->ruc;
+		$razon_social=$datos[0]->razon_social;
+		$placa=$datos[0]->placa;
+		$ejes=$datos[0]->ejes;
+		$numero_documento = $datos[0]->numero_documento;
+		$conductor = $datos[0]->conductor;
+		$tipo_madera=$datos[0]->tipo_madera;
+		$cantidad=$datos[0]->cantidad;
+	 
+		$year = Carbon::now()->year;
+
+		Carbon::setLocale('es');
+
+		$carbonDate =Carbon::now()->format('d-m-Y');
+
+		$currentHour = Carbon::now()->format('H:i:s');
+
+		$pdf = Pdf::loadView('frontend.ingreso.cubicaje_pdf',compact('fecha_ingreso','ruc','razon_social','placa','ejes','numero_documento','conductor','tipo_madera','cantidad','datos_detalle'));
+		
+		$pdf->setPaper('A4'); // Tamaño de papel (puedes cambiarlo según tus necesidades)
+
+		$pdf->setPaper('A4', 'portrait');
+    	$pdf->setOption('margin-top', 20); // Márgen superior en milímetros
+   		$pdf->setOption('margin-right', 50); // Márgen derecho en milímetros
+    	$pdf->setOption('margin-bottom', 20); // Márgen inferior en milímetros
+    	$pdf->setOption('margin-left', 100); // Márgen izquierdo en milímetros
+
+		return $pdf->stream();
+    	//return $pdf->download('invoice.pdf');
+		//return view('frontend.certificado.certificado_pdf');
+
+	}
 
 }

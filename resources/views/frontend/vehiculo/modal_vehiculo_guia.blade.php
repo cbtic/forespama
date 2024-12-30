@@ -14,6 +14,10 @@
   height:250px;
 }
 
+.modal-open .select2-container {
+    z-index: 1050 !important; /* Ajusta el índice z para que Select2 esté encima */
+}
+
 .modal-vehiculo .modal-dialog {
 	width: 100%;
 	max-width:30%!important
@@ -670,11 +674,28 @@ $(document).ready(function () {
 	
 });
 
+$('#openOverlayOpc2').on('show.bs.modal', function () {
+    // Asegúrate de que el segundo modal aparezca encima
+    $(this).css('z-index', parseInt($('.modal-backdrop').last().css('z-index')) + 1);
+});
+
+// Ajusta el z-index del backdrop para que no interfiera con el modal anterior
+$('#openOverlayOpc2').on('shown.bs.modal', function () {
+    var backdrop = $('.modal-backdrop').not('.stacked');
+    backdrop.css('z-index', parseInt(backdrop.css('z-index')) + 1).addClass('stacked');
+});
+
+$('#openOverlayOpc2').on('shown.bs.modal', function () {
+    if ($('body').hasClass('modal-open') === false) {
+        $('body').addClass('modal-open');
+    }
+});
+
 </script>
 
 <script type="text/javascript">
 $(document).ready(function() {
-	$('#numero_placa').focus();
+	//$('#numero_placa').focus();
 	$('#numero_placa').mask('AAA-000');
 	$('#vehiculo_numero_placa').mask('AAA-000');
 	
@@ -686,7 +707,7 @@ $(document).ready(function() {
 		this.value = this.value.toLocaleUpperCase();
 	});
 		
-	$('#vehiculo_empresa').focusin(function() { $('#vehiculo_empresa').select(); });
+	//$('#vehiculo_empresa').focusin(function() { $('#vehiculo_empresa').select(); });
 	
 	$('#vehiculo_empresa').autocomplete({
 		appendTo: "#vehiculo_empresa_busqueda",

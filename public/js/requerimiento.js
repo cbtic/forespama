@@ -94,6 +94,21 @@ function datatablenew(){
             $('[data-toggle="tooltip"]').tooltip();
         },
 
+		"fnRowCallback": function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+
+            const fechaRequerimiento = aData.fecha;
+            if (fechaRequerimiento) {
+                const fechaActual = new Date();
+                const fechaItem = new Date(fechaRequerimiento);
+                const diferenciaDias = (fechaActual - fechaItem) / (1000 * 60 * 60 * 24);
+
+                if (diferenciaDias > 3) {
+                    $(nRow).addClass('fila-roja');
+                }
+            }
+            return nRow;
+        },
+
         "fnServerData": function (sSource, aoData, fnCallback, oSettings) {
 
             var sEcho           = aoData[0].value;
@@ -128,6 +143,7 @@ function datatablenew(){
                     //location.href="login";
                 }
             });
+			
         },
 
         "aoColumnDefs":
@@ -242,11 +258,11 @@ function datatablenew(){
 						
 						var html = '<div class="btn-group btn-group-sm" role="group" aria-label="Log Viewer Actions">';
 						
-						if(usuario == row.id_usuario){
-							html += '<button style="font-size:12px" type="button" class="btn btn-sm btn-success" data-toggle="modal" onclick="modalRequerimiento('+row.id+')" ><i class="fa fa-edit"></i> Editar</button>'; 
-						}else{
+						//if(usuario == row.id_usuario){
+						html += '<button style="font-size:12px" type="button" class="btn btn-sm btn-success" data-toggle="modal" onclick="modalRequerimiento('+row.id+')" ><i class="fa fa-edit"></i> Editar</button>'; 
+						/*}else{
 							html += '<button style="font-size:12px" type="button" class="btn btn-sm btn-success" data-toggle="modal" onclick="modalRequerimiento('+row.id+')" disabled><i class="fa fa-edit"></i> Editar</button>'; 	
-						}
+						}*/
 
 						if(usuario == row.id_responsable){	
 							html += '<button style="font-size:12px;margin-left:10px" type="button" class="btn btn-sm btn-info" data-toggle="modal" onclick="modalAtenderRequerimiento('+row.id+')" ><i class="fa fa-edit"></i> Atender</button>'; 
@@ -266,12 +282,8 @@ function datatablenew(){
 					"bSortable": false,
 					"aTargets": [9],
 				},
-
             ]
-
-
     });
-
 }
 
 function fn_ListarBusqueda() {

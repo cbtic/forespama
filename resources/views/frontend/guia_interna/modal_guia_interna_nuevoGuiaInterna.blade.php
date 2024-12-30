@@ -27,6 +27,7 @@
     height: auto !important;
 }
 
+
 .modal-conductor .modal-dialog {
     width: 40% !important;
 }
@@ -180,9 +181,10 @@ $(document).ready(function() {
     $("#persona_recibe").select2({ width: '100%' });
     $("#motivo_traslado").select2({ width: '100%' });
     $("#numero_documento").select2({ width: '100%' });
+    $("#empresa").select2({ width: '100%' });
+	$("#conductor").select2({ width: '100%' });
+	$("#marca").select2({ width: '100%' });
     //$("#marca_vehiculo").select2({ width: '100%' });
-
-    
 
 });
 
@@ -229,6 +231,9 @@ $(document).ready(function() {
 		changeYear: true,
         language: 'es'
     });
+
+    $('#empresa').select2({ width: '100%' });
+    $('#conductor').select2({ width: '100%' });
 
     //$("#destinatario").select2({ width: '100%' });
 
@@ -774,6 +779,20 @@ function agregarVehiculo(){
 			success: function (result) {
 					$("#diveditpregOpc2").html(result);
 					$('#openOverlayOpc2').modal('show');
+
+                    $.fn.modal.Constructor.prototype.enforceFocus = function() {};
+                    
+                    setTimeout(() => {
+                $('#empresa').select2({
+                    width: '100%',
+                    dropdownParent: $('#openOverlayOpc2')
+                });
+
+                $('#conductor').select2({
+                    width: '100%',
+                    dropdownParent: $('#openOverlayOpc2')
+                });
+            }, 100);
 			}
 	});
 
@@ -1601,7 +1620,12 @@ function obtenerNumeroGuia(){
                                 <?php 
                                     }
                                 ?>
-                                <a href="javascript:void(0)" onClick="fn_save_guia_interna()" class="btn btn-sm btn-success" style="margin-right:10px">Guardar</a>
+                                <?php if($id_user==$guia_interna->id_usuario_inserta && $id>0){?>
+                                    <a href="javascript:void(0)" onClick="fn_save_guia_interna()" class="btn btn-sm btn-success" style="margin-right:10px">Guardar</a>
+                                <?php }?>
+                                <?php if($id==0){?>
+                                    <a href="javascript:void(0)" onClick="fn_save_guia_interna()" class="btn btn-sm btn-success" style="margin-right:10px">Guardar</a>
+                                <?php }?>
                                 <a href="javascript:void(0)" onClick="$('#openOverlayOpc1').modal('hide');" class="btn btn-sm btn-info" style="">Cerrar</a>
                             </div>
                                                 

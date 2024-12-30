@@ -3,8 +3,9 @@
 	$grupo = explode(".",$routeName);
 	if(isset($grupo[0]) && $grupo[0]!="admin"){
 ?>
-
+    
 <div class="c-sidebar c-sidebar-dark c-sidebar-fixed c-sidebar-lg-show" id="sidebar">
+    
     <div class="c-sidebar-brand d-lg-down-none">
 
         <!--
@@ -273,6 +274,12 @@
                 @can('Mantenimiento Tiendas')
 				<li class="c-sidebar-nav-item">
                     <x-utils.link :href="route('frontend.tiendas.create')" class="c-sidebar-nav-link" :text="__('Tiendas')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+                </li>
+				@endif
+
+                @can('Mantenimiento Equivalencia Producto')
+				<li class="c-sidebar-nav-item">
+                    <x-utils.link :href="route('frontend.equivalencia_producto.create')" class="c-sidebar-nav-link" :text="__('Equivalencia Producto')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
                 </li>
 				@endif
 

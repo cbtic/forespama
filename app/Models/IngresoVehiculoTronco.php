@@ -29,7 +29,7 @@ class IngresoVehiculoTronco extends Model
 	function getIngresoVehiculoTroncoCubicajeById($id){
 
         $cad = "select * from ingreso_vehiculo_tronco_cubicajes ivtc 
-where id_ingreso_vehiculo_tronco_tipo_maderas=".$id;
+        where id_ingreso_vehiculo_tronco_tipo_maderas=".$id;
 
 		$data = DB::select($cad);
         return $data;
@@ -38,10 +38,28 @@ where id_ingreso_vehiculo_tronco_tipo_maderas=".$id;
 	function getIngresoVehiculoTroncoCubicajeReporteById($id){
 
         $cad = "select count(*) cantidad,diametro_dm,longitud,volumen_m3,volumen_pies,sum(volumen_total_m3)volumen_total_m3,
-sum(volumen_total_pies)volumen_total_pies,precio_unitario,sum(precio_total)precio_total  
-from ingreso_vehiculo_tronco_cubicajes ivtc 
-where id_ingreso_vehiculo_tronco_tipo_maderas=".$id."
-group by diametro_dm,longitud,volumen_m3,volumen_pies,precio_unitario";
+        sum(volumen_total_pies)volumen_total_pies,precio_unitario,sum(precio_total)precio_total  
+        from ingreso_vehiculo_tronco_cubicajes ivtc 
+        where id_ingreso_vehiculo_tronco_tipo_maderas=".$id."
+        group by diametro_dm,longitud,volumen_m3,volumen_pies,precio_unitario";
+
+		$data = DB::select($cad);
+        return $data;
+    }
+
+    function getIngresoVehiculoTroncoCubicajeCabeceraById($id){
+
+        $cad = "select ivt.id,ivttm.id id_ingreso_vehiculo_tronco_tipo_maderas,ivt.fecha_ingreso,e.ruc,e.razon_social,v.placa,v.ejes,p.numero_documento,
+        p.apellido_paterno||' '||p.apellido_materno||' '||p.nombres conductor,
+        tm.denominacion tipo_madera,ivttm.cantidad
+        from ingreso_vehiculo_troncos ivt
+        inner join empresas e on ivt.id_empresa_transportista=e.id
+        inner join vehiculos v on ivt.id_vehiculos=v.id
+        inner join conductores c on ivt.id_conductores=c.id
+        inner join personas p on c.id_personas=p.id
+        inner join ingreso_vehiculo_tronco_tipo_maderas ivttm on ivt.id=ivttm.id_ingreso_vehiculo_troncos
+        inner join tabla_maestras tm on ivttm.id_tipo_maderas=tm.codigo::int and tm.tipo='42'
+        where ivttm.id = '".$id."'";
 
 		$data = DB::select($cad);
         return $data;
