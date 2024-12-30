@@ -512,3 +512,5 @@ Route::post('equivalencia_producto/listar_equivalencia_producto_ajax', [Equivale
 Route::post('equivalencia_producto/send_equivalencia_producto', [EquivalenciaProductosController::class, 'send_equivalencia_producto'])->name('equivalencia_producto.send_equivalencia_producto');
 Route::get('equivalencia_producto/modal_equivalencia_producto/{id}', [EquivalenciaProductosController::class, 'modal_equivalencia_producto'])->name('equivalencia_producto.modal_equivalencia_producto');
 Route::get('equivalencia_producto/eliminar_equivalencia_producto/{id}/{estado}', [EquivalenciaProductosController::class, 'eliminar_equivalencia_producto'])->name('equivalencia_producto.eliminar_equivalencia_producto');
+
+Route::get('ingreso_vehiculo_tronco/cubicaje_pdf/{id}', [IngresoVehiculoTroncoController::class, 'cubicaje_pdf'])->name('ingreso_vehiculo_tronco.cubicaje_pdf');
