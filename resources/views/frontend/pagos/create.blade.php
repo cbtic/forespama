@@ -521,8 +521,9 @@ label.form-control-sm{
 								</select>
 							</div>
 							
-							<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
 								<input class="btn btn-warning btn-sm pull-rigth" value="Buscar" type="button" id="btnBuscar" />
+								<input class="btn btn-success btn-sm pull-rigth" value="Pagar" type="button" id="btnPagar" onclick="modalPago()"  />
 							</div>
 							
 						</div>

@@ -46,6 +46,15 @@ group by diametro_dm,longitud,volumen_m3,volumen_pies,precio_unitario";
         return $data;
     }
 	
+    function fecha_actual(){
+		
+		$cad = "select to_char(current_date,'dd-mm-yyyy') as fecha_actual";
+
+		$data = DB::select($cad);
+        return $data[0]->fecha_actual;
+		
+	}
+    
 	public function listar_ingreso_vehiculo_tronco_ajax($p){
 
         return $this->readFuntionPostgres('sp_listar_ingreso_vehiculo_tronco_paginado',$p);

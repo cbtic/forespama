@@ -1816,6 +1816,7 @@ function datatablenew() {
         if (anSelected.length != 0) {
 			var odtable = $("#tblSolicitud").DataTable();
 			var idSolicitud = odtable.row(this).data().id_ingreso_vehiculo_tronco_tipo_maderas;
+            $("#id_ingreso_vehiculo_tronco_tipo_maderas").val(idSolicitud);
             //alert(idSolicitud);
 			var id_estado = odtable.row(this).data().id_estado;
 			$('#estado').val(id_estado);
@@ -2547,5 +2548,54 @@ function obtenerDistritoEdit(idProvincia, idDistrito) {
         }
 
     });
+
+}
+
+function modalPago(){
+	
+	$(".modal-dialog").css("width","55%");
+	$('#openOverlayOpc .modal-body').css('height', 'auto');
+	
+	var id_ingreso_vehiculo_tronco_tipo_maderas = $('#id_ingreso_vehiculo_tronco_tipo_maderas').val();
+	/*
+	if(id_persona==""){
+		bootbox.alert("Debe ingresar el Numero de Documento");
+        return false;
+	}
+	*/
+	
+	var msg = "";
+	
+	var id_caja_ingreso_soles = $('#id_caja_ingreso_soles').val();
+	var id_caja_ingreso_dolares = $('#id_caja_ingreso_dolares').val();
+
+    var id_caja_soles = $('#id_caja_soles').val();
+	var saldo_inicial_soles = $('#saldo_inicial_soles').val();	
+    var id_caja_dolares = $('#id_caja_dolares').val();
+	var saldo_inicial_dolares = $('#saldo_inicial_dolares').val();
+	/*
+	if(id_caja_soles == "0")msg += "Debe seleccionar una Caja en Soles disponible <br>";
+	if(saldo_inicial_soles == "")msg += "Debe ingresar el saldo inicial de caja <br>";
+	
+	if(id_caja_dolares == "0")msg += "Debe seleccionar una Caja en Dolares disponible <br>";
+	if(saldo_inicial_dolares == "")msg += "Debe ingresar el saldo inicial de caja <br>";
+	
+	if(typeof(id_caja_ingreso_soles)== "undefined" || typeof(id_caja_ingreso_dolares)== "undefined"){
+		msg += "Debe Aperturar Caja <br>";
+	}
+	*/
+	if(msg!=""){
+        bootbox.alert(msg);
+        return false;
+    }
+	
+	$.ajax({
+			url: "/ingreso_vehiculo_tronco/modal_pago/"+id_ingreso_vehiculo_tronco_tipo_maderas,
+			type: "GET",
+			success: function (result) {  
+					$("#diveditpregOpc").html(result);
+					$('#openOverlayOpc').modal('show');
+			}
+	});
 
 }
