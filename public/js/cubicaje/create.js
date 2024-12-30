@@ -2541,3 +2541,13 @@ function obtenerDistritoEdit(idProvincia, idDistrito) {
     });
 
 }
+
+function imprimirCubicajePdf(){
+
+    var id_ingreso_vehiculo_tronco_tipo_maderas = $("#id_ingreso_vehiculo_tronco_tipo_maderas").val();
+    //var tipo_movimiento = $('#tipo_movimiento').val();
+
+    var href = '/ingreso_vehiculo_tronco/cubicaje_pdf/'+id_ingreso_vehiculo_tronco_tipo_maderas;
+    window.open(href, '_blank');
+
+}
