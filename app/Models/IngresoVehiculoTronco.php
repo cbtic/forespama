@@ -64,10 +64,37 @@ class IngresoVehiculoTronco extends Model
 		$data = DB::select($cad);
         return $data;
     }
+
+    function getIngresoVehiculoTroncoPagoById($id){
+
+        $cad = "select ivtp.id,ivtp.fecha,tm.denominacion tipodesembolso,ivtp.importe,observacion  
+from ingreso_vehiculo_tronco_pagos ivtp
+inner join tabla_maestras tm on ivtp.id_tipodesembolso=tm.codigo::int and tm.tipo='65' 
+where ivtp.id_ingreso_vehiculo_tronco_tipo_maderas=".$id."
+order by 1 desc";
+
+		$data = DB::select($cad);
+        return $data;
+    }
 	
+    function fecha_actual(){
+		
+		$cad = "select to_char(current_date,'dd-mm-yyyy') as fecha_actual";
+
+		$data = DB::select($cad);
+        return $data[0]->fecha_actual;
+		
+	}
+    
 	public function listar_ingreso_vehiculo_tronco_ajax($p){
 
         return $this->readFuntionPostgres('sp_listar_ingreso_vehiculo_tronco_paginado',$p);
+
+    }
+
+    public function listar_ingreso_vehiculo_tronco_pagos_ajax($p){
+
+        return $this->readFuntionPostgres('sp_listar_ingreso_vehiculo_tronco_pagos_paginado',$p);
 
     }
 
