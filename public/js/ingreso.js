@@ -157,7 +157,11 @@ $(document).ready(function () {
 });
 
 
-
+var total_productos = 0;
+var total_descuento = 0;
+var total_pagar = 0;
+var sub_total = 0;
+var total_igv = 0;
 
 function validarMonAd(){
 
@@ -495,7 +499,7 @@ function calcular_total(obj){
 
 
 
-		if(tipo_documento == "79"){//RUC
+		if(tipo_documento == "5"){//RUC
 			
 			$("#btnBoleta").prop('disabled', true);
 			$("#btnFactura").prop('disabled', false);
@@ -539,20 +543,12 @@ function calcular_total(obj){
 		//alert(cboPeriodo_b);
 
 
-
-
-		
-
-		
-
-
-
 	}
 	
 
 	
 	
-	if(tipo_documento == "79"){//RUC
+	if(tipo_documento == "5"){//RUC
 		//$("#btnBoleta").prop('disabled', false);
         //$("#btnFactura").prop('disabled', false);
 		//$("#btnBoleta").show();
@@ -652,7 +648,7 @@ function calcular_total_otros(obj){
 	
 		var tipo_documento = $('#tipo_documento').val();
 
-		if(tipo_documento == "79"){//RUC
+		if(tipo_documento == "5"){//RUC
 			
 			$("#btnBoleta").prop('disabled', true);
 			$("#btnFactura").prop('disabled', false);
@@ -840,7 +836,7 @@ function validaTipoDocumento(){
 	$("#cboMes_b").prop('disabled', false);
 	$("#cboTipoCuota_b").prop('disabled', false);
 
-	if(tipo_documento == "87"){
+	if(tipo_documento == "6"){ //Proforma
 
 		$("#chkExonerado").prop('disabled', true);
 		$("#cboTipoConcepto_b").prop('disabled', true);
@@ -848,7 +844,7 @@ function validaTipoDocumento(){
 		$("#cboMes_b").prop('disabled', true);
 		$("#cboTipoCuota_b").prop('disabled', true);
 
-	}else if(tipo_documento == "79"){ //RUC
+	}else if(tipo_documento == "5"){ //RUC
 		$('#divNombreApellido').hide();
 		//$('#divCodigoAfliado').hide();
 		$('#divFechaAfliado').hide();
@@ -943,13 +939,17 @@ function obtenerBeneficiario(){
 	$('#SelFracciona').val("");
 
 	$("#btnExonerarN").hide();
-	$("#btnExonerarS").show();
-	$("#btnExonerarS").prop('disabled', true);
+	//$("#btnExonerarS").show();
+	//$("#btnExonerarS").prop('disabled', true);
 	$("#btnExonerarN").prop('disabled', true);
 
 	$("#chkExonerado").prop('checked', false);
 	$('#Exonerado').val("0");
+
 	
+	$("#divAgregar").hide();
+	
+	$("#btnProforma").prop('disabled', true);
 	
 	
 	
@@ -977,6 +977,10 @@ function obtenerBeneficiario(){
 				//alert($("#numero_documento").val());
 
 				//alert(result.agremiado.id_tipo_documento);
+
+				$("#divAgregar").show();
+	
+				//$("#btnProforma").prop('disabled', false);
 
 				if(tipo_documento == "5"){ //RUC
 					$('#divNombreApellido').hide();
@@ -1089,6 +1093,7 @@ function obtenerBeneficiario(){
 
 				cargarValorizacion();
 				cargarPagos();
+				cargarProforma();
 				//cargarcboTipoConcepto();
 				//cargarcboPeriodo();
 				//cargarcboMes();
@@ -1341,7 +1346,7 @@ function cargarValorizacion(){
 function cargarPagos(){
 	var tipo_documento = $("#tipo_documento").val();
 	var id_persona = 0;
-	if(tipo_documento=="79")id_persona = $('#id_ubicacion').val();
+	if(tipo_documento=="5")id_persona = $('#id_ubicacion').val();
 	else id_persona = $('#id_persona').val();
 	
 	$('#tblPago').dataTable().fnDestroy();
@@ -1355,6 +1360,37 @@ function cargarPagos(){
 					$('[data-toggle="tooltip"]').tooltip();
 					
 					$('#tblPago').DataTable({
+						//"sPaginationType": "full_numbers",
+						//"paging":false,
+						"searching": false,
+						"info": false,
+						"bSort" : false,
+						"dom": '<"top">rt<"bottom"flpi><"clear">',
+						"language": {"url": "/js/Spanish.json"},
+					});
+							
+			}
+	});
+
+}
+
+function cargarProforma(){
+	var tipo_documento = $("#tipo_documento").val();
+	var id_persona = 0;
+	if(tipo_documento=="5")id_persona = $('#id_ubicacion').val();
+	else id_persona = $('#id_persona').val();
+	
+	$('#tblProforma').dataTable().fnDestroy();
+    $("#tblProforma tbody").html("");
+	$.ajax({
+			//url: "/ingreso/obtener_pago/"+numero_documento,
+			url: "/ingreso/obtener_proforma/"+tipo_documento+"/"+id_persona,
+			type: "GET",
+			success: function (result) {  
+					$("#tblProforma").html(result);
+					$('[data-toggle="tooltip"]').tooltip();
+					
+					$('#tblProforma').DataTable({
 						//"sPaginationType": "full_numbers",
 						//"paging":false,
 						"searching": false,
@@ -1489,8 +1525,10 @@ function enviarTipo(tipo){
 	  });
 */
 
-ValidarDeudasVencidas(tipo);
+//ValidarDeudasVencidas(tipo);
 //validar(tipo);
+
+	document.frmValorizacion.submit();
 	
 }
 
@@ -1538,8 +1576,8 @@ function validar(tipo) {
 
 	
 
-	if(tipo_documento != "79" && id_persona == "")msg += "Debe ingresar el Numero de Documento <br>";
-	if(tipo_documento == "79" && empresa_id == "")msg += "Debe ingresar el Numero de Documento <br>";
+	if(tipo_documento != "5" && id_persona == "")msg += "Debe ingresar el Numero de Documento <br>";
+	if(tipo_documento == "5" && empresa_id == "")msg += "Debe ingresar el Numero de Documento <br>";
 	/*
 	if (tipo != 4) {
 		if(mov=="0")msg+="Debe seleccionar minimo un Concepto del Estado de Cuenta <br>";
@@ -1684,7 +1722,7 @@ function modal_otro_pago(){
 
 	var tipo_documento = $('#tipo_documento').val();
 
-	if(tipo_documento == "79") {
+	if(tipo_documento == "5") {
 		idPersona = $('#empresa_id').val();
 		idAgremiado = 0;
 	}		
@@ -1714,7 +1752,7 @@ function modal_persona(){
 
 	var tipo_documento = $('#tipo_documento').val();
 
-	if(tipo_documento == "79") {
+	if(tipo_documento == "5") {
 		idPersona = $('#empresa_id').val();
 		idAgremiado = 0;
 	}		
@@ -1746,7 +1784,7 @@ function modal_beneficiario_(){
 
 	var tipo_documento = $('#tipo_documento').val();
 
-	if(tipo_documento == "79") {
+	if(tipo_documento == "5") {
 		idPersona = $('#empresa_id').val();
 		idAgremiado = 0;
 	}
@@ -2197,7 +2235,7 @@ function AplicarDescuento(){
 	
 		if(cantidad != 0){
 
-			if(tipo_documento == "79"){//RUC
+			if(tipo_documento == "5"){//RUC
 				
 				$("#btnBoleta").prop('disabled', true);
 				$("#btnFactura").prop('disabled', false);
@@ -2302,7 +2340,7 @@ function select_all(){
 
 	if (cantidad > 0) {
 
-		if (tipo_documento == "79") {//RUC
+		if (tipo_documento == "5") {//RUC
 
 			$("#btnBoleta").prop('disabled', true);
 			$("#btnFactura").prop('disabled', false);
@@ -2762,20 +2800,60 @@ function AddFila(){
 	var fecha_ = f.getDate() + "-"+ f.getMonth()+ "-" +f.getFullYear();
 
 	var producto = $('#txtProducto').val();
+
+	var nombre_producto = $('#nombre_producto').val();
 	var cantidad = $('#txtCantidad').val();
-	var pv = $('#txtPrecioVenta').val();
-	var st = $('#txtValorVenta').val();
+	var precio_venta = $('#txtPrecioVenta').val();
+	var valor_venta = $('#txtValorVenta').val();
 	var igv = $('#txtIgv').val();
 	var total = $('#txtTotal').val();
 
-	//txtUM
-	//txtValorUnitario
-	//txtValorVB
-	//txtDescuento
+	var um = $('#txtUM').val();
+	var valor_unitario = $('#txtValorUnitario').val();
+	var valor_venta_bruto = $('#txtValorVB').val();
+	var id_descuento = $('id_descuento').val();
+	var descuento = $('#txtDescuento').val();
+
+	var id_producto = $('#id_producto').val();
+	var id_um = $('#id_um').val();
+	var codigo_producto = $('#codigo_producto').val();
+
+	var id_moneda = 1;
+	var moneda = "SOLES";
+	var abreviatura = "";
+	var cod_contable = "";
+
+	var vencio = "";
+
+	var id_concepto = 1;
+	var id_tipo_afectacion = 0;
 
 	
-	
+
 	var cont = ind+1;
+
+	$("#btnProforma").prop('disabled', true);
+
+	
+	$('#SelProducto').val("");
+
+	if(cont != 0){
+
+		$('#SelProducto').val("S");
+
+		$("#btnProforma").prop('disabled', false);
+
+		if(tipo_documento == "5"){//RUC
+			
+			$("#btnBoleta").prop('disabled', true);
+			$("#btnFactura").prop('disabled', false);
+		}else
+		{
+			$("#btnBoleta").prop('disabled', false);
+			
+			if(ruc_p!= "") $("#btnFactura").prop('disabled', false);
+		}
+	}
 
 	//var total = $('#').val();
 	//var total = $('#').val();
@@ -2786,38 +2864,46 @@ function AddFila(){
 	//	newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][producto]" value="'+producto+'" />';
 	//newRow +='</td>';
 
-	newRow +='<td class="text-left">'+cont+'<span class=""></span>';
-		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][fecha]" value="" />';
-		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][denominacion]" value="'+producto+'" />';
-		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][monto]" value="'+pv+'" />';
-		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][pu]" value="'+pv+'" />';
+	newRow +='<td class="text-left" style="font-size:8.0pt">'+cont+'<span class=""></span>';
+
+		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][id]" value="'+cont+'" />';
+
+		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][id_producto]" value="'+id_producto+'" />';
+		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][codigo_producto]" value="'+codigo_producto+'" />';
+		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][id_descuento]" value="'+id_descuento+'" />';
+		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][precio_unitario]" value="'+precio_venta+'" />';
+		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][sub_total]" value="'+valor_venta+'" />';
+		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][id_unidad_medida]" value="'+id_um+'" />';
+		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][valor_venta_bruto]" value="'+valor_venta_bruto+'" />';
+
+		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][item]" value="'+cont+'" />';
+		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][fecha]" value="'+fecha_+'" />';
+		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][denominacion]" value="'+nombre_producto+'" />';
+		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][monto]" value="'+valor_venta+'" />';
+		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][pu]" value="'+valor_unitario+'" />';
 		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][igv]" value="'+igv+'" />';
-		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][pv]" value="'+pv+'" />';
+		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][pv]" value="'+precio_venta+'" />';
 		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][total]" value="'+total+'" />';
-		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][moneda]" value="" />';
-		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][id_moneda]" value="" />';
-		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][abreviatura]" value="" />';
+		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][moneda]" value="'+moneda+'" />';
+		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][id_moneda]" value="'+id_moneda+'" />';
+		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][abreviatura]" value="'+abreviatura+'" />';
 		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][cantidad]" value="'+cantidad+'" />';
-
-		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][descuento]" value="" />';
-		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][cod_contable]" value="" />';
+		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][descuento]" value="'+descuento+'" />';
+		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][cod_contable]" value="'+cod_contable+'" />';
 		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][descripcion]" value="'+producto+'" />';
-		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][vencio]" value="" />';
-		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][id_concepto]" value="" />';
-		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][id_tipo_afectacion]" value="" />';
+		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][vencio]" value="'+vencio+'" />';
+		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][id_concepto]" value="'+id_concepto+'" />';
+		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][id_tipo_afectacion]" value="'+id_tipo_afectacion+'" />';
+	newRow +='</td>';
+	//newRow +='<td><input type="text"  value="'+producto+'" placeholder="" class="form-control form-control-sm" /></td>';
+	newRow +='<td class="text-left" style="font-size:8.0pt">'+producto+'<span class=""></span></td>';
+	newRow +='<td class="text-center" style="font-size:8.0pt">'+cantidad+'<span class=""></span></td>';	
+	newRow +='<td class="text-right" style="font-size:8.0pt">'+Number(precio_venta).toFixed(2)+'<span class=""></span></td>';
+	newRow +='<td class="text-right" style="font-size:8.0pt">'+Number(descuento).toFixed(2)+'<span class=""></span></td>';
 
-
-
-	newRow +='</td>';		
-	newRow +='<td class="text-left">'+producto+'<span class=""></span></td>';
-	newRow +='<td class="text-center">'+cantidad+'<span class=""></span></td>';	
-	newRow +='<td class="text-right">'+pv+'<span class=""></span></td>';
-	newRow +='<td class="text-right">'+st+'<span class=""></span></td>';
-	newRow +='<td class="text-right">'+igv+'<span class=""></span></td>';
-	newRow +='<td class="text-right">'+total+'<span class=""></span></td>';
-
-	
-
+	newRow +='<td class="text-right" style="font-size:8.0pt">'+Number(valor_venta).toFixed(2)+'<span class=""></span></td>';
+	newRow +='<td class="text-right" style="font-size:8.0pt">'+Number(igv).toFixed(2)+'<span class=""></span></td>';
+	newRow +='<td class="text-right" style="font-size:8.0pt">'+Number(total).toFixed(2)+'<span class=""></span></td>';
 
 	newRow +='<td><button type="button" class="btn btn-danger deleteFila btn-xs" style="margin-left:4px"><i class="fa fa-times"></i></button></td>';
 
@@ -2825,28 +2911,63 @@ function AddFila(){
 	$('#tblValorizacion tbody').append(newRow);
 
 	$('#openOverlayOpc').modal('hide');
-		
+
+	total_productos = Number(total_productos) + Number(precio_venta)*Number(cantidad);
+	total_descuento = Number(total_descuento) + Number(descuento);
+	total_pagar = Number(total_pagar) + Number(total);
+
+	sub_total =  Number(sub_total) + Number(valor_venta);
+	total_igv = Number(total_igv) + Number(igv);
+
+	
+	$('#deudaTotales').val(Number(total_productos).toFixed(2));
+
+	$('#totalDescuento').val(Number(total_descuento).toFixed(2));
+	$('#total').val(Number(total_pagar).toFixed(2));
+
+	$('#stotal').val(Number(sub_total).toFixed(2));
+	$('#igv').val(Number(total_igv).toFixed(2));
+
 }
 
 function proforma_send(){
+/*
+	var igv_ = $('#igv').val();
+	var total_ = $('#total').val();
+	var stotal_ = $('#stotal').val();
+	alert(stotal_);
+	alert(igv_);
+	alert(total_);
+	exit();
+*/
+	$('#accion_').val("i");
+	$('#id_proforma').val("0");
 
+	var id_persona = $('#id_persona').val();
+	var empresa_id = $('#empresa_id').val();
+
+	//alert(id_persona);
+	//alert(empresa_id);
+	//exit();
 	
 	var msgLoader = "";
 	msgLoader = "Procesando, espere un momento por favor";
 	var heightBrowser = $(window).width()/2;
 	$('.loader').css("opacity","0.8").css("height",heightBrowser).html("<div id='Grd1_wrapper' class='dataTables_wrapper'><div id='Grd1_processing' class='dataTables_processing panel-default'>"+msgLoader+"</div></div>");
     $('.loader').show();
-	//$('#guardar').hide();
-	
+
     $.ajax({
 			url: "/proforma/send",
             type: "POST",
 
 			data : $("#frmValorizacion").serialize(),
-			dataType: 'json',
+			//dataType: 'json',
             success: function (result) {
 
 				$('.loader').hide();
+
+				obtenerBeneficiario();
+
 				
 				//$('#numerof').val(result.id_factura);
 				//$('#divNumeroF').show();
@@ -2854,6 +2975,7 @@ function proforma_send(){
 
             }
     });
+
 }
 
 

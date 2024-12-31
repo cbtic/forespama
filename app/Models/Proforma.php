@@ -7,13 +7,18 @@ use DB;
 
 class Proforma extends Model
 {
-    public function registrar_proforma($datos, $ddatos) {
-
-        $cad = "Select sp_crud_proforma(?, ?)";
-		$data = DB::select($cad, array($datos[0]), array($ddatos[0]));
-        return $data[0]->sp_crud_proforma;
-
+    public function registrar_proforma1($p){
+		return $this->readFunctionPostgres('sp_crud_proforma',$p);
     }
+
+    public function registrar_proforma($p, $pd) {
+        $cad = "Select sp_crud_proforma(?,?)";
+		//echo "Select sp_crud_proforma('".$p."', '".$pd."')";
+        //exit();
+		$data = DB::select($cad, array($p, $pd));
+        return $data[0]->sp_crud_proforma;
+    }
+
 
     public function readFunctionPostgres($function, $parameters = null){
 

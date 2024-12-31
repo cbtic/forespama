@@ -373,7 +373,7 @@ class Valorizacione extends Model
 	
     function getPago($tipo_documento,$persona_id){
 
-        if($tipo_documento=="79"){
+        if($tipo_documento=="5"){
             $cad = "select distinct c.id id_comprobante,c.tipo, c.fecha, c.serie, c.numero, c.total, u.name usuario_registro, c.estado_pago,
             (select string_agg(coalesce(d.descripcion), ',' order by d.item desc)  from comprobante_detalles d  where d.id_comprobante = c.id ) descripcion,id_comprobante_ncnd, 
             (select id
@@ -411,11 +411,33 @@ class Valorizacione extends Model
         }
 
         
-        //echo $cad;
+        echo $cad;
 		$data = DB::select($cad);
         return $data;
     }
 	
+    function getProforma($tipo_documento,$persona_id){
+
+        if($tipo_documento=="5"){
+            $cad = "select *
+            from proformas p
+            where p.id_empresa = ".$persona_id."            
+            order by p.fecha desc";
+
+        }else{
+            $cad = "select *
+            from proformas p
+            where p.id_persona = ".$persona_id."            
+            order by p.fecha desc";
+    
+        }
+
+        
+        //echo $cad;
+		$data = DB::select($cad);
+        return $data;
+    }
+
 	function getPagoEstacionamiento($tipo_documento,$persona_id){
 
         if($tipo_documento=="RUC"){

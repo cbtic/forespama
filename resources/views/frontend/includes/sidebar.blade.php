@@ -57,6 +57,11 @@
                     <x-utils.link :href="route('frontend.ingreso_vehiculo_tronco.cubicaje')" class="c-sidebar-nav-link" :text="__('Cubicaje Tronco')" :active="activeClass(Route::is('admin.auth.role.*'), 'c-active')" />
                 </li>
                 @endif
+
+                <li class="c-sidebar-nav-item">
+                    <x-utils.link :href="route('frontend.ingreso_vehiculo_tronco.pagos')" class="c-sidebar-nav-link" :text="__('Pagos')" :active="activeClass(Route::is('admin.auth.role.*'), 'c-active')" />
+                </li>
+
             </ul>
         </li>
         
@@ -192,6 +197,9 @@
             <ul class="c-sidebar-nav-dropdown-items">
                 <li class="c-sidebar-nav-item">
                     <x-utils.link :href="route('frontend.ingreso.create')" class="c-sidebar-nav-link" :text="__('Estado de Cuentas')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />                  
+                </li>
+                <li class="c-sidebar-nav-item">
+                    <x-utils.link :href="route('frontend.comprobante.all')" class="c-sidebar-nav-link" :text="__('Consulta de Facturas')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />                  
                 </li>
                 <li class="c-sidebar-nav-item">
                     <x-utils.link :href="route('frontend.guia_interna.create')" class="c-sidebar-nav-link" :text="__('Consulta de Guias')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />                  

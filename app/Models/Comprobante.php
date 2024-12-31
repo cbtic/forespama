@@ -9,7 +9,7 @@ use DB;
 class Comprobante extends Model
 {
     public function listar_comprobante($p){
-		return $this->readFuntionPostgres('sp_listar_comprobante_paginado',$p);
+		return $this->readFuntionPostgres('sp_listar_comprobante_paginado',$p);        
     }
  
 
@@ -25,13 +25,13 @@ class Comprobante extends Model
 	public function registrar_factura_moneda($serie, $numero, $tipo, $ubicacion, $persona, $total, $descripcion, $cod_contable, $id_v, $id_caja, $descuento, $accion,    $id_user,   $id_moneda) {
                                           //( serie,  numero,  tipo,  ubicacion,  persona,  total,  descripcion,  cod_contable,  id_v,  id_caja,  descuento,  accion, p_id_usuario, p_id_moneda)
              //print_r($serie .",". $numero.",".$tipo.",".$ubicacion.",".$persona.",".$total.",".$descripcion.",".$cod_contable.",".$id_v.",". $id_caja.",".$descuento.",".$accion.",".$id_user.",".$id_moneda);exit();
-        $cad = "Select sp_crud_factura_moneda(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        $cad = "Select sp_crud_comprobante_moneda(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         //echo "Select sp_crud_factura(".$serie.",".$numero.", ".$tipo.", ".$ubicacion.",".$persona.",".$total.",".$descripcion.",".$cod_contable.",".$codigo_v.",".$estab_v.",".$modulo.",".$smodulo.",".$descuento.",".$accion.",".$id_user.")";
 
 		$data = DB::select($cad, array($serie, $numero, $tipo, $ubicacion, $persona, $total, $descripcion, $cod_contable, $id_v, $id_caja, $descuento, $accion,     $id_user,  $id_moneda));
                                     //( serie,  numero,  tipo,  ubicacion,  persona,  total,  descripcion,  cod_contable,  id_v,  id_caja,  descuento,  accion, p_id_usuario, p_id_moneda)
        // print_r($data); exit();
-        return $data[0]->sp_crud_factura_moneda;
+        return $data[0]->sp_crud_comprobante_moneda;
     }                   
 
     public function registrar_comprobante($serie, $numero, $tipo, $cod_tributario, $total, $descripcion, $cod_contable, $id_v, $id_caja, $descuento, $accion,    $id_user,   $id_moneda) {
@@ -138,20 +138,20 @@ class Comprobante extends Model
 
     function getDatosByComprobante($id){
 
-        $cad = "select distinct u.name as usuario,a.numero_cap,v.id_persona  
+        $cad = "select distinct u.name as usuario,'' numero_cap,v.id_persona  
         from comprobantes c
         inner join valorizaciones v on v.id_comprobante = c.id
-        left join agremiados a on a.id = v.id_agremido
+        --left join agremiados a on a.id = v.id_agremido
         inner join users u on c.id_usuario_inserta =u.id 
                 where c.id='". $id . "'" ;
 
 		$data = DB::select($cad);
 
         if ( empty($data)){
-            $cad = "select distinct u.name as usuario,a.numero_cap,a.id_persona  
+            $cad = "select distinct u.name as usuario, '' numero_cap,a.id_persona  
                     from comprobantes c
                     inner join personas p on c.cod_tributario =p.numero_documento 
-                    inner join agremiados a on a.id_persona = p.id  
+                    --inner join agremiados a on a.id_persona = p.id  
                     inner join users u on c.id_usuario_inserta =u.id 
                     where c.id='". $id . "'" ;
 
@@ -160,10 +160,10 @@ class Comprobante extends Model
         }
 
         if ( empty($data)){
-            $cad = "select distinct u.name as usuario,a.numero_cap,a.id_persona  
+            $cad = "select distinct u.name as usuario,'' numero_cap,a.id_persona  
                     from comprobantes c
                     left join personas p on c.cod_tributario =p.numero_ruc 
-                    left join agremiados a on a.id_persona = p.id  
+                    --left join agremiados a on a.id_persona = p.id  
                     inner join users u on c.id_usuario_inserta =u.id 
                     where c.id='". $id . "'" ;
 
@@ -244,6 +244,17 @@ class Comprobante extends Model
                 and coalesce(estado_sunat,'')=''
                 and tipo<>'TK' 
                 order by id";
+		
+		$data = DB::select($cad);
+        return $data;
+    }
+    
+    function get_envio_pendiente_guia_sunat($fecha){
+		
+        $cad = "select id,guia_anulado from guias 
+                where to_char(guia_fecha_emision ,'yyyy-mm-dd')='".$fecha."'
+                and coalesce(guia_estado_sunat,'')=''               
+                order by id ";
 		
 		$data = DB::select($cad);
         return $data;
@@ -392,6 +403,30 @@ class Comprobante extends Model
 	  $data = DB::select($cad);
       return $data;
    }
+
+   function getRepresentante($tipo_documento,$numero_documento){
+
+
+    //echo $tipo_documento;
+
+    if($tipo_documento=="5"){  //RUC
+        $cad = "select id, ruc numero_documento, razon_social representante, direccion, email 
+                from empresas                     
+                Where ruc='".$numero_documento."'";
+
+    }elseif($tipo_documento=="1"){ //NRO_CAP
+        
+        $cad = "select id, numero_documento, apellido_paterno ||' '|| apellido_materno ||' '|| nombres representante, direccion,  email  			
+        from personas  
+        where id_tipo_documento='".$tipo_documento."' 
+        and numero_documento = '".$numero_documento."' and estado='1' ";
+    }
+    //echo $cad;
+    $data = DB::select($cad);
+    
+    //return $data[0];
+    if(isset($data[0]))return $data[0];
+}
 
 	
 }

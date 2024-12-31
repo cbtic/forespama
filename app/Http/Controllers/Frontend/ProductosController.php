@@ -303,7 +303,6 @@ class ProductosController extends Controller
         ]);
     }
 
-
     public function upload_producto(Request $request){
 		
 		$path = "img/productos";

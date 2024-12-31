@@ -8,13 +8,46 @@ use DB;
 
 class Empresa extends Model
 {
-    protected $fillable = ['ruc', 'razon_social', 'nombre_comercial', 'direccion', 'representante'];
+    use HasFactory;
 
-	public function listar_empresa_ajax($p){
-		return $this->readFunctionPostgres('sp_listar_empresa_paginado',$p);
+    public function listar_empresa_ajax($p){
+
+        return $this->readFuntionPostgres('sp_listar_empresa_paginado',$p);
+
     }
 
-	public function readFunctionPostgres($function, $parameters = null){
+    function getEmpresaId($id){
+
+
+        $cad = "select id, ruc, nombre_comercial, razon_social, direccion, representante, estado, email, telefono
+        from empresas         
+        Where id='".$id."' ";
+    
+        $data = DB::select($cad);
+        if($data)return $data[0];
+    }
+	
+    function getPersonaId($id){
+
+        $cad = "select numero_ruc ruc, apellido_paterno||' '||apellido_materno||' '||nombres nombre_comercial, apellido_paterno||' '||apellido_materno||' '||nombres razon_social,  direccion,  email
+        from personas
+        Where id='".$id."' ";
+    
+        $data = DB::select($cad);
+        if($data)return $data[0];
+    }
+
+    function getPersonaId_BV($id){
+
+        $cad = "select numero_documento ruc, apellido_paterno||' '||apellido_materno||' '||nombres nombre_comercial, apellido_paterno||' '||apellido_materno||' '||nombres razon_social,  direccion,  email
+        from personas
+        Where id='".$id."' ";
+    
+        $data = DB::select($cad);
+        if($data)return $data[0];
+    }
+    
+    public function readFuntionPostgres($function, $parameters = null){
 
         $_parameters = '';
         if (count($parameters) > 0) {
@@ -27,42 +60,17 @@ class Empresa extends Model
         $cad = "FETCH ALL IN ref_cursor;";
         $data = DB::select($cad);
         return $data;
+
     }
 
-    function getEmpresa($id){
+    function getEmpresaPropietario($ruc_propietario){
 
-        $cad = "select * from empresas e 
-        where e.id='".$id."'";
-
-        $data = DB::select($cad);
-        return $data;
+        $cad = "select e.id, e.razon_social, e.direccion, e.telefono, e.email 
+        from empresas e
+        Where e.ruc='".$ruc_propietario."'";
+		//echo $cad;
+		$data = DB::select($cad);
+        return $data[0];
     }
 
-    function obtenerRazonSocialTransporteAll(){
-
-        $cad = "select * from empresas_vehiculos ev 
-        inner join empresas e on ev.id_empresas = e.id ";
-
-        $data = DB::select($cad);
-        return $data;
-    }
-
-    public function vehiculos()
-    {
-        return $this->belongsToMany(Vehiculo::class, 'empresas_vehiculos', 'id_empresas', 'id_vehiculos');
-    }
-
-    public function conductores()
-    {
-        return $this->belongsToMany(Conductores::class,'empresas_conductores', 'id_empresas', 'id_conductores');
-    }
-
-    public function getRucNombreComercialAttribute() : string {
-        return $this->ruc . " - " . $this->nombre_comercial;
-    }
-
-//    public function conductores()
-//    {
-//        return $this->hasMany(Conductores::class);
-//    }
 }

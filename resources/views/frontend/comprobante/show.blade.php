@@ -191,7 +191,7 @@ br {
 
 @stack('after-scripts')
 
-@extends('frontend.layouts.app')
+@extends('backend.layouts.app')
 
 
 
@@ -238,11 +238,11 @@ br {
                                                             <img class="logoimpresora" src="/img/logo-sin-fondo.png">
                                                         </div>
                                                         <h3>
-                                                            COLEGIO DE ARQUITECTOS DEL PERU-REGIONAL LIMA
+                                                            FORESTAL PAMA S.A.C.
                                                         </h3><br>
                                                         @endif
-                                                        <p>AV. SAN FELIPE NRO. 999 LIMA - LIMA - JESUS MARIA</p>
-                                                        <p>RUC 20172977911</p>
+                                                        <p>CAR.MARGINAL KM. 42 SEC. MIRAFLORES (A UNA CDRA. UNIVERSIDAD DE OXAPAMPA) PASCO - OXAPAMPA - OXAPAMPA</p>
+                                                        <p>RUC 20486785994</p>
                                                     </div>
                                                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                                         <strong>
@@ -330,10 +330,9 @@ br {
                                                         <td>FECHA DE EMISIÓN :</td>
                                                         <td style="text-align: right;"><span class="resaltado">{{ $factura->fecha }}</span></td>
                                                         </tr>
-                                                        <tr>
-                                                        <td>CAP :</td>
-                                                        <td style="text-align: right;"><span class="resaltado">{{ $datos->numero_cap }}</span></td>
-                                                        </tr>
+
+
+
                                                         </tbody>
                                                         </table>
                                                                
