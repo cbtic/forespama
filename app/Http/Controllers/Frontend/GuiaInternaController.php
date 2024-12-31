@@ -210,9 +210,10 @@ class GuiaInternaController extends Controller
 
             $guia_interna_detalle->save();
 
-            $guia_detalle->guiad_serie = "T001";
-            $guia_detalle->guiad_numero = "16";
-            $guia_detalle->guiad_tipo = "GR";
+            $guia_detalle->id_guia = $guia->id;
+            $guia_detalle->guiad_serie = $request->serie_guia;
+            $guia_detalle->guiad_numero = $request->numero_guia;
+            $guia_detalle->guiad_tipo = $tipo_guia[0]->codigo;
             $guia_detalle->guiad_codigo = $cod_interno[$index];
             $guia_detalle->guiad_descripcion = $descripcion_[$index];
             $guia_detalle->guiad_cantidad = $cantidad[$index];
