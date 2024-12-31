@@ -477,7 +477,6 @@ Route::post('productos/upload_producto', [ProductosController::class, 'upload_pr
 Route::get('productos/modal_ver_productos/{id}', [ProductosController::class, 'modal_ver_productos'])->name('productos.modal_ver_productos');
 
 Route::post('requerimiento/send_requerimiento_orden_compra', [RequerimientoController::class, 'send_requerimiento_orden_compra'])->name('requerimiento.send_requerimiento_orden_compra');
-<<<<<<< HEAD
 Route::get('entrada_productos/modal_datos_guia/{id}', [EntradaProductosController::class, 'modal_datos_guia'])->name('entrada_productos.modal_datos_guia');
 Route::get('empresa/obtener_empresa_id/{id}', [EmpresaController::class, 'obtener_empresa_id'])->name('empresa.obtener_empresa_id');
 Route::get('requerimiento/modal_atender_requerimiento/{id}', [RequerimientoController::class, 'modal_atender_requerimiento'])->name('requerimiento.modal_atender_requerimiento');
@@ -522,5 +521,3 @@ Route::get('equivalencia_producto/modal_equivalencia_producto/{id}', [Equivalenc
 Route::get('equivalencia_producto/eliminar_equivalencia_producto/{id}/{estado}', [EquivalenciaProductosController::class, 'eliminar_equivalencia_producto'])->name('equivalencia_producto.eliminar_equivalencia_producto');
 
 Route::get('ingreso_vehiculo_tronco/cubicaje_pdf/{id}', [IngresoVehiculoTroncoController::class, 'cubicaje_pdf'])->name('ingreso_vehiculo_tronco.cubicaje_pdf');
-=======
->>>>>>> 49a8f2f8a88556e5ffc7fcdfea28708a8787634f

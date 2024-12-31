@@ -14,11 +14,8 @@ use App\Models\Empresa;
 use App\Models\Conductores;
 use App\Models\EmpresasConductoresVehiculo;
 use App\Models\Pago;
-<<<<<<< HEAD
 use App\Models\Persona;
-=======
 use App\Models\IngresoVehiculoTroncoPago;
->>>>>>> 49a8f2f8a88556e5ffc7fcdfea28708a8787634f
 use Auth;
 use Carbon\Carbon;
 use Barryvdh\DomPDF\Facade\Pdf;
