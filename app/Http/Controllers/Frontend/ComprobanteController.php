@@ -3507,7 +3507,7 @@ class ComprobanteController extends Controller
         //print_r($data);
         //exit();
 		$databuild_string = json_encode($data);
-       // print_r($databuild_string);
+        print_r($databuild_string);
        // exit();
 
 		//$chbuild = curl_init("https://easyfact.tk/see/rest/01");
