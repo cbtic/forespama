@@ -214,6 +214,7 @@ class GuiaInternaController extends Controller
             $guia_detalle->guiad_serie = $request->serie_guia;
             $guia_detalle->guiad_numero = $request->numero_guia;
             $guia_detalle->guiad_tipo = $tipo_guia[0]->codigo;
+            $guia_detalle->guiad_orden_item = $index+1;
             $guia_detalle->guiad_codigo = $cod_interno[$index];
             $guia_detalle->guiad_descripcion = $descripcion_[$index];
             $guia_detalle->guiad_cantidad = $cantidad[$index];
