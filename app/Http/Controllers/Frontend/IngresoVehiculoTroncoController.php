@@ -238,7 +238,7 @@ class IngresoVehiculoTroncoController extends Controller
 		$fecha_actual = $ingresoVehiculoTronco_model->fecha_actual();
 
 		//$adelantos = $adelanto_model->getAdelantoByPersona($id_persona);
-		$tipo_desembolso = $tablaMaestra_model->getMaestroByTipo(59);
+		$tipo_desembolso = $tablaMaestra_model->getMaestroByTipo(65);
 		//print_r($tipo_desembolso);
 		return view('frontend.pagos.modal_pago',compact('id_ingreso_vehiculo_tronco_tipo_maderas','fecha_actual'/*,'adelantos'*/,'tipo_desembolso'));
 	

@@ -69,7 +69,7 @@ class IngresoVehiculoTronco extends Model
 
         $cad = "select ivtp.id,ivtp.fecha,tm.denominacion tipodesembolso,ivtp.importe,observacion  
 from ingreso_vehiculo_tronco_pagos ivtp
-inner join tabla_maestras tm on ivtp.id_tipodesembolso=tm.codigo::int and tm.tipo='59' 
+inner join tabla_maestras tm on ivtp.id_tipodesembolso=tm.codigo::int and tm.tipo='65' 
 where ivtp.id_ingreso_vehiculo_tronco_tipo_maderas=".$id."
 order by 1 desc";
 
