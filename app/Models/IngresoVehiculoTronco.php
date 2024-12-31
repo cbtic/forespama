@@ -45,6 +45,18 @@ group by diametro_dm,longitud,volumen_m3,volumen_pies,precio_unitario";
 		$data = DB::select($cad);
         return $data;
     }
+
+    function getIngresoVehiculoTroncoPagoById($id){
+
+        $cad = "select ivtp.id,ivtp.fecha,tm.denominacion tipodesembolso,ivtp.importe,observacion  
+from ingreso_vehiculo_tronco_pagos ivtp
+inner join tabla_maestras tm on ivtp.id_tipodesembolso=tm.codigo::int and tm.tipo='59' 
+where ivtp.id_ingreso_vehiculo_tronco_tipo_maderas=".$id."
+order by 1 desc";
+
+		$data = DB::select($cad);
+        return $data;
+    }
 	
     function fecha_actual(){
 		

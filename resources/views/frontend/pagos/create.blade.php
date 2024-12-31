@@ -566,7 +566,7 @@ label.form-control-sm{
 				<div class="card">
 						<div class="card-header">
 							<strong>
-								Cubicaje
+								Pagos
 							</strong>
 						</div>
 
@@ -576,17 +576,10 @@ label.form-control-sm{
 								<table id="tblCubicaje" class="table table-hover table-sm">
 									<thead>
 										<tr style="font-size:13px">
-											<th width="2%">Cantidad</th>
-											<th width="10%">Diametro 1(cm)</th>
-											<th width="10%">Diametro 2(cm)</th>
-											<th width="10%">Diametro DM(m)</th>
-											<th width="10%">Longitud(m)</th>
-											<th width="10%">Volumen M3</th>
-											<th width="10%">Volumen Pies</th>
-											<th width="10%">Volumen Total M3</th>
-											<th width="10%">Volumen Total Pies</th>
-											<th width="10%">Precio Unitario</th>
-											<th width="10%">Precio Total</th>
+											<th width="2%">Id</th>
+											<th width="10%">Fecha</th>
+											<th width="10%">Tipo Documento</th>
+											<th width="10%">Importe</th>
 										</tr>
 									</thead>
 									<tbody>

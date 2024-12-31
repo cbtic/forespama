@@ -85,6 +85,7 @@ Route::get('ingreso_vehiculo_tronco/cargar_cubicaje/{id}', [IngresoVehiculoTronc
 Route::get('ingreso_vehiculo_tronco/pagos', [IngresoVehiculoTroncoController::class, 'pagos'])->name('ingreso_vehiculo_tronco.pagos');
 
 Route::get('ingreso_vehiculo_tronco/cargar_reporte_cubicaje/{id}', [IngresoVehiculoTroncoController::class, 'cargar_reporte_cubicaje'])->name('ingreso_vehiculo_tronco.cargar_reporte_cubicaje');
+Route::get('ingreso_vehiculo_tronco/cargar_pago_cubicaje/{id}', [IngresoVehiculoTroncoController::class, 'cargar_pago_cubicaje'])->name('ingreso_vehiculo_tronco.cargar_pago_cubicaje');
 
 Route::get('tabla_maestras', [TablaMaestraController::class, 'index'])->name('tabla_maestras.all');
 Route::get('tabla_maestras/{id}', [TablaMaestraController::class, 'show'])->name('tabla_maestras.show');

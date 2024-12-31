@@ -1824,7 +1824,7 @@ function datatablenew() {
             //Limpiar();
 			//obtenerSolicitud(idSolicitud);
 			
-            cargarReporteCubicaje(idSolicitud);
+            cargarPagoCubicaje(idSolicitud);
 
 			//var iIdProducto = odtable.row(this).data().iIdProducto;
 			//AsignarDatosProductoCompra(iIdProveedor,iIdProducto)
@@ -1900,18 +1900,19 @@ function cargarCubicaje(id) {
 
 }
 
-function cargarReporteCubicaje(id){
+function cargarPagoCubicaje(id){
 
 	//$("#tblCubicaje tbody").html("");
 	$("#divCubicaje").html("");
 	
 	$.ajax({
-			url: "/ingreso_vehiculo_tronco/cargar_reporte_cubicaje/"+id,
+			url: "/ingreso_vehiculo_tronco/cargar_pago_cubicaje/"+id,
 			type: "GET",
 			success: function (result) {  
 					//$("#tblCubicaje tbody").html(result);
 					$("#divCubicaje").html(result);
 					$("#id_ingreso_vehiculo_tronco_tipo_maderas").val(id);
+                    $('[data-toggle="tooltip"]').tooltip();
 			}
 	});
 	
