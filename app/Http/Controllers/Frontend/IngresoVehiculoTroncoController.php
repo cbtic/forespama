@@ -14,7 +14,11 @@ use App\Models\Empresa;
 use App\Models\Conductores;
 use App\Models\EmpresasConductoresVehiculo;
 use App\Models\Pago;
+<<<<<<< HEAD
 use App\Models\Persona;
+=======
+use App\Models\IngresoVehiculoTroncoPago;
+>>>>>>> 49a8f2f8a88556e5ffc7fcdfea28708a8787634f
 use Auth;
 use Carbon\Carbon;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -209,12 +213,75 @@ class IngresoVehiculoTroncoController extends Controller
 
 	}
 
+	public function listar_ingreso_vehiculo_tronco_pagos_ajax(Request $request){
+
+		$ingresoVehiculoTronco_model = new IngresoVehiculoTronco();
+		$p[]=$request->placa;
+		$p[]=$request->NumeroPagina;
+		$p[]=$request->NumeroRegistros;
+		$data = $ingresoVehiculoTronco_model->listar_ingreso_vehiculo_tronco_pagos_ajax($p);
+		$iTotalDisplayRecords = isset($data[0]->totalrows)?$data[0]->totalrows:0;
+
+		$result["PageStart"] = $request->NumeroPagina;
+		$result["pageSize"] = $request->NumeroRegistros;
+		$result["SearchText"] = "";
+		$result["ShowChildren"] = true;
+		$result["iTotalRecords"] = $iTotalDisplayRecords;
+		$result["iTotalDisplayRecords"] = $iTotalDisplayRecords;
+		$result["aaData"] = $data;
+
+        echo json_encode($result);
+
+	}
+
+	public function modal_pago($id_ingreso_vehiculo_tronco_tipo_maderas){
+		
+		$tablaMaestra_model = new TablaMaestra;
+		$ingresoVehiculoTronco_model = new IngresoVehiculoTronco;
+		$fecha_actual = $ingresoVehiculoTronco_model->fecha_actual();
+
+		//$adelantos = $adelanto_model->getAdelantoByPersona($id_persona);
+		$tipo_desembolso = $tablaMaestra_model->getMaestroByTipo(59);
+		//print_r($tipo_desembolso);
+		return view('frontend.pagos.modal_pago',compact('id_ingreso_vehiculo_tronco_tipo_maderas','fecha_actual'/*,'adelantos'*/,'tipo_desembolso'));
+	
+	}
+
+	public function send_pago(Request $request){
+		
+		//$id_user = Auth::user()->id;
+		$maestra_model = new TablaMaestra;
+		//$fecha_hora = $maestra_model->getFechaHoraServidor();
+		
+		//if($request->id_moneda==113)$id_caja=$request->id_caja_soles;
+		//if($request->id_moneda==114)$id_caja=$request->id_caja_dolares;
+		
+		$pago = new IngresoVehiculoTroncoPago;
+		$pago->id_ingreso_vehiculo_tronco_tipo_maderas = $request->id_ingreso_vehiculo_tronco_tipo_maderas;
+		$pago->id_tipodesembolso = $request->id_tipodesembolso;
+		$pago->importe = $request->importe;
+		$pago->fecha = $request->fecha;
+		$pago->observacion = $request->observacion;
+		//$adelanto->fecha_hora = $fecha_hora;
+		//$pago->id_usuario = $id_user;
+		//$pago->id_caja = $id_caja;
+		//$pago->estado = "A";
+		$pago->save();
+		
+    }
+
 	public function cubicaje(){
 
 		//$tablaMaestra_model = new TablaMaestra;
 		//$tipo_madera = $tablaMaestra_model->getMaestroByTipo(42);
 
 		return view('frontend.cubicaje.create'/*,compact('tipo_madera')*/);
+
+	}
+
+	public function pagos(){
+
+		return view('frontend.pagos.create'/*,compact('tipo_madera')*/);
 
 	}
 
@@ -233,6 +300,15 @@ class IngresoVehiculoTroncoController extends Controller
         $cubicaje = $ingresoVehiculoTronco_model->getIngresoVehiculoTroncoCubicajeReporteById($id);
 		
         return view('frontend.cubicaje.cubicaje_reporte_ajax',compact('cubicaje'));
+		
+    }
+
+	public function cargar_pago_cubicaje($id){
+		 
+		$ingresoVehiculoTronco_model = new IngresoVehiculoTronco;
+        $pago = $ingresoVehiculoTronco_model->getIngresoVehiculoTroncoPagoById($id);
+		
+        return view('frontend.pagos.cubicaje_pago_ajax',compact('pago'));
 		
     }
 	

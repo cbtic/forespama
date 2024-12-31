@@ -67,6 +67,9 @@ Route::get('ingreso_vehiculo_tronco/obtener_datos_vehiculo/{placa}', [IngresoVeh
 Route::post('ingreso_vehiculo_tronco/send_ingreso', [IngresoVehiculoTroncoController::class, 'send_ingreso'])->name('ingreso_vehiculo_tronco.send_ingreso');
 Route::post('ingreso_vehiculo_tronco/send_cubicaje', [IngresoVehiculoTroncoController::class, 'send_cubicaje'])->name('ingreso_vehiculo_tronco.send_cubicaje');
 Route::post('ingreso_vehiculo_tronco/listar_ingreso_vehiculo_tronco_ajax', [IngresoVehiculoTroncoController::class, 'listar_ingreso_vehiculo_tronco_ajax'])->name('ingreso_vehiculo_tronco.listar_ingreso_vehiculo_tronco_ajax');
+Route::post('ingreso_vehiculo_tronco/listar_ingreso_vehiculo_tronco_pagos_ajax', [IngresoVehiculoTroncoController::class, 'listar_ingreso_vehiculo_tronco_pagos_ajax'])->name('listar_ingreso_vehiculo_tronco_pagos_ajax.listar_ingreso_vehiculo_tronco_ajax');
+Route::get('ingreso_vehiculo_tronco/modal_pago/{id_ingreso_vehiculo_tronco}', [IngresoVehiculoTroncoController::class, 'modal_pago'])->name('ingreso_vehiculo_tronco.modal_pago');
+Route::post('ingreso_vehiculo_tronco/send_pago', [IngresoVehiculoTroncoController::class, 'send_pago'])->name('ingreso_vehiculo_tronco.send_pago');
 
 Route::get('ingreso_vehiculo_tronco/modal_placa/{id}', [IngresoVehiculoTroncoController::class, 'modal_placa'])->name('ingreso_vehiculo_tronco.modal_placa');
 Route::get('ingreso_vehiculo_tronco/modal_empresa/{id}', [IngresoVehiculoTroncoController::class, 'modal_empresa'])->name('ingreso_vehiculo_tronco.modal_empresa');
@@ -85,7 +88,10 @@ Route::get('ingreso_vehiculo_tronco/modal_ingreso_imagen/{id}', [IngresoVehiculo
 Route::get('ingreso_vehiculo_tronco/cubicaje', [IngresoVehiculoTroncoController::class, 'cubicaje'])->name('ingreso_vehiculo_tronco.cubicaje');
 Route::get('ingreso_vehiculo_tronco/cargar_cubicaje/{id}', [IngresoVehiculoTroncoController::class, 'cargar_cubicaje'])->name('ingreso_vehiculo_tronco.cargar_cubicaje');
 
+Route::get('ingreso_vehiculo_tronco/pagos', [IngresoVehiculoTroncoController::class, 'pagos'])->name('ingreso_vehiculo_tronco.pagos');
+
 Route::get('ingreso_vehiculo_tronco/cargar_reporte_cubicaje/{id}', [IngresoVehiculoTroncoController::class, 'cargar_reporte_cubicaje'])->name('ingreso_vehiculo_tronco.cargar_reporte_cubicaje');
+Route::get('ingreso_vehiculo_tronco/cargar_pago_cubicaje/{id}', [IngresoVehiculoTroncoController::class, 'cargar_pago_cubicaje'])->name('ingreso_vehiculo_tronco.cargar_pago_cubicaje');
 
 Route::get('tabla_maestras', [TablaMaestraController::class, 'index'])->name('tabla_maestras.all');
 Route::get('tabla_maestras/{id}', [TablaMaestraController::class, 'show'])->name('tabla_maestras.show');
@@ -471,6 +477,7 @@ Route::post('productos/upload_producto', [ProductosController::class, 'upload_pr
 Route::get('productos/modal_ver_productos/{id}', [ProductosController::class, 'modal_ver_productos'])->name('productos.modal_ver_productos');
 
 Route::post('requerimiento/send_requerimiento_orden_compra', [RequerimientoController::class, 'send_requerimiento_orden_compra'])->name('requerimiento.send_requerimiento_orden_compra');
+<<<<<<< HEAD
 Route::get('entrada_productos/modal_datos_guia/{id}', [EntradaProductosController::class, 'modal_datos_guia'])->name('entrada_productos.modal_datos_guia');
 Route::get('empresa/obtener_empresa_id/{id}', [EmpresaController::class, 'obtener_empresa_id'])->name('empresa.obtener_empresa_id');
 Route::get('requerimiento/modal_atender_requerimiento/{id}', [RequerimientoController::class, 'modal_atender_requerimiento'])->name('requerimiento.modal_atender_requerimiento');
@@ -515,3 +522,5 @@ Route::get('equivalencia_producto/modal_equivalencia_producto/{id}', [Equivalenc
 Route::get('equivalencia_producto/eliminar_equivalencia_producto/{id}/{estado}', [EquivalenciaProductosController::class, 'eliminar_equivalencia_producto'])->name('equivalencia_producto.eliminar_equivalencia_producto');
 
 Route::get('ingreso_vehiculo_tronco/cubicaje_pdf/{id}', [IngresoVehiculoTroncoController::class, 'cubicaje_pdf'])->name('ingreso_vehiculo_tronco.cubicaje_pdf');
+=======
+>>>>>>> 49a8f2f8a88556e5ffc7fcdfea28708a8787634f
