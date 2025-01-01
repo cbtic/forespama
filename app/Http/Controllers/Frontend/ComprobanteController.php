@@ -993,7 +993,7 @@ class ComprobanteController extends Controller
 						$total   = $request->MonAd;
 					}
 					else{
-						$total   = $value['monto'];
+						$total   = $value['total'];
 					}
 					$descuento = $value['descuento'];
 					if ($value['descuento']=='') $descuento = 0;
@@ -2609,8 +2609,8 @@ class ComprobanteController extends Controller
 		$factura_detalles = ComprobanteDetalle::where([
             'serie' => $factura->serie,
             'numero' => $factura->numero,
-            'tipo' => $factura->tipo
-        ])->get();
+            'tipo' => $factura->tipo            
+        ])->where('id_concepto', '<>', '26464')->get();
 		//print_r($factura); exit();
         //print_r($factura_detalles); exit();		
 		$cabecera = array("valor1","valor2");
@@ -2623,13 +2623,13 @@ class ComprobanteController extends Controller
 							"descuentoItem"=> $row->descuento,
 							"importeIGVItem"=> str_replace(",","",number_format($row->igv_total,2)),//"7.63",
 							"montoTotalItem"=> str_replace(",","",number_format($row->importe,2)), //"50.00",
-							"valorVentaItem"=> str_replace(",","",number_format($row->importe,2)), //"42.37",
+							"valorVentaItem"=> str_replace(",","",number_format($row->pu,2)), //"42.37",
 							"descripcionItem"=> $row->descripcion,//"TRANSBORDO",
 							"unidadMedidaItem"=> $row->unidad,
 							"codigoProductoItem"=> ($row->cod_contable!="")?$row->cod_contable:"0000000", //"002",
                             "codigoDescuentoItem"=> "00",
 							"valorUnitarioSinIgv"=> str_replace(",","",number_format($row->pu,2)), //"42.3728813559",
-							"precioUnitarioConIgv"=> str_replace(",","",number_format($row->pu_con_igv,2)), //"50.0000000000",
+							"precioUnitarioConIgv"=> str_replace(",","",number_format($row->importe,2)), //"50.0000000000",
 							"unidadMedidaComercial"=> "SERV",
 							"codigoAfectacionIGVItem"=> $row->afect_igv,
 							"porcentajeDescuentoItem"=> str_replace(",","",number_format(($row->descuento*100)/$row->pu,2)),
@@ -3458,9 +3458,9 @@ class ComprobanteController extends Controller
         $data["numeroBultos"] ="0";
         $data["ubigeoEmisor"] =$guia->guia_partida_ubigeo;
         $data["tipoDocumento"] =$this->getTipoDocumento($guia->guia_tipo);//"09";
-        $data["distritoEmisor"] ="JESUS MARIA";
+        $data["distritoEmisor"] ="VILLA EL SALVADOR";
         $data["esContingencia"] =false;
-        $data["motivoTraslado"] ="01";
+        $data["motivoTraslado"] =$guia->guia_cod_motivo;
         $data["numeroPrecinto"] ="0";
         $data["pesoBrutoTotal"] =$guia->guia_peso_bruto;//"6.78";
         $data["tipoContenedor"] ="0";
@@ -3476,7 +3476,7 @@ class ComprobanteController extends Controller
         $data["departamentoEmisor"] ="LIMA";
         $data["ubigeoPuntoLlegada"] =$guia->guia_llegada_ubigeo;
         $data["ubigeoPuntoPartida"] =$guia->guia_partida_ubigeo;
-        $data["descripcionTraslado"] ="VENTA";
+        $data["descripcionTraslado"] ="";
         $data["fechaInicioTraslado"] =$guia->guia_fecha_traslado; //"2024-08-01";
         $data["indicadorTransbordo"] ="0";
         $data["numeroPlacaVehiculo"] =$guia->guia_vehiculo_placa; //"D5X709";
@@ -3484,8 +3484,8 @@ class ComprobanteController extends Controller
         $data["razonSocialConductor"] = $guia->razon_social_conductor; //"JAVIER MARTIN ROSELL ALFARO";
         $data["direccionPuntoLlegada"] =$guia->guia_llegada_direccion; //"JR. MINERIA NRO. 177";
         $data["direccionPuntoPartida"] =$guia->guia_partida_direccion; //"AV. NESTOR GAMBETA N° 6311";
-        $data["nombreComercialEmisor"] ="COLEGIO DE ARQUITECTOS DEL PERU-REGIONAL LIMA";
-        $data["unidadMedidaPesoBruto"] ="TNE";
+        $data["nombreComercialEmisor"] ="FORESTAL PAMA S.A.C.";
+        $data["unidadMedidaPesoBruto"] ="KGM";
         $data["tipoDocIdentidadEmisor"] ="6";
         $data["numeroDocIdentidadEmisor"] =$guia->guia_emisor_numdoc; //"20160453908";
         $data["tipoDocIdentidadReceptor"] ="6";
