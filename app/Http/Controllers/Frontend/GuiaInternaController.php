@@ -185,7 +185,7 @@ class GuiaInternaController extends Controller
         $guia->guia_cod_motivo = $request->motivo_traslado;
         $guia->guia_emisor_numdoc = "20486785994";
         $guia->guia_emisor_razsocial = "FORESTAL PAMA S.A.C.";
-        $guia->guia_peso_bruto = 0;
+        $guia->guia_peso_bruto = 100;
         $guia->id_usuario_inserta = $id_user;
         $guia->save();
 
