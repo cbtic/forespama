@@ -522,3 +522,4 @@ Route::get('equivalencia_producto/modal_equivalencia_producto/{id}', [Equivalenc
 Route::get('equivalencia_producto/eliminar_equivalencia_producto/{id}/{estado}', [EquivalenciaProductosController::class, 'eliminar_equivalencia_producto'])->name('equivalencia_producto.eliminar_equivalencia_producto');
 
 Route::get('ingreso_vehiculo_tronco/cubicaje_pdf/{id}', [IngresoVehiculoTroncoController::class, 'cubicaje_pdf'])->name('ingreso_vehiculo_tronco.cubicaje_pdf');
+Route::get('proforma/proforma_pdf/{id}', [ProformaController::class, 'proforma_pdf'])->name('proforma.proforma_pdf');

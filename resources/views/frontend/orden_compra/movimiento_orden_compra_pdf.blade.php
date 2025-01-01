@@ -248,17 +248,17 @@ $(document).ready(function() {
                     <tr>
                         <td class="td" style ="text-align: right; width: 70%; height:25px"></td>
                         <td class="td" style ="text-align: right; width: 15%; height:25px; border-bottom: 1px solid black;"><b>SUB TOTAL:</b></td>
-                        <td class="data" style ="text-align: right; width: 15%; height:25px; border-bottom: 1px solid black;"><?php echo number_format($subtotal_suma,2,'.',',');;?></td>
+                        <td class="data" style ="text-align: right; width: 15%; height:25px; border-bottom: 1px solid black;"><?php echo number_format($subtotal_suma,2,'.',',');?></td>
                     </tr>
                     <tr>
                         <td class="td" style ="text-align: right; width: 70%; height:25px"></td>
                         <td class="td" style ="text-align: right; width: 15%; height:25px; border-bottom: 1px solid black;"><b>IGV:</b></td>
-                        <td class="data" style ="text-align: right; width: 15%; height:25px; border-bottom: 1px solid black;"><?php echo number_format($igv_suma,2,'.',',');;?></td>
+                        <td class="data" style ="text-align: right; width: 15%; height:25px; border-bottom: 1px solid black;"><?php echo number_format($igv_suma,2,'.',',');?></td>
                     </tr>
                     <tr>
                         <td class="td" style ="text-align: right; width: 70%; height:25px"></td>
                         <td class="td" style ="text-align: right; width: 15%; height:25px"><b>TOTAL:</b></td>
-                        <td class="data" style ="text-align: right; width: 15%; height:25px"><?php echo number_format($total_suma,2,'.',',');;?></td>
+                        <td class="data" style ="text-align: right; width: 15%; height:25px"><?php echo number_format($total_suma,2,'.',',');?></td>
                     </tr>
                 </tbody>
             </table>

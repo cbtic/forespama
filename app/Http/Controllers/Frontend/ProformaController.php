@@ -318,4 +318,49 @@ class ProformaController extends Controller
 		return response()->json($codigo_orden_compra);
 	}
 
+    public function proforma_pdf($id){
+
+        $proforma_model = new Proforma;
+        $proforma_detalle_model = new ProformaDetalle;
+
+        $datos=$proforma_model->getProformaById($id);
+        $datos_detalle=$proforma_detalle_model->getDetalleProformaPdf($id);
+
+        $serie=$datos[0]->serie;
+        $numero=$datos[0]->numero;
+        $cliente_nombre=$datos[0]->cliente_nombre;
+        $cliente_numero_documento=$datos[0]->cliente_numero_documento;
+        $fecha=$datos[0]->fecha;
+        $moneda = $datos[0]->moneda;
+        $sub_total = $datos[0]->sub_total;
+        $igv=$datos[0]->igv;
+        $total=$datos[0]->total;
+
+		$year = Carbon::now()->year;
+
+		Carbon::setLocale('es');
+
+		// Crear una instancia de Carbon a partir de la fecha
+
+		 $carbonDate =Carbon::now()->format('d-m-Y');
+
+		 $currentHour = Carbon::now()->format('H:i:s'); 
+
+		$pdf = Pdf::loadView('frontend.proforma.proformas_pdf',compact('serie', 'numero', 'cliente_nombre', 'cliente_numero_documento', 'fecha', 'moneda', 'sub_total', 'igv', 'total' ,'datos_detalle'));
+
+        
+		$pdf->setPaper('A4'); // Tamaño de papel (puedes cambiarlo según tus necesidades)
+
+		$pdf->setPaper('A4', 'portrait');
+    	$pdf->setOption('margin-top', 20); // Márgen superior en milímetros
+   		$pdf->setOption('margin-right', 50); // Márgen derecho en milímetros
+    	$pdf->setOption('margin-bottom', 20); // Márgen inferior en milímetros
+    	$pdf->setOption('margin-left', 100); // Márgen izquierdo en milímetros
+
+		return $pdf->stream();
+    	//return $pdf->download('invoice.pdf');
+		//return view('frontend.certificado.certificado_pdf');
+
+	}
+
 }
