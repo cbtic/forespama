@@ -221,6 +221,9 @@ th:last-child {
             <th style="text-align: left; border: solid 1px black; border-radius: 8px; background-color: white; vertical-align: top; width: 49%">
                 <p class="info-guia">DESTINATARIO: <?php echo $destinatario;?></p>
                 <p class="info-guia">R.U.C.: <?php echo $ruc_destinatario;?></p>
+                <?php if($numero_orden_compra_cliente){?>
+                <p class="info-guia">N° Orden Compra: <?php echo $numero_orden_compra_cliente;?></p>
+                <?php }?>
             </th>
         </tr>
         <tr>
