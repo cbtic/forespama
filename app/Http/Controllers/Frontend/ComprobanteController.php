@@ -315,7 +315,7 @@ class ComprobanteController extends Controller
 
             //echo $TipoF; exit();
 
-          
+            //print_r($facturad); exit();         
 
             return view('frontend.comprobante.create',compact('trans', 'titulo','empresa', 'facturad', 'total', 'igv', 'stotal','TipoF','ubicacion', 'persona','id_caja','serie', 'adelanto','MonAd','forma_pago','tipooperacion','formapago', 'totalDescuento','id_tipo_afectacion_pp', 'valorizad','descuentopp','id_pronto_pago', 'medio_pago'));
         }

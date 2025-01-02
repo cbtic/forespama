@@ -19,6 +19,31 @@ class Proforma extends Model
         return $data[0]->sp_crud_proforma;
     }
 
+    function getProformaDetalle($id){
+
+        $cad = "SELECT p.id, p.serie, p.numero, p.fecha, p.id_moneda, p.moneda, p.sub_total sub_total_, p.igv igv_, p.total total_, p.fecha_vencimiento,
+            pd.id_producto,  pr.codigo, pr.denominacion,
+            case when  p.id_empresa = 23 then 
+            (SELECT pe.codigo_producto ||'-'|| pe.descripcion_producto||'('|| pe.codigo_empresa||'-'|| pe. descripcion_empresa||')'  
+            FROM equivalencia_productos pe
+            where pe.id_empresa = p.id_empresa and pe.id_producto = pd.id_producto and pe.estado= '1'
+            )	else pr.codigo ||'-'|| pr.denominacion end  producto_prof,
+            um.denominacion um, pd.cantidad, pd.id_descuento,
+            pd.precio_unitario, pd.sub_total, pd.igv, pd.total, pd.id_unidad_medida, pd.descuento, pd.valor_venta_bruto
+        FROM proformas p
+        inner join proforma_detalles pd on pd.id_proforma = p.id 
+        inner join productos pr on pr.id = pd.id_producto
+        inner join tabla_maestras um on um.codigo::int = pd.id_unidad_medida and um.tipo = '57'
+        where p.id = ".$id." and 
+        pd.estado = '1'
+        order by pd.id";
+    
+    //echo $cad;
+    $data = DB::select($cad);
+    return $data;
+}
+
+
 
     public function readFunctionPostgres($function, $parameters = null){
 

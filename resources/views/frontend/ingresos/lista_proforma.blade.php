@@ -5,7 +5,8 @@
 	<th>Moneda</th>
 	<th class="sum">IGV</th>
 	<th class="sum">Monto</th>
-	<th>.</th>
+	<th></th>
+	<th></th>
 </tr>
 </thead>
 <tbody>
@@ -28,8 +29,18 @@ foreach($proforma as $row){?>
 			</a>
 		</div>
 	</td>
+	<td class="text-left">
+		<div class="btn-group btn-group-sm" role="group" aria-label="Log Viewer Actions">
+			<a href="javascript:void(0)" onClick="cargarProformaDet(<?php echo $row->id?>)"class="btn btn-sm btn-info" style="font-size:9px!important" >
+				<i class="fa fa-retweet" aria-hidden="true" style="font-size:10px!important"></i>
+			</a>
 
+			
 
+		</div>
+	</td>
+
+	
 </tr>
 <?php 	
 	$total += $row->total;
@@ -61,3 +72,8 @@ foreach($proforma as $row){?>
 
 	}
 </script>
+@push('after-scripts')
+
+<script src="{{ asset('js/ingreso.js') }}"></script>
+
+@endpush

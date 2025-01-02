@@ -1192,6 +1192,19 @@ function cargarValorizacion1(){
 }
 
 
+
+function cargarProformaDet(id){
+
+    $("#tblValorizacion tbody").html("");
+	$.ajax({
+			url: "/ingreso/listar_proforma_det/"+id,
+			type: "GET",
+			success: function (result) {  					
+					$("#tblValorizacion tbody").html(result);
+			}
+	});
+}
+
 function cargarValorizacion(){
 
 	
@@ -1339,7 +1352,6 @@ function cargarValorizacion(){
 });
 
 }
-
 
 
 
@@ -2732,15 +2744,22 @@ function modalProforma(id){
 }
 
 function modal_productos(id){
+
+
 	
 	$(".modal-dialog").css("width","85%");
 	$('#openOverlayOpc.modal-body').css('height', 'auto');
+
+	var id_empresa = $('#empresa_id').val();
+
+	
 
 	$.ajax({
 			url: "/ingreso/modal_productos/"+id,
 			type: "GET",
 			success: function (result) {  
 					$("#diveditpregOpc").html(result);
+					$('#id_empresa_pr').val(id_empresa);
 					$('#openOverlayOpc').modal('show');
 			}
 	});

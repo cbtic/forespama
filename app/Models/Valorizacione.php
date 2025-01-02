@@ -438,6 +438,8 @@ class Valorizacione extends Model
         return $data;
     }
 
+
+
 	function getPagoEstacionamiento($tipo_documento,$persona_id){
 
         if($tipo_documento=="RUC"){

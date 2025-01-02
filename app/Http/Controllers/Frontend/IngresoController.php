@@ -24,6 +24,7 @@ use App\Models\TipoCambio;
 use App\Models\Producto;
 use App\Models\Marca;
 use App\Models\Almacene;
+use App\Models\Proforma;
 
 use Barryvdh\DomPDF\Facade\Pdf;
 use Auth;
@@ -155,7 +156,16 @@ class IngresoController extends Controller
         return view('frontend.ingresos.lista_valorizacion',compact('valorizacion'));
 
     }
- 
+
+    public function listar_proforma_det($id){       
+        $proforma_model = new Proforma;
+        $sw = true;
+        $proforma = $proforma_model->getProformaDetalle($id);
+        
+        return view('frontend.ingresos.lista_proforma_det',compact('proforma'));
+
+    }
+
     public function listar_valorizacion_concepto(Request $request){
         $id_persona = $request->id_persona;
         $tipo_documento = $request->tipo_documento;
@@ -1195,14 +1205,20 @@ class IngresoController extends Controller
 		return view('frontend.ingresos.modal_productos',compact('persona','tipo_documento', 'producto','marca','estado_bien','unidad','descuento' ));
 
 	}
-
-    public function obtener_producto_tipo_denominacion($tipo, $denominacion){
+    
+    public function obtener_producto_tipo_denominacion($tipo, $denominacion, $id_empresa, $origen){
         $tipo_ = "";
         if ($tipo=="all")  $tipo_="";
 		$producto_model = new Producto;
-		$producto = $producto_model->getProductoTipoDen($tipo_, $denominacion);
+		$producto = $producto_model->getProductoTipoDen($tipo_, $denominacion, $id_empresa, $origen);
 		//dd($producto);exit();
 		return response()->json($producto);
 	}
+    public function obtener_producto_eqiv_id($id, $id_empresa, $origen){
 
+		$producto_model = new Producto;
+		$producto = $producto_model->getProductoEquiById($id, $id_empresa, $origen);
+		//dd($producto);exit();
+		return response()->json($producto);
+	}
 }

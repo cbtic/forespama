@@ -204,6 +204,7 @@ Route::post('ingreso/listar_valorizacion', [IngresoController::class, 'listar_va
 Route::post('ingreso/listar_valorizacion_concepto', [IngresoController::class, 'listar_valorizacion_concepto'])->name('ingreso.listar_valorizacion_concepto');
 Route::post('ingreso/listar_valorizacion_periodo', [IngresoController::class, 'listar_valorizacion_periodo'])->name('ingreso.listar_valorizacion_periodo');
 Route::post('ingreso/listar_valorizacion_mes', [IngresoController::class, 'listar_valorizacion_mes'])->name('ingreso.listar_valorizacion_mes');
+Route::get('ingreso/listar_proforma_det/{id}', [IngresoController::class, 'listar_proforma_det'])->name('ingreso.listar_proforma_det');
 Route::get('ingreso/obtener_pago/{tipo_documento}/{persona_id}', [IngresoController::class, 'obtener_pago'])->name('ingreso.obtener_pago')->where('tipo_documento', '(.*)');
 Route::get('ingreso/obtener_proforma/{tipo_documento}/{persona_id}', [IngresoController::class, 'obtener_proforma'])->name('ingreso.obtener_proforma')->where('tipo_documento', '(.*)');
 Route::post('ingreso/sendCaja', [IngresoController::class, 'sendCaja'])->name('ingreso.sendCaja');
@@ -238,7 +239,8 @@ Route::get('ingreso/caja_total', [IngresoController::class, 'caja_total'])->name
 Route::post('ingreso/obtener_caja_condicion_pago', [IngresoController::class, 'obtener_caja_condicion_pago'])->name('ingreso.obtener_caja_condicion_pago');
 Route::post('ingreso/obtener_caja_venta', [IngresoController::class, 'obtener_caja_venta'])->name('ingreso.obtener_caja_venta');
 
-Route::get('ingreso/obtener_producto_tipo_denominacion/{tipo}/{den}', [IngresoController::class, 'obtener_producto_tipo_denominacion'])->name('ingreso.obtener_producto_tipo_denominacion');
+Route::get('ingreso/obtener_producto_tipo_denominacion/{tipo}/{den}/{emp}/{ori}', [IngresoController::class, 'obtener_producto_tipo_denominacion'])->name('ingreso.obtener_producto_tipo_denominacion');
+Route::get('ingreso/obtener_producto_eqiv_id/{id}/{emp}/{ori}', [IngresoController::class, 'obtener_producto_eqiv_id'])->name('ingreso.obtener_producto_eqiv_id');
 Route::post('ingreso/sendCajaMoneda', [IngresoController::class, 'sendCajaMoneda'])->name('ingreso.sendCajaMoneda');
 
 Route::post('proforma/send', [ProformaController::class, 'send'])->name('proforma.send');

@@ -285,33 +285,26 @@
 	var id_producto_=0;
 	var nombre_producto_ = "";
 
+	var id_empresa_ = $('#empresa_id').val();
+	var origen_ = $('#origen').val();
+
 	$('#txtProducto').autocomplete({
 		appendTo: "#producto_list1",
 		source: function(request, response) {
 			$.ajax({
-				url: 'obtener_producto_tipo_denominacion/all/' + $('#txtProducto').val(),
+				url: 'obtener_producto_tipo_denominacion/all/' + $('#txtProducto').val()+'/'+id_empresa_+'/'+origen_,
 				dataType: "json",
 				success: function(data) {
 					// alert(JSON.stringify(data));
 					var resp = $.map(data, function(obj) {
 						console.log(obj);
+
 						id_um_ = obj.id_unidad_medida;
 						um_ = obj.um;												
 						PrecioVenta_ = obj.costo_unitario;
-
-						
-
 						codigo_producto_ = obj.codigo;
 						id_producto_ = obj.id;
 						nombre_producto_ = obj.nombre_producto;
-
-						/*
-						ValorUnitario_ = PrecioVenta_ /(1+tasa_igv_);
-						ValorVB_ = ValorUnitario_ * Cantidad_;
-						ValorVenta_ = ValorVB_ - Descuento_;
-						Igv_ = ValorVenta_ * tasa_igv_;
-						Total_ = ValorVenta_ + Igv_
-						*/
 
 						//return obj.denominacion;
 						var hash = {
@@ -333,24 +326,41 @@
 			//alert(ui.item.key);
 			flag_select = true;
 			$('#txtProducto').attr("readonly", true);
+/*
 			$('#txtUM').val(um_);
-
 			$('#id_um').val(id_um_);
 			$('#codigo_producto').val(codigo_producto_);
 			$('#id_producto').val(id_producto_);
-
 			$('#nombre_producto').val(nombre_producto_);
 			$('#txtPrecioVenta').val(PrecioVenta_);
+*/
+			$("#id_producto").val(ui.item.key);
+			codigo_producto_ = ui.item.key;
+
+			$.ajax({
+				url: 'obtener_producto_eqiv_id/'+codigo_producto_+'/' +id_empresa_+'/'+origen_,
+				dataType: "json",
+				success: function(data){
+					var resp = $.map(data, function(obj) {
+						console.log(obj);
+
+						//alert(obj.um);				
+					$('#txtUM').val(obj.um);
+					$('#id_um').val(obj.id_unidad_medida);
+					$('#codigo_producto').val(obj.codigo);
+					$('#id_producto').val(obj.id);
+					$('#nombre_producto').val(obj.nombre_producto);
+					$('#txtPrecioVenta').val(obj.costo_unitario);
+					calcular();
+
+					});
 
 
-/*			$('#txtValorUnitario').val(ValorUnitario_);
-			$('#txtValorVB').val(ValorVB_);
-			$('#txtDescuento').val(Descuento_);
-			$('#txtValorVenta').val(ValorVenta_);
-			$('#txtIgv').val(Igv_);
-			$('#txtTotal').val(Total_);
-*/			
-			calcular();
+				}
+
+			});
+		
+			
 		},
 		minLength: 2,
 		delay: 100
@@ -482,16 +492,20 @@
 
 									<input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
 									
-									<input type="hidden" name="id_producto" id="id_producto" value="">
+									<!--<input type="hidden" name="id_producto" id="id_producto" value="">-->
 									<input type="hidden" name="id_um" id="id_um" value="">
 									<input type="hidden" name="codigo_producto" id="codigo_producto" value="">
 									<input type="hidden" name="nombre_producto" id="nombre_producto" value="">
+									<input type="hidden" name="id_empresa_pr" id="id_empresa_pr" value="">
 
 									<input type="hidden" name="id_descuento" id="id_descuento" value="1">
 
 									<div class="row" style="padding-left:10px">
 										<div class="card-body">
 											<div class="row">
+												
+												<input type="checkbox" id="origen" name="origen" value="2" class="estado-checkbox" checked ?>
+												<label for="cbox2" id="lblOrigen" > Origen interno</label>
 
 												<div class="col-lg-12">
 													<div class="form-group form-group-sm">
@@ -507,6 +521,14 @@
 														</td>
 
 													</div>
+
+													<div class="col-lg-3">
+														<div class="form-group">
+															<label class="form-control-sm">id</label>
+															<input type="text" name="id_producto" id="id_producto" value="" placeholder="" class="form-control form-control-sm">
+														</div>
+													</div>
+
 												</div>
 											</div>
 
