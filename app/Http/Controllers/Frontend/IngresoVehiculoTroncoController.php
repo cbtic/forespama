@@ -19,6 +19,8 @@ use App\Models\IngresoVehiculoTroncoPago;
 use Auth;
 use Carbon\Carbon;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Maatwebsite\Excel\Facades\Excel;
+use Maatwebsite\Excel\Concerns\FromArray;
 
 class IngresoVehiculoTroncoController extends Controller
 {
@@ -213,7 +215,12 @@ class IngresoVehiculoTroncoController extends Controller
 	public function listar_ingreso_vehiculo_tronco_pagos_ajax(Request $request){
 
 		$ingresoVehiculoTronco_model = new IngresoVehiculoTronco();
+		$p[]=$request->ruc;
+		$p[]=$request->empresa;
 		$p[]=$request->placa;
+		$p[]=$request->tipo_madera;
+		$p[]=$request->fecha_inicio;
+		$p[]=$request->fecha_fin;
 		$p[]=$request->NumeroPagina;
 		$p[]=$request->NumeroRegistros;
 		$data = $ingresoVehiculoTronco_model->listar_ingreso_vehiculo_tronco_pagos_ajax($p);
@@ -278,7 +285,11 @@ class IngresoVehiculoTroncoController extends Controller
 
 	public function pagos(){
 
-		return view('frontend.pagos.create'/*,compact('tipo_madera')*/);
+		$tablaMaestra_model = new TablaMaestra;
+
+		$tipo_madera = $tablaMaestra_model->getMaestroByTipo(42);
+
+		return view('frontend.pagos.create',compact('tipo_madera'));
 
 	}
 
@@ -451,6 +462,59 @@ class IngresoVehiculoTroncoController extends Controller
     	//return $pdf->download('invoice.pdf');
 		//return view('frontend.certificado.certificado_pdf');
 
+	}
+
+	public function exportar_listar_pagos($ruc, $empresa, $placa, $tipo_madera, $fecha_inicio, $fecha_fin) {
+
+
+		if($ruc=="0")$ruc = "";
+		if($empresa=="0")$empresa = "";
+		if($placa=="0")$placa = "";
+		if($tipo_madera==0)$tipo_madera = "";
+		if($fecha_inicio=="0")$fecha_inicio = "";
+		if($fecha_fin=="0")$fecha_fin = "";
+
+		$ingresoVehiculoTronco_model = new IngresoVehiculoTronco();
+		$p[]=$ruc;
+		$p[]=$empresa;
+		$p[]=$placa;
+		$p[]=$tipo_madera;
+		$p[]=$fecha_inicio;
+		$p[]=$fecha_fin;
+		$p[]=1;
+		$p[]=10000;
+		$data = $ingresoVehiculoTronco_model->listar_ingreso_vehiculo_tronco_pagos_ajax($p);
+	
+		$variable = [];
+		$n = 1;
+		//array_push($variable, array("SISTEMA CAP"));
+		//array_push($variable, array("CONSULTA DE CONCURSO","","","",""));
+		array_push($variable, array("N","Fecha","Ruc","Empresa","Placa","Tipo Madera", "Cantidad", "Volumen Total M3", "Volumen Total Pies"));
+		
+		foreach ($data as $r) {
+
+			array_push($variable, array($n++,$r->fecha_ingreso, $r->ruc, $r->razon_social, $r->placa,$r->tipo_madera,$r->cantidad, $r->volumen_total_m3, $r->volumen_total_pies));
+		}
+		
+		$export = new InvoicesExport([$variable]);
+		return Excel::download($export, 'reporte_pagos.xlsx');
+		
+    }
+
+}
+
+class InvoicesExport implements FromArray
+{
+	protected $invoices;
+
+	public function __construct(array $invoices)
+	{
+		$this->invoices = $invoices;
+	}
+
+	public function array(): array
+	{
+		return $this->invoices;
 	}
 
 }

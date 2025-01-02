@@ -216,31 +216,32 @@ th:last-child {
                 <p class="info-guia">Moneda: <?php echo $moneda;?></p>
             </th>
         </tr>
-        <tr>
+        <!--<tr>
             <th style="text-align: left; border: solid 1px black; border-radius: 8px; background-color: white; vertical-align: top; width: 49%">
-                <p class="info-guia">Sub Total: <?php echo $sub_total;?></p>
+                <p class="info-guia">Sub Total: <?php //echo $sub_total;?></p>
             </th>
             <th style="text-align: left; border: solid 1px black; border-radius: 8px; background-color: white; vertical-align: top; width: 49%">
-                <p class="info-guia">IGV: <?php echo $igv;?></p>
+                <p class="info-guia">IGV: <?php //echo $igv;?></p>
             </th>
             <th style="text-align: left; border: solid 1px black; border-radius: 8px; background-color: white; vertical-align: top; width: 49%">
-                <p class="info-guia">Total: <?php echo $total;?></p>
+                <p class="info-guia">Total: <?php //echo $total;?></p>
             </th>
-        </tr>
+        </tr>-->
     </table>
 
             &nbsp;
             <table class="data" style="border-collapse: separate; border-spacing: 0; background-color:white !important; width: 100%; border-radius: 8px; font-size:11px">
                 <tbody>
                     <tr class="data">
-                        <td class="td" style ="text-align: left; width: 5%; height:25px; border-bottom: 1px solid black;"><b>#</b></td>
-                        <td class="td" style ="text-align: left; width: 70%; height:25px; border-bottom: 1px solid black;"><b>DESCRIPCI&Oacute;N</b></td>
-                        <td class="td" style ="text-align: left; width: 20%; height:25px; border-bottom: 1px solid black;"><b>UNIDAD</b></td>
-                        <td class="td" style ="text-align: left; width: 10%; height:25px; border-bottom: 1px solid black;"><b>CANTIDAD</b></td>
-                        <td class="td" style ="text-align: left; width: 10%; height:25px; border-bottom: 1px solid black;"><b>PRECIO UNITARIO</b></td>
-                        <td class="td" style ="text-align: left; width: 10%; height:25px; border-bottom: 1px solid black;"><b>SUB TOTAL</b></td>
-                        <td class="td" style ="text-align: left; width: 10%; height:25px; border-bottom: 1px solid black;"><b>IGV</b></td>
-                        <td class="td" style ="text-align: left; width: 10%; height:25px; border-bottom: 1px solid black;"><b>TOTAL</b></td>
+                        <td class="td" style ="text-align: left; width: 5%; height:5px; border-bottom: 1px solid black;"><b>#</b></td>
+                        <td class="td" style ="text-align: left; width: 10%; height:10px; border-bottom: 1px solid black;"><b>C&Oacute;DIGO</b></td>
+                        <td class="td" style ="text-align: left; width: 35%; height:25px; border-bottom: 1px solid black;"><b>DESCRIPCI&Oacute;N</b></td>
+                        <td class="td" style ="text-align: left; width: 10%; height:10px; border-bottom: 1px solid black;"><b>UNIDAD</b></td>
+                        <td class="td" style ="text-align: left; width: 10%; height:10px; border-bottom: 1px solid black;"><b>CANTIDAD</b></td>
+                        <td class="td" style ="text-align: left; width: 10%; height:10px; border-bottom: 1px solid black;"><b>PRECIO UNITARIO</b></td>
+                        <td class="td" style ="text-align: left; width: 10%; height:10px; border-bottom: 1px solid black;"><b>SUB TOTAL</b></td>
+                        <td class="td" style ="text-align: left; width: 5%; height:10px; border-bottom: 1px solid black;"><b>IGV</b></td>
+                        <td class="td" style ="text-align: left; width: 5%; height:10px; border-bottom: 1px solid black;"><b>TOTAL</b></td>
                     </tr>
                     
                     <?php 
@@ -250,8 +251,9 @@ th:last-child {
                     foreach($datos_detalle as $key=>$r) { ?>
                         <tr>
                             <td class="td" style ="text-align: left; width: 5%; height:25px"><?php echo $r->row_num;?></td>
-                            <td class="td" style ="text-align: left; width: 70%; height:25px"><?php echo $r->producto;?></td>
-                            <td class="td" style ="text-align: left; width: 20%; height:25px"><?php echo $r->unidad_medida;?></td>
+                            <td class="td" style ="text-align: left; width: 10%; height:25px"><?php echo $r->codigo_producto;?> </td>
+                            <td class="td" style ="text-align: left; width: 25%; height:25px"><?php echo $r->producto; if($id_cliente==$r->id_empresa) echo " (".$r->codigo_empresa." - ".$r->descripcion_empresa.")"?> </td>
+                            <td class="td" style ="text-align: left; width: 10%; height:25px"><?php echo $r->unidad_medida;?></td>
                             <td class="td" style ="text-align: left; width: 10%; height:25px"><?php echo $r->cantidad;?></td>
                             <td class="td" style ="text-align: left; width: 10%; height:25px"><?php echo $r->precio_unitario;?></td>
                             <td class="td" style ="text-align: left; width: 10%; height:25px"><?php echo $r->sub_total;?></td>

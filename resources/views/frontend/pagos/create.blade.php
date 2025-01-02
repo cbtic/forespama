@@ -497,14 +497,38 @@ label.form-control-sm{
 						<div id="divTablaIngreso" class="row col align-self-center" style="padding:10px 20px 10px 20px;">
 					
 							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-								<input class="form-control form-control-sm" id="nombre_py_bus" name="nombre_py_bus" placeholder="Nombre del Proyecto">
+								<input class="form-control form-control-sm" id="ruc_bus" name="ruc_bus" placeholder="Ruc">
 							</div>
 							
 							<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-								<input class="form-control form-control-sm" id="detalle_py_bus" name="detalle_py_bus" placeholder="Detalle del Proyecto">
+								<input class="form-control form-control-sm" id="empresa_bus" name="empresa_bus" placeholder="Empresa">
+							</div>
+
+							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+								<input class="form-control form-control-sm" id="placa_bus" name="placa_bus" placeholder="Placa">
+							</div>
+
+							<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+								<select name="tipo_madera_bus" id="tipo_madera_bus" class="form-control form-control-sm">
+									<option value="">--Seleccionar Tipo Madera--</option>
+									<?php
+									foreach ($tipo_madera as $row){?>
+										<option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
+										<?php 
+									}
+									?>
+								</select>
+							</div>
+
+							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+								<input class="form-control form-control-sm" id="fecha_inicio_bus" name="fecha_inicio_bus" placeholder="Fecha Inicio">
+							</div>
+
+							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+								<input class="form-control form-control-sm" id="fecha_fin_bus" name="fecha_fin_bus" placeholder="Fecha Fin">
 							</div>
 							
-							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+							<!--<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
 								<select name="estado_py_bus" id="estado_py_bus" class="form-control form-control-sm" onchange="">
 									<option value="">ESTADO PROYECTO</option>
 									<?php
@@ -519,11 +543,12 @@ label.form-control-sm{
 									<option value="1">ACTIVO</option>
 									<option value="0">INACTIVO</option>
 								</select>
-							</div>
+							</div>-->
 							
-							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+							<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
 								<input class="btn btn-warning btn-sm pull-rigth" value="Buscar" type="button" id="btnBuscar" />
 								<input class="btn btn-success btn-sm pull-rigth" value="Pagar" type="button" id="btnPagar" onclick="modalPago()"  />
+								<input class="btn btn-secondary btn-sm pull-rigth" value="Descargar" type="button" id="btnDescargar" /> 
 							</div>
 							
 						</div>
@@ -535,7 +560,8 @@ label.form-control-sm{
 							<table id="tblSolicitud" class="table table-hover table-sm">
 							<thead>
 							<tr style="font-size:13px">
-								<th>Id</th>
+								<th>N°</th>
+								<!--<th>Id</th>-->
 								<th>Fecha</th>
 								<th>Ruc</th>
 								<th>Empresa</th>

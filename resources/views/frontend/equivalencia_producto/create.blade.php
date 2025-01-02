@@ -410,8 +410,8 @@ label.form-control-sm{
 							<th>Denominaci&oacute;n Producto</th>
                             <th>C&oacute;digo Producto</th>
 							<th>Empresa</th>
-							<th>Denominaci&oacute;n Empresa</th>
 							<th>C&oacute;digo Empresa</th>
+							<th>Denominaci&oacute;n Empresa</th>
 							<th>Estado</th>
                             <th>Acciones</th>
                         </tr>

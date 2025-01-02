@@ -326,6 +326,7 @@ class ProformaController extends Controller
         $datos=$proforma_model->getProformaById($id);
         $datos_detalle=$proforma_detalle_model->getDetalleProformaPdf($id);
 
+        $id_cliente=$datos[0]->id_cliente;
         $serie=$datos[0]->serie;
         $numero=$datos[0]->numero;
         $cliente_nombre=$datos[0]->cliente_nombre;
@@ -346,7 +347,7 @@ class ProformaController extends Controller
 
 		 $currentHour = Carbon::now()->format('H:i:s'); 
 
-		$pdf = Pdf::loadView('frontend.proforma.proformas_pdf',compact('serie', 'numero', 'cliente_nombre', 'cliente_numero_documento', 'fecha', 'moneda', 'sub_total', 'igv', 'total' ,'datos_detalle'));
+		$pdf = Pdf::loadView('frontend.proforma.proformas_pdf',compact('id_cliente','serie', 'numero', 'cliente_nombre', 'cliente_numero_documento', 'fecha', 'moneda', 'sub_total', 'igv', 'total' ,'datos_detalle'));
 
         
 		$pdf->setPaper('A4'); // Tamaño de papel (puedes cambiarlo según tus necesidades)
