@@ -40,7 +40,29 @@ $(document).ready(function () {
 		format: 'dd/mm/yyyy',
 		changeMonth: true,
 		changeYear: true,
+        language: 'es'
     });
+
+    $('#fecha_inicio_bus').datepicker({
+        autoclose: true,
+		format: 'dd/mm/yyyy',
+		changeMonth: true,
+		changeYear: true,
+        language: 'es'
+    });
+
+    $('#fecha_fin_bus').datepicker({
+        autoclose: true,
+		format: 'dd/mm/yyyy',
+		changeMonth: true,
+		changeYear: true,
+        language: 'es'
+    });
+
+    $('#btnDescargar').on('click', function () {
+		DescargarArchivosPagos()
+
+	});
 
     $('#addRow').on('click', function() {
         AddFila();
@@ -1657,10 +1679,12 @@ function datatablenew() {
             var iNroPagina = parseFloat(fn_util_obtieneNroPagina(aoData[3].value, aoData[4].value)).toFixed();
             var iCantMostrar = aoData[4].value;
 
-            var nombre_py_bus = $('#nombre_py_bus').val();
-            var detalle_py_bus = $('#detalle_py_bus').val();
-            var estado = $('#estado').val();
-            var estado_py = $('#estado_py_bus').val();
+            var ruc = $('#ruc_bus').val();
+            var empresa = $('#empresa_bus').val();
+            var placa = $('#placa_bus').val();
+            var tipo_madera = $('#tipo_madera_bus').val();
+            var fecha_inicio = $('#fecha_inicio_bus').val();
+            var fecha_fin = $('#fecha_fin_bus').val();
 
             var _token = $('#_token').val();
             oSettings.jqXHR = $.ajax({
@@ -1670,10 +1694,8 @@ function datatablenew() {
                 "data": {
                     NumeroPagina: iNroPagina,
                     NumeroRegistros: iCantMostrar,
-                    nombre_py_bus: nombre_py_bus,
-                    detalle_py_bus: detalle_py_bus,
-                    estado: estado,
-                    estado_py: estado_py,
+                    ruc: ruc, empresa: empresa, placa: placa, tipo_madera: tipo_madera, fecha_inicio:fecha_inicio,
+                    fecha_fin:fecha_fin,
                     _token: _token
                 },
                 "success": function(result) {
@@ -1697,7 +1719,17 @@ function datatablenew() {
 				$('td', nRow).addClass('verde');
 			} 
 		},
-        "aoColumnDefs": [{
+        "aoColumnDefs": [
+
+            {
+                "mRender": function(data, type, row, meta) {
+                    return meta.row+1;
+                },
+                "bSortable": false,
+                "aTargets": [0]
+            },
+
+            /*{
                 "mRender": function(data, type, row, meta) {
                     var id = "";
                     if (row.id != null) id = row.id;
@@ -1705,7 +1737,7 @@ function datatablenew() {
                 },
                 "bSortable": false,
                 "aTargets": [0]
-            },
+            },*/
             {
                 "mRender": function(data, type, row) {
                     var fecha_ingreso = "";
@@ -2598,5 +2630,48 @@ function modalPago(){
 					$('#openOverlayOpc').modal('show');
 			}
 	});
+
+}
+
+function DescargarArchivosPagos(){
+		
+	var ruc = $('#ruc_bus').val();
+	var empresa = $('#empresa_bus').val();
+	var placa = $('#placa_bus').val();
+	var tipo_madera = $('#tipo_madera_bus').val();
+	var fecha_inicio = $('#fecha_inicio_bus').val();
+	var fecha_fin = $('#fecha_fin_bus').val();
+	//var id_agremiado = 0;
+	//var id_regional = 0;
+	if (ruc == "")ruc = "0";
+	if (empresa == "")empresa = "0";
+	if (placa == "")placa = "0";
+	if (tipo_madera == "")tipo_madera = 0;
+	if (fecha_inicio == ""){
+        fecha_inicio = "0"
+    }else{
+        fecha_inicio = convertirFecha(fecha_inicio);
+    };
+	if (fecha_fin == ""){
+        fecha_fin = "0"
+    }else{
+        fecha_fin = convertirFecha(fecha_fin);
+    };
+	//if (campo == "")campo = 0;
+	//if (orden == "")orden = 0;
+	
+	
+	location.href = '/ingreso_vehiculo_tronco/exportar_listar_pagos/'+ruc+'/'+empresa+'/'+placa+'/'+tipo_madera+'/'+fecha_inicio+'/'+fecha_fin;
+}
+
+function convertirFecha(fecha){
+
+    var partes = fecha.split('/');
+
+    if(partes.length == 3){
+        return partes[2] + '-' + partes[1] + '-' + partes[0] 
+    }
+
+    return fecha;
 
 }

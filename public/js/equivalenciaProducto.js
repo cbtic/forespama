@@ -166,15 +166,6 @@ function datatablenew(){
 					"bSortable": true,
 					"aTargets": [3]
 				},
-				{
-					"mRender": function (data, type, row) {
-						var descripcion_empresa = "";
-						if(row.descripcion_empresa!= null)descripcion_empresa = row.descripcion_empresa;
-						return descripcion_empresa;
-					},
-					"bSortable": true,
-					"aTargets": [4]
-				},
 
 				{
 					"mRender": function (data, type, row) {
@@ -183,9 +174,19 @@ function datatablenew(){
 						return codigo_empresa;
 					},
 					"bSortable": true,
+					"aTargets": [4]
+				},
+
+				{
+					"mRender": function (data, type, row) {
+						var descripcion_empresa = "";
+						if(row.descripcion_empresa!= null)descripcion_empresa = row.descripcion_empresa;
+						return descripcion_empresa;
+					},
+					"bSortable": true,
 					"aTargets": [5]
 				},
-				
+
 				{
 					"mRender": function (data, type, row) {
 						var estado = "";

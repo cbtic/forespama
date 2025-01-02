@@ -21,10 +21,10 @@ foreach($proforma as $row){?>
 	<td class="text-left"><?php echo $row->moneda;?>
 	</td>
 	<td class="text-left"><?php echo $row->igv?></td>
-	<td class="text-left"><?php echo $row->total?></td>	
+	<td class="text-left"><?php echo $row->total?></td>
 	<td class="text-left">
 		<div class="btn-group btn-group-sm" role="group" aria-label="Log Viewer Actions">
-			<a href="/comprobante/<?php echo $row->id?>" class="btn btn-sm btn-success" style="font-size:9px!important" target="_blank">
+			<a href="/proforma/proforma_pdf/<?php echo $row->id?>" class="btn btn-sm btn-success" style="font-size:9px!important" target="_blank">
 				<i class="fa fa-search" style="font-size:9px!important"></i>
 			</a>
 		</div>
