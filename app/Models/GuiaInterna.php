@@ -54,13 +54,13 @@ class GuiaInterna extends Model
 
     function getGuiaInternaById($id){
 
-        $cad = "select gi.id, gi.fecha_emision, gi.punto_partida, gi.punto_llegada, gi.fecha_traslado, gi.costo_minimo, e.razon_social destinatario, gi.ruc_destinatario, m.denominiacion marca, gi.placa, gi.constancia_inscripcion, gi.licencia_conducir, e2.razon_social empresa_transporte, gi.ruc_empresa_transporte, tm.denominacion motivo_traslado, p.nombres||' '||p.apellido_paterno ||' '||p.apellido_materno conductor, gi.guia_serie, gi.guia_numero, 
+        $cad = "select gi.id, gi.fecha_emision, gi.punto_partida, gi.punto_llegada, gi.fecha_traslado, gi.costo_minimo, e.razon_social destinatario, gi.ruc_destinatario, m.denominiacion marca, gi.placa, gi.constancia_inscripcion, gi.licencia_conducir, e2.razon_social empresa_transporte, gi.ruc_empresa_transporte, tm.denominacion motivo_traslado, p.nombres||' '||p.apellido_paterno ||' '||p.apellido_materno conductor, gi.guia_serie, gi.guia_numero, gi.id_destinatario, 
         CASE 
-        WHEN gi.id_tipo_documento=1 is not null THEN 
+        WHEN gi.id_tipo_documento=1 THEN 
         (select oc.numero_orden_compra_cliente from entrada_productos ep 
         inner join orden_compras oc on ep.id_orden_compra = oc.id
         where gi.numero_documento::int = ep.id)
-        WHEN gi.id_tipo_documento=2 is not null THEN 
+        WHEN gi.id_tipo_documento=2 THEN 
         (select oc.numero_orden_compra_cliente from salida_productos sp 
         inner join orden_compras oc on sp.id_orden_compra = oc.id
         where gi.numero_documento::int = sp.id)
