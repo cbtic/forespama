@@ -3500,8 +3500,10 @@ class ComprobanteController extends Controller
         $data["direccionPuntoPartidaCompleta"] =$guia->guia_partida_direccion; //"AV. NESTOR GAMBETA N° 6311, CALLAO - CALLAO - CALLAO";
         $data["indicadorTrasladoVehiculoM1oL"] ="0";
         $data["rucEstablecimientoPuntoLlegada"] =$guia->guia_receptor_numdoc; //"20544125681";
+        $data["rucEstablecimientoPuntoPartida"] =$guia->guia_emisor_numdoc;
         $data["fechaEntregaBienesTransportista"] =$guia->guia_fecha_traslado; //"2024-08-01";
-        $data["codigoEstablecimientoPuntoLlegada"] ="0001";
+        $data["codigoEstablecimientoPuntoLlegada"] ="0000";
+        $data["codigoEstablecimientoPuntoPartida"] ="0001";
         $data["trasladoPorElTotalDeLosBienesSiOrNo"] ="1";
 	
         //print_r($data);
