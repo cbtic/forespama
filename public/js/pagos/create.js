@@ -1819,6 +1819,15 @@ function datatablenew() {
                 "bSortable": false,
                 "aTargets": [9],
             },
+            {
+                "mRender": function(data, type, row) {
+                    var estado_pago = "";
+                    if (row.estado_pago != null) estado_pago = row.estado_pago;
+                    return estado_pago;
+                },
+                "bSortable": false,
+                "aTargets": [10]
+            },
                 /*
 				{
                 "mRender": function (data, type, row) {

@@ -3,12 +3,17 @@
 	<tr style="font-size:13px">
 		<th width="2%">Id</th>
 		<th width="10%">Fecha</th>
-		<th width="10%">Tipo Documento</th>
+		<th width="10%">Tipo Doc</th>
+		<th width="10%">Guia</th>
+		<th width="10%">Factura</th>
 		<th width="10%">Importe</th>
 	</tr>
 </thead>
 <tbody>
 <?php 
+
+$total_importe=0;
+
 if($pago){
 
 $total_importe=0;
@@ -29,9 +34,11 @@ foreach($pago as $row){
 	*/
 ?>
 <tr style="font-size:13px" class="test" data-toggle="tooltip" data-placement="top" title="<?php if($row->observacion!="")echo "Observacion: ".$row->observacion ?>">
-	<td class="text-center"><?php echo $row->id?></td>
-	<td class="text-right"><?php echo $row->fecha?></td>
-	<td class="text-right"><?php echo $row->tipodesembolso?></td>
+	<td class="text-left"><?php echo $row->id?></td>
+	<td class="text-left" style="min-width: 80px!important;"><?php echo $row->fecha?></td>
+	<td class="text-left"><?php echo $row->tipodesembolso?></td>
+	<td class="text-left"><?php echo $row->nro_guia?></td>
+	<td class="text-left"><?php echo $row->nro_factura?></td>
     <td class="text-right"><?php echo $row->importe?></td>
 </tr>
 <?php
@@ -43,7 +50,7 @@ foreach($pago as $row){
 <tfoot>
 	<tr>
 		<th class="text-center">Total</th>
-		<th colspan="2"></th>
+		<th colspan="4"></th>
 		<th class="text-right" style="padding-right:0px"><?php echo $total_importe?></th>
 	</tr>
 </tfoot>

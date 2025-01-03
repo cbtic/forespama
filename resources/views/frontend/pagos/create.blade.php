@@ -571,6 +571,7 @@ label.form-control-sm{
 								<th>Volumen Total M3</th>
 								<th>Volumen Total Pies</th>
 								<th>Precio Total</th>
+								<th>Estado Pago</th>
 								<!--<th class="cubicaje">Cubicaje</th>-->
 							</tr>
 							</thead>
@@ -604,7 +605,9 @@ label.form-control-sm{
 										<tr style="font-size:13px">
 											<th width="2%">Id</th>
 											<th width="10%">Fecha</th>
-											<th width="10%">Tipo Documento</th>
+											<th width="10%">Tipo Doc</th>
+											<th width="10%">Guia</th>
+											<th width="10%">Factura</th>
 											<th width="10%">Importe</th>
 										</tr>
 									</thead>

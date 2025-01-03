@@ -198,10 +198,9 @@ function fn_save(){
 	var fecha = $('#fecha').val();
 	var observacion = $('#observacion').val();
 	var id_tipodesembolso = $('#id_tipodesembolso').val();
-	/*
-	var id_caja_soles = $('#id_caja_soles').val();
-    var id_caja_dolares = $('#id_caja_dolares').val();
-	*/
+	var nro_guia = $('#nro_guia').val();
+    var nro_factura = $('#nro_factura').val();
+	
 	var msg = "";
     if(id_ingreso_vehiculo_tronco_tipo_maderas_modal == "")msg += "Debe ingresar el numero de documento <br>";
     if(importe==""){msg+="Debe ingresar un Importe<br>";}
@@ -224,7 +223,7 @@ function fn_save(){
     $.ajax({
 			url: "/ingreso_vehiculo_tronco/send_pago",
             type: "POST",
-            data : {_token:_token,id_ingreso_vehiculo_tronco_tipo_maderas:id_ingreso_vehiculo_tronco_tipo_maderas_modal,importe:importe,fecha:fecha,observacion:observacion,id_tipodesembolso:id_tipodesembolso/*,id_caja_soles:id_caja_soles,id_caja_dolares:id_caja_dolares*/},
+            data : {_token:_token,id_ingreso_vehiculo_tronco_tipo_maderas:id_ingreso_vehiculo_tronco_tipo_maderas_modal,importe:importe,fecha:fecha,observacion:observacion,id_tipodesembolso:id_tipodesembolso,nro_guia:nro_guia,nro_factura:nro_factura},
             success: function (result) {
 				/*
 				$('.loader').hide();
@@ -472,14 +471,14 @@ container: '#myModal modal-body'
 					
 					<div class="row">
 						
-						<div class="col-lg-6">
+						<div class="col-lg-3">
 							<div class="form-group">
-								<label class="control-label">Importe</label>
-								<input id="importe" name="importe" class="form-control form-control-sm"  value="<?php //echo $id?>" type="number">
+								<label class="control-label">Fecha</label>
+								<input id="fecha" name="fecha" class="form-control form-control-sm"  value="<?php echo $fecha_actual?>" type="text">
 							</div>
 						</div>
-						
-						<div class="col-lg-3">
+
+						<div class="col-lg-4">
 							<div class="form-group">
 								<label class="control-label">Forma de Pago</label>
 								<select name="id_tipodesembolso" id="id_tipodesembolso" class="form-control form-control-sm" onChange="">
@@ -490,10 +489,28 @@ container: '#myModal modal-body'
 							</div>
 						</div>
 						
+						<div class="col-lg-4">
+							<div class="form-group">
+								<label class="control-label">Importe</label>
+								<input id="importe" name="importe" class="form-control form-control-sm"  value="<?php //echo $id?>" type="number">
+							</div>
+						</div>
+						
+					</div>
+
+					<div class="row">
+						
 						<div class="col-lg-3">
 							<div class="form-group">
-								<label class="control-label">Fecha</label>
-								<input id="fecha" name="fecha" class="form-control form-control-sm"  value="<?php echo $fecha_actual?>" type="text">
+								<label class="control-label">Guia</label>
+								<input id="nro_guia" name="nro_guia" class="form-control form-control-sm"  value="<?php //echo $id?>" type="text">
+							</div>
+						</div>
+
+						<div class="col-lg-3">
+							<div class="form-group">
+								<label class="control-label">Factura</label>
+								<input id="nro_factura" name="nro_factura" class="form-control form-control-sm"  value="<?php //echo $id?>" type="text">
 							</div>
 						</div>
 						

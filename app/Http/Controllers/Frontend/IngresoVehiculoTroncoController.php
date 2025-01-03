@@ -264,6 +264,8 @@ class IngresoVehiculoTroncoController extends Controller
 		$pago->id_ingreso_vehiculo_tronco_tipo_maderas = $request->id_ingreso_vehiculo_tronco_tipo_maderas;
 		$pago->id_tipodesembolso = $request->id_tipodesembolso;
 		$pago->importe = $request->importe;
+		$pago->nro_guia = $request->nro_guia;
+		$pago->nro_factura = $request->nro_factura;
 		$pago->fecha = $request->fecha;
 		$pago->observacion = $request->observacion;
 		//$adelanto->fecha_hora = $fecha_hora;
@@ -271,7 +273,22 @@ class IngresoVehiculoTroncoController extends Controller
 		//$pago->id_caja = $id_caja;
 		//$pago->estado = "A";
 		$pago->save();
-		
+
+		$ingresoVehiculoTroncoPago_model = new IngresoVehiculoTroncoPago;
+		$data = $ingresoVehiculoTroncoPago_model->getImportePago($request->id_ingreso_vehiculo_tronco_tipo_maderas);
+
+		if($data->pago==0){
+			$id_estado_pago = 1;
+		}else if($data->precio>$data->pago){
+			$id_estado_pago = 2;
+		}else if($data->precio<=$data->pago){
+			$id_estado_pago = 3;
+		}
+
+		$ingresoVehiculoTroncoTipoMadera = IngresoVehiculoTroncoTipoMadera::find($request->id_ingreso_vehiculo_tronco_tipo_maderas);
+		$ingresoVehiculoTroncoTipoMadera->id_estado_pago=$id_estado_pago;
+		$ingresoVehiculoTroncoTipoMadera->save();
+
     }
 
 	public function cubicaje(){
