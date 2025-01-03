@@ -39,8 +39,9 @@ foreach($proforma as $key=>$row):
 		
 ?>
 <tr style="font-size:13px" data-toggle="tooltip" data-placement="top" title="<?php echo $row->id_producto ?>"  >	
-	<td class="text-center">
-        <div class="btn-group btn-group-sm" role="group" aria-label="Log Viewer Actions">					
+	
+	<td class="text-center" style="font-size:8.0pt"><?php echo $n?>
+       
 
 			<input type="hidden" name="valorizacion_detalle[<?php echo $key?>][id]" value="<?php echo $row->id?>" />
 			<input type="hidden" name="valorizacion_detalle[<?php echo $key?>][id_producto]" value="<?php echo $row->id_producto?>" />
@@ -68,12 +69,8 @@ foreach($proforma as $key=>$row):
 			<input type="hidden" name="valorizacion_detalle[<?php echo $key?>][vencio]" value="" />
 			<input type="hidden" name="valorizacion_detalle[<?php echo $key?>][id_concepto]" value="0" />
 			<input type="hidden" name="valorizacion_detalle[<?php echo $key?>][id_tipo_afectacion]" value="0" />
-
-
-
-        </div>
     </td>
-	<td class="text-left"><?php echo $n?></td>
+
 	<td class="text-center" style="font-size:8.0pt"><?php echo $row->producto_prof?></td>
 	<td class="text-right" style="font-size:8.0pt"><?php echo $row->cantidad?></td>
 	<td class="text-right" style="font-size:8.0pt"><?php echo $row->valor_venta_bruto?></td>
