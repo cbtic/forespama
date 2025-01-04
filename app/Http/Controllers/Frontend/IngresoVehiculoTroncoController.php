@@ -301,6 +301,7 @@ class IngresoVehiculoTroncoController extends Controller
 			$pago->id_tipodesembolso = $request->id_tipodesembolso;
 			$pago->importe = $request->importe;
 			$pago->nro_guia = $request->nro_guia;
+			$pago->nro_cheque = $request->nro_cheque;
 			$pago->nro_factura = $request->nro_factura;
 			$pago->fecha = $request->fecha;
 			$pago->observacion = $request->observacion;
