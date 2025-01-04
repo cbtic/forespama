@@ -1693,7 +1693,7 @@ function generarGuia(){
                                 <?php 
                                     if($id>0){
                                 ?>
-                                <button style="font-size:12px;margin-left:10px; margin-right:10px" type="button" class="btn btn-sm btn-primary" data-toggle="modal" onclick="pdf_guia_interna()"><i class="fa fa-edit" ></i>Imprimir</button>
+                                <button style="font-size:12px;margin-left:10px; margin-right:10px" type="button" class="btn btn-sm btn-primary" data-toggle="modal" onclick="pdf_guia_interna()"><i class="fa fa-print" ></i>Imprimir</button>
                                 <!--<button style="font-size:12px;margin-left:10px; margin-right:100px" type="button" class="btn btn-sm btn-warning" data-toggle="modal" onclick="pdf_guia()" ><i class="fa fa-edit"></i>Imprimir Gu&iacute;a Remisi&oacute;n Electronica</button>
                                 <a href="javascript:void(0)" onClick="fn_pdf_documento()" class="btn btn-sm btn-primary" style="margin-right:100px">Imprimir</a>-->
                                 <?php 
@@ -1709,11 +1709,11 @@ function generarGuia(){
                                 <?php 
                                     if($id>0){
                                 ?>
-                                    <a href="javascript:void(0)" onClick="generarGuia()" class="btn btn-sm btn-warning" style="margin-right:10px">Enviar Sunat</a>
+                                    <a href="javascript:void(0)" onClick="generarGuia()" class="btn btn-sm btn-danger" style="margin-right:10px"><i class="fa fa-paper-plane"></i>Enviar Sunat</a> 
                                 <?php }?>
 
                                 <?php if($id>0 && $guia->guia_estado_sunat =='FIRMADO'){?>
-                                    <a href="http://forespama.felmo.pe/<?php echo $guia->guia_ruta_comprobante;?>" class="btn btn-sm btn-warning" style="margin-right:10px">Ver Gu&iacute;a</a>
+                                    <a href="http://forespama.felmo.pe/<?php echo $guia->guia_ruta_comprobante;?>" target="_blank" class="btn btn-sm btn-warning" style="margin-right:10px"><i class="fa fa-file-pdf"></i>Ver Gu&iacute;a</a>
                                 <?php }?>
 
                                 <a href="javascript:void(0)" onClick="$('#openOverlayOpc1').modal('hide');" class="btn btn-sm btn-info" style="">Cerrar</a>
