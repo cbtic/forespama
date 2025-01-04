@@ -7,6 +7,8 @@
 		<th width="10%">Guia</th>
 		<th width="10%">Factura</th>
 		<th width="10%">Importe</th>
+		<th width="10%">Archivo</th>
+		<th width="10%">Editar</th>
 	</tr>
 </thead>
 <tbody>
@@ -40,10 +42,18 @@ foreach($pago as $row){
 	<td class="text-left"><?php echo $row->nro_guia?></td>
 	<td class="text-left"><?php echo $row->nro_factura?></td>
     <td class="text-right"><?php echo $row->importe?></td>
+	<td class="text-right">
+	<?php if($row->foto_desembolso!=""){?>
+		<a href="/img/pago/<?php echo $row->foto_desembolso?>" target="_blank" class="btn btn-sm btn-info">Ver</a>
+	<?php }?>
+	</td>
+	<td class="text-right">
+		<button style="font-size:12px" type="button" class="btn btn-sm btn-warning" data-toggle="modal" onclick="modalPago(<?php echo $row->id?>,'')" >Editar</button>';
+	</td>
 </tr>
 <?php
 	}
-}
+} 
 ?>
 </tbody>
 

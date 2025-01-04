@@ -68,7 +68,7 @@ Route::post('ingreso_vehiculo_tronco/send_ingreso', [IngresoVehiculoTroncoContro
 Route::post('ingreso_vehiculo_tronco/send_cubicaje', [IngresoVehiculoTroncoController::class, 'send_cubicaje'])->name('ingreso_vehiculo_tronco.send_cubicaje');
 Route::post('ingreso_vehiculo_tronco/listar_ingreso_vehiculo_tronco_ajax', [IngresoVehiculoTroncoController::class, 'listar_ingreso_vehiculo_tronco_ajax'])->name('ingreso_vehiculo_tronco.listar_ingreso_vehiculo_tronco_ajax');
 Route::post('ingreso_vehiculo_tronco/listar_ingreso_vehiculo_tronco_pagos_ajax', [IngresoVehiculoTroncoController::class, 'listar_ingreso_vehiculo_tronco_pagos_ajax'])->name('listar_ingreso_vehiculo_tronco_pagos_ajax.listar_ingreso_vehiculo_tronco_ajax');
-Route::get('ingreso_vehiculo_tronco/modal_pago/{id_ingreso_vehiculo_tronco}', [IngresoVehiculoTroncoController::class, 'modal_pago'])->name('ingreso_vehiculo_tronco.modal_pago');
+Route::get('ingreso_vehiculo_tronco/modal_pago/{id}/{id_ingreso_vehiculo_tronco}', [IngresoVehiculoTroncoController::class, 'modal_pago'])->name('ingreso_vehiculo_tronco.modal_pago');
 Route::post('ingreso_vehiculo_tronco/send_pago', [IngresoVehiculoTroncoController::class, 'send_pago'])->name('ingreso_vehiculo_tronco.send_pago');
 
 Route::get('ingreso_vehiculo_tronco/modal_placa/{id}', [IngresoVehiculoTroncoController::class, 'modal_placa'])->name('ingreso_vehiculo_tronco.modal_placa');
@@ -77,6 +77,8 @@ Route::get('ingreso_vehiculo_tronco/modal_conductor/{id}', [IngresoVehiculoTronc
 
 Route::post('ingreso_vehiculo_tronco/upload_imagen_ingreso', [IngresoVehiculoTroncoController::class, 'upload_imagen_ingreso'])->name('ingreso_vehiculo_tronco.upload_imagen_ingreso');
 Route::get('ingreso_vehiculo_tronco/modal_ingreso_imagen/{id}', [IngresoVehiculoTroncoController::class, 'modal_ingreso_imagen'])->name('ingreso_vehiculo_tronco.modal_ingreso_imagen');
+
+Route::post('ingreso_vehiculo_tronco/upload_pago', [IngresoVehiculoTroncoController::class, 'upload_pago'])->name('ingreso_vehiculo_tronco.upload_pago');
 
 // Route::get('tabla_maestras', [TablaMaestraController::class, 'index'])->name('tabla_maestras.all');
 // Route::get('tabla_maestras/{id}', [TablaMaestraController::class, 'show'])->name('tabla_maestras.show');

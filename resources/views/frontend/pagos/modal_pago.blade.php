@@ -125,6 +125,34 @@ $.mask.definitions['p'] = "[Mm]";
 $(document).ready(function() {
 		
 });
+
+$(document).ready(function() {
+    $(".upload").on('click', function() {
+        var formData = new FormData();
+        var files = $('#image')[0].files[0];
+        formData.append('file',files);
+        $.ajax({
+			headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            url: "/ingreso_vehiculo_tronco/upload_pago",
+            type: 'post',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function(response) {
+                if (response != 0) {
+                    $("#img_ruta").attr("src", "/img/tmp_pago/"+response);
+					$("#img_foto").val(response);
+                } else {
+                    alert('Formato de imagen incorrecto.');
+                }
+            }
+        });
+        return false;
+    });
+});
+
 </script>
 
 <script type="text/javascript">
@@ -193,6 +221,7 @@ function guardarCita(id_medico,fecha_cita){
 function fn_save(){
     
 	var _token = $('#_token').val();
+	var id_modal = $('#id_modal').val();
 	var id_ingreso_vehiculo_tronco_tipo_maderas_modal = $('#id_ingreso_vehiculo_tronco_tipo_maderas_modal').val();
 	var importe = $('#importe').val();
 	var fecha = $('#fecha').val();
@@ -200,7 +229,8 @@ function fn_save(){
 	var id_tipodesembolso = $('#id_tipodesembolso').val();
 	var nro_guia = $('#nro_guia').val();
     var nro_factura = $('#nro_factura').val();
-	
+	var img_foto = $('#img_foto').val();
+
 	var msg = "";
     if(id_ingreso_vehiculo_tronco_tipo_maderas_modal == "")msg += "Debe ingresar el numero de documento <br>";
     if(importe==""){msg+="Debe ingresar un Importe<br>";}
@@ -223,7 +253,7 @@ function fn_save(){
     $.ajax({
 			url: "/ingreso_vehiculo_tronco/send_pago",
             type: "POST",
-            data : {_token:_token,id_ingreso_vehiculo_tronco_tipo_maderas:id_ingreso_vehiculo_tronco_tipo_maderas_modal,importe:importe,fecha:fecha,observacion:observacion,id_tipodesembolso:id_tipodesembolso,nro_guia:nro_guia,nro_factura:nro_factura},
+            data : {_token:_token,id:id_modal,id_ingreso_vehiculo_tronco_tipo_maderas:id_ingreso_vehiculo_tronco_tipo_maderas_modal,importe:importe,fecha:fecha,observacion:observacion,id_tipodesembolso:id_tipodesembolso,nro_guia:nro_guia,nro_factura:nro_factura,img_foto:img_foto},
             success: function (result) {
 				/*
 				$('.loader').hide();
@@ -468,13 +498,16 @@ container: '#myModal modal-body'
 					
 					<input type="hidden" name="_token" value="{{ csrf_token() }}">
 					<input type="hidden" name="id_ingreso_vehiculo_tronco_tipo_maderas_modal" id="id_ingreso_vehiculo_tronco_tipo_maderas_modal" value="<?php echo $id_ingreso_vehiculo_tronco_tipo_maderas?>">
-					
+					<input type="hidden" name="id_modal" id="id_modal" value="<?php echo $id?>">
 					<div class="row">
 						
+					<div class="col-lg-8">
+						<div class="row">
+
 						<div class="col-lg-3">
 							<div class="form-group">
 								<label class="control-label">Fecha</label>
-								<input id="fecha" name="fecha" class="form-control form-control-sm"  value="<?php echo $fecha_actual?>" type="text">
+								<input id="fecha" name="fecha" class="form-control form-control-sm"  value="<?php if($id==0){echo $fecha_actual;}else{echo date('d-m-Y',strtotime($ingresoVehiculoTroncoPago->fecha));}?>" type="text">
 							</div>
 						</div>
 
@@ -482,9 +515,9 @@ container: '#myModal modal-body'
 							<div class="form-group">
 								<label class="control-label">Forma de Pago</label>
 								<select name="id_tipodesembolso" id="id_tipodesembolso" class="form-control form-control-sm" onChange="">
-									<?php foreach($tipo_desembolso as $row):?>
-									<option value="<?php echo $row->codigo?>"><?php echo $row->denominacion?></option>
-									<?php endforeach;?>
+									<?php foreach($tipo_desembolso as $row){?>
+									<option <?php if($row->codigo==$ingresoVehiculoTroncoPago->id_tipodesembolso)echo "selected='selected'";?> value="<?php echo $row->codigo?>"><?php echo $row->denominacion?></option>
+									<?php }?>
 								</select>
 							</div>
 						</div>
@@ -492,7 +525,7 @@ container: '#myModal modal-body'
 						<div class="col-lg-4">
 							<div class="form-group">
 								<label class="control-label">Importe</label>
-								<input id="importe" name="importe" class="form-control form-control-sm"  value="<?php //echo $id?>" type="number">
+								<input id="importe" name="importe" class="form-control form-control-sm"  value="<?php if($id==0){echo $importe;}else{echo $ingresoVehiculoTroncoPago->importe;}?>" type="number">
 							</div>
 						</div>
 						
@@ -503,14 +536,14 @@ container: '#myModal modal-body'
 						<div class="col-lg-3">
 							<div class="form-group">
 								<label class="control-label">Guia</label>
-								<input id="nro_guia" name="nro_guia" class="form-control form-control-sm"  value="<?php //echo $id?>" type="text">
+								<input id="nro_guia" name="nro_guia" class="form-control form-control-sm"  value="<?php echo $ingresoVehiculoTroncoPago->nro_guia?>" type="text">
 							</div>
 						</div>
 
 						<div class="col-lg-3">
 							<div class="form-group">
 								<label class="control-label">Factura</label>
-								<input id="nro_factura" name="nro_factura" class="form-control form-control-sm"  value="<?php //echo $id?>" type="text">
+								<input id="nro_factura" name="nro_factura" class="form-control form-control-sm"  value="<?php echo $ingresoVehiculoTroncoPago->nro_factura?>" type="text">
 							</div>
 						</div>
 						
@@ -521,12 +554,49 @@ container: '#myModal modal-body'
 						<div class="col-lg-12">
 							<div class="form-group">
 								<label class="control-label">Observaci&oacute;n</label>
-								<textarea id="observacion" name="observacion" class="form-control form-control-sm"></textarea>
+								<textarea id="observacion" name="observacion" class="form-control form-control-sm"><?php echo $ingresoVehiculoTroncoPago->observacion?></textarea>
 							</div>
 						</div>
 						
 					</div>
 						
+					</div>
+
+					<div class="col-lg-4">
+							
+							<div class="row">
+						
+								<div class="col-lg-12">
+										
+								
+								<div class="form-group">
+										
+										<span class="btn btn-sm btn-warning btn-file">
+											Examinar <input id="image" name="image" type="file" />
+										</span>
+										<input type="button" class="btn btn-sm btn-primary upload" value="Subir" style="margin-left:10px">
+										
+										<?php
+											$url_foto = "/img/logo_forestalpama.jpg";
+											if ($ingresoVehiculoTroncoPago->foto_desembolso != "") $url_foto = "/img/pago/" . $ingresoVehiculoTroncoPago->foto_desembolso;
+
+											$foto = "";
+											if ($ingresoVehiculoTroncoPago->foto_desembolso != "") $foto = $ingresoVehiculoTroncoPago->foto_desembolso;
+										?>
+
+										<img src="<?php echo $url_foto ?>" id="img_ruta" width="240px" height="150px" alt="" style="margin-top:10px" />
+										<input type="hidden" id="img_foto" name="img_foto" value="<?php echo $foto ?>" />
+									</div>	
+
+
+								</div>
+							</div>
+					</div>
+
+
+					</div>
+
+					
 					
 					<div style="margin-top:10px" class="row form-group">
 						<div class="col-sm-12 controls">

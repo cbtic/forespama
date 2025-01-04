@@ -2593,7 +2593,7 @@ function obtenerDistritoEdit(idProvincia, idDistrito) {
 
 }
 
-function modalPago(){
+function modalPago(id){
 	
 	$(".modal-dialog").css("width","55%");
 	$('#openOverlayOpc .modal-body').css('height', 'auto');
@@ -2632,7 +2632,7 @@ function modalPago(){
     }
 	
 	$.ajax({
-			url: "/ingreso_vehiculo_tronco/modal_pago/"+id_ingreso_vehiculo_tronco_tipo_maderas,
+			url: "/ingreso_vehiculo_tronco/modal_pago/"+id+"/"+id_ingreso_vehiculo_tronco_tipo_maderas,
 			type: "GET",
 			success: function (result) {  
 					$("#diveditpregOpc").html(result);
