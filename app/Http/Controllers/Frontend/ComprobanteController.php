@@ -3589,7 +3589,7 @@ class ComprobanteController extends Controller
 
                // https://test.easyfact.pe/see/server/consult/pdf?nde=20601973759&td=09&se=T001&nu=34&fe=2024-11-27&am=0
                 $fac_ruta_comprobante = config('values.ws_fac_host')."/see/server/consult/pdf?nde=20486785994&td=".$this->getTipoDocumento($guia->guia_tipo) ."&se=" .$guia->guia_serie. "&nu=" .$guia->guia_numero. "&fe=".date("Y-m-d",strtotime($guia->guia_fecha_emision))."&am=0"; //.$guia->guia_numero; //20160453908-09-T001-000002 //20160453908-01-F001-69809
-                //echo($fac_ruta_comprobante);
+                echo($fac_ruta_comprobante);
 
                 if (
 					//test.easyfact.tk
@@ -3600,7 +3600,7 @@ class ComprobanteController extends Controller
                     $guia = Guia::find($id_guia);
                     $guia->guia_estado_sunat = "FIRMADO";
                     // Nueva ruta del PDF descargado
-                    $guia->guia_ruta_comprobante = "storage/".$this->getTipoDocumento($$guia->guia_tipo)."_".$guia->guia_serie."_".$guia->guia_numero."_".$anio.$mes.$dia.".pdf";
+                    //$guia->guia_ruta_comprobante = "storage/".$this->getTipoDocumento($$guia->guia_tipo)."_".$guia->guia_serie."_".$guia->guia_numero."_".$anio.$mes.$dia.".pdf";
                     $guia->save();
 
                 }
