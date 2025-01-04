@@ -72,7 +72,8 @@ class ProductosController extends Controller
 		
 		if($id>0){
 			$producto = Producto::find($id);
-            $imagenes = ProductoImagene::where('id_producto', $id)->pluck('ruta_imagen');
+            //$imagenes = ProductoImagene::where('id_producto', $id)->pluck('ruta_imagen');
+            $imagenes = ProductoImagene::where('id_producto', $id)->get();
 		}else{
 			$producto = new Producto;
             $imagenes = [];
@@ -147,7 +148,8 @@ class ProductosController extends Controller
         }
 		
 		$img_foto = $request->img_foto;
-		
+        $id_img_foto = $request->id_img_foto;
+
 		if(isset($img_foto) && is_array($img_foto) && count($img_foto) > 0){
 			$path = "img/productos/".$producto->id."/".$request->denominacion;
 			if (!is_dir($path)) {
@@ -158,12 +160,20 @@ class ProductosController extends Controller
         $imagenesExistentes = ProductoImagene::where('id_producto', $id_producto)->pluck('ruta_imagen')->toArray();
 		
         if (isset($img_foto) && is_array($img_foto)) {
-
-            foreach($img_foto as $row){
-                
+            $rutaNuevaImagen="";
+            foreach($img_foto as $key=>$row){
+                $rutaNuevaImagen="";
                 if($row!=""){
 
-                    $rutaNuevaImagen = "img/productos/".$producto->id."/".$row;
+                    //$rutaNuevaImagen = "img/productos/".$producto->id."/".$row;
+                    $rutaNuevaImagen = $row;
+                    /*
+                    if(isset($id_img_foto[$key])){
+                        $rutaNuevaImagen = $row;
+                    }else{
+                        $rutaNuevaImagen = "img/productos/".$producto->id."/".$row;
+                    }
+                    */
 
                     if (in_array($rutaNuevaImagen, $imagenesExistentes)) {
                         continue;
@@ -174,7 +184,7 @@ class ProductosController extends Controller
                     if (file_exists($rutaImagenCompleta)) {
                         continue;
                     }
-
+                    
                     $filepath_tmp = public_path('img/productos/tmp/');
                     $filepath_nuevo = public_path('img/productos/'.$producto->id.'/');
                     
@@ -182,7 +192,14 @@ class ProductosController extends Controller
                         copy($filepath_tmp.$row, $filepath_nuevo.$row);
                     }
                     
-                    $productoImagen = new ProductoImagene;
+
+                    if(isset($id_img_foto[$key])){
+                        $id_img = $id_img_foto[$key];
+                        $productoImagen = ProductoImagene::find($id_img);
+                    }else{
+                        $productoImagen = new ProductoImagene;
+                    }
+                    
                     $productoImagen->id_producto = $id_producto;
                     $productoImagen->ruta_imagen = $rutaNuevaImagen;
                     $productoImagen->estado = 1;

@@ -547,13 +547,18 @@ function cargarImagenes() {
                                             <div id="divImagenes" class="scrolls">
                                                 @if(!empty($imagenes) && count($imagenes) > 0)
                                                     @foreach($imagenes as $index => $imagen)
+                                                    <?php //print_r($imagen);
+                                                        //$imagen=
+                                                    ?>
                                                         <div class="img_ruta">
 
-                                                            <img src="{{ asset($imagen) }}" id="img_ruta_{{ $index + 1 }}" width="130px" height="165px" alt="" style="text-align:center;margin-top:8px;display:none;margin-left:10px" />
+                                                            <img src="/img/productos/{{ $imagen->id_producto }}/{{ $imagen->ruta_imagen }}" id="img_ruta_{{ $index + 1 }}" width="130px" height="165px" alt="" style="text-align:center;margin-top:8px;display:none;margin-left:10px" />
                                                             <span class="delete_ruta" style="display:none" onclick="DeleteImagen(this)"></span>
 
-                                                            <input type="hidden" id="img_foto_{{ $index + 1 }}" name="img_foto[]" value="{{ $imagen }}" />
+                                                            <input type="hidden" id="img_foto_{{ $index + 1 }}" name="img_foto[]" value="{{ $imagen->ruta_imagen }}" />
+                                                            <input type="hidden" id="id_img_foto" name="id_img_foto[]" value="{{ $imagen->id }}" />
 
+                                                            
                                                         </div>
                                                     @endforeach
                                                 @else
@@ -570,7 +575,12 @@ function cargarImagenes() {
                                                         Examinar <input id="image" name="image" type="file" />
                                                     </span>
 
-                                                    <input type="hidden" id="ind_img" name="ind_img" value="1" />
+                                                    <?php 
+                                                    //echo count($imagenes); echo "dddd";
+                                                    $ind_img = count($imagenes)+1;
+                                                    ?>
+
+                                                    <input type="hidden" id="ind_img" name="ind_img" value="<?php echo $ind_img?>" />
 
                                                     <input type="button" class="btn btn-sm btn-primary upload" value="Subir" style="margin-left:10px">
                                                 </div>

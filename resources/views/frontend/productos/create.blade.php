@@ -256,7 +256,8 @@ label.form-control-sm{
 	overflow-x: scroll;
 	overflow-y: hidden;
 	height: 200px;
-	white-space:nowrap
+	white-space:nowrap;
+	width: 300px;
 }
 .imageDiv img {
 	box-shadow: 1px 1px 10px #999;
