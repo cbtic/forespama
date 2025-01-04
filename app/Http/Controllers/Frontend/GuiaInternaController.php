@@ -181,8 +181,7 @@ class GuiaInternaController extends Controller
         $guia->guia_llegada_ubigeo = $request->distrito_llegada;
         $guia->guia_partida_ubigeo = $request->distrito_partida;
         //$guia->guia_partida_direccion = $request->punto_partida;
-        $guia->guia_cod_estab_partida = $request->punto_partida;
-        $guia->guia_anulado = "N"; 
+        $guia->guia_anulado = "N";
         $guia->guia_cod_motivo = $request->motivo_traslado;
         $guia->guia_emisor_numdoc = "20486785994";
         $guia->guia_emisor_razsocial = "FORESTAL PAMA S.A.C.";
@@ -190,9 +189,15 @@ class GuiaInternaController extends Controller
         $guia->id_usuario_inserta = $id_user;
         if($request->motivo_traslado=='04'){
             $guia->guia_cod_estab_llegada = $request->punto_llegada_select;
+            $guia->guia_cod_estab_partida = $request->punto_partida;
+            $guia->guia_partida_direccion = $request->punto_partida_descripcion;
+            $guia->guia_llegada_direccion = $request->punto_llegada_descripcion;
         }else{
             $guia->guia_llegada_direccion = $request->punto_llegada_input;
+            $guia->guia_cod_estab_partida = $request->punto_partida;
+            $guia->guia_partida_direccion = $request->punto_partida_descripcion;
         }
+        
         $guia->save();
 
         $array_guia_interna_detalle = array();

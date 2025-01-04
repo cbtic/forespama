@@ -1173,6 +1173,22 @@ function cambiarPuntoLlegada(){
 
 }
 
+$('#punto_partida').on('change', function(){
+
+    var descripcion = $('#punto_partida option:selected').text();
+
+    $('#punto_partida_descripcion').val(descripcion);
+
+});
+
+$('#punto_llegada_select').on('change', function(){
+
+    var descripcion = $('#punto_llegada_select option:selected').text();
+
+    $('#punto_llegada_descripcion').val(descripcion);
+
+});
+
 </script>
 
 
@@ -1525,6 +1541,7 @@ function cambiarPuntoLlegada(){
                                             }
                                             ?>
                                         </select>
+                                        <input name="punto_partida_descripcion" id="punto_partida_descripcion" type="hidden">
                                     </div>
                                 </div>
                             </div>
@@ -1608,6 +1625,7 @@ function cambiarPuntoLlegada(){
                                             }
                                             ?>
                                         </select>
+                                        <input name="punto_llegada_descripcion" id="punto_llegada_descripcion" type="hidden">
                                     </div>
                                 </div>
                             </div>
