@@ -3600,7 +3600,7 @@ class ComprobanteController extends Controller
                     $guia = Guia::find($id_guia);
                     $guia->guia_estado_sunat = "FIRMADO";
                     // Nueva ruta del PDF descargado
-                    //$guia->guia_ruta_comprobante = "storage/".$this->getTipoDocumento($$guia->guia_tipo)."_".$guia->guia_serie."_".$guia->guia_numero."_".$anio.$mes.$dia.".pdf";
+                    $guia->guia_ruta_comprobante = "storage/".$this->getTipoDocumento($guia->guia_tipo)."_".$guia->guia_serie."_".$guia->guia_numero."_".$anio.$mes.$dia.".pdf";
                     $guia->save();
 
                 }
