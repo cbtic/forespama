@@ -67,6 +67,11 @@ $(document).ready(function () {
 		
 	datatablenew();
 
+	$('#btnDescargar').on('click', function () {
+		DescargarArchivosRequerimiento();
+
+	});
+
 });
 
 function datatablenew(){
@@ -371,4 +376,32 @@ function fn_eliminar(id,estado){
 				datatablenew();
             }
     });
+}
+
+function DescargarArchivosRequerimiento(){
+		
+	var tipo_documento = $('#tipo_documento_bus').val();
+	var fecha = $('#fecha_bus').val();
+	var numero_requerimiento = $('#numero_requerimiento_bus').val();
+	var almacen = $('#almacen_bus').val();
+	var situacion = $('#situacion_bus').val();
+	var responsable_atencion = $('#responsable_atencion_bus').val();
+	var estado_atencion = $('#estado_atencion_bus').val();
+	var tipo_requerimiento = $('#tipo_requerimiento_bus').val();
+	var estado = $('#estado_bus').val();
+	//var id_agremiado = 0;
+	//var id_regional = 0;
+	if (tipo_documento == "")tipo_documento = 0;
+	if (fecha == "")fecha = "0";
+	if (numero_requerimiento == "")numero_requerimiento = "0";
+	if (almacen == "")almacen = 0;
+	if (situacion == "")situacion = 0;
+	if (responsable_atencion == "")responsable_atencion = 0;
+	if (estado_atencion == "")estado_atencion = 0;
+	if (tipo_requerimiento == "")tipo_requerimiento = 0;
+	
+	//if (campo == "")campo = 0;
+	//if (orden == "")orden = 0;
+	
+	location.href = '/requerimiento/exportar_listar_requerimiento/'+ruc+'/'+empresa+'/'+placa+'/'+tipo_madera+'/'+fecha_inicio+'/'+fecha_fin;
 }
