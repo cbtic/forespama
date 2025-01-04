@@ -238,16 +238,27 @@ class IngresoVehiculoTroncoController extends Controller
 
 	}
 
-	public function modal_pago($id_ingreso_vehiculo_tronco_tipo_maderas){
+	public function modal_pago($id,$id_ingreso_vehiculo_tronco_tipo_maderas){
 		
 		$tablaMaestra_model = new TablaMaestra;
 		$ingresoVehiculoTronco_model = new IngresoVehiculoTronco;
 		$fecha_actual = $ingresoVehiculoTronco_model->fecha_actual();
 
+		if($id==0){
+			$ingresoVehiculoTroncoPago = new IngresoVehiculoTroncoPago;
+		}else{
+			$ingresoVehiculoTroncoPago = IngresoVehiculoTroncoPago::find($id);
+		}
 		//$adelantos = $adelanto_model->getAdelantoByPersona($id_persona);
 		$tipo_desembolso = $tablaMaestra_model->getMaestroByTipo(65);
 		//print_r($tipo_desembolso);
-		return view('frontend.pagos.modal_pago',compact('id_ingreso_vehiculo_tronco_tipo_maderas','fecha_actual'/*,'adelantos'*/,'tipo_desembolso'));
+
+		$ingresoVehiculoTroncoPago_model = new IngresoVehiculoTroncoPago;
+		$data = $ingresoVehiculoTroncoPago_model->getImportePago($id_ingreso_vehiculo_tronco_tipo_maderas);
+
+		$importe = $data->precio-$data->pago;
+		//echo $id;
+		return view('frontend.pagos.modal_pago',compact('id','ingresoVehiculoTroncoPago','id_ingreso_vehiculo_tronco_tipo_maderas','fecha_actual'/*,'adelantos'*/,'tipo_desembolso','importe'));
 	
 	}
 
@@ -284,20 +295,31 @@ class IngresoVehiculoTroncoController extends Controller
 		
 		//if($request->id_moneda==113)$id_caja=$request->id_caja_soles;
 		//if($request->id_moneda==114)$id_caja=$request->id_caja_dolares;
-		
-		$pago = new IngresoVehiculoTroncoPago;
-		$pago->id_ingreso_vehiculo_tronco_tipo_maderas = $request->id_ingreso_vehiculo_tronco_tipo_maderas;
-		$pago->id_tipodesembolso = $request->id_tipodesembolso;
-		$pago->importe = $request->importe;
-		$pago->nro_guia = $request->nro_guia;
-		$pago->nro_factura = $request->nro_factura;
-		$pago->fecha = $request->fecha;
-		$pago->observacion = $request->observacion;
-		$pago->foto_desembolso = $request->img_foto;
-		//$adelanto->fecha_hora = $fecha_hora;
-		//$pago->id_usuario = $id_user;
-		//$pago->id_caja = $id_caja;
-		//$pago->estado = "A";
+		if($request->id==0){
+			$pago = new IngresoVehiculoTroncoPago;
+			$pago->id_ingreso_vehiculo_tronco_tipo_maderas = $request->id_ingreso_vehiculo_tronco_tipo_maderas;
+			$pago->id_tipodesembolso = $request->id_tipodesembolso;
+			$pago->importe = $request->importe;
+			$pago->nro_guia = $request->nro_guia;
+			$pago->nro_factura = $request->nro_factura;
+			$pago->fecha = $request->fecha;
+			$pago->observacion = $request->observacion;
+			$pago->foto_desembolso = $request->img_foto;
+			//$adelanto->fecha_hora = $fecha_hora;
+			//$pago->id_usuario = $id_user;
+			//$pago->id_caja = $id_caja;
+			//$pago->estado = "A";
+		}else{
+			$pago = IngresoVehiculoTroncoPago::find($request->id);
+			$pago->id_tipodesembolso = $request->id_tipodesembolso;
+			$pago->importe = $request->importe;
+			$pago->nro_guia = $request->nro_guia;
+			$pago->nro_factura = $request->nro_factura;
+			$pago->fecha = $request->fecha;
+			$pago->observacion = $request->observacion;
+			$pago->foto_desembolso = $request->img_foto;
+		}
+
 		$pago->save();
 
 		$ingresoVehiculoTroncoPago_model = new IngresoVehiculoTroncoPago;
