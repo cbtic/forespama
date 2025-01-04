@@ -527,5 +527,6 @@ Route::get('equivalencia_producto/eliminar_equivalencia_producto/{id}/{estado}',
 
 Route::get('ingreso_vehiculo_tronco/cubicaje_pdf/{id}', [IngresoVehiculoTroncoController::class, 'cubicaje_pdf'])->name('ingreso_vehiculo_tronco.cubicaje_pdf');
 Route::get('proforma/proforma_pdf/{id}', [ProformaController::class, 'proforma_pdf'])->name('proforma.proforma_pdf');
-Route::get('ingreso_vehiculo_tronco/exportar_listar_pagos/{ruc}/{empresa}/{placa}/{tipo_madera}/{fecha_inicio}/{fecha_fin}', [IngresoVehiculoTroncoController::class, 'exportar_listar_pagos'])->name('revisorUrbano.exportar_listar_pagos');
+Route::get('ingreso_vehiculo_tronco/exportar_listar_pagos/{ruc}/{empresa}/{placa}/{tipo_madera}/{fecha_inicio}/{fecha_fin}', [IngresoVehiculoTroncoController::class, 'exportar_listar_pagos'])->name('ingreso_vehiculo_tronco.exportar_listar_pagos');
 
+Route::get('requerimiento/exportar_listar_requerimiento/{tipo_documento}/{fecha}/{numero_requerimiento}/{almacen}/{situacion}/{responsable_atencion}/{estado_atencion}/{tipo_requerimiento}/{estado}', [RequerimientoController::class, 'exportar_listar_requerimiento'])->name('requerimiento.exportar_listar_requerimiento');

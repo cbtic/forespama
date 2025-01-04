@@ -18,6 +18,8 @@ use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Auth;
 use Carbon\Carbon;
+use Maatwebsite\Excel\Facades\Excel;
+use Maatwebsite\Excel\Concerns\FromArray;
 
 class RequerimientoController extends Controller
 {
@@ -354,4 +356,61 @@ class RequerimientoController extends Controller
 
     }
 
+    public function exportar_listar_requerimiento($tipo_documento, $fecha, $numero_requerimiento, $almacen, $situacion, $responsable_atencion, $estado_atencion, $tipo_requerimiento, $estado) {
+
+		if($tipo_documento==0)$tipo_documento = "";
+		if($fecha=="0")$fecha = "";
+		if($numero_requerimiento=="0")$numero_requerimiento = "";
+		if($almacen==0)$almacen = "";
+		if($situacion==0)$situacion = "";
+		if($responsable_atencion==0)$responsable_atencion = "";
+        if($estado_atencion==0)$estado_atencion = "";
+        if($tipo_requerimiento==0)$tipo_requerimiento = "";
+        if($estado==0)$estado = "";
+
+		$requerimiento_model = new Requerimiento;
+		$p[]=$tipo_documento;
+        $p[]=$fecha;
+        $p[]=$numero_requerimiento;
+        $p[]=$almacen;
+        $p[]=$situacion;
+        $p[]=$responsable_atencion;
+        $p[]=$estado_atencion;
+        $p[]=$tipo_requerimiento;
+        $p[]=$estado;
+		$p[]=1;
+		$p[]=1000;
+		$data = $requerimiento_model->listar_requerimiento_ajax($p);
+		
+		$variable = [];
+		$n = 1;
+		//array_push($variable, array("SISTEMA CAP"));
+		//array_push($variable, array("CONSULTA DE CONCURSO","","","",""));
+		array_push($variable, array("N","Tipo Documento","Fecha","Numero Requerimiento","Almacen","Situacion", "Responsable Atencion", "Estado Atencion", "Tipo Requerimiento"));
+		
+		foreach ($data as $r) {
+
+			array_push($variable, array($n++,$r->tipo_documento, $r->fecha, $r->codigo, $r->almacen,$r->cerrado_situacion,$r->responsable_atencion, $r->estado_atencion, $r->tipo_requerimiento));
+		}
+		
+		$export = new InvoicesExport([$variable]);
+		return Excel::download($export, 'reporte_requerimiento.xlsx');	
+    }
 }
+
+class InvoicesExport implements FromArray
+{
+	protected $invoices;
+
+	public function __construct(array $invoices)
+	{
+		$this->invoices = $invoices;
+	}
+
+	public function array(): array
+	{
+		return $this->invoices;
+	}
+
+}
+

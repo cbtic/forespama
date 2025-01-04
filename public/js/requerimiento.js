@@ -399,9 +399,10 @@ function DescargarArchivosRequerimiento(){
 	if (responsable_atencion == "")responsable_atencion = 0;
 	if (estado_atencion == "")estado_atencion = 0;
 	if (tipo_requerimiento == "")tipo_requerimiento = 0;
-	
+	if (estado == "")estado = 0;
+
 	//if (campo == "")campo = 0;
 	//if (orden == "")orden = 0;
 	
-	location.href = '/requerimiento/exportar_listar_requerimiento/'+ruc+'/'+empresa+'/'+placa+'/'+tipo_madera+'/'+fecha_inicio+'/'+fecha_fin;
+	location.href = '/requerimiento/exportar_listar_requerimiento/'+tipo_documento+'/'+fecha+'/'+numero_requerimiento+'/'+almacen+'/'+situacion+'/'+responsable_atencion+'/'+estado_atencion+'/'+tipo_requerimiento+'/'+estado;
 }
