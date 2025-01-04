@@ -251,8 +251,33 @@ class IngresoVehiculoTroncoController extends Controller
 	
 	}
 
+	public function upload_pago(Request $request){
+
+		$path = "img/tmp_pago";
+		if (!is_dir($path)) {
+			mkdir($path);
+		}
+
+    	$filepath = public_path('img/tmp_pago/');
+		move_uploaded_file($_FILES["file"]["tmp_name"], $filepath.$_FILES["file"]["name"]);
+		echo $_FILES['file']['name'];
+	}
+
 	public function send_pago(Request $request){
 		
+		$path = "img/pago";
+		if (!is_dir($path)) {
+			mkdir($path);
+		}
+
+		if($request->img_foto!=""){
+			$filepath_tmp = public_path('img/tmp_pago/');
+			$filepath_nuevo = public_path('img/pago/');
+			if (file_exists($filepath_tmp.$request->img_foto)) {
+				copy($filepath_tmp.$request->img_foto, $filepath_nuevo.$request->img_foto);
+			}
+		}
+
 		//$id_user = Auth::user()->id;
 		$maestra_model = new TablaMaestra;
 		//$fecha_hora = $maestra_model->getFechaHoraServidor();
@@ -268,6 +293,7 @@ class IngresoVehiculoTroncoController extends Controller
 		$pago->nro_factura = $request->nro_factura;
 		$pago->fecha = $request->fecha;
 		$pago->observacion = $request->observacion;
+		$pago->foto_desembolso = $request->img_foto;
 		//$adelanto->fecha_hora = $fecha_hora;
 		//$pago->id_usuario = $id_user;
 		//$pago->id_caja = $id_caja;

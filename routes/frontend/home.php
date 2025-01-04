@@ -78,6 +78,8 @@ Route::get('ingreso_vehiculo_tronco/modal_conductor/{id}', [IngresoVehiculoTronc
 Route::post('ingreso_vehiculo_tronco/upload_imagen_ingreso', [IngresoVehiculoTroncoController::class, 'upload_imagen_ingreso'])->name('ingreso_vehiculo_tronco.upload_imagen_ingreso');
 Route::get('ingreso_vehiculo_tronco/modal_ingreso_imagen/{id}', [IngresoVehiculoTroncoController::class, 'modal_ingreso_imagen'])->name('ingreso_vehiculo_tronco.modal_ingreso_imagen');
 
+Route::post('ingreso_vehiculo_tronco/upload_pago', [IngresoVehiculoTroncoController::class, 'upload_pago'])->name('ingreso_vehiculo_tronco.upload_pago');
+
 // Route::get('tabla_maestras', [TablaMaestraController::class, 'index'])->name('tabla_maestras.all');
 // Route::get('tabla_maestras/{id}', [TablaMaestraController::class, 'show'])->name('tabla_maestras.show');
 // Route::post('tabla_maestras/create', [TablaMaestraController::class, 'create'])->name('tabla_maestras.create');
