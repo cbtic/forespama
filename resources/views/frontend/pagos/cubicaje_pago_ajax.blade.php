@@ -49,7 +49,7 @@ foreach($pago as $row){
 </tr>
 <?php
 	}
-}
+} 
 ?>
 </tbody>
 
