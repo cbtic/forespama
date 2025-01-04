@@ -175,7 +175,7 @@ $('#openOverlayOpc').on('shown.bs.modal', function() {
 
 $(document).ready(function() {
 	 
-	 
+	//$("#divCheque").hide(); 
 
 });
 
@@ -218,6 +218,16 @@ function guardarCita(id_medico,fecha_cita){
     }
 }
 
+function validar_tipo(){
+
+	var id_tipodesembolso = $("#id_tipodesembolso").val();
+	$("#divCheque").hide();
+	if(id_tipodesembolso==2){
+		$("#divCheque").show();
+	}
+
+}
+
 function fn_save(){
     
 	var _token = $('#_token').val();
@@ -229,6 +239,7 @@ function fn_save(){
 	var id_tipodesembolso = $('#id_tipodesembolso').val();
 	var nro_guia = $('#nro_guia').val();
     var nro_factura = $('#nro_factura').val();
+	var nro_cheque = $('#nro_cheque').val();
 	var img_foto = $('#img_foto').val();
 
 	var msg = "";
@@ -253,7 +264,7 @@ function fn_save(){
     $.ajax({
 			url: "/ingreso_vehiculo_tronco/send_pago",
             type: "POST",
-            data : {_token:_token,id:id_modal,id_ingreso_vehiculo_tronco_tipo_maderas:id_ingreso_vehiculo_tronco_tipo_maderas_modal,importe:importe,fecha:fecha,observacion:observacion,id_tipodesembolso:id_tipodesembolso,nro_guia:nro_guia,nro_factura:nro_factura,img_foto:img_foto},
+            data : {_token:_token,id:id_modal,id_ingreso_vehiculo_tronco_tipo_maderas:id_ingreso_vehiculo_tronco_tipo_maderas_modal,importe:importe,fecha:fecha,observacion:observacion,id_tipodesembolso:id_tipodesembolso,nro_guia:nro_guia,nro_factura:nro_factura,nro_cheque:nro_cheque,img_foto:img_foto},
             success: function (result) {
 				/*
 				$('.loader').hide();
@@ -514,7 +525,7 @@ container: '#myModal modal-body'
 						<div class="col-lg-4">
 							<div class="form-group">
 								<label class="control-label">Forma de Pago</label>
-								<select name="id_tipodesembolso" id="id_tipodesembolso" class="form-control form-control-sm" onChange="">
+								<select name="id_tipodesembolso" id="id_tipodesembolso" onchange="validar_tipo()" class="form-control form-control-sm" onChange="">
 									<?php foreach($tipo_desembolso as $row){?>
 									<option <?php if($row->codigo==$ingresoVehiculoTroncoPago->id_tipodesembolso)echo "selected='selected'";?> value="<?php echo $row->codigo?>"><?php echo $row->denominacion?></option>
 									<?php }?>
@@ -522,10 +533,10 @@ container: '#myModal modal-body'
 							</div>
 						</div>
 						
-						<div class="col-lg-4">
+						<div class="col-lg-4" id="divCheque" <?php if($ingresoVehiculoTroncoPago->id_tipodesembolso!=2 || $id==0)echo "style='display:none'"?>>
 							<div class="form-group">
-								<label class="control-label">Importe</label>
-								<input id="importe" name="importe" class="form-control form-control-sm"  value="<?php if($id==0){echo $importe;}else{echo $ingresoVehiculoTroncoPago->importe;}?>" type="number">
+								<label class="control-label">Cheque</label>
+								<input id="nro_cheque" name="nro_cheque" class="form-control form-control-sm"  value="<?php echo $ingresoVehiculoTroncoPago->nro_cheque?>" type="number">
 							</div>
 						</div>
 						
@@ -533,6 +544,13 @@ container: '#myModal modal-body'
 
 					<div class="row">
 						
+						<div class="col-lg-4">
+							<div class="form-group">
+								<label class="control-label">Importe</label>
+								<input id="importe" name="importe" class="form-control form-control-sm"  value="<?php if($id==0){echo $importe;}else{echo $ingresoVehiculoTroncoPago->importe;}?>" type="number">
+							</div>
+						</div>
+
 						<div class="col-lg-3">
 							<div class="form-group">
 								<label class="control-label">Guia</label>
