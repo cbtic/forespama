@@ -681,7 +681,8 @@ function cambiarOrigen(){
                                 }
                                 ?>
                             </select>
-                        </div><div class="col-lg-2" id="almacen_salida_">
+                        </div>
+                        <div class="col-lg-2" id="almacen_salida_">
                             Responsable de Atenci&oacute;n
                         </div>
                         <div class="col-lg-2" id="almacen_salida_select">
@@ -690,6 +691,20 @@ function cambiarOrigen(){
                                 <?php 
                                 foreach ($responsable_atencion as $row){?>
                                     <option value="<?php echo $row->id ?>" <?php if($row->id==$requerimiento->responsable_atencion)echo "selected='selected'"?>><?php echo $row->name ?></option>
+                                    <?php 
+                                }
+                                ?>
+                            </select>
+                        </div>
+                        <div class="col-lg-2" id="almacen_salida_">
+                            Tipo de Requerimiento
+                        </div>
+                        <div class="col-lg-2" id="almacen_salida_select">
+                            <select name="tipo_requerimiento" id="tipo_requerimiento" class="form-control form-control-sm" onchange="//actualizarSecciones(this)">
+                                <option value="">--Seleccionar--</option>
+                                <?php 
+                                foreach ($tipo_requerimiento as $row){?>
+                                    <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$requerimiento->id_tipo_requerimiento)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
                                     <?php 
                                 }
                                 ?>

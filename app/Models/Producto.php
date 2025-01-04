@@ -56,6 +56,7 @@ class Producto extends Model
 
         $cad = "select id, numero_serie, codigo, trim(denominacion) denominacion, id_unidad_medida, stock_actual, id_moneda, id_tipo_producto, fecha_vencimiento, id_estado_bien, stock_minimo, observacion, estado, created_at, updated_at, costo_unitario, contenido, id_unidad_producto, id_marca, numero_corrrelativo, id_tipo_origen_producto
         from productos p 
+        where p.estado='1'
         order by p.id ";
 
         //limit 2620";
@@ -76,7 +77,8 @@ class Producto extends Model
     function getProductoExterno(){
 
         $cad = "select * from productos p
-        where p.id_tipo_origen_producto = '2'";
+        where p.id_tipo_origen_producto = '2'
+        and p.estado='1'";
 
 		$data = DB::select($cad);
         return $data;

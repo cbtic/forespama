@@ -122,6 +122,7 @@ function datatablenew(){
 			var situacion = $('#situacion_bus').val();
 			var responsable_atencion = $('#responsable_atencion_bus').val();
 			var estado_atencion = $('#estado_atencion_bus').val();
+			var tipo_requerimiento = $('#tipo_requerimiento_bus').val();
 			var estado = $('#estado_bus').val();
 			
 			var _token = $('#_token').val();
@@ -132,8 +133,8 @@ function datatablenew(){
                 "url": sSource,
                 "data":{NumeroPagina:iNroPagina,NumeroRegistros:iCantMostrar,
 						tipo_documento:tipo_documento,fecha:fecha,numero_requerimiento:numero_requerimiento,
-						almacen:almacen,situacion:situacion,estado:estado,
-						responsable_atencion:responsable_atencion,estado_atencion:estado_atencion,
+						almacen:almacen,situacion:situacion,estado:estado,responsable_atencion:responsable_atencion,
+						estado_atencion:estado_atencion,tipo_requerimiento:tipo_requerimiento,
 						_token:_token
                        },
                 "success": function (result) {
@@ -231,6 +232,16 @@ function datatablenew(){
 
 				{
 					"mRender": function (data, type, row) {
+						var tipo_requerimiento = "";
+						if(row.tipo_requerimiento!= null)tipo_requerimiento = row.tipo_requerimiento;
+						return tipo_requerimiento;
+					},
+					"bSortable": true,
+					"aTargets": [8]
+				},
+
+				{
+					"mRender": function (data, type, row) {
 						var estado = "";
 						if(row.estado == 1){
 							estado = "Activo";
@@ -241,7 +252,7 @@ function datatablenew(){
 						return estado;
 					},
 					"bSortable": false,
-					"aTargets": [8]
+					"aTargets": [9]
 				},
 				{
 					"mRender": function (data, type, row) {
@@ -280,7 +291,7 @@ function datatablenew(){
 						return html;
 					},
 					"bSortable": false,
-					"aTargets": [9],
+					"aTargets": [10],
 				},
             ]
     });

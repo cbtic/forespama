@@ -91,6 +91,7 @@ class TablaMaestra extends Model
                 from tabla_maestras
                 where tipo='".$tipo."'
                 and codigo ='".$codigo."'
+                and estado ='1'
                 order by orden ";
 
 		$data = DB::select($cad);

@@ -93,8 +93,10 @@ class GuiaInternaController extends Controller
 		
 		if($id>0){
             $guia_interna = GuiaInterna::find($id);
+            $guia = Guia::find($id);
 		}else{
 			$guia_interna = new GuiaInterna;
+            $guia = new Guia;
         }
 
         $tipo_documento_entrada = $tablaMaestra_model->getMaestroByTipo(48);
@@ -108,8 +110,9 @@ class GuiaInternaController extends Controller
         $motivo_traslado = $tablaMaestra_model->getMaestroByTipo(63);
         $departamento = $ubigeo_model->getDepartamento();
         $serie_guia = $tablaMaestra_model->getMaestroC(95,"GR");
+        $punto_partida = $tablaMaestra_model->getMaestroByTipo(68);
 
-        return view('frontend.guia_interna.modal_guia_interna_nuevoGuiaInterna',compact('id','guia_interna','tipo_documento_entrada','tipo_documento_salida','producto','marca','estado_bien','unidad','empresas',/*'transporte_razon_social',*/'motivo_traslado','departamento','serie_guia','id_user'));
+        return view('frontend.guia_interna.modal_guia_interna_nuevoGuiaInterna',compact('id','guia_interna','guia','tipo_documento_entrada','tipo_documento_salida','producto','marca','estado_bien','unidad','empresas',/*'transporte_razon_social',*/'motivo_traslado','departamento','serie_guia','id_user','punto_partida'));
 
     }
 
@@ -178,15 +181,25 @@ class GuiaInternaController extends Controller
         $guia->guia_fecha_traslado = $request->fecha_inicio_traslado;
         $guia->guia_vehiculo_placa = $request->placa_guia;
         $guia->guia_llegada_ubigeo = $request->distrito_llegada;
-        $guia->guia_llegada_direccion = $request->punto_llegada;
         $guia->guia_partida_ubigeo = $request->distrito_partida;
-        $guia->guia_partida_direccion = $request->punto_partida;
-        $guia->guia_anulado = "N"; 
+        //$guia->guia_partida_direccion = $request->punto_partida;
+        $guia->guia_anulado = "N";
         $guia->guia_cod_motivo = $request->motivo_traslado;
         $guia->guia_emisor_numdoc = "20486785994";
         $guia->guia_emisor_razsocial = "FORESTAL PAMA S.A.C.";
         $guia->guia_peso_bruto = 100;
         $guia->id_usuario_inserta = $id_user;
+        if($request->motivo_traslado=='04'){
+            $guia->guia_cod_estab_llegada = $request->punto_llegada_select;
+            $guia->guia_cod_estab_partida = $request->punto_partida;
+            $guia->guia_partida_direccion = $request->punto_partida_descripcion;
+            $guia->guia_llegada_direccion = $request->punto_llegada_descripcion;
+        }else{
+            $guia->guia_llegada_direccion = $request->punto_llegada_input;
+            $guia->guia_cod_estab_partida = $request->punto_partida;
+            $guia->guia_partida_direccion = $request->punto_partida_descripcion;
+        }
+        
         $guia->save();
 
         $array_guia_interna_detalle = array();

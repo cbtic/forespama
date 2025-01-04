@@ -284,9 +284,9 @@ $.ajax({
                         <td><input name="cantidad_pendiente[]" id="cantidad_pendiente${n}" class="cantidad_pendiente form-control form-control-sm" value="" type="text" readonly="readonly"></td>
                         <td><input name="stock_actual[]" id="stock_actual${n}" class="form-control form-control-sm" value="${producto_stock.saldos_cantidad}" type="text" readonly="readonly"></td>
                         <td><input name="precio_unitario[]" id="precio_unitario${n}" class="precio_unitario form-control form-control-sm" value="${orden_compra.precio || 0}" type="text" oninput="calcularSubTotal(this)"></td>
-                        <td><input name="sub_total[]" id="sub_total${n}" class="sub_total form-control form-control-sm" value="${orden_compra.sub_total}" type="text" readonly="readonly"></td>
-                        <td><input name="igv[]" id="igv${n}" class="igv form-control form-control-sm" value="${orden_compra.igv}" type="text" readonly="readonly"></td>
-                        <td><input name="total[]" id="total${n}" class="total form-control form-control-sm" value="${orden_compra.total}" type="text" readonly="readonly"></td>
+                        <td><input name="sub_total[]" id="sub_total${n}" class="sub_total form-control form-control-sm" value="${parseFloat(orden_compra.sub_total) || 0}" type="text" readonly="readonly"></td>
+                        <td><input name="igv[]" id="igv${n}" class="igv form-control form-control-sm" value="${parseFloat(orden_compra.igv) || 0}" type="text" readonly="readonly"></td>
+                        <td><input name="total[]" id="total${n}" class="total form-control form-control-sm" value="${parseFloat(orden_compra.total) || 0}" type="text" readonly="readonly"></td>
                         <td><button type="button" class="btn btn-danger btn-sm" onclick="eliminarFila(this)">Eliminar</button></td>
 
                     </tr>
@@ -925,7 +925,7 @@ function pdf_documento(){
                             C&oacute;digo
                         </div>
                         <div class="col-lg-2">
-                            <input id="codigo" name="codigo" on class="form-control form-control-sm"  value="<?php //echo $entrada_producto->numero_comprobante?>" type="text" readonly="readonly">
+                            <input id="codigo" name="codigo" on class="form-control form-control-sm"  value="<?php echo ($id>0) ? str_pad($orden_compra->codigo, 6, '0', STR_PAD_LEFT) :''; ?> " type="text" readonly="readonly">
                         </div>
                         <!--<div class="col-lg-2">
                             Orden de Compra
