@@ -3502,8 +3502,8 @@ class ComprobanteController extends Controller
         $data["rucEstablecimientoPuntoLlegada"] =$guia->guia_receptor_numdoc; //"20544125681";
         $data["rucEstablecimientoPuntoPartida"] =$guia->guia_emisor_numdoc;
         $data["fechaEntregaBienesTransportista"] =$guia->guia_fecha_traslado; //"2024-08-01";
-        $data["codigoEstablecimientoPuntoLlegada"] ="0000";
-        $data["codigoEstablecimientoPuntoPartida"] ="0001";
+        $data["codigoEstablecimientoPuntoLlegada"] =$guia->guia_cod_estab_llegada;
+        $data["codigoEstablecimientoPuntoPartida"] =$guia->guia_cod_estab_partida;
         $data["trasladoPorElTotalDeLosBienesSiOrNo"] ="1";
 	
         //print_r($data);
