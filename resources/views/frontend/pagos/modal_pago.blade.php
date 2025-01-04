@@ -125,6 +125,34 @@ $.mask.definitions['p'] = "[Mm]";
 $(document).ready(function() {
 		
 });
+
+$(document).ready(function() {
+    $(".upload").on('click', function() {
+        var formData = new FormData();
+        var files = $('#image')[0].files[0];
+        formData.append('file',files);
+        $.ajax({
+			headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            url: "/ingreso_vehiculo_tronco/upload_pago",
+            type: 'post',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function(response) {
+                if (response != 0) {
+                    $("#img_ruta").attr("src", "/img/tmp_pago/"+response);
+					$("#img_foto").val(response);
+                } else {
+                    alert('Formato de imagen incorrecto.');
+                }
+            }
+        });
+        return false;
+    });
+});
+
 </script>
 
 <script type="text/javascript">
@@ -200,7 +228,8 @@ function fn_save(){
 	var id_tipodesembolso = $('#id_tipodesembolso').val();
 	var nro_guia = $('#nro_guia').val();
     var nro_factura = $('#nro_factura').val();
-	
+	var img_foto = $('#img_foto').val();
+
 	var msg = "";
     if(id_ingreso_vehiculo_tronco_tipo_maderas_modal == "")msg += "Debe ingresar el numero de documento <br>";
     if(importe==""){msg+="Debe ingresar un Importe<br>";}
@@ -223,7 +252,7 @@ function fn_save(){
     $.ajax({
 			url: "/ingreso_vehiculo_tronco/send_pago",
             type: "POST",
-            data : {_token:_token,id_ingreso_vehiculo_tronco_tipo_maderas:id_ingreso_vehiculo_tronco_tipo_maderas_modal,importe:importe,fecha:fecha,observacion:observacion,id_tipodesembolso:id_tipodesembolso,nro_guia:nro_guia,nro_factura:nro_factura},
+            data : {_token:_token,id_ingreso_vehiculo_tronco_tipo_maderas:id_ingreso_vehiculo_tronco_tipo_maderas_modal,importe:importe,fecha:fecha,observacion:observacion,id_tipodesembolso:id_tipodesembolso,nro_guia:nro_guia,nro_factura:nro_factura,img_foto:img_foto},
             success: function (result) {
 				/*
 				$('.loader').hide();
@@ -471,6 +500,9 @@ container: '#myModal modal-body'
 					
 					<div class="row">
 						
+					<div class="col-lg-8">
+						<div class="row">
+
 						<div class="col-lg-3">
 							<div class="form-group">
 								<label class="control-label">Fecha</label>
@@ -527,6 +559,35 @@ container: '#myModal modal-body'
 						
 					</div>
 						
+					</div>
+
+					<div class="col-lg-4">
+							
+							<div class="row">
+						
+								<div class="col-lg-12">
+										
+								
+								<div class="form-group">
+										
+										<span class="btn btn-sm btn-warning btn-file">
+											Examinar <input id="image" name="image" type="file" />
+										</span>
+										<input type="button" class="btn btn-sm btn-primary upload" value="Subir" style="margin-left:10px">
+										
+										<img src="/img/logo_forestalpama.jpg" id="img_ruta" width="240px" height="150px" alt="" style="margin-top:10px" />
+										<input type="hidden" id="img_foto" name="img_foto" value="" />
+									</div>	
+
+
+								</div>
+							</div>
+					</div>
+
+
+					</div>
+
+					
 					
 					<div style="margin-top:10px" class="row form-group">
 						<div class="col-sm-12 controls">
