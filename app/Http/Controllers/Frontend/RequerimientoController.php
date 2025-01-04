@@ -43,8 +43,9 @@ class RequerimientoController extends Controller
         $almacen = Almacene::all();
         $estado_atencion = $tablaMaestra_model->getMaestroByTipo(60);
         $responsable_atencion = $user_model->getUserAll();
+        $tipo_requerimiento = $tablaMaestra_model->getMaestroByTipo(67);
         
-		return view('frontend.requerimiento.create',compact('tipo_documento','cerrado_requerimiento','almacen','id_user','estado_atencion','responsable_atencion'));
+		return view('frontend.requerimiento.create',compact('tipo_documento','cerrado_requerimiento','almacen','id_user','estado_atencion','responsable_atencion','tipo_requerimiento'));
 
 	}
 
@@ -58,6 +59,7 @@ class RequerimientoController extends Controller
         $p[]=$request->situacion;
         $p[]=$request->responsable_atencion;
         $p[]=$request->estado_atencion;
+        $p[]=$request->tipo_requerimiento;
         $p[]=$request->estado;
 		$p[]=$request->NumeroPagina;
 		$p[]=$request->NumeroRegistros;
@@ -102,8 +104,9 @@ class RequerimientoController extends Controller
         $estado_bien = $tablaMaestra_model->getMaestroByTipo(4);
         $responsable_atencion = $user_model->getUserAll();
         $unidad_origen = $tablaMaestra_model->getMaestroByTipo(50);
+        $tipo_requerimiento = $tablaMaestra_model->getMaestroByTipo(67);
 
-        return view('frontend.requerimiento.modal_requerimiento_nuevoRequerimiento',compact('id','requerimiento','tipo_documento','producto','marca','unidad','almacen','cerrado_requerimiento','estado_bien','estado_atencion','responsable_atencion','unidad_origen','id_user'));
+        return view('frontend.requerimiento.modal_requerimiento_nuevoRequerimiento',compact('id','requerimiento','tipo_documento','producto','marca','unidad','almacen','cerrado_requerimiento','estado_bien','estado_atencion','responsable_atencion','unidad_origen','id_user','tipo_requerimiento'));
 
     }
 
@@ -136,6 +139,7 @@ class RequerimientoController extends Controller
         $requerimiento->estado_atencion = $request->estado_atencion;
         $requerimiento->id_unidad_origen = $request->unidad_origen;
         $requerimiento->id_almacen_salida = $request->almacen_salida;
+        $requerimiento->id_tipo_requerimiento = $request->tipo_requerimiento;
         $requerimiento->cerrado = 1;
         $requerimiento->id_usuario_inserta = $id_user;
         $requerimiento->estado = 1;

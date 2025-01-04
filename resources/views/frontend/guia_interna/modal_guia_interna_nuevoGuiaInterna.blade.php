@@ -176,6 +176,7 @@ $(document).ready(function() {
 
     if($('#id').val()>0){
         obtenerIdDocumento();
+        obtenerEmpresa();
     }
     $("#item").select2({ width: '100%' });
     $("#persona_recibe").select2({ width: '100%' });
@@ -246,6 +247,9 @@ $(document).ready(function() {
 		obtenerDatosUbigeoPartida();
         obtenerDatosUbigeoLlegada();
 	}
+    if($('#id').val()==0){
+        $('#select_punto_llegada').hide();
+    }
 
 });
 
@@ -498,7 +502,7 @@ function fn_save_guia_interna(){
 
     var fecha_emision = $('#fecha_emision').val();
     var punto_partida = $('#punto_partida').val();
-    var punto_llegada = $('#punto_llegada').val();
+    //var punto_llegada = $('#punto_llegada').val();
     var fecha_inicio_traslado = $('#fecha_inicio_traslado').val();
     var destinatario = $('#destinatario').val();
     var ruc = $('#ruc').val();
@@ -519,7 +523,7 @@ function fn_save_guia_interna(){
 
     if(fecha_emision==""){msg+="Ingrese la Fecha de Emision <br>";}
     if(punto_partida==""){msg+="Ingrese el Punto de Partida <br>";}
-    if(punto_llegada==""){msg+="Ingrese el Punto de Llegada <br>";}
+    //if(punto_llegada==""){msg+="Ingrese el Punto de Llegada <br>";}
     if(fecha_inicio_traslado==""){msg+="Ingrese la Fecha de traslado <br>";}
     if(destinatario==""){msg+="Ingrese el Destinatario <br>";}
     if(ruc==""){msg+="Ingrese el RUC de Destinatario <br>";}
@@ -1155,6 +1159,20 @@ function obtenerNumeroGuia(){
     });
 }
 
+function cambiarPuntoLlegada(){
+
+    var motivo_traslado = $('#motivo_traslado').val();
+
+    if(motivo_traslado=='04'){
+        $('#select_punto_llegada').show();
+        $('#input_punto_llegada').hide();
+    }else{
+        $('#select_punto_llegada').hide();
+        $('#input_punto_llegada').show();
+    }
+
+}
+
 </script>
 
 
@@ -1199,7 +1217,7 @@ function obtenerNumeroGuia(){
                                         <option value="">--Seleccionar--</option>
                                         <?php 
                                         foreach ($serie_guia as $row){?>
-                                            <option value="<?php echo $row->denominacion ?>" <?php if($row->denominacion==$guia_interna->numero_guia)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                            <option value="<?php echo $row->denominacion ?>" <?php if($row->denominacion==$guia_interna->guia_serie)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
                                             <?php 
                                         }
                                         ?>
@@ -1213,7 +1231,7 @@ function obtenerNumeroGuia(){
                                     N&uacute;mero
                                 </div>
                                 <div class="col-lg-5">
-                                    <input id="numero_guia" name="numero_guia" on class="form-control form-control-sm"  value="" type="text" readonly>
+                                    <input id="numero_guia" name="numero_guia" on class="form-control form-control-sm"  value="<?php echo ($id>0) ? str_pad($guia_interna->guia_numero, 4, '0', STR_PAD_LEFT) :''; ?> " type="text" readonly>
                                 </div>
                             </div>
                         </div>
@@ -1359,7 +1377,7 @@ function obtenerNumeroGuia(){
                                     Motivo Traslado
                                 </div>
                                 <div class="col-lg-5">
-                                    <select name="motivo_traslado" id="motivo_traslado" class="form-control form-control-sm">
+                                    <select name="motivo_traslado" id="motivo_traslado" class="form-control form-control-sm" onchange="cambiarPuntoLlegada()">
                                         <option value="">--Seleccionar--</option>
                                         <?php 
                                         foreach ($motivo_traslado as $row){?>
@@ -1498,7 +1516,15 @@ function obtenerNumeroGuia(){
                                         Punto de Partida
                                     </div>
                                     <div class="col-lg-9">
-                                        <input id="punto_partida" name="punto_partida" on class="form-control form-control-sm"  value="<?php if($id>0){echo $guia_interna->punto_partida;}?>" type="text">
+                                        <select name="punto_partida" id="punto_partida" class="form-control form-control-sm">
+                                            <option value="">--Seleccionar--</option>
+                                            <?php 
+                                            foreach ($punto_partida as $row){?>
+                                                <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$guia_interna->guia_cod_estab_partida)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                                <?php 
+                                            }
+                                            ?>
+                                        </select>
                                     </div>
                                 </div>
                             </div>
@@ -1567,13 +1593,31 @@ function obtenerNumeroGuia(){
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-lg-3">
+                            <div class="col-lg-3" id="select_punto_llegada">
                                 <div class="row">
                                     <div class="col-lg-3">
                                         Punto de Llegada
                                     </div>
                                     <div class="col-lg-9">
-                                        <input id="punto_llegada" name="punto_llegada" on class="form-control form-control-sm"  value="<?php if($id>0){echo $guia_interna->punto_llegada;}?>" type="text">
+                                        <select name="punto_llegada_select" id="punto_llegada_select" class="form-control form-control-sm">
+                                            <option value="">--Seleccionar--</option>
+                                            <?php 
+                                            foreach ($punto_partida as $row){?>
+                                                <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$guia_interna->guia_cod_estab_llegada)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                                <?php 
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3" id="input_punto_llegada">
+                                <div class="row">
+                                    <div class="col-lg-3">
+                                        Punto de Llegada
+                                    </div>
+                                    <div class="col-lg-9">
+                                        <input id="punto_llegada_input" name="punto_llegada_input" on class="form-control form-control-sm"  value="<?php if($id>0){echo $guia_interna->punto_llegada;}?>" type="text">
                                     </div>
                                 </div>
                             </div>

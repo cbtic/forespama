@@ -925,7 +925,7 @@ function pdf_documento(){
                             C&oacute;digo
                         </div>
                         <div class="col-lg-2">
-                            <input id="codigo" name="codigo" on class="form-control form-control-sm"  value="<?php //echo $entrada_producto->numero_comprobante?>" type="text" readonly="readonly">
+                            <input id="codigo" name="codigo" on class="form-control form-control-sm"  value="<?php echo ($id>0) ? str_pad($orden_compra->codigo, 6, '0', STR_PAD_LEFT) :''; ?> " type="text" readonly="readonly">
                         </div>
                         <!--<div class="col-lg-2">
                             Orden de Compra
