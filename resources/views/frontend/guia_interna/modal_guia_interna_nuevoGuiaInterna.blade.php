@@ -178,6 +178,7 @@ $(document).ready(function() {
         obtenerIdDocumento();
         obtenerEmpresa();
     }
+
     $("#item").select2({ width: '100%' });
     $("#persona_recibe").select2({ width: '100%' });
     $("#motivo_traslado").select2({ width: '100%' });
@@ -1189,6 +1190,22 @@ $('#punto_llegada_select').on('change', function(){
 
 });
 
+function generarGuia(){
+
+    var numero_guia = $('#numero_guia').val();
+
+    numero_guia = parseInt(numero_guia,10);
+
+    $.ajax({
+        url: "/comprobante/guia_json/"+numero_guia,
+        dataType: "json",
+        success: function(result){
+            bootBox.alert("Se envió a la Sunat la Guia");
+            //$('#numero_guia').val(result[0].codigo);
+        }
+    });
+}
+
 </script>
 
 
@@ -1682,15 +1699,25 @@ $('#punto_llegada_select').on('change', function(){
                                 <?php 
                                     }
                                 ?>
-                                <?php if($id_user==$guia_interna->id_usuario_inserta && $id>0){?>
+                                <?php if($id_user==$guia_interna->id_usuario_inserta && $id>0 && $guia->guia_estado_sunat !='FIRMADO'){?>
                                     <a href="javascript:void(0)" onClick="fn_save_guia_interna()" class="btn btn-sm btn-success" style="margin-right:10px">Guardar</a>
                                 <?php }?>
                                 <?php if($id==0){?>
                                     <a href="javascript:void(0)" onClick="fn_save_guia_interna()" class="btn btn-sm btn-success" style="margin-right:10px">Guardar</a>
                                 <?php }?>
+
+                                <?php 
+                                    if($id>0){
+                                ?>
+                                    <a href="javascript:void(0)" onClick="generarGuia()" class="btn btn-sm btn-warning" style="margin-right:10px">Enviar Sunat</a>
+                                <?php }?>
+
+                                <?php if($id>0 && $guia->guia_estado_sunat =='FIRMADO'){?>
+                                    <a href="http://forespama.felmo.pe/<?php echo $guia->guia_ruta_comprobante;?>" class="btn btn-sm btn-warning" style="margin-right:10px">Ver Gu&iacute;a</a>
+                                <?php }?>
+
                                 <a href="javascript:void(0)" onClick="$('#openOverlayOpc1').modal('hide');" class="btn btn-sm btn-info" style="">Cerrar</a>
                             </div>
-                                                
                         </div>
                     </div> 
 
