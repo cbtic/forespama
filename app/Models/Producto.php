@@ -68,7 +68,8 @@ class Producto extends Model
     function getProductoInterno(){
 
         $cad = "select * from productos p
-        where p.id_tipo_origen_producto = '1'";
+        where p.id_tipo_origen_producto = '1'
+        and p.estado='1'";
 
 		$data = DB::select($cad);
         return $data;

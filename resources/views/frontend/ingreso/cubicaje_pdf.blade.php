@@ -254,10 +254,10 @@ $(document).ready(function() {
                         <td class="td total_suma" style="text-align:right"></td>
                         <td class="td total_suma" style="text-align:right"></td>
                         <td class="td total_suma" style="text-align:right"><b><?php echo $volumen_pies_suma;?></b></td>
-                        <td class="td total_suma" style="text-align:right"><b><?php echo $volumen_total_m3_suma;?></b></td>
-                        <td class="td total_suma" style="text-align:right"><b><?php echo $volumen_total_pies_suma;?></b></td>
+                        <td class="td total_suma" style="text-align:right"><b><?php echo number_format($volumen_total_m3_suma,2) ;?></b></td>
+                        <td class="td total_suma" style="text-align:right"><b><?php echo number_format($volumen_total_pies_suma,2) ;?></b></td>
                         <td class="td total_suma" style="text-align:right"></td>
-                        <td class="td total_suma" style="text-align:right"><b><?php echo $precio_total_suma;?></b></td>
+                        <td class="td total_suma" style="text-align:right"><b><?php echo number_format($precio_total_suma,2) ;?></b></td>
                     </tr>
                 </tbody>
             </table>
