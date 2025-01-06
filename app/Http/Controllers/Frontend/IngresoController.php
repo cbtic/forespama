@@ -1221,4 +1221,15 @@ class IngresoController extends Controller
 		//dd($producto);exit();
 		return response()->json($producto);
 	}
+
+    public function obtener_proforma_id($id){
+
+		$proforma_model = new Proforma;
+        //$valorizaciones_model = new Valorizacione;
+        $sw = true;
+        $proforma = $proforma_model->getPersona($id);
+        $array["sw"] = $sw;
+        $array["agremiado"] = $proforma;
+        echo json_encode($array);
+    }
 }
