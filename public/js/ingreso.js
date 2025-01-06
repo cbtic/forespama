@@ -1195,15 +1195,78 @@ function cargarValorizacion1(){
 
 function cargarProformaDet(id){
 
+	var total = 0;
+
     $("#tblValorizacion tbody").html("");
 	$.ajax({
 			url: "/ingreso/listar_proforma_det/"+id,
 			type: "GET",
-			success: function (result) {  					
+			success: function (result) {
+				$(result).each(function (ii, oo) {
+					//total = oo.total_;
+					alert(oo);
+				});
+
+					//alert(total);
+					  					
 					$("#tblValorizacion tbody").html(result);
+					
+					
+				
+				//$("#tipo_documento").val(result.agremiado.id_tipo_documento);
+					
+
+/*
+					$(".mov:checked").each(function (){
+						var val_total = $(this).parent().parent().parent().find('.val_total').html();
+						val_total =val_total.toString().replace(',','');
+						var val_sub_total = $(this).parent().parent().parent().find('.val_sub_total').html();
+						val_sub_total =val_sub_total.toString().replace(',','');
+						var val_igv = $(this).parent().parent().parent().find('.val_igv').html();
+						val_igv =val_igv.toString().replace(',','');
+				
+						//var val_descuento = $(this).parent().parent().parent().find('.val_descuento').html();
+						id_concepto = $(this).parent().parent().parent().find('.id_concepto_modal_sel').val();
+				
+						var val_descuento =$('#DescuentoPP').val("");
+				
+						var numero_cuotas_pp =$('#numero_cuotas_pp').val("");
+						var importe_pp =$('#importe_pp').val("");
+						
+						total += Number(val_total);
+						stotal += Number(val_sub_total);
+						igv += Number(val_igv);
+				
+					});
+					descuento = 0;
+					
+				
+					//$('#idConcepto').val(id_concepto);
+					//total -= descuento;
+					
+					$('#total').val(total.toFixed(2));
+					$('#stotal').val(stotal.toFixed(2));
+					$('#igv').val(igv.toFixed(2));
+					$('#totalDescuento').val(descuento.toFixed(2));
+					*/
 			}
 	});
 }
+
+function calcular_total_pf(){
+	var total = 0;
+	var descuento = 0;
+	var valor_venta_bruto = 0;
+	var valor_venta = 0;
+	var igv = 0;
+	var stotal = 0;
+	var descuento =0;
+
+	total= $('#deudaTotal_pf').val("");
+	alert(total);
+
+}
+
 
 function cargarValorizacion(){
 

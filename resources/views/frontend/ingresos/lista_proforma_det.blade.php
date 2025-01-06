@@ -88,12 +88,30 @@ foreach($proforma as $key=>$row):
 	//$stotal += $stotal;
 	//$igv_ += $igv_;
 
+/*
+	total_productos = Number(total_productos) + Number(precio_venta)*Number(cantidad);
+	total_descuento = Number(total_descuento) + Number(descuento);
+	total_pagar = Number(total_pagar) + Number(total);
+
+	sub_total =  Number(sub_total) + Number(valor_venta);
+	total_igv = Number(total_igv) + Number(igv);
+
 	
+	$('#deudaTotales').val(Number(total_productos).toFixed(2));
+
+	$('#totalDescuento').val(Number(total_descuento).toFixed(2));
+	$('#total').val(Number(total_pagar).toFixed(2));
+
+	$('#stotal').val(Number(sub_total).toFixed(2));
+	$('#igv').val(Number(total_igv).toFixed(2));
+*/
+
+
 endforeach;
 ?>
 
 <tr>
-	<input type="hidden" name="deudaTotal" id="deudaTotal" value="<?php echo number_format($total,2)?>" />
+	<input type="hidden" name="deudaTotal_pf" id="deudaTotal_pf" value="<?php echo number_format($total,2)?>" />	
 </tr>
 
 
