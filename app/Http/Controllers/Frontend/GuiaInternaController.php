@@ -210,6 +210,11 @@ class GuiaInternaController extends Controller
         $guia->id_usuario_inserta = $id_user;
         $guia->guia_conductor_tipodoc = $personas->id_tipo_documento;
         $guia->guia_conductor_numdoc = $personas->numero_documento;
+        if($request->ruc_transporte=='20486785994'){
+            $guia->guia_modo_traslado = '01';
+        }else{
+            $guia->guia_modo_traslado = '02';
+        }
         if($request->motivo_traslado=='04'){
             $guia->guia_cod_estab_llegada = $request->punto_llegada_select;
             $guia->guia_cod_estab_partida = $request->punto_partida;
