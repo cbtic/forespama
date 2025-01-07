@@ -1224,12 +1224,14 @@ class IngresoController extends Controller
 
     public function obtener_proforma_id($id){
 
-		$proforma_model = new Proforma;
+		$proforma_model = new Valorizacione;
         //$valorizaciones_model = new Valorizacione;
         $sw = true;
-        $proforma = $proforma_model->getPersona($id);
+        $proforma = $proforma_model->getProformaId($id);
         $array["sw"] = $sw;
-        $array["agremiado"] = $proforma;
+        $array["proforma"] = $proforma;
         echo json_encode($array);
     }
+
+    
 }
