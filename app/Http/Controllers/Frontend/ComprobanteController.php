@@ -3432,7 +3432,7 @@ class ComprobanteController extends Controller
 		foreach($guia_detalles as $index => $row ) {
 			$items1 = array(
 							"ordenItem"=> $row->guiad_orden_item, //"2",
-                            "codigoItem"=> $row->guiad_orden_item, //"2",
+                            "codigoItem"=> $row->guiad_codigo, //"2",
                             "idProducto"=> "0",
 							"adicionales"=> [],
 							"cantidadItem"=> $row->guiad_cantidad, //"1",
@@ -3457,6 +3457,7 @@ class ComprobanteController extends Controller
         $data["notification"] ="0";
         $data["numeroBultos"] ="0";
         $data["ubigeoEmisor"] =$guia->guia_partida_ubigeo;
+        $data["observaciones"] =$guia->guia_observaciones;
         $data["tipoDocumento"] =$this->getTipoDocumento($guia->guia_tipo);//"09";
         $data["distritoEmisor"] ="VILLA EL SALVADOR";
         $data["esContingencia"] =false;
@@ -3505,7 +3506,7 @@ class ComprobanteController extends Controller
         $data["codigoEstablecimientoPuntoLlegada"] =$guia->guia_cod_estab_llegada;
         $data["codigoEstablecimientoPuntoPartida"] =$guia->guia_cod_estab_partida;
         $data["trasladoPorElTotalDeLosBienesSiOrNo"] ="1";
-        $data["observaciones"] =$guia->guia_observaciones;
+        
 
         if ($guia->guia_modo_traslado=='01'){
             $data["tipoDocIdentidadTransportista"] =$guia->guia_transportista_tipo_doc;
