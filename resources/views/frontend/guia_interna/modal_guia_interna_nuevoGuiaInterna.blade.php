@@ -756,16 +756,24 @@ function cargar_detalle_documento(id_documento){
                 $('#ruc').val("");
                 $('#destinatario_nombre').val("");
                 $('#destinatario').val("");
-        
+                $('#orden_compra_cliente').val("");
+                $('#tiendas_orden_compra').val("");
+
                 $("#ruc").attr("readonly",false);
                 $("#destinatario_nombre").attr("readonly",false);
+                $("#orden_compra_cliente").attr("readonly",false);
+                $("#tiendas_orden_compra").attr("readonly",false);
                 
                 $('#ruc').val(entrada.ruc);
                 $('#destinatario_nombre').val(entrada.razon_social);
                 $('#destinatario').val(entrada.id_empresa_compra);
+                $('#orden_compra_cliente').val(entrada.numero_orden_compra_cliente);
+                $('#tiendas_orden_compra').val(entrada.tiendas);
 
                 $("#ruc").attr("readonly",true);
                 $("#destinatario_nombre").attr("readonly",true);
+                $("#orden_compra_cliente").attr("readonly",true);
+                $("#tiendas_orden_compra").attr("readonly",true);
 
                 //$("#destinatario").select2({ width: '100%' });
                 
@@ -1533,6 +1541,38 @@ function obtenerLicencia(){
                                         <i class="fas fa-plus-circle"></i>Destinatario
                                         <!--<img src="/img/icono_empresa.png" alt="Carro" style="width: 16px; height: 16px; margin-left: 5px;">-->
                                     </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="padding-left:10px; padding-bottom:10px;">
+                        <div class="col-lg-4">
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    N° Orden Compra Cliente
+                                </div>
+                                <div class="col-lg-5">
+                                    <input id="orden_compra_cliente" name="orden_compra_cliente" on class="form-control form-control-sm"  value="<?php if($id>0){echo $guia_interna->numero_orden_compra_cliente;} ?>" type="text">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    Tiendas
+                                </div>
+                                <div class="col-lg-5">
+                                    <input id="tiendas_orden_compra" name="tiendas_orden_compra" on class="form-control form-control-sm"  value="<?php if($id>0){echo $guia_interna->tiendas;} ?>" type="text">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    Observaci&oacute;n
+                                </div>
+                                <div class="col-lg-8">
+                                    <input id="observacion_guia" name="observacion_guia" on class="form-control form-control-sm"  value="<?php if($id>0){echo $guia_interna->observacion;} ?>" type="text">
                                 </div>
                             </div>
                         </div>
