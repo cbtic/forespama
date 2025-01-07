@@ -3469,9 +3469,9 @@ class ComprobanteController extends Controller
         $data["codigoPaisEmisor"] ="PE";
         $data["licenciaConducir"] =$guia->licencia; //"Q25704015";
         $data["numeroContenedor"] ="0";
-        $data["direccionReceptor"] =$guia->guia_llegada_direccion;;//"JR. MINERIA NRO. 177";
+        $data["direccionReceptor"] =$guia->guia_llegada_direccion;//"JR. MINERIA NRO. 177";
         $data["docAfectadoFisico"] =false;
-        $data["modalidadTraslado"] ="02";
+        $data["modalidadTraslado"] =$guia->guia_modo_traslado;
         $data["razonSocialEmisor"] =$guia->guia_emisor_razsocial; //"FELMO SRLTDA";
         $data["departamentoEmisor"] ="LIMA";
         $data["ubigeoPuntoLlegada"] =$guia->guia_llegada_ubigeo;
@@ -3491,11 +3491,11 @@ class ComprobanteController extends Controller
         $data["tipoDocIdentidadReceptor"] ="6";
         $data["tipoDireccionPuntoLlegada"] ="1";
         $data["tipoDireccionPuntoPartida"] ="0";
-        $data["tipoDocIdentidadConductor"] ="1";
+        $data["tipoDocIdentidadConductor"] =$guia->guia_conductor_tipodoc;
         $data["numeroDocIdentidadReceptor"] =$guia->guia_receptor_numdoc; //"20544125681";
         $data["indicadorRetornoVehiculoCon"] ="0";
         $data["indicadorRetornoVehiculoSin"] ="0";
-        $data["numeroDocIdentidadConductor"] =$guia->numero_documento; //"25704015";
+        $data["numeroDocIdentidadConductor"] =$guia->guia_conductor_numdoc; //"25704015";
         $data["direccionPuntoLlegadaCompleta"] =$guia->guia_llegada_direccion; //"JR. MINERIA NRO. 177, LIMA - LIMA - SANTA ANITA";
         $data["direccionPuntoPartidaCompleta"] =$guia->guia_partida_direccion; //"AV. NESTOR GAMBETA N° 6311, CALLAO - CALLAO - CALLAO";
         $data["indicadorTrasladoVehiculoM1oL"] ="0";

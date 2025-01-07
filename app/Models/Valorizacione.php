@@ -438,7 +438,17 @@ class Valorizacione extends Model
         return $data;
     }
 
+    function getProformaId($id){
 
+        
+        $cad = "select *
+        from proformas p
+        where p.id = ".$id."   ";
+        
+        //echo $cad;
+		$data = DB::select($cad);
+        return $data;
+    }
 
 	function getPagoEstacionamiento($tipo_documento,$persona_id){
 
