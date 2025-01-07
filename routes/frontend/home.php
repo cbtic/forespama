@@ -532,3 +532,6 @@ Route::get('proforma/proforma_pdf/{id}', [ProformaController::class, 'proforma_p
 Route::get('ingreso_vehiculo_tronco/exportar_listar_pagos/{ruc}/{empresa}/{placa}/{tipo_madera}/{fecha_inicio}/{fecha_fin}', [IngresoVehiculoTroncoController::class, 'exportar_listar_pagos'])->name('ingreso_vehiculo_tronco.exportar_listar_pagos');
 
 Route::get('requerimiento/exportar_listar_requerimiento/{tipo_documento}/{fecha}/{numero_requerimiento}/{almacen}/{situacion}/{responsable_atencion}/{estado_atencion}/{tipo_requerimiento}/{estado}', [RequerimientoController::class, 'exportar_listar_requerimiento'])->name('requerimiento.exportar_listar_requerimiento');
+Route::get('ingreso_vehiculo_tronco/obtener_datos_vehiculo_guia/{placa}', [IngresoVehiculoTroncoController::class, 'obtener_datos_vehiculo_guia'])->name('ingreso_vehiculo_tronco.obtener_datos_vehiculo_guia');
+Route::get('conductores/obtener_licencia/{conductor}', [ConductoresController::class, 'obtener_licencia'])->name('conductores.obtener_licencia');
+Route::post('conductores/send_conductor_guia', [ConductoresController::class, 'send_conductor_guia'])->name('conductores.send_conductor_guia');

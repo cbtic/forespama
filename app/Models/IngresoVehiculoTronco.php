@@ -26,6 +26,22 @@ class IngresoVehiculoTronco extends Model
         if(isset($data[0]))return $data[0];
     }
 
+    function getEmpresaConductoresVehiculos($id_empresa){
+
+        $cad = "select ecv.id,ecv.id_empresas,ecv.id_vehiculos,ecv.id_conductores,p.id_tipo_documento,p.numero_documento,p.apellido_paterno||' '||p.apellido_materno||' '||p.nombres conductor, c.licencia 
+        from empresas_conductores_vehiculos ecv
+        inner join empresas e on ecv.id_empresas=e.id
+        inner join vehiculos v on ecv.id_vehiculos=v.id and v.estado='1' 
+        inner join conductores c on ecv.id_conductores=c.id and c.estado='ACTIVO'
+        inner join personas p on c.id_personas=p.id
+        where ecv.estado='1'
+        and ecv.id_empresas ='".$id_empresa."'
+        order by ecv.id desc";
+
+		$data = DB::select($cad);
+        return $data;
+    }
+
 	function getIngresoVehiculoTroncoCubicajeById($id){
 
         $cad = "select * from ingreso_vehiculo_tronco_cubicajes ivtc 

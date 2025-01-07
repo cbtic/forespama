@@ -56,6 +56,18 @@ class Conductores extends Model
         return $data;
     }
 
+    function getLicenciaByConductor($conductor){
+
+        $cad = "select * from conductores c 
+        where c.id='".$conductor."'
+        and c.estado='ACTIVO'";
+
+        //limit 2620";
+
+        $data = DB::select($cad);
+        return $data;
+    }
+
     public function listar_conductor_ajax($p){
 		return $this->readFunctionPostgres('sp_listar_conductor_paginado',$p);
     }

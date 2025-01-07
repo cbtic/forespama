@@ -178,4 +178,77 @@ class ConductoresController extends Controller
 
     }
 
+	public function obtener_licencia($conductor){
+
+		$sw = true;
+		$msg = "";
+		$conductores_model = new Conductores;
+		$conductores = $conductores_model->getLicenciaByConductor($conductor);
+		
+		$array["sw"] = $sw;
+		$array["msg"] = $msg;
+		$array["conductores"] = $conductores;
+        echo json_encode($array);
+		
+	}
+
+	public function send_conductor_guia(Request $request){
+
+		$id_user = Auth::user()->id;
+		$sw = true;
+		$msg = "";
+
+		if($request->id == 0){
+
+			$personaExiste = Personas::where("id_tipo_documento",$request->id_tipo_documento)->where("numero_documento",$request->numero_documento)->where("estado",1)->get();
+			
+			if(count($personaExiste)==0){
+				$persona = new Personas;
+				$persona->id_tipo_documento = $request->licencia;
+				$persona->numero_documento = $request->id_personas;
+				$persona->apellido_paterno = Carbon::now()->format('Y-m-d');
+				$persona->apellido_materno = Carbon::now()->format('Y-m-d');
+				$persona->nombres = Carbon::now()->format('Y-m-d');
+				$persona->estado = 1;
+				$persona->save();
+			}else{
+				$persona = $personaExiste[0];
+				$sw = false;
+				$msg = "La persona ingresada ya existe !!!";
+			}
+
+			$conductorExiste = Conductores::where("id_personas",$persona->id)->get();
+			if(count($conductorExiste)==0){
+				$conductor = new Conductores;
+				$conductor->licencia = $request->licencia;
+				$conductor->id_personas = $request->id_personas;
+				$conductor->fecha_licencia = Carbon::now()->format('Y-m-d');
+				$conductor->estado = "ACTIVO";
+				$conductor->save();
+			}else{
+				$conductor = $conductorExiste[0];
+				$sw = false;
+				$msg = "El Conductor ingresado ya existe !!!";
+			}
+
+
+		}else{
+			$conductor = Conductores::find($request->id);
+			$conductor->licencia = $request->licencia;
+			$conductor->id_personas = $request->id_personas;
+			$conductor->save();
+		}
+
+		//EmpresasConductoresVehiculo::find();
+
+		$persona = Persona::find($conductor->id_personas);
+
+		$array["sw"] = $sw;
+		$array["msg"] = $msg;
+		$array["persona"] = $persona;
+		$array["conductor"] = $conductor;
+        echo json_encode($array);
+
+    }
+
 }

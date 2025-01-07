@@ -13,6 +13,8 @@ use App\Models\GuiaInternaDetalle;
 use App\Models\Ubigeo;
 use App\Models\Guia;
 use App\Models\GuiaDetalle;
+use App\Models\Conductores;
+use App\Models\Persona;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Auth;
 use Carbon\Carbon;
@@ -112,6 +114,8 @@ class GuiaInternaController extends Controller
         $serie_guia = $tablaMaestra_model->getMaestroC(95,"GR");
         $punto_partida = $tablaMaestra_model->getMaestroByTipo(68);
 
+        //dd($guia_interna);exit();
+
         return view('frontend.guia_interna.modal_guia_interna_nuevoGuiaInterna',compact('id','guia_interna','guia','tipo_documento_entrada','tipo_documento_salida','producto','marca','estado_bien','unidad','empresas',/*'transporte_razon_social',*/'motivo_traslado','departamento','serie_guia','id_user','punto_partida'));
 
     }
@@ -144,12 +148,12 @@ class GuiaInternaController extends Controller
         $id_guia_interna_detalle =$request->id_guia_interna_detalle;
         
         $guia_interna->fecha_emision = $request->fecha_emision;
-        $guia_interna->punto_partida = $request->punto_partida;
-        $guia_interna->punto_llegada = $request->punto_llegada;
+        $guia_interna->punto_partida = $request->punto_partida_descripcion;
+        $guia_interna->punto_llegada = $request->punto_llegada_descripcion;
         $guia_interna->fecha_traslado = $request->fecha_inicio_traslado;
         $guia_interna->costo_minimo = $request->costo_minimo;
         $guia_interna->id_destinatario = $request->destinatario;
-        $guia_interna->id_conductor = $request->id_conductor_guia;
+        $guia_interna->id_conductor = $request->conductor_guia;
         $guia_interna->ruc_destinatario = $request->ruc;
         $guia_interna->marca = $request->id_marca_vehiculo;
         $guia_interna->placa = $request->placa_guia;
@@ -166,10 +170,22 @@ class GuiaInternaController extends Controller
         $guia_interna->guia_numero = $request->numero_guia;
         $guia_interna->guia_tipo = $tipo_guia[0]->codigo;
         $guia_interna->id_usuario_inserta = $id_user;
+        if($request->motivo_traslado=='04'){
+            $guia_interna->guia_cod_estab_llegada = $request->punto_llegada_select;
+            $guia_interna->guia_cod_estab_partida = $request->punto_partida;
+            $guia_interna->punto_partida = $request->punto_partida_descripcion;
+            $guia_interna->punto_llegada = $request->punto_llegada_descripcion;
+        }else{
+            $guia_interna->punto_llegada = $request->punto_llegada_input;
+            $guia_interna->guia_cod_estab_partida = $request->punto_partida;
+            $guia_interna->punto_partida = $request->punto_partida_descripcion;
+        }
         $guia_interna->estado = 1;
-        $guia_interna->save();    
+        $guia_interna->save();
         
         $empresa_destinatario = Empresa::find($request->destinatario);
+        $conductores = Conductores::find($request->conductor_guia);
+        $personas = Persona::find($conductores->id_personas);
 
         $guia->guia_serie = $request->serie_guia;
         $guia->guia_numero = $request->numero_guia;
@@ -182,6 +198,9 @@ class GuiaInternaController extends Controller
         $guia->guia_vehiculo_placa = $request->placa_guia;
         $guia->guia_llegada_ubigeo = $request->distrito_llegada;
         $guia->guia_partida_ubigeo = $request->distrito_partida;
+        $guia->guia_transportista_numdoc = $request->ruc_transporte;
+        $guia->guia_transportista_tipo_doc = 6;
+        $guia->guia_transportista_razsoc = $request->transporte_razon_social;
         //$guia->guia_partida_direccion = $request->punto_partida;
         $guia->guia_anulado = "N";
         $guia->guia_cod_motivo = $request->motivo_traslado;
@@ -189,6 +208,8 @@ class GuiaInternaController extends Controller
         $guia->guia_emisor_razsocial = "FORESTAL PAMA S.A.C.";
         $guia->guia_peso_bruto = 100;
         $guia->id_usuario_inserta = $id_user;
+        $guia->guia_conductor_tipodoc = $personas->id_tipo_documento;
+        $guia->guia_conductor_numdoc = $personas->numero_documento;
         if($request->motivo_traslado=='04'){
             $guia->guia_cod_estab_llegada = $request->punto_llegada_select;
             $guia->guia_cod_estab_partida = $request->punto_partida;

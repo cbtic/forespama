@@ -177,6 +177,7 @@ $(document).ready(function() {
     if($('#id').val()>0){
         obtenerIdDocumento();
         obtenerEmpresa();
+        cambiarPuntoLlegada();
     }
 
     $("#item").select2({ width: '100%' });
@@ -868,11 +869,10 @@ function obtenerEmpresa(){
     $("#placa_guia").attr("readonly",false);
     $("#marca_vehiculo").attr("readonly",false);
     $("#transporte_razon_social").attr("readonly",false);
-    $("#conductor_guia").attr("readonly",false);
-    $("#numero_licencia").attr("readonly",false);
+    //$("#numero_licencia").attr("readonly",false);
     
     $.ajax({
-        url: '/ingreso_vehiculo_tronco/obtener_datos_vehiculo/' + placa,
+        url: '/ingreso_vehiculo_tronco/obtener_datos_vehiculo_guia/' + placa,
         dataType: "json",
         success: function(result){
             
@@ -884,19 +884,33 @@ function obtenerEmpresa(){
                 $('#marca_vehiculo').val(vehiculo.marca);
                 $('#id_marca_vehiculo').val(vehiculo.id_marca);
                 $('#id_transporte_razon_social').val(vehiculo.id_empresas);
-                $('#id_conductor_guia').val(vehiculo.id_conductores);
+                //$('#id_conductor_guia').val(vehiculo.id_conductores);
                 $('#transporte_razon_social').val(vehiculo.razon_social);
-                $('#conductor_guia').val(vehiculo.conductor);
-                $('#numero_licencia').val(vehiculo.licencia);
+                //$('#conductor_guia').val(vehiculo.conductor);
+                //$('#numero_licencia').val(vehiculo.licencia);
                 $("#marca_vehiculo").attr("readonly",true);
                 $("#ruc_transporte").attr("readonly",true);
                 $("#transporte_razon_social").attr("readonly",true);
-                $("#conductor_guia").attr("readonly",true);
-                $("#numero_licencia").attr("readonly",true);
+                //$("#numero_licencia").attr("readonly",true);
                 
                 //bootbox.alert("El Vehiculo ingresado ya esta registrado !!!");
                 
                 //$("#tipo_documento_bus").attr("disabled",true);
+                var conductores = result.conductores;
+                var option = "<option value=''>Seleccionar</option>";
+                $('#conductor_guia').html("");
+                var id_conductor = <?php echo json_encode($guia_interna->id_conductor); ?>;
+
+                $(conductores).each(function (ii, oo) {
+                    
+                    var selected = (oo.id_conductores == id_conductor) ? "selected='selected'" : "";
+
+                    option += "<option value='" + oo.id_conductores + "' " + selected + ">" + oo.conductor + "</option>";
+                });
+                $('#conductor_guia').html(option);
+                
+                //$('#conductor_guia').attr("disabled",true);
+                //$('.loader').hide();
                 
             }
             
@@ -1192,7 +1206,7 @@ $('#punto_llegada_select').on('change', function(){
 
 function generarGuia(){
 
-    var numero_guia = $('#numero_guia').val();
+    var numero_guia = $('#id').val();
 
     numero_guia = parseInt(numero_guia,10);
 
@@ -1204,6 +1218,32 @@ function generarGuia(){
             //$('#numero_guia').val(result[0].codigo);
         }
     });
+}
+
+function obtenerLicencia(){
+
+    var conductor_guia = $('#conductor_guia').val();
+
+    $('#numero_licencia').val("");
+    $("#numero_licencia").attr("readonly",false);
+
+    if(conductor_guia==0){
+        $('#numero_licencia').val("");
+        $("#numero_licencia").attr("readonly",false);
+    }else{
+
+    $.ajax({
+        url: "/conductores/obtener_licencia/"+conductor_guia,
+        dataType: "json",
+        success: function(result){
+            //bootBox.alert("Se envió a la Sunat la Guia");
+
+            var conductores = result.conductores;
+            $('#numero_licencia').val(conductores[0].licencia);
+            $("#numero_licencia").attr("readonly",false);
+        }
+    });
+    }
 }
 
 </script>
@@ -1371,17 +1411,33 @@ function generarGuia(){
                                     Conductor
                                 </div>
                                 <div class="col-lg-5">
+                                    <select name="conductor_guia" id="conductor_guia" class="form-control form-control-sm" onchange="obtenerLicencia()">
+                                        <option value="">--Seleccionar--</option>
+                                    </select>
+                                </div>
+                                <div class="col-lg-3">
+                                    <button id="btnPlaca" type="button" class="btn btn-warning btn-sm" data-toggle="modal" onclick="agregarConductor()">
+                                        <i class="fas fa-plus-circle"></i>Conductor
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <!--<div class="col-lg-4">
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    Conductor
+                                </div>
+                                <div class="col-lg-5">
                                     <input id="conductor_guia" name="conductor_guia" on class="form-control form-control-sm"  value="<?php //if($id>0){echo $guia_interna->licencia_conducir;} ?>" type="text">
                                     <input name="id_conductor_guia" id="id_conductor_guia" class="form-control form-control-sm" value="" type="hidden">
                                 </div>
                                 <div class="col-lg-3">
                                     <button id="btnPlaca" type="button" class="btn btn-warning btn-sm" data-toggle="modal" onclick="agregarConductor()">
                                         <i class="fas fa-plus-circle"></i>Conductor
-                                        <!--<img src="/img/icono_conductor.png" alt="Carro" style="width: 16px; height: 16px; margin-left: 5px;">-->
                                     </button>
                                 </div>
                             </div>
-                        </div>
+                        </div>-->
                         <div class="col-lg-4">
                             <div class="row">
                                 <div class="col-lg-4">

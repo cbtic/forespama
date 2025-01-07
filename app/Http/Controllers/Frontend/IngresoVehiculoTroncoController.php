@@ -567,6 +567,41 @@ class IngresoVehiculoTroncoController extends Controller
 		
     }
 
+	public function obtener_datos_vehiculo_guia($placa){
+
+		$sw = true;
+		$msg = "";
+		$ingresoVehiculoTronco_model = new IngresoVehiculoTronco;
+		$vehiculo = $ingresoVehiculoTronco_model->getEmpresaConductorVehiculos($placa);
+		$conductores = $ingresoVehiculoTronco_model->getEmpresaConductoresVehiculos($vehiculo->id_empresas);
+		
+		if(!$vehiculo){
+			$vehiculo = Vehiculo::Where("placa",$placa)->Where("estado",1)->first();
+			if($vehiculo){
+				$vehiculo->id_vehiculos = $vehiculo->id;
+			}else{
+				$sw = false;
+				$msg = "El Vehiculo ingresado no existe !!!";
+			}
+			
+		}
+
+		if(!$conductores){
+		
+			$sw = false;
+			$msg = "El Conductor no existe !!!";
+			
+		}
+
+		
+		$array["sw"] = $sw;
+		$array["msg"] = $msg;
+        $array["vehiculo"] = $vehiculo;
+		$array["conductores"] = $conductores;
+        echo json_encode($array);
+		
+	}
+
 }
 
 class InvoicesExport implements FromArray
