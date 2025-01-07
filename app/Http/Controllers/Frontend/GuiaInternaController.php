@@ -168,6 +168,9 @@ class GuiaInternaController extends Controller
         $guia_interna->id_ubigeo_llegada = $request->distrito_llegada;
         $guia_interna->guia_serie = $request->serie_guia;
         $guia_interna->guia_numero = $request->numero_guia;
+        $guia_interna->numero_orden_compra_cliente = $request->orden_compra_cliente;
+        $guia_interna->tiendas = $request->tiendas_orden_compra;
+        $guia_interna->observacion = $request->observacion_guia;
         $guia_interna->guia_tipo = $tipo_guia[0]->codigo;
         $guia_interna->id_usuario_inserta = $id_user;
         if($request->motivo_traslado=='04'){
@@ -210,6 +213,23 @@ class GuiaInternaController extends Controller
         $guia->id_usuario_inserta = $id_user;
         $guia->guia_conductor_tipodoc = $personas->id_tipo_documento;
         $guia->guia_conductor_numdoc = $personas->numero_documento;
+        $observacion ="";
+        if($request->orden_compra_cliente!=""){
+            $observacion.="Orden Compra Cliente: ".$request->orden_compra_cliente;
+        }
+        if($request->tiendas_orden_compra !=""){
+            if ($observacion != "") {
+                $observacion .= " / ";
+            }
+            $observacion.="Tiendas: ".$request->tiendas_orden_compra;
+        }
+        if($request->observacion_guia !=""){
+            if ($observacion != "") {
+                $observacion .= " / ";
+            }
+            $observacion.="Observaciones: ".$request->observacion_guia;
+        }
+        $guia->guia_observaciones = $observacion;
         if($request->ruc_transporte=='20486785994'){
             $guia->guia_modo_traslado = '02';
         }else{
