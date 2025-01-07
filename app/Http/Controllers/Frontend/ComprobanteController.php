@@ -3505,6 +3505,7 @@ class ComprobanteController extends Controller
         $data["codigoEstablecimientoPuntoLlegada"] =$guia->guia_cod_estab_llegada;
         $data["codigoEstablecimientoPuntoPartida"] =$guia->guia_cod_estab_partida;
         $data["trasladoPorElTotalDeLosBienesSiOrNo"] ="1";
+        $data["observaciones"] =$guia->guia_observaciones;
 
         if ($guia->guia_modo_traslado=='01'){
             $data["tipoDocIdentidadTransportista"] =$guia->guia_transportista_tipo_doc;
