@@ -149,14 +149,14 @@ class ProductosController extends Controller
 		
 		$img_foto = $request->img_foto;
         $id_img_foto = $request->id_img_foto;
-
+        /*
 		if(isset($img_foto) && is_array($img_foto) && count($img_foto) > 0){
 			$path = "img/productos/".$producto->id."/".$request->denominacion;
 			if (!is_dir($path)) {
 				mkdir($path);
 			}
 		}
-
+        */
         $imagenesExistentes = ProductoImagene::where('id_producto', $id_producto)->pluck('ruta_imagen')->toArray();
 		
         if (isset($img_foto) && is_array($img_foto)) {
