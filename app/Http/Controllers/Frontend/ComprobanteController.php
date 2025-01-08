@@ -3511,7 +3511,8 @@ class ComprobanteController extends Controller
             $data["fechaEntregaBienesTransportista"] =$guia->guia_fecha_emision;
             $data["numeroDocIdentidadTransportista"] =$guia->guia_transportista_numdoc;
             $data["razonSocialTransportista"] =$guia->guia_transportista_razsoc; 
-            
+        }
+        else{            
             $data["numeroPlacaVehiculo"] =$guia->guia_vehiculo_placa; //"D5X709";
             $data["licenciaConducir"] =$guia->licencia; //"Q25704015";
 
