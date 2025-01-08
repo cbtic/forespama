@@ -3490,11 +3490,11 @@ class ComprobanteController extends Controller
         $data["tipoDocIdentidadReceptor"] ="6";
         $data["tipoDireccionPuntoLlegada"] ="1";
         $data["tipoDireccionPuntoPartida"] ="0";
-        $data["tipoDocIdentidadConductor"] =$guia->guia_conductor_tipodoc;
+        
         $data["numeroDocIdentidadReceptor"] =$guia->guia_receptor_numdoc; //"20544125681";
         $data["indicadorRetornoVehiculoCon"] ="0";
         $data["indicadorRetornoVehiculoSin"] ="0";
-        $data["numeroDocIdentidadConductor"] =$guia->guia_conductor_numdoc; //"25704015";
+        
         $data["direccionPuntoLlegadaCompleta"] =$guia->guia_llegada_direccion; //"JR. MINERIA NRO. 177, LIMA - LIMA - SANTA ANITA";
         $data["direccionPuntoPartidaCompleta"] =$guia->guia_partida_direccion; //"AV. NESTOR GAMBETA N° 6311, CALLAO - CALLAO - CALLAO";
         $data["indicadorTrasladoVehiculoM1oL"] ="0";
@@ -3515,6 +3515,8 @@ class ComprobanteController extends Controller
         else{            
             $data["numeroPlacaVehiculo"] =$guia->guia_vehiculo_placa; //"D5X709";
             $data["licenciaConducir"] =$guia->licencia; //"Q25704015";
+            $data["numeroDocIdentidadConductor"] =$guia->guia_conductor_numdoc; //"25704015";
+            $data["tipoDocIdentidadConductor"] =$guia->guia_conductor_tipodoc;
 
         }
 
