@@ -3467,8 +3467,7 @@ class ComprobanteController extends Controller
         $data["tipoContenedor"] ="0";
         $data["direccionEmisor"] =$guia->guia_partida_direccion;//"AV. NESTOR GAMBETA NRO. 6311 CARRETERA A VENTANILLA (ALTURA KM 5.200 CARRETERA VENTANILLA) ";
         $data["provinciaEmisor"] ="LIMA";
-        $data["codigoPaisEmisor"] ="PE";
-        $data["licenciaConducir"] =$guia->licencia; //"Q25704015";
+        $data["codigoPaisEmisor"] ="PE";        
         $data["numeroContenedor"] ="0";
         $data["direccionReceptor"] =$guia->guia_llegada_direccion;//"JR. MINERIA NRO. 177";
         $data["docAfectadoFisico"] =false;
@@ -3480,7 +3479,6 @@ class ComprobanteController extends Controller
         $data["descripcionTraslado"] ="";
         $data["fechaInicioTraslado"] =$guia->guia_fecha_traslado; //"2024-08-01";
         $data["indicadorTransbordo"] ="0";
-        $data["numeroPlacaVehiculo"] =$guia->guia_vehiculo_placa; //"D5X709";
         $data["razonSocialReceptor"] =$guia->guia_receptor_razsocial; //"ANDECORP S.A.C.";
         $data["razonSocialConductor"] = $guia->razon_social_conductor; //"JAVIER MARTIN ROSELL ALFARO";
         $data["direccionPuntoLlegada"] =$guia->guia_llegada_direccion; //"JR. MINERIA NRO. 177";
@@ -3512,7 +3510,11 @@ class ComprobanteController extends Controller
             $data["tipoDocIdentidadTransportista"] =$guia->guia_transportista_tipo_doc;
             $data["fechaEntregaBienesTransportista"] =$guia->guia_fecha_emision;
             $data["numeroDocIdentidadTransportista"] =$guia->guia_transportista_numdoc;
-            $data["razonSocialTransportista"] =$guia->guia_transportista_razsoc;    
+            $data["razonSocialTransportista"] =$guia->guia_transportista_razsoc; 
+            
+            $data["numeroPlacaVehiculo"] =$guia->guia_vehiculo_placa; //"D5X709";
+            $data["licenciaConducir"] =$guia->licencia; //"Q25704015";
+
         }
 
         
