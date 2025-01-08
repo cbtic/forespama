@@ -64,7 +64,7 @@ class GuiaInterna extends Model
         (select oc.numero_orden_compra_cliente from salida_productos sp 
         inner join orden_compras oc on sp.id_orden_compra = oc.id
         where gi.numero_documento::int = sp.id)
-        end as numero_orden_compra_cliente
+        end as numero_orden_compra_cliente, gi.tiendas, gi.observacion 
         from guia_internas gi
         inner join empresas e on gi.id_destinatario = e.id 
         inner join marcas m on gi.marca::int = m.id 

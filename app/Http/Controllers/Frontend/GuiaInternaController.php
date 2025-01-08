@@ -346,6 +346,8 @@ class GuiaInternaController extends Controller
         $guia_numero=$datos[0]->guia_numero;
         $numero_orden_compra_cliente=$datos[0]->numero_orden_compra_cliente;
         $id_destinatario=$datos[0]->id_destinatario;
+        $tiendas=$datos[0]->tiendas;
+        $observacion=$datos[0]->observacion;
         
         //$tipo_empresa = 'Vende';
 
@@ -357,10 +359,9 @@ class GuiaInternaController extends Controller
 
 		 $carbonDate =Carbon::now()->format('d-m-Y');
 
-		 $currentHour = Carbon::now()->format('H:i:s'); 
+		 $currentHour = Carbon::now()->format('H:i:s');
 
-		$pdf = Pdf::loadView('frontend.guia_interna.guia_interna_pdf',compact('fecha_emision', 'punto_partida', 'punto_llegada', 'fecha_traslado', 'costo_minimo', 'destinatario', 'ruc_destinatario', 'marca', 'placa', 'constancia_inscripcion', 'licencia_conducir', 'empresa_transporte', 'ruc_empresa_transporte', 'motivo_traslado', 'conductor', 'guia_serie', 'guia_numero' ,'datos_detalle','numero_orden_compra_cliente','id_destinatario'));
-
+		$pdf = Pdf::loadView('frontend.guia_interna.guia_interna_pdf',compact('fecha_emision', 'punto_partida', 'punto_llegada', 'fecha_traslado', 'costo_minimo', 'destinatario', 'ruc_destinatario', 'marca', 'placa', 'constancia_inscripcion', 'licencia_conducir', 'empresa_transporte', 'ruc_empresa_transporte', 'motivo_traslado', 'conductor', 'guia_serie', 'guia_numero' ,'datos_detalle','numero_orden_compra_cliente','id_destinatario','tiendas','observacion'));
         
 		$pdf->setPaper('A4'); // Tamaño de papel (puedes cambiarlo según tus necesidades)
 
