@@ -183,7 +183,7 @@ th:last-child {
                 <p style="font-size: 20px; margin: 10; line-height: 1;">R.U.C. 20486785994</p>
                 <div style="background-color: lightgray; padding: 5px; border-radius: 4px; margin: 10px 0;">
                     <p style="font-size: 20px; margin: 0; line-height: 1;">GUIA DE REMISION</p>
-                    <p style="font-size: 20px; margin: 0; line-height: 1;">REMITENTE</p>
+                    <p style="font-size: 20px; margin: 0; line-height: 1;">REMITENTE - CONTROL INTERNO</p>
                 </div>
                 <p style="font-size: 20px; margin: 10; line-height: 1;"><?php echo $guia_serie;?>.- N° <?php echo str_pad($guia_numero, 6, '0', STR_PAD_LEFT);;?></p>
             </th>
@@ -223,6 +223,9 @@ th:last-child {
                 <p class="info-guia">R.U.C.: <?php echo $ruc_destinatario;?></p>
                 <?php if($numero_orden_compra_cliente){?>
                 <p class="info-guia">N° Orden Compra: <?php echo $numero_orden_compra_cliente;?></p>
+                <?php }?>
+                <?php if($tiendas){?>
+                <p class="info-guia">Tiendas: <?php echo $tiendas;?></p>
                 <?php }?>
             </th>
         </tr>
@@ -273,7 +276,14 @@ th:last-child {
                     <p class="info-guia">MOTIVO TRASALDO: <?php echo $motivo_traslado;?></p>
                 </tr>
             </table>
-            
+            &nbsp;
+            <?php if($observacion){?>
+            <table class="data" style="width:100%">
+                <tr>
+                    <p class="info-guia">OBSERVACI&Oacute;N: <?php echo $observacion;?></p>
+                </tr>
+            </table>
+            <?php }?>
         </div>
     </div>
     <!-- /.content-wrapper -->

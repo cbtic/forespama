@@ -1812,7 +1812,7 @@ function obtenerLicencia(){
                                     <a href="http://forespama.felmo.pe/<?php echo $guia->guia_ruta_comprobante;?>" target="_blank" class="btn btn-sm btn-warning" style="margin-right:10px"><i class="fa fa-file-pdf"></i>Ver Gu&iacute;a</a>
                                 <?php }?>
 
-                                <a href="javascript:void(0)" onClick="$('#openOverlayOpc1').modal('hide');" class="btn btn-sm btn-info" style="">Cerrar</a>
+                                <a href="javascript:void(0)" onClick="$('#openOverlayOpc').modal('hide');" class="btn btn-sm btn-info" style="">Cerrar</a>
                             </div>
                         </div>
                     </div> 
