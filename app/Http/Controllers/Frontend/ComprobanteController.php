@@ -3444,7 +3444,14 @@ class ComprobanteController extends Controller
 			$items[$index]=$items1;
         }
 		$data["items"] = $items;
-        
+
+        $items1 = array(
+            "orden"=> 1, 
+            "valor"=> $guia->guia_observaciones,
+            );
+        $items[$index]=$items1;
+        $data["adicionales"] =$items;
+
         $data["anulado"] =false;
         $data["declare"] ="0";
         $data["adjuntos"] =[];
@@ -3457,7 +3464,7 @@ class ComprobanteController extends Controller
         $data["notification"] ="0";
         $data["numeroBultos"] ="0";
         $data["ubigeoEmisor"] =$guia->guia_partida_ubigeo;
-        $data["observaciones"] =$guia->guia_observaciones;
+        //$data["observaciones"] =$guia->guia_observaciones;
         $data["tipoDocumento"] =$this->getTipoDocumento($guia->guia_tipo);//"09";
         $data["distritoEmisor"] ="VILLA EL SALVADOR";
         $data["esContingencia"] =false;
