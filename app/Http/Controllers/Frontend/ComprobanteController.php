@@ -3446,10 +3446,10 @@ class ComprobanteController extends Controller
 		$data["items"] = $items;
 
         $items1 = array(
-            "orden"=> 1, 
+            "orden"=> "1", 
             "valor"=> $guia->guia_observaciones,
             );
-        $items[1]=$items1;
+        $items[0]=$items1;
         $data["adicionales"] =$items;
 
         $data["anulado"] =false;
