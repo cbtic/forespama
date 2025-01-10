@@ -3644,8 +3644,12 @@ class ComprobanteController extends Controller
 
     }
 
+    //https://easyfact.pe/see/rest/6/20608204386/T001-00008239
+
+    //https://easyfact.pe/see/rest/6/20486785994/T001-19
+
     public function consultarEstado($RUC, $TipoDocumento, $SerieNumero, $User, $Password, $URL) {
-        
+
         $URLConsulta = $URL . $TipoDocumento . "/6/" . $RUC . "/" . $SerieNumero;
     
         // Crear la autenticación básica en Base64
