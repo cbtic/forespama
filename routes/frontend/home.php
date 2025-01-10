@@ -535,3 +535,7 @@ Route::get('requerimiento/exportar_listar_requerimiento/{tipo_documento}/{fecha}
 Route::get('ingreso_vehiculo_tronco/obtener_datos_vehiculo_guia/{placa}', [IngresoVehiculoTroncoController::class, 'obtener_datos_vehiculo_guia'])->name('ingreso_vehiculo_tronco.obtener_datos_vehiculo_guia');
 Route::get('conductores/obtener_licencia/{conductor}', [ConductoresController::class, 'obtener_licencia'])->name('conductores.obtener_licencia');
 Route::post('conductores/send_conductor_guia', [ConductoresController::class, 'send_conductor_guia'])->name('conductores.send_conductor_guia');
+
+Route::get('orden_compra/importar_archivo', [OrdenCompraController::class, 'importar_archivo'])->name('orden_compra.importar_archivo');
+
+
