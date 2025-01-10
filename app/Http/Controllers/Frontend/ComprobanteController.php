@@ -3444,13 +3444,12 @@ class ComprobanteController extends Controller
 			$items[$index]=$items1;
         }
 		$data["items"] = $items;
-
         $items2 = array(
             "orden"=> "1", 
             "valor"=> $guia->guia_observaciones,
             );
-        $items[0]=$items2;
-        $data["adicionales"] =$items;
+        $items_[0]=$items2;
+        $data["adicionales"] =$items_;
 
         $data["anulado"] =false;
         $data["declare"] ="0";
