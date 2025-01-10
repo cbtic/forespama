@@ -3453,19 +3453,22 @@ class ComprobanteController extends Controller
         $data["adicionales"] =$items_;
         */
 
-        $data["adicionales"]= [
-            array(            
-              "orden"=> "1",
-              "valor"=> $guia->guia_observaciones,
-            )
-        ];
 
         $data["anulado"] =false;
         $data["declare"] ="0";
         $data["adjuntos"] =[];
         $data["esFicticio"] =false;
         $data["keepNumber"] ="false";
-        $data["adicionales"] =[];
+
+       // $data["adicionales"] =[];
+       $data["adicionales"]= [
+        array(            
+          "orden"=> "1",
+          "valor"=> $guia->guia_observaciones,
+        )
+    ];
+
+
         $data["horaEmision"] =date("h:i:s", strtotime($guia->guia_fecha_emision)); // "12:12:04";//$cabecera->fecha
         $data["serieNumero"] =$guia->guia_serie."-".$guia->guia_numero; // "F001-000002";
         $data["fechaEmision"] =date("Y-m-d",strtotime($guia->guia_fecha_emision)); //"2021-03-18";
