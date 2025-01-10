@@ -3644,5 +3644,39 @@ class ComprobanteController extends Controller
 
     }
 
+    public function consultarEstado($RUC, $TipoDocumento, $SerieNumero, $User, $Password, $URL) {
+        
+        $URLConsulta = $URL . $TipoDocumento . "/6/" . $RUC . "/" . $SerieNumero;
+    
+        // Crear la autenticación básica en Base64
+        $login = base64_encode("$User:$Password");
+    
+        // Inicializar cURL
+        $ch = curl_init();
+    
+        // Configurar las opciones de cURL
+        curl_setopt($ch, CURLOPT_URL, $URLConsulta);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            "Authorization: Basic $login",
+            "Content-Type: application/json"
+        ]);
+    
+        // Ejecutar la solicitud
+        $response = curl_exec($ch);
+    
+        // Manejar errores de cURL
+        if (curl_errno($ch)) {
+            curl_close($ch);
+            return "OFFline";
+        }
+    
+        // Cerrar la conexión cURL
+        curl_close($ch);
+    
+        return $response ?: "OFFline";
+    }
+    
+
 
 }
