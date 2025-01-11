@@ -50,6 +50,23 @@ class OrdenCompraController extends Controller
 
 	}
 
+    public function consulta_stock_pedido(){
+
+        $id_user = Auth::user()->id;
+		$tablaMaestra_model = new TablaMaestra;
+        $almacen_user_model = new Almacen_usuario;
+		$tipo_documento = $tablaMaestra_model->getMaestroByTipo(54);
+        $cerrado_orden_compra = $tablaMaestra_model->getMaestroByTipo(52);
+        $proveedor = Empresa::all();
+        $almacen = Almacene::all();
+        $almacen_usuario = $almacen_user_model->getAlmacenByUser($id_user);
+        //$almacen_usuario2 = $almacen_user_model->getUsersByAlmacen($id_user);
+        //dd($almacen_usuario);exit();
+		
+		return view('frontend.orden_compra.consulta_stock_pedido',compact('tipo_documento','cerrado_orden_compra','proveedor','almacen','almacen_usuario'));
+
+	}
+
     public function listar_orden_compra_ajax(Request $request){
 
 		$orden_compra_model = new OrdenCompra;
@@ -118,6 +135,38 @@ class OrdenCompraController extends Controller
         //dd($proveedor);exit();
 
 		return view('frontend.orden_compra.modal_orden_compra_nuevoOrdenCompra',compact('id','orden_compra','tipo_documento','proveedor','producto','marca','estado_bien','unidad','igv_compra','descuento','almacen','unidad_origen','id_user'));
+
+    }
+
+    public function modal_consulta_orden_compra($id){
+		
+        $id_user = Auth::user()->id;
+        $tablaMaestra_model = new TablaMaestra;
+        $producto_model = new Producto;
+        $marca_model = new Marca;
+        $almacen_model = new Almacene;
+		
+		if($id>0){
+
+            $orden_compra = OrdenCompra::find($id);
+            $proveedor = Empresa::all();
+			
+		}else{
+			$orden_compra = new OrdenCompra;
+            $proveedor = Empresa::all();
+		}
+
+        $tipo_documento = $tablaMaestra_model->getMaestroByTipo(54);
+        $producto = $producto_model->getProductoAll();
+        $marca = $marca_model->getMarcaAll();
+        $estado_bien = $tablaMaestra_model->getMaestroByTipo(4);
+        $unidad = $tablaMaestra_model->getMaestroByTipo(43);
+        $igv_compra = $tablaMaestra_model->getMaestroByTipo(51);
+        $descuento = $tablaMaestra_model->getMaestroByTipo(55);
+        $almacen = $almacen_model->getAlmacenAll();
+        $unidad_origen = $tablaMaestra_model->getMaestroByTipo(50);
+        
+		return view('frontend.orden_compra.modal_orden_compra_stock_pedido',compact('id','orden_compra','tipo_documento','proveedor','producto','marca','estado_bien','unidad','igv_compra','descuento','almacen','unidad_origen','id_user'));
 
     }
 
@@ -450,7 +499,7 @@ class OrdenCompraController extends Controller
         ]);
     }
 
-    public function importar_archivo()
+    public function importar_archivo($archivo)
     {
 
         $id_user = Auth::user()->id;
@@ -467,7 +516,8 @@ class OrdenCompraController extends Controller
         $id_estado_producto = 1;
 
         // Ruta del archivo
-        $filePath = storage_path('app/datos.txt');
+        //$filePath = storage_path('app/datos.txt');
+        $filePath = public_path('orden_compra/'.$archivo);
 
         // Verifica si el archivo existe
         if (!file_exists($filePath)) {
@@ -603,5 +653,29 @@ class OrdenCompraController extends Controller
 
     }
     
+    function extension($filename){$file = explode(".",$filename); return strtolower(end($file));}
+
+    public function upload_orden_compra(Request $request){
+		
+		$filename = date("YmdHis") . substr((string)microtime(), 1, 6);
+		$type="";
+		
+        $path = "orden_compra";
+        if (!is_dir($path)) {
+            mkdir($path);
+        }
+        
+        $filepath = public_path('orden_compra/');
+		
+		$type=$this->extension($_FILES["file"]["name"]);
+		move_uploaded_file($_FILES["file"]["tmp_name"], $filepath . $filename.".".$type);
+		
+		$archivo = $filename.".".$type;
+		
+        //echo $archivo;
+		$this->importar_archivo($archivo);
+		
+	}
+
 
 }

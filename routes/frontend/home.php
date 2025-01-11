@@ -409,6 +409,9 @@ Route::post('orden_compra/send_orden_compra', [OrdenCompraController::class, 'se
 Route::get('orden_compra/modal_orden_compra/{id}', [OrdenCompraController::class, 'modal_orden_compra'])->name('orden_compra.modal_orden_compra');
 Route::get('orden_compra/eliminar_orden_compra/{id}/{estado}', [OrdenCompraController::class, 'eliminar_orden_compra'])->name('orden_compra.eliminar_orden_compra');
 Route::get('orden_compra/cargar_detalle/{id}', [OrdenCompraController::class, 'cargar_detalle'])->name('orden_compra.cargar_detalle');
+Route::get('orden_compra/consulta_stock_pedido', [OrdenCompraController::class, 'consulta_stock_pedido'])->name('orden_compra.consulta_stock_pedido');
+Route::get('orden_compra/modal_consulta_orden_compra/{id}', [OrdenCompraController::class, 'modal_consulta_orden_compra'])->name('orden_compra.modal_consulta_orden_compra');
+Route::post('orden_compra/upload_orden_compra', [OrdenCompraController::class, 'upload_orden_compra'])->name('orden_compra.upload_orden_compra');
 
 Route::get('kardex/create', [KardexController::class, 'create'])->name('kardex.create');
 Route::post('kardex/listar_kardex_ajax', [KardexController::class, 'listar_kardex_ajax'])->name('kardex.listar_kardex_ajax');
@@ -536,6 +539,6 @@ Route::get('ingreso_vehiculo_tronco/obtener_datos_vehiculo_guia/{placa}', [Ingre
 Route::get('conductores/obtener_licencia/{conductor}', [ConductoresController::class, 'obtener_licencia'])->name('conductores.obtener_licencia');
 Route::post('conductores/send_conductor_guia', [ConductoresController::class, 'send_conductor_guia'])->name('conductores.send_conductor_guia');
 
-Route::get('orden_compra/importar_archivo', [OrdenCompraController::class, 'importar_archivo'])->name('orden_compra.importar_archivo');
+Route::get('orden_compra/importar_archivo/{archivo}', [OrdenCompraController::class, 'importar_archivo'])->name('orden_compra.importar_archivo');
 
 
