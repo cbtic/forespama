@@ -964,7 +964,7 @@ function modal_tiendas_orden_compra(id){
 							</tr> 
 							</thead>
 							<tbody id="divOrdenCompraDetalle" style="font-size:13px!important">
-							</tbody>
+							</tbody> 
 						</table>
 					</div>
                     <table style="background-color:white !important;border-collapse:collapse;border-spacing:1px; width: 100%; margin: 0 auto; font-size:12px">
