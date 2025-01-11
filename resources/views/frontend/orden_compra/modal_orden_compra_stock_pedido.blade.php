@@ -492,6 +492,15 @@ $.ajax({
                     productosSeleccionados.push(orden_compra.id_producto);
                 }
 
+                var total = parseFloat(orden_compra.stock_ves) + parseFloat(orden_compra.stock_oxa);
+                
+                var color_ves = "#f5c2c7";
+                var color_oxa = "#f5c2c7";
+                var color_total = "#f5c2c7";
+                if(orden_compra.stock_ves>=orden_compra.cantidad_requerida)color_ves = "#badbcc";
+                if(orden_compra.stock_oxa>=orden_compra.cantidad_requerida)color_oxa = "#badbcc";
+                if(total>=orden_compra.cantidad_requerida)color_total = "#badbcc";
+
                 const row = `
                     <tr>
                         <td>${n}</td>
@@ -502,9 +511,9 @@ $.ajax({
                         <td>${orden_compra.codigo}</td>
                         <td>${orden_compra.cantidad_requerida}</td>
                         <td>${orden_compra.precio || 0}</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                        <td style="background-color:`+color_ves+`">${orden_compra.stock_ves}</td>
+                        <td style="background-color:`+color_oxa+`">${orden_compra.stock_oxa}</td>
+                        <td style="background-color:`+color_total+`">`+total+`</td>
                     </tr>
                 `;
                 tbody.append(row);
