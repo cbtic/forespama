@@ -961,7 +961,7 @@ function modal_tiendas_orden_compra(id){
                                 <th>Stock prod terminado VES</th>
                                 <th>Stock prod terminado OXA</th>
                                 <th>Stock total</th>
-							</tr>
+							</tr> 
 							</thead>
 							<tbody id="divOrdenCompraDetalle" style="font-size:13px!important">
 							</tbody>
