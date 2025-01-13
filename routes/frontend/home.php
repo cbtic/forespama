@@ -409,6 +409,9 @@ Route::post('orden_compra/send_orden_compra', [OrdenCompraController::class, 'se
 Route::get('orden_compra/modal_orden_compra/{id}', [OrdenCompraController::class, 'modal_orden_compra'])->name('orden_compra.modal_orden_compra');
 Route::get('orden_compra/eliminar_orden_compra/{id}/{estado}', [OrdenCompraController::class, 'eliminar_orden_compra'])->name('orden_compra.eliminar_orden_compra');
 Route::get('orden_compra/cargar_detalle/{id}', [OrdenCompraController::class, 'cargar_detalle'])->name('orden_compra.cargar_detalle');
+Route::get('orden_compra/consulta_stock_pedido', [OrdenCompraController::class, 'consulta_stock_pedido'])->name('orden_compra.consulta_stock_pedido');
+Route::get('orden_compra/modal_consulta_orden_compra/{id}', [OrdenCompraController::class, 'modal_consulta_orden_compra'])->name('orden_compra.modal_consulta_orden_compra');
+Route::post('orden_compra/upload_orden_compra', [OrdenCompraController::class, 'upload_orden_compra'])->name('orden_compra.upload_orden_compra');
 
 Route::get('kardex/create', [KardexController::class, 'create'])->name('kardex.create');
 Route::post('kardex/listar_kardex_ajax', [KardexController::class, 'listar_kardex_ajax'])->name('kardex.listar_kardex_ajax');
@@ -540,3 +543,7 @@ Route::get('empresa/obtener_empresas_all', [EmpresaController::class, 'obtener_e
 Route::get('conductores/modal_nuevo_conductor/{id}', [ConductoresController::class, 'modal_nuevo_conductor'])->name('conductores.modal_nuevo_conductor');
 Route::post('conductores/send_conductor_nuevo', [ConductoresController::class, 'send_conductor_nuevo'])->name('conductores.send_conductor_nuevo');
 Route::get('conductores/obtener_conductores_nuevos', [ConductoresController::class, 'obtener_conductores_nuevos'])->name('conductores.obtener_conductores_nuevos');
+
+Route::get('orden_compra/importar_archivo/{archivo}', [OrdenCompraController::class, 'importar_archivo'])->name('orden_compra.importar_archivo');
+
+

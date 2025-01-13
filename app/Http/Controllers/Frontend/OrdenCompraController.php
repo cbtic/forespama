@@ -15,6 +15,7 @@ use App\Models\Almacen_usuario;
 use App\Models\Almacene;
 use App\Models\Tienda;
 use App\Models\TiendaDetalleOrdenCompra;
+use App\Models\EquivalenciaProducto;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Auth;
 use Carbon\Carbon;
@@ -46,6 +47,23 @@ class OrdenCompraController extends Controller
         //dd($almacen_usuario);exit();
 		
 		return view('frontend.orden_compra.create',compact('tipo_documento','cerrado_orden_compra','proveedor','almacen','almacen_usuario'));
+
+	}
+
+    public function consulta_stock_pedido(){
+
+        $id_user = Auth::user()->id;
+		$tablaMaestra_model = new TablaMaestra;
+        $almacen_user_model = new Almacen_usuario;
+		$tipo_documento = $tablaMaestra_model->getMaestroByTipo(54);
+        $cerrado_orden_compra = $tablaMaestra_model->getMaestroByTipo(52);
+        $proveedor = Empresa::all();
+        $almacen = Almacene::all();
+        $almacen_usuario = $almacen_user_model->getAlmacenByUser($id_user);
+        //$almacen_usuario2 = $almacen_user_model->getUsersByAlmacen($id_user);
+        //dd($almacen_usuario);exit();
+		
+		return view('frontend.orden_compra.consulta_stock_pedido',compact('tipo_documento','cerrado_orden_compra','proveedor','almacen','almacen_usuario'));
 
 	}
 
@@ -117,6 +135,38 @@ class OrdenCompraController extends Controller
         //dd($proveedor);exit();
 
 		return view('frontend.orden_compra.modal_orden_compra_nuevoOrdenCompra',compact('id','orden_compra','tipo_documento','proveedor','producto','marca','estado_bien','unidad','igv_compra','descuento','almacen','unidad_origen','id_user'));
+
+    }
+
+    public function modal_consulta_orden_compra($id){
+		
+        $id_user = Auth::user()->id;
+        $tablaMaestra_model = new TablaMaestra;
+        $producto_model = new Producto;
+        $marca_model = new Marca;
+        $almacen_model = new Almacene;
+		
+		if($id>0){
+
+            $orden_compra = OrdenCompra::find($id);
+            $proveedor = Empresa::all();
+			
+		}else{
+			$orden_compra = new OrdenCompra;
+            $proveedor = Empresa::all();
+		}
+
+        $tipo_documento = $tablaMaestra_model->getMaestroByTipo(54);
+        $producto = $producto_model->getProductoAll();
+        $marca = $marca_model->getMarcaAll();
+        $estado_bien = $tablaMaestra_model->getMaestroByTipo(4);
+        $unidad = $tablaMaestra_model->getMaestroByTipo(43);
+        $igv_compra = $tablaMaestra_model->getMaestroByTipo(51);
+        $descuento = $tablaMaestra_model->getMaestroByTipo(55);
+        $almacen = $almacen_model->getAlmacenAll();
+        $unidad_origen = $tablaMaestra_model->getMaestroByTipo(50);
+        
+		return view('frontend.orden_compra.modal_orden_compra_stock_pedido',compact('id','orden_compra','tipo_documento','proveedor','producto','marca','estado_bien','unidad','igv_compra','descuento','almacen','unidad_origen','id_user'));
 
     }
 
@@ -448,5 +498,184 @@ class OrdenCompraController extends Controller
             'tienda_detalle_orden_compra' => $tienda_detalle_orden_compra
         ]);
     }
+
+    public function importar_archivo($archivo)
+    {
+
+        $id_user = Auth::user()->id;
+        $id_unidad_origen = 4;
+        $id_tipo_documento = 2;
+        $estado = 1;
+        $igv_compra = 2;
+        $cerrado = 1;
+        $id_almacen_destino = NULL;
+        $id_almacen_salida = 3;
+        $tienda_asignada = 0;
+        $id_empresa_compra = 23;
+        $id_marca = 278;
+        $id_estado_producto = 1;
+
+        // Ruta del archivo
+        //$filePath = storage_path('app/datos.txt');
+        $filePath = public_path('orden_compra/'.$archivo);
+
+        // Verifica si el archivo existe
+        if (!file_exists($filePath)) {
+            return response()->json(['error' => 'Archivo no encontrado.'], 404);
+        }
+
+        // Abre el archivo
+        $file = fopen($filePath, 'r');
+
+        // Lee la cabecera
+        $header = fgetcsv($file, 0, '|');
+
+        if ($header === false) {
+            return response()->json(['error' => 'El archivo está vacío o tiene un formato incorrecto.'], 400);
+        }
+
+        // Procesa cada línea del archivo
+        $count = 0; // Contador de filas exitosas
+
+        // Iterar sobre cada fila
+        while (($line = fgets($file)) !== false) {
+            // Quitar posibles caracteres no deseados
+            $line = trim($line);
+
+            // Dividir en columnas
+            $data = str_getcsv($line, '|');
+            
+            // Asegurarse de que ambas tengan la misma cantidad de elementos
+            $data = array_pad($data, count($header), null);
+
+            // Validar si la cantidad de columnas coincide con el encabezado
+            if (count($data) !== count($header)) {
+                continue; // Ignorar filas mal formateadas
+            }
+
+            // Asociar columnas del encabezado con valores de la fila
+            $row = array_combine($header, $data);
+
+            $empresa = Empresa::where("ruc",str_replace("-","",$row['RUT_PROVEEDOR']))->first();
+
+            $id_empresa_vende = $empresa->id;
+            $fecha_orden_compra = Carbon::createFromFormat('d/m/Y', $row['FECHA_AUTORIZACION']);
+            $numero_orden_compra_cliente = $row['NRO_OC'];
+
+            if($count == 0){
+
+                $orden_compra_model = new OrdenCompra;
+		        $codigo_orden_compra = $orden_compra_model->getCodigoOrdenCompra($id_tipo_documento);
+                $numero_orden_compra = $codigo_orden_compra[0]->codigo;
+
+                $ordenCompra = new OrdenCompra;                
+                $ordenCompra->id_unidad_origen = $id_unidad_origen;
+                $ordenCompra->id_empresa_vende = $id_empresa_vende;
+                $ordenCompra->id_empresa_compra = $id_empresa_compra;
+                $ordenCompra->fecha_orden_compra = $fecha_orden_compra;
+                $ordenCompra->numero_orden_compra = $numero_orden_compra;
+                $ordenCompra->numero_orden_compra_cliente = $numero_orden_compra_cliente;
+                $ordenCompra->id_tipo_documento = $id_tipo_documento;
+                $ordenCompra->estado = $estado;
+                $ordenCompra->igv_compra = $igv_compra;
+                $ordenCompra->cerrado = $cerrado;
+                $ordenCompra->id_almacen_destino = $id_almacen_destino;
+                $ordenCompra->id_almacen_salida = $id_almacen_salida;
+                $ordenCompra->tienda_asignada = $tienda_asignada;
+                $ordenCompra->id_usuario_inserta = $id_user;
+                $ordenCompra->save();
+                $id_orden_compra = $ordenCompra->id;
+
+            }
+            
+            $equivalenciaProducto = EquivalenciaProducto::where("codigo_empresa",trim($row['SKU']))->first();
+            $id_producto = $equivalenciaProducto->id_producto;
+            $producto = Producto::find($id_producto);
+            $cantidad_requerida = $row['CANTIDAD_PROD'];
+            $id_unidad_medida = $producto->id_unidad_medida;
+            $precio = $row['COSTO_UNI'];
+
+            $sub_total = $cantidad_requerida * $precio;
+            $igv = round(0.18 * $sub_total,2);
+            $total = $sub_total + $igv;
+
+            $ordenCompraDetalle = new OrdenCompraDetalle;
+            $ordenCompraDetalle->id_orden_compra = $id_orden_compra;
+            $ordenCompraDetalle->id_producto = $id_producto;
+            $ordenCompraDetalle->cantidad_requerida = $cantidad_requerida;
+            $ordenCompraDetalle->id_marca = $id_marca;
+            $ordenCompraDetalle->cerrado = $cerrado;
+            $ordenCompraDetalle->estado = $estado;
+            $ordenCompraDetalle->id_unidad_medida = $id_unidad_medida;
+            $ordenCompraDetalle->id_estado_producto = $id_estado_producto;
+            $ordenCompraDetalle->precio = $precio;
+            $ordenCompraDetalle->sub_total = $sub_total;
+            $ordenCompraDetalle->igv = $igv;
+            $ordenCompraDetalle->total = $total;
+            $ordenCompraDetalle->id_usuario_inserta = $id_user;
+            $ordenCompraDetalle->save();
+
+            /*
+            //OrdenCompra::create([
+            $detalle = array(
+                'nro_oc' => $row['NRO_OC'],
+                'rut_proveedor' => $row['RUT_PROVEEDOR'],
+                'razon_social' => $row['RAZON_SOCIAL'],
+                'direccion' => $row['DIRECCION'],
+                'fono' => $row['FONO'] ?? null,
+                'comprador' => $row['COMPRADOR'],
+                'fecha_autorizacion' => Carbon::createFromFormat('d/m/Y', $row['FECHA_AUTORIZACION']),
+                'estado' => $row['ESTADO'],
+                'dias_pago' => $row['DIAS_PAGO'],
+                'total_venta' => $row['TOTAL_VENTA'] ?? null,
+                'total_costo' => $row['TOTAL_COSTO'] ?? null,
+                'costo_uni' => $row['COSTO_UNI'] ?? null,
+                'precio_uni' => $row['PRECIO_UNI'] ?? null,
+                'cantidad_prod' => $row['CANTIDAD_PROD'] ?? null,
+                'upc' => $row['UPC'] ?? null,
+                'sku' => $row['SKU'] ?? null,
+                'descripcion_larga' => $row['DESCRIPCION_LARGA'] ?? null,
+                'marca' => $row['MARCA'] ?? null,
+                'departamento' => $row['DEPARTAMENTO'] ?? null,
+            //]);
+            );
+            print_r($detalle);echo "<br>";
+            */
+            $count++;
+        }
+
+        fclose($file);
+
+        return response()->json([
+            'message' => 'Datos importados correctamente.',
+            'filas_importadas' => $count,
+        ], 200);
+
+    }
+    
+    function extension($filename){$file = explode(".",$filename); return strtolower(end($file));}
+
+    public function upload_orden_compra(Request $request){
+		
+		$filename = date("YmdHis") . substr((string)microtime(), 1, 6);
+		$type="";
+		
+        $path = "orden_compra";
+        if (!is_dir($path)) {
+            mkdir($path);
+        }
+        
+        $filepath = public_path('orden_compra/');
+		
+		$type=$this->extension($_FILES["file"]["name"]);
+		move_uploaded_file($_FILES["file"]["tmp_name"], $filepath . $filename.".".$type);
+		
+		$archivo = $filename.".".$type;
+		
+        //echo $archivo;
+		$this->importar_archivo($archivo);
+		
+	}
+
 
 }

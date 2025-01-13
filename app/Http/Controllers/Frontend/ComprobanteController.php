@@ -3444,20 +3444,38 @@ class ComprobanteController extends Controller
 			$items[$index]=$items1;
         }
 		$data["items"] = $items;
-        
+        /*
+        $items2 = array(
+            "orden"=> "1", 
+            "valor"=> $guia->guia_observaciones,
+            );
+        $items_[0]=$items2;
+        $data["adicionales"] =$items_;
+        */
+
+
         $data["anulado"] =false;
         $data["declare"] ="0";
         $data["adjuntos"] =[];
         $data["esFicticio"] =false;
         $data["keepNumber"] ="false";
-        $data["adicionales"] =[];
+
+       // $data["adicionales"] =[];
+       $data["adicionales"]= [
+        array(            
+          "orden"=> "1",
+          "valor"=> $guia->guia_observaciones,
+        )
+    ];
+
+
         $data["horaEmision"] =date("h:i:s", strtotime($guia->guia_fecha_emision)); // "12:12:04";//$cabecera->fecha
         $data["serieNumero"] =$guia->guia_serie."-".$guia->guia_numero; // "F001-000002";
         $data["fechaEmision"] =date("Y-m-d",strtotime($guia->guia_fecha_emision)); //"2021-03-18";
         $data["notification"] ="0";
         $data["numeroBultos"] ="0";
         $data["ubigeoEmisor"] =$guia->guia_partida_ubigeo;
-        $data["observaciones"] =$guia->guia_observaciones;
+        //$data["observaciones"] =$guia->guia_observaciones;
         $data["tipoDocumento"] =$this->getTipoDocumento($guia->guia_tipo);//"09";
         $data["distritoEmisor"] ="VILLA EL SALVADOR";
         $data["esContingencia"] =false;
