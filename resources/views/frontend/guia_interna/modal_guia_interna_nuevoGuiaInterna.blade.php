@@ -1246,12 +1246,11 @@ function generarGuia(){
         url: "/comprobante/guia_json/"+numero_guia,
         dataType: "json",
         success: function(result){
-            if (result.status == "success") {
-                bootBox.alert(result.message);
-
-                //$('#guia_estado').text(result.guia_estado);
+            
+            if (result.notes == "FIRMADO") {
+                bootbox.alert("El documento ha sido firmado correctamente.");
             } else {
-                bootBox.alert(result.message);
+                bootbox.alert(result.notes);
             }
         }
     });

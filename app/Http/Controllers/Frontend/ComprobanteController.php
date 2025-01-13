@@ -3649,6 +3649,11 @@ class ComprobanteController extends Controller
             //echo $respbuild;
 
         }
+        
+        return response()->json([
+            'notes' => $notes
+        ]);
         //$respbuild->result;
     }
+    
 }

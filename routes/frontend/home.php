@@ -545,5 +545,3 @@ Route::post('conductores/send_conductor_nuevo', [ConductoresController::class, '
 Route::get('conductores/obtener_conductores_nuevos', [ConductoresController::class, 'obtener_conductores_nuevos'])->name('conductores.obtener_conductores_nuevos');
 
 Route::get('orden_compra/importar_archivo/{archivo}', [OrdenCompraController::class, 'importar_archivo'])->name('orden_compra.importar_archivo');
-
-
