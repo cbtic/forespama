@@ -3640,16 +3640,16 @@ class ComprobanteController extends Controller
                 }
             }
             $notes= "FIRMADO";
-            echo $notes;
+            //echo $notes;
         }else
         {
             $notes = $respbuild["notes"];
-            echo $notes;
+            //echo $notes;
 
             //echo $respbuild;
 
         }
-        
+
         return response()->json([
             'notes' => $notes
         ]);
