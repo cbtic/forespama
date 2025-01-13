@@ -3542,7 +3542,7 @@ class ComprobanteController extends Controller
         //print_r($data);
         //exit();
 		$databuild_string = json_encode($data);
-        print_r($databuild_string);
+        //print_r($databuild_string);
        // exit();
 
 		//$chbuild = curl_init("https://easyfact.tk/see/rest/01");
@@ -3583,7 +3583,7 @@ class ComprobanteController extends Controller
             $facturaLog->info('FacturaLog', $log);
             */
 		}
-		print_r($results);
+		//print_r($results);
         curl_close($chbuild);
 
 
@@ -3639,6 +3639,15 @@ class ComprobanteController extends Controller
 
                 }
             }
+            $notes= "FIRMADO";
+            echo $notes;
+        }else
+        {
+            $notes = $respbuild["notes"];
+            echo $notes;
+
+            //echo $respbuild;
+
         }
         //$respbuild->result;
     }
