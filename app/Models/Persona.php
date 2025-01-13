@@ -91,7 +91,12 @@ class Persona extends Model
         //echo $cad; exit();
         $data = DB::select($cad);
         
-        return $data[0];
+        if (!empty($data)) {
+            return $data[0];
+        } else {
+            
+            return null;
+        }
 
     }
 

@@ -108,6 +108,16 @@
 #tablemodalm{
 	
 }
+
+.modal-scrollable {
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+#motivo_traslado {
+    z-index: 1050 !important;  /* Asegúrate de que sea compatible con el z-index del modal */
+}
+
 </style>
 
 <!--<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"/>-->
@@ -191,6 +201,10 @@ $(document).ready(function() {
 
 });
 
+$('#openOverlayOpc').on('hidden.bs.modal', function () {
+    $('#motivo_traslado').select2('close'); 
+});
+
 $(function() {
     $('#placa_guia').keyup(function() {
         this.value = this.value.toLocaleUpperCase();
@@ -251,6 +265,11 @@ $(document).ready(function() {
 	}
     if($('#id').val()==0){
         $('#select_punto_llegada').hide();
+    }
+
+    if($('#placa_guia').val()!=""){
+        btnEmpTrans
+        btnConductor
     }
 
 });
@@ -797,28 +816,31 @@ function agregarVehiculo(){
                     $.fn.modal.Constructor.prototype.enforceFocus = function() {};
                     
                     setTimeout(() => {
-                $('#empresa').select2({
-                    width: '100%',
-                    dropdownParent: $('#openOverlayOpc2')
-                });
+                        $('#empresa').select2({
+                            width: '100%',
+                            dropdownParent: $('#openOverlayOpc2')
+                        });
 
-                $('#conductor').select2({
-                    width: '100%',
-                    dropdownParent: $('#openOverlayOpc2')
-                });
-            }, 100);
+                        $('#conductor').select2({
+                            width: '100%',
+                            dropdownParent: $('#openOverlayOpc2')
+                        });
+                    }, 100);
+
+                    $('#motivo_traslado').select2('close');
+                    //$('.select2-container').remove();
 			}
 	});
-
 }
 
 function agregarConductor(){
 	
 	//$(".modal-dialog").css("width","85%");
 	//$('#openOverlayOpc .modal-body').css('height', 'auto');
+    var id_empresa_conductor_vehiculo = $('#id_empresa_conductor_vehiculo').val();
 
 	$.ajax({
-			url: "/conductores/modal_conductor_guia/"+0,
+			url: "/conductores/modal_conductor_guia/"+0+"/"+id_empresa_conductor_vehiculo,
 			type: "GET",
 			success: function (result) {
                 $("#diveditpregOpc3").html(result);
@@ -827,24 +849,24 @@ function agregarConductor(){
 	});
 }
 
-function agregarDestinatario(){
+function agregarEmpresaTransporte(){
 	
 	//$(".modal-dialog").css("width","85%");
 	//$('#openOverlayOpc2 .modal-body').css('height', 'auto');
-    var placa = $('#placa').val("");
+    var placa = $('#placa_guia').val();
+    var id_empresa_conductor_vehiculo = $('#id_empresa_conductor_vehiculo').val();
 
 	$.ajax({
-			url: "/empresa/modal_empresa_guia/"+0+"/"+placa,
+			url: "/empresa/modal_empresa_guia/"+0+"/"+placa+"/"+id_empresa_conductor_vehiculo,
 			type: "GET",
 			success: function (result) {
 					$("#diveditpregOpc4").html(result);
 					$('#openOverlayOpc4').modal('show');
 			}
 	});
-
 }
 
-function agregarEmpresaTransporte(){
+function agregarDestinatario(){
 	
 	//$(".modal-dialog").css("width","85%");
 	//$('#openOverlayOpc2 .modal-body').css('height', 'auto');
@@ -873,6 +895,7 @@ function obtenerEmpresa(){
     $('#ruc_transporte').val("");
     $('#transporte_razon_social').val("");
     $('#conductor_guia').val("");
+    $('#id_empresa_conductor_vehiculo').val("");
     
     $("#placa_guia").attr("readonly",false);
     $("#marca_vehiculo").attr("readonly",false);
@@ -894,6 +917,7 @@ function obtenerEmpresa(){
                 $('#id_transporte_razon_social').val(vehiculo.id_empresas);
                 //$('#id_conductor_guia').val(vehiculo.id_conductores);
                 $('#transporte_razon_social').val(vehiculo.razon_social);
+                $('#id_empresa_conductor_vehiculo').val(vehiculo.id);
                 //$('#conductor_guia').val(vehiculo.conductor);
                 //$('#numero_licencia').val(vehiculo.licencia);
                 $("#marca_vehiculo").attr("readonly",true);
@@ -1222,8 +1246,13 @@ function generarGuia(){
         url: "/comprobante/guia_json/"+numero_guia,
         dataType: "json",
         success: function(result){
-            bootBox.alert("Se envió a la Sunat la Guia");
-            //$('#numero_guia').val(result[0].codigo);
+            if (result.status == "success") {
+                bootBox.alert(result.message);
+
+                //$('#guia_estado').text(result.guia_estado);
+            } else {
+                bootBox.alert(result.message);
+            }
         }
     });
 }
@@ -1269,7 +1298,7 @@ function obtenerLicencia(){
 		-->
 		<div class="justify-content-center">
 
-            <div class="card">
+            <div class="card modal-scrollable">
                 <!--<div style="display: flex; justify-content: space-between; align-items: center;">
                     <div>
                         <img width="200px" height="80px" style="top:-30px" src="/img/logo_forestalpama.jpg">
@@ -1364,6 +1393,7 @@ function obtenerLicencia(){
                                 </div>
                                 <div class="col-lg-5">
                                     <input id="placa_guia" name="placa_guia" on class="form-control form-control-sm"  value="<?php if($id>0){echo $guia_interna->placa;} ?>" type="text" onchange="obtenerEmpresa()">
+                                    <input name="id_empresa_conductor_vehiculo" id="id_empresa_conductor_vehiculo" class="form-control form-control-sm" value="" type="hidden">
                                 </div>
                                 <div class="col-lg-3">
                                     <button id="btnPlaca" type="button" class="btn btn-warning btn-sm" data-toggle="modal" onclick="agregarVehiculo()">
@@ -1406,7 +1436,7 @@ function obtenerLicencia(){
                                     <input name="id_transporte_razon_social" id="id_transporte_razon_social" class="form-control form-control-sm" value="" type="hidden">
                                 </div>
                                 <div class="col-lg-3">
-                                    <button id="btnPlaca" type="button" class="btn btn-warning btn-sm" data-toggle="modal" onclick="agregarEmpresaTransporte()">
+                                    <button id="btnEmpTrans" type="button" class="btn btn-warning btn-sm" data-toggle="modal" onclick="agregarEmpresaTransporte()">
                                         <i class="fas fa-plus-circle"></i>Emp. Transp.
                                         <!--<img src="/img/icono_empresa_trasnporte.png" alt="Carro" style="width: 20px; height: 20px; margin-left: 3px;">-->
                                     </button>
@@ -1424,7 +1454,7 @@ function obtenerLicencia(){
                                     </select>
                                 </div>
                                 <div class="col-lg-3">
-                                    <button id="btnPlaca" type="button" class="btn btn-warning btn-sm" data-toggle="modal" onclick="agregarConductor()">
+                                    <button id="btnConductor" type="button" class="btn btn-warning btn-sm" data-toggle="modal" onclick="agregarConductor()">
                                         <i class="fas fa-plus-circle"></i>Conductor
                                     </button>
                                 </div>
@@ -1536,12 +1566,12 @@ function obtenerLicencia(){
                                         ?>
                                     </select>-->
                                 </div>
-                                <div class="col-lg-3">
+                                <!--<div class="col-lg-3">
                                     <button id="btnPlaca" type="button" class="btn btn-warning btn-sm" data-toggle="modal" onclick="agregarDestinatario()">
                                         <i class="fas fa-plus-circle"></i>Destinatario
-                                        <!--<img src="/img/icono_empresa.png" alt="Carro" style="width: 16px; height: 16px; margin-left: 5px;">-->
+                                        <img src="/img/icono_empresa.png" alt="Carro" style="width: 16px; height: 16px; margin-left: 5px;">
                                     </button>
-                                </div>
+                                </div>-->
                             </div>
                         </div>
                     </div>
@@ -1803,9 +1833,11 @@ function obtenerLicencia(){
                                 <?php }?>
 
                                 <?php 
-                                    if($id>0){
+                                    if($id>0 && $guia->guia_estado_sunat !='FIRMADO'){
                                 ?>
                                     <a href="javascript:void(0)" onClick="generarGuia()" class="btn btn-sm btn-danger" style="margin-right:10px"><i class="fa fa-paper-plane"></i>Enviar Sunat</a> 
+                                <?php } if($id>0 && $guia->guia_estado_sunat =='FIRMADO'){?>
+                                    <a href="javascript:void(0)" onClick="generarGuia()" class="btn btn-sm btn-danger" style="margin-right:10px; pointer-events: none; opacity: 0.6; cursor: not-allowed;"><i class="fa fa-paper-plane"></i>Enviar Sunat</a> 
                                 <?php }?>
 
                                 <?php if($id>0 && $guia->guia_estado_sunat =='FIRMADO'){?>

@@ -15,9 +15,9 @@
 }
 
 
-.modal-destinatario .modal-dialog {
+.modal-conductor-nuevo .modal-dialog {
 	width: 100%;
-	max-width:60%!important
+	max-width:40%!important
 }
 
 #tablemodal{
@@ -131,12 +131,12 @@ $(document).ready(function() {
 
 <script type="text/javascript">
 
-$('#openOverlayOpc').on('shown.bs.modal', function() {
+$('#openOverlayOpc6').on('shown.bs.modal', function() {
      $('#fecha_solicitud').datepicker({
 		format: "dd-mm-yyyy",
 		autoclose: true,
 		//container: '#openOverlayOpc modal-body'
-		container: '#openOverlayOpc modal-body'
+		container: '#openOverlayOpc6 modal-body'
      });
 	 /*
 	 $('#hora_solicitud').timepicker({
@@ -192,56 +192,117 @@ function guardarCita(id_medico,fecha_cita){
     }
 }
 
+function validaDni() {
+
+	var dni = $("#numero_documento_nuevo").val();
+	var msg = "";
+	
+	/*
+	if (msg != "") {
+		bootbox.alert(msg);
+		return false;
+	}
+
+	if (tipo_documento == "0" || numero_documento == "") {
+		bootbox.alert(msg);
+		return false;
+	}
+	*/
+	
+	var settings = {
+		"url": "https://apiperu.dev/api/dni/" + dni,
+		"method": "GET",
+		"timeout": 0,
+		"headers": {
+			"Authorization": "Bearer 20b6666ddda099db4204cf53854f8ca04d950a4eead89029e77999b0726181cb"
+		},
+	};
+
+	$.ajax(settings).done(function(response) {
+		console.log(response);
+
+		if (response.success == true) {
+
+			var data = response.data;
+
+			$('#apellido_paterno_nuevo').val('')
+			$('#apellido_materno_nuevo').val('')
+			$('#nombres_nuevo').val('')
+
+			$('#apellido_paterno_nuevo').val(data.apellido_paterno);
+			$('#apellido_materno_nuevo').val(data.apellido_materno);
+			$('#nombres_nuevo').val(data.nombres);
+			$("#id_persona_nuevo").val(0);
+			//alert(data.nombre_o_razon_social);
+
+		} else {
+			Swal.fire("DNI Inv&aacute;lido. Revise el DNI digitado!");
+			return false;
+		}
+
+	});
+}
+
 function fn_save(){
     
 	var _token = $('#_token').val();
 	var id  = $('#id').val();
-	var ruc = $('#ruc_').val();
-	var razon_social = $('#razon_social_').val();
-	var direccion = $('#direccion_').val();
-	var email = $('#email_').val();
-	var telefono = $('#telefono_').val();
-	var id_empresa_conductor_vehiculo = $('#id_empresa_conductor_vehiculo').val();
+	var id_personas = $('#id_persona_nuevo').val();
+	var licencia = $('#licencia_nuevo').val();
+	var apellido_paterno = $('#apellido_paterno_nuevo').val();
+	var apellido_materno = $('#apellido_materno_nuevo').val();
+	var nombres = $('#nombres_nuevo').val();
+	var id_tipo_documento = $('#tipo_documento_nuevo').val();
+	var numero_documento = $('#numero_documento_nuevo').val();
 	
     $.ajax({
-			url: "/empresa/send_guia",
+			url: "/conductores/send_conductor_nuevo",
             type: "POST",
-            data : {_token:_token,id:id,ruc:ruc,razon_social:razon_social,direccion:direccion,email:email,telefono:telefono,id_empresa_conductor_vehiculo:id_empresa_conductor_vehiculo},
+            data : {_token:_token,id:id,id_personas:id_personas,licencia:licencia,
+				apellido_paterno:apellido_paterno,apellido_materno:apellido_materno,
+				nombres:nombres,id_tipo_documento:id_tipo_documento,numero_documento:numero_documento},
 			dataType: 'json',
             success: function (result) {
 				
 				if(result.sw==false){
-					var razonSocial = result.empresa;
-					var empresa_id = result.id_empresa;
-					//alert(razonSocial);
-					$('#openOverlayOpc4').modal('hide');
-					$('#transporte_razon_social').val(razonSocial);
-					$('#id_transporte_razon_social').val(empresa_id);
+					bootbox.alert(result.msg);
 				}
 				
-				//$('#openOverlayOpc').modal('hide');
+				$('#openOverlayOpc6').modal('hide');
+				
+				actualizarComboConductores();
+				//obtenerEmpresa();
 				//datatablenew();
 				
             }
     });
 }
 
-function fn_liberar(id){
-    
-	//var id_estacionamiento = $('#id_estacionamiento').val();
-	var _token = $('#_token').val();
+function actualizarComboConductores() {
 	
-    $.ajax({
-			url: "/estacionamiento/liberar_asignacion_estacionamiento_vehiculo",
-            type: "POST",
-            data : {_token:_token,id:id},
-            success: function (result) {
-				$('#openOverlayOpc').modal('hide');
-				cargarAsignarEstacionamiento();
-            }
-    });
-}
+	$.ajax({
+		url: "/conductores/obtener_conductores_nuevos",
+		type: "GET",
+		dataType: "json",
+		success: function (result) {
 
+			var conductores = result.conductor;
+			
+			var $conductorSelect = $('#conductor');
+			$conductorSelect.select2('destroy');
+			
+			$conductorSelect.empty();
+			
+			$conductorSelect.append('<option value="">--Seleccionar--</option>');
+
+			conductores.forEach(function (conductor) {
+				$conductorSelect.append('<option value="' + conductor.id + '">' + conductor.nombre_conductor + '</option>');
+			});
+
+			$conductorSelect.select2({ width: '100%' });
+		}
+	});
+}
 
 function validarLiquidacion() {
 	
@@ -362,7 +423,7 @@ container: '#myModal modal-body'
 		<div class="card">
 			
 			<div class="card-header" style="padding:5px!important;padding-left:20px!important">
-				Edici&oacute;n Empresa
+				Edici&oacute;n Conductor
 			</div>
 			
             <div class="card-body">
@@ -373,31 +434,45 @@ container: '#myModal modal-body'
 					
 					<input type="hidden" name="_token" value="{{ csrf_token() }}">
 					<input type="hidden" name="id" id="id" value="<?php echo $id?>">
-					<input type="hidden" name="id_empresa_conductor_vehiculo" id="id_empresa_conductor_vehiculo" value="<?php echo $empresa_conductor_vehiculo->id?>">
+					<input type="hidden" name="id_persona_nuevo" id="id_persona_nuevo" value="">
 					
-					<!--
-					<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-						<div class="form-group">
-							<div id="custom-search-input">
-								<div class="input-group">
-									<input id="vehiculo_empresa" class="form-control form-control-sm ui-autocomplete-input" placeholder="Buscar Empresa" name="vehiculo_empresa" type="text" autocomplete="off">
-								</div>
-								<div class="input-group" id="vehiculo_empresa_busqueda"><ul class="ui-autocomplete ui-front ui-menu ui-widget ui-widget-content" id="ui-id-278" tabindex="0" style="display: none;"></ul></div>
+					<div class="row">
+						
+						<div class="col-lg-12">
+							<div class="form-group">
+								<label class="control-label">Nro Brevete</label>
+								<input id="licencia_nuevo" name="licencia_nuevo" class="form-control form-control-sm"  value="<?php echo $conductor->licencia?>" type="text" >
 							</div>
 						</div>
+						
 					</div>
-					-->
+					
 					<div class="row">
 						
 						<?php 
 							$readonly=$id>0?"readonly='readonly'":'';
 							$readonly_=$id>0?'':"readonly='readonly'";
 						?>
-
+						
 						<div class="col-lg-12">
 							<div class="form-group">
-								<label class="control-label">Ruc</label>
-								<input id="ruc_" name="ruc_" class="form-control form-control-sm"  value="<?php echo $empresa->ruc?>" type="text" <?php echo $readonly?> >
+								<label class="control-label">Tipo de Documento</label>
+								<select name="tipo_documento_nuevo" id="tipo_documento_nuevo" class="form-control form-control-sm" onChange="">
+									<option value="">--Selecionar--</option>
+									<?php
+									foreach ($tipo_documento as $row) { ?>
+										<option value="<?php echo $row->codigo ?>" <?php if ($row->codigo == $persona->id_tipo_documento) echo "selected='selected'" ?>><?php echo $row->denominacion ?></option>
+									<?php
+									}
+									?>
+								</select>
+							</div>
+						</div>
+						
+						<div class="col-lg-12">
+							<div class="form-group">
+								<label class="control-label">Numero de Documento</label>
+								<input id="numero_documento_nuevo" name="numero_documento_nuevo" class="form-control form-control-sm"  value="<?php echo $persona->numero_documento?>" type="text" <?php echo $readonly?> >
 							</div>
 						</div>
 						
@@ -407,58 +482,34 @@ container: '#myModal modal-body'
 						
 						<div class="col-lg-12">
 							<div class="form-group">
-								<label class="control-label">Raz&oacute;n Social</label>
-								<input id="razon_social_" name="razon_social_" class="form-control form-control-sm"  value="<?php echo $empresa->razon_social?>" type="text" readonly>
+								<label class="control-label">Apellido Paterno</label>
+								<input id="apellido_paterno_nuevo" name="apellido_paterno_nuevo" class="form-control form-control-sm"  value="<?php echo $persona->apellido_paterno?>" type="text" readonly>
 							</div>
 						</div>
 						
 					</div>
-										
+					
 					<div class="row">
 						
 						<div class="col-lg-12">
 							<div class="form-group">
-								<label class="control-label">Direcci&oacute;n</label>
-								<input id="direccion_" name="direccion_" class="form-control form-control-sm"  value="<?php echo $empresa->direccion?>" type="text" >
+								<label class="control-label">Apellido Materno</label>
+								<input id="apellido_materno_nuevo" name="apellido_materno_nuevo" class="form-control form-control-sm"  value="<?php echo $persona->apellido_materno?>" type="text" readonly>
 							</div>
 						</div>
 						
 					</div>
-
+					
 					<div class="row">
 						
-						<div class="col-lg-6">
-							<div class="form-group" style="padding-top:0px;padding-bottom:0px;margin-top:0px;margin-bottom:0px">
-								<label class="control-label">Tel&eacute;fono</label>
-								<input id="telefono_" name="telefono_" class="form-control form-control-sm"  value="<?php echo $empresa->telefono?>" type="text">
-							</div>
-						</div>
-						
-						<div class="col-lg-6">
-							<div class="form-group" style="padding-top:0px;padding-bottom:0px;margin-top:0px;margin-bottom:0px">
-								<label class="control-label">Correo</label>
-								<input id="email_" name="email_" class="form-control form-control-sm" value="<?php echo $empresa->email?>" type="text">
+						<div class="col-lg-12">
+							<div class="form-group">
+								<label class="control-label">Nombres</label>
+								<input id="nombres_nuevo" name="nombres_nuevo" class="form-control form-control-sm"  value="<?php echo $persona->nombres?>" type="text" readonly>
 							</div>
 						</div>
 						
 					</div>
-<!--					
-					<div class="row">						
-						<div class="col-lg-6">
-							<div class="form-group" style="padding-top:0px;padding-bottom:0px;margin-top:0px;margin-bottom:0px">
-								<label class="control-label">Costo Estacionamiento</label>
-								<input id="costo_estacionamiento_" name="costo_estacionamiento_" class="form-control form-control-sm"  value="<?php echo $empresa->costo_estacionamiento?>" type="text">
-							</div>
-						</div>
-						
-						<div class="col-lg-6">
-							<div class="form-group" style="padding-top:0px;padding-bottom:0px;margin-top:0px;margin-bottom:0px">
-								<label class="control-label">Costo Volumen</label>
-								<input id="costo_volumen_" name="costo_volumen_" class="form-control form-control-sm"  value="<?php echo $empresa->costo_volumen?>" type="text">
-							</div>
-						</div>						
-					</div>
--->
 					
 					<div style="margin-top:10px" class="form-group">
 						<div class="col-sm-12 controls">
@@ -489,41 +540,46 @@ container: '#myModal modal-body'
     
 <script type="text/javascript">
 $(document).ready(function () {
-
-	$('#ruc_').blur(function () {
+	
+	$('#numero_documento_nuevo').blur(function () {
+		/*
 		var id = $('#id').val();
 			if(id==0) {
 				validaRuc(this.value);
 			}
+		*/
 		//validaRuc(this.value);
+		var tipo_documento = $("#tipo_documento_nuevo").val();
+		var numero_documento = $("#numero_documento_nuevo").val();
+		obtenerPersona(tipo_documento, numero_documento);
+		
 	});
-	
-	$('#tblReservaEstacionamiento').DataTable({
-		"dom": '<"top">rt<"bottom"flpi><"clear">'
-		});
-	$("#system-search").keyup(function() {
-		var dataTable = $('#tblReservaEstacionamiento').dataTable();
-		dataTable.fnFilter(this.value);
-	}); 
-	
-	$('#tblReservaEstacionamientoPreferente').DataTable({
-		"dom": '<"top">rt<"bottom"flpi><"clear">'
-		});
-	$("#system-searchp").keyup(function() {
-		var dataTable = $('#tblReservaEstacionamientoPreferente').dataTable();
-		dataTable.fnFilter(this.value);
-	});
-	
-	$('#tblSinReservaEstacionamiento').DataTable({
-		"dom": '<"top">rt<"bottom"flpi><"clear">'
-		});
-	$("#system-search2").keyup(function() {
-		var dataTable = $('#tblSinReservaEstacionamiento').dataTable();
-		dataTable.fnFilter(this.value);
-	}); 
 	
 	
 });
+
+function obtenerPersona(tipo_documento, numero_documento){
+
+	$.ajax({
+		//url: '/pesaje/obtener_datos_choferes/' + empresa_id,
+		url: '/persona/obtener_persona/' + tipo_documento + '/' + numero_documento,
+		dataType: "json",
+		success: function(result){
+			
+			var persona = result.persona;
+			if(persona==null){
+				validaDni();
+				return false;
+			}
+
+			$("#apellido_paterno_nuevo").val(persona.apellido_paterno);
+			$("#apellido_materno_nuevo").val(persona.apellido_paterno);
+			$("#nombres_nuevo").val(persona.nombres);
+			$("#id_persona_nuevo").val(persona.id);
+		}
+		
+	});
+}
 
 function validaRuc(ruc){
 	var settings = {
@@ -577,86 +633,6 @@ $(document).ready(function() {
 	//$('#numero_placa').focus();
 	//$('#numero_placa').mask('AAA-000');
 	//$('#vehiculo_numero_placa').mask('AAA-000');
-	
-	$('#vehiculo_numero_placa').keyup(function() {
-		this.value = this.value.toLocaleUpperCase();
-	});
-	
-	$('#vehiculo_empresa').keyup(function() {
-		this.value = this.value.toLocaleUpperCase();
-	});
-		
-	$('#vehiculo_empresa').focusin(function() { $('#vehiculo_empresa').select(); });
-	
-	$('#vehiculo_empresa').autocomplete({
-		appendTo: "#vehiculo_empresa_busqueda",
-		source: function(request, response) {
-			$.ajax({
-			url: '/pesaje/list/'+$('#vehiculo_empresa').val(),
-			dataType: "json",
-			success: function(data){
-			   var resp = $.map(data,function(obj){
-					var hash = {key: obj.id, value: obj.razon_social, ruc: obj.ruc};
-					//if(obj.razon_social=='') { actualiza_ruc("") }
-					return hash;
-			   }); 
-			   response(resp);
-			},
-			error: function() {
-				//actualiza_ruc("");
-			}
-		});
-		},
-		select: function (event, ui) {
-			$('#vehiculo_empresa').blur();
-			$('#ruc').val(ui.item.ruc);
-			//if (ui.item.value != ''){
-			//actualiza_ruc(ui.item.value);
-			//}
-			obtener_vehiculos(ui.item.key);
-			$("#id_empresa").val(ui.item.key); // save selected id to hidden input
-		},
-			minLength: 2,
-			delay: 100
-	  });
-	  
-	
-	$('#modalVehiculoSaveBtn').click(function (e) {
-		e.preventDefault();
-		$(this).html('Enviando datos..');
-	
-		$.ajax({
-		  data: $('#modalVehiculoForm').serialize(),
-		  url: "/vehiculo/send_ajax_asignar",
-		  type: "POST",
-		  dataType: 'json',
-		  success: function (data) {
-	
-			  $('#modalVehiculoForm').trigger("reset");
-			  //$('#vehiculoModal').modal('hide');
-			  $('#openOverlayOpc').modal('hide');
-
-        alert(data.msg);
-        $("#nombre_empresa").val(data.vehiculo_empresa);
-        $("#numero_placa").val(data.vehiculo_numero_placa);
-        $("#numero_ejes").val(data.ejes);
-        $("#numero_documento").val(data.ruc);
-        $("#nombres_razon_social").val(data.razon_social);
-        $("#empresa_direccion").val(data.direccion);
-
-        $("#modalVehiculoSaveBtn").html("Grabar");
-	
-		  },
-		  error: function(data) {
-        mensaje = "Revisar el formulario:\n\n";
-        $.each( data["responseJSON"].errors, function( key, value ) {
-          mensaje += value +"\n";
-        });
-        $("#modalVehiculoSaveBtn").html("Grabar");
-        alert(mensaje);
-      }
-	  });
-	});	  
 	
 });
 

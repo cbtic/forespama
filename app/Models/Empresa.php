@@ -73,4 +73,13 @@ class Empresa extends Model
         return $data[0];
     }
 
+    function getEmpresaAll(){
+
+        $cad = "select * from empresas where estado ='1'";
+
+        $data = DB::select($cad);
+        return $data;
+
+    }
+
 }

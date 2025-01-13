@@ -6,6 +6,7 @@ use App\Http\Requests\ConductoresRequest;
 use App\Models\Conductores;
 use App\Models\TablaMaestra;
 use App\Models\Persona;
+use App\Models\EmpresasConductoresVehiculo;
 use Illuminate\Http\Request;
 use Auth;
 use Carbon\Carbon;
@@ -84,10 +85,10 @@ class ConductoresController extends Controller
         return redirect()->route('frontend.conductores.index');
     }
 
-    public function show(Conductores $conductores)
+    /*public function show(Conductores $conductores)
     {
         return view('frontend.conductores.show', compact('conductores'));
-    }
+    }*/
 
     public function destroy(Conductores $conductores)
     {
@@ -151,7 +152,7 @@ class ConductoresController extends Controller
 
     }
 
-	public function modal_conductor_guia($id){
+	public function modal_conductor_guia($id, $id_empresa_conductor_vehiculo){
 		
 		$id_user = Auth::user()->id;
 		$tablaMaestra_model = new TablaMaestra;
@@ -163,8 +164,9 @@ class ConductoresController extends Controller
 			$persona = new Persona;
 		} 
 		$tipo_documento = $tablaMaestra_model->getMaestroByTipo(9);
+		$empresa_conductor_vehiculo = EmpresasConductoresVehiculo::find($id_empresa_conductor_vehiculo);
 
-		return view('frontend.conductores.modal_conductor_guia',compact('id','conductor','tipo_documento','persona'));
+		return view('frontend.conductores.modal_conductor_guia',compact('id','conductor','tipo_documento','persona','empresa_conductor_vehiculo'));
 
     }
 
@@ -200,24 +202,62 @@ class ConductoresController extends Controller
 
 		if($request->id == 0){
 
-			$personaExiste = Personas::where("id_tipo_documento",$request->id_tipo_documento)->where("numero_documento",$request->numero_documento)->where("estado",1)->get();
+			$personaExiste = Persona::where("id_tipo_documento",$request->id_tipo_documento)->where("numero_documento",$request->numero_documento)->where("estado",1)->get();
 			
 			if(count($personaExiste)==0){
-				$persona = new Personas;
+				$persona = new Persona;
 				$persona->id_tipo_documento = $request->licencia;
-				$persona->numero_documento = $request->id_personas;
-				$persona->apellido_paterno = Carbon::now()->format('Y-m-d');
-				$persona->apellido_materno = Carbon::now()->format('Y-m-d');
-				$persona->nombres = Carbon::now()->format('Y-m-d');
+				$persona->numero_documento = $request->numero_documento_;
+				$persona->apellido_paterno = $request->apellido_paterno_;
+				$persona->apellido_materno = $request->apellido_materno_;
+				$persona->nombres = $request->nombres_;
 				$persona->estado = 1;
 				$persona->save();
+
+				$conductor = new Conductores;
+				$conductor->licencia = $request->licencia;
+				$conductor->fecha_licencia = Carbon::now()->format('Y-m-d');
+				$conductor->estado = "ACTIVO";
+				$conductor->id_personas = $persona->id;
+				$conductor->save();
+				//$empresa_razon_social = $persona->razon_social;
+
+				//$vehiculo = Vehiculo::find($request->id_vehiculo);
+
+				$empresas_conductores_vehiculo = EmpresasConductoresVehiculo::find($request->id_empresa_conductor_vehiculo);
+				$new_empresas_conductores_vehiculo = new EmpresasConductoresVehiculo;
+				$new_empresas_conductores_vehiculo->id_empresas = $empresas_conductores_vehiculo->id_empresas;
+				$new_empresas_conductores_vehiculo->id_vehiculos = $empresas_conductores_vehiculo->id_vehiculos;
+				$new_empresas_conductores_vehiculo->id_conductores = $conductor->id;
+				$new_empresas_conductores_vehiculo->save();
+
 			}else{
-				$persona = $personaExiste[0];
 				$sw = false;
 				$msg = "La persona ingresada ya existe !!!";
+				$id_persona = $personaExiste[0]->id;
+
+				$conductor = Conductores::find($id_persona);
+
+				if(!$conductor){
+					$conductor = new Conductores;
+					$conductor->licencia = $request->licencia;
+					$conductor->fecha_licencia = Carbon::now()->format('Y-m-d');
+					$conductor->estado = "ACTIVO";
+					$conductor->id_personas = $id_persona;
+					$conductor->save();
+				}
+
+				//$empresa_razon_social = $empresaExiste[0]->razon_social;
+
+				$empresas_conductores_vehiculo = EmpresasConductoresVehiculo::find($request->id_empresa_conductor_vehiculo);
+				$new_empresas_conductores_vehiculo = new EmpresasConductoresVehiculo;
+				$new_empresas_conductores_vehiculo->id_empresas = $empresas_conductores_vehiculo->id_empresas;
+				$new_empresas_conductores_vehiculo->id_vehiculos = $empresas_conductores_vehiculo->id_vehiculos;
+				$new_empresas_conductores_vehiculo->id_conductores = $conductor->id;
+				$new_empresas_conductores_vehiculo->save();
 			}
 
-			$conductorExiste = Conductores::where("id_personas",$persona->id)->get();
+			/*$conductorExiste = Conductores::where("id_personas",$persona->id)->get();
 			if(count($conductorExiste)==0){
 				$conductor = new Conductores;
 				$conductor->licencia = $request->licencia;
@@ -229,8 +269,7 @@ class ConductoresController extends Controller
 				$conductor = $conductorExiste[0];
 				$sw = false;
 				$msg = "El Conductor ingresado ya existe !!!";
-			}
-
+			}*/
 
 		}else{
 			$conductor = Conductores::find($request->id);
@@ -242,11 +281,104 @@ class ConductoresController extends Controller
 		//EmpresasConductoresVehiculo::find();
 
 		$persona = Persona::find($conductor->id_personas);
+		$conductor = Conductores::find($conductor->id);
 
 		$array["sw"] = $sw;
 		$array["msg"] = $msg;
 		$array["persona"] = $persona;
 		$array["conductor"] = $conductor;
+        echo json_encode($array);
+
+    }
+
+	public function modal_nuevo_conductor($id){
+		
+		$id_user = Auth::user()->id;
+		$tablaMaestra_model = new TablaMaestra;
+		if($id>0){
+			$conductor = Conductores::find($id);
+			$persona = Persona::find($conductor->id_personas);
+		}else{
+			$conductor = new Conductores;
+			$persona = new Persona;
+		}
+		$tipo_documento = $tablaMaestra_model->getMaestroByTipo(9);
+
+		return view('frontend.conductores.modal_nuevo_conductor',compact('id','conductor','tipo_documento','persona'));
+
+    }
+
+	public function send_conductor_nuevo(Request $request){
+
+		$id_user = Auth::user()->id;
+		$sw = true;
+		$msg = "";
+
+		if($request->id == 0){
+
+			$personaExiste = Persona::where("id_tipo_documento",$request->id_tipo_documento)->where("numero_documento",$request->numero_documento)->where("estado",1)->get();
+			
+			if(count($personaExiste)==0){
+				$persona = new Persona;
+				$persona->id_tipo_documento = $request->licencia;
+				$persona->id_tipo_documento = $request->id_tipo_documento;
+				$persona->numero_documento = $request->numero_documento;
+				$persona->apellido_paterno = $request->apellido_paterno;
+				$persona->apellido_materno = $request->apellido_materno;
+				$persona->fecha_nacimiento = Carbon::now()->format('Y-m-d');
+				$persona->nombres = $request->nombres;
+				$persona->estado = 1;
+				$persona->save();
+
+				$conductor = new Conductores;
+				$conductor->licencia = $request->licencia;
+				$conductor->fecha_licencia = Carbon::now()->format('Y-m-d');
+				$conductor->estado = "ACTIVO";
+				$conductor->id_personas = $persona->id;
+				$conductor->save();
+
+			}else{
+				$sw = false;
+				$msg = "La persona ingresada ya existe !!!";
+				$id_persona = $personaExiste[0]->id;
+
+				$conductor = Conductores::find($id_persona);
+
+				if(!$conductor){
+					$conductor = new Conductores;
+					$conductor->licencia = $request->licencia;
+					$conductor->fecha_licencia = Carbon::now()->format('Y-m-d');
+					$conductor->estado = "ACTIVO";
+					$conductor->id_personas = $id_persona;
+					$conductor->save();
+				}
+
+			}
+
+		}else{
+			$conductor = Conductores::find($request->id);
+			$conductor->licencia = $request->licencia;
+			$conductor->id_personas = $request->id_personas;
+			$conductor->save();
+		}
+
+		$persona = Persona::find($conductor->id_personas);
+		$conductor = Conductores::find($conductor->id);
+
+		$array["sw"] = $sw;
+		$array["msg"] = $msg;
+		$array["persona"] = $persona;
+		$array["conductor"] = $conductor;
+        echo json_encode($array);
+
+    }
+
+	public function obtener_conductores_nuevos(){
+ 		
+        $conductores_model = new Conductores;
+        $conductor = $conductores_model->getConductoresAll();
+        
+        $array["conductor"] = $conductor;
         echo json_encode($array);
 
     }

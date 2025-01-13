@@ -147,7 +147,7 @@ Route::get('vehiculos/{vehiculos}/edit', 'App\Http\Controllers\VehiculoControlle
 Route::get('conductores', 'App\Http\Controllers\ConductoresController@index')->name('conductores.index');
 Route::post('conductores', 'App\Http\Controllers\ConductoresController@store')->name('conductores.store');
 Route::get('conductores/create', 'App\Http\Controllers\ConductoresController@create')->name('conductores.create');
-Route::get('conductores/{conductores}', 'App\Http\Controllers\ConductoresController@show')->name('conductores.show');
+//Route::get('conductores/{conductores}', 'App\Http\Controllers\ConductoresController@show')->name('conductores.show');
 Route::put('conductores/{conductores}', 'App\Http\Controllers\ConductoresController@update')->name('conductores.update');
 Route::patch('conductores/{conductores}', 'App\Http\Controllers\ConductoresController@update');
 Route::delete('conductores/{conductores}', 'App\Http\Controllers\ConductoresController@destroy')->name('conductores.destroy');
@@ -510,10 +510,10 @@ Route::post('conductores/listar_conductor_ajax', [ConductoresController::class, 
 Route::get('conductores/modal_conductor_ingreso/{id}', [ConductoresController::class, 'modal_conductor_ingreso'])->name('conductores.modal_conductor_ingreso');
 Route::get('conductores/eliminar_conductor/{id}/{estado}', [ConductoresController::class, 'eliminar_conductor'])->name('conductores.eliminar_conductor');
 Route::post('conductores/send_conductor_ingreso', [ConductoresController::class, 'send_conductor_ingreso'])->name('conductores.send_conductor_ingreso');
-Route::get('conductores/modal_conductor_guia/{id}', [ConductoresController::class, 'modal_conductor_guia'])->name('conductores.modal_conductor_guia');
+Route::get('conductores/modal_conductor_guia/{id}/{id_empresa_conductor_vehiculo}', [ConductoresController::class, 'modal_conductor_guia'])->name('conductores.modal_conductor_guia');
 
 Route::get('vehiculo/obtener_vehiculo/{placa}', [VehiculoController::class, 'obtener_vehiculo'])->name('vehiculo.obtener_vehiculo');
-Route::get('empresa/modal_empresa_guia/{id}/{placa}', [EmpresaController::class, 'modal_empresa_guia'])->name('empresa.modal_empresa_guia');
+Route::get('empresa/modal_empresa_guia/{id}/{placa}/{id_empresa_conductor_vehiculo}', [EmpresaController::class, 'modal_empresa_guia'])->name('empresa.modal_empresa_guia');
 Route::post('vehiculo/send_guia_mantenimiento', [VehiculoController::class, 'send_guia_mantenimiento'])->name('vehiculo.send_guia_mantenimiento');
 
 Route::get('guia_interna/obtener_provincia_distrito/{idDepartamento}', [GuiaInternaController::class, 'obtener_provincia_distrito'])->name('guia_interna.obtener_provincia_distrito');
@@ -535,3 +535,8 @@ Route::get('requerimiento/exportar_listar_requerimiento/{tipo_documento}/{fecha}
 Route::get('ingreso_vehiculo_tronco/obtener_datos_vehiculo_guia/{placa}', [IngresoVehiculoTroncoController::class, 'obtener_datos_vehiculo_guia'])->name('ingreso_vehiculo_tronco.obtener_datos_vehiculo_guia');
 Route::get('conductores/obtener_licencia/{conductor}', [ConductoresController::class, 'obtener_licencia'])->name('conductores.obtener_licencia');
 Route::post('conductores/send_conductor_guia', [ConductoresController::class, 'send_conductor_guia'])->name('conductores.send_conductor_guia');
+Route::get('empresa/modal_nueva_empresa/{id}', [EmpresaController::class, 'modal_nueva_empresa'])->name('empresa.modal_nueva_empresa');
+Route::get('empresa/obtener_empresas_all', [EmpresaController::class, 'obtener_empresas_all'])->name('empresa.obtener_empresas_all');
+Route::get('conductores/modal_nuevo_conductor/{id}', [ConductoresController::class, 'modal_nuevo_conductor'])->name('conductores.modal_nuevo_conductor');
+Route::post('conductores/send_conductor_nuevo', [ConductoresController::class, 'send_conductor_nuevo'])->name('conductores.send_conductor_nuevo');
+Route::get('conductores/obtener_conductores_nuevos', [ConductoresController::class, 'obtener_conductores_nuevos'])->name('conductores.obtener_conductores_nuevos');

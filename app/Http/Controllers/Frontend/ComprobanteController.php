@@ -3556,6 +3556,7 @@ class ComprobanteController extends Controller
 		if (curl_errno($chbuild)) {
 			$error_msg = curl_error($chbuild);
 			echo $error_msg;
+            
 /*
             $log = ['Error' => $error_msg,
             'description' => 'Errores'];
@@ -3621,10 +3622,6 @@ class ComprobanteController extends Controller
                 }
             }
         }
-
         //$respbuild->result;
-
     }
-
-
 }

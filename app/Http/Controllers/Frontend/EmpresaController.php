@@ -7,6 +7,8 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 use App\Models\Empresa;
+use App\Models\Vehiculo;
+use App\Models\EmpresasConductoresVehiculo;
 //use App\Models\Negativo;
 use App\Models\TablaMaestra;
 use Auth;
@@ -398,18 +400,34 @@ class EmpresaController extends Controller
 	
 	}
 
-	public function modal_empresa_guia($id, $placa){
+	public function modal_nueva_empresa($id){
 		$id_user = Auth::user()->id;
 		$empresa = new Empresa;
 		if($id>0)$empresa = Empresa::find($id);
 		else $empresa = new Empresa;
-		$vehiculo = Vehiculo::where('placa',$placa)->orderBy('id', 'desc')->get();
-		$id_vehiculo = $vehiculo[0]->id;
 		//$solicitud_model = new Solicitude;
 		//$fecha_actual = Carbon::now()->timezone('America/Lima')->format('Y-m-d H:i:s');
 		//$solicitud = $solicitud_model->getSolicitudById($id);
 		//$usuario = User::find($id_user);
-		return view('frontend.empresa.modal_empresa_guia',compact('id','empresa','id_vehiculo'));
+		return view('frontend.empresa.modal_nueva_empresa',compact('id','empresa'));
+	
+	}
+
+	public function modal_empresa_guia($id, $placa, $id_empresa_conductor_vehiculo){
+
+		$id_user = Auth::user()->id;
+		$empresa = new Empresa;
+		if($id>0)$empresa = Empresa::find($id);
+		else $empresa = new Empresa;
+		$empresa_conductor_vehiculo = EmpresasConductoresVehiculo::find($id_empresa_conductor_vehiculo);
+		//$id_vehiculo = $vehiculo[0]->id;
+		//$solicitud_model = new Solicitude;
+		//$fecha_actual = Carbon::now()->timezone('America/Lima')->format('Y-m-d H:i:s');
+		//$solicitud = $solicitud_model->getSolicitudById($id);
+		//$usuario = User::find($id_user);
+
+		//dd($empresa_conductor_vehiculo);exit();
+		return view('frontend.empresa.modal_empresa_guia',compact('id','empresa','empresa_conductor_vehiculo'));
 	
 	}
 
@@ -447,8 +465,6 @@ class EmpresaController extends Controller
 
         //print_r ($validaRuc);
         //exit();
-
-
 		
 		if($request->id == 0){
 			
@@ -674,20 +690,27 @@ class EmpresaController extends Controller
 
 				$empresa_razon_social = $empresa->razon_social;
 
-				$vehiculo = Vehiculo::find($request->id_vehiculo);
+				//$vehiculo = Vehiculo::find($request->id_vehiculo);
 
-				$empresas_conductores_vehiculo = EmpresasConductoresVehiculo::where('id_vehiculo',$vehiculo->id);
-				$empresas_conductores_vehiculo->id_empresas = $empresa->id;
-				$empresas_conductores_vehiculo->save();
+				$empresas_conductores_vehiculo = EmpresasConductoresVehiculo::find($request->id_empresa_conductor_vehiculo);
+				$new_empresas_conductores_vehiculo = new EmpresasConductoresVehiculo;
+				$new_empresas_conductores_vehiculo->id_empresas = $empresa->id;
+				$new_empresas_conductores_vehiculo->id_vehiculos = $empresas_conductores_vehiculo->id_vehiculos;
+				$new_empresas_conductores_vehiculo->id_conductores = $empresas_conductores_vehiculo->id_conductores;
+				$new_empresas_conductores_vehiculo->save();
 
 			}else{
 				$sw = false;
 				$msg = "El Ruc ingresado ya existe !!!";
 				$empresa_razon_social = $empresaExiste[0]->razon_social;
+				$id_empresa = $empresaExiste[0]->id;
 
-				$empresas_conductores_vehiculo = EmpresasConductoresVehiculo::where('id_vehiculo',$vehiculo->id);
-				$empresas_conductores_vehiculo->id_empresas = $empresaExiste[0]->id;
-				$empresas_conductores_vehiculo->save();
+				$empresas_conductores_vehiculo = EmpresasConductoresVehiculo::find($request->id_empresa_conductor_vehiculo);
+				$new_empresas_conductores_vehiculo = new EmpresasConductoresVehiculo;
+				$new_empresas_conductores_vehiculo->id_empresas = $id_empresa;
+				$new_empresas_conductores_vehiculo->id_vehiculos = $empresas_conductores_vehiculo->id_vehiculos;
+				$new_empresas_conductores_vehiculo->id_conductores = $empresas_conductores_vehiculo->id_conductores;
+				$new_empresas_conductores_vehiculo->save();
 			}
 			
 		}
@@ -695,9 +718,20 @@ class EmpresaController extends Controller
 		$array["sw"] = $sw;
         $array["msg"] = $msg;
 		$array["empresa"] = $empresa_razon_social;
+		$array["id_empresa"] = $id_empresa;
         echo json_encode($array);
 		
 		
+    }
+
+	public function obtener_empresas_all(){
+
+        $empresa_model = new Empresa;
+        $empresa = $empresa_model->getEmpresaAll();
+        
+        $array["empresa"] = $empresa;
+        echo json_encode($array);
+
     }
 	
 }

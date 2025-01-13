@@ -88,4 +88,15 @@ class Conductores extends Model
       return $data;
    }
 
+   function getConductoresAll(){
+
+    $cad = "select c.id, c.licencia, c.fecha_licencia, c.estado, c.id_personas, p.nombres||' '||p.apellido_paterno||' '||p.apellido_materno nombre_conductor from conductores c
+    inner join personas p on c.id_personas = p.id
+    where c.estado ='ACTIVO'";
+
+    $data = DB::select($cad);
+    return $data;
+
+}
+
 }

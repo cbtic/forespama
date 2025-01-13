@@ -254,11 +254,16 @@ function fn_save(){
 	var nombres = $('#nombres_').val();
 	var id_tipo_documento = $('#tipo_documento_').val();
 	var numero_documento = $('#numero_documento_').val();
+	var id_empresa_conductor_vehiculo = $('#id_empresa_conductor_vehiculo').val();
+	
 	
     $.ajax({
-			url: "/conductores/send_conductor_ingreso",
+			url: "/conductores/send_conductor_guia",
             type: "POST",
-            data : {_token:_token,id:id,id_personas:id_personas,licencia:licencia,apellido_paterno:apellido_paterno,apellido_materno:apellido_materno,nombres:nombres,id_tipo_documento:id_tipo_documento,numero_documento:numero_documento},
+            data : {_token:_token,id:id,id_personas:id_personas,licencia:licencia,
+				apellido_paterno:apellido_paterno,apellido_materno:apellido_materno,
+				nombres:nombres,id_tipo_documento:id_tipo_documento,numero_documento:numero_documento,
+				id_empresa_conductor_vehiculo:id_empresa_conductor_vehiculo},
 			dataType: 'json',
             success: function (result) {
 				
@@ -283,7 +288,8 @@ function fn_save(){
 					
 				}
 				
-				$('#openOverlayOpc').modal('hide');
+				$('#openOverlayOpc3').modal('hide');
+				obtenerEmpresa();
 				//datatablenew();
 				
             }
@@ -438,7 +444,7 @@ container: '#myModal modal-body'
 					<input type="hidden" name="_token" value="{{ csrf_token() }}">
 					<input type="hidden" name="id" id="id" value="<?php echo $id?>">
 					<input type="hidden" name="id_persona_" id="id_persona_" value="">
-					
+					<input type="hidden" name="id_empresa_conductor_vehiculo" id="id_empresa_conductor_vehiculo" value="<?php echo $empresa_conductor_vehiculo->id?>">
 					
 					<div class="row">
 						
