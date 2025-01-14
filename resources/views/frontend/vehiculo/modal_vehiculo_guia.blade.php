@@ -14,9 +14,9 @@
   height:250px;
 }
 
-.modal-open .select2-container {
-    z-index: 1050 !important; /* Ajusta el índice z para que Select2 esté encima */
-}
+/*.modal-open .select2-container {
+    z-index: 1050 !important;  Ajusta el índice z para que Select2 esté encima 
+}*/
 
 .modal-vehiculo .modal-dialog {
 	width: 100%;
@@ -377,6 +377,32 @@ function calculaPesarSeco(){
 	
 }
 
+function agregarEmpresa(){
+	
+    $.ajax({
+		url: "/empresa/modal_nueva_empresa/"+0,
+		type: "GET",
+		success: function (result) {
+			$("#diveditpregOpc5").html(result);
+			$('#openOverlayOpc5').modal('show');
+		}
+	});
+
+}
+
+function agregarConductorNuevo(){
+
+	$.ajax({
+		url: "/conductores/modal_nuevo_conductor/"+0,
+		type: "GET",
+		success: function (result) {
+			$("#diveditpregOpc6").html(result);
+			$('#openOverlayOpc6').modal('show');
+		}
+	});
+
+}
+
 /*function agregarVehiculo(id){
 	
 	$(".modal-dialog").css("width","85%");
@@ -470,7 +496,7 @@ container: '#myModal modal-body'
 							</div>
                         </div>
 						<div class="col-lg-4 col-md-12 col-sm-12 col-xs-12" style="margin-top: 32px">
-							<button id="btnPlaca" type="button" class="btn btn-warning btn-sm" data-toggle="modal" onclick="agregarVehiculo()">
+							<button id="btnPlaca" type="button" class="btn btn-warning btn-sm" data-toggle="modal" onclick="agregarEmpresa()">
 								<i class="fas fa-plus-circle"></i> Agregar Empresa
 							</button>
 						</div>
@@ -491,7 +517,7 @@ container: '#myModal modal-body'
 							</div>
                         </div>
 						<div class="col-lg-4 col-md-12 col-sm-12 col-xs-12" style="margin-top: 32px">
-							<button id="btnPlaca" type="button" class="btn btn-warning btn-sm" data-toggle="modal" onclick="agregarConductor()">
+							<button id="btnPlaca" type="button" class="btn btn-warning btn-sm" data-toggle="modal" onclick="agregarConductorNuevo()">
 								<i class="fas fa-plus-circle"></i> Agregar Conductor
 							</button>
 						</div>
@@ -643,6 +669,38 @@ container: '#myModal modal-body'
 	  </div>
 
 	</div>-->
+
+	<div id="openOverlayOpc5" class="modal fade modal-destinatario" tabindex="-1" role="dialog">
+		<div class="modal-dialog" >
+
+			<div id="id_content_OverlayoneOpc" class="modal-content" style="padding: 0px;margin: 0px">
+
+				<div class="modal-body" style="padding: 0px;margin: 0px">
+
+					<div id="diveditpregOpc5"></div>
+
+				</div>
+
+			</div>
+
+		</div>
+	</div>
+
+	<div id="openOverlayOpc6" class="modal fade modal-conductor-nuevo" tabindex="-1" role="dialog">
+		<div class="modal-dialog" >
+
+			<div id="id_content_OverlayoneOpc" class="modal-content" style="padding: 0px;margin: 0px">
+
+				<div class="modal-body" style="padding: 0px;margin: 0px">
+
+					<div id="diveditpregOpc6"></div>
+
+				</div>
+			</div>
+		</div>
+
+	</div>
+
 <script type="text/javascript">
 $(document).ready(function () {
 	

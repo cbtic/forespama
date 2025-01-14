@@ -489,6 +489,9 @@ function cargarDetalle(id, cantidad_tiendas) {
 
                     $(`#productosTienda${tienda}_tabla`).append(productoRow);
 
+                    
+                    $("#tiendas"+tienda).select2({ width: '100%' });
+
                     productoContador++;
                 });
             }

@@ -251,8 +251,9 @@ th:last-child {
                 <tbody>
                     <tr class="data">
                         <td class="td" style ="text-align: left; width: 5%; height:25px; border-bottom: 1px solid black;"><b>#</b></td>
-                        <td class="td" style ="text-align: left; width: 70%; height:25px; border-bottom: 1px solid black;"><b>DESCRIPCI&Oacute;N</b></td>
-                        <td class="td" style ="text-align: left; width: 20%; height:25px; border-bottom: 1px solid black;"><b>UNIDAD</b></td>
+                        <td class="td" style ="text-align: left; width: 10%; height:25px; border-bottom: 1px solid black;"><b>C&oacute;DIGO</b></td>
+                        <td class="td" style ="text-align: left; width: 65%; height:25px; border-bottom: 1px solid black;"><b>DESCRIPCI&Oacute;N</b></td>
+                        <td class="td" style ="text-align: left; width: 10%; height:25px; border-bottom: 1px solid black;"><b>UNIDAD</b></td>
                         <td class="td" style ="text-align: left; width: 10%; height:25px; border-bottom: 1px solid black;"><b>CANTIDAD</b></td>
                     </tr>
                     
@@ -261,8 +262,9 @@ th:last-child {
                     foreach($datos_detalle as $key=>$r) { ?>
                         <tr>
                             <td class="td" style ="text-align: left; width: 5%; height:25px"><?php echo $r->row_num;?></td>
-                            <td class="td" style ="text-align: left; width: 70%; height:25px"><?php echo $r->producto; if($id_destinatario==$r->id_empresa) echo " (".$r->codigo_empresa." - ".$r->descripcion_empresa.")"?> </td>
-                            <td class="td" style ="text-align: left; width: 20%; height:25px"><?php echo $r->unidad_medida;?></td>
+                            <td class="td" style ="text-align: left; width: 10%; height:25px"><?php echo $r->codigo_producto;?></td>
+                            <td class="td" style ="text-align: left; width: 65%; height:25px"><?php echo $r->producto; if($id_destinatario==$r->id_empresa) echo " (".$r->codigo_empresa." - ".$r->descripcion_empresa.")"?> </td>
+                            <td class="td" style ="text-align: left; width: 10%; height:25px"><?php echo $r->unidad_medida;?></td>
                             <td class="td" style ="text-align: left; width: 10%; height:25px"><?php echo $r->cantidad;?></td>
                             
                         </tr>

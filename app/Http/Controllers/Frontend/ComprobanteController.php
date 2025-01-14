@@ -3542,7 +3542,7 @@ class ComprobanteController extends Controller
         //print_r($data);
         //exit();
 		$databuild_string = json_encode($data);
-        print_r($databuild_string);
+        //print_r($databuild_string);
        // exit();
 
 		//$chbuild = curl_init("https://easyfact.tk/see/rest/01");
@@ -3574,6 +3574,7 @@ class ComprobanteController extends Controller
 		if (curl_errno($chbuild)) {
 			$error_msg = curl_error($chbuild);
 			echo $error_msg;
+            
 /*
             $log = ['Error' => $error_msg,
             'description' => 'Errores'];
@@ -3582,7 +3583,7 @@ class ComprobanteController extends Controller
             $facturaLog->info('FacturaLog', $log);
             */
 		}
-		print_r($results);
+		//print_r($results);
         curl_close($chbuild);
 
 
@@ -3638,49 +3639,21 @@ class ComprobanteController extends Controller
 
                 }
             }
+            $notes= "FIRMADO";
+            //echo $notes;
+        }else
+        {
+            $notes = $respbuild["notes"];
+            //echo $notes;
+
+            //echo $respbuild;
+
         }
 
-        //$respbuild->result;
-
-    }
-
-    //https://easyfact.pe/see/rest/6/20608204386/T001-00008239
-
-    //https://easyfact.pe/see/rest/6/20486785994/T001-19
-
-    public function consultarEstado($RUC, $TipoDocumento, $SerieNumero, $User, $Password, $URL) {
-
-        $URLConsulta = $URL . $TipoDocumento . "/6/" . $RUC . "/" . $SerieNumero;
-    
-        // Crear la autenticación básica en Base64
-        $login = base64_encode("$User:$Password");
-    
-        // Inicializar cURL
-        $ch = curl_init();
-    
-        // Configurar las opciones de cURL
-        curl_setopt($ch, CURLOPT_URL, $URLConsulta);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, [
-            "Authorization: Basic $login",
-            "Content-Type: application/json"
+        return response()->json([
+            'notes' => $notes
         ]);
-    
-        // Ejecutar la solicitud
-        $response = curl_exec($ch);
-    
-        // Manejar errores de cURL
-        if (curl_errno($ch)) {
-            curl_close($ch);
-            return "OFFline";
-        }
-    
-        // Cerrar la conexión cURL
-        curl_close($ch);
-    
-        return $response ?: "OFFline";
+        //$respbuild->result;
     }
     
-
-
 }

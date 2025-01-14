@@ -201,21 +201,22 @@ function fn_save(){
 	var direccion = $('#direccion_').val();
 	var email = $('#email_').val();
 	var telefono = $('#telefono_').val();
-	var id_vehiculo = $('#id_vehiculo').val();
-	
+	var id_empresa_conductor_vehiculo = $('#id_empresa_conductor_vehiculo').val();
 	
     $.ajax({
 			url: "/empresa/send_guia",
             type: "POST",
-            data : {_token:_token,id:id,ruc:ruc,razon_social:razon_social,direccion:direccion,email:email,telefono:telefono,id_vehiculo:id_vehiculo},
+            data : {_token:_token,id:id,ruc:ruc,razon_social:razon_social,direccion:direccion,email:email,telefono:telefono,id_empresa_conductor_vehiculo:id_empresa_conductor_vehiculo},
 			dataType: 'json',
             success: function (result) {
 				
 				if(result.sw==false){
 					var razonSocial = result.empresa;
+					var empresa_id = result.id_empresa;
 					//alert(razonSocial);
 					$('#openOverlayOpc4').modal('hide');
 					$('#transporte_razon_social').val(razonSocial);
+					$('#id_transporte_razon_social').val(empresa_id);
 				}
 				
 				//$('#openOverlayOpc').modal('hide');
@@ -372,7 +373,7 @@ container: '#myModal modal-body'
 					
 					<input type="hidden" name="_token" value="{{ csrf_token() }}">
 					<input type="hidden" name="id" id="id" value="<?php echo $id?>">
-					<input type="hidden" name="id_vehiculo" id="id_vehiculo" value="<?php echo $id_vehiculo?>">
+					<input type="hidden" name="id_empresa_conductor_vehiculo" id="id_empresa_conductor_vehiculo" value="<?php echo $empresa_conductor_vehiculo->id?>">
 					
 					<!--
 					<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">

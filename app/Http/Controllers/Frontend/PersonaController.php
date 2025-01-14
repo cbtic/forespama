@@ -108,6 +108,7 @@ class PersonaController extends Controller
         $sw = true;
         $persona = $persona_model->getPersona($tipo_documento,$numero_documento);
         //print_r($persona);exit();
+        //dd($persona);exit();
         $array["sw"] = $sw;
         $array["persona"] = $persona;
         echo json_encode($array);
