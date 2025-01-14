@@ -11,6 +11,7 @@ use App\Models\Conductores;
 //use App\Models\Negativo;
 use App\Models\TablaMaestra;
 use App\Models\Ubigeo;
+use App\Models\OrdenCompra;
 
 use Auth;
 
@@ -116,20 +117,17 @@ class PersonaController extends Controller
 
     public function obtener_personas($tipo_documento,$numero_documento){
         $agremiado_model = new Persona;
-		if($tipo_documento=="87"){
+		
+        if($tipo_documento=="6"){
+
+            $orden_compra_model = new OrdenCompra;
 
 			//print_r("hi");exit();
-			$resultado = $agremiado_model->getAgremiadoLiquidacion($numero_documento);
+			$resultado = $orden_compra_model->getOrdenCompraByCod($numero_documento);
 
-			if(isset($resultado->numero_documento)){
+			if(isset($resultado->id_empresa)){
 				//echo("DNI");
-				$tipo_documento = $resultado->id_tipo_documento;
-				$numero_documento = $resultado->numero_documento;
-				//echo($resultado->numero_documento);
-
-			}else if(isset($resultado->ruc)){
-			//	echo("RUC");
-				$tipo_documento="79";
+				$tipo_documento="5";
 				$numero_documento=$resultado->ruc;
 
 			}
