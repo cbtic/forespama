@@ -1034,33 +1034,6 @@ function obtenerBeneficiario(){
 					$('#btnFracciona').attr("disabled", false);
 					$('#btnAnulaVal').attr("disabled", false);
 
-				} else if (tipo_documento == "85") //CAP
-				{
-					var agremiado = result.agremiado.apellido_paterno + " " + result.agremiado.apellido_materno + ", " + result.agremiado.nombres;
-					$('#nombre_').val(agremiado);
-					$('#situacion_').val(result.agremiado.situacion);
-					$('#categoria').val(result.agremiado.categoria);
-					$('#fecha_colegiatura').val(result.agremiado.actividad);
-					$('#fecha_').val(result.agremiado.fecha_colegiado);
-					$('#id_persona').val(result.agremiado.id_p);
-					$('#id_agremiado').val(result.agremiado.id);
-					$('#ruc_p').val(result.agremiado.numero_ruc);
-					$('#id_ubicacion_p').val("0");
-
-					$('#email').val(result.agremiado.email);
-
-					
-
-					$('#numero_documento_').val(numero_documento);
-					$('#id_tipo_documento_').val(tipo_documento);
-					$('#id_tipo_documento').val(tipo_documento);
-					
-					$('#btnOtroConcepto').attr("disabled", false);
-					$('#btnBeneficiario').attr("disabled",false);
-					$('#btnDescuento').attr("disabled", false);
-					$('#btnFracciona').attr("disabled", false);
-					$('#btnAnulaVal').attr("disabled", false);
-
 				} else {
 					var agremiado = result.agremiado.apellido_paterno + " " + result.agremiado.apellido_materno + ", " + result.agremiado.nombres;
 					$('#nombre_').val(agremiado);
@@ -1090,10 +1063,17 @@ function obtenerBeneficiario(){
 					$('#foto').attr('src', '/img/profile-icon.png');
 				}
 
+				//alert(result.id_orden_compra);
 
 				cargarValorizacion();
 				cargarPagos();
 				cargarProforma();
+
+				if (tipo_documento_b=="6"){
+					cargarOrdenCompraDet(result.id_orden_compra);
+				}
+
+
 				//cargarcboTipoConcepto();
 				//cargarcboPeriodo();
 				//cargarcboMes();
@@ -1252,6 +1232,7 @@ function cargarProformaDet(id){
 			}
 	});
 }
+
 
 function calcular_total_pf(){
 	var total = 0;
@@ -3059,5 +3040,59 @@ function proforma_send(){
     });
 
 }
+
+function cargarOrdenCompraDet(id){
+	var total = 0;
+  
+	$('#tblValorizacion').dataTable().fnDestroy();
+    $("#tblValorizacion tbody").html("");
+	$.ajax({
+			url: "/ingreso/listar_orden_compra_det/"+id,
+			type: "GET",
+			success: function (result) {
+				$(result).each(function (ii, oo) {
+					//total = oo.total_;
+					//alert(oo);
+				});
+					//alert(total);
+					  					
+					$("#tblValorizacion tbody").html(result);
+				
+				//$("#tipo_documento").val(result.agremiado.id_tipo_documento);					
+			}
+	});
+}
+/*
+function cargarPagos(){
+	var tipo_documento = $("#tipo_documento").val();
+	var id_persona = 0;
+	if(tipo_documento=="5")id_persona = $('#id_ubicacion').val();
+	else id_persona = $('#id_persona').val();
+	
+	$('#tblPago').dataTable().fnDestroy();
+    $("#tblPago tbody").html("");
+	$.ajax({
+			//url: "/ingreso/obtener_pago/"+numero_documento,
+			url: "/ingreso/obtener_pago/"+tipo_documento+"/"+id_persona,
+			type: "GET",
+			success: function (result) {  
+					$("#tblPago").html(result);
+					$('[data-toggle="tooltip"]').tooltip();
+					
+					$('#tblPago').DataTable({
+						//"sPaginationType": "full_numbers",
+						//"paging":false,
+						"searching": false,
+						"info": false,
+						"bSort" : false,
+						"dom": '<"top">rt<"bottom"flpi><"clear">',
+						"language": {"url": "/js/Spanish.json"},
+					});
+							
+			}
+	});
+
+}
+*/
 
 

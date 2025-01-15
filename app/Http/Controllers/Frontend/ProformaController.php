@@ -196,7 +196,7 @@ class ProformaController extends Controller
             $p_dprof.=$id_user.",";
             $p_dprof.="1";
             $p_dprof.=$value['pv'].",";
-            $p_dprof.=$value['monto'].",";
+            $p_dprof.=$value['monto'];
             $p_dprof.="},";    
         }
         if(strlen($p_dprof)>1)$p_dprof=substr($p_dprof,0,-1);

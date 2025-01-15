@@ -287,7 +287,8 @@
 
 	var id_empresa_ = $('#empresa_id').val();
 	var origen_ = $('#origen').val();
-
+	if(id_empresa_==""){id_empresa_="0";}
+	
 	$('#txtProducto').autocomplete({
 		appendTo: "#producto_list1",
 		source: function(request, response) {

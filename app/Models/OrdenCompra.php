@@ -73,7 +73,7 @@ class OrdenCompra extends Model
 
     function getOrdenCompraByCod($numero){
 
-        $cad = "select e.id id_empresa, e.ruc, e.razon_social 
+        $cad = "select o.id id_orden_compra, e.id id_empresa, e.razon_social, e.direccion, e.representante, e.ruc, e.email, 5 id_tipo_documento,  trim(e.ruc) numero_documento_
                 from orden_compras o 
                 left join empresas e  on e.id = o.id_empresa_compra 
                 where 1=1 
@@ -96,22 +96,17 @@ class OrdenCompra extends Model
 
     function getOrdenCompraDetalle($id){
 
-        $cad = "SELECT p.id, p.serie, p.numero, p.fecha, p.id_moneda, p.moneda, p.sub_total sub_total_, p.igv igv_, p.total total_, p.fecha_vencimiento,
+        $cad = "SELECT p.id, '' serie, p.numero_orden_compra, p.fecha_orden_compra fecha, 1 id_moneda, 'SOLES' moneda, 0  sub_total_, 0 igv_, 0 total_, '01/01/2025' fecha_vencimiento,
             pd.id_producto,  pr.codigo, pr.denominacion,
-            case when  p.id_empresa = 23 then 
-            (SELECT pe.codigo_producto ||'-'|| pe.descripcion_producto||'('|| pe.codigo_empresa||'-'|| pe. descripcion_empresa||')'  
-            FROM equivalencia_productos pe
-            where pe.id_empresa = p.id_empresa and pe.id_producto = pd.id_producto and pe.estado= '1'
-            )	else pr.codigo ||'-'|| pr.denominacion end  producto_prof,
-            um.denominacion um, pd.cantidad, pd.id_descuento,
-            pd.precio_unitario, pd.sub_total, pd.igv, pd.total, pd.id_unidad_medida, pd.descuento, pd.valor_venta_bruto
-        FROM proformas p
-        inner join proforma_detalles pd on pd.id_proforma = p.id 
-        inner join productos pr on pr.id = pd.id_producto
-        inner join tabla_maestras um on um.codigo::int = pd.id_unidad_medida and um.tipo = '57'
-        where p.id = ".$id." and 
-        pd.estado = '1'
-        order by pd.id";
+            pr.codigo ||'-'|| pr.denominacion producto_prof,
+            um.denominacion um, pd.cantidad_despacho cantidad, pd.id_descuento,
+            pd.precio precio_unitario, pd.sub_total, pd.igv, pd.total, pd.id_unidad_medida, 0 descuento, 0 valor_venta_bruto
+            FROM orden_compras p
+            inner join orden_compra_detalles pd on pd.id_orden_compra = p.id 
+            inner join productos pr on pr.id = pd.id_producto
+            inner join tabla_maestras um on um.codigo::int = pd.id_unidad_medida and um.tipo = '57'
+            where p.id = ".$id."  and pd.estado = '1'
+            order by pd.id ";
     
     //echo $cad;
     $data = DB::select($cad);

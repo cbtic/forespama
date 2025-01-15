@@ -41,8 +41,6 @@ foreach($proforma as $key=>$row):
 <tr style="font-size:13px" data-toggle="tooltip" data-placement="top" title="<?php echo $row->id_producto ?>"  >	
 	
 	<td class="text-center" style="font-size:8.0pt"><?php echo $n?>
-       
-
 			<input type="hidden" name="valorizacion_detalle[<?php echo $key?>][id]" value="<?php echo $row->id?>" />
 			<input type="hidden" name="valorizacion_detalle[<?php echo $key?>][id_producto]" value="<?php echo $row->id_producto?>" />
 			<input type="hidden" name="valorizacion_detalle[<?php echo $key?>][codigo_producto]" value="<?php echo $row->codigo?>" />
