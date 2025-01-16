@@ -1065,7 +1065,7 @@ function obtenerBeneficiario(){
 
 				//alert(result.id_orden_compra);
 
-				cargarValorizacion();
+				//cargarValorizacion();
 				cargarPagos();
 				cargarProforma();
 
@@ -1182,10 +1182,8 @@ function cargarProformaDet(id){
 			url: "/ingreso/listar_proforma_det/"+id,
 			type: "GET",
 			success: function (result) {
-				$(result).each(function (ii, oo) {
-					//total = oo.total_;
-					alert(oo);
-				});
+
+
 
 					//alert(total);
 					  					
@@ -3044,7 +3042,7 @@ function proforma_send(){
 function cargarOrdenCompraDet(id){
 	var total = 0;
   
-	$('#tblValorizacion').dataTable().fnDestroy();
+	//$('#tblValorizacion').dataTable().fnDestroy();
     $("#tblValorizacion tbody").html("");
 	$.ajax({
 			url: "/ingreso/listar_orden_compra_det/"+id,

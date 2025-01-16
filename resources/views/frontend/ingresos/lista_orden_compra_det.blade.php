@@ -7,11 +7,11 @@ $valor_venta = 0;
 $igv = 0;
 $n = 0;
 
-$tot_reg = count($proforma);
+$tot_reg = count($orden_compra);
 
 //print_r ($valorizacion); exit();
 
-foreach($proforma as $key=>$row):
+foreach($orden_compra as $key=>$row):
 
 	/*
 	$id_tipo_afectacion = $row->id_tipo_afectacion;

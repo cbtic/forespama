@@ -170,9 +170,9 @@ class IngresoController extends Controller
     public function listar_orden_compra_det($id){       
         $orden_compra_model = new OrdenCompra;
         $sw = true;
-        $proforma = $orden_compra_model->getOrdenCompraDetalle($id);
+        $orden_compra = $orden_compra_model->getOrdenCompraDetalle($id);
         
-        return view('frontend.ingresos.lista_proforma_det',compact('proforma'));
+        return view('frontend.ingresos.lista_orden_compra_det',compact('orden_compra'));
 
     }
 
