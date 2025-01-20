@@ -35,6 +35,8 @@ use App\Http\Controllers\Frontend\ProformaController;
 use App\Http\Controllers\ConductoresController;
 
 use App\Http\Controllers\Frontend\EquivalenciaProductosController;
+
+use App\Http\Controllers\Frontend\ParametroController;
 //use App\Http\Controllers\VehiculoController;
 
 
@@ -545,3 +547,12 @@ Route::post('conductores/send_conductor_nuevo', [ConductoresController::class, '
 Route::get('conductores/obtener_conductores_nuevos', [ConductoresController::class, 'obtener_conductores_nuevos'])->name('conductores.obtener_conductores_nuevos');
 
 Route::get('orden_compra/importar_archivo/{archivo}', [OrdenCompraController::class, 'importar_archivo'])->name('orden_compra.importar_archivo');
+
+Route::get('parametro/create', [ParametroController::class, 'create'])->name('parametro.create');
+Route::post('parametro/listar_parametros_ajax', [ParametroController::class, 'listar_parametros_ajax'])->name('parametro.listar_parametros_ajax');
+Route::post('parametro/send_parametro', [ParametroController::class, 'send_parametro'])->name('parametro.send_parametro');
+Route::get('parametro/modal_parametro/{id}', [ParametroController::class, 'modal_parametro'])->name('parametro.modal_parametro');
+Route::get('parametro/eliminar_parametro/{id}/{estado}', [ParametroController::class, 'eliminar_parametro'])->name('parametro.eliminar_parametro');
+Route::get('parametro/create_valida_parametro', [ParametroController::class, 'create_valida_parametro'])->name('parametro.create_valida_parametro');
+Route::post('parametro/listar_total_orden_compra_tienda_ajax', [ParametroController::class, 'listar_total_orden_compra_tienda_ajax'])->name('parametro.listar_total_orden_compra_tienda_ajax');
+Route::get('parametro/cargar_parametro_orden_compra/{id}', [ParametroController::class, 'cargar_parametro_orden_compra'])->name('parametro.cargar_parametro_orden_compra');

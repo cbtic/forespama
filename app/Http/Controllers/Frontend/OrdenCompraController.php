@@ -130,11 +130,12 @@ class OrdenCompraController extends Controller
         $almacen = $almacen_model->getAlmacenAll();
         //$almacen = Almacene::all();
         $unidad_origen = $tablaMaestra_model->getMaestroByTipo(50);
+        $moneda = $tablaMaestra_model->getMaestroByTipo(1);
         //$codigo_orden_compra = $orden_compra_model->getCodigoOrdenCompra();
         
         //dd($proveedor);exit();
 
-		return view('frontend.orden_compra.modal_orden_compra_nuevoOrdenCompra',compact('id','orden_compra','tipo_documento','proveedor','producto','marca','estado_bien','unidad','igv_compra','descuento','almacen','unidad_origen','id_user'));
+		return view('frontend.orden_compra.modal_orden_compra_nuevoOrdenCompra',compact('id','orden_compra','tipo_documento','proveedor','producto','marca','estado_bien','unidad','igv_compra','descuento','almacen','unidad_origen','id_user','moneda'));
 
     }
 
@@ -204,6 +205,11 @@ class OrdenCompraController extends Controller
         $orden_compra->id_almacen_destino = $request->almacen;
         $orden_compra->id_almacen_salida = $request->almacen_salida;
         $orden_compra->numero_orden_compra_cliente = $request->numero_orden_compra_cliente;
+        $orden_compra->sub_total = $request->sub_total_general;
+        $orden_compra->igv = $request->igv_general;
+        $orden_compra->total = $request->total_general;
+        $orden_compra->id_moneda = $request->moneda;
+        $orden_compra->moneda = $request->moneda_descripcion;
         $orden_compra->cerrado = 1;
         $orden_compra->id_usuario_inserta = $id_user;
         $orden_compra->estado = 1;

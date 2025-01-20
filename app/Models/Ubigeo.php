@@ -57,6 +57,52 @@ class Ubigeo extends Model
         return $data;
     }
 
+    function getDepartamentoByUbigeo($id_departamento){
+
+        $cad = "select id_provincia,desc_ubigeo
+        from ubigeos u
+        where id_departamento!='00'
+        and id_provincia='00'
+        and id_distrito='00'
+        and id_departamento='".$id_departamento."'
+        and estado='1'
+        order by desc_ubigeo";
+
+		$data = DB::select($cad);
+        return $data;
+    }
+
+	function getProvinciaByUbigeo($id_departamento,$id_provincia){
+
+        $cad = "select id_ubigeo,id_distrito,desc_ubigeo
+        from ubigeos u
+        where id_departamento!='00'
+        and id_provincia!='00'
+        and id_distrito='00'
+        and id_departamento='".$id_departamento."'
+        and id_provincia='".$id_provincia."'
+        and estado='1'
+        order by desc_ubigeo";
+
+		$data = DB::select($cad);
+        return $data;
+    }
+
+    function getDistritoByUbigeo($id_ubigeo){
+
+        $cad = "select id_ubigeo,id_distrito,desc_ubigeo
+        from ubigeos u
+        where id_departamento!='00'
+        and id_provincia!='00'
+        and id_distrito!='00'
+        and id_ubigeo='".$id_ubigeo."'
+        and estado='1'
+        order by desc_ubigeo";
+
+		$data = DB::select($cad);
+        return $data;
+    }
+
     public function almacenes()
     {
         return $this->HasOne(Almacene::class,"id_ubigeo","id_ubigeo");

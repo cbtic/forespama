@@ -192,6 +192,12 @@
                     <x-utils.link :href="route('frontend.movimientos.index')" class="c-sidebar-nav-link" :text="__('Movimientos')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
                 </li>
 				@endif
+
+                @can('Verificacion Aplicacion Comisiones')
+				<li class="c-sidebar-nav-item">
+                    <x-utils.link :href="route('frontend.parametro.create_valida_parametro')" class="c-sidebar-nav-link" :text="__('Verificacion de Aplicacion de Comisiones')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+                </li>
+				@endif
 				
             </ul>
 
@@ -290,6 +296,12 @@
                 @can('Mantenimiento Equivalencia Producto')
 				<li class="c-sidebar-nav-item">
                     <x-utils.link :href="route('frontend.equivalencia_producto.create')" class="c-sidebar-nav-link" :text="__('Equivalencia Producto')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+                </li>
+				@endif
+
+                @can('Mantenimiento Parametro')
+				<li class="c-sidebar-nav-item">
+                    <x-utils.link :href="route('frontend.parametro.create')" class="c-sidebar-nav-link" :text="__('Parametros')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
                 </li>
 				@endif
 

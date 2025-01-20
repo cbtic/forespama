@@ -155,6 +155,10 @@ $('#openOverlayOpc').on('shown.bs.modal', function() {
 
 $(document).ready(function() {
 	 
+    cambiarGeneralEspecifico();
+
+    $("#empresa").select2({ width: '100%' });
+
 });
 
 function limpiar(){
@@ -166,26 +170,31 @@ function limpiar(){
 
 function fn_save_marca(){
 
-    $('#denominacion').val($('#denominacion').val().toUpperCase());
+    //$('#denominacion').val($('#denominacion').val().toUpperCase());
 	
 	$.ajax({
-			url: "/marcas/send_marca",
+			url: "/parametro/send_parametro",
             type: "POST",
-            data : $("#frmMarca").serialize(),
+            data : $("#frmParametro").serialize(),
 			success: function (result) {
-				//alert(result);
-                if (result.success) {
-                    bootbox.alert(result.success, function() {
-                        $('#openOverlayOpc').modal('hide');
-                        //bootbox.alert("Se guard&oacute; satisfactoriamente"); 
-                        //window.location.reload();
-                        datatablenew();
-                    });
-                } else if (result.error) {
-                    bootbox.alert(result.error);
-                }
+                $('#openOverlayOpc').modal('hide');
+                bootbox.alert("Se guard&oacute; satisfactoriamente");
+                datatablenew();
+                   
             },
     });
+}
+
+function cambiarGeneralEspecifico(){
+
+    var aplica_detalle = $('#aplica_detalle').val();
+
+    if(aplica_detalle==1){
+        $('#div_general_especifico').show();
+    }else{
+        $('#div_general_especifico').hide();
+    }
+
 }
 
 </script>
@@ -206,11 +215,11 @@ function fn_save_marca(){
             <div class="card">
                 
                 <div class="card-header" style="padding:5px!important;padding-left:20px!important">
-                    Registrar Marcas
+                    Registrar Parametros
                 </div>
                 
                 <div class="card-body">
-                <form method="post" action="#" id="frmMarca" name="frmMarca">
+                <form method="post" action="#" id="frmParametro" name="frmParametro">
 
                     <div class="row">
 
@@ -222,28 +231,66 @@ function fn_save_marca(){
                             
                             <div class="row" style="padding-left:10px">
                                 
-                                <div class="col-lg-8">
+                                <div class="col-lg-11">
                                     <div class="form-group">
-                                        <label class="control-label form-control-sm">Denominaci&oacute;n</label>
-                                        <input id="denominacion" name="denominacion" on class="form-control form-control-sm"  value="<?php echo $marca->denominiacion?>" type="text" style="text-transform: uppercase;">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row" style="padding-left:10px">
-                                <div class="col-lg-4">
-                                    <div class="form-group">
-                                        <label class="control-label form-control-sm">Tipo Marca</label>
-                                        <select name="tipo_marca" id="tipo_marca" class="form-control form-control-sm">
+                                        <label class="control-label form-control-sm">Empresa</label>
+                                        <select name="empresa" id="empresa" class="form-control form-control-sm">
                                             <option value="">--Seleccionar--</option>
                                             <?php 
-                                            foreach ($tipo_marca as $row){?>
-                                                <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$marca->id_tipo_marca)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
-                                                <?php 
+                                            foreach ($empresa as $row){?>
+                                                <option value="<?php echo $row->id ?>" <?php if($row->id==$parametro->id_empresa)echo "selected='selected'"?>><?php echo $row->razon_social ?></option>
+                                                <?php
                                             }
                                             ?>
                                         </select>
                                     </div>
                                 </div>
+                            </div>
+                            <div class="row" style="padding-left:10px">
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <label class="control-label form-control-sm">Año</label>
+                                        <input id="anio" name="anio" on class="form-control form-control-sm"  value="<?php echo $parametro->anio?>" type="text">
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-8">
+                                    <div class="form-group">
+                                        <label class="control-label form-control-sm">Nombre Acuerdo Comercial</label>
+                                        <input id="nombre_comercial" name="nombre_comercial" on class="form-control form-control-sm"  value="<?php echo $parametro->nombre_acuerdo_comercial?>" type="text">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" style="padding-left:10px">
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <label class="control-label form-control-sm">Porcentaje / Valor</label>
+                                        <input id="procentaje_valor" name="procentaje_valor" on class="form-control form-control-sm"  value="<?php echo $parametro->porcentaje_valor?>" type="text">
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label class="control-label form-control-sm">Aplica Detalle</label>
+                                        <select name="aplica_detalle" id="aplica_detalle" class="form-control form-control-sm" onchange="cambiarGeneralEspecifico()">
+                                            <option value="" <?php echo ($parametro->aplica_detalle == '') ? 'selected' : ''; ?>>--Seleccionar--</option>
+                                            <option value="1" <?php echo ($parametro->aplica_detalle == '1') ? 'selected' : ''; ?>>Si</option>
+                                            <option value="0" <?php echo ($parametro->aplica_detalle == '0') ? 'selected' : ''; ?>>No</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-4" id="div_general_especifico">
+                                    <div class="form-group">
+                                    <label class="control-label form-control-sm">General / Especifico</label>
+                                        <select name="general_especifico" id="general_especifico" class="form-control form-control-sm">
+                                            <option value="" <?php echo ($parametro->general_especifico == '') ? 'selected' : ''; ?>>--Seleccionar--</option>
+                                            <option value="1" <?php echo ($parametro->general_especifico == '1') ? 'selected' : ''; ?>>General</option>
+                                            <option value="0" <?php echo ($parametro->general_especifico == '2') ? 'selected' : ''; ?>>Especifico</option>
+                                        </select>
+                                    </div>
+                                </div>
+
                             </div>
                             </div>
                         </div>

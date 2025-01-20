@@ -301,7 +301,7 @@ label.form-control-sm{
 @section('breadcrumb')
 <ol class="breadcrumb" style="padding-left:130px;margin-top:0px;background-color:#283659">
     <li class="breadcrumb-item text-primary">Inicio</li>
-    <li class="breadcrumb-item active">Registro de Tiendas</li>
+    <li class="breadcrumb-item active">Registro de Parametro</li>
     </li>
 </ol>
 
@@ -327,12 +327,12 @@ label.form-control-sm{
 
         <div class="card-body">
 
-            <form class="form-horizontal" method="post" action="" id="frmTiendas" autocomplete="off" enctype="multipart/form-data">
+            <form class="form-horizontal" method="post" action="" id="frmParametros" autocomplete="off" enctype="multipart/form-data">
 				
                 <div class="row">
                     <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12" style="margin-top:15px">
                         <h4 class="card-title mb-0 text-primary" style="font-size:22px">
-                            Tiendas
+                            Parametros
                         </h4>
                     </div>
                 </div>
@@ -342,29 +342,16 @@ label.form-control-sm{
 
 					<div class="col col-sm-12 align-self-center">
 
-
                         <input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
-
-                        <!--<input type="hidden" name="estado" id="estado" value="0">-->
-						
-						<input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
 				
 				<div class="row" style="padding:20px 20px 0px 20px;">
 
-                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+					<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
                         <input id="denominacion_bus" name="denominacion_bus" on class="form-control form-control-sm"  placeholder="Denominaci&oacute;n">
 					</div>
 
-					<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-						<select name="empresa_bus" id="empresa_bus" class="form-control form-control-sm" onchange="">
-							<option value="">--Seleccionar Empresa--</option>
-							<?php
-							foreach ($empresa as $row){?>
-								<option value="<?php echo $row->id ?>"><?php echo $row->razon_social ?></option>
-								<?php 
-							}
-							?>
-						</select>
+					<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+                        <input id="anio_bus" name="anio_bus" on class="form-control form-control-sm"  placeholder="Año">
 					</div>
 					
                     <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
@@ -382,21 +369,20 @@ label.form-control-sm{
 					</div>
 				</div>
 				
-                <div class="card-body">
+                <div class="card-body">				
 
                     <div class="table-responsive">
-                    <table id="tblTiendas" class="table table-hover table-sm">
+                    <table id="tblParametros" class="table table-hover table-sm">
                         <thead>
                         <tr style="font-size:13px">
                             <th>Id</th>
 							<th>Empresa</th>
-							<th>Tienda</th>
-							<th># Tienda</th>
-							<th>Tienda TMH</th>
-							<th>Zona</th>
-							<th>Tienda S-M</th>
-							<th>Zona Especifica</th>
-							<th>Estado</th>
+							<th>Año</th>
+							<th>Nombre Acuerdo Comercial</th>
+							<th>Porcentaje / Valor</th>
+							<th>Aplica Detalle</th>
+							<th>General / Especifico</th>
+							<th>Estado</th> 
                             <th>Acciones</th>
                         </tr>
                         </thead>
@@ -486,6 +472,6 @@ label.form-control-sm{
 
 	</script>
 
-	<script src="{{ asset('js/tiendas.js') }}"></script>
+	<script src="{{ asset('js/parametros.js') }}"></script>
 
 	@endpush

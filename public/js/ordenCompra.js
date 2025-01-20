@@ -312,13 +312,13 @@ function modalOrdenCompra(id){
 	if(tipo=='INGRESO'){tipo_mov=1};
 	if(tipo=='SALIDA'){tipo_mov=2};*/
 
-	$(".modal-dialog").css("width","85%");
+	$(".modal-dialog").css("width","95%");
 	$('#openOverlayOpc .modal-body').css('height', 'auto');
 
 	$.ajax({
 			url: "/orden_compra/modal_orden_compra/"+id,
 			type: "GET",
-			success: function (result) {  
+			success: function (result) {
 					$("#diveditpregOpc").html(result);
 					$('#openOverlayOpc').modal('show');
 			}

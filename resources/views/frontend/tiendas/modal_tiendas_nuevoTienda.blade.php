@@ -234,7 +234,7 @@ function datatableTiendaDetalle(){
                             
                             <div class="row" style="padding-left:10px">
 
-                                <div class="col-lg-10">
+                                <div class="col-lg-12">
                                     <div class="form-group">
                                         <label class="control-label form-control-sm">Empresa</label>
                                         <select name="empresa" id="empresa" class="form-control form-control-sm" onchange="datatableTiendaDetalle()">
@@ -249,11 +249,70 @@ function datatableTiendaDetalle(){
                                     </div>
                                 </div>
                                 
-                                <div class="col-lg-10">
+                                <div class="col-lg-12">
                                     <div class="form-group">
                                         <input type="hidden" name="id_tienda" id="id_tienda" value="<?php echo $tienda_detalle->id_tienda?>">
                                         <label class="control-label form-control-sm">Denominaci&oacute;n</label>
                                         <input id="denominacion" name="denominacion" on class="form-control form-control-sm"  value="<?php echo $tienda->denominacion?>" type="text" style="text-transform: uppercase;">
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label class="control-label form-control-sm">N&uacute;mero Tienda</label>
+                                        <input id="numero_tienda" name="numero_tienda" on class="form-control form-control-sm"  value="<?php echo $tienda->numero_tienda?>" type="text" style="text-transform: uppercase;">
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-8">
+                                    <div class="form-group">
+                                        <label class="control-label form-control-sm">Tienda TMH</label>
+                                        <input id="tienda_tmh" name="tienda_tmh" on class="form-control form-control-sm"  value="<?php echo $tienda->tienda_tmh?>" type="text" style="text-transform: uppercase;">
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label class="control-label form-control-sm">Zona</label>
+                                        <select name="zona" id="zona" class="form-control form-control-sm">
+                                            <option value="">--Seleccionar--</option>
+                                            <?php
+                                            foreach ($zona as $row){?>
+                                                <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$tienda->id_zona)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                             <?php 
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label class="control-label form-control-sm">Tienda S-M</label>
+                                        <select name="tienda_sm" id="tienda_sm" class="form-control form-control-sm">
+                                            <option value="">--Seleccionar--</option>
+                                            <?php
+                                            foreach ($tienda_s_m as $row){?>
+                                                <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$tienda->id_tienda_s_m)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                             <?php 
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label class="control-label form-control-sm">Zona Espec&iacute;fica</label>
+                                        <select name="zona_especifica" id="zona_especifica" class="form-control form-control-sm">
+                                            <option value="">--Seleccionar--</option>
+                                            <?php
+                                            foreach ($zona_especifica as $row){?>
+                                                <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$tienda_detalle->id_zona_especifica)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                             <?php 
+                                            }
+                                            ?>
+                                        </select>
                                     </div>
                                 </div>
                             </div>

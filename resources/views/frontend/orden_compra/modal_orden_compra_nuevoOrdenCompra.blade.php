@@ -91,6 +91,27 @@
 #tablemodalm{
 	
 }
+
+.btn-custom {
+    background-color: #fff; /* Fondo blanco */
+    border: 1px solid #ccc; /* Borde gris */
+    border-radius: 4px; /* Bordes redondeados */
+    padding: 5px 8px; /* Espaciado interno */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); /* Sombra */
+}
+
+.btn-custom i {
+    color: #e74c3c; /* Rojo para el ícono */
+    font-size: 16px; /* Tamaño del ícono */
+}
+
+.btn-custom:hover {
+    background-color: #f8f9fa; /* Fondo ligeramente gris al pasar el cursor */
+    border-color: #bbb;
+}
 </style>
 
 <!--<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"/>-->
@@ -361,43 +382,99 @@ function calcularIGV(subTotal, igvInputId, totalInputId) {
 }
 
 function actualizarTotalGeneral() {
+    var sub_totalGeneral = 0;
+    var igv_totalGeneral = 0;
     var totalGeneral = 0;
     $('#tblOrdenCompraDetalle tbody tr').each(function() {
+        var sub_totalFila = parseFloat($(this).find('.sub_total').val()) || 0;
+        var igv_totalFila = parseFloat($(this).find('.igv').val()) || 0;
         var totalFila = parseFloat($(this).find('.total').val()) || 0;
+        sub_totalGeneral += sub_totalFila;
+        igv_totalGeneral += igv_totalFila;
         totalGeneral += totalFila;
     });
     
-    $('#totalGeneral').text(totalGeneral.toFixed(2));
+    $('#sub_total_general').val(sub_totalGeneral.toFixed(2));
+    $('#igv_general').val(igv_totalGeneral.toFixed(2));
+    $('#total_general').val(totalGeneral.toFixed(2));
 }
 
-function aplicaDescuento(selectElement) {
+function aplicaDescuento(inputElement) {
     
-    var fila = $(selectElement).closest('tr');
+    var fila = $(inputElement).closest('tr');
     var subtotalInput = fila.find('.sub_total');
 
-    var selectedOption = selectElement.options[selectElement.selectedIndex];
-    //alert(selectedOption.value);
+    var descuentoEnSoles = parseFloat($(inputElement).val()) || 0;
+    var subtotal = parseFloat(subtotalInput.val()) || 0; 
 
-    if(selectedOption.value!=''){
+    if(descuentoEnSoles > 0 && descuentoEnSoles <= subtotal) {
+        var nuevo_sub_total = subtotal - descuentoEnSoles; // Resta el descuento
 
-        var porcentaje = parseFloat(selectedOption.text)/100;
-        var subtotal = parseFloat(subtotalInput.val()) || 0;
+        // Actualiza el campo del subtotal
+        subtotalInput.val(nuevo_sub_total.toFixed(2));
 
-        
-        var descuento = subtotal * porcentaje;
-
-        var nuevo_sub_total = subtotal - descuento;
-
-        fila.find('.sub_total').val(nuevo_sub_total.toFixed(2));
-
+        // Recalcula IGV y total
         var igvInputId = fila.find('.igv').attr('id');
         var totalInputId = fila.find('.total').attr('id');
-
         calcularIGV(nuevo_sub_total, igvInputId, totalInputId);
 
+        // Actualiza el total general
         actualizarTotalGeneral();
     }else {
         calcularSubTotal(subtotalInput);
+    }
+}
+
+function aplicaDescuentoEnSoles(inputElement) {
+    var fila = $(inputElement).closest('tr');
+
+    if (!fila.data('subtotal-original')) {
+        fila.data('subtotal-original', parseFloat(fila.find('.sub_total').val()) || 0);
+    }
+
+    var subtotalOriginal = fila.data('subtotal-original');
+    var descuentoEnSoles = parseFloat($(inputElement).val()) || 0;
+
+    if (descuentoEnSoles >= 0 && descuentoEnSoles <= subtotalOriginal) {
+        var nuevoSubTotal = subtotalOriginal - descuentoEnSoles;
+
+        fila.find('.sub_total').val(nuevoSubTotal.toFixed(2));
+
+        var igvInputId = fila.find('.igv').attr('id');
+        var totalInputId = fila.find('.total').attr('id');
+        calcularIGV(nuevoSubTotal, igvInputId, totalInputId);
+
+        actualizarTotalGeneral();
+    } else {
+        // Si el descuento es inválido, recalcula el subtotal original
+        fila.find('.sub_total').val(subtotalOriginal.toFixed(2));
+    }
+}
+
+function aplicaDescuentoEnPorcentaje(inputElement) {
+    
+    var fila = $(inputElement).closest('tr');
+
+    if (!fila.data('subtotal-original')) {
+        fila.data('subtotal-original', parseFloat(fila.find('.sub_total').val()) || 0);
+    }
+
+    var subtotalOriginal = fila.data('subtotal-original');
+    var descuentoEnSoles = parseFloat($(inputElement).val()) || 0;
+
+    if (descuentoEnSoles >= 0 && descuentoEnSoles <= subtotalOriginal) {
+        var nuevoSubTotal = subtotalOriginal - (subtotalOriginal*descuentoEnSoles/100);
+
+        fila.find('.sub_total').val(nuevoSubTotal.toFixed(2));
+
+        var igvInputId = fila.find('.igv').attr('id');
+        var totalInputId = fila.find('.total').attr('id');
+        calcularIGV(nuevoSubTotal, igvInputId, totalInputId);
+
+        actualizarTotalGeneral();
+    } else {
+        // Si el descuento es inválido, recalcula el subtotal original
+        fila.find('.sub_total').val(subtotalOriginal.toFixed(2));
     }
 }
 
@@ -441,19 +518,22 @@ var productosSeleccionados = [];
 
 function cargarDetalle(){
 
-var id = $("#id").val();
-const tbody = $('#divOrdenCompraDetalle');
+    var id = $("#id").val();
+    const tbody = $('#divOrdenCompraDetalle');
 
-tbody.empty();
+    tbody.empty();
 
-$.ajax({
+    $.ajax({
         url: "/orden_compra/cargar_detalle/"+id,
         type: "GET",
         success: function (result) {
 
             let n = 1;
 
+            var sub_total_acumulado=0;
+            var igv_total_acumulado=0;
             var total_acumulado=0;
+            
 
             result.orden_compra.forEach(orden_compra => {
 
@@ -461,7 +541,7 @@ $.ajax({
                 let productoOptions = '<option value="">--Seleccionar--</option>';
                 let estadoBienOptions = '<option value="">--Seleccionar--</option>';
                 let unidadMedidaOptions = '<option value="">--Seleccionar--</option>';
-                let descuentoOptions = '<option value="">--Seleccionar--</option>';
+                //let descuentoOptions = '<option value="">--Seleccionar--</option>';
 
                 result.marca.forEach(marca => {
                     let selected = (marca.id == orden_compra.id_marca) ? 'selected' : '';
@@ -483,10 +563,10 @@ $.ajax({
                     unidadMedidaOptions += `<option value="${unidad_medida.codigo}" ${selected}>${unidad_medida.denominacion}</option>`;
                 });
 
-                result.descuento.forEach(descuento => {
+                /*result.descuento.forEach(descuento => {
                     let selected = (descuento.codigo == orden_compra.id_descuento) ? 'selected' : '';
                     descuentoOptions += `<option value="${descuento.codigo}" ${selected}>${descuento.denominacion}</option>`;
-                });
+                });*/
 
                 if (orden_compra.id_producto) {
                     productosSeleccionados.push(orden_compra.id_producto);
@@ -504,7 +584,8 @@ $.ajax({
                         <td><select name="unidad[]" id="unidad${n}" class="form-control form-control-sm">${unidadMedidaOptions}</select></td>
                         <td><input name="cantidad_ingreso[]" id="cantidad_ingreso${n}" class="cantidad_ingreso form-control form-control-sm" value="${orden_compra.cantidad_requerida}" type="text" oninput="calcularCantidadPendiente(this);calcularSubTotal(this)"></td>
                         <td><input name="precio_unitario[]" id="precio_unitario${n}" class="precio_unitario form-control form-control-sm" value="${orden_compra.precio || 0}" type="text" oninput="calcularSubTotal(this)"></td>
-                        <td><select name="descuento[]" id="descuento${n}" class="form-control form-control-sm" onChange="">${descuentoOptions}</select></td>
+
+                        <td><div style="display: flex; align-items: center; gap: 5px;"><button type="button" class="btn-custom" onclick="cambiarDescuento(this)"><i class="fas fa-paint-brush"></i></button><input name="descuento[]" id="descuento' + n + '" class="descuento form-control form-control-sm" placeholder="S/ Descuento" value="" type="text" oninput="aplicaDescuentoEnSoles(this)"><input name="porcentaje[]" id="porcentaje' + n + '" class="porcentaje form-control form-control-sm" placeholder="% Descuento" type="text" style="display: none;"> </div></td>
                         <td><input name="sub_total[]" id="sub_total${n}" class="sub_total form-control form-control-sm" value="${parseFloat(orden_compra.sub_total || 0) }" type="text" readonly="readonly"></td>
                         <td><input name="igv[]" id="igv${n}" class="igv form-control form-control-sm" value="${parseFloat(orden_compra.igv || 0)}" type="text" readonly="readonly"></td>
                         <td><input name="total[]" id="total${n}" class="total form-control form-control-sm" value="${parseFloat(orden_compra.total || 0)}" type="text" readonly="readonly"></td>
@@ -539,9 +620,13 @@ $.ajax({
                 });
 
                 n++;
-                total_acumulado += parseFloat(orden_compra.total);
+                sub_total_acumulado += parseFloat(orden_compra.sub_total || 0);
+                igv_total_acumulado += parseFloat(orden_compra.igv || 0);
+                total_acumulado += parseFloat(orden_compra.total || 0);
                 });
-                $('#totalGeneral').text(total_acumulado.toFixed(2));
+                $('#sub_total_general').val(sub_total_acumulado.toFixed(2) || '0.00');
+                $('#igv_general').val(igv_total_acumulado.toFixed(2) || '0.00');
+                $('#total_general').val(total_acumulado.toFixed(2) || '0.00');
             }
             
     });
@@ -575,7 +660,7 @@ function agregarProducto(){
         var unidad = '<select name="unidad[]" id="unidad' + n + '" class="form-control form-control-sm" onChange=""> <option value="">--Seleccionar--</option> <?php foreach ($unidad as $row) {?> <option value="<?php echo $row->codigo?>"><?php echo $row->denominacion?></option> <?php } ?> </select>';
         var cantidad_ingreso = '<input name="cantidad_ingreso[]" id="cantidad_ingreso' + n + '" class="cantidad_ingreso form-control form-control-sm" value="" type="text" oninput="calcularSubTotal(this)">';
         var precio_unitario = '<input name="precio_unitario[]" id="precio_unitario' + n + '" class="precio_unitario form-control form-control-sm" value="" type="text" oninput="calcularSubTotal(this)">';
-        var descuento = '<select name="descuento[]" id="descuento' + n + '" class="form-control form-control-sm" onChange="aplicaDescuento(this);"> <option value="">--Seleccionar--</option> <?php foreach ($descuento as $row) {?> <option value="<?php echo $row->codigo?>"><?php echo $row->denominacion?></option> <?php } ?> </select>';
+        var descuento = '<div style="display: flex; align-items: center; gap: 5px;"><button type="button" class="btn-custom" onclick="cambiarDescuento(this)"><i class="fas fa-paint-brush"></i></button><input name="descuento[]" id="descuento' + n + '" class="descuento form-control form-control-sm" placeholder="S/ Descuento" value="" type="text" oninput="aplicaDescuentoEnSoles(this)"><input name="porcentaje[]" id="porcentaje' + n + '" class="porcentaje form-control form-control-sm" placeholder="% Descuento" type="text" oninput="aplicaDescuentoEnPorcentaje(this)" style="display: none;"> </div>';
         var sub_total = '<input name="sub_total[]" id="sub_total' + n + '" class="sub_total form-control form-control-sm" value="" type="text" readonly="readonly">';
         var igv = '<input name="igv[]" id="igv' + n + '" class="igv form-control form-control-sm" value="" type="text" readonly="readonly">';
         var total = '<input name="total[]" id="total' + n + '" class="total form-control form-control-sm" value="" type="text" readonly="readonly">';
@@ -586,7 +671,7 @@ function agregarProducto(){
         newRow += '<td>' + n + '</td>';
         newRow += '<td>' + item + '</td>';
         //newRow += '<td>' + cantidad + '</td>';
-        newRow += '<td style="width: 450px!important; display:block!important">' +descripcion_ant + descripcion + '</td>';
+        newRow += '<td style="width: 400px!important; display:block!important">' +descripcion_ant + descripcion + '</td>';
         //newRow += '<td>' + ubicacion_fisica_seccion + '</td>';
         newRow += '<td>' + marca + '</td>';
         newRow += '<td>' + cod_interno + '</td>';
@@ -633,6 +718,38 @@ function agregarProducto(){
     }
 
     actualizarTotalGeneral();
+}
+
+function cambiarDescuento(button){
+
+    var parent = button.parentElement;
+
+    var descuentoInput = parent.querySelector('.descuento');
+    descuentoInput.style.display = 'none';
+
+    var porcentajeInput = parent.querySelector('.porcentaje');
+    porcentajeInput.style.display = 'block';
+
+    button.innerHTML = '<i class="fas fa-percent"></i>';
+    button.onclick = function () {
+        restaurarDescuento(button);
+    };
+
+}
+
+function restaurarDescuento(button) {
+    var parent = button.parentElement;
+
+    var porcentajeInput = parent.querySelector('.porcentaje');
+    porcentajeInput.style.display = 'none';
+
+    var descuentoInput = parent.querySelector('.descuento');
+    descuentoInput.style.display = 'block';
+
+    button.innerHTML = '<i class="fas fa-paint-brush"></i>';
+    button.onclick = function () {
+        cambiarDescuento(button);
+    };
 }
 
 function verificarProductoSeleccionado(selectElement, rowIndex, valor) {
@@ -785,6 +902,14 @@ function modal_tiendas_orden_compra(id){
 			}
 	});
 }
+
+$('#moneda').on('change', function(){
+
+var descripcion = $('#moneda option:selected').text();
+
+$('#moneda_descripcion').val(descripcion);
+
+});
 
 </script>
 
@@ -948,6 +1073,21 @@ function modal_tiendas_orden_compra(id){
                                 ?>
                             </select>
                         </div>
+                        <div class="col-lg-2">
+                            Moneda
+                        </div>
+                        <div class="col-lg-2">
+                            <select name="moneda" id="moneda" class="form-control form-control-sm" onchange="">
+                                <option value="">--Seleccionar--</option>
+                                <?php
+                                foreach ($moneda as $row){?>
+                                    <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$orden_compra->id_moneda)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                    <?php 
+                                }
+                                ?>
+                            </select>
+                            <input name="moneda_descripcion" id="moneda_descripcion" type="hidden">
+                        </div>
                     </div>
                         <div style="margin-top:15px" class="form-group">
                             <div class="col-sm-12 controls">
@@ -991,8 +1131,24 @@ function modal_tiendas_orden_compra(id){
                         <tbody>
                             <tr>
                                 <td class="td" style ="text-align: left; width: 90%; font-size:13px"></td>
+                                <td class="td" style ="text-align: left; width: 5%; font-size:13px"><b>Sub-Total:</b></td>
+                                <td id="subTotalGeneral" class="td" style="text-align: left; width: 5%; font-size:13px">
+                                    <input type="text" name="sub_total_general" id="sub_total_general" class="form-control" value="0.00" readonly style="border: none; background: transparent; text-align: left; pointer-events: none;">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="td" style ="text-align: left; width: 90%; font-size:13px"></td>
+                                <td class="td" style ="text-align: left; width: 5%; font-size:13px"><b>IGV Total:</b></td>
+                                <td id="igvGeneral" class="td" style="text-align: left; width: 5%; font-size:13px">
+                                    <input type="text" name="igv_general" id="igv_general" class="form-control" value="0.00" readonly style="border: none; background: transparent; text-align: left; pointer-events: none;">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="td" style ="text-align: left; width: 90%; font-size:13px"></td>
                                 <td class="td" style ="text-align: left; width: 5%; font-size:13px"><b>Total:</b></td>
-                                <td id="totalGeneral" class="td" style="text-align: left; width: 5%; font-size:13px">0.00</td>
+                                <td id="totalGeneral" class="td" style="text-align: left; width: 5%; font-size:13px">
+                                    <input type="text" name="total_general" id="total_general" class="form-control" value="0.00" readonly style="border: none; background: transparent; text-align: left; pointer-events: none;">
+                                </td>
                             </tr>
                         </tbody>
                     </table>

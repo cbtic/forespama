@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Tienda;
 use App\Models\Empresa;
 use App\Models\TiendaDetalle;
+use App\Models\TablaMaestra;
 use Auth;
 
 class TiendaController extends Controller
@@ -54,6 +55,8 @@ class TiendaController extends Controller
 
     public function modal_tienda($id){
 		
+		$tablaMaestra_model = new TablaMaestra;
+
 		if($id>0){
             $tienda_detalle = TiendaDetalle::find($id);
 			$tienda = Tienda::find($tienda_detalle->id_tienda);
@@ -63,8 +66,11 @@ class TiendaController extends Controller
 		}
 
         $empresa = Empresa::all();
+		$zona = $tablaMaestra_model->getMaestroByTipo(69);
+		$tienda_s_m = $tablaMaestra_model->getMaestroByTipo(70);
+		$zona_especifica = $tablaMaestra_model->getMaestroByTipo(71);
 
-		return view('frontend.tiendas.modal_tiendas_nuevoTienda',compact('id','tienda','empresa','tienda_detalle'));
+		return view('frontend.tiendas.modal_tiendas_nuevoTienda',compact('id','tienda','empresa','tienda_detalle','zona','tienda_s_m','zona_especifica'));
 
     }
 
@@ -86,6 +92,11 @@ class TiendaController extends Controller
 		}
 
         $tienda->denominacion = $request->denominacion;
+        $tienda->numero_tienda = $request->numero_tienda;
+        $tienda->tienda_tmh = $request->tienda_tmh;
+        $tienda->id_zona = $request->zona;
+        $tienda->id_tienda_s_m = $request->tienda_sm;
+        $tienda->id_zona_especifica = $request->zona_especifica;
         $tienda->estado = 1;
 		$tienda->id_usuario_inserta = $id_user;
 		$tienda->save();

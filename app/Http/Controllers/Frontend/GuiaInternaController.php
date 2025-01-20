@@ -124,6 +124,7 @@ class GuiaInternaController extends Controller
     {
         $id_user = Auth::user()->id;
         $tabla_maestra_model = new TablaMaestra;
+        $ubigeo = new Ubigeo;
 
         if($request->id == 0){
             $guia_interna = new GuiaInterna;
@@ -148,8 +149,8 @@ class GuiaInternaController extends Controller
         $id_guia_interna_detalle =$request->id_guia_interna_detalle;
         
         $guia_interna->fecha_emision = $request->fecha_emision;
-        $guia_interna->punto_partida = $request->punto_partida_descripcion;
-        $guia_interna->punto_llegada = $request->punto_llegada_descripcion;
+        //$guia_interna->punto_partida = $request->punto_partida_descripcion;
+        //$guia_interna->punto_llegada = $request->punto_llegada_descripcion;
         $guia_interna->fecha_traslado = $request->fecha_inicio_traslado;
         $guia_interna->costo_minimo = $request->costo_minimo;
         $guia_interna->id_destinatario = $request->destinatario;
@@ -173,13 +174,22 @@ class GuiaInternaController extends Controller
         $guia_interna->observacion = $request->observacion_guia;
         $guia_interna->guia_tipo = $tipo_guia[0]->codigo;
         $guia_interna->id_usuario_inserta = $id_user;
+        
+        $id_ubigeo = $request->distrito_llegada;
+        $id_departamento = substr($id_ubigeo,0,2);
+        $id_provincia = substr($id_ubigeo,2,2);
+
+        $departamento = $ubigeo->getdepartamentoByUbigeo($id_departamento);
+        $provincia = $ubigeo->getProvinciaByUbigeo($id_departamento, $id_provincia);
+        $distrito = $ubigeo->getDistritoByUbigeo($id_ubigeo);
+
         if($request->motivo_traslado=='04'){
             $guia_interna->guia_cod_estab_llegada = $request->punto_llegada_select;
             $guia_interna->guia_cod_estab_partida = $request->punto_partida;
             $guia_interna->punto_partida = $request->punto_partida_descripcion;
             $guia_interna->punto_llegada = $request->punto_llegada_descripcion;
         }else{
-            $guia_interna->punto_llegada = $request->punto_llegada_input;
+            $guia_interna->punto_llegada = $request->punto_llegada_input." - ".$departamento." - ".$provincia." - ".$distrito;
             $guia_interna->guia_cod_estab_partida = $request->punto_partida;
             $guia_interna->punto_partida = $request->punto_partida_descripcion;
         }
@@ -241,7 +251,7 @@ class GuiaInternaController extends Controller
             $guia->guia_partida_direccion = $request->punto_partida_descripcion;
             $guia->guia_llegada_direccion = $request->punto_llegada_descripcion;
         }else{
-            $guia->guia_llegada_direccion = $request->punto_llegada_input;
+            $guia->guia_llegada_direccion = $request->punto_llegada_input." - ".$departamento." - ".$provincia." - ".$distrito;
             $guia->guia_cod_estab_partida = $request->punto_partida;
             $guia->guia_partida_direccion = $request->punto_partida_descripcion;
         }

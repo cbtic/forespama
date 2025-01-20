@@ -5,10 +5,10 @@ $(document).ready(function () {
 	});
 		
 	$('#btnNuevo').click(function () {
-		modalTienda(0);
+		modalParametro(0);
 	});
 
-	$('#denominacion_bus').keypress(function(e){
+	$('#anio_bus').keypress(function(e){
 		if(e.which == 13) {
 			datatablenew();
 			return false;
@@ -21,8 +21,6 @@ $(document).ready(function () {
 			return false;
 		}
 	});
-
-	$("#empresa_bus").select2({ width: '100%' });
 		
 	datatablenew();
 
@@ -30,9 +28,9 @@ $(document).ready(function () {
 
 function datatablenew(){
                       
-    var oTable1 = $('#tblTiendas').dataTable({
+    var oTable1 = $('#tblParametros').dataTable({
         "bServerSide": true,
-        "sAjaxSource": "/tiendas/listar_tienda_ajax",
+        "sAjaxSource": "/parametro/listar_parametros_ajax",
         "bProcessing": true,
         "sPaginationType": "full_numbers",
         //"paging":false,
@@ -60,7 +58,7 @@ function datatablenew(){
             var iCantMostrar 	= aoData[4].value;
 
             var denominacion = $('#denominacion_bus').val();
-			var empresa = $('#empresa_bus').val();
+			var anio = $('#anio_bus').val();
 			var estado = $('#estado_bus').val();
 			
 			var _token = $('#_token').val();
@@ -70,7 +68,7 @@ function datatablenew(){
                 "type": "POST",
                 "url": sSource,
                 "data":{NumeroPagina:iNroPagina,NumeroRegistros:iCantMostrar,
-						denominacion:denominacion,empresa:empresa,estado:estado,
+						denominacion:denominacion,anio:anio,estado:estado,
 						_token:_token
                        },
                 "success": function (result) {
@@ -98,9 +96,9 @@ function datatablenew(){
 
 				{
 				"mRender": function (data, type, row) {
-					var razon_social = "";
-					if(row.razon_social!= null)razon_social = row.razon_social;
-					return razon_social;
+					var empresa = "";
+					if(row.empresa!= null)empresa = row.empresa;
+					return empresa;
 				},
 				"bSortable": true,
 				"aTargets": [1]
@@ -108,19 +106,19 @@ function datatablenew(){
 
 				{
 				"mRender": function (data, type, row) {
-					var denominacion = "";
-					if(row.denominacion!= null)denominacion = row.denominacion;
-					return denominacion;
+					var anio = "";
+					if(row.anio!= null)anio = row.anio;
+					return anio;
 				},
 				"bSortable": true,
 				"aTargets": [2]
 				},
-
+				
 				{
 				"mRender": function (data, type, row) {
-					var numero_tienda = "";
-					if(row.numero_tienda!= null)numero_tienda = row.numero_tienda;
-					return numero_tienda;
+					var nombre_acuerdo_comercial = "";
+					if(row.nombre_acuerdo_comercial!= null)nombre_acuerdo_comercial = row.nombre_acuerdo_comercial;
+					return nombre_acuerdo_comercial;
 				},
 				"bSortable": true,
 				"aTargets": [3]
@@ -128,9 +126,9 @@ function datatablenew(){
 
 				{
 				"mRender": function (data, type, row) {
-					var tienda_tmh = "";
-					if(row.tienda_tmh!= null)tienda_tmh = row.tienda_tmh;
-					return tienda_tmh;
+					var porcentaje_valor = "";
+					if(row.porcentaje_valor!= null)porcentaje_valor = row.porcentaje_valor;
+					return porcentaje_valor;
 				},
 				"bSortable": true,
 				"aTargets": [4]
@@ -138,9 +136,14 @@ function datatablenew(){
 
 				{
 				"mRender": function (data, type, row) {
-					var tienda_zona = "";
-					if(row.tienda_zona!= null)tienda_zona = row.tienda_zona;
-					return tienda_zona;
+					var aplica_detalle = "";
+					if(row.aplica_detalle == 1){
+						aplica_detalle = "Si";
+					}
+					if(row.aplica_detalle == 0){
+						aplica_detalle = "No";
+					}
+					return aplica_detalle;
 				},
 				"bSortable": true,
 				"aTargets": [5]
@@ -148,24 +151,19 @@ function datatablenew(){
 
 				{
 				"mRender": function (data, type, row) {
-					var tienda_s_m = "";
-					if(row.tienda_s_m!= null)tienda_s_m = row.tienda_s_m;
-					return tienda_s_m;
+					var general_especifico = "";
+					if(row.general_especifico == 1){
+						general_especifico = "General";
+					}
+					if(row.general_especifico == 0){
+						general_especifico = "Especifido";
+					}
+					return general_especifico;
 				},
 				"bSortable": true,
 				"aTargets": [6]
 				},
 
-				{
-				"mRender": function (data, type, row) {
-					var zona_especifica = "";
-					if(row.zona_especifica!= null)zona_especifica = row.zona_especifica;
-					return zona_especifica;
-				},
-				"bSortable": true,
-				"aTargets": [7]
-				},
-				
 				{
 				"mRender": function (data, type, row) {
 					var estado = "";
@@ -178,7 +176,7 @@ function datatablenew(){
 					return estado;
 				},
 				"bSortable": false,
-				"aTargets": [8]
+				"aTargets": [7]
 				},
 				{
 					"mRender": function (data, type, row) {
@@ -195,8 +193,8 @@ function datatablenew(){
 						
 						var html = '<div class="btn-group btn-group-sm" role="group" aria-label="Log Viewer Actions">';
 						
-						html += '<button style="font-size:12px" type="button" class="btn btn-sm btn-success" data-toggle="modal" onclick="modalTienda('+row.id+')" ><i class="fa fa-edit"></i> Editar</button>'; 
-						html += '<a href="javascript:void(0)" onclick=eliminarTienda('+row.id+','+row.estado+') class="btn btn-sm '+clase+'" style="font-size:12px;margin-left:10px">'+estado+'</a>';
+						html += '<button style="font-size:12px" type="button" class="btn btn-sm btn-success" data-toggle="modal" onclick="modalParametro('+row.id+')" ><i class="fa fa-edit"></i> Editar</button>'; 
+						html += '<a href="javascript:void(0)" onclick=eliminarParametro('+row.id+','+row.estado+') class="btn btn-sm '+clase+'" style="font-size:12px;margin-left:10px">'+estado+'</a>';
 						
 						//html += '<a href="javascript:void(0)" onclick=modalResponsable('+row.id+') class="btn btn-sm btn-info" style="font-size:12px;margin-left:10px">Detalle Responsable</a>';
 						
@@ -204,7 +202,7 @@ function datatablenew(){
 						return html;
 					},
 					"bSortable": false,
-					"aTargets": [9],
+					"aTargets": [8],
 				},
 
             ]
@@ -218,13 +216,13 @@ function fn_ListarBusqueda() {
     datatablenew();
 };
 
-function modalTienda(id){
+function modalParametro(id){
 	
 	$(".modal-dialog").css("width","85%");
 	$('#openOverlayOpc .modal-body').css('height', 'auto');
 
 	$.ajax({
-			url: "/tiendas/modal_tienda/"+id,
+			url: "/parametro/modal_parametro/"+id,
 			type: "GET",
 			success: function (result) {  
 					$("#diveditpregOpc").html(result);
@@ -234,7 +232,7 @@ function modalTienda(id){
 
 }
 
-function eliminarTienda(id,estado){
+function eliminarParametro(id,estado){
 	var act_estado = "";
 	if(estado==1){
 		act_estado = "Eliminar";
@@ -246,7 +244,7 @@ function eliminarTienda(id,estado){
 	}
     bootbox.confirm({ 
         size: "small",
-        message: "&iquest;Deseas "+act_estado+" la Tienda?", 
+        message: "&iquest;Deseas "+act_estado+" el Parametro?", 
         callback: function(result){
             if (result==true) {
                 fn_eliminar(id,estado_);
@@ -259,7 +257,7 @@ function eliminarTienda(id,estado){
 function fn_eliminar(id,estado){
 	
     $.ajax({
-            url: "/tiendas/eliminar_tienda/"+id+"/"+estado,
+            url: "/parametro/eliminar_parametro/"+id+"/"+estado,
             type: "GET",
             success: function (result) {
                 //if(result="success")obtenerPlanDetalle(id_plan);
