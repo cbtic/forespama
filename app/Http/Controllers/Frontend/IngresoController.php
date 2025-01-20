@@ -20,6 +20,7 @@ use App\Models\Beneficiario;
 use App\Models\Comprobante;
 use App\Models\AgremiadoMulta;
 use App\Models\TipoCambio;
+use App\Models\OrdenCompra;
 
 use App\Models\Producto;
 use App\Models\Marca;
@@ -163,6 +164,15 @@ class IngresoController extends Controller
         $proforma = $proforma_model->getProformaDetalle($id);
         
         return view('frontend.ingresos.lista_proforma_det',compact('proforma'));
+
+    }
+
+    public function listar_orden_compra_det($id){       
+        $orden_compra_model = new OrdenCompra;
+        $sw = true;
+        $orden_compra = $orden_compra_model->getOrdenCompraDetalle($id);
+        
+        return view('frontend.ingresos.lista_orden_compra_det',compact('orden_compra'));
 
     }
 

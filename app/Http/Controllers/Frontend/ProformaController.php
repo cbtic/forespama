@@ -196,7 +196,7 @@ class ProformaController extends Controller
             $p_dprof.=$id_user.",";
             $p_dprof.="1";
             $p_dprof.=$value['pv'].",";
-            $p_dprof.=$value['monto'].",";
+            $p_dprof.=$value['monto'];
             $p_dprof.="},";    
         }
         if(strlen($p_dprof)>1)$p_dprof=substr($p_dprof,0,-1);
@@ -365,5 +365,16 @@ class ProformaController extends Controller
 		//return view('frontend.certificado.certificado_pdf');
 
 	}
+
+    public function obtener_proforma_id($id){
+        $proforma_model = new Proforma;
+
+        $sw = true;
+        $proforma = $proforma_model->getProformaById($id);
+        $array["sw"] = $sw;
+        $array["proforma"] = $proforma;
+
+        echo json_encode($array);
+    }
 
 }

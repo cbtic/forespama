@@ -61,27 +61,27 @@ class Proforma extends Model
         return $data;
      }
 
-     function getProformaById($id){
 
-        $cad = "select p.id, p.serie, p.numero, 
-        CASE 
-        WHEN p.id_empresa is not null THEN p.id_empresa 
-        WHEN p.id_persona is not null THEN p.id_persona 
-        end as id_cliente,
-        CASE 
-        WHEN p.id_empresa is not null THEN (select e.razon_social from empresas e where p.id_empresa = e.id )
-        WHEN p.id_persona is not null THEN (select p2.nombres ||' '||p2.apellido_paterno ||' '|| p2.apellido_materno nombres from personas p2 where p.id_persona = p2.id)
-        end as cliente_nombre,
-        CASE 
-        WHEN p.id_empresa is not null THEN (select e.ruc from empresas e where p.id_empresa = e.id )
-        WHEN p.id_persona is not null THEN (select p2.numero_documento from personas p2 where p.id_persona = p2.id)
-        end as cliente_numero_documento,
-        p.fecha, p.moneda, p.sub_total, p.igv, p.total, p.estado 
-        from proformas p
-        where p.id='".$id."'";
 
-		$data = DB::select($cad);
-        return $data;
+    function getProformaById($id){
+
+        $cad =  "select id, numero, id_empresa, id_persona, fecha, id_moneda, moneda, sub_total, igv, total, 
+                        estado, cerrado, serie, fecha_vencimiento, descuento			
+                from proformas p                   
+                Where  p.id = ".$id."                     
+                limit 1";
+
+        
+        //echo $cad; exit();
+        $data = DB::select($cad);
+        
+        if (!empty($data)) {
+            return $data[0];
+        } else {
+            
+            return null;
+        }
+
     }
 
 }

@@ -947,10 +947,9 @@ function obtenerBeneficiario(){
 	$('#Exonerado').val("0");
 
 	
-	$("#divAgregar").hide();
+	$("#divAgregar").show();
 	
-	$("#btnProforma").prop('disabled', true);
-	
+	$("#btnProforma").hide();
 	
 	
 	$.ajax({
@@ -1034,33 +1033,6 @@ function obtenerBeneficiario(){
 					$('#btnFracciona').attr("disabled", false);
 					$('#btnAnulaVal').attr("disabled", false);
 
-				} else if (tipo_documento == "85") //CAP
-				{
-					var agremiado = result.agremiado.apellido_paterno + " " + result.agremiado.apellido_materno + ", " + result.agremiado.nombres;
-					$('#nombre_').val(agremiado);
-					$('#situacion_').val(result.agremiado.situacion);
-					$('#categoria').val(result.agremiado.categoria);
-					$('#fecha_colegiatura').val(result.agremiado.actividad);
-					$('#fecha_').val(result.agremiado.fecha_colegiado);
-					$('#id_persona').val(result.agremiado.id_p);
-					$('#id_agremiado').val(result.agremiado.id);
-					$('#ruc_p').val(result.agremiado.numero_ruc);
-					$('#id_ubicacion_p').val("0");
-
-					$('#email').val(result.agremiado.email);
-
-					
-
-					$('#numero_documento_').val(numero_documento);
-					$('#id_tipo_documento_').val(tipo_documento);
-					$('#id_tipo_documento').val(tipo_documento);
-					
-					$('#btnOtroConcepto').attr("disabled", false);
-					$('#btnBeneficiario').attr("disabled",false);
-					$('#btnDescuento').attr("disabled", false);
-					$('#btnFracciona').attr("disabled", false);
-					$('#btnAnulaVal').attr("disabled", false);
-
 				} else {
 					var agremiado = result.agremiado.apellido_paterno + " " + result.agremiado.apellido_materno + ", " + result.agremiado.nombres;
 					$('#nombre_').val(agremiado);
@@ -1090,10 +1062,17 @@ function obtenerBeneficiario(){
 					$('#foto').attr('src', '/img/profile-icon.png');
 				}
 
+				//alert(result.id_orden_compra);
 
 				cargarValorizacion();
 				cargarPagos();
 				cargarProforma();
+
+				if (tipo_documento_b=="6"){
+					cargarOrdenCompraSel(result.id_orden_compra);
+				}
+
+
 				//cargarcboTipoConcepto();
 				//cargarcboPeriodo();
 				//cargarcboMes();
@@ -1190,26 +1169,80 @@ function cargarValorizacion1(){
 	});
 
 }
+function cargarProformaId(id){
+	$.ajax({
+		url: '/proforma/obtener_proforma_id/' + id,
+		dataType: "json",
+		success: function(result){
 
+			if (result) {
+				//alert(result.agremiado.id);
+				//alert(tipo_documento);
+
+				$('#deudaTotales').val(Number(result.proforma.total).toFixed(2));
+				$('#totalDescuento').val(Number(result.proforma.descuento).toFixed(2));
+				$('#total').val(Number(result.proforma.total).toFixed(2));
+			
+				$('#stotal').val(Number(result.proforma.sub_total).toFixed(2));
+				$('#igv').val(Number(result.proforma.igv).toFixed(2));
+
+			}
+		}
+	});
+}
+function cargarOrdenCompraId(id){
+	$.ajax({
+		url: '/orden_compra/obtener_orden_compra_id/' + id,
+		dataType: "json",
+		success: function(result){
+
+			if (result) {
+				//alert(result.agremiado.id);
+				//alert(result);
+
+				$('#deudaTotales').val(Number(result.oc.total).toFixed(2));
+				$('#totalDescuento').val(Number(result.oc.descuento).toFixed(2));
+				$('#total').val(Number(result.oc.total).toFixed(2));
+			
+				$('#stotal').val(Number(result.oc.sub_total).toFixed(2));
+				$('#igv').val(Number(result.oc.igv).toFixed(2));
+
+			}
+		}
+	});
+}
+
+
+function cargarProformaSel(id){
+	cargarProformaId(id);
+	cargarProformaDet(id);
+}
+
+function cargarOrdenCompraSel(id){
+	cargarOrdenCompraId(id);
+	cargarOrdenCompraDet(id);
+}
 
 
 function cargarProformaDet(id){
 
 	var total = 0;
 
+	$("#divAgregar").hide();
+	$("#btnBoleta").prop('disabled', true);
+	$("#btnFactura").prop('disabled', true);
+	$("#btnProforma").hide();
+
     $("#tblValorizacion tbody").html("");
 	$.ajax({
 			url: "/ingreso/listar_proforma_det/"+id,
 			type: "GET",
 			success: function (result) {
-				$(result).each(function (ii, oo) {
-					//total = oo.total_;
-					alert(oo);
-				});
-
-					//alert(total);
 					  					
-					$("#tblValorizacion tbody").html(result);
+				$("#tblValorizacion tbody").html(result);
+				
+				$("#btnBoleta").prop('disabled', false);
+				$("#btnFactura").prop('disabled', false);
 					
 					
 				
@@ -1252,6 +1285,7 @@ function cargarProformaDet(id){
 			}
 	});
 }
+
 
 function calcular_total_pf(){
 	var total = 0;
@@ -2915,6 +2949,7 @@ function AddFila(){
 	var cont = ind+1;
 
 	$("#btnProforma").prop('disabled', true);
+	$("#btnProforma").hide();
 
 	
 	$('#SelProducto').val("");
@@ -3059,5 +3094,64 @@ function proforma_send(){
     });
 
 }
+
+function cargarOrdenCompraDet(id){
+	var total = 0;
+
+	$("#divAgregar").hide();
+	$("#btnBoleta").prop('disabled', true);
+	$("#btnFactura").prop('disabled', true);	
+	$("#btnProforma").hide();
+  
+	//$('#tblValorizacion').dataTable().fnDestroy();
+    $("#tblValorizacion tbody").html("");
+	$.ajax({
+			url: "/ingreso/listar_orden_compra_det/"+id,
+			type: "GET",
+			success: function (result) {
+
+					//alert(total);					  					
+					$("#tblValorizacion tbody").html(result);
+
+					$("#btnBoleta").prop('disabled', false);
+					$("#btnFactura").prop('disabled', false);
+
+				
+				//$("#tipo_documento").val(result.agremiado.id_tipo_documento);					
+			}
+	});
+}
+/*
+function cargarPagos(){
+	var tipo_documento = $("#tipo_documento").val();
+	var id_persona = 0;
+	if(tipo_documento=="5")id_persona = $('#id_ubicacion').val();
+	else id_persona = $('#id_persona').val();
+	
+	$('#tblPago').dataTable().fnDestroy();
+    $("#tblPago tbody").html("");
+	$.ajax({
+			//url: "/ingreso/obtener_pago/"+numero_documento,
+			url: "/ingreso/obtener_pago/"+tipo_documento+"/"+id_persona,
+			type: "GET",
+			success: function (result) {  
+					$("#tblPago").html(result);
+					$('[data-toggle="tooltip"]').tooltip();
+					
+					$('#tblPago').DataTable({
+						//"sPaginationType": "full_numbers",
+						//"paging":false,
+						"searching": false,
+						"info": false,
+						"bSort" : false,
+						"dom": '<"top">rt<"bottom"flpi><"clear">',
+						"language": {"url": "/js/Spanish.json"},
+					});
+							
+			}
+	});
+
+}
+*/
 
 
