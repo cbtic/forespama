@@ -366,4 +366,15 @@ class ProformaController extends Controller
 
 	}
 
+    public function obtener_proforma_id($id){
+        $proforma_model = new Proforma;
+
+        $sw = true;
+        $proforma = $proforma_model->getProformaById($id);
+        $array["sw"] = $sw;
+        $array["proforma"] = $proforma;
+
+        echo json_encode($array);
+    }
+
 }

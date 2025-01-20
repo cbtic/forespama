@@ -58,18 +58,32 @@ class OrdenCompra extends Model
 
     function getOrdenCompraById($id){
 
-        $cad = "select oc.id, e.razon_social empresa_compra, e2.razon_social empresa_vende, to_char(oc.fecha_orden_compra,'dd-mm-yyyy') fecha_orden_compra , oc.numero_orden_compra, tm.denominacion tipo_documento, oc.estado, tm2.denominacion igv, oc.numero_orden_compra_cliente 
+        $cad = "select oc.id, e.razon_social empresa_compra, e2.razon_social empresa_vende, to_char(oc.fecha_orden_compra,'dd-mm-yyyy') fecha_orden_compra , 
+     oc.numero_orden_compra, tm.denominacion tipo_documento, oc.estado, tm2.denominacion igv, oc.numero_orden_compra_cliente, 
+     (select sum(d.total) from orden_compra_detalles d where d.id_orden_compra = oc.id) total,
+     (select sum(d.sub_total) from orden_compra_detalles d where d.id_orden_compra = oc.id) sub_total,
+     (select sum(d.igv) from orden_compra_detalles d where d.id_orden_compra = oc.id) igv,
+     COALESCE (oc.descuento, 0 , oc.descuento) descuento
         from orden_compras oc 
         inner join empresas e on oc.id_empresa_compra = e.id 
         inner join empresas e2 on oc.id_empresa_vende = e2.id 
         inner join tabla_maestras tm on oc.id_tipo_documento = tm.codigo ::int and tm.tipo = '54'
         inner join tabla_maestras tm2 on oc.igv_compra = tm2.codigo ::int and tm2.tipo = '51'
         where oc.id='".$id."'
-        and oc.estado='1'";
+        and oc.estado='1'
+        limit 1";
 
 		$data = DB::select($cad);
-        return $data;
+       // return $data;
+
+        if (!empty($data)) {
+            return $data[0];
+        } else {
+            
+            return null;
+        }
     }
+
 
     function getOrdenCompraByCod($numero){
 
@@ -99,8 +113,8 @@ class OrdenCompra extends Model
         $cad = "SELECT p.id, '' serie, p.numero_orden_compra, p.fecha_orden_compra fecha, 1 id_moneda, 'SOLES' moneda, 0  sub_total_, 0 igv_, 0 total_, '01/01/2025' fecha_vencimiento,
             pd.id_producto,  pr.codigo, pr.denominacion,
             pr.codigo ||'-'|| pr.denominacion producto_prof,
-            um.denominacion um, pd.cantidad_despacho cantidad, pd.id_descuento,
-            pd.precio precio_unitario, pd.sub_total, pd.igv, pd.total, pd.id_unidad_medida, 0 descuento, 0 valor_venta_bruto
+            um.denominacion um, pd.cantidad_requerida cantidad, pd.id_descuento,
+            pd.precio precio_unitario, pd.sub_total, pd.igv, pd.total, pd.id_unidad_medida, descuento, 0 valor_venta_bruto
             FROM orden_compras p
             inner join orden_compra_detalles pd on pd.id_orden_compra = p.id 
             inner join productos pr on pr.id = pd.id_producto
@@ -111,6 +125,8 @@ class OrdenCompra extends Model
     //echo $cad;
     $data = DB::select($cad);
     return $data;
-}
+    }
+
+
 
 }

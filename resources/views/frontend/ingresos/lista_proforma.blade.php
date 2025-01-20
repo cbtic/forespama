@@ -31,7 +31,7 @@ foreach($proforma as $row){?>
 	</td>
 	<td class="text-left">
 		<div class="btn-group btn-group-sm" role="group" aria-label="Log Viewer Actions">
-			<a href="javascript:void(0)" onClick="cargarProformaDet(<?php echo $row->id?>)"class="btn btn-sm btn-info" style="font-size:9px!important" >
+			<a href="javascript:void(0)" onClick="cargarProformaSel(<?php echo $row->id?>)"class="btn btn-sm btn-info" style="font-size:9px!important" >
 				<i class="fa fa-retweet" aria-hidden="true" style="font-size:10px!important"></i>
 			</a>
 

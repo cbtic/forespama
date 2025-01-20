@@ -158,6 +158,10 @@ class ComprobanteController extends Controller
 
             //exit($SelProducto);
 
+            $valorizad = $request->valorizacion_detalle;                  
+            $facturad= $request->valorizacion_detalle;  
+
+/*
 
             if ($SelProducto=="S"){
                   $valorizad = $request->valorizacion_detalle;                  
@@ -184,15 +188,16 @@ class ComprobanteController extends Controller
                     $ind++;
                 }
             }
+                */
 
             //exit($id_concepto_pp);
-
+/*
             $ind = 0;
             foreach($request->comprobante_detalles as $key=>$det){
                 $valorizad[$ind] = $factura_detalle[$key];
                 $ind++;
             }
-
+*/
             
            // print_r($valorizad);
 
@@ -219,7 +224,7 @@ class ComprobanteController extends Controller
             }
 */
 
-
+/*
 
             if ($descuentopp=="S"){
                 $items1 = array(
@@ -251,13 +256,13 @@ class ComprobanteController extends Controller
                         $ind++;
                     }
             }
+            */
 
              //print_r($facturad);exit();
 
-             
+       // }
 
-
-        }
+        
 
             $ubicacion = $request->id_ubicacion;
             $persona = $request->id_persona;

@@ -947,10 +947,9 @@ function obtenerBeneficiario(){
 	$('#Exonerado').val("0");
 
 	
-	$("#divAgregar").hide();
+	$("#divAgregar").show();
 	
-	$("#btnProforma").prop('disabled', true);
-	
+	$("#btnProforma").hide();
 	
 	
 	$.ajax({
@@ -1065,12 +1064,12 @@ function obtenerBeneficiario(){
 
 				//alert(result.id_orden_compra);
 
-				//cargarValorizacion();
+				cargarValorizacion();
 				cargarPagos();
 				cargarProforma();
 
 				if (tipo_documento_b=="6"){
-					cargarOrdenCompraDet(result.id_orden_compra);
+					cargarOrdenCompraSel(result.id_orden_compra);
 				}
 
 
@@ -1170,24 +1169,80 @@ function cargarValorizacion1(){
 	});
 
 }
+function cargarProformaId(id){
+	$.ajax({
+		url: '/proforma/obtener_proforma_id/' + id,
+		dataType: "json",
+		success: function(result){
 
+			if (result) {
+				//alert(result.agremiado.id);
+				//alert(tipo_documento);
+
+				$('#deudaTotales').val(Number(result.proforma.total).toFixed(2));
+				$('#totalDescuento').val(Number(result.proforma.descuento).toFixed(2));
+				$('#total').val(Number(result.proforma.total).toFixed(2));
+			
+				$('#stotal').val(Number(result.proforma.sub_total).toFixed(2));
+				$('#igv').val(Number(result.proforma.igv).toFixed(2));
+
+			}
+		}
+	});
+}
+function cargarOrdenCompraId(id){
+	$.ajax({
+		url: '/orden_compra/obtener_orden_compra_id/' + id,
+		dataType: "json",
+		success: function(result){
+
+			if (result) {
+				//alert(result.agremiado.id);
+				//alert(result);
+
+				$('#deudaTotales').val(Number(result.oc.total).toFixed(2));
+				$('#totalDescuento').val(Number(result.oc.descuento).toFixed(2));
+				$('#total').val(Number(result.oc.total).toFixed(2));
+			
+				$('#stotal').val(Number(result.oc.sub_total).toFixed(2));
+				$('#igv').val(Number(result.oc.igv).toFixed(2));
+
+			}
+		}
+	});
+}
+
+
+function cargarProformaSel(id){
+	cargarProformaId(id);
+	cargarProformaDet(id);
+}
+
+function cargarOrdenCompraSel(id){
+	cargarOrdenCompraId(id);
+	cargarOrdenCompraDet(id);
+}
 
 
 function cargarProformaDet(id){
 
 	var total = 0;
 
+	$("#divAgregar").hide();
+	$("#btnBoleta").prop('disabled', true);
+	$("#btnFactura").prop('disabled', true);
+	$("#btnProforma").hide();
+
     $("#tblValorizacion tbody").html("");
 	$.ajax({
 			url: "/ingreso/listar_proforma_det/"+id,
 			type: "GET",
 			success: function (result) {
-
-
-
-					//alert(total);
 					  					
-					$("#tblValorizacion tbody").html(result);
+				$("#tblValorizacion tbody").html(result);
+				
+				$("#btnBoleta").prop('disabled', false);
+				$("#btnFactura").prop('disabled', false);
 					
 					
 				
@@ -2894,6 +2949,7 @@ function AddFila(){
 	var cont = ind+1;
 
 	$("#btnProforma").prop('disabled', true);
+	$("#btnProforma").hide();
 
 	
 	$('#SelProducto').val("");
@@ -3041,6 +3097,11 @@ function proforma_send(){
 
 function cargarOrdenCompraDet(id){
 	var total = 0;
+
+	$("#divAgregar").hide();
+	$("#btnBoleta").prop('disabled', true);
+	$("#btnFactura").prop('disabled', true);	
+	$("#btnProforma").hide();
   
 	//$('#tblValorizacion').dataTable().fnDestroy();
     $("#tblValorizacion tbody").html("");
@@ -3048,13 +3109,13 @@ function cargarOrdenCompraDet(id){
 			url: "/ingreso/listar_orden_compra_det/"+id,
 			type: "GET",
 			success: function (result) {
-				$(result).each(function (ii, oo) {
-					//total = oo.total_;
-					//alert(oo);
-				});
-					//alert(total);
-					  					
+
+					//alert(total);					  					
 					$("#tblValorizacion tbody").html(result);
+
+					$("#btnBoleta").prop('disabled', false);
+					$("#btnFactura").prop('disabled', false);
+
 				
 				//$("#tipo_documento").val(result.agremiado.id_tipo_documento);					
 			}

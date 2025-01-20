@@ -677,5 +677,15 @@ class OrdenCompraController extends Controller
 		
 	}
 
+    public function obtener_orden_compra_id($id){
+        $oc_model = new OrdenCompra;
+
+        $sw = true;
+        $oc = $oc_model->getOrdenCompraById($id);
+        $array["sw"] = $sw;
+        $array["oc"] = $oc;
+
+        echo json_encode($array);
+    }
 
 }

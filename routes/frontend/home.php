@@ -249,6 +249,8 @@ Route::get('ingreso/obtener_producto_eqiv_id/{id}/{emp}/{ori}', [IngresoControll
 Route::post('ingreso/sendCajaMoneda', [IngresoController::class, 'sendCajaMoneda'])->name('ingreso.sendCajaMoneda');
 
 Route::post('proforma/send', [ProformaController::class, 'send'])->name('proforma.send');
+Route::get('proforma/proforma_pdf/{id}', [ProformaController::class, 'proforma_pdf'])->name('proforma.proforma_pdf');
+Route::get('proforma/obtener_proforma_id/{id}', [ProformaController::class, 'obtener_proforma_id'])->name('proforma.obtener_proforma_id');
 
 
 
@@ -413,6 +415,8 @@ Route::get('orden_compra/cargar_detalle/{id}', [OrdenCompraController::class, 'c
 Route::get('orden_compra/consulta_stock_pedido', [OrdenCompraController::class, 'consulta_stock_pedido'])->name('orden_compra.consulta_stock_pedido');
 Route::get('orden_compra/modal_consulta_orden_compra/{id}', [OrdenCompraController::class, 'modal_consulta_orden_compra'])->name('orden_compra.modal_consulta_orden_compra');
 Route::post('orden_compra/upload_orden_compra', [OrdenCompraController::class, 'upload_orden_compra'])->name('orden_compra.upload_orden_compra');
+Route::get('orden_compra/obtener_orden_compra_id/{id}', [OrdenCompraController::class, 'obtener_orden_compra_id'])->name('orden_compra.obtener_orden_compra_id');
+
 
 Route::get('kardex/create', [KardexController::class, 'create'])->name('kardex.create');
 Route::post('kardex/listar_kardex_ajax', [KardexController::class, 'listar_kardex_ajax'])->name('kardex.listar_kardex_ajax');
@@ -532,7 +536,7 @@ Route::get('equivalencia_producto/modal_equivalencia_producto/{id}', [Equivalenc
 Route::get('equivalencia_producto/eliminar_equivalencia_producto/{id}/{estado}', [EquivalenciaProductosController::class, 'eliminar_equivalencia_producto'])->name('equivalencia_producto.eliminar_equivalencia_producto');
 
 Route::get('ingreso_vehiculo_tronco/cubicaje_pdf/{id}', [IngresoVehiculoTroncoController::class, 'cubicaje_pdf'])->name('ingreso_vehiculo_tronco.cubicaje_pdf');
-Route::get('proforma/proforma_pdf/{id}', [ProformaController::class, 'proforma_pdf'])->name('proforma.proforma_pdf');
+
 Route::get('ingreso_vehiculo_tronco/exportar_listar_pagos/{ruc}/{empresa}/{placa}/{tipo_madera}/{fecha_inicio}/{fecha_fin}', [IngresoVehiculoTroncoController::class, 'exportar_listar_pagos'])->name('ingreso_vehiculo_tronco.exportar_listar_pagos');
 
 Route::get('requerimiento/exportar_listar_requerimiento/{tipo_documento}/{fecha}/{numero_requerimiento}/{almacen}/{situacion}/{responsable_atencion}/{estado_atencion}/{tipo_requerimiento}/{estado}', [RequerimientoController::class, 'exportar_listar_requerimiento'])->name('requerimiento.exportar_listar_requerimiento');
@@ -546,3 +550,4 @@ Route::post('conductores/send_conductor_nuevo', [ConductoresController::class, '
 Route::get('conductores/obtener_conductores_nuevos', [ConductoresController::class, 'obtener_conductores_nuevos'])->name('conductores.obtener_conductores_nuevos');
 
 Route::get('orden_compra/importar_archivo/{archivo}', [OrdenCompraController::class, 'importar_archivo'])->name('orden_compra.importar_archivo');
+
