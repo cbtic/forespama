@@ -300,7 +300,10 @@ class RequerimientoController extends Controller
             $orden_compra_detalle->id_producto = $descripcion[$index];
             $orden_compra_detalle->cantidad_requerida = $cantidad_atendida[$index];
             $orden_compra_detalle->id_estado_producto = $estado_bien[$index];
-            $orden_compra_detalle->id_unidad_medida = $unidad[$index];
+            //$orden_compra_detalle->id_unidad_medida = $unidad[$index];
+            if($unidad[$index]!=null && $unidad[$index] !=0){
+				$orden_compra_detalle->id_unidad_medida = (int)$unidad[$index];
+			}
             //$orden_compra_detalle->id_marca = $marca[$index] ?? '';
             if($marca[$index]!=null && $marca[$index] !=0){
 				$orden_compra_detalle->id_marca = (int)$marca[$index];

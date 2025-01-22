@@ -193,6 +193,9 @@ class OrdenCompraController extends Controller
         $sub_total = $request->input('sub_total');
         $igv = $request->input('igv');
         $total = $request->input('total');
+        $precio_unitario_ = $request->input('precio_unitario_');
+        $valor_venta_bruto = $request->input('valor_venta_bruto');
+        $valor_venta = $request->input('valor_venta');
         $id_orden_compra_detalle =$request->id_orden_compra_detalle;
         
         $orden_compra->id_empresa_compra = $request->empresa_compra;
@@ -228,7 +231,10 @@ class OrdenCompraController extends Controller
             $orden_compra_detalle->id_orden_compra = $orden_compra->id;
             $orden_compra_detalle->id_producto = $descripcion[$index];
             $orden_compra_detalle->cantidad_requerida = $cantidad_ingreso[$index];
-            $orden_compra_detalle->precio = $precio_unitario[$index];
+            $orden_compra_detalle->precio = $precio_unitario_[$index];
+            $orden_compra_detalle->valor_venta_bruto = $valor_venta_bruto[$index];
+            $orden_compra_detalle->precio_venta = $precio_unitario[$index];
+            $orden_compra_detalle->valor_venta = $valor_venta[$index];
             $orden_compra_detalle->id_descuento = $descuento[$index];
             $orden_compra_detalle->sub_total = $sub_total[$index];
             $orden_compra_detalle->igv = $igv[$index];

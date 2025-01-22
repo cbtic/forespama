@@ -50,7 +50,8 @@ class OrdenCompra extends Model
         ocd.precio, ocd.sub_total, ocd.igv, ocd.total, ocd.id_descuento, oc.id_almacen_salida, oc.id_unidad_origen, oc.id_almacen_destino ,
         m.denominiacion marca,
         coalesce((select k.saldos_cantidad from kardex k where id_producto = ocd.id_producto and id_almacen_destino = 3  order by 1 desc limit 1),0)stock_ves, --ves
-        coalesce((select k.saldos_cantidad from kardex k where id_producto = ocd.id_producto and id_almacen_destino = 2  order by 1 desc limit 1),0)stock_oxa --oza
+        coalesce((select k.saldos_cantidad from kardex k where id_producto = ocd.id_producto and id_almacen_destino = 2  order by 1 desc limit 1),0)stock_oxa, --oxa
+        ocd.valor_venta_bruto, precio_venta, valor_venta
         from orden_compra_detalles ocd 
         inner join productos p on ocd.id_producto = p.id
         inner join orden_compras oc on ocd.id_orden_compra = oc.id
