@@ -350,9 +350,9 @@ function calcularSubTotal(input) {
     var precio_unitario = parseFloat(fila.find('.precio_unitario').val()) || 0;
     var valor_venta = parseFloat(fila.find('.valor_venta').val()) || 0;
 
-    var sub_total = cantidad_ingreso * precio_unitario;
+    var sub_total = valor_venta;
 
-    fila.find('.sub_total').val(sub_total.toFixed(2));
+    //fila.find('.sub_total').val(sub_total.toFixed(2));
 
     var igvInputId = fila.find('.igv').attr('id');
     var totalInputId = fila.find('.total').attr('id');
@@ -412,6 +412,7 @@ function calcularPrecioUnitario(input) {
     fila.find('.valor_venta_bruto').val(valor_venta_bruto.toFixed(2));
     fila.find('.valor_venta').val(valor_venta.toFixed(2));
     fila.find('.igv').val(igv.toFixed(2));
+    fila.find('.sub_total').val(valor_venta.toFixed(2));
     fila.find('.total').val(total.toFixed(2));
 
     //var igvInputId = fila.find('.igv').attr('id');
@@ -448,18 +449,34 @@ function actualizarTotalGeneral() {
     var sub_totalGeneral = 0;
     var igv_totalGeneral = 0;
     var totalGeneral = 0;
+    var descuentolGeneral = 0;
+   
     $('#tblOrdenCompraDetalle tbody tr').each(function() {
         var sub_totalFila = parseFloat($(this).find('.sub_total').val()) || 0;
         var igv_totalFila = parseFloat($(this).find('.igv').val()) || 0;
         var totalFila = parseFloat($(this).find('.total').val()) || 0;
+        var precioVentaFila = parseFloat($(this).find('.precio_unitario').val()) || 0;
+        var descuentoFila = 0;
+        var porcentajeFila = 0;
+        var totalPorcentajeFila = 0;
+        if($(this).find('.descuento').val()!=""){
+            descuentoFila = parseFloat($(this).find('.descuento').val()) || 0;
+        }else if($(this).find('.porcentaje').val()!=""){
+            porcentajeFila = parseFloat($(this).find('.porcentaje').val()) || 0;
+            totalPorcentajeFila = precioVentaFila * (porcentajeFila / 100);
+        }
+        
         sub_totalGeneral += sub_totalFila;
         igv_totalGeneral += igv_totalFila;
         totalGeneral += totalFila;
+        descuentolGeneral += descuentoFila;
+        descuentolGeneral += totalPorcentajeFila;
     });
     
     $('#sub_total_general').val(sub_totalGeneral.toFixed(2));
     $('#igv_general').val(igv_totalGeneral.toFixed(2));
     $('#total_general').val(totalGeneral.toFixed(2));
+    $('#descuento_general').val(descuentolGeneral.toFixed(2));
 }
 
 function aplicaDescuento(inputElement) {
@@ -593,7 +610,7 @@ function cargarDetalle(){
             var sub_total_acumulado=0;
             var igv_total_acumulado=0;
             var total_acumulado=0;
-            
+            var descuento_total_acumulado=0;
 
             result.orden_compra.forEach(orden_compra => {
 
@@ -686,10 +703,13 @@ function cargarDetalle(){
                 n++;
                 sub_total_acumulado += parseFloat(orden_compra.sub_total || 0);
                 igv_total_acumulado += parseFloat(orden_compra.igv || 0);
+                descuento_total_acumulado += parseFloat(orden_compra.descuento || 0);
+                descuento_total_acumulado += parseFloat(orden_compra.porcentaje || 0);
                 total_acumulado += parseFloat(orden_compra.total || 0);
                 });
                 $('#sub_total_general').val(sub_total_acumulado.toFixed(2) || '0.00');
                 $('#igv_general').val(igv_total_acumulado.toFixed(2) || '0.00');
+                $('#descuento_general').val(descuento_total_acumulado.toFixed(2) || '0.00');
                 $('#total_general').val(total_acumulado.toFixed(2) || '0.00');
             }
             
@@ -1214,6 +1234,13 @@ $('#moneda_descripcion').val(descripcion);
                                 <td class="td" style ="text-align: left; width: 5%; font-size:13px"><b>IGV Total:</b></td>
                                 <td id="igvGeneral" class="td" style="text-align: left; width: 5%; font-size:13px">
                                     <input type="text" name="igv_general" id="igv_general" class="form-control" value="0.00" readonly style="border: none; background: transparent; text-align: left; pointer-events: none;">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="td" style ="text-align: left; width: 90%; font-size:13px"></td>
+                                <td class="td" style ="text-align: left; width: 5%; font-size:13px"><b>Descuento Total:</b></td>
+                                <td id="descuentoGeneral" class="td" style="text-align: left; width: 5%; font-size:13px">
+                                    <input type="text" name="descuento_general" id="descuento_general" class="form-control" value="0.00" readonly style="border: none; background: transparent; text-align: left; pointer-events: none;">
                                 </td>
                             </tr>
                             <tr>
