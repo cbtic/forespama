@@ -189,13 +189,15 @@ class OrdenCompraController extends Controller
         $unidad = $request->input('unidad');
         $cantidad_ingreso = $request->input('cantidad_ingreso');
         $precio_unitario = $request->input('precio_unitario');
-        $descuento = $request->input('descuento');
+        $id_descuento = $request->input('id_descuento');
         $sub_total = $request->input('sub_total');
         $igv = $request->input('igv');
         $total = $request->input('total');
         $precio_unitario_ = $request->input('precio_unitario_');
         $valor_venta_bruto = $request->input('valor_venta_bruto');
         $valor_venta = $request->input('valor_venta');
+        $descuento = $request->input('descuento');
+        $porcentaje = $request->input('porcentaje');
         $id_orden_compra_detalle =$request->id_orden_compra_detalle;
         
         $orden_compra->id_empresa_compra = $request->empresa_compra;
@@ -236,7 +238,12 @@ class OrdenCompraController extends Controller
             $orden_compra_detalle->valor_venta_bruto = $valor_venta_bruto[$index];
             $orden_compra_detalle->precio_venta = $precio_unitario[$index];
             $orden_compra_detalle->valor_venta = $valor_venta[$index];
-            $orden_compra_detalle->id_descuento = $descuento[$index];
+            $orden_compra_detalle->id_descuento = $id_descuento[$index];
+            if($id_descuento[$index]==1){
+                $orden_compra_detalle->descuento = $descuento[$index];
+            }else if($id_descuento[$index]==2){
+                $orden_compra_detalle->descuento = $porcentaje[$index];
+            }
             $orden_compra_detalle->sub_total = $sub_total[$index];
             $orden_compra_detalle->igv = $igv[$index];
             $orden_compra_detalle->total = $total[$index];
