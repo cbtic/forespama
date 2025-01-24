@@ -796,11 +796,26 @@
                                                 </div>
                                             </div>
 
+                                            <div class="col-lg-4 col-md-3 col-sm-12 col-xs-12" >                                                
+                                                <div id="divAlmacen" class="form-group form-group-sm" style="display:none">
+                                                    <select name="almacen_salida" id="almacen_salida" class="form-control form-control-sm" onchange="//actualizarSecciones(this)">
+                                                        <option value="">Seleccionar Almacen</option>
+                                                        <?php 
+                                                        foreach ($almacen as $row){?>
+                                                            <option value="<?php echo $row->id ?>" ><?php echo $row->denominacion ?></option>
+                                                            <?php 
+                                                        }
+                                                        ?>
+                                                    </select>
+                                                 </div>                                                    
+                                            </div>
 
-                                            <div id="divAgregar" class="col-sm-12 controls" style="display:none">
-                                                <div style="margin-top:15px" class="form-group" >                                                
-                                                    <div class="btn-group btn-group-sm float-right"  role="group" aria-label="Log Viewer Actions">
-                                                        <a href="javascript:void(0)" onClick="modal_productos(0)"  class="btn btn-sm btn-success">Agregar</a>
+                                            <div class="col-lg-2 col-md-3 col-sm-12 col-xs-12" > 
+                                                <div id="divAgregar" class="form-group form-group-sm" style="display:none">
+                                                    <div style="margin-top:15px" class="form-group" >                                                
+                                                        <div class="btn-group btn-group-sm float-right"  role="group" aria-label="Log Viewer Actions">
+                                                            <a href="javascript:void(0)" onClick="modal_productos(0)"  class="btn btn-sm btn-success">Agregar</a>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>

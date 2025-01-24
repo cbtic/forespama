@@ -947,7 +947,10 @@ function obtenerBeneficiario(){
 	$('#Exonerado').val("0");
 
 	
-	$("#divAgregar").show();
+	$("#divAgregar").hide();
+	$("#divAlmacen").hide();
+
+	$('#cboAlmacen').val("");
 	
 	$("#btnProforma").hide();
 	
@@ -978,6 +981,8 @@ function obtenerBeneficiario(){
 				//alert(result.agremiado.id_tipo_documento);
 
 				$("#divAgregar").show();
+				$("#divAlmacen").show();
+				$("#almacen_salida").prop('disabled', false);
 	
 				//$("#btnProforma").prop('disabled', false);
 
@@ -1229,6 +1234,7 @@ function cargarProformaDet(id){
 	var total = 0;
 
 	$("#divAgregar").hide();
+	$("#divAlmacen").hide();
 	$("#btnBoleta").prop('disabled', true);
 	$("#btnFactura").prop('disabled', true);
 	$("#btnProforma").hide();
@@ -2842,24 +2848,41 @@ function modalProforma(id){
 
 function modal_productos(id){
 
+	var msg="";
+	var almacen_salida = $('#almacen_salida').val();
 
+	if (almacen_salida=="")msg+="Seleccione un Almacen para continuar.. <br>";
+
+	if(msg!=""){
 	
-	$(".modal-dialog").css("width","85%");
-	$('#openOverlayOpc.modal-body').css('height', 'auto');
+		bootbox.alert(msg); 
+			
+		return false;
 
-	var id_empresa = $('#empresa_id').val();
+	}
+	else{
 
+
+		$("#almacen_salida").prop('disabled', true);
+
+
+		$(".modal-dialog").css("width","85%");
+		$('#openOverlayOpc.modal-body').css('height', 'auto');
+	
+		var id_empresa = $('#empresa_id').val();
+	
+		$.ajax({
+				url: "/ingreso/modal_productos/"+id,
+				type: "GET",
+				success: function (result) {  
+						$("#diveditpregOpc").html(result);
+						$('#id_empresa_pr').val(id_empresa);
+						$('#openOverlayOpc').modal('show');
+				}
+		});
+	}
 	
 
-	$.ajax({
-			url: "/ingreso/modal_productos/"+id,
-			type: "GET",
-			success: function (result) {  
-					$("#diveditpregOpc").html(result);
-					$('#id_empresa_pr').val(id_empresa);
-					$('#openOverlayOpc').modal('show');
-			}
-	});
 }
 
 function agregarProducto(){
@@ -2959,6 +2982,7 @@ function AddFila(){
 		$('#SelProducto').val("S");
 
 		$("#btnProforma").prop('disabled', false);
+		$("#btnProforma").show();
 
 		if(tipo_documento == "5"){//RUC
 			
@@ -3099,6 +3123,7 @@ function cargarOrdenCompraDet(id){
 	var total = 0;
 
 	$("#divAgregar").hide();
+	$("#divAlmacen").hide();
 	$("#btnBoleta").prop('disabled', true);
 	$("#btnFactura").prop('disabled', true);	
 	$("#btnProforma").hide();

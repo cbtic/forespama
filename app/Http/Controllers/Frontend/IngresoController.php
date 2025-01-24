@@ -89,7 +89,8 @@ class IngresoController extends Controller
         //$almacen = Almacene::all();
         $unidad_origen = $tablaMaestra_model->getMaestroByTipo(50);
 
-        return view('frontend.ingresos.create',compact('persona','caja','caja_usuario','tipo_documento','pronto_pago', 'concepto','mes','producto','marca','estado_bien','unidad','descuento','caja_dolares','caja_usuario_dolares'));
+    
+        return view('frontend.ingresos.create',compact('persona','caja','caja_usuario','tipo_documento','pronto_pago', 'concepto','mes','producto','marca','estado_bien','unidad','descuento','caja_dolares','caja_usuario_dolares', 'almacen'));
 
     }
 

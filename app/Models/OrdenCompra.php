@@ -115,11 +115,9 @@ class OrdenCompra extends Model
 
     function getOrdenCompraDetalle($id){
 
-        $cad = "SELECT p.id, '' serie, p.numero_orden_compra, p.fecha_orden_compra fecha, p.id_moneda, 'SOLES' moneda, pd.sub_total sub_total_, pd.igv igv_, pd.total total_, '01/01/2025' fecha_vencimiento,
-            pd.id_producto,  pr.codigo, pr.denominacion,
-            pr.codigo ||'-'|| pr.denominacion producto_prof,
-            um.denominacion um, pd.cantidad_requerida cantidad, pd.id_descuento,
-            pd.precio precio_unitario, pd.sub_total, pd.igv, pd.total, pd.id_unidad_medida, descuento, pd.valor_venta_bruto
+        $cad = "SELECT p.id, '' serie, p.numero_orden_compra, p.fecha_orden_compra fecha, p.id_moneda, 'SOLES' moneda, pd.sub_total sub_total_, pd.igv igv_, pd.total total_, 
+            '01/01/2025' fecha_vencimiento, pd.id_producto,  pr.codigo, pr.denominacion, pr.codigo ||'-'|| pr.denominacion producto_prof, um.denominacion um, 
+            pd.cantidad_requerida cantidad, pd.id_descuento, pd.precio precio_unitario, pd.sub_total, pd.igv, pd.total, pd.id_unidad_medida, pd.descuento, pd.valor_venta_bruto
             FROM orden_compras p
             inner join orden_compra_detalles pd on pd.id_orden_compra = p.id 
             inner join productos pr on pr.id = pd.id_producto
