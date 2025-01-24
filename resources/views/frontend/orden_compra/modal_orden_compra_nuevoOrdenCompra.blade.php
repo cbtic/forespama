@@ -665,7 +665,7 @@ function cargarDetalle(){
                         <td><input name="valor_venta_bruto[]" id="valor_venta_bruto${n}" class="valor_venta_bruto form-control form-control-sm" value="${parseFloat(orden_compra.valor_venta_bruto || 0).toFixed(2)}" type="text" oninput="calcularSubTotal(this)"></td>
                         <td><input name="valor_venta[]" id="valor_venta${n}" class="valor_venta form-control form-control-sm" value="${parseFloat(orden_compra.valor_venta || 0).toFixed(2)}" type="text" oninput="calcularSubTotal(this)"></td>
 
-                        <td><div style="display: flex; align-items: center; gap: 5px;"><button type="button" class="btn-custom" onclick="cambiarDescuento(this)"><i class="fas fa-paint-brush"></i></button><input name="descuento[]" id="descuento' + n + '" class="descuento form-control form-control-sm" placeholder="S/ Descuento" value="" type="text" oninput="aplicaDescuentoEnSoles(this)"><input name="porcentaje[]" id="porcentaje' + n + '" class="porcentaje form-control form-control-sm" placeholder="% Descuento" type="text" style="display: none;"> </div></td>
+                        <td><div style="display: flex; align-items: center; gap: 5px;"><button type="button" class="btn-custom" onclick="cambiarDescuento(this)"><i class="fas fa-paint-brush"></i></button><input name="descuento[]" id="descuento' + n + '" class="descuento form-control form-control-sm" placeholder="S/ Descuento" value="${parseFloat(orden_compra.id_descuento || 0).toFixed(2)}" type="text" oninput="aplicaDescuentoEnSoles(this)"><input name="porcentaje[]" id="porcentaje' + n + '" class="porcentaje form-control form-control-sm" placeholder="% Descuento" value="${parseFloat(orden_compra.id_descuento || 0).toFixed(2)}" type="text" style="display: none;"> </div></td>
                         <td><input name="sub_total[]" id="sub_total${n}" class="sub_total form-control form-control-sm" value="${parseFloat(orden_compra.sub_total || 0).toFixed(2) }" type="text" readonly="readonly"></td>
                         <td><input name="igv[]" id="igv${n}" class="igv form-control form-control-sm" value="${parseFloat(orden_compra.igv || 0).toFixed(2)}" type="text" readonly="readonly"></td>
                         <td><input name="total[]" id="total${n}" class="total form-control form-control-sm" value="${parseFloat(orden_compra.total || 0).toFixed(2)}" type="text" readonly="readonly"></td>
@@ -703,7 +703,7 @@ function cargarDetalle(){
                 n++;
                 sub_total_acumulado += parseFloat(orden_compra.sub_total || 0);
                 igv_total_acumulado += parseFloat(orden_compra.igv || 0);
-                descuento_total_acumulado += parseFloat(orden_compra.descuento || 0);
+                descuento_total_acumulado += parseFloat(orden_compra.id_descuento || 0);
                 descuento_total_acumulado += parseFloat(orden_compra.porcentaje || 0);
                 total_acumulado += parseFloat(orden_compra.total || 0);
                 });
