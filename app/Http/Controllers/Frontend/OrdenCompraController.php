@@ -213,6 +213,7 @@ class OrdenCompraController extends Controller
         $orden_compra->total = $request->total_general;
         $orden_compra->id_moneda = $request->moneda;
         $orden_compra->moneda = $request->moneda_descripcion;
+        $orden_compra->descuento = $request->descuento_general;
         $orden_compra->cerrado = 1;
         $orden_compra->id_usuario_inserta = $id_user;
         $orden_compra->estado = 1;
