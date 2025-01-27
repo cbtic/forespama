@@ -561,9 +561,6 @@
 
                                                     <input type="hidden" readonly name="tipo_documento" id="tipo_documento" value="85" class="form-control form-control-sm">
                                                     <input type="hidden" readonly name="numero_documento" id="numero_documento" value="" class="form-control form-control-sm">
-
-
-
                                                     <input type="hidden" readonly name="empresa_id" id="empresa_id" value="" class="form-control form-control-sm">
                                                     <input type="hidden" readonly name="id_ubicacion" id="id_ubicacion" value="" class="form-control form-control-sm">
                                                     <input type="hidden" readonly name="id_ubicacion_p" id="id_ubicacion_p" value="" class="form-control form-control-sm">
@@ -573,26 +570,20 @@
                                                     <input type="hidden" readonly name="id_tipo_documento_" id="id_tipo_documento_" value="" class="form-control form-control-sm">
                                                     <input type="hidden" readonly name="id_concepto" id="id_concepto" value="" class="form-control form-control-sm">
                                                     <input type="hidden" readonly name="id_concepto_sel" id="id_concepto_sel" value="" class="form-control form-control-sm">
-
                                                     <input type="hidden" readonly name="DescuentoPP" id="DescuentoPP" value="" class="form-control form-control-sm">
-
                                                     <input type="hidden" readonly name="id_pronto_pago" id="id_pronto_pago" value="<?php echo !empty($pronto_pago->id) ? $pronto_pago->id : '0'  ?>" class="form-control form-control-sm">
                                                     <input type="hidden" readonly name="periodo_pp" id="periodo_pp" value="<?php echo !empty($pronto_pago->periodo) ? $pronto_pago->periodo : '0'  ?>" class="form-control form-control-sm">
                                                     <input type="hidden" readonly name="numero_cuotas_pp" id="numero_cuotas_pp" value="<?php echo !empty($pronto_pago->numero_cuotas) ? $pronto_pago->numero_cuotas : '0'  ?>" class="form-control form-control-sm">
-
                                                     <input type="hidden" readonly name="id_concepto_pp" id="id_concepto_pp" value="<?php echo !empty($concepto->id) ? $concepto->id : '0'   ?>" class="form-control form-control-sm">
                                                     <input type="hidden" readonly name="importe_pp" id="importe_pp" value="<?php echo !empty($concepto->importe) ? $concepto->importe : '0' ?>" class="form-control form-control-sm">
                                                     <input type="hidden" readonly name="id_tipo_afectacion_pp" id="id_tipo_afectacion_pp" value="<?php echo !empty($concepto->id_tipo_afectacion) ? $concepto->id_tipo_afectacion : '0' ?>" class="form-control form-control-sm">
-
                                                     <input type="hidden" readonly name="SelFracciona" id="SelFracciona" value="" class="form-control form-control-sm">
-
                                                     <input type="hidden" readonly name="Exonerado" id="Exonerado" value="" class="form-control form-control-sm">
-
                                                     <input type="hidden" readonly name="mes_deuda" id="mes_deuda" value="" class="form-control form-control-sm">
                                                     <input type="hidden" readonly name="anio_deuda" id="anio_deuda" value="" class="form-control form-control-sm">
-
                                                     <input type="hidden" readonly name="SelProducto" id="SelProducto" value="" class="form-control form-control-sm">
-
+                                                    <input type="hidden" readonly name="id_orden_compra" id="id_orden_compra" value="" class="form-control form-control-sm">
+                                                    
                                                 </div>
                                             </div>
                                         </div>

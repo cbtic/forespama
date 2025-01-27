@@ -268,6 +268,9 @@ class ComprobanteController extends Controller
             $persona = $request->id_persona;
             $tipoDocP = $request->tipo_documento;
 			$empresa_id = $request->empresa_id;
+            $id_orden_compra = $request->id_orden_compra;
+            $id_proforma = $request->id_proforma;
+
            // echo $$tipoDocP;exit();
 
 			// DNI = 78
@@ -322,7 +325,7 @@ class ComprobanteController extends Controller
 
             //print_r($facturad); exit();         
 
-            return view('frontend.comprobante.create',compact('trans', 'titulo','empresa', 'facturad', 'total', 'igv', 'stotal','TipoF','ubicacion', 'persona','id_caja','serie', 'adelanto','MonAd','forma_pago','tipooperacion','formapago', 'totalDescuento','id_tipo_afectacion_pp', 'valorizad','descuentopp','id_pronto_pago', 'medio_pago'));
+            return view('frontend.comprobante.create',compact('trans', 'titulo','empresa', 'facturad', 'total', 'igv', 'stotal','TipoF','ubicacion', 'persona','id_caja','serie', 'adelanto','MonAd','forma_pago','tipooperacion','formapago', 'totalDescuento','id_tipo_afectacion_pp', 'valorizad','descuentopp','id_pronto_pago', 'medio_pago', 'id_orden_compra', 'id_proforma'));
         }
         if ($trans == 'FN'){
             //$serie = $serie_model->getMaestro('SERIES',$TipoF);
@@ -1022,9 +1025,23 @@ class ComprobanteController extends Controller
 
                 foreach ($tarifa as $key => $value) {
 
+                    $id_proforma = $request->id_proforma;
+                    $id_orden_compra = $request->id_orden_compra;
+
+                    if($id_orden_compra!=""){
+                        $id_modulo="1";
+                        $pk_registro=$id_orden_compra;
+                    }elseif($id_proforma!=""){
+                        $id_modulo="2";
+                        $pk_registro=$id_proforma;
+                    }else{
+                        $id_modulo="0";
+                        $pk_registro="0";             
+                    } 
+
                     $valorizacion = new Valorizacione;
-                    $valorizacion->id_modulo = 1;
-                    $valorizacion->pk_registro = 0;
+                    $valorizacion->id_modulo = $id_modulo;
+                    $valorizacion->pk_registro = $pk_registro;
                     $valorizacion->id_concepto = $value['id_concepto']; //26412;
                     //$valorizacion->id_agremido = $id_persona;
                     if($ubicacion_id!="")  $valorizacion->id_empresa = $ubicacion_id;

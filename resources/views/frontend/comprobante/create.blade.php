@@ -440,35 +440,20 @@
                         <input type="hidden" name="descuentopp" id="descuentopp" value="<?php echo $descuentopp; ?>">
                         <input type="hidden" name="id_pronto_pago" id="id_pronto_pago" value="<?php echo $id_pronto_pago; ?>">
                         <input type="hidden" name="totalMedioPago" id="totalMedioPago" value="">
-
                         <input type="hidden" name="persona2" id="persona2" value="">
                         <input type="hidden" name="ubicacion2" id="ubicacion2" value="">
-
-                        <input type="hidden" name="TipoF" id="TipoF" value="<?php if ($trans == 'FA') {
-                                                                        echo $TipoF;
-                                                                    } ?>">
+                        <input type="hidden" name="TipoF" id="TipoF" value="<?php if ($trans == 'FA') {echo $TipoF; } ?>">
                         <input type="hidden" name="vestab" value="1">
-                        <input type="hidden" name="totalF" value="<?php if ($trans == 'FA') {
-                                                                        echo $total;
-                                                                    } ?>">
-                        <input type="hidden" name="ubicacion" value="<?php if ($trans == 'FA') {
-                                                                            echo $ubicacion;
-                                                                        } ?>">
-                        <input type="hidden" name="persona" value="<?php if ($trans == 'FA') {
-                                                                        echo $persona;
-                                                                    } ?>">
-                        <input type="hidden" name="id_caja" value="<?php if ($trans == 'FA') {
-                                                                        echo $id_caja;
-                                                                    } ?>">
-                        <input type="hidden" name="MonAd" value="<?php if ($trans == 'FA') {
-                                                                        echo $MonAd;
-                                                                    } ?>">
-                        <input type="hidden" name="adelanto" value="<?php if ($trans == 'FA') {
-                                                                        echo $adelanto;
-                                                                    } ?>">
-                        <input type="hidden" name="id_factura" value="<?php if ($trans == 'FE') {
-                                                                            echo $facturas->id;
-                                                                        } ?>">
+                        <input type="hidden" name="totalF" value="<?php if ($trans == 'FA') {echo $total;} ?>">
+                        <input type="hidden" name="ubicacion" value="<?php if ($trans == 'FA') {echo $ubicacion;} ?>">
+                        <input type="hidden" name="persona" value="<?php if ($trans == 'FA') {echo $persona;} ?>">
+                        <input type="hidden" name="id_caja" value="<?php if ($trans == 'FA') {echo $id_caja;} ?>">
+                        <input type="hidden" name="MonAd" value="<?php if ($trans == 'FA') {echo $MonAd;} ?>">
+                        <input type="hidden" name="adelanto" value="<?php if ($trans == 'FA') {echo $adelanto;} ?>">
+                        <input type="hidden" name="id_factura" value="<?php if ($trans == 'FE') {echo $facturas->id;} ?>">
+
+                        <input type="hidden" name="id_orden_compra" id="id_orden_compra" value="<?php echo $id_orden_compra; ?>">
+                        <input type="hidden" name="id_proforma" id="id_proforma" value="<?php echo $id_proforma; ?>">
 
                         <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
                             <div class="form-group">

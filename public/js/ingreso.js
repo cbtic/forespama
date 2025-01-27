@@ -1075,6 +1075,8 @@ function obtenerBeneficiario(){
 
 				if (tipo_documento_b=="6"){
 					cargarOrdenCompraSel(result.id_orden_compra);
+					$('#id_orden_compra').val(id_orden_compra);
+					
 				}
 
 
