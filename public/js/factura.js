@@ -298,6 +298,7 @@ function fn_save(){
 				
 				$('#numerof').val(result.id_factura);
 				$('#divNumeroF').show();
+
 				location.href=urlApp+"/comprobante/"+result.id_factura;
 
             }
