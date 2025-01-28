@@ -879,7 +879,7 @@ function validaTipoDocumento(){
 	//obtenerBeneficiario();
 }
 
-function obtenerBeneficiario(){
+function obtenerBeneficiario() {
 
 	var tipo_documento_b = $("#tipo_documento_b").val();
 	$("#tipo_documento").val(tipo_documento_b);
@@ -960,7 +960,7 @@ function obtenerBeneficiario(){
 		dataType: "json",
 		success: function(result){
 
-			if (result) {
+			if (result.agremiado) {
 				//alert(result.agremiado.id);
 				//alert(tipo_documento);
 
@@ -1086,14 +1086,15 @@ function obtenerBeneficiario(){
 			}
 			else {
 
-				alert("registro no registrado");
+				//alert("Número de documento no registrado.");
+				Swal.fire("Numero de documento no fue registrado!");
 
 			}
 			
 		},
 		"error": function (msg, textStatus, errorThrown) {
 
-			if(tipo_documento == "85" || tipo_documento == "5"){
+			if(tipo_documento == "6" || tipo_documento == "5"){
 				Swal.fire("Numero de documento no fue registrado!");
 			}else{
 				confirma_accion();
@@ -1197,6 +1198,7 @@ function cargarProformaId(id){
 		}
 	});
 }
+/*
 function cargarOrdenCompraId(id){
 	$.ajax({
 		url: '/orden_compra/obtener_orden_compra_id/' + id,
@@ -1218,7 +1220,36 @@ function cargarOrdenCompraId(id){
 		}
 	});
 }
+*/
 
+function cargarOrdenCompraId(id) {
+    $.ajax({
+        url: `/orden_compra/obtener_orden_compra_id/${id}`,
+        dataType: "json",
+        success: function (result) {
+            if (result && result.oc) {
+                const { total, descuento, sub_total, igv } = result.oc;
+
+                // Actualizar los valores en los campos del formulario
+                $('#deudaTotales').val(Number(total).toFixed(2));
+                $('#totalDescuento').val(Number(descuento).toFixed(2));
+                $('#total').val(Number(total).toFixed(2));
+                $('#stotal').val(Number(sub_total).toFixed(2));
+                $('#igv').val(Number(igv).toFixed(2));
+            } else {
+                console.warn("No se encontraron datos válidos en la respuesta.");
+            }
+        },
+        error: function (xhr, status, error) {
+            console.error("Error al cargar la orden de compra:", error);
+            alert("Hubo un error al cargar los datos. Por favor, inténtalo de nuevo.");
+        }
+    });
+}
+
+function actualizarCampo(selector, valor) {
+    $(selector).val(Number(valor).toFixed(2));
+}
 
 function cargarProformaSel(id){
 	cargarProformaId(id);
@@ -1230,7 +1261,7 @@ function cargarOrdenCompraSel(id){
 	cargarOrdenCompraDet(id);
 }
 
-
+/*
 function cargarProformaDet(id){
 
 	var total = 0;
@@ -1245,53 +1276,39 @@ function cargarProformaDet(id){
 	$.ajax({
 			url: "/ingreso/listar_proforma_det/"+id,
 			type: "GET",
-			success: function (result) {
-					  					
-				$("#tblValorizacion tbody").html(result);
-				
+			success: function (result) {					  					
+				$("#tblValorizacion tbody").html(result);				
 				$("#btnBoleta").prop('disabled', false);
-				$("#btnFactura").prop('disabled', false);
-					
-					
-				
-				//$("#tipo_documento").val(result.agremiado.id_tipo_documento);
-					
-
-/*
-					$(".mov:checked").each(function (){
-						var val_total = $(this).parent().parent().parent().find('.val_total').html();
-						val_total =val_total.toString().replace(',','');
-						var val_sub_total = $(this).parent().parent().parent().find('.val_sub_total').html();
-						val_sub_total =val_sub_total.toString().replace(',','');
-						var val_igv = $(this).parent().parent().parent().find('.val_igv').html();
-						val_igv =val_igv.toString().replace(',','');
-				
-						//var val_descuento = $(this).parent().parent().parent().find('.val_descuento').html();
-						id_concepto = $(this).parent().parent().parent().find('.id_concepto_modal_sel').val();
-				
-						var val_descuento =$('#DescuentoPP').val("");
-				
-						var numero_cuotas_pp =$('#numero_cuotas_pp').val("");
-						var importe_pp =$('#importe_pp').val("");
-						
-						total += Number(val_total);
-						stotal += Number(val_sub_total);
-						igv += Number(val_igv);
-				
-					});
-					descuento = 0;
-					
-				
-					//$('#idConcepto').val(id_concepto);
-					//total -= descuento;
-					
-					$('#total').val(total.toFixed(2));
-					$('#stotal').val(stotal.toFixed(2));
-					$('#igv').val(igv.toFixed(2));
-					$('#totalDescuento').val(descuento.toFixed(2));
-					*/
+				$("#btnFactura").prop('disabled', false);									
 			}
 	});
+}
+*/
+function cargarProformaDet(id) {
+    // Ocultar elementos y deshabilitar botones
+    $("#divAgregar, #divAlmacen").hide();
+    $("#btnBoleta, #btnFactura").prop('disabled', true);
+    $("#btnProforma").hide();
+
+    // Limpiar la tabla
+    $("#tblValorizacion tbody").empty();
+
+    // Realizar la solicitud AJAX
+    $.ajax({
+        url: `/ingreso/listar_proforma_det/${id}`,
+        type: "GET",
+        success: function (result) {
+            // Insertar el resultado en la tabla
+            $("#tblValorizacion tbody").html(result);
+
+            // Habilitar botones después de cargar los datos
+            $("#btnBoleta, #btnFactura").prop('disabled', false);
+        },
+        error: function (xhr, status, error) {
+            console.error("Error al cargar los detalles de la proforma:", error);
+            alert("Hubo un error al cargar los detalles. Por favor, inténtalo de nuevo.");
+        }
+    });
 }
 
 
@@ -3120,7 +3137,7 @@ function proforma_send(){
     });
 
 }
-
+/*
 function cargarOrdenCompraDet(id){
 	var total = 0;
 
@@ -3148,6 +3165,36 @@ function cargarOrdenCompraDet(id){
 			}
 	});
 }
+*/
+
+function cargarOrdenCompraDet(id) {
+    // Ocultar elementos y deshabilitar botones
+    $("#divAgregar, #divAlmacen").hide();
+    $("#btnBoleta, #btnFactura").prop('disabled', true);
+    $("#btnProforma").hide();
+
+    // Limpiar la tabla
+    $("#tblValorizacion tbody").empty();
+
+    // Realizar la solicitud AJAX
+    $.ajax({
+		url: `/ingreso/listar_orden_compra_det/${id}`,
+        type: "GET",
+        success: function (result) {
+            // Insertar el resultado en la tabla
+            $("#tblValorizacion tbody").html(result);
+
+            // Habilitar botones después de cargar los datos
+            $("#btnBoleta, #btnFactura").prop('disabled', false);
+        },
+        error: function (xhr, status, error) {
+            console.error("Error al cargar los detalles de la orden de compra:", error);
+            alert("Hubo un error al cargar los detalles. Por favor, inténtalo de nuevo.");
+        }
+    });
+}
+
+
 /*
 function cargarPagos(){
 	var tipo_documento = $("#tipo_documento").val();
