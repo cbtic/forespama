@@ -182,6 +182,10 @@ class GuiaInternaController extends Controller
         $departamento = $ubigeo->getdepartamentoByUbigeo($id_departamento);
         $provincia = $ubigeo->getProvinciaByUbigeo($id_departamento, $id_provincia);
         $distrito = $ubigeo->getDistritoByUbigeo($id_ubigeo);
+        
+        $departamento = $departamento[0]->desc_ubigeo ?? '';
+        $provincia = $provincia[0]->desc_ubigeo ?? '';
+        $distrito = $distrito[0]->desc_ubigeo ?? '';
 
         if($request->motivo_traslado=='04'){
             $guia_interna->guia_cod_estab_llegada = $request->punto_llegada_select;
