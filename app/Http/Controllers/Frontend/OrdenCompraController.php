@@ -344,13 +344,13 @@ class OrdenCompraController extends Controller
         $datos=$orden_compra_model->getOrdenCompraById($id);
         $datos_detalle=$orden_compra_detalle_model->getDetalleOrdenCompraPdf($id);
 
-        $tipo_documento=$datos[0]->tipo_documento;
-        $empresa_compra=$datos[0]->empresa_compra;
-        $empresa_vende=$datos[0]->empresa_vende;
-        $fecha_orden_compra = $datos[0]->fecha_orden_compra;
-        $numero_orden_compra = $datos[0]->numero_orden_compra;
-        $numero_orden_compra_cliente = $datos[0]->numero_orden_compra_cliente;
-        $igv=$datos[0]->igv;
+        $tipo_documento=$datos->tipo_documento;
+        $empresa_compra=$datos->empresa_compra;
+        $empresa_vende=$datos->empresa_vende;
+        $fecha_orden_compra = $datos->fecha_orden_compra;
+        $numero_orden_compra = $datos->numero_orden_compra;
+        $numero_orden_compra_cliente = $datos->numero_orden_compra_cliente;
+        $igv=$datos->igv;
         
 		$year = Carbon::now()->year;
 
