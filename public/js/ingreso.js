@@ -1187,6 +1187,8 @@ function cargarProformaId(id){
 				//alert(result.agremiado.id);
 				//alert(tipo_documento);
 
+				$("#id_proforma").val(id);
+
 				$('#deudaTotales').val(Number(result.proforma.total).toFixed(2));
 				$('#totalDescuento').val(Number(result.proforma.descuento).toFixed(2));
 				$('#total').val(Number(result.proforma.total).toFixed(2));
@@ -3100,8 +3102,9 @@ function proforma_send(){
 	alert(total_);
 	exit();
 */
+
 	$('#accion_').val("i");
-	$('#id_proforma').val("0");
+	//$('#id_proforma').val("0");
 
 	var id_persona = $('#id_persona').val();
 	var empresa_id = $('#empresa_id').val();
