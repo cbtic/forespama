@@ -98,6 +98,10 @@ class OrdenCompra extends Model
                 where 1=1 
                 and o.estado = '1' and o.cerrado = '2' and o.id_tipo_documento = 2
                 and o.numero_orden_compra = '".$numero."'
+                and (select count(*) 
+            		FROM  orden_compra_detalles o_
+            		inner join valorizaciones v on v.id_modulo = 1 and v.pk_registro = o_.id 
+            		where o_.id_orden_compra = o.id) = 0
                 limit 1";
 		$data = DB::select($cad);
         if(isset($data[0]))return $data[0];
