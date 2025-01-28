@@ -271,7 +271,7 @@ class ComprobanteController extends Controller
             $id_orden_compra = $request->id_orden_compra;
             $id_proforma = $request->id_proforma;
 
-           // echo $$tipoDocP;exit();
+           // echo $$id_orden_compra;exit();
 
 			// DNI = 78
 
@@ -531,6 +531,9 @@ class ComprobanteController extends Controller
 			/**********RUC***********/
 
 			$tarifa = $request->facturad;
+
+            //print_r($tarifa);
+            //exit();
 
            // $total_pagar_abono = $request->total_pagar_abono;
 
@@ -880,6 +883,7 @@ class ComprobanteController extends Controller
 				$fac_numero = $factura->numero;
 
 				$factura_upd = Comprobante::find($id_factura);
+                
 				if(isset($factura_upd->tipo_cambio)) $factura_upd->tipo_cambio = $request->tipo_cambio;
                 
                 if($total>700 && $tipoF=='FT') {
@@ -994,6 +998,9 @@ class ComprobanteController extends Controller
                     $tarifa[999]=$items1;
                 }
                
+                
+           // print_r($tarifa);
+            //exit();
 				
 				foreach ($tarifa as $key => $value) {
 					//echo "denominacion=>".$value['denominacion']."<br>";
@@ -1007,6 +1014,24 @@ class ComprobanteController extends Controller
 					if ($value['descuento']=='') $descuento = 0;
 					$id_factura_detalle = $facturas_model->registrar_factura_moneda($serieF, $fac_numero, $tipoF, $value['cantidad'], $value['id_concepto'], $total, $value['descripcion'], $value['cod_contable'], $value['item'], $id_factura, $descuento,    'd',     $id_user,  $id_moneda);
 					
+                    // print_r($id_factura_detalle);
+                    //exit();
+
+                    if($value['id_concepto']!='26464'){
+                        $facturaDet_upd = ComprobanteDetalle::find($id_factura_detalle);
+                        
+                        $facturaDet_upd->pu=$value['pu'];
+                        $facturaDet_upd->importe=$value['total'];                
+                        $facturaDet_upd->igv_total=$value['igv'];
+                        $facturaDet_upd->precio_venta=$value['pv'];
+                        $facturaDet_upd->valor_venta_bruto=$value['valor_venta_bruto'];
+                        $facturaDet_upd->valor_venta=$value['valor_venta'];
+                        $facturaDet_upd->save();  
+
+                    }
+                                                                                                                                                                                               
+
+
                     
                     //(  serie,      numero,   tipo,      ubicacion,               persona,  total,            descripcion,           cod_contable,         id_v,     id_caja,  descuento, accion, p_id_usuario, p_id_moneda)
 					
@@ -1021,23 +1046,31 @@ class ComprobanteController extends Controller
 
 
                 //print_r($tarifa);
+
+                
                 //exit();
+
+                $id_proforma = $request->id_proforma;
+                $id_orden_compra = $request->id_orden_compra;
+
+                if($id_orden_compra!=""){
+                    $id_modulo="1";
+                    $pk_registro=$id_orden_compra;
+                }elseif($id_proforma!=""){
+                    $id_modulo="2";
+                    $pk_registro=$id_proforma;
+                }else{
+                    $id_modulo="0";
+                    $pk_registro="0";             
+                } 
+
+                //echo($pk_registro);
+                //exit();
+
 
                 foreach ($tarifa as $key => $value) {
 
-                    $id_proforma = $request->id_proforma;
-                    $id_orden_compra = $request->id_orden_compra;
 
-                    if($id_orden_compra!=""){
-                        $id_modulo="1";
-                        $pk_registro=$id_orden_compra;
-                    }elseif($id_proforma!=""){
-                        $id_modulo="2";
-                        $pk_registro=$id_proforma;
-                    }else{
-                        $id_modulo="0";
-                        $pk_registro="0";             
-                    } 
 
                     $valorizacion = new Valorizacione;
                     $valorizacion->id_modulo = $id_modulo;

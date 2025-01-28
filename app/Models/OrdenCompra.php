@@ -96,7 +96,7 @@ class OrdenCompra extends Model
                 from orden_compras o 
                 left join empresas e  on e.id = o.id_empresa_compra 
                 where 1=1 
-                and o.estado = '1' and o.cerrado = '2'
+                and o.estado = '1' and o.cerrado = '2' and o.id_tipo_documento = 2
                 and o.numero_orden_compra = '".$numero."'
                 limit 1";
 		$data = DB::select($cad);
@@ -122,7 +122,8 @@ class OrdenCompra extends Model
             FROM equivalencia_productos pe
             where pe.id_empresa = oc.id_empresa_vende and pe.id_producto = pd.id_producto and pe.estado= '1'
             )	else pr.codigo ||'-'|| pr.denominacion end  producto_prof,
-            um.denominacion um, pd.cantidad_requerida cantidad, pd.id_descuento, pd.precio precio_unitario, pd.sub_total, pd.igv, pd.total, pd.id_unidad_medida, pd.descuento, pd.valor_venta_bruto
+            um.denominacion um, pd.cantidad_requerida cantidad, pd.id_descuento, pd.precio precio_unitario, pd.sub_total, pd.igv, pd.total, pd.id_unidad_medida, pd.descuento, pd.valor_venta_bruto,
+            pd.precio_venta, pd.valor_venta
             FROM orden_compras oc
             inner join orden_compra_detalles pd on pd.id_orden_compra = oc.id 
             inner join productos pr on pr.id = pd.id_producto
