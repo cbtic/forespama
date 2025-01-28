@@ -151,7 +151,12 @@ class EntradaProductosController extends Controller
             $sub_total = $request->input('sub_total');
             $igv = $request->input('igv');
             $total = $request->input('total');
-
+            $precio_unitario_ = $request->input('precio_unitario_');
+            $valor_venta_bruto = $request->input('valor_venta_bruto');
+            $valor_venta = $request->input('valor_venta');
+            $descuento = $request->input('descuento');
+            $porcentaje = $request->input('porcentaje');
+            $id_descuento = $request->input('id_descuento');
             
             $entrada_producto->fecha_ingreso = $request->fecha_entrada;
             $entrada_producto->id_tipo_documento = $request->tipo_documento;
@@ -190,10 +195,18 @@ class EntradaProductosController extends Controller
                 $entradaProducto_detalle->id_marca = $marca[$index];
                 $entradaProducto_detalle->estado = 1;
                 $entradaProducto_detalle->id_producto = $descripcion[$index];
-                $entradaProducto_detalle->costo = $precio_unitario[$index];
+                $entradaProducto_detalle->costo = $precio_unitario_[$index];
+                $entradaProducto_detalle->valor_venta_bruto = $valor_venta_bruto[$index];
+                $entradaProducto_detalle->precio_venta = $precio_unitario[$index];
+                $entradaProducto_detalle->valor_venta = $valor_venta[$index];
+                $entradaProducto_detalle->id_descuento = $id_descuento[$index];
                 //$entradaProducto_detalle->fecha_fabricacion = $fecha_fabricacion[$index];
                 $entradaProducto_detalle->id_estado_bien = $estado_bien[$index];
-
+                if($id_descuento[$index]==1){
+                    $entradaProducto_detalle->descuento = $descuento[$index];
+                }else if($id_descuento[$index]==2){
+                    $entradaProducto_detalle->descuento = $porcentaje[$index];
+                }
                 /*$entradaProducto_detalle->descripcion = $descripcion[$index];
                 $entradaProducto_detalle->cod_interno = $cod_interno[$index];
                 $entradaProducto_detalle->cantidad_compra = $cantidad_compra[$index];
@@ -217,7 +230,7 @@ class EntradaProductosController extends Controller
                     $kardex = new Kardex;
                     $kardex->id_producto = $descripcion[$index];
                     $kardex->salidas_cantidad = $cantidad_ingreso[$index];
-                    $kardex->costo_salidas_cantidad = $precio_unitario[$index];
+                    $kardex->costo_salidas_cantidad = $precio_unitario_[$index];
                     $kardex->total_salidas_cantidad = $total[$index];
                     if($kardex_buscar){
                         $cantidad_saldo = $kardex_buscar->saldos_cantidad - $cantidad_ingreso[$index];
@@ -241,7 +254,7 @@ class EntradaProductosController extends Controller
                     $kardex = new Kardex;
                     $kardex->id_producto = $descripcion[$index];
                     $kardex->entradas_cantidad = $cantidad_ingreso[$index];
-                    $kardex->costo_entradas_cantidad = $precio_unitario[$index];
+                    $kardex->costo_entradas_cantidad = $precio_unitario_[$index];
                     $kardex->total_entradas_cantidad = $total[$index];
                     if($kardex_buscar){
                         $cantidad_saldo = $kardex_buscar->saldos_cantidad + $cantidad_ingreso[$index];
@@ -362,6 +375,12 @@ class EntradaProductosController extends Controller
             $sub_total = $request->input('sub_total');
             $igv = $request->input('igv');
             $total = $request->input('total');
+            $precio_unitario_ = $request->input('precio_unitario_');
+            $valor_venta_bruto = $request->input('valor_venta_bruto');
+            $valor_venta = $request->input('valor_venta');
+            $descuento = $request->input('descuento');
+            $porcentaje = $request->input('porcentaje');
+            $id_descuento = $request->input('id_descuento');
             
             $salida_producto->fecha_salida = $request->fecha_entrada;
             $salida_producto->id_tipo_documento = $request->tipo_documento;
@@ -402,7 +421,16 @@ class EntradaProductosController extends Controller
                 $salida_producto_detalle->estado = 1;
                 $salida_producto_detalle->cerrado = 1;
                 $salida_producto_detalle->id_producto = $descripcion[$index];
-                $salida_producto_detalle->costo = $precio_unitario[$index];
+                $salida_producto_detalle->costo = $precio_unitario_[$index];
+                $salida_producto_detalle->valor_venta_bruto = $valor_venta_bruto[$index];
+                $salida_producto_detalle->precio_venta = $precio_unitario[$index];
+                $salida_producto_detalle->valor_venta = $valor_venta[$index];
+                $salida_producto_detalle->id_descuento = $id_descuento[$index];
+                if($id_descuento[$index]==1){
+                    $salida_producto_detalle->descuento = $descuento[$index];
+                }else if($id_descuento[$index]==2){
+                    $salida_producto_detalle->descuento = $porcentaje[$index];
+                }
                 //$salida_producto_detalle->fecha_fabricacion = "2024-08-18";
                 $salida_producto_detalle->id_estado_productos = $estado_bien[$index];
 
@@ -429,7 +457,7 @@ class EntradaProductosController extends Controller
                     $kardex = new Kardex;
                     $kardex->id_producto = $descripcion[$index];
                     $kardex->salidas_cantidad = $cantidad_ingreso[$index];
-                    $kardex->costo_salidas_cantidad = $precio_unitario[$index];
+                    $kardex->costo_salidas_cantidad = $precio_unitario_[$index];
                     $kardex->total_salidas_cantidad = $total[$index];
                     if($kardex_buscar){
                         $cantidad_saldo = $kardex_buscar->saldos_cantidad - $cantidad_ingreso[$index];
@@ -453,7 +481,7 @@ class EntradaProductosController extends Controller
                     $kardex = new Kardex;
                     $kardex->id_producto = $descripcion[$index];
                     $kardex->salidas_cantidad = $cantidad_ingreso[$index];
-                    $kardex->costo_salidas_cantidad = $precio_unitario[$index];
+                    $kardex->costo_salidas_cantidad = $precio_unitario_[$index];
                     $kardex->total_salidas_cantidad = $total[$index];
                     if($kardex_buscar){
                         $cantidad_saldo = $kardex_buscar->saldos_cantidad + $cantidad_ingreso[$index];
