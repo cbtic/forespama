@@ -950,7 +950,7 @@ class ComprobanteController extends Controller
                     //$fecha_hoy = date('Y-m-d');
 
                     $items1 = array(
-                        "id" => 1081517, 
+                        "id" => 0, 
                         "fecha" => $fecha_hoy,
                         "denominacion" => "REDONDEO",
                         "descripcion" => "REDONDEO",
@@ -979,7 +979,7 @@ class ComprobanteController extends Controller
                     //$fecha_hoy = date('Y-m-d');
 
                     $items1 = array(
-                        "id" => 1081517, 
+                        "id" => 0, 
                         "fecha" => $fecha_hoy,
                         "denominacion" => "REDONDEO",
                         "descripcion" => "REDONDEO",
@@ -1053,16 +1053,7 @@ class ComprobanteController extends Controller
                 $id_proforma = $request->id_proforma;
                 $id_orden_compra = $request->id_orden_compra;
 
-                if($id_orden_compra!=""){
-                    $id_modulo="1";
-                    $pk_registro=$id_orden_compra;
-                }elseif($id_proforma!=""){
-                    $id_modulo="2";
-                    $pk_registro=$id_proforma;
-                }else{
-                    $id_modulo="0";
-                    $pk_registro="0";             
-                } 
+
 
                 //echo($pk_registro);
                 //exit();
@@ -1070,7 +1061,19 @@ class ComprobanteController extends Controller
 
                 foreach ($tarifa as $key => $value) {
 
-
+                    
+                    if($id_orden_compra!=""){
+                        $id_modulo="1";
+                        $pk_registro=$value['id'];
+                        //$pk_registro=$id_orden_compra;
+                    }elseif($id_proforma!=""){
+                        $id_modulo="2";
+                        $pk_registro=$value['id'];
+                        //$pk_registro=$id_proforma;
+                    }else{
+                        $id_modulo="0";
+                        $pk_registro="0";             
+                    } 
 
                     $valorizacion = new Valorizacione;
                     $valorizacion->id_modulo = $id_modulo;
