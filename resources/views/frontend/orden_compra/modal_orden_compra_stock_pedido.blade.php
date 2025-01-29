@@ -966,7 +966,7 @@ function modal_tiendas_orden_compra(id){
 								<th>Marca</th>
                                 <th>COD. INT.</th>
                                 <th>Cantidad</th>
-                                <th>Precio Unitario</th>
+                                <th>Precio Venta</th>
                                 <th>Stock prod terminado VES</th>
                                 <th>Stock prod terminado OXA</th>
                                 <th>Stock total</th>
