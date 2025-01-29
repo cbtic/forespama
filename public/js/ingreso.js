@@ -3179,9 +3179,11 @@ function cargarOrdenCompraDet(id) {
     // Limpiar la tabla
     $("#tblValorizacion tbody").empty();
 
+	var emp = $('#empresa_id').val();
+
     // Realizar la solicitud AJAX
     $.ajax({
-		url: `/ingreso/listar_orden_compra_det/${id}`,
+		url: `/ingreso/listar_orden_compra_det/${id}/${emp}`,
         type: "GET",
         success: function (result) {
             // Insertar el resultado en la tabla

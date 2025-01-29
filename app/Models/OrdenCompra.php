@@ -117,11 +117,11 @@ class OrdenCompra extends Model
         return $data;
     }
 
-    function getOrdenCompraDetalle($id){
+    function getOrdenCompraDetalle($id, $emp){
 
         $cad = "SELECT pd.id, '' serie, oc.numero_orden_compra, oc.fecha_orden_compra fecha, oc.id_moneda, 'SOLES' moneda, pd.sub_total sub_total_, pd.igv igv_, pd.total total_, 
             '01/01/2025' fecha_vencimiento, pd.id_producto,  pr.codigo, pr.denominacion, 
-            case when  oc.id_empresa_vende = 23 then 
+            case when  oc.id_empresa_vende = ".$emp." then 
             (SELECT pe.codigo_producto ||'-'|| pe.descripcion_producto||'('|| pe.codigo_empresa||'-'|| pe. descripcion_empresa||')'  
             FROM equivalencia_productos pe
             where pe.id_empresa = oc.id_empresa_vende and pe.id_producto = pd.id_producto and pe.estado= '1'

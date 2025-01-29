@@ -209,7 +209,7 @@ Route::post('ingreso/listar_valorizacion_concepto', [IngresoController::class, '
 Route::post('ingreso/listar_valorizacion_periodo', [IngresoController::class, 'listar_valorizacion_periodo'])->name('ingreso.listar_valorizacion_periodo');
 Route::post('ingreso/listar_valorizacion_mes', [IngresoController::class, 'listar_valorizacion_mes'])->name('ingreso.listar_valorizacion_mes');
 Route::get('ingreso/listar_proforma_det/{id}', [IngresoController::class, 'listar_proforma_det'])->name('ingreso.listar_proforma_det');
-Route::get('ingreso/listar_orden_compra_det/{id}', [IngresoController::class, 'listar_orden_compra_det'])->name('ingreso.listar_orden_compra_det');
+Route::get('ingreso/listar_orden_compra_det/{id}/{emp}', [IngresoController::class, 'listar_orden_compra_det'])->name('ingreso.listar_orden_compra_det');
 Route::get('ingreso/obtener_proforma_id/{id}', [IngresoController::class, 'obtener_proforma_id'])->name('ingreso.obtener_proforma_id');
 
 Route::get('ingreso/obtener_pago/{tipo_documento}/{persona_id}', [IngresoController::class, 'obtener_pago'])->name('ingreso.obtener_pago')->where('tipo_documento', '(.*)');
