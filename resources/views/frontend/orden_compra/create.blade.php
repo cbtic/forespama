@@ -454,6 +454,7 @@ label.form-control-sm{
                             <th>Id</th>
 							<th>Tipo Documento</th>
 							<th>Empresa Compra</th>
+							<th>N° OC Cliente</th>
 							<th>Empresa Vende</th>
                             <th>Fecha</th>
 							<th>N&uacute;mero OC</th>

@@ -112,6 +112,20 @@
     background-color: #f8f9fa; /* Fondo ligeramente gris al pasar el cursor */
     border-color: #bbb;
 }
+
+.btn-fosforescente {
+    background-color: #FFFF00 !important; /* Amarillo fosforescente */
+    color: black; /* Texto negro */
+    font-weight: bold;
+    border: none !important; /* Elimina cualquier borde */
+    outline: none; /* Evita bordes al hacer clic */
+    transition: background-color 0.3s ease-in-out;
+}
+
+.btn-fosforescente:hover {
+    background-color:  #E5D100 !important; /* Se oscurece un poco */
+}
+
 </style>
 
 <!--<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"/>-->
@@ -1198,7 +1212,7 @@ $('#moneda_descripcion').val(descripcion);
 
                         <div class="card-body">	
 
-					<div class="table-responsive">
+					<div class="table-responsive" style="overflow-y: auto; max-height: 450px;">
 						<table id="tblOrdenCompraDetalle" class="table table-hover table-sm">
 							<thead>
 							<tr style="font-size:13px">
@@ -1263,11 +1277,11 @@ $('#moneda_descripcion').val(descripcion);
                                     if($id>0){
                                         if($orden_compra->tienda_asignada==0){
                                 ?>
-                                <button style="font-size:12px;margin-left:10px" type="button" class="btn btn-sm btn-secondary" data-toggle="modal" onclick="modal_tiendas_orden_compra()" >Agregar Tiendas</button>
+                                <button style="font-size:12px;margin-left:10px;" type="button" class="btn btn-sm btn-fosforescente" data-toggle="modal" onclick="modal_tiendas_orden_compra()" >Agregar Tiendas</button>
                                 <?php 
                                         }else{
                                 ?>
-                                <button style="font-size:12px;margin-left:10px" type="button" class="btn btn-sm btn-secondary" data-toggle="modal" onclick="modal_tiendas_orden_compra()" disabled>Agregar Tiendas</button>
+                                <button style="font-size:12px;margin-left:10px;" type="button" class="btn btn-sm btn-fosforescente" data-toggle="modal" onclick="modal_tiendas_orden_compra()" disabled>Agregar Tiendas</button>
                                 <?php
                                         }
                                 ?>
