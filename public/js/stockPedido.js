@@ -194,6 +194,16 @@ function datatablenew(){
                 "bSortable": true,
                 "aTargets": [2]
                 },
+
+				{
+				"mRender": function (data, type, row) {
+					var numero_orden_compra_cliente = "";
+					if(row.numero_orden_compra_cliente!= null)numero_orden_compra_cliente = row.numero_orden_compra_cliente;
+					return numero_orden_compra_cliente;
+				},
+				"bSortable": true,
+				"aTargets": [3]
+				},
 				
 				{
                 "mRender": function (data, type, row) {
@@ -202,7 +212,7 @@ function datatablenew(){
 					return empresa_vende;
                 },
                 "bSortable": true,
-                "aTargets": [3]
+                "aTargets": [4]
                 },
 
 				{
@@ -212,7 +222,7 @@ function datatablenew(){
 					return fecha_orden_compra;
 				},
 				"bSortable": true,
-				"aTargets": [4]
+				"aTargets": [5]
 				},
 				{
 				"mRender": function (data, type, row) {
@@ -221,7 +231,7 @@ function datatablenew(){
 					return numero_orden_compra;
 				},
 				"bSortable": true,
-				"aTargets": [5]
+				"aTargets": [6]
 				},
 				{
 				"mRender": function (data, type, row) {
@@ -230,7 +240,7 @@ function datatablenew(){
 					return almacen_origen;
 				},
 				"bSortable": true,
-				"aTargets": [6]
+				"aTargets": [7]
 				},
 				{
 				"mRender": function (data, type, row) {
@@ -239,7 +249,7 @@ function datatablenew(){
 					return almacen_destino;
 				},
 				"bSortable": true,
-				"aTargets": [7]
+				"aTargets": [8]
 				},
 				{
 				"mRender": function (data, type, row) {
@@ -248,7 +258,7 @@ function datatablenew(){
 					return cerrado;
 				},
 				"bSortable": true,
-				"aTargets": [8]
+				"aTargets": [9]
 				},
 				{
 					"mRender": function (data, type, row) {
@@ -262,7 +272,7 @@ function datatablenew(){
 						return estado;
 					},
 					"bSortable": false,
-					"aTargets": [9]
+					"aTargets": [10]
 				},
 				{
 					"mRender": function (data, type, row) {
@@ -285,7 +295,7 @@ function datatablenew(){
 						return html;
 					},
 					"bSortable": false,
-					"aTargets": [10],
+					"aTargets": [11],
 				},
 
             ]
