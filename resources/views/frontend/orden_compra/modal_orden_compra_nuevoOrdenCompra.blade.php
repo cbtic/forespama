@@ -1212,7 +1212,7 @@ $('#moneda_descripcion').val(descripcion);
 
                         <div class="card-body">	
 
-					<div class="table-responsive" style="overflow-y: auto; max-height: 450px;">
+					<div class="table-responsive" style="overflow-y: auto; max-height: 400px;">
 						<table id="tblOrdenCompraDetalle" class="table table-hover table-sm">
 							<thead>
 							<tr style="font-size:13px">
