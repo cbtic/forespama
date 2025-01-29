@@ -619,7 +619,8 @@ class OrdenCompraController extends Controller
             $total = $precio_venta * $cantidad_requerida;
             $valor_unitario = $precio_venta / 1.18;
             //$igv = round(0.18 * $total,2);
-            $igv = round(($total / 1.18) * 0.18,2);
+            $valor_venta_bruto = $total / 1.18;
+            $igv = $valor_venta_bruto * 0.18;
             $sub_total = $total - $igv;
             
             $ordenCompraDetalle = new OrdenCompraDetalle;
