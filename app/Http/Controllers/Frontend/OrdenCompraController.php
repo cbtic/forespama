@@ -613,12 +613,14 @@ class OrdenCompraController extends Controller
             $producto = Producto::find($id_producto);
             $cantidad_requerida = $row['CANTIDAD_PROD'];
             $id_unidad_medida = $producto->id_unidad_medida;
-            $precio = $row['COSTO_UNI'];
+            $precio_venta = $row['COSTO_UNI'];
 
-            $sub_total = $cantidad_requerida * $precio;
-            $igv = round(0.18 * $sub_total,2);
-            $total = $sub_total + $igv;
-
+            //$total = $sub_total + $igv;
+            $total = $precio_venta * $cantidad_requerida;
+            $valor_unitario = $precio_venta / 1.18;
+            $igv = round(0.18 * $total,2);
+            $sub_total = $total - $igv;
+            
             $ordenCompraDetalle = new OrdenCompraDetalle;
             $ordenCompraDetalle->id_orden_compra = $id_orden_compra;
             $ordenCompraDetalle->id_producto = $id_producto;
@@ -628,7 +630,10 @@ class OrdenCompraController extends Controller
             $ordenCompraDetalle->estado = $estado;
             $ordenCompraDetalle->id_unidad_medida = $id_unidad_medida;
             $ordenCompraDetalle->id_estado_producto = $id_estado_producto;
-            $ordenCompraDetalle->precio = $precio;
+            $ordenCompraDetalle->precio_venta = $precio_venta;
+            $ordenCompraDetalle->precio = $valor_unitario;
+            $ordenCompraDetalle->valor_venta_bruto = $sub_total;
+            $ordenCompraDetalle->valor_venta = $sub_total;
             $ordenCompraDetalle->sub_total = $sub_total;
             $ordenCompraDetalle->igv = $igv;
             $ordenCompraDetalle->total = $total;
