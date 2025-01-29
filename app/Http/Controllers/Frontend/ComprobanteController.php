@@ -2721,21 +2721,21 @@ class ComprobanteController extends Controller
 		$data["correoReceptor"] = $factura->correo_des; //"frimacc@gmail.com";
 		$data["distritoEmisor"] = "LIMA";
 		$data["esContingencia"] = false;
-		$data["telefonoEmisor"] = "511 4710739";
+		$data["telefonoEmisor"] = "51 63506623";
 		$data["totalAnticipos"] = "0.00";
-		$data["direccionEmisor"] = "AV. SAN FELIPE NRO. 999 LIMA - LIMA - JESUS MARIA ";
-		$data["provinciaEmisor"] = "LIMA";
+		$data["direccionEmisor"] = "CAR.MARGINAL KM. 42 SEC. MIRAFLORES (A UNA CDRA. UNIVERSIDAD DE OXAPAMPA) PASCO - OXAPAMPA - OXAPAMPA";
+		$data["provinciaEmisor"] = "OXAPAMPA";
 		$data["totalDescuentos"] = str_replace(",","",number_format($factura->total_descuentos,2));
 		$data["totalOPGravadas"] = "0.00"; //"127.12";
 		$data["codigoPaisEmisor"] = "PE";
 		$data["totalOPGratuitas"] = "0.00";        
 		$data["docAfectadoFisico"] = false;
 		$data["importeTotalVenta"] = str_replace(",","",number_format($factura->total,2)); //"150.00";
-		$data["razonSocialEmisor"] = "COLEGIO DE ARQUITECTOS DEL PERU-REGIONAL LIMA";
+		$data["razonSocialEmisor"] = "FORESTAL PAMA S.A.C.";
 		$data["totalOPExoneradas"] = "0.00";
 		$data["totalOPNoGravadas"] = str_replace(",","",number_format($factura->subtotal,2));
 		$data["codigoPaisReceptor"] = "PE";
-		$data["departamentoEmisor"] = "JESUS MARIA";
+		$data["departamentoEmisor"] = "OXAPAMPA";
 		$data["descuentosGlobales"] = "0.00";
 		$data["codigoTipoOperacion"] = "0101";
 		$data["razonSocialReceptor"] = $factura->destinatario;//"Freddy Rimac Coral";
@@ -2845,7 +2845,7 @@ class ComprobanteController extends Controller
 
 
 
-                $fac_ruta_comprobante = config('values.ws_fac_host')."/see/server/consult/pdf?nde=20160453908&td=" .$this->getTipoDocumento($factura->tipo) ."&se=" .$factura->serie. "&nu=" .$factura->numero. "&fe=".date("Y-m-d",strtotime($factura->fecha))."&am=" .$factura->total;
+                $fac_ruta_comprobante = config('values.ws_fac_host')."/see/server/consult/pdf?nde=20486785994&td=" .$this->getTipoDocumento($factura->tipo) ."&se=" .$factura->serie. "&nu=" .$factura->numero. "&fe=".date("Y-m-d",strtotime($factura->fecha))."&am=" .$factura->total;
                 //$fac_ruta_comprobante = config('values.ws_fac_host')."/see/server/consult/pdf?nde=20601973759&td=" .$this->getTipoDocumento($factura->tipo) ."&se=" .$factura->serie. "&nu=" .$factura->numero. "&fe=".date("Y-m-d",strtotime($factura->fecha))."&am=" .$factura->total;
                 print_r($fac_ruta_comprobante); 
 
