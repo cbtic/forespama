@@ -510,7 +510,7 @@ $.ajax({
                         <td>${orden_compra.marca}</td>
                         <td>${orden_compra.codigo}</td>
                         <td>${orden_compra.cantidad_requerida}</td>
-                        <td>${orden_compra.precio || 0}</td>
+                        <td>${orden_compra.precio_venta || 0}</td>
                         <td style="background-color:`+color_ves+`">${orden_compra.stock_ves}</td>
                         <td style="background-color:`+color_oxa+`">${orden_compra.stock_oxa}</td>
                         <td style="background-color:`+color_total+`">`+total+`</td>

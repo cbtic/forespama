@@ -179,7 +179,7 @@ class GuiaInternaController extends Controller
         $id_departamento = substr($id_ubigeo,0,2);
         $id_provincia = substr($id_ubigeo,2,2);
 
-        $departamento = $ubigeo->getdepartamentoByUbigeo($id_departamento);
+        $departamento = $ubigeo->getDepartamentoByUbigeo($id_departamento);
         $provincia = $ubigeo->getProvinciaByUbigeo($id_departamento, $id_provincia);
         $distrito = $ubigeo->getDistritoByUbigeo($id_ubigeo);
         
@@ -191,7 +191,7 @@ class GuiaInternaController extends Controller
             $guia_interna->guia_cod_estab_llegada = $request->punto_llegada_select;
             $guia_interna->guia_cod_estab_partida = $request->punto_partida;
             $guia_interna->punto_partida = $request->punto_partida_descripcion;
-            $guia_interna->punto_llegada = $request->punto_llegada_descripcion;
+            $guia_interna->punto_llegada = $request->punto_llegada_descripcion." - ".$departamento." - ".$provincia." - ".$distrito;
         }else{
             $guia_interna->punto_llegada = $request->punto_llegada_input." - ".$departamento." - ".$provincia." - ".$distrito;
             $guia_interna->guia_cod_estab_partida = $request->punto_partida;
