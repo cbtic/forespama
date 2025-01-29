@@ -884,7 +884,7 @@
                                                             <input type="hidden" readonly name="igv" id="igv" value="" class="form-control form-control-sm">
                                                             <input type="hidden" readonly name="idConcepto" id="idConcepto" value="" class="form-control form-control-sm">
                                                             
-                                                            <input type="hidden" readonly name="id_proforma" id="id_proforma" value="0" class="form-control form-control-sm">
+                                                            <input type="hidden" readonly name="id_proforma" id="id_proforma" value="" class="form-control form-control-sm">
                                                             <input type="hidden" readonly name="accion_" id="accion_" value="" class="form-control form-control-sm">
 
                                                         </td>
