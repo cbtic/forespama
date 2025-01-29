@@ -2687,7 +2687,7 @@ class ComprobanteController extends Controller
 							"codigoProductoItem"=> ($row->cod_contable!="")?$row->cod_contable:"0000000", //"002",
                             "codigoDescuentoItem"=> "00",
 							"valorUnitarioSinIgv"=> str_replace(",","",number_format($row->pu,2)), //"42.3728813559",
-							"precioUnitarioConIgv"=> str_replace(",","",number_format($row->pu_con_igv,2)), //"50.0000000000",
+							"precioUnitarioConIgv"=> str_replace(",","",number_format($row->precio_venta,2)), //"50.0000000000",
 							"unidadMedidaComercial"=> "SERV",
 							"codigoAfectacionIGVItem"=> $row->afect_igv,
 							"porcentajeDescuentoItem"=> str_replace(",","",number_format(($row->descuento*100)/$row->pu,2)),
