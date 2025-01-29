@@ -89,6 +89,23 @@ class OrdenCompra extends Model
         }
     }
 
+    function getOrdenCompraByIdPdf($id){
+
+        $cad = "select oc.id, e.razon_social empresa_compra, e2.razon_social empresa_vende, to_char(oc.fecha_orden_compra,'dd-mm-yyyy') fecha_orden_compra , 
+            oc.numero_orden_compra, tm.denominacion tipo_documento, oc.estado, tm2.denominacion igv, oc.numero_orden_compra_cliente, 
+            oc.total, oc.sub_total, oc.igv, COALESCE (oc.descuento, 0 , oc.descuento) descuento
+        from orden_compras oc 
+            inner join empresas e on oc.id_empresa_compra = e.id 
+            inner join empresas e2 on oc.id_empresa_vende = e2.id 
+            inner join tabla_maestras tm on oc.id_tipo_documento = tm.codigo ::int and tm.tipo = '54'
+            inner join tabla_maestras tm2 on oc.igv_compra = tm2.codigo ::int and tm2.tipo = '51'
+        where oc.id='".$id."'
+            and oc.estado='1'";
+
+		$data = DB::select($cad);
+        return $data;
+
+    }
 
     function getOrdenCompraByCod($numero){
 
