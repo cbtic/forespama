@@ -120,11 +120,11 @@ class OrdenCompra extends Model
     function getOrdenCompraDetalle($id, $emp){
 
         $cad = "SELECT pd.id, '' serie, oc.numero_orden_compra, oc.fecha_orden_compra fecha, oc.id_moneda, 'SOLES' moneda, pd.sub_total sub_total_, pd.igv igv_, pd.total total_, 
-            '01/01/2025' fecha_vencimiento, pd.id_producto,  pr.codigo, pr.denominacion, 
-            case when  oc.id_empresa_vende = ".$emp." then 
-            (SELECT pe.codigo_producto ||'-'|| pe.descripcion_producto||'('|| pe.codigo_empresa||'-'|| pe. descripcion_empresa||')'  
+            '01/01/2025' fecha_vencimiento, pd.id_producto,  pr.codigo, pr.denominacion,
+            case when  oc.id_empresa_compra = ".$emp." then 
+            (SELECT pe.codigo_producto ||'-'|| pr.denominacion ||'('|| pe.codigo_empresa||'-'|| pe. descripcion_empresa||')'  
             FROM equivalencia_productos pe
-            where pe.id_empresa = oc.id_empresa_vende and pe.id_producto = pd.id_producto and pe.estado= '1'
+            where pe.id_empresa = oc.id_empresa_compra and pe.id_producto = pd.id_producto and pe.estado= '1'            
             )	else pr.codigo ||'-'|| pr.denominacion end  producto_prof,
             um.denominacion um, pd.cantidad_requerida cantidad, pd.id_descuento, pd.precio precio_unitario, pd.sub_total, pd.igv, pd.total, pd.id_unidad_medida, pd.descuento, pd.valor_venta_bruto,
             pd.precio_venta, pd.valor_venta
