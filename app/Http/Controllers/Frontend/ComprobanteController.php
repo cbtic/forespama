@@ -738,7 +738,7 @@ class ComprobanteController extends Controller
                     $persona2 = Persona::where('id', $id_persona_act)->first();
                     if($persona2){
                         $persona2->direccion = $direccion;
-                        $persona2->email1 = $correo;
+                        $persona2->email = $correo;
                         $persona2->save();
                     }
 
@@ -759,7 +759,7 @@ class ComprobanteController extends Controller
                     $persona2 = Persona::where('id', $id_persona_act)->first();
                     if($persona2){                        
                         $persona2->direccion = $direccion;
-                        $persona2->email1 = $correo;
+                        $persona2->email = $correo;
                         $persona2->save();
                     }
                   
@@ -788,7 +788,7 @@ class ComprobanteController extends Controller
                     $persona2 = Persona::where('id', $id_persona_act)->first();
                     if($persona2){  
                         $persona2->direccion = $direccion;
-                        $persona2->email1 = $correo;
+                        $persona2->email = $correo;
                         $persona2->save();
                     }
                     
