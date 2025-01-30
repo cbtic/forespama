@@ -8,6 +8,7 @@
 /storage/*.key
 /vendor
 /.vscode
+/public/img
 /public/orden_compra
 *.sublime-project
 *.sublime-workspace
