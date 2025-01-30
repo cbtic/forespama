@@ -3033,7 +3033,7 @@ function AddFila(){
 		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][id_producto]" value="'+id_producto+'" />';
 		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][codigo_producto]" value="'+codigo_producto+'" />';
 		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][id_descuento]" value="'+id_descuento+'" />';
-		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][precio_unitario]" value="'+precio_venta+'" />';
+		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][precio_unitario]" value="'+valor_unitario+'" />';
 		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][sub_total]" value="'+valor_venta+'" />';
 		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][id_unidad_medida]" value="'+id_um+'" />';
 		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][valor_venta_bruto]" value="'+valor_venta_bruto+'" />';
@@ -3041,10 +3041,11 @@ function AddFila(){
 		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][item]" value="'+cont+'" />';
 		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][fecha]" value="'+fecha_+'" />';
 		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][denominacion]" value="'+nombre_producto+'" />';
-		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][monto]" value="'+valor_venta+'" />';
+		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][monto]" value="'+total+'" />';
 		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][pu]" value="'+valor_unitario+'" />';
 		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][igv]" value="'+igv+'" />';
 		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][pv]" value="'+precio_venta+'" />';
+		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][vv]" value="'+valor_venta+'" />';
 		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][total]" value="'+total+'" />';
 		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][moneda]" value="'+moneda+'" />';
 		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][id_moneda]" value="'+id_moneda+'" />';

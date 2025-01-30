@@ -139,6 +139,8 @@ class ProformaController extends Controller
         $p_prof.=$request->stotal.",";
         $p_prof.=$request->igv.",";
         $p_prof.=$request->total.",";
+        //totalDescuento
+
         $p_prof.="1"; //$request->estado;
         //if(strlen($p_prof)>1)$p_prof=substr($p_prof,0,-1);
         $p_prof.="}";
@@ -194,9 +196,9 @@ class ProformaController extends Controller
             $p_dprof.=$value['igv'].",";
             $p_dprof.=$value['total'].",";
             $p_dprof.=$id_user.",";
-            $p_dprof.="1";
+            $p_dprof.="1".",";
             $p_dprof.=$value['pv'].",";
-            $p_dprof.=$value['monto'];
+            $p_dprof.=$value['vv']; 
             $p_dprof.="},";    
         }
         if(strlen($p_dprof)>1)$p_dprof=substr($p_dprof,0,-1);
