@@ -286,7 +286,7 @@ function cambiarGeneralEspecifico(){
                                         <select name="general_especifico" id="general_especifico" class="form-control form-control-sm">
                                             <option value="" <?php echo ($parametro->general_especifico == '') ? 'selected' : ''; ?>>--Seleccionar--</option>
                                             <option value="1" <?php echo ($parametro->general_especifico == '1') ? 'selected' : ''; ?>>General</option>
-                                            <option value="0" <?php echo ($parametro->general_especifico == '2') ? 'selected' : ''; ?>>Especifico</option>
+                                            <option value="2" <?php echo ($parametro->general_especifico == '2') ? 'selected' : ''; ?>>Especifico</option>
                                         </select>
                                     </div>
                                 </div>
