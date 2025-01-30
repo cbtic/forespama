@@ -8,6 +8,7 @@ use App\Models\Parametro;
 use App\Models\Empresa;
 use App\Models\OrdenCompra;
 use App\Models\ParametroOrdenCompra;
+use App\Models\TablaMaestra;
 use Auth;
 use Carbon\Carbon;
 
@@ -37,10 +38,14 @@ class ParametroController extends Controller
 			$parametro = new Parametro;
 		}
 
+        $tabla_maestra_model = new TablaMaestra;
+
+        $tipo_parametro = $tabla_maestra_model->getMaestroByTipo(72);
+
         $empresa = Empresa::all();
 		//var_dump($codigo[0]->codigo);exit();
 
-		return view('frontend.parametro.modal_parametros_nuevoParametro',compact('id','parametro','empresa'));
+		return view('frontend.parametro.modal_parametros_nuevoParametro',compact('id','parametro','empresa','tipo_parametro'));
 
     }
 
@@ -82,6 +87,7 @@ class ParametroController extends Controller
 		$parametro->anio = $request->anio;
 		$parametro->nombre_acuerdo_comercial = $request->nombre_comercial;
 		$parametro->porcentaje_valor = $request->procentaje_valor;
+        $parametro->id_tipo = $request->tipo;
 		$parametro->aplica_detalle = $request->aplica_detalle;
 		$parametro->general_especifico = $request->general_especifico;
         $parametro->estado = 1;
@@ -101,7 +107,7 @@ class ParametroController extends Controller
     }
 
     public function create_valida_parametro(){
-		
+
 		return view('frontend.parametro.create_valida_parametro');
 
 	}

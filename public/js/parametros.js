@@ -136,6 +136,16 @@ function datatablenew(){
 
 				{
 				"mRender": function (data, type, row) {
+					var tipo = "";
+					if(row.tipo!= null)tipo = row.tipo;
+					return tipo;
+				},
+				"bSortable": true,
+				"aTargets": [5]
+				},
+				
+				{
+				"mRender": function (data, type, row) {
 					var aplica_detalle = "";
 					if(row.aplica_detalle == 1){
 						aplica_detalle = "Si";
@@ -146,7 +156,7 @@ function datatablenew(){
 					return aplica_detalle;
 				},
 				"bSortable": true,
-				"aTargets": [5]
+				"aTargets": [6]
 				},
 
 				{
@@ -155,13 +165,13 @@ function datatablenew(){
 					if(row.general_especifico == 1){
 						general_especifico = "General";
 					}
-					if(row.general_especifico == 0){
+					if(row.general_especifico == 2){
 						general_especifico = "Especifido";
 					}
 					return general_especifico;
 				},
 				"bSortable": true,
-				"aTargets": [6]
+				"aTargets": [7]
 				},
 
 				{
@@ -176,7 +186,7 @@ function datatablenew(){
 					return estado;
 				},
 				"bSortable": false,
-				"aTargets": [7]
+				"aTargets": [8]
 				},
 				{
 					"mRender": function (data, type, row) {
@@ -202,7 +212,7 @@ function datatablenew(){
 						return html;
 					},
 					"bSortable": false,
-					"aTargets": [8],
+					"aTargets": [9],
 				},
 
             ]

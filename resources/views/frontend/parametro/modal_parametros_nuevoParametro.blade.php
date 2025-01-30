@@ -268,7 +268,20 @@ function cambiarGeneralEspecifico(){
                                         <input id="procentaje_valor" name="procentaje_valor" on class="form-control form-control-sm"  value="<?php echo $parametro->porcentaje_valor?>" type="text">
                                     </div>
                                 </div>
-
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <label class="control-label form-control-sm">Tipo</label>
+                                        <select name="tipo" id="tipo" class="form-control form-control-sm">
+                                            <option value="">--Seleccionar--</option>
+                                            <?php 
+                                            foreach ($tipo_parametro as $row){?>
+                                                <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$parametro->id_tipo)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                                <?php
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
+                                </div>
                                 <div class="col-lg-4">
                                     <div class="form-group">
                                         <label class="control-label form-control-sm">Aplica Detalle</label>

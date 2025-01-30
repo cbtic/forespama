@@ -380,6 +380,7 @@ label.form-control-sm{
 							<th>Año</th>
 							<th>Nombre Acuerdo Comercial</th>
 							<th>Porcentaje / Valor</th>
+							<th>Tipo</th>
 							<th>Aplica Detalle</th>
 							<th>General / Especifico</th>
 							<th>Estado</th> 
