@@ -179,10 +179,11 @@ function fn_save_tienda(){
 			success: function (result) {
 				
                 datatablenew();
-				datatableTiendaDetalle();
+				/*datatableTiendaDetalle();
                 if($('#id').val()==0){
                     $('#denominacion').val("");
-                }
+                }*/
+                $('#openOverlayOpc').modal('hide');
             },
     });
 }
@@ -308,7 +309,7 @@ function datatableTiendaDetalle(){
                                             <option value="">--Seleccionar--</option>
                                             <?php
                                             foreach ($zona_especifica as $row){?>
-                                                <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$tienda_detalle->id_zona_especifica)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                                <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$tienda->id_zona_especifica)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
                                              <?php 
                                             }
                                             ?>
@@ -321,7 +322,7 @@ function datatableTiendaDetalle(){
                         <div style="margin-top:15px" class="form-group">
                             <div class="col-sm-12 controls">
                                 <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
-                                    <a href="javascript:void(0)" onClick="fn_save_tienda()" class="btn btn-sm btn-success" style="margin-right: 15px;">Registrar</a>
+                                    <a href="javascript:void(0)" onClick="fn_save_tienda()" class="btn btn-sm btn-success" style="margin-right: 15px;">Guardar</a>
 								<a href="javascript:void(0)" onClick="$('#openOverlayOpc').modal('hide');window.location.reload();" class="btn btn-md btn-warning">Cerrar</a>
                                 </div>
                                                     
@@ -329,7 +330,7 @@ function datatableTiendaDetalle(){
                         </div> 
                             
                     </div>
-                    <div class="card-body">
+                    <!--<div class="card-body">
 
 						<div class="table-responsive">
 						<table id="tblTablaTiendaDetalle" class="table table-hover table-sm">
@@ -343,7 +344,7 @@ function datatableTiendaDetalle(){
 							</tbody>
 						</table>
 						</div>
-					</div>
+					</div>-->
                 </form>
                 </div>
                 <!-- /.box -->

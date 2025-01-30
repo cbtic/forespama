@@ -24,9 +24,14 @@ class TiendaController extends Controller
 
     public function create(){
 
+		$tablaMaestra_model = new TablaMaestra;
         $empresa = Empresa::all();
-		
-		return view('frontend.tiendas.create',compact('empresa'));
+
+		$zona = $tablaMaestra_model->getMaestroByTipo(69);
+		$tienda_s_m = $tablaMaestra_model->getMaestroByTipo(70);
+		$zona_especifica = $tablaMaestra_model->getMaestroByTipo(71);
+
+		return view('frontend.tiendas.create',compact('empresa', 'zona', 'tienda_s_m', 'zona_especifica'));
 
 	}
 
@@ -35,6 +40,9 @@ class TiendaController extends Controller
 		$tienda_model = new Tienda;
 		$p[]=$request->denominacion;
         $p[]=$request->empresa;
+		$p[]=$request->zona;
+		$p[]=$request->tienda_sm;
+		$p[]=$request->zona_especifica;
         $p[]=$request->estado;
 		$p[]=$request->NumeroPagina;
 		$p[]=$request->NumeroRegistros;

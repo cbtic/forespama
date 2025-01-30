@@ -61,6 +61,9 @@ function datatablenew(){
 
             var denominacion = $('#denominacion_bus').val();
 			var empresa = $('#empresa_bus').val();
+			var zona = $('#zona_bus').val();
+			var tienda_sm = $('#tienda_sm_bus').val();
+			var zona_especifica = $('#zona_especifica_bus').val();
 			var estado = $('#estado_bus').val();
 			
 			var _token = $('#_token').val();
@@ -70,7 +73,8 @@ function datatablenew(){
                 "type": "POST",
                 "url": sSource,
                 "data":{NumeroPagina:iNroPagina,NumeroRegistros:iCantMostrar,
-						denominacion:denominacion,empresa:empresa,estado:estado,
+						denominacion:denominacion,empresa:empresa,zona:zona, tienda_sm:tienda_sm,
+						zona_especifica:zona_especifica,estado:estado,
 						_token:_token
                        },
                 "success": function (result) {

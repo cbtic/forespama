@@ -351,11 +351,11 @@ label.form-control-sm{
 				
 				<div class="row" style="padding:20px 20px 0px 20px;">
 
-                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                    <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
                         <input id="denominacion_bus" name="denominacion_bus" on class="form-control form-control-sm"  placeholder="Denominaci&oacute;n">
 					</div>
 
-					<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
 						<select name="empresa_bus" id="empresa_bus" class="form-control form-control-sm" onchange="">
 							<option value="">--Seleccionar Empresa--</option>
 							<?php
@@ -366,8 +366,44 @@ label.form-control-sm{
 							?>
 						</select>
 					</div>
+
+					<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+						<select name="zona_bus" id="zona_bus" class="form-control form-control-sm">
+							<option value="">--Selec. Zona--</option>
+							<?php
+							foreach ($zona as $row){?>
+								<option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
+								<?php 
+							}
+							?>
+						</select>
+					</div>
+
+					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+						<select name="tienda_sm_bus" id="tienda_sm_bus" class="form-control form-control-sm">
+							<option value="">--Selec. Tienda SM--</option>
+							<?php
+							foreach ($tienda_s_m as $row){?>
+								<option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
+								<?php 
+							}
+							?>
+						</select>
+					</div>
+
+					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+						<select name="zona_especifica_bus" id="zona_especifica_bus" class="form-control form-control-sm">
+							<option value="">--Selec. Zona Especifica--</option>
+							<?php
+							foreach ($zona_especifica as $row){?>
+								<option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
+								<?php 
+							}
+							?>
+						</select>
+					</div>
 					
-                    <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+                    <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
 						<select name="estado_bus" id="estado_bus" class="form-control form-control-sm">
 							<option value="">Todos</option>
 							<option value="1" selected="selected">Activo</option>
