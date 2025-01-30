@@ -776,14 +776,24 @@ function agregarTiendas() {
         `;
 
         tbody.append(row);
-
+        //$('#tiendas'+n).select2();
+        
     }
+
+    // Forzar `select2` a usar el modal padre
+    $('.tiendas-select').select2({
+        width: '100%',
+        dropdownParent: $('#diveditpregOpc2') // Asegura que el dropdown se renderice en el modal correcto
+        //dropdownParent: $('#id_content_OverlayoneOpc2') // Asegura que el dropdown se renderice en el modal correcto
+    });
+
+    /*
     $('.tiendas-select').select2({
         width: '100%',
         allowClear: true,
         placeholder: '--Seleccionar--'
     });
-
+    */
     cargarDetalle(id, cantidad_tiendas);
 }
 
