@@ -358,13 +358,11 @@ class OrdenCompraController extends Controller
 
 		// Crear una instancia de Carbon a partir de la fecha
 
-		 $carbonDate =Carbon::now()->format('d-m-Y');
+		$carbonDate =Carbon::now()->format('d-m-Y');
 
-		 $currentHour = Carbon::now()->format('H:i:s');
+		$currentHour = Carbon::now()->format('H:i:s');
 
 		$pdf = Pdf::loadView('frontend.orden_compra.movimiento_orden_compra_pdf',compact('tipo_documento','empresa_compra','empresa_vende','fecha_orden_compra','numero_orden_compra','igv','datos_detalle','numero_orden_compra_cliente','tiendas_orden_compra_detalle','tiendas_orden_compra'));
-		
-
 
 		$pdf->setPaper('A4'); // Tamaño de papel (puedes cambiarlo según tus necesidades)
 
