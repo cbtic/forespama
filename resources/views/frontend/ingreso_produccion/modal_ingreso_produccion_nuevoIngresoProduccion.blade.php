@@ -471,29 +471,44 @@ function fn_save_ingreso_produccion(){
         bootbox.alert(msg);
         return false;
     }else{
-        var msgLoader = "";
-        msgLoader = "Procesando, espere un momento por favor";
-        var heightBrowser = $(window).width()/2;
-        $('.loader').css("opacity","0.8").css("height",heightBrowser).html("<div id='Grd1_wrapper' class='dataTables_wrapper'><div id='Grd1_processing' class='dataTables_processing panel-default'>"+msgLoader+"</div></div>");
-        $('.loader').show();
-
-        $.ajax({
-                url: "/ingreso_produccion/send_ingreso_produccion",
-                type: "POST",
-                data : $("#frmIngresoProduccion").serialize(),
-                success: function (result) {
-                    //alert(result.id)
-                    $('#openOverlayOpc').modal('hide');
-                    datatablenew();
-                    $('.loader').hide();
-                    bootbox.alert("Se guard&oacute; satisfactoriamente"); 
-                    /*if (result.id>0) {
-                        modalOrdenCompra(result.id);
-                    }*/
-                   
+        bootbox.confirm({ 
+            size: "small",
+            message: "&iquest;Est&aacute; seguro que son las cantidades correctas? Porque no se podr&aacute; editar.", 
+            callback: function(result){
+                if (result==true) {
+                    save_produccion();
                 }
+            }
         });
+        
     }
+}
+
+function save_produccion(){
+
+    var msgLoader = "";
+    msgLoader = "Procesando, espere un momento por favor";
+    var heightBrowser = $(window).width()/2;
+    $('.loader').css("opacity","0.8").css("height",heightBrowser).html("<div id='Grd1_wrapper' class='dataTables_wrapper'><div id='Grd1_processing' class='dataTables_processing panel-default'>"+msgLoader+"</div></div>");
+    $('.loader').show();
+
+    $.ajax({
+            url: "/ingreso_produccion/send_ingreso_produccion",
+            type: "POST",
+            data : $("#frmIngresoProduccion").serialize(),
+            success: function (result) {
+                //alert(result.id)
+                $('#openOverlayOpc').modal('hide');
+                datatablenew();
+                $('.loader').hide();
+                bootbox.alert("Se guard&oacute; satisfactoriamente"); 
+                /*if (result.id>0) {
+                    modalOrdenCompra(result.id);
+                }*/
+                
+            }
+    });
+    
 }
 
 
