@@ -44,3 +44,11 @@ Route::post('/tienda/all_ajax', [\App\Http\Controllers\TiendaController::class, 
 Route::get('/tienda/modal/{id}', [\App\Http\Controllers\TiendaController::class, 'modal'])->name('tienda.modal');
 Route::post('/tienda/send', [\App\Http\Controllers\TiendaController::class, 'send'])->name('tienda.send');
 Route::get('/tienda/eliminar/{id}/{estado}', [\App\Http\Controllers\TiendaController::class, 'eliminar'])->name('tienda.eliminar');
+
+// Rutas para Moneda
+Route::get('/moneda', [\App\Http\Controllers\MonedaController::class, 'index'])->name('moneda.index');
+Route::get('/moneda/all', [\App\Http\Controllers\MonedaController::class, 'all'])->name('moneda.all');
+Route::post('/moneda/all_ajax', [\App\Http\Controllers\MonedaController::class, 'all_ajax'])->name('moneda.all_ajax');
+Route::get('/moneda/modal/{id}', [\App\Http\Controllers\MonedaController::class, 'modal'])->name('moneda.modal');
+Route::post('/moneda/send', [\App\Http\Controllers\MonedaController::class, 'send'])->name('moneda.send');
+Route::get('/moneda/eliminar/{id}/{estado}', [\App\Http\Controllers\MonedaController::class, 'eliminar'])->name('moneda.eliminar');
