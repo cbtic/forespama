@@ -184,7 +184,7 @@ $(document).ready(function() {
     }*/
 
     if($('#id').val()>0){
-        cargarDetalle();
+        //cargarDetalle();
         cambiarOrigen();
     }
 });
@@ -488,13 +488,20 @@ function cargarDetalle(id, cantidad_tiendas) {
                     `;
 
                     $(`#productosTienda${tienda}_tabla`).append(productoRow);
-
                     
-                    $("#tiendas"+tienda).select2({ width: '100%' });
+                    //$(`#tiendas${tienda}`).select2({ width: '100%' });
+                    
 
                     productoContador++;
                 });
             }
+
+            /*$('.tiendas-select').select2({
+                width: '100%',
+                allowClear: true,
+                placeholder: '--Seleccionar--'
+            });*/
+                    
             $('[data-toggle="tooltip"]').tooltip();
         }
     });
@@ -753,7 +760,7 @@ function agregarTiendas() {
             <tr>
                 <td style="width: 20px;">${n}</td>
                 <td>
-                    <select name="tiendas[]" id="tiendas${n}" class="form-control form-control-sm">
+                    <select name="tiendas[]" id="tiendas${n}" class="form-control form-control-sm tiendas-select">
                         <option value="">--Seleccionar--</option>
                         <?php foreach ($tiendas as $row) { ?>
                             <option value="<?php echo $row->id ?>"><?php echo $row->denominacion ?></option>
@@ -769,8 +776,24 @@ function agregarTiendas() {
         `;
 
         tbody.append(row);
+        //$('#tiendas'+n).select2();
+        
     }
 
+    // Forzar `select2` a usar el modal padre
+    $('.tiendas-select').select2({
+        width: '100%', 
+        dropdownParent: $('#diveditpregOpc2') // Asegura que el dropdown se renderice en el modal correcto
+        //dropdownParent: $('#id_content_OverlayoneOpc2') // Asegura que el dropdown se renderice en el modal correcto
+    });
+
+    /*
+    $('.tiendas-select').select2({
+        width: '100%',
+        allowClear: true,
+        placeholder: '--Seleccionar--'
+    });
+    */
     cargarDetalle(id, cantidad_tiendas);
 }
 

@@ -496,8 +496,20 @@ label.form-control-sm{
 							
 						<div id="divTablaOrdenCompra" class="row col align-self-center" style="padding:10px 20px 10px 20px;">
 					
-							<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+							<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
 								<input class="form-control form-control-sm" id="numero_orden_compra_bus" name="numero_orden_compra_bus" placeholder="N&uacute;mero Orden Compra">
+							</div>
+
+							<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+								<select name="empresa_bus" id="empresa_bus" class="form-control form-control-sm" onchange="">
+									<option value="">--Seleccionar Empresa--</option>
+									<?php
+									foreach ($empresa as $row){?>
+										<option value="<?php echo $row->id ?>"><?php echo $row->razon_social ?></option>
+										<?php 
+									}
+									?>
+								</select>
 							</div>
 							
 							<!--<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
@@ -507,15 +519,15 @@ label.form-control-sm{
 									
 									?>
 								</select>
-							</div>
+							</div>-->
 							
 							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-								<select name="estado" id="estado" class="form-control form-control-sm" onchange="">
+								<select name="estado_bus" id="estado_bus" class="form-control form-control-sm" onchange="">
 									<option value="">ESTADO</option>
-									<option value="1">ACTIVO</option>
-									<option value="0">INACTIVO</option>
+									<option value="1">CERRADO</option>
+									<option value="0">PENDIENTE</option>
 								</select>
-							</div>-->
+							</div>
 							
 							<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
 								<input class="btn btn-warning btn-sm pull-rigth" value="Buscar" type="button" id="btnBuscar" />

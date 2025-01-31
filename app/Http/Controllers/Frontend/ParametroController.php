@@ -108,7 +108,9 @@ class ParametroController extends Controller
 
     public function create_valida_parametro(){
 
-		return view('frontend.parametro.create_valida_parametro');
+        $empresa = Empresa::all();
+
+		return view('frontend.parametro.create_valida_parametro',compact('empresa'));
 
 	}
 

@@ -46,7 +46,7 @@ class Tienda extends Model
             where oc.id = '".$id."'
             group by tdoc.id_tienda
         )
-        order by tdoc.id;";
+        order by tdoc.id";
 
 		$data = DB::select($cad);
         return $data;

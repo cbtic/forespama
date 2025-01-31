@@ -1241,28 +1241,21 @@ $('#moneda_descripcion').val(descripcion);
                     <table style="background-color:white !important;border-collapse:collapse;border-spacing:1px; width: 100%; margin: 0 auto; font-size:12px">
                         <tbody>
                             <tr>
-                                <td class="td" style ="text-align: left; width: 90%; font-size:13px"></td>
                                 <td class="td" style ="text-align: left; width: 5%; font-size:13px"><b>Sub-Total:</b></td>
                                 <td id="subTotalGeneral" class="td" style="text-align: left; width: 5%; font-size:13px">
                                     <input type="text" name="sub_total_general" id="sub_total_general" class="form-control" value="0.00" readonly style="border: none; background: transparent; text-align: left; pointer-events: none;">
                                 </td>
-                            </tr>
-                            <tr>
-                                <td class="td" style ="text-align: left; width: 90%; font-size:13px"></td>
+                                <td class="td" style ="text-align: left; width: 20%; font-size:13px"></td>
                                 <td class="td" style ="text-align: left; width: 5%; font-size:13px"><b>IGV Total:</b></td>
                                 <td id="igvGeneral" class="td" style="text-align: left; width: 5%; font-size:13px">
                                     <input type="text" name="igv_general" id="igv_general" class="form-control" value="0.00" readonly style="border: none; background: transparent; text-align: left; pointer-events: none;">
                                 </td>
-                            </tr>
-                            <tr>
-                                <td class="td" style ="text-align: left; width: 90%; font-size:13px"></td>
+                                <td class="td" style ="text-align: left; width: 20%; font-size:13px"></td>
                                 <td class="td" style ="text-align: left; width: 5%; font-size:13px"><b>Descuento Total:</b></td>
                                 <td id="descuentoGeneral" class="td" style="text-align: left; width: 5%; font-size:13px">
                                     <input type="text" name="descuento_general" id="descuento_general" class="form-control" value="0.00" readonly style="border: none; background: transparent; text-align: left; pointer-events: none;">
                                 </td>
-                            </tr>
-                            <tr>
-                                <td class="td" style ="text-align: left; width: 90%; font-size:13px"></td>
+                                <td class="td" style ="text-align: left; width: 20%; font-size:13px"></td>
                                 <td class="td" style ="text-align: left; width: 5%; font-size:13px"><b>Total:</b></td>
                                 <td id="totalGeneral" class="td" style="text-align: left; width: 5%; font-size:13px">
                                     <input type="text" name="total_general" id="total_general" class="form-control" value="0.00" readonly style="border: none; background: transparent; text-align: left; pointer-events: none;">

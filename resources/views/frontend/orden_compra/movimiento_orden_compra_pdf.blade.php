@@ -183,6 +183,7 @@ $(document).ready(function() {
                         <td class="td" style ="text-align: left; width: 10%;"><b>N&uacute;mero Orden Compra Cliente:</b></td>
                         <td class="td" style ="text-align: left; width: 20%;"><?php echo $numero_orden_compra_cliente;?></td>
                     </tr>
+                    
                     <tr>
                         <td class="td" style ="text-align: left; width: 10%;"><b>IGV:</b></td>
                         <td class="td" style ="text-align: left; width: 20%;"><?php echo $igv;?></td>

@@ -612,7 +612,7 @@ class OrdenCompraController extends Controller
             $id_producto = $equivalenciaProducto->id_producto;
             $producto = Producto::find($id_producto);
             $cantidad_requerida = $row['CANTIDAD_PROD'];
-            $id_unidad_medida = $producto->id_unidad_medida;
+            $id_unidad_medida = $producto->id_unidad_producto;
             $precio_venta = $row['COSTO_UNI'];
 
             //$total = $sub_total + $igv;
