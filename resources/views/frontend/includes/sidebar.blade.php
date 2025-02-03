@@ -203,18 +203,26 @@
 
         </li>
 
+        @if(Gate::check('Ingreso Caja') || Gate::check('Comprobante') || Gate::check('Guia'))
+
         <li class="c-sidebar-nav-dropdown">
             <x-utils.link href="#" icon="c-sidebar-nav-icon cil-list" class="c-sidebar-nav-dropdown-toggle" :text="__('Caja')" />
             <ul class="c-sidebar-nav-dropdown-items">
+                @can('Ingreso Caja')
                 <li class="c-sidebar-nav-item">
                     <x-utils.link :href="route('frontend.ingreso.create')" class="c-sidebar-nav-link" :text="__('Estado de Cuentas')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />                  
                 </li>
+                @endif
+                @can('Comprobante')
                 <li class="c-sidebar-nav-item">
                     <x-utils.link :href="route('frontend.comprobante.all')" class="c-sidebar-nav-link" :text="__('Consulta de Facturas')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />                  
                 </li>
+                @endif
+                @can('Guia')
                 <li class="c-sidebar-nav-item">
                     <x-utils.link :href="route('frontend.guia_interna.create')" class="c-sidebar-nav-link" :text="__('Consulta de Guias')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />                  
                 </li>
+                @endif
             </ul>
         </li> 
 		

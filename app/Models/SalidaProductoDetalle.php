@@ -67,7 +67,8 @@ class SalidaProductoDetalle extends Model
         from salida_productos sp 
         inner join salida_producto_detalles spd on sp.id=spd.id_salida_productos 
         where id_orden_compra ='".$id_orden_compra."'
-        and spd.id_producto='".$id_producto."'";
+        and spd.id_producto='".$id_producto."'
+        and spd.estado='1'";
 
 		$data = DB::select($cad);
         //return $data;

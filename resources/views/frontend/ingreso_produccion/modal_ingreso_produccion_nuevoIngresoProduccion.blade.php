@@ -599,6 +599,13 @@ function pdf_documento_ingreso_produccion(){
                                 ?>
                             </select>
                         </div>
+                        <div class="col-lg-2" style="color:red; font-weight:bold">
+                            <label for="producto_defectuoso" class="form-check-label">Producto Defectuoso</label>
+                        </div>
+                        <div class="col-lg-2">
+                            <input id="producto_defectuoso" name="producto_defectuoso" class="form-check-input" style="margin-left:0px !important;"  type="checkbox" value="1" <?php echo ($id > 0 && $ingreso_produccion->producto_defectuoso == 1) ? 'checked' : ''; ?>>
+                            <input type="hidden" name="producto_defectuoso" value="0">
+                        </div>
                     </div>
                         <div style="margin-top:15px" class="form-group">
                             <div class="col-sm-12 controls">
