@@ -203,6 +203,8 @@
 
         </li>
 
+        @endif
+
         @if(Gate::check('Ingreso Caja') || Gate::check('Comprobante') || Gate::check('Guia'))
 
         <li class="c-sidebar-nav-dropdown">
