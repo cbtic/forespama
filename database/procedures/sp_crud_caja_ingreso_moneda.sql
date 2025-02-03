@@ -1,3 +1,5 @@
+-- DROP FUNCTION public.sp_crud_caja_ingreso_moneda(varchar, int4, int4, int4, varchar, varchar, varchar, int4, int4, varchar, varchar, varchar, varchar);
+
 CREATE OR REPLACE FUNCTION public.sp_crud_caja_ingreso_moneda(accion character varying, p_id_usuario integer, p_id_caja_ingreso_soles integer, p_id_caja_soles integer, p_saldo_inicial_soles character varying, p_total_recaudado_soles character varying, p_saldo_total_soles character varying, p_id_caja_ingreso_dolares integer, p_id_caja_dolares integer, p_saldo_inicial_dolares character varying, p_total_recaudado_dolares character varying, p_saldo_total_dolares character varying, p_estado character varying)
  RETURNS character varying
  LANGUAGE plpgsql
@@ -33,8 +35,8 @@ begin
 			
 			update caja_ingresos t1 set 
 			estado=0,
-			total_recaudado=(select coalesce(Sum(fac_total),0) from facturas fac where fac.fac_anulado='N' And fac.fac_caja_id=t1.id_caja And fac.fac_fecha >= t1.fecha_inicio And fac.fac_fecha <= (case when t1.fecha_fin is null then now() else t1.fecha_fin end)),
-			saldo_total=((select coalesce(Sum(fac_total),0) from facturas fac where fac.fac_anulado='N' And fac.fac_caja_id=t1.id_caja And fac.fac_fecha >= t1.fecha_inicio And fac.fac_fecha <= (case when t1.fecha_fin is null then now() else t1.fecha_fin end))+t1.saldo_inicial),
+			total_recaudado=(select coalesce(Sum(total),0) from comprobantes fac where fac.anulado='N' And fac.id_caja=t1.id_caja And fac.fecha >= t1.fecha_inicio And fac.fecha <= (case when t1.fecha_fin is null then now() else t1.fecha_fin end)),
+			saldo_total=((select coalesce(Sum(total),0) from comprobantes fac where fac.anulado='N' And fac.id_caja=t1.id_caja And fac.fecha >= t1.fecha_inicio And fac.fecha <= (case when t1.fecha_fin is null then now() else t1.fecha_fin end))+t1.saldo_inicial),
 			fecha_fin=now(),
 			updated_at=now(),
 			id_usuario_actualiza = p_id_usuario  
@@ -44,8 +46,8 @@ begin
 			
 			update caja_ingresos t1 set 
 			estado=0,
-			total_recaudado=(select coalesce(Sum(fac_total),0) from facturas fac where fac.fac_anulado='N' And fac.fac_caja_id=t1.id_caja And fac.fac_fecha >= t1.fecha_inicio And fac.fac_fecha <= (case when t1.fecha_fin is null then now() else t1.fecha_fin end)),
-			saldo_total=((select coalesce(Sum(fac_total),0) from facturas fac where fac.fac_anulado='N' And fac.fac_caja_id=t1.id_caja And fac.fac_fecha >= t1.fecha_inicio And fac.fac_fecha <= (case when t1.fecha_fin is null then now() else t1.fecha_fin end))+t1.saldo_inicial),
+			total_recaudado=(select coalesce(Sum(total),0) from comprobantes fac where fac.anulado='N' And fac.id_caja=t1.id_caja And fac.fecha >= t1.fecha_inicio And fac.fecha <= (case when t1.fecha_fin is null then now() else t1.fecha_fin end)),
+			saldo_total=((select coalesce(Sum(total),0) from comprobantes fac where fac.anulado='N' And fac.id_caja=t1.id_caja And fac.fecha >= t1.fecha_inicio And fac.fecha <= (case when t1.fecha_fin is null then now() else t1.fecha_fin end))+t1.saldo_inicial),
 			fecha_fin=now(),
 			updated_at=now(),
 			id_usuario_actualiza = p_id_usuario 

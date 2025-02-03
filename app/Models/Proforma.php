@@ -29,7 +29,7 @@ class Proforma extends Model
             where pe.id_empresa = p.id_empresa and pe.id_producto = pd.id_producto and pe.estado= '1'
             )	else pr.codigo ||'-'|| pr.denominacion end  producto_prof,
             um.denominacion um, pd.cantidad, pd.id_descuento,
-            pd.precio_unitario, pd.sub_total, pd.igv, pd.total, pd.id_unidad_medida, pd.descuento, pd.valor_venta_bruto
+            pd.precio_unitario, pd.sub_total, pd.igv, pd.total, pd.id_unidad_medida, pd.descuento, pd.valor_venta_bruto, pd.precio_venta, pd.valor_venta 
         FROM proformas p
         inner join proforma_detalles pd on pd.id_proforma = p.id 
         inner join productos pr on pr.id = pd.id_producto

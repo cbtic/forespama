@@ -677,7 +677,7 @@ BLADE;
 
         public function eliminar(\$id, \$estado)
         {
-            \$modelo = {$nombre}::find(\$request->id);
+            \$modelo = {$nombre}::find(\$id);
             \$modelo->estado = \$estado;
             \$modelo->save();
             return response()->json(['success' => true, 'message' => 'Registro elimino correctamente.']);

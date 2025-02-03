@@ -463,6 +463,8 @@ function cargarDetalle(id, cantidad_tiendas) {
                         const selected = (unidad_medida.codigo == orden_compra.id_unidad_medida) ? 'selected' : '';
                         unidadMedidaOptions += `<option value="${unidad_medida.codigo}" ${selected}>${unidad_medida.denominacion}</option>`;
                     });
+
+                    const cantidadIngresoValor = (cantidad_tiendas == 1) ? orden_compra.cantidad_requerida : '';
                     
                     const productoRow = `
                         <tr>
@@ -478,7 +480,7 @@ function cargarDetalle(id, cantidad_tiendas) {
                                 </select>
                             </td>
                             <td data-toggle="tooltip" data-placement="top" title="El total es: ${orden_compra.cantidad_requerida}">
-                                <input type="text" name="cantidad_ingreso[${tienda}][]" id="cantidad_ingreso${tienda}_${productoContador}" class="cantidad_ingreso form-control form-control-sm" value="" oninput="">
+                                <input type="text" name="cantidad_ingreso[${tienda}][]" id="cantidad_ingreso${tienda}_${productoContador}" class="cantidad_ingreso form-control form-control-sm" value="${cantidadIngresoValor}" oninput="">
                                 <input type="hidden" name="cantidad_ingreso_total[${tienda}][]" id="cantidad_ingreso_total${tienda}_${productoContador}" class="cantidad_ingreso form-control form-control-sm" value="${orden_compra.cantidad_requerida}" oninput="">
                             </td>
                             <td>
@@ -695,6 +697,17 @@ function fn_save_tienda_orden_compra(){
         }
     });
 
+    $('#divOrdenCompraTienda table').each(function(index, table) { 
+        $(table).find('input[name^="cantidad_ingreso["]').each(function() {
+            const cantidad = $(this).val().trim();
+            
+            if (cantidad == '' || isNaN(cantidad)) {
+                validacionExitosa = false;
+                msg += `Falta ingresar una Cantidad en la Tienda ${index + 1}.<br>`;
+            }
+        });
+    });
+
     if(validacionExitosa==false){
         bootbox.alert(msg);
         return false;
@@ -712,7 +725,7 @@ function fn_save_tienda_orden_compra(){
             success: function (result) {
                 //alert(result.id)
                 $('#openOverlayOpc2').modal('hide');
-                //datatablenew();
+                datatablenew();
                 $('.loader').hide();
                 bootbox.alert("Se guard&oacute; satisfactoriamente"); 
                 
@@ -776,24 +789,15 @@ function agregarTiendas() {
         `;
 
         tbody.append(row);
-        //$('#tiendas'+n).select2();
         
     }
 
-    // Forzar `select2` a usar el modal padre
     $('.tiendas-select').select2({
         width: '100%', 
         dropdownParent: $('#diveditpregOpc2') // Asegura que el dropdown se renderice en el modal correcto
         //dropdownParent: $('#id_content_OverlayoneOpc2') // Asegura que el dropdown se renderice en el modal correcto
     });
 
-    /*
-    $('.tiendas-select').select2({
-        width: '100%',
-        allowClear: true,
-        placeholder: '--Seleccionar--'
-    });
-    */
     cargarDetalle(id, cantidad_tiendas);
 }
 

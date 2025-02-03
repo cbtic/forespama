@@ -185,6 +185,9 @@ $(document).ready(function() {
                     </tr>
                     
                     <tr>
+                        <td class="td" style ="text-align: left; width: 10%;"><b>Tiendas:</b></td>
+                        <td class="td" style ="text-align: left; width: 20%;"><?php echo implode(' - ', array_column($tiendas_orden_compra, 'tienda')); ?></td>
+                        <td class="td" style ="text-align: left; width: 10%;"></td>
                         <td class="td" style ="text-align: left; width: 10%;"><b>IGV:</b></td>
                         <td class="td" style ="text-align: left; width: 20%;"><?php echo $igv;?></td>
                     </tr>
@@ -202,17 +205,17 @@ $(document).ready(function() {
                         <td class="td" style ="text-align: left; width: 5%; height:25px; border-bottom: 1px solid black;"><b>ESTADO BIEN</b></td>
                         <td class="td" style ="text-align: left; width: 5%; height:25px; border-bottom: 1px solid black;"><b>UNIDAD</b></td>
                         <td class="td" style ="text-align: left; width: 5%; height:25px; border-bottom: 1px solid black;"><b>CANTIDAD</b></td>
-                        <td class="td" style ="text-align: left; width: 5%; height:25px; border-bottom: 1px solid black;"><b>PRECIO UNITARIO</b></td>
+                        <!--<td class="td" style ="text-align: left; width: 5%; height:25px; border-bottom: 1px solid black;"><b>PRECIO UNITARIO</b></td>
                         <td class="td" style ="text-align: left; width: 5%; height:25px; border-bottom: 1px solid black;"><b>DESCUENTO</b></td>
                         <td class="td" style ="text-align: left; width: 5%; height:25px; border-bottom: 1px solid black;"><b>SUB TOTAL</b></td>
                         <td class="td" style ="text-align: left; width: 5%; height:25px; border-bottom: 1px solid black;"><b>IGV</b></td>
-                        <td class="td" style ="text-align: left; width: 5%; height:25px; border-bottom: 1px solid black;"><b>TOTAL</b></td>
+                        <td class="td" style ="text-align: left; width: 5%; height:25px; border-bottom: 1px solid black;"><b>TOTAL</b></td>-->
                     </tr>
                     
                     <?php 
-                    $subtotal_suma=0;
+                    /*$subtotal_suma=0;
                     $igv_suma=0;
-                    $total_suma=0;
+                    $total_suma=0;*/
                     foreach($datos_detalle as $key=>$r) { ?>
                         <tr>
                             <td class="td" style ="text-align: left; width: 5%; height:25px"><?php echo $r->row_num;?></td>
@@ -223,43 +226,43 @@ $(document).ready(function() {
                             <td class="td" style ="text-align: left; width: 5%; height:25px"><?php echo $r->estado_producto;?></td>
                             <td class="td" style ="text-align: left; width: 5%; height:25px"><?php echo $r->unidad_medida;?></td>
                             <td class="td" style ="text-align: left; width: 5%; height:25px"><?php echo $r->cantidad_requerida;?></td>
-                            <td class="td" style ="text-align: left; width: 5%; height:25px"><?php echo number_format($r->precio,2,'.',',');?></td>
-                            <td class="td" style ="text-align: left; width: 5%; height:25px"><?php echo $r->descuento;?></td>
-                            <td class="td" style ="text-align: left; width: 5%; height:25px"><?php echo number_format($r->sub_total,2,'.',',');?></td>
-                            <td class="td" style ="text-align: left; width: 5%; height:25px"><?php echo number_format($r->igv,2,'.',',');?></td>
-                            <td class="td" style ="text-align: left; width: 5%; height:25px"><?php echo number_format($r->total,2,'.',',');?></td>
+                            <!--<td class="td" style ="text-align: left; width: 5%; height:25px"><?php //echo number_format($r->precio,2,'.',',');?></td>
+                            <td class="td" style ="text-align: left; width: 5%; height:25px"><?php //echo $r->descuento;?></td>
+                            <td class="td" style ="text-align: left; width: 5%; height:25px"><?php //echo number_format($r->sub_total,2,'.',',');?></td>
+                            <td class="td" style ="text-align: left; width: 5%; height:25px"><?php //echo number_format($r->igv,2,'.',',');?></td>
+                            <td class="td" style ="text-align: left; width: 5%; height:25px"><?php //echo number_format($r->total,2,'.',',');?></td>-->
                             <?php 
-                            $subtotal_suma+=$r->sub_total;
+                            /*$subtotal_suma+=$r->sub_total;
                             $igv_suma+=$r->igv;
-                            $total_suma+=$r->total;
+                            $total_suma+=$r->total;*/
                             ?>
                         </tr>
                     <?php }
            
-                    use Luecano\NumeroALetras\NumeroALetras;
+                    //use Luecano\NumeroALetras\NumeroALetras;
 
-                    $numeroALetras = new NumeroALetras();
-                    $total_en_letras =$numeroALetras->toInvoice( $total_suma, 2, 'Soles');
+                    //$numeroALetras = new NumeroALetras();
+                    //$total_en_letras =$numeroALetras->toInvoice( $total_suma, 2, 'Soles');
                       ?>
                 </tbody>
             </table>
             &nbsp;
-            <table class="data" style="border-collapse: separate; border-spacing: 0; background-color:white !important; border-radius: 8px; font-size:11px; margin: 0 0 0 auto">
+            <!--<table class="data" style="border-collapse: separate; border-spacing: 0; background-color:white !important; border-radius: 8px; font-size:11px; margin: 0 0 0 auto">
                 <tbody>
                     <tr>
                         <td class="td" style ="text-align: right; width: 70%; height:25px"></td>
                         <td class="td" style ="text-align: right; width: 15%; height:25px; border-bottom: 1px solid black;"><b>SUB TOTAL:</b></td>
-                        <td class="data" style ="text-align: right; width: 15%; height:25px; border-bottom: 1px solid black;"><?php echo number_format($subtotal_suma,2,'.',',');?></td>
+                        <td class="data" style ="text-align: right; width: 15%; height:25px; border-bottom: 1px solid black;"><?php //echo number_format($subtotal_suma,2,'.',',');?></td>
                     </tr>
                     <tr>
                         <td class="td" style ="text-align: right; width: 70%; height:25px"></td>
                         <td class="td" style ="text-align: right; width: 15%; height:25px; border-bottom: 1px solid black;"><b>IGV:</b></td>
-                        <td class="data" style ="text-align: right; width: 15%; height:25px; border-bottom: 1px solid black;"><?php echo number_format($igv_suma,2,'.',',');?></td>
+                        <td class="data" style ="text-align: right; width: 15%; height:25px; border-bottom: 1px solid black;"><?php //echo number_format($igv_suma,2,'.',',');?></td>
                     </tr>
                     <tr>
                         <td class="td" style ="text-align: right; width: 70%; height:25px"></td>
                         <td class="td" style ="text-align: right; width: 15%; height:25px"><b>TOTAL:</b></td>
-                        <td class="data" style ="text-align: right; width: 15%; height:25px"><?php echo number_format($total_suma,2,'.',',');?></td>
+                        <td class="data" style ="text-align: right; width: 15%; height:25px"><?php //echo number_format($total_suma,2,'.',',');?></td>
                     </tr>
                 </tbody>
             </table>
@@ -267,14 +270,15 @@ $(document).ready(function() {
             
             <table class="data" style="width:100%">
                 <tr>
-                    <td>SON: <?php echo $total_en_letras; ?></td>
+                    <td>SON: <?php //echo $total_en_letras; ?></td>
                 </tr>
-            </table>
+            </table>-->
             &nbsp;
             <br></br>
             <?php 
-            if(count($tiendas_orden_compra)>0){
+            if(count($tiendas_orden_compra)>1){
             ?>
+            <div style="page-break-before: always;">
             DETALLE DE TIENDAS DONDE SE ENTREGA LOS PRODUCTOS
             &nbsp;
             <table class="data" style="border-collapse: separate; border-spacing: 0; background-color:white !important; width: 100%; border-radius: 8px; font-size:11px">
