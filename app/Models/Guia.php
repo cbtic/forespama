@@ -23,7 +23,8 @@ class Guia extends Model
             inner join vehiculos v on v.placa = g.guia_vehiculo_placa 
             inner join vehiculos_conductores vc on vc.id_vehiculos = v.id
             inner join conductores c on c.id = vc.id_conductores
-            inner join personas p on p.id = c.id_personas 
+            --inner join personas p on p.id = c.id_personas 
+            inner join personas p on p.numero_documento = g.guia_conductor_numdoc
             where g.id = '".$id."' ";
     
         $data = DB::select($cad);
