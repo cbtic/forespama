@@ -64,7 +64,11 @@ $(document).ready(function () {
 		changeYear: true,
         language: 'es'
     });
-		
+
+	$('#empresa_compra_bus').select2({ width : '100%' })
+
+	$('#empresa_vende_bus').select2({ width : '100%' })
+	
 	datatablenew();
 
 });

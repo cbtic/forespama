@@ -9,11 +9,7 @@
 }
 
 #tblOrdenCompra tbody tr.even{
-<<<<<<< HEAD
-	display: none !important
-=======
 	/*display: none !important*/ 
->>>>>>> c168beb62a1672adb0e4eaf15974c844377964bb
 }
 
 body {

@@ -170,6 +170,8 @@ $(document).ready(function() {
         cargarDetalle();
     }
 
+    activarObservacion();
+
     /*if ($('#id').val()==0){
         $('#tblDispensacionDetalle tbody').append(`
             <tr>
@@ -511,8 +513,6 @@ function save_produccion(){
     
 }
 
-
-
 function pdf_documento_ingreso_produccion(){
 
     var id = $('#id').val();
@@ -521,6 +521,20 @@ function pdf_documento_ingreso_produccion(){
     var href = '/ingreso_produccion/movimiento_pdf_ingreso_produccion/'+id;
     window.open(href, '_blank');
 
+}
+
+function activarObservacion() {
+    var checkbox = document.getElementById("producto_defectuoso");
+    var observacionLabel = document.getElementById("observacion_label");
+    var observacionInput = document.getElementById("observacion_input");
+
+    if (checkbox.checked) {
+        observacionLabel.style.display = "block";
+        observacionInput.style.display = "block";
+    } else {
+        observacionLabel.style.display = "none";
+        observacionInput.style.display = "none";
+    }
 }
 
 </script>
@@ -603,8 +617,13 @@ function pdf_documento_ingreso_produccion(){
                             <label for="producto_defectuoso" class="form-check-label">Producto Defectuoso</label>
                         </div>
                         <div class="col-lg-2">
-                            <input id="producto_defectuoso" name="producto_defectuoso" class="form-check-input" style="margin-left:0px !important;"  type="checkbox" value="1" <?php echo ($id > 0 && $ingreso_produccion->producto_defectuoso == 1) ? 'checked' : ''; ?>>
-                            <input type="hidden" name="producto_defectuoso" value="0">
+                            <input id="producto_defectuoso" name="producto_defectuoso" class="form-check-input" style="margin-left:0px !important;"  type="checkbox" value="1" <?php echo ($id > 0 && $ingreso_produccion->producto_defectuoso == 1) ? 'checked' : ''; ?> onclick="activarObservacion()">
+                        </div>
+                        <div class="col-lg-2" id="observacion_label" style="display: none;">
+                            Observaci&oacute;n
+                        </div>
+                        <div class="col-lg-2" id="observacion_input" style="display: none;">
+                            <input id="observacion" name="observacion" on class="form-control form-control-sm"  value="<?php if($id>0){echo $ingreso_produccion->observacion;}?>" type="text">
                         </div>
                     </div>
                         <div style="margin-top:15px" class="form-group">

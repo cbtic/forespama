@@ -118,6 +118,8 @@ class IngresoProduccionController extends Controller
         $ingreso_produccion->id_almacen_destino = $request->almacen_destino;
         $ingreso_produccion->fecha = $request->fecha;
         $ingreso_produccion->codigo = $request->numero_ingreso_produccion;
+        $ingreso_produccion->producto_defectuoso = $request->input('producto_defectuoso', 0) == '1' ? 1 : 0;
+		$ingreso_produccion->observacion = $request->observacion;
         $ingreso_produccion->id_usuario_inserta = $id_user;
 		$ingreso_produccion->estado = 1;
 		$ingreso_produccion->save();
