@@ -103,7 +103,7 @@ function calculoDetraccion(){
 	
 	var total_fac = $('#total_fac_').val();
 	var total_detraccion =total_fac*12/100;
-	var nc_detraccion = "111-111-111-11";
+	var nc_detraccion = "00061142797";
 	var tipo_detraccion = "004";
 	var afecta_a = "022";
 	var medio_pago = "001";
@@ -116,7 +116,7 @@ function calculoDetraccion(){
 
 	if (Math.round(total_fac) > 700 && tipo=='FT' ){
 
-		$('#porcentaje_detraccion').val("12%");		
+		$('#porcentaje_detraccion').val("12");		
 		$('#monto_detraccion').val(total_detraccion.toFixed(2));
 		$('#nc_detraccion').val(nc_detraccion);
 		$('#tipo_detraccion').val(tipo_detraccion);

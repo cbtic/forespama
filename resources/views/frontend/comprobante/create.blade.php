@@ -754,7 +754,7 @@
                                                     if ($trans == 'FA' || $trans == 'FE') { ?>
                                                         <?php foreach ($facturad as $key => $fac) {
                                                             //		$smodulo = $fac['smodulo'];
-                                                        ?>
+                                                        ?> 
                                                             <input type="hidden" name="facturad[<?php echo $key ?>][id]" value="<?php echo $fac['id'] ?>" />
                                                             <input type="hidden" name="facturad[<?php echo $key ?>][fecha]" value="<?php echo $fac['fecha'] ?>" />
                                                             <input type="hidden" name="facturad[<?php echo $key ?>][denominacion]" value="<?php echo $fac['denominacion'] ?>" />
@@ -776,6 +776,7 @@
                                                             <input type="hidden" name="facturad[<?php echo $key ?>][pv]" value="<?php echo $fac['pv'] ?>" />
                                                             <input type="hidden" name="facturad[<?php echo $key ?>][valor_venta_bruto]" value="<?php echo $fac['valor_venta_bruto'] ?>" />
                                                             <input type="hidden" name="facturad[<?php echo $key ?>][valor_venta]" value="<?php echo $fac['vv'] ?>" />
+                                                            <input type="hidden" name="facturad[<?php echo $key ?>][codigo_producto]" value="<?php echo $fac['codigo_producto'] ?>" />
 
                                                             <tr>
                                                                 <td class="text-right"><?php $n = $n + 1;

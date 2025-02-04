@@ -532,7 +532,7 @@ class ComprobanteController extends Controller
 
 			$tarifa = $request->facturad;
 
-            //print_r($tarifa);
+           // print_r($tarifa);
             //exit();
 
            // $total_pagar_abono = $request->total_pagar_abono;
@@ -953,6 +953,7 @@ class ComprobanteController extends Controller
                         "id" => 0, 
                         "fecha" => $fecha_hoy,
                         "denominacion" => "REDONDEO",
+                        "codigo_producto" => "",
                         "descripcion" => "REDONDEO",
                         "monto" => round($total_redondeo,2),
                         "moneda" => "SOLES" ,
@@ -982,6 +983,7 @@ class ComprobanteController extends Controller
                         "id" => 0, 
                         "fecha" => $fecha_hoy,
                         "denominacion" => "REDONDEO",
+                        "codigo_producto" => "",
                         "descripcion" => "REDONDEO",
                         "monto" => round($total_abono,2),
                         "moneda" => "SOLES" ,
@@ -1014,7 +1016,7 @@ class ComprobanteController extends Controller
 					if ($value['descuento']=='') $descuento = 0;
 					$id_factura_detalle = $facturas_model->registrar_factura_moneda($serieF, $fac_numero, $tipoF, $value['cantidad'], $value['id_concepto'], $total, $value['descripcion'], $value['cod_contable'], $value['item'], $id_factura, $descuento,    'd',     $id_user,  $id_moneda);
 					
-                    // print_r($id_factura_detalle);
+                    // print_r($value);
                     //exit();
 
                     if($value['id_concepto']!='26464'){
@@ -1026,6 +1028,7 @@ class ComprobanteController extends Controller
                         $facturaDet_upd->precio_venta=$value['pv'];
                         $facturaDet_upd->valor_venta_bruto=$value['valor_venta_bruto'];
                         $facturaDet_upd->valor_venta=$value['valor_venta'];
+                        $facturaDet_upd->codigo=$value['codigo_producto'];
                         $facturaDet_upd->save();  
 
                     }
@@ -1094,6 +1097,8 @@ class ComprobanteController extends Controller
                     $valorizacion->descripcion = $value['descripcion'];
                     $valorizacion->valor_unitario = $value['monto'];
                     $valorizacion->cantidad = $value['cantidad'];
+                    $valorizacion->codigo = $value['codigo_producto'];
+                    
                     //$valorizacion->codigo_fraccionamiento =  $id_fraccionamiento;
 
                     $valorizacion->id_comprobante = $id_factura;
@@ -2684,7 +2689,7 @@ class ComprobanteController extends Controller
 							"valorVentaItem"=> str_replace(",","",number_format($row->valor_venta)), //"42.37",
 							"descripcionItem"=> $row->descripcion,//"TRANSBORDO",
 							"unidadMedidaItem"=> $row->unidad,
-							"codigoProductoItem"=> ($row->cod_contable!="")?$row->cod_contable:"0000000", //"002",
+							"codigoProductoItem"=> ($row->codigo!="")?$row->codigo:"0000000", //"002",
                             "codigoDescuentoItem"=> "00",
 							"valorUnitarioSinIgv"=> str_replace(",","",number_format($row->pu,2)), //"42.3728813559",
 							"precioUnitarioConIgv"=> str_replace(",","",number_format($row->precio_venta,2)), //"50.0000000000",
