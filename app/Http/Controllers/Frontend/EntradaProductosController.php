@@ -304,17 +304,16 @@ class EntradaProductosController extends Controller
                 $entrada_producto = EntradaProducto::where('id_orden_compra',$request->id_orden_compra)->first();
                 $entrada_producto_detalle = EntradaProductoDetalle::where('id_entrada_productos',$entrada_producto->id)->get();
                 $orden_compra = OrdenCompra::find($entrada_producto->id_orden_compra);
-                $orden_compra_detalle = OrdenCompraDetalle::where('id_orden_compra',$orden_compra->id)->get();
+                $orden_compra_detalle = OrdenCompraDetalle::where('id_orden_compra',$orden_compra->id)->orderBy('id', 'asc')->get();
                 $entrada_producto_detalle_model = new EntradaProductoDetalle;
-
                 foreach($entrada_producto_detalle as $index => $detalle){
-
+                    
                     $detalle_orden = $orden_compra_detalle[$index];
                     
                     $cantidad_requerida = $detalle_orden->cantidad_requerida;
                     
                     $cantidad_ingresada = $entrada_producto_detalle_model->getCantidadEntradaProductoByOrdenProducto($orden_compra->id,$detalle->id_producto);
-
+                    //dd($detalle);
                     if($cantidad_requerida - $cantidad_ingresada==0){
                         $entradaProductoDetalleObj = EntradaProductoDetalle::find($detalle->id);
                         $entradaProductoDetalleObj->cerrado = 2;
@@ -324,6 +323,7 @@ class EntradaProductosController extends Controller
                         $ordenCompraDetalleObj->cerrado = 2;
                         $ordenCompraDetalleObj->save();
                     }
+                    
                     /*
                     if ($detalle->cantidad != $detalle_orden->cantidad_requerida) {
                         $valida_estado = false;
@@ -532,7 +532,7 @@ class EntradaProductosController extends Controller
                 $orden_compra = OrdenCompra::find($salida_producto->id_orden_compra);
                 $orden_compra_detalle = OrdenCompraDetalle::where('id_orden_compra',$orden_compra->id)->get();
                 $salida_producto_detalle_model = new SalidaProductoDetalle;
-
+                
                 foreach($salida_producto_detalle as $index => $detalle){
 
                     $detalle_orden = $orden_compra_detalle[$index];
@@ -540,12 +540,12 @@ class EntradaProductosController extends Controller
                     $cantidad_requerida = $detalle_orden->cantidad_requerida;
                     
                     $cantidad_ingresada = $salida_producto_detalle_model->getCantidadSalidaProductoByOrdenProducto($orden_compra->id,$detalle->id_producto);
-
+                    
                     if($cantidad_requerida - $cantidad_ingresada==0){
                         $salidaProductoDetalleObj = SalidaProductoDetalle::find($detalle->id);
                         $salidaProductoDetalleObj->cerrado = 2;
                         $salidaProductoDetalleObj->save();
-
+                        //echo $cantidad_ingresada;
                         $ordenCompraDetalleObj = OrdenCompraDetalle::find($detalle_orden->id);
                         $ordenCompraDetalleObj->cerrado = 2;
                         $ordenCompraDetalleObj->save();

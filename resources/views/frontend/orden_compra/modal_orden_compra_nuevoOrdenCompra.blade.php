@@ -1002,12 +1002,12 @@ function modal_tiendas_orden_compra(id){
 	var id = $('#id').val();
 
 	$.ajax({
-			url: "/orden_compra/modal_tiendas_orden_compra/"+id,
-			type: "GET",
-			success: function (result) {  
-					$("#diveditpregOpc2").html(result);
-					$('#openOverlayOpc2').modal('show');
-			}
+        url: "/orden_compra/modal_tiendas_orden_compra/"+id,
+        type: "GET",
+        success: function (result) {  
+                $("#diveditpregOpc2").html(result);
+                $('#openOverlayOpc2').modal('show');
+        }
 	});
 }
 
@@ -1018,6 +1018,7 @@ var descripcion = $('#moneda option:selected').text();
 $('#moneda_descripcion').val(descripcion);
 
 });
+
 
 </script>
 
@@ -1274,7 +1275,7 @@ $('#moneda_descripcion').val(descripcion);
                                 <?php 
                                         }else{
                                 ?>
-                                <button style="font-size:12px;margin-left:10px;" type="button" class="btn btn-sm btn-fosforescente" data-toggle="modal" onclick="modal_tiendas_orden_compra()" disabled>Agregar Tiendas</button>
+                                <button style="font-size:12px;margin-left:10px;" type="button" class="btn btn-sm btn-fosforescente" data-toggle="modal" onclick="modal_tiendas_orden_compra()">Editar Tiendas</button>
                                 <?php
                                         }
                                 ?>
