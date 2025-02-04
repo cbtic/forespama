@@ -90,9 +90,18 @@ $(document).ready(function () {
 		}
 	});
 
-	
+	$('#id_tipooperacion_').keypress(function (e) {
+		//if (e.keyCode == 13) {
+			calculoDetraccion();
+		//}
+	});
 
-	calculoDetraccion();
+	$('#id_tipooperacion_').click(function () {
+		calculoDetraccion();
+	});
+
+
+	//calculoDetraccion();
 
 	calculaPorcentaje(1);
 
@@ -107,14 +116,17 @@ function calculoDetraccion(){
 	var tipo_detraccion = "004";
 	var afecta_a = "022";
 	var medio_pago = "001";
-	var tipo_operacion = "2";
+	//var tipo_operacion = "2";
+	var tipo_operacion =$('#id_tipooperacion_').val();
 	//var d = new Date();
 
 	//alert(Math.round(total_fac));
 	//alert(Math.round(total_fac));
 	var tipo= $('#TipoF').val()
 
-	if (Math.round(total_fac) > 700 && tipo=='FT' ){
+	//if (Math.round(total_fac) > 700 && tipo=='FT' ){
+	//	alert(tipo_operacion);
+	if (tipo_operacion=='1001' ){
 
 		$('#porcentaje_detraccion').val("12");		
 		$('#monto_detraccion').val(total_detraccion.toFixed(2));
@@ -130,7 +142,7 @@ function calculoDetraccion(){
 		$('#nc_detraccion').val("");
 		$('#tipo_detraccion').val("");
 		$('#afecta_a').val("");
-		$('#id_tipooperacion_').val("1");
+		$('#id_tipooperacion_').val(tipo_operacion);
 		
 		//$('#medio_pago').value("");
 	}

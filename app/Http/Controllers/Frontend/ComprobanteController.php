@@ -886,7 +886,8 @@ class ComprobanteController extends Controller
                 
 				if(isset($factura_upd->tipo_cambio)) $factura_upd->tipo_cambio = $request->tipo_cambio;
                 
-                if($total>700 && $tipoF=='FT') {
+                //if($total>700 && $tipoF=='FT') {
+                if($request->id_tipooperacion_=="1001") {
                     $factura_upd->porc_detrac = $request->porcentaje_detraccion;
                     $factura_upd->monto_detrac = $request->monto_detraccion;
                     $factura_upd->cuenta_detrac = $request->nc_detraccion;
@@ -2747,9 +2748,9 @@ class ComprobanteController extends Controller
 		$data["codigoPaisReceptor"] = "PE";
 		$data["departamentoEmisor"] = "OXAPAMPA";
 		$data["descuentosGlobales"] = "0.00";
-		$data["codigoTipoOperacion"] = "0101";
+		$data["codigoTipoOperacion"] = $factura->tipo_operacion; //"0101";
 		$data["razonSocialReceptor"] = $factura->destinatario;//"Freddy Rimac Coral";
-		$data["nombreComercialEmisor"] = "CAP";
+		$data["nombreComercialEmisor"] = "FELMO";
 		$data["tipoDocIdentidadEmisor"] = "6";
 		$data["sumatoriaImpuestoBolsas"] = "0.00";
 		$data["numeroDocIdentidadEmisor"] = "20486785994";//"20160453908";     
@@ -2757,7 +2758,7 @@ class ComprobanteController extends Controller
 		$data["numeroDocIdentidadReceptor"] = $factura->cod_tributario; //"10040834643";
         $data["direccionReceptor"] = $factura->direccion;
 
-        if ($factura->porc_detrac!="0")
+        if ($factura->tipo_operacion=="1001")
         {
             
             $data["dtmontoDetraccion"] = $factura->monto_detrac;
@@ -2777,7 +2778,7 @@ class ComprobanteController extends Controller
         }
         
 
-      //  print_r(json_encode($data)); exit();
+        //print_r(json_encode($data)); exit();
 
 
 		$databuild_string = json_encode($data);
