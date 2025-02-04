@@ -821,6 +821,7 @@
                                                 <thead>
                                                     <tr style="font-size:13px">
                                                         <th width="5%">Nro</th>
+                                                        <th width="35%">Codigo</th>
                                                         <th width="35%">Producto</th>
                                                         <th width="10%"class="text-center">Cant.</th>
                                                         <th width="10%"class="text-center">Precio Venta</th>
