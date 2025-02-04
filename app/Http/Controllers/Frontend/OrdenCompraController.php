@@ -506,6 +506,7 @@ class OrdenCompraController extends Controller
         $producto = $producto_model->getProductoAll();
         $estado_bien = $tablaMaestra_model->getMaestroByTipo(4);
         $unidad_medida = $tablaMaestra_model->getMaestroByTipo(43);
+        $tiendas = Tienda::all();
 
         return response()->json([
             'orden_compra' => $orden_compra,
@@ -513,7 +514,8 @@ class OrdenCompraController extends Controller
             'estado_bien' => $estado_bien,
             'unidad_medida' => $unidad_medida,
             'tienda_orden_compra' => $tienda_orden_compra,
-            'tienda_detalle_orden_compra' => $tienda_detalle_orden_compra
+            'tienda_detalle_orden_compra' => $tienda_detalle_orden_compra,
+            'tiendas' => $tiendas
         ]);
     }
 

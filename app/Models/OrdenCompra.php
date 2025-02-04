@@ -139,10 +139,16 @@ class OrdenCompra extends Model
             '01/01/2025' fecha_vencimiento, pd.id_producto,  pr.codigo, pr.denominacion,
             --case when  oc.id_empresa_compra = ".$emp." then 
             case when  oc.id_empresa_compra = 23 then 
+<<<<<<< HEAD
             (SELECT pe.codigo_producto ||'-'|| pr.denominacion ||'('|| pe.codigo_empresa||'-'|| pe. descripcion_empresa||')'  
+=======
+            --(SELECT pe.codigo_producto ||'-'|| pr.denominacion ||'('|| pe.codigo_empresa||'-'|| pe. descripcion_empresa||')'
+            (SELECT  pr.denominacion ||'('|| pe.codigo_empresa||'-'|| pe. descripcion_empresa||')'  
+>>>>>>> c168beb62a1672adb0e4eaf15974c844377964bb
             FROM equivalencia_productos pe
             where pe.id_empresa = oc.id_empresa_compra and pe.id_producto = pd.id_producto and pe.estado= '1'            
-            )	else pr.codigo ||'-'|| pr.denominacion end  producto_prof,
+            --)	else pr.codigo ||'-'|| pr.denominacion end  producto_prof,
+            )	else  pr.denominacion end  producto_prof,
             um.denominacion um, pd.cantidad_requerida cantidad, pd.id_descuento, pd.precio precio_unitario, pd.sub_total, pd.igv, pd.total, pd.id_unidad_medida, pd.descuento, pd.valor_venta_bruto,
             pd.precio_venta, pd.valor_venta
             FROM orden_compras oc

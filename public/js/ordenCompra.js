@@ -130,6 +130,9 @@ function datatablenew(){
                 }
             });
         },
+		"fnRowCallback": function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+           
+		},
 
         "aoColumnDefs":
             [	
@@ -314,6 +317,12 @@ function datatablenew(){
     });
 
 }
+
+fn_util_LineaDatatable("#tblOrdenCompra");
+
+$('#tblOrdenCompra tbody').on('click', 'tr', function () {
+	
+});
 
 function fn_ListarBusqueda() {
     datatablenew();

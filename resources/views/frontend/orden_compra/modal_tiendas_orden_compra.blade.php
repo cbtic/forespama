@@ -187,6 +187,10 @@ $(document).ready(function() {
         //cargarDetalle();
         cambiarOrigen();
     }
+
+    if($('#tienda_asignada').val()==1){
+        cargaDetalleTienda();
+    }
 });
 
 function cambiarTipoCambio(){
@@ -811,6 +815,103 @@ function pdf_documento(){
 
 }
 
+function cargaDetalleTienda(){
+
+    var id = $("#id").val();
+    const tbody = $('#divOrdenCompraTienda');
+
+    tbody.empty();
+
+    $.ajax({
+        url: "/orden_compra/cargar_detalle_tienda/"+id,
+        type: "GET",
+        success: function (result) {
+
+            var cantidad = result.tienda_orden_compra.length;
+
+            $("#cantidad_tiendas").val(cantidad);
+
+            $("#cantidad_tiendas").attr('readonly',true);
+
+            let n = 1;
+
+            result.tienda_orden_compra.forEach(tienda_orden_compra => {
+                
+                let selectTiendas = `<select name="tiendas[]" id="tiendas${n}" class="form-control form-control-sm tiendas-select">
+                    <option value="">--Seleccionar--</option>`;
+                
+                result.tiendas.forEach(tienda => {
+                    let selected = tienda.id == tienda_orden_compra.id_tienda ? "selected" : "";
+                    selectTiendas += `<option value="${tienda.id}" ${selected}>${tienda.denominacion}</option>`;
+                });
+
+                selectTiendas += `</select>`;
+
+                const rowTienda = `
+                    <tr>
+                        <td style="width: 20px">${n}</td>
+                        <td colspan="5">
+                            ${selectTiendas}
+                        </td>
+                    </tr>
+                `;
+                /*const rowTienda  = `
+                    <tr>
+                        <td style="width: 20px">${n}</td>
+                        
+                        <td colspan="5"><input name="tienda[]" id="tienda${n}" class="cantidad_ingreso form-control form-control-sm" style="font-weight: bold;" value="${tienda_orden_compra.tienda}" type="text" readonly></td>
+                    </tr>
+                `;*/
+
+                tbody.append(rowTienda);
+
+                /*const rowTiendaNombre= `
+                    <tr style="font-size:13px">
+                        <th>#</th>
+                        <th>Producto</th>
+                        <th>Unidad</th>
+                        <th>Cantidad</th>
+                    </tr>
+                `;
+                
+                tbody.append(rowTiendaNombre);*/
+
+                result.tienda_detalle_orden_compra.forEach(tienda_detalle_orden_compra => {
+                    if(tienda_orden_compra.id_tienda==tienda_detalle_orden_compra.id_tienda){
+                        const rowProducto  = `
+                            <tr>
+                                <td></td> 
+                        
+                                <td>
+                                    <input type="hidden" name="id_orden_compra_detalle[]" id="id_orden_compra_detalle" value="${tienda_detalle_orden_compra.id_orden_compra}">
+                                    <input type="hidden" name="descripcion[]" id="descripcion" class="cantidad_ingreso form-control form-control-sm" value="${tienda_detalle_orden_compra.id_producto}" oninput="">
+                                    <label style="border:none; background: none;" name="producto[]" id="producto${n}" class="form-control form-control-sm"> ${tienda_detalle_orden_compra.producto}
+                                </td>
+                                
+                                <td style="width: 200px"><label style="border:none; background: none;" name="unidad_medida[]" id="unidad_medida${n}" class="form-control form-control-sm">${tienda_detalle_orden_compra.unidad_medida}</td>
+                                <td style="width: 100px"><input type="text" name="cantidad_ingreso[]" id="cantidad_ingreso${n}" class="form-control form-control-sm" value="${tienda_detalle_orden_compra.cantidad}"></td>
+                                <td><button type="button" class="btn btn-danger btn-sm" onclick="eliminarFila(this)">Eliminar</button></td>
+                            </tr>
+                        `;
+                        /*const rowProducto  = `
+                            <tr>
+                                <td></td> 
+                                <td><input name="producto[]" id="producto${n}" class="cantidad_ingreso form-control form-control-sm" value="${tienda_detalle_orden_compra.producto}" type="text" readonly></td>
+                                <td style="width: 200px"><input name="unidad_medida[]" id="unidad_medida${n}" class="cantidad_ingreso form-control form-control-sm" value="${tienda_detalle_orden_compra.unidad_medida}" type="text" readonly></td>
+                                <td style="width: 100px"><input name="cantidad[]" id="cantidad${n}" class="cantidad form-control form-control-sm" value="${tienda_detalle_orden_compra.cantidad}" type="text" readonly></td>
+                            </tr>
+                        `;*/
+                        tbody.append(rowProducto);
+                    }
+                    
+                });
+                n++;
+            });
+        }
+    });
+
+}
+
 </script>
 
 
@@ -843,6 +944,7 @@ function pdf_documento(){
                     
                     <input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
                     <input type="hidden" name="id" id="id" value="<?php echo $id?>">
+                    <input type="hidden" name="tienda_asignada" id="tienda_asignada" value="<?php echo $orden_compra->tienda_asignada?>">
                     
                     <div class="row" style="padding-left:10px">
 
