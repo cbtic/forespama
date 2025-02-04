@@ -1243,6 +1243,28 @@
                                             </div>
 
                                         </div>
+
+                                        <div id="" class="row">
+                                            <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12">
+                                                <div class="form-group">
+                                                    <input type="checkbox" id="chkRetencion" value="0" />
+                                                    <label for="chkRetencion" id="lblFrac">Ope. Sujeta Retención</label>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12" id="divPorcRet" style="display:none">
+                                                <div class="form-group">
+                                                    <label class="form-control-sm">Porcentaje Retención</label>
+                                                    <input type="text" readonly name="porcentaje_retencion" id="porcentaje_retencion" value="" placeholder="" class="form-control form-control-sm" >
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12" id="divTotRet" style="display:none">
+                                                <div class="form-group">
+                                                    <label class="form-control-sm">Monto Retención</label>
+                                                    <input type="text" readonly name="monto_retencion" id="monto_retencion" value="0" placeholder="" class="form-control form-control-sm" >
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <!--card-body-->
                                 </div>

@@ -915,3 +915,37 @@ function obtenerTitular(){
         
     }
 
+	$("#chkRetencion").on('change', function() {
+		if ($(this).is(':checked')) {
+
+			var total=$("#total_pagar").val();
+			var reten =0;
+			
+			//alert(total);
+			if (total==="0"){
+				total=$("#total_fac_").val();
+			}
+			//alert(total);
+			reten = Number(total)*0.03;
+
+			$('#porcentaje_retencion').val("3");
+			$('#monto_retencion').val(reten.toFixed(2));
+
+			$("#divPorcRet").show();
+		  	$("#divTotRet").show();
+
+		} else {
+
+			$("#divPorcRet").hide();
+			$("#divTotRet").hide();
+
+
+			$('#porcentaje_retencion').val("");
+			$('#monto_retencion').val("0");
+
+
+		}
+
+		//alert($('#chkExonerado').val());	
+	  });
+

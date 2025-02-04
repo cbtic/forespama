@@ -914,6 +914,11 @@ class ComprobanteController extends Controller
                 if($id_persona!="") $factura_upd->id_persona = $id_persona;
                 if($id_empresa!="") $factura_upd->id_empresa = $id_empresa;
 
+                if($request->porcentaje_retencion!=""){
+                    $factura_upd->porc_retencion = $request->porcentaje_retencion;
+                    $factura_upd->monto_retencion = $request->monto_retencion;
+                }
+
 				$factura_upd->save();
 
 
@@ -2764,8 +2769,13 @@ class ComprobanteController extends Controller
             $data["dtmedioPagoDetraccion"] = $factura->medio_pago_detrac;
             $data["dtcodigoBienServicio"] = $factura->afecta_detrac;
         }
-        
 
+        if ($factura->porc_retencion!=""){
+            
+            $data["porcentajeRetencion"] = "0.03"; //$factura->porc_retencion;
+            $data["totalRetencion"] = $factura->monto_retencion;
+        }
+        
 
       //  print_r(json_encode($data)); exit();
 
