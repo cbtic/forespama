@@ -524,7 +524,7 @@
                                                             <option value="">--Selecionar--</option>
                                                             <?php
                                                             foreach ($tipooperacion as $row) { ?>
-                                                                <option value="<?php echo $row->codigo ?>" <?php if ($row->codigo == '1') echo "selected='selected'" ?>><?php echo $row->denominacion ?></option>
+                                                                <option value="<?php echo $row->codigo ?>" <?php if ($row->codigo == '0101') echo "selected='selected'" ?>><?php echo $row->denominacion ?></option>
                                                             <?php
                                                             }
                                                             ?>
@@ -754,7 +754,7 @@
                                                     if ($trans == 'FA' || $trans == 'FE') { ?>
                                                         <?php foreach ($facturad as $key => $fac) {
                                                             //		$smodulo = $fac['smodulo'];
-                                                        ?>
+                                                        ?> 
                                                             <input type="hidden" name="facturad[<?php echo $key ?>][id]" value="<?php echo $fac['id'] ?>" />
                                                             <input type="hidden" name="facturad[<?php echo $key ?>][fecha]" value="<?php echo $fac['fecha'] ?>" />
                                                             <input type="hidden" name="facturad[<?php echo $key ?>][denominacion]" value="<?php echo $fac['denominacion'] ?>" />
@@ -776,6 +776,7 @@
                                                             <input type="hidden" name="facturad[<?php echo $key ?>][pv]" value="<?php echo $fac['pv'] ?>" />
                                                             <input type="hidden" name="facturad[<?php echo $key ?>][valor_venta_bruto]" value="<?php echo $fac['valor_venta_bruto'] ?>" />
                                                             <input type="hidden" name="facturad[<?php echo $key ?>][valor_venta]" value="<?php echo $fac['vv'] ?>" />
+                                                            <input type="hidden" name="facturad[<?php echo $key ?>][codigo_producto]" value="<?php echo $fac['codigo_producto'] ?>" />
 
                                                             <tr>
                                                                 <td class="text-right"><?php $n = $n + 1;
@@ -1241,6 +1242,28 @@
                                                 </div>
                                             </div>
 
+                                        </div>
+
+                                        <div id="" class="row">
+                                            <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12">
+                                                <div class="form-group">
+                                                    <input type="checkbox" id="chkRetencion" value="0" />
+                                                    <label for="chkRetencion" id="lblFrac">Ope. Sujeta Retención</label>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12" id="divPorcRet" style="display:none">
+                                                <div class="form-group">
+                                                    <label class="form-control-sm">Porcentaje Retención</label>
+                                                    <input type="text" readonly name="porcentaje_retencion" id="porcentaje_retencion" value="" placeholder="" class="form-control form-control-sm" >
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12" id="divTotRet" style="display:none">
+                                                <div class="form-group">
+                                                    <label class="form-control-sm">Monto Retención</label>
+                                                    <input type="text" readonly name="monto_retencion" id="monto_retencion" value="0" placeholder="" class="form-control form-control-sm" >
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                     <!--card-body-->

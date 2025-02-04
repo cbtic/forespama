@@ -90,9 +90,18 @@ $(document).ready(function () {
 		}
 	});
 
-	
+	$('#id_tipooperacion_').keypress(function (e) {
+		//if (e.keyCode == 13) {
+			calculoDetraccion();
+		//}
+	});
 
-	calculoDetraccion();
+	$('#id_tipooperacion_').click(function () {
+		calculoDetraccion();
+	});
+
+
+	//calculoDetraccion();
 
 	calculaPorcentaje(1);
 
@@ -103,20 +112,23 @@ function calculoDetraccion(){
 	
 	var total_fac = $('#total_fac_').val();
 	var total_detraccion =total_fac*12/100;
-	var nc_detraccion = "111-111-111-11";
+	var nc_detraccion = "00061142797";
 	var tipo_detraccion = "004";
 	var afecta_a = "022";
 	var medio_pago = "001";
-	var tipo_operacion = "2";
+	//var tipo_operacion = "2";
+	var tipo_operacion =$('#id_tipooperacion_').val();
 	//var d = new Date();
 
 	//alert(Math.round(total_fac));
 	//alert(Math.round(total_fac));
 	var tipo= $('#TipoF').val()
 
-	if (Math.round(total_fac) > 700 && tipo=='FT' ){
+	//if (Math.round(total_fac) > 700 && tipo=='FT' ){
+	//	alert(tipo_operacion);
+	if (tipo_operacion=='1001' ){
 
-		$('#porcentaje_detraccion').val("12%");		
+		$('#porcentaje_detraccion').val("12");		
 		$('#monto_detraccion').val(total_detraccion.toFixed(2));
 		$('#nc_detraccion').val(nc_detraccion);
 		$('#tipo_detraccion').val(tipo_detraccion);
@@ -130,7 +142,7 @@ function calculoDetraccion(){
 		$('#nc_detraccion').val("");
 		$('#tipo_detraccion').val("");
 		$('#afecta_a').val("");
-		$('#id_tipooperacion_').val("1");
+		$('#id_tipooperacion_').val(tipo_operacion);
 		
 		//$('#medio_pago').value("");
 	}
@@ -914,4 +926,38 @@ function obtenerTitular(){
        
         
     }
+
+	$("#chkRetencion").on('change', function() {
+		if ($(this).is(':checked')) {
+
+			var total=$("#total_pagar").val();
+			var reten =0;
+			
+			//alert(total);
+			if (total==="0"){
+				total=$("#total_fac_").val();
+			}
+			//alert(total);
+			reten = Number(total)*0.03;
+
+			$('#porcentaje_retencion').val("3");
+			$('#monto_retencion').val(reten.toFixed(2));
+
+			$("#divPorcRet").show();
+		  	$("#divTotRet").show();
+
+		} else {
+
+			$("#divPorcRet").hide();
+			$("#divTotRet").hide();
+
+
+			$('#porcentaje_retencion').val("");
+			$('#monto_retencion').val("0");
+
+
+		}
+
+		//alert($('#chkExonerado').val());	
+	  });
 

@@ -532,7 +532,7 @@ class ComprobanteController extends Controller
 
 			$tarifa = $request->facturad;
 
-            //print_r($tarifa);
+           // print_r($tarifa);
             //exit();
 
            // $total_pagar_abono = $request->total_pagar_abono;
@@ -886,7 +886,8 @@ class ComprobanteController extends Controller
                 
 				if(isset($factura_upd->tipo_cambio)) $factura_upd->tipo_cambio = $request->tipo_cambio;
                 
-                if($total>700 && $tipoF=='FT') {
+                //if($total>700 && $tipoF=='FT') {
+                if($request->id_tipooperacion_=="1001") {
                     $factura_upd->porc_detrac = $request->porcentaje_detraccion;
                     $factura_upd->monto_detrac = $request->monto_detraccion;
                     $factura_upd->cuenta_detrac = $request->nc_detraccion;
@@ -913,6 +914,11 @@ class ComprobanteController extends Controller
 
                 if($id_persona!="") $factura_upd->id_persona = $id_persona;
                 if($id_empresa!="") $factura_upd->id_empresa = $id_empresa;
+
+                if($request->porcentaje_retencion!=""){
+                    $factura_upd->porc_retencion = $request->porcentaje_retencion;
+                    $factura_upd->monto_retencion = $request->monto_retencion;
+                }
 
 				$factura_upd->save();
 
@@ -953,6 +959,7 @@ class ComprobanteController extends Controller
                         "id" => 0, 
                         "fecha" => $fecha_hoy,
                         "denominacion" => "REDONDEO",
+                        "codigo_producto" => "",
                         "descripcion" => "REDONDEO",
                         "monto" => round($total_redondeo,2),
                         "moneda" => "SOLES" ,
@@ -982,6 +989,7 @@ class ComprobanteController extends Controller
                         "id" => 0, 
                         "fecha" => $fecha_hoy,
                         "denominacion" => "REDONDEO",
+                        "codigo_producto" => "",
                         "descripcion" => "REDONDEO",
                         "monto" => round($total_abono,2),
                         "moneda" => "SOLES" ,
@@ -1014,7 +1022,7 @@ class ComprobanteController extends Controller
 					if ($value['descuento']=='') $descuento = 0;
 					$id_factura_detalle = $facturas_model->registrar_factura_moneda($serieF, $fac_numero, $tipoF, $value['cantidad'], $value['id_concepto'], $total, $value['descripcion'], $value['cod_contable'], $value['item'], $id_factura, $descuento,    'd',     $id_user,  $id_moneda);
 					
-                    // print_r($id_factura_detalle);
+                    // print_r($value);
                     //exit();
 
                     if($value['id_concepto']!='26464'){
@@ -1026,6 +1034,7 @@ class ComprobanteController extends Controller
                         $facturaDet_upd->precio_venta=$value['pv'];
                         $facturaDet_upd->valor_venta_bruto=$value['valor_venta_bruto'];
                         $facturaDet_upd->valor_venta=$value['valor_venta'];
+                        $facturaDet_upd->codigo=$value['codigo_producto'];
                         $facturaDet_upd->save();  
 
                     }
@@ -1094,6 +1103,8 @@ class ComprobanteController extends Controller
                     $valorizacion->descripcion = $value['descripcion'];
                     $valorizacion->valor_unitario = $value['monto'];
                     $valorizacion->cantidad = $value['cantidad'];
+                    $valorizacion->codigo = $value['codigo_producto'];
+                    
                     //$valorizacion->codigo_fraccionamiento =  $id_fraccionamiento;
 
                     $valorizacion->id_comprobante = $id_factura;
@@ -2684,7 +2695,7 @@ class ComprobanteController extends Controller
 							"valorVentaItem"=> str_replace(",","",number_format($row->valor_venta)), //"42.37",
 							"descripcionItem"=> $row->descripcion,//"TRANSBORDO",
 							"unidadMedidaItem"=> $row->unidad,
-							"codigoProductoItem"=> ($row->cod_contable!="")?$row->cod_contable:"0000000", //"002",
+							"codigoProductoItem"=> ($row->codigo!="")?$row->codigo:"0000000", //"002",
                             "codigoDescuentoItem"=> "00",
 							"valorUnitarioSinIgv"=> str_replace(",","",number_format($row->pu,2)), //"42.3728813559",
 							"precioUnitarioConIgv"=> str_replace(",","",number_format($row->precio_venta,2)), //"50.0000000000",
@@ -2737,9 +2748,9 @@ class ComprobanteController extends Controller
 		$data["codigoPaisReceptor"] = "PE";
 		$data["departamentoEmisor"] = "OXAPAMPA";
 		$data["descuentosGlobales"] = "0.00";
-		$data["codigoTipoOperacion"] = "0101";
+		$data["codigoTipoOperacion"] = $factura->tipo_operacion; //"0101";
 		$data["razonSocialReceptor"] = $factura->destinatario;//"Freddy Rimac Coral";
-		$data["nombreComercialEmisor"] = "CAP";
+		$data["nombreComercialEmisor"] = "FELMO";
 		$data["tipoDocIdentidadEmisor"] = "6";
 		$data["sumatoriaImpuestoBolsas"] = "0.00";
 		$data["numeroDocIdentidadEmisor"] = "20486785994";//"20160453908";     
@@ -2747,7 +2758,7 @@ class ComprobanteController extends Controller
 		$data["numeroDocIdentidadReceptor"] = $factura->cod_tributario; //"10040834643";
         $data["direccionReceptor"] = $factura->direccion;
 
-        if ($factura->porc_detrac!="0")
+        if ($factura->tipo_operacion=="1001")
         {
             
             $data["dtmontoDetraccion"] = $factura->monto_detrac;
@@ -2759,10 +2770,15 @@ class ComprobanteController extends Controller
             $data["dtmedioPagoDetraccion"] = $factura->medio_pago_detrac;
             $data["dtcodigoBienServicio"] = $factura->afecta_detrac;
         }
+
+        if ($factura->porc_retencion!=""){
+            
+            $data["porcentajeRetencion"] = "0.03"; //$factura->porc_retencion;
+            $data["totalRetencion"] = $factura->monto_retencion;
+        }
         
 
-
-      //  print_r(json_encode($data)); exit();
+        //print_r(json_encode($data)); exit();
 
 
 		$databuild_string = json_encode($data);
