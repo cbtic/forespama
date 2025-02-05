@@ -105,6 +105,8 @@ class ComprobanteController extends Controller
 
         $medio_pago = $tabla_model->getMaestroByTipo('11');
 
+        $afecta_a = $tabla_model->getMaestroByTipo('35');
+
        // echo $trans;exit();
         if ($trans == 'FA'){
 
@@ -325,7 +327,7 @@ class ComprobanteController extends Controller
 
             //print_r($facturad); exit();         
 
-            return view('frontend.comprobante.create',compact('trans', 'titulo','empresa', 'facturad', 'total', 'igv', 'stotal','TipoF','ubicacion', 'persona','id_caja','serie', 'adelanto','MonAd','forma_pago','tipooperacion','formapago', 'totalDescuento','id_tipo_afectacion_pp', 'valorizad','descuentopp','id_pronto_pago', 'medio_pago', 'id_orden_compra', 'id_proforma'));
+            return view('frontend.comprobante.create',compact('trans', 'titulo','empresa', 'facturad', 'total', 'igv', 'stotal','TipoF','ubicacion', 'persona','id_caja','serie', 'adelanto','MonAd','forma_pago','tipooperacion','formapago', 'totalDescuento','id_tipo_afectacion_pp', 'valorizad','descuentopp','id_pronto_pago', 'medio_pago', 'id_orden_compra', 'id_proforma','afecta_a'));
         }
         if ($trans == 'FN'){
             //$serie = $serie_model->getMaestro('SERIES',$TipoF);
