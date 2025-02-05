@@ -9,7 +9,7 @@
 }
 
 #tblOrdenCompra tbody tr.even{
-	display: none !important
+	/*display: none !important*/ 
 }
 
 body {

@@ -78,8 +78,9 @@ foreach($orden_compra as $key=>$row):
 	<td class="text-right" style="font-size:8.0pt"><?php echo $row->valor_venta_bruto?></td>
 	<td class="text-right" style="font-size:8.0pt"><?php echo $row->igv?></td>
 	<td class="text-right" style="font-size:8.0pt"><?php echo $row->total?></td>
+	<!--
 	<td><button type="button" class="btn btn-danger deleteFila btn-xs" style="margin-left:4px"><i class="fa fa-times"></i></button></td>;
-	
+-->
 
 </tr>
 

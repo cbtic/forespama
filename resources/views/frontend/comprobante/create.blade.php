@@ -1215,16 +1215,33 @@
                                             <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12">
                                                 <div class="form-group">
                                                     <label class="form-control-sm">Afecta a:</label>
+
+                                                    <select name="afecta_a" id="afecta_a" class="form-control form-control-sm" onChange="">
+                                                        <option value="">--Selecionar--</option>
+                                                        <?php
+                                                        foreach ($afecta_a as $row) { ?>
+                                                            <option value="<?php echo $row->codigo ?>" <?php if ($row->codigo == '008') echo "selected='selected'" ?>><?php echo $row->denominacion ?></option>
+                                                        <?php
+                                                        }
+                                                        ?>
+                                                    </select>
+
+<!--
                                                     <select name="afecta_a" id="afecta_a" class="form-control form-control-sm" onchange="validaTipoDocumento()">
                                                         <option value="">
-                                                            <?php echo "" ?></option>
+                                                            <//?php echo "" ?></option>
                                                         <option value="022">
-                                                            <?php echo "Otro servicios empresariales" ?></option>
+                                                            <//?php echo "Otro servicios empresariales" ?></option>
                                                         <option value="017">
-                                                            <?php echo "Contratos de construcción" ?></option>
+                                                            <//?php echo "Contratos de construcción" ?></option>
                                                     </select>
+                                -->
+
+
                                                 </div>
                                             </div>
+
+
                                             <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12">
                                                 <div class="form-group">
                                                     <label class="form-control-sm">Medio de Pago:</label>
