@@ -20,12 +20,9 @@ class Guia extends Model
 
         $cad = "select c.licencia, g.*, p.nombres ||' '|| p.apellido_paterno || ' '|| p.apellido_materno razon_social_conductor, p.numero_documento
             from guias g
-            inner join vehiculos v on v.placa = g.guia_vehiculo_placa 
-            inner join vehiculos_conductores vc on vc.id_vehiculos = v.id
-            inner join conductores c on c.id = vc.id_conductores
-            --inner join personas p on p.id = c.id_personas 
-            inner join personas p on p.numero_documento = g.guia_conductor_numdoc
-            where g.id = '".$id."' ";
+	        inner join personas p on p.numero_documento = g.guia_conductor_numdoc
+            inner join conductores c on c.id_personas = p.id 
+            where g.id = '".$id."' limit 1";
     
         $data = DB::select($cad);
         if($data)return $data[0];
