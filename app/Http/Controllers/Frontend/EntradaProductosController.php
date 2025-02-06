@@ -304,11 +304,13 @@ class EntradaProductosController extends Controller
                 $entrada_producto = EntradaProducto::where('id_orden_compra',$request->id_orden_compra)->first();
                 $entrada_producto_detalle = EntradaProductoDetalle::where('id_entrada_productos',$entrada_producto->id)->get();
                 $orden_compra = OrdenCompra::find($entrada_producto->id_orden_compra);
-                $orden_compra_detalle = OrdenCompraDetalle::where('id_orden_compra',$orden_compra->id)->orderBy('id', 'asc')->get();
+                //$orden_compra_detalle = OrdenCompraDetalle::where('id_orden_compra',$orden_compra->id)->orderBy('id', 'asc')->get();
                 $entrada_producto_detalle_model = new EntradaProductoDetalle;
                 foreach($entrada_producto_detalle as $index => $detalle){
                     
-                    $detalle_orden = $orden_compra_detalle[$index];
+                    $detalle_orden = OrdenCompraDetalle::where('id_orden_compra',$orden_compra->id)->where('id_producto',$detalle->id_producto)->first();
+
+                    //$detalle_orden = $orden_compra_detalle[$index];
                     
                     $cantidad_requerida = $detalle_orden->cantidad_requerida;
                     
@@ -530,12 +532,13 @@ class EntradaProductosController extends Controller
                 $salida_producto = SalidaProducto::where('id_orden_compra',$request->id_orden_compra)->first();
                 $salida_producto_detalle = SalidaProductoDetalle::where('id_salida_productos',$salida_producto->id)->get();
                 $orden_compra = OrdenCompra::find($salida_producto->id_orden_compra);
-                $orden_compra_detalle = OrdenCompraDetalle::where('id_orden_compra',$orden_compra->id)->get();
+                //$orden_compra_detalle = OrdenCompraDetalle::where('id_orden_compra',$orden_compra->id)->get();
                 $salida_producto_detalle_model = new SalidaProductoDetalle;
                 
                 foreach($salida_producto_detalle as $index => $detalle){
 
-                    $detalle_orden = $orden_compra_detalle[$index];
+                    //$detalle_orden = $orden_compra_detalle[$index];
+                    $detalle_orden = OrdenCompraDetalle::where('id_orden_compra',$orden_compra->id)->where('id_producto',$detalle->id_producto)->first();
                     
                     $cantidad_requerida = $detalle_orden->cantidad_requerida;
                     
