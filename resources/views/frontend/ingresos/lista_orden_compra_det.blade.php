@@ -71,8 +71,9 @@ foreach($orden_compra as $key=>$row):
 			<input type="hidden" name="valorizacion_detalle[<?php echo $key?>][id_tipo_afectacion]" value="0" />
     </td>
 
-	<td class="text-center" style="font-size:8.0pt"><?php echo $row->producto_prof?></td>
-	<td class="text-right" style="font-size:8.0pt"><?php echo $row->cantidad?></td>
+	<td class="text-left" style="font-size:8.0pt"><?php echo $row->codigo?></td>
+	<td class="text-left" style="font-size:8.0pt"><?php echo $row->producto_prof?></td>
+	<td class="text-center" style="font-size:8.0pt"><?php echo $row->cantidad?></td>
 	<td class="text-right" style="font-size:8.0pt"><?php echo $row->valor_venta_bruto?></td>
 	<td class="text-right" style="font-size:8.0pt"><?php echo $row->descuento?></td>
 	<td class="text-right" style="font-size:8.0pt"><?php echo $row->valor_venta_bruto?></td>

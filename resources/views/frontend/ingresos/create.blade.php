@@ -821,11 +821,11 @@
                                                 <thead>
                                                     <tr style="font-size:13px">
                                                         <th width="5%">Nro</th>
-                                                        <th width="35%">Codigo</th>
+                                                        <th width="10%">Codigo</th>
                                                         <th width="35%">Producto</th>
                                                         <th width="10%"class="text-center">Cant.</th>
                                                         <th width="10%"class="text-center">Precio Venta</th>
-                                                        <th width="5%"class="text-center">Desc.</th>
+                                                        <th width="10%"class="text-center">Desc.</th>
                                                         <th width="10%" class="text-center">Sub Total</th>
                                                         <th width="10%" class="text-center">IGV</th>
                                                         <th width="10%" class="text-center">Total</th>

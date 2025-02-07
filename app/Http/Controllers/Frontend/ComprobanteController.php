@@ -524,8 +524,8 @@ class ComprobanteController extends Controller
 
         $id_tipo_afectacion_pp = $request->id_tipo_afectacion_pp;
 
-
-         
+       // $id_orden_compra = $request->id_orden_compra;
+       // $id_proforma = $request->id_proforma;
 
 		//$facturaExiste = $facturas_model->getValidaFactura($request->TipoF,$request->ubicacion,$request->persona,$request->totalF);
 		//if(count($facturaExiste)==0){
@@ -900,6 +900,15 @@ class ComprobanteController extends Controller
                     //$factura_upd->detraccion = $request->tipo_cambio;
                     //$factura_upd->id_detra_cod_bos = $request->tipo_cambio;
                 }
+
+                
+                $id_orden_compra = $request->id_orden_compra;
+
+                
+                if ((string)$id_orden_compra!=""){
+                    $factura_upd->orden_compra =  $id_orden_compra;
+                }
+                
 
                 $factura_upd->estado_pago =  $request->estado_pago;
 
@@ -2676,7 +2685,11 @@ class ComprobanteController extends Controller
 
         //echo $this->getTipoDocumento("BV");exit();
 
-		$factura = Comprobante::where('id', $id_factura)->get()[0];
+		//$factura = Comprobante::where('id', $id_factura)->get()[0];
+
+        $factura_model = new Comprobante;
+        $factura = $factura_model->getComprobanteId($id_factura);
+
 		$factura_detalles = ComprobanteDetalle::where([
             'serie' => $factura->serie,
             'numero' => $factura->numero,
@@ -2760,6 +2773,16 @@ class ComprobanteController extends Controller
 		$data["numeroDocIdentidadReceptor"] = $factura->cod_tributario; //"10040834643";
         $data["direccionReceptor"] = $factura->direccion;
 
+        if ($factura->numero_orden_compra_cliente!=Null){            
+            $data["ordenCompra"] = $factura->numero_orden_compra_cliente;
+        }
+        
+        if ($factura->guia_serie!=Null){
+            $data["tipoDocumentoGuia"] = "09";
+            $data["serieNumeroGuia"] = $factura->guia_serie."-".$factura->guia_numero; 
+
+        }
+   
         if ($factura->tipo_operacion=="1001")
         {
             
