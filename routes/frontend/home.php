@@ -561,3 +561,4 @@ Route::get('parametro/eliminar_parametro/{id}/{estado}', [ParametroController::c
 Route::get('parametro/create_valida_parametro', [ParametroController::class, 'create_valida_parametro'])->name('parametro.create_valida_parametro');
 Route::post('parametro/listar_total_orden_compra_tienda_ajax', [ParametroController::class, 'listar_total_orden_compra_tienda_ajax'])->name('parametro.listar_total_orden_compra_tienda_ajax');
 Route::get('parametro/cargar_parametro_orden_compra/{id}', [ParametroController::class, 'cargar_parametro_orden_compra'])->name('parametro.cargar_parametro_orden_compra');
+Route::get('orden_compra/obtener_entrada_salida/{id_orden_compra}/{tipo_documento}', [OrdenCompraController::class, 'obtener_entrada_salida'])->name('orden_compra.obtener_entrada_salida');

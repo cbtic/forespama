@@ -87,4 +87,15 @@ class SalidaProducto extends Model
         return $data;
     }
 
+    function getCodigoSalidaProductobyOC($id){
+
+        $cad = "select sp.codigo from salida_productos sp 
+        where sp.id_orden_compra ='".$id."'
+        and sp.estado='1'
+        limit 1";
+
+		$data = DB::select($cad);
+        return $data;
+    }
+
 }

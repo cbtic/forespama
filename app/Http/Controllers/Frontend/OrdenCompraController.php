@@ -16,6 +16,8 @@ use App\Models\Almacene;
 use App\Models\Tienda;
 use App\Models\TiendaDetalleOrdenCompra;
 use App\Models\EquivalenciaProducto;
+use App\Models\EntradaProducto;
+use App\Models\SalidaProducto;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Auth;
 use Carbon\Carbon;
@@ -714,5 +716,22 @@ class OrdenCompraController extends Controller
 
         echo json_encode($array);
     }
+
+    public function obtener_entrada_salida($id_orden_compra, $tipo_documento){
+		
+        if($tipo_documento == 1){
+
+            $entrada_producto_model = new EntradaProducto;
+            $codigo = $entrada_producto_model->getCodigoEntradaProductobyOC($id_orden_compra);
+
+        }else if($tipo_documento == 2){
+
+            $salida_producto_model = new SalidaProducto;
+            $codigo = $salida_producto_model->getCodigoSalidaProductobyOC($id_orden_compra);
+
+        }
+		
+		return response()->json($codigo);
+	}
 
 }
