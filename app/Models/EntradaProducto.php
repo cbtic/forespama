@@ -112,4 +112,15 @@ class EntradaProducto extends Model
         return $data;
     }
 
+    function getCodigoEntradaProductobyOC($id){
+
+        $cad = "select ep.codigo from entrada_productos ep 
+        where ep.id_orden_compra ='".$id."'
+        and ep.estado='1'
+        limit 1";
+
+		$data = DB::select($cad);
+        return $data;
+    }
+
 }

@@ -224,6 +224,7 @@ $(document).ready(function() {
     if($('#id').val()>0){
         cargarDetalle();
         cambiarOrigen();
+        obtenerEntradaSalida();
     }
 });
 
@@ -1019,6 +1020,30 @@ $('#moneda_descripcion').val(descripcion);
 
 });
 
+function obtenerEntradaSalida(){
+
+    $('#label_entrada_salida').hide();
+    $('#input_entrada_salida').hide();
+    var id_orden_compra = $('#id').val();
+    var tipo_documento = $('#tipo_documento').val();
+
+    $.ajax({
+        url: "/orden_compra/obtener_entrada_salida/"+id_orden_compra+"/"+tipo_documento,
+        type: "GET",
+        success: function (result) {
+
+            var codigoDocumento = result[0].codigo;
+            //alert(codigoDocumento);
+
+            $('#label_entrada_salida').show();
+            $('#input_entrada_salida').show();
+
+            $('#numero_entrada_salida').val(codigoDocumento);
+
+        }
+	});
+
+}
 
 </script>
 
@@ -1196,6 +1221,12 @@ $('#moneda_descripcion').val(descripcion);
                                 ?>
                             </select>
                             <input name="moneda_descripcion" id="moneda_descripcion" type="hidden">
+                        </div>
+                        <div class="col-lg-2" id="label_entrada_salida">
+                            N&uacute;mero Entrada/Salida
+                        </div>
+                        <div class="col-lg-2" id="input_entrada_salida">
+                            <input id="numero_entrada_salida" name="numero_entrada_salida" style="color:red; font-weight:bold" on class="form-control form-control-sm"  value="<?php echo $orden_compra->numero_orden_compra_cliente;?>" type="text">
                         </div>
                     </div>
                         <div style="margin-top:15px" class="form-group">
