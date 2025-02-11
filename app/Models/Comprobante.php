@@ -75,9 +75,9 @@ class Comprobante extends Model
 
         $cad = "select c.*,  oc.numero_orden_compra_cliente, gi.guia_serie, gi.guia_numero
             from comprobantes c 
-            inner join orden_compras oc on oc.id = c.orden_compra::int
+            left join orden_compras oc on oc.id = case c.orden_compra when '' then '0' else  c.orden_compra::int end
             left join salida_productos sp on sp.id_orden_compra = oc.id
-            left join guia_internas gi on gi.numero_documento::int = sp.id 
+            left join guia_internas gi on gi.numero_documento::int = sp.id  
             where c.id = '".$id."' limit 1";
             
         $data = DB::select($cad);
