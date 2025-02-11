@@ -313,6 +313,9 @@ function fn_save(){
 
 				location.href=urlApp+"/comprobante/"+result.id_factura;
 
+				enviar_comprobante(result.id_factura);
+
+
             }
     });
 }
@@ -961,3 +964,28 @@ function obtenerTitular(){
 		//alert($('#chkExonerado').val());	
 	  });
 
+	function enviar_comprobante(id){
+
+		$.ajax({
+			url: '/comprobante/firmar/' + id ,
+			dataType: "json",
+			success: function (result) {
+
+				if (result) {
+					Swal.fire("Enviado al Facturador Electrónica!");
+
+				}
+				else {						
+					Swal.fire("registro no encontrado!");
+				}
+
+			},
+			"error": function (msg, textStatus, errorThrown) {
+
+				Swal.fire("Numero de documento no fue registrado!");
+
+			}
+	
+		});
+		
+	}
