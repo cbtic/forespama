@@ -150,7 +150,7 @@ class OrdenCompra extends Model
             FROM orden_compras oc
             inner join orden_compra_detalles pd on pd.id_orden_compra = oc.id 
             inner join productos pr on pr.id = pd.id_producto
-            inner join tabla_maestras um on um.codigo::int = pd.id_unidad_medida and um.tipo = '57'
+            inner join tabla_maestras um on um.codigo::int = pd.id_unidad_medida and um.tipo = '43'
             where oc.id = ".$id."  and pd.estado = '1' and oc.cerrado= '2'
             order by pd.id ";
     
