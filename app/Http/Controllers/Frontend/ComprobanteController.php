@@ -2759,7 +2759,7 @@ class ComprobanteController extends Controller
 		$data["importeTotalVenta"] = str_replace(",","",number_format($factura->total,2)); //"150.00";
 		$data["razonSocialEmisor"] = "FORESTAL PAMA S.A.C.";
 		$data["totalOPExoneradas"] = "0.00";
-		$data["totalOPNoGravadas"] = str_replace(",","",number_format($factura->subtotal,2));
+		$data["totalOPNoGravadas"] = "0.00";//str_replace(",","",number_format($factura->subtotal,2));
 		$data["codigoPaisReceptor"] = "PE";
 		$data["departamentoEmisor"] = "OXAPAMPA";
 		$data["descuentosGlobales"] = "0.00";
