@@ -402,6 +402,10 @@ label.form-control-sm{
 					</div>
 
 					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+                        <input id="numero_orden_compra_cliente_bus" name="numero_orden_compra_cliente_bus" on class="form-control form-control-sm"  placeholder="N&uacute;mero OC Cliente">
+					</div>
+
+					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
 						<select name="almacen_origen_bus" id="almacen_origen_bus" class="form-control form-control-sm">
 							<option value="">--Seleccionar Almacen Origen--</option>
 							<?php

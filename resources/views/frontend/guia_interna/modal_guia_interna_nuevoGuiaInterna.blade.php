@@ -1246,7 +1246,7 @@ function generarGuia(){
         url: "/comprobante/guia_json/"+numero_guia,
         dataType: "json",
         success: function(result){
-            
+            console.log(result);
             if (result.notes == "FIRMADO") {
                 bootbox.alert("El documento ha sido firmado correctamente.");
             } else {

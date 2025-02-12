@@ -403,6 +403,42 @@ function agregarConductorNuevo(){
 
 }
 
+function obtenerVehiculoGuia(){
+
+	var placa = $('#placa').val();
+	//alert(placa);
+	$('#marca').val("").trigger('change');
+	$('#ejes').val("");
+	$('#peso_tracto').val("");
+	$('#peso_carreta').val("");
+	$('#peso_seco').val("");
+	$('#exonerado').val("");
+	$('#control').val("");
+	$('#bloqueado').val("");
+
+	$.ajax({
+
+		url:"/vehiculo/obtener_vehiculo_guia/"+placa,
+		dataType: 'json',
+		success: function(result){
+
+			if(result.length>=1){
+				var vehiculo = result[0];
+				$('#marca').val(vehiculo.id_marca).trigger('change');
+				$('#ejes').val(vehiculo.ejes);
+				$('#peso_tracto').val(vehiculo.peso_tracto);
+				$('#peso_carreta').val(vehiculo.peso_carreta);
+				$('#peso_seco').val(vehiculo.peso_seco);
+				$('#exonerado').val(vehiculo.exonerado);
+				$('#control').val(vehiculo.control);
+				$('#bloqueado').val(vehiculo.bloqueado);
+			}else{
+				bootbox.alert("No existe un vehiculo con esa Placa.");
+			}
+		}
+	})
+}
+
 /*function agregarVehiculo(id){
 	
 	$(".modal-dialog").css("width","85%");
@@ -526,7 +562,7 @@ container: '#myModal modal-body'
 						<div class="col-lg-4">
 							<div class="form-group">
 								<label class="control-label">Placa</label>
-								<input id="placa" name="placa" maxlength="7" class="form-control form-control-sm"  value="<?php echo $vehiculo->placa?>" type="text">
+								<input id="placa" name="placa" maxlength="7" class="form-control form-control-sm"  value="" type="text" onchange="obtenerVehiculoGuia()">
 							</div>
 						</div>
 						<div class="col-lg-4">

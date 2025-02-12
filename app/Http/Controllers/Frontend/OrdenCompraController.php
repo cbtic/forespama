@@ -77,6 +77,7 @@ class OrdenCompraController extends Controller
         $p[]=$request->empresa_vende;
         $p[]=$request->fecha;
         $p[]=$request->numero_orden_compra;
+        $p[]=$request->numero_orden_compra_cliente;
         $p[]=$request->situacion;
         $p[]=$request->almacen_origen;
         $p[]=$request->almacen_destino;
@@ -236,19 +237,19 @@ class OrdenCompraController extends Controller
             $orden_compra_detalle->id_orden_compra = $orden_compra->id;
             $orden_compra_detalle->id_producto = $descripcion[$index];
             $orden_compra_detalle->cantidad_requerida = $cantidad_ingreso[$index];
-            $orden_compra_detalle->precio = $precio_unitario_[$index];
-            $orden_compra_detalle->valor_venta_bruto = $valor_venta_bruto[$index];
-            $orden_compra_detalle->precio_venta = $precio_unitario[$index];
-            $orden_compra_detalle->valor_venta = $valor_venta[$index];
+            $orden_compra_detalle->precio = round($precio_unitario_[$index],2);
+            $orden_compra_detalle->valor_venta_bruto = round($valor_venta_bruto[$index],2);
+            $orden_compra_detalle->precio_venta = round($precio_unitario[$index],2);
+            $orden_compra_detalle->valor_venta = round($valor_venta[$index],2);
             $orden_compra_detalle->id_descuento = $id_descuento[$index];
             if($id_descuento[$index]==1){
-                $orden_compra_detalle->descuento = $descuento[$index];
+                $orden_compra_detalle->descuento = round($descuento[$index],2);
             }else if($id_descuento[$index]==2){
                 $orden_compra_detalle->descuento = $porcentaje[$index];
             }
-            $orden_compra_detalle->sub_total = $sub_total[$index];
-            $orden_compra_detalle->igv = $igv[$index];
-            $orden_compra_detalle->total = $total[$index];
+            $orden_compra_detalle->sub_total = round($sub_total[$index],2);
+            $orden_compra_detalle->igv = round($igv[$index],2);
+            $orden_compra_detalle->total = round($total[$index],2);
             $orden_compra_detalle->id_estado_producto = $estado_bien[$index];
             $orden_compra_detalle->id_unidad_medida = $unidad[$index];
             $orden_compra_detalle->id_marca = $marca[$index];

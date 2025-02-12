@@ -562,3 +562,4 @@ Route::get('parametro/create_valida_parametro', [ParametroController::class, 'cr
 Route::post('parametro/listar_total_orden_compra_tienda_ajax', [ParametroController::class, 'listar_total_orden_compra_tienda_ajax'])->name('parametro.listar_total_orden_compra_tienda_ajax');
 Route::get('parametro/cargar_parametro_orden_compra/{id}', [ParametroController::class, 'cargar_parametro_orden_compra'])->name('parametro.cargar_parametro_orden_compra');
 Route::get('orden_compra/obtener_entrada_salida/{id_orden_compra}/{tipo_documento}', [OrdenCompraController::class, 'obtener_entrada_salida'])->name('orden_compra.obtener_entrada_salida');
+Route::get('vehiculo/obtener_vehiculo_guia/{placa}', [VehiculoController::class, 'obtener_vehiculo_guia'])->name('vehiculo.obtener_vehiculo_guia');
