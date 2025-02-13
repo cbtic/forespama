@@ -46,7 +46,10 @@ class SalidaProducto extends Model
 
     function getSalidaByIdOrdenCompra($id){
 
-        $cad = "select sp.id, 'SALIDA' tipo, sp.fecha_salida fecha_movimiento, tm.denominacion tipo_documento, tm2.denominacion unidad_origen, '' razon_social, sp.codigo, sp.fecha_comprobante, sp.estado, sp.created_at, tm3.denominacion moneda, sp.observacion, a.denominacion almacen, tm4.denominacion igv_compra 
+        $cad = "select sp.id, 'SALIDA' tipo, sp.fecha_salida fecha_movimiento, tm.denominacion tipo_documento, tm2.denominacion unidad_origen, '' razon_social, sp.codigo, sp.fecha_comprobante, sp.estado, sp.created_at, tm3.denominacion moneda, sp.observacion, a.denominacion almacen, tm4.denominacion igv_compra,
+        (select COALESCE(STRING_AGG(DISTINCT t.denominacion ::TEXT, ', '), '') from tienda_detalle_orden_compras tdoc
+        inner join tiendas t on tdoc.id_tienda = t.id
+        where tdoc.id_orden_compra = oc.id) tiendas
         from salida_productos sp 
         inner join tabla_maestras tm on sp.id_tipo_documento = tm.codigo ::int and tm.tipo = '49'
         inner join tabla_maestras tm2 on sp.unidad_destino ::int = tm2.codigo::int and tm2.tipo = '50'

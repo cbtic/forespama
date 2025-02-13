@@ -56,13 +56,23 @@ class Vehiculo extends Model
 
    function getVehiculoDatos($placa){
 
-    $cad = "select c.id, c.licencia, c.fecha_licencia, c.estado, c.id_personas, p.nombres||' '||p.apellido_paterno||' '||p.apellido_materno nombre_conductor from conductores c 
-    inner join personas p on c.id_personas = p.id ";
+        $cad = "select c.id, c.licencia, c.fecha_licencia, c.estado, c.id_personas, p.nombres||' '||p.apellido_paterno||' '||p.apellido_materno nombre_conductor from conductores c 
+        inner join personas p on c.id_personas = p.id ";
 
-    //limit 2620";
+        //limit 2620";
 
-    $data = DB::select($cad);
-    return $data;
-}
+        $data = DB::select($cad);
+        return $data;
+    }
+
+    function getVehiculoDatosGuia($placa){
+
+        $cad = "select v.id, v.id_marca, v.ejes, v.peso_tracto, v.peso_carreta, v.peso_seco, v.exonerado, v.control, v.bloqueado, v.estado from vehiculos v 
+        where v.placa ='".$placa."'
+        limit 1";
+    
+        $data = DB::select($cad);
+        return $data;
+    }
 
 }

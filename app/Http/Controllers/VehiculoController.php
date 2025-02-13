@@ -279,7 +279,7 @@ class VehiculoController extends Controller
 	public function send_guia_mantenimiento(Request $request){
 
 		$id_user = Auth::user()->id;
-
+		dd($request);exit();
 		if($request->id == 0){
 			$vehiculo = new Vehiculo;
 			$vehiculo->placa = $request->placa;
@@ -360,6 +360,14 @@ class VehiculoController extends Controller
 		$vehiculo_model = new Vehiculo;
 		$vehiculo_datos = $vehiculo_model->getVehiculoDatos($placa);
 		
+		return response()->json($vehiculo_datos);
+	}
+
+	public function obtener_vehiculo_guia($placa){
+		
+		$vehiculo_model = new Vehiculo;
+		$vehiculo_datos = $vehiculo_model->getVehiculoDatosGuia($placa);
+		//dd($vehiculo_datos);exit();
 		return response()->json($vehiculo_datos);
 	}
 

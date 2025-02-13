@@ -2708,18 +2708,18 @@ class ComprobanteController extends Controller
 							"adicionales"=> [],
 							"cantidadItem"=> $row->cantidad, //"1",
 							"descuentoItem"=> $row->descuento,
-							"importeIGVItem"=> str_replace(",","",number_format($row->igv_total,2)),//"7.63",
-							"montoTotalItem"=> str_replace(",","",number_format($row->importe,2)), //"50.00",
-							"valorVentaItem"=> str_replace(",","",number_format($row->valor_venta)), //"42.37",
+							"importeIGVItem"=> str_replace(",","",$row->igv_total),//str_replace(",","",number_format($row->igv_total,2)),//"7.63",
+							"montoTotalItem"=> str_replace(",","",$row->importe), //"50.00",
+							"valorVentaItem"=> str_replace(",","",$row->valor_venta), //"42.37",
 							"descripcionItem"=> $row->descripcion,//"TRANSBORDO",
 							"unidadMedidaItem"=> $row->unidad,
 							"codigoProductoItem"=> ($row->codigo!="")?$row->codigo:"0000000", //"002",
                             "codigoDescuentoItem"=> "00",
-							"valorUnitarioSinIgv"=> str_replace(",","",number_format($row->pu,2)), //"42.3728813559",
-							"precioUnitarioConIgv"=> str_replace(",","",number_format($row->precio_venta,2)), //"50.0000000000",
+							"valorUnitarioSinIgv"=> str_replace(",","",$row->pu), //"42.3728813559",
+							"precioUnitarioConIgv"=> str_replace(",","",$row->precio_venta), //"50.0000000000",
 							"unidadMedidaComercial"=> $row->unidad,
 							"codigoAfectacionIGVItem"=> $row->afect_igv,
-							"porcentajeDescuentoItem"=> str_replace(",","",number_format(($row->descuento*100)/$row->pu,2)),
+							"porcentajeDescuentoItem"=> str_replace(",","",($row->descuento*100)/$row->pu),
 							"codTipoPrecioVtaUnitarioItem"=> "01"
 							);
 			$items[$index]=$items1;
@@ -2740,9 +2740,9 @@ class ComprobanteController extends Controller
 		$data["horaEmision"] = date("h:i:s", strtotime($factura->fecha)); // "12:12:04";//$cabecera->fecha
 		$data["serieNumero"] = $factura->serie."-".$factura->numero; // "F001-000002";
 		$data["fechaEmision"] = date("Y-m-d",strtotime($factura->fecha)); //"2021-03-18";
-		$data["importeTotal"] = str_replace(",","",number_format($factura->total,2)); //"150.00";
+		$data["importeTotal"] = str_replace(",","",$factura->total); //"150.00";
 		$data["notification"] = "1";
-		$data["sumatoriaIGV"] = str_replace(",","",number_format($factura->impuesto,2)); //"22.88";
+		$data["sumatoriaIGV"] = str_replace(",","",$factura->impuesto); //"22.88";
 		$data["sumatoriaISC"] = "0.00";
 		$data["ubigeoEmisor"] = "150139";
 		$data["montoEnLetras"] = $factura->letras; //"CIENTO CINCUENTA Y 00/100";
@@ -2754,15 +2754,15 @@ class ComprobanteController extends Controller
 		$data["totalAnticipos"] = "0.00";
 		$data["direccionEmisor"] = "CAR.MARGINAL KM. 42 SEC. MIRAFLORES (A UNA CDRA. UNIVERSIDAD DE OXAPAMPA) PASCO - OXAPAMPA - OXAPAMPA";
 		$data["provinciaEmisor"] = "OXAPAMPA";
-		$data["totalDescuentos"] = str_replace(",","",number_format($factura->total_descuentos,2));
-		$data["totalOPGravadas"] = "0.00"; //"127.12";
+		$data["totalDescuentos"] = str_replace(",","",$factura->total_descuentos);
+		$data["totalOPGravadas"] = str_replace(",","",$factura->subtotal); //"127.12";
 		$data["codigoPaisEmisor"] = "PE";
 		$data["totalOPGratuitas"] = "0.00";        
 		$data["docAfectadoFisico"] = false;
-		$data["importeTotalVenta"] = str_replace(",","",number_format($factura->total,2)); //"150.00";
+		$data["importeTotalVenta"] = str_replace(",","",$factura->total); //"150.00";
 		$data["razonSocialEmisor"] = "FORESTAL PAMA S.A.C.";
 		$data["totalOPExoneradas"] = "0.00";
-		$data["totalOPNoGravadas"] = "0.00";//str_replace(",","",number_format($factura->subtotal,2));
+		$data["totalOPNoGravadas"] = "0.00";//
 		$data["codigoPaisReceptor"] = "PE";
 		$data["departamentoEmisor"] = "OXAPAMPA";
 		$data["descuentosGlobales"] = "0.00";
@@ -2775,7 +2775,7 @@ class ComprobanteController extends Controller
 		$data["tipoDocIdentidadReceptor"] = $this->getTipoDocPersona($factura->tipo, $factura->cod_tributario);//"6";        
 		$data["numeroDocIdentidadReceptor"] = $factura->cod_tributario; //"10040834643";
         $data["direccionReceptor"] = $factura->direccion;
-
+        
         if ($factura->numero_orden_compra_cliente!=Null){            
             $data["ordenCompra"] = $factura->numero_orden_compra_cliente;
         }

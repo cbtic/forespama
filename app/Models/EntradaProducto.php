@@ -69,7 +69,10 @@ class EntradaProducto extends Model
 
     function getEntradaByIdOrdenCompra($id){
 
-        $cad = "select ep.id, 'ENTRADA' tipo, ep.fecha_ingreso fecha_movimiento, tm.denominacion tipo_documento, tm2.denominacion unidad_origen, e.razon_social, ep.codigo, ep.fecha_comprobante, ep.estado, ep.created_at, tm3.denominacion moneda, ep.observacion, tm4.denominacion igv_compra, a.denominacion almacen
+        $cad = "select ep.id, 'ENTRADA' tipo, ep.fecha_ingreso fecha_movimiento, tm.denominacion tipo_documento, tm2.denominacion unidad_origen, e.razon_social, ep.codigo, ep.fecha_comprobante, ep.estado, ep.created_at, tm3.denominacion moneda, ep.observacion, tm4.denominacion igv_compra, a.denominacion almacen,
+        (select COALESCE(STRING_AGG(DISTINCT t.denominacion ::TEXT, ', '), '') from tienda_detalle_orden_compras tdoc
+        inner join tiendas t on tdoc.id_tienda = t.id
+        where tdoc.id_orden_compra = oc.id) tiendas
         from entrada_productos ep 
         inner join tabla_maestras tm on ep.id_tipo_documento = tm.codigo ::int and tm.tipo = '48'
         inner join tabla_maestras tm2 on ep.unidad_origen::int = tm2.codigo::int and tm2.tipo = '50'

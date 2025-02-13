@@ -113,6 +113,7 @@ function datatablenew(){
 			var almacen_origen = $('#almacen_origen_bus').val();
 			var almacen_destino = $('#almacen_destino_bus').val();
 			var estado = $('#estado_bus').val();
+			var numero_orden_compra_cliente = $('#numero_orden_compra_cliente_bus').val();
 			
 			var _token = $('#_token').val();
             oSettings.jqXHR = $.ajax({
@@ -123,7 +124,7 @@ function datatablenew(){
                 "data":{NumeroPagina:iNroPagina,NumeroRegistros:iCantMostrar,
 						tipo_documento:tipo_documento,empresa_compra:empresa_compra,empresa_vende:empresa_vende,
 						fecha:fecha,numero_orden_compra:numero_orden_compra,almacen_origen:almacen_origen,
-						almacen_destino:almacen_destino,situacion:situacion,estado:estado,
+						almacen_destino:almacen_destino,situacion:situacion,estado:estado,numero_orden_compra_cliente:numero_orden_compra_cliente,
 						_token:_token
                        },
                 "success": function (result) {
