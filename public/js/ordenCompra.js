@@ -71,6 +71,11 @@ $(document).ready(function () {
 	
 	datatablenew();
 
+	$('#btnDescargar').on('click', function () {
+		DescargarArchivosExcel()
+
+	});
+
 });
 
 function datatablenew(){
@@ -435,4 +440,31 @@ function modalTiendaOrdenCompra(id){
 					$('#openOverlayOpc').modal('show');
 			}
 	});
+}
+
+function DescargarArchivosExcel(){
+	
+	var tipo_documento = $('#tipo_documento_bus').val();
+	var empresa_compra = $('#empresa_compra_bus').val();
+	var empresa_vende = $('#empresa_vende_bus').val();
+	var fecha = $('#fecha_bus').val();
+	var numero_orden_compra = $('#numero_orden_compra_bus').val();
+	var numero_orden_compra_cliente = $('#numero_orden_compra_cliente_bus').val();
+	var almacen_origen = $('#almacen_origen_bus').val();
+	var almacen_destino = $('#almacen_destino_bus').val();
+	var situacion = $('#situacion_bus').val();
+	var estado = $('#estado_bus').val();
+
+	if (tipo_documento == "")tipo_documento = 0;
+	if (empresa_compra == "")empresa_compra = 0;
+	if (empresa_vende == "")empresa_vende = 0;
+	if (fecha == "")fecha = "0";
+	if (numero_orden_compra == "")numero_orden_compra = "0";
+	if (numero_orden_compra_cliente == "")numero_orden_compra_cliente = "0";
+	if (almacen_origen == "")almacen_origen = 0;
+	if (almacen_destino == "")almacen_destino = 0;
+	if (situacion == "")situacion = 0;
+	if (estado == "")estado = 0;
+	
+	location.href = '/orden_compra/exportar_listar_orden_compra/'+tipo_documento+'/'+empresa_compra+'/'+empresa_vende+'/'+fecha+'/'+numero_orden_compra+'/'+numero_orden_compra_cliente+'/'+almacen_origen+'/'+almacen_destino+'/'+situacion+'/'+estado;
 }

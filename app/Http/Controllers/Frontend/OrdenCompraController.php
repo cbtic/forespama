@@ -21,7 +21,15 @@ use App\Models\SalidaProducto;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Auth;
 use Carbon\Carbon;
-
+use Maatwebsite\Excel\Facades\Excel;
+use Maatwebsite\Excel\Concerns\FromArray;
+use stdClass;
+use Illuminate\Support\Facades\Response;
+use Maatwebsite\Excel\Concerns\WithStyles;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
+use Maatwebsite\Excel\Concerns\WithHeadings;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
 
 class OrdenCompraController extends Controller
 {
@@ -735,4 +743,118 @@ class OrdenCompraController extends Controller
 		return response()->json($codigo);
 	}
 
+    public function exportar_listar_orden_compra($tipo_documento, $empresa_compra, $empresa_vende, $fecha, $numero_orden_compra, $numero_orden_compra_cliente, $almacen_origen, $almacen_destino, $situacion, $estado) {
+
+		if($tipo_documento==0)$tipo_documento = "";
+        if($empresa_compra==0)$empresa_compra = "";
+        if($empresa_vende==0)$empresa_vende = "";
+        if($fecha=="0")$fecha = "";
+        if($numero_orden_compra=="0")$numero_orden_compra = "";
+        if($numero_orden_compra_cliente=="0")$numero_orden_compra_cliente = "";
+        if($almacen_origen==0)$almacen_origen = "";
+        if($almacen_destino==0)$almacen_destino = "";
+        if($situacion==0)$situacion = "";
+        if($estado==0)$estado = "";
+
+        $orden_compra_model = new OrdenCompra;
+		$p[]=$tipo_documento;
+        $p[]=$empresa_compra;
+        $p[]=$empresa_vende;
+        $p[]=$fecha;
+        $p[]=$numero_orden_compra;
+        $p[]=$numero_orden_compra_cliente;
+        $p[]=$situacion;
+        $p[]=$almacen_origen;
+        $p[]=$almacen_destino;
+        $p[]=$estado;
+		$p[]=1;
+		$p[]=10000;
+		$data = $orden_compra_model->listar_orden_compra_ajax($p);
+		
+		$variable = [];
+		$n = 1;
+
+		array_push($variable, array("N°","Id","Tipo Documento","Empresa Compra","N° OC Cliente","Empresa Vende","Fecha","Numero OC","Almacen Origen","Almacen Destino","Situacion","Estado"));
+		
+		foreach ($data as $r) {
+
+            if($r->estado==1){$estado='ACTIVO';}
+            if($r->estado==0){$estado='INACTIVO';}
+
+			array_push($variable, array($n++,$r->id, $r->tipo_documento, $r->empresa_compra, $r->numero_orden_compra_cliente, $r->empresa_vende, $r->fecha_orden_compra, $r->numero_orden_compra, $r->almacen_origen, $r->almacen_destino, $r->cerrado, $estado));
+		}
+		
+		$export = new InvoicesExport([$variable]);
+		return Excel::download($export, 'Reporte_orden_compra.xlsx');
+		
+    }
+
+}
+
+class InvoicesExport implements FromArray, WithHeadings, WithStyles
+{
+	protected $invoices;
+
+	public function __construct(array $invoices)
+	{
+		$this->invoices = $invoices;
+	}
+
+	public function array(): array
+	{
+		return $this->invoices;
+	}
+
+    public function headings(): array
+    {
+        return ["N", "Id", "Tipo Documento", "Empresa Compra", "N° OC Cliente", "Empresa Vende", "Fecha", "Numero OC", "Almacen Origen", "Almacen Destino", "Situacion", "Estado"];
+    }
+
+	public function styles(Worksheet $sheet)
+    {
+
+		$sheet->mergeCells('A1:L1');
+
+        $sheet->setCellValue('A1', "REPORTE DE ORDEN DE COMPRA - FORESPAMA");
+        $sheet->getStyle('A1:L1')->applyFromArray([
+            'font' => [
+                'bold' => true,
+                'color' => ['rgb' => 'FFFFFF'],
+            ],
+            'fill' => [
+                'fillType' => Fill::FILL_SOLID,
+                'startColor' => ['rgb' => '246257'],
+            ],
+            'alignment' => [
+                'horizontal' => Alignment::HORIZONTAL_CENTER,
+            ],
+        ]);
+
+		$sheet->getStyle('A1')->getAlignment()->setWrapText(true);
+		$sheet->getRowDimension(1)->setRowHeight(30);
+
+        $sheet->getStyle('A2:L2')->applyFromArray([
+            'font' => [
+                'bold' => true,
+                'color' => ['rgb' => '000000'],
+            ],
+            'fill' => [
+                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                'startColor' => ['rgb' => '2EB85C'],
+            ],
+			'alignment' => [
+			'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+    		],
+        ]);
+
+		$sheet->fromArray($this->headings(), NULL, 'A2');
+
+		/*$sheet->getStyle('L3:L'.$sheet->getHighestRow())
+		->getNumberFormat()
+		->setFormatCode(\PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_NUMBER_00);*/ //SIRVE PARA PONER 2 DECIMALES A ESA COLUMNA
+        
+        foreach (range('A', 'L') as $col) {
+            $sheet->getColumnDimension($col)->setAutoSize(true);
+        }
+    }
 }
