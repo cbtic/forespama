@@ -778,6 +778,8 @@
                                                             <input type="hidden" name="facturad[<?php echo $key ?>][valor_venta]" value="<?php echo $fac['vv'] ?>" />
                                                             <input type="hidden" name="facturad[<?php echo $key ?>][codigo_producto]" value="<?php echo $fac['codigo_producto'] ?>" />
 
+                                                            <input type="hidden" name="facturad[<?php echo $key ?>][abreviatura]" value="<?php echo $fac['abreviatura'] ?>" />
+
                                                             <tr>
                                                                 <td class="text-right"><?php $n = $n + 1;
                                                                                         echo $n; ?></td>

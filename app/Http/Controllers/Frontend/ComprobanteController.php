@@ -974,6 +974,7 @@ class ComprobanteController extends Controller
                         "descripcion" => "REDONDEO",
                         "monto" => round($total_redondeo,2),
                         "moneda" => "SOLES" ,
+                        "abreviatura" => "UND" ,
                         "id_moneda" => 1 ,
                         "descuento" => 0 ,
                         "cod_contable" => "",
@@ -1005,6 +1006,7 @@ class ComprobanteController extends Controller
                         "monto" => round($total_abono,2),
                         "moneda" => "SOLES" ,
                         "id_moneda" => 1 ,
+                        "abreviatura" => "UND" ,
                         "descuento" => 0 ,
                         "cod_contable" => "",
                         "id_concepto" => 26464 ,
@@ -1046,6 +1048,7 @@ class ComprobanteController extends Controller
                         $facturaDet_upd->valor_venta_bruto=$value['valor_venta_bruto'];
                         $facturaDet_upd->valor_venta=$value['valor_venta'];
                         $facturaDet_upd->codigo=$value['codigo_producto'];
+                        $facturaDet_upd->unidad=$value['abreviatura'];
                         $facturaDet_upd->save();  
 
                     }
@@ -2714,7 +2717,7 @@ class ComprobanteController extends Controller
                             "codigoDescuentoItem"=> "00",
 							"valorUnitarioSinIgv"=> str_replace(",","",number_format($row->pu,2)), //"42.3728813559",
 							"precioUnitarioConIgv"=> str_replace(",","",number_format($row->precio_venta,2)), //"50.0000000000",
-							"unidadMedidaComercial"=> "SERV",
+							"unidadMedidaComercial"=> $row->unidad,
 							"codigoAfectacionIGVItem"=> $row->afect_igv,
 							"porcentajeDescuentoItem"=> str_replace(",","",number_format(($row->descuento*100)/$row->pu,2)),
 							"codTipoPrecioVtaUnitarioItem"=> "01"

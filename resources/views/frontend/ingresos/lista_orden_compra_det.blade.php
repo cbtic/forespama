@@ -61,7 +61,7 @@ foreach($orden_compra as $key=>$row):
 			<input type="hidden" name="valorizacion_detalle[<?php echo $key?>][total]" value="<?php echo $row->total?>" />
 			<input type="hidden" name="valorizacion_detalle[<?php echo $key?>][moneda]" value="<?php echo $row->moneda?>" />
 			<input type="hidden" name="valorizacion_detalle[<?php echo $key?>][id_moneda]" value="<?php echo $row->id_moneda?>" />
-			<input type="hidden" name="valorizacion_detalle[<?php echo $key?>][abreviatura]" value="<?php echo $row->codigo?>" />
+			<input type="hidden" name="valorizacion_detalle[<?php echo $key?>][abreviatura]" value="<?php echo $row->abreviatura?>" />
 			<input type="hidden" name="valorizacion_detalle[<?php echo $key?>][cantidad]" value="<?php echo $row->cantidad?>" />
 			<input type="hidden" name="valorizacion_detalle[<?php echo $key?>][descuento]" value="<?php echo $row->descuento?>" />
 			<input type="hidden" name="valorizacion_detalle[<?php echo $key?>][cod_contable]" value="000" />

@@ -145,7 +145,7 @@ class OrdenCompra extends Model
             where pe.id_empresa = oc.id_empresa_compra and pe.id_producto = pd.id_producto and pe.estado= '1'            
             --)	else pr.codigo ||'-'|| pr.denominacion end  producto_prof,
             )	else  pr.denominacion end  producto_prof,
-            um.denominacion um, pd.cantidad_requerida cantidad, pd.id_descuento, pd.precio precio_unitario, pd.sub_total, pd.igv, pd.total, pd.id_unidad_medida, pd.descuento, pd.valor_venta_bruto,
+            um.denominacion um, um.abreviatura, pd.cantidad_requerida cantidad, pd.id_descuento, pd.precio precio_unitario, pd.sub_total, pd.igv, pd.total, pd.id_unidad_medida, pd.descuento, pd.valor_venta_bruto,
             pd.precio_venta, pd.valor_venta
             FROM orden_compras oc
             inner join orden_compra_detalles pd on pd.id_orden_compra = oc.id 
