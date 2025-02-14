@@ -537,7 +537,7 @@
 												<div class="col-lg-6">
 													<div class="form-group">
 														<label class="form-control-sm">Cantidad</label>
-														<input type="text" name="txtCantidad" id="txtCantidad" value="1" placeholder="" class="form-control form-control-sm">
+														<input type="text" name="txtCantidad" id="txtCantidad" value="1" placeholder="" class="form-control form-control-sm" oninput="calcular()">
 													</div>
 												</div>
 												<div class="col-lg-6">
@@ -553,7 +553,7 @@
 												<div class="col-lg-6">
 													<div class="form-group">
 														<label class="form-control-sm">Precio Venta</label>
-														<input type="text" name="txtPrecioVenta" id="txtPrecioVenta" value="" placeholder="" class="form-control form-control-sm">
+														<input type="text" name="txtPrecioVenta" id="txtPrecioVenta" value="" placeholder="" class="form-control form-control-sm" oninput="calcular()">
 													</div>
 												</div>
 												<div class="col-lg-6">
@@ -574,7 +574,7 @@
 												<div class="col-lg-4">
 													<div class="form-group">
 														<label class="form-control-sm">Descuento</label>
-														<input type="text" name="txtDescuento" id="txtDescuento" value="0" placeholder="" class="form-control form-control-sm">
+														<input type="text" name="txtDescuento" id="txtDescuento" value="0" placeholder="" class="form-control form-control-sm" oninput="calcular()">
 													</div>
 												</div>
 												<div class="col-lg-4">

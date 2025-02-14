@@ -389,6 +389,7 @@ class Valorizacione extends Model
             left join users u  on u.id  = c.id_usuario_inserta 
             where c.id_empresa = ".$persona_id."
             and c.tipo in ('FT', 'BV')
+            and c.anulado = 'N'
             order by c.fecha desc";
 
         }else{
@@ -406,12 +407,13 @@ class Valorizacione extends Model
             --inner join personas p on c.cod_tributario=p.numero_documento
             where c.id_persona = ".$persona_id."            
             and c.tipo in ('FT', 'BV')
+            and c.anulado = 'N'
             order by c.fecha desc";
     
         }
 
         
-        echo $cad;
+        //echo $cad;
 		$data = DB::select($cad);
         return $data;
     }
