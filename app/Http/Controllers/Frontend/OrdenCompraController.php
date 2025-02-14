@@ -221,9 +221,9 @@ class OrdenCompraController extends Controller
         $orden_compra->id_almacen_destino = $request->almacen;
         $orden_compra->id_almacen_salida = $request->almacen_salida;
         $orden_compra->numero_orden_compra_cliente = $request->numero_orden_compra_cliente;
-        $orden_compra->sub_total = $request->sub_total_general;
-        $orden_compra->igv = $request->igv_general;
-        $orden_compra->total = $request->total_general;
+        $orden_compra->sub_total = round($request->sub_total_general,2);
+        $orden_compra->igv = round($request->igv_general,2);
+        $orden_compra->total = round($request->total_general,2);
         $orden_compra->id_moneda = $request->moneda;
         $orden_compra->moneda = $request->moneda_descripcion;
         $orden_compra->descuento = $request->descuento_general;
