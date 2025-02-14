@@ -37,6 +37,14 @@
 
     $(document).ready(function() {
 
+        $('#fechaF').datepicker({
+            autoclose: true,
+            format: 'yyyy-mm-dd',
+            changeMonth: true,
+            changeYear: true,
+            language: 'es'
+        });
+
         var total_fac = $("#total_fac").val();
 
         // alert(total_fac);
@@ -57,12 +65,12 @@
             if ($(this).val() == 1) {
 
                 OcultarTarjeta();
-                MostrarMedioPago();
+                //MostrarMedioPago();
             }
 
             if ($(this).val() == 2) {
                 MostrarTarjeta();
-                OcultarMedioPago();
+                //OcultarMedioPago();
                 
 
                 $('#numcuota_').val("1");
@@ -74,6 +82,16 @@
             }
             //
         });
+
+        $('.datepicker').datepicker({
+            autoclose: true,
+		//format: 'yyyy-mm-dd',
+         dateFormat: 'dd/mm/yyyy',
+		changeMonth: true,
+		changeYear: true,
+        language: 'es'
+        });
+
 
 
     });
@@ -140,14 +158,64 @@
 
         let fechaFormat
         if (month < 10) {
-            fechaFormat = `${year}-0${month}-${day}`
+            fechaFormat = `${day}-0${month}-${year}`
         } else {
-            fechaFormat = `${year}-${month}-${day}`
+            fechaFormat = `${day}-${month}-${year}`
         }
         return fechaFormat;
     }
 
+    function pad(num, size) {
+        var s = num + "";
+        while (s.length < size) s = "0" + s;
+        return s;
+    }
 
+    function generarCuotas() {
+        // Limpiar la tabla si ya tiene filas
+        $("#tblConceptos tbody").empty();
+
+        // Obtener valores de los inputs
+        var nroCuotas = parseInt($('#numcuota_').val(), 10);
+        var total = parseFloat($('#totalcredito_').val());
+        var plazo = parseInt($('#plazo_').val(), 10);
+        var fechaActual = new Date();
+
+        // Validar que los valores sean válidos
+        if (isNaN(nroCuotas) || isNaN(total) || isNaN(plazo) || nroCuotas <= 0) {
+            alert("Por favor, ingrese valores válidos.");
+            return;
+        }
+
+        // Calcular el monto base de cada cuota
+        var montoBase = (total / nroCuotas).toFixed(2);
+        var montoBaseNum = parseFloat(montoBase);
+
+        // Calcular el monto de la última cuota para ajustar el total
+        var sumaCuotas = montoBaseNum * (nroCuotas - 1);
+        var montoUltimaCuota = (total - sumaCuotas).toFixed(2);
+
+        // Generar las filas de la tabla
+        for (let i = 1; i <= nroCuotas; i++) {
+            // Calcular la fecha de la cuota
+            var fechaCuota = sumarDias(fechaActual, plazo );
+            var fechaFormateada = FormatFecha(fechaCuota);
+
+            // Determinar el monto de la cuota
+            var montoCuota = (i === nroCuotas) ? montoUltimaCuota : montoBase;
+
+            // Crear la fila
+            var newRow = '<tr id="fila' + pad(i, 2) + '">';
+            newRow += '<td width="5%">' + i + '</td>';
+            newRow += '<td><input name="credito[' + i + '][total_frac]" value="' + montoCuota + '"></td>';
+            newRow += '<td><input name="credito[' + i + '][fecha_cuota]" value="' + fechaFormateada + '" class="form-control form-control-sm datepicker"></td>';
+            newRow += '</tr>';
+
+            // Agregar la fila a la tabla
+            $('#tblConceptos tbody').append(newRow);
+        }
+    }
+/*
     function generarCuotas() {
 
         var cantidad = $("#tblConceptos tr").length;
@@ -165,7 +233,7 @@
 
             fecha_cuota = FormatFecha(sumarDias(d, 30));
 
-            total_frac = parseFloat((total) / (nroCuotas)).toFixed(1);
+            total_frac = parseFloat((total) / (nroCuotas)).toFixed(2);
 
             newRow = "";
             if (i == 0) {
@@ -193,6 +261,10 @@
         }
 
     }
+*/
+
+
+
 </script>
 
 <style type="text/css">

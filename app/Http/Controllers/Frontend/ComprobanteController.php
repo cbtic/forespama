@@ -2734,7 +2734,7 @@ class ComprobanteController extends Controller
 		$data["esFicticio"] = false;
 		$data["keepNumber"] = "false";
 		$data["tipoCorreo"] = "1";
-        $data["formaPago"] = "CONTADO";        
+        $data["formaPago"] = ($factura->id_forma_pago =="1")?"CONTADO":"CREDITO"; //"CONTADO";        
 		$data["tipoMoneda"] = ($factura->id_moneda=="1")?"PEN":"USD"; //"PEN";
 		$data["adicionales"] = [];
 		$data["horaEmision"] = date("h:i:s", strtotime($factura->fecha)); // "12:12:04";//$cabecera->fecha
@@ -2775,6 +2775,7 @@ class ComprobanteController extends Controller
 		$data["tipoDocIdentidadReceptor"] = $this->getTipoDocPersona($factura->tipo, $factura->cod_tributario);//"6";        
 		$data["numeroDocIdentidadReceptor"] = $factura->cod_tributario; //"10040834643";
         $data["direccionReceptor"] = $factura->direccion;
+        $data["formaPagoGlosa"] = ($factura->id_forma_pago =="1")?"CONTADO":"CREDITO";
         
         if ($factura->numero_orden_compra_cliente!=Null){            
             $data["ordenCompra"] = $factura->numero_orden_compra_cliente;
@@ -2804,9 +2805,31 @@ class ComprobanteController extends Controller
             $data["porcentajeRetencion"] = "0.03"; //$factura->porc_retencion;
             $data["totalRetencion"] = $factura->monto_retencion;
         }
-        
+        $monto_pago=0;
+        if ($factura->id_forma_pago =="2"){
+            
+            $factura_cuota = ComprobanteCuota::where([
+                'id_comprobante' => $factura->id])->get();
 
-        //print_r(json_encode($data)); exit();
+            foreach($factura_cuota as $index => $row ) {
+                $items1 = array(
+                                "fecha"=> $row->fecha_vencimiento, 
+                                "monto"=> str_replace(",","",$row->monto),
+                                "orden"=> $row->item, 
+                                );
+                $items[$index]=$items1;
+
+                $monto_pago = $monto_pago + $row->monto;
+            }
+            $data["creditoCuotas"] = $items;
+
+            $data["formaPagoMonto"] = str_replace(",","",number_format($monto_pago,2)); //"7.63"  round($monto_pago,2);
+
+            
+         
+        }
+
+      // print_r(json_encode($data)); exit();
 
 
 		$databuild_string = json_encode($data);
