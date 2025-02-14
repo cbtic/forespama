@@ -1326,7 +1326,7 @@ function obtenerLicencia(){
                                         <option value="">--Seleccionar--</option>
                                         <?php 
                                         foreach ($serie_guia as $row){?>
-                                            <option value="<?php echo $row->denominacion ?>" <?php if($row->denominacion==$guia_interna->guia_serie)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                            <option value="<?php echo $row->denominacion ?>" <?php echo ($id > 0 && $row->denominacion==$guia_interna->guia_serie) ? "selected='selected'" : (($row->denominacion == "T001")  ? "selected='selected'" : "");?>><?php echo $row->denominacion ?></option>
                                             <?php 
                                         }
                                         ?>
