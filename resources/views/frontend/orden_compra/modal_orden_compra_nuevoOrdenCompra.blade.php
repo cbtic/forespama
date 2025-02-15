@@ -1215,7 +1215,7 @@ function obtenerEntradaSalida(){
                                 <option value="">--Seleccionar--</option>
                                 <?php
                                 foreach ($moneda as $row){?>
-                                    <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$orden_compra->id_moneda)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                    <option value="<?php echo $row->codigo; ?>" <?php echo ($id > 0 && $row->codigo == $orden_compra->id_moneda) ? "selected='selected'" : (($row->codigo == 1) ? "selected='selected'" : ""); ?>><?php echo $row->denominacion ?></option>
                                     <?php 
                                 }
                                 ?>
