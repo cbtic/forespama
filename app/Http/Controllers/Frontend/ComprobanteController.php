@@ -2812,16 +2812,16 @@ class ComprobanteController extends Controller
                 'id_comprobante' => $id_factura])->get();
 
             foreach($factura_cuota as $index => $row ) {
-                $items1 = array(
+                $items2 = array(
                                 "fecha"=> $row->fecha_vencimiento, 
                                 "monto"=> str_replace(",","",$row->monto),
                                 "orden"=> $row->item, 
                                 );
-                $items[$index]=$items1;
+                $items_c[$index]=$items2;
 
                 $monto_pago = $monto_pago + $row->monto;
             }
-            $data["creditoCuotas"] = $items;
+            $data["creditoCuotas"] = $items_c;
 
             $data["formaPagoMonto"] = str_replace(",","",number_format($monto_pago,2)); //"7.63"  round($monto_pago,2);
 
