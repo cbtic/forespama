@@ -2768,7 +2768,7 @@ class ComprobanteController extends Controller
 		$data["descuentosGlobales"] = "0.00";
 		$data["codigoTipoOperacion"] = $factura->tipo_operacion; //"0101";
 		$data["razonSocialReceptor"] = $factura->destinatario;//"Freddy Rimac Coral";
-		$data["nombreComercialEmisor"] = "FELMO";
+		$data["nombreComercialEmisor"] = "FORESTAL PAMA";
 		$data["tipoDocIdentidadEmisor"] = "6";
 		$data["sumatoriaImpuestoBolsas"] = "0.00";
 		$data["numeroDocIdentidadEmisor"] = "20486785994";//"20160453908";     
@@ -2809,7 +2809,7 @@ class ComprobanteController extends Controller
         if ($factura->id_forma_pago =="2"){
             
             $factura_cuota = ComprobanteCuota::where([
-                'id_comprobante' => $factura->id])->get();
+                'id_comprobante' => $id_factura])->get();
 
             foreach($factura_cuota as $index => $row ) {
                 $items1 = array(
@@ -2829,7 +2829,7 @@ class ComprobanteController extends Controller
          
         }
 
-      // print_r(json_encode($data)); exit();
+       print_r(json_encode($data)."<br>"); //exit();
 
 
 		$databuild_string = json_encode($data);
