@@ -81,7 +81,7 @@ class SalidaProducto extends Model
         inner join tabla_maestras tm on sp.id_tipo_documento = tm.codigo ::int and tm.tipo = '49'
         inner join tabla_maestras tm2 on sp.unidad_destino ::int = tm2.codigo::int and tm2.tipo = '50'
         inner join tabla_maestras tm3 on sp.id_moneda ::int = tm3.codigo::int and tm3.tipo = '1'
-        inner join tabla_maestras tm4 on sp.igv_compra ::int = tm4.codigo::int and tm4.tipo = '51'
+        left join tabla_maestras tm4 on sp.igv_compra ::int = tm4.codigo::int and tm4.tipo = '51'
         inner join almacenes a on sp.id_almacen_salida = a.id
         inner join orden_compras oc on sp.id_orden_compra = oc.id
         and sp.estado='1'";

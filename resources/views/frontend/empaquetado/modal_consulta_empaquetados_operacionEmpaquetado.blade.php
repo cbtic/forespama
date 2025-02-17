@@ -179,7 +179,7 @@ $(document).ready(function() {
 function obtenerCodigo(){
 
     $.ajax({
-        url: "/empaquetado/obtener_codigo_empaquetado/",
+        url: "/empaquetado/obtener_codigo_operacion_empaquetado/",
         dataType: "json",
         success: function (result) {
 
@@ -209,19 +209,31 @@ function obtenerCodInterno(selectElement, n){
         });
 }
 
-function obtenerStock(selectElement, n){
+function obtenerStock(){
 
-    var id_producto = $(selectElement).val();
-    var almacen = $('#almacen').val();
+    var almacen = $('#almacen_destino').val();
 
-    $.ajax({
-        url: "/productos/obtener_stock_producto/"+almacen+"/"+id_producto,
-        dataType: "json",
-        success: function(result){
+    $('select[name="descripcion_[]"]').each(function(index) {
+        var id_producto = $(this).val();
+        var stockField = $(this).closest('tr').find('input[name="stock[]"]');
 
-            var producto_stock = result.producto_stock[id_producto];
-            
-            $('#stock_actual' + n).val(producto_stock.saldos_cantidad);
+        if (id_producto) {
+            $.ajax({
+                url: "/productos/obtener_stock_producto/" + almacen + "/" + id_producto,
+                dataType: "json",
+                success: function(result) {
+                    if (result.producto_stock && result.producto_stock[id_producto]) {
+                        var producto_stock = result.producto_stock[id_producto].saldos_cantidad;
+                        stockField.val(producto_stock);
+                    } else {
+                        stockField.val("0");
+                    }
+                },
+                error: function() {
+                    console.error("Error al obtener stock del producto " + id_producto);
+                    stockField.val("Error");
+                }
+            });
         }
     });
 }
@@ -388,16 +400,26 @@ function eliminarFila(button){
     //$(button).closest('tr').remove();
 }
 
-function fn_save_empaquetado(){
+function fn_save_operacion_empaquetado(){
 	
     var msg = "";
 
     var producto = $('#producto').val();
+    var almacen_destino = $('#almacen_destino').val();
 
     if(producto==""){msg+="Ingrese el Producto <br>";}
-        
+    if(almacen_destino==""){msg+="Ingrese el Almacen Destino <br>";}
 
-    if ($('#tblEmpaquetadoDetalle tbody tr').length == 0) {
+    $("input[name='cantidad[]']").each(function(index) {
+        let cantidad = parseFloat($(this).val()) || 0;
+        let stock = parseFloat($("input[name='stock[]']").eq(index).val()) || 0;
+
+        if (cantidad > stock) {
+            msg += `No hay stock suficiente en el producto ${index + 1}. Cantidad requerida: ${cantidad}, Stock disponible: ${stock}. <br>`;
+        }
+    });
+
+    if ($('#tblOperacionEmpaquetadoDetalle tbody tr').length == 0) {
         msg += "No se ha agregado ningún producto <br>";
     }
 
@@ -410,7 +432,7 @@ function fn_save_empaquetado(){
             message: "&iquest;Est&aacute; seguro que son las cantidades correctas? Porque no se podr&aacute; editar.", 
             callback: function(result){
                 if (result==true) {
-                    save_empaquetado();
+                    save_operacion_empaquetado();
                 }
             }
         });
@@ -418,7 +440,7 @@ function fn_save_empaquetado(){
     }
 }
 
-function save_empaquetado(){
+function save_operacion_empaquetado(){
 
     var msgLoader = "";
     msgLoader = "Procesando, espere un momento por favor";
@@ -427,9 +449,9 @@ function save_empaquetado(){
     $('.loader').show();
 
     $.ajax({
-            url: "/empaquetado/send_empaquetado",
+            url: "/empaquetado/send_operacion_empaquetado",
             type: "POST",
-            data : $("#frmEmpaquetadoProducto").serialize(),
+            data : $("#frmOperacionEmpaquetadoProducto").serialize(),
             success: function (result) {
                 //alert(result.id)
                 $('#openOverlayOpc').modal('hide');
@@ -454,6 +476,81 @@ function pdf_documento_ingreso_produccion(){
 
 }
 
+function obtenerDetalle(){
+
+    var id_producto = $('#producto').val();
+
+    const tbody = $('#divOperacionEmpaquetadoDetalle');
+
+    tbody.empty();
+
+    $.ajax({
+        url: "/empaquetado/obtenerDetalle/"+id_producto,
+        type: "GET",
+        success: function (result) {
+            let n = 1;
+
+            result.empaquetado_operacion.forEach(empaquetado_operacion => {
+
+                let productoOptions = '<option value="">--Seleccionar--</option>';
+                let unidadMedidaOptions = '<option value="">--Seleccionar--</option>';
+
+                result.producto.forEach(producto => {
+                    let selected = (producto.id == empaquetado_operacion.id_producto) ? 'selected' : '';
+                    productoOptions += `<option value="${producto.id}" ${selected}>${producto.codigo} - ${producto.denominacion}</option>`;
+                });
+
+                result.unidad_medida.forEach(unidad_medida => {
+                    let selected = (unidad_medida.codigo == empaquetado_operacion.id_unidad_medida) ? 'selected' : '';
+                    unidadMedidaOptions += `<option value="${unidad_medida.codigo}" ${selected}>${unidad_medida.denominacion}</option>`;
+                });
+
+                if (empaquetado_operacion.id_producto) {
+                    productosSeleccionados.push(empaquetado_operacion.id_producto);
+                }
+               
+                const row = `
+                    <tr>
+                        <td>${n}</td>
+                        <td style="width: 800px !important;display:block"><input name="id_empaquetado_operacion_detalle[]" id="id_empaquetado_operacion_detalle${n}" class="form-control form-control-sm" value="0" type="hidden"><select name="descripcion_[]" id="descripcion_${n}" class="form-control form-control-sm" onChange="verificarProductoSeleccionado(this, ${n});">${productoOptions}</select><input name="descripcion[]" id="descripcion${n}" class="form-control form-control-sm" value="${empaquetado_operacion.id_producto}" type="hidden"></td>
+                        <td><input name="cod_interno[]" id="cod_interno${n}" class="form-control form-control-sm" value="${empaquetado_operacion.codigo}" type="text"></td>
+                        <td><select name="unidad_[]" id="unidad_${n}" class="form-control form-control-sm">${unidadMedidaOptions}</select><input name="unidad[]" id="unidad${n}" class="form-control form-control-sm" value="${empaquetado_operacion.id_unidad_medida}" type="hidden"></td>
+                        <td><input name="cantidad[]" id="cantidad${n}" class="form-control form-control-sm" value="${empaquetado_operacion.cantidad}" type="text" data-cantidad-base="${empaquetado_operacion.cantidad}" readonly="readonly"></td>
+                        <td><input name="stock[]" id="stock${n}" class="form-control form-control-sm" value="0" type="text" readonly="readonly"></td>
+                        <td><button type="button" class="btn btn-danger btn-sm" onclick="eliminarFila(this)">Eliminar</button></td>
+                    </tr>
+                `;
+                tbody.append(row);
+                $('#descripcion_' + n).select2({ 
+                    width: '100%',
+                    dropdownCssClass: 'custom-select2-dropdown'
+                });
+
+                n++;
+                });
+            }
+    })
+}
+
+function calcularCantidades(){
+
+    var cantidad_producto = $('#cantidad_producto').val();
+
+    if(cantidad_producto > 0){
+
+        $('input[name="cantidad[]"]').each(function () {
+            var cantidadBase = $(this).data('cantidad-base');
+            var nuevaCantidad = cantidadBase * cantidad_producto;
+            $(this).val(nuevaCantidad);
+        });
+
+    }else{
+
+        bootbox.alert("No puede ingresar una cantidad menor a 1");
+
+    }
+}
+
 </script>
 
 
@@ -476,11 +573,11 @@ function pdf_documento_ingreso_produccion(){
                     </div>
                 </div>-->
                 <div style="text-align: center; font-size:16px; margin-top: 20px">
-                    <b>Empaquetado de Producto</b>
+                    <b>Operaci&oacute;n de Empaquetado de Producto</b>
                 </div>
                 
                 <div class="card-body">
-                <form method="post" action="#" id="frmEmpaquetadoProducto" name="frmEmpaquetadoProducto">
+                <form method="post" action="#" id="frmOperacionEmpaquetadoProducto" name="frmOperacionEmpaquetadoProducto">
 
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding-top:5px;padding-bottom:20px">
                     
@@ -492,64 +589,70 @@ function pdf_documento_ingreso_produccion(){
                         <div class="col-lg-2">
                             Producto
                         </div>
-                        <div class="col-lg-10">
-                            <select name="producto" id="producto" class="form-control form-control-sm" onchange="obtenerCodigo()">
+                        <div class="col-lg-6">
+                            <select name="producto" id="producto" class="form-control form-control-sm" onchange="obtenerDetalle()">
                                 <option value="">--Seleccionar--</option>
                                 <?php
                                 foreach ($producto as $row){?>
-                                    <option value="<?php echo $row->id ?>" <?php if($row->id==$empaquetado->id_producto)echo "selected='selected'"?>><?php echo $row->codigo .' - '. $row->denominacion ?></option>
+                                    <option value="<?php echo $row->id ?>" <?php if($row->id==$empaquetado_operacion->id_producto)echo "selected='selected'"?>><?php echo $row->codigo .' - '. $row->denominacion ?></option>
                                     <?php
                                 }
                                 ?>
                             </select>
                         </div>
+                        <div class="col-lg-2">
+                            Cantidad
+                        </div>
+                        <div class="col-lg-2">
+                            <input id="cantidad_producto" name="cantidad_producto" on class="form-control form-control-sm"  value="<?php if($id>0){echo $empaquetado_operacion->cantidad;}?>" type="text" oninput="calcularCantidades()">
+                        </div>
                     </div>
                     <div class="row" style="padding-left:10px">
                         <div class="col-lg-2">
-                            C&oacute;digo de Empaquetado
+                            C&oacute;digo de Operaci&oacute;n de Empaquetado
                         </div>
                         <div class="col-lg-2">
-                            <input id="codigo_empaquetado" name="codigo_empaquetado" on class="form-control form-control-sm"  value="<?php if($id>0){echo $empaquetado->codigo;}?>" type="text" readonly ="readonly">
+                            <input id="codigo_empaquetado" name="codigo_empaquetado" on class="form-control form-control-sm"  value="<?php if($id>0){echo $empaquetado_operacion->codigo;}?>" type="text" readonly ="readonly">
                         </div>
                         <div class="col-lg-2">
                             Fecha
                         </div>
                         <div class="col-lg-2">
-                            <input id="fecha_" name="fecha_" on class="form-control form-control-sm"  value="<?php echo isset($empaquetado) && $empaquetado->fecha ? $empaquetado->fecha : date('Y-m-d'); ?>" type="text" disabled='disabled'>
-                            <input type="hidden" name="fecha" id="fecha" value="<?php echo isset($empaquetado) && $empaquetado->fecha ? $empaquetado->fecha : date('Y-m-d'); ?>">
+                            <input id="fecha_" name="fecha_" on class="form-control form-control-sm"  value="<?php echo isset($empaquetado_operacion) && $empaquetado_operacion->fecha ? $empaquetado_operacion->fecha : date('Y-m-d'); ?>" type="text" disabled='disabled'>
+                            <input type="hidden" name="fecha" id="fecha" value="<?php echo isset($empaquetado_operacion) && $empaquetado_operacion->fecha ? $empaquetado_operacion->fecha : date('Y-m-d'); ?>">
                         </div>
-                        <!--<div class="col-lg-2" style="color:red; font-weight:bold">
+                        <div class="col-lg-2" style="color:red; font-weight:bold">
                             Almacen Destino
                         </div>
                         <div class="col-lg-2" id="almacen_destino_select">
-                            <select name="almacen_destino" id="almacen_destino" class="form-control form-control-sm" onchange="">
+                            <select name="almacen_destino" id="almacen_destino" class="form-control form-control-sm" onchange="obtenerStock()">
                                 <option value="">--Seleccionar--</option>
                                 <?php 
-                                //foreach ($almacen_destino as $row){?>
-                                    <option value="<?php //echo $row->id ?>" <?php //if($row->id==$empaquetado->id_almacen_destino)echo "selected='selected'"?>><?php //echo $row->denominacion ?></option>
+                                foreach ($almacen_destino as $row){?>
+                                    <option value="<?php echo $row->id ?>" <?php if($row->id==$empaquetado_operacion->id_almacen_destino)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
                                     <?php 
-                                //}
+                                }
                                 ?>
                             </select>
-                        </div>-->
+                        </div>
                     </div>
-                        <div style="margin-top:15px" class="form-group">
+                        <!--<div style="margin-top:15px" class="form-group">
                             <div class="col-sm-12 controls">
                                 <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
-                                <?php if($id_user==$empaquetado->id_usuario_inserta){?>    
+                                <?php //if($id_user==$empaquetado->id_usuario_inserta){?>    
                                     <a href="javascript:void(0)" onClick="agregarProducto()" class="btn btn-sm btn-success">Agregar</a>
-                                <?php }?>
-                                <?php if($id==0){?>
+                                <?php //}?>
+                                <?php //if($id==0){?>
                                     <a href="javascript:void(0)" onClick="agregarProducto()" class="btn btn-sm btn-success">Agregar</a>
-                                <?php }?>
+                                <?php //}?>
                                 </div>
                             </div>
-                        </div>
+                        </div>-->
 
                         <div class="card-body">	
 
 					<div class="table-responsive">
-						<table id="tblEmpaquetadoDetalle" class="table table-hover table-sm">
+						<table id="tblOperacionEmpaquetadoDetalle" class="table table-hover table-sm">
 							<thead>
 							<tr style="font-size:13px">
 								<th>#</th>
@@ -557,11 +660,12 @@ function pdf_documento_ingreso_produccion(){
                                 <th>COD. INT.</th>
                                 <th>Unidad</th>
                                 <th>Cantidad</th>
+                                <th>Stock</th>
                                 <th>Acciones</th>
                                 <!--<th>Cantidad</th>-->
 							</tr>
 							</thead>
-							<tbody id="divEmpaquetadoDetalle">
+							<tbody id="divOperacionEmpaquetadoDetalle">
 							</tbody>
 						</table>
 					</div>
@@ -580,11 +684,11 @@ function pdf_documento_ingreso_produccion(){
                                <!--<button style="font-size:12px;margin-left:10px; margin-right:100px" type="button" class="btn btn-sm btn-warning" data-toggle="modal" onclick="pdf_guia()" ><i class="fa fa-edit"></i>Imprimir Gu&iacute;a Remisi&oacute;n Electronica</button>
                                 <a href="javascript:void(0)" onClick="fn_pdf_documento()" class="btn btn-sm btn-primary" style="margin-right:100px">Imprimir</a>-->
                                 
-                                <?php if($id_user==$empaquetado->id_usuario_inserta){?>
-                                    <a href="javascript:void(0)" onClick="fn_save_empaquetado()" class="btn btn-sm btn-success" style="margin-right:10px">Guardar</a>
+                                <?php if($id_user==$empaquetado_operacion->id_usuario_inserta){?>
+                                    <a href="javascript:void(0)" onClick="fn_save_operacion_empaquetado()" class="btn btn-sm btn-success" style="margin-right:10px">Guardar</a>
                                 <?php }?>
                                 <?php if($id==0){?>
-                                    <a href="javascript:void(0)" onClick="fn_save_empaquetado()" class="btn btn-sm btn-success" style="margin-right:10px">Guardar</a>
+                                    <a href="javascript:void(0)" onClick="fn_save_operacion_empaquetado()" class="btn btn-sm btn-success" style="margin-right:10px">Guardar</a>
                                 <?php }?>
                                 <a href="javascript:void(0)" onClick="$('#openOverlayOpc').modal('hide');" class="btn btn-sm btn-info" style="">Cerrar</a>
                             </div>

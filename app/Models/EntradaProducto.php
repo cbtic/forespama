@@ -78,7 +78,7 @@ class EntradaProducto extends Model
         inner join tabla_maestras tm2 on ep.unidad_origen::int = tm2.codigo::int and tm2.tipo = '50'
         inner join tabla_maestras tm3 on ep.id_moneda ::int = tm3.codigo::int and tm3.tipo = '1'
         inner join empresas e on ep.id_proveedor = e.id
-        inner join tabla_maestras tm4 on ep.igv_compra ::int = tm4.codigo::int and tm4.tipo = '51'
+        left join tabla_maestras tm4 on ep.igv_compra ::int = tm4.codigo::int and tm4.tipo = '51'
         inner join almacenes a on ep.id_almacen_destino = a.id
         inner join orden_compras oc on ep.id_orden_compra = oc.id
         where oc.id = '".$id."'
@@ -106,7 +106,7 @@ class EntradaProducto extends Model
         inner join tabla_maestras tm2 on ep.unidad_origen::int = tm2.codigo::int and tm2.tipo = '50'
         inner join tabla_maestras tm3 on ep.id_moneda ::int = tm3.codigo::int and tm3.tipo = '1'
         inner join empresas e on ep.id_proveedor = e.id
-        inner join tabla_maestras tm4 on ep.igv_compra ::int = tm4.codigo::int and tm4.tipo = '51'
+        left join tabla_maestras tm4 on ep.igv_compra ::int = tm4.codigo::int and tm4.tipo = '51'
         inner join almacenes a on ep.id_almacen_destino = a.id
         inner join orden_compras oc on ep.id_orden_compra = oc.id
         and ep.estado='1'";
