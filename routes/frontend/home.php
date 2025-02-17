@@ -574,3 +574,10 @@ Route::get('empaquetado/modal_empaquetado/{id}', [EmpaquetadoController::class, 
 Route::get('empaquetado/eliminar_empaquetado/{id}/{estado}', [EmpaquetadoController::class, 'eliminar_empaquetado'])->name('empaquetado.eliminar_empaquetado');
 Route::get('empaquetado/obtener_codigo_empaquetado', [EmpaquetadoController::class, 'obtener_codigo_empaquetado'])->name('empaquetado.obtener_codigo_empaquetado');
 Route::get('empaquetado/cargar_detalle/{id}', [EmpaquetadoController::class, 'cargar_detalle'])->name('empaquetado.cargar_detalle');
+Route::get('empaquetado/create_empaquetado', [EmpaquetadoController::class, 'create_empaquetado'])->name('empaquetado.create_empaquetado');
+Route::get('empaquetado/modal_empaquetado_operacion/{id}', [EmpaquetadoController::class, 'modal_empaquetado_operacion'])->name('empaquetado.modal_empaquetado_operacion');
+Route::get('empaquetado/obtenerDetalle/{id_producto}', [EmpaquetadoController::class, 'obtenerDetalle'])->name('empaquetado.obtenerDetalle');
+Route::post('empaquetado/send_operacion_empaquetado', [EmpaquetadoController::class, 'send_operacion_empaquetado'])->name('empaquetado.send_operacion_empaquetado');
+Route::post('empaquetado/listar_operacion_empaquetados_ajax', [EmpaquetadoController::class, 'listar_operacion_empaquetados_ajax'])->name('empaquetado.listar_operacion_empaquetados_ajax');
+Route::get('empaquetado/obtener_codigo_operacion_empaquetado', [EmpaquetadoController::class, 'obtener_codigo_operacion_empaquetado'])->name('empaquetado.obtener_codigo_operacion_empaquetado');
+Route::get('empaquetado/modal_consulta_empaquetado_operacion/{id}', [EmpaquetadoController::class, 'modal_consulta_empaquetado_operacion'])->name('empaquetado.modal_consulta_empaquetado_operacion');
