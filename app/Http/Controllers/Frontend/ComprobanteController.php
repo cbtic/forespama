@@ -3611,7 +3611,7 @@ class ComprobanteController extends Controller
         $data["tipoContenedor"] ="0";
         $data["direccionEmisor"] =$guia->guia_partida_direccion;//"AV. NESTOR GAMBETA NRO. 6311 CARRETERA A VENTANILLA (ALTURA KM 5.200 CARRETERA VENTANILLA) ";
         $data["provinciaEmisor"] ="LIMA";
-        $data["codigoPaisEmisor"] ="PE";        
+        $data["codigoPaisEmisor"] ="PE";
         $data["numeroContenedor"] ="0";
         $data["direccionReceptor"] =$guia->guia_llegada_direccion;//"JR. MINERIA NRO. 177";
         $data["docAfectadoFisico"] =false;

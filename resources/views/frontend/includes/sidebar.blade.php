@@ -198,6 +198,12 @@
                     <x-utils.link :href="route('frontend.parametro.create_valida_parametro')" class="c-sidebar-nav-link" :text="__('Verificacion de Aplicacion de Comisiones')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
                 </li>
 				@endif
+
+                @can('Empaquetado')
+				<li class="c-sidebar-nav-item">
+                    <x-utils.link :href="route('frontend.empaquetado.create')" class="c-sidebar-nav-link" :text="__('Empaquetado')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+                </li>
+				@endif
 				
             </ul>
 
