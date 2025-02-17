@@ -1047,7 +1047,6 @@ function obtenerEntradaSalida(){
 
 </script>
 
-
 <body class="hold-transition skin-blue sidebar-mini">
     
     <div>
