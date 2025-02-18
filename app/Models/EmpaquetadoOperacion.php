@@ -57,4 +57,19 @@ class EmpaquetadoOperacion extends Model
 		$data = DB::select($cad);
         return $data;
     }
+
+    function getDetalleOperacionEmpaquetadoById($id){
+
+        $cad = "select eod.id,  ROW_NUMBER() OVER (PARTITION BY eod.id_empaquetado_operacion) AS row_num, p.numero_serie item, eod.id_producto, p.codigo, eod.id_unidad_medida, eod.cantidad, p.denominacion producto, tm.denominacion unidad_medida
+        from empaquetado_operacion_detalle eod 
+        inner join productos p on eod.id_producto = p.id
+        inner join empaquetado_operacion eo on eod.id_empaquetado_operacion = eo.id
+        inner join tabla_maestras tm on eod.id_unidad_medida::int = tm.codigo::int and tm.tipo ='43'
+        where eod.id_empaquetado_operacion ='".$id."'
+        and eod.estado='1'";
+
+		$data = DB::select($cad);
+        return $data;
+
+    }
 }

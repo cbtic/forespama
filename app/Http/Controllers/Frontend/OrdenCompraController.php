@@ -210,11 +210,14 @@ class OrdenCompraController extends Controller
         $descuento = $request->input('descuento');
         $porcentaje = $request->input('porcentaje');
         $id_orden_compra_detalle =$request->id_orden_compra_detalle;
+
+        $orden_compra_model = new OrdenCompra;
+		$codigo_orden_compra = $orden_compra_model->getCodigoOrdenCompra($request->tipo_documento);
         
         $orden_compra->id_empresa_compra = $request->empresa_compra;
         $orden_compra->id_empresa_vende = $request->empresa_vende;
         $orden_compra->fecha_orden_compra = $request->fecha_orden_compra;
-        $orden_compra->numero_orden_compra = $request->numero_orden_compra;
+        $orden_compra->numero_orden_compra = $codigo_orden_compra[0]->codigo;
         $orden_compra->id_tipo_documento = $request->tipo_documento;
         $orden_compra->igv_compra = $request->igv_compra;
         $orden_compra->id_unidad_origen = $request->unidad_origen;

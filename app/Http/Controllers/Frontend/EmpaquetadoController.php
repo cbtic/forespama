@@ -353,12 +353,32 @@ class EmpaquetadoController extends Controller
 
         $tablaMaestra_model = new TablaMaestra;
 
-        $producto = Producto::all();
+        $producto = Producto::find($empaquetado_operacion->id_producto);
+        $descripcion_producto = $producto->denominacion;
         $unidad = $tablaMaestra_model->getMaestroByTipo(43);
-        $almacen_destino = Almacene::all();
+        $almacen_destino = Almacene::find($empaquetado_operacion->id_almacen_destino);
+        $denominacion_almacen = $almacen_destino->denominacion;
 
-		return view('frontend.empaquetado.modal_consulta_empaquetados_operacionEmpaquetado',compact('id','empaquetado_operacion','producto','unidad','almacen_destino','id_user'));
+		return view('frontend.empaquetado.modal_consulta_empaquetados_operacionEmpaquetado',compact('id','empaquetado_operacion','producto','unidad','almacen_destino','id_user','descripcion_producto','denominacion_almacen'));
 
+    }
+
+    public function cargar_operacion_detalle($id)
+    {
+
+        $empaquetado_operacion_model = new EmpaquetadoOperacion;
+        $producto_model = new Producto;
+        $tablaMaestra_model = new TablaMaestra;
+
+        $empaquetado_operacion = $empaquetado_operacion_model->getDetalleOperacionEmpaquetadoById($id);
+        $producto = $producto_model->getProductoAll();
+        $unidad_medida = $tablaMaestra_model->getMaestroByTipo(43);
+
+        return response()->json([
+            'empaquetado_operacion' => $empaquetado_operacion,
+            'producto' => $producto,
+            'unidad_medida' => $unidad_medida
+        ]);
     }
 
 }

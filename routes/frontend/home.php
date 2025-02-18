@@ -581,3 +581,4 @@ Route::post('empaquetado/send_operacion_empaquetado', [EmpaquetadoController::cl
 Route::post('empaquetado/listar_operacion_empaquetados_ajax', [EmpaquetadoController::class, 'listar_operacion_empaquetados_ajax'])->name('empaquetado.listar_operacion_empaquetados_ajax');
 Route::get('empaquetado/obtener_codigo_operacion_empaquetado', [EmpaquetadoController::class, 'obtener_codigo_operacion_empaquetado'])->name('empaquetado.obtener_codigo_operacion_empaquetado');
 Route::get('empaquetado/modal_consulta_empaquetado_operacion/{id}', [EmpaquetadoController::class, 'modal_consulta_empaquetado_operacion'])->name('empaquetado.modal_consulta_empaquetado_operacion');
+Route::get('empaquetado/cargar_operacion_detalle/{id}', [EmpaquetadoController::class, 'cargar_operacion_detalle'])->name('empaquetado.cargar_operacion_detalle');
