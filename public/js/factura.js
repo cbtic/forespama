@@ -980,7 +980,7 @@ function obtenerTitular(){
 				if (total==="0"){
 					total=$("#total_fac_").val();
 				}
-				alert(total);
+				//alert(total);
                
 				$('#numcuota_').val("1");				
                 $('#totalcredito_').val(total.toFixed(2).toString().replace(',',''));				
