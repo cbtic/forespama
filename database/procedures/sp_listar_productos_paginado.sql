@@ -54,22 +54,17 @@ begin
 	End If;
 
 	If p_tiene_imagen<>'' Then
-	 v_where:=v_where||'And tiene_imagen  = '''||p_tiene_imagen||''' ';
-	End If;
-
-	If p_estado<>'' Then
-	 v_where:=v_where||'And p.estado  = '''||p_estado||''' ';
-	End If;
-
-	If p_tiene_imagen<>'' Then
 	    If p_tiene_imagen = '1' Then
 	        v_where:=v_where||' And exists (select 1 from producto_imagenes pi where pi.id_producto = p.id) ';
 	    Else
 	        v_where:=v_where||' And not exists (select 1 from producto_imagenes pi where pi.id_producto = p.id) ';
 	    End If;
 	End If;
-	
-	
+
+	If p_estado<>'' Then
+	 v_where:=v_where||'And p.estado  = '''||p_estado||''' ';
+	End If;
+
 	EXECUTE ('SELECT count(1) '||v_tabla||v_where) INTO v_count;
 	v_col_count:=' ,'||v_count||' as TotalRows ';
 

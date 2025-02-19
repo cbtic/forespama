@@ -140,7 +140,7 @@
 		
 	@endif
 	
-	@if(Gate::check('Entradas') || Gate::check('Salidas') || Gate::check('Kardex') || Gate::check('Movimientos') || Gate::check('Requerimientos'))
+	@if(Gate::check('Entradas') || Gate::check('Salidas') || Gate::check('Kardex') || Gate::check('Movimientos') || Gate::check('Requerimientos') || Gate::check('Consulta Stock'))
 
         <li class="c-sidebar-nav-dropdown">
             <x-utils.link href="#" icon="c-sidebar-nav-icon cil-list" class="c-sidebar-nav-dropdown-toggle" :text="__('Operaciones')" />
@@ -162,6 +162,10 @@
                 <li class="c-sidebar-nav-item">
                     <x-utils.link :href="route('frontend.orden_compra.create')" class="c-sidebar-nav-link" :text="__('Orden Compra y Venta')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
                 </li>
+
+                @endif
+
+                @can('Consulta Stock')
 
                 <li class="c-sidebar-nav-item">
                     <x-utils.link :href="route('frontend.orden_compra.consulta_stock_pedido')" class="c-sidebar-nav-link" :text="__('Consulta de Stock de Pedidos')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
