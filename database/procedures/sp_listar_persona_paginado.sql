@@ -20,7 +20,7 @@ Begin
 
 	v_tabla='  from personas p
 				 inner join tabla_maestras t ON t.codigo = p.id_tipo_documento::text and t.tipo = ''9''
-				 inner join tabla_maestras s ON s.codigo = p.id_sexo::text and s.tipo =  ''2''
+				 left join tabla_maestras s ON s.codigo = p.id_sexo::text and s.tipo =  ''2''
 			';
 	
 			
@@ -44,9 +44,9 @@ Begin
 	v_col_count:=' ,'||v_count||' as TotalRows ';
 
 	If v_count::Integer > p_limit::Integer then
-		v_scad:='SELECT '||v_campos||v_col_count||v_tabla||v_where||' Order By  persona LIMIT '||p_limit||' OFFSET '||p_pagina||';'; 
+		v_scad:='SELECT '||v_campos||v_col_count||v_tabla||v_where||' Order By p.id desc LIMIT '||p_limit||' OFFSET '||p_pagina||';'; 
 	else
-		v_scad:='SELECT '||v_campos||v_col_count||v_tabla||v_where||' Order By  persona;'; 
+		v_scad:='SELECT '||v_campos||v_col_count||v_tabla||v_where||' Order By p.id desc;'; 
 	End If;
 	
 	--Raise Notice '%',v_scad;
