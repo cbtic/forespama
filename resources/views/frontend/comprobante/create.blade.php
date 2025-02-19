@@ -79,11 +79,14 @@
                     total = total- Number(retencion);
 	            }
 
-                //alert($total);
+                //alert(total);
 
-                $('#totalcredito_').val(parseFloat(total).toFixed(2))
+                $('#totalcredito_').val(total.toString().replace(',',''));
+                
+
                 $('#plazo_ ').val("30");
                 generarCuotas();
+                //$("#tr_total_pagar").show();
             }
             //
         });
@@ -143,12 +146,12 @@
     }
 
     var cuentaproductos = 0;
-
+/*
     function pad(str, max) {
         str = str.toString();
         return str.length < max ? pad("0" + str, max) : str;
     }
-
+*/
     function sumarDias(fecha, dias) {
         fecha.setDate(fecha.getDate() + dias);
         return fecha;
@@ -180,6 +183,7 @@
         // Limpiar la tabla si ya tiene filas
         $("#tblConceptos tbody").empty();
 
+       // alert($('#totalcredito_').val());
         // Obtener valores de los inputs
         var nroCuotas = parseInt($('#numcuota_').val(), 10);
         var total = parseFloat($('#totalcredito_').val());

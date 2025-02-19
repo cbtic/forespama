@@ -929,7 +929,7 @@ function obtenerTitular(){
        
         
     }
-
+	
 	$("#chkRetencion").on('change', function() {
 		if ($(this).is(':checked')) {
 
@@ -951,13 +951,18 @@ function obtenerTitular(){
 
 			if ($('#id_formapago_').val() == 2) {
 				
-				var total = $('#total_fac').val();
+				//var total = $('#total_fac').val();
                 total = total- Number(reten);
-				$('#numcuota_').val("1");				
-                $('#totalcredito_').val(parseFloat(total).toFixed(2))
+
+				//alert(total);
+				
+				$('#numcuota_').val("1");				                
+				$('#totalcredito_').val(total.toFixed(2).toString().replace(',',''));
                 $('#plazo_ ').val("30");
 
-				generarCuotas();
+				//alert(total.toString().replace(',',''));
+
+				generarCuotasF();
 			}
 
 		} else {
@@ -971,15 +976,19 @@ function obtenerTitular(){
 
 			if ($('#id_formapago_').val() == 2) {
 				
-				var total = $('#total_fac').val();
-
-				//alert(total)
+				var total = $('#total_pagar').val();
+				if (total==="0"){
+					total=$("#total_fac_").val();
+				}
+				alert(total);
                
 				$('#numcuota_').val("1");				
-                $('#totalcredito_').val(parseFloat(total).toFixed(2))
+                $('#totalcredito_').val(total.toFixed(2).toString().replace(',',''));				
                 $('#plazo_ ').val("30");
 
-				generarCuotas();
+				
+
+				generarCuotasF();
 			}
 
 
@@ -987,6 +996,85 @@ function obtenerTitular(){
 
 		//alert($('#chkExonerado').val());	
 	  });
+
+	  function generarCuotasF() {
+        // Limpiar la tabla si ya tiene filas
+        $("#tblConceptos tbody").empty();
+
+		//alert($('#totalcredito_').val());
+
+        // Obtener valores de los inputs
+        var nroCuotas = parseInt($('#numcuota_').val(), 10);
+        var total = parseFloat($('#totalcredito_').val());
+        var plazo = parseInt($('#plazo_').val(), 10);
+        var fechaActual = new Date();
+
+		//alert(nroCuotas);
+		//alert(total);
+		//alert(plazo);
+
+
+        // Validar que los valores sean válidos
+        if (isNaN(nroCuotas) || isNaN(total) || isNaN(plazo) || nroCuotas <= 0) {
+            alert("Por favor, ingrese valores válidos.");
+            return;
+        }
+
+        // Calcular el monto base de cada cuota
+        var montoBase = (total / nroCuotas).toFixed(2);
+        var montoBaseNum = parseFloat(montoBase);
+
+        // Calcular el monto de la última cuota para ajustar el total
+        var sumaCuotas = montoBaseNum * (nroCuotas - 1);
+        var montoUltimaCuota = (total - sumaCuotas).toFixed(2);
+
+        // Generar las filas de la tabla
+        for (let i = 1; i <= nroCuotas; i++) {
+            // Calcular la fecha de la cuota
+            var fechaCuota = sumarDiasF(fechaActual, plazo );
+            var fechaFormateada = FormatFechaF(fechaCuota);
+
+            // Determinar el monto de la cuota
+            var montoCuota = (i === nroCuotas) ? montoUltimaCuota : montoBase;
+
+            // Crear la fila
+            var newRow = '<tr id="fila' + padF(i, 2) + '">';
+            newRow += '<td width="5%">' + i + '</td>';
+            newRow += '<td><input name="credito[' + i + '][total_frac]" value="' + montoCuota + '"></td>';
+            newRow += '<td><input name="credito[' + i + '][fecha_cuota]" value="' + fechaFormateada + '" class="form-control form-control-sm datepicker"></td>';
+            newRow += '</tr>';
+
+            // Agregar la fila a la tabla
+            $('#tblConceptos tbody').append(newRow);
+        }
+    }
+
+	function sumarDiasF(fecha, dias) {
+        fecha.setDate(fecha.getDate() + dias);
+        return fecha;
+    }
+
+    function FormatFechaF(fecha) {
+        //let date = new Date()
+        let date = new Date(fecha)
+        let day = date.getDate()
+        let month = date.getMonth() + 1
+        let year = date.getFullYear()
+
+        let fechaFormat
+        if (month < 10) {
+            fechaFormat = `${day}-0${month}-${year}`
+        } else {
+            fechaFormat = `${day}-${month}-${year}`
+        }
+        return fechaFormat;
+    }
+
+    function padF(num, size) {
+        var s = num + "";
+        while (s.length < size) s = "0" + s;
+        return s;
+    }
 
 	function enviar_comprobante(id){
 
