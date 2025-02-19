@@ -353,6 +353,19 @@ label.form-control-sm{
 				<div class="row" style="padding:20px 20px 0px 20px;">
 
 					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+						<select name="tipo_origen_producto_bus" id="tipo_origen_producto_bus" class="form-control form-control-sm">
+							<option value="">--Seleccionar Tipo Origen Producto--</option>
+							<?php
+							foreach ($tipo_origen_producto as $row) {
+							?>
+							<option value="<?php echo $row->codigo?>"><?php echo $row->denominacion?></option>
+							<?php
+							}
+							?>
+						</select>
+					</div>
+
+					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
 						<input class="form-control form-control-sm" id="serie_bus" name="serie_bus" placeholder="Serie">
 					</div>
 
@@ -375,18 +388,26 @@ label.form-control-sm{
 							}
 							?>
 						</select>
-					</div>
-
+					</div>	
+					
 					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<select name="tipo_origen_producto_bus" id="tipo_origen_producto_bus" class="form-control form-control-sm">
-							<option value="">--Seleccionar Tipo Origen Producto--</option>
+						<select name="tipo_producto_bus" id="tipo_producto_bus" class="form-control form-control-sm">
+							<option value="">--Seleccionar Tipo Producto--</option>
 							<?php
-							foreach ($tipo_origen_producto as $row) {
+							foreach ($tipo_producto as $row) {
 							?>
 							<option value="<?php echo $row->codigo?>"><?php echo $row->denominacion?></option>
 							<?php
 							}
 							?>
+						</select>
+					</div>
+
+					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+						<select name="tiene_imagen_bus" id="tiene_imagen_bus" class="form-control form-control-sm">
+							<option value="" selected="selected">--Seleccionar Tiene Imagen--</option>
+							<option value="1">Si</option>
+							<option value="0">No</option>
 						</select>
 					</div>
 					
@@ -424,6 +445,7 @@ label.form-control-sm{
 							<th>Estado Bien</th>
 							<th>F. Vencimiento</th>
 							<th>Stock M&iacute;nimo</th>
+							<th>Tiene Imagen</th>
 							<th>Estado</th>
                             <th>Acciones</th>
                         </tr>
