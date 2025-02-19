@@ -949,6 +949,17 @@ function obtenerTitular(){
 			$("#divPorcRet").show();
 		  	$("#divTotRet").show();
 
+			if ($('#id_formapago_').val() == 2) {
+				
+				var total = $('#total_fac').val();
+                total = total- Number(reten);
+				$('#numcuota_').val("1");				
+                $('#totalcredito_').val(parseFloat(total).toFixed(2))
+                $('#plazo_ ').val("30");
+
+				generarCuotas();
+			}
+
 		} else {
 
 			$("#divPorcRet").hide();
@@ -957,6 +968,19 @@ function obtenerTitular(){
 
 			$('#porcentaje_retencion').val("");
 			$('#monto_retencion').val("0");
+
+			if ($('#id_formapago_').val() == 2) {
+				
+				var total = $('#total_fac').val();
+
+				//alert(total)
+               
+				$('#numcuota_').val("1");				
+                $('#totalcredito_').val(parseFloat(total).toFixed(2))
+                $('#plazo_ ').val("30");
+
+				generarCuotas();
+			}
 
 
 		}

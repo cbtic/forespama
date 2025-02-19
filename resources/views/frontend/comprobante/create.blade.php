@@ -72,16 +72,16 @@
                 MostrarTarjeta();
                 //OcultarMedioPago();
                 $('#numcuota_').val("1");
-                var $total = $('#total_fac').val();
+                var total = $('#total_fac').val();
 
                 if($("#chkRetencion").is(':checked')) {
-                    var $retencion = $('#monto_retencion').val();
-                    $total = $total- $retencion;
+                    var retencion = $('#monto_retencion').val();
+                    total = total- Number(retencion);
 	            }
 
                 //alert($total);
 
-                $('#totalcredito_').val($total)
+                $('#totalcredito_').val(parseFloat(total).toFixed(2))
                 $('#plazo_ ').val("30");
                 generarCuotas();
             }
