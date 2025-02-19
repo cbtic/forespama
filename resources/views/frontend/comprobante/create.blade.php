@@ -71,11 +71,16 @@
             if ($(this).val() == 2) {
                 MostrarTarjeta();
                 //OcultarMedioPago();
-                
-
                 $('#numcuota_').val("1");
                 var $total = $('#total_fac').val();
-                //alert($('#totalP').val());
+
+                if($("#chkRetencion").is(':checked')) {
+                    var $retencion = $('#monto_retencion').val();
+                    $total = $total- $retencion;
+	            }
+
+                //alert($total);
+
                 $('#totalcredito_').val($total)
                 $('#plazo_ ').val("30");
                 generarCuotas();

@@ -774,7 +774,7 @@ function obtenerTitular(){
 					$("#totalMedioPago").val(monto);
 
 					//alert (monto);
-					alert (idMedio);
+					//alert (idMedio);
 
 					if(idMedio=='1'){
 						//monto = $("#total_fac_").val();
