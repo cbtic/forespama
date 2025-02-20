@@ -399,6 +399,11 @@ function cambiarOrigen(){
     }
 }
 
+function eliminarFila(button){
+    $(button).closest('tr').remove();
+    actualizarTotalGeneral();
+}
+
 function cambiarTipoDocumento(){
 
     var tipoMovimiento = document.getElementById('tipo_movimiento_').value;

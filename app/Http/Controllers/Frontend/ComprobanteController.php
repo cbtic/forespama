@@ -42,6 +42,24 @@ class ComprobanteController extends Controller
         return view('frontend.comprobante.all',compact('formapago','caja','medio_pago','usuario_caja'));
     }
 
+    public function create_consulta_sodimac(){
+        
+        $tabla_model = new TablaMaestra;
+
+        $formapago = $tabla_model->getMaestroByTipo('104');
+
+        $caja = $tabla_model->getMaestroByTipoBySubcogioNull('27');
+
+        $medio_pago = $tabla_model->getMaestroByTipoBySubcogioNull('11');
+
+        $caja_model = new CajaIngreso;
+
+        $usuario_caja = $caja_model->getCajaUsuario_all();
+
+
+        return view('frontend.comprobante.create_consulta_sodimac',compact('formapago','caja','medio_pago','usuario_caja'));
+    }
+
     public function cuadre_caja(){
         //$facturas_model = new Factura;
         //$facturas = $facturas_model->getFactura();

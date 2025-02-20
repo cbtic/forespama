@@ -74,6 +74,7 @@ Route::post('ingreso_vehiculo_tronco/listar_ingreso_vehiculo_tronco_ajax', [Ingr
 Route::post('ingreso_vehiculo_tronco/listar_ingreso_vehiculo_tronco_pagos_ajax', [IngresoVehiculoTroncoController::class, 'listar_ingreso_vehiculo_tronco_pagos_ajax'])->name('listar_ingreso_vehiculo_tronco_pagos_ajax.listar_ingreso_vehiculo_tronco_ajax');
 Route::get('ingreso_vehiculo_tronco/modal_pago/{id}/{id_ingreso_vehiculo_tronco}', [IngresoVehiculoTroncoController::class, 'modal_pago'])->name('ingreso_vehiculo_tronco.modal_pago');
 Route::post('ingreso_vehiculo_tronco/send_pago', [IngresoVehiculoTroncoController::class, 'send_pago'])->name('ingreso_vehiculo_tronco.send_pago');
+Route::get('comprobante/create_consulta_sodimac', [ComprobanteController::class, 'create_consulta_sodimac'])->name('comprobante.create_consulta_sodimac');
 
 Route::get('ingreso_vehiculo_tronco/modal_placa/{id}', [IngresoVehiculoTroncoController::class, 'modal_placa'])->name('ingreso_vehiculo_tronco.modal_placa');
 Route::get('ingreso_vehiculo_tronco/modal_empresa/{id}', [IngresoVehiculoTroncoController::class, 'modal_empresa'])->name('ingreso_vehiculo_tronco.modal_empresa');
@@ -582,3 +583,4 @@ Route::post('empaquetado/listar_operacion_empaquetados_ajax', [EmpaquetadoContro
 Route::get('empaquetado/obtener_codigo_operacion_empaquetado', [EmpaquetadoController::class, 'obtener_codigo_operacion_empaquetado'])->name('empaquetado.obtener_codigo_operacion_empaquetado');
 Route::get('empaquetado/modal_consulta_empaquetado_operacion/{id}', [EmpaquetadoController::class, 'modal_consulta_empaquetado_operacion'])->name('empaquetado.modal_consulta_empaquetado_operacion');
 Route::get('empaquetado/cargar_operacion_detalle/{id}', [EmpaquetadoController::class, 'cargar_operacion_detalle'])->name('empaquetado.cargar_operacion_detalle');
+//Route::get('orden_compra/create_consulta_sodimac', [OrdenCompraController::class, 'create_consulta_sodimac'])->name('orden_compra.create_consulta_sodimac');

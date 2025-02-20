@@ -215,7 +215,7 @@
 
         @endif
 
-        @if(Gate::check('Ingreso Caja') || Gate::check('Comprobante') || Gate::check('Guia'))
+        @if(Gate::check('Ingreso Caja') || Gate::check('Comprobante') || Gate::check('Guia') || Gate::check('Consulta Sodimac'))
 
         <li class="c-sidebar-nav-dropdown">
             <x-utils.link href="#" icon="c-sidebar-nav-icon cil-list" class="c-sidebar-nav-dropdown-toggle" :text="__('Caja')" />
@@ -228,6 +228,11 @@
                 @can('Comprobante')
                 <li class="c-sidebar-nav-item">
                     <x-utils.link :href="route('frontend.comprobante.all')" class="c-sidebar-nav-link" :text="__('Consulta de Facturas')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />                  
+                </li>
+                @endif
+                @can('Consulta Sodimac')
+                <li class="c-sidebar-nav-item">
+                    <x-utils.link :href="route('frontend.comprobante.create_consulta_sodimac')" class="c-sidebar-nav-link" :text="__('Consulta de Facturas Sodimac')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />                  
                 </li>
                 @endif
                 @can('Guia')
