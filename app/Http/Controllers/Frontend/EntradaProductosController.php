@@ -157,6 +157,9 @@ class EntradaProductosController extends Controller
             $descuento = $request->input('descuento');
             $porcentaje = $request->input('porcentaje');
             $id_descuento = $request->input('id_descuento');
+
+            $entrada_producto_model = new EntradaProducto;
+            $codigo = $entrada_producto_model->getCodigoEntradaProducto($request->tipo_documento);
             
             $entrada_producto->fecha_ingreso = $request->fecha_entrada;
             $entrada_producto->id_tipo_documento = $request->tipo_documento;
@@ -173,7 +176,7 @@ class EntradaProductosController extends Controller
             $entrada_producto->observacion = $request->observacion;
             $entrada_producto->id_almacen_destino = $request->almacen;
             $entrada_producto->id_empresa_compra = $request->empresa_compra;
-            $entrada_producto->codigo = $request->codigo;
+            $entrada_producto->codigo = $codigo[0]->codigo;
             $entrada_producto->id_usuario_recibe = $id_user;
             $entrada_producto->estado = 1;
             $entrada_producto->id_orden_compra = $request->id_orden_compra;
@@ -383,7 +386,10 @@ class EntradaProductosController extends Controller
             $descuento = $request->input('descuento');
             $porcentaje = $request->input('porcentaje');
             $id_descuento = $request->input('id_descuento');
-            
+
+            $salida_producto_model = new SalidaProducto;
+            $codigo = $salida_producto_model->getCodigoSalidaProducto($request->tipo_documento);
+
             $salida_producto->fecha_salida = $request->fecha_entrada;
             $salida_producto->id_tipo_documento = $request->tipo_documento;
             $salida_producto->unidad_destino = $request->unidad_origen;
@@ -401,7 +407,7 @@ class EntradaProductosController extends Controller
             $salida_producto->id_orden_compra = $request->id_orden_compra;
             $salida_producto->id_proveedor = $request->proveedor;
             $salida_producto->id_empresa_compra = $request->empresa_compra;
-            $salida_producto->codigo = $request->codigo;
+            $salida_producto->codigo = $codigo[0]->codigo;
             $salida_producto->id_usuario_recibe = $id_user;
             $salida_producto->id_persona_recibe = $request->persona_recibe;
             $salida_producto->save();

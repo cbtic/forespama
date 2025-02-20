@@ -197,10 +197,11 @@ $(document).ready(function() {
 						?>
 						<tr>
 							<td class="text-left" style="vertical-align:middle"><?php //echo $row->tipo_documento?>
-							<img src="<?php echo url($row->ruta_imagen); ?>" width="130px" height="165px" alt="/" style="text-align:center;margin-top:8px;margin-left:10px" />
+							<!--<img src="<?php //echo url($row->ruta_imagen); ?>" width="130px" height="165px" alt="/" style="text-align:center;margin-top:8px;margin-left:10px" />-->
+							<img src="/img/productos/{{ $row->id }}/{{ $row->ruta_imagen }}" width="130px" height="165px" alt="/" style="text-align:center;margin-top:8px;margin-left:10px" />
 							</td>
 							<td class="text-left" style="vertical-align:middle">
-								<a href="<?php echo url($row->ruta_imagen); ?>" target="_blank" class="btn btn-sm btn-info">Ver Imagen</a>
+								<a href="/img/productos/{{ $row->id }}/{{ $row->ruta_imagen }}" target="_blank" class="btn btn-sm btn-info">Ver Imagen</a>
 							</td>
 						</tr>
 						<?php 

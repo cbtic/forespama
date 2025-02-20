@@ -172,6 +172,8 @@ $(document).ready(function() {
 
     $('#placa_guia').mask('AAA-000');
 
+    //$('#peso').mask('0000000000.00', { reverse: true });
+
     $('#fecha').datepicker({
         autoclose: true,
 		format: 'yyyy-mm-dd',
@@ -197,7 +199,7 @@ $(document).ready(function() {
     $("#empresa").select2({ width: '100%' });
 	$("#conductor").select2({ width: '100%' });
 	$("#marca").select2({ width: '100%' });
-    //$("#marca_vehiculo").select2({ width: '100%' });
+    $("#unidad_medida_peso").select2({ width: '100%' });
 
 });
 
@@ -541,6 +543,7 @@ function fn_save_guia_interna(){
     var departamento_llegada = $('#departamento_llegada').val();
     var provincia_llegada = $('#provincia_llegada').val();
     var distrito_llegada = $('#distrito_llegada').val();
+    var peso = $('#peso').val();
 
     if(fecha_emision==""){msg+="Ingrese la Fecha de Emision <br>";}
     if(punto_partida==""){msg+="Ingrese el Punto de Partida <br>";}
@@ -562,6 +565,7 @@ function fn_save_guia_interna(){
     if(departamento_llegada==""){msg+="Ingrese el Departamento de Llegada <br>";}   
     if(provincia_llegada==""){msg+="Ingrese la Provincia de Llegada <br>";}   
     if(distrito_llegada==""){msg+="Ingrese el Distrito de Llegada <br>";}   
+    if(peso==""){msg+="Ingrese el Peso <br>";}   
 
     if ($('#tblGuiaInternaDetalle tbody tr').length == 0) {
         msg += "No se ha agregado ningún producto <br>";
@@ -1322,11 +1326,11 @@ function obtenerLicencia(){
                                     Serie
                                 </div>
                                 <div class="col-lg-5">
-                                    <select name="serie_guia" id="serie_guia" class="form-control form-control-sm" onchange="obtenerNumeroGuia()">
+                                    <select name="serie_guia" id="serie_guia" class="form-control form-control-sm" onchange="//obtenerNumeroGuia()">
                                         <option value="">--Seleccionar--</option>
                                         <?php 
                                         foreach ($serie_guia as $row){?>
-                                            <option value="<?php echo $row->denominacion ?>" <?php if($row->denominacion==$guia_interna->guia_serie)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                            <option value="<?php echo $row->denominacion ?>" <?php echo ($id > 0 && $row->denominacion==$guia_interna->guia_serie) ? "selected='selected'" : (($row->denominacion == "T001")  ? "selected='selected'" : "");?>><?php echo $row->denominacion ?></option>
                                             <?php 
                                         }
                                         ?>
@@ -1353,7 +1357,8 @@ function obtenerLicencia(){
                                     Fecha de Emisi&oacute;n
                                 </div>
                                 <div class="col-lg-5">
-                                    <input id="fecha_emision" name="fecha_emision" on class="form-control form-control-sm"  value="<?php echo isset($guia_interna) && $guia_interna->fecha_emision ? $guia_interna->fecha_emision : date('Y-m-d'); ?>" type="text">
+                                    <input id="fecha_emision_" name="fecha_emision_" on class="form-control form-control-sm"  value="<?php echo isset($guia_interna) && $guia_interna->fecha_emision ? $guia_interna->fecha_emision : date('Y-m-d'); ?>" type="text" disabled="disabled">
+                                    <input type="hidden" name="fecha_emision" id="fecha_emision" value="<?php echo isset($guia_interna) && $guia_interna->fecha_emision ? $guia_interna->fecha_emision : date('Y-m-d'); ?>">
                                 </div>
                             </div>
                         </div>
@@ -1602,6 +1607,36 @@ function obtenerLicencia(){
                                 </div>
                                 <div class="col-lg-8">
                                     <input id="observacion_guia" name="observacion_guia" on class="form-control form-control-sm"  value="<?php if($id>0){echo $guia_interna->observacion;} ?>" type="text">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="padding-left:10px; padding-bottom:10px;">
+                        <div class="col-lg-4">
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    Unidad Medida Peso
+                                </div>
+                                <div class="col-lg-5">
+                                    <select name="unidad_medida_peso" id="unidad_medida_peso" class="form-control form-control-sm" onchange="">
+                                        <option value="">--Seleccionar--</option>
+                                        <?php 
+                                        foreach ($motivo_traslado as $row){?>
+                                            <option value="<?php echo $row->codigo ?>" <?php //if($row->codigo==$guia_interna->id_motivo_traslado)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                            <?php 
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    Peso
+                                </div>
+                                <div class="col-lg-5">
+                                    <input id="peso" name="peso" on class="form-control form-control-sm"  value="<?php //if($id>0){echo $guia_interna->numero_orden_compra_cliente;} ?>" type="text">
                                 </div>
                             </div>
                         </div>

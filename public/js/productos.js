@@ -42,6 +42,10 @@ $(document).ready(function () {
 			return false;
 		}
 	});
+
+	$('#tipo_producto_bus').select2({
+		width : "100%"
+	})
 		
 	datatablenew();
 
@@ -83,6 +87,7 @@ function datatablenew(){
             var denominacion = $('#denominacion_bus').val();
 			var estado_bien = $('#estado_bien_bus').val();
 			var tipo_origen_producto = $('#tipo_origen_producto_bus').val();
+			var tiene_imagen = $('#tiene_imagen_bus').val();
 			var estado = $('#estado_bus').val();
 			
 			var _token = $('#_token').val();
@@ -93,7 +98,7 @@ function datatablenew(){
                 "url": sSource,
                 "data":{NumeroPagina:iNroPagina,NumeroRegistros:iCantMostrar,
 						serie:serie,denominacion:denominacion,codigo:codigo,estado_bien:estado_bien,
-						tipo_origen_producto:tipo_origen_producto,estado:estado,
+						tipo_origen_producto:tipo_origen_producto,estado:estado,tiene_imagen:tiene_imagen,
 						_token:_token
                        },
                 "success": function (result) {
@@ -230,6 +235,20 @@ function datatablenew(){
 				},
 				"bSortable": true,
 				"aTargets": [12]
+				},
+				{
+					"mRender": function (data, type, row) {
+						var tiene_imagen = "";
+						if(row.tiene_imagen == 1){
+							tiene_imagen = "SI";
+						}
+						if(row.tiene_imagen == 0){
+							tiene_imagen = "NO";
+						}
+						return tiene_imagen;
+					},
+					"bSortable": false,
+					"aTargets": [13]
 				},
 				{
 					"mRender": function (data, type, row) {

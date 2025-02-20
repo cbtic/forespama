@@ -1047,7 +1047,6 @@ function obtenerEntradaSalida(){
 
 </script>
 
-
 <body class="hold-transition skin-blue sidebar-mini">
     
     <div>
@@ -1084,7 +1083,7 @@ function obtenerEntradaSalida(){
                             Tipo Documento
                         </div>
                         <div class="col-lg-2">
-                            <select name="tipo_documento" id="tipo_documento" class="form-control form-control-sm" onchange="obtenerCodigo()">
+                            <select name="tipo_documento" id="tipo_documento" class="form-control form-control-sm" onchange="//obtenerCodigo()">
                                 <option value="">--Seleccionar--</option>
                                 <?php
                                 foreach ($tipo_documento as $row){?>
@@ -1215,7 +1214,7 @@ function obtenerEntradaSalida(){
                                 <option value="">--Seleccionar--</option>
                                 <?php
                                 foreach ($moneda as $row){?>
-                                    <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$orden_compra->id_moneda)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                    <option value="<?php echo $row->codigo; ?>" <?php echo ($id > 0 && $row->codigo == $orden_compra->id_moneda) ? "selected='selected'" : (($row->codigo == 1) ? "selected='selected'" : ""); ?>><?php echo $row->denominacion ?></option>
                                     <?php 
                                 }
                                 ?>

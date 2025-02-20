@@ -147,6 +147,10 @@ class GuiaInternaController extends Controller
         $tipo_guia = $tabla_maestra_model->getMaestroDeno(95,$request->serie_guia);
         //dd($tipo_guia);exit();
         $id_guia_interna_detalle =$request->id_guia_interna_detalle;
+
+        $guia_interna_model = new GuiaInterna;
+        $numero_guia = $guia_interna_model->getNumeroGuia($request->serie_guia);
+        //dd($codigo);exit();
         
         $guia_interna->fecha_emision = $request->fecha_emision;
         //$guia_interna->punto_partida = $request->punto_partida_descripcion;
@@ -168,12 +172,13 @@ class GuiaInternaController extends Controller
         $guia_interna->id_ubigeo_partida = $request->distrito_partida;
         $guia_interna->id_ubigeo_llegada = $request->distrito_llegada;
         $guia_interna->guia_serie = $request->serie_guia;
-        $guia_interna->guia_numero = $request->numero_guia;
+        $guia_interna->guia_numero = $numero_guia[0]->codigo;
         $guia_interna->numero_orden_compra_cliente = $request->orden_compra_cliente;
         $guia_interna->tiendas = $request->tiendas_orden_compra;
         $guia_interna->observacion = $request->observacion_guia;
         $guia_interna->guia_tipo = $tipo_guia[0]->codigo;
         $guia_interna->id_usuario_inserta = $id_user;
+        $guia_interna->peso = $request->peso;
         
         $id_ubigeo = $request->distrito_llegada;
         $id_departamento = substr($id_ubigeo,0,2);
@@ -205,7 +210,7 @@ class GuiaInternaController extends Controller
         $personas = Persona::find($conductores->id_personas);
 
         $guia->guia_serie = $request->serie_guia;
-        $guia->guia_numero = $request->numero_guia;
+        $guia->guia_numero = $numero_guia[0]->codigo;
         $guia->guia_tipo = $tipo_guia[0]->codigo;
         $guia->guia_receptor_numdoc = $request->ruc;
         $guia->guia_receptor_tipodoc = "0";
@@ -223,10 +228,11 @@ class GuiaInternaController extends Controller
         $guia->guia_cod_motivo = $request->motivo_traslado;
         $guia->guia_emisor_numdoc = "20486785994";
         $guia->guia_emisor_razsocial = "FORESTAL PAMA S.A.C.";
-        $guia->guia_peso_bruto = 100;
+        //$guia->guia_peso_bruto = 100;
         $guia->id_usuario_inserta = $id_user;
         $guia->guia_conductor_tipodoc = $personas->id_tipo_documento;
         $guia->guia_conductor_numdoc = $personas->numero_documento;
+        $guia->guia_peso_bruto = $request->peso;
         $observacion ="";
         if($request->orden_compra_cliente!=""){
             $observacion.="Orden Compra Cliente: ".$request->orden_compra_cliente;
@@ -288,7 +294,7 @@ class GuiaInternaController extends Controller
 
             $guia_detalle->id_guia = $guia->id;
             $guia_detalle->guiad_serie = $request->serie_guia;
-            $guia_detalle->guiad_numero = $request->numero_guia;
+            $guia_detalle->guiad_numero = $numero_guia[0]->codigo;
             $guia_detalle->guiad_tipo = $tipo_guia[0]->codigo;
             $guia_detalle->guiad_orden_item = $index+1;
             $guia_detalle->guiad_codigo = $cod_interno[$index];

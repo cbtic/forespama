@@ -406,10 +406,10 @@ function cambiarTipoDocumento(){
     //alert(tipoMovimiento);
     if (tipoMovimiento == "1") {
         $('#tipo_documento').val(1).trigger('change');
-        obtenerCodigo();
+        //obtenerCodigo();
     } else if (tipoMovimiento == "2") {
         $('#tipo_documento').val(2).trigger('change');
-        obtenerCodigo();
+        //obtenerCodigo();
     } else {
         $('#tipo_documento').val("").trigger('change');
     }
@@ -1138,7 +1138,7 @@ function pdf_documento(){
                             Tipo Documento
                         </div>
                         <div class="col-lg-2">
-                            <select name="tipo_documento" id="tipo_documento" class="form-control form-control-sm" onchange="obtenerCodigo()">
+                            <select name="tipo_documento" id="tipo_documento" class="form-control form-control-sm" onchange="//obtenerCodigo()">
                                 <option value="">--Seleccionar--</option>
                             </select>
                         </div>

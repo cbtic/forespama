@@ -140,7 +140,7 @@
 		
 	@endif
 	
-	@if(Gate::check('Entradas') || Gate::check('Salidas') || Gate::check('Kardex') || Gate::check('Movimientos') || Gate::check('Requerimientos'))
+	@if(Gate::check('Entradas') || Gate::check('Salidas') || Gate::check('Kardex') || Gate::check('Movimientos') || Gate::check('Requerimientos') || Gate::check('Consulta Stock'))
 
         <li class="c-sidebar-nav-dropdown">
             <x-utils.link href="#" icon="c-sidebar-nav-icon cil-list" class="c-sidebar-nav-dropdown-toggle" :text="__('Operaciones')" />
@@ -162,6 +162,10 @@
                 <li class="c-sidebar-nav-item">
                     <x-utils.link :href="route('frontend.orden_compra.create')" class="c-sidebar-nav-link" :text="__('Orden Compra y Venta')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
                 </li>
+
+                @endif
+
+                @can('Consulta Stock')
 
                 <li class="c-sidebar-nav-item">
                     <x-utils.link :href="route('frontend.orden_compra.consulta_stock_pedido')" class="c-sidebar-nav-link" :text="__('Consulta de Stock de Pedidos')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
@@ -196,6 +200,12 @@
                 @can('Verificacion Aplicacion Comisiones')
 				<li class="c-sidebar-nav-item">
                     <x-utils.link :href="route('frontend.parametro.create_valida_parametro')" class="c-sidebar-nav-link" :text="__('Verificacion de Aplicacion de Comisiones')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+                </li>
+				@endif
+
+                @can('Empaquetado')
+				<li class="c-sidebar-nav-item">
+                    <x-utils.link :href="route('frontend.empaquetado.create_empaquetado')" class="c-sidebar-nav-link" :text="__('Empaquetado')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
                 </li>
 				@endif
 				
@@ -312,6 +322,12 @@
                 @can('Mantenimiento Parametro')
 				<li class="c-sidebar-nav-item">
                     <x-utils.link :href="route('frontend.parametro.create')" class="c-sidebar-nav-link" :text="__('Parametros')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+                </li>
+				@endif
+
+                @can('Mantenimietno Empaquetado')
+				<li class="c-sidebar-nav-item">
+                    <x-utils.link :href="route('frontend.empaquetado.create')" class="c-sidebar-nav-link" :text="__('Empaquetado')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
                 </li>
 				@endif
 

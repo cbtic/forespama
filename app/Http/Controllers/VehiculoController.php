@@ -279,7 +279,7 @@ class VehiculoController extends Controller
 	public function send_guia_mantenimiento(Request $request){
 
 		$id_user = Auth::user()->id;
-		dd($request);exit();
+		//dd($request);exit();
 		if($request->id == 0){
 			$vehiculo = new Vehiculo;
 			$vehiculo->placa = $request->placa;

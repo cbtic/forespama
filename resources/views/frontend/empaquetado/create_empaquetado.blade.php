@@ -2,10 +2,6 @@
 <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" defer></script>
 <style type="text/css">
 
-#tblProductos tbody tr{
-		font-size:13px
-	}
-
 .table td.verde{
 	background:#CAE983  !important
 }
@@ -256,8 +252,7 @@ label.form-control-sm{
 	overflow-x: scroll;
 	overflow-y: hidden;
 	height: 200px;
-	white-space:nowrap;
-	width: 300px;
+	white-space:nowrap
 }
 .imageDiv img {
 	box-shadow: 1px 1px 10px #999;
@@ -291,7 +286,6 @@ label.form-control-sm{
 </style>
 
 
-
 @stack('before-scripts')
 @stack('after-scripts')
 
@@ -302,7 +296,7 @@ label.form-control-sm{
 @section('breadcrumb')
 <ol class="breadcrumb" style="padding-left:130px;margin-top:0px;background-color:#283659">
     <li class="breadcrumb-item text-primary">Inicio</li>
-    <li class="breadcrumb-item active">Registro de Productos</li>
+    <li class="breadcrumb-item active">Registro de Operaci&oacute;n de Empaquetados de Productos</li>
     </li>
 </ol>
 
@@ -328,12 +322,12 @@ label.form-control-sm{
 
         <div class="card-body">
 
-            <form class="form-horizontal" method="post" action="" id="frmProductos" autocomplete="off" enctype="multipart/form-data">
+            <form class="form-horizontal" method="post" action="" id="frmOperacionEmpaquetadoProductos" autocomplete="off" enctype="multipart/form-data">
 				
                 <div class="row">
                     <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12" style="margin-top:15px">
                         <h4 class="card-title mb-0 text-primary" style="font-size:22px">
-                            Productos
+							Operaci&oacute;n Empaquetado de Productos
                         </h4>
                     </div>
                 </div>
@@ -352,65 +346,26 @@ label.form-control-sm{
 				
 				<div class="row" style="padding:20px 20px 0px 20px;">
 
+					<!--<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+                        <input id="fecha_bus" name="fecha_bus" on class="form-control form-control-sm"  placeholder="Fecha">
+					</div>-->
+
 					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<select name="tipo_origen_producto_bus" id="tipo_origen_producto_bus" class="form-control form-control-sm">
-							<option value="">--Seleccionar Tipo Origen Producto--</option>
+                        <input id="numero_empaquetado_bus" name="numero_empaquetado_bus" on class="form-control form-control-sm"  placeholder="N&uacute;mero Empaquetado">
+					</div>
+
+					<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+						<select name="producto_empaquetado_bus" id="producto_empaquetado_bus" class="form-control form-control-sm">
+							<option value="">--Seleccionar Producto--</option>
 							<?php
-							foreach ($tipo_origen_producto as $row) {
-							?>
-							<option value="<?php echo $row->codigo?>"><?php echo $row->denominacion?></option>
-							<?php
+							foreach ($producto as $row){?>
+								<option value="<?php echo $row->id ?>"><?php echo $row->codigo .' - '.$row->denominacion ?></option>
+								<?php 
 							}
 							?>
 						</select>
 					</div>
 
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<input class="form-control form-control-sm" id="serie_bus" name="serie_bus" placeholder="Serie">
-					</div>
-
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<input class="form-control form-control-sm" id="codigo_bus" name="codigo_bus" placeholder="C&oacute;digo">
-					</div>
-
-                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-                        <input id="denominacion_bus" name="denominacion_bus" on class="form-control form-control-sm"  placeholder="Denominaci&oacute;n">
-					</div>
-
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<select name="estado_bien_bus" id="estado_bien_bus" class="form-control form-control-sm">
-							<option value="">--Seleccionar Estado Bien--</option>
-							<?php
-							foreach ($estado_bien as $row) {
-							?>
-							<option value="<?php echo $row->codigo?>"><?php echo $row->denominacion?></option>
-							<?php
-							}
-							?>
-						</select>
-					</div>	
-					
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<select name="tipo_producto_bus" id="tipo_producto_bus" class="form-control form-control-sm">
-							<option value="">--Seleccionar Tipo Producto--</option>
-							<?php
-							foreach ($tipo_producto as $row) {
-							?>
-							<option value="<?php echo $row->codigo?>"><?php echo $row->denominacion?></option>
-							<?php
-							}
-							?>
-						</select>
-					</div>
-
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<select name="tiene_imagen_bus" id="tiene_imagen_bus" class="form-control form-control-sm">
-							<option value="" selected="selected">--Seleccionar Tiene Imagen--</option>
-							<option value="1">Si</option>
-							<option value="0">No</option>
-						</select>
-					</div>
-					
                     <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
 						<select name="estado_bus" id="estado_bus" class="form-control form-control-sm">
 							<option value="">Todos</option>
@@ -418,7 +373,6 @@ label.form-control-sm{
 							<option value="0">Eliminado</option>
 						</select>
 					</div>
-
                     
 					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12" style="padding-right:0px">
 						<input class="btn btn-warning pull-rigth" value="Buscar" type="button" id="btnBuscar" />
@@ -426,26 +380,18 @@ label.form-control-sm{
 					</div>
 				</div>
 				
-                <div class="card-body">				
+                <div class="card-body">
 
                     <div class="table-responsive">
-                    <table id="tblProductos" class="table table-hover table-sm">
+                    <table id="tblOperacionEmpaquetadoProducto" class="table table-hover table-sm">
                         <thead>
                         <tr style="font-size:13px">
                             <th>Id</th>
-							<th>Tipo Origen Producto</th>
-							<th>Serie</th>
-							<th>Denominaci&oacute;n</th>
-                            <th>C&oacute;digo</th>
-                            <th>Unidad Producto</th>
-							<th>Contenido</th>
-							<th>Unidad Medida</th>
-							<th>Marca</th>
-							<th>Tipo Producto</th>
-							<th>Estado Bien</th>
-							<th>F. Vencimiento</th>
-							<th>Stock M&iacute;nimo</th>
-							<th>Tiene Imagen</th>
+							<th>Fecha</th>
+                            <th>Producto</th>
+							<th>N&uacute;mero Operaci&oacute;n</th>
+							<th>Almacen Destino</th>
+							<th>Usuario Registra</th>
 							<th>Estado</th>
                             <th>Acciones</th>
                         </tr>
@@ -536,6 +482,6 @@ label.form-control-sm{
 
 	</script>
 
-	<script src="{{ asset('js/productos.js') }}"></script>
+	<script src="{{ asset('js/operacionEmpaquetadoProducto.js') }}"></script>
 
 	@endpush

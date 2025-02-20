@@ -210,11 +210,14 @@ class OrdenCompraController extends Controller
         $descuento = $request->input('descuento');
         $porcentaje = $request->input('porcentaje');
         $id_orden_compra_detalle =$request->id_orden_compra_detalle;
+
+        $orden_compra_model = new OrdenCompra;
+		$codigo_orden_compra = $orden_compra_model->getCodigoOrdenCompra($request->tipo_documento);
         
         $orden_compra->id_empresa_compra = $request->empresa_compra;
         $orden_compra->id_empresa_vende = $request->empresa_vende;
         $orden_compra->fecha_orden_compra = $request->fecha_orden_compra;
-        $orden_compra->numero_orden_compra = $request->numero_orden_compra;
+        $orden_compra->numero_orden_compra = $codigo_orden_compra[0]->codigo;
         $orden_compra->id_tipo_documento = $request->tipo_documento;
         $orden_compra->igv_compra = $request->igv_compra;
         $orden_compra->id_unidad_origen = $request->unidad_origen;
@@ -545,6 +548,11 @@ class OrdenCompraController extends Controller
         $id_empresa_compra = 23;
         $id_marca = 278;
         $id_estado_producto = 1;
+        $id_moneda = 1;
+        $moneda = "SOLES";
+        $sub_total_general = 0;
+        $igv_general = 0;
+        $total_general = 0;
 
         // Ruta del archivo
         //$filePath = storage_path('app/datos.txt');
@@ -613,6 +621,8 @@ class OrdenCompraController extends Controller
                 $ordenCompra->id_almacen_destino = $id_almacen_destino;
                 $ordenCompra->id_almacen_salida = $id_almacen_salida;
                 $ordenCompra->tienda_asignada = $tienda_asignada;
+                $ordenCompra->id_moneda = $id_moneda;
+                $ordenCompra->moneda = $moneda;
                 $ordenCompra->id_usuario_inserta = $id_user;
                 $ordenCompra->save();
                 $id_orden_compra = $ordenCompra->id;
@@ -624,16 +634,35 @@ class OrdenCompraController extends Controller
             $producto = Producto::find($id_producto);
             $cantidad_requerida = $row['CANTIDAD_PROD'];
             $id_unidad_medida = $producto->id_unidad_producto;
+
+            /*
             $precio_venta = $row['COSTO_UNI'];
 
             //$total = $sub_total + $igv;
-            $total = $precio_venta * $cantidad_requerida;
-            $valor_unitario = $precio_venta / 1.18;
+            $total = round($precio_venta * $cantidad_requerida, 2);
+            $valor_unitario = round($precio_venta / 1.18, 2);
             //$igv = round(0.18 * $total,2);
-            $valor_venta_bruto = $total / 1.18;
-            $igv = $valor_venta_bruto * 0.18;
-            $sub_total = $total - $igv;
-            
+            $valor_venta_bruto = round($total / 1.18, 2);
+            $igv = round($valor_venta_bruto * 0.18, 2);
+            $sub_total = round($total - $igv, 2);
+
+            $sub_total_general += $sub_total;
+            $igv_general += $igv;
+            $total_general += $total;
+            */
+
+            $valor_unitario = $row['COSTO_UNI'];
+            $precio_venta = 1.18*$valor_unitario;
+
+            $total = round($precio_venta * $cantidad_requerida, 2);
+            $valor_venta_bruto = round($total / 1.18, 2);
+            $igv = round($valor_venta_bruto * 0.18, 2);
+            $sub_total = round($total - $igv, 2);
+
+            $sub_total_general += $sub_total;
+            $igv_general += $igv;
+            $total_general += $total;
+
             $ordenCompraDetalle = new OrdenCompraDetalle;
             $ordenCompraDetalle->id_orden_compra = $id_orden_compra;
             $ordenCompraDetalle->id_producto = $id_producto;
@@ -681,6 +710,12 @@ class OrdenCompraController extends Controller
             */
             $count++;
         }
+
+        $ordenCompraTotales = OrdenCompra::find($id_orden_compra);
+        $ordenCompraTotales->sub_total = $sub_total_general;
+        $ordenCompraTotales->igv = $igv_general;
+        $ordenCompraTotales->total = $total_general;
+        $ordenCompraTotales->save();
 
         fclose($file);
 

@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION public.sp_listar_productos_paginado(p_serie character varying, p_denominacion character varying, p_codigo character varying, p_estado_bien character varying, p_tipo_origen_producto character varying, p_estado character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
+CREATE OR REPLACE FUNCTION public.sp_listar_productos_paginado(p_serie character varying, p_denominacion character varying, p_codigo character varying, p_estado_bien character varying, p_tipo_origen_producto character varying, p_tiene_imagen character varying, p_estado character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
  RETURNS refcursor
  LANGUAGE plpgsql
 AS $function$
@@ -15,7 +15,13 @@ begin
 	
 	p_pagina=(p_pagina::Integer-1)*p_limit::Integer;
 
-	v_campos=' p.id, p.numero_serie, p.denominacion, p.codigo, tm3.denominacion unidad, p.contenido, tm4.denominacion unidad_medida, m.denominiacion marca, tm.denominacion unidad_medida_producto, tm2.denominacion estado_bien, p.fecha_vencimiento, p.stock_minimo, p.stock_actual, p.estado, tm5.denominacion tipo_origen_producto ';
+	v_campos=' p.id, p.numero_serie, p.denominacion, p.codigo, tm3.denominacion unidad, p.contenido, tm4.denominacion unidad_medida, m.denominiacion marca, tm.denominacion unidad_medida_producto, tm2.denominacion estado_bien, p.fecha_vencimiento, p.stock_minimo, p.stock_actual, p.estado, tm5.denominacion tipo_origen_producto,
+	(SELECT CASE 
+	WHEN EXISTS (
+    SELECT 1 
+    FROM producto_imagenes pi 
+    WHERE pi.id_producto = p.id) THEN 1 ELSE 0 
+	END) tiene_imagen ';
 
 	v_tabla=' from productos p 
 	left join tabla_maestras tm on p.id_tipo_producto = tm.codigo::int and tm.tipo =''44''
@@ -47,11 +53,18 @@ begin
 	 v_where:=v_where||'And p.id_tipo_origen_producto =  '''||p_tipo_origen_producto||''' ';
 	End If;
 
+	If p_tiene_imagen<>'' Then
+	    If p_tiene_imagen = '1' Then
+	        v_where:=v_where||' And exists (select 1 from producto_imagenes pi where pi.id_producto = p.id) ';
+	    Else
+	        v_where:=v_where||' And not exists (select 1 from producto_imagenes pi where pi.id_producto = p.id) ';
+	    End If;
+	End If;
+
 	If p_estado<>'' Then
 	 v_where:=v_where||'And p.estado  = '''||p_estado||''' ';
 	End If;
-	
-	
+
 	EXECUTE ('SELECT count(1) '||v_tabla||v_where) INTO v_count;
 	v_col_count:=' ,'||v_count||' as TotalRows ';
 

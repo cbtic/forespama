@@ -2735,7 +2735,7 @@ class ComprobanteController extends Controller
 		$data["keepNumber"] = "false";
 		$data["tipoCorreo"] = "1";
         $data["formaPago"] = ($factura->id_forma_pago =="1")?"CONTADO":"CREDITO"; //"CONTADO";        
-		$data["tipoMoneda"] = ($factura->id_moneda=="1")?"PEN":"USD"; //"PEN";
+		$data["tipoMoneda"] = ($factura->id_moneda=="2")?"USD":"PEN"; //"PEN";
 		$data["adicionales"] = [];
 		$data["horaEmision"] = date("h:i:s", strtotime($factura->fecha)); // "12:12:04";//$cabecera->fecha
 		$data["serieNumero"] = $factura->serie."-".$factura->numero; // "F001-000002";
@@ -2768,7 +2768,7 @@ class ComprobanteController extends Controller
 		$data["descuentosGlobales"] = "0.00";
 		$data["codigoTipoOperacion"] = $factura->tipo_operacion; //"0101";
 		$data["razonSocialReceptor"] = $factura->destinatario;//"Freddy Rimac Coral";
-		$data["nombreComercialEmisor"] = "FELMO";
+		$data["nombreComercialEmisor"] = "FORESTAL PAMA";
 		$data["tipoDocIdentidadEmisor"] = "6";
 		$data["sumatoriaImpuestoBolsas"] = "0.00";
 		$data["numeroDocIdentidadEmisor"] = "20486785994";//"20160453908";     
@@ -2809,19 +2809,19 @@ class ComprobanteController extends Controller
         if ($factura->id_forma_pago =="2"){
             
             $factura_cuota = ComprobanteCuota::where([
-                'id_comprobante' => $factura->id])->get();
+                'id_comprobante' => $id_factura])->get();
 
             foreach($factura_cuota as $index => $row ) {
-                $items1 = array(
+                $items2 = array(
                                 "fecha"=> $row->fecha_vencimiento, 
                                 "monto"=> str_replace(",","",$row->monto),
                                 "orden"=> $row->item, 
                                 );
-                $items[$index]=$items1;
+                $items_c[$index]=$items2;
 
                 $monto_pago = $monto_pago + $row->monto;
             }
-            $data["creditoCuotas"] = $items;
+            $data["creditoCuotas"] = $items_c;
 
             $data["formaPagoMonto"] = str_replace(",","",number_format($monto_pago,2)); //"7.63"  round($monto_pago,2);
 
@@ -2829,7 +2829,7 @@ class ComprobanteController extends Controller
          
         }
 
-      // print_r(json_encode($data)); exit();
+       print_r(json_encode($data)."<br>"); //exit();
 
 
 		$databuild_string = json_encode($data);
@@ -3611,7 +3611,7 @@ class ComprobanteController extends Controller
         $data["tipoContenedor"] ="0";
         $data["direccionEmisor"] =$guia->guia_partida_direccion;//"AV. NESTOR GAMBETA NRO. 6311 CARRETERA A VENTANILLA (ALTURA KM 5.200 CARRETERA VENTANILLA) ";
         $data["provinciaEmisor"] ="LIMA";
-        $data["codigoPaisEmisor"] ="PE";        
+        $data["codigoPaisEmisor"] ="PE";
         $data["numeroContenedor"] ="0";
         $data["direccionReceptor"] =$guia->guia_llegada_direccion;//"JR. MINERIA NRO. 177";
         $data["docAfectadoFisico"] =false;
