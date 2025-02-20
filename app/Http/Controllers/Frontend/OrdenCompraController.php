@@ -824,6 +824,8 @@ class OrdenCompraController extends Controller
 		
     }
 
+   
+
 }
 
 class InvoicesExport implements FromArray, WithHeadings, WithStyles
