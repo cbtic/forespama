@@ -974,7 +974,7 @@ class ComprobanteController extends Controller
                         "descripcion" => "REDONDEO",
                         "monto" => round($total_redondeo,2),
                         "moneda" => "SOLES" ,
-                        "abreviatura" => "UND" ,
+                        "abreviatura" => "NIU" ,
                         "id_moneda" => 1 ,
                         "descuento" => 0 ,
                         "cod_contable" => "",
@@ -1006,7 +1006,7 @@ class ComprobanteController extends Controller
                         "monto" => round($total_abono,2),
                         "moneda" => "SOLES" ,
                         "id_moneda" => 1 ,
-                        "abreviatura" => "UND" ,
+                        "abreviatura" => "NIU" ,
                         "descuento" => 0 ,
                         "cod_contable" => "",
                         "id_concepto" => 26464 ,
@@ -2745,7 +2745,7 @@ class ComprobanteController extends Controller
 		$data["sumatoriaIGV"] = str_replace(",","",$factura->impuesto); //"22.88";
 		$data["sumatoriaISC"] = "0.00";
 		$data["ubigeoEmisor"] = "150139";
-		$data["montoEnLetras"] = $factura->letras; //"CIENTO CINCUENTA Y 00/100";
+		//$data["montoEnLetras"] = $factura->letras; //"CIENTO CINCUENTA Y 00/100";
 		$data["tipoDocumento"] = $this->getTipoDocumento($factura->tipo);
 		$data["correoReceptor"] = $factura->correo_des; //"frimacc@gmail.com";
 		$data["distritoEmisor"] = "LIMA";

@@ -1118,13 +1118,13 @@
                                             <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
                                                 <div class="form-group">
                                                     <label class="form-control-sm">F. Pago</label>
-                                                    <input type="text" name="numero_documento" id="numero_documento" value="{{old('clinum')}}" placeholder="" class="form-control form-control-sm">
+                                                    <input type="text" name="fecha_pago" id="fecha_pago" value="{{old('clinum')}}" placeholder="" class="form-control form-control-sm">
                                                 </div>
                                             </div>
                                             <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
                                                 <div class="form-group">
                                                     <label class="form-control-sm">Fecha Vence</label>
-                                                    <input type="text" name="numero_documento" id="numero_documento" value="{{old('clinum')}}" placeholder="" class="form-control form-control-sm">
+                                                    <input type="text" name="fecha_vence" id="fecha_vence" value="{{old('clinum')}}" placeholder="" class="form-control form-control-sm">
                                                 </div>
                                             </div>
                                             <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
