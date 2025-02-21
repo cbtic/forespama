@@ -134,6 +134,8 @@ class OrdenCompra extends Model
             inner join tabla_maestras um on um.codigo::int = pd.id_unidad_medida and um.tipo = '43'
             where sp.id = ".$id."           
             and pd.estado = '1' 
+            and sp.estado = '1'
+            and spd.estado = '1'
             and sp.cerrado= '2'
             order by pd.id ";
     

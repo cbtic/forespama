@@ -67,8 +67,10 @@ class Vehiculo extends Model
 
     function getVehiculoDatosGuia($placa){
 
-        $cad = "select v.id, v.id_marca, v.ejes, v.peso_tracto, v.peso_carreta, v.peso_seco, v.exonerado, v.control, v.bloqueado, v.estado from vehiculos v 
+        $cad = "select v.id, v.id_marca, v.ejes, v.peso_tracto, v.peso_carreta, v.peso_seco, v.exonerado, v.control, v.bloqueado, v.estado, v.constancia_inscripcion
+        from vehiculos v 
         where v.placa ='".$placa."'
+        order by 1 desc
         limit 1";
     
         $data = DB::select($cad);

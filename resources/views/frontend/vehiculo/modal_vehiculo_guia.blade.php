@@ -432,6 +432,7 @@ function obtenerVehiculoGuia(){
 				$('#exonerado').val(vehiculo.exonerado);
 				$('#control').val(vehiculo.control);
 				$('#bloqueado').val(vehiculo.bloqueado);
+				$('#constancia_inscripcion_mantenimiento').val(vehiculo.constancia_inscripcion);
 			}else{
 				bootbox.alert("No existe un vehiculo con esa Placa.");
 			}
@@ -597,32 +598,30 @@ container: '#myModal modal-body'
 					
 					<div class="row">
 						
-						<div class="col-lg-6">
+						<div class="col-lg-4">
 							<div class="form-group">
 								<label class="control-label">Peso Tracto</label>
 								<input id="peso_tracto" name="peso_tracto" class="form-control form-control-sm"  value="<?php echo $vehiculo->peso_tracto?>" type="text" onKeyPress="return isNumber(event)" onKeyUp="calculaPesarSeco()">
 							</div>
 						</div>
 						
-						<div class="col-lg-6">
+						<div class="col-lg-4">
 							<div class="form-group">
 								<label class="control-label">Peso Carreta</label>
 								<input id="peso_carreta" name="peso_carreta" class="form-control form-control-sm"  value="<?php echo $vehiculo->peso_carreta?>" type="text" <?php if($vehiculo->ejes!=5 && $vehiculo->ejes!=6)echo "readonly='readonly'"?>  onkeypress="return isNumber(event)" onKeyUp="calculaPesarSeco()">
 							</div>
 						</div>
 						
-					</div>
-					
-					<div class="row">
-						
-						<div class="col-lg-6">
+						<div class="col-lg-4">
 							<div class="form-group">
 								<label class="control-label">Peso Seco</label>
 								<input id="peso_seco" name="peso_seco" class="form-control form-control-sm"  value="<?php echo $vehiculo->peso_seco?>" type="text" readonly="readonly">
 							</div>
 						</div>
-						
-						<div class="col-lg-6">
+					</div>
+					
+					<div class="row">
+						<div class="col-lg-4">
 							<div class="form-group">
 								<label class="control-label">Exonerado</label>
 								<select name="exonerado" id="exonerado" class="form-control form-control-sm">
@@ -633,12 +632,7 @@ container: '#myModal modal-body'
 							</div>
 						</div>
 						
-					</div>
-					
-					<div class="row">
-						
-						
-						<div class="col-lg-6">
+						<div class="col-lg-4">
 							<div class="form-group">
 								<label class="control-label">Control</label>
 								<select name="control" id="control" class="form-control form-control-sm">
@@ -649,7 +643,7 @@ container: '#myModal modal-body'
 							</div>
 						</div>
 						
-						<div class="col-lg-6">
+						<div class="col-lg-4">
 							<div class="form-group">
 								<label class="control-label">Bloqueado</label>
 								<select name="bloqueado" id="bloqueado" class="form-control form-control-sm">
@@ -660,6 +654,14 @@ container: '#myModal modal-body'
 							</div>
 						</div>
 						
+					</div>
+					<div class="row">
+						<div class="col-lg-6">
+							<div class="form-group">
+								<label class="control-label">N° Constancia Inscripci&oacute;n</label>
+								<input id="constancia_inscripcion_mantenimiento" name="constancia_inscripcion_mantenimiento" class="form-control form-control-sm"  value="<?php echo $vehiculo->constancia_inscripcion?>" type="text">
+							</div>
+						</div>
 					</div>
 					
 					<div style="margin-top:20px;float:right" class="form-group">

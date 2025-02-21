@@ -214,6 +214,7 @@ function fn_save(){
 	var empresa = $('#empresa').val();
 	var conductor = $('#conductor').val();
 	var marca = $('#marca').val();
+	var constancia_inscripcion = $('#constancia_inscripcion').val();
 	
 	if(placa == "")msg += "Debe ingresar una placa <br>";
     if(ejes=="0"){msg+="Debe ingresar un eje<br>";}
@@ -221,6 +222,7 @@ function fn_save(){
 	if(ejes == 5 || ejes == 6){
 		if(peso_carreta==""){msg+="Debe ingresar un peso carreta<br>";}
 	}
+	if(constancia_inscripcion==""){msg+="Debe ingresar la Constancia de Inscripcion<br>";}
    	//if(peso_seco==""){msg+="Debe ingresar un peso seco<br>";}
 	if(exonerado=="0"){msg+="Debe seleccionar exonerado<br>";}
 	if(control=="0"){msg+="Debe seleccionar control<br>";}
@@ -240,7 +242,7 @@ function fn_save(){
             data : {_token:_token,
 				id:id,placa:placa,ejes:ejes,peso_tracto:peso_tracto,peso_carreta:peso_carreta,
 				peso_seco:peso_seco,exonerado:exonerado,control:control,bloqueado:bloqueado,
-				empresa:empresa,conductor:conductor,marca:marca,},
+				empresa:empresa,conductor:conductor,marca:marca,constancia_inscripcion:constancia_inscripcion,},
             success: function (result) {
 				$('#openOverlayOpc').modal('hide');
 				datatablenew();
@@ -526,32 +528,32 @@ container: '#myModal modal-body'
 					
 					<div class="row">
 						
-						<div class="col-lg-6">
+						<div class="col-lg-4">
 							<div class="form-group">
 								<label class="control-label">Peso Tracto</label>
 								<input id="peso_tracto" name="peso_tracto" class="form-control form-control-sm"  value="<?php echo $vehiculo->peso_tracto?>" type="text" onKeyPress="return isNumber(event)" onKeyUp="calculaPesarSeco()">
 							</div>
 						</div>
 						
-						<div class="col-lg-6">
+						<div class="col-lg-4">
 							<div class="form-group">
 								<label class="control-label">Peso Carreta</label>
 								<input id="peso_carreta" name="peso_carreta" class="form-control form-control-sm"  value="<?php echo $vehiculo->peso_carreta?>" type="text" <?php if($vehiculo->ejes!=5 && $vehiculo->ejes!=6)echo "readonly='readonly'"?>  onkeypress="return isNumber(event)" onKeyUp="calculaPesarSeco()">
 							</div>
 						</div>
 						
-					</div>
-					
-					<div class="row">
-						
-						<div class="col-lg-6">
+						<div class="col-lg-4">
 							<div class="form-group">
 								<label class="control-label">Peso Seco</label>
 								<input id="peso_seco" name="peso_seco" class="form-control form-control-sm"  value="<?php echo $vehiculo->peso_seco?>" type="text" readonly="readonly">
 							</div>
 						</div>
+
+					</div>
+					
+					<div class="row">
 						
-						<div class="col-lg-6">
+						<div class="col-lg-4">
 							<div class="form-group">
 								<label class="control-label">Exonerado</label>
 								<select name="exonerado" id="exonerado" class="form-control form-control-sm">
@@ -561,13 +563,8 @@ container: '#myModal modal-body'
 								</select>
 							</div>
 						</div>
-						
-					</div>
-					
-					<div class="row">
-						
-						
-						<div class="col-lg-6">
+												
+						<div class="col-lg-4">
 							<div class="form-group">
 								<label class="control-label">Control</label>
 								<select name="control" id="control" class="form-control form-control-sm">
@@ -578,7 +575,7 @@ container: '#myModal modal-body'
 							</div>
 						</div>
 						
-						<div class="col-lg-6">
+						<div class="col-lg-4">
 							<div class="form-group">
 								<label class="control-label">Bloqueado</label>
 								<select name="bloqueado" id="bloqueado" class="form-control form-control-sm">
@@ -590,7 +587,14 @@ container: '#myModal modal-body'
 						</div>
 						
 					</div>
-					
+					<div class="row">
+						<div class="col-lg-6">
+							<div class="form-group">
+								<label class="control-label">N° Constancia Inscripci&oacute;n</label>
+								<input id="constancia_inscripcion" name="constancia_inscripcion" class="form-control form-control-sm"  value="<?php echo $vehiculo->constancia_inscripcion?>" type="text">
+							</div>
+						</div>
+					</div>
 					<div style="margin-top:20px;float:right" class="form-group">
 						<div class="col-sm-12 controls">
 							<div class="btn-group btn-group-sm" role="group" aria-label="Log Viewer Actions">
