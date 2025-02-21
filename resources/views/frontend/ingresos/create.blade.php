@@ -583,6 +583,7 @@
                                                     <input type="hidden" readonly name="anio_deuda" id="anio_deuda" value="" class="form-control form-control-sm">
                                                     <input type="hidden" readonly name="SelProducto" id="SelProducto" value="" class="form-control form-control-sm">
                                                     <input type="hidden" readonly name="id_orden_compra" id="id_orden_compra" value="" class="form-control form-control-sm">
+                                                    <input type="hidden" readonly name="id_salida_prod" id="id_salida_prod" value="" class="form-control form-control-sm">
                                                     
                                                 </div>
                                             </div>

@@ -88,6 +88,59 @@ class OrdenCompra extends Model
             return null;
         }
     }
+    function getSalidaProdById($id){
+
+        $cad = "select oc.id, e.razon_social empresa_compra, e2.razon_social empresa_vende, to_char(sp.fecha_salida,'dd-mm-yyyy') fecha_orden_compra , 
+            oc.numero_orden_compra, tm.denominacion tipo_documento, oc.estado, tm2.denominacion igv, oc.numero_orden_compra_cliente, 
+            sp.total_compra  total, sp.sub_total_compra sub_total, sp.igv_compra igv, COALESCE (oc.descuento, 0 , oc.descuento) descuento
+        from orden_compras oc
+        	inner join salida_productos sp on sp.id_orden_compra = oc.id 
+            inner join empresas e on oc.id_empresa_compra = e.id 
+            inner join empresas e2 on oc.id_empresa_vende = e2.id 
+            inner join tabla_maestras tm on oc.id_tipo_documento = tm.codigo ::int and tm.tipo = '54'
+            inner join tabla_maestras tm2 on oc.igv_compra = tm2.codigo ::int and tm2.tipo = '51'
+        where 
+        	sp.id = '".$id."'
+            and oc.estado='1'
+            and oc.cerrado= '2'
+        limit 1";
+
+		$data = DB::select($cad);
+       // return $data;
+
+        if (!empty($data)) {
+            return $data[0];
+        } else {
+            
+            return null;
+        }
+    }
+
+    function getSalidaProdDetalle($id, $emp){
+        $cad = "SELECT oc.id id_oc,  pd.id, '' serie, oc.numero_orden_compra, oc.fecha_orden_compra fecha, oc.id_moneda, 'SOLES' moneda, pd.sub_total sub_total_, pd.igv igv_, pd.total total_, 
+            '01/01/2025' fecha_vencimiento, pd.id_producto,  pr.codigo, pr.denominacion, 
+            case when  oc.id_empresa_compra = 23 then 
+            (SELECT  pr.denominacion ||'('|| pe.codigo_empresa||'-'|| pe. descripcion_empresa||')'  
+            FROM equivalencia_productos pe
+            where pe.id_empresa = oc.id_empresa_compra and pe.id_producto = pd.id_producto and pe.estado= '1'            
+            )	else  pr.denominacion end  producto_prof,
+            um.denominacion um, um.abreviatura, spd.cantidad  cantidad, spd.id_descuento, spd.costo precio_unitario, spd.sub_total, spd.igv, spd.total, spd.id_um id_unidad_medida, spd.descuento, spd.valor_venta_bruto,
+            spd.precio_venta, spd.valor_venta
+            FROM orden_compras oc            
+            inner join orden_compra_detalles pd on pd.id_orden_compra = oc.id 
+            inner join salida_productos sp on sp.id_orden_compra = oc.id
+            inner join salida_producto_detalles spd on spd.id_salida_productos = sp.id and spd.id_producto = pd.id_producto 
+            inner join productos pr on pr.id = pd.id_producto
+            inner join tabla_maestras um on um.codigo::int = pd.id_unidad_medida and um.tipo = '43'
+            where sp.id = ".$id."           
+            and pd.estado = '1' 
+            and oc.cerrado= '2'
+            order by pd.id ";
+    
+    //echo $cad;
+    $data = DB::select($cad);
+    return $data;
+    }
 
     function getOrdenCompraByIdPdf($id){
 
@@ -115,6 +168,24 @@ class OrdenCompra extends Model
                 where 1=1 
                 and o.estado = '1' and o.cerrado = '2' and o.id_tipo_documento = 2
                 and o.numero_orden_compra = '".$numero."'
+                and (select count(*) 
+            		FROM  orden_compra_detalles o_
+            		inner join valorizaciones v on v.id_modulo = 1 and v.pk_registro = o_.id 
+            		where o_.id_orden_compra = o.id) = 0
+                limit 1";
+		$data = DB::select($cad);
+        if(isset($data[0]))return $data[0];
+    }
+
+    function getSalidaProductoByCod($numero){
+
+        $cad = "select o.id id_orden_compra, o.numero_orden_compra, sp.id id_salida_prod, sp.codigo,  e.id id_empresa, e.razon_social, e.direccion, e.representante, e.ruc, e.email, 5 id_tipo_documento,  trim(e.ruc) numero_documento_
+                from orden_compras o 
+                left join empresas e  on e.id = o.id_empresa_compra 
+                inner join salida_productos sp on sp.id_orden_compra = o.id 
+                where 1=1 
+                and o.estado = '1' and o.cerrado = '2' and o.id_tipo_documento = 2
+                and sp.codigo = '".$numero."' 
                 and (select count(*) 
             		FROM  orden_compra_detalles o_
             		inner join valorizaciones v on v.id_modulo = 1 and v.pk_registro = o_.id 

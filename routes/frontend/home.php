@@ -422,6 +422,9 @@ Route::get('orden_compra/modal_consulta_orden_compra/{id}', [OrdenCompraControll
 Route::post('orden_compra/upload_orden_compra', [OrdenCompraController::class, 'upload_orden_compra'])->name('orden_compra.upload_orden_compra');
 Route::get('orden_compra/obtener_orden_compra_id/{id}', [OrdenCompraController::class, 'obtener_orden_compra_id'])->name('orden_compra.obtener_orden_compra_id');
 
+Route::get('orden_compra/obtener_salida_prod_id/{id}', [OrdenCompraController::class, 'obtener_salida_prod_id'])->name('orden_compra.obtener_salida_prod_id');
+Route::get('orden_compra/listar_salida_prod_det/{id}/{emp}', [OrdenCompraController::class, 'listar_salida_prod_det'])->name('orden_compra.listar_salida_prod_det');
+
 
 Route::get('kardex/create', [KardexController::class, 'create'])->name('kardex.create');
 Route::post('kardex/listar_kardex_ajax', [KardexController::class, 'listar_kardex_ajax'])->name('kardex.listar_kardex_ajax');
