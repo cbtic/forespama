@@ -296,7 +296,7 @@ label.form-control-sm{
 @section('breadcrumb')
 <ol class="breadcrumb" style="padding-left:130px;margin-top:0px;background-color:#283659">
     <li class="breadcrumb-item text-primary">Inicio</li>
-    <li class="breadcrumb-item active">Consulta de Comprobantes</li>
+    <li class="breadcrumb-item active">Consulta de Comprobantes Sodimac</li>
     </li>
 </ol>
 
@@ -321,7 +321,7 @@ label.form-control-sm{
             <div class="row">
                 <div class="col-sm-5">
                     <h4 class="card-title mb-0 text-primary">
-                        Consultar Facturas<!--<small class="text-muted">Usuarios activos</small>-->
+                        Consultar Facturas Sodimac<!--<small class="text-muted">Usuarios activos</small>-->
                     </h4>
                 </div><!--col-->
             </div>
@@ -338,30 +338,28 @@ label.form-control-sm{
                             </strong>
                         </div><!--card-header-->
 
-                        <form class="form-horizontal" method="post" action="" id="frmAfiliacion" autocomplete="off">
+                        <form class="form-horizontal" method="post" action="" id="frmComprobanteSodimac" autocomplete="off">
 
 
                             <input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
 
                             <div class="row" style="padding:20px 20px 0px 20px;">
 
-                                <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+                                <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
                                     <div class="form-group">
-                                        <label class="form-control-sm">Fecha inicio</label>
                                         <input class="form-control form-control-sm" id="fecha_ini" name="fecha_ini" value="<?php echo date("d-m-Y") ?>" placeholder="Fecha Inicio">
                                     </div>
                                 </div>
-                                <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+                                <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
                                     <div class="form-group">
-                                        <label class="form-control-sm">Fecha Fin</label>
                                         <input class="form-control form-control-sm" id="fecha_fin" name="fecha_fin" value="" placeholder="Fecha fin">
                                     </div>
                                 </div>
                                 <div class="col-lg-2 col-md-12 col-sm-12 col-xs-12">
                                     <div class="form-group">
-                                        <label class="form-control-sm">Tipo Documento</label>
                                         <select name="tipo_documento" id="tipo_documento" class="form-control form-control-sm" onchange="validaTipoDocumento()">
-                                            <option value="FT">
+                                            <option value=""> --Seleccionar Tipo Documento--</option>
+                                            <option selected="selected" value="FT">
                                                 <?php echo "Factura" ?></option>
                                             <option value="BV">
                                                 <?php echo "Boleta" ?></option>
@@ -371,39 +369,31 @@ label.form-control-sm{
                                                 <?php echo "Nota de Debito" ?></option>
                                             <option value="TK">
                                                 <?php echo "Ticket" ?></option>
-                                            <option selected="selected" value="">
+                                            <option value="">
                                                 <?php echo "Todos" ?></option>
                                         </select>
                                     </div>
                                 </div>
                                 <div class="col-lg-1 col-md-12 col-sm-12 col-xs-12">
                                     <div class="form-group">
-                                        <label class="form-control-sm">Serie</label>
-                                        <input type="text" name="serie" id="serie" value="{{old('clinum')}}" placeholder="" class="form-control form-control-sm">
+                                        <input type="text" name="serie" id="serie" value="{{old('clinum')}}" placeholder="Serie" class="form-control form-control-sm">
                                     </div>
                                 </div>
                                 <div class="col-lg-1 col-md-12 col-sm-12 col-xs-12">
                                     <div class="form-group">
-                                        <label class="form-control-sm">Numero</label>
-                                        <input type="text" name="numero" id="numero" value="{{old('clinum')}}" placeholder="" class="form-control form-control-sm">
+                                        <input type="text" name="numero" id="numero" value="{{old('clinum')}}" placeholder="N&uacute;mero" class="form-control form-control-sm">
                                     </div>
                                 </div>
-                                <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12">
-                                    <div class="form-group">
-                                        <label class="form-control-sm">Razon Social</label>
-                                        <input type="text" name="razon_social" id="razon_social" value="{{old('clinum')}}" placeholder="" class="form-control form-control-sm">
-                                    </div>
-                                </div>
-                                <div class="col-lg-1 col-md-12 col-sm-12 col-xs-12">
+                                <!--<div class="col-lg-1 col-md-12 col-sm-12 col-xs-12">
                                     <div class="form-group">
                                         <label class="form-control-sm">Estado de Pago</label>
                                         <select name="estado_pago" id="estado_pago" class="form-control form-control-sm" onchange="validaTipoDocumento()">
                                             <option value="C">
-                                                <?php echo "Cancelado" ?></option>
+                                                <?php //echo "Cancelado" ?></option>
                                             <option value="P">
-                                                <?php echo "Pendiente" ?></option>
+                                                <?php //echo "Pendiente" ?></option>
                                             <option selected="selected" value="">
-                                                <?php echo "Todos" ?></option>
+                                                <?php //echo "Todos" ?></option>
                                         </select>
                                     </div>
                                 </div>
@@ -412,87 +402,55 @@ label.form-control-sm{
                                         <label class="form-control-sm">Anulado</label>
                                         <select name="anulado" id="anulado" class="form-control form-control-sm" onchange="validaTipoDocumento()">
                                             <option value="S">
-                                                <?php echo "Si" ?></option>
+                                                <?php //echo "Si" ?></option>
                                             <option value="N">
-                                                <?php echo "No" ?></option>
+                                                <?php //echo "No" ?></option>
                                             <option selected="selected" value="">
-                                                <?php echo "Todos" ?></option>
+                                                <?php //echo "Todos" ?></option>
                                         </select>
                                     </div>
-                                </div>
+                                </div>-->
 
-                                <div class="col-lg-2 col-md-12 col-sm-12 col-xs-12">
-                                    <label class="form-group">Caja</label>
-                                    <select name="id_caja" id="id_caja" class="form-control form-control-sm" onChange="">
-                                        <option value="">--Selecionar--</option>
-                                        <?php
-                                        foreach ($caja as $row) { ?>
-                                            <option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
-                                        <?php
-                                        }
-                                        ?>
-                                    </select>
-                                </div>
-
-                                <div class="col-lg-2 col-md-12 col-sm-12 col-xs-12">
-                                    <label class="form-group">Usuario</label>
-                                    <select name="id_usuario" id="id_usuario" class="form-control form-control-sm" onChange="">
-                                        <option value="">--Selecionar--</option>
-                                        <?php
-                                        foreach ($usuario_caja as $row) { ?>
-                                            <option value="<?php echo $row->id ?>"><?php echo $row->denominacion ?></option>
-                                        <?php
-                                        }
-                                        ?>
-                                    </select>
-                                </div>
-
-                                <div class="col-lg-1 col-md-12 col-sm-12 col-xs-12">
+                                <!--<div class="col-lg-1 col-md-12 col-sm-12 col-xs-12">
                                     <label class="form-group">Forma de pago</label>
                                     <select name="id_formapago" id="id_formapago" class="form-control form-control-sm" onChange="">
                                         <option value="">--Selecionar--</option>
                                         <?php
-                                        foreach ($formapago as $row) { ?>
-                                            <option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
+                                        //foreach ($formapago as $row) { ?>
+                                            <option value="<?php //echo $row->codigo ?>"><?php //echo $row->denominacion ?></option>
                                         <?php
-                                        }
+                                        //}
                                         ?>
                                     </select>
-                                </div>
+                                </div>-->
 
-                                <div class="col-lg-1 col-md-12 col-sm-12 col-xs-12">
+                                <!--<div class="col-lg-1 col-md-12 col-sm-12 col-xs-12">
                                     <label class="form-group">Medio de pago</label>
                                     <select name="id_mediopago" id="id_mediopago" class="form-control form-control-sm" onChange="">
                                         <option value="">--Selecionar--</option>
                                         <?php
-                                        foreach ($medio_pago as $row) { ?>
-                                            <option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
+                                        //foreach ($medio_pago as $row) { ?>
+                                            <option value="<?php //echo $row->codigo ?>"><?php //echo $row->denominacion ?></option>
                                         <?php
-                                        }
+                                        //}
                                         ?>
                                     </select>
-                                </div>
+                                </div>--> 
 
-
-                                <div class="col-lg-1 col-md-12 col-sm-12 col-xs-12">
-                                    <div class="form-group">
-                                        <label class="form-control-sm">Total</label>
-                                        <input type="text" name="total_b" id="total_b" value="" oninput="validarDecimal(this)" placeholder="" class="form-control form-control-sm">
-                                    </div>
-                                </div>
- 
-
-                                <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12" style="padding-top:30px">
+                                <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12" style="padding-right:0px">
                                     <input class="btn btn-warning pull-rigth" value="Buscar" type="button" id="btnBuscar" />
-                                </div>
 <!--
                                 <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12" style="padding-top:30px">
                                     <input class="btn btn-success pull-rigth" value="Nuevo" type="button" id="btnNuevo1" data-toggle="modal" data-target="#exampleModal2" style="margin-left:15px" />
 
                                 </div>
                                     -->
-                                <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12" style="padding-top:30px">
-                                    <input class="btn btn-success pull-rigth" value="Excel" type="button" id="btnExcel" onclick="reporteFactura()" />
+                                    @hasanyrole('Administrator')
+                                    <button id="btnExcel" type="button" class="btn btn-secondary pull-rigth" style="margin-left:15px;" onclick="reporteFacturaSodimac()">
+                                        <i class="fas fa-download"></i> Exportar Excel
+                                        <!--<img src="/img/icono_carro.png" alt="Carro" style="width: 16px; height: 16px; margin-left: 5px;">-->
+                                    </button>
+                                    @endhasanyrole
                                 </div>
                                 <!--
 					@hasanyrole('contabilidad')
@@ -507,27 +465,20 @@ label.form-control-sm{
                             <div class="card-body">
 
                                 <div class="table-responsive">
-                                    <table id="tblFactura" class="table table-hover table-sm">
+                                    <table id="tblFacturaSodimac" class="table table-hover table-sm">
                                         <thead>
                                             <tr style="font-size:13px">
+                                                <th>Id</th>
+                                                <th>Ruc</th>
+                                                <th>N° Orden Compra</th>
                                                 <th>Serie</th>
                                                 <th>Nro.</th>
                                                 <th>Tipo</th>
                                                 <th>Fecha</th>
-                                                <th>Ruc</th>
-                                                <th>Razón Social</th>
-                                                <th class="text-right">SubTotal</th>
+                                                <th>Moneda</th>
+                                                <th class="text-right">Valor Venta</th>
                                                 <th class="text-right">IGV</th>
-                                                <th class="text-right">Total</th>
-                                                <th>Estado</th>
-                                                <th>Anulado</th>
-                                                <th>Caja</th>
-                                                <th>Usuario</th>
-                                                <th>Forma Pago</th>
-                                                <th class="text-right">Credito</th>
-                                                <th>Sunat</th>
-                                                <th class="text-left">Credito</th>
-                                                <th class="text-left">Factura</th>
+                                                <th class="text-right">Importe Total</th>
                                             </tr>
                                         </thead>
                                         <tbody style="font-size:13px">
@@ -536,8 +487,6 @@ label.form-control-sm{
                                     </table>
                                 </div>
                             </div>
-
-
 
                             <!--card-body-->
                     </div><!--card-->
@@ -585,11 +534,9 @@ label.form-control-sm{
 
                     @endsection
 
-
-
                     @push('after-scripts')
 
-                    <script src="{{ asset('js/FacturaLista.js') }}"></script>
+                    <script src="{{ asset('js/FacturaSodimacLista.js') }}"></script>
                     @endpush
 
 <script>
