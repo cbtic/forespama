@@ -583,4 +583,5 @@ Route::post('empaquetado/listar_operacion_empaquetados_ajax', [EmpaquetadoContro
 Route::get('empaquetado/obtener_codigo_operacion_empaquetado', [EmpaquetadoController::class, 'obtener_codigo_operacion_empaquetado'])->name('empaquetado.obtener_codigo_operacion_empaquetado');
 Route::get('empaquetado/modal_consulta_empaquetado_operacion/{id}', [EmpaquetadoController::class, 'modal_consulta_empaquetado_operacion'])->name('empaquetado.modal_consulta_empaquetado_operacion');
 Route::get('empaquetado/cargar_operacion_detalle/{id}', [EmpaquetadoController::class, 'cargar_operacion_detalle'])->name('empaquetado.cargar_operacion_detalle');
-//Route::get('orden_compra/create_consulta_sodimac', [OrdenCompraController::class, 'create_consulta_sodimac'])->name('orden_compra.create_consulta_sodimac');
+Route::post('comprobante/listar_comprobante_sodimac_ajax', [ComprobanteController::class, 'listar_comprobante_sodimac_ajax'])->name('comprobante.listar_comprobante_sodimac_ajax');
+Route::get('comprobante/exportar_factura_sodimac/{fecha_ini}/{fecha_fin}/{tipo_documento}/{serie}/{numero}', [ComprobanteController::class, 'exportar_factura_sodimac'])->name('comprobante.exportar_factura_sodimac');

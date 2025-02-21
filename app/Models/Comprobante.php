@@ -11,6 +11,10 @@ class Comprobante extends Model
     public function listar_comprobante($p){
 		return $this->readFuntionPostgres('sp_listar_comprobante_paginado',$p);        
     }
+
+    public function listar_comprobante_sodimac_ajax($p){
+		return $this->readFuntionPostgres('sp_listar_comprobante_sodimac_paginado',$p);        
+    }
  
 
     function fecha_hora_actual(){

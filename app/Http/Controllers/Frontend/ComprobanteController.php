@@ -22,6 +22,15 @@ use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
 
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
+use Maatwebsite\Excel\Concerns\FromArray;
+use stdClass;
+use Illuminate\Support\Facades\Response;
+use Maatwebsite\Excel\Concerns\WithStyles;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
+use Maatwebsite\Excel\Concerns\WithHeadings;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
 
 class ComprobanteController extends Controller
 {
@@ -3799,5 +3808,150 @@ class ComprobanteController extends Controller
         ]);
         //$respbuild->result;
     }
+
+    public function listar_comprobante_sodimac_ajax(Request $request){
+
+		$factura_model = new comprobante();
+		$p[]=$request->fecha_ini;
+		$p[]=$request->fecha_fin;
+		$p[]=$request->tipo_documento;
+        $p[]=$request->serie;
+        $p[]=$request->numero;
+		$p[]=$request->NumeroPagina;
+		$p[]=$request->NumeroRegistros;
+		
+		$data = $factura_model->listar_comprobante_sodimac_ajax($p);
+		
+		$iTotalDisplayRecords = isset($data[0]->totalrows)?$data[0]->totalrows:0;
+		//print_r($afiliacion);exit();
+
+		$result["PageStart"] = $request->NumeroPagina;
+		$result["pageSize"] = $request->NumeroRegistros;
+		$result["SearchText"] = "";
+		$result["ShowChildren"] = true;
+		$result["iTotalRecords"] = $iTotalDisplayRecords;
+		$result["iTotalDisplayRecords"] = $iTotalDisplayRecords;
+		$result["aaData"] = $data;
+
+		echo json_encode($result);
+
+	}
+
+    public function exportar_factura_sodimac($fecha_ini, $fecha_fin, $tipo_documento, $serie, $numero) {
+
+		if($fecha_ini=="0")$fecha_ini = "";
+		if($fecha_fin=="0")$fecha_fin = "";
+		if($tipo_documento==0)$tipo_documento = "";
+		if($serie==0)$serie = "";
+		if($numero==0)$numero = "";
+
+		$factura_model = new comprobante();
+		$p[]=$fecha_ini;
+		$p[]=$fecha_fin;
+		$p[]=$tipo_documento;
+        $p[]=$serie;
+        $p[]=$numero;
+		$p[]=1;
+		$p[]=1000;
+		
+		$data = $factura_model->listar_comprobante_sodimac_ajax($p);
+		
+		$variable = [];
+		$n = 1;
+
+		array_push($variable, array("N","Ruc","N° Orden Compra","Serie","Numero","Tipo", "Fecha", "Moneda", "Valor Venta", "Igv", "Importe Total"));
+		
+		foreach ($data as $r) {
+            $tipo_documento ="";
+            if($r->tipo == "FT"){
+                $tipo_documento = "FACTURA";
+            }
+            if($r->tipo == "BV"){
+                $tipo_documento = "BOELTA";
+            }
+            if($r->tipo == "NC"){
+                $tipo_documento = "NOTA DE CREDITO";
+            }
+            if($r->tipo == "ND"){
+                $tipo_documento = "NOTA DE DEBITO";
+            }
+            if($r->tipo == "TK"){
+                $tipo_documento = "TICKET";
+            }
+
+			array_push($variable, array($n++, $r->ruc, $r->numero_orden_compra_cliente, $r->serie, $r->numero, $tipo_documento, $r->fecha, $r->moneda, $r->subtotal, $r->impuesto, $r->total));
+		}
+		
+		$export = new InvoicesExport([$variable]);
+		return Excel::download($export, 'reporte_factura_sodimac.xlsx');	
+    }
     
+}
+
+class InvoicesExport implements FromArray, WithHeadings, WithStyles
+{
+	protected $invoices;
+
+	public function __construct(array $invoices)
+	{
+		$this->invoices = $invoices;
+	}
+
+	public function array(): array
+	{
+		return $this->invoices;
+	}
+
+    public function headings(): array
+    {
+        return ["N","Ruc","N° Orden Compra","Serie","Numero","Tipo", "Fecha", "Moneda", "Valor Venta", "Igv", "Importe Total"];
+    }
+
+	public function styles(Worksheet $sheet)
+    {
+
+		$sheet->mergeCells('A1:K1');
+
+        $sheet->setCellValue('A1', "REPORTE DE FACTURAS PARA SODIMAC - FORESPAMA");
+        $sheet->getStyle('A1:K1')->applyFromArray([
+            'font' => [
+                'bold' => true,
+                'color' => ['rgb' => 'FFFFFF'],
+            ],
+            'fill' => [
+                'fillType' => Fill::FILL_SOLID,
+                'startColor' => ['rgb' => '246257'],
+            ],
+            'alignment' => [
+                'horizontal' => Alignment::HORIZONTAL_CENTER,
+            ],
+        ]);
+
+		$sheet->getStyle('A1')->getAlignment()->setWrapText(true);
+		$sheet->getRowDimension(1)->setRowHeight(30);
+
+        $sheet->getStyle('A2:K2')->applyFromArray([
+            'font' => [
+                'bold' => true,
+                'color' => ['rgb' => '000000'],
+            ],
+            'fill' => [
+                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                'startColor' => ['rgb' => '2EB85C'],
+            ],
+			'alignment' => [
+			'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+    		],
+        ]);
+
+		$sheet->fromArray($this->headings(), NULL, 'A2');
+
+		/*$sheet->getStyle('L3:L'.$sheet->getHighestRow())
+		->getNumberFormat()
+		->setFormatCode(\PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_NUMBER_00);*/ //SIRVE PARA PONER 2 DECIMALES A ESA COLUMNA
+        
+        foreach (range('A', 'K') as $col) {
+            $sheet->getColumnDimension($col)->setAutoSize(true);
+        }
+    }
 }
