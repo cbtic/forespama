@@ -92,7 +92,7 @@ class OrdenCompra extends Model
 
         $cad = "select oc.id, e.razon_social empresa_compra, e2.razon_social empresa_vende, to_char(sp.fecha_salida,'dd-mm-yyyy') fecha_orden_compra , 
             oc.numero_orden_compra, tm.denominacion tipo_documento, oc.estado, tm2.denominacion igv, oc.numero_orden_compra_cliente, 
-            sp.total_compra  total, sp.sub_total_compra sub_total, sp.igv_compra igv, COALESCE (oc.descuento, 0 , oc.descuento) descuento
+            sp.total_compra  total, sp.sub_total_compra sub_total, sp.igv_compra igv, COALESCE (sp.descuento, 0 , sp.descuento) descuento
         from orden_compras oc
         	inner join salida_productos sp on sp.id_orden_compra = oc.id 
             inner join empresas e on oc.id_empresa_compra = e.id 
@@ -102,7 +102,7 @@ class OrdenCompra extends Model
         where 
         	sp.id = '".$id."'
             and oc.estado='1'
-            and oc.cerrado= '2'
+            and sp.cerrado= '2'
         limit 1";
 
 		$data = DB::select($cad);
@@ -134,7 +134,7 @@ class OrdenCompra extends Model
             inner join tabla_maestras um on um.codigo::int = pd.id_unidad_medida and um.tipo = '43'
             where sp.id = ".$id."           
             and pd.estado = '1' 
-            and oc.cerrado= '2'
+            and sp.cerrado= '2'
             order by pd.id ";
     
     //echo $cad;
