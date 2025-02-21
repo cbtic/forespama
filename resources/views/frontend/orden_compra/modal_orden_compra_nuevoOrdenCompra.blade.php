@@ -1014,9 +1014,9 @@ function modal_tiendas_orden_compra(id){
 
 $('#moneda').on('change', function(){
 
-var descripcion = $('#moneda option:selected').text();
+    var descripcion = $('#moneda option:selected').text();
 
-$('#moneda_descripcion').val(descripcion);
+    $('#moneda_descripcion').val(descripcion);
 
 });
 
