@@ -177,7 +177,7 @@ class EntradaProductosController extends Controller
             if($request->moneda==1){$moneda_descripcion="SOLES";}
             else if($request->moneda==2){$moneda_descripcion="DOLARES";}
             else {$moneda_descripcion="SOLES";}
-            $salida_producto->moneda = $moneda_descripcion;
+            $entrada_producto->moneda = $moneda_descripcion;
             $entrada_producto->cerrado = $request->cerrado;
             $entrada_producto->observacion = $request->observacion;
             $entrada_producto->id_almacen_destino = $request->almacen;
