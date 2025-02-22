@@ -445,7 +445,7 @@ label.form-control-sm{
 
                                 </div>
                                     -->
-                                    @hasanyrole('Administrator' || 'Administracion PAMA')
+                                    @hasanyrole(['Administrator', 'Administracion PAMA'])
                                     <button id="btnExcel" type="button" class="btn btn-secondary pull-rigth" style="margin-left:15px;" onclick="reporteFacturaSodimac()">
                                         <i class="fas fa-download"></i> Exportar Excel
                                         <!--<img src="/img/icono_carro.png" alt="Carro" style="width: 16px; height: 16px; margin-left: 5px;">-->
