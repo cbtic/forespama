@@ -262,7 +262,7 @@ function datatablenew(){
 						return estado;
 					},
 					"bSortable": false,
-					"aTargets": [13]
+					"aTargets": [14]
 				},
 				{
 					"mRender": function (data, type, row) {
@@ -280,22 +280,19 @@ function datatablenew(){
 						var html = '<div class="btn-group btn-group-sm" role="group" aria-label="Log Viewer Actions">';
 						
 						html += '<button style="font-size:12px" type="button" class="btn btn-sm btn-success" data-toggle="modal" onclick="modalProducto('+row.id+')" ><i class="fa fa-edit"></i> Editar</button>'; 
-						html += '<a href="javascript:void(0)" onclick=eliminarProducto('+row.id+','+row.estado+') class="btn btn-sm '+clase+'" style="font-size:12px;margin-left:10px">'+estado+'</a>';
-						
+						if (userIsAdmin) {
+							html += '<a href="javascript:void(0)" onclick=eliminarProducto('+row.id+','+row.estado+') class="btn btn-sm '+clase+'" style="font-size:12px;margin-left:10px">'+estado+'</a>';
+						}
 						//html += '<a href="javascript:void(0)" onclick=modalResponsable('+row.id+') class="btn btn-sm btn-info" style="font-size:12px;margin-left:10px">Detalle Responsable</a>';
 						
 						html += '</div>';
 						return html;
 					},
 					"bSortable": false,
-					"aTargets": [14],
+					"aTargets": [15],
 				},
-
             ]
-
-
     });
-
 }
 
 function fn_ListarBusqueda() {

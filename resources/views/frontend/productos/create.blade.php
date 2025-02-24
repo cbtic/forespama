@@ -290,7 +290,11 @@ label.form-control-sm{
 
 </style>
 
+<script>
+    var userIsAdmin = @json(auth()->check() ? auth()->user()->hasRole('Administrator') : false);
 
+    //console.log(userIsAdmin);
+</script>
 
 @stack('before-scripts')
 @stack('after-scripts')

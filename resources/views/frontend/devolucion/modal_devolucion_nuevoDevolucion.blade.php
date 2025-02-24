@@ -1047,13 +1047,13 @@ function obtenerEntradaSalida(){
 
 function cargarSalida(){
 
-    var id = $("#id").val();
+    var numero_salida = $("#numero_salida").val();
     const tbody = $('#divDevolucionDetalle');
 
     tbody.empty();
 
     $.ajax({
-        url: "/devolucion/cargar_salida/"+id,
+        url: "/devolucion/cargar_salida/"+numero_salida,
         type: "GET",
         success: function (result) {
 
@@ -1109,7 +1109,7 @@ function cargarSalida(){
                         <td><input name="valor_venta_bruto[]" id="valor_venta_bruto${n}" class="valor_venta_bruto form-control form-control-sm" value="${parseFloat(devolucion.valor_venta_bruto || 0).toFixed(2)}" type="text" oninput="calcularSubTotal(this)"></td>
                         <td><input name="valor_venta[]" id="valor_venta${n}" class="valor_venta form-control form-control-sm" value="${parseFloat(devolucion.valor_venta || 0).toFixed(2)}" type="text" oninput="calcularSubTotal(this)"></td>
 
-                        <td><input name="descuento[]" id="descuento${n}" class="descuento form-control form-control-sm" placeholder="S/ Descuento" value="${parseFloat((devolucion.descuento ?? 0) || 0).toFixed(2)}" type="text" oninput="aplicaDescuentoEnSoles(this);calcularPrecioUnitario(this)" style="display:'block'"><input name="id_descuento[]" id="id_descuento${n}" type="hidden" value="${orden_compra.id_descuento ?? 1}"></div></td>
+                        <td><input name="descuento[]" id="descuento${n}" class="descuento form-control form-control-sm" placeholder="S/ Descuento" value="${parseFloat((devolucion.descuento ?? 0) || 0).toFixed(2)}" type="text" oninput="aplicaDescuentoEnSoles(this);calcularPrecioUnitario(this)" style="display:'block'"><input name="id_descuento[]" id="id_descuento${n}" type="hidden" value="${devolucion.id_descuento ?? 1}"></div></td>
                         <td><input name="sub_total[]" id="sub_total${n}" class="sub_total form-control form-control-sm" value="${parseFloat(devolucion.sub_total || 0).toFixed(2) }" type="text" readonly="readonly"></td>
                         <td><input name="igv[]" id="igv${n}" class="igv form-control form-control-sm" value="${parseFloat(devolucion.igv || 0).toFixed(2)}" type="text" readonly="readonly"></td>
                         <td><input name="total[]" id="total${n}" class="total form-control form-control-sm" value="${parseFloat(devolucion.total || 0).toFixed(2)}" type="text" readonly="readonly"></td>
@@ -1129,11 +1129,11 @@ function cargarSalida(){
                 });
 
                 n++;
-                sub_total_acumulado += parseFloat(orden_compra.sub_total || 0);
-                igv_total_acumulado += parseFloat(orden_compra.igv || 0);
-                descuento_total_acumulado += parseFloat(orden_compra.descuento || 0);
-                descuento_total_acumulado += parseFloat(orden_compra.porcentaje || 0);
-                total_acumulado += parseFloat(orden_compra.total || 0);
+                sub_total_acumulado += parseFloat(devolucion.sub_total || 0);
+                igv_total_acumulado += parseFloat(devolucion.igv || 0);
+                descuento_total_acumulado += parseFloat(devolucion.descuento || 0);
+                descuento_total_acumulado += parseFloat(devolucion.porcentaje || 0);
+                total_acumulado += parseFloat(devolucion.total || 0);
                 });
                 $('#sub_total_general').val(sub_total_acumulado.toFixed(2) || '0.00');
                 $('#igv_general').val(igv_total_acumulado.toFixed(2) || '0.00');

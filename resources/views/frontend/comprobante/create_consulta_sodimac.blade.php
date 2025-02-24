@@ -285,7 +285,6 @@ label.form-control-sm{
 
 </style>
 
-
 @stack('before-scripts')
 @stack('after-scripts')
 
@@ -304,6 +303,8 @@ label.form-control-sm{
 
 <div class="loader"></div>
 
+
+
 @section('content')
 <!--
     <ol class="breadcrumb" style="padding-left:120px;margin-top:0px;background-color:#355C9D">
@@ -312,6 +313,7 @@ label.form-control-sm{
         </li>
     </ol>
     -->
+    
 <div class="justify-content-center">
 
     <div class="card">

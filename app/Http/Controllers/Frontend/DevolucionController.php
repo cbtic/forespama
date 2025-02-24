@@ -9,6 +9,7 @@ use App\Models\DevolucionDetalle;
 use App\Models\Marca;
 use App\Models\Producto;
 use App\Models\Almacene;
+use App\Models\Kardex;
 use App\Models\TablaMaestra;
 use App\Models\Empresa;
 use Auth;
@@ -191,7 +192,7 @@ class DevolucionController extends Controller
 
     }
 
-    public function cargar_salida($id)
+    public function cargar_salida($numero_salida)
     {
 
         $devolucion_model = new Devolucione;
@@ -200,7 +201,7 @@ class DevolucionController extends Controller
         $tablaMaestra_model = new TablaMaestra;
         $kardex_model = new Kardex;
 
-        $devolucion = $devolucion_model->getDetalleDevolucionId($id);
+        $devolucion = $devolucion_model->getDetalleDevolucionId($numero_salida);
         $marca = $marca_model->getMarcaAll();
         $producto = $producto_model->getProductoAll();
         $unidad_medida = $tablaMaestra_model->getMaestroByTipo(43);
@@ -211,8 +212,7 @@ class DevolucionController extends Controller
             'marca' => $marca,
             'producto' => $producto,
             'unidad_medida' => $unidad_medida,
-            'descuento' => $descuento,
-            'producto_stock' =>$producto_stock
+            'descuento' => $descuento
         ]);
     }
 }
