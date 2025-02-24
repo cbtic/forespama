@@ -57,7 +57,8 @@ class OrdenCompra extends Model
         inner join orden_compras oc on ocd.id_orden_compra = oc.id
         left join marcas m on ocd.id_marca=m.id
         where id_orden_compra ='".$id."'
-        and ocd.estado='1'";
+        and ocd.estado='1'
+        order by 1 asc";
 
 		$data = DB::select($cad);
         return $data;

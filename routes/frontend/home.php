@@ -594,4 +594,5 @@ Route::get('devolucion/create', [DevolucionController::class, 'create'])->name('
 Route::post('devolucion/listar_devolucion_ajax', [DevolucionController::class, 'listar_devolucion_ajax'])->name('devolucion.listar_devolucion_ajax');
 Route::post('devolucion/send_devolucion', [DevolucionController::class, 'send_devolucion'])->name('devolucion.send_devolucion');
 Route::get('devolucion/modal_devolucion/{id}', [DevolucionController::class, 'modal_devolucion'])->name('devolucion.modal_devolucion');
-Route::get('devolucion/cargar_salida/{id}', [DevolucionController::class, 'cargar_salida'])->name('devolucion.cargar_salida');
+Route::get('devolucion/cargar_salida/{numero_salida}', [DevolucionController::class, 'cargar_salida'])->name('devolucion.cargar_salida');
+Route::get('devolucion/cargar_detalle/{id}', [DevolucionController::class, 'cargar_detalle'])->name('devolucion.cargar_detalle');

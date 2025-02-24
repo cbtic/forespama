@@ -224,7 +224,7 @@ $(document).ready(function() {
     if($('#id').val()>0){
         cargarDetalle();
         cambiarOrigen();
-        obtenerEntradaSalida();
+        //obtenerEntradaSalida();
     }
 });
 
@@ -466,7 +466,7 @@ function actualizarTotalGeneral() {
     var totalGeneral = 0;
     var descuentolGeneral = 0;
    
-    $('#tblOrdenCompraDetalle tbody tr').each(function() {
+    $('#tblDevolucionDetalle tbody tr').each(function() {
         var sub_totalFila = parseFloat($(this).find('.sub_total').val()) || 0;
         var igv_totalFila = parseFloat($(this).find('.igv').val()) || 0;
         var totalFila = parseFloat($(this).find('.total').val()) || 0;
@@ -611,12 +611,12 @@ var productosSeleccionados = [];
 function cargarDetalle(){
 
     var id = $("#id").val();
-    const tbody = $('#divOrdenCompraDetalle');
+    const tbody = $('#divDevolucionDetalle');
 
     tbody.empty();
 
     $.ajax({
-        url: "/orden_compra/cargar_detalle/"+id,
+        url: "/devolucion/cargar_detalle/"+id,
         type: "GET",
         success: function (result) {
 
@@ -627,7 +627,7 @@ function cargarDetalle(){
             var total_acumulado=0;
             var descuento_total_acumulado=0;
 
-            result.orden_compra.forEach(orden_compra => {
+            result.devolucion.forEach(devolucion => {
 
                 let marcaOptions = '<option value="">--Seleccionar--</option>';
                 let productoOptions = '<option value="">--Seleccionar--</option>';
@@ -636,22 +636,17 @@ function cargarDetalle(){
                 //let descuentoOptions = '<option value="">--Seleccionar--</option>';
 
                 result.marca.forEach(marca => {
-                    let selected = (marca.id == orden_compra.id_marca) ? 'selected' : '';
+                    let selected = (marca.id == devolucion.id_marca) ? 'selected' : '';
                     marcaOptions += `<option value="${marca.id}" ${selected}>${marca.denominiacion}</option>`;
                 });
 
                 result.producto.forEach(producto => {
-                    let selected = (producto.id == orden_compra.id_producto) ? 'selected' : '';
+                    let selected = (producto.id == devolucion.id_producto) ? 'selected' : '';
                     productoOptions += `<option value="${producto.id}" ${selected}>${producto.codigo} - ${producto.denominacion}</option>`;
                 });
 
-                result.estado_bien.forEach(estado_bien => {
-                    let selected = (estado_bien.codigo == orden_compra.id_estado_producto) ? 'selected' : '';
-                    estadoBienOptions += `<option value="${estado_bien.codigo}" ${selected}>${estado_bien.denominacion}</option>`;
-                });
-
                 result.unidad_medida.forEach(unidad_medida => {
-                    let selected = (unidad_medida.codigo == orden_compra.id_unidad_medida) ? 'selected' : '';
+                    let selected = (unidad_medida.codigo == devolucion.id_unidad_medida) ? 'selected' : '';
                     unidadMedidaOptions += `<option value="${unidad_medida.codigo}" ${selected}>${unidad_medida.denominacion}</option>`;
                 });
 
@@ -660,30 +655,28 @@ function cargarDetalle(){
                     descuentoOptions += `<option value="${descuento.codigo}" ${selected}>${descuento.denominacion}</option>`;
                 });*/
 
-                if (orden_compra.id_producto) {
-                    productosSeleccionados.push(orden_compra.id_producto);
+                if (devolucion.id_producto) {
+                    productosSeleccionados.push(devolucion.id_producto);
                 }
 
                 const row = `
                     <tr>
                         <td>${n}</td>
-                        <td><input name="id_orden_compra_detalle[]" id="id_orden_compra_detalle${n}" class="form-control form-control-sm" value="${orden_compra.id}" type="hidden"><input name="item[]" id="item${n}" class="form-control form-control-sm" value="${orden_compra.item}" type="text"></td>
-                        <td style="width: 450px !important;display:block"><select name="descripcion[]" id="descripcion${n}" class="form-control form-control-sm" onChange="verificarProductoSeleccionado(this, ${n});">${productoOptions}</select></td>
+                        <td style="width: 450px !important;display:block"><input name="id_devolucion_detalle[]" id="id_devolucion_detalle${n}" class="form-control form-control-sm" value="${devolucion.id}" type="hidden"><select name="descripcion[]" id="descripcion${n}" class="form-control form-control-sm" onChange="verificarProductoSeleccionado(this, ${n});">${productoOptions}</select></td>
                         
                         <td><select name="marca[]" id="marca${n}" class="form-control form-control-sm">${marcaOptions}</select></td>
-                        <td><input name="cod_interno[]" id="cod_interno${n}" class="form-control form-control-sm" value="${orden_compra.codigo}" type="text"></td>
-                        <td><select name="estado_bien[]" id="estado_bien${n}" class="form-control form-control-sm" onChange="">${estadoBienOptions}</select></td>
+                        <td><input name="cod_interno[]" id="cod_interno${n}" class="form-control form-control-sm" value="${devolucion.codigo}" type="text"></td>
                         <td><select name="unidad[]" id="unidad${n}" class="form-control form-control-sm">${unidadMedidaOptions}</select></td>
-                        <td><input name="cantidad_ingreso[]" id="cantidad_ingreso${n}" class="cantidad_ingreso form-control form-control-sm" value="${orden_compra.cantidad_requerida}" type="text" oninput="calcularCantidadPendiente(this);calcularSubTotal(this)"></td>
-                        <td><input name="precio_unitario[]" id="precio_unitario${n}" class="precio_unitario form-control form-control-sm" value="${parseFloat(orden_compra.precio_venta || 0).toFixed(2)}" type="text" oninput="calcularSubTotal(this);calcularPrecioUnitario(this)"></td>
-                        <td><input name="precio_unitario_[]" id="precio_unitario_${n}" class="precio_unitario_ form-control form-control-sm" value="${parseFloat(orden_compra.precio || 0).toFixed(2)}" type="text" oninput="calcularPrecioUnitario(this)"></td>
-                        <td><input name="valor_venta_bruto[]" id="valor_venta_bruto${n}" class="valor_venta_bruto form-control form-control-sm" value="${parseFloat(orden_compra.valor_venta_bruto || 0).toFixed(2)}" type="text" oninput="calcularSubTotal(this)"></td>
-                        <td><input name="valor_venta[]" id="valor_venta${n}" class="valor_venta form-control form-control-sm" value="${parseFloat(orden_compra.valor_venta || 0).toFixed(2)}" type="text" oninput="calcularSubTotal(this)"></td>
+                        <td><input name="cantidad_ingreso[]" id="cantidad_ingreso${n}" class="cantidad_ingreso form-control form-control-sm" value="${devolucion.cantidad}" type="text" oninput="calcularCantidadPendiente(this);calcularSubTotal(this);calcularPrecioUnitario(this)"></td>
+                        <td><input name="precio_unitario[]" id="precio_unitario${n}" class="precio_unitario form-control form-control-sm" value="${parseFloat(devolucion.precio_venta || 0).toFixed(2)}" type="text" oninput="calcularSubTotal(this);calcularPrecioUnitario(this)"></td>
+                        <td><input name="precio_unitario_[]" id="precio_unitario_${n}" class="precio_unitario_ form-control form-control-sm" value="${parseFloat(devolucion.precio_unitario || 0).toFixed(2)}" type="text" oninput="calcularPrecioUnitario(this)"></td>
+                        <td><input name="valor_venta_bruto[]" id="valor_venta_bruto${n}" class="valor_venta_bruto form-control form-control-sm" value="${parseFloat(devolucion.valor_venta_bruto || 0).toFixed(2)}" type="text" oninput="calcularSubTotal(this)"></td>
+                        <td><input name="valor_venta[]" id="valor_venta${n}" class="valor_venta form-control form-control-sm" value="${parseFloat(devolucion.valor_venta || 0).toFixed(2)}" type="text" oninput="calcularSubTotal(this)"></td>
 
-                        <td><div style="display: flex; align-items: center; gap: 5px;"> <button type="button" class="btn-custom" onclick="cambiarDescuento(this);calcularPrecioUnitario(this)"><i class="${orden_compra.id_descuento == 2 ? 'fas fa-percentage' : 'fas fa-paint-brush'}"></i></button> <input name="descuento[]" id="descuento${n}" class="descuento form-control form-control-sm" placeholder="S/ Descuento" value="${parseFloat((orden_compra.descuento ?? 0) || 0).toFixed(2)}" type="text" oninput="aplicaDescuentoEnSoles(this);calcularPrecioUnitario(this)" style="display: ${(!orden_compra.id_descuento || orden_compra.id_descuento == 1 || orden_compra.descuento == null || orden_compra.descuento === "") ? 'block' : 'none'};"> <input name="porcentaje[]" id="porcentaje${n}" class="porcentaje form-control form-control-sm" placeholder="% Descuento" value="${parseFloat(orden_compra.id_descuento == 2 ? (orden_compra.descuento ?? 0) : 0).toFixed(2)}" type="text" oninput="aplicaDescuentoEnPorcentaje(this);calcularPrecioUnitario(this)" style="display: ${orden_compra.id_descuento == 2 ? 'block' : 'none'};"><input name="id_descuento[]" id="id_descuento${n}" type="hidden" value="${orden_compra.id_descuento ?? 1}"></div></td>
-                        <td><input name="sub_total[]" id="sub_total${n}" class="sub_total form-control form-control-sm" value="${parseFloat(orden_compra.sub_total || 0).toFixed(2) }" type="text" readonly="readonly"></td>
-                        <td><input name="igv[]" id="igv${n}" class="igv form-control form-control-sm" value="${parseFloat(orden_compra.igv || 0).toFixed(2)}" type="text" readonly="readonly"></td>
-                        <td><input name="total[]" id="total${n}" class="total form-control form-control-sm" value="${parseFloat(orden_compra.total || 0).toFixed(2)}" type="text" readonly="readonly"></td>
+                        <td><div style="display: flex; align-items: center; gap: 5px;"> <button type="button" class="btn-custom" onclick="cambiarDescuento(this);calcularPrecioUnitario(this)"><i class="${devolucion.id_descuento == 2 ? 'fas fa-percentage' : 'fas fa-paint-brush'}"></i></button> <input name="descuento[]" id="descuento${n}" class="descuento form-control form-control-sm" placeholder="S/ Descuento" value="${parseFloat((devolucion.descuento ?? 0) || 0).toFixed(2)}" type="text" oninput="aplicaDescuentoEnSoles(this);calcularPrecioUnitario(this)" style="display: ${(!devolucion.id_descuento || devolucion.id_descuento == 1 || devolucion.descuento == null || devolucion.descuento === "") ? 'block' : 'none'};"> <input name="porcentaje[]" id="porcentaje${n}" class="porcentaje form-control form-control-sm" placeholder="% Descuento" value="${parseFloat(devolucion.id_descuento == 2 ? (devolucion.descuento ?? 0) : 0).toFixed(2)}" type="text" oninput="aplicaDescuentoEnPorcentaje(this);calcularPrecioUnitario(this)" style="display: ${devolucion.id_descuento == 2 ? 'block' : 'none'};"><input name="id_descuento[]" id="id_descuento${n}" type="hidden" value="${devolucion.id_descuento ?? 1}"></div></td>
+                        <td><input name="sub_total[]" id="sub_total${n}" class="sub_total form-control form-control-sm" value="${parseFloat(devolucion.sub_total || 0).toFixed(2) }" type="text" readonly="readonly"></td>
+                        <td><input name="igv[]" id="igv${n}" class="igv form-control form-control-sm" value="${parseFloat(devolucion.igv || 0).toFixed(2)}" type="text" readonly="readonly"></td>
+                        <td><input name="total[]" id="total${n}" class="total form-control form-control-sm" value="${parseFloat(devolucion.total || 0).toFixed(2)}" type="text" readonly="readonly"></td>
                         <td><button type="button" class="btn btn-danger btn-sm" onclick="eliminarFila(this)">Eliminar</button></td>
 
                     </tr>
@@ -699,28 +692,12 @@ function cargarDetalle(){
                     width: '100%',
                 });
 
-                $('#fecha_fabricacion_' + n).datepicker({
-                    autoclose: true,
-                    format: 'yyyy-mm-dd',
-                    changeMonth: true,
-                    changeYear: true,
-                    language: 'es'
-                });
-
-                $('#fecha_vencimiento_' + n).datepicker({
-                    autoclose: true,
-                    format: 'yyyy-mm-dd',
-                    changeMonth: true,
-                    changeYear: true,
-                    language: 'es'
-                });
-
                 n++;
-                sub_total_acumulado += parseFloat(orden_compra.sub_total || 0);
-                igv_total_acumulado += parseFloat(orden_compra.igv || 0);
-                descuento_total_acumulado += parseFloat(orden_compra.descuento || 0);
-                descuento_total_acumulado += parseFloat(orden_compra.porcentaje || 0);
-                total_acumulado += parseFloat(orden_compra.total || 0);
+                sub_total_acumulado += parseFloat(devolucion.sub_total || 0);
+                igv_total_acumulado += parseFloat(devolucion.igv || 0);
+                descuento_total_acumulado += parseFloat(devolucion.descuento || 0);
+                descuento_total_acumulado += parseFloat(devolucion.porcentaje || 0);
+                total_acumulado += parseFloat(devolucion.total || 0);
                 });
                 $('#sub_total_general').val(sub_total_acumulado.toFixed(2) || '0.00');
                 $('#igv_general').val(igv_total_acumulado.toFixed(2) || '0.00');
@@ -919,7 +896,7 @@ function fn_save_devolucion(){
     if(empresa_vende==""){msg+="Ingrese la Empresa que Vende <br>";}
     if(igv_compra==""){msg+="Ingrese el IGV <br>";}
 
-    if ($('#tblOrdenCompraDetalle tbody tr').length == 0) {
+    if ($('#tblDevolucionDetalle tbody tr').length == 0) {
         msg += "No se ha agregado ningún producto <br>";
     }
 
@@ -934,18 +911,18 @@ function fn_save_devolucion(){
         $('.loader').show();
 
         $.ajax({
-                url: "/orden_compra/send_orden_compra",
+                url: "/devolucion/send_devolucion",
                 type: "POST",
-                data : $("#frmOrdenCompra").serialize(),
+                data : $("#frmDevolucion").serialize(),
                 success: function (result) {
                     //alert(result.id)
                     //$('#openOverlayOpc').modal('hide');
                     datatablenew();
                     $('.loader').hide();
                     bootbox.alert("Se guard&oacute; satisfactoriamente"); 
-                    if (result.id>0) {
+                    /*if (result.id>0) {
                         modalOrdenCompra(result.id);
-                    }
+                    }*/
                    
                 }
         });
@@ -1082,7 +1059,7 @@ function cargarSalida(){
                 });
 
                 result.unidad_medida.forEach(unidad_medida => {
-                    let selected = (unidad_medida.codigo == devolucion.id_unidad_medida) ? 'selected' : '';
+                    let selected = (unidad_medida.codigo == devolucion.id_um) ? 'selected' : '';
                     unidadMedidaOptions += `<option value="${unidad_medida.codigo}" ${selected}>${unidad_medida.denominacion}</option>`;
                 });
 
@@ -1098,14 +1075,14 @@ function cargarSalida(){
                 const row = `
                     <tr>
                         <td>${n}</td>
-                        <td style="width: 450px !important;display:block"><input name="id_devolucion_detalle[]" id="id_devolucion_detalle${n}" class="form-control form-control-sm" value="${devolucion.id}" type="hidden"><select name="descripcion[]" id="descripcion${n}" class="form-control form-control-sm" onChange="verificarProductoSeleccionado(this, ${n});">${productoOptions}</select></td>
+                        <td style="width: 450px !important;display:block"><input name="id_devolucion_detalle[]" id="id_devolucion_detalle${n}" class="form-control form-control-sm" value="0" type="hidden"><select name="descripcion[]" id="descripcion${n}" class="form-control form-control-sm" onChange="verificarProductoSeleccionado(this, ${n});">${productoOptions}</select></td>
                         
                         <td><select name="marca[]" id="marca${n}" class="form-control form-control-sm">${marcaOptions}</select></td>
                         <td><input name="cod_interno[]" id="cod_interno${n}" class="form-control form-control-sm" value="${devolucion.codigo}" type="text"></td>
                         <td><select name="unidad[]" id="unidad${n}" class="form-control form-control-sm">${unidadMedidaOptions}</select></td>
-                        <td><input name="cantidad_ingreso[]" id="cantidad_ingreso${n}" class="cantidad_ingreso form-control form-control-sm" value="${devolucion.cantidad_requerida}" type="text" oninput="calcularCantidadPendiente(this);calcularSubTotal(this)"></td>
+                        <td><input name="cantidad_ingreso[]" id="cantidad_ingreso${n}" class="cantidad_ingreso form-control form-control-sm" value="${devolucion.cantidad}" type="text" oninput="calcularCantidadPendiente(this);calcularSubTotal(this);calcularPrecioUnitario(this)"></td>
                         <td><input name="precio_unitario[]" id="precio_unitario${n}" class="precio_unitario form-control form-control-sm" value="${parseFloat(devolucion.precio_venta || 0).toFixed(2)}" type="text" oninput="calcularSubTotal(this);calcularPrecioUnitario(this)"></td>
-                        <td><input name="precio_unitario_[]" id="precio_unitario_${n}" class="precio_unitario_ form-control form-control-sm" value="${parseFloat(devolucion.precio_unitario || 0).toFixed(2)}" type="text" oninput="calcularPrecioUnitario(this)"></td>
+                        <td><input name="precio_unitario_[]" id="precio_unitario_${n}" class="precio_unitario_ form-control form-control-sm" value="${parseFloat(devolucion.costo || 0).toFixed(2)}" type="text" oninput="calcularPrecioUnitario(this)"></td>
                         <td><input name="valor_venta_bruto[]" id="valor_venta_bruto${n}" class="valor_venta_bruto form-control form-control-sm" value="${parseFloat(devolucion.valor_venta_bruto || 0).toFixed(2)}" type="text" oninput="calcularSubTotal(this)"></td>
                         <td><input name="valor_venta[]" id="valor_venta${n}" class="valor_venta form-control form-control-sm" value="${parseFloat(devolucion.valor_venta || 0).toFixed(2)}" type="text" oninput="calcularSubTotal(this)"></td>
 
@@ -1139,6 +1116,18 @@ function cargarSalida(){
                 $('#igv_general').val(igv_total_acumulado.toFixed(2) || '0.00');
                 $('#descuento_general').val(descuento_total_acumulado.toFixed(2) || '0.00');
                 $('#total_general').val(total_acumulado.toFixed(2) || '0.00');
+
+                var devolucion_cabecera = result.devolucion[0];
+
+                //alert(devolucion_cabecera.id_empresa_compra);
+
+                $('#empresa').val(devolucion_cabecera.id_empresa_compra);
+                $('#id_salida').val(devolucion_cabecera.id_salida);
+                $('#almacen').val(devolucion_cabecera.id_almacen_salida);
+                $('#moneda').val(devolucion_cabecera.id_moneda);
+                $('#igv_compra').val(devolucion_cabecera.igv_compra);
+                $('#numero_orden_compra_cliente').val(devolucion_cabecera.numero_orden_compra_cliente);
+
             }
             
     });
@@ -1182,7 +1171,8 @@ function cargarSalida(){
                             N&uacute;mero Salida
                         </div>
                         <div class="col-lg-2">
-                            <input id="numero_salida" name="numero_salida" on class="form-control form-control-sm"  value="<?php //if($id>0){echo $devolucion->numero_salida_;}?>" onchange="cargarSalida()" type="text">
+                            <input id="numero_salida" name="numero_salida" on class="form-control form-control-sm"  value="<?php if($id>0){echo $salida->codigo;}?>" onchange="cargarSalida()" <?php if($id>0) {?> readonly="readonly" <?php } ?>  type="text" >
+                            <input id="id_salida" name="id_salida" on class="form-control form-control-sm"  value="<?php if($id>0){echo $salida->id;}?>" onchange="" type="hidden">
                         </div>
                         <div class="col-lg-2">
                             Empresa
@@ -1192,7 +1182,7 @@ function cargarSalida(){
                                 <option value="">--Seleccionar--</option>
                                 <?php
                                 foreach ($empresa as $row){?>
-                                    <option value="<?php echo $row->id ?>" <?php //if($row->id==$orden_compra->id_empresa_compra)echo "selected='selected'"?>><?php echo $row->razon_social ?></option>
+                                    <option value="<?php echo $row->id ?>" <?php if($row->id==$salida->id_empresa_compra)echo "selected='selected'"?>><?php echo $row->razon_social ?></option>
                                     <?php 
                                 }
                                 ?>
@@ -1202,13 +1192,13 @@ function cargarSalida(){
                             Fecha Devoluci&oacute;n
                         </div>
                         <div class="col-lg-2">
-                            <input id="fecha_devolucion" name="fecha_devolucion" on class="form-control form-control-sm"  value="<?php //echo isset($orden_compra) && $orden_compra->fecha_orden_compra ? $orden_compra->fecha_orden_compra : date('Y-m-d'); ?>" type="text">
+                            <input id="fecha_devolucion" name="fecha_devolucion" on class="form-control form-control-sm"  value="<?php echo isset($devolucion) && $devolucion->fecha ? $devolucion->fecha : date('Y-m-d'); ?>" type="text">
                         </div>
                         <div class="col-lg-2">
                             N&uacute;mero Devoluci&oacute;n
                         </div>
                         <div class="col-lg-2">
-                            <input id="numero_devolucion" name="numero_devolucion" on class="form-control form-control-sm"  value="<?php //echo $orden_compra->numero_orden_compra_cliente;?>" type="text">
+                            <input id="numero_devolucion" name="numero_devolucion" on class="form-control form-control-sm"  value="<?php if($id>0){echo $devolucion->numero_devolucion;}?>" type="text" readonly="readonly">
                         </div>
                         <div class="col-lg-2" id="almacen_" style="color:red; font-weight:bold">
                             Almacen Destino
@@ -1218,7 +1208,7 @@ function cargarSalida(){
                                 <option value="">--Seleccionar--</option>
                                 <?php
                                 foreach ($almacen_destino as $row){?>
-                                    <option value="<?php echo $row->id ?>" <?php //if($row->id==$orden_compra->id_almacen_destino)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                    <option value="<?php echo $row->id ?>" <?php if($row->id==$devolucion->id_almacen)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
                                     <?php 
                                 }
                                 ?>
@@ -1232,7 +1222,7 @@ function cargarSalida(){
                                 <option value="">--Seleccionar--</option>
                                 <?php
                                 foreach ($igv_compra as $row){?>
-                                    <option value="<?php echo $row->codigo ?>" <?php //if($row->codigo==$orden_compra->igv_compra)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                    <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$devolucion->igv_compra)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
                                     <?php 
                                 }
                                 ?>
@@ -1246,7 +1236,7 @@ function cargarSalida(){
                                 <option value="">--Seleccionar--</option>
                                 <?php
                                 foreach ($moneda as $row){?>
-                                    <option value="<?php echo $row->codigo; ?>" <?php //echo ($id > 0 && $row->codigo == $orden_compra->id_moneda) ? "selected='selected'" : (($row->codigo == 1) ? "selected='selected'" : ""); ?>><?php echo $row->denominacion ?></option>
+                                    <option value="<?php echo $row->codigo; ?>" <?php echo ($id > 0 && $row->codigo == $devolucion->id_moneda) ? "selected='selected'" : (($row->codigo == 1) ? "selected='selected'" : ""); ?>><?php echo $row->denominacion ?></option>
                                     <?php 
                                 }
                                 ?>
@@ -1257,7 +1247,21 @@ function cargarSalida(){
                             N&uacute;mero Orden Compra Cliente
                         </div>
                         <div class="col-lg-2" id="input_entrada_salida">
-                            <input id="numero_orden_compra_cliente" name="numero_orden_compra_cliente" style="color:red; font-weight:bold" on class="form-control form-control-sm"  value="<?php //echo $orden_compra->numero_orden_compra_cliente;?>" type="text">
+                            <input id="numero_orden_compra_cliente" name="numero_orden_compra_cliente" style="color:red; font-weight:bold" on class="form-control form-control-sm"  value="<?php echo $orden_compra->numero_orden_compra_cliente;?>" type="text">
+                        </div>
+                        <div class="col-lg-2">
+                            Motivo Devoluci&oacute;n
+                        </div>
+                        <div class="col-lg-2">
+                            <select name="motivo_devolucion" id="motivo_devolucion" class="form-control form-control-sm" onchange="">
+                                <option value="">--Seleccionar--</option>
+                                <?php
+                                foreach ($motivo_devolucion as $row){?>
+                                    <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$devolucion->motivo_devolucion)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                    <?php 
+                                }
+                                ?>
+                            </select>
                         </div>
                     </div>
 
@@ -1268,7 +1272,6 @@ function cargarSalida(){
 							<thead>
 							<tr style="font-size:13px">
 								<th>#</th>
-								<th>Item</th>
 								<th>Descripci&oacute;n</th>
 								<th>Marca</th>
                                 <th>COD. INT.</th>
@@ -1317,7 +1320,7 @@ function cargarSalida(){
                         <div class="col-sm-12 controls">
                             <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
                                 
-                                <?php if($id_user==$devolucion->id_usuario_inserta){?>
+                                <?php if($id_user==$devolucion->id_usuario_inserta and $id==0){?>
                                     <a href="javascript:void(0)" onClick="fn_save_devolucion()" class="btn btn-sm btn-success" style="margin-right:10px">Guardar</a>
                                 <?php }?>
                                 <?php if($id==0){?>

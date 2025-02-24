@@ -8,5 +8,7 @@ use DB;
 
 class DevolucionDetalle extends Model
 {
+    protected $table = 'devolucion_detalle';
+
     use HasFactory;
 }

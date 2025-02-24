@@ -88,9 +88,11 @@ class ProductosController extends Controller
         $unidad_medida = $tablaMaestra_model->getMaestroByTipo(57);
         $marca = $marca_model->getMarcaProducto();
 		$tipo_origen_producto = $tablaMaestra_model->getMaestroByTipo(58);
+		$bien_servicio = $tablaMaestra_model->getMaestroByTipo(73);
+        
 		//var_dump($id);exit();
 
-		return view('frontend.productos.modal_productos_nuevoProducto',compact('id','producto','unidad_medida','moneda','estado_bien','tipo_producto','unidad_producto','marca','tipo_origen_producto','imagenes'));
+		return view('frontend.productos.modal_productos_nuevoProducto',compact('id','producto','unidad_medida','moneda','estado_bien','tipo_producto','unidad_producto','marca','tipo_origen_producto','imagenes','bien_servicio'));
 
     }
 
@@ -137,6 +139,7 @@ class ProductosController extends Controller
         $producto->contenido = $request->contenido;
         $producto->id_unidad_producto = $request->unidad_producto;
         $producto->id_marca = $request->marca;
+        $producto->bien_servicio = $request->bien_servicio;
         //$producto->numero_corrrelativo = $numero_correlativo;
 		$producto->estado = 1;
 		$producto->save();

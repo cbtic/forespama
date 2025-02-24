@@ -37,7 +37,7 @@
         </li>
 		-->
 
-	@if(Gate::check('Ingreso de Camiones') || Gate::check('Cubicaje de Troncos'))
+	@if(Gate::check('Ingreso de Camiones') || Gate::check('Cubicaje de Troncos') || Gate::check('Pagos'))
 
         <li class="c-sidebar-nav-title">@lang('System')</li>
 
@@ -58,10 +58,11 @@
                 </li>
                 @endif
 
+                @can('Pagos')
                 <li class="c-sidebar-nav-item">
                     <x-utils.link :href="route('frontend.ingreso_vehiculo_tronco.pagos')" class="c-sidebar-nav-link" :text="__('Pagos')" :active="activeClass(Route::is('admin.auth.role.*'), 'c-active')" />
                 </li>
-
+                @endif
             </ul>
         </li>
         
@@ -140,7 +141,7 @@
 		
 	@endif
 	
-	@if(Gate::check('Requerimientos') || Gate::check('Entradas') || Gate::check('Orden Compra') || Gate::check('Consulta Stock') || Gate::check('Dispensacion') || Gate::check('Ingreso Produccion') || Gate::check('Kardex') || Gate::check('Movimientos') || Gate::check('Verificacion Aplicacion Comisiones') || Gate::check('Empaquetado'))
+	@if(Gate::check('Requerimientos') || Gate::check('Entradas') || Gate::check('Orden Compra') || Gate::check('Consulta Stock') || Gate::check('Dispensacion') || Gate::check('Ingreso Produccion') || Gate::check('Kardex') || Gate::check('Movimientos') || Gate::check('Verificacion Aplicacion Comisiones') || Gate::check('Empaquetado') || Gate::check('Devolucion'))
 
         <li class="c-sidebar-nav-dropdown">
             <x-utils.link href="#" icon="c-sidebar-nav-icon cil-list" class="c-sidebar-nav-dropdown-toggle" :text="__('Operaciones')" />
