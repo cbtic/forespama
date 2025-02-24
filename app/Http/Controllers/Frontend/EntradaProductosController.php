@@ -20,6 +20,8 @@ use App\Models\Kardex;
 use App\Models\Persona;
 use App\Models\OrdenCompra;
 use App\Models\OrdenCompraDetalle;
+use App\Models\Devolucione;
+use App\Models\DevolucionDetalle;
 use Auth;
 use RealRashid\SweetAlert\Facades\Alert;
 use App\Http\Controllers\Controller;
@@ -1576,6 +1578,11 @@ class EntradaProductosController extends Controller
             $salida_producto_model = new SalidaProducto;
 		    $detalle_documento = $salida_producto_model->getDetalleSalidaProducto();
 
+        }else if($tipo_documento==3){
+
+            $devolucion_model = new Devolucione;
+		    $detalle_documento = $devolucion_model->getDetalleDevolucion();
+
         }
 		
 		return response()->json($detalle_documento);
@@ -1614,6 +1621,29 @@ class EntradaProductosController extends Controller
             $kardex_model = new Kardex;
 
             $entrada_producto = $salida_producto_detalle_model->getDetalleProductoId($id_documento);
+            $marca = $marca_model->getMarcaAll();
+            $producto = $producto_model->getProductoAll();
+            $estado_bien = $tablaMaestra_model->getMaestroByTipo(56);
+            $unidad_medida = $tablaMaestra_model->getMaestroByTipo(43);
+
+            return response()->json([
+                'entrada_producto' => $entrada_producto,
+                'marca' => $marca,
+                'producto' => $producto,
+                'estado_bien' => $estado_bien,
+                'unidad_medida' => $unidad_medida
+            ]);
+
+
+        }else if ($tipo_documento==3){
+
+            $devolucion_detalle_model = new DevolucionDetalle;
+            $marca_model = new Marca;
+            $producto_model = new Producto;
+            $tablaMaestra_model = new TablaMaestra;
+            $kardex_model = new Kardex;
+
+            $entrada_producto = $devolucion_detalle_model->getDetalleProductoId($id_documento);
             $marca = $marca_model->getMarcaAll();
             $producto = $producto_model->getProductoAll();
             $estado_bien = $tablaMaestra_model->getMaestroByTipo(56);

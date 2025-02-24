@@ -1372,6 +1372,7 @@ function obtenerLicencia(){
                                         <option value="" <?= empty($guia_interna->id_tipo_documento) ? "selected='selected'" : "" ?>>--Seleccionar--</option>
                                         <option value="1" <?= $guia_interna->id_tipo_documento == 1 ? "selected='selected'" : "" ?>>NOTA DE RECEPCION</option>
                                         <option value="2" <?= $guia_interna->id_tipo_documento == 2 ? "selected='selected'" : "" ?>>NOTA DE SALIDA</option>
+                                        <option value="3" <?= $guia_interna->id_tipo_documento == 3 ? "selected='selected'" : "" ?>>DEVOLUCI&Oacute;N</option>
                                     </select>
                                 </div>
                             </div>
@@ -1621,7 +1622,7 @@ function obtenerLicencia(){
                                     <select name="unidad_medida_peso" id="unidad_medida_peso" class="form-control form-control-sm" onchange="">
                                         <option value="">--Seleccionar--</option>
                                         <?php 
-                                        foreach ($motivo_traslado as $row){?>
+                                        foreach ($unidad_peso as $row){?>
                                             <option value="<?php echo $row->codigo ?>" <?php //if($row->codigo==$guia_interna->id_motivo_traslado)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
                                             <?php 
                                         }

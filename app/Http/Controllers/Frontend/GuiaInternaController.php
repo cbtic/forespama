@@ -113,10 +113,11 @@ class GuiaInternaController extends Controller
         $departamento = $ubigeo_model->getDepartamento();
         $serie_guia = $tablaMaestra_model->getMaestroC(95,"GR");
         $punto_partida = $tablaMaestra_model->getMaestroByTipo(68);
+        $unidad_peso = $tablaMaestra_model->getMaestroByTipo(43);
 
         //dd($guia_interna);exit();
 
-        return view('frontend.guia_interna.modal_guia_interna_nuevoGuiaInterna',compact('id','guia_interna','guia','tipo_documento_entrada','tipo_documento_salida','producto','marca','estado_bien','unidad','empresas',/*'transporte_razon_social',*/'motivo_traslado','departamento','serie_guia','id_user','punto_partida'));
+        return view('frontend.guia_interna.modal_guia_interna_nuevoGuiaInterna',compact('id','guia_interna','guia','tipo_documento_entrada','tipo_documento_salida','producto','marca','estado_bien','unidad','empresas',/*'transporte_razon_social',*/'motivo_traslado','departamento','serie_guia','id_user','punto_partida','unidad_peso'));
 
     }
 

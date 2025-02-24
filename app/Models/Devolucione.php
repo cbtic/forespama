@@ -79,4 +79,19 @@ class Devolucione extends Model
 		$data = DB::select($cad);
         return $data;
     }
+
+    function getDetalleDevolucion(){
+
+        $cad = "select d.id, d.fecha fecha_movimiento, 'DEVOLUCION' tipo_documento, tm2.denominacion unidad_origen, e.razon_social , d.numero_devolucion codigo, sp.fecha_comprobante, sp.estado, d.created_at, tm3.denominacion moneda, sp.observacion, a.denominacion almacen, tm4.denominacion igv_compra 
+        from devolucione d 
+        inner join salida_productos sp on d.id_salida = sp.id 
+        inner join tabla_maestras tm2 on sp.unidad_destino ::int = tm2.codigo::int and tm2.tipo = '50'
+        inner join tabla_maestras tm3 on d.id_moneda ::int = tm3.codigo::int and tm3.tipo = '1'
+        inner join empresas e on sp.id_empresa_compra = e.id
+        left join tabla_maestras tm4 on d.igv_compra ::int = tm4.codigo::int and tm4.tipo = '51'
+        inner join almacenes a on d.id_almacen = a.id ";
+
+		$data = DB::select($cad);
+        return $data;
+    }
 }
