@@ -251,7 +251,7 @@
 		
 	@endif
 	
-	@if(Gate::check('Inventario'))
+	@if(Gate::check('Inventario') || Gate::check('Consulta Productos Venta'))
         <li class="c-sidebar-nav-dropdown">
             <x-utils.link href="#" icon="c-sidebar-nav-icon cil-list" class="c-sidebar-nav-dropdown-toggle" :text="__('Consultas')" />
             <ul class="c-sidebar-nav-dropdown-items">
