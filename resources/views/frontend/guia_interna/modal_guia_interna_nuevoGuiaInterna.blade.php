@@ -922,6 +922,7 @@ function obtenerEmpresa(){
                 //$('#id_conductor_guia').val(vehiculo.id_conductores);
                 $('#transporte_razon_social').val(vehiculo.razon_social);
                 $('#id_empresa_conductor_vehiculo').val(vehiculo.id);
+                $('#numero_inscripcion').val(vehiculo.constancia_inscripcion);
                 //$('#conductor_guia').val(vehiculo.conductor);
                 //$('#numero_licencia').val(vehiculo.licencia);
                 $("#marca_vehiculo").attr("readonly",true);
