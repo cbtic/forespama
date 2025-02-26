@@ -964,7 +964,7 @@ function obtenerCodigo(){
         $('#empresa_vende').val('30').trigger('change');
     }
 
-    $.ajax({
+    /*$.ajax({
         url: "/orden_compra/obtener_codigo_orden_compra/"+tipo_documento,
         dataType: "json",
         success: function (result) {
@@ -974,7 +974,7 @@ function obtenerCodigo(){
             $('#numero_orden_compra').val(result[0].codigo);
 
         }
-    });
+    });*/
 
 }
 
@@ -1014,9 +1014,9 @@ function modal_tiendas_orden_compra(id){
 
 $('#moneda').on('change', function(){
 
-var descripcion = $('#moneda option:selected').text();
+    var descripcion = $('#moneda option:selected').text();
 
-$('#moneda_descripcion').val(descripcion);
+    $('#moneda_descripcion').val(descripcion);
 
 });
 
@@ -1083,7 +1083,7 @@ function obtenerEntradaSalida(){
                             Tipo Documento
                         </div>
                         <div class="col-lg-2">
-                            <select name="tipo_documento" id="tipo_documento" class="form-control form-control-sm" onchange="//obtenerCodigo()">
+                            <select name="tipo_documento" id="tipo_documento" class="form-control form-control-sm" onchange="obtenerCodigo()">
                                 <option value="">--Seleccionar--</option>
                                 <?php
                                 foreach ($tipo_documento as $row){?>

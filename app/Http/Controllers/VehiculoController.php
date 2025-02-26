@@ -212,6 +212,7 @@ class VehiculoController extends Controller
 			$vehiculo->control = $request->control;
 			$vehiculo->bloqueado = $request->bloqueado;
 			$vehiculo->id_marca = $request->marca;
+			$vehiculo->constancia_inscripcion = $request->constancia_inscripcion;
 			$vehiculo->id_usuario_inserta = $id_user;
 			$vehiculo->id_usuario_actualiza = $id_user;
 			$vehiculo->estado = "1";

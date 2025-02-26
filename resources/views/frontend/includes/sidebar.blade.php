@@ -37,7 +37,7 @@
         </li>
 		-->
 
-	@if(Gate::check('Ingreso de Camiones') || Gate::check('Cubicaje de Troncos'))
+	@if(Gate::check('Ingreso de Camiones') || Gate::check('Cubicaje de Troncos') || Gate::check('Pagos'))
 
         <li class="c-sidebar-nav-title">@lang('System')</li>
 
@@ -58,10 +58,11 @@
                 </li>
                 @endif
 
+                @can('Pagos')
                 <li class="c-sidebar-nav-item">
                     <x-utils.link :href="route('frontend.ingreso_vehiculo_tronco.pagos')" class="c-sidebar-nav-link" :text="__('Pagos')" :active="activeClass(Route::is('admin.auth.role.*'), 'c-active')" />
                 </li>
-
+                @endif
             </ul>
         </li>
         
@@ -140,7 +141,7 @@
 		
 	@endif
 	
-	@if(Gate::check('Entradas') || Gate::check('Salidas') || Gate::check('Kardex') || Gate::check('Movimientos') || Gate::check('Requerimientos') || Gate::check('Consulta Stock'))
+	@if(Gate::check('Requerimientos') || Gate::check('Entradas') || Gate::check('Orden Compra') || Gate::check('Consulta Stock') || Gate::check('Dispensacion') || Gate::check('Ingreso Produccion') || Gate::check('Kardex') || Gate::check('Movimientos') || Gate::check('Verificacion Aplicacion Comisiones') || Gate::check('Empaquetado') || Gate::check('Devolucion'))
 
         <li class="c-sidebar-nav-dropdown">
             <x-utils.link href="#" icon="c-sidebar-nav-icon cil-list" class="c-sidebar-nav-dropdown-toggle" :text="__('Operaciones')" />
@@ -208,6 +209,12 @@
                     <x-utils.link :href="route('frontend.empaquetado.create_empaquetado')" class="c-sidebar-nav-link" :text="__('Empaquetado')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
                 </li>
 				@endif
+
+                @can('Devolucion')
+				<li class="c-sidebar-nav-item">
+                    <x-utils.link :href="route('frontend.devolucion.create')" class="c-sidebar-nav-link" :text="__('Devolucion')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+                </li>
+				@endif
 				
             </ul>
 
@@ -215,7 +222,7 @@
 
         @endif
 
-        @if(Gate::check('Ingreso Caja') || Gate::check('Comprobante') || Gate::check('Guia'))
+        @if(Gate::check('Ingreso Caja') || Gate::check('Comprobante') || Gate::check('Guia') || Gate::check('Consulta Sodimac'))
 
         <li class="c-sidebar-nav-dropdown">
             <x-utils.link href="#" icon="c-sidebar-nav-icon cil-list" class="c-sidebar-nav-dropdown-toggle" :text="__('Caja')" />
@@ -230,6 +237,11 @@
                     <x-utils.link :href="route('frontend.comprobante.all')" class="c-sidebar-nav-link" :text="__('Consulta de Facturas')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />                  
                 </li>
                 @endif
+                @can('Consulta Sodimac')
+                <li class="c-sidebar-nav-item">
+                    <x-utils.link :href="route('frontend.comprobante.create_consulta_sodimac')" class="c-sidebar-nav-link" :text="__('Consulta de Facturas Sodimac')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />                  
+                </li>
+                @endif
                 @can('Guia')
                 <li class="c-sidebar-nav-item">
                     <x-utils.link :href="route('frontend.guia_interna.create')" class="c-sidebar-nav-link" :text="__('Consulta de Guias')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />                  
@@ -240,7 +252,7 @@
 		
 	@endif
 	
-	@if(Gate::check('Inventario'))
+	@if(Gate::check('Inventario') || Gate::check('Consulta Productos Venta'))
         <li class="c-sidebar-nav-dropdown">
             <x-utils.link href="#" icon="c-sidebar-nav-icon cil-list" class="c-sidebar-nav-dropdown-toggle" :text="__('Consultas')" />
             <ul class="c-sidebar-nav-dropdown-items">
@@ -259,7 +271,7 @@
         
 	@endif
 	
-	@if(Gate::check('Mantenimiento Personas') || Gate::check('Mantenimiento Empresas') || Gate::check('Mantenimiento Vehiculos') || Gate::check('Mantenimiento Tablas Maestras') || Gate::check('Mantenimiento Conductores'))
+	@if(Gate::check('Mantenimiento Personas') || Gate::check('Mantenimiento Empresas') || Gate::check('Mantenimiento Vehiculos') || Gate::check('Mantenimiento Tablas Maestras') || Gate::check('Mantenimiento Conductores') || Gate::check('Mantenimiento Tipo Cambio') || Gate::check('Mantenimiento Marcas') || Gate::check('Mantenimiento Tiendas') || Gate::check('Mantenimiento Equivalencia Producto') || Gate::check('Mantenimiento Parametro') || Gate::check('Mantenimiento Empaquetado'))
 	
         <li class="c-sidebar-nav-dropdown">
             <x-utils.link href="#" icon="c-sidebar-nav-icon cil-list" class="c-sidebar-nav-dropdown-toggle" :text="__('Mantenimiento')" />
@@ -325,7 +337,7 @@
                 </li>
 				@endif
 
-                @can('Mantenimietno Empaquetado')
+                @can('Mantenimiento Empaquetado')
 				<li class="c-sidebar-nav-item">
                     <x-utils.link :href="route('frontend.empaquetado.create')" class="c-sidebar-nav-link" :text="__('Empaquetado')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
                 </li>

@@ -172,6 +172,12 @@ class EntradaProductosController extends Controller
             $entrada_producto->sub_total_compra = round($request->sub_total_general,2);
             $entrada_producto->igv_compra = round($request->igv_general,2);
             $entrada_producto->total_compra = round($request->total_general,2);
+            $entrada_producto->descuento = round($request->descuento_general,2);
+            $moneda_descripcion="";
+            if($request->moneda==1){$moneda_descripcion="SOLES";}
+            else if($request->moneda==2){$moneda_descripcion="DOLARES";}
+            else {$moneda_descripcion="SOLES";}
+            $entrada_producto->moneda = $moneda_descripcion;
             $entrada_producto->cerrado = $request->cerrado;
             $entrada_producto->observacion = $request->observacion;
             $entrada_producto->id_almacen_destino = $request->almacen;
@@ -400,6 +406,12 @@ class EntradaProductosController extends Controller
             $salida_producto->sub_total_compra = round($request->sub_total_general,2);
             $salida_producto->igv_compra = round($request->igv_general,2);
             $salida_producto->total_compra = round($request->total_general,2);
+            $salida_producto->descuento = round($request->descuento_general,2);
+            $moneda_descripcion="";
+            if($request->moneda==1){$moneda_descripcion="SOLES";}
+            else if($request->moneda==2){$moneda_descripcion="DOLARES";}
+            else {$moneda_descripcion="SOLES";}
+            $salida_producto->moneda = $moneda_descripcion;
             $salida_producto->cerrado = $request->cerrado;
             $salida_producto->observacion = $request->observacion;
             $salida_producto->id_almacen_salida = $request->almacen_salida;

@@ -20,7 +20,8 @@ class OrdenCompraDetalle extends Model
         inner join tabla_maestras tm3 on ocd.id_unidad_medida = tm3.codigo ::int and tm3.tipo = '43'
         left join marcas m on ocd.id_marca = m.id 
         where ocd.id_orden_compra ='".$id."'
-        and ocd.estado='1'";
+        and ocd.estado='1'
+        order by 1 asc";
 
 		$data = DB::select($cad);
         return $data;

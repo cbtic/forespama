@@ -368,7 +368,7 @@ function cargarImagenes() {
             <div class="card">
                 
                 <div class="card-header" style="padding:5px!important;padding-left:20px!important">
-                    Registrar un producto
+                    Registrar un producto / servicio
                 </div>
                 
                 <div class="card-body">
@@ -392,6 +392,21 @@ function cargarImagenes() {
                                                 <?php
                                                 foreach ($tipo_origen_producto as $row){?>
                                                     <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$producto->id_tipo_origen_producto)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                                <?php
+                                                }
+                                                ?>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-4">
+                                        <div class="form-group">
+                                            <label class="control-label form-control-sm">Bien / Servicio</label>
+                                            <select name="bien_servicio" id="bien_servicio" class="form-control form-control-sm" onchange="">
+                                                <option value="">--Seleccionar--</option>
+                                                <?php
+                                                foreach ($bien_servicio as $row){?>
+                                                    <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$producto->bien_servicio)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
                                                 <?php
                                                 }
                                                 ?>

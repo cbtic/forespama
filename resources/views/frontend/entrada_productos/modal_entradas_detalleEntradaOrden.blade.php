@@ -399,6 +399,11 @@ function cambiarOrigen(){
     }
 }
 
+function eliminarFila(button){
+    $(button).closest('tr').remove();
+    actualizarTotalGeneral();
+}
+
 function cambiarTipoDocumento(){
 
     var tipoMovimiento = document.getElementById('tipo_movimiento_').value;
@@ -976,6 +981,15 @@ function limpiar(){
 	$('#img_foto').val("");
 }
 
+
+$('#moneda_').on('change', function(){
+
+    var descripcion = $('#moneda_ option:selected').text();
+
+    $('#moneda_descripcion').val(descripcion);
+
+});
+
 function fn_save_detalle_producto(){
 
     var tipo_movimiento = $('#tipo_movimiento').val();
@@ -1270,6 +1284,7 @@ function pdf_documento(){
                                 ?>
                             </select>
                             <input type="hidden" name="moneda" id="moneda" value="<?php echo $valorPorDefecto?>">
+                            <input name="moneda_descripcion" id="moneda_descripcion" type="hidden">
                         </div>
                         <div class="col-lg-2" id="tipo_cambio_dolar_">
                             Tipo Cambio Dolar

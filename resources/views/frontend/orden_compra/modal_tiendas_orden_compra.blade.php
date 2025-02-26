@@ -473,6 +473,9 @@ function cargarDetalle(id, cantidad_tiendas) {
                     const productoRow = `
                         <tr>
                             <td></td>
+                            <td>
+                                <input type="text" name="codigo[${tienda}][]" id="codigo${tienda}_${productoContador}" class="codigo form-control form-control-sm" value="${orden_compra.codigo}" oninput="" readonly="readonly">
+                            </td>
                             <td style="width: 690px !important;display:block">
                                 <input type="hidden" name="id_orden_compra_detalle[${tienda}][]" id="id_orden_compra_detalle${tienda}_${productoContador}" value="${orden_compra.id}">
                                 <input type="hidden" name="descripcion[${tienda}][]" id="descripcion${tienda}_${productoContador}" class="cantidad_ingreso form-control form-control-sm" value="${orden_compra.id_producto}" oninput="">

@@ -1078,7 +1078,12 @@ function obtenerBeneficiario() {
 					$('#id_orden_compra').val(result.id_orden_compra);
 					
 				}
-
+				if (tipo_documento_b=="7"){
+					cargaSalidaProdSel(result.id_salida_prod);
+					$('#id_orden_compra').val(result.id_orden_compra);
+					$('#id_salida_prod').val(result.id_salida_prod);
+					
+				}
 
 				//cargarcboTipoConcepto();
 				//cargarcboPeriodo();
@@ -1261,6 +1266,66 @@ function cargarProformaSel(id){
 function cargarOrdenCompraSel(id){
 	cargarOrdenCompraId(id);
 	cargarOrdenCompraDet(id);
+}
+
+function cargaSalidaProdSel(id){
+	cargaSalidaProdId(id);
+	cargarSalidaProdDet(id);
+}
+
+
+function cargaSalidaProdId(id) {
+    $.ajax({
+        url: `/orden_compra/obtener_salida_prod_id/${id}`,
+        dataType: "json",
+        success: function (result) {
+            if (result && result.oc) {
+                const { total, descuento, sub_total, igv } = result.oc;
+
+                // Actualizar los valores en los campos del formulario
+                $('#deudaTotales').val(Number(total).toFixed(2));
+                $('#totalDescuento').val(Number(descuento).toFixed(2));
+                $('#total').val(Number(total).toFixed(2));
+                $('#stotal').val(Number(sub_total).toFixed(2));
+                $('#igv').val(Number(igv).toFixed(2));
+            } else {
+                console.warn("No se encontraron datos válidos en la respuesta.");
+            }
+        },
+        error: function (xhr, status, error) {
+            console.error("Error al cargar la orden de compra:", error);
+            alert("Hubo un error al cargar los datos. Por favor, inténtalo de nuevo.");
+        }
+    });
+}
+
+function cargarSalidaProdDet(id) {
+    // Ocultar elementos y deshabilitar botones
+    $("#divAgregar, #divAlmacen").hide();
+    $("#btnBoleta, #btnFactura").prop('disabled', true);
+    $("#btnProforma").hide();
+
+    // Limpiar la tabla
+    $("#tblValorizacion tbody").empty();
+
+	var emp = $('#empresa_id').val();
+
+    // Realizar la solicitud AJAX
+    $.ajax({
+		url: `/orden_compra/listar_salida_prod_det/${id}/${emp}`,
+        type: "GET",
+        success: function (result) {
+            // Insertar el resultado en la tabla
+            $("#tblValorizacion tbody").html(result);
+
+            // Habilitar botones después de cargar los datos
+            $("#btnBoleta, #btnFactura").prop('disabled', false);
+        },
+        error: function (xhr, status, error) {
+            console.error("Error al cargar los detalles de la salida de producto:", error);
+            alert("Hubo un error al cargar los detalles. Por favor, inténtalo de nuevo.");
+        }
+    });
 }
 
 /*

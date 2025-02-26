@@ -778,6 +778,27 @@ class OrdenCompraController extends Controller
 		return response()->json($codigo);
 	}
 
+    
+    public function obtener_salida_prod_id($id){
+        $oc_model = new OrdenCompra;
+
+        $sw = true;
+        $oc = $oc_model->getSalidaProdById($id);
+        $array["sw"] = $sw;
+        $array["oc"] = $oc;
+
+        echo json_encode($array);
+    }
+
+    public function listar_salida_prod_det($id, $emp){       
+        $orden_compra_model = new OrdenCompra;
+        $sw = true;
+        $orden_compra = $orden_compra_model->getSalidaProdDetalle($id, $emp);
+        
+        return view('frontend.ingresos.lista_orden_compra_det',compact('orden_compra'));
+
+    }
+
     public function exportar_listar_orden_compra($tipo_documento, $empresa_compra, $empresa_vende, $fecha, $numero_orden_compra, $numero_orden_compra_cliente, $almacen_origen, $almacen_destino, $situacion, $estado) {
 
 		if($tipo_documento==0)$tipo_documento = "";
@@ -823,6 +844,8 @@ class OrdenCompraController extends Controller
 		return Excel::download($export, 'Reporte_orden_compra.xlsx');
 		
     }
+
+   
 
 }
 

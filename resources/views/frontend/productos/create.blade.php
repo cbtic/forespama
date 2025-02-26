@@ -290,7 +290,11 @@ label.form-control-sm{
 
 </style>
 
+<script>
+    var userIsAdmin = @json(auth()->check() ? auth()->user()->hasRole('Administrator') : false);
 
+    //console.log(userIsAdmin);
+</script>
 
 @stack('before-scripts')
 @stack('after-scripts')
@@ -333,7 +337,7 @@ label.form-control-sm{
                 <div class="row">
                     <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12" style="margin-top:15px">
                         <h4 class="card-title mb-0 text-primary" style="font-size:22px">
-                            Productos
+                            Productos / Servicios
                         </h4>
                     </div>
                 </div>
@@ -433,6 +437,7 @@ label.form-control-sm{
                         <thead>
                         <tr style="font-size:13px">
                             <th>Id</th>
+							<th>Bien/Servicio</th>
 							<th>Tipo Origen Producto</th>
 							<th>Serie</th>
 							<th>Denominaci&oacute;n</th>

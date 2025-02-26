@@ -118,6 +118,7 @@ class PersonaController extends Controller
     public function obtener_personas($tipo_documento,$numero_documento){
         $agremiado_model = new Persona;
         $id_orden_compra = "";
+        $id_salida_prod = "";
 		
         if($tipo_documento=="6"){
 
@@ -136,6 +137,24 @@ class PersonaController extends Controller
 
 		}
 
+        if($tipo_documento=="7"){
+
+            $orden_compra_model = new OrdenCompra;
+
+			//print_r("hi");exit();
+			$resultado = $orden_compra_model->getSalidaProductoByCod($numero_documento);
+
+			if(isset($resultado->id_empresa)){
+				//echo("DNI");
+				$tipo_documento="5";
+				$numero_documento=$resultado->ruc;
+                $id_orden_compra=$resultado->id_orden_compra;
+                $id_salida_prod=$resultado->id_salida_prod;
+
+			}
+
+		}
+
 		//print_r($resultado);
 		//exit();
         
@@ -145,6 +164,8 @@ class PersonaController extends Controller
         $agremiado = $agremiado_model->getPersona($tipo_documento,$numero_documento);
         $array["sw"] = $sw;
         $array["id_orden_compra"] = $id_orden_compra;
+        $array["id_salida_prod"] = $id_salida_prod;
+
         $array["agremiado"] = $agremiado;
 
         echo json_encode($array);
