@@ -13,6 +13,7 @@ use App\Models\Kardex;
 use App\Models\TablaMaestra;
 use App\Models\Empresa;
 use App\Models\SalidaProducto;
+use App\Models\SalidaProductoDetalle;
 use App\Models\OrdenCompra;
 use Auth;
 
@@ -101,15 +102,150 @@ class DevolucionController extends Controller
 		$id_user = Auth::user()->id;
 
 		if($request->id == 0){
-			$devolucion = new Devolucione;
-            //$dispensacion_model = new Dispensacione;
-            //$correlativo = $dispensacion_model->getCorrelativo();
-            //$dispensacion->numero_corrrelativo = $correlativo[0]->numero_correlativo;
+			//$devolucion = new Devolucione;
+			$salida_producto = new SalidaProducto;
+			$salida_producto_ = SalidaProducto::find($request->id_salida);
 		}else{
-			$devolucion = Devolucione::find($request->id);
+			//$devolucion = Devolucione::find($request->id);
+			$salida_producto = SalidaProducto::find($request->id);
 		}
 
-        $descripcion = $request->input('descripcion');
+		$descripcion = $request->input('descripcion');
+        $cod_interno = $request->input('cod_interno');
+        $marca = $request->input('marca');
+        $unidad = $request->input('unidad');
+        $cantidad = $request->input('cantidad_ingreso');
+		$precio_venta = $request->input('precio_unitario');
+		$precio_unitario = $request->input('precio_unitario_');
+		$valor_venta_bruto = $request->input('valor_venta_bruto');
+		$valor_venta = $request->input('valor_venta');
+		$descuento = $request->input('descuento');
+		$id_descuento = $request->input('id_descuento');
+		$sub_total = $request->input('sub_total');
+		$igv = $request->input('igv');
+		$total = $request->input('total');
+		$id_devolucion_detalle =$request->id_devolucion_detalle;
+
+		$salida_producto->fecha_salida = $request->fecha_devolucion;
+		$salida_producto->id_tipo_documento = $salida_producto_->id_tipo_documento;
+		$salida_producto->unidad_destino = "2";
+		//$salida_producto->numero_comprobante = "";
+		$salida_producto->fecha_comprobante = "18/08/2024";
+		$salida_producto->id_moneda = $request->moneda;
+		//$salida_producto->tipo_cambio_dolar = $request->tipo_cambio_dolar;
+		$salida_producto->sub_total_compra = round($request->sub_total_general,2);
+		$salida_producto->igv_compra = round($request->igv_general,2);
+		$salida_producto->total_compra = round($request->total_general,2);
+		$salida_producto->descuento = round($request->descuento_general,2);
+		$moneda_descripcion="";
+		if($request->moneda==1){$moneda_descripcion="SOLES";}
+		else if($request->moneda==2){$moneda_descripcion="DOLARES";}
+		else {$moneda_descripcion="SOLES";}
+		$salida_producto->moneda = $moneda_descripcion;
+		$salida_producto->cerrado = "2";
+		//$salida_producto->observacion = $request->observacion;
+		$salida_producto->id_almacen_salida = $request->almacen;
+		$salida_producto->estado = 1;
+		$salida_producto->id_orden_compra = $salida_producto_->id_orden_compra;
+		//$salida_producto->id_proveedor = $request->proveedor;
+		$salida_producto->id_empresa_compra = $request->empresa;
+		$salida_producto->codigo = $salida_producto_->codigo;
+		//$salida_producto->id_usuario_recibe = $id_user;
+		//$salida_producto->id_persona_recibe = $request->persona_recibe;
+		$salida_producto->tipo_devolucion = "2";
+		$salida_producto->save();
+
+		foreach($descripcion as $index => $value) {
+            
+            if($id_devolucion_detalle[$index] == 0){
+                $salida_producto_detalle = new SalidaProductoDetalle;
+            }else{
+                $salida_producto_detalle = SalidaProductoDetalle::find($id_devolucion_detalle[$index]);
+            }
+            
+            $salida_producto_detalle->id_salida_productos = $salida_producto->id;
+            $salida_producto_detalle->id_producto = $descripcion[$index];
+            $salida_producto_detalle->cantidad = $cantidad[$index];
+            $salida_producto_detalle->id_um = $unidad[$index];
+            $salida_producto_detalle->costo = $precio_unitario[$index];
+            $salida_producto_detalle->valor_venta_bruto = $valor_venta_bruto[$index];
+            $salida_producto_detalle->precio_venta = $precio_venta[$index];
+            $salida_producto_detalle->valor_venta = $valor_venta[$index];
+            $salida_producto_detalle->id_descuento = $id_descuento[$index];
+            $salida_producto_detalle->descuento = $descuento[$index];
+            $salida_producto_detalle->sub_total = $sub_total[$index];
+            $salida_producto_detalle->igv = $igv[$index];
+            $salida_producto_detalle->total = $total[$index];
+            //$salida_producto_detalle->id_moneda = $request->moneda;
+            //$salida_producto_detalle->moneda = $moneda_descripcion;
+			$salida_producto_detalle->tipo_devolucion = "3";
+			if($marca[$index]!=null && $marca[$index] !=0){
+				$salida_producto_detalle->id_marca = (int)$marca[$index];
+			}
+            $salida_producto_detalle->estado = 1;
+            //$salida_producto_detalle->id_usuario_inserta = $id_user;
+
+            $salida_producto_detalle->save();
+		}
+
+		$salida_producto_final = SalidaProducto::where('codigo',$salida_producto->codigo)->where('tipo_devolucion',3)->where('estado',1)->first();
+
+		$sub_total_final = $salida_producto_final->sub_total_compra - $salida_producto->sub_total_compra;
+		$igv_final = $salida_producto_final->igv_compra - $salida_producto->igv_compra;
+		$total_final = $salida_producto_final->total_compra - $salida_producto->total_compra;
+
+		$salida_producto_final->sub_total_compra = $sub_total_final;
+		$salida_producto_final->igv_compra = $igv_final;
+		$salida_producto_final->total_compra = $total_final;
+		$salida_producto_final->save();
+
+			/*if($id_devolucion_detalle[$index] == 0){
+				$producto = Producto::find($descripcion[$index]);
+
+				$kardex_buscar = Kardex::where("id_producto",$descripcion[$index])->where("id_almacen_destino",$request->almacen_destino)->orderBy('id', 'desc')->first();
+				$kardex = new Kardex;
+				$kardex->id_producto = $descripcion[$index];
+				$kardex->entradas_cantidad = $cantidad[$index];
+				//kardex->costo_salidas_cantidad = $precio_unitario[$index];
+				//$kardex->total_salidas_cantidad = $total[$index];
+				if($kardex_buscar){
+					$cantidad_saldo = $kardex_buscar->saldos_cantidad + $cantidad[$index];
+					$kardex->saldos_cantidad = $cantidad_saldo;
+				}else{
+					$kardex->saldos_cantidad = $cantidad[$index];
+				}
+				$kardex->id_almacen_destino = $request->almacen_destino;
+				$kardex->id_ingreso_produccion = $ingreso_produccion->id;
+
+				$kardex->save();
+			}else{
+				/*$producto = Producto::find($descripcion[$index]);
+
+				$kardex_buscar = Kardex::where("id_producto",$descripcion[$index])->where("id_almacen_destino",$request->almacen)->orderBy('id', 'desc')->first();
+				$kardex_dispensacion = Kardex::where("id_dispensacion",$dispensacion->id)->where("id_producto",$descripcion[$index])->orderBy('id', 'desc')->first();
+				//dd($kardex_dispensacion);exit();
+				$kardex = kardex::find($kardex_dispensacion->id);
+
+				//$kardex->id_producto = $descripcion[$index];
+				//$kardex->salidas_cantidad = $cantidad[$index];
+				if($kardex_dispensacion->salidas_cantidad>$cantidad[$index]){
+					$cantidad_saldo = $kardex_dispensacion->saldos_cantidad - ($kardex_dispensacion->salidas_cantidad - $cantidad[$index]);
+					$kardex->saldos_cantidad = $cantidad_saldo;
+				}else if($kardex_dispensacion->salidas_cantidad<$cantidad[$index]){
+					$cantidad_saldo = $kardex_dispensacion->saldos_cantidad + ($cantidad[$index] - $kardex_dispensacion->salidas_cantidad);
+					$kardex->saldos_cantidad = $cantidad_saldo;
+				}else if($kardex_dispensacion->salidas_cantidad==$cantidad[$index]){
+					$kardex->saldos_cantidad = $cantidad[$index];
+				}
+				//$kardex->saldos_cantidad = $cantidad[$index];
+				$kardex->id_almacen_destino = $request->almacen;
+				$kardex->id_dispensacion = $dispensacion->id;
+
+				$kardex->save();*/
+			//}
+        //}
+
+        /*$descripcion = $request->input('descripcion');
         $cod_interno = $request->input('cod_interno');
         $marca = $request->input('marca');
         $unidad = $request->input('unidad');
@@ -176,7 +312,7 @@ class DevolucionController extends Controller
             $devolucion_detalle->estado = 1;
             $devolucion_detalle->id_usuario_inserta = $id_user;
 
-            $devolucion_detalle->save();
+            $devolucion_detalle->save();*/
 
 			/*if($id_devolucion_detalle[$index] == 0){
 				$producto = Producto::find($descripcion[$index]);
@@ -222,9 +358,9 @@ class DevolucionController extends Controller
 
 				$kardex->save();*/
 			//}
-        }
+        //}
 
-        return response()->json(['success' => 'Ingreso a Produccion guardado exitosamente.']);
+        return response()->json(['success' => 'Devolucion guardada exitosamente.']);
 
     }
 

@@ -594,7 +594,7 @@ class EntradaProductosController extends Controller
                 foreach($item as $index => $value) {
                     
                     $salida_producto_detalle2 = new SalidaProductoDetalle();
-                    $salida_producto_detalle2->id_salida_productos = $salida_producto->id;
+                    $salida_producto_detalle2->id_salida_productos = $salida_producto2->id;
                     $salida_producto_detalle2->numero_serie = $item[$index];
                     $salida_producto_detalle2->cantidad = $cantidad_ingreso[$index];
 
@@ -611,7 +611,7 @@ class EntradaProductosController extends Controller
                     $salida_producto_detalle2->precio_venta = round($precio_unitario[$index],2);
                     $salida_producto_detalle2->valor_venta = round($valor_venta[$index],2);
                     $salida_producto_detalle2->id_descuento = $id_descuento[$index];
-                    $salida_producto_detalle2->tipo_devolucion = "1";
+                    $salida_producto_detalle2->tipo_devolucion = "3";
                     if($id_descuento[$index]==1){
                         $salida_producto_detalle2->descuento = $descuento[$index];
                     }else if($id_descuento[$index]==2){
@@ -626,9 +626,9 @@ class EntradaProductosController extends Controller
 
                     $salida_producto_detalle2->save();
                 }
-            }else{
+            }/*else{
                 $salida_producto = SalidaProducto::find($request->id);
-            }
+            }*/
         }
 
         if($request->tipo_movimiento==1){

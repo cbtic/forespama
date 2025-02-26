@@ -3679,7 +3679,7 @@ class ComprobanteController extends Controller
 
         if ($guia->guia_modo_traslado=='01'){
             $data["tipoDocIdentidadTransportista"] =$guia->guia_transportista_tipo_doc;
-            $data["fechaEntregaBienesTransportista"] =$guia->guia_fecha_emision;
+            $data["fechaEntregaBienesTransportista"] =$guia->guia_fecha_traslado;
             $data["numeroDocIdentidadTransportista"] =$guia->guia_transportista_numdoc;
             $data["razonSocialTransportista"] =$guia->guia_transportista_razsoc; 
         }
