@@ -155,13 +155,15 @@ class DevolucionController extends Controller
 		$salida_producto->tipo_devolucion = "2";
 		$salida_producto->save();
 
+		$array_salida_detalle = array();
+
 		foreach($descripcion as $index => $value) {
             
-            if($id_devolucion_detalle[$index] == 0){
-                $salida_producto_detalle = new SalidaProductoDetalle;
-            }else{
-                $salida_producto_detalle = SalidaProductoDetalle::find($id_devolucion_detalle[$index]);
-            }
+            //if($id_devolucion_detalle[$index] == 0){
+            $salida_producto_detalle = new SalidaProductoDetalle;
+            //}else{
+        	//    $salida_producto_detalle = SalidaProductoDetalle::find($id_devolucion_detalle[$index]);
+            ///}
             
             $salida_producto_detalle->id_salida_productos = $salida_producto->id;
             $salida_producto_detalle->id_producto = $descripcion[$index];
@@ -171,6 +173,7 @@ class DevolucionController extends Controller
             $salida_producto_detalle->valor_venta_bruto = $valor_venta_bruto[$index];
             $salida_producto_detalle->precio_venta = $precio_venta[$index];
             $salida_producto_detalle->valor_venta = $valor_venta[$index];
+            $salida_producto_detalle->cerrado = "2";
             $salida_producto_detalle->id_descuento = $id_descuento[$index];
             $salida_producto_detalle->descuento = $descuento[$index];
             $salida_producto_detalle->sub_total = $sub_total[$index];
@@ -178,7 +181,7 @@ class DevolucionController extends Controller
             $salida_producto_detalle->total = $total[$index];
             //$salida_producto_detalle->id_moneda = $request->moneda;
             //$salida_producto_detalle->moneda = $moneda_descripcion;
-			$salida_producto_detalle->tipo_devolucion = "3";
+			$salida_producto_detalle->tipo_devolucion = "2";
 			if($marca[$index]!=null && $marca[$index] !=0){
 				$salida_producto_detalle->id_marca = (int)$marca[$index];
 			}
@@ -186,6 +189,15 @@ class DevolucionController extends Controller
             //$salida_producto_detalle->id_usuario_inserta = $id_user;
 
             $salida_producto_detalle->save();
+
+			//$array_salida_detalle_producto[] = $salida_producto_detalle->id_producto;
+			//$array_salida_detalle_id[] = $salida_producto_detalle->id;
+
+			$array_salida_detalle[] = [
+				'id_producto' => $salida_producto_detalle->id_producto,
+				'cantidad' => $salida_producto_detalle->cantidad,
+				'id' => $salida_producto_detalle->id
+			];
 		}
 
 		$salida_producto_final = SalidaProducto::where('codigo',$salida_producto->codigo)->where('tipo_devolucion',3)->where('estado',1)->first();
@@ -199,6 +211,71 @@ class DevolucionController extends Controller
 		$salida_producto_final->total_compra = $total_final;
 		$salida_producto_final->save();
 
+		$salida_producto_detalle_final = SalidaProductoDetalle::where('id_salida_productos',$salida_producto_final->id)->where('tipo_devolucion',3)->where('estado',1)->get();
+
+		$array_id_productos = array_column($array_salida_detalle, 'id_producto');
+
+		foreach ($salida_producto_detalle_final as $row) {
+			if (in_array($row->id_producto, $array_id_productos)) {
+				// Buscar el registro dentro de $array_salida_detalle para obtener la cantidad
+				foreach ($array_salida_detalle as $detalle) {
+					if ($detalle['id_producto'] == $row->id_producto) {
+						$salida_detalle_3 = SalidaProductoDetalle::find($row->id);
+						$salida_detalle_2 = SalidaProductoDetalle::find($detalle['id']);
+		
+						if ($salida_detalle_3->cantidad != $detalle['cantidad']) {
+							$cantidad_salida_final = $salida_detalle_3->cantidad - $detalle['cantidad'];
+							$salida_detalle_3->cantidad = $cantidad_salida_final;
+							$valor_venta_bruta_final = $salida_detalle_3->valor_venta_bruto - $salida_detalle_2->valor_venta_bruto;
+							$valor_venta_final = $salida_detalle_3->valor_venta - $salida_detalle_2->valor_venta;
+							$sub_total_final = $salida_detalle_3->sub_total - $salida_detalle_2->sub_total;
+							$igv_final = $salida_detalle_3->igv - $salida_detalle_2->igv;
+							$total_final = $salida_detalle_3->total - $salida_detalle_2->total;
+							$salida_detalle_3->valor_venta_bruto = $valor_venta_bruta_final;
+							$salida_detalle_3->valor_venta = $valor_venta_final;
+							$salida_detalle_3->sub_total = $sub_total_final;
+							$salida_detalle_3->igv = $igv_final;
+							$salida_detalle_3->total = $total_final;
+
+							$kardex_buscar = Kardex::where("id_producto",$detalle['id_producto'])->where("id_almacen_destino",$request->almacen)->orderBy('id', 'desc')->first();
+							$kardex = new Kardex;
+							$kardex->id_producto = $detalle['id_producto'];
+							$kardex->entradas_cantidad = $detalle['cantidad'];
+							if($kardex_buscar){
+								$cantidad_saldo = $kardex_buscar->saldos_cantidad + $detalle['cantidad'];
+								$kardex->saldos_cantidad = $cantidad_saldo;
+							}else{
+								$kardex->saldos_cantidad = $detalle['cantidad'];
+							}
+							$kardex->id_salida_producto = $salida_producto_final->id;
+							$kardex->id_almacen_destino = $request->almacen;
+	
+							$kardex->save();
+
+						} else {
+							$salida_detalle_3->estado = 0;
+							$kardex_buscar = Kardex::where("id_producto",$detalle['id_producto'])->where("id_almacen_destino",$request->almacen)->orderBy('id', 'desc')->first();
+							$kardex = new Kardex;
+							$kardex->id_producto = $detalle['id_producto'];
+							$kardex->entradas_cantidad = $detalle['cantidad'];
+							if($kardex_buscar){
+								$cantidad_saldo = $kardex_buscar->saldos_cantidad + $detalle['cantidad'];
+								$kardex->saldos_cantidad = $cantidad_saldo;
+							}else{
+								$kardex->saldos_cantidad = $detalle['cantidad'];
+							}
+							$kardex->id_salida_producto = $salida_producto_final->id;
+							$kardex->id_almacen_destino = $request->almacen;
+	
+							$kardex->save();
+						}
+		
+						$salida_detalle_3->save();
+						//break;
+					}
+				}
+			}
+		}
 			/*if($id_devolucion_detalle[$index] == 0){
 				$producto = Producto::find($descripcion[$index]);
 

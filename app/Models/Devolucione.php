@@ -47,6 +47,7 @@ class Devolucione extends Model
         left join marcas m on spd.id_marca=m.id
         where  sp.codigo ='".$codigo_salida."'
         and spd.estado='1'
+        and spd.tipo_devolucion ='3'
         order by 1 asc";
 
 		$data = DB::select($cad);

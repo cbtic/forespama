@@ -596,3 +596,5 @@ Route::post('devolucion/send_devolucion', [DevolucionController::class, 'send_de
 Route::get('devolucion/modal_devolucion/{id}', [DevolucionController::class, 'modal_devolucion'])->name('devolucion.modal_devolucion');
 Route::get('devolucion/cargar_salida/{numero_salida}', [DevolucionController::class, 'cargar_salida'])->name('devolucion.cargar_salida');
 Route::get('devolucion/cargar_detalle/{id}', [DevolucionController::class, 'cargar_detalle'])->name('devolucion.cargar_detalle');
+
+Route::get('productos/exportar_listar_productos/{tipo_origen_producto}/{serie}/{codigo}/{denominacion}/{estado_bien}/{tipo_producto}/{tiene_imagen}/{estado}', [ProductosController::class, 'exportar_listar_productos'])->name('orden_compra.exportar_listar_productos');

@@ -576,7 +576,7 @@ class EntradaProductosController extends Controller
                 else if($request->moneda==2){$moneda_descripcion="DOLARES";}
                 else {$moneda_descripcion="SOLES";}
                 $salida_producto2->moneda = $moneda_descripcion;
-                $salida_producto2->cerrado = $request->cerrado;
+                $salida_producto2->cerrado = 2;
                 $salida_producto2->observacion = $request->observacion;
                 $salida_producto2->id_almacen_salida = $request->almacen_salida;
                 $salida_producto2->estado = 1;
@@ -604,7 +604,7 @@ class EntradaProductosController extends Controller
                     $salida_producto_detalle2->id_um = $unidad[$index];
                     $salida_producto_detalle2->id_marca = $marca[$index];
                     $salida_producto_detalle2->estado = 1;
-                    $salida_producto_detalle2->cerrado = 1;
+                    $salida_producto_detalle2->cerrado = 2;
                     $salida_producto_detalle2->id_producto = $descripcion[$index];
                     $salida_producto_detalle2->costo = round($precio_unitario_[$index],2);
                     $salida_producto_detalle2->valor_venta_bruto = round($valor_venta_bruto[$index],2);

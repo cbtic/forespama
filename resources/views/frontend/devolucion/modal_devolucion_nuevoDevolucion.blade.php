@@ -1075,7 +1075,7 @@ function cargarSalida(){
                 const row = `
                     <tr>
                         <td>${n}</td>
-                        <td style="width: 450px !important;display:block"><input name="id_devolucion_detalle[]" id="id_devolucion_detalle${n}" class="form-control form-control-sm" value="0" type="hidden"><select name="descripcion[]" id="descripcion${n}" class="form-control form-control-sm" onChange="verificarProductoSeleccionado(this, ${n});">${productoOptions}</select></td>
+                        <td style="width: 450px !important;display:block"><input name="id_devolucion_detalle[]" id="id_devolucion_detalle${n}" class="form-control form-control-sm" value="${devolucion.id}" type="hidden"><select name="descripcion[]" id="descripcion${n}" class="form-control form-control-sm" onChange="verificarProductoSeleccionado(this, ${n});">${productoOptions}</select></td>
                         
                         <td><select name="marca[]" id="marca${n}" class="form-control form-control-sm">${marcaOptions}</select></td>
                         <td><input name="cod_interno[]" id="cod_interno${n}" class="form-control form-control-sm" value="${devolucion.codigo}" type="text"></td>

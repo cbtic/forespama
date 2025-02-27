@@ -15,6 +15,15 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Auth;
 use Carbon\Carbon;
+use Maatwebsite\Excel\Facades\Excel;
+use Maatwebsite\Excel\Concerns\FromArray;
+use stdClass;
+use Illuminate\Support\Facades\Response;
+use Maatwebsite\Excel\Concerns\WithStyles;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
+use Maatwebsite\Excel\Concerns\WithHeadings;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
 
 class ProductosController extends Controller
 {
@@ -353,8 +362,6 @@ class ProductosController extends Controller
         return view('frontend.productos.modal_ver_productos',compact('imagen_producto'));
 		
     }
-   
-    
     
     public function obtener_producto_tipo_denominacion($tipo, $denominacion){
         
@@ -363,4 +370,117 @@ class ProductosController extends Controller
 		//dd($producto);exit();
 		return response()->json($producto);
 	}
+
+    public function exportar_listar_productos($tipo_origen_producto, $serie, $codigo, $denominacion, $estado_bien, $tipo_producto, $tiene_imagen, $estado) {
+
+		if($tipo_origen_producto==0)$tipo_origen_producto = "";
+        if($serie=="0")$serie = "";
+        if($codigo=="0")$codigo = "";
+        if($denominacion=="0")$denominacion = "";
+        if($estado_bien==0)$estado_bien = "";
+        if($tipo_producto==0)$tipo_producto = "";
+        if($tiene_imagen==0)$tiene_imagen = "";
+        if($estado==0)$estado = "";
+
+        $producto_model = new Producto;
+		$p[]=$serie;
+		$p[]=$denominacion;
+        $p[]=$codigo;
+        $p[]=$estado_bien;
+        $p[]=$tipo_origen_producto;
+        $p[]=$tiene_imagen;
+        $p[]=$estado;
+		$p[]=1;
+		$p[]=10000;
+		$data = $producto_model->listar_producto_ajax($p);
+
+		$variable = [];
+		$n = 1;
+
+		array_push($variable, array("N°","Id","Bien/Servicio","Tipo Origen Producto","Serie","Denominación","Código","Unidad Producto","Contenido","Unidad Medida","Marca","Tipo Producto","Estado Bien","F. Vencimiento","Stock Minimo","Tiene Imagen","Estado"));
+		
+		foreach ($data as $r) {
+
+            if($r->estado==1){$estado='ACTIVO';}
+            if($r->estado==0){$estado='INACTIVO';}
+
+            if($r->tiene_imagen==1){$tiene_imagen='SI';}
+            if($r->tiene_imagen==0){$tiene_imagen='NO';}
+
+			array_push($variable, array($n++,$r->id, $r->bien_servicio, $r->tipo_origen_producto, $r->numero_serie, $r->denominacion, $r->codigo, $r->unidad, $r->contenido, $r->unidad_medida, $r->marca, $r->unidad_medida_producto,$r->estado_bien, $r->fecha_vencimiento, $r->stock_minimo, $tiene_imagen, $estado));
+		}
+		
+		$export = new InvoicesExport([$variable]);
+		return Excel::download($export, 'Lista_productos.xlsx');
+		
+    }
+
+}
+
+class InvoicesExport implements FromArray, WithHeadings, WithStyles
+{
+	protected $invoices;
+
+	public function __construct(array $invoices)
+	{
+		$this->invoices = $invoices;
+	}
+
+	public function array(): array
+	{
+		return $this->invoices;
+	}
+
+    public function headings(): array
+    {
+        return ["N°","Id","Bien/Servicio","Tipo Origen Producto","Serie","Denominación","Código","Unidad Producto","Contenido","Unidad Medida","Marca","Tipo Producto","Estado Bien","F. Vencimiento","Stock Minimo","Tiene Imagen","Estado"];
+    }
+
+	public function styles(Worksheet $sheet)
+    {
+
+		$sheet->mergeCells('A1:Q1');
+
+        $sheet->setCellValue('A1', "LISTA DE PRODUCTOS - FORESPAMA");
+        $sheet->getStyle('A1:Q1')->applyFromArray([
+            'font' => [
+                'bold' => true,
+                'color' => ['rgb' => 'FFFFFF'],
+            ],
+            'fill' => [
+                'fillType' => Fill::FILL_SOLID,
+                'startColor' => ['rgb' => '246257'],
+            ],
+            'alignment' => [
+                'horizontal' => Alignment::HORIZONTAL_CENTER,
+            ],
+        ]);
+
+		$sheet->getStyle('A1')->getAlignment()->setWrapText(true);
+		$sheet->getRowDimension(1)->setRowHeight(30);
+
+        $sheet->getStyle('A2:Q2')->applyFromArray([
+            'font' => [
+                'bold' => true,
+                'color' => ['rgb' => '000000'],
+            ],
+            'fill' => [
+                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                'startColor' => ['rgb' => '2EB85C'],
+            ],
+			'alignment' => [
+			'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+    		],
+        ]);
+
+		$sheet->fromArray($this->headings(), NULL, 'A2');
+
+		/*$sheet->getStyle('L3:L'.$sheet->getHighestRow())
+		->getNumberFormat()
+		->setFormatCode(\PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_NUMBER_00);*/ //SIRVE PARA PONER 2 DECIMALES A ESA COLUMNA
+        
+        foreach (range('A', 'Q') as $col) {
+            $sheet->getColumnDimension($col)->setAutoSize(true);
+        }
+    }
 }

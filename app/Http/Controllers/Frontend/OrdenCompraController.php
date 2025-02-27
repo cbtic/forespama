@@ -188,8 +188,11 @@ class OrdenCompraController extends Controller
 
         if($request->id == 0){
             $orden_compra = new OrdenCompra;
+            $orden_compra_model = new OrdenCompra;
+		    $codigo_orden_compra = $orden_compra_model->getCodigoOrdenCompra($request->tipo_documento);
         }else{
             $orden_compra = OrdenCompra::find($request->id);
+            $codigo_orden_compra = $request->numero_orden_compra;
         }
 
         $item = $request->input('item');
@@ -211,9 +214,6 @@ class OrdenCompraController extends Controller
         $porcentaje = $request->input('porcentaje');
         $id_orden_compra_detalle =$request->id_orden_compra_detalle;
 
-        $orden_compra_model = new OrdenCompra;
-		$codigo_orden_compra = $orden_compra_model->getCodigoOrdenCompra($request->tipo_documento);
-        
         $orden_compra->id_empresa_compra = $request->empresa_compra;
         $orden_compra->id_empresa_vende = $request->empresa_vende;
         $orden_compra->fecha_orden_compra = $request->fecha_orden_compra;
@@ -843,9 +843,7 @@ class OrdenCompraController extends Controller
 		$export = new InvoicesExport([$variable]);
 		return Excel::download($export, 'Reporte_orden_compra.xlsx');
 		
-    }
-
-   
+    }  
 
 }
 

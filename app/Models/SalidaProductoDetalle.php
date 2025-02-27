@@ -34,7 +34,7 @@ class SalidaProductoDetalle extends Model
         inner join productos p on spd.id_producto = p.id
         inner join salida_productos sp on spd.id_salida_productos = sp.id
         left join marcas m on spd.id_marca = m.id 
-        inner join tabla_maestras tm2 on spd.id_estado_productos ::int = tm2.codigo::int and tm2.tipo = '56'
+        left join tabla_maestras tm2 on spd.id_estado_productos ::int = tm2.codigo::int and tm2.tipo = '56'
         left join tabla_maestras tm3 on spd.id_um ::int = tm3.codigo::int and tm3.tipo = '43'
         inner join empresas e on sp.id_empresa_compra = e.id
         inner join orden_compras oc on sp.id_orden_compra = oc.id 
@@ -52,7 +52,7 @@ class SalidaProductoDetalle extends Model
         from salida_producto_detalles spd 
         inner join productos p on spd.id_producto = p.id
         left join marcas m on spd.id_marca = m.id
-        inner join tabla_maestras tm on spd.id_estado_productos ::int = tm.codigo::int and tm.tipo = '4'
+        left join tabla_maestras tm on spd.id_estado_productos ::int = tm.codigo::int and tm.tipo = '4'
         inner join tabla_maestras tm2 on spd.id_um ::int = tm2.codigo::int and tm2.tipo = '43'
         where id_salida_productos ='".$id."'
         and spd.estado='1'";
@@ -68,7 +68,8 @@ class SalidaProductoDetalle extends Model
         inner join salida_producto_detalles spd on sp.id=spd.id_salida_productos 
         where id_orden_compra ='".$id_orden_compra."'
         and spd.id_producto='".$id_producto."'
-        and spd.estado='1'";
+        and spd.estado='1'
+        and spd.tipo_devolucion ='1'";
 
 		$data = DB::select($cad);
         //return $data;

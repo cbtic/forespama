@@ -46,6 +46,11 @@ $(document).ready(function () {
 	$('#tipo_producto_bus').select2({
 		width : "100%"
 	})
+
+	$('#btnDescargar').on('click', function () {
+		DescargarArchivosExcel()
+
+	});
 		
 	datatablenew();
 
@@ -373,4 +378,27 @@ function modalVerAnaqueles(id){
 			}
 	});
 
+}
+
+function DescargarArchivosExcel(){
+	
+	var tipo_origen_producto = $('#tipo_origen_producto_bus').val();
+	var serie = $('#serie_bus').val();
+	var codigo = $('#codigo_bus').val();
+	var denominacion = $('#denominacion_bus').val();
+	var estado_bien = $('#estado_bien_bus').val();
+	var tipo_producto = $('#tipo_producto_bus').val();
+	var tiene_imagen = $('#tiene_imagen_bus').val();
+	var estado = $('#estado_bus').val();
+
+	if (tipo_origen_producto == "")tipo_origen_producto = 0;
+	if (serie == "")serie = "0";
+	if (codigo == "")codigo = "0";
+	if (denominacion == "")denominacion = "0";
+	if (estado_bien == "")estado_bien = 0;
+	if (tipo_producto == "")tipo_producto = 0;
+	if (tiene_imagen == "")tiene_imagen = 0;
+	if (estado == "")estado = 0;
+	
+	location.href = '/productos/exportar_listar_productos/'+tipo_origen_producto+'/'+serie+'/'+codigo+'/'+denominacion+'/'+estado_bien+'/'+tipo_producto+'/'+tiene_imagen+'/'+estado;
 }
