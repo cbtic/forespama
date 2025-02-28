@@ -669,7 +669,7 @@ function cargarDetalle(){
                         <td><select name="unidad[]" id="unidad${n}" class="form-control form-control-sm">${unidadMedidaOptions}</select></td>
                         <td><input name="cantidad_ingreso[]" id="cantidad_ingreso${n}" class="cantidad_ingreso form-control form-control-sm" value="${devolucion.cantidad}" type="text" oninput="calcularCantidadPendiente(this);calcularSubTotal(this);calcularPrecioUnitario(this)"></td>
                         <td><input name="precio_unitario[]" id="precio_unitario${n}" class="precio_unitario form-control form-control-sm" value="${parseFloat(devolucion.precio_venta || 0).toFixed(2)}" type="text" oninput="calcularSubTotal(this);calcularPrecioUnitario(this)"></td>
-                        <td><input name="precio_unitario_[]" id="precio_unitario_${n}" class="precio_unitario_ form-control form-control-sm" value="${parseFloat(devolucion.precio_unitario || 0).toFixed(2)}" type="text" oninput="calcularPrecioUnitario(this)"></td>
+                        <td><input name="precio_unitario_[]" id="precio_unitario_${n}" class="precio_unitario_ form-control form-control-sm" value="${parseFloat(devolucion.costo || 0).toFixed(2)}" type="text" oninput="calcularPrecioUnitario(this)"></td>
                         <td><input name="valor_venta_bruto[]" id="valor_venta_bruto${n}" class="valor_venta_bruto form-control form-control-sm" value="${parseFloat(devolucion.valor_venta_bruto || 0).toFixed(2)}" type="text" oninput="calcularSubTotal(this)"></td>
                         <td><input name="valor_venta[]" id="valor_venta${n}" class="valor_venta form-control form-control-sm" value="${parseFloat(devolucion.valor_venta || 0).toFixed(2)}" type="text" oninput="calcularSubTotal(this)"></td>
 
@@ -904,29 +904,43 @@ function fn_save_devolucion(){
         bootbox.alert(msg);
         return false;
     }else{
-        var msgLoader = "";
-        msgLoader = "Procesando, espere un momento por favor";
-        var heightBrowser = $(window).width()/2;
-        $('.loader').css("opacity","0.8").css("height",heightBrowser).html("<div id='Grd1_wrapper' class='dataTables_wrapper'><div id='Grd1_processing' class='dataTables_processing panel-default'>"+msgLoader+"</div></div>");
-        $('.loader').show();
-
-        $.ajax({
-                url: "/devolucion/send_devolucion",
-                type: "POST",
-                data : $("#frmDevolucion").serialize(),
-                success: function (result) {
-                    //alert(result.id)
-                    //$('#openOverlayOpc').modal('hide');
-                    datatablenew();
-                    $('.loader').hide();
-                    bootbox.alert("Se guard&oacute; satisfactoriamente"); 
-                    /*if (result.id>0) {
-                        modalOrdenCompra(result.id);
-                    }*/
-                   
+        bootbox.confirm({ 
+            size: "small",
+            message: "&iquest;Ha verificado que los productos que se est&aacute;n devolviendo son los correctos?", 
+            callback: function(result){
+                if (result==true) {
+                    save_devolucion();
                 }
+            }
         });
     }
+}
+
+function save_devolucion(){
+
+    var msgLoader = "";
+    msgLoader = "Procesando, espere un momento por favor";
+    var heightBrowser = $(window).width()/2;
+    $('.loader').css("opacity","0.8").css("height",heightBrowser).html("<div id='Grd1_wrapper' class='dataTables_wrapper'><div id='Grd1_processing' class='dataTables_processing panel-default'>"+msgLoader+"</div></div>");
+    $('.loader').show();
+
+    $.ajax({
+            url: "/devolucion/send_devolucion",
+            type: "POST",
+            data : $("#frmDevolucion").serialize(),
+            success: function (result) {
+                //alert(result.id)
+                $('#openOverlayOpc').modal('hide');
+                datatablenew();
+                $('.loader').hide();
+                bootbox.alert("Se guard&oacute; satisfactoriamente"); 
+                /*if (result.id>0) {
+                    modalOrdenCompra(result.id);
+                }*/
+                
+            }
+    });
+    
 }
 
 function obtenerCodigo(){
@@ -1192,14 +1206,14 @@ function cargarSalida(){
                             Fecha Devoluci&oacute;n
                         </div>
                         <div class="col-lg-2">
-                            <input id="fecha_devolucion" name="fecha_devolucion" on class="form-control form-control-sm"  value="<?php echo isset($devolucion) && $devolucion->fecha ? $devolucion->fecha : date('Y-m-d'); ?>" type="text">
+                            <input id="fecha_devolucion" name="fecha_devolucion" on class="form-control form-control-sm"  value="<?php echo isset($salida) && $salida->fecha_salida ? $salida->fecha_salida : date('Y-m-d'); ?>" type="text">
                         </div>
-                        <div class="col-lg-2">
+                        <!--<div class="col-lg-2">
                             N&uacute;mero Devoluci&oacute;n
                         </div>
                         <div class="col-lg-2">
-                            <input id="numero_devolucion" name="numero_devolucion" on class="form-control form-control-sm"  value="<?php if($id>0){echo $devolucion->numero_devolucion;}?>" type="text" readonly="readonly">
-                        </div>
+                            <input id="numero_devolucion" name="numero_devolucion" on class="form-control form-control-sm"  value="<?php //if($id>0){echo $salida->numero_devolucion;}?>" type="text" readonly="readonly">
+                        </div>-->
                         <div class="col-lg-2" id="almacen_" style="color:red; font-weight:bold">
                             Almacen Destino
                         </div>
@@ -1208,26 +1222,26 @@ function cargarSalida(){
                                 <option value="">--Seleccionar--</option>
                                 <?php
                                 foreach ($almacen_destino as $row){?>
-                                    <option value="<?php echo $row->id ?>" <?php if($row->id==$devolucion->id_almacen)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                    <option value="<?php echo $row->id ?>" <?php if($row->id==$salida->id_almacen_salida)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
                                     <?php 
                                 }
                                 ?>
                             </select>
                         </div>
-                        <div class="col-lg-2">
+                        <!--<div class="col-lg-2">
                             Aplica IGV
                         </div>
                         <div class="col-lg-2">
                             <select name="igv_compra" id="igv_compra" class="form-control form-control-sm" onchange="">
                                 <option value="">--Seleccionar--</option>
                                 <?php
-                                foreach ($igv_compra as $row){?>
-                                    <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$devolucion->igv_compra)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                //foreach ($igv_compra as $row){?>
+                                    <option value="<?php //echo $row->codigo ?>" <?php //if($row->codigo==$devolucion->igv_compra)echo "selected='selected'"?>><?php //echo $row->denominacion ?></option>
                                     <?php 
-                                }
+                                //}
                                 ?>
                             </select>
-                        </div>
+                        </div>-->
                         <div class="col-lg-2">
                             Moneda
                         </div>
@@ -1236,7 +1250,7 @@ function cargarSalida(){
                                 <option value="">--Seleccionar--</option>
                                 <?php
                                 foreach ($moneda as $row){?>
-                                    <option value="<?php echo $row->codigo; ?>" <?php echo ($id > 0 && $row->codigo == $devolucion->id_moneda) ? "selected='selected'" : (($row->codigo == 1) ? "selected='selected'" : ""); ?>><?php echo $row->denominacion ?></option>
+                                    <option value="<?php echo $row->codigo; ?>" <?php echo ($id > 0 && $row->codigo == $salida->id_moneda) ? "selected='selected'" : (($row->codigo == 1) ? "selected='selected'" : ""); ?>><?php echo $row->denominacion ?></option>
                                     <?php 
                                 }
                                 ?>
@@ -1257,7 +1271,7 @@ function cargarSalida(){
                                 <option value="">--Seleccionar--</option>
                                 <?php
                                 foreach ($motivo_devolucion as $row){?>
-                                    <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$devolucion->motivo_devolucion)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                    <option value="<?php echo $row->codigo ?>" <?php //if($row->codigo==$devolucion->motivo_devolucion)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
                                     <?php 
                                 }
                                 ?>
@@ -1320,7 +1334,7 @@ function cargarSalida(){
                         <div class="col-sm-12 controls">
                             <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
                                 
-                                <?php if($id_user==$devolucion->id_usuario_inserta and $id==0){?>
+                                <?php if($id_user==$salida->id_usuario_inserta and $id==0){?>
                                     <a href="javascript:void(0)" onClick="fn_save_devolucion()" class="btn btn-sm btn-success" style="margin-right:10px">Guardar</a>
                                 <?php }?>
                                 <?php if($id==0){?>

@@ -409,7 +409,7 @@ label.form-control-sm{
 							<th>Empresa</th>
 							<th>N° OC Cliente</th>
                             <th>Fecha</th>
-							<th>N&uacute;mero Devolui&oacute;n</th>
+							<!--<th>N&uacute;mero Devolui&oacute;n</th>-->
                             <th>Acciones</th>
                         </tr>
                         </thead>

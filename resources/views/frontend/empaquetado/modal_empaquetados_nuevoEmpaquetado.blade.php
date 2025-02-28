@@ -405,7 +405,8 @@ function fn_save_empaquetado(){
         bootbox.alert(msg);
         return false;
     }else{
-        bootbox.confirm({ 
+        save_empaquetado();
+        /*bootbox.confirm({ 
             size: "small",
             message: "&iquest;Est&aacute; seguro que son las cantidades correctas? Porque no se podr&aacute; editar.", 
             callback: function(result){
@@ -413,7 +414,7 @@ function fn_save_empaquetado(){
                     save_empaquetado();
                 }
             }
-        });
+        });*/
         
     }
 }

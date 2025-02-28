@@ -150,9 +150,9 @@ function datatablenew(){
 				
                 {
                 "mRender": function (data, type, row) {
-                	var numero_salida = "";
-					if(row.numero_salida!= null)numero_salida = row.numero_salida;
-					return numero_salida;
+                	var codigo = "";
+					if(row.codigo!= null)codigo = row.codigo;
+					return codigo;
                 },
                 "bSortable": true,
                 "aTargets": [2]
@@ -179,14 +179,14 @@ function datatablenew(){
 
 				{
 				"mRender": function (data, type, row) {
-					var fecha = "";
-					if(row.fecha!= null)fecha = row.fecha;
-					return fecha;
+					var fecha_movimiento = "";
+					if(row.fecha_movimiento!= null)fecha_movimiento = row.fecha_movimiento;
+					return fecha_movimiento;
 				},
 				"bSortable": true,
 				"aTargets": [5]
 				},
-				{
+				/*{
 				"mRender": function (data, type, row) {
 					var numero_devolucion = "";
 					if(row.numero_devolucion!= null)numero_devolucion = row.numero_devolucion;
@@ -194,7 +194,7 @@ function datatablenew(){
 				},
 				"bSortable": true,
 				"aTargets": [6]
-				},
+				},*/
 				{
 					"mRender": function (data, type, row) {
 						/*var estado = "";
@@ -226,7 +226,7 @@ function datatablenew(){
 						return html;
 					},
 					"bSortable": false,
-					"aTargets": [7],
+					"aTargets": [6],
 				},
 
             ]

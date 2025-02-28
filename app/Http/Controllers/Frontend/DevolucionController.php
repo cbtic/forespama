@@ -70,12 +70,14 @@ class DevolucionController extends Controller
         $almacen_model = new Almacene;
 		
 		if($id>0){
-			$devolucion = Devolucione::find($id);
-			$salida = SalidaProducto::find($devolucion->id_salida);
+			$salida = SalidaProducto::find($id);
+			/*$devolucion = Devolucione::find($id);
+			$salida = SalidaProducto::find($devolucion->id_salida);*/
 			$orden_compra = OrdenCompra::find($salida->id_orden_compra);
 		}else{
-			$devolucion = new Devolucione;
 			$salida = new SalidaProducto;
+			/*$devolucion = new Devolucione;
+			$salida = new SalidaProducto;*/
 			$orden_compra = new OrdenCompra;
 		}
 
@@ -93,7 +95,7 @@ class DevolucionController extends Controller
         $empresa = Empresa::All();
 		//var_dump($id);exit();
 
-		return view('frontend.devolucion.modal_devolucion_nuevoDevolucion',compact('id','devolucion','unidad_medida','moneda','estado_bien','tipo_producto','unidad','marca','producto','tipo_documento','almacen_destino','id_user','empresa','igv_compra','motivo_devolucion','salida','orden_compra'));
+		return view('frontend.devolucion.modal_devolucion_nuevoDevolucion',compact('id','salida','unidad_medida','moneda','estado_bien','tipo_producto','unidad','marca','producto','tipo_documento','almacen_destino','id_user','empresa','igv_compra','motivo_devolucion','orden_compra'));
 
     }
 
@@ -468,12 +470,12 @@ class DevolucionController extends Controller
 	public function cargar_detalle($id)
     {
 
-        $devolucion_model = new Devolucione;
+        $salida_model = new SalidaProductoDetalle;
         $marca_model = new Marca;
         $producto_model = new Producto;
         $tablaMaestra_model = new TablaMaestra;
 
-        $devolucion = $devolucion_model->getDetalleDevolucionIdCargar($id);
+        $devolucion = $salida_model->getDetalleProductoId($id);
         $marca = $marca_model->getMarcaAll();
         $producto = $producto_model->getProductoAll();
         $unidad_medida = $tablaMaestra_model->getMaestroByTipo(43);
