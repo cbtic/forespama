@@ -133,11 +133,8 @@ class OrdenCompra extends Model
             inner join salida_producto_detalles spd on spd.id_salida_productos = sp.id and spd.id_producto = pd.id_producto 
             inner join productos pr on pr.id = pd.id_producto
             inner join tabla_maestras um on um.codigo::int = pd.id_unidad_medida and um.tipo = '43'
-            where sp.id = ".$id."           
-            and pd.estado = '1' 
-            and sp.estado = '1'
-            and spd.estado = '1'
-            and sp.cerrado= '2'
+            where sp.id = ".$id." and pd.estado = '1' and sp.estado = '1' and spd.estado = '1' and sp.cerrado= '2'
+            and spd.tipo_devolucion= 3
             order by pd.id ";
     
     //echo $cad;
@@ -187,7 +184,7 @@ class OrdenCompra extends Model
                 left join empresas e  on e.id = o.id_empresa_compra 
                 inner join salida_productos sp on sp.id_orden_compra = o.id 
                 where 1=1 
-                and o.estado = '1' and o.cerrado = '2' and o.id_tipo_documento = 2
+                and o.estado = '1' and o.cerrado = '2' and o.id_tipo_documento = 2 and sp.tipo_devolucion= 3
                 and sp.codigo = '".$numero."' 
                 and (select count(*) 
             		FROM  orden_compra_detalles o_
