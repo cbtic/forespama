@@ -431,6 +431,8 @@ label.form-control-sm{
 							<th>Costo Salidas</th>
 							<th>Total Salida</th>-->
 							<th>Saldos</th>
+							<th>Stock Comprometido</th>
+							<th>Cantidad Disponible</th>
 							<th>Unidad Medida</th>
 							<!--<th>Costo saldos</th>-->
                             <th>Tipo Producto</th>

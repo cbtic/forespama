@@ -542,9 +542,17 @@ function datatablenew_consulta_producto(){
 				if (saldos) {
 					totalSaldo = parseFloat(saldos);
 				}
+				/*if (cantidad_orden_compra) {
+					totalCantidadOrdenCompra = parseFloat(cantidad_orden_compra);
+				}*/
+				/*if (saldo_final) {
+					totalSaldoFinal = parseFloat(saldo_final);
+				}*/
 			});
 
 			$('#tblKardexConsultaProductos tfoot tr').html('<td colspan="3"><b>Total</b></td><td><b>' + totalSaldo + '</b></td><td colspan="2"></td>');
+			//$('#tblKardexConsultaProductos tfoot tr').html('<td colspan="5"><b>Total</b></td><td><b>' + totalCantidadOrdenCompra + '</b></td><td colspan="2"></td>');
+			//$('#tblKardexConsultaProductos tfoot tr').html('<td colspan="7"><b>Total</b></td><td><b>' + totalSaldoFinal + '</b></td><td colspan="2"></td>');
 			//console.log("Total Saldos:", totalSaldo);
             $('[data-toggle="tooltip"]').tooltip();
 			$('#tblKardexConsultaProductos tbody tr').removeClass('fila-par');
@@ -627,6 +635,26 @@ function datatablenew_consulta_producto(){
 				"bSortable": true,
 				"aTargets": [3]
 				},
+
+				{
+				"mRender": function (data, type, row) {
+					var cantidad_orden_compra = "";
+					if(row.cantidad_orden_compra!= null)cantidad_orden_compra = row.cantidad_orden_compra;
+					return cantidad_orden_compra;
+				},
+				"bSortable": true,
+				"aTargets": [4]
+				},
+
+				{
+					"mRender": function (data, type, row) {
+						var saldo_final = "";
+						if(row.saldo_final!= null)saldo_final = row.saldo_final;
+						return saldo_final;
+					},
+					"bSortable": true,
+					"aTargets": [5]
+					},
 				
 				{
 				"mRender": function (data, type, row) {
@@ -635,7 +663,7 @@ function datatablenew_consulta_producto(){
 					return unidad_medida;
 				},
 				"bSortable": true,
-				"aTargets": [4]
+				"aTargets": [6]
 				},
 
 				{
@@ -645,7 +673,7 @@ function datatablenew_consulta_producto(){
 					return tipo_producto;
 				},
 				"bSortable": true,
-				"aTargets": [5]
+				"aTargets": [7]
 				},
 
                 {
@@ -655,7 +683,7 @@ function datatablenew_consulta_producto(){
 					return almacen_kardex;
                 },
                 "bSortable": true,
-                "aTargets": [6]
+                "aTargets": [8]
                 },
 				
 				{
@@ -667,7 +695,7 @@ function datatablenew_consulta_producto(){
 						return html;
 					},
 					"bSortable": true,
-					"aTargets": [7]
+					"aTargets": [9]
 				},
 				
             ]
