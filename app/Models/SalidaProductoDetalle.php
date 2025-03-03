@@ -29,7 +29,11 @@ class SalidaProductoDetalle extends Model
         $cad = "select spd.id,  ROW_NUMBER() OVER (PARTITION BY spd.id_salida_productos ) AS row_num, spd.numero_serie, spd.id_producto, p.codigo, spd.id_marca, p.id_unidad_medida, spd.fecha_vencimiento, spd.id_um, spd.id_estado_productos id_estado_bien, spd.cantidad, spd.cantidad, spd.cantidad, '12' stock_actual, spd.costo, spd.sub_total , spd.igv, spd.total, sp.id_almacen_salida, p.denominacion nombre_producto, m.denominiacion nombre_marca, tm2.denominacion nombre_estado_bien, tm3.denominacion nombre_unidad_medida, sp.id_empresa_compra, e.ruc, e.razon_social, oc.numero_orden_compra_cliente,
         (select COALESCE(STRING_AGG(DISTINCT t.denominacion ::TEXT, ', '), '') from tienda_detalle_orden_compras tdoc
         inner join tiendas t on tdoc.id_tienda = t.id
-        where tdoc.id_orden_compra = oc.id) tiendas, spd.valor_venta_bruto, spd.precio_venta, spd.valor_venta, spd.descuento, spd.id_descuento 
+        where tdoc.id_orden_compra = oc.id) tiendas, spd.valor_venta_bruto, spd.precio_venta, spd.valor_venta, spd.descuento, spd.id_descuento, p.peso,
+        (select distinct t2.direccion from tienda_detalle_orden_compras tdoc2
+        inner join tiendas t2 on tdoc2.id_tienda = t2.id
+        where tdoc2.id_orden_compra = sp.id_orden_compra
+        limit 1)
         from salida_producto_detalles spd 
         inner join productos p on spd.id_producto = p.id
         inner join salida_productos sp on spd.id_salida_productos = sp.id

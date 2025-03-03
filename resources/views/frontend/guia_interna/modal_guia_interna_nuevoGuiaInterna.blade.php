@@ -714,6 +714,7 @@ function cargar_detalle_documento(id_documento){
 
             let entrada = result.entrada_producto[0];
             let n = 1;
+            let peso_total = 0;
 
             result.entrada_producto.forEach(entrada_producto => {
 
@@ -771,32 +772,42 @@ function cargar_detalle_documento(id_documento){
                 });*/
 
                 n++;
+
+                peso_total += parseInt(entrada_producto.peso) || 0;
                 
                 //total_acumulado += parseFloat(orden_compra.total);
                 });
                 //$('#totalGeneral').text(total_acumulado.toFixed(2));
-            
+                //alert(peso_total);
                 $('#ruc').val("");
                 $('#destinatario_nombre').val("");
                 $('#destinatario').val("");
                 $('#orden_compra_cliente').val("");
                 $('#tiendas_orden_compra').val("");
+                $('#peso').val("");
+                $('#punto_llegada_input').val("");
 
                 $("#ruc").attr("readonly",false);
                 $("#destinatario_nombre").attr("readonly",false);
                 $("#orden_compra_cliente").attr("readonly",false);
                 $("#tiendas_orden_compra").attr("readonly",false);
+                $("#peso").attr("readonly",false);
+                $("#punto_llegada_input").attr("readonly",false);
                 
                 $('#ruc').val(entrada.ruc);
                 $('#destinatario_nombre').val(entrada.razon_social);
                 $('#destinatario').val(entrada.id_empresa_compra);
                 $('#orden_compra_cliente').val(entrada.numero_orden_compra_cliente);
                 $('#tiendas_orden_compra').val(entrada.tiendas);
+                $('#peso').val(peso_total);
+                $('#punto_llegada_input').val(entrada.direccion);
 
                 $("#ruc").attr("readonly",true);
                 $("#destinatario_nombre").attr("readonly",true);
                 $("#orden_compra_cliente").attr("readonly",true);
                 $("#tiendas_orden_compra").attr("readonly",true);
+                $("#peso").attr("readonly",true);
+                $("#punto_llegada_input").attr("readonly",true);
 
                 //$("#destinatario").select2({ width: '100%' });
                 

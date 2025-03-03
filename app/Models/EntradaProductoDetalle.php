@@ -34,7 +34,7 @@ class EntradaProductoDetalle extends Model
         $cad = "select epd.id,  ROW_NUMBER() OVER (PARTITION BY epd.id_entrada_productos ) AS row_num, epd.numero_serie, epd.id_producto, p.codigo, epd.id_marca, p.id_unidad_medida, epd.fecha_fabricacion, epd.fecha_vencimiento, epd.id_um, epd.id_estado_bien , epd.cantidad, epd.cantidad, epd.cantidad, '12' stock_actual, epd.costo, epd.sub_total , epd.igv , epd.total, ep.id_almacen_destino, p.denominacion nombre_producto, m.denominiacion nombre_marca, tm2.denominacion nombre_estado_bien, tm3.denominacion nombre_unidad_medida, ep.id_empresa_compra, e.ruc, e.razon_social, oc.numero_orden_compra_cliente,
         (select COALESCE(STRING_AGG(DISTINCT t.denominacion ::TEXT, ', '), '') from tienda_detalle_orden_compras tdoc
         inner join tiendas t on tdoc.id_tienda = t.id
-        where tdoc.id_orden_compra = oc.id) tiendas
+        where tdoc.id_orden_compra = oc.id) tiendas, p.peso
         from entrada_producto_detalles epd 
         inner join productos p on epd.id_producto = p.id
         inner join entrada_productos ep on epd.id_entrada_productos = ep.id

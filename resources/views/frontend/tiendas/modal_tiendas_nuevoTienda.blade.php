@@ -316,6 +316,12 @@ function datatableTiendaDetalle(){
                                         </select>
                                     </div>
                                 </div>
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <label class="control-label form-control-sm">Direcci&oacute;n</label>
+                                        <input id="direccion" name="direccion" on class="form-control form-control-sm"  value="<?php echo $tienda->direccion?>" type="text" style="text-transform: uppercase;">
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         </div>

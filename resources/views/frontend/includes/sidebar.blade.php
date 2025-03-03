@@ -206,7 +206,7 @@
 
                 @can('Empaquetado')
 				<li class="c-sidebar-nav-item">
-                    <x-utils.link :href="route('frontend.empaquetado.create_empaquetado')" class="c-sidebar-nav-link" :text="__('Empaquetado')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+                    <x-utils.link :href="route('frontend.empaquetado.create_empaquetado')" class="c-sidebar-nav-link" :text="__('Transformacion')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
                 </li>
 				@endif
 

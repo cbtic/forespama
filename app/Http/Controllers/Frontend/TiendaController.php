@@ -105,6 +105,7 @@ class TiendaController extends Controller
         $tienda->id_zona = $request->zona;
         $tienda->id_tienda_s_m = $request->tienda_sm;
         $tienda->id_zona_especifica = $request->zona_especifica;
+        $tienda->direccion = $request->direccion;
         $tienda->estado = 1;
 		$tienda->id_usuario_inserta = $id_user;
 		$tienda->save();
