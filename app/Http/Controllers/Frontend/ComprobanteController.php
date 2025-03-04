@@ -2754,7 +2754,7 @@ class ComprobanteController extends Controller
  
 		$data["items"] = $items;
 		$data["anulado"] = false;
-		$data["declare"] = "1"; // 0->dechlare 1>declare instante
+		$data["declare"] = "0"; // 0->dechlare 1>declare instante
 		$data["version"] = "2.1";
 		$data["adjuntos"] = [];
 		$data["anticipos"] = [];
@@ -3608,7 +3608,7 @@ class ComprobanteController extends Controller
 
 
         $data["anulado"] =false;
-        $data["declare"] ="1";
+        $data["declare"] ="0";
         $data["adjuntos"] =[];
         $data["esFicticio"] =false;
         $data["keepNumber"] ="false";
