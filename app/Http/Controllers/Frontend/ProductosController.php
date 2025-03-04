@@ -149,6 +149,7 @@ class ProductosController extends Controller
         $producto->id_unidad_producto = $request->unidad_producto;
         $producto->id_marca = $request->marca;
         $producto->bien_servicio = $request->bien_servicio;
+        $producto->peso = $request->peso;
         //$producto->numero_corrrelativo = $numero_correlativo;
 		$producto->estado = 1;
 		$producto->save();

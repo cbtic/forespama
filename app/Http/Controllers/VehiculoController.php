@@ -292,6 +292,7 @@ class VehiculoController extends Controller
 			$vehiculo->control = $request->control;
 			$vehiculo->bloqueado = $request->bloqueado;
 			$vehiculo->id_marca = $request->marca;
+			$vehiculo->constancia_inscripcion = $request->constancia_inscripcion_mantenimiento;
 			$vehiculo->id_usuario_inserta = $id_user;
 			$vehiculo->id_usuario_actualiza = $id_user;
 			$vehiculo->estado = "1";
@@ -328,6 +329,7 @@ class VehiculoController extends Controller
 			$vehiculo->exonerado = $request->exonerado;
 			$vehiculo->control = $request->control;
 			$vehiculo->bloqueado = $request->bloqueado;
+			$vehiculo->constancia_inscripcion = $request->constancia_inscripcion_mantenimiento;
 			$vehiculo->id_marca = $request->marca;
 			$vehiculo->id_usuario_actualiza = $id_user;
 			$vehiculo->save();

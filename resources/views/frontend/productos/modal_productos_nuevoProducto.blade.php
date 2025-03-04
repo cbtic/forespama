@@ -307,25 +307,47 @@ function limpiar(){
 }
 
 function fn_save_producto(){
+
+    var msg = "";
+
+    var tipo_origen_producto = $('#tipo_origen_producto').val();
+    var bien_servicio = $('#bien_servicio').val();
+    var denominacion = $('#denominacion').val();
+    var codigo = $('#codigo').val();
+    var peso = $('#peso').val();
 	
-	$.ajax({
-			url: "/productos/send_producto",
-            type: "POST",
-            data : $("#frmProducto").serialize(),
-			success: function (result) {
-				//alert(result);
-                if (result.success) {
-                    bootbox.alert(result.success, function() {
-                        $('#openOverlayOpc').modal('hide');
-                        //bootbox.alert("Se guard&oacute; satisfactoriamente"); 
-                        //window.location.reload();
-                        datatablenew();
-                    });
-                } else if (result.error) {
-                    bootbox.alert(result.error);
-                }
-            },
-    });
+    if(tipo_origen_producto==""){msg+="Ingrese el Tipo de Origen del Producto <br>";}
+    if(bien_servicio==""){msg+="Ingrese el Bien o Servicio del Producto <br>";}
+    if(denominacion==""){msg+="Ingrese la Denominacion del Producto <br>";}
+    if(codigo==""){msg+="Ingrese el Codigo del Producto <br>";}
+    if(peso==""){msg+="Ingrese el Peso del Producto <br>";}
+
+    if(msg!=""){
+
+        bootbox.alert(msg);
+        return false;
+
+    }else{
+
+        $.ajax({
+                url: "/productos/send_producto",
+                type: "POST",
+                data : $("#frmProducto").serialize(),
+                success: function (result) {
+                    //alert(result);
+                    if (result.success) {
+                        bootbox.alert(result.success, function() {
+                            $('#openOverlayOpc').modal('hide');
+                            //bootbox.alert("Se guard&oacute; satisfactoriamente");
+                            //window.location.reload();
+                            datatablenew();
+                        });
+                    } else if (result.error) {
+                        bootbox.alert(result.error);
+                    }
+                },
+        });
+    }
 }
 
 function DeleteImagen(obj) {
@@ -544,6 +566,12 @@ function cargarImagenes() {
                                         <div class="form-group">
                                             <label class="control-label form-control-sm">Stock M&iacute;nimo</label>
                                             <input id="stock_minimo" name="stock_minimo" on class="form-control form-control-sm"  value="<?php echo $producto->stock_minimo?>" type="text">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="form-group">
+                                            <label class="control-label form-control-sm">Peso</label>
+                                            <input id="peso" name="peso" on class="form-control form-control-sm"  value="<?php echo $producto->peso?>" type="text">
                                         </div>
                                     </div>
                                 </div>

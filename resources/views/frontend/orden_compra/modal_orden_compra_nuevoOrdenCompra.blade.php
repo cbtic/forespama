@@ -27,6 +27,14 @@
     height: auto !important;
 }
 
+.modal-datos_pedido .modal-dialog {
+    width: 65% !important;
+}
+
+.modal-datos_pedido .modal-body {
+    height: auto !important;
+}
+
 .custom-select2-dropdown {
     width: 700px !important; 
 }
@@ -1012,6 +1020,20 @@ function modal_tiendas_orden_compra(id){
 	});
 }
 
+function modal_datos_pedido_orden_compra(id){
+	
+	var id = $('#id').val();
+
+	$.ajax({
+        url: "/orden_compra/modal_datos_pedido_orden_compra/"+id,
+        type: "GET",
+        success: function (result) {
+                $("#diveditpregOpc3").html(result);
+                $('#openOverlayOpc3').modal('show');
+        }
+	});
+}
+
 $('#moneda').on('change', function(){
 
     var descripcion = $('#moneda option:selected').text();
@@ -1309,6 +1331,9 @@ function obtenerEntradaSalida(){
                                 <?php
                                         }
                                 ?>
+
+                                <button style="font-size:12px;margin-left:10px;" type="button" class="btn btn-sm btn-secondary" data-toggle="modal" onclick="modal_datos_pedido_orden_compra()">Agregar Datos Pedido</button>
+                                
                                 <button style="font-size:12px;margin-left:10px" type="button" class="btn btn-sm btn-primary" data-toggle="modal" onclick="pdf_documento()" ><i class="fa fa-edit"></i>Imprimir</button>
                                 <button style="font-size:12px;margin-left:10px; margin-right:100px" type="button" class="btn btn-sm btn-warning" data-toggle="modal" onclick="pdf_guia()" ><i class="fa fa-edit"></i>Imprimir Gu&iacute;a Remisi&oacute;n Electronica</button>
                                 <!--<a href="javascript:void(0)" onClick="fn_pdf_documento()" class="btn btn-sm btn-primary" style="margin-right:100px">Imprimir</a>-->
@@ -1345,21 +1370,38 @@ function obtenerEntradaSalida(){
 <!-- /.content-wrapper -->
 
 <div id="openOverlayOpc2" class="modal fade modal-tienda" tabindex="-1" role="dialog">
-	  <div class="modal-dialog" >
-	
-		<div id="id_content_OverlayoneOpc2" class="modal-content" style="padding: 0px;margin: 0px">
-		
-		  <div class="modal-body" style="padding: 0px;margin: 0px">
-	
-				<div id="diveditpregOpc2"></div>
-	
-		  </div>
-		
-		</div>
-	
-	  </div>
-		
-	</div>
+    <div class="modal-dialog" >
+
+        <div id="id_content_OverlayoneOpc2" class="modal-content" style="padding: 0px;margin: 0px">
+        
+            <div class="modal-body" style="padding: 0px;margin: 0px">
+
+                <div id="diveditpregOpc2"></div>
+
+            </div>
+        
+        </div>
+
+    </div>
+    
+</div>
+
+<div id="openOverlayOpc3" class="modal fade modal-datos_pedido" tabindex="-1" role="dialog">
+    <div class="modal-dialog" >
+
+        <div id="id_content_OverlayoneOpc3" class="modal-content" style="padding: 0px;margin: 0px">
+        
+            <div class="modal-body" style="padding: 0px;margin: 0px">
+
+                <div id="diveditpregOpc3"></div>
+
+            </div>
+        
+        </div>
+
+    </div>
+    
+</div>
 
     
 <script type="text/javascript">

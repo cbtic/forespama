@@ -16,7 +16,27 @@ begin
 	
 	p_pagina=(p_pagina::Integer-1)*p_limit::Integer;
 
-	v_campos=' DISTINCT ON  (k.id_producto, k.id_almacen_destino ) k.*, p.*, a.denominacion almacen_kardex, tm.denominacion unidad_medida, tm2.denominacion tipo_producto ';
+	v_campos=' DISTINCT ON  (k.id_producto, k.id_almacen_destino ) k.*, p.*, a.denominacion almacen_kardex, tm.denominacion unidad_medida, tm2.denominacion tipo_producto,
+	(select coalesce(sum(ocd.cantidad_requerida),0) from orden_compra_detalles ocd 
+	inner join orden_compras oc on ocd.id_orden_compra = oc.id 
+	where id_producto = k.id_producto 
+	and oc.id_tipo_documento = ''2''
+	and oc.id_tipo_documento =''2''
+	and oc.cerrado =''1''
+	and ocd.cerrado =''1''
+	and oc.estado =''1''
+	and oc.id_almacen_salida = k.id_almacen_destino) cantidad_orden_compra,
+	k.saldos_cantidad - COALESCE(
+	(SELECT SUM(ocd.cantidad_requerida) 
+	FROM orden_compra_detalles ocd 
+	INNER JOIN orden_compras oc ON ocd.id_orden_compra = oc.id 
+	WHERE ocd.id_producto = k.id_producto 
+	AND oc.id_tipo_documento = ''2''
+	and oc.cerrado =''1''
+	and ocd.cerrado =''1''
+	and oc.estado =''1''
+	AND oc.id_almacen_salida = k.id_almacen_destino), 
+	0) AS saldo_final ';
 
 	v_tabla=' FROM kardex k
 	LEFT JOIN productos p ON k.id_producto = p.id

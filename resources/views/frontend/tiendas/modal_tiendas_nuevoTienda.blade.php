@@ -158,6 +158,11 @@ $(document).ready(function() {
     datatableTiendaDetalle();
 
 	$("#empresa").select2({ width: '100%' });
+
+    if($('#id').val()>0){
+        obtenerProvinciaContacto();
+		obtenerDatosUbigeoContacto();
+	}
 	 
 });
 
@@ -200,6 +205,126 @@ function datatableTiendaDetalle(){
 					$("#tblTablaTiendaDetalle tbody").html(result);
 			}
 	});
+}
+
+function obtenerProvinciaContacto(){
+	
+	var id = $('#departamento_contacto').val();
+	if(id=="")return false;
+	$('#provincia_contacto').attr("disabled",true);
+	$('#distrito_contacto').attr("disabled",true);
+	
+	var msgLoader = "";
+	msgLoader = "Procesando, espere un momento por favor";
+	var heightBrowser = $(window).width()/2;
+	$('.loader').css("opacity","0.8").css("height",heightBrowser).html("<div id='Grd1_wrapper' class='dataTables_wrapper'><div id='Grd1_processing' class='dataTables_processing panel-default'>"+msgLoader+"</div></div>");
+    $('.loader').show();
+	
+	$.ajax({
+		url: '/almacenes/obtener_provincia/'+id,
+		dataType: "json",
+		success: function(result){
+			var option = "<option value='' selected='selected'>--Seleccionar--</option>";
+			$('#provincia_contacto').html("");
+			$(result).each(function (ii, oo) {
+				option += "<option value='"+oo.id_provincia+"'>"+oo.desc_ubigeo+"</option>";
+			});
+			$('#provincia_contacto').html(option);
+			
+			var option2 = "<option value=''>--Seleccionar--</option>";
+			$('#distrito_contacto').html(option2);
+			
+			$('#provincia_contacto').attr("disabled",false);
+			$('#distrito_contacto').attr("disabled",false);
+			
+			$('.loader').hide();
+		}
+	});
+}
+
+function obtenerDistritoContacto(){
+	
+	var id_departamento = $('#departamento_contacto').val();
+	var id = $('#provincia_contacto').val();
+	if(id=="")return false;
+	$('#distrito_contacto').attr("disabled",true);
+	
+	var msgLoader = "";
+	msgLoader = "Procesando, espere un momento por favor";
+	var heightBrowser = $(window).width()/2;
+	$('.loader').css("opacity","0.8").css("height",heightBrowser).html("<div id='Grd1_wrapper' class='dataTables_wrapper'><div id='Grd1_processing' class='dataTables_processing panel-default'>"+msgLoader+"</div></div>");
+    $('.loader').show();
+	
+	$.ajax({
+		url: '/almacenes/obtener_distrito/'+id_departamento+'/'+id,
+		dataType: "json",
+		success: function(result){
+			var option = "<option value=''>Seleccionar</option>";
+			$('#distrito_contacto').html("");
+			$(result).each(function (ii, oo) {
+				option += "<option value='"+oo.id_ubigeo+"'>"+oo.desc_ubigeo+"</option>";
+			});
+			$('#distrito_contacto').html(option);
+			
+			$('#distrito_contacto').attr("disabled",false);
+			$('.loader').hide();
+		}
+	});
+}
+
+function obtenerDatosUbigeoContacto(){
+
+    var id = $('#id').val();
+
+    $.ajax({
+        url: '/tienda/obtener_provincia_distrito/'+id,
+        dataType: "json",
+        success: function(result){
+            
+            //alert(result[0].provincia_partida);
+
+            $('#provincia_contacto').val(result[0].provincia_partida);
+
+            obtenerDistritoContacto_(function(){
+
+                $('#distrito_contacto').val(result[0].distrito_partida);
+
+            });
+        }
+    });
+}
+
+function obtenerDistritoContacto_(callback){
+
+    var departamento = $('#departamento_contacto').val();
+    var id = $('#provincia_contacto').val();
+    if(id=="")return false;
+    $('#distrito_contacto').attr("disabled",true);
+
+    var msgLoader = "";
+    msgLoader = "Procesando, espere un momento por favor";
+    var heightBrowser = $(window).width()/2;
+    $('.loader').css("opacity","0.8").css("height",heightBrowser).html("<div id='Grd1_wrapper' class='dataTables_wrapper'><div id='Grd1_processing' class='dataTables_processing panel-default'>"+msgLoader+"</div></div>");
+    $('.loader').show();
+
+    $.ajax({
+        url: '/almacenes/obtener_distrito/'+departamento+'/'+id,
+        dataType: "json",
+        success: function(result){
+            var option = "<option value=''>Seleccionar</option>";
+            $('#distrito_contacto').html("");
+            $(result).each(function (ii, oo) {
+                option += "<option value='"+oo.id_ubigeo+"'>"+oo.desc_ubigeo+"</option>";
+            });
+            $('#distrito_contacto').html(option);
+            
+            $('#distrito_contacto').attr("disabled",false);
+            $('.loader').hide();
+
+            callback();
+        
+        }
+    });
 }
 
 </script>
@@ -314,6 +439,54 @@ function datatableTiendaDetalle(){
                                             }
                                             ?>
                                         </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label class="control-label form-control-sm">Departamento</label>
+                                        <select name="departamento_contacto" id="departamento_contacto" onChange="obtenerProvinciaContacto()" class="form-control form-control-sm">
+                                            <?php if($id>0){ ?> 
+                                            <option value="">--Seleccionar--</option>
+                                            <?php
+                                            foreach ($departamento as $row) {?>
+                                            <option value="<?php echo $row->id_departamento?>" <?php if($row->id_departamento==substr($tienda->id_ubigeo,0,2))echo "selected='selected'"?>><?php echo $row->desc_ubigeo ?></option>
+                                            <?php 
+                                            }
+                                            }else{?>
+                                            <option value="">--Seleccionar--</option>
+                                                <?php
+                                                foreach ($departamento as $row) {
+                                                ?>
+                                                <option value="<?php echo $row->id_departamento?>"><?php echo $row->desc_ubigeo ?></option>
+                                                <?php 
+                                                    
+                                                }
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label class="control-label form-control-sm">Provincia</label>
+                                        <select name="provincia_contacto" id="provincia_contacto" class="form-control form-control-sm" onchange="obtenerDistritoContacto()">
+                                            <option value="">--Seleccionar--</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label class="control-label form-control-sm">Distrito</label>
+                                        <select name="distrito_contacto" id="distrito_contacto" class="form-control form-control-sm" onchange="">
+                                            <option value="">--Seleccionar--</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <label class="control-label form-control-sm">Direcci&oacute;n</label>
+                                        <input id="direccion" name="direccion" on class="form-control form-control-sm"  value="<?php echo $tienda->direccion?>" type="text" style="text-transform: uppercase;">
                                     </div>
                                 </div>
                             </div>

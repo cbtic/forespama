@@ -8,6 +8,7 @@ use App\Models\Tienda;
 use App\Models\Empresa;
 use App\Models\TiendaDetalle;
 use App\Models\TablaMaestra;
+use App\Models\Ubigeo;
 use Auth;
 
 class TiendaController extends Controller
@@ -64,6 +65,7 @@ class TiendaController extends Controller
     public function modal_tienda($id){
 		
 		$tablaMaestra_model = new TablaMaestra;
+        $ubigeo_model = new Ubigeo;
 
 		if($id>0){
             $tienda_detalle = TiendaDetalle::find($id);
@@ -77,8 +79,9 @@ class TiendaController extends Controller
 		$zona = $tablaMaestra_model->getMaestroByTipo(69);
 		$tienda_s_m = $tablaMaestra_model->getMaestroByTipo(70);
 		$zona_especifica = $tablaMaestra_model->getMaestroByTipo(71);
+        $departamento = $ubigeo_model->getDepartamento();
 
-		return view('frontend.tiendas.modal_tiendas_nuevoTienda',compact('id','tienda','empresa','tienda_detalle','zona','tienda_s_m','zona_especifica'));
+		return view('frontend.tiendas.modal_tiendas_nuevoTienda',compact('id','tienda','empresa','tienda_detalle','zona','tienda_s_m','zona_especifica','departamento'));
 
     }
 
@@ -105,6 +108,8 @@ class TiendaController extends Controller
         $tienda->id_zona = $request->zona;
         $tienda->id_tienda_s_m = $request->tienda_sm;
         $tienda->id_zona_especifica = $request->zona_especifica;
+        $tienda->direccion = $request->direccion;
+        $tienda->id_ubigeo = $request->distrito_contacto;
         $tienda->estado = 1;
 		$tienda->id_usuario_inserta = $id_user;
 		$tienda->save();
@@ -138,4 +143,15 @@ class TiendaController extends Controller
         return view('frontend.tiendas.lista_datos_tienda_empresa',compact('tienda_empresa_lista'));
 
     }
+
+	public function obtener_provincia_distrito($id){
+
+		$tienda_detalle = TiendaDetalle::find($id);
+		$tienda = Tienda::find($tienda_detalle->id_tienda);
+		
+		$tienda_model = new Tienda;
+		$tienda = $tienda_model->getProvinciaDistritoById($tienda->id);
+		
+		echo json_encode($tienda);
+	}
 }
