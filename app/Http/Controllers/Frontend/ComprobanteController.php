@@ -2754,7 +2754,7 @@ class ComprobanteController extends Controller
  
 		$data["items"] = $items;
 		$data["anulado"] = false;
-		$data["declare"] = "0"; // 0->dechlare 1>declare instante
+		$data["declare"] = "1"; // 0->dechlare 1>declare instante
 		$data["version"] = "2.1";
 		$data["adjuntos"] = [];
 		$data["anticipos"] = [];
@@ -3608,7 +3608,7 @@ class ComprobanteController extends Controller
 
 
         $data["anulado"] =false;
-        $data["declare"] ="0";
+        $data["declare"] ="1";
         $data["adjuntos"] =[];
         $data["esFicticio"] =false;
         $data["keepNumber"] ="false";
@@ -3648,7 +3648,7 @@ class ComprobanteController extends Controller
         $data["ubigeoPuntoLlegada"] =$guia->guia_llegada_ubigeo;
         $data["ubigeoPuntoPartida"] =$guia->guia_partida_ubigeo;
         $data["descripcionTraslado"] ="";
-        $data["fechaInicioTraslado"] =$guia->guia_fecha_traslado; //"2024-08-01";
+        //$data["fechaInicioTraslado"] =$guia->guia_fecha_traslado; //"2024-08-01";
         $data["indicadorTransbordo"] ="0";
         $data["razonSocialReceptor"] =$guia->guia_receptor_razsocial; //"ANDECORP S.A.C.";
         $data["razonSocialConductor"] = $guia->razon_social_conductor; //"JAVIER MARTIN ROSELL ALFARO";
@@ -3671,7 +3671,7 @@ class ComprobanteController extends Controller
         $data["indicadorTrasladoVehiculoM1oL"] ="0";
         $data["rucEstablecimientoPuntoLlegada"] =$guia->guia_receptor_numdoc; //"20544125681";
         $data["rucEstablecimientoPuntoPartida"] =$guia->guia_emisor_numdoc;
-        $data["fechaEntregaBienesTransportista"] =$guia->guia_fecha_traslado; //"2024-08-01";
+       // $data["fechaEntregaBienesTransportista"] =$guia->guia_fecha_traslado; //"2024-08-01";
         $data["codigoEstablecimientoPuntoLlegada"] = isset($guia->guia_cod_estab_llegada)?$guia->guia_cod_estab_llegada:"0000";
         $data["codigoEstablecimientoPuntoPartida"] =$guia->guia_cod_estab_partida;
         $data["trasladoPorElTotalDeLosBienesSiOrNo"] ="1";
@@ -3688,6 +3688,7 @@ class ComprobanteController extends Controller
             $data["licenciaConducir"] =$guia->licencia; //"Q25704015";
             $data["numeroDocIdentidadConductor"] =$guia->guia_conductor_numdoc; //"25704015";
             $data["tipoDocIdentidadConductor"] =$guia->guia_conductor_tipodoc;
+            $data["fechaInicioTraslado"] =$guia->guia_fecha_traslado; //"2024-08-01";
 
         }
 
