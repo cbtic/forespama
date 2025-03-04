@@ -51,4 +51,16 @@ class Tienda extends Model
 		$data = DB::select($cad);
         return $data;
     }
+
+    function getProvinciaDistritoById($id){
+
+        $cad = "select u.id_provincia provincia_partida, u.id_ubigeo distrito_partida
+        from tiendas t 
+        inner join ubigeos u on t.id_ubigeo = u.id_ubigeo 
+        where t.id='".$id."'";
+
+		$data = DB::select($cad);
+        return $data;
+    }
+
 }

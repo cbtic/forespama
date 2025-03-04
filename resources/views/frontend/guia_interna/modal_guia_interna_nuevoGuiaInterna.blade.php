@@ -582,20 +582,20 @@ function fn_save_guia_interna(){
         $('.loader').show();
 
         $.ajax({
-                url: "/guia_interna/send_guia_interna",
-                type: "POST",
-                data : $("#frmDatosGuia").serialize(),
-                success: function (result) {
-                    //alert(result.id)
-                    $('#openOverlayOpc').modal('hide');
-                    datatablenew();
-                    $('.loader').hide();
-                    bootbox.alert("Se guard&oacute; satisfactoriamente"); 
-                    /*if (result.id>0) {
-                        modalOrdenCompra(result.id);
-                    }*/
-                   
-                }
+            url: "/guia_interna/send_guia_interna",
+            type: "POST",
+            data : $("#frmDatosGuia").serialize(),
+            success: function (result) {
+                //alert(result.id)
+                $('#openOverlayOpc').modal('hide');
+                datatablenew();
+                $('.loader').hide();
+                bootbox.alert("Se guard&oacute; satisfactoriamente"); 
+                /*if (result.id>0) {
+                    modalOrdenCompra(result.id);
+                }*/
+                
+            }
         });
     }
 }
@@ -794,6 +794,8 @@ function cargar_detalle_documento(id_documento){
                 $("#peso").attr("readonly",false);
                 $("#punto_llegada_input").attr("readonly",false);
                 
+                //alert(entrada);
+
                 $('#ruc').val(entrada.ruc);
                 $('#destinatario_nombre').val(entrada.razon_social);
                 $('#destinatario').val(entrada.id_empresa_compra);
@@ -807,13 +809,103 @@ function cargar_detalle_documento(id_documento){
                 $("#orden_compra_cliente").attr("readonly",true);
                 $("#tiendas_orden_compra").attr("readonly",true);
                 $("#peso").attr("readonly",true);
-                $("#punto_llegada_input").attr("readonly",true);
+                //$("#punto_llegada_input").attr("readonly",true);
 
                 //$("#destinatario").select2({ width: '100%' });
+
+                if(entrada.ubigeo){
+                    obtenerProvinciaContacto(entrada.ubigeo);
+                }
                 
             }
     });
 
+}
+
+function obtenerProvinciaContacto(ubigeo){
+	
+	var id = ubigeo.substring(0, 2);
+    $('#departamento_llegada').val(id);
+	if(id=="")return false;
+	$('#provincia_llegada').attr("disabled",true);
+	$('#distrito_llegada').attr("disabled",true);
+	
+	var msgLoader = "";
+	msgLoader = "Procesando, espere un momento por favor";
+	var heightBrowser = $(window).width()/2;
+	$('.loader').css("opacity","0.8").css("height",heightBrowser).html("<div id='Grd1_wrapper' class='dataTables_wrapper'><div id='Grd1_processing' class='dataTables_processing panel-default'>"+msgLoader+"</div></div>");
+    $('.loader').show();
+	
+	$.ajax({
+		url: '/almacenes/obtener_provincia/'+id,
+		dataType: "json",
+		success: function(result){
+			var option = "<option value='' selected='selected'>--Seleccionar--</option>";
+			$('#provincia_llegada').html("");
+			$(result).each(function (ii, oo) {
+				option += "<option value='"+oo.id_provincia+"'>"+oo.desc_ubigeo+"</option>";
+			});
+			$('#provincia_llegada').html(option);
+			
+			var option2 = "<option value=''>--Seleccionar--</option>";
+			$('#distrito_llegada').html(option2);
+			
+			$('#provincia_llegada').attr("disabled",false);
+			$('#distrito_llegada').attr("disabled",false);
+			
+			$('.loader').hide();
+            
+            obtenerDatosUbigeoContacto(ubigeo);
+		}
+	});
+    
+}
+
+function obtenerDatosUbigeoContacto(ubigeo){
+
+    var provincia = ubigeo.substring(2, 4);
+
+    $('#provincia_llegada').val(provincia);
+
+    obtenerDistritoContacto_(function(){
+
+        $('#distrito_llegada').val(ubigeo);
+
+    });
+       
+}
+
+function obtenerDistritoContacto_(callback){
+
+    var departamento = $('#departamento_llegada').val();
+    var id = $('#provincia_llegada').val();
+    if(id=="")return false;
+    $('#distrito_llegada').attr("disabled",true);
+
+    var msgLoader = "";
+    msgLoader = "Procesando, espere un momento por favor";
+    var heightBrowser = $(window).width()/2;
+    $('.loader').css("opacity","0.8").css("height",heightBrowser).html("<div id='Grd1_wrapper' class='dataTables_wrapper'><div id='Grd1_processing' class='dataTables_processing panel-default'>"+msgLoader+"</div></div>");
+    $('.loader').show();
+
+    $.ajax({
+        url: '/almacenes/obtener_distrito/'+departamento+'/'+id,
+        dataType: "json",
+        success: function(result){
+            var option = "<option value=''>Seleccionar</option>";
+            $('#distrito_llegada').html("");
+            $(result).each(function (ii, oo) {
+                option += "<option value='"+oo.id_ubigeo+"'>"+oo.desc_ubigeo+"</option>";
+            });
+            $('#distrito_llegada').html(option);
+            
+            $('#distrito_llegada').attr("disabled",false);
+            $('.loader').hide();
+
+            callback();
+        
+        }
+    });
 }
 
 function agregarVehiculo(){

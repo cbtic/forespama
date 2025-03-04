@@ -18,6 +18,8 @@ use App\Models\TiendaDetalleOrdenCompra;
 use App\Models\EquivalenciaProducto;
 use App\Models\EntradaProducto;
 use App\Models\SalidaProducto;
+use App\Models\Ubigeo;
+use App\Models\OrdenCompraContactoEntrega;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Auth;
 use Carbon\Carbon;
@@ -844,6 +846,70 @@ class OrdenCompraController extends Controller
 		return Excel::download($export, 'Reporte_orden_compra.xlsx');
 		
     }  
+
+    public function modal_datos_pedido_orden_compra($id){
+		
+        $tablaMaestra_model = new TablaMaestra;
+        $producto_model = new Producto;
+        $marca_model = new Marca;
+        $ubigeo_model = new Ubigeo;
+        //$id_orden_compra = $id;
+
+        $existe_orden_compra_contacto_entrega = OrdenCompraContactoEntrega::where('id_orden_compra',$id)->where('estado',1)->first();
+		
+        if($existe_orden_compra_contacto_entrega){
+            $orden_compra_contacto_entrega = OrdenCompraContactoEntrega::find($existe_orden_compra_contacto_entrega->id);
+            $orden_compra = OrdenCompra::find($existe_orden_compra_contacto_entrega->id_orden_compra);
+		}else{
+			$orden_compra_contacto_entrega = new OrdenCompraContactoEntrega;
+            $orden_compra = new OrdenCompra;
+        }
+
+        $tipo_documento = $tablaMaestra_model->getMaestroByTipo(54);
+        $producto = $producto_model->getProductoAll();
+        $marca = $marca_model->getMarcaAll();
+        $estado_bien = $tablaMaestra_model->getMaestroByTipo(4);
+        $unidad = $tablaMaestra_model->getMaestroByTipo(43);
+        $igv_compra = $tablaMaestra_model->getMaestroByTipo(51);
+        $descuento = $tablaMaestra_model->getMaestroByTipo(55);
+        $unidad_origen = $tablaMaestra_model->getMaestroByTipo(50);
+        $tiendas = Tienda::all();
+        $departamento = $ubigeo_model->getDepartamento();
+
+		return view('frontend.orden_compra.modal_datos_pedido_orden_compra',compact('id','orden_compra','orden_compra_contacto_entrega','tipo_documento','producto','marca','estado_bien','unidad','igv_compra','descuento','unidad_origen','tiendas','departamento'));
+
+    }
+
+    public function send_datos_contacto(Request $request){
+
+		$id_user = Auth::user()->id;
+
+        //dd($request->id_datos_pedido);exit();
+
+		if($request->id_datos_pedido){
+            $orden_compra_contacto_entrega = OrdenCompraContactoEntrega::find($request->id_datos_pedido);
+		}else{
+			$orden_compra_contacto_entrega = new OrdenCompraContactoEntrega;
+		}
+		
+		$orden_compra_contacto_entrega->id_orden_compra = $request->id;
+		$orden_compra_contacto_entrega->nombre = $request->nombre_contacto;
+		$orden_compra_contacto_entrega->telefono = $request->telefono_contacto;
+		$orden_compra_contacto_entrega->direccion = $request->direccion_contacto;
+		$orden_compra_contacto_entrega->id_ubigeo = $request->distrito_contacto;
+		$orden_compra_contacto_entrega->estado = 1;
+		$orden_compra_contacto_entrega->id_usuario_inserta = $id_user;
+		$orden_compra_contacto_entrega->save();
+
+    }
+
+    public function obtener_provincia_distrito($id){
+		
+		$orden_compra_contacto_entrega_model = new OrdenCompraContactoEntrega;
+		$ubigeo_contacto_entrega = $orden_compra_contacto_entrega_model->getProvinciaDistritoById($id);
+		
+		echo json_encode($ubigeo_contacto_entrega);
+	}
 
 }
 

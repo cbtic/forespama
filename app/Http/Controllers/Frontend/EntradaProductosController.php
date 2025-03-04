@@ -1667,6 +1667,8 @@ class EntradaProductosController extends Controller
             $estado_bien = $tablaMaestra_model->getMaestroByTipo(56);
             $unidad_medida = $tablaMaestra_model->getMaestroByTipo(43);
 
+            //dd($entrada_producto);
+
             return response()->json([
                 'entrada_producto' => $entrada_producto,
                 'marca' => $marca,
