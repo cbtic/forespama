@@ -247,6 +247,7 @@ class VehiculoController extends Controller
 			$vehiculo->peso_carreta = $request->peso_carreta;
 			$vehiculo->peso_seco = $request->peso_seco;
 			$vehiculo->exonerado = $request->exonerado;
+			$vehiculo->constancia_inscripcion = $request->constancia_inscripcion;
 			$vehiculo->control = $request->control;
 			$vehiculo->bloqueado = $request->bloqueado;
 			$vehiculo->id_marca = $request->marca;

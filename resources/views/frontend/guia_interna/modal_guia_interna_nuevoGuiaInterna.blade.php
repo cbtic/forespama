@@ -1390,6 +1390,17 @@ function obtenerLicencia(){
     }
 }
 
+async function obtenerUbigeo(){
+
+    if($('#punto_partida').val()=="0001"){
+        $('#departamento_partida').val(15);
+        await obtenerProvinciaPartida();
+        $('#provincia_partida').val(01);
+        await obtenerDistritoPartida();
+        $('#distrito_partida').val(150142);
+    }
+}
+
 </script>
 
 
@@ -1814,7 +1825,7 @@ function obtenerLicencia(){
                                         Punto de Partida
                                     </div>
                                     <div class="col-lg-9">
-                                        <select name="punto_partida" id="punto_partida" class="form-control form-control-sm">
+                                        <select name="punto_partida" id="punto_partida" class="form-control form-control-sm" onchange="obtenerUbigeo()">
                                             <option value="">--Seleccionar--</option>
                                             <?php 
                                             foreach ($punto_partida as $row){?>
