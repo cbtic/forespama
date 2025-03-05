@@ -1390,15 +1390,94 @@ function obtenerLicencia(){
     }
 }
 
-async function obtenerUbigeo(){
-
-    if($('#punto_partida').val()=="0001"){
+function obtenerUbigeo() {
+    if ($('#punto_partida').val() == "0001"){
         $('#departamento_partida').val(15);
-        await obtenerProvinciaPartida();
-        $('#provincia_partida').val(01);
-        await obtenerDistritoPartida();
-        $('#distrito_partida').val(150142);
+        obtenerProvinciaPartida_edit(function () {
+            $('#provincia_partida').val("01");
+            obtenerDistritoPartida_edit(function () {
+                $('#distrito_partida').val("150142");
+            });
+        });
+    }else if($('#punto_partida').val() == "0003"){
+        $('#departamento_partida').val(19);
+        obtenerProvinciaPartida_edit(function () {
+            $('#provincia_partida').val("03");
+            obtenerDistritoPartida_edit(function () {
+                $('#distrito_partida').val("190301");
+            });
+        });
     }
+}
+
+function obtenerProvinciaPartida_edit(callback){
+	
+	var id = $('#departamento_partida').val();
+	if(id=="")return false;
+	$('#provincia_partida').attr("disabled",true);
+	$('#distrito_partida').attr("disabled",true);
+	
+	var msgLoader = "";
+	msgLoader = "Procesando, espere un momento por favor";
+	var heightBrowser = $(window).width()/2;
+	$('.loader').css("opacity","0.8").css("height",heightBrowser).html("<div id='Grd1_wrapper' class='dataTables_wrapper'><div id='Grd1_processing' class='dataTables_processing panel-default'>"+msgLoader+"</div></div>");
+    $('.loader').show();
+	
+	$.ajax({
+		url: '/almacenes/obtener_provincia/'+id,
+		dataType: "json",
+		success: function(result){
+			var option = "<option value='' selected='selected'>--Seleccionar--</option>";
+			$('#provincia_partida').html("");
+			$(result).each(function (ii, oo) {
+				option += "<option value='"+oo.id_provincia+"'>"+oo.desc_ubigeo+"</option>";
+			});
+			$('#provincia_partida').html(option);
+			
+			var option2 = "<option value=''>--Seleccionar--</option>";
+			$('#distrito_partida').html(option2);
+			
+			$('#provincia_partida').attr("disabled",false);
+			$('#distrito_partida').attr("disabled",false);
+			
+			$('.loader').hide();
+
+            if (callback) callback(); 
+		}
+	});
+}
+
+function obtenerDistritoPartida_edit(callback){
+	
+	var id_departamento = $('#departamento_partida').val();
+	var id = $('#provincia_partida').val();
+	if(id=="")return false;
+	$('#distrito_partida').attr("disabled",true);
+	
+	var msgLoader = "";
+	msgLoader = "Procesando, espere un momento por favor";
+	var heightBrowser = $(window).width()/2;
+	$('.loader').css("opacity","0.8").css("height",heightBrowser).html("<div id='Grd1_wrapper' class='dataTables_wrapper'><div id='Grd1_processing' class='dataTables_processing panel-default'>"+msgLoader+"</div></div>");
+    $('.loader').show();
+	
+	$.ajax({
+		url: '/almacenes/obtener_distrito/'+id_departamento+'/'+id,
+		dataType: "json",
+		success: function(result){
+			var option = "<option value=''>Seleccionar</option>";
+			$('#distrito_partida').html("");
+			$(result).each(function (ii, oo) {
+				option += "<option value='"+oo.id_ubigeo+"'>"+oo.desc_ubigeo+"</option>";
+			});
+			$('#distrito_partida').html(option);
+			
+			$('#distrito_partida').attr("disabled",false);
+			$('.loader').hide();
+
+            if (callback) callback(); 
+
+		}
+	});
 }
 
 </script>
