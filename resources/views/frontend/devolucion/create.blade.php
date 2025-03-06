@@ -405,7 +405,7 @@ label.form-control-sm{
                         <tr style="font-size:13px">
                             <th>Id</th>
 							<th>Tipo Documento</th>
-							<th>N&uacute;mero Documento</th>
+							<th>N&uacute;mero Salida</th>
 							<th>Empresa</th>
 							<th>N° OC Cliente</th>
                             <th>Fecha</th>
