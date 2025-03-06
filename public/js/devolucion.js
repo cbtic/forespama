@@ -179,9 +179,9 @@ function datatablenew(){
 
 				{
 				"mRender": function (data, type, row) {
-					var fecha_movimiento = "";
-					if(row.fecha_movimiento!= null)fecha_movimiento = row.fecha_movimiento;
-					return fecha_movimiento;
+					var fecha_salida = "";
+					if(row.fecha_salida!= null)fecha_salida = row.fecha_salida;
+					return fecha_salida;
 				},
 				"bSortable": true,
 				"aTargets": [5]
