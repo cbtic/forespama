@@ -602,3 +602,6 @@ Route::get('orden_compra/modal_datos_pedido_orden_compra/{id}', [OrdenCompraCont
 Route::post('orden_compra/send_datos_contacto', [OrdenCompraController::class, 'send_datos_contacto'])->name('orden_compra.send_datos_contacto');
 Route::get('orden_compra/obtener_provincia_distrito/{idDepartamento}', [OrdenCompraController::class, 'obtener_provincia_distrito'])->name('orden_compra.obtener_provincia_distrito');
 Route::get('tienda/obtener_provincia_distrito/{idDepartamento}', [TiendaController::class, 'obtener_provincia_distrito'])->name('tienda.obtener_provincia_distrito');
+Route::get('ingreso_vehiculo_tronco/reporte_pagos', [IngresoVehiculoTroncoController::class, 'reporte_pagos'])->name('ingreso_vehiculo_tronco.reporte_pagos');
+Route::post('ingreso_vehiculo_tronco/listar_ingreso_vehiculo_tronco_reporte_ajax', [IngresoVehiculoTroncoController::class, 'listar_ingreso_vehiculo_tronco_reporte_ajax'])->name('ingreso_vehiculo_tronco.listar_ingreso_vehiculo_tronco_reporte_ajax');
+Route::post('ingreso_vehiculo_tronco/listar_ingreso_vehiculo_tronco_reporte_pago_ajax', [IngresoVehiculoTroncoController::class, 'listar_ingreso_vehiculo_tronco_reporte_pago_ajax'])->name('ingreso_vehiculo_tronco.listar_ingreso_vehiculo_tronco_reporte_pago_ajax');

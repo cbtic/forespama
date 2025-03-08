@@ -256,12 +256,12 @@ function modalDevolucion(id){
 	$('#openOverlayOpc .modal-body').css('height', 'auto');
 
 	$.ajax({
-			url: "/devolucion/modal_devolucion/"+id,
-			type: "GET",
-			success: function (result) {
-					$("#diveditpregOpc").html(result);
-					$('#openOverlayOpc').modal('show');
-			}
+		url: "/devolucion/modal_devolucion/"+id,
+		type: "GET",
+		success: function (result) {
+			$("#diveditpregOpc").html(result);
+			$('#openOverlayOpc').modal('show');
+		}
 	});
 }
 
@@ -290,12 +290,12 @@ function eliminarOrdenCompra(id,estado){
 function fn_eliminar(id,estado){
 	
     $.ajax({
-            url: "/orden_compra/eliminar_orden_compra/"+id+"/"+estado,
-            type: "GET",
-            success: function (result) {
-                //if(result="success")obtenerPlanDetalle(id_plan);
-				datatablenew();
-            }
+		url: "/orden_compra/eliminar_orden_compra/"+id+"/"+estado,
+		type: "GET",
+		success: function (result) {
+			//if(result="success")obtenerPlanDetalle(id_plan);
+			datatablenew();
+		}
     });
 }
 
@@ -307,12 +307,12 @@ function modalEntradaProductoOrdenCompra(id,id_tipo_documento){
 	$('#openOverlayOpc .modal-body').css('height', 'auto');
 
 	$.ajax({
-			url: "/entrada_productos/modal_detalle_producto_orden_compra/"+id+"/"+id_tipo_documento,
-			type: "GET",
-			success: function (result) {
-					$("#diveditpregOpc").html(result);
-					$('#openOverlayOpc').modal('show');
-			}
+		url: "/entrada_productos/modal_detalle_producto_orden_compra/"+id+"/"+id_tipo_documento,
+		type: "GET",
+		success: function (result) {
+			$("#diveditpregOpc").html(result);
+			$('#openOverlayOpc').modal('show');
+		}
 	});
 }
 
@@ -325,8 +325,8 @@ function modalHistorialEntradaProducto(id, id_tipo_documento){
 		url: "/entrada_productos/modal_historial_entrada_producto/"+id+"/"+id_tipo_documento,
 		type: "GET",
 		success: function (result) {
-				$("#diveditpregOpc").html(result);
-				$('#openOverlayOpc').modal('show');
+			$("#diveditpregOpc").html(result);
+			$('#openOverlayOpc').modal('show');
 		}
 	});
 }
@@ -341,12 +341,12 @@ function modalTiendaOrdenCompra(id){
 	$('#openOverlayOpc .modal-body').css('height', 'auto');
 
 	$.ajax({
-			url: "/orden_compra/modal_orden_compra_tienda/"+id,
-			type: "GET",
-			success: function (result) {  
-					$("#diveditpregOpc").html(result);
-					$('#openOverlayOpc').modal('show');
-			}
+		url: "/orden_compra/modal_orden_compra_tienda/"+id,
+		type: "GET",
+		success: function (result) {  
+			$("#diveditpregOpc").html(result);
+			$('#openOverlayOpc').modal('show');
+		}
 	});
 }
 
