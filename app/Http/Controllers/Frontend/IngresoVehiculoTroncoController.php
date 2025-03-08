@@ -602,6 +602,68 @@ class IngresoVehiculoTroncoController extends Controller
 		
 	}
 
+	public function reporte_pagos(){
+
+		$tablaMaestra_model = new TablaMaestra;
+
+		$tipo_madera = $tablaMaestra_model->getMaestroByTipo(42);
+
+		return view('frontend.pagos.create_reporte',compact('tipo_madera'));
+
+	}
+
+	public function listar_ingreso_vehiculo_tronco_reporte_ajax(Request $request){
+
+		$ingresoVehiculoTronco_model = new IngresoVehiculoTronco();
+		/*$p[]=$request->ruc;
+		$p[]=$request->empresa;
+		$p[]=$request->placa;
+		$p[]=$request->tipo_madera;*/
+		$p[]=$request->fecha_inicio;
+		$p[]=$request->fecha_fin;
+		$p[]=$request->NumeroPagina;
+		$p[]=$request->NumeroRegistros;
+		$data = $ingresoVehiculoTronco_model->listar_ingreso_vehiculo_tronco_reporte_ajax($p);
+		$iTotalDisplayRecords = isset($data[0]->totalrows)?$data[0]->totalrows:0;
+
+		$result["PageStart"] = $request->NumeroPagina;
+		$result["pageSize"] = $request->NumeroRegistros;
+		$result["SearchText"] = "";
+		$result["ShowChildren"] = true;
+		$result["iTotalRecords"] = $iTotalDisplayRecords;
+		$result["iTotalDisplayRecords"] = $iTotalDisplayRecords;
+		$result["aaData"] = $data;
+
+        echo json_encode($result);
+
+	}
+
+	public function listar_ingreso_vehiculo_tronco_reporte_pago_ajax(Request $request){
+
+		$ingresoVehiculoTronco_model = new IngresoVehiculoTronco();
+		/*$p[]=$request->ruc;
+		$p[]=$request->empresa;
+		$p[]=$request->placa;
+		$p[]=$request->tipo_madera;*/
+		$p[]=$request->fecha_inicio;
+		$p[]=$request->fecha_fin;
+		$p[]=$request->NumeroPagina;
+		$p[]=$request->NumeroRegistros;
+		$data = $ingresoVehiculoTronco_model->listar_ingreso_vehiculo_tronco_reporte_pago_ajax($p);
+		$iTotalDisplayRecords = isset($data[0]->totalrows)?$data[0]->totalrows:0;
+
+		$result["PageStart"] = $request->NumeroPagina;
+		$result["pageSize"] = $request->NumeroRegistros;
+		$result["SearchText"] = "";
+		$result["ShowChildren"] = true;
+		$result["iTotalRecords"] = $iTotalDisplayRecords;
+		$result["iTotalDisplayRecords"] = $iTotalDisplayRecords;
+		$result["aaData"] = $data;
+
+        echo json_encode($result);
+
+	}
+
 }
 
 class InvoicesExport implements FromArray

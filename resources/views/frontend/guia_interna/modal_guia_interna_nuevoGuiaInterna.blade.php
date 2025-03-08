@@ -715,6 +715,7 @@ function cargar_detalle_documento(id_documento){
             let entrada = result.entrada_producto[0];
             let n = 1;
             let peso_total = 0;
+            let peso_producto = 0;
 
             result.entrada_producto.forEach(entrada_producto => {
 
@@ -773,7 +774,9 @@ function cargar_detalle_documento(id_documento){
 
                 n++;
 
-                peso_total += parseInt(entrada_producto.peso) || 0;
+                peso_producto = entrada_producto.peso * entrada_producto.cantidad;
+
+                peso_total += parseInt(peso_producto) || 0;
                 
                 //total_acumulado += parseFloat(orden_compra.total);
                 });
@@ -1831,7 +1834,7 @@ function obtenerDistritoPartida_edit(callback){
                                     Peso
                                 </div>
                                 <div class="col-lg-5">
-                                    <input id="peso" name="peso" on class="form-control form-control-sm"  value="<?php //if($id>0){echo $guia_interna->numero_orden_compra_cliente;} ?>" type="text">
+                                    <input id="peso" name="peso" on class="form-control form-control-sm"  value="<?php if($id>0){echo $guia_interna->peso;} ?>" type="text">
                                 </div>
                             </div>
                         </div>

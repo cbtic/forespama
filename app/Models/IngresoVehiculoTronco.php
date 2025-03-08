@@ -114,6 +114,18 @@ order by 1 desc";
 
     }
 
+    public function listar_ingreso_vehiculo_tronco_reporte_ajax($p){
+
+        return $this->readFuntionPostgres('sp_listar_ingreso_vehiculo_tronco_reporte_paginado',$p);
+
+    }
+
+    public function listar_ingreso_vehiculo_tronco_reporte_pago_ajax($p){
+
+        return $this->readFuntionPostgres('sp_listar_ingreso_vehiculo_tronco_reporte_pago_paginado',$p);
+
+    }
+
 	public function readFuntionPostgres($function, $parameters = null){
 
         $_parameters = '';

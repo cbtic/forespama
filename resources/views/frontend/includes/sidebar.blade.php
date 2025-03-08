@@ -37,7 +37,7 @@
         </li>
 		-->
 
-	@if(Gate::check('Ingreso de Camiones') || Gate::check('Cubicaje de Troncos') || Gate::check('Pagos'))
+	@if(Gate::check('Ingreso de Camiones') || Gate::check('Cubicaje de Troncos') || Gate::check('Pagos') || Gate::check('Reporte Pagos'))
 
         <li class="c-sidebar-nav-title">@lang('System')</li>
 
@@ -61,6 +61,12 @@
                 @can('Pagos')
                 <li class="c-sidebar-nav-item">
                     <x-utils.link :href="route('frontend.ingreso_vehiculo_tronco.pagos')" class="c-sidebar-nav-link" :text="__('Pagos')" :active="activeClass(Route::is('admin.auth.role.*'), 'c-active')" />
+                </li>
+                @endif
+
+                @can('Reporte Pagos')
+                <li class="c-sidebar-nav-item">
+                    <x-utils.link :href="route('frontend.ingreso_vehiculo_tronco.reporte_pagos')" class="c-sidebar-nav-link" :text="__('Reporte Pagos')" :active="activeClass(Route::is('admin.auth.role.*'), 'c-active')" />
                 </li>
                 @endif
             </ul>
