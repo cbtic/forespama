@@ -2,6 +2,20 @@
 <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" defer></script>
 <style type="text/css">
 
+.dataTables_paginate .pagination {
+    justify-content: center;
+}
+
+.dataTables_paginate .page-item .page-link {
+    color: #007bff;
+    border-radius: 5px;
+}
+
+.dataTables_paginate .page-item.active .page-link {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
 .table-hover tbody tr.row_selected td{background-color:#239244!important;color:#ffffff!important}
 
 .table td.verde{
@@ -530,7 +544,8 @@ label.form-control-sm{
 										
 										<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
 											<input class="btn btn-warning btn-sm pull-rigth" value="Buscar" type="button" id="btnBuscar" />
-											<input class="btn btn-secondary btn-sm pull-rigth" value="Descargar" type="button" id="btnDescargar" /> 
+											<input class="btn btn-secondary btn-sm pull-rigth" value="Reporte Cubicaje" type="button" id="btnDescargarCubicaje" /> 
+											<input class="btn btn-secondary btn-sm pull-rigth" value="Reporte Pagos" type="button" id="btnDescargarPagos" /> 
 										</div>
 								
 									</div>

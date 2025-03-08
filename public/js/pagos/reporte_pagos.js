@@ -352,15 +352,59 @@ function datatablenew() {
             "dom": '<"top">rt<"bottom"flpi><"clear">',
             "fnDrawCallback": function(settings) {
                 let totalSaldo = 0;
+                let totalEfectivo = 0;
+                let totalCheque = 0;
+                let totalTransferencia = 0;
 
                 settings.aoData.forEach(function(row) {
-                    let saldos = row._aData.importe_total;
+                    let saldos = row._aData.total_general;
+                    let total_efec = row._aData.total_efectivo;
+                    let total_cheq = row._aData.total_cheque;
+                    let total_trans = row._aData.total_transferencia;
+                    //let tipoPago = row._aData.tipo_pago;
                     if (saldos) {
-                        totalSaldo += parseFloat(saldos);
+                        totalSaldo = parseFloat(saldos);
+                    }
+                    if (total_efec) {
+                        totalEfectivo = parseFloat(total_efec);
+                    }
+                    if (total_cheq) {
+                        totalCheque = parseFloat(total_cheq);
+                    }
+                    if (total_trans) {
+                        totalTransferencia = parseFloat(total_trans);
                     }
                 });
+
+                $('#tblReportePagos tfoot').html('');
     
-                $('#tblReportePagos tfoot tr').html('<td colspan="1"><b>Total</b></td><td><b>' + totalSaldo.toFixed(2) + '</b></td><td colspan="2"></td>');
+                $('#tblReportePagos tfoot').append(`
+                    <tr>
+                        <td colspan="1"><b>Total</b></td>
+                        <td><b>${totalSaldo.toFixed(2)}</b></td>
+                        <td colspan="2"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="1"><b>Resumen</b></td>
+                        <td></td>
+                        <td colspan="2"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="1">Efectivo</td>
+                        <td>${totalEfectivo.toFixed(2)}</td>
+                        <td colspan="2"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="1">Cheque</td>
+                        <td>${totalCheque.toFixed(2)}</td>
+                        <td colspan="2"></td>
+                    </tr>
+                     <tr>
+                        <td colspan="1">Transferencia</td>
+                        <td>${totalTransferencia.toFixed(2)}</td>
+                        <td colspan="2"></td>
+                    </tr>
+                `);
                 $('[data-toggle="tooltip"]').tooltip();
                 $('#tfoot tbody tr').removeClass('fila-par');
     		    $('#tfoot tbody tr:even').addClass('fila-par');
