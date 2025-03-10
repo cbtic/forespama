@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION public.sp_listar_ingreso_vehiculo_tronco_pagos_paginado(p_ruc character varying, p_empresa character varying, p_placa character varying, p_tipo_madera character varying, p_fecha_desde character varying, p_fecha_hasta character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
+CREATE OR REPLACE FUNCTION public.sp_listar_ingreso_vehiculo_tronco_reporte_paginado(p_fecha_desde character varying, p_fecha_hasta character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
  RETURNS refcursor
  LANGUAGE plpgsql
 AS $function$
@@ -12,43 +12,26 @@ v_count varchar;
 v_col_count varchar;
 --v_perfil varchar;
 
-Begin
+begin
 
 	p_pagina=(p_pagina::Integer-1)*p_limit::Integer;
 
-	v_campos=' ivt.id,ivttm.id id_ingreso_vehiculo_tronco_tipo_maderas,to_char(ivt.fecha_ingreso,''dd-mm-yyyy'') fecha_ingreso,e.ruc,e.razon_social,v.placa,v.ejes,p.numero_documento,
-	p.apellido_paterno||'' ''||p.apellido_materno||'' ''||p.nombres conductor,
-	tm.denominacion tipo_madera,ivttm.cantidad,tmep.denominacion estado_pago, 
+	v_campos=' ivt.id,ivttm.id id_ingreso_vehiculo_tronco_tipo_maderas,to_char(ivt.fecha_ingreso,''dd-mm-yyyy'') fecha_ingreso,TO_CHAR(ivt.fecha_ingreso, ''Day'') dia_semana, e.ruc,e.razon_social,
+	ivttm.cantidad,tmep.denominacion estado_pago, 
 	coalesce((select sum(volumen_total_m3) from ingreso_vehiculo_tronco_cubicajes ivtc where id_ingreso_vehiculo_tronco_tipo_maderas=ivttm.id),0)volumen_total_m3,
 	coalesce((select sum(volumen_total_pies) from ingreso_vehiculo_tronco_cubicajes ivtc where id_ingreso_vehiculo_tronco_tipo_maderas=ivttm.id),0)volumen_total_pies,
-	coalesce((select sum(precio_total) from ingreso_vehiculo_tronco_cubicajes ivtc where id_ingreso_vehiculo_tronco_tipo_maderas=ivttm.id),0)precio_total ';
+	coalesce((select sum(precio_total) from ingreso_vehiculo_tronco_cubicajes ivtc where id_ingreso_vehiculo_tronco_tipo_maderas=ivttm.id),0)precio_total,
+	coalesce(coalesce((select sum(precio_total) from ingreso_vehiculo_tronco_cubicajes ivtc where ivtc.id_ingreso_vehiculo_tronco_tipo_maderas = ivttm.id), 0) /
+	nullif(coalesce((select sum(volumen_total_pies) from ingreso_vehiculo_tronco_cubicajes ivtc where ivtc.id_ingreso_vehiculo_tronco_tipo_maderas = ivttm.id), 0), 0),0) promedio ';
 
 	v_tabla=' from ingreso_vehiculo_troncos ivt
 	inner join empresas e on ivt.id_empresa_proveedor=e.id
 	inner join vehiculos v on ivt.id_vehiculos=v.id
-	inner join conductores c on ivt.id_conductores=c.id
-	inner join personas p on c.id_personas=p.id
 	inner join ingreso_vehiculo_tronco_tipo_maderas ivttm on ivt.id=ivttm.id_ingreso_vehiculo_troncos
 	inner join tabla_maestras tm on ivttm.id_tipo_maderas=tm.codigo::int and tm.tipo=''42''
 	inner join tabla_maestras tmep on ivttm.id_estado_pago=tmep.codigo::int and tmep.tipo=''66'' ';
 
 	v_where = ' where 1=1  ';
-	
-	If p_ruc<>'' Then
-	 v_where:=v_where||'And e.ruc = '''||p_ruc||''' ';
-	End If;
-
-	If p_empresa<>'' Then
-	 v_where:=v_where||'And e.razon_social ilike ''%'||p_empresa||'%'' ';
-	End If;
-
-	If p_placa<>'' Then
-	 v_where:=v_where||'And v.placa ilike ''%'||p_placa||'%'' ';
-	End If;
-
-	If p_tipo_madera<>'' Then
-	 v_where:=v_where||'And ivttm.id_tipo_maderas = '''||p_tipo_madera||''' ';
-	End If;
 
 	If p_fecha_desde<>'' Then
 	 v_where:=v_where||'And ivt.fecha_ingreso >= '''||p_fecha_desde||''' ';
@@ -73,3 +56,4 @@ Begin
 End
 $function$
 ;
+
