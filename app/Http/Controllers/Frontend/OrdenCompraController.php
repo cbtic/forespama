@@ -448,6 +448,7 @@ class OrdenCompraController extends Controller
         $tablaMaestra_model = new TablaMaestra;
         $producto_model = new Producto;
         $marca_model = new Marca;
+        $tienda_model = new Tienda;
 		
         $orden_compra = OrdenCompra::find($id);
 
@@ -459,7 +460,7 @@ class OrdenCompraController extends Controller
         $igv_compra = $tablaMaestra_model->getMaestroByTipo(51);
         $descuento = $tablaMaestra_model->getMaestroByTipo(55);
         $unidad_origen = $tablaMaestra_model->getMaestroByTipo(50);
-        $tiendas = Tienda::all();
+        $tiendas = $tienda_model->getTiendasAll();
 
 		return view('frontend.orden_compra.modal_tiendas_orden_compra',compact('id','orden_compra','tipo_documento','producto','marca','estado_bien','unidad','igv_compra','descuento','unidad_origen','tiendas'));
 

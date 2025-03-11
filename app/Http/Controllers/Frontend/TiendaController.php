@@ -131,6 +131,10 @@ class TiendaController extends Controller
 		$tiendaDetalle->estado = $estado;
 		$tiendaDetalle->save();
 
+		$tienda = Tienda::find($tiendaDetalle->id_tienda);
+		$tienda->estado = $estado;
+		$tienda->save();
+
 		echo $tiendaDetalle->id;
     }
 

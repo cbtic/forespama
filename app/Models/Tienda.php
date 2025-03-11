@@ -63,4 +63,13 @@ class Tienda extends Model
         return $data;
     }
 
+    function getTiendasAll(){
+
+        $cad = "select * from tiendas t 
+        where estado ='1'";
+
+		$data = DB::select($cad);
+        return $data;
+    }
+
 }

@@ -25,9 +25,12 @@ $(document).ready(function () {
         language: 'es'
     });*/
 
-    $('#btnDescargar').on('click', function () {
-		DescargarArchivosPagos();
+    $('#btnDescargarCubicaje').on('click', function () {
+		DescargarReporteCubicaje();
+	});
 
+    $('#btnDescargarPagos').on('click', function () {
+		DescargarReportePagos();
 	});
 
     function getLastMonday() {
@@ -112,8 +115,57 @@ function datatablenew() {
             {},
         ],
         "dom": '<"top">rt<"bottom"flpi><"clear">',
-        "fnDrawCallback": function(json) {
+        "fnDrawCallback": function(settings) {
+            let totalCantidad = 0;
+            let totalM3 = 0;
+            let totalPies = 0;
+            let totalPrecioFinal = 0;
+            let totalTabulacion = 0;
+            let totalPromedio = 0;
+
+            settings.aoData.forEach(function(row) {
+                let total_cantidad = row._aData.totalcantidad;
+                let total_m3 = row._aData.totalvolumenm3;
+                let total_pies = row._aData.totalvolumenpies;
+                let total_precio_final = row._aData.totalpreciototal;
+                //let tipoPago = row._aData.tipo_pago;
+                if (total_cantidad) {
+                    totalCantidad = parseFloat(total_cantidad);
+                }
+                if (total_m3) {
+                    totalM3 = parseFloat(total_m3);
+                }
+                if (total_pies) {
+                    totalPies = parseFloat(total_pies);
+                }
+                if (total_precio_final) {
+                    totalPrecioFinal = parseFloat(total_precio_final);
+                }
+
+            });
+
+            totalTabulacion = totalPrecioFinal;
+
+            totalPromedio = totalPrecioFinal / totalPies;
+
+
+            $('#tblReporteCubicaje tfoot').html('');
+
+            $('#tblReporteCubicaje tfoot').append(`
+                <tr>
+                    <td style="font-size:13px" colspan="2"><b>Total</b></td>
+                    <td style="text-align : right; font-size:13px"><b>${totalCantidad}</b></td>
+                    <td style="text-align : right; font-size:13px"><b>${formato_miles(totalM3)}</b></td>
+                    <td style="text-align : right; font-size:13px"><b>${formato_miles(totalPies)}</b></td>
+                    <td style="text-align : right; font-size:13px"><b>${formato_miles(totalTabulacion)}</b></td>
+                    <td style="text-align : right; font-size:13px"><b>${formato_miles(totalPromedio)}</b></td>
+                    <td style="text-align : right; font-size:13px"><b>${formato_miles(totalPrecioFinal)}</b></td>
+                </tr>
+            `);
             $('[data-toggle="tooltip"]').tooltip();
+            $('#tfoot tbody tr').removeClass('fila-par');
+    		$('#tfoot tbody tr:even').addClass('fila-par');
+                
         },
 
         "fnServerData": function(sSource, aoData, fnCallback, oSettings) {
@@ -261,52 +313,58 @@ function datatablenew() {
                     return cantidad;
                 },
                 "bSortable": false,
-                "aTargets": [2]
+                "aTargets": [2],
+                "className": "text-right",
             },
             {
                 "mRender": function(data, type, row) {
                     var volumen_total_m3 = "";
                     if (row.volumen_total_m3 != null) volumen_total_m3 = row.volumen_total_m3;
-                    return parseFloat(volumen_total_m3).toFixed(2);
+                    return formato_miles(volumen_total_m3);
                 },
                 "bSortable": false,
                 "aTargets": [3],
+                "className": "text-right",
             },
             {
                 "mRender": function(data, type, row) {
                     var volumen_total_pies = "";
                     if (row.volumen_total_pies != null) volumen_total_pies = row.volumen_total_pies;
-                    return parseFloat(volumen_total_pies).toFixed(2);
+                    return formato_miles(volumen_total_pies);
                 },
                 "bSortable": false,
-                "aTargets": [4]
+                "aTargets": [4],
+                "className": "text-right",
             },
             {
                 "mRender": function(data, type, row) {
                     var precio_total = "";
                     if (row.precio_total != null) precio_total = row.precio_total;
-                    return parseFloat(precio_total).toFixed(2);
+                    return formato_miles(precio_total);
                 },
                 "bSortable": false,
                 "aTargets": [5],
+                "className": "text-right",
             },
             {
                 "mRender": function(data, type, row) {
                     var promedio = "";
                     if (row.promedio != null) promedio = row.promedio;
-                    return parseFloat(promedio).toFixed(2);
+                    return formato_miles(promedio);
                 },
                 "bSortable": false,
                 "aTargets": [6],
+                "className": "text-right",
             },
             {
                 "mRender": function(data, type, row) {
                     var precio_total = "";
                     if (row.precio_total != null) precio_total = row.precio_total;
-                    return parseFloat(precio_total).toFixed(2);
+                    return formato_miles(precio_total);
                 },
                 "bSortable": false,
                 "aTargets": [7],
+                "className": "text-right",
             },
                 /*
 				{
@@ -380,28 +438,28 @@ function datatablenew() {
     
                 $('#tblReportePagos tfoot').append(`
                     <tr>
-                        <td colspan="1"><b>Total</b></td>
-                        <td><b>${totalSaldo.toFixed(2)}</b></td>
+                        <td style="font-size:13px" colspan="1"><b>Total</b></td>
+                        <td style="font-size:13px"><b>${formato_miles(totalSaldo)}</b></td>
                         <td colspan="2"></td>
                     </tr>
                     <tr>
-                        <td colspan="1"><b>Resumen</b></td>
+                        <td style="font-size:13px" colspan="1"><b>Resumen</b></td>
                         <td></td>
                         <td colspan="2"></td>
                     </tr>
                     <tr>
-                        <td colspan="1">Efectivo</td>
-                        <td>${totalEfectivo.toFixed(2)}</td>
+                        <td style="font-size:13px" colspan="1">Efectivo</td>
+                        <td style="font-size:13px">${formato_miles(totalEfectivo)}</td>
                         <td colspan="2"></td>
                     </tr>
                     <tr>
-                        <td colspan="1">Cheque</td>
-                        <td>${totalCheque.toFixed(2)}</td>
+                        <td style="font-size:13px" colspan="1">Cheque</td>
+                        <td style="font-size:13px">${formato_miles(totalCheque)}</td>
                         <td colspan="2"></td>
                     </tr>
                      <tr>
-                        <td colspan="1">Transferencia</td>
-                        <td>${totalTransferencia.toFixed(2)}</td>
+                        <td style="font-size:13px" colspan="1">Transferencia</td>
+                        <td style="font-size:13px">${formato_miles(totalTransferencia)}</td>
                         <td colspan="2"></td>
                     </tr>
                 `);
@@ -487,7 +545,7 @@ function datatablenew() {
                     "mRender": function(data, type, row) {
                         var importe_total = "";
                         if (row.importe_total != null) importe_total = row.importe_total;
-                        return parseFloat(importe_total).toFixed(2);
+                        return formato_miles(importe_total);
                     },
                     "bSortable": false,
                     "aTargets": [1],
@@ -631,3 +689,36 @@ function convertirFecha(fecha){
     return fecha;
 
 }
+
+function DescargarReporteCubicaje(){
+
+    var fecha_inicio = $('#fecha_inicio_bus').val();
+	var fecha_fin = $('#fecha_fin_bus').val();
+
+	if (fecha_inicio == "")fecha_inicio = "0";
+    else fecha_inicio = fecha_inicio.replace(/\//g, "-");
+
+	if (fecha_fin == "")fecha_fin = "0";
+    else fecha_fin = fecha_fin.replace(/\//g, "-");
+
+	
+	location.href = '/ingreso_vehiculo_tronco/exportar_reporte_cubicaje/'+fecha_inicio+'/'+fecha_fin;
+
+}
+
+function DescargarReportePagos(){
+
+    var fecha_inicio = $('#fecha_inicio_bus').val();
+	var fecha_fin = $('#fecha_fin_bus').val();
+
+	if (fecha_inicio == "")fecha_inicio = "0";
+    else fecha_inicio = fecha_inicio.replace(/\//g, "-");
+
+	if (fecha_fin == "")fecha_fin = "0";
+    else fecha_fin = fecha_fin.replace(/\//g, "-");
+
+	
+	location.href = '/ingreso_vehiculo_tronco/exportar_reporte_pago/'+fecha_inicio+'/'+fecha_fin;
+
+}
+

@@ -21,6 +21,14 @@ use Carbon\Carbon;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Maatwebsite\Excel\Facades\Excel;
 use Maatwebsite\Excel\Concerns\FromArray;
+use DateTime;
+use stdClass;
+use Illuminate\Support\Facades\Response;
+use Maatwebsite\Excel\Concerns\WithStyles;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
+use Maatwebsite\Excel\Concerns\WithHeadings;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
 
 class IngresoVehiculoTroncoController extends Controller
 {
@@ -664,6 +672,165 @@ class IngresoVehiculoTroncoController extends Controller
 
 	}
 
+	public function exportar_reporte_cubicaje($fecha_inicio, $fecha_fin) {
+
+		if($fecha_inicio=="0")$ruc = "";
+		if($fecha_fin=="0")$empresa = "";
+
+		$ingresoVehiculoTronco_model = new IngresoVehiculoTronco();
+		$p[]=$fecha_inicio;
+		$p[]=$fecha_fin;
+		$p[]=1;
+		$p[]=10000;
+		$data = $ingresoVehiculoTronco_model->listar_ingreso_vehiculo_tronco_reporte_ajax($p);
+
+		$variable = [];
+		$n = 1;
+
+		array_push($variable, array("N","Fecha Recepcion","Proveedor","Cantidad","M3","Pies", "Tabulacion", "Promedio", "Precio Final"));
+		
+		$groupedData = [];
+
+		foreach ($data as $r) {
+
+			if (!isset($r->fecha_ingreso)) {
+				continue; // Saltar registros sin fecha_ingreso
+			}
+
+			if (!isset($groupedData[$r->fecha_ingreso])) {
+				$groupedData[$r->fecha_ingreso] = [];
+			}
+			$groupedData[$r->fecha_ingreso][] = $r;
+		}
+
+		$cantidadGeneral = 0;
+		$m3General = 0;
+		$piesGeneral = 0;
+		$tabulacionGeneral = 0;
+		$promedioGeneral = 0;
+		$precioFinalGeneral = 0;
+		
+		foreach ($groupedData as $fecha => $items) {
+
+			$totalCantidad = 0;
+			$totalM3 = 0;
+			$totalPies = 0;
+			$totalTabulacion = 0;
+			$totalPromedio = 0;
+			$totalPrecioTotal = 0;
+
+			foreach ($items as $r) {
+				array_push($variable, [
+					$n++, 
+					$r->fecha_ingreso,
+					$r->razon_social, 
+					$r->cantidad, 
+					$r->volumen_total_m3, 
+					$r->volumen_total_pies, 
+					$r->precio_total, 
+					number_format($r->promedio, 2),
+					$r->precio_total
+				]);
+				$totalCantidad += $r->cantidad;
+				$totalM3 += $r->volumen_total_m3;
+				$totalPies += $r->volumen_total_pies;
+				$totalPrecioTotal += $r->precio_total;
+			}
+
+			$totalTabulacion = $totalPrecioTotal;
+			$totalPromedio = $totalPies > 0 ? ($totalPrecioTotal / $totalPies) : 0;
+			
+			$fechaObj = DateTime::createFromFormat('d-m-Y', $fecha);
+        	$diaSemana = $fechaObj ? ucfirst(strftime('%A', $fechaObj->getTimestamp())) : "Día desconocido";
+
+			array_push($variable, [
+				"", "", "Total $diaSemana", $totalCantidad, number_format($totalM3, 2), number_format($totalPies, 2),
+				number_format($totalTabulacion, 2), number_format($totalPromedio, 2), number_format($totalPrecioTotal, 2)
+			]);
+			
+			$cantidadGeneral += $totalCantidad;
+			$m3General += $totalM3;
+			$piesGeneral += $totalPies;
+			$tabulacionGeneral += $totalTabulacion;
+			$precioFinalGeneral += $totalPrecioTotal;
+
+		}
+
+		$promedioGeneral = $piesGeneral > 0 ? ($tabulacionGeneral / $piesGeneral) : 0;
+		
+		array_push($variable, [
+			"",
+			"",
+			"Total General",
+			$cantidadGeneral,
+			number_format($m3General, 2),
+			number_format($piesGeneral, 2),
+			number_format($tabulacionGeneral, 2),
+			number_format($promedioGeneral, 2),
+			number_format($precioFinalGeneral, 2)
+		]);
+				
+		$export = new InvoicesExport2([$variable]);
+		return Excel::download($export, 'reporte_cubicaje.xlsx');
+		
+    }
+
+	public function exportar_reporte_pago($fecha_inicio, $fecha_fin) {
+
+		if($fecha_inicio=="0")$ruc = "";
+		if($fecha_fin=="0")$empresa = "";
+
+		$ingresoVehiculoTronco_model = new IngresoVehiculoTronco();
+		$p[]=$fecha_inicio;
+		$p[]=$fecha_fin;
+		$p[]=1;
+		$p[]=10000;
+		$data = $ingresoVehiculoTronco_model->listar_ingreso_vehiculo_tronco_reporte_pago_ajax($p);
+
+		$variable = [];
+		$n = 1;
+		$totalGeneral = 0;
+		$totalEfectivoGeneral = 0;
+		$totalChequeGeneral = 0;
+		$totalTransferenciaGeneral = 0;
+
+		array_push($variable, array("N","Empresa","Total","Tipo Pago","Fecha"));
+		
+		foreach ($data as $r) {
+
+			array_push($variable, array($n++,$r->razon_social, $r->importe_total, $r->tipo_pago, $r->fecha_pago));
+			$totalGeneral = $r->total_general;
+			$totalEfectivoGeneral = $r->total_efectivo;
+			$totalChequeGeneral = $r->total_cheque;
+			$totalTransferenciaGeneral = $r->total_transferencia;
+		}
+
+		array_push($variable, [
+			"","Total", floatval($totalGeneral),
+		]);
+
+		array_push($variable, [
+			"",
+		]);
+
+		array_push($variable, [
+			"","Resumen",
+		]);
+
+		array_push($variable, [
+			"","Total Efectivo", floatval($totalEfectivoGeneral),
+		]);
+		array_push($variable, [
+			"","Total Cheque", floatval($totalChequeGeneral),
+		]);
+		array_push($variable, [
+			"","Total Transferencia", floatval($totalTransferenciaGeneral),
+		]);
+		
+		$export = new InvoicesExport3([$variable]);
+		return Excel::download($export, 'reporte_pagos.xlsx');
+		
+    }
 }
 
 class InvoicesExport implements FromArray
@@ -679,5 +846,179 @@ class InvoicesExport implements FromArray
 	{
 		return $this->invoices;
 	}
+
+}
+
+class InvoicesExport2 implements FromArray, WithHeadings, WithStyles
+{
+	protected $invoices;
+
+	public function __construct(array $invoices)
+	{
+		$this->invoices = $invoices;
+	}
+
+	public function array(): array
+	{
+		return $this->invoices;
+	}
+
+    public function headings(): array
+    {
+        return ["N","Fecha Recepcion","Proveedor","Cantidad","M3","Pies", "Tabulacion", "Promedio", "Precio Final"];
+    }
+
+	public function styles(Worksheet $sheet)
+    {
+
+		$sheet->mergeCells('A1:I1');
+
+        $sheet->setCellValue('A1', "REPORTE DE CUBICAJE - FORESPAMA");
+        $sheet->getStyle('A1:I1')->applyFromArray([
+            'font' => [
+                'bold' => true,
+                'color' => ['rgb' => 'FFFFFF'],
+            ],
+            'fill' => [
+                'fillType' => Fill::FILL_SOLID,
+                'startColor' => ['rgb' => '246257'],
+            ],
+            'alignment' => [
+                'horizontal' => Alignment::HORIZONTAL_CENTER,
+            ],
+        ]);
+
+		$sheet->getStyle('A1')->getAlignment()->setWrapText(true);
+		$sheet->getRowDimension(1)->setRowHeight(30);
+
+        $sheet->getStyle('A2:I2')->applyFromArray([
+            'font' => [
+                'bold' => true,
+                'color' => ['rgb' => '000000'],
+            ],
+            'fill' => [
+                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                'startColor' => ['rgb' => '2EB85C'],
+            ],
+			'alignment' => [
+			'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+    		],
+        ]);
+
+		$sheet->fromArray($this->headings(), NULL, 'A2');
+
+		/*$sheet->getStyle('L3:L'.$sheet->getHighestRow())
+		->getNumberFormat()
+		->setFormatCode(\PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_NUMBER_00);*/ //SIRVE PARA PONER 2 DECIMALES A ESA COLUMNA
+        
+        foreach (range('A', 'I') as $col) {
+            $sheet->getColumnDimension($col)->setAutoSize(true);
+        }
+
+		$lastRow = $sheet->getHighestRow();
+
+		// Aplicar estilo solo a la última fila
+		$sheet->getStyle("A{$lastRow}:I{$lastRow}")->applyFromArray([
+			'font' => [
+				'bold' => true,
+			],
+			'fill' => [
+                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                'startColor' => ['rgb' => 'D9D9D9'],
+            ],
+		]);
+    }
+
+}
+
+class InvoicesExport3 implements FromArray, WithHeadings, WithStyles
+{
+	protected $invoices;
+
+	public function __construct(array $invoices)
+	{
+		$this->invoices = $invoices;
+	}
+
+	public function array(): array
+	{
+		return $this->invoices;
+	}
+
+    public function headings(): array
+    {
+        return ["N","Empresa","Total","Tipo Pago","Fecha"];
+    }
+
+	public function styles(Worksheet $sheet)
+    {
+
+		$sheet->mergeCells('A1:E1');
+
+        $sheet->setCellValue('A1', "REPORTE DE PAGOS - FORESPAMA");
+        $sheet->getStyle('A1:E1')->applyFromArray([
+            'font' => [
+                'bold' => true,
+                'color' => ['rgb' => 'FFFFFF'],
+            ],
+            'fill' => [
+                'fillType' => Fill::FILL_SOLID,
+                'startColor' => ['rgb' => '246257'],
+            ],
+            'alignment' => [
+                'horizontal' => Alignment::HORIZONTAL_CENTER,
+            ],
+        ]);
+
+		$sheet->getStyle('A1')->getAlignment()->setWrapText(true);
+		$sheet->getRowDimension(1)->setRowHeight(30);
+
+        $sheet->getStyle('A2:E2')->applyFromArray([
+            'font' => [
+                'bold' => true,
+                'color' => ['rgb' => '000000'],
+            ],
+            'fill' => [
+                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                'startColor' => ['rgb' => '2EB85C'],
+            ],
+			'alignment' => [
+			'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+    		],
+        ]);
+
+		$sheet->fromArray($this->headings(), NULL, 'A2');
+
+		$sheet->getStyle('C3:C'.$sheet->getHighestRow())
+		->getNumberFormat()
+		->setFormatCode(\PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_NUMBER_00); //SIRVE PARA PONER 2 DECIMALES A ESA COLUMNA
+        
+        foreach (range('A', 'E') as $col) {
+            $sheet->getColumnDimension($col)->setAutoSize(true);
+        }
+
+		//$lastRow = $sheet->getHighestRow();
+
+		/*$sheet->getStyle("A{$lastRow}:I{$lastRow}")->applyFromArray([
+			'font' => [
+				'bold' => true,
+			],
+			'fill' => [
+                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                'startColor' => ['rgb' => 'D9D9D9'],
+            ],
+		]);*/
+
+		$lastRow = $sheet->getHighestRow();
+
+        return [
+        	"B{$lastRow}" => ['font' => ['bold' => true]],
+            "B" . ($lastRow - 1) . ":C" . ($lastRow - 1) => ['font' => ['bold' => true]],
+            "B" . ($lastRow - 2) . ":C" . ($lastRow - 2) => ['font' => ['bold' => true]],
+            "B" . ($lastRow - 3) . ":C" . ($lastRow - 3) => ['font' => ['bold' => true]],
+            "B" . ($lastRow - 4) . ":C" . ($lastRow - 4) => ['font' => ['bold' => true]],
+            "B" . ($lastRow - 5) . ":C" . ($lastRow - 5) => ['font' => ['bold' => true]],
+        ];
+    }
 
 }

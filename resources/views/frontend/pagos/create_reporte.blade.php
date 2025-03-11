@@ -544,8 +544,8 @@ label.form-control-sm{
 										
 										<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
 											<input class="btn btn-warning btn-sm pull-rigth" value="Buscar" type="button" id="btnBuscar" />
-											<input class="btn btn-secondary btn-sm pull-rigth" value="Reporte Cubicaje" type="button" id="btnDescargarCubicaje" /> 
-											<input class="btn btn-secondary btn-sm pull-rigth" value="Reporte Pagos" type="button" id="btnDescargarPagos" /> 
+											<input class="btn btn-secondary btn-sm pull-rigth" value="Reporte Cubicaje" type="button" id="btnDescargarCubicaje" style="margin-left: 10px" /> 
+											<input class="btn btn-secondary btn-sm pull-rigth" value="Reporte Pagos" type="button" id="btnDescargarPagos" style="margin-left: 10px" /> 
 										</div>
 								
 									</div>
@@ -578,6 +578,13 @@ label.form-control-sm{
 														</thead>
 														<tbody style="font-size:13px">
 														</tbody>
+														<tfoot>
+															<tr>
+																<td colspan="2">Total</td>
+																<td></td>
+																<td></td>
+															</tr>
+														</tfoot>
 													</table>
 												</div>
 											</div>

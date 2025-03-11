@@ -776,7 +776,7 @@ function cargar_detalle_documento(id_documento){
 
                 peso_producto = entrada_producto.peso * entrada_producto.cantidad;
 
-                peso_total += parseInt(peso_producto) || 0;
+                peso_total += parseFloat(peso_producto) || 0;
                 
                 //total_acumulado += parseFloat(orden_compra.total);
                 });
