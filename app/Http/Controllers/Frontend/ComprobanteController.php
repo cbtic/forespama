@@ -683,7 +683,7 @@ class ComprobanteController extends Controller
             
             if ($id_persona2!='') {
                 $id_persona_act = $id_persona2;
-                $id_persona='';
+                //$id_persona='';
                 
             }else{
                 $id_persona_act = $id_persona;
@@ -692,7 +692,7 @@ class ComprobanteController extends Controller
 
             if ($ubicacion_id2!=''){
                 $id_ubicacion_act = $ubicacion_id2;
-                $ubicacion_id='';
+                //$ubicacion_id='';
 
             }else{
                 $id_ubicacion_act = $ubicacion_id;
@@ -907,6 +907,8 @@ class ComprobanteController extends Controller
                 
 
 				$factura = Comprobante::where('id', $id_factura)->get()[0];
+
+                //exit();
             
 				$fac_serie = $factura->serie;
 				$fac_numero = $factura->numero;
