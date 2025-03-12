@@ -14,8 +14,8 @@ class RequerimientoDetalle extends Model
         from requerimiento_detalles rd 
         inner join requerimientos r on rd.id_requerimiento = r.id 
         inner join productos p on rd.id_producto = p.id 
-        inner join tabla_maestras tm on rd.id_estado_producto ::int = tm.codigo::int and tm.tipo = '56'
-        inner join tabla_maestras tm2 on rd.id_unidad_medida ::int = tm2.codigo::int and tm2.tipo = '43'
+        left join tabla_maestras tm on rd.id_estado_producto ::int = tm.codigo::int and tm.tipo = '56'
+        left join tabla_maestras tm2 on rd.id_unidad_medida ::int = tm2.codigo::int and tm2.tipo = '43'
         left join marcas m on rd.id_marca = m.id 
         where r.id ='".$id."'";
 
