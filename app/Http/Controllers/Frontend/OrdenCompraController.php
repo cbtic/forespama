@@ -197,6 +197,8 @@ class OrdenCompraController extends Controller
             $codigo_orden_compra = $request->numero_orden_compra;
         }
 
+        //dd($codigo_orden_compra[0]->codigo);exit();
+
         $item = $request->input('item');
         $descripcion = $request->input('descripcion');
         $cod_interno = $request->input('cod_interno');
@@ -219,7 +221,11 @@ class OrdenCompraController extends Controller
         $orden_compra->id_empresa_compra = $request->empresa_compra;
         $orden_compra->id_empresa_vende = $request->empresa_vende;
         $orden_compra->fecha_orden_compra = $request->fecha_orden_compra;
-        $orden_compra->numero_orden_compra = $codigo_orden_compra[0]->codigo;
+        if($request->id == 0){
+            $orden_compra->numero_orden_compra = $codigo_orden_compra[0]->codigo;
+        }else{
+            $orden_compra->numero_orden_compra = $codigo_orden_compra;
+        }
         $orden_compra->id_tipo_documento = $request->tipo_documento;
         $orden_compra->igv_compra = $request->igv_compra;
         $orden_compra->id_unidad_origen = $request->unidad_origen;
