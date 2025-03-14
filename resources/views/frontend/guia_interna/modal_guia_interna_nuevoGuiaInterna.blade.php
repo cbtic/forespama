@@ -804,7 +804,7 @@ function cargar_detalle_documento(id_documento){
                 $('#destinatario').val(entrada.id_empresa_compra);
                 $('#orden_compra_cliente').val(entrada.numero_orden_compra_cliente);
                 $('#tiendas_orden_compra').val(entrada.tiendas);
-                $('#peso').val(peso_total);
+                $('#peso').val(peso_total.toFixed(2));
                 $('#punto_llegada_input').val(entrada.direccion);
 
                 $("#ruc").attr("readonly",true);
@@ -822,7 +822,6 @@ function cargar_detalle_documento(id_documento){
                 
             }
     });
-
 }
 
 function obtenerProvinciaContacto(ubigeo){

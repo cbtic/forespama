@@ -663,10 +663,19 @@ class OrdenCompraController extends Controller
             $valor_unitario = $row['COSTO_UNI'];
             $precio_venta = 1.18*$valor_unitario;
 
-            $total = round($precio_venta * $cantidad_requerida, 2);
+            /*$total = round($precio_venta * $cantidad_requerida, 2);
             $valor_venta_bruto = round($total / 1.18, 2);
             $igv = round($valor_venta_bruto * 0.18, 2);
             $sub_total = round($total - $igv, 2);
+
+            $sub_total_general += $sub_total;
+            $igv_general += $igv;
+            $total_general += $total;*/
+
+            $total = $precio_venta * $cantidad_requerida;
+            $valor_venta_bruto = $total / 1.18;
+            $igv = $valor_venta_bruto * 0.18;
+            $sub_total = $total - $igv;
 
             $sub_total_general += $sub_total;
             $igv_general += $igv;
@@ -681,13 +690,13 @@ class OrdenCompraController extends Controller
             $ordenCompraDetalle->estado = $estado;
             $ordenCompraDetalle->id_unidad_medida = $id_unidad_medida;
             $ordenCompraDetalle->id_estado_producto = $id_estado_producto;
-            $ordenCompraDetalle->precio_venta = $precio_venta;
-            $ordenCompraDetalle->precio = $valor_unitario;
-            $ordenCompraDetalle->valor_venta_bruto = $sub_total;
-            $ordenCompraDetalle->valor_venta = $sub_total;
-            $ordenCompraDetalle->sub_total = $sub_total;
-            $ordenCompraDetalle->igv = $igv;
-            $ordenCompraDetalle->total = $total;
+            $ordenCompraDetalle->precio_venta = round($precio_venta, 2);
+            $ordenCompraDetalle->precio = round($valor_unitario, 2);
+            $ordenCompraDetalle->valor_venta_bruto = round($sub_total, 2);
+            $ordenCompraDetalle->valor_venta = round($sub_total, 2);
+            $ordenCompraDetalle->sub_total = round($sub_total, 2);
+            $ordenCompraDetalle->igv = round($igv, 2);
+            $ordenCompraDetalle->total = round($total, 2);
             $ordenCompraDetalle->id_usuario_inserta = $id_user;
             $ordenCompraDetalle->save();
 
@@ -721,9 +730,9 @@ class OrdenCompraController extends Controller
         }
 
         $ordenCompraTotales = OrdenCompra::find($id_orden_compra);
-        $ordenCompraTotales->sub_total = $sub_total_general;
-        $ordenCompraTotales->igv = $igv_general;
-        $ordenCompraTotales->total = $total_general;
+        $ordenCompraTotales->sub_total = round($sub_total_general, 2);
+        $ordenCompraTotales->igv = round($igv_general, 2);
+        $ordenCompraTotales->total = round($total_general, 2);
         $ordenCompraTotales->save();
 
         fclose($file);
