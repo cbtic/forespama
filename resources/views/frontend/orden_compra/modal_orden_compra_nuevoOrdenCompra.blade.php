@@ -1260,7 +1260,7 @@ function obtenerEntradaSalida(){
                                 <option value="">--Seleccionar--</option>
                                 <?php
                                 foreach ($vendedor as $row){?>
-                                    <option value="<?php echo $row->id; ?>"><?php echo $row->name ?></option>
+                                    <option value="<?php echo $row->id; ?>"<?php if($row->id==$orden_compra->id_vendedor)echo "selected='selected'"?>><?php echo $row->name ?></option>
                                     <?php 
                                 }
                                 ?>

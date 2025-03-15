@@ -49,6 +49,7 @@ class OrdenCompraController extends Controller
     public function create(){
 
         $id_user = Auth::user()->id;
+        $user_model = new User;
         //echo $id_user;
         //$id_rol = auth()->user()->roles->first()->id ?? null;
         //echo $rol;
@@ -61,10 +62,11 @@ class OrdenCompraController extends Controller
         $proveedor = Empresa::all();
         $almacen = Almacene::all();
         $almacen_usuario = $almacen_user_model->getAlmacenByUser($id_user);
+        $vendedor = $user_model->getUserByRol(7);
         //$almacen_usuario2 = $almacen_user_model->getUsersByAlmacen($id_user);
         //dd($almacen_usuario);exit();
 		
-		return view('frontend.orden_compra.create',compact('tipo_documento','cerrado_orden_compra','proveedor','almacen','almacen_usuario'));
+		return view('frontend.orden_compra.create',compact('tipo_documento','cerrado_orden_compra','proveedor','almacen','almacen_usuario','vendedor'));
 
 	}
 

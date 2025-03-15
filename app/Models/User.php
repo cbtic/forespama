@@ -23,9 +23,9 @@ class User extends Model
     function getUserByRol($id_rol){
 
         $cad = "select u.id,u.name
-from model_has_roles mhr  
-inner join users u on mhr.model_id=u.id
-where role_id=".$id_rol;
+        from model_has_roles mhr  
+        inner join users u on mhr.model_id=u.id
+        where role_id=".$id_rol;
 
 		$data = DB::select($cad);
         return $data;
