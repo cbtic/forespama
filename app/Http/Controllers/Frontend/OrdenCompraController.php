@@ -32,6 +32,7 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
+use App\Models\User;
 
 class OrdenCompraController extends Controller
 {
@@ -48,6 +49,11 @@ class OrdenCompraController extends Controller
     public function create(){
 
         $id_user = Auth::user()->id;
+        //echo $id_user;
+        //$id_rol = auth()->user()->roles->first()->id ?? null;
+        //echo $rol;
+        //exit();
+
 		$tablaMaestra_model = new TablaMaestra;
         $almacen_user_model = new Almacen_usuario;
 		$tipo_documento = $tablaMaestra_model->getMaestroByTipo(54);
@@ -81,6 +87,10 @@ class OrdenCompraController extends Controller
 
     public function listar_orden_compra_ajax(Request $request){
 
+        //$id_rol = auth()->user()->roles->first()->id ?? null;
+
+        $id_user = Auth::user()->id;
+
 		$orden_compra_model = new OrdenCompra;
 		$p[]=$request->tipo_documento;
         $p[]=$request->empresa_compra;
@@ -92,6 +102,7 @@ class OrdenCompraController extends Controller
         $p[]=$request->almacen_origen;
         $p[]=$request->almacen_destino;
         $p[]=$request->estado;
+        $p[]=$id_user;
 		$p[]=$request->NumeroPagina;
 		$p[]=$request->NumeroRegistros;
 		$data = $orden_compra_model->listar_orden_compra_ajax($p);
@@ -116,6 +127,7 @@ class OrdenCompraController extends Controller
         $producto_model = new Producto;
         $marca_model = new Marca;
         $almacen_model = new Almacene;
+        $user_model = new User;
 		
 		if($id>0){
 
@@ -144,11 +156,14 @@ class OrdenCompraController extends Controller
         //$almacen = Almacene::all();
         $unidad_origen = $tablaMaestra_model->getMaestroByTipo(50);
         $moneda = $tablaMaestra_model->getMaestroByTipo(1);
+
+        $vendedor = $user_model->getUserByRol(7);
+
         //$codigo_orden_compra = $orden_compra_model->getCodigoOrdenCompra();
         
         //dd($proveedor);exit();
 
-		return view('frontend.orden_compra.modal_orden_compra_nuevoOrdenCompra',compact('id','orden_compra','tipo_documento','proveedor','producto','marca','estado_bien','unidad','igv_compra','descuento','almacen','unidad_origen','id_user','moneda'));
+		return view('frontend.orden_compra.modal_orden_compra_nuevoOrdenCompra',compact('id','orden_compra','tipo_documento','proveedor','producto','marca','estado_bien','unidad','igv_compra','descuento','almacen','unidad_origen','id_user','moneda','vendedor'));
 
     }
 
@@ -240,6 +255,7 @@ class OrdenCompraController extends Controller
         $orden_compra->descuento = $request->descuento_general;
         $orden_compra->cerrado = 1;
         $orden_compra->id_usuario_inserta = $id_user;
+        $orden_compra->id_vendedor = $request->id_vendedor;
         $orden_compra->estado = 1;
         $orden_compra->save();
 

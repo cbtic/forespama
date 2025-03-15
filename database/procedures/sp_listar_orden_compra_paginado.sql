@@ -1,4 +1,7 @@
-CREATE OR REPLACE FUNCTION public.sp_listar_orden_compra_paginado(p_tipo_documento character varying, p_empresa_compra character varying, p_empresa_vende character varying, p_fecha character varying, p_numero_orden_compra character varying, p_numero_orden_compra_cliente character varying, p_situacion character varying, p_almacen_origen character varying, p_almacen_destino character varying, p_estado character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
+
+-- DROP FUNCTION public.sp_listar_orden_compra_paginado(varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, refcursor);
+
+CREATE OR REPLACE FUNCTION public.sp_listar_orden_compra_paginado(p_tipo_documento character varying, p_empresa_compra character varying, p_empresa_vende character varying, p_fecha character varying, p_numero_orden_compra character varying, p_numero_orden_compra_cliente character varying, p_situacion character varying, p_almacen_origen character varying, p_almacen_destino character varying, p_estado character varying,p_id_user character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
  RETURNS refcursor
  LANGUAGE plpgsql
 AS $function$
@@ -10,9 +13,14 @@ v_tabla varchar;
 v_where varchar;
 v_count varchar;
 v_col_count varchar;
+v_id_rol integer;
 
 begin
 	
+	
+
+	select role_id into v_id_rol from model_has_roles mhr where mhr.model_id::varchar=p_id_user;
+
 	p_pagina=(p_pagina::Integer-1)*p_limit::Integer;
 
 	v_campos=' oc.id, tm.denominacion tipo_documento, e.razon_social empresa_compra, e2.razon_social empresa_vende,oc.fecha_orden_compra, oc.numero_orden_compra, oc.estado, oc.id_tipo_documento, oc.id_tipo_documento, oc.id_empresa_compra, oc.id_empresa_vende, oc.cerrado id_cerrado, tm2.denominacion cerrado, oc.id_almacen_salida, oc.id_almacen_destino, a.denominacion almacen_destino, a2.denominacion almacen_origen, u.id id_usuario, oc.id_unidad_origen, oc.numero_orden_compra_cliente, oc.tienda_asignada ';
@@ -71,7 +79,11 @@ begin
 	If p_estado<>'' Then
 	 v_where:=v_where||'And oc.estado  = '''||p_estado||''' ';
 	End If;
-	
+
+	If v_id_rol=7 Then 
+		v_where:=v_where||'And oc.id_vendedor  = '''||p_id_user||''' ';
+	End If;
+
 	EXECUTE ('SELECT count(1) '||v_tabla||v_where) INTO v_count;
 	v_col_count:=' ,'||v_count||' as TotalRows ';
 
@@ -88,3 +100,4 @@ End
 --select sp_listar_periodos_paginado('','','','','','1','10','ref');fetch all in ref
 $function$
 ;
+
