@@ -578,6 +578,7 @@ class OrdenCompraController extends Controller
         $sub_total_general = 0;
         $igv_general = 0;
         $total_general = 0;
+        $id_vendedor = 17;
 
         // Ruta del archivo
         //$filePath = storage_path('app/datos.txt');
@@ -649,6 +650,7 @@ class OrdenCompraController extends Controller
                 $ordenCompra->id_moneda = $id_moneda;
                 $ordenCompra->moneda = $moneda;
                 $ordenCompra->id_usuario_inserta = $id_user;
+                $ordenCompra->id_vendedor = $id_vendedor;
                 $ordenCompra->save();
                 $id_orden_compra = $ordenCompra->id;
 
