@@ -209,6 +209,15 @@ function fn_save_equivalencia_producto(){
     }
 }
 
+$('#producto').on('change', function(){
+    
+    var descripcionCompleta = $('#producto option:selected').text();
+    var descripcion = descripcionCompleta.split(' - ')[1];
+
+    $('#producto_descripcion').val(descripcion);
+
+});
+
 </script>
 
 <body class="hold-transition skin-blue sidebar-mini">
@@ -249,9 +258,10 @@ function fn_save_equivalencia_producto(){
                                         <?php
                                         foreach ($producto as $row){?>
                                             <option value="<?php echo $row->id ?>" <?php if($row->id==$equivalencia_producto->id_producto)echo "selected='selected'"?>><?php echo $row->codigo .' - '. $row->denominacion;?></option>
-                                            <?php 
+                                        <?php 
                                         }
                                         ?>
+                                        <input id="producto_descripcion" name="producto_descripcion" on class="form-control form-control-sm"  value="<?php if($id>0){echo $equivalencia_producto->descripcion_producto;}?>" hidden="hidden">
                                     </select>
                                 </div>
                                 <div class="col-lg-2">
@@ -283,9 +293,17 @@ function fn_save_equivalencia_producto(){
                                     <input id="codigo_producto_empresa" name="codigo_producto_empresa" on class="form-control form-control-sm"  value="<?php if($id>0){echo $equivalencia_producto->codigo_empresa;}?>" type="text">
                                 </div>
                                 <div class="col-lg-2">
-                                Denominaci&oacute;n Producto Empresa
+                                    SKU Producto Empresa
                                 </div>
                                 <div class="col-lg-2">
+                                    <input id="sku_producto_empresa" name="sku_producto_empresa" on class="form-control form-control-sm"  value="<?php if($id>0){echo $equivalencia_producto->sku;}?>" type="text">
+                                </div>
+                            </div>
+                            <div class="row" style="padding-left:10px; padding-top : 10px">
+                                <div class="col-lg-2">
+                                Denominaci&oacute;n Producto Empresa
+                                </div>
+                                <div class="col-lg-4">
                                     <input id="denominacion_producto_empresa" name="denominacion_producto_empresa" on class="form-control form-control-sm"  value="<?php if($id>0){echo $equivalencia_producto->descripcion_empresa;}?>" type="text">
                                 </div>
                             </div>

@@ -479,3 +479,19 @@ function DescargarArchivosExcel(){
 	
 	location.href = '/orden_compra/exportar_listar_orden_compra/'+tipo_documento+'/'+empresa_compra+'/'+empresa_vende+'/'+fecha+'/'+numero_orden_compra+'/'+numero_orden_compra_cliente+'/'+almacen_origen+'/'+almacen_destino+'/'+situacion+'/'+estado;
 }
+
+function generarLPN(){
+
+	var id_orden_compra = $('#id').val();
+
+	$.ajax({
+		url: "/orden_compra/generar_lpn/"+id_orden_compra,
+		type: "GET",
+		success: function (result) {  
+				//$("#diveditpregOpc").html(result);
+				//$('#openOverlayOpc').modal('show');
+				bootbox.alert("Generado Exitosamente");
+		}
+	});
+
+}

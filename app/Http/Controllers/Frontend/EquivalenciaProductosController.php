@@ -91,10 +91,11 @@ class EquivalenciaProductosController extends Controller
 		
 		$equivalencia_producto->id_producto = $request->producto;
 		$equivalencia_producto->codigo_producto = $request->codigo_producto;
-        $equivalencia_producto->descripcion_producto = "aaaa";
+        $equivalencia_producto->descripcion_producto = $request->producto_descripcion;
         $equivalencia_producto->id_empresa = $request->empresa;
         $equivalencia_producto->codigo_empresa = $request->codigo_producto_empresa;
         $equivalencia_producto->descripcion_empresa = $request->denominacion_producto_empresa;
+        $equivalencia_producto->sku = $request->sku_producto_empresa;
         $equivalencia_producto->id_usuario_inserta = $id_user;
 		$equivalencia_producto->estado = 1;
 		$equivalencia_producto->save();

@@ -16,8 +16,8 @@ class OrdenCompraDetalle extends Model
         from orden_compra_detalles ocd 
         inner join productos p on ocd.id_producto = p.id 
         left join tabla_maestras tm on ocd.id_descuento = tm.codigo ::int and tm.tipo = '55'
-        inner join tabla_maestras tm2 on ocd.id_estado_producto = tm2.codigo ::int and tm2.tipo = '56'
-        inner join tabla_maestras tm3 on ocd.id_unidad_medida = tm3.codigo ::int and tm3.tipo = '43'
+        left join tabla_maestras tm2 on ocd.id_estado_producto = tm2.codigo ::int and tm2.tipo = '56'
+        left join tabla_maestras tm3 on ocd.id_unidad_medida = tm3.codigo ::int and tm3.tipo = '43'
         left join marcas m on ocd.id_marca = m.id 
         where ocd.id_orden_compra ='".$id."'
         and ocd.estado='1'

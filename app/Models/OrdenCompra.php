@@ -230,6 +230,13 @@ class OrdenCompra extends Model
     return $data;
     }
 
+    function getOrdenCompraLpn($id_orden_compra){
 
+        $cad="";
+
+        $data = DB::select($cad);
+        return $data;
+
+    }
 
 }

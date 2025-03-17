@@ -607,3 +607,4 @@ Route::post('ingreso_vehiculo_tronco/listar_ingreso_vehiculo_tronco_reporte_ajax
 Route::post('ingreso_vehiculo_tronco/listar_ingreso_vehiculo_tronco_reporte_pago_ajax', [IngresoVehiculoTroncoController::class, 'listar_ingreso_vehiculo_tronco_reporte_pago_ajax'])->name('ingreso_vehiculo_tronco.listar_ingreso_vehiculo_tronco_reporte_pago_ajax');
 Route::get('ingreso_vehiculo_tronco/exportar_reporte_cubicaje/{fecha_inicio}/{fecha_fin}', [IngresoVehiculoTroncoController::class, 'exportar_reporte_cubicaje'])->name('ingreso_vehiculo_tronco.exportar_reporte_cubicaje');
 Route::get('ingreso_vehiculo_tronco/exportar_reporte_pago/{fecha_inicio}/{fecha_fin}', [IngresoVehiculoTroncoController::class, 'exportar_reporte_pago'])->name('ingreso_vehiculo_tronco.exportar_reporte_pago');
+Route::get('orden_compra/generar_lpn/{id_orden_compra}', [OrdenCompraController::class, 'generar_lpn'])->name('orden_compra.generar_lpn');

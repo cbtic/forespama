@@ -179,26 +179,26 @@ function obtenerCodInterno(selectElement, n){
     var id_producto = $(selectElement).val();
 
     $.ajax({
-            url: "/productos/obtener_producto/"+id_producto,
-            dataType: "json",
-            success: function(result){
-                //alert(result[0].codigo);
-                $('#cod_interno' + n).val(result[0].codigo);
-                $('#item' + n).val(result[0].numero_serie);
-                $('#marca' + n).val(result[0].id_marca).trigger('change');
-                $('#unidad' + n).val(result[0].id_unidad_producto);
+        url: "/productos/obtener_producto/"+id_producto,
+        dataType: "json",
+        success: function(result){
+            //alert(result[0].codigo);
+            $('#cod_interno' + n).val(result[0].codigo);
+            $('#item' + n).val(result[0].numero_serie);
+            $('#marca' + n).val(result[0].id_marca).trigger('change');
+            $('#unidad' + n).val(result[0].id_unidad_producto);
 
-                $('#fecha_vencimiento_' + n).datepicker({
-                    autoclose: true,
-                    format: 'yyyy-mm-dd',
-                    changeMonth: true,
-                    changeYear: true,
-                    language: 'es'
-                });
-                
-                $('#fecha_vencimiento_' + n).datepicker('setDate', result[0].fecha_vencimiento);
-            }
-        });
+            $('#fecha_vencimiento_' + n).datepicker({
+                autoclose: true,
+                format: 'yyyy-mm-dd',
+                changeMonth: true,
+                changeYear: true,
+                language: 'es'
+            });
+            
+            $('#fecha_vencimiento_' + n).datepicker('setDate', result[0].fecha_vencimiento);
+        }
+    });
 }
 
 function obtenerCodigo(selectElement){
