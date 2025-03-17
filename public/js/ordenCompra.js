@@ -255,6 +255,15 @@ function datatablenew(){
 				"aTargets": [9]
 				},
 				{
+				"mRender": function (data, type, row) {
+					var vendedor = "";
+					if(row.vendedor!= null)vendedor = row.vendedor;
+					return vendedor;
+				},
+				"bSortable": true,
+				"aTargets": [10]
+				},
+				{
 					"mRender": function (data, type, row) {
 						var estado = "";
 						if(row.estado == 1){
@@ -266,7 +275,7 @@ function datatablenew(){
 						return estado;
 					},
 					"bSortable": false,
-					"aTargets": [10]
+					"aTargets": [11]
 				},
 				{
 					"mRender": function (data, type, row) {
@@ -320,7 +329,7 @@ function datatablenew(){
 						return html;
 					},
 					"bSortable": false,
-					"aTargets": [11],
+					"aTargets": [12],
 				},
 
             ]

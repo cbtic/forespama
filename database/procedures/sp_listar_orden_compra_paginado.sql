@@ -1,7 +1,7 @@
 
 -- DROP FUNCTION public.sp_listar_orden_compra_paginado(varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, refcursor);
 
-CREATE OR REPLACE FUNCTION public.sp_listar_orden_compra_paginado(p_tipo_documento character varying, p_empresa_compra character varying, p_empresa_vende character varying, p_fecha character varying, p_numero_orden_compra character varying, p_numero_orden_compra_cliente character varying, p_situacion character varying, p_almacen_origen character varying, p_almacen_destino character varying, p_estado character varying,p_id_user character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
+CREATE OR REPLACE FUNCTION public.sp_listar_orden_compra_paginado(p_tipo_documento character varying, p_empresa_compra character varying, p_empresa_vende character varying, p_fecha character varying, p_numero_orden_compra character varying, p_numero_orden_compra_cliente character varying, p_situacion character varying, p_almacen_origen character varying, p_almacen_destino character varying, p_estado character varying,p_id_user character varying,p_id_vendedor character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
  RETURNS refcursor
  LANGUAGE plpgsql
 AS $function$
@@ -23,7 +23,7 @@ begin
 
 	p_pagina=(p_pagina::Integer-1)*p_limit::Integer;
 
-	v_campos=' oc.id, tm.denominacion tipo_documento, e.razon_social empresa_compra, e2.razon_social empresa_vende,oc.fecha_orden_compra, oc.numero_orden_compra, oc.estado, oc.id_tipo_documento, oc.id_tipo_documento, oc.id_empresa_compra, oc.id_empresa_vende, oc.cerrado id_cerrado, tm2.denominacion cerrado, oc.id_almacen_salida, oc.id_almacen_destino, a.denominacion almacen_destino, a2.denominacion almacen_origen, u.id id_usuario, oc.id_unidad_origen, oc.numero_orden_compra_cliente, oc.tienda_asignada ';
+	v_campos=' oc.id, tm.denominacion tipo_documento, e.razon_social empresa_compra, e2.razon_social empresa_vende,oc.fecha_orden_compra, oc.numero_orden_compra, oc.estado, oc.id_tipo_documento, oc.id_tipo_documento, oc.id_empresa_compra, oc.id_empresa_vende, oc.cerrado id_cerrado, tm2.denominacion cerrado, oc.id_almacen_salida, oc.id_almacen_destino, a.denominacion almacen_destino, a2.denominacion almacen_origen, u.id id_usuario, oc.id_unidad_origen, oc.numero_orden_compra_cliente, oc.tienda_asignada, u2.name vendedor ';
 
 	v_tabla=' from orden_compras oc 
 	inner join empresas e on oc.id_empresa_compra = e.id
@@ -32,7 +32,8 @@ begin
 	inner join tabla_maestras tm2 on oc.cerrado ::int = tm2.codigo ::int and tm2.tipo=''52'' 
 	left join almacenes a on oc.id_almacen_destino = a.id
 	left join almacenes a2 on oc.id_almacen_salida = a2.id 
-	inner join users u on oc.id_usuario_inserta = u.id';
+	inner join users u on oc.id_usuario_inserta = u.id
+	left join users u2 on oc.id_vendedor = u2.id';
 	
 	v_where = ' Where 1=1 ';
 
@@ -82,6 +83,10 @@ begin
 
 	If v_id_rol=7 Then 
 		v_where:=v_where||'And oc.id_vendedor  = '''||p_id_user||''' ';
+	End If;
+
+	If p_id_vendedor<>'' Then
+	 v_where:=v_where||'And oc.id_vendedor  = '''||p_id_vendedor||''' ';
 	End If;
 
 	EXECUTE ('SELECT count(1) '||v_tabla||v_where) INTO v_count;

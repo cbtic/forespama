@@ -105,6 +105,7 @@ class OrdenCompraController extends Controller
         $p[]=$request->almacen_destino;
         $p[]=$request->estado;
         $p[]=$id_user;
+        $p[]=$request->vendedor;
 		$p[]=$request->NumeroPagina;
 		$p[]=$request->NumeroRegistros;
 		$data = $orden_compra_model->listar_orden_compra_ajax($p);
