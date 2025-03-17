@@ -921,13 +921,13 @@ function fn_save_orden_compra(){
     var empresa_compra = $('#empresa_compra').val();
     var empresa_vende = $('#empresa_vende').val();
     var igv_compra = $('#igv_compra').val();
-    var id_vendedor = $('#id_vendedor').val();
+    //var id_vendedor = $('#id_vendedor').val();
 
     if(tipo_documento==""){msg+="Ingrese el Tipo de Documento <br>";}
     if(empresa_compra==""){msg+="Ingrese la Empresa que Compra <br>";}
     if(empresa_vende==""){msg+="Ingrese la Empresa que Vende <br>";}
     if(igv_compra==""){msg+="Ingrese el IGV <br>";}
-    if(id_vendedor==""){msg+="Ingrese el Vendedor <br>";}
+    //if(id_vendedor==""){msg+="Ingrese el Vendedor <br>";}
 
     if ($('#tblOrdenCompraDetalle tbody tr').length == 0) {
         msg += "No se ha agregado ningún producto <br>";
