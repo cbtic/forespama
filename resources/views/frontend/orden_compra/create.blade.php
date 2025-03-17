@@ -465,12 +465,11 @@ label.form-control-sm{
 						<input class="btn btn-warning pull-rigth" value="Buscar" type="button" id="btnBuscar" />
 						<input class="btn btn-success pull-rigth" value="Nuevo" type="button" id="btnNuevo" style="margin-left:10px" />
 						<!--<input class="btn btn-secondary pull-rigth" value="Excel" name="excel" type="button" id="btnDescargar" style="margin-left:15px;margin-right:10px;"/>-->
-						@hasanyrole('Administrator')
+						
 						<button id="btnDescargar" type="button" class="btn btn-secondary pull-rigth" style="margin-left:10px;">
 							<i class="fas fa-download"></i> Excel
 							<!--<img src="/img/icono_carro.png" alt="Carro" style="width: 16px; height: 16px; margin-left: 5px;">-->
 						</button>
-						@endhasanyrole
 					</div>
 				</div>
 				
