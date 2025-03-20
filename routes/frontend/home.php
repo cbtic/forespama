@@ -608,3 +608,8 @@ Route::post('ingreso_vehiculo_tronco/listar_ingreso_vehiculo_tronco_reporte_pago
 Route::get('ingreso_vehiculo_tronco/exportar_reporte_cubicaje/{fecha_inicio}/{fecha_fin}', [IngresoVehiculoTroncoController::class, 'exportar_reporte_cubicaje'])->name('ingreso_vehiculo_tronco.exportar_reporte_cubicaje');
 Route::get('ingreso_vehiculo_tronco/exportar_reporte_pago/{fecha_inicio}/{fecha_fin}', [IngresoVehiculoTroncoController::class, 'exportar_reporte_pago'])->name('ingreso_vehiculo_tronco.exportar_reporte_pago');
 Route::get('orden_compra/generar_lpn/{id_orden_compra}', [OrdenCompraController::class, 'generar_lpn'])->name('orden_compra.generar_lpn');
+Route::get('orden_compra/create_reporte_comercializacion', [OrdenCompraController::class, 'create_reporte_comercializacion'])->name('orden_compra.create_reporte_comercializacion');
+Route::post('orden_compra/listar_reporte_comercializacion_ajax', [OrdenCompraController::class, 'listar_reporte_comercializacion_ajax'])->name('orden_compra.listar_reporte_comercializacion_ajax');
+Route::get('orden_compra/exportar_reporte_comercializacion/{empresa_compra}/{fecha}/{numero_orden_compra_cliente}/{situacion}', [OrdenCompraController::class, 'exportar_reporte_comercializacion'])->name('orden_compra.exportar_reporte_comercializacion');
+
+

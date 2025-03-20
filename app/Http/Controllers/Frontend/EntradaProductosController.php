@@ -184,6 +184,8 @@ class EntradaProductosController extends Controller
             $entrada_producto->observacion = $request->observacion;
             $entrada_producto->id_almacen_destino = $request->almacen;
             $entrada_producto->id_empresa_compra = $request->empresa_compra;
+            $entrada_producto->id_tipo_cliente = $request->tipo_documento_cliente;
+            $entrada_producto->id_persona = $request->persona_compra;
             $entrada_producto->codigo = $codigo[0]->codigo;
             $entrada_producto->id_usuario_recibe = $id_user;
             $entrada_producto->estado = 1;
@@ -418,6 +420,8 @@ class EntradaProductosController extends Controller
                 $salida_producto->id_orden_compra = $request->id_orden_compra;
                 $salida_producto->id_proveedor = $request->proveedor;
                 $salida_producto->id_empresa_compra = $request->empresa_compra;
+                $salida_producto->id_tipo_cliente = $request->tipo_documento_cliente;
+                $salida_producto->id_persona = $request->persona_compra;
                 $salida_producto->codigo = $codigo[0]->codigo;
                 $salida_producto->id_usuario_recibe = $id_user;
                 $salida_producto->id_persona_recibe = $request->persona_recibe;
@@ -464,6 +468,10 @@ class EntradaProductosController extends Controller
                     }
 
                     $salida_producto_detalle->save();
+
+                    $orden_compra_detalle_cantidad = OrdenCompraDetalle::where('id_orden_compra',$salida_producto->id_orden_compra)->where('id_producto',$descripcion[$index])->where('estado',1)->first();
+                    $orden_compra_detalle_cantidad->cantidad_despacho = $cantidad_ingreso[$index];
+                    $orden_compra_detalle_cantidad->save();
 
                     $producto = Producto::find($descripcion[$index]);
 
@@ -583,6 +591,8 @@ class EntradaProductosController extends Controller
                 $salida_producto2->id_orden_compra = $request->id_orden_compra;
                 $salida_producto2->id_proveedor = $request->proveedor;
                 $salida_producto2->id_empresa_compra = $request->empresa_compra;
+                $salida_producto2->id_tipo_cliente = $request->tipo_documento_cliente;
+                $salida_producto2->id_persona = $request->persona_compra;
                 $salida_producto2->codigo = $codigo[0]->codigo;
                 $salida_producto2->id_usuario_recibe = $id_user;
                 $salida_producto2->id_persona_recibe = $request->persona_recibe;
@@ -1044,6 +1054,8 @@ class EntradaProductosController extends Controller
         $almacen_seccion_model = new AlmacenesSeccione;
         $anaquel_model = new Anaquele;
         $tipo_cambio_model = new TipoCambio;
+        $persona_model = new Persona;
+        $empresa_model = new Empresa;
         $id_user = Auth::user()->id;
       
         if($id>0){
@@ -1093,8 +1105,10 @@ class EntradaProductosController extends Controller
         $igv_compra = $tablaMaestra_model->getMaestroByTipo(51);
         $tipo_movimiento = $tablaMaestra_model->getMaestroByTipo(53);
         $estado_bien = $tablaMaestra_model->getMaestroByTipo(4);
+        $tipo_documento_cliente = $tablaMaestra_model->getMaestroByTipo(75);
+        $persona = $persona_model->obtenerPersonaAll();
         
-		return view('frontend.entrada_productos.modal_entradas_detalleEntradaOrden',compact('id','orden_compra','entrada_producto_detalle','tipo_documento','moneda','unidad_origen','cerrado_entrada','igv_compra','proveedor','producto','unidad','almacen'/*,'almacen_seccion'*/,'tipo_cambio','tipo_movimiento','entrada_producto','marca','estado_bien',/*'tipo_movimiento_',*/'tipo','id_orden_compra','persona'));
+		return view('frontend.entrada_productos.modal_entradas_detalleEntradaOrden',compact('id','orden_compra','entrada_producto_detalle','tipo_documento','moneda','unidad_origen','cerrado_entrada','igv_compra','proveedor','producto','unidad','almacen'/*,'almacen_seccion'*/,'tipo_cambio','tipo_movimiento','entrada_producto','marca','estado_bien',/*'tipo_movimiento_',*/'tipo','id_orden_compra','persona','tipo_documento_cliente','persona'));
 
     }
 
@@ -1531,6 +1545,7 @@ class EntradaProductosController extends Controller
         $almacen_seccion_model = new AlmacenesSeccione;
         $anaquel_model = new Anaquele;
         $tipo_cambio_model = new TipoCambio;
+        $persona_model = new Persona;
         $id_user = Auth::user()->id;
        
         if($id>0){
@@ -1578,11 +1593,13 @@ class EntradaProductosController extends Controller
         $igv_compra = $tablaMaestra_model->getMaestroByTipo(51);
         $tipo_movimiento = $tablaMaestra_model->getMaestroByTipo(53);
         $estado_bien = $tablaMaestra_model->getMaestroByTipo(4);
+        $tipo_documento_cliente = $tablaMaestra_model->getMaestroByTipo(75);
+        $persona = $persona_model->obtenerPersonaAll();
 
         //dd($entrada_producto);exit();
         //dd($orden_compra);exit();
         
-		return view('frontend.entrada_productos.modal_entradas_detalleEntradaHistorial',compact('id','entrada_producto_detalle','tipo_documento','moneda','unidad_origen','cerrado_entrada','igv_compra','proveedor','producto','unidad','almacen'/*,'almacen_seccion'*/,'tipo_cambio','tipo_movimiento','entrada_producto','marca','estado_bien',/*'tipo_movimiento_',*/'tipo','persona','orden_compra'));
+		return view('frontend.entrada_productos.modal_entradas_detalleEntradaHistorial',compact('id','entrada_producto_detalle','tipo_documento','moneda','unidad_origen','cerrado_entrada','igv_compra','proveedor','producto','unidad','almacen'/*,'almacen_seccion'*/,'tipo_cambio','tipo_movimiento','entrada_producto','marca','estado_bien',/*'tipo_movimiento_',*/'tipo','persona','orden_compra','tipo_documento_cliente','persona'));
 
     }
 

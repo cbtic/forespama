@@ -26,7 +26,29 @@ class SalidaProductoDetalle extends Model
 
     function getDetalleProductoId($id){
 
-        $cad = "select spd.id,  ROW_NUMBER() OVER (PARTITION BY spd.id_salida_productos ) AS row_num, spd.numero_serie, spd.id_producto, p.codigo, spd.id_marca, p.id_unidad_medida, spd.fecha_vencimiento, spd.id_um, spd.id_estado_productos id_estado_bien, spd.cantidad, spd.cantidad, spd.cantidad, '12' stock_actual, spd.costo, spd.sub_total , spd.igv, spd.total, sp.id_almacen_salida, p.denominacion nombre_producto, m.denominiacion nombre_marca, tm2.denominacion nombre_estado_bien, tm3.denominacion nombre_unidad_medida, sp.id_empresa_compra, e.ruc, e.razon_social, oc.numero_orden_compra_cliente,
+        $cad = "select spd.id,  ROW_NUMBER() OVER (PARTITION BY spd.id_salida_productos ) AS row_num, spd.numero_serie, spd.id_producto, p.codigo, spd.id_marca, p.id_unidad_medida, spd.fecha_vencimiento, spd.id_um, spd.id_estado_productos id_estado_bien, spd.cantidad, spd.cantidad, spd.cantidad, '12' stock_actual, spd.costo, spd.sub_total , spd.igv, spd.total, sp.id_almacen_salida, p.denominacion nombre_producto, m.denominiacion nombre_marca, tm2.denominacion nombre_estado_bien, tm3.denominacion nombre_unidad_medida, 
+        --sp.id_empresa_compra, 
+        --e.ruc, e.razon_social, 
+        case when sp.id_tipo_cliente = 1 then 
+        (select p.id from personas p
+        where p.id = sp.id_persona)
+        else (select e2.id from empresas e2 
+        where e2.id = sp.id_empresa_compra) 
+        end id_empresa_compra,
+        case when sp.id_tipo_cliente = 1 then 
+        (select p.nombres ||' '|| p.apellido_paterno ||' '|| p.apellido_materno from personas p
+        where p.id = sp.id_persona)
+        else (select e2.razon_social from empresas e2 
+        where e2.id = sp.id_empresa_compra) 
+        end cliente,
+        case when sp.id_tipo_cliente = 1 then 
+        (select p.numero_documento from personas p
+        where p.id = sp.id_persona)
+        else (select e2.ruc from empresas e2 
+        where e2.id = sp.id_empresa_compra) 
+        end documento_cliente,
+        sp.id_tipo_cliente,
+        oc.numero_orden_compra_cliente,
         (select COALESCE(STRING_AGG(DISTINCT t.denominacion ::TEXT, ', '), '') from tienda_detalle_orden_compras tdoc
         inner join tiendas t on tdoc.id_tienda = t.id
         where tdoc.id_orden_compra = oc.id) tiendas, spd.valor_venta_bruto, spd.precio_venta, spd.valor_venta, spd.descuento, spd.id_descuento, p.peso, sp.id_orden_compra,
@@ -54,7 +76,7 @@ class SalidaProductoDetalle extends Model
         left join marcas m on spd.id_marca = m.id 
         left join tabla_maestras tm2 on spd.id_estado_productos ::int = tm2.codigo::int and tm2.tipo = '56'
         left join tabla_maestras tm3 on spd.id_um ::int = tm3.codigo::int and tm3.tipo = '43'
-        inner join empresas e on sp.id_empresa_compra = e.id
+        --inner join empresas e on sp.id_empresa_compra = e.id
         inner join orden_compras oc on sp.id_orden_compra = oc.id 
         --left join tienda_detalle_orden_compras tdoc on tdoc.id_orden_compra = oc.id
         where id_salida_productos ='".$id."'

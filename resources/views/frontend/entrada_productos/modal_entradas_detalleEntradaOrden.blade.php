@@ -216,6 +216,8 @@ $(document).ready(function() {
         cambiarOrigen();
         //cambiarTipoDocumento();
     }
+
+    cambiarCliente();
 });
 
 function cambiarTipoCambio(){
@@ -1091,6 +1093,33 @@ function pdf_documento(){
 
 }
 
+function cambiarCliente(){
+
+    var tipo_documento_cliente = $('#tipo_documento_cliente').val();
+
+    $('#empresa_compra_').hide();
+    $('#empresa_compra_select').hide();
+    $('#label_persona_compra').hide();
+    $('#select_persona_compra').hide();
+
+    if(tipo_documento_cliente==1){
+
+        $('#empresa_compra_').hide();
+        $('#empresa_compra_select').hide();
+        $('#label_persona_compra').show();
+        $('#select_persona_compra').show();
+        
+    }else if(tipo_documento_cliente==5){
+
+        $('#empresa_compra_').show();
+        $('#empresa_compra_select').show();
+        $('#label_persona_compra').hide();
+        $('#select_persona_compra').hide();
+        
+    }
+
+}
+
 </script>
 
 
@@ -1211,6 +1240,21 @@ function pdf_documento(){
                                 ?>
                             </select>
                         </div>
+                        <div class="col-lg-2">
+                            Tipo Documento Cliente
+                        </div>
+                        <div class="col-lg-2">
+                            <input type="hidden" name="tipo_documento_cliente" id="tipo_documento_cliente" value="<?php echo $orden_compra->id_tipo_cliente?>">
+                            <select name="tipo_documento_cliente_" id="tipo_documento_cliente_" class="form-control form-control-sm" onchange="cambiarCliente()" disabled>
+                                <option value="">--Seleccionar--</option>
+                                <?php
+                                foreach ($tipo_documento_cliente as $row){?>
+                                    <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$orden_compra->id_tipo_cliente)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                    <?php 
+                                }
+                                ?>
+                            </select>
+                        </div>
                         <div class="col-lg-2" id="empresa_compra_">
                             Empresa Compra
                         </div>
@@ -1221,6 +1265,21 @@ function pdf_documento(){
                                 <?php
                                 foreach ($proveedor as $row){?>
                                     <option value="<?php echo $row->id ?>" <?php if($row->id==$orden_compra->id_empresa_compra)echo "selected='selected'"?>><?php echo $row->razon_social ?></option>
+                                    <?php 
+                                }
+                                ?>
+                            </select>
+                        </div>
+                        <div class="col-lg-2" id="label_persona_compra">
+                            Persona Compra
+                        </div>
+                        <div class="col-lg-2" id="select_persona_compra">
+                            <input type="hidden" name="persona_compra" id="persona_compra" value="<?php echo $orden_compra->id_persona?>">
+                            <select name="persona_compra_" id="persona_compra_" class="form-control form-control-sm" onchange="" disabled>
+                                <option value="">--Seleccionar--</option>
+                                <?php
+                                foreach ($persona as $row){?>
+                                    <option value="<?php echo $row->id ?>" <?php if($row->id==$orden_compra->id_persona)echo "selected='selected'"?>><?php echo $row->nombres .' '. $row->apellido_paterno .' '. $row->apellido_materno  ?></option>
                                     <?php 
                                 }
                                 ?>

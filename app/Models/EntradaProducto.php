@@ -58,7 +58,7 @@ class EntradaProducto extends Model
         inner join tabla_maestras tm3 on ep.id_moneda ::int = tm3.codigo::int and tm3.tipo = '1'
         inner join empresas e on ep.id_proveedor = e.id
         inner join empresas e2 on ep.id_empresa_compra = e2.id
-        inner join tabla_maestras tm4 on ep.igv_compra ::int = tm4.codigo::int and tm4.tipo = '51'
+        left join tabla_maestras tm4 on ep.igv_compra ::int = tm4.codigo::int and tm4.tipo = '51'
         inner join almacenes a on ep.id_almacen_destino = a.id
         where ep.id='".$id."'
         and ep.estado='1'";

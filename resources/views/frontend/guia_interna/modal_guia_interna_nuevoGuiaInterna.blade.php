@@ -274,6 +274,15 @@ $(document).ready(function() {
         btnConductor
     }
 
+    $('#ruc_destinatario_label').hide();
+    $('#ruc_destinatario_input').hide();
+    $('#dni_destinatario_label').hide();
+    $('#dni_destinatario_input').hide();
+    $('#empresa_destinatario_label').hide();
+    $('#empresa_destinatario_input').hide();
+    $('#nombre_destinatario_label').hide();
+    $('#nombre_destinatario_input').hide();
+
 });
 
 function obtenerCodigo(){
@@ -527,8 +536,8 @@ function fn_save_guia_interna(){
     var punto_partida = $('#punto_partida').val();
     //var punto_llegada = $('#punto_llegada').val();
     var fecha_inicio_traslado = $('#fecha_inicio_traslado').val();
-    var destinatario = $('#destinatario').val();
-    var ruc = $('#ruc').val();
+    //var destinatario = $('#destinatario').val();
+    //var ruc = $('#ruc').val();
     var marca_placa = $('#marca_placa').val();
     var numero_inscripcion = $('#numero_inscripcion').val();
     var numero_licencia = $('#numero_licencia').val();
@@ -549,8 +558,8 @@ function fn_save_guia_interna(){
     if(punto_partida==""){msg+="Ingrese el Punto de Partida <br>";}
     //if(punto_llegada==""){msg+="Ingrese el Punto de Llegada <br>";}
     if(fecha_inicio_traslado==""){msg+="Ingrese la Fecha de traslado <br>";}
-    if(destinatario==""){msg+="Ingrese el Destinatario <br>";}
-    if(ruc==""){msg+="Ingrese el RUC de Destinatario <br>";}
+    //if(destinatario==""){msg+="Ingrese el Destinatario <br>";}
+    //if(ruc==""){msg+="Ingrese el RUC de Destinatario <br>";}
     if(marca_placa==""){msg+="Ingrese la Marca y Placa <br>";}
     if(numero_inscripcion==""){msg+="Ingrese el Numero de Inscripcion <br>";}
     if(numero_licencia==""){msg+="Ingrese el Numero de Licencia <br>";}
@@ -789,6 +798,15 @@ function cargar_detalle_documento(id_documento){
                 $('#tiendas_orden_compra').val("");
                 $('#peso').val("");
                 $('#punto_llegada_input').val("");
+                $('#tipo_documento_cliente').val("");
+                $('#ruc_destinatario_label').val("");
+                $('#ruc_destinatario_input').val("");
+                $('#dni_destinatario_label').val("");
+                $('#dni_destinatario_input').val("");
+                $('#empresa_destinatario_label').val("");
+                $('#empresa_destinatario_input').val("");
+                $('#nombre_destinatario_label').val("");
+                $('#nombre_destinatario_input').val("");
 
                 $("#ruc").attr("readonly",false);
                 $("#destinatario_nombre").attr("readonly",false);
@@ -799,19 +817,54 @@ function cargar_detalle_documento(id_documento){
                 
                 //alert(entrada);
 
-                $('#ruc').val(entrada.ruc);
-                $('#destinatario_nombre').val(entrada.razon_social);
-                $('#destinatario').val(entrada.id_empresa_compra);
                 $('#orden_compra_cliente').val(entrada.numero_orden_compra_cliente);
                 $('#tiendas_orden_compra').val(entrada.tiendas);
                 $('#peso').val(peso_total.toFixed(2));
                 $('#punto_llegada_input').val(entrada.direccion);
+                $('#tipo_documento_cliente').val(entrada.id_tipo_cliente);
+
+                if(entrada.id_tipo_cliente=='1'){
+                    
+                    
+                    $('#div_persona').show();
+                    $('#div_empresa').hide();
+                    $('#div_dni').show();
+                    $('#div_ruc').hide();
+                    $('#dni_destinatario_label').show();
+                    $('#dni_destinatario_input').show();
+                    $('#nombre_destinatario_label').show();
+                    $('#nombre_destinatario_input').show();
+
+                    $('#dni_destinatario').val(entrada.documento_cliente);
+                    $('#persona_destinatario_nombre').val(entrada.cliente);
+                    $('#persona_destinatario').val(entrada.id_empresa_compra);
+
+                }else if(entrada.id_tipo_cliente=='5'){
+
+                    $('#div_persona').hide();
+                    $('#div_empresa').show();
+                    $('#div_dni').hide();
+                    $('#div_ruc').show();
+                    $('#ruc_destinatario_label').show();
+                    $('#ruc_destinatario_input').show();
+                    $('#empresa_destinatario_label').show();
+                    $('#empresa_destinatario_input').show();
+
+                    $('#ruc').val(entrada.documento_cliente);
+                    $('#destinatario_nombre').val(entrada.cliente);
+                    $('#destinatario').val(entrada.id_empresa_compra);
+
+                }
 
                 $("#ruc").attr("readonly",true);
+                $("#dni_destinatario").attr("readonly",true);
                 $("#destinatario_nombre").attr("readonly",true);
+                $("#persona_destinatario_nombre").attr("readonly",true);
                 $("#orden_compra_cliente").attr("readonly",true);
                 $("#tiendas_orden_compra").attr("readonly",true);
                 $("#peso").attr("readonly",true);
+
+                
                 //$("#punto_llegada_input").attr("readonly",true);
 
                 //$("#destinatario").select2({ width: '100%' });
@@ -1742,37 +1795,61 @@ function obtenerDistritoPartida_edit(callback){
                         <div class="col-lg-4">
                             <div class="row">
                                 <div class="col-lg-4">
-                                    RUC Destinatario
+                                    Tipo Documento Cliente
                                 </div>
                                 <div class="col-lg-5">
+                                    <select name="tipo_documento_cliente" id="tipo_documento_cliente" class="form-control form-control-sm" onchange="cambiarCliente()">
+                                        <option value="">--Seleccionar--</option>
+                                        <?php
+                                        foreach ($tipo_documento_cliente as $row){?>
+                                            <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$guia_interna->id_tipo_cliente)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                            <?php 
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4" id="div_ruc">
+                            <div class="row">
+                                <div class="col-lg-4" id="ruc_destinatario_label">
+                                    RUC Destinatario
+                                </div>
+                                <div class="col-lg-5" id="ruc_destinatario_input">
                                     <input id="ruc" name="ruc" on class="form-control form-control-sm"  value="<?php if($id>0){echo $guia_interna->ruc_destinatario;} ?>" type="text">
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-4">
+                        <div class="col-lg-4" id="div_dni">
                             <div class="row">
-                                <div class="col-lg-4">
+                                <div class="col-lg-4" id="dni_destinatario_label">
+                                    DNI Destinatario
+                                </div>
+                                <div class="col-lg-5" id="dni_destinatario_input">
+                                    <input id="dni_destinatario" name="dni_destinatario" on class="form-control form-control-sm"  value="<?php if($id>0){echo $guia_interna->dni_destinatario;} ?>" type="text">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4" id="div_empresa">
+                            <div class="row">
+                                <div class="col-lg-4" id="empresa_destinatario_label">
                                     Nombre Destinatario
                                 </div>
-                                <div class="col-lg-5">
-                                <input id="destinatario_nombre" name="destinatario_nombre" on class="form-control form-control-sm"  value="<?php //if($id>0){echo $guia_interna->licencia_conducir;} ?>" type="text">
-                                <input name="destinatario" id="destinatario" class="form-control form-control-sm" value="" type="hidden">
-                                    <!--<select name="destinatario" id="destinatario" class="form-control form-control-sm" onchange="obtener_ruc()">
-                                        <option value="">--Seleccionar--</option>
-                                        <?php 
-                                        //foreach ($empresas as $row){?>
-                                            <option value="<?php //echo $row->id ?>" <?php //if($row->id==$guia_interna->id_destinatario)echo "selected='selected'"?>><?php //echo $row->razon_social ?></option>
-                                            <?php 
-                                        //}
-                                        ?>
-                                    </select>-->
+                                <div class="col-lg-5" id="empresa_destinatario_input">
+                                    <input id="destinatario_nombre" name="destinatario_nombre" on class="form-control form-control-sm"  value="<?php //if($id>0){echo $guia_interna->licencia_conducir;} ?>" type="text">
+                                    <input name="destinatario" id="destinatario" class="form-control form-control-sm" value="" type="hidden">
                                 </div>
-                                <!--<div class="col-lg-3">
-                                    <button id="btnPlaca" type="button" class="btn btn-warning btn-sm" data-toggle="modal" onclick="agregarDestinatario()">
-                                        <i class="fas fa-plus-circle"></i>Destinatario
-                                        <img src="/img/icono_empresa.png" alt="Carro" style="width: 16px; height: 16px; margin-left: 5px;">
-                                    </button>
-                                </div>-->
+                            </div>
+                        </div>
+                        <div class="col-lg-4" id="div_persona">
+                            <div class="row">
+                                <div class="col-lg-4" id="nombre_destinatario_label">
+                                    Nombre Destinatario
+                                </div>
+                                <div class="col-lg-5" id="nombre_destinatario_input">
+                                    <input id="persona_destinatario_nombre" name="persona_destinatario_nombre" on class="form-control form-control-sm"  value="<?php //if($id>0){echo $guia_interna->licencia_conducir;} ?>" type="text">
+                                    <input name="persona_destinatario" id="persona_destinatario" class="form-control form-control-sm" value="" type="hidden">
+                                </div>
                             </div>
                         </div>
                     </div>

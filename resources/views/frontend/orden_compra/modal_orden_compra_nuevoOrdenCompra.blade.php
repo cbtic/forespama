@@ -199,6 +199,7 @@ $(document).ready(function() {
     $("#ubicacion_fisica_anaquel").select2({ width: '100%' });
     $("#empresa_vende").select2({ width: '100%' });
     $("#empresa_compra").select2({ width: '100%' });
+    $("#persona_compra").select2({ width: '100%' });
     
 
 });
@@ -228,6 +229,8 @@ $(document).ready(function() {
         cambiarTipoCambio();
         cambiarOrigen();
     }*/
+
+    cambiarCliente();
 
     if($('#id').val()>0){
         cargarDetalle();
@@ -918,13 +921,13 @@ function fn_save_orden_compra(){
     var msg = "";
 
     var tipo_documento = $('#tipo_documento').val();
-    var empresa_compra = $('#empresa_compra').val();
+    //var empresa_compra = $('#empresa_compra').val();
     var empresa_vende = $('#empresa_vende').val();
     var igv_compra = $('#igv_compra').val();
     //var id_vendedor = $('#id_vendedor').val();
 
     if(tipo_documento==""){msg+="Ingrese el Tipo de Documento <br>";}
-    if(empresa_compra==""){msg+="Ingrese la Empresa que Compra <br>";}
+    //if(empresa_compra==""){msg+="Ingrese la Empresa que Compra <br>";}
     if(empresa_vende==""){msg+="Ingrese la Empresa que Vende <br>";}
     if(igv_compra==""){msg+="Ingrese el IGV <br>";}
     //if(id_vendedor==""){msg+="Ingrese el Vendedor <br>";}
@@ -1069,6 +1072,33 @@ function obtenerEntradaSalida(){
 
 }
 
+function cambiarCliente(){
+
+    var tipo_documento_cliente = $('#tipo_documento_cliente').val();
+
+    $('#label_empresa_compra').hide();
+    $('#select_empresa_compra').hide();
+    $('#label_persona_compra').hide();
+    $('#select_persona_compra').hide();
+
+    if(tipo_documento_cliente==1){
+
+        $('#label_empresa_compra').hide();
+        $('#select_empresa_compra').hide();
+        $('#label_persona_compra').show();
+        $('#select_persona_compra').show();
+        
+    }else if(tipo_documento_cliente==5){
+
+        $('#label_empresa_compra').show();
+        $('#select_empresa_compra').show();
+        $('#label_persona_compra').hide();
+        $('#select_persona_compra').hide();
+        
+    }
+
+}
+
 </script>
 
 <body class="hold-transition skin-blue sidebar-mini">
@@ -1124,9 +1154,37 @@ function obtenerEntradaSalida(){
                             <input id="numero_orden_compra" name="numero_orden_compra" on class="form-control form-control-sm"  value="<?php if($id>0){echo $orden_compra->numero_orden_compra;}?>" type="text" readonly ="readonly">
                         </div>
                         <div class="col-lg-2">
-                            Empresa Compra
+                            Empresa Vende
                         </div>
                         <div class="col-lg-2">
+                            <select name="empresa_vende" id="empresa_vende" class="form-control form-control-sm" onchange="">
+                                <option value="">--Seleccionar--</option>
+                                <?php
+                                foreach ($proveedor as $row){?>
+                                    <option value="<?php echo $row->id ?>" <?php if($row->id==$orden_compra->id_empresa_vende)echo "selected='selected'"?>><?php echo $row->razon_social ?></option>
+                                    <?php 
+                                }
+                                ?>
+                            </select>
+                        </div>
+                        <div class="col-lg-2">
+                            Tipo Documento Cliente
+                        </div>
+                        <div class="col-lg-2">
+                            <select name="tipo_documento_cliente" id="tipo_documento_cliente" class="form-control form-control-sm" onchange="cambiarCliente()">
+                                <option value="">--Seleccionar--</option>
+                                <?php
+                                foreach ($tipo_documento_cliente as $row){?>
+                                    <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$orden_compra->id_tipo_cliente)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                    <?php 
+                                }
+                                ?>
+                            </select>
+                        </div>
+                        <div class="col-lg-2" id="label_empresa_compra">
+                            Empresa Compra
+                        </div>
+                        <div class="col-lg-2" id="select_empresa_compra">
                             <select name="empresa_compra" id="empresa_compra" class="form-control form-control-sm" onchange="">
                                 <option value="">--Seleccionar--</option>
                                 <?php
@@ -1137,15 +1195,15 @@ function obtenerEntradaSalida(){
                                 ?>
                             </select>
                         </div>
-                        <div class="col-lg-2">
-                            Empresa Vende
+                        <div class="col-lg-2" id="label_persona_compra">
+                            Persona Compra
                         </div>
-                        <div class="col-lg-2">
-                            <select name="empresa_vende" id="empresa_vende" class="form-control form-control-sm" onchange="">
+                        <div class="col-lg-2" id="select_persona_compra">
+                            <select name="persona_compra" id="persona_compra" class="form-control form-control-sm" onchange="">
                                 <option value="">--Seleccionar--</option>
                                 <?php
-                                foreach ($proveedor as $row){?>
-                                    <option value="<?php echo $row->id ?>" <?php if($row->id==$orden_compra->id_empresa_vende)echo "selected='selected'"?>><?php echo $row->razon_social ?></option>
+                                foreach ($persona as $row){?>
+                                    <option value="<?php echo $row->id ?>" <?php if($row->id==$orden_compra->id_persona)echo "selected='selected'"?>><?php echo $row->nombres .' '. $row->apellido_paterno .' '. $row->apellido_materno  ?></option>
                                     <?php 
                                 }
                                 ?>

@@ -75,7 +75,9 @@ class Empresa extends Model
 
     function getEmpresaAll(){
 
-        $cad = "select * from empresas where estado ='1'";
+        $cad = "select * from empresas 
+        where estado ='1'
+        order by razon_social asc";
 
         $data = DB::select($cad);
         return $data;

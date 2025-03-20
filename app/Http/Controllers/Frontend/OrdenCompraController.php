@@ -19,6 +19,7 @@ use App\Models\EquivalenciaProducto;
 use App\Models\EntradaProducto;
 use App\Models\SalidaProducto;
 use App\Models\Ubigeo;
+use App\Models\Persona;
 use App\Models\OrdenCompraContactoEntrega;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Auth;
@@ -131,17 +132,20 @@ class OrdenCompraController extends Controller
         $marca_model = new Marca;
         $almacen_model = new Almacene;
         $user_model = new User;
+        $persona_model = new Persona;
+        $empresa_model = new Empresa;
 		
 		if($id>0){
 
             $orden_compra = OrdenCompra::find($id);
-            $proveedor = Empresa::all();
+            //$proveedor = Empresa::all();
 			
 		}else{
 			$orden_compra = new OrdenCompra;
-            $proveedor = Empresa::all();
+            //$proveedor = Empresa::all();
 		}
 
+        $proveedor = $empresa_model->getEmpresaAll();
         //$orden_compra_model = new OrdenCompra;
         $tipo_documento = $tablaMaestra_model->getMaestroByTipo(54);
         //$moneda = $tablaMaestra_model->getMaestroByTipo(1);
@@ -161,12 +165,14 @@ class OrdenCompraController extends Controller
         $moneda = $tablaMaestra_model->getMaestroByTipo(1);
 
         $vendedor = $user_model->getUserByRol(7);
+        $tipo_documento_cliente = $tablaMaestra_model->getMaestroByTipo(75);
+        $persona = $persona_model->obtenerPersonaAll();
 
         //$codigo_orden_compra = $orden_compra_model->getCodigoOrdenCompra();
         
         //dd($proveedor);exit();
 
-		return view('frontend.orden_compra.modal_orden_compra_nuevoOrdenCompra',compact('id','orden_compra','tipo_documento','proveedor','producto','marca','estado_bien','unidad','igv_compra','descuento','almacen','unidad_origen','id_user','moneda','vendedor'));
+		return view('frontend.orden_compra.modal_orden_compra_nuevoOrdenCompra',compact('id','orden_compra','tipo_documento','proveedor','producto','marca','estado_bien','unidad','igv_compra','descuento','almacen','unidad_origen','id_user','moneda','vendedor','tipo_documento_cliente','persona'));
 
     }
 
@@ -238,6 +244,8 @@ class OrdenCompraController extends Controller
 
         $orden_compra->id_empresa_compra = $request->empresa_compra;
         $orden_compra->id_empresa_vende = $request->empresa_vende;
+        $orden_compra->id_tipo_cliente = $request->tipo_documento_cliente;
+        $orden_compra->id_persona = $request->persona_compra;
         $orden_compra->fecha_orden_compra = $request->fecha_orden_compra;
         if($request->id == 0){
             $orden_compra->numero_orden_compra = $codigo_orden_compra[0]->codigo;
@@ -386,7 +394,7 @@ class OrdenCompraController extends Controller
         $datos_detalle=$orden_compra_detalle_model->getDetalleOrdenCompraPdf($id);
 
         $tipo_documento=$datos[0]->tipo_documento;
-        $empresa_compra=$datos[0]->empresa_compra;
+        $empresa_compra=$datos[0]->cliente;
         $empresa_vende=$datos[0]->empresa_vende;
         $fecha_orden_compra = $datos[0]->fecha_orden_compra;
         $numero_orden_compra = $datos[0]->numero_orden_compra;
@@ -993,6 +1001,81 @@ class OrdenCompraController extends Controller
 
     }
 
+    public function create_reporte_comercializacion(){
+
+        $id_user = Auth::user()->id;
+        $tienda_model = new Tienda;
+        $producto_model = new Producto;
+
+		$tablaMaestra_model = new TablaMaestra;
+		$tipo_documento = $tablaMaestra_model->getMaestroByTipo(54);
+        $cerrado_orden_compra = $tablaMaestra_model->getMaestroByTipo(52);
+        $proveedor = Empresa::all();
+        $tiendas = $tienda_model->getTiendasAll();
+        $productos = $producto_model->getProductoExterno();
+
+		return view('frontend.orden_compra.create_reporte_comercializacion',compact('tipo_documento','cerrado_orden_compra','proveedor','tiendas','productos'));
+
+	}
+
+    public function listar_reporte_comercializacion_ajax(Request $request){
+
+		$orden_compra_model = new OrdenCompra;
+		$p[]=$request->empresa_compra;
+        $p[]=$request->fecha;
+        $p[]=$request->numero_orden_compra_cliente;
+        $p[]=$request->situacion;
+        $p[]=1;
+        $p[]=$request->NumeroPagina;
+		$p[]=$request->NumeroRegistros;
+		$data = $orden_compra_model->listar_reporte_comercializacion_ajax($p);
+		$iTotalDisplayRecords = isset($data[0]->totalrows)?$data[0]->totalrows:0;
+
+		$result["PageStart"] = $request->NumeroPagina;
+		$result["pageSize"] = $request->NumeroRegistros;
+		$result["SearchText"] = "";
+		$result["ShowChildren"] = true;
+		$result["iTotalRecords"] = $iTotalDisplayRecords;
+		$result["iTotalDisplayRecords"] = $iTotalDisplayRecords;
+		$result["aaData"] = $data;
+
+        echo json_encode($result);
+
+	}
+
+    public function exportar_reporte_comercializacion($empresa_compra, $fecha, $numero_orden_compra_cliente, $situacion) {
+
+        if($empresa_compra==0)$empresa_compra = "";
+        if($fecha=="0")$fecha = "";
+        if($numero_orden_compra_cliente=="0")$numero_orden_compra_cliente = "";
+        if($situacion==0)$situacion = "";
+        
+        $orden_compra_model = new OrdenCompra;
+		$p[]=$empresa_compra;
+        $p[]=$fecha;
+        $p[]=$numero_orden_compra_cliente;
+        $p[]=$situacion;
+        $p[]=1;
+        $p[]=1;
+		$p[]=10000;
+		$data = $orden_compra_model->listar_reporte_comercializacion_ajax($p);
+		$iTotalDisplayRecords = isset($data[0]->totalrows)?$data[0]->totalrows:0;
+		
+		$variable = [];
+		$n = 1;
+
+		array_push($variable, array("N°","Empresa","Orden Compra","Local","Pedido","Fecha Pedido","Fecha Vencimiento","Comentario","Codigo Interno","Descripcion","Precio Unitario","Cantidad Pedida","Cantidad Entregada","Cantidad Cancelada","Cantidad Entrega"));
+		
+		foreach ($data as $r) {
+
+			array_push($variable, array($n++,$r->razon_social, $r->numero_orden_compra_cliente, $r->tienda, $r->pedido, $r->fecha_orden_compra, $r->fecha_vencimiento, $r->comentarios, $r->codigo, $r->producto, $r->precio, $r->cantidad_requerida, $r->cantidad_despacho, $r->cantidad_cancelada, $r->pendiente_entrega));
+		}
+		
+		$export = new InvoicesExport2([$variable]);
+		return Excel::download($export, 'Reporte_comercializacion.xlsx');
+		
+    }  
+
 }
 
 class InvoicesExport implements FromArray, WithHeadings, WithStyles
@@ -1058,6 +1141,74 @@ class InvoicesExport implements FromArray, WithHeadings, WithStyles
 		->setFormatCode(\PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_NUMBER_00);*/ //SIRVE PARA PONER 2 DECIMALES A ESA COLUMNA
         
         foreach (range('A', 'L') as $col) {
+            $sheet->getColumnDimension($col)->setAutoSize(true);
+        }
+    }
+}
+
+class InvoicesExport2 implements FromArray, WithHeadings, WithStyles
+{
+	protected $invoices;
+
+	public function __construct(array $invoices)
+	{
+		$this->invoices = $invoices;
+	}
+
+	public function array(): array
+	{
+		return $this->invoices;
+	}
+
+    public function headings(): array
+    {
+        return ["N°", "Empresa", "Orden Compra", "Local", "Pedido", "Fecha Pedido", "Fecha Vencimiento", "Comentario", "Codigo Interno", "Descripcion", "Precio Unitario", "Cantidad Pedida", "Cantidad Entregada", "Cantidad Cancelada", "Cantidad Entrega"];
+    }
+
+	public function styles(Worksheet $sheet)
+    {
+
+		$sheet->mergeCells('A1:O1');
+
+        $sheet->setCellValue('A1', "REPORTE DE COMERCIALIZACION - FORESPAMA");
+        $sheet->getStyle('A1:O1')->applyFromArray([
+            'font' => [
+                'bold' => true,
+                'color' => ['rgb' => 'FFFFFF'],
+            ],
+            'fill' => [
+                'fillType' => Fill::FILL_SOLID,
+                'startColor' => ['rgb' => '246257'],
+            ],
+            'alignment' => [
+                'horizontal' => Alignment::HORIZONTAL_CENTER,
+            ],
+        ]);
+
+		$sheet->getStyle('A1')->getAlignment()->setWrapText(true);
+		$sheet->getRowDimension(1)->setRowHeight(30);
+
+        $sheet->getStyle('A2:O2')->applyFromArray([
+            'font' => [
+                'bold' => true,
+                'color' => ['rgb' => '000000'],
+            ],
+            'fill' => [
+                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                'startColor' => ['rgb' => '2EB85C'],
+            ],
+			'alignment' => [
+			'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+    		],
+        ]);
+
+		$sheet->fromArray($this->headings(), NULL, 'A2');
+
+		/*$sheet->getStyle('L3:L'.$sheet->getHighestRow())
+		->getNumberFormat()
+		->setFormatCode(\PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_NUMBER_00);*/ //SIRVE PARA PONER 2 DECIMALES A ESA COLUMNA
+        
+        foreach (range('A', 'O') as $col) {
             $sheet->getColumnDimension($col)->setAutoSize(true);
         }
     }
