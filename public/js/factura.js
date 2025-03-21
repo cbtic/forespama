@@ -148,6 +148,41 @@ function calculoDetraccion(){
 	}
 }
 
+function obtenerNotaCreditoComprobante(id_orden_compra){
+
+	//var id_orden_compra = $("#id_orden_compra").val();
+
+	//alert(tipo_comprobante);
+
+	$.ajax({
+		url: '/comprobante/obtiene_orden_compra/' + id_orden_compra,
+		dataType: "json",
+		success: function (result) {
+
+			if (result) {
+				alert('SI');
+				return ('Si');
+
+				
+			}
+			else {
+				alert('NO');						
+				return ('No');
+			}
+
+		},
+		"error": function (msg, textStatus, errorThrown) {
+
+			Swal.fire("Numero de documento no fue registrado!");
+			return ('No');
+
+		}
+		
+		
+	});
+	
+}
+
 function guardarFactura(){
 
     var msg = "";
@@ -237,6 +272,14 @@ function guardarFactura(){
 	
 	if (tipo_cambio==""&& forma_pago=="EFECTIVO DOLARES"){msg+="Debe ingresar el tipo de cambio<br>";	}
 
+	var id_orden_compra = $("#id_orden_compra").val();
+	var esiste_oc = obtenerNotaCreditoComprobante(id_orden_compra);
+	esiste_oc="Si";
+
+	if (esiste_oc=="Si"){msg+="La Orden de Compra ya fue Facturado...<br>";	}
+
+
+
 
     if(msg!=""){
 		
@@ -246,7 +289,7 @@ function guardarFactura(){
     else{
         fn_save();
 	}
-	//fn_save();
+	
 
 }
 

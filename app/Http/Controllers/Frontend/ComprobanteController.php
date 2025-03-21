@@ -461,8 +461,10 @@ class ComprobanteController extends Controller
             //echo "adelanto=>".$adelanto."<br>";
 
 
-            $stotal = $total/1.18;
-            $igv   = $stotal * 0.18;
+            //$stotal = $total/1.18;
+            $stotal = $request->stotal;
+            //$igv   = $stotal * 0.18;
+            $igv = $request->igv;
 
 
 
@@ -548,6 +550,19 @@ class ComprobanteController extends Controller
 		$id_user = Auth::user()->id;
         $facturas_model = new Comprobante;
 		$guia_model = new Guia;
+
+        $id_orden_compra = $request->id_orden_compra;
+
+                /*
+        if ((string)$id_orden_compra!=""){
+            //$factura_upd->orden_compra =  $id_orden_compra;
+            $orden_compra = Comprobante::where('orden_compra', $id_orden_compra)->first();
+            if($orden_compra){
+
+            }
+        }
+            */
+        
 
         $id_tipo_afectacion_pp = $request->id_tipo_afectacion_pp;
 
@@ -3559,6 +3574,16 @@ class ComprobanteController extends Controller
 
     }
 
+    public function obtiene_orden_compra($id){
+
+                    
+        $orden_compra = Comprobante::where('orden_compra', $id)->first();
+
+        $array["orden_compra"] = $orden_compra;
+        echo json_encode($array);
+
+    }
+    
     public function guia_json($id_guia){
 
         //$username = config('values.ws_fac_user');

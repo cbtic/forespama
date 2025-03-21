@@ -287,8 +287,9 @@ Route::get('comprobante/envio_factura_sunat_automatico/{fecha}', [ComprobanteCon
 Route::get('comprobante/envio_guia_sunat_automatico/{fecha}', [ComprobanteController::class, 'envio_guia_sunat_automatico'])->name('comprobante.envio_guia_sunat_automatico');
 Route::post('comprobante/listar_comprobante', [ComprobanteController::class, 'listar_comprobante'])->name('comprobante.listar_comprobante');
 
-
 Route::get('comprobante/obtener_representante/{tipo_documento}/{numero_documento}', [ComprobanteController::class, 'obtener_representante'])->name('comprobante.obtener_representante');
+
+Route::get('comprobante/obtiene_orden_compra/{id}', [ComprobanteController::class, 'obtiene_orden_compra'])->name('comprobante.obtiene_orden_compra');
 
 
 Route::get('lotes', 'App\Http\Controllers\LoteController@index')->name('lotes.index');
