@@ -101,12 +101,61 @@ $(document).ready(function () {
 	});
 
 
+	$('#descuento_global').keypress(function (e) {
+		//if (e.keyCode == 13) {
+			calcular_descuento();
+		//}
+	});	
+
 	//calculoDetraccion();
 
 	calculaPorcentaje(1);
 
 	
 });
+
+function calcular_descuento(){
+
+	//alert("ok");
+
+	PrecioVenta_ = $('#total_fac_').val();
+	Descuento_ = $('#descuento_global').val();
+	Cantidad_ = 1;
+
+	alert(Descuento_);
+
+
+	ValorUnitario_ = PrecioVenta_ /(1+tasa_igv_);
+	//ValorUnitario_ = Number(ValorUnitario_ .toFixed(2));		
+	ValorVB_ = ValorUnitario_ * Cantidad_;
+	ValorVenta_ = ValorVB_ - Descuento_;
+	Igv_ = ValorVenta_ * tasa_igv_;
+	//Igv_ = Number(Igv_.toFixed(2));
+	Total_ = ValorVenta_ + Igv_;
+	//Total_ =Number(Total_.toFixed(2));
+
+
+	
+	$('#descuentos').val(Descuento_);
+
+
+/*
+	ValorUnitario_ = Number(ValorUnitario_ .toFixed(2));
+	$('#txtValorUnitario').val(ValorUnitario_);
+	
+	ValorVB_ = Number(ValorVB_ .toFixed(2));
+	$('#txtValorVB').val(ValorVB_);
+	
+	ValorVenta_ = Number(ValorVenta_ .toFixed(2));
+	$('#txtValorVenta').val(ValorVenta_);
+
+	Igv_ = Number(Igv_ .toFixed(2));
+	$('#txtIgv').val(Igv_);
+	
+	Total_ = Number(Total_ .toFixed(2));
+	$('#txtTotal').val(Total_);	
+	*/
+}
 
 function calculoDetraccion(){
 	

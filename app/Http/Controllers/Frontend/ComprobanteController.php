@@ -2787,7 +2787,7 @@ class ComprobanteController extends Controller
 		$data["importeTotal"] = str_replace(",","",$factura->total); //"150.00";
 		$data["notification"] = "1";
 		$data["sumatoriaIGV"] = str_replace(",","",$factura->impuesto); //"22.88";
-		$data["sumatoriaISC"] = "0.00";
+        $data["sumatoriaISC"] = "0.00";
 		$data["ubigeoEmisor"] = "150139";
 		//$data["montoEnLetras"] = $factura->letras; //"CIENTO CINCUENTA Y 00/100";
 		$data["tipoDocumento"] = $this->getTipoDocumento($factura->tipo);
@@ -3579,11 +3579,13 @@ class ComprobanteController extends Controller
                     
         $orden_compra = Comprobante::where('orden_compra', $id)->first();
 
+        print_r($orden_compra);
+
         $array["orden_compra"] = $orden_compra;
         echo json_encode($array);
 
     }
-    
+
     public function guia_json($id_guia){
 
         //$username = config('values.ws_fac_user');

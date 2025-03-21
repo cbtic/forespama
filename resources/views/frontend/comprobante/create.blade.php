@@ -995,12 +995,16 @@
                                                         <th></th>
                                                         <th class="text-right"><span id="anticipos"></span> 0.00</th>
                                                     </tr>
-                                                    <tr style="display:none">
+                                                    <tr>
                                                         <th></th>
                                                         <th>Descuentos</th>
                                                         <th></th>
                                                         <th></th>
-                                                        <th class="text-right"><span id="descuentos"></span> 0.00</th>
+                                                        <th style="padding-bottom:0px;margin-bottom:0px">
+                                                            <input type="text" readonly name="descuentos" id="descuentos" value="0.00" class="form-control form-control-sm text-center">
+                                                        </th>
+
+                                                       
                                                     </tr>
                                                     <tr>
                                                         <th></th>
@@ -1240,7 +1244,7 @@
                                             <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
                                                 <div class="form-group">
                                                     <label class="form-control-sm">Descuento Global</label>
-                                                    <input type="text" name="numero_documento" id="numero_documento" value="{{old('clinum')}}" placeholder="" class="form-control form-control-sm">
+                                                    <input type="text" name="descuento_global" id="descuento_global" value="{{old('clinum')}}" placeholder="" class="form-control form-control-sm">
                                                 </div>
                                             </div>
 
