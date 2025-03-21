@@ -1307,7 +1307,7 @@ function cambiarCliente(){
                             N&uacute;mero Entrada/Salida
                         </div>
                         <div class="col-lg-2" id="input_entrada_salida">
-                            <input id="numero_entrada_salida" name="numero_entrada_salida" style="color:red; font-weight:bold" on class="form-control form-control-sm"  value="<?php echo $orden_compra->numero_orden_compra_cliente;?>" type="text">
+                            <input id="numero_entrada_salida" name="numero_entrada_salida" style="color:red; font-weight:bold" on class="form-control form-control-sm"  value="<?php echo $orden_compra->numero_orden_compra_cliente;?>" type="text" readonly="readonly">
                         </div>
 
                         <div class="col-lg-2">

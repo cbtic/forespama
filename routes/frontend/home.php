@@ -611,5 +611,6 @@ Route::get('orden_compra/generar_lpn/{id_orden_compra}', [OrdenCompraController:
 Route::get('orden_compra/create_reporte_comercializacion', [OrdenCompraController::class, 'create_reporte_comercializacion'])->name('orden_compra.create_reporte_comercializacion');
 Route::post('orden_compra/listar_reporte_comercializacion_ajax', [OrdenCompraController::class, 'listar_reporte_comercializacion_ajax'])->name('orden_compra.listar_reporte_comercializacion_ajax');
 Route::get('orden_compra/exportar_reporte_comercializacion/{empresa_compra}/{fecha}/{numero_orden_compra_cliente}/{situacion}', [OrdenCompraController::class, 'exportar_reporte_comercializacion'])->name('orden_compra.exportar_reporte_comercializacion');
+Route::get('requerimiento/exportar_listar_requerimiento_reporte/{tipo_documento}/{fecha}/{numero_requerimiento}/{almacen}/{situacion}/{responsable_atencion}/{estado_atencion}/{tipo_requerimiento}/{estado}', [RequerimientoController::class, 'exportar_listar_requerimiento_reporte'])->name('requerimiento.exportar_listar_requerimiento_reporte');
 
 

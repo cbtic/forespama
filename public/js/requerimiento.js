@@ -68,7 +68,12 @@ $(document).ready(function () {
 	datatablenew();
 
 	$('#btnDescargar').on('click', function () {
-		DescargarArchivosRequerimiento();
+		descargarArchivosRequerimiento();
+
+	});
+
+	$('#btnDescargarReporte').on('click', function () {
+		descargarArchivosRequerimientoReporte();
 
 	});
 
@@ -378,7 +383,7 @@ function fn_eliminar(id,estado){
     });
 }
 
-function DescargarArchivosRequerimiento(){
+function descargarArchivosRequerimiento(){
 		
 	var tipo_documento = $('#tipo_documento_bus').val();
 	var fecha = $('#fecha_bus').val();
@@ -405,4 +410,29 @@ function DescargarArchivosRequerimiento(){
 	//if (orden == "")orden = 0;
 	
 	location.href = '/requerimiento/exportar_listar_requerimiento/'+tipo_documento+'/'+fecha+'/'+numero_requerimiento+'/'+almacen+'/'+situacion+'/'+responsable_atencion+'/'+estado_atencion+'/'+tipo_requerimiento+'/'+estado;
+}
+
+function descargarArchivosRequerimientoReporte(){
+		
+	var tipo_documento = $('#tipo_documento_bus').val();
+	var fecha = $('#fecha_bus').val();
+	var numero_requerimiento = $('#numero_requerimiento_bus').val();
+	var almacen = $('#almacen_bus').val();
+	var situacion = $('#situacion_bus').val();
+	var responsable_atencion = $('#responsable_atencion_bus').val();
+	var estado_atencion = $('#estado_atencion_bus').val();
+	var tipo_requerimiento = $('#tipo_requerimiento_bus').val();
+	var estado = $('#estado_bus').val();
+
+	if (tipo_documento == "")tipo_documento = 0;
+	if (fecha == "")fecha = "0";
+	if (numero_requerimiento == "")numero_requerimiento = "0";
+	if (almacen == "")almacen = 0;
+	if (situacion == "")situacion = 0;
+	if (responsable_atencion == "")responsable_atencion = 0;
+	if (estado_atencion == "")estado_atencion = 0;
+	if (tipo_requerimiento == "")tipo_requerimiento = 0;
+	if (estado == "")estado = 0;
+	
+	location.href = '/requerimiento/exportar_listar_requerimiento_reporte/'+tipo_documento+'/'+fecha+'/'+numero_requerimiento+'/'+almacen+'/'+situacion+'/'+responsable_atencion+'/'+estado_atencion+'/'+tipo_requerimiento+'/'+estado;
 }

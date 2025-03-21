@@ -203,6 +203,7 @@ class IngresoVehiculoTroncoController extends Controller
 
 		$ingresoVehiculoTronco_model = new IngresoVehiculoTronco();
 		$p[]=$request->placa;
+		$p[]=$request->ruc;
 		$p[]=$request->NumeroPagina;
 		$p[]=$request->NumeroRegistros;
 		$data = $ingresoVehiculoTronco_model->listar_ingreso_vehiculo_tronco_ajax($p);

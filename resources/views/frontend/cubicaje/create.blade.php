@@ -494,15 +494,15 @@ label.form-control-sm{
 							
 						<div id="divTablaIngreso" class="row col align-self-center" style="padding:10px 20px 10px 20px;">
 					
-							<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-								<input class="form-control form-control-sm" id="nombre_py_bus" name="nombre_py_bus" placeholder="Nombre del Proyecto">
-							</div>
-							
-							<div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
-								<input class="form-control form-control-sm" id="detalle_py_bus" name="detalle_py_bus" placeholder="Detalle del Proyecto">
+							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+								<input class="form-control form-control-sm" id="placa_bus" name="placa_bus" placeholder="Placa">
 							</div>
 							
 							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+								<input class="form-control form-control-sm" id="ruc_bus" name="ruc_bus" placeholder="RUC">
+							</div>
+							
+							<!--<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
 								<select name="estado_py_bus" id="estado_py_bus" class="form-control form-control-sm" onchange="">
 									<option value="">ESTADO PROYECTO</option>
 									<?php
@@ -517,7 +517,7 @@ label.form-control-sm{
 									<option value="1">ACTIVO</option>
 									<option value="0">INACTIVO</option>
 								</select>
-							</div>
+							</div>-->
 							
 							<!--
 							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
