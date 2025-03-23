@@ -12,7 +12,7 @@
 <link media="all" type="text/css" rel="stylesheet" href="https://app-gsf.saludpol.gob.pe:29692/css/datatables/dataTables.bootstrap.min.css">
 <script src="https://app-gsf.saludpol.gob.pe:29692/js/datatables/datatables.min.js"></script>
 
-<!--<script src="<?php echo URL::to('/') ?>/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>-->
+<script src="<?php echo URL::to('/') ?>/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>-->
 <!--<script src="<?php echo URL::to('/') ?>/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>-->
 
 <!--<script src="<?php echo URL::to('/') ?>/js/manifest.js"></script>
@@ -64,14 +64,14 @@
             //print_r($(this).val());
             if ($(this).val() == 1) {
                 OcultarTarjeta();
-                //MostrarMedioPago();
+                MostrarMedioPago();
             }
 
             
 
             if ($(this).val() == 2) {
                 MostrarTarjeta();
-                //OcultarMedioPago();
+                OcultarMedioPago();
                 
                 var id_tipooperacion = $('#id_tipooperacion_').val();
                 var monto_detraccion = $('#monto_detraccion').val();                
@@ -1019,12 +1019,18 @@
                                                         <th>Ope Gravadas</th>
                                                         <th></th>
                                                         <th></th>
-                                                        <th class="text-right"><span id="gravadas"></span> <?php if ($trans == 'FA') {
+
+                                                        <th style="padding-bottom:0px;margin-bottom:0px">
+                                                            <input type="text" readonly name="gravadas" id="gravadas" value="<?php echo $stotal ?>" class="form-control form-control-sm text-center">
+                                                        </th>
+<!--
+                                                        <th class="text-right"><span name="gravadas" id="gravadas"></span> <?php if ($trans == 'FA') {
                                                                                                                 echo number_format($stotal, 2);
                                                                                                             }
                                                                                                             if ($trans == 'FE') {
                                                                                                                 echo number_format($comprobante->subtotal, 2);
                                                                                                             } ?></th>
+                                                                                                            -->
                                                     </tr>
                                                     <tr style="display:none">
                                                         <th></th>
@@ -1045,25 +1051,34 @@
                                                         <th>I.G.V.</th>
                                                         <th></th>
                                                         <th></th>
+                                                        <th style="padding-bottom:0px;margin-bottom:0px">
+                                                            <input type="text" readonly name="igv" id="igv" value="<?php echo $igv ?>" class="form-control form-control-sm text-center">
+                                                        </th>
+<!--
                                                         <th class="text-right"><span id="igv" name="igv"></span> <?php if ($trans == 'FA') {
                                                                                                             echo number_format($igv, 2);
                                                                                                         }
                                                                                                         if ($trans == 'FE') {
                                                                                                             echo number_format($comprobante->impuesto, 2);
                                                                                                         } ?></th>
+                                                                                                        -->
                                                     </tr>
                                                     <tr>
                                                         <th></th>
                                                         <th>Total</th>
                                                         <th></th>
                                                         <th></th>
+                                                        <th style="padding-bottom:0px;margin-bottom:0px">
+                                                            <input type="text" readonly name="total" id="total" value="<?php echo $total ?>" class="form-control form-control-sm text-center">
+                                                        </th>
+<!--
                                                         <th class="text-right"><span id="totalP"  name="totalP"></span> <?php if ($trans == 'FA') {
                                                                                                                 echo number_format($total, 2);
                                                                                                             }
                                                                                                             if ($trans == 'FE') {
                                                                                                                 echo number_format($comprobante->total, 2);
                                                                                                             } ?></th>
-
+-->
                                                         <input type="hidden" name="total_fac" id="total_fac" value="<?php echo number_format($total, 2); ?>">
 
                                                         <input type="hidden" name="total_fac_" id="total_fac_" value="<?php echo $total; ?>">
@@ -1163,7 +1178,7 @@
 
                                 <br>
 
-                                <div class="card">
+                                <div class="card" id="card_MedioPago">
                                     <div class="card-header">
                                         <strong>                                            
                                             Medios de Pago
@@ -1201,189 +1216,6 @@
                                     </div>
                                 </div>
 
-
-                                <?php if ($smodulo == 32) { ?>
-                                    <div class="card" style="margin-top:15px">
-                                        <div class="card-header">
-                                            <div id="" class="row">
-                                                <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
-                                                    <strong>
-                                                        Datos de la Guia
-                                                    </strong>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div id="fsFiltro" class="card-body">
-                                            <div id="" class="row">
-                                                <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
-                                                    <div class="form-group">
-                                                        <label class="form-control-sm">Direcci&oacute;n del punto de llegada</label>
-                                                        <input type="text" name="guia_llegada_direccion" id="guia_llegada_direccion" value="" placeholder="" class="form-control form-control-sm">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                <?php } ?>
-
-
-
-
-
-
-                            </div>
-
-                            
-                            <!--card-->
-                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
-                                <div class="card" id="card_MedioPago">
-                                    <div class="card-header">
-                                        <div  class="row">
-                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                                <strong>
-                                                    Impuestos
-                                                </strong>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div id="fsFiltro" class="card-body">
-
-                                        <div id="" class="row">
-                                            <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
-                                                <div class="form-group">
-                                                    <label class="form-control-sm">Descuento Global</label>
-                                                    <input type="text" name="descuento_global" id="descuento_global" value="{{old('clinum')}}" placeholder="" class="form-control form-control-sm">
-                                                </div>
-                                            </div>
-
-                                            <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
-                                                <div class="form-group">
-                                                    <label class="form-control-sm">Monto de Percepción</label>
-                                                    <input type="text" name="numero_documento" id="numero_documento" value="{{old('clinum')}}" placeholder="" class="form-control form-control-sm">
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
-                                                <div class="form-group">
-                                                    <label class="form-control-sm"></label>
-                                                    <input type="text" name="numero_documento" id="numero_documento" value="{{old('clinum')}}" placeholder="" class="form-control form-control-sm">
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
-                                                <div class="form-group">
-                                                    <label class="form-control-sm">Monto Total</label>
-                                                    <input type="text" name="monto_total" id="monto_total" value="{{old('clinum')}}" placeholder="" class="form-control form-control-sm">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div id="" class="row">
-                                            <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12">
-                                                <div class="form-group">
-                                                    <label class="form-control-sm">Porcentaje Detracción</label>
-                                                    <input type="text" name="porcentaje_detraccion" id="porcentaje_detraccion" value="{{old('clinum')}}" placeholder="" class="form-control form-control-sm">
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12">
-                                                <div class="form-group">
-                                                    <label class="form-control-sm">Monto Detracción</label>
-                                                    <input type="text" name="monto_detraccion" id="monto_detraccion" value="{{old('clinum')}}" placeholder="" class="form-control form-control-sm">
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12">
-                                                <div class="form-group">
-                                                    <label class="form-control-sm"> Nro. Cta. BN</label>
-                                                    <input type="text" name="nc_detraccion" id="nc_detraccion" value="{{old('clinum')}}" placeholder="" class="form-control form-control-sm">
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12">
-                                                <div class="form-group">
-                                                    <label class="form-control-sm">Tipo de Detraccion:</label>
-                                                    <select name="tipo_detraccion" id="tipo_detraccion" class="form-control form-control-sm" onchange="validaTipoDocumento()">
-                                                        <option value="">
-                                                            <?php echo "" ?></option>
-                                                        <option value="004">
-                                                            <?php echo "Operación sujeta al Sistema de Pago de Obligaciones Tributarias con el Gobierno Central" ?></option>
-                                                        <option value="017">
-                                                            <?php echo "Operación sujeta al Sistema de Pago de Obligaciones Tributarias con el Gobierno Central - Servicio de Transporte de Pasajeros" ?></option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12">
-                                                <div class="form-group">
-                                                    <label class="form-control-sm">Afecta a:</label>
-
-                                                    <select name="afecta_a" id="afecta_a" class="form-control form-control-sm" onChange="">
-                                                        <option value="">--Selecionar--</option>
-                                                        <?php
-                                                        foreach ($afecta_a as $row) { ?>
-                                                            <option value="<?php echo $row->codigo ?>" <?php if ($row->codigo == '008') echo "selected='selected'" ?>><?php echo $row->denominacion ?></option>
-                                                        <?php
-                                                        }
-                                                        ?>
-                                                    </select>
-
-<!--
-                                                    <select name="afecta_a" id="afecta_a" class="form-control form-control-sm" onchange="validaTipoDocumento()">
-                                                        <option value="">
-                                                            <//?php echo "" ?></option>
-                                                        <option value="022">
-                                                            <//?php echo "Otro servicios empresariales" ?></option>
-                                                        <option value="017">
-                                                            <//?php echo "Contratos de construcción" ?></option>
-                                                    </select>
-                                -->
-
-
-                                                </div>
-                                            </div>
-
-
-                                            <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12">
-                                                <div class="form-group">
-                                                    <label class="form-control-sm">Medio de Pago:</label>
-
-                                                    <select name="medio_pago" id="medio_pago" class="form-control form-control-sm" onChange="">
-                                                        <option value=""> <?php echo "" ?></option>
-                                                        <?php
-                                                        foreach ($forma_pago as $row) { ?>
-                                                            <option value="<?php echo $row->codigo ?>" ><?php echo $row->denominacion ?></option>
-                                                        <?php
-                                                        }
-                                                        ?>
-                                                    </select>
-
-                                                </div>
-                                            </div>
-
-                                        </div>
-
-                                        <div id="" class="row">
-                                            <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12">
-                                                <div class="form-group">
-                                                    <input type="checkbox" id="chkRetencion" value="0" />
-                                                    <label for="chkRetencion" id="lblFrac">Ope. Sujeta Retención</label>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12" id="divPorcRet" style="display:none">
-                                                <div class="form-group">
-                                                    <label class="form-control-sm">Porcentaje Retención</label>
-                                                    <input type="text" readonly name="porcentaje_retencion" id="porcentaje_retencion" value="" placeholder="" class="form-control form-control-sm" >
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12" id="divTotRet" style="display:none">
-                                                <div class="form-group">
-                                                    <label class="form-control-sm">Monto Retención</label>
-                                                    <input type="text" readonly name="monto_retencion" id="monto_retencion" value="0" placeholder="" class="form-control form-control-sm" >
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!--card-body-->
-                                </div>
-                                <!--card-->
-                            </div>
-
-                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                                 <div class="card" id="card_cuotas">
                                     <div class="card-header">
                                         <div id="" class="row">
@@ -1446,7 +1278,171 @@
                                         </div>
                                     </div>
                                 </div>
+
+                                <?php if ($smodulo == 32) { ?>
+                                    <div class="card" style="margin-top:15px">
+                                        <div class="card-header">
+                                            <div id="" class="row">
+                                                <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
+                                                    <strong>
+                                                        Datos de la Guia
+                                                    </strong>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="fsFiltro" class="card-body">
+                                            <div id="" class="row">
+                                                <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
+                                                    <div class="form-group">
+                                                        <label class="form-control-sm">Direcci&oacute;n del punto de llegada</label>
+                                                        <input type="text" name="guia_llegada_direccion" id="guia_llegada_direccion" value="" placeholder="" class="form-control form-control-sm">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <?php } ?>
+
                             </div>
+
+                            
+                            <!--card-->
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                                <div class="card" id="card_impuesto">
+                                    <div class="card-header">
+                                        <div  class="row">
+                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                <strong>
+                                                    Impuestos
+                                                </strong>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="fsFiltro" class="card-body">
+
+                                        <div id="" class="row">
+                                            <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
+                                                <div class="form-group">
+                                                    <label class="form-control-sm">Descuento Global</label>
+                                                    <input type="text" name="descuento_global" id="descuento_global" value="{{old('clinum')}}" placeholder="" class="form-control form-control-sm">
+                                                </div>
+                                            </div>
+
+                                            <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12" style="display:none">
+                                                <div class="form-group">
+                                                    <label class="form-control-sm">Monto de Percepción</label>
+                                                    <input type="text" name="numero_documento" id="numero_documento" value="{{old('clinum')}}" placeholder="" class="form-control form-control-sm">
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12" style="display:none">
+                                                <div class="form-group">
+                                                    <label class="form-control-sm"></label>
+                                                    <input type="text" name="numero_documento" id="numero_documento" value="{{old('clinum')}}" placeholder="" class="form-control form-control-sm">
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12" style="display:none">
+                                                <div class="form-group">
+                                                    <label class="form-control-sm">Monto Total</label>
+                                                    <input type="text" name="monto_total" id="monto_total" value="{{old('clinum')}}" placeholder="" class="form-control form-control-sm">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="" class="row">
+                                            <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12">
+                                                <div class="form-group">
+                                                    <label class="form-control-sm">Porcentaje Detracción</label>
+                                                    <input type="text" name="porcentaje_detraccion" id="porcentaje_detraccion" value="{{old('clinum')}}" placeholder="" class="form-control form-control-sm">
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12">
+                                                <div class="form-group">
+                                                    <label class="form-control-sm">Monto Detracción</label>
+                                                    <input type="text" name="monto_detraccion" id="monto_detraccion" value="{{old('clinum')}}" placeholder="" class="form-control form-control-sm">
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12">
+                                                <div class="form-group">
+                                                    <label class="form-control-sm"> Nro. Cta. BN</label>
+                                                    <input type="text" name="nc_detraccion" id="nc_detraccion" value="{{old('clinum')}}" placeholder="" class="form-control form-control-sm">
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12">
+                                                <div class="form-group">
+                                                    <label class="form-control-sm">Tipo de Detraccion:</label>
+                                                    <select name="tipo_detraccion" id="tipo_detraccion" class="form-control form-control-sm" onchange="validaTipoDocumento()">
+                                                        <option value="">
+                                                            <?php echo "" ?></option>
+                                                        <option value="004">
+                                                            <?php echo "Operación sujeta al Sistema de Pago de Obligaciones Tributarias con el Gobierno Central" ?></option>
+                                                        <option value="017">
+                                                            <?php echo "Operación sujeta al Sistema de Pago de Obligaciones Tributarias con el Gobierno Central - Servicio de Transporte de Pasajeros" ?></option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12">
+                                                <div class="form-group">
+                                                    <label class="form-control-sm">Afecta a:</label>
+
+                                                    <select name="afecta_a" id="afecta_a" class="form-control form-control-sm" onChange="">
+                                                        <option value="">--Selecionar--</option>
+                                                        <?php
+                                                        foreach ($afecta_a as $row) { ?>
+                                                            <option value="<?php echo $row->codigo ?>" <?php if ($row->codigo == '008') echo "selected='selected'" ?>><?php echo $row->denominacion ?></option>
+                                                        <?php
+                                                        }
+                                                        ?>
+                                                    </select>
+
+                                                </div>
+                                            </div>
+
+
+                                            <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12">
+                                                <div class="form-group">
+                                                    <label class="form-control-sm">Medio de Pago:</label>
+
+                                                    <select name="medio_pago" id="medio_pago" class="form-control form-control-sm" onChange="">
+                                                        <option value=""> <?php echo "" ?></option>
+                                                        <?php
+                                                        foreach ($forma_pago as $row) { ?>
+                                                            <option value="<?php echo $row->codigo ?>" ><?php echo $row->denominacion ?></option>
+                                                        <?php
+                                                        }
+                                                        ?>
+                                                    </select>
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                        <div id="" class="row">
+                                            <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12">
+                                                <div class="form-group">
+                                                    <input type="checkbox" id="chkRetencion" value="0" />
+                                                    <label for="chkRetencion" id="lblFrac">Ope. Sujeta Retención</label>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12" id="divPorcRet" style="display:none">
+                                                <div class="form-group">
+                                                    <label class="form-control-sm">Porcentaje Retención</label>
+                                                    <input type="text" readonly name="porcentaje_retencion" id="porcentaje_retencion" value="" placeholder="" class="form-control form-control-sm" >
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12" id="divTotRet" style="display:none">
+                                                <div class="form-group">
+                                                    <label class="form-control-sm">Monto Retención</label>
+                                                    <input type="text" readonly name="monto_retencion" id="monto_retencion" value="0" placeholder="" class="form-control form-control-sm" >
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--card-body-->
+                                </div>
+                                <!--card-->
+                            </div>
+
 
                         </div>
 

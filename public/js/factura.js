@@ -102,10 +102,18 @@ $(document).ready(function () {
 
 
 	$('#descuento_global').keypress(function (e) {
-		//if (e.keyCode == 13) {
+		if (e.keyCode == 13) {
 			calcular_descuento();
-		//}
+		}
 	});	
+
+
+	$('#porcentaje_detraccion').keypress(function (e) {
+		if (e.keyCode == 13) {
+			calculoDetraccion();
+		}
+	});
+
 
 	//calculoDetraccion();
 
@@ -118,53 +126,72 @@ function calcular_descuento(){
 
 	//alert("ok");
 
-	PrecioVenta_ = $('#total_fac_').val();
-	Descuento_ = $('#descuento_global').val();
-	Cantidad_ = 1;
+	var PrecioVenta_ = $('#total_fac_').val();
+	//alert(PrecioVenta_);
+	var Descuento_ = $('#descuento_global').val();
+	var Cantidad_ = 1;
+	var tasa_igv_ = 18;
 
-	alert(Descuento_);
-
-
-	ValorUnitario_ = PrecioVenta_ /(1+tasa_igv_);
-	//ValorUnitario_ = Number(ValorUnitario_ .toFixed(2));		
-	ValorVB_ = ValorUnitario_ * Cantidad_;
-	ValorVenta_ = ValorVB_ - Descuento_;
-	Igv_ = ValorVenta_ * tasa_igv_;
-	//Igv_ = Number(Igv_.toFixed(2));
-	Total_ = ValorVenta_ + Igv_;
-	//Total_ =Number(Total_.toFixed(2));
-
-
-	
 	$('#descuentos').val(Descuento_);
 
+	//PrecioVenta_ = $("#total_pagar").val();
+	//alert(PrecioVenta_);
 
-/*
+	ValorUnitario_ = PrecioVenta_ /(1+tasa_igv_);
+	//alert(ValorUnitario_);
+	
+	ValorVB_ = ValorUnitario_ * Cantidad_;
+	//alert(ValorVB_);
+	
+	ValorVenta_ = ValorVB_ - Descuento_;
+	//alert(ValorVenta_);
+
+	Igv_ = ValorVenta_ * tasa_igv_;
+	//alert(Igv_);
+	//Igv_ = Number(Igv_.toFixed(2));
+	Total_ = ValorVenta_ + Igv_;
+	//alert(Total_);
+	//Total_ =Number(Total_.toFixed(2));
+
+	//alert(Total_);
+
+
+
 	ValorUnitario_ = Number(ValorUnitario_ .toFixed(2));
-	$('#txtValorUnitario').val(ValorUnitario_);
+	//$('#txtValorUnitario').val(ValorUnitario_);
 	
 	ValorVB_ = Number(ValorVB_ .toFixed(2));
-	$('#txtValorVB').val(ValorVB_);
+	//$('#txtValorVB').val(ValorVB_);
 	
 	ValorVenta_ = Number(ValorVenta_ .toFixed(2));
-	$('#txtValorVenta').val(ValorVenta_);
+	//$('#txtValorVenta').val(ValorVenta_);
+	$('#gravadas').val(ValorVenta_);
 
 	Igv_ = Number(Igv_ .toFixed(2));
-	$('#txtIgv').val(Igv_);
+	//$('#txtIgv').val(Igv_);
+	$('#igv').val(Igv_);
 	
 	Total_ = Number(Total_ .toFixed(2));
-	$('#txtTotal').val(Total_);	
-	*/
+	//$('#txtTotal').val(Total_);
+	$('#total').val(Total_);
+	
+	$('#total_fac_').val(Total_);
+	
 }
 
 function calculoDetraccion(){
 	
-	var porcentaje_detraccion = 4;
+	var porcentaje_detraccion = $('#porcentaje_detraccion').val();
+	if (porcentaje_detraccion==""){
+		$('#porcentaje_detraccion').val("4");
+		porcentaje_detraccion = $('#porcentaje_detraccion').val();
+	}
+		
 	var total_fac = $('#total_fac_').val();
 	var total_detraccion =total_fac*(porcentaje_detraccion)/100;
 	var nc_detraccion = "00061142797";
 	var tipo_detraccion = "004";
-	var afecta_a = "008";
+	var afecta_a = "022";
 	var medio_pago = "001";
 	//var tipo_operacion = "2";
 	var tipo_operacion =$('#id_tipooperacion_').val();

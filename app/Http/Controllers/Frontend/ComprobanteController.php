@@ -676,7 +676,7 @@ class ComprobanteController extends Controller
 
 				}
 				
-                $ubicacion_id = $request->ubicacion;        
+            $ubicacion_id = $request->ubicacion;        
             $ubicacion_id2 = $request->ubicacion2;
 			$id_persona = $request->persona;
             $id_persona2 = $request->persona2;
