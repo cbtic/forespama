@@ -1324,7 +1324,7 @@
                                             <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
                                                 <div class="form-group">
                                                     <label class="form-control-sm">Descuento Global</label>
-                                                    <input type="text" name="descuento_global" id="descuento_global" value="{{old('clinum')}}" placeholder="" class="form-control form-control-sm">
+                                                    <input type="text" name="descuento_global" id="descuento_global" value="{{old('clinum')}}" placeholder="" class="form-control form-control-sm" oninput="calcular_descuento()">
                                                 </div>
                                             </div>
 
@@ -1351,7 +1351,7 @@
                                             <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12">
                                                 <div class="form-group">
                                                     <label class="form-control-sm">Porcentaje Detracción</label>
-                                                    <input type="text" name="porcentaje_detraccion" id="porcentaje_detraccion" value="{{old('clinum')}}" placeholder="" class="form-control form-control-sm">
+                                                    <input type="text" name="porcentaje_detraccion" id="porcentaje_detraccion" value="{{old('clinum')}}" placeholder="" class="form-control form-control-sm" oninput="calculoDetraccion()">
                                                 </div>
                                             </div>
                                             <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12">
