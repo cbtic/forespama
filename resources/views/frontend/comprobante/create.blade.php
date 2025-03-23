@@ -63,29 +63,37 @@
             // console.log('Opción seleccionada:', $(this).val());
             //print_r($(this).val());
             if ($(this).val() == 1) {
-
                 OcultarTarjeta();
                 //MostrarMedioPago();
             }
 
+            
+
             if ($(this).val() == 2) {
                 MostrarTarjeta();
                 //OcultarMedioPago();
+                
+                var id_tipooperacion = $('#id_tipooperacion_').val();
+                var monto_detraccion = $('#monto_detraccion').val();                
+                
                 $('#numcuota_').val("1");
-                var total = $('#total_fac').val();
+                var total = $('#total_fac_').val();
+
+
+                if(id_tipooperacion=='1001') total = Number(total) - Number(monto_detraccion);
+ 
 
                 if($("#chkRetencion").is(':checked')) {
                     var retencion = $('#monto_retencion').val();
                     total = total- Number(retencion);
 	            }
-
                 //alert(total);
 
-                $('#totalcredito_').val(total.toString().replace(',',''));
-                
-
+                $('#totalcredito_').val(total.toString().replace(',',''));        
                 $('#plazo_ ').val("30");
                 generarCuotas();
+
+                $('#estado_pago').val("P");
                 //$("#tr_total_pagar").show();
             }
             //
