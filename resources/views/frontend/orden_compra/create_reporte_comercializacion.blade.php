@@ -260,42 +260,8 @@ label.form-control-sm{
 	height: 200px;
 	white-space:nowrap
 }
-.imageDiv img {
-	box-shadow: 1px 1px 10px #999;
-	margin: 2px;
-	max-height: 50px;
-	cursor: pointer;
-	display:inline-block;
-	*display:inline;
-	*zoom:1;
-	vertical-align:top;
-}
-
-
-.img_ruta{
-	position:relative;
-	float:left
-}
-
-.delete_ruta{
-	background-image:url(img/delete.png);
-	top:0px;
-	left:110px;
-	background-size: 100%;
-	position:absolute;
-	display:block;
-	width:30px;
-	height:30px;
-	cursor:pointer
-}
 
 </style>
-
-<script>
-    var almacenUsuario = @json($almacen_usuario);
-	//console.log(almacenUsuario);
-</script>
-
 
 @stack('before-scripts')
 @stack('after-scripts')
@@ -307,7 +273,7 @@ label.form-control-sm{
 @section('breadcrumb')
 <ol class="breadcrumb" style="padding-left:130px;margin-top:0px;background-color:#283659">
     <li class="breadcrumb-item text-primary">Inicio</li>
-    <li class="breadcrumb-item active">Registro de Orden de Compra y Venta</li>
+    <li class="breadcrumb-item active">Reporte de Comercializaci&oacute;n</li>
     </li>
 </ol>
 
@@ -333,12 +299,12 @@ label.form-control-sm{
 
         <div class="card-body">
 
-            <form class="form-horizontal" method="post" action="" id="frmOrdenCompra" autocomplete="off" enctype="multipart/form-data">
+            <form class="form-horizontal" method="post" action="" id="frmReporteComercializacion" autocomplete="off" enctype="multipart/form-data">
 				
                 <div class="row">
                     <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12" style="margin-top:15px">
                         <h4 class="card-title mb-0 text-primary" style="font-size:22px">
-                            Orden de Compra y Venta
+							Reporte de Comercializaci&oacute;n
                         </h4>
                     </div>
                 </div>
@@ -358,32 +324,8 @@ label.form-control-sm{
 				<div class="row" style="padding:20px 20px 0px 20px;">
 
 					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<select name="tipo_documento_bus" id="tipo_documento_bus" class="form-control form-control-sm">
-							<option value="">--Seleccionar Tipo Documento--</option>
-							<?php
-							foreach ($tipo_documento as $row){?>
-								<option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
-								<?php 
-							}
-							?>
-						</select>
-					</div>
-
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
 						<select name="empresa_compra_bus" id="empresa_compra_bus" class="form-control form-control-sm">
 							<option value="">--Seleccionar Empresa Compra--</option>
-							<?php
-							foreach ($proveedor as $row){?>
-								<option value="<?php echo $row->id ?>"><?php echo $row->razon_social ?></option>
-								<?php 
-							}
-							?>
-						</select>
-					</div>
-
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<select name="empresa_vende_bus" id="empresa_vende_bus" class="form-control form-control-sm">
-							<option value="">--Seleccionar Empresa Vende--</option>
 							<?php
 							foreach ($proveedor as $row){?>
 								<option value="<?php echo $row->id ?>"><?php echo $row->razon_social ?></option>
@@ -397,36 +339,12 @@ label.form-control-sm{
                         <input id="fecha_bus" name="fecha_bus" on class="form-control form-control-sm"  placeholder="Fecha">
 					</div>
 
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+					<!--<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
                         <input id="numero_orden_compra_bus" name="numero_orden_compra_bus" on class="form-control form-control-sm"  placeholder="N&uacute;mero Orden Compra">
-					</div>
+					</div>-->
 
 					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
                         <input id="numero_orden_compra_cliente_bus" name="numero_orden_compra_cliente_bus" on class="form-control form-control-sm"  placeholder="N&uacute;mero OC Cliente">
-					</div>
-
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<select name="almacen_origen_bus" id="almacen_origen_bus" class="form-control form-control-sm">
-							<option value="">--Seleccionar Almacen Origen--</option>
-							<?php
-							foreach ($almacen as $row){?>
-								<option value="<?php echo $row->id ?>"><?php echo $row->denominacion ?></option>
-								<?php 
-							}
-							?>
-						</select>
-					</div>
-
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<select name="almacen_destino_bus" id="almacen_destino_bus" class="form-control form-control-sm">
-							<option value="">--Seleccionar Almacen Destino--</option>
-							<?php
-							foreach ($almacen as $row){?>
-								<option value="<?php echo $row->id ?>"><?php echo $row->denominacion ?></option>
-								<?php 
-							}
-							?>
-						</select>
 					</div>
 
 					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
@@ -434,37 +352,29 @@ label.form-control-sm{
 							<option value="">--Seleccionar Situaci&oacute;n--</option>
 							<?php
 							foreach ($cerrado_orden_compra as $row){?>
-								<option value="<?php echo $row->codigo ?>" <?php if($row->codigo=='1')echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+								<option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
 								<?php 
 							}
 							?>
 						</select>
 					</div>
 
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+					<!--<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
 						<select name="vendedor_bus" id="vendedor_bus" class="form-control form-control-sm">
 							<option value="">--Seleccionar Vendedor--</option>
 							<?php
-							foreach ($vendedor as $row){?>
-								<option value="<?php echo $row->id ?>"><?php echo $row->name ?></option>
+							//foreach ($vendedor as $row){?>
+								<option value="<?php //echo $row->id ?>"><?php //echo $row->name ?></option>
 								<?php 
-							}
+							//}
 							?>
 						</select>
-					</div>
+					</div>-->
 
-                    <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<select name="estado_bus" id="estado_bus" class="form-control form-control-sm">
-							<option value="">Todos</option>
-							<option value="1" selected="selected">Activo</option>
-							<option value="0">Eliminado</option>
-						</select>
-					</div>
-                    
 					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12" style="padding-right:0px">
 						<input class="btn btn-warning pull-rigth" value="Buscar" type="button" id="btnBuscar" />
-						<input class="btn btn-success pull-rigth" value="Nuevo" type="button" id="btnNuevo" style="margin-left:10px" />
-						<!--<input class="btn btn-secondary pull-rigth" value="Excel" name="excel" type="button" id="btnDescargar" style="margin-left:15px;margin-right:10px;"/>-->
+						<!--<input class="btn btn-success pull-rigth" value="Nuevo" type="button" id="btnNuevo" style="margin-left:10px" />
+						<input class="btn btn-secondary pull-rigth" value="Excel" name="excel" type="button" id="btnDescargar" style="margin-left:15px;margin-right:10px;"/>-->
 						
 						<button id="btnDescargar" type="button" class="btn btn-secondary pull-rigth" style="margin-left:10px;">
 							<i class="fas fa-download"></i> Excel
@@ -473,25 +383,26 @@ label.form-control-sm{
 					</div>
 				</div>
 				
-                <div class="card-body">				
+                <div class="card-body">
 
                     <div class="table-responsive">
-                    <table id="tblOrdenCompra" class="table table-hover table-sm">
+                    <table id="tblReporteComercializacion" class="table table-hover table-sm">
                         <thead>
                         <tr style="font-size:13px">
-                            <th>Id</th>
-							<th>Tipo Documento</th>
-							<th>Empresa Compra</th>
-							<th>N° OC Cliente</th>
-							<th>Empresa Vende</th>
-                            <th>Fecha</th>
-							<th>N&uacute;mero OC</th>
-							<th>Almacen Origen</th>
-							<th>Almacen Destino</th>
-							<th>Situaci&oacute;n</th>
-							<th>Vendedor</th>
-							<!--<th>Estado</th>-->
-                            <th>Acciones</th>
+                            <th>Cliente</th>
+							<th>Orden Compra</th>
+							<th>Local</th>
+							<th>Pedido</th>
+							<th>Fecha Pedido</th>
+                            <th>Fecha Vencimiento</th>
+							<th>Comentario</th>
+							<th>C&oacute;digo Interno</th>
+							<th>Descripci&oacute;n</th>
+							<th>Precio Unitario</th>
+							<th>Cantidad Pedida</th>
+							<th>Cantidad Entregada</th>
+							<th>Cantidad Cancelada</th>
+							<th>Pendiente Entrega</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -580,6 +491,6 @@ label.form-control-sm{
 
 	</script>
 
-	<script src="{{ asset('js/ordenCompra.js') }}"></script>
+	<script src="{{ asset('js/reporteComercializacion.js') }}"></script>
 
 	@endpush

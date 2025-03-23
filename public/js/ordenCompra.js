@@ -182,9 +182,9 @@ function datatablenew(){
 				
                 {
                 "mRender": function (data, type, row) {
-                	var empresa_compra = "";
-					if(row.empresa_compra!= null)empresa_compra = row.empresa_compra;
-					return empresa_compra;
+                	var cliente = "";
+					if(row.cliente!= null)cliente = row.cliente;
+					return cliente;
                 },
                 "bSortable": true,
                 "aTargets": [2]
@@ -263,7 +263,7 @@ function datatablenew(){
 				"bSortable": true,
 				"aTargets": [10]
 				},
-				{
+				/*{
 					"mRender": function (data, type, row) {
 						var estado = "";
 						if(row.estado == 1){
@@ -276,7 +276,7 @@ function datatablenew(){
 					},
 					"bSortable": false,
 					"aTargets": [11]
-				},
+				},*/
 				{
 					"mRender": function (data, type, row) {
 						var estado = "";
@@ -329,7 +329,7 @@ function datatablenew(){
 						return html;
 					},
 					"bSortable": false,
-					"aTargets": [12],
+					"aTargets": [11],
 				},
 
             ]

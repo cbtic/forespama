@@ -16,6 +16,12 @@ class Requerimiento extends Model
 
     }
 
+    public function listar_reporte_requerimiento_ajax($p){
+
+        return $this->readFuntionPostgres('sp_listar_reporte_requerimiento_paginado',$p);
+
+    }
+
     public function readFuntionPostgres($function, $parameters = null){
 
         $_parameters = '';

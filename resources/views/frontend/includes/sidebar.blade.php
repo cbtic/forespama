@@ -355,11 +355,18 @@
 	
 	@endif
 	
-	@if(Gate::check('Consultas'))
+	@if(Gate::check('Reporte Comercializacion'))
 	
         <li class="c-sidebar-nav-dropdown">
             <x-utils.link href="#" icon="c-sidebar-nav-icon cil-list" class="c-sidebar-nav-dropdown-toggle" :text="__('Reportes')" />
+            <ul class="c-sidebar-nav-dropdown-items">
+                @can('Reporte Comercializacion')
+                    <li class="c-sidebar-nav-item">
+                        <x-utils.link :href="route('frontend.orden_compra.create_reporte_comercializacion')" class="c-sidebar-nav-link" :text="__('Reporte de Comercializacion')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+                    </li>
+				@endif
 
+            </ul>
         </li>
 
     @endif    

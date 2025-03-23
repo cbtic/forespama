@@ -114,10 +114,11 @@ class GuiaInternaController extends Controller
         $serie_guia = $tablaMaestra_model->getMaestroC(95,"GR");
         $punto_partida = $tablaMaestra_model->getMaestroByTipo(68);
         $unidad_peso = $tablaMaestra_model->getMaestroByTipo(43);
+        $tipo_documento_cliente = $tablaMaestra_model->getMaestroByTipo(75);
 
         //dd($guia_interna);exit();
 
-        return view('frontend.guia_interna.modal_guia_interna_nuevoGuiaInterna',compact('id','guia_interna','guia','tipo_documento_entrada','tipo_documento_salida','producto','marca','estado_bien','unidad','empresas',/*'transporte_razon_social',*/'motivo_traslado','departamento','serie_guia','id_user','punto_partida','unidad_peso'));
+        return view('frontend.guia_interna.modal_guia_interna_nuevoGuiaInterna',compact('id','guia_interna','guia','tipo_documento_entrada','tipo_documento_salida','producto','marca','estado_bien','unidad','empresas',/*'transporte_razon_social',*/'motivo_traslado','departamento','serie_guia','id_user','punto_partida','unidad_peso','tipo_documento_cliente'));
 
     }
 
@@ -158,9 +159,20 @@ class GuiaInternaController extends Controller
         //$guia_interna->punto_llegada = $request->punto_llegada_descripcion;
         $guia_interna->fecha_traslado = $request->fecha_inicio_traslado;
         $guia_interna->costo_minimo = $request->costo_minimo;
-        $guia_interna->id_destinatario = $request->destinatario;
         $guia_interna->id_conductor = $request->conductor_guia;
-        $guia_interna->ruc_destinatario = $request->ruc;
+        if($request->tipo_documento_cliente=='1'){
+
+            $guia_interna->id_tipo_cliente = $request->tipo_documento_cliente;
+            $guia_interna->dni_destinatario = $request->dni_destinatario;
+            $guia_interna->id_persona = $request->persona_destinatario;
+            
+        }else if($request->tipo_documento_cliente=='5'){
+            
+            $guia_interna->id_tipo_cliente = $request->tipo_documento_cliente;
+            $guia_interna->ruc_destinatario = $request->ruc;
+            $guia_interna->id_destinatario = $request->destinatario;
+        }
+        
         $guia_interna->marca = $request->id_marca_vehiculo;
         $guia_interna->placa = $request->placa_guia;
         $guia_interna->constancia_inscripcion = $request->numero_inscripcion;
@@ -213,9 +225,14 @@ class GuiaInternaController extends Controller
         $guia->guia_serie = $request->serie_guia;
         $guia->guia_numero = $numero_guia[0]->codigo;
         $guia->guia_tipo = $tipo_guia[0]->codigo;
-        $guia->guia_receptor_numdoc = $request->ruc;
         $guia->guia_receptor_tipodoc = "0";
-        $guia->guia_receptor_razsocial = $empresa_destinatario->razon_social;
+        if($request->tipo_documento_cliente=='1'){
+            $guia->guia_receptor_numdoc = $request->dni_destinatario;
+            $guia->guia_receptor_razsocial = $request->persona_destinatario_nombre;
+        }else if($request->tipo_documento_cliente=='5'){
+            $guia->guia_receptor_numdoc = $request->ruc;
+            $guia->guia_receptor_razsocial = $request->destinatario_nombre;
+        }
         $guia->guia_fecha_emision = $request->fecha_emision;
         $guia->guia_fecha_traslado = $request->fecha_inicio_traslado;
         $guia->guia_vehiculo_placa = $request->placa_guia;

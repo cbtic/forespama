@@ -1657,10 +1657,8 @@ function datatablenew() {
             var iNroPagina = parseFloat(fn_util_obtieneNroPagina(aoData[3].value, aoData[4].value)).toFixed();
             var iCantMostrar = aoData[4].value;
 
-            var nombre_py_bus = $('#nombre_py_bus').val();
-            var detalle_py_bus = $('#detalle_py_bus').val();
-            var estado = $('#estado').val();
-            var estado_py = $('#estado_py_bus').val();
+            var placa = $('#placa_bus').val();
+            var ruc = $('#ruc_bus').val();
 
             var _token = $('#_token').val();
             oSettings.jqXHR = $.ajax({
@@ -1670,10 +1668,8 @@ function datatablenew() {
                 "data": {
                     NumeroPagina: iNroPagina,
                     NumeroRegistros: iCantMostrar,
-                    nombre_py_bus: nombre_py_bus,
-                    detalle_py_bus: detalle_py_bus,
-                    estado: estado,
-                    estado_py: estado_py,
+                    placa: placa,
+                    ruc: ruc,
                     _token: _token
                 },
                 "success": function(result) {
