@@ -2838,10 +2838,12 @@ class ComprobanteController extends Controller
            // $data["descripcionLeyenda"] = "OPERACIÓN SUJETA A DETRACCIÓN";
             $data["dtporcentajeDetraccion"] = $factura->porc_detrac;
             $data["dtnumeroCuentaBancoNacion"] = $factura->cuenta_detrac;
-            $data["dtmontoTotalIncluidoDetraccion"] = $factura->total;
+            $data["dtmontoTotalIncluidoDetraccion"] = $factura->total - $factura->monto_detrac;
 
             $data["dtmedioPagoDetraccion"] = $factura->medio_pago_detrac;
             $data["dtcodigoBienServicio"] = $factura->afecta_detrac;
+
+            
         }
 
         if ($factura->porc_retencion!=""){
