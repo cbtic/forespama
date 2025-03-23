@@ -1022,7 +1022,8 @@ class OrdenCompraController extends Controller
 
 		$orden_compra_model = new OrdenCompra;
 		$p[]=$request->empresa_compra;
-        $p[]=$request->fecha;
+        $p[]=$request->fecha_inicio;
+        $p[]=$request->fecha_fin;
         $p[]=$request->numero_orden_compra_cliente;
         $p[]=$request->situacion;
         $p[]=1;
@@ -1043,16 +1044,18 @@ class OrdenCompraController extends Controller
 
 	}
 
-    public function exportar_reporte_comercializacion($empresa_compra, $fecha, $numero_orden_compra_cliente, $situacion) {
+    public function exportar_reporte_comercializacion($empresa_compra, $fecha_inicio, $fecha_fin, $numero_orden_compra_cliente, $situacion) {
 
         if($empresa_compra==0)$empresa_compra = "";
-        if($fecha=="0")$fecha = "";
+        if($fecha_inicio=="0")$fecha_inicio = "";
+        if($fecha_fin=="0")$fecha_fin = "";
         if($numero_orden_compra_cliente=="0")$numero_orden_compra_cliente = "";
         if($situacion==0)$situacion = "";
         
         $orden_compra_model = new OrdenCompra;
 		$p[]=$empresa_compra;
-        $p[]=$fecha;
+        $p[]=$fecha_inicio;
+        $p[]=$fecha_fin;
         $p[]=$numero_orden_compra_cliente;
         $p[]=$situacion;
         $p[]=1;
@@ -1064,11 +1067,14 @@ class OrdenCompraController extends Controller
 		$variable = [];
 		$n = 1;
 
-		array_push($variable, array("N°","Empresa","Orden Compra","Local","Pedido","Fecha Pedido","Fecha Vencimiento","Comentario","Codigo Interno","Descripcion","Precio Unitario","Cantidad Pedida","Cantidad Entregada","Cantidad Cancelada","Cantidad Entrega"));
+		array_push($variable, array("N°","Empresa","Orden Compra","Pedido","Fecha Pedido","Fecha Vencimiento","Codigo Interno","Descripcion","Precio Unitario","Cantidad Pedida","Cantidad Entregada","Cantidad Cancelada","Pendiente Entrega"));
 		
 		foreach ($data as $r) {
 
-			array_push($variable, array($n++,$r->razon_social, $r->numero_orden_compra_cliente, $r->tienda, $r->pedido, $r->fecha_orden_compra, $r->fecha_vencimiento, $r->comentarios, $r->codigo, $r->producto, $r->precio, $r->cantidad_requerida, $r->cantidad_despacho, $r->cantidad_cancelada, $r->pendiente_entrega));
+            if($r->cerrado==1){$cerrado='SI';}
+            if($r->cerrado==2){$cerrado='NO';}
+
+			array_push($variable, array($n++,$r->razon_social, $r->numero_orden_compra_cliente, $r->pedido, $r->fecha_orden_compra, $r->fecha_vencimiento, $r->codigo, $r->producto, $r->precio, $r->cantidad_requerida, $r->cantidad_despacho, $r->cantidad_cancelada, $cerrado));
 		}
 		
 		$export = new InvoicesExport2([$variable]);
@@ -1162,16 +1168,16 @@ class InvoicesExport2 implements FromArray, WithHeadings, WithStyles
 
     public function headings(): array
     {
-        return ["N°", "Empresa", "Orden Compra", "Local", "Pedido", "Fecha Pedido", "Fecha Vencimiento", "Comentario", "Codigo Interno", "Descripcion", "Precio Unitario", "Cantidad Pedida", "Cantidad Entregada", "Cantidad Cancelada", "Cantidad Entrega"];
+        return ["N°", "Empresa", "Orden Compra", "Pedido", "Fecha Pedido", "Fecha Vencimiento", "Codigo Interno", "Descripcion", "Precio Unitario", "Cantidad Pedida", "Cantidad Entregada", "Cantidad Cancelada", "Pendiente Entrega"];
     }
 
 	public function styles(Worksheet $sheet)
     {
 
-		$sheet->mergeCells('A1:O1');
+		$sheet->mergeCells('A1:M1');
 
         $sheet->setCellValue('A1', "REPORTE DE COMERCIALIZACION - FORESPAMA");
-        $sheet->getStyle('A1:O1')->applyFromArray([
+        $sheet->getStyle('A1:M1')->applyFromArray([
             'font' => [
                 'bold' => true,
                 'color' => ['rgb' => 'FFFFFF'],
@@ -1188,7 +1194,7 @@ class InvoicesExport2 implements FromArray, WithHeadings, WithStyles
 		$sheet->getStyle('A1')->getAlignment()->setWrapText(true);
 		$sheet->getRowDimension(1)->setRowHeight(30);
 
-        $sheet->getStyle('A2:O2')->applyFromArray([
+        $sheet->getStyle('A2:M2')->applyFromArray([
             'font' => [
                 'bold' => true,
                 'color' => ['rgb' => '000000'],
@@ -1208,7 +1214,7 @@ class InvoicesExport2 implements FromArray, WithHeadings, WithStyles
 		->getNumberFormat()
 		->setFormatCode(\PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_NUMBER_00);*/ //SIRVE PARA PONER 2 DECIMALES A ESA COLUMNA
         
-        foreach (range('A', 'O') as $col) {
+        foreach (range('A', 'M') as $col) {
             $sheet->getColumnDimension($col)->setAutoSize(true);
         }
     }

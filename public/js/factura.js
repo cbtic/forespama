@@ -281,13 +281,13 @@ function obtenerNotaCreditoComprobante(id_orden_compra){
 		success: function (result) {
 
 			if (result) {
-				alert('SI');
+				//alert('SI');
 				return ('Si');
 
 				
 			}
 			else {
-				alert('NO');						
+				//alert('NO');						
 				return ('No');
 			}
 

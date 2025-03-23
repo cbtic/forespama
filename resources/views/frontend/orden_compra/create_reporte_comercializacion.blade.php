@@ -336,7 +336,11 @@ label.form-control-sm{
 					</div>
 
 					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-                        <input id="fecha_bus" name="fecha_bus" on class="form-control form-control-sm"  placeholder="Fecha">
+                        <input id="fecha_inicio_bus" name="fecha_inicio_bus" on class="form-control form-control-sm"  placeholder="Fecha Inicio">
+					</div>
+
+					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+						<input class="form-control form-control-sm" id="fecha_fin_bus" name="fecha_fin_bus" placeholder="Fecha Fin">
 					</div>
 
 					<!--<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
@@ -391,11 +395,9 @@ label.form-control-sm{
                         <tr style="font-size:13px">
                             <th>Cliente</th>
 							<th>Orden Compra</th>
-							<th>Local</th>
 							<th>Pedido</th>
 							<th>Fecha Pedido</th>
                             <th>Fecha Vencimiento</th>
-							<th>Comentario</th>
 							<th>C&oacute;digo Interno</th>
 							<th>Descripci&oacute;n</th>
 							<th>Precio Unitario</th>
