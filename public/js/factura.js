@@ -395,7 +395,7 @@ function guardarFactura(){
 
 	var id_orden_compra = $("#id_orden_compra").val();
 	var esiste_oc = obtenerNotaCreditoComprobante(id_orden_compra);
-	esiste_oc="Si";
+	//esiste_oc="Si";
 
 	if (esiste_oc=="Si"){msg+="La Orden de Compra ya fue Facturado...<br>";	}
 
