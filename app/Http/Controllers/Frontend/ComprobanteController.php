@@ -461,8 +461,10 @@ class ComprobanteController extends Controller
             //echo "adelanto=>".$adelanto."<br>";
 
 
-            $stotal = $total/1.18;
-            $igv   = $stotal * 0.18;
+            //$stotal = $total/1.18;
+            $stotal = $request->stotal;
+            //$igv   = $stotal * 0.18;
+            $igv = $request->igv;
 
 
 
@@ -548,6 +550,19 @@ class ComprobanteController extends Controller
 		$id_user = Auth::user()->id;
         $facturas_model = new Comprobante;
 		$guia_model = new Guia;
+
+        $id_orden_compra = $request->id_orden_compra;
+
+                /*
+        if ((string)$id_orden_compra!=""){
+            //$factura_upd->orden_compra =  $id_orden_compra;
+            $orden_compra = Comprobante::where('orden_compra', $id_orden_compra)->first();
+            if($orden_compra){
+
+            }
+        }
+            */
+        
 
         $id_tipo_afectacion_pp = $request->id_tipo_afectacion_pp;
 
@@ -661,7 +676,7 @@ class ComprobanteController extends Controller
 
 				}
 				
-                $ubicacion_id = $request->ubicacion;        
+            $ubicacion_id = $request->ubicacion;        
             $ubicacion_id2 = $request->ubicacion2;
 			$id_persona = $request->persona;
             $id_persona2 = $request->persona2;
@@ -2772,7 +2787,7 @@ class ComprobanteController extends Controller
 		$data["importeTotal"] = str_replace(",","",$factura->total); //"150.00";
 		$data["notification"] = "1";
 		$data["sumatoriaIGV"] = str_replace(",","",$factura->impuesto); //"22.88";
-		$data["sumatoriaISC"] = "0.00";
+        $data["sumatoriaISC"] = "0.00";
 		$data["ubigeoEmisor"] = "150139";
 		//$data["montoEnLetras"] = $factura->letras; //"CIENTO CINCUENTA Y 00/100";
 		$data["tipoDocumento"] = $this->getTipoDocumento($factura->tipo);
@@ -2823,10 +2838,12 @@ class ComprobanteController extends Controller
            // $data["descripcionLeyenda"] = "OPERACIÓN SUJETA A DETRACCIÓN";
             $data["dtporcentajeDetraccion"] = $factura->porc_detrac;
             $data["dtnumeroCuentaBancoNacion"] = $factura->cuenta_detrac;
-            $data["dtmontoTotalIncluidoDetraccion"] = $factura->total;
+            $data["dtmontoTotalIncluidoDetraccion"] = $factura->total - $factura->monto_detrac;
 
             $data["dtmedioPagoDetraccion"] = $factura->medio_pago_detrac;
             $data["dtcodigoBienServicio"] = $factura->afecta_detrac;
+
+            
         }
 
         if ($factura->porc_retencion!=""){
@@ -3555,6 +3572,18 @@ class ComprobanteController extends Controller
         $agremiado = $comprobante_model->getRepresentante($tipo_documento,$numero_documento);
         $array["sw"] = $sw;
         $array["agremiado"] = $agremiado;
+        echo json_encode($array);
+
+    }
+
+    public function obtiene_orden_compra($id){
+
+                    
+        $orden_compra = Comprobante::where('orden_compra', $id)->first();
+
+        print_r($orden_compra);
+
+        $array["orden_compra"] = $orden_compra;
         echo json_encode($array);
 
     }

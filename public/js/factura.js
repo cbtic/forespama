@@ -101,6 +101,20 @@ $(document).ready(function () {
 	});
 
 
+	$('#descuento_global').keypress(function (e) {
+		if (e.keyCode == 13) {
+			calcular_descuento();
+		}
+	});	
+
+
+	$('#porcentaje_detraccion').keypress(function (e) {
+		if (e.keyCode == 13) {
+			calculoDetraccion();
+		}
+	});
+
+
 	//calculoDetraccion();
 
 	calculaPorcentaje(1);
@@ -108,13 +122,76 @@ $(document).ready(function () {
 	
 });
 
+function calcular_descuento(){
+
+	//alert("ok");
+
+	var PrecioVenta_ = $('#total_fac_').val();
+	//alert(PrecioVenta_);
+	var Descuento_ = $('#descuento_global').val();
+	var Cantidad_ = 1;
+	var tasa_igv_ = 18;
+
+	$('#descuentos').val(Descuento_);
+
+	//PrecioVenta_ = $("#total_pagar").val();
+	//alert(PrecioVenta_);
+
+	ValorUnitario_ = PrecioVenta_ /(1+tasa_igv_);
+	//alert(ValorUnitario_);
+	
+	ValorVB_ = ValorUnitario_ * Cantidad_;
+	//alert(ValorVB_);
+	
+	ValorVenta_ = ValorVB_ - Descuento_;
+	//alert(ValorVenta_);
+
+	Igv_ = ValorVenta_ * tasa_igv_;
+	//alert(Igv_);
+	//Igv_ = Number(Igv_.toFixed(2));
+	Total_ = ValorVenta_ + Igv_;
+	//alert(Total_);
+	//Total_ =Number(Total_.toFixed(2));
+
+	//alert(Total_);
+
+
+
+	ValorUnitario_ = Number(ValorUnitario_ .toFixed(2));
+	//$('#txtValorUnitario').val(ValorUnitario_);
+	
+	ValorVB_ = Number(ValorVB_ .toFixed(2));
+	//$('#txtValorVB').val(ValorVB_);
+	
+	ValorVenta_ = Number(ValorVenta_ .toFixed(2));
+	//$('#txtValorVenta').val(ValorVenta_);
+	$('#gravadas').val(ValorVenta_);
+
+	Igv_ = Number(Igv_ .toFixed(2));
+	//$('#txtIgv').val(Igv_);
+	$('#igv').val(Igv_);
+	
+	Total_ = Number(Total_ .toFixed(2));
+	//$('#txtTotal').val(Total_);
+	$('#total').val(Total_);
+	
+	$('#total_fac_').val(Total_);
+	
+}
+
 function calculoDetraccion(){
 	
+	var porcentaje_detraccion = $('#porcentaje_detraccion').val();
+	if (porcentaje_detraccion==""){
+		$('#porcentaje_detraccion').val("4");
+		porcentaje_detraccion = $('#porcentaje_detraccion').val();
+	}
+		
 	var total_fac = $('#total_fac_').val();
-	var total_detraccion =total_fac*12/100;
+	var total_detraccion =total_fac*(porcentaje_detraccion)/100;
 	var nc_detraccion = "00061142797";
 	var tipo_detraccion = "004";
-	var afecta_a = "008";
+	var afecta_a = "022";
 	var medio_pago = "001";
 	//var tipo_operacion = "2";
 	var tipo_operacion =$('#id_tipooperacion_').val();
@@ -128,13 +205,34 @@ function calculoDetraccion(){
 	//	alert(tipo_operacion);
 	if (tipo_operacion=='1001' ){
 
-		$('#porcentaje_detraccion').val("12");		
+		$('#porcentaje_detraccion').val(porcentaje_detraccion);		
 		$('#monto_detraccion').val(total_detraccion.toFixed(2));
 		$('#nc_detraccion').val(nc_detraccion);
 		$('#tipo_detraccion').val(tipo_detraccion);
 		$('#afecta_a').val(afecta_a);
 		$('#medio_pago').val(medio_pago);
 		$('#id_tipooperacion_').val(tipo_operacion);
+
+		var total = $("#total_pagar").val();
+		if (total === "0") {
+			total = $("#total_fac_").val();
+		}
+
+		//var id_tipooperacion = $('#id_tipooperacion_').val();
+		var monto_detraccion = $('#monto_detraccion').val();                
+	
+
+		total = total - Number(monto_detraccion);
+
+		if ($('#id_formapago_').val() == 2) {
+			//total = total - Number(reten);
+
+			$('#numcuota_').val("1");
+			$('#totalcredito_').val(total.toFixed(2).toString().replace(',', ''));
+			$('#plazo_').val("30");
+
+			generarCuotasF();
+		}
 
 	}else{
 		$('#porcentaje_detraccion').val("");
@@ -143,9 +241,67 @@ function calculoDetraccion(){
 		$('#tipo_detraccion').val("");
 		$('#afecta_a').val("");
 		$('#id_tipooperacion_').val(tipo_operacion);
+
+
+		var total = $("#total_pagar").val();
+		if (total === "0") {
+			total = $("#total_fac_").val();
+		}
+
+		var id_tipooperacion = $('#id_tipooperacion_').val();
+		var monto_detraccion = 0;                
+	
+
+		total = total - Number(monto_detraccion);
+
+		if ($('#id_formapago_').val() == 2) {
+			//total = total - Number(reten);
+
+			$('#numcuota_').val("1");
+			$('#totalcredito_').val(total.toFixed(2).toString().replace(',', ''));
+			$('#plazo_').val("30");
+
+			generarCuotasF();
+		}
+
 		
 		//$('#medio_pago').value("");
 	}
+}
+
+function obtenerNotaCreditoComprobante(id_orden_compra){
+
+	//var id_orden_compra = $("#id_orden_compra").val();
+
+	//alert(tipo_comprobante);
+
+	$.ajax({
+		url: '/comprobante/obtiene_orden_compra/' + id_orden_compra,
+		dataType: "json",
+		success: function (result) {
+
+			if (result) {
+				//alert('SI');
+				return ('Si');
+
+				
+			}
+			else {
+				//alert('NO');						
+				return ('No');
+			}
+
+		},
+		"error": function (msg, textStatus, errorThrown) {
+
+			Swal.fire("Numero de documento no fue registrado!");
+			return ('No');
+
+		}
+		
+		
+	});
+	
 }
 
 function guardarFactura(){
@@ -237,6 +393,14 @@ function guardarFactura(){
 	
 	if (tipo_cambio==""&& forma_pago=="EFECTIVO DOLARES"){msg+="Debe ingresar el tipo de cambio<br>";	}
 
+	var id_orden_compra = $("#id_orden_compra").val();
+	var esiste_oc = obtenerNotaCreditoComprobante(id_orden_compra);
+	//esiste_oc="Si";
+
+	if (esiste_oc=="Si"){msg+="La Orden de Compra ya fue Facturado...<br>";	}
+
+
+
 
     if(msg!=""){
 		
@@ -246,7 +410,7 @@ function guardarFactura(){
     else{
         fn_save();
 	}
-	//fn_save();
+	
 
 }
 
@@ -929,7 +1093,7 @@ function obtenerTitular(){
        
         
     }
-	
+	/*
 	$("#chkRetencion").on('change', function() {
 		if ($(this).is(':checked')) {
 
@@ -940,7 +1104,7 @@ function obtenerTitular(){
 			if (total==="0"){
 				total=$("#total_fac_").val();
 			}
-			//alert(total);
+			alert(total);
 			reten = Number(total)*0.03;
 
 			$('#porcentaje_retencion').val("3");
@@ -965,7 +1129,8 @@ function obtenerTitular(){
 				generarCuotasF();
 			}
 
-		} else {
+		}  
+		if ($(this).is(':checked'==false)){
 
 			$("#divPorcRet").hide();
 			$("#divTotRet").hide();
@@ -975,15 +1140,19 @@ function obtenerTitular(){
 			$('#monto_retencion').val("0");
 
 			if ($('#id_formapago_').val() == 2) {
+
+				alert("unchecked");
 				
-				var total = $('#total_pagar').val();
+				var total = $("#total_pagar").val();
+				//alert(total);
 				if (total==="0"){
 					total=$("#total_fac_").val();
 				}
 				//alert(total);
                
 				$('#numcuota_').val("1");				
-                $('#totalcredito_').val(total.toFixed(2).toString().replace(',',''));				
+                $('#totalcredito_').val(total.toFixed(2).toString().replace(',',''));
+
                 $('#plazo_ ').val("30");
 
 				
@@ -996,6 +1165,82 @@ function obtenerTitular(){
 
 		//alert($('#chkExonerado').val());	
 	  });
+
+	  */
+
+	  $("#chkRetencion").on('change', function() {
+		if ($(this).is(':checked')) {
+			// Lógica cuando el checkbox está marcado
+			var total = $("#total_pagar").val();
+			var reten = 0;
+	
+			if (total === "0") {
+				total = $("#total_fac_").val();
+			}
+	
+			reten = Number(total) * 0.03;
+	
+			$('#porcentaje_retencion').val("3");
+			$('#monto_retencion').val(reten.toFixed(2));
+	
+			$("#divPorcRet").show();
+			$("#divTotRet").show();
+
+			//alert($('#id_formapago_').val());
+
+			var id_tipooperacion = $('#id_tipooperacion_').val();
+			var monto_detraccion = $('#monto_detraccion').val();                
+		
+
+			if(id_tipooperacion=='1001') total = total - Number(monto_detraccion);
+
+	
+			if ($('#id_formapago_').val() == 2) {
+				total = total - Number(reten);
+	
+				$('#numcuota_').val("1");
+				$('#totalcredito_').val(total.toFixed(2).toString().replace(',', ''));
+				$('#plazo_').val("30");
+	
+				generarCuotasF();
+			}
+		} else {
+			
+			// Lógica cuando el checkbox no está marcado
+			$("#divPorcRet").hide();
+			$("#divTotRet").hide();
+	
+			$('#porcentaje_retencion').val("");
+			$('#monto_retencion').val("0");
+
+			//alert($('#id_formapago_').val());
+
+			var total = $("#total_pagar").val();
+			if (total === "0") {
+				total = $("#total_fac_").val();
+			}
+
+			var id_tipooperacion = $('#id_tipooperacion_').val();
+			var monto_detraccion = $('#monto_detraccion').val();                
+		
+
+			if(id_tipooperacion=='1001') total = total - Number(monto_detraccion);
+
+	
+			if ($('#id_formapago_').val() == 2) {
+								
+	
+				$('#numcuota_').val("1");
+				$('#totalcredito_').val(total.toString().replace(',', ''));
+
+				//alert($('#totalcredito_').val());
+
+				$('#plazo_').val("30");
+	
+				generarCuotasF();
+			}
+		}
+	});
 
 	  function generarCuotasF() {
         // Limpiar la tabla si ya tiene filas
