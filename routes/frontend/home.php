@@ -423,6 +423,7 @@ Route::get('orden_compra/consulta_stock_pedido', [OrdenCompraController::class, 
 Route::get('orden_compra/modal_consulta_orden_compra/{id}', [OrdenCompraController::class, 'modal_consulta_orden_compra'])->name('orden_compra.modal_consulta_orden_compra');
 Route::post('orden_compra/upload_orden_compra', [OrdenCompraController::class, 'upload_orden_compra'])->name('orden_compra.upload_orden_compra');
 Route::get('orden_compra/obtener_orden_compra_id/{id}', [OrdenCompraController::class, 'obtener_orden_compra_id'])->name('orden_compra.obtener_orden_compra_id');
+Route::get('orden_compra/obtener_orden_compra_persona_id/{id}', [OrdenCompraController::class, 'obtener_orden_compra_persona_id'])->name('orden_compra.obtener_orden_compra_persona_id');
 
 Route::get('orden_compra/obtener_salida_prod_id/{id}', [OrdenCompraController::class, 'obtener_salida_prod_id'])->name('orden_compra.obtener_salida_prod_id');
 Route::get('orden_compra/listar_salida_prod_det/{id}/{emp}', [OrdenCompraController::class, 'listar_salida_prod_det'])->name('orden_compra.listar_salida_prod_det');

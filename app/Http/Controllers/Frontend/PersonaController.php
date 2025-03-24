@@ -132,6 +132,7 @@ class PersonaController extends Controller
 				$tipo_documento="1";
 				$numero_documento=$resultado->numero_documento_;
                 $id_orden_compra=$resultado->id_orden_compra;
+                $id_tipo_cliente= $resultado->id_tipo_cliente;
 
 			}
 
@@ -139,18 +140,36 @@ class PersonaController extends Controller
 
         if($tipo_documento=="6"){
 
-            $orden_compra_model = new OrdenCompra;
+            $tipo_cliente = OrdenCompra::Where("numero_orden_compra",$numero_documento)->Where("estado","1")->Where("cerrado",'2')->Where("id_tipo_documento",'2')->first();
 
-			//print_r("hi");exit();
-			$resultado = $orden_compra_model->getOrdenCompraByCod($numero_documento);
+			if($tipo_cliente->id_tipo_cliente=="1"){
+                $orden_compra_model = new OrdenCompra;
+                $resultado = $orden_compra_model->getOrdenCompraByCodPersona($numero_documento);
 
-			if(isset($resultado->id_empresa)){
-				//echo("DNI");
-				$tipo_documento="5";
-				$numero_documento=$resultado->ruc;
-                $id_orden_compra=$resultado->id_orden_compra;
+            
+                if(isset($resultado->id_persona)){
+                    //echo("DNI");
+                    $tipo_documento="1";
+                    $numero_documento=$resultado->numero_documento_;
+                    $id_orden_compra=$resultado->id_orden_compra;
+                    $id_tipo_cliente= $resultado->id_tipo_cliente;
+    
+                }
 
-			}
+			}else{
+                $orden_compra_model = new OrdenCompra;
+                $resultado = $orden_compra_model->getOrdenCompraByCod($numero_documento);
+
+                if(isset($resultado->id_empresa)){
+                    //echo("DNI");
+                    $tipo_documento="5";
+                    $numero_documento=$resultado->ruc;
+                    $id_orden_compra=$resultado->id_orden_compra;
+                    $id_tipo_cliente= $resultado->id_tipo_cliente;
+    
+                }
+
+            }
 
 		}
 
@@ -167,7 +186,7 @@ class PersonaController extends Controller
 				$numero_documento=$resultado->ruc;
                 $id_orden_compra=$resultado->id_orden_compra;
                 $id_salida_prod=$resultado->id_salida_prod;
-
+                $id_tipo_cliente= $resultado->id_tipo_cliente;
 			}
 
 		}
@@ -182,7 +201,8 @@ class PersonaController extends Controller
         $array["sw"] = $sw;
         $array["id_orden_compra"] = $id_orden_compra;
         $array["id_salida_prod"] = $id_salida_prod;
-
+        $array["id_salida_prod"] = $id_salida_prod;
+        $array["id_tipo_cliente"] = $id_tipo_cliente;
         $array["agremiado"] = $agremiado;
 
         echo json_encode($array);

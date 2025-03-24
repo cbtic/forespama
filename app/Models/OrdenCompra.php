@@ -71,7 +71,6 @@ class OrdenCompra extends Model
     }
 
     function getOrdenCompraById($id){
-
         $cad = "select oc.id, e.razon_social empresa_compra, e2.razon_social empresa_vende, to_char(oc.fecha_orden_compra,'dd-mm-yyyy') fecha_orden_compra , 
             oc.numero_orden_compra, tm.denominacion tipo_documento, oc.estado, tm2.denominacion igv, oc.numero_orden_compra_cliente, 
             oc.total, oc.sub_total, oc.igv, COALESCE (oc.descuento, 0 , oc.descuento) descuento
@@ -95,6 +94,33 @@ class OrdenCompra extends Model
             return null;
         }
     }
+
+    function getOrdenCompraPersonaById($id){
+
+        $cad = "select oc.id, p.nombres empresa_compra, e2.razon_social empresa_vende, to_char(oc.fecha_orden_compra,'dd-mm-yyyy') fecha_orden_compra , 
+            oc.numero_orden_compra, tm.denominacion tipo_documento, oc.estado, tm2.denominacion igv, oc.numero_orden_compra_cliente, 
+            oc.total, oc.sub_total, oc.igv, COALESCE (oc.descuento, 0 , oc.descuento) descuento
+            from orden_compras oc             
+            inner join empresas e2 on oc.id_empresa_vende = e2.id
+            inner join personas p on p.id = oc.id_persona
+            inner join tabla_maestras tm on oc.id_tipo_documento = tm.codigo ::int and tm.tipo = '54'
+            inner join tabla_maestras tm2 on oc.igv_compra = tm2.codigo ::int and tm2.tipo = '51'
+        where oc.id='".$id."'
+            and oc.estado='1'
+            and oc.cerrado= '2'
+        limit 1";
+
+		$data = DB::select($cad);
+       // return $data;
+
+        if (!empty($data)) {
+            return $data[0];
+        } else {
+            
+            return null;
+        }
+    }
+
     function getSalidaProdById($id){
 
         $cad = "select oc.id, e.razon_social empresa_compra, e2.razon_social empresa_vende, to_char(sp.fecha_salida,'dd-mm-yyyy') fecha_orden_compra , 
@@ -191,6 +217,25 @@ class OrdenCompra extends Model
         if(isset($data[0]))return $data[0];
     }
 
+    function getOrdenCompraByCodPersona($numero){
+
+        $cad = "select o.id id_orden_compra, p.id id_persona, p.nombres razon_social, p.direccion, p.nombres representante, p.numero_ruc ruc,  p.email, 1 id_tipo_documento,  p.numero_documento numero_documento_, o.id_tipo_cliente
+                from orden_compras o 
+                left join personas p  on p.id = o.id_persona  
+                where 1=1 
+                and o.estado = '1' and o.cerrado = '2' and o.id_tipo_documento = 2
+                and o.numero_orden_compra = '".$numero."'
+                and (select count(*) 
+            		FROM  orden_compra_detalles o_
+            		inner join valorizaciones v on v.id_modulo = 1 and v.pk_registro = o_.id 
+            		where o_.id_orden_compra = o.id) = 0
+                limit 1";
+
+                //echo $cad;
+		$data = DB::select($cad);
+        if(isset($data[0]))return $data[0];
+    }
+
     function getPersonaOrdenCompraByCod($numero, $tipo_documento){
 
         $cad = "select o.id id_orden_compra, p.id id_persona, p.nombres razon_social, p.direccion, p.nombres representante, p.numero_ruc ruc, p.email, p.id_tipo_documento, p.numero_documento  numero_documento_, o.id_tipo_cliente
@@ -210,7 +255,7 @@ class OrdenCompra extends Model
 
     function getSalidaProductoByCod($numero){
 
-        $cad = "select o.id id_orden_compra, o.numero_orden_compra, sp.id id_salida_prod, sp.codigo,  e.id id_empresa, e.razon_social, e.direccion, e.representante, e.ruc, e.email, 5 id_tipo_documento,  trim(e.ruc) numero_documento_
+        $cad = "select o.id id_orden_compra, o.numero_orden_compra, sp.id id_salida_prod, sp.codigo,  e.id id_empresa, e.razon_social, e.direccion, e.representante, e.ruc, e.email, 5 id_tipo_documento,  trim(e.ruc) numero_documento_, o.id_tipo_cliente
                 from orden_compras o 
                 left join empresas e  on e.id = o.id_empresa_compra 
                 inner join salida_productos sp on sp.id_orden_compra = o.id 
