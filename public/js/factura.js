@@ -280,6 +280,8 @@ function obtenerNotaCreditoComprobante(id_orden_compra){
 		dataType: "json",
 		success: function (result) {
 
+			//alert(result);
+
 			if (result) {
 				//alert('SI');
 				return ('Si');
@@ -294,8 +296,8 @@ function obtenerNotaCreditoComprobante(id_orden_compra){
 		},
 		"error": function (msg, textStatus, errorThrown) {
 
-			Swal.fire("Numero de documento no fue registrado!");
-			return ('No');
+			//Swal.fire("Numero de documento no fue registrado!");
+			//return ('No');
 
 		}
 		
@@ -393,11 +395,13 @@ function guardarFactura(){
 	
 	if (tipo_cambio==""&& forma_pago=="EFECTIVO DOLARES"){msg+="Debe ingresar el tipo de cambio<br>";	}
 
-	var id_orden_compra = $("#id_orden_compra").val();
-	var esiste_oc = obtenerNotaCreditoComprobante(id_orden_compra);
+	//var id_orden_compra = $("#id_orden_compra").val();
+	//var esiste_oc = obtenerNotaCreditoComprobante(id_orden_compra);
 	//esiste_oc="Si";
 
-	if (esiste_oc=="Si"){msg+="La Orden de Compra ya fue Facturado...<br>";	}
+	//alert(esiste_oc);
+
+	//if (esiste_oc=="Si"){msg+="La Orden de Compra ya fue Facturado...<br>";	}
 
 
 
@@ -460,6 +464,9 @@ function fn_save(){
             data : $("#frmFacturacion").serialize(),
 			dataType: 'json',
             success: function (result) {
+							
+				//alert(result.msg);
+
 				/*
 				if(result.sw==false){
 					bootbox.alert(result.msg);
@@ -470,16 +477,21 @@ function fn_save(){
 				//$('#numerof').val(result);
 				//$('#divNumeroF').show();
 				//location.href=urlApp+"/factura/"+result;
-				$('.loader').hide();
-				
-				$('#numerof').val(result.id_factura);
+				$('.loader').hide();				
+				$('#numerof').val(result.id_factura);				
 				$('#divNumeroF').show();
 
-				location.href=urlApp+"/comprobante/"+result.id_factura;
+				//alert(result.id_factura);
+				//exists();
 
-				enviar_comprobante(result.id_factura);
-
-
+				if (result.msg==""){
+					location.href=urlApp+"/comprobante/"+result.id_factura;
+					enviar_comprobante(result.id_factura);
+	
+				}
+				else{
+					Swal.fire(result.msg);
+				}
             }
     });
 }

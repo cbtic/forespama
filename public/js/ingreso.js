@@ -960,6 +960,8 @@ function obtenerBeneficiario() {
 		dataType: "json",
 		success: function(result){
 
+			//alert(result.agremiado);
+
 			if (result.agremiado) {
 				//alert(result.agremiado.id);
 				//alert(tipo_documento);
@@ -1073,12 +1075,18 @@ function obtenerBeneficiario() {
 				cargarPagos();
 				cargarProforma();
 
-				if (tipo_documento_b=="6"){
-					cargarOrdenCompraSel(result.id_orden_compra);
+				if (tipo_documento_b=="1"){  //DNI
+					cargarOrdenCompraSel(result.id_orden_compra, result.id_tipo_cliente);
 					$('#id_orden_compra').val(result.id_orden_compra);
 					
 				}
-				if (tipo_documento_b=="7"){
+
+				if (tipo_documento_b=="6"){  //Orden Compra
+					cargarOrdenCompraSel(result.id_orden_compra, result.id_tipo_cliente);
+					$('#id_orden_compra').val(result.id_orden_compra);
+					
+				}
+				if (tipo_documento_b=="7"){  //Salida Producto
 					cargaSalidaProdSel(result.id_salida_prod);
 					$('#id_orden_compra').val(result.id_orden_compra);
 					$('#id_salida_prod').val(result.id_salida_prod);
@@ -1254,6 +1262,31 @@ function cargarOrdenCompraId(id) {
     });
 }
 
+function cargarOrdenCompraPersonaId(id) {
+    $.ajax({
+        url: `/orden_compra/obtener_orden_compra_persona_id/${id}`,
+        dataType: "json",
+        success: function (result) {
+            if (result && result.oc) {
+                const { total, descuento, sub_total, igv } = result.oc;
+
+                // Actualizar los valores en los campos del formulario
+                $('#deudaTotales').val(Number(total).toFixed(2));
+                $('#totalDescuento').val(Number(descuento).toFixed(2));
+                $('#total').val(Number(total).toFixed(2));
+                $('#stotal').val(Number(sub_total).toFixed(2));
+                $('#igv').val(Number(igv).toFixed(2));
+            } else {
+                console.warn("No se encontraron datos válidos en la respuesta.");
+            }
+        },
+        error: function (xhr, status, error) {
+            console.error("Error al cargar la orden de compra:", error);
+            alert("Hubo un error al cargar los datos. Por favor, inténtalo de nuevo.");
+        }
+    });
+}
+
 function actualizarCampo(selector, valor) {
     $(selector).val(Number(valor).toFixed(2));
 }
@@ -1263,8 +1296,14 @@ function cargarProformaSel(id){
 	cargarProformaDet(id);
 }
 
-function cargarOrdenCompraSel(id){
-	cargarOrdenCompraId(id);
+function cargarOrdenCompraSel(id, tipo_cliente){
+	if (tipo_cliente=='1'){
+		cargarOrdenCompraPersonaId(id);
+	}else{
+		cargarOrdenCompraId(id);
+	}
+	
+
 	cargarOrdenCompraDet(id);
 }
 
@@ -3245,7 +3284,8 @@ function cargarOrdenCompraDet(id) {
     // Limpiar la tabla
     $("#tblValorizacion tbody").empty();
 
-	var emp = $('#empresa_id').val();
+	//var emp = $('#empresa_id').val();
+	var emp = 1;
 
     // Realizar la solicitud AJAX
     $.ajax({
