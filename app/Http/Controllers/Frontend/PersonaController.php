@@ -120,6 +120,23 @@ class PersonaController extends Controller
         $id_orden_compra = "";
         $id_salida_prod = "";
 		
+        if($tipo_documento=="1"){
+
+            $orden_compra_model = new OrdenCompra;
+
+			//print_r("hi");exit();
+			$resultado = $orden_compra_model->getPersonaOrdenCompraByCod($numero_documento, $tipo_documento);
+
+			if(isset($resultado->id_persona)){
+				//echo("DNI");
+				$tipo_documento="1";
+				$numero_documento=$resultado->numero_documento_;
+                $id_orden_compra=$resultado->id_orden_compra;
+
+			}
+
+		}
+
         if($tipo_documento=="6"){
 
             $orden_compra_model = new OrdenCompra;

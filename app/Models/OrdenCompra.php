@@ -176,7 +176,7 @@ class OrdenCompra extends Model
 
     function getOrdenCompraByCod($numero){
 
-        $cad = "select o.id id_orden_compra, e.id id_empresa, e.razon_social, e.direccion, e.representante, e.ruc, e.email, 5 id_tipo_documento,  trim(e.ruc) numero_documento_
+        $cad = "select o.id id_orden_compra, e.id id_empresa, e.razon_social, e.direccion, e.representante, e.ruc, e.email, 5 id_tipo_documento,  trim(e.ruc) numero_documento_, o.id_tipo_cliente
                 from orden_compras o 
                 left join empresas e  on e.id = o.id_empresa_compra 
                 where 1=1 
@@ -187,6 +187,23 @@ class OrdenCompra extends Model
             		inner join valorizaciones v on v.id_modulo = 1 and v.pk_registro = o_.id 
             		where o_.id_orden_compra = o.id) = 0
                 limit 1";
+		$data = DB::select($cad);
+        if(isset($data[0]))return $data[0];
+    }
+
+    function getPersonaOrdenCompraByCod($numero, $tipo_documento){
+
+        $cad = "select o.id id_orden_compra, p.id id_persona, p.nombres razon_social, p.direccion, p.nombres representante, p.numero_ruc ruc, p.email, p.id_tipo_documento, p.numero_documento  numero_documento_, o.id_tipo_cliente
+                from orden_compras o 
+                left join personas p  on p.id = o.id_persona  
+                where 1=1 
+                and o.estado = '1' and o.cerrado = '2' and o.id_tipo_documento = 2
+                and p.numero_documento = '".$numero."' and p.id_tipo_documento = '".$tipo_documento."'
+                and (select count(*) 
+            		FROM  orden_compra_detalles o_
+            		inner join valorizaciones v on v.id_modulo = 1 and v.pk_registro = o_.id 
+            		where o_.id_orden_compra = o.id) = 0
+                limit 1 ";
 		$data = DB::select($cad);
         if(isset($data[0]))return $data[0];
     }

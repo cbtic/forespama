@@ -1073,6 +1073,12 @@ function obtenerBeneficiario() {
 				cargarPagos();
 				cargarProforma();
 
+				if (tipo_documento_b=="1"){
+					cargarOrdenCompraSel(result.id_orden_compra);
+					$('#id_orden_compra').val(result.id_orden_compra);
+					
+				}
+
 				if (tipo_documento_b=="6"){
 					cargarOrdenCompraSel(result.id_orden_compra);
 					$('#id_orden_compra').val(result.id_orden_compra);
@@ -3245,7 +3251,8 @@ function cargarOrdenCompraDet(id) {
     // Limpiar la tabla
     $("#tblValorizacion tbody").empty();
 
-	var emp = $('#empresa_id').val();
+	//var emp = $('#empresa_id').val();
+	var emp = 1;
 
     // Realizar la solicitud AJAX
     $.ajax({
