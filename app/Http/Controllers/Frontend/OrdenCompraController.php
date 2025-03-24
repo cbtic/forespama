@@ -846,8 +846,10 @@ class OrdenCompraController extends Controller
 
     }
 
-    public function exportar_listar_orden_compra($tipo_documento, $empresa_compra, $empresa_vende, $fecha, $numero_orden_compra, $numero_orden_compra_cliente, $almacen_origen, $almacen_destino, $situacion, $estado) {
+    public function exportar_listar_orden_compra($tipo_documento, $empresa_compra, $empresa_vende, $fecha, $numero_orden_compra, $numero_orden_compra_cliente, $almacen_origen, $almacen_destino, $situacion, $estado, $vendedor) {
 
+        $id_user = Auth::user()->id;
+        
 		if($tipo_documento==0)$tipo_documento = "";
         if($empresa_compra==0)$empresa_compra = "";
         if($empresa_vende==0)$empresa_vende = "";
@@ -858,6 +860,7 @@ class OrdenCompraController extends Controller
         if($almacen_destino==0)$almacen_destino = "";
         if($situacion==0)$situacion = "";
         if($estado==0)$estado = "";
+        if($vendedor==0)$vendedor = "";
 
         $orden_compra_model = new OrdenCompra;
 		$p[]=$tipo_documento;
@@ -870,21 +873,23 @@ class OrdenCompraController extends Controller
         $p[]=$almacen_origen;
         $p[]=$almacen_destino;
         $p[]=$estado;
-		$p[]=1;
+		$p[]=$id_user;
+        $p[]=$vendedor;
+        $p[]=1;
 		$p[]=10000;
 		$data = $orden_compra_model->listar_orden_compra_ajax($p);
 		
 		$variable = [];
 		$n = 1;
 
-		array_push($variable, array("N°","Id","Tipo Documento","Empresa Compra","N° OC Cliente","Empresa Vende","Fecha","Numero OC","Almacen Origen","Almacen Destino","Situacion","Estado"));
+		array_push($variable, array("N°","Id","Tipo Documento","Empresa Compra","N° OC Cliente","Empresa Vende","Fecha","Numero OC","Almacen Origen","Almacen Destino","Situacion","Vendedor","Estado"));
 		
 		foreach ($data as $r) {
 
             if($r->estado==1){$estado='ACTIVO';}
             if($r->estado==0){$estado='INACTIVO';}
 
-			array_push($variable, array($n++,$r->id, $r->tipo_documento, $r->empresa_compra, $r->numero_orden_compra_cliente, $r->empresa_vende, $r->fecha_orden_compra, $r->numero_orden_compra, $r->almacen_origen, $r->almacen_destino, $r->cerrado, $estado));
+			array_push($variable, array($n++,$r->id, $r->tipo_documento, $r->cliente, $r->numero_orden_compra_cliente, $r->empresa_vende, $r->fecha_orden_compra, $r->numero_orden_compra, $r->almacen_origen, $r->almacen_destino, $r->cerrado, $r->vendedor, $estado));
 		}
 		
 		$export = new InvoicesExport([$variable]);
@@ -1100,16 +1105,16 @@ class InvoicesExport implements FromArray, WithHeadings, WithStyles
 
     public function headings(): array
     {
-        return ["N", "Id", "Tipo Documento", "Empresa Compra", "N° OC Cliente", "Empresa Vende", "Fecha", "Numero OC", "Almacen Origen", "Almacen Destino", "Situacion", "Estado"];
+        return ["N", "Id", "Tipo Documento", "Empresa Compra", "N° OC Cliente", "Empresa Vende", "Fecha", "Numero OC", "Almacen Origen", "Almacen Destino", "Situacion", "Vendedor", "Estado"];
     }
 
 	public function styles(Worksheet $sheet)
     {
 
-		$sheet->mergeCells('A1:L1');
+		$sheet->mergeCells('A1:M1');
 
         $sheet->setCellValue('A1', "REPORTE DE ORDEN DE COMPRA - FORESPAMA");
-        $sheet->getStyle('A1:L1')->applyFromArray([
+        $sheet->getStyle('A1:M1')->applyFromArray([
             'font' => [
                 'bold' => true,
                 'color' => ['rgb' => 'FFFFFF'],
@@ -1126,7 +1131,7 @@ class InvoicesExport implements FromArray, WithHeadings, WithStyles
 		$sheet->getStyle('A1')->getAlignment()->setWrapText(true);
 		$sheet->getRowDimension(1)->setRowHeight(30);
 
-        $sheet->getStyle('A2:L2')->applyFromArray([
+        $sheet->getStyle('A2:M2')->applyFromArray([
             'font' => [
                 'bold' => true,
                 'color' => ['rgb' => '000000'],
@@ -1146,7 +1151,7 @@ class InvoicesExport implements FromArray, WithHeadings, WithStyles
 		->getNumberFormat()
 		->setFormatCode(\PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_NUMBER_00);*/ //SIRVE PARA PONER 2 DECIMALES A ESA COLUMNA
         
-        foreach (range('A', 'L') as $col) {
+        foreach (range('A', 'M') as $col) {
             $sheet->getColumnDimension($col)->setAutoSize(true);
         }
     }

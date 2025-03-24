@@ -465,6 +465,7 @@ function DescargarArchivosExcel(){
 	var almacen_destino = $('#almacen_destino_bus').val();
 	var situacion = $('#situacion_bus').val();
 	var estado = $('#estado_bus').val();
+	var vendedor = $('#vendedor_bus').val();
 
 	if (tipo_documento == "")tipo_documento = 0;
 	if (empresa_compra == "")empresa_compra = 0;
@@ -476,8 +477,9 @@ function DescargarArchivosExcel(){
 	if (almacen_destino == "")almacen_destino = 0;
 	if (situacion == "")situacion = 0;
 	if (estado == "")estado = 0;
+	if (vendedor == "")vendedor = 0;
 	
-	location.href = '/orden_compra/exportar_listar_orden_compra/'+tipo_documento+'/'+empresa_compra+'/'+empresa_vende+'/'+fecha+'/'+numero_orden_compra+'/'+numero_orden_compra_cliente+'/'+almacen_origen+'/'+almacen_destino+'/'+situacion+'/'+estado;
+	location.href = '/orden_compra/exportar_listar_orden_compra/'+tipo_documento+'/'+empresa_compra+'/'+empresa_vende+'/'+fecha+'/'+numero_orden_compra+'/'+numero_orden_compra_cliente+'/'+almacen_origen+'/'+almacen_destino+'/'+situacion+'/'+estado+'/'+vendedor;
 }
 
 function generarLPN(){
