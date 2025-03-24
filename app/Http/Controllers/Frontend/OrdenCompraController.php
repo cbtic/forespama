@@ -1091,6 +1091,7 @@ class OrdenCompraController extends Controller
 
 class InvoicesExport implements FromArray, WithHeadings, WithStyles
 {
+    
 	protected $invoices;
 
 	public function __construct(array $invoices)
