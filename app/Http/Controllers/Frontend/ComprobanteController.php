@@ -2829,9 +2829,10 @@ class ComprobanteController extends Controller
             $data["ordenCompra"] = $factura->numero_orden_compra_cliente;
         }
         
-        if ($factura->guia_serie!=Null){
+        if ($factura->guia!=Null){
             $data["tipoDocumentoGuia"] = "09";
-            $data["serieNumeroGuia"] = $factura->guia_serie."-".$factura->guia_numero; 
+            //$data["serieNumeroGuia"] = $factura->guia_serie."-".$factura->guia_numero; 
+            $data["serieNumeroGuia"] = $factura->guia; 
 
         }
    
