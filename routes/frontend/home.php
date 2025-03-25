@@ -547,7 +547,7 @@ Route::get('equivalencia_producto/eliminar_equivalencia_producto/{id}/{estado}',
 
 Route::get('ingreso_vehiculo_tronco/cubicaje_pdf/{id}', [IngresoVehiculoTroncoController::class, 'cubicaje_pdf'])->name('ingreso_vehiculo_tronco.cubicaje_pdf');
 
-Route::get('ingreso_vehiculo_tronco/exportar_listar_pagos/{ruc}/{empresa}/{placa}/{tipo_madera}/{fecha_inicio}/{fecha_fin}', [IngresoVehiculoTroncoController::class, 'exportar_listar_pagos'])->name('ingreso_vehiculo_tronco.exportar_listar_pagos');
+Route::get('ingreso_vehiculo_tronco/exportar_listar_pagos/{ruc}/{empresa}/{placa}/{tipo_madera}/{fecha_inicio}/{fecha_fin}/{estado_pago}', [IngresoVehiculoTroncoController::class, 'exportar_listar_pagos'])->name('ingreso_vehiculo_tronco.exportar_listar_pagos');
 
 Route::get('requerimiento/exportar_listar_requerimiento/{tipo_documento}/{fecha}/{numero_requerimiento}/{almacen}/{situacion}/{responsable_atencion}/{estado_atencion}/{tipo_requerimiento}/{estado}', [RequerimientoController::class, 'exportar_listar_requerimiento'])->name('requerimiento.exportar_listar_requerimiento');
 Route::get('ingreso_vehiculo_tronco/obtener_datos_vehiculo_guia/{placa}', [IngresoVehiculoTroncoController::class, 'obtener_datos_vehiculo_guia'])->name('ingreso_vehiculo_tronco.obtener_datos_vehiculo_guia');
@@ -611,7 +611,8 @@ Route::get('ingreso_vehiculo_tronco/exportar_reporte_pago/{fecha_inicio}/{fecha_
 Route::get('orden_compra/generar_lpn/{id_orden_compra}', [OrdenCompraController::class, 'generar_lpn'])->name('orden_compra.generar_lpn');
 Route::get('orden_compra/create_reporte_comercializacion', [OrdenCompraController::class, 'create_reporte_comercializacion'])->name('orden_compra.create_reporte_comercializacion');
 Route::post('orden_compra/listar_reporte_comercializacion_ajax', [OrdenCompraController::class, 'listar_reporte_comercializacion_ajax'])->name('orden_compra.listar_reporte_comercializacion_ajax');
-Route::get('orden_compra/exportar_reporte_comercializacion/{empresa_compra}/{fecha_inicio}/{fecha_fin}/{numero_orden_compra_cliente}/{situacion}', [OrdenCompraController::class, 'exportar_reporte_comercializacion'])->name('orden_compra.exportar_reporte_comercializacion');
+Route::get('orden_compra/exportar_reporte_comercializacion/{empresa_compra}/{fecha_inicio}/{fecha_fin}/{numero_orden_compra_cliente}/{situacion}/{codigo_producto}/{producto}', [OrdenCompraController::class, 'exportar_reporte_comercializacion'])->name('orden_compra.exportar_reporte_comercializacion');
 Route::get('requerimiento/exportar_listar_requerimiento_reporte/{tipo_documento}/{fecha}/{numero_requerimiento}/{almacen}/{situacion}/{responsable_atencion}/{estado_atencion}/{tipo_requerimiento}/{estado}', [RequerimientoController::class, 'exportar_listar_requerimiento_reporte'])->name('requerimiento.exportar_listar_requerimiento_reporte');
+Route::post('orden_compra/upload_orden_distribucion', [OrdenCompraController::class, 'upload_orden_distribucion'])->name('orden_compra.upload_orden_distribucion');
 
 

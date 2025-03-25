@@ -335,11 +335,11 @@ label.form-control-sm{
 						</select>
 					</div>
 
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+					<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
                         <input id="fecha_inicio_bus" name="fecha_inicio_bus" on class="form-control form-control-sm"  placeholder="Fecha Inicio">
 					</div>
 
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+					<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
 						<input class="form-control form-control-sm" id="fecha_fin_bus" name="fecha_fin_bus" placeholder="Fecha Fin">
 					</div>
 
@@ -352,14 +352,26 @@ label.form-control-sm{
 					</div>
 
 					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<select name="situacion_bus" id="situacion_bus" class="form-control form-control-sm">
-							<option value="">--Seleccionar Situaci&oacute;n--</option>
+                        <input id="codigo_producto_bus" name="codigo_producto_bus" on class="form-control form-control-sm"  placeholder="C&oacute;digo Producto">
+					</div>
+
+					<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+						<select name="producto_bus" id="producto_bus" class="form-control form-control-sm">
+							<option value="">--Seleccionar Producto--</option>
 							<?php
-							foreach ($cerrado_orden_compra as $row){?>
-								<option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
+							foreach ($productos as $row){?>
+								<option value="<?php echo $row->id ?>"><?php echo $row->denominacion ?></option>
 								<?php 
 							}
 							?>
+						</select>
+					</div>
+
+					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+						<select name="situacion_bus" id="situacion_bus" class="form-control form-control-sm">
+							<option value="" selected="selected">--Seleccionar Atendido--</option>
+							<option value="1">NO</option>
+							<option value="2">SI</option>
 						</select>
 					</div>
 

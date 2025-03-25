@@ -1,5 +1,4 @@
-
-CREATE OR REPLACE FUNCTION public.sp_listar_ingreso_vehiculo_tronco_paginado(p_placa character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
+CREATE OR REPLACE FUNCTION public.sp_listar_ingreso_vehiculo_tronco_paginado(p_placa character varying, p_ruc character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
  RETURNS refcursor
  LANGUAGE plpgsql
 AS $function$
@@ -18,27 +17,27 @@ Begin
 	p_pagina=(p_pagina::Integer-1)*p_limit::Integer;
 
 	v_campos=' ivt.id,ivttm.id id_ingreso_vehiculo_tronco_tipo_maderas,ivt.fecha_ingreso,e.ruc,e.razon_social,v.placa,v.ejes,p.numero_documento,
-p.apellido_paterno||'' ''||p.apellido_materno||'' ''||p.nombres conductor,
-tm.denominacion tipo_madera,ivttm.cantidad ';
+	p.apellido_paterno||'' ''||p.apellido_materno||'' ''||p.nombres conductor,
+	tm.denominacion tipo_madera,ivttm.cantidad ';
 
 	v_tabla=' from ingreso_vehiculo_troncos ivt
-inner join empresas e on ivt.id_empresa_transportista=e.id
-inner join vehiculos v on ivt.id_vehiculos=v.id
-inner join conductores c on ivt.id_conductores=c.id
-inner join personas p on c.id_personas=p.id
-inner join ingreso_vehiculo_tronco_tipo_maderas ivttm on ivt.id=ivttm.id_ingreso_vehiculo_troncos
-inner join tabla_maestras tm on ivttm.id_tipo_maderas=tm.codigo::int and tm.tipo=''42'' ';
+	inner join empresas e on ivt.id_empresa_transportista=e.id
+	inner join vehiculos v on ivt.id_vehiculos=v.id
+	inner join conductores c on ivt.id_conductores=c.id
+	inner join personas p on c.id_personas=p.id
+	inner join ingreso_vehiculo_tronco_tipo_maderas ivttm on ivt.id=ivttm.id_ingreso_vehiculo_troncos
+	inner join tabla_maestras tm on ivttm.id_tipo_maderas=tm.codigo::int and tm.tipo=''42'' ';
 
 	v_where = ' where 1=1  ';
-	/*
+	
 	If p_placa<>'' Then
-	 v_where:=v_where||'And t1.placa = '''||p_placa||''' ';
+	 v_where:=v_where||'And v.placa = '''||p_placa||''' ';
 	End If;
 
-	If p_ejes<>'' Then
-	 v_where:=v_where||'And t1.ejes = '''||p_ejes||''' ';
+	If p_ruc<>'' Then
+	 v_where:=v_where||'And e.ruc = '''||p_ruc||''' ';
 	End If;
-
+/*
 	If p_exonerado<>'' Then
 	 v_where:=v_where||'And t1.exonerado = '''||p_exonerado||''' ';
 	End If;
@@ -71,4 +70,3 @@ inner join tabla_maestras tm on ivttm.id_tipo_maderas=tm.codigo::int and tm.tipo
 End
 $function$
 ;
-

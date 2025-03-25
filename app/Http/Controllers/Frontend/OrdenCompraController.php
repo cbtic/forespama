@@ -590,6 +590,7 @@ class OrdenCompraController extends Controller
         $igv_general = 0;
         $total_general = 0;
         $id_vendedor = 17;
+        $id_tipo_cliente = 5;
 
         // Ruta del archivo
         //$filePath = storage_path('app/datos.txt');
@@ -637,6 +638,7 @@ class OrdenCompraController extends Controller
             $id_empresa_vende = $empresa->id;
             $fecha_orden_compra = Carbon::createFromFormat('d/m/Y', $row['FECHA_AUTORIZACION']);
             $numero_orden_compra_cliente = $row['NRO_OC'];
+            $fecha_vencimiento = Carbon::createFromFormat('d/m/Y', $row['FECHA_HASTA']);
 
             if($count == 0){
 
@@ -644,7 +646,7 @@ class OrdenCompraController extends Controller
 		        $codigo_orden_compra = $orden_compra_model->getCodigoOrdenCompra($id_tipo_documento);
                 $numero_orden_compra = $codigo_orden_compra[0]->codigo;
 
-                $ordenCompra = new OrdenCompra;                
+                $ordenCompra = new OrdenCompra;
                 $ordenCompra->id_unidad_origen = $id_unidad_origen;
                 $ordenCompra->id_empresa_vende = $id_empresa_vende;
                 $ordenCompra->id_empresa_compra = $id_empresa_compra;
@@ -662,6 +664,8 @@ class OrdenCompraController extends Controller
                 $ordenCompra->moneda = $moneda;
                 $ordenCompra->id_usuario_inserta = $id_user;
                 $ordenCompra->id_vendedor = $id_vendedor;
+                $ordenCompra->id_tipo_cliente = $id_tipo_cliente;
+                $ordenCompra->fecha_vencimiento = $fecha_vencimiento;
                 $ordenCompra->save();
                 $id_orden_compra = $ordenCompra->id;
 
@@ -1031,6 +1035,8 @@ class OrdenCompraController extends Controller
         $p[]=$request->fecha_fin;
         $p[]=$request->numero_orden_compra_cliente;
         $p[]=$request->situacion;
+        $p[]=$request->codigo_producto;
+        $p[]=$request->producto;
         $p[]=1;
         $p[]=$request->NumeroPagina;
 		$p[]=$request->NumeroRegistros;
@@ -1049,13 +1055,15 @@ class OrdenCompraController extends Controller
 
 	}
 
-    public function exportar_reporte_comercializacion($empresa_compra, $fecha_inicio, $fecha_fin, $numero_orden_compra_cliente, $situacion) {
+    public function exportar_reporte_comercializacion($empresa_compra, $fecha_inicio, $fecha_fin, $numero_orden_compra_cliente, $situacion, $codigo_producto, $producto) {
 
         if($empresa_compra==0)$empresa_compra = "";
         if($fecha_inicio=="0")$fecha_inicio = "";
         if($fecha_fin=="0")$fecha_fin = "";
         if($numero_orden_compra_cliente=="0")$numero_orden_compra_cliente = "";
         if($situacion==0)$situacion = "";
+        if($codigo_producto=="0")$codigo_producto = "";
+        if($producto==0)$producto = "";
         
         $orden_compra_model = new OrdenCompra;
 		$p[]=$empresa_compra;
@@ -1063,6 +1071,8 @@ class OrdenCompraController extends Controller
         $p[]=$fecha_fin;
         $p[]=$numero_orden_compra_cliente;
         $p[]=$situacion;
+        $p[]=$codigo_producto;
+        $p[]=$producto;
         $p[]=1;
         $p[]=1;
 		$p[]=10000;
@@ -1086,6 +1096,101 @@ class OrdenCompraController extends Controller
 		return Excel::download($export, 'Reporte_comercializacion.xlsx');
 		
     }  
+
+    public function upload_orden_distribucion(Request $request){
+		
+		$filename = date("YmdHis") . substr((string)microtime(), 1, 6);
+		$type="";
+		
+        $path = "orden_distribucion";
+        if (!is_dir($path)) {
+            mkdir($path);
+        }
+        
+        $filepath = public_path('orden_distribucion/');
+		
+		$type=$this->extension($_FILES["file"]["name"]);
+		move_uploaded_file($_FILES["file"]["tmp_name"], $filepath . $filename.".".$type);
+		
+		$archivo = $filename.".".$type;
+		
+        //echo $archivo;
+		$this->importar_archivo_od($archivo);
+		
+	}
+
+    public function importar_archivo_od($archivo)
+    {
+
+        $id_user = Auth::user()->id;
+        $estado = 1;
+        $tienda_asignada = 1;
+
+        $filePath = public_path('orden_distribucion/'.$archivo);
+
+        if (!file_exists($filePath)) {
+            return response()->json(['error' => 'Archivo no encontrado.'], 404);
+        }
+
+        $file = fopen($filePath, 'r');
+
+        $header = fgetcsv($file, 0, '|');
+
+        if ($header === false) {
+            return response()->json(['error' => 'El archivo está vacío o tiene un formato incorrecto.'], 400);
+        }
+
+        $count = 0;
+
+        while (($line = fgets($file)) !== false) {
+
+            $line = trim($line);
+
+            $data = str_getcsv($line, '|');
+            
+            $data = array_pad($data, count($header), null);
+
+            if (count($data) !== count($header)) {
+                continue;
+            }
+
+            $row = array_combine($header, $data);
+
+            $tienda = Tienda::where("numero_tienda",$row['NRO_LOCAL'])->first();
+            $orden_compra = OrdenCompra::where("numero_orden_compra_cliente",$row['NRO_OD'])->first();
+
+            $id_tienda = $tienda->id;
+            $id_orden_compra = $orden_compra->id;
+            
+            $equivalenciaProducto = EquivalenciaProducto::where("codigo_empresa",trim($row['SKU']))->first();
+            $id_producto = $equivalenciaProducto->id_producto;
+            $producto = Producto::find($id_producto);
+            $cantidad_requerida = $row['UNIDADES'];
+            
+            $tienda_detalle_orden_compra = new TiendaDetalleOrdenCompra;
+            $tienda_detalle_orden_compra->id_tienda = $id_tienda;
+            $tienda_detalle_orden_compra->id_orden_compra = $id_orden_compra;
+            $tienda_detalle_orden_compra->id_producto = $id_producto;
+            $tienda_detalle_orden_compra->cantidad = $cantidad_requerida;
+            $tienda_detalle_orden_compra->estado = $estado;
+            $tienda_detalle_orden_compra->id_usuario_inserta = $id_user;
+            $tienda_detalle_orden_compra->save();
+
+            $count++;
+        }
+
+        $ordenCompra = OrdenCompra::find($id_orden_compra);
+        $ordenCompra->tienda_asignada = $tienda_asignada;
+        $ordenCompra->save();
+
+        fclose($file);
+
+        return response()->json([
+            'message' => 'Datos importados correctamente.',
+            'filas_importadas' => $count,
+        ], 200);
+
+    }
 
 }
 

@@ -528,6 +528,18 @@ label.form-control-sm{
 								<input class="form-control form-control-sm" id="fecha_fin_bus" name="fecha_fin_bus" placeholder="Fecha Fin">
 							</div>
 							
+							<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+								<select name="estado_pago_bus" id="estado_pago_bus" class="form-control form-control-sm">
+									<option value="">--Seleccionar Estado Pago--</option>
+									<?php
+									foreach ($estado_pago as $row){?>
+										<option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
+										<?php 
+									}
+									?>
+								</select>
+							</div>
+
 							<!--<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
 								<select name="estado_py_bus" id="estado_py_bus" class="form-control form-control-sm" onchange="">
 									<option value="">ESTADO PROYECTO</option>

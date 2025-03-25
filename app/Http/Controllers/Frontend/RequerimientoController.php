@@ -291,6 +291,7 @@ class RequerimientoController extends Controller
         $orden_compra->id_almacen_destino = $request->almacen;
         $orden_compra->id_almacen_salida = $request->almacen_salida;
         $orden_compra->id_requerimiento = $request->id;
+        $orden_compra->id_tipo_cliente = '5';
         $orden_compra->id_usuario_inserta = $id_user;
         $orden_compra->estado = 1;
         $orden_compra->save();
@@ -323,7 +324,7 @@ class RequerimientoController extends Controller
 
         }
 
-        $requerimiento->cerrado = 2;
+        $requerimiento->cerrado = $request->cerrado;
         $requerimiento->estado_atencion = 3;
         $requerimiento->save();
         return response()->json(['id' => $orden_compra->id]);

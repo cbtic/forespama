@@ -20,6 +20,26 @@ $(document).ready(function () {
 		return false;
     });
 
+	$(".upload2").on('click', function() {
+        var formData = new FormData();
+        var files = $('#image2')[0].files[0];
+        formData.append('file',files);
+        $.ajax({
+			headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            url: "/orden_compra/upload_orden_distribucion",
+            type: 'post',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function(response) {
+				datatablenew();
+            }
+        });
+		return false;
+    });
+
 	$('#btnBuscar').click(function () {
 		fn_ListarBusqueda();
 	});
@@ -187,9 +207,9 @@ function datatablenew(){
 				
                 {
                 "mRender": function (data, type, row) {
-                	var empresa_compra = "";
-					if(row.empresa_compra!= null)empresa_compra = row.empresa_compra;
-					return empresa_compra;
+                	var cliente = "";
+					if(row.cliente!= null)cliente = row.cliente;
+					return cliente;
                 },
                 "bSortable": true,
                 "aTargets": [2]

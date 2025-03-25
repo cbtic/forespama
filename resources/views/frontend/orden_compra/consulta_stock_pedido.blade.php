@@ -465,14 +465,20 @@ label.form-control-sm{
 						<input class="btn btn-warning float-left" value="Buscar" type="button" id="btnBuscar" />
 
 						<span class="btn btn-info btn-file float-left" style="margin-left:10px">
-							Examinar <input id="image" name="image" type="file" />
+							Examinar OC <input id="image" name="image" type="file" />
 						</span>
 						
 						<i id="fileExcel" class="fa fa-file-excel" style="display:none;color:#00B300;font-size:35px;block;float:left;padding-left:10px"></i>
 						
-						<input type="button" class="btn btn-success upload" value="Subir" style="margin-left:10px;float:left">
-						
+						<input type="button" class="btn btn-success upload" value="Subir OC" style="margin-left:10px;float:left">
 
+						<span class="btn btn-info btn-file float-left" style="margin-left:10px">
+							Examinar OD <input id="image2" name="image2" type="file" />
+						</span>
+						
+						<i id="fileExcel2" class="fa fa-file-excel" style="display:none;color:#00B300;font-size:35px;block;float:left;padding-left:10px"></i>
+						
+						<input type="button" class="btn btn-success upload2" value="Subir OD" style="margin-left:10px;float:left">
 						
 					</div>
 				</div>

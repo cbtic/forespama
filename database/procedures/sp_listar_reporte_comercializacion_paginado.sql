@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION public.sp_listar_reporte_comercializacion_paginado(p_empresa_compra character varying, p_fecha_desde character varying, p_fecha_hasta character varying, p_numero_orden_compra_cliente character varying, p_situacion character varying, p_estado character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
+CREATE OR REPLACE FUNCTION public.sp_listar_reporte_comercializacion_paginado(p_empresa_compra character varying, p_fecha_desde character varying, p_fecha_hasta character varying, p_numero_orden_compra_cliente character varying, p_situacion character varying, p_codigo_producto character varying, p_producto character varying, p_estado character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
  RETURNS refcursor
  LANGUAGE plpgsql
 AS $function$
@@ -46,6 +46,14 @@ begin
 
 	If p_situacion<>'' Then
 	 v_where:=v_where||'And oc.cerrado = '''||p_situacion||''' ';
+	End If;
+
+	If p_codigo_producto<>'' Then
+	 v_where:=v_where||'And p.codigo = '''||p_codigo_producto||''' ';
+	End If;
+
+	If p_producto<>'' Then
+	 v_where:=v_where||'And ocd.id_producto = '''||p_producto||''' ';
 	End If;
 
 	If p_estado<>'' Then

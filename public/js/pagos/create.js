@@ -1685,6 +1685,7 @@ function datatablenew() {
             var tipo_madera = $('#tipo_madera_bus').val();
             var fecha_inicio = $('#fecha_inicio_bus').val();
             var fecha_fin = $('#fecha_fin_bus').val();
+            var estado_pago = $('#estado_pago_bus').val();
 
             var _token = $('#_token').val();
             oSettings.jqXHR = $.ajax({
@@ -1695,7 +1696,7 @@ function datatablenew() {
                     NumeroPagina: iNroPagina,
                     NumeroRegistros: iCantMostrar,
                     ruc: ruc, empresa: empresa, placa: placa, tipo_madera: tipo_madera, fecha_inicio:fecha_inicio,
-                    fecha_fin:fecha_fin,
+                    fecha_fin:fecha_fin,estado_pago:estado_pago,
                     _token: _token
                 },
                 "success": function(result) {
@@ -2650,6 +2651,7 @@ function DescargarArchivosPagos(){
 	var tipo_madera = $('#tipo_madera_bus').val();
 	var fecha_inicio = $('#fecha_inicio_bus').val();
 	var fecha_fin = $('#fecha_fin_bus').val();
+	var estado_pago = $('#estado_pago_bus').val();
 	//var id_agremiado = 0;
 	//var id_regional = 0;
 	if (ruc == "")ruc = "0";
@@ -2666,11 +2668,12 @@ function DescargarArchivosPagos(){
     }else{
         fecha_fin = convertirFecha(fecha_fin);
     };
+	if (estado_pago == "")estado_pago = "0";
 	//if (campo == "")campo = 0;
 	//if (orden == "")orden = 0;
 	
 	
-	location.href = '/ingreso_vehiculo_tronco/exportar_listar_pagos/'+ruc+'/'+empresa+'/'+placa+'/'+tipo_madera+'/'+fecha_inicio+'/'+fecha_fin;
+	location.href = '/ingreso_vehiculo_tronco/exportar_listar_pagos/'+ruc+'/'+empresa+'/'+placa+'/'+tipo_madera+'/'+fecha_inicio+'/'+fecha_fin+'/'+estado_pago;
 }
 
 function convertirFecha(fecha){

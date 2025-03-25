@@ -230,6 +230,7 @@ class IngresoVehiculoTroncoController extends Controller
 		$p[]=$request->tipo_madera;
 		$p[]=$request->fecha_inicio;
 		$p[]=$request->fecha_fin;
+		$p[]=$request->estado_pago;
 		$p[]=$request->NumeroPagina;
 		$p[]=$request->NumeroRegistros;
 		$data = $ingresoVehiculoTronco_model->listar_ingreso_vehiculo_tronco_pagos_ajax($p);
@@ -363,8 +364,9 @@ class IngresoVehiculoTroncoController extends Controller
 		$tablaMaestra_model = new TablaMaestra;
 
 		$tipo_madera = $tablaMaestra_model->getMaestroByTipo(42);
+		$estado_pago = $tablaMaestra_model->getMaestroByTipo(66);
 
-		return view('frontend.pagos.create',compact('tipo_madera'));
+		return view('frontend.pagos.create',compact('tipo_madera','estado_pago'));
 
 	}
 
@@ -539,7 +541,7 @@ class IngresoVehiculoTroncoController extends Controller
 
 	}
 
-	public function exportar_listar_pagos($ruc, $empresa, $placa, $tipo_madera, $fecha_inicio, $fecha_fin) {
+	public function exportar_listar_pagos($ruc, $empresa, $placa, $tipo_madera, $fecha_inicio, $fecha_fin, $estado_pago) {
 
 
 		if($ruc=="0")$ruc = "";
@@ -548,6 +550,7 @@ class IngresoVehiculoTroncoController extends Controller
 		if($tipo_madera==0)$tipo_madera = "";
 		if($fecha_inicio=="0")$fecha_inicio = "";
 		if($fecha_fin=="0")$fecha_fin = "";
+		if($estado_pago=="0")$estado_pago = "";
 
 		$ingresoVehiculoTronco_model = new IngresoVehiculoTronco();
 		$p[]=$ruc;
@@ -556,6 +559,7 @@ class IngresoVehiculoTroncoController extends Controller
 		$p[]=$tipo_madera;
 		$p[]=$fecha_inicio;
 		$p[]=$fecha_fin;
+		$p[]=$estado_pago;
 		$p[]=1;
 		$p[]=10000;
 		$data = $ingresoVehiculoTronco_model->listar_ingreso_vehiculo_tronco_pagos_ajax($p);

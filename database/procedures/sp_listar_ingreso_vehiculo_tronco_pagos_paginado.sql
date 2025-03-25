@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION public.sp_listar_ingreso_vehiculo_tronco_pagos_paginado(p_ruc character varying, p_empresa character varying, p_placa character varying, p_tipo_madera character varying, p_fecha_desde character varying, p_fecha_hasta character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
+CREATE OR REPLACE FUNCTION public.sp_listar_ingreso_vehiculo_tronco_pagos_paginado(p_ruc character varying, p_empresa character varying, p_placa character varying, p_tipo_madera character varying, p_fecha_desde character varying, p_fecha_hasta character varying, p_estado_pago character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
  RETURNS refcursor
  LANGUAGE plpgsql
 AS $function$
@@ -56,6 +56,10 @@ Begin
 
 	If p_fecha_hasta<>'' Then
 	 v_where:=v_where||'And ivt.fecha_ingreso <= '''||p_fecha_hasta||''' ';
+	End If;
+
+	If p_estado_pago<>'' Then
+	 v_where:=v_where||'And ivttm.id_estado_pago = '''||p_estado_pago||''' ';
 	End If;
 	
 	EXECUTE ('SELECT count(1) '||v_tabla||v_where) INTO v_count;
