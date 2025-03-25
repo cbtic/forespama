@@ -3693,12 +3693,14 @@ class ComprobanteController extends Controller
         $data["direccionPuntoPartida"] =$guia->guia_partida_direccion; //"AV. NESTOR GAMBETA N° 6311";
         $data["nombreComercialEmisor"] ="FORESTAL PAMA S.A.C.";
         $data["unidadMedidaPesoBruto"] ="KGM";
-        $data["tipoDocIdentidadEmisor"] ="6";
+
+        $data["tipoDocIdentidadEmisor"] = "6";
         $data["numeroDocIdentidadEmisor"] =$guia->guia_emisor_numdoc; //"20160453908";
-        $data["tipoDocIdentidadReceptor"] ="6";
-        $data["tipoDireccionPuntoLlegada"] ="1";
-        $data["tipoDireccionPuntoPartida"] ="0";
         
+        $data["tipoDocIdentidadReceptor"] = ($guia->guia_receptor_tipodoc =="5")?"6":$guia->guia_receptor_tipodoc;   //"6";
+
+        $data["tipoDireccionPuntoLlegada"] ="1";
+        $data["tipoDireccionPuntoPartida"] ="0";        
         $data["numeroDocIdentidadReceptor"] =$guia->guia_receptor_numdoc; //"20544125681";
         $data["indicadorRetornoVehiculoCon"] ="0";
         $data["indicadorRetornoVehiculoSin"] ="0";
