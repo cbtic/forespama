@@ -812,6 +812,17 @@ class OrdenCompraController extends Controller
         echo json_encode($array);
     }
 
+    public function obtener_orden_compra_persona_id($id){
+        $oc_model = new OrdenCompra;
+
+        $sw = true;
+        $oc = $oc_model->getOrdenCompraPersonaById($id);
+        $array["sw"] = $sw;
+        $array["oc"] = $oc;
+
+        echo json_encode($array);
+    }
+
     public function obtener_entrada_salida($id_orden_compra, $tipo_documento){
 		
         if($tipo_documento == 1){

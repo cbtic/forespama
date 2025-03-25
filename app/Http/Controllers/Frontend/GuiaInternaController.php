@@ -225,13 +225,15 @@ class GuiaInternaController extends Controller
         $guia->guia_serie = $request->serie_guia;
         $guia->guia_numero = $numero_guia[0]->codigo;
         $guia->guia_tipo = $tipo_guia[0]->codigo;
-        $guia->guia_receptor_tipodoc = "0";
+        //$guia->guia_receptor_tipodoc = "0";
         if($request->tipo_documento_cliente=='1'){
             $guia->guia_receptor_numdoc = $request->dni_destinatario;
             $guia->guia_receptor_razsocial = $request->persona_destinatario_nombre;
+            $guia->guia_receptor_tipodoc = $request->tipo_documento_cliente;
         }else if($request->tipo_documento_cliente=='5'){
             $guia->guia_receptor_numdoc = $request->ruc;
             $guia->guia_receptor_razsocial = $request->destinatario_nombre;
+            $guia->guia_receptor_tipodoc = $request->tipo_documento_cliente;
         }
         $guia->guia_fecha_emision = $request->fecha_emision;
         $guia->guia_fecha_traslado = $request->fecha_inicio_traslado;
