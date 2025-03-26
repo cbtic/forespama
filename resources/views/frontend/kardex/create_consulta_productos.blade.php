@@ -356,6 +356,16 @@ label.form-control-sm{
 					<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
 						<select name="consulta_existencia_producto_bus" id="consulta_existencia_producto_bus" class="form-control form-control-sm">
 							<option value="">--Seleccionar Producto--</option>
+							@unless(auth()->user()->hasRole('Vendedor FORESPAMA'))
+							<?php
+							foreach ($producto_all as $row) {
+							?>
+							<option value="<?php echo $row->id?>"><?php echo $row->codigo ." - ".$row->denominacion?></option>
+							<?php
+							}
+							?>
+							@endunless
+							@hasanyrole('Vendedor FORESPAMA')
 							<?php
 							foreach ($producto as $row) {
 							?>
@@ -363,10 +373,11 @@ label.form-control-sm{
 							<?php
 							}
 							?>
+							@endhasanyrole
 						</select>
 					</div>
 
-					<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
 						<select name="consulta_almacen_producto_bus" id="consulta_almacen_producto_bus" class="form-control form-control-sm" onchange="">
 							<option value="">--Seleccionar Almacen--</option>
 							<?php
@@ -408,7 +419,7 @@ label.form-control-sm{
 					</div>-->
 
                     
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12" style="padding-right:0px">
+					<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12" style="padding-right:0px">
 						<input class="btn btn-warning pull-rigth" value="Buscar" type="button" id="btnBuscarConsultaProducto" />
 						<!--<input class="btn btn-success float-rigth" value="Excel" name="excel" type="button" id="btnDescargar" style="padding-left:15px;padding-right:15px;margin-right:10px;" /> 
 						<input class="btn btn-success pull-rigth" value="Nuevo" type="button" id="btnNuevo" style="margin-left:15px" />-->

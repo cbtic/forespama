@@ -170,9 +170,10 @@ class KardexController extends Controller
 
 		$tipo_producto = $tablaMaestra_model->getMaestroByTipo(44);
         $producto = $producto_model->getProductoExterno();
+        $producto_all = $producto_model->getProductoAll();
 		$almacen = $almacen_model->getAlmacenByUser($id_user);
 		
-		return view('frontend.kardex.create_consulta_productos',compact('producto','almacen','tipo_producto'));
+		return view('frontend.kardex.create_consulta_productos',compact('producto','almacen','tipo_producto','producto_all'));
 
 	}
 
