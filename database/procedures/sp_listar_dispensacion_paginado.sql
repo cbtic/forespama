@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION public.sp_listar_dispensacion_paginado(p_tipo_documento character varying, p_fecha character varying, p_numero_dispensacion character varying, p_almacen character varying, p_area_trabajo character varying, p_unidad_trabajo character varying, p_persona_recibe character varying, p_estado character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
+CREATE OR REPLACE FUNCTION public.sp_listar_dispensacion_paginado(p_tipo_documento character varying, p_fecha_desde character varying, p_fecha_hasta character varying, p_numero_dispensacion character varying, p_almacen character varying, p_area_trabajo character varying, p_unidad_trabajo character varying, p_persona_recibe character varying, p_estado character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
  RETURNS refcursor
  LANGUAGE plpgsql
 AS $function$
@@ -34,9 +34,13 @@ begin
 	 v_where:=v_where||'And d.id_tipo_documento  = '''||p_tipo_documento||''' ';
 	End If;
 
-	If p_fecha<>'' Then
-	 v_where:=v_where||'And d.fecha  = '''||p_fecha||''' ';
+	If p_fecha_desde<>'' Then
+	 v_where:=v_where||'And d.fecha >= '''||p_fecha_desde||''' ';
 	End If;
+
+	If p_fecha_hasta<>'' Then
+	 v_where:=v_where||'And d.fecha <= '''||p_fecha_hasta||''' ';
+	End If;	
 
 	If p_numero_dispensacion<>'' Then
 	 v_where:=v_where||'And d.codigo = '''||p_numero_dispensacion||''' ';

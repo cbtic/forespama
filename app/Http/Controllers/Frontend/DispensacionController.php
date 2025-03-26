@@ -49,7 +49,8 @@ class DispensacionController extends Controller
 
 		$dispensacion_model = new Dispensacione;
 		$p[]=$request->tipo_documento;
-		$p[]=$request->fecha;
+		$p[]=$request->fecha_inicio;
+		$p[]=$request->fecha_fin;
         $p[]=$request->numero_dispensacion;
         $p[]=$request->almacen;
 		$p[]=$request->area_trabajo;

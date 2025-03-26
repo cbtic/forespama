@@ -311,6 +311,14 @@ function datatablenew(){
 							
 						html += '<button style="font-size:12px" type="button" class="btn btn-sm btn-info" data-toggle="modal" onclick="modalConsultaOrdenCompra('+row.id+')" ><i class="fa fa-eye"></i> Consulta</button>'; 
 						
+						if(row.tienda_asignada==1){
+							
+							html += '<button style="font-size:12px; margin-left:10px" type="button" class="btn btn-sm btn-primary" data-toggle="modal" onclick="modalTiendaOrdenCompra('+row.id+')" > Punto Entrega</button>'; 
+						}else{
+							
+							html += '<button style="font-size:12px; margin-left:10px" type="button" class="btn btn-sm btn-primary" data-toggle="modal" onclick="modalTiendaOrdenCompra('+row.id+')" disabled> Punto Entrega</button>'; 
+						}
+						
 						html += '</div>';
 						return html;
 					},

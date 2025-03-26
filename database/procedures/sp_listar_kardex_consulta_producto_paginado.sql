@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION public.sp_listar_kardex_consulta_producto_paginado(p_producto character varying, p_almacen character varying, p_cantidad_producto character varying, p_tipo_producto character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
+CREATE OR REPLACE FUNCTION public.sp_listar_kardex_consulta_producto_paginado(p_producto character varying, p_almacen character varying, p_cantidad_producto character varying, p_tipo_producto character varying, p_id_user character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
  RETURNS refcursor
  LANGUAGE plpgsql
 AS $function$
@@ -11,8 +11,11 @@ v_where varchar;
 v_count varchar;
 v_col_count varchar;
 v_total_saldos varchar;
+v_id_rol integer;
 
 begin
+	
+	select role_id into v_id_rol from model_has_roles mhr where mhr.model_id::varchar=p_id_user;
 	
 	p_pagina=(p_pagina::Integer-1)*p_limit::Integer;
 
@@ -44,7 +47,11 @@ begin
 	left join tabla_maestras tm on p.id_unidad_producto ::int = tm.codigo::int and tm.tipo = ''43''
 	left join tabla_maestras tm2 on p.id_tipo_producto ::int = tm2.codigo::int and tm2.tipo = ''44''';
 	
-	v_where = ' Where 1=1 and p.id_tipo_origen_producto =''2''';
+	v_where = ' Where 1=1 ';
+
+	If v_id_rol=7 Then 
+		v_where:=v_where||' And p.id_tipo_origen_producto =''2'' ';
+	End If;
 
 	If p_producto<>'' Then
 	 v_where:=v_where||'And k.id_producto =  '''||p_producto||''' ';

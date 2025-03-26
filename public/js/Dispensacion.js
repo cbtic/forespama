@@ -15,7 +15,14 @@ $(document).ready(function () {
 		}
 	});
 
-	$('#fecha_bus').keypress(function(e){
+	$('#fecha_inicio_bus').keypress(function(e){
+		if(e.which == 13) {
+			datatablenew();
+			return false;
+		}
+	});
+
+	$('#fecha_fin_bus').keypress(function(e){
 		if(e.which == 13) {
 			datatablenew();
 			return false;
@@ -45,7 +52,15 @@ $(document).ready(function () {
 		}
 	});
 
-	$('#fecha_bus').datepicker({
+	$('#fecha_inicio_bus').datepicker({
+        autoclose: true,
+		format: 'yyyy-mm-dd',
+		changeMonth: true,
+		changeYear: true,
+        language: 'es'
+    });
+
+	$('#fecha_fin_bus').datepicker({
         autoclose: true,
 		format: 'yyyy-mm-dd',
 		changeMonth: true,
@@ -89,7 +104,8 @@ function datatablenew(){
             var iCantMostrar 	= aoData[4].value;
 			
             var tipo_documento = $('#tipo_documento_bus').val();
-			var fecha = $('#fecha_bus').val();
+			var fecha_inicio = $('#fecha_inicio_bus').val();
+			var fecha_fin = $('#fecha_fin_bus').val();
 			var numero_dispensacion = $('#numero_dispensacion_bus').val();
 			var situacion = $('#situacion_bus').val();
 			var almacen = $('#almacen_bus').val();
@@ -105,8 +121,8 @@ function datatablenew(){
                 "type": "POST",
                 "url": sSource,
                 "data":{NumeroPagina:iNroPagina,NumeroRegistros:iCantMostrar,
-						tipo_documento:tipo_documento,fecha:fecha,numero_dispensacion:numero_dispensacion,almacen:almacen,
-						area_trabajo:area_trabajo,unidad_trabajo:unidad_trabajo,persona_recibe:persona_recibe,
+						tipo_documento:tipo_documento,fecha_inicio:fecha_inicio,fecha_fin:fecha_fin,numero_dispensacion:numero_dispensacion,
+						almacen:almacen,area_trabajo:area_trabajo,unidad_trabajo:unidad_trabajo,persona_recibe:persona_recibe,
 						almacen:almacen,situacion:situacion,estado:estado,
 						_token:_token
                        },

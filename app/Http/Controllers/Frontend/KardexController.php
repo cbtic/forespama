@@ -13,6 +13,11 @@ use App\Models\Almacene;
 use App\Models\TablaMaestra;
 use Maatwebsite\Excel\Facades\Excel;
 use Maatwebsite\Excel\Concerns\FromArray;
+use Maatwebsite\Excel\Concerns\WithStyles;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
+use Maatwebsite\Excel\Concerns\WithHeadings;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
 use stdClass;
 use Auth;
 
@@ -179,11 +184,14 @@ class KardexController extends Controller
 
 	public function listar_kardex_consulta_producto_ajax(Request $request){
 
+		$id_user = Auth::user()->id;
+
 		$kardex_model = new Kardex;
 		$p[]=$request->consulta_existencia_producto;
 		$p[]=$request->consulta_almacen_producto;
 		$p[]=$request->cantidad_existencia_producto;
 		$p[]=$request->consulta_tipo_producto;
+		$p[]=$id_user;
 		$p[]=$request->NumeroPagina;
 		$p[]=$request->NumeroRegistros;
 		$data = $kardex_model->listar_kardex_consulta_producto_ajax($p);
@@ -203,7 +211,7 @@ class KardexController extends Controller
 
 }
 
-class InvoicesExport implements FromArray
+class InvoicesExport implements FromArray, WithHeadings, WithStyles
 {
 	protected $invoices;
 
@@ -217,4 +225,56 @@ class InvoicesExport implements FromArray
 		return $this->invoices;
 	}
 
+    public function headings(): array
+    {
+        return ["N","Codigo","Producto","Saldos","Almacen"];
+    }
+
+	public function styles(Worksheet $sheet)
+    {
+
+		$sheet->mergeCells('A1:E1');
+
+        $sheet->setCellValue('A1', "REPORTE DE CONSULTA DE EXISTENCIAS - FORESPAMA");
+        $sheet->getStyle('A1:E1')->applyFromArray([
+            'font' => [
+                'bold' => true,
+                'color' => ['rgb' => 'FFFFFF'],
+            ],
+            'fill' => [
+                'fillType' => Fill::FILL_SOLID,
+                'startColor' => ['rgb' => '246257'],
+            ],
+            'alignment' => [
+                'horizontal' => Alignment::HORIZONTAL_CENTER,
+            ],
+        ]);
+
+		$sheet->getStyle('A1')->getAlignment()->setWrapText(true);
+		$sheet->getRowDimension(1)->setRowHeight(30);
+
+        $sheet->getStyle('A2:E2')->applyFromArray([
+            'font' => [
+                'bold' => true,
+                'color' => ['rgb' => '000000'],
+            ],
+            'fill' => [
+                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                'startColor' => ['rgb' => '2EB85C'],
+            ],
+			'alignment' => [
+			'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+    		],
+        ]);
+
+		$sheet->fromArray($this->headings(), NULL, 'A2');
+
+		/*$sheet->getStyle('L3:L'.$sheet->getHighestRow())
+		->getNumberFormat()
+		->setFormatCode(\PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_NUMBER_00);*/ //SIRVE PARA PONER 2 DECIMALES A ESA COLUMNA
+        
+        foreach (range('A', 'E') as $col) {
+            $sheet->getColumnDimension($col)->setAutoSize(true);
+        }
+    }
 }

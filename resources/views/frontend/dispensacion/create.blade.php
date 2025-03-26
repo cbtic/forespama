@@ -358,8 +358,12 @@ label.form-control-sm{
 						</select>
 					</div>
 
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-                        <input id="fecha_bus" name="fecha_bus" on class="form-control form-control-sm"  placeholder="Fecha">
+					<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+                        <input id="fecha_inicio_bus" name="fecha_inicio_bus" on class="form-control form-control-sm"  placeholder="Fecha Inicio">
+					</div>
+
+					<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+						<input class="form-control form-control-sm" id="fecha_fin_bus" name="fecha_fin_bus" placeholder="Fecha Fin">
 					</div>
 
 					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
