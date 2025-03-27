@@ -539,10 +539,10 @@ function fn_save_guia_interna(){
     //var destinatario = $('#destinatario').val();
     //var ruc = $('#ruc').val();
     var marca_placa = $('#marca_placa').val();
-    var numero_inscripcion = $('#numero_inscripcion').val();
+    //var numero_inscripcion = $('#numero_inscripcion').val();
     var numero_licencia = $('#numero_licencia').val();
-    var transporte_razon_social = $('#transporte_razon_social').val();
-    var ruc_transporte = $('#ruc_transporte').val();
+    //var transporte_razon_social = $('#transporte_razon_social').val();
+    //var ruc_transporte = $('#ruc_transporte').val();
     var motivo_traslado = $('#motivo_traslado').val();
     var tipo_documento = $('#tipo_documento').val();
     var numero_documento = $('#numero_documento').val();
@@ -561,10 +561,10 @@ function fn_save_guia_interna(){
     //if(destinatario==""){msg+="Ingrese el Destinatario <br>";}
     //if(ruc==""){msg+="Ingrese el RUC de Destinatario <br>";}
     if(marca_placa==""){msg+="Ingrese la Marca y Placa <br>";}
-    if(numero_inscripcion==""){msg+="Ingrese el Numero de Inscripcion <br>";}
+    //if(numero_inscripcion==""){msg+="Ingrese el Numero de Inscripcion <br>";}
     if(numero_licencia==""){msg+="Ingrese el Numero de Licencia <br>";}
-    if(transporte_razon_social==""){msg+="Ingrese el Transporte <br>";}
-    if(ruc_transporte==""){msg+="Ingrese el RUC del Transporte <br>";}
+    //if(transporte_razon_social==""){msg+="Ingrese el Transporte <br>";}
+    //if(ruc_transporte==""){msg+="Ingrese el RUC del Transporte <br>";}
     if(motivo_traslado==""){msg+="Ingrese el Motivo de Traslado <br>";}
     if(tipo_documento==""){msg+="Ingrese el Tipo de Documento <br>";}
     if(numero_documento==""){msg+="Ingrese el Numero de Documento <br>";}
