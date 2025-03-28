@@ -191,7 +191,7 @@ function obtenerCodigo(){
 
             //alert(result[0].codigo);
             //console.log(result);
-            $('#numero_dispensacion').val(result[0].codigo);
+            //$('#numero_dispensacion').val(result[0].codigo);
 
         }
     });

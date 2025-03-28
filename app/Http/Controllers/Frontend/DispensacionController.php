@@ -113,11 +113,14 @@ class DispensacionController extends Controller
 
 		if($request->id == 0){
 			$dispensacion = new Dispensacione;
+			$dispensacion_model = new Dispensacione;
+		    $codigo_dispensacion = $dispensacion_model->getCodigoDispensacion('2');
             //$dispensacion_model = new Dispensacione;
             //$correlativo = $dispensacion_model->getCorrelativo();
             //$dispensacion->numero_corrrelativo = $correlativo[0]->numero_correlativo;
 		}else{
 			$dispensacion = Dispensacione::find($request->id);
+            $codigo_dispensacion = $request->numero_dispensacion;
 		}
 
 		$item = $request->input('item');
@@ -141,7 +144,12 @@ class DispensacionController extends Controller
         $dispensacion->id_almacen = $request->almacen;
         $dispensacion->id_unidad_trabajo = $request->unidad_trabajo;
         $dispensacion->fecha = $request->fecha;
-        $dispensacion->codigo = $request->numero_dispensacion;
+        //$dispensacion->codigo = $request->numero_dispensacion;
+		if($request->id == 0){
+            $dispensacion->codigo = $codigo_dispensacion[0]->codigo;
+        }else{
+            $dispensacion->codigo = $codigo_dispensacion;
+        }
 		$dispensacion->id_usuario_recibe = $request->persona_recibe;
         $dispensacion->id_usuario_inserta = $id_user;
 		$dispensacion->estado = 1;
