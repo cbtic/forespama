@@ -982,9 +982,9 @@ function obtenerBeneficiario() {
 
 				//alert(result.agremiado.id_tipo_documento);
 
-				$("#divAgregar").show();
-				$("#divAlmacen").show();
-				$("#almacen_salida").prop('disabled', false);
+				//$("#divAgregar").show();
+				//$("#divAlmacen").show();
+				//$("#almacen_salida").prop('disabled', false);
 	
 				//$("#btnProforma").prop('disabled', false);
 
@@ -1013,6 +1013,9 @@ function obtenerBeneficiario() {
 					$('#divRepresentanteEmpresa').hide(); 
 					$('#divEmpresaRazonSocial').hide();
 					$('#divBeneficiarioRuc').hide();
+
+					//$("#divAgregar").show();
+					//$("#divAlmacen").show();
 				}
 
 
@@ -1060,7 +1063,12 @@ function obtenerBeneficiario() {
 					$('#btnDescuento').attr("disabled", false);
 					$('#btnFracciona').attr("disabled", false);
 					$('#btnAnulaVal').attr("disabled", false);
+
+					$("#divAgregar").show();
+					$("#divAlmacen").show();
 					
+
+
 				}
 
 				if (result.agremiado.foto != null && result.agremiado.foto != "") {
@@ -1075,18 +1083,20 @@ function obtenerBeneficiario() {
 				cargarPagos();
 				cargarProforma();
 
-				if (tipo_documento_b=="1"){  //DNI
+				
+
+				if (tipo_documento_b=="1" && result.id_orden_compra!="0"){  //DNI
 					cargarOrdenCompraSel(result.id_orden_compra, result.id_tipo_cliente);
 					$('#id_orden_compra').val(result.id_orden_compra);
 					
 				}
 
-				if (tipo_documento_b=="6"){  //Orden Compra
+				if (tipo_documento_b=="6" && result.id_orden_compra!="0"){  //Orden Compra
 					cargarOrdenCompraSel(result.id_orden_compra, result.id_tipo_cliente);
 					$('#id_orden_compra').val(result.id_orden_compra);
 					
 				}
-				if (tipo_documento_b=="7"){  //Salida Producto
+				if (tipo_documento_b=="7"&& result.id_orden_compra!="0"){  //Salida Producto
 					cargaSalidaProdSel(result.id_salida_prod);
 					$('#id_orden_compra').val(result.id_orden_compra);
 					$('#id_salida_prod').val(result.id_salida_prod);

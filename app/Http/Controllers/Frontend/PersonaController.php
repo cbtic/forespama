@@ -132,9 +132,24 @@ class PersonaController extends Controller
 				$tipo_documento="1";
 				$numero_documento=$resultado->numero_documento_;
                 $id_orden_compra=$resultado->id_orden_compra;
-                $id_tipo_cliente= $resultado->id_tipo_cliente;
+                $id_tipo_cliente=$resultado->id_tipo_cliente;
+                /*
+                if(isset($resultado->id_tipo_cliente)){         
+                    $id_tipo_cliente=0;
+            
+                 }else{
+                    $id_tipo_cliente=$resultado->id_tipo_cliente;
+                 }
+                    */
 
-			}
+			}else{
+
+                $tipo_documento="1";
+				$numero_documento=$numero_documento;
+                $id_orden_compra=0;
+                $id_tipo_cliente=0;
+
+            }
 
 		}
 
