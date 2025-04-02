@@ -1,6 +1,6 @@
 -- DROP FUNCTION public.sp_crud_comprobante_moneda(varchar, int4, varchar, int4, int4, varchar, varchar, varchar, int4, int4, numeric, varchar, int4, int4);
 
-CREATE OR REPLACE FUNCTION public.sp_crud_comprobante_moneda(serie character varying, numero integer, tipo character varying, ubicacion integer, persona integer, total character varying, descripcion character varying, cod_contable character varying, id_v integer, id_caja integer, descuento numeric, accion character varying, p_id_usuario integer, p_id_moneda integer)
+CREATE OR REPLACE FUNCTION public.sp_crud_comprobante_moneda(serie character varying, numero integer, tipo character varying, ubicacion integer, persona integer, total character varying, descripcion character varying, cod_contable character varying, id_v integer, id_caja integer, descuento numeric, accion character varying, p_id_usuario integer, p_id_moneda integer, cantidad character varying)
  RETURNS character varying
  LANGUAGE plpgsql
 AS $function$
@@ -52,6 +52,9 @@ declare
 
 	ubicacion2 integer;
 
+	_cantidad numeric;
+
+
 begin
 		
 	_serie:=serie;
@@ -60,6 +63,9 @@ begin
 
 	--select CAST(total AS numeric) into _total;
 	_total := to_number(total,'9999999999.99');
+
+	_cantidad := to_number(cantidad,'9999999999.99');
+
 	select CAST(descuento AS numeric) into _descuento;
 
 	Case accion
@@ -222,8 +228,8 @@ begin
 			
 				Insert Into comprobante_detalles (serie, numero, tipo, item, cantidad, descripcion,
 					pu,  pu_con_igv,  igv_total, descuento, importe,afect_igv, cod_contable, valor_gratu, unidad,id_usuario_inserta,id_comprobante, id_concepto)
-					Values (_serie,numero,tipo,id_v,ubicacion,descripcion,
-					_pu, _pu_con_igv,_igv_total, _descuento, (_total - _descuento)  ,_id_tipo_afectacion,cod_contable,0,'ZZ',p_id_usuario, id_caja, persona);
+					Values (_serie,numero,tipo,id_v,_cantidad,descripcion,
+					_pu, _pu_con_igv,_igv_total, _descuento, (_total - _descuento)  ,_id_tipo_afectacion,cod_contable,0,'UND',p_id_usuario, id_caja, persona);
 				
 				--update valorizaciones Set id_comprobante  = id_caja, pagado = '1' where id = id_v;
 								
