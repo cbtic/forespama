@@ -937,6 +937,7 @@ function obtenerBeneficiario() {
 	$('#deudaTotal').val("0");
 
 	$('#SelFracciona').val("");
+	$('#id_orden_compra').val("");
 
 	$("#btnExonerarN").hide();
 	//$("#btnExonerarS").show();

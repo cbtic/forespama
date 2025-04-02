@@ -917,12 +917,17 @@ class ComprobanteController extends Controller
                 //print_r($total); exit();
 
 
-                $id_orden_compra = $request->id_orden_compra;
+                $id_orden_compra_ = $request->id_orden_compra;
                 //$id_orden_compra = 45122;
 
-                //print_r($id_orden_compra); 
+                //print_r($id_orden_compra);
+                if($id_orden_compra_=="") $id_orden_compra_= -1;
+                //echo($id_orden_compra_);
+                //exit();
 
-                $orden_compra = Comprobante::where('orden_compra', $id_orden_compra)->first();
+                $orden_compra = Comprobante::where('orden_compra', $id_orden_compra_)->first();
+
+            
 
             if ($orden_compra) {
                 $msg = "El Comprobante NO puede ser Facturado por que la Orden de Compra ya fue Facturado...";
