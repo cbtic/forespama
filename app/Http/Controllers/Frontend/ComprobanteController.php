@@ -3925,7 +3925,131 @@ class ComprobanteController extends Controller
 		$export = new InvoicesExport([$variable]);
 		return Excel::download($export, 'reporte_factura_sodimac.xlsx');	
     }
+
+    public function create_facturacion(){
+        
+        $tabla_model = new TablaMaestra;
+
+        $formapago = $tabla_model->getMaestroByTipo('104');
+
+        $caja = $tabla_model->getMaestroByTipoBySubcogioNull('27');
+
+        $medio_pago = $tabla_model->getMaestroByTipoBySubcogioNull('11');
+
+        $caja_model = new CajaIngreso;
+
+        $usuario_caja = $caja_model->getCajaUsuario_all();
+
+
+        return view('frontend.comprobante.create_facturacion',compact('formapago','caja','medio_pago','usuario_caja'));
+    }
     
+    public function create_pagos(){
+        
+        $tabla_model = new TablaMaestra;
+
+        $formapago = $tabla_model->getMaestroByTipo('104');
+
+        $caja = $tabla_model->getMaestroByTipoBySubcogioNull('27');
+
+        $medio_pago = $tabla_model->getMaestroByTipoBySubcogioNull('11');
+
+        $caja_model = new CajaIngreso;
+
+        $usuario_caja = $caja_model->getCajaUsuario_all();
+
+
+        return view('frontend.comprobante.create_pagos',compact('formapago','caja','medio_pago','usuario_caja'));
+    }
+
+    public function importar_archivo($archivo)
+    {
+        $id_user = Auth::user()->id;
+        $id_tipo_cliente = 5;
+
+        // Ruta del archivo Excel
+        $filePath = public_path('factura_sodimac/'.$archivo);
+
+        // Verifica si el archivo existe
+        if (!file_exists($filePath)) {
+            return response()->json(['error' => 'Archivo no encontrado.'], 404);
+        }
+
+        // Usamos Excel::toArray para leer el archivo Excel
+        $data = Excel::toArray([], $filePath);
+
+        // Accede a la primera hoja del archivo Excel
+        $sheet = $data[0];  // Asumiendo que el archivo tiene solo una hoja
+
+        // Verificar si la hoja está vacía
+        if (empty($sheet)) {
+            return response()->json(['error' => 'El archivo está vacío o tiene un formato incorrecto.'], 400);
+        }
+
+        $count = 0; // Contador de filas exitosas
+
+        foreach ($sheet as $row) {
+            // Aquí asumimos que cada fila tiene un formato similar al que muestras en el código original
+            // Ajusta los índices según las columnas del archivo Excel
+
+            
+
+            $empresa = Empresa::where("ruc", str_replace("-", "", $row[0]))->first(); // Ejemplo usando el índice 0 para RUT_PROVEEDOR
+
+            if ($empresa) {
+                $id_empresa_vende = $empresa->id;
+                $fecha_orden_compra = Carbon::createFromFormat('d/m/Y', $row[1]); // Asumiendo que la fecha de autorización está en la columna 1
+                $numero_orden_compra_cliente = $row[2]; // Asumiendo que el número de OC está en la columna 2
+                $fecha_vencimiento = Carbon::createFromFormat('d/m/Y', $row[3]); // Asumiendo que la fecha de vencimiento está en la columna 3
+
+                // Aquí solo procesamos la primera fila para la orden de compra
+                if ($count == 0) {
+                    $orden_compra_model = new OrdenCompra;
+                    $codigo_orden_compra = $orden_compra_model->getCodigoOrdenCompra($id_tipo_documento);
+                    $numero_orden_compra = $codigo_orden_compra[0]->codigo;
+
+                    $ordenCompra = new OrdenCompra;
+                    $ordenCompra->id_unidad_origen = $id_unidad_origen;
+                    $ordenCompra->id_empresa_vende = $id_empresa_vende;
+                    $ordenCompra->id_empresa_compra = $id_empresa_compra;
+                    $ordenCompra->fecha_orden_compra = $fecha_orden_compra;
+                    $ordenCompra->numero_orden_compra = $numero_orden_compra;
+                    $ordenCompra->numero_orden_compra_cliente = $numero_orden_compra_cliente;
+                    $ordenCompra->id_tipo_documento = $id_tipo_documento;
+                    $ordenCompra->estado = $estado;
+                    $ordenCompra->igv_compra = $igv_compra;
+                    $ordenCompra->cerrado = $cerrado;
+                    $ordenCompra->id_almacen_destino = $id_almacen_destino;
+                    $ordenCompra->id_almacen_salida = $id_almacen_salida;
+                    $ordenCompra->tienda_asignada = $tienda_asignada;
+                    $ordenCompra->id_moneda = $id_moneda;
+                    $ordenCompra->moneda = $moneda;
+                    $ordenCompra->id_usuario_inserta = $id_user;
+                    $ordenCompra->id_vendedor = $id_vendedor;
+                    $ordenCompra->id_tipo_cliente = $id_tipo_cliente;
+                    $ordenCompra->fecha_vencimiento = $fecha_vencimiento;
+                    $ordenCompra->save();
+                    $id_orden_compra = $ordenCompra->id;
+                }
+
+                // Aquí procesamos cada producto en la orden de compra
+                $equivalenciaProducto = EquivalenciaProducto::where("codigo_empresa", trim($row[4]))->first(); // SKU en columna 4
+                if ($equivalenciaProducto) {
+                    $id_producto = $equivalenciaProducto->id_producto;
+                    $producto = Producto::find($id_producto);
+                    $cantidad_requerida = $row[5]; // CANTIDAD_PROD en columna 5
+                    $id_unidad_medida = $producto->id_unidad_producto;
+
+                    // Aquí continúa la lógica para procesar el detalle de la orden de compra...
+                }
+            }
+
+            $count++; // Incrementamos el contador
+        }
+
+        return response()->json(['success' => 'Archivo importado exitosamente.']);
+    }
+
 }
 
 class InvoicesExport implements FromArray, WithHeadings, WithStyles

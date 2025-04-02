@@ -76,6 +76,8 @@ Route::post('ingreso_vehiculo_tronco/listar_ingreso_vehiculo_tronco_pagos_ajax',
 Route::get('ingreso_vehiculo_tronco/modal_pago/{id}/{id_ingreso_vehiculo_tronco}', [IngresoVehiculoTroncoController::class, 'modal_pago'])->name('ingreso_vehiculo_tronco.modal_pago');
 Route::post('ingreso_vehiculo_tronco/send_pago', [IngresoVehiculoTroncoController::class, 'send_pago'])->name('ingreso_vehiculo_tronco.send_pago');
 Route::get('comprobante/create_consulta_sodimac', [ComprobanteController::class, 'create_consulta_sodimac'])->name('comprobante.create_consulta_sodimac');
+Route::get('comprobante/create_facturacion', [ComprobanteController::class, 'create_facturacion'])->name('comprobante.create_facturacion');
+Route::get('comprobante/create_pagos', [ComprobanteController::class, 'create_pagos'])->name('comprobante.create_pagos');
 
 Route::get('ingreso_vehiculo_tronco/modal_placa/{id}', [IngresoVehiculoTroncoController::class, 'modal_placa'])->name('ingreso_vehiculo_tronco.modal_placa');
 Route::get('ingreso_vehiculo_tronco/modal_empresa/{id}', [IngresoVehiculoTroncoController::class, 'modal_empresa'])->name('ingreso_vehiculo_tronco.modal_empresa');

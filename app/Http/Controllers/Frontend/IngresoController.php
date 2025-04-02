@@ -1243,6 +1243,5 @@ class IngresoController extends Controller
         $array["proforma"] = $proforma;
         echo json_encode($array);
     }
-
     
 }

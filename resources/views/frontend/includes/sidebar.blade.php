@@ -371,6 +371,28 @@
 
     @endif    
 
+    @if(Gate::check('Consulta de Facturacion') || Gate::check('Facturacion de Pagos'))
+	
+        <li class="c-sidebar-nav-dropdown">
+            <x-utils.link href="#" icon="c-sidebar-nav-icon cil-list" class="c-sidebar-nav-dropdown-toggle" :text="__('Contabilidad')" />
+            <ul class="c-sidebar-nav-dropdown-items">
+                @can('Consulta de Facturacion')
+                    <li class="c-sidebar-nav-item">
+                        <x-utils.link :href="route('frontend.comprobante.create_facturacion')" class="c-sidebar-nav-link" :text="__('Consulta de Facturacion')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+                    </li>
+				@endif
+
+                @can('Facturacion de Pagos')
+                    <li class="c-sidebar-nav-item">
+                        <x-utils.link :href="route('frontend.comprobante.create_pagos')" class="c-sidebar-nav-link" :text="__('Facturacion de Pagos')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+                    </li>
+				@endif
+
+            </ul>
+        </li>
+
+    @endif    
+
 	@endauth
 
     </ul>

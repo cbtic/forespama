@@ -406,6 +406,8 @@ function modalEntradaProductoOrdenCompra(id,id_tipo_documento){
 
 	//var tipo = $('#tipo_documento').val();
 	
+	//alert(id);
+
 	$(".modal-dialog").css("width","95%");
 	$('#openOverlayOpc .modal-body').css('height', 'auto');
 
