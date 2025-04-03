@@ -749,6 +749,12 @@ function cargarDetalle(){
 
 function agregarProducto(){
 
+    var usuarioRoles = @json(auth()->user()->getRoleNames());
+
+    //alert(usuarioRoles);
+
+    var tieneRolVendedor = usuarioRoles.includes("Vendedor FORESPAMA");
+
     var opcionesDescripcion = `<?php
         echo '<option value="">--Seleccionar--</option>';
         foreach ($producto as $row) {
@@ -762,7 +768,7 @@ function agregarProducto(){
         var n = $('#tblOrdenCompraDetalle tbody tr').length + 1;
         var item = '<input name="id_orden_compra_detalle[]" id="id_orden_compra_detalle${n}" class="form-control form-control-sm" value="${orden_compra.id}" type="hidden"><input name="item[]" id="item' + n + '" class="form-control form-control-sm" value="" type="text">';
         //var cantidad = '<input name="cantidad[]" id="cantidad' + n + '" class="form-control form-control-sm" value="" type="text">';
-        var descripcion = '<select name="descripcion[]" id="descripcion' + n + '" class="form-control form-control-sm" onChange="verificarProductoSeleccionado(this, ' + n + ')"> '+ opcionesDescripcion +' </select>';
+        var descripcion = '<select name="descripcion[]" id="descripcion' + n + '" class="form-control form-control-sm" ' +(!tieneRolVendedor ? 'onChange="verificarProductoSeleccionado(this, ' + n + ')"' : 'onChange="obtenerCodInterno(this, ' + n + ')"') + '> ' + opcionesDescripcion +' </select>';
         
         var descripcion_ant = '<input type="hidden" name="descripcion_ant[]" id="descripcion_ant' + n + '" class="form-control form-control-sm" />';
         

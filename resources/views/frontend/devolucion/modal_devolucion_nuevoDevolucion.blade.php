@@ -383,7 +383,7 @@ function calcularSubTotal(input) {
 function calcularPrecioUnitario(input) {
 
     var fila = $(input).closest('tr');
-    var igvPorcentaje = $('#igv_compra').val() == 2 ? 1.18 : 0;
+    var igvPorcentaje = 1.18;
     var precio_unitario_ = 0;
     var valor_venta_bruto = 0;
     var valor_venta = 0;
@@ -646,7 +646,7 @@ function cargarDetalle(){
                 });
 
                 result.unidad_medida.forEach(unidad_medida => {
-                    let selected = (unidad_medida.codigo == devolucion.id_unidad_medida) ? 'selected' : '';
+                    let selected = (unidad_medida.codigo == devolucion.id_um) ? 'selected' : '';
                     unidadMedidaOptions += `<option value="${unidad_medida.codigo}" ${selected}>${unidad_medida.denominacion}</option>`;
                 });
 
@@ -667,7 +667,7 @@ function cargarDetalle(){
                         <td><select name="marca[]" id="marca${n}" class="form-control form-control-sm">${marcaOptions}</select></td>
                         <td><input name="cod_interno[]" id="cod_interno${n}" class="form-control form-control-sm" value="${devolucion.codigo}" type="text"></td>
                         <td><select name="unidad[]" id="unidad${n}" class="form-control form-control-sm">${unidadMedidaOptions}</select></td>
-                        <td><input name="cantidad_ingreso[]" id="cantidad_ingreso${n}" class="cantidad_ingreso form-control form-control-sm" value="${devolucion.cantidad}" type="text" oninput="calcularCantidadPendiente(this);calcularSubTotal(this);calcularPrecioUnitario(this)"></td>
+                        <td><input name="cantidad_ingreso[]" id="cantidad_ingreso${n}" class="cantidad_ingreso form-control form-control-sm" value="${devolucion.cantidad}" type="text" oninput="calcularSubTotal(this);calcularPrecioUnitario(this)"></td>
                         <td><input name="precio_unitario[]" id="precio_unitario${n}" class="precio_unitario form-control form-control-sm" value="${parseFloat(devolucion.precio_venta || 0).toFixed(2)}" type="text" oninput="calcularSubTotal(this);calcularPrecioUnitario(this)"></td>
                         <td><input name="precio_unitario_[]" id="precio_unitario_${n}" class="precio_unitario_ form-control form-control-sm" value="${parseFloat(devolucion.costo || 0).toFixed(2)}" type="text" oninput="calcularPrecioUnitario(this)"></td>
                         <td><input name="valor_venta_bruto[]" id="valor_venta_bruto${n}" class="valor_venta_bruto form-control form-control-sm" value="${parseFloat(devolucion.valor_venta_bruto || 0).toFixed(2)}" type="text" oninput="calcularSubTotal(this)"></td>
