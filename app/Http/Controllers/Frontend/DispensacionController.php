@@ -91,7 +91,7 @@ class DispensacionController extends Controller
 		}
 
         $tipo_documento = $tablaMaestra_model->getMaestroByTipo(53);
-        $producto = $producto_model->getProductoInterno();
+        $producto = $producto_model->getProductoAll();
         $unidad = $tablaMaestra_model->getMaestroByTipo(43);
         $moneda = $tablaMaestra_model->getMaestroByTipo(1);
         $tipo_producto = $tablaMaestra_model->getMaestroByTipo(44);
