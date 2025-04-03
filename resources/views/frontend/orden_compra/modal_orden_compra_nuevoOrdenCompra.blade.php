@@ -255,6 +255,10 @@ function cambiarTipoCambio(){
 function cambiarOrigen(){
 
     var unidad_origen = $('#unidad_origen').val();
+
+    $('#almacen_salida').val("");
+    $('#almacen').val("");
+
     //alert(moneda);
     if(unidad_origen==1){
         $('#proveedor_select, #proveedor_').hide();

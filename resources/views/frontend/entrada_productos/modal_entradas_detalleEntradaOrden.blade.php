@@ -998,7 +998,7 @@ function fn_save_detalle_producto(){
     var tipo_documento = $('#tipo_documento').val();
     var unidad_origen = $('#unidad_origen').val();
     var almacen = $('#almacen').val();
-    //var almacen_salida = $('#almacen_salida').val();
+    var almacen_salida = $('#almacen_salida').val();
     var moneda = $('#moneda').val();
 
     var msg="";
@@ -1023,6 +1023,20 @@ function fn_save_detalle_producto(){
 
             if(stockActual<cantidad_ingreso_producto){
                 msg+="No hay stock para el producto "+descripcion_producto+" <br>";
+            }
+        });
+    }
+
+    if(tipo_movimiento==1 && almacen_salida!=""){
+
+        $('#tblDetalleEntrada tbody tr').each(function(index, row) {
+
+            const cantidad_ingreso_producto = parseInt($(row).find('input[name="cantidad_ingreso[]"]').val()) || 0;
+            const stockActual = parseInt($(row).find('input[name="stock_actual[]"]').val()) || 0;
+            const descripcion_producto = $(row).find('select[name="descripcion[]"] option:selected').text();
+
+            if(stockActual<cantidad_ingreso_producto){
+                msg+="No hay stock del producto "+descripcion_producto+" <br>";
             }
         });
     }
