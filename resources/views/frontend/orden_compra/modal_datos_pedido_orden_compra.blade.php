@@ -136,8 +136,9 @@ $.mask.definitions['p'] = "[Mm]";
 $(document).ready(function() {
 
     if($('#id_datos_pedido').val()>0){
-        obtenerProvinciaContacto();
-		obtenerDatosUbigeoContacto();
+        obtenerProvinciaContacto(function() {
+            obtenerDatosUbigeoContacto();
+        });
 	}
 
     $("#item").select2({ width: '100%' });
@@ -168,7 +169,7 @@ $(document).ready(function() {
 });
 
 
-function obtenerProvinciaContacto(){
+function obtenerProvinciaContacto(callback){
 	
 	var id = $('#departamento_contacto').val();
 	if(id=="")return false;
@@ -199,6 +200,7 @@ function obtenerProvinciaContacto(){
 			$('#distrito_contacto').attr("disabled",false);
 			
 			$('.loader').hide();
+            if (callback) callback();
 		}
 	});
 }
@@ -448,6 +450,16 @@ function obtenerDistritoContacto_(callback){
                                             </div>
                                             <div class="col-lg-11">
                                                 <input id="direccion_contacto" name="direccion_contacto" on class="form-control form-control-sm"  value="<?php if($orden_compra_contacto_entrega){echo $orden_compra_contacto_entrega->direccion;}?>" type="text">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12"  style="padding-top: 15px;">
+                                        <div class="row">
+                                            <div class="col-lg-1">
+                                                Referencia
+                                            </div>
+                                            <div class="col-lg-8">
+                                                <input id="referencia_contacto" name="referencia_contacto" on class="form-control form-control-sm"  value="<?php if($orden_compra_contacto_entrega){echo $orden_compra_contacto_entrega->referencia;}?>" type="text">
                                             </div>
                                         </div>
                                     </div>

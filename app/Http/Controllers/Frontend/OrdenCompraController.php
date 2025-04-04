@@ -962,6 +962,7 @@ class OrdenCompraController extends Controller
 		$orden_compra_contacto_entrega->telefono = $request->telefono_contacto;
 		$orden_compra_contacto_entrega->direccion = $request->direccion_contacto;
 		$orden_compra_contacto_entrega->id_ubigeo = $request->distrito_contacto;
+		$orden_compra_contacto_entrega->referencia = $request->referencia_contacto;
 		$orden_compra_contacto_entrega->estado = 1;
 		$orden_compra_contacto_entrega->id_usuario_inserta = $id_user;
 		$orden_compra_contacto_entrega->save();
