@@ -16,6 +16,9 @@ class Comprobante extends Model
 		return $this->readFuntionPostgres('sp_listar_comprobante_sodimac_paginado',$p);        
     }
  
+    public function listar_factura_sodimac_ajax($p){
+		return $this->readFuntionPostgres('sp_listar_sodimac_factura_paginado',$p);        
+    }
 
     function fecha_hora_actual(){
 		

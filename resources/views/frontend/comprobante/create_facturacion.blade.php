@@ -395,7 +395,7 @@ label.form-control-sm{
                             <div class="card-body">
 
                                 <div class="table-responsive">
-                                    <table id="tblFacturaSodimac" class="table table-hover table-sm">
+                                    <table id="tblFacturacionSodimac" class="table table-hover table-sm">
                                         <thead>
                                             <tr style="font-size:13px">
                                                 <th>Id</th>
@@ -404,6 +404,7 @@ label.form-control-sm{
                                                 <th>Banco</th>
                                                 <th>Fecha Pago</th>
                                                 <th class="text-right">Total</th>
+                                                <th>Acciones</th>
                                             </tr>
                                         </thead>
                                         <tbody style="font-size:13px">
@@ -461,7 +462,7 @@ label.form-control-sm{
 
                     @push('after-scripts')
 
-                    <script src="{{ asset('js/FacturaSodimacLista.js') }}"></script>
+                    <script src="{{ asset('js/SodimacFactura.js') }}"></script>
                     @endpush
 
 <script>

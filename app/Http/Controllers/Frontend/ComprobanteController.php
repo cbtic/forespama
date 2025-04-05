@@ -3856,7 +3856,7 @@ class ComprobanteController extends Controller
 
     public function listar_comprobante_sodimac_ajax(Request $request){
 
-		$factura_model = new comprobante();
+		$factura_model = new Comprobante();
 		$p[]=$request->fecha_ini;
 		$p[]=$request->fecha_fin;
 		$p[]=$request->tipo_documento;
@@ -3948,6 +3948,34 @@ class ComprobanteController extends Controller
 
         return view('frontend.comprobante.create_facturacion',compact('formapago','caja','medio_pago','usuario_caja'));
     }
+
+    public function listar_factura_sodimac_ajax(Request $request){
+
+		$factura_model = new Comprobante();
+		$p[]=$request->fecha_ini;
+		$p[]=$request->fecha_fin;
+        /*$p[]=$request->serie;
+        $p[]=$request->numero;*/
+        $p[]=$request->estado;
+		$p[]=$request->NumeroPagina;
+		$p[]=$request->NumeroRegistros;
+		
+		$data = $factura_model->listar_factura_sodimac_ajax($p);
+		
+		$iTotalDisplayRecords = isset($data[0]->totalrows)?$data[0]->totalrows:0;
+		//print_r($afiliacion);exit();
+
+		$result["PageStart"] = $request->NumeroPagina;
+		$result["pageSize"] = $request->NumeroRegistros;
+		$result["SearchText"] = "";
+		$result["ShowChildren"] = true;
+		$result["iTotalRecords"] = $iTotalDisplayRecords;
+		$result["iTotalDisplayRecords"] = $iTotalDisplayRecords;
+		$result["aaData"] = $data;
+
+		echo json_encode($result);
+
+	}
     
     public function create_pagos(){
         

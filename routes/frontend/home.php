@@ -617,5 +617,6 @@ Route::post('orden_compra/listar_reporte_comercializacion_ajax', [OrdenCompraCon
 Route::get('orden_compra/exportar_reporte_comercializacion/{empresa_compra}/{fecha_inicio}/{fecha_fin}/{numero_orden_compra_cliente}/{situacion}/{codigo_producto}/{producto}', [OrdenCompraController::class, 'exportar_reporte_comercializacion'])->name('orden_compra.exportar_reporte_comercializacion');
 Route::get('requerimiento/exportar_listar_requerimiento_reporte/{tipo_documento}/{fecha}/{numero_requerimiento}/{almacen}/{situacion}/{responsable_atencion}/{estado_atencion}/{tipo_requerimiento}/{estado}', [RequerimientoController::class, 'exportar_listar_requerimiento_reporte'])->name('requerimiento.exportar_listar_requerimiento_reporte');
 Route::post('orden_compra/upload_orden_distribucion', [OrdenCompraController::class, 'upload_orden_distribucion'])->name('orden_compra.upload_orden_distribucion');
+Route::post('comprobante/listar_factura_sodimac_ajax', [ComprobanteController::class, 'listar_factura_sodimac_ajax'])->name('comprobante.listar_factura_sodimac_ajax');
 
 

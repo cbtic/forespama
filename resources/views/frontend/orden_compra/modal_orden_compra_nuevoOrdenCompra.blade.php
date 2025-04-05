@@ -234,7 +234,7 @@ $(document).ready(function() {
 
     if($('#id').val()>0){
         cargarDetalle();
-        //cambiarOrigen();
+        cambiarOrigen();
         obtenerEntradaSalida();
     }
 });
@@ -256,15 +256,13 @@ function cambiarOrigen(){
 
     var unidad_origen = $('#unidad_origen').val();
 
-    $('#almacen_salida').val("");
-    $('#almacen').val("");
-
     //alert(moneda);
     if(unidad_origen==1){
         $('#proveedor_select, #proveedor_').hide();
         $('#almacen_select, #almacen_').show();
         $('#almacen_salida_select, #almacen_salida_').show();
     }else if(unidad_origen==2){
+        $('#almacen_salida').val("");
         $('#proveedor_select, #proveedor_').show();
         $('#almacen_select, #almacen_').show();
         $('#almacen_salida_select, #almacen_salida_').hide();
@@ -275,6 +273,7 @@ function cambiarOrigen(){
         $('#almacen_salida_select, #almacen_salida_').show();
         //$('#proveedor').val(30);
     }else if(unidad_origen==4){
+        $('#almacen').val("");
         $('#proveedor_select, #proveedor_').show();
         $('#almacen_select, #almacen_').hide();
         $('#almacen_salida_select, #almacen_salida_').show();
