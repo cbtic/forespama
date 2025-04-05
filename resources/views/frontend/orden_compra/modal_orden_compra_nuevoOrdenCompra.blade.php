@@ -234,7 +234,7 @@ $(document).ready(function() {
 
     if($('#id').val()>0){
         cargarDetalle();
-        cambiarOrigen();
+        //cambiarOrigen();
         obtenerEntradaSalida();
     }
 });
