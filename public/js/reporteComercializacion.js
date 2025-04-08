@@ -282,6 +282,7 @@ function DescargarArchivosExcel(){
 	var situacion = $('#situacion_bus').val();
 	var codigo_producto = $('#codigo_producto_bus').val();
 	var producto = $('#producto_bus').val();
+	var vendedor = $('#vendedor_bus').val();
 
 	if (empresa_compra == "")empresa_compra = 0;
 	if (fecha_inicio == "")fecha_inicio = "0";
@@ -290,6 +291,7 @@ function DescargarArchivosExcel(){
 	if (situacion == "")situacion = 0;
 	if (codigo_producto == "")codigo_producto = "0";
 	if (producto == "")producto = 0;
+	if (vendedor == "")vendedor = 0;
 	
-	location.href = '/orden_compra/exportar_reporte_comercializacion/'+empresa_compra+'/'+fecha_inicio+'/'+fecha_fin+'/'+numero_orden_compra_cliente+'/'+situacion+'/'+codigo_producto+'/'+producto;
+	location.href = '/orden_compra/exportar_reporte_comercializacion/'+empresa_compra+'/'+fecha_inicio+'/'+fecha_fin+'/'+numero_orden_compra_cliente+'/'+situacion+'/'+codigo_producto+'/'+producto+'/'+vendedor;
 }
