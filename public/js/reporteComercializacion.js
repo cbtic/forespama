@@ -106,6 +106,7 @@ function datatablenew(){
 			var situacion = $('#situacion_bus').val();
 			var codigo_producto = $('#codigo_producto_bus').val();
 			var producto = $('#producto_bus').val();
+			var vendedor = $('#vendedor_bus').val();
 
 			var _token = $('#_token').val();
             oSettings.jqXHR = $.ajax({
@@ -115,7 +116,7 @@ function datatablenew(){
                 "url": sSource,
                 "data":{NumeroPagina:iNroPagina,NumeroRegistros:iCantMostrar,
 						empresa_compra:empresa_compra, fecha_inicio:fecha_inicio, fecha_fin:fecha_fin, numero_orden_compra_cliente:numero_orden_compra_cliente, 
-						situacion:situacion,codigo_producto:codigo_producto,producto:producto,
+						situacion:situacion,codigo_producto:codigo_producto,producto:producto,vendedor:vendedor,
 						_token:_token
                        },
                 "success": function (result) {
@@ -245,6 +246,15 @@ function datatablenew(){
 				},
 				"bSortable": true,
 				"aTargets": [11]
+				},
+				{
+				"mRender": function (data, type, row) {
+					var vendedor = "";
+					if(row.vendedor!= null)vendedor = row.vendedor;
+					return vendedor;
+				},
+				"bSortable": true,
+				"aTargets": [12]
 				},
 				
             ]

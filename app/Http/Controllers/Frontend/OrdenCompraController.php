@@ -1027,6 +1027,7 @@ class OrdenCompraController extends Controller
         $id_user = Auth::user()->id;
         $tienda_model = new Tienda;
         $producto_model = new Producto;
+        $user_model = new User;
 
 		$tablaMaestra_model = new TablaMaestra;
 		$tipo_documento = $tablaMaestra_model->getMaestroByTipo(54);
@@ -1034,8 +1035,9 @@ class OrdenCompraController extends Controller
         $proveedor = Empresa::all();
         $tiendas = $tienda_model->getTiendasAll();
         $productos = $producto_model->getProductoExterno();
+        $vendedor = $user_model->getUserByRol(7);
 
-		return view('frontend.orden_compra.create_reporte_comercializacion',compact('tipo_documento','cerrado_orden_compra','proveedor','tiendas','productos'));
+		return view('frontend.orden_compra.create_reporte_comercializacion',compact('tipo_documento','cerrado_orden_compra','proveedor','tiendas','productos','vendedor'));
 
 	}
 
@@ -1049,6 +1051,7 @@ class OrdenCompraController extends Controller
         $p[]=$request->situacion;
         $p[]=$request->codigo_producto;
         $p[]=$request->producto;
+        $p[]=$request->vendedor;
         $p[]=1;
         $p[]=$request->NumeroPagina;
 		$p[]=$request->NumeroRegistros;
