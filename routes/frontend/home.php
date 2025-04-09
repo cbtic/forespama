@@ -618,5 +618,7 @@ Route::get('orden_compra/exportar_reporte_comercializacion/{empresa_compra}/{fec
 Route::get('requerimiento/exportar_listar_requerimiento_reporte/{tipo_documento}/{fecha}/{numero_requerimiento}/{almacen}/{situacion}/{responsable_atencion}/{estado_atencion}/{tipo_requerimiento}/{estado}', [RequerimientoController::class, 'exportar_listar_requerimiento_reporte'])->name('requerimiento.exportar_listar_requerimiento_reporte');
 Route::post('orden_compra/upload_orden_distribucion', [OrdenCompraController::class, 'upload_orden_distribucion'])->name('orden_compra.upload_orden_distribucion');
 Route::post('comprobante/listar_factura_sodimac_ajax', [ComprobanteController::class, 'listar_factura_sodimac_ajax'])->name('comprobante.listar_factura_sodimac_ajax');
-
+Route::get('comprobante/modal_factura_sodimac_detalle/{id}', [ComprobanteController::class, 'modal_factura_sodimac_detalle'])->name('comprobante.modal_factura_sodimac_detalle');
+Route::post('comprobante/upload_factura_sodimac', [ComprobanteController::class, 'upload_factura_sodimac'])->name('comprobante.upload_factura_sodimac');
+Route::get('comprobante/importar_archivo/{archivo}', [ComprobanteController::class, 'importar_archivo'])->name('comprobante.importar_archivo');
 

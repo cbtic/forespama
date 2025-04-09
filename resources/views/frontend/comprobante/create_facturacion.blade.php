@@ -348,7 +348,7 @@ label.form-control-sm{
 
                                 <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
                                     <div class="form-group">
-                                        <input class="form-control form-control-sm" id="fecha_ini" name="fecha_ini" value="<?php echo date("d-m-Y") ?>" placeholder="Fecha Inicio">
+                                        <input class="form-control form-control-sm" id="fecha_ini" name="fecha_ini" value="<?php //echo date("d-m-Y") ?>" placeholder="Fecha Inicio">
                                     </div>
                                 </div>
                                 <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
@@ -367,20 +367,25 @@ label.form-control-sm{
                                     </div>
                                 </div>
 
-                                <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12" style="padding-right:0px">
-                                    <input class="btn btn-warning pull-rigth" value="Buscar" type="button" id="btnBuscar" />
+                                <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12" style="padding-right:0px">
+                                    <!--<input class="btn btn-warning pull-rigth" value="Buscar" type="button" id="btnBuscar" />-->
 <!--
                                 <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12" style="padding-top:30px">
                                     <input class="btn btn-success pull-rigth" value="Nuevo" type="button" id="btnNuevo1" data-toggle="modal" data-target="#exampleModal2" style="margin-left:15px" />
 
                                 </div>
                                     -->
-                                    @hasanyrole('Administrator|Administracion PAMA|Caja')
-                                    <button id="btnExcel" type="button" class="btn btn-secondary pull-rigth" style="margin-left:15px;" onclick="reporteFacturaSodimac()">
-                                        <i class="fas fa-download"></i> Exportar Excel
-                                        <!--<img src="/img/icono_carro.png" alt="Carro" style="width: 16px; height: 16px; margin-left: 5px;">-->
-                                    </button>
-                                    @endhasanyrole
+						
+                                        <input class="btn btn-warning float-left" value="Buscar" type="button" id="btnBuscar" />
+
+                                        <span class="btn btn-info btn-file float-left" style="margin-left:10px">
+                                            Examinar Excel <input id="image" name="image" type="file" />
+                                        </span>
+                                        
+                                        <i id="fileExcel" class="fa fa-file-excel" style="display:none;color:#00B300;font-size:35px;block;float:left;padding-left:10px"></i>
+                                        
+                                        <input type="button" class="btn btn-success upload" value="Subir Excel" style="margin-left:10px;float:left">
+
                                 </div>
                                 <!--
 					@hasanyrole('contabilidad')

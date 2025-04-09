@@ -3,6 +3,59 @@
 
 $(document).ready(function () {
 
+    /*$(".upload").on('click', function() {
+        var formData = new FormData();
+        var files = $('#image')[0].files[0];
+        formData.append('file',files);
+        $.ajax({
+			headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            url: "/comprobante/upload_factura_sodimac",
+            type: 'post',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function(response) {
+				datatablenew();
+            }
+        });
+		return false;
+    });*/
+
+    $(".upload").on('click', function() {
+        var formData = new FormData();
+        var files = $('#image')[0].files[0]; 
+        
+        if (!files) {
+            alert('Por favor, selecciona un archivo Excel.');
+            return false;
+        }
+        
+        formData.append('file', files);
+    
+        $.ajax({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            url: "/comprobante/upload_factura_sodimac",
+            type: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function(response) {
+                datatablenew();
+            },
+            error: function(xhr, status, error) {
+                console.log(xhr.responseText); 
+                alert('Hubo un error al cargar el archivo. Intenta nuevamente.');
+            }
+        });
+    
+        return false;
+    });
+    
+
 	$('#btnBuscar').click(function () {
 		fn_ListarBusqueda();
 	});
@@ -244,7 +297,7 @@ function datatablenew(){
 						
 						var html = '<div class="btn-group btn-group-sm" role="group" aria-label="Log Viewer Actions">';
 							
-                        html += '<button style="font-size:12px" type="button" class="btn btn-sm btn-success" data-toggle="modal" onclick="modalOrdenCompra('+row.id+')" ><i class="fa fa-edit"></i>Detalle</button>'; 
+                        html += '<button style="font-size:12px" type="button" class="btn btn-sm btn-success" data-toggle="modal" onclick="modalFacturaSodimac('+row.id+')" ><i class="fa fa-edit"></i>Detalle</button>'; 
                         
                         html += '</div>';
 						return html;
@@ -263,22 +316,19 @@ function fn_ListarBusqueda() {
     datatablenew();
 };
 
-
-
-function modalCreditoPago(id){
+function modalFacturaSodimac(id){
 	
 	$(".modal-dialog").css("width","85%");
 	$('#openOverlayOpc .modal-body').css('height', 'auto');
 
 	$.ajax({
-			url: "/comprobante/credito_pago/"+id,
+			url: "/comprobante/modal_factura_sodimac_detalle/"+id,
 			type: "GET",
-			success: function (result) {  
+			success: function (result) {
 					$("#diveditpregOpc").html(result);
 					$('#openOverlayOpc').modal('show');
 			}
 	});
-
 }
 
 function modalFactura(id){

@@ -436,27 +436,38 @@ class Comprobante extends Model
 
    function getRepresentante($tipo_documento,$numero_documento){
 
+        //echo $tipo_documento;
 
-    //echo $tipo_documento;
+        if($tipo_documento=="5"){  //RUC
+            $cad = "select id, ruc numero_documento, razon_social representante, direccion, email 
+                    from empresas                     
+                    Where ruc='".$numero_documento."'";
 
-    if($tipo_documento=="5"){  //RUC
-        $cad = "select id, ruc numero_documento, razon_social representante, direccion, email 
-                from empresas                     
-                Where ruc='".$numero_documento."'";
-
-    }elseif($tipo_documento=="1"){ //NRO_CAP
+        }elseif($tipo_documento=="1"){ //NRO_CAP
+            
+            $cad = "select id, numero_documento, apellido_paterno ||' '|| apellido_materno ||' '|| nombres representante, direccion,  email  			
+            from personas  
+            where id_tipo_documento='".$tipo_documento."' 
+            and numero_documento = '".$numero_documento."' and estado='1' ";
+        }
+        //echo $cad;
+        $data = DB::select($cad);
         
-        $cad = "select id, numero_documento, apellido_paterno ||' '|| apellido_materno ||' '|| nombres representante, direccion,  email  			
-        from personas  
-        where id_tipo_documento='".$tipo_documento."' 
-        and numero_documento = '".$numero_documento."' and estado='1' ";
+        //return $data[0];
+        if(isset($data[0]))return $data[0];
     }
-    //echo $cad;
-    $data = DB::select($cad);
-    
-    //return $data[0];
-    if(isset($data[0]))return $data[0];
-}
+
+    function obtenerFacturaDetalle($id){
+            
+        $cad = "select sfd.id, sfd.id_tipo_documento, tm.denominacion tipo_documento, sfd.numero_documento, sfd.importe_inicial, sfd.importe_retencion, sfd.importe_total, sfd.estado from sodimac_factura_detalles sfd 
+        inner join tabla_maestras tm on sfd.id_tipo_documento = tm.codigo::int and tipo ='32'
+        where sfd.id_sodimac_factura ='".$id."'
+        order by 1 asc";
+        
+        $data = DB::select($cad);
+        
+        return $data;
+    }
 
 	
 }

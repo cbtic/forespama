@@ -18,6 +18,8 @@ use App\Models\ComprobantePago;
 use App\Models\ComprobanteCuotaPago;
 use App\Models\ComprobanteCuota;
 use App\Models\CajaIngreso;
+use App\Models\SodimacFactura;
+use App\Models\SodimacFacturaDetalle;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
 
@@ -3995,15 +3997,38 @@ class ComprobanteController extends Controller
         return view('frontend.comprobante.create_pagos',compact('formapago','caja','medio_pago','usuario_caja'));
     }
 
+    function extension($filename){$file = explode(".",$filename); return strtolower(end($file));}
+
+    public function upload_factura_sodimac(Request $request){
+		
+		$filename = date("YmdHis") . substr((string)microtime(), 1, 6);
+		$type="";
+		
+        $path = "factura_sodimac";
+        if (!is_dir($path)) {
+            mkdir($path);
+        }
+        
+        $filepath = public_path('factura_sodimac/');
+		
+		$type=$this->extension($_FILES["file"]["name"]);
+		move_uploaded_file($_FILES["file"]["tmp_name"], $filepath . $filename.".".$type);
+		
+		$archivo = $filename.".".$type;
+		
+        //echo $archivo;
+		$this->importar_archivo($archivo);
+		
+	}
+
     public function importar_archivo($archivo)
     {
         $id_user = Auth::user()->id;
         $id_tipo_cliente = 5;
-
-        // Ruta del archivo Excel
+        $ruc_cliente = 20112273922;
+        
         $filePath = public_path('factura_sodimac/'.$archivo);
 
-        // Verifica si el archivo existe
         if (!file_exists($filePath)) {
             return response()->json(['error' => 'Archivo no encontrado.'], 404);
         }
@@ -4015,72 +4040,108 @@ class ComprobanteController extends Controller
         $sheet = $data[0];  // Asumiendo que el archivo tiene solo una hoja
 
         // Verificar si la hoja está vacía
-        if (empty($sheet)) {
+        if (empty($data) || empty($data[0])) {
             return response()->json(['error' => 'El archivo está vacío o tiene un formato incorrecto.'], 400);
         }
 
         $count = 0; // Contador de filas exitosas
+        $generalData = []; // Para almacenar los datos generales del pago
+        $detalleData = [];
 
-        foreach ($sheet as $row) {
-            // Aquí asumimos que cada fila tiene un formato similar al que muestras en el código original
-            // Ajusta los índices según las columnas del archivo Excel
+        foreach ($sheet as $row) {          
 
+            if ($count < 6) { // Los primeros 6 registros son generales
+                $generalData[] = $row;
+            } else { // Los registros posteriores son los detalles de las facturas
+                $detalleData[] = $row;
+            }  
             
-
-            $empresa = Empresa::where("ruc", str_replace("-", "", $row[0]))->first(); // Ejemplo usando el índice 0 para RUT_PROVEEDOR
-
-            if ($empresa) {
-                $id_empresa_vende = $empresa->id;
-                $fecha_orden_compra = Carbon::createFromFormat('d/m/Y', $row[1]); // Asumiendo que la fecha de autorización está en la columna 1
-                $numero_orden_compra_cliente = $row[2]; // Asumiendo que el número de OC está en la columna 2
-                $fecha_vencimiento = Carbon::createFromFormat('d/m/Y', $row[3]); // Asumiendo que la fecha de vencimiento está en la columna 3
-
-                // Aquí solo procesamos la primera fila para la orden de compra
-                if ($count == 0) {
-                    $orden_compra_model = new OrdenCompra;
-                    $codigo_orden_compra = $orden_compra_model->getCodigoOrdenCompra($id_tipo_documento);
-                    $numero_orden_compra = $codigo_orden_compra[0]->codigo;
-
-                    $ordenCompra = new OrdenCompra;
-                    $ordenCompra->id_unidad_origen = $id_unidad_origen;
-                    $ordenCompra->id_empresa_vende = $id_empresa_vende;
-                    $ordenCompra->id_empresa_compra = $id_empresa_compra;
-                    $ordenCompra->fecha_orden_compra = $fecha_orden_compra;
-                    $ordenCompra->numero_orden_compra = $numero_orden_compra;
-                    $ordenCompra->numero_orden_compra_cliente = $numero_orden_compra_cliente;
-                    $ordenCompra->id_tipo_documento = $id_tipo_documento;
-                    $ordenCompra->estado = $estado;
-                    $ordenCompra->igv_compra = $igv_compra;
-                    $ordenCompra->cerrado = $cerrado;
-                    $ordenCompra->id_almacen_destino = $id_almacen_destino;
-                    $ordenCompra->id_almacen_salida = $id_almacen_salida;
-                    $ordenCompra->tienda_asignada = $tienda_asignada;
-                    $ordenCompra->id_moneda = $id_moneda;
-                    $ordenCompra->moneda = $moneda;
-                    $ordenCompra->id_usuario_inserta = $id_user;
-                    $ordenCompra->id_vendedor = $id_vendedor;
-                    $ordenCompra->id_tipo_cliente = $id_tipo_cliente;
-                    $ordenCompra->fecha_vencimiento = $fecha_vencimiento;
-                    $ordenCompra->save();
-                    $id_orden_compra = $ordenCompra->id;
-                }
-
-                // Aquí procesamos cada producto en la orden de compra
-                $equivalenciaProducto = EquivalenciaProducto::where("codigo_empresa", trim($row[4]))->first(); // SKU en columna 4
-                if ($equivalenciaProducto) {
-                    $id_producto = $equivalenciaProducto->id_producto;
-                    $producto = Producto::find($id_producto);
-                    $cantidad_requerida = $row[5]; // CANTIDAD_PROD en columna 5
-                    $id_unidad_medida = $producto->id_unidad_producto;
-
-                    // Aquí continúa la lógica para procesar el detalle de la orden de compra...
-                }
+            if (empty($row[0]) && empty($row[1]) && empty($row[2]) && empty($row[3]) && empty($row[4]) && empty($row[5]) && empty($row[6])) {
+                break;  // Si todas las celdas están vacías, detenemos el ciclo
             }
 
+            //dd($row[0]." - ".$row[1]." - ".$row[2]." - ".$row[3]." - ".$row[4]." - ".$row[5]." - ".$row[6]);exit();
+            /*if (count($row) < 6) {
+                continue; // Si la fila no tiene el número esperado de columnas, la saltamos
+            }*/
+            $empresa = Empresa::where("ruc",  $ruc_cliente)->first(); // Ejemplo usando el índice 0 para RUT_PROVEEDOR
+            //$fecha_pago = Carbon::createFromFormat('Y-m-d', \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row[3])->format('Y-m-d'))->toDateString();
+            $fecha_pago = null;
+            if (isset($row[3])) {
+                // Verificamos si la celda contiene una fecha válida
+                try {
+                    $fecha_pago = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row[3])->format('Y-m-d');
+                } catch (\Exception $e) {
+                    // Si no es una fecha válida, manejar el error adecuadamente
+                    $fecha_pago = null;
+                }
+            }
+            if ($count == 0) {
+                $sodimac_factura = new SodimacFactura;
+                $sodimac_factura->id_medio_pago = $row[0];
+                $sodimac_factura->cuenta_bancaria = $row[1];
+                $sodimac_factura->id_banco = $row[2];
+                $sodimac_factura->fecha_pago = $fecha_pago;
+                $sodimac_factura->id_empresa = $row[4];
+                $sodimac_factura->total_pagado = $row[5];
+                $sodimac_factura->id_moneda = $row[6];
+                $sodimac_factura->estado = 1;
+                $sodimac_factura->id_usuario_inserta = $id_user;
+                $sodimac_factura->save();
+            }
+            
             $count++; // Incrementamos el contador
         }
 
+        foreach ($detalleData as $row) {
+            if (count($row) < 5) {
+                continue; // Si la fila no tiene suficiente información, la saltamos
+            }
+    
+            $tipo_documento = $row[0]; // Tipo Documento
+            $numero_documento = $row[1]; // Nro. Documento
+            $importe_inicial = $row[2]; // Importe Inicial
+            $importe_retencion = $row[3]; // Importe Retención
+            $importe_compensado = $row[4]; // Importe Compensado
+    
+            if($tipo_documento == 'Fac Afecta Elec. Rec'){
+                $tipo_documento='1';
+            }else {
+                $tipo_documento='2';
+            }
+
+            // Guardar el detalle de la factura
+            $sodimac_factura_detalle = new SodimacFacturaDetalle;
+            $sodimac_factura_detalle->id_sodimac_factura = $sodimac_factura->id;
+            $sodimac_factura_detalle->id_tipo_documento = $tipo_documento;
+            $sodimac_factura_detalle->numero_documento = $numero_documento;
+            $sodimac_factura_detalle->importe_inicial = $importe_inicial;
+            $sodimac_factura_detalle->importe_retencion = $importe_retencion;
+            $sodimac_factura_detalle->importe_total = $importe_compensado; // Relacionado con la factura principal
+            $sodimac_factura_detalle->estado = 1; // Relacionado con la factura principal
+            $sodimac_factura_detalle->id_usuario_inserta = $id_user; // Relacionado con la factura principal
+            $sodimac_factura_detalle->save();
+        }
+
         return response()->json(['success' => 'Archivo importado exitosamente.']);
+    }
+
+    public function modal_factura_sodimac_detalle($id){
+		
+		/*if($id>0){
+
+            $orden_compra = OrdenCompra::find($id);
+			
+		}else{
+			$orden_compra = new OrdenCompra;
+		}*/
+
+        $comprobante_model = new Comprobante;
+
+        $sodimac_factura_detalle = $comprobante_model->obtenerFacturaDetalle($id);
+
+		return view('frontend.comprobante.modal_factura_sodimac_detalle',compact('id','sodimac_factura_detalle'));
+
     }
 
 }
