@@ -190,7 +190,7 @@ class OrdenCompra extends Model
         case when oc.id_empresa_compra = 23 or oc.id_empresa_compra = 187  then 
         (select direccion from tienda_detalle_orden_compras tdoc 
         inner join tiendas t on tdoc.id_tienda = t.id 
-        where tdoc.id_orden_compra = oc.id) else
+        where tdoc.id_orden_compra = oc.id limit 1) else
         (select occe.direccion || ' ' || occe.referencia from orden_compra_contacto_entregas occe
         where occe.id_orden_compra = oc.id)
         end direccion
