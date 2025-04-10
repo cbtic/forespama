@@ -263,20 +263,20 @@ function datatablenew(){
 				"bSortable": true,
 				"aTargets": [10]
 				},
-				/*{
+				{
 					"mRender": function (data, type, row) {
-						var estado = "";
-						if(row.estado == 1){
-							estado = "Activo";
+						var tiene_direccion = "";
+						if(row.tiene_direccion == 1){
+							tiene_direccion = "SI";
 						}
-						if(row.estado == 0){
-							estado = "Inactivo";
+						if(row.tiene_direccion == 0){
+							tiene_direccion = "NO";
 						}
-						return estado;
+						return tiene_direccion;
 					},
 					"bSortable": false,
 					"aTargets": [11]
-				},*/
+				},
 				{
 					"mRender": function (data, type, row) {
 						var estado = "";
@@ -329,7 +329,7 @@ function datatablenew(){
 						return html;
 					},
 					"bSortable": false,
-					"aTargets": [11],
+					"aTargets": [12],
 				},
 
             ]

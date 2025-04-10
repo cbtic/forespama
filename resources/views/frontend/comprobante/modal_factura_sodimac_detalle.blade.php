@@ -201,6 +201,7 @@ function fn_save_detalle_producto(){
 								<th>N&uacute;mero Documento</th>
                                 <th style="text-align : right">Importe Inicial</th>
                                 <th style="text-align : right">Importe Retenci&oacute;n</th>
+                                <th style="text-align : right">Importe Detracci&oacute;n</th>
                                 <th style="text-align : right">Importe Total</th>
                                 <!--<th>Acciones</th>-->
 							</tr>
@@ -218,10 +219,11 @@ function fn_save_detalle_producto(){
                                 <td class="text-left" style="vertical-align:middle"><?php echo $row->numero_documento?></td>
                                 <td class="text-right" style="vertical-align:middle"><?php echo $row->importe_inicial?></td>
                                 <td class="text-right" style="vertical-align:middle"><?php echo $row->importe_retencion?></td>
+                                <td class="text-right" style="vertical-align:middle"><?php echo $row->importe_detraccion?></td>
                                 <td class="text-right" style="vertical-align:middle"><?php echo $row->importe_total?></td>
                             </tr>
                             <?php 
-                                if($row->id_tipo_documento == '7'){
+                                if($row->id_tipo_documento == '1'){
                                     $suma_total_sodimac += $row->importe_total;
                                 }else{
                                     $suma_cobro_sodimac += $row->importe_total;
@@ -232,16 +234,16 @@ function fn_save_detalle_producto(){
                             $suma_total_ingreso = $suma_total_sodimac + $suma_cobro_sodimac;
                             ?>
                             <tr>
-                            <td class="text-right" colspan ="5" style="vertical-align:middle">TOTAL FACTURA</td>
-                            <td class="text-right" style="vertical-align:middle"><?php echo $suma_total_sodimac?></td>
+                            <td class="text-right" colspan ="6" style="vertical-align:middle; font-weight: bold;">TOTAL FACTURA</td>
+                            <td class="text-right" style="vertical-align:middle; font-weight: bold;"><?php echo $suma_total_sodimac?></td>
                             </tr>
                             <tr>
-                            <td class="text-right" colspan ="5" style="vertical-align:middle">COBRO SODIMAC</td>
-                            <td class="text-right" style="vertical-align:middle"><?php echo $suma_cobro_sodimac?></td>
+                            <td class="text-right" colspan ="6" style="vertical-align:middle; font-weight: bold;">COBRO SODIMAC</td>
+                            <td class="text-right" style="vertical-align:middle; font-weight: bold;"><?php echo $suma_cobro_sodimac?></td>
                             </tr>	
                             <tr>
-                            <td class="text-right" colspan ="5" style="vertical-align:middle">TOTAL INGRESO</td>
-                            <td class="text-right" style="vertical-align:middle"><?php echo $suma_total_ingreso?></td>
+                            <td class="text-right" colspan ="6" style="vertical-align:middle; font-weight: bold;">TOTAL INGRESO</td>
+                            <td class="text-right" style="vertical-align:middle; font-weight: bold;"><?php echo $suma_total_ingreso?></td>
                             </tr>	
                             </tbody>
 						</table>

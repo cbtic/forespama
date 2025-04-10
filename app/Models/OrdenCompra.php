@@ -159,7 +159,7 @@ class OrdenCompra extends Model
             )	else  pr.denominacion end  producto_prof,
             um.denominacion um, um.abreviatura, spd.cantidad  cantidad, spd.id_descuento, spd.costo precio_unitario, spd.sub_total, spd.igv, spd.total, spd.id_um id_unidad_medida, spd.descuento, spd.valor_venta_bruto,
             spd.precio_venta, spd.valor_venta
-            FROM orden_compras oc            
+            FROM orden_compras oc
             inner join orden_compra_detalles pd on pd.id_orden_compra = oc.id 
             inner join salida_productos sp on sp.id_orden_compra = oc.id
             inner join salida_producto_detalles spd on spd.id_salida_productos = sp.id and spd.id_producto = pd.id_producto 
@@ -186,7 +186,14 @@ class OrdenCompra extends Model
         end cliente,
         e2.razon_social empresa_vende, to_char(oc.fecha_orden_compra,'dd-mm-yyyy') fecha_orden_compra , 
         oc.numero_orden_compra, tm.denominacion tipo_documento, oc.estado, tm2.denominacion igv, oc.numero_orden_compra_cliente, 
-        oc.total, oc.sub_total, oc.igv, COALESCE (oc.descuento, 0 , oc.descuento) descuento
+        oc.total, oc.sub_total, oc.igv, COALESCE (oc.descuento, 0 , oc.descuento) descuento,
+        case when oc.id_empresa_compra = 23 or oc.id_empresa_compra = 187  then 
+        (select direccion from tienda_detalle_orden_compras tdoc 
+        inner join tiendas t on tdoc.id_tienda = t.id 
+        where tdoc.id_orden_compra = oc.id) else
+        (select occe.direccion || ' ' || occe.referencia from orden_compra_contacto_entregas occe
+        where occe.id_orden_compra = oc.id)
+        end direccion
         from orden_compras oc 
         --inner join empresas e on oc.id_empresa_compra = e.id 
         inner join empresas e2 on oc.id_empresa_vende = e2.id 

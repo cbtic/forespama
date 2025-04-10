@@ -161,9 +161,9 @@ function datatablenew(){
 
 				{
 					"mRender": function (data, type, row) {
-						var id = "";
-						if(row.id!= null)id = row.id;
-						return id;
+						var serie_numero = "";
+						if(row.guia_serie!= null && row.guia_numero!= null)serie_numero = row.guia_serie + '-' +row.guia_numero;
+						return serie_numero;
 					},
 					"bSortable": true,
 					"aTargets": [1]

@@ -145,8 +145,20 @@ class TablaMaestra extends Model
         $cad = "select id, denominacion, codigo, abreviatura 
                 from tabla_maestras
                 where tipo='".$tipo."'
-                and denominacion ='".$denominacion."'
+                and denominacion ='%".$denominacion."%'
                 order by orden ";
+
+		$data = DB::select($cad);
+        return $data;
+    }
+
+    function getMaestroDenominacion($tipo, $denominacion){
+
+        $cad = "select id, denominacion, codigo, abreviatura 
+        from tabla_maestras
+        where tipo='".$tipo."'
+        and denominacion ilike '%".$denominacion."%'
+        order by orden ";
 
 		$data = DB::select($cad);
         return $data;

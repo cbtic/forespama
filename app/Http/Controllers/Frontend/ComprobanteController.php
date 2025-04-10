@@ -4024,7 +4024,8 @@ class ComprobanteController extends Controller
     public function importar_archivo($archivo)
     {
         $id_user = Auth::user()->id;
-        $id_tipo_cliente = 5;
+        $moneda = 1;
+        $moneda_detalle = 1;
         $ruc_cliente = 20112273922;
         
         $filePath = public_path('factura_sodimac/'.$archivo);
@@ -4049,42 +4050,45 @@ class ComprobanteController extends Controller
         $detalleData = [];
 
         foreach ($sheet as $row) {          
-
-            if ($count < 6) { // Los primeros 6 registros son generales
+            var_dump($sheet[8][1]); 
+            if ($count < 14) { // Los primeros 14 registros son generales
                 $generalData[] = $row;
             } else { // Los registros posteriores son los detalles de las facturas
-                $detalleData[] = $row;
-            }  
-            
-            if (empty($row[0]) && empty($row[1]) && empty($row[2]) && empty($row[3]) && empty($row[4]) && empty($row[5]) && empty($row[6])) {
-                break;  // Si todas las celdas están vacías, detenemos el ciclo
-            }
+                
+                if (empty($row[0]) && empty($row[1]) && empty($row[2]) && empty($row[3]) && empty($row[4]) && empty($row[5]) && empty($row[6]) && empty($row[7])) {
+                    break;  // Si todas las celdas están vacías, detenemos el ciclo
+                }
 
-            //dd($row[0]." - ".$row[1]." - ".$row[2]." - ".$row[3]." - ".$row[4]." - ".$row[5]." - ".$row[6]);exit();
-            /*if (count($row) < 6) {
-                continue; // Si la fila no tiene el número esperado de columnas, la saltamos
-            }*/
+                $detalleData[] = $row;
+            }
+            
             $empresa = Empresa::where("ruc",  $ruc_cliente)->first(); // Ejemplo usando el índice 0 para RUT_PROVEEDOR
-            //$fecha_pago = Carbon::createFromFormat('Y-m-d', \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row[3])->format('Y-m-d'))->toDateString();
+            
             $fecha_pago = null;
-            if (isset($row[3])) {
-                // Verificamos si la celda contiene una fecha válida
+            if (isset($sheet[8][1]) && is_numeric($sheet[8][1])) {
                 try {
-                    $fecha_pago = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row[3])->format('Y-m-d');
+                    $fecha_pago = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($sheet[8][1])->format('d-m-Y');
                 } catch (\Exception $e) {
                     // Si no es una fecha válida, manejar el error adecuadamente
                     $fecha_pago = null;
                 }
+            }else{
+                $fecha_pago = trim($sheet[8][1]);
             }
             if ($count == 0) {
+
+                $tabla_maestra_model = new TablaMaestra;
+                $id_medio_pago = $tabla_maestra_model->getMaestroDenominacion('65',$sheet[5][1]);
+                $id_banco = $tabla_maestra_model->getMaestroDenominacion('16',$sheet[7][1]);
+
                 $sodimac_factura = new SodimacFactura;
-                $sodimac_factura->id_medio_pago = $row[0];
-                $sodimac_factura->cuenta_bancaria = $row[1];
-                $sodimac_factura->id_banco = $row[2];
+                $sodimac_factura->id_medio_pago = $id_medio_pago[0]->codigo;
+                $sodimac_factura->cuenta_bancaria = $sheet[6][1];
+                $sodimac_factura->id_banco = $id_banco[0]->codigo;
                 $sodimac_factura->fecha_pago = $fecha_pago;
-                $sodimac_factura->id_empresa = $row[4];
-                $sodimac_factura->total_pagado = $row[5];
-                $sodimac_factura->id_moneda = $row[6];
+                $sodimac_factura->id_empresa = $empresa->id;
+                $sodimac_factura->total_pagado = $sheet[10][1];
+                $sodimac_factura->id_moneda = $moneda;
                 $sodimac_factura->estado = 1;
                 $sodimac_factura->id_usuario_inserta = $id_user;
                 $sodimac_factura->save();
@@ -4094,15 +4098,20 @@ class ComprobanteController extends Controller
         }
 
         foreach ($detalleData as $row) {
-            if (count($row) < 5) {
+            if (count($row) < 7) {
                 continue; // Si la fila no tiene suficiente información, la saltamos
+            }
+
+            if ($count >= 14 && empty($row[0])) {
+                continue; // Si la fila es un total y está después de la 14, se ignora
             }
     
             $tipo_documento = $row[0]; // Tipo Documento
             $numero_documento = $row[1]; // Nro. Documento
             $importe_inicial = $row[2]; // Importe Inicial
             $importe_retencion = $row[3]; // Importe Retención
-            $importe_compensado = $row[4]; // Importe Compensado
+            $importe_detraccion = $row[4]; // Importe Detracción
+            $importe_compensado = $row[5]; // Importe Compensado
     
             if($tipo_documento == 'Fac Afecta Elec. Rec'){
                 $tipo_documento='1';
@@ -4117,9 +4126,11 @@ class ComprobanteController extends Controller
             $sodimac_factura_detalle->numero_documento = $numero_documento;
             $sodimac_factura_detalle->importe_inicial = $importe_inicial;
             $sodimac_factura_detalle->importe_retencion = $importe_retencion;
-            $sodimac_factura_detalle->importe_total = $importe_compensado; // Relacionado con la factura principal
-            $sodimac_factura_detalle->estado = 1; // Relacionado con la factura principal
-            $sodimac_factura_detalle->id_usuario_inserta = $id_user; // Relacionado con la factura principal
+            $sodimac_factura_detalle->importe_detraccion = $importe_detraccion;
+            $sodimac_factura_detalle->importe_total = $importe_compensado;
+            $sodimac_factura_detalle->id_moneda = $moneda_detalle;
+            $sodimac_factura_detalle->estado = 1;
+            $sodimac_factura_detalle->id_usuario_inserta = $id_user;
             $sodimac_factura_detalle->save();
         }
 
@@ -4128,14 +4139,6 @@ class ComprobanteController extends Controller
 
     public function modal_factura_sodimac_detalle($id){
 		
-		/*if($id>0){
-
-            $orden_compra = OrdenCompra::find($id);
-			
-		}else{
-			$orden_compra = new OrdenCompra;
-		}*/
-
         $comprobante_model = new Comprobante;
 
         $sodimac_factura_detalle = $comprobante_model->obtenerFacturaDetalle($id);

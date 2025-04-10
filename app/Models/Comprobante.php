@@ -459,10 +459,11 @@ class Comprobante extends Model
 
     function obtenerFacturaDetalle($id){
             
-        $cad = "select sfd.id, sfd.id_tipo_documento, tm.denominacion tipo_documento, sfd.numero_documento, sfd.importe_inicial, sfd.importe_retencion, sfd.importe_total, sfd.estado from sodimac_factura_detalles sfd 
-        inner join tabla_maestras tm on sfd.id_tipo_documento = tm.codigo::int and tipo ='32'
+        $cad = "select sfd.id, sfd.id_tipo_documento, tm.denominacion tipo_documento, sfd.numero_documento, sfd.importe_inicial, sfd.importe_retencion, sfd.importe_total, sfd.estado, sfd.importe_detraccion  
+        from sodimac_factura_detalles sfd 
+        inner join tabla_maestras tm on sfd.id_tipo_documento = tm.codigo::int and tipo ='76'
         where sfd.id_sodimac_factura ='".$id."'
-        order by 1 asc";
+        order by 1 asc ";
         
         $data = DB::select($cad);
         

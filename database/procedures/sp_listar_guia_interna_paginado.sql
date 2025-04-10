@@ -1,3 +1,5 @@
+-- DROP FUNCTION public.sp_listar_guia_interna_paginado(varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, refcursor);
+
 CREATE OR REPLACE FUNCTION public.sp_listar_guia_interna_paginado(p_tipo_documento character varying, p_fecha_emision character varying, p_numero_guia character varying, p_numero_documento character varying, p_empresa_destino character varying, p_placa character varying, p_empresa_trasporte character varying, p_origen character varying, p_destino character varying, p_estado character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
  RETURNS refcursor
  LANGUAGE plpgsql
@@ -15,8 +17,10 @@ begin
 
 	p_pagina=(p_pagina::Integer-1)*p_limit::Integer;
 
-	v_campos=' gi.id, gi.fecha_emision, gi.punto_partida, gi.punto_llegada, gi.fecha_traslado, gi.costo_minimo, e.razon_social destinatario, gi.ruc_destinatario, m.denominiacion marca, gi.placa, gi.constancia_inscripcion, gi.licencia_conducir, e2.razon_social id_transporte, gi.ruc_empresa_transporte ruc_transporte, tm1.denominacion tipo_documento, gi.numero_documento, tm2.denominacion motivo_traslado, gi.estado ';
-
+	v_campos=' gi.id, gi.fecha_emision, gi.punto_partida, gi.punto_llegada, gi.fecha_traslado, gi.costo_minimo, e.razon_social destinatario, gi.ruc_destinatario, m.denominiacion marca, 
+	gi.placa, gi.constancia_inscripcion, gi.licencia_conducir, e2.razon_social id_transporte, gi.ruc_empresa_transporte ruc_transporte, tm1.denominacion tipo_documento, gi.numero_documento, 
+	tm2.denominacion motivo_traslado, gi.estado, gi.guia_serie, gi.guia_numero ';
+	
 	v_tabla=' from guia_internas gi 
 	inner join empresas e on gi.id_destinatario = e.id 
 	left join marcas m on gi.marca::int = m.id

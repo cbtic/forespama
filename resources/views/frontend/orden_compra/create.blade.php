@@ -490,6 +490,7 @@ label.form-control-sm{
 							<th>Almacen Destino</th>
 							<th>Situaci&oacute;n</th>
 							<th>Vendedor</th>
+							<th>Tiene Direcci&oacute;n</th>
 							<!--<th>Estado</th>-->
                             <th>Acciones</th>
                         </tr>
