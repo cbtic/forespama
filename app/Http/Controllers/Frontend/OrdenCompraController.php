@@ -400,6 +400,7 @@ class OrdenCompraController extends Controller
         $numero_orden_compra = $datos[0]->numero_orden_compra;
         $numero_orden_compra_cliente = $datos[0]->numero_orden_compra_cliente;
         $igv=$datos[0]->igv;
+        $direccion=$datos[0]->direccion;
         
 		$year = Carbon::now()->year;
 
@@ -411,7 +412,7 @@ class OrdenCompraController extends Controller
 
 		$currentHour = Carbon::now()->format('H:i:s');
 
-		$pdf = Pdf::loadView('frontend.orden_compra.movimiento_orden_compra_pdf',compact('tipo_documento','empresa_compra','empresa_vende','fecha_orden_compra','numero_orden_compra','igv','datos_detalle','numero_orden_compra_cliente','tiendas_orden_compra_detalle','tiendas_orden_compra'));
+		$pdf = Pdf::loadView('frontend.orden_compra.movimiento_orden_compra_pdf',compact('tipo_documento','empresa_compra','empresa_vende','fecha_orden_compra','numero_orden_compra','igv','datos_detalle','numero_orden_compra_cliente','tiendas_orden_compra_detalle','tiendas_orden_compra','direccion'));
 
 		$pdf->setPaper('A4'); // Tamaño de papel (puedes cambiarlo según tus necesidades)
 

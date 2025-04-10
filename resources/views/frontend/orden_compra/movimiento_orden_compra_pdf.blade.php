@@ -191,6 +191,11 @@ $(document).ready(function() {
                         <td class="td" style ="text-align: left; width: 10%;"><b>IGV:</b></td>
                         <td class="td" style ="text-align: left; width: 20%;"><?php echo $igv;?></td>
                     </tr>
+                    <tr>
+                        <td class="td" style ="text-align: left; width: 10%;"><b>Direcci&oacute;n:</b></td>
+                        <td class="td" style ="text-align: left; width: 20%;"><?php echo $direccion; ?></td>
+                        <td class="td" style ="text-align: left; width: 10%;"></td>
+                    </tr>
                 </tbody>
             </table>
             &nbsp;
