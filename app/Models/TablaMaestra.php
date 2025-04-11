@@ -143,10 +143,10 @@ class TablaMaestra extends Model
     function getMaestroDeno($tipo, $denominacion){
 
         $cad = "select id, denominacion, codigo, abreviatura 
-                from tabla_maestras
-                where tipo='".$tipo."'
-                and denominacion ='".$denominacion."'
-                order by orden ";
+        from tabla_maestras
+        where tipo='".$tipo."'
+        and denominacion ='".$denominacion."'
+        order by orden ";
 
 		$data = DB::select($cad);
         return $data;
