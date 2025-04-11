@@ -145,7 +145,7 @@ class TablaMaestra extends Model
         $cad = "select id, denominacion, codigo, abreviatura 
                 from tabla_maestras
                 where tipo='".$tipo."'
-                and denominacion ='%".$denominacion."%'
+                and denominacion ='".$denominacion."'
                 order by orden ";
 
 		$data = DB::select($cad);

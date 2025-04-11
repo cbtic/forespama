@@ -417,6 +417,10 @@ class Comprobante extends Model
 	public function actualiza_pago_pos($p){
 		return $this->readFunctionPostgres('sp_actualiza_pago_pos',$p);
     }
+
+    public function listar_factura_sodimac_pagos_ajax($p){
+		return $this->readFunctionPostgres('sp_listar_sodimac_factura_pago_paginado',$p);
+    }
 	
 	public function readFunctionPostgres($function, $parameters = null){
 

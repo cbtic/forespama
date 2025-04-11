@@ -20,6 +20,7 @@ use App\Models\ComprobanteCuota;
 use App\Models\CajaIngreso;
 use App\Models\SodimacFactura;
 use App\Models\SodimacFacturaDetalle;
+use App\Models\ComprobanteSodimacHistorico;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
 
@@ -3997,6 +3998,34 @@ class ComprobanteController extends Controller
         return view('frontend.comprobante.create_pagos',compact('formapago','caja','medio_pago','usuario_caja'));
     }
 
+    public function listar_factura_sodimac_pagos_ajax(Request $request){
+
+		$factura_model = new Comprobante();
+		$p[]=$request->fecha_ini;
+		$p[]=$request->fecha_fin;
+        $p[]=$request->serie;
+        $p[]=$request->numero;
+        $p[]=$request->estado;
+		$p[]=$request->NumeroPagina;
+		$p[]=$request->NumeroRegistros;
+		
+		$data = $factura_model->listar_factura_sodimac_pagos_ajax($p);
+		
+		$iTotalDisplayRecords = isset($data[0]->totalrows)?$data[0]->totalrows:0;
+		//print_r($afiliacion);exit();
+
+		$result["PageStart"] = $request->NumeroPagina;
+		$result["pageSize"] = $request->NumeroRegistros;
+		$result["SearchText"] = "";
+		$result["ShowChildren"] = true;
+		$result["iTotalRecords"] = $iTotalDisplayRecords;
+		$result["iTotalDisplayRecords"] = $iTotalDisplayRecords;
+		$result["aaData"] = $data;
+
+		echo json_encode($result);
+
+	}
+
     function extension($filename){$file = explode(".",$filename); return strtolower(end($file));}
 
     public function upload_factura_sodimac(Request $request){
@@ -4144,6 +4173,51 @@ class ComprobanteController extends Controller
         $sodimac_factura_detalle = $comprobante_model->obtenerFacturaDetalle($id);
 
 		return view('frontend.comprobante.modal_factura_sodimac_detalle',compact('id','sodimac_factura_detalle'));
+
+    }
+
+    public function modal_factura_historico($id){
+		
+        $tablaMaestra_model = new TablaMaestra;
+        $empresa_model = new Empresa;
+
+        $moneda = $tablaMaestra_model->getMaestroByTipo(1);
+        $empresa = $empresa_model->getEmpresaAll();
+
+
+		return view('frontend.comprobante.modal_factura_historico',compact('id','moneda','empresa'));
+
+    }
+
+    public function send_factura_historico(Request $request){
+
+		$id_user = Auth::user()->id;
+
+		if($request->id > 0 ){
+            $comprobante_sodimac_historico = ComprobanteSodimacHistorico::find($request->id_datos_pedido);
+		}else{
+			$comprobante_sodimac_historico = new ComprobanteSodimacHistorico;
+		}
+
+        $empresa = Empresa::find($request->empresa);
+		
+		$comprobante_sodimac_historico->serie = $request->serie;
+		$comprobante_sodimac_historico->numero = $request->numero;
+		$comprobante_sodimac_historico->tipo = 'FT';
+		$comprobante_sodimac_historico->fecha = $request->fecha;
+		$comprobante_sodimac_historico->destinatario = $request->empresa_nombre;
+		$comprobante_sodimac_historico->direccion = $request->direccion;
+		$comprobante_sodimac_historico->cod_tributario = $empresa->ruc;
+		$comprobante_sodimac_historico->subtotal = $request->subtotal;
+		$comprobante_sodimac_historico->impuesto = $request->impuesto;
+		$comprobante_sodimac_historico->total = $request->total;
+		$comprobante_sodimac_historico->id_moneda = $request->moneda;
+		$comprobante_sodimac_historico->moneda = $request->moneda_nombre;
+		$comprobante_sodimac_historico->observacion = "";
+		$comprobante_sodimac_historico->monto_retencion = $request->retencion;
+		$comprobante_sodimac_historico->estado = 1;
+		$comprobante_sodimac_historico->id_usuario_inserta = $id_user;
+		$comprobante_sodimac_historico->save();
 
     }
 

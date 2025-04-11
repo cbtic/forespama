@@ -349,17 +349,17 @@ label.form-control-sm{
 
                                 <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
                                     <div class="form-group">
-                                        <input class="form-control form-control-sm" id="fecha_ini" name="fecha_ini" value="<?php echo date("d-m-Y") ?>" placeholder="Fecha Inicio">
+                                        <input class="form-control form-control-sm" id="fecha_ini_bus" name="fecha_ini_bus" value="<?php echo date("d-m-Y") ?>" placeholder="Fecha Inicio">
                                     </div>
                                 </div>
                                 <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
                                     <div class="form-group">
-                                        <input class="form-control form-control-sm" id="fecha_fin" name="fecha_fin" value="" placeholder="Fecha fin">
+                                        <input class="form-control form-control-sm" id="fecha_fin_bus" name="fecha_fin_bus" value="" placeholder="Fecha fin">
                                     </div>
                                 </div>
                                 <div class="col-lg-2 col-md-12 col-sm-12 col-xs-12">
                                     <div class="form-group">
-                                        <select name="tipo_documento" id="tipo_documento" class="form-control form-control-sm" onchange="validaTipoDocumento()">
+                                        <select name="tipo_documento_bus" id="tipo_documento_bus" class="form-control form-control-sm" onchange="validaTipoDocumento()">
                                             <option value=""> --Seleccionar Tipo Documento--</option>
                                             <option selected="selected" value="FT">
                                                 <?php echo "Factura" ?></option>
@@ -378,12 +378,12 @@ label.form-control-sm{
                                 </div>
                                 <div class="col-lg-1 col-md-12 col-sm-12 col-xs-12">
                                     <div class="form-group">
-                                        <input type="text" name="serie" id="serie" value="{{old('clinum')}}" placeholder="Serie" class="form-control form-control-sm">
+                                        <input type="text" name="serie_bus" id="serie_bus" value="{{old('clinum')}}" placeholder="Serie" class="form-control form-control-sm">
                                     </div>
                                 </div>
                                 <div class="col-lg-1 col-md-12 col-sm-12 col-xs-12">
                                     <div class="form-group">
-                                        <input type="text" name="numero" id="numero" value="{{old('clinum')}}" placeholder="N&uacute;mero" class="form-control form-control-sm">
+                                        <input type="text" name="numero_bus" id="numero_bus" value="{{old('clinum')}}" placeholder="N&uacute;mero" class="form-control form-control-sm">
                                     </div>
                                 </div>
                                 <!--<div class="col-lg-1 col-md-12 col-sm-12 col-xs-12">
@@ -441,18 +441,9 @@ label.form-control-sm{
 
                                 <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12" style="padding-right:0px">
                                     <input class="btn btn-warning pull-rigth" value="Buscar" type="button" id="btnBuscar" />
-<!--
-                                <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12" style="padding-top:30px">
-                                    <input class="btn btn-success pull-rigth" value="Nuevo" type="button" id="btnNuevo1" data-toggle="modal" data-target="#exampleModal2" style="margin-left:15px" />
+                                
+						            <input class="btn btn-success pull-rigth" value="Nuevo" type="button" id="btnNuevo" style="margin-left:10px" />
 
-                                </div>
-                                    -->
-                                    @hasanyrole('Administrator|Administracion PAMA|Caja')
-                                    <button id="btnExcel" type="button" class="btn btn-secondary pull-rigth" style="margin-left:15px;" onclick="reporteFacturaSodimac()">
-                                        <i class="fas fa-download"></i> Exportar Excel
-                                        <!--<img src="/img/icono_carro.png" alt="Carro" style="width: 16px; height: 16px; margin-left: 5px;">-->
-                                    </button>
-                                    @endhasanyrole
                                 </div>
                                 <!--
 					@hasanyrole('contabilidad')
@@ -467,7 +458,7 @@ label.form-control-sm{
                             <div class="card-body">
 
                                 <div class="table-responsive">
-                                    <table id="tblFacturaSodimac" class="table table-hover table-sm">
+                                    <table id="tblFacturaSodimacPagos" class="table table-hover table-sm">
                                         <thead>
                                             <tr style="font-size:13px">
                                                 <th>Id</th>
@@ -481,6 +472,7 @@ label.form-control-sm{
                                                 <th class="text-right">Valor Venta</th>
                                                 <th class="text-right">IGV</th>
                                                 <th class="text-right">Importe Total</th>
+                                                <th>N&uacute;mero Documento Sodimac</th>
                                             </tr>
                                         </thead>
                                         <tbody style="font-size:13px">
@@ -533,12 +525,11 @@ label.form-control-sm{
                         </div>                            
                     </div>                    
 
-
                     @endsection
 
                     @push('after-scripts')
 
-                    <script src="{{ asset('js/FacturaSodimacLista.js') }}"></script>
+                    <script src="{{ asset('js/FacturaSodimacPagos.js') }}"></script>
                     @endpush
 
 <script>

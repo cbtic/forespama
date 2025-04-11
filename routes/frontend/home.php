@@ -621,4 +621,7 @@ Route::post('comprobante/listar_factura_sodimac_ajax', [ComprobanteController::c
 Route::get('comprobante/modal_factura_sodimac_detalle/{id}', [ComprobanteController::class, 'modal_factura_sodimac_detalle'])->name('comprobante.modal_factura_sodimac_detalle');
 Route::post('comprobante/upload_factura_sodimac', [ComprobanteController::class, 'upload_factura_sodimac'])->name('comprobante.upload_factura_sodimac');
 Route::get('comprobante/importar_archivo/{archivo}', [ComprobanteController::class, 'importar_archivo'])->name('comprobante.importar_archivo');
+Route::post('comprobante/listar_factura_sodimac_pagos_ajax', [ComprobanteController::class, 'listar_factura_sodimac_pagos_ajax'])->name('comprobante.listar_factura_sodimac_pagos_ajax');
+Route::get('comprobante/modal_factura_historico/{id}', [ComprobanteController::class, 'modal_factura_historico'])->name('comprobante.modal_factura_historico');
+Route::post('comprobante/send_factura_historico', [ComprobanteController::class, 'send_factura_historico'])->name('comprobante.send_factura_historico');
 

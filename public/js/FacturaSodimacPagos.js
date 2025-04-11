@@ -9,110 +9,31 @@ $(document).ready(function () {
     
 	datatablenew();
 
-	$('#fecha_ini').datepicker({
+	$('#fecha_ini_bus').datepicker({
         autoclose: true,
 		format: 'dd-mm-yyyy',
 		changeMonth: true,
 		changeYear: true,
     });
 
-	$('#fecha_fin').datepicker({
+	$('#fecha_fin_bus').datepicker({
         autoclose: true,
         format: 'dd-mm-yyyy',
 		changeMonth: true,
 		changeYear: true,
     });
 
-	$('#fecha_inicio_desde').datepicker({
-        autoclose: true,
-		format: 'dd-mm-yyyy',
-		changeMonth: true,
-		changeYear: true,
-    });
-
-	$('#fecha_inicio_hasta').datepicker({
-        autoclose: true,
-        format: 'dd-mm-yyyy',
-		changeMonth: true,
-		changeYear: true,
-    });
-
-	/*
-    $('#tblAlquiler').dataTable({
-    	"language": {
-    	"emptyTable": "No se encontraron resultados"
-    	}
-	});
-	*/
-	/*
-	$('#tblAlquiler').dataTable( {
-            "language": {
-                "sProcessing":     "Procesando...",
-                "sLengthMenu":     "Mostrar _MENU_ registros",
-                "sZeroRecords":    "No se encontraron resultados",
-                "sEmptyTable":     "Ningun dato disponible en esta tabla",
-                "sInfo":           "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
-                "sInfoEmpty":      "Mostrando registros del 0 al 0 de un total de 0 registros",
-                "sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
-                "sInfoPostFix":    "",
-                "sSearch":         "Buscar:",
-                "sUrl":            "",
-                "sInfoThousands":  ",",
-                "sLoadingRecords": "Cargando...",
-                "oPaginate": {
-                        "sFirst":    "Primero",
-                        "sLast":     "ultimo",
-                        "sNext":     "Siguiente",
-                        "sPrevious": "Anterior"
-                },
-                "oAria": {
-                        "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
-                        "sSortDescending": ": Activar para ordenar la columna de manera descendente"
-                }
-            }
-        } );
-	*/
-
-
-	$(function() {
-		$('#modalPersonaForm #apellido_paterno').keyup(function() {
-			this.value = this.value.toLocaleUpperCase();
-		});
-	});
-	$(function() {
-		$('#modalPersonaForm #apellido_materno').keyup(function() {
-			this.value = this.value.toLocaleUpperCase();
-		});
-	});
-	$(function() {
-		$('#modalPersonaForm #nombres').keyup(function() {
-			this.value = this.value.toLocaleUpperCase();
-		});
+    $('#btnNuevo').click(function () {
+		modalFacturaHistorico(0);
 	});
 
-
-	$(function() {
-		$('#modalPersonaTitularForm #apellido_paterno').keyup(function() {
-			this.value = this.value.toLocaleUpperCase();
-		});
-	});
-	$(function() {
-		$('#modalPersonaTitularForm #apellido_materno').keyup(function() {
-			this.value = this.value.toLocaleUpperCase();
-		});
-	});
-	$(function() {
-		$('#modalPersonaTitularForm #nombres').keyup(function() {
-			this.value = this.value.toLocaleUpperCase();
-		});
-	});
 });
 
 function datatablenew(){
 
-    var oTable1 = $('#tblFacturaSodimac').dataTable({
+    var oTable1 = $('#tblFacturaSodimacPagos').dataTable({
         "bServerSide": true,
-        "sAjaxSource": "/comprobante/listar_comprobante_sodimac_ajax",
+        "sAjaxSource": "/comprobante/listar_factura_sodimac_pagos_ajax",
         "bProcessing": true,
         "sPaginationType": "full_numbers",
         //"paging":false,
@@ -133,18 +54,17 @@ function datatablenew(){
             $('[data-toggle="tooltip"]').tooltip();
         },
         
-
         "fnServerData": function (sSource, aoData, fnCallback, oSettings) {
 
             var sEcho           = aoData[0].value;
             var iNroPagina 	= parseFloat(fn_util_obtieneNroPagina(aoData[3].value, aoData[4].value)).toFixed();
             var iCantMostrar 	= aoData[4].value;
 
-			var fecha_ini = $('#fecha_ini').val();
-            var fecha_fin = $('#fecha_fin').val();
-			var tipo_documento = $('#tipo_documento').val();
-            var serie = $('#serie').val();
-            var numero = $('#numero').val();
+			var fecha_ini = $('#fecha_ini_bus').val();
+            var fecha_fin = $('#fecha_fin_bus').val();
+			var tipo_documento = $('#tipo_documento_bus').val();
+            var serie = $('#serie_bus').val();
+            var numero = $('#numero_bus').val();
             
 			var _token = $('#_token').val();
             oSettings.jqXHR = $.ajax({
@@ -300,6 +220,15 @@ function datatablenew(){
                 "className": "text-right",
                 "aTargets": [10]
                 },
+                {
+                "mRender": function (data, type, row) {
+                    var numero_documento_sodimac = "";
+                    if(row.numero_documento_sodimac!= null)numero_documento_sodimac = row.numero_documento_sodimac;
+                    return numero_documento_sodimac;
+                },
+                "bSortable": false,
+                "aTargets": [11]
+                },
 				   		          
             ]
 
@@ -380,5 +309,19 @@ function modalLiquidacion(id){
 
 }
 
+function modalFacturaHistorico(id){
 
+    $(".modal-dialog").css("width","80%");
+	$('#openOverlayOpc').modal('show');
+	$('#openOverlayOpc .modal-body').css('height', 'auto');
+
+	$.ajax({
+			url: "/comprobante/modal_factura_historico/"+id,
+			type: "GET",
+			success: function (result) {
+					$("#diveditpregOpc").html(result);
+			}
+	});
+
+}
 
