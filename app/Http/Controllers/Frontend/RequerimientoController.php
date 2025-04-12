@@ -314,6 +314,7 @@ class RequerimientoController extends Controller
             if($marca[$index]!=null && $marca[$index] !=0){
 				$orden_compra_detalle->id_marca = (int)$marca[$index];
 			}
+            
             $orden_compra_detalle->estado = 1;
             $orden_compra_detalle->cerrado = 1;
             $orden_compra_detalle->id_usuario_inserta = $id_user;
