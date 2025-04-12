@@ -99,7 +99,21 @@ function datatablenew(){
                         {},
         ],
 		"dom": '<"top">rt<"bottom"flpi><"clear">',
-        "fnDrawCallback": function(json) {
+        "fnDrawCallback": function(settings) {
+
+			let totalImporte = 0;
+
+			settings.aoData.forEach(function(row) {
+				let importe = row._aData.total;
+				if (importe) {
+					totalImporte += parseFloat(importe);
+				}
+			});
+
+			$('#tblOrdenCompra tfoot tr').html('<td colspan="12"><b>Total</b></td><td><b>' + totalImporte.toFixed(2) + '</b></td><td colspan="2"></td>');
+
+            //$('#tblOrdenCompra tfoot th.text-right').text(totalImporte.toFixed(2));
+
             $('[data-toggle="tooltip"]').tooltip();
         },
 
@@ -278,6 +292,17 @@ function datatablenew(){
 					"aTargets": [11]
 				},
 				{
+				"mRender": function (data, type, row) {
+					var total = "";
+					if(row.total!= null)total = parseFloat(row.total).toFixed(2);
+					return total;
+					
+				},
+				"bSortable": true,
+				"aTargets": [12],
+				"className": "text-right",
+				},
+				{
 					"mRender": function (data, type, row) {
 						var estado = "";
 						var clase = "";
@@ -329,7 +354,7 @@ function datatablenew(){
 						return html;
 					},
 					"bSortable": false,
-					"aTargets": [12],
+					"aTargets": [13],
 				},
 
             ]

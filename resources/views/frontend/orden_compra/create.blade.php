@@ -473,30 +473,36 @@ label.form-control-sm{
 					</div>
 				</div>
 				
-                <div class="card-body">				
+                <div class="card-body">
 
-                    <div class="table-responsive">
+                    <div id="divOrdenCompra" class="table-responsive">
                     <table id="tblOrdenCompra" class="table table-hover table-sm">
                         <thead>
-                        <tr style="font-size:13px">
-                            <th>Id</th>
-							<th>Tipo Documento</th>
-							<th>Empresa Compra</th>
-							<th>N° OC Cliente</th>
-							<th>Empresa Vende</th>
-                            <th>Fecha</th>
-							<th>N&uacute;mero OC</th>
-							<th>Almacen Origen</th>
-							<th>Almacen Destino</th>
-							<th>Situaci&oacute;n</th>
-							<th>Vendedor</th>
-							<th>Tiene Direcci&oacute;n</th>
-							<!--<th>Estado</th>-->
-                            <th>Acciones</th>
-                        </tr>
+							<tr style="font-size:13px">
+								<th>Id</th>
+								<th>Tipo Documento</th>
+								<th>Empresa Compra</th>
+								<th>N° OC Cliente</th>
+								<th>Empresa Vende</th>
+								<th>Fecha</th>
+								<th>N&uacute;mero OC</th>
+								<th>Almacen Origen</th>
+								<th>Almacen Destino</th>
+								<th>Situaci&oacute;n</th>
+								<th>Vendedor</th>
+								<th>Tiene Direcci&oacute;n</th>
+								<th style ="text-align:right">Total</th>
+								<!--<th>Estado</th>-->
+								<th>Acciones</th>
+							</tr>
                         </thead>
                         <tbody>
                         </tbody>
+						<tfoot>
+						<tr style="font-size:13px">
+							
+						</tr>
+						</tfoot>
                     </table>
                 </div><!--table-responsive-->
                 </form>

@@ -325,7 +325,7 @@ class RequerimientoController extends Controller
         }
 
         $requerimiento->cerrado = $request->cerrado;
-        $requerimiento->estado_atencion = 3;
+        $requerimiento->estado_atencion = $request->estado_atencion;
         $requerimiento->save();
         return response()->json(['id' => $orden_compra->id]);
     }
