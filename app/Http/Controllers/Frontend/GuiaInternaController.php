@@ -182,6 +182,9 @@ class GuiaInternaController extends Controller
         $guia_interna->id_tipo_documento = $request->tipo_documento;
         $guia_interna->numero_documento = $request->numero_documento;
         $guia_interna->id_motivo_traslado = $request->motivo_traslado;
+        if($request->motivo_traslado=='13'){
+            $guia_interna->descripcion_motivo = $request->descripcion_motivo;
+        }
         $guia_interna->id_ubigeo_partida = $request->distrito_partida;
         $guia_interna->id_ubigeo_llegada = $request->distrito_llegada;
         $guia_interna->guia_serie = $request->serie_guia;
@@ -285,7 +288,11 @@ class GuiaInternaController extends Controller
             $guia->guia_cod_estab_partida = $request->punto_partida;
             $guia->guia_partida_direccion = $request->punto_partida_descripcion;
         }
-        
+
+        if($request->motivo_traslado=='13'){
+            $guia->guia_desc_motivo = $request->descripcion_motivo;
+        }
+
         $guia->save();
 
         $array_guia_interna_detalle = array();
@@ -337,8 +344,6 @@ class GuiaInternaController extends Controller
                 }
             }
         }
-
-
 
         return response()->json(['id' => $guia_interna->id]);
     }

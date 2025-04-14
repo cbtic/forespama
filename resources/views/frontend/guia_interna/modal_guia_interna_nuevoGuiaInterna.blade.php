@@ -254,12 +254,9 @@ $(document).ready(function() {
     $('#empresa').select2({ width: '100%' });
     $('#conductor').select2({ width: '100%' });
 
-    //$("#destinatario").select2({ width: '100%' });
-
-    //$("#transporte_razon_social").select2({ width: '100%' });
-
     obtenerProvinciaPartida();
     obtenerProvinciaLlegada();
+    obtenerMotivo();
 
     if($('#id').val()>0){
 		obtenerDatosUbigeoPartida();
@@ -282,6 +279,7 @@ $(document).ready(function() {
     $('#empresa_destinatario_input').hide();
     $('#nombre_destinatario_label').hide();
     $('#nombre_destinatario_input').hide();
+    $('#div_descripcion_motivo').hide()
 
 });
 
@@ -553,6 +551,7 @@ function fn_save_guia_interna(){
     var provincia_llegada = $('#provincia_llegada').val();
     var distrito_llegada = $('#distrito_llegada').val();
     var peso = $('#peso').val();
+    var descripcion_motivo = $('#descripcion_motivo').val();
 
     if(fecha_emision==""){msg+="Ingrese la Fecha de Emision <br>";}
     if(punto_partida==""){msg+="Ingrese el Punto de Partida <br>";}
@@ -574,7 +573,11 @@ function fn_save_guia_interna(){
     if(departamento_llegada==""){msg+="Ingrese el Departamento de Llegada <br>";}   
     if(provincia_llegada==""){msg+="Ingrese la Provincia de Llegada <br>";}   
     if(distrito_llegada==""){msg+="Ingrese el Distrito de Llegada <br>";}   
-    if(peso==""){msg+="Ingrese el Peso <br>";}   
+    if(peso==""){msg+="Ingrese el Peso <br>";}
+
+    if(motivo_traslado==13 && descripcion_motivo==""){
+        msg+="Ingrese la Descripcion del Traslado <br>";
+    }
 
     if ($('#tblGuiaInternaDetalle tbody tr').length == 0) {
         msg += "No se ha agregado ningún producto <br>";
@@ -1535,6 +1538,18 @@ function obtenerDistritoPartida_edit(callback){
 	});
 }
 
+function obtenerMotivo(){
+
+    var motivo_traslado = $('#motivo_traslado').val();
+
+    if(motivo_traslado==13){
+        $('#div_descripcion_motivo').show();
+    }else{
+        $('#descripcion_motivo').val('');
+        $('#div_descripcion_motivo').hide();
+    }
+}
+
 </script>
 
 
@@ -1758,7 +1773,7 @@ function obtenerDistritoPartida_edit(callback){
                                     Motivo Traslado
                                 </div>
                                 <div class="col-lg-5">
-                                    <select name="motivo_traslado" id="motivo_traslado" class="form-control form-control-sm" onchange="cambiarPuntoLlegada()">
+                                    <select name="motivo_traslado" id="motivo_traslado" class="form-control form-control-sm" onchange="cambiarPuntoLlegada(); obtenerMotivo();">
                                         <option value="">--Seleccionar--</option>
                                         <?php 
                                         foreach ($motivo_traslado as $row){?>
@@ -1767,6 +1782,16 @@ function obtenerDistritoPartida_edit(callback){
                                         }
                                         ?>
                                     </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4" id="div_descripcion_motivo">
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    Descripci&oacute;n Motivo
+                                </div>
+                                <div class="col-lg-5">
+                                    <input id="descripcion_motivo" name="descripcion_motivo" on class="form-control form-control-sm"  value="<?php if($id>0){echo $guia_interna->descripcion_motivo;}?>" type="text">
                                 </div>
                             </div>
                         </div>
