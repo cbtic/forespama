@@ -100,9 +100,9 @@ function datatablenew(){
                 },
 				{
                 "mRender": function (data, type, row) {
-                    var ruc = "";
-					if(row.ruc!= null)ruc = row.ruc;
-					return ruc;
+                    var cod_tributario = "";
+					if(row.cod_tributario!= null)cod_tributario = row.cod_tributario;
+					return cod_tributario;
                 },
                 "bSortable": false,
                 "aTargets": [1]
@@ -229,11 +229,19 @@ function datatablenew(){
                 "bSortable": false,
                 "aTargets": [11]
                 },
-				   		          
+
+                {
+                "mRender": function (data, type, row) {
+                    var importe_total = "";
+                    if(row.importe_total!= null)importe_total = row.importe_total;
+                    return importe_total;
+                },
+                "bSortable": false,
+                "aTargets": [12],
+                "className": 'text-right'
+                },
             ]
-
     });
-
 }
 
 function fn_ListarBusqueda() {

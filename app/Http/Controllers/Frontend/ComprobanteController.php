@@ -4003,9 +4003,10 @@ class ComprobanteController extends Controller
 		$factura_model = new Comprobante();
 		$p[]=$request->fecha_ini;
 		$p[]=$request->fecha_fin;
+		$p[]="";
         $p[]=$request->serie;
         $p[]=$request->numero;
-        $p[]=$request->estado;
+        //$p[]=$request->estado;
 		$p[]=$request->NumeroPagina;
 		$p[]=$request->NumeroRegistros;
 		

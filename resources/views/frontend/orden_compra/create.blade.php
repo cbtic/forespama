@@ -499,9 +499,11 @@ label.form-control-sm{
                         <tbody>
                         </tbody>
 						<tfoot>
-						<tr style="font-size:13px">
-							
-						</tr>
+							<tr style="font-size:13px">
+								<td colspan="12"><b>Total:</b></td>
+								<td></td>
+								<td></td>
+							</tr>
 						</tfoot>
                     </table>
                 </div><!--table-responsive-->

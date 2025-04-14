@@ -473,6 +473,7 @@ label.form-control-sm{
                                                 <th class="text-right">IGV</th>
                                                 <th class="text-right">Importe Total</th>
                                                 <th>N&uacute;mero Documento Sodimac</th>
+                                                <th class="text-right">Total Sodimac</th>
                                             </tr>
                                         </thead>
                                         <tbody style="font-size:13px">
