@@ -97,8 +97,9 @@ class OrdenCompraController extends Controller
 		$orden_compra_model = new OrdenCompra;
 		$p[]=$request->tipo_documento;
         $p[]=$request->empresa_compra;
-        $p[]=$request->empresa_vende;
-        $p[]=$request->fecha;
+        $p[]="";//$request->empresa_vende;
+        $p[]=$request->fecha_inicio;
+        $p[]=$request->fecha_fin;
         $p[]=$request->numero_orden_compra;
         $p[]=$request->numero_orden_compra_cliente;
         $p[]=$request->situacion;

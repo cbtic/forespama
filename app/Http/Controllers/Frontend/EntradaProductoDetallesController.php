@@ -48,6 +48,7 @@ class EntradaProductoDetallesController extends Controller
         $entrada_producto->id_seccion = $request->seccion;
         $entrada_producto->id_marca = $request->marca;
 		$entrada_producto->estado = 1;
+        $entrada_producto->id_usuario_inserta = $id_user;
 		$entrada_producto->save();
 
     }

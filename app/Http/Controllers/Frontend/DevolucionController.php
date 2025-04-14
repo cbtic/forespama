@@ -157,6 +157,7 @@ class DevolucionController extends Controller
 		//$salida_producto->id_usuario_recibe = $id_user;
 		//$salida_producto->id_persona_recibe = $request->persona_recibe;
 		$salida_producto->tipo_devolucion = "2";
+		$salida_producto->id_usuario_inserta = $id_user;
 		$salida_producto->save();
 
 		$array_salida_detalle = array();

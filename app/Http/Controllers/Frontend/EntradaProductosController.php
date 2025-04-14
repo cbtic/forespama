@@ -190,6 +190,7 @@ class EntradaProductosController extends Controller
             $entrada_producto->id_usuario_recibe = $id_user;
             $entrada_producto->estado = 1;
             $entrada_producto->id_orden_compra = $request->id_orden_compra;
+            $entrada_producto->id_usuario_inserta = $id_user;
             $entrada_producto->save();
 
             $valida_estado = true;
@@ -426,6 +427,7 @@ class EntradaProductosController extends Controller
                 $salida_producto->id_usuario_recibe = $id_user;
                 $salida_producto->id_persona_recibe = $request->persona_recibe;
                 $salida_producto->tipo_devolucion = "1";
+                $salida_producto->id_usuario_inserta = $id_user;
                 $salida_producto->save();
 
                 $valida_estado = true;
@@ -597,6 +599,7 @@ class EntradaProductosController extends Controller
                 $salida_producto2->id_usuario_recibe = $id_user;
                 $salida_producto2->id_persona_recibe = $request->persona_recibe;
                 $salida_producto2->tipo_devolucion = "3";
+                $salida_producto2->id_usuario_inserta = $id_user;
                 $salida_producto2->save();
 
                 $valida_estado = true;

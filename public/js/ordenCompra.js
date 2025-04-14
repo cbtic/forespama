@@ -57,7 +57,15 @@ $(document).ready(function () {
 		}
 	});
 
-	$('#fecha_bus').datepicker({
+	$('#fecha_inicio_bus').datepicker({
+        autoclose: true,
+		format: 'yyyy-mm-dd',
+		changeMonth: true,
+		changeYear: true,
+        language: 'es'
+    });
+
+	$('#fecha_fin_bus').datepicker({
         autoclose: true,
 		format: 'yyyy-mm-dd',
 		changeMonth: true,
@@ -126,7 +134,8 @@ function datatablenew(){
             var tipo_documento = $('#tipo_documento_bus').val();
 			var empresa_compra = $('#empresa_compra_bus').val();
 			var empresa_vende = $('#empresa_vende_bus').val();
-			var fecha = $('#fecha_bus').val();
+			var fecha_inicio = $('#fecha_inicio_bus').val();
+			var fecha_fin = $('#fecha_fin_bus').val();
 			var numero_orden_compra = $('#numero_orden_compra_bus').val();
 			var situacion = $('#situacion_bus').val();
 			var almacen_origen = $('#almacen_origen_bus').val();
@@ -143,7 +152,7 @@ function datatablenew(){
                 "url": sSource,
                 "data":{NumeroPagina:iNroPagina,NumeroRegistros:iCantMostrar,
 						tipo_documento:tipo_documento,empresa_compra:empresa_compra,empresa_vende:empresa_vende,
-						fecha:fecha,numero_orden_compra:numero_orden_compra,almacen_origen:almacen_origen,
+						fecha_inicio:fecha_inicio,fecha_fin:fecha_fin,numero_orden_compra:numero_orden_compra,almacen_origen:almacen_origen,
 						almacen_destino:almacen_destino,situacion:situacion,estado:estado,numero_orden_compra_cliente:numero_orden_compra_cliente,
 						vendedor:vendedor,
 						_token:_token
