@@ -494,7 +494,8 @@ function DescargarArchivosExcel(){
 	var tipo_documento = $('#tipo_documento_bus').val();
 	var empresa_compra = $('#empresa_compra_bus').val();
 	var empresa_vende = $('#empresa_vende_bus').val();
-	var fecha = $('#fecha_bus').val();
+	var fecha_inicio = $('#fecha_inicio_bus').val();
+	var fecha_fin = $('#fecha_fin_bus').val();
 	var numero_orden_compra = $('#numero_orden_compra_bus').val();
 	var numero_orden_compra_cliente = $('#numero_orden_compra_cliente_bus').val();
 	var almacen_origen = $('#almacen_origen_bus').val();
@@ -506,7 +507,8 @@ function DescargarArchivosExcel(){
 	if (tipo_documento == "")tipo_documento = 0;
 	if (empresa_compra == "")empresa_compra = 0;
 	if (empresa_vende == "")empresa_vende = 0;
-	if (fecha == "")fecha = "0";
+	if (fecha_inicio == "")fecha_inicio = "0";
+	if (fecha_fin == "")fecha_fin = "0";
 	if (numero_orden_compra == "")numero_orden_compra = "0";
 	if (numero_orden_compra_cliente == "")numero_orden_compra_cliente = "0";
 	if (almacen_origen == "")almacen_origen = 0;
@@ -515,7 +517,7 @@ function DescargarArchivosExcel(){
 	if (estado == "")estado = 0;
 	if (vendedor == "")vendedor = 0;
 	
-	location.href = '/orden_compra/exportar_listar_orden_compra/'+tipo_documento+'/'+empresa_compra+'/'+empresa_vende+'/'+fecha+'/'+numero_orden_compra+'/'+numero_orden_compra_cliente+'/'+almacen_origen+'/'+almacen_destino+'/'+situacion+'/'+estado+'/'+vendedor;
+	location.href = '/orden_compra/exportar_listar_orden_compra/'+tipo_documento+'/'+empresa_compra+'/'+empresa_vende+'/'+fecha_inicio+'/'+fecha_fin+'/'+numero_orden_compra+'/'+numero_orden_compra_cliente+'/'+almacen_origen+'/'+almacen_destino+'/'+situacion+'/'+estado+'/'+vendedor;
 }
 
 function generarLPN(){

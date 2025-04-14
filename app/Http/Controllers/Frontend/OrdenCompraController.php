@@ -863,14 +863,15 @@ class OrdenCompraController extends Controller
 
     }
 
-    public function exportar_listar_orden_compra($tipo_documento, $empresa_compra, $empresa_vende, $fecha, $numero_orden_compra, $numero_orden_compra_cliente, $almacen_origen, $almacen_destino, $situacion, $estado, $vendedor) {
+    public function exportar_listar_orden_compra($tipo_documento, $empresa_compra, $empresa_vende, $fecha_inicio, $fecha_fin, $numero_orden_compra, $numero_orden_compra_cliente, $almacen_origen, $almacen_destino, $situacion, $estado, $vendedor) {
 
         $id_user = Auth::user()->id;
         
 		if($tipo_documento==0)$tipo_documento = "";
         if($empresa_compra==0)$empresa_compra = "";
         if($empresa_vende==0)$empresa_vende = "";
-        if($fecha=="0")$fecha = "";
+        if($fecha_inicio=="0")$fecha_inicio = "";
+        if($fecha_fin=="0")$fecha_fin = "";
         if($numero_orden_compra=="0")$numero_orden_compra = "";
         if($numero_orden_compra_cliente=="0")$numero_orden_compra_cliente = "";
         if($almacen_origen==0)$almacen_origen = "";
@@ -882,8 +883,9 @@ class OrdenCompraController extends Controller
         $orden_compra_model = new OrdenCompra;
 		$p[]=$tipo_documento;
         $p[]=$empresa_compra;
-        $p[]=$empresa_vende;
-        $p[]=$fecha;
+        $p[]="";//$empresa_vende;
+        $p[]=$fecha_inicio;
+        $p[]=$fecha_fin;
         $p[]=$numero_orden_compra;
         $p[]=$numero_orden_compra_cliente;
         $p[]=$situacion;
@@ -899,14 +901,14 @@ class OrdenCompraController extends Controller
 		$variable = [];
 		$n = 1;
 
-		array_push($variable, array("N°","Id","Tipo Documento","Empresa Compra","N° OC Cliente","Empresa Vende","Fecha","Numero OC","Almacen Origen","Almacen Destino","Situacion","Vendedor","Estado"));
+		array_push($variable, array("N°","Id","Tipo Documento","Empresa Compra","N° OC Cliente","Empresa Vende","Fecha","Numero OC","Almacen Origen","Almacen Destino","Situacion","Vendedor","Total","Estado"));
 		
 		foreach ($data as $r) {
 
             if($r->estado==1){$estado='ACTIVO';}
             if($r->estado==0){$estado='INACTIVO';}
 
-			array_push($variable, array($n++,$r->id, $r->tipo_documento, $r->cliente, $r->numero_orden_compra_cliente, $r->empresa_vende, $r->fecha_orden_compra, $r->numero_orden_compra, $r->almacen_origen, $r->almacen_destino, $r->cerrado, $r->vendedor, $estado));
+			array_push($variable, array($n++,$r->id, $r->tipo_documento, $r->cliente, $r->numero_orden_compra_cliente, $r->empresa_vende, $r->fecha_orden_compra, $r->numero_orden_compra, $r->almacen_origen, $r->almacen_destino, $r->cerrado, $r->vendedor, number_format($r->total, 2), $estado));
 		}
 		
 		$export = new InvoicesExport([$variable]);
@@ -1230,7 +1232,7 @@ class InvoicesExport implements FromArray, WithHeadings, WithStyles
 
     public function headings(): array
     {
-        return ["N", "Id", "Tipo Documento", "Empresa Compra", "N° OC Cliente", "Empresa Vende", "Fecha", "Numero OC", "Almacen Origen", "Almacen Destino", "Situacion", "Vendedor", "Estado"];
+        return ["N", "Id", "Tipo Documento", "Empresa Compra", "N° OC Cliente", "Empresa Vende", "Fecha", "Numero OC", "Almacen Origen", "Almacen Destino", "Situacion", "Vendedor", "Total", "Estado"];
     }
 
 	public function styles(Worksheet $sheet)
