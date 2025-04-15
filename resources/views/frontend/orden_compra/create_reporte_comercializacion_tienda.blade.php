@@ -380,9 +380,9 @@ label.form-control-sm{
 						<!--<input class="btn btn-success pull-rigth" value="Nuevo" type="button" id="btnNuevo" style="margin-left:10px" />
 						<input class="btn btn-secondary pull-rigth" value="Excel" name="excel" type="button" id="btnDescargar" style="margin-left:15px;margin-right:10px;"/>-->
 						
-						<!--<button id="btnDescargar" type="button" class="btn btn-secondary pull-rigth" style="margin-left:10px;">
+						<button id="btnDescargar" type="button" class="btn btn-secondary pull-rigth" style="margin-left:10px;">
 							<i class="fas fa-download"></i> Excel
-						</button>-->
+						</button>
 					</div>
 				</div>
 				

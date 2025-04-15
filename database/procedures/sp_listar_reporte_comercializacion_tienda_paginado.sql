@@ -19,19 +19,16 @@ begin
 	p_pagina=(p_pagina::Integer-1)*p_limit::Integer;
 
 	v_campos=' distinct oc.id, e.razon_social, oc.numero_orden_compra_cliente, oc.numero_orden_compra pedido, to_char(oc.fecha_orden_compra,''dd-mm-yyyy'') fecha_orden_compra, to_char(oc.fecha_vencimiento,''dd-mm-yyyy'') fecha_vencimiento, p.codigo, 
-	p.denominacion producto, ocd.precio, ocd.cantidad_requerida, coalesce(ocd.cantidad_despacho, 0) cantidad_despacho, coalesce((ocd.cantidad_requerida - ocd.cantidad_despacho), 0) cantidad_cancelada, ocd.cerrado, u."name" vendedor, 
-	(select string_agg(DISTINCT t.denominacion, '', '') AS tiendas from tienda_detalle_orden_compras tdoc2 
-	inner join tiendas t on tdoc2.id_tienda = t.id
-	where tdoc2.id_orden_compra = oc.id) ';
+	p.denominacion producto, ocd.precio, tdoc.cantidad , coalesce(ocd.cantidad_despacho, 0) cantidad_despacho, coalesce((ocd.cantidad_requerida - ocd.cantidad_despacho), 0) cantidad_cancelada, ocd.cerrado, u."name" vendedor, t.denominacion tienda ';
 
 	v_tabla=' from orden_compras oc 
 	left join empresas e on oc.id_empresa_compra = e.id 
 	left join orden_compra_detalles ocd on oc.id = ocd.id_orden_compra 
 	left join tienda_detalle_orden_compras tdoc on tdoc.id_orden_compra = oc.id and tdoc.id_producto = ocd.id_producto 
-	--left join tiendas t on tdoc.id_tienda = t.id 
+	left join tiendas t on tdoc.id_tienda = t.id 
 	left join users u on oc.id_vendedor = u.id
 	left join productos p on ocd.id_producto = p.id ';
-		
+			
 	v_where = ' Where 1=1 and oc.id_tipo_documento = ''2'' ';
 
 	If p_empresa_compra<>'' Then
@@ -53,14 +50,18 @@ begin
 	If p_producto<>'' Then
 	 v_where:=v_where||'And ocd.id_producto = '''||p_producto||''' ';
 	End If;
-	
+
 	If p_tienda<>'' Then
+	 v_where:=v_where||'And tdoc.id_tienda = '''||p_tienda||''' ';
+	End If;
+	
+	/*If p_tienda<>'' Then
 	  v_where := v_where || ' AND EXISTS (
 	    SELECT 1 FROM tienda_detalle_orden_compras tdoc_filtro
 	    WHERE tdoc_filtro.id_orden_compra = oc.id
 	    AND tdoc_filtro.id_tienda = ''' || p_tienda || '''
 	  ) ';
-	End If;
+	End If;*/
 
 	If p_estado<>'' Then
 	 v_where:=v_where||'And oc.estado = '''||p_estado||''' ';

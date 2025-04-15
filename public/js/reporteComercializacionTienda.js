@@ -208,18 +208,18 @@ function datatablenew(){
 				},
 				{
 				"mRender": function (data, type, row) {
-					var cantidad_requerida = "";
-					if(row.cantidad_requerida!= null)cantidad_requerida = row.cantidad_requerida;
-					return cantidad_requerida;
+					var cantidad = "";
+					if(row.cantidad!= null)cantidad = row.cantidad;
+					return cantidad;
 				},
 				"bSortable": true,
 				"aTargets": [8]
 				},
 				{
 				"mRender": function (data, type, row) {
-					var tiendas = "";
-					if(row.tiendas!= null)tiendas = row.tiendas;
-					return tiendas;
+					var tienda = "";
+					if(row.tienda!= null)tienda = row.tienda;
+					return tienda;
 				},
 				"bSortable": true,
 				"aTargets": [9]
@@ -247,19 +247,15 @@ function DescargarArchivosExcel(){
 	var fecha_inicio = $('#fecha_inicio_bus').val();
 	var fecha_fin = $('#fecha_fin_bus').val();
 	var numero_orden_compra_cliente = $('#numero_orden_compra_cliente_bus').val();
-	var situacion = $('#situacion_bus').val();
-	var codigo_producto = $('#codigo_producto_bus').val();
 	var producto = $('#producto_bus').val();
-	var vendedor = $('#vendedor_bus').val();
+	var tienda = $('#tienda_bus').val();
 
 	if (empresa_compra == "")empresa_compra = 0;
 	if (fecha_inicio == "")fecha_inicio = "0";
 	if (fecha_fin == "")fecha_fin = "0";
 	if (numero_orden_compra_cliente == "")numero_orden_compra_cliente = "0";
-	if (situacion == "")situacion = 0;
-	if (codigo_producto == "")codigo_producto = "0";
 	if (producto == "")producto = 0;
-	if (vendedor == "")vendedor = 0;
+	if (tienda == "")tienda = 0;
 	
-	location.href = '/orden_compra/exportar_reporte_comercializacion/'+empresa_compra+'/'+fecha_inicio+'/'+fecha_fin+'/'+numero_orden_compra_cliente+'/'+situacion+'/'+codigo_producto+'/'+producto+'/'+vendedor;
+	location.href = '/orden_compra/exportar_reporte_comercializacion_tienda/'+empresa_compra+'/'+fecha_inicio+'/'+fecha_fin+'/'+numero_orden_compra_cliente+'/'+producto+'/'+tienda;
 }

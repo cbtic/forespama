@@ -626,4 +626,5 @@ Route::get('comprobante/modal_factura_historico/{id}', [ComprobanteController::c
 Route::post('comprobante/send_factura_historico', [ComprobanteController::class, 'send_factura_historico'])->name('comprobante.send_factura_historico');
 Route::get('orden_compra/create_reporte_comercializacion_tienda', [OrdenCompraController::class, 'create_reporte_comercializacion_tienda'])->name('orden_compra.create_reporte_comercializacion_tienda');
 Route::post('orden_compra/listar_reporte_comercializacion_tienda_ajax', [OrdenCompraController::class, 'listar_reporte_comercializacion_tienda_ajax'])->name('orden_compra.listar_reporte_comercializacion_tienda_ajax');
+Route::get('orden_compra/exportar_reporte_comercializacion_tienda/{empresa_compra}/{fecha_inicio}/{fecha_fin}/{numero_orden_compra_cliente}/{producto}/{tienda}', [OrdenCompraController::class, 'exportar_reporte_comercializacion_tienda'])->name('orden_compra.exportar_reporte_comercializacion_tienda');
 
