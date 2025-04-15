@@ -1118,6 +1118,53 @@ class OrdenCompraController extends Controller
 		
     }  
 
+    public function create_reporte_comercializacion_tienda(){
+
+        $id_user = Auth::user()->id;
+        $tienda_model = new Tienda;
+        $producto_model = new Producto;
+        $user_model = new User;
+        $tienda_model = new Tienda;
+
+		$tablaMaestra_model = new TablaMaestra;
+		$tipo_documento = $tablaMaestra_model->getMaestroByTipo(54);
+        $cerrado_orden_compra = $tablaMaestra_model->getMaestroByTipo(52);
+        $proveedor = Empresa::all();
+        $tiendas = $tienda_model->getTiendasAll();
+        $productos = $producto_model->getProductoExterno();
+        $vendedor = $user_model->getUserByRol(7);
+
+		return view('frontend.orden_compra.create_reporte_comercializacion_tienda',compact('tipo_documento','cerrado_orden_compra','proveedor','tiendas','productos','vendedor'));
+
+	}
+
+    public function listar_reporte_comercializacion_tienda_ajax(Request $request){
+
+		$orden_compra_model = new OrdenCompra;
+		$p[]=$request->empresa_compra;
+        $p[]=$request->fecha_inicio;
+        $p[]=$request->fecha_fin;
+        $p[]=$request->numero_orden_compra_cliente;
+        $p[]=$request->producto;
+        $p[]=$request->tienda;
+        $p[]=1;
+        $p[]=$request->NumeroPagina;
+		$p[]=$request->NumeroRegistros;
+		$data = $orden_compra_model->listar_reporte_comercializacion_tienda_ajax($p);
+		$iTotalDisplayRecords = isset($data[0]->totalrows)?$data[0]->totalrows:0;
+
+		$result["PageStart"] = $request->NumeroPagina;
+		$result["pageSize"] = $request->NumeroRegistros;
+		$result["SearchText"] = "";
+		$result["ShowChildren"] = true;
+		$result["iTotalRecords"] = $iTotalDisplayRecords;
+		$result["iTotalDisplayRecords"] = $iTotalDisplayRecords;
+		$result["aaData"] = $data;
+
+        echo json_encode($result);
+
+	}
+
     public function upload_orden_distribucion(Request $request){
 		
 		$filename = date("YmdHis") . substr((string)microtime(), 1, 6);

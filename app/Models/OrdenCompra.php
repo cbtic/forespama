@@ -28,6 +28,12 @@ class OrdenCompra extends Model
 
     }
 
+    public function listar_reporte_comercializacion_tienda_ajax($p){
+
+        return $this->readFuntionPostgres('sp_listar_reporte_comercializacion_tienda_paginado',$p);
+
+    }
+
     public function readFuntionPostgres($function, $parameters = null){
 
         $_parameters = '';

@@ -624,4 +624,6 @@ Route::get('comprobante/importar_archivo/{archivo}', [ComprobanteController::cla
 Route::post('comprobante/listar_factura_sodimac_pagos_ajax', [ComprobanteController::class, 'listar_factura_sodimac_pagos_ajax'])->name('comprobante.listar_factura_sodimac_pagos_ajax');
 Route::get('comprobante/modal_factura_historico/{id}', [ComprobanteController::class, 'modal_factura_historico'])->name('comprobante.modal_factura_historico');
 Route::post('comprobante/send_factura_historico', [ComprobanteController::class, 'send_factura_historico'])->name('comprobante.send_factura_historico');
+Route::get('orden_compra/create_reporte_comercializacion_tienda', [OrdenCompraController::class, 'create_reporte_comercializacion_tienda'])->name('orden_compra.create_reporte_comercializacion_tienda');
+Route::post('orden_compra/listar_reporte_comercializacion_tienda_ajax', [OrdenCompraController::class, 'listar_reporte_comercializacion_tienda_ajax'])->name('orden_compra.listar_reporte_comercializacion_tienda_ajax');
 

@@ -355,7 +355,7 @@
 	
 	@endif
 	
-	@if(Gate::check('Reporte Comercializacion'))
+	@if(Gate::check('Reporte Comercializacion') || Gate::check('Reporte Comercializacion Tienda'))
 	
         <li class="c-sidebar-nav-dropdown">
             <x-utils.link href="#" icon="c-sidebar-nav-icon cil-list" class="c-sidebar-nav-dropdown-toggle" :text="__('Reportes')" />
@@ -363,6 +363,12 @@
                 @can('Reporte Comercializacion')
                     <li class="c-sidebar-nav-item">
                         <x-utils.link :href="route('frontend.orden_compra.create_reporte_comercializacion')" class="c-sidebar-nav-link" :text="__('Reporte de Comercializacion')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+                    </li>
+				@endif
+
+                @can('Reporte Comercializacion Tienda')
+                    <li class="c-sidebar-nav-item">
+                        <x-utils.link :href="route('frontend.orden_compra.create_reporte_comercializacion_tienda')" class="c-sidebar-nav-link" :text="__('Reporte de Comercializacion por Tienda')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
                     </li>
 				@endif
 

@@ -36,3 +36,4 @@ yarn-error.log
 .composer.lock
 phpunit.dusk.xml
 /public/factura_sodimac
+/public/orden_distribucion
