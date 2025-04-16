@@ -185,12 +185,13 @@ var productosSeleccionados = [];
 function cargarDetalle(){
 
     var id = $("#id").val();
-    const tbody = $('#divIngresoProduccionDetalle');
+    var tipo_documento = $("#tipo_documento").val();
+    const tbody = $('#divAjusteStockDetalle');
 
     tbody.empty();
 
     $.ajax({
-        url: "/entrada_productos/cargar_detalle/"+id,
+        url: "/entrada_productos/cargar_detalle/"+id+"/"+tipo_documento,
         type: "GET",
         success: function (result) {
 
