@@ -627,4 +627,8 @@ Route::post('comprobante/send_factura_historico', [ComprobanteController::class,
 Route::get('orden_compra/create_reporte_comercializacion_tienda', [OrdenCompraController::class, 'create_reporte_comercializacion_tienda'])->name('orden_compra.create_reporte_comercializacion_tienda');
 Route::post('orden_compra/listar_reporte_comercializacion_tienda_ajax', [OrdenCompraController::class, 'listar_reporte_comercializacion_tienda_ajax'])->name('orden_compra.listar_reporte_comercializacion_tienda_ajax');
 Route::get('orden_compra/exportar_reporte_comercializacion_tienda/{empresa_compra}/{fecha_inicio}/{fecha_fin}/{numero_orden_compra_cliente}/{producto}/{tienda}', [OrdenCompraController::class, 'exportar_reporte_comercializacion_tienda'])->name('orden_compra.exportar_reporte_comercializacion_tienda');
+Route::get('entrada_productos/create_ajuste_stock', [EntradaProductosController::class, 'create_ajuste_stock'])->name('entrada_productos.create_ajuste_stock');
+Route::post('entrada_productos/listar_ajuste_stock_ajax', [EntradaProductosController::class, 'listar_ajuste_stock_ajax'])->name('entrada_productos.listar_ajuste_stock_ajax');
+Route::post('entrada_productos/send_ajuste_stock', [EntradaProductosController::class, 'send_ajuste_stock'])->name('entrada_productos.send_ajuste_stock');
+Route::get('entrada_productos/modal_ajuste_stock/{id}', [EntradaProductosController::class, 'modal_ajuste_stock'])->name('entrada_productos.modal_ajuste_stock');
 

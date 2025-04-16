@@ -221,6 +221,12 @@
                     <x-utils.link :href="route('frontend.devolucion.create')" class="c-sidebar-nav-link" :text="__('Devolucion')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
                 </li>
 				@endif
+
+                @can('Ajuste Stock')
+				<li class="c-sidebar-nav-item">
+                    <x-utils.link :href="route('frontend.entrada_productos.create_ajuste_stock')" class="c-sidebar-nav-link" :text="__('Ajuste de Stock')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+                </li>
+				@endif
 				
             </ul>
 
@@ -375,7 +381,7 @@
             </ul>
         </li>
 
-    @endif    
+    @endif
 
     @if(Gate::check('Consulta de Facturacion') || Gate::check('Facturacion de Pagos'))
 	

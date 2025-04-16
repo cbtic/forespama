@@ -33,6 +33,12 @@ class EntradaProducto extends Model
 
     }
 
+    public function listar_ajuste_stock_ajax($p){
+
+        return $this->readFuntionPostgres('sp_listar_ajuste_stock_paginado',$p);
+
+    }
+
     public function readFuntionPostgres($function, $parameters = null){
 
         $_parameters = '';
