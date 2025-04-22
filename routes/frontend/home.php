@@ -631,4 +631,6 @@ Route::get('entrada_productos/create_ajuste_stock', [EntradaProductosController:
 Route::post('entrada_productos/listar_ajuste_stock_ajax', [EntradaProductosController::class, 'listar_ajuste_stock_ajax'])->name('entrada_productos.listar_ajuste_stock_ajax');
 Route::post('entrada_productos/send_ajuste_stock', [EntradaProductosController::class, 'send_ajuste_stock'])->name('entrada_productos.send_ajuste_stock');
 Route::get('entrada_productos/modal_ajuste_stock/{id}', [EntradaProductosController::class, 'modal_ajuste_stock'])->name('entrada_productos.modal_ajuste_stock');
+Route::get('orden_compra/modal_anular_orden_compra/{id}', [OrdenCompraController::class, 'modal_anular_orden_compra'])->name('orden_compra.modal_anular_orden_compra');
+Route::post('orden_compra/anular_orden_compra', [OrdenCompraController::class, 'anular_orden_compra'])->name('orden_compra.anular_orden_compra');
 

@@ -536,24 +536,28 @@ function validaRuc(ruc){
 
 			var data= response.data;
 
-			$('#razon_social_').val('')
-			$('#direccion_').val('')
-			$('#telefono_').val('')
-			$('#email_').val('')
+			//alert(data.estado);
 
-			$('#razon_social_').val(data.nombre_o_razon_social);
-			//$('#direccion_').attr('readonly', true);
+			$('#razon_social_').val('');
+			$('#direccion_').val('');
+			$('#telefono_').val('');
+			$('#email_').val('');
 
-			if (typeof data.direccion_completa != "undefined"){
-				$('#direccion_').val(data.direccion_completa);
+			if(data.estado == 'ACTIVO'){
+
+				$('#razon_social_').val(data.nombre_o_razon_social);
+				//$('#direccion_').attr('readonly', true);
+
+				if (typeof data.direccion_completa != "undefined"){
+					$('#direccion_').val(data.direccion_completa);
+				}
+				else{
+					$('#direccion_').attr('readonly', false);
+				}
+
+			}else{
+				bootbox.alert("El RUC "+ruc+" esta con el estado de "+ data.estado);
 			}
-			else{
-				$('#direccion_').attr('readonly', false);
-			}
-			
-
-			//alert(data.nombre_o_razon_social);
-
 		}
 		else{
 			bootbox.alert("RUC Invalido,... revise el RUC digitado ¡");

@@ -143,6 +143,7 @@ function datatablenew(){
 			var estado = $('#estado_bus').val();
 			var numero_orden_compra_cliente = $('#numero_orden_compra_cliente_bus').val();
 			var vendedor = $('#vendedor_bus').val();
+			var estado_pedido = $('#estado_pedido_bus').val();
 			
 			var _token = $('#_token').val();
             oSettings.jqXHR = $.ajax({
@@ -154,7 +155,7 @@ function datatablenew(){
 						tipo_documento:tipo_documento,empresa_compra:empresa_compra,empresa_vende:empresa_vende,
 						fecha_inicio:fecha_inicio,fecha_fin:fecha_fin,numero_orden_compra:numero_orden_compra,almacen_origen:almacen_origen,
 						almacen_destino:almacen_destino,situacion:situacion,estado:estado,numero_orden_compra_cliente:numero_orden_compra_cliente,
-						vendedor:vendedor,
+						vendedor:vendedor,estado_pedido:estado_pedido,
 						_token:_token
                        },
                 "success": function (result) {
@@ -359,6 +360,8 @@ function datatablenew(){
 						html += '<button style="font-size:12px; margin-left:10px" type="button" class="btn btn-sm btn-warning" data-toggle="modal" onclick="modalHistorialEntradaProducto('+row.id+','+row.id_tipo_documento+')">Historial</button>';  
 						//html += '<a href="javascript:void(0)" onclick=modalResponsable('+row.id+') class="btn btn-sm btn-info" style="font-size:12px;margin-left:10px">Detalle Responsable</a>';
 						
+						html += '<a href="javascript:void(0)" onclick=anularOrdenCompra('+row.id+') class="btn btn-sm '+clase+'" style="font-size:12px;margin-left:10px">Anular</a>';
+
 						html += '</div>';
 						return html;
 					},
@@ -367,8 +370,6 @@ function datatablenew(){
 				},
 
             ]
-
-
     });
 
 }
@@ -434,6 +435,22 @@ function fn_eliminar(id,estado){
 				datatablenew();
             }
     });
+}
+
+function anularOrdenCompra(id){
+
+	$(".modal-dialog").css("width","95%");
+	$('#openOverlayOpc .modal-body').css('height', 'auto');
+
+	$.ajax({
+			url: "/orden_compra/modal_anular_orden_compra/"+id,
+			type: "GET",
+			success: function (result) {
+					$("#diveditpregOpc").html(result);
+					$('#openOverlayOpc').modal('show');
+			}
+	});
+
 }
 
 function modalEntradaProductoOrdenCompra(id,id_tipo_documento){

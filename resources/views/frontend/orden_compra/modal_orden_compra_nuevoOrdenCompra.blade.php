@@ -819,7 +819,7 @@ function agregarProducto(){
 
         $('#descripcion' + n).select2({
             width: '100%',
-            dropdownCssClass: 'custom-select2-dropdown'
+            dropdownCssClass: 'custom-select2-dropdown',
             //dropdownCssClass: 'form-control form-control-sm',
             //containerCssClass: 'form-control form-control-sm'
         });

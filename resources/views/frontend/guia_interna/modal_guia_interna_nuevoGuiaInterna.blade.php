@@ -171,9 +171,7 @@ $.mask.definitions['p'] = "[Mm]";
 $(document).ready(function() {
 
     $('#placa_guia').mask('AAA-000');
-
-    //$('#peso').mask('0000000000.00', { reverse: true });
-
+    
     $('#fecha').datepicker({
         autoclose: true,
 		format: 'yyyy-mm-dd',
@@ -183,7 +181,6 @@ $(document).ready(function() {
     });
 
     if($('#id').val()==0){
-        //obtenerCodigo();
     }
 
     if($('#id').val()>0){
@@ -222,18 +219,6 @@ $('#openOverlayOpc').on('shown.bs.modal', function() {
 });
 
 $(document).ready(function() {
-
-    /*if($('#id').val()>0){
-        cargarDetalle();
-    }*/
-
-    /*if ($('#id').val()==0){
-        $('#tblDispensacionDetalle tbody').append(`
-            <tr>
-                <td><button type="button" class="btn btn-danger btn-sm" onclick="eliminarFila(this)">Eliminar</button></td>
-            </tr>
-        `)
-    }*/
 
     $('#fecha_emision').datepicker({
         autoclose: true,
@@ -292,8 +277,6 @@ function obtenerCodigo(){
         dataType: "json",
         success: function (result) {
 
-            //alert(result[0].codigo);
-            //console.log(result);
             $('#numero_ingreso_produccion').val(result[0].codigo);
 
         }
@@ -309,7 +292,6 @@ function obtenerCodInterno(selectElement, n){
             url: "/productos/obtener_producto/"+id_producto,
             dataType: "json",
             success: function(result){
-                //alert(result[0].codigo);
                 $('#cod_interno' + n).val(result[0].codigo);
                 $('#item' + n).val(result[0].numero_serie);
                 $('#marca' + n).val(result[0].id_marca).trigger('change');
@@ -351,8 +333,6 @@ function cargarDetalle(){
 
             let n = 1;
 
-            //var total_acumulado=0;
-
             result.ingreso_produccion.forEach(ingreso_produccion => {
 
                 let marcaOptions = '<option value="">--Seleccionar--</option>';
@@ -360,8 +340,6 @@ function cargarDetalle(){
                 let estadoBienOptions = '<option value="">--Seleccionar--</option>';
                 let unidadMedidaOptions = '<option value="">--Seleccionar--</option>';
 
-                //alert(result.dispensacion[1]);
-                
                 result.marca.forEach(marca => {
                     let selected = (marca.id == ingreso_produccion.id_marca) ? 'selected' : '';
                     marcaOptions += `<option value="${marca.id}" ${selected}>${marca.denominiacion}</option>`;
@@ -382,12 +360,9 @@ function cargarDetalle(){
                     unidadMedidaOptions += `<option value="${unidad_medida.codigo}" ${selected}>${unidad_medida.denominacion}</option>`;
                 });
 
-                //alert(dispensacion.id_producto);
-
                 if (ingreso_produccion.id_producto) {
                     productosSeleccionados.push(ingreso_produccion.id_producto);
                 }
-                //alert(productosSeleccionados);
                
                 const row = `
                     <tr>
@@ -412,9 +387,7 @@ function cargarDetalle(){
                 });
 
                 n++;
-                //total_acumulado += parseFloat(orden_compra.total);
                 });
-                //$('#totalGeneral').text(total_acumulado.toFixed(2));
             }
     });
 
@@ -442,7 +415,6 @@ function agregarProducto(){
         var estado_bien =  '<select name="estado_bien[]" id="estado_bien' + n + '" class="form-control form-control-sm" onChange=""><option value="">--Seleccionar--</option> <?php foreach ($estado_bien as $row) { ?> <option value="<?php echo $row->codigo ?>" <?php echo ($row->codigo == 1) ? "selected" : ""; ?>><?php echo $row->denominacion; ?></option> <?php } ?> </select>';
         var unidad = '<select name="unidad[]" id="unidad' + n + '" class="form-control form-control-sm" onChange=""> <option value="">--Seleccionar--</option> <?php foreach ($unidad as $row) {?> <option value="<?php echo $row->codigo?>"><?php echo $row->denominacion?></option> <?php } ?> </select>';
         var cantidad_ingreso = '<input name="cantidad[]" id="cantidad' + n + '" class="cantidad form-control form-control-sm" value="" type="text" oninput="">';
-        //var stock_actual = '<input name="stock_actual[]" id="stock_actual' + n + '" class="form-control form-control-sm" value="" type="text">';
         
         var btnEliminar = '<button type="button" class="btn btn-danger btn-sm" onclick="eliminarFila(this)">Eliminar</button>';
 
@@ -455,7 +427,6 @@ function agregarProducto(){
         newRow += '<td>' + estado_bien + '</td>';
         newRow += '<td>' + unidad + '</td>';
         newRow += '<td>' + cantidad_ingreso + '</td>';
-        //newRow += '<td>' + stock_actual + '</td>';
         newRow += '<td>' + btnEliminar + '</td>';
         newRow += '</tr>';
 
@@ -489,7 +460,7 @@ function verificarProductoSeleccionado(selectElement, rowIndex, valor) {
             $("#descripcion_ant"+rowIndex).val(selectedValue);
 
             obtenerCodInterno(selectElement, rowIndex);
-            //obtenerStock(selectElement, rowIndex);
+
         } else {
             bootbox.alert("Este producto ya ha sido seleccionado. Por favor elige otro.");
             $(selectElement).val('').trigger('change');
@@ -520,10 +491,7 @@ function eliminarFila(button){
 
     row.remove();
 
-    //actualizarTotalGeneral();
-
     console.log(productosSeleccionados);
-    //$(button).closest('tr').remove();
 }
 
 function fn_save_guia_interna(){
@@ -532,15 +500,9 @@ function fn_save_guia_interna(){
 
     var fecha_emision = $('#fecha_emision').val();
     var punto_partida = $('#punto_partida').val();
-    //var punto_llegada = $('#punto_llegada').val();
     var fecha_inicio_traslado = $('#fecha_inicio_traslado').val();
-    //var destinatario = $('#destinatario').val();
-    //var ruc = $('#ruc').val();
     var marca_placa = $('#marca_placa').val();
-    //var numero_inscripcion = $('#numero_inscripcion').val();
     var numero_licencia = $('#numero_licencia').val();
-    //var transporte_razon_social = $('#transporte_razon_social').val();
-    //var ruc_transporte = $('#ruc_transporte').val();
     var motivo_traslado = $('#motivo_traslado').val();
     var tipo_documento = $('#tipo_documento').val();
     var numero_documento = $('#numero_documento').val();
@@ -555,15 +517,9 @@ function fn_save_guia_interna(){
 
     if(fecha_emision==""){msg+="Ingrese la Fecha de Emision <br>";}
     if(punto_partida==""){msg+="Ingrese el Punto de Partida <br>";}
-    //if(punto_llegada==""){msg+="Ingrese el Punto de Llegada <br>";}
     if(fecha_inicio_traslado==""){msg+="Ingrese la Fecha de traslado <br>";}
-    //if(destinatario==""){msg+="Ingrese el Destinatario <br>";}
-    //if(ruc==""){msg+="Ingrese el RUC de Destinatario <br>";}
     if(marca_placa==""){msg+="Ingrese la Marca y Placa <br>";}
-    //if(numero_inscripcion==""){msg+="Ingrese el Numero de Inscripcion <br>";}
     if(numero_licencia==""){msg+="Ingrese el Numero de Licencia <br>";}
-    //if(transporte_razon_social==""){msg+="Ingrese el Transporte <br>";}
-    //if(ruc_transporte==""){msg+="Ingrese el RUC del Transporte <br>";}
     if(motivo_traslado==""){msg+="Ingrese el Motivo de Traslado <br>";}
     if(tipo_documento==""){msg+="Ingrese el Tipo de Documento <br>";}
     if(numero_documento==""){msg+="Ingrese el Numero de Documento <br>";}
@@ -598,14 +554,11 @@ function fn_save_guia_interna(){
             type: "POST",
             data : $("#frmDatosGuia").serialize(),
             success: function (result) {
-                //alert(result.id)
+
                 $('#openOverlayOpc').modal('hide');
                 datatablenew();
                 $('.loader').hide();
                 bootbox.alert("Se guard&oacute; satisfactoriamente"); 
-                /*if (result.id>0) {
-                    modalOrdenCompra(result.id);
-                }*/
                 
             }
         });
@@ -615,7 +568,6 @@ function fn_save_guia_interna(){
 function pdf_guia_interna(){
 
     var id = $('#id').val();
-    //var tipo_movimiento = $('#tipo_movimiento').val();
 
     var href = '/guia_interna/guia_interna_pdf/'+id;
     window.open(href, '_blank');
@@ -655,8 +607,6 @@ function obtener_ruc_transporte(){
 function obtenerIdDocumento(){
 
     var guia_interna = @json($guia_interna);
-
-    //alert(guia_interna.numero_documento);
 
     var tipo_documento =  $('#tipo_documento').val();
 
@@ -736,8 +686,6 @@ function cargar_detalle_documento(id_documento){
                 let estadoBienOptions = '<option value="">--Seleccionar--</option>';
                 let unidadMedidaOptions = '<option value="">--Seleccionar--</option>';
 
-                //alert(result.dispensacion[1]);
-                
                 result.marca.forEach(marca => {
                     let selected = (marca.id == entrada_producto.id_marca) ? 'selected' : '';
                     marcaOptions += `<option value="${marca.id}" ${selected}>${marca.denominiacion}</option>`;
@@ -775,25 +723,13 @@ function cargar_detalle_documento(id_documento){
                     </tr>
                 `;
                 tbody.append(row);
-                /*$('#descripcion_' + n).select2({ 
-                    width: '100%',
-                    dropdownCssClass: 'custom-select2-dropdown'
-                });
-
-                $('#marca_' + n).select2({
-                    width: '100%',
-                });*/
-
                 n++;
 
                 peso_producto = entrada_producto.peso * entrada_producto.cantidad;
 
                 peso_total += parseFloat(peso_producto) || 0;
                 
-                //total_acumulado += parseFloat(orden_compra.total);
                 });
-                //$('#totalGeneral').text(total_acumulado.toFixed(2));
-                //alert(peso_total);
                 $('#ruc').val("");
                 $('#destinatario_nombre').val("");
                 $('#destinatario').val("");
@@ -818,8 +754,6 @@ function cargar_detalle_documento(id_documento){
                 $("#peso").attr("readonly",false);
                 $("#punto_llegada_input").attr("readonly",false);
                 
-                //alert(entrada);
-
                 $('#orden_compra_cliente').val(entrada.numero_orden_compra_cliente);
                 $('#tiendas_orden_compra').val(entrada.tiendas);
                 $('#peso').val(peso_total.toFixed(2));
@@ -866,11 +800,6 @@ function cargar_detalle_documento(id_documento){
                 $("#orden_compra_cliente").attr("readonly",true);
                 $("#tiendas_orden_compra").attr("readonly",true);
                 $("#peso").attr("readonly",true);
-
-                
-                //$("#punto_llegada_input").attr("readonly",true);
-
-                //$("#destinatario").select2({ width: '100%' });
 
                 if(entrada.ubigeo){
                     obtenerProvinciaContacto(entrada.ubigeo);
@@ -968,9 +897,6 @@ function obtenerDistritoContacto_(callback){
 
 function agregarVehiculo(){
 	
-	//$(".modal-dialog").css("width","85%");
-	//$('#openOverlayOpc .modal-body').css('height', 'auto');
-
 	$.ajax({
 			url: "/vehiculo/modal_vehiculo_guia/"+0,
 			type: "GET",
@@ -993,15 +919,12 @@ function agregarVehiculo(){
                     }, 100);
 
                     $('#motivo_traslado').select2('close');
-                    //$('.select2-container').remove();
 			}
 	});
 }
 
 function agregarConductor(){
 	
-	//$(".modal-dialog").css("width","85%");
-	//$('#openOverlayOpc .modal-body').css('height', 'auto');
     var id_empresa_conductor_vehiculo = $('#id_empresa_conductor_vehiculo').val();
 
 	$.ajax({
@@ -1016,8 +939,6 @@ function agregarConductor(){
 
 function agregarEmpresaTransporte(){
 	
-	//$(".modal-dialog").css("width","85%");
-	//$('#openOverlayOpc2 .modal-body').css('height', 'auto');
     var placa = $('#placa_guia').val();
     var id_empresa_conductor_vehiculo = $('#id_empresa_conductor_vehiculo').val();
 
@@ -1033,9 +954,6 @@ function agregarEmpresaTransporte(){
 
 function agregarDestinatario(){
 	
-	//$(".modal-dialog").css("width","85%");
-	//$('#openOverlayOpc2 .modal-body').css('height', 'auto');
-
 	$.ajax({
 			url: "/empresa/modal_empresa_guia/"+0,
 			type: "GET",
@@ -1065,7 +983,6 @@ function obtenerEmpresa(){
     $("#placa_guia").attr("readonly",false);
     $("#marca_vehiculo").attr("readonly",false);
     $("#transporte_razon_social").attr("readonly",false);
-    //$("#numero_licencia").attr("readonly",false);
     
     $.ajax({
         url: '/ingreso_vehiculo_tronco/obtener_datos_vehiculo_guia/' + placa,
@@ -1080,20 +997,12 @@ function obtenerEmpresa(){
                 $('#marca_vehiculo').val(vehiculo.marca);
                 $('#id_marca_vehiculo').val(vehiculo.id_marca);
                 $('#id_transporte_razon_social').val(vehiculo.id_empresas);
-                //$('#id_conductor_guia').val(vehiculo.id_conductores);
                 $('#transporte_razon_social').val(vehiculo.razon_social);
                 $('#id_empresa_conductor_vehiculo').val(vehiculo.id);
                 $('#numero_inscripcion').val(vehiculo.constancia_inscripcion);
-                //$('#conductor_guia').val(vehiculo.conductor);
-                //$('#numero_licencia').val(vehiculo.licencia);
                 $("#marca_vehiculo").attr("readonly",true);
                 $("#ruc_transporte").attr("readonly",true);
                 $("#transporte_razon_social").attr("readonly",true);
-                //$("#numero_licencia").attr("readonly",true);
-                
-                //bootbox.alert("El Vehiculo ingresado ya esta registrado !!!");
-                
-                //$("#tipo_documento_bus").attr("disabled",true);
                 var conductores = result.conductores;
                 var option = "<option value=''>Seleccionar</option>";
                 $('#conductor_guia').html("");
@@ -1106,10 +1015,7 @@ function obtenerEmpresa(){
                     option += "<option value='" + oo.id_conductores + "' " + selected + ">" + oo.conductor + "</option>";
                 });
                 $('#conductor_guia').html(option);
-                
-                //$('#conductor_guia').attr("disabled",true);
-                //$('.loader').hide();
-                
+                                
             }
             
         }
@@ -1257,8 +1163,6 @@ function obtenerDatosUbigeoPartida(){
         dataType: "json",
         success: function(result){
             
-            //alert(result[0].distrito_partida);
-
             $('#provincia_partida').val(result[0].provincia_partida);
 
             obtenerDistritoPartida_(function(){
@@ -1312,8 +1216,6 @@ function obtenerDatosUbigeoLlegada(){
         dataType: "json",
         success: function(result){
             
-            //alert(result[0].provincia);
-
             $('#provincia_llegada').val(result[0].provincia_llegada);
 
             obtenerDistritoLlegada_(function(){
@@ -1556,21 +1458,9 @@ function obtenerMotivo(){
 <body class="hold-transition skin-blue sidebar-mini">
     
     <div>
-		<!--
-        <section class="content-header">
-          <h1>
-            <small style="font-size: 20px">Programados del Medicos del dia <?php //echo $fecha_atencion?></small>
-          </h1>
-        </section>
-		-->
 		<div class="justify-content-center">
 
             <div class="card modal-scrollable">
-                <!--<div style="display: flex; justify-content: space-between; align-items: center;">
-                    <div>
-                        <img width="200px" height="80px" style="top:-30px" src="/img/logo_forestalpama.jpg">
-                    </div>
-                </div>-->
                 <div style="text-align: center; font-size:16px; margin-top: 20px">
                     <b>Datos de Guia</b>
                 </div>
@@ -1667,7 +1557,6 @@ function obtenerMotivo(){
                                 <div class="col-lg-3">
                                     <button id="btnPlaca" type="button" class="btn btn-warning btn-sm" data-toggle="modal" onclick="agregarVehiculo()">
                                         <i class="fas fa-plus-circle"></i>Vehiculo
-                                        <!--<img src="/img/icono_carro.png" alt="Carro" style="width: 16px; height: 16px; margin-left: 5px;">-->
                                     </button>
                                 </div>
                             </div>
@@ -1707,7 +1596,6 @@ function obtenerMotivo(){
                                 <div class="col-lg-3">
                                     <button id="btnEmpTrans" type="button" class="btn btn-warning btn-sm" data-toggle="modal" onclick="agregarEmpresaTransporte()">
                                         <i class="fas fa-plus-circle"></i>Emp. Transp.
-                                        <!--<img src="/img/icono_empresa_trasnporte.png" alt="Carro" style="width: 20px; height: 20px; margin-left: 3px;">-->
                                     </button>
                                 </div>
                             </div>
@@ -1729,22 +1617,6 @@ function obtenerMotivo(){
                                 </div>
                             </div>
                         </div>
-                        <!--<div class="col-lg-4">
-                            <div class="row">
-                                <div class="col-lg-4">
-                                    Conductor
-                                </div>
-                                <div class="col-lg-5">
-                                    <input id="conductor_guia" name="conductor_guia" on class="form-control form-control-sm"  value="<?php //if($id>0){echo $guia_interna->licencia_conducir;} ?>" type="text">
-                                    <input name="id_conductor_guia" id="id_conductor_guia" class="form-control form-control-sm" value="" type="hidden">
-                                </div>
-                                <div class="col-lg-3">
-                                    <button id="btnPlaca" type="button" class="btn btn-warning btn-sm" data-toggle="modal" onclick="agregarConductor()">
-                                        <i class="fas fa-plus-circle"></i>Conductor
-                                    </button>
-                                </div>
-                            </div>
-                        </div>-->
                         <div class="col-lg-4">
                             <div class="row">
                                 <div class="col-lg-4">
@@ -2137,24 +2009,12 @@ function obtenerMotivo(){
 							</tbody>
 						</table>
 					</div>
-                    <!--<table style="background-color:white !important;border-collapse:collapse;border-spacing:1px; width: 100%; margin: 0 auto; font-size:12px">
-                        <tbody>
-                            <tr>
-                                <td class="td" style ="text-align: left; width: 90%; font-size:13px"></td>
-                                <td class="td" style ="text-align: left; width: 5%; font-size:13px"><b>Total:</b></td>
-                                <td id="totalGeneral" class="td" style="text-align: left; width: 5%; font-size:13px">0.00</td>
-                            </tr>
-                        </tbody>
-                    </table>-->
                     <div style="margin-top:15px" class="form-group">
                         <div class="col-sm-12 controls">
                             <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
                                 <?php 
                                     if($id>0){
                                 ?>
-                                <!--<button style="font-size:12px;margin-left:10px; margin-right:10px" type="button" class="btn btn-sm btn-primary" data-toggle="modal" onclick="pdf_guia_interna()"><i class="fa fa-print" ></i>Imprimir</button>
-                                <button style="font-size:12px;margin-left:10px; margin-right:100px" type="button" class="btn btn-sm btn-warning" data-toggle="modal" onclick="pdf_guia()" ><i class="fa fa-edit"></i>Imprimir Gu&iacute;a Remisi&oacute;n Electronica</button>
-                                <a href="javascript:void(0)" onClick="fn_pdf_documento()" class="btn btn-sm btn-primary" style="margin-right:100px">Imprimir</a>-->
                                 <?php 
                                     }
                                 ?>

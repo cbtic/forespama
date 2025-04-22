@@ -64,10 +64,11 @@ class OrdenCompraController extends Controller
         $almacen = Almacene::all();
         $almacen_usuario = $almacen_user_model->getAlmacenByUser($id_user);
         $vendedor = $user_model->getUserByRol(7);
+		$estado_pedido = $tablaMaestra_model->getMaestroByTipo(77);
         //$almacen_usuario2 = $almacen_user_model->getUsersByAlmacen($id_user);
         //dd($almacen_usuario);exit();
 		
-		return view('frontend.orden_compra.create',compact('tipo_documento','cerrado_orden_compra','proveedor','almacen','almacen_usuario','vendedor'));
+		return view('frontend.orden_compra.create',compact('tipo_documento','cerrado_orden_compra','proveedor','almacen','almacen_usuario','vendedor','estado_pedido'));
 
 	}
 
@@ -1295,6 +1296,30 @@ class OrdenCompraController extends Controller
             'filas_importadas' => $count,
         ], 200);
 
+    }
+
+    public function modal_anular_orden_compra($id){
+		
+        $tablaMaestra_model = new TablaMaestra;
+		
+        $orden_compra = OrdenCompra::find($id);
+
+        $estado_pedido = $tablaMaestra_model->getMaestroByTipo(77);
+        
+		return view('frontend.orden_compra.modal_anular_orden_compra',compact('id','orden_compra','estado_pedido'));
+
+    }
+
+    public function anular_orden_compra(Request $request)
+    {
+		$orden_compra = OrdenCompra::find($request->id);
+
+		$orden_compra->estado_pedido = $request->estado;
+		$orden_compra->motivo = $request->motivo;
+		$orden_compra->save();
+
+		echo $orden_compra->id;
+        
     }
 
 }
