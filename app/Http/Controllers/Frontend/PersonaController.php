@@ -282,20 +282,20 @@ class PersonaController extends Controller
 	public function modal_persona($id){
 		$id_user = Auth::user()->id;
         /*
-		$persona = new Persona;
-		$negativo = "";
-		if($id>0){
-			$persona = Persona::find($id);
-			//$negativo = Negativo::where('persona_id',$id)->orderBy('id', 'desc')->first();
-		} else {
-			$persona = new Persona;
-		}
-        		
-		$tablaMaestra_model = new TablaMaestra;		
-		$tipo_documento = $tablaMaestra_model->getMaestroByTipo("9");
-        
-		return view('frontend.persona.modal_persona',compact('id','persona','negativo','tipo_documento'));
-*/
+            $persona = new Persona;
+            $negativo = "";
+            if($id>0){
+                $persona = Persona::find($id);
+                //$negativo = Negativo::where('persona_id',$id)->orderBy('id', 'desc')->first();
+            } else {
+                $persona = new Persona;
+            }
+                    
+            $tablaMaestra_model = new TablaMaestra;		
+            $tipo_documento = $tablaMaestra_model->getMaestroByTipo("9");
+            
+            return view('frontend.persona.modal_persona',compact('id','persona','negativo','tipo_documento'));
+        */
 
 
 		$tablaMaestra_model = new TablaMaestra;
@@ -551,8 +551,14 @@ class PersonaController extends Controller
 			$persona->nombres = $request->nombre;
 			//$persona->codigo = $request->codigo;
             //$persona->ocupacion = $request->ocupacion;
-			$persona->telefono = $request->telefono;
-			$persona->email = $request->email;
+			$persona->telefono = $request->numero_celular;
+			$persona->direccion = $request->direccion;
+			$persona->id_sexo = $request->sexo;
+			$persona->fecha_nacimiento = $request->fecha_nacimiento;
+			$persona->grupo_sanguineo = $request->grupo_sanguineo;
+			$persona->lugar_nacimiento = $request->lugar_nacimiento;
+			$persona->id_nacionalidad = $request->nacionalidad;
+			$persona->email = $request->correo;
 			$persona->foto = $request->img_foto;
             $persona->numero_ruc = $request->ruc;
 			//$flag_negativo = $persona->flag_negativo;
