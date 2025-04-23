@@ -191,7 +191,7 @@ br {
 
 @stack('after-scripts')
 
-@extends('backend.layouts.app')
+@extends('frontend.layouts.app')
 
 
 

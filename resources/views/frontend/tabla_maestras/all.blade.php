@@ -67,7 +67,7 @@
 
 </style>
 
-@extends('backend.layouts.app')
+@extends('frontend.layouts.app')
 
 @section('title', ' | ' . __('labels.frontend.contact.box_title'))
 

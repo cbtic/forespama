@@ -13,43 +13,19 @@
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
     <link href="{{ mix('css/frontend.css') }}" rel="stylesheet">
-	
-	<style>
-        .close-heading{
-            position: relative;
-        }
-
-        button.close{
-            background:#1C77B9!important;
-            padding:0px 6px 2px 6px!important;
-            -moz-border-radius: 30px 30px 30px 30px!important; /* Firefox */
-            -webkit-border-radius: 30px 30px 30px 30px!important; /* Google Chrome y Safari */
-            border-radius: 30px 30px 30px 30px!important; /* CSS3 (Opera 10.5 e Internet Explorer 9) */
-        }
-
-        .close{
-            color:#FFFFFF!important;
-            opacity:1!important;
-            font-size:25px!important;
-
-            position: absolute;
-            z-index: 1000;
-            display:block;
-            right: 3px;
-            top:3px
-        }
-    </style>
-	
     <livewire:styles />
     @stack('after-styles')
+    <livewire:scripts />
+    <script src="{{ mix('js/app.js') }}" defer></script>
 </head>
 <body>
+	<!--
     @include('includes.partials.read-only')
     @include('includes.partials.logged-in-as')
     @include('includes.partials.announcements')
-
+	-->
     <div id="app">
-        @include('frontend.includes.nav')
+        @include('frontend.includes.sidebar')
         @include('includes.partials.messages')
 
         <main>
@@ -58,7 +34,9 @@
     </div><!--app-->
 
     @stack('before-scripts')
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<link rel="stylesheet" href="<?php echo URL::to('/') ?>/bower_components/select2/dist/css/select2.min.css">
 	<script src="<?php echo URL::to('/') ?>/bower_components/select2/dist/js/select2.full.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.0/jquery-ui.min.js"></script>
@@ -70,7 +48,8 @@
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.min.js"></script>
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/locales/bootstrap-datepicker.es.min.js" charset="UTF-8"></script>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker3.css" />
-    <livewire:scripts />
+
     @stack('after-scripts')
+    @include('sweetalert::alert')
 </body>
 </html>

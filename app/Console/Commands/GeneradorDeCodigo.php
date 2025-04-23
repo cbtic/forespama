@@ -325,7 +325,7 @@ PHP;
 
         $contenido = <<<BLADE
     <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" defer></script>
-    @extends('backend.layouts.app')
+    @extends('frontend.layouts.app')
 
     @section('breadcrumb')
     <ol class="breadcrumb" style="padding-left:130px;margin-top:0px;background-color:#283659">
