@@ -531,8 +531,9 @@ label.form-control-sm{
 								</select>
 							</div>
 							-->
-							<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+							<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
 								<input class="btn btn-warning btn-sm pull-rigth" value="Buscar" type="button" id="btnBuscar" />
+								<a type="button" href="/img/cubicaje/plantilla/Plantilla_cubicaje.xlsx" class="btn btn-secondary btn-sm" style="margin-left:15px;">Plantilla</a>
 							</div>
 							
 						</div>

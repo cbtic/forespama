@@ -1,5 +1,74 @@
 
 $(document).ready(function () {
+
+    /*$(document).on('click', '.upload', function () {
+        alert("ok")
+        var formData = new FormData();
+        var files = $('#image')[0].files[0];
+        formData.append('file',files);
+        $.ajax({
+			headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            url: "/ingreso_vehiculo_tronco/upload_cubicaje",
+            type: 'post',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function(response) {
+				datatablenew();
+				
+            }
+        });
+		return false;
+    });*/
+
+    $(document).on('click', '.upload', function () {
+        //alert("ok");
+        var container = $(this).closest('.btn-group');
+        var fileInput = container.find('input[type="file"]')[0];
+        var file = fileInput.files[0];
+    
+        if (!file) {
+            alert("Por favor selecciona un archivo.");
+            return;
+        }
+
+        var idIngreso = $(this).data('id');
+    
+        var formData = new FormData();
+        formData.append('file', file);
+        formData.append('id_ingreso_vehiculo_tronco_tipo_maderas', idIngreso);
+    
+        $.ajax({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            url: "/ingreso_vehiculo_tronco/upload_cubicaje",
+            type: 'post',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                if (response.success) {
+                    datatablenew();
+                    container.find('.fileExcel').show();
+                } else {
+                    alert(response.message);
+                }
+            },
+            error: function (xhr) {
+                if (xhr.status == 422 && xhr.responseJSON) {
+                    alert(xhr.responseJSON.message);
+                } else {
+                    alert("Error inesperado al subir el archivo.");
+                }
+            }
+        });
+    
+        return false;
+    });
+    
 	
 	datatablenew();
 	
@@ -72,14 +141,6 @@ $(document).ready(function () {
         changeMonth: true,
         changeYear: true,
     });
-    /*
-	$('#fecha_hasta').datepicker({
-        autoclose: true,
-		format: 'dd/mm/yyyy',
-		changeMonth: true,
-		changeYear: true,
-    });
-	*/
 
 });
 
@@ -1774,7 +1835,12 @@ function datatablenew() {
                 	var html = '<div class="btn-group btn-group-sm" role="group" aria-label="Log Viewer Actions">';		
 					html += '<button style="font-size:12px;color:#FFFFFF;margin-left:10px" type="button" class="btn btn-sm btn-info" data-toggle="modal" onclick="cargarCubicaje('+row.id_ingreso_vehiculo_tronco_tipo_maderas+')"><i class="fa fa-edit" style="font-size:9px!important"></i> Cubicar</button>';
 					html += '<button style="font-size:12px;color:#FFFFFF;margin-left:10px" type="button" class="btn btn-sm btn-danger" data-toggle="modal" onclick="cargarReporteCubicaje('+row.id_ingreso_vehiculo_tronco_tipo_maderas+')"><i class="fa fa-edit" style="font-size:9px!important"></i> Reporte</button>';
-					html += '</div>';
+                    html += '<span class="btn btn-warning btn-file" style="float:left; margin-left: 10px">';
+                    html += 'Examinar <input id="image" name="image" type="file" />';
+                    html += '</span>';
+                    html += '<i id="fileExcel" class="fa fa-file-excel" style="display:none;color:#00B300;font-size:35px;float:left;padding-left:10px"></i>';
+                    html += '<input type="button" class="btn btn-primary upload" data-id="'+row.id+'" value="Subir" style="margin-left:10px;float:left">';
+                    html += '</div>';
 					return html;
                 },
                 "bSortable": false,
@@ -1782,10 +1848,7 @@ function datatablenew() {
 				"sClass" : "cubicaje"
                 },
 				
-				
             ]
-
-
     });
 
 

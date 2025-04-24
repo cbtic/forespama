@@ -633,4 +633,4 @@ Route::post('entrada_productos/send_ajuste_stock', [EntradaProductosController::
 Route::get('entrada_productos/modal_ajuste_stock/{id}', [EntradaProductosController::class, 'modal_ajuste_stock'])->name('entrada_productos.modal_ajuste_stock');
 Route::get('orden_compra/modal_anular_orden_compra/{id}', [OrdenCompraController::class, 'modal_anular_orden_compra'])->name('orden_compra.modal_anular_orden_compra');
 Route::post('orden_compra/anular_orden_compra', [OrdenCompraController::class, 'anular_orden_compra'])->name('orden_compra.anular_orden_compra');
-
+Route::post('ingreso_vehiculo_tronco/upload_cubicaje', [IngresoVehiculoTroncoController::class, 'upload_cubicaje'])->name('ingreso_vehiculo_tronco.upload_cubicaje');

@@ -4079,8 +4079,8 @@ class ComprobanteController extends Controller
         $generalData = []; // Para almacenar los datos generales del pago
         $detalleData = [];
 
-        foreach ($sheet as $row) {          
-            var_dump($sheet[8][1]); 
+        foreach ($sheet as $row) {
+            var_dump($sheet[8][1]);
             if ($count < 14) { // Los primeros 14 registros son generales
                 $generalData[] = $row;
             } else { // Los registros posteriores son los detalles de las facturas
