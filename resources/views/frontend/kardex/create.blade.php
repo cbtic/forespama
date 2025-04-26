@@ -412,6 +412,8 @@ label.form-control-sm{
                             <th>Total Saldos</th>
 							<th>Almacen</th>
 							<th>Fecha</th>
+							<th>Tipo Movimiento</th>
+							<th>C&oacute;digo Movimiento</th>
 							<!--<th>Almacen Salida</th>-->
                         </tr>
                         </thead>

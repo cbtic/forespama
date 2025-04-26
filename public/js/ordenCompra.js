@@ -224,13 +224,22 @@ function datatablenew(){
 				"aTargets": [3]
 				},
 				{
+				"mRender": function (data, type, row) {
+					var codigo_requerimiento = "";
+					if(row.codigo_requerimiento!= null)codigo_requerimiento = row.codigo_requerimiento;
+					return codigo_requerimiento;
+				},
+				"bSortable": true,
+				"aTargets": [4]
+				},
+				{
                 "mRender": function (data, type, row) {
                 	var empresa_vende = "";
 					if(row.empresa_vende!= null)empresa_vende = row.empresa_vende;
 					return empresa_vende;
                 },
                 "bSortable": true,
-                "aTargets": [4]
+                "aTargets": [5]
                 },
 
 				{
@@ -240,7 +249,7 @@ function datatablenew(){
 					return fecha_orden_compra;
 				},
 				"bSortable": true,
-				"aTargets": [5]
+				"aTargets": [6]
 				},
 				{
 				"mRender": function (data, type, row) {
@@ -249,7 +258,7 @@ function datatablenew(){
 					return numero_orden_compra;
 				},
 				"bSortable": true,
-				"aTargets": [6]
+				"aTargets": [7]
 				},
 				{
 				"mRender": function (data, type, row) {
@@ -258,7 +267,7 @@ function datatablenew(){
 					return almacen_origen;
 				},
 				"bSortable": true,
-				"aTargets": [7]
+				"aTargets": [8]
 				},
 				{
 				"mRender": function (data, type, row) {
@@ -267,7 +276,7 @@ function datatablenew(){
 					return almacen_destino;
 				},
 				"bSortable": true,
-				"aTargets": [8]
+				"aTargets": [9]
 				},
 				{
 				"mRender": function (data, type, row) {
@@ -276,7 +285,7 @@ function datatablenew(){
 					return cerrado;
 				},
 				"bSortable": true,
-				"aTargets": [9]
+				"aTargets": [10]
 				},
 				{
 				"mRender": function (data, type, row) {
@@ -285,7 +294,7 @@ function datatablenew(){
 					return vendedor;
 				},
 				"bSortable": true,
-				"aTargets": [10]
+				"aTargets": [11]
 				},
 				{
 					"mRender": function (data, type, row) {
@@ -299,7 +308,7 @@ function datatablenew(){
 						return tiene_direccion;
 					},
 					"bSortable": false,
-					"aTargets": [11]
+					"aTargets": [12]
 				},
 				{
 				"mRender": function (data, type, row) {
@@ -309,7 +318,7 @@ function datatablenew(){
 					
 				},
 				"bSortable": true,
-				"aTargets": [12],
+				"aTargets": [13],
 				"className": "text-right",
 				},
 				{
@@ -368,7 +377,7 @@ function datatablenew(){
 						return html;
 					},
 					"bSortable": false,
-					"aTargets": [13],
+					"aTargets": [14],
 				},
 
             ]

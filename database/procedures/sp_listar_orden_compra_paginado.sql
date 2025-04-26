@@ -1,4 +1,4 @@
--- DROP FUNCTION public.sp_listar_orden_compra_paginado(varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, refcursor);
+-- DROP FUNCTION public.sp_listar_orden_compra_paginado(varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, refcursor);
 
 CREATE OR REPLACE FUNCTION public.sp_listar_orden_compra_paginado(p_tipo_documento character varying, p_empresa_compra character varying, p_empresa_vende character varying, p_fecha_inicio character varying, p_fecha_fin character varying, p_numero_orden_compra character varying, p_numero_orden_compra_cliente character varying, p_situacion character varying, p_almacen_origen character varying, p_almacen_destino character varying, p_estado character varying, p_id_user character varying, p_id_vendedor character varying, p_estado_pedido character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
  RETURNS refcursor
@@ -34,7 +34,8 @@ begin
 	select 1 
 	from orden_compra_contacto_entregas occe 
 	where occe.id_orden_compra = oc.id) then 1 else 0 
-	end) tiene_direccion, oc.total ';
+	end) tiene_direccion, oc.total, oc.estado_pedido,
+	(select r.codigo  from requerimientos r where oc.id_requerimiento = r.id) codigo_requerimiento ';
 
 	v_tabla=' from orden_compras oc 
 	inner join empresas e2 on oc.id_empresa_vende = e2.id

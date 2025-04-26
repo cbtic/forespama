@@ -249,6 +249,24 @@ function datatablenew(){
 				"bSortable": true,
 				"aTargets": [13]
 				},
+				{
+				"mRender": function (data, type, row) {
+					var tipo_movimiento = "";
+					if(row.tipo_movimiento!= null)tipo_movimiento = row.tipo_movimiento;
+					return tipo_movimiento;
+				},
+				"bSortable": true,
+				"aTargets": [14]
+				},
+				{
+				"mRender": function (data, type, row) {
+					var codigo_movimiento = "";
+					if(row.codigo_movimiento!= null)codigo_movimiento = row.codigo_movimiento;
+					return codigo_movimiento;
+				},
+				"bSortable": true,
+				"aTargets": [15]
+				},
 				/*{
 				"mRender": function (data, type, row) {
 					var almacen_salida = "";
