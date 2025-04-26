@@ -3623,11 +3623,18 @@ class ComprobanteController extends Controller
             'guiad_numero' => $guia->guia_numero,
             'guiad_tipo' => $guia->guia_tipo
         ])->get();
+        
 		//echo $guia_detalles->guiad_numero; exit();
 		//print_r($guia_detalles);exit();
 		$cabecera = array("valor1","valor2");
 		$detalle = array("valor1","valor2");
 		foreach($guia_detalles as $index => $row ) {
+
+            $tabla_maestras = TablaMaestra::where([
+                'abreviatura' => $row->guiad_unid_medida,
+                'tipo' => '43',
+            ])->first();
+
 			$items1 = array(
 							"ordenItem"=> $row->guiad_orden_item, //"2",
                             "codigoItem"=> $row->guiad_codigo, //"2",
@@ -3637,7 +3644,7 @@ class ComprobanteController extends Controller
                             "precioProducto"=> $row->guiad_cantidad, //"1",
 							"descripcionItem"=> $row->guiad_descripcion,//"RESIDUO HIDROBIOLOGICOS",
 							"unidadMedidaItem"=> $row->guiad_unid_medida,
-							"unidadMedidaComercial"=> $row->guiad_unid_medida,
+							"unidadMedidaComercial"=> $tabla_maestras->abreviatura_comercial,
 							);
 			$items[$index]=$items1;
         }
@@ -3707,8 +3714,8 @@ class ComprobanteController extends Controller
         
         $data["tipoDocIdentidadReceptor"] = ($guia->guia_receptor_tipodoc =="5")?"6":$guia->guia_receptor_tipodoc;   //"6";
 
-        $data["tipoDireccionPuntoLlegada"] ="1";
-        $data["tipoDireccionPuntoPartida"] ="0";        
+        $data["tipoDireccionPuntoLlegada"] = ($guia->guia_receptor_tipodoc =="1")?"2": "1";//"1";
+        $data["tipoDireccionPuntoPartida"] ="0";
         $data["numeroDocIdentidadReceptor"] =$guia->guia_receptor_numdoc; //"20544125681";
         $data["indicadorRetornoVehiculoCon"] ="0";
         $data["indicadorRetornoVehiculoSin"] ="0";
@@ -3716,7 +3723,10 @@ class ComprobanteController extends Controller
         $data["direccionPuntoLlegadaCompleta"] =$guia->guia_llegada_direccion; //"JR. MINERIA NRO. 177, LIMA - LIMA - SANTA ANITA";
         $data["direccionPuntoPartidaCompleta"] =$guia->guia_partida_direccion; //"AV. NESTOR GAMBETA N° 6311, CALLAO - CALLAO - CALLAO";
         $data["indicadorTrasladoVehiculoM1oL"] ="0";
-        $data["rucEstablecimientoPuntoLlegada"] =$guia->guia_receptor_numdoc; //"20544125681";
+        if($guia->guia_receptor_tipodoc =="5"){
+            $data["rucEstablecimientoPuntoLlegada"] =$guia->guia_receptor_numdoc; //"20544125681";
+        }
+
         $data["rucEstablecimientoPuntoPartida"] =$guia->guia_emisor_numdoc;
        // $data["fechaEntregaBienesTransportista"] =$guia->guia_fecha_traslado; //"2024-08-01";
         $data["codigoEstablecimientoPuntoLlegada"] = isset($guia->guia_cod_estab_llegada)?$guia->guia_cod_estab_llegada:"0000";

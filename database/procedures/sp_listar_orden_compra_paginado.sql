@@ -1,6 +1,6 @@
--- DROP FUNCTION public.sp_listar_orden_compra_paginado(varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, refcursor);
+-- DROP FUNCTION public.sp_listar_orden_compra_paginado(varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, refcursor);
 
-CREATE OR REPLACE FUNCTION public.sp_listar_orden_compra_paginado(p_tipo_documento character varying, p_empresa_compra character varying, p_empresa_vende character varying, p_fecha_inicio character varying, p_fecha_fin character varying, p_numero_orden_compra character varying, p_numero_orden_compra_cliente character varying, p_situacion character varying, p_almacen_origen character varying, p_almacen_destino character varying, p_estado character varying, p_id_user character varying, p_id_vendedor character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
+CREATE OR REPLACE FUNCTION public.sp_listar_orden_compra_paginado(p_tipo_documento character varying, p_empresa_compra character varying, p_empresa_vende character varying, p_fecha_inicio character varying, p_fecha_fin character varying, p_numero_orden_compra character varying, p_numero_orden_compra_cliente character varying, p_situacion character varying, p_almacen_origen character varying, p_almacen_destino character varying, p_estado character varying, p_id_user character varying, p_id_vendedor character varying, p_estado_pedido character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
  RETURNS refcursor
  LANGUAGE plpgsql
 AS $function$
@@ -102,6 +102,11 @@ begin
 	If p_id_vendedor<>'' Then
 	 v_where:=v_where||'And oc.id_vendedor  = '''||p_id_vendedor||''' ';
 	End If;
+
+	If p_estado_pedido<>'' Then
+	 v_where:=v_where||'And oc.estado_pedido  = '''||p_estado_pedido||''' ';
+	End If;
+
 
 	EXECUTE ('SELECT count(1) '||v_tabla||v_where) INTO v_count;
 	v_col_count:=' ,'||v_count||' as TotalRows ';

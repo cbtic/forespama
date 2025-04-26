@@ -1,4 +1,4 @@
--- DROP FUNCTION public.sp_listar_entrada_producto_paginado(varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, refcursor);
+-- DROP FUNCTION public.sp_listar_ajuste_stock_paginado(varchar, varchar, varchar, varchar, varchar, varchar, varchar, refcursor);
 
 CREATE OR REPLACE FUNCTION public.sp_listar_ajuste_stock_paginado(p_tipo_documento character varying, p_fecha character varying, p_numero_operacion character varying, p_almacen_destino character varying, p_estado character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
  RETURNS refcursor
@@ -17,16 +17,16 @@ begin
 	
 	p_pagina=(p_pagina::Integer-1)*p_limit::Integer;
 
-	v_campos=' id, tipo, fecha_movimiento, tipo_documento, codigo, estado, id_tipo_documento, almacen, id_almacen, usuario ';
+	v_campos=' id, tipo, fecha_movimiento, tipo_documento, codigo, estado, id_tipo_documento, almacen, id_almacen, usuario, created_at ';
 
-	v_tabla=' (SELECT ep.id, ''INGRESO'' tipo, ep.fecha_ingreso fecha_movimiento, tm.denominacion tipo_documento, ep.codigo, ep.estado, ep.id_tipo_documento, a.denominacion almacen, ep.id_almacen_destino id_almacen, u.name usuario ' ||
+	v_tabla=' (SELECT ep.id, ''INGRESO'' tipo, ep.fecha_ingreso fecha_movimiento, tm.denominacion tipo_documento, ep.codigo, ep.estado, ep.id_tipo_documento, a.denominacion almacen, ep.id_almacen_destino id_almacen, u.name usuario, ep.created_at ' ||
               'FROM entrada_productos ep ' ||
               'INNER JOIN tabla_maestras tm ON ep.id_tipo_documento = tm.codigo::int AND tm.tipo = ''48'' ' ||
               'inner join almacenes a on ep.id_almacen_destino = a.id ' ||
               'left join users u on ep.id_usuario_inserta = u.id ' ||
 			  'where ep.ajuste = ''1'' ' ||
               'UNION ALL ' ||
-              'SELECT sp.id, ''SALIDA'' tipo, sp.fecha_salida fecha_movimiento, tm.denominacion tipo_documento, sp.codigo, sp.estado, sp.id_tipo_documento, a.denominacion almacen, sp.id_almacen_salida id_almacen, u.name usuario ' ||
+              'SELECT sp.id, ''SALIDA'' tipo, sp.fecha_salida fecha_movimiento, tm.denominacion tipo_documento, sp.codigo, sp.estado, sp.id_tipo_documento, a.denominacion almacen, sp.id_almacen_salida id_almacen, u.name usuario, sp.created_at ' ||
               'FROM salida_productos sp ' ||
               'INNER JOIN tabla_maestras tm ON sp.id_tipo_documento = tm.codigo::int AND tm.tipo = ''49'' ' ||
               'inner join almacenes a on sp.id_almacen_salida = a.id ' ||
@@ -59,9 +59,9 @@ begin
 	v_col_count:=' ,'||v_count||' as TotalRows ';
 
 	If v_count::Integer > p_limit::Integer then
-		v_scad:='SELECT '||v_campos||v_col_count|| 'from' ||v_tabla||v_where||' Order By id desc LIMIT '||p_limit||' OFFSET '||p_pagina||';'; 
+		v_scad:='SELECT '||v_campos||v_col_count|| 'from' ||v_tabla||v_where||' Order By created_at desc LIMIT '||p_limit||' OFFSET '||p_pagina||';'; 
 	else
-		v_scad:='SELECT '||v_campos||v_col_count|| 'from' ||v_tabla||v_where||' Order By id desc;'; 
+		v_scad:='SELECT '||v_campos||v_col_count|| 'from' ||v_tabla||v_where||' Order By created_at desc;'; 
 	End If;
 
 	--Raise Notice '%',v_scad;

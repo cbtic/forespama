@@ -333,10 +333,12 @@ function datatablenew(){
 						/*}else{
 							html += '<button style="font-size:12px" type="button" class="btn btn-sm btn-success" data-toggle="modal" onclick="modalOrdenCompra('+row.id+')" disabled><i class="fa fa-edit"></i> Editar</button>'; 
 						}*/
-						if(row.id_cerrado==1){
-							html += '<a href="javascript:void(0)" onclick=eliminarOrdenCompra('+row.id+','+row.estado+') class="btn btn-sm '+clase+'" style="font-size:12px;margin-left:10px">'+estado+'</a>';
-						}else{
-							html += '<a href="javascript:void(0)" onclick=eliminarOrdenCompra('+row.id+','+row.estado+') class="btn btn-sm '+clase+'" style="font-size:12px;margin-left:10px; pointer-events: none; opacity: 0.6; cursor: not-allowed;">'+estado+'</a>';
+						if (esAdministrador) {
+							if(row.id_cerrado==1){
+								html += '<a href="javascript:void(0)" onclick=eliminarOrdenCompra('+row.id+','+row.estado+') class="btn btn-sm '+clase+'" style="font-size:12px;margin-left:10px">'+estado+'</a>';
+							}else{
+								html += '<a href="javascript:void(0)" onclick=eliminarOrdenCompra('+row.id+','+row.estado+') class="btn btn-sm '+clase+'" style="font-size:12px;margin-left:10px; pointer-events: none; opacity: 0.6; cursor: not-allowed;">'+estado+'</a>';
+							}
 						}
 						if(almacenUsuario.some(almacen => almacen.id_almacen == row.id_almacen_destino) && row.id_cerrado==1){
 							html += '<button style="font-size:12px; margin-left:10px" type="button" class="btn btn-sm btn-info" data-toggle="modal" onclick="modalEntradaProductoOrdenCompra('+row.id+','+row.id_tipo_documento+')">Atender</button>';
@@ -359,9 +361,9 @@ function datatablenew(){
 						
 						html += '<button style="font-size:12px; margin-left:10px" type="button" class="btn btn-sm btn-warning" data-toggle="modal" onclick="modalHistorialEntradaProducto('+row.id+','+row.id_tipo_documento+')">Historial</button>';  
 						//html += '<a href="javascript:void(0)" onclick=modalResponsable('+row.id+') class="btn btn-sm btn-info" style="font-size:12px;margin-left:10px">Detalle Responsable</a>';
-						
-						html += '<a href="javascript:void(0)" onclick=anularOrdenCompra('+row.id+') class="btn btn-sm '+clase+'" style="font-size:12px;margin-left:10px">Anular</a>';
-
+						if (esAdministrador) {
+							html += '<a href="javascript:void(0)" onclick=anularOrdenCompra('+row.id+') class="btn btn-sm '+clase+'" style="font-size:12px;margin-left:10px">Anular</a>';
+						}
 						html += '</div>';
 						return html;
 					},
@@ -520,6 +522,7 @@ function DescargarArchivosExcel(){
 	var situacion = $('#situacion_bus').val();
 	var estado = $('#estado_bus').val();
 	var vendedor = $('#vendedor_bus').val();
+	var estado_pedido = $('#estado_pedido_bus').val();
 
 	if (tipo_documento == "")tipo_documento = 0;
 	if (empresa_compra == "")empresa_compra = 0;
@@ -533,8 +536,9 @@ function DescargarArchivosExcel(){
 	if (situacion == "")situacion = 0;
 	if (estado == "")estado = 0;
 	if (vendedor == "")vendedor = 0;
+	if (estado_pedido == "")estado_pedido = 0;
 	
-	location.href = '/orden_compra/exportar_listar_orden_compra/'+tipo_documento+'/'+empresa_compra+'/'+empresa_vende+'/'+fecha_inicio+'/'+fecha_fin+'/'+numero_orden_compra+'/'+numero_orden_compra_cliente+'/'+almacen_origen+'/'+almacen_destino+'/'+situacion+'/'+estado+'/'+vendedor;
+	location.href = '/orden_compra/exportar_listar_orden_compra/'+tipo_documento+'/'+empresa_compra+'/'+empresa_vende+'/'+fecha_inicio+'/'+fecha_fin+'/'+numero_orden_compra+'/'+numero_orden_compra_cliente+'/'+almacen_origen+'/'+almacen_destino+'/'+situacion+'/'+estado+'/'+vendedor+'/'+estado_pedido;
 }
 
 function generarLPN(){
@@ -544,11 +548,10 @@ function generarLPN(){
 	$.ajax({
 		url: "/orden_compra/generar_lpn/"+id_orden_compra,
 		type: "GET",
-		success: function (result) {  
+		success: function (result) {
 				//$("#diveditpregOpc").html(result);
 				//$('#openOverlayOpc').modal('show');
 				bootbox.alert("Generado Exitosamente");
 		}
 	});
-
 }

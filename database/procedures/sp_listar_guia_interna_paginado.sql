@@ -17,19 +17,26 @@ begin
 
 	p_pagina=(p_pagina::Integer-1)*p_limit::Integer;
 
-	v_campos=' gi.id, gi.fecha_emision, gi.punto_partida, gi.punto_llegada, gi.fecha_traslado, gi.costo_minimo, e.razon_social destinatario, gi.ruc_destinatario, m.denominiacion marca, 
+	v_campos=' gi.id, gi.fecha_emision, gi.punto_partida, gi.punto_llegada, gi.fecha_traslado, gi.costo_minimo,
+	case when gi.id_tipo_cliente  = 1 then 
+	(select p.nombres ||'' ''|| p.apellido_paterno ||'' ''|| p.apellido_materno from personas p
+	where p.id = gi.id_persona)
+	else (select e2.razon_social from empresas e2 
+	where e2.id = gi.id_destinatario ) 
+	end destinatario, 
+	case when gi.id_tipo_cliente  = 1 then gi.dni_destinatario 
+	else gi.ruc_destinatario
+	end ruc_destinatario, m.denominiacion marca, 
 	gi.placa, gi.constancia_inscripcion, gi.licencia_conducir, e2.razon_social id_transporte, gi.ruc_empresa_transporte ruc_transporte, tm1.denominacion tipo_documento, gi.numero_documento, 
 	tm2.denominacion motivo_traslado, gi.estado, gi.guia_serie, gi.guia_numero ';
 	
 	v_tabla=' from guia_internas gi 
-	inner join empresas e on gi.id_destinatario = e.id 
 	left join marcas m on gi.marca::int = m.id
 	left join empresas e2 on gi.id_empresa_transporte = e2.id 
-	LEFT JOIN 
-	    tabla_maestras tm1 
-	    ON (gi.id_tipo_documento = 1 AND gi.id_tipo_documento ::int = tm1.codigo::int AND tm1.tipo = ''48'')
-	    OR (gi.id_tipo_documento = 2 AND gi.id_tipo_documento ::int = tm1.codigo::int AND tm1.tipo = ''49'')
-	inner join tabla_maestras tm2 on gi.id_motivo_traslado ::int = tm2.codigo::int and tm2.tipo = ''63'' ';
+	LEFT JOIN tabla_maestras tm1 
+	ON (gi.id_tipo_documento = 1 AND gi.id_tipo_documento ::int = tm1.codigo::int AND tm1.tipo = ''48'')
+	OR (gi.id_tipo_documento = 2 AND gi.id_tipo_documento ::int = tm1.codigo::int AND tm1.tipo = ''49'')
+	inner join tabla_maestras tm2 on gi.id_motivo_traslado ::int = tm2.codigo::int and tm2.tipo = ''63''  ';
 	
 	v_where = ' Where 1=1 '; 
 
