@@ -13,8 +13,18 @@ $(document).ready(function () {
             data: formData,
             contentType: false,
             processData: false,
+			dataType: 'json', 
             success: function(response) {
-				datatablenew();
+				
+				console.log(response); 
+
+				if(response.cantidad>0){
+					bootbox.alert("El numero de orden de compra de cliente ya existe. Por favor ingrese otro.");
+					return false;
+				}else{
+					datatablenew();
+				}
+				
             }
         });
 		return false;

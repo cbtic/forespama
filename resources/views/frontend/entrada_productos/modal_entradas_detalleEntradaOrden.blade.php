@@ -22,9 +22,9 @@
 #tablemodal{
     border-spacing: 0;
     display: flex;/*Se ajuste dinamicamente al tamano del dispositivo**/
-    max-height: 80vh; /*El alto que necesitemos**/
-    overflow-y: auto; /**El scroll verticalmente cuando sea necesario*/
-    overflow-x: hidden;/*Sin scroll horizontal*/
+    /*max-height: 80vh;*/ /*El alto que necesitemos**/
+    /*overflow-y: auto;*/ /**El scroll verticalmente cuando sea necesario*/
+    /*overflow-x: hidden;*//*Sin scroll horizontal*/
     table-layout: fixed;/**Forzamos a que las filas tenga el mismo ancho**/
     width: 98vw; /*El ancho que necesitemos*/
     border:1px solid #c4c0c9;
@@ -1065,10 +1065,14 @@ function fn_save_detalle_producto(){
                 data :  $('#frmDetalleProductos').serialize(),
                 success: function (result) {
                     //alert(result.id)
+                    
+                    
                     datatablenew();
                     $('#openOverlayOpc').modal('hide');
                     $('.loader').hide();
                     bootbox.alert("Se guard&oacute; satisfactoriamente"); 
+                    
+                    
                     //if (result.id>0) {
                     //   modalEntradaProducto(result.id,result.tipo_movimiento);
                     //}

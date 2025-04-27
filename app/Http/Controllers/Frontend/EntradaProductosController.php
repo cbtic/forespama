@@ -395,6 +395,15 @@ class EntradaProductosController extends Controller
                 $porcentaje = $request->input('porcentaje');
                 $id_descuento = $request->input('id_descuento');
 
+
+                $cantidad_items = count($item);
+                //echo $request->id_orden_compra;
+                //$salida_producto = SalidaProducto::where('id_orden_compra',$request->id_orden_compra)->first();
+                //print_r($salida_producto);
+                //$salida_producto_detalle = SalidaProductoDetalle::where('id_salida_productos',$salida_producto->id)->get();
+                //echo count($salida_producto_detalle);
+                //exit();
+
                 $salida_producto_model = new SalidaProducto;
                 $codigo = $salida_producto_model->getCodigoSalidaProducto($request->tipo_documento);
 
@@ -428,7 +437,10 @@ class EntradaProductosController extends Controller
                 $salida_producto->id_persona_recibe = $request->persona_recibe;
                 $salida_producto->tipo_devolucion = "1";
                 $salida_producto->id_usuario_inserta = $id_user;
+                $salida_producto->cerrado = 2;
                 $salida_producto->save();
+                $id_salida_productos = $salida_producto->id;
+                $id_orden_compra = $salida_producto->id_orden_compra;
 
                 $valida_estado = true;
 
@@ -527,22 +539,29 @@ class EntradaProductosController extends Controller
                     }
                 }
 
-                if($valida_estado==true){
-                    $salida_producto = SalidaProducto::where('id_orden_compra',$request->id_orden_compra)->first();
-                    $salida_producto_detalle = SalidaProductoDetalle::where('id_salida_productos',$salida_producto->id)->get();
-                    $orden_compra = OrdenCompra::find($salida_producto->id_orden_compra);
+                //if($valida_estado==true){
+                    //$salida_producto = SalidaProducto::where('id_orden_compra',$request->id_orden_compra)->first();
+                    $salida_producto_detalle = SalidaProductoDetalle::where('id_salida_productos',$id_salida_productos)->where('estado','1')->get();
+                    //$orden_compra = OrdenCompra::find($id_orden_compra);
                     //$orden_compra_detalle = OrdenCompraDetalle::where('id_orden_compra',$orden_compra->id)->get();
                     $salida_producto_detalle_model = new SalidaProductoDetalle;
                     
+                    //echo "id_salida_productos:".$id_salida_productos;
+
                     foreach($salida_producto_detalle as $index => $detalle){
 
                         //$detalle_orden = $orden_compra_detalle[$index];
-                        $detalle_orden = OrdenCompraDetalle::where('id_orden_compra',$orden_compra->id)->where('id_producto',$detalle->id_producto)->first();
+                        $detalle_orden = OrdenCompraDetalle::where('id_orden_compra',$id_orden_compra)->where('id_producto',$detalle->id_producto)->where('estado','1')->first();
                         
                         $cantidad_requerida = $detalle_orden->cantidad_requerida;
                         
-                        $cantidad_ingresada = $salida_producto_detalle_model->getCantidadSalidaProductoByOrdenProducto($orden_compra->id,$detalle->id_producto);
+                        $cantidad_ingresada = $salida_producto_detalle_model->getCantidadSalidaProductoByOrdenProducto($id_orden_compra,$detalle->id_producto);
                         
+                        //echo "id_producto:".$detalle->id_producto;
+                        //echo "id_orden_compra:".$id_orden_compra;
+                        //echo "cantidad_requerida:".$cantidad_requerida;
+                        //echo "cantidad_ingresada:".$cantidad_ingresada;
+
                         if($cantidad_requerida - $cantidad_ingresada==0){
                             $salidaProductoDetalleObj = SalidaProductoDetalle::find($detalle->id);
                             $salidaProductoDetalleObj->cerrado = 2;
@@ -554,19 +573,31 @@ class EntradaProductosController extends Controller
                         }
                     }
 
+                    //cantidad_items 
+
                     $salida_producto_detalle_valida = SalidaProductoDetalle::where('id_salida_productos',$salida_producto->id)->where('cerrado','2')->get();
-                    if($salida_producto_detalle_valida->count()==$salida_producto_detalle->count()){
+                    
+                    //if($salida_producto_detalle_valida->count()==$salida_producto_detalle->count()){
+                    //$id_orden_compra
+                    
+                    $orden_compra_detalle_model = new OrdenCompraDetalle;
+                    $cantidadAbierto = $orden_compra_detalle_model->getCantidadAbiertoOrdenCompraDetalleByIdOrdenCompra($id_orden_compra);
+
+                    if($cantidadAbierto==0){
+                    
+                        /*
                         $salida_producto_all = SalidaProducto::where('id_orden_compra',$request->id_orden_compra)->get();
                         foreach ($salida_producto_all as $salida_producto_) {
                             $salida_producto_->cerrado = 2;
                             $salida_producto_->save();
                         }
+                        */
 
-                        $OrdenCompraObj = OrdenCompra::find($orden_compra->id);
+                        $OrdenCompraObj = OrdenCompra::find($id_orden_compra);
                         $OrdenCompraObj->cerrado = 2;
                         $OrdenCompraObj->save();
                     }
-                }
+                //}
 
                 $salida_producto2 = new SalidaProducto;
 

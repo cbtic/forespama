@@ -644,8 +644,17 @@ class OrdenCompraController extends Controller
             $numero_orden_compra_cliente = $row['NRO_OC'];
             $fecha_vencimiento = Carbon::createFromFormat('d/m/Y', $row['FECHA_HASTA']);
 
+
             if($count == 0){
 
+                $OrdenCompraExiste = OrdenCompra::where("numero_orden_compra_cliente",$numero_orden_compra_cliente)->where("estado","1")->get();
+            
+                if(count($OrdenCompraExiste)>0){
+                    $array["cantidad"] = count($OrdenCompraExiste);
+                    echo json_encode($array);
+                    exit();
+                }
+                
                 $orden_compra_model = new OrdenCompra;
 		        $codigo_orden_compra = $orden_compra_model->getCodigoOrdenCompra($id_tipo_documento);
                 $numero_orden_compra = $codigo_orden_compra[0]->codigo;
@@ -774,11 +783,15 @@ class OrdenCompraController extends Controller
 
         fclose($file);
 
+        $array["cantidad"] = count($OrdenCompraExiste);
+        echo json_encode($array);
+        /*
         return response()->json([
             'message' => 'Datos importados correctamente.',
             'filas_importadas' => $count,
+            'cantidad' => 0
         ], 200);
-
+        */
     }
     
     function extension($filename){$file = explode(".",$filename); return strtolower(end($file));}
