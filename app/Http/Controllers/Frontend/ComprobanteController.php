@@ -4232,6 +4232,39 @@ class ComprobanteController extends Controller
 
     }
 
+    public function create_ventas(){
+        
+        $empresa_model = new Empresa;
+
+        $empresas = $empresa_model->getEmpresaAll();
+
+        $anio_inicio = 2019;
+        $anio_actual = now()->year;
+        $anios = range($anio_inicio, $anio_actual);
+
+        return view('frontend.comprobante.create_ventas',compact('anios','empresas'));
+    }
+
+    public function lista_ventas_anio($anio, $empresa){
+
+        $comprobante_model = new Comprobante;
+
+        $reporte_ventas = $comprobante_model->obtenerVentasByAnio($anio, $empresa);
+        //dd($reporte_ventas);exit();
+        return view('frontend.comprobante.lista_ventas_anio',compact('reporte_ventas'));
+
+    }
+
+    public function lista_pagos_anio($anio, $empresa){
+
+        $comprobante_model = new Comprobante;
+
+        $reporte_ventas = $comprobante_model->obtenerPagosByAnio($anio, $empresa);
+        //dd($reporte_ventas);exit();
+        return view('frontend.comprobante.lista_pagos_anio',compact('reporte_ventas'));
+
+    }
+
 }
 
 class InvoicesExport implements FromArray, WithHeadings, WithStyles

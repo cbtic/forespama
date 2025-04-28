@@ -1292,7 +1292,20 @@ class OrdenCompraController extends Controller
             $id_producto = $equivalenciaProducto->id_producto;
             $producto = Producto::find($id_producto);
             $cantidad_requerida = $row['UNIDADES'];
-            
+
+            //dd($count);exit();
+
+            if($count == 0){
+                
+                $existeTiendaOrdenCompra = TiendaDetalleOrdenCompra::where("id_orden_compra",$orden_compra->id)->where("estado",1)->get();
+                //dd($existeTiendaOrdenCompra);exit();
+                if(count($existeTiendaOrdenCompra)>0){
+                    $array["cantidad"] = count($existeTiendaOrdenCompra);
+                    echo json_encode($array);
+                    exit();
+                }
+            }
+                
             $tienda_detalle_orden_compra = new TiendaDetalleOrdenCompra;
             $tienda_detalle_orden_compra->id_tienda = $id_tienda;
             $tienda_detalle_orden_compra->id_orden_compra = $id_orden_compra;
@@ -1303,6 +1316,8 @@ class OrdenCompraController extends Controller
             $tienda_detalle_orden_compra->save();
 
             $count++;
+            //}
+            
         }
 
         $ordenCompra = OrdenCompra::find($id_orden_compra);

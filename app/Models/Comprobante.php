@@ -474,5 +474,63 @@ class Comprobante extends Model
         return $data;
     }
 
+    function obtenerVentasByAnio($anio, $empresa){
+
+        $empresa_ = "";
+        
+        if($empresa!="0"){
+            $empresa_=" where c.id_empresa = '".$empresa."' ";
+        }
+
+        $cad = "select 
+        sum(case when to_char(c.fecha, 'MM') = '01' and to_char(c.fecha, 'YYYY') = '".$anio."' then c.total::float else 0 end) as enero,
+        sum(case when to_char(c.fecha, 'MM') = '02' and to_char(c.fecha, 'YYYY') = '".$anio."' then c.total::float else 0 end) as febrero,
+        sum(case when to_char(c.fecha, 'MM') = '03' and to_char(c.fecha, 'YYYY') = '".$anio."' then c.total::float else 0 end) as marzo,
+        sum(case when to_char(c.fecha, 'MM') = '04' and to_char(c.fecha, 'YYYY') = '".$anio."' then c.total::float else 0 end) as abril,
+        sum(case when to_char(c.fecha, 'MM') = '05' and to_char(c.fecha, 'YYYY') = '".$anio."' then c.total::float else 0 end) as mayo,
+        sum(case when to_char(c.fecha, 'MM') = '06' and to_char(c.fecha, 'YYYY') = '".$anio."' then c.total::float else 0 end) as junio,
+        sum(case when to_char(c.fecha, 'MM') = '07' and to_char(c.fecha, 'YYYY') = '".$anio."' then c.total::float else 0 end) as julio,
+        sum(case when to_char(c.fecha, 'MM') = '08' and to_char(c.fecha, 'YYYY') = '".$anio."' then c.total::float else 0 end) as agosto,
+        sum(case when to_char(c.fecha, 'MM') = '09' and to_char(c.fecha, 'YYYY') = '".$anio."' then c.total::float else 0 end) as setiembre,
+        sum(case when to_char(c.fecha, 'MM') = '10' and to_char(c.fecha, 'YYYY') = '".$anio."' then c.total::float else 0 end) as octubre,
+        sum(case when to_char(c.fecha, 'MM') = '11' and to_char(c.fecha, 'YYYY') = '".$anio."' then c.total::float else 0 end) as noviembre,
+        sum(case when to_char(c.fecha, 'MM') = '12' and to_char(c.fecha, 'YYYY') = '".$anio."' then c.total::float else 0 end) as diciembre
+        from comprobantes c
+        ".$empresa_." ";
+        
+        $data = DB::select($cad);
+        
+        return $data;
+    }
+
+    function obtenerPagosByAnio($anio, $empresa){
+
+        $empresa_ = "";
+        
+        if($empresa!="0"){
+            $empresa_=" where c.id_empresa = '".$empresa."' ";
+        }
+        
+        $cad = "select 
+        sum(case when to_char(c.fecha, 'MM') = '01' and to_char(c.fecha, 'YYYY') = '".$anio."' then c.total::float else 0 end) as enero,
+        sum(case when to_char(c.fecha, 'MM') = '02' and to_char(c.fecha, 'YYYY') = '".$anio."' then c.total::float else 0 end) as febrero,
+        sum(case when to_char(c.fecha, 'MM') = '03' and to_char(c.fecha, 'YYYY') = '".$anio."' then c.total::float else 0 end) as marzo,
+        sum(case when to_char(c.fecha, 'MM') = '04' and to_char(c.fecha, 'YYYY') = '".$anio."' then c.total::float else 0 end) as abril,
+        sum(case when to_char(c.fecha, 'MM') = '05' and to_char(c.fecha, 'YYYY') = '".$anio."' then c.total::float else 0 end) as mayo,
+        sum(case when to_char(c.fecha, 'MM') = '06' and to_char(c.fecha, 'YYYY') = '".$anio."' then c.total::float else 0 end) as junio,
+        sum(case when to_char(c.fecha, 'MM') = '07' and to_char(c.fecha, 'YYYY') = '".$anio."' then c.total::float else 0 end) as julio,
+        sum(case when to_char(c.fecha, 'MM') = '08' and to_char(c.fecha, 'YYYY') = '".$anio."' then c.total::float else 0 end) as agosto,
+        sum(case when to_char(c.fecha, 'MM') = '09' and to_char(c.fecha, 'YYYY') = '".$anio."' then c.total::float else 0 end) as setiembre,
+        sum(case when to_char(c.fecha, 'MM') = '10' and to_char(c.fecha, 'YYYY') = '".$anio."' then c.total::float else 0 end) as octubre,
+        sum(case when to_char(c.fecha, 'MM') = '11' and to_char(c.fecha, 'YYYY') = '".$anio."' then c.total::float else 0 end) as noviembre,
+        sum(case when to_char(c.fecha, 'MM') = '12' and to_char(c.fecha, 'YYYY') = '".$anio."' then c.total::float else 0 end) as diciembre
+        from comprobantes c 
+        inner join sodimac_factura_detalles sfd on '01-' || c.serie ||'-'|| lpad(coalesce(c.numero::int, 1)::varchar, 8, '0') = sfd.numero_documento
+         ".$empresa_." ";
+        
+        $data = DB::select($cad);
+        
+        return $data;
+    }
 	
 }

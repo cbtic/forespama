@@ -8,6 +8,21 @@
 */
 /*.datepicker{ z-index:99999 !important; }*/
 
+.modal-dialog {
+  max-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-content {
+  flex: 1 1 auto;
+  overflow: hidden;
+}
+
+.modal-body {
+  overflow-y: auto;
+}
+
 .datepicker,
 .table-condensed {
   width: 250px;

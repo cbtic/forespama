@@ -326,11 +326,15 @@
 						   <div class="dropdown-menu" aria-labelledby="navbarDropdownPrueba">
 
 								@can('Consulta de Facturacion')
-										<x-utils.link :href="route('frontend.comprobante.create_facturacion')" class="dropdown-item" :text="__('Consulta de Facturacion')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+									<x-utils.link :href="route('frontend.comprobante.create_facturacion')" class="dropdown-item" :text="__('Consulta de Facturacion')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
 								@endif
 
 								@can('Facturacion de Pagos')
-										<x-utils.link :href="route('frontend.comprobante.create_pagos')" class="dropdown-item" :text="__('Facturacion de Pagos')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+									<x-utils.link :href="route('frontend.comprobante.create_pagos')" class="dropdown-item" :text="__('Facturacion de Pagos')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+								@endif
+
+								@can('Reporte Ventas')
+									<x-utils.link :href="route('frontend.comprobante.create_ventas')" class="dropdown-item" :text="__('Reporte Ventas')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
 								@endif
 
 							</div>
