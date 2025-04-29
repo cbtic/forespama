@@ -4265,6 +4265,26 @@ class ComprobanteController extends Controller
 
     }
 
+    public function lista_retencion_anio($anio, $empresa){
+
+        $comprobante_model = new Comprobante;
+
+        $reporte_ventas = $comprobante_model->obtenerRetencionByAnio($anio, $empresa);
+        //dd($reporte_ventas);exit();
+        return view('frontend.comprobante.lista_retencion_anio',compact('reporte_ventas'));
+
+    }
+
+    public function lista_cobros_anio($anio, $empresa){
+
+        $comprobante_model = new Comprobante;
+
+        $reporte_ventas = $comprobante_model->obtenerCobrosByAnio($anio, $empresa);
+        //dd($reporte_ventas);exit();
+        return view('frontend.comprobante.lista_cobros_anio',compact('reporte_ventas'));
+
+    }
+
 }
 
 class InvoicesExport implements FromArray, WithHeadings, WithStyles

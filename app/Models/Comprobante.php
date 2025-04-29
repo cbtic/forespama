@@ -479,7 +479,7 @@ class Comprobante extends Model
         $empresa_ = "";
         
         if($empresa!="0"){
-            $empresa_=" where c.id_empresa = '".$empresa."' ";
+            $empresa_=" and c.id_empresa = '".$empresa."' ";
         }
 
         $cad = "select 
@@ -496,6 +496,7 @@ class Comprobante extends Model
         sum(case when to_char(c.fecha, 'MM') = '11' and to_char(c.fecha, 'YYYY') = '".$anio."' then c.total::float else 0 end) as noviembre,
         sum(case when to_char(c.fecha, 'MM') = '12' and to_char(c.fecha, 'YYYY') = '".$anio."' then c.total::float else 0 end) as diciembre
         from comprobantes c
+        where c.id_empresa >=0
         ".$empresa_." ";
         
         $data = DB::select($cad);
@@ -508,7 +509,7 @@ class Comprobante extends Model
         $empresa_ = "";
         
         if($empresa!="0"){
-            $empresa_=" where c.id_empresa = '".$empresa."' ";
+            $empresa_=" and c.id_empresa = '".$empresa."' ";
         }
         
         $cad = "select 
@@ -526,7 +527,69 @@ class Comprobante extends Model
         sum(case when to_char(c.fecha, 'MM') = '12' and to_char(c.fecha, 'YYYY') = '".$anio."' then c.total::float else 0 end) as diciembre
         from comprobantes c 
         inner join sodimac_factura_detalles sfd on '01-' || c.serie ||'-'|| lpad(coalesce(c.numero::int, 1)::varchar, 8, '0') = sfd.numero_documento
-         ".$empresa_." ";
+        where c.id_empresa >=0
+        ".$empresa_." ";
+        
+        $data = DB::select($cad);
+        
+        return $data;
+    }
+
+    function obtenerRetencionByAnio($anio, $empresa){
+
+        $empresa_ = "";
+        
+        if($empresa!="0"){
+            $empresa_=" and c.id_empresa = '".$empresa."' ";
+        }
+        
+        $cad = "select 
+        sum(case when to_char(c.fecha, 'MM') = '01' and to_char(c.fecha, 'YYYY') = '".$anio."' then c.monto_retencion ::float else 0 end) as enero,
+        sum(case when to_char(c.fecha, 'MM') = '02' and to_char(c.fecha, 'YYYY') = '".$anio."' then c.monto_retencion::float else 0 end) as febrero,
+        sum(case when to_char(c.fecha, 'MM') = '03' and to_char(c.fecha, 'YYYY') = '".$anio."' then c.monto_retencion::float else 0 end) as marzo,
+        sum(case when to_char(c.fecha, 'MM') = '04' and to_char(c.fecha, 'YYYY') = '".$anio."' then c.monto_retencion::float else 0 end) as abril,
+        sum(case when to_char(c.fecha, 'MM') = '05' and to_char(c.fecha, 'YYYY') = '".$anio."' then c.monto_retencion::float else 0 end) as mayo,
+        sum(case when to_char(c.fecha, 'MM') = '06' and to_char(c.fecha, 'YYYY') = '".$anio."' then c.monto_retencion::float else 0 end) as junio,
+        sum(case when to_char(c.fecha, 'MM') = '07' and to_char(c.fecha, 'YYYY') = '".$anio."' then c.monto_retencion::float else 0 end) as julio,
+        sum(case when to_char(c.fecha, 'MM') = '08' and to_char(c.fecha, 'YYYY') = '".$anio."' then c.monto_retencion::float else 0 end) as agosto,
+        sum(case when to_char(c.fecha, 'MM') = '09' and to_char(c.fecha, 'YYYY') = '".$anio."' then c.monto_retencion::float else 0 end) as setiembre,
+        sum(case when to_char(c.fecha, 'MM') = '10' and to_char(c.fecha, 'YYYY') = '".$anio."' then c.monto_retencion::float else 0 end) as octubre,
+        sum(case when to_char(c.fecha, 'MM') = '11' and to_char(c.fecha, 'YYYY') = '".$anio."' then c.monto_retencion::float else 0 end) as noviembre,
+        sum(case when to_char(c.fecha, 'MM') = '12' and to_char(c.fecha, 'YYYY') = '".$anio."' then c.monto_retencion::float else 0 end) as diciembre
+        from comprobantes c 
+        where c.id_empresa >=0
+        ".$empresa_." ";
+        
+        $data = DB::select($cad);
+        
+        return $data;
+    }
+
+    function obtenerCobrosByAnio($anio, $empresa){
+
+        $empresa_ = "";
+        
+        if($empresa!="0"){
+            $empresa_=" and c.id_empresa = '".$empresa."' ";
+        }
+        
+        $cad = "select 
+        sum(case when to_char(sf.fecha_pago, 'MM') = '01' and to_char(sf.fecha_pago, 'YYYY') = '".$anio."' then abs(sfd.importe_total) ::float else 0 end) as enero,
+        sum(case when to_char(sf.fecha_pago, 'MM') = '02' and to_char(sf.fecha_pago, 'YYYY') = '".$anio."' then abs(sfd.importe_total)::float else 0 end) as febrero,
+        sum(case when to_char(sf.fecha_pago, 'MM') = '03' and to_char(sf.fecha_pago, 'YYYY') = '".$anio."' then abs(sfd.importe_total)::float else 0 end) as marzo,
+        sum(case when to_char(sf.fecha_pago, 'MM') = '04' and to_char(sf.fecha_pago, 'YYYY') = '".$anio."' then abs(sfd.importe_total)::float else 0 end) as abril,
+        sum(case when to_char(sf.fecha_pago, 'MM') = '05' and to_char(sf.fecha_pago, 'YYYY') = '".$anio."' then abs(sfd.importe_total)::float else 0 end) as mayo,
+        sum(case when to_char(sf.fecha_pago, 'MM') = '06' and to_char(sf.fecha_pago, 'YYYY') = '".$anio."' then abs(sfd.importe_total)::float else 0 end) as junio,
+        sum(case when to_char(sf.fecha_pago, 'MM') = '07' and to_char(sf.fecha_pago, 'YYYY') = '".$anio."' then abs(sfd.importe_total)::float else 0 end) as julio,
+        sum(case when to_char(sf.fecha_pago, 'MM') = '08' and to_char(sf.fecha_pago, 'YYYY') = '".$anio."' then abs(sfd.importe_total)::float else 0 end) as agosto,
+        sum(case when to_char(sf.fecha_pago, 'MM') = '09' and to_char(sf.fecha_pago, 'YYYY') = '".$anio."' then abs(sfd.importe_total)::float else 0 end) as setiembre,
+        sum(case when to_char(sf.fecha_pago, 'MM') = '10' and to_char(sf.fecha_pago, 'YYYY') = '".$anio."' then abs(sfd.importe_total)::float else 0 end) as octubre,
+        sum(case when to_char(sf.fecha_pago, 'MM') = '11' and to_char(sf.fecha_pago, 'YYYY') = '".$anio."' then abs(sfd.importe_total)::float else 0 end) as noviembre,
+        sum(case when to_char(sf.fecha_pago, 'MM') = '12' and to_char(sf.fecha_pago, 'YYYY') = '".$anio."' then abs(sfd.importe_total)::float else 0 end) as diciembre
+        from sodimac_facturas sf 
+        inner join sodimac_factura_detalles sfd on sf.id = sfd.id_sodimac_factura
+        where sfd.id_tipo_documento ='2'
+        ".$empresa_." ";
         
         $data = DB::select($cad);
         

@@ -1,5 +1,10 @@
 <!--<link rel="stylesheet" href="<?php //echo URL::to('/') ?>/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">-->
 <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/highcharts-3d.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+
 <style type="text/css">
 
 .table td.verde{
@@ -374,94 +379,187 @@ label.form-control-sm{
                                 </div>
                             </div>
 
-                            <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
+                            <div class="row">
+                                <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
 
-                                <div class="card-body">
-                                    <div>
-                                        <strong>
-                                            Facturado
-                                        </strong>
+                                    <div class="card-body">
+                                        <div>
+                                            <strong>
+                                                Facturado
+                                            </strong>
+                                        </div>
+                                        <div class="table-responsive">
+                                            <table id="tblVentasFacturado" class="table table-hover table-sm">
+                                                <thead>
+                                                    <tr style="font-size:13px">
+                                                        <th>Enero</th>
+                                                        <th>Febrero</th>
+                                                        <th>Marzo</th>
+                                                        <th>Abril</th>
+                                                        <th>Mayo</th>
+                                                        <th>Junio</th>
+                                                        <th>Julio</th>
+                                                        <th>Agosto</th>
+                                                        <th>Setiembre</th>
+                                                        <th>Octubre</th>
+                                                        <th>Noviembre</th>
+                                                        <th>Diciembre</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody style="font-size:13px">
+                                                    <tr style="font-size:13px">
+                                                        <td class="text-left">0.00</td>
+                                                        <td class="text-left">0.00</td>
+                                                        <td class="text-left">0.00</td>
+                                                        <td class="text-left">0.00</td>
+                                                        <td class="text-left">0.00</td>
+                                                        <td class="text-left">0.00</td>
+                                                        <td class="text-left">0.00</td>
+                                                        <td class="text-left">0.00</td>
+                                                        <td class="text-left">0.00</td>
+                                                        <td class="text-left">0.00</td>
+                                                        <td class="text-left">0.00</td>
+                                                        <td class="text-left">0.00</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
-                                    <div class="table-responsive">
-                                        <table id="tblVentasFacturado" class="table table-hover table-sm">
-                                            <thead>
-                                                <tr style="font-size:13px">
-                                                    <th>Enero</th>
-                                                    <th>Febrero</th>
-                                                    <th>Marzo</th>
-                                                    <th>Abril</th>
-                                                    <th>Mayo</th>
-                                                    <th>Junio</th>
-                                                    <th>Julio</th>
-                                                    <th>Agosto</th>
-                                                    <th>Setiembre</th>
-                                                    <th>Octubre</th>
-                                                    <th>Noviembre</th>
-                                                    <th>Diciembre</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody style="font-size:13px">
-                                                <tr style="font-size:13px">
-                                                    <td class="text-left">0.00</td>
-                                                    <td class="text-left">0.00</td>
-                                                    <td class="text-left">0.00</td>
-                                                    <td class="text-left">0.00</td>
-                                                    <td class="text-left">0.00</td>
-                                                    <td class="text-left">0.00</td>
-                                                    <td class="text-left">0.00</td>
-                                                    <td class="text-left">0.00</td>
-                                                    <td class="text-left">0.00</td>
-                                                    <td class="text-left">0.00</td>
-                                                    <td class="text-left">0.00</td>
-                                                    <td class="text-left">0.00</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
+
+                                    <div class="card-body">
+                                        <div>
+                                            <strong>
+                                                Pagado
+                                            </strong>
+                                        </div>
+                                        <div class="table-responsive">
+                                            <table id="tblVentasPagado" class="table table-hover table-sm">
+                                                <thead>
+                                                    <tr style="font-size:13px">
+                                                        <th>Enero</th>
+                                                        <th>Febrero</th>
+                                                        <th>Marzo</th>
+                                                        <th>Abril</th>
+                                                        <th>Mayo</th>
+                                                        <th>Junio</th>
+                                                        <th>Julio</th>
+                                                        <th>Agosto</th>
+                                                        <th>Setiembre</th>
+                                                        <th>Octubre</th>
+                                                        <th>Noviembre</th>
+                                                        <th>Diciembre</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody style="font-size:13px">
+                                                    <tr style="font-size:13px">
+                                                        <td class="text-left">0.00</td>
+                                                        <td class="text-left">0.00</td>
+                                                        <td class="text-left">0.00</td>
+                                                        <td class="text-left">0.00</td>
+                                                        <td class="text-left">0.00</td>
+                                                        <td class="text-left">0.00</td>
+                                                        <td class="text-left">0.00</td>
+                                                        <td class="text-left">0.00</td>
+                                                        <td class="text-left">0.00</td>
+                                                        <td class="text-left">0.00</td>
+                                                        <td class="text-left">0.00</td>
+                                                        <td class="text-left">0.00</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+
+                                    <div class="card-body">
+                                        <div>
+                                            <strong>
+                                                Retenciones
+                                            </strong>
+                                        </div>
+                                        <div class="table-responsive">
+                                            <table id="tblVentasRetencion" class="table table-hover table-sm">
+                                                <thead>
+                                                    <tr style="font-size:13px">
+                                                        <th>Enero</th>
+                                                        <th>Febrero</th>
+                                                        <th>Marzo</th>
+                                                        <th>Abril</th>
+                                                        <th>Mayo</th>
+                                                        <th>Junio</th>
+                                                        <th>Julio</th>
+                                                        <th>Agosto</th>
+                                                        <th>Setiembre</th>
+                                                        <th>Octubre</th>
+                                                        <th>Noviembre</th>
+                                                        <th>Diciembre</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody style="font-size:13px">
+                                                    <tr style="font-size:13px">
+                                                        <td class="text-left">0.00</td>
+                                                        <td class="text-left">0.00</td>
+                                                        <td class="text-left">0.00</td>
+                                                        <td class="text-left">0.00</td>
+                                                        <td class="text-left">0.00</td>
+                                                        <td class="text-left">0.00</td>
+                                                        <td class="text-left">0.00</td>
+                                                        <td class="text-left">0.00</td>
+                                                        <td class="text-left">0.00</td>
+                                                        <td class="text-left">0.00</td>
+                                                        <td class="text-left">0.00</td>
+                                                        <td class="text-left">0.00</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <div>
+                                            <strong>
+                                                Cobros
+                                            </strong>
+                                        </div>
+                                        <div class="table-responsive">
+                                            <table id="tblVentasCobros" class="table table-hover table-sm">
+                                                <thead>
+                                                    <tr style="font-size:13px">
+                                                        <th>Enero</th>
+                                                        <th>Febrero</th>
+                                                        <th>Marzo</th>
+                                                        <th>Abril</th>
+                                                        <th>Mayo</th>
+                                                        <th>Junio</th>
+                                                        <th>Julio</th>
+                                                        <th>Agosto</th>
+                                                        <th>Setiembre</th>
+                                                        <th>Octubre</th>
+                                                        <th>Noviembre</th>
+                                                        <th>Diciembre</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody style="font-size:13px">
+                                                    <tr style="font-size:13px">
+                                                        <td class="text-left">0.00</td>
+                                                        <td class="text-left">0.00</td>
+                                                        <td class="text-left">0.00</td>
+                                                        <td class="text-left">0.00</td>
+                                                        <td class="text-left">0.00</td>
+                                                        <td class="text-left">0.00</td>
+                                                        <td class="text-left">0.00</td>
+                                                        <td class="text-left">0.00</td>
+                                                        <td class="text-left">0.00</td>
+                                                        <td class="text-left">0.00</td>
+                                                        <td class="text-left">0.00</td>
+                                                        <td class="text-left">0.00</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
                                 </div>
-
-                                <div class="card-body">
-                                    <div>
-                                        <strong>
-                                            Pagado
-                                        </strong>
-                                    </div>
-                                    <div class="table-responsive">
-                                        <table id="tblVentasPagado" class="table table-hover table-sm">
-                                            <thead>
-                                                <tr style="font-size:13px">
-                                                    <th>Enero</th>
-                                                    <th>Febrero</th>
-                                                    <th>Marzo</th>
-                                                    <th>Abril</th>
-                                                    <th>Mayo</th>
-                                                    <th>Junio</th>
-                                                    <th>Julio</th>
-                                                    <th>Agosto</th>
-                                                    <th>Setiembre</th>
-                                                    <th>Octubre</th>
-                                                    <th>Noviembre</th>
-                                                    <th>Diciembre</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody style="font-size:13px">
-                                                <tr style="font-size:13px">
-                                                    <td class="text-left">0.00</td>
-                                                    <td class="text-left">0.00</td>
-                                                    <td class="text-left">0.00</td>
-                                                    <td class="text-left">0.00</td>
-                                                    <td class="text-left">0.00</td>
-                                                    <td class="text-left">0.00</td>
-                                                    <td class="text-left">0.00</td>
-                                                    <td class="text-left">0.00</td>
-                                                    <td class="text-left">0.00</td>
-                                                    <td class="text-left">0.00</td>
-                                                    <td class="text-left">0.00</td>
-                                                    <td class="text-left">0.00</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
+                                <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                                    <canvas id="ventasChart" width="100%" height="50"></canvas><br>
+                                    <div id="ventasPieChart" style="height: 400px; margin-top: 30px;"></div>
                                 </div>
                             </div>
                             <!--card-body-->
@@ -469,43 +567,15 @@ label.form-control-sm{
                     <!--</div>--><!--col-->
                     <!--</div>--><!--row-->
 
-                    <!-- Modal -->
-<!--                     
-                    <div class="modal fade" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel2" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel2">Seleccione Tipo de Documento</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-
-                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                        <div class="card-body">
-                                            <div id="" class="row">
-                                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
+                    <div id="openOverlayOpc" class="modal fade" role="dialog">
+                        <div class="modal-dialog" >
+                            <div id="id_content_OverlayoneOpc" class="modal-content" style="padding: 0px;margin: 0px">
+                                <div class="modal-body" style="padding: 0px;margin: 0px">
+                                    <div id="diveditpregOpc"></div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                                    -->
-                    <div id="openOverlayOpc" class="modal fade" role="dialog">
-                        <div class="modal-dialog" >
-                            <div id="id_content_OverlayoneOpc" class="modal-content" style="padding: 0px;margin: 0px">                            
-                                <div class="modal-body" style="padding: 0px;margin: 0px">
-                                    <div id="diveditpregOpc"></div>
-                                </div>                            
-                            </div>
-                        </div>                            
-                    </div>                    
 
                     @endsection
 
