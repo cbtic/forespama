@@ -588,8 +588,7 @@ class Comprobante extends Model
         sum(case when to_char(sf.fecha_pago, 'MM') = '12' and to_char(sf.fecha_pago, 'YYYY') = '".$anio."' then abs(sfd.importe_total)::float else 0 end) as diciembre
         from sodimac_facturas sf 
         inner join sodimac_factura_detalles sfd on sf.id = sfd.id_sodimac_factura
-        where sfd.id_tipo_documento ='2'
-        ".$empresa_." ";
+        where sfd.id_tipo_documento ='2'";
         
         $data = DB::select($cad);
         
