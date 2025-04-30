@@ -161,6 +161,9 @@ function generarGraficoVentas() {
 }
 
 function cargarDatosYGraficar() {
+
+	resetearTablasVentas();
+
 	const anio = $('#anio_bus').val();
 	const empresa = $('#empresa_bus').val();
 
@@ -186,14 +189,19 @@ function cargarDatosYGraficar() {
 				$("#tblVentasRetencion tbody").html(result);
 			}
 		}),
-		$.ajax({
-			url: "/comprobante/lista_cobros_anio/" + anio + "/" + empresa,
-			type: "GET",
-			success: function (result) {
-				$("#tblVentasCobros tbody").html(result);
-			}
-		})
+		
 	];
+	if (empresa == "23" || empresa == "0") {
+		promesas.push(
+			$.ajax({
+				url: "/comprobante/lista_cobros_anio/" + anio + "/" + empresa,
+				type: "GET",
+				success: function (result) {
+					$("#tblVentasCobros tbody").html(result);
+				}
+			})
+		);
+	}
 
 	$.when(...promesas).done(function () {
 		generarGraficoVentas();
@@ -320,4 +328,15 @@ function generarGraficoPastelVentas(facturado, pagado, retencion, cobros) {
             ]
         }]
     });
+}
+
+function resetearTablasVentas() {
+	const celdas = '<tr>' +
+		'<td class="text-left">0.00</td>'.repeat(12) +
+		'</tr>';
+
+	$("#tblVentasFacturado tbody").html(celdas);
+	$("#tblVentasPagado tbody").html(celdas);
+	$("#tblVentasRetencion tbody").html(celdas);
+	$("#tblVentasCobros tbody").html(celdas);
 }
