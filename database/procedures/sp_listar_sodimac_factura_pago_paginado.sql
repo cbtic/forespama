@@ -18,7 +18,7 @@ begin
 	
 	p_pagina=(p_pagina::Integer-1)*p_limit::Integer;
 
-	v_campos=' id, serie, numero, tipo, fecha, destinatario, cod_tributario, subtotal, impuesto, total, estado_pago, anulado, sunat, numero_orden_compra_cliente, moneda, numero_documento_sodimac, importe_total ';
+	v_campos=' id, serie, numero, tipo, fecha, destinatario, cod_tributario, subtotal, impuesto, total, estado_pago, anulado, sunat, numero_orden_compra_cliente, moneda, numero_documento_sodimac, importe_total, importe_inicial, importe_retencion, importe_detraccion, estado_pago_sodimac, coincide_total_inicial ';
 
 	v_filtros_fecha := '';
 	
@@ -30,12 +30,12 @@ begin
 	  v_filtros_fecha := v_filtros_fecha || ' AND c.fecha <= TO_DATE(''' || p_fecha_fin || ''', ''dd-mm-yyyy'') ';
 	END IF;
 
-	v_tabla=' (select c.id, c.serie, c.numero, c.tipo, TO_CHAR(c.fecha,''dd-mm-yyyy'') fecha, c.destinatario, c.cod_tributario, c.subtotal, c.impuesto, c.total, c.estado_pago, c.anulado, c.estado_sunat sunat, (select oc.numero_orden_compra_cliente from orden_compras oc inner join orden_compra_detalles ocd on oc.id = ocd.id_orden_compra left join valorizaciones v on ocd.id = v.pk_registro where v.id_comprobante = c.id and oc.estado =''1'' limit 1) numero_orden_compra_cliente, c.moneda, sfd.numero_documento numero_documento_sodimac, sfd.importe_total  ' ||
+	v_tabla=' (select c.id, c.serie, c.numero, c.tipo, TO_CHAR(c.fecha,''dd-mm-yyyy'') fecha, c.destinatario, c.cod_tributario, c.subtotal, c.impuesto, c.total, c.estado_pago, c.anulado, c.estado_sunat sunat, (select oc.numero_orden_compra_cliente from orden_compras oc inner join orden_compra_detalles ocd on oc.id = ocd.id_orden_compra left join valorizaciones v on ocd.id = v.pk_registro where v.id_comprobante = c.id and oc.estado =''1'' limit 1) numero_orden_compra_cliente, c.moneda, sfd.numero_documento numero_documento_sodimac, sfd.importe_total, sfd.importe_inicial, abs(sfd.importe_retencion) importe_retencion, sfd.importe_detraccion, case when sfd.importe_total is null then 0 else 1 end as estado_pago_sodimac, CASE WHEN c.total::float = sfd.importe_inicial::float THEN 1 ELSE 0 END AS coincide_total_inicial ' ||
               'FROM comprobantes c ' ||
               'left join sodimac_factura_detalles sfd on ''01-'' || c.serie ||''-''|| lpad(coalesce(c.numero::int, 1)::varchar, 8, ''0'') = sfd.numero_documento  '||
               'Where 1 = 1 and  c.id_empresa in (''23'',''187'') '|| v_filtros_fecha || '
                UNION ALL ' ||
-              'select csh.id, csh.serie, csh.numero, csh.tipo, TO_CHAR(csh.fecha,''dd-mm-yyyy'') fecha, csh.destinatario, csh.cod_tributario, csh.subtotal, csh.impuesto, csh.total, '''' estado_pago, '''' anulado, '''' sunat, '''' numero_orden_compra_cliente, csh.moneda, sfd2.numero_documento, sfd2.importe_total ' ||
+              'select csh.id, csh.serie, csh.numero, csh.tipo, TO_CHAR(csh.fecha,''dd-mm-yyyy'') fecha, csh.destinatario, csh.cod_tributario, csh.subtotal, csh.impuesto, csh.total, '''' estado_pago, '''' anulado, '''' sunat, '''' numero_orden_compra_cliente, csh.moneda, sfd2.numero_documento, sfd2.importe_total, sfd2.importe_inicial, abs(sfd2.importe_retencion) importe_retencion, sfd2.importe_detraccion, case when sfd2.importe_total is null then 0 else 1 end as estado_pago_sodimac, CASE WHEN csh.total::float = sfd2.importe_inicial::float THEN 1 ELSE 0 END AS coincide_total_inicial ' ||
               'from comprobante_sodimac_historicos csh ' ||
               'left join sodimac_factura_detalles sfd2 on ''01-'' || csh.serie ||''-''|| lpad(coalesce(csh.numero::int, 1)::varchar, 8, ''0'') = sfd2.numero_documento ) union_table ';
 	
