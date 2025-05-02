@@ -4016,6 +4016,9 @@ class ComprobanteController extends Controller
 		$p[]="";
         $p[]=$request->serie;
         $p[]=$request->numero;
+        $p[]=$request->estado_pago;
+        $p[]=$request->observacion_pago;
+        $p[]=$request->dias_pagado;
         //$p[]=$request->estado;
 		$p[]=$request->NumeroPagina;
 		$p[]=$request->NumeroRegistros;

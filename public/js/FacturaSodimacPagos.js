@@ -65,6 +65,9 @@ function datatablenew(){
 			var tipo_documento = $('#tipo_documento_bus').val();
             var serie = $('#serie_bus').val();
             var numero = $('#numero_bus').val();
+            var estado_pago = $('#estado_pago_bus').val();
+            var observacion_pago = $('#observacion_pago_bus').val();
+            var dias_pagado = $('#dias_pagado_bus').val();
             
 			var _token = $('#_token').val();
             oSettings.jqXHR = $.ajax({
@@ -73,8 +76,8 @@ function datatablenew(){
                 "type": "POST",
                 "url": sSource,
                 "data":{NumeroPagina:iNroPagina,NumeroRegistros:iCantMostrar,
-						fecha_ini:fecha_ini,fecha_fin:fecha_fin,tipo_documento:tipo_documento, 
-                        serie:serie, numero:numero, _token:_token
+						fecha_ini:fecha_ini,fecha_fin:fecha_fin,tipo_documento:tipo_documento, serie:serie, numero:numero, 
+                        estado_pago:estado_pago, observacion_pago:observacion_pago, dias_pagado:dias_pagado, _token:_token
                        },
                 "success": function (result) {
                     fnCallback(result);

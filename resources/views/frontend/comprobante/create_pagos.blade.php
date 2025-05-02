@@ -349,7 +349,7 @@ label.form-control-sm{
 
                                 <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
                                     <div class="form-group">
-                                        <input class="form-control form-control-sm" id="fecha_ini_bus" name="fecha_ini_bus" value="<?php echo date("d-m-Y") ?>" placeholder="Fecha Inicio">
+                                        <input class="form-control form-control-sm" id="fecha_ini_bus" name="fecha_ini_bus" value="<?php echo date("01-01-Y") ?>" placeholder="Fecha Inicio">
                                     </div>
                                 </div>
                                 <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
@@ -357,7 +357,7 @@ label.form-control-sm{
                                         <input class="form-control form-control-sm" id="fecha_fin_bus" name="fecha_fin_bus" value="" placeholder="Fecha fin">
                                     </div>
                                 </div>
-                                <div class="col-lg-2 col-md-12 col-sm-12 col-xs-12">
+                                <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
                                     <div class="form-group">
                                         <select name="tipo_documento_bus" id="tipo_documento_bus" class="form-control form-control-sm" onchange="validaTipoDocumento()">
                                             <option value=""> --Seleccionar Tipo Documento--</option>
@@ -384,6 +384,39 @@ label.form-control-sm{
                                 <div class="col-lg-1 col-md-12 col-sm-12 col-xs-12">
                                     <div class="form-group">
                                         <input type="text" name="numero_bus" id="numero_bus" value="{{old('clinum')}}" placeholder="N&uacute;mero" class="form-control form-control-sm">
+                                    </div>
+                                </div>
+                                <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+                                    <div class="form-group">
+                                        <select name="estado_pago_bus" id="estado_pago_bus" class="form-control form-control-sm" onchange="">
+                                        <option value=""> --Selecc. Estado Pago--</option>
+                                            <option value="0">
+                                                <?php echo "Pendiente" ?></option>
+                                            <option value="1">
+                                                <?php echo "Pagado" ?></option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+                                    <div class="form-group">
+                                        <select name="observacion_pago_bus" id="observacion_pago_bus" class="form-control form-control-sm" onchange="">
+                                        <option value=""> --Selecc. Observaci&oacute;n Pago--</option>
+                                            <option value="1">
+                                                <?php echo "OK" ?></option>
+                                            <option value="2">
+                                                <?php echo "OBSERVADO" ?></option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+                                    <div class="form-group">
+                                        <select name="dias_pagado_bus" id="dias_pagado_bus" class="form-control form-control-sm" onchange="">
+                                        <option value="" selected="selected">--Selecc. Dias Pagado--</option>
+                                        <option value="1"><=60</option>
+                                        <option value="2">>60 y <=80</option>
+                                        <option value="3">>80 y <=100</option>
+                                        <option value="4">>100</option>
+                                        </select>
                                     </div>
                                 </div>
                                 <!--<div class="col-lg-1 col-md-12 col-sm-12 col-xs-12">
