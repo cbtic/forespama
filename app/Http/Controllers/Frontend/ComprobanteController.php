@@ -4183,10 +4183,12 @@ class ComprobanteController extends Controller
     public function modal_factura_sodimac_detalle($id){
 		
         $comprobante_model = new Comprobante;
+        $tablaMaestra_model = new TablaMaestra;
 
         $sodimac_factura_detalle = $comprobante_model->obtenerFacturaDetalle($id);
+        $cobros_sodimac = $tablaMaestra_model->getMaestroByTipo(78);
 
-		return view('frontend.comprobante.modal_factura_sodimac_detalle',compact('id','sodimac_factura_detalle'));
+		return view('frontend.comprobante.modal_factura_sodimac_detalle',compact('id','sodimac_factura_detalle','cobros_sodimac'));
 
     }
 

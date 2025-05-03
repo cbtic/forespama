@@ -49,7 +49,7 @@ $(document).ready(function () {
 				console.log(response); 
 
 				if(response.cantidad>0){
-					bootbox.alert("El numero de orden de compra de cliente ya existe. Por favor ingrese otro.");
+					bootbox.alert("La Orden de Compra ya tiene asiganada tiendas. Por favor ingrese otro.");
 					return false;
 				}else{
 					datatablenew();

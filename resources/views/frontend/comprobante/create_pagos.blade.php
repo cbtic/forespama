@@ -412,10 +412,10 @@ label.form-control-sm{
                                     <div class="form-group">
                                         <select name="dias_pagado_bus" id="dias_pagado_bus" class="form-control form-control-sm" onchange="">
                                         <option value="" selected="selected">--Selecc. Dias Pagado--</option>
-                                        <option value="1"><=60</option>
-                                        <option value="2">>60 y <=80</option>
-                                        <option value="3">>80 y <=100</option>
-                                        <option value="4">>100</option>
+                                        <option value="1">Menor o igual a 60 d&iacute;as</option>
+                                        <option value="2">Entre 61 y 80 d&iacute;as</option>
+                                        <option value="3">Entre 81 y 100 d&iacute;as</option>
+                                        <option value="4">Mayor a 100 d&iacute;as</option>
                                         </select>
                                     </div>
                                 </div>

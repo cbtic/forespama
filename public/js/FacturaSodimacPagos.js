@@ -311,7 +311,7 @@ function datatablenew(){
 
                     if(row.estado_pago_sodimac == 1){
                         if(row.coincide_total_inicial == 1){
-                            coincide_total_inicial = "Pagado";
+                            coincide_total_inicial = "Ok";
                         }
                         if(row.coincide_total_inicial == 2){
                             coincide_total_inicial = "Observado";

@@ -199,6 +199,7 @@ function fn_save_detalle_producto(){
 								<th>Id</th>
 								<th>Tipo Documento</th>
 								<th>N&uacute;mero Documento</th>
+								<th>Tipo Cobro</th>
                                 <th style="text-align : right">Importe Inicial</th>
                                 <th style="text-align : right">Importe Retenci&oacute;n</th>
                                 <th style="text-align : right">Importe Detracci&oacute;n</th>
@@ -217,6 +218,17 @@ function fn_save_detalle_producto(){
                                 <td class="text-left" style="vertical-align:middle"><?php echo $row->id?></td>
                                 <td class="text-left" style="vertical-align:middle"><?php echo $row->tipo_documento?></td>
                                 <td class="text-left" style="vertical-align:middle"><?php echo $row->numero_documento?></td>
+                                <td class="text-left" style="vertical-align:middle">
+                                    <select name="unidad_origen" id="unidad_origen" class="form-control form-control-sm">
+                                        <option value="">--Seleccionar--</option>
+                                        <?php
+                                        foreach ($unidad_origen as $row){?>
+                                            <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$orden_compra->id_unidad_origen)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                            <?php 
+                                        }
+                                        ?>
+                                    </select>
+                                </td>
                                 <td class="text-right" style="vertical-align:middle"><?php echo $row->importe_inicial?></td>
                                 <td class="text-right" style="vertical-align:middle"><?php echo $row->importe_retencion?></td>
                                 <td class="text-right" style="vertical-align:middle"><?php echo $row->importe_detraccion?></td>

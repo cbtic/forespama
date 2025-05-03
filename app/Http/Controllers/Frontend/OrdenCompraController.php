@@ -1326,10 +1326,13 @@ class OrdenCompraController extends Controller
 
         fclose($file);
 
-        return response()->json([
+        $array["cantidad"] = count($existeTiendaOrdenCompra);
+        echo json_encode($array);
+
+        /*return response()->json([
             'message' => 'Datos importados correctamente.',
             'filas_importadas' => $count,
-        ], 200);
+        ], 200);*/
 
     }
 
