@@ -234,9 +234,9 @@ function datatablenew(){
                 },
                 {
                 "mRender": function (data, type, row) {
-                    var fecha = "";
-                    if(row.fecha!= null)fecha = row.fecha;
-                    return fecha;
+                    var fecha_pago = "";
+                    if(row.fecha_pago!= null)fecha_pago = row.fecha_pago;
+                    return fecha_pago;
                 },
                 "bSortable": false,
                 "aTargets": [12]
@@ -307,14 +307,19 @@ function datatablenew(){
                         coincide_total_inicial=""
                     };
                     return coincide_total_inicial;*/
+                    var coincide_total_inicial = "";
+
                     if(row.estado_pago_sodimac == 1){
-                        estado_pago_sodimac = "Pagado";
+                        if(row.coincide_total_inicial == 1){
+                            coincide_total_inicial = "Pagado";
+                        }
+                        if(row.coincide_total_inicial == 2){
+                            coincide_total_inicial = "Observado";
+                        }
                     }
                     if(row.estado_pago_sodimac == 0){
-                        estado_pago_sodimac = "Pendiente";
+                        estado_pago_sodimac = "";
                     }
-                    var coincide_total_inicial = "";
-                    if(row.coincide_total_inicial!= null)coincide_total_inicial = row.coincide_total_inicial;
                     return coincide_total_inicial;
                 },
                 "bSortable": false,
@@ -323,12 +328,19 @@ function datatablenew(){
                 },
                 {
                 "mRender": function (data, type, row) {
+                    
                     var dias_diferencia_pago = "";
                     if(row.dias_diferencia_pago!= null)dias_diferencia_pago = row.dias_diferencia_pago;
-                    return dias_diferencia_pago;
+                    if(parseInt(row.dias_diferencia_pago)>=60){
+                        return '<span style="color: red; font-weight: bold;">'+dias_diferencia_pago+'</span>';
+                    }else{
+                        return '<span style="color: blue; font-weight: bold;">'+dias_diferencia_pago+'</span>';
+                    }
+                    
                 },
                 "bSortable": false,
-                "aTargets": [19]
+                "aTargets": [19],
+                "className": 'text-right'
                 },
             ]
     });
