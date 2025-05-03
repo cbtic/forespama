@@ -2752,10 +2752,10 @@ class ComprobanteController extends Controller
 		$factura_detalles = ComprobanteDetalle::where([
             'serie' => $factura->serie,
             'numero' => $factura->numero,
-            'tipo' => $factura->tipo            
+            'tipo' => $factura->tipo
         ])->where('id_concepto', '<>', '26464')->get();
 		//print_r($factura); exit();
-        //print_r($factura_detalles); exit();		
+        //print_r($factura_detalles); exit();
 		$cabecera = array("valor1","valor2");
 		$detalle = array("valor1","valor2");
 		foreach($factura_detalles as $index => $row ) {
@@ -2833,7 +2833,7 @@ class ComprobanteController extends Controller
         $data["direccionReceptor"] = $factura->direccion;
         $data["formaPagoGlosa"] = ($factura->id_forma_pago =="1")?"CONTADO":"CREDITO";
         
-        if ($factura->numero_orden_compra_cliente!=Null){            
+        if ($factura->numero_orden_compra_cliente!=Null){
             $data["ordenCompra"] = $factura->numero_orden_compra_cliente;
         }
         

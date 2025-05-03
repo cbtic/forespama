@@ -506,12 +506,14 @@ label.form-control-sm{
                                                 <th class="text-right">IGV</th>
                                                 <th class="text-right">Importe Total</th>
                                                 <th>N&uacute;mero Documento Sodimac</th>
+                                                <th>Fecha Pago</th>
                                                 <th class="text-right">Sub Total Sodimac</th>
                                                 <th class="text-right">Retenci&oacute;n Sodimac</th>
                                                 <th class="text-right">Detracci&oacute;n Sodimac</th>
                                                 <th class="text-right">Total Sodimac</th>
                                                 <th class="text-right">Estado Pago</th>
                                                 <th class="text-right">Observaci&oacute;n Pago</th>
+                                                <th>D&iacute;as Pago</th>
                                             </tr>
                                         </thead>
                                         <tbody style="font-size:13px">

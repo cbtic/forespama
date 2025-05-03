@@ -232,7 +232,15 @@ function datatablenew(){
                 "bSortable": false,
                 "aTargets": [11]
                 },
-
+                {
+                "mRender": function (data, type, row) {
+                    var fecha = "";
+                    if(row.fecha!= null)fecha = row.fecha;
+                    return fecha;
+                },
+                "bSortable": false,
+                "aTargets": [12]
+                },
                 {
                 "mRender": function (data, type, row) {
                     var importe_total = "";
@@ -240,7 +248,7 @@ function datatablenew(){
                     return importe_total;
                 },
                 "bSortable": false,
-                "aTargets": [12],
+                "aTargets": [13],
                 "className": 'text-right'
                 },
                 {
@@ -250,7 +258,7 @@ function datatablenew(){
                     return importe_retencion;
                 },
                 "bSortable": false,
-                "aTargets": [13],
+                "aTargets": [14],
                 "className": 'text-right'
                 },
                 {
@@ -260,7 +268,7 @@ function datatablenew(){
                     return importe_detraccion;
                 },
                 "bSortable": false,
-                "aTargets": [14],
+                "aTargets": [15],
                 "className": 'text-right'
                 },
                 {
@@ -270,7 +278,7 @@ function datatablenew(){
                     return importe_inicial;
                 },
                 "bSortable": false,
-                "aTargets": [15],
+                "aTargets": [16],
                 "className": 'text-right'
                 },
                 {
@@ -285,24 +293,42 @@ function datatablenew(){
 						return estado_pago_sodimac;
 					},
 					"bSortable": false,
-					"aTargets": [16]
+					"aTargets": [17]
 				},
                 {
                 "mRender": function (data, type, row) {
                     //row.estado_pago == 
-                    var coincide_total_inicial = "";
+                    /*var coincide_total_inicial = "";
                     if(row.estado_pago_sodimac==1 && row.coincide_total_inicial!= null){
                         coincide_total_inicial = "OK" 
-                    }else if (row.estado_pago_sodimac==0){
-                        coincide_total_inicial=""
-                    }else{
+                    }else if (row.estado_pago_sodimac==2){
                         coincide_total_inicial="OBSERVADO"
+                    }else{
+                        coincide_total_inicial=""
                     };
+                    return coincide_total_inicial;*/
+                    if(row.estado_pago_sodimac == 1){
+                        estado_pago_sodimac = "Pagado";
+                    }
+                    if(row.estado_pago_sodimac == 0){
+                        estado_pago_sodimac = "Pendiente";
+                    }
+                    var coincide_total_inicial = "";
+                    if(row.coincide_total_inicial!= null)coincide_total_inicial = row.coincide_total_inicial;
                     return coincide_total_inicial;
                 },
                 "bSortable": false,
-                "aTargets": [17],
+                "aTargets": [18],
                 "className": 'text-right'
+                },
+                {
+                "mRender": function (data, type, row) {
+                    var dias_diferencia_pago = "";
+                    if(row.dias_diferencia_pago!= null)dias_diferencia_pago = row.dias_diferencia_pago;
+                    return dias_diferencia_pago;
+                },
+                "bSortable": false,
+                "aTargets": [19]
                 },
             ]
     });

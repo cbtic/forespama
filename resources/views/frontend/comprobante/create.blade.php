@@ -39,7 +39,7 @@
 
         $('#fechaF').datepicker({
             autoclose: true,
-            format: 'yyyy-mm-dd',
+            format: 'dd/mm/yyyy',
             changeMonth: true,
             changeYear: true,
             language: 'es'
