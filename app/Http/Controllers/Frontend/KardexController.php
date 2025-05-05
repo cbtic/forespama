@@ -209,6 +209,39 @@ class KardexController extends Controller
 
 	}
 
+	public function exportar_listar_existencia_consulta_producto($consulta_existencia_producto, $consulta_almacen_producto, $consulta_tipo_producto, $cantidad_existencia_producto) {
+
+		$id_user = Auth::user()->id;
+
+		if($consulta_existencia_producto=="0")$consulta_existencia_producto = "";
+		if($consulta_almacen_producto=="0")$consulta_almacen_producto = "";
+		if($consulta_tipo_producto=="0")$consulta_tipo_producto = "";
+
+		$kardex_model = new Kardex;
+		$p[]=$consulta_existencia_producto;
+		$p[]=$consulta_almacen_producto;
+		$p[]=$cantidad_existencia_producto;
+		$p[]=$consulta_tipo_producto;
+		$p[]=$id_user;
+		$p[]=1;
+		$p[]=10000;
+		$data = $kardex_model->listar_kardex_consulta_producto_ajax($p);
+		
+		$variable = [];
+		$n = 1;
+
+		array_push($variable, array("N","Codigo","Producto","Saldos","Stock Comprometido","Cantidad Disponible","Unidad Medida","Tipo Producto","Almacen"));
+		
+		foreach ($data as $r) {
+
+			array_push($variable, array($n++,$r->codigo, $r->denominacion, $r->saldos_cantidad, $r->cantidad_orden_compra, $r->saldo_final, $r->unidad_medida, $r->tipo_producto, $r->almacen_kardex));
+		}
+		
+		$export = new InvoicesExport2([$variable]);
+		return Excel::download($export, 'Reporte_existencias_consulta_producto.xlsx');
+		
+    }
+
 }
 
 class InvoicesExport implements FromArray, WithHeadings, WithStyles
@@ -274,6 +307,74 @@ class InvoicesExport implements FromArray, WithHeadings, WithStyles
 		->setFormatCode(\PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_NUMBER_00);*/ //SIRVE PARA PONER 2 DECIMALES A ESA COLUMNA
         
         foreach (range('A', 'E') as $col) {
+            $sheet->getColumnDimension($col)->setAutoSize(true);
+        }
+    }
+}
+
+class InvoicesExport2 implements FromArray, WithHeadings, WithStyles
+{
+	protected $invoices;
+
+	public function __construct(array $invoices)
+	{
+		$this->invoices = $invoices;
+	}
+
+	public function array(): array
+	{
+		return $this->invoices;
+	}
+
+    public function headings(): array
+    {
+        return ["N","Codigo","Producto","Saldos","Stock Comprometido","Cantidad Disponible","Unidad Medida","Tipo Producto","Almacen"];
+    }
+
+	public function styles(Worksheet $sheet)
+    {
+
+		$sheet->mergeCells('A1:I1');
+
+        $sheet->setCellValue('A1', "REPORTE DE CONSULTA DE EXISTENCIAS POR PRODUCTO- FORESPAMA");
+        $sheet->getStyle('A1:I1')->applyFromArray([
+            'font' => [
+                'bold' => true,
+                'color' => ['rgb' => 'FFFFFF'],
+            ],
+            'fill' => [
+                'fillType' => Fill::FILL_SOLID,
+                'startColor' => ['rgb' => '246257'],
+            ],
+            'alignment' => [
+                'horizontal' => Alignment::HORIZONTAL_CENTER,
+            ],
+        ]);
+
+		$sheet->getStyle('A1')->getAlignment()->setWrapText(true);
+		$sheet->getRowDimension(1)->setRowHeight(30);
+
+        $sheet->getStyle('A2:I2')->applyFromArray([
+            'font' => [
+                'bold' => true,
+                'color' => ['rgb' => '000000'],
+            ],
+            'fill' => [
+                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                'startColor' => ['rgb' => '2EB85C'],
+            ],
+			'alignment' => [
+			'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+    		],
+        ]);
+
+		//$sheet->fromArray($this->headings(), NULL, 'I2');
+
+		/*$sheet->getStyle('L3:L'.$sheet->getHighestRow())
+		->getNumberFormat()
+		->setFormatCode(\PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_NUMBER_00);*/ //SIRVE PARA PONER 2 DECIMALES A ESA COLUMNA
+        
+        foreach (range('A', 'I') as $col) {
             $sheet->getColumnDimension($col)->setAutoSize(true);
         }
     }

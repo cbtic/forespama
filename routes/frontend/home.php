@@ -455,6 +455,7 @@ Route::get('kardex/create_consulta', [KardexController::class, 'create_consulta'
 Route::post('kardex/listar_kardex_existencia_ajax', [KardexController::class, 'listar_kardex_existencia_ajax'])->name('kardex.listar_kardex_existencia_ajax');
 Route::post('kardex/listar_kardex_existencia_producto_ajax', [KardexController::class, 'listar_kardex_existencia_producto_ajax'])->name('kardex.listar_kardex_existencia_producto_ajax');
 Route::get('kardex/exportar_listar_existencia/{consulta_almacen}', [KardexController::class, 'exportar_listar_existencia'])->name('kardex.exportar_listar_existencia');
+Route::get('kardex/exportar_listar_existencia_consulta_producto/{consulta_existencia_producto}/{consulta_almacen_producto}/{consulta_tipo_producto}/{cantidad_existencia_producto}', [KardexController::class, 'exportar_listar_existencia_consulta_producto'])->name('kardex.exportar_listar_existencia_consulta_producto');
 
 Route::get('dispensacion/create', [DispensacionController::class, 'create'])->name('dispensacion.create');
 Route::post('dispensacion/listar_dispensacion_ajax', [DispensacionController::class, 'listar_dispensacion_ajax'])->name('dispensacion.listar_dispensacion_ajax');

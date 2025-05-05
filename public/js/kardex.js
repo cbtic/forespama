@@ -53,6 +53,11 @@ $(document).ready(function () {
 
 	});
 
+	$('#btnDescargarConsultaProductos').on('click', function () {
+		DescargarConsultaProductoArchivosExcel()
+
+	});
+
 	$('#btnBuscarConsultaProducto').click(function () {
 		fn_ListarBusqueda_Existencia_Producto();
 	});
@@ -754,11 +759,25 @@ function fn_ListarBusqueda_Existencia_Producto() {
 };
 
 function DescargarArchivosExcel(){
-		
+	
 	var consulta_almacen = $('#consulta_almacen_bus').val();
 	if (consulta_almacen == "")consulta_almacen = 0;
 	
 	location.href = '/kardex/exportar_listar_existencia/'+consulta_almacen;
+}
+
+function DescargarConsultaProductoArchivosExcel(){
+	
+	var consulta_existencia_producto = $('#consulta_existencia_producto_bus').val();
+	var consulta_almacen_producto = $('#consulta_almacen_producto_bus').val();
+	var consulta_tipo_producto = $('#consulta_tipo_producto_bus').val();
+	var cantidad_existencia_producto = $('#cantidad_existencia_producto_bus').val();
+
+	if (consulta_existencia_producto == "")consulta_existencia_producto = 0;
+	if (consulta_almacen_producto == "")consulta_almacen_producto = 0;
+	if (consulta_tipo_producto == "")consulta_tipo_producto = 0;
+	
+	location.href = '/kardex/exportar_listar_existencia_consulta_producto/'+consulta_existencia_producto+'/'+consulta_almacen_producto+'/'+consulta_tipo_producto+'/'+cantidad_existencia_producto;
 }
 
 function obtenerProductosAlmacen(){
