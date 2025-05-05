@@ -462,8 +462,8 @@ class Comprobante extends Model
     }
 
     function obtenerFacturaDetalle($id){
-            
-        $cad = "select sfd.id, sfd.id_tipo_documento, tm.denominacion tipo_documento, sfd.numero_documento, sfd.importe_inicial, sfd.importe_retencion, sfd.importe_total, sfd.estado, sfd.importe_detraccion  
+        
+        $cad = "select sfd.id, sfd.id_tipo_documento, tm.denominacion tipo_documento, sfd.numero_documento, sfd.importe_inicial, sfd.importe_retencion, sfd.importe_total, sfd.estado, sfd.importe_detraccion, sfd.id_tipo_documento_cobro
         from sodimac_factura_detalles sfd 
         inner join tabla_maestras tm on sfd.id_tipo_documento = tm.codigo::int and tipo ='76'
         where sfd.id_sodimac_factura ='".$id."'

@@ -122,6 +122,8 @@
 
 $(document).ready(function() {
 
+    actualizarVisibilidadTiendas();
+    
 });
 
 </script>
@@ -142,12 +144,12 @@ $(document).ready(function() {
     
 });
 
-function fn_save_detalle_producto(){
+function fn_save_detalle_factura(){
 	
 	$.ajax({
-			url: "/entrada_productos/send_entrada_producto",
+			url: "/comprobante/send_detalle_factura",
             type: "POST",
-            data : $("#frmDetalleProductos").serialize(),
+            data : $("#frmDetalleFacturaSodimac").serialize(),
 			success: function (result) {
                 //alert(result.id)
                 $('#openOverlayOpc').modal('hide');
@@ -155,6 +157,38 @@ function fn_save_detalle_producto(){
                 //   modalEntradaProducto(result.id,result.tipo_movimiento);
                 //}
             }
+    });
+}
+
+document.addEventListener("change", function (event) {
+    if (event.target.classList.contains("cobros-select")) {
+        const selectedOption = event.target.options[event.target.selectedIndex];
+        const subCodigo = selectedOption.getAttribute("data-sub-codigo");
+        const rowId = event.target.getAttribute("data-row-id");
+        const tiendaSelect = document.getElementById("tienda-" + rowId);
+
+        if (subCodigo === "2") {
+            tiendaSelect.style.display = "block";
+        } else {
+            tiendaSelect.style.display = "none";
+            tiendaSelect.value = "";
+        }
+    }
+});
+
+function actualizarVisibilidadTiendas() {
+    document.querySelectorAll(".cobros-select").forEach(select => {
+        const selectedOption = select.options[select.selectedIndex];
+        const subCodigo = selectedOption.getAttribute("data-sub-codigo");
+        const rowId = select.getAttribute("data-row-id");
+        const tiendaSelect = document.getElementById("tienda-" + rowId);
+
+        if (subCodigo === "2") {
+            tiendaSelect.style.display = "block";
+        } else {
+            tiendaSelect.style.display = "none";
+            tiendaSelect.value = "";
+        }
     });
 }
 
@@ -200,6 +234,7 @@ function fn_save_detalle_producto(){
 								<th>Tipo Documento</th>
 								<th>N&uacute;mero Documento</th>
 								<th>Tipo Cobro</th>
+								<th>Tienda</th>
                                 <th style="text-align : right">Importe Inicial</th>
                                 <th style="text-align : right">Importe Retenci&oacute;n</th>
                                 <th style="text-align : right">Importe Detracci&oacute;n</th>
@@ -212,22 +247,41 @@ function fn_save_detalle_producto(){
                             $suma_total_sodimac = 0;
                             $suma_cobro_sodimac = 0;
                             $suma_total_ingreso = 0;
-                            foreach($sodimac_factura_detalle as $row){
+                            foreach($sodimac_factura_detalle as $key => $row){
+                            ?>
+                            <?php
+                            //$selected_cobro = collect($cobros_sodimac)->firstWhere('codigo', $row->id_tipo_documento_cobro);
+                            
                             ?>
                             <tr>
                                 <td class="text-left" style="vertical-align:middle"><?php echo $row->id?></td>
                                 <td class="text-left" style="vertical-align:middle"><?php echo $row->tipo_documento?></td>
                                 <td class="text-left" style="vertical-align:middle"><?php echo $row->numero_documento?></td>
                                 <td class="text-left" style="vertical-align:middle">
-                                    <select name="unidad_origen" id="unidad_origen" class="form-control form-control-sm">
+                                    <?php if($row->id_tipo_documento == 2){?>
+                                    <select name="cobros_sodimac[<?php echo $row->id ?>]" id="cobros_sodimac" class="form-control form-control-sm cobros-select" data-row-id="<?php echo $row->id ?>">
                                         <option value="">--Seleccionar--</option>
                                         <?php
-                                        foreach ($unidad_origen as $row){?>
-                                            <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$orden_compra->id_unidad_origen)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
-                                            <?php 
+                                        foreach ($cobros_sodimac as $row2){?>
+                                            <option value="<?php echo $row2->codigo ?>" data-sub-codigo="<?php echo $row2->sub_codigo ?>" <?php if($row2->codigo==$sodimac_factura_detalle[$key]->id_tipo_documento_cobro)echo "selected='selected'"?>><?php echo $row2->denominacion ?></option>
+                                        <?php 
                                         }
                                         ?>
                                     </select>
+                                    <?php }?>
+                                </td>
+                                <td class="text-left" style="vertical-align:middle">
+                                    <?php if($row->id_tipo_documento == 2){?>
+                                    <select name="tienda[<?php echo $row->id ?>]" id="tienda-<?php echo $row->id ?>"  class="form-control form-control-sm tienda-select" style="display: none;">
+                                        <option value="">--Seleccionar--</option>
+                                        <?php
+                                        foreach ($tiendas as $row3){?>
+                                            <option value="<?php echo $row3->id ?>" <?php if($row3->id==$sodimac_factura_detalle[$key]->id_tipo_documento_cobro)echo "selected='selected'"?>><?php echo $row3->denominacion ?></option>
+                                        <?php 
+                                        }
+                                        ?>
+                                    </select>
+                                    <?php }?>
                                 </td>
                                 <td class="text-right" style="vertical-align:middle"><?php echo $row->importe_inicial?></td>
                                 <td class="text-right" style="vertical-align:middle"><?php echo $row->importe_retencion?></td>
@@ -264,7 +318,7 @@ function fn_save_detalle_producto(){
                         <div class="col-sm-12 controls">
                             <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
                                 
-                                <!--<a href="javascript:void(0)" onClick="fn_save_detalle_producto()" class="btn btn-sm btn-success" style="margin-right:10px">Guardar</a>-->
+                                <a href="javascript:void(0)" onClick="fn_save_detalle_factura()" class="btn btn-sm btn-success" style="margin-right:10px">Guardar</a>
                                 <a href="javascript:void(0)" onClick="$('#openOverlayOpc').modal('hide');" class="btn btn-sm btn-info" style="">Cerrar</a>
                             </div>
                                                 

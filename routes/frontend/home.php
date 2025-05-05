@@ -83,6 +83,7 @@ Route::get('comprobante/lista_ventas_anio/{anio}/{empresa}', [ComprobanteControl
 Route::get('comprobante/lista_pagos_anio/{anio}/{empresa}', [ComprobanteController::class, 'lista_pagos_anio'])->name('comprobante.lista_pagos_anio');
 Route::get('comprobante/lista_retencion_anio/{anio}/{empresa}', [ComprobanteController::class, 'lista_retencion_anio'])->name('comprobante.lista_retencion_anio');
 Route::get('comprobante/lista_cobros_anio/{anio}/{empresa}', [ComprobanteController::class, 'lista_cobros_anio'])->name('comprobante.lista_cobros_anio');
+Route::post('comprobante/send_detalle_factura', [ComprobanteController::class, 'send_detalle_factura'])->name('comprobante.send_detalle_factura');
 
 Route::get('ingreso_vehiculo_tronco/modal_placa/{id}', [IngresoVehiculoTroncoController::class, 'modal_placa'])->name('ingreso_vehiculo_tronco.modal_placa');
 Route::get('ingreso_vehiculo_tronco/modal_empresa/{id}', [IngresoVehiculoTroncoController::class, 'modal_empresa'])->name('ingreso_vehiculo_tronco.modal_empresa');

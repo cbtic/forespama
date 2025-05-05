@@ -20,7 +20,7 @@ use App\Models\ComprobanteCuota;
 use App\Models\CajaIngreso;
 use App\Models\SodimacFactura;
 use App\Models\SodimacFacturaDetalle;
-use App\Models\ComprobanteSodimacHistorico;
+use App\Models\Tienda;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
 
@@ -4184,11 +4184,13 @@ class ComprobanteController extends Controller
 		
         $comprobante_model = new Comprobante;
         $tablaMaestra_model = new TablaMaestra;
+        $tienda_model = new Tienda;
 
         $sodimac_factura_detalle = $comprobante_model->obtenerFacturaDetalle($id);
         $cobros_sodimac = $tablaMaestra_model->getMaestroByTipo(78);
+        $tiendas = $tienda_model->getTiendasAll();
 
-		return view('frontend.comprobante.modal_factura_sodimac_detalle',compact('id','sodimac_factura_detalle','cobros_sodimac'));
+		return view('frontend.comprobante.modal_factura_sodimac_detalle',compact('id','sodimac_factura_detalle','cobros_sodimac','tiendas'));
 
     }
 
@@ -4287,6 +4289,36 @@ class ComprobanteController extends Controller
         $reporte_ventas = $comprobante_model->obtenerCobrosByAnio($anio, $empresa);
         //dd($reporte_ventas);exit();
         return view('frontend.comprobante.lista_cobros_anio',compact('reporte_ventas'));
+
+    }
+
+    public function send_detalle_factura(Request $request){
+
+		$id_user = Auth::user()->id;
+
+		/*if($request->id > 0 ){
+            $sodimac_factura_detalle = SodimacFacturaDetalle::find($request->id);
+		}else{
+			$sodimac_factura_detalle = new SodimacFacturaDetalle;
+		}*/
+        
+        //dd($request->cobros_sodimac);exit();
+        
+        foreach ($request->cobros_sodimac as $id_detalle => $codigo_cobro) {
+            if ($codigo_cobro) {
+                $detalle = SodimacFacturaDetalle::find($id_detalle);
+                if ($detalle) {
+                    $detalle->id_tipo_documento_cobro = $codigo_cobro;
+                    if (!empty($request->tienda[$id_detalle])) {
+                        $detalle->id_tienda = $request->tienda[$id_detalle];
+                    } else {
+                        $detalle->id_tienda = null;
+                    }
+                    $detalle->id_usuario_inserta = $id_user;
+                    $detalle->save();
+                }
+            }
+        }
 
     }
 
