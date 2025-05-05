@@ -423,6 +423,7 @@ label.form-control-sm{
                             <th>Fecha</th>
 							<th>Tipo Documento</th>
 							<th>N° Documento</th>
+							<th>Cliente</th>
 							<th>Placa Carro</th>
 							<th>Empresa Transporte</th>
 							<th>Origen</th>

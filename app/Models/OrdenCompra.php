@@ -194,10 +194,18 @@ class OrdenCompra extends Model
         oc.numero_orden_compra, tm.denominacion tipo_documento, oc.estado, tm2.denominacion igv, oc.numero_orden_compra_cliente, 
         oc.total, oc.sub_total, oc.igv, COALESCE (oc.descuento, 0 , oc.descuento) descuento,
         case when oc.id_empresa_compra = 23 or oc.id_empresa_compra = 187  then 
-        (select direccion from tienda_detalle_orden_compras tdoc 
+        (select t.direccion || ' - ' || dp.desc_ubigeo || ' - ' || p.desc_ubigeo  || ' - ' || d.desc_ubigeo AS direccion_completa from tienda_detalle_orden_compras tdoc 
         inner join tiendas t on tdoc.id_tienda = t.id 
+        inner join ubigeos u on t.id_ubigeo = u.id_ubigeo
+        left join ubigeos p on p.id_ubigeo = SUBSTRING(u.id_ubigeo FROM 1 FOR 4) || '00'
+        left join ubigeos dp on dp.id_ubigeo = SUBSTRING(u.id_ubigeo FROM 1 FOR 2) || '0000'
+        left join ubigeos d on d.id_ubigeo = u.id_ubigeo 
         where tdoc.id_orden_compra = oc.id limit 1) else
-        (select occe.direccion || ' ' || COALESCE(occe.referencia,'') from orden_compra_contacto_entregas occe
+        (select occe.direccion || ' - ' ||  dp.desc_ubigeo || ' - ' || p.desc_ubigeo || ' - ' || d.desc_ubigeo || ' - ' ||  COALESCE(occe.referencia,'') from orden_compra_contacto_entregas occe
+        inner join ubigeos u on occe.id_ubigeo = u.id_ubigeo
+        left join ubigeos p on p.id_ubigeo = SUBSTRING(u.id_ubigeo FROM 1 FOR 4) || '00'
+        left join ubigeos dp on dp.id_ubigeo = SUBSTRING(u.id_ubigeo FROM 1 FOR 2) || '0000'
+        left join ubigeos d on d.id_ubigeo = u.id_ubigeo 
         where occe.id_orden_compra = oc.id)
         end direccion
         from orden_compras oc 
