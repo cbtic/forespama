@@ -1,6 +1,13 @@
 $(document).ready(function () {
 	
 	$(".upload").on('click', function() {
+
+		var msgLoader = "";
+        msgLoader = "Procesando, espere un momento por favor";
+        var heightBrowser = $(window).width()/2;
+        $('.loader').css("opacity","0.8").css("height",heightBrowser).html("<div id='Grd1_wrapper' class='dataTables_wrapper'><div id='Grd1_processing' class='dataTables_processing panel-default'>"+msgLoader+"</div></div>");
+        $('.loader').show();
+		
         var formData = new FormData();
         var files = $('#image')[0].files[0];
         formData.append('file',files);
@@ -19,10 +26,12 @@ $(document).ready(function () {
 				console.log(response); 
 
 				if(response.cantidad>0){
+					$('.loader').hide();
 					bootbox.alert("El numero de orden de compra de cliente ya existe. Por favor ingrese otro.");
 					return false;
 				}else{
 					datatablenew();
+					$('.loader').hide();
 				}
 				
             }
@@ -31,6 +40,13 @@ $(document).ready(function () {
     });
 
 	$(".upload2").on('click', function() {
+
+		var msgLoader = "";
+        msgLoader = "Procesando, espere un momento por favor";
+        var heightBrowser = $(window).width()/2;
+        $('.loader').css("opacity","0.8").css("height",heightBrowser).html("<div id='Grd1_wrapper' class='dataTables_wrapper'><div id='Grd1_processing' class='dataTables_processing panel-default'>"+msgLoader+"</div></div>");
+        $('.loader').show();
+
         var formData = new FormData();
         var files = $('#image2')[0].files[0];
         formData.append('file',files);
@@ -49,10 +65,12 @@ $(document).ready(function () {
 				console.log(response); 
 
 				if(response.cantidad>0){
+					$('.loader').hide();
 					bootbox.alert("La Orden de Compra ya tiene asiganada tiendas. Por favor ingrese otro.");
 					return false;
 				}else{
 					datatablenew();
+					$('.loader').hide();
 				}
             }
         });

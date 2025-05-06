@@ -4322,6 +4322,83 @@ class ComprobanteController extends Controller
 
     }
 
+    public function exportar_listar_pagos_sodimac($fecha_ini, $fecha_fin, $tipo_documento, $serie, $numero, $estado_pago, $observacion_pago, $dias_pagado) {
+
+		$id_user = Auth::user()->id;
+
+		if($fecha_ini=="0")$fecha_ini = "";
+		if($fecha_fin=="0")$fecha_fin = "";
+		if($tipo_documento==0)$tipo_documento = "";
+		if($serie==0)$serie = "";
+		if($numero==0)$numero = "";
+		if($estado_pago==0)$estado_pago = "";
+		if($observacion_pago==0)$observacion_pago = "";
+		if($dias_pagado==0)$dias_pagado = "";
+
+		$factura_model = new Comprobante();
+		$p[]=$fecha_ini;
+		$p[]=$fecha_fin;
+		$p[]="";
+        $p[]=$serie;
+        $p[]=$numero;
+        $p[]=$estado_pago;
+        $p[]=$observacion_pago;
+        $p[]=$dias_pagado;
+		$p[]=1;
+		$p[]=10000;
+		$data = $factura_model->listar_factura_sodimac_pagos_ajax($p);
+		
+		$variable = [];
+		$n = 1;
+
+		array_push($variable, array("N","RUC","N° Orden Compra","Serie","Nro","Tipo","Fecha","Moneda","Valor Venta","IGV","Importe Total","Numero Documento Sodimac","Fecha Pago","Sub Total Sodimac","Retencion Sodimac","Detraccion Sodimac","Total Sodimac","Estado Pago","Observación Pago","Días Pago"));
+		
+		foreach ($data as $r) {
+
+            $coincide_total_inicial_ = "";
+            $estado_pago_sodimac_ = "";
+
+            if($r->estado_pago_sodimac == 1){
+                $estado_pago_sodimac_ = "Pagado";
+
+                if($r->coincide_total_inicial == 1){
+                    $coincide_total_inicial_ = "Ok";
+                }
+                if($r->coincide_total_inicial == 2){
+                    $coincide_total_inicial_ = "Observado";
+                }
+            }
+
+            if($r->estado_pago_sodimac == 0){
+                $coincide_total_inicial_ = "";
+                $estado_pago_sodimac_ = "Pendiente";
+            }
+
+            $tipo_ = "";
+            if($r->tipo == "FT"){
+                $tipo_ = "FACTURA";
+            }
+            if($tipo_ == "BV"){
+                $tipo_ = "BOELTA";
+            }
+            if($tipo_ == "NC"){
+                $tipo_ = "NOTA DE CREDITO";
+            }
+            if($tipo_ == "ND"){
+                $tipo_ = "NOTA DE DEBITO";
+            }
+            if($tipo_ == "TK"){
+                $tipo_ = "TICKET";
+            }
+            
+			array_push($variable, array($n++,$r->cod_tributario, $r->numero_orden_compra_cliente, $r->serie, $r->numero, $tipo_, $r->fecha, $r->moneda, $r->subtotal, $r->impuesto, $r->total, $r->numero_documento_sodimac, $r->fecha_pago, $r->importe_total, $r->importe_retencion, $r->importe_detraccion, $r->importe_inicial, $estado_pago_sodimac_, $coincide_total_inicial_, $r->dias_diferencia_pago));
+		}
+		
+		$export = new InvoicesExport2([$variable]);
+		return Excel::download($export, 'Reporte_pagos_sodimac.xlsx');
+		
+    }
+
 }
 
 class InvoicesExport implements FromArray, WithHeadings, WithStyles
@@ -4387,6 +4464,74 @@ class InvoicesExport implements FromArray, WithHeadings, WithStyles
 		->setFormatCode(\PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_NUMBER_00);*/ //SIRVE PARA PONER 2 DECIMALES A ESA COLUMNA
         
         foreach (range('A', 'K') as $col) {
+            $sheet->getColumnDimension($col)->setAutoSize(true);
+        }
+    }
+}
+
+class InvoicesExport2 implements FromArray, WithHeadings, WithStyles
+{
+	protected $invoices;
+
+	public function __construct(array $invoices)
+	{
+		$this->invoices = $invoices;
+	}
+
+	public function array(): array
+	{
+		return $this->invoices;
+	}
+
+    public function headings(): array
+    {
+        return ["N","RUC","N° Orden Compra","Serie","Nro","Tipo","Fecha","Moneda","Valor Venta","IGV","Importe Total","Numero Documento Sodimac","Fecha Pago","Sub Total Sodimac","Retencion Sodimac","Detraccion Sodimac","Total Sodimac","Estado Pago","Observación Pago","Días Pago"];
+    }
+
+	public function styles(Worksheet $sheet)
+    {
+
+		$sheet->mergeCells('A1:T1');
+
+        $sheet->setCellValue('A1', "REPORTE DE PAGOS DE SODIMAC - FORESPAMA");
+        $sheet->getStyle('A1:T1')->applyFromArray([
+            'font' => [
+                'bold' => true,
+                'color' => ['rgb' => 'FFFFFF'],
+            ],
+            'fill' => [
+                'fillType' => Fill::FILL_SOLID,
+                'startColor' => ['rgb' => '246257'],
+            ],
+            'alignment' => [
+                'horizontal' => Alignment::HORIZONTAL_CENTER,
+            ],
+        ]);
+
+		$sheet->getStyle('A1')->getAlignment()->setWrapText(true);
+		$sheet->getRowDimension(1)->setRowHeight(30);
+
+        $sheet->getStyle('A2:T2')->applyFromArray([
+            'font' => [
+                'bold' => true,
+                'color' => ['rgb' => '000000'],
+            ],
+            'fill' => [
+                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                'startColor' => ['rgb' => '2EB85C'],
+            ],
+			'alignment' => [
+			'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+    		],
+        ]);
+
+		$sheet->fromArray($this->headings(), NULL, 'A2');
+
+		/*$sheet->getStyle('L3:L'.$sheet->getHighestRow())
+		->getNumberFormat()
+		->setFormatCode(\PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_NUMBER_00);*/ //SIRVE PARA PONER 2 DECIMALES A ESA COLUMNA
+        
+        foreach (range('A', 'T') as $col) {
             $sheet->getColumnDimension($col)->setAutoSize(true);
         }
     }

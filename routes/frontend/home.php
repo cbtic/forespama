@@ -641,3 +641,4 @@ Route::get('entrada_productos/modal_ajuste_stock/{id}', [EntradaProductosControl
 Route::get('orden_compra/modal_anular_orden_compra/{id}', [OrdenCompraController::class, 'modal_anular_orden_compra'])->name('orden_compra.modal_anular_orden_compra');
 Route::post('orden_compra/anular_orden_compra', [OrdenCompraController::class, 'anular_orden_compra'])->name('orden_compra.anular_orden_compra');
 Route::post('ingreso_vehiculo_tronco/upload_cubicaje', [IngresoVehiculoTroncoController::class, 'upload_cubicaje'])->name('ingreso_vehiculo_tronco.upload_cubicaje');
+Route::get('comprobante/exportar_listar_pagos_sodimac/{fecha_ini}/{fecha_fin}/{tipo_documento}/{serie}/{numero}/{estado_pago}/{observacion_pago}/{dias_pagado}', [ComprobanteController::class, 'exportar_listar_pagos_sodimac'])->name('comprobante.exportar_listar_pagos_sodimac');

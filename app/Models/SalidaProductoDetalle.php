@@ -57,11 +57,21 @@ class SalidaProductoDetalle extends Model
         inner join tiendas t2 on tdoc2.id_tienda = t2.id
         where tdoc2.id_orden_compra = sp.id_orden_compra
         limit 1) 
+        when oc.id_empresa_compra = 187 then 
+        (select distinct t2.direccion from tienda_detalle_orden_compras tdoc2
+        inner join tiendas t2 on tdoc2.id_tienda = t2.id
+        where tdoc2.id_orden_compra = sp.id_orden_compra
+        limit 1) 
         else (select occe.direccion from orden_compra_contacto_entregas occe 
         inner join orden_compras oc2 on occe.id_orden_compra = oc2.id 
         where oc2.id = sp.id_orden_compra)
         end direccion,
         case when oc.id_empresa_compra = 23 then 
+        (select distinct t2.id_ubigeo from tienda_detalle_orden_compras tdoc2
+        inner join tiendas t2 on tdoc2.id_tienda = t2.id
+        where tdoc2.id_orden_compra = sp.id_orden_compra
+        limit 1)
+        when oc.id_empresa_compra = 187 then 
         (select distinct t2.id_ubigeo from tienda_detalle_orden_compras tdoc2
         inner join tiendas t2 on tdoc2.id_tienda = t2.id
         where tdoc2.id_orden_compra = sp.id_orden_compra

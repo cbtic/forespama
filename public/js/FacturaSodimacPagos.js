@@ -27,6 +27,11 @@ $(document).ready(function () {
 		modalFacturaHistorico(0);
 	});
 
+    $('#btnDescargarPagos').on('click', function () {
+		DescargarArchivosExcel()
+
+	});
+
 });
 
 function datatablenew(){
@@ -318,7 +323,7 @@ function datatablenew(){
                         }
                     }
                     if(row.estado_pago_sodimac == 0){
-                        estado_pago_sodimac = "";
+                        coincide_total_inicial = "";
                     }
                     return coincide_total_inicial;
                 },
@@ -435,3 +440,25 @@ function modalFacturaHistorico(id){
 
 }
 
+function DescargarArchivosExcel(){
+	
+	var fecha_ini = $('#fecha_ini_bus').val();
+	var fecha_fin = $('#fecha_fin_bus').val();
+	var tipo_documento = $('#tipo_documento_bus').val();
+	var serie = $('#serie_bus').val();
+	var numero = $('#numero_bus').val();
+	var estado_pago = $('#estado_pago_bus').val();
+	var observacion_pago = $('#observacion_pago_bus').val();
+	var dias_pagado = $('#dias_pagado_bus').val();
+
+	if (fecha_ini == "")fecha_ini = "0";
+	if (fecha_fin == "")fecha_fin = "0";
+	if (tipo_documento == "")tipo_documento = 0;
+	if (serie == "")serie = 0;
+	if (numero == "")numero = 0;
+	if (estado_pago == "")estado_pago = 0;
+	if (observacion_pago == "")observacion_pago = 0;
+	if (dias_pagado == "")dias_pagado = 0;
+	
+	location.href = '/comprobante/exportar_listar_pagos_sodimac/'+fecha_ini+'/'+fecha_fin+'/'+tipo_documento+'/'+serie+'/'+numero+'/'+estado_pago+'/'+observacion_pago+'/'+dias_pagado;
+}

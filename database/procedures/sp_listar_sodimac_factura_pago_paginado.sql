@@ -34,7 +34,7 @@ begin
               'FROM comprobantes c ' ||
               'left join sodimac_factura_detalles sfd on ''01-'' || c.serie ||''-''|| lpad(coalesce(c.numero::int, 1)::varchar, 8, ''0'') = sfd.numero_documento  '||
               'left join sodimac_facturas sf on sfd.id_sodimac_factura = sf.id '||
-              'Where 1 = 1 and  c.id_empresa in (''23'',''187'') '|| v_filtros_fecha || '
+              'Where 1 = 1 and  c.id_empresa in (''23'',''187'') and c.anulado != ''S'' '|| v_filtros_fecha || '
                UNION ALL ' ||
               'select csh.id, csh.serie, csh.numero, csh.tipo, TO_CHAR(csh.fecha,''dd-mm-yyyy'') fecha, csh.destinatario, csh.cod_tributario, csh.subtotal, csh.impuesto, csh.total, '''' estado_pago, '''' anulado, '''' sunat, '''' numero_orden_compra_cliente, csh.moneda, sfd2.numero_documento, sfd2.importe_total, sfd2.importe_inicial, abs(sfd2.importe_retencion) importe_retencion, sfd2.importe_detraccion, case when sfd2.importe_total is null then 0 else 1 end as estado_pago_sodimac, CASE WHEN sfd2.importe_total is not null and csh.total::float = sfd2.importe_inicial::float THEN 1 when sfd2.importe_total is not null and csh.total::float != sfd2.importe_inicial::float then 2 else 0 END AS coincide_total_inicial, sf2.fecha_pago, DATE_PART(''day'', COALESCE(sf2.fecha_pago, CURRENT_DATE) - csh.fecha)::int AS dias_diferencia_pago ' ||
               'from comprobante_sodimac_historicos csh ' ||
