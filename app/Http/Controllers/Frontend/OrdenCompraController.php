@@ -383,6 +383,53 @@ class OrdenCompraController extends Controller
         ]);
     }
 
+    public function cargar_detalle_abierto($id)
+    {
+
+        $orden_compra_model = new OrdenCompra;
+        $marca_model = new Marca;
+        $producto_model = new Producto;
+        $tablaMaestra_model = new TablaMaestra;
+        $kardex_model = new Kardex;
+
+        $orden_compra = $orden_compra_model->getDetalleOrdenCompraIdAbierto($id);
+        $marca = $marca_model->getMarcaAll();
+        $producto = $producto_model->getProductoAll();
+        $estado_bien = $tablaMaestra_model->getMaestroByTipo(4);
+        $unidad_medida = $tablaMaestra_model->getMaestroByTipo(43);
+        $descuento = $tablaMaestra_model->getMaestroByTipo(55);
+
+        $producto_stock = [];
+
+        foreach($orden_compra as $detalle){
+
+            $id_almacen_bus = $detalle->id_almacen_salida;
+            
+            if($detalle->id_unidad_origen==2){$id_almacen_bus = $detalle->id_almacen_destino;}
+            if($detalle->id_unidad_origen==4){$id_almacen_bus = $detalle->id_almacen_salida;}
+            $stock = $kardex_model->getExistenciaProductoById($detalle->id_producto, $id_almacen_bus);
+            if(count($stock)>0){
+                $producto_stock[$detalle->id_producto] = $stock[0];
+            }else {
+                $producto_stock[$detalle->id_producto] = ['saldos_cantidad'=>0];
+            }
+            
+            //var_dump($producto_stock);
+        }
+        
+        //exit();
+
+        return response()->json([
+            'orden_compra' => $orden_compra,
+            'marca' => $marca,
+            'producto' => $producto,
+            'estado_bien' => $estado_bien,
+            'unidad_medida' => $unidad_medida,
+            'descuento' => $descuento,
+            'producto_stock' =>$producto_stock
+        ]);
+    }
+
     public function movimiento_pdf($id){
 
         $orden_compra_model = new OrdenCompra;

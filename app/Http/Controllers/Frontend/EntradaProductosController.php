@@ -484,7 +484,9 @@ class EntradaProductosController extends Controller
                     $salida_producto_detalle->save();
 
                     $orden_compra_detalle_cantidad = OrdenCompraDetalle::where('id_orden_compra',$salida_producto->id_orden_compra)->where('id_producto',$descripcion[$index])->where('estado',1)->first();
-                    $orden_compra_detalle_cantidad->cantidad_despacho = $cantidad_ingreso[$index];
+                    $cantidad_despacho_actual = $orden_compra_detalle_cantidad->cantidad_despacho;
+                    $cantidad_despacho_actualizado = $cantidad_despacho_actual + $cantidad_ingreso[$index];
+                    $orden_compra_detalle_cantidad->cantidad_despacho = $cantidad_despacho_actualizado;
                     $orden_compra_detalle_cantidad->save();
 
                     $producto = Producto::find($descripcion[$index]);

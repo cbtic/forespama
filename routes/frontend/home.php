@@ -427,6 +427,7 @@ Route::post('orden_compra/send_orden_compra', [OrdenCompraController::class, 'se
 Route::get('orden_compra/modal_orden_compra/{id}', [OrdenCompraController::class, 'modal_orden_compra'])->name('orden_compra.modal_orden_compra');
 Route::get('orden_compra/eliminar_orden_compra/{id}/{estado}', [OrdenCompraController::class, 'eliminar_orden_compra'])->name('orden_compra.eliminar_orden_compra');
 Route::get('orden_compra/cargar_detalle/{id}', [OrdenCompraController::class, 'cargar_detalle'])->name('orden_compra.cargar_detalle');
+Route::get('orden_compra/cargar_detalle_abierto/{id}', [OrdenCompraController::class, 'cargar_detalle_abierto'])->name('orden_compra.cargar_detalle_abierto');
 Route::get('orden_compra/consulta_stock_pedido', [OrdenCompraController::class, 'consulta_stock_pedido'])->name('orden_compra.consulta_stock_pedido');
 Route::get('orden_compra/modal_consulta_orden_compra/{id}', [OrdenCompraController::class, 'modal_consulta_orden_compra'])->name('orden_compra.modal_consulta_orden_compra');
 Route::post('orden_compra/upload_orden_compra', [OrdenCompraController::class, 'upload_orden_compra'])->name('orden_compra.upload_orden_compra');
