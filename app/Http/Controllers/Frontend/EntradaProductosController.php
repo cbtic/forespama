@@ -192,6 +192,7 @@ class EntradaProductosController extends Controller
             $entrada_producto->id_orden_compra = $request->id_orden_compra;
             $entrada_producto->id_usuario_inserta = $id_user;
             $entrada_producto->save();
+            $codigo_nota_entrada = $entrada_producto->codigo;
 
             $valida_estado = true;
 
@@ -441,7 +442,8 @@ class EntradaProductosController extends Controller
                 $salida_producto->save();
                 $id_salida_productos = $salida_producto->id;
                 $id_orden_compra = $salida_producto->id_orden_compra;
-
+                $codigo_nota_salida = $salida_producto->codigo;
+                //dd($codigo_nota_salida);exit();
                 $valida_estado = true;
 
                 foreach($item as $index => $value) {
@@ -678,9 +680,9 @@ class EntradaProductosController extends Controller
         }
 
         if($request->tipo_movimiento==1){
-            return response()->json(['id' => $entrada_producto->id, 'tipo_movimiento' => $request->tipo_movimiento]);
+            return response()->json(['id' => $entrada_producto->id, 'tipo_movimiento' => $request->tipo_movimiento, 'codigo' => $codigo_nota_entrada]);
         }else{
-            return response()->json(['id' => $salida_producto->id, 'tipo_movimiento' => $request->tipo_movimiento]);
+            return response()->json(['id' => $salida_producto->id, 'tipo_movimiento' => $request->tipo_movimiento, 'codigo' => $codigo_nota_salida]);
         }
         
     }

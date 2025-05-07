@@ -1108,8 +1108,9 @@ class OrdenCompraController extends Controller
         $tiendas = $tienda_model->getTiendasAll();
         $productos = $producto_model->getProductoExterno();
         $vendedor = $user_model->getUserByRol(7);
+        $estado_pedido = $tablaMaestra_model->getMaestroByTipo(77);
 
-		return view('frontend.orden_compra.create_reporte_comercializacion',compact('tipo_documento','cerrado_orden_compra','proveedor','tiendas','productos','vendedor'));
+		return view('frontend.orden_compra.create_reporte_comercializacion',compact('tipo_documento','cerrado_orden_compra','proveedor','tiendas','productos','vendedor','estado_pedido'));
 
 	}
 
@@ -1124,6 +1125,7 @@ class OrdenCompraController extends Controller
         $p[]=$request->codigo_producto;
         $p[]=$request->producto;
         $p[]=$request->vendedor;
+        $p[]=$request->estado_pedido;
         $p[]=1;
         $p[]=$request->NumeroPagina;
 		$p[]=$request->NumeroRegistros;
@@ -1142,7 +1144,7 @@ class OrdenCompraController extends Controller
 
 	}
 
-    public function exportar_reporte_comercializacion($empresa_compra, $fecha_inicio, $fecha_fin, $numero_orden_compra_cliente, $situacion, $codigo_producto, $producto, $vendedor) {
+    public function exportar_reporte_comercializacion($empresa_compra, $fecha_inicio, $fecha_fin, $numero_orden_compra_cliente, $situacion, $codigo_producto, $producto, $vendedor, $estado_pedido) {
 
         if($empresa_compra==0)$empresa_compra = "";
         if($fecha_inicio=="0")$fecha_inicio = "";
@@ -1152,6 +1154,7 @@ class OrdenCompraController extends Controller
         if($codigo_producto=="0")$codigo_producto = "";
         if($producto==0)$producto = "";
         if($vendedor==0)$vendedor = "";
+        if($estado_pedido==0)$estado_pedido = "";
         
         $orden_compra_model = new OrdenCompra;
 		$p[]=$empresa_compra;
@@ -1162,6 +1165,7 @@ class OrdenCompraController extends Controller
         $p[]=$codigo_producto;
         $p[]=$producto;
         $p[]=$vendedor;
+        $p[]=$estado_pedido;
         $p[]=1;
         $p[]=1;
 		$p[]=10000;
@@ -1171,14 +1175,14 @@ class OrdenCompraController extends Controller
 		$variable = [];
 		$n = 1;
 
-		array_push($variable, array("N°","Empresa","Orden Compra","Pedido","Fecha Pedido","Fecha Vencimiento","Codigo Interno","Descripcion","Precio Unitario","Cantidad Pedida","Cantidad Entregada","Cantidad Cancelada","Pendiente Entrega","Vendedor"));
+		array_push($variable, array("N°","Empresa","Orden Compra","Pedido","Fecha Pedido","Fecha Vencimiento","Codigo Interno","Descripcion","Precio Unitario","Cantidad Pedida","Cantidad Entregada","Cantidad Cancelada","Pendiente Entrega","Vendedor","Estado Pedido"));
 		
 		foreach ($data as $r) {
 
             if($r->cerrado==1){$cerrado='SI';}
             if($r->cerrado==2){$cerrado='NO';}
 
-			array_push($variable, array($n++,$r->razon_social, $r->numero_orden_compra_cliente, $r->pedido, $r->fecha_orden_compra, $r->fecha_vencimiento, $r->codigo, $r->producto, $r->precio, $r->cantidad_requerida, $r->cantidad_despacho, $r->cantidad_cancelada, $cerrado, $r->vendedor));
+			array_push($variable, array($n++,$r->cliente, $r->numero_orden_compra_cliente, $r->pedido, $r->fecha_orden_compra, $r->fecha_vencimiento, $r->codigo, $r->producto, $r->precio, $r->cantidad_requerida, $r->cantidad_despacho, $r->cantidad_cancelada, $cerrado, $r->vendedor, $r->estado_pedido));
 		}
 		
 		$export = new InvoicesExport2([$variable]);
@@ -1494,16 +1498,16 @@ class InvoicesExport2 implements FromArray, WithHeadings, WithStyles
 
     public function headings(): array
     {
-        return ["N°", "Empresa", "Orden Compra", "Pedido", "Fecha Pedido", "Fecha Vencimiento", "Codigo Interno", "Descripcion", "Precio Unitario", "Cantidad Pedida", "Cantidad Entregada", "Cantidad Cancelada", "Pendiente Entrega", "Vendedor"];
+        return ["N°", "Empresa", "Orden Compra", "Pedido", "Fecha Pedido", "Fecha Vencimiento", "Codigo Interno", "Descripcion", "Precio Unitario", "Cantidad Pedida", "Cantidad Entregada", "Cantidad Cancelada", "Pendiente Entrega", "Vendedor", "Estado Pedido"];
     }
 
 	public function styles(Worksheet $sheet)
     {
 
-		$sheet->mergeCells('A1:N1');
+		$sheet->mergeCells('A1:O1');
 
         $sheet->setCellValue('A1', "REPORTE DE COMERCIALIZACION - FORESPAMA");
-        $sheet->getStyle('A1:N1')->applyFromArray([
+        $sheet->getStyle('A1:O1')->applyFromArray([
             'font' => [
                 'bold' => true,
                 'color' => ['rgb' => 'FFFFFF'],
@@ -1520,7 +1524,7 @@ class InvoicesExport2 implements FromArray, WithHeadings, WithStyles
 		$sheet->getStyle('A1')->getAlignment()->setWrapText(true);
 		$sheet->getRowDimension(1)->setRowHeight(30);
 
-        $sheet->getStyle('A2:N2')->applyFromArray([
+        $sheet->getStyle('A2:O2')->applyFromArray([
             'font' => [
                 'bold' => true,
                 'color' => ['rgb' => '000000'],
@@ -1540,7 +1544,7 @@ class InvoicesExport2 implements FromArray, WithHeadings, WithStyles
 		->getNumberFormat()
 		->setFormatCode(\PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_NUMBER_00);*/ //SIRVE PARA PONER 2 DECIMALES A ESA COLUMNA
         
-        foreach (range('A', 'N') as $col) {
+        foreach (range('A', 'O') as $col) {
             $sheet->getColumnDimension($col)->setAutoSize(true);
         }
     }

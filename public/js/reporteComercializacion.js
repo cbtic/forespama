@@ -107,6 +107,7 @@ function datatablenew(){
 			var codigo_producto = $('#codigo_producto_bus').val();
 			var producto = $('#producto_bus').val();
 			var vendedor = $('#vendedor_bus').val();
+			var estado_pedido = $('#estado_pedido_bus').val();
 
 			var _token = $('#_token').val();
             oSettings.jqXHR = $.ajax({
@@ -116,7 +117,7 @@ function datatablenew(){
                 "url": sSource,
                 "data":{NumeroPagina:iNroPagina,NumeroRegistros:iCantMostrar,
 						empresa_compra:empresa_compra, fecha_inicio:fecha_inicio, fecha_fin:fecha_fin, numero_orden_compra_cliente:numero_orden_compra_cliente, 
-						situacion:situacion,codigo_producto:codigo_producto,producto:producto,vendedor:vendedor,
+						situacion:situacion,codigo_producto:codigo_producto,producto:producto,vendedor:vendedor,estado_pedido:estado_pedido,
 						_token:_token
                        },
                 "success": function (result) {
@@ -135,9 +136,9 @@ function datatablenew(){
             [			
                 {
                 "mRender": function (data, type, row) {
-                	var razon_social = "";
-					if(row.razon_social!= null)razon_social = row.razon_social;
-					return razon_social;
+                	var cliente = "";
+					if(row.cliente!= null)cliente = row.cliente;
+					return cliente;
                 },
                 "bSortable": true,
                 "aTargets": [0]
@@ -256,7 +257,15 @@ function datatablenew(){
 				"bSortable": true,
 				"aTargets": [12]
 				},
-				
+				{
+				"mRender": function (data, type, row) {
+					var estado_pedido = "";
+					if(row.estado_pedido!= null)estado_pedido = row.estado_pedido;
+					return estado_pedido;
+				},
+				"bSortable": true,
+				"aTargets": [13]
+				},
             ]
 
     });
@@ -283,6 +292,7 @@ function DescargarArchivosExcel(){
 	var codigo_producto = $('#codigo_producto_bus').val();
 	var producto = $('#producto_bus').val();
 	var vendedor = $('#vendedor_bus').val();
+	var estado_pedido = $('#estado_pedido_bus').val();
 
 	if (empresa_compra == "")empresa_compra = 0;
 	if (fecha_inicio == "")fecha_inicio = "0";
@@ -292,6 +302,7 @@ function DescargarArchivosExcel(){
 	if (codigo_producto == "")codigo_producto = "0";
 	if (producto == "")producto = 0;
 	if (vendedor == "")vendedor = 0;
+	if (estado_pedido == "")estado_pedido = 0;
 	
-	location.href = '/orden_compra/exportar_reporte_comercializacion/'+empresa_compra+'/'+fecha_inicio+'/'+fecha_fin+'/'+numero_orden_compra_cliente+'/'+situacion+'/'+codigo_producto+'/'+producto+'/'+vendedor;
+	location.href = '/orden_compra/exportar_reporte_comercializacion/'+empresa_compra+'/'+fecha_inicio+'/'+fecha_fin+'/'+numero_orden_compra_cliente+'/'+situacion+'/'+codigo_producto+'/'+producto+'/'+vendedor+'/'+estado_pedido;
 }

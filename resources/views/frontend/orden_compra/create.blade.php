@@ -515,7 +515,7 @@ label.form-control-sm{
 								<th>Acciones</th>
 							</tr>
                         </thead>
-                        <tbody>
+                        <tbody style="font-size: 14px">
                         </tbody>
 						<tfoot>
 							<tr style="font-size:13px">
