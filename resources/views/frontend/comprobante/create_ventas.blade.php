@@ -355,7 +355,7 @@ label.form-control-sm{
                                         <option value="0">--Selecionar Año--</option>
                                         <?php
                                         foreach ($anios as $anios) { ?>
-                                            <option value="<?php echo $anios ?>"><?php echo $anios ?></option>
+                                            <option value="<?php echo $anios ?>"<?php echo ($anios == $anio_actual) ? 'selected' : '' ?>><?php echo $anios ?></option>
                                         <?php
                                         }
                                         ?>
@@ -372,7 +372,7 @@ label.form-control-sm{
                                         }
                                         ?>
                                     </select>
-                                </div>   
+                                </div>
 
                                 <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12" style="padding-right:0px">
                                     <input class="btn btn-warning pull-rigth" value="Buscar" type="button" id="btnBuscar" />

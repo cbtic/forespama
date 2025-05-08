@@ -356,7 +356,7 @@ label.form-control-sm{
                                         <input class="form-control form-control-sm" id="fecha_fin" name="fecha_fin" value="" placeholder="Fecha fin">
                                     </div>
                                 </div>
-                                <div class="col-lg-1 col-md-12 col-sm-12 col-xs-12">
+                                <!--<div class="col-lg-1 col-md-12 col-sm-12 col-xs-12">
                                     <div class="form-group">
                                         <input type="text" name="serie" id="serie" value="{{old('clinum')}}" placeholder="Serie" class="form-control form-control-sm">
                                     </div>
@@ -365,6 +365,14 @@ label.form-control-sm{
                                     <div class="form-group">
                                         <input type="text" name="numero" id="numero" value="{{old('clinum')}}" placeholder="N&uacute;mero" class="form-control form-control-sm">
                                     </div>
+                                </div>-->
+
+                                <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+                                    <select name="tiene_tipo_cobro_bus" id="tiene_tipo_cobro_bus" class="form-control form-control-sm">
+                                        <option value="">--Falta Comprobante--</option>
+                                        <option value="0">Si</option>
+                                        <option value="1">No</option>
+                                    </select>
                                 </div>
 
                                 <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12" style="padding-right:0px">
@@ -409,6 +417,7 @@ label.form-control-sm{
                                                 <th>Banco</th>
                                                 <th>Fecha Pago</th>
                                                 <th class="text-right">Total</th>
+                                                <th>Falta Comprobantes Cobro</th>
                                                 <th>Acciones</th>
                                             </tr>
                                         </thead>

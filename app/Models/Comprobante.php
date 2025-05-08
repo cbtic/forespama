@@ -9,15 +9,15 @@ use DB;
 class Comprobante extends Model
 {
     public function listar_comprobante($p){
-		return $this->readFuntionPostgres('sp_listar_comprobante_paginado',$p);        
+		return $this->readFuntionPostgres('sp_listar_comprobante_paginado',$p);
     }
 
     public function listar_comprobante_sodimac_ajax($p){
-		return $this->readFuntionPostgres('sp_listar_comprobante_sodimac_paginado',$p);        
+		return $this->readFuntionPostgres('sp_listar_comprobante_sodimac_paginado',$p);
     }
  
     public function listar_factura_sodimac_ajax($p){
-		return $this->readFuntionPostgres('sp_listar_sodimac_factura_paginado',$p);        
+		return $this->readFuntionPostgres('sp_listar_sodimac_factura_paginado',$p);
     }
 
     function fecha_hora_actual(){
@@ -81,12 +81,15 @@ class Comprobante extends Model
     function getComprobanteId($id){
 
         $cad = "select c.*,  oc.numero_orden_compra_cliente, 
-                            (select string_agg(gi.guia_serie||'-'||gi.guia_numero ,', ') from salida_productos sp 
-                            left join guia_internas gi on gi.numero_documento::int = sp.id 
-                            where sp.tipo_devolucion='3'
-                            and sp.id_orden_compra=oc.id) guia
+                (select string_agg(gi.guia_serie||'-'||gi.guia_numero ,', ') from salida_productos sp 
+                left join guia_internas gi on gi.numero_documento::int = sp.id 
+                where sp.tipo_devolucion='3'
+                and sp.id_orden_compra=oc.id) guia,
+                (select tm.denominacion medio_pago from comprobante_pagos cp 
+                inner join tabla_maestras tm on cp.id_medio = tm.codigo::int and tm.tipo='11'
+                where cp.id_comprobante = c.id) medio_pago
                 from comprobantes c 
-                    left join orden_compras oc on oc.id = case c.orden_compra when '' then '0' else  c.orden_compra::int end
+                left join orden_compras oc on oc.id = case c.orden_compra when '' then '0' else  c.orden_compra::int end
                 where c.id = '".$id."' ";
 
 /*
@@ -496,7 +499,7 @@ class Comprobante extends Model
         sum(case when to_char(c.fecha, 'MM') = '11' and to_char(c.fecha, 'YYYY') = '".$anio."' then c.total::float else 0 end) as noviembre,
         sum(case when to_char(c.fecha, 'MM') = '12' and to_char(c.fecha, 'YYYY') = '".$anio."' then c.total::float else 0 end) as diciembre
         from comprobantes c
-        where c.id_empresa >=0
+        where c.id_empresa >=0 and c.anulado != 'S'
         ".$empresa_." ";
         
         $data = DB::select($cad);
@@ -527,7 +530,7 @@ class Comprobante extends Model
         sum(case when to_char(c.fecha, 'MM') = '12' and to_char(c.fecha, 'YYYY') = '".$anio."' then c.total::float else 0 end) as diciembre
         from comprobantes c 
         inner join sodimac_factura_detalles sfd on '01-' || c.serie ||'-'|| lpad(coalesce(c.numero::int, 1)::varchar, 8, '0') = sfd.numero_documento
-        where c.id_empresa >=0
+        where c.id_empresa >=0 and c.anulado != 'S'
         ".$empresa_." ";
         
         $data = DB::select($cad);
@@ -557,7 +560,7 @@ class Comprobante extends Model
         sum(case when to_char(c.fecha, 'MM') = '11' and to_char(c.fecha, 'YYYY') = '".$anio."' then c.monto_retencion::float else 0 end) as noviembre,
         sum(case when to_char(c.fecha, 'MM') = '12' and to_char(c.fecha, 'YYYY') = '".$anio."' then c.monto_retencion::float else 0 end) as diciembre
         from comprobantes c 
-        where c.id_empresa >=0
+        where c.id_empresa >=0 and c.anulado != 'S'
         ".$empresa_." ";
         
         $data = DB::select($cad);

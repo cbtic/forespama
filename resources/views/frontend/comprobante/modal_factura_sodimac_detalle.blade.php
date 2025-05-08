@@ -153,6 +153,7 @@ function fn_save_detalle_factura(){
 			success: function (result) {
                 //alert(result.id)
                 $('#openOverlayOpc').modal('hide');
+                datatablenew();
                 //if (result.id>0) {
                 //   modalEntradaProducto(result.id,result.tipo_movimiento);
                 //}

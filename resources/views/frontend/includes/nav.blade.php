@@ -317,7 +317,7 @@
 
 					@endif
 
-					@if(Gate::check('Consulta de Facturacion') || Gate::check('Facturacion de Pagos'))
+					@if(Gate::check('Consulta de Facturacion') || Gate::check('Facturacion de Pagos') || Gate::check('Reporte Ventas'))
 					
 						<li class="nav-item dropdown">
 							<a href="#" class="nav-link dropdown-toggle" id="navbarDropdownPrueba" data-toggle="dropdown"
@@ -335,6 +335,23 @@
 
 								@can('Reporte Ventas')
 									<x-utils.link :href="route('frontend.comprobante.create_ventas')" class="dropdown-item" :text="__('Reporte Ventas')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+								@endif
+
+							</div>
+						</li>
+
+					@endif 
+
+					@if(Gate::check('Consulta de Facturacion'))
+					
+						<li class="nav-item dropdown">
+							<a href="#" class="nav-link dropdown-toggle" id="navbarDropdownPrueba" data-toggle="dropdown"
+						   aria-haspopup="true" aria-expanded="false">Promotores y Rutas</a>
+
+						   <div class="dropdown-menu" aria-labelledby="navbarDropdownPrueba">
+
+								@can('Asignacion Rutas')
+									<x-utils.link :href="route('frontend.promotores.create_ruta')" class="dropdown-item" :text="__('Asignacion Rutas')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
 								@endif
 
 							</div>

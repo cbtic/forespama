@@ -199,6 +199,7 @@ function datatablenew(){
 			var tipo_documento = $('#tipo_documento').val();
             var serie = $('#serie').val();
             var numero = $('#numero').val();
+            var tiene_tipo_cobro = $('#tiene_tipo_cobro_bus').val();
             var estado = 1;
             
 			var _token = $('#_token').val();
@@ -209,7 +210,7 @@ function datatablenew(){
                 "url": sSource,
                 "data":{NumeroPagina:iNroPagina,NumeroRegistros:iCantMostrar,
 						fecha_ini:fecha_ini,fecha_fin:fecha_fin,tipo_documento:tipo_documento, estado:estado,
-                        serie:serie, numero:numero, _token:_token
+                        serie:serie, numero:numero, tiene_tipo_cobro:tiene_tipo_cobro, _token:_token
                        },
                 "success": function (result) {
                     fnCallback(result);
@@ -284,6 +285,20 @@ function datatablenew(){
                 },
                 {
 					"mRender": function (data, type, row) {
+						var tiene_tipo_cobro = "";
+						if(row.tiene_tipo_cobro == 1){
+							tiene_tipo_cobro = "NO";
+						}
+						if(row.tiene_tipo_cobro == 0){
+							tiene_tipo_cobro = "SI";
+						}
+						return tiene_tipo_cobro;
+					},
+					"bSortable": false,
+					"aTargets": [6]
+				},
+                {
+					"mRender": function (data, type, row) {
 						var estado = "";
 						var clase = "";
 						if(row.estado == 1){
@@ -303,8 +318,9 @@ function datatablenew(){
 						return html;
 					},
 					"bSortable": false,
-					"aTargets": [6],
+					"aTargets": [7],
 				},
+                
 				   		          
             ]
 

@@ -2831,6 +2831,9 @@ class ComprobanteController extends Controller
 		$data["tipoDocIdentidadReceptor"] = $this->getTipoDocPersona($factura->tipo, $factura->cod_tributario);//"6";        
 		$data["numeroDocIdentidadReceptor"] = $factura->cod_tributario; //"10040834643";
         $data["direccionReceptor"] = $factura->direccion;
+        if($this->getTipoDocumento($factura->tipo) == "03"){
+            $data["condicionPago"] = $factura->medio_pago;
+        }
         $data["formaPagoGlosa"] = ($factura->id_forma_pago =="1")?"CONTADO":"CREDITO";
         
         if ($factura->numero_orden_compra_cliente!=Null){
@@ -3967,6 +3970,7 @@ class ComprobanteController extends Controller
 		$factura_model = new Comprobante();
 		$p[]=$request->fecha_ini;
 		$p[]=$request->fecha_fin;
+		$p[]=$request->tiene_tipo_cobro;
         /*$p[]=$request->serie;
         $p[]=$request->numero;*/
         $p[]=$request->estado;
@@ -4249,7 +4253,7 @@ class ComprobanteController extends Controller
         $anio_actual = now()->year;
         $anios = range($anio_inicio, $anio_actual);
 
-        return view('frontend.comprobante.create_ventas',compact('anios','empresas'));
+        return view('frontend.comprobante.create_ventas',compact('anios','empresas','anio_actual'));
     }
 
     public function lista_ventas_anio($anio, $empresa){
