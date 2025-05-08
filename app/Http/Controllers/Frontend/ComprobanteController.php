@@ -2759,6 +2759,12 @@ class ComprobanteController extends Controller
 		$cabecera = array("valor1","valor2");
 		$detalle = array("valor1","valor2");
 		foreach($factura_detalles as $index => $row ) {
+
+            $tabla_maestras = TablaMaestra::where([
+                'abreviatura' => $row->guiad_unid_medida,
+                'tipo' => '43',
+            ])->first();
+
 			$items1 = array(
 							"ordenItem"=> $row->item, //"2",
 							"adicionales"=> [],
@@ -2773,7 +2779,7 @@ class ComprobanteController extends Controller
                             "codigoDescuentoItem"=> "00",
 							"valorUnitarioSinIgv"=> str_replace(",","",$row->pu), //"42.3728813559",
 							"precioUnitarioConIgv"=> str_replace(",","",$row->precio_venta), //"50.0000000000",
-							"unidadMedidaComercial"=> $row->unidad,
+							"unidadMedidaComercial"=> $tabla_maestras->abreviatura_comercial,
 							"codigoAfectacionIGVItem"=> $row->afect_igv,
 							"porcentajeDescuentoItem"=> str_replace(",","",($row->descuento*100)/$row->pu),
 							"codTipoPrecioVtaUnitarioItem"=> "01"
@@ -2891,8 +2897,7 @@ class ComprobanteController extends Controller
          
         }
 
-       print_r(json_encode($data)."<br>"); //exit();
-
+        print_r(json_encode($data)."<br>"); exit();
 
 		$databuild_string = json_encode($data);
        // print_r($databuild_string);exit();
@@ -3712,6 +3717,10 @@ class ComprobanteController extends Controller
         $data["nombreComercialEmisor"] ="FORESTAL PAMA S.A.C.";
         $data["unidadMedidaPesoBruto"] ="KGM";
 
+        if($guia->guia_cod_motivo=='13'){
+            $data["descripcionTraslado"] =$guia->guia_desc_motivo;
+        }
+
         $data["tipoDocIdentidadEmisor"] = "6";
         $data["numeroDocIdentidadEmisor"] =$guia->guia_emisor_numdoc; //"20160453908";
         
@@ -3751,8 +3760,8 @@ class ComprobanteController extends Controller
             $data["fechaInicioTraslado"] =$guia->guia_fecha_traslado; //"2024-08-01";
 
         }
-
         
+       print_r(json_encode($data)."<br>"); //exit();
         //print_r($data);
         //exit();
 		$databuild_string = json_encode($data);
@@ -3798,8 +3807,8 @@ class ComprobanteController extends Controller
             */
 		}
 		//print_r($results);
+        print_r($results."<br>"); 
         curl_close($chbuild);
-
 
 		//$results = substr($results,strpos($results,'{'),strlen($results));
         $results = substr($results,strpos($results,'{'),strlen($results));

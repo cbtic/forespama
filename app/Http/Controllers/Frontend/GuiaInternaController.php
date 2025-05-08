@@ -116,7 +116,7 @@ class GuiaInternaController extends Controller
         $unidad_peso = $tablaMaestra_model->getMaestroByTipo(43);
         $tipo_documento_cliente = $tablaMaestra_model->getMaestroByTipo(75);
 
-        //dd($guia_interna);exit();
+        //dd($guia);exit();
 
         return view('frontend.guia_interna.modal_guia_interna_nuevoGuiaInterna',compact('id','guia_interna','guia','tipo_documento_entrada','tipo_documento_salida','producto','marca','estado_bien','unidad','empresas',/*'transporte_razon_social',*/'motivo_traslado','departamento','serie_guia','id_user','punto_partida','unidad_peso','tipo_documento_cliente'));
 
