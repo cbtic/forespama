@@ -170,38 +170,20 @@ $('#openOverlayOpc').on('shown.bs.modal', function() {
 
 $(document).ready(function() {
 
+    agregarHorario();
 
 });
 
-function fn_save_dispensacion(){
+function fn_save_promotor_ruta(){
 	
     var msg = "";
 
-    var tipo_documento = $('#tipo_documento').val();
-    var almacen = $('#almacen').val();
-    var area_trabajo = $('#area_trabajo').val();
-    var unidad_trabajo = $('#unidad_trabajo').val();
+    var id_promotor = $('#id_promotor').val();
 
-    if(tipo_documento==""){msg+="Ingrese el Tipo de Documento <br>";}
-    if(almacen==""){msg+="Ingrese el Almacen <br>";}
-    if(area_trabajo==""){msg+="Ingrese el Area de Trabajo <br>";}
-    if(unidad_trabajo==""){msg+="Ingrese la Unidad de Trabajo <br>";}
-
-    $('#tblDispensacionDetalle tbody tr').each(function(index, row) {
-
-        const id_dispensacion_detalle_producto = parseInt($(row).find('input[name="id_dispensacion_detalle[]"]').val());
-        const cantidad_ingreso_producto = parseInt($(row).find('input[name="cantidad[]"]').val());
-        const stockActual = parseInt($(row).find('input[name="stock_actual[]"]').val());
-        const descripcion_producto = $(row).find('select[name="descripcion[]"] option:selected').text();
-        
-        if(stockActual<cantidad_ingreso_producto && id_dispensacion_detalle_producto==0){
-            msg+="No hay stock para el producto "+descripcion_producto+" <br>";
-        }
-    });
-        
-
-    if ($('#tblDispensacionDetalle tbody tr').length == 0) {
-        msg += "No se ha agregado ningún producto <br>";
+    if(id_promotor==""){msg+="Ingrese el Promotor <br>";}
+    
+    if ($('#tblPromotorRutaDetalle tbody tr').length == 0) {
+        msg += "No tiene ningun horario <br>";
     }
 
     if(msg!=""){
@@ -215,7 +197,7 @@ function fn_save_dispensacion(){
         $('.loader').show();
 
         $.ajax({
-                url: "/dispensacion/send_dispensacion",
+                url: "/promotores/send_promotor_ruta",
                 type: "POST",
                 data : $("#frmDispensacion").serialize(),
                 success: function (result) {
@@ -231,6 +213,61 @@ function fn_save_dispensacion(){
                 }
         });
     }
+}
+
+function agregarHorario(){
+
+    var opcionesTienda = `<?php
+        echo '<option value="">--Seleccionar--</option>';
+        foreach ($tiendas as $row) {
+            echo '<option value="' . htmlspecialchars($row->id, ENT_QUOTES, 'UTF-8') . '">' . htmlspecialchars($row->id . ' - ' . $row->denominacion, ENT_QUOTES, 'UTF-8') . '</option>';
+        }
+    ?>`;
+
+    var cantidad = 7;
+    
+    for (var i = 0; i < cantidad; i++) {
+        var n = $('#tblPromotorRutaDetalle tbody tr').length + 1;
+        var fecha = '<input name="id_promotor_ruta_detalle[]" id="id_promotor_ruta_detalle${n}" class="form-control form-control-sm" value="${promotor_ruta.id}" type="hidden"><input name="fecha[]" id="fecha' + n + '" class="form-control form-control-sm" value="" type="text">';
+        //var cantidad = '<input name="cantidad[]" id="cantidad' + n + '" class="form-control form-control-sm" value="" type="text">';
+        var tienda = '<select name="tienda[]" id="tienda' + n + '" class="form-control form-control-sm"> ' + opcionesTienda +' </select>';
+        var hora_llegada = '<input name="hora_llegada[]" id="hora_llegada' + n + '" class="form-control form-control-sm" value="" type="time">'
+        var hora_salida = '<input name="hora_salida[]" id="hora_salida' + n + '" class="form-control form-control-sm" value="" type="time">'
+        var hora_estado_situacional = '<input name="hora_estado_situacional[]" id="hora_estado_situacional' + n + '" class="form-control form-control-sm" value="" type="time">'
+        var hora_estado_promocion = '<input name="hora_estado_promocion[]" id="hora_estado_promocion' + n + '" class="form-control form-control-sm" value="" type="time">'
+        
+        var btnEliminar = '<button type="button" class="btn btn-danger btn-sm" onclick="eliminarFila(this)">Eliminar</button>';
+        var newRow = "";
+        newRow += '<tr>';
+        newRow += '<td>' + n + '</td>';
+        newRow += '<td>' + fecha + '</td>';
+        newRow += '<td>' + tienda + '</td>';
+        newRow += '<td>' + hora_llegada + '</td>';
+        newRow += '<td>' + hora_salida + '</td>';
+        newRow += '<td>' + hora_estado_situacional + '</td>';
+        newRow += '<td>' + hora_estado_promocion + '</td>';
+        newRow += '<td>' + btnEliminar + '</td>';
+        newRow += '</tr>';
+
+        $('#tblPromotorRutaDetalle tbody').append(newRow);
+        
+        $('#tienda' + n).select2({
+            width: '100%',
+        });
+
+        $('#fecha' + n).datepicker({
+            autoclose: true,
+            format: 'yyyy-mm-dd',
+            changeMonth: true,
+            changeYear: true,
+            language: 'es'
+        });
+    }
+}
+
+function eliminarFila(button){
+    $(button).closest('tr').remove();
+    actualizarTotalGeneral();
 }
 
 </script>
@@ -271,7 +308,7 @@ function fn_save_dispensacion(){
                         <div class="col-lg-2">
                             Promotor
                         </div>
-                        <div class="col-lg-2">
+                        <div class="col-lg-4">
                             <select name="id_promotor" id="id_promotor" class="form-control form-control-sm" onchange="">
                                 <option value="">--Seleccionar--</option>
                                 <?php
@@ -283,17 +320,30 @@ function fn_save_dispensacion(){
                             </select>
                         </div>
                     </div>
-                    <div class="row" style="padding-left:10px">
-                        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12" style="padding-top:5px;padding-bottom:20px">
-                            asd
-                        </div>
-                    </div>
+                    <div class="card-body" style="margin-top:15px">	
+                    <div class="table-responsive" style="overflow-y: auto; max-height: 400px;">
+						<table id="tblPromotorRutaDetalle" class="table table-hover table-sm">
+							<thead>
+							<tr style="font-size:13px">
+								<th>#</th>
+								<th>D&iacute;a</th>
+								<th>Tienda</th>
+								<th>Hora Llegada</th>
+                                <th>Hora Salida</th>
+                                <th>Hora Estado Situacional</th>
+                                <th>Hora Estado Promoci&oacute;n</th>
+							</tr>
+							</thead>
+							<tbody id="divPromotorRutaDetalle">
+							</tbody>
+						</table>
+					</div>
                     
                     <div style="margin-top:15px" class="form-group">
                         <div class="col-sm-12 controls">
                             <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
                                 
-                                <a href="javascript:void(0)" onClick="fn_save_dispensacion()" class="btn btn-sm btn-success" style="margin-right:10px">Guardar</a>
+                                <a href="javascript:void(0)" onClick="fn_save_promotor_ruta()" class="btn btn-sm btn-success" style="margin-right:10px">Guardar</a>
                                 
                                 <a href="javascript:void(0)" onClick="$('#openOverlayOpc').modal('hide');" class="btn btn-sm btn-info" style="">Cerrar</a>
                             </div>

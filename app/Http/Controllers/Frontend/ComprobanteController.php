@@ -2761,7 +2761,7 @@ class ComprobanteController extends Controller
 		foreach($factura_detalles as $index => $row ) {
 
             $tabla_maestras = TablaMaestra::where([
-                'abreviatura' => $row->guiad_unid_medida,
+                'abreviatura' => $row->unidad,
                 'tipo' => '43',
             ])->first();
 
