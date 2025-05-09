@@ -2897,7 +2897,7 @@ class ComprobanteController extends Controller
          
         }
 
-        print_r(json_encode($data)."<br>"); exit();
+        //print_r(json_encode($data)."<br>"); exit();
 
 		$databuild_string = json_encode($data);
        // print_r($databuild_string);exit();
