@@ -2892,8 +2892,6 @@ class ComprobanteController extends Controller
             $data["creditoCuotas"] = $items_c;
 
             $data["formaPagoMonto"] = str_replace(",","",number_format($monto_pago,2)); //"7.63"  round($monto_pago,2);
-
-            
          
         }
 
