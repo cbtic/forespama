@@ -5,7 +5,7 @@ $(document).ready(function () {
 	});
 
 	$('#btnNuevo').click(function () {
-		modalDispensacion(0);
+		modalPromotorRuta(0);
 	});
 
 	$('#tipo_documento_bus').keypress(function(e){
@@ -261,7 +261,7 @@ function datatablenew(){
 						
 						var html = '<div class="btn-group btn-group-sm" role="group" aria-label="Log Viewer Actions">';
 						
-						html += '<button style="font-size:12px" type="button" class="btn btn-sm btn-success" data-toggle="modal" onclick="modalDispensacion('+row.id+')" ><i class="fa fa-edit"></i> Editar</button>'; 
+						html += '<button style="font-size:12px" type="button" class="btn btn-sm btn-success" data-toggle="modal" onclick="modalPromotorRuta('+row.id+')" ><i class="fa fa-edit"></i> Editar</button>'; 
 						
 						//html += '<a href="javascript:void(0)" onclick=eliminarDispensacion('+row.id+','+row.estado+') class="btn btn-sm '+clase+'" style="font-size:12px;margin-left:10px">'+estado+'</a>';			
 						
@@ -283,7 +283,7 @@ function fn_ListarBusqueda() {
     datatablenew();
 };
 
-function modalDispensacion(id){
+function modalPromotorRuta(id){
 	
 	/*var tipo_mov="";
 	if(tipo=='INGRESO'){tipo_mov=1};
@@ -293,7 +293,7 @@ function modalDispensacion(id){
 	$('#openOverlayOpc .modal-body').css('height', 'auto');
 
 	$.ajax({
-			url: "/dispensacion/modal_dispensacion/"+id,
+			url: "/promotores/modal_promotor_ruta/"+id,
 			type: "GET",
 			success: function (result) {  
 					$("#diveditpregOpc").html(result);

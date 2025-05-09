@@ -264,11 +264,7 @@ $.ajax({
                 let unidadMedidaOptions = '<option value="">--Seleccionar--</option>';
                 //console.log('producto_stock:', result.producto_stock);
                 var producto_stock = result.producto_stock[orden_compra.id_producto];
-                /*if (producto_stock) {
-                    console.log('saldos_cantidad:', producto_stock.saldos_cantidad);
-                } else {
-                    console.log('No se encontró stock para el producto:', orden_compra.id_producto);
-                }*/
+                
 
                 result.marca.forEach(marca => {
                     let selected = (marca.id == orden_compra.id_marca) ? 'selected' : '';
@@ -351,7 +347,21 @@ $.ajax({
                     language: 'es'
                 });
                 
-                calcularCantidadPendiente($('#cantidad_ingreso' + n));
+                let currentIndex = n;
+
+                //tbody.append(row);
+
+                calcularCantidadPendiente($('#cantidad_ingreso' + currentIndex)[0]);
+
+                setTimeout(() => {
+                    const $cantidadIngreso = $('#cantidad_ingreso' + currentIndex);
+                    const $precioUnitario = $('#precio_unitario' + currentIndex);
+                    const $precioUnitario_ = $('#precio_unitario_' + currentIndex);
+
+                    calcularCantidadPendiente($cantidadIngreso[0]);
+                    calcularPrecioUnitario($precioUnitario[0]);
+                }, 0);
+
                 n++;
                 sub_total_acumulado += parseFloat(orden_compra.sub_total || 0);
                 igv_total_acumulado += parseFloat(orden_compra.igv || 0);
@@ -359,16 +369,46 @@ $.ajax({
                 descuento_total_acumulado += parseFloat(orden_compra.porcentaje || 0);
                 total_acumulado += parseFloat(orden_compra.total || 0);
                 
+                
                 });
+
+                recalcularTotalesGenerales();
                 //alert(total_acumulado);
                 $('#sub_total_general').val(sub_total_acumulado.toFixed(2) || '0.00');
                 $('#igv_general').val(igv_total_acumulado.toFixed(2) || '0.00');
                 $('#descuento_general').val(descuento_total_acumulado.toFixed(2) || '0.00');
                 $('#total_general').val(total_acumulado.toFixed(2 || '0.00'));
             }
-            
     });
 
+}
+
+function recalcularTotalesGenerales() {
+    let subtotal = 0;
+    let igv = 0;
+    let descuento = 0;
+    let total = 0;
+
+    $('.sub_total').each(function () {
+        subtotal += parseFloat($(this).val()) || 0;
+    });
+
+    $('.igv').each(function () {
+        igv += parseFloat($(this).val()) || 0;
+    });
+
+    $('.descuento').each(function () {
+        descuento += parseFloat($(this).val()) || 0;
+    });
+
+    $('.total').each(function () {
+        total += parseFloat($(this).val()) || 0;
+    });
+
+    $('#sub_total_general').val(subtotal.toFixed(2));
+    $('#igv_general').val(igv.toFixed(2));
+    $('#descuento_general').val(descuento.toFixed(2));
+    $('#total_general').val(total.toFixed(2));
 }
 
 function cambiarOrigen(){
@@ -818,7 +858,7 @@ function calcularPrecioUnitario(input) {
     var cantidad_ingreso = parseFloat(fila.find('.cantidad_ingreso').val()) || 0;
     var descuento = parseFloat(fila.find('.descuento').val()) || 0;
     var porcentaje = parseFloat(fila.find('.porcentaje').val()) || 0;
-
+    
     if(igvPorcentaje==1.18){
         precio_unitario_ = precio_venta / igvPorcentaje;
     }else{
