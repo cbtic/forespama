@@ -95,7 +95,7 @@ class Almacene extends Model
 
     function getAlmacenAll(){
 
-        $cad = "select * from almacenes a";
+        $cad = "select * from almacenes a where a.estado='1'";
 
 		$data = DB::select($cad);
         return $data;
