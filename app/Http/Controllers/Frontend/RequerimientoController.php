@@ -248,7 +248,7 @@ class RequerimientoController extends Controller
 		$pdf = Pdf::loadView('frontend.requerimiento.movimiento_pdf_requerimiento',compact('tipo_documento','almacen','fecha','codigo','datos_detalle','responsable_atencion','sustento_requerimiento'));
 		
 		$pdf->setPaper('A4'); // Tamaño de papel (puedes cambiarlo según tus necesidades)
-
+        
 		$pdf->setPaper('A4', 'portrait');
     	$pdf->setOption('margin-top', 20); // Márgen superior en milímetros
    		$pdf->setOption('margin-right', 50); // Márgen derecho en milímetros

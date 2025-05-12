@@ -17,7 +17,7 @@ class RequerimientoDetalle extends Model
         left join tabla_maestras tm on rd.id_estado_producto ::int = tm.codigo::int and tm.tipo = '56'
         left join tabla_maestras tm2 on rd.id_unidad_medida ::int = tm2.codigo::int and tm2.tipo = '43'
         left join marcas m on rd.id_marca = m.id 
-        where r.id ='".$id."'";
+        where r.id ='".$id."' and rd.estado ='1'";
 
 		$data = DB::select($cad);
         return $data;
