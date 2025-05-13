@@ -118,7 +118,7 @@ function datatablenew(){
 				}
 			});
 
-			$('#tblOrdenCompra tfoot tr').html('<td colspan="12"><b>Total</b></td><td><b>' + totalImporte.toFixed(2) + '</b></td><td colspan="2"></td>');
+			$('#tblOrdenCompra tfoot tr').html('<td colspan="13"><b>Total</b></td><td><b>' + totalImporte.toFixed(2) + '</b></td><td colspan="2"></td>');
 
             //$('#tblOrdenCompra tfoot th.text-right').text(totalImporte.toFixed(2));
 
