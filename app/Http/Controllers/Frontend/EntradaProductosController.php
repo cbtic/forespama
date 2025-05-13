@@ -192,6 +192,8 @@ class EntradaProductosController extends Controller
             $entrada_producto->id_orden_compra = $request->id_orden_compra;
             $entrada_producto->id_usuario_inserta = $id_user;
             $entrada_producto->save();
+            $id_entrada_productos = $entrada_producto->id;
+            $id_orden_compra = $entrada_producto->id_orden_compra;
             $codigo_nota_entrada = $entrada_producto->codigo;
 
             $valida_estado = true;
@@ -315,21 +317,21 @@ class EntradaProductosController extends Controller
                 }
             }
 
-            if($valida_estado==true){
-                $entrada_producto = EntradaProducto::where('id_orden_compra',$request->id_orden_compra)->first();
-                $entrada_producto_detalle = EntradaProductoDetalle::where('id_entrada_productos',$entrada_producto->id)->get();
-                $orden_compra = OrdenCompra::find($entrada_producto->id_orden_compra);
+            //if($valida_estado==true){
+                //$entrada_producto = EntradaProducto::where('id_orden_compra',$request->id_orden_compra)->first();
+                $entrada_producto_detalle = EntradaProductoDetalle::where('id_entrada_productos',$id_entrada_productos)->where('estado','1')->get();
+                //$orden_compra = OrdenCompra::find($entrada_producto->id_orden_compra);
                 //$orden_compra_detalle = OrdenCompraDetalle::where('id_orden_compra',$orden_compra->id)->orderBy('id', 'asc')->get();
                 $entrada_producto_detalle_model = new EntradaProductoDetalle;
                 foreach($entrada_producto_detalle as $index => $detalle){
                     
-                    $detalle_orden = OrdenCompraDetalle::where('id_orden_compra',$orden_compra->id)->where('id_producto',$detalle->id_producto)->first();
+                    $detalle_orden = OrdenCompraDetalle::where('id_orden_compra',$id_orden_compra)->where('id_producto',$detalle->id_producto)->where('estado','1')->first();
 
                     //$detalle_orden = $orden_compra_detalle[$index];
                     
                     $cantidad_requerida = $detalle_orden->cantidad_requerida;
                     
-                    $cantidad_ingresada = $entrada_producto_detalle_model->getCantidadEntradaProductoByOrdenProducto($orden_compra->id,$detalle->id_producto);
+                    $cantidad_ingresada = $entrada_producto_detalle_model->getCantidadEntradaProductoByOrdenProducto($id_orden_compra,$detalle->id_producto);
                     //dd($detalle);
                     if($cantidad_requerida - $cantidad_ingresada==0){
                         $entradaProductoDetalleObj = EntradaProductoDetalle::find($detalle->id);
@@ -355,20 +357,21 @@ class EntradaProductosController extends Controller
                 }
                */
 
-                $entrada_producto_detalle_valida = EntradaProductoDetalle::where('id_entrada_productos',$entrada_producto->id)->where('cerrado','2')->get();
-                if($entrada_producto_detalle_valida->count()==$entrada_producto_detalle->count()){
-                    $entrada_producto_all = EntradaProducto::where('id_orden_compra',$request->id_orden_compra)->get();
-                    foreach ($entrada_producto_all as $entrada_producto_) {
-                        $entrada_producto_->cerrado = 2;
-                        $entrada_producto_->save();
-                    }
+                $entrada_producto_detalle_valida = EntradaProductoDetalle::where('id_entrada_productos',$id_entrada_productos)->where('cerrado','2')->get();
+                //if($entrada_producto_detalle_valida->count()==$entrada_producto_detalle->count()){
 
-                    $OrdenCompraObj = OrdenCompra::find($orden_compra->id);
-                    $OrdenCompraObj->cerrado = 2;
-                    $OrdenCompraObj->save();
+                $orden_compra_detalle_model = new OrdenCompraDetalle;
+                $cantidadAbierto = $orden_compra_detalle_model->getCantidadAbiertoOrdenCompraDetalleByIdOrdenCompra($id_orden_compra);
+
+                if($cantidadAbierto==0){
+
+                        $OrdenCompraObj = OrdenCompra::find($id_orden_compra);
+                        $OrdenCompraObj->cerrado = 2;
+                        $OrdenCompraObj->save();
                 }
+                //}
 
-            }
+            //}
 
         }else if($request->tipo_movimiento==2){
 

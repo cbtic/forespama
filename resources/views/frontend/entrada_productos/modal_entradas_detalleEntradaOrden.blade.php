@@ -238,7 +238,7 @@ var productosSeleccionados = [];
 function cargarDetalle(){
 
 var id = <?php echo $orden_compra->id?>;
-//var tipo_movimiento = $("#tipo_movimiento").val();
+var tipo_movimiento = $("#tipo_movimiento").val();
 
 //$("#divDetalle tbody").html("");
 const tbody = $('#divDetalle');
@@ -246,7 +246,7 @@ const tbody = $('#divDetalle');
 tbody.empty();
 
 $.ajax({
-        url: "/orden_compra/cargar_detalle_abierto/"+id,
+        url: "/orden_compra/cargar_detalle_abierto/"+id+"/"+tipo_movimiento,
         type: "GET",
         success: function (result) {
 

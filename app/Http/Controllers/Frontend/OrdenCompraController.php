@@ -383,7 +383,7 @@ class OrdenCompraController extends Controller
         ]);
     }
 
-    public function cargar_detalle_abierto($id)
+    public function cargar_detalle_abierto($id, $tipo_movimiento)
     {
 
         $orden_compra_model = new OrdenCompra;
@@ -392,7 +392,12 @@ class OrdenCompraController extends Controller
         $tablaMaestra_model = new TablaMaestra;
         $kardex_model = new Kardex;
 
-        $orden_compra = $orden_compra_model->getDetalleOrdenCompraIdAbierto($id);
+        if($tipo_movimiento=='1'){
+            $orden_compra = $orden_compra_model->getDetalleOrdenCompraIdAbiertoEntrada($id);
+        }else{
+            $orden_compra = $orden_compra_model->getDetalleOrdenCompraIdAbierto($id);
+        }
+        
         $marca = $marca_model->getMarcaAll();
         $producto = $producto_model->getProductoAll();
         $estado_bien = $tablaMaestra_model->getMaestroByTipo(4);

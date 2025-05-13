@@ -30,10 +30,10 @@ class OrdenCompraDetalle extends Model
     function getCantidadAbiertoOrdenCompraDetalleByIdOrdenCompra($id_orden_compra){
 
         $cad = "select count(id) cantidad
-from orden_compra_detalles ocd 
-where id_orden_compra=".$id_orden_compra."
-and ocd.estado='1'
-and ocd.cerrado!='2'";
+        from orden_compra_detalles ocd 
+        where id_orden_compra=".$id_orden_compra."
+        and ocd.estado='1'
+        and ocd.cerrado!='2'";
 
 		$data = DB::select($cad);
         //return $data;
