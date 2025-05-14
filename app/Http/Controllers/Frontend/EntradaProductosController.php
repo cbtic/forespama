@@ -241,6 +241,12 @@ class EntradaProductosController extends Controller
 
                 $entradaProducto_detalle->save();
 
+                $orden_compra_detalle_cantidad = OrdenCompraDetalle::where('id_orden_compra',$entrada_producto->id_orden_compra)->where('id_producto',$descripcion[$index])->where('estado',1)->first();
+                $cantidad_despacho_actual = $orden_compra_detalle_cantidad->cantidad_despacho;
+                $cantidad_despacho_actualizado = $cantidad_despacho_actual + $cantidad_ingreso[$index];
+                $orden_compra_detalle_cantidad->cantidad_despacho = $cantidad_despacho_actualizado;
+                $orden_compra_detalle_cantidad->save();
+
                 $producto = Producto::find($descripcion[$index]);
                 if($request->almacen_salida!=""){
                     $kardex_buscar = Kardex::where("id_producto",$descripcion[$index])->where("id_almacen_destino",$request->almacen_salida)->orderBy('id', 'desc')->first();
