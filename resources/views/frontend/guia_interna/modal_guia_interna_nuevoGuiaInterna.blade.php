@@ -1964,7 +1964,7 @@ function obtenerMotivo(){
                                         Punto de Llegada
                                     </div>
                                     <div class="col-lg-9">
-                                        <select name="punto_llegada_select" id="punto_llegada_select" class="form-control form-control-sm">
+                                        <select name="punto_llegada_select" id="punto_llegada_select" class="form-control form-control-sm" onchange="obtenerUbigeo()">
                                             <option value="">--Seleccionar--</option>
                                             <?php 
                                             foreach ($punto_partida as $row){?>
