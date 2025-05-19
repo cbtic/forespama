@@ -297,54 +297,61 @@ class GuiaInternaController extends Controller
 
         $array_guia_interna_detalle = array();
 
-        foreach($item as $index => $value) {
+        if($request->id == 0){
+
+            foreach($item as $index => $value) {
             
-            //if($id_guia_interna_detalle[$index] == 0){
-                $guia_interna_detalle = new GuiaInternaDetalle;
-                $guia_detalle = new GuiaDetalle;
-                $tabla_maestra_model = new TablaMaestra;
-                $abreviatura_unidad_medida = $tabla_maestra_model->getMaestroC(43,$unidad[$index]);
-            //}else{
-            //    $guia_interna_detalle = GuiaInternaDetalle::find($id_guia_interna_detalle[$index]);
-            //}
-            
-            $guia_interna_detalle->id_guia_interna = $guia_interna->id;
-            $guia_interna_detalle->id_producto = $descripcion[$index];
-            $guia_interna_detalle->cantidad = $cantidad[$index];
-            $guia_interna_detalle->id_estado_producto = $estado_bien[$index];
-            $guia_interna_detalle->id_unidad_medida = $unidad[$index];
-            $guia_interna_detalle->id_marca = $marca[$index];
-            $guia_interna_detalle->estado = 1;
-            $guia_interna_detalle->id_usuario_inserta = $id_user;
-
-            $guia_interna_detalle->save();
-
-            $guia_detalle->id_guia = $guia->id;
-            $guia_detalle->guiad_serie = $request->serie_guia;
-            $guia_detalle->guiad_numero = $numero_guia[0]->codigo;
-            $guia_detalle->guiad_tipo = $tipo_guia[0]->codigo;
-            $guia_detalle->guiad_orden_item = $index+1;
-            $guia_detalle->guiad_codigo = $cod_interno[$index];
-            $guia_detalle->guiad_descripcion = $descripcion_[$index];
-            $guia_detalle->guiad_cantidad = $cantidad[$index];
-            $guia_detalle->guiad_unid_medida = $abreviatura_unidad_medida[0]->abreviatura;
-            $guia_detalle->id_usuario_inserta = $id_user;
-            $guia_detalle->save();
-
-            $array_guia_interna_detalle[] = $guia_interna_detalle->id;
-
-            $GuiaInternaAll = GuiaInternaDetalle::where("id_guia_interna",$guia_interna->id)->where("estado","1")->get();
-            
-            foreach($GuiaInternaAll as $key=>$row){
+                //if($id_guia_interna_detalle[$index] == 0){
+                    $guia_interna_detalle = new GuiaInternaDetalle;
+                    $guia_detalle = new GuiaDetalle;
+                    $tabla_maestra_model = new TablaMaestra;
+                    $abreviatura_unidad_medida = $tabla_maestra_model->getMaestroC(43,$unidad[$index]);
+                /*}else{
+                    $guia_interna_detalle = GuiaInternaDetalle::find($id_guia_interna_detalle[$index]);
+                    $guia_detalle = GuiaDetalle::find($id_guia_interna_detalle[$index]);
+                    $tabla_maestra_model = new TablaMaestra;
+                    $abreviatura_unidad_medida = $tabla_maestra_model->getMaestroC(43,$unidad[$index]);
+                }*/
                 
-                if (!in_array($row->id, $array_guia_interna_detalle)){
-                    $guia_interna_detalle = GuiaInternaDetalle::find($row->id);
-                    $guia_interna_detalle->estado = 0;
-                    $guia_interna_detalle->save();
+                $guia_interna_detalle->id_guia_interna = $guia_interna->id;
+                $guia_interna_detalle->id_producto = $descripcion[$index];
+                $guia_interna_detalle->cantidad = $cantidad[$index];
+                $guia_interna_detalle->id_estado_producto = $estado_bien[$index];
+                $guia_interna_detalle->id_unidad_medida = $unidad[$index];
+                $guia_interna_detalle->id_marca = $marca[$index];
+                $guia_interna_detalle->estado = 1;
+                $guia_interna_detalle->id_usuario_inserta = $id_user;
+
+                $guia_interna_detalle->save();
+
+                $guia_detalle->id_guia = $guia->id;
+                $guia_detalle->guiad_serie = $request->serie_guia;
+                $guia_detalle->guiad_numero = $numero_guia[0]->codigo;
+                $guia_detalle->guiad_tipo = $tipo_guia[0]->codigo;
+                $guia_detalle->guiad_orden_item = $index+1;
+                $guia_detalle->guiad_codigo = $cod_interno[$index];
+                $guia_detalle->guiad_descripcion = $descripcion_[$index];
+                $guia_detalle->guiad_cantidad = $cantidad[$index];
+                $guia_detalle->guiad_unid_medida = $abreviatura_unidad_medida[0]->abreviatura;
+                $guia_detalle->id_usuario_inserta = $id_user;
+                $guia_detalle->save();
+
+                $array_guia_interna_detalle[] = $guia_interna_detalle->id;
+
+                $GuiaInternaAll = GuiaInternaDetalle::where("id_guia_interna",$guia_interna->id)->where("estado","1")->get();
+                
+                foreach($GuiaInternaAll as $key=>$row){
+                    
+                    if (!in_array($row->id, $array_guia_interna_detalle)){
+                        $guia_interna_detalle = GuiaInternaDetalle::find($row->id);
+                        $guia_interna_detalle->estado = 0;
+                        $guia_interna_detalle->save();
+                    }
                 }
             }
-        }
 
+        }
+        
         return response()->json(['id' => $guia_interna->id]);
     }
 

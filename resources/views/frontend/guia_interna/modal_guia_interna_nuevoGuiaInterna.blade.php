@@ -246,6 +246,7 @@ $(document).ready(function() {
     if($('#id').val()>0){
 		obtenerDatosUbigeoPartida();
         obtenerDatosUbigeoLlegada();
+        actualizarDescripciones();
 	}
     if($('#id').val()==0){
         $('#select_punto_llegada').hide();
@@ -363,7 +364,7 @@ function cargarDetalle(){
                 if (ingreso_produccion.id_producto) {
                     productosSeleccionados.push(ingreso_produccion.id_producto);
                 }
-               
+                
                 const row = `
                     <tr>
                         <td>${n}</td>
@@ -1286,6 +1287,14 @@ function cambiarPuntoLlegada(){
         $('#input_punto_llegada').show();
     }
 
+}
+
+function actualizarDescripciones() {
+    var descripcion_partida = $('#punto_partida option:selected').text();
+    $('#punto_partida_descripcion').val(descripcion_partida);
+
+    var descripcion_llegada = $('#punto_llegada_select option:selected').text();
+    $('#punto_llegada_descripcion').val(descripcion_llegada);
 }
 
 $('#punto_partida').on('change', function(){
