@@ -1688,6 +1688,11 @@ class EntradaProductosController extends Controller
             $devolucion_model = new Devolucione;
 		    $detalle_documento = $devolucion_model->getDetalleDevolucion();
 
+        }else if($tipo_documento==4){
+
+            $orden_compra_model = new OrdenCompra;
+		    $detalle_documento = $orden_compra_model->getDetalleOrdenCompraGuia();
+
         }
 		
 		return response()->json($detalle_documento);
@@ -1762,9 +1767,28 @@ class EntradaProductosController extends Controller
                 'producto' => $producto,
                 'estado_bien' => $estado_bien,
                 'unidad_medida' => $unidad_medida
+            ]); 
+        }else if ($tipo_documento==4){
+
+            $orden_compra_detalle_model = new OrdenCompraDetalle;
+            $marca_model = new Marca;
+            $producto_model = new Producto;
+            $tablaMaestra_model = new TablaMaestra;
+            $kardex_model = new Kardex;
+
+            $entrada_producto = $orden_compra_detalle_model->getDetalleProductoId($id_documento);
+            $marca = $marca_model->getMarcaAll();
+            $producto = $producto_model->getProductoAll();
+            $estado_bien = $tablaMaestra_model->getMaestroByTipo(56);
+            $unidad_medida = $tablaMaestra_model->getMaestroByTipo(43);
+
+            return response()->json([
+                'entrada_producto' => $entrada_producto,
+                'marca' => $marca,
+                'producto' => $producto,
+                'estado_bien' => $estado_bien,
+                'unidad_medida' => $unidad_medida
             ]);
-
-
         }
     }
 

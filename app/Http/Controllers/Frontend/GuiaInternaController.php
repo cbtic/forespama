@@ -212,7 +212,7 @@ class GuiaInternaController extends Controller
             $guia_interna->guia_cod_estab_llegada = $request->punto_llegada_select;
             $guia_interna->guia_cod_estab_partida = $request->punto_partida;
             $guia_interna->punto_partida = $request->punto_partida_descripcion;
-            $guia_interna->punto_llegada = $request->punto_llegada_descripcion." - ".$departamento." - ".$provincia." - ".$distrito;
+            $guia_interna->punto_llegada = $request->punto_llegada_descripcion;
         }else{
             $guia_interna->punto_llegada = $request->punto_llegada_input." - ".$departamento." - ".$provincia." - ".$distrito;
             $guia_interna->guia_cod_estab_partida = $request->punto_partida;

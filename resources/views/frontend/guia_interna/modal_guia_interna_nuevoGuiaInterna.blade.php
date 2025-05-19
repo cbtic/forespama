@@ -1440,6 +1440,96 @@ function obtenerDistritoPartida_edit(callback){
 	});
 }
 
+function obtenerUbigeoLlegada() {
+    if ($('#punto_llegada_select').val() == "0001"){
+        $('#departamento_llegada').val(15);
+        obtenerProvinciaLlegada_edit(function () {
+            $('#provincia_llegada').val("01");
+            obtenerDistritoLlegada_edit(function () {
+                $('#distrito_llegada').val("150142");
+            });
+        });
+    }else if($('#punto_llegada_select').val() == "0003"){
+        $('#departamento_llegada').val(19);
+        obtenerProvinciaLlegada_edit(function () {
+            $('#provincia_llegada').val("03");
+            obtenerDistritoLlegada_edit(function () {
+                $('#distrito_llegada').val("190301");
+            });
+        });
+    }
+}
+
+function obtenerProvinciaLlegada_edit(callback){
+	
+	var id = $('#departamento_llegada').val();
+	if(id=="")return false;
+	$('#provincia_llegada').attr("disabled",true);
+	$('#distrito_llegada').attr("disabled",true);
+	
+	var msgLoader = "";
+	msgLoader = "Procesando, espere un momento por favor";
+	var heightBrowser = $(window).width()/2;
+	$('.loader').css("opacity","0.8").css("height",heightBrowser).html("<div id='Grd1_wrapper' class='dataTables_wrapper'><div id='Grd1_processing' class='dataTables_processing panel-default'>"+msgLoader+"</div></div>");
+    $('.loader').show();
+	
+	$.ajax({
+		url: '/almacenes/obtener_provincia/'+id,
+		dataType: "json",
+		success: function(result){
+			var option = "<option value='' selected='selected'>--Seleccionar--</option>";
+			$('#provincia_llegada').html("");
+			$(result).each(function (ii, oo) {
+				option += "<option value='"+oo.id_provincia+"'>"+oo.desc_ubigeo+"</option>";
+			});
+			$('#provincia_llegada').html(option);
+			
+			var option2 = "<option value=''>--Seleccionar--</option>";
+			$('#distrito_llegada').html(option2);
+			
+			$('#provincia_llegada').attr("disabled",false);
+			$('#distrito_llegada').attr("disabled",false);
+			
+			$('.loader').hide();
+
+            if (callback) callback(); 
+		}
+	});
+}
+
+function obtenerDistritoLlegada_edit(callback){
+	
+	var id_departamento = $('#departamento_llegada').val();
+	var id = $('#provincia_llegada').val();
+	if(id=="")return false;
+	$('#distrito_llegada').attr("disabled",true);
+	
+	var msgLoader = "";
+	msgLoader = "Procesando, espere un momento por favor";
+	var heightBrowser = $(window).width()/2;
+	$('.loader').css("opacity","0.8").css("height",heightBrowser).html("<div id='Grd1_wrapper' class='dataTables_wrapper'><div id='Grd1_processing' class='dataTables_processing panel-default'>"+msgLoader+"</div></div>");
+    $('.loader').show();
+	
+	$.ajax({
+		url: '/almacenes/obtener_distrito/'+id_departamento+'/'+id,
+		dataType: "json",
+		success: function(result){
+			var option = "<option value=''>Seleccionar</option>";
+			$('#distrito_llegada').html("");
+			$(result).each(function (ii, oo) {
+				option += "<option value='"+oo.id_ubigeo+"'>"+oo.desc_ubigeo+"</option>";
+			});
+			$('#distrito_llegada').html(option);
+			
+			$('#distrito_llegada').attr("disabled",false);
+			$('.loader').hide();
+
+            if (callback) callback(); 
+
+		}
+	});
+}
+
 function obtenerMotivo(){
 
     var motivo_traslado = $('#motivo_traslado').val();
@@ -1527,6 +1617,7 @@ function obtenerMotivo(){
                                         <option value="1" <?= $guia_interna->id_tipo_documento == 1 ? "selected='selected'" : "" ?>>NOTA DE RECEPCION</option>
                                         <option value="2" <?= $guia_interna->id_tipo_documento == 2 ? "selected='selected'" : "" ?>>NOTA DE SALIDA</option>
                                         <option value="3" <?= $guia_interna->id_tipo_documento == 3 ? "selected='selected'" : "" ?>>DEVOLUCI&Oacute;N</option>
+                                        <option value="4" <?= $guia_interna->id_tipo_documento == 4 ? "selected='selected'" : "" ?>>ORDEN DE COMPRA</option>
                                     </select>
                                 </div>
                             </div>
@@ -1964,7 +2055,7 @@ function obtenerMotivo(){
                                         Punto de Llegada
                                     </div>
                                     <div class="col-lg-9">
-                                        <select name="punto_llegada_select" id="punto_llegada_select" class="form-control form-control-sm" onchange="obtenerUbigeo()">
+                                        <select name="punto_llegada_select" id="punto_llegada_select" class="form-control form-control-sm" onchange="obtenerUbigeoLlegada()">
                                             <option value="">--Seleccionar--</option>
                                             <?php 
                                             foreach ($punto_partida as $row){?>
