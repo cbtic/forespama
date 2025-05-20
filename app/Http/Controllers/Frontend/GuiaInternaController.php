@@ -151,7 +151,12 @@ class GuiaInternaController extends Controller
         $id_guia_interna_detalle =$request->id_guia_interna_detalle;
 
         $guia_interna_model = new GuiaInterna;
-        $numero_guia = $guia_interna_model->getNumeroGuia($request->serie_guia);
+        if($request->id == 0){
+            $numero_guia = $guia_interna_model->getNumeroGuia($request->serie_guia);
+            $guia_interna->guia_numero = $numero_guia[0]->codigo;
+        }else{
+            $guia_interna->guia_numero = $request->numero_guia;
+        }
         //dd($codigo);exit();
         
         $guia_interna->fecha_emision = $request->fecha_emision;
@@ -188,7 +193,6 @@ class GuiaInternaController extends Controller
         $guia_interna->id_ubigeo_partida = $request->distrito_partida;
         $guia_interna->id_ubigeo_llegada = $request->distrito_llegada;
         $guia_interna->guia_serie = $request->serie_guia;
-        $guia_interna->guia_numero = $numero_guia[0]->codigo;
         $guia_interna->numero_orden_compra_cliente = $request->orden_compra_cliente;
         $guia_interna->tiendas = $request->tiendas_orden_compra;
         $guia_interna->observacion = $request->observacion_guia;
@@ -226,7 +230,16 @@ class GuiaInternaController extends Controller
         $personas = Persona::find($conductores->id_personas);
 
         $guia->guia_serie = $request->serie_guia;
-        $guia->guia_numero = $numero_guia[0]->codigo;
+
+        $guia_interna_model = new GuiaInterna;
+        if($request->id == 0){
+            $numero_guia = $guia_interna_model->getNumeroGuia($request->serie_guia);
+            $guia->guia_numero = $numero_guia[0]->codigo;
+        }else{
+            $guia->guia_numero = $request->numero_guia;
+        }
+
+        
         $guia->guia_tipo = $tipo_guia[0]->codigo;
         //$guia->guia_receptor_tipodoc = "0";
         if($request->tipo_documento_cliente=='1'){
