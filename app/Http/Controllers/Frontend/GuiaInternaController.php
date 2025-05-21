@@ -152,8 +152,8 @@ class GuiaInternaController extends Controller
 
         $guia_interna_model = new GuiaInterna;
         if($request->id == 0){
-            $numero_guia = $guia_interna_model->getNumeroGuia($request->serie_guia);
-            $guia_interna->guia_numero = $numero_guia[0]->codigo;
+            $numero_guia_interna = $guia_interna_model->getNumeroGuia($request->serie_guia);
+            $guia_interna->guia_numero = $numero_guia_interna[0]->codigo;
         }else{
             $guia_interna->guia_numero = $request->numero_guia;
         }
@@ -233,12 +233,11 @@ class GuiaInternaController extends Controller
 
         $guia_interna_model = new GuiaInterna;
         if($request->id == 0){
-            $numero_guia = $guia_interna_model->getNumeroGuia($request->serie_guia);
-            $guia->guia_numero = $numero_guia[0]->codigo;
+            //$numero_guia_interna = $guia_interna_model->getNumeroGuia($request->serie_guia);
+            $guia->guia_numero = $numero_guia_interna[0]->codigo;
         }else{
             $guia->guia_numero = $request->numero_guia;
         }
-
         
         $guia->guia_tipo = $tipo_guia[0]->codigo;
         //$guia->guia_receptor_tipodoc = "0";
@@ -339,7 +338,7 @@ class GuiaInternaController extends Controller
 
                 $guia_detalle->id_guia = $guia->id;
                 $guia_detalle->guiad_serie = $request->serie_guia;
-                $guia_detalle->guiad_numero = $numero_guia[0]->codigo;
+                $guia_detalle->guiad_numero = $numero_guia_interna[0]->codigo;
                 $guia_detalle->guiad_tipo = $tipo_guia[0]->codigo;
                 $guia_detalle->guiad_orden_item = $index+1;
                 $guia_detalle->guiad_codigo = $cod_interno[$index];

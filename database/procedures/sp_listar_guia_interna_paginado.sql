@@ -36,6 +36,7 @@ begin
 	LEFT JOIN tabla_maestras tm1 
 	ON (gi.id_tipo_documento = 1 AND gi.id_tipo_documento ::int = tm1.codigo::int AND tm1.tipo = ''48'')
 	OR (gi.id_tipo_documento = 2 AND gi.id_tipo_documento ::int = tm1.codigo::int AND tm1.tipo = ''49'')
+	OR (gi.id_tipo_documento = 4 AND gi.id_tipo_documento ::int-3 = tm1.codigo::int AND tm1.tipo = ''54'')
 	inner join tabla_maestras tm2 on gi.id_motivo_traslado ::int = tm2.codigo::int and tm2.tipo = ''63''  ';
 	
 	v_where = ' Where 1=1 '; 
