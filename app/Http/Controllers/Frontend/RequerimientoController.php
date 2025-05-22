@@ -191,6 +191,16 @@ class RequerimientoController extends Controller
         return response()->json(['id' => $requerimiento->id]);
     }
 
+    public function eliminar_requerimiento($id,$estado)
+    {
+		$requerimiento = Requerimiento::find($id);
+
+		$requerimiento->estado = $estado;
+		$requerimiento->save();
+
+		echo $requerimiento->id;
+    }
+
     public function obtener_codigo_requerimiento($tipo_documento){
 		
 		$requerimiento_model = new Requerimiento;
