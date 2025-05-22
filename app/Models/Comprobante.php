@@ -85,6 +85,7 @@ class Comprobante extends Model
                 left join guia_internas gi on gi.numero_documento::int = sp.id 
                 where sp.tipo_devolucion='3'
                 and gi.id_tipo_documento !='4'
+                and gi.guia_anulado ='N'
                 and sp.id_orden_compra=oc.id) guia,
                 (select tm.denominacion medio_pago from comprobante_pagos cp 
                 inner join tabla_maestras tm on cp.id_medio = tm.codigo::int and tm.tipo='11'
