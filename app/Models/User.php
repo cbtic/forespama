@@ -25,7 +25,8 @@ class User extends Model
         $cad = "select u.id,u.name
         from model_has_roles mhr  
         inner join users u on mhr.model_id=u.id
-        where role_id=".$id_rol;
+        where role_id= ".$id_rol." 
+        and active = 1 ";
 
 		$data = DB::select($cad);
         return $data;
