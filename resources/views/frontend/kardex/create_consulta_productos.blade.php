@@ -356,7 +356,7 @@ label.form-control-sm{
 					<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
 						<select name="consulta_existencia_producto_bus" id="consulta_existencia_producto_bus" class="form-control form-control-sm">
 							<option value="">--Seleccionar Producto--</option>
-							@unless(auth()->user()->hasRole('Vendedor FORESPAMA'))
+							@unless(auth()->user()->hasRole('Vendedor FORESPAMA|Vendedor FORESPAMA jefe'))
 							<?php
 							foreach ($producto_all as $row) {
 							?>
@@ -365,7 +365,7 @@ label.form-control-sm{
 							}
 							?>
 							@endunless
-							@hasanyrole('Vendedor FORESPAMA')
+							@hasanyrole('Vendedor FORESPAMA|Vendedor FORESPAMA jefe')
 							<?php
 							foreach ($producto as $row) {
 							?>

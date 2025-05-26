@@ -62,6 +62,27 @@ $(document).ready(function () {
 		fn_ListarBusqueda_Existencia_Producto();
 	});
 
+	$('#btnDescargarKardex').on('click', function () {
+		DescargarKardexExcel()
+
+	});
+
+	$('#fecha_inicio_bus').datepicker({
+        autoclose: true,
+		format: 'yyyy-mm-dd',
+		changeMonth: true,
+		changeYear: true,
+        language: 'es'
+    });
+
+	$('#fecha_fin_bus').datepicker({
+        autoclose: true,
+		format: 'yyyy-mm-dd',
+		changeMonth: true,
+		changeYear: true,
+        language: 'es'
+    });
+
 	activarBotonExcel();
 
 });
@@ -99,6 +120,8 @@ function datatablenew(){
 			
             var producto = $('#producto_bus').val();
 			var almacen = $('#almacen_bus').val();
+			var fecha_inicio = $('#fecha_inicio_bus').val();
+			var fecha_fin = $('#fecha_fin_bus').val();
 			
 			var _token = $('#_token').val();
             oSettings.jqXHR = $.ajax({
@@ -107,7 +130,7 @@ function datatablenew(){
                 "type": "POST",
                 "url": sSource,
                 "data":{NumeroPagina:iNroPagina,NumeroRegistros:iCantMostrar,
-						producto:producto,almacen:almacen,
+						producto:producto,almacen:almacen,fecha_inicio:fecha_inicio,fecha_fin:fecha_fin,
 						_token:_token
                        },
                 "success": function (result) {
@@ -120,7 +143,7 @@ function datatablenew(){
         },
 
         "aoColumnDefs":
-            [	
+            [
 				{
                 "mRender": function (data, type, row) {
                 	var id = "";
@@ -286,7 +309,7 @@ function datatablenew(){
 }
 
 function datatablenew_existencia(){
-                      
+    
     var oTable1 = $('#tblKardexConsulta').dataTable({
         "bServerSide": true,
         "sAjaxSource": "/kardex/listar_kardex_existencia_ajax",
@@ -852,4 +875,19 @@ function modalVerProducto(id){
 			}
 	});
 
+}
+
+function DescargarKardexExcel(){
+	
+	var almacen = $('#almacen_bus').val();
+	var producto = $('#producto_bus').val();
+	var fecha_inicio = $('#fecha_inicio_bus').val();
+	var fecha_fin = $('#fecha_fin_bus').val();
+
+	if (almacen == "")almacen = 0;
+	if (producto == "")producto = 0;
+	if (fecha_inicio == "")fecha_inicio = "0";
+	if (fecha_fin == "")fecha_fin = "0";
+	
+	location.href = '/kardex/exportar_listar_consulta_kardex/'+almacen+'/'+producto+'/'+fecha_inicio+'/'+fecha_fin;
 }

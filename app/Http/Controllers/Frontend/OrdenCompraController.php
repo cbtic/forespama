@@ -63,7 +63,7 @@ class OrdenCompraController extends Controller
         $proveedor = Empresa::all();
         $almacen = Almacene::all();
         $almacen_usuario = $almacen_user_model->getAlmacenByUser($id_user);
-        $vendedor = $user_model->getUserByRol(7);
+        $vendedor = $user_model->getUserByRol(7,10);
 		$estado_pedido = $tablaMaestra_model->getMaestroByTipo(77);
         //$almacen_usuario2 = $almacen_user_model->getUsersByAlmacen($id_user);
         //dd($almacen_usuario);exit();
@@ -167,7 +167,7 @@ class OrdenCompraController extends Controller
         $unidad_origen = $tablaMaestra_model->getMaestroByTipo(50);
         $moneda = $tablaMaestra_model->getMaestroByTipo(1);
 
-        $vendedor = $user_model->getUserByRol(7);
+        $vendedor = $user_model->getUserByRol(7,10);
         $tipo_documento_cliente = $tablaMaestra_model->getMaestroByTipo(75);
         $persona = $persona_model->obtenerPersonaAll();
 
@@ -1112,7 +1112,7 @@ class OrdenCompraController extends Controller
         $proveedor = Empresa::all();
         $tiendas = $tienda_model->getTiendasAll();
         $productos = $producto_model->getProductoExterno();
-        $vendedor = $user_model->getUserByRol(7);
+        $vendedor = $user_model->getUserByRol(7,10);
         $estado_pedido = $tablaMaestra_model->getMaestroByTipo(77);
 
 		return view('frontend.orden_compra.create_reporte_comercializacion',compact('tipo_documento','cerrado_orden_compra','proveedor','tiendas','productos','vendedor','estado_pedido'));
@@ -1209,7 +1209,7 @@ class OrdenCompraController extends Controller
         $proveedor = Empresa::all();
         $tiendas = $tienda_model->getTiendasAll();
         $productos = $producto_model->getProductoExterno();
-        $vendedor = $user_model->getUserByRol(7);
+        $vendedor = $user_model->getUserByRol(7,10);
 
 		return view('frontend.orden_compra.create_reporte_comercializacion_tienda',compact('tipo_documento','cerrado_orden_compra','proveedor','tiendas','productos','vendedor'));
 

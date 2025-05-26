@@ -351,7 +351,7 @@ label.form-control-sm{
 				
 				<div class="row" style="padding:20px 20px 0px 20px;">
 
-					<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+					<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
 						<select name="almacen_bus" id="almacen_bus" class="form-control form-control-sm" onchange="obtenerProductosAlmacenKardex()">
 							<option value="">--Seleccionar Almacen--</option>
 							<?php
@@ -376,6 +376,14 @@ label.form-control-sm{
 							?>
 						</select>
 					</div>
+
+					<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+                        <input id="fecha_inicio_bus" name="fecha_inicio_bus" on class="form-control form-control-sm"  placeholder="Fecha Inicio">
+					</div>
+
+					<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+                        <input id="fecha_fin_bus" name="fecha_fin_bus" on class="form-control form-control-sm"  placeholder="Fecha Fin">
+					</div>
 					
                     <!--<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
 						<select name="estado_bus" id="estado_bus" class="form-control form-control-sm">
@@ -384,11 +392,10 @@ label.form-control-sm{
 							<option value="0">Eliminado</option>
 						</select>
 					</div>-->
-
                     
 					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12" style="padding-right:0px">
 						<input class="btn btn-warning pull-rigth" value="Buscar" type="button" id="btnBuscar" />
-						<!--<input class="btn btn-success pull-rigth" value="Nuevo" type="button" id="btnNuevo" style="margin-left:15px" />-->
+						<input class="btn btn-success float-rigth" value="Excel" name="excel" type="button" id="btnDescargarKardex" style="padding-left:15px;padding-right:15px;margin-right:10px;" /> 
 					</div>
 				</div>
 				

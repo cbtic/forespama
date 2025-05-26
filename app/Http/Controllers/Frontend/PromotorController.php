@@ -74,7 +74,7 @@ class PromotorController extends Controller
 
         $dia_semana = $tablaMaestra_model->getMaestroByTipo(2);
         $tiendas = $tienda_model->getTiendasAll();
-        $promotores = $user_model->getUserByRol(7);
+        $promotores = $user_model->getUserByRol(7,10);
 
 		return view('frontend.promotores.modal_promotor_nuevoPromotorRuta',compact('id','promotor_ruta','dia_semana','tiendas','promotores'));
 

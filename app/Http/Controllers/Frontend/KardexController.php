@@ -59,6 +59,8 @@ class KardexController extends Controller
 		$kardex_model = new Kardex;
 		$p[]=$request->producto;
 		$p[]=$request->almacen;
+		$p[]=$request->fecha_inicio;
+		$p[]=$request->fecha_fin;
 		$p[]=$request->NumeroPagina;
 		$p[]=$request->NumeroRegistros;
 		$data = $kardex_model->listar_kardex_ajax($p);
@@ -242,6 +244,37 @@ class KardexController extends Controller
 		
     }
 
+	public function exportar_listar_consulta_kardex($almacen, $producto, $fecha_inicio, $fecha_fin) {
+
+		if($almacen==0)$almacen = "";
+		if($producto==0)$producto = "";
+		if($fecha_inicio=="0")$fecha_inicio = "";
+		if($fecha_fin=="0")$fecha_fin = "";
+
+		$kardex_model = new Kardex;
+		$p[]=$producto;
+		$p[]=$almacen;
+		$p[]=$fecha_inicio;
+		$p[]=$fecha_fin;
+		$p[]=1;
+		$p[]=10000;
+		$data = $kardex_model->listar_kardex_ajax($p);
+		
+		$variable = [];
+		$n = 1;
+
+		array_push($variable, array("N","Codigo","Producto","Entrada","Costo Entrada","Total Entrada","Salidas","Costo Salidas","Total Salidas","Saldos","Costo Saldos","Total Saldos","Almacen","Fecha","Tipo Movimiento","Codigo Movimiento"));
+		
+		foreach ($data as $r) {
+
+			array_push($variable, array($n++,$r->codigo, $r->producto, $r->entrada, $r->costo_entrada, $r->total_entrada, $r->salida, $r->costo_salida, $r->total_salida, $r->saldos, $r->costo_saldos, $r->total_saldos, $r->almacen_destino, $r->fecha_kardex, $r->tipo_movimiento, $r->codigo_movimiento));
+		}
+		
+		$export = new InvoicesExport3([$variable]);
+		return Excel::download($export, 'Reporte_kardex.xlsx');
+		
+    }
+
 }
 
 class InvoicesExport implements FromArray, WithHeadings, WithStyles
@@ -375,6 +408,74 @@ class InvoicesExport2 implements FromArray, WithHeadings, WithStyles
 		->setFormatCode(\PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_NUMBER_00);*/ //SIRVE PARA PONER 2 DECIMALES A ESA COLUMNA
         
         foreach (range('A', 'I') as $col) {
+            $sheet->getColumnDimension($col)->setAutoSize(true);
+        }
+    }
+}
+
+class InvoicesExport3 implements FromArray, WithHeadings, WithStyles
+{
+	protected $invoices;
+
+	public function __construct(array $invoices)
+	{
+		$this->invoices = $invoices;
+	}
+
+	public function array(): array
+	{
+		return $this->invoices;
+	}
+
+    public function headings(): array
+    {
+        return ["N","Codigo","Producto","Entrada","Costo Entrada","Total Entrada","Salidas","Costo Salidas","Total Salidas","Saldos","Costo Saldos","Total Saldos","Almacen","Fecha","Tipo Movimiento","Codigo Movimiento"];
+    }
+
+	public function styles(Worksheet $sheet)
+    {
+
+		$sheet->mergeCells('A1:P1');
+
+        $sheet->setCellValue('A1', "REPORTE DE KARDEX - FORESPAMA");
+        $sheet->getStyle('A1:P1')->applyFromArray([
+            'font' => [
+                'bold' => true,
+                'color' => ['rgb' => 'FFFFFF'],
+            ],
+            'fill' => [
+                'fillType' => Fill::FILL_SOLID,
+                'startColor' => ['rgb' => '246257'],
+            ],
+            'alignment' => [
+                'horizontal' => Alignment::HORIZONTAL_CENTER,
+            ],
+        ]);
+
+		$sheet->getStyle('A1')->getAlignment()->setWrapText(true);
+		$sheet->getRowDimension(1)->setRowHeight(30);
+
+        $sheet->getStyle('A2:P2')->applyFromArray([
+            'font' => [
+                'bold' => true,
+                'color' => ['rgb' => '000000'],
+            ],
+            'fill' => [
+                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                'startColor' => ['rgb' => '2EB85C'],
+            ],
+			'alignment' => [
+			'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+    		],
+        ]);
+
+		//$sheet->fromArray($this->headings(), NULL, 'I2');
+
+		/*$sheet->getStyle('L3:L'.$sheet->getHighestRow())
+		->getNumberFormat()
+		->setFormatCode(\PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_NUMBER_00);*/ //SIRVE PARA PONER 2 DECIMALES A ESA COLUMNA
+        
+        foreach (range('A', 'P') as $col) {
             $sheet->getColumnDimension($col)->setAutoSize(true);
         }
     }

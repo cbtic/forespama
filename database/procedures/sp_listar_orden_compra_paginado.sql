@@ -104,8 +104,8 @@ begin
 	   v_where := v_where || ' AND (oc.id_vendedor = ''' || p_id_user || ''' OR oc.id_vendedor IN (
 	       SELECT id_vendedor FROM jefe_vendedor_detalles WHERE id_jefe_vendedor = ' || p_id_user || '
 	   ))';
-	Else
-	   v_where := v_where || ' AND oc.id_vendedor = ''' || p_id_user || '''';
+	/*Else
+	   v_where := v_where || ' AND oc.id_vendedor = ''' || p_id_user || '''';*/
 	End If;
 
 	If p_id_vendedor<>'' Then
