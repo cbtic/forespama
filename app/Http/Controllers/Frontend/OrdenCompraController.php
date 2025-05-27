@@ -1416,6 +1416,16 @@ class OrdenCompraController extends Controller
         
     }
 
+    public function create_pago_orden_compra(){
+
+		$tablaMaestra_model = new TablaMaestra;
+
+		$estado_pago = $tablaMaestra_model->getMaestroByTipo(66);
+
+		return view('frontend.orden_compra.create_pago_orden_compra',compact('estado_pago'));
+
+	}
+
 }
 
 class InvoicesExport implements FromArray, WithHeadings, WithStyles

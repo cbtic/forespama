@@ -194,7 +194,7 @@
 
 						@endif
 
-						@if(Gate::check('Ingreso Caja') || Gate::check('Comprobante') || Gate::check('Guia') || Gate::check('Consulta Sodimac'))
+						@if(Gate::check('Ingreso Caja') || Gate::check('Comprobante') || Gate::check('Guia') || Gate::check('Consulta Sodimac') || Gate::check('Pagos Orden Compra'))
 
 						<li class="nav-item dropdown">
 							<a href="#" class="nav-link dropdown-toggle" id="navbarDropdownPrueba" data-toggle="dropdown"
@@ -213,6 +213,9 @@
 								@endif
 								@can('Guia')
 									<x-utils.link :href="route('frontend.guia_interna.create')" class="dropdown-item" :text="__('Consulta de Guias')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />                  
+								@endif
+								@can('Pagos Orden Compra')
+									<x-utils.link :href="route('frontend.orden_compra.create_pago_orden_compra')" class="dropdown-item" :text="__('Pagos Orden Compra')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />                  
 								@endif
 							</div>
 						</li> 

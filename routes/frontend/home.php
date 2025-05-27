@@ -647,4 +647,6 @@ Route::get('comprobante/exportar_listar_pagos_sodimac/{fecha_ini}/{fecha_fin}/{t
 Route::get('promotores/create_ruta', [PromotorController::class, 'create_ruta'])->name('promotores.create_ruta');
 Route::get('promotores/modal_promotor_ruta/{id}', [PromotorController::class, 'modal_promotor_ruta'])->name('promotores.modal_promotor_ruta');
 Route::get('kardex/exportar_listar_consulta_kardex/{almacen}/{producto}/{fecha_inicio}/{fecha_fin}', [KardexController::class, 'exportar_listar_consulta_kardex'])->name('kardex.exportar_listar_consulta_kardex');
+Route::get('orden_compra/create_pago_orden_compra', [OrdenCompraController::class, 'create_pago_orden_compra'])->name('orden_compra.create_pago_orden_compra');
+
 

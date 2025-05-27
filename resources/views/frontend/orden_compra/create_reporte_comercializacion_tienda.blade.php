@@ -398,6 +398,7 @@ label.form-control-sm{
 							<th>Fecha Pedido</th>
                             <th>Fecha Vencimiento</th>
 							<th>C&oacute;digo Interno</th>
+							<th>C&oacute;digo Sodimac</th>
 							<th>Descripci&oacute;n</th>
 							<th>Precio Unitario</th>
 							<th>Cantidad Pedida</th>

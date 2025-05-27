@@ -190,12 +190,21 @@ function datatablenew(){
 				},
 				{
 				"mRender": function (data, type, row) {
+					var codigo_empresa = "";
+					if(row.codigo_empresa!= null)codigo_empresa = row.codigo_empresa;
+					return codigo_empresa;
+				},
+				"bSortable": true,
+				"aTargets": [6]
+				},
+				{
+				"mRender": function (data, type, row) {
 					var producto = "";
 					if(row.producto!= null)producto = row.producto;
 					return producto;
 				},
 				"bSortable": true,
-				"aTargets": [6]
+				"aTargets": [7]
 				},
 				{
 				"mRender": function (data, type, row) {
@@ -204,7 +213,7 @@ function datatablenew(){
 					return precio;
 				},
 				"bSortable": true,
-				"aTargets": [7]
+				"aTargets": [8]
 				},
 				{
 				"mRender": function (data, type, row) {
@@ -213,7 +222,7 @@ function datatablenew(){
 					return cantidad;
 				},
 				"bSortable": true,
-				"aTargets": [8]
+				"aTargets": [9]
 				},
 				{
 				"mRender": function (data, type, row) {
@@ -222,7 +231,7 @@ function datatablenew(){
 					return cantidad_despacho;
 				},
 				"bSortable": true,
-				"aTargets": [9]
+				"aTargets": [10]
 				},
 				{
 				"mRender": function (data, type, row) {
@@ -231,7 +240,7 @@ function datatablenew(){
 					return cantidad_cancelada;
 				},
 				"bSortable": true,
-				"aTargets": [10]
+				"aTargets": [11]
 				},
 				{
 				"mRender": function (data, type, row) {
@@ -240,7 +249,7 @@ function datatablenew(){
 					return tienda;
 				},
 				"bSortable": true,
-				"aTargets": [11]
+				"aTargets": [12]
 				},
 				
             ]
