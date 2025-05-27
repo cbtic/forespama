@@ -1180,14 +1180,14 @@ class OrdenCompraController extends Controller
 		$variable = [];
 		$n = 1;
 
-		array_push($variable, array("N°","Empresa","Orden Compra","Pedido","Fecha Pedido","Fecha Vencimiento","Codigo Interno","Descripcion","Precio Unitario","Cantidad Pedida","Cantidad Entregada","Cantidad Cancelada","Pendiente Entrega","Vendedor","Estado Pedido"));
+		array_push($variable, array("N°","Empresa","Orden Compra","Pedido","Fecha Pedido","Fecha Vencimiento","Codigo Interno","Codigo Sodimac","Descripcion","Precio Unitario","Cantidad Pedida","Cantidad Entregada","Cantidad Cancelada","Pendiente Entrega","Vendedor","Estado Pedido"));
 		
 		foreach ($data as $r) {
 
             if($r->cerrado==1){$cerrado='SI';}
             if($r->cerrado==2){$cerrado='NO';}
 
-			array_push($variable, array($n++,$r->cliente, $r->numero_orden_compra_cliente, $r->pedido, $r->fecha_orden_compra, $r->fecha_vencimiento, $r->codigo, $r->producto, $r->precio, $r->cantidad_requerida, $r->cantidad_despacho, $r->cantidad_cancelada, $cerrado, $r->vendedor, $r->estado_pedido));
+			array_push($variable, array($n++,$r->cliente, $r->numero_orden_compra_cliente, $r->pedido, $r->fecha_orden_compra, $r->fecha_vencimiento, $r->codigo, $r->codigo_empresa, $r->producto, $r->precio, $r->cantidad_requerida, $r->cantidad_despacho, $r->cantidad_cancelada, $cerrado, $r->vendedor, $r->estado_pedido));
 		}
 		
 		$export = new InvoicesExport2([$variable]);
@@ -1267,11 +1267,11 @@ class OrdenCompraController extends Controller
 		$variable = [];
 		$n = 1;
 
-		array_push($variable, array("N°","Empresa","Orden Compra","Pedido","Fecha Pedido","Fecha Vencimiento","Codigo Interno","Descripcion","Precio Unitario","Cantidad Pedida","Tienda"));
+		array_push($variable, array("N°","Empresa","Orden Compra","Pedido","Fecha Pedido","Fecha Vencimiento","Codigo Interno","Codigo Sodimac","Descripcion","Precio Unitario","Cantidad Pedida","Tienda"));
 		
 		foreach ($data as $r) {
 
-			array_push($variable, array($n++,$r->razon_social, $r->numero_orden_compra_cliente, $r->pedido, $r->fecha_orden_compra, $r->fecha_vencimiento, $r->codigo, $r->producto, $r->precio, $r->cantidad, $r->tienda));
+			array_push($variable, array($n++,$r->razon_social, $r->numero_orden_compra_cliente, $r->pedido, $r->fecha_orden_compra, $r->fecha_vencimiento, $r->codigo, $r->codigo_empresa, $r->producto, $r->precio, $r->cantidad, $r->tienda));
 		}
 		
 		$export = new InvoicesExport3([$variable]);
@@ -1513,16 +1513,16 @@ class InvoicesExport2 implements FromArray, WithHeadings, WithStyles
 
     public function headings(): array
     {
-        return ["N°", "Empresa", "Orden Compra", "Pedido", "Fecha Pedido", "Fecha Vencimiento", "Codigo Interno", "Descripcion", "Precio Unitario", "Cantidad Pedida", "Cantidad Entregada", "Cantidad Cancelada", "Pendiente Entrega", "Vendedor", "Estado Pedido"];
+        return ["N°", "Empresa", "Orden Compra", "Pedido", "Fecha Pedido", "Fecha Vencimiento", "Codigo Interno", "Codigo Sodimac", "Descripcion", "Precio Unitario", "Cantidad Pedida", "Cantidad Entregada", "Cantidad Cancelada", "Pendiente Entrega", "Vendedor", "Estado Pedido"];
     }
 
 	public function styles(Worksheet $sheet)
     {
 
-		$sheet->mergeCells('A1:O1');
+		$sheet->mergeCells('A1:P1');
 
         $sheet->setCellValue('A1', "REPORTE DE COMERCIALIZACION - FORESPAMA");
-        $sheet->getStyle('A1:O1')->applyFromArray([
+        $sheet->getStyle('A1:P1')->applyFromArray([
             'font' => [
                 'bold' => true,
                 'color' => ['rgb' => 'FFFFFF'],
@@ -1539,7 +1539,7 @@ class InvoicesExport2 implements FromArray, WithHeadings, WithStyles
 		$sheet->getStyle('A1')->getAlignment()->setWrapText(true);
 		$sheet->getRowDimension(1)->setRowHeight(30);
 
-        $sheet->getStyle('A2:O2')->applyFromArray([
+        $sheet->getStyle('A2:P2')->applyFromArray([
             'font' => [
                 'bold' => true,
                 'color' => ['rgb' => '000000'],
@@ -1559,7 +1559,7 @@ class InvoicesExport2 implements FromArray, WithHeadings, WithStyles
 		->getNumberFormat()
 		->setFormatCode(\PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_NUMBER_00);*/ //SIRVE PARA PONER 2 DECIMALES A ESA COLUMNA
         
-        foreach (range('A', 'O') as $col) {
+        foreach (range('A', 'P') as $col) {
             $sheet->getColumnDimension($col)->setAutoSize(true);
         }
     }
@@ -1581,16 +1581,16 @@ class InvoicesExport3 implements FromArray, WithHeadings, WithStyles
 
     public function headings(): array
     {
-        return ["N°", "Empresa", "Orden Compra", "Pedido", "Fecha Pedido", "Fecha Vencimiento", "Codigo Interno", "Descripcion", "Precio Unitario", "Cantidad Pedida", "Tienda"];
+        return ["N°", "Empresa", "Orden Compra", "Pedido", "Fecha Pedido", "Fecha Vencimiento", "Codigo Interno", "Codigo Sodimac", "Descripcion", "Precio Unitario", "Cantidad Pedida", "Tienda"];
     }
 
 	public function styles(Worksheet $sheet)
     {
 
-		$sheet->mergeCells('A1:K1');
+		$sheet->mergeCells('A1:L1');
 
         $sheet->setCellValue('A1', "REPORTE DE COMERCIALIZACION POR TIENDA - FORESPAMA");
-        $sheet->getStyle('A1:K1')->applyFromArray([
+        $sheet->getStyle('A1:L1')->applyFromArray([
             'font' => [
                 'bold' => true,
                 'color' => ['rgb' => 'FFFFFF'],
@@ -1607,7 +1607,7 @@ class InvoicesExport3 implements FromArray, WithHeadings, WithStyles
 		$sheet->getStyle('A1')->getAlignment()->setWrapText(true);
 		$sheet->getRowDimension(1)->setRowHeight(30);
 
-        $sheet->getStyle('A2:K2')->applyFromArray([
+        $sheet->getStyle('A2:L2')->applyFromArray([
             'font' => [
                 'bold' => true,
                 'color' => ['rgb' => '000000'],
@@ -1627,7 +1627,7 @@ class InvoicesExport3 implements FromArray, WithHeadings, WithStyles
 		->getNumberFormat()
 		->setFormatCode(\PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_NUMBER_00);*/ //SIRVE PARA PONER 2 DECIMALES A ESA COLUMNA
         
-        foreach (range('A', 'K') as $col) {
+        foreach (range('A', 'L') as $col) {
             $sheet->getColumnDimension($col)->setAutoSize(true);
         }
     }
