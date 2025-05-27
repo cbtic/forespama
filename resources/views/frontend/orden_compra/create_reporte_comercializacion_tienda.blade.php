@@ -400,7 +400,9 @@ label.form-control-sm{
 							<th>C&oacute;digo Interno</th>
 							<th>Descripci&oacute;n</th>
 							<th>Precio Unitario</th>
-							<th>Cantidad</th>
+							<th>Cantidad Pedida</th>
+							<th>Cantidad Entregada</th>
+							<th>Cantidad Cancelada</th>
 							<th>Tienda</th>
                         </tr>
                         </thead>

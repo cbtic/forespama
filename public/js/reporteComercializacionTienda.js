@@ -217,12 +217,30 @@ function datatablenew(){
 				},
 				{
 				"mRender": function (data, type, row) {
+					var cantidad_despacho = "";
+					if(row.cantidad_despacho!= null)cantidad_despacho = row.cantidad_despacho;
+					return cantidad_despacho;
+				},
+				"bSortable": true,
+				"aTargets": [9]
+				},
+				{
+				"mRender": function (data, type, row) {
+					var cantidad_cancelada = "";
+					if(row.cantidad_cancelada!= null)cantidad_cancelada = row.cantidad_cancelada;
+					return cantidad_cancelada;
+				},
+				"bSortable": true,
+				"aTargets": [10]
+				},
+				{
+				"mRender": function (data, type, row) {
 					var tienda = "";
 					if(row.tienda!= null)tienda = row.tienda;
 					return tienda;
 				},
 				"bSortable": true,
-				"aTargets": [9]
+				"aTargets": [11]
 				},
 				
             ]
