@@ -34,6 +34,12 @@ class OrdenCompra extends Model
 
     }
 
+    public function listar_orden_compra_pagos_ajax($p){
+
+        return $this->readFuntionPostgres('sp_listar_orden_compra_pagos_paginado',$p);
+
+    }
+
     public function readFuntionPostgres($function, $parameters = null){
 
         $_parameters = '';
@@ -407,5 +413,26 @@ class OrdenCompra extends Model
 		$data = DB::select($cad);
         return $data;
     }
+
+    function getOrdenCompraPagoById($id){
+
+        $cad = "select ocp.id, ocp.fecha, tm.denominacion tipodesembolso, ocp.importe, observacion, nro_guia, nro_factura, nro_cheque, foto_desembolso   
+        from orden_compra_pagos ocp 
+        inner join tabla_maestras tm on ocp.id_tipo_desembolso = tm.codigo::int and tm.tipo='65' 
+        where ocp.id_orden_compra = ".$id."
+        order by 1 desc";
+
+		$data = DB::select($cad);
+        return $data;
+    }
+
+    function fecha_actual(){
+		
+		$cad = "select to_char(current_date,'dd-mm-yyyy') as fecha_actual";
+
+		$data = DB::select($cad);
+        return $data[0]->fecha_actual;
+		
+	}
 
 }

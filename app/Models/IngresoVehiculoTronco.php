@@ -84,10 +84,10 @@ class IngresoVehiculoTronco extends Model
     function getIngresoVehiculoTroncoPagoById($id){
 
         $cad = "select ivtp.id,ivtp.fecha,tm.denominacion tipodesembolso,ivtp.importe,observacion,nro_guia,nro_factura,nro_cheque,foto_desembolso   
-from ingreso_vehiculo_tronco_pagos ivtp
-inner join tabla_maestras tm on ivtp.id_tipodesembolso=tm.codigo::int and tm.tipo='65' 
-where ivtp.id_ingreso_vehiculo_tronco_tipo_maderas=".$id."
-order by 1 desc";
+        from ingreso_vehiculo_tronco_pagos ivtp
+        inner join tabla_maestras tm on ivtp.id_tipodesembolso=tm.codigo::int and tm.tipo='65' 
+        where ivtp.id_ingreso_vehiculo_tronco_tipo_maderas=".$id."
+        order by 1 desc";
 
 		$data = DB::select($cad);
         return $data;

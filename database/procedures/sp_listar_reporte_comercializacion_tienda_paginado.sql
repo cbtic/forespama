@@ -16,7 +16,7 @@ BEGIN
     v_campos := ' DISTINCT oc.id, e.razon_social, oc.numero_orden_compra_cliente, oc.numero_orden_compra pedido,
     to_char(oc.fecha_orden_compra, ''dd-mm-yyyy'') fecha_orden_compra,
     to_char(oc.fecha_vencimiento, ''dd-mm-yyyy'') fecha_vencimiento,
-    p.codigo, p.denominacion producto, ocd.precio,
+    p.codigo, ep.codigo_empresa,  p.denominacion producto, ocd.precio,
     CASE 
         WHEN om.id_orden_compra IS NOT NULL THEN cp.suma_cantidad
         ELSE tdoc.cantidad
@@ -36,6 +36,7 @@ BEGIN
     LEFT JOIN tiendas t ON tdoc.id_tienda = t.id
     LEFT JOIN users u ON oc.id_vendedor = u.id
     LEFT JOIN productos p ON ocd.id_producto = p.id
+	left join equivalencia_productos ep on ep.codigo_producto = p.codigo 
     LEFT JOIN (
         SELECT id_orden_compra
         FROM tienda_detalle_orden_compras

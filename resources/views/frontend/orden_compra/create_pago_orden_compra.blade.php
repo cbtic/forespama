@@ -366,10 +366,6 @@ label.form-control-sm{
 		display: none !important
 	}
 	
-	#btnGuardar{
-		display: none !important
-	}
-	
 	#btnImprimir{
 		display: none !important
 	}
@@ -478,7 +474,7 @@ label.form-control-sm{
 					<div class="col col-sm-12 align-self-center">
 
                         <input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
-						<input type="hidden" name="id_ingreso_vehiculo_tronco_tipo_maderas" id="id_orden_compra" value="0">
+						<input type="hidden" name="id_orden_compra" id="id_orden_compra" value="0">
 						
 					<div class="row" style="padding-top:15px">
 
@@ -496,18 +492,26 @@ label.form-control-sm{
 							
 						<div id="divTablaIngreso" class="row col align-self-center" style="padding:10px 20px 10px 20px;">
 					
-							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+							<!--<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
 								<input class="form-control form-control-sm" id="ruc_bus" name="ruc_bus" placeholder="Ruc">
 							</div>
 							
 							<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
 								<input class="form-control form-control-sm" id="empresa_bus" name="empresa_bus" placeholder="Empresa">
+							</div>-->
+
+							<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+								<select name="empresa_bus" id="empresa_bus" class="form-control form-control-sm">
+									<option value="">--Seleccionar Empresa--</option>
+									<?php
+									foreach ($empresa as $row){?>
+										<option value="<?php echo $row->id ?>"><?php echo $row->razon_social ?></option>
+										<?php 
+									}
+									?>
+								</select>
 							</div>
 
-							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-								<input class="form-control form-control-sm" id="placa_bus" name="placa_bus" placeholder="Placa">
-							</div>
-							
 							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
 								<input class="form-control form-control-sm" id="fecha_inicio_bus" name="fecha_inicio_bus" placeholder="Fecha Inicio">
 							</div>
@@ -516,9 +520,9 @@ label.form-control-sm{
 								<input class="form-control form-control-sm" id="fecha_fin_bus" name="fecha_fin_bus" placeholder="Fecha Fin">
 							</div>
 							
-							<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
 								<select name="estado_pago_bus" id="estado_pago_bus" class="form-control form-control-sm">
-									<option value="">--Seleccionar Estado Pago--</option>
+									<option value="">--Estado Pago--</option>
 									<?php
 									foreach ($estado_pago as $row){?>
 										<option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
@@ -545,14 +549,20 @@ label.form-control-sm{
 							<tr style="font-size:13px">
 								<th>N°</th>
 								<th>Fecha</th>
-								<th>Ruc</th>
-								<th>Empresa</th>
-								<th>Placa</th>
-								<th>Tipo Madera</th>
-								<th>Cantidad</th>
-								<th>Volumen Total M3</th>
-								<th>Volumen Total Pies</th>
-								<th>Precio Total</th>
+								<th>Cliente</th>
+								<th>Vendedor</th>
+								<th>Tipo Producto</th>
+								<th>N&uacute;mero OC</th>
+								<th>Fecha Factura</th>
+								<th>N&uacute;mero Factura</th>
+								<th>Sub Total</th>
+								<th>IGV</th>
+								<th>Total</th>
+								<th>Abono Pago</th>
+								<!--<th>Banco</th>-->
+								<th>Forma Pago</th>
+								<th>Fecha Vencimiento</th>
+								<th>Guia</th>
 								<th>Estado Pago</th>
 							</tr>
 							</thead>
@@ -580,8 +590,8 @@ label.form-control-sm{
 
 						<div class="card-body">
 							
-							<div id="divCubicaje" class="table-responsive overflow-auto" style="max-height: 500px">
-								<table id="tblCubicaje" class="table table-hover table-sm">
+							<div id="divOrdenCompra" class="table-responsive overflow-auto" style="max-height: 500px">
+								<table id="tblOrdenCompra" class="table table-hover table-sm">
 									<thead>
 										<tr style="font-size:13px">
 											<th width="2%">Id</th>
@@ -690,6 +700,6 @@ label.form-control-sm{
 	
 	</script>
 	
-	<script src="{{ asset('js/pagos/create.js') }}"></script>
+	<script src="{{ asset('js/pago_orden_compra.js') }}"></script>
 	
 	@endpush

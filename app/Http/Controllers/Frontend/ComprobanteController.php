@@ -2892,13 +2892,13 @@ class ComprobanteController extends Controller
             $data["creditoCuotas"] = $items_c;
 
             $data["formaPagoMonto"] = str_replace(",","",number_format($monto_pago,2)); //"7.63"  round($monto_pago,2);
-         
+            
         }
 
         //print_r(json_encode($data)."<br>"); exit();
 
 		$databuild_string = json_encode($data);
-       // print_r($databuild_string);exit();
+        //print_r($databuild_string);exit();
 
 		//$chbuild = curl_init("https://easyfact.tk/see/rest/01");
         $chbuild = curl_init(config('values.ws_fac_host')."/see/rest/".$this->getTipoDocumento($factura->tipo));
@@ -2917,6 +2917,7 @@ class ComprobanteController extends Controller
         curl_setopt($chbuild, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($chbuild, CURLOPT_CUSTOMREQUEST, "PUT");
         curl_setopt($chbuild, CURLOPT_POSTFIELDS, $databuild_string);
+
         $results = curl_exec($chbuild);
         //print_r($results);
         //exit();
