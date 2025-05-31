@@ -1468,6 +1468,7 @@ class OrdenCompraController extends Controller
 		}
 		//$adelantos = $adelanto_model->getAdelantoByPersona($id_persona);
 		$tipo_desembolso = $tablaMaestra_model->getMaestroByTipo(65);
+		$banco = $tablaMaestra_model->getMaestroByTipo(16);
 		//print_r($tipo_desembolso);
 
 		$orden_compra_pago_model = new OrdenCompraPago;
@@ -1475,7 +1476,7 @@ class OrdenCompraController extends Controller
 
 		$importe = $data->precio-$data->pago;
 		//echo $id;
-		return view('frontend.orden_compra.modal_pago',compact('id','orden_compra_pago','id_orden_compra','fecha_actual'/*,'adelantos'*/,'tipo_desembolso','importe'));
+		return view('frontend.orden_compra.modal_pago',compact('id','orden_compra_pago','id_orden_compra','fecha_actual'/*,'adelantos'*/,'tipo_desembolso','importe','banco'));
 	
 	}
 
@@ -1486,6 +1487,90 @@ class OrdenCompraController extends Controller
 		
         return view('frontend.orden_compra.orden_compra_pago_ajax',compact('pago'));
 		
+    }
+
+    public function upload_pago(Request $request){
+
+		$path = "img/tmp_pago_orden_compra";
+		if (!is_dir($path)) {
+			mkdir($path);
+		}
+
+    	$filepath = public_path('img/tmp_pago_orden_compra/');
+		move_uploaded_file($_FILES["file"]["tmp_name"], $filepath.$_FILES["file"]["name"]);
+		echo $_FILES['file']['name'];
+	}
+
+	public function send_pago(Request $request){
+		
+		$path = "img/pago_orden_compra";
+		if (!is_dir($path)) {
+			mkdir($path);
+		}
+
+		if($request->img_foto!=""){
+			$filepath_tmp = public_path('img/tmp_pago_orden_compra/');
+			$filepath_nuevo = public_path('img/pago_orden_compra/');
+			if (file_exists($filepath_tmp.$request->img_foto)) {
+				copy($filepath_tmp.$request->img_foto, $filepath_nuevo.$request->img_foto);
+			}
+		}
+
+		$id_user = Auth::user()->id;
+		$maestra_model = new TablaMaestra;
+		
+		if($request->id==0){
+			$pago = new OrdenCompraPago;
+			$pago->id_orden_compra = $request->id_orden_compra;
+			$pago->id_tipo_desembolso = $request->id_tipodesembolso;
+			$pago->importe = $request->importe;
+			$pago->nro_guia = $request->nro_guia;
+			$pago->nro_cheque = $request->nro_cheque;
+			$pago->nro_factura = $request->nro_factura;
+			$pago->id_banco = $request->id_banco;
+			$pago->nro_operacion = $request->nro_operacion;
+			$pago->fecha = $request->fecha;
+			$pago->observacion = $request->observacion;
+			$pago->foto_desembolso = $request->img_foto;
+			$pago->estado = 1;
+			$pago->id_usuario_inserta = $id_user;
+			//$adelanto->fecha_hora = $fecha_hora;
+			//$pago->id_usuario = $id_user;
+			//$pago->id_caja = $id_caja;
+			//$pago->estado = "A";
+		}else{
+			$pago = OrdenCompraPago::find($request->id);
+			$pago->id_tipo_desembolso = $request->id_tipodesembolso;
+			$pago->importe = $request->importe;
+			$pago->nro_guia = $request->nro_guia;
+			$pago->nro_factura = $request->nro_factura;
+			$pago->id_banco = $request->id_banco;
+			$pago->nro_operacion = $request->nro_operacion;
+			$pago->fecha = $request->fecha;
+			$pago->observacion = $request->observacion;
+			$pago->foto_desembolso = $request->img_foto;
+			$pago->estado = 1;
+			$pago->id_usuario_inserta = $id_user;
+		}
+
+		$pago->save();
+
+		$ordenCompraPago_model = new OrdenCompraPago;
+		$data = $ordenCompraPago_model->getImportePago($request->id_orden_compra);
+
+		if($data->pago==0){
+			$id_estado_pago = 1;
+		}else if($data->precio>$data->pago){
+			$id_estado_pago = 2;
+		}else if($data->precio<=$data->pago){
+			$id_estado_pago = 3;
+		}
+
+		$OrdenCompraPagoActual = OrdenCompraPago::where('id_orden_compra', $request->id_orden_compra)->where('estado', 1)->get();
+        foreach($OrdenCompraPagoActual as $pago){
+            $pago->id_estado_pago=$id_estado_pago;
+            $pago->save();
+        }
     }
 
 }

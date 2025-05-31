@@ -651,5 +651,5 @@ Route::get('orden_compra/create_pago_orden_compra', [OrdenCompraController::clas
 Route::get('orden_compra/modal_pago/{id}/{id_orden_compra}', [OrdenCompraController::class, 'modal_pago'])->name('orden_compra.modal_pago');
 Route::post('orden_compra/listar_orden_compra_pagos_ajax', [OrdenCompraController::class, 'listar_orden_compra_pagos_ajax'])->name('orden_compra.listar_orden_compra_pagos_ajax');
 Route::get('orden_compra/cargar_pago_orden_compra/{id}', [OrdenCompraController::class, 'cargar_pago_orden_compra'])->name('orden_compra.cargar_pago_orden_compra');
-
-
+Route::post('orden_compra/send_pago', [OrdenCompraController::class, 'send_pago'])->name('orden_compra.send_pago');
+Route::post('orden_compra/upload_pago', [OrdenCompraController::class, 'upload_pago'])->name('orden_compra.upload_pago');

@@ -135,14 +135,14 @@ $(document).ready(function() {
 			headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
-            url: "/ingreso_vehiculo_tronco/upload_pago",
+            url: "/orden_compra/upload_pago",
             type: 'post',
             data: formData,
             contentType: false,
             processData: false,
             success: function(response) {
                 if (response != 0) {
-                    $("#img_ruta").attr("src", "/img/tmp_pago/"+response);
+                    $("#img_ruta").attr("src", "/img/tmp_pago_orden_compra/"+response);
 					$("#img_foto").val(response);
                 } else {
                     alert('Formato de imagen incorrecto.');
@@ -196,8 +196,12 @@ function validar_tipo(){
 
 	var id_tipodesembolso = $("#id_tipodesembolso").val();
 	$("#divCheque").hide();
+	$("#divNumeroOperacion").hide();
 	if(id_tipodesembolso==2){
 		$("#divCheque").show();
+	}
+	if(id_tipodesembolso==3){
+		$("#divNumeroOperacion").show();
 	}
 
 }
@@ -206,7 +210,7 @@ function fn_save(){
     
 	var _token = $('#_token').val();
 	var id_modal = $('#id_modal').val();
-	var id_ingreso_vehiculo_tronco_tipo_maderas_modal = $('#id_ingreso_vehiculo_tronco_tipo_maderas_modal').val();
+	var id_orden_compra_modal = $('#id_orden_compra_modal').val();
 	var importe = $('#importe').val();
 	var fecha = $('#fecha').val();
 	var observacion = $('#observacion').val();
@@ -215,9 +219,11 @@ function fn_save(){
     var nro_factura = $('#nro_factura').val();
 	var nro_cheque = $('#nro_cheque').val();
 	var img_foto = $('#img_foto').val();
+	var id_banco = $('#id_banco').val();
+	var nro_operacion = $('#nro_operacion').val();
 
 	var msg = "";
-    if(id_ingreso_vehiculo_tronco_tipo_maderas_modal == "")msg += "Debe ingresar el numero de documento <br>";
+    if(id_orden_compra_modal == "")msg += "Debe ingresar el numero de documento <br>";
     if(importe==""){msg+="Debe ingresar un Importe<br>";}
     if(fecha==""){msg+="Debe ingresar una Fecha<br>";}
     
@@ -225,7 +231,6 @@ function fn_save(){
         bootbox.alert(msg); 
         return false;
     }
-	
 	
 	var msgLoader = "";
 	msgLoader = "Procesando, espere un momento por favor";
@@ -236,17 +241,18 @@ function fn_save(){
 	$("#btnGuardar").prop('disabled', true);
 	
     $.ajax({
-			url: "/ingreso_vehiculo_tronco/send_pago",
+			url: "/orden_compra/send_pago",
             type: "POST",
-            data : {_token:_token,id:id_modal,id_ingreso_vehiculo_tronco_tipo_maderas:id_ingreso_vehiculo_tronco_tipo_maderas_modal,importe:importe,fecha:fecha,observacion:observacion,id_tipodesembolso:id_tipodesembolso,nro_guia:nro_guia,nro_factura:nro_factura,nro_cheque:nro_cheque,img_foto:img_foto},
+            data : {_token:_token,
+					id:id_modal, id_orden_compra:id_orden_compra_modal, importe:importe, fecha:fecha,observacion:observacion, id_tipodesembolso:id_tipodesembolso,
+					nro_guia:nro_guia, nro_factura:nro_factura, nro_cheque:nro_cheque, img_foto:img_foto, id_banco:id_banco, nro_operacion:nro_operacion},
             success: function (result) {
 				/*
 				$('.loader').hide();
 				$('#openOverlayOpc').modal('hide');
 				obtenerBeneficiario();
 				*/
-				location.href="/ingreso_vehiculo_tronco/pagos";
-				//location.href=location.reload();
+				location.href="/orden_compra/create_pago_orden_compra";
 				
             }
     });
@@ -299,7 +305,7 @@ function fn_save(){
 								<label class="control-label">Forma de Pago</label>
 								<select name="id_tipodesembolso" id="id_tipodesembolso" onchange="validar_tipo()" class="form-control form-control-sm" onChange="">
 									<?php foreach($tipo_desembolso as $row){?>
-									<option <?php if($row->codigo==$orden_compra_pago->id_tipodesembolso)echo "selected='selected'";?> value="<?php echo $row->codigo?>"><?php echo $row->denominacion?></option>
+									<option <?php if($row->codigo==$orden_compra_pago->id_tipo_desembolso)echo "selected='selected'";?> value="<?php echo $row->codigo?>"><?php echo $row->denominacion?></option>
 									<?php }?>
 								</select>
 							</div>
@@ -309,6 +315,13 @@ function fn_save(){
 							<div class="form-group">
 								<label class="control-label">Cheque</label>
 								<input id="nro_cheque" name="nro_cheque" class="form-control form-control-sm"  value="<?php echo $orden_compra_pago->nro_cheque?>" type="number">
+							</div>
+						</div>
+
+						<div class="col-lg-4" id="divNumeroOperacion" <?php if($orden_compra_pago->id_tipodesembolso!=3 || $id==0)echo "style='display:none'"?>>
+							<div class="form-group">
+								<label class="control-label">N&uacute;mero Operaci&oacute;n</label>
+								<input id="nro_operacion" name="nro_operacion" class="form-control form-control-sm"  value="<?php echo $orden_compra_pago->nro_operacion?>" type="number">
 							</div>
 						</div>
 						
@@ -323,19 +336,31 @@ function fn_save(){
 							</div>
 						</div>
 
-						<div class="col-lg-3">
+						<div class="col-lg-4">
+							<div class="form-group">
+								<label class="control-label">Banco</label>
+								<select name="id_banco" id="id_banco" onchange="" class="form-control form-control-sm" onChange="">
+									<option value="">--Seleccionar--</option>
+									<?php foreach($banco as $row){?>
+									<option <?php if($row->codigo==$orden_compra_pago->id_banco)echo "selected='selected'";?> value="<?php echo $row->codigo?>"><?php echo $row->denominacion?></option>
+									<?php }?>
+								</select>
+							</div>
+						</div>
+
+						<!--<div class="col-lg-3">
 							<div class="form-group">
 								<label class="control-label">Guia</label>
-								<input id="nro_guia" name="nro_guia" class="form-control form-control-sm"  value="<?php echo $orden_compra_pago->nro_guia?>" type="text">
+								<input id="nro_guia" name="nro_guia" class="form-control form-control-sm"  value="<?php //echo $orden_compra_pago->nro_guia?>" type="text">
 							</div>
 						</div>
 
 						<div class="col-lg-3">
 							<div class="form-group">
 								<label class="control-label">Factura</label>
-								<input id="nro_factura" name="nro_factura" class="form-control form-control-sm"  value="<?php echo $orden_compra_pago->nro_factura?>" type="text">
+								<input id="nro_factura" name="nro_factura" class="form-control form-control-sm"  value="<?php //echo $orden_compra_pago->nro_factura?>" type="text">
 							</div>
-						</div>
+						</div>-->
 						
 					</div>
 					
@@ -368,7 +393,7 @@ function fn_save(){
 										
 										<?php
 											$url_foto = "/img/logo_forestalpama.jpg";
-											if ($orden_compra_pago->foto_desembolso != "") $url_foto = "/img/pago/" . $orden_compra_pago->foto_desembolso;
+											if ($orden_compra_pago->foto_desembolso != "") $url_foto = "/img/pago_orden_compra/" . $orden_compra_pago->foto_desembolso;
 
 											$foto = "";
 											if ($orden_compra_pago->foto_desembolso != "") $foto = $orden_compra_pago->foto_desembolso;

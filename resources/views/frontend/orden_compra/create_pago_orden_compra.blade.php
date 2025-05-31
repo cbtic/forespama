@@ -597,8 +597,8 @@ label.form-control-sm{
 											<th width="2%">Id</th>
 											<th width="10%">Fecha</th>
 											<th width="10%">Tipo Doc</th>
-											<th width="10%">Guia</th>
-											<th width="10%">Factura</th>
+											<!--<th width="10%">Guia</th>
+											<th width="10%">Factura</th>-->
 											<th width="10%">Importe</th>
 											<th width="10%">Archivo</th>
 										</tr>
