@@ -24,7 +24,11 @@ begin
 	else (select e2.razon_social from empresas e2 
 	where e2.id = oc.id_empresa_compra) 
 	end cliente,
-	oc.numero_orden_compra_cliente, oc.numero_orden_compra pedido, to_char(oc.fecha_orden_compra,''dd-mm-yyyy'') fecha_orden_compra, to_char(oc.fecha_vencimiento,''dd-mm-yyyy'') fecha_vencimiento, p.codigo, ep.codigo_empresa, 
+	oc.numero_orden_compra_cliente, oc.numero_orden_compra pedido, to_char(oc.fecha_orden_compra,''dd-mm-yyyy'') fecha_orden_compra, to_char(oc.fecha_vencimiento,''dd-mm-yyyy'') fecha_vencimiento, 
+	(select to_char(sp.fecha_salida,''dd-mm-yyyy'') from salida_productos sp 
+	where sp.id_orden_compra = oc.id
+	limit 1) fecha_salida,
+	p.codigo, ep.codigo_empresa, 
 	p.denominacion producto, ocd.precio, ocd.cantidad_requerida, coalesce(ocd.cantidad_despacho, 0) cantidad_despacho, coalesce((ocd.cantidad_requerida - ocd.cantidad_despacho), 0) cantidad_cancelada, ocd.cerrado, u."name" vendedor, tm.denominacion estado_pedido ';
 
 	v_tabla=' from orden_compras oc 
