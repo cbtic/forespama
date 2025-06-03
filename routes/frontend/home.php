@@ -653,3 +653,6 @@ Route::post('orden_compra/listar_orden_compra_pagos_ajax', [OrdenCompraControlle
 Route::get('orden_compra/cargar_pago_orden_compra/{id}', [OrdenCompraController::class, 'cargar_pago_orden_compra'])->name('orden_compra.cargar_pago_orden_compra');
 Route::post('orden_compra/send_pago', [OrdenCompraController::class, 'send_pago'])->name('orden_compra.send_pago');
 Route::post('orden_compra/upload_pago', [OrdenCompraController::class, 'upload_pago'])->name('orden_compra.upload_pago');
+Route::get('orden_compra/create_reporte_comercializacion_solicitado_tienda', [OrdenCompraController::class, 'create_reporte_comercializacion_solicitado_tienda'])->name('orden_compra.create_reporte_comercializacion_solicitado_tienda');
+Route::post('orden_compra/listar_reporte_comercializacion_solicitado_tienda_ajax', [OrdenCompraController::class, 'listar_reporte_comercializacion_solicitado_tienda_ajax'])->name('orden_compra.listar_reporte_comercializacion_solicitado_tienda_ajax');
+Route::get('orden_compra/exportar_reporte_comercializacion_solicitado_tienda/{empresa_compra}/{fecha_inicio}/{fecha_fin}/{numero_orden_compra_cliente}/{producto}/{tienda}', [OrdenCompraController::class, 'exportar_reporte_comercializacion_solicitado_tienda'])->name('orden_compra.exportar_reporte_comercializacion_solicitado_tienda');

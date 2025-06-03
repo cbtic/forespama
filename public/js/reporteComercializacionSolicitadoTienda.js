@@ -72,9 +72,9 @@ $(document).ready(function () {
 
 function datatablenew(){
     
-    var oTable1 = $('#tblReporteComercializacionTienda').dataTable({
+    var oTable1 = $('#tblReporteComercializacionSolicitadoTienda').dataTable({
         "bServerSide": true,
-        "sAjaxSource": "/orden_compra/listar_reporte_comercializacion_tienda_ajax",
+        "sAjaxSource": "/orden_compra/listar_reporte_comercializacion_solicitado_tienda_ajax",
         "bProcessing": true,
         "sPaginationType": "full_numbers",
         //"paging":false,
@@ -226,30 +226,12 @@ function datatablenew(){
 				},
 				{
 				"mRender": function (data, type, row) {
-					var cantidad_despacho = "";
-					if(row.cantidad_despacho!= null)cantidad_despacho = row.cantidad_despacho;
-					return cantidad_despacho;
-				},
-				"bSortable": true,
-				"aTargets": [10]
-				},
-				{
-				"mRender": function (data, type, row) {
-					var cantidad_cancelada = "";
-					if(row.cantidad_cancelada!= null)cantidad_cancelada = row.cantidad_cancelada;
-					return cantidad_cancelada;
-				},
-				"bSortable": true,
-				"aTargets": [11]
-				},
-				{
-				"mRender": function (data, type, row) {
 					var tienda = "";
 					if(row.tienda!= null)tienda = row.tienda;
 					return tienda;
 				},
 				"bSortable": true,
-				"aTargets": [12]
+				"aTargets": [10]
 				},
 				
             ]
@@ -258,9 +240,9 @@ function datatablenew(){
 
 }
 
-fn_util_LineaDatatable("#tblReporteComercializacion");
+fn_util_LineaDatatable("#tblReporteComercializacionSolicitadoTienda");
 
-$('#tblReporteComercializacion tbody').on('click', 'tr', function () {
+$('#tblReporteComercializacionSolicitadoTienda tbody').on('click', 'tr', function () {
 	
 });
 
@@ -284,5 +266,5 @@ function DescargarArchivosExcel(){
 	if (producto == "")producto = 0;
 	if (tienda == "")tienda = 0;
 	
-	location.href = '/orden_compra/exportar_reporte_comercializacion_tienda/'+empresa_compra+'/'+fecha_inicio+'/'+fecha_fin+'/'+numero_orden_compra_cliente+'/'+producto+'/'+tienda;
+	location.href = '/orden_compra/exportar_reporte_comercializacion_solicitado_tienda/'+empresa_compra+'/'+fecha_inicio+'/'+fecha_fin+'/'+numero_orden_compra_cliente+'/'+producto+'/'+tienda;
 }

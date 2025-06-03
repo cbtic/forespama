@@ -1268,11 +1268,11 @@ class OrdenCompraController extends Controller
 		$variable = [];
 		$n = 1;
 
-		array_push($variable, array("N°","Empresa","Orden Compra","Pedido","Fecha Pedido","Fecha Vencimiento","Codigo Interno","Codigo Sodimac","Descripcion","Precio Unitario","Cantidad Pedida","Tienda"));
+		array_push($variable, array("N°","Empresa","Orden Compra","Pedido","Fecha Pedido","Fecha Vencimiento","Codigo Interno","Codigo Sodimac","Descripcion","Precio Unitario","Cantidad Pedida","Cantidad Entregada","Cantidad Cancelada","Tienda"));
 		
 		foreach ($data as $r) {
 
-			array_push($variable, array($n++,$r->razon_social, $r->numero_orden_compra_cliente, $r->pedido, $r->fecha_orden_compra, $r->fecha_vencimiento, $r->codigo, $r->codigo_empresa, $r->producto, $r->precio, $r->cantidad, $r->tienda));
+			array_push($variable, array($n++,$r->razon_social, $r->numero_orden_compra_cliente, $r->pedido, $r->fecha_orden_compra, $r->fecha_vencimiento, $r->codigo, $r->codigo_empresa, $r->producto, $r->precio, $r->cantidad, $r->cantidad_despacho, $r->cantidad_cancelada, $r->tienda));
 		}
 		
 		$export = new InvoicesExport3([$variable]);
@@ -1573,6 +1573,90 @@ class OrdenCompraController extends Controller
         }
     }
 
+    public function create_reporte_comercializacion_solicitado_tienda(){
+
+        $id_user = Auth::user()->id;
+        $tienda_model = new Tienda;
+        $producto_model = new Producto;
+        $user_model = new User;
+        $tienda_model = new Tienda;
+
+		$tablaMaestra_model = new TablaMaestra;
+		$tipo_documento = $tablaMaestra_model->getMaestroByTipo(54);
+        $cerrado_orden_compra = $tablaMaestra_model->getMaestroByTipo(52);
+        $proveedor = Empresa::all();
+        $tiendas = $tienda_model->getTiendasAll();
+        $productos = $producto_model->getProductoExterno();
+        $vendedor = $user_model->getUserByRol(7,11);
+
+		return view('frontend.orden_compra.create_reporte_comercializacion_solicitado_tienda',compact('tipo_documento','cerrado_orden_compra','proveedor','tiendas','productos','vendedor'));
+
+	}
+
+    public function listar_reporte_comercializacion_solicitado_tienda_ajax(Request $request){
+
+		$orden_compra_model = new OrdenCompra;
+		$p[]=$request->empresa_compra;
+        $p[]=$request->fecha_inicio;
+        $p[]=$request->fecha_fin;
+        $p[]=$request->numero_orden_compra_cliente;
+        $p[]=$request->producto;
+        $p[]=$request->tienda;
+        $p[]=1;
+        $p[]=$request->NumeroPagina;
+		$p[]=$request->NumeroRegistros;
+		$data = $orden_compra_model->listar_reporte_comercializacion_solicitado_tienda_ajax($p);
+		$iTotalDisplayRecords = isset($data[0]->totalrows)?$data[0]->totalrows:0;
+
+		$result["PageStart"] = $request->NumeroPagina;
+		$result["pageSize"] = $request->NumeroRegistros;
+		$result["SearchText"] = "";
+		$result["ShowChildren"] = true;
+		$result["iTotalRecords"] = $iTotalDisplayRecords;
+		$result["iTotalDisplayRecords"] = $iTotalDisplayRecords;
+		$result["aaData"] = $data;
+
+        echo json_encode($result);
+
+	}
+
+    public function exportar_reporte_comercializacion_solicitado_tienda($empresa_compra, $fecha_inicio, $fecha_fin, $numero_orden_compra_cliente, $producto, $tienda) {
+
+        if($empresa_compra==0)$empresa_compra = "";
+        if($fecha_inicio=="0")$fecha_inicio = "";
+        if($fecha_fin=="0")$fecha_fin = "";
+        if($numero_orden_compra_cliente=="0")$numero_orden_compra_cliente = "";
+        if($producto==0)$producto = "";
+        if($tienda==0)$tienda = "";
+        
+        $orden_compra_model = new OrdenCompra;
+		$p[]=$empresa_compra;
+        $p[]=$fecha_inicio;
+        $p[]=$fecha_fin;
+        $p[]=$numero_orden_compra_cliente;
+        $p[]=$producto;
+        $p[]=$tienda;
+        $p[]=1;
+        $p[]=1;
+		$p[]=10000;
+		$data = $orden_compra_model->listar_reporte_comercializacion_solicitado_tienda_ajax($p);
+		$iTotalDisplayRecords = isset($data[0]->totalrows)?$data[0]->totalrows:0;
+		
+		$variable = [];
+		$n = 1;
+
+		array_push($variable, array("N°","Empresa","Orden Compra","Pedido","Fecha Pedido","Fecha Vencimiento","Codigo Interno","Codigo Sodimac","Descripcion","Precio Unitario","Cantidad Pedida","Tienda"));
+		
+		foreach ($data as $r) {
+
+			array_push($variable, array($n++,$r->razon_social, $r->numero_orden_compra_cliente, $r->pedido, $r->fecha_orden_compra, $r->fecha_vencimiento, $r->codigo, $r->codigo_empresa, $r->producto, $r->precio, $r->cantidad, $r->tienda));
+		}
+		
+		$export = new InvoicesExport4([$variable]);
+		return Excel::download($export, 'Reporte_comercializacion_tienda_solicitada.xlsx');
+		
+    }
+
 }
 
 class InvoicesExport implements FromArray, WithHeadings, WithStyles
@@ -1713,6 +1797,74 @@ class InvoicesExport2 implements FromArray, WithHeadings, WithStyles
 }
 
 class InvoicesExport3 implements FromArray, WithHeadings, WithStyles
+{
+	protected $invoices;
+
+	public function __construct(array $invoices)
+	{
+		$this->invoices = $invoices;
+	}
+
+	public function array(): array
+	{
+		return $this->invoices;
+	}
+
+    public function headings(): array
+    {
+        return ["N°", "Empresa", "Orden Compra", "Pedido", "Fecha Pedido", "Fecha Vencimiento", "Codigo Interno", "Codigo Sodimac", "Descripcion", "Precio Unitario", "Cantidad Pedida", "Cantidad Entregada", "Cantidad Cancelada", "Tienda"];
+    }
+
+	public function styles(Worksheet $sheet)
+    {
+
+		$sheet->mergeCells('A1:N1');
+
+        $sheet->setCellValue('A1', "REPORTE DE COMERCIALIZACION POR TIENDA - FORESPAMA");
+        $sheet->getStyle('A1:N1')->applyFromArray([
+            'font' => [
+                'bold' => true,
+                'color' => ['rgb' => 'FFFFFF'],
+            ],
+            'fill' => [
+                'fillType' => Fill::FILL_SOLID,
+                'startColor' => ['rgb' => '246257'],
+            ],
+            'alignment' => [
+                'horizontal' => Alignment::HORIZONTAL_CENTER,
+            ],
+        ]);
+
+		$sheet->getStyle('A1')->getAlignment()->setWrapText(true);
+		$sheet->getRowDimension(1)->setRowHeight(30);
+
+        $sheet->getStyle('A2:N2')->applyFromArray([
+            'font' => [
+                'bold' => true,
+                'color' => ['rgb' => '000000'],
+            ],
+            'fill' => [
+                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                'startColor' => ['rgb' => '2EB85C'],
+            ],
+			'alignment' => [
+			'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+    		],
+        ]);
+
+		$sheet->fromArray($this->headings(), NULL, 'A2');
+
+		/*$sheet->getStyle('L3:L'.$sheet->getHighestRow())
+		->getNumberFormat()
+		->setFormatCode(\PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_NUMBER_00);*/ //SIRVE PARA PONER 2 DECIMALES A ESA COLUMNA
+        
+        foreach (range('A', 'N') as $col) {
+            $sheet->getColumnDimension($col)->setAutoSize(true);
+        }
+    }
+}
+
+class InvoicesExport4 implements FromArray, WithHeadings, WithStyles
 {
 	protected $invoices;
 
