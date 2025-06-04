@@ -56,7 +56,8 @@ class Requerimiento extends Model
         inner join productos p on rd.id_producto = p.id
         inner join requerimientos r on rd.id_requerimiento = r.id
         where id_requerimiento ='".$id."'
-        and rd.estado='1'";
+        and rd.estado='1'
+        order by 1 asc ";
 
 		$data = DB::select($cad);
         return $data;

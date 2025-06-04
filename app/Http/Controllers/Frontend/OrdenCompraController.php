@@ -1181,14 +1181,14 @@ class OrdenCompraController extends Controller
 		$variable = [];
 		$n = 1;
 
-		array_push($variable, array("N°","Empresa","Orden Compra","Pedido","Fecha Pedido","Fecha Vencimiento","Codigo Interno","Codigo Sodimac","Descripcion","Precio Unitario","Cantidad Pedida","Cantidad Entregada","Cantidad Cancelada","Pendiente Entrega","Vendedor","Estado Pedido"));
+		array_push($variable, array("N°","Empresa","Orden Compra","Pedido","Fecha Pedido","Fecha Vencimiento","Fecha Entrega Real","Codigo Interno","Codigo Sodimac","Descripcion","Precio Unitario","Cantidad Pedida","Cantidad Entregada","Cantidad Cancelada","Pendiente Entrega","Vendedor","Estado Pedido"));
 		
 		foreach ($data as $r) {
 
             if($r->cerrado==1){$cerrado='SI';}
             if($r->cerrado==2){$cerrado='NO';}
 
-			array_push($variable, array($n++,$r->cliente, $r->numero_orden_compra_cliente, $r->pedido, $r->fecha_orden_compra, $r->fecha_vencimiento, $r->codigo, $r->codigo_empresa, $r->producto, $r->precio, $r->cantidad_requerida, $r->cantidad_despacho, $r->cantidad_cancelada, $cerrado, $r->vendedor, $r->estado_pedido));
+			array_push($variable, array($n++,$r->cliente, $r->numero_orden_compra_cliente, $r->pedido, $r->fecha_orden_compra, $r->fecha_vencimiento, $r->fecha_salida, $r->codigo, $r->codigo_empresa, $r->producto, $r->precio, $r->cantidad_requerida, $r->cantidad_despacho, $r->cantidad_cancelada, $cerrado, $r->vendedor, $r->estado_pedido));
 		}
 		
 		$export = new InvoicesExport2([$variable]);
@@ -1744,7 +1744,7 @@ class InvoicesExport2 implements FromArray, WithHeadings, WithStyles
 
     public function headings(): array
     {
-        return ["N°", "Empresa", "Orden Compra", "Pedido", "Fecha Pedido", "Fecha Vencimiento", "Codigo Interno", "Codigo Sodimac", "Descripcion", "Precio Unitario", "Cantidad Pedida", "Cantidad Entregada", "Cantidad Cancelada", "Pendiente Entrega", "Vendedor", "Estado Pedido"];
+        return ["N°", "Empresa", "Orden Compra", "Pedido", "Fecha Pedido", "Fecha Vencimiento","Fecha Entrega Real", "Codigo Interno", "Codigo Sodimac", "Descripcion", "Precio Unitario", "Cantidad Pedida", "Cantidad Entregada", "Cantidad Cancelada", "Pendiente Entrega", "Vendedor", "Estado Pedido"];
     }
 
 	public function styles(Worksheet $sheet)
