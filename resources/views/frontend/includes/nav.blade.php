@@ -315,8 +315,8 @@
 										<x-utils.link :href="route('frontend.orden_compra.create_reporte_comercializacion_tienda')" class="dropdown-item" :text="__('Reporte de Comercializacion por Tienda')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
 								@endif
 
-								@can('Reporte Comercializacion Tienda Solicitado')
-										<x-utils.link :href="route('frontend.orden_compra.create_reporte_comercializacion_solicitado_tienda')" class="dropdown-item" :text="__('Reporte de Comercializacion Solicitado por Tienda')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+								@can('Reporte Pedidos Tienda')
+										<x-utils.link :href="route('frontend.orden_compra.create_reporte_comercializacion_solicitado_tienda')" class="dropdown-item" :text="__('Reporte de Pedidos por Tienda')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
 								@endif
 
 							</div>
