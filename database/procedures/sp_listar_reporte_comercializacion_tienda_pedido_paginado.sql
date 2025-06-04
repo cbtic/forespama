@@ -28,7 +28,7 @@ begin
 	left join productos p on ocd.id_producto = p.id 
 	left join equivalencia_productos ep on ep.codigo_producto = p.codigo ';
 	
-	v_where = ' Where 1=1 and oc.id_tipo_documento = ''2'' and oc.id_empresa_compra in(''23'',''187'') ';
+	v_where = ' Where 1=1 and oc.id_tipo_documento = ''2'' and oc.id_empresa_compra in(''23'',''187'') and oc.estado_pedido =''1'' ';
 
 	If p_empresa_compra<>'' Then
 	 v_where:=v_where||'And oc.id_empresa_compra  = '''||p_empresa_compra||''' ';

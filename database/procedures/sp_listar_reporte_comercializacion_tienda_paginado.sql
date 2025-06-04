@@ -1,6 +1,8 @@
+-- DROP FUNCTION public.sp_listar_reporte_comercializacion_tienda_paginado(varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, refcursor);
+
 CREATE OR REPLACE FUNCTION public.sp_listar_reporte_comercializacion_tienda_paginado(p_empresa_compra character varying, p_fecha_desde character varying, p_fecha_hasta character varying, p_numero_orden_compra_cliente character varying, p_producto character varying, p_tienda character varying, p_estado character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
-RETURNS refcursor
-LANGUAGE plpgsql
+ RETURNS refcursor
+ LANGUAGE plpgsql
 AS $function$
 
 DECLARE
@@ -49,7 +51,7 @@ BEGIN
         GROUP BY id_orden_compra, id_producto
     ) cp ON cp.id_orden_compra = oc.id AND cp.id_producto = ocd.id_producto ';
 
-    v_where := ' WHERE 1=1 AND oc.id_tipo_documento = ''2'' ';
+    v_where := ' WHERE 1=1 AND oc.id_tipo_documento = ''2'' and oc.estado_pedido =''1'' ';
 
     IF p_empresa_compra <> '' THEN
         v_where := v_where || ' AND oc.id_empresa_compra = ''' || p_empresa_compra || ''' ';
@@ -91,4 +93,5 @@ BEGIN
     OPEN p_ref FOR EXECUTE v_scad;
     RETURN p_ref;
 END;
-$function$;
+$function$
+;
