@@ -291,6 +291,8 @@ function datatablenew(){
 							html += '<button style="font-size:12px;margin-left:10px" type="button" class="btn btn-sm btn-info" data-toggle="modal" onclick="modalAtenderRequerimiento('+row.id+')" disabled><i class="fa fa-edit"></i> Atender</button>'; 	
 						}
 
+						html += '<button style="font-size:12px; margin-left:10px" type="button" class="btn btn-sm btn-warning" data-toggle="modal" onclick="modalControlProductos('+row.id+')">Control Productos</button>';  
+						
 						if(usuario == row.id_usuario){
 							html += '<a href="javascript:void(0)" onclick=eliminarRequerimiento('+row.id+','+row.estado+') class="btn btn-sm '+clase+'" style="font-size:12px;margin-left:10px">'+estado+'</a>'; 
 						}else{
@@ -435,4 +437,19 @@ function descargarArchivosRequerimientoReporte(){
 	if (estado == "")estado = 0;
 	
 	location.href = '/requerimiento/exportar_listar_requerimiento_reporte/'+tipo_documento+'/'+fecha+'/'+numero_requerimiento+'/'+almacen+'/'+situacion+'/'+responsable_atencion+'/'+estado_atencion+'/'+tipo_requerimiento+'/'+estado;
+}
+
+function modalControlProductos(id){
+	
+	$(".modal-dialog").css("width","85%");
+	$('#openOverlayOpc .modal-body').css('height', 'auto');
+
+	$.ajax({
+			url: "/requerimiento/modal_control_requerimiento/"+id,
+			type: "GET",
+			success: function (result) {  
+					$("#diveditpregOpc").html(result);
+					$('#openOverlayOpc').modal('show');
+			}
+	});
 }

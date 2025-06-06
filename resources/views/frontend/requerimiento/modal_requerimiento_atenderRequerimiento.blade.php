@@ -246,7 +246,7 @@ const tbody = $('#divRequerimientoDetalle');
 tbody.empty();
 
 $.ajax({
-        url: "/requerimiento/cargar_detalle/"+id,
+        url: "/requerimiento/cargar_detalle_abierto/"+id,
         type: "GET",
         success: function (result) {
 
@@ -297,7 +297,7 @@ $.ajax({
                         <td><input name="estado_bien[]" id="estado_bien${n}" class="form-control form-control-sm" value="${requerimiento.id_estado_producto}" type="hidden"><select name="estado_bien_[]" id="estado_bien_${n}" class="form-control form-control-sm" onChange="" disabled>${estadoBienOptions}</select></td>
                         <td><input name="unidad[]" id="unidad${n}" class="form-control form-control-sm" value="${requerimiento.id_unidad_medida}" type="hidden"><select name="unidad_[]" id="unidad_${n}" class="form-control form-control-sm" disabled>${unidadMedidaOptions}</select></td>
                         <td><input name="cantidad_ingreso[]" id="cantidad_ingreso${n}" class="cantidad_ingreso form-control form-control-sm" value="${requerimiento.cantidad}" type="text" oninput="" readonly></td>
-                        <td><input name="cantidad_atendida[]" id="cantidad_atendida${n}" class="form-control form-control-sm" value="${requerimiento.cantidad}" type="text"></td>
+                        <td><input name="cantidad_atendida[]" id="cantidad_atendida${n}" class="form-control form-control-sm" value="${requerimiento.cantidad-requerimiento.cantidad_atendida}" type="text"></td>
                         <td><button type="button" class="btn btn-danger btn-sm" onclick="eliminarFila(this)">Eliminar</button></td>
 
                     </tr>

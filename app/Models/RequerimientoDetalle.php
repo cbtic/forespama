@@ -23,4 +23,30 @@ class RequerimientoDetalle extends Model
 		$data = DB::select($cad);
         return $data;
     }
+
+    function getCantidadOrdenCompraByRequerimientoProducto($id_requerimiento,$id_producto){
+
+        $cad = "select sum(ocd.cantidad_requerida) cantidad_ingresada
+        from orden_compras oc  
+        inner join orden_compra_detalles ocd on oc.id=ocd.id_orden_compra 
+        where oc.id_requerimiento  = '".$id_requerimiento."'
+        and ocd.id_producto= '".$id_producto."' ";
+
+		$data = DB::select($cad);
+        //return $data;
+        if(isset($data[0]))return $data[0]->cantidad_ingresada;
+    }
+
+    function getCantidadAbiertoRequerimientoDetalleByIdRequerimiento($id_requerimiento){
+
+        $cad = "select count(id) cantidad
+        from requerimiento_detalles rd  
+        where rd.id_requerimiento = '".$id_requerimiento."'
+        and rd.estado='1'
+        and rd.cerrado!='2'";
+
+		$data = DB::select($cad);
+        //return $data;
+        if(isset($data[0]))return $data[0]->cantidad;
+    }
 }

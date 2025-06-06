@@ -152,6 +152,8 @@ class RequerimientoController extends Controller
         $requerimiento->estado = 1;
         $requerimiento->save();
 
+        $id_requerimiento = $requerimiento->id;
+
         $array_requerimiento_detalle = array();
 
         foreach($item as $index => $value) {
@@ -232,6 +234,29 @@ class RequerimientoController extends Controller
         ]);
     }
 
+    public function cargar_detalle_abierto($id)
+    {
+
+        $requerimiento_model = new Requerimiento;
+        $marca_model = new Marca;
+        $producto_model = new Producto;
+        $tablaMaestra_model = new TablaMaestra;
+
+        $requerimiento = $requerimiento_model->getDetalleRequerimientoIdAbierto($id);
+        $marca = $marca_model->getMarcaAll();
+        $producto = $producto_model->getProductoAll();
+        $estado_bien = $tablaMaestra_model->getMaestroByTipo(4);
+        $unidad_medida = $tablaMaestra_model->getMaestroByTipo(43);
+
+        return response()->json([
+            'requerimiento' => $requerimiento,
+            'marca' => $marca,
+            'producto' => $producto,
+            'estado_bien' => $estado_bien,
+            'unidad_medida' => $unidad_medida
+        ]);
+    }
+
     public function movimiento_pdf_requerimiento($id){
 
         $requerimiento_model = new Requerimiento;
@@ -273,6 +298,7 @@ class RequerimientoController extends Controller
         $id_user = Auth::user()->id;
 
         $requerimiento = Requerimiento::find($request->id);
+        $id_requerimiento = $requerimiento->id;
 
         $orden_compra = new OrdenCompra;
 
@@ -335,9 +361,42 @@ class RequerimientoController extends Controller
 
         }
 
-        $requerimiento->cerrado = $request->cerrado;
+        $requerimiento_detalle = RequerimientoDetalle::where('id_requerimiento',$id_requerimiento)->where('estado','1')->get();
+
+        $requerimiento_detalle_model = new RequerimientoDetalle;
+
+        foreach($requerimiento_detalle as $index => $detalle){
+            
+            $detalle_requerimiento = RequerimientoDetalle::where('id_requerimiento',$id_requerimiento)->where('id_producto',$detalle->id_producto)->where('estado','1')->first();
+
+            $cantidad_requerida = $detalle_requerimiento->cantidad;
+            
+            $cantidad_ingresada = $requerimiento_detalle_model->getCantidadOrdenCompraByRequerimientoProducto($id_requerimiento,$detalle->id_producto);
+            
+            if($cantidad_requerida - $cantidad_ingresada==0){
+                $RequerimientoDetalleObj = RequerimientoDetalle::find($detalle->id);
+                $RequerimientoDetalleObj->cerrado = 2;
+                $RequerimientoDetalleObj->save();
+            }
+        }
+
+        $requerimiento_detalle_valida = RequerimientoDetalle::where('id_requerimiento',$id_requerimiento)->where('cerrado','2')->get();
+
+        $requerimiento_detalles_model = new RequerimientoDetalle;
+        $cantidadAbierto = $requerimiento_detalles_model->getCantidadAbiertoRequerimientoDetalleByIdRequerimiento($id_requerimiento);
+
+        if($cantidadAbierto==0){
+
+                $RequerimientoObj = Requerimiento::find($id_requerimiento);
+                $RequerimientoObj->cerrado = 2;
+                $RequerimientoObj->estado_atencion = 3;
+                $RequerimientoObj->save();
+        }
+
+        /*$requerimiento->cerrado = $request->cerrado;
         $requerimiento->estado_atencion = $request->estado_atencion;
-        $requerimiento->save();
+        $requerimiento->save();*/
+
         return response()->json(['id' => $orden_compra->id]);
     }
 
@@ -455,6 +514,64 @@ class RequerimientoController extends Controller
 		
 		$export = new InvoicesExport2([$variable]);
 		return Excel::download($export, 'reporte_requerimiento_ejecutivo.xlsx');
+    }
+
+    public function modal_control_requerimiento($id){
+		
+        $id_user = Auth::user()->id;
+        $tablaMaestra_model = new TablaMaestra;
+        $producto_model = new Producto;
+        $marca_model = new Marca;
+        $almacen_model = new Almacene;
+        $user_model = new User;
+		
+		if($id>0){
+
+            $requerimiento = Requerimiento::find($id);
+		}else{
+			$requerimiento = new Requerimiento;
+        }
+
+        $requerimiento_model = new Requerimiento;
+        $datos_requerimiento = $requerimiento_model->getControlRequerimientoById($id);
+
+        $tipo_documento = $tablaMaestra_model->getMaestroByTipo(59);
+        $cerrado_requerimiento = $tablaMaestra_model->getMaestroByTipo(52);
+        $estado_atencion = $tablaMaestra_model->getMaestroByTipo(60);
+        $producto = $producto_model->getProductoAll();
+        $marca = $marca_model->getMarcaAll();
+        $unidad = $tablaMaestra_model->getMaestroByTipo(43);
+        $almacen = $almacen_model->getAlmacenAll();
+        $estado_bien = $tablaMaestra_model->getMaestroByTipo(4);
+        $responsable_atencion = $user_model->getUserAll();
+        $unidad_origen = $tablaMaestra_model->getMaestroByTipo(50);
+        $tipo_requerimiento = $tablaMaestra_model->getMaestroByTipo(67);
+
+        return view('frontend.requerimiento.modal_requerimiento_controlRequerimiento',compact('id','requerimiento','tipo_documento','producto','marca','unidad','almacen','cerrado_requerimiento','estado_bien','estado_atencion','responsable_atencion','unidad_origen','id_user','tipo_requerimiento','datos_requerimiento'));
+
+    }
+
+    public function cargar_detalle_control($id)
+    {
+
+        $requerimiento_model = new Requerimiento;
+        $marca_model = new Marca;
+        $producto_model = new Producto;
+        $tablaMaestra_model = new TablaMaestra;
+
+        $requerimiento = $requerimiento_model->getControlDetalleRequerimientoId($id);
+        $marca = $marca_model->getMarcaAll();
+        $producto = $producto_model->getProductoAll();
+        $estado_bien = $tablaMaestra_model->getMaestroByTipo(4);
+        $unidad_medida = $tablaMaestra_model->getMaestroByTipo(43);
+
+        return response()->json([
+            'requerimiento' => $requerimiento,
+            'marca' => $marca,
+            'producto' => $producto,
+            'estado_bien' => $estado_bien,
+            'unidad_medida' => $unidad_medida
+        ]);
     }
 }
 
