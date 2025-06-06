@@ -1,6 +1,6 @@
--- DROP FUNCTION public.sp_listar_sodimac_factura_pago_paginado(varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, refcursor);
+-- DROP FUNCTION public.sp_listar_sodimac_factura_pago_paginado(varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, refcursor);
 
-CREATE OR REPLACE FUNCTION public.sp_listar_sodimac_factura_pago_paginado(p_fecha_ini character varying, p_fecha_fin character varying, p_tipo character varying, p_serie character varying, p_numero character varying, p_estado_pago character varying, p_observacion_pago character varying, p_dias_pagado character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
+CREATE OR REPLACE FUNCTION public.sp_listar_sodimac_factura_pago_paginado(p_fecha_ini character varying, p_fecha_fin character varying, p_tipo character varying, p_serie character varying, p_numero character varying, p_estado_pago character varying, p_observacion_pago character varying, p_dias_pagado character varying, p_color character varying, p_anulado character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
  RETURNS refcursor
  LANGUAGE plpgsql
 AS $function$
@@ -34,9 +34,9 @@ begin
               'FROM comprobantes c ' ||
               'left join sodimac_factura_detalles sfd on ''01-'' || c.serie ||''-''|| lpad(coalesce(c.numero::int, 1)::varchar, 8, ''0'') = sfd.numero_documento  '||
               'left join sodimac_facturas sf on sfd.id_sodimac_factura = sf.id '||
-              'Where 1 = 1 and  c.id_empresa in (''23'',''187'') and c.anulado != ''S'' '|| v_filtros_fecha || '
+              'Where 1 = 1 and  c.id_empresa in (''23'',''187'') '|| v_filtros_fecha || '
                UNION ALL ' ||
-              'select csh.id, csh.serie, csh.numero, csh.tipo, TO_CHAR(csh.fecha,''dd-mm-yyyy'') fecha, csh.destinatario, csh.cod_tributario, csh.subtotal, csh.impuesto, csh.total, '''' estado_pago, '''' anulado, '''' sunat, '''' numero_orden_compra_cliente, csh.moneda, sfd2.numero_documento, sfd2.importe_total, sfd2.importe_inicial, abs(sfd2.importe_retencion) importe_retencion, sfd2.importe_detraccion, case when sfd2.importe_total is null then 0 else 1 end as estado_pago_sodimac, CASE WHEN sfd2.importe_total is not null and csh.total::float = sfd2.importe_inicial::float THEN 1 when sfd2.importe_total is not null and csh.total::float != sfd2.importe_inicial::float then 2 else 0 END AS coincide_total_inicial, sf2.fecha_pago, DATE_PART(''day'', COALESCE(sf2.fecha_pago, CURRENT_DATE) - csh.fecha)::int AS dias_diferencia_pago ' ||
+              'select csh.id, csh.serie, csh.numero, csh.tipo, TO_CHAR(csh.fecha,''dd-mm-yyyy'') fecha, csh.destinatario, csh.cod_tributario, csh.subtotal, csh.impuesto, csh.total, '''' estado_pago, ''N'' anulado, '''' sunat, '''' numero_orden_compra_cliente, csh.moneda, sfd2.numero_documento, sfd2.importe_total, sfd2.importe_inicial, abs(sfd2.importe_retencion) importe_retencion, sfd2.importe_detraccion, case when sfd2.importe_total is null then 0 else 1 end as estado_pago_sodimac, CASE WHEN sfd2.importe_total is not null and csh.total::float = sfd2.importe_inicial::float THEN 1 when sfd2.importe_total is not null and csh.total::float != sfd2.importe_inicial::float then 2 else 0 END AS coincide_total_inicial, sf2.fecha_pago, DATE_PART(''day'', COALESCE(sf2.fecha_pago, CURRENT_DATE) - csh.fecha)::int AS dias_diferencia_pago ' ||
               'from comprobante_sodimac_historicos csh ' ||
               'left join sodimac_factura_detalles sfd2 on ''01-'' || csh.serie ||''-''|| lpad(coalesce(csh.numero::int, 1)::varchar, 8, ''0'') = sfd2.numero_documento ' || 
 			  'left join sodimac_facturas sf2 on sfd2.id_sodimac_factura = sf2.id) union_table ';
@@ -80,6 +80,19 @@ begin
 		If p_dias_pagado='4' Then
 	 		v_where:=v_where||'And dias_diferencia_pago > 100 ';
 		End If;
+	End If;
+
+	If p_color<>'' Then
+		If p_color='1' Then
+	 		v_where:=v_where||'And dias_diferencia_pago <= 60 ';
+		End If;
+		If p_color='2' Then
+	 		v_where:=v_where||'And dias_diferencia_pago > 60';
+		End If;
+	End If;
+
+	If p_anulado<>'' Then
+	 v_where:=v_where||'And anulado = '''||p_anulado||''' ';
 	End If;
 	
 	EXECUTE ('SELECT count(1) from '||v_tabla||v_where) INTO v_count;

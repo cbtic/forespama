@@ -413,7 +413,7 @@ function datatablenew(){
                 {
                     "mRender": function (data, type, row) {
                         var tiene_nc = "";
-                        if(row.tiene_nc!= null)tiene_nc = row.tiene_nc;
+                        if(row.tiene_nc== null)tiene_nc = '<input class="btn btn-secondary pull-light" value="NC" type="button" id="btnBoleta" onclick="nc(' + row.id + ', \'' + row.tiene_nc + '\')">';
                         return tiene_nc;
                     },
                     "bSortable": false,
@@ -515,5 +515,7 @@ function modalLiquidacion(id){
 
 }
 
-
-
+function nc(id, id_ncnd) {
+    window.location.href = '/comprobante/nc_edita';
+    return false;
+}
