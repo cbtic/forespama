@@ -3628,7 +3628,8 @@ class ComprobanteController extends Controller
 		$guia_detalles = GuiaDetalle::where([
             'guiad_serie' => $guia->guia_serie,
             'guiad_numero' => $guia->guia_numero,
-            'guiad_tipo' => $guia->guia_tipo
+            'guiad_tipo' => $guia->guia_tipo,
+            'estado' => 1
         ])->get();
         
 		//echo $guia_detalles->guiad_numero; exit();
@@ -4031,6 +4032,7 @@ class ComprobanteController extends Controller
         $p[]=$request->estado_pago;
         $p[]=$request->observacion_pago;
         $p[]=$request->dias_pagado;
+        $p[]=$request->color_bus;
         //$p[]=$request->estado;
 		$p[]=$request->NumeroPagina;
 		$p[]=$request->NumeroRegistros;

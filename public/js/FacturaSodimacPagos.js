@@ -73,6 +73,7 @@ function datatablenew(){
             var estado_pago = $('#estado_pago_bus').val();
             var observacion_pago = $('#observacion_pago_bus').val();
             var dias_pagado = $('#dias_pagado_bus').val();
+            var color_bus = $('#color_bus').val();
             
 			var _token = $('#_token').val();
             oSettings.jqXHR = $.ajax({
@@ -82,7 +83,7 @@ function datatablenew(){
                 "url": sSource,
                 "data":{NumeroPagina:iNroPagina,NumeroRegistros:iCantMostrar,
 						fecha_ini:fecha_ini,fecha_fin:fecha_fin,tipo_documento:tipo_documento, serie:serie, numero:numero, 
-                        estado_pago:estado_pago, observacion_pago:observacion_pago, dias_pagado:dias_pagado, _token:_token
+                        estado_pago:estado_pago, observacion_pago:observacion_pago, dias_pagado:dias_pagado, color_bus:color_bus, _token:_token
                        },
                 "success": function (result) {
                     fnCallback(result);
@@ -189,6 +190,20 @@ function datatablenew(){
                 "bSortable": false,
                 "aTargets": [6]
                 },
+                {
+					"mRender": function (data, type, row) {
+						var anulado = "";
+						if(row.anulado == "N"){
+							anulado = "No";
+						}
+						if(row.anulado == "S"){
+							anulado = "Si";
+						}
+						return anulado;
+					},
+					"bSortable": false,
+					"aTargets": [7]
+				},
 				{
                 "mRender": function (data, type, row) {
                     var moneda = "";
@@ -196,7 +211,7 @@ function datatablenew(){
 					return moneda;
                 },
                 "bSortable": false,
-                "aTargets": [7]
+                "aTargets": [8]
                 },
 				{
                 "mRender": function (data, type, row) {
@@ -206,7 +221,7 @@ function datatablenew(){
                 },
                 "bSortable": false,
                 "className": "text-right",
-                "aTargets": [8]
+                "aTargets": [9]
                 },
 				{
                 "mRender": function (data, type, row) {
@@ -216,7 +231,7 @@ function datatablenew(){
                 },
                 "bSortable": false,
                 "className": "text-right",
-                "aTargets": [9]
+                "aTargets": [10]
                 },
 				{
                 "mRender": function (data, type, row) {
@@ -226,7 +241,7 @@ function datatablenew(){
                 },
                 "bSortable": false,
                 "className": "text-right",
-                "aTargets": [10]
+                "aTargets": [11]
                 },
                 {
                 "mRender": function (data, type, row) {
@@ -235,7 +250,7 @@ function datatablenew(){
                     return numero_documento_sodimac;
                 },
                 "bSortable": false,
-                "aTargets": [11]
+                "aTargets": [12]
                 },
                 {
                 "mRender": function (data, type, row) {
@@ -244,7 +259,7 @@ function datatablenew(){
                     return fecha_pago;
                 },
                 "bSortable": false,
-                "aTargets": [12]
+                "aTargets": [13]
                 },
                 {
                 "mRender": function (data, type, row) {
@@ -253,7 +268,7 @@ function datatablenew(){
                     return importe_total;
                 },
                 "bSortable": false,
-                "aTargets": [13],
+                "aTargets": [14],
                 "className": 'text-right'
                 },
                 {
@@ -263,7 +278,7 @@ function datatablenew(){
                     return importe_retencion;
                 },
                 "bSortable": false,
-                "aTargets": [14],
+                "aTargets": [15],
                 "className": 'text-right'
                 },
                 {
@@ -273,7 +288,7 @@ function datatablenew(){
                     return importe_detraccion;
                 },
                 "bSortable": false,
-                "aTargets": [15],
+                "aTargets": [16],
                 "className": 'text-right'
                 },
                 {
@@ -283,7 +298,7 @@ function datatablenew(){
                     return importe_inicial;
                 },
                 "bSortable": false,
-                "aTargets": [16],
+                "aTargets": [17],
                 "className": 'text-right'
                 },
                 {
@@ -298,7 +313,7 @@ function datatablenew(){
 						return estado_pago_sodimac;
 					},
 					"bSortable": false,
-					"aTargets": [17]
+					"aTargets": [18]
 				},
                 {
                 "mRender": function (data, type, row) {
@@ -328,7 +343,7 @@ function datatablenew(){
                     return coincide_total_inicial;
                 },
                 "bSortable": false,
-                "aTargets": [18],
+                "aTargets": [19],
                 "className": 'text-right'
                 },
                 {
@@ -344,7 +359,7 @@ function datatablenew(){
                     
                 },
                 "bSortable": false,
-                "aTargets": [19],
+                "aTargets": [20],
                 "className": 'text-right'
                 },
             ]

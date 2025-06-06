@@ -397,7 +397,7 @@ label.form-control-sm{
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+                                <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
                                     <div class="form-group">
                                         <select name="observacion_pago_bus" id="observacion_pago_bus" class="form-control form-control-sm" onchange="">
                                         <option value=""> --Selecc. Observaci&oacute;n Pago--</option>
@@ -416,6 +416,15 @@ label.form-control-sm{
                                         <option value="2">Entre 61 y 80 d&iacute;as</option>
                                         <option value="3">Entre 81 y 100 d&iacute;as</option>
                                         <option value="4">Mayor a 100 d&iacute;as</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+                                    <div class="form-group">
+                                        <select name="color_bus" id="color_bus" class="form-control form-control-sm" onchange="">
+                                        <option value="" selected="selected">--Selecc. Color--</option>
+                                        <option value="1" style="color:blue">Azul</option>
+                                        <option value="2" style="color:red">Rojo</option>
                                         </select>
                                     </div>
                                 </div>
@@ -504,6 +513,7 @@ label.form-control-sm{
                                                 <th>Nro.</th>
                                                 <th>Tipo</th>
                                                 <th>Fecha</th>
+                                                <th>Anulado</th>
                                                 <th>Moneda</th>
                                                 <th class="text-right">Valor Venta</th>
                                                 <th class="text-right">IGV</th>
