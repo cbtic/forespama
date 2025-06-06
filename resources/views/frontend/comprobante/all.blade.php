@@ -527,6 +527,7 @@ label.form-control-sm{
                                                 <th class="text-right">Credito</th>
                                                 <th>Sunat</th>
                                                 <th class="text-left">Credito</th>
+                                                <th class="text-left">Nota Credito</th>
                                                 <th class="text-left">Factura</th>
                                             </tr>
                                         </thead>

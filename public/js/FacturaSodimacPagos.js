@@ -73,7 +73,8 @@ function datatablenew(){
             var estado_pago = $('#estado_pago_bus').val();
             var observacion_pago = $('#observacion_pago_bus').val();
             var dias_pagado = $('#dias_pagado_bus').val();
-            var color_bus = $('#color_bus').val();
+            var color = $('#color_bus').val();
+            var anulado = $('#anulado_bus').val();
             
 			var _token = $('#_token').val();
             oSettings.jqXHR = $.ajax({
@@ -83,7 +84,7 @@ function datatablenew(){
                 "url": sSource,
                 "data":{NumeroPagina:iNroPagina,NumeroRegistros:iCantMostrar,
 						fecha_ini:fecha_ini,fecha_fin:fecha_fin,tipo_documento:tipo_documento, serie:serie, numero:numero, 
-                        estado_pago:estado_pago, observacion_pago:observacion_pago, dias_pagado:dias_pagado, color_bus:color_bus, _token:_token
+                        estado_pago:estado_pago, observacion_pago:observacion_pago, dias_pagado:dias_pagado, color:color, anulado:anulado, _token:_token
                        },
                 "success": function (result) {
                     fnCallback(result);
@@ -465,7 +466,9 @@ function DescargarArchivosExcel(){
 	var estado_pago = $('#estado_pago_bus').val();
 	var observacion_pago = $('#observacion_pago_bus').val();
 	var dias_pagado = $('#dias_pagado_bus').val();
-
+	var color = $('#color_bus').val();
+	var anulado = $('#anulado_bus').val();
+    //alert(anulado);exit();
 	if (fecha_ini == "")fecha_ini = "0";
 	if (fecha_fin == "")fecha_fin = "0";
 	if (tipo_documento == "")tipo_documento = 0;
@@ -474,6 +477,9 @@ function DescargarArchivosExcel(){
 	if (estado_pago == "")estado_pago = 0;
 	if (observacion_pago == "")observacion_pago = 0;
 	if (dias_pagado == "")dias_pagado = 0;
+	if (color == "")color = 0;
+	if (anulado == "")anulado = 0;
 	
-	location.href = '/comprobante/exportar_listar_pagos_sodimac/'+fecha_ini+'/'+fecha_fin+'/'+tipo_documento+'/'+serie+'/'+numero+'/'+estado_pago+'/'+observacion_pago+'/'+dias_pagado;
+    //alert(anulado);exit();
+	location.href = '/comprobante/exportar_listar_pagos_sodimac/'+fecha_ini+'/'+fecha_fin+'/'+tipo_documento+'/'+serie+'/'+numero+'/'+estado_pago+'/'+observacion_pago+'/'+dias_pagado+'/'+color+'/'+anulado;
 }

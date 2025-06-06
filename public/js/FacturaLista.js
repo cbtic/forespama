@@ -327,15 +327,15 @@ function datatablenew(){
                 "bSortable": false,
                 "aTargets": [12]
                 },
-                {
-                    "mRender": function (data, type, row) {
-                        var forma_pago = "";
-                        if(row.forma_pago!= null)forma_pago = row.forma_pago;
-                        return forma_pago;
-                    },
-                    "bSortable": false,
-                    "aTargets": [13]
-                },                    
+                    {
+                        "mRender": function (data, type, row) {
+                            var forma_pago = "";
+                            if(row.forma_pago!= null)forma_pago = row.forma_pago;
+                            return forma_pago;
+                        },
+                        "bSortable": false,
+                        "aTargets": [13]
+                    },                    
 				{
                     "mRender": function (data, type, row) {
                         var restante_credito = "";
@@ -409,7 +409,16 @@ function datatablenew(){
                     },
                     "bSortable": false,
                     "aTargets": [16],
-                },                
+                },      
+                {
+                    "mRender": function (data, type, row) {
+                        var tiene_nc = "";
+                        if(row.tiene_nc!= null)tiene_nc = row.tiene_nc;
+                        return tiene_nc;
+                    },
+                    "bSortable": false,
+                    "aTargets": [17]
+                },              
 				{
                     "mRender": function (data, type, row) {
                         var html = '<div class="btn-group btn-group-sm" role="group" aria-label="Log Viewer Actions">';
@@ -417,7 +426,7 @@ function datatablenew(){
                         return html;
                     },
                     "bSortable": false,
-                    "aTargets": [17],
+                    "aTargets": [18],
                 },
                 
 

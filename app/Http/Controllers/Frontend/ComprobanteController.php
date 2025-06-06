@@ -2345,8 +2345,6 @@ class ComprobanteController extends Controller
 		return view('frontend.factura.modal_factura',compact('id','factura','negativo'));
 	}
     
-    
-
     public function nc_edita(Request $request){
 
         $id_caja = $request->id_caja_;
@@ -2375,10 +2373,7 @@ class ComprobanteController extends Controller
 
 			$id_caja = (isset($caja_usuario->id_caja))?$caja_usuario->id_caja:0;
 		}
-       
-      //print_r($trans); 
-      //echo($id);
-     // exit();
+        
 
         if ( $trans == "FN"){
 
@@ -4032,7 +4027,8 @@ class ComprobanteController extends Controller
         $p[]=$request->estado_pago;
         $p[]=$request->observacion_pago;
         $p[]=$request->dias_pagado;
-        $p[]=$request->color_bus;
+        $p[]=$request->color;
+        $p[]=$request->anulado;
         //$p[]=$request->estado;
 		$p[]=$request->NumeroPagina;
 		$p[]=$request->NumeroRegistros;
@@ -4336,10 +4332,10 @@ class ComprobanteController extends Controller
 
     }
 
-    public function exportar_listar_pagos_sodimac($fecha_ini, $fecha_fin, $tipo_documento, $serie, $numero, $estado_pago, $observacion_pago, $dias_pagado) {
+    public function exportar_listar_pagos_sodimac($fecha_ini, $fecha_fin, $tipo_documento, $serie, $numero, $estado_pago, $observacion_pago, $dias_pagado, $color, $anulado) {
 
 		$id_user = Auth::user()->id;
-
+        //dd($anulado);exit();
 		if($fecha_ini=="0")$fecha_ini = "";
 		if($fecha_fin=="0")$fecha_fin = "";
 		if($tipo_documento==0)$tipo_documento = "";
@@ -4348,7 +4344,9 @@ class ComprobanteController extends Controller
 		if($estado_pago==0)$estado_pago = "";
 		if($observacion_pago==0)$observacion_pago = "";
 		if($dias_pagado==0)$dias_pagado = "";
-
+		if($color==0)$color = "";
+		if($anulado===0)$anulado = "";
+        //dd($anulado);exit();
 		$factura_model = new Comprobante();
 		$p[]=$fecha_ini;
 		$p[]=$fecha_fin;
@@ -4358,6 +4356,8 @@ class ComprobanteController extends Controller
         $p[]=$estado_pago;
         $p[]=$observacion_pago;
         $p[]=$dias_pagado;
+        $p[]=$color;
+        $p[]=$anulado;
 		$p[]=1;
 		$p[]=10000;
 		$data = $factura_model->listar_factura_sodimac_pagos_ajax($p);
@@ -4365,7 +4365,7 @@ class ComprobanteController extends Controller
 		$variable = [];
 		$n = 1;
 
-		array_push($variable, array("N","RUC","N° Orden Compra","Serie","Nro","Tipo","Fecha","Moneda","Valor Venta","IGV","Importe Total","Numero Documento Sodimac","Fecha Pago","Sub Total Sodimac","Retencion Sodimac","Detraccion Sodimac","Total Sodimac","Estado Pago","Observación Pago","Días Pago"));
+		array_push($variable, array("N","RUC","N° Orden Compra","Serie","Nro","Tipo","Fecha","Anulado","Moneda","Valor Venta","IGV","Importe Total","Numero Documento Sodimac","Fecha Pago","Sub Total Sodimac","Retencion Sodimac","Detraccion Sodimac","Total Sodimac","Estado Pago","Observación Pago","Días Pago"));
 		
 		foreach ($data as $r) {
 
@@ -4405,7 +4405,7 @@ class ComprobanteController extends Controller
                 $tipo_ = "TICKET";
             }
             
-			array_push($variable, array($n++,$r->cod_tributario, $r->numero_orden_compra_cliente, $r->serie, $r->numero, $tipo_, $r->fecha, $r->moneda, $r->subtotal, $r->impuesto, $r->total, $r->numero_documento_sodimac, $r->fecha_pago, $r->importe_total, $r->importe_retencion, $r->importe_detraccion, $r->importe_inicial, $estado_pago_sodimac_, $coincide_total_inicial_, $r->dias_diferencia_pago));
+			array_push($variable, array($n++,$r->cod_tributario, $r->numero_orden_compra_cliente, $r->serie, $r->numero, $tipo_, $r->fecha, $r->anulado, $r->moneda, $r->subtotal, $r->impuesto, $r->total, $r->numero_documento_sodimac, $r->fecha_pago, $r->importe_total, $r->importe_retencion, $r->importe_detraccion, $r->importe_inicial, $estado_pago_sodimac_, $coincide_total_inicial_, $r->dias_diferencia_pago));
 		}
 		
 		$export = new InvoicesExport2([$variable]);
@@ -4499,16 +4499,16 @@ class InvoicesExport2 implements FromArray, WithHeadings, WithStyles
 
     public function headings(): array
     {
-        return ["N","RUC","N° Orden Compra","Serie","Nro","Tipo","Fecha","Moneda","Valor Venta","IGV","Importe Total","Numero Documento Sodimac","Fecha Pago","Sub Total Sodimac","Retencion Sodimac","Detraccion Sodimac","Total Sodimac","Estado Pago","Observación Pago","Días Pago"];
+        return ["N","RUC","N° Orden Compra","Serie","Nro","Tipo","Fecha","Anulado","Moneda","Valor Venta","IGV","Importe Total","Numero Documento Sodimac","Fecha Pago","Sub Total Sodimac","Retencion Sodimac","Detraccion Sodimac","Total Sodimac","Estado Pago","Observación Pago","Días Pago"];
     }
 
 	public function styles(Worksheet $sheet)
     {
 
-		$sheet->mergeCells('A1:T1');
+		$sheet->mergeCells('A1:U1');
 
         $sheet->setCellValue('A1', "REPORTE DE PAGOS DE SODIMAC - FORESPAMA");
-        $sheet->getStyle('A1:T1')->applyFromArray([
+        $sheet->getStyle('A1:U1')->applyFromArray([
             'font' => [
                 'bold' => true,
                 'color' => ['rgb' => 'FFFFFF'],
@@ -4525,7 +4525,7 @@ class InvoicesExport2 implements FromArray, WithHeadings, WithStyles
 		$sheet->getStyle('A1')->getAlignment()->setWrapText(true);
 		$sheet->getRowDimension(1)->setRowHeight(30);
 
-        $sheet->getStyle('A2:T2')->applyFromArray([
+        $sheet->getStyle('A2:U2')->applyFromArray([
             'font' => [
                 'bold' => true,
                 'color' => ['rgb' => '000000'],
@@ -4545,7 +4545,7 @@ class InvoicesExport2 implements FromArray, WithHeadings, WithStyles
 		->getNumberFormat()
 		->setFormatCode(\PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_NUMBER_00);*/ //SIRVE PARA PONER 2 DECIMALES A ESA COLUMNA
         
-        foreach (range('A', 'T') as $col) {
+        foreach (range('A', 'U') as $col) {
             $sheet->getColumnDimension($col)->setAutoSize(true);
         }
     }

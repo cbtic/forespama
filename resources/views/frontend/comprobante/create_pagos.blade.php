@@ -397,7 +397,7 @@ label.form-control-sm{
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+                                <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
                                     <div class="form-group">
                                         <select name="observacion_pago_bus" id="observacion_pago_bus" class="form-control form-control-sm" onchange="">
                                         <option value=""> --Selecc. Observaci&oacute;n Pago--</option>
@@ -408,7 +408,7 @@ label.form-control-sm{
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+                                <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
                                     <div class="form-group">
                                         <select name="dias_pagado_bus" id="dias_pagado_bus" class="form-control form-control-sm" onchange="">
                                         <option value="" selected="selected">--Selecc. Dias Pagado--</option>
@@ -419,12 +419,21 @@ label.form-control-sm{
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+                                <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
                                     <div class="form-group">
                                         <select name="color_bus" id="color_bus" class="form-control form-control-sm" onchange="">
                                         <option value="" selected="selected">--Selecc. Color--</option>
                                         <option value="1" style="color:blue">Azul</option>
                                         <option value="2" style="color:red">Rojo</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+                                    <div class="form-group">
+                                        <select name="anulado_bus" id="anulado_bus" class="form-control form-control-sm" onchange="">
+                                        <option value="" selected="selected">--Selecc. Anulado--</option>
+                                        <option value="S" style="color:blue">Si</option>
+                                        <option value="N" style="color:red">No</option>
                                         </select>
                                     </div>
                                 </div>

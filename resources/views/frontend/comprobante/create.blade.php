@@ -1473,8 +1473,6 @@
 <!--row-->
 @endsection
 
-
-
 @push('after-scripts')
 
 <script src="{{ asset('js/factura.js') }}"></script>
