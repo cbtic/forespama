@@ -1,3 +1,5 @@
+-- DROP FUNCTION public.sp_listar_requerimiento_paginado(varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, refcursor);
+
 CREATE OR REPLACE FUNCTION public.sp_listar_requerimiento_paginado(p_tipo_documento character varying, p_fecha character varying, p_numero_requerimiento character varying, p_almacen character varying, p_situacion character varying, p_responsable_atencion character varying, p_estado_atencion character varying, p_tipo_requerimiento character varying, p_estado character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
  RETURNS refcursor
  LANGUAGE plpgsql
@@ -15,7 +17,7 @@ begin
 
 	p_pagina=(p_pagina::Integer-1)*p_limit::Integer;
 
-	v_campos=' r.id, tm.denominacion tipo_documento, r.fecha, r.codigo, r.cerrado, a.denominacion almacen, r.estado, tm2.denominacion cerrado_situacion, id_usuario_inserta id_usuario, u.name responsable_atencion, tm3.denominacion estado_atencion, r.responsable_atencion id_responsable, tm4.denominacion tipo_requerimiento ';
+	v_campos=' r.id, tm.denominacion tipo_documento, r.fecha, r.codigo, r.cerrado, a.denominacion almacen, r.estado, tm2.denominacion cerrado_situacion, id_usuario_inserta id_usuario, u.name responsable_atencion, tm3.denominacion estado_atencion, r.responsable_atencion id_responsable, tm4.denominacion tipo_requerimiento, r.estado_solicitud ';
 
 	v_tabla=' from requerimientos r 
 	left join tabla_maestras tm on r.id_tipo_documento ::int = tm.codigo::int and tm.tipo = ''59''

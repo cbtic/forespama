@@ -40,10 +40,10 @@ BEGIN
     LEFT JOIN productos p ON ocd.id_producto = p.id
 	left join equivalencia_productos ep on ep.codigo_producto = p.codigo 
     LEFT JOIN (
-        SELECT id_orden_compra
-        FROM tienda_detalle_orden_compras
-        GROUP BY id_orden_compra
-        HAVING COUNT(DISTINCT id_tienda) > 1
+        SELECT distinct id_orden_compra
+		FROM tienda_detalle_orden_compras tdoc
+		left join tiendas t on tdoc.id_tienda = t.id
+		where t.id_zona = ''2''
     ) om ON om.id_orden_compra = oc.id
     LEFT JOIN (
         SELECT id_orden_compra, id_producto, SUM(cantidad) AS suma_cantidad

@@ -659,3 +659,4 @@ Route::get('orden_compra/exportar_reporte_comercializacion_solicitado_tienda/{em
 Route::get('requerimiento/modal_control_requerimiento/{id}', [RequerimientoController::class, 'modal_control_requerimiento'])->name('requerimiento.modal_control_requerimiento');
 Route::get('requerimiento/cargar_detalle_control/{id}', [RequerimientoController::class, 'cargar_detalle_control'])->name('requerimiento.cargar_detalle_control');
 Route::get('requerimiento/cargar_detalle_abierto/{id}', [RequerimientoController::class, 'cargar_detalle_abierto'])->name('requerimiento.cargar_detalle_abierto');
+Route::post('requerimiento/send_genera_requerimiento', [RequerimientoController::class, 'send_genera_requerimiento'])->name('requerimiento.send_genera_requerimiento');

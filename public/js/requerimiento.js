@@ -279,11 +279,11 @@ function datatablenew(){
 						
 						var html = '<div class="btn-group btn-group-sm" role="group" aria-label="Log Viewer Actions">';
 						
-						//if(usuario == row.id_usuario){
+						if(row.estado_solicitud == 1){
 						html += '<button style="font-size:12px" type="button" class="btn btn-sm btn-success" data-toggle="modal" onclick="modalRequerimiento('+row.id+')" ><i class="fa fa-edit"></i> Editar</button>'; 
-						/*}else{
+						}else{
 							html += '<button style="font-size:12px" type="button" class="btn btn-sm btn-success" data-toggle="modal" onclick="modalRequerimiento('+row.id+')" disabled><i class="fa fa-edit"></i> Editar</button>'; 	
-						}*/
+						}
 
 						if(usuario == row.id_responsable){	
 							html += '<button style="font-size:12px;margin-left:10px" type="button" class="btn btn-sm btn-info" data-toggle="modal" onclick="modalAtenderRequerimiento('+row.id+')" ><i class="fa fa-edit"></i> Atender</button>'; 

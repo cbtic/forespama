@@ -16,7 +16,7 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        //
+        Commands\inhabilitarModificacionRequerimientoAutomaticoCron::class,
     ];
 
     /**
@@ -27,7 +27,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('activitylog:clean')->daily();
+        $schedule->command('inhabilitarModificacionRequerimientoAutomatico:cron')->dailyAt('20:00');
     }
 
     /**

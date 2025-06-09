@@ -126,7 +126,7 @@ class Requerimiento extends Model
         rd.id_estado_producto , rd.cantidad, r.id_almacen_destino,
         (select coalesce(sum(ocd.cantidad_requerida),0) from orden_compras oc
         inner join orden_compra_detalles ocd on ocd.id_orden_compra = oc.id 
-        where oc.id_requerimiento = r.id and ocd.id_producto = rd.id_producto) cantidad_atendida
+        where oc.id_requerimiento = r.id and ocd.id_producto = rd.id_producto) cantidad_atendida, rd.id_usuario_inserta
         from requerimiento_detalles rd 
         inner join productos p on rd.id_producto = p.id
         inner join requerimientos r on rd.id_requerimiento = r.id
@@ -138,5 +138,28 @@ class Requerimiento extends Model
 		$data = DB::select($cad);
         return $data;
     }
+
+    function inhabilitarModificacionRequerimiento(){
+        $p=array();
+		return $this->readFunctionPostgresTransaction('sp_crud_requerimiento_inhabilitar_editar',$p);
+    }
+
+    public function readFunctionPostgresTransaction($function, $parameters = null){
+	
+      $_parameters = '';
+      if (count($parameters) > 0) {
+	  		
+			foreach($parameters as $par){
+				if(is_string($par))$_parameters .= "'" . $par . "',";
+				else $_parameters .= "" . $par . ",";
+		  	}
+			if(strlen($_parameters)>1)$_parameters= substr($_parameters,0,-1);
+			
+      }
+
+	  $cad = "select " . $function . "(" . $_parameters . ");";
+	  $data = DB::select($cad);
+	  return $data[0]->$function;
+   }
 
 }

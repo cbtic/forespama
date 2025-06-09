@@ -522,6 +522,28 @@ function save_orden_compra_requerimiento(){
     }
 }
 
+function generar_requerimiento(){
+
+    var msgLoader = "";
+    msgLoader = "Procesando, espere un momento por favor";
+    var heightBrowser = $(window).width()/2;
+    $('.loader').css("opacity","0.8").css("height",heightBrowser).html("<div id='Grd1_wrapper' class='dataTables_wrapper'><div id='Grd1_processing' class='dataTables_processing panel-default'>"+msgLoader+"</div></div>");
+    $('.loader').show();
+
+    $.ajax({
+            url: "/requerimiento/send_genera_requerimiento",
+            type: "POST",
+            data : $("#frmRequerimiento").serialize(),
+            success: function (result) {
+                datatablenew();
+                $('.loader').hide();
+                bootbox.alert("Se gener&oacute; requerimiento satisfactoriamente");
+                $('#openOverlayOpc').modal('hide');
+            }
+    });
+    
+}
+
 function obtenerCodigo(){
 
     var tipo_documento = $('#tipo_documento').val();
@@ -555,6 +577,36 @@ function cerrarModalRequerimiento(){
     $('#openOverlayOpc').modal('hide');
 
     datatablenew();
+}
+
+function cambiarOrigen(){
+
+    var unidad_origen = $('#unidad_origen').val();
+    //alert(moneda);
+    if(unidad_origen==1){
+        $('#proveedor_select, #proveedor_').hide();
+        $('#almacen_select, #almacen_').show();
+        $('#almacen_salida_select, #almacen_salida_').show();
+    }else if(unidad_origen==2){
+        $('#proveedor_select, #proveedor_').show();
+        $('#almacen_select, #almacen_').hide();
+        $('#almacen_salida_select, #almacen_salida_').show();
+        //$('#proveedor').val("");
+    }else if(unidad_origen==3){
+        $('#proveedor_select, #proveedor_').show();
+        $('#almacen_select, #almacen_').show();
+        $('#almacen_salida_select, #almacen_salida_').show();
+        //$('#proveedor').val(30);
+    }else if(unidad_origen==4){
+        $('#proveedor_select, #proveedor_').show();
+        $('#almacen_select, #almacen_').hide();
+        $('#almacen_salida_select, #almacen_salida_').show();
+        //$('#proveedor').val(30);
+    }else{
+        $('#proveedor_select, #proveedor_').hide();
+        $('#almacen_select, #almacen_').show();
+        $('#almacen_salida_select, #almacen_salida_').show();
+    }
 }
 
 </script>
@@ -735,7 +787,7 @@ function cerrarModalRequerimiento(){
                                 <th>Estado Bien</th>
                                 <th>Unidad</th>
                                 <th>Cantidad</th>
-                                <th>Cantidad Atendida</th>
+                                <th>Cantidad Pendiente</th>
 							</tr>
 							</thead>
 							<tbody id="divRequerimientoDetalle">
@@ -750,6 +802,7 @@ function cerrarModalRequerimiento(){
                                 ?>
                                 <button style="font-size:12px;margin-left:10px;margin-right:10px" type="button" class="btn btn-sm btn-primary" data-toggle="modal" onclick="pdf_documento()" ><i class="fa fa-edit"></i>Imprimir</button>
                                 <button style="font-size:12px;margin-right:10px" type="button" class="btn btn-sm btn-warning" data-toggle="modal" onclick="save_orden_compra_requerimiento()" ><i class="fa fa-edit"></i>Generar Orden Compra</button>
+                                <button style="font-size:12px;margin-right:10px" type="button" class="btn btn-sm btn-success" data-toggle="modal" onclick="generar_requerimiento()" ><i class="fa fa-edit"></i>Generar Requerimiento Pedientes</button>
                                 <?php 
                                     }
                                 ?>

@@ -498,7 +498,6 @@ function reporteFactura(){
 
 }
 
-
 function modalLiquidacion(id){
 
 	$(".modal-dialog").css("width","80%");

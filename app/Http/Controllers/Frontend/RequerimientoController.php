@@ -573,6 +573,86 @@ class RequerimientoController extends Controller
             'unidad_medida' => $unidad_medida
         ]);
     }
+
+    public function send_genera_requerimiento(Request $request)
+    {
+        //$id_user = Auth::user()->id;
+
+        $requerimiento = Requerimiento::find($request->id);
+        $requerimiento_model = new Requerimiento;
+        $id_requerimiento = $requerimiento->id;
+        
+        $cantidad_atendida = $request->input('cantidad_atendida');
+
+        $fecha_actual = Carbon::now();
+        $codigo_requerimiento = $requerimiento_model->getCodigoRequerimiento(1);
+        
+        $requerimiento_nuevo = new Requerimiento;
+        $requerimiento_nuevo->id_tipo_documento = $requerimiento->id_tipo_documento;
+        $requerimiento_nuevo->fecha = $fecha_actual;
+        $requerimiento_nuevo->codigo = $codigo_requerimiento[0]->codigo;
+        $requerimiento_nuevo->id_almacen_destino = $requerimiento->id_almacen_destino;
+        $requerimiento_nuevo->sustento_requerimiento = $requerimiento->sustento_requerimiento;
+        $requerimiento_nuevo->cerrado = 1;
+        $requerimiento_nuevo->id_usuario_inserta = $requerimiento->id_usuario_inserta;
+        $requerimiento_nuevo->estado = 1;
+        $requerimiento_nuevo->responsable_atencion = $requerimiento->responsable_atencion;
+        $requerimiento_nuevo->estado_atencion = 1;
+        $requerimiento_nuevo->id_unidad_origen = $requerimiento->id_unidad_origen;
+        $requerimiento_nuevo->id_almacen_salida = $requerimiento->id_almacen_salida;
+        $requerimiento_nuevo->id_tipo_requerimiento = $requerimiento->id_tipo_requerimiento;
+        $requerimiento_nuevo->id_requerimiento_matriz = $id_requerimiento;
+        $requerimiento_nuevo->save();
+        $id_requerimiento_nuevo = $requerimiento_nuevo->id;
+        
+        $array_requerimiento_detalle = array();
+
+        $req_detalle_abierto = $requerimiento_model->getDetalleRequerimientoIdAbierto($id_requerimiento);
+
+        foreach($req_detalle_abierto as $index => $value) {
+            
+            //dd($value->id_usuario_inserta);exit();
+            $requerimiento_detalle = new RequerimientoDetalle;
+            
+            $requerimiento_detalle->id_requerimiento = $id_requerimiento_nuevo;
+            $requerimiento_detalle->id_producto = $value->id_producto;
+            $requerimiento_detalle->cantidad = isset($cantidad_atendida[$index]) ? (float) $cantidad_atendida[$index] : 0;
+            $requerimiento_detalle->id_estado_producto = $value->id_estado_producto;
+            //$orden_compra_detalle->id_unidad_medida = $unidad[$index];
+            if($value->id_unidad_medida!=null && $value->id_unidad_medida !=0){
+				$requerimiento_detalle->id_unidad_medida = (int)$value->id_unidad_medida;
+			}
+            //$orden_compra_detalle->id_marca = $marca[$index] ?? '';
+            if($value->id_marca!=null && $value->id_marca !=0){
+				$requerimiento_detalle->id_marca = (int)$value->id_marca;
+			}
+            
+            $requerimiento_detalle->estado = 1;
+            $requerimiento_detalle->cerrado = 1;
+            $requerimiento_detalle->id_usuario_inserta = $value->id_usuario_inserta;
+
+            $requerimiento_detalle->save();
+
+            $requerimiento_detalle_matriz = RequerimientoDetalle::find($value->id);
+            $requerimiento_detalle_matriz->cerrado = 2;
+            $requerimiento_detalle_matriz->save();
+
+        }
+
+        $requerimiento->cerrado = 2;
+        $requerimiento->estado_atencion = 3;
+        $requerimiento->save();
+
+        return response()->json(['id' => $requerimiento_nuevo->id]);
+    }
+
+    function inhabilitarModificacionRequerimiento(){
+
+        $requerimiento_model = new Requerimiento;
+
+		$requerimiento_model->inhabilitarModificacionRequerimiento();
+
+    }
 }
 
 class InvoicesExport implements FromArray, WithHeadings, WithStyles
