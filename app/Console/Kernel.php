@@ -27,7 +27,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('inhabilitarModificacionRequerimientoAutomatico:cron')->dailyAt('20:00');
+        $schedule->command('inhabilitarModificacionRequerimientoAutomatico:cron')->dailyAt('22:00');
     }
 
     /**
