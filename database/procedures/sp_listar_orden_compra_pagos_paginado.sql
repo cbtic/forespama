@@ -72,7 +72,11 @@ Begin
 	END IF;
 
 	IF p_estado_pago <> '' THEN
-	  v_where := v_where || ' AND ocp.id_estado_pago = ''' || p_estado_pago || ''' ';
+	  v_where := v_where || ' AND EXISTS (
+	    SELECT 1 FROM orden_compra_pagos ocp_sub 
+	    WHERE ocp_sub.id_orden_compra = oc.id 
+	    AND ocp_sub.id_estado_pago = ''' || p_estado_pago || '''
+	  ) ';
 	END IF;
 	
 	EXECUTE ('SELECT count(1) '||v_tabla||v_where) INTO v_count;

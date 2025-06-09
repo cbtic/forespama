@@ -14,11 +14,12 @@ class OrdenCompraPago extends Model
 
         $cad = "select 
         coalesce((select sum(oc.total) 
-        from orden_compras oc   
+        from orden_compras oc 
         where oc.id = '".$id."'), 0)precio,
         coalesce((select sum(importe) 
-        from orden_compra_pagos ocp  
-        where ocp.id_orden_compra = '".$id."'), 0)pago";
+        from orden_compra_pagos ocp 
+        where ocp.id_orden_compra = '".$id."'
+        and ocp.estado = '1'), 0) pago";
 
 		$data = DB::select($cad);
         return $data[0];

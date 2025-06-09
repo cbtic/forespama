@@ -422,10 +422,11 @@ class OrdenCompra extends Model
 
     function getOrdenCompraPagoById($id){
 
-        $cad = "select ocp.id, ocp.fecha, tm.denominacion tipodesembolso, ocp.importe, observacion, nro_guia, nro_factura, nro_cheque, foto_desembolso   
+        $cad = "select ocp.id, ocp.fecha, tm.denominacion tipodesembolso, ocp.importe, observacion, nro_guia, nro_factura, nro_cheque, foto_desembolso 
         from orden_compra_pagos ocp 
         inner join tabla_maestras tm on ocp.id_tipo_desembolso = tm.codigo::int and tm.tipo='65' 
         where ocp.id_orden_compra = ".$id."
+        and ocp.estado = '1'
         order by 1 desc";
 
 		$data = DB::select($cad);
