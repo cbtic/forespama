@@ -512,6 +512,18 @@ label.form-control-sm{
 								</select>
 							</div>
 
+							<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+								<select name="persona_bus" id="persona_bus" class="form-control form-control-sm">
+									<option value="">--Seleccionar Persona--</option>
+									<?php
+									foreach ($persona as $row){?>
+										<option value="<?php echo $row->id ?>"><?php echo $row->nombres.' '.$row->apellido_paterno.' '.$row->apellido_materno ?></option>
+										<?php 
+									}
+									?>
+								</select>
+							</div>
+
 							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
 								<input class="form-control form-control-sm" id="fecha_inicio_bus" name="fecha_inicio_bus" placeholder="Fecha Inicio">
 							</div>

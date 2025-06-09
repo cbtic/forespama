@@ -1421,11 +1421,13 @@ class OrdenCompraController extends Controller
 
 		$tablaMaestra_model = new TablaMaestra;
         $empresa_model = new Empresa;
+        $persona_model = new Persona;
 
 		$estado_pago = $tablaMaestra_model->getMaestroByTipo(66);
         $empresa = $empresa_model->getEmpresaAll();
+        $persona = $persona_model->obtenerPersonaAll();
 
-		return view('frontend.orden_compra.create_pago_orden_compra',compact('estado_pago','empresa'));
+		return view('frontend.orden_compra.create_pago_orden_compra',compact('estado_pago','empresa','persona'));
 
 	}
 
@@ -1435,6 +1437,7 @@ class OrdenCompraController extends Controller
 
 		$orden_compra_model = new OrdenCompra;
         $p[]=$request->empresa;
+        $p[]=$request->persona;
         $p[]=$request->fecha_inicio;
         $p[]=$request->fecha_fin;
         $p[]=$request->estado_pago;

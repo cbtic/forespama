@@ -42,6 +42,8 @@ $(document).ready(function () {
 
     $('#empresa_bus').select2({ widht : '100 %', })
 
+    $('#persona_bus').select2({ widht : '100 %', })
+
     /*
 	$('#fecha_hasta').datepicker({
         autoclose: true,
@@ -86,6 +88,7 @@ function datatablenew() {
 
             var ruc = $('#ruc_bus').val();
             var empresa = $('#empresa_bus').val();
+            var persona = $('#persona_bus').val();
             var placa = $('#placa_bus').val();
             var tipo_madera = $('#tipo_madera_bus').val();
             var fecha_inicio = $('#fecha_inicio_bus').val();
@@ -101,7 +104,7 @@ function datatablenew() {
                     NumeroPagina: iNroPagina,
                     NumeroRegistros: iCantMostrar,
                     ruc: ruc, empresa: empresa, placa: placa, tipo_madera: tipo_madera, fecha_inicio:fecha_inicio,
-                    fecha_fin:fecha_fin,estado_pago:estado_pago,
+                    fecha_fin:fecha_fin,estado_pago:estado_pago,persona:persona,
                     _token: _token
                 },
                 "success": function(result) {

@@ -1,6 +1,6 @@
--- DROP FUNCTION public.sp_listar_orden_compra_pagos_paginado(varchar, varchar, varchar, varchar, varchar, varchar, refcursor);
+-- DROP FUNCTION public.sp_listar_orden_compra_pagos_paginado(varchar, varchar, varchar, varchar, varchar, varchar, varchar, refcursor);
 
-CREATE OR REPLACE FUNCTION public.sp_listar_orden_compra_pagos_paginado(p_empresa character varying, p_fecha_desde character varying, p_fecha_hasta character varying, p_estado_pago character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
+CREATE OR REPLACE FUNCTION public.sp_listar_orden_compra_pagos_paginado(p_empresa character varying, p_persona character varying, p_fecha_desde character varying, p_fecha_hasta character varying, p_estado_pago character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
  RETURNS refcursor
  LANGUAGE plpgsql
 AS $function$
@@ -42,32 +42,38 @@ Begin
 	where sp.tipo_devolucion=''3''
 	and gi.id_tipo_documento !=''4''
 	and gi.guia_anulado =''N''
-	and sp.id_orden_compra = oc.id) guia, tm.denominacion estado_pago ';
-
-	v_tabla=' from orden_compras oc 
-	left join orden_compra_pagos ocp on ocp.id_orden_compra = oc.id 
+	and sp.id_orden_compra = oc.id) guia,
+	(select tm.denominacion from orden_compra_pagos ocp
 	left join tabla_maestras tm on ocp.id_estado_pago = tm.codigo::int and tm.tipo = ''66''
+	where ocp.id_orden_compra = oc.id 
+	limit 1) estado_pago ';
+	
+	v_tabla=' from orden_compras oc 
 	left join comprobantes c on c.orden_compra::varchar = oc.id::varchar and c.anulado = ''N''
 	left join tabla_maestras tm2 on c.id_forma_pago = tm2.codigo::int and tm2.tipo = ''104''
 	left join users u on oc.id_vendedor = u.id ';
 
-	v_where = ' where 1=1 and oc.estado = ''1'' and oc.id_tipo_documento = ''2'' and oc.id_empresa_compra not in (''23'',''187'') ';
+	v_where = ' where 1=1 and oc.estado = ''1'' and oc.id_tipo_documento = ''2'' AND (oc.id_empresa_compra IS NULL OR oc.id_empresa_compra NOT IN (''23'',''187'')) ';
 
-	/*If p_empresa<>'' Then
-	 v_where:=v_where||'And e.razon_social ilike ''%'||p_empresa||'%'' ';
-	End If;*/
-	
-	/*If p_fecha_desde<>'' Then
-	 v_where:=v_where||'And ivt.fecha_ingreso >= '''||p_fecha_desde||''' ';
-	End If;
+	IF p_empresa <> '' THEN
+	  v_where := v_where || ' AND oc.id_empresa_compra = ''' || p_empresa || ''' ';
+	END IF;
 
-	If p_fecha_hasta<>'' Then
-	 v_where:=v_where||'And ivt.fecha_ingreso <= '''||p_fecha_hasta||''' ';
-	End If;
+	IF p_persona <> '' THEN
+	  v_where := v_where || ' AND oc.id_persona = ''' || p_persona || ''' ';
+	END IF;
+		
+	IF p_fecha_desde <> '' THEN
+	  v_where := v_where || ' AND oc.fecha_orden_compra >= ''' || p_fecha_desde || ''' ';
+	END IF;
 
-	If p_estado_pago<>'' Then
-	 v_where:=v_where||'And ivttm.id_estado_pago = '''||p_estado_pago||''' ';
-	End If;*/
+	IF p_fecha_hasta <> '' THEN
+	  v_where := v_where || ' AND oc.fecha_orden_compra <= ''' || p_fecha_hasta || ''' ';
+	END IF;
+
+	IF p_estado_pago <> '' THEN
+	  v_where := v_where || ' AND ocp.id_estado_pago = ''' || p_estado_pago || ''' ';
+	END IF;
 	
 	EXECUTE ('SELECT count(1) '||v_tabla||v_where) INTO v_count;
 	v_col_count:=' ,'||v_count||' as TotalRows ';
