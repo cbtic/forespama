@@ -1558,9 +1558,9 @@ class OrdenCompraController extends Controller
 	public function send_pago(Request $request){
 		
         $orden_compra_id = $request->id_orden_compra;
-		$path = "img/pago_orden_compra/".$orden_compra_id;
+		$path = public_path("img/pago_orden_compra/".$orden_compra_id);
 		if (!is_dir($path)) {
-			mkdir($path);
+			mkdir($path, 0777, true);
 		}
 
 		if($request->img_foto!=""){
