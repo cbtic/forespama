@@ -1638,7 +1638,7 @@ class OrdenCompraController extends Controller
         $orden_compra_id = $request->id_orden_compra;
 		$path = "img/guia_orden_compra/".$orden_compra_id;
 		if (!is_dir($path)) {
-			mkdir($path);
+			mkdir($path, 0777, true);
 		}
 
 		if($request->img_foto!=""){
