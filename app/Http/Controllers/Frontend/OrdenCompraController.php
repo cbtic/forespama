@@ -1499,24 +1499,36 @@ class OrdenCompraController extends Controller
 			mkdir($path);
 		}
 
+        $filename = date("YmdHis") . substr((string)microtime(), 1, 6);
+		$type="";
+
     	$filepath = public_path('img/tmp_pago_orden_compra/');
-		move_uploaded_file($_FILES["file"]["tmp_name"], $filepath.$_FILES["file"]["name"]);
-		echo $_FILES['file']['name'];
+
+        $type=$this->extension($_FILES["file"]["name"]);
+		move_uploaded_file($_FILES["file"]["tmp_name"], $filepath . $filename.".".$type);
+
+		echo $filename.".".$type;
 	}
 
 	public function send_pago(Request $request){
 		
-		$path = "img/pago_orden_compra";
+        $orden_compra_id = $request->id_orden_compra;
+		$path = "img/pago_orden_compra/".$orden_compra_id;
 		if (!is_dir($path)) {
 			mkdir($path);
 		}
 
 		if($request->img_foto!=""){
 			$filepath_tmp = public_path('img/tmp_pago_orden_compra/');
-			$filepath_nuevo = public_path('img/pago_orden_compra/');
-			if (file_exists($filepath_tmp.$request->img_foto)) {
-				copy($filepath_tmp.$request->img_foto, $filepath_nuevo.$request->img_foto);
-			}
+			$filepath_nuevo = public_path('img/pago_orden_compra/'. $orden_compra_id . '/');
+             if (!is_dir($filepath_nuevo)) {
+                mkdir($filepath_nuevo, 0777, true);
+            }
+			if ($request->img_foto != "") {
+                if (file_exists($filepath_tmp . $request->img_foto)) {
+                    copy($filepath_tmp . $request->img_foto, $filepath_nuevo . $request->img_foto);
+                }
+            }
 		}
 
 		$id_user = Auth::user()->id;

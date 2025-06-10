@@ -1730,7 +1730,7 @@ class EntradaProductosController extends Controller
             $tablaMaestra_model = new TablaMaestra;
             $kardex_model = new Kardex;
 
-            $entrada_producto = $salida_producto_detalle_model->getDetalleProductoId($id_documento);
+            $entrada_producto = $salida_producto_detalle_model->getDetalleProductoIdGuia($id_documento);
             $marca = $marca_model->getMarcaAll();
             $producto = $producto_model->getProductoAll();
             $estado_bien = $tablaMaestra_model->getMaestroByTipo(56);

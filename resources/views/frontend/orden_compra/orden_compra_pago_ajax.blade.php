@@ -44,7 +44,7 @@ foreach($pago as $row){
     <td class="text-right"><?php echo $row->importe?></td>
 	<td class="text-right">
 	<?php if($row->foto_desembolso!=""){?>
-		<a href="/img/pago_orden_compra/<?php echo $row->foto_desembolso?>" target="_blank" class="btn btn-sm btn-info">Ver</a>
+		<a href="/img/pago_orden_compra/<?php echo $row->id_orden_compra?>/<?php echo $row->foto_desembolso?>" target="_blank" class="btn btn-sm btn-info">Ver</a>
 	<?php }?>
 	</td>
 	<td class="text-right">
@@ -53,7 +53,7 @@ foreach($pago as $row){
 </tr>
 <?php
 	}
-} 
+}
 ?>
 </tbody>
 
