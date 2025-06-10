@@ -76,7 +76,39 @@ function datatablenew() {
             {},
         ],
         "dom": '<"top">rt<"bottom"flpi><"clear">',
-        "fnDrawCallback": function(json) {
+        "fnDrawCallback": function(settings) {
+
+            let totalImporte = 0;
+            let totalAbono = 0;
+
+			settings.aoData.forEach(function(row) {
+				let importe = row._aData.total;
+				let importe_abono_pago = row._aData.abono_pago;
+				if (importe) {
+					totalImporte += parseFloat(importe);
+				}
+                if (importe_abono_pago) {
+					totalAbono += parseFloat(importe_abono_pago);
+				}
+			});
+
+			let footerHtml = '';
+            for (let i = 0; i < 13; i++) {
+                if (i === 10) {
+                    footerHtml += `<td><b>${totalImporte.toFixed(2)}</b></td>`;
+                } else if (i === 11) {
+                    footerHtml += `<td><b>${totalAbono.toFixed(2)}</b></td>`;
+                } else if (i === 0) {
+                    footerHtml += `<td><b>Total</b></td>`;
+                } else {
+                    footerHtml += `<td></td>`;
+                }
+            }
+
+            $('#tblPagoOrdenCompra tfoot tr').html(footerHtml);
+
+            //$('#tblOrdenCompra tfoot th.text-right').text(totalImporte.toFixed(2));
+
             $('[data-toggle="tooltip"]').tooltip();
         },
 
@@ -324,6 +356,8 @@ function datatablenew() {
 			$('#estado').val(id_estado);
 			
             cargarPagoOrdenCompra(idPagoOrdenCompra);
+            
+            cargarGuiaOrdenCompra(idPagoOrdenCompra);
 
         }
     });
@@ -336,14 +370,32 @@ function cargarPagoOrdenCompra(id){
 	$("#divOrdenCompra").html("");
 	
 	$.ajax({
-			url: "/orden_compra/cargar_pago_orden_compra/"+id,
-			type: "GET",
-			success: function (result) {  
-					//$("#tblCubicaje tbody").html(result);
-					$("#divOrdenCompra").html(result);
-					$("#id_orden_compra").val(id);
-                    $('[data-toggle="tooltip"]').tooltip();
-			}
+        url: "/orden_compra/cargar_pago_orden_compra/"+id,
+        type: "GET",
+        success: function (result) {  
+                //$("#tblCubicaje tbody").html(result);
+                $("#divOrdenCompra").html(result);
+                $("#id_orden_compra").val(id);
+                $('[data-toggle="tooltip"]').tooltip();
+        }
+	});
+	
+}
+
+function cargarGuiaOrdenCompra(id){
+
+	//$("#tblCubicaje tbody").html("");
+	$("#divOrdenCompraGuia").html("");
+	
+	$.ajax({
+        url: "/orden_compra/cargar_guia_orden_compra/"+id,
+        type: "GET",
+        success: function (result) {  
+                //$("#tblCubicaje tbody").html(result);
+                $("#divOrdenCompraGuia").html(result);
+                $("#id_orden_compra").val(id);
+                $('[data-toggle="tooltip"]').tooltip();
+        }
 	});
 	
 }
@@ -390,6 +442,31 @@ function modalPago(id){
 			url: "/orden_compra/modal_pago/"+id+"/"+id_orden_compra,
 			type: "GET",
 			success: function (result) {  
+					$("#diveditpregOpc").html(result);
+					$('#openOverlayOpc').modal('show');
+			}
+	});
+
+}
+
+function modalGuia(id){
+	
+	$(".modal-dialog").css("width","55%");
+	$('#openOverlayOpc .modal-body').css('height', 'auto');
+	
+	var id_orden_compra = $('#id_orden_compra').val();
+	
+	var msg = "";
+
+	if(msg!=""){
+        bootbox.alert(msg);
+        return false;
+    }
+	
+	$.ajax({
+			url: "/orden_compra/modal_guia/"+id+"/"+id_orden_compra,
+			type: "GET",
+			success: function (result) {
 					$("#diveditpregOpc").html(result);
 					$('#openOverlayOpc').modal('show');
 			}

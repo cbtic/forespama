@@ -660,3 +660,7 @@ Route::get('requerimiento/modal_control_requerimiento/{id}', [RequerimientoContr
 Route::get('requerimiento/cargar_detalle_control/{id}', [RequerimientoController::class, 'cargar_detalle_control'])->name('requerimiento.cargar_detalle_control');
 Route::get('requerimiento/cargar_detalle_abierto/{id}', [RequerimientoController::class, 'cargar_detalle_abierto'])->name('requerimiento.cargar_detalle_abierto');
 Route::post('requerimiento/send_genera_requerimiento', [RequerimientoController::class, 'send_genera_requerimiento'])->name('requerimiento.send_genera_requerimiento');
+Route::get('orden_compra/cargar_guia_orden_compra/{id}', [OrdenCompraController::class, 'cargar_guia_orden_compra'])->name('orden_compra.cargar_guia_orden_compra');
+Route::get('orden_compra/modal_guia/{id}/{id_orden_compra}', [OrdenCompraController::class, 'modal_guia'])->name('orden_compra.modal_guia');
+Route::post('orden_compra/upload_guia', [OrdenCompraController::class, 'upload_guia'])->name('orden_compra.upload_guia');
+Route::post('orden_compra/send_orden_compra_guia', [OrdenCompraController::class, 'send_orden_compra_guia'])->name('orden_compra.send_orden_compra_guia');

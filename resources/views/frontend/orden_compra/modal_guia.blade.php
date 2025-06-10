@@ -127,7 +127,7 @@ $(document).ready(function() {
 });
 
 $(document).ready(function() {
-    $(".upload").on('click', function() {
+    $(".upload2").on('click', function() {
         var formData = new FormData();
         var files = $('#image')[0].files[0];
         formData.append('file',files);
@@ -135,14 +135,14 @@ $(document).ready(function() {
 			headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
-            url: "/orden_compra/upload_pago",
+            url: "/orden_compra/upload_guia",
             type: 'post',
             data: formData,
             contentType: false,
             processData: false,
             success: function(response) {
                 if (response != 0) {
-                    $("#img_ruta").attr("src", "/img/tmp_pago_orden_compra/"+response);
+                    $("#img_ruta").attr("src", "/img/tmp_guia_orden_compra/"+response);
 					$("#img_foto").val(response);
                 } else {
                     alert('Formato de imagen incorrecto.');
@@ -179,54 +179,17 @@ $(document).ready(function() {
 
 });
 
-function validacion(){
-    
-    var msg = "";
-    var cobservaciones=$("#frmComentar #cobservaciones").val();
-    
-    if(cobservaciones==""){msg+="Debe ingresar una Observacion <br>";}
-    
-    if(msg!=""){
-        bootbox.alert(msg); 
-        return false;
-    }
-}
-
-function validar_tipo(){
-
-	var id_tipodesembolso = $("#id_tipodesembolso").val();
-	$("#divCheque").hide();
-	$("#divNumeroOperacion").hide();
-	if(id_tipodesembolso==2){
-		$("#divCheque").show();
-	}
-	if(id_tipodesembolso==3){
-		$("#divNumeroOperacion").show();
-	}
-
-}
-
 function fn_save(){
     
 	var _token = $('#_token').val();
 	var id_modal = $('#id_modal').val();
 	var id_orden_compra_modal = $('#id_orden_compra_modal').val();
-	var importe = $('#importe').val();
-	var fecha = $('#fecha').val();
 	var observacion = $('#observacion').val();
-	var id_tipodesembolso = $('#id_tipodesembolso').val();
-	var nro_guia = $('#nro_guia').val();
-    var nro_factura = $('#nro_factura').val();
-	var nro_cheque = $('#nro_cheque').val();
 	var img_foto = $('#img_foto').val();
-	var id_banco = $('#id_banco').val();
-	var nro_operacion = $('#nro_operacion').val();
 
 	var msg = "";
     if(id_orden_compra_modal == "")msg += "Debe ingresar el numero de documento <br>";
-    if(importe==""){msg+="Debe ingresar un Importe<br>";}
-    if(fecha==""){msg+="Debe ingresar una Fecha<br>";}
-    
+
 	if(msg!=""){
         bootbox.alert(msg); 
         return false;
@@ -241,11 +204,10 @@ function fn_save(){
 	$("#btnGuardar").prop('disabled', true);
 	
     $.ajax({
-			url: "/orden_compra/send_pago",
+			url: "/orden_compra/send_orden_compra_guia",
             type: "POST",
             data : {_token:_token,
-					id:id_modal, id_orden_compra:id_orden_compra_modal, importe:importe, fecha:fecha,observacion:observacion, id_tipodesembolso:id_tipodesembolso,
-					nro_guia:nro_guia, nro_factura:nro_factura, nro_cheque:nro_cheque, img_foto:img_foto, id_banco:id_banco, nro_operacion:nro_operacion},
+					id:id_modal, id_orden_compra:id_orden_compra_modal, observacion:observacion, img_foto:img_foto},
             success: function (result) {
 				/*
 				$('.loader').hide();
@@ -276,7 +238,7 @@ function fn_save(){
 		<div class="card">
 			
 			<div class="card-header" style="padding:5px!important;padding-left:20px!important">
-				Lista de Pagos
+				Lista de Guias
 			</div>
 			
             <div class="card-body">
@@ -285,146 +247,67 @@ function fn_save(){
 
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding-top:10px">
 					
-					<input type="hidden" name="_token" value="{{ csrf_token() }}">
-					<input type="hidden" name="id_orden_compra_modal" id="id_orden_compra_modal" value="<?php echo $id_orden_compra?>">
-					<input type="hidden" name="id_modal" id="id_modal" value="<?php echo $id?>">
-					<div class="row">
-						
+				<input type="hidden" name="_token" value="{{ csrf_token() }}">
+				<input type="hidden" name="id_orden_compra_modal" id="id_orden_compra_modal" value="<?php echo $id_orden_compra?>">
+				<input type="hidden" name="id_modal" id="id_modal" value="<?php echo $id?>">
+				<div class="row">
+					
 					<div class="col-lg-8">
 						<div class="row">
-
-						<div class="col-lg-3">
-							<div class="form-group">
-								<label class="control-label">Fecha</label>
-								<input id="fecha" name="fecha" class="form-control form-control-sm"  value="<?php if($id==0){echo $fecha_actual;}else{echo date('d-m-Y',strtotime($orden_compra_pago->fecha));}?>" type="text">
-							</div>
-						</div>
-
-						<div class="col-lg-4">
-							<div class="form-group">
-								<label class="control-label">Forma de Pago</label>
-								<select name="id_tipodesembolso" id="id_tipodesembolso" onchange="validar_tipo()" class="form-control form-control-sm" onChange="">
-									<?php foreach($tipo_desembolso as $row){?>
-									<option <?php if($row->codigo==$orden_compra_pago->id_tipo_desembolso)echo "selected='selected'";?> value="<?php echo $row->codigo?>"><?php echo $row->denominacion?></option>
-									<?php }?>
-								</select>
-							</div>
-						</div>
-						
-						<div class="col-lg-4" id="divCheque" <?php if($orden_compra_pago->id_tipodesembolso!=2 || $id==0)echo "style='display:none'"?>>
-							<div class="form-group">
-								<label class="control-label">Cheque</label>
-								<input id="nro_cheque" name="nro_cheque" class="form-control form-control-sm"  value="<?php echo $orden_compra_pago->nro_cheque?>" type="number">
-							</div>
-						</div>
-
-						<div class="col-lg-4" id="divNumeroOperacion" <?php if($orden_compra_pago->id_tipodesembolso!=3 || $id==0)echo "style='display:none'"?>>
-							<div class="form-group">
-								<label class="control-label">N&uacute;mero Operaci&oacute;n</label>
-								<input id="nro_operacion" name="nro_operacion" class="form-control form-control-sm"  value="<?php echo $orden_compra_pago->nro_operacion?>" type="number">
-							</div>
-						</div>
-						
-					</div>
-
-					<div class="row">
 						
 						<div class="col-lg-4">
 							<div class="form-group">
-								<label class="control-label">Importe</label>
-								<input id="importe" name="importe" class="form-control form-control-sm"  value="<?php if($id==0){echo $importe;}else{echo $orden_compra_pago->importe;}?>" type="number">
+								<label class="control-label">Serie - N&uacute;mero</label>
+								<input id="nro_operacion" name="nro_operacion" class="form-control form-control-sm"  value="<?php echo $guia_interna->guia_serie.'-'.$guia_interna->guia_numero ?>" readonly>
 							</div>
 						</div>
-
-						<div class="col-lg-4">
-							<div class="form-group">
-								<label class="control-label">Banco</label>
-								<select name="id_banco" id="id_banco" onchange="" class="form-control form-control-sm" onChange="">
-									<option value="">--Seleccionar--</option>
-									<?php foreach($banco as $row){?>
-									<option <?php if($row->codigo==$orden_compra_pago->id_banco)echo "selected='selected'";?> value="<?php echo $row->codigo?>"><?php echo $row->denominacion?></option>
-									<?php }?>
-								</select>
-							</div>
-						</div>
-
-						<!--<div class="col-lg-3">
-							<div class="form-group">
-								<label class="control-label">Guia</label>
-								<input id="nro_guia" name="nro_guia" class="form-control form-control-sm"  value="<?php //echo $orden_compra_pago->nro_guia?>" type="text">
-							</div>
-						</div>
-
-						<div class="col-lg-3">
-							<div class="form-group">
-								<label class="control-label">Factura</label>
-								<input id="nro_factura" name="nro_factura" class="form-control form-control-sm"  value="<?php //echo $orden_compra_pago->nro_factura?>" type="text">
-							</div>
-						</div>-->
-						
-					</div>
-					
-					<div class="row">
 						
 						<div class="col-lg-12">
 							<div class="form-group">
 								<label class="control-label">Observaci&oacute;n</label>
-								<textarea id="observacion" name="observacion" class="form-control form-control-sm"><?php echo $orden_compra_pago->observacion?></textarea>
+								<textarea id="observacion" name="observacion" class="form-control form-control-sm"><?php echo $guia_interna->observacion_recepcion?></textarea>
 							</div>
 						</div>
-						
 					</div>
-						
-					</div>
+				</div>
 
-					<div class="col-lg-4">
-							
-							<div class="row">
+				<div class="col-lg-4">
 						
-								<div class="col-lg-12">
-										
+					<div class="row">
+				
+						<div class="col-lg-12">
+						
+						<div class="form-group">
 								
-								<div class="form-group">
-										
-										<span class="btn btn-sm btn-warning btn-file">
-											Examinar <input id="image" name="image" type="file" />
-										</span>
-										<input type="button" class="btn btn-sm btn-primary upload" value="Subir" style="margin-left:10px">
-										
-										<?php
-											$url_foto = "/img/logo_forestalpama.jpg";
-											if ($orden_compra_pago->foto_desembolso != "") $url_foto = "/img/pago_orden_compra/" . $id_orden_compra . "/" . $orden_compra_pago->foto_desembolso;
+								<span class="btn btn-sm btn-warning btn-file">
+									Examinar <input id="image" name="image" type="file" />
+								</span>
+								<input type="button" class="btn btn-sm btn-primary upload2" value="Subir" style="margin-left:10px">
+								
+								<?php
+									$url_foto = "/img/logo_forestalpama.jpg";
+									if ($guia_interna->ruta_imagen != "") $url_foto = "/img/guia_orden_compra/" . $id_orden_compra . "/" . $guia_interna->ruta_imagen;
 
-											$foto = "";
-											if ($orden_compra_pago->foto_desembolso != "") $foto = $orden_compra_pago->foto_desembolso;
-										?>
+									$foto = "";
+									if ($guia_interna->ruta_imagen != "") $foto = $guia_interna->ruta_imagen;
+								?>
 
-										<img src="<?php echo $url_foto ?>" id="img_ruta" width="240px" height="150px" alt="" style="margin-top:10px" />
-										<input type="hidden" id="img_foto" name="img_foto" value="<?php echo $foto ?>" />
-									</div>	
-
-
-								</div>
+								<img src="<?php echo $url_foto ?>" id="img_ruta" width="240px" height="150px" alt="" style="margin-top:10px" />
+								<input type="hidden" id="img_foto" name="img_foto" value="<?php echo $foto ?>" />
 							</div>
-					</div>
-
-
-					</div>
-
-					
-					
-					<div style="margin-top:10px" class="row form-group">
-						<div class="col-sm-12 controls">
-							<div class="btn-group btn-group-sm" role="group" aria-label="Log Viewer Actions" style="float:right">
-								<!--<a href="javascript:void(0)" id="btnGuardar" onClick="fn_save()" class="btn btn-sm btn-success">Guardar</a>-->
-								<input class="btn btn-sm btn-success" value="Guardar" type="button" id="btnGuardar" onClick="fn_save()">
-								
-								</div>
-							
 						</div>
-					</div> 
-					
-              </div>
+					</div>
+				</div>
+			</div>
+
+			<div style="margin-top:10px" class="row form-group">
+				<div class="col-sm-12 controls">
+					<div class="btn-group btn-group-sm" role="group" aria-label="Log Viewer Actions" style="float:right">
+						<input class="btn btn-sm btn-success" value="Guardar" type="button" id="btnGuardar" onClick="fn_save()">
+					</div>
+				</div>
+			</div>
+		</div>
 			  
 			  
 			  

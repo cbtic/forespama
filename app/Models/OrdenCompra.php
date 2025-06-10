@@ -433,6 +433,20 @@ class OrdenCompra extends Model
         return $data;
     }
 
+    function getOrdenCompraGuiaById($id){
+
+        $cad = "select gi.id, gi.fecha_traslado, gi.guia_serie ||'-'|| gi.guia_numero serie_numero, gi.ruta_imagen, gi.observacion_recepcion, oc.id id_orden_compra
+        from guia_internas gi 
+        left join salida_productos sp on gi.numero_documento::int = sp.id 
+        left join orden_compras oc on sp.id_orden_compra = oc.id 
+        where oc.id = '".$id."'
+        and gi.estado = '1'
+        order by 1 desc";
+
+		$data = DB::select($cad);
+        return $data;
+    }
+
     function fecha_actual(){
 		
 		$cad = "select to_char(current_date,'dd-mm-yyyy') as fecha_actual";

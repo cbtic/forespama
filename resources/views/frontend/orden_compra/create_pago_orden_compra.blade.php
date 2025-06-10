@@ -448,194 +448,174 @@ label.form-control-sm{
     </ol>
     -->
 
-<div class="justify-content-center">
-    <!--<div class="container-fluid">-->
-	
-	<a href="javascript:void(0)" onclick="ocultar_solicitud()"><i class="fa fa-bars fa-lg" style="position:absolute;right:50%;top:-24px;color:#FFFFFF"></i></a>
-	
+<div class="container-fluid mt-4">
+    <a href="javascript:void(0)" onclick="ocultar_solicitud()" style="position:absolute; right:50%; top:-24px; color:#FFFFFF">
+        <i class="fa fa-bars fa-lg"></i>
+    </a>
+
     <div class="card">
-
         <div class="card-body">
-
             <form class="form-horizontal" method="post" action="" id="frmPagoOrdenCompra" autocomplete="off" enctype="multipart/form-data">
-				<!--
+                <input type="hidden" name="flag_ocultar" id="flag_ocultar" value="0">
+                <input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
+                <input type="hidden" name="id_orden_compra" id="id_orden_compra" value="0">
+
                 <div class="row">
-                    <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12" style="margin-top:15px">
-                        <h4 class="card-title mb-0 text-primary" style="font-size:22px">
-                            Registro Solicitudes
-                        </h4>
+                    <!-- Panel principal (izquierdo) -->
+                    <div class="col-lg-8 mb-4">
+                        <div class="card h-100">
+                            <div class="divlogoimpresora" style="display:none;">
+                                <img class="logoimpresora" src="/img/logo_forestalpama.jpg" align="right">
+                            </div>
+
+                            <div class="card-header">
+                                <strong>Pagos Orden Compra</strong>
+                            </div>
+
+                            <div class="card-body">
+                                <div class="row" style="padding:20px 20px 0px 20px;">
+                                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                                        <select name="empresa_bus" id="empresa_bus" class="form-control form-control-sm">
+                                            <option value="">--Seleccionar Empresa--</option>
+                                            <?php foreach ($empresa as $row) { ?>
+                                                <option value="<?php echo $row->id ?>"><?php echo $row->razon_social ?></option>
+                                            <?php } ?>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                                        <select name="persona_bus" id="persona_bus" class="form-control form-control-sm">
+                                            <option value="">--Seleccionar Persona--</option>
+                                            <?php foreach ($persona as $row) { ?>
+                                                <option value="<?php echo $row->id ?>"><?php echo $row->nombres . ' ' . $row->apellido_paterno . ' ' . $row->apellido_materno ?></option>
+                                            <?php } ?>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+                                        <input class="form-control form-control-sm" id="fecha_inicio_bus" name="fecha_inicio_bus" placeholder="Fecha Inicio">
+                                    </div>
+
+                                    <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+                                        <input class="form-control form-control-sm" id="fecha_fin_bus" name="fecha_fin_bus" placeholder="Fecha Fin">
+                                    </div>
+
+                                    <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+                                        <select name="estado_pago_bus" id="estado_pago_bus" class="form-control form-control-sm">
+                                            <option value="">--Estado Pago--</option>
+                                            <?php foreach ($estado_pago as $row) { ?>
+                                                <option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
+                                            <?php } ?>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12" style="padding-right:0px">
+                                        <button type="button" class="btn btn-warning btn-sm me-2" id="btnBuscar">Buscar</button>
+                                        <button type="button" class="btn btn-success btn-sm me-2" id="btnPagar" onclick="modalPago(0)">Pagar</button>
+                                        <button type="button" class="btn btn-secondary btn-sm" id="btnDescargar">Descargar</button>
+                                    </div>
+                                </div>
+
+                                <div class="table-responsive mt-3">
+                                    <table id="tblPagoOrdenCompra" class="table table-hover table-sm">
+                                        <thead>
+                                            <tr style="font-size:13px">
+                                                <th>N°</th>
+                                                <th>Fecha</th>
+                                                <th>Cliente</th>
+                                                <th>Vendedor</th>
+                                                <th>Tipo Producto</th>
+                                                <th>N° OC</th>
+                                                <th>Fecha Factura</th>
+                                                <th>N° Factura</th>
+                                                <th>Sub Total</th>
+                                                <th>IGV</th>
+                                                <th>Total</th>
+                                                <th>Abono</th>
+                                                <th>Forma Pago</th>
+                                                <th>Fecha Vencimiento</th>
+                                                <th>Guía</th>
+                                                <th>Estado Pago</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody style="font-size:13px">
+                                        </tbody>
+                                        <tfoot>
+                                            <tr style="font-size:13px">
+                                                <td colspan="10"><strong>Total:</strong></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
-				-->
-                <div class="row justify-content-center" style="margin-top:15px">
-					
-                    <input type="hidden" name="flag_ocultar" id="flag_ocultar" value="0">
-					
-					<div class="col col-sm-12 align-self-center">
 
-                        <input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
-						<input type="hidden" name="id_orden_compra" id="id_orden_compra" value="0">
-						
-					<div class="row" style="padding-top:15px">
+                    <!-- Panel derecho -->
+                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 d-flex flex-column gap-3">
 
-						<div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
-
-						<div class="card">
-						
-						<div class="divlogoimpresora" style="display:none;">
-							<img class="logoimpresora" src="/img/logo_forestalpama.jpg" align="right">
-						</div>
-						
-						<div class="card-header">
-							<strong>Pagos Orden Compra</strong>
-						</div>
-							
-						<div id="divTablaIngreso" class="row col align-self-center" style="padding:10px 20px 10px 20px;">
-					
-							<!--<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-								<input class="form-control form-control-sm" id="ruc_bus" name="ruc_bus" placeholder="Ruc">
+						<!-- Primer panel: Pagos -->
+						<div class="card flex-fill">
+							<div class="card-header">
+								<strong>Pagos</strong>
 							</div>
-							
-							<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-								<input class="form-control form-control-sm" id="empresa_bus" name="empresa_bus" placeholder="Empresa">
-							</div>-->
-
-							<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-								<select name="empresa_bus" id="empresa_bus" class="form-control form-control-sm">
-									<option value="">--Seleccionar Empresa--</option>
-									<?php
-									foreach ($empresa as $row){?>
-										<option value="<?php echo $row->id ?>"><?php echo $row->razon_social ?></option>
-										<?php 
-									}
-									?>
-								</select>
-							</div>
-
-							<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-								<select name="persona_bus" id="persona_bus" class="form-control form-control-sm">
-									<option value="">--Seleccionar Persona--</option>
-									<?php
-									foreach ($persona as $row){?>
-										<option value="<?php echo $row->id ?>"><?php echo $row->nombres.' '.$row->apellido_paterno.' '.$row->apellido_materno ?></option>
-										<?php 
-									}
-									?>
-								</select>
-							</div>
-
-							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-								<input class="form-control form-control-sm" id="fecha_inicio_bus" name="fecha_inicio_bus" placeholder="Fecha Inicio">
-							</div>
-
-							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-								<input class="form-control form-control-sm" id="fecha_fin_bus" name="fecha_fin_bus" placeholder="Fecha Fin">
-							</div>
-							
-							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-								<select name="estado_pago_bus" id="estado_pago_bus" class="form-control form-control-sm">
-									<option value="">--Estado Pago--</option>
-									<?php
-									foreach ($estado_pago as $row){?>
-										<option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
-										<?php 
-									}
-									?>
-								</select>
-							</div>
-							
-							<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-								<input class="btn btn-warning btn-sm pull-rigth" value="Buscar" type="button" id="btnBuscar" />
-								<input class="btn btn-success btn-sm pull-rigth" value="Pagar" type="button" id="btnPagar" onclick="modalPago(0)"  />
-								<input class="btn btn-secondary btn-sm pull-rigth" value="Descargar" type="button" id="btnDescargar" /> 
-							</div>
-							
-						</div>
-						
-						<div class="card-body">
-							
-							<div class="table-responsive">
-							<!--table-hover-grid-->
-							<table id="tblPagoOrdenCompra" class="table table-hover table-sm">
-							<thead>
-							<tr style="font-size:13px">
-								<th>N°</th>
-								<th>Fecha</th>
-								<th>Cliente</th>
-								<th>Vendedor</th>
-								<th>Tipo Producto</th>
-								<th>N&uacute;mero OC</th>
-								<th>Fecha Factura</th>
-								<th>N&uacute;mero Factura</th>
-								<th>Sub Total</th>
-								<th>IGV</th>
-								<th>Total</th>
-								<th>Abono Pago</th>
-								<!--<th>Banco</th>-->
-								<th>Forma Pago</th>
-								<th>Fecha Vencimiento</th>
-								<th>Guia</th>
-								<th>Estado Pago</th>
-							</tr>
-							</thead>
-							<tbody style="font-size:13px">
-							</tbody>
-							</table>
-							
+							<div class="card-body">
+								<div id="divOrdenCompra" class="table-responsive overflow-auto" style="max-height: 240px;">
+									<table id="tblOrdenCompra" class="table table-hover table-sm">
+										<thead>
+											<tr style="font-size:13px">
+												<th width="2%">Id</th>
+												<th width="10%">Fecha</th>
+												<th width="10%">Tipo Doc</th>
+												<th width="10%">Importe</th>
+												<th width="10%">Archivo</th>
+											</tr>
+										</thead>
+										<tbody>
+										</tbody>
+									</table>
+								</div>
 							</div>
 						</div>
-						
-						
-                    </div>
-					
-					
-                </div>
-				
-				<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
 
-				<div class="card">
-						<div class="card-header">
-							<strong>
-								Pagos
-							</strong>
-						</div>
-
-						<div class="card-body">
-							
-							<div id="divOrdenCompra" class="table-responsive overflow-auto" style="max-height: 500px">
-								<table id="tblOrdenCompra" class="table table-hover table-sm">
-									<thead>
-										<tr style="font-size:13px">
-											<th width="2%">Id</th>
-											<th width="10%">Fecha</th>
-											<th width="10%">Tipo Doc</th>
-											<!--<th width="10%">Guia</th>
-											<th width="10%">Factura</th>-->
-											<th width="10%">Importe</th>
-											<th width="10%">Archivo</th>
-										</tr>
-									</thead>
-									<tbody>
-
-									</tbody>
-								</table>
+						<!-- Segundo panel: Puedes personalizarlo como "Resumen", "Notas", etc. -->
+						<div class="card flex-fill">
+							<div class="card-header">
+								<strong>Guias</strong>
 							</div>
-							
+							<div class="card-body">
+								<div id="divOrdenCompraGuia" class="table-responsive overflow-auto" style="max-height: 240px;">
+									<table id="tblOrdenCompraGuia" class="table table-hover table-sm">
+										<thead>
+											<tr style="font-size:13px">
+												<th width="2%">Id</th>
+												<th width="10%">Fecha Traslado</th>
+												<th width="10%">Serie-N&uacute;mero</th>
+												<th width="10%">Archivo</th>
+											</tr>
+										</thead>
+										<tbody>
+										</tbody>
+									</table>
+								</div>
+							</div>
 						</div>
+
 					</div>
 
-				</div>
-				
-				<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">  
-				</div>
+
+                </div> <!-- fin row -->
+            </form>
         </div>
-        <!--col-->
-
-        </form>
-
-        
-
     </div>
+</div>
+
     <!--row-->
     @endsection
 

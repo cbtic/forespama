@@ -22,6 +22,7 @@ use App\Models\Ubigeo;
 use App\Models\Persona;
 use App\Models\OrdenCompraContactoEntrega;
 use App\Models\OrdenCompraPago;
+use App\Models\GuiaInterna;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Auth;
 use Carbon\Carbon;
@@ -1483,12 +1484,38 @@ class OrdenCompraController extends Controller
 	
 	}
 
+    public function modal_guia($id, $id_orden_compra){
+		
+		$tablaMaestra_model = new TablaMaestra;
+
+		if($id==0){
+			$guia_interna = new GuiaInterna;
+		}else{
+			$guia_interna = GuiaInterna::find($id);
+		}
+
+        //dd($guia_interna->guia_serie);exit();
+
+		return view('frontend.orden_compra.modal_guia',compact('id','guia_interna','id_orden_compra'));
+	
+	}
+
     public function cargar_pago_orden_compra($id){
 		 
 		$orden_compra_model = new OrdenCompra;
         $pago = $orden_compra_model->getOrdenCompraPagoById($id);
 		
         return view('frontend.orden_compra.orden_compra_pago_ajax',compact('pago'));
+		
+    }
+
+    public function cargar_guia_orden_compra($id){
+		
+        //dd("ok");exit();
+		$orden_compra_model = new OrdenCompra;
+        $guia = $orden_compra_model->getOrdenCompraGuiaById($id);
+		
+        return view('frontend.orden_compra.orden_compra_guia_ajax',compact('guia'));
 		
     }
 
@@ -1503,6 +1530,24 @@ class OrdenCompraController extends Controller
 		$type="";
 
     	$filepath = public_path('img/tmp_pago_orden_compra/');
+
+        $type=$this->extension($_FILES["file"]["name"]);
+		move_uploaded_file($_FILES["file"]["tmp_name"], $filepath . $filename.".".$type);
+
+		echo $filename.".".$type;
+	}
+
+    public function upload_guia(Request $request){
+
+		$path = "img/tmp_guia_orden_compra";
+		if (!is_dir($path)) {
+			mkdir($path);
+		}
+
+        $filename = date("YmdHis") . substr((string)microtime(), 1, 6);
+		$type="";
+
+    	$filepath = public_path('img/tmp_guia_orden_compra/');
 
         $type=$this->extension($_FILES["file"]["name"]);
 		move_uploaded_file($_FILES["file"]["tmp_name"], $filepath . $filename.".".$type);
@@ -1586,6 +1631,34 @@ class OrdenCompraController extends Controller
             $pago->id_estado_pago=$id_estado_pago;
             $pago->save();
         }
+    }
+
+    public function send_orden_compra_guia(Request $request){
+		
+        $orden_compra_id = $request->id_orden_compra;
+		$path = "img/guia_orden_compra/".$orden_compra_id;
+		if (!is_dir($path)) {
+			mkdir($path);
+		}
+
+		if($request->img_foto!=""){
+			$filepath_tmp = public_path('img/tmp_guia_orden_compra/');
+			$filepath_nuevo = public_path('img/guia_orden_compra/'. $orden_compra_id . '/');
+             if (!is_dir($filepath_nuevo)) {
+                mkdir($filepath_nuevo, 0777, true);
+            }
+			if ($request->img_foto != "") {
+                if (file_exists($filepath_tmp . $request->img_foto)) {
+                    copy($filepath_tmp . $request->img_foto, $filepath_nuevo . $request->img_foto);
+                }
+            }
+		}
+
+		$guia_interna = GuiaInterna::find($request->id);
+        $guia_interna->ruta_imagen = $request->img_foto;
+        $guia_interna->observacion_recepcion = $request->observacion;
+		$guia_interna->save();
+
     }
 
     public function create_reporte_comercializacion_solicitado_tienda(){

@@ -1,14 +1,12 @@
 <table id="tblOrdenCompra" class="table table-hover table-sm">
 <thead>
 	<tr style="font-size:13px">
-		<th width="2%">Id</th>
-		<th width="10%">Fecha</th>
-		<th width="10%">Tipo Doc</th>
-		<!--<th width="10%">Guia</th>
-		<th width="10%">Factura</th>-->
-		<th width="10%">Importe</th>
-		<th width="10%">Archivo</th>
-		<th width="10%">Editar</th>
+		<th width="10%">Id</th>
+		<th width="20%">Fecha</th>
+		<th width="20%">Tipo Doc</th>
+		<th width="20%">Importe</th>
+		<th width="15%">Archivo</th>
+		<th width="15%">Editar</th>
 	</tr>
 </thead>
 <tbody>
@@ -42,12 +40,12 @@ foreach($pago as $row){
 	<!--<td class="text-left"><?php //echo $row->nro_guia?></td>
 	<td class="text-left"><?php //echo $row->nro_factura?></td>-->
     <td class="text-right"><?php echo $row->importe?></td>
-	<td class="text-right">
+	<td class="text-left">
 	<?php if($row->foto_desembolso!=""){?>
 		<a href="/img/pago_orden_compra/<?php echo $row->id_orden_compra?>/<?php echo $row->foto_desembolso?>" target="_blank" class="btn btn-sm btn-info">Ver</a>
 	<?php }?>
 	</td>
-	<td class="text-right">
+	<td class="text-left">
 		<button style="font-size:12px" type="button" class="btn btn-sm btn-warning" data-toggle="modal" onclick="modalPago(<?php echo $row->id?>,'')" >Editar</button>
 	</td>
 </tr>
