@@ -215,8 +215,6 @@ $(document).ready(function() {
                         <td class="td" style ="text-align: left; width: 5%; height:25px; border-bottom: 1px solid black;"><b>ESTADO BIEN</b></td>
                         <td class="td" style ="text-align: left; width: 5%; height:25px; border-bottom: 1px solid black;"><b>UNIDAD</b></td>
                         <td class="td" style ="text-align: left; width: 5%; height:25px; border-bottom: 1px solid black;"><b>CANT. INGRESO</b></td>
-                        <td class="td" style ="text-align: left; width: 5%; height:25px; border-bottom: 1px solid black;"><b>CANT. COMPRA</b></td>
-                        <td class="td" style ="text-align: left; width: 5%; height:25px; border-bottom: 1px solid black;"><b>CANT. PENDIENTE</b></td>
                         <td class="td" style ="text-align: left; width: 5%; height:25px; border-bottom: 1px solid black;"><b>STOCK ACTUAL</b></td>
                         <td class="td" style ="text-align: left; width: 5%; height:25px; border-bottom: 1px solid black;"><b>PRECIO UNITARIO</b></td>
                         <td class="td" style ="text-align: left; width: 5%; height:25px; border-bottom: 1px solid black;"><b>SUB TOTAL</b></td>
@@ -237,8 +235,6 @@ $(document).ready(function() {
                             <td class="td" style ="text-align: left; width: 5%; height:25px"><?php echo $r->codigo;?></td>
                             <td class="td" style ="text-align: left; width: 5%; height:25px"><?php echo $r->estado_bien;?></td>
                             <td class="td" style ="text-align: left; width: 5%; height:25px"><?php echo $r->unidad_medida;?></td>
-                            <td class="td" style ="text-align: left; width: 5%; height:25px"><?php echo $r->cantidad;?></td>
-                            <td class="td" style ="text-align: left; width: 5%; height:25px"><?php echo $r->cantidad;?></td>
                             <td class="td" style ="text-align: left; width: 5%; height:25px"><?php echo $r->cantidad;?></td>
                             <td class="td" style ="text-align: left; width: 5%; height:25px">
                                 {{ isset($producto_stock[$r->id_producto]->saldos_cantidad) ? $producto_stock[$r->id_producto]->saldos_cantidad : 0 }}

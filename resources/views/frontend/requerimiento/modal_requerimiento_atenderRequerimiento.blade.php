@@ -290,8 +290,7 @@ $.ajax({
                 const row = `
                     <tr>
                         <td>${n}</td>
-                        <td><input name="id_requerimiento_detalle[]" id="id_requerimiento_detalle${n}" class="form-control form-control-sm" value="${requerimiento.id}" type="hidden"><input name="item[]" id="item${n}" class="form-control form-control-sm" value="${requerimiento.item}" type="text" readonly></td>
-                        <td style="width: 450px !important;display:block"><input name="descripcion[]" id="descripcion${n}" class="form-control form-control-sm" value="${requerimiento.id_producto}" type="hidden"><select name="descripcion_[]" id="descripcion_${n}" class="form-control form-control-sm" onChange="verificarProductoSeleccionado(this, ${n});" disabled>${productoOptions}</select></td>
+                        <td style="width: 450px !important;display:block"><input name="id_requerimiento_detalle[]" id="id_requerimiento_detalle${n}" class="form-control form-control-sm" value="${requerimiento.id}" type="hidden"><input name="descripcion[]" id="descripcion${n}" class="form-control form-control-sm" value="${requerimiento.id_producto}" type="hidden"><select name="descripcion_[]" id="descripcion_${n}" class="form-control form-control-sm" onChange="verificarProductoSeleccionado(this, ${n});" disabled>${productoOptions}</select></td>
                         <td><input name="marca[]" id="marca${n}" class="form-control form-control-sm" value="${requerimiento.id_marca}" type="hidden"><select name="marca_[]" id="marca_${n}" class="form-control form-control-sm" disabled>${marcaOptions}</select></td>
                         <td><input name="cod_interno[]" id="cod_interno${n}" class="form-control form-control-sm" value="${requerimiento.codigo}" type="text" readonly></td>
                         <td><input name="estado_bien[]" id="estado_bien${n}" class="form-control form-control-sm" value="${requerimiento.id_estado_producto}" type="hidden"><select name="estado_bien_[]" id="estado_bien_${n}" class="form-control form-control-sm" onChange="" disabled>${estadoBienOptions}</select></td>
@@ -780,7 +779,6 @@ function cambiarOrigen(){
 							<thead>
 							<tr style="font-size:13px">
 								<th>#</th>
-								<th>Item</th>
 								<th>Descripci&oacute;n</th>
 								<th>Marca</th>
                                 <th>COD. INT.</th>

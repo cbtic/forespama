@@ -305,14 +305,14 @@ $.ajax({
                 const row = `
                     <tr>
                         <td>${n}</td>
-                        <td><input name="id_requerimiento_detalle[]" id="id_requerimiento_detalle${n}" class="form-control form-control-sm" value="${requerimiento.id}" type="hidden"><input name="item[]" id="item${n}" class="form-control form-control-sm" value="${requerimiento.item}" type="text"></td>
-                        <td style="width: 450px !important;display:block"><select name="descripcion[]" id="descripcion${n}" class="form-control form-control-sm" onChange="verificarProductoSeleccionado(this, ${n});">${productoOptions}</select></td>
+                        <td style="width: 450px !important;display:block"><input name="id_requerimiento_detalle[]" id="id_requerimiento_detalle${n}" class="form-control form-control-sm" value="${requerimiento.id}" type="hidden"><select name="descripcion[]" id="descripcion${n}" class="form-control form-control-sm" onChange="verificarProductoSeleccionado(this, ${n});">${productoOptions}</select></td>
                         
                         <td><select name="marca[]" id="marca${n}" class="form-control form-control-sm">${marcaOptions}</select></td>
                         <td><input name="cod_interno[]" id="cod_interno${n}" class="form-control form-control-sm" value="${requerimiento.codigo}" type="text"></td>
                         <td><select name="estado_bien[]" id="estado_bien${n}" class="form-control form-control-sm" onChange="">${estadoBienOptions}</select></td>
                         <td><select name="unidad[]" id="unidad${n}" class="form-control form-control-sm">${unidadMedidaOptions}</select></td>
                         <td><input name="cantidad_ingreso[]" id="cantidad_ingreso${n}" class="cantidad_ingreso form-control form-control-sm" value="${requerimiento.cantidad}" type="text" oninput=""></td>
+                        <td><textarea name="observacion[]" id="observacion${n}" class="form-control form-control-sm">${requerimiento.observacion}</textarea></td>
                         <td><button type="button" class="btn btn-danger btn-sm" onclick="eliminarFila(this)">Eliminar</button></td>
 
                     </tr>
@@ -348,27 +348,27 @@ function agregarProducto(){
     var newRow = "";
     for (var i = 0; i < cantidad; i++) { 
         var n = $('#tblRequerimientoDetalle tbody tr').length + 1;
-        var item = '<input name="id_requerimiento_detalle[]" id="id_requerimiento_detalle${n}" class="form-control form-control-sm" value="${requerimiento.id}" type="hidden"><input name="item[]" id="item' + n + '" class="form-control form-control-sm" value="" type="text">';
         //var cantidad = '<input name="cantidad[]" id="cantidad' + n + '" class="form-control form-control-sm" value="" type="text">';
-        var descripcion = '<select name="descripcion[]" id="descripcion' + n + '" class="form-control form-control-sm" onChange="verificarProductoSeleccionado(this, ' + n + ')"> '+ opcionesDescripcion +' </select>';
+        var descripcion = '<input name="id_requerimiento_detalle[]" id="id_requerimiento_detalle${n}" class="form-control form-control-sm" value="${requerimiento.id}" type="hidden"><select name="descripcion[]" id="descripcion' + n + '" class="form-control form-control-sm" onChange="verificarProductoSeleccionado(this, ' + n + ')"> '+ opcionesDescripcion +' </select>';
         var descripcion_ant = '<input type="hidden" name="descripcion_ant[]" id="descripcion_ant' + n + '" class="form-control form-control-sm" />';
         var cod_interno = '<input name="cod_interno[]" id="cod_interno' + n + '" class="form-control form-control-sm" value="" type="text">';
         var marca = '<select name="marca[]" id="marca' + n + '" class="form-control form-control-sm" onchange=""> <option value="">--Seleccionar--</option><?php foreach ($marca as $row){?><option value="<?php echo htmlspecialchars($row->id); ?>"><?php echo htmlspecialchars(addslashes($row->denominiacion)); ?></option><?php }?></select>'
         var estado_bien =  '<select name="estado_bien[]" id="estado_bien' + n + '" class="form-control form-control-sm" onChange=""><option value="">--Seleccionar--</option> <?php foreach ($estado_bien as $row) { ?> <option value="<?php echo $row->codigo ?>" <?php echo ($row->codigo == 1) ? "selected" : ""; ?>><?php echo $row->denominacion ?></option> <?php } ?> </select>';
         var unidad = '<select name="unidad[]" id="unidad' + n + '" class="form-control form-control-sm" onChange=""> <option value="">--Seleccionar--</option> <?php foreach ($unidad as $row) {?> <option value="<?php echo $row->codigo?>"><?php echo $row->denominacion?></option> <?php } ?> </select>';
         var cantidad_ingreso = '<input name="cantidad_ingreso[]" id="cantidad_ingreso' + n + '" class="cantidad_ingreso form-control form-control-sm" value="" type="text" oninput="">';
-        
+        var observacion = '<textarea name="observacion[]" id="observacion' + n + '" class="form-control form-control-sm"></textarea>';
+
         var btnEliminar = '<button type="button" class="btn btn-danger btn-sm" onclick="eliminarFila(this)">Eliminar</button>';
 
         newRow += '<tr>';
         newRow += '<td>' + n + '</td>';
-        newRow += '<td>' + item + '</td>';
         newRow += '<td style="width: 450px!important; display:block!important">' +descripcion_ant + descripcion + '</td>';
         newRow += '<td>' + marca + '</td>';
         newRow += '<td>' + cod_interno + '</td>';
         newRow += '<td>' + estado_bien + '</td>';
         newRow += '<td>' + unidad + '</td>';
         newRow += '<td>' + cantidad_ingreso + '</td>';
+        newRow += '<td>' + observacion + '</td>';
         newRow += '<td>' + btnEliminar + '</td>';
         newRow += '</tr>';
 
@@ -781,13 +781,13 @@ function cambiarOrigen(){
                                     <thead>
                                     <tr style="font-size:13px">
                                         <th>#</th>
-                                        <th>Item</th>
                                         <th>Descripci&oacute;n</th>
                                         <th>Marca</th>
                                         <th>COD. INT.</th>
                                         <th>Estado Bien</th>
                                         <th>Unidad</th>
                                         <th>Cantidad</th>
+                                        <th>Observaci&oacute;n</th>
                                     </tr>
                                     </thead>
                                     <tbody id="divRequerimientoDetalle">

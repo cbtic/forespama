@@ -127,13 +127,13 @@ class RequerimientoController extends Controller
             $requerimiento = Requerimiento::find($request->id);
         }
 
-        $item = $request->input('item');
         $descripcion = $request->input('descripcion');
         $cod_interno = $request->input('cod_interno');
         $marca = $request->input('marca');
         $estado_bien = $request->input('estado_bien');
         $unidad = $request->input('unidad');
         $cantidad_ingreso = $request->input('cantidad_ingreso');
+        $observacion = $request->input('observacion');
         
         $id_requerimiento_detalle =$request->id_requerimiento_detalle;
         
@@ -156,7 +156,7 @@ class RequerimientoController extends Controller
 
         $array_requerimiento_detalle = array();
 
-        foreach($item as $index => $value) {
+        foreach($descripcion as $index => $value) {
             
             if($id_requerimiento_detalle[$index] == 0){
                 $requerimiento_detalle = new RequerimientoDetalle;
@@ -172,6 +172,7 @@ class RequerimientoController extends Controller
             $requerimiento_detalle->id_marca = $marca[$index];
             $requerimiento_detalle->estado = 1;
             $requerimiento_detalle->cerrado = 1;
+            $requerimiento_detalle->observacion = $observacion[$index];
             $requerimiento_detalle->id_usuario_inserta = $id_user;
 
             $requerimiento_detalle->save();
