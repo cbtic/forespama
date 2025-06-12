@@ -208,7 +208,7 @@ $(document).ready(function() {
                             <td class="td" style ="text-align: left; width: 10%; height:25px"><?php echo $r->codigo;?></td>
                             <td class="td" style ="text-align: left; width: 10%; height:25px"><?php echo $r->estado_producto;?></td>
                             <td class="td" style ="text-align: left; width: 10%; height:25px"><?php echo $r->unidad_medida;?></td>
-                            <td class="td" style ="text-align: left; width: 10%; height:25px"><?php echo $r->cantidad;?></td>
+                            <td class="td" style ="text-align: center; width: 10%; height:25px"><?php echo $r->cantidad;?></td>
                             <td class="td" style ="text-align: left; width: 10%; height:25px"><?php echo $r->observacion;?></td>
                             <?php 
                             ?>
