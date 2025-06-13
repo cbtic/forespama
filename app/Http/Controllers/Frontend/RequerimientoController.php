@@ -306,7 +306,7 @@ class RequerimientoController extends Controller
         $orden_compra_model = new OrdenCompra;
         $codigo_orden_compra = $orden_compra_model->getCodigoOrdenCompra(1);
 
-        $item = $request->input('item');
+        //$item = $request->input('item');
         $descripcion = $request->input('descripcion');
         $cod_interno = $request->input('cod_interno');
         $marca = $request->input('marca');
@@ -335,7 +335,7 @@ class RequerimientoController extends Controller
 
         $array_orden_compra_detalle = array();
 
-        foreach($item as $index => $value) {
+        foreach($descripcion as $index => $value) {
             
             $orden_compra_detalle = new OrdenCompraDetalle;
             
