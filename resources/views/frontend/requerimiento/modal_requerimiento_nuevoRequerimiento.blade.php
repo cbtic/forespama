@@ -805,7 +805,7 @@ function cambiarOrigen(){
                                         <?php 
                                             }
                                         ?>
-                                        <?php if($id_user==$requerimiento->id_usuario_inserta){?>
+                                        <?php if($id_user==$requerimiento->id_usuario_inserta && $requerimiento->estado_solicitud == '1'){?>
                                             <a href="javascript:void(0)" onClick="fn_save_requerimiento()" class="btn btn-sm btn-success" style="margin-right:10px">Guardar</a>
                                         <?php }?>
                                         <?php if($id==0){?>
