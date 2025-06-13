@@ -292,7 +292,7 @@ $.ajax({
                     <tr>
                         <td>${n}</td>
                         <td><input name="item[]" id="item${n}" class="form-control form-control-sm" style="border: none; background-color: transparent;" value="${requerimiento.item}" type="text" disabled></td>
-                        <td><input name="descripcion[]" id="descripcion${n}" class="form-control form-control-sm" style="border: none; background-color: transparent;" value="${requerimiento.nombre_producto}" type="text" disabled></td>
+                        <td style="width: 450px!important; display:block!important"><textarea name="descripcion[]" id="descripcion${n}" class="form-control form-control-sm" style="border: none; background-color: transparent " type="text" disabled>${requerimiento.nombre_producto}</textarea></td>
                         <td><input name="marca[]" id="marca${n}" class="form-control form-control-sm" style="border: none; background-color: transparent;" value="${requerimiento.marca}" type="text" disabled></td>
                         <td><input name="cod_interno[]" id="cod_interno${n}" class="form-control form-control-sm" style="border: none; background-color: transparent;" value="${requerimiento.codigo}" type="text" disabled></td>
                         <td><input name="estado_bien[]" id="estado_bien${n}" class="form-control form-control-sm" style="border: none; background-color: transparent;" value="${requerimiento.estado_producto}" type="text" disabled></td>
