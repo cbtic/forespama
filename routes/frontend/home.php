@@ -664,3 +664,4 @@ Route::get('orden_compra/cargar_guia_orden_compra/{id}', [OrdenCompraController:
 Route::get('orden_compra/modal_guia/{id}/{id_orden_compra}', [OrdenCompraController::class, 'modal_guia'])->name('orden_compra.modal_guia');
 Route::post('orden_compra/upload_guia', [OrdenCompraController::class, 'upload_guia'])->name('orden_compra.upload_guia');
 Route::post('orden_compra/send_orden_compra_guia', [OrdenCompraController::class, 'send_orden_compra_guia'])->name('orden_compra.send_orden_compra_guia');
+Route::get('orden_compra/eliminar_pago/{id}', [OrdenCompraController::class, 'eliminar_pago'])->name('orden_compra.eliminar_pago');

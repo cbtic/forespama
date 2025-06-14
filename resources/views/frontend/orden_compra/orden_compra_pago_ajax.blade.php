@@ -6,7 +6,7 @@
 		<th width="20%">Tipo Doc</th>
 		<th width="20%">Importe</th>
 		<th width="15%">Archivo</th>
-		<th width="15%">Editar</th>
+		<th width="15%">Acciones</th>
 	</tr>
 </thead>
 <tbody>
@@ -47,6 +47,9 @@ foreach($pago as $row){
 	</td>
 	<td class="text-left">
 		<button style="font-size:12px" type="button" class="btn btn-sm btn-warning" data-toggle="modal" onclick="modalPago(<?php echo $row->id?>,'')" >Editar</button>
+	</td>
+	<td class="text-left">
+		<button style="font-size:12px" type="button" class="btn btn-sm btn-danger" data-toggle="modal" onclick="eliminarPago(<?php echo $row->id?>,'')" >Eliminar</button>
 	</td>
 </tr>
 <?php

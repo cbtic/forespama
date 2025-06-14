@@ -34,7 +34,8 @@ Begin
 	oc.numero_orden_compra, to_char(c.fecha,''yyyy-mm-dd'') fecha_factura, c.serie ||''-''|| c.numero numero_factura, oc.sub_total, oc.igv, oc.total, 
 	(select sum(ocp2.importe)
 	from orden_compra_pagos ocp2
-	where ocp2.id_orden_compra = oc.id) abono_pago, tm2.denominacion forma_pago, 
+	where ocp2.id_orden_compra = oc.id
+	and ocp2.estado=''1'') abono_pago, tm2.denominacion forma_pago, 
 	(select cc.fecha_vencimiento  from comprobante_cuotas cc 
 	where cc.id_comprobante = c.id)fecha_vencimiento,
 	(select string_agg(gi.guia_serie||''-''||gi.guia_numero ,'', '') from salida_productos sp 

@@ -1519,6 +1519,16 @@ class OrdenCompraController extends Controller
 		
     }
 
+    public function eliminar_pago($id)
+    {
+		$orden_compra_pago = OrdenCompraPago::find($id);
+		$orden_compra_pago->estado = 0;
+		$orden_compra_pago->save();
+
+		echo $orden_compra_pago->id;
+
+    }
+
     public function upload_pago(Request $request){
 
 		$path = "img/tmp_pago_orden_compra";

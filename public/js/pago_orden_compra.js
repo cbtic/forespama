@@ -14,6 +14,8 @@ $(document).ready(function () {
 	
 	$('#btnBuscar').click(function () {
 		fn_ListarBusqueda();
+        cargarPagoOrdenCompra(0);
+        cargarGuiaOrdenCompra(0);
 	});
 	
     $('#fecha_inicio_bus').datepicker({
@@ -517,4 +519,35 @@ function convertirFecha(fecha){
 
     return fecha;
 
+}
+
+function eliminarPago(id){
+	var act_estado = "";
+	
+	act_estado = "Eliminar";
+	
+    bootbox.confirm({ 
+        size: "small",
+        message: "&iquest;Deseas "+act_estado+" el Pago?",
+        callback: function(result){
+            if (result==true) {
+                fn_eliminar_pago(id);
+            }
+        }
+    });
+    $(".modal-dialog").css("width","30%");
+}
+
+function fn_eliminar_pago(id){
+	
+    $.ajax({
+            url: "/orden_compra/eliminar_pago/"+id,
+            type: "GET",
+            success: function (result) {
+                //if(result="success")obtenerPlanDetalle(id_plan);
+				datatablenew();
+                cargarPagoOrdenCompra(0);
+                cargarGuiaOrdenCompra(0);
+            }
+    });
 }
