@@ -526,7 +526,7 @@ function eliminarPago(id){
 	
 	act_estado = "Eliminar";
 	
-    bootbox.confirm({ 
+    bootbox.confirm({
         size: "small",
         message: "&iquest;Deseas "+act_estado+" el Pago?",
         callback: function(result){
