@@ -32,12 +32,12 @@ foreach($cubicaje as $row){
 	<td class="text-center"><?php echo $row->cantidad?></td>
 	<td class="text-right"><?php echo ($row->diametro_dm!=0)?$row->diametro_dm:""?></td>
 	<td class="text-right"><?php echo ($row->longitud==0)?2.44:$row->longitud?></td>
-    <td class="text-right"><?php echo ($row->volumen_m3!=0)?$row->volumen_m3:""?></td>
-	<td class="text-right"><?php echo ($row->volumen_pies!=0)?$row->volumen_pies:""?></td>
-	<td class="text-right"><?php echo ($row->volumen_total_m3!=0)?$row->volumen_total_m3:""?></td>
-	<td class="text-right"><?php echo ($row->volumen_total_pies!=0)?$row->volumen_total_pies:""?></td>
-	<td class="text-right"><?php echo ($row->precio_unitario!=0)?$row->precio_unitario:""?></td>
-	<td class="text-right"><?php echo ($row->precio_total!=0)?$row->precio_total:""?></td>
+    <td class="text-right"><?php echo ($row->volumen_m3!=0)? number_format($row->volumen_m3,2):""?></td>
+	<td class="text-right"><?php echo ($row->volumen_pies!=0)? number_format($row->volumen_pies,2):""?></td>
+	<td class="text-right"><?php echo ($row->volumen_total_m3!=0)? number_format($row->volumen_total_m3,2):""?></td>
+	<td class="text-right"><?php echo ($row->volumen_total_pies!=0)? number_format($row->volumen_total_pies,2):""?></td>
+	<td class="text-right"><?php echo ($row->precio_unitario!=0)? number_format($row->precio_unitario,2):""?></td>
+	<td class="text-right"><?php echo ($row->precio_total!=0)? number_format($row->precio_total,2):""?></td>
 </tr>
 <?php
 	}
@@ -48,11 +48,11 @@ foreach($cubicaje as $row){
 	<tr>
 		<th class="text-center"><?php echo $cantidad_cubicaje?></th>
 		<th colspan="3"></th>
-		<th class="text-right" style="padding-right:12px"><?php echo $volumen_pies?></th>
-		<th class="text-right" style="padding-right:12px"><?php echo $volumen_total_m3?></th>
-		<th class="text-right" style="padding-right:12px"><?php echo $volumen_total_pies?></th>
+		<th class="text-right" style="padding-right:12px"><?php echo number_format($volumen_pies,2)?></th>
+		<th class="text-right" style="padding-right:12px"><?php echo number_format($volumen_total_m3,2)?></th>
+		<th class="text-right" style="padding-right:12px"><?php echo number_format($volumen_total_pies,2)?></th>
 		<th></th>
-		<th class="text-right" style="padding-right:12px"><?php echo $precio_total?></th>
+		<th class="text-right" style="padding-right:12px"><?php echo number_format($precio_total,2)?></th>
 	</tr>
 </tfoot>
 </table>

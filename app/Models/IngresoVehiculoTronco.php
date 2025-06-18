@@ -53,11 +53,12 @@ class IngresoVehiculoTronco extends Model
 	
 	function getIngresoVehiculoTroncoCubicajeReporteById($id){
 
-        $cad = "select count(*) cantidad,diametro_dm,longitud,volumen_m3,volumen_pies,sum(volumen_total_m3)volumen_total_m3,
-        sum(volumen_total_pies)volumen_total_pies,precio_unitario,sum(precio_total)precio_total  
+        $cad = "select count(*) cantidad, diametro_dm, longitud, volumen_m3, volumen_pies, sum(volumen_total_m3)volumen_total_m3,
+        sum(volumen_total_pies)volumen_total_pies, precio_unitario, sum(precio_total)precio_total  
         from ingreso_vehiculo_tronco_cubicajes ivtc 
-        where id_ingreso_vehiculo_tronco_tipo_maderas=".$id."
-        group by diametro_dm,longitud,volumen_m3,volumen_pies,precio_unitario";
+        where id_ingreso_vehiculo_tronco_tipo_maderas='".$id."'
+        group by diametro_dm, longitud, volumen_m3, volumen_pies, precio_unitario
+        order by diametro_dm asc";
 
 		$data = DB::select($cad);
         return $data;
