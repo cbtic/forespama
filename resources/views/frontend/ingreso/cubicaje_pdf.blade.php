@@ -249,13 +249,13 @@ $(document).ready(function() {
 
                             if($r->precio_unitario==1.20){
                                 $suma_cantidad_reporte_1_2+=$r->cantidad;
-                                $suma_volumen_m3_1_2+=$r->volumen_m3;
-                                $suma_volumen_pies_1_2+=$r->volumen_pies;
+                                $suma_volumen_m3_1_2+=$r->volumen_total_m3;
+                                $suma_volumen_pies_1_2+=$r->volumen_total_pies;
                                 $suma_total_1_2+=$r->precio_total;
                             }else{
                                 $suma_cantidad_reporte_1_7+=$r->cantidad;
-                                $suma_volumen_m3_1_7+=$r->volumen_m3;
-                                $suma_volumen_pies_1_7+=$r->volumen_pies;
+                                $suma_volumen_m3_1_7+=$r->volumen_total_m3;
+                                $suma_volumen_pies_1_7+=$r->volumen_total_pies;
                                 $suma_total_1_7+=$r->precio_total;
                             }
 
