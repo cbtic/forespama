@@ -16,6 +16,12 @@ class Dispensacione extends Model
 
     }
 
+    public function listar_dispensacion_reporte_ajax($p){
+
+        return $this->readFuntionPostgres('sp_listar_dispensacion_reporte_paginado',$p);
+
+    }
+
     public function readFuntionPostgres($function, $parameters = null){
 
         $_parameters = '';

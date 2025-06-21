@@ -70,6 +70,11 @@ $(document).ready(function () {
 		
 	datatablenew();
 
+	$('#btnDescargar').on('click', function () {
+		descargarArchivosDispensacionReporte();
+
+	});
+
 });
 
 function datatablenew(){
@@ -358,3 +363,27 @@ function obtenerUnidadTrabajo(){
     });
 }
 
+function descargarArchivosDispensacionReporte(){
+	
+	var tipo_documento = $('#tipo_documento_bus').val();
+	var fecha_inicio = $('#fecha_inicio_bus').val();
+	var fecha_fin = $('#fecha_fin_bus').val();
+	var numero_dispensacion = $('#numero_dispensacion_bus').val();
+	var almacen = $('#almacen_bus').val();
+	var area_trabajo = $('#area_trabajo_bus').val();
+	var unidad_trabajo = $('#unidad_trabajo_bus').val();
+	var persona_recibe = $('#persona_recibe_bus').val();
+	var estado = $('#estado_bus').val();
+
+	if (tipo_documento == "")tipo_documento = 0;
+	if (fecha_inicio == "")fecha_inicio = "0";
+	if (fecha_fin == "")fecha_fin = "0";
+	if (numero_dispensacion == "")numero_dispensacion = "0";
+	if (almacen == "")almacen = 0;
+	if (area_trabajo == "")area_trabajo = 0;
+	if (unidad_trabajo == "")unidad_trabajo = 0;
+	if (persona_recibe == "")persona_recibe = 0;
+	if (estado == "")estado = 0;
+	
+	location.href = '/dispensacion/exportar_listar_dispensacion_reporte/'+tipo_documento+'/'+fecha_inicio+'/'+fecha_fin+'/'+numero_dispensacion+'/'+almacen+'/'+area_trabajo+'/'+unidad_trabajo+'/'+persona_recibe+'/'+estado;
+}

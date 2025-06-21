@@ -194,7 +194,7 @@ $('#openOverlayOpc').on('shown.bs.modal', function() {
 
 $(document).ready(function() {
     if($('#id').val()==0){
-        obtenerCodigo();
+        //obtenerCodigo();
     }
 
     if($('#id').val()>0){
@@ -439,7 +439,7 @@ function fn_save_requerimiento(){
     var msg = "";
 
     var tipo_documento = $('#tipo_documento').val();
-    var numero_requerimiento = $('#numero_requerimiento').val();
+    //var numero_requerimiento = $('#numero_requerimiento').val();
     var fecha_requerimiento = $('#fecha_requerimiento').val();
     var responsable = $('#responsable').val();
     var estado_atencion = $('#estado_atencion').val();
@@ -449,7 +449,7 @@ function fn_save_requerimiento(){
     var unidad_origen = $('#unidad_origen').val();
 
     if(tipo_documento==""){msg+="Ingrese el Tipo de Documento <br>";}
-    if(numero_requerimiento==""){msg+="Ingrese el Numero de Requerimiento <br>";}
+    //if(numero_requerimiento==""){msg+="Ingrese el Numero de Requerimiento <br>";}
     if(responsable==""){msg+="Ingrese el Responsable de Atencion <br>";}
     if(estado_atencion==""){msg+="Ingrese el Estado de Atencion <br>";}
     if(fecha_requerimiento==""){msg+="Ingrese la Fecha <br>";}
@@ -626,7 +626,7 @@ function cambiarOrigen(){
                                 Tipo Documento
                             </div>
                             <div class="col-lg-2">
-                                <select name="tipo_documento" id="tipo_documento" class="form-control form-control-sm" onchange="obtenerCodigo()">
+                                <select name="tipo_documento" id="tipo_documento" class="form-control form-control-sm" onchange="//obtenerCodigo()">
                                     <option value="">--Seleccionar--</option>
                                     <?php
                                     foreach ($tipo_documento as $row){

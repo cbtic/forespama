@@ -127,6 +127,10 @@ class RequerimientoController extends Controller
             $requerimiento = Requerimiento::find($request->id);
         }
 
+        $requerimiento_model = new Requerimiento;
+        
+		$codigo_requerimiento = $requerimiento_model->getCodigoRequerimiento(1);
+
         $descripcion = $request->input('descripcion');
         $cod_interno = $request->input('cod_interno');
         $marca = $request->input('marca');
@@ -139,7 +143,7 @@ class RequerimientoController extends Controller
         
         $requerimiento->id_tipo_documento = $request->tipo_documento;
         $requerimiento->fecha = $request->fecha_requerimiento;
-        $requerimiento->codigo = $request->numero_requerimiento;
+        $requerimiento->codigo = $codigo_requerimiento[0]->codigo;
         $requerimiento->id_almacen_destino = $request->almacen;
         $requerimiento->sustento_requerimiento = $request->sustento_requerimiento;
         $requerimiento->responsable_atencion = $request->responsable;

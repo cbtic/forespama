@@ -380,4 +380,112 @@ class DispensacionController extends Controller
 
 	}
 
+	public function exportar_listar_dispensacion_reporte($tipo_documento, $fecha_inicio, $fecha_fin, $numero_dispensacion, $almacen, $area_trabajo, $unidad_trabajo, $persona_recibe, $estado) {
+
+		if($tipo_documento==0)$tipo_documento = "";
+		if($fecha_inicio=="0")$fecha_inicio = "";
+		if($fecha_fin=="0")$fecha_fin = "";
+		if($numero_dispensacion=="0")$numero_dispensacion = "";
+		if($almacen==0)$almacen = "";
+		if($area_trabajo==0)$area_trabajo = "";
+        if($unidad_trabajo==0)$unidad_trabajo = "";
+        if($persona_recibe==0)$persona_recibe = "";
+        if($estado==0)$estado = "";
+
+		$dispensacion_model = new Dispensacione;
+		$p[]=$tipo_documento;
+		$p[]=$fecha_inicio;
+		$p[]=$fecha_fin;
+        $p[]=$numero_dispensacion;
+        $p[]=$almacen;
+		$p[]=$area_trabajo;
+		$p[]=$unidad_trabajo;
+		$p[]=$persona_recibe;
+        $p[]=$estado;
+		$p[]=1;
+		$p[]=10000;
+		$data = $dispensacion_model->listar_dispensacion_reporte_ajax($p);
+		
+		$variable = [];
+		$n = 1;
+		
+		array_push($variable, array("N","Codigo Dispensacion","Fecha","Almacen","Persona Recibe", "Area Trabajo", "Unidad Trabajo", "Codigo Producto", "Producto", "Cantidad"));
+		
+		foreach ($data as $r) {
+
+			array_push($variable, array($n++,$r->codigo_dispensacion, $r->fecha, $r->almacen_salida, $r->usuario_recibe,$r->area_trabajo, $r->unidad_trabajo, $r->codigo_producto, $r->producto, $r->cantidad));
+		}
+		
+		$export = new InvoicesExport([$variable]);
+		return Excel::download($export, 'reporte_dispensacion_ejecutivo.xlsx');
+    }
+
+}
+
+class InvoicesExport implements FromArray, WithHeadings, WithStyles
+{
+	protected $invoices;
+
+	public function __construct(array $invoices)
+	{
+		$this->invoices = $invoices;
+	}
+
+	public function array(): array
+	{
+		return $this->invoices;
+	}
+
+    public function headings(): array
+    {
+        return ["N","Codigo Dispensacion","Fecha","Almacen","Persona Recibe", "Area Trabajo", "Unidad Trabajo", "Codigo Producto", "Producto", "Cantidad"];
+    }
+
+	public function styles(Worksheet $sheet)
+    {
+
+		$sheet->mergeCells('A1:J1');
+
+        $sheet->setCellValue('A1', "REPORTE DE DETALLE DE DISPENSACION - FORESPAMA");
+        $sheet->getStyle('A1:J1')->applyFromArray([
+            'font' => [
+                'bold' => true,
+                'color' => ['rgb' => 'FFFFFF'],
+            ],
+            'fill' => [
+                'fillType' => Fill::FILL_SOLID,
+                'startColor' => ['rgb' => '246257'],
+            ],
+            'alignment' => [
+                'horizontal' => Alignment::HORIZONTAL_CENTER,
+            ],
+        ]);
+
+		$sheet->getStyle('A1')->getAlignment()->setWrapText(true);
+		$sheet->getRowDimension(1)->setRowHeight(30);
+
+        $sheet->getStyle('A2:J2')->applyFromArray([
+            'font' => [
+                'bold' => true,
+                'color' => ['rgb' => '000000'],
+            ],
+            'fill' => [
+                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                'startColor' => ['rgb' => '2EB85C'],
+            ],
+			'alignment' => [
+			'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+    		],
+        ]);
+
+		$sheet->fromArray($this->headings(), NULL, 'A2');
+
+		/*$sheet->getStyle('L3:L'.$sheet->getHighestRow())
+		->getNumberFormat()
+		->setFormatCode(\PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_NUMBER_00);*/ //SIRVE PARA PONER 2 DECIMALES A ESA COLUMNA
+        
+        foreach (range('A', 'J') as $col) {
+            $sheet->getColumnDimension($col)->setAutoSize(true);
+        }
+    }
 }
