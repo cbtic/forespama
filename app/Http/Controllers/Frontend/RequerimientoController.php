@@ -795,4 +795,3 @@ class InvoicesExport2 implements FromArray, WithHeadings, WithStyles
         }
     }
 }
-

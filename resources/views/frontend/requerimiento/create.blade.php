@@ -2,6 +2,8 @@
 <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" defer></script>
 <style type="text/css">
 
+.table-hover tbody tr.row_selected td{background-color:#239244!important;color:#ffffff!important}
+
 .table td.verde{
 	background:#CAE983  !important
 }

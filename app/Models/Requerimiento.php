@@ -102,10 +102,10 @@ class Requerimiento extends Model
         $cad = "select rd.id,  ROW_NUMBER() OVER (PARTITION BY rd.id_requerimiento ) AS row_num, coalesce(p.numero_serie,'') item, rd.id_producto, p.codigo, p.denominacion nombre_producto, coalesce(m.denominiacion,'') marca, coalesce(tm.denominacion,'') estado_producto, coalesce(tm2.denominacion ,'') unidad_medida, rd.cantidad, r.id_almacen_destino,
         (select coalesce(sum(ocd.cantidad_requerida),0) from orden_compras oc
         inner join orden_compra_detalles ocd on ocd.id_orden_compra = oc.id 
-        where oc.id_requerimiento = r.id and ocd.id_producto = rd.id_producto) cantidad_atendida,
+        where oc.id_requerimiento = r.id and ocd.id_producto = rd.id_producto and oc.estado ='1') cantidad_atendida,
         (select COALESCE(STRING_AGG(DISTINCT oc.numero_orden_compra ::TEXT, ', '), '') from orden_compras oc 
         inner join orden_compra_detalles ocd on oc.id = ocd.id_orden_compra  
-        where rd.id_producto = ocd.id_producto and oc.id_requerimiento = r.id) orden_compra
+        where rd.id_producto = ocd.id_producto and oc.id_requerimiento = r.id and oc.estado ='1') orden_compra
         from requerimiento_detalles rd 
         inner join productos p on rd.id_producto = p.id
         inner join requerimientos r on rd.id_requerimiento = r.id
@@ -126,7 +126,7 @@ class Requerimiento extends Model
         rd.id_estado_producto , rd.cantidad, r.id_almacen_destino,
         (select coalesce(sum(ocd.cantidad_requerida),0) from orden_compras oc
         inner join orden_compra_detalles ocd on ocd.id_orden_compra = oc.id 
-        where oc.id_requerimiento = r.id and ocd.id_producto = rd.id_producto) cantidad_atendida, rd.id_usuario_inserta
+        where oc.id_requerimiento = r.id and ocd.id_producto = rd.id_producto and oc.estado ='1') cantidad_atendida, rd.id_usuario_inserta
         from requerimiento_detalles rd 
         inner join productos p on rd.id_producto = p.id
         inner join requerimientos r on rd.id_requerimiento = r.id

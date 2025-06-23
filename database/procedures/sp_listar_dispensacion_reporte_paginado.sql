@@ -17,7 +17,7 @@ begin
 
 	p_pagina=(p_pagina::Integer-1)*p_limit::Integer;
 
-	v_campos=' dd.id, at.denominacion area_trabajo, ut.denominacion unidad_trabajo, d.fecha, d.codigo codigo_dispensacion, a.denominacion almacen_salida, u."name" usuario_recibe,
+	v_campos=' dd.id, at.denominacion area_trabajo, ut.denominacion unidad_trabajo, d.fecha, d.codigo codigo_dispensacion, a.denominacion almacen_salida, pe.nombres ||'' ''|| pe.apellido_paterno ||'' ''|| pe.apellido_materno usuario_recibe,
 	p.codigo codigo_producto, p.denominacion producto, dd.cantidad ';
 
 	v_tabla=' from dispensaciones d
@@ -26,7 +26,7 @@ begin
 	left join area_trabajo at on d.id_area_trabajo = at.id
 	left join unidad_trabajo ut on d.id_unidad_trabajo = ut.id 
 	left join almacenes a on d.id_almacen = a.id 
-	left join users u on d.id_usuario_recibe = u.id ';
+	left join personas pe on d.id_usuario_recibe = p.id ';
 		
 	v_where = ' Where 1=1 and dd.estado = ''1'' ';
 

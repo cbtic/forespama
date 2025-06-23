@@ -309,6 +309,12 @@ function datatablenew(){
     });
 }
 
+fn_util_LineaDatatable("#tblRequerimiento");
+
+$('#tblRequerimiento tbody').on('click', 'tr', function () {
+	
+});
+
 function fn_ListarBusqueda() {
     datatablenew();
 };
