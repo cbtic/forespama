@@ -1760,9 +1760,12 @@ function datatablenew() {
 					
 					var html = '<div class="btn-group btn-group-sm" role="group" aria-label="Log Viewer Actions">';
 					//html += '<button style="font-size:12px" type="button" class="btn btn-sm btn-success" data-toggle="modal" onclick="editarConcursoInscripcion('+row.id+')" ><i class="fa fa-edit"></i> Editar</button>';
+					if(row.tiene_imagen == 1){
+                        html += '<button style="font-size:12px;color:#FFFFFF;margin-left:10px" type="button" class="btn btn-sm btn-info" data-toggle="modal" onclick="modalVerIngresoImagen('+row.id+')"><i class="fa fa-edit" style="font-size:9px!important"></i> Ver Imagenes</button>';
+                    }else{
+                        html += '<button style="font-size:12px;color:#FFFFFF;margin-left:10px" type="button" class="btn btn-sm btn-info" data-toggle="modal" onclick="modalVerIngresoImagen('+row.id+')" disabled><i class="fa fa-edit" style="font-size:9px!important"></i> Ver Imagenes</button>';   
+                    }
 					
-					html += '<button style="font-size:12px;color:#FFFFFF;margin-left:10px" type="button" class="btn btn-sm btn-info" data-toggle="modal" onclick="modalVerIngresoImagen('+row.id+')"><i class="fa fa-edit" style="font-size:9px!important"></i> Ver Imagenes</button>';
-		
 					html += '</div>';
 					return html;
 				},
