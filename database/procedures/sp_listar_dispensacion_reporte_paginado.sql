@@ -18,10 +18,10 @@ begin
 	p_pagina=(p_pagina::Integer-1)*p_limit::Integer;
 
 	v_campos=' dd.id, at.denominacion area_trabajo, ut.denominacion unidad_trabajo, d.fecha, d.codigo codigo_dispensacion, a.denominacion almacen_salida, u."name" usuario_recibe,
-	p.codigo codigo_producto, p.denominacion producto, dd.cantidad
-	from dispensaciones d ';
+	p.codigo codigo_producto, p.denominacion producto, dd.cantidad ';
 
-	v_tabla=' inner join dispensacion_detalles dd on dd.id_dispensacion = d.id 
+	v_tabla=' from dispensaciones d
+	inner join dispensacion_detalles dd on dd.id_dispensacion = d.id 
 	inner join productos p on dd.id_producto = p.id 
 	left join area_trabajo at on d.id_area_trabajo = at.id
 	left join unidad_trabajo ut on d.id_unidad_trabajo = ut.id 
