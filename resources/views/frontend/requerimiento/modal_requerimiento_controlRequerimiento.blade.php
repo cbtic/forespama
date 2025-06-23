@@ -338,6 +338,16 @@ function cerrarModalRequerimiento(){
     datatablenew();
 }
 
+function pdf_documento_control(){
+
+    var id = $('#id').val();
+    //var tipo_movimiento = $('#tipo_movimiento').val();
+
+    var href = '/requerimiento/movimiento_pdf_requerimiento_control/'+id;
+    window.open(href, '_blank');
+
+}
+
 </script>
 
 <body class="hold-transition skin-blue sidebar-mini">
@@ -476,6 +486,7 @@ function cerrarModalRequerimiento(){
                                     }*/
                                 ?>
                                 <!--<a href="javascript:void(0)" onClick="fn_save_requerimiento()" class="btn btn-sm btn-success" style="margin-right:10px">Guardar</a>-->
+                                <button style="font-size:12px;margin-left:10px;margin-right:10px" type="button" class="btn btn-sm btn-primary" data-toggle="modal" onclick="pdf_documento_control()" ><i class="fa fa-edit"></i>Imprimir</button>
                                 <a href="javascript:void(0)" onClick="cerrarModalRequerimiento()" class="btn btn-sm btn-info" style="">Cerrar</a>
                             </div>
                                                 

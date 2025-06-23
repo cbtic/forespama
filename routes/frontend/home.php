@@ -666,3 +666,4 @@ Route::post('orden_compra/upload_guia', [OrdenCompraController::class, 'upload_g
 Route::post('orden_compra/send_orden_compra_guia', [OrdenCompraController::class, 'send_orden_compra_guia'])->name('orden_compra.send_orden_compra_guia');
 Route::get('orden_compra/eliminar_pago/{id}', [OrdenCompraController::class, 'eliminar_pago'])->name('orden_compra.eliminar_pago');
 Route::get('dispensacion/exportar_listar_dispensacion_reporte/{tipo_documento}/{fecha_inicio}/{fecha_fin}/{numero_dispensacion}/{almacen}/{area_trabajo}/{unidad_trabajo}/{persona_recibe}/{estado}', [DispensacionController::class, 'exportar_listar_dispensacion_reporte'])->name('dispensacion.exportar_listar_dispensacion_reporte');
+Route::get('requerimiento/movimiento_pdf_requerimiento_control/{id}', [RequerimientoController::class, 'movimiento_pdf_requerimiento_control'])->name('requerimiento.movimiento_pdf_requerimiento_control');

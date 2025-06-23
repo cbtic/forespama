@@ -658,6 +658,42 @@ class RequerimientoController extends Controller
 		$requerimiento_model->inhabilitarModificacionRequerimiento();
 
     }
+
+    public function movimiento_pdf_requerimiento_control($id){
+
+        $requerimiento_model = new Requerimiento;
+        $requerimiento_detalle_model = new RequerimientoDetalle;
+
+        $datos=$requerimiento_model->getRequerimientoById($id);
+        $datos_detalle=$requerimiento_model->getControlDetalleRequerimientoId($id);
+
+        $tipo_documento=$datos[0]->tipo_documento;
+        $almacen=$datos[0]->almacen;
+        $fecha = $datos[0]->fecha;
+        $codigo=$datos[0]->codigo;
+        $responsable_atencion=$datos[0]->responsable_atencion;
+        $sustento_requerimiento=$datos[0]->sustento_requerimiento;
+        
+		$year = Carbon::now()->year;
+
+		Carbon::setLocale('es');
+
+		$carbonDate =Carbon::now()->format('d-m-Y');
+
+		$currentHour = Carbon::now()->format('H:i:s');
+
+		$pdf = Pdf::loadView('frontend.requerimiento.movimiento_pdf_requerimiento_control',compact('tipo_documento','almacen','fecha','codigo','datos_detalle','responsable_atencion','sustento_requerimiento'));
+		
+		$pdf->setPaper('A4'); // Tamaño de papel (puedes cambiarlo según tus necesidades)
+        
+		$pdf->setPaper('A4', 'portrait');
+    	$pdf->setOption('margin-top', 20); // Márgen superior en milímetros
+   		$pdf->setOption('margin-right', 50); // Márgen derecho en milímetros
+    	$pdf->setOption('margin-bottom', 20); // Márgen inferior en milímetros
+    	$pdf->setOption('margin-left', 100); // Márgen izquierdo en milímetros
+
+		return $pdf->stream();
+	}
 }
 
 class InvoicesExport implements FromArray, WithHeadings, WithStyles
