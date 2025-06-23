@@ -112,7 +112,7 @@ function datatablenew(){
                 const fechaItem = new Date(fechaRequerimiento);
                 const diferenciaDias = (fechaActual - fechaItem) / (1000 * 60 * 60 * 24);
 
-                if (diferenciaDias > 3) {
+                if (diferenciaDias > 5) {
                     $(nRow).addClass('fila-roja');
                 }
             }
