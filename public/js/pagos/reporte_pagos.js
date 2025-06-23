@@ -122,32 +122,30 @@ function datatablenew() {
             let totalPrecioFinal = 0;
             let totalTabulacion = 0;
             let totalPromedio = 0;
-
+            let contadorPromedios = 0;
+            
             settings.aoData.forEach(function(row) {
-                let total_cantidad = row._aData.totalcantidad;
-                let total_m3 = row._aData.totalvolumenm3;
-                let total_pies = row._aData.totalvolumenpies;
-                let total_precio_final = row._aData.totalpreciototal;
-                //let tipoPago = row._aData.tipo_pago;
-                if (total_cantidad) {
-                    totalCantidad = parseFloat(total_cantidad);
-                }
-                if (total_m3) {
-                    totalM3 = parseFloat(total_m3);
-                }
-                if (total_pies) {
-                    totalPies = parseFloat(total_pies);
-                }
-                if (total_precio_final) {
-                    totalPrecioFinal = parseFloat(total_precio_final);
-                }
+                const razon_social = row._aData.razon_social;
 
+                // Solo sumar si es una fila de TOTAL del día
+                if (razon_social && razon_social.includes("Total")) {
+                    totalCantidad += parseFloat(row._aData.cantidad || 0);
+                    totalM3 += parseFloat(row._aData.volumen_total_m3 || 0);
+                    totalPies += parseFloat(row._aData.volumen_total_pies || 0);
+                    totalPrecioFinal += parseFloat(row._aData.precio_total || 0);
+                    
+                    // Solo promediar si hay valor válido
+                    const promedio = parseFloat(row._aData.promedio);
+                    if (!isNaN(promedio)) {
+                        totalPromedio += promedio;
+                        contadorPromedios++;
+                    }
+                }
             });
 
             totalTabulacion = totalPrecioFinal;
 
-            totalPromedio = totalPrecioFinal / totalPies;
-
+            totalPromedio = totalPies > 0 ? totalPrecioFinal / totalPies : 0;
 
             $('#tblReporteCubicaje tfoot').html('');
 

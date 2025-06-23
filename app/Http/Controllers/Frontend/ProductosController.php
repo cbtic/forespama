@@ -107,6 +107,10 @@ class ProductosController extends Controller
 
     public function send_producto(Request $request){
 
+        //$btnFichaTecnica = $request->btnFichaTecnica;
+
+        //dd($btnFichaTecnica);exit();
+
         $existe_producto_codigo = Producto::where('codigo', $request->codigo)->first();
 
         $existe_producto_serie = Producto::where('numero_serie', $request->numero_serie)->whereNotNull('numero_serie')->where('numero_serie', '!=', '')->first();
@@ -225,6 +229,33 @@ class ProductosController extends Controller
         }
 		//////////////////
 
+        $producto_ficha_tecnica = Producto::find($id_producto);
+
+        $path = "img/ficha_tecnica_productos/";
+
+        if(!is_dir($path)) {
+            mkdir($path);
+        }
+
+        if(isset($_FILES["btnFichaTecnica"]) && $_FILES["btnFichaTecnica"]["error"] == UPLOAD_ERR_OK) {
+
+            $path = "img/ficha_tecnica_productos/".$producto->id;
+            if (!is_dir($path)) {
+                mkdir($path);
+            }
+
+            $filepath = public_path($path.'/');
+
+            $filename = "ficha_tecnica_".date("YmdHis") . substr((string)microtime(), 1, 6);
+            $type=$this->extension($_FILES["btnFichaTecnica"]["name"]);
+            $filenamefirma=$filename.".".$type;
+
+            move_uploaded_file($_FILES["btnFichaTecnica"]["tmp_name"], $filepath.$filenamefirma);
+
+            $producto_ficha_tecnica->ruta_ficha_tecnica = $path."/".$filenamefirma;
+            $producto_ficha_tecnica->save();
+        }
+        
         return response()->json(['success' => 'Producto guardado exitosamente.']);
 
     }

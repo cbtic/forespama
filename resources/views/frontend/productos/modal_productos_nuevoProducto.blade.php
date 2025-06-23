@@ -334,11 +334,15 @@ function fn_save_producto(){
         var heightBrowser = $(window).width()/2;
         $('.loader').css("opacity","0.8").css("height",heightBrowser).html("<div id='Grd1_wrapper' class='dataTables_wrapper'><div id='Grd1_processing' class='dataTables_processing panel-default'>"+msgLoader+"</div></div>");
         $('.loader').show();
+        let form = document.getElementById('frmProducto');
+	    let formData = new FormData(form);
 
         $.ajax({
                 url: "/productos/send_producto",
                 type: "POST",
-                data : $("#frmProducto").serialize(),
+                data : formData,
+                contentType: false,
+			    processData: false, 
                 success: function (result) {
                     //alert(result);
                     if (result.success) {
@@ -582,6 +586,18 @@ function cargarImagenes() {
                                             <input id="peso" name="peso" on class="form-control form-control-sm"  value="<?php echo $producto->peso?>" type="text">
                                         </div>
                                     </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label class="control-label form-control-sm">Ficha T&eacute;cnica</label>
+                                            <input type="file" class="form-control-file btn btn-sm btn-success" style="background-color: #F6F6F6 !important; border: none !important; padding: 0 !important; box-shadow: none !important; color:black" id="btnFichaTecnica" name="btnFichaTecnica">
+                                            <?php if (!empty($producto->ruta_ficha_tecnica)) : ?>
+                                                <div class="mt-2">
+                                                    <i class="fa fa-file-pdf-o"></i>
+                                                    <a href="<?php echo asset($producto->ruta_ficha_tecnica); ?>" target="_blank">Descargar ficha técnica</a>
+                                                </div>
+                                            <?php endif; ?>
+                                        </div>
+							        </div>
                                 </div>
                             </div>
                             <div class="col-lg-4">
