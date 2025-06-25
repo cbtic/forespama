@@ -197,6 +197,7 @@ $(document).ready(function() {
                         <td class="td" style ="text-align: left; width: 10%; height:25px; border-bottom: 1px solid black;"><b>UNIDAD</b></td>
                         <td class="td" style ="text-align: left; width: 10%; height:25px; border-bottom: 1px solid black;"><b>CANTIDAD</b></td>
                         <td class="td" style ="text-align: left; width: 10%; height:25px; border-bottom: 1px solid black;"><b>OBSERVACION</b></td>
+                        <td class="td" style ="text-align: left; width: 10%; height:25px; border-bottom: 1px solid black;"><b>IMAGEN</b></td>
                     </tr>
                     
                     <?php 
@@ -210,8 +211,15 @@ $(document).ready(function() {
                             <td class="td" style ="text-align: left; width: 10%; height:25px"><?php echo $r->unidad_medida;?></td>
                             <td class="td" style ="text-align: center; width: 10%; height:25px"><?php echo $r->cantidad;?></td>
                             <td class="td" style ="text-align: left; width: 10%; height:25px"><?php echo $r->observacion;?></td>
-                            <?php 
-                            ?>
+                            <td class="td" style ="text-align: center; width: 10%; height:25px">
+                                <?php if (!empty($r->ruta_imagen)) : ?>
+                                    <a href="<?php echo asset($r->ruta_imagen); ?>" target="_blank">
+                                        <i class="fa fa-file-image-o"></i> Ver Imagen
+                                    </a>
+                                <?php else: ?>
+                                    -
+                                <?php endif; ?>
+                            </td>
                         </tr>
                     <?php }
                       ?>

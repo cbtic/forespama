@@ -1,3 +1,5 @@
+-- DROP FUNCTION public.sp_listar_ingreso_vehiculo_tronco_pagos_paginado(varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, refcursor);
+
 CREATE OR REPLACE FUNCTION public.sp_listar_ingreso_vehiculo_tronco_pagos_paginado(p_ruc character varying, p_empresa character varying, p_placa character varying, p_tipo_madera character varying, p_fecha_desde character varying, p_fecha_hasta character varying, p_estado_pago character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
  RETURNS refcursor
  LANGUAGE plpgsql
@@ -28,11 +30,11 @@ Begin
 	inner join vehiculos v on ivt.id_vehiculos=v.id
 	inner join conductores c on ivt.id_conductores=c.id
 	inner join personas p on c.id_personas=p.id
-	inner join ingreso_vehiculo_tronco_tipo_maderas ivttm on ivt.id=ivttm.id_ingreso_vehiculo_troncos
+	inner join ingreso_vehiculo_tronco_tipo_maderas ivttm on ivt.id=ivttm.id_ingreso_vehiculo_troncos and ivttm.estado=''1''
 	inner join tabla_maestras tm on ivttm.id_tipo_maderas=tm.codigo::int and tm.tipo=''42''
 	inner join tabla_maestras tmep on ivttm.id_estado_pago=tmep.codigo::int and tmep.tipo=''66'' ';
 
-	v_where = ' where 1=1  ';
+	v_where = ' where 1=1  and ivt.estado_ingreso =''1''';
 	
 	If p_ruc<>'' Then
 	 v_where:=v_where||'And e.ruc = '''||p_ruc||''' ';

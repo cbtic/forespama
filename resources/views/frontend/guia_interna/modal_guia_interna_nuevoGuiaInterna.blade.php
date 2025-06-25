@@ -735,6 +735,7 @@ function cargar_detalle_documento(id_documento){
                 $('#destinatario_nombre').val("");
                 $('#destinatario').val("");
                 $('#orden_compra_cliente').val("");
+                $('#orden_compra').val("");
                 $('#tiendas_orden_compra').val("");
                 $('#peso').val("");
                 $('#punto_llegada_input').val("");
@@ -751,11 +752,13 @@ function cargar_detalle_documento(id_documento){
                 $("#ruc").attr("readonly",false);
                 $("#destinatario_nombre").attr("readonly",false);
                 $("#orden_compra_cliente").attr("readonly",false);
+                $("#orden_compra").attr("readonly",false);
                 $("#tiendas_orden_compra").attr("readonly",false);
                 $("#peso").attr("readonly",false);
                 $("#punto_llegada_input").attr("readonly",false);
                 
                 $('#orden_compra_cliente').val(entrada.numero_orden_compra_cliente);
+                $('#orden_compra').val(entrada.numero_orden_compra);
                 $('#tiendas_orden_compra').val(entrada.tiendas);
                 $('#peso').val(peso_total.toFixed(2));
                 $('#punto_llegada_input').val(entrada.direccion);
@@ -799,6 +802,7 @@ function cargar_detalle_documento(id_documento){
                 $("#destinatario_nombre").attr("readonly",true);
                 $("#persona_destinatario_nombre").attr("readonly",true);
                 $("#orden_compra_cliente").attr("readonly",true);
+                $("#orden_compra").attr("readonly",true);
                 $("#tiendas_orden_compra").attr("readonly",true);
                 $("#peso").attr("readonly",true);
 
@@ -1800,7 +1804,7 @@ function obtenerMotivo(){
                                         <?php
                                         foreach ($tipo_documento_cliente as $row){?>
                                             <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$guia_interna->id_tipo_cliente)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
-                                            <?php 
+                                            <?php
                                         }
                                         ?>
                                     </select>
@@ -1864,6 +1868,16 @@ function obtenerMotivo(){
                         <div class="col-lg-4">
                             <div class="row">
                                 <div class="col-lg-4">
+                                    N° Orden Compra
+                                </div>
+                                <div class="col-lg-5">
+                                    <input id="orden_compra" name="orden_compra" on class="form-control form-control-sm"  value="<?php if($id>0){echo $guia_interna->numero_orden_compra;} ?>" type="text">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="row">
+                                <div class="col-lg-4">
                                     Tiendas
                                 </div>
                                 <div class="col-lg-5">
@@ -1871,19 +1885,9 @@ function obtenerMotivo(){
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-4">
-                            <div class="row">
-                                <div class="col-lg-4">
-                                    Observaci&oacute;n
-                                </div>
-                                <div class="col-lg-8">
-                                    <input id="observacion_guia" name="observacion_guia" on class="form-control form-control-sm"  value="<?php if($id>0){echo $guia_interna->observacion;} ?>" type="text">
-                                </div>
-                            </div>
-                        </div>
                     </div>
                     <div class="row" style="padding-left:10px; padding-bottom:10px;">
-                        <div class="col-lg-4">
+                        <!--<div class="col-lg-4">
                             <div class="row">
                                 <div class="col-lg-4">
                                     Unidad Medida Peso
@@ -1898,6 +1902,16 @@ function obtenerMotivo(){
                                         }
                                         ?>
                                     </select>
+                                </div>
+                            </div>
+                        </div>-->
+                        <div class="col-lg-4">
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    Observaci&oacute;n
+                                </div>
+                                <div class="col-lg-8">
+                                    <input id="observacion_guia" name="observacion_guia" on class="form-control form-control-sm"  value="<?php if($id>0){echo $guia_interna->observacion;} ?>" type="text">
                                 </div>
                             </div>
                         </div>

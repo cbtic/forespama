@@ -192,6 +192,7 @@ class GuiaInternaController extends Controller
         $guia_interna->id_ubigeo_llegada = $request->distrito_llegada;
         $guia_interna->guia_serie = $request->serie_guia;
         $guia_interna->numero_orden_compra_cliente = $request->orden_compra_cliente;
+        $guia_interna->numero_orden_compra = $request->orden_compra;
         $guia_interna->tiendas = $request->tiendas_orden_compra;
         $guia_interna->observacion = $request->observacion_guia;
         $guia_interna->guia_tipo = $tipo_guia[0]->codigo;
@@ -264,6 +265,16 @@ class GuiaInternaController extends Controller
         if($request->orden_compra_cliente!=""){
             $observacion.="Orden Compra Cliente: ".$request->orden_compra_cliente;
         }
+        //dd($request->orden_compra);
+        if(!in_array($request->destinatario, [23, 187])){
+            if($request->orden_compra!=""){
+                if ($observacion != "") {
+                    $observacion .= " / ";
+                }
+                $observacion.="Orden Compra: ".$request->orden_compra;
+            }
+        }
+        
         if($request->tiendas_orden_compra !=""){
             if ($observacion != "") {
                 $observacion .= " / ";

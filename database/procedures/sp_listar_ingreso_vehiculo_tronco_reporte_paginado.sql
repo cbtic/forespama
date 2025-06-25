@@ -33,7 +33,6 @@ begin
 	inner join tabla_maestras tm on ivttm.id_tipo_maderas=tm.codigo::int and tm.tipo=''42''
 	inner join tabla_maestras tmep on ivttm.id_estado_pago=tmep.codigo::int and tmep.tipo=''66''
 	where 1=1 
-	--and ivt.id_empresa_proveedor = 188 
 	'; 
 	
 	If p_fecha_desde<>'' Then
