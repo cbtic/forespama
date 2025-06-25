@@ -40,6 +40,7 @@ use App\Http\Controllers\Frontend\ParametroController;
 use App\Http\Controllers\Frontend\EmpaquetadoController;
 use App\Http\Controllers\Frontend\DevolucionController;
 use App\Http\Controllers\Frontend\PromotorController;
+use App\Http\Controllers\Frontend\EmpresaCubicajeController;
 
 //use App\Http\Controllers\VehiculoController;
 
@@ -667,3 +668,8 @@ Route::post('orden_compra/send_orden_compra_guia', [OrdenCompraController::class
 Route::get('orden_compra/eliminar_pago/{id}', [OrdenCompraController::class, 'eliminar_pago'])->name('orden_compra.eliminar_pago');
 Route::get('dispensacion/exportar_listar_dispensacion_reporte/{tipo_documento}/{fecha_inicio}/{fecha_fin}/{numero_dispensacion}/{almacen}/{area_trabajo}/{unidad_trabajo}/{persona_recibe}/{estado}', [DispensacionController::class, 'exportar_listar_dispensacion_reporte'])->name('dispensacion.exportar_listar_dispensacion_reporte');
 Route::get('requerimiento/movimiento_pdf_requerimiento_control/{id}', [RequerimientoController::class, 'movimiento_pdf_requerimiento_control'])->name('requerimiento.movimiento_pdf_requerimiento_control');
+Route::get('empresa_cubicaje/create', [EmpresaCubicajeController::class, 'create'])->name('empresa_cubicaje.create');
+Route::post('empresa_cubicaje/listar_empresa_cubicaje_ajax', [EmpresaCubicajeController::class, 'listar_empresa_cubicaje_ajax'])->name('empresa_cubicaje.listar_empresa_cubicaje_ajax');
+Route::post('empresa_cubicaje/send_empresa_cubicaje', [EmpresaCubicajeController::class, 'send_empresa_cubicaje'])->name('empresa_cubicaje.send_empresa_cubicaje');
+Route::get('empresa_cubicaje/modal_empresa_cubicaje/{id}', [EmpresaCubicajeController::class, 'modal_empresa_cubicaje'])->name('empresa_cubicaje.modal_empresa_cubicaje');
+Route::get('empresa_cubicaje/eliminar_empresa_cubicaje/{id}/{estado}', [EmpresaCubicajeController::class, 'eliminar_empresa_cubicaje'])->name('empresa_cubicaje.eliminar_empresa_cubicaje');

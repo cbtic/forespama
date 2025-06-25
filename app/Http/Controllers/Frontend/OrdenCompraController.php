@@ -360,8 +360,11 @@ class OrdenCompraController extends Controller
 
             $id_almacen_bus = $detalle->id_almacen_salida;
             
+            if($detalle->id_unidad_origen==1){$id_almacen_bus = $detalle->id_almacen_salida;}
             if($detalle->id_unidad_origen==2){$id_almacen_bus = $detalle->id_almacen_destino;}
+            if($detalle->id_unidad_origen==3){$id_almacen_bus = $detalle->id_almacen_salida;}
             if($detalle->id_unidad_origen==4){$id_almacen_bus = $detalle->id_almacen_salida;}
+            
             $stock = $kardex_model->getExistenciaProductoById($detalle->id_producto, $id_almacen_bus);
             if(count($stock)>0){
                 $producto_stock[$detalle->id_producto] = $stock[0];

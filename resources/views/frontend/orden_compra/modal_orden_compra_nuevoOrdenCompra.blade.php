@@ -666,7 +666,7 @@ function cargarDetalle(){
                 let productoOptions = '<option value="">--Seleccionar--</option>';
                 let estadoBienOptions = '<option value="">--Seleccionar--</option>';
                 let unidadMedidaOptions = '<option value="">--Seleccionar--</option>';
-                //let descuentoOptions = '<option value="">--Seleccionar--</option>';
+                var producto_stock = result.producto_stock[orden_compra.id_producto];
 
                 result.marca.forEach(marca => {
                     let selected = (marca.id == orden_compra.id_marca) ? 'selected' : '';
@@ -708,6 +708,7 @@ function cargarDetalle(){
                         <td><select name="estado_bien[]" id="estado_bien${n}" class="form-control form-control-sm" onChange="">${estadoBienOptions}</select></td>
                         <td><select name="unidad[]" id="unidad${n}" class="form-control form-control-sm">${unidadMedidaOptions}</select></td>
                         <td><input name="cantidad_ingreso[]" id="cantidad_ingreso${n}" class="cantidad_ingreso form-control form-control-sm" value="${orden_compra.cantidad_requerida}" type="text" oninput="calcularCantidadPendiente(this);calcularSubTotal(this);calcularPrecioUnitario(this)"></td>
+                        <td><input name="stock_actual[]" id="stock_actual${n}" class="form-control form-control-sm" value="${producto_stock.saldos_cantidad}" type="text" readonly="readonly"></td>
                         <td><input name="precio_unitario[]" id="precio_unitario${n}" class="precio_unitario form-control form-control-sm" value="${parseFloat(orden_compra.precio_venta || 0).toFixed(2)}" type="text" oninput="calcularSubTotal(this);calcularPrecioUnitario(this)"></td>
                         <td><input name="precio_unitario_[]" id="precio_unitario_${n}" class="precio_unitario_ form-control form-control-sm" value="${parseFloat(orden_compra.precio || 0).toFixed(2)}" type="text" oninput="calcularPrecioUnitario(this)"></td>
                         <td><input name="valor_venta_bruto[]" id="valor_venta_bruto${n}" class="valor_venta_bruto form-control form-control-sm" value="${parseFloat(orden_compra.valor_venta_bruto || 0).toFixed(2)}" type="text" oninput="calcularSubTotal(this)"></td>
@@ -797,6 +798,7 @@ function agregarProducto(){
         var estado_bien =  '<select name="estado_bien[]" id="estado_bien' + n + '" class="form-control form-control-sm" onChange=""><option value="">--Seleccionar--</option> <?php foreach ($estado_bien as $row) { ?> <option value="<?php echo $row->codigo ?>" <?php echo ($row->codigo == 1) ? "selected" : ""; ?>><?php echo $row->denominacion ?></option> <?php } ?> </select>';
         var unidad = '<select name="unidad[]" id="unidad' + n + '" class="form-control form-control-sm" onChange=""> <option value="">--Seleccionar--</option> <?php foreach ($unidad as $row) {?> <option value="<?php echo $row->codigo?>"><?php echo $row->denominacion?></option> <?php } ?> </select>';
         var cantidad_ingreso = '<input name="cantidad_ingreso[]" id="cantidad_ingreso' + n + '" class="cantidad_ingreso form-control form-control-sm" value="" type="text" oninput="calcularSubTotal(this);calcularPrecioUnitario(this)">';
+        var stock_actual = '<input name="stock_actual[]" id="stock_actual' + n + '" class="form-control form-control-sm" value="" type="text" readonly>';
         var precio_unitario = '<input name="precio_unitario[]" id="precio_unitario' + n + '" class="precio_unitario form-control form-control-sm" value="" type="text" oninput="calcularSubTotal(this);calcularPrecioUnitario(this)">';
         var precio_unitario_ = '<input name="precio_unitario_[]" id="precio_unitario_' + n + '" class="precio_unitario_ form-control form-control-sm" value="" type="text" oninput="calcularPrecioUnitario(this)">';
         var valor_venta_bruto = '<input name="valor_venta_bruto[]" id="valor_venta_bruto' + n + '" class="valor_venta_bruto form-control form-control-sm" value="" type="text" oninput="calcularSubTotal(this)">';
@@ -819,6 +821,7 @@ function agregarProducto(){
         newRow += '<td>' + estado_bien + '</td>';
         newRow += '<td>' + unidad + '</td>';
         newRow += '<td>' + cantidad_ingreso + '</td>';
+        newRow += '<td>' + stock_actual + '</td>';
         newRow += '<td>' + precio_unitario + '</td>';
         newRow += '<td>' + precio_unitario_ + '</td>';
         newRow += '<td>' + valor_venta_bruto + '</td>';
@@ -917,6 +920,7 @@ function verificarProductoSeleccionado(selectElement, rowIndex, valor) {
             $("#descripcion_ant"+rowIndex).val(selectedValue);
 
             obtenerCodInterno(selectElement, rowIndex);
+            obtenerStock(selectElement, rowIndex);
         } else {
             bootbox.alert("Este producto ya ha sido seleccionado. Por favor elige otro.");
             $(selectElement).val('').trigger('change');
@@ -1125,6 +1129,34 @@ function cambiarCliente(){
         
     }
 
+}
+
+function obtenerStock(selectElement, n){
+
+    var id_producto = $(selectElement).val();
+    var unidad_origen = $('#unidad_origen').val();
+    //alert(unidad_origen);
+    var almacen = "";
+    if(unidad_origen==1){
+        almacen = $('#almacen_salida').val();
+    }else if(unidad_origen==2){
+        almacen = $('#almacen').val();
+    }else if(unidad_origen==3){
+        almacen = $('#almacen_salida').val();
+    }else if(unidad_origen==4){
+        almacen = $('#almacen_salida').val();
+    }
+
+    $.ajax({
+        url: "/productos/obtener_stock_producto/"+almacen+"/"+id_producto,
+        dataType: "json",
+        success: function(result){
+
+            var producto_stock = result.producto_stock[id_producto];
+            
+            $('#stock_actual' + n).val(producto_stock.saldos_cantidad);
+        }
+    });
 }
 
 </script>
@@ -1383,6 +1415,7 @@ function cambiarCliente(){
                                 <th>Estado Bien</th>
                                 <th>Unidad</th>
                                 <th>Cantidad</th>
+                                <th>Stock Actual</th>
                                 <th>Precio Venta</th>
                                 <th>Precio Unitario</th>
                                 <th>Valor Venta Bruto</th>

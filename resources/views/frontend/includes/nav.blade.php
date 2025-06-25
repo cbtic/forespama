@@ -293,6 +293,10 @@
 									<x-utils.link :href="route('frontend.empaquetado.create')" class="dropdown-item" :text="__('Empaquetado')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
 								@endif
 
+								@can('Mantenimiento Empresas Cubicaje')
+									<x-utils.link :href="route('frontend.empresa_cubicaje.create')" class="dropdown-item" :text="__('Empresas Cubicaje')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+								@endif
+
 							</div>
 
 						</li>
