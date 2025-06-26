@@ -350,11 +350,43 @@ label.form-control-sm{
 				
 				<div class="row" style="padding:20px 20px 0px 20px;">
 
-                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-                        <input id="razon_social_bus" name="razon_social_bus" on class="form-control form-control-sm"  placeholder="Razon Social">
+                    <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+                        <select name="tipo_empresa_bus" id="tipo_empresa_bus" class="form-control form-control-sm">
+							<option value="">--Seleccionar Tipo Empresa--</option>
+							<?php
+							foreach ($tipo_empresa as $row){?>
+								<option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
+								<?php 
+							}
+							?>
+						</select>
+					</div>
+
+					<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                        <select name="empresa_bus" id="empresa_bus" class="form-control form-control-sm">
+							<option value="">--Seleccionar Empresa--</option>
+							<?php
+							foreach ($empresas as $row){?>
+								<option value="<?php echo $row->id ?>"><?php echo $row->razon_social ?></option>
+								<?php 
+							}
+							?>
+						</select>
+					</div>
+
+					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+                        <select name="tipo_pago_bus" id="tipo_pago_bus" class="form-control form-control-sm">
+							<option value="">--Seleccionar Tipo Pago--</option>
+							<?php
+							foreach ($tipo_pago as $row){?>
+								<option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
+								<?php 
+							}
+							?>
+						</select>
 					</div>
 					
-                    <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+                    <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
 						<select name="estado_bus" id="estado_bus" class="form-control form-control-sm">
 							<option value="">Todos</option>
 							<option value="1" selected="selected">Activo</option>
@@ -375,10 +407,13 @@ label.form-control-sm{
                         <thead>
                         <tr style="font-size:13px">
                             <th>Id</th>
-							<th>Raz&oacute;n Social</th>
 							<th>Tipo Empresa</th>
+							<th>Raz&oacute;n Social</th>
+							<th>Conductor</th>
 							<th>Tipo Pago</th>
-							<th>Precio</th>
+							<th>Diametro DM</th>
+							<th>Precio Mayor</th>
+							<th>Precio Menor</th>
 							<th>Estado</th>
                             <th>Acciones</th>
                         </tr>

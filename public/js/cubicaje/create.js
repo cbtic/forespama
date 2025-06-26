@@ -53,6 +53,7 @@ $(document).ready(function () {
                 if (response.success) {
                     datatablenew();
                     container.find('.fileExcel').show();
+                    cargarCubicaje(response.id_ingreso_vehiculo_tronco_tipo_madera);
                 } else {
                     alert(response.message);
                 }
@@ -73,6 +74,10 @@ $(document).ready(function () {
 	datatablenew();
 	
 	$('#btnGuardar').on('click', function () {
+		guardar_cubicaje();
+	});
+
+    $('#btnGuardar2').on('click', function () {
 		guardar_cubicaje();
 	});
 	
@@ -1901,6 +1906,10 @@ function datatablenew() {
 
 function calcular_cubicaje(obj) {
 
+    //var id_empresa_proveedor = $(obj).parent().parent().find('input[name="id_empresa_proveedor[]"]').val();
+    var diametro_dm_ = parseFloat($(obj).parent().parent().find('input[name="diametro_dm[]"]').val());
+    var precio_mayor = parseFloat($(obj).parent().parent().find('input[name="precio_mayor[]"]').val());
+    var precio_menor = parseFloat($(obj).parent().parent().find('input[name="precio_menor[]"]').val());
     var diametro_1 = $(obj).parent().parent().find('input[name="diametro_1[]"]').val();
     var diametro_2 = $(obj).parent().parent().find('input[name="diametro_2[]"]').val();
     var longitud = $(obj).parent().parent().find('input[name="longitud[]"]').val();
@@ -1913,16 +1922,18 @@ function calcular_cubicaje(obj) {
     var precio_unitario = 0;
     var precio_total = 0;
 
-    if (diametro_dm > 0.229) {
-        precio_unitario = 1.70;
+    //alert(diametro_dm_);
+    if (diametro_dm >= diametro_dm_) {
+        precio_unitario = precio_mayor;
     } else {
-        precio_unitario = 1.20;
+        precio_unitario = precio_menor;
     }
 
     if (longitud < 1.22) precio_unitario = 1.20;
 
     precio_total = volumen_total_pies * precio_unitario;
 
+    //alert(precio_total);
     $(obj).parent().parent().find('input[name="diametro_dm[]"]').val(diametro_dm);
     $(obj).parent().parent().find('input[name="volumen_m3[]"]').val(volumen_m3.toFixed(3));
     $(obj).parent().parent().find('input[name="volumen_total_m3[]"]').val(volumen_m3.toFixed(2));

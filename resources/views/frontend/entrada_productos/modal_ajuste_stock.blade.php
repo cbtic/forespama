@@ -300,7 +300,7 @@ function agregarProducto(){
         var stock_actual = '<input name="stock_actual[]" id="stock_actual' + n + '" class="form-control form-control-sm" value="" type="text" readonly>';
         
         var btnEliminar = '<button type="button" class="btn btn-danger btn-sm" onclick="eliminarFila(this)">Eliminar</button>';
-        
+
         newRow += '<tr>';
         newRow += '<td>' + n + '</td>';
         newRow += '<td>' + item + '</td>';
@@ -449,19 +449,19 @@ function save_ajuste(){
 
 function obtenerStock(selectElement, n){
 
-var id_producto = $(selectElement).val();
-var almacen = $('#almacen_destino').val();
+    var id_producto = $(selectElement).val();
+    var almacen = $('#almacen_destino').val();
 
-$.ajax({
-    url: "/productos/obtener_stock_producto/"+almacen+"/"+id_producto,
-    dataType: "json",
-    success: function(result){
+    $.ajax({
+        url: "/productos/obtener_stock_producto/"+almacen+"/"+id_producto,
+        dataType: "json",
+        success: function(result){
 
-        var producto_stock = result.producto_stock[id_producto];
-        
-        $('#stock_actual' + n).val(producto_stock.saldos_cantidad);
-    }
-});
+            var producto_stock = result.producto_stock[id_producto];
+            
+            $('#stock_actual' + n).val(producto_stock.saldos_cantidad);
+        }
+    });
 }
 
 </script>

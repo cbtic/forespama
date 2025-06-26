@@ -5,7 +5,7 @@ $(document).ready(function () {
 	});
 		
 	$('#btnNuevo').click(function () {
-		modalMarca(0);
+		modalEmpresaCubicaje(0);
 	});
 
 	$('#razon_social_bus').keypress(function(e){
@@ -21,13 +21,15 @@ $(document).ready(function () {
 			return false;
 		}
 	});
-		
+	
 	datatablenew();
+
+	$('#empresa_bus').select2({ width : '100%' })
 
 });
 
 function datatablenew(){
-                      
+    
     var oTable1 = $('#tblEmpresaCubicaje').dataTable({
         "bServerSide": true,
         "sAjaxSource": "/empresa_cubicaje/listar_empresa_cubicaje_ajax",
@@ -57,7 +59,9 @@ function datatablenew(){
             var iNroPagina 	= parseFloat(fn_util_obtieneNroPagina(aoData[3].value, aoData[4].value)).toFixed();
             var iCantMostrar 	= aoData[4].value;
 
-            var denominacion = $('#denominacion_bus').val();
+            var tipo_empresa = $('#tipo_empresa_bus').val();
+            var empresa = $('#empresa_bus').val();
+            var tipo_pago = $('#tipo_pago_bus').val();
 			var estado = $('#estado_bus').val();
 			
 			var _token = $('#_token').val();
@@ -66,8 +70,8 @@ function datatablenew(){
                 //"contentType": "application/json; charset=utf-8",
                 "type": "POST",
                 "url": sSource,
-                "data":{NumeroPagina:iNroPagina,NumeroRegistros:iCantMostrar,
-						denominacion:denominacion,estado:estado,
+                "data":{NumeroPagina:iNroPagina, NumeroRegistros:iCantMostrar,
+						tipo_empresa:tipo_empresa, empresa:empresa, tipo_pago:tipo_pago, estado:estado,
 						_token:_token
                        },
                 "success": function (result) {
@@ -95,9 +99,9 @@ function datatablenew(){
 
 				{
 				"mRender": function (data, type, row) {
-					var razon_social = "";
-					if(row.razon_social!= null)razon_social = row.razon_social;
-					return razon_social;
+					var tipo_empresa = "";
+					if(row.tipo_empresa!= null)tipo_empresa = row.tipo_empresa;
+					return tipo_empresa;
 				},
 				"bSortable": true,
 				"aTargets": [1]
@@ -105,12 +109,22 @@ function datatablenew(){
 
 				{
 				"mRender": function (data, type, row) {
-					var tipo_empresa = "";
-					if(row.tipo_empresa!= null)tipo_empresa = row.tipo_empresa;
-					return tipo_empresa;
+					var razon_social = "";
+					if(row.razon_social!= null)razon_social = row.razon_social;
+					return razon_social;
 				},
 				"bSortable": true,
 				"aTargets": [2]
+				},
+
+				{
+				"mRender": function (data, type, row) {
+					var conductor = "";
+					if(row.conductor!= null)conductor = row.conductor;
+					return conductor;
+				},
+				"bSortable": true,
+				"aTargets": [3]
 				},
 
 				{
@@ -120,17 +134,37 @@ function datatablenew(){
 					return tipo_pago;
 				},
 				"bSortable": true,
-				"aTargets": [3]
+				"aTargets": [4]
+				},
+
+				{
+				"mRender": function (data, type, row) {
+					var diametro_dm = "";
+					if(row.diametro_dm!= null)diametro_dm = row.diametro_dm;
+					return diametro_dm;
+				},
+				"bSortable": true,
+				"aTargets": [5]
 				},
 				
 				{
 				"mRender": function (data, type, row) {
-					var precio = "";
-					if(row.precio!= null)precio = row.precio;
-					return precio;
+					var precio_mayor = "";
+					if(row.precio_mayor!= null)precio_mayor = row.precio_mayor;
+					return precio_mayor;
 				},
 				"bSortable": true,
-				"aTargets": [4]
+				"aTargets": [6]
+				},
+
+				{
+				"mRender": function (data, type, row) {
+					var precio_menor = "";
+					if(row.precio_menor!= null)precio_menor = row.precio_menor;
+					return precio_menor;
+				},
+				"bSortable": true,
+				"aTargets": [7]
 				},
 
 				{
@@ -145,7 +179,7 @@ function datatablenew(){
 					return estado;
 				},
 				"bSortable": false,
-				"aTargets": [5]
+				"aTargets": [8]
 				},
 				{
 					"mRender": function (data, type, row) {
@@ -171,7 +205,7 @@ function datatablenew(){
 						return html;
 					},
 					"bSortable": false,
-					"aTargets": [6],
+					"aTargets": [9],
 				},
             ]
     });
@@ -182,13 +216,13 @@ function fn_ListarBusqueda() {
     datatablenew();
 };
 
-function modalMarca(id){
+function modalEmpresaCubicaje(id){
 	
 	$(".modal-dialog").css("width","85%");
 	$('#openOverlayOpc .modal-body').css('height', 'auto');
 
 	$.ajax({
-			url: "/marcas/modal_marca/"+id,
+			url: "/empresa_cubicaje/modal_empresa_cubicaje/"+id,
 			type: "GET",
 			success: function (result) {  
 					$("#diveditpregOpc").html(result);
@@ -198,7 +232,7 @@ function modalMarca(id){
 
 }
 
-function eliminarMarca(id,estado){
+function eliminarEmpresaCubicaje(id,estado){
 	var act_estado = "";
 	if(estado==1){
 		act_estado = "Eliminar";
@@ -210,7 +244,7 @@ function eliminarMarca(id,estado){
 	}
     bootbox.confirm({ 
         size: "small",
-        message: "&iquest;Deseas "+act_estado+" la Marca?", 
+        message: "&iquest;Deseas "+act_estado+" el registro de la Empresa?", 
         callback: function(result){
             if (result==true) {
                 fn_eliminar(id,estado_);
@@ -223,7 +257,7 @@ function eliminarMarca(id,estado){
 function fn_eliminar(id,estado){
 	
     $.ajax({
-            url: "/marcas/eliminar_marca/"+id+"/"+estado,
+            url: "/empresa_cubicaje/eliminar_empresa_cubicaje/"+id+"/"+estado,
             type: "GET",
             success: function (result) {
                 //if(result="success")obtenerPlanDetalle(id_plan);

@@ -849,14 +849,22 @@ class IngresoVehiculoTroncoController extends Controller
 		move_uploaded_file($_FILES["file"]["tmp_name"], $filepath . $filename.".".$type);
 		
 		$archivo = $filename.".".$type;
+
+		$id_ingreso_vehiculo_tronco_tipo_madera = IngresoVehiculoTroncoTipoMadera::where('id_ingreso_vehiculo_troncos', $idIngreso)->where('estado',1)->first();
 		
-		return $this->importar_cubicaje($archivo, $idIngreso);
+		//$id_ingreso_vehiculo_cubicaje = IngresoVehiculoTroncoCubicaje::where('id_ingreso_vehiculo_tronco_tipo_maderas', $id_ingreso_vehiculo_tronco_tipo_madera->id)->where('estado',1)->first();
+
+		$modal_ingreso_vehiculo_cubicaje = new IngresoVehiculoTronco;
+
+		$datos_cubicaje = $modal_ingreso_vehiculo_cubicaje->getIngresoVehiculoTroncoCubicajeById($id_ingreso_vehiculo_tronco_tipo_madera->id);
+
+		return $this->importar_cubicaje($archivo, $idIngreso, $datos_cubicaje[0]->diametro_dm_proveedor, $datos_cubicaje[0]->precio_mayor, $datos_cubicaje[0]->precio_menor);
 		
 	}
 	
 	function extension($filename){$file = explode(".",$filename); return strtolower(end($file));}
 	
-	public function importar_cubicaje($archivo, $idIngreso){
+	public function importar_cubicaje($archivo, $idIngreso, $diametro_dm_, $precio_mayor, $precio_menor){
 		
 		$id_user = Auth::user()->id;
 
@@ -952,10 +960,10 @@ class IngresoVehiculoTroncoController extends Controller
 				$precio_unitario = 0;
 				$precio_total = 0;
 
-				if ($diametro_dm > 0.229) {
-					$precio_unitario = 1.70;
+				if ($diametro_dm >= $diametro_dm_) {
+					$precio_unitario = $precio_mayor;
 				} else {
-					$precio_unitario = 1.20;
+					$precio_unitario = $precio_menor;
 				}
 
 				if ($longitud < 1.22) $precio_unitario = 1.20;
@@ -1012,7 +1020,7 @@ class IngresoVehiculoTroncoController extends Controller
 			
 		}
 
-		return response()->json(['success' => true, 'message' => 'Archivo procesado correctamente.']);
+		return response()->json(['success' => true, 'message' => 'Archivo procesado correctamente.','id_ingreso_vehiculo_tronco_tipo_madera'=>$id_ingreso_vehiculo_tronco_tipo_madera]);
 	}
 }
 

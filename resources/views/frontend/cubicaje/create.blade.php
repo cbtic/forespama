@@ -638,7 +638,7 @@ label.form-control-sm{
 								
 								<input class="btn btn-warning btn-sm float-right" style="margin-left:15px" value="Imprimir" type="button" id="btnImprimir" onclick="imprimirCubicajePdf()" />
 								
-								<input class="btn btn-success btn-sm float-right" value="Guardar" type="button" id="btnGuardar" />
+								<input class="btn btn-success btn-sm float-right" value="Guardar" type="button" id="btnGuardar2" />
 								
 							</div>
 							

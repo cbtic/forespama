@@ -154,7 +154,15 @@ $('#openOverlayOpc').on('shown.bs.modal', function() {
 });
 
 $(document).ready(function() {
-	 
+	
+    $('#empresa').select2({ width: '100%' })
+    $('#conductor').select2({ width: '100%' })
+
+    $('#conductor_div').hide();
+    $('#conductor_div').hide();
+    
+    validaTipoEmpresa();
+
 });
 
 function limpiar(){
@@ -164,28 +172,33 @@ function limpiar(){
 	$('#img_foto').val("");
 }
 
-function fn_save_marca(){
-
-    $('#denominacion').val($('#denominacion').val().toUpperCase());
+function fn_save_empresa_cubicaje(){
 	
 	$.ajax({
-			url: "/marcas/send_marca",
+			url: "/empresa_cubicaje/send_empresa_cubicaje",
             type: "POST",
-            data : $("#frmMarca").serialize(),
+            data : $("#frmEmpresaCubicaje").serialize(),
 			success: function (result) {
-				//alert(result);
-                if (result.success) {
-                    bootbox.alert(result.success, function() {
-                        $('#openOverlayOpc').modal('hide');
-                        //bootbox.alert("Se guard&oacute; satisfactoriamente"); 
-                        //window.location.reload();
-                        datatablenew();
-                    });
-                } else if (result.error) {
-                    bootbox.alert(result.error);
-                }
+				
+                $('#openOverlayOpc').modal('hide');
+                datatablenew();
+                
             },
     });
+}
+
+function validaTipoEmpresa(){
+
+    var tipo_empresa = $('#tipo_empresa').val();
+    //$('#conductor_div').hide();
+    //$('#conductor_div').hide();
+
+    if(tipo_empresa==2){
+        $('#conductor_div').show();
+    }else{
+        $('#conductor_div').hide();
+    }
+
 }
 
 </script>
@@ -201,16 +214,16 @@ function fn_save_marca(){
           </h1>
         </section>
 		-->
-		<div class="justify-content-center">		
+		<div class="justify-content-center">
 
             <div class="card">
                 
                 <div class="card-header" style="padding:5px!important;padding-left:20px!important">
-                    Registrar Marcas
+                    Registrar Empresa Cubicaje
                 </div>
                 
                 <div class="card-body">
-                <form method="post" action="#" id="frmMarca" name="frmMarca">
+                <form method="post" action="#" id="frmEmpresaCubicaje" name="frmEmpresaCubicaje">
 
                     <div class="row">
 
@@ -219,29 +232,82 @@ function fn_save_marca(){
                             <input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
                             <input type="hidden" name="id" id="id" value="<?php echo $id?>">
                             
-                            
                             <div class="row" style="padding-left:10px">
-                                
-                                <div class="col-lg-8">
+						
+                                <div class="col-lg-12">
                                     <div class="form-group">
-                                        <label class="control-label form-control-sm">Denominaci&oacute;n</label>
-                                        <input id="denominacion" name="denominacion" on class="form-control form-control-sm"  value="<?php echo $marca->denominiacion?>" type="text" style="text-transform: uppercase;">
+                                        <label class="control-label form-control-sm">Empresas</label>
+                                        <select name="empresa" id="empresa" class="form-control form-control-sm">
+                                            <option value="">--Seleccionar--</option>
+                                            <?php 
+                                            foreach ($empresas as $row){?>
+                                                <option value="<?php echo $row->id ?>" <?php if($row->id==$empresa_cubicaje->id_empresa)echo "selected='selected'"?>><?php echo $row->razon_social ?></option>
+                                                <?php 
+                                            }
+                                            ?>
+                                        </select>
                                     </div>
                                 </div>
                             </div>
                             <div class="row" style="padding-left:10px">
                                 <div class="col-lg-4">
                                     <div class="form-group">
-                                        <label class="control-label form-control-sm">Tipo Marca</label>
-                                        <select name="tipo_marca" id="tipo_marca" class="form-control form-control-sm">
+                                        <label class="control-label form-control-sm">Tipo Empresa</label>
+                                        <select name="tipo_empresa" id="tipo_empresa" class="form-control form-control-sm" onchange="validaTipoEmpresa()">
                                             <option value="">--Seleccionar--</option>
                                             <?php 
-                                            foreach ($tipo_marca as $row){?>
-                                                <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$marca->id_tipo_marca)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                            foreach ($tipo_empresa as $row){?>
+                                                <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$empresa_cubicaje->id_tipo_empresa)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
                                                 <?php 
                                             }
                                             ?>
                                         </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-8" id="conductor_div">
+                                    <div class="form-group">
+                                        <label class="control-label form-control-sm">Conductor</label>
+                                        <select name="conductor" id="conductor" class="form-control form-control-sm">
+                                            <option value="">--Seleccionar--</option>
+                                            <?php 
+                                            foreach ($conductor as $row){?>
+                                                <option value="<?php echo $row->id ?>" <?php if($row->id==$empresa_cubicaje->id_conductor)echo "selected='selected'"?>><?php echo $row->nombre_conductor ?></option>
+                                                <?php 
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label class="control-label form-control-sm">Tipo Pago</label>
+                                        <select name="tipo_pago" id="tipo_pago" class="form-control form-control-sm">
+                                            <option value="">--Seleccionar--</option>
+                                            <?php 
+                                            foreach ($tipo_pago as $row){?>
+                                                <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$empresa_cubicaje->id_tipo_pago)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                                <?php 
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label class="control-label form-control-sm">Diametro Dm</label>
+                                        <input id="diametro_dm" name="diametro_dm" class="form-control form-control-sm"  value="<?php echo $empresa_cubicaje->diametro_dm?>" type="text">
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label class="control-label form-control-sm">Precio Mayor</label>
+                                        <input id="precio_mayor" name="precio_mayor" class="form-control form-control-sm"  value="<?php echo $empresa_cubicaje->precio_mayor?>" type="text">
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label class="control-label form-control-sm">Precio Menor</label>
+                                        <input id="precio_menor" name="precio_menor" class="form-control form-control-sm"  value="<?php echo $empresa_cubicaje->precio_menor?>" type="text">
                                     </div>
                                 </div>
                             </div>
@@ -250,7 +316,7 @@ function fn_save_marca(){
                         <div style="margin-top:15px" class="form-group">
                             <div class="col-sm-12 controls">
                                 <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
-                                    <a href="javascript:void(0)" onClick="fn_save_marca()" class="btn btn-sm btn-success">Registrar</a>
+                                    <a href="javascript:void(0)" onClick="fn_save_empresa_cubicaje()" class="btn btn-sm btn-success">Registrar</a>
                                 </div>
                                                     
                             </div>
@@ -275,7 +341,7 @@ function fn_save_marca(){
 <script type="text/javascript">
 $(document).ready(function () {
 
-	$('#ruc_').blur(function () {
+	$('#ruc').blur(function () {
 		var id = $('#id').val();
 			if(id==0) {
 				validaRuc(this.value);

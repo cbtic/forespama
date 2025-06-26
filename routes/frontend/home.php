@@ -673,3 +673,4 @@ Route::post('empresa_cubicaje/listar_empresa_cubicaje_ajax', [EmpresaCubicajeCon
 Route::post('empresa_cubicaje/send_empresa_cubicaje', [EmpresaCubicajeController::class, 'send_empresa_cubicaje'])->name('empresa_cubicaje.send_empresa_cubicaje');
 Route::get('empresa_cubicaje/modal_empresa_cubicaje/{id}', [EmpresaCubicajeController::class, 'modal_empresa_cubicaje'])->name('empresa_cubicaje.modal_empresa_cubicaje');
 Route::get('empresa_cubicaje/eliminar_empresa_cubicaje/{id}/{estado}', [EmpresaCubicajeController::class, 'eliminar_empresa_cubicaje'])->name('empresa_cubicaje.eliminar_empresa_cubicaje');
+

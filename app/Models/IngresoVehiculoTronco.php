@@ -17,7 +17,7 @@ class IngresoVehiculoTronco extends Model
         inner join vehiculos v on ecv.id_vehiculos=v.id and v.estado='1' 
         inner join conductores c on ecv.id_conductores=c.id and c.estado='ACTIVO'
         inner join personas p on c.id_personas=p.id
-        inner join marcas m on v.id_marca = m.id
+        left join marcas m on v.id_marca = m.id
         where ecv.estado='1'
         and v.placa='".$placa."'
         order by ecv.id desc";
@@ -44,8 +44,35 @@ class IngresoVehiculoTronco extends Model
 
 	function getIngresoVehiculoTroncoCubicajeById($id){
 
-        $cad = "select * from ingreso_vehiculo_tronco_cubicajes ivtc 
-        where id_ingreso_vehiculo_tronco_tipo_maderas=".$id;
+        $cad = "select ivtc.*, ivt.id_empresa_proveedor,
+        (select ec.diametro_dm
+        from empresa_cubicajes ec
+        where ec.id_empresa = ivt.id_empresa_proveedor 
+        and ((ec.id_tipo_empresa = 2 and ec.id_conductor = ivt.id_conductores) 
+        or (ec.id_tipo_empresa = 1))
+        and ec.estado ='1'
+        order by 1 desc 
+        limit 1) diametro_dm_proveedor,
+        (select ec.precio_mayor 
+        from empresa_cubicajes ec
+        where ec.id_empresa = ivt.id_empresa_proveedor 
+        and ((ec.id_tipo_empresa = 2 and ec.id_conductor = ivt.id_conductores) 
+        or (ec.id_tipo_empresa = 1))
+        and ec.estado ='1'
+        order by 1 desc 
+        limit 1) precio_mayor,
+        (select ec.precio_menor 
+        from empresa_cubicajes ec
+        where ec.id_empresa = ivt.id_empresa_proveedor 
+        and ((ec.id_tipo_empresa = 2 and ec.id_conductor = ivt.id_conductores) 
+        or (ec.id_tipo_empresa = 1))
+        and ec.estado ='1'
+        order by 1 desc 
+        limit 1) precio_menor
+        from ingreso_vehiculo_tronco_cubicajes ivtc 
+        left join ingreso_vehiculo_tronco_tipo_maderas ivttm on ivtc.id_ingreso_vehiculo_tronco_tipo_maderas = ivttm.id 
+        left join ingreso_vehiculo_troncos ivt on ivttm.id_ingreso_vehiculo_troncos = ivt.id
+        where id_ingreso_vehiculo_tronco_tipo_maderas='".$id."' ";
 
 		$data = DB::select($cad);
         return $data;
