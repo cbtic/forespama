@@ -10,7 +10,7 @@ class RequerimientoDetalle extends Model
 {
     function getDetalleRequerimientoPdf($id){
 
-        $cad = "select rd.id, ROW_NUMBER() OVER (PARTITION BY rd.id_requerimiento order by rd.id asc) AS row_num, p.numero_serie, p.denominacion producto, p.codigo, rd.cantidad, tm.denominacion estado_producto, tm2.denominacion unidad_medida, m.denominiacion marca, rd.observacion, pi.ruta_imagen 
+        $cad = "select rd.id, ROW_NUMBER() OVER (PARTITION BY rd.id_requerimiento order by rd.id asc) AS row_num, p.id id_producto, p.numero_serie, p.denominacion producto, p.codigo, rd.cantidad, tm.denominacion estado_producto, tm2.denominacion unidad_medida, m.denominiacion marca, rd.observacion, pi.ruta_imagen 
         from requerimiento_detalles rd 
         inner join requerimientos r on rd.id_requerimiento = r.id 
         inner join productos p on rd.id_producto = p.id 

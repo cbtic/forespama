@@ -213,7 +213,7 @@ $(document).ready(function() {
                             <td class="td" style ="text-align: left; width: 10%; height:25px"><?php echo $r->observacion;?></td>
                             <td class="td" style ="text-align: center; width: 10%; height:25px">
                                 <?php if (!empty($r->ruta_imagen)) : ?>
-                                    <a href="<?php echo asset($r->ruta_imagen); ?>" target="_blank">
+                                    <a href="<?php echo asset('img/productos/'. $r->id_producto .'/'. $r->ruta_imagen); ?>" target="_blank"> <!--img/productos/-->
                                         <i class="fa fa-file-image-o"></i> Ver Imagen
                                     </a>
                                 <?php else: ?>

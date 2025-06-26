@@ -186,7 +186,6 @@ class IngresoVehiculoTroncoController extends Controller
 			$ingresoVehiculoTroncoCubicaje->save();
 		}
 		
-		
 		$empresasConductoresVehiculoExiste = EmpresasConductoresVehiculo::where("id_empresas",$request->id_empresa_transportista)->where("id_vehiculos",$request->id_vehiculos)->where("id_conductores",$request->id_conductores)->where("estado",1)->get();
 		if(count($empresasConductoresVehiculoExiste)==0){
 			$empresasConductoresVehiculo = new EmpresasConductoresVehiculo;

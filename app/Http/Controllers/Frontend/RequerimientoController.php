@@ -123,13 +123,12 @@ class RequerimientoController extends Controller
 
         if($request->id == 0){
             $requerimiento = new Requerimiento;
+            $requerimiento_model = new Requerimiento;
+		    $codigo_requerimiento = $requerimiento_model->getCodigoRequerimiento(1);
         }else{
             $requerimiento = Requerimiento::find($request->id);
+            $codigo_requerimiento = $request->numero_requerimiento;
         }
-
-        $requerimiento_model = new Requerimiento;
-        
-		$codigo_requerimiento = $requerimiento_model->getCodigoRequerimiento(1);
 
         $descripcion = $request->input('descripcion');
         $cod_interno = $request->input('cod_interno');
@@ -143,7 +142,11 @@ class RequerimientoController extends Controller
         
         $requerimiento->id_tipo_documento = $request->tipo_documento;
         $requerimiento->fecha = $request->fecha_requerimiento;
-        $requerimiento->codigo = $codigo_requerimiento[0]->codigo;
+        if($request->id == 0){
+            $requerimiento->codigo = $codigo_requerimiento[0]->codigo;
+        }else{
+            $requerimiento->codigo = $codigo_requerimiento;
+        }
         $requerimiento->id_almacen_destino = $request->almacen;
         $requerimiento->sustento_requerimiento = $request->sustento_requerimiento;
         $requerimiento->responsable_atencion = $request->responsable;

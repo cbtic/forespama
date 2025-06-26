@@ -16,7 +16,7 @@ class IngresoVehiculoTronco extends Model
         inner join empresas e on ecv.id_empresas=e.id
         inner join vehiculos v on ecv.id_vehiculos=v.id and v.estado='1' 
         inner join conductores c on ecv.id_conductores=c.id and c.estado='ACTIVO'
-        inner join personas p on c.id_personas=p.id
+        inner join personas p on c.id_personas=p.id and p.estado='1'
         left join marcas m on v.id_marca = m.id
         where ecv.estado='1'
         and v.placa='".$placa."'

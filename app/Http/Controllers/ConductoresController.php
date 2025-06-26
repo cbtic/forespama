@@ -115,7 +115,7 @@ class ConductoresController extends Controller
 				$persona->apellido_materno = $request->apellido_materno;
 				$persona->nombres = $request->nombres;
 				$persona->fecha_nacimiento = "1990-01-01";
-				$persona->estado = "A";
+				$persona->estado = "1";
 				$persona->save();
 				$request->id_personas = $persona->id;
 			}
