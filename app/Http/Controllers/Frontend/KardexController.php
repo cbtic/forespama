@@ -11,6 +11,7 @@ use App\Models\Kardex;
 use App\Models\Producto;
 use App\Models\Almacene;
 use App\Models\TablaMaestra;
+use App\Models\Empresa;
 use Maatwebsite\Excel\Facades\Excel;
 use Maatwebsite\Excel\Concerns\FromArray;
 use Maatwebsite\Excel\Concerns\WithStyles;
@@ -274,6 +275,51 @@ class KardexController extends Controller
 		return Excel::download($export, 'Reporte_kardex.xlsx');
 		
     }
+
+	public function create_consulta_productos_orden_compra(){
+
+		
+		$id_user = Auth::user()->id;
+
+        $producto_model = new Producto;
+		$almacen_model = new Almacene;
+		$tablaMaestra_model = new TablaMaestra;
+		$empresa_model = new Empresa;
+
+        $producto = $producto_model->getProductoExterno();
+        $producto_all = $producto_model->getProductoAll();
+		$almacen = $almacen_model->getAlmacenByUser($id_user);
+		$empresas = $empresa_model->getEmpresaAll();
+		
+		return view('frontend.kardex.create_consulta_productos_orden_compra',compact('producto','almacen','producto_all','empresas'));
+
+	}
+
+	public function listar_kardex_consulta_producto_orden_compra_ajax(Request $request){
+
+		$id_user = Auth::user()->id;
+
+		$kardex_model = new Kardex;
+		$p[]=$request->consulta_oc_existencia_producto;
+		$p[]=$request->consulta_oc_almacen_producto;
+		$p[]=$id_user;
+		$p[]=$request->consulta_oc_empresa;
+		$p[]=$request->NumeroPagina;
+		$p[]=$request->NumeroRegistros;
+		$data = $kardex_model->listar_kardex_consulta_producto_orden_compra_ajax($p);
+		$iTotalDisplayRecords = isset($data[0]->totalrows)?$data[0]->totalrows:0;
+
+		$result["PageStart"] = $request->NumeroPagina;
+		$result["pageSize"] = $request->NumeroRegistros;
+		$result["SearchText"] = "";
+		$result["ShowChildren"] = true;
+		$result["iTotalRecords"] = $iTotalDisplayRecords;
+		$result["iTotalDisplayRecords"] = $iTotalDisplayRecords;
+		$result["aaData"] = $data;
+
+        echo json_encode($result);
+
+	}
 
 }
 
