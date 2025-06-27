@@ -29,9 +29,10 @@ class RequerimientoDetalle extends Model
 
         $cad = "select sum(ocd.cantidad_requerida) cantidad_ingresada
         from orden_compras oc  
-        inner join orden_compra_detalles ocd on oc.id=ocd.id_orden_compra 
+        inner join orden_compra_detalles ocd on oc.id=ocd.id_orden_compra and ocd.estado = '1'
         where oc.id_requerimiento  = '".$id_requerimiento."'
-        and ocd.id_producto= '".$id_producto."' ";
+        and ocd.id_producto= '".$id_producto."' 
+        and oc.estado = '1' ";
 
 		$data = DB::select($cad);
         //return $data;
