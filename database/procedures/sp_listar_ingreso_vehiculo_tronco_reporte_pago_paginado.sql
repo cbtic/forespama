@@ -1,24 +1,28 @@
-CREATE OR REPLACE FUNCTION public.sp_listar_ingreso_vehiculo_tronco_reporte_pago_paginado(
-    p_fecha_desde character varying, 
-    p_fecha_hasta character varying, 
-    p_pagina character varying, 
-    p_limit character varying, 
-    p_ref refcursor
-) 
-RETURNS refcursor 
-LANGUAGE plpgsql 
+CREATE OR REPLACE FUNCTION public.sp_listar_ingreso_vehiculo_tronco_reporte_pago_paginado(p_fecha_desde character varying, p_fecha_hasta character varying, p_empresa character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
+ RETURNS refcursor
+ LANGUAGE plpgsql
 AS $function$
 DECLARE
     v_scad varchar;
     v_count varchar;
     v_col_count varchar;
+	v_where_empresa varchar := '';
+
 BEGIN
     -- Calcular el offset para la paginación
     p_pagina := (p_pagina::Integer - 1) * p_limit::Integer;
 
+	IF TRIM(p_empresa) IS NOT NULL AND TRIM(p_empresa) <> '' THEN
+        v_where_empresa := ' AND ivt.id_empresa_proveedor = ' || quote_literal(p_empresa);
+    END IF;
+
     -- Obtener el total de registros
     EXECUTE ('SELECT count(1) FROM ingreso_vehiculo_tronco_pagos ivtp 
-              WHERE ivtp.fecha BETWEEN ''' || p_fecha_desde || ''' AND ''' || p_fecha_hasta || '''') 
+ 			INNER JOIN ingreso_vehiculo_tronco_tipo_maderas ivttm ON ivtp.id_ingreso_vehiculo_tronco_tipo_maderas = ivttm.id
+          	INNER JOIN ingreso_vehiculo_troncos ivt ON ivttm.id_ingreso_vehiculo_troncos = ivt.id
+            WHERE ivtp.fecha BETWEEN ''' || p_fecha_desde || ''' AND ''' || p_fecha_hasta || ''''
+	|| v_where_empresa) 
+
     INTO v_count;
 
     v_col_count := ' ,' || v_count || ' AS TotalRows ';
@@ -36,7 +40,8 @@ BEGIN
         INNER JOIN ingreso_vehiculo_tronco_tipo_maderas ivttm ON ivt.id = ivttm.id_ingreso_vehiculo_troncos
         INNER JOIN ingreso_vehiculo_tronco_pagos ivtp ON ivtp.id_ingreso_vehiculo_tronco_tipo_maderas = ivttm.id 
         INNER JOIN tabla_maestras tm ON ivtp.id_tipodesembolso = tm.codigo::int AND tm.tipo = ''65''
-        WHERE ivtp.fecha BETWEEN ''' || p_fecha_desde || ''' AND ''' || p_fecha_hasta || '''
+        WHERE ivtp.fecha BETWEEN ''' || p_fecha_desde || ''' AND ''' || p_fecha_hasta || ''''
+		|| v_where_empresa || '
         GROUP BY e.razon_social, tm.denominacion, ivtp.fecha, ivtp.id_tipodesembolso
     )
     SELECT 
@@ -54,4 +59,5 @@ BEGIN
     OPEN p_ref FOR EXECUTE(v_scad);
     RETURN p_ref;
 END
-$function$;
+$function$
+;

@@ -58,6 +58,8 @@ $(document).ready(function () {
         language: 'es'
     });
 
+    $('#empresa_bus').select2({ width : '100%' })
+
 });
 
 function formato_miles(numero) {
@@ -178,6 +180,7 @@ function datatablenew() {
             var tipo_madera = $('#tipo_madera_bus').val();*/
             var fecha_inicio = $('#fecha_inicio_bus').val();
             var fecha_fin = $('#fecha_fin_bus').val();
+            var empresa = $('#empresa_bus').val();
 
             var _token = $('#_token').val();
             oSettings.jqXHR = $.ajax({
@@ -185,10 +188,8 @@ function datatablenew() {
                 "type": "POST",
                 "url": sSource,
                 "data": {
-                    NumeroPagina: iNroPagina,
-                    NumeroRegistros: iCantMostrar,
-                    fecha_inicio:fecha_inicio,
-                    fecha_fin:fecha_fin,
+                    NumeroPagina:iNroPagina, NumeroRegistros:iCantMostrar,
+                    fecha_inicio:fecha_inicio, fecha_fin:fecha_fin, empresa:empresa,
                     _token: _token
                 },
                 "success": function(result) {
@@ -364,6 +365,16 @@ function datatablenew() {
                 "aTargets": [7],
                 "className": "text-right",
             },
+            {
+                "mRender": function(data, type, row) {
+                    var tipo_pago = "";
+                    if (row.tipo_pago != null) tipo_pago = row.tipo_pago;
+                    return tipo_pago;
+                },
+                "bSortable": false,
+                "aTargets": [8],
+                "className": "text-right",
+            },
                 /*
 				{
                 "mRender": function (data, type, row) {
@@ -480,6 +491,7 @@ function datatablenew() {
                 var tipo_madera = $('#tipo_madera_bus').val();*/
                 var fecha_inicio = $('#fecha_inicio_bus').val();
                 var fecha_fin = $('#fecha_fin_bus').val();
+                var empresa = $('#empresa_bus').val();
     
                 var _token = $('#_token').val();
                 oSettings.jqXHR = $.ajax({
@@ -487,13 +499,11 @@ function datatablenew() {
                     "type": "POST",
                     "url": sSource,
                     "data": {
-                        NumeroPagina: iNroPagina,
-                        NumeroRegistros: iCantMostrar,
-                        fecha_inicio:fecha_inicio,
-                        fecha_fin:fecha_fin,
+                        NumeroPagina:iNroPagina, NumeroRegistros:iCantMostrar,
+                        fecha_inicio:fecha_inicio, fecha_fin:fecha_fin, empresa:empresa,
                         _token: _token
                     },
-                    "success": function(result) {    
+                    "success": function(result) {
     
                         fnCallback(result);
     
@@ -692,6 +702,7 @@ function DescargarReporteCubicaje(){
 
     var fecha_inicio = $('#fecha_inicio_bus').val();
 	var fecha_fin = $('#fecha_fin_bus').val();
+    var empresa = $('#empresa_bus').val();
 
 	if (fecha_inicio == "")fecha_inicio = "0";
     else fecha_inicio = fecha_inicio.replace(/\//g, "-");
@@ -699,8 +710,9 @@ function DescargarReporteCubicaje(){
 	if (fecha_fin == "")fecha_fin = "0";
     else fecha_fin = fecha_fin.replace(/\//g, "-");
 
-	
-	location.href = '/ingreso_vehiculo_tronco/exportar_reporte_cubicaje/'+fecha_inicio+'/'+fecha_fin;
+    if (empresa == "")empresa = 0;
+
+	location.href = '/ingreso_vehiculo_tronco/exportar_reporte_cubicaje/'+fecha_inicio+'/'+fecha_fin+'/'+empresa;
 
 }
 
@@ -708,6 +720,7 @@ function DescargarReportePagos(){
 
     var fecha_inicio = $('#fecha_inicio_bus').val();
 	var fecha_fin = $('#fecha_fin_bus').val();
+	var empresa = $('#empresa_bus').val();
 
 	if (fecha_inicio == "")fecha_inicio = "0";
     else fecha_inicio = fecha_inicio.replace(/\//g, "-");
@@ -715,8 +728,9 @@ function DescargarReportePagos(){
 	if (fecha_fin == "")fecha_fin = "0";
     else fecha_fin = fecha_fin.replace(/\//g, "-");
 
-	
-	location.href = '/ingreso_vehiculo_tronco/exportar_reporte_pago/'+fecha_inicio+'/'+fecha_fin;
+	if (empresa == "")empresa = 0;
+    
+	location.href = '/ingreso_vehiculo_tronco/exportar_reporte_pago/'+fecha_inicio+'/'+fecha_fin+'/'+empresa;
 
 }
 

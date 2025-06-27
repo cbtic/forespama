@@ -619,8 +619,8 @@ Route::get('tienda/obtener_provincia_distrito/{idDepartamento}', [TiendaControll
 Route::get('ingreso_vehiculo_tronco/reporte_pagos', [IngresoVehiculoTroncoController::class, 'reporte_pagos'])->name('ingreso_vehiculo_tronco.reporte_pagos');
 Route::post('ingreso_vehiculo_tronco/listar_ingreso_vehiculo_tronco_reporte_ajax', [IngresoVehiculoTroncoController::class, 'listar_ingreso_vehiculo_tronco_reporte_ajax'])->name('ingreso_vehiculo_tronco.listar_ingreso_vehiculo_tronco_reporte_ajax');
 Route::post('ingreso_vehiculo_tronco/listar_ingreso_vehiculo_tronco_reporte_pago_ajax', [IngresoVehiculoTroncoController::class, 'listar_ingreso_vehiculo_tronco_reporte_pago_ajax'])->name('ingreso_vehiculo_tronco.listar_ingreso_vehiculo_tronco_reporte_pago_ajax');
-Route::get('ingreso_vehiculo_tronco/exportar_reporte_cubicaje/{fecha_inicio}/{fecha_fin}', [IngresoVehiculoTroncoController::class, 'exportar_reporte_cubicaje'])->name('ingreso_vehiculo_tronco.exportar_reporte_cubicaje');
-Route::get('ingreso_vehiculo_tronco/exportar_reporte_pago/{fecha_inicio}/{fecha_fin}', [IngresoVehiculoTroncoController::class, 'exportar_reporte_pago'])->name('ingreso_vehiculo_tronco.exportar_reporte_pago');
+Route::get('ingreso_vehiculo_tronco/exportar_reporte_cubicaje/{fecha_inicio}/{fecha_fin}/{empresa}', [IngresoVehiculoTroncoController::class, 'exportar_reporte_cubicaje'])->name('ingreso_vehiculo_tronco.exportar_reporte_cubicaje');
+Route::get('ingreso_vehiculo_tronco/exportar_reporte_pago/{fecha_inicio}/{fecha_fin}/{empresa}', [IngresoVehiculoTroncoController::class, 'exportar_reporte_pago'])->name('ingreso_vehiculo_tronco.exportar_reporte_pago');
 Route::get('orden_compra/generar_lpn/{id_orden_compra}', [OrdenCompraController::class, 'generar_lpn'])->name('orden_compra.generar_lpn');
 Route::get('orden_compra/create_reporte_comercializacion', [OrdenCompraController::class, 'create_reporte_comercializacion'])->name('orden_compra.create_reporte_comercializacion');
 Route::post('orden_compra/listar_reporte_comercializacion_ajax', [OrdenCompraController::class, 'listar_reporte_comercializacion_ajax'])->name('orden_compra.listar_reporte_comercializacion_ajax');

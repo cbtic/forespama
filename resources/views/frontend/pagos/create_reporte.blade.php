@@ -541,6 +541,18 @@ label.form-control-sm{
 										<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
 											<input class="form-control form-control-sm" id="fecha_fin_bus" name="fecha_fin_bus" placeholder="Fecha Fin">
 										</div>
+
+										<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+											<select name="empresa_bus" id="empresa_bus" class="form-control form-control-sm">
+												<option value="">--Seleccionar Empresa--</option>
+												<?php
+												foreach ($empresas as $row){?>
+													<option value="<?php echo $row->id ?>"><?php echo $row->razon_social ?></option>
+													<?php 
+												}
+												?>
+											</select>
+										</div>
 										
 										<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
 											<input class="btn btn-warning btn-sm pull-rigth" value="Buscar" type="button" id="btnBuscar" />
@@ -573,6 +585,7 @@ label.form-control-sm{
 																<th width="10%">Tabulaci&oacute;n</th>
 																<th width="10%">Promedio</th>
 																<th width="10%">Precio Final</th>
+																<th width="10%">Tipo Pago</th>
 																<!--<th class="cubicaje">Cubicaje</th>-->
 															</tr>
 														</thead>

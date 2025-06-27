@@ -617,10 +617,12 @@ class IngresoVehiculoTroncoController extends Controller
 	public function reporte_pagos(){
 
 		$tablaMaestra_model = new TablaMaestra;
+		$empresa_model = new Empresa;
 
 		$tipo_madera = $tablaMaestra_model->getMaestroByTipo(42);
+		$empresas = $empresa_model->getEmpresaAll();
 
-		return view('frontend.pagos.create_reporte',compact('tipo_madera'));
+		return view('frontend.pagos.create_reporte',compact('tipo_madera','empresas'));
 
 	}
 
@@ -633,6 +635,7 @@ class IngresoVehiculoTroncoController extends Controller
 		$p[]=$request->tipo_madera;*/
 		$p[]=$request->fecha_inicio;
 		$p[]=$request->fecha_fin;
+		$p[]=$request->empresa;
 		$p[]=$request->NumeroPagina;
 		$p[]=$request->NumeroRegistros;
 		$data = $ingresoVehiculoTronco_model->listar_ingreso_vehiculo_tronco_reporte_ajax($p);
@@ -659,6 +662,7 @@ class IngresoVehiculoTroncoController extends Controller
 		$p[]=$request->tipo_madera;*/
 		$p[]=$request->fecha_inicio;
 		$p[]=$request->fecha_fin;
+		$p[]=$request->empresa;
 		$p[]=$request->NumeroPagina;
 		$p[]=$request->NumeroRegistros;
 		$data = $ingresoVehiculoTronco_model->listar_ingreso_vehiculo_tronco_reporte_pago_ajax($p);
@@ -676,14 +680,16 @@ class IngresoVehiculoTroncoController extends Controller
 
 	}
 
-	public function exportar_reporte_cubicaje($fecha_inicio, $fecha_fin) {
+	public function exportar_reporte_cubicaje($fecha_inicio, $fecha_fin, $empresa) {
 
-		if($fecha_inicio=="0")$ruc = "";
-		if($fecha_fin=="0")$empresa = "";
+		if($fecha_inicio=="0")$fecha_inicio = "";
+		if($fecha_fin=="0")$fecha_fin = "";
+		if($empresa==0)$empresa = "";
 
 		$ingresoVehiculoTronco_model = new IngresoVehiculoTronco();
 		$p[]=$fecha_inicio;
 		$p[]=$fecha_fin;
+		$p[]=$empresa;
 		$p[]=1;
 		$p[]=10000;
 		$data = $ingresoVehiculoTronco_model->listar_ingreso_vehiculo_tronco_reporte_ajax($p);
@@ -779,14 +785,16 @@ class IngresoVehiculoTroncoController extends Controller
 		
     }
 
-	public function exportar_reporte_pago($fecha_inicio, $fecha_fin) {
+	public function exportar_reporte_pago($fecha_inicio, $fecha_fin, $empresa) {
 
-		if($fecha_inicio=="0")$ruc = "";
-		if($fecha_fin=="0")$empresa = "";
+		if($fecha_inicio=="0")$fecha_inicio = "";
+		if($fecha_fin=="0")$fecha_fin = "";
+		if($empresa==0)$empresa = "";
 
 		$ingresoVehiculoTronco_model = new IngresoVehiculoTronco();
 		$p[]=$fecha_inicio;
 		$p[]=$fecha_fin;
+		$p[]=$empresa;
 		$p[]=1;
 		$p[]=10000;
 		$data = $ingresoVehiculoTronco_model->listar_ingreso_vehiculo_tronco_reporte_pago_ajax($p);
