@@ -293,7 +293,7 @@ function datatablenew(){
 
 						html += '<button style="font-size:12px; margin-left:10px" type="button" class="btn btn-sm btn-warning" data-toggle="modal" onclick="modalControlProductos('+row.id+')">Control Productos</button>';  
 						
-						if(usuario == row.id_usuario){
+						if(usuario == row.id_usuario && row.estado_solicitud == 1){
 							html += '<a href="javascript:void(0)" onclick=eliminarRequerimiento('+row.id+','+row.estado+') class="btn btn-sm '+clase+'" style="font-size:12px;margin-left:10px">'+estado+'</a>'; 
 						}else{
 							html += '<a href="javascript:void(0)" onclick=eliminarRequerimiento('+row.id+','+row.estado+') class="btn btn-sm '+clase+'" style="font-size:12px;margin-left:10px; pointer-events: none; opacity: 0.6; cursor: not-allowed;">'+estado+'</a>'; 	

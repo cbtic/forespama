@@ -675,3 +675,4 @@ Route::get('empresa_cubicaje/modal_empresa_cubicaje/{id}', [EmpresaCubicajeContr
 Route::get('empresa_cubicaje/eliminar_empresa_cubicaje/{id}/{estado}', [EmpresaCubicajeController::class, 'eliminar_empresa_cubicaje'])->name('empresa_cubicaje.eliminar_empresa_cubicaje');
 Route::get('kardex/create_consulta_productos_orden_compra', [KardexController::class, 'create_consulta_productos_orden_compra'])->name('kardex.create_consulta_productos_orden_compra');
 Route::post('kardex/listar_kardex_consulta_producto_orden_compra_ajax', [KardexController::class, 'listar_kardex_consulta_producto_orden_compra_ajax'])->name('kardex.listar_kardex_consulta_producto_orden_compra_ajax');
+Route::get('kardex/exportar_listar_consulta_producto_oc/{consulta_oc_existencia_producto}/{consulta_oc_almacen_producto}/{consulta_oc_empresa}', [KardexController::class, 'exportar_listar_consulta_producto_oc'])->name('kardex.exportar_listar_consulta_producto_oc');

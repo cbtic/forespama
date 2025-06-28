@@ -34,7 +34,7 @@ $(document).ready(function () {
 		fn_ListarBusqueda();
 	});
 
-	$('#btnDescargar').on('click', function () {
+	$('#btnDescargarConsultaProductos').on('click', function () {
 		DescargarArchivosExcel()
 	});
 
@@ -177,8 +177,13 @@ function fn_ListarBusqueda() {
 
 function DescargarArchivosExcel(){
 	
-	var consulta_almacen = $('#consulta_almacen_bus').val();
-	if (consulta_almacen == "")consulta_almacen = 0;
+	var consulta_oc_existencia_producto = $('#consulta_oc_existencia_producto_bus').val();
+	var consulta_oc_almacen_producto = $('#consulta_oc_almacen_producto_bus').val();
+	var consulta_oc_empresa = $('#consulta_oc_empresa_bus').val();
+
+	if (consulta_oc_existencia_producto == "")consulta_oc_existencia_producto = 0;
+	if (consulta_oc_almacen_producto == "")consulta_oc_almacen_producto = 0;
+	if (consulta_oc_empresa == "")consulta_oc_empresa = 0;
 	
-	location.href = '/kardex/exportar_listar_existencia/'+consulta_almacen;
+	location.href = '/kardex/exportar_listar_consulta_producto_oc/'+consulta_oc_existencia_producto+'/'+consulta_oc_almacen_producto+'/'+consulta_oc_empresa;
 }
