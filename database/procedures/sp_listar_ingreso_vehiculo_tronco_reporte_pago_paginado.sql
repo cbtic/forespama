@@ -1,4 +1,6 @@
-CREATE OR REPLACE FUNCTION public.sp_listar_ingreso_vehiculo_tronco_reporte_pago_paginado(p_fecha_desde character varying, p_fecha_hasta character varying, p_empresa character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
+DROP FUNCTION public.sp_listar_ingreso_vehiculo_tronco_reporte_pago_paginado(varchar, varchar, varchar, varchar, varchar, refcursor);
+
+CREATE OR REPLACE FUNCTION public.sp_listar_ingreso_vehiculo_tronco_reporte_pago_paginado(p_fecha_desde character varying, p_fecha_hasta character varying, p_tipo_empresa character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
  RETURNS refcursor
  LANGUAGE plpgsql
 AS $function$
@@ -6,14 +8,20 @@ DECLARE
     v_scad varchar;
     v_count varchar;
     v_col_count varchar;
-	v_where_empresa varchar := '';
-
+	v_where_tipo_empresa varchar := '';
 BEGIN
     -- Calcular el offset para la paginación
     p_pagina := (p_pagina::Integer - 1) * p_limit::Integer;
 
-	IF TRIM(p_empresa) IS NOT NULL AND TRIM(p_empresa) <> '' THEN
-        v_where_empresa := ' AND ivt.id_empresa_proveedor = ' || quote_literal(p_empresa);
+    -- Filtro por tipo_empresa usando subconsulta
+    IF TRIM(p_tipo_empresa) IS NOT NULL AND TRIM(p_tipo_empresa) <> '' THEN
+        v_where_tipo_empresa := ' AND (
+			SELECT ec.id_tipo_empresa 
+			FROM empresa_cubicajes ec
+			WHERE ec.id_empresa = ivt.id_empresa_proveedor
+			AND ec.estado = ''1''
+			AND (ec.id_tipo_empresa = 1 OR (ec.id_tipo_empresa = 2 AND ec.id_conductor = ivt.id_conductores))
+		) = ' || quote_literal(p_tipo_empresa);
     END IF;
 
     -- Obtener el total de registros
@@ -21,8 +29,7 @@ BEGIN
  			INNER JOIN ingreso_vehiculo_tronco_tipo_maderas ivttm ON ivtp.id_ingreso_vehiculo_tronco_tipo_maderas = ivttm.id
           	INNER JOIN ingreso_vehiculo_troncos ivt ON ivttm.id_ingreso_vehiculo_troncos = ivt.id
             WHERE ivtp.fecha BETWEEN ''' || p_fecha_desde || ''' AND ''' || p_fecha_hasta || ''''
-	|| v_where_empresa) 
-
+	|| v_where_tipo_empresa) 
     INTO v_count;
 
     v_col_count := ' ,' || v_count || ' AS TotalRows ';
@@ -41,7 +48,7 @@ BEGIN
         INNER JOIN ingreso_vehiculo_tronco_pagos ivtp ON ivtp.id_ingreso_vehiculo_tronco_tipo_maderas = ivttm.id 
         INNER JOIN tabla_maestras tm ON ivtp.id_tipodesembolso = tm.codigo::int AND tm.tipo = ''65''
         WHERE ivtp.fecha BETWEEN ''' || p_fecha_desde || ''' AND ''' || p_fecha_hasta || ''''
-		|| v_where_empresa || '
+		|| v_where_tipo_empresa || '
         GROUP BY e.razon_social, tm.denominacion, ivtp.fecha, ivtp.id_tipodesembolso
     )
     SELECT 

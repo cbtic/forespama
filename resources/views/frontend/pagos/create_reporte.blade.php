@@ -542,12 +542,24 @@ label.form-control-sm{
 											<input class="form-control form-control-sm" id="fecha_fin_bus" name="fecha_fin_bus" placeholder="Fecha Fin">
 										</div>
 
-										<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+										<!--<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
 											<select name="empresa_bus" id="empresa_bus" class="form-control form-control-sm">
 												<option value="">--Seleccionar Empresa--</option>
 												<?php
-												foreach ($empresas as $row){?>
-													<option value="<?php echo $row->id ?>"><?php echo $row->razon_social ?></option>
+												//foreach ($empresas as $row){?>
+													<option value="<?php //echo $row->id ?>"><?php //echo $row->razon_social ?></option>
+													<?php 
+												//}
+												?>
+											</select>
+										</div>-->
+
+										<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+											<select name="tipo_empresa_bus" id="tipo_empresa_bus" class="form-control form-control-sm">
+												<option value="">--Seleccionar Tipo Empresa--</option>
+												<?php
+												foreach ($tipo_empresa as $row){?>
+													<option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
 													<?php 
 												}
 												?>

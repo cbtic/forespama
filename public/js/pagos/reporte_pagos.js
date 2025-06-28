@@ -180,7 +180,7 @@ function datatablenew() {
             var tipo_madera = $('#tipo_madera_bus').val();*/
             var fecha_inicio = $('#fecha_inicio_bus').val();
             var fecha_fin = $('#fecha_fin_bus').val();
-            var empresa = $('#empresa_bus').val();
+            var tipo_empresa = $('#tipo_empresa_bus').val();
 
             var _token = $('#_token').val();
             oSettings.jqXHR = $.ajax({
@@ -189,7 +189,7 @@ function datatablenew() {
                 "url": sSource,
                 "data": {
                     NumeroPagina:iNroPagina, NumeroRegistros:iCantMostrar,
-                    fecha_inicio:fecha_inicio, fecha_fin:fecha_fin, empresa:empresa,
+                    fecha_inicio:fecha_inicio, fecha_fin:fecha_fin, tipo_empresa:tipo_empresa,
                     _token: _token
                 },
                 "success": function(result) {
@@ -491,7 +491,7 @@ function datatablenew() {
                 var tipo_madera = $('#tipo_madera_bus').val();*/
                 var fecha_inicio = $('#fecha_inicio_bus').val();
                 var fecha_fin = $('#fecha_fin_bus').val();
-                var empresa = $('#empresa_bus').val();
+                var tipo_empresa = $('#tipo_empresa_bus').val();
     
                 var _token = $('#_token').val();
                 oSettings.jqXHR = $.ajax({
@@ -500,7 +500,7 @@ function datatablenew() {
                     "url": sSource,
                     "data": {
                         NumeroPagina:iNroPagina, NumeroRegistros:iCantMostrar,
-                        fecha_inicio:fecha_inicio, fecha_fin:fecha_fin, empresa:empresa,
+                        fecha_inicio:fecha_inicio, fecha_fin:fecha_fin, tipo_empresa:tipo_empresa,
                         _token: _token
                     },
                     "success": function(result) {
@@ -702,7 +702,7 @@ function DescargarReporteCubicaje(){
 
     var fecha_inicio = $('#fecha_inicio_bus').val();
 	var fecha_fin = $('#fecha_fin_bus').val();
-    var empresa = $('#empresa_bus').val();
+    var tipo_empresa = $('#tipo_empresa_bus').val();
 
 	if (fecha_inicio == "")fecha_inicio = "0";
     else fecha_inicio = fecha_inicio.replace(/\//g, "-");
@@ -710,9 +710,9 @@ function DescargarReporteCubicaje(){
 	if (fecha_fin == "")fecha_fin = "0";
     else fecha_fin = fecha_fin.replace(/\//g, "-");
 
-    if (empresa == "")empresa = 0;
+    if (tipo_empresa == "")tipo_empresa = 0;
 
-	location.href = '/ingreso_vehiculo_tronco/exportar_reporte_cubicaje/'+fecha_inicio+'/'+fecha_fin+'/'+empresa;
+	location.href = '/ingreso_vehiculo_tronco/exportar_reporte_cubicaje/'+fecha_inicio+'/'+fecha_fin+'/'+tipo_empresa;
 
 }
 
@@ -720,7 +720,7 @@ function DescargarReportePagos(){
 
     var fecha_inicio = $('#fecha_inicio_bus').val();
 	var fecha_fin = $('#fecha_fin_bus').val();
-	var empresa = $('#empresa_bus').val();
+	var tipo_empresa = $('#tipo_empresa_bus').val();
 
 	if (fecha_inicio == "")fecha_inicio = "0";
     else fecha_inicio = fecha_inicio.replace(/\//g, "-");
@@ -728,9 +728,9 @@ function DescargarReportePagos(){
 	if (fecha_fin == "")fecha_fin = "0";
     else fecha_fin = fecha_fin.replace(/\//g, "-");
 
-	if (empresa == "")empresa = 0;
+	if (tipo_empresa == "")tipo_empresa = 0;
     
-	location.href = '/ingreso_vehiculo_tronco/exportar_reporte_pago/'+fecha_inicio+'/'+fecha_fin+'/'+empresa;
+	location.href = '/ingreso_vehiculo_tronco/exportar_reporte_pago/'+fecha_inicio+'/'+fecha_fin+'/'+tipo_empresa;
 
 }
 

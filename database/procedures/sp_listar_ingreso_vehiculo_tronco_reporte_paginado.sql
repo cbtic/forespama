@@ -1,6 +1,6 @@
--- DROP FUNCTION public.sp_listar_ingreso_vehiculo_tronco_reporte_paginado(varchar, varchar, varchar, varchar, varchar, refcursor);
+--DROP FUNCTION public.sp_listar_ingreso_vehiculo_tronco_reporte_paginado(varchar, varchar, varchar, varchar, varchar, refcursor);
 
-CREATE OR REPLACE FUNCTION public.sp_listar_ingreso_vehiculo_tronco_reporte_paginado(p_fecha_desde character varying, p_fecha_hasta character varying, p_empresa character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
+CREATE OR REPLACE FUNCTION public.sp_listar_ingreso_vehiculo_tronco_reporte_paginado(p_fecha_desde character varying, p_fecha_hasta character varying, p_tipo_empresa character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
  RETURNS refcursor
  LANGUAGE plpgsql
 AS $function$
@@ -19,7 +19,7 @@ begin
 	p_pagina=(p_pagina::Integer-1)*p_limit::Integer;
 
 	v_campos=' fecha_ingreso,dia_semana,ruc,razon_social,sum(cantidad)cantidad,sum(volumen_total_m3)volumen_total_m3,sum(volumen_total_pies)volumen_total_pies,sum(precio_total)precio_total,
-	case when sum(promedio) > 0 then (sum(promedio)/sum((case when promedio > 0 then 1 else 0 end))) else 0 end promedio, tipo_pago ';
+	case when sum(promedio) > 0 then (sum(promedio)/sum((case when promedio > 0 then 1 else 0 end))) else 0 end promedio, tipo_pago, tipo_empresa ';
 
 	v_tabla=' from (
 	select ivt.id_empresa_proveedor id_empresa,ivt.id,ivttm.id id_ingreso_vehiculo_tronco_tipo_maderas,to_char(ivt.fecha_ingreso,''dd-mm-yyyy'') fecha_ingreso,TO_CHAR(ivt.fecha_ingreso, ''Day'') dia_semana, 
@@ -29,12 +29,17 @@ begin
 	coalesce((select sum(precio_total) from ingreso_vehiculo_tronco_cubicajes ivtc where id_ingreso_vehiculo_tronco_tipo_maderas=ivttm.id),0)precio_total,
 	coalesce(coalesce((select sum(precio_total) from ingreso_vehiculo_tronco_cubicajes ivtc where ivtc.id_ingreso_vehiculo_tronco_tipo_maderas = ivttm.id), 0) /
 	nullif(coalesce((select sum(volumen_total_pies) from ingreso_vehiculo_tronco_cubicajes ivtc where ivtc.id_ingreso_vehiculo_tronco_tipo_maderas = ivttm.id), 0), 0),0) promedio,
-	(select tm2.denominacion tipo_pago
-	from empresa_cubicajes ec 
-	inner join tabla_maestras tm2 on ec.id_tipo_pago::int = tm2.codigo::int and tm2.tipo =''80''
-	where ivt.id_empresa_proveedor = ec.id_empresa 
-	and ec.id_conductor = ivt.id_conductores 
-	and ec.estado =''1'') tipo_pago
+	(select tm2.denominacion
+  	from empresa_cubicajes ec
+  	inner join tabla_maestras tm2 on ec.id_tipo_pago::int = tm2.codigo::int and tm2.tipo = ''80''
+  	where ec.id_empresa = ivt.id_empresa_proveedor 
+    and ec.estado = ''1''
+    and (ec.id_tipo_empresa = 1 OR (ec.id_tipo_empresa = 2 AND ec.id_conductor = ivt.id_conductores))) tipo_pago,
+	(select ec.id_tipo_empresa 
+	from empresa_cubicajes ec
+	where ec.id_empresa = ivt.id_empresa_proveedor 
+	and ec.estado = ''1''
+	and (ec.id_tipo_empresa = 1 OR (ec.id_tipo_empresa = 2 AND ec.id_conductor = ivt.id_conductores))) tipo_empresa
 	from ingreso_vehiculo_troncos ivt
 	inner join vehiculos v on ivt.id_vehiculos=v.id
 	inner join ingreso_vehiculo_tronco_tipo_maderas ivttm on ivt.id=ivttm.id_ingreso_vehiculo_troncos
@@ -50,13 +55,17 @@ begin
 	 v_tabla:=v_tabla||'And ivt.fecha_ingreso <= '''||p_fecha_hasta||''' ';
 	End If;	
 
-	If p_empresa<>'' Then
-	 v_tabla:=v_tabla||'And ivt.id_empresa_proveedor = '''||p_empresa||''' ';
-	End If;	
+	If p_tipo_empresa<>'' Then
+	 v_tabla:=v_tabla||'And (select ec.id_tipo_empresa 
+			from empresa_cubicajes ec
+			where ec.id_empresa = ivt.id_empresa_proveedor 
+			and ec.estado = ''1''
+			and (ec.id_tipo_empresa = 1 OR (ec.id_tipo_empresa = 2 AND ec.id_conductor = ivt.id_conductores))) = '''||p_tipo_empresa||''' ';
+	End If;
 
 	v_tabla:=v_tabla||' )R
 	inner join empresas e on R.id_empresa=e.id
-	group by e.id,fecha_ingreso,dia_semana, tipo_pago  ';
+	group by e.id,fecha_ingreso,dia_semana, tipo_pago, tipo_empresa  ';
 
 	v_where = ' ';
 	

@@ -621,8 +621,9 @@ class IngresoVehiculoTroncoController extends Controller
 
 		$tipo_madera = $tablaMaestra_model->getMaestroByTipo(42);
 		$empresas = $empresa_model->getEmpresaAll();
+		$tipo_empresa = $tablaMaestra_model->getMaestroByTipo(79);
 
-		return view('frontend.pagos.create_reporte',compact('tipo_madera','empresas'));
+		return view('frontend.pagos.create_reporte',compact('tipo_madera','empresas','tipo_empresa'));
 
 	}
 
@@ -635,7 +636,7 @@ class IngresoVehiculoTroncoController extends Controller
 		$p[]=$request->tipo_madera;*/
 		$p[]=$request->fecha_inicio;
 		$p[]=$request->fecha_fin;
-		$p[]=$request->empresa;
+		$p[]=$request->tipo_empresa;
 		$p[]=$request->NumeroPagina;
 		$p[]=$request->NumeroRegistros;
 		$data = $ingresoVehiculoTronco_model->listar_ingreso_vehiculo_tronco_reporte_ajax($p);
@@ -662,7 +663,7 @@ class IngresoVehiculoTroncoController extends Controller
 		$p[]=$request->tipo_madera;*/
 		$p[]=$request->fecha_inicio;
 		$p[]=$request->fecha_fin;
-		$p[]=$request->empresa;
+		$p[]=$request->tipo_empresa;
 		$p[]=$request->NumeroPagina;
 		$p[]=$request->NumeroRegistros;
 		$data = $ingresoVehiculoTronco_model->listar_ingreso_vehiculo_tronco_reporte_pago_ajax($p);
@@ -680,16 +681,16 @@ class IngresoVehiculoTroncoController extends Controller
 
 	}
 
-	public function exportar_reporte_cubicaje($fecha_inicio, $fecha_fin, $empresa) {
+	public function exportar_reporte_cubicaje($fecha_inicio, $fecha_fin, $tipo_empresa) {
 
 		if($fecha_inicio=="0")$fecha_inicio = "";
 		if($fecha_fin=="0")$fecha_fin = "";
-		if($empresa==0)$empresa = "";
+		if($tipo_empresa==0)$tipo_empresa = "";
 
 		$ingresoVehiculoTronco_model = new IngresoVehiculoTronco();
 		$p[]=$fecha_inicio;
 		$p[]=$fecha_fin;
-		$p[]=$empresa;
+		$p[]=$tipo_empresa;
 		$p[]=1;
 		$p[]=10000;
 		$data = $ingresoVehiculoTronco_model->listar_ingreso_vehiculo_tronco_reporte_ajax($p);
@@ -785,16 +786,16 @@ class IngresoVehiculoTroncoController extends Controller
 		
     }
 
-	public function exportar_reporte_pago($fecha_inicio, $fecha_fin, $empresa) {
+	public function exportar_reporte_pago($fecha_inicio, $fecha_fin, $tipo_empresa) {
 
 		if($fecha_inicio=="0")$fecha_inicio = "";
 		if($fecha_fin=="0")$fecha_fin = "";
-		if($empresa==0)$empresa = "";
+		if($tipo_empresa==0)$tipo_empresa = "";
 
 		$ingresoVehiculoTronco_model = new IngresoVehiculoTronco();
 		$p[]=$fecha_inicio;
 		$p[]=$fecha_fin;
-		$p[]=$empresa;
+		$p[]=$tipo_empresa;
 		$p[]=1;
 		$p[]=10000;
 		$data = $ingresoVehiculoTronco_model->listar_ingreso_vehiculo_tronco_reporte_pago_ajax($p);
