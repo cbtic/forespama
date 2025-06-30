@@ -1,6 +1,8 @@
+-- DROP FUNCTION public.sp_listar_kardex_orden_compra_saldos_paginado(varchar, varchar, varchar, varchar, varchar, varchar, refcursor);
+
 CREATE OR REPLACE FUNCTION public.sp_listar_kardex_orden_compra_saldos_paginado(p_producto character varying, p_almacen character varying, p_id_user character varying, p_id_empresa character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
-RETURNS refcursor
-LANGUAGE plpgsql
+ RETURNS refcursor
+ LANGUAGE plpgsql
 AS $function$
 DECLARE
     v_scad TEXT;
@@ -41,6 +43,7 @@ BEGIN
               AND oc.cerrado = ''1''
               AND ocd.cerrado = ''1''
               AND oc.estado = ''1''
+			  AND oc.estado_pedido != ''3''
 			' || CASE WHEN p_id_empresa <> '' THEN 'AND oc.id_empresa_compra = ''' || p_id_empresa || '''' ELSE '' END || '
             GROUP BY ocd.id_producto, oc.id_almacen_salida
         )
@@ -70,6 +73,7 @@ BEGIN
               AND oc.cerrado = ''1''
               AND ocd.cerrado = ''1''
               AND oc.estado = ''1''
+			  AND oc.estado_pedido != ''3''
 			' || CASE WHEN p_id_empresa <> '' THEN 'AND oc.id_empresa_compra = ''' || p_id_empresa || '''' ELSE '' END || '
             GROUP BY ocd.id_producto, oc.id_almacen_salida
         )
@@ -93,4 +97,5 @@ BEGIN
     OPEN p_ref FOR EXECUTE v_scad;
     RETURN p_ref;
 END
-$function$;
+$function$
+;

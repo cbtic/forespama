@@ -515,6 +515,7 @@ class IngresoVehiculoTroncoController extends Controller
 		$conductor = $datos[0]->conductor;
 		$tipo_madera=$datos[0]->tipo_madera;
 		$cantidad=$datos[0]->cantidad;
+		$tipo_empresa=$datos[0]->tipo_empresa;
 	 
 		$year = Carbon::now()->year;
 
@@ -524,7 +525,7 @@ class IngresoVehiculoTroncoController extends Controller
 
 		$currentHour = Carbon::now()->format('H:i:s');
 
-		$pdf = Pdf::loadView('frontend.ingreso.cubicaje_pdf',compact('fecha_ingreso','ruc','razon_social','placa','ejes','numero_documento','conductor','tipo_madera','cantidad','datos_detalle'));
+		$pdf = Pdf::loadView('frontend.ingreso.cubicaje_pdf',compact('fecha_ingreso','ruc','razon_social','placa','ejes','numero_documento','conductor','tipo_madera','cantidad','datos_detalle','tipo_empresa'));
 		
 		$pdf->setPaper('A4'); // Tamaño de papel (puedes cambiarlo según tus necesidades)
 

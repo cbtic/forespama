@@ -294,7 +294,6 @@ class KardexController extends Controller
 		return view('frontend.kardex.create_consulta_productos_orden_compra',compact('producto','almacen','producto_all','empresas'));
 
 	}
-
 	public function listar_kardex_consulta_producto_orden_compra_ajax(Request $request){
 
 		$id_user = Auth::user()->id;

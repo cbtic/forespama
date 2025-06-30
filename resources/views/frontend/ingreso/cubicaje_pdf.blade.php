@@ -165,10 +165,10 @@ $(document).ready(function() {
     <table style="width: 100%;">
         <tr>
             <td style="text-align: left; vertical-align: middle;">
-                <h2 style="margin: 0;">Ingreso de Camiones - Cubicaje</h2>
+                <h3 style="margin: 0;">Ingreso de Camiones - Cubicaje</h3>
             </td>
             <td style="text-align: right;">
-                <img src="img/logo_forestalpama.jpg" width="130" height="45" style="margin-top: -10px;">
+                <img src="img/logo_forestalpama.jpg" width="110" height="40" style="margin-top: -10px;">
             </td>
         </tr>
     </table>
@@ -177,20 +177,20 @@ $(document).ready(function() {
         <table style=" border-spacing: 0; background-color:white !important; width: 100%; font-size:11px">
                 <tbody>
                     <tr>
-                        <td class="td" style ="text-align: left; width: 10%; height:25px; border-bottom: 1px solid black;"><b>FECHA</b></td>
-                        <td class="td" style ="text-align: left; width: 10%; height:25px; border-bottom: 1px solid black;"><b>PLACA</b></td>
-                        <td class="td" style ="text-align: left; width: 20%; height:25px; border-bottom: 1px solid black;"><b>RUC</b></td>
-                        <td class="td" style ="text-align: left; width: 40%; height:25px; border-bottom: 1px solid black;"><b>EMPRESA</b></td>
-                        <td class="td" style ="text-align: left; width: 10%; height:25px; border-bottom: 1px solid black;"><b>TIPO MADERA</b></td>
-                        <td class="td" style ="text-align: left; width: 10%; height:25px; border-bottom: 1px solid black;"><b>CANTIDAD</b></td>
+                        <td class="td" style ="text-align: left; width: 10%; height:15px; border-bottom: 1px solid black;"><b>FECHA</b></td>
+                        <td class="td" style ="text-align: left; width: 10%; height:15px; border-bottom: 1px solid black;"><b>PLACA</b></td>
+                        <td class="td" style ="text-align: left; width: 20%; height:15px; border-bottom: 1px solid black;"><b>RUC</b></td>
+                        <td class="td" style ="text-align: left; width: 40%; height:15px; border-bottom: 1px solid black;"><b>EMPRESA</b></td>
+                        <td class="td" style ="text-align: left; width: 10%; height:15px; border-bottom: 1px solid black;"><b>TIPO MADERA</b></td>
+                        <td class="td" style ="text-align: left; width: 10%; height:15px; border-bottom: 1px solid black;"><b>CANTIDAD</b></td>
                     </tr>
                     <tr>
-                        <td class="td" style ="text-align: left; width: 10%; height:25px"><?php echo $fecha_ingreso;?></td>
-                        <td class="td" style ="text-align: left; width: 10%; height:25px"><?php echo $placa;?></td>
-                        <td class="td" style ="text-align: left; width: 20%; height:25px;"><?php echo $ruc;?></td>
-                        <td class="td" style ="text-align: left; width: 40%; height:25px;"><?php echo $razon_social;?></td>
-                        <td class="td" style ="text-align: left; width: 10%; height:25px;"><?php echo $tipo_madera;?></td>
-                        <td class="td" style ="text-align: left; width: 10%; height:25px;"><?php echo $cantidad;?></td>
+                        <td class="td" style ="text-align: left; width: 10%; height:10px"><?php echo $fecha_ingreso;?></td>
+                        <td class="td" style ="text-align: left; width: 10%; height:10px"><?php echo $placa;?></td>
+                        <td class="td" style ="text-align: left; width: 20%; height:10px;"><?php echo $ruc;?></td>
+                        <td class="td" style ="text-align: left; width: 40%; height:10px;"><?php echo $razon_social;?></td>
+                        <td class="td" style ="text-align: left; width: 10%; height:10px;"><?php echo $tipo_madera;?></td>
+                        <td class="td" style ="text-align: left; width: 10%; height:10px;"><?php echo $cantidad;?></td>
                     </tr>
                 </tbody>
             </table>
@@ -222,24 +222,28 @@ $(document).ready(function() {
                     $precio_total_suma=0;
                     $suma_cantidad_reporte_1_2=0;
                     $suma_cantidad_reporte_1_7=0;
+                    $suma_cantidad_reporte_interno=0;
                     $suma_volumen_m3_1_2=0;
                     $suma_volumen_m3_1_7=0;
+                    $suma_volumen_m3_interno=0;
                     $suma_volumen_pies_1_2=0;
                     $suma_volumen_pies_1_7=0;
+                    $suma_volumen_pies_interno=0;
                     $suma_total_1_2=0;
                     $suma_total_1_7=0;
+                    $suma_total_interno=0;
 
                     foreach($datos_detalle as $key=>$r) { ?>
                         <tr>
-                            <td class="td" style ="text-align: center; width: 10%; height:13px"><?php echo $r->cantidad;?></td>
-                            <td class="td" style ="text-align: right; width: 10%; height:13px"><?php echo number_format($r->diametro_dm,3);?></td>
-                            <td class="td" style ="text-align: right; width: 10%; height:13px"><?php echo $r->longitud;?></td>
-                            <td class="td" style ="text-align: right; width: 10%; height:13px"><?php echo number_format($r->volumen_m3,2);?></td>
-                            <td class="td" style ="text-align: right; width: 10%; height:13px"><?php echo number_format($r->volumen_pies,2);?></td>
-                            <td class="td" style ="text-align: right; width: 10%; height:13px"><?php echo number_format($r->volumen_total_m3,2);?></td>
-                            <td class="td" style ="text-align: right; width: 10%; height:13px"><?php echo number_format($r->volumen_total_pies,2);?></td>
-                            <td class="td" style ="text-align: right; width: 10%; height:13px"><?php echo number_format($r->precio_unitario,2);?></td>
-                            <td class="td" style ="text-align: right; width: 10%; height:13px"><?php echo number_format($r->precio_total,2);?></td>
+                            <td class="td" style ="text-align: center; width: 8%; height:13px"><?php echo $r->cantidad;?></td>
+                            <td class="td" style ="text-align: right; width: 8%; height:13px"><?php echo number_format($r->diametro_dm,3);?></td>
+                            <td class="td" style ="text-align: right; width: 8%; height:13px"><?php echo $r->longitud;?></td>
+                            <td class="td" style ="text-align: right; width: 8%; height:13px"><?php echo number_format($r->volumen_m3,2);?></td>
+                            <td class="td" style ="text-align: right; width: 8%; height:13px"><?php echo number_format($r->volumen_pies,2);?></td>
+                            <td class="td" style ="text-align: right; width: 8%; height:13px"><?php echo number_format($r->volumen_total_m3,2);?></td>
+                            <td class="td" style ="text-align: right; width: 8%; height:13px"><?php echo number_format($r->volumen_total_pies,2);?></td>
+                            <td class="td" style ="text-align: right; width: 8%; height:13px"><?php echo number_format($r->precio_unitario,2);?></td>
+                            <td class="td" style ="text-align: right; width: 8%; height:13px"><?php echo number_format($r->precio_total,2);?></td>
                             <?php 
                             $cantidad_suma+=$r->cantidad;
                             $volumen_pies_suma+=$r->volumen_pies;
@@ -247,16 +251,23 @@ $(document).ready(function() {
                             $volumen_total_pies_suma+=$r->volumen_total_pies;
                             $precio_total_suma+=$r->precio_total;
 
-                            if($r->precio_unitario==1.20){
-                                $suma_cantidad_reporte_1_2+=$r->cantidad;
-                                $suma_volumen_m3_1_2+=$r->volumen_total_m3;
-                                $suma_volumen_pies_1_2+=$r->volumen_total_pies;
-                                $suma_total_1_2+=$r->precio_total;
-                            }else{
-                                $suma_cantidad_reporte_1_7+=$r->cantidad;
-                                $suma_volumen_m3_1_7+=$r->volumen_total_m3;
-                                $suma_volumen_pies_1_7+=$r->volumen_total_pies;
-                                $suma_total_1_7+=$r->precio_total;
+                            if($tipo_empresa==1){
+                                if($r->precio_unitario==1.20){
+                                    $suma_cantidad_reporte_1_2+=$r->cantidad;
+                                    $suma_volumen_m3_1_2+=$r->volumen_total_m3;
+                                    $suma_volumen_pies_1_2+=$r->volumen_total_pies;
+                                    $suma_total_1_2+=$r->precio_total;
+                                }else{
+                                    $suma_cantidad_reporte_1_7+=$r->cantidad;
+                                    $suma_volumen_m3_1_7+=$r->volumen_total_m3;
+                                    $suma_volumen_pies_1_7+=$r->volumen_total_pies;
+                                    $suma_total_1_7+=$r->precio_total;
+                                }
+                            }else if($tipo_empresa==2){
+                                $suma_cantidad_reporte_interno+=$r->cantidad;
+                                $suma_volumen_m3_interno+=$r->volumen_total_m3;
+                                $suma_volumen_pies_interno+=$r->volumen_total_pies;
+                                $suma_total_interno+=$r->precio_total;
                             }
 
                             ?>
@@ -285,27 +296,46 @@ $(document).ready(function() {
                     <td class="td" style ="text-align: center; width: 10%; height:20px; border-bottom: 1px solid black; font-size: 10px"><b>Precio Unitario</b></td>
                     <td class="td" style ="text-align: center; width: 10%; height:20px; border-bottom: 1px solid black; font-size: 10px"><b>Total</b></td>
                 </tr>
-                <tr>
-                    <td class="td" style ="text-align: right; width: 10%; height:13px"><?php echo $suma_cantidad_reporte_1_2;?></td>
-                    <td class="td" style ="text-align: right; width: 10%; height:13px"><?php echo number_format($suma_volumen_m3_1_2,2);?></td>
-                    <td class="td" style ="text-align: right; width: 10%; height:13px"><?php echo number_format($suma_volumen_pies_1_2,2);?></td>
-                    <td class="td" style ="text-align: right; width: 10%; height:13px">1.20</td>
-                    <td class="td" style ="text-align: right; width: 10%; height:13px"><?php echo number_format($suma_total_1_2,2);?></td>
-                </tr>
-                 <tr>
-                    <td class="td" style ="text-align: right; width: 10%; height:13px"><?php echo $suma_cantidad_reporte_1_7;?></td>
-                    <td class="td" style ="text-align: right; width: 10%; height:13px"><?php echo number_format($suma_volumen_m3_1_7,2);?></td>
-                    <td class="td" style ="text-align: right; width: 10%; height:13px"><?php echo number_format($suma_volumen_pies_1_7,2);?></td>
-                    <td class="td" style ="text-align: right; width: 10%; height:13px">1.70</td>
-                    <td class="td" style ="text-align: right; width: 10%; height:13px"><?php echo number_format($suma_total_1_7,2);?></td>
-                </tr>
-                <tr style="border-top:1px solid">
-                    <td class="td" style ="text-align: right; width: 10%; height:13px"><?php echo $suma_cantidad_reporte_1_2+$suma_cantidad_reporte_1_7;?></td>
-                    <td class="td" style ="text-align: right; width: 10%; height:13px"><?php echo number_format($suma_volumen_m3_1_2+$suma_volumen_m3_1_7,2);?></td>
-                    <td class="td" style ="text-align: right; width: 10%; height:13px"><?php echo number_format($suma_volumen_pies_1_2+$suma_volumen_pies_1_7,2);?></td>
-                    <td class="td" style ="text-align: right; width: 10%; height:13px"></td>
-                    <td class="td" style ="text-align: right; width: 10%; height:13px"><?php echo number_format($suma_total_1_2+$suma_total_1_7,2);?></td>
-                </tr>
+                <?php if($tipo_empresa==1) {?>
+                    <tr>
+                        <td class="td" style ="text-align: right; width: 8%; height:13px"><?php echo $suma_cantidad_reporte_1_2;?></td>
+                        <td class="td" style ="text-align: right; width: 8%; height:13px"><?php echo number_format($suma_volumen_m3_1_2,2);?></td>
+                        <td class="td" style ="text-align: right; width: 8%; height:13px"><?php echo number_format($suma_volumen_pies_1_2,2);?></td>
+                        <td class="td" style ="text-align: right; width: 8%; height:13px">1.20</td>
+                        <td class="td" style ="text-align: right; width: 8%; height:13px"><?php echo number_format($suma_total_1_2,2);?></td>
+                    </tr>
+                    <tr>
+                        <td class="td" style ="text-align: right; width: 8%; height:13px"><?php echo $suma_cantidad_reporte_1_7;?></td>
+                        <td class="td" style ="text-align: right; width: 8%; height:13px"><?php echo number_format($suma_volumen_m3_1_7,2);?></td>
+                        <td class="td" style ="text-align: right; width: 8%; height:13px"><?php echo number_format($suma_volumen_pies_1_7,2);?></td>
+                        <td class="td" style ="text-align: right; width: 8%; height:13px">1.70</td>
+                        <td class="td" style ="text-align: right; width: 8%; height:13px"><?php echo number_format($suma_total_1_7,2);?></td>
+                    </tr>
+                    <tr style="border-top:1px solid">
+                        <td class="td" style ="text-align: right; width: 8%; height:13px"><?php echo $suma_cantidad_reporte_1_2+$suma_cantidad_reporte_1_7;?></td>
+                        <td class="td" style ="text-align: right; width: 8%; height:13px"><?php echo number_format($suma_volumen_m3_1_2+$suma_volumen_m3_1_7,2);?></td>
+                        <td class="td" style ="text-align: right; width: 8%; height:13px"><?php echo number_format($suma_volumen_pies_1_2+$suma_volumen_pies_1_7,2);?></td>
+                        <td class="td" style ="text-align: right; width: 8%; height:13px"></td>
+                        <td class="td" style ="text-align: right; width: 8%; height:13px"><?php echo number_format($suma_total_1_2+$suma_total_1_7,2);?></td>
+                    </tr>
+                
+                <?php }else if($tipo_empresa==2){?>
+                    <tr>
+                        <td class="td" style ="text-align: right; width: 8%; height:13px"><?php echo $suma_cantidad_reporte_interno;?></td>
+                        <td class="td" style ="text-align: right; width: 8%; height:13px"><?php echo number_format($suma_volumen_m3_interno,2);?></td>
+                        <td class="td" style ="text-align: right; width: 8%; height:13px"><?php echo number_format($suma_volumen_pies_interno,2);?></td>
+                        <td class="td" style ="text-align: right; width: 8%; height:13px"><?php echo number_format($r->precio_unitario,2)?></td>
+                        <td class="td" style ="text-align: right; width: 8%; height:13px"><?php echo number_format($suma_total_interno,2);?></td>
+                    </tr>
+                    <tr style="border-top:1px solid">
+                        <td class="td" style ="text-align: right; width: 8%; height:13px"><?php echo $suma_cantidad_reporte_interno;?></td>
+                        <td class="td" style ="text-align: right; width: 8%; height:13px"><?php echo number_format($suma_volumen_m3_interno,2);?></td>
+                        <td class="td" style ="text-align: right; width: 8%; height:13px"><?php echo number_format($suma_volumen_pies_interno,2);?></td>
+                        <td class="td" style ="text-align: right; width: 8%; height:13px"></td>
+                        <td class="td" style ="text-align: right; width: 8%; height:13px"><?php echo number_format($suma_total_interno,2);?></td>
+                    </tr>
+
+                <?php }?>
             </table>
         </div>
     </div>

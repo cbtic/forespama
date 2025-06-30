@@ -95,7 +95,12 @@ class IngresoVehiculoTronco extends Model
 
         $cad = "select ivt.id,ivttm.id id_ingreso_vehiculo_tronco_tipo_maderas,ivt.fecha_ingreso,e.ruc,e.razon_social,v.placa,v.ejes,p.numero_documento,
         p.apellido_paterno||' '||p.apellido_materno||' '||p.nombres conductor,
-        tm.denominacion tipo_madera,ivttm.cantidad
+        tm.denominacion tipo_madera,ivttm.cantidad,
+        (select ec.id_tipo_empresa 
+        from empresa_cubicajes ec
+        where ec.id_empresa = ivt.id_empresa_proveedor 
+        and ec.estado = '1'
+        and (ec.id_tipo_empresa = 1 OR (ec.id_tipo_empresa = 2 AND ec.id_conductor = ivt.id_conductores))) tipo_empresa
         from ingreso_vehiculo_troncos ivt
         inner join empresas e on ivt.id_empresa_transportista=e.id
         inner join vehiculos v on ivt.id_vehiculos=v.id
