@@ -1,6 +1,6 @@
--- DROP FUNCTION public.sp_crud_comprobante_moneda(varchar, int4, varchar, int4, int4, varchar, varchar, varchar, int4, int4, numeric, varchar, int4, int4);
+-- DROP FUNCTION public.sp_crud_comprobante_moneda(varchar, int4, varchar, int4, int4, varchar, varchar, varchar, int4, int4, numeric, varchar, int4, int4, varchar);
 
-CREATE OR REPLACE FUNCTION public.sp_crud_comprobante_moneda(serie character varying, numero integer, tipo character varying, ubicacion integer, persona integer, total character varying, descripcion character varying, cod_contable character varying, id_v integer, id_caja integer, descuento numeric, accion character varying, p_id_usuario integer, p_id_moneda integer, cantidad character varying)
+CREATE OR REPLACE FUNCTION public.sp_crud_comprobante_moneda(serie character varying, numero integer, tipo character varying, ubicacion integer, persona integer, total character varying, descripcion character varying, cod_contable character varying, id_v integer, id_caja integer, descuento numeric, accion character varying, p_id_usuario integer, p_id_moneda integer, cantidad character varying, fecha character varying)
  RETURNS character varying
  LANGUAGE plpgsql
 AS $function$
@@ -54,8 +54,12 @@ declare
 
 	_cantidad numeric;
 
+	_fecha date;
+
 
 begin
+	
+	_fecha:= TO_DATE(fecha, 'DD/MM/YYYY HH:MI:SS');
 		
 	_serie:=serie;
 
@@ -179,13 +183,12 @@ begin
 						fecha_programado, observacion, id_moneda, tipo, id_forma_pago, afecta, cerrado, id_tipo_documento,serie_ncnd ,id_numero_ncnd ,tipo_ncnd,
 						solictante,orden_compra,  total_anticipo, total_descuentos, desc_globales,monto_perce, monto_detrac, porc_detrac, totalconperce, tipo_guia,
 						serie_refer, nro_refer, tipo_refer, codtipo_ncnd, motivo_ncnd, correo_des, tipo_operacion, base_perce, tipo_emision, ope_gratuitas,
-						subtotal, codigo_bbss_detrac, cuenta_detrac, notas, cond_pago, id_caja, id_usuario_inserta, cod_tributario_2, destinatario_2, direccion_2, correo_des_2)
-						
-					Values (serie,(select coalesce(max(fi.numero),'0')+1 from comprobantes fi where fi.serie = _serie),now(),_razon_social,_direccion,_ruc,'', '',
+						subtotal, codigo_bbss_detrac, cuenta_detrac, notas, cond_pago, id_caja, id_usuario_inserta, cod_tributario_2, destinatario_2, direccion_2, correo_des_2)						
+					Values (serie,(select coalesce(max(fi.numero),'0')+1 from comprobantes fi where fi.serie = _serie),_fecha,_razon_social,_direccion,_ruc,'', '',
 						CAST(total AS numeric),0.00,0.00,
 						_igv_total, --((CAST(total AS numeric)/1.18)*0.18),
-						CAST(total AS numeric),_total_letras,_moneda,18,0.000,'P','N',now(),now(),
-						now(),now(),'',p_id_moneda, tipo, 1, '', 'S',6,'',0,'','','',0.00, _descuento, 0.00, 0.00, 0.00, 0, CAST(total AS numeric), '', '', '', '', '', '', _correo, '01',CAST(total AS numeric), 'SINCRONO', 0, 
+						CAST(total AS numeric),_total_letras,_moneda,18,0.000,'P','N',_fecha,_fecha,
+						_fecha,_fecha,'',p_id_moneda, tipo, 1, '', 'S',6,'',0,'','','',0.00, _descuento, 0.00, 0.00, 0.00, 0, CAST(total AS numeric), '', '', '', '', '', '', _correo, '01',CAST(total AS numeric), 'SINCRONO', 0, 
 						_subtotal, --CAST(total AS numeric)/1.18, 
 						'', '', '', '', id_caja, p_id_usuario, _ruc2, _razon_social2, _direccion2, _correo2);
 
