@@ -37,6 +37,7 @@
 
     $(document).ready(function() {
 
+
         $('#fechaF').datepicker({
             autoclose: true,
             format: 'dd/mm/yyyy',
@@ -108,6 +109,21 @@
         language: 'es'
         });
 
+
+
+    /*
+    // Validación al enviar el formulario (opcional)
+    $('form').submit(function() {
+        var selectedDate = $('#fechaF').datepicker('getDate');
+        if (selectedDate < minDate || selectedDate > today) {
+            alert('Por favor seleccione una fecha entre ' + 
+                  $.datepicker.formatDate('dd/mm/yy', minDate) + 
+                  ' y ' + $.datepicker.formatDate('dd/mm/yy', today));
+            return false;
+        }
+        return true;
+    });
+    */
 
 
     });

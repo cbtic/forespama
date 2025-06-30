@@ -119,8 +119,44 @@ $(document).ready(function () {
 
 	calculaPorcentaje(1);
 
+
+	            // Obtener fecha actual
+    
+
+	$('#fechaF').val(obtenerFechaActual());
+
+/*
+	var today = new Date();
+    // Calcular fecha mínima (2 días antes de hoy)
+    var minDate = new Date();
+    minDate.setDate(today.getDate() - 2);
+    
+    // Inicializar datepicker con configuración
+    $('#fechaF').datepicker({
+        dateFormat: 'dd/mm/yy',
+        minDate: minDate,  // Fecha mínima permitida (2 días antes de hoy)
+        maxDate: today,    // Fecha máxima permitida (hoy)
+        beforeShowDay: function(date) {
+            // Opcional: resaltar días permitidos
+            return [true];
+        },
+        onSelect: function(dateText, inst) {
+            // Validación adicional al seleccionar
+            console.log('Fecha seleccionada:', dateText);
+        }
+    });
+*/
 	
 });
+
+function obtenerFechaActual() {
+  const hoy = new Date();
+  const dia = String(hoy.getDate()).padStart(2, '0');
+  const mes = String(hoy.getMonth() + 1).padStart(2, '0');
+  const año = hoy.getFullYear();
+  
+  return `${dia}/${mes}/${año}`;
+}
 
 function calcular_descuento(){
 
@@ -336,6 +372,26 @@ function guardarFactura(){
 
 	//exit();
 
+	var today = new Date();
+
+    // Calcular fecha mínima (2 días antes de hoy)
+    var minDate = new Date();
+    minDate.setDate(today.getDate() - 3);
+
+	    var minDate_m = new Date();
+    minDate_m.setDate(today.getDate() - 2);
+
+
+	var selectedDate = $('#fechaF').datepicker('getDate');
+    
+	if (selectedDate < minDate || selectedDate > today) {
+            msg+= 'Por favor seleccione una fecha entre ' + 
+                  $.datepicker.formatDate('dd/mm/yy', minDate_m) + 
+                  ' y ' + $.datepicker.formatDate('dd/mm/yy', today)+'<br>';            
+    }
+       
+
+
 	if(total_!=total_fac_ && id_formapago_==1){
 
 		$total_pagar_abono = $("#total_pagar_abono").val();
@@ -347,6 +403,8 @@ function guardarFactura(){
 		}
 		
 	}
+
+
 
 
 	var direccion = $('#direccion').val();
