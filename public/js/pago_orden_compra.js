@@ -477,20 +477,15 @@ function modalGuia(id){
 }
 
 function DescargarArchivosPagos(){
-		
-	var ruc = $('#ruc_bus').val();
+	
 	var empresa = $('#empresa_bus').val();
-	var placa = $('#placa_bus').val();
-	var tipo_madera = $('#tipo_madera_bus').val();
+	var persona = $('#persona_bus').val();
 	var fecha_inicio = $('#fecha_inicio_bus').val();
 	var fecha_fin = $('#fecha_fin_bus').val();
 	var estado_pago = $('#estado_pago_bus').val();
-	//var id_agremiado = 0;
-	//var id_regional = 0;
-	if (ruc == "")ruc = "0";
-	if (empresa == "")empresa = "0";
-	if (placa == "")placa = "0";
-	if (tipo_madera == "")tipo_madera = 0;
+
+	if (empresa == "")empresa = 0;
+	if (persona == "")persona = 0;
 	if (fecha_inicio == ""){
         fecha_inicio = "0"
     }else{
@@ -501,12 +496,9 @@ function DescargarArchivosPagos(){
     }else{
         fecha_fin = convertirFecha(fecha_fin);
     };
-	if (estado_pago == "")estado_pago = "0";
-	//if (campo == "")campo = 0;
-	//if (orden == "")orden = 0;
+	if (estado_pago == "")estado_pago = 0;
 	
-	
-	location.href = '/ingreso_vehiculo_tronco/exportar_listar_pagos/'+ruc+'/'+empresa+'/'+placa+'/'+tipo_madera+'/'+fecha_inicio+'/'+fecha_fin+'/'+estado_pago;
+	location.href = '/orden_compra/exportar_listar_pagos_orden_compra/'+empresa+'/'+persona+'/'+fecha_inicio+'/'+fecha_fin+'/'+estado_pago;
 }
 
 function convertirFecha(fecha){

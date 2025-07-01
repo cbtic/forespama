@@ -33,8 +33,9 @@ class IngresoProduccionController extends Controller
 		$tipo_documento = $tablaMaestra_model->getMaestroByTipo(53);
         //$cerrado_orden_compra = $tablaMaestra_model->getMaestroByTipo(52);
         $almacen_destino = Almacene::all();
+        $area = $tablaMaestra_model->getMaestroByTipo(81);
 		
-		return view('frontend.ingreso_produccion.create',compact('tipo_documento','almacen_destino'));
+		return view('frontend.ingreso_produccion.create',compact('tipo_documento','almacen_destino','area'));
 
 	}
 
@@ -45,6 +46,7 @@ class IngresoProduccionController extends Controller
 		$p[]=$request->fecha;
         $p[]=$request->numero_ingreso_produccion;
         $p[]=$request->almacen_destino;
+        $p[]=$request->area;
         $p[]=$request->estado;
 		$p[]=$request->NumeroPagina;
 		$p[]=$request->NumeroRegistros;
@@ -86,9 +88,10 @@ class IngresoProduccionController extends Controller
         $unidad_medida = $tablaMaestra_model->getMaestroByTipo(57);
         $marca = $marca_model->getMarcaAll();
         $almacen_destino = $almacen_model->getAlmacenAll();
+        $area = $tablaMaestra_model->getMaestroByTipo(81);
 		//var_dump($id);exit();
 
-		return view('frontend.ingreso_produccion.modal_ingreso_produccion_nuevoIngresoProduccion',compact('id','ingreso_produccion','unidad_medida','moneda','estado_bien','tipo_producto','unidad','marca','producto','tipo_documento','almacen_destino','id_user'));
+		return view('frontend.ingreso_produccion.modal_ingreso_produccion_nuevoIngresoProduccion',compact('id','ingreso_produccion','unidad_medida','moneda','estado_bien','tipo_producto','unidad','marca','producto','tipo_documento','almacen_destino','id_user','area'));
 
     }
 
@@ -120,6 +123,7 @@ class IngresoProduccionController extends Controller
         $ingreso_produccion->codigo = $request->numero_ingreso_produccion;
         $ingreso_produccion->producto_defectuoso = $request->input('producto_defectuoso', 0) == '1' ? 1 : 0;
 		$ingreso_produccion->observacion = $request->observacion;
+		$ingreso_produccion->id_area = $request->area;
         $ingreso_produccion->id_usuario_inserta = $id_user;
 		$ingreso_produccion->estado = 1;
 		$ingreso_produccion->save();

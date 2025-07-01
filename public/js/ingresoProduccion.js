@@ -90,6 +90,7 @@ function datatablenew(){
 			var fecha = $('#fecha_bus').val();
 			var numero_ingreso_produccion = $('#numero_ingreso_produccion_bus').val();
 			var almacen_destino = $('#almacen_destino_bus').val();
+			var area = $('#area_bus').val();
 			var estado = $('#estado_bus').val();
 			
 			var _token = $('#_token').val();
@@ -98,9 +99,9 @@ function datatablenew(){
                 //"contentType": "application/json; charset=utf-8",
                 "type": "POST",
                 "url": sSource,
-                "data":{NumeroPagina:iNroPagina,NumeroRegistros:iCantMostrar,
-						tipo_documento:tipo_documento,fecha:fecha,numero_ingreso_produccion:numero_ingreso_produccion,
-						almacen_destino:almacen_destino,estado:estado,
+                "data":{NumeroPagina:iNroPagina, NumeroRegistros:iCantMostrar,
+						tipo_documento:tipo_documento, fecha:fecha, numero_ingreso_produccion:numero_ingreso_produccion,
+						almacen_destino:almacen_destino, area:area, estado:estado,
 						_token:_token
                        },
                 "success": function (result) {
@@ -172,6 +173,16 @@ function datatablenew(){
 					"bSortable": true,
 					"aTargets": [5]
 				},
+
+				{
+					"mRender": function (data, type, row) {
+						var area = "";
+						if(row.area!= null)area = row.area;
+						return area;
+					},
+					"bSortable": true,
+					"aTargets": [6]
+				},
 				
 				{
 					"mRender": function (data, type, row) {
@@ -185,7 +196,7 @@ function datatablenew(){
 						return estado;
 					},
 					"bSortable": false,
-					"aTargets": [6]
+					"aTargets": [7]
 				},
 				{
 					"mRender": function (data, type, row) {
@@ -210,7 +221,7 @@ function datatablenew(){
 						return html;
 					},
 					"bSortable": false,
-					"aTargets": [7],
+					"aTargets": [8],
 				},
             ]
     });

@@ -628,6 +628,20 @@ function activarObservacion() {
                                 ?>
                             </select>
                         </div>
+                        <div class="col-lg-2">
+                            &Aacute;rea
+                        </div>
+                        <div class="col-lg-2">
+                            <select name="area" id="area" class="form-control form-control-sm" onchange="">
+                                <option value="">--Seleccionar--</option>
+                                <?php 
+                                foreach ($area as $row){?>
+                                    <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$ingreso_produccion->id_area)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                    <?php 
+                                }
+                                ?>
+                            </select>
+                        </div>
                         <div class="col-lg-2" style="color:red; font-weight:bold">
                             <label for="producto_defectuoso" class="form-check-label">Producto Defectuoso</label>
                         </div>

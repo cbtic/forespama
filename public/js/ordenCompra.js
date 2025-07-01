@@ -508,12 +508,12 @@ function modalTiendaOrdenCompra(id){
 	$('#openOverlayOpc .modal-body').css('height', 'auto');
 
 	$.ajax({
-			url: "/orden_compra/modal_orden_compra_tienda/"+id,
-			type: "GET",
-			success: function (result) {  
-					$("#diveditpregOpc").html(result);
-					$('#openOverlayOpc').modal('show');
-			}
+		url: "/orden_compra/modal_orden_compra_tienda/"+id,
+		type: "GET",
+		success: function (result) {  
+				$("#diveditpregOpc").html(result);
+				$('#openOverlayOpc').modal('show');
+		}
 	});
 }
 

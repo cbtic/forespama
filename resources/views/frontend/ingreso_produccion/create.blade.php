@@ -378,6 +378,18 @@ label.form-control-sm{
 						</select>
 					</div>
 
+					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+						<select name="area_bus" id="area_bus" class="form-control form-control-sm">
+							<option value="">--Seleccionar &Aacute;rea--</option>
+							<?php
+							foreach ($area as $row){?>
+								<option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
+								<?php 
+							}
+							?>
+						</select>
+					</div>
+
                     <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
 						<select name="estado_bus" id="estado_bus" class="form-control form-control-sm">
 							<option value="">Todos</option>
@@ -404,6 +416,7 @@ label.form-control-sm{
 							<th>N&uacute;mero Ingreso</th>
 							<th>Almacen Destino</th>
 							<th>Usuario Registra</th>
+							<th>&Aacute;rea</th>
 							<th>Estado</th>
                             <th>Acciones</th>
                         </tr>

@@ -1758,6 +1758,40 @@ class OrdenCompraController extends Controller
 		
     }
 
+    public function exportar_listar_pagos_orden_compra($empresa, $persona, $fecha_inicio, $fecha_fin, $estado_pago) {
+
+
+		if($empresa==0)$empresa = "";
+		if($persona==0)$persona = "";
+		if($fecha_inicio=="0")$fecha_inicio = "";
+		if($fecha_fin=="0")$fecha_fin = "";
+		if($estado_pago==0)$estado_pago = "";
+
+		$orden_compra_model = new OrdenCompra;
+        $p[]=$empresa;
+        $p[]=$persona;
+        $p[]=$fecha_inicio;
+        $p[]=$fecha_fin;
+        $p[]=$estado_pago;
+		$p[]=1;
+		$p[]=10000;
+		$data = $orden_compra_model->listar_orden_compra_pagos_ajax($p);
+	
+		$variable = [];
+		$n = 1;
+
+		array_push($variable, array("N","Fecha","Cliente","Vendedor","Tipo Producto","N° OC", "Fecha Factura", "N° Factura", "SubTotal", "IGV", "Total", "Abono", "Forma Pago", "Fecha Vencimiento", "Guia", "Estado Pago", "Pagos", "Fecha Pagos", "Guias", "Observacion Guias"));
+		
+		foreach ($data as $r) {
+
+			array_push($variable, array($n++,$r->fecha_ingreso, $r->ruc, $r->razon_social, $r->placa,$r->tipo_madera,$r->cantidad, $r->volumen_total_m3, $r->volumen_total_pies));
+		}
+		
+		$export = new InvoicesExport([$variable]);
+		return Excel::download($export, 'reporte_pagos.xlsx');
+		
+    }
+
 }
 
 class InvoicesExport implements FromArray, WithHeadings, WithStyles
