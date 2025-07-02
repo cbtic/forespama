@@ -18,6 +18,12 @@ class IngresoProduccion extends Model
 
     }
 
+    public function listar_ingreso_produccion_detalle_ajax($p){
+
+        return $this->readFuntionPostgres('sp_listar_ingreso_produccion_detalle_paginado',$p);
+
+    }
+
     public function readFuntionPostgres($function, $parameters = null){
 
         $_parameters = '';

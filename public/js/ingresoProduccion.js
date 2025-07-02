@@ -53,6 +53,10 @@ $(document).ready(function () {
 		
 	datatablenew();
 
+	$('#btnDescargar').on('click', function () {
+		descargarArchivosIngresoProduccion();
+	});
+
 });
 
 function datatablenew(){
@@ -282,4 +286,23 @@ function fn_eliminar(id,estado){
 				datatablenew();
             }
     });
+}
+
+function descargarArchivosIngresoProduccion(){
+		
+	var tipo_documento = $('#tipo_documento_bus').val();
+	var fecha = $('#fecha_bus').val();
+	var numero_ingreso_produccion = $('#numero_ingreso_produccion_bus').val();
+	var almacen_destino = $('#almacen_destino_bus').val();
+	var area = $('#area_bus').val();
+	var estado = $('#estado_bus').val();
+
+	if (tipo_documento == "")tipo_documento = 0;
+	if (fecha == "")fecha = "0";
+	if (numero_ingreso_produccion == "")numero_ingreso_produccion = "0";
+	if (almacen_destino == "")almacen_destino = 0;
+	if (area == "")area = 0;
+	if (estado == "")estado = 0;
+	
+	location.href = '/ingreso_produccion/exportar_listar_ingreso_produccion/'+tipo_documento+'/'+fecha+'/'+numero_ingreso_produccion+'/'+almacen_destino+'/'+area+'/'+estado;
 }
