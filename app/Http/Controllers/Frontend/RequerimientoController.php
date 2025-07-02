@@ -43,6 +43,7 @@ class RequerimientoController extends Controller
 
         $id_user = Auth::user()->id;
 		$tablaMaestra_model = new TablaMaestra;
+        $producto_model = new Producto;
         $user_model = new User;
 		$tipo_documento = $tablaMaestra_model->getMaestroByTipo(59);
         $cerrado_requerimiento = $tablaMaestra_model->getMaestroByTipo(52);
@@ -51,8 +52,9 @@ class RequerimientoController extends Controller
         $estado_atencion = $tablaMaestra_model->getMaestroByTipo(60);
         $responsable_atencion = $user_model->getUserAll();
         $tipo_requerimiento = $tablaMaestra_model->getMaestroByTipo(67);
+        $producto = $producto_model->getProductoAll();
         
-		return view('frontend.requerimiento.create',compact('tipo_documento','cerrado_requerimiento','almacen','id_user','estado_atencion','responsable_atencion','tipo_requerimiento'));
+		return view('frontend.requerimiento.create',compact('tipo_documento','cerrado_requerimiento','almacen','id_user','estado_atencion','responsable_atencion','tipo_requerimiento','producto'));
 
 	}
 
@@ -67,6 +69,7 @@ class RequerimientoController extends Controller
         $p[]=$request->responsable_atencion;
         $p[]=$request->estado_atencion;
         $p[]=$request->tipo_requerimiento;
+        $p[]=$request->producto;
         $p[]=$request->estado;
 		$p[]=$request->NumeroPagina;
 		$p[]=$request->NumeroRegistros;
@@ -443,7 +446,7 @@ class RequerimientoController extends Controller
 
     }
 
-    public function exportar_listar_requerimiento($tipo_documento, $fecha, $numero_requerimiento, $almacen, $situacion, $responsable_atencion, $estado_atencion, $tipo_requerimiento, $estado) {
+    public function exportar_listar_requerimiento($tipo_documento, $fecha, $numero_requerimiento, $almacen, $situacion, $responsable_atencion, $estado_atencion, $tipo_requerimiento, $estado, $producto) {
 
 		if($tipo_documento==0)$tipo_documento = "";
 		if($fecha=="0")$fecha = "";
@@ -454,6 +457,7 @@ class RequerimientoController extends Controller
         if($estado_atencion==0)$estado_atencion = "";
         if($tipo_requerimiento==0)$tipo_requerimiento = "";
         if($estado==0)$estado = "";
+        if($producto==0)$producto = "";
 
 		$requerimiento_model = new Requerimiento;
 		$p[]=$tipo_documento;
@@ -464,6 +468,7 @@ class RequerimientoController extends Controller
         $p[]=$responsable_atencion;
         $p[]=$estado_atencion;
         $p[]=$tipo_requerimiento;
+        $p[]=$producto;
         $p[]=$estado;
 		$p[]=1;
 		$p[]=1000;
@@ -484,7 +489,7 @@ class RequerimientoController extends Controller
 		return Excel::download($export, 'reporte_requerimiento.xlsx');	
     }
 
-    public function exportar_listar_requerimiento_reporte($tipo_documento, $fecha, $numero_requerimiento, $almacen, $situacion, $responsable_atencion, $estado_atencion, $tipo_requerimiento, $estado) {
+    public function exportar_listar_requerimiento_reporte($tipo_documento, $fecha, $numero_requerimiento, $almacen, $situacion, $responsable_atencion, $estado_atencion, $tipo_requerimiento, $estado, $producto) {
 
 		if($tipo_documento==0)$tipo_documento = "";
 		if($fecha=="0")$fecha = "";
@@ -495,6 +500,7 @@ class RequerimientoController extends Controller
         if($estado_atencion==0)$estado_atencion = "";
         if($tipo_requerimiento==0)$tipo_requerimiento = "";
         if($estado==0)$estado = "";
+        if($producto==0)$producto = "";
 
 		$requerimiento_model = new Requerimiento;
 		$p[]=$tipo_documento;
@@ -505,6 +511,7 @@ class RequerimientoController extends Controller
         $p[]=$responsable_atencion;
         $p[]=$estado_atencion;
         $p[]=$tipo_requerimiento;
+        $p[]=$producto;
         $p[]=$estado;
 		$p[]=1;
 		$p[]=1000;

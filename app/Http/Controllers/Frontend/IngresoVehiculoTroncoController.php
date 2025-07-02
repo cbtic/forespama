@@ -971,7 +971,7 @@ class IngresoVehiculoTroncoController extends Controller
 
 				if ($diametro_dm >= $diametro_dm_) {
 					$precio_unitario = $precio_mayor;
-				} else {
+				} else{
 					$precio_unitario = $precio_menor;
 				}
 
