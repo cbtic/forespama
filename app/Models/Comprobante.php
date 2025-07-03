@@ -484,7 +484,7 @@ class Comprobante extends Model
         $empresa_ = "";
         
         if($empresa!="0"){
-            $empresa_=" and c.id_empresa = '".$empresa."' ";
+            $empresa_=" and id_empresa = '".$empresa."' ";
         }
 
         $cad = "select 
@@ -500,9 +500,18 @@ class Comprobante extends Model
         sum(case when to_char(c.fecha, 'MM') = '10' and to_char(c.fecha, 'YYYY') = '".$anio."' then c.total::float else 0 end) as octubre,
         sum(case when to_char(c.fecha, 'MM') = '11' and to_char(c.fecha, 'YYYY') = '".$anio."' then c.total::float else 0 end) as noviembre,
         sum(case when to_char(c.fecha, 'MM') = '12' and to_char(c.fecha, 'YYYY') = '".$anio."' then c.total::float else 0 end) as diciembre
-        from comprobantes c
-        where c.id_empresa >=0 and c.anulado != 'S'
-        ".$empresa_." ";
+        FROM (
+            SELECT fecha, total
+            FROM comprobantes
+            WHERE id_empresa >= 0 
+            AND anulado != 'S' 
+            ".$empresa_." 
+            UNION ALL
+            SELECT fecha, total
+            FROM comprobante_sodimac_historicos
+            WHERE id_empresa >= 0 
+            ".$empresa_." 
+        ) AS c ";
         
         $data = DB::select($cad);
         
