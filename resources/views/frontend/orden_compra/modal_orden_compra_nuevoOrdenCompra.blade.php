@@ -368,6 +368,8 @@ function obtenerCodInterno(selectElement, n){
                 
             }
         });
+
+        obtenerStock(selectElement, n);
 }
 
 function obtenerCodigo(selectElement){
