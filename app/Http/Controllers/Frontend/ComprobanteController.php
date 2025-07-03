@@ -20,6 +20,7 @@ use App\Models\ComprobanteCuota;
 use App\Models\CajaIngreso;
 use App\Models\SodimacFactura;
 use App\Models\SodimacFacturaDetalle;
+use App\Models\ComprobanteSodimacHistorico;
 use App\Models\Tienda;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
