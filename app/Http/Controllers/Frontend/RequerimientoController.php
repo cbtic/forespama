@@ -704,6 +704,14 @@ class RequerimientoController extends Controller
 
 		return $pdf->stream();
 	}
+
+    public function modal_observacion($id){
+				
+		$requerimiento_detalle = RequerimientoDetalle::find($id);
+        
+        return view('frontend.requerimiento.modal_observacion_requerimiento',compact('id','requerimiento_detalle'));
+
+    }
 }
 
 class InvoicesExport implements FromArray, WithHeadings, WithStyles

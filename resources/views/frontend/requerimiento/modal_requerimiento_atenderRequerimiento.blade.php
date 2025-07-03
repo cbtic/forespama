@@ -298,7 +298,7 @@ $.ajax({
                         <td><input name="cantidad_ingreso[]" id="cantidad_ingreso${n}" class="cantidad_ingreso form-control form-control-sm" value="${requerimiento.cantidad}" type="text" oninput="" readonly></td>
                         <td><input name="cantidad_atendida[]" id="cantidad_atendida${n}" class="form-control form-control-sm" value="${requerimiento.cantidad-requerimiento.cantidad_atendida}" type="text"></td>
                         <td><button type="button" class="btn btn-danger btn-sm" onclick="eliminarFila(this)">Eliminar</button></td>
-                        <td><button type="button" class="btn btn-success btn-sm" onclick="modalObservacion(this)">Observacion</button></td>
+                        <td><button type="button" class="btn btn-success btn-sm" onclick="modalObservacion(${n})">Observacion</button></td>
                     </tr>
                 `;
                 tbody.append(row);
@@ -314,9 +314,7 @@ $.ajax({
                 n++;
                 });
             }
-            
     });
-
 }
 
 function agregarProducto(){
@@ -343,6 +341,7 @@ function agregarProducto(){
         var cantidad_ingreso = '<input name="cantidad_ingreso[]" id="cantidad_ingreso' + n + '" class="cantidad_ingreso form-control form-control-sm" value="" type="text" oninput="">';
         
         var btnEliminar = '<button type="button" class="btn btn-danger btn-sm" onclick="eliminarFila(this)">Eliminar</button>';
+        var btnObservacion = '<button type="button" class="btn btn-success btn-sm" onclick="modalObservacion(' + n + ')">Observacion</button>';
 
         newRow += '<tr>';
         newRow += '<td>' + n + '</td>';
@@ -354,6 +353,7 @@ function agregarProducto(){
         newRow += '<td>' + unidad + '</td>';
         newRow += '<td>' + cantidad_ingreso + '</td>';
         newRow += '<td>' + btnEliminar + '</td>';
+        newRow += '<td>' + btnObservacion + '</td>';
         newRow += '</tr>';
 
         $('#tblRequerimientoDetalle tbody').append(newRow);
@@ -411,8 +411,21 @@ function eliminarFila(button){
     //actualizarTotalGeneral();
 }
 
-function modalObservacion(button){
+function modalObservacion(n){
 
+    //alert(n);
+
+    const idDetalle = $('#id_requerimiento_detalle' + n).val();
+
+    $.ajax({
+			url: "/requerimiento/modal_observacion/"+idDetalle,
+			type: "GET",
+			success: function (result) {
+					$("#diveditpregOpc2").html(result);
+					$('#openOverlayOpc2').modal('show');
+                    
+			}
+	});
 }
 
 function limpiar(){

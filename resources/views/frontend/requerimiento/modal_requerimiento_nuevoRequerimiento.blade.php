@@ -361,6 +361,7 @@ function agregarProducto(){
         var observacion_atencion = '<textarea name="observacion_atencion[]" id="observacion_atencion' + n + '" class="form-control form-control-sm" readonly></textarea>';
 
         var btnEliminar = '<button type="button" class="btn btn-danger btn-sm" onclick="eliminarFila(this)">Eliminar</button>';
+        //var btnObservacion = '<button type="button" class="btn btn-success btn-sm" onclick="modalObservacion(this)">Observacion</button>';
 
         newRow += '<tr>';
         newRow += '<td>' + n + '</td>';
@@ -373,6 +374,7 @@ function agregarProducto(){
         newRow += '<td>' + observacion + '</td>';
         newRow += '<td>' + observacion_atencion + '</td>';
         newRow += '<td>' + btnEliminar + '</td>';
+        //newRow += '<td>' + btnObservacion + '</td>';
         newRow += '</tr>';
 
         $('#tblRequerimientoDetalle tbody').append(newRow);
