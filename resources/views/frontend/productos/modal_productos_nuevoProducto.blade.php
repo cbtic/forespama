@@ -457,7 +457,7 @@ function cargarImagenes() {
                                     <div class="col-lg-8">
                                         <div class="form-group">
                                             <label class="control-label form-control-sm">Denominaci&oacute;n</label>
-                                            <input id="denominacion" name="denominacion" on class="form-control form-control-sm"  value="<?php echo $producto->denominacion?>" type="text">
+                                            <input id="denominacion" name="denominacion" on class="form-control form-control-sm"  value="<?php echo htmlspecialchars($producto->denominacion, ENT_QUOTES, 'UTF-8')?>" type="text">
                                         </div>
                                     </div>
                                     <div class="col-lg-4">

@@ -17,7 +17,7 @@ begin
 	
 	p_pagina=(p_pagina::Integer-1)*p_limit::Integer;
 
-	v_campos=' ip.id, tm.denominacion tipo_documento, ip.fecha, ip.codigo numero_ingreso_produccion, ip.estado, a.denominacion almacen_destino, u.name usuario_ingreso, tm2.denominacion area, p.codigo, p.denominacion producto ';
+	v_campos=' ip.id, tm.denominacion tipo_documento, ip.fecha, ip.codigo numero_ingreso_produccion, ip.estado, a.denominacion almacen_destino, u.name usuario_ingreso, tm2.denominacion area, p.codigo, p.denominacion producto, ipd.cantidad ';
 
 	v_tabla=' from ingreso_produccion ip
 	inner join tabla_maestras tm on ip.id_tipo_documento ::int = tm.codigo ::int and tm.tipo = ''53''

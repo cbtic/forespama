@@ -298,7 +298,7 @@ $.ajax({
                         <td><input name="cantidad_ingreso[]" id="cantidad_ingreso${n}" class="cantidad_ingreso form-control form-control-sm" value="${requerimiento.cantidad}" type="text" oninput="" readonly></td>
                         <td><input name="cantidad_atendida[]" id="cantidad_atendida${n}" class="form-control form-control-sm" value="${requerimiento.cantidad-requerimiento.cantidad_atendida}" type="text"></td>
                         <td><button type="button" class="btn btn-danger btn-sm" onclick="eliminarFila(this)">Eliminar</button></td>
-
+                        <td><button type="button" class="btn btn-success btn-sm" onclick="modalObservacion(this)">Observacion</button></td>
                     </tr>
                 `;
                 tbody.append(row);
@@ -409,6 +409,10 @@ function verificarProductoSeleccionado(selectElement, rowIndex, valor) {
 function eliminarFila(button){
     $(button).closest('tr').remove();
     //actualizarTotalGeneral();
+}
+
+function modalObservacion(button){
+
 }
 
 function limpiar(){
@@ -769,11 +773,11 @@ function cambiarOrigen(){
                                     <th>#</th>
                                     <th>Descripci&oacute;n</th>
                                     <th>Marca</th>
-                                    <th>COD. INT.</th>
-                                    <th>Estado Bien</th>
-                                    <th>Unidad</th>
-                                    <th>Cantidad</th>
-                                    <th>Cantidad Pendiente</th>
+                                    <th style="width : 10%">COD. INT.</th>
+                                    <th style="width : 10%">Estado Bien</th>
+                                    <th style="width : 10%">Unidad</th>
+                                    <th style="width : 8%">Cantidad</th>
+                                    <th style="width : 8%">Cantidad Pendiente</th>
                                 </tr>
                                 </thead>
                                 <tbody id="divRequerimientoDetalle">

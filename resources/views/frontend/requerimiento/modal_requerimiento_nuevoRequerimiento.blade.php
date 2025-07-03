@@ -313,6 +313,7 @@ $.ajax({
                         <td><select name="unidad[]" id="unidad${n}" class="form-control form-control-sm">${unidadMedidaOptions}</select></td>
                         <td><input name="cantidad_ingreso[]" id="cantidad_ingreso${n}" class="cantidad_ingreso form-control form-control-sm" value="${requerimiento.cantidad}" type="text" oninput=""></td>
                         <td><textarea name="observacion[]" id="observacion${n}" class="form-control form-control-sm">${requerimiento.observacion}</textarea></td>
+                        <td><textarea name="observacion_atencion[]" id="observacion_atencion${n}" class="form-control form-control-sm" readonly>${requerimiento.observacion_atencion ?? ''}</textarea></td>
                         <td><button type="button" class="btn btn-danger btn-sm" onclick="eliminarFila(this)">Eliminar</button></td>
 
                     </tr>
@@ -357,6 +358,7 @@ function agregarProducto(){
         var unidad = '<select name="unidad[]" id="unidad' + n + '" class="form-control form-control-sm" onChange=""> <option value="">--Seleccionar--</option> <?php foreach ($unidad as $row) {?> <option value="<?php echo $row->codigo?>"><?php echo $row->denominacion?></option> <?php } ?> </select>';
         var cantidad_ingreso = '<input name="cantidad_ingreso[]" id="cantidad_ingreso' + n + '" class="cantidad_ingreso form-control form-control-sm" value="" type="text" oninput="">';
         var observacion = '<textarea name="observacion[]" id="observacion' + n + '" class="form-control form-control-sm"></textarea>';
+        var observacion_atencion = '<textarea name="observacion_atencion[]" id="observacion_atencion' + n + '" class="form-control form-control-sm" readonly></textarea>';
 
         var btnEliminar = '<button type="button" class="btn btn-danger btn-sm" onclick="eliminarFila(this)">Eliminar</button>';
 
@@ -369,6 +371,7 @@ function agregarProducto(){
         newRow += '<td>' + unidad + '</td>';
         newRow += '<td>' + cantidad_ingreso + '</td>';
         newRow += '<td>' + observacion + '</td>';
+        newRow += '<td>' + observacion_atencion + '</td>';
         newRow += '<td>' + btnEliminar + '</td>';
         newRow += '</tr>';
 
@@ -776,18 +779,18 @@ function cambiarOrigen(){
                         <div class="card-body">
 
                             <div class="table-responsive" style="overflow-y: auto; max-height: 400px; overflow-x: auto; ">
-                                <table id="tblRequerimientoDetalle" class="
-                                table table-hover table-sm">
+                                <table id="tblRequerimientoDetalle" class="table table-hover table-sm">
                                     <thead>
                                     <tr style="font-size:13px">
                                         <th>#</th>
                                         <th>Descripci&oacute;n</th>
                                         <th>Marca</th>
-                                        <th>COD. INT.</th>
-                                        <th>Estado Bien</th>
-                                        <th>Unidad</th>
-                                        <th>Cantidad</th>
-                                        <th>Observaci&oacute;n</th>
+                                        <th style="width : 10%">COD. INT.</th>
+                                        <th style="width : 10%">Estado Bien</th>
+                                        <th style="width : 10%">Unidad</th>
+                                        <th style="width : 8%">Cantidad</th>
+                                        <th style="width : 20%">Observaci&oacute;n</th>
+                                        <th style="width : 20%">Observaci&oacute;n Atenci&oacute;n</th>
                                     </tr>
                                     </thead>
                                     <tbody id="divRequerimientoDetalle">
