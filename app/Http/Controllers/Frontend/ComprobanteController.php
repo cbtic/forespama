@@ -4246,6 +4246,7 @@ class ComprobanteController extends Controller
 		$comprobante_sodimac_historico->moneda = $request->moneda_nombre;
 		$comprobante_sodimac_historico->observacion = "";
 		$comprobante_sodimac_historico->monto_retencion = $request->retencion;
+		$comprobante_sodimac_historico->id_empresa = $request->empresa;
 		$comprobante_sodimac_historico->estado = 1;
 		$comprobante_sodimac_historico->id_usuario_inserta = $id_user;
 		$comprobante_sodimac_historico->save();
