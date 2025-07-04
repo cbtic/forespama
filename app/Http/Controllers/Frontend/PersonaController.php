@@ -124,23 +124,14 @@ class PersonaController extends Controller
 
             $orden_compra_model = new OrdenCompra;
 
-			//print_r("hi");exit();
 			$resultado = $orden_compra_model->getPersonaOrdenCompraByCod($numero_documento, $tipo_documento);
 
 			if(isset($resultado->id_persona)){
-				//echo("DNI");
+
 				$tipo_documento="1";
 				$numero_documento=$resultado->numero_documento_;
                 $id_orden_compra=$resultado->id_orden_compra;
                 $id_tipo_cliente=$resultado->id_tipo_cliente;
-                /*
-                if(isset($resultado->id_tipo_cliente)){         
-                    $id_tipo_cliente=0;
-            
-                 }else{
-                    $id_tipo_cliente=$resultado->id_tipo_cliente;
-                 }
-                    */
 
 			}else{
 
@@ -150,7 +141,29 @@ class PersonaController extends Controller
                 $id_tipo_cliente=0;
 
             }
+		}
 
+        if($tipo_documento=="5"){
+
+            $orden_compra_model = new OrdenCompra;
+
+			$resultado = $orden_compra_model->getEmpresaOrdenCompraByCod($numero_documento);
+
+			if(isset($resultado->id_empresa)){
+
+				$tipo_documento="5";
+				$numero_documento=$resultado->numero_documento_;
+                $id_orden_compra=$resultado->id_orden_compra;
+                $id_tipo_cliente=$resultado->id_tipo_cliente;
+
+			}else{
+
+                $tipo_documento="5";
+				$numero_documento=$numero_documento;
+                $id_orden_compra=0;
+                $id_tipo_cliente=0;
+
+            }
 		}
 
         if($tipo_documento=="6"){
@@ -222,8 +235,6 @@ class PersonaController extends Controller
 
         echo json_encode($array);
     }
-
-   
 	
 	public function obtener_persona_conductor($tipo_documento,$numero_documento){
 

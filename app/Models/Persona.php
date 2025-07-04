@@ -57,14 +57,14 @@ class Persona extends Model
     function getPersona($tipo_documento,$numero_documento){
         //echo $tipo_documento; exit();
         if($tipo_documento=="5"){  //RUC
-            $cad = "select t1.id,razon_social,t1.direccion,t1.representante, t1.ruc, t1.email, 5 id_tipo_documento,  trim(t1.ruc) numero_documento_
+            $cad = "select t1.id,razon_social,t1.direccion,t1.representante, t1.ruc, t1.email, 5 id_tipo_documento,  trim(t1.ruc) numero_documento_, 5 id_tipo_cliente
                     from empresas t1                    
                     Where trim(t1.ruc)='".$numero_documento."' and t1.estado ='1' ";
 
         }else{
 
             $cad =  "select t1.id,t1.numero_documento,t1.nombres,t1.apellido_paterno,t1.apellido_materno,t1.foto,
-                    t1.numero_ruc,t1.id_tipo_documento,t1.email, trim(t1.numero_documento)  numero_documento_ 			
+                    t1.numero_ruc,t1.id_tipo_documento,t1.email, trim(t1.numero_documento)  numero_documento_, 1 id_tipo_cliente	
                     from personas t1                   
                     Where  t1.id_tipo_documento=1 and trim(t1.numero_documento) = trim('".$numero_documento."') 
                     and t1.estado='1' 

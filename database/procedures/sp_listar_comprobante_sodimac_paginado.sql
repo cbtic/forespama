@@ -20,13 +20,15 @@ begin
 	
 	p_pagina=(p_pagina::Integer-1)*p_limit::Integer;
 
-	v_campos=' c.id, ''20486785994'' ruc, c.serie, c.numero, c.tipo, TO_CHAR(c.fecha,''dd-mm-yyyy'') fecha, c.destinatario, 
+	v_campos=' c.id, 
+	(select e.ruc from empresas e where c.id_empresa = e.id) ruc,
+	c.serie, c.numero, c.tipo, TO_CHAR(c.fecha,''dd-mm-yyyy'') fecha, c.destinatario, 
 	c.subtotal, c.impuesto, c.total, c.estado_pago, c.anulado, c.estado_sunat sunat,
 	(select oc.numero_orden_compra_cliente from orden_compras oc
 	inner join orden_compra_detalles ocd on oc.id = ocd.id_orden_compra 
 	left join valorizaciones v on ocd.id = v.pk_registro 
 	where v.id_comprobante = c.id
-	limit 1), c.moneda  ';
+	limit 1), c.moneda ';
         
 	v_tabla='FROM comprobantes c ';
 

@@ -10,7 +10,7 @@
 
 <link rel="stylesheet" href="<?php echo URL::to('/') ?>/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
 <link media="all" type="text/css" rel="stylesheet" href="https://app-gsf.saludpol.gob.pe:29692/css/datatables/dataTables.bootstrap.min.css">
-<script src="https://app-gsf.saludpol.gob.pe:29692/js/datatables/datatables.min.js"></script>
+<script src="https://app-gsf.saludpol.gob.pe:29692/js/datatables/datatables.min.js"></script>-->
 
 <!--<script src="<?php echo URL::to('/') ?>/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>-->
 <!--<script src="<?php echo URL::to('/') ?>/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>-->
@@ -243,6 +243,8 @@
                         <input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
 
                         <input type="hidden" name="trans" id="trans" value="<?php echo $trans; ?>">
+                        <input type="hidden" name="_afecta" id="_afecta" value="<?php echo $afectacion; ?>">
+
                         <input type="hidden" name="tipoF" value="NC">
                         <input type="hidden" name="vestab" value="1">
                         <input type="hidden" name="totalF" value="<?php if ($trans == 'FA') {
@@ -501,6 +503,7 @@
                                                                 <input type="hidden" id="facturad_pu" name="facturad[<?php echo $key ?>][importe]" value="<?php echo $fac['pu'] ?>" />
                                                                 <input type="hidden" id="facturad_igv" name="facturad[<?php echo $key ?>][igv]" value="<?php echo $fac['igv_total'] ?>" />
                                                                 <input type="hidden" id="facturad_total" name="facturad[<?php echo $key ?>][total]" value="<?php echo $fac['importe'] ?>" />
+                                                                <input type="hidden" name="facturad[<?php echo $key ?>][cantidad]" value="<?php echo $fac['cantidad'] ?>" />
 
 
                                                                 <tr>
@@ -689,5 +692,5 @@
 
 @push('after-scripts')
 
-<script src="{{ asset('js/facturaND.js') }}"></script>
+<script src="{{ asset('js/facturaNC.js') }}"></script>
 @endpush

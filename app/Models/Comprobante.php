@@ -55,7 +55,7 @@ class Comprobante extends Model
        
     }
 
-    public function registrar_comprobante_ncnd($serie, $numero, $tipo, $cod_tributario, $total, $descripcion, $cod_contable, $id_v, $id_caja, $descuento, $accion,    $id_user,   $id_moneda,$razon_social,$direccion,$id_comprobante_origen,$correo,$id_afecta,$tiponota,  $motivo,$afecta_ingreso) {
+    public function registrar_comprobante_ncnd($serie, $numero, $tipo, $cod_tributario, $total, $descripcion, $cod_contable, $id_v, $id_caja, $descuento, $accion,    $id_user,   $id_moneda,$razon_social,$direccion,$id_comprobante_origen,$correo,$id_afecta,$tiponota,  $motivo,$afecta_ingreso,$id_concepto,$item,$cantidad) {
         //( serie,  numero,  tipo,  ubicacion,  persona,  total,  descripcion,  cod_contable,  id_v,  id_caja,  descuento,  accion, p_id_usuario, p_id_moneda)
        //print_r($serie ." numero". $numero." tipo". $tipo." ubicacion". $cod_tributario."persona ". $cod_tributario.
          //           " total". $total."descripcion ". $descripcion." ". $cod_contable." ". $id_v." ". $id_caja." ". $descuento.
@@ -64,13 +64,15 @@ class Comprobante extends Model
        $cad = "Select sp_crud_comprobante_ncnd(?,?,?,?,?,
                                                 ?,?,?,?,?,
                                                 ?,?,?,?,?,
-                                                ?,?,?,?,?,?)";
+                                                ?,?,?,?,?,
+                                                ?,?,?,?)";
         //echo "Select sp_crud_factura(".$serie.",".$numero.", ".$tipo.", ".$ubicacion.",".$persona.",".$total.",".$descripcion.",".$cod_contable.",".$codigo_v.",".$estab_v.",".$modulo.",".$smodulo.",".$descuento.",".$accion.",".$id_user.")";
        
         $data = DB::select($cad, array($serie, $numero, $tipo, $cod_tributario, $total, 
                                        $descripcion, $cod_contable, $id_comprobante_origen, $id_caja, $descuento, 
                                        $accion,     $id_user,  $id_moneda, $razon_social, $direccion,
-                                       $id_comprobante_origen,$correo,$id_afecta,$tiponota,  $motivo,$afecta_ingreso));
+                                       $id_comprobante_origen,$correo,$id_afecta,$tiponota,  $motivo,
+                                       $afecta_ingreso,$id_concepto,$item,$cantidad));
         //( serie,  numero,  tipo,  ubicacion,  persona,  total,  descripcion,  cod_contable,  id_v,  id_caja,  descuento,  accion, p_id_usuario, p_id_moneda)
         //print_r($data );exit();
        
@@ -183,7 +185,7 @@ class Comprobante extends Model
 		$data = DB::select($cad);
 
         if ( empty($data)){
-            $cad = "select distinct u.name as usuario, '' numero_cap,a.id_persona  
+            $cad = "select distinct u.name as usuario, '' numero_cap,p.id_persona  
                     from comprobantes c
                     inner join personas p on c.cod_tributario =p.numero_documento 
                     --inner join agremiados a on a.id_persona = p.id  
@@ -232,7 +234,7 @@ class Comprobante extends Model
 
     function getPersonaDni($numero_documento){
 
-        $cad = "select p.id, p.numero_documento, p.apellido_paterno, p.apellido_materno, p.nombres,direccion ,correo
+        $cad = "select p.id, p.numero_documento, p.apellido_paterno, p.apellido_materno, p.nombres,direccion , email
 		        from personas p
 		        Where p.numero_documento='".$numero_documento."'";
 		//echo $cad;
@@ -242,7 +244,7 @@ class Comprobante extends Model
 
     function getPersonaRuc($numero_documento){
 
-        $cad = "select p.id, p.numero_documento, p.apellido_paterno, p.apellido_materno, p.nombres, direccion,correo email
+        $cad = "select p.id, p.numero_documento, p.apellido_paterno, p.apellido_materno, p.nombres, direccion, email
 		from personas p
 		Where p.numero_ruc='".$numero_documento."' or  p.numero_documento='".$numero_documento."'";
 		//echo $cad;
@@ -454,7 +456,7 @@ class Comprobante extends Model
 
         }elseif($tipo_documento=="1"){ //NRO_CAP
             
-            $cad = "select id, numero_documento, apellido_paterno ||' '|| apellido_materno ||' '|| nombres representante, direccion,  email  			
+            $cad = "select id, numero_documento, apellido_paterno ||' '|| apellido_materno ||' '|| nombres representante, direccion, email  			
             from personas  
             where id_tipo_documento='".$tipo_documento."' 
             and numero_documento = '".$numero_documento."' and estado='1' ";

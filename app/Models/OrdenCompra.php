@@ -341,6 +341,23 @@ class OrdenCompra extends Model
         if(isset($data[0]))return $data[0];
     }
 
+    function getEmpresaOrdenCompraByCod($numero){
+
+        $cad = "select oc.id id_orden_compra, e.id id_empresa, e.razon_social, e.direccion, e.representante, e.ruc, e.email, '5' id_tipo_documento, e.ruc numero_documento_, oc.id_tipo_cliente
+        from orden_compras oc
+        left join empresas e on e.id = oc.id_empresa_compra 
+        where 1=1 
+        and oc.estado = '1' and oc.cerrado = '2' and oc.id_tipo_documento = 2
+        and e.ruc = '".$numero."' 
+        and (select count(*) 
+        FROM  orden_compra_detalles o_
+        inner join valorizaciones v on v.id_modulo = 1 and v.pk_registro = o_.id 
+        where o_.id_orden_compra = oc.id) = 0
+        limit 1 ";
+		$data = DB::select($cad);
+        if(isset($data[0]))return $data[0];
+    }
+
     function getSalidaProductoByCod($numero){
 
         $cad = "select o.id id_orden_compra, o.numero_orden_compra, sp.id id_salida_prod, sp.codigo,  e.id id_empresa, e.razon_social, e.direccion, e.representante, e.ruc, e.email, 5 id_tipo_documento,  trim(e.ruc) numero_documento_, o.id_tipo_cliente
