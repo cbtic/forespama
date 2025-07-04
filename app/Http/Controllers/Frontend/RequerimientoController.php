@@ -706,10 +706,25 @@ class RequerimientoController extends Controller
 	}
 
     public function modal_observacion($id){
-				
+		
 		$requerimiento_detalle = RequerimientoDetalle::find($id);
         
         return view('frontend.requerimiento.modal_observacion_requerimiento',compact('id','requerimiento_detalle'));
+
+    }
+
+    public function send_observacion_requerimiento(Request $request){
+
+		$id_user = Auth::user()->id;
+
+        //$observacion = $request->input('observacion');
+
+        $requerimiento_detalle = RequerimientoDetalle::find($request->id);
+		
+		$requerimiento_detalle->observacion_atencion = $request->observacion;
+		$requerimiento_detalle->save();
+
+        return response()->json(['success' => 'Observacion guardada exitosamente.']);
 
     }
 }

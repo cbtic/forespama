@@ -14,9 +14,9 @@
   height:250px;
 }
 
-.modal-dialog {
-    width: 100%;
-    max-width:30%!important
+.modal-observacion .modal-dialog {
+	width: 100%;
+	max-width:40%!important
 }
 
 .custom-select2-dropdown {
@@ -170,16 +170,13 @@ function limpiar(){
 	$('#img_foto').val("");
 }
 
-function fn_save_anular_orden_compra(){
+function fn_save_observacion(){
 	
     var msg = "";
     
-    var motivo = $('#motivo').val();
-    var estado = $('#estado').val();
+    var observacion = $('#observacion').val();
 
-    if(motivo == ""){msg+="Ingrese el Motivo <br>";}
-    if(estado == ""){msg+="Ingrese el Estado <br>";}
-    if(estado == 1 ){msg+="El Estado no puede ser Activo <br>";}
+    if(observacion == ""){msg+="Ingrese la Observacion <br>";}
 
     if(msg!=""){
         bootbox.alert(msg);
@@ -192,15 +189,15 @@ function fn_save_anular_orden_compra(){
         $('.loader').show();
 
         $.ajax({
-            url: "/orden_compra/anular_orden_compra",
+            url: "/requerimiento/send_observacion_requerimiento",
             type: "POST",
-            data : $("#frmAnularOrdenCompra").serialize(),
+            data : $("#frmObservacionRequerimiento").serialize(),
             success: function (result) {
                 //alert(result.id)
-                $('#openOverlayOpc').modal('hide');
-                datatablenew();
+                $('#openOverlayOpc2').modal('hide');
+                //datatablenew();
                 $('.loader').hide();
-                bootbox.alert("Se anulado satisfactoriamente"); 
+                bootbox.alert("Se guardo satisfactoriamente"); 
                 
             }
         });
@@ -242,30 +239,12 @@ function fn_save_anular_orden_compra(){
                     
                     <div class="row" style="padding-left:10px">
 
-                        <div class="col-lg-3" style="padding-top:20px">
-                            Observaci&oacute;n
-                        </div>
-                        <div class="col-lg-9" style="padding-top:20px">
+                        <div class="col-lg-12" style="padding-top:20px">
+                            <label class="control-label form-control-sm">Observaci&oacute;n</label>
 							<div class="form-group" style="padding-top:0px;padding-bottom:0px;margin-top:0px;margin-bottom:0px">
-								<input id="motivo" name="motivo" class="form-control form-control-sm" value="<?php echo $orden_compra->observacion?>" type="text">
+								<textarea id="observacion" name="observacion" class="form-control form-control-sm"type="text"></textarea>
 							</div>
 						</div>
-                    </div>
-                    <div class="row" style="padding-left:10px; padding-top:20px">
-                        <div class="col-lg-3">
-                            Estado
-                        </div>
-                        <div class="col-lg-6">
-                            <select name="estado" id="estado" class="form-control form-control-sm" onchange="">
-                                <option value="">--Seleccionar--</option>
-                                <?php
-                                foreach ($estado_pedido as $row){?>
-                                    <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$orden_compra->estado_pedido)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
-                                    <?php 
-                                }
-                                ?>
-                            </select>
-                        </div>
                     </div>
                     
                     <div class="card-body" style="margin-top:20px">	
@@ -274,8 +253,8 @@ function fn_save_anular_orden_compra(){
                         <div class="col-sm-12 controls">
                             <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
                                 
-                                <a href="javascript:void(0)" onClick="fn_save_anular_orden_compra()" class="btn btn-sm btn-success" style="margin-right:10px">Guardar</a>
-                                <a href="javascript:void(0)" onClick="$('#openOverlayOpc').modal('hide');" class="btn btn-sm btn-info" style="">Cerrar</a>
+                                <a href="javascript:void(0)" onClick="fn_save_observacion()" class="btn btn-sm btn-success" style="margin-right:10px">Guardar</a>
+                                <a href="javascript:void(0)" onClick="$('#openOverlayOpc2').modal('hide');" class="btn btn-sm btn-info" style="">Cerrar</a>
                             </div>
                                                 
                         </div>

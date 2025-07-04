@@ -830,10 +830,10 @@ function cambiarOrigen(){
 </div>
 <!-- /.content-wrapper -->
 
-<div id="openOverlayOpc2" class="modal fade modal-tienda" tabindex="-1" role="dialog">
+<div id="openOverlayOpc2" class="modal fade modal-observacion" tabindex="-1" role="dialog">
 	  <div class="modal-dialog" >
 	
-		<div id="id_content_OverlayoneOpc2" class="modal-content" style="padding: 0px;margin: 0px">
+		<div id="id_content_OverlayoneOpc" class="modal-content" style="padding: 0px;margin: 0px">
 		
 		  <div class="modal-body" style="padding: 0px;margin: 0px">
 	

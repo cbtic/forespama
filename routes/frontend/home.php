@@ -679,3 +679,4 @@ Route::get('kardex/exportar_listar_consulta_producto_oc/{consulta_oc_existencia_
 Route::get('orden_compra/exportar_listar_pagos_orden_compra/{empresa}/{persona}/{fecha_inicio}/{fecha_fin}/{estado_pago}', [OrdenCompraController::class, 'exportar_listar_pagos_orden_compra'])->name('orden_compra.exportar_listar_pagos_orden_compra');
 Route::get('ingreso_produccion/exportar_listar_ingreso_produccion/{tipo_documento}/{fecha}/{numero_ingreso_produccion}/{almacen_destino}/{area}/{estado}', [IngresoProduccionController::class, 'exportar_listar_ingreso_produccion'])->name('ingreso_produccion.exportar_listar_ingreso_produccion');
 Route::get('requerimiento/modal_observacion/{id}', [RequerimientoController::class, 'modal_observacion'])->name('requerimiento.modal_observacion');
+Route::post('requerimiento/send_observacion_requerimiento', [RequerimientoController::class, 'send_observacion_requerimiento'])->name('requerimiento.send_observacion_requerimiento');

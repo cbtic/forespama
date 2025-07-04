@@ -54,7 +54,7 @@ class Requerimiento extends Model
         rd.id_estado_producto , rd.cantidad, r.id_almacen_destino,
         (select coalesce(sum(ocd.cantidad_requerida),0) from orden_compras oc
         inner join orden_compra_detalles ocd on ocd.id_orden_compra = oc.id 
-        where oc.id_requerimiento = r.id and ocd.id_producto = rd.id_producto) cantidad_atendida, coalesce(rd.observacion,'') observacion
+        where oc.id_requerimiento = r.id and ocd.id_producto = rd.id_producto) cantidad_atendida, coalesce(rd.observacion,'') observacion, coalesce(rd.observacion_atencion,'') observacion_atencion
         from requerimiento_detalles rd 
         inner join productos p on rd.id_producto = p.id
         inner join requerimientos r on rd.id_requerimiento = r.id
