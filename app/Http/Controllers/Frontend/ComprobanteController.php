@@ -2266,10 +2266,9 @@ class ComprobanteController extends Controller
         $datos_model = new Comprobante;
 		
         $datos=  $datos_model->getDatosByComprobante($id);
-        dd($datos);exit();
+        //dd($datos);exit();
         $cronograma=  $datos_model->getCronogramaPagos($id);
-       
-
+        
 		if($factura->nro_guia!=""){
 			$fac_serie_guia = $factura->serie_guia;
 			$fac_nro_guia = $factura->nro_guia;
@@ -3046,6 +3045,16 @@ class ComprobanteController extends Controller
 
     }
 
+    public function getTipoDocPersona_nc($td){
+        $tipoDoc = "";
+        if ($td == 'FT') {
+            $tipoDoc = "6";
+        } else {
+            $tipoDoc = "0";
+        }
+        return $tipoDoc;
+    }
+
     public function getTipoDocPersona($td, $dni){
 
         $tipoDoc = "";
@@ -3103,6 +3112,9 @@ class ComprobanteController extends Controller
         //echo $this->getTipoDocumento("BV");exit();
 
 		$factura = Comprobante::where('id', $id_factura)->get()[0];
+
+        $factura_nc = Comprobante::where('id', $factura->id_comprobante_ncnd)->get()[0];
+
 		$factura_detalles = ComprobanteDetalle::where([
             'serie' => $factura->serie,
             'numero' => $factura->numero,
@@ -3112,6 +3124,10 @@ class ComprobanteController extends Controller
         //print_r($factura_detalles); exit();		
 		$cabecera = array("valor1","valor2");
 		$detalle = array("valor1","valor2");
+
+        $totalOPGravadas = 0;
+        $totalOPNoGravadas = 0;
+        
         foreach ($factura_detalles as $index => $row) {
             $items1 = array(
                     "ordenItem" => $row->item, //"2",
@@ -3127,10 +3143,21 @@ class ComprobanteController extends Controller
                     "valorUnitarioSinIgv" => str_replace(",", "", number_format($row->pu_con_igv, 2)), //"42.3728813559",
                     "precioUnitarioConIgv" => str_replace(",", "", number_format($row->importe, 2)), //"50.0000000000",
                     "unidadMedidaComercial" => "SERV",
-                    "codigoAfectacionIGVItem" => "10",
+                    //"codigoAfectacionIGVItem" => "10",
+                    "codigoAfectacionIGVItem"=> $row->afect_igv,
                     //"porcentajeDescuentoItem"=> "0.00",
                     "codTipoPrecioVtaUnitarioItem" => "01"
                 );
+                //dd($row->afect_igv);exit();
+
+                $valor = (float) str_replace(",", "", $row->valor_venta ?? 0);
+
+                if ($row->afect_igv=='10'){
+                    $totalOPGravadas += $valor;
+                }else{
+                    $totalOPNoGravadas += $valor;
+                }
+                
             $items[$index] = $items1;
         }
 /*
@@ -3177,48 +3204,52 @@ class ComprobanteController extends Controller
 		$data["correoReceptor"] = $factura->correo_des; //"frimacc@gmail.com";
 		$data["distritoEmisor"] = "LIMA";
 		$data["esContingencia"] = false;
-        $data["motivoSustento"] = "DESCUENTO GLOBAL";
+        $data["motivoSustento"] = $factura->motivo_ncnd;
 		//$data["telefonoEmisor"] = "511 4710739";
 		$data["totalAnticipos"] = "0.00";
-		$data["direccionEmisor"] = "AV. SAN FELIPE NRO. 999 LIMA - LIMA - JESUS MARIA ";
+		$data["direccionEmisor"] = "CAR.MARGINAL KM. 42 SEC. MIRAFLORES (A UNA CDRA. UNIVERSIDAD DE OXAPAMPA) PASCO - OXAPAMPA - OXAPAMPA";
 		$data["provinciaEmisor"] = "LIMA";
-        $data["tipoNotaCredito"] = "04";
+        //$data["tipoNotaCredito"] = "04";
+        $data["tipoNotaCredito"] = $factura->codtipo_ncnd;
 		$data["totalDescuentos"] = "0.00";
-		$data["totalOPGravadas"] = str_replace(",","",number_format($factura->subtotal,2)); //"127.12";
+		$data["totalOPGravadas"] = str_replace(",","",number_format($totalOPGravadas,2)); //"127.12";
 		$data["codigoPaisEmisor"] = "PE";
 		$data["totalOPGratuitas"] = "0.00";
-        $data["direccionReceptor"] = "AV. SAN FELIPE NRO. 999 LIMA - LIMA - JESUS MARIA ";
+        $data["direccionReceptor"] = "CAR.MARGINAL KM. 42 SEC. MIRAFLORES (A UNA CDRA. UNIVERSIDAD DE OXAPAMPA) PASCO - OXAPAMPA - OXAPAMPA";
 		$data["docAfectadoFisico"] = false;
 
 
 		//$data["importeTotalVenta"] = str_replace(",","",number_format($factura->total,2)); //"150.00";
-		$data["razonSocialEmisor"] = "COLEGIO DE ARQUITECTOS DEL PERU-REGIONAL LIMA";
+		$data["razonSocialEmisor"] = "FORESTAL PAMA S.A.C";
 		$data["totalOPExoneradas"] = "0.00";
-		$data["totalOPNoGravadas"] = "0.00";
+		//$data["totalOPNoGravadas"] = "0.00";
+        $data["totalOPNoGravadas"] = str_replace(",","",number_format($totalOPNoGravadas,2));
 		$data["codigoPaisReceptor"] = "PE";
-		$data["departamentoEmisor"] = "JESUS MARIA";
+		$data["departamentoEmisor"] = "OXAPAMPA";
 		//$data["descuentosGlobales"] = "0.00";
 		//$data["codigoTipoOperacion"] = "0101";
 		$data["razonSocialReceptor"] = $factura->destinatario;//"Freddy Rimac Coral";
-        $data["serieNumeroAfectado"] = $factura->serie."-".$factura->numero;
-        $data["serieNumeroModifica"] = $factura->serie."-".$factura->numero;
+        $data["serieNumeroAfectado"] = $factura_nc->serie."-".$factura_nc->numero;
+        $data["serieNumeroModifica"] = $factura_nc->serie."-".$factura_nc->numero;
 
         $data["sumatoriaOtrosCargos"] = "0";
 
 		//$data["nombreComercialEmisor"] = "CAP";		       
-        $data["nombreComercialEmisor"] = "COLEGIO DE ARQUITECTOS DEL PERU-REGIONAL LIMA";
-        $data["tipoDocumentoModifica"] = "01";
-        $data["fechaDocumentoAfectado"] = "2023-11-13";
+        $data["nombreComercialEmisor"] = "FORESTAL PAMA";
+        //$data["tipoDocumentoModifica"] = "01";
+        $data["tipoDocumentoModifica"] = $this->getTipoDocumento($factura_nc->tipo); 
+        $data["fechaDocumentoAfectado"] = date("Y-m-d",strtotime($factura_nc->fecha));
         $data["tipoDocIdentidadEmisor"] = "6";
 		$data["sumatoriaImpuestoBolsas"] = "0.00";
-		$data["numeroDocIdentidadEmisor"] = "20172977911";//"20160453908";        
-		$data["tipoDocIdentidadReceptor"] = $this->getTipoDocPersona($factura->tipo, $factura->cod_tributario);//"6";                
+		$data["numeroDocIdentidadEmisor"] = "20486785994";//"20160453908";        
+		$data["tipoDocIdentidadReceptor"] = $this->getTipoDocPersona_nc($factura_nc->tipo);//"6";                
 		$data["numeroDocIdentidadReceptor"] = $factura->cod_tributario; //"10040834643";
 
         //$data["direccionReceptor"] = $factura->direccion;
 
-       // print_r($data); exit();
+        //print_r($data); exit();
 
+        //dd($data);exit();
 		$databuild_string = json_encode($data);
        
         //print_r($databuild_string);exit();
@@ -3270,7 +3301,7 @@ class ComprobanteController extends Controller
         $respbuild = json_decode($results, true);
 		//echo "<br>";
 		//print_r($respbuild); exit();
-            
+        
         $body = $respbuild["body"];
             
         if(count($body)>0){

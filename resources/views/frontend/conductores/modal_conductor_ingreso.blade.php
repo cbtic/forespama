@@ -575,7 +575,7 @@ function obtenerPersona(tipo_documento, numero_documento){
 				return false;
 			}
 			$("#apellido_paterno_").val(persona.apellido_paterno);
-			$("#apellido_materno_").val(persona.apellido_paterno);
+			$("#apellido_materno_").val(persona.apellido_materno);
 			$("#nombres_").val(persona.nombres);
 			$("#id_persona_").val(persona.id);
 		}

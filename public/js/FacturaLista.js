@@ -514,11 +514,11 @@ function modalLiquidacion(id){
 
 }
 
-function nc(id, id_ncnd) {
-
-    $('#id_comprobante_origen').val(id);
+function nc(id,id_ncnd){
+	//$('#id_comprobante_nc').val(id);
+	$('#id_comprobante_origen').val(id);
 	$('#id_comprobante').val(id_ncnd);
-    
-    window.location.href = '/comprobante/nc_edita';
-    return false;
-}
+	
+	document.forms["frmPagos"].submit();
+	return false;
+};
