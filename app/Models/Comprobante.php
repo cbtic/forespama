@@ -507,11 +507,13 @@ class Comprobante extends Model
             FROM comprobantes
             WHERE id_empresa >= 0 
             AND anulado != 'S' 
+            and estado = '1'
             ".$empresa_." 
             UNION ALL
             SELECT fecha, total
             FROM comprobante_sodimac_historicos
-            WHERE id_empresa >= 0 
+            WHERE id_empresa >= 0
+            and estado = '1' 
             ".$empresa_." 
         ) AS c ";
         
