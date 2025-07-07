@@ -598,6 +598,20 @@ function cambiarOrigen(){
     }
 }
 
+function modalCerrarAntiguedad(){
+
+    const id = $('#id').val();
+
+    $.ajax({
+			url: "/requerimiento/modal_cerrar_antiguedad/"+id,
+			type: "GET",
+			success: function (result) {
+                $("#diveditpregOpc2").html(result);
+                $('#openOverlayOpc2').modal('show');
+			}
+	});
+}
+
 </script>
 
 <body class="hold-transition skin-blue sidebar-mini">
@@ -741,6 +755,9 @@ function cambiarOrigen(){
                                     ?>
                                 </select>
                             </div>
+                            <?php
+                                $valorSeleccionado = ($id == 0) ? '1' : $requerimiento->cerrado;
+                            ?>
                             <div class="col-lg-2">
                                 Cerrado
                             </div>
@@ -749,7 +766,7 @@ function cambiarOrigen(){
                                     <option value="">--Seleccionar--</option>
                                     <?php
                                     foreach ($cerrado_requerimiento as $row){?>
-                                        <option value="<?php echo $row->codigo ?>" <?php if($row->codigo=='1')echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                        <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$valorSeleccionado)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
                                         <?php 
                                     }
                                     ?>
@@ -802,10 +819,25 @@ function cambiarOrigen(){
                             <div style="margin-top:15px" class="form-group">
                                 <div class="col-sm-12 controls">
                                     <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
+
+                                        @hasanyrole('Administrator')
+                                            <?php 
+                                            if($id>0){
+                                                if($requerimiento->estado_atencion!=4 && ($requerimiento->estado_atencion==1 || $requerimiento->estado_atencion==2)){
+                                            ?>
+                                                <button type="button" class="btn btn-warning btn-sm" onclick="modalCerrarAntiguedad()" style="margin-right:10px">Cerrar por Antiguedad</button>
+                                            <?php 
+                                                }else{
+                                            ?>
+                                                <button type="button" class="btn btn-warning btn-sm" onclick="modalCerrarAntiguedad()" style="margin-right:10px" disabled>Cerrar por Antiguedad</button>
+                                            <?php } 
+                                            }?>
+                                        @endhasanyrole
+
                                         <?php 
                                             if($id>0){
                                         ?>
-                                        <button style="font-size:12px;margin-left:10px;margin-right:10px" type="button" class="btn btn-sm btn-primary" data-toggle="modal" onclick="pdf_documento()" ><i class="fa fa-edit"></i>Imprimir</button>
+                                        <button style="font-size:12px; margin-right:10px" type="button" class="btn btn-sm btn-primary" data-toggle="modal" onclick="pdf_documento()" ><i class="fas fa-print"></i> Imprimir</button>
                                         <!--<button style="font-size:12px;margin-right:10px" type="button" class="btn btn-sm btn-warning" data-toggle="modal" onclick="save_orden_compra_requerimiento()" ><i class="fa fa-edit"></i>Generar Orden Compra</button>-->
                                         <?php 
                                             }
@@ -816,7 +848,10 @@ function cambiarOrigen(){
                                         <?php if($id==0){?>
                                             <a href="javascript:void(0)" onClick="fn_save_requerimiento()" class="btn btn-sm btn-success" style="margin-right:10px">Guardar</a>
                                         <?php }?>
-                                        <a href="javascript:void(0)" onClick="$('#openOverlayOpc').modal('hide');" class="btn btn-sm btn-info" style="">Cerrar</a>
+                                        <a href="javascript:void(0)" onClick="$('#openOverlayOpc').modal('hide');" class="btn btn-sm btn-info" style="margin-right:10px">Cerrar</a>
+
+                                       
+
                                     </div>
                                                         
                                 </div>
@@ -839,7 +874,7 @@ function cambiarOrigen(){
 </div>
 <!-- /.content-wrapper -->
 
-<div id="openOverlayOpc2" class="modal fade modal-tienda" tabindex="-1" role="dialog">
+<div id="openOverlayOpc2" class="modal fade modal-antiguedad" tabindex="-1" role="dialog">
 	  <div class="modal-dialog" >
 	
 		<div id="id_content_OverlayoneOpc2" class="modal-content" style="padding: 0px;margin: 0px">

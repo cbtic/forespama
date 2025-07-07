@@ -680,3 +680,5 @@ Route::get('orden_compra/exportar_listar_pagos_orden_compra/{empresa}/{persona}/
 Route::get('ingreso_produccion/exportar_listar_ingreso_produccion/{tipo_documento}/{fecha}/{numero_ingreso_produccion}/{almacen_destino}/{area}/{estado}', [IngresoProduccionController::class, 'exportar_listar_ingreso_produccion'])->name('ingreso_produccion.exportar_listar_ingreso_produccion');
 Route::get('requerimiento/modal_observacion/{id}', [RequerimientoController::class, 'modal_observacion'])->name('requerimiento.modal_observacion');
 Route::post('requerimiento/send_observacion_requerimiento', [RequerimientoController::class, 'send_observacion_requerimiento'])->name('requerimiento.send_observacion_requerimiento');
+Route::get('requerimiento/modal_cerrar_antiguedad/{id}', [RequerimientoController::class, 'modal_cerrar_antiguedad'])->name('requerimiento.modal_cerrar_antiguedad');
+Route::post('requerimiento/send_cerrar_antiguedad_requerimiento', [RequerimientoController::class, 'send_cerrar_antiguedad_requerimiento'])->name('requerimiento.send_cerrar_antiguedad_requerimiento');

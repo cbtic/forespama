@@ -491,13 +491,17 @@ label.form-control-sm{
 						<div class="card-header">
 							<strong>Ingreso de Camiones - Cubicaje</strong>
 						</div>
-							
+						
 						<div id="divTablaIngreso" class="row col align-self-center" style="padding:10px 20px 10px 20px;">
 					
 							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
 								<input class="form-control form-control-sm" id="placa_bus" name="placa_bus" placeholder="Placa">
 							</div>
 							
+							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+								<input class="form-control form-control-sm" id="ruc_bus" name="ruc_bus" placeholder="RUC">
+							</div>
+
 							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
 								<input class="form-control form-control-sm" id="ruc_bus" name="ruc_bus" placeholder="RUC">
 							</div>

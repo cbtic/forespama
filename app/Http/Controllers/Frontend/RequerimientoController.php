@@ -727,6 +727,31 @@ class RequerimientoController extends Controller
         return response()->json(['success' => 'Observacion guardada exitosamente.']);
 
     }
+
+    public function modal_cerrar_antiguedad($id){
+		
+		$requerimiento = Requerimiento::find($id);
+        
+        return view('frontend.requerimiento.modal_cerrar_antiguedad_requerimiento',compact('id','requerimiento'));
+
+    }
+
+    public function send_cerrar_antiguedad_requerimiento(Request $request){
+
+		$id_user = Auth::user()->id;
+
+        //$observacion = $request->input('observacion');
+
+        $requerimiento = Requerimiento::find($request->id);
+		
+		$requerimiento->cerrado = 2;
+		$requerimiento->estado_atencion = 4;
+		$requerimiento->motivo_cerrado = $request->motivo;
+		$requerimiento->save();
+
+        return response()->json(['success' => 'Observacion guardada exitosamente.']);
+
+    }
 }
 
 class InvoicesExport implements FromArray, WithHeadings, WithStyles
