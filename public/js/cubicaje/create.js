@@ -68,7 +68,10 @@ $(document).ready(function () {
         });
     
         return false;
-    });
+
+        
+
+	});
     
 	
 	datatablenew();
@@ -146,6 +149,11 @@ $(document).ready(function () {
         changeMonth: true,
         changeYear: true,
     });
+
+    $('#btnDescargarReporteAnual').on('click', function () {
+		descargarReporteAnual();
+
+	});
 
 });
 
@@ -1725,6 +1733,7 @@ function datatablenew() {
 
             var placa = $('#placa_bus').val();
             var ruc = $('#ruc_bus').val();
+            var anio = $('#anio_bus').val();
 
             var _token = $('#_token').val();
             oSettings.jqXHR = $.ajax({
@@ -1734,8 +1743,7 @@ function datatablenew() {
                 "data": {
                     NumeroPagina: iNroPagina,
                     NumeroRegistros: iCantMostrar,
-                    placa: placa,
-                    ruc: ruc,
+                    placa:placa,ruc:ruc,anio:anio,
                     _token: _token
                 },
                 "success": function(result) {
@@ -2624,4 +2632,17 @@ function imprimirCubicajePdf(){
         bootbox.alert("Debe seleccionar algun ingreso de camion");
     }
 
+}
+
+function descargarReporteAnual(){
+		
+	var placa = $('#placa_bus').val();
+	var ruc = $('#ruc_bus').val();
+	var anio = $('#anio_bus').val();
+
+	if (placa == "")placa = "0";
+	if (ruc == "")ruc = "0";
+	if (anio == "")anio = 0;
+	
+	location.href = '/ingreso_vehiculo_tronco/exportar_listar_reporte_anual/'+placa+'/'+ruc+'/'+anio;
 }

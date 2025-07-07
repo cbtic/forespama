@@ -126,6 +126,15 @@ class IngresoVehiculoTronco extends Model
 		$data = DB::select($cad);
         return $data;
     }
+
+    function obtenerAniosIngreso(){
+
+        $cad = "select distinct DATE_PART('YEAR', ivt.fecha_ingreso)::varchar anio from ingreso_vehiculo_troncos ivt 
+        order by  DATE_PART('YEAR', ivt.fecha_ingreso)::varchar ";
+
+		$data = DB::select($cad);
+        return $data;
+    }
 	
     function fecha_actual(){
 		
@@ -157,6 +166,12 @@ class IngresoVehiculoTronco extends Model
     public function listar_ingreso_vehiculo_tronco_reporte_pago_ajax($p){
 
         return $this->readFuntionPostgres('sp_listar_ingreso_vehiculo_tronco_reporte_pago_paginado',$p);
+
+    }
+
+    public function listar_ingreso_vehiculo_reporte_anual_ajax($p){
+
+        return $this->readFuntionPostgres('sp_listar_ingreso_vehiculo_tronco_reporte_anual_paginado',$p);
 
     }
 

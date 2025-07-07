@@ -203,6 +203,7 @@ class IngresoVehiculoTroncoController extends Controller
 		$ingresoVehiculoTronco_model = new IngresoVehiculoTronco();
 		$p[]=$request->placa;
 		$p[]=$request->ruc;
+		$p[]=$request->anio;
 		$p[]=$request->NumeroPagina;
 		$p[]=$request->NumeroRegistros;
 		$data = $ingresoVehiculoTronco_model->listar_ingreso_vehiculo_tronco_ajax($p);
@@ -353,8 +354,10 @@ class IngresoVehiculoTroncoController extends Controller
 
 		//$tablaMaestra_model = new TablaMaestra;
 		//$tipo_madera = $tablaMaestra_model->getMaestroByTipo(42);
+		$ingreso_vehiculo_tronco_model = new IngresoVehiculoTronco;
+		$anio = $ingreso_vehiculo_tronco_model->obtenerAniosIngreso();
 
-		return view('frontend.cubicaje.create'/*,compact('tipo_madera')*/);
+		return view('frontend.cubicaje.create',compact('anio'));
 
 	}
 
@@ -1031,6 +1034,34 @@ class IngresoVehiculoTroncoController extends Controller
 
 		return response()->json(['success' => true, 'message' => 'Archivo procesado correctamente.','id_ingreso_vehiculo_tronco_tipo_madera'=>$id_ingreso_vehiculo_tronco_tipo_madera]);
 	}
+
+	public function exportar_listar_reporte_anual($placa, $ruc, $anio) {
+
+		if($placa=="0")$placa = "";
+		if($ruc=="0")$ruc = "";
+		if($anio==0)$anio = "";
+
+		$requerimiento_model = new IngresoVehiculoTronco;
+		$p[]=$placa;
+        $p[]=$ruc;
+        $p[]=$anio;
+		$p[]=1;
+		$p[]=1000;
+		$data = $requerimiento_model->listar_ingreso_vehiculo_reporte_anual_ajax($p);
+		
+		$variable = [];
+		$n = 1;
+
+		array_push($variable, array("Mes","Trozas","M3","Pies","Soles"));
+		
+		foreach ($data as $r) {
+
+			array_push($variable, array($r->mes,$r->total_trozas, $r->total_m3, $r->total_pies, $r->total_precio_total));
+		}
+		
+		$export = new InvoicesExport4([$variable]);
+		return Excel::download($export, 'reporte_compra_anual.xlsx');
+    }
 }
 
 class InvoicesExport implements FromArray
@@ -1220,4 +1251,76 @@ class InvoicesExport3 implements FromArray, WithHeadings, WithStyles
             "B" . ($lastRow - 5) . ":C" . ($lastRow - 5) => ['font' => ['bold' => true]],
         ];
     }
+}
+
+class InvoicesExport4 implements FromArray, WithHeadings, WithStyles
+{
+	protected $invoices;
+
+	public function __construct(array $invoices)
+	{
+		$this->invoices = $invoices;
+	}
+
+	public function array(): array
+	{
+		return $this->invoices;
+	}
+
+    public function headings(): array
+    {
+        return ["Mes","Trozas","M3","Pies","Soles"];
+    }
+
+	public function styles(Worksheet $sheet)
+    {
+
+		$sheet->mergeCells('A1:E1');
+
+        $sheet->setCellValue('A1', "RESUMEN DE COMPRAS DE MADERA ANIO - FORESPAMA");
+        $sheet->getStyle('A1:E1')->applyFromArray([
+            'font' => [
+                'bold' => true,
+                'color' => ['rgb' => 'FFFFFF'],
+            ],
+            'fill' => [
+                'fillType' => Fill::FILL_SOLID,
+                'startColor' => ['rgb' => '246257'],
+            ],
+            'alignment' => [
+                'horizontal' => Alignment::HORIZONTAL_CENTER,
+            ],
+        ]);
+
+		$sheet->getStyle('A1')->getAlignment()->setWrapText(true);
+		$sheet->getRowDimension(1)->setRowHeight(30);
+
+        $sheet->getStyle('A2:E2')->applyFromArray([
+            'font' => [
+                'bold' => true,
+                'color' => ['rgb' => '000000'],
+            ],
+            'fill' => [
+                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                'startColor' => ['rgb' => '2EB85C'],
+            ],
+			'alignment' => [
+			'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+    		],
+        ]);
+
+		$sheet->fromArray($this->headings(), NULL, 'A2');
+
+		/*$sheet->getStyle('L3:L'.$sheet->getHighestRow())
+		->getNumberFormat()
+		->setFormatCode(\PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_NUMBER_00);*/ //SIRVE PARA PONER 2 DECIMALES A ESA COLUMNA
+        
+        foreach (range('A', 'E') as $col) {
+            $sheet->getColumnDimension($col)->setAutoSize(true);
+        }
+
+		$lastRow = $sheet->getHighestRow();
+
+    }
+
 }

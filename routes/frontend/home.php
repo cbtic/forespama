@@ -682,3 +682,4 @@ Route::get('requerimiento/modal_observacion/{id}', [RequerimientoController::cla
 Route::post('requerimiento/send_observacion_requerimiento', [RequerimientoController::class, 'send_observacion_requerimiento'])->name('requerimiento.send_observacion_requerimiento');
 Route::get('requerimiento/modal_cerrar_antiguedad/{id}', [RequerimientoController::class, 'modal_cerrar_antiguedad'])->name('requerimiento.modal_cerrar_antiguedad');
 Route::post('requerimiento/send_cerrar_antiguedad_requerimiento', [RequerimientoController::class, 'send_cerrar_antiguedad_requerimiento'])->name('requerimiento.send_cerrar_antiguedad_requerimiento');
+Route::get('ingreso_vehiculo_tronco/exportar_listar_reporte_anual/{placa}/{ruc}/{anio}', [IngresoVehiculoTroncoController::class, 'exportar_listar_reporte_anual'])->name('ingreso_vehiculo_tronco.exportar_listar_reporte_anual');

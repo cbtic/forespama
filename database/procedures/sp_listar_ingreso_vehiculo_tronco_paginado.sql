@@ -1,6 +1,6 @@
 -- DROP FUNCTION public.sp_listar_ingreso_vehiculo_tronco_paginado(varchar, varchar, varchar, varchar, refcursor);
 
-CREATE OR REPLACE FUNCTION public.sp_listar_ingreso_vehiculo_tronco_paginado(p_placa character varying, p_ruc character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
+CREATE OR REPLACE FUNCTION public.sp_listar_ingreso_vehiculo_tronco_paginado(p_placa character varying, p_ruc character varying, p_anio character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
  RETURNS refcursor
  LANGUAGE plpgsql
 AS $function$
@@ -40,23 +40,10 @@ Begin
 	If p_ruc<>'' Then
 	 v_where:=v_where||'And e.ruc = '''||p_ruc||''' ';
 	End If;
-/*
-	If p_exonerado<>'' Then
-	 v_where:=v_where||'And t1.exonerado = '''||p_exonerado||''' ';
-	End If;
 
-	If p_control<>'' Then
-	 v_where:=v_where||'And t1.control = '''||p_control||''' ';
+	If p_anio<>'' Then
+	 v_where:=v_where||'And to_char(ivt.fecha_ingreso, ''YYYY'') = '''||p_anio||''' ';
 	End If;
-
-	If p_bloqueado<>'' Then
-	 v_where:=v_where||'And t1.bloqueado = '''||p_bloqueado||''' ';
-	End If;
-
-	If p_estado<>'' Then
-	 v_where:=v_where||'And t1.estado = '''||p_estado||''' ';
-	End If;
-	*/
 
 	EXECUTE ('SELECT count(1) '||v_tabla||v_where) INTO v_count;
 	v_col_count:=' ,'||v_count||' as TotalRows ';

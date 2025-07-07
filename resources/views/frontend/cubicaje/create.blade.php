@@ -503,7 +503,15 @@ label.form-control-sm{
 							</div>
 
 							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-								<input class="form-control form-control-sm" id="ruc_bus" name="ruc_bus" placeholder="RUC">
+								<select name="anio_bus" id="anio_bus" class="form-control form-control-sm" onchange="">
+                                    <option value="">--Seleccionar Año--</option>
+                                    <?php 
+                                    foreach ($anio as $row){?>
+                                        <option value="<?php echo $row->anio ?>"><?php echo $row->anio ?></option>
+                                        <?php 
+                                    }
+                                    ?>
+                                </select>
 							</div>
 							
 							<!--<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
@@ -538,6 +546,7 @@ label.form-control-sm{
 							<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
 								<input class="btn btn-warning btn-sm pull-rigth" value="Buscar" type="button" id="btnBuscar" />
 								<a type="button" href="/img/cubicaje/plantilla/Plantilla_cubicaje_actualizado.xlsx" class="btn btn-secondary btn-sm" style="margin-left:15px;">Plantilla</a>
+								<buttom class="btn btn-secondary pull-rigth" type="button" id="btnDescargarReporteAnual" style="margin-left:15px" /><i class="fa fa-download"></i> Descarga Reporte Anual</buttom>
 							</div>
 							
 						</div>
@@ -567,34 +576,10 @@ label.form-control-sm{
 							
 							</div>
 						</div>
-						
-						
-						<!--
-                        <div id="" class="row">
-                            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-
-
-                            </div>
-
-                            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-
-                                <br>
-
-                            </div>
-
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                            </div>
-
-                        </div>
-						-->
                     </div>
-					
-					
-
                 </div>
 
 				<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-
                                         
 					<div class="card">
 						<div class="card-header">
@@ -636,8 +621,6 @@ label.form-control-sm{
 								</table>
 							</div>
 							
-							<!--<a class='flotante' name="guardar" id="guardar" onclick="guardarSolicitud()" href='#' ><img src='/img/btn_save.png' border="0"/></a>-->
-							
 							<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 								
 								<input class="btn btn-warning btn-sm float-right" style="margin-left:15px" value="Imprimir" type="button" id="btnImprimir" onclick="imprimirCubicajePdf()" />
@@ -645,27 +628,13 @@ label.form-control-sm{
 								<input class="btn btn-success btn-sm float-right" value="Guardar" type="button" id="btnGuardar2" />
 								
 							</div>
-							
-							
-
 						</div>
 					</div>
 				</div>
-				
-				
-					
-									
-									
-									
-									
-
         </div>
         <!--col-->
 
         </form>
-
-        
-
     </div>
     <!--row-->
     @endsection
