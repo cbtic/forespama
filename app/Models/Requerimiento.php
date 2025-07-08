@@ -89,7 +89,7 @@ class Requerimiento extends Model
         inner join tabla_maestras tm3 on r.estado_atencion::int  = tm3.codigo::int and tm3.tipo ='60'
         inner join users u on r.responsable_atencion = u.id
         inner join tabla_maestras tm4 on r.cerrado::int = tm4.codigo::int and tm4.tipo ='52'
-        inner join tabla_maestras tm5 on r.id_tipo_requerimiento = tm5.codigo::int and tm5.tipo ='67'
+        left join tabla_maestras tm5 on r.id_tipo_requerimiento = tm5.codigo::int and tm5.tipo ='67'
         where r.id='".$id."'
         and r.estado ='1' ";
 

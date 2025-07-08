@@ -569,13 +569,12 @@ class IngresoVehiculoTroncoController extends Controller
 	
 		$variable = [];
 		$n = 1;
-		//array_push($variable, array("SISTEMA CAP"));
-		//array_push($variable, array("CONSULTA DE CONCURSO","","","",""));
-		array_push($variable, array("N","Fecha","Ruc","Empresa","Placa","Tipo Madera", "Cantidad", "Volumen Total M3", "Volumen Total Pies"));
+
+		array_push($variable, array("N","Fecha","Ruc","Empresa","Placa","Tipo Madera", "Cantidad", "Volumen Total M3", "Volumen Total Pies", "Precio Total", "Estado Pago"));
 		
 		foreach ($data as $r) {
 
-			array_push($variable, array($n++,$r->fecha_ingreso, $r->ruc, $r->razon_social, $r->placa,$r->tipo_madera,$r->cantidad, $r->volumen_total_m3, $r->volumen_total_pies));
+			array_push($variable, array($n++,$r->fecha_ingreso, $r->ruc, $r->razon_social, $r->placa,$r->tipo_madera,$r->cantidad, round($r->volumen_total_m3, 2), round($r->volumen_total_pies, 2), round($r->precio_total, 2), $r->estado_pago));
 		}
 		
 		$export = new InvoicesExport([$variable]);
@@ -1064,7 +1063,7 @@ class IngresoVehiculoTroncoController extends Controller
     }
 }
 
-class InvoicesExport implements FromArray
+class InvoicesExport implements FromArray, WithHeadings, WithStyles
 {
 	protected $invoices;
 
@@ -1077,6 +1076,60 @@ class InvoicesExport implements FromArray
 	{
 		return $this->invoices;
 	}
+
+    public function headings(): array
+    {
+        return ["N","Fecha Recepcion","Proveedor","Cantidad","M3","Pies", "Tabulacion", "Promedio", "Precio Final", "Precio Total", "Estado Pago"];
+    }
+
+	public function styles(Worksheet $sheet)
+    {
+
+		$sheet->mergeCells('A1:K1');
+
+        $sheet->setCellValue('A1', "REPORTE DE PAGOS - FORESPAMA");
+        $sheet->getStyle('A1:K1')->applyFromArray([
+            'font' => [
+                'bold' => true,
+                'color' => ['rgb' => 'FFFFFF'],
+            ],
+            'fill' => [
+                'fillType' => Fill::FILL_SOLID,
+                'startColor' => ['rgb' => '246257'],
+            ],
+            'alignment' => [
+                'horizontal' => Alignment::HORIZONTAL_CENTER,
+            ],
+        ]);
+
+		$sheet->getStyle('A1')->getAlignment()->setWrapText(true);
+		$sheet->getRowDimension(1)->setRowHeight(30);
+
+        $sheet->getStyle('A2:K2')->applyFromArray([
+            'font' => [
+                'bold' => true,
+                'color' => ['rgb' => '000000'],
+            ],
+            'fill' => [
+                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                'startColor' => ['rgb' => '2EB85C'],
+            ],
+			'alignment' => [
+			'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+    		],
+        ]);
+
+		$sheet->fromArray($this->headings(), NULL, 'A2');
+
+		/*$sheet->getStyle('L3:L'.$sheet->getHighestRow())
+		->getNumberFormat()
+		->setFormatCode(\PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_NUMBER_00);*/ //SIRVE PARA PONER 2 DECIMALES A ESA COLUMNA
+        
+        foreach (range('A', 'K') as $col) {
+            $sheet->getColumnDimension($col)->setAutoSize(true);
+        }
+		
+    }
 
 }
 

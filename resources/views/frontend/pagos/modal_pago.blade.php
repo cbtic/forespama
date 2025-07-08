@@ -271,7 +271,10 @@ function fn_save(){
 				$('#openOverlayOpc').modal('hide');
 				obtenerBeneficiario();
 				*/
-				location.href="/ingreso_vehiculo_tronco/pagos";
+				$('.loader').hide();
+				$('#openOverlayOpc').modal('hide');
+				datatablenew();
+				//location.href="/ingreso_vehiculo_tronco/pagos";
 				//location.href=location.reload();
 				
             }
