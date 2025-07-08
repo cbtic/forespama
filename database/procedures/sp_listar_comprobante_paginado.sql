@@ -32,9 +32,7 @@ Begin
 		  Inner Join users u On u.id = f.id_usuario_inserta 
          
    */       
-		  
-
-
+	
 	v_campos=' f.id, f.serie, f.numero, f.tipo, f.fecha, f.cod_tributario, f.destinatario, 
         f.subtotal, f.impuesto, f.total, f.estado_pago, f.anulado, f.estado_sunat sunat, f.ruta_comprobante pdf, u.name usuario, tm.denominacion caja,
         f.id_forma_pago, fp.denominacion forma_pago, case when f.id_forma_pago = 2  then f.total_credito 
@@ -50,7 +48,7 @@ Begin
 
 ';
 
-	v_where = ' Where 1 = 1 ';
+	v_where = ' Where 1 = 1 and f.estado = ''1'' ';
 
 	If p_fecha_ini<>'' Then
 	 v_where:=v_where||'And f.fecha >= '''||p_fecha_ini||' :00:00'' ';
