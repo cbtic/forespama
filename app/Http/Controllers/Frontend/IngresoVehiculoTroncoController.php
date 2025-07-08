@@ -1058,7 +1058,7 @@ class IngresoVehiculoTroncoController extends Controller
 			array_push($variable, array($r->mes,$r->total_trozas, $r->total_m3, $r->total_pies, $r->total_precio_total));
 		}
 		
-		$export = new InvoicesExport4([$variable]);
+		$export = new InvoicesExport4([$variable],$anio);
 		return Excel::download($export, 'reporte_compra_anual.xlsx');
     }
 }
@@ -1309,10 +1309,12 @@ class InvoicesExport3 implements FromArray, WithHeadings, WithStyles
 class InvoicesExport4 implements FromArray, WithHeadings, WithStyles
 {
 	protected $invoices;
+	protected $anio;
 
-	public function __construct(array $invoices)
+	public function __construct(array $invoices, $anio)
 	{
 		$this->invoices = $invoices;
+		$this->anio = $anio;
 	}
 
 	public function array(): array
@@ -1330,7 +1332,7 @@ class InvoicesExport4 implements FromArray, WithHeadings, WithStyles
 
 		$sheet->mergeCells('A1:E1');
 
-        $sheet->setCellValue('A1', "RESUMEN DE COMPRAS DE MADERA ANIO - FORESPAMA");
+        $sheet->setCellValue('A1', "RESUMEN DE COMPRAS DE MADERA {$this->anio} - FORESPAMA");
         $sheet->getStyle('A1:E1')->applyFromArray([
             'font' => [
                 'bold' => true,
