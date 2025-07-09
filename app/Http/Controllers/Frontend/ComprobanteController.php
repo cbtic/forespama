@@ -945,8 +945,6 @@ class ComprobanteController extends Controller
                 $id_factura = $facturas_model->registrar_factura_moneda($serieF,     $id_tipo_afectacion_pp, $tipoF, $ubicacion_id, $id_persona_act, round($total, 2),   $ubicacion_id2,      $id_persona2,    0, $id_caja,          $descuento,    'f',     $id_user,  $id_moneda, '0', $fechaF);
                 //(serie,  numero,   tipo,     ubicacion,     persona,  total, descripcion, cod_contable, id_v,   id_caja, descuento, accion, p_id_usuario, p_id_moneda)
 
-
-
                 $factura = Comprobante::where('id', $id_factura)->get()[0];
 
                 //exit();
@@ -2400,7 +2398,9 @@ class ComprobanteController extends Controller
                 'tipo' => $comprobante->tipo
             ])->get();
         }
-      //  print_r($comprobante); exit();
+
+        //dd($facturad);exit();
+        //print_r($comprobante); exit();
 
         if ($comprobante->tipo=="BV"){
             $persona_model= new Comprobante;
@@ -3120,6 +3120,7 @@ class ComprobanteController extends Controller
             'numero' => $factura->numero,
             'tipo' => $factura->tipo
         ])->get();
+        //dd($factura_detalles);exit();
 		//print_r($factura); exit();
         //print_r($factura_detalles); exit();		
 		$cabecera = array("valor1","valor2");
@@ -3129,6 +3130,12 @@ class ComprobanteController extends Controller
         $totalOPNoGravadas = 0;
         
         foreach ($factura_detalles as $index => $row) {
+
+            $tabla_maestras = TablaMaestra::where([
+                'abreviatura' => $row->unidad,
+                'tipo' => '43',
+            ])->first();
+
             $items1 = array(
                     "ordenItem" => $row->item, //"2",
                     "adicionales" => [],
@@ -3139,10 +3146,10 @@ class ComprobanteController extends Controller
                     "valorVentaItem" => str_replace(",", "", number_format($row->pu, 2)), //"42.37",
                     "descripcionItem" => $row->descripcion, //"TRANSBORDO",
                     "unidadMedidaItem" => $row->unidad,
-                    //"codigoProductoItem"=> ($row->cod_contable!="")?$row->cod_contable:"0000000", //"002",
+                    "codigoProductoItem"=> ($row->codigo!="")?$row->codigo:"0000000", //"002",
                     "valorUnitarioSinIgv" => str_replace(",", "", number_format($row->pu_con_igv, 2)), //"42.3728813559",
                     "precioUnitarioConIgv" => str_replace(",", "", number_format($row->importe, 2)), //"50.0000000000",
-                    "unidadMedidaComercial" => "SERV",
+                    "unidadMedidaComercial" => $tabla_maestras->abreviatura_comercial,
                     //"codigoAfectacionIGVItem" => "10",
                     "codigoAfectacionIGVItem"=> $row->afect_igv,
                     //"porcentajeDescuentoItem"=> "0.00",
@@ -3186,7 +3193,7 @@ class ComprobanteController extends Controller
 		$data["keepNumber"] = "false";
 		$data["tipoCorreo"] = "1";
        // $data["formaPago"] = "CONTADO";
-		$data["tipoMoneda"] = ($factura->id_moneda=="2")?"PEN":"USD"; //"PEN";
+		$data["tipoMoneda"] = ($factura->id_moneda=="1")?"PEN":"USD"; //"PEN";
 		$data["adicionales"] = [];
 		$data["horaEmision"] = date("h:i:s", strtotime($factura->fecha)); // "12:12:04";//$cabecera->fecha
 		$data["serieNumero"] = $factura->serie."-".$factura->numero; // "F001-000002";
@@ -3215,10 +3222,9 @@ class ComprobanteController extends Controller
 		$data["totalOPGravadas"] = str_replace(",","",number_format($totalOPGravadas,2)); //"127.12";
 		$data["codigoPaisEmisor"] = "PE";
 		$data["totalOPGratuitas"] = "0.00";
-        $data["direccionReceptor"] = "CAR.MARGINAL KM. 42 SEC. MIRAFLORES (A UNA CDRA. UNIVERSIDAD DE OXAPAMPA) PASCO - OXAPAMPA - OXAPAMPA";
+        $data["direccionReceptor"] = $factura->direccion;
 		$data["docAfectadoFisico"] = false;
-
-
+        
 		//$data["importeTotalVenta"] = str_replace(",","",number_format($factura->total,2)); //"150.00";
 		$data["razonSocialEmisor"] = "FORESTAL PAMA S.A.C";
 		$data["totalOPExoneradas"] = "0.00";
@@ -3269,6 +3275,12 @@ class ComprobanteController extends Controller
 			)
         );
         curl_setopt($chbuild, CURLOPT_RETURNTRANSFER, true);
+
+        /**************** ELIMINAR ***************/
+        //curl_setopt($chbuild, CURLOPT_SSL_VERIFYPEER, false);
+        //curl_setopt($chbuild, CURLOPT_SSL_VERIFYHOST, false);
+        /*****************************************/
+
 		curl_setopt($chbuild, CURLOPT_CUSTOMREQUEST, "PUT");
         curl_setopt($chbuild, CURLOPT_POSTFIELDS, $databuild_string);
         $results = curl_exec($chbuild);
@@ -3365,11 +3377,9 @@ class ComprobanteController extends Controller
         $guia_model = new Guia;
  
             /**********RUC***********/
-            
 
             $tarifa = $request->facturad;
- 
-            
+
             $total = $request->totalP;
             $serieF = $request->serieF;
             $tipoF = $request->tipoF;
@@ -3393,8 +3403,6 @@ class ComprobanteController extends Controller
 
             //echo("id_comprobante_origen: ".$id_comprobante_origen);
             
-            
-
             $trans = $request->trans;
             
             //1	DOLARES
@@ -3412,16 +3420,15 @@ class ComprobanteController extends Controller
                     $id_val = $value['id'];
  
                 }
-               
                 
                 $id_moneda=1;
  
                 $descuento = $value['descuento'];
                 
-               $id_factura = $facturas_model->registrar_comprobante_ncnd($serieF,     0, $tipoF,  $cod_tributario, $total,          '',           '',    $id_comprobante, $id_caja,          0,    'f',      $id_user,  1,$razon_social,$direccion,$id_comprobante_ncdc,$correo,$afecta,$tiponota,   $motivo,$afecta_ingreso,0,0,0);
-              //  $id_factura = $facturas_model->registrar_factura_moneda($serieF,     $id_tipo_afectacion_pp, $tipoF, $ubicacion_id, $id_persona, $total,          '',           '',    0, $id_caja,          $descuento,    'f',     $id_user,  $id_moneda);
+                $id_factura = $facturas_model->registrar_comprobante_ncnd($serieF,     0, $tipoF,  $cod_tributario, $total,          '',           '',    $id_comprobante, $id_caja,          0,    'f',      $id_user,  1,$razon_social,$direccion,$id_comprobante_ncdc,$correo,$afecta,$tiponota,   $motivo,$afecta_ingreso,0,0,0);
+                //$id_factura = $facturas_model->registrar_factura_moneda($serieF,     $id_tipo_afectacion_pp, $tipoF, $ubicacion_id, $id_persona, $total,          '',           '',    0, $id_caja,          $descuento,    'f',     $id_user,  $id_moneda);
  
-               // print_r($id_factura); exit();					       //(serie,  numero,   tipo,     ubicacion,     persona,  total, descripcion, cod_contable, id_v,   id_caja, descuento, accion, p_id_usuario, p_id_moneda)
+                //print_r($id_factura); exit();					       //(serie,  numero,   tipo,     ubicacion,     persona,  total, descripcion, cod_contable, id_v,   id_caja, descuento, accion, p_id_usuario, p_id_moneda)
               
                 $factura = Comprobante::where('id', $id_factura)->get()[0];
  
@@ -3447,9 +3454,14 @@ class ComprobanteController extends Controller
                     $descuento = $value['descuento'];
                     if ($value['descuento']=='') $descuento = 0;
                     $id_factura_detalle = $facturas_model->registrar_comprobante_ncnd($serieF, $fac_numero, $tipoF, $value['item'], $total, $value['descripcion'], "", $value['id'], $id_factura, $descuento,    'd',     $id_user,  $id_moneda,$razon_social,$direccion,$id_comprobante_ncdc,$correo,$afecta,$tiponota,$motivo,$afecta_ingreso,0,$value['item'],$value['cantidad']);
-                                                                                 //(  serie,      numero,   tipo,      ubicacion, persona,  total,            descripcion,           cod_contable,         id_v,     id_caja,  descuento, accion, p_id_usuario, p_id_moneda)
-                    
+                                                                                     //(  serie,      numero,   tipo,      ubicacion, persona,  total,            descripcion,           cod_contable,         id_v,     id_caja,  descuento, accion, p_id_usuario, p_id_moneda)
                 
+                    $facturaDet_upd = ComprobanteDetalle::find($id_factura_detalle);
+
+                    $facturaDet_upd->codigo = $value['codigo_producto'];
+                    $facturaDet_upd->unidad = $value['abreviatura'];
+                    $facturaDet_upd->save();
+                    
                 }
  
                 $estado_ws = $ws_model->getMaestroByTipo('96');

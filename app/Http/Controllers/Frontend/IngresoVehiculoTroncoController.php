@@ -570,11 +570,11 @@ class IngresoVehiculoTroncoController extends Controller
 		$variable = [];
 		$n = 1;
 
-		array_push($variable, array("N","Fecha","Ruc","Empresa","Placa","Tipo Madera", "Cantidad", "Volumen Total M3", "Volumen Total Pies", "Precio Total", "Estado Pago"));
+		array_push($variable, array("N","Fecha","Ruc","Empresa","Placa","Tipo Madera", "Cantidad", "Volumen Total M3", "Volumen Total Pies", "Precio Total", "Estado Pago", "Fecha Pago", "Numero Factura"));
 		
 		foreach ($data as $r) {
 
-			array_push($variable, array($n++,$r->fecha_ingreso, $r->ruc, $r->razon_social, $r->placa,$r->tipo_madera,$r->cantidad, round($r->volumen_total_m3, 2), round($r->volumen_total_pies, 2), round($r->precio_total, 2), $r->estado_pago));
+			array_push($variable, array($n++,$r->fecha_ingreso, $r->ruc, $r->razon_social, $r->placa,$r->tipo_madera,$r->cantidad, round($r->volumen_total_m3, 2), round($r->volumen_total_pies, 2), round($r->precio_total, 2), $r->estado_pago, $r->fecha_pago, $r->numero_factura));
 		}
 		
 		$export = new InvoicesExport([$variable]);
@@ -1079,16 +1079,16 @@ class InvoicesExport implements FromArray, WithHeadings, WithStyles
 
     public function headings(): array
     {
-        return ["N","Fecha Recepcion","Proveedor","Cantidad","M3","Pies", "Tabulacion", "Promedio", "Precio Final", "Precio Total", "Estado Pago"];
+        return ["N","Fecha Recepcion","Proveedor","Cantidad","M3","Pies", "Tabulacion", "Promedio", "Precio Final", "Precio Total", "Estado Pago", "Fecha Pago", "Numero Factura"];
     }
 
 	public function styles(Worksheet $sheet)
     {
 
-		$sheet->mergeCells('A1:K1');
+		$sheet->mergeCells('A1:M1');
 
         $sheet->setCellValue('A1', "REPORTE DE PAGOS - FORESPAMA");
-        $sheet->getStyle('A1:K1')->applyFromArray([
+        $sheet->getStyle('A1:M1')->applyFromArray([
             'font' => [
                 'bold' => true,
                 'color' => ['rgb' => 'FFFFFF'],
@@ -1105,7 +1105,7 @@ class InvoicesExport implements FromArray, WithHeadings, WithStyles
 		$sheet->getStyle('A1')->getAlignment()->setWrapText(true);
 		$sheet->getRowDimension(1)->setRowHeight(30);
 
-        $sheet->getStyle('A2:K2')->applyFromArray([
+        $sheet->getStyle('A2:M2')->applyFromArray([
             'font' => [
                 'bold' => true,
                 'color' => ['rgb' => '000000'],
@@ -1125,7 +1125,7 @@ class InvoicesExport implements FromArray, WithHeadings, WithStyles
 		->getNumberFormat()
 		->setFormatCode(\PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_NUMBER_00);*/ //SIRVE PARA PONER 2 DECIMALES A ESA COLUMNA
         
-        foreach (range('A', 'K') as $col) {
+        foreach (range('A', 'M') as $col) {
             $sheet->getColumnDimension($col)->setAutoSize(true);
         }
 		

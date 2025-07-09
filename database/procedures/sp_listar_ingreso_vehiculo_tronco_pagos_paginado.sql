@@ -23,7 +23,10 @@ Begin
 	tm.denominacion tipo_madera,ivttm.cantidad,tmep.denominacion estado_pago, 
 	coalesce((select sum(volumen_total_m3) from ingreso_vehiculo_tronco_cubicajes ivtc where id_ingreso_vehiculo_tronco_tipo_maderas=ivttm.id),0)volumen_total_m3,
 	coalesce((select sum(volumen_total_pies) from ingreso_vehiculo_tronco_cubicajes ivtc where id_ingreso_vehiculo_tronco_tipo_maderas=ivttm.id),0)volumen_total_pies,
-	coalesce((select sum(precio_total) from ingreso_vehiculo_tronco_cubicajes ivtc where id_ingreso_vehiculo_tronco_tipo_maderas=ivttm.id),0)precio_total ';
+	coalesce((select sum(precio_total) from ingreso_vehiculo_tronco_cubicajes ivtc where id_ingreso_vehiculo_tronco_tipo_maderas=ivttm.id),0)precio_total,
+	(select COALESCE(STRING_AGG(distinct ivtp.fecha ::TEXT, '', ''), '''') from ingreso_vehiculo_tronco_pagos ivtp where ivtp.id_ingreso_vehiculo_tronco_tipo_maderas  = ivttm.id limit 1) fecha_pago,
+	(select COALESCE(STRING_AGG(distinct ivtp.nro_factura ::TEXT, '', ''), '''') from ingreso_vehiculo_tronco_pagos ivtp where ivtp.id_ingreso_vehiculo_tronco_tipo_maderas = ivttm.id) numero_factura,
+	(select COALESCE(STRING_AGG(distinct ivtp.nro_cheque  ::TEXT, '', ''), '''') from ingreso_vehiculo_tronco_pagos ivtp where ivtp.id_ingreso_vehiculo_tronco_tipo_maderas = ivttm.id) numero_cheque ';
 
 	v_tabla=' from ingreso_vehiculo_troncos ivt
 	inner join empresas e on ivt.id_empresa_proveedor=e.id
@@ -34,7 +37,7 @@ Begin
 	inner join tabla_maestras tm on ivttm.id_tipo_maderas=tm.codigo::int and tm.tipo=''42''
 	inner join tabla_maestras tmep on ivttm.id_estado_pago=tmep.codigo::int and tmep.tipo=''66'' ';
 
-	v_where = ' where 1=1  and ivt.estado_ingreso =''1''';
+	v_where = ' where 1=1  and ivt.estado_ingreso =''1'' ';
 	
 	If p_ruc<>'' Then
 	 v_where:=v_where||'And e.ruc = '''||p_ruc||''' ';

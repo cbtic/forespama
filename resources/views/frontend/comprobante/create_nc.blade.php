@@ -504,6 +504,8 @@
                                                                 <input type="hidden" id="facturad_igv" name="facturad[<?php echo $key ?>][igv]" value="<?php echo $fac['igv_total'] ?>" />
                                                                 <input type="hidden" id="facturad_total" name="facturad[<?php echo $key ?>][total]" value="<?php echo $fac['importe'] ?>" />
                                                                 <input type="hidden" name="facturad[<?php echo $key ?>][cantidad]" value="<?php echo $fac['cantidad'] ?>" />
+                                                                <input type="hidden" name="facturad[<?php echo $key ?>][codigo_producto]" value="<?php echo $fac['codigo'] ?>" />
+                                                                <input type="hidden" name="facturad[<?php echo $key ?>][abreviatura]" value="<?php echo $fac['unidad'] ?>" />
 
 
                                                                 <tr>

@@ -418,7 +418,7 @@ function datatablenew(){
                     },
                     "bSortable": false,
                     "aTargets": [17]
-                },              
+                },
 				{
                     "mRender": function (data, type, row) {
                         var html = '<div class="btn-group btn-group-sm" role="group" aria-label="Log Viewer Actions">';
