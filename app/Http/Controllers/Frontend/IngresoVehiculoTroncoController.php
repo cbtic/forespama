@@ -1079,7 +1079,7 @@ class InvoicesExport implements FromArray, WithHeadings, WithStyles
 
     public function headings(): array
     {
-        return ["N","Fecha Recepcion","Proveedor","Cantidad","M3","Pies", "Tabulacion", "Promedio", "Precio Final", "Precio Total", "Estado Pago", "Fecha Pago", "Numero Factura"];
+        return ["N","Fecha","Ruc","Empresa","Placa","Tipo Madera", "Cantidad", "Volumen Total M3", "Volumen Total Pies", "Precio Total", "Estado Pago", "Fecha Pago", "Numero Factura"];
     }
 
 	public function styles(Worksheet $sheet)

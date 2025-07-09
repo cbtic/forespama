@@ -1,4 +1,4 @@
--- DROP FUNCTION public.sp_crud_comprobante_ncnd(varchar, int4, varchar, varchar, varchar, varchar, varchar, int4, int4, numeric, varchar, int4, int4, varchar, varchar, int4, varchar, int4, varchar, varchar, varchar, varchar, int4, int4, int4);
+-- DROP FUNCTION public.sp_crud_comprobante_ncnd(varchar, int4, varchar, varchar, varchar, varchar, varchar, int4, int4, numeric, varchar, int4, int4, varchar, varchar, int4, varchar, int4, varchar, varchar, varchar, int4, int4, int4);
 
 CREATE OR REPLACE FUNCTION public.sp_crud_comprobante_ncnd(serie character varying, numero integer, tipo character varying, cod_tributario character varying, total character varying, descripcion character varying, cod_contable character varying, id_v integer, id_caja integer, descuento numeric, accion character varying, p_id_usuario integer, p_id_moneda integer, p_razon_social character varying, p_direccion character varying, p_comprobante_origen integer, correo character varying, p_afectacion integer, p_tipo_nota character varying, p_motivo character varying, p_afecta_ingreso character varying, p_id_concepto integer, p_item integer, p_cantidad integer)
  RETURNS character varying
@@ -106,12 +106,12 @@ begin
 							from comprobantes c inner join comprobante_pagos cp on c.id =cp.id_comprobante where c.id=p_comprobante_origen;
 
 							if _fecha_comp=CURRENT_DATE THEN
-								insert into comprobante_pagos (id_comprobante,item,fecha    , id_medio,  nro_operacion,descripcion,monto   ,fecha_vencimiento,estado,id_usuario_inserta)
-													values (  idp,            1,    now(),    _id_medio,_nro_operacion,            '',     _total*-1,now(),            '1',    p_id_usuario);
+								insert into comprobante_pagos (id_comprobante,item,fecha    , id_medio,  nro_operacion,descripcion,monto   ,fecha_vencimiento,estado,id_usuario_inserta, created_at)
+													values (  idp,            1,    now(),    _id_medio,_nro_operacion,            '',     _total*-1,now(),            '1',    p_id_usuario, now());
 							else
 							
-								insert into comprobante_pagos (id_comprobante,item,fecha     ,id_medio,nro_operacion,descripcion,monto   ,fecha_vencimiento,estado,id_usuario_inserta)
-													values (  idp,            1,    now(),     91,       '',            '',     _total*-1,now(),            '1',    p_id_usuario);
+								insert into comprobante_pagos (id_comprobante,item,fecha     ,id_medio,nro_operacion,descripcion,monto   ,fecha_vencimiento,estado,id_usuario_inserta, created_at)
+													values (  idp,            1,    now(),     91,       '',            '',     _total*-1,now(),            '1',    p_id_usuario, now());
 							end if;
 						end if;
 					end if;			
@@ -121,8 +121,8 @@ begin
 			if numero > 0 Then
 
 				Insert Into comprobante_detalles (serie, numero, tipo, item, cantidad, descripcion,
-					pu, pu_con_igv, igv_total, descuento, importe,afect_igv, cod_contable, valor_gratu, unidad,id_usuario_inserta,id_comprobante,id_concepto)
-					Values (_serie,numero,tipo,p_item,p_cantidad,descripcion,_sub_total,_igv,_igv,descuento,_total,p_afectacion,cod_contable,0,'ZZ',p_id_usuario, id_caja,p_id_concepto);
+					pu, pu_con_igv, igv_total, descuento, importe,afect_igv, cod_contable, valor_gratu, unidad,id_usuario_inserta,id_comprobante,id_concepto, created_at, updated_at)
+					Values (_serie,numero,tipo,p_item,p_cantidad,descripcion,_sub_total,_igv,_igv,descuento,_total,p_afectacion,cod_contable,0,'ZZ',p_id_usuario, id_caja,p_id_concepto, now(), now());
 				
 				idp := (SELECT currval('comprobante_detalles_id_seq'));
 
