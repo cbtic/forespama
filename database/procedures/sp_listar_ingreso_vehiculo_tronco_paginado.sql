@@ -1,4 +1,4 @@
--- DROP FUNCTION public.sp_listar_ingreso_vehiculo_tronco_paginado(varchar, varchar, varchar, varchar, refcursor);
+-- DROP FUNCTION public.sp_listar_ingreso_vehiculo_tronco_paginado(varchar, varchar, varchar, varchar, varchar, refcursor);
 
 CREATE OR REPLACE FUNCTION public.sp_listar_ingreso_vehiculo_tronco_paginado(p_placa character varying, p_ruc character varying, p_anio character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
  RETURNS refcursor
@@ -49,9 +49,9 @@ Begin
 	v_col_count:=' ,'||v_count||' as TotalRows ';
 
 	If v_count::Integer > p_limit::Integer then
-		v_scad:='SELECT '||v_campos||v_col_count||v_tabla||v_where||' Order By ivt.id Desc LIMIT '||p_limit||' OFFSET '||p_pagina||';';
+		v_scad:='SELECT '||v_campos||v_col_count||v_tabla||v_where||' Order By ivt.fecha_ingreso Desc LIMIT '||p_limit||' OFFSET '||p_pagina||';';
 	else
-		v_scad:='SELECT '||v_campos||v_col_count||v_tabla||v_where||' Order By ivt.id Desc;';
+		v_scad:='SELECT '||v_campos||v_col_count||v_tabla||v_where||' Order By ivt.fecha_ingreso Desc;';
 	End If;
 
 	--Raise Notice '%',v_scad;

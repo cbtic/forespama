@@ -87,7 +87,7 @@ $(document).ready(function () {
 });
 
 function datatablenew(){
-                      
+    
     var oTable1 = $('#tblOrdenCompra').dataTable({
         "bServerSide": true,
         "sAjaxSource": "/orden_compra/listar_orden_compra_ajax",

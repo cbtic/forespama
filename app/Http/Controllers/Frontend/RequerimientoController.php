@@ -520,11 +520,11 @@ class RequerimientoController extends Controller
 		$variable = [];
 		$n = 1;
 		
-		array_push($variable, array("N","Tipo Documento","Fecha","Numero Requerimiento","Almacen", "Responsable Atencion", "Producto", "Codigo", "Marca", "Cantidad"));
+		array_push($variable, array("N","Tipo Documento","Fecha","Numero Requerimiento","Almacen", "Responsable Atencion", "Producto", "Codigo", "Marca", "Cantidad", "Cantidad Atendida", "Estado"));
 		
 		foreach ($data as $r) {
 
-			array_push($variable, array($n++,$r->tipo_documento, $r->fecha, $r->numero_requerimiento, $r->almacen_solicitante,$r->responsable_atencion,$r->producto, $r->codigo, $r->marca, $r->cantidad));
+			array_push($variable, array($n++,$r->tipo_documento, $r->fecha, $r->numero_requerimiento, $r->almacen_solicitante,$r->responsable_atencion,$r->producto, $r->codigo, $r->marca, $r->cantidad, $r->cantidad_atendida, $r->cerrado));
 		}
 		
 		$export = new InvoicesExport2([$variable]);
@@ -838,16 +838,16 @@ class InvoicesExport2 implements FromArray, WithHeadings, WithStyles
 
     public function headings(): array
     {
-        return ["N","Tipo Documento","Fecha","Numero Requerimiento","Almacen", "Responsable Atencion", "Producto", "Codigo", "Marca", "Cantidad"];
+        return ["N","Tipo Documento","Fecha","Numero Requerimiento","Almacen", "Responsable Atencion", "Producto", "Codigo", "Marca", "Cantidad", "Cantidad Atendida", "Estado"];
     }
 
 	public function styles(Worksheet $sheet)
     {
 
-		$sheet->mergeCells('A1:J1');
+		$sheet->mergeCells('A1:L1');
 
         $sheet->setCellValue('A1', "REPORTE DE DETALLE DE REQUERIMIENTO - FORESPAMA");
-        $sheet->getStyle('A1:J1')->applyFromArray([
+        $sheet->getStyle('A1:L1')->applyFromArray([
             'font' => [
                 'bold' => true,
                 'color' => ['rgb' => 'FFFFFF'],
@@ -864,7 +864,7 @@ class InvoicesExport2 implements FromArray, WithHeadings, WithStyles
 		$sheet->getStyle('A1')->getAlignment()->setWrapText(true);
 		$sheet->getRowDimension(1)->setRowHeight(30);
 
-        $sheet->getStyle('A2:J2')->applyFromArray([
+        $sheet->getStyle('A2:L2')->applyFromArray([
             'font' => [
                 'bold' => true,
                 'color' => ['rgb' => '000000'],
@@ -884,7 +884,7 @@ class InvoicesExport2 implements FromArray, WithHeadings, WithStyles
 		->getNumberFormat()
 		->setFormatCode(\PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_NUMBER_00);*/ //SIRVE PARA PONER 2 DECIMALES A ESA COLUMNA
         
-        foreach (range('A', 'J') as $col) {
+        foreach (range('A', 'L') as $col) {
             $sheet->getColumnDimension($col)->setAutoSize(true);
         }
     }
