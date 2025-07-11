@@ -126,10 +126,16 @@ class Requerimiento extends Model
         rd.id_estado_producto , rd.cantidad, r.id_almacen_destino,
         (select coalesce(sum(ocd.cantidad_requerida),0) from orden_compras oc
         inner join orden_compra_detalles ocd on ocd.id_orden_compra = oc.id 
-        where oc.id_requerimiento = r.id and ocd.id_producto = rd.id_producto and oc.estado ='1') cantidad_atendida, rd.id_usuario_inserta
+        where oc.id_requerimiento = r.id and ocd.id_producto = rd.id_producto and oc.estado ='1') cantidad_atendida,
+        coalesce(ppd.id_moneda, 0) id_moneda,
+        coalesce(ppd.tipo_cambio, 0) tipo_cambio,
+        coalesce(ppd.precio, 0) precio,
+        coalesce(ppd.precio_dolares, 0) precio_dolares,
+        rd.id_usuario_inserta
         from requerimiento_detalles rd 
         inner join productos p on rd.id_producto = p.id
         inner join requerimientos r on rd.id_requerimiento = r.id
+        left join lateral (select ppd.id_moneda, ppd.tipo_cambio, ppd.precio, ppd.precio_dolares from producto_precio_detalles ppd where ppd.id_producto = p.id order by ppd.id desc limit 1) ppd on true
         where id_requerimiento ='".$id."'
         and rd.estado='1'
         and rd.cerrado='1'

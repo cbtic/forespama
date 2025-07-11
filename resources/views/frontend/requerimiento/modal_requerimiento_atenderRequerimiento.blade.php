@@ -240,12 +240,12 @@ var productosSeleccionados = [];
 
 function cargarDetalle(){
 
-var id = $("#id").val();
-const tbody = $('#divRequerimientoDetalle');
+    var id = $("#id").val();
+    const tbody = $('#divRequerimientoDetalle');
 
-tbody.empty();
+    tbody.empty();
 
-$.ajax({
+    $.ajax({
         url: "/requerimiento/cargar_detalle_abierto/"+id,
         type: "GET",
         success: function (result) {
@@ -260,6 +260,7 @@ $.ajax({
                 let productoOptions = '<option value="">--Seleccionar--</option>';
                 let estadoBienOptions = '<option value="">--Seleccionar--</option>';
                 let unidadMedidaOptions = '<option value="">--Seleccionar--</option>';
+                let monedaOptions = '<option value="">--Seleccionar--</option>';
                 
                 result.marca.forEach(marca => {
                     let selected = (marca.id == requerimiento.id_marca) ? 'selected' : '';
@@ -281,11 +282,25 @@ $.ajax({
                     unidadMedidaOptions += `<option value="${unidad_medida.codigo}" ${selected}>${unidad_medida.denominacion}</option>`;
                 });
 
+                result.moneda.forEach(moneda => {
+                    let selected = (moneda.codigo == requerimiento.id_moneda) ? 'selected' : '';
+                    monedaOptions += `<option value="${moneda.codigo}" ${selected}>${moneda.denominacion}</option>`;
+                });
+
                 if (requerimiento.id_producto) {
                     productosSeleccionados.push(requerimiento.id_producto);
                 }
 
                 const idMarca = requerimiento.id_marca ?? '';
+
+                let isReadonly = (requerimiento.id_moneda == "" || requerimiento.id_moneda == null) ? 'readonly' : '';
+                let cantidad = parseFloat(requerimiento.cantidad || 0);
+                let cantidadAtendida = parseFloat(requerimiento.cantidad - requerimiento.cantidad_atendida || 0);
+                let precioUnitario = parseFloat(requerimiento.precio || 0);
+                let tipoCambio = parseFloat(requerimiento.tipo_cambio || 0);
+
+                let totalPrecio =  precioUnitario * tipoCambio * cantidadAtendida;
+                let total =  totalPrecio * cantidadAtendida;
 
                 const row = `
                     <tr>
@@ -296,7 +311,13 @@ $.ajax({
                         <td><input name="estado_bien[]" id="estado_bien${n}" class="form-control form-control-sm" value="${requerimiento.id_estado_producto}" type="hidden"><select name="estado_bien_[]" id="estado_bien_${n}" class="form-control form-control-sm" onChange="" disabled>${estadoBienOptions}</select></td>
                         <td><input name="unidad[]" id="unidad${n}" class="form-control form-control-sm" value="${requerimiento.id_unidad_medida}" type="hidden"><select name="unidad_[]" id="unidad_${n}" class="form-control form-control-sm" disabled>${unidadMedidaOptions}</select></td>
                         <td><input name="cantidad_ingreso[]" id="cantidad_ingreso${n}" class="cantidad_ingreso form-control form-control-sm" value="${requerimiento.cantidad}" type="text" oninput="" readonly></td>
-                        <td><input name="cantidad_atendida[]" id="cantidad_atendida${n}" class="form-control form-control-sm" value="${requerimiento.cantidad-requerimiento.cantidad_atendida}" type="text"></td>
+                        <td><input name="cantidad_atendida[]" id="cantidad_atendida${n}" class="form-control form-control-sm" value="${requerimiento.cantidad-requerimiento.cantidad_atendida}" type="text" oninput="calcularTotalPrecio(${n})"></td>
+                        <td><input name="moneda[]" id="moneda${n}" class="form-control form-control-sm" value="${requerimiento.id_moneda}" type="hidden"><select name="moneda_" id="moneda_${n}" class="form-control form-control-sm" onchange="">${monedaOptions}</select><input name="moneda_descripcion" id="moneda_descripcion" type="hidden"></td>
+                        <td><input name="tipo_cambio[]" id="tipo_cambio${n}" class="tipo_cambio form-control form-control-sm" value="${parseFloat(requerimiento.tipo_cambio || 0).toFixed(2)}" type="text" oninput="calcularTotalPrecio(${n})" onblur="formatearDecimal(this)" ${isReadonly}></td>
+                        <td><input name="precio_unitario[]" id="precio_unitario${n}" class="precio_unitario form-control form-control-sm" value="${parseFloat(requerimiento.precio_dolares || 0).toFixed(2)}" type="text" oninput="calcularTotalPrecio(${n})" onblur="formatearDecimal(this)" ${isReadonly}></td>
+                        <td><input name="total_precio[]" id="total_precio${n}" class="total_precio form-control form-control-sm" value="${totalPrecio.toFixed(2)}" type="text" oninput="" readonly></td>
+                        <td><input name="total[]" id="total${n}" class="total form-control form-control-sm" value="${total.toFixed(2)}" type="text" oninput="" readonly></td>
+                        
                         <td><button type="button" class="btn btn-danger btn-sm" onclick="eliminarFila(this)">Eliminar</button></td>
                         <td><button type="button" class="btn btn-success btn-sm" onclick="modalObservacion(${n})">Observacion</button></td>
                     </tr>
@@ -312,8 +333,88 @@ $.ajax({
                 });
 
                 n++;
-                });
+            });
+        }
+    });
+}
+
+$(document).on('change', '[id^="moneda_"]', function () {
+    const id = $(this).attr('id').split('_')[1];
+    const valor = $(this).val();
+    const descripcion = $(this).find('option:selected').text();
+
+    $(`#moneda${id}`).val($(this).val());
+    $(`#moneda_descripcion${id}`).val(descripcion);
+
+    const campos = [`tipo_cambio${id}`, `precio_unitario${id}`];
+
+    campos.forEach(campoId => {
+        if (valor === "") {
+            $(`#${campoId}`).prop('readonly', true).val('0.00');
+        } else {
+            $(`#${campoId}`).prop('readonly', false);
+        }
+    });
+
+    calcularTotalPrecio(id);
+});
+
+function calcularTotalPrecio(n) {
+
+    const cantidadIngreso = parseFloat($(`#cantidad_ingreso${n}`).val()) || 0;
+    const cantidadAtendida = parseFloat($(`#cantidad_atendida${n}`).val()) || 0;
+    const precioUnitario = parseFloat($(`#precio_unitario${n}`).val()) || 0;
+    const tipoCambio = parseFloat($(`#tipo_cambio${n}`).val()) || 0;
+    const idMoneda = parseInt($(`#moneda${n}`).val()) || 0;
+
+    let totalUnitario = 0;
+    let totalPrecio = 0;
+
+    if (idMoneda == 2) {
+        totalUnitario = precioUnitario * tipoCambio;
+        totalPrecio = precioUnitario * tipoCambio * cantidadAtendida;
+    } else {
+        totalUnitario = precioUnitario;
+        totalPrecio = precioUnitario * cantidadAtendida;
+    }
+
+    if (idMoneda === 2 && tipoCambio  === 0) {
+        cargarTipoCambioDelDia(n);
+        return;
+    }
+
+    $(`#total_precio${n}`).val(totalUnitario.toFixed(2));
+
+    $(`#total${n}`).val(totalPrecio.toFixed(2));
+}
+
+function formatearDecimal(input) {
+    let valor = parseFloat(input.value);
+    if (!isNaN(valor)) {
+        input.value = valor.toFixed(2);
+    } else {
+        input.value = '0.00';
+    }
+}
+
+function cargarTipoCambioDelDia(n) {
+
+    $.ajax({
+        url: "/tipo_cambio/obtenerUltimoTipoCambio",
+        method: 'GET',
+        success: function(response) {
+            // Asegura que el resultado no esté vacío
+            if (response.length > 0) {
+                const tipoCambio = parseFloat(response[0].valor_venta || 0).toFixed(2);
+                $(`#tipo_cambio${n}`).val(tipoCambio).prop('readonly', false);
+                calcularTotalPrecio(n); // recalcular con nuevo valor
+            } else {
+                alert('No se encontró tipo de cambio del día.');
             }
+        },
+        error: function() {
+            alert('Error al obtener el tipo de cambio del día.');
+        }
     });
 }
 
@@ -791,6 +892,11 @@ function cambiarOrigen(){
                                     <th style="width : 10%">Unidad</th>
                                     <th style="width : 8%">Cantidad</th>
                                     <th style="width : 8%">Cantidad Pendiente</th>
+                                    <th style="width : 8%">Moneda</th>
+                                    <th style="width : 8%">Tipo Cambio</th>
+                                    <th style="width : 8%">Precio</th>
+                                    <th style="width : 8%">Total Precio Unitario</th>
+                                    <th style="width : 8%">Total</th>
                                 </tr>
                                 </thead>
                                 <tbody id="divRequerimientoDetalle">

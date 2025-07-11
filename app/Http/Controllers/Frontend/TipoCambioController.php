@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\TipoCambio;
+use Illuminate\Support\Facades\Http;
 use App\Models\TablaMaestra;
+use Carbon\Carbon;
 use Auth;
 
 class TipoCambioController extends Controller
@@ -85,5 +87,48 @@ class TipoCambioController extends Controller
 		echo $tipoCambio->id;
 
     }
+	
+	public function obtenerTipoCambioDiario(){
 		
+		$fecha = Carbon::now()->toDateString();
+
+        if (TipoCambio::where('fecha', $fecha)->exists()) {
+            \Log::info("Tipo de cambio ya registrado para la fecha: $fecha");
+            return response()->json(['message' => 'Tipo de cambio ya registrado para hoy.'], 200);
+        }
+
+        $response = Http::get('https://api.apis.net.pe/v1/tipo-cambio-sunat');
+		//$response = Http::withoutVerifying()->get('https://api.apis.net.pe/v1/tipo-cambio-sunat');
+
+        if ($response->successful()) {
+            $data = $response->json();
+
+			$tipoCambio = new TipoCambio;
+			$tipoCambio->fecha = $data['fecha'];
+			$tipoCambio->id_tipo_moneda_compra = 1;
+			$tipoCambio->id_tipo_moneda_venta = 2;
+			$tipoCambio->valor_compra = $data['compra'];
+			$tipoCambio->valor_venta = $data['venta'];
+			$tipoCambio->estado = 1;
+			$tipoCambio->save();
+
+            \Log::info("Tipo de cambio registrado exitosamente para $fecha", $data);
+
+            return response()->json(['message' => 'Tipo de cambio registrado correctamente.', 'data' => $data], 201);
+        } else {
+            \Log::error('Error al obtener tipo de cambio desde la API.');
+            return response()->json(['error' => 'No se pudo obtener el tipo de cambio.'], 500);
+        }
+	}
+
+	public function obtenerUltimoTipoCambio(){
+
+		$ultimo_tipo_model = new TipoCambio;
+
+		$ultimo_tipo_cambio = $ultimo_tipo_model->getTipoCambioUltimo();
+
+		return response()->json($ultimo_tipo_cambio);
+
+	}
+
 }

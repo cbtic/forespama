@@ -14,6 +14,7 @@ use App\Models\Almacen_usuario;
 use App\Models\RequerimientoDetalle;
 use App\Models\OrdenCompra;
 use App\Models\OrdenCompraDetalle;
+use App\Models\ProductoPrecioDetalle;
 use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Auth;
@@ -258,13 +259,15 @@ class RequerimientoController extends Controller
         $producto = $producto_model->getProductoAll();
         $estado_bien = $tablaMaestra_model->getMaestroByTipo(4);
         $unidad_medida = $tablaMaestra_model->getMaestroByTipo(43);
+        $moneda = $tablaMaestra_model->getMaestroByTipo(1);
 
         return response()->json([
             'requerimiento' => $requerimiento,
             'marca' => $marca,
             'producto' => $producto,
             'estado_bien' => $estado_bien,
-            'unidad_medida' => $unidad_medida
+            'unidad_medida' => $unidad_medida,
+            'moneda' => $moneda
         ]);
     }
 
@@ -324,6 +327,11 @@ class RequerimientoController extends Controller
         $unidad = $request->input('unidad');
         $cantidad_ingreso = $request->input('cantidad_ingreso');
         $cantidad_atendida = $request->input('cantidad_atendida');
+        $moneda = $request->input('moneda');
+        $tipo_cambio = $request->input('tipo_cambio');
+        $precio_unitario = $request->input('precio_unitario');
+        $total_precio = $request->input('total_precio');
+        $total = $request->input('total');
         
         $id_requerimiento_detalle =$request->id_requerimiento_detalle;
         
@@ -342,26 +350,54 @@ class RequerimientoController extends Controller
         $orden_compra->id_usuario_inserta = $id_user;
         $orden_compra->estado = 1;
         $orden_compra->save();
+        $id_orden_compra = $orden_compra->id;
 
         $array_orden_compra_detalle = array();
 
+        $acumulado_sub_total = 0;
+        $acumulado_igv = 0;
+        $acumulado_total = 0;
+
         foreach($descripcion as $index => $value) {
             
+            $precio_unitario_ = 0;
+            $valor_venta_bruto = 0;
+            $valor_venta = 0;
+            $igv = 0;
+            $total = 0;
+
             $orden_compra_detalle = new OrdenCompraDetalle;
+
+            $precio_unitario_ = $total_precio[$index] / 1.18;
+            $valor_venta_bruto = ($cantidad_atendida[$index] * $total_precio[$index]) / 1.18;
+            $valor_venta = $valor_venta_bruto;
+            $igv = $valor_venta * 0.18;
+            $total = $valor_venta + $igv;
             
-            $orden_compra_detalle->id_orden_compra = $orden_compra->id;
+            $orden_compra_detalle->id_orden_compra = $id_orden_compra;
             $orden_compra_detalle->id_producto = $descripcion[$index];
             $orden_compra_detalle->cantidad_requerida = $cantidad_atendida[$index];
             $orden_compra_detalle->id_estado_producto = $estado_bien[$index];
-            //$orden_compra_detalle->id_unidad_medida = $unidad[$index];
-            if($unidad[$index]!=null && $unidad[$index] !=0){
+
+            $orden_compra_detalle->precio = round($precio_unitario_,2);//$total_precio[$index]
+
+            $orden_compra_detalle->valor_venta_bruto = round($valor_venta_bruto,2);
+
+            $orden_compra_detalle->precio_venta = round($total_precio[$index],2);//$precio_unitario_
+
+            $orden_compra_detalle->valor_venta = round($valor_venta,2);
+            $orden_compra_detalle->sub_total = round($valor_venta,2);
+            $orden_compra_detalle->igv = round($igv,2);
+            $orden_compra_detalle->total = round($total,2);
+            if($unidad[$index]!=null && $unidad !=0){
 				$orden_compra_detalle->id_unidad_medida = (int)$unidad[$index];
 			}
             //$orden_compra_detalle->id_marca = $marca[$index] ?? '';
             if($marca[$index]!=null && $marca[$index] !=0){
 				$orden_compra_detalle->id_marca = (int)$marca[$index];
 			}
-            
+            $orden_compra_detalle->id_descuento = 1;
+            $orden_compra_detalle->descuento = 0;
             $orden_compra_detalle->estado = 1;
             $orden_compra_detalle->cerrado = 1;
             $orden_compra_detalle->id_usuario_inserta = $id_user;
@@ -370,7 +406,28 @@ class RequerimientoController extends Controller
 
             $array_orden_compra_detalle[] = $orden_compra_detalle->id;
 
+            $producto_precio_detalle = new ProductoPrecioDetalle;
+            $producto_precio_detalle->id_producto = $descripcion[$index];
+            $producto_precio_detalle->id_moneda = $moneda[$index];
+            $producto_precio_detalle->tipo_cambio = $tipo_cambio[$index];
+            $producto_precio_detalle->precio_dolares = $precio_unitario[$index];
+            $producto_precio_detalle->precio = $total_precio[$index];
+            $producto_precio_detalle->fecha = Carbon::now();
+            $producto_precio_detalle->estado = '1';
+            $producto_precio_detalle->id_usuario_inserta = $id_user;
+            $producto_precio_detalle->save();
+
+            $acumulado_sub_total += $valor_venta;
+            $acumulado_igv += $igv;
+            $acumulado_total += $total;
+
         }
+
+        $orden_compra_actualizado = OrdenCompra::find($id_orden_compra);
+        $orden_compra_actualizado->sub_total = round($acumulado_sub_total, 2);
+        $orden_compra_actualizado->igv = round($acumulado_igv, 2);
+        $orden_compra_actualizado->total = round($acumulado_total, 2);
+        $orden_compra_actualizado->save();
 
         $requerimiento_detalle = RequerimientoDetalle::where('id_requerimiento',$id_requerimiento)->where('estado','1')->get();
 
