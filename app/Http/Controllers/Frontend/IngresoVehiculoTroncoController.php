@@ -588,6 +588,7 @@ class IngresoVehiculoTroncoController extends Controller
 		$msg = "";
 		$ingresoVehiculoTronco_model = new IngresoVehiculoTronco;
 		$vehiculo = $ingresoVehiculoTronco_model->getEmpresaConductorVehiculos($placa);
+		//dd($vehiculo);exit();
 		$conductores = $ingresoVehiculoTronco_model->getEmpresaConductoresVehiculos($vehiculo->id_empresas);
 		
 		if(!$vehiculo){
