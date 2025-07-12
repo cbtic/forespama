@@ -1,3 +1,5 @@
+-- DROP FUNCTION public.sp_listar_empresa_cubicaje_paginado(varchar, varchar, varchar, varchar, varchar, varchar, refcursor);
+
 CREATE OR REPLACE FUNCTION public.sp_listar_empresa_cubicaje_paginado(p_tipo_empresa character varying, p_empresa character varying, p_tipo_pago character varying, p_estado character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
  RETURNS refcursor
  LANGUAGE plpgsql
@@ -15,7 +17,7 @@ begin
 	
 	p_pagina=(p_pagina::Integer-1)*p_limit::Integer;
 
-	v_campos=' ec.id, tm.denominacion tipo_empresa, e.razon_social, p.nombres ||'' ''|| p.apellido_paterno ||'' ''|| p.apellido_materno conductor, tm2.denominacion tipo_pago, ec.diametro_dm, ec.precio_mayor,ec.precio_menor, ec.estado ';
+	v_campos=' ec.id, tm.denominacion tipo_empresa, e.razon_social, p.nombres ||'' ''|| p.apellido_paterno ||'' ''|| p.apellido_materno conductor, tm2.denominacion tipo_pago, ec.diametro_dm, ec.precio_mayor,ec.precio_menor, ec.estado, ec.letra  ';
 
 	v_tabla=' from empresa_cubicajes ec
 	inner join empresas e on ec.id_empresa = e.id and e.estado =''1''

@@ -31,4 +31,14 @@ class EmpresaCubicaje extends Model
         return $data;
 
     }
+
+    function obtenerLetraEmpresa(){
+
+        $cad = "select ec.letra from empresa_cubicajes ec
+        where ec.letra is not null 
+        order by letra asc ";
+
+		$data = DB::select($cad);
+        return $data;
+    }
 }

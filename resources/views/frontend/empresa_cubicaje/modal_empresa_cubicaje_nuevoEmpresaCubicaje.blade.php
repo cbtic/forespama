@@ -310,6 +310,20 @@ function validaTipoEmpresa(){
                                         <input id="precio_menor" name="precio_menor" class="form-control form-control-sm"  value="<?php echo $empresa_cubicaje->precio_menor?>" type="text">
                                     </div>
                                 </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label class="control-label form-control-sm">Letra</label>
+                                        <select name="letra" id="letra" class="form-control form-control-sm">
+                                            <option value="">--Seleccionar--</option>
+                                            <?php 
+                                            foreach ($letras_disponibles as $letra) { ?>
+                                                <option value="<?php echo $letra; ?>" <?php if ($letra == $empresa_cubicaje->letra) echo "selected='selected'"; ?>><?php echo $letra; ?>
+                                                </option>
+                                            <?php } ?>
+                                        </select>
+                                    </div>
+                                </div>
+
                             </div>
                             </div>
                         </div>

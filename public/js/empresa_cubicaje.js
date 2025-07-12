@@ -169,6 +169,16 @@ function datatablenew(){
 
 				{
 				"mRender": function (data, type, row) {
+					var letra = "";
+					if(row.letra!= null)letra = row.letra;
+					return letra;
+				},
+				"bSortable": true,
+				"aTargets": [8]
+				},
+
+				{
+				"mRender": function (data, type, row) {
 					var estado = "";
 					if(row.estado == 1){
 						estado = "Activo";
@@ -179,7 +189,7 @@ function datatablenew(){
 					return estado;
 				},
 				"bSortable": false,
-				"aTargets": [8]
+				"aTargets": [9]
 				},
 				{
 					"mRender": function (data, type, row) {
@@ -205,7 +215,7 @@ function datatablenew(){
 						return html;
 					},
 					"bSortable": false,
-					"aTargets": [9],
+					"aTargets": [10],
 				},
             ]
     });

@@ -2,10 +2,6 @@
 <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" defer></script>
 <style type="text/css">
 
-#tblProductos tbody tr{
-		font-size:13px
-	}
-
 .table td.verde{
 	background:#CAE983  !important
 }
@@ -290,7 +286,6 @@ label.form-control-sm{
 </style>
 
 
-
 @stack('before-scripts')
 @stack('after-scripts')
 
@@ -301,7 +296,7 @@ label.form-control-sm{
 @section('breadcrumb')
 <ol class="breadcrumb" style="padding-left:130px;margin-top:0px;background-color:#283659">
     <li class="breadcrumb-item text-primary">Inicio</li>
-    <li class="breadcrumb-item active">Registro de Marcas</li>
+    <li class="breadcrumb-item active">Registro de Producci&oacute;n de Acerrado</li>
     </li>
 </ol>
 
@@ -327,12 +322,12 @@ label.form-control-sm{
 
         <div class="card-body">
 
-            <form class="form-horizontal" method="post" action="" id="frmEmpresaCubicaje" autocomplete="off" enctype="multipart/form-data">
+            <form class="form-horizontal" method="post" action="" id="frmAcerradoMadera" autocomplete="off" enctype="multipart/form-data">
 				
                 <div class="row">
                     <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12" style="margin-top:15px">
                         <h4 class="card-title mb-0 text-primary" style="font-size:22px">
-                            Empresas Cubicaje
+                            Ingreso de Producci&oacute;n de Acerrado
                         </h4>
                     </div>
                 </div>
@@ -342,87 +337,54 @@ label.form-control-sm{
 
 					<div class="col col-sm-12 align-self-center">
 
+
                         <input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
 
                         <!--<input type="hidden" name="estado" id="estado" value="0">-->
 						
 						<input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
 				
-				<div class="row" style="padding:20px 20px 0px 20px;">
+					<div class="row" style="padding:20px 20px 0px 20px;">
 
-                    <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-                        <select name="tipo_empresa_bus" id="tipo_empresa_bus" class="form-control form-control-sm">
-							<option value="">--Seleccionar Tipo Empresa--</option>
-							<?php
-							foreach ($tipo_empresa as $row){?>
-								<option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
-								<?php 
-							}
-							?>
-						</select>
-					</div>
+						<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+							<input id="fecha_bus" name="fecha_bus" on class="form-control form-control-sm"  placeholder="Fecha">
+						</div>
 
-					<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-                        <select name="empresa_bus" id="empresa_bus" class="form-control form-control-sm">
-							<option value="">--Seleccionar Empresa--</option>
-							<?php
-							foreach ($empresas as $row){?>
-								<option value="<?php echo $row->id ?>"><?php echo $row->razon_social ?></option>
-								<?php 
-							}
-							?>
-						</select>
-					</div>
-
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-                        <select name="tipo_pago_bus" id="tipo_pago_bus" class="form-control form-control-sm">
-							<option value="">--Seleccionar Tipo Pago--</option>
-							<?php
-							foreach ($tipo_pago as $row){?>
-								<option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
-								<?php 
-							}
-							?>
-						</select>
+						<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+							<select name="estado_bus" id="estado_bus" class="form-control form-control-sm">
+								<option value="">Todos</option>
+								<option value="1" selected="selected">Activo</option>
+								<option value="0">Eliminado</option>
+							</select>
+						</div>
+						
+						<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12" style="padding-right:0px">
+							<input class="btn btn-warning pull-rigth" value="Buscar" type="button" id="btnBuscar" />
+							<input class="btn btn-success pull-rigth" value="Nuevo" type="button" id="btnNuevo" style="margin-left:15px" />
+						</div>
 					</div>
 					
-                    <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
-						<select name="estado_bus" id="estado_bus" class="form-control form-control-sm">
-							<option value="">Todos</option>
-							<option value="1" selected="selected">Activo</option>
-							<option value="0">Eliminado</option>
-						</select>
-					</div>
+					<div class="card-body">
 
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12" style="padding-right:0px">
-						<input class="btn btn-warning pull-rigth" value="Buscar" type="button" id="btnBuscar" />
-						<input class="btn btn-success pull-rigth" value="Nuevo" type="button" id="btnNuevo" style="margin-left:15px" />
-					</div>
-				</div>
-				
-                <div class="card-body">				
-
-                    <div class="table-responsive">
-                    <table id="tblEmpresaCubicaje" class="table table-hover table-sm">
-                        <thead>
-                        <tr style="font-size:13px">
-                            <th>Id</th>
-							<th>Tipo Empresa</th>
-							<th>Raz&oacute;n Social</th>
-							<th>Conductor</th>
-							<th>Tipo Pago</th>
-							<th>Diametro DM</th>
-							<th>Precio Mayor</th>
-							<th>Precio Menor</th>
-							<th>Letra</th>
-							<th>Estado</th>
-                            <th>Acciones</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                    </table>
-                </div><!--table-responsive-->
+						<div class="table-responsive">
+						<table id="tblAcerradoMadera" class="table table-hover table-sm">
+							<thead>
+							<tr style="font-size:13px">
+								<th>Id</th>
+								<th>Fecha</th>
+								<th>Cantidad</th>
+								<th>Medida</th>
+								<th>Paquetes</th>
+								<th>N° Piezas</th>
+								<th>Cantidad</th>
+								<th>Estado</th>
+								<th>Acciones</th>
+							</tr>
+							</thead>
+							<tbody>
+							</tbody>
+						</table>
+					</div><!--table-responsive-->
                 </form>
                 </div><!--card-body-->
             </div><!--card-->
@@ -452,59 +414,8 @@ label.form-control-sm{
 
 	<script type="text/javascript">
 
-	/*$(document).ready(function() {
-		$(".upload").on('click', function() {
-			var formData = new FormData();
-			var files = $('#image')[0].files[0];
-			formData.append('file',files);
-			$.ajax({
-				headers: {
-					'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-				},
-				url: "/ingreso_vehiculo_tronco/upload_imagen_ingreso",
-				type: 'post',
-				data: formData,
-				contentType: false,
-				processData: false,
-				success: function(response) {
-					
-					var ind_img = $("#ind_img").val();
-					
-					if (response != 0) {
-						$("#img_ruta_"+ind_img).attr("src", "/img/ingreso/tmp/"+response).show();
-						$(".delete_ruta").show();
-						$("#img_foto_"+ind_img).val(response);
-
-						ind_img++;
-
-						var newRow = "";
-						newRow += '<div class="img_ruta">';
-						newRow += '<img src="" id="img_ruta_'+ind_img+'" width="130px" height="165px" alt="" style="text-align:center;margin-top:8px;display:none;margin-left:10px" />';
-						newRow += '<span class="delete_ruta" style="display:none" onclick="DeleteImagen(this)"></span>';
-						newRow += '<input type="hidden" id="img_foto_'+ind_img+'" name="img_foto[]" value="" />';
-						newRow += '</div>';
-
-						$("#divImagenes").append(newRow);
-						$("#ind_img").val(ind_img);
-
-					} else {
-						alert('Formato de imagen incorrecto.');
-					}
-					
-				}
-			});
-			return false;
-		});
-
-		$(".delete").on('click', function() {
-			$("#img_ruta0").attr("src", "/dist/img/profile-icon.png");
-			$("#img_foto0").val("");
-		});
-
-	});*/
-
 	</script>
 
-	<script src="{{ asset('js/empresa_cubicaje.js') }}"></script>
+	<script src="{{ asset('js/acerrado_madera.js') }}"></script>
 
 	@endpush

@@ -67,11 +67,15 @@ class EmpresaCubicajeController extends Controller
         $tablaMaestra_model = new TablaMaestra;
         $conductor_model = new Conductores;
         $empresa_model = new Empresa;
+        
+        $letras_abecedario = range('A', 'Z');
 		
 		if($id>0){
             $empresa_cubicaje = EmpresaCubicaje::find($id);
+            $letras_usadas = EmpresaCubicaje::where('id', '!=', $id)->pluck('letra')->toArray();
 		}else{
 			$empresa_cubicaje = new EmpresaCubicaje;
+            $letras_usadas = EmpresaCubicaje::pluck('letra')->toArray();
 		}
 
         $tipo_empresa = $tablaMaestra_model->getMaestroByTipo(79);
@@ -79,7 +83,10 @@ class EmpresaCubicajeController extends Controller
         $tipo_pago = $tablaMaestra_model->getMaestroByTipo(80);
         $empresas = $empresa_model->getEmpresaAll();
 
-		return view('frontend.empresa_cubicaje.modal_empresa_cubicaje_nuevoEmpresaCubicaje',compact('id','empresa_cubicaje','tipo_empresa','conductor','tipo_pago','id_user','empresas'));
+        $letras_disponibles = array_diff($letras_abecedario, $letras_usadas);
+        sort($letras_disponibles);
+
+		return view('frontend.empresa_cubicaje.modal_empresa_cubicaje_nuevoEmpresaCubicaje',compact('id','empresa_cubicaje','tipo_empresa','conductor','tipo_pago','id_user','empresas','letras_disponibles'));
 
     }
 
@@ -108,6 +115,7 @@ class EmpresaCubicajeController extends Controller
         $empresa_cubicaje->precio_mayor = $request->precio_mayor;
         $empresa_cubicaje->precio_menor = $request->precio_menor;
         $empresa_cubicaje->diametro_dm = $request->diametro_dm;
+        $empresa_cubicaje->letra = $request->letra;
         $empresa_cubicaje->id_usuario_inserta = $id_user;
         $empresa_cubicaje->estado = 1;
         $empresa_cubicaje->save();
