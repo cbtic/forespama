@@ -26,6 +26,7 @@ class LoginController
     */
 
     use AuthenticatesUsers;
+    
 
     /**
      * Where to redirect users after login.
@@ -44,8 +45,8 @@ class LoginController
      */
     public function showLoginForm()
     {
-        $sedes = Sede::where('estado','=','1')->pluck('denominacion', 'id');
-        return view('frontend.auth.login', compact('sedes'));
+        //$sedes = Sede::where('estado','=','1')->pluck('denominacion', 'id');
+        return view('frontend.auth.login');
     }
 
     /**
@@ -59,7 +60,7 @@ class LoginController
     protected function validateLogin(Request $request)
     {
         $request->validate([
-            'sede' => ['required'],
+            //'sede' => ['required'],
             $this->username() => ['required', 'max:255', 'string'],
             'password' => array_merge(['max:100'], PasswordRules::login()),
             'g-recaptcha-response' => ['required_if:captcha_status,true', new Captcha],
@@ -112,6 +113,16 @@ class LoginController
             return redirect()->route('frontend.auth.login')->withFlashDanger(__('Your account has been deactivated.'));
         }
         */
+        
+        $id_sede = auth()->user()->id_sede;
+        //print($id_sede); exit();
+        //$id_sede = $request->input('sede');                
+        $sede = Sede::find($id_sede);
+
+        //print($id_sede); exit();
+        session(['id_sede' => $id_sede]);
+        session(['denominacion_sede' => $sede->denominacion]);
+        session(['id_afectacion_sede' => $sede->id_afectacion]);
 
         if (! $user->isActive()) {
             auth()->logout();

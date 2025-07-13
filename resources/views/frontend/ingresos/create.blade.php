@@ -353,11 +353,7 @@
                         <div class="row">
 
                             <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12" style="margin-top:0px!important;text-align:center">
-                                <!--
-								<h4 class="card-title mb-0 text-primary">
-									Estado de cuenta
-								</h4>
-								-->
+
                                 <div style="position:relative">
                                     <!--<img src="{{ $logged_in_user->picture }}" class="user-profile-image_" id="foto" width="80px" height="110px" style="position:absolute;top:-30px;left:35%" />-->
                                     <img src="../img/profile-icon.png" id="foto" width="90px" height="110px" style="position:absolute;top:-30px;left:35%" />
@@ -367,7 +363,11 @@
                             <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
                                 <div class="form-group">
                                     <br>
-
+                                
+								<h4 class="card-subtitle mb-0 text-primary">
+                                    {{ session('denominacion_sede') }}
+								</h4>
+								
                                     <?php
                                     $readonly = '';
                                     $saldo_inicial = "";
@@ -404,6 +404,8 @@
 
                                 </div>
                             </div>
+
+                
 
                             <div class="col-lg-7 col-md-7 col-sm-12 col-xs-12" style="padding:0px">
 
@@ -536,8 +538,8 @@
                                 <div class="card">
                                     <div class="card-header">
                                         <strong>
-                                            Datos de la Persona__
-                                        </strong>
+                                            Datos de la Persona
+                                        </strong>                                       
                                     </div>
 
                                     <div class="card-body">

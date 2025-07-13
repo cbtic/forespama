@@ -26,6 +26,7 @@ use App\Models\Producto;
 use App\Models\Marca;
 use App\Models\Almacene;
 use App\Models\Proforma;
+use App\Models\Sede;
 
 use Barryvdh\DomPDF\Facade\Pdf;
 use Auth;
@@ -88,8 +89,9 @@ class IngresoController extends Controller
         $almacen = $almacen_model->getAlmacenAll();
         //$almacen = Almacene::all();
         $unidad_origen = $tablaMaestra_model->getMaestroByTipo(50);
-
-    
+        //$id_sede = session('id_sede');
+        //$sede = Sede::find($id_sede);
+            
         return view('frontend.ingresos.create',compact('persona','caja','caja_usuario','tipo_documento','pronto_pago', 'concepto','mes','producto','marca','estado_bien','unidad','descuento','caja_dolares','caja_usuario_dolares', 'almacen'));
 
     }
@@ -98,9 +100,10 @@ class IngresoController extends Controller
  
         $valorizaciones_model = new Valorizacione;
         $sw = true;
+        $id_afectacion_sede  = session('id_afectacion_sede');
         //$valorizacion = $valorizaciones_model->getValorizacion($tipo_documento,$id_persona);
-        //print_r($valorizacion);exit();
-        return view('frontend.ingresos.lista_valorizacion',compact('valorizacion'));
+        //print_r($id_afectacion_sede);exit();
+        return view('frontend.ingresos.lista_valorizacion',compact('valorizacion','id_afectacion_sede'));
 
     }
 
@@ -172,8 +175,9 @@ class IngresoController extends Controller
         $orden_compra_model = new OrdenCompra;
         $sw = true;
         $orden_compra = $orden_compra_model->getOrdenCompraDetalle($id, $emp);
+        $id_afectacion_sede  = session('id_afectacion_sede');
         
-        return view('frontend.ingresos.lista_orden_compra_det',compact('orden_compra'));
+        return view('frontend.ingresos.lista_orden_compra_det',compact('orden_compra','id_afectacion_sede'));
 
     }
 
@@ -1212,8 +1216,10 @@ class IngresoController extends Controller
         $almacen = $almacen_model->getAlmacenAll();
         //$almacen = Almacene::all();
         $unidad_origen = $tablaMaestra_model->getMaestroByTipo(50);
+
+        $id_afectacion_sede  = session('id_afectacion_sede');
 		
-		return view('frontend.ingresos.modal_productos',compact('persona','tipo_documento', 'producto','marca','estado_bien','unidad','descuento' ));
+		return view('frontend.ingresos.modal_productos',compact('persona','tipo_documento', 'producto','marca','estado_bien','unidad','descuento','id_afectacion_sede' ));
 
 	}
     

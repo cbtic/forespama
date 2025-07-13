@@ -285,6 +285,8 @@
 	var id_producto_=0;
 	var nombre_producto_ = "";
 
+	var id_tipo_afectacion = "";
+
 	var id_empresa_ = $('#empresa_id').val();
 	var origen_ = $('#origen').val();
 	if(id_empresa_==""){id_empresa_="0";}
@@ -395,6 +397,10 @@
 		Descuento_ = $('#txtDescuento').val();
 		Cantidad_ = $('#txtCantidad').val();
 
+		id_tipo_afectacion = $('#id_tipo_afectacion').val();
+
+		if (id_tipo_afectacion=='20') tasa_igv_ = 0;
+
 		//alert(PrecioVenta_);
 
 
@@ -403,6 +409,8 @@
 		ValorVB_ = ValorUnitario_ * Cantidad_;
 		ValorVenta_ = ValorVB_ - Descuento_;
 		Igv_ = ValorVenta_ * tasa_igv_;
+
+		
 		//Igv_ = Number(Igv_.toFixed(2));
 		Total_ = ValorVenta_ + Igv_;
 		//Total_ =Number(Total_.toFixed(2));
@@ -480,7 +488,7 @@
 			<div class="card">
 
 				<div class="card-header" style="padding:5px!important;padding-left:20px!important">
-					Registro de Papeleta
+					Registro de Papeleta - {{ session('denominacion_sede') }}
 				</div>
 
 				<div class="card-body">
@@ -498,7 +506,9 @@
 									<input type="hidden" name="codigo_producto" id="codigo_producto" value="">
 									<input type="hidden" name="nombre_producto" id="nombre_producto" value="">
 									<input type="hidden" name="id_empresa_pr" id="id_empresa_pr" value="">
-
+									<input type="hidden" name="id_tipo_afectacion" id="id_tipo_afectacion" value="{{ session('id_afectacion_sede') }}">
+									<input type="hidden" name="id_producto" id="id_producto" value="">
+							
 									<input type="hidden" name="id_descuento" id="id_descuento" value="1">
 
 									<div class="row" style="padding-left:10px">
@@ -522,14 +532,14 @@
 														</td>
 
 													</div>
-
-													<div class="col-lg-3">
+<!--
+													<div class="col-lg-2">
 														<div class="form-group">
 															<label class="form-control-sm">id</label>
 															<input type="text" name="id_producto" id="id_producto" value="" placeholder="" class="form-control form-control-sm">
 														</div>
 													</div>
-
+-->
 												</div>
 											</div>
 
