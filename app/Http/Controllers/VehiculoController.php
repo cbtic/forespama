@@ -283,31 +283,42 @@ class VehiculoController extends Controller
 		$id_user = Auth::user()->id;
 		//dd($request);exit();
 		if($request->id == 0){
-			$vehiculo = new Vehiculo;
-			$vehiculo->placa = $request->placa;
-			$vehiculo->ejes = $request->ejes;
-			$vehiculo->peso_tracto = $request->peso_tracto;
-			$vehiculo->peso_carreta = $request->peso_carreta;
-			$vehiculo->peso_seco = $request->peso_seco;
-			$vehiculo->exonerado = $request->exonerado;
-			$vehiculo->control = $request->control;
-			$vehiculo->bloqueado = $request->bloqueado;
-			$vehiculo->id_marca = $request->marca;
-			$vehiculo->constancia_inscripcion = $request->constancia_inscripcion_mantenimiento;
-			$vehiculo->id_usuario_inserta = $id_user;
-			$vehiculo->id_usuario_actualiza = $id_user;
-			$vehiculo->estado = "1";
-			$vehiculo->save();
 
+			if($request->empresa !=""){
+
+				$vehiculo = Vehiculo::where('id',$request->empresa)->where('estado',1)->first();
+				$id_vehiculo = $vehiculo->id;
+
+			}else{
+
+				$vehiculo = new Vehiculo;
+				$vehiculo->placa = $request->placa;
+				$vehiculo->ejes = $request->ejes;
+				$vehiculo->peso_tracto = $request->peso_tracto;
+				$vehiculo->peso_carreta = $request->peso_carreta;
+				$vehiculo->peso_seco = $request->peso_seco;
+				$vehiculo->exonerado = $request->exonerado;
+				$vehiculo->control = $request->control;
+				$vehiculo->bloqueado = $request->bloqueado;
+				$vehiculo->id_marca = $request->marca;
+				$vehiculo->constancia_inscripcion = $request->constancia_inscripcion_mantenimiento;
+				$vehiculo->id_usuario_inserta = $id_user;
+				$vehiculo->id_usuario_actualiza = $id_user;
+				$vehiculo->estado = "1";
+				$vehiculo->save();
+				$id_vehiculo = $vehiculo->id;
+
+			}
+			
 			$empresa_vehiculo = new EmpresaVehiculo;
 
-			$empresa_vehiculo->id_vehiculos = $vehiculo->id;
+			$empresa_vehiculo->id_vehiculos = $id_vehiculo;
 			$empresa_vehiculo->id_empresas = $request->empresa;
 			$empresa_vehiculo->save();
 
 			$vehiculo_conductor = new VehiculoConductore;
 
-			$vehiculo_conductor->id_vehiculos = $vehiculo->id;
+			$vehiculo_conductor->id_vehiculos = $id_vehiculo;
 			$vehiculo_conductor->id_conductores = $request->conductor;
 			$vehiculo_conductor->estado = 1;
 			$vehiculo_conductor->save();

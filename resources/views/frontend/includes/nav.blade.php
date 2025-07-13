@@ -72,17 +72,20 @@
 						
 
 					@endif
-						
+					
 					@if(Gate::check('Acerrado'))
 
-					<li class="nav-item dropdown">
+						<li class="nav-item dropdown">
 							<a href="#" class="nav-link dropdown-toggle" id="navbarDropdownPrueba" data-toggle="dropdown"
-						   aria-haspopup="true" aria-expanded="false">Acerrado</a>
-							<!--
-						   	<div class="dropdown-menu" aria-labelledby="navbarDropdownPrueba">
+							aria-haspopup="true" aria-expanded="false">Acerrado</a>
+							<div class="dropdown-menu" aria-labelledby="navbarDropdownPrueba">
+								
+								@can('Acerrado')
+									<x-utils.link :href="route('frontend.acerrado_madera.create')" class="dropdown-item" :text="__('Acerrado Madera')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+								@endif
+								
 							</div>
-							-->
-					</li>
+						</li>
 					@endif
 					
 					@if(Gate::check('Almacenes') || Gate::check('Secciones') || Gate::check('Anaqueles') || Gate::check('Productos') || Gate::check('Lotes'))

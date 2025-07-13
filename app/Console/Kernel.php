@@ -17,6 +17,7 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         Commands\inhabilitarModificacionRequerimientoAutomaticoCron::class,
+        Commands\obtenerTipoCambioDiarioAutomaticoCron::class,
     ];
 
     /**
@@ -28,6 +29,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('inhabilitarModificacionRequerimientoAutomatico:cron')->dailyAt('22:00');
+        $schedule->command('obtenerTipoCambioDiarioAutomatico:cron')->dailyAt('06:00');
     }
 
     /**

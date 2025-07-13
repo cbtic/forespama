@@ -41,6 +41,7 @@ use App\Http\Controllers\Frontend\EmpaquetadoController;
 use App\Http\Controllers\Frontend\DevolucionController;
 use App\Http\Controllers\Frontend\PromotorController;
 use App\Http\Controllers\Frontend\EmpresaCubicajeController;
+use App\Http\Controllers\Frontend\AcerradoMaderaController;
 
 //use App\Http\Controllers\VehiculoController;
 
@@ -683,3 +684,10 @@ Route::post('requerimiento/send_observacion_requerimiento', [RequerimientoContro
 Route::get('requerimiento/modal_cerrar_antiguedad/{id}', [RequerimientoController::class, 'modal_cerrar_antiguedad'])->name('requerimiento.modal_cerrar_antiguedad');
 Route::post('requerimiento/send_cerrar_antiguedad_requerimiento', [RequerimientoController::class, 'send_cerrar_antiguedad_requerimiento'])->name('requerimiento.send_cerrar_antiguedad_requerimiento');
 Route::get('ingreso_vehiculo_tronco/exportar_listar_reporte_anual/{placa}/{ruc}/{anio}', [IngresoVehiculoTroncoController::class, 'exportar_listar_reporte_anual'])->name('ingreso_vehiculo_tronco.exportar_listar_reporte_anual');
+Route::get('tipo_cambio/obtenerUltimoTipoCambio', [TipoCambioController::class, 'obtenerUltimoTipoCambio'])->name('tipo_cambio.obtenerUltimoTipoCambio');
+
+Route::get('acerrado_madera/create', [AcerradoMaderaController::class, 'create'])->name('acerrado_madera.create');
+Route::post('acerrado_madera/listar_acerrado_madera_ajax', [AcerradoMaderaController::class, 'listar_acerrado_madera_ajax'])->name('acerrado_madera.listar_acerrado_madera_ajax');
+Route::post('acerrado_madera/send_acerrado_madera', [AcerradoMaderaController::class, 'send_acerrado_madera'])->name('acerrado_madera.send_acerrado_madera');
+Route::get('acerrado_madera/modal_acerrado_madera/{id}', [AcerradoMaderaController::class, 'modal_acerrado_madera'])->name('acerrado_madera.modal_acerrado_madera');
+Route::get('acerrado_madera/obtener_cantidad_madera/{id_producto}', [AcerradoMaderaController::class, 'obtener_cantidad_madera'])->name('acerrado_madera.obtener_cantidad_madera');

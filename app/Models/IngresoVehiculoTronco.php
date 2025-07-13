@@ -36,6 +36,8 @@ class IngresoVehiculoTronco extends Model
         inner join personas p on c.id_personas=p.id
         where ecv.estado='1'
         and ecv.id_empresas ='".$id_empresa."'
+        and ecv.id = (select MAX(sub.id) from empresas_conductores_vehiculos sub
+        where sub.id_conductores = ecv.id_conductores and sub.estado = '1')
         order by ecv.id desc";
 
 		$data = DB::select($cad);

@@ -27,17 +27,17 @@ class TipoCambio extends Model
 	  $cad = "FETCH ALL IN ref_cursor;";
 	  $data = DB::select($cad);
       return $data;
-   }
+    }
 
-   function getTipoCambioUltimo(){
+    function getTipoCambioUltimo(){
 
-    $cad = "select tc.id, to_char(tc.fecha,'dd-mm-yyyy') fecha, tc.id_tipo_moneda_compra, tc.id_tipo_moneda_venta, tc.valor_compra, tc.valor_venta, tc.estado from tipo_cambios tc 
-    where tc.estado = '1'
-    order by tc.fecha desc
-    limit 1";
+        $cad = "select tc.id, to_char(tc.fecha,'dd-mm-yyyy') fecha, tc.id_tipo_moneda_compra, tc.id_tipo_moneda_venta, tc.valor_compra, tc.valor_venta, tc.estado from tipo_cambios tc 
+        where tc.estado = '1'
+        order by tc.fecha desc
+        limit 1";
 
-    $data = DB::select($cad);
-    return $data;
-}
+        $data = DB::select($cad);
+        return $data;
+    }
    
 }

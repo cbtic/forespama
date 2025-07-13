@@ -1,4 +1,6 @@
-CREATE OR REPLACE FUNCTION public.sp_listar_tipo_cambio_paginado(p_fecha character varying,p_moneda_compra character varying,p_moneda_venta character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
+-- DROP FUNCTION public.sp_listar_tipo_cambio_paginado(varchar, varchar, varchar, varchar, varchar, refcursor);
+
+CREATE OR REPLACE FUNCTION public.sp_listar_tipo_cambio_paginado(p_fecha character varying, p_moneda_compra character varying, p_moneda_venta character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
  RETURNS refcursor
  LANGUAGE plpgsql
 AS $function$
@@ -20,8 +22,8 @@ Begin
 	t3.denominacion moneda_venta,t1.valor_venta,t1.valor_compra,t1.id_tipo_moneda_compra,t1.estado ';
 
 	v_tabla='from tipo_cambios t1
-inner join tabla_maestras t2 on t1.id_tipo_moneda_compra=t2.id and t2.tipo=''1''
-inner join tabla_maestras t3 on t1.id_tipo_moneda_venta=t3.id and t3.tipo=''1''';
+	inner join tabla_maestras t2 on t1.id_tipo_moneda_compra=t2.id and t2.tipo=''1''
+	inner join tabla_maestras t3 on t1.id_tipo_moneda_venta=t3.id and t3.tipo=''1''';
 	
 	v_where = ' Where t1.estado=''1'' ';
 	
@@ -41,9 +43,9 @@ inner join tabla_maestras t3 on t1.id_tipo_moneda_venta=t3.id and t3.tipo=''1'''
 	v_col_count:=' ,'||v_count||' as TotalRows ';
 
 	If v_count::Integer > p_limit::Integer then
-		v_scad:='SELECT '||v_campos||v_col_count||v_tabla||v_where||' Order By t2.orden Asc LIMIT '||p_limit||' OFFSET '||p_pagina||';'; 
+		v_scad:='SELECT '||v_campos||v_col_count||v_tabla||v_where||' Order By t1.fecha desc LIMIT '||p_limit||' OFFSET '||p_pagina||';'; 
 	else
-		v_scad:='SELECT '||v_campos||v_col_count||v_tabla||v_where||' Order By t2.orden Asc;'; 
+		v_scad:='SELECT '||v_campos||v_col_count||v_tabla||v_where||' Order By t1.fecha desc;'; 
 	End If;
 	
 	--Raise Notice '%',v_scad;

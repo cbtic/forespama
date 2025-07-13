@@ -1,4 +1,4 @@
--- DROP FUNCTION public.sp_listar_reporte_requerimiento_paginado(varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, refcursor);
+-- DROP FUNCTION public.sp_listar_reporte_requerimiento_paginado(varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, refcursor);
 
 CREATE OR REPLACE FUNCTION public.sp_listar_reporte_requerimiento_paginado(p_tipo_documento character varying, p_fecha character varying, p_numero_requerimiento character varying, p_almacen character varying, p_situacion character varying, p_responsable_atencion character varying, p_estado_atencion character varying, p_tipo_requerimiento character varying, p_producto character varying, p_estado character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
  RETURNS refcursor
@@ -17,12 +17,17 @@ begin
 	
 	p_pagina=(p_pagina::Integer-1)*p_limit::Integer;
 
-	v_campos=' rd.id, tm.denominacion tipo_documento, r.fecha, r.codigo numero_requerimiento, a.denominacion almacen_solicitante, u.name responsable_atencion, r.estado, p.denominacion producto, p.codigo, m.denominiacion marca, rd.cantidad ';
+	v_campos=' rd.id, tm.denominacion tipo_documento, r.fecha, r.codigo numero_requerimiento, a.denominacion almacen_solicitante, u.name responsable_atencion, r.estado, p.denominacion producto, p.codigo, m.denominiacion marca, rd.cantidad,
+	(select coalesce(sum(ocd.cantidad_requerida),0) from orden_compras oc
+	inner join orden_compra_detalles ocd on ocd.id_orden_compra = oc.id 
+	where oc.id_requerimiento = r.id and ocd.id_producto = rd.id_producto and oc.estado =''1'') cantidad_atendida,
+	tm2.denominacion cerrado ';
 
 	v_tabla=' from requerimiento_detalles rd 
 	inner join requerimientos r on rd.id_requerimiento = r.id 
 	inner join productos p on rd.id_producto = p.id 
 	inner join tabla_maestras tm on r.id_tipo_documento::int = tm.codigo::int and tm.tipo = ''59''
+	inner join tabla_maestras tm2 on rd.cerrado::int = tm2.codigo::int and tm2.tipo = ''52''
 	inner join almacenes a on r.id_almacen_destino = a.id 
 	inner join users u on r.responsable_atencion = u.id 
 	left join marcas m on p.id_marca = m.id ';
