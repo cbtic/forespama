@@ -211,11 +211,9 @@ function cargarDetalleIngreso(){
     tbody.empty();
 
     $.ajax({
-        url: "/acerrado_madera/cargar_detalle_ingreso_vehiculo_acerrado/",
-        dataType: "GET",
+        url: "/acerrado_madera/cargar_detalle_ingreso_vehiculo_acerrado",
+        dataType: "json",
         success: function(result){
-            
-            alert(result);
 
             let n = 1;
 
@@ -228,11 +226,12 @@ function cargarDetalleIngreso(){
                         <td>${n}</td>
                         <td style="width: 450px !important;display:block"><input name="id_ingreso_acerrado_detalle[]" id="id_ingreso_acerrado_detalle${n}" class="form-control form-control-sm" value="${detalle_ingreso_acerrado.id}" type="hidden"><input name="ruc[]" id="ruc${n}" class="form-control form-control-sm" value="${detalle_ingreso_acerrado.ruc}" type="text"></td>
                         <td><input name="razon_social[]" id="razon_social${n}" class="form-control form-control-sm" value="${detalle_ingreso_acerrado.razon_social}" type="text"></td>
+                        <td><input name="letra[]" id="letra${n}" class="form-control form-control-sm" value="${detalle_ingreso_acerrado.letra}" type="text"></td>
                         <td><input name="placa[]" id="placa${n}" class="form-control form-control-sm" value="${detalle_ingreso_acerrado.placa}" type="text"></td>
-                        <td><input name="tipo_madera[]" id="tipo_madera${n}" class="form-control form-control-sm" value="${detalle_ingreso_acerrado.tipo_maderea}" type="text"></td>
+                        <td><input name="tipo_madera[]" id="tipo_madera${n}" class="form-control form-control-sm" value="${detalle_ingreso_acerrado.tipo_madera}" type="text"></td>
                         <td><input name="cantidad_ingreso[]" id="cantidad_ingreso${n}" class="form-control form-control-sm" value="${detalle_ingreso_acerrado.cantidad}" type="text"></td>
                         <td><input name="cantidad_ingreso_produccion[]" id="cantidad_ingreso_produccion${n}" class="form-control form-control-sm" value="" type="text"></td>
-                        <td><input name="procentaje[]" id="procentaje${n}" class="form-control form-control-sm" value="" type="text"></td>
+                        <td><input name="porcentaje[]" id="porcentaje${n}" class="form-control form-control-sm" value="" type="text"></td>
                     </tr>
                 `;
                 tbody.append(row);
@@ -240,7 +239,6 @@ function cargarDetalleIngreso(){
                 n++;
             });
         }
-    });
 }
 
 </script>
@@ -332,11 +330,5 @@ $(document).ready(function () {
 
 </script>
 
-<script type="text/javascript">
-$(document).ready(function() {
-	
-	
-});
 
-</script>
 

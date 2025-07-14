@@ -94,7 +94,9 @@ class AcerradoMaderaController extends Controller
 		
 		$ingreso_vehiculo_tronco_tipo_madera_model = new IngresoVehiculoTroncoTipoMadera;
 		$detalle_ingreso_acerrado = $ingreso_vehiculo_tronco_tipo_madera_model->getDetalleIngresoVehiculoAcerrado();
-		
-		return response()->json($detalle_ingreso_acerrado);
+		//dd($detalle_ingreso_acerrado);exit();
+		return response()->json([
+			'detalle_ingreso_acerrado' => $detalle_ingreso_acerrado
+		]);
 	}
 }
