@@ -1152,7 +1152,7 @@ class ComprobanteController extends Controller
                 //print_r($id_orden_compra);
                 //exit();
 
-                if ($id_orden_compra == "" || $id_proforma == "") {                    
+                if ($id_orden_compra == "") {
                     $id_user = Auth::user()->id;
                     $orden_compra_model = new OrdenCompra;
                     $codigo_orden_compra = $orden_compra_model->getCodigoOrdenCompra(2);
@@ -1160,7 +1160,7 @@ class ComprobanteController extends Controller
                     $orden_compra = new OrdenCompra;
                     if($tipoF == 'FT'){                         
                         $orden_compra->id_empresa_compra = $ubicacion_id;
-                        $orden_compra->id_tipo_documento = 1;
+                        $orden_compra->id_tipo_documento = 2;
                          $orden_compra->id_tipo_cliente = '5';
                     }else { //if($tipoF == 'BV'){                        
                         $orden_compra->id_persona = $id_persona_act;
@@ -1197,6 +1197,9 @@ class ComprobanteController extends Controller
                     $orden_compra->save();
                     $id_orden_compra = $orden_compra->id;
                     
+                    $act_factura = Comprobante::find($id_factura);
+                    $act_factura->orden_compra = $id_orden_compra; 
+                    $act_factura->save();
                     //print_r($id_orden_compra);
                     //exit();
 
