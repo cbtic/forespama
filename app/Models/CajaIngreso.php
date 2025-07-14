@@ -8,7 +8,7 @@ use DB;
 
 class CajaIngreso extends Model
 {
-    function getCajaIngresoByusuario($id_usuario,$tipo){
+    function getCajaIngresoByusuario($id_usuario,$tipo,$id_sede){
 
         $cad = "select t1.id,t1.id_caja,t1.saldo_inicial,
 		(select coalesce(Sum(total),0) from comprobantes where id_caja = t1.id_caja And fecha >= fecha_inicio And fecha <= (case when fecha_fin is null then now() else fecha_fin end))total_recaudado,
@@ -19,6 +19,7 @@ class CajaIngreso extends Model
 		inner join users t3 on t1.id_usuario = t3.id
         where t1.id_usuario= ".$id_usuario."
 		And t2.tipo= '".$tipo."'
+        and t2.sub_codigo = '".$id_sede."'
 		and t1.estado='1'
 		order by 1 desc
         limit 1";

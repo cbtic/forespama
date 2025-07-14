@@ -130,14 +130,103 @@ $(document).ready(function () {
 		}
 	});
 
+	/*
 	$('#tblValorizacion tbody').on('click', 'button.deleteFila', function () {
 		var obj = $(this);
+
+		//alert(obj.parent().parent().parent().find('.val_total').html()); 
+		//alert(obj.parent().parent().parent().find('.val_descuento').html());
+		//alert(obj.parent().parent().parent().find('.val_igv').html());
+		//alert(obj.parent().parent().parent().find('.val_stotal').html()); 		
+		//exit();
+
+		var total = $(this).parent().parent().parent().find('.val_total').html();
+		var descuento =  $(this).parent().parent().parent().find('.val_descuento').html();
+		var igv =  $(this).parent().parent().parent().find('.val_igv').html();
+		var stotal=  $(this).parent().parent().parent().find('.val_stotal').html();
+		var precio_venta=  $(this).parent().parent().parent().find('.val_precio_venta').html();
+		var cantidad=  $(this).parent().parent().parent().find('.val_cantidad').html();
+		
+
+		var deuda_ = $('#deudaTotales').val();
+		var descuento_ = $('#totalDescuento').val();
+		var total_ = $('#total').val();
+		var stotal_ = $('#stotal').val();
+		var igv_ = $('#igv').val();
+
+
+		total_productos = Number(deuda_) - Number(precio_venta)*Number(cantidad);
+		total_descuento = Number(descuento_) - Number(descuento);
+		total_pagar = Number(total_)- Number(total);
+		sub_total = Number(stotal_)- Number(stotal);
+		total_igv = Number(igv_) - Number(igv);
+
+
+		 $('#deudaTotales').val(total_productos);
+		 $('#totalDescuento').val(total_descuento);
+		 $('#igv').val(total_igv);
+		 $('#stotal').val(sub_total);
+		 $('#total').val(total_pagar);
+
 		obj.parent().parent().remove();
 		
 
 		//simulaPesarCarreta();
 		
 	});
+	*/
+
+	$('#tblValorizacion tbody').on('click', 'button.deleteFila', function () {
+		// Obtener la fila (tr) que contiene el botón clickeado
+		var row = $(this).closest('tr');
+		
+		// Obtener los valores de la fila
+		var total = row.find('.val_total').text();
+		var descuento = row.find('.val_descuento').text();
+		var igv = row.find('.val_igv').text();
+		var stotal = row.find('.val_stotal').text();
+		var precio_venta = row.find('.val_precio_venta').text();
+		var cantidad = row.find('.val_cantidad').text();
+		
+		// Obtener los valores totales
+		var deuda_ = $('#deudaTotales').val();
+		var descuento_ = $('#totalDescuento').val();
+		var total_ = $('#total').val();
+		var stotal_ = $('#stotal').val();
+		var igv_ = $('#igv').val();
+		
+		// Calcular nuevos totales
+		total_productos = Number(deuda_) - Number(precio_venta)*Number(cantidad);
+		total_descuento = Number(descuento_) - Number(descuento);
+		total_pagar = Number(total_)- Number(total);
+		sub_total = Number(stotal_)- Number(stotal);
+		total_igv = Number(igv_) - Number(igv);
+		
+		// Actualizar los totales
+		$('#deudaTotales').val(total_productos.toFixed(2));
+		$('#totalDescuento').val(total_descuento.toFixed(2));
+		$('#igv').val(total_igv.toFixed(2));
+		$('#stotal').val(sub_total.toFixed(2));
+		$('#total').val(total_pagar.toFixed(2));
+		
+		// Eliminar la fila
+		row.remove();
+		
+		// Opcional: Actualizar números de fila restantes
+		updateRowNumbers();
+	});
+
+	// Función para actualizar números de fila (opcional)
+	function updateRowNumbers() {
+		$('#tblValorizacion tbody tr').each(function(index) {
+			$(this).find('td:first').text(index + 1);
+			// Actualizar también el input hidden del índice si es necesario
+			$(this).find('input[name*="[item]"]').val(index + 1);
+		});
+	}
+
+
+
 
 /*
 	$( '#cboTipoConcepto_b' ).select2( {
@@ -2991,15 +3080,15 @@ function modal_productos(id){
 
 	if(msg!=""){
 	
-		bootbox.alert(msg); 
+		//bootbox.alert(msg); 
 			
-		return false;
+		//return false;
 
 	}
 	else{
 
 
-		$("#almacen_salida").prop('disabled', true);
+		//$("#almacen_salida").prop('disabled', true);
 
 
 		$(".modal-dialog").css("width","85%");
@@ -3067,44 +3156,33 @@ function AddFila(){
 		
 	var newRow = "";
 	var ind = $('#tblValorizacion tbody tr').length;
-	//var tabindex = 11;
-	//var nuevalperiodo = "";
 
-	//var f = new Date();
 	var f = new Date();
 	var fecha_ = f.getDate() + "-"+ f.getMonth()+ "-" +f.getFullYear();
 
 	var producto = $('#txtProducto').val();
-
 	var nombre_producto = $('#nombre_producto').val();
 	var cantidad = $('#txtCantidad').val();
 	var precio_venta = $('#txtPrecioVenta').val();
 	var valor_venta = $('#txtValorVenta').val();
 	var igv = $('#txtIgv').val();
 	var total = $('#txtTotal').val();
-
 	var um = $('#txtUM').val();
 	var valor_unitario = $('#txtValorUnitario').val();
 	var valor_venta_bruto = $('#txtValorVB').val();
 	var id_descuento = $('id_descuento').val();
 	var descuento = $('#txtDescuento').val();
-
 	var id_producto = $('#id_producto').val();
 	var id_um = $('#id_um').val();
 	var codigo_producto = $('#codigo_producto').val();
-
 	var id_moneda = 1;
 	var moneda = "SOLES";
-	var abreviatura = "";
+	var abreviatura = $('#txtAbreviatura').val();
 	var cod_contable = "";
 
 	var vencio = "";
-
 	var id_concepto = 1;
 	var id_tipo_afectacion = 0;
-
-	
-
 	var cont = ind+1;
 
 	$("#btnProforma").prop('disabled', true);
@@ -3135,7 +3213,7 @@ function AddFila(){
 	//var total = $('#').val();
 	//var total = $('#').val();
 
-	newRow +='<tr>';
+	newRow +='<tr style="font-size:13px"  >';
 
 	//newRow +='<td>';
 	//	newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][producto]" value="'+producto+'" />';
@@ -3174,14 +3252,20 @@ function AddFila(){
 		newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][id_tipo_afectacion]" value="'+id_tipo_afectacion+'" />';
 	newRow +='</td>';
 	//newRow +='<td><input type="text"  value="'+producto+'" placeholder="" class="form-control form-control-sm" /></td>';
+	newRow +='<td class="text-left" style="font-size:8.0pt">'+codigo_producto+'<span class=""></span></td>';
 	newRow +='<td class="text-left" style="font-size:8.0pt">'+producto+'<span class=""></span></td>';
-	newRow +='<td class="text-center" style="font-size:8.0pt">'+cantidad+'<span class=""></span></td>';	
-	newRow +='<td class="text-right" style="font-size:8.0pt">'+Number(precio_venta).toFixed(2)+'<span class=""></span></td>';
-	newRow +='<td class="text-right" style="font-size:8.0pt">'+Number(descuento).toFixed(2)+'<span class=""></span></td>';
-
-	newRow +='<td class="text-right" style="font-size:8.0pt">'+Number(valor_venta).toFixed(2)+'<span class=""></span></td>';
-	newRow +='<td class="text-right" style="font-size:8.0pt">'+Number(igv).toFixed(2)+'<span class=""></span></td>';
-	newRow +='<td class="text-right" style="font-size:8.0pt">'+Number(total).toFixed(2)+'<span class=""></span></td>';
+	//newRow +='<td class="text-center" style="font-size:8.0pt">'+cantidad+'<span class=""></span></td>';	
+	newRow += '<td class="text-right" style="font-size:8.0pt"><span class="val_cantidad" style="font-size:inherit">'+Number(cantidad).toFixed(2)+'</span></td>';
+	//newRow +='<td class="text-right" style="font-size:8.0pt">'+Number(precio_venta).toFixed(2)+'<span class=""></span></td>';
+	newRow += '<td class="text-right" style="font-size:8.0pt"><span class="val_precio_venta" style="font-size:inherit">'+Number(precio_venta).toFixed(2)+'</span></td>';
+	//newRow +='<td class="text-right" style="font-size:8.0pt">'+Number(descuento).toFixed(2)+'<span class=""></span></td>';
+	newRow += '<td class="text-right" style="font-size:8.0pt"><span class="val_descuento" style="font-size:inherit">'+Number(descuento).toFixed(2)+'</span></td>';
+	//newRow +='<td class="text-right" style="font-size:8.0pt">'+Number(valor_venta).toFixed(2)+'<span class=""></span></td>';
+	newRow += '<td class="text-right" style="font-size:8.0pt"><span class="val_stotal" style="font-size:inherit">'+Number(valor_venta).toFixed(2)+'</span></td>';
+	//newRow +='<td class="text-right" style="font-size:8.0pt">'+Number(igv).toFixed(2)+'<span class=""></span></td>';
+	newRow += '<td class="text-right" style="font-size:8.0pt"><span class="val_igv" style="font-size:inherit">'+Number(igv).toFixed(2)+'</span></td>';
+	//newRow +='<td class="text-right" style="font-size:8.0pt">'+Number(total).toFixed(2)+'<span class=""></span></td>';
+	newRow += '<td class="text-right" style="font-size:8.0pt"><span class="val_total" style="font-size:inherit">'+Number(total).toFixed(2)+'</span></td>';
 
 	newRow +='<td><button type="button" class="btn btn-danger deleteFila btn-xs" style="margin-left:4px"><i class="fa fa-times"></i></button></td>';
 

@@ -22,6 +22,9 @@ use App\Models\SodimacFactura;
 use App\Models\SodimacFacturaDetalle;
 use App\Models\ComprobanteSodimacHistorico;
 use App\Models\Tienda;
+use App\Models\OrdenCompra;
+use App\Models\OrdenCompraDetalle;
+
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
 
@@ -103,11 +106,12 @@ class ComprobanteController extends Controller
 
         
         //print_r($id_tipo_afectacion_pp); exit();
+        $id_sede = session('id_sede');
 
 		if($id_caja==""){
 			$valorizaciones_model = new Valorizacione;
 			$id_user = Auth::user()->id;
-			$caja_usuario = $valorizaciones_model->getCajaIngresoByusuario($id_user,'27');
+			$caja_usuario = $valorizaciones_model->getCajaIngresoByusuario($id_user,'27',$id_sede);
 			//$id_caja = $caja_usuario->id_caja;
 			$id_caja = (isset($caja_usuario->id_caja))?$caja_usuario->id_caja:0;
 		}
@@ -168,7 +172,7 @@ class ComprobanteController extends Controller
             
            // echo "id_tipo_afectacion_pp=>".$id_tipo_afectacion_pp."<br>";
 /*
-            if ($id_tipo_afectacion_pp=="30"){
+            if ($id_tipo_afectacion_pp=="20"){
                 $stotal = $total;
                 $igv   = 0;
             }
@@ -420,11 +424,12 @@ class ComprobanteController extends Controller
 
 
 		//if($id_caja=="")$id_caja = Session::get('id_caja');
+        $id_sede = session('id_sede');
 
 		if($id_caja==""){
 			$valorizaciones_model = new Valorizacione;
 			$id_user = Auth::user()->id;
-			$caja_usuario = $valorizaciones_model->getCajaIngresoByusuario($id_user,'CARRETA');
+			$caja_usuario = $valorizaciones_model->getCajaIngresoByusuario($id_user,'CARRETA',$id_sede);
 			//$id_caja = $caja_usuario->id_caja;
 			$id_caja = (isset($caja_usuario->id_caja))?$caja_usuario->id_caja:0;
 		}
@@ -925,7 +930,7 @@ class ComprobanteController extends Controller
                 //$id_orden_compra = 45122;
 
                 //print_r($id_orden_compra);
-                if($id_orden_compra_=="") $id_orden_compra_= -1;
+                if($id_orden_compra_=="") $id_orden_compra_= -999;
                 //echo($id_orden_compra_);
                 //exit();
 
@@ -1100,7 +1105,8 @@ class ComprobanteController extends Controller
                     }
                     $descuento = $value['descuento'];
                     if ($value['descuento'] == '') $descuento = 0;
-                    $id_factura_detalle = $facturas_model->registrar_factura_moneda($serieF, $fac_numero, $tipoF, 0, $value['id_concepto'], $total, $value['descripcion'], $value['cod_contable'], $value['item'], $id_factura, $descuento,    'd',     $id_user,  $id_moneda, $value['cantidad'],$fechaF);
+                    //$id_factura_detalle = $facturas_model->registrar_factura_moneda($serieF, $fac_numero, $tipoF, 0, $value['id_concepto'], $total, $value['descripcion'], $value['cod_contable'], $value['item'], $id_factura, $descuento,    'd',     $id_user,  $id_moneda, $value['cantidad'],$fechaF);
+                    $id_factura_detalle = $facturas_model->registrar_factura_moneda($serieF, $fac_numero, $tipoF, 0,  $id_tipo_afectacion_pp, $total, $value['descripcion'], $value['cod_contable'], $value['item'], $id_factura, $descuento,    'd',     $id_user,  $id_moneda, $value['cantidad'],$fechaF);
 
                     // print_r($value);
                     //exit();
@@ -1141,14 +1147,88 @@ class ComprobanteController extends Controller
                 $id_proforma = $request->id_proforma;
                 $id_orden_compra = $request->id_orden_compra;
 
-
-
-                //echo($pk_registro);
+                //print_r($id_proforma);
+                //print_r($id_orden_compra);
                 //exit();
 
+                if ($id_orden_compra == "" || $id_proforma == "") {                    
+                    $id_user = Auth::user()->id;
+                    $orden_compra_model = new OrdenCompra;
+                    $codigo_orden_compra = $orden_compra_model->getCodigoOrdenCompra(2);
 
+                    $orden_compra = new OrdenCompra;
+                    if($tipoF == 'FT'){                         
+                        $orden_compra->id_empresa_compra = $ubicacion_id;
+                        $orden_compra->id_tipo_documento = 1;
+                         $orden_compra->id_tipo_cliente = '5';
+                    }else { //if($tipoF == 'BV'){                        
+                        $orden_compra->id_persona = $id_persona_act;
+                        $orden_compra->id_tipo_documento = 2;
+                        $orden_compra->id_tipo_cliente = '1';
+                    }
+                   if($id_tipo_afectacion_pp =='20'){
+                        $orden_compra->igv_compra = 1;
+                        $orden_compra->id_almacen_salida = 2;
+                        $orden_compra->id_unidad_origen = 4;
+                   }else{
+                        $orden_compra->igv_compra = 2;
+                        $orden_compra->id_almacen_salida = 3;
+                        $orden_compra->id_unidad_origen = 4;
+                   }
+                    
+                    $orden_compra->id_empresa_vende = 30;
+                    $orden_compra->fecha_orden_compra = Carbon::now()->toDateString();
+                    $orden_compra->numero_orden_compra = $codigo_orden_compra[0]->codigo;
+                    $orden_compra->tienda_asignada = '0';
+                    $orden_compra->cerrado = '1';                    
+                    //$orden_compra->id_almacen_destino =3;
+                    $orden_compra->id_usuario_inserta = $id_user;
+                    $orden_compra->estado = '1';                    
+                    $orden_compra->id_vendedor = 3;
+                    $orden_compra->estado_pedido = '1';                     
+                    $orden_compra->total =  $request->totalF;
+                    $orden_compra->sub_total =  $request->gravadas;
+                    $orden_compra->igv =  $request->igv;
+                    $orden_compra->id_moneda = 1;
+                    $orden_compra->moneda =  "SOLES";
+                    $orden_compra->descuento =  0;
+                    
+                    $orden_compra->save();
+                    $id_orden_compra = $orden_compra->id;
+                    
+                    //print_r($id_orden_compra);
+                    //exit();
+
+                    foreach($tarifa as $key => $value) { 
+                        $orden_compra_detalle = new OrdenCompraDetalle;   
+
+                        $orden_compra_detalle->id_orden_compra = $id_orden_compra;
+                        $orden_compra_detalle->id_producto = $value['id_producto'];
+                        $orden_compra_detalle->cantidad_requerida = $value['cantidad'];
+                        $orden_compra_detalle->id_estado_producto = '1';
+                        $orden_compra_detalle->precio = $value['pu'];
+                        $orden_compra_detalle->valor_venta_bruto = $value['valor_venta_bruto'];
+                        $orden_compra_detalle->precio_venta = $value['pv'];
+                        $orden_compra_detalle->valor_venta = $value['valor_venta'];
+                        $orden_compra_detalle->sub_total =$value['valor_venta'];
+                        $orden_compra_detalle->igv =  $value['igv'];
+                        $orden_compra_detalle->total = $value['total'];                        
+                        $orden_compra_detalle->id_unidad_medida = $value['id_unidad_medida'];
+                        $orden_compra_detalle->id_marca = 278;                        
+                        //$orden_compra_detalle->id_descuento = $value['id_descuento'];
+                        $orden_compra_detalle->descuento = $value['descuento']; 
+                        $orden_compra_detalle->estado = '1';
+                        $orden_compra_detalle->cerrado = '1';
+                        $orden_compra_detalle->id_usuario_inserta = $id_user;
+
+                        $orden_compra_detalle->save();
+
+                    }     
+                                   
+                } 
+
+                
                 foreach ($tarifa as $key => $value) {
-
 
                     if ($id_orden_compra != "") {
                         $id_modulo = "1";
@@ -2362,11 +2442,11 @@ class ComprobanteController extends Controller
             $trans = "FE";
         }
         
-        
+        $id_sede = session('id_sede');
 		if($id_caja==""){
 			$valorizaciones_model = new Valorizacione;
 			$id_user = Auth::user()->id;
-			$caja_usuario = $valorizaciones_model->getCajaIngresoByusuario($id_user,'91');
+			$caja_usuario = $valorizaciones_model->getCajaIngresoByusuario($id_user,'91',$id_sede);
 			//$id_caja = $caja_usuario->id_caja;
 
 			$id_caja = (isset($caja_usuario->id_caja))?$caja_usuario->id_caja:0;
@@ -2503,11 +2583,11 @@ class ComprobanteController extends Controller
             $trans = "FE";
         }
         
-        
+        $id_sede = session('id_sede');
 		if($id_caja==""){
 			$valorizaciones_model = new Valorizacione;
 			$id_user = Auth::user()->id;
-			$caja_usuario = $valorizaciones_model->getCajaIngresoByusuario($id_user,'91');
+			$caja_usuario = $valorizaciones_model->getCajaIngresoByusuario($id_user,'91',$id_sede);
 			//$id_caja = $caja_usuario->id_caja;
 
 			$id_caja = (isset($caja_usuario->id_caja))?$caja_usuario->id_caja:0;

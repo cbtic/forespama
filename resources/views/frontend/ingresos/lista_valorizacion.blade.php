@@ -19,7 +19,7 @@ foreach($valorizacion as $key=>$row):
 	$n++;
 	$monto = $row->monto;
 
-	if($id_tipo_afectacion=='30'){
+	if($id_tipo_afectacion=='20'){
 		$stotal =str_replace(",","",number_format($monto));
 		$igv_   = 0;
 	

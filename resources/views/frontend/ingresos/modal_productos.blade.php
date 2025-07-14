@@ -349,11 +349,13 @@
 
 						//alert(obj.um);				
 					$('#txtUM').val(obj.um);
-					$('#id_um').val(obj.id_unidad_medida);
+					$('#id_um').val(obj.id_unidad_medida);					
 					$('#codigo_producto').val(obj.codigo);
 					$('#id_producto').val(obj.id);
 					$('#nombre_producto').val(obj.nombre_producto);
 					$('#txtPrecioVenta').val(obj.costo_unitario);
+					$('#txtAbreviatura').val(obj.abreviatura);
+					
 					calcular();
 
 					});
@@ -508,6 +510,7 @@
 									<input type="hidden" name="id_empresa_pr" id="id_empresa_pr" value="">
 									<input type="hidden" name="id_tipo_afectacion" id="id_tipo_afectacion" value="{{ session('id_afectacion_sede') }}">
 									<input type="hidden" name="id_producto" id="id_producto" value="">
+									<input type="hidden" name="txtAbreviatura" id="txtAbreviatura" value="">
 							
 									<input type="hidden" name="id_descuento" id="id_descuento" value="1">
 

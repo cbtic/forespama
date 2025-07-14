@@ -128,11 +128,12 @@ class TablaMaestra extends Model
         return $obj;
     }
 
-    function getCaja($tipo){
+    function getCaja($tipo,$id_sede){
 
         $cad = "Select t1.codigo id,t1.denominacion 
 		from tabla_maestras t1
-		where t1.tipo='".$tipo."' and t1.estado='1' 
+		where t1.tipo='".$tipo."' and t1.estado='1'
+        and t1.sub_codigo = '".$id_sede."'  
 		And t1.codigo::int not in (select distinct id_caja from caja_ingresos where estado='1')
 		order by t1.orden"; 
     

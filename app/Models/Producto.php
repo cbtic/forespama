@@ -111,7 +111,7 @@ class Producto extends Model
 
         if ($tipo == '') $tipo_v =" ";
 
-        $cad = "SELECT p.id, p.codigo ||' - '|| p.denominacion denominacion,   p.denominacion producto, p.codigo,  p.id_unidad_medida, um.denominacion um,  p.stock_actual, 
+        $cad = "SELECT p.id, p.codigo ||' - '|| p.denominacion denominacion,   p.denominacion producto, p.codigo,  p.id_unidad_producto id_unidad_medida, um.denominacion um, um.abreviatura,  p.stock_actual, 
                     p.id_moneda, m.denominacion moneda_desc, m.abreviatura moneda_abreviatura, p.costo_unitario, p.numero_corrrelativo, p.id_tipo_origen_producto,
                     case when  e.id_empresa = '".$id_empresa."' then 
                     (SELECT pe.codigo_producto ||'-'|| pe.descripcion_producto||' ('|| pe.codigo_empresa||'-'|| pe. descripcion_empresa||')'  
@@ -119,7 +119,7 @@ class Producto extends Model
                     where pe.id_empresa = e.id_empresa and pe.id_producto = p.id 
                     )	else p.codigo ||'-'|| p.denominacion end  denominacion
                 from productos p
-                    left join tabla_maestras um on um.codigo::int=p.id_unidad_medida and um.tipo = '43'
+                    left join tabla_maestras um on um.codigo::int=p.id_unidad_producto and um.tipo = '43'
                     left join tabla_maestras m on m.codigo::int=p.id_moneda and m.tipo = '1'
                     left join equivalencia_productos e on e.id_producto = p.id
                 where p.estado = '1' 
@@ -133,7 +133,7 @@ class Producto extends Model
                 order by p.denominacion "
         
 		;
-       // print_r($cad);
+        //print_r($cad);
 
 		$data = DB::select($cad);
         return $data;
@@ -142,7 +142,7 @@ class Producto extends Model
     function getProductoEquiById($id,$id_empresa, $origen){
 
 
-        $cad = "SELECT p.id, p.codigo ||' - '|| p.denominacion denominacion,   p.denominacion producto, p.codigo,  p.id_unidad_medida, um.denominacion um,  p.stock_actual, 
+        $cad = "SELECT p.id, p.codigo ||' - '|| p.denominacion denominacion,   p.denominacion producto, p.codigo,  p.id_unidad_producto id_unidad_medida, um.denominacion um, um.abreviatura, p.stock_actual, 
                     p.id_moneda, m.denominacion moneda_desc, m.abreviatura moneda_abreviatura, p.costo_unitario, p.numero_corrrelativo, p.id_tipo_origen_producto,
                     case when  e.id_empresa = '".$id_empresa."' then 
                     (SELECT pe.codigo_producto ||'-'|| pe.descripcion_producto||' ('|| pe.codigo_empresa||'-'|| pe. descripcion_empresa||')'  
@@ -150,7 +150,7 @@ class Producto extends Model
                     where pe.id_empresa = e.id_empresa and pe.id_producto = p.id 
                     )	else p.codigo ||'-'|| p.denominacion end  denominacion                    
                 from productos p
-                    left join tabla_maestras um on um.codigo::int=p.id_unidad_medida and um.tipo = '43'
+                    left join tabla_maestras um on um.codigo::int=p.id_unidad_producto and um.tipo = '43'
                     left join tabla_maestras m on m.codigo::int=p.id_moneda and m.tipo = '1'
                     left join equivalencia_productos e on e.id_producto = p.id
                 where  

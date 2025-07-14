@@ -540,7 +540,7 @@ function fn_save(){
 				$('#divNumeroF').show();
 
 				//alert(result.id_factura);
-				//exists();
+				//exit();
 
 				if (result.msg==""){
 					location.href=urlApp+"/comprobante/"+result.id_factura;

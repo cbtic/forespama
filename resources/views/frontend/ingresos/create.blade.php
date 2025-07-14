@@ -306,6 +306,7 @@
         height: 30px;
         cursor: pointer
     }
+
 </style>
 
 
@@ -578,7 +579,10 @@
                                                     <input type="hidden" readonly name="numero_cuotas_pp" id="numero_cuotas_pp" value="<?php echo !empty($pronto_pago->numero_cuotas) ? $pronto_pago->numero_cuotas : '0'  ?>" class="form-control form-control-sm">
                                                     <input type="hidden" readonly name="id_concepto_pp" id="id_concepto_pp" value="<?php echo !empty($concepto->id) ? $concepto->id : '0'   ?>" class="form-control form-control-sm">
                                                     <input type="hidden" readonly name="importe_pp" id="importe_pp" value="<?php echo !empty($concepto->importe) ? $concepto->importe : '0' ?>" class="form-control form-control-sm">
-                                                    <input type="hidden" readonly name="id_tipo_afectacion_pp" id="id_tipo_afectacion_pp" value="<?php echo !empty($concepto->id_tipo_afectacion) ? $concepto->id_tipo_afectacion : '0' ?>" class="form-control form-control-sm">
+<!--
+                                                    <input type="hidden" readonly name="id_tipo_afectacion_pp" id="id_tipo_afectacion_pp" value="<?//php echo !empty($concepto->id_tipo_afectacion) ? $concepto->id_tipo_afectacion : '0' ?>" class="form-control form-control-sm">
+                                                    -->
+                                                    <input type="hidden" readonly name="id_tipo_afectacion_pp" id="id_tipo_afectacion_pp" value="<?php echo !empty($id_afectacion_sede) ? $id_afectacion_sede : '0' ?>" class="form-control form-control-sm">                                                    
                                                     <input type="hidden" readonly name="SelFracciona" id="SelFracciona" value="" class="form-control form-control-sm">
                                                     <input type="hidden" readonly name="Exonerado" id="Exonerado" value="" class="form-control form-control-sm">
                                                     <input type="hidden" readonly name="mes_deuda" id="mes_deuda" value="" class="form-control form-control-sm">
@@ -789,20 +793,21 @@
                                                     </label>
                                                 </div>
                                             </div>
-
+<!--
                                             <div class="col-lg-4 col-md-3 col-sm-12 col-xs-12" >                                                
                                                 <div id="divAlmacen" class="form-group form-group-sm" style="display:none">
                                                     <select name="almacen_salida" id="almacen_salida" class="form-control form-control-sm" onchange="//actualizarSecciones(this)">
                                                         <option value="">Seleccionar Almacen</option>
                                                         <?php 
-                                                        foreach ($almacen as $row){?>
-                                                            <option value="<?php echo $row->id ?>" ><?php echo $row->denominacion ?></option>
+                                                        //foreach ($almacen as $row){?>
+                                                            <option value="<?php //echo $row->id ?>" ><?//php echo $row->denominacion ?></option>
                                                             <?php 
-                                                        }
+                                                        //}
                                                         ?>
                                                     </select>
                                                  </div>                                                    
                                             </div>
+                                                    -->
 
                                             <div class="col-lg-2 col-md-3 col-sm-12 col-xs-12" > 
                                                 <div id="divAgregar" class="form-group form-group-sm" style="display:none">

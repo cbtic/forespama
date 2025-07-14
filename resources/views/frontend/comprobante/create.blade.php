@@ -868,6 +868,7 @@
                                                             <input type="hidden" name="facturad[<?php echo $key ?>][monto]" value="<?php echo $fac['monto'] ?>" />
                                                             <input type="hidden" name="facturad[<?php echo $key ?>][moneda]" value="<?php echo $fac['moneda'] ?>" />
                                                             <input type="hidden" name="facturad[<?php echo $key ?>][id_moneda]" value="<?php echo $fac['id_moneda'] ?>" />
+                                                             <input type="hidden" name="facturad[<?php echo $key ?>][id_descuento]" value="<?php echo $fac['id_descuento'] ?>" />
                                                             <input type="hidden" name="facturad[<?php echo $key ?>][descuento]" value="<?php echo $fac['descuento'] ?>" />
                                                             <input type="hidden" name="facturad[<?php echo $key ?>][cod_contable]" value="<?php echo $fac['cod_contable'] ?>" />
 
@@ -882,6 +883,10 @@
                                                             <input type="hidden" name="facturad[<?php echo $key ?>][valor_venta_bruto]" value="<?php echo $fac['valor_venta_bruto'] ?>" />
                                                             <input type="hidden" name="facturad[<?php echo $key ?>][valor_venta]" value="<?php echo $fac['vv'] ?>" />
                                                             <input type="hidden" name="facturad[<?php echo $key ?>][codigo_producto]" value="<?php echo $fac['codigo_producto'] ?>" />
+                                                            <input type="hidden" name="facturad[<?php echo $key ?>][id_producto]" value="<?php echo $fac['id_producto'] ?>" />
+                                                            <input type="hidden" name="facturad[<?php echo $key ?>][id_unidad_medida]" value="<?php echo $fac['id_unidad_medida'] ?>" />
+
+                                                            
 
                                                             <input type="hidden" name="facturad[<?php echo $key ?>][abreviatura]" value="<?php echo $fac['abreviatura'] ?>" />
 

@@ -50,12 +50,15 @@ class IngresoController extends Controller
         $persona = new Persona;
         $caja_model = new TablaMaestra;
         $caja_ingreso_model = new CajaIngreso();
-        //$pronto_pago_model = new ProntoPago;
-        $caja = $caja_model->getCaja('27');        
-        $caja_usuario = $caja_ingreso_model->getCajaIngresoByusuario($id_user,'27');
+ 
+        $id_sede = session('id_sede');
 
-        $caja_dolares = $caja_model->getCaja('62');
-        $caja_usuario_dolares = $caja_ingreso_model->getCajaIngresoByusuario($id_user,'62');
+        //$pronto_pago_model = new ProntoPago;
+        $caja = $caja_model->getCaja('27',$id_sede);        
+        $caja_usuario = $caja_ingreso_model->getCajaIngresoByusuario($id_user,'27',$id_sede);
+
+        $caja_dolares = $caja_model->getCaja('62',$id_sede);
+        $caja_usuario_dolares = $caja_ingreso_model->getCajaIngresoByusuario($id_user,'62',$id_sede);
 
         //$tipo_documento = $caja_model->getMaestroByTipo(9);
         $pronto_pago = ProntoPago::where("estado","1")->first();
@@ -89,10 +92,11 @@ class IngresoController extends Controller
         $almacen = $almacen_model->getAlmacenAll();
         //$almacen = Almacene::all();
         $unidad_origen = $tablaMaestra_model->getMaestroByTipo(50);
-        //$id_sede = session('id_sede');
+       
         //$sede = Sede::find($id_sede);
+        $id_afectacion_sede = session('id_afectacion_sede');
             
-        return view('frontend.ingresos.create',compact('persona','caja','caja_usuario','tipo_documento','pronto_pago', 'concepto','mes','producto','marca','estado_bien','unidad','descuento','caja_dolares','caja_usuario_dolares', 'almacen'));
+        return view('frontend.ingresos.create',compact('persona','caja','caja_usuario','tipo_documento','pronto_pago', 'concepto','mes','producto','marca','estado_bien','unidad','descuento','caja_dolares','caja_usuario_dolares', 'almacen','id_afectacion_sede'));
 
     }
 
@@ -1194,9 +1198,10 @@ class IngresoController extends Controller
         $persona = new Persona;
         $caja_model = new TablaMaestra;
         $caja_ingreso_model = new CajaIngreso();
+        $id_sede = session('id_sede');
         //$pronto_pago_model = new ProntoPago;
-        $caja = $caja_model->getCaja('91');        
-        $caja_usuario = $caja_ingreso_model->getCajaIngresoByusuario($id_user,'91');
+        $caja = $caja_model->getCaja('91',$id_sede);        
+        $caja_usuario = $caja_ingreso_model->getCajaIngresoByusuario($id_user,'91',$id_sede);
         $tipo_documento = $caja_model->getMaestroByTipo(9);
        
                 
