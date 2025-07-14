@@ -187,7 +187,8 @@ class ComprobanteController extends Controller
 
             //$factura_detalle->id_modulo = 3;
 
-           // print_r($request->comprobante_detalles);
+            print_r($request->comprobante_detalles);
+            exit();
            
             $ind = 0;
             //$id_concepto_det=0;

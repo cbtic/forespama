@@ -176,9 +176,13 @@ $(document).ready(function () {
 	});
 	*/
 
+
+	/*
 	$('#tblValorizacion tbody').on('click', 'button.deleteFila', function () {
 		// Obtener la fila (tr) que contiene el botón clickeado
 		var row = $(this).closest('tr');
+
+
 		
 		// Obtener los valores de la fila
 		var total = row.find('.val_total').text();
@@ -196,11 +200,16 @@ $(document).ready(function () {
 		var igv_ = $('#igv').val();
 		
 		// Calcular nuevos totales
-		total_productos = Number(deuda_) - Number(precio_venta)*Number(cantidad);
-		total_descuento = Number(descuento_) - Number(descuento);
-		total_pagar = Number(total_)- Number(total);
-		sub_total = Number(stotal_)- Number(stotal);
-		total_igv = Number(igv_) - Number(igv);
+		//total_productos = Number(deuda_) - Number(precio_venta)*Number(cantidad);
+		total_productos = parseFloat(deuda_) - parseFloat(precio_venta)*parseFloat(cantidad);
+		//total_descuento = Number(descuento_) - Number(descuento);
+		total_descuento = parseFloat(descuento_) - parseFloat(descuento);
+		//total_pagar = Number(total_)- Number(total);
+		total_pagar = parseFloat(total_)- parseFloat(total);
+		//sub_total = Number(stotal_)- Number(stotal);
+		sub_total = parseFloat(stotal_)- parseFloat(stotal);
+		//total_igv = Number(igv_) - Number(igv);
+		total_igv = parseFloat(igv_) - parseFloat(igv);
 		
 		// Actualizar los totales
 		$('#deudaTotales').val(total_productos.toFixed(2));
@@ -224,7 +233,74 @@ $(document).ready(function () {
 			$(this).find('input[name*="[item]"]').val(index + 1);
 		});
 	}
+*/
 
+	$('#tblValorizacion tbody').on('click', 'button.deleteFila', function () {
+		var row = $(this).closest('tr');
+		var rowIndex = row.index(); // Obtiene el índice de la fila
+
+		alert(rowIndex);exit();
+		
+		// 1. Eliminar los inputs del formulario
+		$('input[name^="valorizacion_detalle['+rowIndex+']"]').remove();
+		
+		// Obtener los valores de la fila
+		var total = row.find('.val_total').text();
+		var descuento = row.find('.val_descuento').text();
+		var igv = row.find('.val_igv').text();
+		var stotal = row.find('.val_stotal').text();
+		var precio_venta = row.find('.val_precio_venta').text();
+		var cantidad = row.find('.val_cantidad').text();
+		
+		// Obtener los valores totales
+		var deuda_ = $('#deudaTotales').val();
+		var descuento_ = $('#totalDescuento').val();
+		var total_ = $('#total').val();
+		var stotal_ = $('#stotal').val();
+		var igv_ = $('#igv').val();
+		
+		// Calcular nuevos totales
+		//total_productos = Number(deuda_) - Number(precio_venta)*Number(cantidad);
+		total_productos = parseFloat(deuda_) - parseFloat(precio_venta)*parseFloat(cantidad);
+		//total_descuento = Number(descuento_) - Number(descuento);
+		total_descuento = parseFloat(descuento_) - parseFloat(descuento);
+		//total_pagar = Number(total_)- Number(total);
+		total_pagar = parseFloat(total_)- parseFloat(total);
+		//sub_total = Number(stotal_)- Number(stotal);
+		sub_total = parseFloat(stotal_)- parseFloat(stotal);
+		//total_igv = Number(igv_) - Number(igv);
+		total_igv = parseFloat(igv_) - parseFloat(igv);
+		
+		// Actualizar los totales
+		$('#deudaTotales').val(total_productos.toFixed(2));
+		$('#totalDescuento').val(total_descuento.toFixed(2));
+		$('#igv').val(total_igv.toFixed(2));
+		$('#stotal').val(sub_total.toFixed(2));
+		$('#total').val(total_pagar.toFixed(2));
+		
+		
+		// 3. Eliminar la fila
+		row.remove();
+		
+		// 4. Reindexar las filas restantes
+		reindexFormInputs();
+	});
+
+	function reindexFormInputs() {
+		$('#tblValorizacion tbody tr').each(function(newIndex) {
+			var oldIndex = $(this).index();
+			
+			// Actualizar los nombres de los inputs
+			$(this).find('input').each(function() {
+				var name = $(this).attr('name');
+				name = name.replace(/\[\d+\]/g, '['+newIndex+']');
+				$(this).attr('name', name);
+			});
+			
+			// Actualizar el número de fila visual
+			$(this).find('td:first').text(newIndex + 1);
+		});
+	}
 
 
 
@@ -3213,11 +3289,12 @@ function AddFila(){
 	//var total = $('#').val();
 	//var total = $('#').val();
 
-	newRow +='<tr style="font-size:13px"  >';
-
+	//newRow +='<tr style="font-size:13px"  >';
+	newRow += '<tr data-row-id="'+cont+'" data-precio="'+precio_venta+'" data-cantidad="'+cantidad+'">';
 	//newRow +='<td>';
 	//	newRow +='<input type="hidden"  name="valorizacion_detalle['+ind+'][producto]" value="'+producto+'" />';
 	//newRow +='</td>';
+	
 
 	newRow +='<td class="text-left" style="font-size:8.0pt">'+cont+'<span class=""></span>';
 
