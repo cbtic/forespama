@@ -690,4 +690,4 @@ Route::get('acerrado_madera/create', [AcerradoMaderaController::class, 'create']
 Route::post('acerrado_madera/listar_acerrado_madera_ajax', [AcerradoMaderaController::class, 'listar_acerrado_madera_ajax'])->name('acerrado_madera.listar_acerrado_madera_ajax');
 Route::post('acerrado_madera/send_acerrado_madera', [AcerradoMaderaController::class, 'send_acerrado_madera'])->name('acerrado_madera.send_acerrado_madera');
 Route::get('acerrado_madera/modal_acerrado_madera/{id}', [AcerradoMaderaController::class, 'modal_acerrado_madera'])->name('acerrado_madera.modal_acerrado_madera');
-Route::get('acerrado_madera/obtener_cantidad_madera/{id_producto}', [AcerradoMaderaController::class, 'obtener_cantidad_madera'])->name('acerrado_madera.obtener_cantidad_madera');
+Route::get('acerrado_madera/cargar_detalle_ingreso_vehiculo_acerrado', [AcerradoMaderaController::class, 'cargar_detalle_ingreso_vehiculo_acerrado'])->name('acerrado_madera.cargar_detalle_ingreso_vehiculo_acerrado');

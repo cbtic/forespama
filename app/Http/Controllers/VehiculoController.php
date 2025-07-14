@@ -286,7 +286,7 @@ class VehiculoController extends Controller
 
 			if($request->empresa !=""){
 
-				$vehiculo = Vehiculo::where('id',$request->empresa)->where('estado',1)->first();
+				$vehiculo = Vehiculo::where('placa',$request->placa)->where('estado',1)->first();
 				$id_vehiculo = $vehiculo->id;
 
 			}else{

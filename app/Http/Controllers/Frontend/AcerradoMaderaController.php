@@ -90,11 +90,11 @@ class AcerradoMaderaController extends Controller
 
     }
 
-    public function obtener_cantidad_madera($letra_empresa_cubicaje){
+    public function cargar_detalle_ingreso_vehiculo_acerrado(){
 		
 		$ingreso_vehiculo_tronco_tipo_madera_model = new IngresoVehiculoTroncoTipoMadera;
-		$cantidad = $ingreso_vehiculo_tronco_tipo_madera_model->getCantidadMaderaByLetraEmpresa($letra_empresa_cubicaje);
+		$detalle_ingreso_acerrado = $ingreso_vehiculo_tronco_tipo_madera_model->getDetalleIngresoVehiculoAcerrado();
 		
-		return response()->json($cantidad);
+		return response()->json($detalle_ingreso_acerrado);
 	}
 }

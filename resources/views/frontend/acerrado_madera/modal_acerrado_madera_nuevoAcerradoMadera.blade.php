@@ -135,6 +135,8 @@ $.mask.definitions['p'] = "[Mm]";
 */
 $(document).ready(function() {
 
+    cargarDetalleIngreso();
+
     $('#fecha').datepicker({
         autoclose: true,
 		format: 'yyyy-mm-dd',
@@ -142,8 +144,6 @@ $(document).ready(function() {
 		changeYear: true,
         language: 'es'
     });
-
-    $('#tipo_madera').select2({ width : '100%' })
 
 });
 
@@ -155,19 +155,6 @@ $('#openOverlayOpc').on('shown.bs.modal', function() {
 	 
 });
 
-function obtenerCodInterno(){
-
-    var id_producto = $('#producto').val();
-
-    $.ajax({
-        url: "/productos/obtener_producto/"+id_producto,
-        dataType: "json",
-        success: function(result){
-            //alert(result[0].codigo);
-            $('#codigo_producto').val(result[0].codigo);
-        }
-    });
-}
 
 function fn_save_madera_acerrado(){
 	
@@ -216,17 +203,42 @@ function fn_save_madera_acerrado(){
     }
 }
 
-function obtenerCantidadMadera(){
+function cargarDetalleIngreso(){
 
-    var letra_empresa_cubicaje = $('#letra_empresa_cubicaje').val();
-    $('#cantidad_ingreso').val("");
+    var id = $("#id").val();
+    const tbody = $('#divAcerradoMadera');
+
+    tbody.empty();
 
     $.ajax({
-        url: "/acerrado_madera/obtener_cantidad_madera/"+letra_empresa_cubicaje,
-        dataType: "json",
+        url: "/acerrado_madera/cargar_detalle_ingreso_vehiculo_acerrado/",
+        dataType: "GET",
         success: function(result){
-            //alert(result[0].codigo);
-            $('#cantidad_ingreso').val(result[0].cantidad);
+            
+            alert(result);
+
+            let n = 1;
+
+            var total_acumulado=0;
+
+            result.detalle_ingreso_acerrado.forEach(detalle_ingreso_acerrado => {
+
+                const row = `
+                    <tr>
+                        <td>${n}</td>
+                        <td style="width: 450px !important;display:block"><input name="id_ingreso_acerrado_detalle[]" id="id_ingreso_acerrado_detalle${n}" class="form-control form-control-sm" value="${detalle_ingreso_acerrado.id}" type="hidden"><input name="ruc[]" id="ruc${n}" class="form-control form-control-sm" value="${detalle_ingreso_acerrado.ruc}" type="text"></td>
+                        <td><input name="razon_social[]" id="razon_social${n}" class="form-control form-control-sm" value="${detalle_ingreso_acerrado.razon_social}" type="text"></td>
+                        <td><input name="placa[]" id="placa${n}" class="form-control form-control-sm" value="${detalle_ingreso_acerrado.placa}" type="text"></td>
+                        <td><input name="tipo_madera[]" id="tipo_madera${n}" class="form-control form-control-sm" value="${detalle_ingreso_acerrado.tipo_maderea}" type="text"></td>
+                        <td><input name="cantidad_ingreso[]" id="cantidad_ingreso${n}" class="form-control form-control-sm" value="${detalle_ingreso_acerrado.cantidad}" type="text"></td>
+                        <td><input name="cantidad_ingreso_produccion[]" id="cantidad_ingreso_produccion${n}" class="form-control form-control-sm" value="" type="text"></td>
+                        <td><input name="procentaje[]" id="procentaje${n}" class="form-control form-control-sm" value="" type="text"></td>
+                    </tr>
+                `;
+                tbody.append(row);
+                
+                n++;
+            });
         }
     });
 }
@@ -236,13 +248,6 @@ function obtenerCantidadMadera(){
 <body class="hold-transition skin-blue sidebar-mini">
     
     <div>
-		<!--
-        <section class="content-header">
-          <h1>
-            <small style="font-size: 20px">Programados del Medicos del dia <?php //echo $fecha_atencion?></small>
-          </h1>
-        </section>
-		-->
 		<div class="justify-content-center">
 
             <div class="card">
@@ -251,9 +256,9 @@ function obtenerCantidadMadera(){
                     <b>Ingreso Diario Producci&oacute;n de Madera Acerrada</b>
                 </div>
                 
-                    <div class="card-body">
-                        <form method="post" action="#" id="frmAcerradoMadera" name="frmAcerradoMadera">
-                        <div class="row">
+                <div class="card-body">
+                    <form method="post" action="#" id="frmAcerradoMadera" name="frmAcerradoMadera">
+                    <div class="row">
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding-top:5px;padding-bottom:20px">
                         <meta name="csrf-token" content="{{ csrf_token() }}">
                             <input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
@@ -268,152 +273,43 @@ function obtenerCantidadMadera(){
                                 <div class="col-lg-2">
                                     <input id="fecha" name="fecha" on class="form-control form-control-sm"  value="<?php echo /*isset($acerrado_madera) && $acerrado_madera->fecha_orden_compra ? $acerrado_madera->fecha_orden_compra :*/ date('Y-m-d'); ?>" type="text">
                                 </div>
-                                <!--<div class="col-lg-2">
-                                    Letra Empresa
-                                </div>
-                                <div class="col-lg-2">
-                                    <select name="letra_empresa_cubicaje" id="letra_empresa_cubicaje" class="form-control form-control-sm" onchange="obtenerCantidadMadera()">
-                                        <option value="">--Seleccionar--</option>
-                                        <?php
-                                        //foreach ($letra_empresa_cubicaje as $row){?>
-                                            <option value="<?php //echo $row->letra ?>" <?php //if($row->id==$acerrado_madera->id_medida)echo "selected='selected'"?>><?php //echo $row->letra;?></option>
-                                        <?php 
-                                        //}
-                                        ?>
-                                    </select>
-                                </div>
-                                <div class="col-lg-2">
-                                    Cantidad Ingreso
-                                </div>
-                                <div class="col-lg-2">
-                                    <input id="cantidad_ingreso" name="cantidad_ingreso" on class="form-control form-control-sm"  value="<?php //if($id>0){echo $equivalencia_producto->codigo_producto;}?>" type="text">
-                                </div>   
-                                <div class="col-lg-2">
-                                    Tipo Madera
-                                </div>
-                                <div class="col-lg-2">
-                                    <select name="tipo_madera" id="tipo_madera" class="form-control form-control-sm" onchange="">
-                                        <option value="">--Seleccionar--</option>
-                                        <?php
-                                        //foreach ($tipo_madera as $row){?>
-                                            <option value="<?php //echo $row->codigo ?>" <?php //if($row->id==$acerrado_madera->id_medida)echo "selected='selected'"?>><?php //echo $row->denominacion;?></option>
-                                        <?php 
-                                        //}
-                                        ?>
-                                    </select>
-                                </div>
-                                <div class="col-lg-2">
-                                    Medida
-                                </div>
-                                <div class="col-lg-2">
-                                    <select name="medida_acerrado" id="medida_acerrado" class="form-control form-control-sm" onchange="">
-                                        <option value="">--Seleccionar--</option>
-                                        <?php
-                                        //foreach ($medida_acerrado as $row){?>
-                                            <option value="<?php //echo $row->codigo ?>" <?php //if($row->id==$acerrado_madera->id_medida)echo "selected='selected'"?>><?php //echo $row->denominacion;?></option>
-                                        <?php 
-                                        //}
-                                        ?>
-                                    </select>
-                                </div>
-                                <div class="col-lg-2">
-                                    Paquetes
-                                </div>
-                                <div class="col-lg-2">
-                                    <input id="paquetes" name="paquetes" on class="form-control form-control-sm"  value="<?php //if($id>0){echo $equivalencia_producto->codigo_producto;}?>" type="text">
-                                </div>
-                                <div class="col-lg-2">
-                                    N° Piezas
-                                </div>
-                                <div class="col-lg-2">
-                                    <input id="numero_piezas" name="numero_piezas" on class="form-control form-control-sm"  value="<?php //if($id>0){echo $equivalencia_producto->codigo_producto;}?>" type="text">
-                                </div>
-                                <div class="col-lg-2">
-                                    Cantidad Total
-                                </div>
-                                <div class="col-lg-2">
-                                    <input id="cantidad_total" name="cantidad_total" on class="form-control form-control-sm"  value="<?php //if($id>0){echo $equivalencia_producto->codigo_producto;}?>" type="text" >
-                                </div>-->
                             </div>
 
                             <div class="card-body">
 
                                 <div class="table-responsive" style="overflow-y: auto; max-height: 400px; overflow-x: auto; ">
-                                    <table id="tblRequerimientoDetalle" class="table table-hover table-sm">
+                                    <table id="tblAcerradoMadera" class="table table-hover table-sm">
                                         <thead>
                                         <tr style="font-size:13px">
-                                            <th>#</th>
-                                            <th>Descripci&oacute;n</th>
-                                            <th>Marca</th>
-                                            <th style="width : 10%">COD. INT.</th>
-                                            <th style="width : 10%">Estado Bien</th>
-                                            <th style="width : 10%">Unidad</th>
-                                            <th style="width : 8%">Cantidad</th>
-                                            <th style="width : 20%">Observaci&oacute;n</th>
-                                            <th style="width : 20%">Observaci&oacute;n Atenci&oacute;n</th>
+                                            <th style="width : 5%">#</th>
+                                            <th style="width : 20%">Ruc</th>
+                                            <th style="width : 20%">Razon Social</th>
+                                            <th style="width : 5%">Letra</th>
+                                            <th style="width : 10%">Placa</th>
+                                            <th style="width : 10%">Tipo Madera</th>
+                                            <th style="width : 10%">Cantidad</th>
+                                            <th style="width : 10%">Ingreso Producci&oacute;n</th>
+                                            <th style="width : 10%">%</th>
                                         </tr>
                                         </thead>
-                                        <tbody id="divRequerimientoDetalle">
+                                        <tbody id="divAcerradoMadera">
                                         </tbody>
                                     </table>
                                 </div>
-                                <div style="margin-top:15px" class="form-group">
-                                    <div class="col-sm-12 controls">
-                                        <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
-
-                                            @hasanyrole('Administrator')
-                                                <?php 
-                                                if($id>0){
-                                                    if($requerimiento->estado_atencion!=4 && ($requerimiento->estado_atencion==1 || $requerimiento->estado_atencion==2)){
-                                                ?>
-                                                    <button type="button" class="btn btn-warning btn-sm" onclick="modalCerrarAntiguedad()" style="margin-right:10px">Cerrar por Antiguedad</button>
-                                                <?php 
-                                                    }else{
-                                                ?>
-                                                    <button type="button" class="btn btn-warning btn-sm" onclick="modalCerrarAntiguedad()" style="margin-right:10px" disabled>Cerrar por Antiguedad</button>
-                                                <?php } 
-                                                }?>
-                                            @endhasanyrole
-
-                                            <?php 
-                                                if($id>0){
-                                            ?>
-                                            <button style="font-size:12px; margin-right:10px" type="button" class="btn btn-sm btn-primary" data-toggle="modal" onclick="pdf_documento()" ><i class="fas fa-print"></i> Imprimir</button>
-                                            <!--<button style="font-size:12px;margin-right:10px" type="button" class="btn btn-sm btn-warning" data-toggle="modal" onclick="save_orden_compra_requerimiento()" ><i class="fa fa-edit"></i>Generar Orden Compra</button>-->
-                                            <?php 
-                                                }
-                                            ?>
-                                            <?php if($id_user==$requerimiento->id_usuario_inserta && $requerimiento->estado_solicitud == '1'){?>
-                                                <a href="javascript:void(0)" onClick="fn_save_requerimiento()" class="btn btn-sm btn-success" style="margin-right:10px">Guardar</a>
-                                            <?php }?>
-                                            <?php if($id==0){?>
-                                                <a href="javascript:void(0)" onClick="fn_save_requerimiento()" class="btn btn-sm btn-success" style="margin-right:10px">Guardar</a>
-                                            <?php }?>
-                                            <a href="javascript:void(0)" onClick="$('#openOverlayOpc').modal('hide');" class="btn btn-sm btn-info" style="margin-right:10px">Cerrar</a>
-
-                                            
-
-                                        </div>
-                                                            
-                                    </div>
-                                </div> 
-
                             </div>
-
+                            <div style="margin-top:15px" class="form-group">
+                                <div class="col-sm-12 controls">
+                                    <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
+                                    
+                                        <a href="javascript:void(0)" onClick="fn_save_madera_acerrado()" class="btn btn-sm btn-success" style="margin-right:10px">Guardar</a>
+                                        <a href="javascript:void(0)" onClick="$('#openOverlayOpc').modal('hide');" class="btn btn-sm btn-info" style="">Cerrar</a>
+                                    </div>
+                                                        
+                                </div>
+                            </div> 
                         </div>
                     </div>
-                    <div style="margin-top:15px" class="form-group">
-                        <div class="col-sm-12 controls">
-                            <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
-                            
-                                <a href="javascript:void(0)" onClick="fn_save_madera_acerrado()" class="btn btn-sm btn-success" style="margin-right:10px">Guardar</a>
-                                <a href="javascript:void(0)" onClick="$('#openOverlayOpc').modal('hide');" class="btn btn-sm btn-info" style="">Cerrar</a>
-                            </div>
-                                                
-                        </div>
-                    </div> 
-
-                </form>
+                    </form>
                 </div>
                 <!-- /.box -->
                 
