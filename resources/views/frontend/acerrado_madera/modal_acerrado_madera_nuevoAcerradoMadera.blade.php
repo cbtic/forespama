@@ -16,7 +16,7 @@
 
 .modal-dialog {
     width: 100%;
-    max-width:60%!important
+    max-width:70%!important
 }
 
 .custom-select2-dropdown {
@@ -266,19 +266,19 @@ function obtenerCantidadMadera(){
                                     Fecha
                                 </div>
                                 <div class="col-lg-2">
-                                    <input id="fecha" name="fecha" on class="form-control form-control-sm"  value="<?php //if($id>0){echo $equivalencia_producto->codigo_producto;}?>" type="text">
+                                    <input id="fecha" name="fecha" on class="form-control form-control-sm"  value="<?php echo /*isset($acerrado_madera) && $acerrado_madera->fecha_orden_compra ? $acerrado_madera->fecha_orden_compra :*/ date('Y-m-d'); ?>" type="text">
                                 </div>
-                                <div class="col-lg-2">
+                                <!--<div class="col-lg-2">
                                     Letra Empresa
                                 </div>
                                 <div class="col-lg-2">
                                     <select name="letra_empresa_cubicaje" id="letra_empresa_cubicaje" class="form-control form-control-sm" onchange="obtenerCantidadMadera()">
                                         <option value="">--Seleccionar--</option>
                                         <?php
-                                        foreach ($letra_empresa_cubicaje as $row){?>
-                                            <option value="<?php echo $row->letra ?>" <?php //if($row->id==$acerrado_madera->id_medida)echo "selected='selected'"?>><?php echo $row->letra;?></option>
+                                        //foreach ($letra_empresa_cubicaje as $row){?>
+                                            <option value="<?php //echo $row->letra ?>" <?php //if($row->id==$acerrado_madera->id_medida)echo "selected='selected'"?>><?php //echo $row->letra;?></option>
                                         <?php 
-                                        }
+                                        //}
                                         ?>
                                     </select>
                                 </div>
@@ -286,7 +286,7 @@ function obtenerCantidadMadera(){
                                     Cantidad Ingreso
                                 </div>
                                 <div class="col-lg-2">
-                                    <input id="cantidad_ingreso" name="cantidad_ingreso" on class="form-control form-control-sm"  value="<?php //if($id>0){echo $equivalencia_producto->codigo_producto;}?>" type="text" readonly="readonly">
+                                    <input id="cantidad_ingreso" name="cantidad_ingreso" on class="form-control form-control-sm"  value="<?php //if($id>0){echo $equivalencia_producto->codigo_producto;}?>" type="text">
                                 </div>   
                                 <div class="col-lg-2">
                                     Tipo Madera
@@ -295,10 +295,10 @@ function obtenerCantidadMadera(){
                                     <select name="tipo_madera" id="tipo_madera" class="form-control form-control-sm" onchange="">
                                         <option value="">--Seleccionar--</option>
                                         <?php
-                                        foreach ($tipo_madera as $row){?>
-                                            <option value="<?php echo $row->codigo ?>" <?php //if($row->id==$acerrado_madera->id_medida)echo "selected='selected'"?>><?php echo $row->denominacion;?></option>
+                                        //foreach ($tipo_madera as $row){?>
+                                            <option value="<?php //echo $row->codigo ?>" <?php //if($row->id==$acerrado_madera->id_medida)echo "selected='selected'"?>><?php //echo $row->denominacion;?></option>
                                         <?php 
-                                        }
+                                        //}
                                         ?>
                                     </select>
                                 </div>
@@ -309,10 +309,10 @@ function obtenerCantidadMadera(){
                                     <select name="medida_acerrado" id="medida_acerrado" class="form-control form-control-sm" onchange="">
                                         <option value="">--Seleccionar--</option>
                                         <?php
-                                        foreach ($medida_acerrado as $row){?>
-                                            <option value="<?php echo $row->codigo ?>" <?php //if($row->id==$acerrado_madera->id_medida)echo "selected='selected'"?>><?php echo $row->denominacion;?></option>
+                                        //foreach ($medida_acerrado as $row){?>
+                                            <option value="<?php //echo $row->codigo ?>" <?php //if($row->id==$acerrado_madera->id_medida)echo "selected='selected'"?>><?php //echo $row->denominacion;?></option>
                                         <?php 
-                                        }
+                                        //}
                                         ?>
                                     </select>
                                 </div>
@@ -333,23 +333,87 @@ function obtenerCantidadMadera(){
                                 </div>
                                 <div class="col-lg-2">
                                     <input id="cantidad_total" name="cantidad_total" on class="form-control form-control-sm"  value="<?php //if($id>0){echo $equivalencia_producto->codigo_producto;}?>" type="text" >
-                                </div>                      
+                                </div>-->
                             </div>
-                        </div>
-                        </div>
-                            <div style="margin-top:15px" class="form-group">
-                                <div class="col-sm-12 controls">
-                                    <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
-                                    
-                                        <a href="javascript:void(0)" onClick="fn_save_madera_acerrado()" class="btn btn-sm btn-success" style="margin-right:10px">Guardar</a>
-                                        <a href="javascript:void(0)" onClick="$('#openOverlayOpc').modal('hide');" class="btn btn-sm btn-info" style="">Cerrar</a>
-                                    </div>
-                                                        
+
+                            <div class="card-body">
+
+                                <div class="table-responsive" style="overflow-y: auto; max-height: 400px; overflow-x: auto; ">
+                                    <table id="tblRequerimientoDetalle" class="table table-hover table-sm">
+                                        <thead>
+                                        <tr style="font-size:13px">
+                                            <th>#</th>
+                                            <th>Descripci&oacute;n</th>
+                                            <th>Marca</th>
+                                            <th style="width : 10%">COD. INT.</th>
+                                            <th style="width : 10%">Estado Bien</th>
+                                            <th style="width : 10%">Unidad</th>
+                                            <th style="width : 8%">Cantidad</th>
+                                            <th style="width : 20%">Observaci&oacute;n</th>
+                                            <th style="width : 20%">Observaci&oacute;n Atenci&oacute;n</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="divRequerimientoDetalle">
+                                        </tbody>
+                                    </table>
                                 </div>
-                            </div> 
+                                <div style="margin-top:15px" class="form-group">
+                                    <div class="col-sm-12 controls">
+                                        <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
+
+                                            @hasanyrole('Administrator')
+                                                <?php 
+                                                if($id>0){
+                                                    if($requerimiento->estado_atencion!=4 && ($requerimiento->estado_atencion==1 || $requerimiento->estado_atencion==2)){
+                                                ?>
+                                                    <button type="button" class="btn btn-warning btn-sm" onclick="modalCerrarAntiguedad()" style="margin-right:10px">Cerrar por Antiguedad</button>
+                                                <?php 
+                                                    }else{
+                                                ?>
+                                                    <button type="button" class="btn btn-warning btn-sm" onclick="modalCerrarAntiguedad()" style="margin-right:10px" disabled>Cerrar por Antiguedad</button>
+                                                <?php } 
+                                                }?>
+                                            @endhasanyrole
+
+                                            <?php 
+                                                if($id>0){
+                                            ?>
+                                            <button style="font-size:12px; margin-right:10px" type="button" class="btn btn-sm btn-primary" data-toggle="modal" onclick="pdf_documento()" ><i class="fas fa-print"></i> Imprimir</button>
+                                            <!--<button style="font-size:12px;margin-right:10px" type="button" class="btn btn-sm btn-warning" data-toggle="modal" onclick="save_orden_compra_requerimiento()" ><i class="fa fa-edit"></i>Generar Orden Compra</button>-->
+                                            <?php 
+                                                }
+                                            ?>
+                                            <?php if($id_user==$requerimiento->id_usuario_inserta && $requerimiento->estado_solicitud == '1'){?>
+                                                <a href="javascript:void(0)" onClick="fn_save_requerimiento()" class="btn btn-sm btn-success" style="margin-right:10px">Guardar</a>
+                                            <?php }?>
+                                            <?php if($id==0){?>
+                                                <a href="javascript:void(0)" onClick="fn_save_requerimiento()" class="btn btn-sm btn-success" style="margin-right:10px">Guardar</a>
+                                            <?php }?>
+                                            <a href="javascript:void(0)" onClick="$('#openOverlayOpc').modal('hide');" class="btn btn-sm btn-info" style="margin-right:10px">Cerrar</a>
+
+                                            
+
+                                        </div>
+                                                            
+                                    </div>
+                                </div> 
+
+                            </div>
 
                         </div>
-                    </form>
+                    </div>
+                    <div style="margin-top:15px" class="form-group">
+                        <div class="col-sm-12 controls">
+                            <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
+                            
+                                <a href="javascript:void(0)" onClick="fn_save_madera_acerrado()" class="btn btn-sm btn-success" style="margin-right:10px">Guardar</a>
+                                <a href="javascript:void(0)" onClick="$('#openOverlayOpc').modal('hide');" class="btn btn-sm btn-info" style="">Cerrar</a>
+                            </div>
+                                                
+                        </div>
+                    </div> 
+
+                </form>
                 </div>
                 <!-- /.box -->
                 

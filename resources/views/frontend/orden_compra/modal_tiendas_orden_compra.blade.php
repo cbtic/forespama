@@ -801,8 +801,8 @@ function agregarTiendas() {
 
     $('.tiendas-select').select2({
         width: '100%', 
-        dropdownParent: $('#diveditpregOpc2') // Asegura que el dropdown se renderice en el modal correcto
-        //dropdownParent: $('#id_content_OverlayoneOpc2') // Asegura que el dropdown se renderice en el modal correcto
+        //dropdownParent: $('#diveditpregOpc2') // Asegura que el dropdown se renderice en el modal correcto
+        dropdownParent: $('#id_content_OverlayoneOpc2') // Asegura que el dropdown se renderice en el modal correcto
     });
 
     cargarDetalle(id, cantidad_tiendas);
