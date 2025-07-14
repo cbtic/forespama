@@ -1227,6 +1227,9 @@ class ComprobanteController extends Controller
 
                         $orden_compra_detalle->save();
 
+                        $id_orden_compra_detalle = $orden_compra_detalle->id;                                                
+                        $tarifa[$key]['id'] = $id_orden_compra_detalle;
+
                     }     
                                    
                 } 
