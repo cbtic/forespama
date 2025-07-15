@@ -687,7 +687,10 @@ Route::get('ingreso_vehiculo_tronco/exportar_listar_reporte_anual/{placa}/{ruc}/
 Route::get('tipo_cambio/obtenerUltimoTipoCambio', [TipoCambioController::class, 'obtenerUltimoTipoCambio'])->name('tipo_cambio.obtenerUltimoTipoCambio');
 
 Route::get('acerrado_madera/create', [AcerradoMaderaController::class, 'create'])->name('acerrado_madera.create');
-Route::post('acerrado_madera/listar_acerrado_madera_ajax', [AcerradoMaderaController::class, 'listar_acerrado_madera_ajax'])->name('acerrado_madera.listar_acerrado_madera_ajax');
-Route::post('acerrado_madera/send_acerrado_madera', [AcerradoMaderaController::class, 'send_acerrado_madera'])->name('acerrado_madera.send_acerrado_madera');
-Route::get('acerrado_madera/modal_acerrado_madera/{id}', [AcerradoMaderaController::class, 'modal_acerrado_madera'])->name('acerrado_madera.modal_acerrado_madera');
+Route::post('acerrado_madera/listar_ingreso_produccion_acerrado_madera_ajax', [AcerradoMaderaController::class, 'listar_ingreso_produccion_acerrado_madera_ajax'])->name('acerrado_madera.listar_ingreso_produccion_acerrado_madera_ajax');
+Route::post('acerrado_madera/listar_produccion_acerrado_madera_ajax', [AcerradoMaderaController::class, 'listar_produccion_acerrado_madera_ajax'])->name('acerrado_madera.listar_produccion_acerrado_madera_ajax');
+Route::get('acerrado_madera/modal_ingreso_acerrado_madera/{id}', [AcerradoMaderaController::class, 'modal_ingreso_acerrado_madera'])->name('acerrado_madera.modal_ingreso_acerrado_madera');
+Route::post('acerrado_madera/send_ingreso_produccion_acerrado_madera', [AcerradoMaderaController::class, 'send_ingreso_produccion_acerrado_madera'])->name('acerrado_madera.send_ingreso_produccion_acerrado_madera');
+Route::post('acerrado_madera/send_produccion_acerrado_madera', [AcerradoMaderaController::class, 'send_produccion_acerrado_madera'])->name('acerrado_madera.send_produccion_acerrado_madera');
 Route::get('acerrado_madera/cargar_detalle_ingreso_vehiculo_acerrado', [AcerradoMaderaController::class, 'cargar_detalle_ingreso_vehiculo_acerrado'])->name('acerrado_madera.cargar_detalle_ingreso_vehiculo_acerrado');
+Route::get('acerrado_madera/modal_salida_acerrado_madera/{id}', [AcerradoMaderaController::class, 'modal_salida_acerrado_madera'])->name('acerrado_madera.modal_salida_acerrado_madera');

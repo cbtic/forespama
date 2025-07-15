@@ -322,69 +322,110 @@ label.form-control-sm{
 
         <div class="card-body">
 
-            <form class="form-horizontal" method="post" action="" id="frmAcerradoMadera" autocomplete="off" enctype="multipart/form-data">
-				
-                <div class="row">
-                    <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12" style="margin-top:15px">
-                        <h4 class="card-title mb-0 text-primary" style="font-size:22px">
-                            Ingreso de Producci&oacute;n de Acerrado
-                        </h4>
-                    </div>
-                </div>
-                <div class="row justify-content-center" style="margin-top:15px">
+			<form class="form-horizontal" method="post" action="" id="frmAcerradoMadera" autocomplete="off" enctype="multipart/form-data">
+			
+			<!--<div class="row">
+				<div class="col-lg-5 col-md-5 col-sm-12 col-xs-12" style="margin-top:15px">
+					<h4 class="card-title mb-0 text-primary" style="font-size:22px">
+						Ingreso de Producci&oacute;n de Acerrado
+					</h4>
+				</div>
+			</div>-->
+			<div class="row justify-content-center" style="margin-top:15px">
 
-                    <input type="hidden" name="flag_ocultar" id="flag_ocultar" value="0">
+				<input type="hidden" name="flag_ocultar" id="flag_ocultar" value="0">
 
-					<div class="col col-sm-12 align-self-center">
+				<div class="col col-sm-12 align-self-center">
 
 
-                        <input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
+					<input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
 
-                        <!--<input type="hidden" name="estado" id="estado" value="0">-->
-						
-						<input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
-				
-					<div class="row" style="padding:20px 20px 0px 20px;">
+					<!--<input type="hidden" name="estado" id="estado" value="0">-->
+									
+					<div class="row" style="padding-top:15px">
 
-						<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-							<input id="fecha_bus" name="fecha_bus" on class="form-control form-control-sm"  placeholder="Fecha">
+						<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+
+							<div class="card">
+
+								<div class="card-header">
+									<strong>Ingreso Madera Producci&oacute;n</strong>
+								</div>
+
+								<div id="divTablaIngresoMadera" class="row col align-self-center" style="padding:10px 20px 10px 20px;">
+
+									<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+										<input id="fecha_bus" name="fecha_bus" on class="form-control form-control-sm"  placeholder="Fecha">
+									</div>
+
+									<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+										<select name="estado_bus" id="estado_bus" class="form-control form-control-sm">
+											<option value="">Todos</option>
+											<option value="1" selected="selected">Activo</option>
+											<option value="0">Eliminado</option>
+										</select>
+									</div>
+									
+									<div class="col-lg-5 col-md-5 col-sm-12 col-xs-12" style="padding-right:0px">
+										<input class="btn btn-warning btn-sm pull-rigth" value="Buscar" type="button" id="btnBuscar" />
+										<input class="btn btn-success btn-sm pull-rigth" value="Nuevo Ingreso" type="button" id="btnNuevoIngreso" style="margin-left:15px" />
+										<input class="btn btn-success btn-sm pull-rigth" value="Nueva Salida" type="button" id="btnNuevoSalida" style="margin-left:15px" />
+									</div>
+								</div>
+
+								<div class="card-body">
+
+									<div class="table-responsive">
+									<table id="tblAcerradoMadera" class="table table-hover table-sm">
+										<thead>
+										<tr style="font-size:13px">
+											<th>Id</th>
+											<th>Fecha</th>
+											<th>Cantidad Ingreso</th>
+											<th>Estado</th>
+											<!--<th>Acciones</th>-->
+										</tr>
+										</thead>
+									<tbody>
+									</tbody>
+									</table>
+									</div>
+								</div><!--table-responsive-->
+							</div>
 						</div>
+						<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
 
-						<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-							<select name="estado_bus" id="estado_bus" class="form-control form-control-sm">
-								<option value="">Todos</option>
-								<option value="1" selected="selected">Activo</option>
-								<option value="0">Eliminado</option>
-							</select>
-						</div>
-						
-						<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12" style="padding-right:0px">
-							<input class="btn btn-warning pull-rigth" value="Buscar" type="button" id="btnBuscar" />
-							<input class="btn btn-success pull-rigth" value="Nuevo" type="button" id="btnNuevo" style="margin-left:15px" />
+							<div class="card">
+								<div class="card-header">
+									<strong>
+										Producci&oacute;n Diaria Madera Acerrada
+									</strong>
+								</div>
+
+								<div class="card-body">
+									
+									<div id="divProduccionMaderaAcerrada" class="table-responsive overflow-auto" style="max-height: 500px">
+										<table id="tblProduccionMaderaAcerrada" class="table table-hover table-sm">
+											<thead>
+												<tr style="font-size:13px">
+													<th width="2%">Id</th>
+													<th width="10%">Tipo Madera</th>
+													<th width="10%">Medida</th>
+													<th width="10%">Paquetes</th>
+													<th width="10%">Cantidad 1</th>
+													<th width="10%">Cantidad 2</th>
+													<th width="10%">N° Piezas</th>
+												</tr>
+											</thead>
+											<tbody>
+
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
-					
-					<div class="card-body">
-
-						<div class="table-responsive">
-						<table id="tblAcerradoMadera" class="table table-hover table-sm">
-							<thead>
-							<tr style="font-size:13px">
-								<th>Id</th>
-								<th>Fecha</th>
-								<th>Cantidad</th>
-								<th>Medida</th>
-								<th>Paquetes</th>
-								<th>N° Piezas</th>
-								<th>Cantidad</th>
-								<th>Estado</th>
-								<th>Acciones</th>
-							</tr>
-							</thead>
-							<tbody>
-							</tbody>
-						</table>
-					</div><!--table-responsive-->
                 </form>
                 </div><!--card-body-->
             </div><!--card-->

@@ -135,7 +135,7 @@ $.mask.definitions['p'] = "[Mm]";
 */
 $(document).ready(function() {
 
-    cargarDetalleIngreso();
+    //cargarDetalleIngreso();
 
     $('#fecha').datepicker({
         autoclose: true,
@@ -151,7 +151,12 @@ $(document).ready(function() {
 
 <script type="text/javascript">
 
-function fn_save_madera_acerrado(){
+$('#openOverlayOpc').on('shown.bs.modal', function() {
+	 
+});
+
+
+function fn_save_produccion_madera_acerrado(){
 	
     var msg = "";
     var _token = $('#_token').val();
@@ -161,18 +166,8 @@ function fn_save_madera_acerrado(){
 
     if(fecha==""){msg+="Ingrese una Fecha <br>";}
 
-    var filas = $('#divAcerradoMadera tr');
-    var tieneCantidades = false;
-
-    filas.each(function(index) {
-        var cantidad = parseInt($(this).find('input[name="cantidad_ingreso_produccion[]"]').val());
-        if (cantidad || cantidad >= 0) {
-            tieneCantidades = true;
-        }
-    });
-
-    if(tieneCantidades==false){
-        msg+="Ingrese una cantidad como minimo <br>";
+    if ($('#tblSalidaAcerradoMadera tbody tr').length == 0) {
+        msg += "No se ha agregado ningún registro <br>";
     }
 
     if(msg!=""){
@@ -186,13 +181,14 @@ function fn_save_madera_acerrado(){
         $('.loader').show();
 
         $.ajax({
-            url: "/acerrado_madera/send_ingreso_produccion_acerrado_madera",
+            url: "/acerrado_madera/send_produccion_acerrado_madera",
             type: "POST",
-            data : $("#frmIngresoAcerradoMadera").serialize(),
+            data : $("#frmSalidaAcerradoMadera").serialize(),
             success: function (result) {
+                
                 $('#openOverlayOpc').modal('hide');
                 $('.loader').hide();
-                bootbox.alert("Se guard&oacute; satisfactoriamente");
+                bootbox.alert("Se guard&oacute; satisfactoriamente"); 
                 datatablenew();
                 
             }
@@ -225,9 +221,9 @@ function cargarDetalleIngreso(){
                         <td><input name="razon_social[]" id="razon_social${n}" class="form-control form-control-sm" style="border: none; background-color: transparent;" value="${detalle_ingreso_acerrado.razon_social}" type="text" readonly></td>
                         <td><input name="letra[]" id="letra${n}" class="form-control form-control-sm" style="border: none; background-color: transparent;" value="${detalle_ingreso_acerrado.letra}" type="text" readonly></td>
                         <td><input name="placa[]" id="placa${n}" class="form-control form-control-sm" style="border: none; background-color: transparent;" value="${detalle_ingreso_acerrado.placa}" type="text" readonly></td>
-                        <td><input name="id_tipo_madera[]" id="id_tipo_madera${n}" class="form-control form-control-sm" value="${detalle_ingreso_acerrado.id_tipo_maderas}" type="hidden"><input name="tipo_madera[]" id="tipo_madera${n}" class="form-control form-control-sm" style="border: none; background-color: transparent;" value="${detalle_ingreso_acerrado.tipo_madera}" type="text" readonly></td>
-                        <td><input name="cantidad_ingreso[]" id="cantidad_ingreso${n}" class="cantidad_ingreso form-control form-control-sm" style="border: none; background-color: transparent;" value="${detalle_ingreso_acerrado.cantidad_pendiente}" type="text" readonly></td>
-                        <td><input name="cantidad_ingreso_produccion[]" id="cantidad_ingreso_produccion${n}" class="cantidad_ingreso_produccion form-control form-control-sm" value="" type="text" oninput="calcularPorcentaje(this)"></td>
+                        <td><input name="tipo_madera[]" id="tipo_madera${n}" class="form-control form-control-sm" style="border: none; background-color: transparent;" value="${detalle_ingreso_acerrado.tipo_madera}" type="text" readonly></td>
+                        <td><input name="cantidad_ingreso[]" id="cantidad_ingreso${n}" class="cantidad_ingreso form-control form-control-sm" style="border: none; background-color: transparent;" value="${detalle_ingreso_acerrado.cantidad}" type="text" readonly></td>
+                        <td><input name="cantidad_ingreso_produccion[]" id="cantidad_ingreso_produccion${n}" class="cantidad_ingreso_produccion form-control form-control-sm" value="" type="text" onchange="calcularPorcentaje(this)"></td>
                         <td><input name="porcentaje[]" id="porcentaje${n}" class="porcentaje form-control form-control-sm" value="" type="text"></td>
                     </tr>
                 `;
@@ -246,6 +242,7 @@ function calcularPorcentaje(input){
     var cantidad_ingreso = parseFloat(fila.find('.cantidad_ingreso').val()) || 0;
     var cantidad_ingreso_produccion = parseFloat(fila.find('.cantidad_ingreso_produccion').val()) || 0;
     var porcentaje = 0;
+    //alert(cantidad_ingreso+'-'+cantidad_ingreso_produccion);
 
     if(cantidad_ingreso_produccion > cantidad_ingreso){
 
@@ -259,6 +256,58 @@ function calcularPorcentaje(input){
     }
 }
 
+function agregarSalidaAcerrado(){
+
+    var cantidad = 1;
+    var newRow = "";
+    for (var i = 0; i < cantidad; i++) { 
+        var n = $('#tblSalidaAcerradoMadera tbody tr').length + 1;
+        var tipo_madera = '<select name="tipo_madera[]" id="tipo_madera' + n + '" class="form-control form-control-sm" onchange=""> <option value="">--Seleccionar--</option><?php foreach ($tipo_madera as $row){?><option value="<?php echo $row->codigo; ?>"><?php echo $row->denominacion; ?></option><?php }?></select>';
+        var medida = '<input name="id_salida_acerrado_madera[]" id="id_salida_acerrado_madera${n}" class="form-control form-control-sm" value="1" type="hidden"><select name="medida[]" id="medida' + n + '" class="form-control form-control-sm" onchange=""> <option value="">--Seleccionar--</option><?php foreach ($medida_acerrado as $row){?><option value="<?php echo $row->codigo; ?>"><?php echo $row->denominacion; ?></option><?php }?></select>';
+        var paquete = '<input name="paquete[]" id="paquete' + n + '" class="paquete form-control form-control-sm" value="" type="text" oninput="calcularNPiezas(this)">';
+        var medida_paquete1 = '<input name="medida_paquete1[]" id="medida_paquete1' + n + '" class="medida_paquete1 form-control form-control-sm" value="" type="text" oninput="calcularNPiezas(this)">';
+        var medida_paquete2 = '<input name="medida_paquete2[]" id="medida_paquete2' + n + '" class="medida_paquete2 form-control form-control-sm" value="" type="text" oninput="calcularNPiezas(this)">';
+        var n_piezas = '<input name="n_piezas[]" id="n_piezas' + n + '" class="n_piezas form-control form-control-sm" value="" type="text" readonly>';
+        
+        var btnEliminar = '<button type="button" class="btn btn-danger btn-sm" onclick="eliminarFila(this)">Eliminar</button>';
+
+        newRow += '<tr>';
+        newRow += '<td>' + n + '</td>';
+        newRow += '<td>' + tipo_madera + '</td>';
+        newRow += '<td>' + medida + '</td>';
+        newRow += '<td>' + paquete + '</td>';
+        newRow += '<td>' + medida_paquete1 + '</td>';
+        newRow += '<td>' + medida_paquete2 + '</td>';
+        newRow += '<td>' + n_piezas + '</td>';
+        newRow += '<td>' + btnEliminar + '</td>';
+        newRow += '</tr>';
+
+        $('#tblSalidaAcerradoMadera tbody').append(newRow);
+        
+    }
+}
+
+function calcularNPiezas(input){
+
+    var fila = $(input).closest('tr');
+
+    var paquete = parseFloat(fila.find('.paquete').val()) || 0;
+    var medida_paquete1 = parseFloat(fila.find('.medida_paquete1').val()) || 0;
+    var medida_paquete2 = parseFloat(fila.find('.medida_paquete2').val()) || 0;
+    var n_piezas = parseFloat(fila.find('.n_piezas').val()) || 0;
+
+    n_piezas = paquete * medida_paquete1 * medida_paquete2;
+
+    fila.find('.n_piezas').val(n_piezas);   
+
+}
+
+function eliminarFila(button){
+
+    $(button).closest('tr').remove();
+
+}
+
 </script>
 
 <body class="hold-transition skin-blue sidebar-mini">
@@ -269,11 +318,11 @@ function calcularPorcentaje(input){
             <div class="card">
 
                 <div class="card-header" style="text-align: center; font-size:16px; margin-top: 20px">
-                    <b>Ingreso Diario Producci&oacute;n de Madera Acerrada</b>
+                    <b>Producci&oacute;n Diaria de Madera Acerrada</b>
                 </div>
                 
                 <div class="card-body">
-                    <form method="post" action="#" id="frmIngresoAcerradoMadera" name="frmIngresoAcerradoMadera">
+                    <form method="post" action="#" id="frmSalidaAcerradoMadera" name="frmSalidaAcerradoMadera">
                     <div class="row">
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding-top:5px;padding-bottom:20px">
                         <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -290,25 +339,30 @@ function calcularPorcentaje(input){
                                     <input id="fecha" name="fecha" on class="form-control form-control-sm"  value="<?php echo /*isset($acerrado_madera) && $acerrado_madera->fecha_orden_compra ? $acerrado_madera->fecha_orden_compra :*/ date('Y-m-d'); ?>" type="text">
                                 </div>
                             </div>
-
+                            <div style="margin-top:15px" class="form-group">
+                                <div class="col-sm-12 controls">
+                                    <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
+                                        <a href="javascript:void(0)" onClick="agregarSalidaAcerrado()" class="btn btn-sm btn-success">Agregar</a>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="card-body">
 
                                 <div class="table-responsive" style="overflow-y: auto; max-height: 400px; overflow-x: auto; ">
-                                    <table id="tblAcerradoMadera" class="table table-hover table-sm">
+                                    <table id="tblSalidaAcerradoMadera" class="table table-hover table-sm">
                                         <thead>
                                         <tr style="font-size:13px">
-                                            <th style="width : 3%">#</th>
-                                            <th style="width : 10%">Ruc</th>
-                                            <th style="width : 30%">Razon Social</th>
-                                            <th style="width : 7%">Letra</th>
-                                            <th style="width : 10%">Placa</th>
-                                            <th style="width : 10%">Tipo Madera</th>
-                                            <th style="width : 10%">Cantidad</th>
-                                            <th style="width : 10%">Ingreso Producci&oacute;n</th>
-                                            <th style="width : 10%">%</th>
+                                            <th style="width : 5%">#</th>
+                                            <th style="width : 20%">Tipo Madera</th>
+                                            <th style="width : 20%">Medida</th>
+                                            <th style="width : 10%">Paquetes</th>
+                                            <th style="width : 10%">Cantidad 1</th>
+                                            <th style="width : 10%">Cantidad 2</th>
+                                            <th style="width : 10%">N° Piezas</th>
+                                            <th style="width : 10%"></th>
                                         </tr>
                                         </thead>
-                                        <tbody id="divAcerradoMadera">
+                                        <tbody id="divSalidaAcerradoMadera">
                                         </tbody>
                                     </table>
                                 </div>
@@ -317,7 +371,7 @@ function calcularPorcentaje(input){
                                 <div class="col-sm-12 controls">
                                     <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
                                     
-                                        <a href="javascript:void(0)" onClick="fn_save_madera_acerrado()" class="btn btn-sm btn-success" style="margin-right:10px">Guardar</a>
+                                        <a href="javascript:void(0)" onClick="fn_save_produccion_madera_acerrado()" class="btn btn-sm btn-success" style="margin-right:10px">Guardar</a>
                                         <a href="javascript:void(0)" onClick="$('#openOverlayOpc').modal('hide');" class="btn btn-sm btn-info" style="">Cerrar</a>
                                     </div>
                                                         

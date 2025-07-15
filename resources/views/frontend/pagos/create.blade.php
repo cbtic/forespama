@@ -471,176 +471,155 @@ label.form-control-sm{
                     </div>
                 </div>
 				-->
-                <div class="row justify-content-center" style="margin-top:15px">
+            <div class="row justify-content-center" style="margin-top:15px">
 					
-                    <input type="hidden" name="flag_ocultar" id="flag_ocultar" value="0">
+                <input type="hidden" name="flag_ocultar" id="flag_ocultar" value="0">
 					
-					<div class="col col-sm-12 align-self-center">
+				<div class="col col-sm-12 align-self-center">
 
-                        <input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
-						<input type="hidden" name="id_ingreso_vehiculo_tronco_tipo_maderas" id="id_ingreso_vehiculo_tronco_tipo_maderas" value="0">
+					<input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
+					<input type="hidden" name="id_ingreso_vehiculo_tronco_tipo_maderas" id="id_ingreso_vehiculo_tronco_tipo_maderas" value="0">
 						
 					<div class="row" style="padding-top:15px">
 
 						<div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
 
-						<div class="card">
+							<div class="card">
 						
-						<div class="divlogoimpresora" style="display:none;">
-							<img class="logoimpresora" src="/img/logo_forestalpama.jpg" align="right">
-						</div>
+								<div class="divlogoimpresora" style="display:none;">
+									<img class="logoimpresora" src="/img/logo_forestalpama.jpg" align="right">
+								</div>
 						
-						<div class="card-header">
-							<strong>Ingreso de Pagos</strong>
-						</div>
+								<div class="card-header">
+									<strong>Ingreso de Pagos</strong>
+								</div>
 							
-						<div id="divTablaIngreso" class="row col align-self-center" style="padding:10px 20px 10px 20px;">
-					
-							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-								<input class="form-control form-control-sm" id="ruc_bus" name="ruc_bus" placeholder="Ruc">
-							</div>
+								<div id="divTablaIngreso" class="row col align-self-center" style="padding:10px 20px 10px 20px;">
 							
-							<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-								<input class="form-control form-control-sm" id="empresa_bus" name="empresa_bus" placeholder="Empresa">
-							</div>
-
-							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-								<input class="form-control form-control-sm" id="placa_bus" name="placa_bus" placeholder="Placa">
-							</div>
-
-							<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-								<select name="tipo_madera_bus" id="tipo_madera_bus" class="form-control form-control-sm">
-									<option value="">--Seleccionar Tipo Madera--</option>
-									<?php
-									foreach ($tipo_madera as $row){?>
-										<option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
-										<?php 
-									}
-									?>
-								</select>
-							</div>
-
-							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-								<input class="form-control form-control-sm" id="fecha_inicio_bus" name="fecha_inicio_bus" placeholder="Fecha Inicio">
-							</div>
-
-							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-								<input class="form-control form-control-sm" id="fecha_fin_bus" name="fecha_fin_bus" placeholder="Fecha Fin">
-							</div>
-							
-							<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-								<select name="estado_pago_bus" id="estado_pago_bus" class="form-control form-control-sm">
-									<option value="">--Seleccionar Estado Pago--</option>
-									<?php
-									foreach ($estado_pago as $row){?>
-										<option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
-										<?php 
-									}
-									?>
-								</select>
-							</div>
-
-							<!--<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-								<select name="estado_py_bus" id="estado_py_bus" class="form-control form-control-sm" onchange="">
-									<option value="">ESTADO PROYECTO</option>
-									<?php
+									<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+										<input class="form-control form-control-sm" id="ruc_bus" name="ruc_bus" placeholder="Ruc">
+									</div>
 									
-									?>
-								</select>
-							</div>
-							
-							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-								<select name="estado" id="estado" class="form-control form-control-sm" onchange="">
-									<option value="">ESTADO</option>
-									<option value="1">ACTIVO</option>
-									<option value="0">INACTIVO</option>
-								</select>
-							</div>-->
-							
-							<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-								<input class="btn btn-warning btn-sm pull-rigth" value="Buscar" type="button" id="btnBuscar" />
-								<input class="btn btn-success btn-sm pull-rigth" value="Pagar" type="button" id="btnPagar" onclick="modalPago(0)"  />
-								<input class="btn btn-secondary btn-sm pull-rigth" value="Descargar" type="button" id="btnDescargar" /> 
-							</div>
-							
-						</div>
-						
-						<div class="card-body">
-							
-							<div class="table-responsive">
-							<!--table-hover-grid-->
-							<table id="tblSolicitud" class="table table-hover table-sm">
-							<thead>
-							<tr style="font-size:13px">
-								<th>N°</th>
-								<!--<th>Id</th>-->
-								<th>Fecha</th>
-								<th>Ruc</th>
-								<th>Empresa</th>
-								<th>Placa</th>
-								<th>Tipo Madera</th>
-								<th>Cantidad</th>
-								<th>Volumen Total M3</th>
-								<th>Volumen Total Pies</th>
-								<th>Precio Total</th>
-								<th>Estado Pago</th>
-								<!--<th class="cubicaje">Cubicaje</th>-->
-							</tr>
-							</thead>
-							<tbody style="font-size:13px">
-							</tbody>
-							</table>
-							
-							</div>
-						</div>
-						
-						
-                    </div>
-					
-					
-                </div>
-				
-				<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+									<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+										<input class="form-control form-control-sm" id="empresa_bus" name="empresa_bus" placeholder="Empresa">
+									</div>
 
-				<div class="card">
-						<div class="card-header">
-							<strong>
-								Pagos
-							</strong>
-						</div>
+									<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+										<input class="form-control form-control-sm" id="placa_bus" name="placa_bus" placeholder="Placa">
+									</div>
 
-						<div class="card-body">
-							
-							<div id="divCubicaje" class="table-responsive overflow-auto" style="max-height: 500px">
-								<table id="tblCubicaje" class="table table-hover table-sm">
+									<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+										<select name="tipo_madera_bus" id="tipo_madera_bus" class="form-control form-control-sm">
+											<option value="">--Seleccionar Tipo Madera--</option>
+											<?php
+											foreach ($tipo_madera as $row){?>
+												<option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
+												<?php 
+											}
+											?>
+										</select>
+									</div>
+
+									<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+										<input class="form-control form-control-sm" id="fecha_inicio_bus" name="fecha_inicio_bus" placeholder="Fecha Inicio">
+									</div>
+
+									<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+										<input class="form-control form-control-sm" id="fecha_fin_bus" name="fecha_fin_bus" placeholder="Fecha Fin">
+									</div>
+									
+									<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+										<select name="estado_pago_bus" id="estado_pago_bus" class="form-control form-control-sm">
+											<option value="">--Seleccionar Estado Pago--</option>
+											<?php
+											foreach ($estado_pago as $row){?>
+												<option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
+												<?php 
+											}
+											?>
+										</select>
+									</div>
+									
+									<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+										<input class="btn btn-warning btn-sm pull-rigth" value="Buscar" type="button" id="btnBuscar" />
+										<input class="btn btn-success btn-sm pull-rigth" value="Pagar" type="button" id="btnPagar" onclick="modalPago(0)"  />
+										<input class="btn btn-secondary btn-sm pull-rigth" value="Descargar" type="button" id="btnDescargar" /> 
+									</div>
+									
+								</div>
+						
+								<div class="card-body">
+									
+									<div class="table-responsive">
+									<!--table-hover-grid-->
+									<table id="tblSolicitud" class="table table-hover table-sm">
 									<thead>
-										<tr style="font-size:13px">
-											<th width="2%">Id</th>
-											<th width="10%">Fecha</th>
-											<th width="10%">Tipo Doc</th>
-											<th width="10%">Guia</th>
-											<th width="10%">Factura</th>
-											<th width="10%">Importe</th>
-											<th width="10%">Archivo</th>
-										</tr>
+									<tr style="font-size:13px">
+										<th>N°</th>
+										<!--<th>Id</th>-->
+										<th>Fecha</th>
+										<th>Ruc</th>
+										<th>Empresa</th>
+										<th>Placa</th>
+										<th>Tipo Madera</th>
+										<th>Cantidad</th>
+										<th>Volumen Total M3</th>
+										<th>Volumen Total Pies</th>
+										<th>Precio Total</th>
+										<th>Estado Pago</th>
+										<!--<th class="cubicaje">Cubicaje</th>-->
+									</tr>
 									</thead>
-									<tbody>
-
+									<tbody style="font-size:13px">
 									</tbody>
-								</table>
+									</table>
+									
+									</div>
+								</div>
+                    		</div>
+                		</div>
+				
+						<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+
+							<div class="card">
+									<div class="card-header">
+										<strong>
+											Pagos
+										</strong>
+									</div>
+
+									<div class="card-body">
+										
+										<div id="divCubicaje" class="table-responsive overflow-auto" style="max-height: 500px">
+											<table id="tblCubicaje" class="table table-hover table-sm">
+												<thead>
+													<tr style="font-size:13px">
+														<th width="2%">Id</th>
+														<th width="10%">Fecha</th>
+														<th width="10%">Tipo Doc</th>
+														<th width="10%">Guia</th>
+														<th width="10%">Factura</th>
+														<th width="10%">Importe</th>
+														<th width="10%">Archivo</th>
+													</tr>
+												</thead>
+												<tbody>
+
+												</tbody>
+											</table>
+										</div>
+										
+										
+									</div>
+								</div>
+
 							</div>
-							
+						
+						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+									
 							
 						</div>
-					</div>
-
-				</div>
-				
-				<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-
-                              
-					
-				</div>
 				
 				
 					
