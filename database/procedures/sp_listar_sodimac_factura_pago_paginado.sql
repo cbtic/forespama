@@ -14,6 +14,9 @@ v_count varchar;
 v_col_count varchar;
 v_filtros_fecha_comprobante varchar;
 v_filtros_fecha_comprobante_historico varchar;
+v_total_subtotal NUMERIC := 0;
+v_total_impuesto NUMERIC := 0;
+v_total_total NUMERIC := 0;
 
 begin
 	
@@ -38,7 +41,7 @@ begin
               'FROM comprobantes c ' ||
               'left join sodimac_factura_detalles sfd on ''01-'' || c.serie ||''-''|| lpad(coalesce(c.numero::int, 1)::varchar, 8, ''0'') = sfd.numero_documento  '||
               'left join sodimac_facturas sf on sfd.id_sodimac_factura = sf.id '||
-              'Where 1 = 1 and c.estado = ''1'' c.id_empresa in (''23'',''187'') '|| v_filtros_fecha_comprobante || '
+              'Where 1 = 1 and c.estado = ''1'' and c.id_empresa in (''23'',''187'') '|| v_filtros_fecha_comprobante || '
                UNION ALL ' ||
               'select csh.id, csh.serie, csh.numero, csh.tipo, TO_CHAR(csh.fecha,''dd-mm-yyyy'') fecha, csh.destinatario, csh.cod_tributario, csh.subtotal, csh.impuesto, csh.total, '''' estado_pago, ''N'' anulado, '''' sunat, '''' numero_orden_compra_cliente, csh.moneda, sfd2.numero_documento, sfd2.importe_total, sfd2.importe_inicial, abs(sfd2.importe_retencion) importe_retencion, sfd2.importe_detraccion, case when sfd2.importe_total is null then 0 else 1 end as estado_pago_sodimac, CASE WHEN sfd2.importe_total is not null and csh.total::float = sfd2.importe_inicial::float THEN 1 when sfd2.importe_total is not null and csh.total::float != sfd2.importe_inicial::float then 2 else 0 END AS coincide_total_inicial, sf2.fecha_pago, DATE_PART(''day'', COALESCE(sf2.fecha_pago, CURRENT_DATE) - csh.fecha)::int AS dias_diferencia_pago ' ||
               'from comprobante_sodimac_historicos csh ' ||
@@ -102,6 +105,14 @@ begin
 	
 	EXECUTE ('SELECT count(1) from '||v_tabla||v_where) INTO v_count;
 	v_col_count:=' ,'||v_count||' as TotalRows ';
+
+	-- Totales generales (sin paginación)
+	EXECUTE 'SELECT COALESCE(SUM(subtotal),0), COALESCE(SUM(impuesto),0), COALESCE(SUM(total),0)
+	         FROM ' || v_tabla || v_where
+	INTO v_total_subtotal, v_total_impuesto, v_total_total;
+	
+	-- Añadir los totales como columnas adicionales
+	v_campos := v_campos || ', ' || v_total_subtotal || ' as total_subtotal, ' || v_total_impuesto || ' as total_impuesto, ' || v_total_total || ' as total_total';
 
 	If v_count::Integer > p_limit::Integer then
 		v_scad:='SELECT '||v_campos||v_col_count|| 'from' ||v_tabla||v_where||' Order By id desc LIMIT '||p_limit||' OFFSET '||p_pagina||';'; 

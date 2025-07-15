@@ -55,7 +55,7 @@ function datatablenew(){
                         {},
         ],
 		"dom": '<"top">rt<"bottom"flpi><"clear">',
-        "fnDrawCallback": function(json) {
+        "fnDrawCallback": function(settings) {
             $('[data-toggle="tooltip"]').tooltip();
         },
         
@@ -91,6 +91,22 @@ function datatablenew(){
                 },
                 "error": function (msg, textStatus, errorThrown) {
                     //location.href="login";
+                }
+            });
+            $('#tblFacturaSodimacPagos').on('xhr.dt', function (e, settings, json, xhr) {
+                if (json.aaData.length > 0) {
+                    let fila = json.aaData[0];
+
+                    let totalSubtotal = parseFloat(fila.total_subtotal || 0).toFixed(2);
+                    let totalImpuesto = parseFloat(fila.total_impuesto || 0).toFixed(2);
+                    let totalTotal = parseFloat(fila.total_total || 0).toFixed(2);
+
+                    $('#tblFacturaSodimacPagos tfoot tr').html(
+                        '<td colspan="9"><b>Total</b></td>' +
+                        '<td><b>' + totalSubtotal + '</b></td>' +
+                        '<td><b>' + totalImpuesto + '</b></td>' +
+                        '<td><b>' + totalTotal + '</b></td>' 
+                    );
                 }
             });
         },
@@ -474,6 +490,7 @@ function DescargarArchivosExcel(){
 	if (tipo_documento == "")tipo_documento = 0;
 	if (serie == "")serie = 0;
 	if (numero == "")numero = 0;
+    if (estado_pago == 0 )estado_pago = -99;
 	if (estado_pago == "")estado_pago = 0;
 	if (observacion_pago == "")observacion_pago = 0;
 	if (dias_pagado == "")dias_pagado = 0;

@@ -4473,11 +4473,13 @@ class ComprobanteController extends Controller
 		if($serie==0)$serie = "";
 		if($numero==0)$numero = "";
 		if($estado_pago==0)$estado_pago = "";
+		if($estado_pago==-99)$estado_pago = 0;
 		if($observacion_pago==0)$observacion_pago = "";
 		if($dias_pagado==0)$dias_pagado = "";
 		if($color==0)$color = "";
-		if($anulado===0)$anulado = "";
-        //dd($anulado);exit();
+		if($anulado==0)$anulado = "";
+        //dd($fecha_ini.'-'.$fecha_fin.'-'.$tipo_documento.'-'.$serie.'-'.$numero.'-'.$estado_pago.'-'.$observacion_pago.'-'.$dias_pagado.'-'.$color.'-'.$anulado);exit();
+
 		$factura_model = new Comprobante();
 		$p[]=$fecha_ini;
 		$p[]=$fecha_fin;
@@ -4492,7 +4494,7 @@ class ComprobanteController extends Controller
 		$p[]=1;
 		$p[]=10000;
 		$data = $factura_model->listar_factura_sodimac_pagos_ajax($p);
-		
+		//dd($data);exit();
 		$variable = [];
 		$n = 1;
 
