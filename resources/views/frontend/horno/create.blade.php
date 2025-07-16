@@ -296,7 +296,7 @@ label.form-control-sm{
 @section('breadcrumb')
 <ol class="breadcrumb" style="padding-left:130px;margin-top:0px;background-color:#283659">
     <li class="breadcrumb-item text-primary">Inicio</li>
-    <li class="breadcrumb-item active">Registro de Producci&oacute;n de Acerrado</li>
+    <li class="breadcrumb-item active">Registro de Ingreso al Horno</li>
     </li>
 </ol>
 
@@ -322,7 +322,7 @@ label.form-control-sm{
 
         <div class="card-body">
 
-			<form class="form-horizontal" method="post" action="" id="frmAcerradoMadera" autocomplete="off" enctype="multipart/form-data">
+			<form class="form-horizontal" method="post" action="" id="frmIngresoHorno" autocomplete="off" enctype="multipart/form-data">
 			
 			<!--<div class="row">
 				<div class="col-lg-5 col-md-5 col-sm-12 col-xs-12" style="margin-top:15px">
@@ -344,12 +344,12 @@ label.form-control-sm{
 									
 					<div class="row" style="padding-top:15px">
 
-						<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 
 							<div class="card">
 
 								<div class="card-header">
-									<strong>Ingreso Troncos</strong>
+									<strong>Ingreso al Horno</strong>
 								</div>
 
 								<div id="divTablaIngresoMadera" class="row col align-self-center" style="padding:10px 20px 10px 20px;">
@@ -368,21 +368,21 @@ label.form-control-sm{
 									
 									<div class="col-lg-5 col-md-5 col-sm-12 col-xs-12" style="padding-right:0px">
 										<input class="btn btn-warning btn-sm pull-rigth" value="Buscar" type="button" id="btnBuscar" />
-										<input class="btn btn-success btn-sm pull-rigth" value="Nuevo Ingreso" type="button" id="btnNuevoIngreso" style="margin-left:15px" />
-										<input class="btn btn-success btn-sm pull-rigth" value="Nueva Salida" type="button" id="btnNuevoSalida" style="margin-left:15px" />
+										<input class="btn btn-success btn-sm pull-rigth" value="Nuevo" type="button" id="btnNuevoIngreso" style="margin-left:15px" />
 									</div>
 								</div>
 
 								<div class="card-body">
 
 									<div class="table-responsive">
-									<table id="tblAcerradoMaderaCreate" class="table table-hover table-sm">
+									<table id="tblIngresoHorno" class="table table-hover table-sm">
 										<thead>
 										<tr style="font-size:13px">
 											<th>Id</th>
+											<th>Id</th>
 											<th>Fecha Ingreso</th>
-											<th>RUC</th>
-											<th>Raz&oacute;n Social</th>
+											<th>Temperatura Inicio</th>
+											<th></th>
 											<th>Placa</th>
 											<th>Tipo Madera</th>
 											<th>Cantidad Ingreso</th>
@@ -395,38 +395,6 @@ label.form-control-sm{
 									</table>
 									</div>
 								</div><!--table-responsive-->
-							</div>
-						</div>
-						<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-
-							<div class="card">
-								<div class="card-header">
-									<strong>
-										Producci&oacute;n Acerrio
-									</strong>
-								</div>
-
-								<div class="card-body">
-									
-									<div id="divProduccionMaderaAcerrada" class="table-responsive overflow-auto" style="max-height: 500px">
-										<table id="tblProduccionMaderaAcerradaCreate" class="table table-hover table-sm">
-											<thead>
-												<tr style="font-size:13px">
-													<th width="5%">Id</th>
-													<th width="15%">Fecha Producci&oacute;n</th>
-													<th width="12%">Tipo Madera</th>
-													<th width="18%">Medida</th>
-													<th width="10%">Paquetes</th>
-													<th width="10%">Cantidad 1</th>
-													<th width="10%">Cantidad 2</th>
-													<th width="10%">N° Piezas</th>
-												</tr>
-											</thead">
-											<tbody style="font-size:13px">
-											</tbody>
-										</table>
-									</div>
-								</div>
 							</div>
 						</div>
 					</div>
