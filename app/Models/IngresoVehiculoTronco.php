@@ -76,7 +76,7 @@ class IngresoVehiculoTronco extends Model
         left join ingreso_vehiculo_troncos ivt on ivttm.id_ingreso_vehiculo_troncos = ivt.id
         where id_ingreso_vehiculo_tronco_tipo_maderas='".$id."' 
         and ivtc.estado = '1'
-        order by ivtc 1 asc";
+        order by 1 asc";
 
 		$data = DB::select($cad);
         return $data;
