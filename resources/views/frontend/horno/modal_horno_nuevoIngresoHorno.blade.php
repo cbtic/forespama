@@ -16,7 +16,7 @@
 
 .modal-dialog {
     width: 100%;
-    max-width:75%!important
+    max-width:55%!important
 }
 
 .custom-select2-dropdown {
@@ -135,7 +135,7 @@ $.mask.definitions['p'] = "[Mm]";
 */
 $(document).ready(function() {
 
-    cargarDetalleIngreso();
+    cargarDetalleAcerrado();
 
     $('#fecha').datepicker({
         autoclose: true,
@@ -144,6 +144,8 @@ $(document).ready(function() {
 		changeYear: true,
         language: 'es'
     });
+
+    $('#operador').select2 ({  width : '100%' })
 
 });
 
@@ -200,15 +202,15 @@ function fn_save_madera_acerrado(){
     }
 }
 
-function cargarDetalleIngreso(){
+function cargarDetalleAcerrado(){
 
     var id = $("#id").val();
-    const tbody = $('#divAcerradoMadera');
+    const tbody = $('#divIngresoHorno');
 
     tbody.empty();
 
     $.ajax({
-        url: "/acerrado_madera/cargar_detalle_ingreso_vehiculo_acerrado",
+        url: "/horno/cargar_detalle_acerrado",
         dataType: "json",
         success: function(result){
 
@@ -216,19 +218,17 @@ function cargarDetalleIngreso(){
 
             var total_acumulado=0;
 
-            result.detalle_ingreso_acerrado.forEach(detalle_ingreso_acerrado => {
+            result.detalle_acerrado.forEach(detalle_acerrado => {
 
                 const row = `
                     <tr>
                         <td>${n}</td>
-                        <td><input name="id_ingreso_acerrado_detalle[]" id="id_ingreso_acerrado_detalle${n}" class="form-control form-control-sm" value="${detalle_ingreso_acerrado.id}" type="hidden"><input name="ruc[]" id="ruc${n}" class="form-control form-control-sm" style="border: none; background-color: transparent;" value="${detalle_ingreso_acerrado.ruc}" type="text" readonly></td>
-                        <td><input name="razon_social[]" id="razon_social${n}" class="form-control form-control-sm" style="border: none; background-color: transparent;" value="${detalle_ingreso_acerrado.razon_social}" type="text" readonly></td>
-                        <td><input name="letra[]" id="letra${n}" class="form-control form-control-sm" style="border: none; background-color: transparent;" value="${detalle_ingreso_acerrado.letra}" type="text" readonly></td>
-                        <td><input name="placa[]" id="placa${n}" class="form-control form-control-sm" style="border: none; background-color: transparent;" value="${detalle_ingreso_acerrado.placa}" type="text" readonly></td>
-                        <td><input name="id_tipo_madera[]" id="id_tipo_madera${n}" class="form-control form-control-sm" value="${detalle_ingreso_acerrado.id_tipo_maderas}" type="hidden"><input name="tipo_madera[]" id="tipo_madera${n}" class="form-control form-control-sm" style="border: none; background-color: transparent;" value="${detalle_ingreso_acerrado.tipo_madera}" type="text" readonly></td>
-                        <td><input name="cantidad_ingreso[]" id="cantidad_ingreso${n}" class="cantidad_ingreso form-control form-control-sm" style="border: none; background-color: transparent;" value="${detalle_ingreso_acerrado.cantidad_pendiente}" type="text" readonly></td>
-                        <td><input name="cantidad_ingreso_produccion[]" id="cantidad_ingreso_produccion${n}" class="cantidad_ingreso_produccion form-control form-control-sm" value="" type="text" oninput="calcularPorcentaje(this)"></td>
-                        <td><input name="porcentaje[]" id="porcentaje${n}" class="porcentaje form-control form-control-sm" value="" type="text"></td>
+                        <td><input name="id_acerrado_detalle[]" id="id_acerrado_detalle${n}" class="form-control form-control-sm" value="${detalle_acerrado.id}" type="hidden"><input name="fecha_produccion[]" id="fecha_produccion${n}" class="form-control form-control-sm" style="border: none; background-color: transparent;" value="${detalle_acerrado.fecha_produccion}" type="text" readonly></td>
+                        <td><input name="tipo_madera[]" id="tipo_madera${n}" class="form-control form-control-sm" style="border: none; background-color: transparent;" value="${detalle_acerrado.tipo_madera}" type="text" readonly></td>
+                        <td><input name="medida[]" id="medida${n}" class="form-control form-control-sm" style="border: none; background-color: transparent;" value="${detalle_acerrado.medida}" type="text" readonly></td>
+                        <td><input name="cantidad_paquete[]" id="cantidad_paquete${n}" class="form-control form-control-sm" style="border: none; background-color: transparent;" value="${detalle_acerrado.cantidad_paquetes}" type="text" readonly></td>
+                        <td><input name="total_n_piezas[]" id="total_n_piezas${n}" class="total_n_piezas form-control form-control-sm" style="border: none; background-color: transparent;" value="${detalle_acerrado.total_n_piezas}" type="text" readonly></td>
+                        <td><input name="ingreso_horno[]" id="ingreso_horno${n}" class="ingreso_horno form-control form-control-sm" value="" type="text" oninput="calcularIngresoHorno(this)"></td>
                     </tr>
                 `;
                 tbody.append(row);
@@ -239,72 +239,25 @@ function cargarDetalleIngreso(){
     })
 }
 
-function calcularPorcentaje(input) {
+function calcularIngresoHorno(input) {
 
-    var filas = $('.cantidad_ingreso_produccion');
-    var totalFilas = 0;
-
-    filas.each(function () {
-        var fila = $(this).closest('tr');
-        var cantidad_ingreso = parseFloat(fila.find('.cantidad_ingreso_produccion').val()) || 0;
-        if (cantidad_ingreso > 0) {
-            totalFilas++;
-        }
-    });
-
+    var fila = $(input).closest('tr');
+    var total_n_piezas = parseFloat(fila.find('.total_n_piezas').val()) || 0;
+    var cantidad_ingreso = parseFloat(fila.find('.ingreso_horno').val()) || 0;
     var sumaTotalProduccion = 0;
-    var error = false;
-
-    filas.each(function () {
-        var fila = $(this).closest('tr');
-        var cantidad_ingreso = parseFloat(fila.find('.cantidad_ingreso').val()) || 0;
-        var cantidad_produccion = parseFloat($(this).val()) || 0;
-
-        if (cantidad_produccion > cantidad_ingreso) {
-            bootbox.alert("La cantidad de ingreso a producción no puede ser mayor que la cantidad de ingreso.");
-            fila.find('.porcentaje').val("0.00");
-            fila.find('.cantidad_ingreso_produccion').val("");
-            error = true;
-            return false;
-        }
-
-        sumaTotalProduccion += cantidad_produccion;
-    });
-
-    if (error) {
-        $('#total_produccion').val("0.00");
-        $('#total_produccion_porcentaje').val("0.00");
-        calcularPorcentaje(input);
+    //alert(total_n_piezas +"-"+cantidad_ingreso)
+    if(cantidad_ingreso > total_n_piezas){
+        bootbox.alert("La cantidad de Ingreso al Horno no puede ser mayor al total de piezas");
         return;
     }
-
-    $('#total_produccion').val(sumaTotalProduccion.toFixed(2));
-
-    if (sumaTotalProduccion === 0) {
-        $('.porcentaje').val("0.00");
-        $('#total_produccion_porcentaje').val("0.00");
-        return;
-    }
-
-    var sumaPorcentaje = 0;
-
-    filas.each(function () {
-        var fila = $(this).closest('tr');
-        var cantidad_ingreso = parseFloat(fila.find('.cantidad_ingreso').val()) || 0;
-        var cantidad_produccion = parseFloat($(this).val()) || 0;
-        var porcentaje = 0;
-
-        if (totalFilas === 1) {
-            porcentaje = (cantidad_produccion / cantidad_ingreso) * 100;
-        } else {
-            porcentaje = (cantidad_produccion / sumaTotalProduccion) * 100;
-        }
-
-        fila.find('.porcentaje').val(porcentaje.toFixed(2));
-        sumaPorcentaje += porcentaje;
+    
+    $('.ingreso_horno').each(function() {
+        var val = parseFloat($(this).val()) || 0;
+        sumaTotalProduccion += val;
     });
 
-    $('#total_produccion_porcentaje').val(sumaPorcentaje.toFixed(2));
+    $('#total_ingreso_horno').val(sumaTotalProduccion.toFixed(2));
+
 }
 
 </script>
@@ -317,11 +270,11 @@ function calcularPorcentaje(input) {
             <div class="card">
 
                 <div class="card-header" style="text-align: center; font-size:16px; margin-top: 20px">
-                    <b>Ingreso de Troncos a Acerrio</b>
+                    <b>Ingreso Horno</b>
                 </div>
                 
                 <div class="card-body">
-                    <form method="post" action="#" id="frmIngresoAcerradoMadera" name="frmIngresoAcerradoMadera">
+                    <form method="post" action="#" id="frmIngresoHorno" name="frmIngresoHorno">
                     <div class="row">
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding-top:5px;padding-bottom:20px">
                         <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -332,37 +285,89 @@ function calcularPorcentaje(input) {
                             <div class="row" style="padding-left:10px">
 
                                 <div class="col-lg-2">
-                                    Fecha
+                                    Horno
+                                </div>
+                                <div class="col-lg-2">
+                                    <select name="horno" id="horno" class="form-control form-control-sm" onchange="">
+                                        <option value="">--Seleccionar--</option>
+                                        <?php
+                                        foreach ($horno as $row){?>
+                                            <option value="<?php echo $row->codigo ?>" <?php //echo ($id > 0 && $row->codigo == $orden_compra->id_moneda) ? "selected='selected'" : (($row->codigo == 1) ? "selected='selected'" : ""); ?>><?php echo $row->denominacion ?></option>
+                                            <?php 
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row" style="padding-left:10px">
+                                <div class="col-lg-2">
+                                    Fecha Encendido
                                 </div>
                                 <div class="col-lg-2">
                                     <input id="fecha" name="fecha" on class="form-control form-control-sm"  value="<?php echo /*isset($acerrado_madera) && $acerrado_madera->fecha_orden_compra ? $acerrado_madera->fecha_orden_compra :*/ date('Y-m-d'); ?>" type="text">
                                 </div>
+
+                                <div class="col-lg-2">
+                                    Hora Encendido
+                                </div>
+                                <div class="col-lg-2">
+                                    <input id="hora_encendido" name="hora_encendido" on class="form-control form-control-sm"  value="<?php /*echo isset($acerrado_madera) && $acerrado_madera->fecha_orden_compra ? $acerrado_madera->fecha_orden_compra :*/ ?>" type="time">
+                                </div>
+                            </div>
+                            <div class="row" style="padding-left:10px">
+                                <div class="col-lg-2">
+                                    Temperatura Inicio
+                                </div>
+                                <div class="col-lg-2">
+                                    <input id="temperatura_inicio" name="temperatura_inicio" class="form-control form-control-sm"  value="<?php /*echo isset($acerrado_madera) && $acerrado_madera->fecha_orden_compra ? $acerrado_madera->fecha_orden_compra :*/ ?>" placeholder="&#176;C" type="number">
+                                </div>
+                            
+                                <div class="col-lg-2">
+                                    Humedad Inicio
+                                </div>
+                                <div class="col-lg-2">
+                                    <input id="humedad_inicio" name="humedad_inicio" on class="form-control form-control-sm"  value="<?php /*echo isset($acerrado_madera) && $acerrado_madera->fecha_orden_compra ? $acerrado_madera->fecha_orden_compra :*/ ?>" placeholder="&#37;" type="text">
+                                </div>
+                            </div>
+                            <div class="row" style="padding-left:10px">
+                                <div class="col-lg-2">
+                                    Operador
+                                </div>
+                                <div class="col-lg-6">
+                                    <select name="operador" id="operador" class="form-control form-control-sm" onchange="">
+                                        <option value="">--Seleccionar--</option>
+                                        <?php
+                                        foreach ($operador as $row){?>
+                                            <option value="<?php echo $row->id ?>" <?php //echo ($id > 0 && $row->codigo == $orden_compra->id_moneda) ? "selected='selected'" : (($row->codigo == 1) ? "selected='selected'" : ""); ?>><?php echo $row->nombres . ' ' . $row->apellido_paterno . ' ' . $row->apellido_materno ?></option>
+                                            <?php 
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
+
                             </div>
 
                             <div class="card-body">
 
                                 <div class="table-responsive" style="overflow-y: auto; max-height: 400px; overflow-x: auto; ">
-                                    <table id="tblAcerradoMadera" class="table table-hover table-sm">
+                                    <table id="tblIngresoHorno" class="table table-hover table-sm">
                                         <thead>
                                         <tr style="font-size:13px">
-                                            <th style="width : 3%">#</th>
-                                            <th style="width : 10%">Ruc</th>
-                                            <th style="width : 30%">Razon Social</th>
-                                            <th style="width : 7%">Letra</th>
-                                            <th style="width : 10%">Placa</th>
-                                            <th style="width : 10%">Tipo Madera</th>
-                                            <th style="width : 10%">Cantidad</th>
-                                            <th style="width : 10%">Ingreso Producci&oacute;n</th>
-                                            <th style="width : 10%">%</th>
+                                            <th style="width : 5%">#</th>
+                                            <th style="width : 20%">Fecha Acerrado</th>
+                                            <th style="width : 20%">Tipo Madera</th>
+                                            <th style="width : 20%">Medida</th>
+                                            <th style="width : 15%">Cantidad Paquetes</th>
+                                            <th style="width : 10%">Total Piezas</th>
+                                            <th style="width : 10%">Ingreso Horno</th>
                                         </tr>
                                         </thead>
-                                        <tbody id="divAcerradoMadera">
+                                        <tbody id="divIngresoHorno">
                                         </tbody>
                                         <tfoot>
                                             <tr>
-                                                <td colspan="7" style="text-align:right;"><strong>Total:</strong></td>
-                                                <td><input type="text" id="total_produccion" class="form-control form-control-sm" readonly></td>
-                                                <td><input type="text" id="total_produccion_porcentaje" class="form-control form-control-sm" readonly></td>
+                                                <td colspan="6" style="text-align:right;"><strong>Total:</strong></td>
+                                                <td><input type="text" id="total_ingreso_horno" class="form-control form-control-sm" readonly></td>
                                             </tr>
                                         </tfoot>
                                     </table>

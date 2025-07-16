@@ -698,4 +698,4 @@ Route::get('horno/create', [HornoController::class, 'create'])->name('horno.crea
 Route::post('horno/listar_ingreso_horno_ajax', [HornoController::class, 'listar_ingreso_horno_ajax'])->name('horno.listar_ingreso_horno_ajax');
 Route::get('horno/modal_ingreso_horno/{id}', [HornoController::class, 'modal_ingreso_horno'])->name('horno.modal_ingreso_horno');
 Route::post('horno/send_ingreso_horno', [HornoController::class, 'send_ingreso_horno'])->name('horno.send_ingreso_horno');
-//Route::get('horno/cargar_detalle_ingreso_vehiculo_acerrado', [HornoController::class, 'cargar_detalle_ingreso_vehiculo_acerrado'])->name('horno.cargar_detalle_ingreso_vehiculo_acerrado');
+Route::get('horno/cargar_detalle_acerrado', [HornoController::class, 'cargar_detalle_acerrado'])->name('horno.cargar_detalle_acerrado');

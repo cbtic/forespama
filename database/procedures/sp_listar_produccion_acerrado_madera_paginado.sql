@@ -17,10 +17,12 @@ begin
 	
 	p_pagina=(p_pagina::Integer-1)*p_limit::Integer;
 
-	v_campos=' pam.id, pam.fecha_produccion, sum(pamd.total_n_piezas) cantidad_producido, pam.estado ';
+	v_campos=' pamd.id, pam.fecha_produccion, tm.denominacion tipo_madera, tm2.denominacion medida, pamd.cantidad_paquetes, pamd.medida1_paquete, pamd.medida2_paquete, pamd.total_n_piezas, pamd.estado ';
 
-	v_tabla=' from produccion_acerrado_maderas pam
-	inner join produccion_acerrado_madera_detalles pamd on pamd.id_produccion_acerrado_maderas  = pam.id ';
+	v_tabla=' from produccion_acerrado_madera_detalles pamd 
+	inner join produccion_acerrado_maderas pam on pamd.id_produccion_acerrado_maderas = pam.id 
+	inner join tabla_maestras tm on tm.codigo::int = pamd.id_tipo_madera and tm.tipo = ''42''
+	inner join tabla_maestras tm2 on tm2.codigo::int = pamd.id_medida and tm2.tipo = ''82'' ';
 	
 	v_where = ' Where 1=1 ';
 
@@ -29,7 +31,7 @@ begin
 	End If;
 
 	If p_estado<>'' Then
-	 v_where:=v_where||'And pam.estado  = '''||p_estado||''' ';
+	 v_where:=v_where||'And pamd.estado  = '''||p_estado||''' ';
 	End If;
 	
 	
@@ -37,9 +39,9 @@ begin
 	v_col_count:=' ,'||v_count||' as TotalRows ';
 
 	If v_count::Integer > p_limit::Integer then
-		v_scad:='SELECT '||v_campos||v_col_count||v_tabla||v_where||' group by pam.id Order By pam.id desc LIMIT '||p_limit||' OFFSET '||p_pagina||';'; 
+		v_scad:='SELECT '||v_campos||v_col_count||v_tabla||v_where||' Order By pamd.id desc LIMIT '||p_limit||' OFFSET '||p_pagina||';'; 
 	else
-		v_scad:='SELECT '||v_campos||v_col_count||v_tabla||v_where||' group by pam.id Order By pam.id desc;'; 
+		v_scad:='SELECT '||v_campos||v_col_count||v_tabla||v_where||' Order By pamd.id desc;'; 
 	End If;
 
 	--Raise Notice '%',v_scad;

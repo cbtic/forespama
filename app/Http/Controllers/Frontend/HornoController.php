@@ -5,6 +5,9 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\TablaMaestra;
+use App\Models\IngresoHorno;
+use App\Models\Persona;
+use App\Models\ProduccionAcerradoMadera;
 use Auth;
 use Carbon\Carbon;
 
@@ -51,19 +54,21 @@ class HornoController extends Controller
     public function modal_ingreso_horno($id){
 		
 		$tabla_maestra_model = new TablaMaestra;
-        $empresa_cubicaje_model = new EmpresaCubicaje;
+        //$empresa_cubicaje_model = new EmpresaCubicaje;
+        $persona_model = new Persona;
 
-		if($id>0){
+		/*if($id>0){
 			$ingreso_horno = IngresoHorno::find($id);
 		}else{
 			$ingreso_horno = new IngresoHorno;
-		}
+		}*/
 
-		$tipo_madera = $tabla_maestra_model->getMaestroByTipo('42');
-		$medida_acerrado = $tabla_maestra_model->getMaestroByTipo('82');
-        $letra_empresa_cubicaje = $empresa_cubicaje_model->obtenerLetraEmpresa();
+		$horno = $tabla_maestra_model->getMaestroByTipo('83');
+		//$medida_acerrado = $tabla_maestra_model->getMaestroByTipo('82');
+        //$letra_empresa_cubicaje = $empresa_cubicaje_model->obtenerLetraEmpresa();
+        $operador = $persona_model->obtenerPersonaAll();
 
-		return view('frontend.horno.modal_horno_nuevoIngresoHorno',compact('id','ingreso_produccion_acerrado_madera','tipo_madera','medida_acerrado','letra_empresa_cubicaje'));
+		return view('frontend.horno.modal_horno_nuevoIngresoHorno',compact('id',/*'ingreso_horno',*/'horno','operador'));
 
     }
 
@@ -127,4 +132,14 @@ class HornoController extends Controller
         return response()->json(['success' => 'Registro de ingreso guardado exitosamente.']);
 
     }
+
+    public function cargar_detalle_acerrado(){
+		
+		$produccion_acerrado_madera_model = new ProduccionAcerradoMadera;
+		$detalle_acerrado = $produccion_acerrado_madera_model->getDetalleAcerrado();
+		
+		return response()->json([
+			'detalle_acerrado' => $detalle_acerrado
+		]);
+	}
 }

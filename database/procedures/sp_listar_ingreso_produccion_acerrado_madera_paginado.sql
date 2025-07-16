@@ -17,10 +17,15 @@ begin
 	
 	p_pagina=(p_pagina::Integer-1)*p_limit::Integer;
 
-	v_campos=' ipam.id, ipam.fecha_ingreso, sum(ipamd.cantidad_ingreso_tronco) cantidad_ingreso, ipam.estado ';
+	v_campos=' ipd.id, ipam.fecha_ingreso, e.ruc, e.razon_social, v.placa, tm.denominacion tipo_madera, ipd.cantidad_ingreso_tronco, ipd.estado ';
 
-	v_tabla=' from ingreso_produccion_acerrado_maderas ipam
-	inner join ingreso_produccion_acerrado_madera_detalles ipamd on ipamd.id_ingreso_produccion_acerrado_maderas = ipam.id ';
+	v_tabla=' from ingreso_produccion_acerrado_madera_detalles ipd 
+	inner join ingreso_produccion_acerrado_maderas ipam on ipd.id_ingreso_produccion_acerrado_maderas = ipam.id 
+	inner join ingreso_vehiculo_tronco_tipo_maderas ivttm on ivttm.id = ipd.id_ingreso_vehiculo_tronco_tipo_maderas 
+	inner join ingreso_vehiculo_troncos ivt on ivttm.id_ingreso_vehiculo_troncos = ivt.id 
+	inner join empresas e on e.id = ivt.id_empresa_proveedor 
+	inner join vehiculos v on ivt.id_vehiculos = v.id
+	inner join tabla_maestras tm on tm.codigo::int = ipd.id_tipo_madera and tm.tipo =''42'' ';
 	
 	v_where = ' Where 1=1 ';
 
@@ -29,7 +34,7 @@ begin
 	End If;
 
 	If p_estado<>'' Then
-	 v_where:=v_where||'And ipam.estado  = '''||p_estado||''' ';
+	 v_where:=v_where||'And ipd.estado  = '''||p_estado||''' ';
 	End If;
 	
 	
@@ -37,9 +42,9 @@ begin
 	v_col_count:=' ,'||v_count||' as TotalRows ';
 
 	If v_count::Integer > p_limit::Integer then
-		v_scad:='SELECT '||v_campos||v_col_count||v_tabla||v_where||' group by ipam.id Order By ipam.id desc LIMIT '||p_limit||' OFFSET '||p_pagina||';'; 
+		v_scad:='SELECT '||v_campos||v_col_count||v_tabla||v_where||' Order By ipd.id desc LIMIT '||p_limit||' OFFSET '||p_pagina||';'; 
 	else
-		v_scad:='SELECT '||v_campos||v_col_count||v_tabla||v_where||' group by ipam.id Order By ipam.id desc;'; 
+		v_scad:='SELECT '||v_campos||v_col_count||v_tabla||v_where||' Order By ipd.id desc;'; 
 	End If;
 
 	--Raise Notice '%',v_scad;

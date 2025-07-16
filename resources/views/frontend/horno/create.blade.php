@@ -375,19 +375,19 @@ label.form-control-sm{
 								<div class="card-body">
 
 									<div class="table-responsive">
-									<table id="tblIngresoHorno" class="table table-hover table-sm">
+									<table id="tblIngresoHornoCreate" class="table table-hover table-sm">
 										<thead>
 										<tr style="font-size:13px">
 											<th>Id</th>
-											<th>Id</th>
-											<th>Fecha Ingreso</th>
+											<th>N° Horno</th>
+											<th>Fecha Encendido</th>
+											<th>Hora Encendido</th>
 											<th>Temperatura Inicio</th>
-											<th></th>
-											<th>Placa</th>
-											<th>Tipo Madera</th>
-											<th>Cantidad Ingreso</th>
-											<!--<th>Estado</th>
-											<th>Acciones</th>-->
+											<th>Humedad Inicio</th>
+											<th>Fecha Apagado</th>
+											<th>Hora Apagado</th>
+											<th>Humedad Apagado</th>
+											<th>Operador</th>
 										</tr>
 										</thead>
 									<tbody style="font-size:13px">
@@ -429,6 +429,6 @@ label.form-control-sm{
 
 	</script>
 
-	<script src="{{ asset('js/acerrado_madera.js') }}"></script>
+	<script src="{{ asset('js/horno.js') }}"></script>
 
 	@endpush

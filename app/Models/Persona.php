@@ -123,15 +123,15 @@ class Persona extends Model
       return $data;
    }
 
-   public function obtenerPersonaAll(){
+    public function obtenerPersonaAll(){
     
-    $cad="select * from personas p 
-    where estado ='1' 
-    order by nombres asc";
+        $cad="select * from personas p 
+        where estado ='1' 
+        order by nombres asc";
 
-    $data = DB::select($cad);
-    return $data;
+        $data = DB::select($cad);
+        return $data;
 
-   }
+    }
 
 }
