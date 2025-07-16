@@ -67,13 +67,13 @@
 								@can('Reporte Pagos')
 									<x-utils.link :href="route('frontend.ingreso_vehiculo_tronco.reporte_pagos')" class="dropdown-item" :text="__('Reporte Pagos')" :active="activeClass(Route::is('admin.auth.role.*'), 'c-active')" />
 								@endif
+
 							</div>
 						</li>
 						
-
 					@endif
 					
-					@if(Gate::check('Acerrado'))
+					@if(Gate::check('Acerrado') || Gate::check('Horno'))
 
 						<li class="nav-item dropdown">
 							<a href="#" class="nav-link dropdown-toggle" id="navbarDropdownPrueba" data-toggle="dropdown"
@@ -82,6 +82,10 @@
 								
 								@can('Acerrado')
 									<x-utils.link :href="route('frontend.acerrado_madera.create')" class="dropdown-item" :text="__('Acerrado Madera')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+								@endif
+
+								@can('Horno')
+									<x-utils.link :href="route('frontend.horno.create')" class="dropdown-item" :text="__('Horno')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
 								@endif
 								
 							</div>
@@ -150,13 +154,10 @@
 
 								@can('Orden Compra')
 									<x-utils.link :href="route('frontend.orden_compra.create')" class="dropdown-item" :text="__('Orden Compra y Venta')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
-
 								@endif
 
 								@can('Consulta Stock')
-
 									<x-utils.link :href="route('frontend.orden_compra.consulta_stock_pedido')" class="dropdown-item" :text="__('Consulta de Stock de Pedidos')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
-
 								@endif
 								
 								@can('Dispensacion')
@@ -224,6 +225,7 @@
 								@can('Pagos Orden Compra')
 									<x-utils.link :href="route('frontend.orden_compra.create_pago_orden_compra')" class="dropdown-item" :text="__('Pagos Orden Compra')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />                  
 								@endif
+
 							</div>
 						</li> 
 						
@@ -237,17 +239,18 @@
 
 						   <div class="dropdown-menu" aria-labelledby="navbarDropdownPrueba">
 
-							@can('Inventario')
+								@can('Inventario')
 									<x-utils.link :href="route('frontend.kardex.create_consulta')" class="dropdown-item" :text="__('Consultas de Existencias')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
-							@endif
+								@endif
 
-							@can('Consulta Productos Venta')
+								@can('Consulta Productos Venta')
 									<x-utils.link :href="route('frontend.kardex.create_consulta_productos')" class="dropdown-item" :text="__('Consultas de Productos')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
-							@endif
+								@endif
 
-							@can('Consulta Productos Orden Compra')
+								@can('Consulta Productos Orden Compra')
 									<x-utils.link :href="route('frontend.kardex.create_consulta_productos_orden_compra')" class="dropdown-item" :text="__('Consulta Productos por Orden Compra')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
-							@endif
+								@endif
+
 							</div>
 						</li>
 						
@@ -310,7 +313,6 @@
 								@endif
 
 							</div>
-
 						</li>
 					
 					@endif
@@ -324,15 +326,15 @@
 						   <div class="dropdown-menu" aria-labelledby="navbarDropdownPrueba">
 
 								@can('Reporte Comercializacion')
-										<x-utils.link :href="route('frontend.orden_compra.create_reporte_comercializacion')" class="dropdown-item" :text="__('Reporte de Comercializacion')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+									<x-utils.link :href="route('frontend.orden_compra.create_reporte_comercializacion')" class="dropdown-item" :text="__('Reporte de Comercializacion')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
 								@endif
 
 								@can('Reporte Comercializacion Tienda')
-										<x-utils.link :href="route('frontend.orden_compra.create_reporte_comercializacion_tienda')" class="dropdown-item" :text="__('Reporte de Comercializacion por Tienda')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+									<x-utils.link :href="route('frontend.orden_compra.create_reporte_comercializacion_tienda')" class="dropdown-item" :text="__('Reporte de Comercializacion por Tienda')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
 								@endif
 
 								@can('Reporte Pedidos Tienda')
-										<x-utils.link :href="route('frontend.orden_compra.create_reporte_comercializacion_solicitado_tienda')" class="dropdown-item" :text="__('Reporte de Pedidos por Tienda')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+									<x-utils.link :href="route('frontend.orden_compra.create_reporte_comercializacion_solicitado_tienda')" class="dropdown-item" :text="__('Reporte de Pedidos por Tienda')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
 								@endif
 
 							</div>

@@ -42,6 +42,7 @@ use App\Http\Controllers\Frontend\DevolucionController;
 use App\Http\Controllers\Frontend\PromotorController;
 use App\Http\Controllers\Frontend\EmpresaCubicajeController;
 use App\Http\Controllers\Frontend\AcerradoMaderaController;
+use App\Http\Controllers\Frontend\HornoController;
 
 //use App\Http\Controllers\VehiculoController;
 
@@ -685,7 +686,6 @@ Route::get('requerimiento/modal_cerrar_antiguedad/{id}', [RequerimientoControlle
 Route::post('requerimiento/send_cerrar_antiguedad_requerimiento', [RequerimientoController::class, 'send_cerrar_antiguedad_requerimiento'])->name('requerimiento.send_cerrar_antiguedad_requerimiento');
 Route::get('ingreso_vehiculo_tronco/exportar_listar_reporte_anual/{placa}/{ruc}/{anio}', [IngresoVehiculoTroncoController::class, 'exportar_listar_reporte_anual'])->name('ingreso_vehiculo_tronco.exportar_listar_reporte_anual');
 Route::get('tipo_cambio/obtenerUltimoTipoCambio', [TipoCambioController::class, 'obtenerUltimoTipoCambio'])->name('tipo_cambio.obtenerUltimoTipoCambio');
-
 Route::get('acerrado_madera/create', [AcerradoMaderaController::class, 'create'])->name('acerrado_madera.create');
 Route::post('acerrado_madera/listar_ingreso_produccion_acerrado_madera_ajax', [AcerradoMaderaController::class, 'listar_ingreso_produccion_acerrado_madera_ajax'])->name('acerrado_madera.listar_ingreso_produccion_acerrado_madera_ajax');
 Route::post('acerrado_madera/listar_produccion_acerrado_madera_ajax', [AcerradoMaderaController::class, 'listar_produccion_acerrado_madera_ajax'])->name('acerrado_madera.listar_produccion_acerrado_madera_ajax');
@@ -694,3 +694,8 @@ Route::post('acerrado_madera/send_ingreso_produccion_acerrado_madera', [Acerrado
 Route::post('acerrado_madera/send_produccion_acerrado_madera', [AcerradoMaderaController::class, 'send_produccion_acerrado_madera'])->name('acerrado_madera.send_produccion_acerrado_madera');
 Route::get('acerrado_madera/cargar_detalle_ingreso_vehiculo_acerrado', [AcerradoMaderaController::class, 'cargar_detalle_ingreso_vehiculo_acerrado'])->name('acerrado_madera.cargar_detalle_ingreso_vehiculo_acerrado');
 Route::get('acerrado_madera/modal_salida_acerrado_madera/{id}', [AcerradoMaderaController::class, 'modal_salida_acerrado_madera'])->name('acerrado_madera.modal_salida_acerrado_madera');
+Route::get('horno/create', [HornoController::class, 'create'])->name('horno.create');
+Route::post('horno/listar_ingreso_horno_ajax', [HornoController::class, 'listar_ingreso_horno_ajax'])->name('horno.listar_ingreso_horno_ajax');
+Route::get('horno/modal_ingreso_horno/{id}', [HornoController::class, 'modal_ingreso_horno'])->name('horno.modal_ingreso_horno');
+Route::post('horno/send_ingreso_horno', [HornoController::class, 'send_ingreso_horno'])->name('horno.send_ingreso_horno');
+//Route::get('horno/cargar_detalle_ingreso_vehiculo_acerrado', [HornoController::class, 'cargar_detalle_ingreso_vehiculo_acerrado'])->name('horno.cargar_detalle_ingreso_vehiculo_acerrado');

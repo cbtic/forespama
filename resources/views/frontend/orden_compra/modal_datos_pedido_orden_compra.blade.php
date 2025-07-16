@@ -242,10 +242,22 @@ function fn_save_datos_pedido(){
     var nombre_contacto = $('#nombre_contacto').val();
     var telefono_contacto = $('#telefono_contacto').val();
     var direccion_contacto = $('#direccion_contacto').val();
+    var departamento_contacto = $('#departamento_contacto option:selected').text();
+    var provincia_contacto = $('#provincia_contacto option:selected').text();
+    var distrito_contacto = $('#distrito_contacto option:selected').text();
+    var departamento_contacto_caracteres = departamento_contacto.length;
+    var provincia_contacto_caracteres = provincia_contacto.length;
+    var distrito_contacto_caracteres = distrito_contacto.length;
+    var total_ubigeo_caracteres = departamento_contacto_caracteres + provincia_contacto_caracteres  + distrito_contacto_caracteres + 9;
+    var total_caracteres_direccion = total_ubigeo_caracteres + direccion_contacto.length;
+
+    //alert(total_caracteres_direccion);
+    //return;
 
     if(nombre_contacto==""){msg+="Ingrese el Nombre <br>";}
     if(telefono_contacto==""){msg+="Ingrese el Telefono <br>";}
     if(direccion_contacto==""){msg+="Ingrese la Direccion <br>";}
+    if(total_caracteres_direccion > 100){msg+="El total de caracteres del ubigeo y direccion no pueden ser mayor a 100 <br>";}
 
     if(msg!=""){
         bootbox.alert(msg);

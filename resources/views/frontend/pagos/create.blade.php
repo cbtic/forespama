@@ -573,7 +573,6 @@ label.form-control-sm{
 									<tbody style="font-size:13px">
 									</tbody>
 									</table>
-									
 									</div>
 								</div>
                     		</div>

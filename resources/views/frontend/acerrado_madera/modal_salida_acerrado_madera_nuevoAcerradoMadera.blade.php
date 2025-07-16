@@ -155,10 +155,9 @@ $('#openOverlayOpc').on('shown.bs.modal', function() {
 	 
 });
 
-
 function fn_save_produccion_madera_acerrado(){
 	
-    var msg = "";
+     var msg = "";
     var _token = $('#_token').val();
 	var id = $('#id').val();
 
@@ -174,26 +173,40 @@ function fn_save_produccion_madera_acerrado(){
         bootbox.alert(msg);
         return false;
     }else{
-        var msgLoader = "";
-        msgLoader = "Procesando, espere un momento por favor";
-        var heightBrowser = $(window).width()/2;
-        $('.loader').css("opacity","0.8").css("height",heightBrowser).html("<div id='Grd1_wrapper' class='dataTables_wrapper'><div id='Grd1_processing' class='dataTables_processing panel-default'>"+msgLoader+"</div></div>");
-        $('.loader').show();
-
-        $.ajax({
-            url: "/acerrado_madera/send_produccion_acerrado_madera",
-            type: "POST",
-            data : $("#frmSalidaAcerradoMadera").serialize(),
-            success: function (result) {
-                
-                $('#openOverlayOpc').modal('hide');
-                $('.loader').hide();
-                bootbox.alert("Se guard&oacute; satisfactoriamente"); 
-                datatablenew();
-                
+        bootbox.confirm({ 
+            size: "small",
+            message: "&iquest;Est&aacute; seguro de Guardar el ingreso?", 
+            callback: function(result){
+                if (result==true) {
+                    save_produccion();
+                }
             }
         });
+        
     }
+}
+
+
+function save_produccion(){
+	
+    var msgLoader = "";
+    msgLoader = "Procesando, espere un momento por favor";
+    var heightBrowser = $(window).width()/2;
+    $('.loader').css("opacity","0.8").css("height",heightBrowser).html("<div id='Grd1_wrapper' class='dataTables_wrapper'><div id='Grd1_processing' class='dataTables_processing panel-default'>"+msgLoader+"</div></div>");
+    $('.loader').show();
+
+    $.ajax({
+        url: "/acerrado_madera/send_produccion_acerrado_madera",
+        type: "POST",
+        data : $("#frmSalidaAcerradoMadera").serialize(),
+        success: function (result) {
+            
+            $('#openOverlayOpc').modal('hide');
+            $('.loader').hide();
+            bootbox.alert("Se guard&oacute; satisfactoriamente"); 
+            datatablenew2();
+        }
+    });
 }
 
 function cargarDetalleIngreso(){
@@ -318,7 +331,7 @@ function eliminarFila(button){
             <div class="card">
 
                 <div class="card-header" style="text-align: center; font-size:16px; margin-top: 20px">
-                    <b>Producci&oacute;n Diaria de Madera Acerrada</b>
+                    <b>Producci&oacute;n Acerrio</b>
                 </div>
                 
                 <div class="card-body">

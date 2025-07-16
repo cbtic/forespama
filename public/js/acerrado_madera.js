@@ -41,7 +41,7 @@ $(document).ready(function () {
 
 function datatablenew(){
                       
-    var oTable1 = $('#tblAcerradoMadera').dataTable({
+    var oTable1 = $('#tblAcerradoMaderaCreate').dataTable({
         "bServerSide": true,
         "sAjaxSource": "/acerrado_madera/listar_ingreso_produccion_acerrado_madera_ajax",
         "bProcessing": true,
@@ -117,15 +117,55 @@ function datatablenew(){
 
 				{
 					"mRender": function (data, type, row) {
-						var cantidad_ingreso = "";
-						if(row.cantidad_ingreso!= null)cantidad_ingreso = row.cantidad_ingreso;
-						return cantidad_ingreso;
+						var ruc = "";
+						if(row.ruc!= null)ruc = row.ruc;
+						return ruc;
 					},
 					"bSortable": true,
 					"aTargets": [2]
 				},
-				
+
 				{
+					"mRender": function (data, type, row) {
+						var razon_social = "";
+						if(row.razon_social!= null)razon_social = row.razon_social;
+						return razon_social;
+					},
+					"bSortable": true,
+					"aTargets": [3]
+				},
+
+				{
+					"mRender": function (data, type, row) {
+						var placa = "";
+						if(row.placa!= null)placa = row.placa;
+						return placa;
+					},
+					"bSortable": true,
+					"aTargets": [4]
+				},
+
+				{
+					"mRender": function (data, type, row) {
+						var tipo_madera = "";
+						if(row.tipo_madera!= null)tipo_madera = row.tipo_madera;
+						return tipo_madera;
+					},
+					"bSortable": true,
+					"aTargets": [5]
+				},
+
+				{
+					"mRender": function (data, type, row) {
+						var cantidad_ingreso_tronco = "";
+						if(row.cantidad_ingreso_tronco!= null)cantidad_ingreso_tronco = row.cantidad_ingreso_tronco;
+						return cantidad_ingreso_tronco;
+					},
+					"bSortable": true,
+					"aTargets": [6]
+				},
+				
+				/*{
 					"mRender": function (data, type, row) {
 						var estado = "";
 						if(row.estado == 1){
@@ -137,9 +177,9 @@ function datatablenew(){
 						return estado;
 					},
 					"bSortable": false,
-					"aTargets": [3]
+					"aTargets": [7]
 				},
-				/*{
+				{
 					"mRender": function (data, type, row) {
 						var estado = "";
 						var clase = "";
@@ -170,7 +210,7 @@ function datatablenew(){
 
 function datatablenew2(){
                       
-    var oTable1 = $('#tblProduccionMaderaAcerrada').dataTable({
+    var oTable1 = $('#tblProduccionMaderaAcerradaCreate').dataTable({
         "bServerSide": true,
         "sAjaxSource": "/acerrado_madera/listar_produccion_acerrado_madera_ajax",
         "bProcessing": true,
@@ -246,15 +286,65 @@ function datatablenew2(){
 
 				{
 					"mRender": function (data, type, row) {
-						var cantidad_producido = "";
-						if(row.cantidad_producido!= null)cantidad_producido = row.cantidad_producido;
-						return cantidad_producido;
+						var tipo_madera = "";
+						if(row.tipo_madera!= null)tipo_madera = row.tipo_madera;
+						return tipo_madera;
 					},
 					"bSortable": true,
 					"aTargets": [2]
 				},
-				
+
 				{
+					"mRender": function (data, type, row) {
+						var medida = "";
+						if(row.medida!= null)medida = row.medida;
+						return medida;
+					},
+					"bSortable": true,
+					"aTargets": [3]
+				},
+
+				{
+					"mRender": function (data, type, row) {
+						var cantidad_paquetes = "";
+						if(row.cantidad_paquetes!= null)cantidad_paquetes = row.cantidad_paquetes;
+						return cantidad_paquetes;
+					},
+					"bSortable": true,
+					"aTargets": [4]
+				},
+
+				{
+					"mRender": function (data, type, row) {
+						var medida1_paquete = "";
+						if(row.medida1_paquete!= null)medida1_paquete = row.medida1_paquete;
+						return medida1_paquete;
+					},
+					"bSortable": true,
+					"aTargets": [5]
+				},
+
+				{
+					"mRender": function (data, type, row) {
+						var medida2_paquete = "";
+						if(row.medida2_paquete!= null)medida2_paquete = row.medida2_paquete;
+						return medida2_paquete;
+					},
+					"bSortable": true,
+					"aTargets": [6]
+				},
+
+				{
+					"mRender": function (data, type, row) {
+						var total_n_piezas = "";
+						if(row.total_n_piezas!= null)total_n_piezas = row.total_n_piezas;
+						return total_n_piezas;
+					},
+					"bSortable": true,
+					"aTargets": [7]
+				},
+				
+				/*{
 					"mRender": function (data, type, row) {
 						var estado = "";
 						if(row.estado == 1){
@@ -266,9 +356,9 @@ function datatablenew2(){
 						return estado;
 					},
 					"bSortable": false,
-					"aTargets": [3]
+					"aTargets": [8]
 				},
-				/*{
+				{
 					"mRender": function (data, type, row) {
 						var estado = "";
 						var clase = "";
