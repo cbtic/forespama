@@ -264,25 +264,25 @@ function calcularIngresoHorno(input) {
 }
 
 function calcularTotalPiezasIngreso(input){
-
     var fila = $(input).closest('tr');
 
     var cantidad_paquete = parseFloat(fila.find('.cantidad_paquete').val()) || 0;
     var cantidad_paquete_ingreso = parseFloat(fila.find('.cantidad_paquete_ingreso').val()) || 0;
 
-    alert(cantidad_paquete_ingreso+'-'+cantidad_paquete)
-    if(parseInt(cantidad_paquete_ingreso) > parseInt(cantidad_paquete)){
+    // Verificación antes de continuar
+    if (cantidad_paquete_ingreso > cantidad_paquete) {
         bootbox.alert("La cantidad de Paquetes de Ingreso al Horno no puede ser mayor al total de Paquetes");
         fila.find('.cantidad_paquete_ingreso').val("");
-        calcularTotalPiezasIngreso(input);
+        fila.find('.ingreso_horno').val(""); // también limpiar ingreso_horno
         return;
     }
 
+    // Si todo está bien, calcula normalmente
     var total_ingreso_horno = cantidad_paquete_ingreso * 10; // cambiar el 10 por las medidas
 
     fila.find('.ingreso_horno').val(total_ingreso_horno);
 
-    calcularIngresoHorno(input);
+    calcularIngresoHorno(input); // solo llamas si todo es válido
 }
 
 </script>
