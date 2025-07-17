@@ -83,6 +83,27 @@
 #tablemodalm{
 	
 }
+
+.bloque-horno {
+    width: 210px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 5px;
+    margin: 5px;
+    text-align: center;
+}
+
+.fila-horno {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: start;
+}
+
+.fila-label {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
 </style>
 
 <!--<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"/>-->
@@ -135,7 +156,7 @@ $.mask.definitions['p'] = "[Mm]";
 */
 $(document).ready(function() {
 
-    cargarDetalleAcerrado();
+    cargarDetalleHorno();
 
     $('#fecha').datepicker({
         autoclose: true,
@@ -153,7 +174,7 @@ $(document).ready(function() {
 
 <script type="text/javascript">
 
-function fn_save_madera_acerrado(){
+function fn_save_salida_horno(){
 	
     var msg = "";
     var _token = $('#_token').val();
@@ -162,20 +183,6 @@ function fn_save_madera_acerrado(){
     var fecha = $('#fecha').val();
 
     if(fecha==""){msg+="Ingrese una Fecha <br>";}
-
-    var filas = $('#divAcerradoMadera tr');
-    var tieneCantidades = false;
-
-    filas.each(function(index) {
-        var cantidad = parseInt($(this).find('input[name="cantidad_ingreso_produccion[]"]').val());
-        if (cantidad || cantidad >= 0) {
-            tieneCantidades = true;
-        }
-    });
-
-    if(tieneCantidades==false){
-        msg+="Ingrese una cantidad como minimo <br>";
-    }
 
     if(msg!=""){
         bootbox.alert(msg);
@@ -188,9 +195,9 @@ function fn_save_madera_acerrado(){
         $('.loader').show();
 
         $.ajax({
-            url: "/acerrado_madera/send_ingreso_produccion_acerrado_madera",
+            url: "/horno/send_ingreso_horno",
             type: "POST",
-            data : $("#frmIngresoAcerradoMadera").serialize(),
+            data : $("#frmSalidaHorno").serialize(),
             success: function (result) {
                 $('#openOverlayOpc').modal('hide');
                 $('.loader').hide();
@@ -202,42 +209,41 @@ function fn_save_madera_acerrado(){
     }
 }
 
-function cargarDetalleAcerrado(){
+function cargarDetalleHorno() {
+    const container = $('#divIngresoHorno');
+    container.empty();
 
-    var id = $("#id").val();
-    const tbody = $('#divIngresoHorno');
+    const filas = ["3", "2", "1"];
+    const letras = ["A", "B", "C", "D"];
+    const niveles = ["3", "2", "1"];
 
-    tbody.empty();
+    let contador = 1;
 
-    $.ajax({
-        url: "/horno/cargar_detalle_acerrado",
-        dataType: "json",
-        success: function(result){
+    filas.forEach(filaNum => {
+        let filaHtml = `<div class="fila-label mt-3"><strong>FILA N° ${filaNum}</strong></div>`;
 
-            let n = 1;
+        niveles.forEach(nivel => {
+            filaHtml += `<div class="fila-horno d-flex mb-3">`;
 
-            var total_acumulado=0;
+            letras.forEach(letra => {
+                const ubicacion = `${filaNum}${letra}-${nivel}`;
 
-            result.detalle_acerrado.forEach(detalle_acerrado => {
+                filaHtml += `<div class="text-center mx-2 bloque-horno" style="display: flex; flex-direction: column; align-items: center;">
+                        <div><strong>Ubicación: ${ubicacion}</strong></div>
+                        <div class="mt-1">
+                            <label for="humedad${contador}">Humedad:</label>
+                            <input id="humedad${contador}" name="humedad[]" class="form-control form-control-sm text-center" style="width: 60px; display: inline-block;" type="text" placeholder="%">
+                        </div>
+                    </div>`;
 
-                const row = `
-                    <tr>
-                        <td>${n}</td>
-                        <td><input name="id_acerrado_detalle[]" id="id_acerrado_detalle${n}" class="form-control form-control-sm" value="${detalle_acerrado.id}" type="hidden"><input name="fecha_produccion[]" id="fecha_produccion${n}" class="form-control form-control-sm" style="border: none; background-color: transparent;" value="${detalle_acerrado.fecha_produccion}" type="text" readonly></td>
-                        <td><input name="tipo_madera[]" id="tipo_madera${n}" class="form-control form-control-sm" style="border: none; background-color: transparent;" value="${detalle_acerrado.tipo_madera}" type="text" readonly></td>
-                        <td><input name="medida[]" id="medida${n}" class="form-control form-control-sm" style="border: none; background-color: transparent;" value="${detalle_acerrado.medida}" type="text" readonly></td>
-                        <td><input name="cantidad_paquete[]" id="cantidad_paquete${n}" class="cantidad_paquete form-control form-control-sm" style="border: none; background-color: transparent;" value="${detalle_acerrado.cantidad_paquetes}" type="text" readonly></td>
-                        <td><input name="total_n_piezas[]" id="total_n_piezas${n}" class="total_n_piezas form-control form-control-sm" style="border: none; background-color: transparent;" value="${detalle_acerrado.total_n_piezas}" type="text" readonly></td>
-                        <td><input name="cantidad_paquete_ingreso[]" id="cantidad_paquete_ingreso${n}" class="cantidad_paquete_ingreso form-control form-control-sm" value="" type="text" oninput="calcularTotalPiezasIngreso(this)"></td>
-                        <td><input name="ingreso_horno[]" id="ingreso_horno${n}" class="ingreso_horno form-control form-control-sm" value="" type="text" oninput="calcularIngresoHorno(this)" readonly></td>
-                    </tr>
-                `;
-                tbody.append(row);
-                
-                n++;
+                contador++;
             });
-        }
-    })
+
+            filaHtml += `</div>`;
+        });
+
+        container.append(filaHtml);
+    });
 }
 
 function calcularIngresoHorno(input) {
@@ -263,28 +269,6 @@ function calcularIngresoHorno(input) {
 
 }
 
-function calcularTotalPiezasIngreso(input){
-
-    var fila = $(input).closest('tr');
-
-    var cantidad_paquete = parseFloat(fila.find('.cantidad_paquete').val()) || 0;
-    var cantidad_paquete_ingreso = parseFloat(fila.find('.cantidad_paquete_ingreso').val()) || 0;
-
-    alert(cantidad_paquete_ingreso+'-'+cantidad_paquete)
-    if(parseInt(cantidad_paquete_ingreso) > parseInt(cantidad_paquete)){
-        bootbox.alert("La cantidad de Paquetes de Ingreso al Horno no puede ser mayor al total de Paquetes");
-        fila.find('.cantidad_paquete_ingreso').val("");
-        calcularTotalPiezasIngreso(input);
-        return;
-    }
-
-    var total_ingreso_horno = cantidad_paquete_ingreso * 10; // cambiar el 10 por las medidas
-
-    fila.find('.ingreso_horno').val(total_ingreso_horno);
-
-    calcularIngresoHorno(input);
-}
-
 </script>
 
 <body class="hold-transition skin-blue sidebar-mini">
@@ -295,11 +279,11 @@ function calcularTotalPiezasIngreso(input){
             <div class="card">
 
                 <div class="card-header" style="text-align: center; font-size:16px; margin-top: 20px">
-                    <b>Ingreso Horno</b>
+                    <b>Salida Horno</b>
                 </div>
                 
                 <div class="card-body">
-                    <form method="post" action="#" id="frmIngresoHorno" name="frmIngresoHorno">
+                    <form method="post" action="#" id="frmSalidaHorno" name="frmSalidaHorno">
                     <div class="row">
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding-top:5px;padding-bottom:20px">
                         <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -326,14 +310,14 @@ function calcularTotalPiezasIngreso(input){
                             </div>
                             <div class="row" style="padding-left:10px">
                                 <div class="col-lg-2">
-                                    Fecha Encendido
+                                    Fecha Apagado
                                 </div>
                                 <div class="col-lg-2">
                                     <input id="fecha" name="fecha" on class="form-control form-control-sm"  value="<?php echo /*isset($acerrado_madera) && $acerrado_madera->fecha_orden_compra ? $acerrado_madera->fecha_orden_compra :*/ date('Y-m-d'); ?>" type="text">
                                 </div>
 
                                 <div class="col-lg-2">
-                                    Hora Encendido
+                                    Hora Apagado
                                 </div>
                                 <div class="col-lg-2">
                                     <input id="hora_encendido" name="hora_encendido" on class="form-control form-control-sm"  value="<?php /*echo isset($acerrado_madera) && $acerrado_madera->fecha_orden_compra ? $acerrado_madera->fecha_orden_compra :*/ ?>" type="time">
@@ -341,14 +325,7 @@ function calcularTotalPiezasIngreso(input){
                             </div>
                             <div class="row" style="padding-left:10px">
                                 <div class="col-lg-2">
-                                    Temperatura Inicio
-                                </div>
-                                <div class="col-lg-2">
-                                    <input id="temperatura_inicio" name="temperatura_inicio" class="form-control form-control-sm"  value="<?php /*echo isset($acerrado_madera) && $acerrado_madera->fecha_orden_compra ? $acerrado_madera->fecha_orden_compra :*/ ?>" placeholder="&#176;C" type="number">
-                                </div>
-                            
-                                <div class="col-lg-2">
-                                    Humedad Inicio
+                                    Humedad Apagado
                                 </div>
                                 <div class="col-lg-2">
                                     <input id="humedad_inicio" name="humedad_inicio" on class="form-control form-control-sm"  value="<?php /*echo isset($acerrado_madera) && $acerrado_madera->fecha_orden_compra ? $acerrado_madera->fecha_orden_compra :*/ ?>" placeholder="&#37;" type="text">
@@ -369,41 +346,26 @@ function calcularTotalPiezasIngreso(input){
                                         ?>
                                     </select>
                                 </div>
-
                             </div>
-
+                            <div class="row" style="padding-left:10px">
+                                <div class="col-lg-2">
+                                    Observaci&oacute;n
+                                </div>
+                                <div class="col-lg-10">
+                                    <textarea id="observacion" name="observacion" on class="form-control form-control-sm"></textarea>
+                                </div>
+                            </div>
+                            
                             <div class="card-body">
-
-                                <div class="table-responsive" style="overflow-y: auto; max-height: 400px; overflow-x: auto; ">
-                                    <table id="tblIngresoHorno" class="table table-hover table-sm">
-                                        <thead>
-                                        <tr style="font-size:13px">
-                                            <th style="width : 5%">#</th>
-                                            <th style="width : 20%">Fecha Acerrado</th>
-                                            <th style="width : 20%">Tipo Madera</th>
-                                            <th style="width : 20%">Medida</th>
-                                            <th style="width : 15%">Cantidad Paquetes</th>
-                                            <th style="width : 10%">Total Piezas</th>
-                                            <th style="width : 10%">Ingreso Paquetes</th>
-                                            <th style="width : 10%">Ingreso Horno</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody id="divIngresoHorno">
-                                        </tbody>
-                                        <tfoot>
-                                            <tr>
-                                                <td colspan="6" style="text-align:right;"><strong>Total:</strong></td>
-                                                <td><input type="text" id="total_ingreso_horno" class="form-control form-control-sm" readonly></td>
-                                            </tr>
-                                        </tfoot>
-                                    </table>
+                                <div id="divIngresoHorno" class="container-fluid">
+                                    <!-- Aquí se cargará la estructura dinámica -->
                                 </div>
                             </div>
                             <div style="margin-top:15px" class="form-group">
                                 <div class="col-sm-12 controls">
                                     <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
                                     
-                                        <a href="javascript:void(0)" onClick="fn_save_madera_acerrado()" class="btn btn-sm btn-success" style="margin-right:10px">Guardar</a>
+                                        <a href="javascript:void(0)" onClick="fn_save_salida_horno()" class="btn btn-sm btn-success" style="margin-right:10px">Guardar</a>
                                         <a href="javascript:void(0)" onClick="$('#openOverlayOpc').modal('hide');" class="btn btn-sm btn-info" style="">Cerrar</a>
                                     </div>
                                                         

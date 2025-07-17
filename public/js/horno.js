@@ -7,6 +7,10 @@ $(document).ready(function () {
 	$('#btnNuevoIngreso').click(function () {
 		modalIngresoHorno(0);
 	});
+	
+	$('#btnNuevoSalida').click(function () {
+		modalSalidaHorno(0);
+	});
 
 	$('#fecha_bus').keypress(function(e){
 		if(e.which == 13) {
@@ -214,6 +218,21 @@ function modalIngresoHorno(id){
 
 	$.ajax({
 			url: "/horno/modal_ingreso_horno/"+id,
+			type: "GET",
+			success: function (result) {  
+					$("#diveditpregOpc").html(result);
+					$('#openOverlayOpc').modal('show');
+			}
+	});
+}
+
+function modalSalidaHorno(id){
+
+	$(".modal-dialog").css("width","85%");
+	$('#openOverlayOpc .modal-body').css('height', 'auto');
+
+	$.ajax({
+			url: "/horno/modal_salida_horno/"+id,
 			type: "GET",
 			success: function (result) {  
 					$("#diveditpregOpc").html(result);

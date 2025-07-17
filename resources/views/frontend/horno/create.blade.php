@@ -369,6 +369,7 @@ label.form-control-sm{
 									<div class="col-lg-5 col-md-5 col-sm-12 col-xs-12" style="padding-right:0px">
 										<input class="btn btn-warning btn-sm pull-rigth" value="Buscar" type="button" id="btnBuscar" />
 										<input class="btn btn-success btn-sm pull-rigth" value="Nuevo" type="button" id="btnNuevoIngreso" style="margin-left:15px" />
+										<input class="btn btn-success btn-sm pull-rigth" value="Nuevo" type="button" id="btnNuevoSalida" style="margin-left:15px" />
 									</div>
 								</div>
 

@@ -699,3 +699,4 @@ Route::post('horno/listar_ingreso_horno_ajax', [HornoController::class, 'listar_
 Route::get('horno/modal_ingreso_horno/{id}', [HornoController::class, 'modal_ingreso_horno'])->name('horno.modal_ingreso_horno');
 Route::post('horno/send_ingreso_horno', [HornoController::class, 'send_ingreso_horno'])->name('horno.send_ingreso_horno');
 Route::get('horno/cargar_detalle_acerrado', [HornoController::class, 'cargar_detalle_acerrado'])->name('horno.cargar_detalle_acerrado');
+Route::get('horno/modal_salida_horno/{id}', [HornoController::class, 'modal_salida_horno'])->name('horno.modal_salida_horno');

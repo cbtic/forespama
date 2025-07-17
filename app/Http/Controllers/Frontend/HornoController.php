@@ -72,6 +72,27 @@ class HornoController extends Controller
 
     }
 
+	public function modal_salida_horno($id){
+		
+		$tabla_maestra_model = new TablaMaestra;
+        //$empresa_cubicaje_model = new EmpresaCubicaje;
+        $persona_model = new Persona;
+
+		/*if($id>0){
+			$ingreso_horno = IngresoHorno::find($id);
+		}else{
+			$ingreso_horno = new IngresoHorno;
+		}*/
+
+		$horno = $tabla_maestra_model->getMaestroByTipo('83');
+		//$medida_acerrado = $tabla_maestra_model->getMaestroByTipo('82');
+        //$letra_empresa_cubicaje = $empresa_cubicaje_model->obtenerLetraEmpresa();
+        $operador = $persona_model->obtenerPersonaAll();
+
+		return view('frontend.horno.modal_horno_nuevoSalidaHorno',compact('id',/*'ingreso_horno',*/'horno','operador'));
+
+    }
+
     public function send_ingreso_horno(Request $request){
 
         $id_user = Auth::user()->id;
