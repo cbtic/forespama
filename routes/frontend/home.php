@@ -43,6 +43,7 @@ use App\Http\Controllers\Frontend\PromotorController;
 use App\Http\Controllers\Frontend\EmpresaCubicajeController;
 use App\Http\Controllers\Frontend\AcerradoMaderaController;
 use App\Http\Controllers\Frontend\HornoController;
+use App\Http\Controllers\Frontend\ActivoController;
 
 //use App\Http\Controllers\VehiculoController;
 
@@ -700,3 +701,10 @@ Route::get('horno/modal_ingreso_horno/{id}', [HornoController::class, 'modal_ing
 Route::post('horno/send_ingreso_horno', [HornoController::class, 'send_ingreso_horno'])->name('horno.send_ingreso_horno');
 Route::get('horno/cargar_detalle_acerrado', [HornoController::class, 'cargar_detalle_acerrado'])->name('horno.cargar_detalle_acerrado');
 Route::get('horno/modal_salida_horno/{id}', [HornoController::class, 'modal_salida_horno'])->name('horno.modal_salida_horno');
+Route::get('orden_compra/create_control_produccion', [OrdenCompraController::class, 'create_control_produccion'])->name('orden_compra.create_control_produccion');
+Route::post('orden_compra/listar_orden_compra_control_produccion_ajax', [OrdenCompraController::class, 'listar_orden_compra_control_produccion_ajax'])->name('orden_compra.listar_orden_compra_control_produccion_ajax');
+Route::get('orden_compra/modal_orden_compra_control_produccion/{id}', [OrdenCompraController::class, 'modal_orden_compra_control_produccion'])->name('orden_compra.modal_orden_compra_control_produccion');
+Route::get('activos/create', [ActivoController::class, 'create'])->name('activos.create');
+Route::post('activos/listar_activos_ajax', [ActivoController::class, 'listar_activos_ajax'])->name('activos.listar_activos_ajax');
+Route::get('activos/modal_activos_horno/{id}', [ActivoController::class, 'modal_activos_horno'])->name('activos.modal_activos_horno');
+Route::post('activos/send_activo', [ActivoController::class, 'send_activo'])->name('activos.send_activo');

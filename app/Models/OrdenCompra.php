@@ -46,6 +46,12 @@ class OrdenCompra extends Model
 
     }
 
+    public function listar_orden_compra_control_produccion_ajax($p){
+
+        return $this->readFuntionPostgres('sp_listar_orden_compra_control_produccion_paginado',$p);
+
+    }
+
     public function readFuntionPostgres($function, $parameters = null){
 
         $_parameters = '';

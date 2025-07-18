@@ -1792,6 +1792,100 @@ class OrdenCompraController extends Controller
 		
     }
 
+    public function create_control_produccion(){
+
+        $id_user = Auth::user()->id;
+        $user_model = new User;
+
+		$tablaMaestra_model = new TablaMaestra;
+        $almacen_user_model = new Almacen_usuario;
+        $persona_model = new Persona;
+
+        $cerrado_orden_compra = $tablaMaestra_model->getMaestroByTipo(52);
+        $proveedor = Empresa::all();
+        $almacen = Almacene::all();
+        $almacen_usuario = $almacen_user_model->getAlmacenByUser($id_user);
+        $vendedor = $user_model->getUserByRol(7,11);
+		$estado_pedido = $tablaMaestra_model->getMaestroByTipo(77);
+        $persona_compra = $persona_model->obtenerPersonaAll();
+        
+		return view('frontend.orden_compra.create_control_produccion',compact('cerrado_orden_compra','proveedor','almacen','almacen_usuario','vendedor','estado_pedido','persona_compra'));
+
+	}
+
+    public function listar_orden_compra_control_produccion_ajax(Request $request){
+
+        $id_user = Auth::user()->id;
+
+		$orden_compra_model = new OrdenCompra;
+        $p[]=$request->empresa_compra;
+        $p[]=$request->persona_compra;
+        $p[]=$request->fecha_inicio;
+        $p[]=$request->fecha_fin;
+        $p[]=$request->numero_orden_compra;
+        $p[]=$request->numero_orden_compra_cliente;
+        $p[]=$request->situacion;
+        $p[]=$request->almacen_origen;
+        $p[]=$request->estado;
+        $p[]=$request->vendedor;
+        $p[]=$request->estado_pedido;
+		$p[]=$request->NumeroPagina;
+		$p[]=$request->NumeroRegistros;
+		$data = $orden_compra_model->listar_orden_compra_control_produccion_ajax($p);
+		$iTotalDisplayRecords = isset($data[0]->totalrows)?$data[0]->totalrows:0;
+
+		$result["PageStart"] = $request->NumeroPagina;
+		$result["pageSize"] = $request->NumeroRegistros;
+		$result["SearchText"] = "";
+		$result["ShowChildren"] = true;
+		$result["iTotalRecords"] = $iTotalDisplayRecords;
+		$result["iTotalDisplayRecords"] = $iTotalDisplayRecords;
+		$result["aaData"] = $data;
+
+        echo json_encode($result);
+
+	}
+
+    public function modal_orden_compra_control_produccion($id){
+		
+        $id_user = Auth::user()->id;
+        $tablaMaestra_model = new TablaMaestra;
+        $producto_model = new Producto;
+        $marca_model = new Marca;
+        $almacen_model = new Almacene;
+        $user_model = new User;
+        $persona_model = new Persona;
+        $empresa_model = new Empresa;
+		
+		if($id>0){
+
+            $orden_compra = OrdenCompra::find($id);
+			
+		}else{
+			$orden_compra = new OrdenCompra;
+		}
+
+        $proveedor = $empresa_model->getEmpresaAll();
+        $tipo_documento = $tablaMaestra_model->getMaestroByTipo(54);
+        $producto = $producto_model->getProductoAll();
+        $marca = $marca_model->getMarcaAll();
+        $estado_bien = $tablaMaestra_model->getMaestroByTipo(4);
+        $unidad = $tablaMaestra_model->getMaestroByTipo(43);
+        $igv_compra = $tablaMaestra_model->getMaestroByTipo(51);
+        $descuento = $tablaMaestra_model->getMaestroByTipo(55);
+        $almacen = $almacen_model->getAlmacenAll();
+        $unidad_origen = $tablaMaestra_model->getMaestroByTipo(50);
+        $moneda = $tablaMaestra_model->getMaestroByTipo(1);
+
+        $vendedor = $user_model->getUserByRol(7,11);
+        $tipo_documento_cliente = $tablaMaestra_model->getMaestroByTipo(75);
+        $persona = $persona_model->obtenerPersonaAll();
+
+
+		return view('frontend.orden_compra.modal_orden_compra_nuevoOrdenCompraControlProduccion',compact('id','orden_compra','tipo_documento','proveedor','producto','marca','estado_bien','unidad','igv_compra','descuento','almacen','unidad_origen','id_user','moneda','vendedor','tipo_documento_cliente','persona'));
+
+    }
+
 }
 
 class InvoicesExport implements FromArray, WithHeadings, WithStyles

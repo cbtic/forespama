@@ -92,22 +92,29 @@
 						</li>
 					@endif
 					
+					
+					@if(Gate::check('Registro Activos'))
+						<li class="nav-item dropdown">
+							<a href="#" class="nav-link dropdown-toggle" id="navbarDropdownPrueba" data-toggle="dropdown"
+							aria-haspopup="true" aria-expanded="false">Activos</a>
+								
+								<div class="dropdown-menu" aria-labelledby="navbarDropdownPrueba">
+
+									@can('Registro Activos')
+										<x-utils.link :href="route('frontend.activos.create')" class="dropdown-item" :text="__('Registro de Activos')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" /><!--Control de Mantenimiento-->
+									@endif
+
+								</div>
+						</li>
+					@endif
+
 					@if(Gate::check('Almacenes') || Gate::check('Secciones') || Gate::check('Anaqueles') || Gate::check('Productos') || Gate::check('Lotes'))
 
 						<li class="nav-item dropdown">
-								<a href="#" class="nav-link dropdown-toggle" id="navbarDropdownPrueba" data-toggle="dropdown"
-							aria-haspopup="true" aria-expanded="false">Control Mantenimiento</a>
-								<!--
-								<div class="dropdown-menu" aria-labelledby="navbarDropdownPrueba">
-								</div>
-								-->
-						</li>
-
-						<li class="nav-item dropdown">
 							<a href="#" class="nav-link dropdown-toggle" id="navbarDropdownPrueba" data-toggle="dropdown"
-						   aria-haspopup="true" aria-expanded="false">Almacenes</a>
+						   	aria-haspopup="true" aria-expanded="false">Almacenes</a>
 
-						   <div class="dropdown-menu" aria-labelledby="navbarDropdownPrueba">
+						   	<div class="dropdown-menu" aria-labelledby="navbarDropdownPrueba">
 								
 								@can('Almacenes')
 									<x-utils.link :href="route('frontend.almacenes.create')" class="dropdown-item" :text="__('Almacenes')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
@@ -190,6 +197,10 @@
 
 								@can('Ajuste Stock')
 									<x-utils.link :href="route('frontend.entrada_productos.create_ajuste_stock')" class="dropdown-item" :text="__('Ajuste de Stock')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+								@endif
+
+								@can('Control Produccion Orden Compra')
+									<x-utils.link :href="route('frontend.orden_compra.create_control_produccion')" class="dropdown-item" :text="__('Control Produccion Orden Compra')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
 								@endif
 								
 							</div>

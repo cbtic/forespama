@@ -1,12 +1,6 @@
 <title>FORESPAMA</title>
 
 <style>
-/*
-.datepicker {
-  z-index: 1600 !important; 
-}
-*/
-/*.datepicker{ z-index:99999 !important; }*/
 
 .datepicker,
 .table-condensed {
@@ -99,9 +93,7 @@
 }
 
 #tablemodal tbody tr:hover td, #tablemodal tbody tr:hover th {
-  /*background-color: red!important;*/
   font-weight:bold;
-  /*mix-blend-mode: difference;*/
   
 }
 
@@ -115,22 +107,10 @@
 }
 
 #motivo_traslado {
-    z-index: 1050 !important;  /* Asegúrate de que sea compatible con el z-index del modal */
+    z-index: 1050 !important;
 }
 
 </style>
-
-<!--<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"/>-->
-<!--<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>-->
-<!--<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>-->
-
-
-<!--<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>-->
-
-
-<!--Se quito estas dos lineas de datepicker y se puso las 3 de abajo -->
-<!--<script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/js/bootstrap-datepicker.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" />-->
 
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/locales/bootstrap-datepicker.es.min.js" charset="UTF-8"></script>
@@ -138,36 +118,9 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/5.5.2/bootbox.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
 
-<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>-->
 
-<!--
-<script src="resources/plugins/timepicker/bootstrap-timepicker.min.js"></script>
-<link rel="stylesheet" href="resources/plugins/timepicker/bootstrap-timepicker.min.css">
--->
-
-<!--
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker-standalone.css">
--->
-
-<!--
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/3.1.4/js/bootstrap-datetimepicker.min.js" integrity="sha512-r/mHP22LKVhxWFlvCpzqMUT4dWScZc6WRhBMVUQh+SdofvvM1BS1Hdcy94XVOod7QqQMRjLQn5w/AQOfXTPvVA==" crossorigin="anonymous"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/3.1.4/css/bootstrap-datetimepicker.css" integrity="sha512-HWqapTcU+yOMgBe4kFnMcJGbvFPbgk39bm0ExFn0ks6/n97BBHzhDuzVkvMVVHTJSK5mtrXGX4oVwoQsNcsYvg==" crossorigin="anonymous" />
--->
-
-<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.js"></script>-->
 <script type="text/javascript">
-/*
-jQuery(function($){
-$.mask.definitions['H'] = "[0-1]";
-$.mask.definitions['h'] = "[0-9]";
-$.mask.definitions['M'] = "[0-5]";
-$.mask.definitions['m'] = "[0-9]";
-$.mask.definitions['P'] = "[AaPp]";
-$.mask.definitions['p'] = "[Mm]";
-});
-*/
+
 $(document).ready(function() {
 
     $('#placa_guia').mask('AAA-000');
@@ -268,232 +221,6 @@ $(document).ready(function() {
     $('#div_descripcion_motivo').hide()
 
 });
-
-function obtenerCodigo(){
-
-    var tipo_documento = $('#tipo_documento').val();
-
-    $.ajax({
-        url: "/ingreso_produccion/obtener_codigo_ingreso_produccion/"+tipo_documento,
-        dataType: "json",
-        success: function (result) {
-
-            $('#numero_ingreso_produccion').val(result[0].codigo);
-
-        }
-    });
-
-}
-
-function obtenerCodInterno(selectElement, n){
-
-    var id_producto = $(selectElement).val();
-
-    $.ajax({
-            url: "/productos/obtener_producto/"+id_producto,
-            dataType: "json",
-            success: function(result){
-                $('#cod_interno' + n).val(result[0].codigo);
-                $('#item' + n).val(result[0].numero_serie);
-                $('#marca' + n).val(result[0].id_marca).trigger('change');
-                $('#unidad' + n).val(result[0].id_unidad_producto);
-            }
-        });
-}
-
-function obtenerStock(selectElement, n){
-
-    var id_producto = $(selectElement).val();
-    var almacen = $('#almacen').val();
-
-    $.ajax({
-        url: "/productos/obtener_stock_producto/"+almacen+"/"+id_producto,
-        dataType: "json",
-        success: function(result){
-
-            var producto_stock = result.producto_stock[id_producto];
-            
-            $('#stock_actual' + n).val(producto_stock.saldos_cantidad);
-        }
-    });
-}
-
-var productosSeleccionados = [];
-
-function cargarDetalle(){
-
-    var id = $("#id").val();
-    const tbody = $('#divIngresoProduccionDetalle');
-
-    tbody.empty();
-
-    $.ajax({
-        url: "/ingreso_produccion/cargar_detalle/"+id,
-        type: "GET",
-        success: function (result) {
-
-            let n = 1;
-
-            result.ingreso_produccion.forEach(ingreso_produccion => {
-
-                let marcaOptions = '<option value="">--Seleccionar--</option>';
-                let productoOptions = '<option value="">--Seleccionar--</option>';
-                let estadoBienOptions = '<option value="">--Seleccionar--</option>';
-                let unidadMedidaOptions = '<option value="">--Seleccionar--</option>';
-
-                result.marca.forEach(marca => {
-                    let selected = (marca.id == ingreso_produccion.id_marca) ? 'selected' : '';
-                    marcaOptions += `<option value="${marca.id}" ${selected}>${marca.denominiacion}</option>`;
-                });
-
-                result.producto.forEach(producto => {
-                    let selected = (producto.id == ingreso_produccion.id_producto) ? 'selected' : '';
-                    productoOptions += `<option value="${producto.id}" ${selected}>${producto.codigo} - ${producto.denominacion}</option>`;
-                });
-
-                result.estado_bien.forEach(estado_bien => {
-                    let selected = (estado_bien.codigo == ingreso_produccion.id_estado_producto) ? 'selected' : '';
-                    estadoBienOptions += `<option value="${estado_bien.codigo}" ${selected}>${estado_bien.denominacion}</option>`;
-                });
-
-                result.unidad_medida.forEach(unidad_medida => {
-                    let selected = (unidad_medida.codigo == ingreso_produccion.id_unidad_medida) ? 'selected' : '';
-                    unidadMedidaOptions += `<option value="${unidad_medida.codigo}" ${selected}>${unidad_medida.denominacion}</option>`;
-                });
-
-                if (ingreso_produccion.id_producto) {
-                    productosSeleccionados.push(ingreso_produccion.id_producto);
-                }
-                
-                const row = `
-                    <tr>
-                        <td>${n}</td>
-                        <td><input name="id_ingreso_produccion_detalle[]" id="id_ingreso_produccion_detalle${n}" class="form-control form-control-sm" value="${ingreso_produccion.id}" type="hidden"><input name="item[]" id="item${n}" class="form-control form-control-sm" value="${ingreso_produccion.item}" type="text" readonly></td>
-                        <td style="width: 450px !important;display:block"><select name="descripcion_[]" id="descripcion_${n}" class="form-control form-control-sm" onChange="verificarProductoSeleccionado(this, ${n});" disabled>${productoOptions}</select><input name="descripcion[]" id="descripcion${n}" class="form-control form-control-sm" value="${ingreso_produccion.id_producto}" type="hidden"></td>
-                        <td><input name="cod_interno[]" id="cod_interno${n}" class="form-control form-control-sm" value="${ingreso_produccion.codigo}" type="text" readonly></td>
-                        <td><select name="marca_[]" id="marca_${n}" class="form-control form-control-sm" disabled>${marcaOptions}</select><input name="marca[]" id="marca${n}" class="form-control form-control-sm" value="${ingreso_produccion.id_marca}" type="hidden"></td>
-                        <td><select name="estado_bien_[]" id="estado_bien_${n}" class="form-control form-control-sm" onChange="" disabled>${estadoBienOptions}</select><input name="estado_bien[]" id="estado_bien${n}" class="form-control form-control-sm" value="${ingreso_produccion.id_estado_producto}" type="hidden"></td>
-                        <td><select name="unidad_[]" id="unidad_${n}" class="form-control form-control-sm" disabled>${unidadMedidaOptions}</select><input name="unidad[]" id="unidad${n}" class="form-control form-control-sm" value="${ingreso_produccion.id_unidad_medida}" type="hidden"></td>
-                        <td><input name="cantidad[]" id="cantidad${n}" class="cantidad form-control form-control-sm" value="${ingreso_produccion.cantidad}" type="text" oninput="calcularCantidadPendiente(this);calcularSubTotal(this)" readonly></td>
-                    </tr>
-                `;
-                tbody.append(row);
-                $('#descripcion_' + n).select2({ 
-                    width: '100%',
-                    dropdownCssClass: 'custom-select2-dropdown'
-                });
-
-                $('#marca_' + n).select2({
-                    width: '100%',
-                });
-
-                n++;
-                });
-            }
-    });
-
-}
-
-function agregarProducto(){
-
-    var opcionesDescripcion = `<?php
-        echo '<option value="">--Seleccionar--</option>';
-        foreach ($producto as $row) {
-            echo '<option value="' . htmlspecialchars($row->id, ENT_QUOTES, 'UTF-8') . '">' . htmlspecialchars($row->codigo. ' - ' .$row->denominacion, ENT_QUOTES, 'UTF-8') . '</option>';
-        }
-    ?>`;
-
-    var cantidad = 1;
-    var newRow = "";
-    for (var i = 0; i < cantidad; i++) { 
-
-        var n = $('#tblIngresoProduccionDetalle tbody tr').length + 1;
-        var item = '<input name="id_ingreso_produccion_detalle[]" id="id_ingreso_produccion_detalle' + n + '" class="form-control form-control-sm" value="0" type="hidden"><input name="item[]" id="item' + n + '" class="form-control form-control-sm" value="" type="text">';
-        var descripcion = '<select name="descripcion[]" id="descripcion' + n + '" class="form-control form-control-sm" onChange="verificarProductoSeleccionado(this, ' + n + ')"> '+ opcionesDescripcion +' </select>';
-        var descripcion_ant = '<input type="hidden" name="descripcion_ant[]" id="descripcion_ant' + n + '" class="form-control form-control-sm" />';
-        var cod_interno = '<input name="cod_interno[]" id="cod_interno' + n + '" class="form-control form-control-sm" value="" type="text">';
-        var marca = '<select name="marca[]" id="marca' + n + '" class="form-control form-control-sm" onchange=""> <option value="">--Seleccionar--</option><?php foreach ($marca as $row){?><option value="<?php echo htmlspecialchars($row->id); ?>"><?php echo htmlspecialchars(addslashes($row->denominiacion)); ?></option><?php }?></select>';
-        var estado_bien =  '<select name="estado_bien[]" id="estado_bien' + n + '" class="form-control form-control-sm" onChange=""><option value="">--Seleccionar--</option> <?php foreach ($estado_bien as $row) { ?> <option value="<?php echo $row->codigo ?>" <?php echo ($row->codigo == 1) ? "selected" : ""; ?>><?php echo $row->denominacion; ?></option> <?php } ?> </select>';
-        var unidad = '<select name="unidad[]" id="unidad' + n + '" class="form-control form-control-sm" onChange=""> <option value="">--Seleccionar--</option> <?php foreach ($unidad as $row) {?> <option value="<?php echo $row->codigo?>"><?php echo $row->denominacion?></option> <?php } ?> </select>';
-        var cantidad_ingreso = '<input name="cantidad[]" id="cantidad' + n + '" class="cantidad form-control form-control-sm" value="" type="text" oninput="">';
-        
-        var btnEliminar = '<button type="button" class="btn btn-danger btn-sm" onclick="eliminarFila(this)">Eliminar</button>';
-
-        newRow += '<tr>';
-        newRow += '<td>' + n + '</td>';
-        newRow += '<td>' + item + '</td>';
-        newRow += '<td style="width: 450px!important; display:block!important">' + descripcion_ant + descripcion + '</td>';
-        newRow += '<td>' + cod_interno + '</td>';
-        newRow += '<td>' + marca + '</td>';
-        newRow += '<td>' + estado_bien + '</td>';
-        newRow += '<td>' + unidad + '</td>';
-        newRow += '<td>' + cantidad_ingreso + '</td>';
-        newRow += '<td>' + btnEliminar + '</td>';
-        newRow += '</tr>';
-
-        $('#tblIngresoProduccionDetalle tbody').append(newRow);
-
-        $('#descripcion' + n).select2({
-            width: '100%',
-            dropdownCssClass: 'custom-select2-dropdown'
-        });
-
-        $('#marca' + n).select2({
-            width: '100%',
-        });
-    }
-}
-
-function verificarProductoSeleccionado(selectElement, rowIndex, valor) {
-    var selectedValue = $(selectElement).val();
-
-    if (selectedValue) {
-        var selectedValueAnt = $("#descripcion_ant"+rowIndex).val();
-        if(selectedValueAnt != ""){
-            const index_ant = productosSeleccionados.indexOf(Number(selectedValueAnt));
-            console.log(index_ant);
-            productosSeleccionados.splice(index_ant, 1);
-            $("#descripcion_ant"+rowIndex).val("");
-        }
-
-        if (!productosSeleccionados.includes(Number(selectedValue))) {
-            productosSeleccionados.push(Number(selectedValue));
-            $("#descripcion_ant"+rowIndex).val(selectedValue);
-
-            obtenerCodInterno(selectElement, rowIndex);
-
-        } else {
-            bootbox.alert("Este producto ya ha sido seleccionado. Por favor elige otro.");
-            $(selectElement).val('').trigger('change');
-        }
-    } else {
-        
-        const index = productosSeleccionados.indexOf(Number(selectedValue));
-        if (index > -1) {
-            productosSeleccionados.splice(index, 1);
-        }
-    }
-
-    console.log(productosSeleccionados);
-}
-
-function eliminarFila(button){
-
-    var row = $(button).closest('tr');
-
-    var selectedValue = row.find('select[name="descripcion[]"]').val();
-
-    if (selectedValue) {
-        const index = productosSeleccionados.indexOf(Number(selectedValue));
-        if (index > -1) {
-            productosSeleccionados.splice(index, 1);
-        }
-    }
-
-    row.remove();
-
-    console.log(productosSeleccionados);
-}
 
 function fn_save_guia_interna(){
 	
@@ -730,87 +457,87 @@ function cargar_detalle_documento(id_documento){
 
                 peso_total += parseFloat(peso_producto) || 0;
                 
-                });
-                $('#ruc').val("");
-                $('#destinatario_nombre').val("");
-                $('#destinatario').val("");
-                $('#orden_compra_cliente').val("");
-                $('#orden_compra').val("");
-                $('#tiendas_orden_compra').val("");
-                $('#peso').val("");
-                $('#punto_llegada_input').val("");
-                $('#tipo_documento_cliente').val("");
-                $('#ruc_destinatario_label').val("");
-                $('#ruc_destinatario_input').val("");
-                $('#dni_destinatario_label').val("");
-                $('#dni_destinatario_input').val("");
-                $('#empresa_destinatario_label').val("");
-                $('#empresa_destinatario_input').val("");
-                $('#nombre_destinatario_label').val("");
-                $('#nombre_destinatario_input').val("");
+            });
+            $('#ruc').val("");
+            $('#destinatario_nombre').val("");
+            $('#destinatario').val("");
+            $('#orden_compra_cliente').val("");
+            $('#orden_compra').val("");
+            $('#tiendas_orden_compra').val("");
+            $('#peso').val("");
+            $('#punto_llegada_input').val("");
+            $('#tipo_documento_cliente').val("");
+            $('#ruc_destinatario_label').val("");
+            $('#ruc_destinatario_input').val("");
+            $('#dni_destinatario_label').val("");
+            $('#dni_destinatario_input').val("");
+            $('#empresa_destinatario_label').val("");
+            $('#empresa_destinatario_input').val("");
+            $('#nombre_destinatario_label').val("");
+            $('#nombre_destinatario_input').val("");
 
-                $("#ruc").attr("readonly",false);
-                $("#destinatario_nombre").attr("readonly",false);
-                $("#orden_compra_cliente").attr("readonly",false);
-                $("#orden_compra").attr("readonly",false);
-                $("#tiendas_orden_compra").attr("readonly",false);
-                $("#peso").attr("readonly",false);
-                $("#punto_llegada_input").attr("readonly",false);
+            $("#ruc").attr("readonly",false);
+            $("#destinatario_nombre").attr("readonly",false);
+            $("#orden_compra_cliente").attr("readonly",false);
+            $("#orden_compra").attr("readonly",false);
+            $("#tiendas_orden_compra").attr("readonly",false);
+            $("#peso").attr("readonly",false);
+            $("#punto_llegada_input").attr("readonly",false);
+            
+            $('#orden_compra_cliente').val(entrada.numero_orden_compra_cliente);
+            $('#orden_compra').val(entrada.numero_orden_compra);
+            $('#tiendas_orden_compra').val(entrada.tiendas);
+            $('#peso').val(peso_total.toFixed(2));
+            $('#punto_llegada_input').val(entrada.direccion);
+            $('#tipo_documento_cliente').val(entrada.id_tipo_cliente);
+
+            if(entrada.id_tipo_cliente=='1'){
                 
-                $('#orden_compra_cliente').val(entrada.numero_orden_compra_cliente);
-                $('#orden_compra').val(entrada.numero_orden_compra);
-                $('#tiendas_orden_compra').val(entrada.tiendas);
-                $('#peso').val(peso_total.toFixed(2));
-                $('#punto_llegada_input').val(entrada.direccion);
-                $('#tipo_documento_cliente').val(entrada.id_tipo_cliente);
-
-                if(entrada.id_tipo_cliente=='1'){
-                    
-                    
-                    $('#div_persona').show();
-                    $('#div_empresa').hide();
-                    $('#div_dni').show();
-                    $('#div_ruc').hide();
-                    $('#dni_destinatario_label').show();
-                    $('#dni_destinatario_input').show();
-                    $('#nombre_destinatario_label').show();
-                    $('#nombre_destinatario_input').show();
-
-                    $('#dni_destinatario').val(entrada.documento_cliente);
-                    $('#persona_destinatario_nombre').val(entrada.cliente);
-                    $('#persona_destinatario').val(entrada.id_empresa_compra);
-
-                }else if(entrada.id_tipo_cliente=='5'){
-
-                    $('#div_persona').hide();
-                    $('#div_empresa').show();
-                    $('#div_dni').hide();
-                    $('#div_ruc').show();
-                    $('#ruc_destinatario_label').show();
-                    $('#ruc_destinatario_input').show();
-                    $('#empresa_destinatario_label').show();
-                    $('#empresa_destinatario_input').show();
-
-                    $('#ruc').val(entrada.documento_cliente);
-                    $('#destinatario_nombre').val(entrada.cliente);
-                    $('#destinatario').val(entrada.id_empresa_compra);
-
-                }
-
-                $("#ruc").attr("readonly",true);
-                $("#dni_destinatario").attr("readonly",true);
-                $("#destinatario_nombre").attr("readonly",true);
-                $("#persona_destinatario_nombre").attr("readonly",true);
-                $("#orden_compra_cliente").attr("readonly",true);
-                $("#orden_compra").attr("readonly",true);
-                $("#tiendas_orden_compra").attr("readonly",true);
-                $("#peso").attr("readonly",true);
-
-                if(entrada.ubigeo){
-                    obtenerProvinciaContacto(entrada.ubigeo);
-                }
                 
+                $('#div_persona').show();
+                $('#div_empresa').hide();
+                $('#div_dni').show();
+                $('#div_ruc').hide();
+                $('#dni_destinatario_label').show();
+                $('#dni_destinatario_input').show();
+                $('#nombre_destinatario_label').show();
+                $('#nombre_destinatario_input').show();
+
+                $('#dni_destinatario').val(entrada.documento_cliente);
+                $('#persona_destinatario_nombre').val(entrada.cliente);
+                $('#persona_destinatario').val(entrada.id_empresa_compra);
+
+            }else if(entrada.id_tipo_cliente=='5'){
+
+                $('#div_persona').hide();
+                $('#div_empresa').show();
+                $('#div_dni').hide();
+                $('#div_ruc').show();
+                $('#ruc_destinatario_label').show();
+                $('#ruc_destinatario_input').show();
+                $('#empresa_destinatario_label').show();
+                $('#empresa_destinatario_input').show();
+
+                $('#ruc').val(entrada.documento_cliente);
+                $('#destinatario_nombre').val(entrada.cliente);
+                $('#destinatario').val(entrada.id_empresa_compra);
+
             }
+
+            $("#ruc").attr("readonly",true);
+            $("#dni_destinatario").attr("readonly",true);
+            $("#destinatario_nombre").attr("readonly",true);
+            $("#persona_destinatario_nombre").attr("readonly",true);
+            $("#orden_compra_cliente").attr("readonly",true);
+            $("#orden_compra").attr("readonly",true);
+            $("#tiendas_orden_compra").attr("readonly",true);
+            $("#peso").attr("readonly",true);
+
+            if(entrada.ubigeo){
+                obtenerProvinciaContacto(entrada.ubigeo);
+            }
+            
+        }
     });
 }
 
@@ -903,28 +630,28 @@ function obtenerDistritoContacto_(callback){
 function agregarVehiculo(){
 	
 	$.ajax({
-			url: "/vehiculo/modal_vehiculo_guia/"+0,
-			type: "GET",
-			success: function (result) {
-					$("#diveditpregOpc2").html(result);
-					$('#openOverlayOpc2').modal('show');
+        url: "/vehiculo/modal_vehiculo_guia/"+0,
+        type: "GET",
+        success: function (result) {
+            $("#diveditpregOpc2").html(result);
+            $('#openOverlayOpc2').modal('show');
 
-                    $.fn.modal.Constructor.prototype.enforceFocus = function() {};
-                    
-                    setTimeout(() => {
-                        $('#empresa').select2({
-                            width: '100%',
-                            dropdownParent: $('#openOverlayOpc2')
-                        });
+            $.fn.modal.Constructor.prototype.enforceFocus = function() {};
+            
+            setTimeout(() => {
+                $('#empresa').select2({
+                    width: '100%',
+                    dropdownParent: $('#openOverlayOpc2')
+                });
 
-                        $('#conductor').select2({
-                            width: '100%',
-                            dropdownParent: $('#openOverlayOpc2')
-                        });
-                    }, 100);
+                $('#conductor').select2({
+                    width: '100%',
+                    dropdownParent: $('#openOverlayOpc2')
+                });
+            }, 100);
 
-                    $('#motivo_traslado').select2('close');
-			}
+            $('#motivo_traslado').select2('close');
+        }
 	});
 }
 
@@ -933,12 +660,12 @@ function agregarConductor(){
     var id_empresa_conductor_vehiculo = $('#id_empresa_conductor_vehiculo').val();
 
 	$.ajax({
-			url: "/conductores/modal_conductor_guia/"+0+"/"+id_empresa_conductor_vehiculo,
-			type: "GET",
-			success: function (result) {
-                $("#diveditpregOpc3").html(result);
-                $('#openOverlayOpc3').modal('show');
-			}
+        url: "/conductores/modal_conductor_guia/"+0+"/"+id_empresa_conductor_vehiculo,
+        type: "GET",
+        success: function (result) {
+            $("#diveditpregOpc3").html(result);
+            $('#openOverlayOpc3').modal('show');
+        }
 	});
 }
 
@@ -948,24 +675,24 @@ function agregarEmpresaTransporte(){
     var id_empresa_conductor_vehiculo = $('#id_empresa_conductor_vehiculo').val();
 
 	$.ajax({
-			url: "/empresa/modal_empresa_guia/"+0+"/"+placa+"/"+id_empresa_conductor_vehiculo,
-			type: "GET",
-			success: function (result) {
-					$("#diveditpregOpc4").html(result);
-					$('#openOverlayOpc4').modal('show');
-			}
+        url: "/empresa/modal_empresa_guia/"+0+"/"+placa+"/"+id_empresa_conductor_vehiculo,
+        type: "GET",
+        success: function (result) {
+                $("#diveditpregOpc4").html(result);
+                $('#openOverlayOpc4').modal('show');
+        }
 	});
 }
 
 function agregarDestinatario(){
 	
 	$.ajax({
-			url: "/empresa/modal_empresa_guia/"+0,
-			type: "GET",
-			success: function (result) {  
-					$("#diveditpregOpc4").html(result);
-					$('#openOverlayOpc4').modal('show');
-			}
+        url: "/empresa/modal_empresa_guia/"+0,
+        type: "GET",
+        success: function (result) {  
+                $("#diveditpregOpc4").html(result);
+                $('#openOverlayOpc4').modal('show');
+        }
 	});
 }
 
@@ -1022,11 +749,8 @@ function obtenerEmpresa(){
                 $('#conductor_guia').html(option);
                                 
             }
-            
         }
-        
     });
-    
 }
 
 function obtenerProvinciaPartida(){
@@ -1273,7 +997,6 @@ function obtenerNumeroGuia(){
         url: "/guia_interna/obtener_numero_guia/"+serie_guia,
         dataType: "json",
         success: function(result){
-            //alert(result[0].codigo);
             $('#numero_guia').val(result[0].codigo);
         }
     });
@@ -1887,24 +1610,6 @@ function obtenerMotivo(){
                         </div>
                     </div>
                     <div class="row" style="padding-left:10px; padding-bottom:10px;">
-                        <!--<div class="col-lg-4">
-                            <div class="row">
-                                <div class="col-lg-4">
-                                    Unidad Medida Peso
-                                </div>
-                                <div class="col-lg-5">
-                                    <select name="unidad_medida_peso" id="unidad_medida_peso" class="form-control form-control-sm" onchange="">
-                                        <option value="">--Seleccionar--</option>
-                                        <?php 
-                                        foreach ($unidad_peso as $row){?>
-                                            <option value="<?php echo $row->codigo ?>" <?php //if($row->codigo==$guia_interna->id_motivo_traslado)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
-                                            <?php 
-                                        }
-                                        ?>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>-->
                         <div class="col-lg-4">
                             <div class="row">
                                 <div class="col-lg-4">
@@ -2234,9 +1939,6 @@ $(document).ready(function () {
 
 <script type="text/javascript">
 $(document).ready(function() {
-	//$('#numero_placa').focus();
-	//$('#numero_placa').mask('AAA-000');
-	//$('#vehiculo_numero_placa').mask('AAA-000');
 
 });
 
