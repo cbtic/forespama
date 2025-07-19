@@ -708,3 +708,4 @@ Route::get('activos/create', [ActivoController::class, 'create'])->name('activos
 Route::post('activos/listar_activos_ajax', [ActivoController::class, 'listar_activos_ajax'])->name('activos.listar_activos_ajax');
 Route::get('activos/modal_activos_horno/{id}', [ActivoController::class, 'modal_activos_horno'])->name('activos.modal_activos_horno');
 Route::post('activos/send_activo', [ActivoController::class, 'send_activo'])->name('activos.send_activo');
+Route::get('activos/obtener_provincia_distrito/{idDepartamento}', [ActivoController::class, 'obtener_provincia_distrito'])->name('activos.obtener_provincia_distrito');

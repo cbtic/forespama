@@ -349,11 +349,27 @@ label.form-control-sm{
 				
 				<div class="row" style="padding:20px 20px 0px 20px;">
 
-                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-                        <input id="denominacion_bus" name="denominacion_bus" on class="form-control form-control-sm"  placeholder="Denominaci&oacute;n">
+                    <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+						<select name="tipo_activo_bus" id="tipo_activo_bus" class="form-control form-control-sm">
+							<option value="">--Seleccionar Tipo Activo--</option>
+							<?php
+							foreach ($tipo_activo as $row){?>
+								<option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
+								<?php 
+							}
+							?>
+						</select>
+					</div>
+
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                        <input id="descripcion_bus" name="descripcion_bus" on class="form-control form-control-sm"  placeholder="Descripci&oacute;n">
+					</div>
+
+                    <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+                        <input id="placa_bus" name="placa_bus" on class="form-control form-control-sm mayusculas"  placeholder="Placa">
 					</div>
 					
-                    <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+                    <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
 						<select name="estado_bus" id="estado_bus" class="form-control form-control-sm">
 							<option value="">Todos</option>
 							<option value="1" selected="selected">Activo</option>
@@ -385,16 +401,20 @@ label.form-control-sm{
 							<th>Color</th>
 							<th>Titulo</th>
 							<th>Partida Registral</th>
-							<th>Partida Tarjeta Circulaci&oacute;</th>
+							<th>Partida Tarjeta Circulaci&oacute;n</th>
 							<th>Vigencia Tarjeta Circulaci&oacute;n</th>
 							<th>Fecha Vencimiento SOAT</th>
 							<th>Fecha Vencimiento Revisi&oacute; T&eacute;cnica</th>
+							<th>Valor Libros</th>
+							<th>Valor Comercial</th>
+							<th>Tipo Combustible</th>
+							<th>Dimensiones</th>
 							<th>Estado Activo</th>
 							<th>Estado</th>
                             <th>Acciones</th>
                         </tr>
                         </thead>
-                        <tbody>
+                        <tbody style="font-size:13px">
                         </tbody>
                     </table>
                 </div><!--table-responsive-->

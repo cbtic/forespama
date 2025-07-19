@@ -24,6 +24,14 @@ $(document).ready(function () {
 		
 	datatablenew();
 
+	$('#placa_bus').mask('AAA-000');
+
+});
+
+$(function() {
+    $('.mayusculas').keyup(function() {
+        this.value = this.value.toUpperCase();
+    });
 });
 
 function datatablenew(){
@@ -57,7 +65,9 @@ function datatablenew(){
             var iNroPagina 	= parseFloat(fn_util_obtieneNroPagina(aoData[3].value, aoData[4].value)).toFixed();
             var iCantMostrar 	= aoData[4].value;
 
-            var denominacion = $('#denominacion_bus').val();
+            var tipo_activo = $('#tipo_activo_bus').val();
+            var descripcion = $('#descripcion_bus').val();
+            var placa = $('#placa_bus').val();
 			var estado = $('#estado_bus').val();
 			
 			var _token = $('#_token').val();
@@ -67,7 +77,7 @@ function datatablenew(){
                 "type": "POST",
                 "url": sSource,
                 "data":{NumeroPagina:iNroPagina,NumeroRegistros:iCantMostrar,
-						denominacion:denominacion,estado:estado,
+						tipo_activo:tipo_activo,descripcion:descripcion,placa:placa,estado:estado,
 						_token:_token
                        },
                 "success": function (result) {
@@ -95,24 +105,204 @@ function datatablenew(){
 
 				{
 				"mRender": function (data, type, row) {
-					var denominiacion = "";
-					if(row.denominiacion!= null)denominiacion = row.denominiacion;
-					return denominiacion;
+					var ubigeo = "";
+					if(row.ubigeo!= null)ubigeo = row.ubigeo;
+					return ubigeo;
 				},
 				"bSortable": true,
 				"aTargets": [1]
 				},
 
 				{
-					"mRender": function (data, type, row) {
-						var tipo_marca = "";
-						if(row.tipo_marca!= null)tipo_marca = row.tipo_marca;
-						return tipo_marca;
-					},
-					"bSortable": true,
-					"aTargets": [2]
-					},
+				"mRender": function (data, type, row) {
+					var direccion = "";
+					if(row.direccion!= null)direccion = row.direccion;
+					return direccion;
+				},
+				"bSortable": true,
+				"aTargets": [2]
+				},
+
+				{
+				"mRender": function (data, type, row) {
+					var tipo_activo = "";
+					if(row.tipo_activo!= null)tipo_activo = row.tipo_activo;
+					return tipo_activo;
+				},
+				"bSortable": true,
+				"aTargets": [3]
+				},
+
+				{
+				"mRender": function (data, type, row) {
+					var descripcion = "";
+					if(row.descripcion!= null)descripcion = row.descripcion;
+					return descripcion;
+				},
+				"bSortable": true,
+				"aTargets": [4]
+				},
+
+				{
+				"mRender": function (data, type, row) {
+					var placa = "";
+					if(row.placa!= null)placa = row.placa;
+					return placa;
+				},
+				"bSortable": true,
+				"aTargets": [5]
+				},
+
+				{
+				"mRender": function (data, type, row) {
+					var modelo = "";
+					if(row.modelo!= null)modelo = row.modelo;
+					return modelo;
+				},
+				"bSortable": true,
+				"aTargets": [6]
+				},
+
+				{
+				"mRender": function (data, type, row) {
+					var serie = "";
+					if(row.serie!= null)serie = row.serie;
+					return serie;
+				},
+				"bSortable": true,
+				"aTargets": [7]
+				},
+
+				{
+				"mRender": function (data, type, row) {
+					var marca = "";
+					if(row.marca!= null)marca = row.marca;
+					return marca;
+				},
+				"bSortable": true,
+				"aTargets": [8]
+				},
+
+				{
+				"mRender": function (data, type, row) {
+					var color = "";
+					if(row.color!= null)color = row.color;
+					return color;
+				},
+				"bSortable": true,
+				"aTargets": [9]
+				},
+
+				{
+				"mRender": function (data, type, row) {
+					var titulo = "";
+					if(row.titulo!= null)titulo = row.titulo;
+					return titulo;
+				},
+				"bSortable": true,
+				"aTargets": [10]
+				},
+
+				{
+				"mRender": function (data, type, row) {
+					var partida_registral = "";
+					if(row.partida_registral!= null)partida_registral = row.partida_registral;
+					return partida_registral;
+				},
+				"bSortable": true,
+				"aTargets": [11]
+				},
+
+				{
+				"mRender": function (data, type, row) {
+					var partida_circulacion = "";
+					if(row.partida_circulacion!= null)partida_circulacion = row.partida_circulacion;
+					return partida_circulacion;
+				},
+				"bSortable": true,
+				"aTargets": [12]
+				},
+
+				{
+				"mRender": function (data, type, row) {
+					var vigencia_circulacion = "";
+					if(row.vigencia_circulacion!= null)vigencia_circulacion = row.vigencia_circulacion;
+					return vigencia_circulacion;
+				},
+				"bSortable": true,
+				"aTargets": [13]
+				},
+
+				{
+				"mRender": function (data, type, row) {
+					var fecha_vencimiento_soat = "";
+					if(row.fecha_vencimiento_soat!= null)fecha_vencimiento_soat = row.fecha_vencimiento_soat;
+					return fecha_vencimiento_soat;
+				},
+				"bSortable": true,
+				"aTargets": [14]
+				},
+
+				{
+				"mRender": function (data, type, row) {
+					var fecha_vencimiento_revision_tecnica = "";
+					if(row.fecha_vencimiento_revision_tecnica!= null)fecha_vencimiento_revision_tecnica = row.fecha_vencimiento_revision_tecnica;
+					return fecha_vencimiento_revision_tecnica;
+				},
+				"bSortable": true,
+				"aTargets": [15]
+				},
 				
+				{
+				"mRender": function (data, type, row) {
+					var valor_libros = "";
+					if(row.valor_libros!= null)valor_libros = parseFloat(row.valor_libros).toFixed(2);
+					return valor_libros;
+				},
+				"bSortable": true,
+				"aTargets": [16]
+				},
+
+				{
+				"mRender": function (data, type, row) {
+					var valor_comercial = "";
+					if(row.valor_comercial!= null)valor_comercial = parseFloat(row.valor_comercial).toFixed(2);
+					return valor_comercial;
+				},
+				"bSortable": true,
+				"aTargets": [17]
+				},
+
+				{
+				"mRender": function (data, type, row) {
+					var tipo_combustible = "";
+					if(row.tipo_combustible!= null)tipo_combustible = row.tipo_combustible;
+					return tipo_combustible;
+				},
+				"bSortable": true,
+				"aTargets": [18]
+				},
+
+				{
+				"mRender": function (data, type, row) {
+					var dimensiones = "";
+					if(row.dimensiones!= null)dimensiones = row.dimensiones;
+					return dimensiones;
+				},
+				"bSortable": true,
+				"aTargets": [19]
+				},
+
+				{
+				"mRender": function (data, type, row) {
+					var estado_activo = "";
+					if(row.estado_activo!= null)estado_activo = row.estado_activo;
+					return estado_activo;
+				},
+				"bSortable": true,
+				"aTargets": [20]
+				},
+
 				{
 				"mRender": function (data, type, row) {
 					var estado = "";
@@ -125,7 +315,7 @@ function datatablenew(){
 					return estado;
 				},
 				"bSortable": false,
-				"aTargets": [3]
+				"aTargets": [21]
 				},
 				{
 					"mRender": function (data, type, row) {
@@ -151,7 +341,7 @@ function datatablenew(){
 						return html;
 					},
 					"bSortable": false,
-					"aTargets": [4],
+					"aTargets": [22],
 				},
 
             ]

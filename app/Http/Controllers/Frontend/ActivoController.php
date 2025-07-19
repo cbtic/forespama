@@ -27,15 +27,21 @@ class ActivoController extends Controller
 
     public function create(){
 		
-		return view('frontend.activos.create');
+		$tabla_maestra_model = new TablaMaestra;
+
+		$tipo_activo = $tabla_maestra_model->getMaestroByTipo('84');
+
+		return view('frontend.activos.create',compact('tipo_activo'));
 
 	}
 
     public function listar_activos_ajax(Request $request){
 
 		$activos_model = new Activo;
-		$p[]=$request->fecha;
-        $p[]=1;
+		$p[]=$request->tipo_activo;
+		$p[]=$request->descripcion;
+		$p[]=$request->placa;
+		$p[]=$request->estado;
 		$p[]=$request->NumeroPagina;
 		$p[]=$request->NumeroRegistros;
 		$data = $activos_model->listar_activos_ajax($p);
@@ -86,13 +92,40 @@ class ActivoController extends Controller
 			$activo = Activo::find($request->id);
 		}
 
-        $ingreso_horno->fecha_ingreso = $request->fecha;
-		$ingreso_horno->estado = 1;
-        $ingreso_horno->id_usuario_inserta = $id_user;
-		$ingreso_horno->save();
-		$id_ingreso_produccion_acerrado_madera = $ingreso_produccion_acerrado_madera->id;
+        $activo->id_ubigeo = $request->distrito;
+        $activo->direccion = $request->direccion;
+        $activo->id_tipo_activo = $request->tipo_activo;
+        $activo->descripcion = $request->descripcion;
+        $activo->placa = $request->placa;
+        $activo->modelo = $request->modelo;
+        $activo->serie = $request->serie;
+        $activo->id_marca = $request->marca;
+        $activo->color = $request->color;
+        $activo->titulo = $request->titulo;
+        $activo->partida_registral = $request->partida_registral;
+        $activo->partida_circulacion = $request->partida_circulacion;
+        $activo->vigencia_circulacion = $request->vigencia_circulacion;
+        $activo->fecha_vencimiento_soat = $request->fecha_vencimiento_soat;
+        $activo->fecha_vencimiento_revision_tecnica = $request->fecha_vencimiento_revision_tecnica;
+        $activo->valor_libros = $request->valor_libros;
+        $activo->valor_comercial = $request->valor_comercial;
+        $activo->id_tipo_combustible = $request->tipo_combustible;
+        $activo->dimensiones = $request->dimension;
+        $activo->id_estado_activo = $request->estado_activo;
+		$activo->estado = 1;
+        $activo->id_usuario_inserta = $id_user;
+		$activo->save();
 
         return response()->json(['success' => 'Registro de activo guardado exitosamente.']);
 
     }
+
+	public function obtener_provincia_distrito($id){
+		
+		$activos_model = new Activo;
+		$ubigeo_activo = $activos_model->getProvinciaDistritoById($id);
+		
+		echo json_encode($ubigeo_activo);
+	}
+
 }

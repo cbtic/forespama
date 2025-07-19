@@ -192,8 +192,8 @@ $(document).ready(function() {
 });
 
 $(function() {
-    $('#placa').keyup(function() {
-        this.value = this.value.toLocaleUpperCase();
+    $('.mayusculas').keyup(function() {
+        this.value = this.value.toUpperCase();
     });
 });
 
@@ -204,28 +204,61 @@ function limpiar(){
 	$('#img_foto').val("");
 }
 
-function fn_save_marca(){
+function fn_save_activos(){
 
-    $('#denominacion').val($('#denominacion').val().toUpperCase());
+    var msg = "";
+
+    var departamento = $('#departamento').val();
+    var provincia = $('#provincia').val();
+    var distrito = $('#distrito').val();
+    var direccion = $('#direccion').val();
+    var tipo_activo = $('#tipo_activo').val();
+    var descripcion = $('#descripcion').val();
+    var tipo_combustible = $('#tipo_combustible').val();
+    var estado_activo = $('#estado_activo').val();
+    var valor_libros = $('#valor_libros').val();
+    var valor_comercial = $('#valor_comercial').val();
+
+    if(departamento==""){msg+="Ingrese el Departamento <br>";}
+    if(provincia==""){msg+="Ingrese ls Provincia <br>";}
+    if(distrito==""){msg+="Ingrese el Distrito <br>";}
+    if(direccion==""){msg+="Ingrese la Direccion <br>";}
+    if(tipo_activo==""){msg+="Ingrese el Tipo de Activo <br>";}
+    if(descripcion==""){msg+="Ingrese la Descripcion <br>";}
+    if(tipo_combustible==""){msg+="Ingrese el Tipo de Combustible <br>";}
+    if(estado_activo==""){msg+="Ingrese el Estado del Activo <br>";}
+    if(valor_libros==""){msg+="Ingrese el Valor en Libros <br>";}
+    if(valor_comercial==""){msg+="Ingrese el Valor Comercial <br>";}
 	
-	$.ajax({
-			url: "/marcas/send_marca",
+    if(msg!=""){
+        bootbox.alert(msg);
+        return false;
+    }else{
+        var msgLoader = "";
+        msgLoader = "Procesando, espere un momento por favor";
+        var heightBrowser = $(window).width()/2;
+        $('.loader').css("opacity","0.8").css("height",heightBrowser).html("<div id='Grd1_wrapper' class='dataTables_wrapper'><div id='Grd1_processing' class='dataTables_processing panel-default'>"+msgLoader+"</div></div>");
+        $('.loader').show();
+
+        $.ajax({
+            url: "/activos/send_activo",
             type: "POST",
-            data : $("#frmMarca").serialize(),
-			success: function (result) {
-				//alert(result);
+            data : $("#frmActivos").serialize(),
+            success: function (result) {
+                
                 if (result.success) {
+                    $('.loader').hide();
                     bootbox.alert(result.success, function() {
+                        
                         $('#openOverlayOpc').modal('hide');
-                        //bootbox.alert("Se guard&oacute; satisfactoriamente"); 
-                        //window.location.reload();
                         datatablenew();
                     });
                 } else if (result.error) {
                     bootbox.alert(result.error);
                 }
             },
-    });
+        });
+    }
 }
 
 function obtenerDistrito(){
@@ -299,7 +332,7 @@ function obtenerDatosUbigeo(){
     var id = $('#id').val();
 
     $.ajax({
-        url: '/activo/obtener_provincia_distrito/'+id,
+        url: '/activos/obtener_provincia_distrito/'+id,
         dataType: "json",
         success: function(result){
             
@@ -404,7 +437,7 @@ $(function() {
                                                 <option value="">--Seleccionar--</option>
                                                 <?php
                                                 foreach ($departamento as $row) {?>
-                                                <option value="<?php echo $row->id_departamento?>" <?php //if($row->id_departamento==substr($orden_compra_contacto_entrega->id_ubigeo,0,2))echo "selected='selected'"?>><?php echo $row->desc_ubigeo ?></option>
+                                                <option value="<?php echo $row->id_departamento?>" <?php if($row->id_departamento==substr($activo->id_ubigeo,0,2))echo "selected='selected'"?>><?php echo $row->desc_ubigeo ?></option>
                                                 <?php 
                                                 }
                                                 }else{?>
@@ -440,7 +473,7 @@ $(function() {
                                     <div class="col-lg-6">
                                         <div class="form-group">
                                             <label class="control-label form-control-sm">Direcci&oacute;n</label>
-                                            <input id="direccion" name="direccion" on class="form-control form-control-sm"  value="<?php //echo $marca->denominiacion?>" type="text" style="text-transform: uppercase;">
+                                            <input id="direccion" name="direccion" on class="form-control form-control-sm mayusculas"  value="<?php echo $activo->direccion?>" type="text">
                                         </div>
                                     </div>
                                 </div>
@@ -455,7 +488,7 @@ $(function() {
                                                 <option value="">--Seleccionar--</option>
                                                 <?php 
                                                 foreach ($tipo_activo as $row){?>
-                                                    <option value="<?php echo $row->codigo ?>" <?php //if($row->id==$activo->id_tipo_marca)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                                    <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$activo->id_tipo_activo)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
                                                     <?php 
                                                 }
                                                 ?>
@@ -465,19 +498,19 @@ $(function() {
                                     <div class="col-lg-6">
                                         <div class="form-group">
                                             <label class="control-label form-control-sm">Descripci&oacute;n</label>
-                                            <input id="descripcion" name="descripcion" on class="form-control form-control-sm"  value="<?php //echo $marca->denominiacion?>" type="text" style="text-transform: uppercase;">
+                                            <input id="descripcion" name="descripcion" on class="form-control form-control-sm mayusculas"  value="<?php echo $activo->descripcion?>" type="text">
                                         </div>
                                     </div>
                                     <div class="col-lg-2">
                                         <div class="form-group">
                                             <label class="control-label form-control-sm">Placa</label>
-                                            <input id="placa" name="placa" on class="form-control form-control-sm"  value="<?php //echo $marca->denominiacion?>" type="text" placeholder="ABC-123">
+                                            <input id="placa" name="placa" on class="form-control form-control-sm mayusculas"  value="<?php echo $activo->placa?>" type="text" placeholder="ABC-123">
                                         </div>
                                     </div>
                                     <div class="col-lg-2">
                                         <div class="form-group">
                                             <label class="control-label form-control-sm">Modelo</label>
-                                            <input id="modelo" name="modelo" on class="form-control form-control-sm"  value="<?php //echo $marca->denominiacion?>" type="text" style="text-transform: uppercase;">
+                                            <input id="modelo" name="modelo" on class="form-control form-control-sm mayusculas"  value="<?php echo $activo->modelo?>" type="text">
                                         </div>
                                     </div>
                                 </div>
@@ -485,7 +518,7 @@ $(function() {
                                     <div class="col-lg-3">
                                         <div class="form-group">
                                             <label class="control-label form-control-sm">Serie</label>
-                                            <input id="serie" name="serie" on class="form-control form-control-sm"  value="<?php //echo $marca->denominiacion?>" type="text" style="text-transform: uppercase;">
+                                            <input id="serie" name="serie" on class="form-control form-control-sm mayusculas"  value="<?php echo $activo->serie?>" type="text">
                                         </div>
                                     </div>
                                     <div class="col-lg-2">
@@ -495,7 +528,7 @@ $(function() {
                                                 <option value="">--Seleccionar--</option>
                                                 <?php 
                                                 foreach ($marca as $row){?>
-                                                    <option value="<?php echo $row->id ?>" <?php //if($row->codigo==$marca->id_tipo_marca)echo "selected='selected'"?>><?php echo $row->denominiacion ?></option>
+                                                    <option value="<?php echo $row->id ?>" <?php if($row->id==$activo->id_marca)echo "selected='selected'"?>><?php echo $row->denominiacion ?></option>
                                                     <?php 
                                                 }
                                                 ?>
@@ -505,7 +538,7 @@ $(function() {
                                     <div class="col-lg-3">
                                         <div class="form-group">
                                             <label class="control-label form-control-sm">Color</label>
-                                            <input id="color" name="color" on class="form-control form-control-sm"  value="<?php //echo $marca->denominiacion?>" type="text" style="text-transform: uppercase;">
+                                            <input id="color" name="color" on class="form-control form-control-sm mayusculas"  value="<?php echo $activo->color?>" type="text">
                                         </div>
                                     </div>
                                     <div class="col-lg-2">
@@ -515,11 +548,17 @@ $(function() {
                                                 <option value="">--Seleccionar--</option>
                                                 <?php 
                                                 foreach ($tipo_combustible as $row){?>
-                                                    <option value="<?php echo $row->codigo ?>" <?php //if($row->codigo==$marca->id_tipo_marca)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                                    <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$activo->id_tipo_combustible)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
                                                     <?php 
                                                 }
                                                 ?>
                                             </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3">
+                                        <div class="form-group">
+                                            <label class="control-label form-control-sm">Dimesiones</label>
+                                            <input id="dimension" name="dimension" on class="form-control form-control-sm mayusculas"  value="<?php echo $activo->dimensiones?>" type="text">
                                         </div>
                                     </div>
                                 </div>
@@ -532,13 +571,13 @@ $(function() {
                                             <div class="col-lg-6">
                                                 <div class="form-group">
                                                     <label class="control-label form-control-sm">Titulo</label>
-                                                    <input id="titulo" name="titulo" on class="form-control form-control-sm"  value="<?php //echo $marca->denominiacion?>" type="text" style="text-transform: uppercase;">
+                                                    <input id="titulo" name="titulo" on class="form-control form-control-sm mayusculas"  value="<?php echo $activo->titulo?>" type="text">
                                                 </div>
                                             </div>
                                             <div class="col-lg-6">
                                                 <div class="form-group">
                                                     <label class="control-label form-control-sm">Partida Registral</label>
-                                                    <input id="partida_registral" name="partida_registral" on class="form-control form-control-sm"  value="<?php //echo $marca->denominiacion?>" type="text" style="text-transform: uppercase;">
+                                                    <input id="partida_registral" name="partida_registral" on class="form-control form-control-sm mayusculas"  value="<?php echo $activo->partida_registral?>" type="text">
                                                 </div>
                                             </div>
                                         </div>
@@ -551,13 +590,13 @@ $(function() {
                                             <div class="col-lg-4">
                                                 <div class="form-group">
                                                     <label class="control-label form-control-sm">Partida Circulaci&oacute;n</label>
-                                                    <input id="partida_circulacion" name="partida_circulacion" on class="form-control form-control-sm"  value="<?php //echo $marca->denominiacion?>" type="text" style="text-transform: uppercase;">
+                                                    <input id="partida_circulacion" name="partida_circulacion" on class="form-control form-control-sm mayusculas"  value="<?php echo $activo->partida_circulacion?>" type="text">
                                                 </div>
                                             </div>
                                             <div class="col-lg-4">
                                                 <div class="form-group">
                                                     <label class="control-label form-control-sm">Vigencia Circulaci&oacute;n</label>
-                                                    <input id="vigencia_circulacion" name="vigencia_circulacion" on class="form-control form-control-sm"  value="<?php //echo $marca->denominiacion?>" type="text" placeholder="YYYY-MM-DD">
+                                                    <input id="vigencia_circulacion" name="vigencia_circulacion" on class="form-control form-control-sm mayusculas"  value="<?php echo $activo->vigencia_circulacion?>" type="text" placeholder="YYYY-MM-DD">
                                                 </div>
                                             </div>
                                             <div class="col-lg-4">
@@ -567,7 +606,7 @@ $(function() {
                                                         <option value="">--Seleccionar--</option>
                                                         <?php 
                                                         foreach ($estado_activos as $row){?>
-                                                            <option value="<?php echo $row->codigo ?>" <?php //if($row->codigo==$marca->id_tipo_marca)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                                            <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$activo->id_estado_activo)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
                                                             <?php 
                                                         }
                                                         ?>
@@ -586,13 +625,13 @@ $(function() {
                                             <div class="col-lg-6">
                                                 <div class="form-group">
                                                     <label class="control-label form-control-sm">Fecha Vencimiento SOAT</label>
-                                                    <input id="fecha_vencimiento_soat" name="fecha_vencimiento_soat" on class="form-control form-control-sm"  value="<?php //echo $marca->denominiacion?>" type="text" placeholder="YYYY-MM-DD">
+                                                    <input id="fecha_vencimiento_soat" name="fecha_vencimiento_soat" on class="form-control form-control-sm mayusculas"  value="<?php echo $activo->fecha_vencimiento_soat?>" type="text" placeholder="YYYY-MM-DD">
                                                 </div>
                                             </div>
                                             <div class="col-lg-6">
                                                 <div class="form-group">
                                                     <label class="control-label form-control-sm">Fecha Vencimiento Revisi&oacute;n T&eacute;cnica</label>
-                                                    <input id="fecha_vencimiento_revision_tecnica" name="fecha_vencimiento_revision_tecnica" on class="form-control form-control-sm"  value="<?php //echo $marca->denominiacion?>" type="text" placeholder="YYYY-MM-DD">
+                                                    <input id="fecha_vencimiento_revision_tecnica" name="fecha_vencimiento_revision_tecnica" on class="form-control form-control-sm mayusculas"  value="<?php echo $activo->fecha_vencimiento_revision_tecnica?>" type="text" placeholder="YYYY-MM-DD">
                                                 </div>
                                             </div>
                                         </div>
@@ -605,13 +644,13 @@ $(function() {
                                             <div class="col-lg-6">
                                                 <div class="form-group">
                                                     <label class="control-label form-control-sm">Valor Libros</label>
-                                                    <input id="valor_libros" name="valor_libros" on class="form-control form-control-sm solo-decimal"  value="<?php //echo $marca->denominiacion?>" type="text" placeholder="0.00">
+                                                    <input id="valor_libros" name="valor_libros" on class="form-control form-control-sm solo-decimal"  value="<?php echo number_format($activo->valor_libros, 2)?>" type="text" placeholder="0.00">
                                                 </div>
                                             </div>
                                             <div class="col-lg-6">
                                                 <div class="form-group">
                                                     <label class="control-label form-control-sm">Valor Comercial</label>
-                                                    <input id="valor_comercial" name="valor_comercial" on class="form-control form-control-sm solo-decimal"  value="<?php //echo $marca->denominiacion?>" type="text" placeholder="0.00">
+                                                    <input id="valor_comercial" name="valor_comercial" on class="form-control form-control-sm solo-decimal"  value="<?php echo number_format($activo->valor_comercial, 2)?>" type="text" placeholder="0.00">
                                                 </div>
                                             </div>
                                         </div>
@@ -624,9 +663,8 @@ $(function() {
                     <div style="margin-top:15px" class="form-group">
                         <div class="col-sm-12 controls">
                             <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
-                                <a href="javascript:void(0)" onClick="fn_save_marca()" class="btn btn-sm btn-success">Registrar</a>
+                                <a href="javascript:void(0)" onClick="fn_save_activos()" class="btn btn-sm btn-success">Registrar</a>
                             </div>
-                                                
                         </div>
                     </div> 
                         
