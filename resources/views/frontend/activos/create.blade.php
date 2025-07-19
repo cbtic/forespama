@@ -388,7 +388,7 @@ label.form-control-sm{
                     <div class="table-responsive">
                     <table id="tblActivos" class="table table-hover table-sm">
                         <thead>
-                        <tr style="font-size:13px">
+                        <tr style="font-size:12px">
                             <th>Id</th>
                             <th>Ubigeo</th>
                             <th>Direcci&oacute;n</th>
@@ -404,7 +404,7 @@ label.form-control-sm{
 							<th>Partida Tarjeta Circulaci&oacute;n</th>
 							<th>Vigencia Tarjeta Circulaci&oacute;n</th>
 							<th>Fecha Vencimiento SOAT</th>
-							<th>Fecha Vencimiento Revisi&oacute; T&eacute;cnica</th>
+							<th>Fecha Vencimiento Revisi&oacute;n T&eacute;cnica</th>
 							<th>Valor Libros</th>
 							<th>Valor Comercial</th>
 							<th>Tipo Combustible</th>
@@ -414,7 +414,7 @@ label.form-control-sm{
                             <th>Acciones</th>
                         </tr>
                         </thead>
-                        <tbody style="font-size:13px">
+                        <tbody style="font-size:12px">
                         </tbody>
                     </table>
                 </div><!--table-responsive-->

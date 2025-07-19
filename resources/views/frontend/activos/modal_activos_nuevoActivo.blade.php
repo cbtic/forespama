@@ -644,13 +644,13 @@ $(function() {
                                             <div class="col-lg-6">
                                                 <div class="form-group">
                                                     <label class="control-label form-control-sm">Valor Libros</label>
-                                                    <input id="valor_libros" name="valor_libros" on class="form-control form-control-sm solo-decimal"  value="<?php echo number_format($activo->valor_libros, 2)?>" type="text" placeholder="0.00">
+                                                    <input id="valor_libros" name="valor_libros" on class="form-control form-control-sm solo-decimal" <?= ($activo->valor_libros !== null && $activo->valor_libros !== '') ? 'value="' . number_format($activo->valor_libros, 2) . '"' : '' ?> type="text" placeholder="0.00">
                                                 </div>
                                             </div>
                                             <div class="col-lg-6">
                                                 <div class="form-group">
                                                     <label class="control-label form-control-sm">Valor Comercial</label>
-                                                    <input id="valor_comercial" name="valor_comercial" on class="form-control form-control-sm solo-decimal"  value="<?php echo number_format($activo->valor_comercial, 2)?>" type="text" placeholder="0.00">
+                                                    <input id="valor_comercial" name="valor_comercial" on class="form-control form-control-sm solo-decimal" <?= ($activo->valor_comercial !== null && $activo->valor_comercial !== '') ? 'value="' . number_format($activo->valor_comercial, 2) . '"' : '' ?> type="text" placeholder="0.00">
                                                 </div>
                                             </div>
                                         </div>

@@ -92,6 +92,9 @@ class ActivoController extends Controller
 			$activo = Activo::find($request->id);
 		}
 
+		$valor_libros = str_replace(',', '', $request->valor_libros);
+		$valor_comercial = str_replace(',', '', $request->valor_comercial);
+
         $activo->id_ubigeo = $request->distrito;
         $activo->direccion = $request->direccion;
         $activo->id_tipo_activo = $request->tipo_activo;
@@ -107,8 +110,8 @@ class ActivoController extends Controller
         $activo->vigencia_circulacion = $request->vigencia_circulacion;
         $activo->fecha_vencimiento_soat = $request->fecha_vencimiento_soat;
         $activo->fecha_vencimiento_revision_tecnica = $request->fecha_vencimiento_revision_tecnica;
-        $activo->valor_libros = $request->valor_libros;
-        $activo->valor_comercial = $request->valor_comercial;
+        $activo->valor_libros = $valor_libros;
+        $activo->valor_comercial = $valor_comercial;
         $activo->id_tipo_combustible = $request->tipo_combustible;
         $activo->dimensiones = $request->dimension;
         $activo->id_estado_activo = $request->estado_activo;
@@ -118,6 +121,16 @@ class ActivoController extends Controller
 
         return response()->json(['success' => 'Registro de activo guardado exitosamente.']);
 
+    }
+
+	public function eliminar_activo($id,$estado)
+    {
+		$activo = Activo::find($id);
+
+		$activo->estado = $estado;
+		$activo->save();
+
+		echo $activo->id;
     }
 
 	public function obtener_provincia_distrito($id){
