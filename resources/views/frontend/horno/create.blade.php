@@ -385,10 +385,15 @@ label.form-control-sm{
 											<th>Hora Encendido</th>
 											<th>Temperatura Inicio</th>
 											<th>Humedad Inicio</th>
+											<th>Operador Encendido</th>
 											<th>Fecha Apagado</th>
 											<th>Hora Apagado</th>
 											<th>Humedad Apagado</th>
 											<th>Operador</th>
+											<th>Observaci&oacute;n</th>
+											<th>Total Ingreso</th>
+											<th>Estado</th>
+											<th>Acciones</th>
 										</tr>
 										</thead>
 									<tbody style="font-size:13px">

@@ -102,55 +102,24 @@ class HornoController extends Controller
 		}else{
 			$ingreso_horno = IngresoHorno::find($request->id);
 		}
-		
-		$ruc = $request->input('ruc');
-		$razon_social = $request->input('razon_social');
-		$letra = $request->input('letra');
-		$placa = $request->input('placa');
-		$id_tipo_madera = $request->input('id_tipo_madera');
-		$tipo_madera = $request->input('tipo_madera');
-		$cantidad_ingreso = $request->input('cantidad_ingreso');
-		$cantidad_ingreso_produccion = $request->input('cantidad_ingreso_produccion');
-		$porcentaje = $request->input('porcentaje');
-        $id_ingreso_acerrado_detalle =$request->id_ingreso_acerrado_detalle;
 
-        $ingreso_horno->fecha_ingreso = $request->fecha;
+        $ingreso_horno->id_numero_horno = $request->horno;
+        $ingreso_horno->fecha_encendido = $request->fecha;
+        $ingreso_horno->hora_encendido = $request->hora_encendido;
+        $ingreso_horno->temperatura_inicio = $request->temperatura_inicio;
+        $ingreso_horno->humedad_inicio = $request->humedad_inicio;
+        $ingreso_horno->id_operador_inicio = $request->operador;
+        /*$ingreso_horno->fecha_apagado = $request->fecha;
+        $ingreso_horno->hora_apagado = $request->fecha;
+        $ingreso_horno->humedad_apagado = $request->fecha;
+        $ingreso_horno->id_operador_apagado = $request->fecha;
+        $ingreso_horno->observacion = $request->fecha;*/
+        $ingreso_horno->total_ingreso = $request->total_ingreso_horno;
 		$ingreso_horno->estado = 1;
         $ingreso_horno->id_usuario_inserta = $id_user;
 		$ingreso_horno->save();
-		$id_ingreso_produccion_acerrado_madera = $ingreso_produccion_acerrado_madera->id;
 
-		$array_ingreso_produccion_acerrado_madera_detalle = array();
-
-		foreach($ruc as $index => $value) {
-            
-			if($cantidad_ingreso_produccion[$index] != "" || $cantidad_ingreso_produccion[$index] > 0){
-
-				$ingreso_produccion_acerrado_madera_detalle = new IngresoProduccionAcerradoMaderaDetalle;
-            
-				$ingreso_produccion_acerrado_madera_detalle->id_ingreso_produccion_acerrado_maderas = $id_ingreso_produccion_acerrado_madera;
-				$ingreso_produccion_acerrado_madera_detalle->id_ingreso_vehiculo_tronco_tipo_maderas = $id_ingreso_acerrado_detalle[$index];
-				$ingreso_produccion_acerrado_madera_detalle->cantidad_ingreso_tronco = $cantidad_ingreso_produccion[$index];
-				$ingreso_produccion_acerrado_madera_detalle->id_tipo_madera = $id_tipo_madera[$index];
-				$ingreso_produccion_acerrado_madera_detalle->estado_ingreso_acerrado = 1;
-				$ingreso_produccion_acerrado_madera_detalle->estado = 1;
-				$ingreso_produccion_acerrado_madera_detalle->id_usuario_inserta = $id_user;
-				$ingreso_produccion_acerrado_madera_detalle->save();
-
-				$array_ingreso_produccion_acerrado_madera_detalle[] = $ingreso_produccion_acerrado_madera_detalle->id;
-
-				$IngresoVehiculoTroncoTipoMaderaAll = IngresoVehiculoTroncoTipoMadera::where('id',$id_ingreso_acerrado_detalle)->where('estado',1)->first();
-
-				if($cantidad_ingreso_produccion[$index] == $cantidad_ingreso[$index]){
-					$IngresoVehiculoTroncoTipoMaderaAll->estado_acerrado = 0;
-					$IngresoVehiculoTroncoTipoMaderaAll->save();
-				}
-
-			}
-            
-        }
-
-        return response()->json(['success' => 'Registro de ingreso guardado exitosamente.']);
+        return response()->json(['success' => 'Registro guardado exitosamente.']);
 
     }
 

@@ -106,9 +106,9 @@ function datatablenew(){
 
 				{
 					"mRender": function (data, type, row) {
-						var fecha_ingreso = "";
-						if(row.fecha_ingreso!= null)fecha_ingreso = row.fecha_ingreso;
-						return fecha_ingreso;
+						var horno = "";
+						if(row.horno!= null)horno = row.horno;
+						return horno;
 					},
 					"bSortable": true,
 					"aTargets": [1]
@@ -116,9 +116,9 @@ function datatablenew(){
 
 				{
 					"mRender": function (data, type, row) {
-						var ruc = "";
-						if(row.ruc!= null)ruc = row.ruc;
-						return ruc;
+						var fecha_encendido = "";
+						if(row.fecha_encendido!= null)fecha_encendido = row.fecha_encendido;
+						return fecha_encendido;
 					},
 					"bSortable": true,
 					"aTargets": [2]
@@ -126,9 +126,9 @@ function datatablenew(){
 
 				{
 					"mRender": function (data, type, row) {
-						var razon_social = "";
-						if(row.razon_social!= null)razon_social = row.razon_social;
-						return razon_social;
+						var hora_encendido = "";
+						if(row.hora_encendido!= null)hora_encendido = row.hora_encendido;
+						return hora_encendido;
 					},
 					"bSortable": true,
 					"aTargets": [3]
@@ -136,9 +136,9 @@ function datatablenew(){
 
 				{
 					"mRender": function (data, type, row) {
-						var placa = "";
-						if(row.placa!= null)placa = row.placa;
-						return placa;
+						var temperatura_inicio = "";
+						if(row.temperatura_inicio!= null)temperatura_inicio = row.temperatura_inicio;
+						return temperatura_inicio;
 					},
 					"bSortable": true,
 					"aTargets": [4]
@@ -146,9 +146,9 @@ function datatablenew(){
 
 				{
 					"mRender": function (data, type, row) {
-						var tipo_madera = "";
-						if(row.tipo_madera!= null)tipo_madera = row.tipo_madera;
-						return tipo_madera;
+						var humedad_inicio = "";
+						if(row.humedad_inicio!= null)humedad_inicio = row.humedad_inicio;
+						return humedad_inicio;
 					},
 					"bSortable": true,
 					"aTargets": [5]
@@ -156,15 +156,75 @@ function datatablenew(){
 
 				{
 					"mRender": function (data, type, row) {
-						var cantidad_ingreso_tronco = "";
-						if(row.cantidad_ingreso_tronco!= null)cantidad_ingreso_tronco = row.cantidad_ingreso_tronco;
-						return cantidad_ingreso_tronco;
+						var operador_encendido = "";
+						if(row.operador_encendido!= null)operador_encendido = row.operador_encendido;
+						return operador_encendido;
 					},
 					"bSortable": true,
 					"aTargets": [6]
 				},
+
+				{
+					"mRender": function (data, type, row) {
+						var fecha_apagado = "";
+						if(row.fecha_apagado!= null)fecha_apagado = row.fecha_apagado;
+						return fecha_apagado;
+					},
+					"bSortable": true,
+					"aTargets": [7]
+				},
+
+				{
+					"mRender": function (data, type, row) {
+						var hora_apagado = "";
+						if(row.hora_apagado!= null)hora_apagado = row.hora_apagado;
+						return hora_apagado;
+					},
+					"bSortable": true,
+					"aTargets": [8]
+				},
+
+				{
+					"mRender": function (data, type, row) {
+						var humedad_apagado = "";
+						if(row.humedad_apagado!= null)humedad_apagado = row.humedad_apagado;
+						return humedad_apagado;
+					},
+					"bSortable": true,
+					"aTargets": [9]
+				},
+
+				{
+					"mRender": function (data, type, row) {
+						var operador_apagado = "";
+						if(row.operador_apagado!= null)operador_apagado = row.operador_apagado;
+						return operador_apagado;
+					},
+					"bSortable": true,
+					"aTargets": [10]
+				},
+
+				{
+					"mRender": function (data, type, row) {
+						var observacion = "";
+						if(row.observacion!= null)observacion = row.observacion;
+						return observacion;
+					},
+					"bSortable": true,
+					"aTargets": [11]
+				},
+
+				{
+					"mRender": function (data, type, row) {
+						var total_ingreso = "";
+						if(row.total_ingreso!= null)total_ingreso = row.total_ingreso;
+						return total_ingreso;
+					},
+					"bSortable": true,
+					"aTargets": [12]
+				},
 				
-				/*{
+				{
 					"mRender": function (data, type, row) {
 						var estado = "";
 						if(row.estado == 1){
@@ -176,7 +236,7 @@ function datatablenew(){
 						return estado;
 					},
 					"bSortable": false,
-					"aTargets": [7]
+					"aTargets": [13]
 				},
 				{
 					"mRender": function (data, type, row) {
@@ -193,7 +253,8 @@ function datatablenew(){
 						
 						var html = '<div class="btn-group btn-group-sm" role="group" aria-label="Log Viewer Actions">';
 						
-						html += '<button style="font-size:12px" type="button" class="btn btn-sm btn-success" data-toggle="modal" onclick="modalAcerradoMadera('+row.id+')" ><i class="fa fa-edit"></i> Editar</button>'; 
+						html += '<button style="font-size:12px" type="button" class="btn btn-sm btn-success" data-toggle="modal" onclick="modalIngresoHorno('+row.id+')" ><i class="fa fa-edit"></i> Editar</button>'; 
+						html += '<button style="font-size:12px; margin-left:10px" type="button" class="btn btn-sm btn-info" data-toggle="modal" onclick="modalSalidaHorno('+row.id+')" ><i class="fa fa-edit"></i> Agregar Salida</button>'; 
 						
 						//html += '<a href="javascript:void(0)" onclick=eliminarEquivalenciaProducto('+row.id+','+row.estado+') class="btn btn-sm '+clase+'" style="font-size:12px;margin-left:10px">'+estado+'</a>';			
 						
@@ -201,8 +262,8 @@ function datatablenew(){
 						return html;
 					},
 					"bSortable": false,
-					"aTargets": [4],
-				},*/
+					"aTargets": [14],
+				},
             ]
     });
 }

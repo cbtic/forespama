@@ -156,7 +156,7 @@ $.mask.definitions['p'] = "[Mm]";
 */
 $(document).ready(function() {
 
-    cargarDetalleHorno();
+    //cargarDetalleHorno();
 
     $('#fecha').datepicker({
         autoclose: true,

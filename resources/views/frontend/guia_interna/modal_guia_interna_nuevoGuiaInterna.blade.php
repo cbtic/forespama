@@ -434,9 +434,9 @@ function cargar_detalle_documento(id_documento){
                     unidadMedidaOptions += `<option value="${unidad_medida.codigo}" ${selected}>${unidad_medida.denominacion}</option>`;
                 });
 
-                if (entrada_producto.id_producto) {
-                    productosSeleccionados.push(entrada_producto.id_producto);
-                }
+                //if (entrada_producto.id_producto) {
+                //    productosSeleccionados.push(entrada_producto.id_producto);
+                //}
                
                 const row = `
                     <tr>

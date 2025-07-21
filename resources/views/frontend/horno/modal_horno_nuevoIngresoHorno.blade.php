@@ -153,7 +153,7 @@ $(document).ready(function() {
 
 <script type="text/javascript">
 
-function fn_save_madera_acerrado(){
+function fn_save_ingreso_horno(){
 	
     var msg = "";
     var _token = $('#_token').val();
@@ -163,18 +163,18 @@ function fn_save_madera_acerrado(){
 
     if(fecha==""){msg+="Ingrese una Fecha <br>";}
 
-    var filas = $('#divAcerradoMadera tr');
+    var filas = $('#divIngresoHorno tr');
     var tieneCantidades = false;
 
     filas.each(function(index) {
-        var cantidad = parseInt($(this).find('input[name="cantidad_ingreso_produccion[]"]').val());
+        var cantidad = parseInt($(this).find('input[name="cantidad_paquete_ingreso[]"]').val());
         if (cantidad || cantidad >= 0) {
             tieneCantidades = true;
         }
     });
 
     if(tieneCantidades==false){
-        msg+="Ingrese una cantidad como minimo <br>";
+        msg+="Ingrese una cantidad de paquete como minimo <br>";
     }
 
     if(msg!=""){
@@ -188,9 +188,9 @@ function fn_save_madera_acerrado(){
         $('.loader').show();
 
         $.ajax({
-            url: "/acerrado_madera/send_ingreso_produccion_acerrado_madera",
+            url: "/horno/send_ingreso_horno",
             type: "POST",
-            data : $("#frmIngresoAcerradoMadera").serialize(),
+            data : $("#frmIngresoHorno").serialize(),
             success: function (result) {
                 $('#openOverlayOpc').modal('hide');
                 $('.loader').hide();
@@ -227,6 +227,8 @@ function cargarDetalleAcerrado(){
                         <td><input name="tipo_madera[]" id="tipo_madera${n}" class="form-control form-control-sm" style="border: none; background-color: transparent;" value="${detalle_acerrado.tipo_madera}" type="text" readonly></td>
                         <td><input name="medida[]" id="medida${n}" class="form-control form-control-sm" style="border: none; background-color: transparent;" value="${detalle_acerrado.medida}" type="text" readonly></td>
                         <td><input name="cantidad_paquete[]" id="cantidad_paquete${n}" class="cantidad_paquete form-control form-control-sm" style="border: none; background-color: transparent;" value="${detalle_acerrado.cantidad_paquetes}" type="text" readonly></td>
+                        <td><input name="medida1[]" id="medida1${n}" class="medida1 form-control form-control-sm" style="border: none; background-color: transparent;" value="${detalle_acerrado.medida1_paquete}" type="text" readonly></td>
+                        <td><input name="medida2[]" id="medida2${n}" class="medida2 form-control form-control-sm" style="border: none; background-color: transparent;" value="${detalle_acerrado.medida2_paquete}" type="text" readonly></td>
                         <td><input name="total_n_piezas[]" id="total_n_piezas${n}" class="total_n_piezas form-control form-control-sm" style="border: none; background-color: transparent;" value="${detalle_acerrado.total_n_piezas}" type="text" readonly></td>
                         <td><input name="cantidad_paquete_ingreso[]" id="cantidad_paquete_ingreso${n}" class="cantidad_paquete_ingreso form-control form-control-sm" value="" type="text" oninput="calcularTotalPiezasIngreso(this)"></td>
                         <td><input name="ingreso_horno[]" id="ingreso_horno${n}" class="ingreso_horno form-control form-control-sm" value="" type="text" oninput="calcularIngresoHorno(this)" readonly></td>
@@ -267,18 +269,20 @@ function calcularTotalPiezasIngreso(input){
     var fila = $(input).closest('tr');
 
     var cantidad_paquete = parseFloat(fila.find('.cantidad_paquete').val()) || 0;
+    var medida1 = parseFloat(fila.find('.medida1').val()) || 0;
+    var medida2 = parseFloat(fila.find('.medida2').val()) || 0;
     var cantidad_paquete_ingreso = parseFloat(fila.find('.cantidad_paquete_ingreso').val()) || 0;
 
     // Verificación antes de continuar
     if (cantidad_paquete_ingreso > cantidad_paquete) {
         bootbox.alert("La cantidad de Paquetes de Ingreso al Horno no puede ser mayor al total de Paquetes");
         fila.find('.cantidad_paquete_ingreso').val("");
-        fila.find('.ingreso_horno').val(""); // también limpiar ingreso_horno
+        fila.find('.ingreso_horno').val("");
         return;
     }
 
     // Si todo está bien, calcula normalmente
-    var total_ingreso_horno = cantidad_paquete_ingreso * 10; // cambiar el 10 por las medidas
+    var total_ingreso_horno = cantidad_paquete_ingreso * medida1 * medida2;
 
     fila.find('.ingreso_horno').val(total_ingreso_horno);
 
@@ -379,10 +383,12 @@ function calcularTotalPiezasIngreso(input){
                                         <thead>
                                         <tr style="font-size:13px">
                                             <th style="width : 5%">#</th>
-                                            <th style="width : 20%">Fecha Acerrado</th>
-                                            <th style="width : 20%">Tipo Madera</th>
-                                            <th style="width : 20%">Medida</th>
-                                            <th style="width : 15%">Cantidad Paquetes</th>
+                                            <th style="width : 10%">Fecha Acerrado</th>
+                                            <th style="width : 10%">Tipo Madera</th>
+                                            <th style="width : 15%">Medida</th>
+                                            <th style="width : 10%">Cantidad Paquetes</th>
+                                            <th style="width : 10%">Medida 1</th>
+                                            <th style="width : 10%">Medida 2</th>
                                             <th style="width : 10%">Total Piezas</th>
                                             <th style="width : 10%">Ingreso Paquetes</th>
                                             <th style="width : 10%">Ingreso Horno</th>
@@ -392,7 +398,7 @@ function calcularTotalPiezasIngreso(input){
                                         </tbody>
                                         <tfoot>
                                             <tr>
-                                                <td colspan="6" style="text-align:right;"><strong>Total:</strong></td>
+                                                <td colspan="9" style="text-align:right;"><strong>Total:</strong></td>
                                                 <td><input type="text" id="total_ingreso_horno" class="form-control form-control-sm" readonly></td>
                                             </tr>
                                         </tfoot>
@@ -403,7 +409,7 @@ function calcularTotalPiezasIngreso(input){
                                 <div class="col-sm-12 controls">
                                     <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
                                     
-                                        <a href="javascript:void(0)" onClick="fn_save_madera_acerrado()" class="btn btn-sm btn-success" style="margin-right:10px">Guardar</a>
+                                        <a href="javascript:void(0)" onClick="fn_save_ingreso_horno()" class="btn btn-sm btn-success" style="margin-right:10px">Guardar</a>
                                         <a href="javascript:void(0)" onClick="$('#openOverlayOpc').modal('hide');" class="btn btn-sm btn-info" style="">Cerrar</a>
                                     </div>
                                                         
