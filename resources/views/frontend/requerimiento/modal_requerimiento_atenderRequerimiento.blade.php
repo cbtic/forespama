@@ -313,8 +313,8 @@ function cargarDetalle(){
                         <td><input name="cantidad_ingreso[]" id="cantidad_ingreso${n}" class="cantidad_ingreso form-control form-control-sm" value="${requerimiento.cantidad}" type="text" oninput="" readonly></td>
                         <td><input name="cantidad_atendida[]" id="cantidad_atendida${n}" class="form-control form-control-sm" value="${requerimiento.cantidad-requerimiento.cantidad_atendida}" type="text" oninput="calcularTotalPrecio(${n})"></td>
                         <td><input name="moneda[]" id="moneda${n}" class="form-control form-control-sm" value="${requerimiento.id_moneda}" type="hidden"><select name="moneda_" id="moneda_${n}" class="form-control form-control-sm" onchange="">${monedaOptions}</select><input name="moneda_descripcion" id="moneda_descripcion" type="hidden"></td>
-                        <td><input name="tipo_cambio[]" id="tipo_cambio${n}" class="tipo_cambio form-control form-control-sm" value="${parseFloat(requerimiento.tipo_cambio || 0).toFixed(2)}" type="text" oninput="calcularTotalPrecio(${n})" onblur="formatearDecimal(this)" ${isReadonly}></td>
-                        <td><input name="precio_unitario[]" id="precio_unitario${n}" class="precio_unitario form-control form-control-sm" value="${parseFloat(requerimiento.precio_dolares || 0).toFixed(2)}" type="text" oninput="calcularTotalPrecio(${n})" onblur="formatearDecimal(this)" ${isReadonly}></td>
+                        <td><input name="tipo_cambio[]" id="tipo_cambio${n}" class="tipo_cambio form-control form-control-sm" value="${parseFloat(requerimiento.tipo_cambio || 0).toFixed(3)}" type="text" oninput="calcularTotalPrecio(${n})" onblur="formatearDecimal(this)" ${isReadonly}></td>
+                        <td><input name="precio_unitario[]" id="precio_unitario${n}" class="precio_unitario form-control form-control-sm" value="${parseFloat(requerimiento.precio_dolares || 0).toFixed(2)}" type="text" oninput="calcularTotalPrecio(${n})" onblur="formatearDosDecimal(this)" ${isReadonly}></td>
                         <td><input name="total_precio[]" id="total_precio${n}" class="total_precio form-control form-control-sm" value="${totalPrecio.toFixed(2)}" type="text" oninput="" readonly></td>
                         <td><input name="total[]" id="total${n}" class="total form-control form-control-sm" value="${total.toFixed(2)}" type="text" oninput="" readonly></td>
                         
@@ -391,6 +391,15 @@ function calcularTotalPrecio(n) {
 function formatearDecimal(input) {
     let valor = parseFloat(input.value);
     if (!isNaN(valor)) {
+        input.value = valor.toFixed(3);
+    } else {
+        input.value = '0.000';
+    }
+}
+
+function formatearDosDecimal(input) {
+    let valor = parseFloat(input.value);
+    if (!isNaN(valor)) {
         input.value = valor.toFixed(2);
     } else {
         input.value = '0.00';
@@ -405,7 +414,7 @@ function cargarTipoCambioDelDia(n) {
         success: function(response) {
             // Asegura que el resultado no esté vacío
             if (response.length > 0) {
-                const tipoCambio = parseFloat(response[0].valor_venta || 0).toFixed(2);
+                const tipoCambio = parseFloat(response[0].valor_venta || 0).toFixed(3);
                 $(`#tipo_cambio${n}`).val(tipoCambio).prop('readonly', false);
                 calcularTotalPrecio(n); // recalcular con nuevo valor
             } else {
