@@ -17,7 +17,7 @@
 
 .modal-dialog {
 	width: 100%;
-	max-width:60%!important
+	max-width:75%!important
   }
   
 #tablemodal{
@@ -79,6 +79,10 @@
 
 #tablemodalm{
 	
+}
+
+.scrolls {
+	height: 100px;
 }
 </style>
 
@@ -189,6 +193,34 @@ $(document).ready(function() {
 
     $('#marca').select2({ width : '100%' })
 
+});
+
+$(document).ready(function() {
+	 
+    $(".upload").on('click', function() {
+        var formData = new FormData();
+        var files = $('#image')[0].files[0];
+        formData.append('file',files);
+        $.ajax({
+			headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            url: "/activos/upload_activo",
+            type: 'post',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function(response) {
+                if (response != 0) {
+                    $("#img_ruta").attr("src", "/img/tmp_activos/"+response);
+					$("#img_foto").val(response);
+                } else {
+                    alert('Formato de imagen incorrecto.');
+                }
+            }
+        });
+        return false;
+    });
 });
 
 $(function() {
@@ -412,10 +444,12 @@ $(function() {
 
             <div class="card">
                 
-                <div class="card-header" style="padding:5px!important;padding-left:20px!important">
-                    Registrar Activos
-                </div>
                 
+                <div class="" style="padding-top:20px!important;padding-left:20px!important;padding-right:20px; text-align: center">
+                    <b style="font-size : 15px">Registrar Activos</b>
+                    <img src="/img/logo_forestalpama.jpg" align="right" style="width: 120px; height: 50px">
+                </div>
+
                 <div class="card-body">
                 <form method="post" action="#" id="frmActivos" name="frmActivos">
 
@@ -426,8 +460,127 @@ $(function() {
                             <input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
                             <input type="hidden" name="id" id="id" value="<?php echo $id?>">
                             
-                            <fieldset name="ubicacion" style="margin-top: 10px; border:1px solid #A4A4A4; padding: 10px">
-                            <legend class="control-label form-control-sm">Ubicaci&oacute;n</legend>
+                            <fieldset name="datos_activo" style="border:1px solid #A4A4A4; padding: 10px;">
+                            <legend class="control-label form-control-sm"><b>Datos del Activo</b></legend>
+                            <div class="row">
+                                <div class="col-lg-8">
+                                    <div class="row">
+                                        <div class="col-lg-2">
+                                            <div class="form-group">
+                                                <label class="control-label form-control-sm">Tipo Activo</label>
+                                                <select name="tipo_activo" id="tipo_activo" class="form-control form-control-sm">
+                                                    <option value="">--Seleccionar--</option>
+                                                    <?php 
+                                                    foreach ($tipo_activo as $row){?>
+                                                        <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$activo->id_tipo_activo)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                                        <?php 
+                                                    }
+                                                    ?>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <div class="form-group">
+                                                <label class="control-label form-control-sm">C&oacute;digo</label>
+                                                <input id="codigo" name="codigo" on class="form-control form-control-sm mayusculas"  value="<?php //echo $activo->codigo?>" type="text">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label class="control-label form-control-sm">Descripci&oacute;n</label>
+                                                <input id="descripcion" name="descripcion" on class="form-control form-control-sm mayusculas"  value="<?php echo $activo->descripcion?>" type="text">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <div class="form-group">
+                                                <label class="control-label form-control-sm">Placa</label>
+                                                <input id="placa" name="placa" on class="form-control form-control-sm mayusculas"  value="<?php echo $activo->placa?>" type="text" placeholder="ABC-123">
+                                            </div>
+                                        </div>
+                                        </div>
+                                    <div class="row">
+                                    <div class="col-lg-2">
+                                            <div class="form-group">
+                                                <label class="control-label form-control-sm">Modelo</label>
+                                                <input id="modelo" name="modelo" on class="form-control form-control-sm mayusculas"  value="<?php echo $activo->modelo?>" type="text">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <div class="form-group">
+                                                <label class="control-label form-control-sm">Serie</label>
+                                                <input id="serie" name="serie" on class="form-control form-control-sm mayusculas"  value="<?php echo $activo->serie?>" type="text">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <div class="form-group">
+                                                <label class="control-label form-control-sm">Marca</label>
+                                                <select name="marca" id="marca" class="form-control form-control-sm">
+                                                    <option value="">--Seleccionar--</option>
+                                                    <?php 
+                                                    foreach ($marca as $row){?>
+                                                        <option value="<?php echo $row->id ?>" <?php if($row->id==$activo->id_marca)echo "selected='selected'"?>><?php echo $row->denominiacion ?></option>
+                                                        <?php 
+                                                    }
+                                                    ?>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <div class="form-group">
+                                                <label class="control-label form-control-sm">Color</label>
+                                                <input id="color" name="color" on class="form-control form-control-sm mayusculas"  value="<?php echo $activo->color?>" type="text">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <div class="form-group">
+                                                <label class="control-label form-control-sm">Tipo Combustible</label>
+                                                <select name="tipo_combustible" id="tipo_combustible" class="form-control form-control-sm">
+                                                    <option value="">--Seleccionar--</option>
+                                                    <?php 
+                                                    foreach ($tipo_combustible as $row){?>
+                                                        <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$activo->id_tipo_combustible)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                                        <?php 
+                                                    }
+                                                    ?>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <div class="form-group">
+                                                <label class="control-label form-control-sm">Dimesiones</label>
+                                                <input id="dimension" name="dimension" on class="form-control form-control-sm mayusculas"  value="<?php echo $activo->dimensiones?>" type="text">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="form-group">
+                                                    
+                                                <span class="btn btn-sm btn-warning btn-file">
+                                                    Examinar <input id="image" name="image" type="file" />
+                                                </span>
+                                                <input type="button" class="btn btn-sm btn-primary upload" value="Subir" style="margin-left:10px">
+                                                
+                                                <?php
+                                                    $url_foto = "/img/logo_forestalpama.jpg";
+                                                    if ($activo->ruta_imagen != "") $url_foto = "/img/activos/" . $id_activo . "/" . $activo->ruta_imagen;
+
+                                                    $foto = "";
+                                                    if ($activo->ruta_imagen != "") $foto = $activo->ruta_imagen;
+                                                ?>
+
+                                                <img src="<?php echo $url_foto ?>" id="img_ruta" width="240px" height="150px" alt="" style="margin-top:10px" />
+                                                <input type="hidden" id="img_foto" name="img_foto" value="<?php echo $foto ?>" />
+                                            </div>	
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            </fieldset>
+                            <fieldset name="ubicacion" style="margin-top: 20px; border:1px solid #A4A4A4; padding: 10px">
+                            <legend class="control-label form-control-sm"><b>Ubicaci&oacute;n</b></legend>
                                 <div class="row">
                                     <div class="col-lg-2">
                                         <div class="form-group">
@@ -478,95 +631,10 @@ $(function() {
                                     </div>
                                 </div>
                             </fieldset>
-                            <fieldset name="datos_activo" style="margin-top: 20px; border:1px solid #A4A4A4; padding: 10px;">
-                            <legend class="control-label form-control-sm">Datos del Activo</legend>
-                                <div class="row">
-                                    <div class="col-lg-2">
-                                        <div class="form-group">
-                                            <label class="control-label form-control-sm">Tipo Activo</label>
-                                            <select name="tipo_activo" id="tipo_activo" class="form-control form-control-sm">
-                                                <option value="">--Seleccionar--</option>
-                                                <?php 
-                                                foreach ($tipo_activo as $row){?>
-                                                    <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$activo->id_tipo_activo)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
-                                                    <?php 
-                                                }
-                                                ?>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <div class="form-group">
-                                            <label class="control-label form-control-sm">Descripci&oacute;n</label>
-                                            <input id="descripcion" name="descripcion" on class="form-control form-control-sm mayusculas"  value="<?php echo $activo->descripcion?>" type="text">
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-2">
-                                        <div class="form-group">
-                                            <label class="control-label form-control-sm">Placa</label>
-                                            <input id="placa" name="placa" on class="form-control form-control-sm mayusculas"  value="<?php echo $activo->placa?>" type="text" placeholder="ABC-123">
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-2">
-                                        <div class="form-group">
-                                            <label class="control-label form-control-sm">Modelo</label>
-                                            <input id="modelo" name="modelo" on class="form-control form-control-sm mayusculas"  value="<?php echo $activo->modelo?>" type="text">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-lg-3">
-                                        <div class="form-group">
-                                            <label class="control-label form-control-sm">Serie</label>
-                                            <input id="serie" name="serie" on class="form-control form-control-sm mayusculas"  value="<?php echo $activo->serie?>" type="text">
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-2">
-                                        <div class="form-group">
-                                            <label class="control-label form-control-sm">Marca</label>
-                                            <select name="marca" id="marca" class="form-control form-control-sm">
-                                                <option value="">--Seleccionar--</option>
-                                                <?php 
-                                                foreach ($marca as $row){?>
-                                                    <option value="<?php echo $row->id ?>" <?php if($row->id==$activo->id_marca)echo "selected='selected'"?>><?php echo $row->denominiacion ?></option>
-                                                    <?php 
-                                                }
-                                                ?>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-3">
-                                        <div class="form-group">
-                                            <label class="control-label form-control-sm">Color</label>
-                                            <input id="color" name="color" on class="form-control form-control-sm mayusculas"  value="<?php echo $activo->color?>" type="text">
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-2">
-                                        <div class="form-group">
-                                            <label class="control-label form-control-sm">Tipo Combustible</label>
-                                            <select name="tipo_combustible" id="tipo_combustible" class="form-control form-control-sm">
-                                                <option value="">--Seleccionar--</option>
-                                                <?php 
-                                                foreach ($tipo_combustible as $row){?>
-                                                    <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$activo->id_tipo_combustible)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
-                                                    <?php 
-                                                }
-                                                ?>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-3">
-                                        <div class="form-group">
-                                            <label class="control-label form-control-sm">Dimesiones</label>
-                                            <input id="dimension" name="dimension" on class="form-control form-control-sm mayusculas"  value="<?php echo $activo->dimensiones?>" type="text">
-                                        </div>
-                                    </div>
-                                </div>
-                            </fieldset>
                             <div class="row">
                                 <div class="col-lg-4">
                                     <fieldset name="tarjeta_propiedad" style="margin-top: 20px; border:1px solid #A4A4A4; padding: 10px">
-                                    <legend class="control-label form-control-sm">Tarjeta Propiedad</legend>
+                                    <legend class="control-label form-control-sm"><b>Tarjeta Propiedad</b></legend>
                                         <div class="row">
                                             <div class="col-lg-6">
                                                 <div class="form-group">
@@ -585,7 +653,7 @@ $(function() {
                                 </div>
                                 <div class="col-lg-8">
                                     <fieldset name="tarjeta_circulacion" style="margin-top: 20px; border:1px solid #A4A4A4; padding: 10px">
-                                    <legend class="control-label form-control-sm">Tarjeta Circulaci&oacute;n</legend>
+                                    <legend class="control-label form-control-sm"><b>Tarjeta Circulaci&oacute;n</b></legend>
                                         <div class="row">
                                             <div class="col-lg-4">
                                                 <div class="form-group">
@@ -617,10 +685,10 @@ $(function() {
                                     </fieldset>
                                 </div>
                             </div>
-                            <div class="row">
+                            <!--<div class="row">
                                 <div class="col-lg-6">
                                     <fieldset name="fecha_vencimiento" style="margin-top: 20px; border:1px solid #A4A4A4; padding: 10px">
-                                    <legend class="control-label form-control-sm">Fecha Vencimiento</legend>
+                                    <legend class="control-label form-control-sm"><b>Fecha Vencimiento</b></legend>
                                         <div class="row">
                                             <div class="col-lg-6">
                                                 <div class="form-group">
@@ -636,26 +704,24 @@ $(function() {
                                             </div>
                                         </div>
                                     </fieldset>
-                                </div>
-                                <div class="col-lg-6">
-                                    <fieldset name="costos" style="margin-top: 20px; border:1px solid #A4A4A4; padding: 10px">
-                                    <legend class="control-label form-control-sm">Costos</legend>
-                                        <div class="row">
-                                            <div class="col-lg-6">
-                                                <div class="form-group">
-                                                    <label class="control-label form-control-sm">Valor Libros</label>
-                                                    <input id="valor_libros" name="valor_libros" on class="form-control form-control-sm solo-decimal" <?= ($activo->valor_libros !== null && $activo->valor_libros !== '') ? 'value="' . number_format($activo->valor_libros, 2) . '"' : '' ?> type="text" placeholder="0.00">
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-6">
-                                                <div class="form-group">
-                                                    <label class="control-label form-control-sm">Valor Comercial</label>
-                                                    <input id="valor_comercial" name="valor_comercial" on class="form-control form-control-sm solo-decimal" <?= ($activo->valor_comercial !== null && $activo->valor_comercial !== '') ? 'value="' . number_format($activo->valor_comercial, 2) . '"' : '' ?> type="text" placeholder="0.00">
-                                                </div>
+                                </div>-->
+                                <fieldset name="costos" style="margin-top: 20px; border:1px solid #A4A4A4; padding: 10px">
+                                <legend class="control-label form-control-sm"><b>Valorizaci&oacute;n</b></legend>
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label class="control-label form-control-sm">Valor Libros</label>
+                                                <input id="valor_libros" name="valor_libros" on class="form-control form-control-sm solo-decimal" <?= ($activo->valor_libros !== null && $activo->valor_libros !== '') ? 'value="' . number_format($activo->valor_libros, 2) . '"' : '' ?> type="text" placeholder="0.00">
                                             </div>
                                         </div>
-                                    </fieldset>
-                                </div>
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label class="control-label form-control-sm">Valor Comercial</label>
+                                                <input id="valor_comercial" name="valor_comercial" on class="form-control form-control-sm solo-decimal" <?= ($activo->valor_comercial !== null && $activo->valor_comercial !== '') ? 'value="' . number_format($activo->valor_comercial, 2) . '"' : '' ?> type="text" placeholder="0.00">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </fieldset>
                             </div>
                         </div>
                     </div>

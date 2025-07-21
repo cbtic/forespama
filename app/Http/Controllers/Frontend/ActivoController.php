@@ -84,6 +84,25 @@ class ActivoController extends Controller
 
     public function send_activo(Request $request){
 
+		$activo_id = $request->id;
+		$path = public_path("img/activos/".$activo_id);
+		if (!is_dir($path)) {
+			mkdir($path, 0777, true);
+		}
+
+		if($request->img_foto!=""){
+			$filepath_tmp = public_path('img/tmp_activos/');
+			$filepath_nuevo = public_path('img/activos/'. $activo_id . '/');
+             if (!is_dir($filepath_nuevo)) {
+                mkdir($filepath_nuevo, 0777, true);
+            }
+			if ($request->img_foto != "") {
+                if (file_exists($filepath_tmp . $request->img_foto)) {
+                    copy($filepath_tmp . $request->img_foto, $filepath_nuevo . $request->img_foto);
+                }
+            }
+		}
+
         $id_user = Auth::user()->id;
 
 		if($request->id == 0){
@@ -95,6 +114,7 @@ class ActivoController extends Controller
 		$valor_libros = str_replace(',', '', $request->valor_libros);
 		$valor_comercial = str_replace(',', '', $request->valor_comercial);
 
+        $activo->codigo = $request->codigo;
         $activo->id_ubigeo = $request->distrito;
         $activo->direccion = $request->direccion;
         $activo->id_tipo_activo = $request->tipo_activo;
@@ -115,9 +135,11 @@ class ActivoController extends Controller
         $activo->id_tipo_combustible = $request->tipo_combustible;
         $activo->dimensiones = $request->dimension;
         $activo->id_estado_activo = $request->estado_activo;
+        $activo->ruta_imagen = $request->img_foto;
 		$activo->estado = 1;
         $activo->id_usuario_inserta = $id_user;
 		$activo->save();
+		$id_activo = $activo->id; 
 
         return response()->json(['success' => 'Registro de activo guardado exitosamente.']);
 
@@ -141,4 +163,26 @@ class ActivoController extends Controller
 		echo json_encode($ubigeo_activo);
 	}
 
+	function extension($filename){$file = explode(".",$filename); return strtolower(end($file));}
+
+    public function upload_activo(Request $request){
+		
+		$filename = date("YmdHis") . substr((string)microtime(), 1, 6);
+		$type="";
+		
+        $path = "tmp_activos";
+        if (!is_dir($path)) {
+            mkdir($path);
+        }
+        
+        $filepath = public_path('tmp_activos/');
+		
+		$type=$this->extension($_FILES["file"]["name"]);
+		move_uploaded_file($_FILES["file"]["tmp_name"], $filepath . $filename.".".$type);
+		
+		$archivo = $filename.".".$type;
+		
+		echo $archivo;
+		//$this->importar_archivo($archivo);
+	}
 }

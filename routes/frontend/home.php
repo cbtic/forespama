@@ -710,3 +710,4 @@ Route::get('activos/modal_activos_horno/{id}', [ActivoController::class, 'modal_
 Route::post('activos/send_activo', [ActivoController::class, 'send_activo'])->name('activos.send_activo');
 Route::get('activos/obtener_provincia_distrito/{idDepartamento}', [ActivoController::class, 'obtener_provincia_distrito'])->name('activos.obtener_provincia_distrito');
 Route::get('activos/eliminar_activo/{id}/{estado}', [ActivoController::class, 'eliminar_activo'])->name('activos.eliminar_activo');
+Route::post('activos/upload_activo', [ActivoController::class, 'upload_activo'])->name('activos.upload_activo');
