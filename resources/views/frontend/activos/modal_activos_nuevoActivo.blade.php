@@ -17,7 +17,7 @@
 
 .modal-dialog {
 	width: 100%;
-	max-width:75%!important
+	max-width:80%!important
   }
   
 #tablemodal{
@@ -565,7 +565,7 @@ $(function() {
                                                 
                                                 <?php
                                                     $url_foto = "/img/logo_forestalpama.jpg";
-                                                    if ($activo->ruta_imagen != "") $url_foto = "/img/activos/" . $id_activo . "/" . $activo->ruta_imagen;
+                                                    if ($activo->ruta_imagen != "") $url_foto = "/img/activos/" . $id . "/" . $activo->ruta_imagen;
 
                                                     $foto = "";
                                                     if ($activo->ruta_imagen != "") $foto = $activo->ruta_imagen;
@@ -573,65 +573,67 @@ $(function() {
 
                                                 <img src="<?php echo $url_foto ?>" id="img_ruta" width="240px" height="150px" alt="" style="margin-top:10px" />
                                                 <input type="hidden" id="img_foto" name="img_foto" value="<?php echo $foto ?>" />
-                                            </div>	
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             </fieldset>
-                            <fieldset name="ubicacion" style="margin-top: 20px; border:1px solid #A4A4A4; padding: 10px">
-                            <legend class="control-label form-control-sm"><b>Ubicaci&oacute;n</b></legend>
-                                <div class="row">
-                                    <div class="col-lg-2">
-                                        <div class="form-group">
-                                            <label class="control-label form-control-sm">Departamento</label>
-                                            <select name="departamento" id="departamento" onchange="obtenerProvincia()" class="form-control form-control-sm">
-                                                <?php if($id>0){ ?> 
-                                                <option value="">--Seleccionar--</option>
-                                                <?php
-                                                foreach ($departamento as $row) {?>
-                                                <option value="<?php echo $row->id_departamento?>" <?php if($row->id_departamento==substr($activo->id_ubigeo,0,2))echo "selected='selected'"?>><?php echo $row->desc_ubigeo ?></option>
-                                                <?php 
-                                                }
-                                                }else{?>
-                                                <option value="">--Seleccionar--</option>
-                                                    <?php
-                                                    foreach ($departamento as $row) {
-                                                    ?>
-                                                    <option value="<?php echo $row->id_departamento?>"><?php echo $row->desc_ubigeo ?></option>
-                                                    <?php 
-                                                        
-                                                    }
-                                                }
-                                                ?>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-2">
-                                        <div class="form-group">
-                                            <label class="control-label form-control-sm">Provincia</label>
-                                            <select name="provincia" id="provincia" class="form-control form-control-sm" onchange="obtenerDistrito()">
-                                                <option value="">--Seleccionar--</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-2">
-                                        <div class="form-group">
-                                            <label class="control-label form-control-sm">Distrito</label>
-                                            <select name="distrito" id="distrito" class="form-control form-control-sm" onchange="">
-                                                <option value="">--Seleccionar--</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <div class="form-group">
-                                            <label class="control-label form-control-sm">Direcci&oacute;n</label>
-                                            <input id="direccion" name="direccion" on class="form-control form-control-sm mayusculas"  value="<?php echo $activo->direccion?>" type="text">
-                                        </div>
-                                    </div>
-                                </div>
-                            </fieldset>
                             <div class="row">
+                                <div class="col-lg-8">
+                                    <fieldset name="ubicacion" style="margin-top: 20px; border:1px solid #A4A4A4; padding: 10px">
+                                    <legend class="control-label form-control-sm"><b>Ubicaci&oacute;n</b></legend>
+                                        <div class="row">
+                                            <div class="col-lg-2">
+                                                <div class="form-group">
+                                                    <label class="control-label form-control-sm">Departamento</label>
+                                                    <select name="departamento" id="departamento" onchange="obtenerProvincia()" class="form-control form-control-sm">
+                                                        <?php if($id>0){ ?> 
+                                                        <option value="">--Seleccionar--</option>
+                                                        <?php
+                                                        foreach ($departamento as $row) {?>
+                                                        <option value="<?php echo $row->id_departamento?>" <?php if($row->id_departamento==substr($activo->id_ubigeo,0,2))echo "selected='selected'"?>><?php echo $row->desc_ubigeo ?></option>
+                                                        <?php 
+                                                        }
+                                                        }else{?>
+                                                        <option value="">--Seleccionar--</option>
+                                                            <?php
+                                                            foreach ($departamento as $row) {
+                                                            ?>
+                                                            <option value="<?php echo $row->id_departamento?>"><?php echo $row->desc_ubigeo ?></option>
+                                                            <?php 
+                                                                
+                                                            }
+                                                        }
+                                                        ?>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-2">
+                                                <div class="form-group">
+                                                    <label class="control-label form-control-sm">Provincia</label>
+                                                    <select name="provincia" id="provincia" class="form-control form-control-sm" onchange="obtenerDistrito()">
+                                                        <option value="">--Seleccionar--</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-2">
+                                                <div class="form-group">
+                                                    <label class="control-label form-control-sm">Distrito</label>
+                                                    <select name="distrito" id="distrito" class="form-control form-control-sm" onchange="">
+                                                        <option value="">--Seleccionar--</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="form-group">
+                                                    <label class="control-label form-control-sm">Direcci&oacute;n</label>
+                                                    <input id="direccion" name="direccion" on class="form-control form-control-sm mayusculas"  value="<?php echo $activo->direccion?>" type="text">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </div>
                                 <div class="col-lg-4">
                                     <fieldset name="tarjeta_propiedad" style="margin-top: 20px; border:1px solid #A4A4A4; padding: 10px">
                                     <legend class="control-label form-control-sm"><b>Tarjeta Propiedad</b></legend>
@@ -651,7 +653,9 @@ $(function() {
                                         </div>
                                     </fieldset>
                                 </div>
-                                <div class="col-lg-8">
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-6">
                                     <fieldset name="tarjeta_circulacion" style="margin-top: 20px; border:1px solid #A4A4A4; padding: 10px">
                                     <legend class="control-label form-control-sm"><b>Tarjeta Circulaci&oacute;n</b></legend>
                                         <div class="row">
@@ -684,7 +688,6 @@ $(function() {
                                         </div>
                                     </fieldset>
                                 </div>
-                            </div>
                             <!--<div class="row">
                                 <div class="col-lg-6">
                                     <fieldset name="fecha_vencimiento" style="margin-top: 20px; border:1px solid #A4A4A4; padding: 10px">
@@ -705,26 +708,217 @@ $(function() {
                                         </div>
                                     </fieldset>
                                 </div>-->
-                                <fieldset name="costos" style="margin-top: 20px; border:1px solid #A4A4A4; padding: 10px">
-                                <legend class="control-label form-control-sm"><b>Valorizaci&oacute;n</b></legend>
-                                    <div class="row">
-                                        <div class="col-lg-6">
-                                            <div class="form-group">
-                                                <label class="control-label form-control-sm">Valor Libros</label>
-                                                <input id="valor_libros" name="valor_libros" on class="form-control form-control-sm solo-decimal" <?= ($activo->valor_libros !== null && $activo->valor_libros !== '') ? 'value="' . number_format($activo->valor_libros, 2) . '"' : '' ?> type="text" placeholder="0.00">
+                                <div class="col-lg-6">
+                                    <fieldset name="costos" style="margin-top: 20px; border:1px solid #A4A4A4; padding: 10px">
+                                    <legend class="control-label form-control-sm"><b>Valorizaci&oacute;n</b></legend>
+                                        <div class="row">
+                                            <div class="col-lg-4">
+                                                <div class="form-group">
+                                                    <label class="control-label form-control-sm">Valor Libros</label>
+                                                    <input id="valor_libros" name="valor_libros" on class="form-control form-control-sm solo-decimal" <?= ($activo->valor_libros !== null && $activo->valor_libros !== '') ? 'value="' . number_format($activo->valor_libros, 2) . '"' : '' ?> type="text" placeholder="0.00">
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <div class="form-group">
+                                                    <label class="control-label form-control-sm">Valor Comercial</label>
+                                                    <input id="valor_comercial" name="valor_comercial" on class="form-control form-control-sm solo-decimal" <?= ($activo->valor_comercial !== null && $activo->valor_comercial !== '') ? 'value="' . number_format($activo->valor_comercial, 2) . '"' : '' ?> type="text" placeholder="0.00">
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="col-lg-6">
-                                            <div class="form-group">
-                                                <label class="control-label form-control-sm">Valor Comercial</label>
-                                                <input id="valor_comercial" name="valor_comercial" on class="form-control form-control-sm solo-decimal" <?= ($activo->valor_comercial !== null && $activo->valor_comercial !== '') ? 'value="' . number_format($activo->valor_comercial, 2) . '"' : '' ?> type="text" placeholder="0.00">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </fieldset>
+                                    </fieldset>
+                                </div>
                             </div>
                         </div>
                     </div>
+                </div>
+                <div style="clear:both;padding-top:15px"></div>
+                    <div class="card" style="padding: 20px;">
+                        <nav>
+                            <div class="nav nav-pills" id="nav-tab" role="tablist">
+                                <a
+                                    class="nav-link active"
+                                    id="my-profile-tab"
+                                    data-toggle="pill"
+                                    href="#my-profile"
+                                    role="tab"
+                                    aria-controls="my-profile"
+                                    aria-selected="true">SOAT</a>
+                                
+                                <a
+                                    class="nav-link"
+                                    id="information-tab"
+                                    data-toggle="pill"
+                                    href="#information"
+                                    role="tab"
+                                    aria-controls="information"
+                                    aria-selected="false"
+                                    >Revisi&oacute;n T&eacute;cnica</a>
+                                
+                                <a
+                                    class="nav-link"
+                                    id="seguimiento-tab"
+                                    data-toggle="pill"
+                                    href="#seguimiento"
+                                    role="tab"
+                                    aria-controls="seguimiento"
+                                    aria-selected="false"
+                                    >Control de Mantenimientos</a>
+                            
+                            </div>
+                        </nav>
+                        <div class="tab-content" id="my-profile-tabsContent">
+                            <div class="tab-pane fade pt-3 show active" id="my-profile" role="tabpanel" aria-labelledby="my-profile-tab" style="padding-top:0px!important">
+						 
+                                <div class="row" style="padding-top:0px">
+
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <div id="" class="row">
+                                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                        <strong>
+                                                            Datos del SOAT
+                                                        </strong>
+                                                        
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="card-body" style="margin-top:15px;margin-bottom:15px">
+                                                
+                                                <input class="btn btn-success btn-sm float-right" value="NUEVO" type="button" id="btnNuevoSOAT" style="width:120px;margin-right:15px"/>
+                                                
+                                                <div style="clear:both"></div>
+                                                
+                                                <div class="row">
+                                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                    
+                                                        <div class="card-body">
+                                        
+                                                            <div class="table-responsive">
+                                                            <table id="tblSolicitud" class="table table-hover table-sm">
+                                                            <thead>
+                                                                <tr style="font-size:13px">
+                                                                    <th>N&uacute;mero de Poliza</th>
+                                                                    <th>Fecha Emisi&oacute;n</th>
+                                                                    <th>Fecha Vencimiento</th>
+                                                                    <th>Opciones</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody style="font-size:13px">
+                                                                <?php foreach($soat_activo as $row){?>
+                                                                <tr>
+                                                                    <th><?php echo $row->numero_certificado?></th>
+                                                                    <th><?php echo $row->fecha_emision?></th>
+                                                                    <th><?php echo $row->fecha_vencimiento?></th>
+                                                                    <th>
+                                                                        <div class="btn-group btn-group-sm" role="group" aria-label="Log Viewer Actions">
+                                                                        <button style="font-size:12px" type="button" class="btn btn-sm btn-success" data-toggle="modal" onclick="modalParentesco(<?php echo $row->id?>)" ><i class="fa fa-edit"></i> Editar</button>
+                                                                        <a href="javascript:void(0)" onclick="eliminarParentesco(<?php echo $row->id?>)" class="btn btn-sm btn-danger" style="font-size:12px;margin-left:10px">Eliminar</a>
+                                                                        </div>
+                                                                    </th>
+                                                                </tr>						
+                                                                <?php }?>
+                                                            </tbody>							
+                                                            </table>
+                                                            
+                                                            </div>
+                                                        
+                                                        </div>
+                                                    
+                                                    </div>
+                                                    
+                                                </div>
+                                                    
+                                            </div>
+                                            
+                                            
+                                        </div>
+            
+                                        
+                                    </div>
+                                    
+                                </div>
+                                
+                            
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <div class="tab-pane fade pt-3" id="information" role="tabpanel" aria-labelledby="information-tab">
+							
+							<div class="row" style="padding-top:0px">
+
+								<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+									
+									<div class="card">
+										<div class="card-header">
+											<div id="" class="row">
+												<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+													<strong>
+														Estudios Realizados
+													</strong>
+													
+												</div>
+											</div>
+										</div>
+
+										<div class="card-body" style="margin-top:15px;margin-bottom:15px">
+											
+											<input class="btn btn-success btn-sm float-right" value="NUEVO" type="button" id="btnNuevoEstudio" style="width:120px;margin-right:15px"/>
+											
+											<div style="clear:both"></div>
+											
+											<div class="row">
+												<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+												
+													<div class="card-body">
+									
+														<div class="table-responsive">
+														<table id="tblSolicitud" class="table table-hover table-sm">
+														<thead>
+															<tr style="font-size:13px">
+																<th>Universidad</th>
+																<th>Especialidad</th>
+																<th>Titulo de Tesis</th>
+																<th>F. Egresado</th>
+																<th>F. Graduado</th>
+																<th>Libro</th>
+																<th>Folio</th>
+																<th>Opciones</th>
+															</tr>
+														</thead>
+														<tbody style="font-size:13px">
+															<?php //foreach($agremiado_estudio as $row){?>
+															<tr>
+																<th><?php //echo $row->universidad?></th>
+																<th><?php //echo $row->especialidad?></th>
+																<th><?php //echo $row->tesis?></th>
+																<th><?php //echo $row->fecha_egresado?></th>
+																<th><?php //echo $row->fecha_graduado?></th>
+																<th><?php //echo $row->libro?></th>
+																<th><?php //echo $row->folio?></th>
+																<th>
+					<div class="btn-group btn-group-sm" role="group" aria-label="Log Viewer Actions">
+					<button style="font-size:12px" type="button" class="btn btn-sm btn-success" data-toggle="modal" onclick="modalEstudio(<?php //echo $row->id?>)" ><i class="fa fa-edit"></i> Editar</button>
+					<a href="javascript:void(0)" onclick="eliminarEstudio(<?php //echo $row->id?>)" class="btn btn-sm btn-danger" style="font-size:12px;margin-left:10px">Eliminar</a>
+					</div>
+																</th>
+															</tr>														
+															<?php //}?>
+														</tbody>							
+														</table>
+														
+													</div>
+												</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
                 </div>
                     <div style="margin-top:15px" class="form-group">
                         <div class="col-sm-12 controls">

@@ -9,6 +9,8 @@ use App\Models\Activo;
 use App\Models\Persona;
 use App\Models\Ubigeo;
 use App\Models\Marca;
+use App\Models\SoatActivo;
+use App\Models\RevisionTecnicaActivo;
 use Auth;
 use Carbon\Carbon;
 
@@ -65,7 +67,9 @@ class ActivoController extends Controller
         $persona_model = new Persona;
         $ubigeo_model = new Ubigeo;
         $marca_model = new Marca;
-
+        $soat_activo_model = new SoatActivo;
+        $revision_tecnica_activo_model = new RevisionTecnicaActivo;
+		
 		if($id>0){
 			$activo = Activo::find($id);
 		}else{
@@ -77,31 +81,14 @@ class ActivoController extends Controller
 		$tipo_combustible = $tabla_maestra_model->getMaestroByTipo('86');
         $departamento = $ubigeo_model->getDepartamento();
         $marca = $marca_model->getMarcaVehiculo();
+		$soat_activo = $soat_activo_model->getSoatActivo($id);
+		$revision_tecnica_activo = $revision_tecnica_activo_model->getRevisionTecnicaActivo($id);
 
-		return view('frontend.activos.modal_activos_nuevoActivo',compact('id','activo','tipo_activo','estado_activos','marca','tipo_combustible','departamento'));
+		return view('frontend.activos.modal_activos_nuevoActivo',compact('id','activo','tipo_activo','estado_activos','marca','tipo_combustible','departamento','soat_activo','revision_tecnica_activo'));
 
     }
 
     public function send_activo(Request $request){
-
-		$activo_id = $request->id;
-		$path = public_path("img/activos/".$activo_id);
-		if (!is_dir($path)) {
-			mkdir($path, 0777, true);
-		}
-
-		if($request->img_foto!=""){
-			$filepath_tmp = public_path('img/tmp_activos/');
-			$filepath_nuevo = public_path('img/activos/'. $activo_id . '/');
-             if (!is_dir($filepath_nuevo)) {
-                mkdir($filepath_nuevo, 0777, true);
-            }
-			if ($request->img_foto != "") {
-                if (file_exists($filepath_tmp . $request->img_foto)) {
-                    copy($filepath_tmp . $request->img_foto, $filepath_nuevo . $request->img_foto);
-                }
-            }
-		}
 
         $id_user = Auth::user()->id;
 
@@ -114,7 +101,7 @@ class ActivoController extends Controller
 		$valor_libros = str_replace(',', '', $request->valor_libros);
 		$valor_comercial = str_replace(',', '', $request->valor_comercial);
 
-        $activo->codigo = $request->codigo;
+        $activo->codigo_activo = $request->codigo;
         $activo->id_ubigeo = $request->distrito;
         $activo->direccion = $request->direccion;
         $activo->id_tipo_activo = $request->tipo_activo;
@@ -140,6 +127,25 @@ class ActivoController extends Controller
         $activo->id_usuario_inserta = $id_user;
 		$activo->save();
 		$id_activo = $activo->id; 
+
+		$activo_id = $id_activo;
+		$path = public_path("img/activos/".$activo_id);
+		if (!is_dir($path)) {
+			mkdir($path, 0777, true);
+		}
+
+		if($request->img_foto!=""){
+			$filepath_tmp = public_path('img/tmp_activos/');
+			$filepath_nuevo = public_path('img/activos/'. $activo_id . '/');
+             if (!is_dir($filepath_nuevo)) {
+                mkdir($filepath_nuevo, 0777, true);
+            }
+			if ($request->img_foto != "") {
+                if (file_exists($filepath_tmp . $request->img_foto)) {
+                    copy($filepath_tmp . $request->img_foto, $filepath_nuevo . $request->img_foto);
+                }
+            }
+		}
 
         return response()->json(['success' => 'Registro de activo guardado exitosamente.']);
 
@@ -167,22 +173,19 @@ class ActivoController extends Controller
 
     public function upload_activo(Request $request){
 		
-		$filename = date("YmdHis") . substr((string)microtime(), 1, 6);
+		$path = "img/tmp_activos";
+		if (!is_dir($path)) {
+			mkdir($path);
+		}
+
+        $filename = date("YmdHis") . substr((string)microtime(), 1, 6);
 		$type="";
-		
-        $path = "tmp_activos";
-        if (!is_dir($path)) {
-            mkdir($path);
-        }
-        
-        $filepath = public_path('tmp_activos/');
-		
-		$type=$this->extension($_FILES["file"]["name"]);
+
+    	$filepath = public_path('img/tmp_activos/');
+
+        $type=$this->extension($_FILES["file"]["name"]);
 		move_uploaded_file($_FILES["file"]["tmp_name"], $filepath . $filename.".".$type);
-		
-		$archivo = $filename.".".$type;
-		
-		echo $archivo;
-		//$this->importar_archivo($archivo);
+
+		echo $filename.".".$type;
 	}
 }
