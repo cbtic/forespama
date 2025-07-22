@@ -441,7 +441,7 @@ class RequerimientoController extends Controller
             
             $cantidad_ingresada = $requerimiento_detalle_model->getCantidadOrdenCompraByRequerimientoProducto($id_requerimiento,$detalle->id_producto);
             
-            if($cantidad_requerida - $cantidad_ingresada==0){
+            if($cantidad_requerida <= $cantidad_ingresada){
                 $RequerimientoDetalleObj = RequerimientoDetalle::find($detalle->id);
                 $RequerimientoDetalleObj->cerrado = 2;
                 $RequerimientoDetalleObj->save();
