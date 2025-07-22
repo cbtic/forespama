@@ -103,6 +103,11 @@ $(document).ready(function () {
 
 	});
 
+    $('#btnDescargar2').on('click', function () {
+		descargarCubicaje();
+
+	});
+
 	/*
 	$('.delete_ruta').on('click', function () {
 		DeleteImagen(this);
