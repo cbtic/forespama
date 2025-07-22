@@ -641,7 +641,7 @@ function save_orden_compra_requerimiento(){
                 success: function (result) {
                     datatablenew();
                     $('.loader').hide();
-                    bootbox.alert("Se guard&oacute; satisfactoriamente"); 
+                    bootbox.alert("Se guard&oacute; satisfactoriamente");
                     $('#openOverlayOpc').modal('hide');
                 }
         });

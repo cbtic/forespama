@@ -201,22 +201,8 @@ $(document).ready(function() {
     if($('#id').val()>0){
         cargarDetalle();
         cambiarOrigen();
-        obtenerEntradaSalida();
     }
 });
-
-function cambiarTipoCambio(){
-
-    var moneda = $('#moneda').val();
-
-    if(moneda==2){
-        $('#tipo_cambio_dolar_, #tipo_cambio_dolar_input').show();
-    }else if(moneda==1){
-        $('#tipo_cambio_dolar_, #tipo_cambio_dolar_input').hide();
-    }else{
-        $('#tipo_cambio_dolar_, #tipo_cambio_dolar_input').hide();
-    }
-}
 
 function cambiarOrigen(){
 
@@ -310,184 +296,6 @@ function calcularCantidadPendiente(input) {
     fila.find('.cantidad_pendiente').val(cantidad_pendiente.toFixed(2));
 }
 
-function calcularSubTotal(input) {
-
-    var fila = $(input).closest('tr');
-    var cantidad_ingreso = parseFloat(fila.find('.cantidad_ingreso').val()) || 0;
-    var precio_unitario = parseFloat(fila.find('.precio_unitario').val()) || 0;
-    var valor_venta = parseFloat(fila.find('.valor_venta').val()) || 0;
-
-    var sub_total = valor_venta;
-
-    var igvInputId = fila.find('.igv').attr('id');
-    var totalInputId = fila.find('.total').attr('id');
-
-}
-
-function calcularPrecioUnitario(input) {
-
-    var fila = $(input).closest('tr');
-    var igvPorcentaje = $('#igv_compra').val() == 2 ? 1.18 : 0;
-    var precio_unitario_ = 0;
-    var valor_venta_bruto = 0;
-    var valor_venta = 0;
-    var igv = 0;
-    var total = 0;
-
-    var precio_venta = parseFloat(fila.find('.precio_unitario').val()) || 0;
-    var cantidad_ingreso = parseFloat(fila.find('.cantidad_ingreso').val()) || 0;
-    var descuento = parseFloat(fila.find('.descuento').val()) || 0;
-    var porcentaje = parseFloat(fila.find('.porcentaje').val()) || 0;
-
-    if(igvPorcentaje==1.18){
-        precio_unitario_ = precio_venta / igvPorcentaje;
-    }else{
-        precio_unitario_ = precio_venta
-    }
-
-    if(igvPorcentaje==1.18){
-        valor_venta_bruto = (cantidad_ingreso * precio_venta) / igvPorcentaje;
-    }else{
-        valor_venta_bruto = cantidad_ingreso * precio_venta;
-    }
-    
-    if(descuento!= "" || porcentaje != ""){
-        if(descuento!= ""){
-            valor_venta = valor_venta_bruto - descuento;
-        }else if(porcentaje != ""){
-            valor_venta = valor_venta_bruto - (valor_venta_bruto * (porcentaje / 100));
-        }
-    }else{
-        valor_venta = valor_venta_bruto;
-    }
-
-    if(igvPorcentaje==1.18){
-        igv = valor_venta * 0.18;
-    }
-
-    total = valor_venta + igv;
-
-    fila.find('.precio_unitario_').val(precio_unitario_.toFixed(2));
-    fila.find('.valor_venta_bruto').val(valor_venta_bruto.toFixed(2));
-    fila.find('.valor_venta').val(valor_venta.toFixed(2));
-    fila.find('.igv').val(igv.toFixed(2));
-    fila.find('.sub_total').val(valor_venta.toFixed(2));
-    fila.find('.total').val(total.toFixed(2));
-
-    actualizarTotalGeneral();
-}
-
-function calcularIGV(subTotal, igvInputId, totalInputId) {
-    subTotal = parseFloat(subTotal) || 0;
-    
-    var igvPorcentaje = $('#igv_compra').val() == 2 ? 0.18 : 0;
-    var igvValor = subTotal * igvPorcentaje;
-    var total = subTotal + igvValor;
-
-    if (!igvInputId || !totalInputId) {
-        console.error("Error: Los IDs de IGV o Total no son válidos.");
-        return;
-    }
-    
-    $('#' + igvInputId).val(igvValor.toFixed(2));
-    
-    $('#' + totalInputId).val(total.toFixed(2));
-}
-
-function actualizarTotalGeneral() {
-    var sub_totalGeneral = 0;
-    var igv_totalGeneral = 0;
-    var totalGeneral = 0;
-    var descuentolGeneral = 0;
-   
-    $('#tblOrdenCompraDetalle tbody tr').each(function() {
-        var sub_totalFila = parseFloat($(this).find('.sub_total').val()) || 0;
-        var igv_totalFila = parseFloat($(this).find('.igv').val()) || 0;
-        var totalFila = parseFloat($(this).find('.total').val()) || 0;
-        var precioVentaFila = parseFloat($(this).find('.precio_unitario').val()) || 0;
-        var descuentoFila = 0;
-        var porcentajeFila = 0;
-        var totalPorcentajeFila = 0;
-        if($(this).find('.descuento').val()!=""){
-            descuentoFila = parseFloat($(this).find('.descuento').val()) || 0;
-        }else if($(this).find('.porcentaje').val()!=""){
-            porcentajeFila = parseFloat($(this).find('.porcentaje').val()) || 0;
-            totalPorcentajeFila = precioVentaFila * (porcentajeFila / 100);
-        }
-        
-        sub_totalGeneral += sub_totalFila;
-        igv_totalGeneral += igv_totalFila;
-        totalGeneral += totalFila;
-        descuentolGeneral += descuentoFila;
-        descuentolGeneral += totalPorcentajeFila;
-    });
-    
-    $('#sub_total_general').val(sub_totalGeneral.toFixed(2));
-    $('#igv_general').val(igv_totalGeneral.toFixed(2));
-    $('#total_general').val(totalGeneral.toFixed(2));
-    $('#descuento_general').val(descuentolGeneral.toFixed(2));
-}
-
-function aplicaDescuento(inputElement) {
-    
-    var fila = $(inputElement).closest('tr');
-    var subtotalInput = fila.find('.sub_total');
-
-    var descuentoEnSoles = parseFloat($(inputElement).val()) || 0;
-    var subtotal = parseFloat(subtotalInput.val()) || 0; 
-
-    if(descuentoEnSoles > 0 && descuentoEnSoles <= subtotal) {
-        actualizarTotalGeneral();
-    }else {
-        calcularSubTotal(subtotalInput);
-    }
-}
-
-function aplicaDescuentoEnSoles(inputElement) {
-
-    var fila = $(inputElement).closest('tr');
-
-    if (!fila.data('subtotal-original')) {
-        fila.data('subtotal-original', parseFloat(fila.find('.sub_total').val()) || 0);
-    }
-
-    var subtotalOriginal = fila.data('subtotal-original');
-    var descuentoEnSoles = parseFloat($(inputElement).val()) || 0;
-
-    if (descuentoEnSoles >= 0 && descuentoEnSoles <= subtotalOriginal) {
-
-        actualizarTotalGeneral();
-    } else {
-        fila.find('.sub_total').val(subtotalOriginal.toFixed(2));
-    }
-}
-
-function aplicaDescuentoEnPorcentaje(inputElement) {
-    
-    var fila = $(inputElement).closest('tr');
-
-    if (!fila.data('subtotal-original')) {
-        fila.data('subtotal-original', parseFloat(fila.find('.sub_total').val()) || 0);
-    }
-
-    var subtotalOriginal = fila.data('subtotal-original');
-    var descuentoEnSoles = parseFloat($(inputElement).val()) || 0;
-
-    if (descuentoEnSoles >= 0 && descuentoEnSoles <= subtotalOriginal) {
-        var nuevoSubTotal = subtotalOriginal - (subtotalOriginal*descuentoEnSoles/100);
-
-        fila.find('.sub_total').val(nuevoSubTotal.toFixed(2));
-
-        var igvInputId = fila.find('.igv').attr('id');
-        var totalInputId = fila.find('.total').attr('id');
-        calcularIGV(nuevoSubTotal, igvInputId, totalInputId);
-
-        actualizarTotalGeneral();
-    } else {
-        fila.find('.sub_total').val(subtotalOriginal.toFixed(2));
-    }
-}
-
 var productosSeleccionados = [];
 
 function cargarDetalle(){
@@ -498,7 +306,7 @@ function cargarDetalle(){
     tbody.empty();
 
     $.ajax({
-        url: "/orden_compra/cargar_detalle/"+id,
+        url: "/orden_compra/cargar_detalle_control_produccion/"+id,
         type: "GET",
         success: function (result) {
 
@@ -541,42 +349,39 @@ function cargarDetalle(){
                     productosSeleccionados.push(orden_compra.id_producto);
                 }
 
+                let cantidad_ingreso = parseFloat(orden_compra.cantidad_requerida);
+                let stock_actual = parseFloat(producto_stock.saldos_cantidad);
+                let stock_comprometido = orden_compra.comprometido;
+
+                let boton_comprometer;
+
+                if (cantidad_ingreso < stock_actual && stock_comprometido == 0) {
+                    boton_comprometer = `<button type="button" class="btn btn-warning btn-sm" onclick="comprometerStock(this)">Comprometer Stock</button>`;
+                } else {
+                    boton_comprometer = `<button type="button" class="btn btn-warning btn-sm" disabled>Comprometer Stock</button>`;
+                }
+
                 const row = `
                     <tr>
                         <td>${n}</td>
-                        <td><input name="id_orden_compra_detalle[]" id="id_orden_compra_detalle${n}" class="form-control form-control-sm" value="${orden_compra.id}" type="hidden"><input name="item[]" id="item${n}" class="form-control form-control-sm" value="${orden_compra.item}" type="text"></td>
-                        <td style="width: 400px !important;display:block"><select name="descripcion[]" id="descripcion${n}" class="form-control form-control-sm" onChange="verificarProductoSeleccionado(this, ${n});">${productoOptions}</select></td>
+                        <td><input name="id_orden_compra_detalle[]" id="id_orden_compra_detalle${n}" class="id_orden_compra_detalle form-control form-control-sm" value="${orden_compra.id}" type="hidden"><input name="item[]" id="item${n}" class="form-control form-control-sm" style="border: none; background-color: transparent;" value="${orden_compra.item}" type="text" readonly="readonly"></td>
                         
-                        <td><select name="marca[]" id="marca${n}" class="form-control form-control-sm">${marcaOptions}</select></td>
-                        <td><input name="cod_interno[]" id="cod_interno${n}" class="form-control form-control-sm" value="${orden_compra.codigo}" type="text"></td>
-                        <td><select name="estado_bien[]" id="estado_bien${n}" class="form-control form-control-sm" onChange="">${estadoBienOptions}</select></td>
-                        <td><select name="unidad[]" id="unidad${n}" class="form-control form-control-sm">${unidadMedidaOptions}</select></td>
-                        <td><input name="cantidad_ingreso[]" id="cantidad_ingreso${n}" class="cantidad_ingreso form-control form-control-sm" value="${orden_compra.cantidad_requerida}" type="text" oninput="calcularCantidadPendiente(this);calcularSubTotal(this);calcularPrecioUnitario(this)"></td>
-                        <td><input name="stock_actual[]" id="stock_actual${n}" class="form-control form-control-sm" value="${producto_stock.saldos_cantidad}" type="text" readonly="readonly"></td>
-                        <td><input name="precio_unitario[]" id="precio_unitario${n}" class="precio_unitario form-control form-control-sm" value="${parseFloat(orden_compra.precio_venta || 0).toFixed(2)}" type="text" oninput="calcularSubTotal(this);calcularPrecioUnitario(this)"></td>
-                        <td><input name="precio_unitario_[]" id="precio_unitario_${n}" class="precio_unitario_ form-control form-control-sm" value="${parseFloat(orden_compra.precio || 0).toFixed(2)}" type="text" oninput="calcularPrecioUnitario(this)"></td>
-                        <td><input name="valor_venta_bruto[]" id="valor_venta_bruto${n}" class="valor_venta_bruto form-control form-control-sm" value="${parseFloat(orden_compra.valor_venta_bruto || 0).toFixed(2)}" type="text" oninput="calcularSubTotal(this)"></td>
-                        <td><input name="valor_venta[]" id="valor_venta${n}" class="valor_venta form-control form-control-sm" value="${parseFloat(orden_compra.valor_venta || 0).toFixed(2)}" type="text" oninput="calcularSubTotal(this)"></td>
-
-                        <td><div style="display: flex; align-items: center; gap: 5px;"> <button type="button" class="btn-custom" onclick="cambiarDescuento(this);calcularPrecioUnitario(this)"><i class="${orden_compra.id_descuento == 2 ? 'fas fa-percentage' : 'fas fa-paint-brush'}"></i></button> <input name="descuento[]" id="descuento${n}" class="descuento form-control form-control-sm" placeholder="S/ Descuento" value="${parseFloat((orden_compra.descuento ?? 0) || 0).toFixed(2)}" type="text" oninput="aplicaDescuentoEnSoles(this);calcularPrecioUnitario(this)" style="display: ${(!orden_compra.id_descuento || orden_compra.id_descuento == 1 || orden_compra.descuento == null || orden_compra.descuento === "") ? 'block' : 'none'};"> <input name="porcentaje[]" id="porcentaje${n}" class="porcentaje form-control form-control-sm" placeholder="% Descuento" value="${parseFloat(orden_compra.id_descuento == 2 ? (orden_compra.descuento ?? 0) : 0).toFixed(2)}" type="text" oninput="aplicaDescuentoEnPorcentaje(this);calcularPrecioUnitario(this)" style="display: ${orden_compra.id_descuento == 2 ? 'block' : 'none'};"><input name="id_descuento[]" id="id_descuento${n}" type="hidden" value="${orden_compra.id_descuento ?? 1}"></div></td>
-                        <td><input name="sub_total[]" id="sub_total${n}" class="sub_total form-control form-control-sm" value="${parseFloat(orden_compra.sub_total || 0).toFixed(2) }" type="text" readonly="readonly"></td>
-                        <td><input name="igv[]" id="igv${n}" class="igv form-control form-control-sm" value="${parseFloat(orden_compra.igv || 0).toFixed(2)}" type="text" readonly="readonly"></td>
-                        <td><input name="total[]" id="total${n}" class="total form-control form-control-sm" value="${parseFloat(orden_compra.total || 0).toFixed(2)}" type="text" readonly="readonly"></td>
-                        <td><button type="button" class="btn btn-danger btn-sm" onclick="eliminarFila(this)">Eliminar</button></td>
+                        <td style="width: 400px !important;display:block"><input name="descripcion[]" id="descripcion${n}" class="form-control form-control-sm" style="border: none; background-color: transparent;" value="${orden_compra.nombre_producto}" type="text" readonly="readonly"></td>
+                        <<td><input name="marca[]" id="marca${n}" class="form-control form-control-sm" style="border: none; background-color: transparent;" value="${orden_compra.marca}" type="text" readonly="readonly"></td>
+                        <td><input name="cod_interno[]" id="cod_interno${n}" class="form-control form-control-sm" style="border: none; background-color: transparent;" value="${orden_compra.codigo}" type="text" readonly="readonly"></td>
+                        <td><input name="estado_bien[]" id="estado_bien${n}" class="form-control form-control-sm" style="border: none; background-color: transparent;" value="${orden_compra.estado_producto}" type="text" oninput="" readonly="readonly"></td>
+                        <td><input name="unidad[]" id="unidad${n}" class="form-control form-control-sm" style="border: none; background-color: transparent;" value="${orden_compra.unidad_medida}" type="text" oninput="" readonly="readonly"></td>
+                        <td><input name="cantidad_ingreso[]" id="cantidad_ingreso${n}" class="cantidad_ingreso form-control form-control-sm" style="border: none; background-color: transparent;" value="${orden_compra.cantidad_requerida}" type="text" oninput="" readonly="readonly"></td>
+                        <td><input name="stock_actual[]" id="stock_actual${n}" class="form-control form-control-sm" style="border: none; background-color: transparent;" value="${producto_stock.saldos_cantidad}" type="text" readonly="readonly"></td>
+                        <td style="width:150px">
+                            ${boton_comprometer}
+                        </td>
 
                     </tr>
                 `;
 
                 tbody.append(row);
-                $('#descripcion' + n).select2({ 
-                    width: '100%', 
-                    dropdownCssClass: 'custom-select2-dropdown'
-                });
-
-                $('#marca' + n).select2({
-                    width: '100%',
-                });
-
+                
                 $('#fecha_fabricacion_' + n).datepicker({
                     autoclose: true,
                     format: 'yyyy-mm-dd',
@@ -594,193 +399,37 @@ function cargarDetalle(){
                 });
 
                 n++;
-                sub_total_acumulado += parseFloat(orden_compra.sub_total || 0);
-                igv_total_acumulado += parseFloat(orden_compra.igv || 0);
-                descuento_total_acumulado += parseFloat(orden_compra.descuento || 0);
-                descuento_total_acumulado += parseFloat(orden_compra.porcentaje || 0);
-                total_acumulado += parseFloat(orden_compra.total || 0);
 
             });
 
-            $('#sub_total_general').val(sub_total_acumulado.toFixed(2) || '0.00');
-            $('#igv_general').val(igv_total_acumulado.toFixed(2) || '0.00');
-            $('#descuento_general').val(descuento_total_acumulado.toFixed(2) || '0.00');
-            $('#total_general').val(total_acumulado.toFixed(2) || '0.00');
         }
     });
 }
 
-function agregarProducto(){
+function comprometerStock(input){
 
-    var usuarioRoles = @json(auth()->user()->getRoleNames());
+    var fila = $(input).closest('tr');
+    var id_orden_compra_detalle = parseFloat(fila.find('.id_orden_compra_detalle').val()) || 0;
 
-    var tieneRolVendedor = usuarioRoles.includes("Vendedor FORESPAMA");
+    var msgLoader = "";
+    msgLoader = "Procesando, espere un momento por favor";
+    var heightBrowser = $(window).width()/2;
+    $('.loader').css("opacity","0.8").css("height",heightBrowser).html("<div id='Grd1_wrapper' class='dataTables_wrapper'><div id='Grd1_processing' class='dataTables_processing panel-default'>"+msgLoader+"</div></div>");
+    $('.loader').show();
+    
+    $.ajax({
+            url: "/orden_compra/send_comprometer_stock/"+id_orden_compra_detalle,
+            type: "GET",
+            success: function (result) {
+                //$('#openOverlayOpc').modal('hide');
+                $('.loader').hide();
+                bootbox.alert("Se guardó satisfactoriamente", function () {
 
-    var opcionesDescripcion = `<?php
-        echo '<option value="">--Seleccionar--</option>';
-        foreach ($producto as $row) {
-            echo '<option value="' . htmlspecialchars($row->id, ENT_QUOTES, 'UTF-8') . '">' . htmlspecialchars($row->codigo . ' - ' . $row->denominacion, ENT_QUOTES, 'UTF-8') . '</option>';
-        }
-    ?>`;
-
-    var cantidad = 1;
-    var newRow = "";
-    for (var i = 0; i < cantidad; i++) { 
-        var n = $('#tblOrdenCompraDetalle tbody tr').length + 1;
-        var item = '<input name="id_orden_compra_detalle[]" id="id_orden_compra_detalle${n}" class="form-control form-control-sm" value="${orden_compra.id}" type="hidden"><input name="item[]" id="item' + n + '" class="form-control form-control-sm" value="" type="text">';
-        var descripcion = '<select name="descripcion[]" id="descripcion' + n + '" class="form-control form-control-sm" ' +(!tieneRolVendedor ? 'onChange="verificarProductoSeleccionado(this, ' + n + ')"' : 'onChange="obtenerCodInterno(this, ' + n + ')"') + '> ' + opcionesDescripcion +' </select>';
-        
-        var descripcion_ant = '<input type="hidden" name="descripcion_ant[]" id="descripcion_ant' + n + '" class="form-control form-control-sm" />';
-        
-        var cod_interno = '<input name="cod_interno[]" id="cod_interno' + n + '" class="form-control form-control-sm" value="" type="text">';
-        var marca = '<select name="marca[]" id="marca' + n + '" class="form-control form-control-sm" onchange=""> <option value="">--Seleccionar--</option><?php foreach ($marca as $row){?><option value="<?php echo htmlspecialchars($row->id); ?>"><?php echo htmlspecialchars(addslashes($row->denominiacion)); ?></option><?php }?></select>'
-        var estado_bien =  '<select name="estado_bien[]" id="estado_bien' + n + '" class="form-control form-control-sm" onChange=""><option value="">--Seleccionar--</option> <?php foreach ($estado_bien as $row) { ?> <option value="<?php echo $row->codigo ?>" <?php echo ($row->codigo == 1) ? "selected" : ""; ?>><?php echo $row->denominacion ?></option> <?php } ?> </select>';
-        var unidad = '<select name="unidad[]" id="unidad' + n + '" class="form-control form-control-sm" onChange=""> <option value="">--Seleccionar--</option> <?php foreach ($unidad as $row) {?> <option value="<?php echo $row->codigo?>"><?php echo $row->denominacion?></option> <?php } ?> </select>';
-        var cantidad_ingreso = '<input name="cantidad_ingreso[]" id="cantidad_ingreso' + n + '" class="cantidad_ingreso form-control form-control-sm" value="" type="text" oninput="calcularSubTotal(this);calcularPrecioUnitario(this)">';
-        var stock_actual = '<input name="stock_actual[]" id="stock_actual' + n + '" class="form-control form-control-sm" value="" type="text" readonly>';
-        var precio_unitario = '<input name="precio_unitario[]" id="precio_unitario' + n + '" class="precio_unitario form-control form-control-sm" value="" type="text" oninput="calcularSubTotal(this);calcularPrecioUnitario(this)">';
-        var precio_unitario_ = '<input name="precio_unitario_[]" id="precio_unitario_' + n + '" class="precio_unitario_ form-control form-control-sm" value="" type="text" oninput="calcularPrecioUnitario(this)">';
-        var valor_venta_bruto = '<input name="valor_venta_bruto[]" id="valor_venta_bruto' + n + '" class="valor_venta_bruto form-control form-control-sm" value="" type="text" oninput="calcularSubTotal(this)">';
-        var valor_venta = '<input name="valor_venta[]" id="valor_venta' + n + '" class="valor_venta form-control form-control-sm" value="" type="text" oninput="calcularSubTotal(this)">';
-        var descuento = '<div style="display: flex; align-items: center; gap: 5px;"><button type="button" class="btn-custom" onclick="cambiarDescuento(this);calcularPrecioUnitario(this)"><i class="fas fa-paint-brush"></i></button><input name="descuento[]" id="descuento' + n + '" class="descuento form-control form-control-sm" placeholder="S/ Descuento" value="" type="text" oninput="aplicaDescuentoEnSoles(this);calcularPrecioUnitario(this)"><input name="porcentaje[]" id="porcentaje' + n + '" class="porcentaje form-control form-control-sm" placeholder="% Descuento" type="text" oninput="aplicaDescuentoEnPorcentaje(this);calcularPrecioUnitario(this)" style="display: none;"> <input name="id_descuento[]" id="id_descuento${n}" type="hidden" value="1"></div>';
-        var sub_total = '<input name="sub_total[]" id="sub_total' + n + '" class="sub_total form-control form-control-sm" value="" type="text" readonly="readonly">';
-        var igv = '<input name="igv[]" id="igv' + n + '" class="igv form-control form-control-sm" value="" type="text" readonly="readonly">';
-        var total = '<input name="total[]" id="total' + n + '" class="total form-control form-control-sm" value="" type="text" readonly="readonly">';
-        
-        var btnEliminar = '<button type="button" class="btn btn-danger btn-sm" onclick="eliminarFila(this)">Eliminar</button>';
-
-        newRow += '<tr>';
-        newRow += '<td>' + n + '</td>';
-        newRow += '<td>' + item + '</td>';
-        newRow += '<td style="width: 400px!important; display:block!important">' +descripcion_ant + descripcion + '</td>';
-        newRow += '<td>' + marca + '</td>';
-        newRow += '<td>' + cod_interno + '</td>';
-        newRow += '<td>' + estado_bien + '</td>';
-        newRow += '<td>' + unidad + '</td>';
-        newRow += '<td>' + cantidad_ingreso + '</td>';
-        newRow += '<td>' + stock_actual + '</td>';
-        newRow += '<td>' + precio_unitario + '</td>';
-        newRow += '<td>' + precio_unitario_ + '</td>';
-        newRow += '<td>' + valor_venta_bruto + '</td>';
-        newRow += '<td>' + valor_venta + '</td>';
-        newRow += '<td>' + descuento + '</td>';
-        newRow += '<td>' + sub_total + '</td>';
-        newRow += '<td>' + igv + '</td>';
-        newRow += '<td>' + total + '</td>';
-        newRow += '<td>' + btnEliminar + '</td>';
-        newRow += '</tr>';
-
-        $('#tblOrdenCompraDetalle tbody').append(newRow);
-
-        $('#descripcion' + n).select2({
-            width: '100%',
-            dropdownCssClass: 'custom-select2-dropdown',
+                    cargarDetalle();
+                });
+                
+            }
         });
-
-        $('#marca' + n).select2({
-            width: '100%',
-        });
-        
-        $('#fecha_fabricacion_' + n).datepicker({
-            autoclose: true,
-            format: 'yyyy-mm-dd',
-            changeMonth: true,
-            changeYear: true,
-            language: 'es'
-        });
-
-        $('#fecha_vencimiento_' + n).datepicker({
-            autoclose: true,
-            format: 'yyyy-mm-dd',
-            changeMonth: true,
-            changeYear: true,
-            language: 'es'
-        });
-
-    }
-
-    actualizarTotalGeneral();
-}
-
-function cambiarDescuento(button){
-
-    var parent = button.parentElement;
-
-    var porcentajeInput = parent.querySelector('.porcentaje');
-    var descuentoInput = parent.querySelector('.descuento');
-    var idDescuentoInput = parent.querySelector('[name="id_descuento[]"]');
-
-    if (porcentajeInput.style.display == 'none' || porcentajeInput.style.display == '') {
-        porcentajeInput.style.display = 'block';
-        descuentoInput.style.display = 'none';
-        idDescuentoInput.value = '2';
-        button.innerHTML = '<i class="fas fa-percentage"></i>';
-    } else {
-        porcentajeInput.style.display = 'none';
-        descuentoInput.style.display = 'block';
-        idDescuentoInput.value = '1';
-        button.innerHTML = '<i class="fas fa-paint-brush"></i>';
-    }
-}
-
-function restaurarDescuento(button) {
-    var parent = button.parentElement;
-
-    var porcentajeInput = parent.querySelector('.porcentaje');
-    porcentajeInput.style.display = 'none';
-
-    var descuentoInput = parent.querySelector('.descuento');
-    descuentoInput.style.display = 'block';
-
-    button.innerHTML = '<i class="fas fa-paint-brush"></i>';
-    button.onclick = function () {
-        cambiarDescuento(button);
-    };
-}
-
-function verificarProductoSeleccionado(selectElement, rowIndex, valor) {
-    var selectedValue = $(selectElement).val();
-
-    if (selectedValue) {
-        var selectedValueAnt = $("#descripcion_ant"+rowIndex).val();
-        if(selectedValueAnt != ""){
-            const index_ant = productosSeleccionados.indexOf(Number(selectedValueAnt));
-            console.log(index_ant);
-            productosSeleccionados.splice(index_ant, 1);
-            $("#descripcion_ant"+rowIndex).val("");
-        }
-
-        if (!productosSeleccionados.includes(Number(selectedValue))) {
-            productosSeleccionados.push(Number(selectedValue));
-            $("#descripcion_ant"+rowIndex).val(selectedValue);
-
-            obtenerCodInterno(selectElement, rowIndex);
-            obtenerStock(selectElement, rowIndex);
-        } else {
-            bootbox.alert("Este producto ya ha sido seleccionado. Por favor elige otro.");
-            $(selectElement).val('').trigger('change');
-        }
-    } else {
-        
-        const index = productosSeleccionados.indexOf(Number(selectedValue));
-        if (index > -1) {
-            productosSeleccionados.splice(index, 1);
-        }
-    }
-
-    console.log(productosSeleccionados);
-}
-
-function eliminarFila(button){
-    $(button).closest('tr').remove();
-    actualizarTotalGeneral();
-}
-
-function limpiar(){
-	$('#id').val("0");
-	$('#id_tipo_documento').val("");
-	$('#denominacion').val("");
-	$('#img_foto').val("");
 }
 
 function fn_save_orden_compra(){
@@ -825,14 +474,6 @@ function fn_save_orden_compra(){
     }
 }
 
-$('#moneda').on('change', function(){
-
-    var descripcion = $('#moneda option:selected').text();
-
-    $('#moneda_descripcion').val(descripcion);
-
-});
-
 function cambiarCliente(){
 
     var tipo_documento_cliente = $('#tipo_documento_cliente').val();
@@ -857,7 +498,6 @@ function cambiarCliente(){
         $('#select_persona_compra').hide();
         
     }
-
 }
 
 function obtenerStock(selectElement, n){
@@ -1030,21 +670,6 @@ function obtenerStock(selectElement, n){
                             </select>
                         </div>
                         <div class="col-lg-2">
-                            Moneda
-                        </div>
-                        <div class="col-lg-2">
-                            <select name="moneda" id="moneda" class="form-control form-control-sm" onchange="">
-                                <option value="">--Seleccionar--</option>
-                                <?php
-                                foreach ($moneda as $row){?>
-                                    <option value="<?php echo $row->codigo; ?>" <?php echo ($id > 0 && $row->codigo == $orden_compra->id_moneda) ? "selected='selected'" : (($row->codigo == 1) ? "selected='selected'" : ""); ?>><?php echo $row->denominacion ?></option>
-                                    <?php 
-                                }
-                                ?>
-                            </select>
-                            <input name="moneda_descripcion" id="moneda_descripcion" type="hidden">
-                        </div>
-                        <div class="col-lg-2">
                             Vendedor
                         </div>
                         <div class="col-lg-2">
@@ -1075,45 +700,12 @@ function obtenerStock(selectElement, n){
                                 <th>Unidad</th>
                                 <th>Cantidad</th>
                                 <th>Stock Actual</th>
-                                <th>Precio Venta</th>
-                                <th>Precio Unitario</th>
-                                <th>Valor Venta Bruto</th>
-                                <th>Valor Venta</th>
-                                <th>Descuento</th>
-                                <th>Sub Total</th>
-                                <th>IGV</th>
-                                <th>Total</th>
 							</tr>
 							</thead>
 							<tbody id="divOrdenCompraDetalle">
 							</tbody>
 						</table>
 					</div>
-                    <table style="background-color:white !important;border-collapse:collapse;border-spacing:1px; width: 100%; margin: 0 auto; font-size:12px">
-                        <tbody>
-                            <tr>
-                                <td class="td" style ="text-align: left; width: 5%; font-size:13px"><b>Sub-Total:</b></td>
-                                <td id="subTotalGeneral" class="td" style="text-align: left; width: 5%; font-size:13px">
-                                    <input type="text" name="sub_total_general" id="sub_total_general" class="form-control" value="0.00" readonly style="border: none; background: transparent; text-align: left; pointer-events: none;">
-                                </td>
-                                <td class="td" style ="text-align: left; width: 20%; font-size:13px"></td>
-                                <td class="td" style ="text-align: left; width: 5%; font-size:13px"><b>IGV Total:</b></td>
-                                <td id="igvGeneral" class="td" style="text-align: left; width: 5%; font-size:13px">
-                                    <input type="text" name="igv_general" id="igv_general" class="form-control" value="0.00" readonly style="border: none; background: transparent; text-align: left; pointer-events: none;">
-                                </td>
-                                <td class="td" style ="text-align: left; width: 20%; font-size:13px"></td>
-                                <td class="td" style ="text-align: left; width: 5%; font-size:13px"><b>Descuento Total:</b></td>
-                                <td id="descuentoGeneral" class="td" style="text-align: left; width: 5%; font-size:13px">
-                                    <input type="text" name="descuento_general" id="descuento_general" class="form-control" value="0.00" readonly style="border: none; background: transparent; text-align: left; pointer-events: none;">
-                                </td>
-                                <td class="td" style ="text-align: left; width: 20%; font-size:13px"></td>
-                                <td class="td" style ="text-align: left; width: 5%; font-size:13px"><b>Total:</b></td>
-                                <td id="totalGeneral" class="td" style="text-align: left; width: 5%; font-size:13px">
-                                    <input type="text" name="total_general" id="total_general" class="form-control" value="0.00" readonly style="border: none; background: transparent; text-align: left; pointer-events: none;">
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
                     <div style="margin-top:15px" class="form-group">
                         <div class="col-sm-12 controls">
                             <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">

@@ -712,3 +712,6 @@ Route::get('activos/obtener_provincia_distrito/{idDepartamento}', [ActivoControl
 Route::get('activos/eliminar_activo/{id}/{estado}', [ActivoController::class, 'eliminar_activo'])->name('activos.eliminar_activo');
 Route::post('activos/upload_activo', [ActivoController::class, 'upload_activo'])->name('activos.upload_activo');
 Route::get('ingreso_vehiculo_tronco/exportar_listar_cubicaje_excel/{id}', [IngresoVehiculoTroncoController::class, 'exportar_listar_cubicaje_excel'])->name('ingreso_vehiculo_tronco.exportar_listar_cubicaje_excel');
+Route::get('orden_compra/cargar_detalle_control_produccion/{id}', [OrdenCompraController::class, 'cargar_detalle_control_produccion'])->name('orden_compra.cargar_detalle_control_produccion');
+Route::get('orden_compra/send_comprometer_stock/{id_orden_compra_detalle}', [OrdenCompraController::class, 'send_comprometer_stock'])->name('orden_compra.send_comprometer_stock');
+

@@ -388,6 +388,54 @@ class OrdenCompraController extends Controller
         ]);
     }
 
+    public function cargar_detalle_control_produccion($id)
+    {
+
+        $orden_compra_model = new OrdenCompra;
+        $marca_model = new Marca;
+        $producto_model = new Producto;
+        $tablaMaestra_model = new TablaMaestra;
+        $kardex_model = new Kardex;
+
+        $orden_compra = $orden_compra_model->getDetalleOrdenCompraIdControlProduccion($id);
+        $marca = $marca_model->getMarcaAll();
+        $producto = $producto_model->getProductoAll();
+        $estado_bien = $tablaMaestra_model->getMaestroByTipo(4);
+        $unidad_medida = $tablaMaestra_model->getMaestroByTipo(43);
+
+        $producto_stock = [];
+
+        foreach($orden_compra as $detalle){
+
+            $id_almacen_bus = $detalle->id_almacen_salida;
+            
+            if($detalle->id_unidad_origen==1){$id_almacen_bus = $detalle->id_almacen_salida;}
+            if($detalle->id_unidad_origen==2){$id_almacen_bus = $detalle->id_almacen_destino;}
+            if($detalle->id_unidad_origen==3){$id_almacen_bus = $detalle->id_almacen_salida;}
+            if($detalle->id_unidad_origen==4){$id_almacen_bus = $detalle->id_almacen_salida;}
+            
+            $stock = $kardex_model->getExistenciaProductoById($detalle->id_producto, $id_almacen_bus);
+            if(count($stock)>0){
+                $producto_stock[$detalle->id_producto] = $stock[0];
+            }else {
+                $producto_stock[$detalle->id_producto] = ['saldos_cantidad'=>0];
+            }
+            
+            //var_dump($producto_stock);
+        }
+        
+        //exit();
+
+        return response()->json([
+            'orden_compra' => $orden_compra,
+            'marca' => $marca,
+            'producto' => $producto,
+            'estado_bien' => $estado_bien,
+            'unidad_medida' => $unidad_medida,
+            'producto_stock' =>$producto_stock
+        ]);
+    }
+
     public function cargar_detalle_abierto($id, $tipo_movimiento)
     {
 
@@ -1851,7 +1899,6 @@ class OrdenCompraController extends Controller
         $id_user = Auth::user()->id;
         $tablaMaestra_model = new TablaMaestra;
         $producto_model = new Producto;
-        $marca_model = new Marca;
         $almacen_model = new Almacene;
         $user_model = new User;
         $persona_model = new Persona;
@@ -1866,23 +1913,26 @@ class OrdenCompraController extends Controller
 		}
 
         $proveedor = $empresa_model->getEmpresaAll();
-        $tipo_documento = $tablaMaestra_model->getMaestroByTipo(54);
         $producto = $producto_model->getProductoAll();
-        $marca = $marca_model->getMarcaAll();
-        $estado_bien = $tablaMaestra_model->getMaestroByTipo(4);
-        $unidad = $tablaMaestra_model->getMaestroByTipo(43);
         $igv_compra = $tablaMaestra_model->getMaestroByTipo(51);
-        $descuento = $tablaMaestra_model->getMaestroByTipo(55);
         $almacen = $almacen_model->getAlmacenAll();
         $unidad_origen = $tablaMaestra_model->getMaestroByTipo(50);
-        $moneda = $tablaMaestra_model->getMaestroByTipo(1);
 
         $vendedor = $user_model->getUserByRol(7,11);
         $tipo_documento_cliente = $tablaMaestra_model->getMaestroByTipo(75);
         $persona = $persona_model->obtenerPersonaAll();
 
+		return view('frontend.orden_compra.modal_orden_compra_nuevoOrdenCompraControlProduccion',compact('id','orden_compra','proveedor','producto','igv_compra','almacen','unidad_origen','id_user','vendedor','tipo_documento_cliente','persona'));
 
-		return view('frontend.orden_compra.modal_orden_compra_nuevoOrdenCompraControlProduccion',compact('id','orden_compra','tipo_documento','proveedor','producto','marca','estado_bien','unidad','igv_compra','descuento','almacen','unidad_origen','id_user','moneda','vendedor','tipo_documento_cliente','persona'));
+    }
+
+    public function send_comprometer_stock($id_orden_compra_detalle)
+    {
+		$orden_compra_detalle = OrdenCompraDetalle::find($id_orden_compra_detalle);
+		$orden_compra_detalle->comprometido = 1;
+		$orden_compra_detalle->save();
+
+		echo $orden_compra_detalle->id;
 
     }
 

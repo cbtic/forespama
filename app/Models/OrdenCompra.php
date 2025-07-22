@@ -94,6 +94,35 @@ class OrdenCompra extends Model
         return $data;
     }
 
+    function getDetalleOrdenCompraIdControlProduccion($id){
+
+        $cad = "select ocd.id,  ROW_NUMBER() OVER (PARTITION BY ocd.id_orden_compra ) AS row_num, p.numero_serie item, ocd.id_producto, p.codigo, p.denominacion nombre_producto, ocd.id_marca, 
+        tm.denominacion unidad_medida, ocd.fecha_fabricacion, ocd.fecha_vencimiento, 
+        tm2.denominacion estado_producto , ocd.cantidad_requerida, 
+        coalesce((select sum(cantidad)
+        from entrada_productos ep
+        inner join entrada_producto_detalles epd on ep.id=epd.id_entrada_productos 
+        where id_orden_compra =ocd.id_orden_compra 
+        and epd.id_producto=ocd.id_producto),0)cantidad_ingresada,
+        ocd.precio, ocd.sub_total, ocd.igv, ocd.total, ocd.id_descuento, oc.id_almacen_salida, oc.id_unidad_origen, oc.id_almacen_destino ,
+        m.denominiacion marca,
+        coalesce((select k.saldos_cantidad from kardex k where id_producto = ocd.id_producto and id_almacen_destino = 3  order by 1 desc limit 1),0)stock_ves, --ves
+        coalesce((select k.saldos_cantidad from kardex k where id_producto = ocd.id_producto and id_almacen_destino = 2  order by 1 desc limit 1),0)stock_oxa, --oxa
+        ocd.valor_venta_bruto, precio_venta, valor_venta, ocd.id_descuento, ocd.descuento, ocd.comprometido
+        from orden_compra_detalles ocd 
+        inner join productos p on ocd.id_producto = p.id
+        inner join orden_compras oc on ocd.id_orden_compra = oc.id
+        left join marcas m on ocd.id_marca=m.id
+        left join tabla_maestras tm on ocd.id_unidad_medida = tm.codigo::int and tm.tipo = '43'
+        left join tabla_maestras tm2 on ocd.id_estado_producto = tm2.codigo::int and tm2.tipo = '56'
+        where id_orden_compra ='".$id."'
+        and ocd.estado='1'
+        order by 1 asc";
+
+		$data = DB::select($cad);
+        return $data;
+    }
+
     function getDetalleOrdenCompraIdAbierto($id){
 
         $cad = "select ocd.id,  ROW_NUMBER() OVER (PARTITION BY ocd.id_orden_compra ) AS row_num, p.numero_serie item, ocd.id_producto, p.codigo, p.denominacion nombre_producto, ocd.id_marca, ocd.id_unidad_medida, ocd.fecha_fabricacion, ocd.fecha_vencimiento, 
