@@ -711,3 +711,4 @@ Route::post('activos/send_activo', [ActivoController::class, 'send_activo'])->na
 Route::get('activos/obtener_provincia_distrito/{idDepartamento}', [ActivoController::class, 'obtener_provincia_distrito'])->name('activos.obtener_provincia_distrito');
 Route::get('activos/eliminar_activo/{id}/{estado}', [ActivoController::class, 'eliminar_activo'])->name('activos.eliminar_activo');
 Route::post('activos/upload_activo', [ActivoController::class, 'upload_activo'])->name('activos.upload_activo');
+Route::get('ingreso_vehiculo_tronco/exportar_listar_cubicaje_excel/{id}', [IngresoVehiculoTroncoController::class, 'exportar_listar_cubicaje_excel'])->name('ingreso_vehiculo_tronco.exportar_listar_cubicaje_excel');

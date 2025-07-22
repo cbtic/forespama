@@ -96,6 +96,13 @@ $(document).ready(function () {
 		//Limpiar();
 		window.location.reload();
 	});
+
+
+    $('#btnDescargar').on('click', function () {
+		descargarCubicaje();
+
+	});
+
 	/*
 	$('.delete_ruta').on('click', function () {
 		DeleteImagen(this);
@@ -2645,4 +2652,15 @@ function descargarReporteAnual(){
 	if (anio == "")anio = 0;
 	
 	location.href = '/ingreso_vehiculo_tronco/exportar_listar_reporte_anual/'+placa+'/'+ruc+'/'+anio;
+}
+
+function descargarCubicaje(){
+
+	var id = $("#id_ingreso_vehiculo_tronco_tipo_maderas").val();
+
+    if(id>0){
+        location.href = '/ingreso_vehiculo_tronco/exportar_listar_cubicaje_excel/'+id;
+    }else{
+        bootbox.alert("Debe seleccionar algun ingreso de camion");
+    }
 }

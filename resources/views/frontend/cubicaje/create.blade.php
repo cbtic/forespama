@@ -591,6 +591,9 @@ label.form-control-sm{
 						<div class="card-body">
 							
 							<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+							
+								<input class="btn btn-secondary btn-sm float-right" style="margin-left:15px" value="Excel" type="button" id="btnDescargar" />
 								
 								<input class="btn btn-warning btn-sm float-right" style="margin-left:15px" value="Imprimir" type="button" id="btnImprimir" onclick="imprimirCubicajePdf()" />
 								
@@ -622,6 +625,8 @@ label.form-control-sm{
 							</div>
 							
 							<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+								<input class="btn btn-secondary btn-sm float-right" style="margin-left:15px" value="Excel" type="button" id="btnDescargar" />
 								
 								<input class="btn btn-warning btn-sm float-right" style="margin-left:15px" value="Imprimir" type="button" id="btnImprimir" onclick="imprimirCubicajePdf()" />
 								

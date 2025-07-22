@@ -501,7 +501,6 @@ class IngresoVehiculoTroncoController extends Controller
 		
 	public function cubicaje_pdf($id){
 
-
 		$vehiculo_tronco_model = new IngresoVehiculoTronco;
 		//$salida_producto_detalle_model = new IngresoVehiculoTronco;
 		$datos=$vehiculo_tronco_model->getIngresoVehiculoTroncoCubicajeCabeceraById($id);
@@ -1062,6 +1061,112 @@ class IngresoVehiculoTroncoController extends Controller
 		$export = new InvoicesExport4([$variable],$anio);
 		return Excel::download($export, 'reporte_compra_anual.xlsx');
     }
+
+	public function exportar_listar_cubicaje_excel($id) {
+
+		$vehiculo_tronco_model = new IngresoVehiculoTronco;
+
+		$datos=$vehiculo_tronco_model->getIngresoVehiculoTroncoCubicajeCabeceraById($id);
+		$datos_detalle=$vehiculo_tronco_model->getIngresoVehiculoTroncoCubicajeReporteById($id);
+
+		$fecha_ingreso=$datos[0]->fecha_ingreso;
+		$ruc=$datos[0]->ruc;
+		$razon_social=$datos[0]->razon_social;
+		$placa=$datos[0]->placa;
+		$ejes=$datos[0]->ejes;
+		$numero_documento = $datos[0]->numero_documento;
+		$conductor = $datos[0]->conductor;
+		$tipo_madera=$datos[0]->tipo_madera;
+		$cantidad=$datos[0]->cantidad;
+		$tipo_empresa=$datos[0]->tipo_empresa;
+		$titulo = "Ingreso de Camiones - Cubicaje";
+		$titulo2 = "Cubicaje";
+
+		$cantidad_suma=0;
+		$volumen_pies_suma=0;
+		$volumen_total_m3_suma=0;
+		$volumen_total_pies_suma=0;
+		$precio_total_suma=0;
+		$suma_cantidad_reporte_1_2=0;
+		$suma_cantidad_reporte_1_7=0;
+		$suma_cantidad_reporte_interno=0;
+		$suma_volumen_m3_1_2=0;
+		$suma_volumen_m3_1_7=0;
+		$suma_volumen_m3_interno=0;
+		$suma_volumen_pies_1_2=0;
+		$suma_volumen_pies_1_7=0;
+		$suma_volumen_pies_interno=0;
+		$suma_total_1_2=0;
+		$suma_total_1_7=0;
+		$suma_total_interno=0;
+		
+		$variable = [];
+		$n = 1;
+
+		array_push($variable, array($titulo));
+
+		//array_push($variable, array("Fecha","Placa","RUC","Empresa","Tipo Madera","Cantidad"));
+		
+		array_push($variable, array($fecha_ingreso,$placa,$ruc,$razon_social,$tipo_madera,$cantidad));
+		
+		array_push($variable, array(""));
+
+		array_push($variable, array($titulo2));
+		
+		array_push($variable, array("Cantidad","Diametro DM(M)","Longitud(M)","Volumen M3","Volumen Pies", "Volumen Total M3", "Volumen Total Pies", "Precio Unitario", "Precio Total"));
+		
+		foreach ($datos_detalle as $r) {
+
+			array_push($variable, array($r->cantidad, number_format($r->diametro_dm,3), $r->longitud, number_format($r->volumen_m3,2), number_format($r->volumen_pies,2),number_format($r->volumen_total_m3,2),number_format($r->volumen_total_pies,2), number_format($r->precio_unitario,2), number_format($r->precio_total,2)));
+		
+			$cantidad_suma+=$r->cantidad;
+			$volumen_pies_suma+=$r->volumen_pies;
+			$volumen_total_m3_suma+=$r->volumen_total_m3;
+			$volumen_total_pies_suma+=$r->volumen_total_pies;
+			$precio_total_suma+=$r->precio_total;
+
+			if($tipo_empresa==1){
+				if($r->precio_unitario==1.20){
+					$suma_cantidad_reporte_1_2+=$r->cantidad;
+					$suma_volumen_m3_1_2+=$r->volumen_total_m3;
+					$suma_volumen_pies_1_2+=$r->volumen_total_pies;
+					$suma_total_1_2+=$r->precio_total;
+				}else{
+					$suma_cantidad_reporte_1_7+=$r->cantidad;
+					$suma_volumen_m3_1_7+=$r->volumen_total_m3;
+					$suma_volumen_pies_1_7+=$r->volumen_total_pies;
+					$suma_total_1_7+=$r->precio_total;
+				}
+			}else if($tipo_empresa==2){
+				$suma_cantidad_reporte_interno+=$r->cantidad;
+				$suma_volumen_m3_interno+=$r->volumen_total_m3;
+				$suma_volumen_pies_interno+=$r->volumen_total_pies;
+				$suma_total_interno+=$r->precio_total;
+			}
+		}
+
+		array_push($variable, array($cantidad_suma,"","","",number_format($volumen_pies_suma,2),number_format($volumen_total_m3_suma,2),number_format($volumen_total_pies_suma,2),"",number_format($precio_total_suma,2)));
+		
+		array_push($variable, array(""));
+	
+		array_push($variable, array("Troncos","M3","Pies","Precio Unitario","Total"));
+
+		if($tipo_empresa==1){
+			
+			array_push($variable, array($suma_cantidad_reporte_1_2,number_format($suma_volumen_m3_1_2,2),number_format($suma_volumen_pies_1_2,2),1.20,number_format($suma_total_1_2,2)));
+			array_push($variable, array($suma_cantidad_reporte_1_7,number_format($suma_volumen_m3_1_7,2),number_format($suma_volumen_pies_1_7,2),1.70,number_format($suma_total_1_7,2)));
+			array_push($variable, array($suma_cantidad_reporte_1_2+$suma_cantidad_reporte_1_7,number_format($suma_volumen_m3_1_2+$suma_volumen_m3_1_7,2),number_format($suma_volumen_pies_1_2+$suma_volumen_pies_1_7,2),"",number_format($suma_total_1_2+$suma_total_1_7,2)));
+
+		}else if($tipo_empresa==2){
+			
+			array_push($variable, array($suma_cantidad_reporte_interno,number_format($suma_volumen_m3_interno,2),number_format($suma_volumen_pies_interno,2),number_format($r->precio_unitario,2),number_format($suma_total_interno,2)));
+			array_push($variable, array($suma_cantidad_reporte_interno,number_format($suma_volumen_m3_interno,2),number_format($suma_volumen_pies_interno,2),"",number_format($suma_total_interno,2)));
+			
+		}
+
+		$export = new InvoicesExport5([$variable]);
+		return Excel::download($export, 'reporte_cubicaje.xlsx');
+    }
 }
 
 class InvoicesExport implements FromArray, WithHeadings, WithStyles
@@ -1372,6 +1477,103 @@ class InvoicesExport4 implements FromArray, WithHeadings, WithStyles
 		->setFormatCode(\PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_NUMBER_00);*/ //SIRVE PARA PONER 2 DECIMALES A ESA COLUMNA
         
         foreach (range('A', 'E') as $col) {
+            $sheet->getColumnDimension($col)->setAutoSize(true);
+        }
+
+		$lastRow = $sheet->getHighestRow();
+
+    }
+
+}
+
+class InvoicesExport5 implements FromArray, WithHeadings, WithStyles
+{
+	protected $invoices;
+
+	public function __construct(array $invoices)
+	{
+		$this->invoices = $invoices;
+	}
+
+	public function array(): array
+	{
+		return $this->invoices;
+	}
+
+    public function headings(): array
+    {
+        return ["Fecha","Placa","RUC","Empresa","Tipo Madera","Cantidad"];
+    }
+
+	public function styles(Worksheet $sheet)
+    {
+
+		$sheet->mergeCells('A1:I1');
+
+        $sheet->setCellValue('A1', "Ingreso de Camiones - Cubicaje");
+        $sheet->getStyle('A1:I1')->applyFromArray([
+            'font' => [
+                'bold' => true,
+                'color' => ['rgb' => 'FFFFFF'],
+            ],
+            'fill' => [
+                'fillType' => Fill::FILL_SOLID,
+                'startColor' => ['rgb' => '246257'],
+            ],
+            'alignment' => [
+                'horizontal' => Alignment::HORIZONTAL_CENTER,
+            ],
+        ]);
+
+		$sheet->getStyle('A1')->getAlignment()->setWrapText(true);
+		$sheet->getRowDimension(1)->setRowHeight(30);
+
+        $sheet->getStyle('A2:I2')->applyFromArray([
+            'font' => [
+                'bold' => true,
+                'color' => ['rgb' => '000000'],
+            ],
+            'fill' => [
+                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                'startColor' => ['rgb' => '2EB85C'],
+            ],
+			'alignment' => [
+			'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+    		],
+        ]);
+
+		$sheet->mergeCells('A5:I5');
+    $sheet->setCellValue('A5', "Cubicaje");
+    $sheet->getStyle('A5:I5')->applyFromArray([
+        'font' => [
+            'bold' => true,
+            'color' => ['rgb' => 'FFFFFF'],
+        ],
+        'fill' => [
+            'fillType' => Fill::FILL_SOLID,
+            'startColor' => ['rgb' => '246257'],
+        ],
+        'alignment' => [
+            'horizontal' => Alignment::HORIZONTAL_CENTER,
+        ],
+    ]);
+    $sheet->getRowDimension(5)->setRowHeight(30);
+    $sheet->getStyle('A5')->getAlignment()->setWrapText(true);
+
+    // 👉 Cabecera secundaria en A6:I6
+    $sheet->getStyle('A6:I6')->applyFromArray([
+        'font' => ['bold' => true, 'color' => ['rgb' => '000000']],
+        'fill' => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['rgb' => '2EB85C']],
+        'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER],
+    ]);
+
+		$sheet->fromArray($this->headings(), NULL, 'A2');
+
+		/*$sheet->getStyle('L3:L'.$sheet->getHighestRow())
+		->getNumberFormat()
+		->setFormatCode(\PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_NUMBER_00);*/ //SIRVE PARA PONER 2 DECIMALES A ESA COLUMNA
+        
+        foreach (range('A', 'I') as $col) {
             $sheet->getColumnDimension($col)->setAutoSize(true);
         }
 
