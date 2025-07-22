@@ -17,7 +17,7 @@
 
 .modal-dialog {
 	width: 100%;
-	max-width:80%!important
+	max-width:90%!important
   }
   
 #tablemodal{
@@ -447,7 +447,7 @@ $(function() {
                 
                 <div class="" style="padding-top:20px!important;padding-left:20px!important;padding-right:20px; text-align: center">
                     <b style="font-size : 15px">Registrar Activos</b>
-                    <img src="/img/logo_forestalpama.jpg" align="right" style="width: 120px; height: 50px">
+                    <!--<img src="/img/logo_forestalpama.jpg" align="right" style="width: 120px; height: 50px">-->
                 </div>
 
                 <div class="card-body">
@@ -455,12 +455,12 @@ $(function() {
 
                     <div class="row">
 
-                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding-top:5px;padding-bottom:20px">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding-top:5px;">
                                 
                             <input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
                             <input type="hidden" name="id" id="id" value="<?php echo $id?>">
                             
-                            <fieldset name="datos_activo" style="border:1px solid #A4A4A4; padding: 10px;">
+                            <fieldset name="datos_activo" style="border:1px solid #A4A4A4; padding: 10px">
                             <legend class="control-label form-control-sm"><b>Datos del Activo</b></legend>
                             <div class="row">
                                 <div class="col-lg-8">
@@ -551,6 +551,18 @@ $(function() {
                                                 <input id="dimension" name="dimension" on class="form-control form-control-sm mayusculas"  value="<?php echo $activo->dimensiones?>" type="text">
                                             </div>
                                         </div>
+                                        <div class="col-lg-4">
+                                            <div class="form-group">
+                                                <label class="control-label form-control-sm">Valor Libros</label>
+                                                <input id="valor_libros" name="valor_libros" on class="form-control form-control-sm solo-decimal" <?= ($activo->valor_libros !== null && $activo->valor_libros !== '') ? 'value="' . number_format($activo->valor_libros, 2) . '"' : '' ?> type="text" placeholder="0.00">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <div class="form-group">
+                                                <label class="control-label form-control-sm">Valor Comercial</label>
+                                                <input id="valor_comercial" name="valor_comercial" on class="form-control form-control-sm solo-decimal" <?= ($activo->valor_comercial !== null && $activo->valor_comercial !== '') ? 'value="' . number_format($activo->valor_comercial, 2) . '"' : '' ?> type="text" placeholder="0.00">
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="col-lg-4">
@@ -580,11 +592,11 @@ $(function() {
                             </div>
                             </fieldset>
                             <div class="row">
-                                <div class="col-lg-8">
-                                    <fieldset name="ubicacion" style="margin-top: 20px; border:1px solid #A4A4A4; padding: 10px">
+                                <div class="col-lg-5">
+                                    <fieldset name="ubicacion" style="border:1px solid #A4A4A4; padding: 10px">
                                     <legend class="control-label form-control-sm"><b>Ubicaci&oacute;n</b></legend>
                                         <div class="row">
-                                            <div class="col-lg-2">
+                                            <div class="col-lg-4">
                                                 <div class="form-group">
                                                     <label class="control-label form-control-sm">Departamento</label>
                                                     <select name="departamento" id="departamento" onchange="obtenerProvincia()" class="form-control form-control-sm">
@@ -609,7 +621,7 @@ $(function() {
                                                     </select>
                                                 </div>
                                             </div>
-                                            <div class="col-lg-2">
+                                            <div class="col-lg-4">
                                                 <div class="form-group">
                                                     <label class="control-label form-control-sm">Provincia</label>
                                                     <select name="provincia" id="provincia" class="form-control form-control-sm" onchange="obtenerDistrito()">
@@ -617,7 +629,7 @@ $(function() {
                                                     </select>
                                                 </div>
                                             </div>
-                                            <div class="col-lg-2">
+                                            <div class="col-lg-4">
                                                 <div class="form-group">
                                                     <label class="control-label form-control-sm">Distrito</label>
                                                     <select name="distrito" id="distrito" class="form-control form-control-sm" onchange="">
@@ -625,7 +637,9 @@ $(function() {
                                                     </select>
                                                 </div>
                                             </div>
-                                            <div class="col-lg-6">
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-lg-12">
                                                 <div class="form-group">
                                                     <label class="control-label form-control-sm">Direcci&oacute;n</label>
                                                     <input id="direccion" name="direccion" on class="form-control form-control-sm mayusculas"  value="<?php echo $activo->direccion?>" type="text">
@@ -634,17 +648,19 @@ $(function() {
                                         </div>
                                     </fieldset>
                                 </div>
-                                <div class="col-lg-4">
-                                    <fieldset name="tarjeta_propiedad" style="margin-top: 20px; border:1px solid #A4A4A4; padding: 10px">
+                                <div class="col-lg-3">
+                                    <fieldset name="tarjeta_propiedad" style="border:1px solid #A4A4A4; padding: 10px">
                                     <legend class="control-label form-control-sm"><b>Tarjeta Propiedad</b></legend>
                                         <div class="row">
-                                            <div class="col-lg-6">
+                                            <div class="col-lg-12">
                                                 <div class="form-group">
                                                     <label class="control-label form-control-sm">Titulo</label>
                                                     <input id="titulo" name="titulo" on class="form-control form-control-sm mayusculas"  value="<?php echo $activo->titulo?>" type="text">
                                                 </div>
                                             </div>
-                                            <div class="col-lg-6">
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-lg-12">
                                                 <div class="form-group">
                                                     <label class="control-label form-control-sm">Partida Registral</label>
                                                     <input id="partida_registral" name="partida_registral" on class="form-control form-control-sm mayusculas"  value="<?php echo $activo->partida_registral?>" type="text">
@@ -653,25 +669,25 @@ $(function() {
                                         </div>
                                     </fieldset>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-lg-6">
-                                    <fieldset name="tarjeta_circulacion" style="margin-top: 20px; border:1px solid #A4A4A4; padding: 10px">
+                                <div class="col-lg-4">
+                                    <fieldset name="tarjeta_circulacion" style="border:1px solid #A4A4A4; padding: 10px">
                                     <legend class="control-label form-control-sm"><b>Tarjeta Circulaci&oacute;n</b></legend>
                                         <div class="row">
-                                            <div class="col-lg-4">
+                                            <div class="col-lg-12">
                                                 <div class="form-group">
                                                     <label class="control-label form-control-sm">Partida Circulaci&oacute;n</label>
                                                     <input id="partida_circulacion" name="partida_circulacion" on class="form-control form-control-sm mayusculas"  value="<?php echo $activo->partida_circulacion?>" type="text">
                                                 </div>
                                             </div>
-                                            <div class="col-lg-4">
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-lg-6">
                                                 <div class="form-group">
                                                     <label class="control-label form-control-sm">Vigencia Circulaci&oacute;n</label>
                                                     <input id="vigencia_circulacion" name="vigencia_circulacion" on class="form-control form-control-sm mayusculas"  value="<?php echo $activo->vigencia_circulacion?>" type="text" placeholder="YYYY-MM-DD">
                                                 </div>
                                             </div>
-                                            <div class="col-lg-4">
+                                            <div class="col-lg-6">
                                                 <div class="form-group">
                                                     <label class="control-label form-control-sm">Estado de Activo</label>
                                                     <select name="estado_activo" id="estado_activo" class="form-control form-control-sm">
@@ -708,30 +724,30 @@ $(function() {
                                         </div>
                                     </fieldset>
                                 </div>-->
-                                <div class="col-lg-6">
-                                    <fieldset name="costos" style="margin-top: 20px; border:1px solid #A4A4A4; padding: 10px">
+                                <!--<div class="col-lg-6">
+                                    <fieldset name="costos" style="border:1px solid #A4A4A4; padding: 10px">
                                     <legend class="control-label form-control-sm"><b>Valorizaci&oacute;n</b></legend>
                                         <div class="row">
                                             <div class="col-lg-4">
                                                 <div class="form-group">
                                                     <label class="control-label form-control-sm">Valor Libros</label>
-                                                    <input id="valor_libros" name="valor_libros" on class="form-control form-control-sm solo-decimal" <?= ($activo->valor_libros !== null && $activo->valor_libros !== '') ? 'value="' . number_format($activo->valor_libros, 2) . '"' : '' ?> type="text" placeholder="0.00">
+                                                    <input id="valor_libros" name="valor_libros" on class="form-control form-control-sm solo-decimal" type="text" placeholder="0.00">
                                                 </div>
                                             </div>
                                             <div class="col-lg-4">
                                                 <div class="form-group">
                                                     <label class="control-label form-control-sm">Valor Comercial</label>
-                                                    <input id="valor_comercial" name="valor_comercial" on class="form-control form-control-sm solo-decimal" <?= ($activo->valor_comercial !== null && $activo->valor_comercial !== '') ? 'value="' . number_format($activo->valor_comercial, 2) . '"' : '' ?> type="text" placeholder="0.00">
+                                                    <input id="valor_comercial" name="valor_comercial" on class="form-control form-control-sm solo-decimal" type="text" placeholder="0.00">
                                                 </div>
                                             </div>
                                         </div>
                                     </fieldset>
-                                </div>
+                                </div>-->
                             </div>
                         </div>
                     </div>
                 </div>
-                <div style="clear:both;padding-top:15px"></div>
+                <div style="clear:both"></div>
                     <div class="card" style="padding: 20px;">
                         <nav>
                             <div class="nav nav-pills" id="nav-tab" role="tablist">
