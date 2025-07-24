@@ -356,7 +356,7 @@ class ProductosController extends Controller
             if(count($stock)>0){
                 $producto_stock[$id_producto] = $stock[0];
             }else {
-                $producto_stock[$id_producto] = ['saldos_cantidad'=>0];
+                $producto_stock[$id_producto] = ['stock_comprometido'=>0];
             }
         //}
 

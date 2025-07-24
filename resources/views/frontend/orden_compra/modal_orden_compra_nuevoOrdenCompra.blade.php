@@ -710,7 +710,7 @@ function cargarDetalle(){
                         <td><select name="estado_bien[]" id="estado_bien${n}" class="form-control form-control-sm" onChange="">${estadoBienOptions}</select></td>
                         <td><select name="unidad[]" id="unidad${n}" class="form-control form-control-sm">${unidadMedidaOptions}</select></td>
                         <td><input name="cantidad_ingreso[]" id="cantidad_ingreso${n}" class="cantidad_ingreso form-control form-control-sm" value="${orden_compra.cantidad_requerida}" type="text" oninput="calcularCantidadPendiente(this);calcularSubTotal(this);calcularPrecioUnitario(this)"></td>
-                        <td><input name="stock_actual[]" id="stock_actual${n}" class="form-control form-control-sm" value="${producto_stock.saldos_cantidad}" type="text" readonly="readonly"></td>
+                        <td><input name="stock_actual[]" id="stock_actual${n}" class="form-control form-control-sm" value="${producto_stock.stock_comprometido}" type="text" readonly="readonly"></td>
                         <td><input name="precio_unitario[]" id="precio_unitario${n}" class="precio_unitario form-control form-control-sm" value="${parseFloat(orden_compra.precio_venta || 0).toFixed(2)}" type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, \'\').replace(/(\\..*?)\\..*/g, \'$1\').replace(/(\\d+\\.\\d{0,2}).*/, \'$1\'); calcularSubTotal(this);calcularPrecioUnitario(this)"></td>
                         <td><input name="precio_unitario_[]" id="precio_unitario_${n}" class="precio_unitario_ form-control form-control-sm" value="${parseFloat(orden_compra.precio || 0).toFixed(2)}" type="text" oninput="calcularPrecioUnitario(this)"></td>
                         <td><input name="valor_venta_bruto[]" id="valor_venta_bruto${n}" class="valor_venta_bruto form-control form-control-sm" value="${parseFloat(orden_compra.valor_venta_bruto || 0).toFixed(2)}" type="text" oninput="calcularSubTotal(this)"></td>
@@ -1156,7 +1156,7 @@ function obtenerStock(selectElement, n){
 
             var producto_stock = result.producto_stock[id_producto];
             
-            $('#stock_actual' + n).val(producto_stock.saldos_cantidad);
+            $('#stock_actual' + n).val(producto_stock.stock_comprometido);
         }
     });
 }
@@ -1417,7 +1417,7 @@ function obtenerStock(selectElement, n){
                                 <th>Estado Bien</th>
                                 <th>Unidad</th>
                                 <th>Cantidad</th>
-                                <th>Stock Actual</th>
+                                <th>Stock Disponible</th>
                                 <th>Precio Venta</th>
                                 <th>Precio Unitario</th>
                                 <th>Valor Venta Bruto</th>

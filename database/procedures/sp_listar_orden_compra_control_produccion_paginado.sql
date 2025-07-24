@@ -23,7 +23,7 @@ begin
 	where p.id = oc.id_persona)
 	else (select e2.razon_social from empresas e2 
 	where e2.id = oc.id_empresa_compra) 
-	end cliente, oc.numero_orden_compra, oc.numero_orden_compra_cliente, a.denominacion almacen, oc.fecha_orden_compra, oc.fecha_vencimiento, oc.fecha_produccion, tm.denominacion cerrado, u."name" vendedor, oc.estado ';
+	end cliente, oc.numero_orden_compra, oc.numero_orden_compra_cliente, a.denominacion almacen, oc.fecha_orden_compra, oc.fecha_vencimiento, oc.fecha_produccion, tm.denominacion cerrado, u."name" vendedor, oc.estado, oc.comprometido ';
 
 	v_tabla=' from orden_compras oc 
 	inner join almacenes a on oc.id_almacen_salida = a.id 

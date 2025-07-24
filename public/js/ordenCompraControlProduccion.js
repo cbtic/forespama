@@ -281,9 +281,19 @@ function datatablenew(){
 					clase = "btn-success";
 				}
 				
+				let btnClass = '';
+
+				if (row.comprometido == 0) {
+					btnClass = 'btn-danger';
+				} else if (row.comprometido == 1) {
+					btnClass = 'btn-warning';
+				} else if (row.comprometido == 2) {
+					btnClass = 'btn-success';
+				}
+
 				var html = '<div class="btn-group btn-group-sm" role="group" aria-label="Log Viewer Actions">';
 					
-				html += '<button style="font-size:12px" type="button" class="btn btn-sm btn-success" data-toggle="modal" onclick="modalOrdenCompraControlProduccion('+row.id+')" ><i class="fa fa-edit"></i> Entrega Produccion</button>'; 
+				html += '<button style="font-size:12px" type="button" class="btn btn-sm ' + btnClass + '" data-toggle="modal" onclick="modalOrdenCompraControlProduccion('+row.id+')" ><i class="fa fa-edit"></i> Entrega Produccion</button>'; 
 				
 				html += '</div>';
 				return html;

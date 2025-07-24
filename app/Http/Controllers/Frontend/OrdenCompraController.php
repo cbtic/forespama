@@ -369,7 +369,7 @@ class OrdenCompraController extends Controller
             if(count($stock)>0){
                 $producto_stock[$detalle->id_producto] = $stock[0];
             }else {
-                $producto_stock[$detalle->id_producto] = ['saldos_cantidad'=>0];
+                $producto_stock[$detalle->id_producto] = ['stock_comprometido'=>0];
             }
             
             //var_dump($producto_stock);
@@ -418,7 +418,7 @@ class OrdenCompraController extends Controller
             if(count($stock)>0){
                 $producto_stock[$detalle->id_producto] = $stock[0];
             }else {
-                $producto_stock[$detalle->id_producto] = ['saldos_cantidad'=>0];
+                $producto_stock[$detalle->id_producto] = ['stock_comprometido'=>0];
             }
             
             //var_dump($producto_stock);
@@ -469,7 +469,7 @@ class OrdenCompraController extends Controller
             if(count($stock)>0){
                 $producto_stock[$detalle->id_producto] = $stock[0];
             }else {
-                $producto_stock[$detalle->id_producto] = ['saldos_cantidad'=>0];
+                $producto_stock[$detalle->id_producto] = ['stock_comprometido'=>0];
             }
             
             //var_dump($producto_stock);
@@ -1931,6 +1931,32 @@ class OrdenCompraController extends Controller
 		$orden_compra_detalle = OrdenCompraDetalle::find($id_orden_compra_detalle);
 		$orden_compra_detalle->comprometido = 1;
 		$orden_compra_detalle->save();
+
+        $orden_compra = OrdenCompra::find($orden_compra_detalle->id_orden_compra);
+        $id_orden_compra = $orden_compra->id;
+        $orden_compra_detalle_total = OrdenCompraDetalle::where('id_orden_compra',$id_orden_compra)->where('estado','1')->get();
+        
+        $total = count($orden_compra_detalle_total);
+        $comprometidos = 0;
+
+        $orden_compra->comprometido = "1";
+        $orden_compra->save();
+
+        foreach($orden_compra_detalle_total as $detalle){
+            if($detalle->comprometido == 1){
+                $comprometidos++;
+            }
+        }
+
+        if ($comprometidos == 0) {
+            $orden_compra->comprometido = 0;
+        } elseif ($comprometidos < $total) {
+            $orden_compra->comprometido = 1;
+        } else {
+            $orden_compra->comprometido = 2;
+        }
+
+        $orden_compra->save();
 
 		echo $orden_compra_detalle->id;
 

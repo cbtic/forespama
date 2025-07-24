@@ -74,9 +74,22 @@ class Kardex extends Model
 
     function getExistenciaProductoById($id, $id_almacen_salida){
 
-        $cad = "select * from kardex k 
-        where k.id_producto = '".$id."' and  k.id_almacen_destino ='".$id_almacen_salida."'
+        $cad = "select *, k.saldos_cantidad - coalesce((select sum(ocd.cantidad_requerida) cantidad_requerida from orden_compra_detalles ocd where ocd.id_producto = '".$id."' and ocd.comprometido = '1' and ocd.cerrado = '1'),0) stock_comprometido
+        from kardex k 
+        where k.id_producto = '".$id."' and  k.id_almacen_destino = '".$id_almacen_salida."'
         order by 1 desc
+        limit 1";
+
+		$data = DB::select($cad);
+        return $data;
+    }
+
+    function getStockComprometidoProductoById($id, $id_almacen_salida){
+
+        $cad = "select k.saldos_cantidad - (select sum(ocd.cantidad_requerida) cantidad_requerida from orden_compra_detalles ocd where ocd.id_producto = '".$id."' and ocd.comprometido = '".$id_almacen_salida."') stock_comprometido
+        from kardex k 
+        where k.id_producto = '".$id."' and k.id_almacen_destino = '".$id_almacen_salida."'
+        order by k.id desc
         limit 1";
 
 		$data = DB::select($cad);

@@ -79,8 +79,8 @@ class OrdenCompra extends Model
         and epd.id_producto=ocd.id_producto),0)cantidad_ingresada,
         ocd.precio, ocd.sub_total, ocd.igv, ocd.total, ocd.id_descuento, oc.id_almacen_salida, oc.id_unidad_origen, oc.id_almacen_destino ,
         m.denominiacion marca,
-        coalesce((select k.saldos_cantidad from kardex k where id_producto = ocd.id_producto and id_almacen_destino = 3  order by 1 desc limit 1),0)stock_ves, --ves
-        coalesce((select k.saldos_cantidad from kardex k where id_producto = ocd.id_producto and id_almacen_destino = 2  order by 1 desc limit 1),0)stock_oxa, --oxa
+        coalesce((select k.saldos_cantidad - (select sum(ocd.cantidad_requerida) cantidad_requerida from orden_compra_detalles ocd where ocd.id_producto = k.id_producto and ocd.comprometido ='1') stock_comprometido from kardex k where id_producto = ocd.id_producto and id_almacen_destino = 3  order by k.id desc limit 1),0)stock_ves, --ves
+        coalesce((select k.saldos_cantidad - (select sum(ocd.cantidad_requerida) cantidad_requerida from orden_compra_detalles ocd where ocd.id_producto = k.id_producto and ocd.comprometido ='1') stock_comprometido from kardex k where id_producto = ocd.id_producto and id_almacen_destino = 2  order by k.id desc limit 1),0)stock_oxa, --oxa
         ocd.valor_venta_bruto, precio_venta, valor_venta, ocd.id_descuento, ocd.descuento
         from orden_compra_detalles ocd 
         inner join productos p on ocd.id_producto = p.id

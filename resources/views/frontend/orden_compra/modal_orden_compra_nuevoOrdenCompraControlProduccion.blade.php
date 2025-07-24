@@ -350,15 +350,19 @@ function cargarDetalle(){
                 }
 
                 let cantidad_ingreso = parseFloat(orden_compra.cantidad_requerida);
-                let stock_actual = parseFloat(producto_stock.saldos_cantidad);
+                let stock_actual = parseFloat(producto_stock.stock_comprometido);
                 let stock_comprometido = orden_compra.comprometido;
 
                 let boton_comprometer;
 
-                if (cantidad_ingreso < stock_actual && stock_comprometido == 0) {
-                    boton_comprometer = `<button type="button" class="btn btn-warning btn-sm" onclick="comprometerStock(this)">Comprometer Stock</button>`;
-                } else {
-                    boton_comprometer = `<button type="button" class="btn btn-warning btn-sm" disabled>Comprometer Stock</button>`;
+                if(stock_comprometido == 1){
+                    boton_comprometer = `<button type="button" class="btn btn-success btn-sm" disabled>Comprometer Stock</button>`;
+                }else{
+                    if (cantidad_ingreso < stock_actual) {
+                        boton_comprometer = `<button type="button" class="btn btn-warning btn-sm" onclick="comprometerStock(this)">Comprometer Stock</button>`;
+                    } else {
+                        boton_comprometer = `<button type="button" class="btn btn-warning btn-sm" disabled>Comprometer Stock</button>`;
+                    }
                 }
 
                 const row = `
@@ -372,7 +376,7 @@ function cargarDetalle(){
                         <td><input name="estado_bien[]" id="estado_bien${n}" class="form-control form-control-sm" style="border: none; background-color: transparent;" value="${orden_compra.estado_producto}" type="text" oninput="" readonly="readonly"></td>
                         <td><input name="unidad[]" id="unidad${n}" class="form-control form-control-sm" style="border: none; background-color: transparent;" value="${orden_compra.unidad_medida}" type="text" oninput="" readonly="readonly"></td>
                         <td><input name="cantidad_ingreso[]" id="cantidad_ingreso${n}" class="cantidad_ingreso form-control form-control-sm" style="border: none; background-color: transparent;" value="${orden_compra.cantidad_requerida}" type="text" oninput="" readonly="readonly"></td>
-                        <td><input name="stock_actual[]" id="stock_actual${n}" class="form-control form-control-sm" style="border: none; background-color: transparent;" value="${producto_stock.saldos_cantidad}" type="text" readonly="readonly"></td>
+                        <td><input name="stock_actual[]" id="stock_actual${n}" class="form-control form-control-sm" style="border: none; background-color: transparent;" value="${producto_stock.stock_comprometido}" type="text" readonly="readonly"></td>
                         <td style="width:150px">
                             ${boton_comprometer}
                         </td>
@@ -418,18 +422,18 @@ function comprometerStock(input){
     $('.loader').show();
     
     $.ajax({
-            url: "/orden_compra/send_comprometer_stock/"+id_orden_compra_detalle,
-            type: "GET",
-            success: function (result) {
-                //$('#openOverlayOpc').modal('hide');
-                $('.loader').hide();
-                bootbox.alert("Se guardó satisfactoriamente", function () {
+        url: "/orden_compra/send_comprometer_stock/"+id_orden_compra_detalle,
+        type: "GET",
+        success: function (result) {
+            //$('#openOverlayOpc').modal('hide');
+            $('.loader').hide();
+            bootbox.alert("Se guardó satisfactoriamente", function () {
 
-                    cargarDetalle();
-                });
-                
-            }
-        });
+                cargarDetalle();
+                datatablenew();
+            });
+        }
+    });
 }
 
 function fn_save_orden_compra(){
@@ -699,7 +703,7 @@ function obtenerStock(selectElement, n){
                                 <th>Estado Bien</th>
                                 <th>Unidad</th>
                                 <th>Cantidad</th>
-                                <th>Stock Actual</th>
+                                <th>Stock Disponible</th>
 							</tr>
 							</thead>
 							<tbody id="divOrdenCompraDetalle">
@@ -709,8 +713,8 @@ function obtenerStock(selectElement, n){
                     <div style="margin-top:15px" class="form-group">
                         <div class="col-sm-12 controls">
                             <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
-                                <a href="javascript:void(0)" onClick="fn_save_orden_compra()" class="btn btn-sm btn-success" style="margin-right:10px">Guardar</a>
-                                <a href="javascript:void(0)" onClick="$('#openOverlayOpc').modal('hide');" class="btn btn-sm btn-info" style="">Cerrar</a>
+                                <!--<a href="javascript:void(0)" onClick="fn_save_orden_compra()" class="btn btn-sm btn-success" style="margin-right:10px">Guardar</a>
+                                <a href="javascript:void(0)" onClick="$('#openOverlayOpc').modal('hide');" class="btn btn-sm btn-info" style="">Cerrar</a>-->
                             </div>
                                                 
                         </div>
