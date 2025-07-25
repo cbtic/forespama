@@ -198,16 +198,34 @@
 								@can('Ajuste Stock')
 									<x-utils.link :href="route('frontend.entrada_productos.create_ajuste_stock')" class="dropdown-item" :text="__('Ajuste de Stock')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
 								@endif
-
-								@can('Control Produccion Orden Compra')
-									<x-utils.link :href="route('frontend.orden_compra.create_control_produccion')" class="dropdown-item" :text="__('Control Produccion Orden Compra')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
-								@endif
 								
 							</div>
 
 						</li>
 
-						@endif
+					@endif
+
+					@if(Gate::check('Control Produccion Orden Compra') || Gate::check('Orden Produccion'))
+
+						<li class="nav-item dropdown">
+							<a href="#" class="nav-link dropdown-toggle" id="navbarDropdownPrueba" data-toggle="dropdown"
+							aria-haspopup="true" aria-expanded="false">Almacenes</a>
+
+							<div class="dropdown-menu" aria-labelledby="navbarDropdownPrueba">
+								
+								@can('Control Produccion Orden Compra')
+									<x-utils.link :href="route('frontend.orden_compra.create_control_produccion')" class="dropdown-item" :text="__('Control Produccion Orden Compra')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+								@endif
+
+								@can('Orden Produccion')
+									<x-utils.link :href="route('frontend.orden_produccion.create_orden_produccion')" class="dropdown-item" :text="__('Orden Produccion')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+								@endif
+																
+							</div>
+
+						</li>
+						
+					@endif
 
 						@if(Gate::check('Ingreso Caja') || Gate::check('Comprobante') || Gate::check('Guia') || Gate::check('Consulta Sodimac') || Gate::check('Pagos Orden Compra'))
 

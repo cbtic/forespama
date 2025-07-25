@@ -44,6 +44,7 @@ use App\Http\Controllers\Frontend\EmpresaCubicajeController;
 use App\Http\Controllers\Frontend\AcerradoMaderaController;
 use App\Http\Controllers\Frontend\HornoController;
 use App\Http\Controllers\Frontend\ActivoController;
+use App\Http\Controllers\Frontend\OrdenProduccionController;
 
 //use App\Http\Controllers\VehiculoController;
 
