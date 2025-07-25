@@ -5,17 +5,10 @@ $(document).ready(function () {
 	});
 
 	$('#btnNuevo').click(function () {
-		modalOrdenCompra(0);
+		modalOrdenProduccion(0);
 	});
 
-	$('#empresa_compra_bus').keypress(function(e){
-		if(e.which == 13) {
-			datatablenew();
-			return false;
-		}
-	});
-
-	$('#persona_compra_bus').keypress(function(e){
+	$('#producto_bus').keypress(function(e){
 		if(e.which == 13) {
 			datatablenew();
 			return false;
@@ -36,14 +29,7 @@ $(document).ready(function () {
 		}
 	});
 
-	$('#numero_orden_compra_bus').keypress(function(e){
-		if(e.which == 13) {
-			datatablenew();
-			return false;
-		}
-	});
-
-	$('#situacion_bus').keypress(function(e){
+	$('#numero_orden_produccion_bus').keypress(function(e){
 		if(e.which == 13) {
 			datatablenew();
 			return false;
@@ -73,26 +59,17 @@ $(document).ready(function () {
         language: 'es'
     });
 
-	$('#empresa_compra_bus').select2({ width : '100%' })
+	$('#producto_bus').select2({ width : '100%' })
 
-	$('#persona_compra_bus').select2({ width : '100%' })
-	
-	$('#almacen_origen_bus').select2({ width : '100%' })
-	
 	datatablenew();
-
-	/*$('#btnDescargar').on('click', function () {
-		DescargarArchivosExcel()
-
-	});*/
 
 });
 
 function datatablenew(){
     
-    var oTable1 = $('#tblOrdenCompraControlProduccion').dataTable({
+    var oTable1 = $('#tblOrdenProduccion').dataTable({
         "bServerSide": true,
-        "sAjaxSource": "/orden_compra/listar_orden_compra_control_produccion_ajax",
+        "sAjaxSource": "/orden_produccion/listar_orden_produccion_ajax",
         "bProcessing": true,
         "sPaginationType": "full_numbers",
         //"paging":false,
@@ -120,18 +97,10 @@ function datatablenew(){
             var iNroPagina 	= parseFloat(fn_util_obtieneNroPagina(aoData[3].value, aoData[4].value)).toFixed();
             var iCantMostrar 	= aoData[4].value;
 			
-			var empresa_compra = $('#empresa_compra_bus').val();
-			var persona_compra = $('#persona_compra_bus').val();
 			var fecha_inicio = $('#fecha_inicio_bus').val();
-			var fecha_fin = $('#fecha_fin_bus').val();
-			var numero_orden_compra = $('#numero_orden_compra_bus').val();
-			var situacion = $('#situacion_bus').val();
-			var almacen_origen = $('#almacen_origen_bus').val();
+			var numero_orden_produccion = $('#numero_orden_produccion_bus').val();
+			var encargado_bus= $('#encargado_bus').val();
 			var estado = $('#estado_bus').val();
-			var numero_orden_compra_cliente = $('#numero_orden_compra_cliente_bus').val();
-			var vendedor = $('#vendedor_bus').val();
-			var estado_pedido = $('#estado_pedido_bus').val();
-			var estado_comprometido = $('#estado_comprometido_bus').val();
 			
 			var _token = $('#_token').val();
             oSettings.jqXHR = $.ajax({
@@ -140,10 +109,8 @@ function datatablenew(){
                 "type": "POST",
                 "url": sSource,
                 "data":{NumeroPagina:iNroPagina,NumeroRegistros:iCantMostrar,
-						empresa_compra:empresa_compra,persona_compra:persona_compra,fecha_inicio:fecha_inicio,fecha_fin:fecha_fin,numero_orden_compra:numero_orden_compra,
-						almacen_origen:almacen_origen,situacion:situacion,estado:estado,numero_orden_compra_cliente:numero_orden_compra_cliente,
-						vendedor:vendedor,estado_pedido:estado_pedido,estado_comprometido:estado_comprometido,
-						_token:_token
+						fecha_inicio:fecha_inicio,numero_orden_produccion:numero_orden_produccion,encargado_bus:encargado_bus,
+						estado:estado,_token:_token
                        },
                 "success": function (result) {
                     fnCallback(result);
@@ -173,9 +140,9 @@ function datatablenew(){
 
 			{
 			"mRender": function (data, type, row) {
-				var cliente = "";
-				if(row.cliente!= null)cliente = row.cliente;
-				return cliente;
+				var codigo = "";
+				if(row.codigo!= null)codigo = row.codigo;
+				return codigo;
 			},
 			"bSortable": true,
 			"aTargets": [1]
@@ -183,9 +150,9 @@ function datatablenew(){
 		
 			{
 			"mRender": function (data, type, row) {
-				var numero_orden_compra = "";
-				if(row.numero_orden_compra!= null)numero_orden_compra = row.numero_orden_compra;
-				return numero_orden_compra;
+				var fecha_orden_produccion = "";
+				if(row.fecha_orden_produccion!= null)fecha_orden_produccion = row.fecha_orden_produccion;
+				return fecha_orden_produccion;
 			},
 			"bSortable": true,
 			"aTargets": [2]
@@ -193,68 +160,24 @@ function datatablenew(){
 			
 			{
 			"mRender": function (data, type, row) {
-				var numero_orden_compra_cliente = "";
-				if(row.numero_orden_compra_cliente!= null)numero_orden_compra_cliente = row.numero_orden_compra_cliente;
-				return numero_orden_compra_cliente;
-			},
-			"bSortable": true,
-			"aTargets": [3]
-			},
-			{
-			"mRender": function (data, type, row) {
-				var almacen = "";
-				if(row.almacen!= null)almacen = row.almacen;
-				return almacen;
-			},
-			"bSortable": true,
-			"aTargets": [4]
-			},
-			{
-			"mRender": function (data, type, row) {
-				var fecha_orden_compra = "";
-				if(row.fecha_orden_compra!= null)fecha_orden_compra = row.fecha_orden_compra;
-				return fecha_orden_compra;
-			},
-			"bSortable": true,
-			"aTargets": [5]
-			},
-
-			{
-			"mRender": function (data, type, row) {
-				var fecha_vencimiento = "";
-				if(row.fecha_vencimiento!= null)fecha_vencimiento = row.fecha_vencimiento;
-				return fecha_vencimiento;
-			},
-			"bSortable": true,
-			"aTargets": [6]
-			},
-			{
-			"mRender": function (data, type, row) {
 				var fecha_produccion = "";
 				if(row.fecha_produccion!= null)fecha_produccion = row.fecha_produccion;
 				return fecha_produccion;
 			},
 			"bSortable": true,
-			"aTargets": [7]
+			"aTargets": [3]
 			},
+			
 			{
 			"mRender": function (data, type, row) {
-				var cerrado = "";
-				if(row.cerrado!= null)cerrado = row.cerrado;
-				return cerrado;
+				var situacion = "";
+				if(row.situacion!= null)situacion = row.situacion;
+				return situacion;
 			},
 			"bSortable": true,
-			"aTargets": [8]
+			"aTargets": [4]
 			},
-			{
-			"mRender": function (data, type, row) {
-				var vendedor = "";
-				if(row.vendedor!= null)vendedor = row.vendedor;
-				return vendedor;
-			},
-			"bSortable": true,
-			"aTargets": [9]
-			},
+
 			{
 			"mRender": function (data, type, row) {
 				var estado = "";
@@ -267,7 +190,7 @@ function datatablenew(){
 				return estado;
 			},
 			"bSortable": false,
-			"aTargets": [10]
+			"aTargets": [5]
 			},
 			{
 			"mRender": function (data, type, row) {
@@ -281,26 +204,16 @@ function datatablenew(){
 					estado = "Activar";
 					clase = "btn-success";
 				}
-				
-				let btnClass = '';
-
-				if (row.comprometido == 0) {
-					btnClass = 'btn-danger';
-				} else if (row.comprometido == 1) {
-					btnClass = 'btn-warning';
-				} else if (row.comprometido == 2) {
-					btnClass = 'btn-success';
-				}
 
 				var html = '<div class="btn-group btn-group-sm" role="group" aria-label="Log Viewer Actions">';
 					
-				html += '<button style="font-size:12px" type="button" class="btn btn-sm ' + btnClass + '" data-toggle="modal" onclick="modalOrdenCompraControlProduccion('+row.id+')" ><i class="fa fa-edit"></i> Entrega Produccion</button>'; 
+				html += '<button style="font-size:12px" type="button" class="btn btn-sm btn-success" data-toggle="modal" onclick="modalOrdenProduccion('+row.id+')" ><i class="fa fa-edit"></i> Editar</button>'; 
 				
 				html += '</div>';
 				return html;
 			},
 			"bSortable": false,
-			"aTargets": [11],
+			"aTargets": [6],
 			},
 
 		]
@@ -308,9 +221,9 @@ function datatablenew(){
 
 }
 
-fn_util_LineaDatatable("#tblOrdenCompraControlProduccion");
+fn_util_LineaDatatable("#tblOrdenProduccion");
 
-$('#tblOrdenCompraControlProduccion tbody').on('click', 'tr', function () {
+$('#tblOrdenProduccion tbody').on('click', 'tr', function () {
 	
 });
 
@@ -318,13 +231,13 @@ function fn_ListarBusqueda() {
     datatablenew();
 };
 
-function modalOrdenCompraControlProduccion(id){
+function modalOrdenProduccion(id){
 
 	$(".modal-dialog").css("width","95%");
 	$('#openOverlayOpc .modal-body').css('height', 'auto');
 
 	$.ajax({
-		url: "/orden_compra/modal_orden_compra_control_produccion/"+id,
+		url: "/orden_produccion/modal_orden_produccion/"+id,
 		type: "GET",
 		success: function (result) {
 			$("#diveditpregOpc").html(result);

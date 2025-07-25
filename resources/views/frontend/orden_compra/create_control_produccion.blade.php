@@ -450,6 +450,18 @@ label.form-control-sm{
 							?>
 						</select>
 					</div>
+
+					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+						<select name="estado_comprometido_bus" id="estado_comprometido_bus" class="form-control form-control-sm">
+							<option value="">--Seleccionar Estado Comprometido--</option>
+							<?php
+							foreach ($estado_comprometido as $row){?>
+								<option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
+								<?php 
+							}
+							?>
+						</select>
+					</div>
                     
 					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12" style="padding-right:0px">
 						<input class="btn btn-warning pull-rigth" value="Buscar" type="button" id="btnBuscar" />

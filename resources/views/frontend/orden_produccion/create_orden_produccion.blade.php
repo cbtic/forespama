@@ -291,13 +291,6 @@ label.form-control-sm{
 
 </style>
 
-<script>
-    var almacenUsuario = @json($almacen_usuario);
-	//alert(almacenUsuario.id_user);
-	var esAdministrador = {{ auth()->user()->hasAnyRole('Administrator') ? 'true' : 'false' }};
-	//console.log(almacenUsuario);
-</script>
-
 @stack('before-scripts')
 @stack('after-scripts')
 
@@ -334,12 +327,12 @@ label.form-control-sm{
 
         <div class="card-body">
 
-            <form class="form-horizontal" method="post" action="" id="frmOrdenProduccion" autocomplete="off" enctype="multipart/form-data">
+            <form class="form-horizontal" method="post" action="" id="frmOrdenFabricacion" autocomplete="off" enctype="multipart/form-data">
 				
                 <div class="row">
                     <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12" style="margin-top:15px">
                         <h4 class="card-title mb-0 text-primary" style="font-size:22px">
-                            Orden de Producci&oacute;n
+                            Orden de Fabricaci&oacute;n
                         </h4>
                     </div>
                 </div>
@@ -350,17 +343,39 @@ label.form-control-sm{
 					<div class="col col-sm-12 align-self-center">
 
                         <input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
-						
-						<input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
-				
+										
 				<div class="row" style="padding:20px 20px 0px 20px;">
 
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<select name="empresa_compra_bus" id="empresa_compra_bus" class="form-control form-control-sm">
-							<option value="">--Seleccionar Empresa Compra--</option>
+					<!--<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+						<select name="producto_bus" id="producto_bus" class="form-control form-control-sm">
+							<option value="">--Seleccionar Producto--</option>
 							<?php
-							foreach ($productos as $row){?>
-								<option value="<?php echo $row->id ?>"><?php echo $row->denominacion ?></option>
+							//foreach ($productos as $row){?>
+								<option value="<?php //echo $row->id ?>"><?php //echo $row->denominacion ?></option>
+								<?php 
+							//}
+							?>
+						</select>
+					</div>-->
+
+					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+                        <input id="fecha_inicio_bus" name="fecha_inicio_bus" on class="form-control form-control-sm"  placeholder="Fecha Inicio">
+					</div>
+
+					<!--<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+                        <input id="fecha_fin_bus" name="fecha_fin_bus" on class="form-control form-control-sm"  placeholder="Fecha Fin">
+					</div>-->
+
+					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+                        <input id="numero_orden_produccion_bus" name="numero_orden_produccion_bus" on class="form-control form-control-sm"  placeholder="N&uacute;mero Orden Fabricaci&oacute;n">
+					</div>
+
+					<div class="col-lg-2">
+						<select name="encargado_bus" id="encargado_bus" class="form-control form-control-sm" onchange="">
+							<option value="">--Seleccionar--</option>
+							<?php
+							foreach ($encargado as $row){?>
+								<option value="<?php echo $row->id ?>"><?php echo $row->nombres . ' ' . $row->apellido_paterno . ' ' . $row->apellido_materno ?></option>
 								<?php 
 							}
 							?>
@@ -377,7 +392,8 @@ label.form-control-sm{
                     
 					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12" style="padding-right:0px">
 						<input class="btn btn-warning pull-rigth" value="Buscar" type="button" id="btnBuscar" />
-						
+						<input class="btn btn-success pull-rigth" value="Nuevo" type="button" id="btnNuevo" style="margin-left:10px" />
+
 						<!--<button id="btnDescargar" type="button" class="btn btn-secondary pull-rigth" style="margin-left:10px;">
 							<i class="fas fa-download"></i> Excel
 						</button>-->
@@ -391,15 +407,10 @@ label.form-control-sm{
                         <thead>
 							<tr style="font-size:13px">
 								<th>Id</th>
-								<th>Cliente</th>
-								<th>N&uacute;mero OC</th>
-								<th>N° OC Cliente</th>
-								<th>Almacen Origen</th>
-								<th>Fecha OC</th>
-								<th>Fecha Vencimiento</th>
+								<th>N&uacute;mero Orden Fabricaci&oacute;n</th>
+								<th>Fecha Orden Fabricaci&oacute;n</th>
 								<th>Fecha Produccion</th>
 								<th>Situaci&oacute;n</th>
-								<th>Vendedor</th>
 								<th>Estado</th>
 								<th>Acciones</th>
 							</tr>

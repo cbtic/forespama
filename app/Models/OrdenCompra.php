@@ -508,4 +508,21 @@ class OrdenCompra extends Model
 		
 	}
 
+    function getDetalleProductosNoComprometidosId(){
+
+        $cad = "select p.id, p.denominacion producto, p.codigo, tm.denominacion unidad, sum(ocd.cantidad_requerida) cantidad_total, ocd.id_unidad_medida
+        from orden_compra_detalles ocd 
+        inner join orden_compras oc on ocd.id_orden_compra = oc.id
+        inner join productos p on ocd.id_producto = p.id 
+        inner join tabla_maestras tm on ocd.id_unidad_medida = tm.codigo::int and tm.tipo = '43'
+        where ocd.comprometido = '0'
+        and ocd.cerrado ='1'
+        and ocd.estado ='1'
+        and oc.id_tipo_documento ='2'
+        group by p.id, p.denominacion, p.codigo, tm.denominacion, ocd.id_unidad_medida
+        order by 1 desc";
+
+		$data = DB::select($cad);
+        return $data;
+    }
 }

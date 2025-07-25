@@ -988,21 +988,21 @@ class IngresoVehiculoTroncoController extends Controller
 					//$ingresoVehiculoTroncoCubicaje = $row3;
 					$ingreso_vehiculo_tronco_cubicaje_id->diametro_1= $diametro_1;
 					$ingreso_vehiculo_tronco_cubicaje_id->diametro_2 = $diametro_2;
-					$ingreso_vehiculo_tronco_cubicaje_id->diametro_dm = $diametro_dm;
+					$ingreso_vehiculo_tronco_cubicaje_id->diametro_dm = number_format($diametro_dm,3);
 					$ingreso_vehiculo_tronco_cubicaje_id->longitud = $longitud;
-					$ingreso_vehiculo_tronco_cubicaje_id->volumen_m3 = $volumen_m3;
-					$ingreso_vehiculo_tronco_cubicaje_id->volumen_pies = $volumen_pies;
-					$ingreso_vehiculo_tronco_cubicaje_id->volumen_total_m3 = $volumen_m3;
-					$ingreso_vehiculo_tronco_cubicaje_id->volumen_total_pies = $volumen_total_pies;
+					$ingreso_vehiculo_tronco_cubicaje_id->volumen_m3 = number_format($volumen_m3,2);
+					$ingreso_vehiculo_tronco_cubicaje_id->volumen_pies = number_format($volumen_pies,2);
+					$ingreso_vehiculo_tronco_cubicaje_id->volumen_total_m3 = number_format($volumen_m3,2);
+					$ingreso_vehiculo_tronco_cubicaje_id->volumen_total_pies = number_format($volumen_total_pies,2);
 					$ingreso_vehiculo_tronco_cubicaje_id->precio_unitario = $precio_unitario;
-					$ingreso_vehiculo_tronco_cubicaje_id->precio_total = $precio_total;
+					$ingreso_vehiculo_tronco_cubicaje_id->precio_total = number_format($precio_total,2);
 					$ingreso_vehiculo_tronco_cubicaje_id->save();
 					
 					$precio_total_final+=$precio_total;
 				}
 				
 				$ingresoVehiculoTroncoTipoMadera = IngresoVehiculoTroncoTipoMadera::find($id_ingreso_vehiculo_tronco_tipo_madera);
-				$ingresoVehiculoTroncoTipoMadera->total = $precio_total_final;
+				$ingresoVehiculoTroncoTipoMadera->total = number_format($precio_total_final,2);
 				$ingresoVehiculoTroncoTipoMadera->save();
 				$id_ingreso_vehiculo_troncos = $ingresoVehiculoTroncoTipoMadera->id_ingreso_vehiculo_troncos;
 
@@ -1017,9 +1017,9 @@ class IngresoVehiculoTroncoController extends Controller
 				$pago->comprobante_destinatario = $empresa->razon_social;
 				$pago->comprobante_direccion = $empresa->direccion;
 				$pago->comprobante_ruc = $empresa->ruc;
-				$pago->subtotal = $precio_total_final;
+				$pago->subtotal = number_format($precio_total_final,2);
 				$pago->impuesto = 0;
-				$pago->total = $precio_total_final;
+				$pago->total = number_format($precio_total_final,2);
 				$pago->letras = "";
 				$pago->id_moneda = 1;
 				$pago->estado_pago = "N";

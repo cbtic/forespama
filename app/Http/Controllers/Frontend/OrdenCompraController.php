@@ -1856,8 +1856,9 @@ class OrdenCompraController extends Controller
         $vendedor = $user_model->getUserByRol(7,11);
 		$estado_pedido = $tablaMaestra_model->getMaestroByTipo(77);
         $persona_compra = $persona_model->obtenerPersonaAll();
+        $estado_comprometido = $tablaMaestra_model->getMaestroByTipo(87);
         
-		return view('frontend.orden_compra.create_control_produccion',compact('cerrado_orden_compra','proveedor','almacen','almacen_usuario','vendedor','estado_pedido','persona_compra'));
+		return view('frontend.orden_compra.create_control_produccion',compact('cerrado_orden_compra','proveedor','almacen','almacen_usuario','vendedor','estado_pedido','persona_compra','estado_comprometido'));
 
 	}
 
@@ -1877,6 +1878,7 @@ class OrdenCompraController extends Controller
         $p[]=$request->estado;
         $p[]=$request->vendedor;
         $p[]=$request->estado_pedido;
+        $p[]=$request->estado_comprometido;
 		$p[]=$request->NumeroPagina;
 		$p[]=$request->NumeroRegistros;
 		$data = $orden_compra_model->listar_orden_compra_control_produccion_ajax($p);

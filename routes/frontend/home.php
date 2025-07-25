@@ -715,4 +715,8 @@ Route::post('activos/upload_activo', [ActivoController::class, 'upload_activo'])
 Route::get('ingreso_vehiculo_tronco/exportar_listar_cubicaje_excel/{id}', [IngresoVehiculoTroncoController::class, 'exportar_listar_cubicaje_excel'])->name('ingreso_vehiculo_tronco.exportar_listar_cubicaje_excel');
 Route::get('orden_compra/cargar_detalle_control_produccion/{id}', [OrdenCompraController::class, 'cargar_detalle_control_produccion'])->name('orden_compra.cargar_detalle_control_produccion');
 Route::get('orden_compra/send_comprometer_stock/{id_orden_compra_detalle}', [OrdenCompraController::class, 'send_comprometer_stock'])->name('orden_compra.send_comprometer_stock');
-
+Route::get('orden_produccion/create_orden_produccion', [OrdenProduccionController::class, 'create_orden_produccion'])->name('orden_produccion.create_orden_produccion');
+Route::post('orden_produccion/listar_orden_produccion_ajax', [OrdenProduccionController::class, 'listar_orden_produccion_ajax'])->name('orden_produccion.listar_orden_produccion_ajax');
+Route::get('orden_produccion/modal_orden_produccion/{id}', [OrdenProduccionController::class, 'modal_orden_produccion'])->name('orden_produccion.modal_orden_produccion');
+Route::post('orden_produccion/send_orden_produccion', [OrdenProduccionController::class, 'send_orden_produccion'])->name('orden_produccion.send_orden_produccion');
+Route::get('orden_produccion/cargar_detalle', [OrdenProduccionController::class, 'cargar_detalle'])->name('orden_produccion.cargar_detalle');

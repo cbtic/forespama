@@ -5,6 +5,11 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\TablaMaestra;
+use App\Models\Producto;
+use App\Models\Persona;
+use App\Models\OrdenCompra;
+use App\Models\OrdenProduccion;
+use App\Models\OrdenProduccionDetalle;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Auth;
 use Carbon\Carbon;
@@ -15,32 +20,27 @@ class OrdenProduccionController extends Controller
 
 		$tablaMaestra_model = new TablaMaestra;
         $producto_model = new Producto;
+        $persona_model = new Persona;
 
         $productos = $producto_model->getProductoExterno();
+        $encargado = $persona_model->obtenerPersonaAll();
         
-		return view('frontend.orden_produccion.create_orden_produccion',compact('productos'));
+		return view('frontend.orden_produccion.create_orden_produccion',compact('productos','encargado'));
 
 	}
 
-    public function listar_orden_compra_control_produccion_ajax(Request $request){
+    public function listar_orden_produccion_ajax(Request $request){
 
         $id_user = Auth::user()->id;
 
-		$orden_compra_model = new OrdenCompra;
-        $p[]=$request->empresa_compra;
-        $p[]=$request->persona_compra;
-        $p[]=$request->fecha_inicio;
-        $p[]=$request->fecha_fin;
-        $p[]=$request->numero_orden_compra;
-        $p[]=$request->numero_orden_compra_cliente;
-        $p[]=$request->situacion;
-        $p[]=$request->almacen_origen;
+		$orden_produccion_model = new OrdenProduccion;
+        $p[]=$request->codigo;
+        $p[]=$request->fecha;
+        $p[]=$request->encargado;
         $p[]=$request->estado;
-        $p[]=$request->vendedor;
-        $p[]=$request->estado_pedido;
 		$p[]=$request->NumeroPagina;
 		$p[]=$request->NumeroRegistros;
-		$data = $orden_compra_model->listar_orden_compra_control_produccion_ajax($p);
+		$data = $orden_produccion_model->listar_orden_produccion_ajax($p);
 		$iTotalDisplayRecords = isset($data[0]->totalrows)?$data[0]->totalrows:0;
 
 		$result["PageStart"] = $request->NumeroPagina;
@@ -55,72 +55,112 @@ class OrdenProduccionController extends Controller
 
 	}
 
-    public function modal_orden_compra_control_produccion($id){
+    public function modal_orden_produccion($id){
 		
         $id_user = Auth::user()->id;
         $tablaMaestra_model = new TablaMaestra;
         $producto_model = new Producto;
-        $almacen_model = new Almacene;
-        $user_model = new User;
         $persona_model = new Persona;
-        $empresa_model = new Empresa;
 		
 		if($id>0){
 
-            $orden_compra = OrdenCompra::find($id);
+            $orden_produccion = OrdenProduccion::find($id);
 			
 		}else{
-			$orden_compra = new OrdenCompra;
+			$orden_produccion = new OrdenProduccion;
 		}
 
-        $proveedor = $empresa_model->getEmpresaAll();
-        $producto = $producto_model->getProductoAll();
-        $igv_compra = $tablaMaestra_model->getMaestroByTipo(51);
-        $almacen = $almacen_model->getAlmacenAll();
-        $unidad_origen = $tablaMaestra_model->getMaestroByTipo(50);
+        $producto = $producto_model->getProductoExterno();
+        $unidad = $tablaMaestra_model->getMaestroByTipo(43);
+        $encargado = $persona_model->obtenerPersonaAll();
 
-        $vendedor = $user_model->getUserByRol(7,11);
-        $tipo_documento_cliente = $tablaMaestra_model->getMaestroByTipo(75);
-        $persona = $persona_model->obtenerPersonaAll();
-
-		return view('frontend.orden_compra.modal_orden_compra_nuevoOrdenCompraControlProduccion',compact('id','orden_compra','proveedor','producto','igv_compra','almacen','unidad_origen','id_user','vendedor','tipo_documento_cliente','persona'));
+		return view('frontend.orden_produccion.modal_orden_produccion_nuevoOrdenProduccion',compact('id','orden_produccion','producto','unidad','encargado'));
 
     }
 
-    public function send_comprometer_stock($id_orden_compra_detalle)
+    public function send_orden_produccion(Request $request)
     {
-		$orden_compra_detalle = OrdenCompraDetalle::find($id_orden_compra_detalle);
-		$orden_compra_detalle->comprometido = 1;
-		$orden_compra_detalle->save();
+		$id_user = Auth::user()->id;
 
-        $orden_compra = OrdenCompra::find($orden_compra_detalle->id_orden_compra);
-        $id_orden_compra = $orden_compra->id;
-        $orden_compra_detalle_total = OrdenCompraDetalle::where('id_orden_compra',$id_orden_compra)->where('estado','1')->get();
+        if($request->id == 0){
+            $orden_produccion = new OrdenProduccion;
+            $orden_produccion_model = new OrdenProduccion;
+		    $codigo_orden_produccion = $orden_produccion_model->getCodigoOrdenProduccion();
+        }else{
+            $orden_produccion = OrdenCompra::find($request->id);
+            $codigo_orden_produccion = $request->numero_orden_produccion;
+        }
+
+        $id_producto = $request->input('id_producto');
+        $cantidad_producir = $request->input('cantidad_producir');
+
+        $orden_produccion->id_encargado = $request->encargado;
+        $orden_produccion->fecha_orden_produccion = $request->fecha_orden_produccion;
+        if($request->id == 0){
+            $orden_produccion->codigo = $codigo_orden_produccion[0]->codigo;
+        }else{
+            $orden_produccion->codigo = $codigo_orden_produccion;
+        }
+        $orden_produccion->id_situacion = 1;
+        $orden_produccion->id_usuario_inserta = $id_user;
+        $orden_produccion->estado = 1;
+        $orden_produccion->save();
+        $id_orden_produccion = $orden_produccion->id;
         
-        $total = count($orden_compra_detalle_total);
-        $comprometidos = 0;
+        $array_orden_produccion_detalle = array();
 
-        $orden_compra->comprometido = "1";
-        $orden_compra->save();
+        foreach($id_producto as $index => $value) {
+            
+            //if($id_orden_compra_detalle[$index] == 0){
+                $orden_produccion_detalle = new OrdenProduccionDetalle;
+            //}else{
+            //    $orden_compra_detalle = OrdenCompraDetalle::find($id_orden_compra_detalle[$index]);
+            //}
+            
+            $orden_produccion_detalle->id_orden_produccion = $id_orden_produccion;
+            $orden_produccion_detalle->id_producto = $id_producto[$index];
+            $orden_produccion_detalle->cantidad = $cantidad_producir[$index];
+            $orden_produccion_detalle->estado = 1;
+            $orden_produccion_detalle->id_usuario_inserta = $id_user;
 
-        foreach($orden_compra_detalle_total as $detalle){
-            if($detalle->comprometido == 1){
-                $comprometidos++;
-            }
+            $orden_produccion_detalle->save();
+
+            $array_orden_produccion_detalle[] = $orden_produccion_detalle->id;
+
+            /*$OrdenCompraAll = OrdenCompraDetalle::where("id_orden_compra",$orden_compra->id)->where("estado","1")->get();
+            
+            foreach($OrdenCompraAll as $key=>$row){
+                
+                if (!in_array($row->id, $array_orden_compra_detalle)){
+                    $orden_compra_detalle = OrdenCompraDetalle::find($row->id);
+                    $orden_compra_detalle->estado = 0;
+                    $orden_compra_detalle->save();
+                }
+            }*/
         }
 
-        if ($comprometidos == 0) {
-            $orden_compra->comprometido = 0;
-        } elseif ($comprometidos < $total) {
-            $orden_compra->comprometido = 1;
-        } else {
-            $orden_compra->comprometido = 2;
-        }
-
-        $orden_compra->save();
-
-		echo $orden_compra_detalle->id;
+		return response()->json(['id' => $orden_produccion->id]);  
 
     }
-    
+
+    public function cargar_detalle()
+    {
+
+        $orden_compra_model = new OrdenCompra;
+        $producto_model = new Producto;
+        $tablaMaestra_model = new TablaMaestra;
+
+        $orden_produccion = $orden_compra_model->getDetalleProductosNoComprometidosId();
+        $producto = $producto_model->getProductoExterno();
+        $unidad_medida = $tablaMaestra_model->getMaestroByTipo(43);
+
+        $producto_stock = [];
+
+        return response()->json([
+            'orden_produccion' => $orden_produccion,
+            'producto' => $producto,
+            'unidad_medida' => $unidad_medida,
+            'producto_stock' =>$producto_stock
+        ]);
+    }
 }
