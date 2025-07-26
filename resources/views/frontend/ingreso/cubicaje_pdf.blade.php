@@ -246,6 +246,15 @@ $(document).ready(function() {
                     $precio_menor = null;
                     $precio_mayor = null;
 
+                    if ($tipo_empresa == 2) {
+                        $precios = array_map(function($item) {
+                            return $item->precio_unitario;
+                        }, $datos_detalle);
+
+                        $precio_menor = min($precios);
+                        $precio_mayor = max($precios);
+                    }
+
                     foreach($datos_detalle as $key=>$r) { ?>
                         <tr>
                             <td class="td" style ="text-align: center; width: 8%; height:13px"><?php echo $r->cantidad;?></td>
@@ -277,6 +286,7 @@ $(document).ready(function() {
                                     $suma_total_1_7+=$r->precio_total;
                                 }
                             }else if($tipo_empresa == 2) {
+                                
                                 if ($precio_base === null) {
                                     $precio_base = $r->precio_unitario;
                                 }
