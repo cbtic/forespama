@@ -243,6 +243,8 @@ $(document).ready(function() {
                     $suma_volumen_pies_interno_mayor = 0;
                     $suma_total_interno_mayor = 0;
                     $precio_base = null;
+                    $precio_menor = null;
+                    $precio_mayor = null;
 
                     foreach($datos_detalle as $key=>$r) { ?>
                         <tr>
@@ -262,7 +264,6 @@ $(document).ready(function() {
                             $volumen_total_pies_suma+=$r->volumen_total_pies;
                             $precio_total_suma+=$r->precio_total;
                             
-
                             if($tipo_empresa==1){
                                 if($r->precio_unitario==1.20){
                                     $suma_cantidad_reporte_1_2+=$r->cantidad;
@@ -281,18 +282,19 @@ $(document).ready(function() {
                                 }
 
                                 if ($r->precio_unitario < $precio_base) {
+                                    $precio_menor = $r->precio_unitario;
                                     $suma_cantidad_reporte_interno_menor += $r->cantidad;
                                     $suma_volumen_m3_interno_menor += $r->volumen_total_m3;
                                     $suma_volumen_pies_interno_menor += $r->volumen_total_pies;
                                     $suma_total_interno_menor += $r->precio_total;
                                 } else {
+                                    $precio_mayor = $r->precio_unitario;
                                     $suma_cantidad_reporte_interno_mayor += $r->cantidad;
                                     $suma_volumen_m3_interno_mayor += $r->volumen_total_m3;
                                     $suma_volumen_pies_interno_mayor += $r->volumen_total_pies;
                                     $suma_total_interno_mayor += $r->precio_total;
                                 }
                             }
-
                             ?>
                         </tr>
                     <?php 
@@ -348,7 +350,7 @@ $(document).ready(function() {
                             <td class="td" style="text-align: right; width: 8%; height:13px"><?php echo $suma_cantidad_reporte_interno_menor; ?></td>
                             <td class="td" style="text-align: right; width: 8%; height:13px"><?php echo number_format($suma_volumen_m3_interno_menor, 2); ?></td>
                             <td class="td" style="text-align: right; width: 8%; height:13px"><?php echo number_format($suma_volumen_pies_interno_menor, 2); ?></td>
-                            <td class="td" style="text-align: right; width: 8%; height:13px">Precio menor</td>
+                            <td class="td" style="text-align: right; width: 8%; height:13px"><?php echo number_format($precio_menor, 2); ?></td>
                             <td class="td" style="text-align: right; width: 8%; height:13px"><?php echo number_format($suma_total_interno_menor, 2); ?></td>
                         </tr>
 
@@ -357,7 +359,7 @@ $(document).ready(function() {
                             <td class="td" style="text-align: right; width: 8%; height:13px"><?php echo $suma_cantidad_reporte_interno_mayor; ?></td>
                             <td class="td" style="text-align: right; width: 8%; height:13px"><?php echo number_format($suma_volumen_m3_interno_mayor, 2); ?></td>
                             <td class="td" style="text-align: right; width: 8%; height:13px"><?php echo number_format($suma_volumen_pies_interno_mayor, 2); ?></td>
-                            <td class="td" style="text-align: right; width: 8%; height:13px">Precio mayor</td>
+                            <td class="td" style="text-align: right; width: 8%; height:13px"><?php echo number_format($precio_mayor, 2); ?></td>
                             <td class="td" style="text-align: right; width: 8%; height:13px"><?php echo number_format($suma_total_interno_mayor, 2); ?></td>
                         </tr>
 
