@@ -281,7 +281,7 @@ $(document).ready(function() {
                                     $precio_base = $r->precio_unitario;
                                 }
 
-                                if ($r->precio_unitario < $precio_base) {
+                                if ($precio_menor < $precio_base) {
                                     $precio_menor = $r->precio_unitario;
                                     $suma_cantidad_reporte_interno_menor += $r->cantidad;
                                     $suma_volumen_m3_interno_menor += $r->volumen_total_m3;

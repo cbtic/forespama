@@ -518,6 +518,14 @@ class IngresoVehiculoTroncoController extends Controller
 		$tipo_madera=$datos[0]->tipo_madera;
 		$cantidad=$datos[0]->cantidad;
 		$tipo_empresa=$datos[0]->tipo_empresa;
+
+		$precios = array_map(function($item) {
+			return $item->precio_unitario;
+		}, $datos_detalle);
+
+		// Obtener precio mínimo y máximo
+		$precio_menor = !empty($precios) ? min($precios) : 0;
+		$precio_mayor = !empty($precios) ? max($precios) : 0;
 	 
 		$year = Carbon::now()->year;
 
@@ -527,7 +535,7 @@ class IngresoVehiculoTroncoController extends Controller
 
 		$currentHour = Carbon::now()->format('H:i:s');
 
-		$pdf = Pdf::loadView('frontend.ingreso.cubicaje_pdf',compact('fecha_ingreso','ruc','razon_social','placa','ejes','numero_documento','conductor','tipo_madera','cantidad','datos_detalle','tipo_empresa'));
+		$pdf = Pdf::loadView('frontend.ingreso.cubicaje_pdf',compact('fecha_ingreso','ruc','razon_social','placa','ejes','numero_documento','conductor','tipo_madera','cantidad','datos_detalle','tipo_empresa','precio_menor','precio_mayor'));
 		
 		$pdf->setPaper('A4'); // Tamaño de papel (puedes cambiarlo según tus necesidades)
 
