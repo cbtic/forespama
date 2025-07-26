@@ -281,13 +281,13 @@ $(document).ready(function() {
                                     $precio_base = $r->precio_unitario;
                                 }
 
-                                if ($precio_menor < $precio_base) {
+                                if ($r->precio_unitario == $precio_menor) {
                                     $precio_menor = $r->precio_unitario;
                                     $suma_cantidad_reporte_interno_menor += $r->cantidad;
                                     $suma_volumen_m3_interno_menor += $r->volumen_total_m3;
                                     $suma_volumen_pies_interno_menor += $r->volumen_total_pies;
                                     $suma_total_interno_menor += $r->precio_total;
-                                } else {
+                                } else if ($r->precio_unitario == $precio_mayor){
                                     $precio_mayor = $r->precio_unitario;
                                     $suma_cantidad_reporte_interno_mayor += $r->cantidad;
                                     $suma_volumen_m3_interno_mayor += $r->volumen_total_m3;
