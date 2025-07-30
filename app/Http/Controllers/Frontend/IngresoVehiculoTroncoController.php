@@ -1010,7 +1010,7 @@ class IngresoVehiculoTroncoController extends Controller
 				}
 				
 				$ingresoVehiculoTroncoTipoMadera = IngresoVehiculoTroncoTipoMadera::find($id_ingreso_vehiculo_tronco_tipo_madera);
-				$ingresoVehiculoTroncoTipoMadera->total = number_format($precio_total_final,2);
+				$ingresoVehiculoTroncoTipoMadera->total = round($precio_total_final,2);
 				$ingresoVehiculoTroncoTipoMadera->save();
 				$id_ingreso_vehiculo_troncos = $ingresoVehiculoTroncoTipoMadera->id_ingreso_vehiculo_troncos;
 
