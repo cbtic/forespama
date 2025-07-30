@@ -209,6 +209,16 @@ $(document).ready(function() {
         language: 'es'
     });
 
+    $('#fecha_vencimiento').datepicker({
+        autoclose: true,
+		format: 'yyyy-mm-dd',
+		changeMonth: true,
+		changeYear: true,
+        language: 'es'
+    });
+    
+    obtenerFechaVencimiento();
+
     $("#item").select2({ width: '100%' });
     $("#ubicacion_fisica_seccion").select2({ width: '100%' });
     $("#ubicacion_fisica_anaquel").select2({ width: '100%' });
@@ -954,10 +964,13 @@ function fn_save_orden_compra(){
 	
     var msg = "";
 
+    var id = $('#id').val();
     var tipo_documento = $('#tipo_documento').val();
     //var empresa_compra = $('#empresa_compra').val();
     var empresa_vende = $('#empresa_vende').val();
     var igv_compra = $('#igv_compra').val();
+    var fecha_orden_compra = $('#fecha_orden_compra').val();
+    var fecha_vencimiento = $('#fecha_vencimiento').val();
     //var id_vendedor = $('#id_vendedor').val();
 
     if(tipo_documento==""){msg+="Ingrese el Tipo de Documento <br>";}
@@ -968,6 +981,21 @@ function fn_save_orden_compra(){
 
     if ($('#tblOrdenCompraDetalle tbody tr').length == 0) {
         msg += "No se ha agregado ningún producto <br>";
+    }
+
+    if (id == 0 && tipo_documento == 2)
+        
+        if(fecha_vencimiento==""){msg+="Ingrese Fecha de Vencimiento <br>";}
+
+        if(fecha_vencimiento !== "" && fecha_orden_compra !== "") {
+        const fecha1 = new Date(fecha_orden_compra);
+        const fecha2 = new Date(fecha_vencimiento);
+
+        const diferenciaDias = Math.ceil((fecha2 - fecha1) / (1000 * 60 * 60 * 24));
+
+        if (diferenciaDias < 5) {
+            msg += "La Fecha de Vencimiento debe ser al menos 5 días después de la Fecha de Orden de Compra <br>";
+        }
     }
 
     if(msg!=""){
@@ -1161,6 +1189,21 @@ function obtenerStock(selectElement, n){
     });
 }
 
+function obtenerFechaVencimiento(){
+
+    var tipo_documento = $('#tipo_documento').val();
+
+    if(tipo_documento == 2){
+        $('#label_fecha_vencimiento').show();
+        $('#input_fecha_vencimiento').show();
+    } else {
+        $('#label_fecha_vencimiento').hide();
+        $('#input_fecha_vencimiento').hide();
+        $('#fecha_vencimiento').val('');
+    }
+
+}
+
 </script>
 
 <body class="hold-transition skin-blue sidebar-mini">
@@ -1199,7 +1242,7 @@ function obtenerStock(selectElement, n){
                             Tipo Documento
                         </div>
                         <div class="col-lg-2">
-                            <select name="tipo_documento" id="tipo_documento" class="form-control form-control-sm" onchange="obtenerCodigo()">
+                            <select name="tipo_documento" id="tipo_documento" class="form-control form-control-sm" onchange="obtenerCodigo(); obtenerFechaVencimiento()">
                                 <option value="">--Seleccionar--</option>
                                 <?php
                                 foreach ($tipo_documento as $row){?>
@@ -1276,6 +1319,12 @@ function obtenerStock(selectElement, n){
                         </div>
                         <div class="col-lg-2">
                             <input id="fecha_orden_compra" name="fecha_orden_compra" on class="form-control form-control-sm"  value="<?php echo isset($orden_compra) && $orden_compra->fecha_orden_compra ? $orden_compra->fecha_orden_compra : date('Y-m-d'); ?>" type="text">
+                        </div>
+                        <div id="label_fecha_vencimiento" class="col-lg-2" @if($orden_compra->id_tipo_documento != 2) style="display:none;" @endif>
+                            Fecha Vencimiento
+                        </div>
+                        <div id="input_fecha_vencimiento" class="col-lg-2" @if($orden_compra->id_tipo_documento != 2) style="display:none;" @endif>
+                            <input id="fecha_vencimiento" name="fecha_vencimiento" class="form-control form-control-sm" type="text" value="{{ $orden_compra->fecha_vencimiento ?? '' }}">
                         </div>
                         <div class="col-lg-2">
                             N&uacute;mero Orden Compra Cliente

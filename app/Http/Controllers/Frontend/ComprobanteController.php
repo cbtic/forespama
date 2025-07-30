@@ -38,6 +38,7 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
+use App\Models\User;
 
 class ComprobanteController extends Controller
 {
@@ -4544,6 +4545,22 @@ class ComprobanteController extends Controller
 		$export = new InvoicesExport2([$variable]);
 		return Excel::download($export, 'Reporte_pagos_sodimac.xlsx');
 		
+    }
+
+    public function create_facturacion_orden_compra(){
+        
+        $id_user = Auth::user()->id;
+
+		$tablaMaestra_model = new TablaMaestra;
+        $user_model = new User;
+
+		$tipo_documento = $tablaMaestra_model->getMaestroByTipo(54);
+        $cerrado_orden_compra = $tablaMaestra_model->getMaestroByTipo(52);
+        $proveedor = Empresa::all();
+		$estado_pedido = $tablaMaestra_model->getMaestroByTipo(77);
+        $vendedor = $user_model->getUserByRol(7,11);
+
+        return view('frontend.comprobante.create_facturacion_orden_compra',compact('tipo_documento','cerrado_orden_compra','proveedor','estado_pedido','vendedor'));
     }
 
 }

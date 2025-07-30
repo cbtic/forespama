@@ -255,6 +255,10 @@
 									<x-utils.link :href="route('frontend.orden_compra.create_pago_orden_compra')" class="dropdown-item" :text="__('Pagos Orden Compra')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />                  
 								@endif
 
+								@can('Facturacion Orden Compra')
+									<x-utils.link :href="route('frontend.comprobante.create_facturacion_orden_compra')" class="dropdown-item" :text="__('Facturacion Orden Compra')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />                  
+								@endif
+
 							</div>
 						</li> 
 						

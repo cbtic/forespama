@@ -252,6 +252,7 @@ class OrdenCompraController extends Controller
         $orden_compra->id_tipo_cliente = $request->tipo_documento_cliente;
         $orden_compra->id_persona = $request->persona_compra;
         $orden_compra->fecha_orden_compra = $request->fecha_orden_compra;
+        $orden_compra->fecha_vencimiento = $request->fecha_vencimiento;
         if($request->id == 0){
             $orden_compra->numero_orden_compra = $codigo_orden_compra[0]->codigo;
         }else{

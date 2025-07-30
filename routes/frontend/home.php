@@ -85,6 +85,8 @@ Route::get('comprobante/create_consulta_sodimac', [ComprobanteController::class,
 Route::get('comprobante/create_facturacion', [ComprobanteController::class, 'create_facturacion'])->name('comprobante.create_facturacion');
 Route::get('comprobante/create_pagos', [ComprobanteController::class, 'create_pagos'])->name('comprobante.create_pagos');
 Route::get('comprobante/create_ventas', [ComprobanteController::class, 'create_ventas'])->name('comprobante.create_ventas');
+Route::get('comprobante/create_facturacion_orden_compra', [ComprobanteController::class, 'create_facturacion_orden_compra'])->name('comprobante.create_facturacion_orden_compra');
+Route::post('comprobante/listar_orden_produccion_ajax', [ComprobanteController::class, 'listar_orden_produccion_ajax'])->name('comprobante.listar_orden_produccion_ajax');
 Route::get('comprobante/lista_ventas_anio/{anio}/{empresa}', [ComprobanteController::class, 'lista_ventas_anio'])->name('comprobante.lista_ventas_anio');
 Route::get('comprobante/lista_pagos_anio/{anio}/{empresa}', [ComprobanteController::class, 'lista_pagos_anio'])->name('comprobante.lista_pagos_anio');
 Route::get('comprobante/lista_retencion_anio/{anio}/{empresa}', [ComprobanteController::class, 'lista_retencion_anio'])->name('comprobante.lista_retencion_anio');
