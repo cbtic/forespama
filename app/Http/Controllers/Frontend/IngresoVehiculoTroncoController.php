@@ -1025,9 +1025,9 @@ class IngresoVehiculoTroncoController extends Controller
 				$pago->comprobante_destinatario = $empresa->razon_social;
 				$pago->comprobante_direccion = $empresa->direccion;
 				$pago->comprobante_ruc = $empresa->ruc;
-				$pago->subtotal = number_format($precio_total_final,2);
+				$pago->subtotal = round($precio_total_final,2);
 				$pago->impuesto = 0;
-				$pago->total = number_format($precio_total_final,2);
+				$pago->total = round($precio_total_final,2);
 				$pago->letras = "";
 				$pago->id_moneda = 1;
 				$pago->estado_pago = "N";
