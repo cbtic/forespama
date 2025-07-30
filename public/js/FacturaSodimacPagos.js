@@ -490,8 +490,11 @@ function DescargarArchivosExcel(){
 	if (tipo_documento == "")tipo_documento = 0;
 	if (serie == "")serie = 0;
 	if (numero == "")numero = 0;
-    if (estado_pago == 0 )estado_pago = -99;
-	if (estado_pago == "")estado_pago = 0;
+    if (estado_pago == "") {
+        estado_pago = 0;
+    } else if (estado_pago == 0) {
+        estado_pago = -99;
+    }
 	if (observacion_pago == "")observacion_pago = 0;
 	if (dias_pagado == "")dias_pagado = 0;
 	if (color == "")color = 0;

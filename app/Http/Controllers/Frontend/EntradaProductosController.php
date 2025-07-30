@@ -417,7 +417,7 @@ class EntradaProductosController extends Controller
                 $salida_producto_model = new SalidaProducto;
                 $codigo = $salida_producto_model->getCodigoSalidaProducto($request->tipo_documento);
 
-                $salida_producto->fecha_salida = $request->fecha_entrada;
+                $salida_producto->fecha_salida = Carbon::now();
                 $salida_producto->id_tipo_documento = $request->tipo_documento;
                 $salida_producto->unidad_destino = $request->unidad_origen;
                 $salida_producto->numero_comprobante = $request->numero_comprobante;
