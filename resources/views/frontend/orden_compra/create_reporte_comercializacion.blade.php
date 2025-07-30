@@ -435,6 +435,7 @@ label.form-control-sm{
 							<th>Fecha Pedido</th>
                             <th>Fecha Vencimiento</th>
                             <th>Fecha Entrega Real</th>
+                            <th>Fecha Facturado</th>
 							<th>C&oacute;digo Interno</th>
 							<th>C&oacute;digo Sodimac</th>
 							<th>Descripci&oacute;n</th>
