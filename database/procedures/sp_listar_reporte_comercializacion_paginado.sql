@@ -30,7 +30,7 @@ begin
 	limit 1) fecha_salida,
 	p.codigo, ep.codigo_empresa, 
 	p.denominacion producto, ocd.precio, ocd.cantidad_requerida, coalesce(ocd.cantidad_despacho, 0) cantidad_despacho, coalesce((ocd.cantidad_requerida - ocd.cantidad_despacho), 0) cantidad_cancelada, ocd.cerrado, u."name" vendedor, tm.denominacion estado_pedido,
-	(select c.fecha from comprobantes c where c.orden_compra::int = oc.id and c.anulado = ''N'' and c.estado = ''1'') fecha_facturado ';
+	(select to_char(c.fecha,''dd-mm-yyyy'') fecha_facturado from comprobantes c where c.orden_compra::int = oc.id and c.anulado = ''N'' and c.estado = ''1'') fecha_facturado ';
 
 	v_tabla=' from orden_compras oc 
 	left join empresas e on oc.id_empresa_compra = e.id 
