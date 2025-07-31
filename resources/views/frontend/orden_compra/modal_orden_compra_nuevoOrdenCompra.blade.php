@@ -993,8 +993,8 @@ function fn_save_orden_compra(){
 
         const diferenciaDias = Math.ceil((fecha2 - fecha1) / (1000 * 60 * 60 * 24));
 
-        if (diferenciaDias < 5) {
-            msg += "La Fecha de Vencimiento debe ser al menos 5 días después de la Fecha de Orden de Compra <br>";
+        if (diferenciaDias < 3) {
+            msg += "La Fecha de Vencimiento debe ser al menos 3 días después de la Fecha de Orden de Compra <br>";
         }
     }
 
