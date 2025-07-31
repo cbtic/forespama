@@ -39,6 +39,7 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
 use App\Models\User;
+use DateTime;
 
 class ComprobanteController extends Controller
 {
@@ -4563,6 +4564,104 @@ class ComprobanteController extends Controller
         return view('frontend.comprobante.create_facturacion_orden_compra',compact('tipo_documento','cerrado_orden_compra','proveedor','estado_pedido','vendedor'));
     }
 
+    public function listar_facturacion_orden_compra_ajax(Request $request){
+
+		$facturacion_orden_compra_model = new OrdenCompra;
+        $p[]=$request->empresa_compra;
+        $p[]=$request->fecha_inicio;
+        $p[]=$request->fecha_fin;
+        $p[]=$request->numero_orden_compra;
+        $p[]=$request->numero_orden_compra_cliente;
+        $p[]=$request->situacion;
+        $p[]=$request->estado;
+        $p[]=$request->vendedor;
+        $p[]=$request->estado_pedido;
+        $p[]=$request->facturado;
+		$p[]=$request->NumeroPagina;
+		$p[]=$request->NumeroRegistros;
+		$data = $facturacion_orden_compra_model->listar_facturacion_orden_compra_ajax($p);
+		$iTotalDisplayRecords = isset($data[0]->totalrows)?$data[0]->totalrows:0;
+
+		$result["PageStart"] = $request->NumeroPagina;
+		$result["pageSize"] = $request->NumeroRegistros;
+		$result["SearchText"] = "";
+		$result["ShowChildren"] = true;
+		$result["iTotalRecords"] = $iTotalDisplayRecords;
+		$result["iTotalDisplayRecords"] = $iTotalDisplayRecords;
+		$result["aaData"] = $data;
+
+        echo json_encode($result);
+
+	}
+
+    public function exportar_listar_facturacion_orden_compra($empresa_compra, $fecha_inicio, $fecha_fin, $numero_orden_compra, $numero_orden_compra_cliente, $situacion, $estado, $vendedor, $estado_pedido, $facturado) {
+        
+        if($empresa_compra==0)$empresa_compra = "";
+        if($fecha_inicio=="0")$fecha_inicio = "";
+        if($fecha_fin=="0")$fecha_fin = "";
+        if($numero_orden_compra=="0")$numero_orden_compra = "";
+        if($numero_orden_compra_cliente=="0")$numero_orden_compra_cliente = "";
+        if($situacion==0)$situacion = "";
+        if($estado==0)$estado = "";
+        if($vendedor==0)$vendedor = "";
+        if($estado_pedido==0)$estado_pedido = "";
+        if($facturado==-99)$facturado = "";
+
+        $facturacion_orden_compra_model = new OrdenCompra;
+        $p[]=$empresa_compra;
+        $p[]=$fecha_inicio;
+        $p[]=$fecha_fin;
+        $p[]=$numero_orden_compra;
+        $p[]=$numero_orden_compra_cliente;
+        $p[]=$situacion;
+        $p[]=$estado;
+        $p[]=$vendedor;
+        $p[]=$estado_pedido;
+        $p[]=$facturado;
+        $p[]=1;
+		$p[]=10000;
+		$data = $facturacion_orden_compra_model->listar_facturacion_orden_compra_ajax($p);
+		
+
+		$variable = [];
+		$n = 1;
+
+		array_push($variable, array("N°","Id","Empresa Compra","N° OC Cliente","Fecha","Fecha Entregado","Numero OC","Situacion","Vendedor","Total","Facturado","Fecha Facturacion","Dif. Dias Facturac."));
+		
+		foreach ($data as $r) {
+
+            /*if($r->estado==1){$estado='ACTIVO';}
+            if($r->estado==0){$estado='INACTIVO';}*/
+
+            /*if($r->estado_pedido==1){$estado_pedido='ACTIVO';}
+            if($r->estado_pedido==2){$estado_pedido='ANULADO';}
+            if($r->estado_pedido==3){$estado_pedido='CANCELADO';}*/
+
+            if($r->facturado==1){$facturado='SI';}
+            if($r->facturado==0){$facturado='NO';}
+
+            $diasDiferencia = '';
+            if (!empty($r->fecha_salida) && !empty($r->fecha_facturado)) {
+                try {
+                    $fechaSalida = DateTime::createFromFormat('Y-m-d', $r->fecha_salida);
+                    $fechaFacturado = DateTime::createFromFormat('Y-m-d', $r->fecha_facturado);
+
+                    if ($fechaSalida && $fechaFacturado) {
+                        $intervalo = $fechaFacturado->diff($fechaSalida);
+                        $diasDiferencia = $intervalo->days;
+                    }
+                } catch (Exception $e) {
+                    $diasDiferencia = '';
+                }
+            }
+
+			array_push($variable, array($n++,$r->id, $r->cliente, $r->numero_orden_compra_cliente, $r->fecha_orden_compra, $r->fecha_salida, $r->numero_orden_compra, $r->cerrado, $r->vendedor, number_format($r->total, 2), $facturado, $r->fecha_facturado, $diasDiferencia));
+		}
+		
+		$export = new InvoicesExport3([$variable]);
+		return Excel::download($export, 'Reporte_facturacion_orden_compra.xlsx');
+		
+    }
 }
 
 class InvoicesExport implements FromArray, WithHeadings, WithStyles
@@ -4696,6 +4795,74 @@ class InvoicesExport2 implements FromArray, WithHeadings, WithStyles
 		->setFormatCode(\PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_NUMBER_00);*/ //SIRVE PARA PONER 2 DECIMALES A ESA COLUMNA
         
         foreach (range('A', 'U') as $col) {
+            $sheet->getColumnDimension($col)->setAutoSize(true);
+        }
+    }
+}
+
+class InvoicesExport3 implements FromArray, WithHeadings, WithStyles
+{
+	protected $invoices;
+
+	public function __construct(array $invoices)
+	{
+		$this->invoices = $invoices;
+	}
+
+	public function array(): array
+	{
+		return $this->invoices;
+	}
+
+    public function headings(): array
+    {
+        return ["N°","Id","Empresa Compra","N° OC Cliente","Fecha","Fecha Entregado","Numero OC","Situacion","Vendedor","Total","Facturado","Fecha Facturacion","Dif. Dias Facturac."];
+    }
+
+	public function styles(Worksheet $sheet)
+    {
+
+		$sheet->mergeCells('A1:M1');
+
+        $sheet->setCellValue('A1', "REPORTE FACTURACION ORDEN COMPRA - FORESPAMA");
+        $sheet->getStyle('A1:M1')->applyFromArray([
+            'font' => [
+                'bold' => true,
+                'color' => ['rgb' => 'FFFFFF'],
+            ],
+            'fill' => [
+                'fillType' => Fill::FILL_SOLID,
+                'startColor' => ['rgb' => '246257'],
+            ],
+            'alignment' => [
+                'horizontal' => Alignment::HORIZONTAL_CENTER,
+            ],
+        ]);
+
+		$sheet->getStyle('A1')->getAlignment()->setWrapText(true);
+		$sheet->getRowDimension(1)->setRowHeight(30);
+
+        $sheet->getStyle('A2:M2')->applyFromArray([
+            'font' => [
+                'bold' => true,
+                'color' => ['rgb' => '000000'],
+            ],
+            'fill' => [
+                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                'startColor' => ['rgb' => '2EB85C'],
+            ],
+			'alignment' => [
+			'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+    		],
+        ]);
+
+		$sheet->fromArray($this->headings(), NULL, 'A2');
+
+		/*$sheet->getStyle('L3:L'.$sheet->getHighestRow())
+		->getNumberFormat()
+		->setFormatCode(\PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_NUMBER_00);*/ //SIRVE PARA PONER 2 DECIMALES A ESA COLUMNA
+        
+        foreach (range('A', 'M') as $col) {
             $sheet->getColumnDimension($col)->setAutoSize(true);
         }
     }

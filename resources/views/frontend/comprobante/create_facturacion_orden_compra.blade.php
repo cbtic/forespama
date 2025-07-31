@@ -380,7 +380,7 @@ label.form-control-sm{
 							<option value="">--Seleccionar Situaci&oacute;n--</option>
 							<?php
 							foreach ($cerrado_orden_compra as $row){?>
-								<option value="<?php echo $row->codigo ?>" <?php if($row->codigo=='1')echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+								<option value="<?php echo $row->codigo ?>" <?php if($row->codigo=='2')echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
 								<?php 
 							}
 							?>
@@ -418,10 +418,17 @@ label.form-control-sm{
 							?>
 						</select>
 					</div>
+
+					<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+						<select name="facturado_bus" id="facturado_bus" class="form-control form-control-sm">
+							<option value="">--Seleccionar Facturado--</option>
+							<option value="1">Si</option>
+							<option value="0" selected="selected">No</option>
+						</select>
+					</div>
                     
 					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12" style="padding-right:0px">
 						<input class="btn btn-warning pull-rigth" value="Buscar" type="button" id="btnBuscar" />
-						<input class="btn btn-success pull-rigth" value="Nuevo" type="button" id="btnNuevo" style="margin-left:10px" />
 						
 						<button id="btnDescargar" type="button" class="btn btn-secondary pull-rigth" style="margin-left:10px;">
 							<i class="fas fa-download"></i> Excel
@@ -432,32 +439,28 @@ label.form-control-sm{
                 <div class="card-body">
 
                     <div id="divOrdenCompra" class="table-responsive">
-                    <table id="tblOrdenCompra" class="table table-hover table-sm">
+                    <table id="tblFacturacionOrdenCompra" class="table table-hover table-sm">
                         <thead>
 							<tr style="font-size:13px">
 								<th>Id</th>
-								<th>Tipo Documento</th>
 								<th>Empresa Compra</th>
 								<th>N° OC Cliente</th>
-								<th>N° Requerimiento</th>
-								<th>Empresa Vende</th>
 								<th>Fecha</th>
+								<th>Fecha Entregado</th>
 								<th>N&uacute;mero OC</th>
-								<th>Almacen Origen</th>
-								<th>Almacen Destino</th>
 								<th>Situaci&oacute;n</th>
 								<th>Vendedor</th>
-								<th>Tiene Direcci&oacute;n</th>
 								<th style ="text-align:right">Total</th>
-								<!--<th>Estado</th>-->
-								<th>Acciones</th>
+								<th>Facturado</th>
+								<th>Fecha Facturaci&oacute;n</th>
+								<th>Dif. D&iacute;as Facturac.</th>
 							</tr>
                         </thead>
                         <tbody style="font-size: 14px">
                         </tbody>
 						<tfoot>
 							<tr style="font-size:13px">
-								<td colspan="12"><b>Total:</b></td>
+								<td colspan="7"><b>Total:</b></td>
 								<td></td>
 								<td></td>
 							</tr>
@@ -493,59 +496,8 @@ label.form-control-sm{
 
 	<script type="text/javascript">
 
-	/*$(document).ready(function() {
-		$(".upload").on('click', function() {
-			var formData = new FormData();
-			var files = $('#image')[0].files[0];
-			formData.append('file',files);
-			$.ajax({
-				headers: {
-					'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-				},
-				url: "/ingreso_vehiculo_tronco/upload_imagen_ingreso",
-				type: 'post',
-				data: formData,
-				contentType: false,
-				processData: false,
-				success: function(response) {
-					
-					var ind_img = $("#ind_img").val();
-					
-					if (response != 0) {
-						$("#img_ruta_"+ind_img).attr("src", "/img/ingreso/tmp/"+response).show();
-						$(".delete_ruta").show();
-						$("#img_foto_"+ind_img).val(response);
-
-						ind_img++;
-
-						var newRow = "";
-						newRow += '<div class="img_ruta">';
-						newRow += '<img src="" id="img_ruta_'+ind_img+'" width="130px" height="165px" alt="" style="text-align:center;margin-top:8px;display:none;margin-left:10px" />';
-						newRow += '<span class="delete_ruta" style="display:none" onclick="DeleteImagen(this)"></span>';
-						newRow += '<input type="hidden" id="img_foto_'+ind_img+'" name="img_foto[]" value="" />';
-						newRow += '</div>';
-
-						$("#divImagenes").append(newRow);
-						$("#ind_img").val(ind_img);
-
-					} else {
-						alert('Formato de imagen incorrecto.');
-					}
-					
-				}
-			});
-			return false;
-		});
-
-		$(".delete").on('click', function() {
-			$("#img_ruta0").attr("src", "/dist/img/profile-icon.png");
-			$("#img_foto0").val("");
-		});
-
-	});*/
-
 	</script>
 
-	<script src="{{ asset('js/ordenCompra.js') }}"></script>
+	<script src="{{ asset('js/facturacionOrdenCompra.js') }}"></script>
 
 	@endpush

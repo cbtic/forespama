@@ -86,7 +86,8 @@ Route::get('comprobante/create_facturacion', [ComprobanteController::class, 'cre
 Route::get('comprobante/create_pagos', [ComprobanteController::class, 'create_pagos'])->name('comprobante.create_pagos');
 Route::get('comprobante/create_ventas', [ComprobanteController::class, 'create_ventas'])->name('comprobante.create_ventas');
 Route::get('comprobante/create_facturacion_orden_compra', [ComprobanteController::class, 'create_facturacion_orden_compra'])->name('comprobante.create_facturacion_orden_compra');
-Route::post('comprobante/listar_orden_produccion_ajax', [ComprobanteController::class, 'listar_orden_produccion_ajax'])->name('comprobante.listar_orden_produccion_ajax');
+Route::post('comprobante/listar_facturacion_orden_compra_ajax', [ComprobanteController::class, 'listar_facturacion_orden_compra_ajax'])->name('comprobante.listar_facturacion_orden_compra_ajax');
+Route::get('comprobante/exportar_listar_facturacion_orden_compra/{empresa_compra}/{fecha_inicio}/{fecha_fin}/{numero_orden_compra}/{numero_orden_compra_cliente}/{situacion}/{estado}/{vendedor}/{estado_pedido}/{facturado}', [ComprobanteController::class, 'exportar_listar_facturacion_orden_compra'])->name('comprobante.exportar_listar_facturacion_orden_compra');
 Route::get('comprobante/lista_ventas_anio/{anio}/{empresa}', [ComprobanteController::class, 'lista_ventas_anio'])->name('comprobante.lista_ventas_anio');
 Route::get('comprobante/lista_pagos_anio/{anio}/{empresa}', [ComprobanteController::class, 'lista_pagos_anio'])->name('comprobante.lista_pagos_anio');
 Route::get('comprobante/lista_retencion_anio/{anio}/{empresa}', [ComprobanteController::class, 'lista_retencion_anio'])->name('comprobante.lista_retencion_anio');

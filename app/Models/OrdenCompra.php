@@ -52,6 +52,12 @@ class OrdenCompra extends Model
 
     }
 
+    public function listar_facturacion_orden_compra_ajax($p){
+
+        return $this->readFuntionPostgres('sp_listar_facturacion_orden_compra_paginado',$p);
+
+    }
+
     public function readFuntionPostgres($function, $parameters = null){
 
         $_parameters = '';
