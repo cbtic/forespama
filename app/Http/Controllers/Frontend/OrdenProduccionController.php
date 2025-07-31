@@ -10,6 +10,7 @@ use App\Models\Persona;
 use App\Models\OrdenCompra;
 use App\Models\OrdenProduccion;
 use App\Models\OrdenProduccionDetalle;
+use App\Models\TipoEncargado;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Auth;
 use Carbon\Carbon;
@@ -60,7 +61,7 @@ class OrdenProduccionController extends Controller
         $id_user = Auth::user()->id;
         $tablaMaestra_model = new TablaMaestra;
         $producto_model = new Producto;
-        $persona_model = new Persona;
+        $encargado_model = new TipoEncargado;
 		
 		if($id>0){
 
@@ -72,7 +73,7 @@ class OrdenProduccionController extends Controller
 
         $producto = $producto_model->getProductoExterno();
         $unidad = $tablaMaestra_model->getMaestroByTipo(43);
-        $encargado = $persona_model->obtenerPersonaAll();
+        $encargado = $encargado_model->obtenerEncargadoByTipo(2);
 
 		return view('frontend.orden_produccion.modal_orden_produccion_nuevoOrdenProduccion',compact('id','orden_produccion','producto','unidad','encargado'));
 

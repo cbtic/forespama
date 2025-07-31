@@ -192,6 +192,8 @@ $(document).ready(function() {
     
     cargarDetalle();
 
+    $('#encargado').select2({ width : '100%'})
+
 });
 
 function obtenerDescripcion(selectElement){
@@ -479,7 +481,7 @@ function pdf_documento(){
                                 <option value="">--Seleccionar--</option>
                                 <?php
                                 foreach ($encargado as $row){?>
-                                    <option value="<?php echo $row->id ?>" <?php if($row->id==$orden_produccion->id_encargado)echo "selected='selected'"?>><?php echo $row->nombres ?></option>
+                                    <option value="<?php echo $row->id ?>" <?php if($row->id==$orden_produccion->id_encargado)echo "selected='selected'"?>><?php echo $row->encargado ?></option>
                                     <?php 
                                 }
                                 ?>

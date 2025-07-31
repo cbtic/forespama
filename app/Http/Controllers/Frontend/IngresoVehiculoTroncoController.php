@@ -1036,7 +1036,6 @@ class IngresoVehiculoTroncoController extends Controller
 				$pago->save();
 				
 			}
-			
 		}
 
 		return response()->json(['success' => true, 'message' => 'Archivo procesado correctamente.','id_ingreso_vehiculo_tronco_tipo_madera'=>$id_ingreso_vehiculo_tronco_tipo_madera]);

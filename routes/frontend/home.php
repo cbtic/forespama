@@ -45,6 +45,8 @@ use App\Http\Controllers\Frontend\AcerradoMaderaController;
 use App\Http\Controllers\Frontend\HornoController;
 use App\Http\Controllers\Frontend\ActivoController;
 use App\Http\Controllers\Frontend\OrdenProduccionController;
+use App\Http\Controllers\Frontend\FamiliaController;
+use App\Http\Controllers\Frontend\SubFamiliaController;
 
 //use App\Http\Controllers\VehiculoController;
 
@@ -723,3 +725,14 @@ Route::post('orden_produccion/listar_orden_produccion_ajax', [OrdenProduccionCon
 Route::get('orden_produccion/modal_orden_produccion/{id}', [OrdenProduccionController::class, 'modal_orden_produccion'])->name('orden_produccion.modal_orden_produccion');
 Route::post('orden_produccion/send_orden_produccion', [OrdenProduccionController::class, 'send_orden_produccion'])->name('orden_produccion.send_orden_produccion');
 Route::get('orden_produccion/cargar_detalle', [OrdenProduccionController::class, 'cargar_detalle'])->name('orden_produccion.cargar_detalle');
+
+Route::get('familia/create', [FamiliaController::class, 'create'])->name('familia.create');
+Route::post('familia/listar_familia_ajax', [FamiliaController::class, 'listar_familia_ajax'])->name('familia.listar_familia_ajax');
+Route::get('familia/modal_familia/{id}', [FamiliaController::class, 'modal_familia'])->name('familia.modal_familia');
+Route::post('familia/send_familia', [FamiliaController::class, 'send_familia'])->name('familia.send_familia');
+Route::get('familia/eliminar_familia/{id}/{estado}', [FamiliaController::class, 'eliminar_familia'])->name('familia.eliminar_familia');
+Route::get('sub_familia/create', [SubFamiliaController::class, 'create'])->name('sub_familia.create');
+Route::post('sub_familia/listar_sub_familia_ajax', [SubFamiliaController::class, 'listar_sub_familia_ajax'])->name('sub_familia.listar_sub_familia_ajax');
+Route::get('sub_familia/modal_sub_familia/{id}', [SubFamiliaController::class, 'modal_sub_familia'])->name('sub_familia.modal_sub_familia');
+Route::post('sub_familia/send_sub_familia', [SubFamiliaController::class, 'send_sub_familia'])->name('sub_familia.send_sub_familia');
+Route::get('sub_familia/eliminar_sub_familia/{id}/{estado}', [SubFamiliaController::class, 'eliminar_sub_familia'])->name('sub_familia.eliminar_sub_familia');
