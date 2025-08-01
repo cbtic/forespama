@@ -736,3 +736,5 @@ Route::post('sub_familia/listar_sub_familia_ajax', [SubFamiliaController::class,
 Route::get('sub_familia/modal_sub_familia/{id}', [SubFamiliaController::class, 'modal_sub_familia'])->name('sub_familia.modal_sub_familia');
 Route::post('sub_familia/send_sub_familia', [SubFamiliaController::class, 'send_sub_familia'])->name('sub_familia.send_sub_familia');
 Route::get('sub_familia/eliminar_sub_familia/{id}/{estado}', [SubFamiliaController::class, 'eliminar_sub_familia'])->name('sub_familia.eliminar_sub_familia');
+Route::get('sub_familia/valida_codigo_unico/{inicial}', [SubFamiliaController::class, 'valida_codigo_unico'])->name('sub_familia.valida_codigo_unico');
+

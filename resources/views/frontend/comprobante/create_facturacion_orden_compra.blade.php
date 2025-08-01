@@ -446,11 +446,13 @@ label.form-control-sm{
 								<th>Empresa Compra</th>
 								<th>N° OC Cliente</th>
 								<th>Fecha</th>
-								<th>Fecha Entregado</th>
+								<th>Fecha Salida</th>
 								<th>N&uacute;mero OC</th>
 								<th>Situaci&oacute;n</th>
 								<th>Vendedor</th>
 								<th style ="text-align:right">Total</th>
+								<th>Fecha Entrega</th>
+								<th>Guia</th>
 								<th>Facturado</th>
 								<th>Fecha Facturaci&oacute;n</th>
 								<th>Dif. D&iacute;as Facturac.</th>

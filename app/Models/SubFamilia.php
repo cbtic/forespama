@@ -31,4 +31,13 @@ class SubFamilia extends Model
         return $data;
 
     }
+
+    function getCodigoUnico($inicial){
+
+        $cad = "select count(*) cantidad from sub_familias sf  
+        where sf.inicial_codigo = '".$inicial."' ";
+        
+        $data = DB::select($cad);
+        return $data;
+    }
 }

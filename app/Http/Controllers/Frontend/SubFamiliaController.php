@@ -92,4 +92,19 @@ class SubFamiliaController extends Controller
 
 		echo $sub_familia->id;
     }
+
+    public function valida_codigo_unico($inicial){
+
+		$sub_familia_model = new SubFamilia;
+		$sub_familia = $sub_familia_model->getCodigoUnico($inicial);
+
+		$datos_formateados = [];
+
+        foreach ($sub_familia as $subfamilia) {
+            $datos_formateados[] = [
+                'cantidad' => $subfamilia->cantidad,
+            ];
+        }
+        return response()->json($datos_formateados);
+	}
 }

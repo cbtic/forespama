@@ -170,6 +170,24 @@ $(function() {
     });
 });
 
+function validar_codigo(){
+
+    var inicial = $('#inicial').val();
+
+    $.ajax({
+        url: "/sub_familia/valida_codigo_unico/"+inicial,
+        method: 'GET',
+        success: function (result) {
+
+            if(result[0].cantidad > 0){
+                bootbox.alert("Existe una Sub Familia con ese mismo Codigo");
+            }else{
+                fn_save_sub_familia();
+            }
+        }
+    });
+}
+
 function fn_save_sub_familia(){
 
     var msg = "";
@@ -280,7 +298,7 @@ function fn_save_sub_familia(){
                         <div style="margin-top:15px" class="form-group">
                             <div class="col-sm-12 controls">
                                 <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
-                                    <a href="javascript:void(0)" onClick="fn_save_sub_familia()" class="btn btn-sm btn-success">Registrar</a>
+                                    <a href="javascript:void(0)" onClick="validar_codigo()" class="btn btn-sm btn-success">Registrar</a>
                                 </div>
                             </div>
                         </div> 

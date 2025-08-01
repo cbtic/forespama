@@ -257,19 +257,39 @@ function datatablenew(){
 				},
 
 				{
+				"mRender": function (data, type, row) {
+					var fecha_guia = "";
+					if(row.fecha_guia!= null)fecha_guia = row.fecha_guia;
+					return fecha_guia;
+				},
+				"bSortable": true,
+				"aTargets": [11]
+				},
+
+				{
+				"mRender": function (data, type, row) {
+					var guias = "";
+					if(row.guias!= null)guias = row.guias;
+					return guias;
+				},
+				"bSortable": true,
+				"aTargets": [12]
+				},
+
+				{
 					"mRender": function (data, type, row) {
-						var fechaSalida = row.fecha_salida ? new Date(row.fecha_salida) : null;
+						var fechaGuia = row.fecha_guia ? new Date(row.fecha_guia) : null;
 						var fechaFacturado = row.fecha_facturado ? new Date(row.fecha_facturado) : null;
 						var diasDiferencia = "";
-						if (fechaSalida && fechaFacturado) {
-							var diferencia = fechaFacturado - fechaSalida;
+						if (fechaGuia && fechaFacturado) {
+							var diferencia = fechaFacturado - fechaGuia;
 							diasDiferencia = Math.ceil(diferencia / (1000 * 60 * 60 * 24));
 						}
 
 						return diasDiferencia;
 					},
 					"bSortable": true,
-					"aTargets": [11],
+					"aTargets": [13],
 					"className": "text-center",
 				},
 
@@ -294,7 +314,7 @@ function datatablenew(){
 						return html;
 					},
 					"bSortable": false,
-					"aTargets": [12],
+					"aTargets": [14],
 				},
             ]
     });
