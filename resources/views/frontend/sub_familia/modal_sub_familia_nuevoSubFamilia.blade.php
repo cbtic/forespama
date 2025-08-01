@@ -173,19 +173,24 @@ $(function() {
 function validar_codigo(){
 
     var inicial = $('#inicial').val();
+    var id = $('#id').val();
 
-    $.ajax({
-        url: "/sub_familia/valida_codigo_unico/"+inicial,
-        method: 'GET',
-        success: function (result) {
+    if(id > 0){
+        fn_save_sub_familia();
+    }else{
+        $.ajax({
+            url: "/sub_familia/valida_codigo_unico/"+inicial,
+            method: 'GET',
+            success: function (result) {
 
-            if(result[0].cantidad > 0){
-                bootbox.alert("Existe una Sub Familia con ese mismo Codigo");
-            }else{
-                fn_save_sub_familia();
+                if(result[0].cantidad > 0){
+                    bootbox.alert("Existe una Sub Familia con ese mismo Codigo");
+                }else{
+                    fn_save_sub_familia();
+                }
             }
-        }
-    });
+        });
+    }
 }
 
 function fn_save_sub_familia(){

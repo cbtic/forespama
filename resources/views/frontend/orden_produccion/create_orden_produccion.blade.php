@@ -409,6 +409,7 @@ label.form-control-sm{
 								<th>Id</th>
 								<th>N&uacute;mero Orden Fabricaci&oacute;n</th>
 								<th>Fecha Orden Fabricaci&oacute;n</th>
+								<th>&Aacute;rea</th>
 								<th>Fecha Produccion</th>
 								<th>Situaci&oacute;n</th>
 								<th>Estado</th>

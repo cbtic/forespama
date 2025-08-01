@@ -157,6 +157,16 @@ function datatablenew(){
 			"bSortable": true,
 			"aTargets": [2]
 			},
+
+			{
+			"mRender": function (data, type, row) {
+				var area = "";
+				if(row.area!= null)area = row.area;
+				return area;
+			},
+			"bSortable": true,
+			"aTargets": [3]
+			},
 			
 			{
 			"mRender": function (data, type, row) {
@@ -165,7 +175,7 @@ function datatablenew(){
 				return fecha_produccion;
 			},
 			"bSortable": true,
-			"aTargets": [3]
+			"aTargets": [4]
 			},
 			
 			{
@@ -175,7 +185,7 @@ function datatablenew(){
 				return situacion;
 			},
 			"bSortable": true,
-			"aTargets": [4]
+			"aTargets": [5]
 			},
 
 			{
@@ -190,7 +200,7 @@ function datatablenew(){
 				return estado;
 			},
 			"bSortable": false,
-			"aTargets": [5]
+			"aTargets": [6]
 			},
 			{
 			"mRender": function (data, type, row) {
@@ -213,12 +223,10 @@ function datatablenew(){
 				return html;
 			},
 			"bSortable": false,
-			"aTargets": [6],
+			"aTargets": [7],
 			},
-
 		]
     });
-
 }
 
 fn_util_LineaDatatable("#tblOrdenProduccion");

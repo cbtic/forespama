@@ -190,9 +190,13 @@ $('#openOverlayOpc').on('shown.bs.modal', function() {
 
 $(document).ready(function() {
     
-    cargarDetalle();
+    if($('#id').val() == 0){
+        cargarDetalle();
+    }else{
+        cargarDetalleGuardado();
+    }
 
-    $('#encargado').select2({ width : '100%'})
+    $('#area').select2({ width : '100%'})
 
 });
 
@@ -238,6 +242,66 @@ function cargarDetalle(){
 
     $.ajax({
         url: "/orden_produccion/cargar_detalle",
+        type: "GET",
+        success: function (result) {
+
+            let n = 1;
+
+            result.orden_produccion.forEach(orden_produccion => {
+
+                let productoOptions = '<option value="">--Seleccionar--</option>';
+                let unidadMedidaOptions = '<option value="">--Seleccionar--</option>';
+
+                result.producto.forEach(producto => {
+                    let selected = (producto.id == orden_produccion.id) ? 'selected' : '';
+                    productoOptions += `<option value="${producto.id}" ${selected}>${producto.codigo} - ${producto.denominacion}</option>`;
+                });
+
+                result.unidad_medida.forEach(unidad_medida => {
+                    let selected = (unidad_medida.codigo == orden_produccion.id_unidad_medida) ? 'selected' : '';
+                    unidadMedidaOptions += `<option value="${unidad_medida.codigo}" ${selected}>${unidad_medida.denominacion}</option>`;
+                });
+                
+                if (orden_produccion.id) {
+                    productosSeleccionados.push(orden_produccion.id);
+                }
+
+                const row = `
+                    <tr>
+                        <td>${n}</td>
+                        <td style="width: 800px !important;display:block"><input name="id_producto[]" id="id_producto${n}" class="form-control form-control-sm" value="${orden_produccion.id}" type="hidden"><select name="descripcion[]" id="descripcion${n}" class="form-control form-control-sm" onChange="">${productoOptions}</select></td>
+                        <td><input name="cod_interno[]" id="cod_interno${n}" class="form-control form-control-sm" value="${orden_produccion.codigo}" type="text"></td>
+                        
+                        <td><select name="unidad[]" id="unidad${n}" class="form-control form-control-sm">${unidadMedidaOptions}</select></td>
+                        <td><input name="cantidad_ingreso[]" id="cantidad_ingreso${n}" class="cantidad_ingreso form-control form-control-sm" value="${orden_produccion.cantidad_total}" type="text" readonly></td>
+                        
+                        <td><input name="cantidad_producir[]" id="cantidad_producir${n}" class="cantidad_producir form-control form-control-sm" value="" type="text"></td>
+                        <td><button type="button" class="btn btn-danger btn-sm" onclick="eliminarFila(this)">Eliminar</button></td>
+
+                    </tr>
+                `;
+
+                tbody.append(row);
+                $('#descripcion' + n).select2({ 
+                    width: '100%', 
+                    dropdownCssClass: 'custom-select2-dropdown'
+                });
+
+                n++;
+            });
+        }
+    });
+}
+
+function cargarDetalleGuardado(){
+
+    var id = $("#id").val();
+    const tbody = $('#divOrdenProduccionDetalle');
+
+    tbody.empty();
+
+    $.ajax({
+        url: "/orden_produccion/cargar_detalle_guardado/"+id,
         type: "GET",
         success: function (result) {
 
@@ -381,10 +445,10 @@ function fn_save_orden_produccion(){
     var msg = "";
 
     var fecha_orden_produccion = $('#fecha_orden_produccion').val();
-    var encargado = $('#encargado').val();
+    var area = $('#area').val();
 
     if(fecha_orden_produccion==""){msg+="Ingrese la Fecha de la Orden de Produccion <br>";}
-    if(encargado==""){msg+="Ingrese un Encargado <br>";}
+    if(area==""){msg+="Ingrese un Area <br>";}
 
     if ($('#tblOrdenProduccionDetalle tbody tr').length == 0) {
         msg += "No se ha agregado ningún producto <br>";
@@ -421,9 +485,8 @@ function pdf_documento(){
 
     var id = $('#id').val();
 
-    var href = '/orden_compra/movimiento_pdf/'+id;
+    var href = '/orden_produccion/movimiento_pdf/'+id;
     window.open(href, '_blank');
-
 }
 
 </script>
@@ -474,14 +537,14 @@ function pdf_documento(){
                             <input id="fecha_orden_produccion" name="fecha_orden_produccion" on class="form-control form-control-sm"  value="<?php echo isset($orden_produccion) && $orden_produccion->fecha_orden_produccion ? $orden_produccion->fecha_orden_produccion : date('Y-m-d'); ?>" type="text">
                         </div>
                         <div class="col-lg-2">
-                            Encargado
+                            &Aacute;rea
                         </div>
                         <div class="col-lg-2">
-                            <select name="encargado" id="encargado" class="form-control form-control-sm" onchange="">
+                            <select name="area" id="area" class="form-control form-control-sm" onchange="">
                                 <option value="">--Seleccionar--</option>
                                 <?php
-                                foreach ($encargado as $row){?>
-                                    <option value="<?php echo $row->id ?>" <?php if($row->id==$orden_produccion->id_encargado)echo "selected='selected'"?>><?php echo $row->encargado ?></option>
+                                foreach ($area as $row){?>
+                                    <option value="<?php echo $row->id ?>" <?php if($row->id==$orden_produccion->id_area)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
                                     <?php 
                                 }
                                 ?>
