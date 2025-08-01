@@ -68,7 +68,7 @@ class FamiliaController extends Controller
         $familia->save();
         $id_familia = $familia->id;
         
-		return response()->json(['success' => 'Marca guardada exitosamente.']);  
+		return response()->json(['success' => 'Familia guardada exitosamente.']);  
 
     }
 

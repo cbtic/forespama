@@ -53,7 +53,11 @@ class SubFamiliaController extends Controller
 			$sub_familia = new SubFamilia;
 		}
 
-		return view('frontend.sub_familia.modal_sub_familia_nuevoSubFamilia',compact('id','sub_familia'));
+        $familia_model = new Familia;
+
+        $familia = $familia_model->getFamiliaAll();
+
+		return view('frontend.sub_familia.modal_sub_familia_nuevoSubFamilia',compact('id','sub_familia','familia'));
 
     }
 
@@ -67,13 +71,15 @@ class SubFamiliaController extends Controller
             $sub_familia = SubFamilia::find($request->id);
         }
 
+        $sub_familia->id_familia = $request->familia;
         $sub_familia->denominacion = $request->denominacion;
+        $sub_familia->inicial_codigo = $request->inicial;
         $sub_familia->id_usuario_inserta = $id_user;
         $sub_familia->estado = 1;
         $sub_familia->save();
         $id_sub_familia = $sub_familia->id;
         
-		return response()->json(['success' => 'Marca guardada exitosamente.']);  
+		return response()->json(['success' => 'Sub Familia guardada exitosamente.']);  
 
     }
 

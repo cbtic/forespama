@@ -171,19 +171,29 @@ $(function() {
 });
 
 function fn_save_familia(){
-	
-    var msgLoader = "";
-    msgLoader = "Procesando, espere un momento por favor";
-    var heightBrowser = $(window).width()/2;
-    $('.loader').css("opacity","0.8").css("height",heightBrowser).html("<div id='Grd1_wrapper' class='dataTables_wrapper'><div id='Grd1_processing' class='dataTables_processing panel-default'>"+msgLoader+"</div></div>");
-    $('.loader').show();
 
-	$.ajax({
-			url: "/familia/send_familia",
+    var msg = "";
+    var denominacion = $('#denominacion').val();
+    
+    if(denominacion == ""){msg+="Ingrese la Denominacion <br>";}
+	
+    if(msg!=""){
+        bootbox.alert(msg);
+        return false;
+    }else{
+	
+        var msgLoader = "";
+        msgLoader = "Procesando, espere un momento por favor";
+        var heightBrowser = $(window).width()/2;
+        $('.loader').css("opacity","0.8").css("height",heightBrowser).html("<div id='Grd1_wrapper' class='dataTables_wrapper'><div id='Grd1_processing' class='dataTables_processing panel-default'>"+msgLoader+"</div></div>");
+        $('.loader').show();
+
+        $.ajax({
+            url: "/familia/send_familia",
             type: "POST",
             data : $("#frmFamilias").serialize(),
-			success: function (result) {
-				//alert(result);
+            success: function (result) {
+                //alert(result);
                 $('.loader').hide();
                 if (result.success) {
                     bootbox.alert(result.success, function() {
@@ -194,7 +204,8 @@ function fn_save_familia(){
                     bootbox.alert(result.error);
                 }
             },
-    });
+        });
+    }
 }
 
 </script>

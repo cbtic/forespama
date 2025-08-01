@@ -170,20 +170,34 @@ $(function() {
     });
 });
 
-function fn_save_familia(){
-	
-    var msgLoader = "";
-    msgLoader = "Procesando, espere un momento por favor";
-    var heightBrowser = $(window).width()/2;
-    $('.loader').css("opacity","0.8").css("height",heightBrowser).html("<div id='Grd1_wrapper' class='dataTables_wrapper'><div id='Grd1_processing' class='dataTables_processing panel-default'>"+msgLoader+"</div></div>");
-    $('.loader').show();
+function fn_save_sub_familia(){
 
-	$.ajax({
-			url: "/sub_familia/send_sub_familia",
+    var msg = "";
+    var familia = $('#familia').val();
+    var denominacion = $('#denominacion').val();
+    var inicial = $('#inicial').val();
+    
+    if(familia == ""){msg+="Ingrese la Familia <br>";}
+    if(denominacion == ""){msg+="Ingrese la Denominacion <br>";}
+    if(inicial.length > 4){msg+="Las iniciales no pueden ser mayor a 4 Digitos <br>";}
+    if(inicial == ""){msg+="Ingrese la Inicial <br>";}
+	
+    if(msg!=""){
+        bootbox.alert(msg);
+        return false;
+    }else{
+        var msgLoader = "";
+        msgLoader = "Procesando, espere un momento por favor";
+        var heightBrowser = $(window).width()/2;
+        $('.loader').css("opacity","0.8").css("height",heightBrowser).html("<div id='Grd1_wrapper' class='dataTables_wrapper'><div id='Grd1_processing' class='dataTables_processing panel-default'>"+msgLoader+"</div></div>");
+        $('.loader').show();
+
+        $.ajax({
+            url: "/sub_familia/send_sub_familia",
             type: "POST",
             data : $("#frmFamilias").serialize(),
-			success: function (result) {
-				//alert(result);
+            success: function (result) {
+                //alert(result);
                 $('.loader').hide();
                 if (result.success) {
                     bootbox.alert(result.success, function() {
@@ -194,7 +208,8 @@ function fn_save_familia(){
                     bootbox.alert(result.error);
                 }
             },
-    });
+        });
+    }
 }
 
 </script>
@@ -215,7 +230,7 @@ function fn_save_familia(){
             <div class="card">
                 
                 <div class="card-header" style="padding:5px!important;padding-left:20px!important">
-                    Registrar Familia
+                    Registrar Sub Familia
                 </div>
                 
                 <div class="card-body">
@@ -233,8 +248,30 @@ function fn_save_familia(){
                                 
                                 <div class="col-lg-8">
                                     <div class="form-group">
+                                        <label class="control-label form-control-sm">Familia</label>
+                                        <select name="familia" id="familia" class="form-control form-control-sm">
+                                            <option value="">--Seleccionar--</option>
+                                            <?php 
+                                            foreach ($familia as $row){?>
+                                                <option value="<?php echo $row->id ?>" <?php if($row->id==$sub_familia->id_familia)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                                <?php 
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-lg-8">
+                                    <div class="form-group">
                                         <label class="control-label form-control-sm">Denominaci&oacute;n</label>
-                                        <input id="denominacion" name="denominacion" on class="form-control form-control-sm mayusculas"  value="<?php echo $familia->denominacion?>" type="text">
+                                        <input id="denominacion" name="denominacion" on class="form-control form-control-sm mayusculas"  value="<?php echo $sub_familia->denominacion?>" type="text">
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label class="control-label form-control-sm">Iniciales</label>
+                                        <input id="inicial" name="inicial" on class="form-control form-control-sm mayusculas"  value="<?php echo $sub_familia->inicial_codigo?>" type="text">
                                     </div>
                                 </div>
                             </div>
@@ -243,9 +280,8 @@ function fn_save_familia(){
                         <div style="margin-top:15px" class="form-group">
                             <div class="col-sm-12 controls">
                                 <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
-                                    <a href="javascript:void(0)" onClick="fn_save_familia()" class="btn btn-sm btn-success">Registrar</a>
+                                    <a href="javascript:void(0)" onClick="fn_save_sub_familia()" class="btn btn-sm btn-success">Registrar</a>
                                 </div>
-                                                    
                             </div>
                         </div> 
                             
