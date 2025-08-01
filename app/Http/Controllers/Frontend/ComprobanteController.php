@@ -3844,7 +3844,7 @@ class ComprobanteController extends Controller
         $data["nombreComercialEmisor"] ="FORESTAL PAMA S.A.C.";
         $data["unidadMedidaPesoBruto"] ="KGM";
 
-        if($guia->guia_cod_motivo=='13'){
+        if($guia->guia_cod_motivo=='13' || $guia->guia_cod_motivo=='06'){
             $data["descripcionTraslado"] =$guia->guia_desc_motivo;
         }
 
