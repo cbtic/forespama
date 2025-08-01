@@ -32,7 +32,15 @@ begin
 	(select to_char(c.fecha,''yyyy-mm-dd'') from comprobantes c where c.orden_compra::int = oc.id and c.anulado = ''N'' and c.estado = ''1'') fecha_facturado,
 	(select to_char(sp.created_at,''yyyy-mm-dd'') from salida_productos sp 
 	where sp.id_orden_compra = oc.id
-	limit 1) fecha_salida ';
+	limit 1) fecha_salida,
+	(select gi.fecha_traslado from guia_internas gi 
+	where gi.numero_orden_compra = oc.numero_orden_compra
+	and gi.guia_anulado = ''N''
+	limit 1) fecha_guia,
+	(select string_agg(gi.guia_serie||''-''||gi.guia_numero ,'', '') from guia_internas gi 
+	where gi.numero_orden_compra = oc.numero_orden_compra
+	and gi.guia_anulado = ''N''
+	limit 1) guias ';
 
 	v_tabla=' from orden_compras oc
 	inner join tabla_maestras tm2 on oc.cerrado ::int = tm2.codigo ::int and tm2.tipo=''52''
