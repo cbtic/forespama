@@ -230,6 +230,35 @@ function datatablenew(){
 				"aTargets": [8],
 				"className": "text-right",
 				},
+				{
+				"mRender": function (data, type, row) {
+					var fecha_facturado = "";
+					if(row.fecha_facturado!= null)fecha_facturado = row.fecha_facturado;
+					return fecha_facturado;
+				},
+				"bSortable": true,
+				"aTargets": [9]
+				},
+
+				{
+				"mRender": function (data, type, row) {
+					var fecha_guia = "";
+					if(row.fecha_guia!= null)fecha_guia = row.fecha_guia;
+					return fecha_guia;
+				},
+				"bSortable": true,
+				"aTargets": [10]
+				},
+
+				{
+				"mRender": function (data, type, row) {
+					var guias = "";
+					if(row.guias!= null)guias = row.guias;
+					return guias;
+				},
+				"bSortable": true,
+				"aTargets": [11]
+				},
 
 				{
 					"mRender": function (data, type, row) {
@@ -243,37 +272,7 @@ function datatablenew(){
 						return facturado;
 					},
 					"bSortable": false,
-					"aTargets": [9]
-				},
-
-				{
-				"mRender": function (data, type, row) {
-					var fecha_facturado = "";
-					if(row.fecha_facturado!= null)fecha_facturado = row.fecha_facturado;
-					return fecha_facturado;
-				},
-				"bSortable": true,
-				"aTargets": [10]
-				},
-
-				{
-				"mRender": function (data, type, row) {
-					var fecha_guia = "";
-					if(row.fecha_guia!= null)fecha_guia = row.fecha_guia;
-					return fecha_guia;
-				},
-				"bSortable": true,
-				"aTargets": [11]
-				},
-
-				{
-				"mRender": function (data, type, row) {
-					var guias = "";
-					if(row.guias!= null)guias = row.guias;
-					return guias;
-				},
-				"bSortable": true,
-				"aTargets": [12]
+					"aTargets": [12]
 				},
 
 				{
