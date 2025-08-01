@@ -257,7 +257,7 @@ function datatablenew(){
 						if(row.facturado == 1){
 							facturado = "SI";
 						}
-						if(row.facturado == 0){
+						if(row.facturado == ""){
 							facturado = "NO";
 						}
 						return facturado;
