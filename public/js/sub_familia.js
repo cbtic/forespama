@@ -123,6 +123,16 @@ function datatablenew(){
 
 				{
 				"mRender": function (data, type, row) {
+					var inicial_codigo = "";
+					if(row.inicial_codigo!= null)inicial_codigo = row.inicial_codigo;
+					return inicial_codigo;
+				},
+				"bSortable": true,
+				"aTargets": [3]
+				},
+
+				{
+				"mRender": function (data, type, row) {
 					var estado = "";
 					if(row.estado == 1){
 						estado = "Activo";
@@ -133,7 +143,7 @@ function datatablenew(){
 					return estado;
 				},
 				"bSortable": false,
-				"aTargets": [3]
+				"aTargets": [4]
 				},
 				{
 					"mRender": function (data, type, row) {
@@ -159,7 +169,7 @@ function datatablenew(){
 						return html;
 					},
 					"bSortable": false,
-					"aTargets": [4],
+					"aTargets": [5],
 				},
             ]
     });

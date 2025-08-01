@@ -386,6 +386,7 @@ label.form-control-sm{
                             <th>Id</th>
 							<th>Familia</th>
 							<th>Denominaci&oacute;n</th>
+							<th>Inicial</th>
 							<th>Estado</th>
                             <th>Acciones</th>
                         </tr>
