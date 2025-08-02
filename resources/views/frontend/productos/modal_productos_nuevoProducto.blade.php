@@ -315,12 +315,16 @@ function fn_save_producto(){
     var denominacion = $('#denominacion').val();
     var codigo = $('#codigo').val();
     var peso = $('#peso').val();
+    var familia = $('#familia').val();
+    var sub_familia = $('#sub_familia').val();
 	
     if(tipo_origen_producto==""){msg+="Ingrese el Tipo de Origen del Producto <br>";}
     if(bien_servicio==""){msg+="Ingrese el Bien o Servicio del Producto <br>";}
     if(denominacion==""){msg+="Ingrese la Denominacion del Producto <br>";}
     if(codigo==""){msg+="Ingrese el Codigo del Producto <br>";}
     if(peso==""){msg+="Ingrese el Peso del Producto <br>";}
+    if(familia==""){msg+="Ingrese la Familia <br>";}
+    if(sub_familia==""){msg+="Ingrese la Sub Familia <br>";}
 
     if(msg!=""){
 
@@ -382,6 +386,40 @@ function cargarImagenes() {
             botonEliminar.hide();
         }
     });
+}
+
+function obtenerSubFamilia(){
+
+    var familia = $('#familia').val();
+    if(familia=="")return false;
+    
+	$('#sub_familia').attr("disabled",true);
+    
+    var msgLoader = "";
+	msgLoader = "Procesando, espere un momento por favor";
+	var heightBrowser = $(window).width()/2;
+	$('.loader').css("opacity","0.8").css("height",heightBrowser).html("<div id='Grd1_wrapper' class='dataTables_wrapper'><div id='Grd1_processing' class='dataTables_processing panel-default'>"+msgLoader+"</div></div>");
+    $('.loader').show();
+
+    $.ajax({
+        url: "/sub_familia/obtener_sub_familia/"+familia,
+        dataType: "json",
+        success: function (result) {
+
+           var option = "<option value='' selected='selected'>Seleccionar</option>";
+			$('#sub_familia').html("");
+			$(result).each(function (ii, oo) {
+				option += "<option value='"+oo.id+"'>"+oo.denominacion+"</option>";
+			});
+			$('#sub_familia').html(option);
+			
+			$('#sub_familia').attr("disabled",false);
+			
+			$('.loader').hide();
+
+        }
+    });
+
 }
 
 </script>
@@ -514,17 +552,39 @@ function cargarImagenes() {
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-lg-4">
+                                    <!--<div class="col-lg-4">
                                         <div class="form-group">
                                             <label class="control-label form-control-sm">Tipo Producto</label>
                                             <select name="tipo_producto" id="tipo_producto" class="form-control form-control-sm" onchange="">
                                                 <option value="">--Seleccionar--</option>
                                                 <?php
-                                                foreach ($tipo_producto as $row){?>
-                                                    <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$producto->id_tipo_producto)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                                //foreach ($tipo_producto as $row){?>
+                                                    <option value="<?php //echo $row->codigo ?>" <?php //if($row->codigo==$producto->id_tipo_producto)echo "selected='selected'"?>><?php //echo $row->denominacion ?></option>
+                                                <?php 
+                                                //}
+                                                ?>
+                                            </select>
+                                        </div>
+                                    </div>-->
+                                    <div class="col-lg-4">
+                                        <div class="form-group">
+                                            <label class="control-label form-control-sm">Familia</label>
+                                            <select name="familia" id="familia" class="form-control form-control-sm" onchange="obtenerSubFamilia()">
+                                                <option value="">--Seleccionar--</option>
+                                                <?php
+                                                foreach ($familia as $row){?>
+                                                    <option value="<?php echo $row->id ?>" <?php if($row->id==$producto->id_familia)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
                                                 <?php 
                                                 }
                                                 ?>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="form-group">
+                                            <label class="control-label form-control-sm">Sub Familia</label>
+                                            <select name="sub_familia" id="sub_familia" class="form-control form-control-sm" onchange="">
+                                                <option value="">--Seleccionar--</option>
                                             </select>
                                         </div>
                                     </div>

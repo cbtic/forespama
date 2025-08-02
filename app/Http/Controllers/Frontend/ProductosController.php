@@ -10,6 +10,8 @@ use App\Models\EntradaProductoDetalle;
 use App\Models\SalidaProductoDetalle;
 use App\Models\Kardex;
 use App\Models\ProductoImagene;
+use App\Models\Familia;
+use App\Models\SubFamilia;
 use RealRashid\SweetAlert\Facades\Alert;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -80,6 +82,7 @@ class ProductosController extends Controller
 		
         $tablaMaestra_model = new TablaMaestra;
         $marca_model = new Marca;
+        $familia_model = new Familia;
 		
 		if($id>0){
 			$producto = Producto::find($id);
@@ -98,10 +101,11 @@ class ProductosController extends Controller
         $marca = $marca_model->getMarcaProducto();
 		$tipo_origen_producto = $tablaMaestra_model->getMaestroByTipo(58);
 		$bien_servicio = $tablaMaestra_model->getMaestroByTipo(73);
+        $familia = $familia_model->getFamiliaAll();
         
 		//var_dump($id);exit();
 
-		return view('frontend.productos.modal_productos_nuevoProducto',compact('id','producto','unidad_medida','moneda','estado_bien','tipo_producto','unidad_producto','marca','tipo_origen_producto','imagenes','bien_servicio'));
+		return view('frontend.productos.modal_productos_nuevoProducto',compact('id','producto','unidad_medida','moneda','estado_bien','tipo_producto','unidad_producto','marca','tipo_origen_producto','imagenes','bien_servicio','familia'));
 
     }
 
@@ -143,7 +147,9 @@ class ProductosController extends Controller
         $producto->id_unidad_medida = $request->unidad_medida;
         $producto->stock_actual = $request->stock_actual;
         $producto->id_moneda = $request->moneda;
-        $producto->id_tipo_producto = $request->tipo_producto;
+        //$producto->id_tipo_producto = $request->tipo_producto;
+        $producto->id_familia = $request->familia;
+        $producto->id_sub_familia = $request->sub_familia;
         $producto->fecha_vencimiento = $request->fecha_vencimiento;
         $producto->id_estado_bien = $request->estado_bien;
         $producto->stock_minimo = $request->stock_minimo;

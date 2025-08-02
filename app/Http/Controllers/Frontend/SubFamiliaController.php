@@ -107,4 +107,11 @@ class SubFamiliaController extends Controller
         }
         return response()->json($datos_formateados);
 	}
+
+    public function obtener_sub_familia($familia){
+		
+		$sub_familia_model = new SubFamilia;
+		$sub_familia = $sub_familia_model->getSubFamilia($familia);
+		echo json_encode($sub_familia);
+	}
 }

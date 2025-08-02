@@ -725,6 +725,7 @@ Route::post('orden_produccion/listar_orden_produccion_ajax', [OrdenProduccionCon
 Route::get('orden_produccion/modal_orden_produccion/{id}', [OrdenProduccionController::class, 'modal_orden_produccion'])->name('orden_produccion.modal_orden_produccion');
 Route::post('orden_produccion/send_orden_produccion', [OrdenProduccionController::class, 'send_orden_produccion'])->name('orden_produccion.send_orden_produccion');
 Route::get('orden_produccion/cargar_detalle', [OrdenProduccionController::class, 'cargar_detalle'])->name('orden_produccion.cargar_detalle');
+Route::get('orden_produccion/cargar_detalle', [OrdenProduccionController::class, 'cargar_detalle'])->name('orden_produccion.cargar_detalle');
 
 Route::get('familia/create', [FamiliaController::class, 'create'])->name('familia.create');
 Route::post('familia/listar_familia_ajax', [FamiliaController::class, 'listar_familia_ajax'])->name('familia.listar_familia_ajax');
@@ -737,4 +738,4 @@ Route::get('sub_familia/modal_sub_familia/{id}', [SubFamiliaController::class, '
 Route::post('sub_familia/send_sub_familia', [SubFamiliaController::class, 'send_sub_familia'])->name('sub_familia.send_sub_familia');
 Route::get('sub_familia/eliminar_sub_familia/{id}/{estado}', [SubFamiliaController::class, 'eliminar_sub_familia'])->name('sub_familia.eliminar_sub_familia');
 Route::get('sub_familia/valida_codigo_unico/{inicial}', [SubFamiliaController::class, 'valida_codigo_unico'])->name('sub_familia.valida_codigo_unico');
-
+Route::get('sub_familia/obtener_sub_familia/{familia}', [SubFamiliaController::class, 'obtener_sub_familia'])->name('sub_familia.obtener_sub_familia');
