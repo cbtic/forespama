@@ -43,11 +43,14 @@ class ProductosController extends Controller
     public function create(){
 
 		$tablaMaestra_model = new TablaMaestra;
+        $familia_model = new Familia;
+
 		$estado_bien = $tablaMaestra_model->getMaestroByTipo(56);
 		$tipo_origen_producto = $tablaMaestra_model->getMaestroByTipo(58);
 		$tipo_producto = $tablaMaestra_model->getMaestroByTipo(44);
+        $familia = $familia_model->getFamiliaAll();
 		
-		return view('frontend.productos.create',compact('estado_bien','tipo_origen_producto','tipo_producto'));
+		return view('frontend.productos.create',compact('estado_bien','tipo_origen_producto','tipo_producto','familia'));
 
 	}
 
@@ -60,6 +63,8 @@ class ProductosController extends Controller
         $p[]=$request->estado_bien;
         $p[]=$request->tipo_origen_producto;
         $p[]=$request->tiene_imagen;
+        $p[]=$request->familia;
+        $p[]=$request->sub_familia;
         $p[]=$request->estado;
 		$p[]=$request->NumeroPagina;
 		$p[]=$request->NumeroRegistros;

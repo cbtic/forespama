@@ -93,6 +93,8 @@ function datatablenew(){
 			var estado_bien = $('#estado_bien_bus').val();
 			var tipo_origen_producto = $('#tipo_origen_producto_bus').val();
 			var tiene_imagen = $('#tiene_imagen_bus').val();
+			var familia = $('#familia_bus').val();
+			var sub_familia = $('#sub_familia_bus').val();
 			var estado = $('#estado_bus').val();
 			
 			var _token = $('#_token').val();
@@ -102,8 +104,8 @@ function datatablenew(){
                 "type": "POST",
                 "url": sSource,
                 "data":{NumeroPagina:iNroPagina,NumeroRegistros:iCantMostrar,
-						serie:serie,denominacion:denominacion,codigo:codigo,estado_bien:estado_bien,
-						tipo_origen_producto:tipo_origen_producto,estado:estado,tiene_imagen:tiene_imagen,
+						serie:serie,denominacion:denominacion,codigo:codigo,estado_bien:estado_bien,tipo_origen_producto:tipo_origen_producto,
+						estado:estado,tiene_imagen:tiene_imagen,familia:familia,sub_familia:sub_familia,
 						_token:_token
                        },
                 "success": function (result) {
@@ -401,4 +403,37 @@ function DescargarArchivosExcel(){
 	if (estado == "")estado = 0;
 	
 	location.href = '/productos/exportar_listar_productos/'+tipo_origen_producto+'/'+serie+'/'+codigo+'/'+denominacion+'/'+estado_bien+'/'+tipo_producto+'/'+tiene_imagen+'/'+estado;
+}
+
+function obtenerSubFamiliaBus(){
+
+    var familia = $('#familia_bus').val();
+    if(familia=="")return false;
+    
+	$('#sub_familia').attr("disabled",true);
+    
+    var msgLoader = "";
+	msgLoader = "Procesando, espere un momento por favor";
+	var heightBrowser = $(window).width()/2;
+	$('.loader').css("opacity","0.8").css("height",heightBrowser).html("<div id='Grd1_wrapper' class='dataTables_wrapper'><div id='Grd1_processing' class='dataTables_processing panel-default'>"+msgLoader+"</div></div>");
+    $('.loader').show();
+
+    $.ajax({
+        url: "/sub_familia/obtener_sub_familia/"+familia,
+        dataType: "json",
+        success: function (result) {
+
+           var option = "<option value='' selected='selected'>--Seleccionar Sub Familia--</option>";
+			$('#sub_familia_bus').html("");
+			$(result).each(function (ii, oo) {
+				option += "<option value='"+oo.id+"'>"+oo.denominacion+"</option>";
+			});
+			$('#sub_familia_bus').html(option);
+			
+			$('#sub_familia_bus').attr("disabled",false);
+			
+			$('.loader').hide();
+
+        }
+    });
 }

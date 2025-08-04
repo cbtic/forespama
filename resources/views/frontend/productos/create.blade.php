@@ -394,16 +394,35 @@ label.form-control-sm{
 						</select>
 					</div>	
 					
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+					<!--<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
 						<select name="tipo_producto_bus" id="tipo_producto_bus" class="form-control form-control-sm">
 							<option value="">--Seleccionar Tipo Producto--</option>
 							<?php
-							foreach ($tipo_producto as $row) {
+							//foreach ($tipo_producto as $row) {
 							?>
-							<option value="<?php echo $row->codigo?>"><?php echo $row->denominacion?></option>
+							<option value="<?php //echo $row->codigo?>"><?php //echo $row->denominacion?></option>
+							<?php
+							//}
+							?>
+						</select>
+					</div>-->
+
+					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+						<select name="familia_bus" id="familia_bus" class="form-control form-control-sm" onchange="obtenerSubFamiliaBus()">
+							<option value="">--Seleccionar Familia--</option>
+							<?php
+							foreach ($familia as $row) {
+							?>
+							<option value="<?php echo $row->id?>"><?php echo $row->denominacion?></option>
 							<?php
 							}
 							?>
+						</select>
+					</div>
+
+					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+						<select name="sub_familia_bus" id="sub_familia_bus" class="form-control form-control-sm">
+							<option value="">--Seleccionar Sub Familia--</option>
 						</select>
 					</div>
 

@@ -408,7 +408,7 @@ function obtenerSubFamilia(){
         dataType: "json",
         success: function (result) {
 
-           var option = "<option value='' selected='selected'>Seleccionar</option>";
+           var option = "<option value='' selected='selected'>--Seleccionar--</option>";
 			$('#sub_familia').html("");
 
 			$(result).each(function (ii, oo) {
