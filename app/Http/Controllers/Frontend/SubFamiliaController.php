@@ -114,4 +114,11 @@ class SubFamiliaController extends Controller
 		$sub_familia = $sub_familia_model->getSubFamilia($familia);
 		echo json_encode($sub_familia);
 	}
+
+    public function obtener_codigo($sub_familia){
+		
+		$sub_familia_model = new SubFamilia;
+		$codigo = $sub_familia_model->getCodigo($sub_familia);
+		echo json_encode($codigo);
+	}
 }

@@ -739,3 +739,4 @@ Route::post('sub_familia/send_sub_familia', [SubFamiliaController::class, 'send_
 Route::get('sub_familia/eliminar_sub_familia/{id}/{estado}', [SubFamiliaController::class, 'eliminar_sub_familia'])->name('sub_familia.eliminar_sub_familia');
 Route::get('sub_familia/valida_codigo_unico/{inicial}', [SubFamiliaController::class, 'valida_codigo_unico'])->name('sub_familia.valida_codigo_unico');
 Route::get('sub_familia/obtener_sub_familia/{familia}', [SubFamiliaController::class, 'obtener_sub_familia'])->name('sub_familia.obtener_sub_familia');
+Route::get('sub_familia/obtener_codigo/{sub_familia}', [SubFamiliaController::class, 'obtener_codigo'])->name('sub_familia.obtener_codigo');

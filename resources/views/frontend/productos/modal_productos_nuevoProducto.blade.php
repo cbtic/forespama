@@ -240,9 +240,9 @@ $(document).ready(function() {
 
     if($("#id").val()>0){
         cargarImagenes();
+        obtenerSubFamilia();
     }
     
-
 });
 
 function AddFila(){
@@ -388,6 +388,8 @@ function cargarImagenes() {
     });
 }
 
+var subFamiliaSeleccionada = "<?php echo isset($producto->id_sub_familia) ? $producto->id_sub_familia : ''; ?>";
+
 function obtenerSubFamilia(){
 
     var familia = $('#familia').val();
@@ -408,8 +410,10 @@ function obtenerSubFamilia(){
 
            var option = "<option value='' selected='selected'>Seleccionar</option>";
 			$('#sub_familia').html("");
+
 			$(result).each(function (ii, oo) {
-				option += "<option value='"+oo.id+"'>"+oo.denominacion+"</option>";
+				var selected = (oo.id == subFamiliaSeleccionada) ? "selected='selected'" : "";
+                option += "<option value='" + oo.id + "' " + selected + ">" + oo.denominacion + "</option>";
 			});
 			$('#sub_familia').html(option);
 			
@@ -419,7 +423,34 @@ function obtenerSubFamilia(){
 
         }
     });
+}
 
+function obtenerCodigo(){
+
+    var familia = $('#familia').val();
+    var sub_familia = $('#sub_familia').val();
+    var codigo = $('#codigo').val();
+
+    if(familia=="")return false;
+    if(sub_familia=="")return false;
+
+    var msgLoader = "";
+	msgLoader = "Procesando, espere un momento por favor";
+	var heightBrowser = $(window).width()/2;
+	$('.loader').css("opacity","0.8").css("height",heightBrowser).html("<div id='Grd1_wrapper' class='dataTables_wrapper'><div id='Grd1_processing' class='dataTables_processing panel-default'>"+msgLoader+"</div></div>");
+    $('.loader').show();
+
+    $.ajax({
+        url: "/sub_familia/obtener_codigo/"+sub_familia,
+        dataType: "json",
+        success: function (result) {
+
+            var codigo = result[0].nuevo_codigo;
+            $('#codigo').val(codigo);
+            $('.loader').hide();
+
+        }
+    });
 }
 
 </script>
@@ -501,7 +532,7 @@ function obtenerSubFamilia(){
                                     <div class="col-lg-4">
                                         <div class="form-group">
                                             <label class="control-label form-control-sm">C&oacute;digo</label>
-                                            <input id="codigo" name="codigo" on class="form-control form-control-sm"  value="<?php echo $producto->codigo?>" type="text">
+                                            <input id="codigo" name="codigo" on class="form-control form-control-sm"  value="<?php echo $producto->codigo?>" type="text" readonly>
                                         </div>
                                     </div>
                                     <div class="col-lg-4">
@@ -583,7 +614,7 @@ function obtenerSubFamilia(){
                                     <div class="col-lg-4">
                                         <div class="form-group">
                                             <label class="control-label form-control-sm">Sub Familia</label>
-                                            <select name="sub_familia" id="sub_familia" class="form-control form-control-sm" onchange="">
+                                            <select name="sub_familia" id="sub_familia" class="form-control form-control-sm" onchange="obtenerCodigo()">
                                                 <option value="">--Seleccionar--</option>
                                             </select>
                                         </div>
