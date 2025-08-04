@@ -323,8 +323,8 @@ function fn_save_producto(){
     if(denominacion==""){msg+="Ingrese la Denominacion del Producto <br>";}
     if(codigo==""){msg+="Ingrese el Codigo del Producto <br>";}
     if(peso==""){msg+="Ingrese el Peso del Producto <br>";}
-    if(familia==""){msg+="Ingrese la Familia <br>";}
-    if(sub_familia==""){msg+="Ingrese la Sub Familia <br>";}
+    //if(familia==""){msg+="Ingrese la Familia <br>";}
+    //if(sub_familia==""){msg+="Ingrese la Sub Familia <br>";}
 
     if(msg!=""){
 
