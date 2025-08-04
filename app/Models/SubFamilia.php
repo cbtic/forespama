@@ -54,7 +54,7 @@ class SubFamilia extends Model
     function getCodigo($sub_familia){
 
         $cad = "select  sf.inicial_codigo || lpad((coalesce(max(substring(p.codigo from '.{4}$')::int), 0) + 1)::text,4, '0') nuevo_codigo from sub_familias sf 
-        inner join productos p on sf.id = p.id_sub_familia 
+        left join productos p on sf.id = p.id_sub_familia 
         where sf.id = '".$sub_familia."'
         and sf.estado ='1'
         group by sf.inicial_codigo";
