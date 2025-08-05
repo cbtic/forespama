@@ -1035,7 +1035,7 @@ class OrdenCompraController extends Controller
             if($r->estado_pedido==2){$estado_pedido='ANULADO';}
             if($r->estado_pedido==3){$estado_pedido='CANCELADO';}
 
-			array_push($variable, array($n++,$r->id, $r->tipo_documento, $r->cliente, $r->numero_orden_compra_cliente, $r->empresa_vende, $r->fecha_orden_compra, $r->numero_orden_compra, $r->almacen_origen, $r->almacen_destino, $r->cerrado, $r->vendedor, number_format($r->total, 2), $estado, $estado_pedido));
+			array_push($variable, array($n++,$r->id, $r->tipo_documento, $r->cliente, $r->numero_orden_compra_cliente, $r->empresa_vende, $r->fecha_orden_compra, $r->numero_orden_compra, $r->almacen_origen, $r->almacen_destino, $r->cerrado, $r->vendedor, (float)$r->total, $estado, $estado_pedido));
 		}
 		
 		$export = new InvoicesExport([$variable]);
@@ -2026,9 +2026,9 @@ class InvoicesExport implements FromArray, WithHeadings, WithStyles
 
 		$sheet->fromArray($this->headings(), NULL, 'A2');
 
-		/*$sheet->getStyle('L3:L'.$sheet->getHighestRow())
+		$sheet->getStyle('M3:M'.$sheet->getHighestRow())
 		->getNumberFormat()
-		->setFormatCode(\PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_NUMBER_00);*/ //SIRVE PARA PONER 2 DECIMALES A ESA COLUMNA
+		->setFormatCode('#,##0.00');
         
         foreach (range('A', 'O') as $col) {
             $sheet->getColumnDimension($col)->setAutoSize(true);
