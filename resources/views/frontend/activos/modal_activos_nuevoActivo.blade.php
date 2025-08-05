@@ -492,7 +492,7 @@ $(function() {
                                         </div>
                                         </div>
                                     <div class="row">
-                                    <div class="col-lg-2">
+                                        <div class="col-lg-2">
                                             <div class="form-group">
                                                 <label class="control-label form-control-sm">Modelo</label>
                                                 <input id="modelo" name="modelo" on class="form-control form-control-sm mayusculas"  value="<?php echo $activo->modelo?>" type="text">
