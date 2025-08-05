@@ -711,6 +711,7 @@ Route::get('orden_compra/create_control_produccion', [OrdenCompraController::cla
 Route::post('orden_compra/listar_orden_compra_control_produccion_ajax', [OrdenCompraController::class, 'listar_orden_compra_control_produccion_ajax'])->name('orden_compra.listar_orden_compra_control_produccion_ajax');
 Route::get('orden_compra/modal_orden_compra_control_produccion/{id}', [OrdenCompraController::class, 'modal_orden_compra_control_produccion'])->name('orden_compra.modal_orden_compra_control_produccion');
 Route::get('activos/create', [ActivoController::class, 'create'])->name('activos.create');
+Route::get('activos/create_activo', [ActivoController::class, 'create_activo'])->name('activos.create_activo');
 Route::post('activos/listar_activos_ajax', [ActivoController::class, 'listar_activos_ajax'])->name('activos.listar_activos_ajax');
 Route::get('activos/modal_activos_horno/{id}', [ActivoController::class, 'modal_activos_horno'])->name('activos.modal_activos_horno');
 Route::post('activos/send_activo', [ActivoController::class, 'send_activo'])->name('activos.send_activo');

@@ -379,7 +379,7 @@ label.form-control-sm{
 
 					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12" style="padding-right:0px">
 						<input class="btn btn-warning pull-rigth" value="Buscar" type="button" id="btnBuscar" />
-						<input class="btn btn-success pull-rigth" value="Nuevo" type="button" id="btnNuevo" style="margin-left:15px" />
+						<a class="btn btn-success" href="/activos/create_activo" style="margin-left:15px">Nuevo</a>
 					</div>
 				</div>
 				

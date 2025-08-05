@@ -433,13 +433,6 @@ $(function() {
 <body class="hold-transition skin-blue sidebar-mini">
 
     <div>
-		<!--
-        <section class="content-header">
-          <h1>
-            <small style="font-size: 20px">Programados del Medicos del dia <?php //echo $fecha_atencion?></small>
-          </h1>
-        </section>
-		-->
 		<div class="justify-content-center">		
 
             <div class="card">

@@ -1,4 +1,4 @@
--- DROP FUNCTION public.sp_listar_productos_paginado(varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, refcursor);
+-- DROP FUNCTION public.sp_listar_productos_paginado(varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, refcursor);
 
 CREATE OR REPLACE FUNCTION public.sp_listar_productos_paginado(p_serie character varying, p_denominacion character varying, p_codigo character varying, p_estado_bien character varying, p_tipo_origen_producto character varying, p_tiene_imagen character varying, p_familia character varying, p_sub_familia character varying, p_estado character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
  RETURNS refcursor
@@ -34,7 +34,7 @@ begin
 	left join tabla_maestras tm6 on p.bien_servicio = tm6.codigo::int and tm6.tipo =''73''
 	left join marcas m on p.id_marca = m.id
 	left join familias f on p.id_familia = f.id 
-	left join sub_familias sf on f.id = sf.id_familia ';
+	left join sub_familias sf on p.id_sub_familia = sf.id ';
 	
 	v_where = ' Where 1=1 ';
 

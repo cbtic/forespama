@@ -37,6 +37,26 @@ class ActivoController extends Controller
 
 	}
 
+	public function create_activo(){
+		
+		$id = 0;
+		$tabla_maestra_model = new TablaMaestra;
+		$activo = new Activo;
+        $marca_model = new Marca;
+        $ubigeo_model = new Ubigeo;
+        $soat_activo_model = new SoatActivo;
+
+		$tipo_activo = $tabla_maestra_model->getMaestroByTipo('84');
+		$marca = $marca_model->getMarcaVehiculo();
+		$tipo_combustible = $tabla_maestra_model->getMaestroByTipo('86');
+		$estado_activos = $tabla_maestra_model->getMaestroByTipo('85');
+        $departamento = $ubigeo_model->getDepartamento();
+		$soat_activo = $soat_activo_model->getSoatActivo($id);
+
+		return view('frontend.activos.create_activo',compact('activo','marca','tipo_combustible','estado_activos','soat_activo','departamento','tipo_activo','id'));
+
+	}
+
     public function listar_activos_ajax(Request $request){
 
 		$activos_model = new Activo;
