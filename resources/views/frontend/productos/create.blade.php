@@ -469,7 +469,8 @@ label.form-control-sm{
 							<th>Contenido</th>
 							<th>Unidad Medida</th>
 							<th>Marca</th>
-							<th>Tipo Producto</th>
+							<th>Familia</th>
+							<th>Sub Familia</th>
 							<th>Estado Bien</th>
 							<th>F. Vencimiento</th>
 							<th>Stock M&iacute;nimo</th>
