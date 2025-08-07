@@ -138,7 +138,8 @@ class OrdenCompra extends Model
         inner join salida_producto_detalles spd on sp.id=spd.id_salida_productos  
         where id_orden_compra =ocd.id_orden_compra 
         and spd.id_producto=ocd.id_producto
-        and sp.tipo_devolucion ='1'),0)cantidad_ingresada,
+        and sp.tipo_devolucion ='1'
+        and sp.estado = '1'),0)cantidad_ingresada,
         ocd.precio, ocd.sub_total, ocd.igv, ocd.total, ocd.id_descuento, oc.id_almacen_salida, oc.id_unidad_origen, oc.id_almacen_destino ,
         m.denominiacion marca,
         coalesce((select k.saldos_cantidad from kardex k where id_producto = ocd.id_producto and id_almacen_destino = 3  order by 1 desc limit 1),0)stock_ves, --ves

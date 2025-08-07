@@ -741,3 +741,14 @@ Route::get('sub_familia/eliminar_sub_familia/{id}/{estado}', [SubFamiliaControll
 Route::get('sub_familia/valida_codigo_unico/{inicial}', [SubFamiliaController::class, 'valida_codigo_unico'])->name('sub_familia.valida_codigo_unico');
 Route::get('sub_familia/obtener_sub_familia/{familia}', [SubFamiliaController::class, 'obtener_sub_familia'])->name('sub_familia.obtener_sub_familia');
 Route::get('sub_familia/obtener_codigo/{sub_familia}', [SubFamiliaController::class, 'obtener_codigo'])->name('sub_familia.obtener_codigo');
+Route::get('activos/modal_soat_activo/{id}', [ActivoController::class, 'modal_soat_activo'])->name('activos.modal_soat_activo');
+Route::get('activos/modal_revision_tecnica_activo/{id}', [ActivoController::class, 'modal_revision_tecnica_activo'])->name('activos.modal_revision_tecnica_activo');
+Route::get('activos/modal_control_mantenimiento_activo/{id}', [ActivoController::class, 'modal_control_mantenimiento_activo'])->name('activos.modal_control_mantenimiento_activo');
+Route::get('activos/eliminar_soat_activo/{id}/{estado}', [ActivoController::class, 'eliminar_soat_activo'])->name('activos.eliminar_soat_activo');
+Route::get('activos/eliminar_revision_tecnica_activo/{id}/{estado}', [ActivoController::class, 'eliminar_revision_tecnica_activo'])->name('activos.eliminar_revision_tecnica_activo');
+Route::get('activos/eliminar_control_mantenimiento_activo/{id}/{estado}', [ActivoController::class, 'eliminar_control_mantenimiento_activo'])->name('activos.eliminar_control_mantenimiento_activo');
+Route::post('activos/send', [ActivoController::class, 'send'])->name('activos.send');
+Route::post('activos/send_soat_activo', [ActivoController::class, 'send_soat_activo'])->name('activos.send_soat_activo');
+Route::post('activos/send_revision_tecnica_activo', [ActivoController::class, 'send_revision_tecnica_activo'])->name('activos.send_revision_tecnica_activo');
+Route::post('activos/send_control_mantenimiento_activo', [ActivoController::class, 'send_control_mantenimiento_activo'])->name('activos.send_control_mantenimiento_activo');
+Route::get('activos/editar_activo/{id}', [ActivoController::class, 'editar_activo'])->name('activos.editar_activo');

@@ -349,12 +349,12 @@ label.form-control-sm{
                                             <div class="row">
                                                 <div class="col-lg-11 col-md-12 col-sm-12 col-xs-12">
 													<div class="row">
-                                                        <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
+                                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                                             <div class="row">
-                                                                <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
+                                                                <div class="col-lg-1 col-md-12 col-sm-12 col-xs-12">
                                                                     Tipo Activo
                                                                 </div>
-                                                                <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
+                                                                <div class="col-lg-2 col-md-12 col-sm-12 col-xs-12">
                                                                     <select name="tipo_activo" id="tipo_activo" class="form-control form-control-sm">
                                                                         <option value="">--Seleccionar--</option>
                                                                         <?php 
@@ -365,85 +365,42 @@ label.form-control-sm{
                                                                         ?>
                                                                     </select>
                                                                 </div>
-                                                                <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
+                                                                <div class="col-lg-1 col-md-12 col-sm-12 col-xs-12">
                                                                     C&oacute;digo
                                                                 </div>
-                                                                <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
+                                                                <div class="col-lg-2 col-md-12 col-sm-12 col-xs-12">
                                                                     <input id="codigo" name="codigo" on class="form-control form-control-sm mayusculas"  value="<?php //echo $activo->codigo?>" type="text">
                                                                 </div>
-                                                            </div>
-                                                            <div class="row">
-                                                                <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
-                                                                    Placa
-                                                                </div>
-                                                                <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
-                                                                    <input id="placa" name="placa" on class="form-control form-control-sm mayusculas"  value="<?php echo $activo->placa?>" type="text" placeholder="ABC-123">
-                                                                </div>
-                                                                <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
-                                                                    Modelo
-                                                                </div>
-                                                                <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
-                                                                    <input id="modelo" name="modelo" on class="form-control form-control-sm mayusculas"  value="<?php echo $activo->modelo?>" type="text">
-                                                                </div>
-                                                            </div>
-                                                            <div class="row">
-                                                                <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
-                                                                    Tipo Combustible
-                                                                </div>
-                                                                <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
-                                                                    <select name="tipo_combustible" id="tipo_combustible" class="form-control form-control-sm">
-                                                                        <option value="">--Seleccionar--</option>
-                                                                        <?php 
-                                                                        foreach ($tipo_combustible as $row){?>
-                                                                            <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$activo->id_tipo_combustible)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
-                                                                            <?php 
-                                                                        }
-                                                                        ?>
-                                                                    </select>
-                                                                </div>
-                                                                <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
-                                                                    Dimesiones
-                                                                </div>
-                                                                <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
-                                                                    <input id="dimension" name="dimension" on class="form-control form-control-sm mayusculas"  value="<?php echo $activo->dimensiones?>" type="text">
-                                                                </div>
-                                                            </div>
-                                                            <div class="row">
-                                                                <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
-                                                                    Valor Libros
-                                                                </div>
-                                                                <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
-                                                                    <input id="valor_libros" name="valor_libros" on class="form-control form-control-sm solo-decimal" <?= ($activo->valor_libros !== null && $activo->valor_libros !== '') ? 'value="' . number_format($activo->valor_libros, 2) . '"' : '' ?> type="text" placeholder="0.00">
-                                                                </div>
-                                                                <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
-                                                                    Valor Comercial
-                                                                </div>
-                                                                <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
-                                                                    <input id="valor_comercial" name="valor_comercial" on class="form-control form-control-sm solo-decimal" <?= ($activo->valor_comercial !== null && $activo->valor_comercial !== '') ? 'value="' . number_format($activo->valor_comercial, 2) . '"' : '' ?> type="text" placeholder="0.00">
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        
-                                                        <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
-                                                            <div class="row">
-                                                                <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
+                                                                <div class="col-lg-1 col-md-12 col-sm-12 col-xs-12">
                                                                     Descripci&oacute;n
                                                                 </div>
-                                                                <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
+                                                                <div class="col-lg-5 col-md-12 col-sm-12 col-xs-12">
                                                                     <input id="descripcion" name="descripcion" on class="form-control form-control-sm mayusculas"  value="<?php echo $activo->descripcion?>" type="text">
                                                                 </div>
                                                             </div>
                                                             <div class="row">
-                                                                <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
+                                                                <div class="col-lg-1 col-md-12 col-sm-12 col-xs-12">
+                                                                    Placa
+                                                                </div>
+                                                                <div class="col-lg-2 col-md-12 col-sm-12 col-xs-12">
+                                                                    <input id="placa" name="placa" on class="form-control form-control-sm mayusculas"  value="<?php echo $activo->placa?>" type="text" placeholder="ABC-123">
+                                                                </div>
+                                                                <div class="col-lg-1 col-md-12 col-sm-12 col-xs-12">
+                                                                    Modelo
+                                                                </div>
+                                                                <div class="col-lg-2 col-md-12 col-sm-12 col-xs-12">
+                                                                    <input id="modelo" name="modelo" on class="form-control form-control-sm mayusculas"  value="<?php echo $activo->modelo?>" type="text">
+                                                                </div>
+                                                                <div class="col-lg-1 col-md-12 col-sm-12 col-xs-12">
                                                                     Serie
                                                                 </div>
-                                                                <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
+                                                                <div class="col-lg-2 col-md-12 col-sm-12 col-xs-12">
                                                                     <input id="serie" name="serie" on class="form-control form-control-sm mayusculas"  value="<?php echo $activo->serie?>" type="text">
                                                                 </div>
-                                                                <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
+                                                                <div class="col-lg-1 col-md-12 col-sm-12 col-xs-12">
                                                                     Marca
                                                                 </div>
-                                                                <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
+                                                                <div class="col-lg-2 col-md-12 col-sm-12 col-xs-12">
                                                                     <select name="marca" id="marca" class="form-control form-control-sm">
                                                                         <option value="">--Seleccionar--</option>
                                                                         <?php 
@@ -456,11 +413,136 @@ label.form-control-sm{
                                                                 </div>
                                                             </div>
                                                             <div class="row">
-                                                                <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
+                                                                <div class="col-lg-1 col-md-12 col-sm-12 col-xs-12">
+                                                                    Tipo Combustible
+                                                                </div>
+                                                                <div class="col-lg-2 col-md-12 col-sm-12 col-xs-12">
+                                                                    <select name="tipo_combustible" id="tipo_combustible" class="form-control form-control-sm">
+                                                                        <option value="">--Seleccionar--</option>
+                                                                        <?php 
+                                                                        foreach ($tipo_combustible as $row){?>
+                                                                            <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$activo->id_tipo_combustible)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                                                            <?php 
+                                                                        }
+                                                                        ?>
+                                                                    </select>
+                                                                </div>
+                                                                <div class="col-lg-1 col-md-12 col-sm-12 col-xs-12">
+                                                                    Dimesiones
+                                                                </div>
+                                                                <div class="col-lg-2 col-md-12 col-sm-12 col-xs-12">
+                                                                    <input id="dimension" name="dimension" on class="form-control form-control-sm mayusculas"  value="<?php echo $activo->dimensiones?>" type="text">
+                                                                </div>
+                                                                <div class="col-lg-1 col-md-12 col-sm-12 col-xs-12">
+                                                                    Valor Libros
+                                                                </div>
+                                                                <div class="col-lg-2 col-md-12 col-sm-12 col-xs-12">
+                                                                    <input id="valor_libros" name="valor_libros" on class="form-control form-control-sm solo-decimal" <?= ($activo->valor_libros !== null && $activo->valor_libros !== '') ? 'value="' . number_format($activo->valor_libros, 2) . '"' : '' ?> type="text" placeholder="0.00">
+                                                                </div>
+                                                                <div class="col-lg-1 col-md-12 col-sm-12 col-xs-12">
+                                                                    Valor Comercial
+                                                                </div>
+                                                                <div class="col-lg-2 col-md-12 col-sm-12 col-xs-12">
+                                                                    <input id="valor_comercial" name="valor_comercial" on class="form-control form-control-sm solo-decimal" <?= ($activo->valor_comercial !== null && $activo->valor_comercial !== '') ? 'value="' . number_format($activo->valor_comercial, 2) . '"' : '' ?> type="text" placeholder="0.00">
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col-lg-1 col-md-12 col-sm-12 col-xs-12">
                                                                     Color
                                                                 </div>
-                                                                <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
+                                                                <div class="col-lg-5 col-md-12 col-sm-12 col-xs-12">
                                                                     <input id="color" name="color" on class="form-control form-control-sm mayusculas"  value="<?php echo $activo->color?>" type="text">
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col-lg-1 col-md-12 col-sm-12 col-xs-12">
+                                                                    Departamento
+                                                                </div>
+                                                                <div class="col-lg-2 col-md-12 col-sm-12 col-xs-12">
+                                                                    <select name="departamento" id="departamento" onchange="obtenerProvincia()" class="form-control form-control-sm">
+                                                                        <?php if($id>0){ ?> 
+                                                                        <option value="">--Seleccionar--</option>
+                                                                        <?php
+                                                                        foreach ($departamento as $row) {?>
+                                                                        <option value="<?php echo $row->id_departamento?>" <?php if($row->id_departamento==substr($activo->id_ubigeo,0,2))echo "selected='selected'"?>><?php echo $row->desc_ubigeo ?></option>
+                                                                        <?php 
+                                                                        }
+                                                                        }else{?>
+                                                                        <option value="">--Seleccionar--</option>
+                                                                            <?php
+                                                                            foreach ($departamento as $row) {
+                                                                            ?>
+                                                                            <option value="<?php echo $row->id_departamento?>"><?php echo $row->desc_ubigeo ?></option>
+                                                                            <?php 
+                                                                                
+                                                                            }
+                                                                        }
+                                                                        ?>
+                                                                    </select>
+                                                                </div>
+                                                                <div class="col-lg-1 col-md-12 col-sm-12 col-xs-12">
+                                                                    Provincia
+                                                                </div>
+                                                                <div class="col-lg-2 col-md-12 col-sm-12 col-xs-12">
+                                                                    <select name="provincia" id="provincia" class="form-control form-control-sm" onchange="obtenerDistrito()">
+                                                                        <option value="">--Seleccionar--</option>
+                                                                    </select>
+                                                                </div>
+                                                                <div class="col-lg-1 col-md-12 col-sm-12 col-xs-12">
+                                                                    Distrito
+                                                                </div>
+                                                                <div class="col-lg-2 col-md-12 col-sm-12 col-xs-12">
+                                                                    <select name="distrito" id="distrito" class="form-control form-control-sm" onchange="">
+                                                                        <option value="">--Seleccionar--</option>
+                                                                    </select>
+                                                                </div>
+                                                                <div class="col-lg-1 col-md-12 col-sm-12 col-xs-12">
+                                                                    Direcci&oacute;n
+                                                                </div>
+                                                                <div class="col-lg-2 col-md-12 col-sm-12 col-xs-12">
+                                                                    <input id="direccion" name="direccion" on class="form-control form-control-sm mayusculas"  value="<?php echo $activo->direccion?>" type="text">
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col-lg-1 col-md-12 col-sm-12 col-xs-12">
+                                                                    Titulo
+                                                                </div>
+                                                                <div class="col-lg-2 col-md-12 col-sm-12 col-xs-12">
+                                                                    <input id="titulo" name="titulo" on class="form-control form-control-sm mayusculas"  value="<?php echo $activo->titulo?>" type="text">
+                                                                </div>
+                                                                <div class="col-lg-1 col-md-12 col-sm-12 col-xs-12">
+                                                                    Partida Registral
+                                                                </div>
+                                                                <div class="col-lg-2 col-md-12 col-sm-12 col-xs-12">
+                                                                    <input id="partida_registral" name="partida_registral" on class="form-control form-control-sm mayusculas"  value="<?php echo $activo->partida_registral?>" type="text">
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col-lg-1 col-md-12 col-sm-12 col-xs-12">
+                                                                    Partida Circulaci&oacute;n
+                                                                </div>
+                                                                <div class="col-lg-5 col-md-12 col-sm-12 col-xs-12">
+                                                                    <input id="partida_circulacion" name="partida_circulacion" on class="form-control form-control-sm mayusculas"  value="<?php echo $activo->partida_circulacion?>" type="text">
+                                                                </div>
+                                                                <div class="col-lg-1 col-md-12 col-sm-12 col-xs-12">
+                                                                    Vigencia Circulaci&oacute;n
+                                                                </div>
+                                                                <div class="col-lg-2 col-md-12 col-sm-12 col-xs-12">
+                                                                    <input id="vigencia_circulacion" name="vigencia_circulacion" on class="form-control form-control-sm mayusculas"  value="<?php echo $activo->vigencia_circulacion?>" type="text" placeholder="YYYY-MM-DD">
+                                                                </div>
+                                                                <div class="col-lg-1 col-md-12 col-sm-12 col-xs-12">
+                                                                    Estado de Activo
+                                                                </div>
+                                                                <div class="col-lg-2 col-md-12 col-sm-12 col-xs-12">
+                                                                    <select name="estado_activo" id="estado_activo" class="form-control form-control-sm">
+                                                                        <option value="">--Seleccionar--</option>
+                                                                        <?php 
+                                                                        foreach ($estado_activos as $row){?>
+                                                                            <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$activo->id_estado_activo)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                                                            <?php 
+                                                                        }
+                                                                        ?>
+                                                                    </select>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -468,9 +550,7 @@ label.form-control-sm{
                                                 </div>
                                                 <div class="col-lg-1 col-md-12 col-sm-12 col-xs-12">
                                                     <div class="row">
-
                                                         <div class="form-group">
-                                                                
                                                             <span class="btn btn-sm btn-warning btn-file">
                                                                 Examinar <input id="image" name="image" type="file" />
                                                             </span>
@@ -483,13 +563,11 @@ label.form-control-sm{
                                                                 $foto = "";
                                                                 if ($activo->ruta_imagen != "") $foto = $activo->ruta_imagen;
                                                             ?>
-
                                                             <!--<img src="<?php //echo $url_foto ?>" id="img_ruta" width="240px" height="150px" alt="" style="margin-top:10px" />-->
                                                             <a href="<?php echo "/".$activo->ruta_imagen ?>" target="_blank" class="btn btn-sm btn-secondary"><img src="<?php echo $url_foto?>" id="img_ruta" width="80" height="50" alt="" style="margin-top:10px" /></a>
                                                             <input type="hidden" id="img_foto" name="img_foto" value="" />
                                                         </div>
                                                         <input class="btn btn-sm btn-success float-rigth" value="GUARDAR" name="guardar" type="button" id="btnGuardar" style="padding-left:25px;padding-right:25px;margin-left:10px;margin-top:15px" />
-                                                    
                                                     </div>
                                                 </div>
                                             </div>
@@ -499,146 +577,45 @@ label.form-control-sm{
                             </div>
                         </div>
                     </div>
-
-                    <div class="row">
-                        <div class="col-lg-4">
-                            <div class="form-group">
-                                <label class="control-label form-control-sm">Departamento</label>
-                                <select name="departamento" id="departamento" onchange="obtenerProvincia()" class="form-control form-control-sm">
-                                    <?php if($id>0){ ?> 
-                                    <option value="">--Seleccionar--</option>
-                                    <?php
-                                    foreach ($departamento as $row) {?>
-                                    <option value="<?php echo $row->id_departamento?>" <?php if($row->id_departamento==substr($activo->id_ubigeo,0,2))echo "selected='selected'"?>><?php echo $row->desc_ubigeo ?></option>
-                                    <?php 
-                                    }
-                                    }else{?>
-                                    <option value="">--Seleccionar--</option>
-                                        <?php
-                                        foreach ($departamento as $row) {
-                                        ?>
-                                        <option value="<?php echo $row->id_departamento?>"><?php echo $row->desc_ubigeo ?></option>
-                                        <?php 
-                                            
-                                        }
-                                    }
-                                    ?>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-lg-4">
-                            <div class="form-group">
-                                <label class="control-label form-control-sm">Provincia</label>
-                                <select name="provincia" id="provincia" class="form-control form-control-sm" onchange="obtenerDistrito()">
-                                    <option value="">--Seleccionar--</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-lg-4">
-                            <div class="form-group">
-                                <label class="control-label form-control-sm">Distrito</label>
-                                <select name="distrito" id="distrito" class="form-control form-control-sm" onchange="">
-                                    <option value="">--Seleccionar--</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="form-group">
-                                <label class="control-label form-control-sm">Direcci&oacute;n</label>
-                                <input id="direccion" name="direccion" on class="form-control form-control-sm mayusculas"  value="<?php echo $activo->direccion?>" type="text">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="form-group">
-                                <label class="control-label form-control-sm">Titulo</label>
-                                <input id="titulo" name="titulo" on class="form-control form-control-sm mayusculas"  value="<?php echo $activo->titulo?>" type="text">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="form-group">
-                                <label class="control-label form-control-sm">Partida Registral</label>
-                                <input id="partida_registral" name="partida_registral" on class="form-control form-control-sm mayusculas"  value="<?php echo $activo->partida_registral?>" type="text">
-                            </div>
-                        </div>
-                    </div>
                     
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="form-group">
-                                <label class="control-label form-control-sm">Partida Circulaci&oacute;n</label>
-                                <input id="partida_circulacion" name="partida_circulacion" on class="form-control form-control-sm mayusculas"  value="<?php echo $activo->partida_circulacion?>" type="text">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-6">
-                            <div class="form-group">
-                                <label class="control-label form-control-sm">Vigencia Circulaci&oacute;n</label>
-                                <input id="vigencia_circulacion" name="vigencia_circulacion" on class="form-control form-control-sm mayusculas"  value="<?php echo $activo->vigencia_circulacion?>" type="text" placeholder="YYYY-MM-DD">
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="form-group">
-                                <label class="control-label form-control-sm">Estado de Activo</label>
-                                <select name="estado_activo" id="estado_activo" class="form-control form-control-sm">
-                                    <option value="">--Seleccionar--</option>
-                                    <?php 
-                                    foreach ($estado_activos as $row){?>
-                                        <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$activo->id_estado_activo)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
-                                        <?php 
-                                    }
-                                    ?>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-            
-                    <div style="clear:both;padding-top:15px"></div>
+                    <?php if($id>0){?>
 
+                    <div style="clear:both;padding-top:15px"></div>
                         <div class="card">
                             <nav>
                                 <div class="nav nav-pills" id="nav-tab" role="tablist">
                                     <a
                                         class="nav-link active"
-                                        id="my-profile-tab"
+                                        id="soat-tab"
                                         data-toggle="pill"
-                                        href="#my-profile"
+                                        href="#soat"
                                         role="tab"
-                                        aria-controls="my-profile"
+                                        aria-controls="soat"
                                         aria-selected="true">SOAT</a>
                                     
                                     <a
                                         class="nav-link"
-                                        id="information-tab"
+                                        id="revision_tecnica-tab"
                                         data-toggle="pill"
-                                        href="#information"
+                                        href="#revision_tecnica"
                                         role="tab"
-                                        aria-controls="information"
-                                        aria-selected="false"
-                                        >Revisi&oacute;n T&eacute;cnica</a>
+                                        aria-controls="revision_tecnica"
+                                        aria-selected="false">Revisi&oacute;n T&eacute;cnica</a>
                                     
                                     <a
                                         class="nav-link"
-                                        id="seguimiento-tab"
+                                        id="control_mantenimiento-tab"
                                         data-toggle="pill"
-                                        href="#seguimiento"
+                                        href="#control_mantenimiento"
                                         role="tab"
-                                        aria-controls="seguimiento"
-                                        aria-selected="false"
-                                        >Control de Mantenimientos</a>
+                                        aria-controls="control_mantenimiento"
+                                        aria-selected="false">Control de Mantenimientos</a>
                                 
                                 </div>
                             </nav>
-                            <div class="tab-content" id="my-profile-tabsContent">
-                                <div class="tab-pane fade pt-3 show active" id="my-profile" role="tabpanel" aria-labelledby="my-profile-tab" style="padding-top:0px!important">
+                            <div class="tab-content" id="nav-tabsContent">
+
+                                <div class="tab-pane fade pt-3 show active" id="soat" role="tabpanel" aria-labelledby="soat-tab" style="padding-top:0px!important">
                             
                                     <div class="row" style="padding-top:0px">
 
@@ -651,7 +628,6 @@ label.form-control-sm{
                                                             <strong>
                                                                 Datos del SOAT
                                                             </strong>
-                                                            
                                                         </div>
                                                     </div>
                                                 </div>
@@ -661,115 +637,157 @@ label.form-control-sm{
                                                     <input class="btn btn-success btn-sm float-right" value="NUEVO" type="button" id="btnNuevoSOAT" style="width:120px;margin-right:15px"/>
                                                     
                                                     <div style="clear:both"></div>
-                                                    
-                                                    <div class="row">
-                                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                                        
-                                                            <div class="card-body">
                                             
-                                                                <div class="table-responsive">
-                                                                <table id="tblSolicitud" class="table table-hover table-sm">
-                                                                <thead>
-                                                                    <tr style="font-size:13px">
-                                                                        <th>N&uacute;mero de Poliza</th>
-                                                                        <th>Fecha Emisi&oacute;n</th>
-                                                                        <th>Fecha Vencimiento</th>
-                                                                        <th>Opciones</th>
-                                                                    </tr>
-                                                                </thead>
-                                                                <tbody style="font-size:13px">
-                                                                    <?php foreach($soat_activo as $row){?>
-                                                                    <tr>
-                                                                        <th><?php echo $row->numero_certificado?></th>
-                                                                        <th><?php echo $row->fecha_emision?></th>
-                                                                        <th><?php echo $row->fecha_vencimiento?></th>
-                                                                        <th>
-                                                                            <div class="btn-group btn-group-sm" role="group" aria-label="Log Viewer Actions">
-                                                                            <button style="font-size:12px" type="button" class="btn btn-sm btn-success" data-toggle="modal" onclick="modalParentesco(<?php echo $row->id?>)" ><i class="fa fa-edit"></i> Editar</button>
-                                                                            <a href="javascript:void(0)" onclick="eliminarParentesco(<?php echo $row->id?>)" class="btn btn-sm btn-danger" style="font-size:12px;margin-left:10px">Eliminar</a>
-                                                                            </div>
-                                                                        </th>
-                                                                    </tr>						
-                                                                    <?php }?>
-                                                                </tbody>							
-                                                                </table>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="tab-pane fade pt-3" id="information" role="tabpanel" aria-labelledby="information-tab">
-                                
-                                <div class="row" style="padding-top:0px">
-
-                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                        
-                                        <div class="card">
-                                            <div class="card-header">
-                                                <div id="" class="row">
-                                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                                        <strong>
-                                                            Estudios Realizados
-                                                        </strong>
-                                                        
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="card-body" style="margin-top:15px;margin-bottom:15px">
-                                                
-                                                <input class="btn btn-success btn-sm float-right" value="NUEVO" type="button" id="btnNuevoEstudio" style="width:120px;margin-right:15px"/>
-                                                
-                                                <div style="clear:both"></div>
-                                                
-                                                <div class="row">
-                                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                                    
-                                                        <div class="card-body">
-                                        
-                                                            <div class="table-responsive">
-                                                            <table id="tblSolicitud" class="table table-hover table-sm">
+                                                    <div class="table-responsive">
+                                                        <table id="tblDatosSoat" class="table table-hover table-sm">
                                                             <thead>
                                                                 <tr style="font-size:13px">
-                                                                    <th>Universidad</th>
-                                                                    <th>Especialidad</th>
-                                                                    <th>Titulo de Tesis</th>
-                                                                    <th>F. Egresado</th>
-                                                                    <th>F. Graduado</th>
-                                                                    <th>Libro</th>
-                                                                    <th>Folio</th>
+                                                                    <th>N&uacute;mero de Poliza</th>
+                                                                    <th>Fecha Emisi&oacute;n</th>
+                                                                    <th>Fecha Vencimiento</th>
+                                                                    <th>Estado SOAT</th>
                                                                     <th>Opciones</th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody style="font-size:13px">
-                                                                <?php //foreach($agremiado_estudio as $row){?>
+                                                                <?php foreach($soat_activo as $row){?>
                                                                 <tr>
-                                                                    <th><?php //echo $row->universidad?></th>
-                                                                    <th><?php //echo $row->especialidad?></th>
-                                                                    <th><?php //echo $row->tesis?></th>
-                                                                    <th><?php //echo $row->fecha_egresado?></th>
-                                                                    <th><?php //echo $row->fecha_graduado?></th>
-                                                                    <th><?php //echo $row->libro?></th>
-                                                                    <th><?php //echo $row->folio?></th>
+                                                                    <th><?php echo $row->numero_poliza?></th>
+                                                                    <th><?php echo $row->fecha_emision?></th>
+                                                                    <th><?php echo $row->fecha_vencimiento?></th>
+                                                                    <th><?php echo $row->estado_soat?></th>
                                                                     <th>
-                        <div class="btn-group btn-group-sm" role="group" aria-label="Log Viewer Actions">
-                        <button style="font-size:12px" type="button" class="btn btn-sm btn-success" data-toggle="modal" onclick="modalEstudio(<?php //echo $row->id?>)" ><i class="fa fa-edit"></i> Editar</button>
-                        <a href="javascript:void(0)" onclick="eliminarEstudio(<?php //echo $row->id?>)" class="btn btn-sm btn-danger" style="font-size:12px;margin-left:10px">Eliminar</a>
-                        </div>
+                                                                        <div class="btn-group btn-group-sm" role="group" aria-label="Log Viewer Actions">
+                                                                            <button style="font-size:12px" type="button" class="btn btn-sm btn-success" data-toggle="modal" onclick="modalSoat(<?php echo $row->id?>)" ><i class="fa fa-edit"></i> Editar</button>
+                                                                            <a href="javascript:void(0)" onclick="eliminarSoat(<?php echo $row->id?>)" class="btn btn-sm btn-danger" style="font-size:12px;margin-left:10px">Eliminar</a>
+                                                                        </div>
                                                                     </th>
-                                                                </tr>														
-                                                                <?php //}?>
+                                                                </tr>						
+                                                                <?php }?>
                                                             </tbody>							
-                                                            </table>
-                                                            
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade pt-3" id="revision_tecnica" role="tabpanel" aria-labelledby="revision_tecnica-tab">
+                                        
+                                    <div class="row" style="padding-top:0px">
+
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                            
+                                            <div class="card">
+                                                <div class="card-header">
+                                                    <div id="" class="row">
+                                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                            <strong>
+                                                                Datos de Revisi&oacute;n T&eacute;cnica
+                                                            </strong>
                                                         </div>
                                                     </div>
+                                                </div>
+
+                                                <div class="card-body" style="margin-top:15px;margin-bottom:15px">
+                                                    
+                                                    <input class="btn btn-success btn-sm float-right" value="NUEVO" type="button" id="btnNuevoRevisionTecnica" style="width:120px;margin-right:15px"/>
+                                                    
+                                                    <div style="clear:both"></div>
+                                            
+                                                    <div class="table-responsive">
+                                                        <table id="tblRevisionTecnica" class="table table-hover table-sm">
+                                                            <thead>
+                                                                <tr style="font-size:13px">
+                                                                    <th>N&uacute;mero Certificado</th>
+                                                                    <th>Fecha Emisi&oacute;n</th>
+                                                                    <th>Fecha Vencimiento</th>
+                                                                    <th>Resultado Revisi&oacute;n</th>
+                                                                    <th>Estado Revisi&oacute;n</th>
+                                                                    <th>Opciones</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody style="font-size:13px">
+                                                                <?php foreach($revision_tecnica_activo as $row){?>
+                                                                <tr>
+                                                                    <th><?php echo $row->numero_certificado?></th>
+                                                                    <th><?php echo $row->fecha_emision?></th>
+                                                                    <th><?php echo $row->fecha_vencimiento?></th>
+                                                                    <th><?php echo $row->resultado_revision?></th>
+                                                                    <th><?php echo $row->estado_revision?></th>
+                                                                    <th>
+                                                                    <div class="btn-group btn-group-sm" role="group" aria-label="Log Viewer Actions">
+                                                                    <button style="font-size:12px" type="button" class="btn btn-sm btn-success" data-toggle="modal" onclick="modalRevisionTecnica(<?php echo $row->id?>)" ><i class="fa fa-edit"></i> Editar</button>
+                                                                    <a href="javascript:void(0)" onclick="eliminarRevisionTecnica(<?php echo $row->id?>)" class="btn btn-sm btn-danger" style="font-size:12px;margin-left:10px">Eliminar</a>
+                                                                    </div>
+                                                                    </th>
+                                                                </tr>														
+                                                                <?php }?>
+                                                            </tbody>							
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade pt-3" id="control_mantenimiento" role="tabpanel" aria-labelledby="control_mantenimiento-tab">
+                                        
+                                        <div class="row" style="padding-top:0px">
+
+                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                
+                                                <div class="card">
+                                                    <div class="card-header">
+                                                        <div id="" class="row">
+                                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                                <strong>
+                                                                    Datos de Mantenimientos
+                                                                </strong>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="card-body" style="margin-top:15px;margin-bottom:15px">
+                                                        
+                                                        <input class="btn btn-success btn-sm float-right" value="NUEVO" type="button" id="btnNuevoMantenimiento" style="width:120px;margin-right:15px"/>
+                                                        
+                                                        <div style="clear:both"></div>
+                                                        <div class="table-responsive">
+                                                            <table id="tblMantenimiento" class="table table-hover table-sm">
+                                                                <thead>
+                                                                    <tr style="font-size:13px">
+                                                                        <th>Fecha Mantenimiento</th>
+                                                                        <th>Kilometraje</th>
+                                                                        <th>Pr&oacute;ximo Kilometraje</th>
+                                                                        <th>Tipo Mantenimiento</th>
+                                                                        <th>Costo</th>
+                                                                        <th>Fecha Pr&oacute;ximo Mantenimiento</th>
+                                                                        <th>Observaci&oacute;n</th>
+                                                                        <th>Opciones</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody style="font-size:13px">
+                                                                    <?php foreach($control_mantenimiento_activo as $row){?>
+                                                                    <tr>
+                                                                        <th><?php echo $row->fecha_mantenimiento?></th>
+                                                                        <th><?php echo $row->kilometraje?></th>
+                                                                        <th><?php echo $row->proximo_kilometraje?></th>
+                                                                        <th><?php echo $row->tipo_mantenimiento?></th>
+                                                                        <th><?php echo $row->costo?></th>
+                                                                        <th><?php echo $row->fecha_proximo_mantenimiento?></th>
+                                                                        <th><?php echo $row->observacion?></th>
+                                                                        <th>
+                                                                        <div class="btn-group btn-group-sm" role="group" aria-label="Log Viewer Actions">
+                                                                        <button style="font-size:12px" type="button" class="btn btn-sm btn-success" data-toggle="modal" onclick="modalMantenimiento(<?php echo $row->id?>)" ><i class="fa fa-edit"></i> Editar</button>
+                                                                        <a href="javascript:void(0)" onclick="eliminarMantenimiento(<?php echo $row->id?>)" class="btn btn-sm btn-danger" style="font-size:12px;margin-left:10px">Eliminar</a>
+                                                                        </div>
+                                                                        </th>
+                                                                    </tr>														
+                                                                    <?php }?>
+                                                                </tbody>							
+                                                            </table>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -777,14 +795,8 @@ label.form-control-sm{
                                     </div>
                                 </div>
                             </div>
+                        <?php }?>
                     </div>
-                    <div style="margin-top:15px" class="form-group">
-                        <div class="col-sm-12 controls">
-                            <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
-                                <a href="javascript:void(0)" onClick="fn_save_activos()" class="btn btn-sm btn-success">Registrar</a>
-                            </div>
-                        </div>
-                    </div> 
                 </form>
                 </div><!--card-body-->
             </div><!--card-->
@@ -816,6 +828,6 @@ label.form-control-sm{
 
 	</script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.js"></script>
-	<script src="{{ asset('js/activos.js') }}"></script>
+	<script src="{{ asset('js/create_activos.js') }}"></script>
 
 	@endpush
