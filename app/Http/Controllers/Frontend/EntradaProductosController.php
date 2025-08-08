@@ -171,10 +171,10 @@ class EntradaProductosController extends Controller
             $entrada_producto->fecha_comprobante = "18/08/2024";
             $entrada_producto->id_moneda = $request->moneda;
             $entrada_producto->tipo_cambio_dolar = $request->tipo_cambio_dolar;
-            $entrada_producto->sub_total_compra = round($request->sub_total_general,2);
-            $entrada_producto->igv_compra = round($request->igv_general,2);
-            $entrada_producto->total_compra = round($request->total_general,2);
-            $entrada_producto->descuento = round($request->descuento_general,2);
+            $entrada_producto->sub_total_compra = round($request->sub_total_general,3);
+            $entrada_producto->igv_compra = round($request->igv_general,3);
+            $entrada_producto->total_compra = round($request->total_general,3);
+            $entrada_producto->descuento = round($request->descuento_general,3);
             $moneda_descripcion="";
             if($request->moneda==1){$moneda_descripcion="SOLES";}
             else if($request->moneda==2){$moneda_descripcion="DOLARES";}
@@ -212,10 +212,10 @@ class EntradaProductosController extends Controller
                 $entradaProducto_detalle->id_marca = $marca[$index];
                 $entradaProducto_detalle->estado = 1;
                 $entradaProducto_detalle->id_producto = $descripcion[$index];
-                $entradaProducto_detalle->costo = round($precio_unitario_[$index],2);
-                $entradaProducto_detalle->valor_venta_bruto = round($valor_venta_bruto[$index],2);
-                $entradaProducto_detalle->precio_venta = round($precio_unitario[$index],2);
-                $entradaProducto_detalle->valor_venta = round($valor_venta[$index],2);
+                $entradaProducto_detalle->costo = round($precio_unitario_[$index],3);
+                $entradaProducto_detalle->valor_venta_bruto = round($valor_venta_bruto[$index],3);
+                $entradaProducto_detalle->precio_venta = round($precio_unitario[$index],3);
+                $entradaProducto_detalle->valor_venta = round($valor_venta[$index],3);
                 $entradaProducto_detalle->id_descuento = $id_descuento[$index];
                 //$entradaProducto_detalle->fecha_fabricacion = $fecha_fabricacion[$index];
                 $entradaProducto_detalle->id_estado_bien = $estado_bien[$index];
@@ -230,10 +230,10 @@ class EntradaProductosController extends Controller
                 $entradaProducto_detalle->cantidad_pendiente = $cantidad_pendiente[$index];
                 $entradaProducto_detalle->stock_actual = $stock_actual[$index];
                 $entradaProducto_detalle->precio_unitario = $precio_unitario[$index];*/
-                $entradaProducto_detalle->sub_total = round($sub_total[$index],2);
-                $entradaProducto_detalle->igv = round($igv[$index],2);
+                $entradaProducto_detalle->sub_total = round($sub_total[$index],3);
+                $entradaProducto_detalle->igv = round($igv[$index],3);
                 $entradaProducto_detalle->cerrado = 1;
-                $entradaProducto_detalle->total = round($total[$index],2);
+                $entradaProducto_detalle->total = round($total[$index],3);
 
                 if($cantidad_pendiente[$index]!=0){
                     $valida_estado = false;

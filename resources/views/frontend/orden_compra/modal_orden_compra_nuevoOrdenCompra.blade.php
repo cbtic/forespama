@@ -412,17 +412,9 @@ function calcularSubTotal(input) {
 
     var sub_total = valor_venta;
 
-    //fila.find('.sub_total').val(sub_total.toFixed(2));
-
     var igvInputId = fila.find('.igv').attr('id');
     var totalInputId = fila.find('.total').attr('id');
 
-    //console.log('IGV ID:', igvInputId);
-    //console.log('Total ID:', totalInputId);
-
-    //calcularIGV(sub_total, igvInputId, totalInputId, valor_venta);
-
-    //actualizarTotalGeneral();
 }
 
 function calcularPrecioUnitario(input) {
@@ -486,6 +478,59 @@ function calcularPrecioUnitario(input) {
     actualizarTotalGeneral();
 }
 
+function calcularPrecioUnitario_(input, decimales) {
+
+    var fila = $(input).closest('tr');
+    var igvPorcentaje = $('#igv_compra').val() == 2 ? 1.18 : 0;
+    var precio_unitario_ = 0;
+    var valor_venta_bruto = 0;
+    var valor_venta = 0;
+    var igv = 0;
+    var total = 0;
+
+    var precio_venta = parseFloat(fila.find('.precio_unitario').val()) || 0;
+    var cantidad_ingreso = parseFloat(fila.find('.cantidad_ingreso').val()) || 0;
+    var descuento = parseFloat(fila.find('.descuento').val()) || 0;
+    var porcentaje = parseFloat(fila.find('.porcentaje').val()) || 0;
+
+    if(igvPorcentaje==1.18){
+        precio_unitario_ = precio_venta / igvPorcentaje;
+    }else{
+        precio_unitario_ = precio_venta
+    }
+
+    if(igvPorcentaje==1.18){
+        valor_venta_bruto = (cantidad_ingreso * precio_venta) / igvPorcentaje;
+    }else{
+        valor_venta_bruto = cantidad_ingreso * precio_venta;
+    }
+    
+    if(descuento!= "" || porcentaje != ""){
+        if(descuento!= ""){
+            valor_venta = valor_venta_bruto - descuento;
+        }else if(porcentaje != ""){
+            valor_venta = valor_venta_bruto - (valor_venta_bruto * (porcentaje / 100));
+        }
+    }else{
+        valor_venta = valor_venta_bruto;
+    }
+
+    if(igvPorcentaje==1.18){
+        igv = valor_venta * 0.18;
+    }
+
+    total = valor_venta + igv;
+
+    fila.find('.precio_unitario_').val(precio_unitario_.toFixed(decimales));
+    fila.find('.valor_venta_bruto').val(valor_venta_bruto.toFixed(decimales));
+    fila.find('.valor_venta').val(valor_venta.toFixed(decimales));
+    fila.find('.igv').val(igv.toFixed(decimales));
+    fila.find('.sub_total').val(valor_venta.toFixed(decimales));
+    fila.find('.total').val(total.toFixed(decimales));
+
+    actualizarTotalGeneral_(decimales);
+}
+
 function calcularIGV(subTotal, igvInputId, totalInputId) {
     subTotal = parseFloat(subTotal) || 0;
     
@@ -510,7 +555,7 @@ function actualizarTotalGeneral() {
     var igv_totalGeneral = 0;
     var totalGeneral = 0;
     var descuentolGeneral = 0;
-   
+    
     $('#tblOrdenCompraDetalle tbody tr').each(function() {
         var sub_totalFila = parseFloat($(this).find('.sub_total').val()) || 0;
         var igv_totalFila = parseFloat($(this).find('.igv').val()) || 0;
@@ -537,6 +582,40 @@ function actualizarTotalGeneral() {
     $('#igv_general').val(igv_totalGeneral.toFixed(2));
     $('#total_general').val(totalGeneral.toFixed(2));
     $('#descuento_general').val(descuentolGeneral.toFixed(2));
+}
+
+function actualizarTotalGeneral_(decimales) {
+    var sub_totalGeneral = 0;
+    var igv_totalGeneral = 0;
+    var totalGeneral = 0;
+    var descuentolGeneral = 0;
+    
+    $('#tblOrdenCompraDetalle tbody tr').each(function() {
+        var sub_totalFila = parseFloat($(this).find('.sub_total').val()) || 0;
+        var igv_totalFila = parseFloat($(this).find('.igv').val()) || 0;
+        var totalFila = parseFloat($(this).find('.total').val()) || 0;
+        var precioVentaFila = parseFloat($(this).find('.precio_unitario').val()) || 0;
+        var descuentoFila = 0;
+        var porcentajeFila = 0;
+        var totalPorcentajeFila = 0;
+        if($(this).find('.descuento').val()!=""){
+            descuentoFila = parseFloat($(this).find('.descuento').val()) || 0;
+        }else if($(this).find('.porcentaje').val()!=""){
+            porcentajeFila = parseFloat($(this).find('.porcentaje').val()) || 0;
+            totalPorcentajeFila = precioVentaFila * (porcentajeFila / 100);
+        }
+        
+        sub_totalGeneral += sub_totalFila;
+        igv_totalGeneral += igv_totalFila;
+        totalGeneral += totalFila;
+        descuentolGeneral += descuentoFila;
+        descuentolGeneral += totalPorcentajeFila;
+    });
+    
+    $('#sub_total_general').val(sub_totalGeneral.toFixed(decimales));
+    $('#igv_general').val(igv_totalGeneral.toFixed(decimales));
+    $('#total_general').val(totalGeneral.toFixed(decimales));
+    $('#descuento_general').val(descuentolGeneral.toFixed(decimales));
 }
 
 function aplicaDescuento(inputElement) {
@@ -656,6 +735,8 @@ var productosSeleccionados = [];
 function cargarDetalle(){
 
     var id = $("#id").val();
+    var tipo_documento = $("#tipo_documento").val();
+    var decimales = (tipo_documento == "1") ? 3 : 2;
     const tbody = $('#divOrdenCompraDetalle');
 
     tbody.empty();
@@ -721,15 +802,15 @@ function cargarDetalle(){
                         <td><select name="unidad[]" id="unidad${n}" class="form-control form-control-sm">${unidadMedidaOptions}</select></td>
                         <td><input name="cantidad_ingreso[]" id="cantidad_ingreso${n}" class="cantidad_ingreso form-control form-control-sm" value="${orden_compra.cantidad_requerida}" type="text" oninput="calcularCantidadPendiente(this);calcularSubTotal(this);calcularPrecioUnitario(this)"></td>
                         <td><input name="stock_actual[]" id="stock_actual${n}" class="form-control form-control-sm" value="${producto_stock.stock_comprometido}" type="text" readonly="readonly"></td>
-                        <td><input name="precio_unitario[]" id="precio_unitario${n}" class="precio_unitario form-control form-control-sm" value="${parseFloat(orden_compra.precio_venta || 0).toFixed(2)}" type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, \'\').replace(/(\\..*?)\\..*/g, \'$1\').replace(/(\\d+\\.\\d{0,2}).*/, \'$1\'); calcularSubTotal(this);calcularPrecioUnitario(this)"></td>
-                        <td><input name="precio_unitario_[]" id="precio_unitario_${n}" class="precio_unitario_ form-control form-control-sm" value="${parseFloat(orden_compra.precio || 0).toFixed(2)}" type="text" oninput="calcularPrecioUnitario(this)"></td>
-                        <td><input name="valor_venta_bruto[]" id="valor_venta_bruto${n}" class="valor_venta_bruto form-control form-control-sm" value="${parseFloat(orden_compra.valor_venta_bruto || 0).toFixed(2)}" type="text" oninput="calcularSubTotal(this)"></td>
-                        <td><input name="valor_venta[]" id="valor_venta${n}" class="valor_venta form-control form-control-sm" value="${parseFloat(orden_compra.valor_venta || 0).toFixed(2)}" type="text" oninput="calcularSubTotal(this)"></td>
+                        <td><input name="precio_unitario[]" id="precio_unitario${n}" class="precio_unitario form-control form-control-sm" value="${parseFloat(orden_compra.precio_venta || 0).toFixed(decimales)}" type="text" oninput="limitarDecimalesYCalcular(this, ${decimales})"></td>
+                        <td><input name="precio_unitario_[]" id="precio_unitario_${n}" class="precio_unitario_ form-control form-control-sm" value="${parseFloat(orden_compra.precio || 0).toFixed(decimales)}" type="text" oninput="calcularPrecioUnitario(this)"></td>
+                        <td><input name="valor_venta_bruto[]" id="valor_venta_bruto${n}" class="valor_venta_bruto form-control form-control-sm" value="${parseFloat(orden_compra.valor_venta_bruto || 0).toFixed(decimales)}" type="text" oninput="calcularSubTotal(this)"></td>
+                        <td><input name="valor_venta[]" id="valor_venta${n}" class="valor_venta form-control form-control-sm" value="${parseFloat(orden_compra.valor_venta || 0).toFixed(decimales)}" type="text" oninput="calcularSubTotal(this)"></td>
 
-                        <td><div style="display: flex; align-items: center; gap: 5px;"> <button type="button" class="btn-custom" onclick="cambiarDescuento(this);calcularPrecioUnitario(this)"><i class="${orden_compra.id_descuento == 2 ? 'fas fa-percentage' : 'fas fa-paint-brush'}"></i></button> <input name="descuento[]" id="descuento${n}" class="descuento form-control form-control-sm" placeholder="S/ Descuento" value="${parseFloat((orden_compra.descuento ?? 0) || 0).toFixed(2)}" type="text" oninput="aplicaDescuentoEnSoles(this);calcularPrecioUnitario(this)" style="display: ${(!orden_compra.id_descuento || orden_compra.id_descuento == 1 || orden_compra.descuento == null || orden_compra.descuento === "") ? 'block' : 'none'};"> <input name="porcentaje[]" id="porcentaje${n}" class="porcentaje form-control form-control-sm" placeholder="% Descuento" value="${parseFloat(orden_compra.id_descuento == 2 ? (orden_compra.descuento ?? 0) : 0).toFixed(2)}" type="text" oninput="aplicaDescuentoEnPorcentaje(this);calcularPrecioUnitario(this)" style="display: ${orden_compra.id_descuento == 2 ? 'block' : 'none'};"><input name="id_descuento[]" id="id_descuento${n}" type="hidden" value="${orden_compra.id_descuento ?? 1}"></div></td>
-                        <td><input name="sub_total[]" id="sub_total${n}" class="sub_total form-control form-control-sm" value="${parseFloat(orden_compra.sub_total || 0).toFixed(2) }" type="text" readonly="readonly"></td>
-                        <td><input name="igv[]" id="igv${n}" class="igv form-control form-control-sm" value="${parseFloat(orden_compra.igv || 0).toFixed(2)}" type="text" readonly="readonly"></td>
-                        <td><input name="total[]" id="total${n}" class="total form-control form-control-sm" value="${parseFloat(orden_compra.total || 0).toFixed(2)}" type="text" readonly="readonly"></td>
+                        <td><div style="display: flex; align-items: center; gap: 5px;"> <button type="button" class="btn-custom" onclick="cambiarDescuento(this);calcularPrecioUnitario(this)"><i class="${orden_compra.id_descuento == 2 ? 'fas fa-percentage' : 'fas fa-paint-brush'}"></i></button> <input name="descuento[]" id="descuento${n}" class="descuento form-control form-control-sm" placeholder="S/ Descuento" value="${parseFloat((orden_compra.descuento ?? 0) || 0).toFixed(decimales)}" type="text" oninput="aplicaDescuentoEnSoles(this);calcularPrecioUnitario(this)" style="display: ${(!orden_compra.id_descuento || orden_compra.id_descuento == 1 || orden_compra.descuento == null || orden_compra.descuento === "") ? 'block' : 'none'};"> <input name="porcentaje[]" id="porcentaje${n}" class="porcentaje form-control form-control-sm" placeholder="% Descuento" value="${parseFloat(orden_compra.id_descuento == 2 ? (orden_compra.descuento ?? 0) : 0).toFixed(decimales)}" type="text" oninput="aplicaDescuentoEnPorcentaje(this);calcularPrecioUnitario(this)" style="display: ${orden_compra.id_descuento == 2 ? 'block' : 'none'};"><input name="id_descuento[]" id="id_descuento${n}" type="hidden" value="${orden_compra.id_descuento ?? 1}"></div></td>
+                        <td><input name="sub_total[]" id="sub_total${n}" class="sub_total form-control form-control-sm" value="${parseFloat(orden_compra.sub_total || 0).toFixed(decimales) }" type="text" readonly="readonly"></td>
+                        <td><input name="igv[]" id="igv${n}" class="igv form-control form-control-sm" value="${parseFloat(orden_compra.igv || 0).toFixed(decimales)}" type="text" readonly="readonly"></td>
+                        <td><input name="total[]" id="total${n}" class="total form-control form-control-sm" value="${parseFloat(orden_compra.total || 0).toFixed(decimales)}" type="text" readonly="readonly"></td>
                         <td><button type="button" class="btn btn-danger btn-sm" onclick="eliminarFila(this)">Eliminar</button></td>
 
                     </tr>
@@ -768,14 +849,24 @@ function cargarDetalle(){
                 descuento_total_acumulado += parseFloat(orden_compra.porcentaje || 0);
                 total_acumulado += parseFloat(orden_compra.total || 0);
                 });
-                $('#sub_total_general').val(sub_total_acumulado.toFixed(2) || '0.00');
-                $('#igv_general').val(igv_total_acumulado.toFixed(2) || '0.00');
-                $('#descuento_general').val(descuento_total_acumulado.toFixed(2) || '0.00');
-                $('#total_general').val(total_acumulado.toFixed(2) || '0.00');
+                $('#sub_total_general').val(sub_total_acumulado.toFixed(decimales) || '0.00');
+                $('#igv_general').val(igv_total_acumulado.toFixed(decimales) || '0.00');
+                $('#descuento_general').val(descuento_total_acumulado.toFixed(decimales) || '0.00');
+                $('#total_general').val(total_acumulado.toFixed(decimales) || '0.00');
             }
             
     });
 
+}
+
+function limitarDecimalesYCalcular(input, decimales) {
+    input.value = input.value
+        .replace(/[^0-9.]/g, '')
+        .replace(/(\..*?)\..*/g, '$1')
+        .replace(new RegExp('(\\d+\\.\\d{0,' + decimales + '}).*'), '$1');
+
+    calcularSubTotal(input);
+    calcularPrecioUnitario_(input, decimales);
 }
 
 function agregarProducto(){

@@ -167,4 +167,25 @@ class OrdenProduccionController extends Controller
             'producto_stock' =>$producto_stock
         ]);
     }
+
+    public function cargar_detalle_guardado($id)
+    {
+
+        $orden_produccion_model = new OrdenProduccion;
+        $producto_model = new Producto;
+        $tablaMaestra_model = new TablaMaestra;
+
+        $orden_produccion = $orden_produccion_model->getDetalleOrdenProduccionById($id);
+        $producto = $producto_model->getProductoExterno();
+        $unidad_medida = $tablaMaestra_model->getMaestroByTipo(43);
+
+        $producto_stock = [];
+
+        return response()->json([
+            'orden_produccion' => $orden_produccion,
+            'producto' => $producto,
+            'unidad_medida' => $unidad_medida,
+            'producto_stock' =>$producto_stock
+        ]);
+    }
 }

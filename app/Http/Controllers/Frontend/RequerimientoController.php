@@ -379,16 +379,16 @@ class RequerimientoController extends Controller
             $orden_compra_detalle->cantidad_requerida = $cantidad_atendida[$index];
             $orden_compra_detalle->id_estado_producto = $estado_bien[$index];
 
-            $orden_compra_detalle->precio = round($precio_unitario_,2);//$total_precio[$index]
+            $orden_compra_detalle->precio = round($precio_unitario_,3);//$total_precio[$index]
 
-            $orden_compra_detalle->valor_venta_bruto = round($valor_venta_bruto,2);
+            $orden_compra_detalle->valor_venta_bruto = round($valor_venta_bruto,3);
 
-            $orden_compra_detalle->precio_venta = round($total_precio[$index],2);//$precio_unitario_
+            $orden_compra_detalle->precio_venta = round($total_precio[$index],3);//$precio_unitario_
 
-            $orden_compra_detalle->valor_venta = round($valor_venta,2);
-            $orden_compra_detalle->sub_total = round($valor_venta,2);
-            $orden_compra_detalle->igv = round($igv,2);
-            $orden_compra_detalle->total = round($total,2);
+            $orden_compra_detalle->valor_venta = round($valor_venta,3);
+            $orden_compra_detalle->sub_total = round($valor_venta,3);
+            $orden_compra_detalle->igv = round($igv,3);
+            $orden_compra_detalle->total = round($total,3);
             if($unidad[$index]!=null && $unidad !=0){
 				$orden_compra_detalle->id_unidad_medida = (int)$unidad[$index];
 			}
@@ -424,9 +424,9 @@ class RequerimientoController extends Controller
         }
 
         $orden_compra_actualizado = OrdenCompra::find($id_orden_compra);
-        $orden_compra_actualizado->sub_total = round($acumulado_sub_total, 2);
-        $orden_compra_actualizado->igv = round($acumulado_igv, 2);
-        $orden_compra_actualizado->total = round($acumulado_total, 2);
+        $orden_compra_actualizado->sub_total = round($acumulado_sub_total, 3);
+        $orden_compra_actualizado->igv = round($acumulado_igv, 3);
+        $orden_compra_actualizado->total = round($acumulado_total, 3);
         $orden_compra_actualizado->save();
 
         $requerimiento_detalle = RequerimientoDetalle::where('id_requerimiento',$id_requerimiento)->where('estado','1')->get();
