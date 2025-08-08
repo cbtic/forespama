@@ -63,7 +63,7 @@ class DevolucionController extends Controller
 
 	}
 
-    public function modal_devolucion($id){
+    public function modal_devolucion($id, $id_tipo_documento){
 		
 		$id_user = Auth::user()->id;
         $tablaMaestra_model = new TablaMaestra;
@@ -97,7 +97,7 @@ class DevolucionController extends Controller
         $empresa = Empresa::All();
 		//var_dump($id);exit();
 
-		return view('frontend.devolucion.modal_devolucion_nuevoDevolucion',compact('id','salida','unidad_medida','moneda','estado_bien','tipo_producto','unidad','marca','producto','tipo_documento','almacen_destino','id_user','empresa','igv_compra','motivo_devolucion','orden_compra'));
+		return view('frontend.devolucion.modal_devolucion_nuevoDevolucion',compact('id','id_tipo_documento','salida','unidad_medida','moneda','estado_bien','tipo_producto','unidad','marca','producto','tipo_documento','almacen_destino','id_user','empresa','igv_compra','motivo_devolucion','orden_compra'));
 
     }
 
@@ -158,7 +158,7 @@ class DevolucionController extends Controller
 		$entrada_producto->codigo = $salida_producto_->codigo;
 		//$salida_producto->id_usuario_recibe = $id_user;
 		//$salida_producto->id_persona_recibe = $request->persona_recibe;
-		//$entrada_producto->tipo_devolucion = "2";
+		$entrada_producto->tipo_devolucion = "2";
 		$entrada_producto->id_usuario_inserta = $id_user;
 		$entrada_producto->save();
 
@@ -311,15 +311,22 @@ class DevolucionController extends Controller
         ]);
     }
 
-	public function cargar_detalle($id)
+	public function cargar_detalle($id, $id_tipo_documento)
     {
 
-        $salida_model = new SalidaProductoDetalle;
+		if ($id_tipo_documento == 2){
+			$salida_model = new SalidaProductoDetalle;
+			$devolucion = $salida_model->getDetalleProductoId($id);
+		}else if ($id_tipo_documento == 1){
+			$entrada_model = new EntradaProductoDetalle;
+			$devolucion = $entrada_model->getDetalleProductoId($id);
+		}
+
         $marca_model = new Marca;
         $producto_model = new Producto;
         $tablaMaestra_model = new TablaMaestra;
 
-        $devolucion = $salida_model->getDetalleProductoId($id);
+        
         $marca = $marca_model->getMarcaAll();
         $producto = $producto_model->getProductoAll();
         $unidad_medida = $tablaMaestra_model->getMaestroByTipo(43);

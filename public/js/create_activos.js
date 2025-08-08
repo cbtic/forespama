@@ -81,6 +81,9 @@ function guardar_activo(){
 	var tipo_combustible = $("#tipo_combustible").val();
 	var valor_libros = $("#valor_libros").val();
 	var valor_comercial = $("#valor_comercial").val();
+	var departamento = $("#departamento").val();
+	var provincia = $("#provincia").val();
+	var distrito = $("#distrito").val();
 	
 	if(tipo_activo=="")msg += "Debe seleccionar un Tipo de Activo <br>";
 	if(descripcion=="")msg += "Debe Ingresar una Descripcion <br>";
@@ -88,6 +91,9 @@ function guardar_activo(){
 	if(tipo_combustible=="")msg += "Debe Seleccionar el Tipo de Combustible <br>";
 	if(valor_libros=="")msg += "Debe Ingresar el Valor Libros <br>";
 	if(valor_comercial=="")msg += "Debe Ingresar el Valor Comercial <br>";
+	if(departamento=="")msg += "Debe Seleccione el Departamento <br>";
+	if(provincia=="")msg += "Debe Seleccione la Provincia <br>";
+	if(distrito=="")msg += "Debe Seleccione el Distrito <br>";
 	
 	if (msg != "") {
 		bootbox.alert(msg);
@@ -109,7 +115,7 @@ function fn_save(){
 				return false;
 			}
 			
-			window.location.reload();
+			window.location.href = "/activos/editar_activo/" + result.id;
 			
 		}
     });

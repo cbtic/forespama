@@ -39,7 +39,7 @@ class EntradaProductoDetalle extends Model
         inner join productos p on epd.id_producto = p.id
         inner join entrada_productos ep on epd.id_entrada_productos = ep.id
         left join marcas m on epd.id_marca = m.id 
-        inner join tabla_maestras tm2 on epd.id_estado_bien ::int = tm2.codigo::int and tm2.tipo = '56'
+        left join tabla_maestras tm2 on epd.id_estado_bien ::int = tm2.codigo::int and tm2.tipo = '56'
         left join tabla_maestras tm3 on epd.id_um ::int = tm3.codigo::int and tm3.tipo = '43'
         inner join empresas e on ep.id_empresa_compra = e.id
         inner join orden_compras oc on ep.id_orden_compra = oc.id 

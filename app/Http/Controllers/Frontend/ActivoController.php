@@ -270,7 +270,10 @@ class ActivoController extends Controller
             }
 		}
 
-        return response()->json(['success' => 'Registro de activo guardado exitosamente.']);
+        return response()->json([
+			'success' => 'Registro de activo guardado exitosamente.',
+			'id' => $id_activo
+		]);
 		
 	}
 
@@ -460,4 +463,20 @@ class ActivoController extends Controller
 		echo "success";
 
     }
+
+	public function cambiarVigenciaSoat(){
+
+		$soat_activo_model = new SoatActivo;
+
+		$soat_activo_model->actualizarVigenciaSoat();
+		
+	}
+
+	public function cambiarVigenciaRevisionTecnica(){
+
+		$revision_tecnica_activo_model = new RevisionTecnicaActivo;
+
+		$revision_tecnica_activo_model->actualizarVigenciaRevisionTecnica();
+		
+	}
 }

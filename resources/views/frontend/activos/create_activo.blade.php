@@ -352,7 +352,7 @@ label.form-control-sm{
                                                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                                             <div class="row">
                                                                 <div class="col-lg-1 col-md-12 col-sm-12 col-xs-12">
-                                                                    Tipo Activo
+                                                                    Tipo Activo <span style="color:red;">*</span>
                                                                 </div>
                                                                 <div class="col-lg-2 col-md-12 col-sm-12 col-xs-12">
                                                                     <select name="tipo_activo" id="tipo_activo" class="form-control form-control-sm">
@@ -372,7 +372,7 @@ label.form-control-sm{
                                                                     <input id="codigo" name="codigo" on class="form-control form-control-sm mayusculas"  value="<?php //echo $activo->codigo?>" type="text">
                                                                 </div>
                                                                 <div class="col-lg-1 col-md-12 col-sm-12 col-xs-12">
-                                                                    Descripci&oacute;n
+                                                                    Descripci&oacute;n <span style="color:red;">*</span>
                                                                 </div>
                                                                 <div class="col-lg-5 col-md-12 col-sm-12 col-xs-12">
                                                                     <input id="descripcion" name="descripcion" on class="form-control form-control-sm mayusculas"  value="<?php echo $activo->descripcion?>" type="text">
@@ -380,7 +380,7 @@ label.form-control-sm{
                                                             </div>
                                                             <div class="row">
                                                                 <div class="col-lg-1 col-md-12 col-sm-12 col-xs-12">
-                                                                    Placa
+                                                                    Placa <span style="color:red;">*</span>
                                                                 </div>
                                                                 <div class="col-lg-2 col-md-12 col-sm-12 col-xs-12">
                                                                     <input id="placa" name="placa" on class="form-control form-control-sm mayusculas"  value="<?php echo $activo->placa?>" type="text" placeholder="ABC-123">
@@ -414,7 +414,7 @@ label.form-control-sm{
                                                             </div>
                                                             <div class="row">
                                                                 <div class="col-lg-1 col-md-12 col-sm-12 col-xs-12">
-                                                                    Tipo Combustible
+                                                                    Tipo Combustible <span style="color:red;">*</span>
                                                                 </div>
                                                                 <div class="col-lg-2 col-md-12 col-sm-12 col-xs-12">
                                                                     <select name="tipo_combustible" id="tipo_combustible" class="form-control form-control-sm">
@@ -434,13 +434,13 @@ label.form-control-sm{
                                                                     <input id="dimension" name="dimension" on class="form-control form-control-sm mayusculas"  value="<?php echo $activo->dimensiones?>" type="text">
                                                                 </div>
                                                                 <div class="col-lg-1 col-md-12 col-sm-12 col-xs-12">
-                                                                    Valor Libros
+                                                                    Valor Libros <span style="color:red;">*</span>
                                                                 </div>
                                                                 <div class="col-lg-2 col-md-12 col-sm-12 col-xs-12">
                                                                     <input id="valor_libros" name="valor_libros" on class="form-control form-control-sm solo-decimal" <?= ($activo->valor_libros !== null && $activo->valor_libros !== '') ? 'value="' . number_format($activo->valor_libros, 2) . '"' : '' ?> type="text" placeholder="0.00">
                                                                 </div>
                                                                 <div class="col-lg-1 col-md-12 col-sm-12 col-xs-12">
-                                                                    Valor Comercial
+                                                                    Valor Comercial <span style="color:red;">*</span>
                                                                 </div>
                                                                 <div class="col-lg-2 col-md-12 col-sm-12 col-xs-12">
                                                                     <input id="valor_comercial" name="valor_comercial" on class="form-control form-control-sm solo-decimal" <?= ($activo->valor_comercial !== null && $activo->valor_comercial !== '') ? 'value="' . number_format($activo->valor_comercial, 2) . '"' : '' ?> type="text" placeholder="0.00">
@@ -456,7 +456,7 @@ label.form-control-sm{
                                                             </div>
                                                             <div class="row">
                                                                 <div class="col-lg-1 col-md-12 col-sm-12 col-xs-12">
-                                                                    Departamento
+                                                                    Departamento <span style="color:red;">*</span>
                                                                 </div>
                                                                 <div class="col-lg-2 col-md-12 col-sm-12 col-xs-12">
                                                                     <select name="departamento" id="departamento" onchange="obtenerProvincia()" class="form-control form-control-sm">
@@ -481,7 +481,7 @@ label.form-control-sm{
                                                                     </select>
                                                                 </div>
                                                                 <div class="col-lg-1 col-md-12 col-sm-12 col-xs-12">
-                                                                    Provincia
+                                                                    Provincia <span style="color:red;">*</span>
                                                                 </div>
                                                                 <div class="col-lg-2 col-md-12 col-sm-12 col-xs-12">
                                                                     <select name="provincia" id="provincia" class="form-control form-control-sm" onchange="obtenerDistrito()">
@@ -489,7 +489,7 @@ label.form-control-sm{
                                                                     </select>
                                                                 </div>
                                                                 <div class="col-lg-1 col-md-12 col-sm-12 col-xs-12">
-                                                                    Distrito
+                                                                    Distrito <span style="color:red;">*</span>
                                                                 </div>
                                                                 <div class="col-lg-2 col-md-12 col-sm-12 col-xs-12">
                                                                     <select name="distrito" id="distrito" class="form-control form-control-sm" onchange="">
@@ -544,6 +544,7 @@ label.form-control-sm{
                                                                         ?>
                                                                     </select>
                                                                 </div>
+                                                                <span style="color:red;">* Datos Obligatorios</span>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -564,7 +565,7 @@ label.form-control-sm{
                                                                 if ($activo->ruta_imagen != "") $foto = $activo->ruta_imagen;
                                                             ?>
                                                             <!--<img src="<?php //echo $url_foto ?>" id="img_ruta" width="240px" height="150px" alt="" style="margin-top:10px" />-->
-                                                            <a href="<?php echo "/".$activo->ruta_imagen ?>" target="_blank" class="btn btn-sm btn-secondary"><img src="<?php echo $url_foto?>" id="img_ruta" width="80" height="50" alt="" style="margin-top:10px" /></a>
+                                                            <a href="<?php echo "/img/activos/".$activo->id."/".$activo->ruta_imagen ?>" target="_blank" class="btn btn-sm btn-secondary"><img src="<?php echo $url_foto?>" id="img_ruta" width="80" height="50" alt="" style="margin-top:10px" /></a>
                                                             <input type="hidden" id="img_foto" name="img_foto" value="" />
                                                         </div>
                                                         <input class="btn btn-sm btn-success float-rigth" value="GUARDAR" name="guardar" type="button" id="btnGuardar" style="padding-left:25px;padding-right:25px;margin-left:10px;margin-top:15px" />

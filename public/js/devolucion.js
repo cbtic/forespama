@@ -5,7 +5,7 @@ $(document).ready(function () {
 	});
 
 	$('#btnNuevo').click(function () {
-		modalDevolucion(0);
+		modalDevolucion(0,0);
 	});
 
 	$('#empresa_bus').keypress(function(e){
@@ -212,7 +212,7 @@ function datatablenew(){
 						//alert(almacenUsuario.id_user);
 						//if(almacenUsuario.some(almacen => almacen.id_user == row.id_usuario) && row.id_cerrado==1){
 							
-							html += '<button style="font-size:12px" type="button" class="btn btn-sm btn-success" data-toggle="modal" onclick="modalDevolucion('+row.id+')" ><i class="fa fa-edit"></i> Visualizar</button>'; 
+							html += '<button style="font-size:12px" type="button" class="btn btn-sm btn-success" data-toggle="modal" onclick="modalDevolucion('+row.id+','+row.id_tipo_documento+')" ><i class="fa fa-edit"></i> Visualizar</button>'; 
 						/*}else{
 							html += '<button style="font-size:12px" type="button" class="btn btn-sm btn-success" data-toggle="modal" onclick="modalOrdenCompra('+row.id+')" disabled><i class="fa fa-edit"></i> Editar</button>'; 
 						}*/
@@ -246,7 +246,7 @@ function fn_ListarBusqueda() {
     datatablenew();
 };
 
-function modalDevolucion(id){
+function modalDevolucion(id, id_tipo_documento){
 	
 	/*var tipo_mov="";
 	if(tipo=='INGRESO'){tipo_mov=1};
@@ -256,7 +256,7 @@ function modalDevolucion(id){
 	$('#openOverlayOpc .modal-body').css('height', 'auto');
 
 	$.ajax({
-		url: "/devolucion/modal_devolucion/"+id,
+		url: "/devolucion/modal_devolucion/"+id+"/"+id_tipo_documento,
 		type: "GET",
 		success: function (result) {
 			$("#diveditpregOpc").html(result);

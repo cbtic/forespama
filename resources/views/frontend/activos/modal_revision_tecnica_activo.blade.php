@@ -295,14 +295,14 @@ function fn_save_revision_tecnica(){
 					<div class="row" style="padding-left:10px">
 						<div class="col-lg-6">
 							<div class="form-group">
-								<label class="control-label form-control-sm">Fecha Emisi&oacute;n</label>
+								<label class="control-label form-control-sm">Fecha Revisi&oacute;n</label>
 								<input id="fecha_emision" name="fecha_emision" on class="form-control form-control-sm mayusculas"  value="<?php echo $revision_tecnica_activo->fecha_emision?>" type="text" placeholder="YYYY-MM-DD">
 							</div>
 						</div>
 
 						<div class="col-lg-6">
 							<div class="form-group">
-								<label class="control-label form-control-sm">Fecha Vencimiento</label>
+								<label class="control-label form-control-sm">Fecha Pr&oacute;xima Revisi&oacute;n</label>
 								<input id="fecha_vencimiento" name="fecha_vencimiento" on class="form-control form-control-sm mayusculas"  value="<?php echo $revision_tecnica_activo->fecha_vencimiento?>" type="text" placeholder="YYYY-MM-DD">
 							</div>
 						</div>						

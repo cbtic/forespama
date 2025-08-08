@@ -616,9 +616,9 @@ Route::get('comprobante/exportar_factura_sodimac/{fecha_ini}/{fecha_fin}/{tipo_d
 Route::get('devolucion/create', [DevolucionController::class, 'create'])->name('devolucion.create');
 Route::post('devolucion/listar_devolucion_ajax', [DevolucionController::class, 'listar_devolucion_ajax'])->name('devolucion.listar_devolucion_ajax');
 Route::post('devolucion/send_devolucion', [DevolucionController::class, 'send_devolucion'])->name('devolucion.send_devolucion');
-Route::get('devolucion/modal_devolucion/{id}', [DevolucionController::class, 'modal_devolucion'])->name('devolucion.modal_devolucion');
+Route::get('devolucion/modal_devolucion/{id}/{id_tipo_documento}', [DevolucionController::class, 'modal_devolucion'])->name('devolucion.modal_devolucion');
 Route::get('devolucion/cargar_salida/{numero_salida}', [DevolucionController::class, 'cargar_salida'])->name('devolucion.cargar_salida');
-Route::get('devolucion/cargar_detalle/{id}', [DevolucionController::class, 'cargar_detalle'])->name('devolucion.cargar_detalle');
+Route::get('devolucion/cargar_detalle/{id}/{id_tipo_documento}', [DevolucionController::class, 'cargar_detalle'])->name('devolucion.cargar_detalle');
 
 Route::get('productos/exportar_listar_productos/{tipo_origen_producto}/{serie}/{codigo}/{denominacion}/{estado_bien}/{tipo_producto}/{tiene_imagen}/{estado}', [ProductosController::class, 'exportar_listar_productos'])->name('orden_compra.exportar_listar_productos');
 Route::get('orden_compra/modal_datos_pedido_orden_compra/{id}', [OrdenCompraController::class, 'modal_datos_pedido_orden_compra'])->name('orden_compra.modal_datos_pedido_orden_compra');

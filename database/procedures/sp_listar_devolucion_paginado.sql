@@ -15,17 +15,21 @@ begin
 	
 	p_pagina=(p_pagina::Integer-1)*p_limit::Integer;
 
-	v_campos=' sp.id, ''SALIDA'' tipo, sp.fecha_salida fecha_movimiento, tm.denominacion tipo_documento, tm2.denominacion unidad_origen, e.razon_social empresa, sp.codigo, sp.fecha_comprobante, sp.estado, sp.created_at, sp.cerrado, ''2'' id_tipo, sp.id_tipo_documento, sp.unidad_destino id_unidad_origen, a.denominacion almacen, sp.id_almacen_salida id_almacen, null id_proveedor, u.name usuario_recibe, oc.numero_orden_compra_cliente ';
+	v_campos=' id, tipo_documento, id_tipo_documento, codigo, empresa, numero_orden_compra_cliente, fecha_documento ';
 
-	v_tabla=' FROM salida_productos sp 
-	INNER JOIN tabla_maestras tm ON sp.id_tipo_documento = tm.codigo::int AND tm.tipo = ''49'' 
-	inner join almacenes a on sp.id_almacen_salida = a.id 
-	left join users u on sp.id_usuario_recibe = u.id 
-	INNER JOIN tabla_maestras tm2 ON sp.unidad_destino::int = tm2.codigo::int AND tm2.tipo = ''50''
-	inner join orden_compras oc on sp.id_orden_compra = oc.id
-	inner join empresas e on sp.id_empresa_compra = e.id  ';
-			
-	v_where = ' Where 1=1 and sp.tipo_devolucion =''2'' ';
+	v_tabla=' (select sp.id, ''SALIDA'' tipo_documento, 2 id_tipo_documento, sp.codigo, e.razon_social empresa, oc.numero_orden_compra_cliente, sp.fecha_salida fecha_documento ' ||
+              'FROM salida_productos sp ' ||
+              'inner join empresas e on sp.id_empresa_compra = e.id '||
+              'inner join orden_compras oc on sp.id_orden_compra = oc.id '||
+              'Where 1 = 1 and sp.tipo_devolucion = ''2'' ' ||
+              'UNION ALL ' ||
+              'select ep.id, ''ENTRADA'' tipo_documento, 1 id_tipo_documento, ep.codigo, e.razon_social empresa, oc.numero_orden_compra_cliente, ep.fecha_ingreso fecha_documento ' ||
+              'from entrada_productos ep ' ||
+              'inner join empresas e on ep.id_empresa_compra  = e.id ' || 
+			  'inner join orden_compras oc on ep.id_orden_compra = oc.id '||
+			  'Where 1 = 1 and ep.tipo_devolucion = ''2'') union_table ';
+	
+	v_where = ' Where 1=1 ';
 
 	If p_empresa<>'' Then
 	 v_where:=v_where||'And sp.id_empresa_compra  = '''||p_empresa||''' ';
@@ -43,13 +47,13 @@ begin
 	 v_where:=v_where||'And oc.numero_orden_compra_cliente  = '''||p_numero_orden_compra_cliente||''' ';
 	End If;
 	
-	EXECUTE ('SELECT count(1) '||v_tabla||v_where) INTO v_count;
+	EXECUTE ('SELECT count(1) from '||v_tabla||v_where) INTO v_count;
 	v_col_count:=' ,'||v_count||' as TotalRows ';
 
 	If v_count::Integer > p_limit::Integer then
-		v_scad:='SELECT '||v_campos||v_col_count||v_tabla||v_where||' Order By sp.id desc LIMIT '||p_limit||' OFFSET '||p_pagina||';'; 
+		v_scad:='SELECT '||v_campos||v_col_count|| 'from' ||v_tabla||v_where||' Order By fecha_documento desc LIMIT '||p_limit||' OFFSET '||p_pagina||';'; 
 	else
-		v_scad:='SELECT '||v_campos||v_col_count||v_tabla||v_where||' Order By sp.id desc;'; 
+		v_scad:='SELECT '||v_campos||v_col_count|| 'from' ||v_tabla||v_where||' Order By fecha_documento desc;'; 
 	End If;
 
 	--Raise Notice '%',v_scad;

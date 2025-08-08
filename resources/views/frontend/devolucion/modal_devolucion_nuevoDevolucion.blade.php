@@ -611,12 +611,13 @@ var productosSeleccionados = [];
 function cargarDetalle(){
 
     var id = $("#id").val();
+    var id_tipo_documento = $("#id_tipo_documento").val();
     const tbody = $('#divDevolucionDetalle');
 
     tbody.empty();
 
     $.ajax({
-        url: "/devolucion/cargar_detalle/"+id,
+        url: "/devolucion/cargar_detalle/"+id+"/"+id_tipo_documento,
         type: "GET",
         success: function (result) {
 
@@ -1178,6 +1179,7 @@ function cargarSalida(){
                     
                     <input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
                     <input type="hidden" name="id" id="id" value="<?php echo $id?>">
+                    <input type="hidden" name="id_tipo_documento" id="id_tipo_documento" value="<?php echo $id_tipo_documento?>">
                     
                     <div class="row" style="padding-left:10px">
 
