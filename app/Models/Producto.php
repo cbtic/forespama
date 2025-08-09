@@ -201,4 +201,17 @@ class Producto extends Model
 		$data = DB::select($cad);
         return $data;
     }
+
+    function getCodigoProducto($familia, $sub_familia){
+
+        $cad = "select sf.inicial_codigo || lpad((coalesce(max(substring(p.codigo from '.{4}$')::int), 0) + 1)::text,4, '0') codigo
+        from productos p
+        left join sub_familias sf on p.id_sub_Familia = sf.id
+        where p.id_familia = '".$familia."'
+        and p.id_sub_familia = '".$sub_familia."'
+        group by sf.inicial_codigo";
+
+		$data = DB::select($cad);
+        return $data;
+    }
 }

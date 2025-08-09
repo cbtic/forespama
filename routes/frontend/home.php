@@ -752,3 +752,5 @@ Route::post('activos/send_soat_activo', [ActivoController::class, 'send_soat_act
 Route::post('activos/send_revision_tecnica_activo', [ActivoController::class, 'send_revision_tecnica_activo'])->name('activos.send_revision_tecnica_activo');
 Route::post('activos/send_control_mantenimiento_activo', [ActivoController::class, 'send_control_mantenimiento_activo'])->name('activos.send_control_mantenimiento_activo');
 Route::get('activos/editar_activo/{id}', [ActivoController::class, 'editar_activo'])->name('activos.editar_activo');
+Route::get('orden_compra/obtener_orden_compra_matriz/{numero_orden_compra_matriz}', [OrdenCompraController::class, 'obtener_orden_compra_matriz'])->name('orden_compra.obtener_orden_compra_matriz');
+

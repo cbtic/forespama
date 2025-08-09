@@ -532,4 +532,17 @@ class OrdenCompra extends Model
 		$data = DB::select($cad);
         return $data;
     }
+
+    function getOrdenCompraMatriz($numero_orden_compra_matriz){
+
+        $cad = "select oc.id, oc.id_empresa_compra, oc.id_empresa_vende, oc.id_tipo_cliente, oc.id_empresa_compra, oc.id_persona, oc.id_unidad_origen, oc.id_almacen_salida, oc.id_almacen_destino, oc.igv_compra, oc.id_vendedor, oc.numero_orden_compra_cliente, oc.estado 
+        from orden_compras oc 
+        where oc.numero_orden_compra = '".$numero_orden_compra_matriz."'
+        and oc.estado ='1'
+        and oc.id_tipo_documento = '2'
+        and oc.estado_pedido = '1'";
+
+		$data = DB::select($cad);
+        return $data;
+    }
 }

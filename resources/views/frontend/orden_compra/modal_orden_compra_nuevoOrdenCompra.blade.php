@@ -316,24 +316,20 @@ function obtenerAnaquel(selectElement){
     var id =  $(selectElement).val();
 
     $.ajax({
-            url: "/lotes/obtener_anaquel_seccion/"+id,
-            dataType: "json",
-            success: function (result) {
+        url: "/lotes/obtener_anaquel_seccion/"+id,
+        dataType: "json",
+        success: function (result) {
 
-                var option = "<option value=''>--Seleccionar--</option>";
-                //$('#ubicacion_fisica_anaquel').html("");
-                var anaquelSelect = fila.find('select[name="ubicacion_fisica_anaquel[]"]');
-                anaquelSelect.html("");
-                $(result).each(function (ii, oo) {
-                    option += "<option value='"+oo.id+"'>"+oo.anaquel+"</option>";
-                });
-                //$('#ubicacion_fisica_anaquel').html(option);
-                anaquelSelect.html(option); 
-                //$('#seccion').attr("disabled",false);
-                                
-            }
+            var option = "<option value=''>--Seleccionar--</option>";
+            var anaquelSelect = fila.find('select[name="ubicacion_fisica_anaquel[]"]');
+            anaquelSelect.html("");
+            $(result).each(function (ii, oo) {
+                option += "<option value='"+oo.id+"'>"+oo.anaquel+"</option>";
+            });
+            anaquelSelect.html(option);
+                            
+        }
     });
-
 }
 
 function obtenerDescripcion(selectElement){
@@ -355,31 +351,30 @@ function obtenerCodInterno(selectElement, n){
     var id_producto = $(selectElement).val();
 
     $.ajax({
-            url: "/productos/obtener_producto/"+id_producto,
-            dataType: "json",
-            success: function(result){
-                //alert(result[0].codigo);
-                $('#cod_interno' + n).val(result[0].codigo);
-                $('#item' + n).val(result[0].numero_serie);
-                $('#marca' + n).val(result[0].id_marca).trigger('change');
-                $('#unidad' + n).val(result[0].id_unidad_producto);
-                
-                if(result[0].bien_servicio == 2){
-                    $('#precio_unitario' + n).val(result[0].costo_unitario);
-                }
-
-                $('#fecha_vencimiento_' + n).datepicker({
-                    autoclose: true,
-                    format: 'yyyy-mm-dd',
-                    changeMonth: true,
-                    changeYear: true,
-                    language: 'es'
-                });
-                
+        url: "/productos/obtener_producto/"+id_producto,
+        dataType: "json",
+        success: function(result){
+            //alert(result[0].codigo);
+            $('#cod_interno' + n).val(result[0].codigo);
+            $('#item' + n).val(result[0].numero_serie);
+            $('#marca' + n).val(result[0].id_marca).trigger('change');
+            $('#unidad' + n).val(result[0].id_unidad_producto);
+            
+            if(result[0].bien_servicio == 2){
+                $('#precio_unitario' + n).val(result[0].costo_unitario);
             }
-        });
 
-        obtenerStock(selectElement, n);
+            $('#fecha_vencimiento_' + n).datepicker({
+                autoclose: true,
+                format: 'yyyy-mm-dd',
+                changeMonth: true,
+                changeYear: true,
+                language: 'es'
+            });
+            
+        }
+    });
+    obtenerStock(selectElement, n);
 }
 
 function obtenerCodigo(selectElement){
@@ -467,14 +462,6 @@ function calcularPrecioUnitario(input) {
     fila.find('.sub_total').val(valor_venta.toFixed(2));
     fila.find('.total').val(total.toFixed(2));
 
-    //var igvInputId = fila.find('.igv').attr('id');
-    //var totalInputId = fila.find('.total').attr('id');
-
-    //console.log('IGV ID:', igvInputId);
-    //console.log('Total ID:', totalInputId);
-
-    //calcularIGV(sub_total, igvInputId, totalInputId);
-
     actualizarTotalGeneral();
 }
 
@@ -535,8 +522,6 @@ function calcularIGV(subTotal, igvInputId, totalInputId) {
     subTotal = parseFloat(subTotal) || 0;
     
     var igvPorcentaje = $('#igv_compra').val() == 2 ? 0.18 : 0;
-    //var valor_venta = parseFloat(fila.find('.valor_venta').val()) || 0;
-    //alert(valor_venta);
     var igvValor = subTotal * igvPorcentaje;
     var total = subTotal + igvValor;
 
@@ -627,14 +612,6 @@ function aplicaDescuento(inputElement) {
     var subtotal = parseFloat(subtotalInput.val()) || 0; 
 
     if(descuentoEnSoles > 0 && descuentoEnSoles <= subtotal) {
-        /*var nuevo_sub_total = subtotal - descuentoEnSoles;
-
-        subtotalInput.val(nuevo_sub_total.toFixed(2));
-
-        var igvInputId = fila.find('.igv').attr('id');
-        var totalInputId = fila.find('.total').attr('id');
-        calcularIGV(nuevo_sub_total, igvInputId, totalInputId);*/
-
         actualizarTotalGeneral();
     }else {
         calcularSubTotal(subtotalInput);
@@ -652,17 +629,8 @@ function aplicaDescuentoEnSoles(inputElement) {
     var descuentoEnSoles = parseFloat($(inputElement).val()) || 0;
 
     if (descuentoEnSoles >= 0 && descuentoEnSoles <= subtotalOriginal) {
-        /*var nuevoSubTotal = subtotalOriginal - descuentoEnSoles;
-
-        fila.find('.sub_total').val(nuevoSubTotal.toFixed(2));
-
-        var igvInputId = fila.find('.igv').attr('id');
-        var totalInputId = fila.find('.total').attr('id');
-        calcularIGV(nuevoSubTotal, igvInputId, totalInputId);*/
-
         actualizarTotalGeneral();
     } else {
-        // Si el descuento es inválido, recalcula el subtotal original
         fila.find('.sub_total').val(subtotalOriginal.toFixed(2));
     }
 }
@@ -689,7 +657,6 @@ function aplicaDescuentoEnPorcentaje(inputElement) {
 
         actualizarTotalGeneral();
     } else {
-        // Si el descuento es inválido, recalcula el subtotal original
         fila.find('.sub_total').val(subtotalOriginal.toFixed(2));
     }
 }
@@ -705,10 +672,8 @@ $('#almacen').change(function() {
 });
 
 function actualizarSecciones(selectElement, n) {
-    //var id_almacen = $('#almacen').val();
-    var id_almacen = $(selectElement).val();
 
-    //alert(id_almacen);
+    var id_almacen = $(selectElement).val();
 
     $.ajax({
         url: "/lotes/obtener_seccion_almacen/"+id_almacen,
@@ -718,7 +683,6 @@ function actualizarSecciones(selectElement, n) {
             var option = "<option value=''>--Seleccionar--</option>";
 
             var ubicacionFisicaSeccion = $('#ubicacion_fisica_seccion' + n);
-            //console.log(ubicacionFisicaSeccion);
             ubicacionFisicaSeccion.html("");
 
             $(result).each(function (ii, oo) {
@@ -781,11 +745,6 @@ function cargarDetalle(){
                     unidadMedidaOptions += `<option value="${unidad_medida.codigo}" ${selected}>${unidad_medida.denominacion}</option>`;
                 });
 
-                /*result.descuento.forEach(descuento => {
-                    let selected = (descuento.codigo == orden_compra.id_descuento) ? 'selected' : '';
-                    descuentoOptions += `<option value="${descuento.codigo}" ${selected}>${descuento.denominacion}</option>`;
-                });*/
-
                 if (orden_compra.id_producto) {
                     productosSeleccionados.push(orden_compra.id_producto);
                 }
@@ -815,7 +774,6 @@ function cargarDetalle(){
 
                     </tr>
                 `;
-                //alert(orden_compra.id_descuento);
                 tbody.append(row);
                 $('#descripcion' + n).select2({ 
                     width: '100%', 
@@ -848,15 +806,15 @@ function cargarDetalle(){
                 descuento_total_acumulado += parseFloat(orden_compra.descuento || 0);
                 descuento_total_acumulado += parseFloat(orden_compra.porcentaje || 0);
                 total_acumulado += parseFloat(orden_compra.total || 0);
-                });
-                $('#sub_total_general').val(sub_total_acumulado.toFixed(decimales) || '0.00');
-                $('#igv_general').val(igv_total_acumulado.toFixed(decimales) || '0.00');
-                $('#descuento_general').val(descuento_total_acumulado.toFixed(decimales) || '0.00');
-                $('#total_general').val(total_acumulado.toFixed(decimales) || '0.00');
-            }
-            
-    });
 
+            });
+
+            $('#sub_total_general').val(sub_total_acumulado.toFixed(decimales) || '0.00');
+            $('#igv_general').val(igv_total_acumulado.toFixed(decimales) || '0.00');
+            $('#descuento_general').val(descuento_total_acumulado.toFixed(decimales) || '0.00');
+            $('#total_general').val(total_acumulado.toFixed(decimales) || '0.00');
+        }
+    });
 }
 
 function limitarDecimalesYCalcular(input, decimales) {
@@ -873,8 +831,6 @@ function agregarProducto(){
 
     var usuarioRoles = @json(auth()->user()->getRoleNames());
 
-    //alert(usuarioRoles);
-
     var tieneRolVendedor = usuarioRoles.includes("Vendedor FORESPAMA");
 
     var opcionesDescripcion = `<?php
@@ -889,13 +845,8 @@ function agregarProducto(){
     for (var i = 0; i < cantidad; i++) { 
         var n = $('#tblOrdenCompraDetalle tbody tr').length + 1;
         var item = '<input name="id_orden_compra_detalle[]" id="id_orden_compra_detalle${n}" class="form-control form-control-sm" value="${orden_compra.id}" type="hidden"><input name="item[]" id="item' + n + '" class="form-control form-control-sm" value="" type="text">';
-        //var cantidad = '<input name="cantidad[]" id="cantidad' + n + '" class="form-control form-control-sm" value="" type="text">';
         var descripcion = '<select name="descripcion[]" id="descripcion' + n + '" class="form-control form-control-sm" ' +(!tieneRolVendedor ? 'onChange="verificarProductoSeleccionado(this, ' + n + ')"' : 'onChange="obtenerCodInterno(this, ' + n + ')"') + '> ' + opcionesDescripcion +' </select>';
-        
         var descripcion_ant = '<input type="hidden" name="descripcion_ant[]" id="descripcion_ant' + n + '" class="form-control form-control-sm" />';
-        
-        //var ubicacion_fisica_seccion = '<select name="ubicacion_fisica_seccion[]" id="ubicacion_fisica_seccion' + n + '" class="form-control form-control-sm" onChange="obtenerAnaquel(this)"> <option value="">- Selecione -</option> <?php //foreach ($almacen_seccion as $row) {?> <option value="<?php //echo $row->id?>"><?php //echo $row->codigo_seccion."-".$row->seccion?></option> <?php //} ?> </select>';
-        //var ubicacion_fisica_anaquel = '<select name="ubicacion_fisica_anaquel[]" id="ubicacion_fisica_anaquel' + n + '" class="form-control form-control-sm" onChange=""> <option value="">- Selecione -</option>} ?> </select>';
         var cod_interno = '<input name="cod_interno[]" id="cod_interno' + n + '" class="form-control form-control-sm" value="" type="text">';
         var marca = '<select name="marca[]" id="marca' + n + '" class="form-control form-control-sm" onchange=""> <option value="">--Seleccionar--</option><?php foreach ($marca as $row){?><option value="<?php echo htmlspecialchars($row->id); ?>"><?php echo htmlspecialchars(addslashes($row->denominiacion)); ?></option><?php }?></select>'
         var estado_bien =  '<select name="estado_bien[]" id="estado_bien' + n + '" class="form-control form-control-sm" onChange=""><option value="">--Seleccionar--</option> <?php foreach ($estado_bien as $row) { ?> <option value="<?php echo $row->codigo ?>" <?php echo ($row->codigo == 1) ? "selected" : ""; ?>><?php echo $row->denominacion ?></option> <?php } ?> </select>';
@@ -916,9 +867,7 @@ function agregarProducto(){
         newRow += '<tr>';
         newRow += '<td>' + n + '</td>';
         newRow += '<td>' + item + '</td>';
-        //newRow += '<td>' + cantidad + '</td>';
         newRow += '<td style="width: 400px!important; display:block!important">' +descripcion_ant + descripcion + '</td>';
-        //newRow += '<td>' + ubicacion_fisica_seccion + '</td>';
         newRow += '<td>' + marca + '</td>';
         newRow += '<td>' + cod_interno + '</td>';
         newRow += '<td>' + estado_bien + '</td>';
@@ -941,8 +890,6 @@ function agregarProducto(){
         $('#descripcion' + n).select2({
             width: '100%',
             dropdownCssClass: 'custom-select2-dropdown',
-            //dropdownCssClass: 'form-control form-control-sm',
-            //containerCssClass: 'form-control form-control-sm'
         });
 
         $('#marca' + n).select2({
@@ -1057,18 +1004,14 @@ function fn_save_orden_compra(){
 
     var id = $('#id').val();
     var tipo_documento = $('#tipo_documento').val();
-    //var empresa_compra = $('#empresa_compra').val();
     var empresa_vende = $('#empresa_vende').val();
     var igv_compra = $('#igv_compra').val();
     var fecha_orden_compra = $('#fecha_orden_compra').val();
     var fecha_vencimiento = $('#fecha_vencimiento').val();
-    //var id_vendedor = $('#id_vendedor').val();
 
     if(tipo_documento==""){msg+="Ingrese el Tipo de Documento <br>";}
-    //if(empresa_compra==""){msg+="Ingrese la Empresa que Compra <br>";}
     if(empresa_vende==""){msg+="Ingrese la Empresa que Vende <br>";}
     if(igv_compra==""){msg+="Ingrese el IGV <br>";}
-    //if(id_vendedor==""){msg+="Ingrese el Vendedor <br>";}
 
     if ($('#tblOrdenCompraDetalle tbody tr').length == 0) {
         msg += "No se ha agregado ningún producto <br>";
@@ -1100,20 +1043,18 @@ function fn_save_orden_compra(){
         $('.loader').show();
 
         $.ajax({
-                url: "/orden_compra/send_orden_compra",
-                type: "POST",
-                data : $("#frmOrdenCompra").serialize(),
-                success: function (result) {
-                    //alert(result.id)
-                    //$('#openOverlayOpc').modal('hide');
-                    datatablenew();
-                    $('.loader').hide();
-                    bootbox.alert("Se guard&oacute; satisfactoriamente"); 
-                    if (result.id>0) {
-                        modalOrdenCompra(result.id);
-                    }
-                   
+            url: "/orden_compra/send_orden_compra",
+            type: "POST",
+            data : $("#frmOrdenCompra").serialize(),
+            success: function (result) {
+                
+                datatablenew();
+                $('.loader').hide();
+                bootbox.alert("Se guard&oacute; satisfactoriamente"); 
+                if (result.id>0) {
+                    modalOrdenCompra(result.id);
                 }
+            }
         });
     }
 }
@@ -1125,29 +1066,28 @@ function obtenerCodigo(){
     if(tipo_documento==1){
         $('#empresa_compra').val('30').trigger('change');
         $('#empresa_vende').val('').trigger('change');
+        $('#label_numero_orden_compra_matriz').hide();
+        $('#input_numero_orden_compra_matriz').hide();
+        $('#numero_orden_compra_matriz').val('');
     }else if(tipo_documento==2){
         $('#empresa_compra').val('').trigger('change');
         $('#empresa_vende').val('30').trigger('change');
+        $('#label_numero_orden_compra_matriz').hide();
+        $('#input_numero_orden_compra_matriz').hide();
+        $('#numero_orden_compra_matriz').val('');
+    }else if(tipo_documento==4){
+        $('#label_numero_orden_compra_matriz').show();
+        $('#input_numero_orden_compra_matriz').show();
+    }else{
+        $('#label_numero_orden_compra_matriz').hide();
+        $('#input_numero_orden_compra_matriz').hide();
+        $('#numero_orden_compra_matriz').val('');
     }
-
-    /*$.ajax({
-        url: "/orden_compra/obtener_codigo_orden_compra/"+tipo_documento,
-        dataType: "json",
-        success: function (result) {
-
-            //alert(result[0].codigo);
-            //console.log(result);
-            $('#numero_orden_compra').val(result[0].codigo);
-
-        }
-    });*/
-
 }
 
 function pdf_documento(){
 
     var id = $('#id').val();
-    //var tipo_movimiento = $('#tipo_movimiento').val();
 
     var href = '/orden_compra/movimiento_pdf/'+id;
     window.open(href, '_blank');
@@ -1172,8 +1112,8 @@ function modal_tiendas_orden_compra(id){
         url: "/orden_compra/modal_tiendas_orden_compra/"+id,
         type: "GET",
         success: function (result) {  
-                $("#diveditpregOpc2").html(result);
-                $('#openOverlayOpc2').modal('show');
+            $("#diveditpregOpc2").html(result);
+            $('#openOverlayOpc2').modal('show');
         }
 	});
 }
@@ -1186,8 +1126,8 @@ function modal_datos_pedido_orden_compra(id){
         url: "/orden_compra/modal_datos_pedido_orden_compra/"+id,
         type: "GET",
         success: function (result) {
-                $("#diveditpregOpc3").html(result);
-                $('#openOverlayOpc3').modal('show');
+            $("#diveditpregOpc3").html(result);
+            $('#openOverlayOpc3').modal('show');
         }
 	});
 }
@@ -1213,7 +1153,6 @@ function obtenerEntradaSalida(){
         success: function (result) {
 
             var codigoDocumento = result[0].codigo;
-            //alert(codigoDocumento);
 
             $('#label_entrada_salida').show();
             $('#input_entrada_salida').show();
@@ -1222,7 +1161,6 @@ function obtenerEntradaSalida(){
 
         }
 	});
-
 }
 
 function cambiarCliente(){
@@ -1249,15 +1187,14 @@ function cambiarCliente(){
         $('#select_persona_compra').hide();
         
     }
-
 }
 
 function obtenerStock(selectElement, n){
 
     var id_producto = $(selectElement).val();
     var unidad_origen = $('#unidad_origen').val();
-    //alert(unidad_origen);
     var almacen = "";
+    
     if(unidad_origen==1){
         almacen = $('#almacen_salida').val();
     }else if(unidad_origen==2){
@@ -1292,7 +1229,35 @@ function obtenerFechaVencimiento(){
         $('#input_fecha_vencimiento').hide();
         $('#fecha_vencimiento').val('');
     }
+}
 
+function obtenerOrdenCompraMatriz(){
+
+    var numero_orden_compra_matriz = $('#numero_orden_compra_matriz').val();
+
+    $.ajax({
+        url: "/orden_compra/obtener_orden_compra_matriz/"+numero_orden_compra_matriz,
+        dataType: "json",
+        success: function(result){
+            
+            if (result.length > 0) {
+                var orden_compra_matriz = result[0];
+
+                $('#tipo_documento_cliente').val(orden_compra_matriz.id_tipo_cliente).trigger('change');
+                $('#empresa_compra').val(orden_compra_matriz.id_empresa_compra).trigger('change');
+                $('#empresa_vende').val(orden_compra_matriz.id_empresa_vende).trigger('change');
+                $('#persona_compra').val(orden_compra_matriz.id_persona).trigger('change');
+                $('#unidad_origen').val(orden_compra_matriz.id_unidad_origen).trigger('change');
+                $('#almacen_salida').val(orden_compra_matriz.id_almacen_salida);
+                $('#almacen').val(orden_compra_matriz.id_almacen_destino);
+                $('#igv_compra').val(orden_compra_matriz.igv_compra);
+                $('#id_vendedor').val(orden_compra_matriz.id_vendedor);
+                $('#numero_orden_compra_cliente').val(orden_compra_matriz.numero_orden_compra_cliente);
+            } else {
+                bootbox.alert('No se encontró la orden de compra matriz');
+            }
+        }
+    });
 }
 
 </script>
@@ -1342,6 +1307,12 @@ function obtenerFechaVencimiento(){
                                 }
                                 ?>
                             </select>
+                        </div>
+                        <div id="label_numero_orden_compra_matriz" class="col-lg-2" @if($orden_compra->id_tipo_documento != 4) style="display:none;" @endif>
+                            N&uacute;mero Orden Compra Matriz
+                        </div>
+                        <div id="input_numero_orden_compra_matriz" class="col-lg-2" @if($orden_compra->id_tipo_documento != 4) style="display:none;" @endif>
+                            <input id="numero_orden_compra_matriz" name="numero_orden_compra_matriz" on class="form-control form-control-sm"  value="" type="text" onchange="obtenerOrdenCompraMatriz()">
                         </div>
                         <div class="col-lg-2">
                             N&uacute;mero Orden Compra

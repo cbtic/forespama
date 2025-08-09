@@ -1106,20 +1106,28 @@ class EntradaProductosController extends Controller
         $id_user = Auth::user()->id;
       
         if($id>0){
-            if($tipo==1){
+            if($tipo == 1){
                 $orden_compra = OrdenCompra::find($id);
                 $entrada_producto_detalle = new EntradaProductoDetalle;
                 $entrada_producto = new EntradaProducto;
                 $proveedor = Empresa::all();
                 $id_orden_compra = $id;
                 $id = '0';
-            }else if($tipo==2){
+            }else if($tipo == 2){
                 $orden_compra = OrdenCompra::find($id);
                 $entrada_producto_detalle = new SalidaProductoDetalle;
                 $entrada_producto = new SalidaProducto;
                 $proveedor = Empresa::all();
                 $id_orden_compra = $id;
                 $id = '0';
+            }else if($tipo == 4){
+                $orden_compra = OrdenCompra::find($id);
+                $entrada_producto_detalle = new SalidaProductoDetalle;
+                $entrada_producto = new SalidaProducto;
+                $proveedor = Empresa::all();
+                $id_orden_compra = $id;
+                $id = '0';
+                $tipo = 2;
             }
 			
             $tipo_cambio = $tipo_cambio_model->getTipoCambioUltimo();
@@ -1137,7 +1145,7 @@ class EntradaProductosController extends Controller
             $tipo_cambio = $tipo_cambio_model->getTipoCambioUltimo();
             $almacen = $almacen_model->getAlmacenAll();
             $marca = $marca_model->getMarcaAll();
-            $tipo_movimiento_='';
+            $tipo_movimiento_ = '';
 		}
         
         $persona = Persona::all();

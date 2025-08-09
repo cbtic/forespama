@@ -313,7 +313,7 @@ function fn_save_producto(){
     var tipo_origen_producto = $('#tipo_origen_producto').val();
     var bien_servicio = $('#bien_servicio').val();
     var denominacion = $('#denominacion').val();
-    var codigo = $('#codigo').val();
+    //var codigo = $('#codigo').val();
     var peso = $('#peso').val();
     var familia = $('#familia').val();
     var sub_familia = $('#sub_familia').val();
@@ -321,7 +321,7 @@ function fn_save_producto(){
     if(tipo_origen_producto==""){msg+="Ingrese el Tipo de Origen del Producto <br>";}
     if(bien_servicio==""){msg+="Ingrese el Bien o Servicio del Producto <br>";}
     if(denominacion==""){msg+="Ingrese la Denominacion del Producto <br>";}
-    if(codigo==""){msg+="Ingrese el Codigo del Producto <br>";}
+    //if(codigo==""){msg+="Ingrese el Codigo del Producto <br>";}
     if(peso==""){msg+="Ingrese el Peso del Producto <br>";}
     //if(familia==""){msg+="Ingrese la Familia <br>";}
     //if(sub_familia==""){msg+="Ingrese la Sub Familia <br>";}
@@ -425,7 +425,7 @@ function obtenerSubFamilia(){
     });
 }
 
-function obtenerCodigo(){
+/*function obtenerCodigo(){
 
     var familia = $('#familia').val();
     var sub_familia = $('#sub_familia').val();
@@ -451,7 +451,7 @@ function obtenerCodigo(){
 
         }
     });
-}
+}*/
 
 </script>
 
@@ -614,7 +614,7 @@ function obtenerCodigo(){
                                     <div class="col-lg-4">
                                         <div class="form-group">
                                             <label class="control-label form-control-sm">Sub Familia</label>
-                                            <select name="sub_familia" id="sub_familia" class="form-control form-control-sm" onchange="obtenerCodigo()">
+                                            <select name="sub_familia" id="sub_familia" class="form-control form-control-sm" onchange="/*obtenerCodigo()*/">
                                                 <option value="">--Seleccionar--</option>
                                             </select>
                                         </div>

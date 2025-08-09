@@ -120,34 +120,43 @@ class ProductosController extends Controller
 
         //dd($btnFichaTecnica);exit();
 
-        $existe_producto_codigo = Producto::where('codigo', $request->codigo)->first();
-
-        $existe_producto_serie = Producto::where('numero_serie', $request->numero_serie)->whereNotNull('numero_serie')->where('numero_serie', '!=', '')->first();
-
-        if ($existe_producto_serie && $existe_producto_serie->id != $request->id) {
-            return response()->json([
-            'error' => 'El número de serie ya está registrado.'
-            ]);
-        }
-
-        if ($existe_producto_codigo && $existe_producto_codigo->id != $request->id) {
-            return response()->json([
-            'error' => 'El código ya está registrado.'
-            ]);
-        }
-
 		if($request->id == 0){
 			$producto = new Producto;
             $producto_model = new Producto;
             $correlativo = $producto_model->getCorrelativo();
             $producto->numero_corrrelativo = $correlativo[0]->numero_correlativo;
+            $codigo_producto = $producto_model->getCodigoProducto($request->familia, $request->sub_familia);
 		}else{
 			$producto = Producto::find($request->id);
+            $codigo_producto = $request->codigo;
 		}
+
+        if($request->id == 0){
+
+            $existe_producto_codigo = Producto::where('codigo', $codigo_producto[0]->codigo)->first();
+
+            $existe_producto_serie = Producto::where('numero_serie', $request->numero_serie)->whereNotNull('numero_serie')->where('numero_serie', '!=', '')->first();
+
+            if ($existe_producto_serie && $existe_producto_serie->id != $request->id) {
+                return response()->json([
+                'error' => 'El número de serie ya está registrado.'
+                ]);
+            }
+
+            if ($existe_producto_codigo && $existe_producto_codigo->id != $request->id) {
+                return response()->json([
+                'error' => 'El código ya está registrado.'
+                ]);
+            }
+        }
 
         $producto->id_tipo_origen_producto = $request->tipo_origen_producto;
 		$producto->numero_serie = $request->numero_serie;
-		$producto->codigo = $request->codigo;
+		if($request->id == 0){
+            $producto->codigo = $codigo_producto[0]->codigo;
+        }else{
+            $producto->codigo = $codigo_producto;
+        }
         $producto->denominacion = $request->denominacion;
         $producto->id_unidad_medida = $request->unidad_medida;
         $producto->stock_actual = $request->stock_actual;

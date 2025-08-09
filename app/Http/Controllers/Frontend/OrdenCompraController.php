@@ -220,13 +220,17 @@ class OrdenCompraController extends Controller
         if($request->id == 0){
             $orden_compra = new OrdenCompra;
             $orden_compra_model = new OrdenCompra;
-		    $codigo_orden_compra = $orden_compra_model->getCodigoOrdenCompra($request->tipo_documento);
+
+            if($request->tipo_documento != 4){
+                $codigo_orden_compra = $orden_compra_model->getCodigoOrdenCompra($request->tipo_documento);
+            }else if($request->tipo_documento == 4){
+                $codigo_orden_compra = $orden_compra_model->getCodigoOrdenCompra(2);
+            }
+		    
         }else{
             $orden_compra = OrdenCompra::find($request->id);
             $codigo_orden_compra = $request->numero_orden_compra;
         }
-
-        //dd($codigo_orden_compra[0]->codigo);exit();
 
         $item = $request->input('item');
         $descripcion = $request->input('descripcion');
@@ -274,6 +278,10 @@ class OrdenCompraController extends Controller
         $orden_compra->id_usuario_inserta = $id_user;
         $orden_compra->id_vendedor = $request->id_vendedor;
         $orden_compra->estado = 1;
+        if($request->tipo_documento == 4){
+            $orden_compra_matriz = OrdenCompra::where('numero_orden_compra',$request->numero_orden_compra_matriz)->where('id_tipo_documento',2)->where('estado',1)->where('estado_pedido',1)->first();
+            $orden_compra->id_orden_compra_matriz = $orden_compra_matriz->id;
+        }
         $orden_compra->save();
 
         $array_orden_compra_detalle = array();
@@ -1965,6 +1973,13 @@ class OrdenCompraController extends Controller
 
     }
 
+    public function obtener_orden_compra_matriz($numero_orden_compra_matriz){
+		
+		$orden_compra_model = new OrdenCompra;
+		$orden_compra_matriz = $orden_compra_model->getOrdenCompraMatriz($numero_orden_compra_matriz);
+		
+		return response()->json($orden_compra_matriz);
+	}
 }
 
 class InvoicesExport implements FromArray, WithHeadings, WithStyles
