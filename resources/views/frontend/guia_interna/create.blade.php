@@ -346,32 +346,56 @@ label.form-control-sm{
 				
 				<div class="row" style="padding:20px 20px 0px 20px;">
 
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+					<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
                         <input id="numero_guia_bus" name="numero_guia_bus" on class="form-control form-control-sm"  placeholder="N&uacute;mero Guia">
 					</div>
 
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+					<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
                         <input id="fecha_bus" name="fecha_bus" on class="form-control form-control-sm"  placeholder="Fecha">
 					</div>
 
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<select name="tipo_documento_bus" id="tipo_documento_bus" class="form-control form-control-sm">
-							<option value="">--Seleccionar Tipo Documento--</option>
+					<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+                        <input id="numero_documento_bus" name="numero_documento_bus" on class="form-control form-control-sm"  placeholder="N&uacute;mero Documento">
+					</div>
+
+					<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+                        <input id="placa_bus" name="placa_bus" on class="form-control form-control-sm"  placeholder="N&uacute;mero Placa">
+					</div>
+
+					<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+						<select name="empresa_transporte_bus" id="empresa_transporte_bus" class="form-control form-control-sm">
+							<option value="">--Seleccionar Empresa Transporte--</option>
 							<?php
-							foreach ($tipo_documento as $row){?>
-								<option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
+							foreach ($transporte_razon_social as $row){?>
+								<option value="<?php echo $row->id ?>"><?php echo $row->razon_social ?></option>
 								<?php 
 							}
 							?>
 						</select>
 					</div>
 
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-                        <input id="numero_documento_bus" name="numero_documento_bus" on class="form-control form-control-sm"  placeholder="N&uacute;mero Documento">
+					<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+						<select name="empresa_bus" id="empresa_bus" class="form-control form-control-sm">
+							<option value="">--Seleccionar Empresa Cliente--</option>
+							<?php
+							foreach ($empresa as $row){?>
+								<option value="<?php echo $row->id ?>"><?php echo $row->razon_social ?></option>
+								<?php 
+							}
+							?>
+						</select>
 					</div>
 
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-                        <input id="placa_bus" name="placa_bus" on class="form-control form-control-sm"  placeholder="N&uacute;mero Placa">
+					<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+						<select name="persona_bus" id="persona_bus" class="form-control form-control-sm">
+							<option value="">--Seleccionar Persona Cliente--</option>
+							<?php
+							foreach ($persona as $row){?>
+								<option value="<?php echo $row->id ?>"><?php echo $row->nombres. ' ' . $row->apellido_paterno . ' ' . $row->apellido_materno ?></option>
+								<?php 
+							}
+							?>
+						</select>
 					</div>
 
 					<!--<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
@@ -384,7 +408,7 @@ label.form-control-sm{
 							//}
 							?>
 						</select>
-					</div>-->
+					</div>
 
 					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
                         <input id="empresa_transporte_bus" name="empresa_transporte_bus" on class="form-control form-control-sm"  placeholder="Razon Social Transporte">
@@ -396,7 +420,7 @@ label.form-control-sm{
 
 					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
                         <input id="destino_bus" name="destino_bus" on class="form-control form-control-sm"  placeholder="Destino">
-					</div>
+					</div>-->
 
                     <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
 						<select name="estado_bus" id="estado_bus" class="form-control form-control-sm">

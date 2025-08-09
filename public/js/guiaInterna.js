@@ -81,6 +81,12 @@ $(document).ready(function () {
 		
 	datatablenew();
 
+	$('#empresa_transporte_bus').select2({ width: '100%'})
+
+	$('#empresa_bus').select2({ width: '100%'})
+	
+	$('#persona_bus').select2({ width: '100%'})
+
 });
 
 function datatablenew(){
@@ -114,14 +120,13 @@ function datatablenew(){
             var iNroPagina 	= parseFloat(fn_util_obtieneNroPagina(aoData[3].value, aoData[4].value)).toFixed();
             var iCantMostrar 	= aoData[4].value;
 			
-            var numero_guia = $('#numero_guia_bus').val();
 			var fecha = $('#fecha_bus').val();
-			var tipo_documento = $('#tipo_documento_bus').val();
+            var numero_guia = $('#numero_guia_bus').val();
 			var numero_documento = $('#numero_documento_bus').val();
+			var empresa = $('#empresa_bus').val();
+			var persona = $('#persona_bus').val();
 			var placa = $('#placa_bus').val();
 			var empresa_transporte = $('#empresa_transporte_bus').val();
-			var origen = $('#origen_bus').val();
-			var destino = $('#destino_bus').val();
 			var estado = $('#estado_bus').val();
 			
 			var _token = $('#_token').val();
@@ -131,9 +136,8 @@ function datatablenew(){
                 "type": "POST",
                 "url": sSource,
                 "data":{NumeroPagina:iNroPagina,NumeroRegistros:iCantMostrar,
-						numero_guia:numero_guia,fecha:fecha,tipo_documento:tipo_documento,
-						numero_documento:numero_documento,placa:placa,estado:estado,
-						empresa_transporte:empresa_transporte,origen:origen,destino:destino,
+						fecha:fecha,numero_guia:numero_guia,numero_documento:numero_documento,
+						empresa:empresa,persona:persona,placa:placa,empresa_transporte:empresa_transporte,estado:estado,
 						_token:_token
                        },
                 "success": function (result) {

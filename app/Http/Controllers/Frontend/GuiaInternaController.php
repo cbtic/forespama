@@ -15,6 +15,7 @@ use App\Models\Guia;
 use App\Models\GuiaDetalle;
 use App\Models\Conductores;
 use App\Models\Persona;
+use App\Models\EmpresaVehiculo;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Auth;
 use Carbon\Carbon;
@@ -44,28 +45,31 @@ class GuiaInternaController extends Controller
         $responsable_atencion = $user_model->getUserAll();*/
 
         $tablaMaestra_model = new TablaMaestra;
+        $empresa_vehiculo_model = new EmpresaVehiculo;
+        $empresa_model = new Empresa;
+        $persona_model = new Persona;
         //$empresa_model = new Empresa;
 
         $tipo_documento = $tablaMaestra_model->getMaestroByTipo(59);
+        $transporte_razon_social = $empresa_vehiculo_model->getEmpresaTransporte();
+        $empresa = $empresa_model->getEmpresaAll();
+        $persona = $persona_model->obtenerPersonaAll();
         //$transporte_razon_social = $empresa_model->obtenerRazonSocialTransporteAll();
 
-        
-		return view('frontend.guia_interna.create',compact('tipo_documento'/*,'transporte_razon_social'*/));
+		return view('frontend.guia_interna.create',compact('tipo_documento','transporte_razon_social','empresa','persona'));
 
 	}
 
     public function listar_guia_interna_ajax(Request $request){
 
 		$guia_interna_model = new GuiaInterna;
-		$p[]=$request->tipo_documento;
         $p[]=$request->fecha;
         $p[]=$request->numero_guia;
         $p[]=$request->numero_documento;
-        $p[]=$request->empresa_destino;
+        $p[]=$request->empresa;
+        $p[]=$request->persona;
         $p[]=$request->placa;
         $p[]=$request->empresa_transporte;
-        $p[]=$request->origen;
-        $p[]=$request->destino;
         $p[]=$request->estado;
 		$p[]=$request->NumeroPagina;
 		$p[]=$request->NumeroRegistros;
