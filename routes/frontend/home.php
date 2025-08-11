@@ -753,4 +753,7 @@ Route::post('activos/send_revision_tecnica_activo', [ActivoController::class, 's
 Route::post('activos/send_control_mantenimiento_activo', [ActivoController::class, 'send_control_mantenimiento_activo'])->name('activos.send_control_mantenimiento_activo');
 Route::get('activos/editar_activo/{id}', [ActivoController::class, 'editar_activo'])->name('activos.editar_activo');
 Route::get('orden_compra/obtener_orden_compra_matriz/{numero_orden_compra_matriz}', [OrdenCompraController::class, 'obtener_orden_compra_matriz'])->name('orden_compra.obtener_orden_compra_matriz');
-
+Route::get('orden_produccion/movimiento_pdf/{id}', [OrdenProduccionController::class, 'movimiento_pdf'])->name('orden_produccion.movimiento_pdf');
+Route::get('orden_produccion/modal_atender_orden_produccion/{id}', [OrdenProduccionController::class, 'modal_atender_orden_produccion'])->name('orden_produccion.modal_atender_orden_produccion');
+Route::get('orden_produccion/cargar_detalle_orden_produccion/{id}', [OrdenProduccionController::class, 'cargar_detalle_orden_produccion'])->name('orden_produccion.cargar_detalle_orden_produccion');
+Route::post('orden_produccion/send_orden_produccion_orden_compra', [OrdenProduccionController::class, 'send_orden_produccion_orden_compra'])->name('orden_produccion.send_orden_produccion_orden_compra');

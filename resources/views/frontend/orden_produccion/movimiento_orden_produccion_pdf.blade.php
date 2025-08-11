@@ -125,23 +125,17 @@ td.data, th.data {
   
 }
 
-.contenido {
-    width: 100%;
-    background-color: white;
-    margin-bottom: 80px; /* Ajusta este margen según sea necesario */
+#tablemodalm{
+	
 }
 
 .footer-final {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            font-size: 12px;
-            background-color: white;
-        }
-
-#tablemodalm{
-	
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    font-size: 12px;
+    background-color: white;
 }
 </style>
 
@@ -170,7 +164,7 @@ $(document).ready(function() {
     </div>-->
     <table class="data" style="width:100%; font-size:11px">
         <tr>
-            <th><h2><?php echo "DISPENSACION N° ". $codigo;?></h2></th>
+            <th><h2><?php echo " Orden de Fabricacion N° " . $codigo;?></h2></th>
         </tr>
     </table>
     <!--<div style="display: flex !important; width:100%">
@@ -185,22 +179,10 @@ $(document).ready(function() {
             <table class="data" style="width:100%; background-color:white !important;border-spacing:1px; width: 100%; margin: 0 auto; font-size:12px; vertical-align:top">
                 <tbody>
                     <tr>
-                        <td class="td" style ="text-align: left; width: 10%;"><b>Fecha:</b></td>
-                        <td class="td" style ="text-align: left; width: 20%;"><?php echo $fecha;?></td>
-                        <td class="td" style ="text-align: left; width: 10%;"></td>
-                        <td class="td" style ="text-align: left; width: 10%;"><b>Almacen:</b></td>
-                        <td class="td" style ="text-align: left; width: 20%;"><?php echo $almacen;?></td>
-                    </tr>
-                    <tr>
-                        <td class="td" style ="text-align: left; width: 10%;"><b>&Aacute;rea de Trabajo:</b></td>
-                        <td class="td" style ="text-align: left; width: 20%;"><?php echo $area_trabajo;?></td>
-                        <td class="td" style ="text-align: left; width: 10%;"></td>
-                        <td class="td" style ="text-align: left; width: 10%;"><b>Unidad de Trabajo:</b></td>
-                        <td class="td" style ="text-align: left; width: 20%;"><?php echo $unidad_trabajo;?></td>
-                    </tr>
-                    <tr>
-                        <td class="td" style ="text-align: left; width: 10%;"><b>Persona Recibe:</b></td>
-                        <td class="td" colspan="4" style ="text-align: left; width: 20%;"><?php echo $usuario_recibe;?></td>
+                        <td class="td" style ="text-align: left; width: 20%;"><b>Fecha de Orden Producci&oacute;n:</b></td>
+                        <td class="td" style ="text-align: left; width: 20%;"><?php echo $fecha_orden_produccion;?></td>
+                        <td class="td" style ="text-align: left; width: 10%;"><b>&Aacute;rea:</b></td>
+                        <td class="td" style ="text-align: left; width: 20%;"><?php echo $area;?></td>
                     </tr>
                 </tbody>
             </table>
@@ -209,37 +191,38 @@ $(document).ready(function() {
                 <tbody>
                     <tr class="data">
                         <td class="td" style ="text-align: left; width: 5%; height:25px; border-bottom: 1px solid black;"><b>#</b></td>
-                        <td class="td" style ="text-align: left; width: 10%; height:25px; border-bottom: 1px solid black;"><b>ITEM</b></td>
-                        <td class="td" style ="text-align: left; width: 30%; height:25px; border-bottom: 1px solid black;"><b>DESCRIPCI&Oacute;N</b></td>
-                        <td class="td" style ="text-align: left; width: 10%; height:25px; border-bottom: 1px solid black;"><b>MARCA</b></td>
-                        <td class="td" style ="text-align: left; width: 15%; height:25px; border-bottom: 1px solid black;"><b>COD. INTERNO</b></td>
-                        <td class="td" style ="text-align: left; width: 10%; height:25px; border-bottom: 1px solid black;"><b>ESTADO BIEN</b></td>
-                        <td class="td" style ="text-align: left; width: 10%; height:25px; border-bottom: 1px solid black;"><b>UNIDAD</b></td>
-                        <td class="td" style ="text-align: left; width: 10%; height:25px; border-bottom: 1px solid black;"><b>CANTIDAD</b></td>
+                        <td class="td" style ="text-align: left; width: 50%; height:25px; border-bottom: 1px solid black;"><b>DESCRIPCI&Oacute;N</b></td>
+                        <td class="td" style ="text-align: left; width: 15%; height:25px; border-bottom: 1px solid black;"><b>C&Oacute;DIGO</b></td>
+                        <td class="td" style ="text-align: left; width: 15%; height:25px; border-bottom: 1px solid black;"><b>UNIDAD</b></td>
+                        <td class="td" style ="text-align: left; width: 15%; height:25px; border-bottom: 1px solid black;"><b>CANTIDAD</b></td>
                     </tr>
                     
                     <?php 
                     foreach($datos_detalle as $key=>$r) { ?>
                         <tr>
                             <td class="td" style ="text-align: left; width: 5%; height:25px"><?php echo $r->row_num;?></td>
-                            <td class="td" style ="text-align: left; width: 10%; height:25px"><?php echo $r->numero_serie;?></td>
-                            <td class="td" style ="text-align: left; width: 30%; height:25px"><?php echo $r->producto;?></td>
-                            <td class="td" style ="text-align: left; width: 10%; height:25px"><?php echo $r->marca;?></td>
+                            <td class="td" style ="text-align: left; width: 50%; height:25px"><?php echo $r->producto;?></td>
                             <td class="td" style ="text-align: left; width: 15%; height:25px"><?php echo $r->codigo;?></td>
-                            <td class="td" style ="text-align: left; width: 10%; height:25px"><?php echo $r->estado_producto;?></td>
-                            <td class="td" style ="text-align: left; width: 10%; height:25px"><?php echo $r->unidad_medida;?></td>
-                            <td class="td" style ="text-align: center; width: 10%; height:25px"><?php echo $r->cantidad;?></td>
+                            <td class="td" style ="text-align: left; width: 15%; height:25px"><?php echo $r->unidad_medida;?></td>
+                            <td class="td" style ="text-align: left; width: 15%; height:25px"><?php echo $r->cantidad;?></td>
+                            <?php
+                            ?>
                         </tr>
                     <?php }
+           
                       ?>
                 </tbody>
             </table>
+            &nbsp;
             <div class="footer-final">
-                <table style="width:100%; font-size:12px;">
+                <table style="width:100%; font-size:12px; border-collapse: collapse;">
                     <tbody>
                         <tr style="text-align:center">
-                            <td style="text-align: left; width: 20%;"><b>Recibido por:</b></td>
-                            <td colspan="4" style="text-align: left; width: 90%;"><?php echo $usuario_recibe; ?></td>
+                            <td style="text-align: right; width: 20%; border-top: 1px solid"><b>Solicitado por:</b></td>
+                            <td style="text-align: left; width: 25%; border-top: 1px solid"><?php echo $usuario; ?></td>
+                            <td style="text-align: left; width: 10%;"></td>
+                            <td style="text-align: right; width: 20%; border-top: 1px solid"><b>&Aacute;rea Solicitada:</b></td>
+                            <td style="text-align: left; width: 25%; border-top: 1px solid"><?php echo $area; ?></td>
                         </tr>
                     </tbody>
                 </table>
@@ -250,7 +233,7 @@ $(document).ready(function() {
     
 @push('after-scripts')
 
-<script src="{{ asset('js/ordenCompra.js') }}"></script>
+<script src="{{ asset('js/ordenProduccion.js') }}"></script>
 
 @endpush
 

@@ -59,6 +59,13 @@ $(document).ready(function () {
         return false;
     });
 
+		
+	if($('#id_activo').val()>0){
+        obtenerProvincia(function() {
+            obtenerDatosUbigeo();
+        });
+	}
+
 });
 
 $(function() {
@@ -79,8 +86,8 @@ function guardar_activo(){
 	var descripcion = $("#descripcion").val();
 	var placa = $("#placa").val();
 	var tipo_combustible = $("#tipo_combustible").val();
-	var valor_libros = $("#valor_libros").val();
-	var valor_comercial = $("#valor_comercial").val();
+	//var valor_libros = $("#valor_libros").val();
+	//var valor_comercial = $("#valor_comercial").val();
 	var departamento = $("#departamento").val();
 	var provincia = $("#provincia").val();
 	var distrito = $("#distrito").val();
@@ -89,8 +96,8 @@ function guardar_activo(){
 	if(descripcion=="")msg += "Debe Ingresar una Descripcion <br>";
 	if(placa=="")msg += "Debe Ingresar la Placa <br>";
 	if(tipo_combustible=="")msg += "Debe Seleccionar el Tipo de Combustible <br>";
-	if(valor_libros=="")msg += "Debe Ingresar el Valor Libros <br>";
-	if(valor_comercial=="")msg += "Debe Ingresar el Valor Comercial <br>";
+	//if(valor_libros=="")msg += "Debe Ingresar el Valor Libros <br>";
+	//if(valor_comercial=="")msg += "Debe Ingresar el Valor Comercial <br>";
 	if(departamento=="")msg += "Debe Seleccione el Departamento <br>";
 	if(provincia=="")msg += "Debe Seleccione la Provincia <br>";
 	if(distrito=="")msg += "Debe Seleccione el Distrito <br>";
@@ -333,7 +340,7 @@ function obtenerProvincia(callback){
 
 function obtenerDatosUbigeo(){
 
-    var id = $('#id').val();
+    var id = $('#id_activo').val();
 
     $.ajax({
         url: '/activos/obtener_provincia_distrito/'+id,

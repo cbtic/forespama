@@ -1,3 +1,5 @@
+-- DROP FUNCTION public.sp_listar_activos_paginado(varchar, varchar, varchar, varchar, varchar, varchar, refcursor);
+
 CREATE OR REPLACE FUNCTION public.sp_listar_activos_paginado(p_tipo_activo character varying, p_descripcion character varying, p_placa character varying, p_estado character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
  RETURNS refcursor
  LANGUAGE plpgsql
@@ -16,7 +18,19 @@ begin
 	p_pagina=(p_pagina::Integer-1)*p_limit::Integer;
 
 	v_campos=' a.id, u.desc_ubigeo ubigeo, a.direccion, tm.denominacion tipo_activo, a.descripcion, a.placa, a.modelo, a.serie, m.denominiacion marca, a.color, a.titulo, a.partida_registral, a.partida_circulacion, a.vigencia_circulacion,
-	a.fecha_vencimiento_soat, a.fecha_vencimiento_revision_tecnica, a.valor_libros, a.valor_comercial, tm3.denominacion tipo_combustible, a.dimensiones, tm2.denominacion estado_activo, a.estado ';
+	(select sa.fecha_vencimiento 
+	from soat_activos sa 
+	where sa.id_activos = a.id 
+	and sa.estado = ''1'' 
+	order by fecha_vencimiento desc 
+	limit 1) fecha_vencimiento_soat, 
+	(select rta.fecha_vencimiento 
+	from revision_tecnica_activos rta 
+	where rta.id_activos = a.id 
+	and rta.estado = ''1'' 
+	order by fecha_vencimiento desc 
+	limit 1) fecha_vencimiento_revision, 
+	a.valor_libros, a.valor_comercial, tm3.denominacion tipo_combustible, a.dimensiones, tm2.denominacion estado_activo, a.estado ';
 
 	v_tabla=' from activos a
 	inner join tabla_maestras tm on a.id_tipo_activo = tm.codigo::int and tm.tipo = ''84''

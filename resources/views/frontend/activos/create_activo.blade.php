@@ -434,13 +434,13 @@ label.form-control-sm{
                                                                     <input id="dimension" name="dimension" on class="form-control form-control-sm mayusculas"  value="<?php echo $activo->dimensiones?>" type="text">
                                                                 </div>
                                                                 <div class="col-lg-1 col-md-12 col-sm-12 col-xs-12">
-                                                                    Valor Libros <span style="color:red;">*</span>
+                                                                    Valor Libros
                                                                 </div>
                                                                 <div class="col-lg-2 col-md-12 col-sm-12 col-xs-12">
                                                                     <input id="valor_libros" name="valor_libros" on class="form-control form-control-sm solo-decimal" <?= ($activo->valor_libros !== null && $activo->valor_libros !== '') ? 'value="' . number_format($activo->valor_libros, 2) . '"' : '' ?> type="text" placeholder="0.00">
                                                                 </div>
                                                                 <div class="col-lg-1 col-md-12 col-sm-12 col-xs-12">
-                                                                    Valor Comercial <span style="color:red;">*</span>
+                                                                    Valor Comercial
                                                                 </div>
                                                                 <div class="col-lg-2 col-md-12 col-sm-12 col-xs-12">
                                                                     <input id="valor_comercial" name="valor_comercial" on class="form-control form-control-sm solo-decimal" <?= ($activo->valor_comercial !== null && $activo->valor_comercial !== '') ? 'value="' . number_format($activo->valor_comercial, 2) . '"' : '' ?> type="text" placeholder="0.00">

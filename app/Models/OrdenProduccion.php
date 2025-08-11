@@ -57,4 +57,39 @@ class OrdenProduccion extends Model
 		$data = DB::select($cad);
         return $data;
     }
+
+    function getOrdenProduccionByIdPdf($id){
+
+        $cad = "select op.id, op.id_situacion,
+        to_char(op.fecha_orden_produccion,'dd-mm-yyyy') fecha_orden_produccion, 
+        op.codigo, ut.denominacion area, u.name usuario, op.estado
+        from orden_produccion op
+        inner join unidad_trabajo ut on ut.id = op.id_area 
+        inner join users u on op.id_usuario_inserta = u.id
+        where op.id = '".$id."'
+        and op.estado = '1' ";
+
+		$data = DB::select($cad);
+        return $data;
+
+    }
+
+    function getDetalleOrdenProduccionId($id){
+
+        $cad = "select opd.id,  ROW_NUMBER() OVER (PARTITION BY opd.id_orden_produccion ) AS row_num, p.numero_serie item, opd.id_producto, p.codigo, p.denominacion nombre_producto, tm.denominacion unidad_medida, 
+        (select coalesce(sum(ocd.cantidad_requerida),0) from orden_compras oc
+        inner join orden_compra_detalles ocd on ocd.id_orden_compra = oc.id 
+        where oc.id_orden_produccion = op.id and ocd.id_producto = opd.id_producto and oc.estado ='1') cantidad_atendida,
+        p.id_unidad_medida, opd.cantidad
+        from orden_produccion_detalles opd 
+        inner join productos p on opd.id_producto = p.id
+        inner join orden_produccion op on opd.id_orden_produccion = op.id
+        left join tabla_maestras tm on p.id_unidad_medida::int = tm.codigo::int and tm.tipo = '43'
+        where opd.id_orden_produccion='".$id."'
+        and opd.estado='1'
+        order by 1 asc ";
+
+		$data = DB::select($cad);
+        return $data;
+    }
 }

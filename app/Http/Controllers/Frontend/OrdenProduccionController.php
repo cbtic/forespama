@@ -12,6 +12,10 @@ use App\Models\OrdenProduccion;
 use App\Models\OrdenProduccionDetalle;
 use App\Models\TipoEncargado;
 use App\Models\UnidadTrabajo;
+use App\Models\OrdenCompraDetalle;
+use App\Models\Marca;
+use App\Models\Almacene;
+use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Auth;
 use Carbon\Carbon;
@@ -23,11 +27,13 @@ class OrdenProduccionController extends Controller
 		$tablaMaestra_model = new TablaMaestra;
         $producto_model = new Producto;
         $persona_model = new Persona;
+        $unidad_trabajo_model = new UnidadTrabajo;
 
         $productos = $producto_model->getProductoExterno();
-        $encargado = $persona_model->obtenerPersonaAll();
+        //$encargado = $persona_model->obtenerPersonaAll();
+        $area = $unidad_trabajo_model->getUnidadTrabajo(7);
         
-		return view('frontend.orden_produccion.create_orden_produccion',compact('productos','encargado'));
+		return view('frontend.orden_produccion.create_orden_produccion',compact('productos','area'));
 
 	}
 
@@ -36,9 +42,9 @@ class OrdenProduccionController extends Controller
         $id_user = Auth::user()->id;
 
 		$orden_produccion_model = new OrdenProduccion;
-        $p[]=$request->codigo;
-        $p[]=$request->fecha;
-        $p[]=$request->encargado;
+        $p[]=$request->numero_orden_produccion;
+        $p[]=$request->fecha_inicio;
+        $p[]=$request->area;
         $p[]=$request->estado;
 		$p[]=$request->NumeroPagina;
 		$p[]=$request->NumeroRegistros;
@@ -187,5 +193,187 @@ class OrdenProduccionController extends Controller
             'unidad_medida' => $unidad_medida,
             'producto_stock' =>$producto_stock
         ]);
+    }
+
+    public function movimiento_pdf($id){
+
+        $orden_compra_model = new OrdenProduccion;
+        $orden_compra_detalle_model = new OrdenProduccionDetalle;
+
+        $datos=$orden_compra_model->getOrdenProduccionByIdPdf($id);
+        $datos_detalle=$orden_compra_detalle_model->getDetalleOrdenProduccionPdf($id);
+
+        $id_situacion=$datos[0]->id_situacion;
+        $fecha_orden_produccion=$datos[0]->fecha_orden_produccion;
+        $codigo=$datos[0]->codigo;
+        $area = $datos[0]->area;
+        $usuario = $datos[0]->usuario;
+                
+		$year = Carbon::now()->year;
+
+		Carbon::setLocale('es');
+
+		$carbonDate =Carbon::now()->format('d-m-Y');
+
+		$currentHour = Carbon::now()->format('H:i:s');
+
+		$pdf = Pdf::loadView('frontend.orden_produccion.movimiento_orden_produccion_pdf',compact('id_situacion','fecha_orden_produccion','codigo','area','usuario','datos_detalle'));
+
+		$pdf->setPaper('A4'); // Tamaño de papel (puedes cambiarlo según tus necesidades)
+
+		$pdf->setPaper('A4', 'portrait'); //landscape horizontal
+    	$pdf->setOption('margin-top', 20); // Márgen superior en milímetros
+   		$pdf->setOption('margin-right', 50); // Márgen derecho en milímetros
+    	$pdf->setOption('margin-bottom', 20); // Márgen inferior en milímetros
+    	$pdf->setOption('margin-left', 100); // Márgen izquierdo en milímetros
+
+		return $pdf->stream();
+
+	}
+
+    public function modal_atender_orden_produccion($id){
+		
+        $tablaMaestra_model = new TablaMaestra;
+        $producto_model = new Producto;
+        $marca_model = new Marca;
+        $almacen_model = new Almacene;
+        $user_model = new User;
+		
+		if($id>0){
+            $orden_produccion = OrdenProduccion::find($id);
+        }else{
+			$orden_produccion = new OrdenProduccion;
+        }
+
+        $tipo_documento = $tablaMaestra_model->getMaestroByTipo(59);
+        $cerrado_requerimiento = $tablaMaestra_model->getMaestroByTipo(52);
+        $estado_atencion = $tablaMaestra_model->getMaestroByTipo(60);
+        $producto = $producto_model->getProductoAll();
+        $marca = $marca_model->getMarcaAll();
+        $unidad = $tablaMaestra_model->getMaestroByTipo(43);
+        $almacen = $almacen_model->getAlmacenAll();
+        $estado_bien = $tablaMaestra_model->getMaestroByTipo(4);
+        $responsable_atencion = $user_model->getUserAll();
+        $unidad_origen = $tablaMaestra_model->getMaestroByTipo(50);
+        
+        return view('frontend.orden_produccion.modal_orden_produccion_atenderOrdenProduccion',compact('id','orden_produccion','tipo_documento','producto','marca','unidad','almacen','cerrado_requerimiento','estado_bien','estado_atencion','responsable_atencion','unidad_origen'));
+
+    }
+
+    public function cargar_detalle_orden_produccion($id)
+    {
+
+        $orden_produccion_model = new OrdenProduccion;
+        $marca_model = new Marca;
+        $producto_model = new Producto;
+        $tablaMaestra_model = new TablaMaestra;
+
+        $orden_produccion = $orden_produccion_model->getDetalleOrdenProduccionId($id);
+        $producto = $producto_model->getProductoAll();
+        $unidad_medida = $tablaMaestra_model->getMaestroByTipo(43);
+
+        return response()->json([
+            'orden_produccion' => $orden_produccion,
+            'producto' => $producto,
+            'unidad_medida' => $unidad_medida
+        ]);
+    }
+
+    public function send_orden_produccion_orden_compra(Request $request)
+    {
+        $id_user = Auth::user()->id;
+
+        $orden_produccion = OrdenProduccion::find($request->id);
+        $id_orden_produccion = $orden_produccion->id;
+
+        $orden_compra = new OrdenCompra;
+
+        $orden_compra_model = new OrdenCompra;
+        $codigo_orden_compra = $orden_compra_model->getCodigoOrdenCompra(1);
+
+        $descripcion = $request->input('descripcion');
+        $cod_interno = $request->input('codigo');
+        $unidad = $request->input('unidad');
+        $cantidad = $request->input('cantidad_atendida');
+        
+        $id_orden_produccion_detalle =$request->id_orden_produccion_detalle;
+        
+        $orden_compra->id_empresa_compra = 30;
+        $orden_compra->id_empresa_vende = 30;
+        $orden_compra->fecha_orden_compra = $request->fecha_produccion;
+        $orden_compra->numero_orden_compra = $codigo_orden_compra[0]->codigo;
+        $orden_compra->id_tipo_documento = 1;
+        $orden_compra->igv_compra = 1;
+        $orden_compra->cerrado = 1;
+        $orden_compra->id_unidad_origen = "3";
+        $orden_compra->id_almacen_destino = $request->almacen_destino;
+        $orden_compra->id_tipo_cliente = '5';
+        $orden_compra->id_moneda = 1;
+        $orden_compra->moneda = "SOLES";
+        $orden_compra->id_usuario_inserta = $id_user;
+        $orden_compra->estado = 1;
+        $orden_compra->id_orden_produccion = $id_orden_produccion;
+        $orden_compra->save();
+        $id_orden_compra = $orden_compra->id;
+
+        $array_orden_compra_detalle = array();
+
+        foreach($descripcion as $index => $value) {
+
+            $orden_compra_detalle = new OrdenCompraDetalle;
+
+            $orden_compra_detalle->id_orden_compra = $id_orden_compra;
+            $orden_compra_detalle->id_producto = $descripcion[$index];
+            $orden_compra_detalle->cantidad_requerida = $cantidad[$index];
+            $orden_compra_detalle->id_estado_producto = 1;
+            if($unidad[$index]!=null && $unidad !=0){
+				$orden_compra_detalle->id_unidad_medida = (int)$unidad[$index];
+			}
+			$orden_compra_detalle->id_marca = 278;
+            $orden_compra_detalle->id_descuento = 1;
+            $orden_compra_detalle->descuento = 0;
+            $orden_compra_detalle->estado = 1;
+            $orden_compra_detalle->cerrado = 1;
+            $orden_compra_detalle->id_usuario_inserta = $id_user;
+
+            $orden_compra_detalle->save();
+
+            $array_orden_compra_detalle[] = $orden_compra_detalle->id;
+
+        }
+
+        $orden_produccion_detalle = OrdenProduccionDetalle::where('id_orden_produccion',$id_orden_produccion)->where('estado','1')->get();
+
+        $orden_produccion_detalle_model = new OrdenProduccionDetalle;
+
+        foreach($orden_produccion_detalle as $index => $detalle){
+            
+            $detalle_orden_produccion = OrdenProduccionDetalle::where('id_orden_produccion',$id_orden_produccion)->where('id_producto',$detalle->id_producto)->where('estado','1')->first();
+
+            $cantidad_requerida = $detalle_orden_produccion->cantidad;
+            
+            $cantidad_ingresada = $orden_produccion_detalle_model->getCantidadOrdenCompraByOrdenProduccionProducto($id_orden_produccion,$detalle->id_producto);
+            
+            if($cantidad_requerida <= $cantidad_ingresada){
+                $OrdenProduccionDetalleObj = OrdenProduccionDetalle::find($detalle->id);
+                $OrdenProduccionDetalleObj->cerrado = 2;
+                $OrdenProduccionDetalleObj->save();
+            }
+        }
+
+        $orden_produccion_detalle_valida = OrdenProduccionDetalle::where('id_orden_produccion',$id_orden_produccion)->where('cerrado','2')->get();
+
+        $orden_produccion_detalles_model = new OrdenProduccionDetalle;
+        $cantidadAbierto = $orden_produccion_detalles_model->getCantidadAbiertoOrdenProduccionDetalleByIdOrdenProduccion($id_orden_produccion);
+
+        if($cantidadAbierto==0){
+
+                $OrdenProduccionObj = OrdenProduccion::find($id_orden_produccion);
+                $OrdenProduccionObj->cerrado = 2;
+                $OrdenProduccionObj->id_situacion = 3;
+                $OrdenProduccionObj->save();
+        }
+
+        return response()->json(['id' => $orden_produccion->id]);
     }
 }

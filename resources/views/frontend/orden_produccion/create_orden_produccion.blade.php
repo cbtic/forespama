@@ -370,12 +370,24 @@ label.form-control-sm{
                         <input id="numero_orden_produccion_bus" name="numero_orden_produccion_bus" on class="form-control form-control-sm"  placeholder="N&uacute;mero Orden Fabricaci&oacute;n">
 					</div>
 
-					<div class="col-lg-2">
+					<!--<div class="col-lg-2">
 						<select name="encargado_bus" id="encargado_bus" class="form-control form-control-sm" onchange="">
 							<option value="">--Seleccionar--</option>
 							<?php
-							foreach ($encargado as $row){?>
-								<option value="<?php echo $row->id ?>"><?php echo $row->nombres . ' ' . $row->apellido_paterno . ' ' . $row->apellido_materno ?></option>
+							//foreach ($encargado as $row){?>
+								<option value="<?php //echo $row->id ?>"><?php //echo $row->nombres . ' ' . $row->apellido_paterno . ' ' . $row->apellido_materno ?></option>
+								<?php 
+							//}
+							?>
+						</select>
+					</div>-->
+
+					<div class="col-lg-2">
+						<select name="area_bus" id="area_bus" class="form-control form-control-sm" onchange="">
+							<option value="">--Seleccionar--</option>
+							<?php
+							foreach ($area as $row){?>
+								<option value="<?php echo $row->id ?>"><?php echo $row->denominacion ?></option>
 								<?php 
 							}
 							?>

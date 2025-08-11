@@ -99,7 +99,8 @@ function datatablenew(){
 			
 			var fecha_inicio = $('#fecha_inicio_bus').val();
 			var numero_orden_produccion = $('#numero_orden_produccion_bus').val();
-			var encargado_bus= $('#encargado_bus').val();
+			//var encargado = $('#encargado_bus').val();
+			var area= $('#area_bus').val();
 			var estado = $('#estado_bus').val();
 			
 			var _token = $('#_token').val();
@@ -109,7 +110,7 @@ function datatablenew(){
                 "type": "POST",
                 "url": sSource,
                 "data":{NumeroPagina:iNroPagina,NumeroRegistros:iCantMostrar,
-						fecha_inicio:fecha_inicio,numero_orden_produccion:numero_orden_produccion,encargado_bus:encargado_bus,
+						fecha_inicio:fecha_inicio,numero_orden_produccion:numero_orden_produccion,area:area,
 						estado:estado,_token:_token
                        },
                 "success": function (result) {
@@ -218,6 +219,8 @@ function datatablenew(){
 				var html = '<div class="btn-group btn-group-sm" role="group" aria-label="Log Viewer Actions">';
 					
 				html += '<button style="font-size:12px" type="button" class="btn btn-sm btn-success" data-toggle="modal" onclick="modalOrdenProduccion('+row.id+')" ><i class="fa fa-edit"></i> Editar</button>'; 
+
+				html += '<button style="font-size:12px;margin-left:10px" type="button" class="btn btn-sm btn-info" data-toggle="modal" onclick="modalAtenderOrdenProduccion('+row.id+')" ><i class="fa fa-edit"></i> Atender</button>'; 
 				
 				html += '</div>';
 				return html;
@@ -285,4 +288,19 @@ function DescargarArchivosExcel(){
 	if (estado_pedido == "")estado_pedido = 0;
 	
 	location.href = '/orden_compra/exportar_listar_orden_compra/'+tipo_documento+'/'+empresa_compra+'/'+empresa_vende+'/'+fecha_inicio+'/'+fecha_fin+'/'+numero_orden_compra+'/'+numero_orden_compra_cliente+'/'+almacen_origen+'/'+almacen_destino+'/'+situacion+'/'+estado+'/'+vendedor+'/'+estado_pedido;
+}
+
+function modalAtenderOrdenProduccion(id){
+	
+	$(".modal-dialog").css("width","95%");
+	$('#openOverlayOpc .modal-body').css('height', 'auto');
+
+	$.ajax({
+		url: "/orden_produccion/modal_atender_orden_produccion/"+id,
+		type: "GET",
+		success: function (result) {
+			$("#diveditpregOpc").html(result);
+			$('#openOverlayOpc').modal('show');
+		}
+	});
 }

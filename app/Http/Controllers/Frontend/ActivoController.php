@@ -222,8 +222,8 @@ class ActivoController extends Controller
 			$activo->id_usuario_inserta = $id_user;
 		}
 
-		$valor_libros = str_replace(',', '', $request->valor_libros);
-		$valor_comercial = str_replace(',', '', $request->valor_comercial);
+		$valor_libros = trim($request->valor_libros) !== '' ? str_replace(',', '', $request->valor_libros) : null;
+		$valor_comercial = trim($request->valor_comercial) !== '' ? str_replace(',', '', $request->valor_comercial) : null;
 
         $activo->codigo_activo = $request->codigo;
         $activo->id_ubigeo = $request->distrito;

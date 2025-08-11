@@ -245,9 +245,9 @@ function datatablenew(){
 
 				{
 				"mRender": function (data, type, row) {
-					var fecha_vencimiento_revision_tecnica = "";
-					if(row.fecha_vencimiento_revision_tecnica!= null)fecha_vencimiento_revision_tecnica = row.fecha_vencimiento_revision_tecnica;
-					return fecha_vencimiento_revision_tecnica;
+					var fecha_vencimiento_revision = "";
+					if(row.fecha_vencimiento_revision!= null)fecha_vencimiento_revision = row.fecha_vencimiento_revision;
+					return fecha_vencimiento_revision;
 				},
 				"bSortable": true,
 				"aTargets": [15]
