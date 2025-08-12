@@ -18,7 +18,8 @@ class IngresoVehiculoTroncoPago extends Model
         where id_ingreso_vehiculo_tronco_tipo_maderas=".$id."),0)precio,
         coalesce((select sum(importe) 
         from ingreso_vehiculo_tronco_pagos 
-        where id_ingreso_vehiculo_tronco_tipo_maderas=".$id."),0)pago";
+        where id_ingreso_vehiculo_tronco_tipo_maderas=".$id."
+        and estado = '1'),0)pago";
 
 		$data = DB::select($cad);
         return $data[0];

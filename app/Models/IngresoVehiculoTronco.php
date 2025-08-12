@@ -124,6 +124,7 @@ class IngresoVehiculoTronco extends Model
         from ingreso_vehiculo_tronco_pagos ivtp
         inner join tabla_maestras tm on ivtp.id_tipodesembolso=tm.codigo::int and tm.tipo='65' 
         where ivtp.id_ingreso_vehiculo_tronco_tipo_maderas=".$id."
+        and ivtp.estado = '1'
         order by 1 desc";
 
 		$data = DB::select($cad);
