@@ -12,7 +12,7 @@ class OrdenCompraDetalle extends Model
 
     function getDetalleOrdenCompraPdf($id){
 
-        $cad = "select ocd.id, ocd.id_orden_compra, ROW_NUMBER() OVER (PARTITION BY ocd.id_orden_compra order by opd.id ASC) AS row_num, p.denominacion producto, p.numero_serie, p.codigo, ocd.cantidad_requerida, ocd.precio, tm.denominacion descuento, ocd.sub_total, ocd.igv, ocd.total, ocd.fecha_fabricacion, ocd.fecha_vencimiento, tm2.denominacion estado_producto, tm3.denominacion unidad_medida, m.denominiacion marca,ocd.estado
+        $cad = "select ocd.id, ocd.id_orden_compra, ROW_NUMBER() OVER (PARTITION BY ocd.id_orden_compra order by ocd.id ASC) AS row_num, p.denominacion producto, p.numero_serie, p.codigo, ocd.cantidad_requerida, ocd.precio, tm.denominacion descuento, ocd.sub_total, ocd.igv, ocd.total, ocd.fecha_fabricacion, ocd.fecha_vencimiento, tm2.denominacion estado_producto, tm3.denominacion unidad_medida, m.denominiacion marca,ocd.estado
         from orden_compra_detalles ocd 
         inner join productos p on ocd.id_producto = p.id 
         left join tabla_maestras tm on ocd.id_descuento = tm.codigo ::int and tm.tipo = '55'

@@ -8,6 +8,8 @@ use App\Models\TablaMaestra;
 use App\Models\Producto;
 use App\Models\Persona;
 use App\Models\OrdenCompra;
+use App\Models\IngresoProduccion;
+use App\Models\IngresoProduccionDetalle;
 use App\Models\OrdenProduccion;
 use App\Models\OrdenProduccionDetalle;
 use App\Models\TipoEncargado;
@@ -279,17 +281,17 @@ class OrdenProduccionController extends Controller
         ]);
     }
 
-    public function send_orden_produccion_orden_compra(Request $request)
+    public function send_orden_produccion_ingreso_produccion(Request $request)
     {
         $id_user = Auth::user()->id;
 
         $orden_produccion = OrdenProduccion::find($request->id);
         $id_orden_produccion = $orden_produccion->id;
 
-        $orden_compra = new OrdenCompra;
+        $ingreso_produccion = new IngresoProduccion;
 
-        $orden_compra_model = new OrdenCompra;
-        $codigo_orden_compra = $orden_compra_model->getCodigoOrdenCompra(1);
+        $ingreso_produccion_model = new IngresoProduccion;
+        $codigo_ingreso_produccion = $ingreso_produccion_model->getCodigoIngresoProduccion(1);
 
         $descripcion = $request->input('descripcion');
         $cod_interno = $request->input('codigo');
@@ -298,47 +300,37 @@ class OrdenProduccionController extends Controller
         
         $id_orden_produccion_detalle =$request->id_orden_produccion_detalle;
         
-        $orden_compra->id_empresa_compra = 30;
-        $orden_compra->id_empresa_vende = 30;
-        $orden_compra->fecha_orden_compra = $request->fecha_produccion;
-        $orden_compra->numero_orden_compra = $codigo_orden_compra[0]->codigo;
-        $orden_compra->id_tipo_documento = 1;
-        $orden_compra->igv_compra = 1;
-        $orden_compra->cerrado = 1;
-        $orden_compra->id_unidad_origen = "3";
-        $orden_compra->id_almacen_destino = $request->almacen_destino;
-        $orden_compra->id_tipo_cliente = '5';
-        $orden_compra->id_moneda = 1;
-        $orden_compra->moneda = "SOLES";
-        $orden_compra->id_usuario_inserta = $id_user;
-        $orden_compra->estado = 1;
-        $orden_compra->id_orden_produccion = $id_orden_produccion;
-        $orden_compra->save();
-        $id_orden_compra = $orden_compra->id;
+        $ingreso_produccion->id_tipo_documento = 1;
+        $ingreso_produccion->codigo = $codigo_ingreso_produccion[0]->codigo;
+        $ingreso_produccion->fecha = $request->fecha_produccion;
+        $ingreso_produccion->id_almacen_destino = $request->almacen_destino;
+        $ingreso_produccion->id_area = $orden_produccion->id_area;
+        $ingreso_produccion->id_usuario_inserta = $id_user;
+        $ingreso_produccion->estado = 1;
+        $ingreso_produccion->id_orden_produccion = $id_orden_produccion;
+        $ingreso_produccion->save();
+        $id_ingreso_produccion = $ingreso_produccion->id;
 
-        $array_orden_compra_detalle = array();
+        $array_ingreso_produccion_detalle = array();
 
         foreach($descripcion as $index => $value) {
 
-            $orden_compra_detalle = new OrdenCompraDetalle;
+            $ingreso_produccion_detalle = new IngresoProduccionDetalle;
 
-            $orden_compra_detalle->id_orden_compra = $id_orden_compra;
-            $orden_compra_detalle->id_producto = $descripcion[$index];
-            $orden_compra_detalle->cantidad_requerida = $cantidad[$index];
-            $orden_compra_detalle->id_estado_producto = 1;
+            $ingreso_produccion_detalle->id_ingreso_produccion = $id_ingreso_produccion;
+            $ingreso_produccion_detalle->id_producto = $descripcion[$index];
+            $ingreso_produccion_detalle->cantidad = $cantidad[$index];
+            $ingreso_produccion_detalle->id_estado_producto = 1;
             if($unidad[$index]!=null && $unidad !=0){
-				$orden_compra_detalle->id_unidad_medida = (int)$unidad[$index];
+				$ingreso_produccion_detalle->id_unidad_medida = (int)$unidad[$index];
 			}
-			$orden_compra_detalle->id_marca = 278;
-            $orden_compra_detalle->id_descuento = 1;
-            $orden_compra_detalle->descuento = 0;
-            $orden_compra_detalle->estado = 1;
-            $orden_compra_detalle->cerrado = 1;
-            $orden_compra_detalle->id_usuario_inserta = $id_user;
+			$ingreso_produccion_detalle->id_marca = 278;
+            $ingreso_produccion_detalle->estado = 1;
+            $ingreso_produccion_detalle->id_usuario_inserta = $id_user;
 
-            $orden_compra_detalle->save();
+            $ingreso_produccion_detalle->save();
 
-            $array_orden_compra_detalle[] = $orden_compra_detalle->id;
+            $array_ingreso_produccion_detalle[] = $ingreso_produccion_detalle->id;
 
         }
 
@@ -352,7 +344,7 @@ class OrdenProduccionController extends Controller
 
             $cantidad_requerida = $detalle_orden_produccion->cantidad;
             
-            $cantidad_ingresada = $orden_produccion_detalle_model->getCantidadOrdenCompraByOrdenProduccionProducto($id_orden_produccion,$detalle->id_producto);
+            $cantidad_ingresada = $orden_produccion_detalle_model->getCantidadIngresoProduccionByOrdenProduccionProducto($id_orden_produccion,$detalle->id_producto);
             
             if($cantidad_requerida <= $cantidad_ingresada){
                 $OrdenProduccionDetalleObj = OrdenProduccionDetalle::find($detalle->id);

@@ -317,7 +317,7 @@ function save_orden_compra_orden_produccion(){
         $('.loader').show();
 
         $.ajax({
-            url: "/orden_produccion/send_orden_produccion_orden_compra",
+            url: "/orden_produccion/send_orden_produccion_ingreso_produccion",
             type: "POST",
             data : $("#frmAtenderOrdenProduccion").serialize(),
             success: function (result) {
@@ -451,7 +451,7 @@ function cerrarModalAtenderOrdenProduccion(){
                                         if($id>0){
                                     ?>
                                     <!--<button style="font-size:12px;margin-left:10px;margin-right:20px" type="button" class="btn btn-sm btn-primary" data-toggle="modal" onclick="pdf_documento()" ><i class="fa fa-edit"></i> Imprimir</button>-->
-                                    <button style="font-size:12px;margin-right:20px" type="button" class="btn btn-sm btn-warning" data-toggle="modal" onclick="save_orden_compra_orden_produccion()" ><i class="fa fa-edit"></i> Generar Orden Compra</button>
+                                    <button style="font-size:12px;margin-right:20px" type="button" class="btn btn-sm btn-warning" data-toggle="modal" onclick="save_orden_compra_orden_produccion()" ><i class="fa fa-edit"></i> Generar Ingreso Producci&oacute;n</button>
                                     <?php 
                                         }
                                     ?>

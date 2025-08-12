@@ -318,7 +318,7 @@ function cargarDetalleGuardado(){
                 });
 
                 result.unidad_medida.forEach(unidad_medida => {
-                    let selected = (unidad_medida.codigo == orden_produccion.id_unidad_medida) ? 'selected' : '';
+                    let selected = (unidad_medida.codigo == orden_produccion.id_unidad_producto) ? 'selected' : '';
                     unidadMedidaOptions += `<option value="${unidad_medida.codigo}" ${selected}>${unidad_medida.denominacion}</option>`;
                 });
                 
