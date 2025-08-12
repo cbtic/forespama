@@ -87,6 +87,7 @@ class OrdenProduccion extends Model
         left join tabla_maestras tm on p.id_unidad_producto::int = tm.codigo::int and tm.tipo = '43'
         where opd.id_orden_produccion='".$id."'
         and opd.estado='1'
+        and opd.cerrado ='1'
         order by 1 asc";
 
 		$data = DB::select($cad);

@@ -17,6 +17,7 @@ use App\Models\UnidadTrabajo;
 use App\Models\OrdenCompraDetalle;
 use App\Models\Marca;
 use App\Models\Almacene;
+use App\Models\Kardex;
 use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Auth;
@@ -331,6 +332,23 @@ class OrdenProduccionController extends Controller
             $ingreso_produccion_detalle->save();
 
             $array_ingreso_produccion_detalle[] = $ingreso_produccion_detalle->id;
+
+            $producto = Producto::find($descripcion[$index]);
+
+            $kardex_buscar = Kardex::where("id_producto",$descripcion[$index])->where("id_almacen_destino",$request->almacen_destino)->orderBy('id', 'desc')->first();
+            $kardex = new Kardex;
+            $kardex->id_producto = $descripcion[$index];
+            $kardex->entradas_cantidad = $cantidad[$index];
+            if($kardex_buscar){
+                $cantidad_saldo = $kardex_buscar->saldos_cantidad + $cantidad[$index];
+                $kardex->saldos_cantidad = $cantidad_saldo;
+            }else{
+                $kardex->saldos_cantidad = $cantidad[$index];
+            }
+            $kardex->id_almacen_destino = $request->almacen_destino;
+            $kardex->id_ingreso_produccion = $id_ingreso_produccion;
+
+            $kardex->save();
 
         }
 

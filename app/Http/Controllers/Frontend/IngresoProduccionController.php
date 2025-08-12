@@ -11,6 +11,7 @@ use App\Models\Marca;
 use App\Models\Almacene;
 use App\Models\Producto;
 use App\Models\Kardex;
+use App\Models\UnidadTrabajo;
 use Auth;
 use Carbon\Carbon;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -37,10 +38,12 @@ class IngresoProduccionController extends Controller
     public function create(){
 
 		$tablaMaestra_model = new TablaMaestra;
+		$unidad_trabajo_model = new UnidadTrabajo;
 		$tipo_documento = $tablaMaestra_model->getMaestroByTipo(53);
         //$cerrado_orden_compra = $tablaMaestra_model->getMaestroByTipo(52);
         $almacen_destino = Almacene::all();
-        $area = $tablaMaestra_model->getMaestroByTipo(81);
+        //$area = $tablaMaestra_model->getMaestroByTipo(81);
+		$area = $unidad_trabajo_model->getUnidadTrabajo(7);
 		
 		return view('frontend.ingreso_produccion.create',compact('tipo_documento','almacen_destino','area'));
 
@@ -79,6 +82,7 @@ class IngresoProduccionController extends Controller
         $marca_model = new Marca;
         $producto_model = new Producto;
         $almacen_model = new Almacene;
+		$unidad_trabajo_model = new UnidadTrabajo;
 		
 		if($id>0){
 			$ingreso_produccion = IngresoProduccion::find($id);
@@ -95,7 +99,8 @@ class IngresoProduccionController extends Controller
         $unidad_medida = $tablaMaestra_model->getMaestroByTipo(57);
         $marca = $marca_model->getMarcaAll();
         $almacen_destino = $almacen_model->getAlmacenAll();
-        $area = $tablaMaestra_model->getMaestroByTipo(81);
+        //$area = $tablaMaestra_model->getMaestroByTipo(81);
+		$area = $unidad_trabajo_model->getUnidadTrabajo(7);
 		//var_dump($id);exit();
 
 		return view('frontend.ingreso_produccion.modal_ingreso_produccion_nuevoIngresoProduccion',compact('id','ingreso_produccion','unidad_medida','moneda','estado_bien','tipo_producto','unidad','marca','producto','tipo_documento','almacen_destino','id_user','area'));

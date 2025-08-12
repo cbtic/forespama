@@ -383,7 +383,7 @@ label.form-control-sm{
 							<option value="">--Seleccionar &Aacute;rea--</option>
 							<?php
 							foreach ($area as $row){?>
-								<option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
+								<option value="<?php echo $row->id ?>"><?php echo $row->denominacion ?></option>
 								<?php 
 							}
 							?>

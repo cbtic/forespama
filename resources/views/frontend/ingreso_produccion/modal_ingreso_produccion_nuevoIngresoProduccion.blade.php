@@ -636,7 +636,7 @@ function activarObservacion() {
                                 <option value="">--Seleccionar--</option>
                                 <?php 
                                 foreach ($area as $row){?>
-                                    <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$ingreso_produccion->id_area)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                    <option value="<?php echo $row->id ?>" <?php if($row->id==$ingreso_produccion->id_area)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
                                     <?php 
                                 }
                                 ?>
