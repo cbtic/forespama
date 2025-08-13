@@ -544,7 +544,7 @@ class Comprobante extends Model
         sum(case when to_char(c.fecha, 'MM') = '11' and to_char(c.fecha, 'YYYY') = '".$anio."' then c.total::float else 0 end) as noviembre,
         sum(case when to_char(c.fecha, 'MM') = '12' and to_char(c.fecha, 'YYYY') = '".$anio."' then c.total::float else 0 end) as diciembre
         from comprobantes c 
-        inner join sodimac_factura_detalles sfd on '01-' || c.serie ||'-'|| lpad(coalesce(c.numero::int, 1)::varchar, 8, '0') = sfd.numero_documento
+        inner join sodimac_factura_detalles sfd on '01-' || c.serie ||'-'|| lpad(coalesce(c.numero::int, 1)::varchar, 8, '0') = sfd.numero_documento and sfd.estado ='1'
         where c.id_empresa >=0 and c.anulado != 'S'
         ".$empresa_." ";
         
@@ -606,7 +606,8 @@ class Comprobante extends Model
         sum(case when to_char(sf.fecha_pago, 'MM') = '12' and to_char(sf.fecha_pago, 'YYYY') = '".$anio."' then abs(sfd.importe_total)::float else 0 end) as diciembre
         from sodimac_facturas sf 
         inner join sodimac_factura_detalles sfd on sf.id = sfd.id_sodimac_factura
-        where sfd.id_tipo_documento ='2'";
+        where sfd.id_tipo_documento ='2'
+        and sfd.estado ='1'";
         
         $data = DB::select($cad);
         
