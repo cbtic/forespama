@@ -4468,7 +4468,7 @@ class ComprobanteController extends Controller
 
     }
 
-    public function exportar_listar_pagos_sodimac($fecha_ini, $fecha_fin, $tipo_documento, $serie, $numero, $estado_pago, $observacion_pago, $dias_pagado, $color, $anulado) {
+    public function exportar_listar_pagos_sodimac($fecha_ini, $fecha_fin, $tipo_documento, $serie, $numero, $estado_pago, $observacion_pago, $dias_pagado, $color, $anulado, $empresa) {
 
 		$id_user = Auth::user()->id;
         //dd($anulado);exit();
@@ -4483,6 +4483,7 @@ class ComprobanteController extends Controller
 		if($dias_pagado==0)$dias_pagado = "";
 		if($color==0)$color = "";
 		if($anulado==0)$anulado = "";
+		if($empresa==0)$empresa = "";
         //dd($fecha_ini.'-'.$fecha_fin.'-'.$tipo_documento.'-'.$serie.'-'.$numero.'-'.$estado_pago.'-'.$observacion_pago.'-'.$dias_pagado.'-'.$color.'-'.$anulado);exit();
 
 		$factura_model = new Comprobante();
@@ -4496,6 +4497,7 @@ class ComprobanteController extends Controller
         $p[]=$dias_pagado;
         $p[]=$color;
         $p[]=$anulado;
+        $p[]=$empresa;
 		$p[]=1;
 		$p[]=10000;
 		$data = $factura_model->listar_factura_sodimac_pagos_ajax($p);

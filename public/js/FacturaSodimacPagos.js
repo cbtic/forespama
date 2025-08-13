@@ -486,6 +486,7 @@ function DescargarArchivosExcel(){
 	var dias_pagado = $('#dias_pagado_bus').val();
 	var color = $('#color_bus').val();
 	var anulado = $('#anulado_bus').val();
+	var empresa = $('#empresa_bus').val();
     //alert(anulado);exit();
 	if (fecha_ini == "")fecha_ini = "0";
 	if (fecha_fin == "")fecha_fin = "0";
@@ -501,7 +502,8 @@ function DescargarArchivosExcel(){
 	if (dias_pagado == "")dias_pagado = 0;
 	if (color == "")color = 0;
 	if (anulado == "")anulado = 0;
+	if (empresa == "")empresa = 0;
 	
     //alert(anulado);exit();
-	location.href = '/comprobante/exportar_listar_pagos_sodimac/'+fecha_ini+'/'+fecha_fin+'/'+tipo_documento+'/'+serie+'/'+numero+'/'+estado_pago+'/'+observacion_pago+'/'+dias_pagado+'/'+color+'/'+anulado;
+	location.href = '/comprobante/exportar_listar_pagos_sodimac/'+fecha_ini+'/'+fecha_fin+'/'+tipo_documento+'/'+serie+'/'+numero+'/'+estado_pago+'/'+observacion_pago+'/'+dias_pagado+'/'+color+'/'+anulado+'/'+empresa;
 }
