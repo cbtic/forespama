@@ -28,13 +28,13 @@ begin
 	v_filtros_fecha_comprobante_historico := '';
 	
 	IF p_fecha_ini <> '' THEN
-	  v_filtros_fecha_comprobante := v_filtros_fecha_comprobante || ' AND c.fecha >= TO_DATE(''' || p_fecha_ini || ''', ''dd-mm-yyyy'') ';
-	  v_filtros_fecha_comprobante_historico := v_filtros_fecha_comprobante_historico || ' AND csh.fecha >= TO_DATE(''' || p_fecha_ini || ''', ''dd-mm-yyyy'') ';
+	  v_filtros_fecha_comprobante := v_filtros_fecha_comprobante || ' AND c.fecha::date >= TO_DATE(''' || p_fecha_ini || ''', ''dd-mm-yyyy'') ';
+	  v_filtros_fecha_comprobante_historico := v_filtros_fecha_comprobante_historico || ' AND csh.fecha::date >= TO_DATE(''' || p_fecha_ini || ''', ''dd-mm-yyyy'') ';
 	END IF;
 	
 	IF p_fecha_fin <> '' THEN
-	  v_filtros_fecha_comprobante := v_filtros_fecha_comprobante || ' AND c.fecha <= TO_DATE(''' || p_fecha_fin || ''', ''dd-mm-yyyy'') ';
-	  v_filtros_fecha_comprobante_historico := v_filtros_fecha_comprobante_historico || ' AND csh.fecha <= TO_DATE(''' || p_fecha_fin || ''', ''dd-mm-yyyy'') ';
+	  v_filtros_fecha_comprobante := v_filtros_fecha_comprobante || ' AND c.fecha::date <= TO_DATE(''' || p_fecha_fin || ''', ''dd-mm-yyyy'') ';
+	  v_filtros_fecha_comprobante_historico := v_filtros_fecha_comprobante_historico || ' AND csh.fecha::date <= TO_DATE(''' || p_fecha_fin || ''', ''dd-mm-yyyy'') ';
 	END IF;
 
 	v_tabla=' (select c.id, c.serie, c.numero, c.tipo, TO_CHAR(c.fecha,''dd-mm-yyyy'') fecha, c.destinatario, c.cod_tributario, c.subtotal, c.impuesto, c.total, c.estado_pago, c.anulado, c.estado_sunat sunat, (select oc.numero_orden_compra_cliente from orden_compras oc inner join orden_compra_detalles ocd on oc.id = ocd.id_orden_compra left join valorizaciones v on ocd.id = v.pk_registro where v.id_comprobante = c.id and oc.estado =''1'' limit 1) numero_orden_compra_cliente, c.moneda, sfd.numero_documento numero_documento_sodimac, sfd.importe_total, sfd.importe_inicial, abs(sfd.importe_retencion) importe_retencion, sfd.importe_detraccion, case when sfd.importe_total is null then 0 else 1 end as estado_pago_sodimac, CASE when sfd.importe_total is not null and c.total::float = sfd.importe_inicial::float THEN 1 when sfd.importe_total is not null and c.total::float != sfd.importe_inicial::float then 2 else 0 END AS coincide_total_inicial, sf.fecha_pago, DATE_PART(''day'', COALESCE(sf.fecha_pago, CURRENT_DATE) - c.fecha)::int AS dias_diferencia_pago ' ||

@@ -528,25 +528,41 @@ class Comprobante extends Model
         
         if($empresa!="0"){
             $empresa_=" and c.id_empresa = '".$empresa."' ";
+            $empresa_historico=" and csh.id_empresa = '".$empresa."' ";
         }
         
         $cad = "select 
-        sum(case when to_char(c.fecha, 'MM') = '01' and to_char(c.fecha, 'YYYY') = '".$anio."' then c.total::float else 0 end) as enero,
-        sum(case when to_char(c.fecha, 'MM') = '02' and to_char(c.fecha, 'YYYY') = '".$anio."' then c.total::float else 0 end) as febrero,
-        sum(case when to_char(c.fecha, 'MM') = '03' and to_char(c.fecha, 'YYYY') = '".$anio."' then c.total::float else 0 end) as marzo,
-        sum(case when to_char(c.fecha, 'MM') = '04' and to_char(c.fecha, 'YYYY') = '".$anio."' then c.total::float else 0 end) as abril,
-        sum(case when to_char(c.fecha, 'MM') = '05' and to_char(c.fecha, 'YYYY') = '".$anio."' then c.total::float else 0 end) as mayo,
-        sum(case when to_char(c.fecha, 'MM') = '06' and to_char(c.fecha, 'YYYY') = '".$anio."' then c.total::float else 0 end) as junio,
-        sum(case when to_char(c.fecha, 'MM') = '07' and to_char(c.fecha, 'YYYY') = '".$anio."' then c.total::float else 0 end) as julio,
-        sum(case when to_char(c.fecha, 'MM') = '08' and to_char(c.fecha, 'YYYY') = '".$anio."' then c.total::float else 0 end) as agosto,
-        sum(case when to_char(c.fecha, 'MM') = '09' and to_char(c.fecha, 'YYYY') = '".$anio."' then c.total::float else 0 end) as setiembre,
-        sum(case when to_char(c.fecha, 'MM') = '10' and to_char(c.fecha, 'YYYY') = '".$anio."' then c.total::float else 0 end) as octubre,
-        sum(case when to_char(c.fecha, 'MM') = '11' and to_char(c.fecha, 'YYYY') = '".$anio."' then c.total::float else 0 end) as noviembre,
-        sum(case when to_char(c.fecha, 'MM') = '12' and to_char(c.fecha, 'YYYY') = '".$anio."' then c.total::float else 0 end) as diciembre
-        from comprobantes c 
-        inner join sodimac_factura_detalles sfd on '01-' || c.serie ||'-'|| lpad(coalesce(c.numero::int, 1)::varchar, 8, '0') = sfd.numero_documento and sfd.estado ='1'
-        where c.id_empresa >=0 and c.anulado != 'S'
-        ".$empresa_." ";
+        sum(case when to_char(c.fecha, 'MM') = '01' and to_char(c.fecha, 'YYYY') = '2025' then c.total::float else 0 end) as enero,
+        sum(case when to_char(c.fecha, 'MM') = '02' and to_char(c.fecha, 'YYYY') = '2025' then c.total::float else 0 end) as febrero,
+        sum(case when to_char(c.fecha, 'MM') = '03' and to_char(c.fecha, 'YYYY') = '2025' then c.total::float else 0 end) as marzo,
+        sum(case when to_char(c.fecha, 'MM') = '04' and to_char(c.fecha, 'YYYY') = '2025' then c.total::float else 0 end) as abril,
+        sum(case when to_char(c.fecha, 'MM') = '05' and to_char(c.fecha, 'YYYY') = '2025' then c.total::float else 0 end) as mayo,
+        sum(case when to_char(c.fecha, 'MM') = '06' and to_char(c.fecha, 'YYYY') = '2025' then c.total::float else 0 end) as junio,
+        sum(case when to_char(c.fecha, 'MM') = '07' and to_char(c.fecha, 'YYYY') = '2025' then c.total::float else 0 end) as julio,
+        sum(case when to_char(c.fecha, 'MM') = '08' and to_char(c.fecha, 'YYYY') = '2025' then c.total::float else 0 end) as agosto,
+        sum(case when to_char(c.fecha, 'MM') = '09' and to_char(c.fecha, 'YYYY') = '2025' then c.total::float else 0 end) as setiembre,
+        sum(case when to_char(c.fecha, 'MM') = '10' and to_char(c.fecha, 'YYYY') = '2025' then c.total::float else 0 end) as octubre,
+        sum(case when to_char(c.fecha, 'MM') = '11' and to_char(c.fecha, 'YYYY') = '2025' then c.total::float else 0 end) as noviembre,
+        sum(case when to_char(c.fecha, 'MM') = '12' and to_char(c.fecha, 'YYYY') = '2025' then c.total::float else 0 end) as diciembre
+        FROM (
+            SELECT c.fecha, c.total
+            FROM comprobantes c
+            INNER JOIN sodimac_factura_detalles sfd 
+                ON '01-' || c.serie || '-' || lpad(coalesce(c.numero::int, 1)::varchar, 8, '0') = sfd.numero_documento
+            AND sfd.estado = '1'
+            WHERE c.id_empresa >= 0 
+            AND c.anulado != 'S'
+            ".$empresa_." 
+            UNION ALL
+            SELECT csh.fecha, csh.total
+            FROM comprobante_sodimac_historicos csh
+            INNER JOIN sodimac_factura_detalles sfd2 
+                ON '01-' || csh.serie || '-' || lpad(coalesce(csh.numero::int, 1)::varchar, 8, '0') = sfd2.numero_documento
+            AND sfd2.estado = '1'
+            WHERE csh.id_empresa >= 0
+            ".$empresa_historico." 
+            and csh.estado='1'
+        ) AS c;";
         
         $data = DB::select($cad);
         
