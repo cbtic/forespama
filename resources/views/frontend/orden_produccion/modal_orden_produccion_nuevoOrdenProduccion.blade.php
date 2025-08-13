@@ -523,7 +523,7 @@ function pdf_documento(){
                     <div class="row" style="padding-left:10px">
 
                         <div class="col-lg-2">
-                            N&uacute;mero Orden Fabricacion
+                            N&uacute;mero Orden Fabricaci&oacute;n
                         </div>
                         <div class="col-lg-2">
                             <input id="numero_orden_produccion" name="numero_orden_produccion" on class="form-control form-control-sm"  value="<?php if($id>0){echo $orden_produccion->codigo;}?>" type="text" readonly ="readonly">
@@ -570,7 +570,7 @@ function pdf_documento(){
 								<th>Descripci&oacute;n</th>
                                 <th>COD. INT.</th>
                                 <th>Unidad</th>
-                                <th>Cantidad Comprometida</th>
+                                <th>Cantidad Solicitada</th>
                                 <th>Cantidad Producir</th>
 							</tr>
 							</thead>

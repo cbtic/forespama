@@ -4133,6 +4133,7 @@ class ComprobanteController extends Controller
     public function create_pagos(){
         
         $tabla_model = new TablaMaestra;
+        $empresa_model = new Empresa;
 
         $formapago = $tabla_model->getMaestroByTipo('104');
 
@@ -4144,8 +4145,9 @@ class ComprobanteController extends Controller
 
         $usuario_caja = $caja_model->getCajaUsuario_all();
 
+        $empresas_sodimac = $empresa_model->getEmpresasSodimac();
 
-        return view('frontend.comprobante.create_pagos',compact('formapago','caja','medio_pago','usuario_caja'));
+        return view('frontend.comprobante.create_pagos',compact('formapago','caja','medio_pago','usuario_caja','empresas_sodimac'));
     }
 
     public function listar_factura_sodimac_pagos_ajax(Request $request){
@@ -4161,6 +4163,7 @@ class ComprobanteController extends Controller
         $p[]=$request->dias_pagado;
         $p[]=$request->color;
         $p[]=$request->anulado;
+        $p[]=$request->empresa;
         //$p[]=$request->estado;
 		$p[]=$request->NumeroPagina;
 		$p[]=$request->NumeroRegistros;

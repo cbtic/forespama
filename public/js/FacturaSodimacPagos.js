@@ -75,6 +75,7 @@ function datatablenew(){
             var dias_pagado = $('#dias_pagado_bus').val();
             var color = $('#color_bus').val();
             var anulado = $('#anulado_bus').val();
+            var empresa = $('#empresa_bus').val();
             
 			var _token = $('#_token').val();
             oSettings.jqXHR = $.ajax({
@@ -83,8 +84,9 @@ function datatablenew(){
                 "type": "POST",
                 "url": sSource,
                 "data":{NumeroPagina:iNroPagina,NumeroRegistros:iCantMostrar,
-						fecha_ini:fecha_ini,fecha_fin:fecha_fin,tipo_documento:tipo_documento, serie:serie, numero:numero, 
-                        estado_pago:estado_pago, observacion_pago:observacion_pago, dias_pagado:dias_pagado, color:color, anulado:anulado, _token:_token
+						fecha_ini:fecha_ini,fecha_fin:fecha_fin,tipo_documento:tipo_documento,serie:serie,numero:numero,estado_pago:estado_pago,
+                        observacion_pago:observacion_pago,dias_pagado:dias_pagado,color:color,anulado:anulado,empresa:empresa,
+                        _token:_token
                        },
                 "success": function (result) {
                     fnCallback(result);

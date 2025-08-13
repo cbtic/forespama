@@ -84,4 +84,16 @@ class Empresa extends Model
 
     }
 
+    function getEmpresasSodimac(){
+
+        $cad = "select * from empresas e 
+        where e.id in('23','187')
+        and e.estado = '1'
+        order by 1 asc";
+
+        $data = DB::select($cad);
+        return $data;
+
+    }
+
 }

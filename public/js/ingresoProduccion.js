@@ -187,6 +187,16 @@ function datatablenew(){
 					"bSortable": true,
 					"aTargets": [6]
 				},
+
+				{
+					"mRender": function (data, type, row) {
+						var codigo_orden_produccion = "";
+						if(row.codigo_orden_produccion!= null)codigo_orden_produccion = row.codigo_orden_produccion;
+						return codigo_orden_produccion;
+					},
+					"bSortable": true,
+					"aTargets": [7]
+				},
 				
 				{
 					"mRender": function (data, type, row) {
@@ -200,7 +210,7 @@ function datatablenew(){
 						return estado;
 					},
 					"bSortable": false,
-					"aTargets": [7]
+					"aTargets": [8]
 				},
 				{
 					"mRender": function (data, type, row) {
@@ -225,7 +235,7 @@ function datatablenew(){
 						return html;
 					},
 					"bSortable": false,
-					"aTargets": [8],
+					"aTargets": [9],
 				},
             ]
     });

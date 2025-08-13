@@ -347,6 +347,17 @@ label.form-control-sm{
 
                             <div class="row" style="padding:20px 20px 0px 20px;">
 
+                                <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+                                    <select name="empresa_bus" id="empresa_bus" class="form-control form-control-sm">
+                                        <option value="">--Seleccionar Empresa--</option>
+                                        <?php
+                                        foreach ($empresas_sodimac as $row){?>
+                                            <option value="<?php echo $row->ruc ?>"><?php echo $row->razon_social ?></option>
+                                            <?php 
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
                                 <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
                                     <div class="form-group">
                                         <input class="form-control form-control-sm" id="fecha_ini_bus" name="fecha_ini_bus" value="<?php echo date("01-01-Y") ?>" placeholder="Fecha Inicio">
