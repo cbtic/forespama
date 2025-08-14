@@ -702,7 +702,7 @@ function cerrarModalRequerimiento(){
 
     $('#openOverlayOpc').modal('hide');
 
-    datatablenew();
+    //datatablenew();
 }
 
 function cambiarOrigen(){

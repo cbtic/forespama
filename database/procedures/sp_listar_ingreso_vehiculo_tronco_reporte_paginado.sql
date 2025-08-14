@@ -1,4 +1,4 @@
---DROP FUNCTION public.sp_listar_ingreso_vehiculo_tronco_reporte_paginado(varchar, varchar, varchar, varchar, varchar, refcursor);
+-- DROP FUNCTION public.sp_listar_ingreso_vehiculo_tronco_reporte_paginado(varchar, varchar, varchar, varchar, varchar, refcursor);
 
 CREATE OR REPLACE FUNCTION public.sp_listar_ingreso_vehiculo_tronco_reporte_paginado(p_fecha_desde character varying, p_fecha_hasta character varying, p_tipo_empresa character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
  RETURNS refcursor
@@ -42,7 +42,7 @@ begin
 	and (ec.id_tipo_empresa = 1 OR (ec.id_tipo_empresa = 2 AND ec.id_conductor = ivt.id_conductores))) tipo_empresa
 	from ingreso_vehiculo_troncos ivt
 	inner join vehiculos v on ivt.id_vehiculos=v.id
-	inner join ingreso_vehiculo_tronco_tipo_maderas ivttm on ivt.id=ivttm.id_ingreso_vehiculo_troncos
+	inner join ingreso_vehiculo_tronco_tipo_maderas ivttm on ivt.id=ivttm.id_ingreso_vehiculo_troncos and ivttm.estado =''1''
 	inner join tabla_maestras tm on ivttm.id_tipo_maderas=tm.codigo::int and tm.tipo=''42''
 	inner join tabla_maestras tmep on ivttm.id_estado_pago=tmep.codigo::int and tmep.tipo=''66''
 	where 1=1 '; 

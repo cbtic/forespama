@@ -1973,6 +1973,61 @@ class OrdenCompraController extends Controller
 
     }
 
+    public function send_comprometer_stock_total($id)
+    {
+        $kardex_model = new Kardex;
+
+        $detalles = OrdenCompraDetalle::where('id_orden_compra', $id)
+            ->where('estado', '1')
+            ->get();
+        $orden_compra_matriz = OrdenCompra::find($id);
+        foreach ($detalles as $detalle) {
+
+            $id_almacen_bus = $orden_compra_matriz->id_almacen_salida;
+
+            if ($detalle->id_unidad_origen == 1) {
+                $id_almacen_bus = $orden_compra_matriz->id_almacen_salida;
+            }
+            if ($detalle->id_unidad_origen == 2) {
+                $id_almacen_bus = $orden_compra_matriz->id_almacen_destino;
+            }
+            if ($detalle->id_unidad_origen == 3) {
+                $id_almacen_bus = $orden_compra_matriz->id_almacen_salida;
+            }
+            if ($detalle->id_unidad_origen == 4) {
+                $id_almacen_bus = $orden_compra_matriz->id_almacen_salida;
+            }
+            
+            $stock = $kardex_model->getExistenciaProductoById($detalle->id_producto, $id_almacen_bus);
+            $stock_actual = count($stock) > 0 ? floatval($stock[0]->stock_comprometido) : 0;
+
+            $cantidad_ingreso = floatval($detalle->cantidad_requerida);
+
+            if ($detalle->comprometido != 1 && $cantidad_ingreso < $stock_actual) {
+                $detalle->comprometido = 1;
+                $detalle->save();
+            }
+        }
+
+        $total = OrdenCompraDetalle::where('id_orden_compra', $id)->where('estado', '1')->count();
+
+        $comprometidos = OrdenCompraDetalle::where('id_orden_compra', $id)->where('estado', '1')->where('comprometido', 1)->count();
+
+        $orden_compra = OrdenCompra::find($id);
+
+        if ($comprometidos == 0) {
+            $orden_compra->comprometido = 0;
+        } elseif ($comprometidos < $total) {
+            $orden_compra->comprometido = 1;
+        } else {
+            $orden_compra->comprometido = 2;
+        }
+
+        $orden_compra->save();
+
+        echo $id;
+    }
+
     public function obtener_orden_compra_matriz($numero_orden_compra_matriz){
 		
 		$orden_compra_model = new OrdenCompra;

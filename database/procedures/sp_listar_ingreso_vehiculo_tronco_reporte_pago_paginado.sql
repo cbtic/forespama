@@ -1,4 +1,4 @@
-DROP FUNCTION public.sp_listar_ingreso_vehiculo_tronco_reporte_pago_paginado(varchar, varchar, varchar, varchar, varchar, refcursor);
+-- DROP FUNCTION public.sp_listar_ingreso_vehiculo_tronco_reporte_pago_paginado(varchar, varchar, varchar, varchar, varchar, refcursor);
 
 CREATE OR REPLACE FUNCTION public.sp_listar_ingreso_vehiculo_tronco_reporte_pago_paginado(p_fecha_desde character varying, p_fecha_hasta character varying, p_tipo_empresa character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
  RETURNS refcursor
@@ -26,7 +26,7 @@ BEGIN
 
     -- Obtener el total de registros
     EXECUTE ('SELECT count(1) FROM ingreso_vehiculo_tronco_pagos ivtp 
- 			INNER JOIN ingreso_vehiculo_tronco_tipo_maderas ivttm ON ivtp.id_ingreso_vehiculo_tronco_tipo_maderas = ivttm.id
+ 			INNER JOIN ingreso_vehiculo_tronco_tipo_maderas ivttm ON ivtp.id_ingreso_vehiculo_tronco_tipo_maderas = ivttm.id and ivttm.estado = ''1''
           	INNER JOIN ingreso_vehiculo_troncos ivt ON ivttm.id_ingreso_vehiculo_troncos = ivt.id
             WHERE ivtp.fecha BETWEEN ''' || p_fecha_desde || ''' AND ''' || p_fecha_hasta || ''''
 	|| v_where_tipo_empresa) 
@@ -44,7 +44,7 @@ BEGIN
             ivtp.id_tipodesembolso
         FROM ingreso_vehiculo_troncos ivt
         INNER JOIN empresas e ON ivt.id_empresa_proveedor = e.id
-        INNER JOIN ingreso_vehiculo_tronco_tipo_maderas ivttm ON ivt.id = ivttm.id_ingreso_vehiculo_troncos
+        INNER JOIN ingreso_vehiculo_tronco_tipo_maderas ivttm ON ivt.id = ivttm.id_ingreso_vehiculo_troncos and ivttm.estado=''1''
         INNER JOIN ingreso_vehiculo_tronco_pagos ivtp ON ivtp.id_ingreso_vehiculo_tronco_tipo_maderas = ivttm.id 
         INNER JOIN tabla_maestras tm ON ivtp.id_tipodesembolso = tm.codigo::int AND tm.tipo = ''65''
         WHERE ivtp.fecha BETWEEN ''' || p_fecha_desde || ''' AND ''' || p_fecha_hasta || ''''

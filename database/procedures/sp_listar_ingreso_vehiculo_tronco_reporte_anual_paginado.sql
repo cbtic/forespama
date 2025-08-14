@@ -26,7 +26,7 @@ Begin
 	round(sum(ivtc.precio_total)::numeric, 2) as total_precio_total';
 
 	v_tabla = ' from ingreso_vehiculo_troncos ivt
-	inner join ingreso_vehiculo_tronco_tipo_maderas ivttm ON ivttm.id_ingreso_vehiculo_troncos = ivt.id
+	inner join ingreso_vehiculo_tronco_tipo_maderas ivttm ON ivttm.id_ingreso_vehiculo_troncos = ivt.id and ivttm.estado = ''1''
 	left join empresas e on ivt.id_empresa_proveedor = e.id
 	left join vehiculos v on ivt.id_vehiculos=v.id
 	left join (select id_ingreso_vehiculo_tronco_tipo_maderas, sum(volumen_m3) as volumen_m3, sum(volumen_pies) as volumen_pies, sum(precio_total) as precio_total

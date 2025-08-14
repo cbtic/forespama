@@ -757,3 +757,4 @@ Route::get('orden_produccion/movimiento_pdf/{id}', [OrdenProduccionController::c
 Route::get('orden_produccion/modal_atender_orden_produccion/{id}', [OrdenProduccionController::class, 'modal_atender_orden_produccion'])->name('orden_produccion.modal_atender_orden_produccion');
 Route::get('orden_produccion/cargar_detalle_orden_produccion/{id}', [OrdenProduccionController::class, 'cargar_detalle_orden_produccion'])->name('orden_produccion.cargar_detalle_orden_produccion');
 Route::post('orden_produccion/send_orden_produccion_orden_compra', [OrdenProduccionController::class, 'send_orden_produccion_orden_compra'])->name('orden_produccion.send_orden_produccion_orden_compra');
+Route::get('orden_compra/send_comprometer_stock_total/{id}', [OrdenCompraController::class, 'send_comprometer_stock_total'])->name('orden_compra.send_comprometer_stock_total');

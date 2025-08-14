@@ -1,6 +1,4 @@
--- DROP FUNCTION public.sp_listar_reporte_requerimiento_paginado(varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, refcursor);
-
-CREATE OR REPLACE FUNCTION public.sp_listar_reporte_requerimiento_paginado(p_tipo_documento character varying, p_fecha character varying, p_numero_requerimiento character varying, p_almacen character varying, p_situacion character varying, p_responsable_atencion character varying, p_estado_atencion character varying, p_tipo_requerimiento character varying, p_producto character varying, p_estado character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
+CREATE OR REPLACE FUNCTION public.sp_listar_reporte_requerimiento_paginado(p_tipo_documento character varying, p_fecha character varying, p_numero_requerimiento character varying, p_almacen character varying, p_situacion character varying, p_responsable_atencion character varying, p_estado_atencion character varying, p_tipo_requerimiento character varying, p_producto character varying, p_denominacion_producto character varying, p_estado character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
  RETURNS refcursor
  LANGUAGE plpgsql
 AS $function$
@@ -75,6 +73,14 @@ begin
 		SELECT 1 FROM requerimiento_detalles rd 
 		WHERE rd.id_requerimiento = r.id 
 		AND rd.id_producto = ''' || p_producto || ''') ';
+	End If;
+
+	If p_denominacion_producto<>'' Then
+	 v_where := v_where || 'AND EXISTS (
+		SELECT 1 FROM requerimiento_detalles rd 
+		inner join productos p on rd.id_producto = p.id 
+		WHERE rd.id_requerimiento = r.id
+		AND p.denominacion ilike ''%'||p_denominacion_producto||'%'' )';
 	End If;
 	
 	EXECUTE ('SELECT count(1) '||v_tabla||v_where) INTO v_count;

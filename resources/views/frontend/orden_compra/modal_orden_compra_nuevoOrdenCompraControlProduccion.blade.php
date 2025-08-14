@@ -405,7 +405,6 @@ function cargarDetalle(){
                 n++;
 
             });
-
         }
     });
 }
@@ -528,6 +527,31 @@ function obtenerStock(selectElement, n){
             var producto_stock = result.producto_stock[id_producto];
             
             $('#stock_actual' + n).val(producto_stock.saldos_cantidad);
+        }
+    });
+}
+
+function comprometerStockTotal(){
+
+    var id = $('#id').val();
+
+    var msgLoader = "";
+    msgLoader = "Procesando, espere un momento por favor";
+    var heightBrowser = $(window).width()/2;
+    $('.loader').css("opacity","0.8").css("height",heightBrowser).html("<div id='Grd1_wrapper' class='dataTables_wrapper'><div id='Grd1_processing' class='dataTables_processing panel-default'>"+msgLoader+"</div></div>");
+    $('.loader').show();
+    
+    $.ajax({
+        url: "/orden_compra/send_comprometer_stock_total/"+id,
+        type: "GET",
+        success: function (result) {
+            //$('#openOverlayOpc').modal('hide');
+            $('.loader').hide();
+            bootbox.alert("Se guardó satisfactoriamente", function () {
+
+                cargarDetalle();
+                datatablenew();
+            });
         }
     });
 }
@@ -691,37 +715,34 @@ function obtenerStock(selectElement, n){
 
                     <div class="card-body">	
 
-					<div class="table-responsive" style="overflow-y: auto; max-height: 400px;">
-						<table id="tblOrdenCompraDetalle" class="table table-hover table-sm">
-							<thead>
-							<tr style="font-size:13px">
-								<th>#</th>
-								<th>Item</th>
-								<th>Descripci&oacute;n</th>
-								<th>Marca</th>
-                                <th>COD. INT.</th>
-                                <th>Estado Bien</th>
-                                <th>Unidad</th>
-                                <th>Cantidad</th>
-                                <th>Stock Disponible</th>
-							</tr>
-							</thead>
-							<tbody id="divOrdenCompraDetalle">
-							</tbody>
-						</table>
-					</div>
-                    <div style="margin-top:15px" class="form-group">
-                        <div class="col-sm-12 controls">
-                            <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
-                                <!--<a href="javascript:void(0)" onClick="fn_save_orden_compra()" class="btn btn-sm btn-success" style="margin-right:10px">Guardar</a>
-                                <a href="javascript:void(0)" onClick="$('#openOverlayOpc').modal('hide');" class="btn btn-sm btn-info" style="">Cerrar</a>-->
-                            </div>
-                                                
+                        <div class="table-responsive" style="overflow-y: auto; max-height: 400px;">
+                            <table id="tblOrdenCompraDetalle" class="table table-hover table-sm">
+                                <thead>
+                                <tr style="font-size:13px">
+                                    <th>#</th>
+                                    <th>Item</th>
+                                    <th>Descripci&oacute;n</th>
+                                    <th>Marca</th>
+                                    <th>COD. INT.</th>
+                                    <th>Estado Bien</th>
+                                    <th>Unidad</th>
+                                    <th>Cantidad</th>
+                                    <th>Stock Disponible</th>
+                                </tr>
+                                </thead>
+                                <tbody id="divOrdenCompraDetalle">
+                                </tbody>
+                            </table>
                         </div>
-                    </div> 
-
-				</div>
-                            
+                        <div style="margin-top:15px" class="form-group">
+                            <div class="col-sm-12 controls">
+                                <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
+                                    <button type="button" class="btn btn-success btn-sm" style="margin-right:10px" onclick="comprometerStockTotal()">Comprometer Stock Total</button>
+                                    <a href="javascript:void(0)" onClick="$('#openOverlayOpc').modal('hide');" class="btn btn-sm btn-info" style="">Cerrar</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     </div>
                 </form>
                 </div>
