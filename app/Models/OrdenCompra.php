@@ -519,7 +519,7 @@ class OrdenCompra extends Model
 
         $cad = "select p.id, p.denominacion producto, p.codigo, tm.denominacion unidad, sum(ocd.cantidad_requerida) cantidad_total, ocd.id_unidad_medida
         from orden_compra_detalles ocd 
-        inner join orden_compras oc on ocd.id_orden_compra = oc.id
+        inner join orden_compras oc on ocd.id_orden_compra = oc.id and oc.estado='1'
         inner join productos p on ocd.id_producto = p.id 
         inner join tabla_maestras tm on ocd.id_unidad_medida = tm.codigo::int and tm.tipo = '43'
         where ocd.comprometido = '0'
