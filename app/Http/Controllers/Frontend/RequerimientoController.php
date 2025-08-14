@@ -504,7 +504,7 @@ class RequerimientoController extends Controller
 
     }
 
-    public function exportar_listar_requerimiento($tipo_documento, $fecha, $numero_requerimiento, $almacen, $situacion, $responsable_atencion, $estado_atencion, $tipo_requerimiento, $estado, $producto) {
+    public function exportar_listar_requerimiento($tipo_documento, $fecha, $numero_requerimiento, $almacen, $situacion, $responsable_atencion, $estado_atencion, $tipo_requerimiento, $estado, $producto, $denominacion_producto) {
 
 		if($tipo_documento==0)$tipo_documento = "";
 		if($fecha=="0")$fecha = "";
@@ -516,7 +516,8 @@ class RequerimientoController extends Controller
         if($tipo_requerimiento==0)$tipo_requerimiento = "";
         if($estado==0)$estado = "";
         if($producto==0)$producto = "";
-
+        if($denominacion_producto=="0")$denominacion_producto = "";
+        
 		$requerimiento_model = new Requerimiento;
 		$p[]=$tipo_documento;
         $p[]=$fecha;
@@ -527,6 +528,7 @@ class RequerimientoController extends Controller
         $p[]=$estado_atencion;
         $p[]=$tipo_requerimiento;
         $p[]=$producto;
+        $p[]=$denominacion_producto;
         $p[]=$estado;
 		$p[]=1;
 		$p[]=1000;
@@ -547,7 +549,7 @@ class RequerimientoController extends Controller
 		return Excel::download($export, 'reporte_requerimiento.xlsx');	
     }
 
-    public function exportar_listar_requerimiento_reporte($tipo_documento, $fecha, $numero_requerimiento, $almacen, $situacion, $responsable_atencion, $estado_atencion, $tipo_requerimiento, $estado, $producto) {
+    public function exportar_listar_requerimiento_reporte($tipo_documento, $fecha, $numero_requerimiento, $almacen, $situacion, $responsable_atencion, $estado_atencion, $tipo_requerimiento, $estado, $producto, $denominacion_producto) {
 
 		if($tipo_documento==0)$tipo_documento = "";
 		if($fecha=="0")$fecha = "";
@@ -559,6 +561,7 @@ class RequerimientoController extends Controller
         if($tipo_requerimiento==0)$tipo_requerimiento = "";
         if($estado==0)$estado = "";
         if($producto==0)$producto = "";
+        if($denominacion_producto=="0")$denominacion_producto = "";
 
 		$requerimiento_model = new Requerimiento;
 		$p[]=$tipo_documento;
@@ -570,6 +573,7 @@ class RequerimientoController extends Controller
         $p[]=$estado_atencion;
         $p[]=$tipo_requerimiento;
         $p[]=$producto;
+        $p[]=$denominacion_producto;
         $p[]=$estado;
 		$p[]=1;
 		$p[]=1000;

@@ -420,6 +420,7 @@ function descargarArchivosRequerimiento(){
 	var tipo_requerimiento = $('#tipo_requerimiento_bus').val();
 	var estado = $('#estado_bus').val();
 	var producto = $('#producto_bus').val();
+	var denominacion_producto = $('#denominacion_producto_bus').val();
 	//var id_agremiado = 0;
 	//var id_regional = 0;
 	if (tipo_documento == "")tipo_documento = 0;
@@ -432,11 +433,12 @@ function descargarArchivosRequerimiento(){
 	if (tipo_requerimiento == "")tipo_requerimiento = 0;
 	if (estado == "")estado = 0;
 	if (producto == "")producto = 0;
+	if (denominacion_producto == "")denominacion_producto = "0";
 
 	//if (campo == "")campo = 0;
 	//if (orden == "")orden = 0;
 	
-	location.href = '/requerimiento/exportar_listar_requerimiento/'+tipo_documento+'/'+fecha+'/'+numero_requerimiento+'/'+almacen+'/'+situacion+'/'+responsable_atencion+'/'+estado_atencion+'/'+tipo_requerimiento+'/'+estado+'/'+producto;
+	location.href = '/requerimiento/exportar_listar_requerimiento/'+tipo_documento+'/'+fecha+'/'+numero_requerimiento+'/'+almacen+'/'+situacion+'/'+responsable_atencion+'/'+estado_atencion+'/'+tipo_requerimiento+'/'+estado+'/'+producto+'/'+denominacion_producto;
 }
 
 function descargarArchivosRequerimientoReporte(){
@@ -451,6 +453,7 @@ function descargarArchivosRequerimientoReporte(){
 	var tipo_requerimiento = $('#tipo_requerimiento_bus').val();
 	var estado = $('#estado_bus').val();
 	var producto = $('#producto_bus').val();
+	var denominacion_producto = $('#denominacion_producto_bus').val();
 
 	if (tipo_documento == "")tipo_documento = 0;
 	if (fecha == "")fecha = "0";
@@ -462,8 +465,9 @@ function descargarArchivosRequerimientoReporte(){
 	if (tipo_requerimiento == "")tipo_requerimiento = 0;
 	if (estado == "")estado = 0;
 	if (producto == "")producto = 0;
+	if (denominacion_producto == "")denominacion_producto = "0";
 	
-	location.href = '/requerimiento/exportar_listar_requerimiento_reporte/'+tipo_documento+'/'+fecha+'/'+numero_requerimiento+'/'+almacen+'/'+situacion+'/'+responsable_atencion+'/'+estado_atencion+'/'+tipo_requerimiento+'/'+estado+'/'+producto;
+	location.href = '/requerimiento/exportar_listar_requerimiento_reporte/'+tipo_documento+'/'+fecha+'/'+numero_requerimiento+'/'+almacen+'/'+situacion+'/'+responsable_atencion+'/'+estado_atencion+'/'+tipo_requerimiento+'/'+estado+'/'+producto+'/'+denominacion_producto;
 }
 
 function modalControlProductos(id){
