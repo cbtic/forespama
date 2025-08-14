@@ -2003,7 +2003,7 @@ class OrdenCompraController extends Controller
 
             $cantidad_ingreso = floatval($detalle->cantidad_requerida);
 
-            if ($detalle->comprometido != 1 && $cantidad_ingreso < $stock_actual) {
+            if ($detalle->comprometido != 1 && $cantidad_ingreso <= $stock_actual) {
                 $detalle->comprometido = 1;
                 $detalle->save();
             }
