@@ -358,7 +358,7 @@ function cargarDetalle(){
                 if(stock_comprometido == 1){
                     boton_comprometer = `<button type="button" class="btn btn-success btn-sm" disabled>Comprometer Stock</button>`;
                 }else{
-                    if (cantidad_ingreso < stock_actual) {
+                    if (cantidad_ingreso <= stock_actual) {
                         boton_comprometer = `<button type="button" class="btn btn-warning btn-sm" onclick="comprometerStock(this)">Comprometer Stock</button>`;
                     } else {
                         boton_comprometer = `<button type="button" class="btn btn-warning btn-sm" disabled>Comprometer Stock</button>`;
