@@ -35,8 +35,9 @@ class OrdenProduccionController extends Controller
         $productos = $producto_model->getProductoExterno();
         //$encargado = $persona_model->obtenerPersonaAll();
         $area = $unidad_trabajo_model->getUnidadTrabajo(7);
+        $situacion = $tablaMaestra_model->getMaestroByTipo(92);
         
-		return view('frontend.orden_produccion.create_orden_produccion',compact('productos','area'));
+		return view('frontend.orden_produccion.create_orden_produccion',compact('productos','area','situacion'));
 
 	}
 
@@ -48,6 +49,7 @@ class OrdenProduccionController extends Controller
         $p[]=$request->numero_orden_produccion;
         $p[]=$request->fecha_inicio;
         $p[]=$request->area;
+        $p[]=$request->situacion;
         $p[]=$request->estado;
 		$p[]=$request->NumeroPagina;
 		$p[]=$request->NumeroRegistros;
@@ -241,6 +243,7 @@ class OrdenProduccionController extends Controller
         $marca_model = new Marca;
         $almacen_model = new Almacene;
         $user_model = new User;
+        $unidad_trabajo_model = new UnidadTrabajo;
 		
 		if($id>0){
             $orden_produccion = OrdenProduccion::find($id);
@@ -258,8 +261,9 @@ class OrdenProduccionController extends Controller
         $estado_bien = $tablaMaestra_model->getMaestroByTipo(4);
         $responsable_atencion = $user_model->getUserAll();
         $unidad_origen = $tablaMaestra_model->getMaestroByTipo(50);
+        $area = $unidad_trabajo_model->getUnidadTrabajo(7);
         
-        return view('frontend.orden_produccion.modal_orden_produccion_atenderOrdenProduccion',compact('id','orden_produccion','tipo_documento','producto','marca','unidad','almacen','cerrado_requerimiento','estado_bien','estado_atencion','responsable_atencion','unidad_origen'));
+        return view('frontend.orden_produccion.modal_orden_produccion_atenderOrdenProduccion',compact('id','orden_produccion','tipo_documento','producto','marca','unidad','almacen','cerrado_requerimiento','estado_bien','estado_atencion','responsable_atencion','unidad_origen','area'));
 
     }
 
@@ -282,7 +286,7 @@ class OrdenProduccionController extends Controller
         ]);
     }
 
-    public function send_orden_produccion_ingreso_produccion(Request $request)
+    public function send_orden_produccion_orden_compra(Request $request)
     {
         $id_user = Auth::user()->id;
 
@@ -378,10 +382,14 @@ class OrdenProduccionController extends Controller
 
         if($cantidadAbierto==0){
 
-                $OrdenProduccionObj = OrdenProduccion::find($id_orden_produccion);
-                $OrdenProduccionObj->cerrado = 2;
-                $OrdenProduccionObj->id_situacion = 3;
-                $OrdenProduccionObj->save();
+            $OrdenProduccionObj = OrdenProduccion::find($id_orden_produccion);
+            $OrdenProduccionObj->cerrado = 2;
+            $OrdenProduccionObj->id_situacion = 3;
+            $OrdenProduccionObj->save();
+        }else{
+            $OrdenProduccionObj = OrdenProduccion::find($id_orden_produccion);
+            $OrdenProduccionObj->id_situacion = 2;
+            $OrdenProduccionObj->save();
         }
 
         return response()->json(['id' => $orden_produccion->id]);

@@ -297,10 +297,12 @@ function save_orden_compra_orden_produccion(){
     var msg = "";
 
     var fecha_produccion = $('#fecha_produccion').val();
+    var almacen_origen = $('#almacen_origen').val();
     var almacen_destino = $('#almacen_destino').val();
 
-    if(fecha_produccion==""){msg+="Ingrese la Fecha de Fabricacion <br>";}
-    if(almacen_destino==""){msg+="Ingrese el Almacen Destino <br>";}
+    if(fecha_produccion == ""){msg+="Ingrese la Fecha de Fabricacion <br>";}
+    if(almacen_origen == ""){msg+="Ingrese el Almacen Origen <br>";}
+    if(almacen_destino == ""){msg+="Ingrese el Almacen Destino <br>";}
 
     if ($('#tblOrdenProduccionDetalle tbody tr').length == 0) {
         msg += "No se ha agregado ningún producto <br>";
@@ -317,7 +319,7 @@ function save_orden_compra_orden_produccion(){
         $('.loader').show();
 
         $.ajax({
-            url: "/orden_produccion/send_orden_produccion_ingreso_produccion",
+            url: "/orden_produccion/send_orden_produccion_orden_compra",
             type: "POST",
             data : $("#frmAtenderOrdenProduccion").serialize(),
             success: function (result) {
@@ -395,15 +397,45 @@ function cerrarModalAtenderOrdenProduccion(){
                             <div class="col-lg-2">
                                 <input id="fecha_produccion" name="fecha_produccion" on class="form-control form-control-sm"  value="<?php echo isset($orden_produccion) && $orden_produccion->fecha_produccion ? $orden_produccion->fecha_produccion : date('Y-m-d'); ?>" type="text">
                             </div>
-                            <div class="col-lg-2" id="almacen_" style="color:green; font-weight:bold">
-                                Almacen Destino
+                            <div class="col-lg-2">
+                                &Aacute;rea
                             </div>
-                            <div class="col-lg-2" id="almacen_select">
-                                <select name="almacen_destino" id="almacen_destino" class="form-control form-control-sm" onchange="//actualizarSecciones(this)">
+                            <div class="col-lg-2">
+                            <select name="area" id="area" class="form-control form-control-sm" onchange="" disabled>
+                                <option value="">--Seleccionar--</option>
+                                <?php
+                                foreach ($area as $row){?>
+                                    <option value="<?php echo $row->id ?>" <?php if($row->id==$orden_produccion->id_area)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                    <?php 
+                                }
+                                ?>
+                            </select>
+                        </div>
+                        </div>
+                        <div class="row" style="padding-left:10px">
+                            <div class="col-lg-2" style="color:red; font-weight:bold">
+                                Almacen Origen
+                            </div>
+                            <div class="col-lg-2">
+                                <select name="almacen_origen" id="almacen_origen" class="form-control form-control-sm" onchange="">
                                     <option value="">--Seleccionar--</option>
                                     <?php 
                                     foreach ($almacen as $row){?>
-                                        <option value="<?php echo $row->id ?>" <?php //if($row->id==$orden_produccion->id_almacen_salida)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                        <option value="<?php echo $row->id ?>"><?php echo $row->denominacion ?></option>
+                                        <?php 
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                            <div class="col-lg-2" style="color:green; font-weight:bold">
+                                Almacen Destino
+                            </div>
+                            <div class="col-lg-2">
+                                <select name="almacen_destino" id="almacen_destino" class="form-control form-control-sm" onchange="">
+                                    <option value="">--Seleccionar--</option>
+                                    <?php 
+                                    foreach ($almacen as $row){?>
+                                        <option value="<?php echo $row->id ?>"><?php echo $row->denominacion ?></option>
                                         <?php 
                                     }
                                     ?>

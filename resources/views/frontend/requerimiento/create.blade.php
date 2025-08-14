@@ -458,6 +458,9 @@ label.form-control-sm{
 							?>
 						</select>
 					</div>
+					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+                        <input id="denominacion_producto_bus" name="denominacion_producto_bus" on class="form-control form-control-sm mayusculas"  placeholder="Denominaci&oacute;n Producto">
+					</div>
                     <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
 						<select name="estado_bus" id="estado_bus" class="form-control form-control-sm">
 							<option value="">Todos</option>

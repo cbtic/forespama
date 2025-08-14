@@ -99,8 +99,8 @@ function datatablenew(){
 			
 			var fecha_inicio = $('#fecha_inicio_bus').val();
 			var numero_orden_produccion = $('#numero_orden_produccion_bus').val();
-			//var encargado = $('#encargado_bus').val();
 			var area= $('#area_bus').val();
+			var situacion = $('#situacion_bus').val();
 			var estado = $('#estado_bus').val();
 			
 			var _token = $('#_token').val();
@@ -110,7 +110,7 @@ function datatablenew(){
                 "type": "POST",
                 "url": sSource,
                 "data":{NumeroPagina:iNroPagina,NumeroRegistros:iCantMostrar,
-						fecha_inicio:fecha_inicio,numero_orden_produccion:numero_orden_produccion,area:area,
+						fecha_inicio:fecha_inicio,numero_orden_produccion:numero_orden_produccion,area:area,situacion:situacion,
 						estado:estado,_token:_token
                        },
                 "success": function (result) {

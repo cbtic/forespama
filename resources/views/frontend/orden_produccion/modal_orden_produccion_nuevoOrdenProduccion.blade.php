@@ -269,7 +269,7 @@ function cargarDetalle(){
                 const row = `
                     <tr>
                         <td>${n}</td>
-                        <td style="width: 800px !important;display:block"><input name="id_producto[]" id="id_producto${n}" class="form-control form-control-sm" value="${orden_produccion.id}" type="hidden"><select name="descripcion[]" id="descripcion${n}" class="form-control form-control-sm" onChange="">${productoOptions}</select></td>
+                        <td style="width: 900px !important;display:block"><input name="id_producto[]" id="id_producto${n}" class="form-control form-control-sm" value="${orden_produccion.id}" type="hidden"><select name="descripcion[]" id="descripcion${n}" class="form-control form-control-sm" onChange="">${productoOptions}</select></td>
                         <td><input name="cod_interno[]" id="cod_interno${n}" class="form-control form-control-sm" value="${orden_produccion.codigo}" type="text"></td>
                         
                         <td><select name="unidad[]" id="unidad${n}" class="form-control form-control-sm">${unidadMedidaOptions}</select></td>
@@ -329,7 +329,7 @@ function cargarDetalleGuardado(){
                 const row = `
                     <tr>
                         <td>${n}</td>
-                        <td style="width: 800px !important;display:block"><input name="id_producto[]" id="id_producto${n}" class="form-control form-control-sm" value="${orden_produccion.id}" type="hidden"><select name="descripcion[]" id="descripcion${n}" class="form-control form-control-sm" onChange="">${productoOptions}</select></td>
+                        <td style="width: 950px !important;display:block"><input name="id_producto[]" id="id_producto${n}" class="form-control form-control-sm" value="${orden_produccion.id}" type="hidden"><select name="descripcion[]" id="descripcion${n}" class="form-control form-control-sm" onChange="">${productoOptions}</select></td>
                         <td><input name="cod_interno[]" id="cod_interno${n}" class="form-control form-control-sm" value="${orden_produccion.codigo}" type="text"></td>
                         
                         <td><select name="unidad[]" id="unidad${n}" class="form-control form-control-sm">${unidadMedidaOptions}</select></td>
@@ -377,7 +377,7 @@ function agregarProducto(){
 
         newRow += '<tr>';
         newRow += '<td>' + n + '</td>';
-        newRow += '<td style="width: 400px!important; display:block!important">' +descripcion_ant + descripcion + '</td>';
+        newRow += '<td style="width: 900px!important; display:block!important">' +descripcion_ant + descripcion + '</td>';
         newRow += '<td>' + cod_interno + '</td>';
         newRow += '<td>' + unidad + '</td>';
         newRow += '<td>' + cantidad_comprometida + '</td>';
@@ -582,11 +582,10 @@ function pdf_documento(){
                         <div class="col-sm-12 controls">
                             <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
                                 
-                                <button style="font-size:12px;margin-left:10px;margin-right:10px" type="button" class="btn btn-sm btn-primary" data-toggle="modal" onclick="pdf_documento()" ><i class="fa fa-edit"></i>Imprimir</button>
-                                
-                                <?php //if($id_user==$orden_compra->id_usuario_inserta){?>
-                                    <!--<a href="javascript:void(0)" onClick="fn_save_orden_compra()" class="btn btn-sm btn-success" style="margin-right:10px">Guardar</a>-->
-                                <?php //}?>
+                                <?php if($id>0){?>
+                                    <button style="font-size:12px;margin-left:10px;margin-right:10px" type="button" class="btn btn-sm btn-primary" data-toggle="modal" onclick="pdf_documento()" ><i class="fa fa-edit"></i>Imprimir</button>
+                                <?php }?>
+
                                 <?php if($id==0){?>
                                     <a href="javascript:void(0)" onClick="fn_save_orden_produccion()" class="btn btn-sm btn-success" style="margin-right:10px">Guardar</a>
                                 <?php }?>

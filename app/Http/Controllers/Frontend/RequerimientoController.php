@@ -71,6 +71,7 @@ class RequerimientoController extends Controller
         $p[]=$request->estado_atencion;
         $p[]=$request->tipo_requerimiento;
         $p[]=$request->producto;
+        $p[]=$request->denominacion_producto;
         $p[]=$request->estado;
 		$p[]=$request->NumeroPagina;
 		$p[]=$request->NumeroRegistros;

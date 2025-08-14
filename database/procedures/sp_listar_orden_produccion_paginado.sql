@@ -1,6 +1,4 @@
--- DROP FUNCTION public.sp_listar_orden_produccion_paginado(varchar, varchar, varchar, varchar, varchar, varchar, refcursor);
-
-CREATE OR REPLACE FUNCTION public.sp_listar_orden_produccion_paginado(p_codigo character varying, p_fecha character varying, p_area character varying, p_estado character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
+CREATE OR REPLACE FUNCTION public.sp_listar_orden_produccion_paginado(p_codigo character varying, p_fecha character varying, p_area character varying, p_situacion character varying, p_estado character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
  RETURNS refcursor
  LANGUAGE plpgsql
 AS $function$
@@ -21,7 +19,7 @@ begin
 
 	v_tabla=' from orden_produccion op 
 	inner join unidad_trabajo ut on op.id_area = ut.id 
-	inner join tabla_maestras tm on op.id_situacion = tm.codigo::int and tm.tipo = ''60'' ';
+	inner join tabla_maestras tm on op.id_situacion = tm.codigo::int and tm.tipo = ''92'' ';
 	
 	v_where = ' Where 1=1 ';
 
@@ -35,6 +33,10 @@ begin
 
 	If p_area<>'' Then
 	 v_where:=v_where||'And op.id_area = '''||p_area||''' ';
+	End If;
+	
+	If p_situacion<>'' Then
+	 v_where:=v_where||'And op.id_situacion = '''||p_situacion||''' ';
 	End If;
 
 	If p_estado<>'' Then
