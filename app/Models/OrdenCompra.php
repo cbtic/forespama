@@ -349,7 +349,7 @@ class OrdenCompra extends Model
 
     function getOrdenCompraByCodPersona($numero){
 
-        $cad = "select o.id id_orden_compra, p.id id_persona, p.nombres razon_social, p.direccion, p.nombres representante, p.numero_ruc ruc,  p.email, 1 id_tipo_documento,  p.numero_documento numero_documento_, o.id_tipo_cliente
+        $cad = "select o.id id_orden_compra, p.id id_persona, p.nombres razon_social, p.direccion, p.nombres representante, p.numero_ruc ruc,  p.email, p.id_tipo_documento,  p.numero_documento numero_documento_, o.id_tipo_cliente
                 from orden_compras o 
                 left join personas p  on p.id = o.id_persona  
                 where 1=1 

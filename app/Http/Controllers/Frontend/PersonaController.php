@@ -177,7 +177,7 @@ class PersonaController extends Controller
             
                 if(isset($resultado->id_persona)){
                     //echo("DNI");
-                    $tipo_documento="1";
+                    $tipo_documento=$resultado->id_tipo_documento;
                     $numero_documento=$resultado->numero_documento_;
                     $id_orden_compra=$resultado->id_orden_compra;
                     $id_tipo_cliente= $resultado->id_tipo_cliente;

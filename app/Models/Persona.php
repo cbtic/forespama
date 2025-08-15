@@ -66,7 +66,7 @@ class Persona extends Model
             $cad =  "select t1.id,t1.numero_documento,t1.nombres,t1.apellido_paterno,t1.apellido_materno,t1.foto,
                     t1.numero_ruc,t1.id_tipo_documento,t1.email, trim(t1.numero_documento)  numero_documento_, 1 id_tipo_cliente	
                     from personas t1                   
-                    Where  t1.id_tipo_documento=1 and trim(t1.numero_documento) = trim('".$numero_documento."') 
+                    Where  t1.id_tipo_documento=".$tipo_documento." and trim(t1.numero_documento) = trim('".$numero_documento."') 
                     and t1.estado='1' 
                     limit 1";
 
