@@ -545,7 +545,7 @@ label.form-control-sm{
 							-->
 							<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
 								<input class="btn btn-warning btn-sm pull-rigth" value="Buscar" type="button" id="btnBuscar" />
-								<a type="button" href="/img/cubicaje/plantilla/Plantilla_cubicaje_actualizado_17072025.xlsx" class="btn btn-secondary btn-sm" style="margin-left:15px;">Plantilla</a>
+								<a type="button" href="/img/cubicaje/plantilla/Plantilla_cubicaje_actualizado_15082025.xlsx" class="btn btn-secondary btn-sm" style="margin-left:15px;">Plantilla</a>
 								<buttom class="btn btn-secondary btn-sm" type="button" id="btnDescargarReporteAnual" style="margin-left:15px" /><i class="fa fa-download"></i> Descarga Reporte Anual</buttom>
 							</div>
 							

@@ -2902,7 +2902,7 @@ class ComprobanteController extends Controller
 		$data["totalDescuentos"] = str_replace(",","",$factura->total_descuentos);
 		$data["totalOPGravadas"] = str_replace(",","",$factura->subtotal); //"127.12";
 		$data["codigoPaisEmisor"] = "PE";
-		$data["totalOPGratuitas"] = "0.00";        
+		$data["totalOPGratuitas"] = "0.00";
 		$data["docAfectadoFisico"] = false;
 		$data["importeTotalVenta"] = str_replace(",","",$factura->total); //"150.00";
 		$data["razonSocialEmisor"] = "FORESTAL PAMA S.A.C.";
@@ -2916,8 +2916,8 @@ class ComprobanteController extends Controller
 		$data["nombreComercialEmisor"] = "FORESTAL PAMA";
 		$data["tipoDocIdentidadEmisor"] = "6";
 		$data["sumatoriaImpuestoBolsas"] = "0.00";
-		$data["numeroDocIdentidadEmisor"] = "20486785994";//"20160453908";     
-		$data["tipoDocIdentidadReceptor"] = $this->getTipoDocPersona($factura->tipo, $factura->cod_tributario);//"6";        
+		$data["numeroDocIdentidadEmisor"] = "20486785994";//"20160453908";
+		$data["tipoDocIdentidadReceptor"] = $this->getTipoDocPersona($factura->tipo, $factura->cod_tributario);//"6";
 		$data["numeroDocIdentidadReceptor"] = $factura->cod_tributario; //"10040834643";
         $data["direccionReceptor"] = $factura->direccion;
         if($this->getTipoDocumento($factura->tipo) == "03"){
