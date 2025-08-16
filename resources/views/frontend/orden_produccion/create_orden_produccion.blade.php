@@ -372,7 +372,7 @@ label.form-control-sm{
 
 					<div class="col-lg-2">
 						<select name="situacion_bus" id="situacion_bus" class="form-control form-control-sm" onchange="">
-							<option value="">--Seleccionar--</option>
+							<option value="">--Seleccionar Situaci&oacute;n--</option>
 							<?php
 							foreach ($situacion as $row){?>
 								<option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
@@ -384,10 +384,22 @@ label.form-control-sm{
 
 					<div class="col-lg-2">
 						<select name="area_bus" id="area_bus" class="form-control form-control-sm" onchange="">
-							<option value="">--Seleccionar--</option>
+							<option value="">--Seleccionar &aacute;rea--</option>
 							<?php
 							foreach ($area as $row){?>
 								<option value="<?php echo $row->id ?>"><?php echo $row->denominacion ?></option>
+								<?php 
+							}
+							?>
+						</select>
+					</div>
+
+					<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+						<select name="producto_bus" id="producto_bus" class="form-control form-control-sm">
+							<option value="">--Seleccionar Producto--</option>
+							<?php
+							foreach ($producto as $row){?>
+								<option value="<?php echo $row->id ?>"><?php echo $row->codigo .' - ' . $row->denominacion ?></option>
 								<?php 
 							}
 							?>

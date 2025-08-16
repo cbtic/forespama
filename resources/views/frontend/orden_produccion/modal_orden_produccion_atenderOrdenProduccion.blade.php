@@ -442,6 +442,14 @@ function cerrarModalAtenderOrdenProduccion(){
                                 </select>
                             </div>
                         </div>
+                        <div class="row" style="padding-left:10px">
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                    <label class="control-label">Observaci&oacute;n</label>
+                                    <textarea id="observacion" name="observacion" class="form-control form-control-sm"><?php //echo $orden_compra_pago->observacion?></textarea>
+                                </div>
+                            </div>
+                        </div>
                         <!--<div class="row" style="padding-left:10px">
                             <div class="col-lg-2">
                                 Sustento Requerimiento

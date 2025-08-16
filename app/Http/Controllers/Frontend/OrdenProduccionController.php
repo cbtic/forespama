@@ -32,12 +32,13 @@ class OrdenProduccionController extends Controller
         $persona_model = new Persona;
         $unidad_trabajo_model = new UnidadTrabajo;
 
-        $productos = $producto_model->getProductoExterno();
+        $producto = $producto_model->getProductoExterno();
         //$encargado = $persona_model->obtenerPersonaAll();
         $area = $unidad_trabajo_model->getUnidadTrabajo(7);
         $situacion = $tablaMaestra_model->getMaestroByTipo(92);
+        //$producto = $producto_model->getProductoAll();
         
-		return view('frontend.orden_produccion.create_orden_produccion',compact('productos','area','situacion'));
+		return view('frontend.orden_produccion.create_orden_produccion',compact('area','situacion','producto'));
 
 	}
 
@@ -50,6 +51,7 @@ class OrdenProduccionController extends Controller
         $p[]=$request->fecha_inicio;
         $p[]=$request->area;
         $p[]=$request->situacion;
+        $p[]=$request->producto;
         $p[]=$request->estado;
 		$p[]=$request->NumeroPagina;
 		$p[]=$request->NumeroRegistros;

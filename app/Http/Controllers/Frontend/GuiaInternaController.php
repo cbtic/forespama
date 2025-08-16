@@ -165,7 +165,7 @@ class GuiaInternaController extends Controller
         //$guia_interna->punto_partida = $request->punto_partida_descripcion;
         //$guia_interna->punto_llegada = $request->punto_llegada_descripcion;
         $guia_interna->fecha_traslado = $request->fecha_inicio_traslado;
-        $guia_interna->costo_minimo = $request->costo_minimo;
+        //$guia_interna->costo_minimo = $request->costo_minimo;
         $guia_interna->id_conductor = $request->conductor_guia;
         if($request->tipo_documento_cliente=='1'){
 
@@ -182,6 +182,7 @@ class GuiaInternaController extends Controller
         
         $guia_interna->marca = $request->id_marca_vehiculo;
         $guia_interna->placa = $request->placa_guia;
+        $guia_interna->guia_vehiculo_segunda_placa = $request->segunda_placa_guia;
         $guia_interna->constancia_inscripcion = $request->numero_inscripcion;
         $guia_interna->licencia_conducir = $request->numero_licencia;
         $guia_interna->id_empresa_transporte = $request->id_transporte_razon_social;
@@ -250,6 +251,7 @@ class GuiaInternaController extends Controller
         $guia->guia_fecha_emision = $request->fecha_emision;
         $guia->guia_fecha_traslado = $request->fecha_inicio_traslado;
         $guia->guia_vehiculo_placa = $request->placa_guia;
+        $guia->guia_vehiculo_segunda_placa = $request->segunda_placa_guia;
         $guia->guia_llegada_ubigeo = $request->distrito_llegada;
         $guia->guia_partida_ubigeo = $request->distrito_partida;
         $guia->guia_transportista_numdoc = $request->ruc_transporte;

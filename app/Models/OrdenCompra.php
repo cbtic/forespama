@@ -517,7 +517,15 @@ class OrdenCompra extends Model
 
     function getDetalleProductosNoComprometidosId(){
 
-        $cad = "select p.id, p.denominacion producto, p.codigo, tm.denominacion unidad, sum(ocd.cantidad_requerida) cantidad_total, ocd.id_unidad_medida
+        $cad = "select p.id, p.denominacion producto, p.codigo, tm.denominacion unidad, sum(ocd.cantidad_requerida) cantidad_total, ocd.id_unidad_medida,
+        (select sum(opd.cantidad) from orden_produccion_detalles opd 
+        inner join orden_produccion op on opd.id_orden_produccion = op.id 
+        where op.estado ='1'
+        and op.cerrado ='1'
+        and opd.estado ='1'
+        and opd.cerrado ='1'
+        and opd.id_producto = ocd.id_producto
+        group by opd.id_producto) cantidad_orden_produccion
         from orden_compra_detalles ocd 
         inner join orden_compras oc on ocd.id_orden_compra = oc.id and oc.estado='1'
         inner join productos p on ocd.id_producto = p.id 
@@ -526,7 +534,7 @@ class OrdenCompra extends Model
         and ocd.cerrado ='1'
         and ocd.estado ='1'
         and oc.id_tipo_documento ='2'
-        group by p.id, p.denominacion, p.codigo, tm.denominacion, ocd.id_unidad_medida
+        group by p.id, p.denominacion, p.codigo, tm.denominacion, ocd.id_unidad_medida, ocd.id_producto
         order by 1 desc";
 
 		$data = DB::select($cad);

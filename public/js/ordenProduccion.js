@@ -102,6 +102,7 @@ function datatablenew(){
 			var area= $('#area_bus').val();
 			var situacion = $('#situacion_bus').val();
 			var estado = $('#estado_bus').val();
+			var producto = $('#producto_bus').val();
 			
 			var _token = $('#_token').val();
             oSettings.jqXHR = $.ajax({
@@ -110,7 +111,7 @@ function datatablenew(){
                 "type": "POST",
                 "url": sSource,
                 "data":{NumeroPagina:iNroPagina,NumeroRegistros:iCantMostrar,
-						fecha_inicio:fecha_inicio,numero_orden_produccion:numero_orden_produccion,area:area,situacion:situacion,
+						fecha_inicio:fecha_inicio,numero_orden_produccion:numero_orden_produccion,area:area,situacion:situacion,producto:producto,
 						estado:estado,_token:_token
                        },
                 "success": function (result) {

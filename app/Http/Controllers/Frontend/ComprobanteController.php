@@ -3771,16 +3771,16 @@ class ComprobanteController extends Controller
             ])->first();
 
 			$items1 = array(
-							"ordenItem"=> $row->guiad_orden_item, //"2",
-                            "codigoItem"=> $row->guiad_codigo, //"2",
-                            "idProducto"=> "0",
-							"adicionales"=> [],
-							"cantidadItem"=> $row->guiad_cantidad, //"1",
-                            "precioProducto"=> $row->guiad_cantidad, //"1",
-							"descripcionItem"=> $row->guiad_descripcion,//"RESIDUO HIDROBIOLOGICOS",
-							"unidadMedidaItem"=> $row->guiad_unid_medida,
-							"unidadMedidaComercial"=> $tabla_maestras->abreviatura_comercial,
-							);
+                "ordenItem"=> $row->guiad_orden_item, //"2",
+                "codigoItem"=> $row->guiad_codigo, //"2",
+                "idProducto"=> "0",
+                "adicionales"=> [],
+                "cantidadItem"=> $row->guiad_cantidad, //"1",
+                "precioProducto"=> $row->guiad_cantidad, //"1",
+                "descripcionItem"=> $row->guiad_descripcion,//"RESIDUO HIDROBIOLOGICOS",
+                "unidadMedidaItem"=> $row->guiad_unid_medida,
+                "unidadMedidaComercial"=> $tabla_maestras->abreviatura_comercial,
+            );
 			$items[$index]=$items1;
         }
 		$data["items"] = $items;
@@ -3872,15 +3872,22 @@ class ComprobanteController extends Controller
         $data["codigoEstablecimientoPuntoPartida"] =$guia->guia_cod_estab_partida;
         $data["trasladoPorElTotalDeLosBienesSiOrNo"] ="1";
         
-
         if ($guia->guia_modo_traslado=='01'){
             $data["tipoDocIdentidadTransportista"] =$guia->guia_transportista_tipo_doc;
             $data["fechaEntregaBienesTransportista"] =$guia->guia_fecha_traslado;
             $data["numeroDocIdentidadTransportista"] =$guia->guia_transportista_numdoc;
-            $data["razonSocialTransportista"] =$guia->guia_transportista_razsoc; 
+            $data["razonSocialTransportista"] =$guia->guia_transportista_razsoc;
         }
-        else{            
-            $data["numeroPlacaVehiculo"] =$guia->guia_vehiculo_placa; //"D5X709";
+        else{
+            if($guia->guia_vehiculo_segunda_placa != ""){
+                $data["numeroPlacaVehiculo"] = implode('|', [
+                    $guia->guia_vehiculo_placa,  // placa principal
+                    $guia->guia_vehiculo_segunda_placa   // placa secundaria o remolque
+                ]);//$guia->guia_vehiculo_placa; //"AOU123|AOU234";
+            }else{
+                $data["numeroPlacaVehiculo"] =$guia->guia_vehiculo_placa; //"D5X709";
+            }
+            //$data["numeroPlacaVehiculo"] ="AOU123|AOU124";//$guia->guia_vehiculo_placa; //"D5X709";
             $data["licenciaConducir"] =$guia->licencia; //"Q25704015";
             $data["numeroDocIdentidadConductor"] =$guia->guia_conductor_numdoc; //"25704015";
             $data["tipoDocIdentidadConductor"] =$guia->guia_conductor_tipodoc;
@@ -3911,6 +3918,11 @@ class ComprobanteController extends Controller
         curl_setopt($chbuild, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($chbuild, CURLOPT_CUSTOMREQUEST, "PUT");
         curl_setopt($chbuild, CURLOPT_POSTFIELDS, $databuild_string);
+        /*********************************  ELIMINAR  *************************************/
+        curl_setopt($chbuild, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($chbuild, CURLOPT_SSL_VERIFYHOST, false);
+        /*********************************************************************************/
+        
         $results = curl_exec($chbuild);
 
         $facturaLog = new Logger('factura_sunat');

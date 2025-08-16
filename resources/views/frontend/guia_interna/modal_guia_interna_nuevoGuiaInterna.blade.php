@@ -1391,6 +1391,16 @@ function obtenerMotivo(){
                         <div class="col-lg-4">
                             <div class="row">
                                 <div class="col-lg-4">
+                                    N° Placa Carreta
+                                </div>
+                                <div class="col-lg-5">
+                                    <input id="segunda_placa_guia" name="segunda_placa_guia" on class="form-control form-control-sm"  value="<?php if($id>0){echo $guia_interna->guia_vehiculo_segunda_placa;} ?>" type="text" onchange="">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="row">
+                                <div class="col-lg-4">
                                     Marca Vehiculo
                                 </div>
                                 <div class="col-lg-5">
@@ -1399,6 +1409,8 @@ function obtenerMotivo(){
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    <div class="row" style="padding-left:10px; padding-bottom:10px;">
                         <div class="col-lg-4">
                             <div class="row">
                                 <div class="col-lg-4">
@@ -1409,8 +1421,6 @@ function obtenerMotivo(){
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="row" style="padding-left:10px; padding-bottom:10px;">
                         <div class="col-lg-4">
                             <div class="row">
                                 <div class="col-lg-4">
@@ -1444,6 +1454,8 @@ function obtenerMotivo(){
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    <div class="row" style="padding-left:10px; padding-bottom:10px;">
                         <div class="col-lg-4">
                             <div class="row">
                                 <div class="col-lg-4">
@@ -1454,8 +1466,6 @@ function obtenerMotivo(){
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="row" style="padding-left:10px; padding-bottom:10px;">
                         <div class="col-lg-4">
                             <div class="row">
                                 <div class="col-lg-4">
@@ -1494,16 +1504,16 @@ function obtenerMotivo(){
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-4">
+                        <!--<div class="col-lg-4">
                             <div class="row">
                                 <div class="col-lg-4">
                                     Costo M&iacute;nimo
                                 </div>
                                 <div class="col-lg-5">
-                                    <input id="costo_minimo" name="costo_minimo" on class="form-control form-control-sm"  value="<?php if($id>0){echo $guia_interna->costo_minimo;}?>" type="text">
+                                    <input id="costo_minimo" name="costo_minimo" on class="form-control form-control-sm"  value="<?php //if($id>0){echo $guia_interna->costo_minimo;}?>" type="text">
                                 </div>
                             </div>
-                        </div>
+                        </div>-->
                     </div>
                     <div class="row" style="padding-left:10px; padding-bottom:10px;">
                         <div class="col-lg-4">
