@@ -132,13 +132,13 @@ td.data, th.data {
 }
 
 .footer-final {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            font-size: 12px;
-            background-color: white;
-        }
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    font-size: 12px;
+    background-color: white;
+}
 
 #tablemodalm{
 	
