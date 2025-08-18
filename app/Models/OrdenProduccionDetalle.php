@@ -26,12 +26,12 @@ class OrdenProduccionDetalle extends Model
 
     function getCantidadIngresoProduccionByOrdenProduccionProducto($id_orden_produccion, $id_producto){
 
-        $cad = "select sum(ipd.cantidad) cantidad_ingresada
-        from ingreso_produccion ip 
-        inner join ingreso_produccion_detalles ipd on ip.id=ipd.id_ingreso_produccion and ipd.estado = '1'
-        where ip.id_orden_produccion = '".$id_orden_produccion."'
-        and ipd.id_producto= '".$id_producto."' 
-        and ip.estado = '1'";
+        $cad = "select sum(ocd.cantidad_requerida) cantidad_ingresada
+        from orden_compras oc 
+        inner join orden_compra_detalles ocd on oc.id = ocd.id_orden_compra and ocd.estado = '1'
+        where oc.id_orden_produccion = '".$id_orden_produccion."'
+        and ocd.id_producto= '".$id_producto."'
+        and oc.estado = '1'";
 
 		$data = DB::select($cad);
         //return $data;

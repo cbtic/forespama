@@ -8,6 +8,10 @@ $(document).ready(function () {
 		modalOrdenProduccion(0);
 	});
 
+	$('#btnNuevoPlaneamiento').click(function () {
+		modalOrdenProduccionPlaneamiento(0);
+	});
+
 	$('#producto_bus').keypress(function(e){
 		if(e.which == 13) {
 			datatablenew();
@@ -250,6 +254,21 @@ function modalOrdenProduccion(id){
 
 	$.ajax({
 		url: "/orden_produccion/modal_orden_produccion/"+id,
+		type: "GET",
+		success: function (result) {
+			$("#diveditpregOpc").html(result);
+			$('#openOverlayOpc').modal('show');
+		}
+	});
+}
+
+function modalOrdenProduccionPlaneamiento(id){
+
+	$(".modal-dialog").css("width","95%");
+	$('#openOverlayOpc .modal-body').css('height', 'auto');
+
+	$.ajax({
+		url: "/orden_produccion/modal_orden_produccion_planeamiento/"+id,
 		type: "GET",
 		success: function (result) {
 			$("#diveditpregOpc").html(result);

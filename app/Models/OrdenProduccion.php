@@ -77,9 +77,10 @@ class OrdenProduccion extends Model
     function getDetalleOrdenProduccionId($id){
 
         $cad = "select opd.id,  ROW_NUMBER() OVER (PARTITION BY opd.id_orden_produccion ) AS row_num, p.numero_serie item, opd.id_producto, p.codigo, p.denominacion nombre_producto, tm.denominacion unidad_medida, 
-        (select coalesce(sum(ipd.cantidad ),0) from ingreso_produccion ip 
-        inner join ingreso_produccion_detalles ipd on ipd.id_ingreso_produccion = ip.id 
-        where ip.id_orden_produccion = op.id and ipd.id_producto = opd.id_producto and ip.estado ='1') cantidad_atendida,
+        (select coalesce(sum(ocd.cantidad_requerida ),0) 
+        from orden_compras oc
+        inner join orden_compra_detalles ocd on ocd.id_orden_compra = oc.id 
+        where oc.id_orden_produccion = op.id and ocd.id_producto = opd.id_producto and oc.estado ='1') cantidad_atendida,
         p.id_unidad_producto, opd.cantidad
         from orden_produccion_detalles opd 
         inner join productos p on opd.id_producto = p.id

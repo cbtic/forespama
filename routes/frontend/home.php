@@ -758,3 +758,5 @@ Route::get('orden_produccion/modal_atender_orden_produccion/{id}', [OrdenProducc
 Route::get('orden_produccion/cargar_detalle_orden_produccion/{id}', [OrdenProduccionController::class, 'cargar_detalle_orden_produccion'])->name('orden_produccion.cargar_detalle_orden_produccion');
 Route::post('orden_produccion/send_orden_produccion_orden_compra', [OrdenProduccionController::class, 'send_orden_produccion_orden_compra'])->name('orden_produccion.send_orden_produccion_orden_compra');
 Route::get('orden_compra/send_comprometer_stock_total/{id}', [OrdenCompraController::class, 'send_comprometer_stock_total'])->name('orden_compra.send_comprometer_stock_total');
+Route::get('orden_produccion/modal_orden_produccion_planeamiento/{id}', [OrdenProduccionController::class, 'modal_orden_produccion_planeamiento'])->name('orden_produccion.modal_orden_produccion_planeamiento');
+Route::get('orden_produccion/exportar_listar_orden_produccion/{id}', [OrdenProduccionController::class, 'exportar_listar_orden_produccion'])->name('orden_produccion.exportar_listar_orden_produccion');

@@ -22,6 +22,13 @@ use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Auth;
 use Carbon\Carbon;
+use Maatwebsite\Excel\Facades\Excel;
+use Maatwebsite\Excel\Concerns\FromArray;
+use Maatwebsite\Excel\Concerns\WithStyles;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
+use Maatwebsite\Excel\Concerns\WithHeadings;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
 
 class OrdenProduccionController extends Controller
 {
@@ -92,6 +99,31 @@ class OrdenProduccionController extends Controller
         $area = $unidad_trabajo_model->getUnidadTrabajo(7);
 
 		return view('frontend.orden_produccion.modal_orden_produccion_nuevoOrdenProduccion',compact('id','orden_produccion','producto','unidad','area'));
+
+    }
+
+    public function modal_orden_produccion_planeamiento($id){
+		
+        $id_user = Auth::user()->id;
+        $tablaMaestra_model = new TablaMaestra;
+        $producto_model = new Producto;
+        $encargado_model = new TipoEncargado;
+        $unidad_trabajo_model = new UnidadTrabajo;
+		
+		if($id>0){
+
+            $orden_produccion = OrdenProduccion::find($id);
+			
+		}else{
+			$orden_produccion = new OrdenProduccion;
+		}
+
+        $producto = $producto_model->getProductoExterno();
+        $unidad = $tablaMaestra_model->getMaestroByTipo(43);
+        //$encargado = $encargado_model->obtenerEncargadoByTipo(2);
+        $area = $unidad_trabajo_model->getUnidadTrabajo(7);
+
+		return view('frontend.orden_produccion.modal_orden_produccion_nuevoOrdenProduccionPlaneamiento',compact('id','orden_produccion','producto','unidad','area'));
 
     }
 
@@ -295,10 +327,10 @@ class OrdenProduccionController extends Controller
         $orden_produccion = OrdenProduccion::find($request->id);
         $id_orden_produccion = $orden_produccion->id;
 
-        $ingreso_produccion = new IngresoProduccion;
+        $orden_compra = new OrdenCompra;
 
-        $ingreso_produccion_model = new IngresoProduccion;
-        $codigo_ingreso_produccion = $ingreso_produccion_model->getCodigoIngresoProduccion(1);
+        $orden_compra_model = new OrdenCompra;
+        $codigo_orden_compra = $orden_compra_model->getCodigoOrdenCompra(1);
 
         $descripcion = $request->input('descripcion');
         $cod_interno = $request->input('codigo');
@@ -307,54 +339,48 @@ class OrdenProduccionController extends Controller
         
         $id_orden_produccion_detalle =$request->id_orden_produccion_detalle;
         
-        $ingreso_produccion->id_tipo_documento = 1;
-        $ingreso_produccion->codigo = $codigo_ingreso_produccion[0]->codigo;
-        $ingreso_produccion->fecha = $request->fecha_produccion;
-        $ingreso_produccion->id_almacen_destino = $request->almacen_destino;
-        $ingreso_produccion->id_area = $orden_produccion->id_area;
-        $ingreso_produccion->id_usuario_inserta = $id_user;
-        $ingreso_produccion->estado = 1;
-        $ingreso_produccion->id_orden_produccion = $id_orden_produccion;
-        $ingreso_produccion->save();
-        $id_ingreso_produccion = $ingreso_produccion->id;
+        $orden_compra->id_empresa_compra = 30;
+        $orden_compra->id_empresa_vende = 30;
+        $orden_compra->fecha_orden_compra = $request->fecha_produccion;
+        $orden_compra->numero_orden_compra = $codigo_orden_compra[0]->codigo;
+        $orden_compra->id_tipo_documento = 1;
+        $orden_compra->igv_compra = 1;
+        $orden_compra->cerrado = 1;
+        $orden_compra->id_unidad_origen = 3;
+        $orden_compra->id_almacen_destino = $request->almacen_destino;
+        $orden_compra->id_almacen_salida = $request->almacen_origen;
+        $orden_compra->id_tipo_cliente = '5';
+        $orden_compra->id_usuario_inserta = $id_user;
+        $orden_compra->observacion_vendedor = $request->observacion;
+        $orden_compra->id_orden_produccion = $id_orden_produccion;
+        $orden_compra->fecha_produccion = $request->fecha_produccion;
+        $orden_compra->estado = 1;
+        $orden_compra->save();
+        $id_orden_compra = $orden_compra->id;
 
-        $array_ingreso_produccion_detalle = array();
+        $array_orden_compra_detalle = array();
 
         foreach($descripcion as $index => $value) {
 
-            $ingreso_produccion_detalle = new IngresoProduccionDetalle;
-
-            $ingreso_produccion_detalle->id_ingreso_produccion = $id_ingreso_produccion;
-            $ingreso_produccion_detalle->id_producto = $descripcion[$index];
-            $ingreso_produccion_detalle->cantidad = $cantidad[$index];
-            $ingreso_produccion_detalle->id_estado_producto = 1;
+            $orden_compra_detalle = new OrdenCompraDetalle;
+            
+            $orden_compra_detalle->id_orden_compra = $id_orden_compra;
+            $orden_compra_detalle->id_producto = $descripcion[$index];
+            $orden_compra_detalle->cantidad_requerida = $cantidad[$index];
+            $orden_compra_detalle->id_estado_producto = 1;
             if($unidad[$index]!=null && $unidad !=0){
-				$ingreso_produccion_detalle->id_unidad_medida = (int)$unidad[$index];
+				$orden_compra_detalle->id_unidad_medida = (int)$unidad[$index];
 			}
-			$ingreso_produccion_detalle->id_marca = 278;
-            $ingreso_produccion_detalle->estado = 1;
-            $ingreso_produccion_detalle->id_usuario_inserta = $id_user;
+			$orden_compra_detalle->id_marca = 278;
+            $orden_compra_detalle->id_descuento = 1;
+            $orden_compra_detalle->descuento = 0;
+            $orden_compra_detalle->estado = 1;
+            $orden_compra_detalle->cerrado = 1;
+            $orden_compra_detalle->id_usuario_inserta = $id_user;
 
-            $ingreso_produccion_detalle->save();
+            $orden_compra_detalle->save();
 
-            $array_ingreso_produccion_detalle[] = $ingreso_produccion_detalle->id;
-
-            $producto = Producto::find($descripcion[$index]);
-
-            $kardex_buscar = Kardex::where("id_producto",$descripcion[$index])->where("id_almacen_destino",$request->almacen_destino)->orderBy('id', 'desc')->first();
-            $kardex = new Kardex;
-            $kardex->id_producto = $descripcion[$index];
-            $kardex->entradas_cantidad = $cantidad[$index];
-            if($kardex_buscar){
-                $cantidad_saldo = $kardex_buscar->saldos_cantidad + $cantidad[$index];
-                $kardex->saldos_cantidad = $cantidad_saldo;
-            }else{
-                $kardex->saldos_cantidad = $cantidad[$index];
-            }
-            $kardex->id_almacen_destino = $request->almacen_destino;
-            $kardex->id_ingreso_produccion = $id_ingreso_produccion;
-
-            $kardex->save();
+            $array_orden_compra_detalle[] = $orden_compra_detalle->id;
 
         }
 
@@ -395,5 +421,111 @@ class OrdenProduccionController extends Controller
         }
 
         return response()->json(['id' => $orden_produccion->id]);
+    }
+
+    public function exportar_listar_orden_produccion($id) {
+        
+		$orden_produccion_model = new OrdenProduccion;
+
+		$data_cabecera = $orden_produccion_model->getOrdenProduccionByIdPdf($id);
+
+        $fecha_orden_produccion=$data_cabecera[0]->fecha_orden_produccion;
+        $codigo=$data_cabecera[0]->codigo;
+        $area = $data_cabecera[0]->area;
+		
+		$data_detalle = $orden_produccion_model->getDetalleOrdenProduccionById($id);
+		
+		$variable = [];
+		$n = 1;
+		
+		foreach ($data_detalle as $r) {
+
+			$variable[] = [$n++, $r->nombre_producto, $r->codigo, $r->unidad_medida, $r->cantidad];
+		}
+		
+		$export = new InvoicesExport($variable, $codigo, $fecha_orden_produccion, $area);
+		return Excel::download($export, 'orden_produccion.xlsx');
+    }
+}
+
+class InvoicesExport implements FromArray, WithStyles
+{
+	protected $invoices;
+    protected $codigo;
+    protected $fecha;
+    protected $area;
+
+	public function __construct(array $invoices, $codigo, $fecha, $area)
+	{
+		$this->invoices = $invoices;
+		$this->codigo = $codigo;
+        $this->fecha = $fecha;
+        $this->area = $area;
+	}
+
+	public function array(): array
+    {
+        $data = [];
+        
+        $data[] = ["",""];
+
+        $data[] = ["Fecha Orden Producción", "Área"];
+
+        $data[] = [$this->fecha, $this->area];
+
+        $data[] = ["#", "Descripción", "Código", "Unidad", "Cantidad"];
+
+        foreach ($this->invoices as $row) {
+            $data[] = $row;
+        }
+
+        return $data;
+    }
+
+    public function styles(Worksheet $sheet)
+    {
+        $sheet->mergeCells('A1:E1');
+        $sheet->setCellValue('A1', "ORDEN DE FABRICACION N° {$this->codigo} - FORESPAMA");
+
+        $sheet->getStyle('A1:E1')->applyFromArray([
+            'font' => [
+                'bold' => true,
+                'color' => ['rgb' => 'FFFFFF'],
+                'size' => 14,
+            ],
+            'fill' => [
+                'fillType' => Fill::FILL_SOLID,
+                'startColor' => ['rgb' => '246257'],
+            ],
+            'alignment' => [
+                'horizontal' => Alignment::HORIZONTAL_CENTER,
+                'vertical'   => Alignment::VERTICAL_CENTER,
+            ],
+        ]);
+        $sheet->getRowDimension(1)->setRowHeight(30);
+
+        $sheet->getStyle('A2:B2')->applyFromArray([
+            'font' => [
+                'bold' => true,
+            ],
+        ]);
+
+        $sheet->getStyle('A4:E4')->applyFromArray([
+            'font' => [
+                'bold' => true,
+                'color' => ['rgb' => '000000'],
+            ],
+            'fill' => [
+                'fillType' => Fill::FILL_SOLID,
+                'startColor' => ['rgb' => '2EB85C'],
+            ],
+            'alignment' => [
+                'horizontal' => Alignment::HORIZONTAL_CENTER,
+            ],
+        ]);
+
+        foreach (range('A', 'E') as $col) {
+            $sheet->getColumnDimension($col)->setAutoSize(true);
+        }
     }
 }

@@ -190,12 +190,6 @@ $('#openOverlayOpc').on('shown.bs.modal', function() {
 
 $(document).ready(function() {
     
-    if($('#id').val() == 0){
-        cargarDetalle();
-    }else{
-        cargarDetalleGuardado();
-    }
-
     $('#area').select2({ width : '100%'})
 
 });
@@ -233,125 +227,6 @@ function obtenerCodInterno(selectElement, n){
 
 var productosSeleccionados = [];
 
-function cargarDetalle(){
-
-    var id = $("#id").val();
-    const tbody = $('#divOrdenProduccionDetalle');
-
-    tbody.empty();
-
-    $.ajax({
-        url: "/orden_produccion/cargar_detalle",
-        type: "GET",
-        success: function (result) {
-
-            let n = 1;
-
-            result.orden_produccion.forEach(orden_produccion => {
-
-                let productoOptions = '<option value="">--Seleccionar--</option>';
-                let unidadMedidaOptions = '<option value="">--Seleccionar--</option>';
-
-                result.producto.forEach(producto => {
-                    let selected = (producto.id == orden_produccion.id) ? 'selected' : '';
-                    productoOptions += `<option value="${producto.id}" ${selected}>${producto.codigo} - ${producto.denominacion}</option>`;
-                });
-
-                result.unidad_medida.forEach(unidad_medida => {
-                    let selected = (unidad_medida.codigo == orden_produccion.id_unidad_medida) ? 'selected' : '';
-                    unidadMedidaOptions += `<option value="${unidad_medida.codigo}" ${selected}>${unidad_medida.denominacion}</option>`;
-                });
-                
-                if (orden_produccion.id) {
-                    productosSeleccionados.push(orden_produccion.id);
-                }
-
-                const row = `
-                    <tr>
-                        <td>${n}</td>
-                        <td style="width: 900px !important;display:block"><input name="id_producto[]" id="id_producto${n}" class="form-control form-control-sm" value="${orden_produccion.id}" type="hidden"><select name="descripcion[]" id="descripcion${n}" class="form-control form-control-sm" onChange="">${productoOptions}</select></td>
-                        <td><input name="cod_interno[]" id="cod_interno${n}" class="form-control form-control-sm" value="${orden_produccion.codigo}" type="text"></td>
-                        
-                        <td><select name="unidad[]" id="unidad${n}" class="form-control form-control-sm">${unidadMedidaOptions}</select></td>
-                        <td><input name="cantidad_ingreso[]" id="cantidad_ingreso${n}" class="cantidad_ingreso form-control form-control-sm" value="${orden_produccion.cantidad_total-orden_produccion.cantidad_orden_produccion}" type="text" readonly></td>
-                        
-                        <td><input name="cantidad_producir[]" id="cantidad_producir${n}" class="cantidad_producir form-control form-control-sm" value="" type="text"></td>
-                        <td><button type="button" class="btn btn-danger btn-sm" onclick="eliminarFila(this)">Eliminar</button></td>
-
-                    </tr>
-                `;
-
-                tbody.append(row);
-                $('#descripcion' + n).select2({ 
-                    width: '100%', 
-                    dropdownCssClass: 'custom-select2-dropdown'
-                });
-
-                n++;
-            });
-        }
-    });
-}
-
-function cargarDetalleGuardado(){
-
-    var id = $("#id").val();
-    const tbody = $('#divOrdenProduccionDetalle');
-
-    tbody.empty();
-
-    $.ajax({
-        url: "/orden_produccion/cargar_detalle_guardado/"+id,
-        type: "GET",
-        success: function (result) {
-
-            let n = 1;
-
-            result.orden_produccion.forEach(orden_produccion => {
-
-                let productoOptions = '<option value="">--Seleccionar--</option>';
-                let unidadMedidaOptions = '<option value="">--Seleccionar--</option>';
-
-                result.producto.forEach(producto => {
-                    let selected = (producto.id == orden_produccion.id_producto) ? 'selected' : '';
-                    productoOptions += `<option value="${producto.id}" ${selected}>${producto.codigo} - ${producto.denominacion}</option>`;
-                });
-
-                result.unidad_medida.forEach(unidad_medida => {
-                    let selected = (unidad_medida.codigo == orden_produccion.id_unidad_producto) ? 'selected' : '';
-                    unidadMedidaOptions += `<option value="${unidad_medida.codigo}" ${selected}>${unidad_medida.denominacion}</option>`;
-                });
-                
-                if (orden_produccion.id) {
-                    productosSeleccionados.push(orden_produccion.id);
-                }
-
-                const row = `
-                    <tr>
-                        <td>${n}</td>
-                        <td style="width: 950px !important;display:block"><input name="id_producto[]" id="id_producto${n}" class="form-control form-control-sm" value="${orden_produccion.id}" type="hidden"><select name="descripcion[]" id="descripcion${n}" class="form-control form-control-sm" onChange="">${productoOptions}</select></td>
-                        <td><input name="cod_interno[]" id="cod_interno${n}" class="form-control form-control-sm" value="${orden_produccion.codigo}" type="text"></td>
-                        
-                        <td><select name="unidad[]" id="unidad${n}" class="form-control form-control-sm">${unidadMedidaOptions}</select></td>
-                        <td><input name="cantidad_ingreso[]" id="cantidad_ingreso${n}" class="cantidad_ingreso form-control form-control-sm" value="" type="text" readonly></td>
-                        
-                        <td><input name="cantidad_producir[]" id="cantidad_producir${n}" class="cantidad_producir form-control form-control-sm" value="${orden_produccion.cantidad}" type="text"></td>
-                        
-                    </tr>
-                `;
-
-                tbody.append(row);
-                $('#descripcion' + n).select2({ 
-                    width: '100%', 
-                    dropdownCssClass: 'custom-select2-dropdown'
-                });
-
-                n++;
-            });
-        }
-    });
-}
-
 function agregarProducto(){
 
     var opcionesDescripcion = `<?php
@@ -365,7 +240,7 @@ function agregarProducto(){
     var newRow = "";
     for (var i = 0; i < cantidad; i++) { 
         var n = $('#tblOrdenProduccionDetalle tbody tr').length + 1;
-        var descripcion = '<input name="id_producto_detalle[]" id="id_producto_detalle${n}" class="form-control form-control-sm" value="${orden_produccion.id}" type="hidden"><select name="descripcion[]" id="descripcion' + n + '" class="form-control form-control-sm" onChange="verificarProductoSeleccionado(this, ' + n + '); obtenerCodInterno(this, ' + ');">' + opcionesDescripcion +' </select>';
+        var descripcion = '<input name="id_producto_detalle[]" id="id_producto_detalle${n}" class="form-control form-control-sm" value="${orden_produccion.id}" type="hidden"><select name="id_producto[]" id="id_producto' + n + '" class="form-control form-control-sm" onChange="verificarProductoSeleccionado(this, ' + n + '); obtenerCodInterno(this, ' + ');">' + opcionesDescripcion +' </select>';
         var descripcion_ant = '<input type="hidden" name="descripcion_ant[]" id="descripcion_ant' + n + '" class="form-control form-control-sm" />';
         
         var cod_interno = '<input name="cod_interno[]" id="cod_interno' + n + '" class="form-control form-control-sm" value="" type="text">';
@@ -387,7 +262,7 @@ function agregarProducto(){
 
         $('#tblOrdenProduccionDetalle tbody').append(newRow);
 
-        $('#descripcion' + n).select2({
+        $('#id_producto' + n).select2({
             width: '100%',
             dropdownCssClass: 'custom-select2-dropdown',
         });
@@ -430,13 +305,6 @@ function eliminarFila(button){
 
     $(button).closest('tr').remove();
     
-}
-
-function limpiar(){
-	$('#id').val("0");
-	$('#id_tipo_documento').val("");
-	$('#denominacion').val("");
-	$('#img_foto').val("");
 }
 
 function fn_save_orden_produccion(){
@@ -486,11 +354,6 @@ function pdf_documento(){
 
     var href = '/orden_produccion/movimiento_pdf/'+id;
     window.open(href, '_blank');
-}
-
-function descargarOrdenProduccion(id){
-		
-	location.href = '/orden_produccion/exportar_listar_orden_produccion/'+id;
 }
 
 </script>
@@ -588,9 +451,7 @@ function descargarOrdenProduccion(id){
                             <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
                                 
                                 <?php if($id>0){?>
-                                    <button style="font-size:12px;margin-left:10px;margin-right:10px" type="button" class="btn btn-sm btn-primary" data-toggle="modal" onclick="pdf_documento()" ><i class="fa fa-edit"></i>Imprimir Pdf</button>
-
-                                    <button style="font-size:12px;margin-left:10px;margin-right:10px" type="button" class="btn btn-sm btn-secondary" data-toggle="modal" onclick="descargarOrdenProduccion(<?php echo $id?>)"><i class="fa fa-download"></i>Descargar Excel</button>
+                                    <button style="font-size:12px;margin-left:10px;margin-right:10px" type="button" class="btn btn-sm btn-primary" data-toggle="modal" onclick="pdf_documento()" ><i class="fa fa-edit"></i>Imprimir</button>
                                 <?php }?>
 
                                 <?php if($id==0){?>
@@ -616,71 +477,6 @@ function descargarOrdenProduccion(id){
 </div>
 <!-- /.content-wrapper -->
 
-<div id="openOverlayOpc2" class="modal fade modal-tienda" tabindex="-1" role="dialog">
-    <div class="modal-dialog" >
-
-        <div id="id_content_OverlayoneOpc2" class="modal-content" style="padding: 0px;margin: 0px">
-        
-            <div class="modal-body" style="padding: 0px;margin: 0px">
-
-                <div id="diveditpregOpc2"></div>
-
-            </div>
-        
-        </div>
-
-    </div>
-    
-</div>
-
-<div id="openOverlayOpc3" class="modal fade modal-datos_pedido" tabindex="-1" role="dialog">
-    <div class="modal-dialog" >
-
-        <div id="id_content_OverlayoneOpc3" class="modal-content" style="padding: 0px;margin: 0px">
-        
-            <div class="modal-body" style="padding: 0px;margin: 0px">
-
-                <div id="diveditpregOpc3"></div>
-
-            </div>
-        
-        </div>
-
-    </div>
-    
-</div>
-
-    
 <script type="text/javascript">
-$(document).ready(function () {
-
-	$('#ruc_').blur(function () {
-		var id = $('#id').val();
-			if(id==0) {
-				validaRuc(this.value);
-			}
-		//validaRuc(this.value);
-	});
-	
-	
-	
-	
-});
-
 
 </script>
-
-<script type="text/javascript">
-$(document).ready(function() {
-	//$('#numero_placa').focus();
-	//$('#numero_placa').mask('AAA-000');
-	//$('#vehiculo_numero_placa').mask('AAA-000');
-	
-	
-});
-
-
-
-
-</script>
-

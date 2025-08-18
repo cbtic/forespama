@@ -1499,6 +1499,12 @@ function obtenerOrdenCompraMatriz(){
                             <!--<input name="moneda_descripcion" id="moneda_descripcion" type="hidden">-->
                         </div>
 
+                        <div class="col-lg-2" id="label_entrada_salida">
+                            Observaci&oacute;n
+                        </div>
+                        <div class="col-lg-2" id="input_entrada_salida">
+                            <textarea id="observacion_vendedor" name="observacion_vendedor" class="form-control form-control-sm"><?php echo $orden_compra->observacion_vendedor?></textarea>
+                        </div>
 
                     </div>
                         <div style="margin-top:15px" class="form-group">

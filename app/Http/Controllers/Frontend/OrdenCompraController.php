@@ -277,6 +277,7 @@ class OrdenCompraController extends Controller
         $orden_compra->cerrado = 1;
         $orden_compra->id_usuario_inserta = $id_user;
         $orden_compra->id_vendedor = $request->id_vendedor;
+        $orden_compra->observacion_vendedor = $request->observacion_vendedor;
         $orden_compra->estado = 1;
         if($request->tipo_documento == 4){
             $orden_compra_matriz = OrdenCompra::where('numero_orden_compra',$request->numero_orden_compra_matriz)->where('id_tipo_documento',2)->where('estado',1)->where('estado_pedido',1)->first();
