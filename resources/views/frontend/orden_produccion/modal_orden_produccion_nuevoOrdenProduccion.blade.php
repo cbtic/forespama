@@ -488,6 +488,14 @@ function pdf_documento(){
     window.open(href, '_blank');
 }
 
+function pdf_documento_detallado(){
+
+    var id = $('#id').val();
+
+    var href = '/orden_produccion/movimiento_pdf_detallado/'+id;
+    window.open(href, '_blank');
+}
+
 function descargarOrdenProduccion(id){
 		
 	location.href = '/orden_produccion/exportar_listar_orden_produccion/'+id;
@@ -590,7 +598,9 @@ function descargarOrdenProduccion(id){
                                 <?php if($id>0){?>
                                     <button style="font-size:12px;margin-left:10px;margin-right:10px" type="button" class="btn btn-sm btn-primary" data-toggle="modal" onclick="pdf_documento()" ><i class="fa fa-edit"></i>Imprimir Pdf</button>
 
-                                    <button style="font-size:12px;margin-left:10px;margin-right:10px" type="button" class="btn btn-sm btn-secondary" data-toggle="modal" onclick="descargarOrdenProduccion(<?php echo $id?>)"><i class="fa fa-download"></i>Descargar Excel</button>
+                                    <button style="font-size:12px;margin-right:10px" type="button" class="btn btn-sm btn-secondary" data-toggle="modal" onclick="descargarOrdenProduccion(<?php echo $id?>)"><i class="fa fa-download"></i>Descargar Excel</button>
+
+                                    <button style="font-size:12px;margin-left:10px;margin-right:10px" type="button" class="btn btn-sm btn-primary" data-toggle="modal" onclick="pdf_documento_detallado()" ><i class="fa fa-edit"></i>Imprimir Pdf Destallado</button>
                                 <?php }?>
 
                                 <?php if($id==0){?>

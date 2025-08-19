@@ -1,6 +1,4 @@
--- DROP FUNCTION public.sp_listar_orden_compra_paginado(varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, refcursor);
-
-CREATE OR REPLACE FUNCTION public.sp_listar_orden_compra_paginado(p_tipo_documento character varying, p_empresa_compra character varying, p_empresa_vende character varying, p_fecha_inicio character varying, p_fecha_fin character varying, p_numero_orden_compra character varying, p_numero_orden_compra_cliente character varying, p_situacion character varying, p_almacen_origen character varying, p_almacen_destino character varying, p_estado character varying, p_id_user character varying, p_id_vendedor character varying, p_estado_pedido character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
+CREATE OR REPLACE FUNCTION public.sp_listar_orden_compra_paginado(p_tipo_documento character varying, p_empresa_compra character varying, p_empresa_vende character varying, p_fecha_inicio character varying, p_fecha_fin character varying, p_numero_orden_compra character varying, p_numero_orden_compra_cliente character varying, p_situacion character varying, p_almacen_origen character varying, p_almacen_destino character varying, p_estado character varying, p_id_user character varying, p_id_vendedor character varying, p_estado_pedido character varying, p_prioridad character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
  RETURNS refcursor
  LANGUAGE plpgsql
 AS $function$
@@ -73,7 +71,22 @@ begin
 	End If;
 
 	If p_numero_orden_compra<>'' Then
-	 v_where:=v_where||'And oc.numero_orden_compra  = '''||p_numero_orden_compra||''' ';
+	 v_where:=v_where||'And oc.id in (
+				        select id 
+				        from orden_compras 
+				        where numero_orden_compra = '''||p_numero_orden_compra||'''
+				        union
+				        select id_orden_compra_matriz 
+				        from orden_compras 
+				        where numero_orden_compra = '''||p_numero_orden_compra||'''
+				        and id_orden_compra_matriz is not null
+				        union
+				        select id 
+				        from orden_compras 
+				        where id_orden_compra_matriz = (
+			            select id 
+			            from orden_compras 
+			            where numero_orden_compra = '''||p_numero_orden_compra||''' and id_tipo_documento = ''2'')) ';
 	End If;
 
 	If p_numero_orden_compra_cliente<>'' Then
@@ -116,6 +129,9 @@ begin
 	 v_where:=v_where||'And oc.estado_pedido  = '''||p_estado_pedido||''' ';
 	End If;
 
+	If p_prioridad<>'' Then
+	 v_where:=v_where||'And oc.id_prioridad  = '''||p_prioridad||''' ';
+	End If;
 
 	EXECUTE ('SELECT count(1) '||v_tabla||v_where) INTO v_count;
 	v_col_count:=' ,'||v_count||' as TotalRows ';

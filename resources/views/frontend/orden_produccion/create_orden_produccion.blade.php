@@ -358,7 +358,7 @@ label.form-control-sm{
 						</select>
 					</div>-->
 
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+					<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
                         <input id="fecha_inicio_bus" name="fecha_inicio_bus" on class="form-control form-control-sm"  placeholder="Fecha Inicio">
 					</div>
 
@@ -366,7 +366,7 @@ label.form-control-sm{
                         <input id="fecha_fin_bus" name="fecha_fin_bus" on class="form-control form-control-sm"  placeholder="Fecha Fin">
 					</div>-->
 
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+					<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
                         <input id="numero_orden_produccion_bus" name="numero_orden_produccion_bus" on class="form-control form-control-sm"  placeholder="N&uacute;mero Orden Fabricaci&oacute;n">
 					</div>
 
@@ -400,6 +400,18 @@ label.form-control-sm{
 							<?php
 							foreach ($producto as $row){?>
 								<option value="<?php echo $row->id ?>"><?php echo $row->codigo .' - ' . $row->denominacion ?></option>
+								<?php 
+							}
+							?>
+						</select>
+					</div>
+
+					<div class="col-lg-2">
+						<select name="cerrado_bus" id="cerrado_bus" class="form-control form-control-sm" onchange="">
+							<option value="">--Seleccionar Cerrado--</option>
+							<?php
+							foreach ($cerrado as $row){?>
+								<option value="<?php echo $row->codigo ?>"<?php echo ($row->codigo == '1') ? 'selected' : ''; ?>><?php echo $row->denominacion ?></option>
 								<?php 
 							}
 							?>

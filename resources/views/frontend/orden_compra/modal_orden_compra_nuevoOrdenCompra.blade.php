@@ -256,6 +256,7 @@ $(document).ready(function() {
     }*/
 
     cambiarCliente();
+    obtenerPrioridad();
 
     if($('#id').val()>0){
         cargarDetalle();
@@ -1163,6 +1164,18 @@ function obtenerEntradaSalida(){
 	});
 }
 
+function obtenerPrioridad(){
+
+    $('#prioridad_label').hide();
+    $('#prioridad_select').hide();
+    var vendedor = $('#id_vendedor').val();
+
+    if(vendedor==35){
+        $('#prioridad_label').show();
+        $('#prioridad_select').show();
+    }
+}
+
 function cambiarCliente(){
 
     var tipo_documento_cliente = $('#tipo_documento_cliente').val();
@@ -1487,7 +1500,7 @@ function obtenerOrdenCompraMatriz(){
                             Vendedor
                         </div>
                         <div class="col-lg-2">
-                            <select name="id_vendedor" id="id_vendedor" class="form-control form-control-sm" onchange="">
+                            <select name="id_vendedor" id="id_vendedor" class="form-control form-control-sm" onchange="obtenerPrioridad()">
                                 <option value="">--Seleccionar--</option>
                                 <?php
                                 foreach ($vendedor as $row){?>
@@ -1497,6 +1510,22 @@ function obtenerOrdenCompraMatriz(){
                                 ?>
                             </select>
                             <!--<input name="moneda_descripcion" id="moneda_descripcion" type="hidden">-->
+                        </div>
+
+                        <div class="col-lg-2" id="prioridad_label">
+                            Prioridad
+                        </div>
+                        <div class="col-lg-2" id="prioridad_select">
+                            <select name="prioridad" id="prioridad" class="form-control form-control-sm" onchange="">
+                                <option value="">--Seleccionar--</option>
+                                <?php
+                                foreach ($prioridad as $row){?>
+                                    <option value="<?php echo $row->codigo; ?>"<?php if($row->codigo==$orden_compra->id_prioridad)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                    <?php 
+                                }
+                                ?>
+                            </select>
+                            <input name="moneda_descripcion" id="moneda_descripcion" type="hidden">
                         </div>
 
                         <div class="col-lg-2" id="label_entrada_salida">

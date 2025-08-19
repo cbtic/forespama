@@ -593,7 +593,7 @@ Route::post('parametro/listar_total_orden_compra_tienda_ajax', [ParametroControl
 Route::get('parametro/cargar_parametro_orden_compra/{id}', [ParametroController::class, 'cargar_parametro_orden_compra'])->name('parametro.cargar_parametro_orden_compra');
 Route::get('orden_compra/obtener_entrada_salida/{id_orden_compra}/{tipo_documento}', [OrdenCompraController::class, 'obtener_entrada_salida'])->name('orden_compra.obtener_entrada_salida');
 Route::get('vehiculo/obtener_vehiculo_guia/{placa}', [VehiculoController::class, 'obtener_vehiculo_guia'])->name('vehiculo.obtener_vehiculo_guia');
-Route::get('orden_compra/exportar_listar_orden_compra/{tipo_documento}/{empresa_compra}/{empresa_vende}/{fecha_inicio}/{fecha_fin}/{numero_orden_compra}/{numero_orden_compra_cliente}/{almacen_origen}/{almacen_destino}/{situacion}/{estado}/{vendedor}/{estado_pedido}', [OrdenCompraController::class, 'exportar_listar_orden_compra'])->name('orden_compra.exportar_listar_orden_compra');
+Route::get('orden_compra/exportar_listar_orden_compra/{tipo_documento}/{empresa_compra}/{empresa_vende}/{fecha_inicio}/{fecha_fin}/{numero_orden_compra}/{numero_orden_compra_cliente}/{almacen_origen}/{almacen_destino}/{situacion}/{estado}/{vendedor}/{estado_pedido}/{prioridad}', [OrdenCompraController::class, 'exportar_listar_orden_compra'])->name('orden_compra.exportar_listar_orden_compra');
 
 Route::get('empaquetado/create', [EmpaquetadoController::class, 'create'])->name('empaquetado.create');
 Route::post('empaquetado/listar_empaquetados_ajax', [EmpaquetadoController::class, 'listar_empaquetados_ajax'])->name('empaquetado.listar_empaquetados_ajax');
@@ -760,3 +760,5 @@ Route::post('orden_produccion/send_orden_produccion_orden_compra', [OrdenProducc
 Route::get('orden_compra/send_comprometer_stock_total/{id}', [OrdenCompraController::class, 'send_comprometer_stock_total'])->name('orden_compra.send_comprometer_stock_total');
 Route::get('orden_produccion/modal_orden_produccion_planeamiento/{id}', [OrdenProduccionController::class, 'modal_orden_produccion_planeamiento'])->name('orden_produccion.modal_orden_produccion_planeamiento');
 Route::get('orden_produccion/exportar_listar_orden_produccion/{id}', [OrdenProduccionController::class, 'exportar_listar_orden_produccion'])->name('orden_produccion.exportar_listar_orden_produccion');
+Route::get('orden_produccion/movimiento_pdf_detallado/{id}', [OrdenProduccionController::class, 'movimiento_pdf_detallado'])->name('orden_produccion.movimiento_pdf_detallado');
+Route::get('orden_produccion/cerrar_orden_produccion/{id}', [OrdenProduccionController::class, 'cerrar_orden_produccion'])->name('orden_produccion.cerrar_orden_produccion');

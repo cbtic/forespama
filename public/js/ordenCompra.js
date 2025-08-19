@@ -144,6 +144,7 @@ function datatablenew(){
 			var numero_orden_compra_cliente = $('#numero_orden_compra_cliente_bus').val();
 			var vendedor = $('#vendedor_bus').val();
 			var estado_pedido = $('#estado_pedido_bus').val();
+			var prioridad = $('#prioridad_bus').val();
 			
 			var _token = $('#_token').val();
             oSettings.jqXHR = $.ajax({
@@ -155,7 +156,7 @@ function datatablenew(){
 						tipo_documento:tipo_documento,empresa_compra:empresa_compra,empresa_vende:empresa_vende,
 						fecha_inicio:fecha_inicio,fecha_fin:fecha_fin,numero_orden_compra:numero_orden_compra,almacen_origen:almacen_origen,
 						almacen_destino:almacen_destino,situacion:situacion,estado:estado,numero_orden_compra_cliente:numero_orden_compra_cliente,
-						vendedor:vendedor,estado_pedido:estado_pedido,
+						vendedor:vendedor,estado_pedido:estado_pedido,prioridad:prioridad,
 						_token:_token
                        },
                 "success": function (result) {
@@ -532,6 +533,7 @@ function DescargarArchivosExcel(){
 	var estado = $('#estado_bus').val();
 	var vendedor = $('#vendedor_bus').val();
 	var estado_pedido = $('#estado_pedido_bus').val();
+	var prioridad = $('#prioridad_bus').val();
 
 	if (tipo_documento == "")tipo_documento = 0;
 	if (empresa_compra == "")empresa_compra = 0;
@@ -546,8 +548,9 @@ function DescargarArchivosExcel(){
 	if (estado == "")estado = 0;
 	if (vendedor == "")vendedor = 0;
 	if (estado_pedido == "")estado_pedido = 0;
+	if (prioridad == "")prioridad = 0;
 	
-	location.href = '/orden_compra/exportar_listar_orden_compra/'+tipo_documento+'/'+empresa_compra+'/'+empresa_vende+'/'+fecha_inicio+'/'+fecha_fin+'/'+numero_orden_compra+'/'+numero_orden_compra_cliente+'/'+almacen_origen+'/'+almacen_destino+'/'+situacion+'/'+estado+'/'+vendedor+'/'+estado_pedido;
+	location.href = '/orden_compra/exportar_listar_orden_compra/'+tipo_documento+'/'+empresa_compra+'/'+empresa_vende+'/'+fecha_inicio+'/'+fecha_fin+'/'+numero_orden_compra+'/'+numero_orden_compra_cliente+'/'+almacen_origen+'/'+almacen_destino+'/'+situacion+'/'+estado+'/'+vendedor+'/'+estado_pedido+'/'+prioridad;
 }
 
 function generarLPN(){

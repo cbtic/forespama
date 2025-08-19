@@ -107,6 +107,7 @@ function datatablenew(){
 			var situacion = $('#situacion_bus').val();
 			var estado = $('#estado_bus').val();
 			var producto = $('#producto_bus').val();
+			var cerrado = $('#cerrado_bus').val();
 			
 			var _token = $('#_token').val();
             oSettings.jqXHR = $.ajax({
@@ -115,7 +116,7 @@ function datatablenew(){
                 "type": "POST",
                 "url": sSource,
                 "data":{NumeroPagina:iNroPagina,NumeroRegistros:iCantMostrar,
-						fecha_inicio:fecha_inicio,numero_orden_produccion:numero_orden_produccion,area:area,situacion:situacion,producto:producto,
+						fecha_inicio:fecha_inicio,numero_orden_produccion:numero_orden_produccion,area:area,situacion:situacion,producto:producto,cerrado:cerrado,
 						estado:estado,_token:_token
                        },
                 "success": function (result) {
@@ -223,7 +224,7 @@ function datatablenew(){
 
 				var html = '<div class="btn-group btn-group-sm" role="group" aria-label="Log Viewer Actions">';
 					
-				html += '<button style="font-size:12px" type="button" class="btn btn-sm btn-success" data-toggle="modal" onclick="modalOrdenProduccion('+row.id+')" ><i class="fa fa-edit"></i> Editar</button>'; 
+				html += '<button style="font-size:12px" type="button" class="btn btn-sm btn-success" data-toggle="modal" onclick="modalOrdenProduccion('+row.id+')" ><i class="fa fa-edit"></i> Visualizar</button>'; 
 
 				html += '<button style="font-size:12px;margin-left:10px" type="button" class="btn btn-sm btn-info" data-toggle="modal" onclick="modalAtenderOrdenProduccion('+row.id+')" ><i class="fa fa-edit"></i> Atender</button>'; 
 				

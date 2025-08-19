@@ -67,10 +67,11 @@ class OrdenCompraController extends Controller
         $almacen_usuario = $almacen_user_model->getAlmacenByUser($id_user);
         $vendedor = $user_model->getUserByRol(7,11);
 		$estado_pedido = $tablaMaestra_model->getMaestroByTipo(77);
+		$prioridad = $tablaMaestra_model->getMaestroByTipo(93);
         //$almacen_usuario2 = $almacen_user_model->getUsersByAlmacen($id_user);
         //dd($almacen_usuario);exit();
 		
-		return view('frontend.orden_compra.create',compact('tipo_documento','cerrado_orden_compra','proveedor','almacen','almacen_usuario','vendedor','estado_pedido'));
+		return view('frontend.orden_compra.create',compact('tipo_documento','cerrado_orden_compra','proveedor','almacen','almacen_usuario','vendedor','estado_pedido','prioridad'));
 
 	}
 
@@ -112,6 +113,7 @@ class OrdenCompraController extends Controller
         $p[]=$id_user;
         $p[]=$request->vendedor;
         $p[]=$request->estado_pedido;
+        $p[]=$request->prioridad;
 		$p[]=$request->NumeroPagina;
 		$p[]=$request->NumeroRegistros;
 		$data = $orden_compra_model->listar_orden_compra_ajax($p);
@@ -172,12 +174,13 @@ class OrdenCompraController extends Controller
         $vendedor = $user_model->getUserByRol(7,11);
         $tipo_documento_cliente = $tablaMaestra_model->getMaestroByTipo(75);
         $persona = $persona_model->obtenerPersonaAll();
+        $prioridad = $tablaMaestra_model->getMaestroByTipo(93);
 
         //$codigo_orden_compra = $orden_compra_model->getCodigoOrdenCompra();
         
         //dd($proveedor);exit();
 
-		return view('frontend.orden_compra.modal_orden_compra_nuevoOrdenCompra',compact('id','orden_compra','tipo_documento','proveedor','producto','marca','estado_bien','unidad','igv_compra','descuento','almacen','unidad_origen','id_user','moneda','vendedor','tipo_documento_cliente','persona'));
+		return view('frontend.orden_compra.modal_orden_compra_nuevoOrdenCompra',compact('id','orden_compra','tipo_documento','proveedor','producto','marca','estado_bien','unidad','igv_compra','descuento','almacen','unidad_origen','id_user','moneda','vendedor','tipo_documento_cliente','persona','prioridad'));
 
     }
 
@@ -278,6 +281,7 @@ class OrdenCompraController extends Controller
         $orden_compra->id_usuario_inserta = $id_user;
         $orden_compra->id_vendedor = $request->id_vendedor;
         $orden_compra->observacion_vendedor = $request->observacion_vendedor;
+        $orden_compra->id_prioridad = $request->prioridad;
         $orden_compra->estado = 1;
         if($request->tipo_documento == 4){
             $orden_compra_matriz = OrdenCompra::where('numero_orden_compra',$request->numero_orden_compra_matriz)->where('id_tipo_documento',2)->where('estado',1)->where('estado_pedido',1)->first();
@@ -993,7 +997,7 @@ class OrdenCompraController extends Controller
 
     }
 
-    public function exportar_listar_orden_compra($tipo_documento, $empresa_compra, $empresa_vende, $fecha_inicio, $fecha_fin, $numero_orden_compra, $numero_orden_compra_cliente, $almacen_origen, $almacen_destino, $situacion, $estado, $vendedor, $estado_pedido) {
+    public function exportar_listar_orden_compra($tipo_documento, $empresa_compra, $empresa_vende, $fecha_inicio, $fecha_fin, $numero_orden_compra, $numero_orden_compra_cliente, $almacen_origen, $almacen_destino, $situacion, $estado, $vendedor, $estado_pedido, $prioridad) {
 
         $id_user = Auth::user()->id;
         
@@ -1010,6 +1014,7 @@ class OrdenCompraController extends Controller
         if($estado==0)$estado = "";
         if($vendedor==0)$vendedor = "";
         if($estado_pedido==0)$estado_pedido = "";
+        if($prioridad==0)$prioridad = "";
 
         $orden_compra_model = new OrdenCompra;
 		$p[]=$tipo_documento;
@@ -1026,6 +1031,7 @@ class OrdenCompraController extends Controller
 		$p[]=$id_user;
         $p[]=$vendedor;
         $p[]=$estado_pedido;
+        $p[]=$prioridad;
         $p[]=1;
 		$p[]=10000;
 		$data = $orden_compra_model->listar_orden_compra_ajax($p);
@@ -2036,6 +2042,50 @@ class OrdenCompraController extends Controller
 		
 		return response()->json($orden_compra_matriz);
 	}
+
+    public function comprometerStockTotalAutomatico()
+    {
+        $kardex_model = new Kardex;
+
+        $ordenes = OrdenCompra::where('cerrado', 1)->where('estado', 1)->where('comprometido', 0)->get();
+
+        foreach ($ordenes as $orden_compra_matriz) {
+            $detalles = OrdenCompraDetalle::where('id_orden_compra', $orden_compra_matriz->id)->where('estado', '1')->get();
+
+            foreach ($detalles as $detalle) {
+                $id_almacen_bus = $orden_compra_matriz->id_almacen_salida;
+
+                if ($detalle->id_unidad_origen == 2) {
+                    $id_almacen_bus = $orden_compra_matriz->id_almacen_destino;
+                }
+
+                $stock = $kardex_model->getExistenciaProductoById($detalle->id_producto, $id_almacen_bus);
+                $stock_actual = count($stock) > 0 ? floatval($stock[0]->stock_comprometido) : 0;
+
+                $cantidad_ingreso = floatval($detalle->cantidad_requerida);
+
+                if ($detalle->comprometido != 1 && $cantidad_ingreso <= $stock_actual) {
+                    $detalle->comprometido = 1;
+                    $detalle->save();
+                }
+            }
+
+            $total = OrdenCompraDetalle::where('id_orden_compra', $orden_compra_matriz->id)->where('estado', '1')->count();
+            $comprometidos = OrdenCompraDetalle::where('id_orden_compra', $orden_compra_matriz->id)->where('estado', '1')->where('comprometido', 1)->count();
+
+            if ($comprometidos == 0) {
+                $orden_compra_matriz->comprometido = 0;
+            } elseif ($comprometidos < $total) {
+                $orden_compra_matriz->comprometido = 1;
+            } else {
+                $orden_compra_matriz->comprometido = 2;
+            }
+
+            $orden_compra_matriz->save();
+        }
+
+        return "Proceso de compromiso automático finalizado.";
+    }
 }
 
 class InvoicesExport implements FromArray, WithHeadings, WithStyles

@@ -332,6 +332,21 @@ function save_orden_compra_orden_produccion(){
     }
 }
 
+function cerrar_orden_produccion(){
+
+    var id = $('#id').val();
+
+    $.ajax({
+        url: "/orden_produccion/cerrar_orden_produccion/"+id,
+        type: "GET",
+        success: function (result) {
+            datatablenew();
+            //$('.loader').hide();
+            $('#openOverlayOpc').modal('hide');
+        }
+    });
+}
+
 function obtenerCodigo(){
 
     var tipo_documento = $('#tipo_documento').val();
@@ -372,7 +387,7 @@ function cerrarModalAtenderOrdenProduccion(){
 
             <div class="card">
                 <div style="text-align: center; font-size:16px; margin-top: 20px">
-                    <b>Orden Producci&oacute;n</b>
+                    <b>Orden Fabricaci&oacute;n</b>
                 </div>
                 
                 <div class="card-body">
@@ -491,7 +506,11 @@ function cerrarModalAtenderOrdenProduccion(){
                                         if($id>0){
                                     ?>
                                     <!--<button style="font-size:12px;margin-left:10px;margin-right:20px" type="button" class="btn btn-sm btn-primary" data-toggle="modal" onclick="pdf_documento()" ><i class="fa fa-edit"></i> Imprimir</button>-->
+                                    
+                                    <button style="font-size:12px;margin-right:20px" type="button" class="btn btn-sm btn-danger" data-toggle="modal" onclick="cerrar_orden_produccion()" ><i class="fa fa-edit"></i> Cerrar Orden Fabricaci&oacute;n</button>
+
                                     <button style="font-size:12px;margin-right:20px" type="button" class="btn btn-sm btn-warning" data-toggle="modal" onclick="save_orden_compra_orden_produccion()" ><i class="fa fa-edit"></i> Generar Orden Compra</button>
+
                                     <?php 
                                         }
                                     ?>

@@ -43,9 +43,10 @@ class OrdenProduccionController extends Controller
         //$encargado = $persona_model->obtenerPersonaAll();
         $area = $unidad_trabajo_model->getUnidadTrabajo(7);
         $situacion = $tablaMaestra_model->getMaestroByTipo(92);
+        $cerrado = $tablaMaestra_model->getMaestroByTipo(52);
         //$producto = $producto_model->getProductoAll();
         
-		return view('frontend.orden_produccion.create_orden_produccion',compact('area','situacion','producto'));
+		return view('frontend.orden_produccion.create_orden_produccion',compact('area','situacion','producto','cerrado'));
 
 	}
 
@@ -59,6 +60,7 @@ class OrdenProduccionController extends Controller
         $p[]=$request->area;
         $p[]=$request->situacion;
         $p[]=$request->producto;
+        $p[]=$request->cerrado;
         $p[]=$request->estado;
 		$p[]=$request->NumeroPagina;
 		$p[]=$request->NumeroRegistros;
@@ -270,6 +272,42 @@ class OrdenProduccionController extends Controller
 
 	}
 
+    public function movimiento_pdf_detallado($id){
+
+        $orden_compra_model = new OrdenProduccion;
+        $orden_compra_detalle_model = new OrdenProduccionDetalle;
+
+        $datos=$orden_compra_model->getOrdenProduccionByIdPdf($id);
+        $datos_detalle=$orden_compra_detalle_model->getDetalleOrdenProduccionPdf($id);
+
+        $id_situacion=$datos[0]->id_situacion;
+        $fecha_orden_produccion=$datos[0]->fecha_orden_produccion;
+        $codigo=$datos[0]->codigo;
+        $area = $datos[0]->area;
+        $usuario = $datos[0]->usuario;
+                
+		$year = Carbon::now()->year;
+
+		Carbon::setLocale('es');
+
+		$carbonDate =Carbon::now()->format('d-m-Y');
+
+		$currentHour = Carbon::now()->format('H:i:s');
+
+		$pdf = Pdf::loadView('frontend.orden_produccion.movimiento_orden_produccion_pdf',compact('id_situacion','fecha_orden_produccion','codigo','area','usuario','datos_detalle'));
+
+		$pdf->setPaper('A4'); // Tamaño de papel (puedes cambiarlo según tus necesidades)
+
+		$pdf->setPaper('A4', 'portrait'); //landscape horizontal
+    	$pdf->setOption('margin-top', 20); // Márgen superior en milímetros
+   		$pdf->setOption('margin-right', 50); // Márgen derecho en milímetros
+    	$pdf->setOption('margin-bottom', 20); // Márgen inferior en milímetros
+    	$pdf->setOption('margin-left', 100); // Márgen izquierdo en milímetros
+
+		return $pdf->stream();
+
+	}
+
     public function modal_atender_orden_produccion($id){
 		
         $tablaMaestra_model = new TablaMaestra;
@@ -445,6 +483,16 @@ class OrdenProduccionController extends Controller
 		
 		$export = new InvoicesExport($variable, $codigo, $fecha_orden_produccion, $area);
 		return Excel::download($export, 'orden_produccion.xlsx');
+    }
+
+    public function cerrar_orden_produccion($id)
+    {
+		$orden_produccion = OrdenProduccion::find($id);
+
+		$orden_produccion->cerrado = 2;
+		$orden_produccion->save();
+
+		echo $orden_produccion->id;
     }
 }
 

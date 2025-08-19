@@ -459,6 +459,18 @@ label.form-control-sm{
 						</select>
 					</div>
 
+					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+						<select name="prioridad_bus" id="prioridad_bus" class="form-control form-control-sm">
+							<option value="">--Seleccionar Prioridad--</option>
+							<?php
+							foreach ($prioridad as $row){?>
+								<option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
+								<?php 
+							}
+							?>
+						</select>
+					</div>
+
                     <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
 						<select name="estado_bus" id="estado_bus" class="form-control form-control-sm">
 							<option value="">Todos</option>
