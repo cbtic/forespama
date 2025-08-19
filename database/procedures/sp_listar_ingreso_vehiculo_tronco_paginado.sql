@@ -49,9 +49,9 @@ Begin
 	v_col_count:=' ,'||v_count||' as TotalRows ';
 
 	If v_count::Integer > p_limit::Integer then
-		v_scad:='SELECT '||v_campos||v_col_count||v_tabla||v_where||' Order By ivt.fecha_ingreso Desc LIMIT '||p_limit||' OFFSET '||p_pagina||';';
+		v_scad:='SELECT '||v_campos||v_col_count||v_tabla||v_where||' Order By ivt.fecha_ingreso Desc,id Desc LIMIT '||p_limit||' OFFSET '||p_pagina||';';
 	else
-		v_scad:='SELECT '||v_campos||v_col_count||v_tabla||v_where||' Order By ivt.fecha_ingreso Desc;';
+		v_scad:='SELECT '||v_campos||v_col_count||v_tabla||v_where||' Order By ivt.fecha_ingreso Desc,id Desc;';
 	End If;
 
 	--Raise Notice '%',v_scad;

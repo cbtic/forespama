@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION public.sp_listar_orden_produccion_paginado(p_codigo character varying, p_fecha character varying, p_area character varying, p_situacion character varying, p_producto character varying, p_estado character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
+CREATE OR REPLACE FUNCTION public.sp_listar_orden_produccion_paginado(p_codigo character varying, p_fecha character varying, p_area character varying, p_situacion character varying, p_producto character varying, p_cerrado character varying, p_estado character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
  RETURNS refcursor
  LANGUAGE plpgsql
 AS $function$
@@ -44,6 +44,10 @@ begin
 		SELECT 1 FROM orden_produccion_detalles opd
 		WHERE opd.id_orden_produccion = op.id 
 		AND opd.id_producto = ''' || p_producto || ''') ';
+	End If;
+
+	If p_cerrado<>'' Then
+	 v_where:=v_where||'And op.cerrado  = '''||p_cerrado||''' ';
 	End If;
 
 	If p_estado<>'' Then
