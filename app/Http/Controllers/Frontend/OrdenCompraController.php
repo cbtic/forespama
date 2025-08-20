@@ -1984,24 +1984,22 @@ class OrdenCompraController extends Controller
     {
         $kardex_model = new Kardex;
 
-        $detalles = OrdenCompraDetalle::where('id_orden_compra', $id)
-            ->where('estado', '1')
-            ->get();
+        $detalles = OrdenCompraDetalle::where('id_orden_compra', $id)->where('estado', '1')->get();
         $orden_compra_matriz = OrdenCompra::find($id);
         foreach ($detalles as $detalle) {
 
             $id_almacen_bus = $orden_compra_matriz->id_almacen_salida;
 
-            if ($detalle->id_unidad_origen == 1) {
+            if ($orden_compra_matriz->id_unidad_origen == 1) {
                 $id_almacen_bus = $orden_compra_matriz->id_almacen_salida;
             }
-            if ($detalle->id_unidad_origen == 2) {
+            if ($orden_compra_matriz->id_unidad_origen == 2) {
                 $id_almacen_bus = $orden_compra_matriz->id_almacen_destino;
             }
-            if ($detalle->id_unidad_origen == 3) {
+            if ($orden_compra_matriz->id_unidad_origen == 3) {
                 $id_almacen_bus = $orden_compra_matriz->id_almacen_salida;
             }
-            if ($detalle->id_unidad_origen == 4) {
+            if ($orden_compra_matriz->id_unidad_origen == 4) {
                 $id_almacen_bus = $orden_compra_matriz->id_almacen_salida;
             }
             
@@ -2055,7 +2053,7 @@ class OrdenCompraController extends Controller
             foreach ($detalles as $detalle) {
                 $id_almacen_bus = $orden_compra_matriz->id_almacen_salida;
 
-                if ($detalle->id_unidad_origen == 2) {
+                if ($orden_compra_matriz->id_unidad_origen == 2) {
                     $id_almacen_bus = $orden_compra_matriz->id_almacen_destino;
                 }
 
