@@ -20,6 +20,7 @@ class Kernel extends ConsoleKernel
         Commands\obtenerTipoCambioDiarioAutomaticoCron::class,
         Commands\CambiarVigenciaRevisionTecnicaAutomaticoCron::class,
         Commands\CambiarVigenciaSoatAutomaticoCron::class,
+        Commands\ComprometerStockTotalAutomaticoCron::class,
     ];
 
     /**
