@@ -99,7 +99,7 @@ class ActivoController extends Controller
 		$familia = $familia_model->getFamiliaAll();
 		$tipo_activo = $tabla_maestra_model->getMaestroByTipo('94');
 		$tipo_operacion_maquinaria = $tabla_maestra_model->getMaestroByTipo('95');
-
+		
 		return view('frontend.activos.create_activo',compact('id','activo','marca','tipo_combustible','estado_activos','soat_activo','departamento','tipo_activo','id','revision_tecnica_activo','control_mantenimiento_activo','familia','tipo_activo','tipo_operacion_maquinaria'));
 
 	}
