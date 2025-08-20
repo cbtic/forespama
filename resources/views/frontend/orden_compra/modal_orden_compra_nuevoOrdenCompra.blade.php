@@ -750,6 +750,8 @@ function cargarDetalle(){
                     productosSeleccionados.push(orden_compra.id_producto);
                 }
 
+                var stock_mostrar = (tipo_documento == 1) ? producto_stock.saldos_cantidad : producto_stock.stock_comprometido;
+
                 const row = `
                     <tr>
                         <td>${n}</td>
@@ -761,7 +763,7 @@ function cargarDetalle(){
                         <td><select name="estado_bien[]" id="estado_bien${n}" class="form-control form-control-sm" onChange="">${estadoBienOptions}</select></td>
                         <td><select name="unidad[]" id="unidad${n}" class="form-control form-control-sm">${unidadMedidaOptions}</select></td>
                         <td><input name="cantidad_ingreso[]" id="cantidad_ingreso${n}" class="cantidad_ingreso form-control form-control-sm" value="${orden_compra.cantidad_requerida}" type="text" oninput="calcularCantidadPendiente(this);calcularSubTotal(this);calcularPrecioUnitario(this)"></td>
-                        <td><input name="stock_actual[]" id="stock_actual${n}" class="form-control form-control-sm" value="${producto_stock.stock_comprometido}" type="text" readonly="readonly"></td>
+                        <td><input name="stock_actual[]" id="stock_actual${n}" class="form-control form-control-sm" value="${stock_mostrar}" type="text" readonly="readonly"></td>
                         <td><input name="precio_unitario[]" id="precio_unitario${n}" class="precio_unitario form-control form-control-sm" value="${parseFloat(orden_compra.precio_venta || 0).toFixed(decimales)}" type="text" oninput="limitarDecimalesYCalcular(this, ${decimales})"></td>
                         <td><input name="precio_unitario_[]" id="precio_unitario_${n}" class="precio_unitario_ form-control form-control-sm" value="${parseFloat(orden_compra.precio || 0).toFixed(decimales)}" type="text" oninput="calcularPrecioUnitario(this)"></td>
                         <td><input name="valor_venta_bruto[]" id="valor_venta_bruto${n}" class="valor_venta_bruto form-control form-control-sm" value="${parseFloat(orden_compra.valor_venta_bruto || 0).toFixed(decimales)}" type="text" oninput="calcularSubTotal(this)"></td>
@@ -1207,6 +1209,7 @@ function obtenerStock(selectElement, n){
     var id_producto = $(selectElement).val();
     var unidad_origen = $('#unidad_origen').val();
     var almacen = "";
+    var tipo_documento = $('#tipo_documento').val();
     
     if(unidad_origen==1){
         almacen = $('#almacen_salida').val();
@@ -1225,7 +1228,11 @@ function obtenerStock(selectElement, n){
 
             var producto_stock = result.producto_stock[id_producto];
             
-            $('#stock_actual' + n).val(producto_stock.stock_comprometido);
+            if(tipo_documento == 1){
+                $('#stock_actual' + n).val(producto_stock.saldos_cantidad);
+            }else{
+                $('#stock_actual' + n).val(producto_stock.stock_comprometido);
+            }
         }
     });
 }

@@ -64,7 +64,17 @@ $(document).ready(function () {
         obtenerProvincia(function() {
             obtenerDatosUbigeo();
         });
+
+		obtenerSubTipoActivo(function(){
+			obtenerDatosSubTipoActivo();
+		});
+
+		obtenerSubFamiliaBus(function(){
+			obtenerDatosSubFamilia();
+		});
 	}
+
+	obtenerDatosActivo();
 
 });
 
@@ -86,18 +96,23 @@ function guardar_activo(){
 	var descripcion = $("#descripcion").val();
 	var placa = $("#placa").val();
 	var tipo_combustible = $("#tipo_combustible").val();
-	//var valor_libros = $("#valor_libros").val();
-	//var valor_comercial = $("#valor_comercial").val();
+	var familia = $("#familia").val();
+	var sub_familia = $("#sub_familia").val();
+	var sub_tipo_activo = $("#sub_tipo_activo").val();
 	var departamento = $("#departamento").val();
 	var provincia = $("#provincia").val();
 	var distrito = $("#distrito").val();
 	
 	if(tipo_activo=="")msg += "Debe seleccionar un Tipo de Activo <br>";
+	
+	if(tipo_activo==2){
+		if(placa=="")msg += "Debe Ingresar la Placa <br>";
+		if(tipo_combustible=="")msg += "Debe Seleccionar el Tipo de Combustible <br>";
+	}
+	if(familia=="")msg += "Debe Ingresar la Familia <br>";
+	if(sub_familia=="")msg += "Debe Ingresar la Sub Familia <br>";
+	if(sub_tipo_activo=="")msg += "Debe Ingresar el Sub Tipo de Activo <br>";
 	if(descripcion=="")msg += "Debe Ingresar una Descripcion <br>";
-	if(placa=="")msg += "Debe Ingresar la Placa <br>";
-	if(tipo_combustible=="")msg += "Debe Seleccionar el Tipo de Combustible <br>";
-	//if(valor_libros=="")msg += "Debe Ingresar el Valor Libros <br>";
-	//if(valor_comercial=="")msg += "Debe Ingresar el Valor Comercial <br>";
 	if(departamento=="")msg += "Debe Seleccione el Departamento <br>";
 	if(provincia=="")msg += "Debe Seleccione la Provincia <br>";
 	if(distrito=="")msg += "Debe Seleccione el Distrito <br>";
@@ -406,3 +421,147 @@ $(function() {
         }
     });
 });
+
+function obtenerDatosActivo(){
+
+	var tipo_activo = $('#tipo_activo').val();
+
+	$('#label_tipo_combustible_maquinaria').hide();
+	$('#opcion_tipo_combustible_maquinaria').hide();
+	$('#label_dimension_maquinaria').hide();
+	$('#opcion_dimension_maquinaria').hide();
+	$('#label_placa_maquinaria').hide();
+	$('#opcion_placa_maquinaria').hide();
+	$('#div_titulo_maquinaria').hide();
+	$('#div_partida_maquinaria').hide();
+
+	if(tipo_activo==2){
+		$('#label_tipo_combustible_maquinaria').show();
+		$('#opcion_tipo_combustible_maquinaria').show();
+		$('#label_dimension_maquinaria').show();
+		$('#opcion_dimension_maquinaria').show();
+		$('#label_placa_maquinaria').show();
+		$('#opcion_placa_maquinaria').show();
+		$('#div_titulo_maquinaria').show();
+		$('#div_partida_maquinaria').show();
+	}
+
+}
+
+function obtenerSubTipoActivo(callback){
+
+	var tipo_activo = $('#tipo_activo').val();
+
+	var msgLoader = "";
+	msgLoader = "Procesando, espere un momento por favor";
+	var heightBrowser = $(window).width()/2;
+	$('.loader').css("opacity","0.8").css("height",heightBrowser).html("<div id='Grd1_wrapper' class='dataTables_wrapper'><div id='Grd1_processing' class='dataTables_processing panel-default'>"+msgLoader+"</div></div>");
+    $('.loader').show();
+	
+	$.ajax({
+		url: '/activos/obtener_sub_tipo_activo/'+tipo_activo,
+		dataType: "json",
+		success: function(result){
+			var option = "<option value=''>--Seleccionar--</option>";
+			$('#sub_tipo_activo').html("");
+			$(result).each(function (ii, oo) {
+				option += "<option value='"+oo.codigo+"'>"+oo.denominacion+"</option>";
+			});
+			$('#sub_tipo_activo').html(option);
+			
+			$('#sub_tipo_activo').attr("disabled",false);
+			$('.loader').hide();
+			if (callback) callback();
+		}
+	});
+}
+
+function obtenerDatosSubTipoActivo(){
+
+    var id = $('#id_activo').val();
+
+    $.ajax({
+        url: '/activos/obtener_datos_sub_tipo_activo/'+id,
+        dataType: "json",
+        success: function(result){
+            
+            $('#sub_tipo_activo').val(result[0].id_sub_tipo_activo);
+			
+        }
+    });
+}
+
+function obtenerSubFamiliaBus(callback){
+
+    var familia = $('#familia').val();
+    if(familia=="")return false;
+    
+	$('#sub_familia').attr("disabled",true);
+    
+    var msgLoader = "";
+	msgLoader = "Procesando, espere un momento por favor";
+	var heightBrowser = $(window).width()/2;
+	$('.loader').css("opacity","0.8").css("height",heightBrowser).html("<div id='Grd1_wrapper' class='dataTables_wrapper'><div id='Grd1_processing' class='dataTables_processing panel-default'>"+msgLoader+"</div></div>");
+    $('.loader').show();
+
+    $.ajax({
+        url: "/sub_familia/obtener_sub_familia/"+familia,
+        dataType: "json",
+        success: function (result) {
+
+           var option = "<option value='' selected='selected'>--Seleccionar--</option>";
+			$('#sub_familia').html("");
+			$(result).each(function (ii, oo) {
+				option += "<option value='"+oo.id+"'>"+oo.denominacion+"</option>";
+			});
+			$('#sub_familia').html(option);
+			$('#sub_familia').attr("disabled",false);
+			$('.loader').hide();
+			if (callback) callback();
+
+        }
+    });
+}
+
+function obtenerDatosSubFamilia(){
+
+    var id = $('#id_activo').val();
+
+    $.ajax({
+        url: '/activos/obtener_datos_sub_familia/'+id,
+        dataType: "json",
+        success: function(result){
+            
+            $('#sub_familia').val(result[0].id_sub_familia);
+			
+        }
+    });
+}
+
+function  obtenerMarca(){
+
+	var tipo_activo = $('#tipo_activo').val();
+
+	var msgLoader = "";
+	msgLoader = "Procesando, espere un momento por favor";
+	var heightBrowser = $(window).width()/2;
+	$('.loader').css("opacity","0.8").css("height",heightBrowser).html("<div id='Grd1_wrapper' class='dataTables_wrapper'><div id='Grd1_processing' class='dataTables_processing panel-default'>"+msgLoader+"</div></div>");
+    $('.loader').show();
+	
+	$.ajax({
+		url: '/activos/obtener_marca/'+tipo_activo,
+		dataType: "json",
+		success: function(result){
+			var option = "<option value=''>--Seleccionar--</option>";
+			$('#marca').html("");
+			$(result).each(function (ii, oo) {
+				option += "<option value='"+oo.id+"'>"+oo.denominiacion+"</option>";
+			});
+			$('#marca').html(option);
+			
+			$('#marca').attr("disabled",false);
+			$('.loader').hide();
+			if (callback) callback();
+		}
+	});
+}

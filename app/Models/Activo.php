@@ -41,4 +41,38 @@ class Activo extends Model
 		$data = DB::select($cad);
         return $data;
     }
+
+    function getCodigoActivo($familia, $sub_familia){
+
+        $cad = "select sf.inicial_codigo || lpad((coalesce(MAX(SUBSTRING(a.codigo_activo from '.{4}$')::INT), 0) + 1)::TEXT,4, '0') as codigo
+        from sub_familias sf
+        left join activos a on a.id_sub_familia = sf.id and a.id_familia = '".$familia."' and a.id_sub_familia = '".$sub_familia."'
+        where sf.id = '".$sub_familia."'
+        group by sf.inicial_codigo";
+
+		$data = DB::select($cad);
+        return $data;
+    }
+
+    function getSubTipoActivo($id){
+
+        $cad = "select a.id, a.id_sub_tipo_activo 
+        from activos a 
+        where a.id = '".$id."' 
+        and a.estado = '1' ";
+
+		$data = DB::select($cad);
+        return $data;
+    }
+
+    function getSubFamilia($id){
+
+        $cad = "select a.id, a.id_sub_familia 
+        from activos a
+        where a.id = '".$id."' 
+        and a.estado = '1' ";
+
+		$data = DB::select($cad);
+        return $data;
+    }
 }

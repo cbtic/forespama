@@ -74,7 +74,13 @@ class Kardex extends Model
 
     function getExistenciaProductoById($id, $id_almacen_salida){
 
-        $cad = "select *, k.saldos_cantidad - coalesce((select sum(ocd.cantidad_requerida) cantidad_requerida from orden_compra_detalles ocd where ocd.id_producto = '".$id."' and ocd.comprometido = '1' and ocd.cerrado = '1'),0) stock_comprometido
+        $cad = "select *, k.saldos_cantidad - coalesce((select sum(ocd.cantidad_requerida) cantidad_requerida 
+        from orden_compra_detalles ocd 
+        inner join orden_compras oc on ocd.id_orden_compra = oc.id and oc.estado ='1' and oc.id_tipo_documento ='2' and oc.cerrado ='1' and oc.estado_pedido ='1'
+        where ocd.id_producto = '".$id."' 
+        and ocd.comprometido = '1' 
+        and ocd.cerrado = '1' 
+        and ocd.estado ='1'),0) stock_comprometido
         from kardex k 
         where k.id_producto = '".$id."' and  k.id_almacen_destino = '".$id_almacen_salida."'
         order by 1 desc

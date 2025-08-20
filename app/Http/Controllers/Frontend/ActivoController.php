@@ -12,6 +12,8 @@ use App\Models\Marca;
 use App\Models\SoatActivo;
 use App\Models\RevisionTecnicaActivo;
 use App\Models\ControlMantenimientoActivo;
+use App\Models\Familia;
+use App\Models\SubFamilia;
 use Auth;
 use Carbon\Carbon;
 
@@ -48,8 +50,9 @@ class ActivoController extends Controller
         $soat_activo_model = new SoatActivo;
         $revision_tecnica_activo_model = new RevisionTecnicaActivo;
         $control_mantenimiento_activo_model = new ControlMantenimientoActivo;
+        $familia_model = new Familia;
 
-		$tipo_activo = $tabla_maestra_model->getMaestroByTipo('84');
+		$sub_tipo_activo = $tabla_maestra_model->getMaestroByTipo('84');
 		$marca = $marca_model->getMarcaVehiculo();
 		$tipo_combustible = $tabla_maestra_model->getMaestroByTipo('86');
 		$estado_activos = $tabla_maestra_model->getMaestroByTipo('85');
@@ -57,8 +60,11 @@ class ActivoController extends Controller
 		$soat_activo = $soat_activo_model->getSoatActivo($id);
 		$revision_tecnica_activo = $revision_tecnica_activo_model->getRevisionTecnicaActivo($id);
 		$control_mantenimiento_activo = $control_mantenimiento_activo_model->getControlMantenimientoActivo($id);
+		$familia = $familia_model->getFamiliaAll();
+		$tipo_activo = $tabla_maestra_model->getMaestroByTipo('94');
+		$tipo_operacion_maquinaria = $tabla_maestra_model->getMaestroByTipo('95');
 
-		return view('frontend.activos.create_activo',compact('id','activo','marca','tipo_combustible','estado_activos','soat_activo','departamento','tipo_activo','id','revision_tecnica_activo','control_mantenimiento_activo'));
+		return view('frontend.activos.create_activo',compact('id','activo','marca','tipo_combustible','estado_activos','soat_activo','departamento','sub_tipo_activo','tipo_activo','id','revision_tecnica_activo','control_mantenimiento_activo','familia','tipo_operacion_maquinaria'));
 
 	}
 
@@ -71,17 +77,30 @@ class ActivoController extends Controller
         $soat_activo_model = new SoatActivo;
         $revision_tecnica_activo_model = new RevisionTecnicaActivo;
         $control_mantenimiento_activo_model = new ControlMantenimientoActivo;
+		$familia_model = new Familia;
 
 		$tipo_activo = $tabla_maestra_model->getMaestroByTipo('84');
-		$marca = $marca_model->getMarcaVehiculo();
+		if($activo->id_tipo_activo==2){
+			$marca = $marca_model->getMarcaVehiculo();
+		}
+		if($activo->id_tipo_activo==3){
+			$marca = $marca_model->getMarcaEquipo();
+		}
+		if($activo->id_tipo_activo==1){
+			$marca = $marca_model->getMarcaVehiculo();
+		}
+		
 		$tipo_combustible = $tabla_maestra_model->getMaestroByTipo('86');
 		$estado_activos = $tabla_maestra_model->getMaestroByTipo('85');
         $departamento = $ubigeo_model->getDepartamento();
 		$soat_activo = $soat_activo_model->getSoatActivo($id);
 		$revision_tecnica_activo = $revision_tecnica_activo_model->getRevisionTecnicaActivo($id);
 		$control_mantenimiento_activo = $control_mantenimiento_activo_model->getControlMantenimientoActivo($id);
+		$familia = $familia_model->getFamiliaAll();
+		$tipo_activo = $tabla_maestra_model->getMaestroByTipo('94');
+		$tipo_operacion_maquinaria = $tabla_maestra_model->getMaestroByTipo('95');
 
-		return view('frontend.activos.create_activo',compact('id','activo','marca','tipo_combustible','estado_activos','soat_activo','departamento','tipo_activo','id','revision_tecnica_activo','control_mantenimiento_activo'));
+		return view('frontend.activos.create_activo',compact('id','activo','marca','tipo_combustible','estado_activos','soat_activo','departamento','tipo_activo','id','revision_tecnica_activo','control_mantenimiento_activo','familia','tipo_activo','tipo_operacion_maquinaria'));
 
 	}
 
@@ -217,15 +236,25 @@ class ActivoController extends Controller
 		if($id_activo> 0){
 			$activo = Activo::find($id_activo);
 			$activo->id_usuario_actualiza = $id_user;
+			$codigo_activo = $request->codigo;
 		}else{
 			$activo = new Activo;
 			$activo->id_usuario_inserta = $id_user;
+			$activo_model = new Activo;
+			$codigo_activo = $activo_model->getCodigoActivo($request->familia, $request->sub_familia);
 		}
 
 		$valor_libros = trim($request->valor_libros) !== '' ? str_replace(',', '', $request->valor_libros) : null;
 		$valor_comercial = trim($request->valor_comercial) !== '' ? str_replace(',', '', $request->valor_comercial) : null;
 
-        $activo->codigo_activo = $request->codigo;
+        $activo->id_familia = $request->familia;
+        $activo->id_sub_familia = $request->sub_familia;
+        $activo->id_sub_tipo_activo = $request->sub_tipo_activo;
+        if($request->id_activo == 0){
+            $activo->codigo_activo = $codigo_activo[0]->codigo;
+        }else{
+            $activo->codigo_activo = $codigo_activo;
+        }
         $activo->id_ubigeo = $request->distrito;
         $activo->direccion = $request->direccion;
         $activo->id_tipo_activo = $request->tipo_activo;
@@ -478,5 +507,36 @@ class ActivoController extends Controller
 
 		$revision_tecnica_activo_model->actualizarVigenciaRevisionTecnica();
 		
+	}
+
+	public function obtener_sub_tipo_activo($tipo_activo){
+		
+		$tabla_maestra_model = new TablaMaestra;
+		$sub_tipo_activo = $tabla_maestra_model->getMaestroByTipoAndSubTipo(84,$tipo_activo);
+		echo json_encode($sub_tipo_activo);
+	}
+
+	public function obtener_datos_sub_tipo_activo($id){
+		
+		$activo_model = new Activo;
+		$activo = $activo_model->getSubTipoActivo($id);
+
+		echo json_encode($activo);
+	}
+
+	public function obtener_datos_sub_familia($id){
+		
+		$activo_model = new Activo;
+		$activo = $activo_model->getSubFamilia($id);
+		
+		echo json_encode($activo);
+	}
+
+	public function obtener_marca($tipo_activo){
+		
+		$marca_model = new Marca;
+		$marca = $marca_model->getMarcaByTipoActivo($tipo_activo);
+
+		echo json_encode($marca);
 	}
 }

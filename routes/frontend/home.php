@@ -762,3 +762,7 @@ Route::get('orden_produccion/modal_orden_produccion_planeamiento/{id}', [OrdenPr
 Route::get('orden_produccion/exportar_listar_orden_produccion/{id}', [OrdenProduccionController::class, 'exportar_listar_orden_produccion'])->name('orden_produccion.exportar_listar_orden_produccion');
 Route::get('orden_produccion/movimiento_pdf_detallado/{id}', [OrdenProduccionController::class, 'movimiento_pdf_detallado'])->name('orden_produccion.movimiento_pdf_detallado');
 Route::get('orden_produccion/cerrar_orden_produccion/{id}', [OrdenProduccionController::class, 'cerrar_orden_produccion'])->name('orden_produccion.cerrar_orden_produccion');
+Route::get('activos/obtener_sub_tipo_activo/{tipo_activo}', [ActivoController::class, 'obtener_sub_tipo_activo'])->name('activos.obtener_sub_tipo_activo');
+Route::get('activos/obtener_datos_sub_tipo_activo/{id}', [ActivoController::class, 'obtener_datos_sub_tipo_activo'])->name('activos.obtener_datos_sub_tipo_activo');
+Route::get('activos/obtener_datos_sub_familia/{id}', [ActivoController::class, 'obtener_datos_sub_familia'])->name('activos.obtener_datos_sub_familia');
+Route::get('activos/obtener_marca/{tipo_activo}', [ActivoController::class, 'obtener_marca'])->name('activos.obtener_marca');
