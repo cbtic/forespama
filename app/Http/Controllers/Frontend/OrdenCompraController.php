@@ -2045,7 +2045,7 @@ class OrdenCompraController extends Controller
     {
         $kardex_model = new Kardex;
 
-        $ordenes = OrdenCompra::where('cerrado', 1)->where('id_tipo_documento', 2)->where('estado', 1)->whereIn('comprometido', [0, 1])->get();
+        $ordenes = OrdenCompra::where('cerrado', 1)->where('id_tipo_documento', 2)->where('estado_pedido', 1)->where('estado', 1)->whereIn('comprometido', [0, 1])->get();
 
         foreach ($ordenes as $orden_compra_matriz) {
             $detalles = OrdenCompraDetalle::where('id_orden_compra', $orden_compra_matriz->id)->where('estado', '1')->get();

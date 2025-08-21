@@ -35,7 +35,8 @@ class Kernel extends ConsoleKernel
         $schedule->command('obtenerTipoCambioDiarioAutomatico:cron')->dailyAt('06:00');
         $schedule->command('CambiarVigenciaRevisionTecnicaAutomatico:cron')->dailyAt('05:00');
         $schedule->command('cambiarVigenciaSoatAutomatico:cron')->dailyAt('05:00');
-        $schedule->command('comprometerStockTotalAutomatico:cron')->hourly()->between('7:00', '19:00');
+        $schedule->command('comprometerStockTotalAutomatico:cron')->dailyAt('10:24');
+        //$schedule->command('comprometerStockTotalAutomatico:cron')->hourly()->between('7:00', '19:00');
     }
 
     /**
