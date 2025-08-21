@@ -348,6 +348,7 @@ label.form-control-sm{
                                         <div style="clear:both"></div>
                                             <div class="row">
                                                 <div class="col-lg-11 col-md-12 col-sm-12 col-xs-12">
+                                                    <?php $disabled = ($id > 0) ? "disabled" : ""; ?>
 													<div class="row">
                                                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                                             <div class="row">
@@ -355,7 +356,7 @@ label.form-control-sm{
                                                                     Tipo <span style="color:red;">*</span>
                                                                 </div>
                                                                 <div class="col-lg-2 col-md-12 col-sm-12 col-xs-12">
-                                                                    <select name="tipo_activo" id="tipo_activo" class="form-control form-control-sm" onchange="obtenerDatosActivo();obtenerSubTipoActivo();obtenerMarca()">
+                                                                    <select name="tipo_activo" id="tipo_activo" class="form-control form-control-sm" onchange="obtenerDatosActivo();obtenerSubTipoActivo();obtenerMarca()" <?= $disabled; ?>>
                                                                         <option value="">--Seleccionar--</option>
                                                                         <?php 
                                                                         foreach ($tipo_activo as $row){?>
@@ -369,7 +370,7 @@ label.form-control-sm{
                                                                     Familia <span style="color:red;">*</span>
                                                                 </div>
                                                                 <div class="col-lg-2 col-md-12 col-sm-12 col-xs-12">
-                                                                    <select name="familia" id="familia" class="form-control form-control-sm" onchange="obtenerSubFamiliaBus()">
+                                                                    <select name="familia" id="familia" class="form-control form-control-sm" onchange="obtenerSubFamiliaBus()" <?= $disabled; ?>>
                                                                         <option value="">--Seleccionar--</option>
                                                                         <?php 
                                                                         foreach ($familia as $row){?>
@@ -383,7 +384,7 @@ label.form-control-sm{
                                                                     Sub Familia <span style="color:red;">*</span>
                                                                 </div>
                                                                 <div class="col-lg-2 col-md-12 col-sm-12 col-xs-12">
-                                                                    <select name="sub_familia" id="sub_familia" class="form-control form-control-sm">
+                                                                    <select name="sub_familia" id="sub_familia" class="form-control form-control-sm" <?= $disabled; ?>>
                                                                         <option value="">--Seleccionar--</option>
                                                                     </select>
                                                                 </div>
@@ -398,7 +399,7 @@ label.form-control-sm{
                                                                 <div class="col-lg-1 col-md-12 col-sm-12 col-xs-12">
                                                                     SubTipo Activo <span style="color:red;">*</span>
                                                                 </div>
-                                                                <div class="col-lg-2 col-md-12 col-sm-12 col-xs-12">
+                                                                <div class="col-lg-2 col-md-12 col-sm-12 col-xs-12" <?= $disabled; ?>>
                                                                     <select name="sub_tipo_activo" id="sub_tipo_activo" class="form-control form-control-sm">
                                                                         <option value="">--Seleccionar--</option>
                                                                         <?php 
@@ -449,6 +450,20 @@ label.form-control-sm{
                                                                         ?>
                                                                     </select>
                                                                 </div>
+                                                                <div class="col-lg-1 col-md-12 col-sm-12 col-xs-12" id="label_marca_maquinaria">
+                                                                    Pais Procedencia
+                                                                </div>
+                                                                <div class="col-lg-2 col-md-12 col-sm-12 col-xs-12" id="select_marca_maquinaria">
+                                                                    <select name="pais_procedencia" id="pais_procedencia" class="form-control form-control-sm">
+                                                                        <option value="">--Seleccionar--</option>
+                                                                        <?php 
+                                                                        foreach ($pais as $row){?>
+                                                                            <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$activo->id_pais_procedencia)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                                                            <?php 
+                                                                        }
+                                                                        ?>
+                                                                    </select>
+                                                                </div>
                                                             </div>
                                                             <div class="row">
                                                                 <div class="col-lg-1 col-md-12 col-sm-12 col-xs-12" id="label_tipo_combustible_maquinaria">
@@ -471,6 +486,18 @@ label.form-control-sm{
                                                                 <div class="col-lg-2 col-md-12 col-sm-12 col-xs-12" id="opcion_dimension_maquinaria">
                                                                     <input id="dimension" name="dimension" on class="form-control form-control-sm mayusculas"  value="<?php echo $activo->dimensiones?>" type="text">
                                                                 </div>
+                                                                <div class="col-lg-1 col-md-12 col-sm-12 col-xs-12" id="label_anio_fabricacion_maquinaria">
+                                                                    Año Fabricaci&oacute;n
+                                                                </div>
+                                                                <div class="col-lg-2 col-md-12 col-sm-12 col-xs-12" id="opcion_anio_fabricacion_maquinaria">
+                                                                    <input id="anio_fabricacion" name="anio_fabricacion" on class="form-control form-control-sm mayusculas"  value="<?php echo $activo->anio_fabricacion?>" type="text">
+                                                                </div>
+                                                                <div class="col-lg-1 col-md-12 col-sm-12 col-xs-12" id="label_potencia_maquinaria">
+                                                                    Potencia (KW)
+                                                                </div>
+                                                                <div class="col-lg-2 col-md-12 col-sm-12 col-xs-12" id="opcion_potencia_maquinaria">
+                                                                    <input id="potencia" name="potencia" on class="form-control form-control-sm mayusculas"  value="<?php echo $activo->potencia?>" type="text">
+                                                                </div>
                                                                 <div class="col-lg-1 col-md-12 col-sm-12 col-xs-12">
                                                                     Valor Libros
                                                                 </div>
@@ -485,6 +512,20 @@ label.form-control-sm{
                                                                 </div>
                                                             </div>
                                                             <div class="row">
+                                                                <div class="col-lg-1 col-md-12 col-sm-12 col-xs-12" id="label_tipo_operacion_maquinaria_maquinaria">
+                                                                    Tipo Operaci&oacute;n
+                                                                </div>
+                                                                <div class="col-lg-2 col-md-12 col-sm-12 col-xs-12" id="select_tipo_operacion_maquinaria_maquinaria">
+                                                                    <select name="tipo_operacion_maquinaria" id="tipo_operacion_maquinaria" class="form-control form-control-sm">
+                                                                        <option value="">--Seleccionar--</option>
+                                                                        <?php 
+                                                                        foreach ($tipo_operacion_maquinaria as $row){?>
+                                                                            <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$activo->id_tipo_operacion)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                                                            <?php 
+                                                                        }
+                                                                        ?>
+                                                                    </select>
+                                                                </div>
                                                                 <div class="col-lg-1 col-md-12 col-sm-12 col-xs-12">
                                                                     Color
                                                                 </div>

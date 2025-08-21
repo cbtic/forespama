@@ -62,9 +62,10 @@ class ActivoController extends Controller
 		$control_mantenimiento_activo = $control_mantenimiento_activo_model->getControlMantenimientoActivo($id);
 		$familia = $familia_model->getFamiliaAll();
 		$tipo_activo = $tabla_maestra_model->getMaestroByTipo('94');
-		$tipo_operacion_maquinaria = $tabla_maestra_model->getMaestroByTipo('95');
+		$tipo_operacion_maquinaria = $tabla_maestra_model->getMaestroByTipo('97');
+		$pais = $tabla_maestra_model->getMaestroByTipo('96');
 
-		return view('frontend.activos.create_activo',compact('id','activo','marca','tipo_combustible','estado_activos','soat_activo','departamento','sub_tipo_activo','tipo_activo','id','revision_tecnica_activo','control_mantenimiento_activo','familia','tipo_operacion_maquinaria'));
+		return view('frontend.activos.create_activo',compact('id','activo','marca','tipo_combustible','estado_activos','soat_activo','departamento','sub_tipo_activo','tipo_activo','id','revision_tecnica_activo','control_mantenimiento_activo','familia','tipo_operacion_maquinaria','pais'));
 
 	}
 
@@ -99,8 +100,9 @@ class ActivoController extends Controller
 		$familia = $familia_model->getFamiliaAll();
 		$tipo_activo = $tabla_maestra_model->getMaestroByTipo('94');
 		$tipo_operacion_maquinaria = $tabla_maestra_model->getMaestroByTipo('95');
+		$pais = $tabla_maestra_model->getMaestroByTipo('96');
 		
-		return view('frontend.activos.create_activo',compact('id','activo','marca','tipo_combustible','estado_activos','soat_activo','departamento','tipo_activo','id','revision_tecnica_activo','control_mantenimiento_activo','familia','tipo_activo','tipo_operacion_maquinaria'));
+		return view('frontend.activos.create_activo',compact('id','activo','marca','tipo_combustible','estado_activos','soat_activo','departamento','tipo_activo','id','revision_tecnica_activo','control_mantenimiento_activo','familia','tipo_activo','tipo_operacion_maquinaria','pais'));
 
 	}
 
@@ -225,11 +227,13 @@ class ActivoController extends Controller
 		
 		$id_activo = $request->id_activo;
 		
-		if($id_activo==0){
-			$activoExiste = Activo::where("placa",$request->placa)->where("estado",1)->get();
-			if(count($activoExiste)>0){
-				echo "1";
-				exit();
+		if($request->tipo_activo==2){
+			if($id_activo==0){
+				$activoExiste = Activo::where("placa",$request->placa)->where("estado",1)->get();
+				if(count($activoExiste)>0){
+					echo "1";
+					exit();
+				}
 			}
 		}
 		
@@ -276,6 +280,10 @@ class ActivoController extends Controller
         $activo->dimensiones = $request->dimension;
         $activo->id_estado_activo = $request->estado_activo;
         $activo->ruta_imagen = $request->img_foto;
+        $activo->id_pais_procedencia = $request->pais_procedencia;
+        $activo->anio_fabricacion = $request->anio_fabricacion;
+        $activo->potencia = $request->potencia;
+        $activo->id_tipo_operacion = $request->tipo_operacion_maquinaria;
 		$activo->estado = 1;
 		$activo->save();
 		$id_activo = $activo->id;

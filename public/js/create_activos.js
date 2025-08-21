@@ -32,6 +32,8 @@ $(document).ready(function () {
 
 	$('#marca').select2({ width : '100%' })
 
+	$('#pais_procedencia').select2({ width : '100%' })
+
 	$('#placa').mask('AAA-000');
 
 	$(".upload").on('click', function() {
@@ -434,6 +436,14 @@ function obtenerDatosActivo(){
 	$('#opcion_placa_maquinaria').hide();
 	$('#div_titulo_maquinaria').hide();
 	$('#div_partida_maquinaria').hide();
+	$('#label_marca_maquinaria').hide();
+	$('#select_marca_maquinaria').hide();
+	$('#label_anio_fabricacion_maquinaria').hide();
+	$('#opcion_anio_fabricacion_maquinaria').hide();
+	$('#label_potencia_maquinaria').hide();
+	$('#opcion_potencia_maquinaria').hide();
+	$('#label_tipo_operacion_maquinaria_maquinaria').hide();
+	$('#select_tipo_operacion_maquinaria_maquinaria').hide();
 
 	if(tipo_activo==2){
 		$('#label_tipo_combustible_maquinaria').show();
@@ -446,11 +456,23 @@ function obtenerDatosActivo(){
 		$('#div_partida_maquinaria').show();
 	}
 
+	if(tipo_activo==4){
+		$('#label_marca_maquinaria').show();
+		$('#select_marca_maquinaria').show();
+		$('#label_anio_fabricacion_maquinaria').show();
+		$('#opcion_anio_fabricacion_maquinaria').show();
+		$('#label_potencia_maquinaria').show();
+		$('#opcion_potencia_maquinaria').show();
+		$('#label_tipo_operacion_maquinaria_maquinaria').show();
+		$('#select_tipo_operacion_maquinaria_maquinaria').show();
+	}
+
 }
 
 function obtenerSubTipoActivo(callback){
 
 	var tipo_activo = $('#tipo_activo').val();
+	if(tipo_activo=="")return false;
 
 	var msgLoader = "";
 	msgLoader = "Procesando, espere un momento por favor";
@@ -486,6 +508,7 @@ function obtenerDatosSubTipoActivo(){
         success: function(result){
             
             $('#sub_tipo_activo').val(result[0].id_sub_tipo_activo);
+			$('#sub_tipo_activo').attr('disabled',true);
 			
         }
     });
@@ -526,6 +549,7 @@ function obtenerSubFamiliaBus(callback){
 function obtenerDatosSubFamilia(){
 
     var id = $('#id_activo').val();
+	if(id=="")return false;
 
     $.ajax({
         url: '/activos/obtener_datos_sub_familia/'+id,
@@ -533,6 +557,7 @@ function obtenerDatosSubFamilia(){
         success: function(result){
             
             $('#sub_familia').val(result[0].id_sub_familia);
+			$('#sub_familia').attr('disabled',true);
 			
         }
     });
@@ -541,6 +566,7 @@ function obtenerDatosSubFamilia(){
 function  obtenerMarca(){
 
 	var tipo_activo = $('#tipo_activo').val();
+	if(tipo_activo=="")return false;
 
 	var msgLoader = "";
 	msgLoader = "Procesando, espere un momento por favor";
