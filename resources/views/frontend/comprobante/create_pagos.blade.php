@@ -405,6 +405,8 @@ label.form-control-sm{
                                                 <?php echo "Pendiente" ?></option>
                                             <option value="1">
                                                 <?php echo "Pagado" ?></option>
+                                            <option value="2">
+                                                <?php echo "Anulado" ?></option>
                                         </select>
                                     </div>
                                 </div>
