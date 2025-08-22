@@ -329,6 +329,9 @@ function datatablenew(){
 						if(row.estado_pago_sodimac == 0){
 							estado_pago_sodimac = "Pendiente";
 						}
+                        if(row.estado_pago_sodimac == 2){
+							estado_pago_sodimac = "Anulado";
+						}
 						return estado_pago_sodimac;
 					},
 					"bSortable": false,
