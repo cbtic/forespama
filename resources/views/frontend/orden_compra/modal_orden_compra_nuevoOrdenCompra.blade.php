@@ -722,7 +722,6 @@ function cargarDetalle(){
 
                 let marcaOptions = '<option value="">--Seleccionar--</option>';
                 let productoOptions = '<option value="">--Seleccionar--</option>';
-                let estadoBienOptions = '<option value="">--Seleccionar--</option>';
                 let unidadMedidaOptions = '<option value="">--Seleccionar--</option>';
                 var producto_stock = result.producto_stock[orden_compra.id_producto];
 
@@ -734,11 +733,6 @@ function cargarDetalle(){
                 result.producto.forEach(producto => {
                     let selected = (producto.id == orden_compra.id_producto) ? 'selected' : '';
                     productoOptions += `<option value="${producto.id}" ${selected}>${producto.codigo} - ${producto.denominacion}</option>`;
-                });
-
-                result.estado_bien.forEach(estado_bien => {
-                    let selected = (estado_bien.codigo == orden_compra.id_estado_producto) ? 'selected' : '';
-                    estadoBienOptions += `<option value="${estado_bien.codigo}" ${selected}>${estado_bien.denominacion}</option>`;
                 });
 
                 result.unidad_medida.forEach(unidad_medida => {
@@ -755,12 +749,10 @@ function cargarDetalle(){
                 const row = `
                     <tr>
                         <td>${n}</td>
-                        <td><input name="id_orden_compra_detalle[]" id="id_orden_compra_detalle${n}" class="form-control form-control-sm" value="${orden_compra.id}" type="hidden"><input name="item[]" id="item${n}" class="form-control form-control-sm" value="${orden_compra.item}" type="text"></td>
-                        <td style="width: 400px !important;display:block"><select name="descripcion[]" id="descripcion${n}" class="form-control form-control-sm" onChange="verificarProductoSeleccionado(this, ${n});">${productoOptions}</select></td>
+                        <td style="width: 400px !important;display:block"><input name="id_orden_compra_detalle[]" id="id_orden_compra_detalle${n}" class="form-control form-control-sm" value="${orden_compra.id}" type="hidden"><select name="descripcion[]" id="descripcion${n}" class="form-control form-control-sm" onChange="verificarProductoSeleccionado(this, ${n});">${productoOptions}</select></td>
                         
                         <td><select name="marca[]" id="marca${n}" class="form-control form-control-sm">${marcaOptions}</select></td>
                         <td><input name="cod_interno[]" id="cod_interno${n}" class="form-control form-control-sm" value="${orden_compra.codigo}" type="text"></td>
-                        <td><select name="estado_bien[]" id="estado_bien${n}" class="form-control form-control-sm" onChange="">${estadoBienOptions}</select></td>
                         <td><select name="unidad[]" id="unidad${n}" class="form-control form-control-sm">${unidadMedidaOptions}</select></td>
                         <td><input name="cantidad_ingreso[]" id="cantidad_ingreso${n}" class="cantidad_ingreso form-control form-control-sm" value="${orden_compra.cantidad_requerida}" type="text" oninput="calcularCantidadPendiente(this);calcularSubTotal(this);calcularPrecioUnitario(this)"></td>
                         <td><input name="stock_actual[]" id="stock_actual${n}" class="form-control form-control-sm" value="${stock_mostrar}" type="text" readonly="readonly"></td>
@@ -847,12 +839,10 @@ function agregarProducto(){
     var newRow = "";
     for (var i = 0; i < cantidad; i++) { 
         var n = $('#tblOrdenCompraDetalle tbody tr').length + 1;
-        var item = '<input name="id_orden_compra_detalle[]" id="id_orden_compra_detalle${n}" class="form-control form-control-sm" value="${orden_compra.id}" type="hidden"><input name="item[]" id="item' + n + '" class="form-control form-control-sm" value="" type="text">';
-        var descripcion = '<select name="descripcion[]" id="descripcion' + n + '" class="form-control form-control-sm" ' +(!tieneRolVendedor ? 'onChange="verificarProductoSeleccionado(this, ' + n + ')"' : 'onChange="obtenerCodInterno(this, ' + n + ')"') + '> ' + opcionesDescripcion +' </select>';
+        var descripcion = '<input name="id_orden_compra_detalle[]" id="id_orden_compra_detalle${n}" class="form-control form-control-sm" value="${orden_compra.id}" type="hidden"><select name="descripcion[]" id="descripcion' + n + '" class="form-control form-control-sm" ' +(!tieneRolVendedor ? 'onChange="verificarProductoSeleccionado(this, ' + n + ')"' : 'onChange="obtenerCodInterno(this, ' + n + ')"') + '> ' + opcionesDescripcion +' </select>';
         var descripcion_ant = '<input type="hidden" name="descripcion_ant[]" id="descripcion_ant' + n + '" class="form-control form-control-sm" />';
         var cod_interno = '<input name="cod_interno[]" id="cod_interno' + n + '" class="form-control form-control-sm" value="" type="text">';
         var marca = '<select name="marca[]" id="marca' + n + '" class="form-control form-control-sm" onchange=""> <option value="">--Seleccionar--</option><?php foreach ($marca as $row){?><option value="<?php echo htmlspecialchars($row->id); ?>"><?php echo htmlspecialchars(addslashes($row->denominiacion)); ?></option><?php }?></select>'
-        var estado_bien =  '<select name="estado_bien[]" id="estado_bien' + n + '" class="form-control form-control-sm" onChange=""><option value="">--Seleccionar--</option> <?php foreach ($estado_bien as $row) { ?> <option value="<?php echo $row->codigo ?>" <?php echo ($row->codigo == 1) ? "selected" : ""; ?>><?php echo $row->denominacion ?></option> <?php } ?> </select>';
         var unidad = '<select name="unidad[]" id="unidad' + n + '" class="form-control form-control-sm" onChange=""> <option value="">--Seleccionar--</option> <?php foreach ($unidad as $row) {?> <option value="<?php echo $row->codigo?>"><?php echo $row->denominacion?></option> <?php } ?> </select>';
         var cantidad_ingreso = '<input name="cantidad_ingreso[]" id="cantidad_ingreso' + n + '" class="cantidad_ingreso form-control form-control-sm" value="" type="text" oninput="calcularSubTotal(this);calcularPrecioUnitario(this)">';
         var stock_actual = '<input name="stock_actual[]" id="stock_actual' + n + '" class="form-control form-control-sm" value="" type="text" readonly>';
@@ -869,11 +859,9 @@ function agregarProducto(){
 
         newRow += '<tr>';
         newRow += '<td>' + n + '</td>';
-        newRow += '<td>' + item + '</td>';
         newRow += '<td style="width: 400px!important; display:block!important">' +descripcion_ant + descripcion + '</td>';
         newRow += '<td>' + marca + '</td>';
         newRow += '<td>' + cod_interno + '</td>';
-        newRow += '<td>' + estado_bien + '</td>';
         newRow += '<td>' + unidad + '</td>';
         newRow += '<td>' + cantidad_ingreso + '</td>';
         newRow += '<td>' + stock_actual + '</td>';
@@ -1556,18 +1544,16 @@ function obtenerOrdenCompraMatriz(){
                             </div>
                         </div> 
 
-                        <div class="card-body">	
+                        <div class="card-body" style="padding-right: 0px !important; padding-left: 0px !important;">	
 
 					<div class="table-responsive" style="overflow-y: auto; max-height: 400px;">
 						<table id="tblOrdenCompraDetalle" class="table table-hover table-sm">
 							<thead>
 							<tr style="font-size:13px">
 								<th>#</th>
-								<th>Item</th>
 								<th>Descripci&oacute;n</th>
 								<th>Marca</th>
                                 <th>COD. INT.</th>
-                                <th>Estado Bien</th>
                                 <th>Unidad</th>
                                 <th>Cantidad</th>
                                 <th>Stock Disponible</th>
@@ -1589,22 +1575,22 @@ function obtenerOrdenCompraMatriz(){
                         <tbody>
                             <tr>
                                 <td class="td" style ="text-align: left; width: 5%; font-size:13px"><b>Sub-Total:</b></td>
-                                <td id="subTotalGeneral" class="td" style="text-align: left; width: 5%; font-size:13px">
+                                <td id="subTotalGeneral" class="td" style="text-align: left; width: 10%; font-size:13px">
                                     <input type="text" name="sub_total_general" id="sub_total_general" class="form-control" value="0.00" readonly style="border: none; background: transparent; text-align: left; pointer-events: none;">
                                 </td>
-                                <td class="td" style ="text-align: left; width: 20%; font-size:13px"></td>
+                                <td class="td" style ="text-align: left; width: 10%; font-size:13px"></td>
                                 <td class="td" style ="text-align: left; width: 5%; font-size:13px"><b>IGV Total:</b></td>
-                                <td id="igvGeneral" class="td" style="text-align: left; width: 5%; font-size:13px">
+                                <td id="igvGeneral" class="td" style="text-align: left; width: 10%; font-size:13px">
                                     <input type="text" name="igv_general" id="igv_general" class="form-control" value="0.00" readonly style="border: none; background: transparent; text-align: left; pointer-events: none;">
                                 </td>
-                                <td class="td" style ="text-align: left; width: 20%; font-size:13px"></td>
+                                <td class="td" style ="text-align: left; width: 10%; font-size:13px"></td>
                                 <td class="td" style ="text-align: left; width: 5%; font-size:13px"><b>Descuento Total:</b></td>
                                 <td id="descuentoGeneral" class="td" style="text-align: left; width: 5%; font-size:13px">
                                     <input type="text" name="descuento_general" id="descuento_general" class="form-control" value="0.00" readonly style="border: none; background: transparent; text-align: left; pointer-events: none;">
                                 </td>
-                                <td class="td" style ="text-align: left; width: 20%; font-size:13px"></td>
+                                <td class="td" style ="text-align: left; width: 10%; font-size:13px"></td>
                                 <td class="td" style ="text-align: left; width: 5%; font-size:13px"><b>Total:</b></td>
-                                <td id="totalGeneral" class="td" style="text-align: left; width: 5%; font-size:13px">
+                                <td id="totalGeneral" class="td" style="text-align: left; width: 10%; font-size:13px">
                                     <input type="text" name="total_general" id="total_general" class="form-control" value="0.00" readonly style="border: none; background: transparent; text-align: left; pointer-events: none;">
                                 </td>
                             </tr>
