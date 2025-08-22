@@ -1864,6 +1864,7 @@ class OrdenCompraController extends Controller
 		$tablaMaestra_model = new TablaMaestra;
         $almacen_user_model = new Almacen_usuario;
         $persona_model = new Persona;
+        $producto_model = new Producto;
 
         $cerrado_orden_compra = $tablaMaestra_model->getMaestroByTipo(52);
         $proveedor = Empresa::all();
@@ -1873,8 +1874,9 @@ class OrdenCompraController extends Controller
 		$estado_pedido = $tablaMaestra_model->getMaestroByTipo(77);
         $persona_compra = $persona_model->obtenerPersonaAll();
         $estado_comprometido = $tablaMaestra_model->getMaestroByTipo(87);
+        $producto = $producto_model->getProductoExterno();
         
-		return view('frontend.orden_compra.create_control_produccion',compact('cerrado_orden_compra','proveedor','almacen','almacen_usuario','vendedor','estado_pedido','persona_compra','estado_comprometido'));
+		return view('frontend.orden_compra.create_control_produccion',compact('cerrado_orden_compra','proveedor','almacen','almacen_usuario','vendedor','estado_pedido','persona_compra','estado_comprometido','producto'));
 
 	}
 
@@ -1895,6 +1897,7 @@ class OrdenCompraController extends Controller
         $p[]=$request->vendedor;
         $p[]=$request->estado_pedido;
         $p[]=$request->estado_comprometido;
+        $p[]=$request->producto;
 		$p[]=$request->NumeroPagina;
 		$p[]=$request->NumeroRegistros;
 		$data = $orden_compra_model->listar_orden_compra_control_produccion_ajax($p);

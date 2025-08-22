@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION public.sp_listar_orden_compra_control_produccion_paginado(p_empresa_compra character varying, p_persona_compra character varying, p_fecha_inicio character varying, p_fecha_fin character varying, p_numero_orden_compra character varying, p_numero_orden_compra_cliente character varying, p_situacion character varying, p_almacen_origen character varying, p_estado character varying, p_id_vendedor character varying, p_estado_pedido character varying, p_estado_comprometido character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
+CREATE OR REPLACE FUNCTION public.sp_listar_orden_compra_control_produccion_paginado(p_empresa_compra character varying, p_persona_compra character varying, p_fecha_inicio character varying, p_fecha_fin character varying, p_numero_orden_compra character varying, p_numero_orden_compra_cliente character varying, p_situacion character varying, p_almacen_origen character varying, p_estado character varying, p_id_vendedor character varying, p_estado_pedido character varying, p_estado_comprometido character varying, p_producto character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
  RETURNS refcursor
  LANGUAGE plpgsql
 AS $function$
@@ -76,6 +76,13 @@ begin
 
 	If p_estado_comprometido<>'' Then
 	 v_where:=v_where||'And oc.comprometido  = '''||p_estado_comprometido||''' ';
+	End If;
+
+	If p_producto<>'' Then
+	 v_where := v_where || 'AND EXISTS (
+		SELECT 1 FROM orden_compra_detalles ocd
+		WHERE ocd.id_orden_compra = oc.id 
+		AND ocd.id_producto = ''' || p_producto || ''') ';
 	End If;
 
 	EXECUTE ('SELECT count(1) '||v_tabla||v_where) INTO v_count;
