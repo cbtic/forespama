@@ -60,7 +60,7 @@ class ActivoController extends Controller
 		$soat_activo = $soat_activo_model->getSoatActivo($id);
 		$revision_tecnica_activo = $revision_tecnica_activo_model->getRevisionTecnicaActivo($id);
 		$control_mantenimiento_activo = $control_mantenimiento_activo_model->getControlMantenimientoActivo($id);
-		$familia = $familia_model->getFamiliaAll();
+		$familia = $familia_model->getFamiliaActivos();
 		$tipo_activo = $tabla_maestra_model->getMaestroByTipo('94');
 		$tipo_operacion_maquinaria = $tabla_maestra_model->getMaestroByTipo('97');
 		$pais = $tabla_maestra_model->getMaestroByTipo('96');

@@ -324,6 +324,18 @@ label.form-control-sm{
 				<div class="row" style="padding:20px 20px 0px 20px;">
 
 					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+						<select name="canal_bus" id="canal_bus" class="form-control form-control-sm">
+							<option value="">--Seleccionar Canal--</option>
+							<?php
+							foreach ($canal as $row){?>
+								<option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
+								<?php 
+							}
+							?>
+						</select>
+					</div>
+
+					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
 						<select name="empresa_compra_bus" id="empresa_compra_bus" class="form-control form-control-sm">
 							<option value="">--Seleccionar Empresa Compra--</option>
 							<?php

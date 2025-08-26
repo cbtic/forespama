@@ -372,6 +372,18 @@ label.form-control-sm{
 					</div>
 
 					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+						<select name="canal_bus" id="canal_bus" class="form-control form-control-sm">
+							<option value="">--Seleccionar Canal--</option>
+							<?php
+							foreach ($canal as $row){?>
+								<option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
+								<?php 
+							}
+							?>
+						</select>
+					</div>
+
+					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
 						<select name="empresa_compra_bus" id="empresa_compra_bus" class="form-control form-control-sm">
 							<option value="">--Seleccionar Empresa Compra--</option>
 							<?php
@@ -395,11 +407,11 @@ label.form-control-sm{
 						</select>
 					</div>-->
 
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+					<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
                         <input id="fecha_inicio_bus" name="fecha_inicio_bus" on class="form-control form-control-sm"  placeholder="Fecha Inicio">
 					</div>
 
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+					<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
                         <input id="fecha_fin_bus" name="fecha_fin_bus" on class="form-control form-control-sm"  placeholder="Fecha Fin">
 					</div>
 
@@ -459,9 +471,9 @@ label.form-control-sm{
 						</select>
 					</div>
 
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+					<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
 						<select name="prioridad_bus" id="prioridad_bus" class="form-control form-control-sm">
-							<option value="">--Seleccionar Prioridad--</option>
+							<option value="">--Selec. Prioridad--</option>
 							<?php
 							foreach ($prioridad as $row){?>
 								<option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
@@ -479,9 +491,9 @@ label.form-control-sm{
 						</select>
 					</div>
 
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+					<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
 						<select name="estado_pedido_bus" id="estado_pedido_bus" class="form-control form-control-sm">
-							<option value="">--Seleccionar Estado Pedido--</option>
+							<option value="">--Selec. Estado Pedido--</option>
 							<?php
 							foreach ($estado_pedido as $row){?>
 								<option value="<?php echo $row->codigo ?>" <?php echo ($row->codigo == '1') ? 'selected' : ''; ?>><?php echo $row->denominacion ?></option>

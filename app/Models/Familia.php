@@ -40,4 +40,14 @@ class Familia extends Model
 		$data = DB::select($cad);
         return $data;
     }
+
+    function getFamiliaActivos(){
+
+        $cad = "select f.id, f.denominacion, f.estado from familias f 
+        where f.estado='1'
+        and f.id='8'";
+
+		$data = DB::select($cad);
+        return $data;
+    }
 }

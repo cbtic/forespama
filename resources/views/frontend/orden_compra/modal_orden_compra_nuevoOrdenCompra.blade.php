@@ -218,6 +218,7 @@ $(document).ready(function() {
     });
     
     obtenerFechaVencimiento();
+    obtenerCanal();
 
     $("#item").select2({ width: '100%' });
     $("#ubicacion_fisica_seccion").select2({ width: '100%' });
@@ -999,6 +1000,7 @@ function fn_save_orden_compra(){
     var igv_compra = $('#igv_compra').val();
     var fecha_orden_compra = $('#fecha_orden_compra').val();
     var fecha_vencimiento = $('#fecha_vencimiento').val();
+    var canal = $('#canal').val();
 
     if(tipo_documento==""){msg+="Ingrese el Tipo de Documento <br>";}
     if(empresa_vende==""){msg+="Ingrese la Empresa que Vende <br>";}
@@ -1021,6 +1023,8 @@ function fn_save_orden_compra(){
         if (diferenciaDias < 3) {
             msg += "La Fecha de Vencimiento debe ser al menos 3 días después de la Fecha de Orden de Compra <br>";
         }
+        
+        if(canal==""){msg+="Ingrese el Canal <br>";}
     }
 
     if(msg!=""){
@@ -1268,6 +1272,38 @@ function obtenerOrdenCompraMatriz(){
     });
 }
 
+function obtenerCanal(){
+
+    var tipo_documento = $('#tipo_documento').val();
+
+    if(tipo_documento == 2){
+        $('#label_canal').show();
+        $('#select_canal').show();
+    } else {
+        $('#label_canal').hide();
+        $('#select_canal').hide();
+        $('#canal').val('');
+    }
+}
+
+function obtenerBeneficiario(){
+
+    var canal = $('#canal').val();
+
+    if(canal == 1){
+        $('#tipo_documento_cliente').val(1);
+        cambiarCliente();
+        $('#label_empresa_compra').show();
+        $('#select_empresa_compra').show();
+    } else {
+        $('#tipo_documento_cliente').val(5);
+        cambiarCliente();
+    }
+
+    
+
+}
+
 </script>
 
 <body class="hold-transition skin-blue sidebar-mini">
@@ -1306,11 +1342,25 @@ function obtenerOrdenCompraMatriz(){
                             Tipo Documento
                         </div>
                         <div class="col-lg-2">
-                            <select name="tipo_documento" id="tipo_documento" class="form-control form-control-sm" onchange="obtenerCodigo(); obtenerFechaVencimiento()">
+                            <select name="tipo_documento" id="tipo_documento" class="form-control form-control-sm" onchange="obtenerCodigo(); obtenerFechaVencimiento(); obtenerCanal()">
                                 <option value="">--Seleccionar--</option>
                                 <?php
                                 foreach ($tipo_documento as $row){?>
                                     <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$orden_compra->id_tipo_documento)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                    <?php 
+                                }
+                                ?>
+                            </select>
+                        </div>
+                        <div class="col-lg-2" id="label_canal">
+                            Canal
+                        </div>
+                        <div class="col-lg-2" id="select_canal">
+                            <select name="canal" id="canal" class="form-control form-control-sm" onchange="obtenerBeneficiario()">
+                                <option value="">--Seleccionar--</option>
+                                <?php
+                                foreach ($canal as $row){?>
+                                    <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$orden_compra->id_canal)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
                                     <?php 
                                 }
                                 ?>
@@ -1356,20 +1406,6 @@ function obtenerOrdenCompraMatriz(){
                                 ?>
                             </select>
                         </div>
-                        <div class="col-lg-2" id="label_empresa_compra">
-                            Empresa Compra
-                        </div>
-                        <div class="col-lg-2" id="select_empresa_compra">
-                            <select name="empresa_compra" id="empresa_compra" class="form-control form-control-sm" onchange="">
-                                <option value="">--Seleccionar--</option>
-                                <?php
-                                foreach ($proveedor as $row){?>
-                                    <option value="<?php echo $row->id ?>" <?php if($row->id==$orden_compra->id_empresa_compra)echo "selected='selected'"?>><?php echo $row->razon_social ?></option>
-                                    <?php 
-                                }
-                                ?>
-                            </select>
-                        </div>
                         <div class="col-lg-2" id="label_persona_compra">
                             Persona Compra
                         </div>
@@ -1379,6 +1415,20 @@ function obtenerOrdenCompraMatriz(){
                                 <?php
                                 foreach ($persona as $row){?>
                                     <option value="<?php echo $row->id ?>" <?php if($row->id==$orden_compra->id_persona)echo "selected='selected'"?>><?php echo $row->nombres .' '. $row->apellido_paterno .' '. $row->apellido_materno  ?></option>
+                                    <?php 
+                                }
+                                ?>
+                            </select>
+                        </div>
+                        <div class="col-lg-2" id="label_empresa_compra">
+                            Empresa Compra
+                        </div>
+                        <div class="col-lg-2" id="select_empresa_compra">
+                            <select name="empresa_compra" id="empresa_compra" class="form-control form-control-sm" onchange="">
+                                <option value="">--Seleccionar--</option>
+                                <?php
+                                foreach ($proveedor as $row){?>
+                                    <option value="<?php echo $row->id ?>" <?php if($row->id==$orden_compra->id_empresa_compra)echo "selected='selected'"?>><?php echo $row->razon_social ?></option>
                                     <?php 
                                 }
                                 ?>
@@ -1394,7 +1444,7 @@ function obtenerOrdenCompraMatriz(){
                             Fecha Vencimiento
                         </div>
                         <div id="input_fecha_vencimiento" class="col-lg-2" @if($orden_compra->id_tipo_documento != 2) style="display:none;" @endif>
-                            <input id="fecha_vencimiento" name="fecha_vencimiento" class="form-control form-control-sm" type="text" value="{{ $orden_compra->fecha_vencimiento ?? '' }}">
+                            <input id="fecha_vencimiento" name="fecha_vencimiento" class="form-control form-control-sm" type="text" value="{{ $orden_compra->fecha_vencimiento ?? '' }}" placeholder="YYYY-MM-DD">
                         </div>
                         <div class="col-lg-2">
                             N&uacute;mero Orden Compra Cliente
@@ -1534,7 +1584,7 @@ function obtenerOrdenCompraMatriz(){
                         <div style="margin-top:15px" class="form-group">
                             <div class="col-sm-12 controls">
                                 <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
-                                <?php if($id_user==$orden_compra->id_usuario_inserta){?>    
+                                <?php if($id_user==$orden_compra->id_usuario_inserta && $orden_compra->cerrado == 1 ){?>
                                     <a href="javascript:void(0)" onClick="agregarProducto()" class="btn btn-sm btn-success">Agregar</a>
                                 <?php }?>
                                 <?php if($id==0){?>
@@ -1542,7 +1592,7 @@ function obtenerOrdenCompraMatriz(){
                                 <?php }?>
                                 </div>
                             </div>
-                        </div> 
+                        </div>
 
                         <div class="card-body" style="padding-right: 0px !important; padding-left: 0px !important;">	
 
@@ -1600,7 +1650,7 @@ function obtenerOrdenCompraMatriz(){
                         <div class="col-sm-12 controls">
                             <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
                                 <?php 
-                                    if($id>0){
+                                    if($id>0 && $orden_compra->cerrado == 1 ){
                                         if($orden_compra->tienda_asignada==0){
                                 ?>
                                 <button style="font-size:12px;margin-left:10px;" type="button" class="btn btn-sm btn-fosforescente" data-toggle="modal" onclick="modal_tiendas_orden_compra()" >Agregar Tiendas</button>
@@ -1631,7 +1681,7 @@ function obtenerOrdenCompraMatriz(){
                                     }
                                 ?>
                                 
-                                <?php if($id_user==$orden_compra->id_usuario_inserta){?>
+                                <?php if($id_user==$orden_compra->id_usuario_inserta && $orden_compra->cerrado == 1){?>
                                     <a href="javascript:void(0)" onClick="fn_save_orden_compra()" class="btn btn-sm btn-success" style="margin-right:10px">Guardar</a>
                                 <?php }?>
                                 <?php if($id==0){?>
@@ -1639,10 +1689,8 @@ function obtenerOrdenCompraMatriz(){
                                 <?php }?>
                                 <a href="javascript:void(0)" onClick="$('#openOverlayOpc').modal('hide');" class="btn btn-sm btn-info" style="">Cerrar</a>
                             </div>
-                                                
                         </div>
-                    </div> 
-
+                    </div>
 				</div>
                             
                     </div>

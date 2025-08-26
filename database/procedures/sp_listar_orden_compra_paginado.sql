@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION public.sp_listar_orden_compra_paginado(p_tipo_documento character varying, p_empresa_compra character varying, p_empresa_vende character varying, p_fecha_inicio character varying, p_fecha_fin character varying, p_numero_orden_compra character varying, p_numero_orden_compra_cliente character varying, p_situacion character varying, p_almacen_origen character varying, p_almacen_destino character varying, p_estado character varying, p_id_user character varying, p_id_vendedor character varying, p_estado_pedido character varying, p_prioridad character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
+CREATE OR REPLACE FUNCTION public.sp_listar_orden_compra_paginado(p_tipo_documento character varying, p_empresa_compra character varying, p_empresa_vende character varying, p_fecha_inicio character varying, p_fecha_fin character varying, p_numero_orden_compra character varying, p_numero_orden_compra_cliente character varying, p_situacion character varying, p_almacen_origen character varying, p_almacen_destino character varying, p_estado character varying, p_id_user character varying, p_id_vendedor character varying, p_estado_pedido character varying, p_prioridad character varying, p_canal character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
  RETURNS refcursor
  LANGUAGE plpgsql
 AS $function$
@@ -90,7 +90,7 @@ begin
 	End If;
 
 	If p_numero_orden_compra_cliente<>'' Then
-	 v_where:=v_where||'And oc.numero_orden_compra_cliente  = '''||p_numero_orden_compra_cliente||''' ';
+	 v_where:=v_where||'And oc.numero_orden_compra_cliente = '''||p_numero_orden_compra_cliente||''' ';
 	End If;
 
 	If p_situacion<>'' Then
@@ -106,11 +106,11 @@ begin
 	End If;
 
 	If p_estado<>'' Then
-	 v_where:=v_where||'And oc.estado  = '''||p_estado||''' ';
+	 v_where:=v_where||'And oc.estado = '''||p_estado||''' ';
 	End If;
 
 	If v_id_rol=7 Then 
-		v_where:=v_where||'And oc.id_vendedor  = '''||p_id_user||''' ';
+		v_where:=v_where||'And oc.id_vendedor = '''||p_id_user||''' ';
 	End If;
 
 	If v_id_rol = 11 Then
@@ -122,15 +122,19 @@ begin
 	End If;
 
 	If p_id_vendedor<>'' Then
-	 v_where:=v_where||'And oc.id_vendedor  = '''||p_id_vendedor||''' ';
+	 v_where:=v_where||'And oc.id_vendedor = '''||p_id_vendedor||''' ';
 	End If;
 
 	If p_estado_pedido<>'' Then
-	 v_where:=v_where||'And oc.estado_pedido  = '''||p_estado_pedido||''' ';
+	 v_where:=v_where||'And oc.estado_pedido = '''||p_estado_pedido||''' ';
 	End If;
 
 	If p_prioridad<>'' Then
-	 v_where:=v_where||'And oc.id_prioridad  = '''||p_prioridad||''' ';
+	 v_where:=v_where||'And oc.id_prioridad = '''||p_prioridad||''' ';
+	End If;
+
+	If p_canal<>'' Then
+	 v_where:=v_where||'And oc.id_canal = '''||p_canal||''' ';
 	End If;
 
 	EXECUTE ('SELECT count(1) '||v_tabla||v_where) INTO v_count;

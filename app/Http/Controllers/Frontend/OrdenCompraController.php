@@ -68,10 +68,11 @@ class OrdenCompraController extends Controller
         $vendedor = $user_model->getUserByRol(7,11);
 		$estado_pedido = $tablaMaestra_model->getMaestroByTipo(77);
 		$prioridad = $tablaMaestra_model->getMaestroByTipo(93);
+		$canal = $tablaMaestra_model->getMaestroByTipo(98);
         //$almacen_usuario2 = $almacen_user_model->getUsersByAlmacen($id_user);
         //dd($almacen_usuario);exit();
 		
-		return view('frontend.orden_compra.create',compact('tipo_documento','cerrado_orden_compra','proveedor','almacen','almacen_usuario','vendedor','estado_pedido','prioridad'));
+		return view('frontend.orden_compra.create',compact('tipo_documento','cerrado_orden_compra','proveedor','almacen','almacen_usuario','vendedor','estado_pedido','prioridad','canal'));
 
 	}
 
@@ -114,6 +115,7 @@ class OrdenCompraController extends Controller
         $p[]=$request->vendedor;
         $p[]=$request->estado_pedido;
         $p[]=$request->prioridad;
+        $p[]=$request->canal;
 		$p[]=$request->NumeroPagina;
 		$p[]=$request->NumeroRegistros;
 		$data = $orden_compra_model->listar_orden_compra_ajax($p);
@@ -175,12 +177,13 @@ class OrdenCompraController extends Controller
         $tipo_documento_cliente = $tablaMaestra_model->getMaestroByTipo(75);
         $persona = $persona_model->obtenerPersonaAll();
         $prioridad = $tablaMaestra_model->getMaestroByTipo(93);
+        $canal = $tablaMaestra_model->getMaestroByTipo(98);
 
         //$codigo_orden_compra = $orden_compra_model->getCodigoOrdenCompra();
         
         //dd($proveedor);exit();
 
-		return view('frontend.orden_compra.modal_orden_compra_nuevoOrdenCompra',compact('id','orden_compra','tipo_documento','proveedor','producto','marca','estado_bien','unidad','igv_compra','descuento','almacen','unidad_origen','id_user','moneda','vendedor','tipo_documento_cliente','persona','prioridad'));
+		return view('frontend.orden_compra.modal_orden_compra_nuevoOrdenCompra',compact('id','orden_compra','tipo_documento','proveedor','producto','marca','estado_bien','unidad','igv_compra','descuento','almacen','unidad_origen','id_user','moneda','vendedor','tipo_documento_cliente','persona','prioridad','canal'));
 
     }
 
@@ -235,7 +238,6 @@ class OrdenCompraController extends Controller
             $codigo_orden_compra = $request->numero_orden_compra;
         }
 
-        $item = $request->input('item');
         $descripcion = $request->input('descripcion');
         $cod_interno = $request->input('cod_interno');
         $marca = $request->input('marca');
@@ -282,6 +284,7 @@ class OrdenCompraController extends Controller
         $orden_compra->id_vendedor = $request->id_vendedor;
         $orden_compra->observacion_vendedor = $request->observacion_vendedor;
         $orden_compra->id_prioridad = $request->prioridad;
+        $orden_compra->id_canal = $request->canal;
         $orden_compra->estado = 1;
         if($request->tipo_documento == 4){
             $orden_compra_matriz = OrdenCompra::where('numero_orden_compra',$request->numero_orden_compra_matriz)->where('id_tipo_documento',2)->where('estado',1)->where('estado_pedido',1)->first();
@@ -291,7 +294,7 @@ class OrdenCompraController extends Controller
 
         $array_orden_compra_detalle = array();
 
-        foreach($item as $index => $value) {
+        foreach($descripcion as $index => $value) {
             
             if($id_orden_compra_detalle[$index] == 0){
                 $orden_compra_detalle = new OrdenCompraDetalle;
@@ -315,7 +318,7 @@ class OrdenCompraController extends Controller
             $orden_compra_detalle->sub_total = round($sub_total[$index],2);
             $orden_compra_detalle->igv = round($igv[$index],2);
             $orden_compra_detalle->total = round($total[$index],2);
-            $orden_compra_detalle->id_estado_producto = $estado_bien[$index];
+            //$orden_compra_detalle->id_estado_producto = $estado_bien[$index];
             $orden_compra_detalle->id_unidad_medida = $unidad[$index];
             $orden_compra_detalle->id_marca = $marca[$index];
             $orden_compra_detalle->estado = 1;
@@ -714,6 +717,7 @@ class OrdenCompraController extends Controller
         $total_general = 0;
         $id_vendedor = 35;
         $id_tipo_cliente = 5;
+        $id_canal = 4;
 
         // Ruta del archivo
         //$filePath = storage_path('app/datos.txt');
@@ -761,7 +765,7 @@ class OrdenCompraController extends Controller
             $id_empresa_vende = $empresa->id;
             $fecha_orden_compra = Carbon::createFromFormat('d/m/Y', $row['FECHA_AUTORIZACION']);
             $numero_orden_compra_cliente = $row['NRO_OC'];
-            $fecha_vencimiento = Carbon::createFromFormat('d/m/Y', $row['FECHA_HASTA']);
+            $fecha_vencimiento = Carbon::createFromFormat('d/m/Y', $row['FECHA_DESDE']);
 
 
             if($count == 0){
@@ -798,6 +802,7 @@ class OrdenCompraController extends Controller
                 $ordenCompra->id_vendedor = $id_vendedor;
                 $ordenCompra->id_tipo_cliente = $id_tipo_cliente;
                 $ordenCompra->fecha_vencimiento = $fecha_vencimiento;
+                $ordenCompra->id_canal = $id_canal;
                 $ordenCompra->save();
                 $id_orden_compra = $ordenCompra->id;
 
@@ -997,7 +1002,7 @@ class OrdenCompraController extends Controller
 
     }
 
-    public function exportar_listar_orden_compra($tipo_documento, $empresa_compra, $empresa_vende, $fecha_inicio, $fecha_fin, $numero_orden_compra, $numero_orden_compra_cliente, $almacen_origen, $almacen_destino, $situacion, $estado, $vendedor, $estado_pedido, $prioridad) {
+    public function exportar_listar_orden_compra($tipo_documento, $empresa_compra, $empresa_vende, $fecha_inicio, $fecha_fin, $numero_orden_compra, $numero_orden_compra_cliente, $almacen_origen, $almacen_destino, $situacion, $estado, $vendedor, $estado_pedido, $prioridad, $canal) {
 
         $id_user = Auth::user()->id;
         
@@ -1015,6 +1020,7 @@ class OrdenCompraController extends Controller
         if($vendedor==0)$vendedor = "";
         if($estado_pedido==0)$estado_pedido = "";
         if($prioridad==0)$prioridad = "";
+        if($canal==0)$canal = "";
 
         $orden_compra_model = new OrdenCompra;
 		$p[]=$tipo_documento;
@@ -1033,6 +1039,7 @@ class OrdenCompraController extends Controller
         $p[]=$estado_pedido;
         $p[]=$prioridad;
         $p[]=1;
+        $p[]=$canal;
 		$p[]=10000;
 		$data = $orden_compra_model->listar_orden_compra_ajax($p);
 		
@@ -1183,8 +1190,9 @@ class OrdenCompraController extends Controller
         $productos = $producto_model->getProductoExterno();
         $vendedor = $user_model->getUserByRol(7,11);
         $estado_pedido = $tablaMaestra_model->getMaestroByTipo(77);
+		$canal = $tablaMaestra_model->getMaestroByTipo(98);
 
-		return view('frontend.orden_compra.create_reporte_comercializacion',compact('tipo_documento','cerrado_orden_compra','proveedor','tiendas','productos','vendedor','estado_pedido'));
+		return view('frontend.orden_compra.create_reporte_comercializacion',compact('tipo_documento','cerrado_orden_compra','proveedor','tiendas','productos','vendedor','estado_pedido','canal'));
 
 	}
 
@@ -1201,6 +1209,7 @@ class OrdenCompraController extends Controller
         $p[]=$request->vendedor;
         $p[]=$request->estado_pedido;
         $p[]=1;
+        $p[]=$request->canal;
         $p[]=$request->NumeroPagina;
 		$p[]=$request->NumeroRegistros;
 		$data = $orden_compra_model->listar_reporte_comercializacion_ajax($p);
@@ -1218,7 +1227,7 @@ class OrdenCompraController extends Controller
 
 	}
 
-    public function exportar_reporte_comercializacion($empresa_compra, $fecha_inicio, $fecha_fin, $numero_orden_compra_cliente, $situacion, $codigo_producto, $producto, $vendedor, $estado_pedido) {
+    public function exportar_reporte_comercializacion($empresa_compra, $fecha_inicio, $fecha_fin, $numero_orden_compra_cliente, $situacion, $codigo_producto, $producto, $vendedor, $estado_pedido, $canal) {
 
         if($empresa_compra==0)$empresa_compra = "";
         if($fecha_inicio=="0")$fecha_inicio = "";
@@ -1229,6 +1238,7 @@ class OrdenCompraController extends Controller
         if($producto==0)$producto = "";
         if($vendedor==0)$vendedor = "";
         if($estado_pedido==0)$estado_pedido = "";
+        if($canal==0)$canal = "";
         
         $orden_compra_model = new OrdenCompra;
 		$p[]=$empresa_compra;
@@ -1241,6 +1251,7 @@ class OrdenCompraController extends Controller
         $p[]=$vendedor;
         $p[]=$estado_pedido;
         $p[]=1;
+        $p[]=$canal;
         $p[]=1;
 		$p[]=10000;
 		$data = $orden_compra_model->listar_reporte_comercializacion_ajax($p);

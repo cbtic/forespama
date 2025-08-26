@@ -108,6 +108,7 @@ function datatablenew(){
 			var producto = $('#producto_bus').val();
 			var vendedor = $('#vendedor_bus').val();
 			var estado_pedido = $('#estado_pedido_bus').val();
+			var canal = $('#canal_bus').val();
 
 			var _token = $('#_token').val();
             oSettings.jqXHR = $.ajax({
@@ -117,7 +118,7 @@ function datatablenew(){
                 "url": sSource,
                 "data":{NumeroPagina:iNroPagina,NumeroRegistros:iCantMostrar,
 						empresa_compra:empresa_compra, fecha_inicio:fecha_inicio, fecha_fin:fecha_fin, numero_orden_compra_cliente:numero_orden_compra_cliente, 
-						situacion:situacion,codigo_producto:codigo_producto,producto:producto,vendedor:vendedor,estado_pedido:estado_pedido,
+						situacion:situacion,codigo_producto:codigo_producto,producto:producto,vendedor:vendedor,estado_pedido:estado_pedido,canal:canal,
 						_token:_token
                        },
                 "success": function (result) {
@@ -318,6 +319,7 @@ function DescargarArchivosExcel(){
 	var producto = $('#producto_bus').val();
 	var vendedor = $('#vendedor_bus').val();
 	var estado_pedido = $('#estado_pedido_bus').val();
+	var canal = $('#canal_bus').val();
 
 	if (empresa_compra == "")empresa_compra = 0;
 	if (fecha_inicio == "")fecha_inicio = "0";
@@ -328,6 +330,7 @@ function DescargarArchivosExcel(){
 	if (producto == "")producto = 0;
 	if (vendedor == "")vendedor = 0;
 	if (estado_pedido == "")estado_pedido = 0;
+	if (canal == "")canal = 0;
 	
-	location.href = '/orden_compra/exportar_reporte_comercializacion/'+empresa_compra+'/'+fecha_inicio+'/'+fecha_fin+'/'+numero_orden_compra_cliente+'/'+situacion+'/'+codigo_producto+'/'+producto+'/'+vendedor+'/'+estado_pedido;
+	location.href = '/orden_compra/exportar_reporte_comercializacion/'+empresa_compra+'/'+fecha_inicio+'/'+fecha_fin+'/'+numero_orden_compra_cliente+'/'+situacion+'/'+codigo_producto+'/'+producto+'/'+vendedor+'/'+estado_pedido+'/'+canal;
 }
