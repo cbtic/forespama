@@ -1,6 +1,6 @@
--- DROP FUNCTION public.sp_listar_reporte_comercializacion_paginado(varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, refcursor);
+-- DROP FUNCTION public.sp_listar_reporte_comercializacion_paginado(varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, refcursor);
 
-CREATE OR REPLACE FUNCTION public.sp_listar_reporte_comercializacion_paginado(p_empresa_compra character varying, p_fecha_desde character varying, p_fecha_hasta character varying, p_numero_orden_compra_cliente character varying, p_situacion character varying, p_codigo_producto character varying, p_producto character varying, p_vendedor character varying, p_estado_pedido character varying, p_estado character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
+CREATE OR REPLACE FUNCTION public.sp_listar_reporte_comercializacion_paginado(p_empresa_compra character varying, p_fecha_desde character varying, p_fecha_hasta character varying, p_numero_orden_compra_cliente character varying, p_situacion character varying, p_codigo_producto character varying, p_producto character varying, p_vendedor character varying, p_estado_pedido character varying, p_estado character varying, p_canal character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
  RETURNS refcursor
  LANGUAGE plpgsql
 AS $function$
@@ -18,12 +18,9 @@ begin
 	
 	p_pagina=(p_pagina::Integer-1)*p_limit::Integer;
 
-	v_campos=' distinct oc.id, case when oc.id_tipo_cliente = 1 then 
-	(select p.nombres ||'' ''|| p.apellido_paterno ||'' ''|| p.apellido_materno from personas p
-	where p.id = oc.id_persona)
-	else (select e2.razon_social from empresas e2 
-	where e2.id = oc.id_empresa_compra) 
-	end cliente,
+	v_campos=' distinct oc.id, 
+	(select e2.razon_social from empresas e2 
+	where e2.id = oc.id_empresa_compra) cliente,
 	oc.numero_orden_compra_cliente, oc.numero_orden_compra pedido, to_char(oc.fecha_orden_compra,''dd-mm-yyyy'') fecha_orden_compra, to_char(oc.fecha_vencimiento,''dd-mm-yyyy'') fecha_vencimiento, 
 	(select to_char(sp.created_at,''dd-mm-yyyy'') from salida_productos sp 
 	where sp.id_orden_compra = oc.id
@@ -36,13 +33,12 @@ begin
 	left join empresas e on oc.id_empresa_compra = e.id 
 	left join orden_compra_detalles ocd on oc.id = ocd.id_orden_compra and ocd.estado = ''1''
 	left join tienda_detalle_orden_compras tdoc on tdoc.id_orden_compra = oc.id and tdoc.id_producto = ocd.id_producto 
-	--left join tiendas t on tdoc.id_tienda = t.id 
 	left join users u on oc.id_vendedor = u.id
 	left join productos p on ocd.id_producto = p.id
 	left join equivalencia_productos ep on ep.codigo_producto = p.codigo 
 	inner join tabla_maestras tm on oc.estado_pedido::int = tm.codigo::int and tm.tipo = ''77'' ';
 	
-	v_where = ' Where 1=1 and oc.id_tipo_documento = ''2'' ';
+	v_where = ' Where 1=1 and oc.id_tipo_documento = ''2'' and oc.estado_pedido = ''1'' ';
 
 	If p_empresa_compra<>'' Then
 	 v_where:=v_where||'And oc.id_empresa_compra  = '''||p_empresa_compra||''' ';
@@ -82,6 +78,10 @@ begin
 
 	If p_estado<>'' Then
 	 v_where:=v_where||'And oc.estado = '''||p_estado||''' ';
+	End If;
+
+	If p_canal<>'' Then
+	 v_where:=v_where||'And oc.id_canal = '''||p_canal||''' ';
 	End If;
 
 	EXECUTE ('SELECT count(1) '||v_tabla||v_where) INTO v_count;

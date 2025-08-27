@@ -766,3 +766,6 @@ Route::get('activos/obtener_sub_tipo_activo/{tipo_activo}', [ActivoController::c
 Route::get('activos/obtener_datos_sub_tipo_activo/{id}', [ActivoController::class, 'obtener_datos_sub_tipo_activo'])->name('activos.obtener_datos_sub_tipo_activo');
 Route::get('activos/obtener_datos_sub_familia/{id}', [ActivoController::class, 'obtener_datos_sub_familia'])->name('activos.obtener_datos_sub_familia');
 Route::get('activos/obtener_marca/{tipo_activo}', [ActivoController::class, 'obtener_marca'])->name('activos.obtener_marca');
+Route::get('ingreso_vehiculo_tronco/eliminar_pago/{id}', [IngresoVehiculoTroncoController::class, 'eliminar_pago'])->name('ingreso_vehiculo_tronco.eliminar_pago');
+
+

@@ -415,7 +415,6 @@ function cargarValorizacion() {
 
 }
 
-
 function cargarPagos() {
 
 
@@ -2686,4 +2685,49 @@ function convertirFecha(fecha){
 
     return fecha;
 
+}
+
+function eliminarPago(id){
+	var act_estado = "";
+	
+	act_estado = "Eliminar";
+	
+    bootbox.confirm({
+        size: "small",
+        message: "&iquest;Deseas "+act_estado+" el Pago?",
+        callback: function(result){
+            if (result==true) {
+                fn_eliminar_pago(id);
+            }
+        }
+    });
+    $(".modal-dialog").css("width","30%");
+}
+
+function fn_eliminar_pago(id){
+	
+    $.ajax({
+        url: "/ingreso_vehiculo_tronco/eliminar_pago/"+id,
+        type: "GET",
+        success: function (result) {
+
+            var oTable = $('#tblSolicitud').DataTable();
+            oTable.ajax.reload(function () {
+                $('#tblSolicitud tbody tr').each(function () {
+                    var data = oTable.row(this).data();
+                    if (data && data.id_ingreso_vehiculo_tronco_tipo_maderas == result) {
+
+                        $('#tblSolicitud tbody tr').removeClass('row_selected');
+
+                        $(this).addClass('row_selected');
+                        
+                        $("#id_ingreso_vehiculo_tronco_tipo_maderas").val(data.id_ingreso_vehiculo_tronco_tipo_maderas);
+                        $('#estado').val(data.id_estado);
+                        
+                        cargarPagoCubicaje(result);
+                    }
+                });
+            });
+        }
+    });
 }

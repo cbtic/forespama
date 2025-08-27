@@ -50,6 +50,9 @@ foreach($pago as $row){
 	<td class="text-right">
 		<button style="font-size:12px" type="button" class="btn btn-sm btn-warning" data-toggle="modal" onclick="modalPago(<?php echo $row->id?>,'')" >Editar</button>';
 	</td>
+	<td class="text-left">
+		<button style="font-size:12px" type="button" class="btn btn-sm btn-danger" data-toggle="modal" onclick="eliminarPago(<?php echo $row->id?>,'')" >Eliminar</button>
+	</td>
 </tr>
 <?php
 	}

@@ -1299,9 +1299,6 @@ function obtenerBeneficiario(){
         $('#tipo_documento_cliente').val(5);
         cambiarCliente();
     }
-
-    
-
 }
 
 </script>

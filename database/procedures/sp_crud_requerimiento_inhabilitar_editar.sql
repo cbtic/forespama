@@ -26,7 +26,7 @@ begin
 		from requerimientos r 
 		where 1=1 
 		and estado='1' 
-		and r.fecha::date<CURRENT_DATE
+		and r.fecha::date<=CURRENT_DATE
 		and r.estado_solicitud = '1'
 		order by r.id desc
 		

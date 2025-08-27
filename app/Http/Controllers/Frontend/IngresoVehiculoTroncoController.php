@@ -325,6 +325,7 @@ class IngresoVehiculoTroncoController extends Controller
 			$pago->id_tipodesembolso = $request->id_tipodesembolso;
 			$pago->importe = $request->importe;
 			$pago->nro_guia = $request->nro_guia;
+			$pago->nro_cheque = $request->nro_cheque;
 			$pago->nro_factura = $request->nro_factura;
 			$pago->fecha = $request->fecha;
 			$pago->observacion = $request->observacion;
@@ -347,6 +348,8 @@ class IngresoVehiculoTroncoController extends Controller
 		$ingresoVehiculoTroncoTipoMadera = IngresoVehiculoTroncoTipoMadera::find($request->id_ingreso_vehiculo_tronco_tipo_maderas);
 		$ingresoVehiculoTroncoTipoMadera->id_estado_pago=$id_estado_pago;
 		$ingresoVehiculoTroncoTipoMadera->save();
+
+		echo $ingresoVehiculoTroncoTipoMadera->id;
 
     }
 
@@ -1173,6 +1176,16 @@ class IngresoVehiculoTroncoController extends Controller
 
 		$export = new InvoicesExport5([$variable]);
 		return Excel::download($export, 'reporte_cubicaje.xlsx');
+    }
+
+	public function eliminar_pago($id)
+    {
+		$ingreso_vehiculo_tronco_pago = IngresoVehiculoTroncoPago::find($id);
+		$ingreso_vehiculo_tronco_pago->estado = 0;
+		$ingreso_vehiculo_tronco_pago->save();
+
+		echo $ingreso_vehiculo_tronco_pago->id_ingreso_vehiculo_tronco_tipo_maderas;
+
     }
 }
 

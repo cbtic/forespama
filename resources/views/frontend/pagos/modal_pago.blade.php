@@ -262,22 +262,42 @@ function fn_save(){
 	$("#btnGuardar").prop('disabled', true);
 	
     $.ajax({
-			url: "/ingreso_vehiculo_tronco/send_pago",
-            type: "POST",
-            data : {_token:_token,id:id_modal,id_ingreso_vehiculo_tronco_tipo_maderas:id_ingreso_vehiculo_tronco_tipo_maderas_modal,importe:importe,fecha:fecha,observacion:observacion,id_tipodesembolso:id_tipodesembolso,nro_guia:nro_guia,nro_factura:nro_factura,nro_cheque:nro_cheque,img_foto:img_foto},
-            success: function (result) {
-				/*
-				$('.loader').hide();
-				$('#openOverlayOpc').modal('hide');
-				obtenerBeneficiario();
-				*/
-				$('.loader').hide();
-				$('#openOverlayOpc').modal('hide');
-				datatablenew();
-				//location.href="/ingreso_vehiculo_tronco/pagos";
-				//location.href=location.reload();
-				
-            }
+		url: "/ingreso_vehiculo_tronco/send_pago",
+		type: "POST",
+		data : {_token:_token,id:id_modal,id_ingreso_vehiculo_tronco_tipo_maderas:id_ingreso_vehiculo_tronco_tipo_maderas_modal,importe:importe,fecha:fecha,observacion:observacion,id_tipodesembolso:id_tipodesembolso,nro_guia:nro_guia,nro_factura:nro_factura,nro_cheque:nro_cheque,img_foto:img_foto},
+		success: function (result) {
+			/*
+			$('.loader').hide();
+			$('#openOverlayOpc').modal('hide');
+			obtenerBeneficiario();
+			*/
+			//alert(result);
+			$('.loader').hide();
+			$('#openOverlayOpc').modal('hide');
+			/*datatablenew();
+			cargarPagoCubicaje(result);*/
+			var oTable = $('#tblSolicitud').DataTable();
+			oTable.ajax.reload(function () {
+				// cuando termine de recargar, buscamos la fila
+				$('#tblSolicitud tbody tr').each(function () {
+					var data = oTable.row(this).data();
+					if (data && data.id_ingreso_vehiculo_tronco_tipo_maderas == result) {
+
+						$('#tblSolicitud tbody tr').removeClass('row_selected');
+						
+						$(this).addClass('row_selected');
+						
+						$("#id_ingreso_vehiculo_tronco_tipo_maderas").val(data.id_ingreso_vehiculo_tronco_tipo_maderas);
+						$('#estado').val(data.id_estado);
+
+						cargarPagoCubicaje(result);
+					}
+				});
+			});
+			//location.href="/ingreso_vehiculo_tronco/pagos";
+			//location.href=location.reload();
+			
+		}
     });
 }
 
