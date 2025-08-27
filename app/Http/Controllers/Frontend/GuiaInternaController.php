@@ -337,7 +337,7 @@ class GuiaInternaController extends Controller
                 $guia_interna_detalle->id_guia_interna = $guia_interna->id;
                 $guia_interna_detalle->id_producto = $descripcion[$index];
                 $guia_interna_detalle->cantidad = $cantidad[$index];
-                $guia_interna_detalle->id_estado_producto = $estado_bien[$index];
+                $guia_interna_detalle->id_estado_producto = 1;
                 $guia_interna_detalle->id_unidad_medida = $unidad[$index];
                 $guia_interna_detalle->id_marca = $marca[$index];
                 $guia_interna_detalle->estado = 1;
