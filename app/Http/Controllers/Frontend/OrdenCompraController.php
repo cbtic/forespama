@@ -1038,8 +1038,8 @@ class OrdenCompraController extends Controller
         $p[]=$vendedor;
         $p[]=$estado_pedido;
         $p[]=$prioridad;
-        $p[]=1;
         $p[]=$canal;
+        $p[]=1;
 		$p[]=10000;
 		$data = $orden_compra_model->listar_orden_compra_ajax($p);
 		
