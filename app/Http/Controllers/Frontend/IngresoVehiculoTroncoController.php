@@ -204,6 +204,8 @@ class IngresoVehiculoTroncoController extends Controller
 		$p[]=$request->placa;
 		$p[]=$request->ruc;
 		$p[]=$request->anio;
+		$p[]=$request->fecha_inicio;
+		$p[]=$request->fecha_fin;
 		$p[]=$request->NumeroPagina;
 		$p[]=$request->NumeroRegistros;
 		$data = $ingresoVehiculoTronco_model->listar_ingreso_vehiculo_tronco_ajax($p);
@@ -1072,6 +1074,38 @@ class IngresoVehiculoTroncoController extends Controller
 		return Excel::download($export, 'reporte_compra_anual.xlsx');
     }
 
+	public function exportar_listar_reporte_excel($placa, $ruc, $anio, $fecha_inicio, $fecha_fin) {
+
+		if($placa=="0")$placa = "";
+		if($ruc=="0")$ruc = "";
+		if($anio=="0")$anio = "";
+		if($fecha_inicio=="0")$fecha_inicio = "";
+		if($fecha_fin=="0")$fecha_fin = "";
+
+		$ingreso_vehiculo_tronco_model = new IngresoVehiculoTronco;
+		$p[]=$placa;
+        $p[]=$ruc;
+        $p[]=$anio;
+        $p[]=$fecha_inicio;
+        $p[]=$fecha_fin;
+		$p[]=1;
+		$p[]=1000;
+		$data = $ingreso_vehiculo_tronco_model->listar_ingreso_vehiculo_tronco_ajax($p);
+		
+		$variable = [];
+		$n = 1;
+
+		array_push($variable, array("N°","Fecha","Placa","RUC","Empresa","Documento Conductor","Tipo Madera","Cantidad"));
+		
+		foreach ($data as $r) {
+
+			array_push($variable, array($n++,$r->fecha_ingreso,$r->placa, $r->ruc, $r->razon_social, $r->numero_documento, $r->tipo_madera, $r->cantidad));
+		}
+		
+		$export = new InvoicesExport6([$variable]);
+		return Excel::download($export, 'reporte_ingreso_camion.xlsx');
+    }
+
 	public function exportar_listar_cubicaje_excel($id) {
 
 		$vehiculo_tronco_model = new IngresoVehiculoTronco;
@@ -1599,6 +1633,83 @@ class InvoicesExport5 implements FromArray, WithHeadings, WithStyles
 
 		$lastRow = $sheet->getHighestRow();
 
+    }
+
+}
+
+class InvoicesExport6 implements FromArray, WithHeadings, WithStyles
+{
+	protected $invoices;
+
+	public function __construct(array $invoices)
+	{
+		$this->invoices = $invoices;
+	}
+
+	public function array(): array
+	{
+		return $this->invoices;
+	}
+
+    public function headings(): array
+    {
+        return ["N°","Fecha","Placa","RUC","Empresa","Documento Conductor","Tipo Madera","Cantidad"];
+    }
+
+	public function styles(Worksheet $sheet)
+    {
+
+		$sheet->mergeCells('A1:H1');
+
+        $sheet->setCellValue('A1', "REPORTE DE CUBICAJE POR FECHAS- FORESPAMA");
+        $sheet->getStyle('A1:H1')->applyFromArray([
+            'font' => [
+                'bold' => true,
+                'color' => ['rgb' => 'FFFFFF'],
+            ],
+            'fill' => [
+                'fillType' => Fill::FILL_SOLID,
+                'startColor' => ['rgb' => '246257'],
+            ],
+            'alignment' => [
+                'horizontal' => Alignment::HORIZONTAL_CENTER,
+            ],
+        ]);
+
+		$sheet->getStyle('A1')->getAlignment()->setWrapText(true);
+		$sheet->getRowDimension(1)->setRowHeight(30);
+
+        $sheet->getStyle('A2:H2')->applyFromArray([
+            'font' => [
+                'bold' => true,
+                'color' => ['rgb' => '000000'],
+            ],
+            'fill' => [
+                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                'startColor' => ['rgb' => '2EB85C'],
+            ],
+			'alignment' => [
+			'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+    		],
+        ]);
+
+		$sheet->fromArray($this->headings(), NULL, 'A2');
+
+        foreach (range('A', 'H') as $col) {
+            $sheet->getColumnDimension($col)->setAutoSize(true);
+        }
+
+		/*$lastRow = $sheet->getHighestRow();
+
+		$sheet->getStyle("A{$lastRow}:I{$lastRow}")->applyFromArray([
+			'font' => [
+				'bold' => true,
+			],
+			'fill' => [
+                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                'startColor' => ['rgb' => 'D9D9D9'],
+            ],
+		]);*/
     }
 
 }

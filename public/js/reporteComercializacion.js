@@ -237,12 +237,21 @@ function datatablenew(){
 				},
 				{
 				"mRender": function (data, type, row) {
+					var descuento = "";
+					if(row.descuento!= null)descuento = row.descuento;
+					return descuento;
+				},
+				"bSortable": true,
+				"aTargets": [11]
+				},
+				{
+				"mRender": function (data, type, row) {
 					var cantidad_requerida = "";
 					if(row.cantidad_requerida!= null)cantidad_requerida = row.cantidad_requerida;
 					return cantidad_requerida;
 				},
 				"bSortable": true,
-				"aTargets": [11]
+				"aTargets": [12]
 				},
 				{
 				"mRender": function (data, type, row) {
@@ -251,7 +260,7 @@ function datatablenew(){
 					return cantidad_despacho;
 				},
 				"bSortable": true,
-				"aTargets": [12]
+				"aTargets": [13]
 				},
 				{
 				"mRender": function (data, type, row) {
@@ -260,7 +269,7 @@ function datatablenew(){
 					return cantidad_cancelada;
 				},
 				"bSortable": true,
-				"aTargets": [13]
+				"aTargets": [14]
 				},
 				{
 				"mRender": function (data, type, row) {
@@ -274,7 +283,7 @@ function datatablenew(){
 						return cerrado;
 				},
 				"bSortable": true,
-				"aTargets": [14]
+				"aTargets": [15]
 				},
 				{
 				"mRender": function (data, type, row) {
@@ -283,7 +292,7 @@ function datatablenew(){
 					return vendedor;
 				},
 				"bSortable": true,
-				"aTargets": [15]
+				"aTargets": [16]
 				},
 				{
 				"mRender": function (data, type, row) {
@@ -292,7 +301,7 @@ function datatablenew(){
 					return estado_pedido;
 				},
 				"bSortable": true,
-				"aTargets": [16]
+				"aTargets": [17]
 				},
             ]
     });

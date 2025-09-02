@@ -502,6 +502,14 @@ label.form-control-sm{
 								<input class="form-control form-control-sm" id="ruc_bus" name="ruc_bus" placeholder="RUC">
 							</div>
 
+							<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+								<input id="fecha_inicio_bus" name="fecha_inicio_bus" on class="form-control form-control-sm"  placeholder="Fecha Inicio">
+							</div>
+
+							<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+								<input id="fecha_fin_bus" name="fecha_fin_bus" on class="form-control form-control-sm"  placeholder="Fecha Fin">
+							</div>
+
 							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
 								<select name="anio_bus" id="anio_bus" class="form-control form-control-sm" onchange="">
                                     <option value="">--Seleccionar Año--</option>
@@ -543,10 +551,12 @@ label.form-control-sm{
 								</select>
 							</div>
 							-->
-							<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+							<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
 								<input class="btn btn-warning btn-sm pull-rigth" value="Buscar" type="button" id="btnBuscar" />
 								<a type="button" href="/img/cubicaje/plantilla/Plantilla_cubicaje_actualizado_15082025.xlsx" class="btn btn-secondary btn-sm" style="margin-left:15px;">Plantilla</a>
+								<buttom class="btn btn-secondary btn-sm" type="button" id="btnDescargarExcel" style="margin-left:15px" /><i class="fa fa-download"></i> Descarga Excel</buttom>
 								<buttom class="btn btn-secondary btn-sm" type="button" id="btnDescargarReporteAnual" style="margin-left:15px" /><i class="fa fa-download"></i> Descarga Reporte Anual</buttom>
+							</div>
 							</div>
 							
 						</div>

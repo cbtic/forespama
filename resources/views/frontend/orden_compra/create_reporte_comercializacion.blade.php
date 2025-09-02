@@ -452,6 +452,7 @@ label.form-control-sm{
 							<th>C&oacute;digo Sodimac</th>
 							<th>Descripci&oacute;n</th>
 							<th>Precio Unitario</th>
+							<th>Descuento</th>
 							<th>Cantidad Pedida</th>
 							<th>Cantidad Entregada</th>
 							<th>Cantidad Cancelada</th>

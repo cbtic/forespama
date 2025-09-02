@@ -167,6 +167,27 @@ $(document).ready(function () {
 
 	});
 
+    $('#btnDescargarExcel').on('click', function () {
+		descargarReporteExcel();
+
+	});
+
+    $('#fecha_inicio_bus').datepicker({
+        autoclose: true,
+		format: 'yyyy-mm-dd',
+		changeMonth: true,
+		changeYear: true,
+        language: 'es'
+    });
+
+	$('#fecha_fin_bus').datepicker({
+        autoclose: true,
+		format: 'yyyy-mm-dd',
+		changeMonth: true,
+		changeYear: true,
+        language: 'es'
+    });
+
 });
 
 function guardar_cubicaje() {
@@ -1746,6 +1767,8 @@ function datatablenew() {
             var placa = $('#placa_bus').val();
             var ruc = $('#ruc_bus').val();
             var anio = $('#anio_bus').val();
+            var fecha_inicio = $('#fecha_inicio_bus').val();
+            var fecha_fin = $('#fecha_fin_bus').val();
 
             var _token = $('#_token').val();
             oSettings.jqXHR = $.ajax({
@@ -1755,7 +1778,7 @@ function datatablenew() {
                 "data": {
                     NumeroPagina: iNroPagina,
                     NumeroRegistros: iCantMostrar,
-                    placa:placa,ruc:ruc,anio:anio,
+                    placa:placa,ruc:ruc,anio:anio,fecha_inicio:fecha_inicio,fecha_fin:fecha_fin,
                     _token: _token
                 },
                 "success": function(result) {
@@ -2657,6 +2680,23 @@ function descargarReporteAnual(){
 	if (anio == "")anio = 0;
 	
 	location.href = '/ingreso_vehiculo_tronco/exportar_listar_reporte_anual/'+placa+'/'+ruc+'/'+anio;
+}
+
+function descargarReporteExcel(){
+		
+	var placa = $('#placa_bus').val();
+	var ruc = $('#ruc_bus').val();
+	var fecha_inicio = $('#fecha_inicio_bus').val();
+	var fecha_fin = $('#fecha_fin_bus').val();
+	var anio = $('#anio_bus').val();
+
+	if (placa == "")placa = "0";
+	if (ruc == "")ruc = "0";
+	if (anio == "")anio = "0";
+	if (fecha_inicio == "")fecha_inicio = "0";
+	if (fecha_fin == "")fecha_fin = "0";
+	
+	location.href = '/ingreso_vehiculo_tronco/exportar_listar_reporte_excel/'+placa+'/'+ruc+'/'+anio+'/'+fecha_inicio+'/'+fecha_fin;
 }
 
 function descargarCubicaje(){
