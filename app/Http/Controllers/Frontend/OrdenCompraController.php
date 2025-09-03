@@ -1273,7 +1273,7 @@ class OrdenCompraController extends Controller
 		$export = new InvoicesExport2([$variable]);
 		return Excel::download($export, 'Reporte_comercializacion.xlsx');
 		
-    }  
+    }
 
     public function create_reporte_comercializacion_tienda(){
 

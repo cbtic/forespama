@@ -1,6 +1,4 @@
--- DROP FUNCTION public.sp_listar_ingreso_vehiculo_tronco_paginado(varchar, varchar, varchar, varchar, varchar, refcursor);
-
-CREATE OR REPLACE FUNCTION public.sp_listar_ingreso_vehiculo_tronco_paginado(p_placa character varying, p_ruc character varying, p_anio character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
+CREATE OR REPLACE FUNCTION public.sp_listar_ingreso_vehiculo_tronco_paginado(p_placa character varying, p_ruc character varying, p_anio character varying, p_fecha_inicio character varying, p_fecha_fin character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
  RETURNS refcursor
  LANGUAGE plpgsql
 AS $function$
@@ -43,6 +41,14 @@ Begin
 
 	If p_anio<>'' Then
 	 v_where:=v_where||'And to_char(ivt.fecha_ingreso, ''YYYY'') = '''||p_anio||''' ';
+	End If;
+
+	If p_fecha_inicio<>'' Then
+	 v_where:=v_where||'And ivt.fecha_ingreso  >= '''||p_fecha_inicio||''' ';
+	End If;
+
+	If p_fecha_fin<>'' Then
+	 v_where:=v_where||'And ivt.fecha_ingreso  <= '''||p_fecha_fin||''' ';
 	End If;
 
 	EXECUTE ('SELECT count(1) '||v_tabla||v_where) INTO v_count;
