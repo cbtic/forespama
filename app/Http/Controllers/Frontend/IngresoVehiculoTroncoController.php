@@ -29,6 +29,8 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Shared\Date;
 
 class IngresoVehiculoTroncoController extends Controller
 {
@@ -420,21 +422,42 @@ class IngresoVehiculoTroncoController extends Controller
 		$precio_unitario = $request->precio_unitario;
 		$precio_total = $request->precio_total;
 		$precio_total_final = 0;
+
+		$items = [];
+
+		foreach ($id_ingreso_vehiculo_tronco_cubicaje as $key => $id) {
+			$items[] = [
+				'id' => $id,
+				'diametro_1' => $diametro_1[$key],
+				'diametro_2' => $diametro_2[$key],
+				'diametro_dm' => $diametro_dm[$key],
+				'longitud' => $longitud[$key],
+				'volumen_m3' => $volumen_m3[$key],
+				'volumen_pies' => $volumen_pies[$key],
+				'volumen_total_m3' => $volumen_total_m3[$key],
+				'volumen_total_pies' => $volumen_total_pies[$key],
+				'precio_unitario' => $precio_unitario[$key],
+				'precio_total' => $precio_total[$key],
+			];
+		}
+
+		usort($items, function($a, $b) {
+			return $a['id'] <=> $b['id'];
+		});
 		
+		foreach($items as $item){
 
-		foreach($id_ingreso_vehiculo_tronco_cubicaje as $key=>$row){
-
-			$ingresoVehiculoTroncoCubicaje = IngresoVehiculoTroncoCubicaje::find($row);
-			$ingresoVehiculoTroncoCubicaje->diametro_1= $diametro_1[$key];
-			$ingresoVehiculoTroncoCubicaje->diametro_2 = $diametro_2[$key];
-			$ingresoVehiculoTroncoCubicaje->diametro_dm = $diametro_dm[$key];
-			$ingresoVehiculoTroncoCubicaje->longitud = $longitud[$key];
-			$ingresoVehiculoTroncoCubicaje->volumen_m3 = $volumen_m3[$key];
-			$ingresoVehiculoTroncoCubicaje->volumen_pies = $volumen_pies[$key];
-			$ingresoVehiculoTroncoCubicaje->volumen_total_m3 = $volumen_total_m3[$key];
-			$ingresoVehiculoTroncoCubicaje->volumen_total_pies = $volumen_total_pies[$key];
-			$ingresoVehiculoTroncoCubicaje->precio_unitario = $precio_unitario[$key];
-			$ingresoVehiculoTroncoCubicaje->precio_total = $precio_total[$key];
+			$ingresoVehiculoTroncoCubicaje = IngresoVehiculoTroncoCubicaje::find($item['id']);
+			$ingresoVehiculoTroncoCubicaje->diametro_1= $item['diametro_1'];
+			$ingresoVehiculoTroncoCubicaje->diametro_2 = $item['diametro_2'];
+			$ingresoVehiculoTroncoCubicaje->diametro_dm = $item['diametro_dm'];
+			$ingresoVehiculoTroncoCubicaje->longitud = $item['longitud'];
+			$ingresoVehiculoTroncoCubicaje->volumen_m3 = $item['volumen_m3'];
+			$ingresoVehiculoTroncoCubicaje->volumen_pies = $item['volumen_pies'];
+			$ingresoVehiculoTroncoCubicaje->volumen_total_m3 = $item['volumen_total_m3'];
+			$ingresoVehiculoTroncoCubicaje->volumen_total_pies = $item['volumen_total_pies'];
+			$ingresoVehiculoTroncoCubicaje->precio_unitario = $item['precio_unitario'];
+			$ingresoVehiculoTroncoCubicaje->precio_total = $item['precio_total'];
 			$ingresoVehiculoTroncoCubicaje->save();
 			
 			$precio_total_final+=$precio_total[$key];
@@ -888,163 +911,120 @@ class IngresoVehiculoTroncoController extends Controller
 	
 	function extension($filename){$file = explode(".",$filename); return strtolower(end($file));}
 	
-	public function importar_cubicaje($archivo, $idIngreso, $diametro_dm_, $precio_mayor, $precio_menor){
-		
+	public function importar_cubicaje($archivo, $idIngreso, $diametro_dm_, $precio_mayor, $precio_menor)
+	{
 		$id_user = Auth::user()->id;
 
-		$cubicaje = Excel::toArray(new stdClass(), "img/cubicaje/".$archivo);
-		$count = 0;
-		$sheet = $cubicaje[0];
+		$spreadsheet = IOFactory::load(public_path("img/cubicaje/".$archivo));
+		$sheet = $spreadsheet->getActiveSheet();
 
+		// Validaciones de cabecera
 		$fecha = null;
-		if (isset($sheet[1][0]) && is_numeric($sheet[1][0])) {
+		$cellFecha = $sheet->getCell("A2")->getCalculatedValue();
+		if (is_numeric($cellFecha)) {
 			try {
-				$fecha = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($sheet[1][0])->format('Y-m-d');
+				$fecha = Date::excelToDateTimeObject($cellFecha)->format('Y-m-d');
 			} catch (\Exception $e) {
 				$fecha = null;
 			}
-		}else{
-			$fecha = trim($sheet[1][0]);
+		} else {
+			$fecha = trim($cellFecha);
 		}
 
-		$placa = $sheet[1][1];
-		$ruc = $sheet[1][2];
-		$cantidad = $sheet[1][3];
+		$placa = $sheet->getCell("B2")->getCalculatedValue();
+		$ruc = $sheet->getCell("C2")->getCalculatedValue();
+		$cantidad = $sheet->getCell("D2")->getCalculatedValue();
 
-		//var_dump($fecha . " - " . $placa ." - " . $ruc ." - " . $cantidad);exit();
 		$ingreso_vehiculo = IngresoVehiculoTronco::find($idIngreso);
-
 		$vehiculo = Vehiculo::find($ingreso_vehiculo->id_vehiculos);
-
 		$empresa = Empresa::find($ingreso_vehiculo->id_empresa_proveedor);
-		
-		$ingreso_vehiculo_tronco_tipo_madera = IngresoVehiculoTroncoTipoMadera::where("id_ingreso_vehiculo_troncos",$idIngreso)->where("estado",1)->first();
+
+		$ingreso_vehiculo_tronco_tipo_madera = IngresoVehiculoTroncoTipoMadera::where("id_ingreso_vehiculo_troncos",$idIngreso)
+			->where("estado",1)->first();
 		$id_ingreso_vehiculo_tronco_tipo_madera = $ingreso_vehiculo_tronco_tipo_madera->id;
 
-		//dd($id_ingreso_vehiculo_tronco_tipo_madera);exit();
-
-		$fecha_registro = $ingreso_vehiculo->fecha_ingreso;
-		$placa_registro = $vehiculo->placa;
-		$ruc_registro = $empresa->ruc;
-		$cantidad_registro = $ingreso_vehiculo_tronco_tipo_madera->cantidad;
-
-		//var_dump($fecha . " - " . $placa ." - " . $ruc ." - " . $cantidad);
-		//var_dump($fecha_registro . " - " . $placa_registro ." - " . $ruc_registro ." - " . $cantidad_registro);
-
+		// Validaciones
 		$errores = [];
-
-		if($fecha != $fecha_registro){
-			$errores[] = "La fecha no coincide.\n";
-		}
-
-		if($placa != $placa_registro){
-			$errores[] = "La Placa no coincide.\n";
-		}
-
-		if($ruc != $ruc_registro){
-			$errores[] = "El RUC no coincide.\n";
-		}
-
-		if($cantidad != $cantidad_registro){
-			$errores[] = "La Cantidad no coincide.\n";
-		}
+		if($fecha != $ingreso_vehiculo->fecha_ingreso) $errores[] = "La fecha no coincide.\n";
+		if($placa != $vehiculo->placa) $errores[] = "La Placa no coincide.\n";
+		if($ruc != $empresa->ruc) $errores[] = "El RUC no coincide.\n";
+		if($cantidad != $ingreso_vehiculo_tronco_tipo_madera->cantidad) $errores[] = "La Cantidad no coincide.\n";
 
 		if (!empty($errores)) {
 			return response()->json(['success' => false, 'message' => implode("", $errores)], 422);
 		}
 
+		// Troncos existentes
 		$id_ingreso_vehiculo_tronco_cubicaje = IngresoVehiculoTroncoCubicaje::where("id_ingreso_vehiculo_tronco_tipo_maderas",$id_ingreso_vehiculo_tronco_tipo_madera)->where("estado",1)->get()->values();
-		
-		foreach($sheet as $i=>$fila){
-			
-			if($i>3){
 
-				$key = $i - 4; // El índice del registro que corresponde a esta fila
-				if (!isset($id_ingreso_vehiculo_tronco_cubicaje[$key])) continue;
-				$ingreso_vehiculo_tronco_cubicaje_id = $id_ingreso_vehiculo_tronco_cubicaje[$key];
+		$rowIndex = 5;
+		$precio_total_final = 0;
 
-				$diametro1 = $fila[0];
-				$diametro2 = $fila[1];
-				$longitud = $fila[2];
-				
-				//$ingreso_vehiculo_troncos = IngresoVehiculoTronco::find($idIngreso);
+		foreach($id_ingreso_vehiculo_tronco_cubicaje as $registro){
+			$diametro1 = $sheet->getCell("A".$rowIndex)->getCalculatedValue();
+			$diametro2 = $sheet->getCell("B".$rowIndex)->getCalculatedValue();
+			$longitud  = $sheet->getCell("C".$rowIndex)->getCalculatedValue();
+			$rowIndex++; // AVANZAR FILA SIEMPRE
 
-				//$id_ingreso_vehiculo_tronco_cubicaje = IngresoVehiculoTroncoCubicaje::where("id_ingreso_vehiculo_tronco_tipo_maderas",$id_ingreso_vehiculo_tronco_tipo_madera)->where("estado",1)->get();
-				$diametro_1 = $diametro1;
-				$diametro_2 = $diametro2;
-				$longitud = $longitud;
-				$precio_total_final = 0;
-				
-				$diametro_dm = (((float)($diametro_1) + (float)($diametro_2)) / 2) / 100;
-				$radio = $diametro_dm / 2;
-				$volumen_m3 = 3.1416 * $radio * $radio * (float)($longitud);
-				$volumen_pies = 220 * $volumen_m3;
-				$volumen_total_pies = 220 * $volumen_m3;
-				
-				$precio_unitario = 0;
-				$precio_total = 0;
+			if (!$diametro1 || !$diametro2 || !$longitud) continue;
 
-				if ($diametro_dm >= $diametro_dm_) {
-					$precio_unitario = $precio_mayor;
-				} else{
-					$precio_unitario = $precio_menor;
-				}
+			$diametro_dm = (((float)$diametro1 + (float)$diametro2) / 2) / 100;
+			$radio = $diametro_dm / 2;
+			$volumen_m3 = 3.1416 * $radio * $radio * (float)$longitud;
+			$volumen_pies = 220 * $volumen_m3;
+			$volumen_total_pies = $volumen_pies;
 
-				if ($longitud < 1.22) $precio_unitario = 1.20;
+			// Precio
+			$precio_unitario = ($diametro_dm >= $diametro_dm_) ? $precio_mayor : $precio_menor;
+			if ($longitud < 1.22) $precio_unitario = 1.20;
 
-				$precio_total = $volumen_total_pies * $precio_unitario;
-				
-				foreach($id_ingreso_vehiculo_tronco_cubicaje as $key2=>$row3){
+			$precio_total = $volumen_total_pies * $precio_unitario;
 
-					//dd($row);exit();
+			// Actualizar registro
+			$registro->diametro_1 = $diametro1;
+			$registro->diametro_2 = $diametro2;
+			$registro->diametro_dm = number_format($diametro_dm,3);
+			$registro->longitud = $longitud;
+			$registro->volumen_m3 = number_format($volumen_m3,2);
+			$registro->volumen_pies = number_format($volumen_pies,2);
+			$registro->volumen_total_m3 = number_format($volumen_m3,2);
+			$registro->volumen_total_pies = number_format($volumen_total_pies,2);
+			$registro->precio_unitario = $precio_unitario;
+			$registro->precio_total = number_format($precio_total,2);
+			$registro->save();
 
-					//$ingresoVehiculoTroncoCubicaje = $row3;
-					$ingreso_vehiculo_tronco_cubicaje_id->diametro_1= $diametro_1;
-					$ingreso_vehiculo_tronco_cubicaje_id->diametro_2 = $diametro_2;
-					$ingreso_vehiculo_tronco_cubicaje_id->diametro_dm = number_format($diametro_dm,3);
-					$ingreso_vehiculo_tronco_cubicaje_id->longitud = $longitud;
-					$ingreso_vehiculo_tronco_cubicaje_id->volumen_m3 = number_format($volumen_m3,2);
-					$ingreso_vehiculo_tronco_cubicaje_id->volumen_pies = number_format($volumen_pies,2);
-					$ingreso_vehiculo_tronco_cubicaje_id->volumen_total_m3 = number_format($volumen_m3,2);
-					$ingreso_vehiculo_tronco_cubicaje_id->volumen_total_pies = number_format($volumen_total_pies,2);
-					$ingreso_vehiculo_tronco_cubicaje_id->precio_unitario = $precio_unitario;
-					$ingreso_vehiculo_tronco_cubicaje_id->precio_total = number_format($precio_total,2);
-					$ingreso_vehiculo_tronco_cubicaje_id->save();
-					
-					$precio_total_final+=$precio_total;
-				}
-				
-				$ingresoVehiculoTroncoTipoMadera = IngresoVehiculoTroncoTipoMadera::find($id_ingreso_vehiculo_tronco_tipo_madera);
-				$ingresoVehiculoTroncoTipoMadera->total = round($precio_total_final,2);
-				$ingresoVehiculoTroncoTipoMadera->save();
-				$id_ingreso_vehiculo_troncos = $ingresoVehiculoTroncoTipoMadera->id_ingreso_vehiculo_troncos;
-
-				$ingresoVehiculoTronco = IngresoVehiculoTronco::find($id_ingreso_vehiculo_troncos);
-				
-				$empresa = Empresa::find($ingresoVehiculoTronco->id_empresa_transportista);
-				
-				$pago = new Pago;
-				$pago->id_modulo = 1;
-				$pago->pk_registro = $id_ingreso_vehiculo_troncos;
-				$pago->fecha = Carbon::now()->format('Y-m-d');
-				$pago->comprobante_destinatario = $empresa->razon_social;
-				$pago->comprobante_direccion = $empresa->direccion;
-				$pago->comprobante_ruc = $empresa->ruc;
-				$pago->subtotal = round($precio_total_final,2);
-				$pago->impuesto = 0;
-				$pago->total = round($precio_total_final,2);
-				$pago->letras = "";
-				$pago->id_moneda = 1;
-				$pago->estado_pago = "N";
-				$pago->estado = "1";
-				$pago->id_usuario_inserta = $id_user;
-				$pago->save();
-				
-			}
+			$precio_total_final += $precio_total;
 		}
+
+		// Guardar total en tipo_madera
+		$ingresoVehiculoTroncoTipoMadera = IngresoVehiculoTroncoTipoMadera::find($id_ingreso_vehiculo_tronco_tipo_madera);
+		$ingresoVehiculoTroncoTipoMadera->total = round($precio_total_final,2);
+		$ingresoVehiculoTroncoTipoMadera->save();
+
+		// Crear pago
+		$ingresoVehiculoTronco = IngresoVehiculoTronco::find($ingresoVehiculoTroncoTipoMadera->id_ingreso_vehiculo_troncos);
+		$empresa = Empresa::find($ingresoVehiculoTronco->id_empresa_transportista);
+
+		$pago = new Pago;
+		$pago->id_modulo = 1;
+		$pago->pk_registro = $ingresoVehiculoTronco->id;
+		$pago->fecha = Carbon::now()->format('Y-m-d');
+		$pago->comprobante_destinatario = $empresa->razon_social;
+		$pago->comprobante_direccion = $empresa->direccion;
+		$pago->comprobante_ruc = $empresa->ruc;
+		$pago->subtotal = round($precio_total_final,2);
+		$pago->impuesto = 0;
+		$pago->total = round($precio_total_final,2);
+		$pago->letras = "";
+		$pago->id_moneda = 1;
+		$pago->estado_pago = "N";
+		$pago->estado = "1";
+		$pago->id_usuario_inserta = $id_user;
+		$pago->save();
 
 		return response()->json(['success' => true, 'message' => 'Archivo procesado correctamente.','id_ingreso_vehiculo_tronco_tipo_madera'=>$id_ingreso_vehiculo_tronco_tipo_madera]);
 	}
+
 
 	public function exportar_listar_reporte_anual($placa, $ruc, $anio) {
 

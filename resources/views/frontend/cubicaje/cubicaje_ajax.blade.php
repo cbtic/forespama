@@ -32,7 +32,7 @@ foreach($cubicaje as $row){
 ?>
 <tr style="font-size:13px" class="test" data-toggle="tooltip" data-placement="top">
 	<td class="text-left"><?php echo $cantidad ?></td>
-	<td class="text-center">1<input type="hidden" name="id_ingreso_vehiculo_tronco_cubicaje[]" value="<?php echo $row->id?>" /><input type="hidden" name="id_empresa_proveedor[]" value="<?php echo $row->id_empresa_proveedor?>" /><input type="hidden" name="diametro_dm[]" value="<?php echo $row->diametro_dm_proveedor?>" /><input type="hidden" name="precio_mayor[]" value="<?php echo $row->precio_mayor?>" /><input type="hidden" name="precio_menor[]" value="<?php echo $row->precio_menor?>" /></td>
+	<td class="text-center">1<input type="hidden" name="id_ingreso_vehiculo_tronco_cubicaje[]" value="<?php echo $row->id?>" /><input type="hidden" name="id_empresa_proveedor[]" value="<?php echo $row->id_empresa_proveedor?>" /><input type="hidden" name="diametro_dm_[]" value="<?php echo $row->diametro_dm_proveedor?>" /><input type="hidden" name="precio_mayor[]" value="<?php echo $row->precio_mayor?>" /><input type="hidden" name="precio_menor[]" value="<?php echo $row->precio_menor?>" /></td>
 	<td class="text-right"><input class="form-control form-control-sm text-right" name="diametro_1[]" value="<?php echo ($row->diametro_1!=0)?$row->diametro_1:""?>" onKeyUp="calcular_cubicaje(this)"></td>
 	<td class="text-right"><input class="form-control form-control-sm text-right" name="diametro_2[]" value="<?php echo ($row->diametro_2!=0)?$row->diametro_2:""?>" onKeyUp="calcular_cubicaje(this)"></td>
 	<td class="text-right"><input class="form-control form-control-sm text-right" name="diametro_dm[]" value="<?php echo ($row->diametro_dm!=0)? number_format($row->diametro_dm,3):""?>" readonly="readonly"></td>

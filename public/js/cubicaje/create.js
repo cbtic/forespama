@@ -204,7 +204,6 @@ function guardar_cubicaje() {
     });
 }
 
-
 function formato_miles(numero) {
 
     return parseFloat(numero).toFixed(2).replace(/\D/g, "").replace(/([0-9])([0-9]{2})$/, '$1.$2').replace(/\B(?=(\d{3})+(?!\d)\.?)/g, ",");
@@ -1950,7 +1949,7 @@ function datatablenew() {
 function calcular_cubicaje(obj) {
 
     //var id_empresa_proveedor = $(obj).parent().parent().find('input[name="id_empresa_proveedor[]"]').val();
-    var diametro_dm_ = parseFloat($(obj).parent().parent().find('input[name="diametro_dm[]"]').val());
+    var diametro_dm_ = parseFloat($(obj).parent().parent().find('input[name="diametro_dm_[]"]').val());
     var precio_mayor = parseFloat($(obj).parent().parent().find('input[name="precio_mayor[]"]').val());
     var precio_menor = parseFloat($(obj).parent().parent().find('input[name="precio_menor[]"]').val());
     var diametro_1 = $(obj).parent().parent().find('input[name="diametro_1[]"]').val();
@@ -1977,8 +1976,8 @@ function calcular_cubicaje(obj) {
     precio_total = volumen_total_pies * precio_unitario;
 
     //alert(precio_total);
-    $(obj).parent().parent().find('input[name="diametro_dm[]"]').val(diametro_dm);
-    $(obj).parent().parent().find('input[name="volumen_m3[]"]').val(volumen_m3.toFixed(3));
+    $(obj).parent().parent().find('input[name="diametro_dm[]"]').val(diametro_dm.toFixed(3));
+    $(obj).parent().parent().find('input[name="volumen_m3[]"]').val(volumen_m3.toFixed(2));
     $(obj).parent().parent().find('input[name="volumen_total_m3[]"]').val(volumen_m3.toFixed(2));
     $(obj).parent().parent().find('input[name="volumen_pies[]"]').val(volumen_pies.toFixed(2));
     $(obj).parent().parent().find('input[name="volumen_total_pies[]"]').val(volumen_total_pies.toFixed(2));
@@ -2001,7 +2000,6 @@ function cargarCubicaje(id) {
             $("#id_ingreso_vehiculo_tronco_tipo_maderas").val(id);
         }
     });
-
 }
 
 function cargarReporteCubicaje(id){

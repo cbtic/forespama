@@ -554,6 +554,7 @@ label.form-control-sm{
 							<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
 								<input class="btn btn-warning btn-sm pull-rigth" value="Buscar" type="button" id="btnBuscar" />
 								<a type="button" href="/img/cubicaje/plantilla/Plantilla_cubicaje_actualizado_15082025.xlsx" class="btn btn-secondary btn-sm" style="margin-left:15px;">Plantilla</a>
+								<a type="button" href="/img/cubicaje/plantilla/Plantilla_cubicaje_4diametros_06092025.xlsx" class="btn btn-secondary btn-sm" style="margin-left:15px;">Plantilla 4D</a>
 								<buttom class="btn btn-secondary btn-sm" type="button" id="btnDescargarExcel" style="margin-left:15px" /><i class="fa fa-download"></i> Descarga Excel</buttom>
 								<buttom class="btn btn-secondary btn-sm" type="button" id="btnDescargarReporteAnual" style="margin-left:15px" /><i class="fa fa-download"></i> Descarga Reporte Anual</buttom>
 							</div>
@@ -602,7 +603,6 @@ label.form-control-sm{
 							
 							<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 
-							
 								<input class="btn btn-secondary btn-sm float-right" style="margin-left:15px" value="Excel" type="button" id="btnDescargar" />
 								
 								<input class="btn btn-warning btn-sm float-right" style="margin-left:15px" value="Imprimir" type="button" id="btnImprimir" onclick="imprimirCubicajePdf()" />
