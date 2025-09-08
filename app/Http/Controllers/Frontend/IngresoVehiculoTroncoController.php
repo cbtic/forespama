@@ -532,7 +532,7 @@ class IngresoVehiculoTroncoController extends Controller
         return view('frontend.ingreso.modal_ingreso_imagen',compact('ingresoVehiculoTroncoImagen'));
 		
     }
-		
+	
 	public function cubicaje_pdf($id){
 
 		$vehiculo_tronco_model = new IngresoVehiculoTronco;
@@ -573,7 +573,7 @@ class IngresoVehiculoTroncoController extends Controller
 		
 		$pdf->setPaper('A4'); // Tamaño de papel (puedes cambiarlo según tus necesidades)
 
-		$pdf->setPaper('A4', 'portrait');
+		$pdf->setPaper([0, 0, 690, 960], 'portrait');
     	$pdf->setOption('margin-top', 20); // Márgen superior en milímetros
    		$pdf->setOption('margin-right', 50); // Márgen derecho en milímetros
     	$pdf->setOption('margin-bottom', 20); // Márgen inferior en milímetros
