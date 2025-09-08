@@ -1887,6 +1887,12 @@ function datatablenew() {
                     html += '</span>';
                     html += '<i id="fileExcel" class="fa fa-file-excel" style="display:none;color:#00B300;font-size:35px;float:left;padding-left:10px"></i>';
                     html += '<input type="button" class="btn btn-primary upload" data-id="'+row.id+'" value="Subir" style="margin-left:10px;float:left">';
+                    
+                    if (esAdministrador || esUsuarioPermitido) {
+
+                        html += '<a href="javascript:void(0)" onclick=eliminarIngresoVehiculo('+row.id_ingreso_vehiculo_tronco_tipo_maderas+') class="btn btn-sm btn-danger" style="font-size:12px;margin-left:10px">Eliminar</a>';
+                    }
+
                     html += '</div>';
 					return html;
                 },
@@ -1944,6 +1950,32 @@ function datatablenew() {
         }
     });
 
+}
+
+function eliminarIngresoVehiculo(id){
+
+    bootbox.confirm({ 
+        size: "small",
+        message: "&iquest;Deseas Eliminar El Ingreso de Vehiculo?", 
+        callback: function(result){
+            if (result==true) {
+                fn_eliminar(id);
+            }
+        }
+    });
+    $(".modal-dialog").css("width","30%");
+}
+
+function fn_eliminar(id){
+	
+    $.ajax({
+            url: "/ingreso_vehiculo_tronco/eliminar_ingreso_vehiculo/"+id,
+            type: "GET",
+            success: function (result) {
+                //if(result="success")obtenerPlanDetalle(id_plan);
+				datatablenew();
+            }
+    });
 }
 
 function calcular_cubicaje(obj) {

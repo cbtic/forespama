@@ -16,6 +16,7 @@ use App\Models\EmpresasConductoresVehiculo;
 use App\Models\Pago;
 use App\Models\Persona;
 use App\Models\IngresoVehiculoTroncoPago;
+use App\Models\Almacen_usuario;
 use Auth;
 use Carbon\Carbon;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -359,12 +360,17 @@ class IngresoVehiculoTroncoController extends Controller
 
 	public function cubicaje(){
 
+		$id_user = Auth::user()->id;
+
 		//$tablaMaestra_model = new TablaMaestra;
 		//$tipo_madera = $tablaMaestra_model->getMaestroByTipo(42);
 		$ingreso_vehiculo_tronco_model = new IngresoVehiculoTronco;
-		$anio = $ingreso_vehiculo_tronco_model->obtenerAniosIngreso();
+		$almacen_user_model = new Almacen_usuario;
 
-		return view('frontend.cubicaje.create',compact('anio'));
+		$anio = $ingreso_vehiculo_tronco_model->obtenerAniosIngreso();
+		$almacen_usuario = $almacen_user_model->getAlmacenByUser($id_user);
+
+		return view('frontend.cubicaje.create',compact('anio','almacen_usuario'));
 
 	}
 
@@ -1199,6 +1205,16 @@ class IngresoVehiculoTroncoController extends Controller
 		$ingreso_vehiculo_tronco_pago->save();
 
 		echo $ingreso_vehiculo_tronco_pago->id_ingreso_vehiculo_tronco_tipo_maderas;
+
+    }
+
+	public function eliminar_ingreso_vehiculo($id)
+    {
+		$ingreso_vehiculo_tronco_tipo_maderas = IngresoVehiculoTroncoTipoMadera::find($id);
+		$ingreso_vehiculo_tronco_tipo_maderas->estado = 0;
+		$ingreso_vehiculo_tronco_tipo_maderas->save();
+
+		echo $ingreso_vehiculo_tronco_tipo_maderas->id;
 
     }
 }

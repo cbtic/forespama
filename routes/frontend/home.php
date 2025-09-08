@@ -768,5 +768,5 @@ Route::get('activos/obtener_datos_sub_familia/{id}', [ActivoController::class, '
 Route::get('activos/obtener_marca/{tipo_activo}', [ActivoController::class, 'obtener_marca'])->name('activos.obtener_marca');
 Route::get('ingreso_vehiculo_tronco/eliminar_pago/{id}', [IngresoVehiculoTroncoController::class, 'eliminar_pago'])->name('ingreso_vehiculo_tronco.eliminar_pago');
 Route::get('ingreso_vehiculo_tronco/exportar_listar_reporte_excel/{placa}/{ruc}/{anio}/{fecha_inicio}/{fecha_fin}', [IngresoVehiculoTroncoController::class, 'exportar_listar_reporte_excel'])->name('ingreso_vehiculo_tronco.exportar_listar_reporte_excel');
-
+Route::get('ingreso_vehiculo_tronco/eliminar_ingreso_vehiculo/{id}', [IngresoVehiculoTroncoController::class, 'eliminar_ingreso_vehiculo'])->name('ingreso_vehiculo_tronco.eliminar_ingreso_vehiculo');
 

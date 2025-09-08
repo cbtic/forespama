@@ -421,7 +421,13 @@ label.form-control-sm{
 
 </style>
 
-
+<script>
+    var almacenUsuario = @json($almacen_usuario);
+	//alert(almacenUsuario.id_user);
+	var esAdministrador = {{ auth()->user()->hasAnyRole('Administrator') ? 'true' : 'false' }};
+	var esUsuarioPermitido = {{ auth()->user()->hasAnyRole('Encargado Cubicaje') ? 'true' : 'false' }};
+	//console.log(almacenUsuario);
+</script>
 
 @stack('before-scripts')
 @stack('after-scripts')

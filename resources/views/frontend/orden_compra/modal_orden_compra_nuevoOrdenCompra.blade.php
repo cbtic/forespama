@@ -1659,11 +1659,16 @@ function obtenerBeneficiario(){
                                         }
                                 ?>
 
+                                <button style="font-size:12px;margin-left:10px" type="button" class="btn btn-sm btn-primary" data-toggle="modal" onclick="pdf_documento()" ><i class="fa fa-edit"></i>Imprimir</button>
+
                                 <button style="font-size:12px;margin-left:10px;" type="button" class="btn btn-sm btn-secondary" data-toggle="modal" onclick="modal_datos_pedido_orden_compra()">Agregar Datos Pedido</button>
                                 
-                                <button style="font-size:12px;margin-left:10px" type="button" class="btn btn-sm btn-primary" data-toggle="modal" onclick="pdf_documento()" ><i class="fa fa-edit"></i>Imprimir</button>
                                 <button style="font-size:12px;margin-left:10px; margin-right:10px" type="button" class="btn btn-sm btn-warning" data-toggle="modal" onclick="pdf_guia()" ><i class="fa fa-edit"></i>Imprimir Gu&iacute;a Remisi&oacute;n Electronica</button>
                                 <!--<a href="javascript:void(0)" onClick="fn_pdf_documento()" class="btn btn-sm btn-primary" style="margin-right:100px">Imprimir</a>-->
+                                <?php 
+                                    }else{
+                                ?>
+                                    <button style="font-size:12px;margin-left:10px" type="button" class="btn btn-sm btn-primary" data-toggle="modal" onclick="pdf_documento()" ><i class="fa fa-edit"></i>Imprimir</button>
                                 <?php 
                                     }
                                 ?>
@@ -1672,7 +1677,7 @@ function obtenerBeneficiario(){
                                     if($id>0){
                                         if($orden_compra->id_empresa_compra==23){
                                 ?>
-                                <button style="font-size:12px;margin-right:40px" type="button" class="btn btn-sm btn-light" data-toggle="modal" onclick="generarLPN()" >Generar LPN</button>
+                                <button style="font-size:12px;margin-right:40px;" type="button" class="btn btn-sm btn-light" data-toggle="modal" onclick="generarLPN()" >Generar LPN</button>
                                 <?php 
                                         }
                                     }
@@ -1684,7 +1689,7 @@ function obtenerBeneficiario(){
                                 <?php if($id==0){?>
                                     <a href="javascript:void(0)" onClick="fn_save_orden_compra()" class="btn btn-sm btn-success" style="margin-right:10px">Guardar</a>
                                 <?php }?>
-                                <a href="javascript:void(0)" onClick="$('#openOverlayOpc').modal('hide');" class="btn btn-sm btn-info" style="">Cerrar</a>
+                                <a href="javascript:void(0)" onClick="$('#openOverlayOpc').modal('hide');" class="btn btn-sm btn-info" style="margin-left:10px;">Cerrar</a>
                             </div>
                         </div>
                     </div>
