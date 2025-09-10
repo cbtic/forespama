@@ -423,7 +423,8 @@ label.form-control-sm{
 							<th>N&uacute;mero Ingreso</th>
 							<th>Almacen Destino</th>
 							<th>Usuario Registra</th>
-							<th>&Aacute;rea</th>
+							<th>&Aacute;rea Trabajo</th>
+							<th>Unidad Trabajo</th>
 							<th>C&oacute;digo Orden Producci&oacute;n</th>
 							<th>Estado</th>
                             <th>Acciones</th>

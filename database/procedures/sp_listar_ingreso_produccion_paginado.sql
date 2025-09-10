@@ -1,6 +1,6 @@
--- DROP FUNCTION public.sp_listar_ingreso_produccion_paginado(varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, refcursor);
+-- DROP FUNCTION public.sp_listar_ingreso_produccion_paginado(varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, refcursor);
 
-CREATE OR REPLACE FUNCTION public.sp_listar_ingreso_produccion_paginado(p_tipo_documento character varying, p_fecha character varying, p_numero_ingreso_produccion character varying, p_almacen_destino character varying, p_area character varying, p_estado character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
+CREATE OR REPLACE FUNCTION public.sp_listar_ingreso_produccion_paginado(p_tipo_documento character varying, p_fecha character varying, p_numero_ingreso_produccion character varying, p_almacen_destino character varying, p_area character varying, p_unidad_trabajo character varying, p_estado character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
  RETURNS refcursor
  LANGUAGE plpgsql
 AS $function$
@@ -17,19 +17,16 @@ begin
 
 	p_pagina=(p_pagina::Integer-1)*p_limit::Integer;
 
-	v_campos=' ip.id, tm.denominacion tipo_documento, ip.fecha, ip.codigo numero_ingreso_produccion, ip.estado, a.denominacion almacen_destino, u.name usuario_ingreso, ut.denominacion area ';
+	v_campos=' ip.id, tm.denominacion tipo_documento, ip.fecha, ip.codigo numero_ingreso_produccion, ip.estado, a.denominacion almacen_destino, u.name usuario_ingreso, at2.denominacion area_trabajo, ut.denominacion unidad_trabajo ';
 
 	v_tabla=' from ingreso_produccion ip
 	inner join tabla_maestras tm on ip.id_tipo_documento ::int = tm.codigo ::int and tm.tipo=''53''
 	left join almacenes a on ip.id_almacen_destino = a.id
 	inner join users u on ip.id_usuario_inserta = u.id
-	left join unidad_trabajo ut on ut.id = ip.id_area  ';
+	left join area_trabajo at2 on ip.id_area = at2.id 
+	left join unidad_trabajo ut on ut.id = ip.id_unidad_trabajo ';
 	
 	v_where = ' Where 1=1 ';
-
-	/*If p_denominacion<>'' Then
-	 v_where:=v_where||'And ep.denominacion ilike  ''%'||p_denominacion||'%'' ';
-	End If;*/
 
 	If p_tipo_documento<>'' Then
 	 v_where:=v_where||'And ip.id_tipo_documento  = '''||p_tipo_documento||''' ';
@@ -49,6 +46,10 @@ begin
 
 	If p_area<>'' Then
 	 v_where:=v_where||'And ip.id_area = '''||p_area||''' ';
+	End If;
+
+	If p_unidad_trabajo<>'' Then
+	 v_where:=v_where||'And ip.id_unidad_trabajo = '''||p_unidad_trabajo||''' ';
 	End If;
 
 	If p_estado<>'' Then
