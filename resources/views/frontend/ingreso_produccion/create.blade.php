@@ -378,15 +378,21 @@ label.form-control-sm{
 						</select>
 					</div>
 
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<select name="area_bus" id="area_bus" class="form-control form-control-sm">
-							<option value="">--Seleccionar &Aacute;rea--</option>
-							<?php
-							foreach ($area as $row){?>
+					<div class="col-lg-2">
+						<select name="area_trabajo_bus" id="area_trabajo_bus" class="form-control form-control-sm" onchange="obtenerUnidadTrabajo()">
+							<option value="">--Seleccionar Area Trabajo--</option>
+							<?php 
+							foreach ($area_trabajo as $row){?>
 								<option value="<?php echo $row->id ?>"><?php echo $row->denominacion ?></option>
 								<?php 
 							}
 							?>
+						</select>
+					</div>
+
+					<div class="col-lg-2">
+						<select name="unidad_trabajo_bus" id="unidad_trabajo_bus" class="form-control form-control-sm" onchange="//actualizarSecciones(this)">
+							<option value="">--Seleccionar Unidad Trabajo--</option>
 						</select>
 					</div>
 

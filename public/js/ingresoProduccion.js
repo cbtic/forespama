@@ -94,7 +94,8 @@ function datatablenew(){
 			var fecha = $('#fecha_bus').val();
 			var numero_ingreso_produccion = $('#numero_ingreso_produccion_bus').val();
 			var almacen_destino = $('#almacen_destino_bus').val();
-			var area = $('#area_bus').val();
+			var area = $('#area_trabajo_bus').val();
+			var unidad_trabajo = $('#unidad_trabajo_bus').val();
 			var estado = $('#estado_bus').val();
 			
 			var _token = $('#_token').val();
@@ -105,7 +106,7 @@ function datatablenew(){
                 "url": sSource,
                 "data":{NumeroPagina:iNroPagina, NumeroRegistros:iCantMostrar,
 						tipo_documento:tipo_documento, fecha:fecha, numero_ingreso_produccion:numero_ingreso_produccion,
-						almacen_destino:almacen_destino, area:area, estado:estado,
+						almacen_destino:almacen_destino, area:area, unidad_trabajo:unidad_trabajo, estado:estado,
 						_token:_token
                        },
                 "success": function (result) {
@@ -180,12 +181,22 @@ function datatablenew(){
 
 				{
 					"mRender": function (data, type, row) {
-						var area = "";
-						if(row.area!= null)area = row.area;
-						return area;
+						var area_trabajo = "";
+						if(row.area_trabajo!= null)area_trabajo = row.area_trabajo;
+						return area_trabajo;
 					},
 					"bSortable": true,
 					"aTargets": [6]
+				},
+
+				{
+					"mRender": function (data, type, row) {
+						var unidad_trabajo = "";
+						if(row.unidad_trabajo!= null)unidad_trabajo = row.unidad_trabajo;
+						return unidad_trabajo;
+					},
+					"bSortable": true,
+					"aTargets": [7]
 				},
 
 				{
@@ -195,7 +206,7 @@ function datatablenew(){
 						return codigo_orden_produccion;
 					},
 					"bSortable": true,
-					"aTargets": [7]
+					"aTargets": [8]
 				},
 				
 				{
@@ -210,7 +221,7 @@ function datatablenew(){
 						return estado;
 					},
 					"bSortable": false,
-					"aTargets": [8]
+					"aTargets": [9]
 				},
 				{
 					"mRender": function (data, type, row) {
@@ -235,7 +246,7 @@ function datatablenew(){
 						return html;
 					},
 					"bSortable": false,
-					"aTargets": [9],
+					"aTargets": [10],
 				},
             ]
     });
@@ -304,7 +315,8 @@ function descargarArchivosIngresoProduccion(){
 	var fecha = $('#fecha_bus').val();
 	var numero_ingreso_produccion = $('#numero_ingreso_produccion_bus').val();
 	var almacen_destino = $('#almacen_destino_bus').val();
-	var area = $('#area_bus').val();
+	var area = $('#area_trabajo_bus').val();
+	var unidad_trabajo = $('#unidad_trabajo_bus').val();
 	var estado = $('#estado_bus').val();
 
 	if (tipo_documento == "")tipo_documento = 0;
@@ -312,7 +324,27 @@ function descargarArchivosIngresoProduccion(){
 	if (numero_ingreso_produccion == "")numero_ingreso_produccion = "0";
 	if (almacen_destino == "")almacen_destino = 0;
 	if (area == "")area = 0;
+	if (unidad_trabajo == "")unidad_trabajo = 0;
 	if (estado == "")estado = 0;
 	
-	location.href = '/ingreso_produccion/exportar_listar_ingreso_produccion/'+tipo_documento+'/'+fecha+'/'+numero_ingreso_produccion+'/'+almacen_destino+'/'+area+'/'+estado;
+	location.href = '/ingreso_produccion/exportar_listar_ingreso_produccion/'+tipo_documento+'/'+fecha+'/'+numero_ingreso_produccion+'/'+almacen_destino+'/'+area+'/'+unidad_trabajo+'/'+estado;
+}
+
+function obtenerUnidadTrabajo(){
+    
+    var area_trabajo = $('#area_trabajo_bus').val();
+	
+	$.ajax({
+        url: "/dispensacion/obtener_unidad_trabajo/"+area_trabajo,
+        dataType: "json",
+        success: function(result){
+            var option = "<option value='' selected='selected'>--Seleccionar Unidad Trabajo--</option>";
+            $('#unidad_trabajo_bus').html("");
+            $(result).each(function (ii, oo) {
+              	option += "<option value='" + oo.id + "'>" + oo.denominacion + "</option>"; 
+            });
+            $('#unidad_trabajo_bus').html(option);
+        }
+        
+    });
 }

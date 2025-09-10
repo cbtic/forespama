@@ -192,6 +192,10 @@ $(document).ready(function() {
     
     $('#area').select2({ width : '100%'})
 
+    if($('#id').val()>0){
+        obtenerUnidadTrabajo();
+    }
+
 });
 
 function obtenerDescripcion(selectElement){
@@ -356,6 +360,34 @@ function pdf_documento(){
     window.open(href, '_blank');
 }
 
+function obtenerUnidadTrabajo(){
+    
+    var area_trabajo = $('#area_trabajo').val();
+    var selectedUnidad = "<?php echo isset($orden_produccion->id_unidad_trabajo) ? $orden_produccion->id_unidad_trabajo : ''; ?>";
+    //alert(selectedUnidad);
+    $.ajax({
+        url: "/dispensacion/obtener_unidad_trabajo/"+area_trabajo,
+        dataType: "json",
+        success: function(result){
+            var option = "<option value='' selected='selected'>--Seleccionar--</option>";
+            var option;
+            $('#unidad_trabajo').html("");
+            $(result).each(function (ii, oo) {
+                if (oo.id == selectedUnidad) {
+                    option += "<option value='" + oo.id + "' selected='selected'>" + oo.denominacion + "</option>";
+                }else {
+                    option += "<option value='"+oo.id+"'>"+oo.denominacion+"</option>";
+                }
+                
+            });
+            $('#unidad_trabajo').html(option);
+            //$('#unidad_trabajo').select2();
+            
+            //$('.loader').hide();
+        }
+    });
+}
+
 </script>
 
 <body class="hold-transition skin-blue sidebar-mini">
@@ -404,17 +436,25 @@ function pdf_documento(){
                             <input id="fecha_orden_produccion" name="fecha_orden_produccion" on class="form-control form-control-sm"  value="<?php echo isset($orden_produccion) && $orden_produccion->fecha_orden_produccion ? $orden_produccion->fecha_orden_produccion : date('Y-m-d'); ?>" type="text">
                         </div>
                         <div class="col-lg-2">
-                            &Aacute;rea
+                            &Aacute;rea de Trabajo
                         </div>
-                        <div class="col-lg-2">
-                            <select name="area" id="area" class="form-control form-control-sm" onchange="">
+                        <div class="col-lg-2" id="almacen_salida_select">
+                            <select name="area_trabajo" id="area_trabajo" class="form-control form-control-sm" onchange="obtenerUnidadTrabajo()">
                                 <option value="">--Seleccionar--</option>
-                                <?php
-                                foreach ($area as $row){?>
+                                <?php 
+                                foreach ($area_trabajo as $row){?>
                                     <option value="<?php echo $row->id ?>" <?php if($row->id==$orden_produccion->id_area)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
                                     <?php 
                                 }
                                 ?>
+                            </select>
+                        </div>
+                        <div class="col-lg-2">
+                            Unidad de Trabajo
+                        </div>
+                        <div class="col-lg-2" id="almacen_salida_select">
+                            <select name="unidad_trabajo" id="unidad_trabajo" class="form-control form-control-sm" onchange="//actualizarSecciones(this)">
+                                <option value="">--Seleccionar--</option>
                             </select>
                         </div>
                     </div>

@@ -13,7 +13,7 @@ class UnidadTrabajo extends Model
     function getUnidadTrabajoAll(){
 
         $cad = "select * from unidad_trabajo ut 
-        where estado='1'
+        where estado = '1'
         order by 1 asc";
 
 		$data = DB::select($cad);
@@ -25,6 +25,7 @@ class UnidadTrabajo extends Model
         $cad = "select ut.id, ut.denominacion from unidad_trabajo ut 
         inner join area_trabajo at on ut.id_area_trabajo = at.id
         where at.id='".$area_trabajo."'
+        and ut.estado = '1'
         order by ut.id asc";
 
 		$data = DB::select($cad);

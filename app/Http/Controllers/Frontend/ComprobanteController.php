@@ -1159,35 +1159,36 @@ class ComprobanteController extends Controller
                     $codigo_orden_compra = $orden_compra_model->getCodigoOrdenCompra(2);
 
                     $orden_compra = new OrdenCompra;
-                    if($tipoF == 'FT'){                         
+                    if($tipoF == 'FT'){
                         $orden_compra->id_empresa_compra = $ubicacion_id;
                         $orden_compra->id_tipo_documento = 2;
                          $orden_compra->id_tipo_cliente = '5';
-                    }else { //if($tipoF == 'BV'){                        
+                    }else { //if($tipoF == 'BV'){
                         $orden_compra->id_persona = $id_persona_act;
                         $orden_compra->id_tipo_documento = 2;
                         $orden_compra->id_tipo_cliente = '1';
                     }
-                   if($id_tipo_afectacion_pp =='20'){
+                    if($id_tipo_afectacion_pp =='20'){
                         $orden_compra->igv_compra = 1;
                         $orden_compra->id_almacen_salida = 2;
                         $orden_compra->id_unidad_origen = 4;
-                   }else{
+                    }else{
                         $orden_compra->igv_compra = 2;
                         $orden_compra->id_almacen_salida = 3;
                         $orden_compra->id_unidad_origen = 4;
-                   }
+                    }
                     
                     $orden_compra->id_empresa_vende = 30;
                     $orden_compra->fecha_orden_compra = Carbon::now()->toDateString();
                     $orden_compra->numero_orden_compra = $codigo_orden_compra[0]->codigo;
                     $orden_compra->tienda_asignada = '0';
-                    $orden_compra->cerrado = '1';                    
+                    $orden_compra->cerrado = '1';
                     //$orden_compra->id_almacen_destino =3;
                     $orden_compra->id_usuario_inserta = $id_user;
-                    $orden_compra->estado = '1';                    
-                    $orden_compra->id_vendedor = 3;
-                    $orden_compra->estado_pedido = '1';                     
+                    $orden_compra->estado = '1';
+                    $orden_compra->id_vendedor = 38;
+                    $orden_compra->id_canal = 6;
+                    $orden_compra->estado_pedido = '1';
                     $orden_compra->total =  $request->totalF;
                     $orden_compra->sub_total =  $request->gravadas;
                     $orden_compra->igv =  $request->igv;
@@ -1204,8 +1205,8 @@ class ComprobanteController extends Controller
                     //print_r($id_orden_compra);
                     //exit();
 
-                    foreach($tarifa as $key => $value) { 
-                        $orden_compra_detalle = new OrdenCompraDetalle;   
+                    foreach($tarifa as $key => $value) {
+                        $orden_compra_detalle = new OrdenCompraDetalle;
 
                         $orden_compra_detalle->id_orden_compra = $id_orden_compra;
                         $orden_compra_detalle->id_producto = $value['id_producto'];
@@ -1217,9 +1218,9 @@ class ComprobanteController extends Controller
                         $orden_compra_detalle->valor_venta = $value['valor_venta'];
                         $orden_compra_detalle->sub_total =$value['valor_venta'];
                         $orden_compra_detalle->igv =  $value['igv'];
-                        $orden_compra_detalle->total = $value['total'];                        
+                        $orden_compra_detalle->total = $value['total'];
                         $orden_compra_detalle->id_unidad_medida = $value['id_unidad_medida'];
-                        $orden_compra_detalle->id_marca = 278;                        
+                        $orden_compra_detalle->id_marca = 278;
                         //$orden_compra_detalle->id_descuento = $value['id_descuento'];
                         $orden_compra_detalle->descuento = $value['descuento']; 
                         $orden_compra_detalle->estado = '1';
@@ -1228,13 +1229,11 @@ class ComprobanteController extends Controller
 
                         $orden_compra_detalle->save();
 
-                        $id_orden_compra_detalle = $orden_compra_detalle->id;                                                
+                        $id_orden_compra_detalle = $orden_compra_detalle->id;
                         $tarifa[$key]['id'] = $id_orden_compra_detalle;
 
                     }     
-                                   
-                } 
-
+                }
                 
                 foreach ($tarifa as $key => $value) {
 
@@ -2841,6 +2840,10 @@ class ComprobanteController extends Controller
         //print_r($factura_detalles); exit();
 		$cabecera = array("valor1","valor2");
 		$detalle = array("valor1","valor2");
+
+        $totalOPGravadas = 0;
+        $totalOPNoGravadas = 0;
+
 		foreach($factura_detalles as $index => $row ) {
 
             $tabla_maestras = TablaMaestra::where([
@@ -2849,25 +2852,34 @@ class ComprobanteController extends Controller
             ])->first();
 
 			$items1 = array(
-							"ordenItem"=> $row->item, //"2",
-							"adicionales"=> [],
-							"cantidadItem"=> $row->cantidad, //"1",
-							"descuentoItem"=> $row->descuento,
-							"importeIGVItem"=> str_replace(",","",$row->igv_total),//str_replace(",","",number_format($row->igv_total,2)),//"7.63",
-							"montoTotalItem"=> str_replace(",","",$row->importe), //"50.00",
-							"valorVentaItem"=> str_replace(",","",$row->valor_venta), //"42.37",
-							"descripcionItem"=> $row->descripcion,//"TRANSBORDO",
-							"unidadMedidaItem"=> $row->unidad,
-							"codigoProductoItem"=> ($row->codigo!="")?$row->codigo:"0000000", //"002",
-                            "codigoDescuentoItem"=> "00",
-							"valorUnitarioSinIgv"=> str_replace(",","",$row->pu), //"42.3728813559",
-							"precioUnitarioConIgv"=> str_replace(",","",$row->precio_venta), //"50.0000000000",
-							"unidadMedidaComercial"=> $tabla_maestras->abreviatura_comercial,
-							"codigoAfectacionIGVItem"=> $row->afect_igv,
-							"porcentajeDescuentoItem"=> str_replace(",","",($row->descuento*100)/$row->pu),
-							"codTipoPrecioVtaUnitarioItem"=> "01"
-							);
+                "ordenItem"=> $row->item, //"2",
+                "adicionales"=> [],
+                "cantidadItem"=> $row->cantidad, //"1",
+                "descuentoItem"=> $row->descuento,
+                "importeIGVItem"=> str_replace(",","",$row->igv_total),//str_replace(",","",number_format($row->igv_total,2)),//"7.63",
+                "montoTotalItem"=> str_replace(",","",$row->importe), //"50.00",
+                "valorVentaItem"=> str_replace(",","",$row->valor_venta), //"42.37",
+                "descripcionItem"=> $row->descripcion,//"TRANSBORDO",
+                "unidadMedidaItem"=> $row->unidad,
+                "codigoProductoItem"=> ($row->codigo!="")?$row->codigo:"0000000", //"002",
+                "codigoDescuentoItem"=> "00",
+                "valorUnitarioSinIgv"=> str_replace(",","",$row->pu), //"42.3728813559",
+                "precioUnitarioConIgv"=> str_replace(",","",$row->precio_venta), //"50.0000000000",
+                "unidadMedidaComercial"=> $tabla_maestras->abreviatura_comercial,
+                "codigoAfectacionIGVItem"=> $row->afect_igv,
+                "porcentajeDescuentoItem"=> str_replace(",","",($row->descuento*100)/$row->pu),
+                "codTipoPrecioVtaUnitarioItem"=> "01"
+            );
+
+            if ($row->afect_igv == '10') {
+                $totalOPGravadas = $totalOPGravadas + str_replace(",", "", $row->valor_venta);
+            } else {
+                $totalOPNoGravadas = $totalOPNoGravadas + str_replace(",", "", $row->valor_venta);
+            }
+            
 			$items[$index]=$items1;
+
+            $afect_igv = $row->afect_igv;
         }
  
 		$data["items"] = $items;
@@ -2900,14 +2912,14 @@ class ComprobanteController extends Controller
 		$data["direccionEmisor"] = "CAR.MARGINAL KM. 42 SEC. MIRAFLORES (A UNA CDRA. UNIVERSIDAD DE OXAPAMPA) PASCO - OXAPAMPA - OXAPAMPA";
 		$data["provinciaEmisor"] = "OXAPAMPA";
 		$data["totalDescuentos"] = str_replace(",","",$factura->total_descuentos);
-		$data["totalOPGravadas"] = str_replace(",","",$factura->subtotal); //"127.12";
+		$data["totalOPGravadas"] = str_replace(",","",number_format($totalOPGravadas,2)); //"127.12";
 		$data["codigoPaisEmisor"] = "PE";
 		$data["totalOPGratuitas"] = "0.00";
 		$data["docAfectadoFisico"] = false;
 		$data["importeTotalVenta"] = str_replace(",","",$factura->total); //"150.00";
 		$data["razonSocialEmisor"] = "FORESTAL PAMA S.A.C.";
-		$data["totalOPExoneradas"] = "0.00";
-		$data["totalOPNoGravadas"] = "0.00";//
+		$data["totalOPExoneradas"] = str_replace(",","",number_format($totalOPNoGravadas,2));;
+		$data["totalOPNoGravadas"] = "0.00"; 
 		$data["codigoPaisReceptor"] = "PE";
 		$data["departamentoEmisor"] = "OXAPAMPA";
 		$data["descuentosGlobales"] = "0.00";
@@ -3000,6 +3012,11 @@ class ComprobanteController extends Controller
         curl_setopt($chbuild, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($chbuild, CURLOPT_CUSTOMREQUEST, "PUT");
         curl_setopt($chbuild, CURLOPT_POSTFIELDS, $databuild_string);
+
+        /**************** ELIMINAR ***************/
+        //curl_setopt($chbuild, CURLOPT_SSL_VERIFYPEER, false);
+        //curl_setopt($chbuild, CURLOPT_SSL_VERIFYHOST, false);
+        /*****************************************/
 
         $results = curl_exec($chbuild);
         //print_r($results);
@@ -3919,8 +3936,8 @@ class ComprobanteController extends Controller
 		curl_setopt($chbuild, CURLOPT_CUSTOMREQUEST, "PUT");
         curl_setopt($chbuild, CURLOPT_POSTFIELDS, $databuild_string);
         /*********************************  ELIMINAR  *************************************/
-        curl_setopt($chbuild, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($chbuild, CURLOPT_SSL_VERIFYHOST, false);
+        //curl_setopt($chbuild, CURLOPT_SSL_VERIFYPEER, false);
+        //curl_setopt($chbuild, CURLOPT_SSL_VERIFYHOST, false);
         /*********************************************************************************/
         
         $results = curl_exec($chbuild);

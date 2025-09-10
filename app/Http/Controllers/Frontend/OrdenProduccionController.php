@@ -18,6 +18,7 @@ use App\Models\OrdenCompraDetalle;
 use App\Models\Marca;
 use App\Models\Almacene;
 use App\Models\Kardex;
+use App\Models\AreaTrabajo;
 use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Auth;
@@ -37,16 +38,16 @@ class OrdenProduccionController extends Controller
 		$tablaMaestra_model = new TablaMaestra;
         $producto_model = new Producto;
         $persona_model = new Persona;
-        $unidad_trabajo_model = new UnidadTrabajo;
+        $area_trabajo_model = new AreaTrabajo;
 
         $producto = $producto_model->getProductoExterno();
         //$encargado = $persona_model->obtenerPersonaAll();
-        $area = $unidad_trabajo_model->getUnidadTrabajo(7);
+        $area_trabajo = $area_trabajo_model->getAreaTrabajoAll();
         $situacion = $tablaMaestra_model->getMaestroByTipo(92);
         $cerrado = $tablaMaestra_model->getMaestroByTipo(52);
         //$producto = $producto_model->getProductoAll();
         
-		return view('frontend.orden_produccion.create_orden_produccion',compact('area','situacion','producto','cerrado'));
+		return view('frontend.orden_produccion.create_orden_produccion',compact('area_trabajo','situacion','producto','cerrado'));
 
 	}
 
@@ -58,6 +59,7 @@ class OrdenProduccionController extends Controller
         $p[]=$request->numero_orden_produccion;
         $p[]=$request->fecha_inicio;
         $p[]=$request->area;
+        $p[]=$request->unidad_trabajo;
         $p[]=$request->situacion;
         $p[]=$request->producto;
         $p[]=$request->cerrado;
@@ -85,7 +87,7 @@ class OrdenProduccionController extends Controller
         $tablaMaestra_model = new TablaMaestra;
         $producto_model = new Producto;
         $encargado_model = new TipoEncargado;
-        $unidad_trabajo_model = new UnidadTrabajo;
+        $area_trabajo_model = new AreaTrabajo;
 		
 		if($id>0){
 
@@ -98,9 +100,9 @@ class OrdenProduccionController extends Controller
         $producto = $producto_model->getProductoExterno();
         $unidad = $tablaMaestra_model->getMaestroByTipo(43);
         //$encargado = $encargado_model->obtenerEncargadoByTipo(2);
-        $area = $unidad_trabajo_model->getUnidadTrabajo(7);
+        $area_trabajo = $area_trabajo_model->getAreaTrabajoAll();
 
-		return view('frontend.orden_produccion.modal_orden_produccion_nuevoOrdenProduccion',compact('id','orden_produccion','producto','unidad','area'));
+		return view('frontend.orden_produccion.modal_orden_produccion_nuevoOrdenProduccion',compact('id','orden_produccion','producto','unidad','area_trabajo'));
 
     }
 
@@ -110,7 +112,7 @@ class OrdenProduccionController extends Controller
         $tablaMaestra_model = new TablaMaestra;
         $producto_model = new Producto;
         $encargado_model = new TipoEncargado;
-        $unidad_trabajo_model = new UnidadTrabajo;
+        $area_trabajo_model = new AreaTrabajo;
 		
 		if($id>0){
 
@@ -123,9 +125,9 @@ class OrdenProduccionController extends Controller
         $producto = $producto_model->getProductoExterno();
         $unidad = $tablaMaestra_model->getMaestroByTipo(43);
         //$encargado = $encargado_model->obtenerEncargadoByTipo(2);
-        $area = $unidad_trabajo_model->getUnidadTrabajo(7);
+        $area_trabajo = $area_trabajo_model->getAreaTrabajoAll();
 
-		return view('frontend.orden_produccion.modal_orden_produccion_nuevoOrdenProduccionPlaneamiento',compact('id','orden_produccion','producto','unidad','area'));
+		return view('frontend.orden_produccion.modal_orden_produccion_nuevoOrdenProduccionPlaneamiento',compact('id','orden_produccion','producto','unidad','area_trabajo'));
 
     }
 
@@ -145,7 +147,8 @@ class OrdenProduccionController extends Controller
         $id_producto = $request->input('id_producto');
         $cantidad_producir = $request->input('cantidad_producir');
 
-        $orden_produccion->id_area = $request->area;
+        $orden_produccion->id_area = $request->area_trabajo;
+        $orden_produccion->id_unidad_trabajo = $request->unidad_trabajo;
         $orden_produccion->fecha_orden_produccion = $request->fecha_orden_produccion;
         if($request->id == 0){
             $orden_produccion->codigo = $codigo_orden_produccion[0]->codigo;
@@ -247,7 +250,8 @@ class OrdenProduccionController extends Controller
         $id_situacion=$datos[0]->id_situacion;
         $fecha_orden_produccion=$datos[0]->fecha_orden_produccion;
         $codigo=$datos[0]->codigo;
-        $area = $datos[0]->area;
+        $area_trabajo = $datos[0]->area_trabajo;
+        $unidad_trabajo = $datos[0]->unidad_trabajo;
         $usuario = $datos[0]->usuario;
                 
 		$year = Carbon::now()->year;
@@ -258,7 +262,7 @@ class OrdenProduccionController extends Controller
 
 		$currentHour = Carbon::now()->format('H:i:s');
 
-		$pdf = Pdf::loadView('frontend.orden_produccion.movimiento_orden_produccion_pdf',compact('id_situacion','fecha_orden_produccion','codigo','area','usuario','datos_detalle'));
+		$pdf = Pdf::loadView('frontend.orden_produccion.movimiento_orden_produccion_pdf',compact('id_situacion','fecha_orden_produccion','codigo','area_trabajo','usuario','datos_detalle','unidad_trabajo'));
 
 		$pdf->setPaper('A4'); // Tamaño de papel (puedes cambiarlo según tus necesidades)
 
@@ -283,7 +287,8 @@ class OrdenProduccionController extends Controller
         $id_situacion=$datos[0]->id_situacion;
         $fecha_orden_produccion=$datos[0]->fecha_orden_produccion;
         $codigo=$datos[0]->codigo;
-        $area = $datos[0]->area;
+        $area_trabajo = $datos[0]->area_trabajo;
+        $unidad_trabajo = $datos[0]->unidad_trabajo;
         $usuario = $datos[0]->usuario;
                 
 		$year = Carbon::now()->year;
@@ -294,7 +299,7 @@ class OrdenProduccionController extends Controller
 
 		$currentHour = Carbon::now()->format('H:i:s');
 
-		$pdf = Pdf::loadView('frontend.orden_produccion.movimiento_orden_produccion_pdf',compact('id_situacion','fecha_orden_produccion','codigo','area','usuario','datos_detalle'));
+		$pdf = Pdf::loadView('frontend.orden_produccion.movimiento_orden_produccion_pdf',compact('id_situacion','fecha_orden_produccion','codigo','area_trabajo','usuario','datos_detalle','unidad_trabajo'));
 
 		$pdf->setPaper('A4'); // Tamaño de papel (puedes cambiarlo según tus necesidades)
 
@@ -315,7 +320,7 @@ class OrdenProduccionController extends Controller
         $marca_model = new Marca;
         $almacen_model = new Almacene;
         $user_model = new User;
-        $unidad_trabajo_model = new UnidadTrabajo;
+        $area_trabajo_model = new AreaTrabajo;
 		
 		if($id>0){
             $orden_produccion = OrdenProduccion::find($id);
@@ -333,9 +338,9 @@ class OrdenProduccionController extends Controller
         $estado_bien = $tablaMaestra_model->getMaestroByTipo(4);
         $responsable_atencion = $user_model->getUserAll();
         $unidad_origen = $tablaMaestra_model->getMaestroByTipo(50);
-        $area = $unidad_trabajo_model->getUnidadTrabajo(7);
+        $area_trabajo = $area_trabajo_model->getAreaTrabajoAll();
         
-        return view('frontend.orden_produccion.modal_orden_produccion_atenderOrdenProduccion',compact('id','orden_produccion','tipo_documento','producto','marca','unidad','almacen','cerrado_requerimiento','estado_bien','estado_atencion','responsable_atencion','unidad_origen','area'));
+        return view('frontend.orden_produccion.modal_orden_produccion_atenderOrdenProduccion',compact('id','orden_produccion','tipo_documento','producto','marca','unidad','almacen','cerrado_requerimiento','estado_bien','estado_atencion','responsable_atencion','unidad_origen','area_trabajo'));
 
     }
 
@@ -469,7 +474,8 @@ class OrdenProduccionController extends Controller
 
         $fecha_orden_produccion=$data_cabecera[0]->fecha_orden_produccion;
         $codigo=$data_cabecera[0]->codigo;
-        $area = $data_cabecera[0]->area;
+        $area_trabajo = $data_cabecera[0]->area_trabajo;
+        $unidad_trabajo = $data_cabecera[0]->unidad_trabajo;
 		
 		$data_detalle = $orden_produccion_model->getDetalleOrdenProduccionById($id);
 		
@@ -481,7 +487,7 @@ class OrdenProduccionController extends Controller
 			$variable[] = [$n++, $r->nombre_producto, $r->codigo, $r->unidad_medida, $r->cantidad];
 		}
 		
-		$export = new InvoicesExport($variable, $codigo, $fecha_orden_produccion, $area);
+		$export = new InvoicesExport($variable, $codigo, $fecha_orden_produccion, $area_trabajo, $unidad_trabajo);
 		return Excel::download($export, 'orden_produccion.xlsx');
     }
 
@@ -501,14 +507,16 @@ class InvoicesExport implements FromArray, WithStyles
 	protected $invoices;
     protected $codigo;
     protected $fecha;
-    protected $area;
+    protected $area_trabajo;
+    protected $unidad_trabajo;
 
-	public function __construct(array $invoices, $codigo, $fecha, $area)
+	public function __construct(array $invoices, $codigo, $fecha, $area_trabajo, $unidad_trabajo)
 	{
 		$this->invoices = $invoices;
 		$this->codigo = $codigo;
         $this->fecha = $fecha;
-        $this->area = $area;
+        $this->area_trabajo = $area_trabajo;
+        $this->unidad_trabajo = $unidad_trabajo;
 	}
 
 	public function array(): array
@@ -517,9 +525,9 @@ class InvoicesExport implements FromArray, WithStyles
         
         $data[] = ["",""];
 
-        $data[] = ["Fecha Orden Producción", "Área"];
+        $data[] = ["Fecha Orden Producción", "Area Trabajo", "Unidad Trabajo"];
 
-        $data[] = [$this->fecha, $this->area];
+        $data[] = [$this->fecha, $this->area_trabajo, $this->unidad_trabajo];
 
         $data[] = ["#", "Descripción", "Código", "Unidad", "Cantidad"];
 
@@ -552,7 +560,7 @@ class InvoicesExport implements FromArray, WithStyles
         ]);
         $sheet->getRowDimension(1)->setRowHeight(30);
 
-        $sheet->getStyle('A2:B2')->applyFromArray([
+        $sheet->getStyle('A2:C2')->applyFromArray([
             'font' => [
                 'bold' => true,
             ],

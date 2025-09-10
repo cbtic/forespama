@@ -62,11 +62,12 @@ class OrdenProduccion extends Model
 
         $cad = "select op.id, op.id_situacion,
         to_char(op.fecha_orden_produccion,'dd-mm-yyyy') fecha_orden_produccion, 
-        op.codigo, ut.denominacion area, u.name usuario, op.estado
+        op.codigo, at.denominacion area_trabajo, ut.denominacion unidad_trabajo, u.name usuario, op.estado
         from orden_produccion op
-        inner join unidad_trabajo ut on ut.id = op.id_area 
+        left join area_trabajo at on op.id_area = at.id 
+        left join unidad_trabajo ut on ut.id = op.id_unidad_trabajo
         inner join users u on op.id_usuario_inserta = u.id
-        where op.id = '".$id."'
+        where op.id = '14'
         and op.estado = '1' ";
 
 		$data = DB::select($cad);

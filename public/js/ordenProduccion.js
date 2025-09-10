@@ -103,7 +103,8 @@ function datatablenew(){
 			
 			var fecha_inicio = $('#fecha_inicio_bus').val();
 			var numero_orden_produccion = $('#numero_orden_produccion_bus').val();
-			var area= $('#area_bus').val();
+			var area= $('#area_trabajo_bus').val();
+			var unidad_trabajo= $('#unidad_trabajo_bus').val();
 			var situacion = $('#situacion_bus').val();
 			var estado = $('#estado_bus').val();
 			var producto = $('#producto_bus').val();
@@ -116,7 +117,7 @@ function datatablenew(){
                 "type": "POST",
                 "url": sSource,
                 "data":{NumeroPagina:iNroPagina,NumeroRegistros:iCantMostrar,
-						fecha_inicio:fecha_inicio,numero_orden_produccion:numero_orden_produccion,area:area,situacion:situacion,producto:producto,cerrado:cerrado,
+						fecha_inicio:fecha_inicio,numero_orden_produccion:numero_orden_produccion,area:area,situacion:situacion,producto:producto,cerrado:cerrado,unidad_trabajo:unidad_trabajo,
 						estado:estado,_token:_token
                        },
                 "success": function (result) {
@@ -167,9 +168,9 @@ function datatablenew(){
 
 			{
 			"mRender": function (data, type, row) {
-				var area = "";
-				if(row.area!= null)area = row.area;
-				return area;
+				var area_trabajo = "";
+				if(row.area_trabajo!= null)area_trabajo = row.area_trabajo;
+				return area_trabajo;
 			},
 			"bSortable": true,
 			"aTargets": [3]
@@ -177,12 +178,22 @@ function datatablenew(){
 			
 			{
 			"mRender": function (data, type, row) {
+				var unidad_trabajo = "";
+				if(row.unidad_trabajo!= null)unidad_trabajo = row.unidad_trabajo;
+				return unidad_trabajo;
+			},
+			"bSortable": true,
+			"aTargets": [4]
+			},
+
+			{
+			"mRender": function (data, type, row) {
 				var fecha_produccion = "";
 				if(row.fecha_produccion!= null)fecha_produccion = row.fecha_produccion;
 				return fecha_produccion;
 			},
 			"bSortable": true,
-			"aTargets": [4]
+			"aTargets": [5]
 			},
 			
 			{
@@ -192,7 +203,7 @@ function datatablenew(){
 				return situacion;
 			},
 			"bSortable": true,
-			"aTargets": [5]
+			"aTargets": [6]
 			},
 
 			{
@@ -207,7 +218,7 @@ function datatablenew(){
 				return estado;
 			},
 			"bSortable": false,
-			"aTargets": [6]
+			"aTargets": [7]
 			},
 			{
 			"mRender": function (data, type, row) {
@@ -232,7 +243,7 @@ function datatablenew(){
 				return html;
 			},
 			"bSortable": false,
-			"aTargets": [7],
+			"aTargets": [8],
 			},
 		]
     });
@@ -324,4 +335,23 @@ function modalAtenderOrdenProduccion(id){
 			$('#openOverlayOpc').modal('show');
 		}
 	});
+}
+
+function obtenerUnidadTrabajo(){
+    
+    var area_trabajo = $('#area_trabajo_bus').val();
+   
+	$.ajax({
+        url: "/dispensacion/obtener_unidad_trabajo/"+area_trabajo,
+        dataType: "json",
+        success: function(result){
+            var option = "<option value='' selected='selected'>--Seleccionar Unidad Trabajo--</option>";
+            $('#unidad_trabajo_bus').html("");
+            $(result).each(function (ii, oo) {
+              	option += "<option value='" + oo.id + "'>" + oo.denominacion + "</option>"; 
+            });
+            $('#unidad_trabajo_bus').html(option);
+        }
+        
+    });
 }

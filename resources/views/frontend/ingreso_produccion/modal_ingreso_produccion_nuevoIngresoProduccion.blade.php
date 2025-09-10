@@ -218,7 +218,7 @@ function obtenerCodigo(){
 function obtenerUnidadTrabajo(){
     
     var area_trabajo = $('#area_trabajo').val();
-    var selectedUnidad = "<?php echo isset($dispensacion->id_unidad_trabajo) ? $dispensacion->id_unidad_trabajo : ''; ?>";
+    var selectedUnidad = "<?php echo isset($ingreso_produccion->id_unidad_trabajo) ? $ingreso_produccion->id_unidad_trabajo : ''; ?>";
     //alert(selectedUnidad);
     $.ajax({
         url: "/dispensacion/obtener_unidad_trabajo/"+area_trabajo,
@@ -629,17 +629,25 @@ function activarObservacion() {
                             </select>
                         </div>
                         <div class="col-lg-2">
-                            &Aacute;rea
+                            &Aacute;rea de Trabajo
                         </div>
-                        <div class="col-lg-2">
-                            <select name="area" id="area" class="form-control form-control-sm" onchange="">
+                        <div class="col-lg-2" id="almacen_salida_select">
+                            <select name="area_trabajo" id="area_trabajo" class="form-control form-control-sm" onchange="obtenerUnidadTrabajo()">
                                 <option value="">--Seleccionar--</option>
                                 <?php 
-                                foreach ($area as $row){?>
+                                foreach ($area_trabajo as $row){?>
                                     <option value="<?php echo $row->id ?>" <?php if($row->id==$ingreso_produccion->id_area)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
                                     <?php 
                                 }
                                 ?>
+                            </select>
+                        </div>
+                        <div class="col-lg-2">
+                            Unidad de Trabajo
+                        </div>
+                        <div class="col-lg-2" id="almacen_salida_select">
+                            <select name="unidad_trabajo" id="unidad_trabajo" class="form-control form-control-sm" onchange="//actualizarSecciones(this)">
+                                <option value="">--Seleccionar--</option>
                             </select>
                         </div>
                         <div class="col-lg-2" style="color:red; font-weight:bold">

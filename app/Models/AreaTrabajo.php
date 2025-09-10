@@ -19,4 +19,15 @@ class AreaTrabajo extends Model
 		$data = DB::select($cad);
         return $data;
     }
+
+    function getAreaTrabajoProduccion(){
+
+        $cad = "select * from area_trabajo at 
+        where estado='1'
+        and at.id in('6','7')
+        order by 1 asc";
+        
+		$data = DB::select($cad);
+        return $data;
+    }
 }

@@ -12,6 +12,7 @@ use App\Models\Almacene;
 use App\Models\Producto;
 use App\Models\Kardex;
 use App\Models\UnidadTrabajo;
+use App\Models\AreaTrabajo;
 use Auth;
 use Carbon\Carbon;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -38,14 +39,14 @@ class IngresoProduccionController extends Controller
     public function create(){
 
 		$tablaMaestra_model = new TablaMaestra;
-		$unidad_trabajo_model = new UnidadTrabajo;
+		$area_trabajo_model = new AreaTrabajo;
 		$tipo_documento = $tablaMaestra_model->getMaestroByTipo(53);
         //$cerrado_orden_compra = $tablaMaestra_model->getMaestroByTipo(52);
         $almacen_destino = Almacene::all();
         //$area = $tablaMaestra_model->getMaestroByTipo(81);
-		$area = $unidad_trabajo_model->getUnidadTrabajo(7);
+		$area_trabajo = $area_trabajo_model->getAreaTrabajoProduccion();
 		
-		return view('frontend.ingreso_produccion.create',compact('tipo_documento','almacen_destino','area'));
+		return view('frontend.ingreso_produccion.create',compact('tipo_documento','almacen_destino','area_trabajo'));
 
 	}
 
@@ -57,6 +58,7 @@ class IngresoProduccionController extends Controller
         $p[]=$request->numero_ingreso_produccion;
         $p[]=$request->almacen_destino;
         $p[]=$request->area;
+        $p[]=$request->unidad_trabajo;
         $p[]=$request->estado;
 		$p[]=$request->NumeroPagina;
 		$p[]=$request->NumeroRegistros;
@@ -82,7 +84,7 @@ class IngresoProduccionController extends Controller
         $marca_model = new Marca;
         $producto_model = new Producto;
         $almacen_model = new Almacene;
-		$unidad_trabajo_model = new UnidadTrabajo;
+		$area_trabajo_model = new AreaTrabajo;
 		
 		if($id>0){
 			$ingreso_produccion = IngresoProduccion::find($id);
@@ -100,10 +102,10 @@ class IngresoProduccionController extends Controller
         $marca = $marca_model->getMarcaAll();
         $almacen_destino = $almacen_model->getAlmacenAll();
         //$area = $tablaMaestra_model->getMaestroByTipo(81);
-		$area = $unidad_trabajo_model->getUnidadTrabajo(7);
+		$area_trabajo = $area_trabajo_model->getAreaTrabajoProduccion();
 		//var_dump($id);exit();
 
-		return view('frontend.ingreso_produccion.modal_ingreso_produccion_nuevoIngresoProduccion',compact('id','ingreso_produccion','unidad_medida','moneda','estado_bien','tipo_producto','unidad','marca','producto','tipo_documento','almacen_destino','id_user','area'));
+		return view('frontend.ingreso_produccion.modal_ingreso_produccion_nuevoIngresoProduccion',compact('id','ingreso_produccion','unidad_medida','moneda','estado_bien','tipo_producto','unidad','marca','producto','tipo_documento','almacen_destino','id_user','area_trabajo'));
 
     }
 
@@ -135,7 +137,8 @@ class IngresoProduccionController extends Controller
         $ingreso_produccion->codigo = $request->numero_ingreso_produccion;
         $ingreso_produccion->producto_defectuoso = $request->input('producto_defectuoso', 0) == '1' ? 1 : 0;
 		$ingreso_produccion->observacion = $request->observacion;
-		$ingreso_produccion->id_area = $request->area;
+		$ingreso_produccion->id_area = $request->area_trabajo;
+		$ingreso_produccion->id_unidad_trabajo = $request->unidad_trabajo;
         $ingreso_produccion->id_usuario_inserta = $id_user;
 		$ingreso_produccion->estado = 1;
 		$ingreso_produccion->save();
@@ -327,13 +330,14 @@ class IngresoProduccionController extends Controller
 
 	}
 
-	public function exportar_listar_ingreso_produccion($tipo_documento, $fecha, $numero_ingreso_produccion, $almacen_destino, $area, $estado) {
+	public function exportar_listar_ingreso_produccion($tipo_documento, $fecha, $numero_ingreso_produccion, $almacen_destino, $area, $unidad_trabajo, $estado) {
 
 		if($tipo_documento==0)$tipo_documento = "";
 		if($fecha=="0")$fecha = "";
 		if($numero_ingreso_produccion=="0")$numero_ingreso_produccion = "";
 		if($almacen_destino==0)$almacen_destino = "";
 		if($area==0)$area = "";
+		if($unidad_trabajo==0)$unidad_trabajo = "";
 		if($estado==0)$estado = "";
 
 		$ingreso_produccion_model = new IngresoProduccion;
@@ -342,6 +346,7 @@ class IngresoProduccionController extends Controller
         $p[]=$numero_ingreso_produccion;
         $p[]=$almacen_destino;
         $p[]=$area;
+        $p[]=$unidad_trabajo;
         $p[]=$estado;
 		$p[]=1;
 		$p[]=10000;
@@ -350,11 +355,11 @@ class IngresoProduccionController extends Controller
 		$variable = [];
 		$n = 1;
 		
-		array_push($variable, array("N","Tipo Documento","Fecha","Numero Ingreso","Almacen Destino","Usuario Registra", "Area", "Codigo", "Producto", "Cantidad"));
+		array_push($variable, array("N","Tipo Documento","Fecha","Numero Ingreso","Almacen Destino","Usuario Registra", "Area Trabajo", "Unidad Trabajo", "Codigo", "Producto", "Cantidad"));
 		
 		foreach ($data as $r) {
 
-			array_push($variable, array($n++, $r->tipo_documento, $r->fecha, $r->numero_ingreso_produccion, $r->almacen_destino, $r->usuario_ingreso, $r->area, $r->codigo, $r->producto, $r->cantidad));
+			array_push($variable, array($n++, $r->tipo_documento, $r->fecha, $r->numero_ingreso_produccion, $r->almacen_destino, $r->usuario_ingreso, $r->area_trabajo, $r->unidad_trabajo, $r->codigo, $r->producto, $r->cantidad));
 		}
 		
 		$export = new InvoicesExport([$variable]);
@@ -379,16 +384,16 @@ class InvoicesExport implements FromArray, WithHeadings, WithStyles
 
     public function headings(): array
     {
-        return ["N","Tipo Documento","Fecha","Numero Ingreso","Almacen Destino","Usuario Registra", "Area", "Codigo", "Producto", "Cantidad"];
+        return ["N","Tipo Documento","Fecha","Numero Ingreso","Almacen Destino","Usuario Registra", "Area Trabajo", "Unidad Trabajo", "Codigo", "Producto", "Cantidad"];
     }
 
 	public function styles(Worksheet $sheet)
     {
 
-		$sheet->mergeCells('A1:J1');
+		$sheet->mergeCells('A1:K1');
 
         $sheet->setCellValue('A1', "REPORTE DE DETALLE DE INGRESO PRODUCCION - FORESPAMA");
-        $sheet->getStyle('A1:J1')->applyFromArray([
+        $sheet->getStyle('A1:K1')->applyFromArray([
             'font' => [
                 'bold' => true,
                 'color' => ['rgb' => 'FFFFFF'],
@@ -405,7 +410,7 @@ class InvoicesExport implements FromArray, WithHeadings, WithStyles
 		$sheet->getStyle('A1')->getAlignment()->setWrapText(true);
 		$sheet->getRowDimension(1)->setRowHeight(30);
 
-        $sheet->getStyle('A2:J2')->applyFromArray([
+        $sheet->getStyle('A2:K2')->applyFromArray([
             'font' => [
                 'bold' => true,
                 'color' => ['rgb' => '000000'],
@@ -425,7 +430,7 @@ class InvoicesExport implements FromArray, WithHeadings, WithStyles
 		->getNumberFormat()
 		->setFormatCode(\PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_NUMBER_00);*/ //SIRVE PARA PONER 2 DECIMALES A ESA COLUMNA
         
-        foreach (range('A', 'J') as $col) {
+        foreach (range('A', 'K') as $col) {
             $sheet->getColumnDimension($col)->setAutoSize(true);
         }
     }

@@ -181,8 +181,12 @@ $(document).ready(function() {
                     <tr>
                         <td class="td" style ="text-align: left; width: 20%;"><b>Fecha de Orden Producci&oacute;n:</b></td>
                         <td class="td" style ="text-align: left; width: 20%;"><?php echo $fecha_orden_produccion;?></td>
-                        <td class="td" style ="text-align: left; width: 10%;"><b>&Aacute;rea:</b></td>
-                        <td class="td" style ="text-align: left; width: 20%;"><?php echo $area;?></td>
+                    </tr>
+                    <tr>
+                        <td class="td" style ="text-align: left; width: 10%;"><b>&Aacute;rea Trabajo:</b></td>
+                        <td class="td" style ="text-align: left; width: 20%;"><?php echo $area_trabajo;?></td>
+                        <td class="td" style ="text-align: left; width: 20%;"><b>Unidad Trabajo:</b></td>
+                        <td class="td" style ="text-align: left; width: 20%;"><?php echo $unidad_trabajo;?></td>
                     </tr>
                 </tbody>
             </table>
@@ -221,8 +225,8 @@ $(document).ready(function() {
                             <td style="text-align: right; width: 20%; border-top: 1px solid"><b>Solicitado por:</b></td>
                             <td style="text-align: left; width: 25%; border-top: 1px solid"><?php echo $usuario; ?></td>
                             <td style="text-align: left; width: 10%;"></td>
-                            <td style="text-align: right; width: 20%; border-top: 1px solid"><b>&Aacute;rea Solicitada:</b></td>
-                            <td style="text-align: left; width: 25%; border-top: 1px solid"><?php echo $area; ?></td>
+                            <td style="text-align: right; width: 20%; border-top: 1px solid"><b>Unidad Solicita:</b></td>
+                            <td style="text-align: left; width: 25%; border-top: 1px solid"><?php echo $unidad_trabajo; ?></td>
                         </tr>
                     </tbody>
                 </table>
