@@ -952,7 +952,7 @@ class ComprobanteController extends Controller
                 $id_factura = $facturas_model->registrar_factura_moneda($serieF,     $id_tipo_afectacion_pp, $tipoF, $ubicacion_id, $id_persona_act, round($total, 2),   $ubicacion_id2,      $id_persona2,    0, $id_caja,          $descuento,    'f',     $id_user,  $id_moneda, '0', $fechaF);
                 //(serie,  numero,   tipo,     ubicacion,     persona,  total, descripcion, cod_contable, id_v,   id_caja, descuento, accion, p_id_usuario, p_id_moneda)
 
-                $factura = Comprobante::where('id', $id_factura)->get()[0];
+                $factura = Comprobante::where('id', $id_factura)->where('estado',1)->get()[0];
 
                 //exit();
 
