@@ -94,6 +94,7 @@ class Comprobante extends Model
                 where cp.id_comprobante = c.id) medio_pago
                 from comprobantes c 
                 left join orden_compras oc on oc.id = case c.orden_compra when '' then '0' else  c.orden_compra::int end
+                and c.estado ='1'
                 where c.id = '".$id."' ";
 
 /*
