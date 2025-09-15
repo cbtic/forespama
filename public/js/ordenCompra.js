@@ -542,6 +542,7 @@ function DescargarArchivosExcel(){
 	var estado_pedido = $('#estado_pedido_bus').val();
 	var prioridad = $('#prioridad_bus').val();
 	var canal = $('#canal_bus').val();
+	var tipo_producto = $('#tipo_producto_bus').val();
 
 	if (tipo_documento == "")tipo_documento = 0;
 	if (empresa_compra == "")empresa_compra = 0;
@@ -558,8 +559,9 @@ function DescargarArchivosExcel(){
 	if (estado_pedido == "")estado_pedido = 0;
 	if (prioridad == "")prioridad = 0;
 	if (canal == "")canal = 0;
+	if (tipo_producto == "")tipo_producto = 0;
 	
-	location.href = '/orden_compra/exportar_listar_orden_compra/'+tipo_documento+'/'+empresa_compra+'/'+empresa_vende+'/'+fecha_inicio+'/'+fecha_fin+'/'+numero_orden_compra+'/'+numero_orden_compra_cliente+'/'+almacen_origen+'/'+almacen_destino+'/'+situacion+'/'+estado+'/'+vendedor+'/'+estado_pedido+'/'+prioridad+'/'+canal;
+	location.href = '/orden_compra/exportar_listar_orden_compra/'+tipo_documento+'/'+empresa_compra+'/'+empresa_vende+'/'+fecha_inicio+'/'+fecha_fin+'/'+numero_orden_compra+'/'+numero_orden_compra_cliente+'/'+almacen_origen+'/'+almacen_destino+'/'+situacion+'/'+estado+'/'+vendedor+'/'+estado_pedido+'/'+prioridad+'/'+canal+'/'+tipo_producto;
 }
 
 function DescargarOrdenCompraDetalleExcel(){
@@ -579,6 +581,7 @@ function DescargarOrdenCompraDetalleExcel(){
 	var estado_pedido = $('#estado_pedido_bus').val();
 	var prioridad = $('#prioridad_bus').val();
 	var canal = $('#canal_bus').val();
+	var tipo_producto = $('#tipo_producto_bus').val();
 
 	if (tipo_documento == "")tipo_documento = 0;
 	if (empresa_compra == "")empresa_compra = 0;
@@ -595,8 +598,9 @@ function DescargarOrdenCompraDetalleExcel(){
 	if (estado_pedido == "")estado_pedido = 0;
 	if (prioridad == "")prioridad = 0;
 	if (canal == "")canal = 0;
+	if (tipo_producto == "")tipo_producto = 0;
 	
-	location.href = '/orden_compra/exportar_listar_orden_compra_detalle/'+tipo_documento+'/'+empresa_compra+'/'+empresa_vende+'/'+fecha_inicio+'/'+fecha_fin+'/'+numero_orden_compra+'/'+numero_orden_compra_cliente+'/'+almacen_origen+'/'+almacen_destino+'/'+situacion+'/'+estado+'/'+vendedor+'/'+estado_pedido+'/'+prioridad+'/'+canal;
+	location.href = '/orden_compra/exportar_listar_orden_compra_detalle/'+tipo_documento+'/'+empresa_compra+'/'+empresa_vende+'/'+fecha_inicio+'/'+fecha_fin+'/'+numero_orden_compra+'/'+numero_orden_compra_cliente+'/'+almacen_origen+'/'+almacen_destino+'/'+situacion+'/'+estado+'/'+vendedor+'/'+estado_pedido+'/'+prioridad+'/'+canal+'/'+tipo_producto;
 }
 
 function generarLPN(){

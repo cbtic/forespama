@@ -1004,7 +1004,7 @@ class OrdenCompraController extends Controller
 
     }
 
-    public function exportar_listar_orden_compra($tipo_documento, $empresa_compra, $empresa_vende, $fecha_inicio, $fecha_fin, $numero_orden_compra, $numero_orden_compra_cliente, $almacen_origen, $almacen_destino, $situacion, $estado, $vendedor, $estado_pedido, $prioridad, $canal) {
+    public function exportar_listar_orden_compra($tipo_documento, $empresa_compra, $empresa_vende, $fecha_inicio, $fecha_fin, $numero_orden_compra, $numero_orden_compra_cliente, $almacen_origen, $almacen_destino, $situacion, $estado, $vendedor, $estado_pedido, $prioridad, $canal, $tipo_producto) {
 
         $id_user = Auth::user()->id;
         
@@ -1023,6 +1023,7 @@ class OrdenCompraController extends Controller
         if($estado_pedido==0)$estado_pedido = "";
         if($prioridad==0)$prioridad = "";
         if($canal==0)$canal = "";
+        if($tipo_producto==0)$tipo_producto = "";
 
         $orden_compra_model = new OrdenCompra;
 		$p[]=$tipo_documento;
@@ -1041,6 +1042,7 @@ class OrdenCompraController extends Controller
         $p[]=$estado_pedido;
         $p[]=$prioridad;
         $p[]=$canal;
+        $p[]=$tipo_producto;
         $p[]=1;
 		$p[]=10000;
 		$data = $orden_compra_model->listar_orden_compra_ajax($p);
@@ -1067,7 +1069,7 @@ class OrdenCompraController extends Controller
 		
     }
 
-    public function exportar_listar_orden_compra_detalle($tipo_documento, $empresa_compra, $empresa_vende, $fecha_inicio, $fecha_fin, $numero_orden_compra, $numero_orden_compra_cliente, $almacen_origen, $almacen_destino, $situacion, $estado, $vendedor, $estado_pedido, $prioridad, $canal) {
+    public function exportar_listar_orden_compra_detalle($tipo_documento, $empresa_compra, $empresa_vende, $fecha_inicio, $fecha_fin, $numero_orden_compra, $numero_orden_compra_cliente, $almacen_origen, $almacen_destino, $situacion, $estado, $vendedor, $estado_pedido, $prioridad, $canal, $tipo_producto) {
 
         $id_user = Auth::user()->id;
         
@@ -1086,6 +1088,7 @@ class OrdenCompraController extends Controller
         if($estado_pedido==0)$estado_pedido = "";
         if($prioridad==0)$prioridad = "";
         if($canal==0)$canal = "";
+        if($tipo_producto==0)$tipo_producto = "";
 
         $orden_compra_model = new OrdenCompra;
 		$p[]=$tipo_documento;
@@ -1104,6 +1107,7 @@ class OrdenCompraController extends Controller
         $p[]=$estado_pedido;
         $p[]=$prioridad;
         $p[]=$canal;
+        $p[]=$tipo_producto;
         $p[]=1;
 		$p[]=10000;
 		$data = $orden_compra_model->listar_orden_compra_detalle_ajax($p);
