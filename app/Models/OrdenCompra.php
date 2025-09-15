@@ -308,7 +308,7 @@ class OrdenCompra extends Model
         e2.razon_social empresa_vende, to_char(oc.fecha_orden_compra,'dd-mm-yyyy') fecha_orden_compra , 
         oc.numero_orden_compra, tm.denominacion tipo_documento, oc.estado, tm2.denominacion igv, oc.numero_orden_compra_cliente, 
         oc.total, oc.sub_total, oc.igv, COALESCE (oc.descuento, 0 , oc.descuento) descuento,
-        case when oc.id_empresa_compra = 23 or oc.id_empresa_compra = 187  then 
+        case when oc.id_canal = 4 then 
         (select t.direccion || ' - ' || dp.desc_ubigeo || ' - ' || p.desc_ubigeo  || ' - ' || d.desc_ubigeo AS direccion_completa from tienda_detalle_orden_compras tdoc 
         inner join tiendas t on tdoc.id_tienda = t.id 
         inner join ubigeos u on t.id_ubigeo = u.id_ubigeo

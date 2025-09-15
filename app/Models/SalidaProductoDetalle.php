@@ -151,12 +151,7 @@ class SalidaProductoDetalle extends Model
         (select COALESCE(STRING_AGG(DISTINCT t.denominacion ::TEXT, ', '), '') from tienda_detalle_orden_compras tdoc
         inner join tiendas t on tdoc.id_tienda = t.id
         where tdoc.id_orden_compra = oc.id) tiendas, spd.valor_venta_bruto, spd.precio_venta, spd.valor_venta, spd.descuento, spd.id_descuento, p.peso, sp.id_orden_compra,
-        case when oc.id_empresa_compra = 23 then 
-        (select distinct t2.direccion from tienda_detalle_orden_compras tdoc2
-        inner join tiendas t2 on tdoc2.id_tienda = t2.id
-        where tdoc2.id_orden_compra = sp.id_orden_compra
-        limit 1) 
-        when oc.id_empresa_compra = 187 then 
+        case when oc.id_canal = 4 then 
         (select distinct t2.direccion from tienda_detalle_orden_compras tdoc2
         inner join tiendas t2 on tdoc2.id_tienda = t2.id
         where tdoc2.id_orden_compra = sp.id_orden_compra
@@ -165,12 +160,7 @@ class SalidaProductoDetalle extends Model
         inner join orden_compras oc2 on occe.id_orden_compra = oc2.id 
         where oc2.id = sp.id_orden_compra)
         end direccion,
-        case when oc.id_empresa_compra = 23 then 
-        (select distinct t2.id_ubigeo from tienda_detalle_orden_compras tdoc2
-        inner join tiendas t2 on tdoc2.id_tienda = t2.id
-        where tdoc2.id_orden_compra = sp.id_orden_compra
-        limit 1)
-        when oc.id_empresa_compra = 187 then 
+        case when oc.id_canal = 4 then 
         (select distinct t2.id_ubigeo from tienda_detalle_orden_compras tdoc2
         inner join tiendas t2 on tdoc2.id_tienda = t2.id
         where tdoc2.id_orden_compra = sp.id_orden_compra
