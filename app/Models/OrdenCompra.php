@@ -16,6 +16,12 @@ class OrdenCompra extends Model
 
     }
 
+    public function listar_orden_compra_detalle_ajax($p){
+
+        return $this->readFuntionPostgres('sp_listar_orden_compra_detalle_paginado',$p);
+
+    }
+
     public function listar_total_orden_compra_tienda_ajax($p){
 
         return $this->readFuntionPostgres('sp_listar_total_orden_compra_tienda_paginado',$p);

@@ -84,6 +84,11 @@ $(document).ready(function () {
 
 	});
 
+	$('#btnDescargarDetalle').on('click', function () {
+		DescargarOrdenCompraDetalleExcel()
+
+	});
+
 });
 
 function datatablenew(){
@@ -146,6 +151,7 @@ function datatablenew(){
 			var estado_pedido = $('#estado_pedido_bus').val();
 			var prioridad = $('#prioridad_bus').val();
 			var canal = $('#canal_bus').val();
+			var tipo_producto = $('#tipo_producto_bus').val();
 			
 			var _token = $('#_token').val();
             oSettings.jqXHR = $.ajax({
@@ -157,7 +163,7 @@ function datatablenew(){
 						tipo_documento:tipo_documento,empresa_compra:empresa_compra,empresa_vende:empresa_vende,
 						fecha_inicio:fecha_inicio,fecha_fin:fecha_fin,numero_orden_compra:numero_orden_compra,almacen_origen:almacen_origen,
 						almacen_destino:almacen_destino,situacion:situacion,estado:estado,numero_orden_compra_cliente:numero_orden_compra_cliente,
-						vendedor:vendedor,estado_pedido:estado_pedido,prioridad:prioridad,canal:canal,
+						vendedor:vendedor,estado_pedido:estado_pedido,prioridad:prioridad,canal:canal,tipo_producto:tipo_producto,
 						_token:_token
                        },
                 "success": function (result) {
@@ -554,6 +560,43 @@ function DescargarArchivosExcel(){
 	if (canal == "")canal = 0;
 	
 	location.href = '/orden_compra/exportar_listar_orden_compra/'+tipo_documento+'/'+empresa_compra+'/'+empresa_vende+'/'+fecha_inicio+'/'+fecha_fin+'/'+numero_orden_compra+'/'+numero_orden_compra_cliente+'/'+almacen_origen+'/'+almacen_destino+'/'+situacion+'/'+estado+'/'+vendedor+'/'+estado_pedido+'/'+prioridad+'/'+canal;
+}
+
+function DescargarOrdenCompraDetalleExcel(){
+	
+	var tipo_documento = $('#tipo_documento_bus').val();
+	var empresa_compra = $('#empresa_compra_bus').val();
+	var empresa_vende = $('#empresa_vende_bus').val();
+	var fecha_inicio = $('#fecha_inicio_bus').val();
+	var fecha_fin = $('#fecha_fin_bus').val();
+	var numero_orden_compra = $('#numero_orden_compra_bus').val();
+	var numero_orden_compra_cliente = $('#numero_orden_compra_cliente_bus').val();
+	var almacen_origen = $('#almacen_origen_bus').val();
+	var almacen_destino = $('#almacen_destino_bus').val();
+	var situacion = $('#situacion_bus').val();
+	var estado = $('#estado_bus').val();
+	var vendedor = $('#vendedor_bus').val();
+	var estado_pedido = $('#estado_pedido_bus').val();
+	var prioridad = $('#prioridad_bus').val();
+	var canal = $('#canal_bus').val();
+
+	if (tipo_documento == "")tipo_documento = 0;
+	if (empresa_compra == "")empresa_compra = 0;
+	if (empresa_vende == "")empresa_vende = 0;
+	if (fecha_inicio == "")fecha_inicio = "0";
+	if (fecha_fin == "")fecha_fin = "0";
+	if (numero_orden_compra == "")numero_orden_compra = "0";
+	if (numero_orden_compra_cliente == "")numero_orden_compra_cliente = "0";
+	if (almacen_origen == "")almacen_origen = 0;
+	if (almacen_destino == "")almacen_destino = 0;
+	if (situacion == "")situacion = 0;
+	if (estado == "")estado = 0;
+	if (vendedor == "")vendedor = 0;
+	if (estado_pedido == "")estado_pedido = 0;
+	if (prioridad == "")prioridad = 0;
+	if (canal == "")canal = 0;
+	
+	location.href = '/orden_compra/exportar_listar_orden_compra_detalle/'+tipo_documento+'/'+empresa_compra+'/'+empresa_vende+'/'+fecha_inicio+'/'+fecha_fin+'/'+numero_orden_compra+'/'+numero_orden_compra_cliente+'/'+almacen_origen+'/'+almacen_destino+'/'+situacion+'/'+estado+'/'+vendedor+'/'+estado_pedido+'/'+prioridad+'/'+canal;
 }
 
 function generarLPN(){

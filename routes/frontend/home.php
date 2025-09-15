@@ -569,7 +569,7 @@ Route::get('equivalencia_producto/eliminar_equivalencia_producto/{id}/{estado}',
 
 Route::get('ingreso_vehiculo_tronco/cubicaje_pdf/{id}', [IngresoVehiculoTroncoController::class, 'cubicaje_pdf'])->name('ingreso_vehiculo_tronco.cubicaje_pdf');
 
-Route::get('ingreso_vehiculo_tronco/exportar_listar_pagos/{ruc}/{empresa}/{placa}/{tipo_madera}/{fecha_inicio}/{fecha_fin}/{estado_pago}', [IngresoVehiculoTroncoController::class, 'exportar_listar_pagos'])->name('ingreso_vehiculo_tronco.exportar_listar_pagos');
+Route::get('ingreso_vehiculo_tronco/exportar_listar_pagos/{ruc}/{empresa}/{placa}/{tipo_madera}/{fecha_inicio}/{fecha_fin}/{estado_pago}/{tipo_empresa}', [IngresoVehiculoTroncoController::class, 'exportar_listar_pagos'])->name('ingreso_vehiculo_tronco.exportar_listar_pagos');
 
 Route::get('requerimiento/exportar_listar_requerimiento/{tipo_documento}/{fecha}/{numero_requerimiento}/{almacen}/{situacion}/{responsable_atencion}/{estado_atencion}/{tipo_requerimiento}/{estado}/{producto}/{denominacion_producto}', [RequerimientoController::class, 'exportar_listar_requerimiento'])->name('requerimiento.exportar_listar_requerimiento');
 Route::get('ingreso_vehiculo_tronco/obtener_datos_vehiculo_guia/{placa}', [IngresoVehiculoTroncoController::class, 'obtener_datos_vehiculo_guia'])->name('ingreso_vehiculo_tronco.obtener_datos_vehiculo_guia');
@@ -769,4 +769,5 @@ Route::get('activos/obtener_marca/{tipo_activo}', [ActivoController::class, 'obt
 Route::get('ingreso_vehiculo_tronco/eliminar_pago/{id}', [IngresoVehiculoTroncoController::class, 'eliminar_pago'])->name('ingreso_vehiculo_tronco.eliminar_pago');
 Route::get('ingreso_vehiculo_tronco/exportar_listar_reporte_excel/{placa}/{ruc}/{anio}/{fecha_inicio}/{fecha_fin}', [IngresoVehiculoTroncoController::class, 'exportar_listar_reporte_excel'])->name('ingreso_vehiculo_tronco.exportar_listar_reporte_excel');
 Route::get('ingreso_vehiculo_tronco/eliminar_ingreso_vehiculo/{id}', [IngresoVehiculoTroncoController::class, 'eliminar_ingreso_vehiculo'])->name('ingreso_vehiculo_tronco.eliminar_ingreso_vehiculo');
+Route::get('orden_compra/exportar_listar_orden_compra_detalle/{tipo_documento}/{empresa_compra}/{empresa_vende}/{fecha_inicio}/{fecha_fin}/{numero_orden_compra}/{numero_orden_compra_cliente}/{almacen_origen}/{almacen_destino}/{situacion}/{estado}/{vendedor}/{estado_pedido}/{prioridad}/{canal}', [OrdenCompraController::class, 'exportar_listar_orden_compra_detalle'])->name('orden_compra.exportar_listar_orden_compra_detalle');
 

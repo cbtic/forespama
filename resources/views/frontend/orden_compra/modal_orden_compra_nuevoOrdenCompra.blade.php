@@ -1593,7 +1593,7 @@ function obtenerBeneficiario(){
 
                         <div class="card-body" style="padding-right: 0px !important; padding-left: 0px !important;">	
 
-					<div class="table-responsive" style="overflow-y: auto; max-height: 400px;">
+					<div class="table-responsive" style="overflow-y: auto; max-height: 350px;">
 						<table id="tblOrdenCompraDetalle" class="table table-hover table-sm">
 							<thead>
 							<tr style="font-size:13px">

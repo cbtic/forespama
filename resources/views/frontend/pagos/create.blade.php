@@ -539,6 +539,18 @@ label.form-control-sm{
 											?>
 										</select>
 									</div>
+
+									<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+										<select name="tipo_empresa_bus" id="tipo_empresa_bus" class="form-control form-control-sm">
+											<option value="">--Seleccionar Tipo Empresa--</option>
+											<?php
+											foreach ($tipo_empresa as $row){?>
+												<option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
+												<?php 
+											}
+											?>
+										</select>
+									</div>
 									
 									<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
 										<input class="btn btn-warning btn-sm pull-rigth" value="Buscar" type="button" id="btnBuscar" />
