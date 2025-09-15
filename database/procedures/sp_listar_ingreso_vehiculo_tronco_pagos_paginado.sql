@@ -1,6 +1,6 @@
 -- DROP FUNCTION public.sp_listar_ingreso_vehiculo_tronco_pagos_paginado(varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, refcursor);
 
-CREATE OR REPLACE FUNCTION public.sp_listar_ingreso_vehiculo_tronco_pagos_paginado(p_ruc character varying, p_empresa character varying, p_placa character varying, p_tipo_madera character varying, p_fecha_desde character varying, p_fecha_hasta character varying, p_estado_pago character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
+CREATE OR REPLACE FUNCTION public.sp_listar_ingreso_vehiculo_tronco_pagos_paginado(p_ruc character varying, p_empresa character varying, p_placa character varying, p_tipo_madera character varying, p_fecha_desde character varying, p_fecha_hasta character varying, p_estado_pago character varying, p_tipo_empresa character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
  RETURNS refcursor
  LANGUAGE plpgsql
 AS $function$
@@ -65,6 +65,14 @@ Begin
 
 	If p_estado_pago<>'' Then
 	 v_where:=v_where||'And ivttm.id_estado_pago = '''||p_estado_pago||''' ';
+	End If;
+
+	If p_tipo_empresa<>'' Then
+	 v_where:=v_where||'And (select ec.id_tipo_empresa 
+			from empresa_cubicajes ec
+			where ec.id_empresa = ivt.id_empresa_proveedor 
+			and ec.estado = ''1''
+			and (ec.id_tipo_empresa = 1 OR (ec.id_tipo_empresa = 2 AND ec.id_conductor = ivt.id_conductores))) = '''||p_tipo_empresa||''' ';
 	End If;
 	
 	EXECUTE ('SELECT count(1) '||v_tabla||v_where) INTO v_count;

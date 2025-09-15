@@ -1,6 +1,6 @@
 -- DROP FUNCTION public.sp_listar_orden_compra_paginado(varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, refcursor);
 
-CREATE OR REPLACE FUNCTION public.sp_listar_orden_compra_paginado(p_tipo_documento character varying, p_empresa_compra character varying, p_empresa_vende character varying, p_fecha_inicio character varying, p_fecha_fin character varying, p_numero_orden_compra character varying, p_numero_orden_compra_cliente character varying, p_situacion character varying, p_almacen_origen character varying, p_almacen_destino character varying, p_estado character varying, p_id_user character varying, p_id_vendedor character varying, p_estado_pedido character varying, p_prioridad character varying, p_canal character varying, p_tipo_producto character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
+CREATE OR REPLACE FUNCTION public.sp_listar_orden_compra_detalle_paginado(p_tipo_documento character varying, p_empresa_compra character varying, p_empresa_vende character varying, p_fecha_inicio character varying, p_fecha_fin character varying, p_numero_orden_compra character varying, p_numero_orden_compra_cliente character varying, p_situacion character varying, p_almacen_origen character varying, p_almacen_destino character varying, p_estado character varying, p_id_user character varying, p_id_vendedor character varying, p_estado_pedido character varying, p_prioridad character varying, p_canal character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
  RETURNS refcursor
  LANGUAGE plpgsql
 AS $function$
@@ -20,33 +20,23 @@ begin
 
 	p_pagina=(p_pagina::Integer-1)*p_limit::Integer;
 
-	v_campos=' oc.id, tm.denominacion tipo_documento, e2.razon_social empresa_vende,
+	v_campos=' oc.id, ocd.id id_orden_compra_detalle,
 	case when oc.id_tipo_cliente = 1 then 
 	(select p.nombres ||'' ''|| p.apellido_paterno ||'' ''|| p.apellido_materno from personas p
 	where p.id = oc.id_persona)
-	else (select e2.razon_social from empresas e2 
-	where e2.id = oc.id_empresa_compra) 
-	end cliente,
-	oc.fecha_orden_compra, oc.numero_orden_compra, oc.estado, oc.id_tipo_documento, oc.id_tipo_documento, oc.id_empresa_compra, oc.id_empresa_vende, oc.cerrado id_cerrado, tm2.denominacion cerrado,
-	oc.id_almacen_salida, oc.id_almacen_destino, a.denominacion almacen_destino, a2.denominacion almacen_origen, u.id id_usuario, oc.id_unidad_origen, oc.numero_orden_compra_cliente, oc.tienda_asignada, u2.name vendedor,
-	(select case
-	when exists (
-	select 1 
-	from orden_compra_contacto_entregas occe 
-	where occe.id_orden_compra = oc.id) then 1 else 0 
-	end) tiene_direccion, oc.total, oc.estado_pedido,
-	(select r.codigo  from requerimientos r where oc.id_requerimiento = r.id) codigo_requerimiento ';
-
+	else (select e.razon_social from empresas e 
+	where e.id = oc.id_empresa_compra) 
+	end cliente, oc.numero_orden_compra, oc.fecha_orden_compra, p.codigo, p.denominacion producto, ocd.cantidad_requerida, ocd.precio_venta, ocd.precio, ocd.valor_venta_bruto, ocd.valor_venta, ocd.descuento, ocd.sub_total, ocd.igv, ocd.total ';
+	
 	v_tabla=' from orden_compras oc 
-	inner join empresas e2 on oc.id_empresa_vende = e2.id
-	inner join tabla_maestras tm on oc.id_tipo_documento ::int = tm.codigo ::int and tm.tipo=''54''
-	inner join tabla_maestras tm2 on oc.cerrado ::int = tm2.codigo ::int and tm2.tipo=''52'' 
-	left join almacenes a on oc.id_almacen_destino = a.id
-	left join almacenes a2 on oc.id_almacen_salida = a2.id 
-	inner join users u on oc.id_usuario_inserta = u.id
-	left join users u2 on oc.id_vendedor = u2.id ';
+	inner join orden_compra_detalles ocd on oc.id = ocd.id_orden_compra and ocd.estado = ''1''
+	inner join productos p on ocd.id_producto = p.id ';
 		
 	v_where = ' Where 1=1 ';
+
+	/*If p_denominacion<>'' Then
+	 v_where:=v_where||'And ep.denominacion ilike  ''%'||p_denominacion||'%'' ';
+	End If;*/
 
 	If p_tipo_documento<>'' Then
 	 v_where:=v_where||'And oc.id_tipo_documento  = '''||p_tipo_documento||''' ';
@@ -134,22 +124,14 @@ begin
 	If p_canal<>'' Then
 	 v_where:=v_where||'And oc.id_canal = '''||p_canal||''' ';
 	End If;
-
-	If p_tipo_producto<>'' Then
-	 v_where:=v_where||' and exists (
-		select 1 from orden_compra_detalles ocd 
-		inner join productos p on ocd.id_producto = p.id 
-		where ocd.id_orden_compra = oc.id 
-		and p.bien_servicio = '''||p_tipo_producto||''') ';
-	End If;
-
+	
 	EXECUTE ('SELECT count(1) '||v_tabla||v_where) INTO v_count;
 	v_col_count:=' ,'||v_count||' as TotalRows ';
 
 	If v_count::Integer > p_limit::Integer then
-		v_scad:='SELECT '||v_campos||v_col_count||v_tabla||v_where||' Order By oc.id desc LIMIT '||p_limit||' OFFSET '||p_pagina||';'; 
+		v_scad:='SELECT '||v_campos||v_col_count||v_tabla||v_where||' Order By oc.id desc, ocd.id asc LIMIT '||p_limit||' OFFSET '||p_pagina||';'; 
 	else
-		v_scad:='SELECT '||v_campos||v_col_count||v_tabla||v_where||' Order By oc.id desc;'; 
+		v_scad:='SELECT '||v_campos||v_col_count||v_tabla||v_where||' Order By oc.id desc, ocd.id asc;'; 
 	End If;
 
 	--Raise Notice '%',v_scad;
