@@ -575,7 +575,7 @@ class IngresoVehiculoTroncoController extends Controller
 		
 		$pdf->setPaper('A4'); // Tamaño de papel (puedes cambiarlo según tus necesidades)
 
-		$pdf->setPaper([0, 0, 720, 990], 'portrait');
+		$pdf->setPaper([0, 0, 720, 1000], 'portrait');
     	$pdf->setOption('margin-top', 20); // Márgen superior en milímetros
    		$pdf->setOption('margin-right', 50); // Márgen derecho en milímetros
     	$pdf->setOption('margin-bottom', 20); // Márgen inferior en milímetros
