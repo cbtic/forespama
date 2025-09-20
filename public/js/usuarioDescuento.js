@@ -5,10 +5,24 @@ $(document).ready(function () {
 	});
 		
 	$('#btnNuevo').click(function () {
-		modalMarca(0);
+		modalUsuarioDescuento(0);
 	});
 
-	$('#denominacion_bus').keypress(function(e){
+	$('#usuario_bus').keypress(function(e){
+		if(e.which == 13) {
+			datatablenew();
+			return false;
+		}
+	});
+
+	$('#descuento_bus').keypress(function(e){
+		if(e.which == 13) {
+			datatablenew();
+			return false;
+		}
+	});
+
+	$('#tipo_usuario_bus').keypress(function(e){
 		if(e.which == 13) {
 			datatablenew();
 			return false;
@@ -21,16 +35,18 @@ $(document).ready(function () {
 			return false;
 		}
 	});
-		
+
+	$('#usuario_bus').select2({ width : '100%' })
+	
 	datatablenew();
 
 });
 
 function datatablenew(){
                       
-    var oTable1 = $('#tblMarcas').dataTable({
+    var oTable1 = $('#tblUsuarioDescuento').dataTable({
         "bServerSide": true,
-        "sAjaxSource": "/marcas/listar_marca_ajax",
+        "sAjaxSource": "/usuario_descuento/listar_usuario_descuento_ajax",
         "bProcessing": true,
         "sPaginationType": "full_numbers",
         //"paging":false,
@@ -57,7 +73,9 @@ function datatablenew(){
             var iNroPagina 	= parseFloat(fn_util_obtieneNroPagina(aoData[3].value, aoData[4].value)).toFixed();
             var iCantMostrar 	= aoData[4].value;
 
-            var denominacion = $('#denominacion_bus').val();
+            var usuario = $('#usuario_bus').val();
+            var descuento = $('#descuento_bus').val();
+            var tipo_usuario = $('#tipo_usuario_bus').val();
 			var estado = $('#estado_bus').val();
 			
 			var _token = $('#_token').val();
@@ -67,7 +85,7 @@ function datatablenew(){
                 "type": "POST",
                 "url": sSource,
                 "data":{NumeroPagina:iNroPagina,NumeroRegistros:iCantMostrar,
-						denominacion:denominacion,estado:estado,
+						usuario:usuario,descuento:descuento,tipo_usuario:tipo_usuario,estado:estado,
 						_token:_token
                        },
                 "success": function (result) {
@@ -95,9 +113,9 @@ function datatablenew(){
 
 				{
 				"mRender": function (data, type, row) {
-					var denominiacion = "";
-					if(row.denominiacion!= null)denominiacion = row.denominiacion;
-					return denominiacion;
+					var tipo_usuario = "";
+					if(row.tipo_usuario!= null)tipo_usuario = row.tipo_usuario;
+					return tipo_usuario;
 				},
 				"bSortable": true,
 				"aTargets": [1]
@@ -105,12 +123,22 @@ function datatablenew(){
 
 				{
 				"mRender": function (data, type, row) {
-					var tipo_marca = "";
-					if(row.tipo_marca!= null)tipo_marca = row.tipo_marca;
-					return tipo_marca;
+					var usuario = "";
+					if(row.usuario!= null)usuario = row.usuario;
+					return usuario;
 				},
 				"bSortable": true,
 				"aTargets": [2]
+				},
+
+				{
+				"mRender": function (data, type, row) {
+					var descuento = "";
+					if(row.descuento!= null)descuento = row.descuento;
+					return descuento;
+				},
+				"bSortable": true,
+				"aTargets": [3]
 				},
 				
 				{
@@ -125,33 +153,33 @@ function datatablenew(){
 					return estado;
 				},
 				"bSortable": false,
-				"aTargets": [3]
+				"aTargets": [4]
 				},
 				{
-				"mRender": function (data, type, row) {
-					var estado = "";
-					var clase = "";
-					if(row.estado == 1){
-						estado = "Eliminar";
-						clase = "btn-danger";
-					}
-					if(row.estado == 0){
-						estado = "Activar";
-						clase = "btn-success";
-					}
-					
-					var html = '<div class="btn-group btn-group-sm" role="group" aria-label="Log Viewer Actions">';
-					
-					html += '<button style="font-size:12px" type="button" class="btn btn-sm btn-success" data-toggle="modal" onclick="modalMarca('+row.id+')" ><i class="fa fa-edit"></i> Editar</button>'; 
-					html += '<a href="javascript:void(0)" onclick=eliminarMarca('+row.id+','+row.estado+') class="btn btn-sm '+clase+'" style="font-size:12px;margin-left:10px">'+estado+'</a>';
-					
-					//html += '<a href="javascript:void(0)" onclick=modalResponsable('+row.id+') class="btn btn-sm btn-info" style="font-size:12px;margin-left:10px">Detalle Responsable</a>';
-					
-					html += '</div>';
-					return html;
-				},
-				"bSortable": false,
-				"aTargets": [4],
+					"mRender": function (data, type, row) {
+						var estado = "";
+						var clase = "";
+						if(row.estado == 1){
+							estado = "Eliminar";
+							clase = "btn-danger";
+						}
+						if(row.estado == 0){
+							estado = "Activar";
+							clase = "btn-success";
+						}
+						
+						var html = '<div class="btn-group btn-group-sm" role="group" aria-label="Log Viewer Actions">';
+						
+						html += '<button style="font-size:12px" type="button" class="btn btn-sm btn-success" data-toggle="modal" onclick="modalUsuarioDescuento('+row.id+')" ><i class="fa fa-edit"></i> Editar</button>'; 
+						html += '<a href="javascript:void(0)" onclick=eliminarUsuarioDescuento('+row.id+','+row.estado+') class="btn btn-sm '+clase+'" style="font-size:12px;margin-left:10px">'+estado+'</a>';
+						
+						//html += '<a href="javascript:void(0)" onclick=modalResponsable('+row.id+') class="btn btn-sm btn-info" style="font-size:12px;margin-left:10px">Detalle Responsable</a>';
+						
+						html += '</div>';
+						return html;
+					},
+					"bSortable": false,
+					"aTargets": [5],
 				},
             ]
     });
@@ -161,13 +189,13 @@ function fn_ListarBusqueda() {
     datatablenew();
 };
 
-function modalMarca(id){
+function modalUsuarioDescuento(id){
 	
 	$(".modal-dialog").css("width","85%");
 	$('#openOverlayOpc .modal-body').css('height', 'auto');
 
 	$.ajax({
-		url: "/marcas/modal_marca/"+id,
+		url: "/usuario_descuento/modal_usuario_descuento/"+id,
 		type: "GET",
 		success: function (result) {  
 			$("#diveditpregOpc").html(result);
@@ -176,7 +204,7 @@ function modalMarca(id){
 	});
 }
 
-function eliminarMarca(id,estado){
+function eliminarUsuarioDescuento(id,estado){
 	var act_estado = "";
 	if(estado==1){
 		act_estado = "Eliminar";
@@ -188,7 +216,7 @@ function eliminarMarca(id,estado){
 	}
     bootbox.confirm({ 
         size: "small",
-        message: "&iquest;Deseas "+act_estado+" la Marca?", 
+        message: "&iquest;Deseas "+act_estado+" el Permiso de Usuario?", 
         callback: function(result){
             if (result==true) {
                 fn_eliminar(id,estado_);
@@ -201,7 +229,7 @@ function eliminarMarca(id,estado){
 function fn_eliminar(id,estado){
 	
     $.ajax({
-		url: "/marcas/eliminar_marca/"+id+"/"+estado,
+		url: "/usuario_descuento/eliminar_usuario_descuento/"+id+"/"+estado,
 		type: "GET",
 		success: function (result) {
 			//if(result="success")obtenerPlanDetalle(id_plan);

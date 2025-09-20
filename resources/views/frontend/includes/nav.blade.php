@@ -289,8 +289,8 @@
 						
 					@endif
 					
-					@if(Gate::check('Mantenimiento Personas') || Gate::check('Mantenimiento Empresas') || Gate::check('Mantenimiento Vehiculos') || Gate::check('Mantenimiento Tablas Maestras') || Gate::check('Mantenimiento Conductores') || Gate::check('Mantenimiento Tipo Cambio') || Gate::check('Mantenimiento Marcas') || Gate::check('Mantenimiento Tiendas') || Gate::check('Mantenimiento Equivalencia Producto') || Gate::check('Mantenimiento Parametro') || Gate::check('Mantenimiento Empaquetado') || Gate::check('Mantenimiento Empresas Cubicaje') || Gate::check('Mantenimiento Familia') || Gate::check('Mantenimiento Sub Familia'))
-							
+					@if(Gate::check('Mantenimiento Personas') || Gate::check('Mantenimiento Empresas') || Gate::check('Mantenimiento Vehiculos') || Gate::check('Mantenimiento Tablas Maestras') || Gate::check('Mantenimiento Conductores') || Gate::check('Mantenimiento Tipo Cambio') || Gate::check('Mantenimiento Marcas') || Gate::check('Mantenimiento Tiendas') || Gate::check('Mantenimiento Equivalencia Producto') || Gate::check('Mantenimiento Parametro') || Gate::check('Mantenimiento Empaquetado') || Gate::check('Mantenimiento Empresas Cubicaje') || Gate::check('Mantenimiento Familia') || Gate::check('Mantenimiento Sub Familia') || Gate::check('Mantenimiento Permisos Usuario Descuento'))
+						
 						<li class="nav-item dropdown">
 							<a href="#" class="nav-link dropdown-toggle" id="navbarDropdownPrueba" data-toggle="dropdown"
 						   aria-haspopup="true" aria-expanded="false">Mantenimiento</a>
@@ -351,6 +351,10 @@
 
 								@can('Mantenimiento Sub Familia')
 									<x-utils.link :href="route('frontend.sub_familia.create')" class="dropdown-item" :text="__('Sub Familia')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+								@endif
+
+								@can('Mantenimiento Permisos Usuario Descuento')
+									<x-utils.link :href="route('frontend.usuario_descuento.create')" class="dropdown-item" :text="__('Permisos Usuario Descuento')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
 								@endif
 
 							</div>

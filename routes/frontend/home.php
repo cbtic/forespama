@@ -47,6 +47,7 @@ use App\Http\Controllers\Frontend\ActivoController;
 use App\Http\Controllers\Frontend\OrdenProduccionController;
 use App\Http\Controllers\Frontend\FamiliaController;
 use App\Http\Controllers\Frontend\SubFamiliaController;
+use App\Http\Controllers\Frontend\UsuarioDescuentoController;
 
 //use App\Http\Controllers\VehiculoController;
 
@@ -771,3 +772,10 @@ Route::get('ingreso_vehiculo_tronco/exportar_listar_reporte_excel/{placa}/{ruc}/
 Route::get('ingreso_vehiculo_tronco/eliminar_ingreso_vehiculo/{id}', [IngresoVehiculoTroncoController::class, 'eliminar_ingreso_vehiculo'])->name('ingreso_vehiculo_tronco.eliminar_ingreso_vehiculo');
 Route::get('orden_compra/exportar_listar_orden_compra_detalle/{tipo_documento}/{empresa_compra}/{empresa_vende}/{fecha_inicio}/{fecha_fin}/{numero_orden_compra}/{numero_orden_compra_cliente}/{almacen_origen}/{almacen_destino}/{situacion}/{estado}/{vendedor}/{estado_pedido}/{prioridad}/{canal}/{tipo_producto}', [OrdenCompraController::class, 'exportar_listar_orden_compra_detalle'])->name('orden_compra.exportar_listar_orden_compra_detalle');
 
+Route::get('usuario_descuento/create', [UsuarioDescuentoController::class, 'create'])->name('usuario_descuento.create');
+Route::post('usuario_descuento/listar_usuario_descuento_ajax', [UsuarioDescuentoController::class, 'listar_usuario_descuento_ajax'])->name('usuario_descuento.listar_usuario_descuento_ajax');
+Route::post('usuario_descuento/send_usuario_descuento', [UsuarioDescuentoController::class, 'send_usuario_descuento'])->name('usuario_descuento.send_usuario_descuento');
+Route::get('usuario_descuento/modal_usuario_descuento/{id}', [UsuarioDescuentoController::class, 'modal_usuario_descuento'])->name('usuario_descuento.modal_usuario_descuento');
+Route::get('usuario_descuento/eliminar_usuario_descuento/{id}/{estado}', [UsuarioDescuentoController::class, 'eliminar_usuario_descuento'])->name('usuario_descuento.eliminar_usuario_descuento');
+
+Route::get('orden_compra/obtener_descuento/{id_vendedor}', [OrdenCompraController::class, 'obtener_descuento'])->name('orden_compra.obtener_descuento');

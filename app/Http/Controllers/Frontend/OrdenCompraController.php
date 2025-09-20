@@ -22,6 +22,7 @@ use App\Models\Ubigeo;
 use App\Models\Persona;
 use App\Models\OrdenCompraContactoEntrega;
 use App\Models\OrdenCompraPago;
+use App\Models\UsuarioDescuento;
 use App\Models\GuiaInterna;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Auth;
@@ -145,15 +146,20 @@ class OrdenCompraController extends Controller
         $user_model = new User;
         $persona_model = new Persona;
         $empresa_model = new Empresa;
+        $usuario_descuento_model = new UsuarioDescuento;
 		
 		if($id>0){
 
             $orden_compra = OrdenCompra::find($id);
             //$proveedor = Empresa::all();
+            $descuento_usuario = $usuario_descuento_model->getDescuentoByUser($orden_compra->id_vendedor);
+            $id_descuento_usuario = $descuento_usuario[0]->descuento;
+            //dd($id_descuento_usuario);exit();
 			
 		}else{
 			$orden_compra = new OrdenCompra;
             //$proveedor = Empresa::all();
+            $id_descuento_usuario = 0;
 		}
 
         $proveedor = $empresa_model->getEmpresaAll();
@@ -185,7 +191,7 @@ class OrdenCompraController extends Controller
         
         //dd($proveedor);exit();
 
-		return view('frontend.orden_compra.modal_orden_compra_nuevoOrdenCompra',compact('id','orden_compra','tipo_documento','proveedor','producto','marca','estado_bien','unidad','igv_compra','descuento','almacen','unidad_origen','id_user','moneda','vendedor','tipo_documento_cliente','persona','prioridad','canal'));
+		return view('frontend.orden_compra.modal_orden_compra_nuevoOrdenCompra',compact('id','orden_compra','tipo_documento','proveedor','producto','marca','estado_bien','unidad','igv_compra','descuento','almacen','unidad_origen','id_user','moneda','vendedor','tipo_documento_cliente','persona','prioridad','canal','id_descuento_usuario'));
 
     }
 
@@ -981,6 +987,14 @@ class OrdenCompraController extends Controller
         }
 		
 		return response()->json($codigo);
+	}
+
+    public function obtener_descuento($id_vendedor){
+		
+        $usuario_descuento_model = new UsuarioDescuento;
+        $descuento = $usuario_descuento_model->getDescuentoByUser($id_vendedor);
+		
+		return response()->json($descuento);
 	}
 
     
