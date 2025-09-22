@@ -1,4 +1,4 @@
-@extends('backend.layouts.app')
+@extends('frontend.layouts.app')
 
 @section('content')
     <div class="container">
@@ -17,5 +17,9 @@
 @endsection
 
 @push('after-scripts')
-<script type="text/javascript" src="{{ asset('js/autocompletePersona.js') }}"></script>
+<script>
+    $(document).ready(function() {
+        $('.form-select').select2();
+    });
+</script>
 @endpush

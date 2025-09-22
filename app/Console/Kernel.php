@@ -16,7 +16,11 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        //
+        Commands\inhabilitarModificacionRequerimientoAutomaticoCron::class,
+        Commands\obtenerTipoCambioDiarioAutomaticoCron::class,
+        Commands\CambiarVigenciaRevisionTecnicaAutomaticoCron::class,
+        Commands\CambiarVigenciaSoatAutomaticoCron::class,
+        Commands\ComprometerStockTotalAutomaticoCron::class,
     ];
 
     /**
@@ -27,7 +31,24 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('activitylog:clean')->daily();
+        $schedule->command('inhabilitarModificacionRequerimientoAutomatico:cron')->dailyAt('22:00');
+        $schedule->command('obtenerTipoCambioDiarioAutomatico:cron')->dailyAt('06:00');
+        $schedule->command('CambiarVigenciaRevisionTecnicaAutomatico:cron')->dailyAt('05:00');
+        $schedule->command('cambiarVigenciaSoatAutomatico:cron')->dailyAt('05:00');
+
+        $schedule->command('comprometerStockTotalAutomatico:cron')->dailyAt('07:00');
+        $schedule->command('comprometerStockTotalAutomatico:cron')->dailyAt('08:00');
+        $schedule->command('comprometerStockTotalAutomatico:cron')->dailyAt('09:00');
+        $schedule->command('comprometerStockTotalAutomatico:cron')->dailyAt('10:00');
+        $schedule->command('comprometerStockTotalAutomatico:cron')->dailyAt('11:00');
+        $schedule->command('comprometerStockTotalAutomatico:cron')->dailyAt('12:00');
+        $schedule->command('comprometerStockTotalAutomatico:cron')->dailyAt('13:00');
+        $schedule->command('comprometerStockTotalAutomatico:cron')->dailyAt('14:00');
+        $schedule->command('comprometerStockTotalAutomatico:cron')->dailyAt('15:00');
+        $schedule->command('comprometerStockTotalAutomatico:cron')->dailyAt('16:00');
+        $schedule->command('comprometerStockTotalAutomatico:cron')->dailyAt('17:00');
+        $schedule->command('comprometerStockTotalAutomatico:cron')->dailyAt('18:00');
+        $schedule->command('comprometerStockTotalAutomatico:cron')->dailyAt('19:00');
     }
 
     /**

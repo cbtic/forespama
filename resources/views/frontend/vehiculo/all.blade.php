@@ -99,7 +99,7 @@
 @stack('before-scripts')
 @stack('after-scripts')
 
-@extends('backend.layouts.app')
+@extends('frontend.layouts.app')
 
 @section('title', ' | ' . __('labels.frontend.afiliacion.box_title'))
 
@@ -154,12 +154,19 @@
 				
 				<div class="row" style="padding:20px 20px 0px 20px;">
 				
-					<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
-						<input class="form-control form-control-sm" id="numero_documento" name="numero_documento" placeholder="Numero de documento">
+					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+						<input class="form-control form-control-sm" id="placa_bus" name="placa_bus" placeholder="Numero de Placa">
 					</div>
-					<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12" style="padding-left:0px;margin-left:0px;">
-						<input class="form-control form-control-sm" id="persona" name="persona" placeholder="Nombres y Apellidos">
-					</div>
+					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+                        <select id="ejes_bus" name="ejes_bus" class="form-control form-control-sm">
+                            <option value="">Escoger</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                        </select>
+                    </div>
 					<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12" style="padding-left:0px;margin-left:0px;">
 						<select name="estado" id="estado" class="form-control form-control-sm">
 							<option value="">Todos</option>

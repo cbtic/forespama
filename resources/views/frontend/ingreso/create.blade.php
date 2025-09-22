@@ -190,12 +190,12 @@ label.form-control-sm{
 	width: 100%;
 	height: 100%;
 	/*height: 1500px;*/
-	overflow: hidden; 
+	overflow: hidden;
 	top: 0px;
 	left: 0px;
 	z-index: 10000;
 	text-align: center;
-	position:absolute; 
+	position:absolute;
 	background-color: #000;
 	opacity:0.6;
 	filter:alpha(opacity=40);
@@ -235,11 +235,11 @@ label.form-control-sm{
   display: block;
 }
 
-.wrapper { 
+.wrapper {
 	/*background:#EFEFEF; */
 	/*box-shadow: 1px 1px 10px #999; */
-	margin: auto; 
-	text-align: center; 
+	margin: auto;
+	text-align: center;
 	position: relative;
 	-webkit-border-radius: 5px;
 	-moz-border-radius: 5px;
@@ -248,14 +248,14 @@ label.form-control-sm{
 	width: 800px;
 	padding-top: 5px;
 }
-.scrolls { 
+.scrolls {
 	overflow-x: scroll;
 	overflow-y: hidden;
 	height: 200px;
 	white-space:nowrap
-} 
-.imageDiv img { 
-	box-shadow: 1px 1px 10px #999; 
+}
+.imageDiv img {
+	box-shadow: 1px 1px 10px #999;
 	margin: 2px;
 	max-height: 50px;
 	cursor: pointer;
@@ -290,7 +290,7 @@ label.form-control-sm{
 @stack('before-scripts')
 @stack('after-scripts')
 
-@extends('backend.layouts.app')
+@extends('frontend.layouts.app')
 
 @section('title', ' | ' . __('labels.frontend.afiliacion.box_title'))
 
@@ -316,9 +316,9 @@ label.form-control-sm{
 
 <div class="justify-content-center">
     <!--<div class="container-fluid">-->
-	
+
 	<a href="javascript:void(0)" onclick="ocultar_solicitud()"><i class="fa fa-bars fa-lg" style="position:absolute;right:50%;top:-24px;color:#FFFFFF"></i></a>
-	
+
     <div class="card">
 
         <div class="card-body">
@@ -334,9 +334,9 @@ label.form-control-sm{
                 </div>
 				-->
                 <div class="row justify-content-center" style="margin-top:15px">
-					
+
                     <input type="hidden" name="flag_ocultar" id="flag_ocultar" value="0">
-					
+
 					<div class="col col-sm-12 align-self-center">
 
 
@@ -344,12 +344,12 @@ label.form-control-sm{
 
                         <!--<input type="hidden" name="estado" id="estado" value="0">-->
 						
-						<input type="hidden" name="empresa_transportista_id" id="empresa_transportista_id" value="0">
-						<input type="hidden" name="vehiculos_id" id="vehiculos_id" value="0">
-						<input type="hidden" name="conductores_id" id="conductores_id" value="0">
+						<input type="hidden" name="id_empresa_transportista" id="id_empresa_transportista" value="0">
+						<input type="hidden" name="id_vehiculos" id="id_vehiculos" value="0">
+						<input type="hidden" name="id_conductores" id="id_conductores" value="0">
 						
                         <div class="row" id="divSolicitud">
-							
+
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <div id="" class="row">
                                     <div class="col-lg-7 col-md-7 col-sm-12 col-xs-12">
@@ -362,70 +362,121 @@ label.form-control-sm{
                                                             <!--@lang('labels.frontend.asistencia.box_asistencia')-->
                                                             Ingreso de Camiones
                                                         </strong>
-														
+
                                                     </div>
                                                 </div>
                                             </div>
 
                                             <div class="card-body" style="margin-top:15px;margin-bottom:15px">
-											
+
 												<div style="clear:both"></div>
                                                 <div class="row">
 												
+													<!--
 													<div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
 														<label class="form-control-sm">Id Ingreso</label>
 														<input type="text" name="id_proyecto" id="id_proyecto"
 															value="" readonly="readonly" placeholder="" class="form-control form-control-sm" >
 													</div>
+													-->
 													
-													<div class="col-lg-7 col-md-12 col-sm-12 col-xs-12">
+													<div class="col-lg-5 col-md-12 col-sm-12 col-xs-12">
 														<label class="form-control-sm">Placa</label>
-														<input type="text" name="placa" id="placa"
-															value="" placeholder="" class="form-control form-control-sm" onblur="obtenerEmpresa()">
+														
+														<div class="row">
+															<div class="col-lg-7 col-md-12 col-sm-12 col-xs-12">
+															<input type="text" name="placa" id="placa"
+																value="" placeholder="" class="form-control form-control-sm" onblur="obtenerEmpresa()">
+																
+															</div>
+															<div class="col-lg-5 col-md-12 col-sm-12 col-xs-12">
+																<button id="btnPlaca" type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#vehiculoModal">
+																	<i class="fas fa-plus-circle"></i> Veh&iacute;culo
+																</button>
+															</div>
+														</div>
+														
 													</div>
-													
-													<div class="col-lg-2 col-md-12 col-sm-12 col-xs-12">
+
+													<div class="col-lg-4 col-md-12 col-sm-12 col-xs-12">
 														<label class="form-control-sm">Fecha</label>
 														<input type="text" name="fecha_ingreso" id="fecha_ingreso"
 															value="" placeholder="" class="form-control form-control-sm" >
 													</div>
-																	
+
                                                 </div>
-												
-												<div class="row">
-												
+
+												<div class="row" style="padding-top:8px">
+
 													<div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
 														<label class="form-control-sm">Ruc Empresa</label>
 														<input type="text" name="ruc" id="ruc"
-															value="" readonly="readonly" class="form-control form-control-sm" >
+															value="" class="form-control form-control-sm" onblur="obtenerEmpresaBuscar()">
 													</div>
-													
+
 													<div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
 														<label class="form-control-sm">Raz&oacute;n Social</label>
-														<input type="text" name="empresa" id="empresa"
-															value="" readonly="readonly" class="form-control form-control-sm" >
-													</div>
 													
+														<div class="row">
+															<div class="col-lg-8 col-md-12 col-sm-12 col-xs-12">
+																<input type="text" name="empresa" id="empresa"
+															value="" readonly="readonly" class="form-control form-control-sm" >
+															</div>
+															
+															<div class="col-lg-4 col-md-12 col-sm-12 col-xs-12">
+																<button id="btnEmpresa" type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#vehiculoModal">
+																	<i class="fas fa-plus-circle"></i> Empresa
+																</button>
+															</div>
+														</div>
+															
+													</div>
+
 												</div>
-												
+
 												<div class="row">
-												
+													
 													<div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
-														<label class="form-control-sm">DNI Conductor</label>
-														<input type="text" name="numero_documento" id="numero_documento"
-															value="" readonly="readonly" class="form-control form-control-sm" >
+														<label class="form-control-sm">T.Doc Conductor</label>
+														<select name="tipo_documento_bus" id="tipo_documento_bus" class="form-control form-control-sm" onchange="obtenerPersonaBuscar()">
+															<option value="">--Selecionar--</option>
+															<?php
+															foreach ($tipo_documento as $row) { ?>
+																<option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
+															<?php
+															}
+															?>
+														</select>
 													</div>
-													
-													<div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
+
+													<div class="col-lg-3 col-md-12 col-sm-12 col-xs-12" style="padding-right:0px!important">
+														<label class="form-control-sm">N. Doc</label>
+															<input type="text" name="numero_documento" id="numero_documento"
+															value="" class="form-control form-control-sm" onblur="obtenerPersonaBuscar()">
+													</div>
+
+													<div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
 														<label class="form-control-sm">Nombre Conductor</label>
-														<input type="text" name="conductor" id="conductor"
-															value="" readonly="readonly" class="form-control form-control-sm" >
+															
+														<div class="row">	
+															<div class="col-lg-8 col-md-12 col-sm-12 col-xs-12">
+																<input type="text" name="conductor" id="conductor"
+																value="" readonly="readonly" class="form-control form-control-sm" >
+															</div>
+															
+															<div class="col-lg-4 col-md-12 col-sm-12 col-xs-12" style="padding-left:0px!important;padding-right:0px!important">
+																<button id="btnConductor" type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#vehiculoModal">
+																	<i class="fas fa-plus-circle"></i> Conductor
+																</button>
+															</div>
+														</div>
+																
 													</div>
-													
+
 												</div>
-												
+
 												<div class="row">
-												
+
 													<div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
 														<label class="form-control-sm">Tipo Madera</label>
 														<select name="tipo_maderas_id" id="tipo_maderas_id" class="form-control form-control-sm">
@@ -438,15 +489,15 @@ label.form-control-sm{
 															?>
 														</select>
 													</div>
-													
-													<div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
+
+													<div class="col-lg-3 col-md-12 col-sm-12 col-xs-12" style="padding-right:0px">
 														<label class="form-control-sm">Cantidad Troncos</label>
 														<input type="text" name="cantidad" id="cantidad"
 															value="" class="form-control form-control-sm" >
 													</div>
-													
+
 												</div>
-												
+
 												<div style="clear:both"></div>
 												<div class="row">
 													<!--
@@ -455,36 +506,36 @@ label.form-control-sm{
 														<select name="estado_py" id="estado_py" class="form-control form-control-sm" onchange="">
 															<option value="">ESTADO PROYECTO</option>
 															<?php
-															
+
 															?>
 														</select>
 													</div>
 													-->
-													
+
 													<div class="col-xl-12 text-right" style="padding-top:15px">
-														
+
 														<input class="btn btn-warning btn-sm float-rigth" value="NUEVO" type="button" id="btnNuevo" style="padding-left:20px;padding-right:20px"/>
-														
+
                                                         <input class="btn btn-sm btn-success float-rigth" value="GUARDAR" name="guardar" type="button" id="btnGuardar" style="margin-left:10px" />
-														
-														
-                                                        
+
+
+
                                                     </div>
-													
+
 												</div>
-												
+
 
                                             </div>
                                             <!--card-body-->
                                         </div>
                                         <!--card-->
-										
-										
+
+
                                     </div>
-									
+
 									<div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
 
-                                        
+
                                         <div class="card" style="min-height:140px">
                                             <div class="card-header">
                                                 <strong>
@@ -496,104 +547,104 @@ label.form-control-sm{
 
 												<div class="wrapper">
   													<div id="divImagenes" class="scrolls">
-														
+
 														<div class="img_ruta">
-															
+
 															<img src="" id="img_ruta_1" width="130px" height="165px" alt="" style="text-align:center;margin-top:8px;display:none;margin-left:10px" />
 															<span class="delete_ruta" style="display:none" onclick="DeleteImagen(this)"></span>
-														
+
 															<input type="hidden" id="img_foto_1" name="img_foto[]" value="" />
-															
+
 														</div>
-														
+
 													</div>
 												</div>
-												
+
 												<div class="row">
-												
+
 													<div class="col-lg-12">
 														<div class="form-group" style="text-align:center">
 															<span class="btn btn-sm btn-warning btn-file">
 																Examinar <input id="image" name="image" type="file" />
 															</span>
-							
+
 															<input type="hidden" id="ind_img" name="ind_img" value="1" />
-															
+
 															<input type="button" class="btn btn-sm btn-primary upload" value="Subir" style="margin-left:10px">
-							
+
 															<!--<input type="button" class="btn btn-sm btn-danger delete" value="Eliminar" style="margin-left:10px">-->
-															
+
 														</div>
 													</div>
-												
+
 												</div>
-												
+
                                                 <!--table-responsive-->
 												<!--
 												<div class="row">
                                                     <div class="col">
                                                         <div class="form-group mb-0 float-right">
-                                                            
-															<input class="btn btn-danger pull-rigth" value="GUARDAR" 
+
+															<input class="btn btn-danger pull-rigth" value="GUARDAR"
                                                                 name="crea" type="button" form="prestacionescrea"
                                                                 id="btnGuardar" onclick="guardarCargaVehiculo()" />
                                                         </div>
                                                     </div>
                                                 </div>
-												
+
 												<a class='flotante' name="guardar" id="guardar" onclick="guardarSolicitud()" href='#' ><img src='/img/btn_save.png' border="0"/></a>
-												
+
 												-->
-												
-												
+
+
 
 
                                             </div>
                                             <!--card-body-->
                                         </div>
                                         <!--card-->
-										
-										
+
+
                                     </div>
                                     <!--card-->
-									
-									
+
+
                                 </div>
 
 
                             </div>
                         </div>
 
-						
+
 					<div class="row" style="padding-top:15px">
 
 						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 
 						<div class="card">
-						
+
 						<div class="card-header">
 							<strong>Lista de Ingreso de Camiones</strong>
 						</div>
-						
-						<div class="row col align-self-center" style="padding:10px 20px 10px 20px;">
-					
+
+						<div class="row col align-self-center" style="padding:10px 20px 10px 20px;display:none">
+
 							<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
 								<input class="form-control form-control-sm" id="nombre_py_bus" name="nombre_py_bus" placeholder="Nombre del Proyecto">
 							</div>
-							
+
 							<div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
 								<input class="form-control form-control-sm" id="detalle_py_bus" name="detalle_py_bus" placeholder="Detalle del Proyecto">
 							</div>
-							
+
 							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
 								<select name="estado_py_bus" id="estado_py_bus" class="form-control form-control-sm" onchange="">
 									<option value="">ESTADO PROYECTO</option>
 									<?php
-									
+
 									?>
 								</select>
 							</div>
-							
+
 							<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
 								<select name="estado" id="estado" class="form-control form-control-sm" onchange="">
 									<option value="">ESTADO</option>
@@ -601,7 +652,7 @@ label.form-control-sm{
 									<option value="0">INACTIVO</option>
 								</select>
 							</div>
-							
+
 							<!--
 							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
 								<select name="id_estado" id="id_estado" class="form-control form-control-sm" onchange="">
@@ -617,11 +668,11 @@ label.form-control-sm{
 							<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
 								<input class="btn btn-warning btn-sm pull-rigth" value="Buscar" type="button" id="btnBuscar" />
 							</div>
-							
+
 						</div>
-						
+
 						<div class="card-body">
-							
+
 							<div class="table-responsive">
 							<!--table-hover-grid-->
 							<table id="tblSolicitud" class="table table-hover table-sm">
@@ -636,16 +687,17 @@ label.form-control-sm{
 								<th>Conductor</th>
 								<th>Tipo Madera</th>
 								<th>Cantidad</th>
+								<th>Imagenes</th>
 							</tr>
 							</thead>
 							<tbody style="font-size:13px">
 							</tbody>
 							</table>
-							
+
 							</div>
 						</div>
-						
-						
+
+
 						<!--
                         <div id="" class="row">
                             <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
@@ -675,7 +727,7 @@ label.form-control-sm{
 
         </form>
 
-        
+
 
     </div>
     <!--row-->
@@ -683,25 +735,25 @@ label.form-control-sm{
 
 	<div id="openOverlayOpc" class="modal fade" role="dialog">
 	  <div class="modal-dialog" >
-	
+
 		<div id="id_content_OverlayoneOpc" class="modal-content" style="padding: 0px;margin: 0px">
-		
+
 		  <div class="modal-body" style="padding: 0px;margin: 0px">
-	
+
 				<div id="diveditpregOpc"></div>
-	
+
 		  </div>
-		
+
 		</div>
-	
+
 	  </div>
-		
+
 	</div>
 
     @push('after-scripts')
-    
+
 	<script type="text/javascript">
-	
+
 	$(document).ready(function() {
 		$(".upload").on('click', function() {
 			var formData = new FormData();
@@ -711,49 +763,50 @@ label.form-control-sm{
 				headers: {
 					'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 				},
-				url: "/proyecto/upload",
+				url: "/ingreso_vehiculo_tronco/upload_imagen_ingreso",
 				type: 'post',
 				data: formData,
 				contentType: false,
 				processData: false,
 				success: function(response) {
-				
+					
 					var ind_img = $("#ind_img").val();
 					
 					if (response != 0) {
-						$("#img_ruta_"+ind_img).attr("src", "/img/proyecto/tmp/"+response).show();
+						$("#img_ruta_"+ind_img).attr("src", "/img/ingreso/tmp/"+response).show();
 						$(".delete_ruta").show();
 						$("#img_foto_"+ind_img).val(response);
-						
+
 						ind_img++;
-						
+
 						var newRow = "";
 						newRow += '<div class="img_ruta">';
 						newRow += '<img src="" id="img_ruta_'+ind_img+'" width="130px" height="165px" alt="" style="text-align:center;margin-top:8px;display:none;margin-left:10px" />';
 						newRow += '<span class="delete_ruta" style="display:none" onclick="DeleteImagen(this)"></span>';
 						newRow += '<input type="hidden" id="img_foto_'+ind_img+'" name="img_foto[]" value="" />';
 						newRow += '</div>';
-						
+
 						$("#divImagenes").append(newRow);
 						$("#ind_img").val(ind_img);
-						
+
 					} else {
 						alert('Formato de imagen incorrecto.');
 					}
+					
 				}
 			});
 			return false;
 		});
-	
+
 		$(".delete").on('click', function() {
 			$("#img_ruta0").attr("src", "/dist/img/profile-icon.png");
 			$("#img_foto0").val("");
 		});
-	
+
 	});
-	
+
 	</script>
-	
+
 	<script src="{{ asset('js/ingreso/create.js') }}"></script>
-	
+
 	@endpush

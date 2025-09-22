@@ -1,0 +1,91 @@
+-- DROP FUNCTION public.sp_listar_guia_interna_paginado(varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, refcursor);
+
+CREATE OR REPLACE FUNCTION public.sp_listar_guia_interna_paginado(p_fecha_emision character varying, p_numero_guia character varying, p_numero_documento character varying, p_empresa_destino character varying, p_persona_destino character varying, p_placa character varying, p_empresa_trasporte character varying, p_estado character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
+ RETURNS refcursor
+ LANGUAGE plpgsql
+AS $function$
+
+Declare
+v_scad varchar;
+v_campos varchar;
+v_tabla varchar;
+v_where varchar;
+v_count varchar;
+v_col_count varchar;
+
+begin
+
+	p_pagina=(p_pagina::Integer-1)*p_limit::Integer;
+
+	v_campos=' gi.id, gi.fecha_emision, gi.punto_partida, gi.punto_llegada, gi.fecha_traslado, gi.costo_minimo,
+	case when gi.id_tipo_cliente = 1 then 
+	(select p.nombres ||'' ''|| p.apellido_paterno ||'' ''|| p.apellido_materno from personas p
+	where p.id = gi.id_persona)
+	else (select e2.razon_social from empresas e2 
+	where e2.id = gi.id_destinatario ) 
+	end destinatario, 
+	case when gi.id_tipo_cliente  = 1 then gi.dni_destinatario 
+	else gi.ruc_destinatario
+	end ruc_destinatario, m.denominiacion marca, 
+	gi.placa, gi.constancia_inscripcion, gi.licencia_conducir, e2.razon_social id_transporte, gi.ruc_empresa_transporte ruc_transporte, tm1.denominacion tipo_documento, gi.numero_documento, 
+	tm2.denominacion motivo_traslado, gi.estado, gi.guia_serie, gi.guia_numero ';
+	
+	v_tabla=' from guia_internas gi 
+	left join marcas m on gi.marca::int = m.id
+	left join empresas e2 on gi.id_empresa_transporte = e2.id 
+	LEFT JOIN tabla_maestras tm1 
+	ON (gi.id_tipo_documento = 1 AND gi.id_tipo_documento ::int = tm1.codigo::int AND tm1.tipo = ''48'')
+	OR (gi.id_tipo_documento = 2 AND gi.id_tipo_documento ::int = tm1.codigo::int AND tm1.tipo = ''49'')
+	OR (gi.id_tipo_documento = 4 AND gi.id_tipo_documento ::int-3 = tm1.codigo::int AND tm1.tipo = ''54'')
+	inner join tabla_maestras tm2 on gi.id_motivo_traslado ::int = tm2.codigo::int and tm2.tipo = ''63''  ';
+	
+	v_where = ' Where 1=1 ';
+
+	If p_fecha_emision<>'' Then
+	 v_where:=v_where||'And gi.fecha_emision = '''||p_fecha_emision||''' ';
+	End If;
+
+	If p_numero_guia<>'' Then
+	 v_where:=v_where||'And gi.guia_numero = '''||p_numero_guia||''' ';
+	End If;
+
+	If p_numero_documento<>'' Then
+	 v_where:=v_where||'And gi.numero_documento = '''||p_numero_documento||''' ';
+	End If;
+
+	If p_empresa_destino<>'' Then
+	 v_where:=v_where||'And gi.id_destinatario = '''||p_empresa_destino||''' ';
+	End If;
+
+	If p_persona_destino<>'' Then
+	 v_where:=v_where||'And gi.id_persona = '''||p_persona_destino||''' ';
+	End If;
+
+	If p_placa<>'' Then
+	 v_where:=v_where||'And gi.placa = '''||p_placa||''' ';
+	End If;
+
+	If p_empresa_trasporte<>'' Then
+	 v_where:=v_where||'And gi.id_empresa_transporte = '''||p_empresa_trasporte||''' ';
+	End If;
+
+	If p_estado<>'' Then
+	 v_where:=v_where||'And gi.estado = '''||p_estado||''' ';
+	End If;
+	
+	EXECUTE ('SELECT count(1) '||v_tabla||v_where) INTO v_count;
+	v_col_count:=' ,'||v_count||' as TotalRows ';
+
+	If v_count::Integer > p_limit::Integer then
+		v_scad:='SELECT '||v_campos||v_col_count||v_tabla||v_where||' Order By gi.id desc LIMIT '||p_limit||' OFFSET '||p_pagina||';'; 
+	else
+		v_scad:='SELECT '||v_campos||v_col_count||v_tabla||v_where||' Order By gi.id desc;'; 
+	End If;
+
+	--Raise Notice '%',v_scad;
+	Open p_ref For Execute(v_scad);
+	Return p_ref;
+End
+--select sp_listar_periodos_paginado('','','','','','1','10','ref');fetch all in ref
+$function$
+;

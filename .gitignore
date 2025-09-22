@@ -1,7 +1,6 @@
 /coverage
 /node_modules
-#/public/css
-#/public/js
+/public/css
 /public/fonts
 /public/hot
 /public/storage
@@ -9,6 +8,8 @@
 /storage/*.key
 /vendor
 /.vscode
+/public/img/*
+/public/orden_compra/*
 *.sublime-project
 *.sublime-workspace
 _ide_helper.php
@@ -33,3 +34,6 @@ yarn-error.log
 .package.json
 .yarn.lock
 .composer.lock
+phpunit.dusk.xml
+/public/factura_sodimac
+/public/orden_distribucion

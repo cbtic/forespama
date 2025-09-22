@@ -2,30 +2,98 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use DB;
 
 class Empresa extends Model
 {
-    protected $fillable = ['ruc', 'razon_social', 'nombre_comercial', 'direccion', 'representante'];
+    use HasFactory;
 
-	public function listar_empresa_ajax($p){
-		return $this->readFunctionPostgres('sp_listar_empresa_paginado',$p);
+    public function listar_empresa_ajax($p){
+
+        return $this->readFuntionPostgres('sp_listar_empresa_paginado',$p);
+
     }
 
-	public function readFunctionPostgres($function, $parameters = null){
+    function getEmpresaId($id){
 
-      $_parameters = '';
-      if (count($parameters) > 0) {
-          $_parameters = implode("','", $parameters);
-          $_parameters = "'" . $_parameters . "',";
-      }
-	  $data = DB::select("BEGIN;");
-	  $cad = "select " . $function . "(" . $_parameters . "'ref_cursor');";
-	  $data = DB::select($cad);
-	  $cad = "FETCH ALL IN ref_cursor;";
-	  $data = DB::select($cad);
-      return $data;
-   }
+
+        $cad = "select id, ruc, nombre_comercial, razon_social, direccion, representante, estado, email, telefono
+        from empresas         
+        Where id='".$id."' ";
+    
+        $data = DB::select($cad);
+        if($data)return $data[0];
+    }
+	
+    function getPersonaId($id){
+
+        $cad = "select numero_ruc ruc, apellido_paterno||' '||apellido_materno||' '||nombres nombre_comercial, apellido_paterno||' '||apellido_materno||' '||nombres razon_social,  direccion,  email
+        from personas
+        Where id='".$id."' ";
+    
+        $data = DB::select($cad);
+        if($data)return $data[0];
+    }
+
+    function getPersonaId_BV($id){
+
+        $cad = "select numero_documento ruc, apellido_paterno||' '||apellido_materno||' '||nombres nombre_comercial, apellido_paterno||' '||apellido_materno||' '||nombres razon_social,  direccion,  email
+        from personas
+        Where id='".$id."' ";
+    
+        $data = DB::select($cad);
+        if($data)return $data[0];
+    }
+    
+    public function readFuntionPostgres($function, $parameters = null){
+
+        $_parameters = '';
+        if (count($parameters) > 0) {
+            $_parameters = implode("','", $parameters);
+            $_parameters = "'" . $_parameters . "',";
+        }
+        $data = DB::select("BEGIN;");
+        $cad = "select " . $function . "(" . $_parameters . "'ref_cursor');";
+        $data = DB::select($cad);
+        $cad = "FETCH ALL IN ref_cursor;";
+        $data = DB::select($cad);
+        return $data;
+
+    }
+
+    function getEmpresaPropietario($ruc_propietario){
+
+        $cad = "select e.id, e.razon_social, e.direccion, e.telefono, e.email 
+        from empresas e
+        Where e.ruc='".$ruc_propietario."'";
+		//echo $cad;
+		$data = DB::select($cad);
+        return $data[0];
+    }
+
+    function getEmpresaAll(){
+
+        $cad = "select * from empresas 
+        where estado ='1'
+        order by razon_social asc";
+
+        $data = DB::select($cad);
+        return $data;
+
+    }
+
+    function getEmpresasSodimac(){
+
+        $cad = "select * from empresas e 
+        where e.id in('23','187')
+        and e.estado = '1'
+        order by 1 asc";
+
+        $data = DB::select($cad);
+        return $data;
+
+    }
 
 }

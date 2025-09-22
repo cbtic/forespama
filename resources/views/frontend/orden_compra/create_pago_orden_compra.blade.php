@@ -1,0 +1,697 @@
+<!--<link rel="stylesheet" href="<?php //echo URL::to('/') ?>/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">-->
+<script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" defer></script>
+<style type="text/css">
+
+.table-hover tbody tr.row_selected td{background-color:#239244!important;color:#ffffff!important}
+
+.table td.verde{
+	background:#CAE983  !important
+}
+
+body {
+    background-color: #bdc3c7;
+}
+
+.table-fixed {
+    width: 100%;
+    background-color: #f3f3f3;
+}
+
+.table-fixed tbody {
+    height: 200px;
+    overflow-y: auto;
+    width: 100%;
+}
+
+.table-fixed thead,
+.table-fixed tbody,
+.table-fixed tr,
+.table-fixed td,
+.table-fixed th {
+    display: block;
+}
+
+.table-fixed tbody td {
+    float: left;
+}
+
+.table-fixed thead tr th {
+    float: left;
+    background-color: #f39c12;
+    border-color: #e67e22;
+}
+
+/* Begin - Overriding styles for this page */
+.card-body {
+    padding: 0 1.25rem !important;
+}
+
+.form-control-sm {
+    line-height: 1.1 !important;
+    margin: 0 !important;
+}
+
+.form-group {
+    margin-bottom: 0.5rem !important;
+}
+
+.breadcrumb {
+    padding: 0.2rem 2rem !important;
+    margin-bottom: 0 !important;
+}
+
+.card-header {
+    padding: 0.2rem 1.25rem !important;
+}
+
+.pesajeIngreso {
+    line-height: 2.8;
+}
+
+.fecha_ingreso_salida {
+    color: blue;
+    font-size: 14px;
+    font-style: italic;
+	float:left
+}
+
+br {
+    line-height: 30px;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+    -moz-appearance: textfield;
+}
+
+ul.ui-autocomplete {
+    z-index: 1100;
+}
+
+.btn-xsm {
+    font-size: 11px !important;
+}
+
+/* End - Overriding styles for this page */
+/*********************************************************/
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 42px;
+  height: 24px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 0px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #2196F3;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+.no {padding-right:3px;padding-left:0px;display:block;width:20px;float:left;font-size:11px;text-align:right;padding-top:5px}
+.si {padding-right:0px;padding-left:3px;display:block;width:20px;float:left;font-size:11px;text-align:left;padding-top:5px}
+
+.flotante {
+    display:inline;
+        position:fixed;
+        bottom:0px;
+        right:0px;
+		z-index:1000
+}
+.flotanteC {
+    display:inline;
+        position:fixed;
+        bottom:65px;
+        right:0px;
+}
+
+label.form-control-sm{
+	padding-left:0px!important;
+	padding-right:0px;
+	padding-top:5px!important;
+	height:25px!important;
+	/*line-height:10px!important*/
+}
+
+.loader {
+	width: 100%;
+	height: 100%;
+	/*height: 1500px;*/
+	overflow: hidden; 
+	top: 0px;
+	left: 0px;
+	z-index: 10000;
+	text-align: center;
+	position:absolute; 
+	background-color: #000;
+	opacity:0.6;
+	filter:alpha(opacity=40);
+	display:none;
+}
+
+.dataTables_processing {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 500px!important;
+	font-size: 1.7em;
+	border: 0px;
+	margin-left: -17%!important;
+	text-align: center;
+	background: #3c8dbc;
+	color: #FFFFFF;
+}
+
+.btn-file {
+  position: relative;
+  overflow: hidden;
+}
+.btn-file input[type=file] {
+  position: absolute;
+  top: 0;
+  right: 0;
+  min-width: 100%;
+  min-height: 100%;
+  font-size: 100px;
+  text-align: right;
+  filter: alpha(opacity=0);
+  opacity: 0;
+  outline: none;
+  background: white;
+  cursor: inherit;
+  display: block;
+}
+
+.wrapper { 
+	/*background:#EFEFEF; */
+	/*box-shadow: 1px 1px 10px #999; */
+	margin: auto; 
+	text-align: center; 
+	position: relative;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	margin-bottom: 20px !important;
+	width: 800px;
+	padding-top: 5px;
+}
+.scrolls { 
+	overflow-x: scroll;
+	overflow-y: hidden;
+	height: 200px;
+	white-space:nowrap
+} 
+.imageDiv img { 
+	box-shadow: 1px 1px 10px #999; 
+	margin: 2px;
+	max-height: 50px;
+	cursor: pointer;
+	display:inline-block;
+	*display:inline;
+	*zoom:1;
+	vertical-align:top;
+}
+
+
+.img_ruta{
+	position:relative;
+	float:left
+}
+
+.delete_ruta{
+	background-image:url(img/delete.png);
+	top:0px;
+	left:110px;
+	background-size: 100%;
+	position:absolute;
+	display:block;
+	width:30px;
+	height:30px;
+	cursor:pointer
+}
+
+/*
+ VERSION PARA IMPRESORAS
+*/
+@page {
+  margin: 0;
+}
+
+@media print {
+	/*
+  html, body {
+    width: 80mm;
+    height: 297mm;
+  }
+  */
+	
+    *, :after, :before {
+        color: #FFF!important;
+        text-shadow: none!important;
+        background: blue!important;
+        -webkit-box-shadow: none!important;
+        box-shadow: none!important;
+        font-family:sans-serif;
+    }
+	
+    p,table, th, td {
+        color: black !important;
+        font-size: 16px !important;
+        font-family:sans-serif;
+    }
+	
+    .resaltado {
+        color: black !important;
+        font-size: 36px !important;
+        font-weight: bold;
+    }
+	
+    .divlogoimpresora {
+        display: block !important;
+    }
+	
+    .logoimpresora {
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 0px;
+        margin-bottom: 5px;
+        display: block;
+        width: 250px !important;
+        height: 55px !important;
+    }
+	
+    h3{
+        color: black !important;
+        font-size: 52px !important;
+        text-align: center;
+        font-family:sans-serif;
+    }
+	
+    .separador {
+        display: block;
+        margin-top: 20px;
+    }
+
+    .navbar.navbar-expand-lg.navbar-dark.bg-primary.mb-0 {
+        display: none
+    }
+    h4,ol{
+        display: none !important
+    }
+
+    .flotante,.flotanteC {
+        display: none !important
+    }
+	
+	#divTablaIngreso{
+		display: none !important
+	}
+	
+	.c-header.c-header-light.c-header-fixed{
+		display: none !important
+	}
+	
+	#btnImprimir{
+		display: none !important
+	}
+	
+	.bottom{
+		display: none !important
+	}
+	
+	.cubicaje{
+		display: none !important
+	}
+	.form-control{
+		border:0px !important;
+		font-weight:bold !important;
+		color:#000000 !important;
+	}
+	
+	.card-header strong{
+		padding: 10px 10px !important;
+		font-weight:bold !important;
+		color:#000000 !important;
+		font-size: 22px !important;
+		border:0px !important;
+	}
+	
+	.card-header{
+		border:0px !important;
+	}
+	.card{
+		border:0px !important;
+	}
+	
+	.c-footer{
+		display: none !important
+	}
+
+	#divCubicaje{
+		max-height: 5000px !important
+	}
+	
+	#tblSolicitud tbody tr.even{
+		display: none !important
+	}
+	/*
+	#tblSolicitud{
+		display: block !important
+	}
+	*/
+	
+}
+
+</style>
+
+
+
+@stack('before-scripts')
+@stack('after-scripts')
+
+@extends('frontend.layouts.app')
+
+@section('title', ' | ' . __('labels.frontend.afiliacion.box_title'))
+
+@section('breadcrumb')
+<ol class="breadcrumb" style="padding-left:130px;margin-top:0px;background-color:#283659">
+    <li class="breadcrumb-item text-primary">Inicio</li>
+    <li class="breadcrumb-item active">Pago Orden Compra</li>
+    </li>
+</ol>
+
+@endsection
+
+<div class="loader"></div>
+
+@section('content')
+<!--
+    <ol class="breadcrumb" style="padding-left:120px;margin-top:0px;background-color:#355C9D">
+        <li class="breadcrumb-item text-primary">Inicio</li>
+            <li class="breadcrumb-item active">Nueva Asistencia</li>
+        </li>
+    </ol>
+    -->
+
+<div class="container-fluid mt-4">
+    <a href="javascript:void(0)" onclick="ocultar_solicitud()" style="position:absolute; right:50%; top:-24px; color:#FFFFFF">
+        <i class="fa fa-bars fa-lg"></i>
+    </a>
+
+    <div class="card">
+        <div class="card-body">
+            <form class="form-horizontal" method="post" action="" id="frmPagoOrdenCompra" autocomplete="off" enctype="multipart/form-data">
+                <input type="hidden" name="flag_ocultar" id="flag_ocultar" value="0">
+                <input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
+                <input type="hidden" name="id_orden_compra" id="id_orden_compra" value="0">
+
+                <div class="row">
+                    <!-- Panel principal (izquierdo) -->
+                    <div class="col-lg-8 mb-4">
+                        <div class="card h-100">
+                            <div class="divlogoimpresora" style="display:none;">
+                                <img class="logoimpresora" src="/img/logo_forestalpama.jpg" align="right">
+                            </div>
+
+                            <div class="card-header">
+                                <strong>Pagos Orden Compra</strong>
+                            </div>
+
+                            <div class="card-body">
+                                <div class="row" style="padding:20px 20px 0px 20px;">
+                                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                                        <select name="empresa_bus" id="empresa_bus" class="form-control form-control-sm">
+                                            <option value="">--Seleccionar Empresa--</option>
+                                            <?php foreach ($empresa as $row) { ?>
+                                                <option value="<?php echo $row->id ?>"><?php echo $row->razon_social ?></option>
+                                            <?php } ?>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                                        <select name="persona_bus" id="persona_bus" class="form-control form-control-sm">
+                                            <option value="">--Seleccionar Persona--</option>
+                                            <?php foreach ($persona as $row) { ?>
+                                                <option value="<?php echo $row->id ?>"><?php echo $row->nombres . ' ' . $row->apellido_paterno . ' ' . $row->apellido_materno ?></option>
+                                            <?php } ?>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+                                        <input class="form-control form-control-sm" id="fecha_inicio_bus" name="fecha_inicio_bus" placeholder="Fecha Inicio">
+                                    </div>
+
+                                    <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+                                        <input class="form-control form-control-sm" id="fecha_fin_bus" name="fecha_fin_bus" placeholder="Fecha Fin">
+                                    </div>
+
+                                    <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+                                        <select name="estado_pago_bus" id="estado_pago_bus" class="form-control form-control-sm">
+                                            <option value="">--Estado Pago--</option>
+                                            <?php foreach ($estado_pago as $row) { ?>
+                                                <option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
+                                            <?php } ?>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12" style="padding-right:0px">
+                                        <button type="button" class="btn btn-warning btn-sm me-2" id="btnBuscar">Buscar</button>
+                                        <button type="button" class="btn btn-success btn-sm me-2" id="btnPagar" onclick="modalPago(0)">Pagar</button>
+                                        <button type="button" class="btn btn-secondary btn-sm" id="btnDescargar">Descargar</button>
+                                    </div>
+                                </div>
+
+                                <div class="table-responsive mt-3">
+                                    <table id="tblPagoOrdenCompra" class="table table-hover table-sm">
+                                        <thead>
+                                            <tr style="font-size:13px">
+                                                <th>N°</th>
+                                                <th>Fecha</th>
+                                                <th>Cliente</th>
+                                                <th>Vendedor</th>
+                                                <th>Tipo Producto</th>
+                                                <th>N° OC</th>
+                                                <th>Fecha Factura</th>
+                                                <th>N° Factura</th>
+                                                <th>Sub Total</th>
+                                                <th>IGV</th>
+                                                <th>Total</th>
+                                                <th>Abono</th>
+                                                <th>Forma Pago</th>
+                                                <th>Fecha Vencimiento</th>
+                                                <th>Guía</th>
+                                                <th>Estado Pago</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody style="font-size:13px">
+                                        </tbody>
+                                        <tfoot>
+                                            <tr style="font-size:13px">
+                                                <td colspan="10"><strong>Total:</strong></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Panel derecho -->
+                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 d-flex flex-column gap-3">
+
+						<!-- Primer panel: Pagos -->
+						<div class="card flex-fill">
+							<div class="card-header">
+								<strong>Pagos</strong>
+							</div>
+							<div class="card-body">
+								<div id="divOrdenCompra" class="table-responsive overflow-auto" style="max-height: 240px;">
+									<table id="tblOrdenCompra" class="table table-hover table-sm">
+										<thead>
+											<tr style="font-size:13px">
+												<th width="2%">Id</th>
+												<th width="10%">Fecha</th>
+												<th width="10%">Tipo Doc</th>
+												<th width="10%">Importe</th>
+												<th width="10%">Archivo</th>
+											</tr>
+										</thead>
+										<tbody>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+
+						<!-- Segundo panel: Puedes personalizarlo como "Resumen", "Notas", etc. -->
+						<div class="card flex-fill">
+							<div class="card-header">
+								<strong>Guias</strong>
+							</div>
+							<div class="card-body">
+								<div id="divOrdenCompraGuia" class="table-responsive overflow-auto" style="max-height: 240px;">
+									<table id="tblOrdenCompraGuia" class="table table-hover table-sm">
+										<thead>
+											<tr style="font-size:13px">
+												<th width="2%">Id</th>
+												<th width="10%">Fecha Traslado</th>
+												<th width="10%">Serie-N&uacute;mero</th>
+												<th width="10%">Archivo</th>
+											</tr>
+										</thead>
+										<tbody>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+
+					</div>
+
+
+                </div> <!-- fin row -->
+            </form>
+        </div>
+    </div>
+</div>
+
+    <!--row-->
+    @endsection
+
+	<div id="openOverlayOpc" class="modal fade" role="dialog">
+	  <div class="modal-dialog" >
+	
+		<div id="id_content_OverlayoneOpc" class="modal-content" style="padding: 0px;margin: 0px">
+		
+		  <div class="modal-body" style="padding: 0px;margin: 0px">
+	
+				<div id="diveditpregOpc"></div>
+	
+		  </div>
+		
+		</div>
+	
+	  </div>
+		
+	</div>
+
+    @push('after-scripts')
+    
+	<script type="text/javascript">
+	
+	$(document).ready(function() {
+		$(".upload").on('click', function() {
+			var formData = new FormData();
+			var files = $('#image')[0].files[0];
+			formData.append('file',files);
+			$.ajax({
+				headers: {
+					'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+				},
+				url: "/proyecto/upload",
+				type: 'post',
+				data: formData,
+				contentType: false,
+				processData: false,
+				success: function(response) {
+				
+					var ind_img = $("#ind_img").val();
+					
+					if (response != 0) {
+						$("#img_ruta_"+ind_img).attr("src", "/img/proyecto/tmp/"+response).show();
+						$(".delete_ruta").show();
+						$("#img_foto_"+ind_img).val(response);
+						
+						ind_img++;
+						
+						var newRow = "";
+						newRow += '<div class="img_ruta">';
+						newRow += '<img src="" id="img_ruta_'+ind_img+'" width="130px" height="165px" alt="" style="text-align:center;margin-top:8px;display:none;margin-left:10px" />';
+						newRow += '<span class="delete_ruta" style="display:none" onclick="DeleteImagen(this)"></span>';
+						newRow += '<input type="hidden" id="img_foto_'+ind_img+'" name="img_foto[]" value="" />';
+						newRow += '</div>';
+						
+						$("#divImagenes").append(newRow);
+						$("#ind_img").val(ind_img);
+						
+					} else {
+						alert('Formato de imagen incorrecto.');
+					}
+				}
+			});
+			return false;
+		});
+	
+		$(".delete").on('click', function() {
+			$("#img_ruta0").attr("src", "/dist/img/profile-icon.png");
+			$("#img_foto0").val("");
+		});
+	
+	});
+	
+	</script>
+	
+	<script src="{{ asset('js/pago_orden_compra.js') }}"></script>
+	
+	@endpush

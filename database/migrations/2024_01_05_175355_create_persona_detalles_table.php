@@ -15,8 +15,8 @@ class CreatePersonaDetallesTable extends Migration
     {
         Schema::create('persona_detalles', function (Blueprint $table) {
             $table->bigIncrements('id');
-			$table->bigInteger('id_personas')->unsigned()->index();	
-			$table->bigInteger('id_empresas')->unsigned()->index();		
+			$table->bigInteger('id_personas')->unsigned()->index();
+			$table->bigInteger('id_empresas')->unsigned()->index();
 			$table->string('ubigeo',8);
 			$table->string('pais')->nullable();
 			$table->string('departamento')->nullable();
@@ -24,7 +24,7 @@ class CreatePersonaDetallesTable extends Migration
 			$table->string('distrito')->nullable();
 			$table->string('direccion');
             $table->string('email')->nullable();
-            $table->string('foto')->nullable();			
+            $table->string('foto')->nullable();
 			$table->date('fecha_ingreso')->nullable();
 			$table->bigInteger('id_condicion_laboral')->nullable();
 			$table->bigInteger('id_tipo_planilla')->nullable();
@@ -44,7 +44,7 @@ class CreatePersonaDetallesTable extends Migration
 			$table->bigInteger('id_nivel')->nullable();
 			$table->bigInteger('id_banco_cts')->nullable();
 			$table->string('num_cuenta_cts')->nullable();
-			$table->bigInteger('id_moneda_cts')->nullable();			
+			$table->bigInteger('id_moneda_cts')->nullable();
 			$table->string('estado',1)->default('1');
 			$table->string('eliminado',1)->default('1');
             $table->timestamps();
@@ -62,6 +62,6 @@ class CreatePersonaDetallesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('persona_detalles');
+        //Schema::dropIfExists('persona_detalles');
     }
 }

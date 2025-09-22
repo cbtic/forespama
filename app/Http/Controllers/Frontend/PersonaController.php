@@ -7,9 +7,11 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 use App\Models\Persona;
+use App\Models\Conductores;
 //use App\Models\Negativo;
 use App\Models\TablaMaestra;
 use App\Models\Ubigeo;
+use App\Models\OrdenCompra;
 
 use Auth;
 
@@ -107,8 +109,157 @@ class PersonaController extends Controller
         $sw = true;
         $persona = $persona_model->getPersona($tipo_documento,$numero_documento);
         //print_r($persona);exit();
+        //dd($persona);exit();
         $array["sw"] = $sw;
         $array["persona"] = $persona;
+        echo json_encode($array);
+    }
+
+    public function obtener_personas($tipo_documento,$numero_documento){
+        $agremiado_model = new Persona;
+        $id_orden_compra = "";
+        $id_salida_prod = "";
+		
+        if($tipo_documento=="1"){
+
+            $orden_compra_model = new OrdenCompra;
+
+			$resultado = $orden_compra_model->getPersonaOrdenCompraByCod($numero_documento, $tipo_documento);
+
+			if(isset($resultado->id_persona)){
+
+				$tipo_documento="1";
+				$numero_documento=$resultado->numero_documento_;
+                $id_orden_compra=$resultado->id_orden_compra;
+                $id_tipo_cliente=$resultado->id_tipo_cliente;
+
+			}else{
+
+                $tipo_documento="1";
+				$numero_documento=$numero_documento;
+                $id_orden_compra=0;
+                $id_tipo_cliente=0;
+
+            }
+		}
+
+        if($tipo_documento=="5"){
+
+            $orden_compra_model = new OrdenCompra;
+
+			$resultado = $orden_compra_model->getEmpresaOrdenCompraByCod($numero_documento);
+
+			if(isset($resultado->id_empresa)){
+
+				$tipo_documento="5";
+				$numero_documento=$resultado->numero_documento_;
+                $id_orden_compra=$resultado->id_orden_compra;
+                $id_tipo_cliente=$resultado->id_tipo_cliente;
+
+			}else{
+
+                $tipo_documento="5";
+				$numero_documento=$numero_documento;
+                $id_orden_compra=0;
+                $id_tipo_cliente=0;
+
+            }
+		}
+
+        if($tipo_documento=="6"){
+
+            $tipo_cliente = OrdenCompra::Where("numero_orden_compra",$numero_documento)->Where("estado","1")->Where("cerrado",'2')->Where("id_tipo_documento",'2')->first();
+
+			if($tipo_cliente->id_tipo_cliente=="1"){
+                $orden_compra_model = new OrdenCompra;
+                $resultado = $orden_compra_model->getOrdenCompraByCodPersona($numero_documento);
+
+            
+                if(isset($resultado->id_persona)){
+                    //echo("DNI");
+                    $tipo_documento=$resultado->id_tipo_documento;
+                    $numero_documento=$resultado->numero_documento_;
+                    $id_orden_compra=$resultado->id_orden_compra;
+                    $id_tipo_cliente= $resultado->id_tipo_cliente;
+    
+                }
+
+			}else{
+                $orden_compra_model = new OrdenCompra;
+                $resultado = $orden_compra_model->getOrdenCompraByCod($numero_documento);
+
+                if(isset($resultado->id_empresa)){
+                    //echo("DNI");
+                    $tipo_documento="5";
+                    $numero_documento=$resultado->ruc;
+                    $id_orden_compra=$resultado->id_orden_compra;
+                    $id_tipo_cliente= $resultado->id_tipo_cliente;
+    
+                }
+
+            }
+
+		}
+
+        if($tipo_documento=="7"){
+
+            $orden_compra_model = new OrdenCompra;
+
+			//print_r("hi");exit();
+			$resultado = $orden_compra_model->getSalidaProductoByCod($numero_documento);
+
+			if(isset($resultado->id_empresa)){
+				//echo("DNI");
+				$tipo_documento="5";
+				$numero_documento=$resultado->ruc;
+                $id_orden_compra=$resultado->id_orden_compra;
+                $id_salida_prod=$resultado->id_salida_prod;
+                $id_tipo_cliente= $resultado->id_tipo_cliente;
+			}
+
+		}
+
+		//print_r($resultado);
+		//exit();
+        
+		$agremiado_model = new Persona;
+        //$valorizaciones_model = new Valorizacione;
+        $sw = true;
+        $agremiado = $agremiado_model->getPersona($tipo_documento,$numero_documento);
+        $array["sw"] = $sw;
+        $array["id_orden_compra"] = $id_orden_compra;
+        $array["id_salida_prod"] = $id_salida_prod;
+        $array["id_salida_prod"] = $id_salida_prod;
+        $array["id_tipo_cliente"] = $id_tipo_cliente;
+        $array["agremiado"] = $agremiado;
+
+        echo json_encode($array);
+    }
+	
+	public function obtener_persona_conductor($tipo_documento,$numero_documento){
+
+        $persona_model = new Persona;
+        $sw = true;
+		$msg = "";
+		$conductor = NULL;
+		
+        $persona = $persona_model->getPersona($tipo_documento,$numero_documento);
+		
+		if($persona){
+        	$conductor = Conductores::Where("id_personas",$persona->id)->Where("estado","ACTIVO")->first();
+			if(!$conductor){
+				$sw = false;
+				$msg = "El Conductor ingresado no existe !!!";
+			}
+		}else{
+			$sw = false;
+			$msg = "El Conductor ingresado no existe !!!";
+		}
+		
+		$array["sw"] = $sw;
+		$array["msg"] = $msg;
+        $array["persona"] = $persona;
+		$array["conductor"] = $conductor;
         echo json_encode($array);
 
     }
@@ -142,20 +293,20 @@ class PersonaController extends Controller
 	public function modal_persona($id){
 		$id_user = Auth::user()->id;
         /*
-		$persona = new Persona;
-		$negativo = "";
-		if($id>0){
-			$persona = Persona::find($id);
-			//$negativo = Negativo::where('persona_id',$id)->orderBy('id', 'desc')->first();
-		} else {
-			$persona = new Persona;
-		}
-        		
-		$tablaMaestra_model = new TablaMaestra;		
-		$tipo_documento = $tablaMaestra_model->getMaestroByTipo("9");
-        
-		return view('frontend.persona.modal_persona',compact('id','persona','negativo','tipo_documento'));
-*/
+            $persona = new Persona;
+            $negativo = "";
+            if($id>0){
+                $persona = Persona::find($id);
+                //$negativo = Negativo::where('persona_id',$id)->orderBy('id', 'desc')->first();
+            } else {
+                $persona = new Persona;
+            }
+                    
+            $tablaMaestra_model = new TablaMaestra;		
+            $tipo_documento = $tablaMaestra_model->getMaestroByTipo("9");
+            
+            return view('frontend.persona.modal_persona',compact('id','persona','negativo','tipo_documento'));
+        */
 
 
 		$tablaMaestra_model = new TablaMaestra;
@@ -180,6 +331,20 @@ class PersonaController extends Controller
 		
 		return view('frontend.persona.modal_persona',compact('id','persona','sexo','tipo_documento','grupo_sanguineo','nacionalidad','departamento'));        
 
+	}
+
+    public function obtener_provincia($idDepartamento){
+		
+		$ubigeo_model = new Ubigeo;
+		$provincia = $ubigeo_model->getProvincia($idDepartamento);
+		echo json_encode($provincia);
+	}
+	
+	public function obtener_distrito($id_departamento,$idProvincia){
+		
+		$ubigeo_model = new Ubigeo;
+		$distrito = $ubigeo_model->getDistrito($id_departamento,$idProvincia);
+		echo json_encode($distrito);
 	}
 
 	public function modal_persona_vacuna($id_persona){
@@ -340,44 +505,41 @@ class PersonaController extends Controller
             $buscapersona = Persona::where("numero_documento", $request->numero_documento)->where("estado", "1")->get();
 
             if ($buscapersona->count()==0){
-
-                $codigo=$request->codigo;
-                $telefono = $request->telefono;
-                $email = $request->email;
-
+/*
                 if($codigo==""){
                     $array_tipo_documento = array('DNI' => 'DNI','CARNET_EXTRANJERIA' => 'CE','PASAPORTE' => 'PAS','RUC' => 'RUC','CEDULA' => 'CED','PTP/PTEP' => 'PTP/PTEP', 'CPP/CSR' => 'CPP/CSR');
                     $codigo = $array_tipo_documento[$request->tipo_documento]."-".$request->numero_documento;
                 }
-                if($telefono=="")$telefono="999999999";
-                if($email=="")$email="mail@mail.com";
+*/
+                //if($telefono=="")$telefono="999999999";
+                //if($email=="")$email="mail@mail.com";
 
                 $persona = new Persona;
-                $persona->tipo_documento = $request->tipo_documento;
+                $persona->id_tipo_documento = $request->tipo_documento;
                 $persona->numero_documento = $request->numero_documento;
                 $persona->apellido_paterno = $request->apellido_paterno;
                 $persona->apellido_materno = $request->apellido_materno;
-                $persona->nombres = $request->nombres;
-                $persona->codigo = $codigo;
-                $persona->ocupacion = $request->ocupacion;
-                $persona->fecha_nacimiento = "1990-01-01";
-                $persona->sexo = "M";
-                //$persona->telefono = "999999999";
-                $persona->telefono = $telefono;
-                //$persona->email = "mail@mail.com";
-                $persona->email = $email;
-                //$persona->foto = "mail@mail.com";
+                $persona->nombres = $request->nombre;
+                $persona->fecha_nacimiento = $request->fecha_nacimiento;
+                $persona->id_sexo =  $request->sexo;
+                $persona->telefono = $request->numero_celular;
+                $persona->email = $request->correo;
                 $persona->foto = $request->img_foto;
                 $persona->estado = "1";
-                $persona->ruc = $request->ruc;
-                $persona->flag_negativo = $request->flag_negativo;
+                $persona->numero_ruc = $request->ruc;
+                $persona->grupo_sanguineo = $request->grupo_sanguineo;
+                $persona->id_ubigeo_nacimiento = $request->id_ubigeo_nacimiento;
+                $persona->lugar_nacimiento = $request->lugar_nacimiento;
+                $persona->id_nacionalidad = $request->nacionalidad;
+                $persona->direccion = $request->direccion;
                 $persona->save();
-
+/*
                 $negativo = new Negativo;
                 $negativo->persona_id = $persona->id;
                 $negativo->flag_negativo = $request->flag_negativo;
                 $negativo->observacion = $request->observacion;
                 $negativo->fecha = Carbon::now()->format('Y-m-d');
+                */
             }
             else{
                 $sw = false;
@@ -393,24 +555,30 @@ class PersonaController extends Controller
             //$request->id = $buscapersona[0]->id;
 
 			$persona = Persona::find($request->id);
-			$persona->tipo_documento = $request->tipo_documento;
+			$persona->id_tipo_documento = $request->tipo_documento;
 			$persona->numero_documento = $request->numero_documento;
 			$persona->apellido_paterno = $request->apellido_paterno;
 			$persona->apellido_materno = $request->apellido_materno;
-			$persona->nombres = $request->nombres;
-			$persona->codigo = $request->codigo;
-            $persona->ocupacion = $request->ocupacion;
-			$persona->telefono = $request->telefono;
-			$persona->email = $request->email;
+			$persona->nombres = $request->nombre;
+			//$persona->codigo = $request->codigo;
+            //$persona->ocupacion = $request->ocupacion;
+			$persona->telefono = $request->numero_celular;
+			$persona->direccion = $request->direccion;
+			$persona->id_sexo = $request->sexo;
+			$persona->fecha_nacimiento = $request->fecha_nacimiento;
+			$persona->grupo_sanguineo = $request->grupo_sanguineo;
+			$persona->lugar_nacimiento = $request->lugar_nacimiento;
+			$persona->id_nacionalidad = $request->nacionalidad;
+			$persona->email = $request->correo;
 			$persona->foto = $request->img_foto;
-            $persona->ruc = $request->ruc;
-			$flag_negativo = $persona->flag_negativo;
+            $persona->numero_ruc = $request->ruc;
+			//$flag_negativo = $persona->flag_negativo;
 
-            $persona->flag_negativo = $request->flag_negativo;
+            //$persona->flag_negativo = $request->flag_negativo;
             //print ($persona->ruc);exit();
 			$persona->save();
 
-
+/*
             if($flag_negativo!=$request->flag_negativo){
                 $negativo = new Negativo;
                 $negativo->persona_id = $persona->id;
@@ -425,6 +593,7 @@ class PersonaController extends Controller
                     $negativo->save();
                 }
              }
+             */
         }
 
         $array["sw"] = $sw;

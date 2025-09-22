@@ -1,9 +1,9 @@
-@extends('backend.layouts.app')
+@extends('frontend.layouts.app')
 
 @section('content')
     <x-backend.card>
         <x-slot name="header">
-            @lang('Coductores')
+            @lang('Conductores')
         </x-slot>
 
         <x-slot name="headerActions">
@@ -17,6 +17,9 @@
 
         <x-slot name="body">
             <livewire:backend.conductores-table />
-        </x-slot>
-    </x-backend.card>
+            </x-slot>
+        </x-backend.card>
 @endsection
+
+@push('after-scripts')
+

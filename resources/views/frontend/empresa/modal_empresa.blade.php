@@ -14,12 +14,11 @@
   height:250px;
 }
 
-
 .modal-dialog {
 	width: 100%;
-	max-width:40%!important
-  }
-  
+	max-width:60%!important
+}
+
 #tablemodal{
     border-spacing: 0;
     display: flex;/*Se ajuste dinamicamente al tamano del dispositivo**/
@@ -205,7 +204,7 @@ function fn_save(){
 	var costo_volumen = $('#costo_volumen_').val();
 	
     $.ajax({
-			url: "/empresa/send_empresa",
+			url: "/empresa/send",
             type: "POST",
             data : {_token:_token,id:id,ruc:ruc,razon_social:razon_social,direccion:direccion,email:email,telefono:telefono,costo_estacionamiento:costo_estacionamiento,costo_volumen:costo_volumen},
 			dataType: 'json',
@@ -414,7 +413,7 @@ container: '#myModal modal-body'
 						<div class="col-lg-12">
 							<div class="form-group">
 								<label class="control-label">Direcci&oacute;n</label>
-								<input id="direccion_" name="direccion_" class="form-control form-control-sm"  value="<?php echo $empresa->direccion?>" type="text" <?php echo $readonly_?> >
+								<input id="direccion_" name="direccion_" class="form-control form-control-sm"  value="<?php echo $empresa->direccion?>" type="text" >
 							</div>
 						</div>
 						
@@ -437,9 +436,8 @@ container: '#myModal modal-body'
 						</div>
 						
 					</div>
-					
-					<div class="row">
-						
+<!--					
+					<div class="row">						
 						<div class="col-lg-6">
 							<div class="form-group" style="padding-top:0px;padding-bottom:0px;margin-top:0px;margin-bottom:0px">
 								<label class="control-label">Costo Estacionamiento</label>
@@ -452,9 +450,9 @@ container: '#myModal modal-body'
 								<label class="control-label">Costo Volumen</label>
 								<input id="costo_volumen_" name="costo_volumen_" class="form-control form-control-sm"  value="<?php echo $empresa->costo_volumen?>" type="text">
 							</div>
-						</div>
-						
+						</div>						
 					</div>
+-->
 					
 					<div style="margin-top:10px" class="form-group">
 						<div class="col-sm-12 controls">
@@ -538,24 +536,28 @@ function validaRuc(ruc){
 
 			var data= response.data;
 
-			$('#razon_social_').val('')
-			$('#direccion_').val('')
-			$('#telefono_').val('')
-			$('#email_').val('')
+			//alert(data.estado);
 
-			$('#razon_social_').val(data.nombre_o_razon_social);
-			$('#direccion_').attr('readonly', true);
+			$('#razon_social_').val('');
+			$('#direccion_').val('');
+			$('#telefono_').val('');
+			$('#email_').val('');
 
-			if (typeof data.direccion_completa != "undefined"){
-				$('#direccion_').val(data.direccion_completa);
+			if(data.estado == 'ACTIVO'){
+
+				$('#razon_social_').val(data.nombre_o_razon_social);
+				//$('#direccion_').attr('readonly', true);
+
+				if (typeof data.direccion_completa != "undefined"){
+					$('#direccion_').val(data.direccion_completa);
+				}
+				else{
+					$('#direccion_').attr('readonly', false);
+				}
+
+			}else{
+				bootbox.alert("El RUC "+ruc+" esta con el estado de "+ data.estado);
 			}
-			else{
-				$('#direccion_').attr('readonly', false);
-			}
-			
-
-			//alert(data.nombre_o_razon_social);
-
 		}
 		else{
 			bootbox.alert("RUC Invalido,... revise el RUC digitado ¡");

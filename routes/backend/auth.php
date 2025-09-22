@@ -136,6 +136,7 @@ Route::group([
                 ->breadcrumbs(function (Trail $trail, Role $role) {
                     $trail->parent('admin.auth.role.index')
                         ->push(__('Editing :role', ['role' => $role->name]), route('admin.auth.role.edit', $role));
+						//->push(__('Edit'), route('admin.auth.role.edit', $role));
                 });
 
             Route::patch('/', [RoleController::class, 'update'])->name('update');

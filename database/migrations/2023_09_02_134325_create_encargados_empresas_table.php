@@ -14,7 +14,7 @@ class CreateEncargadosEmpresasTable extends Migration
     public function up()
     {
         Schema::create('encargados_empresas', function (Blueprint $table) {
-            $table->bigIncrements('id');            
+            $table->bigIncrements('id');
             $table->bigInteger('id_personas')->unsigned()->index();
             $table->bigInteger('id_empresas')->unsigned()->index();
             $table->string('estado',1)->default('1');
@@ -32,6 +32,6 @@ class CreateEncargadosEmpresasTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('encargados_empresas');
+        //Schema::dropIfExists('encargados_empresas');
     }
 }

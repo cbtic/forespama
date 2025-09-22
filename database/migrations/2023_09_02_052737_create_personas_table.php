@@ -15,7 +15,7 @@ class CreatePersonasTable extends Migration
     {
         Schema::create('personas', function (Blueprint $table) {
 
-            $table->bigIncrements('id');            
+            $table->bigIncrements('id');
             $table->enum('tipo_documento', ['DNI', 'CARNET_EXTRANJERIA', 'PASAPORTE', 'CEDULA', 'PTP/PTEP']);
             $table->string('numero_documento');
             $table->string('apellido_paterno');
@@ -24,7 +24,7 @@ class CreatePersonasTable extends Migration
             $table->date('fecha_nacimiento');
             $table->enum('sexo', ['F', 'M']);
             $table->string('estado',1)->default('1');
-            
+
             $table->timestamps();
         });
     }
@@ -36,6 +36,6 @@ class CreatePersonasTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('personas');
+        //Schema::dropIfExists('personas');
     }
 }

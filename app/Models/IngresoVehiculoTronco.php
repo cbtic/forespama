@@ -8,28 +8,177 @@ use DB;
 
 class IngresoVehiculoTronco extends Model
 {
-    
+
 	function getEmpresaConductorVehiculos($placa){
 
-        $cad = "select ecv.id,ecv.empresas_id,ecv.vehiculos_id,ecv.conductores_id,e.razon_social,e.ruc,v.placa,v.ejes,v.peso_tracto,v.peso_carreta,v.peso_seco,c.licencia,to_char(c.fecha_licencia,'dd-mm-yyyy')fecha_licencia,p.numero_documento,p.apellido_paterno||' '||p.apellido_materno||' '||p.nombres conductor 
-from empresas_conductores_vehiculos ecv
-inner join empresas e on ecv.empresas_id=e.id
-inner join vehiculos v on ecv.vehiculos_id=v.id and v.estado='1' 
-inner join conductores c on ecv.conductores_id=c.id and c.estado='1'
-inner join personas p on c.personas_id=p.id 
-where ecv.estado='1'
-and v.placa='".$placa."'";
+        $cad = "select ecv.id,ecv.id_empresas,ecv.id_vehiculos,ecv.id_conductores,e.razon_social,e.ruc,v.placa,v.ejes,v.peso_tracto,v.peso_carreta,v.peso_seco,c.licencia,to_char(c.fecha_licencia,'dd-mm-yyyy')fecha_licencia,p.id_tipo_documento,p.numero_documento,p.apellido_paterno||' '||p.apellido_materno||' '||p.nombres conductor, v.id_marca, m.denominiacion marca, c.licencia, v.constancia_inscripcion 
+        from empresas_conductores_vehiculos ecv
+        inner join empresas e on ecv.id_empresas=e.id
+        inner join vehiculos v on ecv.id_vehiculos=v.id and v.estado='1' 
+        inner join conductores c on ecv.id_conductores=c.id and c.estado='ACTIVO'
+        inner join personas p on c.id_personas=p.id and p.estado='1'
+        left join marcas m on v.id_marca = m.id
+        where ecv.estado='1'
+        and v.placa='".$placa."'
+        order by ecv.id desc";
 
 		$data = DB::select($cad);
         if(isset($data[0]))return $data[0];
     }
+
+    function getEmpresaConductoresVehiculos($id_empresa){
+
+        $cad = "select ecv.id,ecv.id_empresas,ecv.id_vehiculos,ecv.id_conductores,p.id_tipo_documento,p.numero_documento,p.apellido_paterno||' '||p.apellido_materno||' '||p.nombres conductor, c.licencia 
+        from empresas_conductores_vehiculos ecv
+        inner join empresas e on ecv.id_empresas=e.id
+        inner join vehiculos v on ecv.id_vehiculos=v.id and v.estado='1' 
+        inner join conductores c on ecv.id_conductores=c.id and c.estado='ACTIVO'
+        inner join personas p on c.id_personas=p.id
+        where ecv.estado='1'
+        and ecv.id_empresas ='".$id_empresa."'
+        and ecv.id = (select MAX(sub.id) from empresas_conductores_vehiculos sub
+        where sub.id_conductores = ecv.id_conductores and sub.estado = '1')
+        order by ecv.id desc";
+
+		$data = DB::select($cad);
+        return $data;
+    }
+
+	function getIngresoVehiculoTroncoCubicajeById($id){
+
+        $cad = "select ivtc.*, ivt.id_empresa_proveedor,
+        (select ec.diametro_dm
+        from empresa_cubicajes ec
+        where ec.id_empresa = ivt.id_empresa_proveedor 
+        and ((ec.id_tipo_empresa = 2 and ec.id_conductor = ivt.id_conductores) 
+        or (ec.id_tipo_empresa = 1))
+        and ec.estado ='1'
+        order by 1 desc 
+        limit 1) diametro_dm_proveedor,
+        (select ec.precio_mayor 
+        from empresa_cubicajes ec
+        where ec.id_empresa = ivt.id_empresa_proveedor 
+        and ((ec.id_tipo_empresa = 2 and ec.id_conductor = ivt.id_conductores) 
+        or (ec.id_tipo_empresa = 1))
+        and ec.estado ='1'
+        order by 1 desc 
+        limit 1) precio_mayor,
+        (select ec.precio_menor 
+        from empresa_cubicajes ec
+        where ec.id_empresa = ivt.id_empresa_proveedor 
+        and ((ec.id_tipo_empresa = 2 and ec.id_conductor = ivt.id_conductores) 
+        or (ec.id_tipo_empresa = 1))
+        and ec.estado ='1'
+        order by 1 desc 
+        limit 1) precio_menor
+        from ingreso_vehiculo_tronco_cubicajes ivtc 
+        left join ingreso_vehiculo_tronco_tipo_maderas ivttm on ivtc.id_ingreso_vehiculo_tronco_tipo_maderas = ivttm.id 
+        left join ingreso_vehiculo_troncos ivt on ivttm.id_ingreso_vehiculo_troncos = ivt.id
+        where id_ingreso_vehiculo_tronco_tipo_maderas='".$id."' 
+        and ivtc.estado = '1'
+        order by 1 asc";
+
+		$data = DB::select($cad);
+        return $data;
+    }
 	
+	function getIngresoVehiculoTroncoCubicajeReporteById($id){
+
+        $cad = "select count(*) cantidad, diametro_dm, longitud, volumen_m3, volumen_pies, sum(volumen_total_m3)volumen_total_m3,
+        sum(volumen_total_pies)volumen_total_pies, precio_unitario, sum(precio_total)precio_total  
+        from ingreso_vehiculo_tronco_cubicajes ivtc 
+        where id_ingreso_vehiculo_tronco_tipo_maderas='".$id."'
+        group by diametro_dm, longitud, volumen_m3, volumen_pies, precio_unitario
+        order by diametro_dm asc";
+
+		$data = DB::select($cad);
+        return $data;
+    }
+
+    function getIngresoVehiculoTroncoCubicajeCabeceraById($id){
+
+        $cad = "select ivt.id,ivttm.id id_ingreso_vehiculo_tronco_tipo_maderas,ivt.fecha_ingreso,e.ruc,e.razon_social,v.placa,v.ejes,p.numero_documento,
+        p.apellido_paterno||' '||p.apellido_materno||' '||p.nombres conductor,
+        tm.denominacion tipo_madera,ivttm.cantidad,
+        (select ec.id_tipo_empresa 
+        from empresa_cubicajes ec
+        where ec.id_empresa = ivt.id_empresa_proveedor 
+        and ec.estado = '1'
+        and (ec.id_tipo_empresa = 1 OR (ec.id_tipo_empresa = 2 AND ec.id_conductor = ivt.id_conductores))) tipo_empresa
+        from ingreso_vehiculo_troncos ivt
+        inner join empresas e on ivt.id_empresa_transportista=e.id
+        inner join vehiculos v on ivt.id_vehiculos=v.id
+        inner join conductores c on ivt.id_conductores=c.id
+        inner join personas p on c.id_personas=p.id
+        inner join ingreso_vehiculo_tronco_tipo_maderas ivttm on ivt.id=ivttm.id_ingreso_vehiculo_troncos
+        inner join tabla_maestras tm on ivttm.id_tipo_maderas=tm.codigo::int and tm.tipo='42'
+        where ivttm.id = '".$id."'";
+
+		$data = DB::select($cad);
+        return $data;
+    }
+
+    function getIngresoVehiculoTroncoPagoById($id){
+
+        $cad = "select ivtp.id,ivtp.fecha,tm.denominacion tipodesembolso,ivtp.importe,observacion,nro_guia,nro_factura,nro_cheque,foto_desembolso   
+        from ingreso_vehiculo_tronco_pagos ivtp
+        inner join tabla_maestras tm on ivtp.id_tipodesembolso=tm.codigo::int and tm.tipo='65' 
+        where ivtp.id_ingreso_vehiculo_tronco_tipo_maderas=".$id."
+        and ivtp.estado = '1'
+        order by 1 desc";
+
+		$data = DB::select($cad);
+        return $data;
+    }
+
+    function obtenerAniosIngreso(){
+
+        $cad = "select distinct DATE_PART('YEAR', ivt.fecha_ingreso)::varchar anio from ingreso_vehiculo_troncos ivt 
+        order by  DATE_PART('YEAR', ivt.fecha_ingreso)::varchar ";
+
+		$data = DB::select($cad);
+        return $data;
+    }
+	
+    function fecha_actual(){
+		
+		$cad = "select to_char(current_date,'dd-mm-yyyy') as fecha_actual";
+
+		$data = DB::select($cad);
+        return $data[0]->fecha_actual;
+		
+	}
+    
 	public function listar_ingreso_vehiculo_tronco_ajax($p){
 
         return $this->readFuntionPostgres('sp_listar_ingreso_vehiculo_tronco_paginado',$p);
 
     }
-	
+
+    public function listar_ingreso_vehiculo_tronco_pagos_ajax($p){
+
+        return $this->readFuntionPostgres('sp_listar_ingreso_vehiculo_tronco_pagos_paginado',$p);
+
+    }
+
+    public function listar_ingreso_vehiculo_tronco_reporte_ajax($p){
+
+        return $this->readFuntionPostgres('sp_listar_ingreso_vehiculo_tronco_reporte_paginado',$p);
+
+    }
+
+    public function listar_ingreso_vehiculo_tronco_reporte_pago_ajax($p){
+
+        return $this->readFuntionPostgres('sp_listar_ingreso_vehiculo_tronco_reporte_pago_paginado',$p);
+
+    }
+
+    public function listar_ingreso_vehiculo_reporte_anual_ajax($p){
+
+        return $this->readFuntionPostgres('sp_listar_ingreso_vehiculo_tronco_reporte_anual_paginado',$p);
+
+    }
+
 	public function readFuntionPostgres($function, $parameters = null){
 
         $_parameters = '';
@@ -45,6 +194,6 @@ and v.placa='".$placa."'";
         return $data;
 
     }
-	
-		
+
+
 }

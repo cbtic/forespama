@@ -11,6 +11,7 @@ use Grafite\Forms\Fields\Email;
 use Grafite\Forms\Fields\HasOne;
 use Grafite\Forms\Fields\HasMany;
 use Grafite\Forms\Fields\Date;
+use Grafite\Forms\Html\Button;
 use Grafite\Forms\Fields\Select;
 use Grafite\Forms\Fields\PasswordWithReveal;
 use Grafite\Forms\Fields\AutoSuggestSelect;
@@ -25,13 +26,15 @@ class ConductoresForm extends ModelForm
      */
     public $model = Conductores::class;
 
-    public $routeParameters = ['id', 'licencia', 'fecha_licencia', 'estado'];
+    public $routeParameters = ['id', 'id_personas', 'licencia', 'fecha_licencia', 'estado'];
 
     public $columns = 1;
 
     public $hasFiles = true;
 
     public $instance;
+
+    public $disableOnSubmit = true;
 
     /**
      * Required prefix of routes
@@ -54,7 +57,9 @@ class ConductoresForm extends ModelForm
      * @var array
      */
     public $buttons = [
-        'submit' => 'Guardar'
+        'cancel' => 'Cancelar',
+        'submit' => 'Guardar',
+        'delete' => 'Borrar'
     ];
 
     /**
@@ -65,8 +70,10 @@ class ConductoresForm extends ModelForm
     public function fields()
     {
         return [
-            HasOne::make('personas_id', [
+            HasOne::make('id_personas', [
+                'label' => 'Persona',
                 'model' => Persona::class,
+                'value' => $this->routeParameterValues[1],
                 'model_options' => [
                     'label' => 'nombre_completo',
                     'value' => 'id',

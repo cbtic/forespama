@@ -31,30 +31,64 @@ class Persona extends Model
 
     public function conductores()
     {
-        return $this->hasMany(Conductore::class);
+        return $this->hasOne(Conductores::class,'id_conductores');
     }
 
-    function getPersonas($empresa_id){
+    //function getPersonas($empresa_id){
       //  $ubicacion = UbicacionTrabajo::where("ubicacion_empresa_id", $empresa_id)->first();
        // $afiliaciones = Afiliacion::where("ubicacion_id", $ubicacion->id)->get("persona_id");
         //$data = Persona::find($afiliaciones);
 
        // return $data;
-    }
+    //}
 
-    function getPersona($tipo_documento,$numero_documento){
+    function getPersona_($tipo_documento,$numero_documento){
 
         $cad = "select t1.*
 		from personas t1
-		Where t1.tipo_documento='".$tipo_documento."' And t1.numero_documento='".$numero_documento."'";
+		Where t1.id_tipo_documento='".$tipo_documento."' And t1.numero_documento='".$numero_documento."'";
 		//echo $cad;
 		$data = DB::select($cad);
         if(isset($data[0]))return $data[0];
 
     }
 
+
+    function getPersona($tipo_documento,$numero_documento){
+        //echo $tipo_documento; exit();
+        if($tipo_documento=="5"){  //RUC
+            $cad = "select t1.id,razon_social,t1.direccion,t1.representante, t1.ruc, t1.email, 5 id_tipo_documento,  trim(t1.ruc) numero_documento_, 5 id_tipo_cliente
+                    from empresas t1                    
+                    Where trim(t1.ruc)='".$numero_documento."' and t1.estado ='1' ";
+
+        }else{
+
+            $cad =  "select t1.id,t1.numero_documento,t1.nombres,t1.apellido_paterno,t1.apellido_materno,t1.foto,
+                    t1.numero_ruc,t1.id_tipo_documento,t1.email, trim(t1.numero_documento)  numero_documento_, 1 id_tipo_cliente	
+                    from personas t1                   
+                    Where  t1.id_tipo_documento=".$tipo_documento." and trim(t1.numero_documento) = trim('".$numero_documento."') 
+                    and t1.estado='1' 
+                    limit 1";
+
+        }
+        //echo $cad; exit();
+        $data = DB::select($cad);
+        
+        if (!empty($data)) {
+            return $data[0];
+        } else {
+            
+            return null;
+        }
+
+    }
+
     public function getNombreCompletoAttribute() : string {
       return $this->numero_documento . " - " . $this->apellido_paterno ." " . $this->apellido_materno . ", " . $this->nombres;
+    }
+
+    public function getNombreCompletoSinDniAttribute() : string {
+      return $this->apellido_paterno ." " . $this->apellido_materno . ", " . $this->nombres;
     }
 
 	public function listar_persona_ajax($p){
@@ -88,5 +122,16 @@ class Persona extends Model
 	  DB::select("END;");
       return $data;
    }
+
+    public function obtenerPersonaAll(){
+    
+        $cad="select * from personas p 
+        where estado ='1' 
+        order by nombres asc";
+
+        $data = DB::select($cad);
+        return $data;
+
+    }
 
 }

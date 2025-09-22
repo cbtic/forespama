@@ -1,11 +1,11 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-<title>Sistema SIGCAP</title>
+<title>Sistema FORESPAMA</title>
 
 <style>
 	/*
 .datepicker {
-  z-index: 1600 !important; 
+  z-index: 1600 !important;
 }
 */
 	/*.datepicker{ z-index:99999 !important; }*/
@@ -458,26 +458,16 @@ $.mask.definitions['p'] = "[Mm]";
 			msg= "Falta ingresar un Apellido Materno";
 		}else if (fecha_nacimiento==""){
 			msg= "Falta seleccionar una Fecha de Nacimiento";
-		}else if (lugar_nacimiento==""){
-			msg= "Falta ingresar un Lugar de Nacimiento";
-		}else if (nacionalidad==""){
-			msg= "Falta seleccionar una Nacionalidad";
 		}else if (sexo==""){
 			msg= "Falta seleccionar un Sexo";
 		}else if (numero_celular==""){
 			msg= "Falta ingresar un N&uacute;mero de Celular";
-		}else if (!validarCelular(numero_celular)) { 
+		}else if (!validarCelular(numero_celular)) {
 			msg = "Ingrese un Número de Celular V&aacute;lido";
-		}else if (correo==""){
-			msg= "Falta ingresar un Correo";
-		}else if (!validateEmail(correo)) {
-        	msg = "Ingrese un Correo Electr&oacute;nico V&aacute;lida";
-    	}else if (direccion==""){
-			msg= "Falta ingresar una Direcci&oacute;n";
 		}
 
 		if (msg=="0"){
-			fn_save_persona()		
+			fn_save_persona()
 		}
 		else {
 			Swal.fire(msg);
@@ -556,7 +546,7 @@ $.mask.definitions['p'] = "[Mm]";
 		});
 		}*/
 		$.ajax({
-			url: "/persona/send_persona_nuevoPersona",
+			url: "/persona/send",
 			type: "POST",
 			data: {
 				_token: _token,
@@ -610,7 +600,7 @@ $.mask.definitions['p'] = "[Mm]";
 	}
 
 	function obtenerBeneficiario(){
-		
+
 		//var id_tipo_documento = $("#tipo_documento").val();
 		var numero_documento = $("#numero_documento").val();
 		var msg = "";
@@ -618,7 +608,7 @@ $.mask.definitions['p'] = "[Mm]";
 		//alert(tipo_documento);
 		//alert(numero_documento);
 		//exit();
-		
+
 		if (msg != "") {
 			bootbox.alert(msg);
 			return false;
@@ -629,12 +619,12 @@ $.mask.definitions['p'] = "[Mm]";
 			return false;
 		}
 
-		
+
 		$.ajax({
 			url: '/persona/buscar_persona/'+ numero_documento,
 			dataType: "json",
 			success: function(result){
-				
+
 				if(result.sw==1){
 					bootbox.alert("Se puede grabar");
 				}
@@ -646,32 +636,32 @@ $.mask.definitions['p'] = "[Mm]";
 					bootbox.alert("El numero de documento no se encontro en CAP - Lima ni en Reniec");
 					return false;
 				}
-				
+
 
 				var persona = result.persona;
 				var persona_detalle = result.persona_detalle;
 				//bootbox.alert("Datos recuperados ->" + persona.apellido_materno);
-				
+
 				var nombre = persona.apellido_paterno+" "+persona.apellido_materno+", "+persona.nombres;
 				$('#nombres').val(nombre);
 				$('#fecha_nacimiento').val(persona.fecha_nacimiento);
 				$('#sexo').val(persona.sexo);
 				$('#id').val(persona.id);
 				$('#id_per_det').val(0);
-				
+
 
 				//$('#telefono_').val(persona_detalle.telefono);
 				//$('#email_').val(persona_detalle.email);
 
 				//$('#tipo_documento').attr("disabled",true);
 				$('#numero_documento').attr("disabled",true);
-			}	
+			}
 		},
 		{
 			url: '/persona/buscar_persona/'+ numero_documento,
 			dataType: "json",
 			success: function(result){
-				
+
 				if(result.sw==2){
 					bootbox.alert("No es colaborador de CAP - Lima, los datos han sido obtenidos de Reniec");
 					//$('#telefono').attr("disabled",false);
@@ -680,45 +670,45 @@ $.mask.definitions['p'] = "[Mm]";
 				if(result.sw==3){
 					bootbox.alert("El numero de documento no se encontro en CAP - Lima ni en Reniec");
 					//$('#numero_documento').val("");
-					
+
 					/*
 					$('#numero_documento').attr("disabled",false);
 					$('#nombres').attr("disabled",false).attr("placeholder","Ingrese Nombres");
-					
+
 					$('#divApellidoP').show();
 					$('#divApellidoM').show();
-					
+
 					$('#apellidop').attr("placeholder","Apellido Paterno");
 					$('#apellidom').attr("placeholder","Apellido Materno");
-					
+
 					$('#telefono').attr("disabled",false);
 					$('#email').attr("disabled",false);
 					*/
 					return false;
 				}
-				
+
 
 				var persona = result.persona;
 				var persona_detalle = result.persona_detalle;
 				//bootbox.alert("Datos recuperados ->" + persona.apellido_materno);
-				
+
 				var nombre = persona.apellido_paterno+" "+persona.apellido_materno+", "+persona.nombres;
 				$('#nombres').val(nombre);
 				$('#fecha_nacimiento').val(persona.fecha_nacimiento);
 				$('#sexo').val(persona.sexo);
 				$('#id').val(persona.id);
 				$('#id_per_det').val(0);
-				
+
 
 				//$('#telefono').val(persona_detalle.telefono);
 				//$('#email').val(persona_detalle.email);
 
 				//$('#tipo_documento').attr("disabled",true);
 				//$('#numero_documento').attr("disabled",true);
-			}	
+			}
 		}
 		);
-		
+
 	}
 
 	function validarLiquidacion() {
@@ -814,14 +804,14 @@ $.mask.definitions['p'] = "[Mm]";
 	}
 
 	$(document).ready(function() {
-	
+
 		var id_ubigeo = "<?php echo $persona->id_ubigeo_nacimiento?>";
 		var idProvincia = id_ubigeo.substring(2,4);
 		var idDistrito = id_ubigeo.substring(4,6);
-				
-		obtenerProvinciaNacimientoEdit(idProvincia);	 
+
+		obtenerProvinciaNacimientoEdit(idProvincia);
 		obtenerDistritoNacimientoEdit(idProvincia,idDistrito);
-	
+
 		$(".upload").on('click', function() {
 			var formData = new FormData();
 			var files = $('#image')[0].files[0];
@@ -859,20 +849,20 @@ $.mask.definitions['p'] = "[Mm]";
 	});
 
 	function obtenerProvinciaNacimiento(){
-	
+
 		var id = $('#id_departamento_nacimiento').val();
 		if(id=="")return false;
 		$('#id_provincia_nacimiento').attr("disabled",true);
 		$('#id_distrito_nacimiento').attr("disabled",true);
-		
+
 		var msgLoader = "";
 		msgLoader = "Procesando, espere un momento por favor";
 		var heightBrowser = $(window).width()/2;
 		$('.loader').css("opacity","0.8").css("height",heightBrowser).html("<div id='Grd1_wrapper' class='dataTables_wrapper'><div id='Grd1_processing' class='dataTables_processing panel-default'>"+msgLoader+"</div></div>");
 		$('.loader').show();
-		
+
 		$.ajax({
-			url: '/agremiado/obtener_provincia/'+id,
+			url: '/persona/obtener_provincia/'+id,
 			dataType: "json",
 			success: function(result){
 				var option = "<option value='' selected='selected'>Seleccionar</option>";
@@ -881,36 +871,36 @@ $.mask.definitions['p'] = "[Mm]";
 					option += "<option value='"+oo.id_provincia+"'>"+oo.desc_ubigeo+"</option>";
 				});
 				$('#id_provincia_nacimiento').html(option);
-				
+
 				var option2 = "<option value=''>Seleccionar</option>";
 				$('#id_distrito_nacimiento').html(option2);
-				
+
 				$('#id_provincia_nacimiento').attr("disabled",false);
 				$('#id_distrito_nacimiento').attr("disabled",false);
-				
+
 				$('.loader').hide();
-				
+
 			}
-			
+
 		});
-		
+
 	}
 
 	function obtenerDistritoNacimiento(){
-		
+
 		var id_departamento = $('#id_departamento_nacimiento').val();
 		var id = $('#id_provincia_nacimiento').val();
 		if(id=="")return false;
 		$('#id_distrito_nacimiento').attr("disabled",true);
-		
+
 		var msgLoader = "";
 		msgLoader = "Procesando, espere un momento por favor";
 		var heightBrowser = $(window).width()/2;
 		$('.loader').css("opacity","0.8").css("height",heightBrowser).html("<div id='Grd1_wrapper' class='dataTables_wrapper'><div id='Grd1_processing' class='dataTables_processing panel-default'>"+msgLoader+"</div></div>");
 		$('.loader').show();
-		
+
 		$.ajax({
-			url: '/agremiado/obtener_distrito/'+id_departamento+'/'+id,
+			url: '/persona/obtener_distrito/'+id_departamento+'/'+id,
 			dataType: "json",
 			success: function(result){
 				var option = "<option value=''>Seleccionar</option>";
@@ -919,31 +909,31 @@ $.mask.definitions['p'] = "[Mm]";
 					option += "<option value='"+oo.id_ubigeo+"'>"+oo.desc_ubigeo+"</option>";
 				});
 				$('#id_distrito_nacimiento').html(option);
-				
+
 				$('#id_distrito_nacimiento').attr("disabled",false);
 				$('.loader').hide();
-				
+
 			}
-			
+
 		});
-		
+
 	}
 
 	function obtenerProvinciaNacimientoEdit(idProvincia){
-	
+
 		var id = $('#id_departamento_nacimiento').val();
 		if(id=="")return false;
 		$('#id_provincia_nacimiento').attr("disabled",true);
 		$('#id_distrito_nacimiento').attr("disabled",true);
-		
+
 		var msgLoader = "";
 		msgLoader = "Procesando, espere un momento por favor";
 		var heightBrowser = $(window).width()/2;
 		$('.loader').css("opacity","0.8").css("height",heightBrowser).html("<div id='Grd1_wrapper' class='dataTables_wrapper'><div id='Grd1_processing' class='dataTables_processing panel-default'>"+msgLoader+"</div></div>");
 		$('.loader').show();
-		
+
 		$.ajax({
-			url: '/agremiado/obtener_provincia/'+id,
+			url: '/persona/obtener_provincia/'+id,
 			dataType: "json",
 			success: function(result){
 				var option = "<option value='' selected='selected'>Seleccionar</option>";
@@ -955,19 +945,19 @@ $.mask.definitions['p'] = "[Mm]";
 					option += "<option value='"+oo.id_provincia+"' "+selected+" >"+oo.desc_ubigeo+"</option>";
 				});
 				$('#id_provincia_nacimiento').html(option);
-				
+
 				//var option2 = "<option value=''>Seleccionar</option>";
 				//$('#id_distrito_nacimiento').html(option2);
-				
+
 				$('#id_provincia_nacimiento').attr("disabled",false);
 				//$('#id_distrito_nacimiento').attr("disabled",false);
-				
+
 				$('.loader').hide();
-				
+
 			}
-			
+
 		});
-		
+
 	}
 
 	function obtenerDistritoNacimientoEdit(idProvincia,idDistrito){
@@ -976,15 +966,15 @@ $.mask.definitions['p'] = "[Mm]";
 		var id = idProvincia;
 		if(id=="")return false;
 		$('#id_distrito_nacimiento').attr("disabled",true);
-		
+
 		var msgLoader = "";
 		msgLoader = "Procesando, espere un momento por favor";
 		var heightBrowser = $(window).width()/2;
 		$('.loader').css("opacity","0.8").css("height",heightBrowser).html("<div id='Grd1_wrapper' class='dataTables_wrapper'><div id='Grd1_processing' class='dataTables_processing panel-default'>"+msgLoader+"</div></div>");
 		$('.loader').show();
-		
+
 		$.ajax({
-			url: '/agremiado/obtener_distrito/'+id_departamento+'/'+id,
+			url: '/persona/obtener_distrito/'+id_departamento+'/'+id,
 			dataType: "json",
 			success: function(result){
 				var option = "<option value=''>Seleccionar</option>";
@@ -998,11 +988,11 @@ $.mask.definitions['p'] = "[Mm]";
 				$('#id_distrito_nacimiento').html(option);
 				$('#id_distrito_nacimiento').attr("disabled",false);
 				$('.loader').hide();
-				
+
 			}
-			
+
 		});
-		
+
 	}
 
 	/*
@@ -1026,7 +1016,7 @@ $.mask.definitions['p'] = "[Mm]";
 	});
 	*/
 
-	/*				
+	/*
 	format: "dd/mm/yyyy",
 	startDate: "01-01-2015",
 	endDate: "01-01-2020",
@@ -1095,7 +1085,7 @@ $.mask.definitions['p'] = "[Mm]";
 											</div>
 										</div>
 
-										
+
 
 										<div class="col-lg-7">
 											<div class="form-group" style="padding-top:0px;padding-bottom:0px;margin-top:0px;margin-bottom:0px">
@@ -1202,7 +1192,7 @@ $.mask.definitions['p'] = "[Mm]";
 													<?php
 													foreach ($departamento as $row) {?>
 													<option value="<?php echo $row->id_departamento?>" <?php if($row->id_departamento==substr($persona->id_ubigeo_nacimiento,0,2))echo "selected='selected'"?>><?php echo $row->desc_ubigeo ?></option>
-													<?php 
+													<?php
 													}
 													?>
 												</select>
@@ -1244,13 +1234,13 @@ $.mask.definitions['p'] = "[Mm]";
 										<div class="col-lg-3">
 											<div class="form-group">
 												<label class="control-label form-control-sm">N&uacute;mero Celular</label>
-												<input id="numero_celular" name="numero_celular" class="form-control form-control-sm" value="<?php echo $persona->numero_celular ?>" type="text">
+												<input id="numero_celular" name="numero_celular" class="form-control form-control-sm" value="<?php echo $persona->telefono ?>" type="text">
 											</div>
 										</div>
 										<div class="col-lg-6">
 											<div class="form-group">
 												<label class="control-label form-control-sm">Correo</label>
-												<input id="correo" name="correo" class="form-control form-control-sm" value="<?php echo $persona->correo ?>" type="text">
+												<input id="correo" name="correo" class="form-control form-control-sm" value="<?php echo $persona->email ?>" type="text">
 											</div>
 										</div>
 									</div>
@@ -1350,7 +1340,7 @@ $.mask.definitions['p'] = "[Mm]";
 							var resp = $.map(data,function(obj){
 								var hash = {key: obj.id, value: obj.usuario};
 								return hash;
-							}); 
+							});
 							response(resp);
 						},
 						error: function() {

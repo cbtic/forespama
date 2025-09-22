@@ -12,6 +12,8 @@ use Rappasoft\LaravelLivewireTables\Views\Column;
  */
 class RolesTable extends DataTableComponent
 {
+    protected $model = Role::class;
+
     /**
      * @return Builder
      */
@@ -25,19 +27,37 @@ class RolesTable extends DataTableComponent
     public function columns(): array
     {
         return [
-            Column::make(__('Type'))
+            Column::make('Type')
                 ->sortable(),
-            Column::make(__('Name'))
+            Column::make('Name')
                 ->sortable(),
-            Column::make(__('Permissions')),
-            Column::make(__('Number of Users'), 'users_count')
+			Column::make('id')
                 ->sortable(),
-            Column::make(__('Actions')),
+            //Column::make('Permissions'),
+            //Column::make(__('Number of Users'), 'users_count')
+            //    ->sortable(),
+            // Column::make('Actions'),
         ];
     }
 
     public function configure(): void
     {
+        $this->setPerPageAccepted([50, 100, 150]);
+
+        $this->setPerPage(50);
+
+        $this->setDefaultSort('id', 'desc');
+
+        $this->setPrimaryKey('id')
+        ->setTableRowUrl(function($row) {
+			//print_r($row->id);
+			//echo $row->id."ccc";
+             return route('admin.auth.role.edit', $row->id);
+			//return route('admin.auth.role.edit', User::where('email', $row->email)->pluck("id")[0]);
+        })
+		->setTableRowUrlTarget(function($row) {
+            return '_self';
+        });
 
     }
 

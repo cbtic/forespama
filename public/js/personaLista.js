@@ -451,9 +451,9 @@ function datatablenew(){
             var iNroPagina 	= parseFloat(fn_util_obtieneNroPagina(aoData[3].value, aoData[4].value)).toFixed();
             var iCantMostrar 	= aoData[4].value;
 			
-			var numero_documento = $('#numero_documento').val();
-            var persona = $('#persona').val();
-			var estado = $('#estado').val();
+			var numero_documento = $('#numero_documento_bus').val();
+            var persona = $('#persona_bus').val();
+			var estado = $('#estado_bus').val();
 			var empresa = $('#empresa').val();
 			var _token = $('#_token').val();
 			

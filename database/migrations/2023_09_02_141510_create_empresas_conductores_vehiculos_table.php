@@ -34,6 +34,6 @@ class CreateEmpresasConductoresVehiculosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('empresas_conductores_vehiculos');
+        //Schema::dropIfExists('empresas_conductores_vehiculos');
     }
 }

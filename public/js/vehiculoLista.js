@@ -15,7 +15,11 @@ $(document).ready(function () {
 	
 	$("#plan_id").select2();
 	$("#ubicacion_id").select2();
-	
+
+	$('#placa_bus').mask('AAA-000');
+	$('#placa_bus').keyup(function() {
+        this.value = this.value.toLocaleUpperCase();
+    });
 	
 	$(function() {
 		$('#modalPersonaForm #apellido_paterno').keyup(function() {
@@ -407,6 +411,9 @@ function datatablenew(){
 			var flag_carnet = $('#flag_carnet').val();
 			var flag_negativo = 0;
 			if($("#flag_negativo").is(':checked'))flag_negativo = 1;
+			var numero_documento = $('#numero_documento').val();
+			var placa = $('#placa_bus').val();
+			var ejes = $('#ejes_bus').val();
 			var _token = $('#_token').val();
 			
             oSettings.jqXHR = $.ajax({
@@ -415,7 +422,9 @@ function datatablenew(){
                 "type": "POST",
                 "url": sSource,
                 "data":{NumeroPagina:iNroPagina,NumeroRegistros:iCantMostrar,
-						numero_documento:numero_documento,persona:persona,estado:estado,flag_negativo:flag_negativo,flag_foto:flag_foto,flag_vacuna:flag_vacuna,flag_carnet:flag_carnet,
+						numero_documento:numero_documento,persona:persona,estado:estado,
+						flag_negativo:flag_negativo,flag_foto:flag_foto,flag_vacuna:flag_vacuna,
+						flag_carnet:flag_carnet,placa:placa,ejes:ejes,
 						_token:_token
                        },
                 "success": function (result) {

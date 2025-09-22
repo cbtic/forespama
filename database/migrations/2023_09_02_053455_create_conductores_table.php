@@ -15,8 +15,10 @@ class CreateConductoresTable extends Migration
     {
         Schema::create('conductores', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('personas_id')->unsigned()->index();
+            $table->string('licencia');
+            $table->date('fecha_licencia');
             $table->enum('estado', ['ACTIVO', 'CANCELADO']);
+            $table->bigInteger('id_personas')->unsigned()->index();
             $table->timestamps();
             //Foreign Keys
             $table->foreign('id_personas')->references('id')->on('personas');
@@ -30,6 +32,6 @@ class CreateConductoresTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('conductores');
+        //Schema::dropIfExists('conductores');
     }
 }

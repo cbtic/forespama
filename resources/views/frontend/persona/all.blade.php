@@ -99,7 +99,7 @@
 @stack('before-scripts')
 @stack('after-scripts')
 
-@extends('backend.layouts.app')
+@extends('frontend.layouts.app')
 
 @section('title', ' | ' . __('labels.frontend.afiliacion.box_title'))
 
@@ -155,15 +155,15 @@
 				<div class="row" style="padding:20px 20px 0px 20px;">
 				
 					<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
-						<input class="form-control form-control-sm" id="numero_documento" name="numero_documento" placeholder="Num. documento">
+						<input class="form-control form-control-sm" id="numero_documento_bus" name="numero_documento_bus" placeholder="Num. documento">
 					</div>
 
 					<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12" style="padding-left:0px;margin-left:0px;">
-						<input class="form-control form-control-sm" id="persona" name="persona" placeholder="Nombres y Apellidos">
+						<input class="form-control form-control-sm" id="persona_bus" name="persona_bus" placeholder="Nombres y Apellidos">
 					</div>
 
 					<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12" style="padding-left:0px;margin-left:0px;">
-						<select name="flag_foto" id="flag_foto" class="form-control form-control-sm">
+						<select name="flag_foto_bus" id="flag_foto_bus" class="form-control form-control-sm">
 							<option value="">T. Foto</option>
 							<option value="1">Con Foto</option>
 							<option value="2">Sin Foto</option>
@@ -171,7 +171,7 @@
 					</div>                 
 
 					<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12" style="padding-left:0px;margin-left:0px;">
-						<select name="estado" id="estado" class="form-control form-control-sm">
+						<select name="estado_bus" id="estado_bus" class="form-control form-control-sm">
 							<option value="">Todos</option>
 							<option value="1" selected="selected">Activo</option>
 							<option value="0">Eliminado</option>

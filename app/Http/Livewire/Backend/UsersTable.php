@@ -6,13 +6,15 @@ use App\Domains\Auth\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Rappasoft\LaravelLivewireTables\DataTableComponent;
 use Rappasoft\LaravelLivewireTables\Views\Column;
-use Rappasoft\LaravelLivewireTables\Views\Filter;
 
 /**
  * Class UsersTable.
  */
 class UsersTable extends DataTableComponent
 {
+
+    protected $model = User::class;
+
     /**
      * @var
      */
@@ -47,7 +49,7 @@ class UsersTable extends DataTableComponent
      */
     public function query(): Builder
     {
-        $query = User::with('roles', 'twoFactorAuth')->withCount('twoFactorAuth');
+        $query = User::with('roles', 'twoFactorAuth');
 
         if ($this->status === 'deleted') {
             $query = $query->onlyTrashed();
@@ -64,32 +66,6 @@ class UsersTable extends DataTableComponent
             ->when($this->getFilter('verified'), fn ($query, $verified) => $verified === 'yes' ? $query->whereNotNull('email_verified_at') : $query->whereNull('email_verified_at'));
     }
 
-    /**
-     * @return array
-     */
-    public function filters(): array
-    {
-        return [
-            'type' => Filter::make('User Type')
-                ->select([
-                    '' => 'Any',
-                    User::TYPE_ADMIN => 'Administrators',
-                    User::TYPE_USER => 'Users',
-                ]),
-            'active' => Filter::make('Active')
-                ->select([
-                    '' => 'Any',
-                    'yes' => 'Yes',
-                    'no' => 'No',
-                ]),
-            'verified' => Filter::make('E-mail Verified')
-                ->select([
-                    '' => 'Any',
-                    'yes' => 'Yes',
-                    'no' => 'No',
-                ]),
-        ];
-    }
 
     /**
      * @return array
@@ -97,19 +73,23 @@ class UsersTable extends DataTableComponent
     public function columns(): array
     {
         return [
-            Column::make(__('Type'))
+            Column::make('Type')
                 ->sortable(),
-            Column::make(__('Name'))
+            Column::make('Name')
                 ->sortable(),
-            Column::make(__('E-mail'), 'email')
+            Column::make('E-mail', 'email')
                 ->sortable(),
-            Column::make(__('Verified'), 'email_verified_at')
+            Column::make('Verified', 'email_verified_at')
                 ->sortable(),
-            Column::make(__('2FA'), 'two_factor_auth_count')
-                ->sortable(),
-            Column::make(__('Roles')),
-            Column::make(__('Additional Permissions')),
-            Column::make(__('Actions')),
+            // Column::make('Acciones')
+            //     ->unclickable()
+            //     ->label(
+            //         function ($row, Column $column) {
+            //             $edit = '<button class="btn btn-xs btn-success text-white" onclick="window.location.href=\'' . route('admin.auth.user.edit', $row ) . '\'">Editar</button>';
+            //             $delete = '<button class="btn btn-xs btn-danger text-white" wire:click="delete(' . $row->id . ')">Eliminar</button>';
+            //             return $edit . " " . $delete;
+            //         }
+            //     )->html(),
         ];
     }
 
@@ -123,6 +103,18 @@ class UsersTable extends DataTableComponent
 
     public function configure(): void
     {
+        $this->setPerPageAccepted([50, 100, 150]);
 
+        $this->setPerPage(50);
+
+        $this->setDefaultSort('id', 'desc');
+
+        $this->setPrimaryKey('id')
+        ->setTableRowUrl(function($row) {
+            return route('admin.auth.user.edit', User::where('email', $row->email)->pluck("id")[0]);
+        })
+        ->setTableRowUrlTarget(function($row) {
+            return '_self';
+        });
     }
 }
