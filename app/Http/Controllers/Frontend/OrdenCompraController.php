@@ -292,6 +292,7 @@ class OrdenCompraController extends Controller
         $orden_compra->id_vendedor = $request->id_vendedor;
         $orden_compra->observacion_vendedor = $request->observacion_vendedor;
         $orden_compra->id_prioridad = $request->prioridad;
+        $orden_compra->id_autorizacion = $request->id_autorizacion;
         $orden_compra->id_canal = $request->canal;
         $orden_compra->estado = 1;
         if($request->tipo_documento == 4){
@@ -2173,6 +2174,174 @@ class OrdenCompraController extends Controller
         }
 
         return "Proceso de compromiso automático finalizado.";
+    }
+
+    public function create_autorizacion(){
+		
+        $user_model = new User;
+        $tablaMaestra_model = new TablaMaestra;
+
+        $vendedor = $user_model->getUserByRol(7,11);
+		$estado_autorizacion = $tablaMaestra_model->getMaestroByTipo(100);
+
+		return view('frontend.orden_compra.create_autorizacion',compact('vendedor','estado_autorizacion'));
+
+	}
+
+    public function listar_orden_compra_autorizacion_ajax(Request $request){
+
+        $id_user = Auth::user()->id;
+
+		$orden_compra_model = new OrdenCompra;
+        $p[]=$request->empresa_compra;
+        $p[]=$request->numero_orden_compra;
+        $p[]=$request->numero_orden_compra_cliente;
+        $p[]=$id_user;
+        $p[]=$request->estado_autorizacion;
+        $p[]=$request->estado;
+		$p[]=$request->NumeroPagina;
+		$p[]=$request->NumeroRegistros;
+		$data = $orden_compra_model->listar_orden_compra_autorizacion_ajax($p);
+		$iTotalDisplayRecords = isset($data[0]->totalrows)?$data[0]->totalrows:0;
+
+		$result["PageStart"] = $request->NumeroPagina;
+		$result["pageSize"] = $request->NumeroRegistros;
+		$result["SearchText"] = "";
+		$result["ShowChildren"] = true;
+		$result["iTotalRecords"] = $iTotalDisplayRecords;
+		$result["iTotalDisplayRecords"] = $iTotalDisplayRecords;
+		$result["aaData"] = $data;
+
+        echo json_encode($result);
+
+	}
+
+    public function modal_orden_compra_autorizacion($id){
+		
+        $id_user = Auth::user()->id;
+        $tablaMaestra_model = new TablaMaestra;
+        $producto_model = new Producto;
+        $marca_model = new Marca;
+        $almacen_model = new Almacene;
+        $user_model = new User;
+        $persona_model = new Persona;
+        $empresa_model = new Empresa;
+        $usuario_descuento_model = new UsuarioDescuento;
+		
+		if($id>0){
+
+            $orden_compra = OrdenCompra::find($id);
+            $descuento_usuario = $usuario_descuento_model->getDescuentoByUser($orden_compra->id_vendedor);
+            $id_descuento_usuario = $descuento_usuario[0]->descuento;
+			
+		}else{
+			$orden_compra = new OrdenCompra;
+            $id_descuento_usuario = 0;
+		}
+
+        $proveedor = $empresa_model->getEmpresaAll();
+        $tipo_documento = $tablaMaestra_model->getMaestroByTipo(54);
+        $producto = $producto_model->getProductoAll();
+        $marca = $marca_model->getMarcaAll();
+        $estado_bien = $tablaMaestra_model->getMaestroByTipo(4);
+        $unidad = $tablaMaestra_model->getMaestroByTipo(43);
+        $igv_compra = $tablaMaestra_model->getMaestroByTipo(51);
+        $descuento = $tablaMaestra_model->getMaestroByTipo(55);
+        $almacen = $almacen_model->getAlmacenAll();
+        $unidad_origen = $tablaMaestra_model->getMaestroByTipo(50);
+        $moneda = $tablaMaestra_model->getMaestroByTipo(1);
+
+        $vendedor = $user_model->getUserByRol(7,11);
+        $tipo_documento_cliente = $tablaMaestra_model->getMaestroByTipo(75);
+        $persona = $persona_model->obtenerPersonaAll();
+        $prioridad = $tablaMaestra_model->getMaestroByTipo(93);
+        $canal = $tablaMaestra_model->getMaestroByTipo(98);
+
+		return view('frontend.orden_compra.modal_orden_compra_autorizacionOrdenCompra',compact('id','orden_compra','tipo_documento','proveedor','producto','marca','estado_bien','unidad','igv_compra','descuento','almacen','unidad_origen','id_user','moneda','vendedor','tipo_documento_cliente','persona','prioridad','canal','id_descuento_usuario'));
+
+    }
+
+    public function send_orden_compra_autorizacion(Request $request){
+
+        $id_user = Auth::user()->id;
+
+        if($request->id == 0){
+            $orden_compra = new OrdenCompra;
+		    
+        }else{
+            $orden_compra = OrdenCompra::find($request->id);
+        }
+
+        $descripcion = $request->input('descripcion');
+        $cod_interno = $request->input('cod_interno');
+        $marca = $request->input('marca');
+        $estado_bien = $request->input('estado_bien');
+        $unidad = $request->input('unidad');
+        $cantidad_ingreso = $request->input('cantidad_ingreso');
+        $precio_unitario = $request->input('precio_unitario');
+        $id_descuento = $request->input('id_descuento');
+        $sub_total = $request->input('sub_total');
+        $igv = $request->input('igv');
+        $total = $request->input('total');
+        $precio_unitario_ = $request->input('precio_unitario_');
+        $valor_venta_bruto = $request->input('valor_venta_bruto');
+        $valor_venta = $request->input('valor_venta');
+        $descuento = $request->input('descuento');
+        $porcentaje = $request->input('porcentaje');
+        $id_orden_compra_detalle =$request->id_orden_compra_detalle;
+
+        $orden_compra->id_autorizacion = $request->id_autorizacion;
+        $orden_compra->save();
+
+        $array_orden_compra_detalle = array();
+
+        foreach($descripcion as $index => $value) {
+            
+            if($id_orden_compra_detalle[$index] == 0){
+                $orden_compra_detalle = new OrdenCompraDetalle;
+            }else{
+                $orden_compra_detalle = OrdenCompraDetalle::find($id_orden_compra_detalle[$index]);
+            }
+            
+            $orden_compra_detalle->id_orden_compra = $orden_compra->id;
+            $orden_compra_detalle->id_producto = $descripcion[$index];
+            $orden_compra_detalle->cantidad_requerida = $cantidad_ingreso[$index];
+            $orden_compra_detalle->precio = round($precio_unitario_[$index],2);
+            $orden_compra_detalle->valor_venta_bruto = round($valor_venta_bruto[$index],2);
+            $orden_compra_detalle->precio_venta = round($precio_unitario[$index],2);
+            $orden_compra_detalle->valor_venta = round($valor_venta[$index],2);
+            $orden_compra_detalle->id_descuento = $id_descuento[$index];
+            if($id_descuento[$index]==1){
+                $orden_compra_detalle->descuento = round($descuento[$index],2);
+            }else if($id_descuento[$index]==2){
+                $orden_compra_detalle->descuento = $porcentaje[$index];
+            }
+            $orden_compra_detalle->sub_total = round($sub_total[$index],2);
+            $orden_compra_detalle->igv = round($igv[$index],2);
+            $orden_compra_detalle->total = round($total[$index],2);
+            //$orden_compra_detalle->id_unidad_medida = $unidad[$index];
+            //$orden_compra_detalle->id_marca = $marca[$index];
+            $orden_compra_detalle->estado = 1;
+            //$orden_compra_detalle->cerrado = 1;
+            $orden_compra_detalle->id_usuario_inserta = $id_user;
+            $orden_compra_detalle->save();
+
+            $array_orden_compra_detalle[] = $orden_compra_detalle->id;
+
+            //$OrdenCompraAll = OrdenCompraDetalle::where("id_orden_compra",$orden_compra->id)->where("estado","1")->get();
+            
+            /*foreach($OrdenCompraAll as $key=>$row){
+                
+                if (!in_array($row->id, $array_orden_compra_detalle)){
+                    $orden_compra_detalle = OrdenCompraDetalle::find($row->id);
+                    $orden_compra_detalle->estado = 0;
+                    $orden_compra_detalle->save();
+                }
+            }*/
+        }
+
+        return response()->json(['id' => $orden_compra->id]);
+        
     }
 }
 

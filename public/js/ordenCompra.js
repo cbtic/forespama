@@ -120,7 +120,7 @@ function datatablenew(){
 				let importe = row._aData.total;
 				if (importe) {
 					totalImporte += parseFloat(importe);
-				}
+				}			
 			});
 
 			$('#tblOrdenCompra tfoot tr').html('<td colspan="13"><b>Total</b></td><td><b>' + totalImporte.toFixed(2) + '</b></td><td colspan="2"></td>');
@@ -175,7 +175,13 @@ function datatablenew(){
             });
         },
 		"fnRowCallback": function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
-           
+
+			$(nRow).removeClass("row_autorizacion row_autorizacion_selected row_selected");
+
+			if (aData.id_autorizacion == 1) {
+				$(nRow).addClass("row_autorizacion");
+				$(nRow).attr("data-toggle", "tooltip").attr("data-placement", "top").attr("title", "REQUIERE AUTORIZACIÓN DE DESCUENTO");
+			}
 		},
 
         "aoColumnDefs":
@@ -194,9 +200,9 @@ function datatablenew(){
 
 				{
 					"mRender": function (data, type, row) {
-						var tipo_documento = "";
-						if(row.tipo_documento!= null)tipo_documento = row.tipo_documento;
-						return tipo_documento;
+						var id_autorizacion = "";
+						if(row.id_autorizacion!= null)id_autorizacion = row.id_autorizacion;
+						return id_autorizacion;
 					},
 					"bSortable": true,
 					"aTargets": [1]
@@ -357,9 +363,9 @@ function datatablenew(){
 								html += '<a href="javascript:void(0)" onclick=eliminarOrdenCompra('+row.id+','+row.estado+') class="btn btn-sm '+clase+'" style="font-size:12px;margin-left:10px; pointer-events: none; opacity: 0.6; cursor: not-allowed;">'+estado+'</a>';
 							}
 						}
-						if(almacenUsuario.some(almacen => almacen.id_almacen == row.id_almacen_destino) && row.id_cerrado==1){
+						if(almacenUsuario.some(almacen => almacen.id_almacen == row.id_almacen_destino) && row.id_cerrado==1 && row.id_autorizacion != 1){
 							html += '<button style="font-size:12px; margin-left:10px" type="button" class="btn btn-sm btn-info" data-toggle="modal" onclick="modalEntradaProductoOrdenCompra('+row.id+','+row.id_tipo_documento+')">Atender</button>';
-						}else if(almacenUsuario.some(almacen => almacen.id_almacen == row.id_almacen_salida) && row.id_cerrado==1 && row.id_unidad_origen==4){
+						}else if(almacenUsuario.some(almacen => almacen.id_almacen == row.id_almacen_salida) && row.id_cerrado==1 && row.id_unidad_origen==4 && row.id_autorizacion != 1){
 							html += '<button style="font-size:12px; margin-left:10px" type="button" class="btn btn-sm btn-info" data-toggle="modal" onclick="modalEntradaProductoOrdenCompra('+row.id+','+row.id_tipo_documento+')">Atender</button>';
 						}else{
 							html += '<button style="font-size:12px; margin-left:10px" type="button" class="btn btn-sm btn-info" data-toggle="modal" onclick="modalEntradaProductoOrdenCompra('+row.id+','+row.id_tipo_documento+')" disabled>Atender</button>';
@@ -390,13 +396,28 @@ function datatablenew(){
 
             ]
     });
-
 }
 
 fn_util_LineaDatatable("#tblOrdenCompra");
 
 $('#tblOrdenCompra tbody').on('click', 'tr', function () {
-	
+	let table = $('#tblOrdenCompra').DataTable();
+    let data = table.row(this).data();
+
+    $('#tblOrdenCompra tbody tr')
+        .removeClass('row_selected row_autorizacion_selected')
+        .each(function () {
+            let d = table.row(this).data();
+            if (d && d.id_autorizacion == 1) {
+                $(this).addClass('row_autorizacion');
+            }
+        });
+
+    if (data.id_autorizacion == 1) {
+        $(this).removeClass('row_autorizacion').addClass('row_autorizacion_selected');
+    } else {
+        $(this).addClass('row_selected');
+    }
 });
 
 function fn_ListarBusqueda() {

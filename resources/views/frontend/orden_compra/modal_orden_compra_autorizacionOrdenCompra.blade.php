@@ -251,10 +251,6 @@ $('#openOverlayOpc').on('shown.bs.modal', function() {
 });
 
 $(document).ready(function() {
-    /*if($('#id').val()==0){
-        cambiarTipoCambio();
-        cambiarOrigen();
-    }*/
 
     cambiarCliente();
     obtenerPrioridad();
@@ -310,28 +306,6 @@ function cambiarOrigen(){
         $('#almacen_select, #almacen_').show();
         $('#almacen_salida_select, #almacen_salida_').show();
     }
-}
-
-function obtenerAnaquel(selectElement){
-
-    var fila = $(selectElement).closest('tr');
-    var id =  $(selectElement).val();
-
-    $.ajax({
-        url: "/lotes/obtener_anaquel_seccion/"+id,
-        dataType: "json",
-        success: function (result) {
-
-            var option = "<option value=''>--Seleccionar--</option>";
-            var anaquelSelect = fila.find('select[name="ubicacion_fisica_anaquel[]"]');
-            anaquelSelect.html("");
-            $(result).each(function (ii, oo) {
-                option += "<option value='"+oo.id+"'>"+oo.anaquel+"</option>";
-            });
-            anaquelSelect.html(option);
-                            
-        }
-    });
 }
 
 function obtenerDescripcion(selectElement){
@@ -663,39 +637,6 @@ function aplicaDescuentoEnPorcentaje(inputElement) {
     }
 }
 
-$('#almacen').change(function() {
-    
-    var almacenElement = this;
-    
-    $('#tblOrdenCompraDetalle tbody tr').each(function(index, row) {
-        var n = index + 1;
-        actualizarSecciones(almacenElement, n);
-    });
-});
-
-function actualizarSecciones(selectElement, n) {
-
-    var id_almacen = $(selectElement).val();
-
-    $.ajax({
-        url: "/lotes/obtener_seccion_almacen/"+id_almacen,
-        dataType: "json",
-        success: function (result) {
-
-            var option = "<option value=''>--Seleccionar--</option>";
-
-            var ubicacionFisicaSeccion = $('#ubicacion_fisica_seccion' + n);
-            ubicacionFisicaSeccion.html("");
-
-            $(result).each(function (ii, oo) {
-                option += "<option value='" + oo.id + "'>" + oo.codigo_seccion + "-" + oo.seccion + "</option>";
-            });
-
-            ubicacionFisicaSeccion.html(option);
-        }
-    });
-}
-
 var productosSeleccionados = [];
 
 function cargarDetalle(){
@@ -770,7 +711,6 @@ function cargarDetalle(){
 
                     </tr>
                 `;
-
                 tbody.append(row);
                 $('#descripcion' + n).select2({ 
                     width: '100%', 
@@ -822,92 +762,6 @@ function limitarDecimalesYCalcular(input, decimales) {
 
     calcularSubTotal(input);
     calcularPrecioUnitario_(input, decimales);
-}
-
-function agregarProducto(){
-
-    var usuarioRoles = @json(auth()->user()->getRoleNames());
-
-    var tieneRolVendedor = usuarioRoles.includes("Vendedor FORESPAMA");
-
-    var opcionesDescripcion = `<?php
-        echo '<option value="">--Seleccionar--</option>';
-        foreach ($producto as $row) {
-            echo '<option value="' . htmlspecialchars($row->id, ENT_QUOTES, 'UTF-8') . '">' . htmlspecialchars($row->codigo . ' - ' . $row->denominacion, ENT_QUOTES, 'UTF-8') . '</option>';
-        }
-    ?>`;
-
-    var cantidad = 1;
-    var newRow = "";
-    for (var i = 0; i < cantidad; i++) { 
-        var n = $('#tblOrdenCompraDetalle tbody tr').length + 1;
-        var descripcion = '<input name="id_orden_compra_detalle[]" id="id_orden_compra_detalle${n}" class="form-control form-control-sm" value="${orden_compra.id}" type="hidden"><select name="descripcion[]" id="descripcion' + n + '" class="form-control form-control-sm" ' +(!tieneRolVendedor ? 'onChange="verificarProductoSeleccionado(this, ' + n + ')"' : 'onChange="obtenerCodInterno(this, ' + n + ')"') + '> ' + opcionesDescripcion +' </select>';
-        var descripcion_ant = '<input type="hidden" name="descripcion_ant[]" id="descripcion_ant' + n + '" class="form-control form-control-sm" />';
-        var cod_interno = '<input name="cod_interno[]" id="cod_interno' + n + '" class="form-control form-control-sm" value="" type="text">';
-        var marca = '<select name="marca[]" id="marca' + n + '" class="form-control form-control-sm" onchange=""> <option value="">--Seleccionar--</option><?php foreach ($marca as $row){?><option value="<?php echo htmlspecialchars($row->id); ?>"><?php echo htmlspecialchars(addslashes($row->denominiacion)); ?></option><?php }?></select>'
-        var unidad = '<select name="unidad[]" id="unidad' + n + '" class="form-control form-control-sm" onChange=""> <option value="">--Seleccionar--</option> <?php foreach ($unidad as $row) {?> <option value="<?php echo $row->codigo?>"><?php echo $row->denominacion?></option> <?php } ?> </select>';
-        var cantidad_ingreso = '<input name="cantidad_ingreso[]" id="cantidad_ingreso' + n + '" class="cantidad_ingreso form-control form-control-sm" value="" type="text" oninput="calcularSubTotal(this);calcularPrecioUnitario(this)">';
-        var stock_actual = '<input name="stock_actual[]" id="stock_actual' + n + '" class="form-control form-control-sm" value="" type="text" readonly>';
-        var precio_unitario = '<input name="precio_unitario[]" id="precio_unitario' + n + '" class="precio_unitario form-control form-control-sm" value="" type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, \'\').replace(/(\\..*?)\\..*/g, \'$1\').replace(/(\\d+\\.\\d{0,2}).*/, \'$1\'); calcularSubTotal(this);calcularPrecioUnitario(this)" readonly="readonly">';
-        var precio_unitario_ = '<input name="precio_unitario_[]" id="precio_unitario_' + n + '" class="precio_unitario_ form-control form-control-sm" value="" type="text" oninput="calcularPrecioUnitario(this)" readonly="readonly">';
-        var valor_venta_bruto = '<input name="valor_venta_bruto[]" id="valor_venta_bruto' + n + '" class="valor_venta_bruto form-control form-control-sm" value="" type="text" oninput="calcularSubTotal(this)" readonly="readonly">';
-        var valor_venta = '<input name="valor_venta[]" id="valor_venta' + n + '" class="valor_venta form-control form-control-sm" value="" type="text" oninput="calcularSubTotal(this)" readonly="readonly">';
-        var descuento = '<div style="display: flex; align-items: center; gap: 5px;"><button type="button" class="btn-custom" onclick="cambiarDescuento(this);calcularPrecioUnitario(this)" hidden><i class="fas fa-paint-brush"></i></button><input name="descuento[]" id="descuento' + n + '" class="descuento form-control form-control-sm" placeholder="S/ Descuento" value="" type="text" oninput="aplicaDescuentoEnSoles(this);calcularPrecioUnitario(this)"><input name="porcentaje[]" id="porcentaje' + n + '" class="porcentaje form-control form-control-sm" placeholder="% Descuento" type="text" oninput="aplicaDescuentoEnPorcentaje(this);calcularPrecioUnitario(this)" style="display: none;"> <input name="id_descuento[]" id="id_descuento${n}" type="hidden" value="1"></div>';
-        var sub_total = '<input name="sub_total[]" id="sub_total' + n + '" class="sub_total form-control form-control-sm" value="" type="text" readonly="readonly">';
-        var igv = '<input name="igv[]" id="igv' + n + '" class="igv form-control form-control-sm" value="" type="text" readonly="readonly">';
-        var total = '<input name="total[]" id="total' + n + '" class="total form-control form-control-sm" value="" type="text" readonly="readonly">';
-        
-        var btnEliminar = '<button type="button" class="btn btn-danger btn-sm" onclick="eliminarFila(this)">Eliminar</button>';
-
-        newRow += '<tr>';
-        newRow += '<td>' + n + '</td>';
-        newRow += '<td style="width: 400px!important; display:block!important">' +descripcion_ant + descripcion + '</td>';
-        newRow += '<td>' + marca + '</td>';
-        newRow += '<td>' + cod_interno + '</td>';
-        newRow += '<td>' + unidad + '</td>';
-        newRow += '<td>' + cantidad_ingreso + '</td>';
-        newRow += '<td>' + stock_actual + '</td>';
-        newRow += '<td>' + precio_unitario + '</td>';
-        newRow += '<td>' + precio_unitario_ + '</td>';
-        newRow += '<td>' + valor_venta_bruto + '</td>';
-        newRow += '<td>' + valor_venta + '</td>';
-        newRow += '<td>' + descuento + '</td>';
-        newRow += '<td>' + sub_total + '</td>';
-        newRow += '<td>' + igv + '</td>';
-        newRow += '<td>' + total + '</td>';
-        newRow += '<td>' + btnEliminar + '</td>';
-        newRow += '</tr>';
-
-        $('#tblOrdenCompraDetalle tbody').append(newRow);
-
-        $('#descripcion' + n).select2({
-            width: '100%',
-            dropdownCssClass: 'custom-select2-dropdown',
-        });
-
-        $('#marca' + n).select2({
-            width: '100%',
-        });
-        
-        $('#fecha_fabricacion_' + n).datepicker({
-            autoclose: true,
-            format: 'yyyy-mm-dd',
-            changeMonth: true,
-            changeYear: true,
-            language: 'es'
-        });
-
-        $('#fecha_vencimiento_' + n).datepicker({
-            autoclose: true,
-            format: 'yyyy-mm-dd',
-            changeMonth: true,
-            changeYear: true,
-            language: 'es'
-        });
-
-    }
-
-    actualizarTotalGeneral();
 }
 
 function cambiarDescuento(button){
@@ -979,144 +833,27 @@ function verificarProductoSeleccionado(selectElement, rowIndex, valor) {
     console.log(productosSeleccionados);
 }
 
-function eliminarFila(button){
-    $(button).closest('tr').remove();
-    actualizarTotalGeneral();
-}
-
-function limpiar(){
-	$('#id').val("0");
-	$('#id_tipo_documento').val("");
-	$('#denominacion').val("");
-	$('#img_foto').val("");
-}
-
-function fn_save_orden_compra(){
+function fn_save_autorizacion_orden_compra(){
 	
-    var msg = "";
-    var msg2 = "";
+    var msgLoader = "";
+    msgLoader = "Procesando, espere un momento por favor";
+    var heightBrowser = $(window).width()/2;
+    $('.loader').css("opacity","0.8").css("height",heightBrowser).html("<div id='Grd1_wrapper' class='dataTables_wrapper'><div id='Grd1_processing' class='dataTables_processing panel-default'>"+msgLoader+"</div></div>");
+    $('.loader').show();
 
-    var id = $('#id').val();
-    var tipo_documento = $('#tipo_documento').val();
-    var empresa_vende = $('#empresa_vende').val();
-    var igv_compra = $('#igv_compra').val();
-    var fecha_orden_compra = $('#fecha_orden_compra').val();
-    var fecha_vencimiento = $('#fecha_vencimiento').val();
-    var canal = $('#canal').val();
-    
-    if(tipo_documento==""){msg+="Ingrese el Tipo de Documento <br>";}
-    if(empresa_vende==""){msg+="Ingrese la Empresa que Vende <br>";}
-    if(igv_compra==""){msg+="Ingrese el IGV <br>";}
-
-    if ($('#tblOrdenCompraDetalle tbody tr').length == 0) {
-        msg += "No se ha agregado ning&uacute;n producto <br>";
-    }
-
-    /*if(tipo_documento==2){
-
-        var id_descuento_usuario = $('#id_descuento_usuario').val();
-        var total_general = $('#total_general').val();
-        var descuento_general = $('#descuento_general').val();
-
-        var descuento_num = parseFloat(id_descuento_usuario.replace('%', ''));
-        var total_general_num = parseFloat(total_general);
-        var descuento_general_num = parseFloat(descuento_general);
-
-        descuento_num = descuento_num / 100;
-
-        var descuento_con_igv = descuento_general_num * 1.18;
-        
-        var total_sin_descuento = total_general_num+descuento_con_igv;
-        
-        var descuento_permitido = total_sin_descuento * descuento_num;
-
-        if(descuento_permitido < descuento_general_num){
-            msg +="El total de la Orden de Venta super&oacute; el m&aacute;ximo de Descuento permitido <br>";
+    $.ajax({
+        url: "/orden_compra/send_orden_compra",
+        type: "POST",
+        data : $("#frmAutorizacionOrdenCompra").serialize(),
+        success: function (result) {
+            
+            $('.loader').hide();
+            bootbox.alert("Se autoriz&oacute; satisfactoriamente");
+            $('#openOverlayOpc').modal('hide');
+            datatablenew();
+            
         }
-    }*/
-
-    if(tipo_documento == 2){
-
-        var id_descuento_usuario = $('#id_descuento_usuario').val();
-        var descuento_num = parseFloat(id_descuento_usuario.replace('%', '')) / 100;
-
-        $('#tblOrdenCompraDetalle tbody tr').each(function(index, fila){
-            var filaIndex = index + 1;
-
-            var valorVentaBruto = parseFloat($(fila).find('.valor_venta_bruto').val()) || 0;
-            var descuentoFila   = parseFloat($(fila).find('.descuento').val()) || 0;
-            var descripcion = $(fila).find('select[name="descripcion[]"] option:selected').text();
-
-            var precio_unitario = parseFloat($(fila).find('.precio_unitario').val()) || 0;
-            var cantidad_ingreso = parseFloat($(fila).find('.cantidad_ingreso').val()) || 0;
-
-            var precio_total = precio_unitario * cantidad_ingreso;
-
-            var descuentoPermitidoFila = precio_total * descuento_num;
-
-            if(descuentoFila > descuentoPermitidoFila){
-                msg2 += "El producto " + descripcion + " supera el m&aacute;ximo de Descuento permitido <br>";
-                
-                $('#id_autorizacion').val(1);
-                
-            }
-        });
-    }
-
-    if (id == 0 && tipo_documento == 2)
-        
-        if(fecha_vencimiento==""){msg+="Ingrese Fecha de Vencimiento <br>";}
-
-        if(fecha_vencimiento !== "" && fecha_orden_compra !== "") {
-        const fecha1 = new Date(fecha_orden_compra);
-        const fecha2 = new Date(fecha_vencimiento);
-
-        const diferenciaDias = Math.ceil((fecha2 - fecha1) / (1000 * 60 * 60 * 24));
-
-        if (diferenciaDias < 3) {
-            msg += "La Fecha de Vencimiento debe ser al menos 3 días despu&eacute;s de la Fecha de Orden de Compra <br>";
-        }
-        
-        if(canal==""){msg+="Ingrese el Canal <br>";}
-    }
-
-    if(msg!=""){
-        bootbox.alert(msg);
-        return false;
-    }else{
-
-        var msgLoader = "";
-        msgLoader = "Procesando, espere un momento por favor";
-        var heightBrowser = $(window).width()/2;
-        $('.loader').css("opacity","0.8").css("height",heightBrowser).html("<div id='Grd1_wrapper' class='dataTables_wrapper'><div id='Grd1_processing' class='dataTables_processing panel-default'>"+msgLoader+"</div></div>");
-        $('.loader').show();
-
-        $.ajax({
-            url: "/orden_compra/send_orden_compra",
-            type: "POST",
-            data : $("#frmOrdenCompra").serialize(),
-            success: function (result) {
-                
-                datatablenew();
-                $('.loader').hide();
-                if (msg2 !== "") {
-                    bootbox.alert(msg2, function () {
-                        bootbox.alert("Se guard&oacute; satisfactoriamente", function () {
-                            if (result.id > 0) {
-                                modalOrdenCompra(result.id);
-                            }
-                        });
-                    });
-                } else {
-                    bootbox.alert("Se guard&oacute; satisfactoriamente", function () {
-                        if (result.id > 0) {
-                            modalOrdenCompra(result.id);
-                        }
-                    });
-                }
-            }
-        });
-    }
+    });
 }
 
 function obtenerCodigo(){
@@ -1143,53 +880,6 @@ function obtenerCodigo(){
         $('#input_numero_orden_compra_matriz').hide();
         $('#numero_orden_compra_matriz').val('');
     }
-}
-
-function pdf_documento(){
-
-    var id = $('#id').val();
-
-    var href = '/orden_compra/movimiento_pdf/'+id;
-    window.open(href, '_blank');
-
-}
-
-function pdf_guia(){
-
-    var id = $('#id').val();
-    var tipo_movimiento = $('#tipo_movimiento').val();
-
-    var href = '/entrada_productos/guia_electronica_pdf/'+id+'/'+2;
-    window.open(href, '_blank');
-
-}
-
-function modal_tiendas_orden_compra(id){
-	
-	var id = $('#id').val();
-
-	$.ajax({
-        url: "/orden_compra/modal_tiendas_orden_compra/"+id,
-        type: "GET",
-        success: function (result) {  
-            $("#diveditpregOpc2").html(result);
-            $('#openOverlayOpc2').modal('show');
-        }
-	});
-}
-
-function modal_datos_pedido_orden_compra(id){
-	
-	var id = $('#id').val();
-
-	$.ajax({
-        url: "/orden_compra/modal_datos_pedido_orden_compra/"+id,
-        type: "GET",
-        success: function (result) {
-            $("#diveditpregOpc3").html(result);
-            $('#openOverlayOpc3').modal('show');
-        }
-	});
 }
 
 $('#moneda').on('change', function(){
@@ -1408,7 +1098,7 @@ function obtenerBeneficiario(){
                 </div>
                 
                 <div class="card-body">
-                <form method="post" action="#" id="frmOrdenCompra" name="frmOrdenCompra">
+                <form method="post" action="#" id="frmAutorizacionOrdenCompra" name="frmAutorizacionOrdenCompra">
 
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding-top:5px;padding-bottom:20px">
                     
@@ -1730,49 +1420,7 @@ function obtenerBeneficiario(){
                     <div style="margin-top:15px" class="form-group">
                         <div class="col-sm-12 controls">
                             <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
-                                <?php 
-                                    if($id>0 && $orden_compra->cerrado == 1 ){
-                                        if($orden_compra->tienda_asignada==0){
-                                ?>
-                                <button style="font-size:12px;margin-left:10px;" type="button" class="btn btn-sm btn-fosforescente" data-toggle="modal" onclick="modal_tiendas_orden_compra()" >Agregar Tiendas</button>
-                                <?php 
-                                        }else{
-                                ?>
-                                <button style="font-size:12px;margin-left:10px;" type="button" class="btn btn-sm btn-fosforescente" data-toggle="modal" onclick="modal_tiendas_orden_compra()">Editar Tiendas</button>
-                                <?php
-                                        }
-                                ?>
-
-                                <button style="font-size:12px;margin-left:10px" type="button" class="btn btn-sm btn-primary" data-toggle="modal" onclick="pdf_documento()" ><i class="fa fa-edit"></i>Imprimir</button>
-
-                                <button style="font-size:12px;margin-left:10px;" type="button" class="btn btn-sm btn-secondary" data-toggle="modal" onclick="modal_datos_pedido_orden_compra()">Agregar Datos Pedido</button>
-                                
-                                <button style="font-size:12px;margin-left:10px; margin-right:10px" type="button" class="btn btn-sm btn-warning" data-toggle="modal" onclick="pdf_guia()" ><i class="fa fa-edit"></i>Imprimir Gu&iacute;a Remisi&oacute;n Electronica</button>
-                                <!--<a href="javascript:void(0)" onClick="fn_pdf_documento()" class="btn btn-sm btn-primary" style="margin-right:100px">Imprimir</a>-->
-                                <?php 
-                                    }else{
-                                ?>
-                                    <button style="font-size:12px;margin-left:10px; margin-right:10px" type="button" class="btn btn-sm btn-primary" data-toggle="modal" onclick="pdf_documento()" ><i class="fa fa-edit"></i>Imprimir</button>
-                                <?php 
-                                    }
-                                ?>
-
-                                <?php 
-                                    if($id>0){
-                                        if($orden_compra->id_empresa_compra==23){
-                                ?>
-                                <button style="font-size:12px;margin-right:40px;" type="button" class="btn btn-sm btn-light" data-toggle="modal" onclick="generarLPN()" >Generar LPN</button>
-                                <?php 
-                                        }
-                                    }
-                                ?>
-                                
-                                <?php if($id_user==$orden_compra->id_usuario_inserta && $orden_compra->cerrado == 1){?>
-                                    <a href="javascript:void(0)" onClick="fn_save_orden_compra()" class="btn btn-sm btn-success" style="margin-right:10px">Guardar</a>
-                                <?php }?>
-                                <?php if($id==0){?>
-                                    <a href="javascript:void(0)" onClick="fn_save_orden_compra()" class="btn btn-sm btn-success" style="margin-right:10px">Guardar</a>
-                                <?php }?>
+                                <a href="javascript:void(0)" onClick="fn_save_autorizacion_orden_compra()" class="btn btn-sm btn-success" style="margin-right:10px">Autorizar</a>
                                 <a href="javascript:void(0)" onClick="$('#openOverlayOpc').modal('hide');" class="btn btn-sm btn-info" style="margin-left:10px;">Cerrar</a>
                             </div>
                         </div>

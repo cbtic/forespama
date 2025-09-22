@@ -64,6 +64,12 @@ class OrdenCompra extends Model
 
     }
 
+    public function listar_orden_compra_autorizacion_ajax($p){
+
+        return $this->readFuntionPostgres('sp_listar_autorizacion_orden_compra_paginado',$p);
+
+    }
+
     public function readFuntionPostgres($function, $parameters = null){
 
         $_parameters = '';
@@ -540,6 +546,7 @@ class OrdenCompra extends Model
         and ocd.cerrado ='1'
         and ocd.estado ='1'
         and oc.id_tipo_documento ='2'
+        and oc.cerrado ='1'
         group by p.id, p.denominacion, p.codigo, tm.denominacion, ocd.id_unidad_medida, ocd.id_producto
         having sum(ocd.cantidad_requerida) > coalesce((
         select sum(opd.cantidad) 

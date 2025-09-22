@@ -779,3 +779,8 @@ Route::get('usuario_descuento/modal_usuario_descuento/{id}', [UsuarioDescuentoCo
 Route::get('usuario_descuento/eliminar_usuario_descuento/{id}/{estado}', [UsuarioDescuentoController::class, 'eliminar_usuario_descuento'])->name('usuario_descuento.eliminar_usuario_descuento');
 
 Route::get('orden_compra/obtener_descuento/{id_vendedor}', [OrdenCompraController::class, 'obtener_descuento'])->name('orden_compra.obtener_descuento');
+
+Route::get('orden_compra/create_autorizacion', [OrdenCompraController::class, 'create_autorizacion'])->name('orden_compra.create_autorizacion');
+Route::post('orden_compra/listar_orden_compra_autorizacion_ajax', [OrdenCompraController::class, 'listar_orden_compra_autorizacion_ajax'])->name('orden_compra.listar_orden_compra_autorizacion_ajax');
+Route::get('orden_compra/modal_orden_compra_autorizacion/{id}', [OrdenCompraController::class, 'modal_orden_compra_autorizacion'])->name('orden_compra.modal_orden_compra_autorizacion');
+Route::post('orden_compra/send_orden_compra_autorizacion', [OrdenCompraController::class, 'send_orden_compra_autorizacion'])->name('orden_compra.send_orden_compra_autorizacion');

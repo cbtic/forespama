@@ -2,19 +2,6 @@
 <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" defer></script>
 <style type="text/css">
 
-/* Rojo claro por defecto */
-.table-hover tbody tr.row_autorizacion td {
-    background-color: #f8d7da !important;
-    color: #000000 !important;
-}
-
-/* Rojo fuerte cuando está seleccionada */
-.table-hover tbody tr.row_autorizacion_selected td {
-    background-color: #da4a59ff !important;
-    color: #ffffff !important;
-}
-
-/* Verde seleccionado */
 .table-hover tbody tr.row_selected td{background-color:#239244!important;color:#ffffff!important}
 
 .table td.verde{
@@ -305,10 +292,7 @@ label.form-control-sm{
 </style>
 
 <script>
-    var almacenUsuario = @json($almacen_usuario);
-	//alert(almacenUsuario.id_user);
-	var esAdministrador = {{ auth()->user()->hasAnyRole('Administrator') ? 'true' : 'false' }};
-	//console.log(almacenUsuario);
+
 </script>
 
 
@@ -348,12 +332,12 @@ label.form-control-sm{
 
         <div class="card-body">
 
-            <form class="form-horizontal" method="post" action="" id="frmOrdenCompra" autocomplete="off" enctype="multipart/form-data">
+            <form class="form-horizontal" method="post" action="" id="frmAutorizacion" autocomplete="off" enctype="multipart/form-data">
 				
                 <div class="row">
                     <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12" style="margin-top:15px">
                         <h4 class="card-title mb-0 text-primary" style="font-size:22px">
-                            Orden de Compra y Venta
+                            Gesti&oacute;n de Autorizaci&oacute;n
                         </h4>
                     </div>
                 </div>
@@ -363,70 +347,11 @@ label.form-control-sm{
 
 					<div class="col col-sm-12 align-self-center">
 
-
                         <input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
-
-                        <!--<input type="hidden" name="estado" id="estado" value="0">-->
 						
 						<input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
 				
 				<div class="row" style="padding:20px 20px 0px 20px;">
-
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<select name="tipo_documento_bus" id="tipo_documento_bus" class="form-control form-control-sm">
-							<option value="">--Seleccionar Tipo Documento--</option>
-							<?php
-							foreach ($tipo_documento as $row){?>
-								<option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
-								<?php 
-							}
-							?>
-						</select>
-					</div>
-
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<select name="canal_bus" id="canal_bus" class="form-control form-control-sm">
-							<option value="">--Seleccionar Canal--</option>
-							<?php
-							foreach ($canal as $row){?>
-								<option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
-								<?php 
-							}
-							?>
-						</select>
-					</div>
-
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<select name="empresa_compra_bus" id="empresa_compra_bus" class="form-control form-control-sm">
-							<option value="">--Seleccionar Empresa Compra--</option>
-							<?php
-							foreach ($proveedor as $row){?>
-								<option value="<?php echo $row->id ?>"><?php echo $row->razon_social ?></option>
-								<?php 
-							}
-							?>
-						</select>
-					</div>
-
-					<!--<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<select name="empresa_vende_bus" id="empresa_vende_bus" class="form-control form-control-sm">
-							<option value="">--Seleccionar Empresa Vende--</option>
-							<?php
-							//foreach ($proveedor as $row){?>
-								<option value="<?php //echo $row->id ?>"><?php //echo $row->razon_social ?></option>
-								<?php 
-							//}
-							?>
-						</select>
-					</div>-->
-
-					<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
-                        <input id="fecha_inicio_bus" name="fecha_inicio_bus" on class="form-control form-control-sm"  placeholder="Fecha Inicio">
-					</div>
-
-					<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
-                        <input id="fecha_fin_bus" name="fecha_fin_bus" on class="form-control form-control-sm"  placeholder="Fecha Fin">
-					</div>
 
 					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
                         <input id="numero_orden_compra_bus" name="numero_orden_compra_bus" on class="form-control form-control-sm"  placeholder="N&uacute;mero Orden Compra">
@@ -434,42 +359,6 @@ label.form-control-sm{
 
 					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
                         <input id="numero_orden_compra_cliente_bus" name="numero_orden_compra_cliente_bus" on class="form-control form-control-sm"  placeholder="N&uacute;mero OC Cliente">
-					</div>
-
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<select name="almacen_origen_bus" id="almacen_origen_bus" class="form-control form-control-sm">
-							<option value="">--Seleccionar Almacen Origen--</option>
-							<?php
-							foreach ($almacen as $row){?>
-								<option value="<?php echo $row->id ?>"><?php echo $row->denominacion ?></option>
-								<?php 
-							}
-							?>
-						</select>
-					</div>
-
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<select name="almacen_destino_bus" id="almacen_destino_bus" class="form-control form-control-sm">
-							<option value="">--Seleccionar Almacen Destino--</option>
-							<?php
-							foreach ($almacen as $row){?>
-								<option value="<?php echo $row->id ?>"><?php echo $row->denominacion ?></option>
-								<?php 
-							}
-							?>
-						</select>
-					</div>
-
-					<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
-						<select name="situacion_bus" id="situacion_bus" class="form-control form-control-sm">
-							<option value="">--Seleccionar Situaci&oacute;n--</option>
-							<?php
-							foreach ($cerrado_orden_compra as $row){?>
-								<option value="<?php echo $row->codigo ?>" <?php if($row->codigo=='1')echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
-								<?php 
-							}
-							?>
-						</select>
 					</div>
 
 					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
@@ -484,24 +373,12 @@ label.form-control-sm{
 						</select>
 					</div>
 
-					<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
-						<select name="prioridad_bus" id="prioridad_bus" class="form-control form-control-sm">
-							<option value="">--Selec. Prioridad--</option>
-							<?php
-							foreach ($prioridad as $row){?>
-								<option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
-								<?php 
-							}
-							?>
-						</select>
-					</div>
-
 					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<select name="tipo_producto_bus" id="tipo_producto_bus" class="form-control form-control-sm">
-							<option value="">--Seleccionar Tipo Producto--</option>
+						<select name="estado_autorizacion_bus" id="estado_autorizacion_bus" class="form-control form-control-sm">
+							<option value="">--Seleccionar Esado Autorizacion--</option>
 							<?php
-							foreach ($bien_servicio as $row){?>
-								<option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
+							foreach ($estado_autorizacion as $row){?>
+								<option value="<?php echo $row->codigo ?>" <?php if($row->codigo==1)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
 								<?php 
 							}
 							?>
@@ -515,68 +392,34 @@ label.form-control-sm{
 							<option value="0">Eliminado</option>
 						</select>
 					</div>
-
-					<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
-						<select name="estado_pedido_bus" id="estado_pedido_bus" class="form-control form-control-sm">
-							<option value="">--Selec. Estado Pedido--</option>
-							<?php
-							foreach ($estado_pedido as $row){?>
-								<option value="<?php echo $row->codigo ?>" <?php echo ($row->codigo == '1') ? 'selected' : ''; ?>><?php echo $row->denominacion ?></option>
-								<?php 
-							}
-							?>
-						</select>
-					</div>
                     
 					<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12" style="padding-right:0px">
 						<input class="btn btn-warning pull-rigth" value="Buscar" type="button" id="btnBuscar" />
-						<input class="btn btn-success pull-rigth" value="Nuevo" type="button" id="btnNuevo" style="margin-left:10px" />
-						<!--<input class="btn btn-secondary pull-rigth" value="Excel" name="excel" type="button" id="btnDescargar" style="margin-left:15px;margin-right:10px;"/>-->
-						
-						<button id="btnDescargar" type="button" class="btn btn-secondary pull-rigth" style="margin-left:10px;">
-							<i class="fas fa-download"></i> Excel
-							<!--<img src="/img/icono_carro.png" alt="Carro" style="width: 16px; height: 16px; margin-left: 5px;">-->
-						</button>
-
-						<button id="btnDescargarDetalle" type="button" class="btn btn-secondary pull-rigth" style="margin-left:10px;">
-							<i class="fas fa-download"></i> Excel Detallado
-							<!--<img src="/img/icono_carro.png" alt="Carro" style="width: 16px; height: 16px; margin-left: 5px;">-->
-						</button>
 					</div>
 				</div>
 				
                 <div class="card-body">
 
-                    <div id="divOrdenCompra" class="table-responsive">
-                    <table id="tblOrdenCompra" class="table table-hover table-sm">
+                    <div id="divAutorizacion" class="table-responsive">
+                    <table id="tblAutorizacion" class="table table-hover table-sm">
                         <thead>
 							<tr style="font-size:13px">
 								<th>Id</th>
 								<th>Tipo Documento</th>
 								<th>Empresa Compra</th>
 								<th>N° OC Cliente</th>
-								<th>N° Requerimiento</th>
-								<th>Empresa Vende</th>
 								<th>Fecha</th>
 								<th>N&uacute;mero OC</th>
 								<th>Almacen Origen</th>
-								<th>Almacen Destino</th>
 								<th>Situaci&oacute;n</th>
 								<th>Vendedor</th>
-								<th>Tiene Direcci&oacute;n</th>
 								<th style ="text-align:right">Total</th>
-								<!--<th>Estado</th>-->
 								<th>Acciones</th>
 							</tr>
                         </thead>
                         <tbody style="font-size: 14px">
                         </tbody>
 						<tfoot>
-							<tr style="font-size:13px">
-								<td colspan="12"><b>Total:</b></td>
-								<td></td>
-								<td></td>
-							</tr>
 						</tfoot>
                     </table>
                 </div><!--table-responsive-->
@@ -662,6 +505,6 @@ label.form-control-sm{
 
 	</script>
 
-	<script src="{{ asset('js/ordenCompra.js') }}"></script>
+	<script src="{{ asset('js/ordenCompraAutorizacion.js') }}"></script>
 
 	@endpush
