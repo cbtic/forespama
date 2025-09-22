@@ -21,7 +21,13 @@ class ConductoresTable extends DataTableComponent
 
     public function configure(): void
     {
-        $this->setPrimaryKey('id');
+        $this->setPrimaryKey('id')
+        ->setTableRowUrl(function($row) {
+            return route('frontend.conductores.edit', $row);
+        })
+        ->setTableRowUrlTarget(function($row) {
+            return '_self';
+        });
     }
 
     public function columns(): array
@@ -29,12 +35,22 @@ class ConductoresTable extends DataTableComponent
         return [
             Column::make('ID', 'id')
                 ->sortable(),
+            Column::make('Nombre', 'personas.nombres')
+                ->sortable()
+                ->searchable(),
+            Column::make('Ap. Pat.', 'personas.apellido_paterno')
+                ->sortable()
+                ->searchable(),
+            Column::make('Ap. Mat.', 'personas.apellido_materno')
+                ->sortable()
+                ->searchable(),
+            Column::make('Documento', 'personas.numero_documento')
+                ->sortable(),
             Column::make('Licencia')
                 ->sortable()
                 ->searchable(),
             Column::make('Fecha Emision', 'fecha_licencia')
-                ->sortable()
-                ->searchable(),
+                ->sortable(),
         ];
     }
 }

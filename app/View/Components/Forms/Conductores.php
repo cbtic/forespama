@@ -28,6 +28,10 @@ class Conductores extends Component
     public function render()
     {
         // return view('components.forms.conductores');
-        return app(ConductoresForm::class)->create()->render();
+        if ($this->conductores) {
+            return app(ConductoresForm::class)->create()->edit($this->conductores)->render();
+        } else {
+            return app(ConductoresForm::class)->create()->render();
+        }
     }
 }
