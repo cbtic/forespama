@@ -301,7 +301,7 @@ $.ajax({
                         <td><input name="cod_interno[]" id="cod_interno${n}" class="form-control form-control-sm" value="${orden_compra.codigo}" type="text"></td>
                         <td><select name="estado_bien[]" id="estado_bien${n}" class="form-control form-control-sm" onChange="">${estadoBienOptions}</select></td>
                         <td><select name="unidad[]" id="unidad${n}" class="form-control form-control-sm">${unidadMedidaOptions}</select><input type="hidden" class="cantidad_ingresada" name="cantidad_ingresada[]" id="cantidad_ingresada${n}" value="${orden_compra.cantidad_ingresada}"></td>
-                        <td><input name="cantidad_ingreso[]" id="cantidad_ingreso${n}" class="cantidad_ingreso form-control form-control-sm" value="${orden_compra.cantidad_requerida-orden_compra.cantidad_ingresada}" type="text" oninput="calcularCantidadPendiente(this);calcularSubTotal(this);calcularPrecioUnitario(this,${decimales})"></td>
+                        <td><input name="cantidad_ingreso[]" id="cantidad_ingreso${n}" class="cantidad_ingreso form-control form-control-sm" value="${orden_compra.cantidad_requerida-orden_compra.cantidad_ingresada}" type="text" oninput="calcularCantidadPendiente(this);calcularDescuentoParcial(this,${orden_compra.cantidad_requerida-orden_compra.cantidad_ingresada},${parseFloat((orden_compra.descuento ?? 0) || 0).toFixed(decimales)});calcularSubTotal(this);calcularPrecioUnitario(this,${decimales})"></td>
                         <td><input name="cantidad_compra[]" id="cantidad_compra${n}" class="cantidad_compra form-control form-control-sm" value="${orden_compra.cantidad_requerida}" type="text" oninput="calcularCantidadPendiente(this)" readonly="readonly"></td>
                         <td><input name="cantidad_pendiente[]" id="cantidad_pendiente${n}" class="cantidad_pendiente form-control form-control-sm" value="" type="text" readonly="readonly"></td>
                         <td><input name="stock_actual[]" id="stock_actual${n}" class="form-control form-control-sm" value="${producto_stock.saldos_cantidad}" type="text" readonly="readonly"></td>
@@ -540,6 +540,20 @@ function calcularCantidadPendiente(input) {
     cantidad_pendiente = cantidad_pendiente <= 0 ? 0 : cantidad_pendiente;
 
     fila.find('.cantidad_pendiente').val(cantidad_pendiente.toFixed(2));
+}
+
+function calcularDescuentoParcial(input, cantidad, descuento){
+
+    //alert(cantidad);
+    var fila = $(input).closest('tr');
+
+    var cantidad_ingreso = parseFloat(fila.find('.cantidad_ingreso').val()) || 0;
+
+    var descuento_unitario = descuento / cantidad;
+
+    var descuento_parcial = descuento_unitario * cantidad_ingreso;
+
+    fila.find('.descuento').val(descuento_parcial.toFixed(2));
 }
 
 function calcularSubTotal(input) {

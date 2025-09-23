@@ -149,6 +149,28 @@
     background-color:  #E5D100 !important; /* Se oscurece un poco */
 }
 
+.fila-autorizacion {
+    background-color: #f8d7da !important;
+}
+
+
+.fila-autorizacion input[readonly] {
+    border: 1px solid #dc3545 !important;
+    background-color: #ffcbcbff; /* un rosado muy suave */
+}
+
+.fila-autorizacion input,
+.fila-autorizacion select {
+    border: 1px solid #dc3545 !important;
+    background-color: #fff5f5; /* un rosado muy suave */
+}
+
+.fila-autorizacion .select2-container--default .select2-selection--single {
+    border: 1px solid #dc3545 !important;
+    background-color: #fff5f5 !important;
+    border-radius: 4px;
+}
+
 </style>
 
 <!--<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"/>-->
@@ -217,6 +239,7 @@ $(document).ready(function() {
         language: 'es'
     });
     
+    obtenerDescuentoAutorizacion();
     obtenerFechaVencimiento();
     obtenerCanal();
 
@@ -689,9 +712,9 @@ function cargarDetalle(){
                 var stock_mostrar = (tipo_documento == 1) ? producto_stock.saldos_cantidad : producto_stock.stock_comprometido;
 
                 const row = `
-                    <tr>
+                    <tr class="${orden_compra.id_autorizacion == 1 ? 'fila-autorizacion' : ''}">
                         <td>${n}</td>
-                        <td style="width: 400px !important;display:block"><input name="id_orden_compra_detalle[]" id="id_orden_compra_detalle${n}" class="form-control form-control-sm" value="${orden_compra.id}" type="hidden"><select name="descripcion[]" id="descripcion${n}" class="form-control form-control-sm" onChange="verificarProductoSeleccionado(this, ${n});">${productoOptions}</select></td>
+                        <td style="width: 400px !important;display:block"><input name="id_orden_compra_detalle[]" id="id_orden_compra_detalle${n}" class="form-control form-control-sm" value="${orden_compra.id}" type="hidden"><input name="id_autorizacion_detalle[]" id="id_autorizacion_detalle${n}" class="form-control form-control-sm" value="2" type="hidden"><select name="descripcion[]" id="descripcion${n}" class="form-control form-control-sm" onChange="verificarProductoSeleccionado(this, ${n});">${productoOptions}</select></td>
                         
                         <td><select name="marca[]" id="marca${n}" class="form-control form-control-sm">${marcaOptions}</select></td>
                         <td><input name="cod_interno[]" id="cod_interno${n}" class="form-control form-control-sm" value="${orden_compra.codigo}" type="text"></td>
@@ -707,7 +730,6 @@ function cargarDetalle(){
                         <td><input name="sub_total[]" id="sub_total${n}" class="sub_total form-control form-control-sm" value="${parseFloat(orden_compra.sub_total || 0).toFixed(decimales) }" type="text" readonly="readonly"></td>
                         <td><input name="igv[]" id="igv${n}" class="igv form-control form-control-sm" value="${parseFloat(orden_compra.igv || 0).toFixed(decimales)}" type="text" readonly="readonly"></td>
                         <td><input name="total[]" id="total${n}" class="total form-control form-control-sm" value="${parseFloat(orden_compra.total || 0).toFixed(decimales)}" type="text" readonly="readonly"></td>
-                        <td><button type="button" class="btn btn-danger btn-sm" onclick="eliminarFila(this)">Eliminar</button></td>
 
                     </tr>
                 `;
@@ -833,8 +855,53 @@ function verificarProductoSeleccionado(selectElement, rowIndex, valor) {
     console.log(productosSeleccionados);
 }
 
+function obtenerDescuentoAutorizacion(){
+
+    var id_user = $('#id_user').val();
+
+    $.ajax({
+        url: "/orden_compra/obtener_descuento_usuario/"+id_user,
+        dataType: "json",
+        success: function(result){
+
+            $('#id_descuento_usuario').val(result[0].descuento);
+            //alert(result[0].descuento);
+            
+        }
+    });
+}
+
 function fn_save_autorizacion_orden_compra(){
 	
+    var msg = "";
+
+    var id_descuento_usuario = $('#id_descuento_usuario').val();
+    var descuento_num = parseFloat(id_descuento_usuario.replace('%', '')) / 100;
+
+    $('#tblOrdenCompraDetalle tbody tr').each(function(index, fila){
+        var filaIndex = index + 1;
+
+        var valorVentaBruto = parseFloat($(fila).find('.valor_venta_bruto').val()) || 0;
+        var descuentoFila   = parseFloat($(fila).find('.descuento').val()) || 0;
+        var descripcion = $(fila).find('select[name="descripcion[]"] option:selected').text();
+
+        var precio_unitario = parseFloat($(fila).find('.precio_unitario').val()) || 0;
+        var cantidad_ingreso = parseFloat($(fila).find('.cantidad_ingreso').val()) || 0;
+
+        var precio_total = precio_unitario * cantidad_ingreso;
+
+        var descuentoPermitidoFila = precio_total * descuento_num;
+
+        if(descuentoFila > descuentoPermitidoFila){
+            msg += "El producto " + descripcion + " supera el m&aacute;ximo de Descuento permitido";
+            
+            $('#id_autorizacion_detalle'+filaIndex).val(1);
+
+            $('#id_autorizacion').val(1);
+            
+        }
+    });
+
     var msgLoader = "";
     msgLoader = "Procesando, espere un momento por favor";
     var heightBrowser = $(window).width()/2;
@@ -842,16 +909,27 @@ function fn_save_autorizacion_orden_compra(){
     $('.loader').show();
 
     $.ajax({
-        url: "/orden_compra/send_orden_compra",
+        url: "/orden_compra/send_orden_compra_autorizacion",
         type: "POST",
         data : $("#frmAutorizacionOrdenCompra").serialize(),
         success: function (result) {
-            
-            $('.loader').hide();
-            bootbox.alert("Se autoriz&oacute; satisfactoriamente");
-            $('#openOverlayOpc').modal('hide');
             datatablenew();
-            
+            $('.loader').hide();
+            if (msg !== "") {
+                bootbox.alert(msg, function () {
+                    bootbox.alert("Se guard&oacute; satisfactoriamente", function () {
+                        if (result.id > 0) {
+                            modalOrdenCompraAutorizacion(result.id);
+                        }
+                    });
+                });
+            } else {
+                bootbox.alert("Se guard&oacute; satisfactoriamente", function () {
+                    if (result.id > 0) {
+                        modalOrdenCompraAutorizacion(result.id);
+                    }
+                });
+            }
         }
     });
 }
@@ -1106,6 +1184,7 @@ function obtenerBeneficiario(){
                     <input type="hidden" name="id" id="id" value="<?php echo $id?>">
                     <input type="hidden" name="id_descuento_usuario" id="id_descuento_usuario" value="<?php echo $id_descuento_usuario?>">
                     <input type="hidden" name="id_autorizacion" id="id_autorizacion" value="2">
+                    <input type="hidden" name="id_user" id="id_user" value="<?php echo $id_user?>">
                     
                     <div class="row" style="padding-left:10px">
 
@@ -1352,18 +1431,18 @@ function obtenerBeneficiario(){
                         </div>
 
                     </div>
-                        <div style="margin-top:15px" class="form-group">
+                        <!--<div style="margin-top:15px" class="form-group">
                             <div class="col-sm-12 controls">
                                 <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
-                                <?php if($id_user==$orden_compra->id_usuario_inserta && $orden_compra->cerrado == 1 ){?>
+                                <?php //if($id_user==$orden_compra->id_usuario_inserta && $orden_compra->cerrado == 1 ){?>
                                     <a href="javascript:void(0)" onClick="agregarProducto()" class="btn btn-sm btn-success">Agregar</a>
-                                <?php }?>
-                                <?php if($id==0){?>
+                                <?php //}?>
+                                <?php //if($id==0){?>
                                     <a href="javascript:void(0)" onClick="agregarProducto()" class="btn btn-sm btn-success">Agregar</a>
-                                <?php }?>
+                                <?php //}?>
                                 </div>
                             </div>
-                        </div>
+                        </div>-->
 
                         <div class="card-body" style="padding-right: 0px !important; padding-left: 0px !important;">	
 

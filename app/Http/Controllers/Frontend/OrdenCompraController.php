@@ -262,6 +262,7 @@ class OrdenCompraController extends Controller
         $valor_venta = $request->input('valor_venta');
         $descuento = $request->input('descuento');
         $porcentaje = $request->input('porcentaje');
+        $id_autorizacion_detalle = $request->input('id_autorizacion_detalle');
         $id_orden_compra_detalle =$request->id_orden_compra_detalle;
 
         $orden_compra->id_empresa_compra = $request->empresa_compra;
@@ -332,6 +333,7 @@ class OrdenCompraController extends Controller
             $orden_compra_detalle->id_marca = $marca[$index];
             $orden_compra_detalle->estado = 1;
             $orden_compra_detalle->cerrado = 1;
+            $orden_compra_detalle->id_autorizacion = $id_autorizacion_detalle[$index];
             $orden_compra_detalle->id_usuario_inserta = $id_user;
 
             $orden_compra_detalle->save();
@@ -2288,9 +2290,11 @@ class OrdenCompraController extends Controller
         $valor_venta = $request->input('valor_venta');
         $descuento = $request->input('descuento');
         $porcentaje = $request->input('porcentaje');
+        $id_autorizacion_detalle = $request->input('id_autorizacion_detalle');
         $id_orden_compra_detalle =$request->id_orden_compra_detalle;
 
         $orden_compra->id_autorizacion = $request->id_autorizacion;
+        $orden_compra->id_usuario_autoriza = $id_user;
         $orden_compra->save();
 
         $array_orden_compra_detalle = array();
@@ -2323,6 +2327,8 @@ class OrdenCompraController extends Controller
             //$orden_compra_detalle->id_marca = $marca[$index];
             $orden_compra_detalle->estado = 1;
             //$orden_compra_detalle->cerrado = 1;
+            $orden_compra_detalle->id_autorizacion = $id_autorizacion_detalle[$index];
+            $orden_compra_detalle->id_usuario_autoriza = $id_user;
             $orden_compra_detalle->id_usuario_inserta = $id_user;
             $orden_compra_detalle->save();
 
@@ -2343,6 +2349,14 @@ class OrdenCompraController extends Controller
         return response()->json(['id' => $orden_compra->id]);
         
     }
+
+    public function obtener_descuento_usuario($id_user){
+        
+		$usuario_descuento_model = new UsuarioDescuento;
+		$descuento_usuario = $usuario_descuento_model->getDescuentoByUser($id_user);
+		
+		echo json_encode($descuento_usuario);
+	}
 }
 
 class InvoicesExport implements FromArray, WithHeadings, WithStyles

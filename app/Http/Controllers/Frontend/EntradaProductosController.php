@@ -1096,7 +1096,6 @@ class EntradaProductosController extends Controller
         $empresa_model = new Empresa;
         $producto_model = new Producto;
         $almacen_model = new Almacene;
-        //$persona_model = new Persona;
         $marca_model = new Marca;
         $almacen_seccion_model = new AlmacenesSeccione;
         $anaquel_model = new Anaquele;
@@ -1133,15 +1132,12 @@ class EntradaProductosController extends Controller
             $tipo_cambio = $tipo_cambio_model->getTipoCambioUltimo();
             $almacen_ = null;
             $marca = $marca_model->getMarcaAll();
-            //$almacen__ = Almacene::getAlmacenById($entrada_producto->id_almacen);
             
             $almacen = $almacen_model->getAlmacenAll();
-            //$tipo_movimiento_=1;
 		}else{
 			$entrada_producto_detalle = new EntradaProductoDetalle;
             $entrada_producto = new EntradaProducto;
             $proveedor = Empresa::all();
-            //dd($proveedor);exit();
             $tipo_cambio = $tipo_cambio_model->getTipoCambioUltimo();
             $almacen = $almacen_model->getAlmacenAll();
             $marca = $marca_model->getMarcaAll();
