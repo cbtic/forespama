@@ -785,3 +785,5 @@ Route::post('orden_compra/listar_orden_compra_autorizacion_ajax', [OrdenCompraCo
 Route::get('orden_compra/modal_orden_compra_autorizacion/{id}', [OrdenCompraController::class, 'modal_orden_compra_autorizacion'])->name('orden_compra.modal_orden_compra_autorizacion');
 Route::post('orden_compra/send_orden_compra_autorizacion', [OrdenCompraController::class, 'send_orden_compra_autorizacion'])->name('orden_compra.send_orden_compra_autorizacion');
 Route::get('orden_compra/obtener_descuento_usuario/{id_user}', [OrdenCompraController::class, 'obtener_descuento_usuario'])->name('orden_compra.obtener_descuento_usuario');
+
+Route::post('horno/send_salida_horno', [HornoController::class, 'send_salida_horno'])->name('horno.send_salida_horno');

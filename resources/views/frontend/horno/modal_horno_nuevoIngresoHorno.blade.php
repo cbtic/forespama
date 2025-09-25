@@ -321,7 +321,7 @@ function calcularTotalPiezasIngreso(input){
                                         <option value="">--Seleccionar--</option>
                                         <?php
                                         foreach ($horno as $row){?>
-                                            <option value="<?php echo $row->codigo ?>" <?php //echo ($id > 0 && $row->codigo == $orden_compra->id_moneda) ? "selected='selected'" : (($row->codigo == 1) ? "selected='selected'" : ""); ?>><?php echo $row->denominacion ?></option>
+                                            <option value="<?php echo $row->codigo ?>" <?php echo ($id > 0 && $row->codigo == $ingreso_horno->id_numero_horno) ? "selected='selected'" : ""; ?>><?php echo $row->denominacion ?></option>
                                             <?php 
                                         }
                                         ?>
@@ -333,14 +333,14 @@ function calcularTotalPiezasIngreso(input){
                                     Fecha Encendido
                                 </div>
                                 <div class="col-lg-2">
-                                    <input id="fecha" name="fecha" on class="form-control form-control-sm"  value="<?php echo /*isset($acerrado_madera) && $acerrado_madera->fecha_orden_compra ? $acerrado_madera->fecha_orden_compra :*/ date('Y-m-d'); ?>" type="text">
+                                    <input id="fecha" name="fecha" on class="form-control form-control-sm"  value="<?php echo isset($ingreso_horno) && $ingreso_horno->fecha_encendido ? $ingreso_horno->fecha_encendido : date('Y-m-d'); ?>" type="text">
                                 </div>
 
                                 <div class="col-lg-2">
                                     Hora Encendido
                                 </div>
                                 <div class="col-lg-2">
-                                    <input id="hora_encendido" name="hora_encendido" on class="form-control form-control-sm"  value="<?php /*echo isset($acerrado_madera) && $acerrado_madera->fecha_orden_compra ? $acerrado_madera->fecha_orden_compra :*/ ?>" type="time">
+                                    <input id="hora_encendido" name="hora_encendido" on class="form-control form-control-sm"  value="<?php echo isset($ingreso_horno) && $ingreso_horno->hora_encendido ? $ingreso_horno->hora_encendido : "" ?>" type="time">
                                 </div>
                             </div>
                             <div class="row" style="padding-left:10px">
@@ -348,14 +348,14 @@ function calcularTotalPiezasIngreso(input){
                                     Temperatura Inicio
                                 </div>
                                 <div class="col-lg-2">
-                                    <input id="temperatura_inicio" name="temperatura_inicio" class="form-control form-control-sm"  value="<?php /*echo isset($acerrado_madera) && $acerrado_madera->fecha_orden_compra ? $acerrado_madera->fecha_orden_compra :*/ ?>" placeholder="&#176;C" type="number">
+                                    <input id="temperatura_inicio" name="temperatura_inicio" class="form-control form-control-sm"  value="<?php echo isset($ingreso_horno) && $ingreso_horno->temperatura_inicio ? $ingreso_horno->temperatura_inicio : "" ?>" placeholder="&#176;C" type="number">
                                 </div>
                             
                                 <div class="col-lg-2">
                                     Humedad Inicio
                                 </div>
                                 <div class="col-lg-2">
-                                    <input id="humedad_inicio" name="humedad_inicio" on class="form-control form-control-sm"  value="<?php /*echo isset($acerrado_madera) && $acerrado_madera->fecha_orden_compra ? $acerrado_madera->fecha_orden_compra :*/ ?>" placeholder="&#37;" type="text">
+                                    <input id="humedad_inicio" name="humedad_inicio" on class="form-control form-control-sm"  value="<?php echo isset($ingreso_horno) && $ingreso_horno->humedad_inicio ? $ingreso_horno->humedad_inicio : "" ?>" placeholder="&#37;" type="text">
                                 </div>
                             </div>
                             <div class="row" style="padding-left:10px">
@@ -367,13 +367,12 @@ function calcularTotalPiezasIngreso(input){
                                         <option value="">--Seleccionar--</option>
                                         <?php
                                         foreach ($operador as $row){?>
-                                            <option value="<?php echo $row->id ?>" <?php //echo ($id > 0 && $row->codigo == $orden_compra->id_moneda) ? "selected='selected'" : (($row->codigo == 1) ? "selected='selected'" : ""); ?>><?php echo $row->nombres . ' ' . $row->apellido_paterno . ' ' . $row->apellido_materno ?></option>
+                                            <option value="<?php echo $row->id ?>" <?php echo ($id > 0 && $row->id == $ingreso_horno->id_operador_inicio) ? "selected='selected'" : ""; ?>><?php echo $row->nombres . ' ' . $row->apellido_paterno . ' ' . $row->apellido_materno ?></option>
                                             <?php 
                                         }
                                         ?>
                                     </select>
                                 </div>
-
                             </div>
 
                             <div class="card-body">

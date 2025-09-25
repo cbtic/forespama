@@ -2327,8 +2327,12 @@ class OrdenCompraController extends Controller
             //$orden_compra_detalle->id_marca = $marca[$index];
             $orden_compra_detalle->estado = 1;
             //$orden_compra_detalle->cerrado = 1;
-            $orden_compra_detalle->id_autorizacion = $id_autorizacion_detalle[$index];
-            $orden_compra_detalle->id_usuario_autoriza = $id_user;
+            if($orden_compra_detalle->id_autorizacion == 1){
+                $orden_compra_detalle->id_autorizacion = $id_autorizacion_detalle[$index];
+                if($id_autorizacion_detalle[$index] == 2){
+                    $orden_compra_detalle->id_usuario_autoriza = $id_user;
+                }
+            }
             $orden_compra_detalle->id_usuario_inserta = $id_user;
             $orden_compra_detalle->save();
 

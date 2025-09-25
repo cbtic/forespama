@@ -158,7 +158,7 @@ $(document).ready(function() {
 
     //cargarDetalleHorno();
 
-    $('#fecha').datepicker({
+    $('#fecha_salida').datepicker({
         autoclose: true,
 		format: 'yyyy-mm-dd',
 		changeMonth: true,
@@ -180,9 +180,9 @@ function fn_save_salida_horno(){
     var _token = $('#_token').val();
 	var id = $('#id').val();
 
-    var fecha = $('#fecha').val();
+    var fecha_salida = $('#fecha_salida').val();
 
-    if(fecha==""){msg+="Ingrese una Fecha <br>";}
+    if(fecha_salida==""){msg+="Ingrese una Fecha <br>";}
 
     if(msg!=""){
         bootbox.alert(msg);
@@ -195,7 +195,7 @@ function fn_save_salida_horno(){
         $('.loader').show();
 
         $.ajax({
-            url: "/horno/send_ingreso_horno",
+            url: "/horno/send_salida_horno",
             type: "POST",
             data : $("#frmSalidaHorno").serialize(),
             success: function (result) {
@@ -301,7 +301,7 @@ function calcularIngresoHorno(input) {
                                         <option value="">--Seleccionar--</option>
                                         <?php
                                         foreach ($horno as $row){?>
-                                            <option value="<?php echo $row->codigo ?>" <?php //echo ($id > 0 && $row->codigo == $orden_compra->id_moneda) ? "selected='selected'" : (($row->codigo == 1) ? "selected='selected'" : ""); ?>><?php echo $row->denominacion ?></option>
+                                            <option value="<?php echo $row->codigo ?>" <?php echo ($id > 0 && $row->codigo == $ingreso_horno->id_numero_horno) ? "selected='selected'" : ""; ?>><?php echo $row->denominacion ?></option>
                                             <?php 
                                         }
                                         ?>
@@ -313,14 +313,14 @@ function calcularIngresoHorno(input) {
                                     Fecha Apagado
                                 </div>
                                 <div class="col-lg-2">
-                                    <input id="fecha" name="fecha" on class="form-control form-control-sm"  value="<?php echo /*isset($acerrado_madera) && $acerrado_madera->fecha_orden_compra ? $acerrado_madera->fecha_orden_compra :*/ date('Y-m-d'); ?>" type="text">
+                                    <input id="fecha_salida" name="fecha_salida" on class="form-control form-control-sm"  value="<?php echo date('Y-m-d'); ?>" type="text">
                                 </div>
 
                                 <div class="col-lg-2">
                                     Hora Apagado
                                 </div>
                                 <div class="col-lg-2">
-                                    <input id="hora_encendido" name="hora_encendido" on class="form-control form-control-sm"  value="<?php /*echo isset($acerrado_madera) && $acerrado_madera->fecha_orden_compra ? $acerrado_madera->fecha_orden_compra :*/ ?>" type="time">
+                                    <input id="hora_apagado" name="hora_apagado" on class="form-control form-control-sm"  value="<?php /*echo isset($acerrado_madera) && $acerrado_madera->fecha_orden_compra ? $acerrado_madera->fecha_orden_compra :*/ ?>" type="time">
                                 </div>
                             </div>
                             <div class="row" style="padding-left:10px">
@@ -328,7 +328,7 @@ function calcularIngresoHorno(input) {
                                     Humedad Apagado
                                 </div>
                                 <div class="col-lg-2">
-                                    <input id="humedad_inicio" name="humedad_inicio" on class="form-control form-control-sm"  value="<?php /*echo isset($acerrado_madera) && $acerrado_madera->fecha_orden_compra ? $acerrado_madera->fecha_orden_compra :*/ ?>" placeholder="&#37;" type="text">
+                                    <input id="humedad_fin" name="humedad_fin" on class="form-control form-control-sm"  value="" placeholder="&#37;" type="text">
                                 </div>
                             </div>
                             <div class="row" style="padding-left:10px">
@@ -336,11 +336,27 @@ function calcularIngresoHorno(input) {
                                     Operador
                                 </div>
                                 <div class="col-lg-6">
-                                    <select name="operador" id="operador" class="form-control form-control-sm" onchange="">
+                                    <select name="operador_salida" id="operador_salida" class="form-control form-control-sm" onchange="">
                                         <option value="">--Seleccionar--</option>
                                         <?php
                                         foreach ($operador as $row){?>
                                             <option value="<?php echo $row->id ?>" <?php //echo ($id > 0 && $row->codigo == $orden_compra->id_moneda) ? "selected='selected'" : (($row->codigo == 1) ? "selected='selected'" : ""); ?>><?php echo $row->nombres . ' ' . $row->apellido_paterno . ' ' . $row->apellido_materno ?></option>
+                                            <?php 
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row" style="padding-left:10px">
+                                <div class="col-lg-2">
+                                    Almacen Destino
+                                </div>
+                                <div class="col-lg-6">
+                                    <select name="almacen_destino" id="almacen_destino" class="form-control form-control-sm" onchange="">
+                                        <option value="">--Seleccionar--</option>
+                                        <?php 
+                                        foreach ($almacen as $row){?>
+                                            <option value="<?php echo $row->id ?>" <?php //if($row->id==$orden_compra->id_almacen_salida)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
                                             <?php 
                                         }
                                         ?>
