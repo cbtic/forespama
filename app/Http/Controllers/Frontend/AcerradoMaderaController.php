@@ -224,6 +224,7 @@ class AcerradoMaderaController extends Controller
 			$produccion_acerrado_madera_detalle->medida1_paquete = $medida_paquete1[$index];
 			$produccion_acerrado_madera_detalle->medida2_paquete = $medida_paquete2[$index];
 			$produccion_acerrado_madera_detalle->total_n_piezas = $n_piezas[$index];
+			$produccion_acerrado_madera_detalle->cantidad_pendiente = $paquete[$index];
 			$produccion_acerrado_madera_detalle->estado_produccion_acerrado = 1;
 			$produccion_acerrado_madera_detalle->estado = 1;
 			$produccion_acerrado_madera_detalle->id_usuario_inserta = $id_user;

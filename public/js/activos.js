@@ -273,7 +273,7 @@ function datatablenew(){
 				"aTargets": [17]
 				},
 
-				{
+				/*{
 				"mRender": function (data, type, row) {
 					var tipo_combustible = "";
 					if(row.tipo_combustible!= null)tipo_combustible = row.tipo_combustible;
@@ -301,7 +301,7 @@ function datatablenew(){
 				},
 				"bSortable": true,
 				"aTargets": [20]
-				},
+				},*/
 
 				{
 				"mRender": function (data, type, row) {
@@ -315,7 +315,7 @@ function datatablenew(){
 					return estado;
 				},
 				"bSortable": false,
-				"aTargets": [21]
+				"aTargets": [18]
 				},
 				{
 					"mRender": function (data, type, row) {
@@ -341,7 +341,7 @@ function datatablenew(){
 						return html;
 					},
 					"bSortable": false,
-					"aTargets": [22],
+					"aTargets": [19],
 				},
 
             ]

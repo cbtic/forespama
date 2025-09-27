@@ -407,9 +407,9 @@ label.form-control-sm{
 							<th>Fecha Vencimiento Revisi&oacute;n T&eacute;cnica</th>
 							<th>Valor Libros</th>
 							<th>Valor Comercial</th>
-							<th>Tipo Combustible</th>
+							<!--<th>Tipo Combustible</th>
 							<th>Dimensiones</th>
-							<th>Estado Activo</th>
+							<th>Estado Activo</th>-->
 							<th>Estado</th>
                             <th>Acciones</th>
                         </tr>

@@ -166,7 +166,7 @@ $(document).ready(function() {
         language: 'es'
     });
 
-    $('#operador').select2 ({  width : '100%' })
+    $('#operador_salida').select2 ({  width : '100%' })
 
 });
 

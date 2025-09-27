@@ -9,6 +9,7 @@ use App\Models\IngresoHorno;
 use App\Models\Persona;
 use App\Models\Almacene;
 use App\Models\ProduccionAcerradoMadera;
+use App\Models\ProduccionAcerradoMaderaDetalle;
 use Auth;
 use Carbon\Carbon;
 
@@ -108,21 +109,47 @@ class HornoController extends Controller
 			$ingreso_horno = IngresoHorno::find($request->id);
 		}
 
+		$fecha_produccion = $request->input('fecha_produccion');
+		$tipo_madera = $request->input('tipo_madera');
+		$medida = $request->input('medida');
+		$cantidad_paquete = $request->input('cantidad_paquete');
+		$medida1 = $request->input('medida1');
+		$medida2 = $request->input('medida2');
+		$total_n_piezas = $request->input('total_n_piezas');
+		$cantidad_paquete_ingreso = $request->input('cantidad_paquete_ingreso');
+		$ingreso_horno_ = $request->input('ingreso_horno');
+		$totalIngresoHorno = $request->input('total_ingreso_horno');
+        $id_acerrado_detalle =$request->id_acerrado_detalle;
+
         $ingreso_horno->id_numero_horno = $request->horno;
         $ingreso_horno->fecha_encendido = $request->fecha;
         $ingreso_horno->hora_encendido = $request->hora_encendido;
         $ingreso_horno->temperatura_inicio = $request->temperatura_inicio;
         $ingreso_horno->humedad_inicio = $request->humedad_inicio;
         $ingreso_horno->id_operador_inicio = $request->operador;
-        /*$ingreso_horno->fecha_apagado = $request->fecha;
-        $ingreso_horno->hora_apagado = $request->fecha;
-        $ingreso_horno->humedad_apagado = $request->fecha;
-        $ingreso_horno->id_operador_apagado = $request->fecha;
-        $ingreso_horno->observacion = $request->fecha;*/
-        $ingreso_horno->total_ingreso = $request->total_ingreso_horno;
+        $ingreso_horno->total_ingreso = $totalIngresoHorno;
 		$ingreso_horno->estado = 1;
         $ingreso_horno->id_usuario_inserta = $id_user;
 		$ingreso_horno->save();
+		$id_ingreso_horno = $ingreso_horno->id;
+
+		$array_ingreso_horno_detalle = array();
+
+		foreach($tipo_madera as $index => $value) {
+            
+			if($cantidad_paquete_ingreso[$index] != "" || $cantidad_paquete_ingreso[$index] > 0){
+
+				$produccionAcerradoMaderaDetalleAll = ProduccionAcerradoMaderaDetalle::where('id',$id_acerrado_detalle[$index])->where('estado',1)->first();
+
+				if($total_n_piezas[$index] <= $ingreso_horno_[$index]){
+					$produccionAcerradoMaderaDetalleAll->estado_produccion_acerrado = 0;
+					$produccionAcerradoMaderaDetalleAll->save();
+				}else{
+					$produccionAcerradoMaderaDetalleAll->cantidad_pendiente = $cantidad_paquete[$index] - $cantidad_paquete_ingreso[$index];
+					$produccionAcerradoMaderaDetalleAll->save();
+				}
+			}
+		}
 
         return response()->json(['success' => 'Registro guardado exitosamente.']);
 

@@ -220,6 +220,8 @@ function cargarDetalleAcerrado(){
 
             result.detalle_acerrado.forEach(detalle_acerrado => {
 
+                var total_piezas_pendiente = detalle_acerrado.cantidad_paquetes * detalle_acerrado.medida1_paquete * detalle_acerrado.medida2_paquete;
+
                 const row = `
                     <tr>
                         <td>${n}</td>
@@ -229,7 +231,7 @@ function cargarDetalleAcerrado(){
                         <td><input name="cantidad_paquete[]" id="cantidad_paquete${n}" class="cantidad_paquete form-control form-control-sm" style="border: none; background-color: transparent;" value="${detalle_acerrado.cantidad_paquetes}" type="text" readonly></td>
                         <td><input name="medida1[]" id="medida1${n}" class="medida1 form-control form-control-sm" style="border: none; background-color: transparent;" value="${detalle_acerrado.medida1_paquete}" type="text" readonly></td>
                         <td><input name="medida2[]" id="medida2${n}" class="medida2 form-control form-control-sm" style="border: none; background-color: transparent;" value="${detalle_acerrado.medida2_paquete}" type="text" readonly></td>
-                        <td><input name="total_n_piezas[]" id="total_n_piezas${n}" class="total_n_piezas form-control form-control-sm" style="border: none; background-color: transparent;" value="${detalle_acerrado.total_n_piezas}" type="text" readonly></td>
+                        <td><input name="total_n_piezas[]" id="total_n_piezas${n}" class="total_n_piezas form-control form-control-sm" style="border: none; background-color: transparent;" value="${total_piezas_pendiente}" type="text" readonly></td>
                         <td><input name="cantidad_paquete_ingreso[]" id="cantidad_paquete_ingreso${n}" class="cantidad_paquete_ingreso form-control form-control-sm" value="" type="text" oninput="calcularTotalPiezasIngreso(this)"></td>
                         <td><input name="ingreso_horno[]" id="ingreso_horno${n}" class="ingreso_horno form-control form-control-sm" value="" type="text" oninput="calcularIngresoHorno(this)" readonly></td>
                     </tr>
@@ -398,7 +400,7 @@ function calcularTotalPiezasIngreso(input){
                                         <tfoot>
                                             <tr>
                                                 <td colspan="9" style="text-align:right;"><strong>Total:</strong></td>
-                                                <td><input type="text" id="total_ingreso_horno" class="form-control form-control-sm" readonly></td>
+                                                <td><input type="text" id="total_ingreso_horno" name="total_ingreso_horno" class="form-control form-control-sm" readonly></td>
                                             </tr>
                                         </tfoot>
                                     </table>
