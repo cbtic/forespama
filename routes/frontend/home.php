@@ -787,3 +787,8 @@ Route::post('orden_compra/send_orden_compra_autorizacion', [OrdenCompraControlle
 Route::get('orden_compra/obtener_descuento_usuario/{id_user}', [OrdenCompraController::class, 'obtener_descuento_usuario'])->name('orden_compra.obtener_descuento_usuario');
 
 Route::post('horno/send_salida_horno', [HornoController::class, 'send_salida_horno'])->name('horno.send_salida_horno');
+Route::get('activos/create_entrega_activo', [ActivoController::class, 'create_entrega_activo'])->name('activos.create_entrega_activo');
+Route::post('activos/listar_entrega_activos_ajax', [ActivoController::class, 'listar_entrega_activos_ajax'])->name('activos.listar_entrega_activos_ajax');
+Route::post('activos/send_entrega_activo', [ActivoController::class, 'send_entrega_activo'])->name('activos.send_entrega_activo');
+Route::get('activos/modal_entrega_activos/{id}', [ActivoController::class, 'modal_entrega_activos'])->name('activos.modal_entrega_activos');
+Route::get('activos/eliminar_entrega_activo/{id}/{estado}', [ActivoController::class, 'eliminar_entrega_activo'])->name('activos.eliminar_entrega_activo');

@@ -101,7 +101,11 @@
 								<div class="dropdown-menu" aria-labelledby="navbarDropdownPrueba">
 
 									@can('Registro Activos')
-										<x-utils.link :href="route('frontend.activos.create')" class="dropdown-item" :text="__('Registro de Activos')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" /><!--Control de Mantenimiento-->
+										<x-utils.link :href="route('frontend.activos.create')" class="dropdown-item" :text="__('Registro de Activos')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+									@endif
+
+									@can('Registro Entrega Activos')
+										<x-utils.link :href="route('frontend.activos.create_entrega_activo')" class="dropdown-item" :text="__('Registro de Entrega Activos')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
 									@endif
 
 								</div>
