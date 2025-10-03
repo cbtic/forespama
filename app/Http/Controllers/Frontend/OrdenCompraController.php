@@ -152,8 +152,13 @@ class OrdenCompraController extends Controller
 
             $orden_compra = OrdenCompra::find($id);
             //$proveedor = Empresa::all();
-            $descuento_usuario = $usuario_descuento_model->getDescuentoByUser($orden_compra->id_vendedor);
-            $id_descuento_usuario = $descuento_usuario[0]->descuento;
+            if($orden_compra->id_tipo_documento == '2'){
+                $descuento_usuario = $usuario_descuento_model->getDescuentoByUser($orden_compra->id_vendedor);
+                $id_descuento_usuario = $descuento_usuario[0]->descuento;
+            }else{
+                $id_descuento_usuario = 0;
+            }
+            
             //dd($id_descuento_usuario);exit();
 			
 		}else{
