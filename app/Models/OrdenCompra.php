@@ -432,9 +432,13 @@ class OrdenCompra extends Model
 
     function getCodigoOrdenCompra($tipo_documento){
 
+        if($tipo_documento == 2){
+            $id_tipo_documento_4 = " or id_tipo_documento = 4";
+        }
+
         $cad = "select lpad(coalesce(max(oc.numero_orden_compra::int) + 1, 1)::varchar, 6, '0') codigo
         from orden_compras oc
-        where id_tipo_documento = '".$tipo_documento."'";
+        where id_tipo_documento = '".$tipo_documento."' ".$id_tipo_documento_4." ";
 
 		$data = DB::select($cad);
         return $data;

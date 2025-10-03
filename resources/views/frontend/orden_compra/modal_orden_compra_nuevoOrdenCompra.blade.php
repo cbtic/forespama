@@ -1023,7 +1023,7 @@ function fn_save_orden_compra(){
             if(precioUnitario == "0" || precioUnitario ==""){
 
                 msg += "El producto " + descripcion_precio + " no tiene precio, contactarse con la persona encargada de definir el precio <br>";
-                            
+                
             }
         });
 
