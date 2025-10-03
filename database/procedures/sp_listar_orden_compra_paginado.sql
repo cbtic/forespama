@@ -35,12 +35,13 @@ begin
 	from orden_compra_contacto_entregas occe 
 	where occe.id_orden_compra = oc.id) then 1 else 0 
 	end) tiene_direccion, oc.total, oc.estado_pedido,
-	(select r.codigo  from requerimientos r where oc.id_requerimiento = r.id) codigo_requerimiento, oc.id_autorizacion ';
+	(select r.codigo  from requerimientos r where oc.id_requerimiento = r.id) codigo_requerimiento, oc.id_autorizacion, tm3.denominacion prioridad ';
 
 	v_tabla=' from orden_compras oc 
 	inner join empresas e2 on oc.id_empresa_vende = e2.id
-	inner join tabla_maestras tm on oc.id_tipo_documento ::int = tm.codigo ::int and tm.tipo=''54''
-	inner join tabla_maestras tm2 on oc.cerrado ::int = tm2.codigo ::int and tm2.tipo=''52'' 
+	inner join tabla_maestras tm on oc.id_tipo_documento ::int = tm.codigo ::int and tm.tipo = ''54''
+	inner join tabla_maestras tm2 on oc.cerrado ::int = tm2.codigo ::int and tm2.tipo = ''52'' 
+	left join tabla_maestras tm3 on oc.id_prioridad ::int = tm3.codigo ::int and tm3.tipo = ''93''
 	left join almacenes a on oc.id_almacen_destino = a.id
 	left join almacenes a2 on oc.id_almacen_salida = a2.id 
 	inner join users u on oc.id_usuario_inserta = u.id

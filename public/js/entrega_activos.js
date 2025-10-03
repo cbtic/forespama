@@ -8,6 +8,13 @@ $(document).ready(function () {
 		modalEntregaActivo(0);
 	});
 
+	$('#persona_bus').keypress(function(e){
+		if(e.which == 13) {
+			datatablenew();
+			return false;
+		}
+	});
+
 	$('#descripcion_bus').keypress(function(e){
 		if(e.which == 13) {
 			datatablenew();
@@ -21,7 +28,9 @@ $(document).ready(function () {
 			return false;
 		}
 	});
-		
+	
+	$('#persona_bus').select2({ width : "100%" })
+
 	datatablenew();
 
 });

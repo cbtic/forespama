@@ -1067,7 +1067,7 @@ class OrdenCompraController extends Controller
 		$variable = [];
 		$n = 1;
 
-		array_push($variable, array("N°","Id","Tipo Documento","Empresa Compra","N° OC Cliente","Empresa Vende","Fecha","Numero OC","Almacen Origen","Almacen Destino","Situacion","Vendedor","Total","Estado","Estado Pedido"));
+		array_push($variable, array("N°","Id","Tipo Documento","Empresa Compra","N° OC Cliente"/*,"Empresa Vende"*/,"Fecha","Numero OC","Almacen Origen","Almacen Destino","Situacion","Vendedor","Total","Estado","Estado Pedido","Prioridad"));
 		
 		foreach ($data as $r) {
 
@@ -1078,7 +1078,7 @@ class OrdenCompraController extends Controller
             if($r->estado_pedido==2){$estado_pedido='ANULADO';}
             if($r->estado_pedido==3){$estado_pedido='CANCELADO';}
 
-			array_push($variable, array($n++,$r->id, $r->tipo_documento, $r->cliente, $r->numero_orden_compra_cliente, $r->empresa_vende, $r->fecha_orden_compra, $r->numero_orden_compra, $r->almacen_origen, $r->almacen_destino, $r->cerrado, $r->vendedor, (float)$r->total, $estado, $estado_pedido));
+			array_push($variable, array($n++,$r->id, $r->tipo_documento, $r->cliente, $r->numero_orden_compra_cliente/*, $r->empresa_vende*/, $r->fecha_orden_compra, $r->numero_orden_compra, $r->almacen_origen, $r->almacen_destino, $r->cerrado, $r->vendedor, (float)$r->total, $estado, $estado_pedido, $r->prioridad));
 		}
 		
 		$export = new InvoicesExport([$variable]);
@@ -2380,7 +2380,7 @@ class InvoicesExport implements FromArray, WithHeadings, WithStyles
 
     public function headings(): array
     {
-        return ["N", "Id", "Tipo Documento", "Empresa Compra", "N° OC Cliente", "Empresa Vende", "Fecha", "Numero OC", "Almacen Origen", "Almacen Destino", "Situacion", "Vendedor", "Total", "Estado", "Estado Pedido"];
+        return ["N", "Id", "Tipo Documento", "Empresa Compra", "N° OC Cliente"/*, "Empresa Vende"*/, "Fecha", "Numero OC", "Almacen Origen", "Almacen Destino", "Situacion", "Vendedor", "Total", "Estado", "Estado Pedido", "Prioridad"];
     }
 
 	public function styles(Worksheet $sheet)
@@ -2454,10 +2454,10 @@ class InvoicesExport2 implements FromArray, WithHeadings, WithStyles
 	public function styles(Worksheet $sheet)
     {
 
-		$sheet->mergeCells('A1:R1');
+		$sheet->mergeCells('A1:S1');
 
         $sheet->setCellValue('A1', "REPORTE DE COMERCIALIZACION - FORESPAMA");
-        $sheet->getStyle('A1:R1')->applyFromArray([
+        $sheet->getStyle('A1:S1')->applyFromArray([
             'font' => [
                 'bold' => true,
                 'color' => ['rgb' => 'FFFFFF'],
@@ -2474,7 +2474,7 @@ class InvoicesExport2 implements FromArray, WithHeadings, WithStyles
 		$sheet->getStyle('A1')->getAlignment()->setWrapText(true);
 		$sheet->getRowDimension(1)->setRowHeight(30);
 
-        $sheet->getStyle('A2:R2')->applyFromArray([
+        $sheet->getStyle('A2:S2')->applyFromArray([
             'font' => [
                 'bold' => true,
                 'color' => ['rgb' => '000000'],
@@ -2494,7 +2494,7 @@ class InvoicesExport2 implements FromArray, WithHeadings, WithStyles
 		->getNumberFormat()
 		->setFormatCode(\PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_NUMBER_00);*/ //SIRVE PARA PONER 2 DECIMALES A ESA COLUMNA
         
-        foreach (range('A', 'R') as $col) {
+        foreach (range('A', 'S') as $col) {
             $sheet->getColumnDimension($col)->setAutoSize(true);
         }
     }

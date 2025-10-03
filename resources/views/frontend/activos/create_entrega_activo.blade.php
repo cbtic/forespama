@@ -349,7 +349,7 @@ label.form-control-sm{
 				
 				<div class="row" style="padding:20px 20px 0px 20px;">
 
-                    <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
 						<select name="persona_bus" id="persona_bus" class="form-control form-control-sm">
 							<option value="">--Seleccionar Persona--</option>
 							<?php

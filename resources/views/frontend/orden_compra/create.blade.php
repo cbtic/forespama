@@ -556,7 +556,7 @@ label.form-control-sm{
 								<th>Empresa Compra</th>
 								<th>N° OC Cliente</th>
 								<th>N° Requerimiento</th>
-								<th>Empresa Vende</th>
+								<!--<th>Empresa Vende</th>-->
 								<th>Fecha</th>
 								<th>N&uacute;mero OC</th>
 								<th>Almacen Origen</th>
@@ -565,6 +565,7 @@ label.form-control-sm{
 								<th>Vendedor</th>
 								<th>Tiene Direcci&oacute;n</th>
 								<th style ="text-align:right">Total</th>
+								<th>Prioridad</th>
 								<!--<th>Estado</th>-->
 								<th>Acciones</th>
 							</tr>

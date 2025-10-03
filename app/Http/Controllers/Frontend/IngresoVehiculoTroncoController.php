@@ -77,7 +77,7 @@ class IngresoVehiculoTroncoController extends Controller
 		}else{
 			$conductor = new Conductores;
 			$persona = new Persona;
-		} 
+		}
 		$tipo_documento = $tablaMaestra_model->getMaestroByTipo(9);
 
 		return view('frontend.conductores.modal_conductor_ingreso',compact('id','conductor','tipo_documento','persona'));

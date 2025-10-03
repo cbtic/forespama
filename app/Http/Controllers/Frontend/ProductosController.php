@@ -423,7 +423,7 @@ class ProductosController extends Controller
 		return response()->json($producto);
 	}
 
-    public function exportar_listar_productos($tipo_origen_producto, $serie, $codigo, $denominacion, $estado_bien, $tipo_producto, $tiene_imagen, $estado) {
+    public function exportar_listar_productos($tipo_origen_producto, $serie, $codigo, $denominacion, $estado_bien, $tipo_producto, $tiene_imagen, $estado, $familia, $sub_familia) {
 
 		if($tipo_origen_producto==0)$tipo_origen_producto = "";
         if($serie=="0")$serie = "";
@@ -433,6 +433,8 @@ class ProductosController extends Controller
         if($tipo_producto==0)$tipo_producto = "";
         if($tiene_imagen==0)$tiene_imagen = "";
         if($estado==0)$estado = "";
+        if($familia==0)$familia = "";
+        if($sub_familia==0)$sub_familia = "";
 
         $producto_model = new Producto;
 		$p[]=$serie;
@@ -441,6 +443,8 @@ class ProductosController extends Controller
         $p[]=$estado_bien;
         $p[]=$tipo_origen_producto;
         $p[]=$tiene_imagen;
+        $p[]=$familia;
+        $p[]=$sub_familia;
         $p[]=$estado;
 		$p[]=1;
 		$p[]=10000;
@@ -449,7 +453,7 @@ class ProductosController extends Controller
 		$variable = [];
 		$n = 1;
 
-		array_push($variable, array("N°","Id","Bien/Servicio","Tipo Origen Producto","Serie","Denominación","Código","Unidad Producto","Contenido","Unidad Medida","Marca","Tipo Producto","Estado Bien","F. Vencimiento","Stock Minimo","Tiene Imagen","Estado"));
+		array_push($variable, array("N°","Id","Bien/Servicio","Tipo Origen Producto","Serie","Denominación","Código","Unidad Producto","Contenido","Unidad Medida","Marca","Familia","Sub Familia","Estado Bien","F. Vencimiento","Stock Minimo","Tiene Imagen","Estado"));
 		
 		foreach ($data as $r) {
 
@@ -459,7 +463,7 @@ class ProductosController extends Controller
             if($r->tiene_imagen==1){$tiene_imagen='SI';}
             if($r->tiene_imagen==0){$tiene_imagen='NO';}
 
-			array_push($variable, array($n++,$r->id, $r->bien_servicio, $r->tipo_origen_producto, $r->numero_serie, $r->denominacion, $r->codigo, $r->unidad, $r->contenido, $r->unidad_medida, $r->marca, $r->unidad_medida_producto,$r->estado_bien, $r->fecha_vencimiento, $r->stock_minimo, $tiene_imagen, $estado));
+			array_push($variable, array($n++,$r->id, $r->bien_servicio, $r->tipo_origen_producto, $r->numero_serie, $r->denominacion, $r->codigo, $r->unidad, $r->contenido, $r->unidad_medida, $r->marca, $r->familia, $r->sub_familia, $r->estado_bien, $r->fecha_vencimiento, $r->stock_minimo, $tiene_imagen, $estado));
 		}
 		
 		$export = new InvoicesExport([$variable]);
@@ -485,16 +489,16 @@ class InvoicesExport implements FromArray, WithHeadings, WithStyles
 
     public function headings(): array
     {
-        return ["N°","Id","Bien/Servicio","Tipo Origen Producto","Serie","Denominación","Código","Unidad Producto","Contenido","Unidad Medida","Marca","Tipo Producto","Estado Bien","F. Vencimiento","Stock Minimo","Tiene Imagen","Estado"];
+        return ["N°","Id","Bien/Servicio","Tipo Origen Producto","Serie","Denominación","Código","Unidad Producto","Contenido","Unidad Medida","Marca","Familia","Sub Familia","Estado Bien","F. Vencimiento","Stock Minimo","Tiene Imagen","Estado"];
     }
 
 	public function styles(Worksheet $sheet)
     {
 
-		$sheet->mergeCells('A1:Q1');
+		$sheet->mergeCells('A1:R1');
 
         $sheet->setCellValue('A1', "LISTA DE PRODUCTOS - FORESPAMA");
-        $sheet->getStyle('A1:Q1')->applyFromArray([
+        $sheet->getStyle('A1:R1')->applyFromArray([
             'font' => [
                 'bold' => true,
                 'color' => ['rgb' => 'FFFFFF'],
@@ -511,7 +515,7 @@ class InvoicesExport implements FromArray, WithHeadings, WithStyles
 		$sheet->getStyle('A1')->getAlignment()->setWrapText(true);
 		$sheet->getRowDimension(1)->setRowHeight(30);
 
-        $sheet->getStyle('A2:Q2')->applyFromArray([
+        $sheet->getStyle('A2:R2')->applyFromArray([
             'font' => [
                 'bold' => true,
                 'color' => ['rgb' => '000000'],
@@ -531,7 +535,7 @@ class InvoicesExport implements FromArray, WithHeadings, WithStyles
 		->getNumberFormat()
 		->setFormatCode(\PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_NUMBER_00);*/ //SIRVE PARA PONER 2 DECIMALES A ESA COLUMNA
         
-        foreach (range('A', 'Q') as $col) {
+        foreach (range('A', 'R') as $col) {
             $sheet->getColumnDimension($col)->setAutoSize(true);
         }
     }

@@ -1012,28 +1012,18 @@ function fn_save_orden_compra(){
         msg += "No se ha agregado ning&uacute;n producto <br>";
     }
 
-    /*if(tipo_documento==2){
+    $('#tblOrdenCompraDetalle tbody tr').each(function(index, fila){
+        var filaIndex = index + 1;
 
-        var id_descuento_usuario = $('#id_descuento_usuario').val();
-        var total_general = $('#total_general').val();
-        var descuento_general = $('#descuento_general').val();
+        var precioUnitario = parseFloat($(fila).find('.precio_unitario').val()) || 0;
+        var descripcion_precio = $(fila).find('select[name="descripcion[]"] option:selected').text();
 
-        var descuento_num = parseFloat(id_descuento_usuario.replace('%', ''));
-        var total_general_num = parseFloat(total_general);
-        var descuento_general_num = parseFloat(descuento_general);
+        if(precioUnitario == "0" || precioUnitario ==""){
 
-        descuento_num = descuento_num / 100;
-
-        var descuento_con_igv = descuento_general_num * 1.18;
-        
-        var total_sin_descuento = total_general_num+descuento_con_igv;
-        
-        var descuento_permitido = total_sin_descuento * descuento_num;
-
-        if(descuento_permitido < descuento_general_num){
-            msg +="El total de la Orden de Venta super&oacute; el m&aacute;ximo de Descuento permitido <br>";
+            msg += "El producto " + descripcion_precio + " no tiene precio, contactarse con la persona encargada de definir el precio <br>";
+                        
         }
-    }*/
+    });
 
     if(tipo_documento == 2){
 
