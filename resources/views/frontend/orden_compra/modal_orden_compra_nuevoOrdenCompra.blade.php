@@ -1012,20 +1012,20 @@ function fn_save_orden_compra(){
         msg += "No se ha agregado ning&uacute;n producto <br>";
     }
 
-    $('#tblOrdenCompraDetalle tbody tr').each(function(index, fila){
-        var filaIndex = index + 1;
-
-        var precioUnitario = parseFloat($(fila).find('.precio_unitario').val()) || 0;
-        var descripcion_precio = $(fila).find('select[name="descripcion[]"] option:selected').text();
-
-        if(precioUnitario == "0" || precioUnitario ==""){
-
-            msg += "El producto " + descripcion_precio + " no tiene precio, contactarse con la persona encargada de definir el precio <br>";
-                        
-        }
-    });
-
     if(tipo_documento == 2){
+
+        $('#tblOrdenCompraDetalle tbody tr').each(function(index, fila){
+            var filaIndex = index + 1;
+
+            var precioUnitario = parseFloat($(fila).find('.precio_unitario').val()) || 0;
+            var descripcion_precio = $(fila).find('select[name="descripcion[]"] option:selected').text();
+
+            if(precioUnitario == "0" || precioUnitario ==""){
+
+                msg += "El producto " + descripcion_precio + " no tiene precio, contactarse con la persona encargada de definir el precio <br>";
+                            
+            }
+        });
 
         var id_descuento_usuario = $('#id_descuento_usuario').val();
         var descuento_num = parseFloat(id_descuento_usuario.replace('%', '')) / 100;
