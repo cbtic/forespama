@@ -434,6 +434,8 @@ class OrdenCompra extends Model
 
         if($tipo_documento == 2){
             $id_tipo_documento_4 = " or id_tipo_documento = 4";
+        }else{
+            $id_tipo_documento_4 ="";
         }
 
         $cad = "select lpad(coalesce(max(oc.numero_orden_compra::int) + 1, 1)::varchar, 6, '0') codigo
