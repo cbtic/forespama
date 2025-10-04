@@ -24,12 +24,6 @@ use Auth;
 
 class KardexController extends Controller
 {
-    /*public function index()
-    {
-        $kardex = Kardex::latest()->paginate(10);
-        return view('frontend.kardex.index', compact('kardex'));
-    }*/
-
     public function __construct(){
 
 		$this->middleware(function ($request, $next) {
@@ -42,8 +36,6 @@ class KardexController extends Controller
 
     public function create(){
 
-		//$tablaMaestra_model = new TablaMaestra;
-		//$estado_bien = $tablaMaestra_model->getMaestroByTipo(4);
 		$id_user = Auth::user()->id;
 
         $producto_model = new Producto;
@@ -81,8 +73,6 @@ class KardexController extends Controller
 
 	public function create_consulta(){
 
-		//$tablaMaestra_model = new TablaMaestra;
-		//$estado_bien = $tablaMaestra_model->getMaestroByTipo(4);
 		$id_user = Auth::user()->id;
 
         $producto_model = new Producto;
@@ -343,7 +333,6 @@ class KardexController extends Controller
 		array_push($variable, array("N","Codigo","Producto","Saldos","Stock Comprometido","Cantidad Disponible","Almacen"));
 		
 		foreach ($data as $r) {
-
 			array_push($variable, array($n++,$r->codigo, $r->producto, $r->saldos_cantidad, $r->cantidad_orden_compra, $r->saldo_final, $r->almacen_kardex));
 		}
 		
@@ -412,10 +401,6 @@ class InvoicesExport implements FromArray, WithHeadings, WithStyles
 
 		$sheet->fromArray($this->headings(), NULL, 'A2');
 
-		/*$sheet->getStyle('L3:L'.$sheet->getHighestRow())
-		->getNumberFormat()
-		->setFormatCode(\PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_NUMBER_00);*/ //SIRVE PARA PONER 2 DECIMALES A ESA COLUMNA
-        
         foreach (range('A', 'E') as $col) {
             $sheet->getColumnDimension($col)->setAutoSize(true);
         }
@@ -478,12 +463,6 @@ class InvoicesExport2 implements FromArray, WithHeadings, WithStyles
     		],
         ]);
 
-		//$sheet->fromArray($this->headings(), NULL, 'I2');
-
-		/*$sheet->getStyle('L3:L'.$sheet->getHighestRow())
-		->getNumberFormat()
-		->setFormatCode(\PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_NUMBER_00);*/ //SIRVE PARA PONER 2 DECIMALES A ESA COLUMNA
-        
         foreach (range('A', 'I') as $col) {
             $sheet->getColumnDimension($col)->setAutoSize(true);
         }
@@ -546,12 +525,6 @@ class InvoicesExport3 implements FromArray, WithHeadings, WithStyles
     		],
         ]);
 
-		//$sheet->fromArray($this->headings(), NULL, 'I2');
-
-		/*$sheet->getStyle('L3:L'.$sheet->getHighestRow())
-		->getNumberFormat()
-		->setFormatCode(\PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_NUMBER_00);*/ //SIRVE PARA PONER 2 DECIMALES A ESA COLUMNA
-        
         foreach (range('A', 'P') as $col) {
             $sheet->getColumnDimension($col)->setAutoSize(true);
         }
@@ -613,13 +586,7 @@ class InvoicesExport4 implements FromArray, WithHeadings, WithStyles
 			'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
     		],
         ]);
-
-		//$sheet->fromArray($this->headings(), NULL, 'I2');
-
-		/*$sheet->getStyle('L3:L'.$sheet->getHighestRow())
-		->getNumberFormat()
-		->setFormatCode(\PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_NUMBER_00);*/ //SIRVE PARA PONER 2 DECIMALES A ESA COLUMNA
-        
+		
         foreach (range('A', 'G') as $col) {
             $sheet->getColumnDimension($col)->setAutoSize(true);
         }

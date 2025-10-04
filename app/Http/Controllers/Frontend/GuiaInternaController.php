@@ -34,27 +34,15 @@ class GuiaInternaController extends Controller
 
     public function create(){
 
-        /*$id_user = Auth::user()->id;
-		$tablaMaestra_model = new TablaMaestra;
-        $user_model = new User;
-		$tipo_documento = $tablaMaestra_model->getMaestroByTipo(59);
-        $cerrado_requerimiento = $tablaMaestra_model->getMaestroByTipo(52);
-        //$proveedor = Empresa::all();
-        $almacen = Almacene::all();
-        $estado_atencion = $tablaMaestra_model->getMaestroByTipo(60);
-        $responsable_atencion = $user_model->getUserAll();*/
-
         $tablaMaestra_model = new TablaMaestra;
         $empresa_vehiculo_model = new EmpresaVehiculo;
         $empresa_model = new Empresa;
         $persona_model = new Persona;
-        //$empresa_model = new Empresa;
 
         $tipo_documento = $tablaMaestra_model->getMaestroByTipo(59);
         $transporte_razon_social = $empresa_vehiculo_model->getEmpresaTransporte();
         $empresa = $empresa_model->getEmpresaAll();
         $persona = $persona_model->obtenerPersonaAll();
-        //$transporte_razon_social = $empresa_model->obtenerRazonSocialTransporteAll();
 
 		return view('frontend.guia_interna.create',compact('tipo_documento','transporte_razon_social','empresa','persona'));
 
@@ -111,7 +99,6 @@ class GuiaInternaController extends Controller
         $marca = $marca_model->getMarcaVehiculo();
         $estado_bien = $tablaMaestra_model->getMaestroByTipo(4);
         $unidad = $tablaMaestra_model->getMaestroByTipo(43);
-        //$transporte_razon_social = $empresa_model->obtenerRazonSocialTransporteAll();
         $empresas = Empresa::all();
         $motivo_traslado = $tablaMaestra_model->getMaestroByTipo(63);
         $departamento = $ubigeo_model->getDepartamento();
@@ -119,8 +106,6 @@ class GuiaInternaController extends Controller
         $punto_partida = $tablaMaestra_model->getMaestroByTipo(68);
         $unidad_peso = $tablaMaestra_model->getMaestroByTipo(43);
         $tipo_documento_cliente = $tablaMaestra_model->getMaestroByTipo(75);
-
-        //dd($guia);exit();
 
         return view('frontend.guia_interna.modal_guia_interna_nuevoGuiaInterna',compact('id','guia_interna','guia','tipo_documento_entrada','tipo_documento_salida','producto','marca','estado_bien','unidad','empresas',/*'transporte_razon_social',*/'motivo_traslado','departamento','serie_guia','id_user','punto_partida','unidad_peso','tipo_documento_cliente'));
 
@@ -155,17 +140,12 @@ class GuiaInternaController extends Controller
         $cantidad = $request->input('cantidad');
         
         $tipo_guia = $tabla_maestra_model->getMaestroDeno(95,$request->serie_guia);
-        //dd($tipo_guia);exit();
         $id_guia_interna_detalle =$request->id_guia_interna_detalle;
 
         $guia_interna->guia_numero = $numero_guia;
-        //dd($codigo);exit();
         
         $guia_interna->fecha_emision = $request->fecha_emision;
-        //$guia_interna->punto_partida = $request->punto_partida_descripcion;
-        //$guia_interna->punto_llegada = $request->punto_llegada_descripcion;
         $guia_interna->fecha_traslado = $request->fecha_inicio_traslado;
-        //$guia_interna->costo_minimo = $request->costo_minimo;
         $guia_interna->id_conductor = $request->conductor_guia;
         if($request->tipo_documento_cliente=='1'){
 
@@ -238,7 +218,6 @@ class GuiaInternaController extends Controller
         
         
         $guia->guia_tipo = $tipo_guia[0]->codigo;
-        //$guia->guia_receptor_tipodoc = "0";
         if($request->tipo_documento_cliente=='1'){
             $guia->guia_receptor_numdoc = $request->dni_destinatario;
             $guia->guia_receptor_razsocial = $request->persona_destinatario_nombre;
@@ -257,12 +236,10 @@ class GuiaInternaController extends Controller
         $guia->guia_transportista_numdoc = $request->ruc_transporte;
         $guia->guia_transportista_tipo_doc = 6;
         $guia->guia_transportista_razsoc = $request->transporte_razon_social;
-        //$guia->guia_partida_direccion = $request->punto_partida;
         $guia->guia_anulado = "N";
         $guia->guia_cod_motivo = $request->motivo_traslado;
         $guia->guia_emisor_numdoc = "20486785994";
         $guia->guia_emisor_razsocial = "FORESTAL PAMA S.A.C.";
-        //$guia->guia_peso_bruto = 100;
         $guia->id_usuario_inserta = $id_user;
         $guia->guia_conductor_tipodoc = $personas->id_tipo_documento;
         $guia->guia_conductor_numdoc = $personas->numero_documento;
@@ -271,7 +248,6 @@ class GuiaInternaController extends Controller
         if($request->orden_compra_cliente!=""){
             $observacion.="Orden Compra Cliente: ".$request->orden_compra_cliente;
         }
-        //dd($request->orden_compra);
         if(!in_array($request->destinatario, [23, 187])){
             if($request->orden_compra!=""){
                 if ($observacion != "") {
@@ -321,18 +297,11 @@ class GuiaInternaController extends Controller
         if($request->id == 0){
 
             foreach($item as $index => $value) {
-            
-                //if($id_guia_interna_detalle[$index] == 0){
-                    $guia_interna_detalle = new GuiaInternaDetalle;
-                    $guia_detalle = new GuiaDetalle;
-                    $tabla_maestra_model = new TablaMaestra;
-                    $abreviatura_unidad_medida = $tabla_maestra_model->getMaestroC(43,$unidad[$index]);
-                /*}else{
-                    $guia_interna_detalle = GuiaInternaDetalle::find($id_guia_interna_detalle[$index]);
-                    $guia_detalle = GuiaDetalle::find($id_guia_interna_detalle[$index]);
-                    $tabla_maestra_model = new TablaMaestra;
-                    $abreviatura_unidad_medida = $tabla_maestra_model->getMaestroC(43,$unidad[$index]);
-                }*/
+
+                $guia_interna_detalle = new GuiaInternaDetalle;
+                $guia_detalle = new GuiaDetalle;
+                $tabla_maestra_model = new TablaMaestra;
+                $abreviatura_unidad_medida = $tabla_maestra_model->getMaestroC(43,$unidad[$index]);
                 
                 $guia_interna_detalle->id_guia_interna = $guia_interna->id;
                 $guia_interna_detalle->id_producto = $descripcion[$index];
@@ -370,7 +339,6 @@ class GuiaInternaController extends Controller
                     }
                 }
             }
-
         }
         
         return response()->json(['id' => $guia_interna->id]);
@@ -422,8 +390,6 @@ class GuiaInternaController extends Controller
         $tiendas=$datos[0]->tiendas;
         $observacion=$datos[0]->observacion;
         
-        //$tipo_empresa = 'Vende';
-
 		$year = Carbon::now()->year;
 
 		Carbon::setLocale('es');
@@ -449,5 +415,4 @@ class GuiaInternaController extends Controller
 		//return view('frontend.certificado.certificado_pdf');
 
 	}
-
 }
