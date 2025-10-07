@@ -136,7 +136,7 @@ class EntradaProductosController extends Controller
             //    $entrada_producto = EntradaProducto::find($request->id);
             //}
 
-            $item = $request->input('item');
+            //$item = $request->input('item');
             //$cantidad = $request->input('cantidad');
             $descripcion = $request->input('descripcion');
             //$ubicacion_fisica_seccion = $request->input('ubicacion_fisica_seccion');
@@ -198,11 +198,10 @@ class EntradaProductosController extends Controller
 
             $valida_estado = true;
 
-            foreach($item as $index => $value) {
+            foreach($descripcion as $index => $value) {
                 
                 $entradaProducto_detalle = new EntradaProductoDetalle();
                 $entradaProducto_detalle->id_entrada_productos = $entrada_producto->id;
-                $entradaProducto_detalle->numero_serie = $item[$index];
                 $entradaProducto_detalle->cantidad = $cantidad_ingreso[$index];
 
                 //$entradaProducto_detalle->numero_lote = "";
@@ -218,7 +217,6 @@ class EntradaProductosController extends Controller
                 $entradaProducto_detalle->valor_venta = round($valor_venta[$index],3);
                 $entradaProducto_detalle->id_descuento = $id_descuento[$index];
                 //$entradaProducto_detalle->fecha_fabricacion = $fecha_fabricacion[$index];
-                $entradaProducto_detalle->id_estado_bien = $estado_bien[$index];
                 if($id_descuento[$index]==1){
                     $entradaProducto_detalle->descuento = $descuento[$index];
                 }else if($id_descuento[$index]==2){

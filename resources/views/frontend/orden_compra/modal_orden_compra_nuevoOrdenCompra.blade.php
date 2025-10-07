@@ -884,12 +884,12 @@ function agregarProducto(){
     var newRow = "";
     for (var i = 0; i < cantidad; i++) { 
         var n = $('#tblOrdenCompraDetalle tbody tr').length + 1;
-        var descripcion = '<input name="id_orden_compra_detalle[]" id="id_orden_compra_detalle${n}" class="form-control form-control-sm" value="${orden_compra.id}" type="hidden"><input name="id_autorizacion_detalle[]" id="id_autorizacion_detalle' + n + '" class="form-control form-control-sm" value="2" type="hidden"><select name="descripcion[]" id="descripcion' + n + '" class="form-control form-control-sm" ' +(!tieneRolVendedor ? 'onChange="verificarProductoSeleccionado(this, ' + n + ')"' : 'onChange="obtenerCodInterno(this, ' + n + ')"') + '> ' + opcionesDescripcion +' </select>';
+        var descripcion = '<input name="id_orden_compra_detalle[]" id="id_orden_compra_detalle${n}" class="form-control form-control-sm" value="${orden_compra.id}" type="hidden"><input name="id_autorizacion_detalle[]" id="id_autorizacion_detalle' + n + '" class="form-control form-control-sm" value="2" type="hidden"><select name="descripcion[]" id="descripcion' + n + '" class="form-control form-control-sm" ' +(!tieneRolVendedor ? 'onChange="verificarProductoSeleccionado(this, ' + n + ');validarMuestraExhibicion(this)"' : 'onChange="obtenerCodInterno(this, ' + n + ');validarMuestraExhibicion(this)"') + '> ' + opcionesDescripcion +' </select>';
         var descripcion_ant = '<input type="hidden" name="descripcion_ant[]" id="descripcion_ant' + n + '" class="form-control form-control-sm" />';
         var cod_interno = '<input name="cod_interno[]" id="cod_interno' + n + '" class="form-control form-control-sm" value="" type="text">';
         var marca = '<select name="marca[]" id="marca' + n + '" class="form-control form-control-sm" onchange=""> <option value="">--Seleccionar--</option><?php foreach ($marca as $row){?><option value="<?php echo htmlspecialchars($row->id); ?>"><?php echo htmlspecialchars(addslashes($row->denominiacion)); ?></option><?php }?></select>'
         var unidad = '<select name="unidad[]" id="unidad' + n + '" class="form-control form-control-sm" onChange=""> <option value="">--Seleccionar--</option> <?php foreach ($unidad as $row) {?> <option value="<?php echo $row->codigo?>"><?php echo $row->denominacion?></option> <?php } ?> </select>';
-        var cantidad_ingreso = '<input name="cantidad_ingreso[]" id="cantidad_ingreso' + n + '" class="cantidad_ingreso form-control form-control-sm" value="" type="text" oninput="calcularSubTotal(this);calcularPrecioUnitario(this)">';
+        var cantidad_ingreso = '<input name="cantidad_ingreso[]" id="cantidad_ingreso' + n + '" class="cantidad_ingreso form-control form-control-sm" value="" type="text" oninput="calcularSubTotal(this);calcularPrecioUnitario(this);validarMuestraExhibicion(this)">';
         var stock_actual = '<input name="stock_actual[]" id="stock_actual' + n + '" class="form-control form-control-sm" value="" type="text" readonly>';
         var precio_unitario = '<input name="precio_unitario[]" id="precio_unitario' + n + '" class="precio_unitario form-control form-control-sm" value="" type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, \'\').replace(/(\\..*?)\\..*/g, \'$1\').replace(/(\\d+\\.\\d{0,2}).*/, \'$1\'); calcularSubTotal(this);calcularPrecioUnitario(this)" readonly="readonly">';
         var precio_unitario_ = '<input name="precio_unitario_[]" id="precio_unitario_' + n + '" class="precio_unitario_ form-control form-control-sm" value="" type="text" oninput="calcularPrecioUnitario(this)" readonly="readonly">';
@@ -1065,8 +1065,11 @@ function fn_save_orden_compra(){
 
             if(precioUnitario == "0" || precioUnitario ==""){
 
-                msg += "El producto " + descripcion_precio + " no tiene precio, contactarse con la persona encargada de definir el precio <br>";
-                
+                var numero_orden_compra_cliente = $('#numero_orden_compra_cliente').val().toUpperCase().trim();
+
+                if(!numero_orden_compra_cliente.includes('MUESTRA') && !numero_orden_compra_cliente.includes('EXHIBICION')){
+                    msg += "El producto " + descripcion_precio + " no tiene precio, contactarse con la persona encargada de definir el precio <br>";
+                }
             }
         });
 
@@ -1415,6 +1418,32 @@ function obtenerBeneficiario(){
     } else {
         $('#tipo_documento_cliente').val(5);
         cambiarCliente();
+    }
+}
+
+function validarMuestraExhibicion(input){
+
+    const row = $(input).closest("tr");
+
+    var numero_orden_compra_cliente = $('#numero_orden_compra_cliente').val().toUpperCase().trim();
+
+    if(numero_orden_compra_cliente.includes('MUESTRA') || numero_orden_compra_cliente.includes('EXHIBICION')){
+
+        //alert("ok");
+        row.find(".precio_unitario").val(0);
+        row.find(".precio_unitario_").val(0);
+        row.find(".valor_venta_bruto").val("0");
+        row.find(".valor_venta").val("0");
+        row.find(".descuento").val("0");
+        row.find(".sub_total").val("0");
+        row.find(".igv").val("0");
+        row.find(".total").val("0");
+
+        $('#sub_total_general').val("0");
+        $('#igv_general').val("0");
+        $('#descuento_general').val("0");
+        $('#total_general').val("0");
+
     }
 }
 
