@@ -719,14 +719,15 @@ function cargarDetalle(){
                         <td><select name="marca[]" id="marca${n}" class="form-control form-control-sm">${marcaOptions}</select></td>
                         <td><input name="cod_interno[]" id="cod_interno${n}" class="form-control form-control-sm" value="${orden_compra.codigo}" type="text"></td>
                         <td><select name="unidad[]" id="unidad${n}" class="form-control form-control-sm">${unidadMedidaOptions}</select></td>
-                        <td><input name="cantidad_ingreso[]" id="cantidad_ingreso${n}" class="cantidad_ingreso form-control form-control-sm" value="${orden_compra.cantidad_requerida}" type="text" oninput="calcularCantidadPendiente(this);calcularSubTotal(this);calcularPrecioUnitario(this)"></td>
-                        <td><input name="stock_actual[]" id="stock_actual${n}" class="form-control form-control-sm" value="${stock_mostrar}" type="text" readonly="readonly"></td>
+                        <td><input name="cantidad_ingreso[]" id="cantidad_ingreso${n}" class="cantidad_ingreso form-control form-control-sm" value="${orden_compra.cantidad_requerida}" type="text" oninput="calcularCantidadPendiente(this);calcularSubTotal(this);calcularPrecioUnitario(this)" readonly="readonly"></td>
                         <td><input name="precio_unitario[]" id="precio_unitario${n}" class="precio_unitario form-control form-control-sm" value="${parseFloat(orden_compra.precio_venta || 0).toFixed(decimales)}" type="text" oninput="limitarDecimalesYCalcular(this, ${decimales})" readonly="readonly"></td>
                         <td><input name="precio_unitario_[]" id="precio_unitario_${n}" class="precio_unitario_ form-control form-control-sm" value="${parseFloat(orden_compra.precio || 0).toFixed(decimales)}" type="text" oninput="calcularPrecioUnitario(this)" readonly="readonly"></td>
                         <td><input name="valor_venta_bruto[]" id="valor_venta_bruto${n}" class="valor_venta_bruto form-control form-control-sm" value="${parseFloat(orden_compra.valor_venta_bruto || 0).toFixed(decimales)}" type="text" oninput="calcularSubTotal(this)" readonly="readonly"></td>
-                        <td><input name="valor_venta[]" id="valor_venta${n}" class="valor_venta form-control form-control-sm" value="${parseFloat(orden_compra.valor_venta || 0).toFixed(decimales)}" type="text" oninput="calcularSubTotal(this)" readonly="readonly"></td>
-
+                        
                         <td><div style="display: flex; align-items: center; gap: 5px;"> <button type="button" class="btn-custom" onclick="cambiarDescuento(this);calcularPrecioUnitario(this)" hidden><i class="${orden_compra.id_descuento == 2 ? 'fas fa-percentage' : 'fas fa-paint-brush'}"></i></button> <input name="descuento[]" id="descuento${n}" class="descuento form-control form-control-sm" placeholder="S/ Descuento" value="${parseFloat((orden_compra.descuento ?? 0) || 0).toFixed(decimales)}" type="text" oninput="aplicaDescuentoEnSoles(this);calcularPrecioUnitario(this)" style="display: ${(!orden_compra.id_descuento || orden_compra.id_descuento == 1 || orden_compra.descuento == null || orden_compra.descuento === "") ? 'block' : 'none'};"> <input name="porcentaje[]" id="porcentaje${n}" class="porcentaje form-control form-control-sm" placeholder="% Descuento" value="${parseFloat(orden_compra.id_descuento == 2 ? (orden_compra.descuento ?? 0) : 0).toFixed(decimales)}" type="text" oninput="aplicaDescuentoEnPorcentaje(this);calcularPrecioUnitario(this)" style="display: ${orden_compra.id_descuento == 2 ? 'block' : 'none'};"><input name="id_descuento[]" id="id_descuento${n}" type="hidden" value="${orden_compra.id_descuento ?? 1}"></div></td>
+                        <td><input name="porcentaje_descuento[]" id="porcentaje_descuento${n}" class="porcentaje_descuento form-control form-control-sm" value="" type="text" oninput="" readonly="readonly"></td>
+
+                        <td><input name="valor_venta[]" id="valor_venta${n}" class="valor_venta form-control form-control-sm" value="${parseFloat(orden_compra.valor_venta || 0).toFixed(decimales)}" type="text" oninput="calcularSubTotal(this)" readonly="readonly"></td>
                         <td><input name="sub_total[]" id="sub_total${n}" class="sub_total form-control form-control-sm" value="${parseFloat(orden_compra.sub_total || 0).toFixed(decimales) }" type="text" readonly="readonly"></td>
                         <td><input name="igv[]" id="igv${n}" class="igv form-control form-control-sm" value="${parseFloat(orden_compra.igv || 0).toFixed(decimales)}" type="text" readonly="readonly"></td>
                         <td><input name="total[]" id="total${n}" class="total form-control form-control-sm" value="${parseFloat(orden_compra.total || 0).toFixed(decimales)}" type="text" readonly="readonly"></td>
@@ -759,7 +760,26 @@ function cargarDetalle(){
                     language: 'es'
                 });
 
+                let descuentoMonto = 0;
+
+                if (parseInt(orden_compra.id_descuento || 1) === 2) {
+                    let pct = parseFloat(orden_compra.descuento || 0);
+                    descuentoMonto = (pct / 100) * parseFloat(orden_compra.valor_venta_bruto || 0);
+                } else {
+                    descuentoMonto = parseFloat(orden_compra.descuento || 0);
+                }
+
+                let cantidadVal = parseFloat(orden_compra.cantidad_requerida || 1);
+
+                let precioVentaUnitario = parseFloat(orden_compra.precio_venta || 0);
+                let baseBrutoConIGV = precioVentaUnitario * cantidadVal;
+
+                let porcentajeRelativoAlBruto = (baseBrutoConIGV > 0) ? (descuentoMonto / baseBrutoConIGV * 100) : 0;
+
+                $(`#porcentaje_descuento${n}`).val(porcentajeRelativoAlBruto.toFixed(decimales));
+
                 n++;
+
                 sub_total_acumulado += parseFloat(orden_compra.sub_total || 0);
                 igv_total_acumulado += parseFloat(orden_compra.igv || 0);
                 descuento_total_acumulado += parseFloat(orden_compra.descuento || 0);
@@ -893,7 +913,7 @@ function fn_save_autorizacion_orden_compra(){
         var descuentoPermitidoFila = precio_total * descuento_num;
 
         if(descuentoFila > descuentoPermitidoFila){
-            msg += "El producto " + descripcion + " supera el m&aacute;ximo de Descuento permitido";
+            msg += "El producto " + descripcion + " supera el m&aacute;ximo de Descuento permitido <br>";
             
             $('#id_autorizacion_detalle'+filaIndex).val(1);
 
@@ -1456,12 +1476,13 @@ function obtenerBeneficiario(){
                                 <th>COD. INT.</th>
                                 <th>Unidad</th>
                                 <th>Cantidad</th>
-                                <th>Stock Disponible</th>
+                                <!--<th>Stock Disponible</th>-->
                                 <th>Precio Venta</th>
                                 <th>Precio Unitario</th>
                                 <th>Valor Venta Bruto</th>
+                                <th>Valor Descuento</th>
+                                <th>Porcentaje Descuento</th>
                                 <th>Valor Venta</th>
-                                <th>Descuento</th>
                                 <th>Sub Total</th>
                                 <th>IGV</th>
                                 <th>Total</th>

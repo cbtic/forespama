@@ -295,11 +295,9 @@ $.ajax({
                 const row = `
                     <tr>
                         <td>${n}</td>
-                        <td><input name="item[]" id="item${n}" class="form-control form-control-sm" value="${orden_compra.item}" type="text"></td>
                         <td style="width: 450px !important;display:block"><select name="descripcion[]" id="descripcion${n}" class="form-control form-control-sm" onChange="verificarProductoSeleccionado(this, ${n});">${productoOptions}</select></td>
                         <td><select name="marca[]" id="marca${n}" class="form-control form-control-sm">${marcaOptions}</select></td>
                         <td><input name="cod_interno[]" id="cod_interno${n}" class="form-control form-control-sm" value="${orden_compra.codigo}" type="text"></td>
-                        <td><select name="estado_bien[]" id="estado_bien${n}" class="form-control form-control-sm" onChange="">${estadoBienOptions}</select></td>
                         <td><select name="unidad[]" id="unidad${n}" class="form-control form-control-sm">${unidadMedidaOptions}</select><input type="hidden" class="cantidad_ingresada" name="cantidad_ingresada[]" id="cantidad_ingresada${n}" value="${orden_compra.cantidad_ingresada}"></td>
                         <td><input name="cantidad_ingreso[]" id="cantidad_ingreso${n}" class="cantidad_ingreso form-control form-control-sm" value="${orden_compra.cantidad_requerida-orden_compra.cantidad_ingresada}" type="text" oninput="calcularCantidadPendiente(this);calcularDescuentoParcial(this,${orden_compra.cantidad_requerida-orden_compra.cantidad_ingresada},${parseFloat((orden_compra.descuento ?? 0) || 0).toFixed(decimales)});calcularSubTotal(this);calcularPrecioUnitario(this,${decimales})"></td>
                         <td><input name="cantidad_compra[]" id="cantidad_compra${n}" class="cantidad_compra form-control form-control-sm" value="${orden_compra.cantidad_requerida}" type="text" oninput="calcularCantidadPendiente(this)" readonly="readonly"></td>
@@ -310,7 +308,7 @@ $.ajax({
                         <td><input name="valor_venta_bruto[]" id="valor_venta_bruto${n}" class="valor_venta_bruto form-control form-control-sm" value="${parseFloat(orden_compra.valor_venta_bruto || 0).toFixed(decimales)}" type="text" oninput="calcularSubTotal(this)"></td>
                         <td><input name="valor_venta[]" id="valor_venta${n}" class="valor_venta form-control form-control-sm" value="${parseFloat(orden_compra.valor_venta || 0).toFixed(decimales)}" type="text" oninput="calcularSubTotal(this)"></td>
 
-                        <td><div style="display: flex; align-items: center; gap: 5px;"> <button type="button" class="btn-custom" onclick="cambiarDescuento(this)"><i class="${orden_compra.id_descuento == 2 ? 'fas fa-percentage' : 'fas fa-paint-brush'}"></i></button> <input name="descuento[]" id="descuento${n}" class="descuento form-control form-control-sm" placeholder="S/ Descuento" value="${parseFloat((orden_compra.descuento ?? 0) || 0).toFixed(decimales)}" type="text" oninput="aplicaDescuentoEnSoles(this);calcularPrecioUnitario(this, decimales)" style="display: ${(!orden_compra.id_descuento || orden_compra.id_descuento == 1 || orden_compra.descuento == null || orden_compra.descuento === "") ? 'block' : 'none'};"> <input name="porcentaje[]" id="porcentaje${n}" class="porcentaje form-control form-control-sm" placeholder="% Descuento" value="${parseFloat(orden_compra.id_descuento == 2 ? (orden_compra.descuento ?? 0) : 0).toFixed(decimales)}" type="text" oninput="aplicaDescuentoEnPorcentaje(this);calcularPrecioUnitario(this, decimales)" style="display: ${orden_compra.id_descuento == 2 ? 'block' : 'none'};"><input name="id_descuento[]" id="id_descuento${n}" type="hidden" value="${orden_compra.id_descuento ?? 1}"></div></td>
+                        <td><div style="display: flex; align-items: center; gap: 5px;"> <button type="button" class="btn-custom" onclick="cambiarDescuento(this)" hidden><i class="${orden_compra.id_descuento == 2 ? 'fas fa-percentage' : 'fas fa-paint-brush'}"></i></button> <input name="descuento[]" id="descuento${n}" class="descuento form-control form-control-sm" placeholder="S/ Descuento" value="${parseFloat((orden_compra.descuento ?? 0) || 0).toFixed(decimales)}" type="text" oninput="aplicaDescuentoEnSoles(this);calcularPrecioUnitario(this, decimales)" style="display: ${(!orden_compra.id_descuento || orden_compra.id_descuento == 1 || orden_compra.descuento == null || orden_compra.descuento === "") ? 'block' : 'none'};"> <input name="porcentaje[]" id="porcentaje${n}" class="porcentaje form-control form-control-sm" placeholder="% Descuento" value="${parseFloat(orden_compra.id_descuento == 2 ? (orden_compra.descuento ?? 0) : 0).toFixed(decimales)}" type="text" oninput="aplicaDescuentoEnPorcentaje(this);calcularPrecioUnitario(this, decimales)" style="display: ${orden_compra.id_descuento == 2 ? 'block' : 'none'};"><input name="id_descuento[]" id="id_descuento${n}" type="hidden" value="${orden_compra.id_descuento ?? 1}"></div></td>
                         <td><input name="sub_total[]" id="sub_total${n}" class="sub_total form-control form-control-sm" value="${parseFloat(orden_compra.sub_total) || 0}" type="text" readonly="readonly"></td>
                         <td><input name="igv[]" id="igv${n}" class="igv form-control form-control-sm" value="${parseFloat(orden_compra.igv) || 0}" type="text" readonly="readonly"></td>
                         <td><input name="total[]" id="total${n}" class="total form-control form-control-sm" value="${parseFloat(orden_compra.total) || 0}" type="text" readonly="readonly"></td>
@@ -1533,14 +1531,9 @@ function cambiarCliente(){
 							<thead>
 							<tr style="font-size:13px">
 								<th>#</th>
-								<th>Item</th>
-								<!--<th>Cnd</th>-->
 								<th>Descripci&oacute;n</th>
-								<!--<th>Ub. Fisica Secci&oacute;n</th>
-                                <th>Ub. Fisica Anaquel</th>-->
 								<th>Marca</th>
                                 <th>COD. INT.</th>
-                                <th>Estado Bien</th>
                                 <th>Unidad</th>
                                 <th>Cantidad Ingreso</th>
                                 <th>Cantidad Compra</th>

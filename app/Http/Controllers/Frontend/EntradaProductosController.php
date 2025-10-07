@@ -384,7 +384,6 @@ class EntradaProductosController extends Controller
             if($request->id == 0){
                 $salida_producto = new SalidaProducto;
                 
-                $item = $request->input('item');
                 $descripcion = $request->input('descripcion');
                 $cod_interno = $request->input('cod_interno');
                 $marca = $request->input('marca');
@@ -406,7 +405,7 @@ class EntradaProductosController extends Controller
                 $id_descuento = $request->input('id_descuento');
 
 
-                $cantidad_items = count($item);
+                $cantidad_items = count($descripcion);
                 //echo $request->id_orden_compra;
                 //$salida_producto = SalidaProducto::where('id_orden_compra',$request->id_orden_compra)->first();
                 //print_r($salida_producto);
@@ -455,11 +454,10 @@ class EntradaProductosController extends Controller
                 //dd($codigo_nota_salida);exit();
                 $valida_estado = true;
 
-                foreach($item as $index => $value) {
+                foreach($descripcion as $index => $value) {
                     
                     $salida_producto_detalle = new SalidaProductoDetalle();
                     $salida_producto_detalle->id_salida_productos = $salida_producto->id;
-                    $salida_producto_detalle->numero_serie = $item[$index];
                     $salida_producto_detalle->cantidad = $cantidad_ingreso[$index];
 
                     //$salida_producto_detalle->numero_lote = "";
@@ -481,8 +479,6 @@ class EntradaProductosController extends Controller
                     }else if($id_descuento[$index]==2){
                         $salida_producto_detalle->descuento = $porcentaje[$index];
                     }
-                    //$salida_producto_detalle->fecha_fabricacion = "2024-08-18";
-                    $salida_producto_detalle->id_estado_productos = $estado_bien[$index];
 
                     $salida_producto_detalle->sub_total = round($sub_total[$index],2);
                     $salida_producto_detalle->igv = round($igv[$index],2);
@@ -648,11 +644,10 @@ class EntradaProductosController extends Controller
 
                 $valida_estado = true;
 
-                foreach($item as $index => $value) {
+                foreach($descripcion as $index => $value) {
                     
                     $salida_producto_detalle2 = new SalidaProductoDetalle();
                     $salida_producto_detalle2->id_salida_productos = $salida_producto2->id;
-                    $salida_producto_detalle2->numero_serie = $item[$index];
                     $salida_producto_detalle2->cantidad = $cantidad_ingreso[$index];
 
                     //$salida_producto_detalle->numero_lote = "";
@@ -674,8 +669,6 @@ class EntradaProductosController extends Controller
                     }else if($id_descuento[$index]==2){
                         $salida_producto_detalle2->descuento = $porcentaje[$index];
                     }
-                    //$salida_producto_detalle->fecha_fabricacion = "2024-08-18";
-                    $salida_producto_detalle2->id_estado_productos = $estado_bien[$index];
 
                     $salida_producto_detalle2->sub_total = round($sub_total[$index],2);
                     $salida_producto_detalle2->igv = round($igv[$index],2);
@@ -1170,7 +1163,7 @@ class EntradaProductosController extends Controller
             $entrada_producto_model = new EntradaProducto;
             $entrada_producto = $entrada_producto_model->getEntradaByIdOrdenCompra($id);
 
-        }else if($id_tipo_documento==2){
+        }else if($id_tipo_documento==2 || $id_tipo_documento==4){
 
             $salida_producto_model = new SalidaProducto;
             $entrada_producto = $salida_producto_model->getSalidaByIdOrdenCompra($id);
