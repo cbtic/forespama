@@ -475,6 +475,7 @@ function cargar_detalle_documento(id_documento){
             $('#empresa_destinatario_input').val("");
             $('#nombre_destinatario_label').val("");
             $('#nombre_destinatario_input').val("");
+            $('#tipo_documento_orden').val("");
 
             $("#ruc").attr("readonly",false);
             $("#destinatario_nombre").attr("readonly",false);
@@ -490,6 +491,7 @@ function cargar_detalle_documento(id_documento){
             $('#peso').val(peso_total.toFixed(2));
             $('#punto_llegada_input').val(entrada.direccion);
             $('#tipo_documento_cliente').val(entrada.id_tipo_cliente);
+            $('#tipo_documento_orden').val(entrada.tipo_documento_orden);
 
             if(entrada.id_tipo_cliente=='1'){
                 
@@ -1367,6 +1369,7 @@ function obtenerMotivo(){
                                     <select name="numero_documento" id="numero_documento" class="form-control form-control-sm">
                                         <option value="">--Seleccionar--</option>
                                     </select>
+                                    <input type="hidden" name="tipo_documento_orden" id="tipo_documento_orden" value="<?php //echo isset($guia_interna) && $guia_interna->fecha_emision ? $guia_interna->fecha_emision : date('Y-m-d'); ?>">
                                 </div>
                             </div>
                         </div>

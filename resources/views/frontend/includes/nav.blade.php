@@ -199,12 +199,16 @@
 									<x-utils.link :href="route('frontend.devolucion.create')" class="dropdown-item" :text="__('Devolucion')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
 								@endif
 
-								@can('Ajuste Stock')
-									<x-utils.link :href="route('frontend.entrada_productos.create_ajuste_stock')" class="dropdown-item" :text="__('Ajuste de Stock')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
-								@endif
-
 								@can('Gestion Autorizacion')
 									<x-utils.link :href="route('frontend.orden_compra.create_autorizacion')" class="dropdown-item" :text="__('Gestion de Autorizacion')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+								@endif
+
+								@can('Cargar Informe Venta b2b')
+									<x-utils.link :href="route('frontend.orden_compra.create_informe_b2b')" class="dropdown-item" :text="__('Cargar Informe Venta B2B')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+								@endif
+
+								@can('Ajuste Stock')
+									<x-utils.link :href="route('frontend.entrada_productos.create_ajuste_stock')" class="dropdown-item" :text="__('Ajuste de Stock')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
 								@endif
 								
 							</div>
@@ -388,6 +392,10 @@
 
 								@can('Reporte Pedidos Tienda')
 									<x-utils.link :href="route('frontend.orden_compra.create_reporte_comercializacion_solicitado_tienda')" class="dropdown-item" :text="__('Reporte de Pedidos por Tienda')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+								@endif
+
+								@can('Reporte Comercializacion General')
+									<x-utils.link :href="route('frontend.orden_compra.create_reporte_comercializacion_general')" class="dropdown-item" :text="__('Reporte de Comercializacion General')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
 								@endif
 
 							</div>

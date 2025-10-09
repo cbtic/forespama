@@ -54,7 +54,7 @@ BEGIN
         group by id_orden_compra, id_producto
     ) cp on cp.id_orden_compra = oc.id and cp.id_producto = ocd.id_producto ';
 
-    v_where := ' WHERE 1=1 and oc.id_tipo_documento = ''2'' and oc.estado_pedido =''1'' ';
+    v_where := ' WHERE 1=1 and (oc.id_tipo_documento = ''2'' or oc.id_tipo_documento = ''4'') and oc.estado_pedido =''1'' ';
 
     IF p_empresa_compra <> '' THEN
         v_where := v_where || ' and oc.id_empresa_compra = ''' || p_empresa_compra || ''' ';

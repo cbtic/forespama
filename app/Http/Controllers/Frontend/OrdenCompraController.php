@@ -2216,6 +2216,281 @@ class OrdenCompraController extends Controller
 		
 		echo json_encode($descuento_usuario);
 	}
+
+    public function create_reporte_comercializacion_general(){
+
+        $id_user = Auth::user()->id;
+        $producto_model = new Producto;
+        $user_model = new User;
+
+		$tablaMaestra_model = new TablaMaestra;
+        $proveedor = Empresa::all();
+        $productos = $producto_model->getProductoExterno();
+        $vendedor = $user_model->getUserByRol(7,11);
+		$canal = $tablaMaestra_model->getMaestroByTipo(98);
+
+		return view('frontend.orden_compra.create_reporte_comercializacion_general',compact('proveedor','productos','vendedor','canal'));
+
+	}
+
+    public function listar_reporte_comercializacion_general_ajax(Request $request){
+
+        $id_user = Auth::user()->id;
+
+		$orden_compra_model = new OrdenCompra;
+        $p[]=$request->canal;
+        $p[]=$request->empresa_compra;
+        $p[]=$request->fecha_inicio;
+        $p[]=$request->fecha_fin;
+        $p[]=$request->vendedor;
+		$p[]=$request->NumeroPagina;
+		$p[]=$request->NumeroRegistros;
+		$data = $orden_compra_model->listar_reporte_comercializacion_general_ajax($p);
+		$iTotalDisplayRecords = isset($data[0]->totalrows)?$data[0]->totalrows:0;
+
+		$result["PageStart"] = $request->NumeroPagina;
+		$result["pageSize"] = $request->NumeroRegistros;
+		$result["SearchText"] = "";
+		$result["ShowChildren"] = true;
+		$result["iTotalRecords"] = $iTotalDisplayRecords;
+		$result["iTotalDisplayRecords"] = $iTotalDisplayRecords;
+		$result["aaData"] = $data;
+
+        echo json_encode($result);
+
+	}
+
+    public function exportar_reporte_comercializacion_general($empresa_compra, $fecha_inicio, $fecha_fin, $vendedor, $canal) {
+
+        if($empresa_compra==0)$empresa_compra = "";
+        if($fecha_inicio=="0")$fecha_inicio = "";
+        if($fecha_fin=="0")$fecha_fin = "";
+        if($vendedor==0)$vendedor = "";
+        if($canal==0)$canal = "";
+        
+        $orden_compra_model = new OrdenCompra;
+		$p[]=$canal;
+        $p[]=$empresa_compra;
+        $p[]=$fecha_inicio;
+        $p[]=$fecha_fin;
+        $p[]=$vendedor;
+        $p[]=1;
+		$p[]=10000;
+		$data = $orden_compra_model->listar_reporte_comercializacion_general_ajax($p);
+		$iTotalDisplayRecords = isset($data[0]->totalrows)?$data[0]->totalrows:0;
+		
+		$variable = [];
+		$n = 1;
+
+		array_push($variable, array("N°","Cliente","Canal","Vendedor","Monto","Fecha","Numero Orden Compra"));
+		
+		foreach ($data as $r) {
+
+			array_push($variable, array($n++,$r->cliente, $r->canal, $r->vendedor, $r->total_despacho, $r->fecha_orden_compra, $r->pedido));
+		}
+		
+		$export = new InvoicesExport6([$variable]);
+		return Excel::download($export, 'Reporte_comercializacion_general.xlsx');
+		
+    }
+
+    public function create_informe_b2b(){
+
+		return view('frontend.orden_compra.create_informe_b2b');
+
+	}
+
+    public function listar_informe_b2b_ajax(Request $request){
+
+        $id_user = Auth::user()->id;
+
+		$orden_compra_model = new OrdenCompra;
+		$p[]=$request->tipo_documento;
+        $p[]=$request->empresa_compra;
+        $p[]="";//$request->empresa_vende;
+        $p[]=$request->fecha_inicio;
+        $p[]=$request->fecha_fin;
+        $p[]=$request->numero_orden_compra;
+        $p[]=$request->numero_orden_compra_cliente;
+        $p[]=$request->situacion;
+        $p[]=$request->almacen_origen;
+        $p[]=$request->almacen_destino;
+        $p[]=$request->estado;
+        $p[]=$id_user;
+        $p[]=$request->vendedor;
+        $p[]=$request->estado_pedido;
+        $p[]=$request->prioridad;
+        $p[]=$request->canal;
+        $p[]=$request->tipo_producto;
+		$p[]=$request->NumeroPagina;
+		$p[]=$request->NumeroRegistros;
+		$data = $orden_compra_model->listar_informe_b2b_ajax($p);
+		$iTotalDisplayRecords = isset($data[0]->totalrows)?$data[0]->totalrows:0;
+
+		$result["PageStart"] = $request->NumeroPagina;
+		$result["pageSize"] = $request->NumeroRegistros;
+		$result["SearchText"] = "";
+		$result["ShowChildren"] = true;
+		$result["iTotalRecords"] = $iTotalDisplayRecords;
+		$result["iTotalDisplayRecords"] = $iTotalDisplayRecords;
+		$result["aaData"] = $data;
+
+        echo json_encode($result);
+
+	}
+
+    public function upload_informe_b2b_compra(Request $request){
+		
+		$filename = date("YmdHis") . substr((string)microtime(), 1, 6);
+		$type="";
+		
+        $path = "informe_b2b";
+        if (!is_dir($path)) {
+            mkdir($path);
+        }
+        
+        $filepath = public_path('informe_b2b/');
+		
+		$type=$this->extension($_FILES["file"]["name"]);
+		move_uploaded_file($_FILES["file"]["tmp_name"], $filepath . $filename.".".$type);
+		
+		$archivo = $filename.".".$type;
+		
+		$this->importar_informe_b2b($archivo);
+		
+	}
+
+    public function importar_informe_b2b($archivo)
+    {
+
+        $id_user = Auth::user()->id;
+
+        $filePath = public_path('informe_b2b/'.$archivo);
+
+        if (!file_exists($filePath)) {
+            return response()->json(['error' => 'Archivo no encontrado.'], 404);
+        }
+        
+        $file = fopen($filePath, 'r');
+
+        // Lee la cabecera
+        $header = fgetcsv($file, 0, '|');
+
+        if ($header === false) {
+            return response()->json(['error' => 'El archivo está vacío o tiene un formato incorrecto.'], 400);
+        }
+
+        $count = 0;
+
+        while (($line = fgets($file)) !== false) {
+
+            $line = trim($line);
+            
+            $data = str_getcsv($line, '|');
+            
+            $data = array_pad($data, count($header), null);
+
+            if (count($data) !== count($header)) {
+                continue; // Ignorar filas mal formateadas
+            }
+
+            $row = array_combine($header, $data);
+
+            $empresa = Empresa::where("ruc",str_replace("-","",$row['RUT_PROVEEDOR']))->first();
+
+            $id_empresa_vende = $empresa->id;
+            $fecha_orden_compra = Carbon::createFromFormat('d/m/Y', $row['FECHA_AUTORIZACION']);
+            $numero_orden_compra_cliente = $row['NRO_OC'];
+            $fecha_vencimiento = Carbon::createFromFormat('d/m/Y', $row['FECHA_DESDE']);
+
+            /*if($count == 0){
+
+                $InformeVentaB2BExiste = InformeVentaB2b::where("numero_orden_compra_cliente",$numero_orden_compra_cliente)->where("estado","1")->get();
+            
+                if(count($OrdenCompraExiste)>0){
+                    $array["cantidad"] = count($OrdenCompraExiste);
+                    echo json_encode($array);
+                    exit();
+                }
+                
+                $informeVentaB2B = new InformeVentaB2b;
+                $informeVentaB2B->id_unidad_origen = $id_unidad_origen;
+                $informeVentaB2B->id_empresa_vende = $id_empresa_vende;
+                $informeVentaB2B->id_empresa_compra = $id_empresa_compra;
+                $informeVentaB2B->fecha_orden_compra = $fecha_orden_compra;
+                $informeVentaB2B->numero_orden_compra = $numero_orden_compra;
+                $informeVentaB2B->numero_orden_compra_cliente = $numero_orden_compra_cliente;
+                $informeVentaB2B->id_tipo_documento = $id_tipo_documento;
+                $informeVentaB2B->estado = $estado;
+                $informeVentaB2B->igv_compra = $igv_compra;
+                $informeVentaB2B->cerrado = $cerrado;
+                $informeVentaB2B->id_almacen_destino = $id_almacen_destino;
+                $informeVentaB2B->id_almacen_salida = $id_almacen_salida;
+                $informeVentaB2B->tienda_asignada = $tienda_asignada;
+                $informeVentaB2B->id_moneda = $id_moneda;
+                $informeVentaB2B->moneda = $moneda;
+                $informeVentaB2B->id_usuario_inserta = $id_user;
+                $informeVentaB2B->id_vendedor = $id_vendedor;
+                $informeVentaB2B->id_tipo_cliente = $id_tipo_cliente;
+                $informeVentaB2B->fecha_vencimiento = $fecha_vencimiento;
+                $informeVentaB2B->id_canal = $id_canal;
+                $informeVentaB2B->save();
+                $id_informeVentaB2B = $informeVentaB2B->id;
+
+            }*/
+            
+            $equivalenciaProducto = EquivalenciaProducto::where("codigo_empresa",trim($row['SKU']))->first();
+            $id_producto = $equivalenciaProducto->id_producto;
+            $producto = Producto::find($id_producto);
+            $sku = $row['SKU'];
+            $id_local = $row['NRO_LOCAL'];
+
+            $lunes = $row['LUNES'];
+            $martes = $row['MARTES'];
+            $miercoles = $row['MIERCOLES'];
+            $jueves = $row['JUEVES'];
+            $viernes = $row['VIERNES'];
+            $sabado = $row['SABADO'];
+            $domingo = $row['DOMINGO'];
+
+            $venta_unidades = $row['VENTA_UNIDADES'];
+            $venta_soles = $row['VENTA_SOLES'];
+            $stock_contable = $row['STOCK_CONTABLE'];
+
+            $informeVentaB2B = new InformeVentaB2b;
+            $informeVentaB2B->sku = $id_orden_compra;
+            $informeVentaB2B->id_producto = $id_producto;
+            $informeVentaB2B->cantidad_requerida = $cantidad_requerida;
+            $informeVentaB2B->id_marca = $id_marca;
+            $informeVentaB2B->cerrado = $cerrado;
+            $informeVentaB2B->estado = $estado;
+            $informeVentaB2B->id_unidad_medida = $id_unidad_medida;
+            $informeVentaB2B->id_estado_producto = $id_estado_producto;
+            $informeVentaB2B->precio_venta = round($precio_venta, 2);
+            $informeVentaB2B->precio = round($valor_unitario, 2);
+            $informeVentaB2B->valor_venta_bruto = round($sub_total, 2);
+            $informeVentaB2B->valor_venta = round($sub_total, 2);
+            $informeVentaB2B->sub_total = round($sub_total, 2);
+            $informeVentaB2B->igv = round($igv, 2);
+            $informeVentaB2B->total = round($total, 2);
+            $informeVentaB2B->id_usuario_inserta = $id_user;
+            $informeVentaB2B->save();
+
+            $count++;
+        }
+
+        $ordenCompraTotales = OrdenCompra::find($id_orden_compra);
+        $ordenCompraTotales->sub_total = round($sub_total_general, 2);
+        $ordenCompraTotales->igv = round($igv_general, 2);
+        $ordenCompraTotales->total = round($total_general, 2);
+        $ordenCompraTotales->save();
+
+        fclose($file);
+
+        $array["cantidad"] = count($OrdenCompraExiste);
+        echo json_encode($array);
+
+    }
 }
 
 class InvoicesExport implements FromArray, WithHeadings, WithStyles
@@ -2538,6 +2813,70 @@ class InvoicesExport5 implements FromArray, WithHeadings, WithStyles
 		$sheet->fromArray($this->headings(), NULL, 'A2');
         
         foreach (range('A', 'O') as $col) {
+            $sheet->getColumnDimension($col)->setAutoSize(true);
+        }
+    }
+}
+
+class InvoicesExport6 implements FromArray, WithHeadings, WithStyles
+{
+	protected $invoices;
+
+	public function __construct(array $invoices)
+	{
+		$this->invoices = $invoices;
+	}
+
+	public function array(): array
+	{
+		return $this->invoices;
+	}
+
+    public function headings(): array
+    {
+        return ["N°","Cliente","Canal","Vendedor","Monto","Fecha","Numero Orden Compra"];
+    }
+
+	public function styles(Worksheet $sheet)
+    {
+
+		$sheet->mergeCells('A1:G1');
+
+        $sheet->setCellValue('A1', "REPORTE DE COMERCIALIZACION GENERAL - FORESPAMA");
+        $sheet->getStyle('A1:G1')->applyFromArray([
+            'font' => [
+                'bold' => true,
+                'color' => ['rgb' => 'FFFFFF'],
+            ],
+            'fill' => [
+                'fillType' => Fill::FILL_SOLID,
+                'startColor' => ['rgb' => '246257'],
+            ],
+            'alignment' => [
+                'horizontal' => Alignment::HORIZONTAL_CENTER,
+            ],
+        ]);
+
+		$sheet->getStyle('A1')->getAlignment()->setWrapText(true);
+		$sheet->getRowDimension(1)->setRowHeight(30);
+
+        $sheet->getStyle('A2:G2')->applyFromArray([
+            'font' => [
+                'bold' => true,
+                'color' => ['rgb' => '000000'],
+            ],
+            'fill' => [
+                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                'startColor' => ['rgb' => '2EB85C'],
+            ],
+			'alignment' => [
+			'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+    		],
+        ]);
+
+		$sheet->fromArray($this->headings(), NULL, 'A2');
+        
+        foreach (range('A', 'G') as $col) {
             $sheet->getColumnDimension($col)->setAutoSize(true);
         }
     }

@@ -1520,7 +1520,9 @@ function obtenerBeneficiario(){
                     <div style="margin-top:15px" class="form-group">
                         <div class="col-sm-12 controls">
                             <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
+                                <?php if($orden_compra->id_autorizacion == 1){?>
                                 <a href="javascript:void(0)" onClick="fn_save_autorizacion_orden_compra()" class="btn btn-sm btn-success" style="margin-right:10px">Autorizar</a>
+                                <?php }?>
                                 <a href="javascript:void(0)" onClick="$('#openOverlayOpc').modal('hide');" class="btn btn-sm btn-info" style="margin-left:10px;">Cerrar</a>
                             </div>
                         </div>

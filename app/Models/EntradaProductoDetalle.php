@@ -44,7 +44,7 @@ class EntradaProductoDetalle extends Model
         else (select e2.razon_social from empresas e2 
         where e2.id = ep.id_empresa_compra) 
         end razon_social, 
-        oc.numero_orden_compra_cliente,
+        oc.numero_orden_compra_cliente, tm5.denominacion tipo_documento_orden,
         (select COALESCE(STRING_AGG(DISTINCT t.denominacion ::TEXT, ', '), '') from tienda_detalle_orden_compras tdoc
         inner join tiendas t on tdoc.id_tienda = t.id
         where tdoc.id_orden_compra = oc.id) tiendas, p.peso
@@ -55,6 +55,7 @@ class EntradaProductoDetalle extends Model
         left join tabla_maestras tm2 on epd.id_estado_bien ::int = tm2.codigo::int and tm2.tipo = '56'
         left join tabla_maestras tm3 on epd.id_um ::int = tm3.codigo::int and tm3.tipo = '43'
         inner join orden_compras oc on ep.id_orden_compra = oc.id 
+        left join tabla_maestras tm5 on oc.id_tipo_documento = tm5.codigo::int and tm5.tipo ='54'
         where id_entrada_productos = '".$id."'
         and epd.estado='1'";
 

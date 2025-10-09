@@ -793,3 +793,10 @@ Route::post('activos/listar_entrega_activos_ajax', [ActivoController::class, 'li
 Route::post('activos/send_entrega_activo', [ActivoController::class, 'send_entrega_activo'])->name('activos.send_entrega_activo');
 Route::get('activos/modal_entrega_activos/{id}', [ActivoController::class, 'modal_entrega_activos'])->name('activos.modal_entrega_activos');
 Route::get('activos/eliminar_entrega_activo/{id}/{estado}', [ActivoController::class, 'eliminar_entrega_activo'])->name('activos.eliminar_entrega_activo');
+
+Route::get('orden_compra/create_reporte_comercializacion_general', [OrdenCompraController::class, 'create_reporte_comercializacion_general'])->name('orden_compra.create_reporte_comercializacion_general');
+Route::post('orden_compra/listar_reporte_comercializacion_general_ajax', [OrdenCompraController::class, 'listar_reporte_comercializacion_general_ajax'])->name('orden_compra.listar_reporte_comercializacion_general_ajax');
+Route::get('orden_compra/exportar_reporte_comercializacion_general/{empresa_compra}/{fecha_inicio}/{fecha_fin}/{vendedor}/{canal}', [OrdenCompraController::class, 'exportar_reporte_comercializacion_general'])->name('orden_compra.exportar_reporte_comercializacion_general');
+Route::get('orden_compra/create_informe_b2b', [OrdenCompraController::class, 'create_informe_b2b'])->name('orden_compra.create_informe_b2b');
+Route::post('orden_compra/listar_informe_b2b_ajax', [OrdenCompraController::class, 'listar_informe_b2b_ajax'])->name('orden_compra.listar_informe_b2b_ajax');
+Route::post('orden_compra/upload_informe_b2b_compra', [OrdenCompraController::class, 'upload_informe_b2b_compra'])->name('orden_compra.upload_informe_b2b_compra');

@@ -65,7 +65,7 @@ class OrdenCompraDetalle extends Model
         oc.numero_orden_compra_cliente,
         (select COALESCE(STRING_AGG(DISTINCT t.denominacion ::TEXT, ', '), '') from tienda_detalle_orden_compras tdoc
         inner join tiendas t on tdoc.id_tienda = t.id
-        where tdoc.id_orden_compra = oc.id) tiendas, ocd.valor_venta_bruto, ocd.precio_venta, ocd.valor_venta, ocd.descuento, ocd.id_descuento, p.peso, oc.id,
+        where tdoc.id_orden_compra = oc.id) tiendas, ocd.valor_venta_bruto, ocd.precio_venta, ocd.valor_venta, ocd.descuento, ocd.id_descuento, p.peso, oc.id, tm5.denominacion tipo_documento_orden,
         case when oc.id_empresa_compra = 23 then 
         (select distinct t2.direccion from tienda_detalle_orden_compras tdoc2
         inner join tiendas t2 on tdoc2.id_tienda = t2.id
@@ -100,11 +100,11 @@ class OrdenCompraDetalle extends Model
         left join marcas m on ocd.id_marca = m.id 
         left join tabla_maestras tm2 on ocd.id_estado_producto ::int = tm2.codigo::int and tm2.tipo = '56'
         left join tabla_maestras tm3 on ocd.id_unidad_medida ::int = tm3.codigo::int and tm3.tipo = '43'
+        left join tabla_maestras tm5 on oc.id_tipo_documento = tm5.codigo::int and tm5.tipo ='54'
         where oc.id ='".$id."'
         and ocd.estado='1'";
 
 		$data = DB::select($cad);
         return $data;
     }
-
 }

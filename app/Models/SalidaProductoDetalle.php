@@ -147,7 +147,7 @@ class SalidaProductoDetalle extends Model
         else (select e2.ruc from empresas e2 
         where e2.id = sp.id_empresa_compra) 
         end documento_cliente,
-        sp.id_tipo_cliente, oc.numero_orden_compra_cliente, oc.numero_orden_compra,
+        sp.id_tipo_cliente, oc.numero_orden_compra_cliente, oc.numero_orden_compra, tm5.denominacion tipo_documento_orden,
         (select COALESCE(STRING_AGG(DISTINCT t.denominacion ::TEXT, ', '), '') from tienda_detalle_orden_compras tdoc
         inner join tiendas t on tdoc.id_tienda = t.id
         where tdoc.id_orden_compra = oc.id) tiendas, spd.valor_venta_bruto, spd.precio_venta, spd.valor_venta, spd.descuento, spd.id_descuento, p.peso, sp.id_orden_compra,
@@ -176,6 +176,7 @@ class SalidaProductoDetalle extends Model
         left join tabla_maestras tm2 on spd.id_estado_productos ::int = tm2.codigo::int and tm2.tipo = '56'
         left join tabla_maestras tm3 on spd.id_um ::int = tm3.codigo::int and tm3.tipo = '43'
         inner join orden_compras oc on sp.id_orden_compra = oc.id 
+        left join tabla_maestras tm5 on oc.id_tipo_documento = tm5.codigo::int and tm5.tipo ='54'
         where id_salida_productos ='".$id."'
         and spd.estado='1'";
 

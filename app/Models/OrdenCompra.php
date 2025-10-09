@@ -70,6 +70,12 @@ class OrdenCompra extends Model
 
     }
 
+    public function listar_reporte_comercializacion_general_ajax($p){
+
+        return $this->readFuntionPostgres('sp_listar_reporte_comercializacion_general_paginado',$p);
+
+    }
+
     public function readFuntionPostgres($function, $parameters = null){
 
         $_parameters = '';
@@ -482,7 +488,7 @@ class OrdenCompra extends Model
 
     function getDetalleOrdenCompraGuia(){
 
-        $cad = "select oc.id, oc.fecha_orden_compra fecha_movimiento, tm.denominacion tipo_documento, tm2.denominacion unidad_origen, e.razon_social, oc.numero_orden_compra codigo, oc.fecha_orden_compra fecha_comprobante, oc.estado, oc.created_at, tm3.denominacion moneda, '' observacion, tm4.denominacion igv_compra, a.denominacion almacen
+        $cad = "select oc.id, tm5.denominacion tipo_documento_orden, oc.fecha_orden_compra fecha_movimiento, tm.denominacion tipo_documento, tm2.denominacion unidad_origen, e.razon_social, oc.numero_orden_compra codigo, oc.fecha_orden_compra fecha_comprobante, oc.estado, oc.created_at, tm3.denominacion moneda, '' observacion, tm4.denominacion igv_compra, a.denominacion almacen
         from orden_compras oc
         inner join tabla_maestras tm on oc.id_tipo_documento = tm.codigo ::int and tm.tipo = '54'
         inner join tabla_maestras tm2 on oc.id_unidad_origen::int = tm2.codigo::int and tm2.tipo = '50'
@@ -490,6 +496,7 @@ class OrdenCompra extends Model
         inner join empresas e on oc.id_empresa_compra = e.id
         left join tabla_maestras tm4 on oc.igv_compra ::int = tm4.codigo::int and tm4.tipo = '51'
         inner join almacenes a on oc.id_almacen_destino = a.id
+        left join tabla_maestras tm5 on oc.id_tipo_documento = tm5.codigo::int and tm5.tipo ='54'
         where oc.estado='1'
         and oc.id_tipo_documento ='1'";
 

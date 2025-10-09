@@ -253,7 +253,7 @@ class GuiaInternaController extends Controller
                 if ($observacion != "") {
                     $observacion .= " / ";
                 }
-                $observacion.="Orden Compra: ".$request->orden_compra;
+                $observacion.=$request->tipo_documento_orden.": ".$request->orden_compra;
             }
         }
         
