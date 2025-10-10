@@ -306,12 +306,6 @@ label.form-control-sm{
 
 </style>
 
-<script>
-    var almacenUsuario = @json($almacen_usuario);
-	//console.log(almacenUsuario);
-</script>
-
-
 @stack('before-scripts')
 @stack('after-scripts')
 
@@ -373,7 +367,11 @@ label.form-control-sm{
 				<div class="row" style="padding:20px 20px 0px 20px;">
 
 					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-                        <input id="fecha_bus" name="fecha_bus" on class="form-control form-control-sm"  placeholder="Fecha">
+                        <input id="fecha_desde_bus" name="fecha_desde_bus" on class="form-control form-control-sm"  placeholder="Fecha Desde">
+					</div>
+
+					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+                        <input id="fecha_hasta_bus" name="fecha_hasta_bus" on class="form-control form-control-sm"  placeholder="Fecha Hasta">
 					</div>
 
 					<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12" style="padding-right:0px">
@@ -398,8 +396,14 @@ label.form-control-sm{
                         <thead>
                         <tr style="font-size:13px">
                             <th>Id</th>
+							<th>UPC</th>
 							<th>SKU</th>
+							<th>Descipci&oacute;n</th>
+							<th>SubClase Conjunto</th>
+							<th>Desc SubClase Conjunto</th>
+							<th>N° Tienda</th>
 							<th>Local</th>
+							<th>Semana</th>
 							<th>Lunes</th>
 							<th>Martes</th>
                             <th>Miercoles</th>

@@ -24,6 +24,8 @@ use App\Models\OrdenCompraContactoEntrega;
 use App\Models\OrdenCompraPago;
 use App\Models\UsuarioDescuento;
 use App\Models\GuiaInterna;
+use App\Models\InformeB2bVenta;
+use DateTime;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Auth;
 use Carbon\Carbon;
@@ -2305,23 +2307,9 @@ class OrdenCompraController extends Controller
         $id_user = Auth::user()->id;
 
 		$orden_compra_model = new OrdenCompra;
-		$p[]=$request->tipo_documento;
-        $p[]=$request->empresa_compra;
-        $p[]="";//$request->empresa_vende;
-        $p[]=$request->fecha_inicio;
-        $p[]=$request->fecha_fin;
-        $p[]=$request->numero_orden_compra;
-        $p[]=$request->numero_orden_compra_cliente;
-        $p[]=$request->situacion;
-        $p[]=$request->almacen_origen;
-        $p[]=$request->almacen_destino;
-        $p[]=$request->estado;
-        $p[]=$id_user;
-        $p[]=$request->vendedor;
-        $p[]=$request->estado_pedido;
-        $p[]=$request->prioridad;
-        $p[]=$request->canal;
-        $p[]=$request->tipo_producto;
+		$p[]=$request->semana;
+        $p[]=$request->producto;
+        $p[]=$request->tienda;
 		$p[]=$request->NumeroPagina;
 		$p[]=$request->NumeroRegistros;
 		$data = $orden_compra_model->listar_informe_b2b_ajax($p);
@@ -2376,12 +2364,39 @@ class OrdenCompraController extends Controller
         // Lee la cabecera
         $header = fgetcsv($file, 0, '|');
 
+        //dd($header); exit();
+
         if ($header === false) {
             return response()->json(['error' => 'El archivo está vacío o tiene un formato incorrecto.'], 400);
         }
 
-        $count = 0;
+        $cleanHeader = [];
+        $semana = null;
 
+        foreach ($header as $col) {
+            $col = trim($col);
+            
+            if (preg_match('/_(\d{2}-\d{2})$/', $col, $matches)) {
+                [$nombreCampo, $fechaParte] = explode('_', $col);
+                $nombreCampo = strtoupper($nombreCampo);
+                [$dia, $mes] = explode('-', $fechaParte);
+                $anioActual = date('Y');
+                $fecha = DateTime::createFromFormat('d-m-Y', "$dia-$mes-$anioActual");
+
+                if ($fecha && !$semana) {
+                    $semana = (int)$fecha->format('W');
+                }
+            } else {
+                $nombreCampo = strtoupper($col);
+            }
+
+            $cleanHeader[] = $nombreCampo;
+        }
+
+        $header = $cleanHeader;
+
+        $count = 0;
+        
         while (($line = fgets($file)) !== false) {
 
             $line = trim($line);
@@ -2395,13 +2410,6 @@ class OrdenCompraController extends Controller
             }
 
             $row = array_combine($header, $data);
-
-            $empresa = Empresa::where("ruc",str_replace("-","",$row['RUT_PROVEEDOR']))->first();
-
-            $id_empresa_vende = $empresa->id;
-            $fecha_orden_compra = Carbon::createFromFormat('d/m/Y', $row['FECHA_AUTORIZACION']);
-            $numero_orden_compra_cliente = $row['NRO_OC'];
-            $fecha_vencimiento = Carbon::createFromFormat('d/m/Y', $row['FECHA_DESDE']);
 
             /*if($count == 0){
 
@@ -2440,10 +2448,15 @@ class OrdenCompraController extends Controller
             }*/
             
             $equivalenciaProducto = EquivalenciaProducto::where("codigo_empresa",trim($row['SKU']))->first();
+            $equivalenciaTienda = Tienda::where("numero_tienda",trim($row['NRO_LOCAL']))->first();
             $id_producto = $equivalenciaProducto->id_producto;
+            $id_tienda = $equivalenciaTienda->id;
             $producto = Producto::find($id_producto);
+            $upc = $row['UPC'];
             $sku = $row['SKU'];
-            $id_local = $row['NRO_LOCAL'];
+            $subclase_conjunto = $row['SUBCLASE-CONJUNTO'];
+            $desc_subclase_conjunto = $row['DESC_SUBCLASE-DESC_CONJUNTO'];
+            //$id_local = $row['NRO_LOCAL'];
 
             $lunes = $row['LUNES'];
             $martes = $row['MARTES'];
@@ -2457,37 +2470,40 @@ class OrdenCompraController extends Controller
             $venta_soles = $row['VENTA_SOLES'];
             $stock_contable = $row['STOCK_CONTABLE'];
 
-            $informeVentaB2B = new InformeVentaB2b;
-            $informeVentaB2B->sku = $id_orden_compra;
+            $oc_pendiente = $row['OC_PENDIENTE'];
+            $trf_por_recibir = $row['TRF_POR_RECIBIR'];
+            $trf_enviadas = $row['TRF_ENVIADAS'];
+
+            $informeVentaB2B = new InformeB2bVenta;
+            $informeVentaB2B->upc = $upc;
+            $informeVentaB2B->sku = trim($sku);
             $informeVentaB2B->id_producto = $id_producto;
-            $informeVentaB2B->cantidad_requerida = $cantidad_requerida;
-            $informeVentaB2B->id_marca = $id_marca;
-            $informeVentaB2B->cerrado = $cerrado;
-            $informeVentaB2B->estado = $estado;
-            $informeVentaB2B->id_unidad_medida = $id_unidad_medida;
-            $informeVentaB2B->id_estado_producto = $id_estado_producto;
-            $informeVentaB2B->precio_venta = round($precio_venta, 2);
-            $informeVentaB2B->precio = round($valor_unitario, 2);
-            $informeVentaB2B->valor_venta_bruto = round($sub_total, 2);
-            $informeVentaB2B->valor_venta = round($sub_total, 2);
-            $informeVentaB2B->sub_total = round($sub_total, 2);
-            $informeVentaB2B->igv = round($igv, 2);
-            $informeVentaB2B->total = round($total, 2);
+            $informeVentaB2B->subclase_conjunto = $subclase_conjunto;
+            $informeVentaB2B->desc_subclase_conjunto = $desc_subclase_conjunto;
+            $informeVentaB2B->id_tienda = $id_tienda;
+            $informeVentaB2B->semana = $semana;
+            $informeVentaB2B->lunes = $lunes;
+            $informeVentaB2B->martes = $martes;
+            $informeVentaB2B->miercoles = $miercoles;
+            $informeVentaB2B->jueves = $jueves;
+            $informeVentaB2B->viernes = $viernes;
+            $informeVentaB2B->sabado = $sabado;
+            $informeVentaB2B->domingo = $domingo;
+            $informeVentaB2B->venta_unidades = $venta_unidades;
+            $informeVentaB2B->venta_soles = $venta_soles;
+            $informeVentaB2B->stock_contable = $stock_contable;
+            $informeVentaB2B->oc_pendiente = $oc_pendiente;
+            $informeVentaB2B->trf_por_recibir = $trf_por_recibir;
+            $informeVentaB2B->trf_enviadas = $trf_enviadas;
             $informeVentaB2B->id_usuario_inserta = $id_user;
             $informeVentaB2B->save();
 
             $count++;
         }
 
-        $ordenCompraTotales = OrdenCompra::find($id_orden_compra);
-        $ordenCompraTotales->sub_total = round($sub_total_general, 2);
-        $ordenCompraTotales->igv = round($igv_general, 2);
-        $ordenCompraTotales->total = round($total_general, 2);
-        $ordenCompraTotales->save();
-
         fclose($file);
 
-        $array["cantidad"] = count($OrdenCompraExiste);
+        $array["cantidad"] = 0;//count($count);
         echo json_encode($array);
 
     }

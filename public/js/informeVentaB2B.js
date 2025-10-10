@@ -42,14 +42,29 @@ $(document).ready(function () {
 		fn_ListarBusqueda();
 	});
 
-	$('#fecha_bus').keypress(function(e){
+	$('#fecha_desde_bus').keypress(function(e){
 		if(e.which == 13) {
 			datatablenew();
 			return false;
 		}
 	});
 
-	$('#fecha_bus').datepicker({
+	$('#fecha_hasta_bus').keypress(function(e){
+		if(e.which == 13) {
+			datatablenew();
+			return false;
+		}
+	});
+
+	$('#fecha_desde_bus').datepicker({
+        autoclose: true,
+		format: 'yyyy-mm-dd',
+		changeMonth: true,
+		changeYear: true,
+        language: 'es'
+    });
+
+	$('#fecha_hasta_bus').datepicker({
         autoclose: true,
 		format: 'yyyy-mm-dd',
 		changeMonth: true,
@@ -128,9 +143,9 @@ function datatablenew(){
 
 				{
 				"mRender": function (data, type, row) {
-					var tipo_documento = "";
-					if(row.tipo_documento!= null)tipo_documento = row.tipo_documento;
-					return tipo_documento;
+					var upc = "";
+					if(row.upc!= null)upc = row.upc;
+					return upc;
 				},
 				"bSortable": true,
 				"aTargets": [1]
@@ -138,9 +153,9 @@ function datatablenew(){
 				
                 {
                 "mRender": function (data, type, row) {
-                	var cliente = "";
-					if(row.cliente!= null)cliente = row.cliente;
-					return cliente;
+                	var sku = "";
+					if(row.sku!= null)sku = row.sku;
+					return sku;
                 },
                 "bSortable": true,
                 "aTargets": [2]
@@ -148,9 +163,9 @@ function datatablenew(){
 
 				{
 				"mRender": function (data, type, row) {
-					var numero_orden_compra_cliente = "";
-					if(row.numero_orden_compra_cliente!= null)numero_orden_compra_cliente = row.numero_orden_compra_cliente;
-					return numero_orden_compra_cliente;
+					var descripcion_empresa = "";
+					if(row.descripcion_empresa!= null)descripcion_empresa = row.descripcion_empresa;
+					return descripcion_empresa;
 				},
 				"bSortable": true,
 				"aTargets": [3]
@@ -158,9 +173,9 @@ function datatablenew(){
 				
 				{
                 "mRender": function (data, type, row) {
-                	var empresa_vende = "";
-					if(row.empresa_vende!= null)empresa_vende = row.empresa_vende;
-					return empresa_vende;
+                	var subclase_conjunto = "";
+					if(row.subclase_conjunto!= null)subclase_conjunto = row.subclase_conjunto;
+					return subclase_conjunto;
                 },
                 "bSortable": true,
                 "aTargets": [4]
@@ -168,48 +183,129 @@ function datatablenew(){
 
 				{
 				"mRender": function (data, type, row) {
-					var fecha_orden_compra = "";
-					if(row.fecha_orden_compra!= null)fecha_orden_compra = row.fecha_orden_compra;
-					return fecha_orden_compra;
+					var desc_subclase_conjunto = "";
+					if(row.desc_subclase_conjunto!= null)desc_subclase_conjunto = row.desc_subclase_conjunto;
+					return desc_subclase_conjunto;
 				},
 				"bSortable": true,
 				"aTargets": [5]
 				},
 				{
 				"mRender": function (data, type, row) {
-					var numero_orden_compra = "";
-					if(row.numero_orden_compra!= null)numero_orden_compra = row.numero_orden_compra;
-					return numero_orden_compra;
+					var numero_tienda = "";
+					if(row.numero_tienda!= null)numero_tienda = row.numero_tienda;
+					return numero_tienda;
 				},
 				"bSortable": true,
 				"aTargets": [6]
 				},
 				{
 				"mRender": function (data, type, row) {
-					var almacen_origen = "";
-					if(row.almacen_origen!= null)almacen_origen = row.almacen_origen;
-					return almacen_origen;
+					var tienda = "";
+					if(row.tienda!= null)tienda = row.tienda;
+					return tienda;
 				},
 				"bSortable": true,
 				"aTargets": [7]
 				},
 				{
 				"mRender": function (data, type, row) {
-					var almacen_destino = "";
-					if(row.almacen_destino!= null)almacen_destino = row.almacen_destino;
-					return almacen_destino;
+					var semana = "";
+					if(row.semana!= null)semana = row.semana;
+					return semana;
 				},
 				"bSortable": true,
 				"aTargets": [8]
 				},
 				{
 				"mRender": function (data, type, row) {
-					var cerrado = "";
-					if(row.cerrado!= null)cerrado = row.cerrado;
-					return cerrado;
+					var lunes = "";
+					if(row.lunes!= null)lunes = row.lunes;
+					return lunes;
 				},
 				"bSortable": true,
 				"aTargets": [9]
+				},
+				{
+				"mRender": function (data, type, row) {
+					var martes = "";
+					if(row.martes!= null)martes = row.martes;
+					return martes;
+				},
+				"bSortable": true,
+				"aTargets": [10]
+				},
+				{
+				"mRender": function (data, type, row) {
+					var miercoles = "";
+					if(row.miercoles!= null)miercoles = row.miercoles;
+					return miercoles;
+				},
+				"bSortable": true,
+				"aTargets": [11]
+				},
+				{
+				"mRender": function (data, type, row) {
+					var jueves = "";
+					if(row.jueves!= null)jueves = row.jueves;
+					return jueves;
+				},
+				"bSortable": true,
+				"aTargets": [12]
+				},
+				{
+				"mRender": function (data, type, row) {
+					var viernes = "";
+					if(row.viernes!= null)viernes = row.viernes;
+					return viernes;
+				},
+				"bSortable": true,
+				"aTargets": [13]
+				},
+				{
+				"mRender": function (data, type, row) {
+					var sabado = "";
+					if(row.sabado!= null)sabado = row.sabado;
+					return sabado;
+				},
+				"bSortable": true,
+				"aTargets": [14]
+				},
+				{
+				"mRender": function (data, type, row) {
+					var domingo = "";
+					if(row.domingo!= null)domingo = row.domingo;
+					return domingo;
+				},
+				"bSortable": true,
+				"aTargets": [15]
+				},
+				{
+				"mRender": function (data, type, row) {
+					var venta_unidades = "";
+					if(row.venta_unidades!= null)venta_unidades = row.venta_unidades;
+					return venta_unidades;
+				},
+				"bSortable": true,
+				"aTargets": [16]
+				},
+				{
+				"mRender": function (data, type, row) {
+					var venta_soles = "";
+					if(row.venta_soles!= null)venta_soles = row.venta_soles;
+					return venta_soles;
+				},
+				"bSortable": true,
+				"aTargets": [17]
+				},
+				{
+				"mRender": function (data, type, row) {
+					var stock_contable = "";
+					if(row.stock_contable!= null)stock_contable = row.stock_contable;
+					return stock_contable;
+				},
+				"bSortable": true,
+				"aTargets": [18]
 				},
             ]
     });

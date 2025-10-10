@@ -88,6 +88,7 @@ class Almacene extends Model
         inner join users u on au.id_user = u.id 
         where u.id = '".$id."'
         and au.estado='1'
+        and a.estado='1'
         order by 1 asc";
 
 		$data = DB::select($cad);
