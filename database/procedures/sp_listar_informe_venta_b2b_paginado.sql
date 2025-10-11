@@ -43,7 +43,7 @@ begin
 	If v_count::Integer > p_limit::Integer then
 		v_scad:='SELECT '||v_campos||v_col_count||v_tabla||v_where||' Order By ibbv.semana desc, ibbv.id asc LIMIT '||p_limit||' OFFSET '||p_pagina||';'; 
 	else
-		v_scad:='SELECT '||v_campos||v_col_count||v_tabla||v_where||' Order By ibbv.semana desc, ibbv.id asc desc;'; 
+		v_scad:='SELECT '||v_campos||v_col_count||v_tabla||v_where||' Order By ibbv.semana desc, ibbv.id asc;'; 
 	End If;
 
 	--Raise Notice '%',v_scad;

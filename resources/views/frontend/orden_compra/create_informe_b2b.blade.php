@@ -367,11 +367,31 @@ label.form-control-sm{
 				<div class="row" style="padding:20px 20px 0px 20px;">
 
 					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-                        <input id="fecha_desde_bus" name="fecha_desde_bus" on class="form-control form-control-sm"  placeholder="Fecha Desde">
+                        <input id="semana_bus" name="semana_bus" on class="form-control form-control-sm"  placeholder="Semana">
 					</div>
 
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-                        <input id="fecha_hasta_bus" name="fecha_hasta_bus" on class="form-control form-control-sm"  placeholder="Fecha Hasta">
+					<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+						<select name="producto_bus" id="producto_bus" class="form-control form-control-sm">
+							<option value="">--Seleccionar Producto--</option>
+							<?php
+							foreach ($equivalencia_producto as $row){?>
+								<option value="<?php echo $row->id_producto ?>"><?php echo $row->codigo_empresa . ' ' . $row->descripcion_empresa ?></option>
+								<?php 
+							}
+							?>
+						</select>
+					</div>
+
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+						<select name="tienda_bus" id="tienda_bus" class="form-control form-control-sm">
+							<option value="">--Seleccionar Tienda--</option>
+							<?php
+							foreach ($tienda as $row){?>
+								<option value="<?php echo $row->id ?>"><?php echo $row->denominacion ?></option>
+								<?php 
+							}
+							?>
+						</select>
 					</div>
 
 					<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12" style="padding-right:0px">

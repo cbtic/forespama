@@ -31,4 +31,13 @@ class EquivalenciaProducto extends Model
         return $data;
 
     }
+
+    function getEquivalenciaProductoAll(){
+
+        $cad = "select * from equivalencia_productos ep 
+        where ep.estado ='1' ";
+
+		$data = DB::select($cad);
+        return $data;
+    }
 }

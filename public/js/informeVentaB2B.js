@@ -42,35 +42,10 @@ $(document).ready(function () {
 		fn_ListarBusqueda();
 	});
 
-	$('#fecha_desde_bus').keypress(function(e){
-		if(e.which == 13) {
-			datatablenew();
-			return false;
-		}
-	});
+	$('#producto_bus').select2({ width : '100%' })
 
-	$('#fecha_hasta_bus').keypress(function(e){
-		if(e.which == 13) {
-			datatablenew();
-			return false;
-		}
-	});
-
-	$('#fecha_desde_bus').datepicker({
-        autoclose: true,
-		format: 'yyyy-mm-dd',
-		changeMonth: true,
-		changeYear: true,
-        language: 'es'
-    });
-
-	$('#fecha_hasta_bus').datepicker({
-        autoclose: true,
-		format: 'yyyy-mm-dd',
-		changeMonth: true,
-		changeYear: true,
-        language: 'es'
-    });
+	
+	$('#tienda_bus').select2({ width : '100%' })
 	
 	datatablenew();
 
@@ -107,7 +82,9 @@ function datatablenew(){
             var iNroPagina 	= parseFloat(fn_util_obtieneNroPagina(aoData[3].value, aoData[4].value)).toFixed();
             var iCantMostrar 	= aoData[4].value;
 			
-			var fecha = $('#fecha_bus').val();
+			var semana = $('#semana_bus').val();
+			var producto = $('#producto_bus').val();
+			var tienda = $('#tienda_bus').val();
 			
 			var _token = $('#_token').val();
             oSettings.jqXHR = $.ajax({
@@ -116,7 +93,7 @@ function datatablenew(){
                 "type": "POST",
                 "url": sSource,
                 "data":{NumeroPagina:iNroPagina,NumeroRegistros:iCantMostrar,
-						fecha:fecha,
+						semana:semana,producto:producto,tienda:tienda,
 						_token:_token
                        },
                 "success": function (result) {

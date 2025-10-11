@@ -2298,7 +2298,13 @@ class OrdenCompraController extends Controller
 
     public function create_informe_b2b(){
 
-		return view('frontend.orden_compra.create_informe_b2b');
+        $equivalencia_producto_model = new EquivalenciaProducto;
+        $tienda_model = new Tienda;
+
+        $equivalencia_producto = $equivalencia_producto_model->getEquivalenciaProductoAll();
+        $tienda = $tienda_model->getTiendasAll();
+
+		return view('frontend.orden_compra.create_informe_b2b',compact('equivalencia_producto','tienda'));
 
 	}
 
