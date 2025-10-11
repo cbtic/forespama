@@ -93,6 +93,13 @@ $(document).ready(function () {
 
 function datatablenew(){
     
+	$('[data-toggle="tooltip"]').tooltip('hide');
+    $('.tooltip').remove();
+
+    if ($.fn.DataTable.isDataTable('#tblOrdenCompra')) {
+        $('#tblOrdenCompra').empty();
+    }
+
     var oTable1 = $('#tblOrdenCompra').dataTable({
         "bServerSide": true,
         "sAjaxSource": "/orden_compra/listar_orden_compra_ajax",
@@ -113,6 +120,8 @@ function datatablenew(){
         ],
 		"dom": '<"top">rt<"bottom"flpi><"clear">',
         "fnDrawCallback": function(settings) {
+
+			$('[data-toggle="tooltip"]').tooltip({ trigger: 'hover' });
 
 			let totalImporte = 0;
 
@@ -183,10 +192,6 @@ function datatablenew(){
 				$(nRow).addClass("row_autorizacion");
 				$(nRow).attr("data-toggle", "tooltip").attr("data-placement", "top").attr("title", "REQUIERE AUTORIZACIÓN DE DESCUENTO");
 			}
-
-			$('[data-toggle="tooltip"]').tooltip({
-				trigger: 'hover'
-			});
 		},
 
         "aoColumnDefs":
@@ -410,6 +415,7 @@ function datatablenew(){
 
             ]
     });
+
 }
 
 fn_util_LineaDatatable("#tblOrdenCompra");
