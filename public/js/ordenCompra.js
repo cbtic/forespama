@@ -177,11 +177,16 @@ function datatablenew(){
 		"fnRowCallback": function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
 
 			$(nRow).removeClass("row_autorizacion row_autorizacion_selected row_selected");
+			$(nRow).removeAttr("data-original-title");
 
 			if (aData.id_autorizacion == 1) {
 				$(nRow).addClass("row_autorizacion");
 				$(nRow).attr("data-toggle", "tooltip").attr("data-placement", "top").attr("title", "REQUIERE AUTORIZACIÓN DE DESCUENTO");
 			}
+
+			$('[data-toggle="tooltip"]').tooltip({
+				trigger: 'hover'
+			});
 		},
 
         "aoColumnDefs":

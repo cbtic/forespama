@@ -104,7 +104,7 @@ class Requerimiento extends Model
         inner join orden_compra_detalles ocd on ocd.id_orden_compra = oc.id 
         where oc.id_requerimiento = r.id and ocd.id_producto = rd.id_producto and oc.estado ='1') cantidad_atendida,
         (select COALESCE(STRING_AGG(DISTINCT oc.numero_orden_compra ::TEXT, ', '), '') from orden_compras oc 
-        inner join orden_compra_detalles ocd on oc.id = ocd.id_orden_compra  
+        inner join orden_compra_detalles ocd on oc.id = ocd.id_orden_compra and ocd.estado = '1'
         where rd.id_producto = ocd.id_producto and oc.id_requerimiento = r.id and oc.estado ='1') orden_compra
         from requerimiento_detalles rd 
         inner join productos p on rd.id_producto = p.id
