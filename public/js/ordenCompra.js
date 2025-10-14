@@ -129,7 +129,7 @@ function datatablenew(){
 				let importe = row._aData.total;
 				if (importe) {
 					totalImporte += parseFloat(importe);
-				}			
+				}
 			});
 
 			$('#tblOrdenCompra tfoot tr').html('<td colspan="13"><b>Total</b></td><td><b>' + totalImporte.toFixed(2) + '</b></td><td colspan="2"></td>');

@@ -26,6 +26,8 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
+use Google\Cloud\Vision\V1\ImageAnnotatorClient;
+use GuzzleHttp\Client;
 
 class ProductosController extends Controller
 {
@@ -469,6 +471,42 @@ class ProductosController extends Controller
 		$export = new InvoicesExport([$variable]);
 		return Excel::download($export, 'Lista_productos.xlsx');
 		
+    }
+
+    public function create_chopeo_producto(){
+
+		$tablaMaestra_model = new TablaMaestra;
+        $familia_model = new Familia;
+
+		$estado_bien = $tablaMaestra_model->getMaestroByTipo(56);
+		$tipo_origen_producto = $tablaMaestra_model->getMaestroByTipo(58);
+		$tipo_producto = $tablaMaestra_model->getMaestroByTipo(44);
+        $familia = $familia_model->getFamiliaAll();
+		
+		return view('frontend.productos.create_chopeo_producto',compact('estado_bien','tipo_origen_producto','tipo_producto','familia'));
+
+	}
+
+    public function testVision()
+    {
+        $imagePath = public_path('prueba.jpeg');
+        $keyFile = storage_path('app/google-key.json');
+
+        $visionClient = new ImageAnnotatorClient([
+            'credentials' => $keyFile,
+        ]);
+
+        $image = file_get_contents($imagePath);
+        $response = $visionClient->textDetection($image);
+        $texts = $response->getTextAnnotations();
+
+        if (count($texts) > 0) {
+            $texto = $texts[0]->getDescription();
+            preg_match('/\b\d{7}\b/', $texto, $match);
+            return $match[0] ?? 'No se encontró número de 7 dígitos';
+        } else {
+            return 'No se detectó texto en la imagen.';
+        }
     }
 
 }

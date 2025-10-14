@@ -14,6 +14,7 @@
         "barryvdh/laravel-dompdf": "^2.2",
         "darkghosthunter/laraguard": "^3.0",
         "fruitcake/laravel-cors": "^2.0",
+        "google/cloud-vision": "^1.9",
         "grafite/forms": "^6.26",
         "guzzlehttp/guzzle": "^7.0.1",
         "harvesthq/chosen": "^1.8",
