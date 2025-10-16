@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "bamboo-drive-475120-n5",
+  "private_key_id": "e7caca6d31ffddda7c6bbc6c09f0ad3a56b20486",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQC22sMSqPzQ+7Tq\nTWo7VgiDF1awA/3rZ5NqZdt5GtZOiciErIqssNFfEVrRL/Nzjmymcv3F+mteoMXi\nyY2vA1Cm+sjM3QOQ8WRQz9d8piZILoXlRhharo8ss3R0iubxpcaK27sDJZP8Xmwf\nzF85jtdj6EyHApUro2Bropozgcf1W9bv32EdqzlV7+pGZ5fuXhIvNlOMWNtUzUbA\nZt5XTg8QRXe8NUQWBsC+WTMpyQxqda5L3+5MGzmqciBZou/UAJADvCDESb1qONRJ\nw4vuDUfAn8qGf8RRgVOg8pGvOpdTemSB0akoJTzMVdkfXFPpFk5fndEdMYgYMQSb\nK2Fvo239AgMBAAECggEAUCCb8/zeUHvEYxoKb7b7Iuriv134cqQgKrM40iBrAd6J\n4m2zlQokrXqu59UR4zTpsqTYRN3AGCbuoDs/XY5f1NQ3kuJU0jqdgXYakRJD20Sb\nwwUM3gv5TJbU9M77da/1yVqRYEciyqfbzLFjlxbblvmwM0dz87vzoCcQWHrKE19t\ni2pShXVBOO7cE6orsX4jx+CvP9L0Dn4ORdg4b9dwWiqSo0hcvz+RB9+bVdHpVOWp\nM9pgvCGJheWe57iAVM0SDFT718ahz5kaCd9gpSriH8+zFYG17uCZJe+fF/e5HRGj\nbiovVV6vz693AIWiqPuMr/jVUJJZbu7F2NefX1t+JwKBgQDrdgJq0nSNlq839YWn\nFwUB0MSm9El7t+Mk3Qgqwgip0nTkJaaiAfBZOTif6A2Q5ZR+y64Ll99EREuLi4cy\nilM8UTb9zMPIynM+SOswXaWzA7cgZx+HdtVlmuJXVRWCXVT/99+uGgLMv78Aw9gq\n5LVdQzPUC9Nhs/ZAOkXwiYMcDwKBgQDGzgSc1W3McmPZabzFK2REPEyATv+Hm0qM\nrh34GdM3oadMCAZhb9C/OyJo4BEucwd4hUZzG7BibHcPRekSNJZOvfF2vCaptBDJ\n5aT8R9x90WiOaCA3kmC65qOD/adUaf3c89Sc91vY8VT1kbQ0p0cduvuJIJQIAnwF\nN/+iGuK5MwKBgQCKEUe3lbKMd8hE2u5FHSVtfBpj/6i7KAfETOuGDwL/eY3bXgyI\nwPRLjVcbxPl3dneNpidnWuWrZRSbPfTH+P53xvOk/RXsvnG3GxD16mPIRaxzDqUZ\nTOAy1RBVv2l+aPX3pkR+FXiA0QrSCwTNmhCTIF3awBhyGRGTddgfBLNhlwKBgEIi\nwzIRZmd/HmxzWpMVLlPs415D6YoJRTGrstiYbsWxB2CpwsWjVwRm/bl54P1c0v1r\nCNa+PV1gy/LOxQyDZgVn9u4TBaGq/3LK7KnolhddFLVbOmyCS5+hnoAIYCQa5pMc\nonxdZba0Ahl3kUV66JOhYpBpwBUyDmQGDwq0evw1AoGAVziG8M0nDF4tgRTtVY0U\nSw03739a8RpVX28B6bHRIaGjNJaBLkQVWc1k6w1W3lhyBlXaS62A/L/PYIqDKjm+\n2xfkRGVc9pQMm58C9uXMVl9cw+akmOf24IAPtNTU6PuWS1AZxYWhSs4Fc61sjKSi\nirxt7VQpKI7ZallrHjlttBE=\n-----END PRIVATE KEY-----\n",
+  "client_email": "lector-imagenes@bamboo-drive-475120-n5.iam.gserviceaccount.com",
+  "client_id": "100224186376933586649",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/lector-imagenes%40bamboo-drive-475120-n5.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
