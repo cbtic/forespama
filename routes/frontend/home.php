@@ -216,6 +216,12 @@ Route::put('secciones/{secciones}', 'App\Http\Controllers\SeccionesController@up
 Route::delete('secciones/{secciones}', 'App\Http\Controllers\SeccionesController@destroy')->name('secciones.destroy');
 Route::get('secciones/{secciones}/edit', 'App\Http\Controllers\SeccionesController@edit')->name('secciones.edit');
 
+Route::get('productos/create_chopeo_producto', [ProductosController::class, 'create_chopeo_producto'])->name('productos.create_chopeo_producto');
+Route::post('productos/listar_chopeo_ajax', [ProductosController::class, 'listar_chopeo_ajax'])->name('productos.listar_chopeo_ajax');
+Route::get('productos/modal_chopeo/{id}', [ProductosController::class, 'modal_chopeo'])->name('productos.modal_chopeo');
+Route::post('productos/send_chopeo', [ProductosController::class, 'send_chopeo'])->name('productos.send_chopeo');
+Route::get('test-vision', [App\Http\Controllers\Frontend\ProductosController::class, 'testVision']);
+
 Route::get('productos', 'App\Http\Controllers\ProductosController@index')->name('productos.index');
 Route::post('productos', 'App\Http\Controllers\ProductosController@store')->name('productos.store');
 Route::get('productos/create', 'App\Http\Controllers\ProductosController@create')->name('productos.create');
@@ -224,7 +230,6 @@ Route::get('productos/{productos}', 'App\Http\Controllers\ProductosController@sh
 Route::put('productos/{productos}', 'App\Http\Controllers\ProductosController@update')->name('productos.update');
 Route::delete('productos/{productos}', 'App\Http\Controllers\ProductosController@destroy')->name('productos.destroy');
 Route::get('productos/{productos}/edit', 'App\Http\Controllers\ProductosController@edit')->name('productos.edit');
-
 
 Route::get('ingreso/create', [IngresoController::class, 'create'])->name('ingreso.create');
 Route::get('ingreso/obtener_valorizacion/{tipo_documento}/{id_persona}', [IngresoController::class, 'obtener_valorizacion'])->name('ingreso.obtener_valorizacion')->where('tipo_documento', '(.*)');
@@ -800,3 +805,5 @@ Route::get('orden_compra/exportar_reporte_comercializacion_general/{empresa_comp
 Route::get('orden_compra/create_informe_b2b', [OrdenCompraController::class, 'create_informe_b2b'])->name('orden_compra.create_informe_b2b');
 Route::post('orden_compra/listar_informe_b2b_ajax', [OrdenCompraController::class, 'listar_informe_b2b_ajax'])->name('orden_compra.listar_informe_b2b_ajax');
 Route::post('orden_compra/upload_informe_b2b_compra', [OrdenCompraController::class, 'upload_informe_b2b_compra'])->name('orden_compra.upload_informe_b2b_compra');
+
+
