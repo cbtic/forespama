@@ -508,7 +508,6 @@ class ProductosController extends Controller
             return 'No se detectó texto en la imagen.';
         }
     }
-
 }
 
 class InvoicesExport implements FromArray, WithHeadings, WithStyles
