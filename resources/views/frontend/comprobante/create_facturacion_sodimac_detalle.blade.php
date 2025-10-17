@@ -387,8 +387,14 @@ label.form-control-sm{
                                             </tr>
                                         </thead>
                                         <tbody style="font-size:13px">
-
                                         </tbody>
+                                        <tfoot>
+                                            <tr style="font-size:13px">
+                                                <td colspan="5"><b>Total:</b></td>
+                                                <td></td>
+                                                <td></td>
+                                            </tr>
+                                        </tfoot>
                                     </table>
                                 </div>
                             </div>

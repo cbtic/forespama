@@ -34,11 +34,38 @@ function datatablenew(){
                         {},
         ],
 		"dom": '<"top">rt<"bottom"flpi><"clear">',
-        "fnDrawCallback": function(json) {
+        "fnDrawCallback": function(settings) {
+
+            let totalImporteInicial = 0;
+            let totalImporteRetencion = 0;
+            let totalImporteTotal = 0;
+
+			settings.aoData.forEach(function(row) {
+				let importe_inicial = row._aData.importe_inicial;
+				let importe_retencion = row._aData.importe_retencion;
+				let importe_total = row._aData.importe_total;
+                
+				if (importe_inicial) {
+					totalImporteInicial += parseFloat(Math.abs(importe_inicial));
+				}
+                if (importe_retencion) {
+					totalImporteRetencion += parseFloat(importe_retencion);
+				}
+                if (importe_total) {
+					totalImporteTotal += parseFloat(Math.abs(importe_total));
+				}
+			});
+
+			$('#tblFacturacionSodimacDetalle tfoot tr').html(`
+                <td colspan="5"><b>Total</b></td>
+                <td class="text-right"><b>${totalImporteInicial.toFixed(2)}</b></td>
+                <td class="text-right"><b>${totalImporteRetencion.toFixed(2)}</b></td>
+                <td class="text-right"><b>${totalImporteTotal.toFixed(2)}</b></td>
+            `);
+
             $('[data-toggle="tooltip"]').tooltip();
         },
         
-
         "fnServerData": function (sSource, aoData, fnCallback, oSettings) {
 
             var sEcho           = aoData[0].value;
