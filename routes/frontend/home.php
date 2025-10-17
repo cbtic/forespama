@@ -86,6 +86,8 @@ Route::get('ingreso_vehiculo_tronco/modal_pago/{id}/{id_ingreso_vehiculo_tronco}
 Route::post('ingreso_vehiculo_tronco/send_pago', [IngresoVehiculoTroncoController::class, 'send_pago'])->name('ingreso_vehiculo_tronco.send_pago');
 Route::get('comprobante/create_consulta_sodimac', [ComprobanteController::class, 'create_consulta_sodimac'])->name('comprobante.create_consulta_sodimac');
 Route::get('comprobante/create_facturacion', [ComprobanteController::class, 'create_facturacion'])->name('comprobante.create_facturacion');
+Route::get('comprobante/create_facturacion_sodimac_detalle', [ComprobanteController::class, 'create_facturacion_sodimac_detalle'])->name('comprobante.create_facturacion_sodimac_detalle');
+Route::post('comprobante/listar_factura_sodimac_detalle_ajax', [ComprobanteController::class, 'listar_factura_sodimac_detalle_ajax'])->name('comprobante.listar_factura_sodimac_detalle_ajax');
 Route::get('comprobante/create_pagos', [ComprobanteController::class, 'create_pagos'])->name('comprobante.create_pagos');
 Route::get('comprobante/create_ventas', [ComprobanteController::class, 'create_ventas'])->name('comprobante.create_ventas');
 Route::get('comprobante/create_facturacion_orden_compra', [ComprobanteController::class, 'create_facturacion_orden_compra'])->name('comprobante.create_facturacion_orden_compra');
