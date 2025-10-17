@@ -18,7 +18,18 @@ begin
 
 	p_pagina=(p_pagina::Integer-1)*p_limit::Integer;
 
-	v_campos=' fecha_ingreso,dia_semana,ruc,razon_social,sum(cantidad)cantidad,sum(volumen_total_m3)volumen_total_m3,sum(volumen_total_pies)volumen_total_pies,sum(precio_total)precio_total,
+	v_campos=' fecha_ingreso,dia_semana,case when id_tipo_cliente = 1 then 
+	(select p.nombres ||'' ''|| p.apellido_paterno ||'' ''|| p.apellido_materno from personas p
+	where p.id = R.id_persona)
+	else (select e2.razon_social from empresas e2 
+	where e2.id = R.id_empresa_transportista) 
+	end razon_social,
+	case when id_tipo_cliente = 1 then 
+	(select p.numero_documento from personas p
+	where p.id = R.id_persona)
+	else (select e2.ruc from empresas e2 
+	where e2.id = R.id_empresa_transportista) 
+	end ruc,sum(cantidad)cantidad,sum(volumen_total_m3)volumen_total_m3,sum(volumen_total_pies)volumen_total_pies,sum(precio_total)precio_total,
 	case when sum(promedio) > 0 then (sum(promedio)/sum((case when promedio > 0 then 1 else 0 end))) else 0 end promedio, tipo_pago, tipo_empresa ';
 
 	v_tabla=' from (
@@ -39,7 +50,7 @@ begin
 	from empresa_cubicajes ec
 	where ec.id_empresa = ivt.id_empresa_proveedor 
 	and ec.estado = ''1''
-	and (ec.id_tipo_empresa = 1 OR (ec.id_tipo_empresa = 2 AND ec.id_conductor = ivt.id_conductores))) tipo_empresa
+	and (ec.id_tipo_empresa = 1 OR (ec.id_tipo_empresa = 2 AND ec.id_conductor = ivt.id_conductores))) tipo_empresa, ivt.id_tipo_cliente, ivt.id_persona, ivt.id_empresa_transportista
 	from ingreso_vehiculo_troncos ivt
 	inner join vehiculos v on ivt.id_vehiculos=v.id
 	inner join ingreso_vehiculo_tronco_tipo_maderas ivttm on ivt.id=ivttm.id_ingreso_vehiculo_troncos and ivttm.estado =''1''
@@ -64,8 +75,7 @@ begin
 	End If;
 
 	v_tabla:=v_tabla||' )R
-	inner join empresas e on R.id_empresa=e.id
-	group by e.id,fecha_ingreso,dia_semana, tipo_pago, tipo_empresa  ';
+	group by R.id_tipo_cliente, R.id_persona, R.id_empresa_transportista, fecha_ingreso,dia_semana, tipo_pago, tipo_empresa  ';
 
 	v_where = ' ';
 	

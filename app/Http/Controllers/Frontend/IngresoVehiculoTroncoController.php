@@ -944,7 +944,14 @@ class IngresoVehiculoTroncoController extends Controller
 
 		$ingreso_vehiculo = IngresoVehiculoTronco::find($idIngreso);
 		$vehiculo = Vehiculo::find($ingreso_vehiculo->id_vehiculos);
-		$empresa = Empresa::find($ingreso_vehiculo->id_empresa_proveedor);
+
+		if($ingreso_vehiculo->id_tipo_cliente == 1){
+			$persona = Persona::find($ingreso_vehiculo->id_persona);
+			$ruc = $persona->numero_documento;
+		}else{
+			$empresa = Empresa::find($ingreso_vehiculo->id_empresa_proveedor);
+			$ruc = $empresa->ruc;
+		}
 
 		$ingreso_vehiculo_tronco_tipo_madera = IngresoVehiculoTroncoTipoMadera::where("id_ingreso_vehiculo_troncos",$idIngreso)->where("estado",1)->first();
 		$id_ingreso_vehiculo_tronco_tipo_madera = $ingreso_vehiculo_tronco_tipo_madera->id;
@@ -953,7 +960,7 @@ class IngresoVehiculoTroncoController extends Controller
 		$errores = [];
 		if($fecha != $ingreso_vehiculo->fecha_ingreso) $errores[] = "La fecha no coincide.\n";
 		if($placa != $vehiculo->placa) $errores[] = "La Placa no coincide.\n";
-		if($ruc != $empresa->ruc) $errores[] = "El RUC no coincide.\n";
+		if($ruc != $ruc) $errores[] = "El RUC no coincide.\n";
 		if($cantidad != $ingreso_vehiculo_tronco_tipo_madera->cantidad) $errores[] = "La Cantidad no coincide.\n";
 
 		if (!empty($errores)) {
@@ -1005,15 +1012,27 @@ class IngresoVehiculoTroncoController extends Controller
 		$ingresoVehiculoTroncoTipoMadera->save();
 
 		$ingresoVehiculoTronco = IngresoVehiculoTronco::find($ingresoVehiculoTroncoTipoMadera->id_ingreso_vehiculo_troncos);
-		$empresa = Empresa::find($ingresoVehiculoTronco->id_empresa_transportista);
+		//$empresa = Empresa::find($ingresoVehiculoTronco->id_empresa_transportista);
+
+		if($ingresoVehiculoTronco->id_tipo_cliente == 1){
+			$persona = Persona::find($ingresoVehiculoTronco->id_persona);
+			$cliente_nombre = $persona->nombres .' '. $persona->apellido_paterno .' '.$persona->apellido_materno;
+			$cliente_direccion = $persona->direccion;
+			$cliente_numero_documento = $persona->numero_documento;
+		}else{
+			$empresa = Empresa::find($ingresoVehiculoTronco->id_empresa_transportista);
+			$cliente_nombre = $empresa->razon_social;
+			$cliente_direccion = $empresa->direccion;
+			$cliente_numero_documento = $empresa->ruc;
+		}
 
 		$pago = new Pago;
 		$pago->id_modulo = 1;
 		$pago->pk_registro = $ingresoVehiculoTronco->id;
 		$pago->fecha = Carbon::now()->format('Y-m-d');
-		$pago->comprobante_destinatario = $empresa->razon_social;
-		$pago->comprobante_direccion = $empresa->direccion;
-		$pago->comprobante_ruc = $empresa->ruc;
+		$pago->comprobante_destinatario = $cliente_nombre;
+		$pago->comprobante_direccion = $cliente_direccion;
+		$pago->comprobante_ruc = $cliente_numero_documento;
 		$pago->subtotal = round($precio_total_final,2);
 		$pago->impuesto = 0;
 		$pago->total = round($precio_total_final,2);

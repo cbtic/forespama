@@ -427,6 +427,10 @@
 									<x-utils.link :href="route('frontend.comprobante.create_ventas')" class="dropdown-item" :text="__('Reporte Ventas')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
 								@endif
 
+								@can('Consulta de Facturacion Detalle')
+									<x-utils.link :href="route('frontend.comprobante.create_facturacion_sodimac_detalle')" class="dropdown-item" :text="__('Consulta de Facturacion Detalle')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+								@endif
+
 							</div>
 						</li>
 

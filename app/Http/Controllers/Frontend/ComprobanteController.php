@@ -4480,6 +4480,40 @@ class ComprobanteController extends Controller
 
     }
 
+    public function create_facturacion_sodimac_detalle(){
+        
+        $tabla_model = new TablaMaestra;
+
+        $tipo_documento_cobro = $tabla_model->getMaestroByTipo('78');
+
+        return view('frontend.comprobante.create_facturacion_sodimac_detalle',compact('tipo_documento_cobro'));
+    }
+
+    public function listar_factura_sodimac_detalle_ajax(Request $request){
+
+		$factura_model = new Comprobante();
+		$p[]=$request->numero_documento;
+		$p[]=$request->tipo_documento_cobro;
+		$p[]=$request->NumeroPagina;
+		$p[]=$request->NumeroRegistros;
+		
+		$data = $factura_model->listar_factura_sodimac_detalle_ajax($p);
+		
+		$iTotalDisplayRecords = isset($data[0]->totalrows)?$data[0]->totalrows:0;
+		//print_r($afiliacion);exit();
+
+		$result["PageStart"] = $request->NumeroPagina;
+		$result["pageSize"] = $request->NumeroRegistros;
+		$result["SearchText"] = "";
+		$result["ShowChildren"] = true;
+		$result["iTotalRecords"] = $iTotalDisplayRecords;
+		$result["iTotalDisplayRecords"] = $iTotalDisplayRecords;
+		$result["aaData"] = $data;
+
+		echo json_encode($result);
+
+	}
+
     public function create_ventas(){
         
         $empresa_model = new Empresa;
