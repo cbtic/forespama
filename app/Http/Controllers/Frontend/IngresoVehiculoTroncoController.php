@@ -40,8 +40,9 @@ class IngresoVehiculoTroncoController extends Controller
 		$tablaMaestra_model = new TablaMaestra;
 		$tipo_madera = $tablaMaestra_model->getMaestroByTipo(42);
 		$tipo_documento = $tablaMaestra_model->getMaestroByTipo(9);
+		$tipo_documento_cliente = $tablaMaestra_model->getMaestroByTipo(75);
 		
-		return view('frontend.ingreso.create',compact('tipo_madera','tipo_documento'));
+		return view('frontend.ingreso.create',compact('tipo_madera','tipo_documento','tipo_documento_cliente'));
 
 	}
 	
@@ -116,8 +117,14 @@ class IngresoVehiculoTroncoController extends Controller
 		$ingresoVehiculoTronco = new IngresoVehiculoTronco;
 		$ingresoVehiculoTronco->fecha_ingreso = $request->fecha_ingreso;
 		$ingresoVehiculoTronco->fecha_salida = $request->fecha_ingreso;
-		$ingresoVehiculoTronco->id_empresa_transportista = $request->id_empresa_transportista;
-		$ingresoVehiculoTronco->id_empresa_proveedor = $request->id_empresa_transportista;//0;
+		if($request->tipo_documento_empresa == 1){
+			$ingresoVehiculoTronco->id_tipo_cliente = $request->tipo_documento_empresa;
+			$ingresoVehiculoTronco->id_persona = $request->id_empresa_persona;
+		}else{
+			$ingresoVehiculoTronco->id_tipo_cliente = $request->tipo_documento_empresa;
+			$ingresoVehiculoTronco->id_empresa_transportista = $request->id_empresa_transportista;
+			$ingresoVehiculoTronco->id_empresa_proveedor = $request->id_empresa_transportista;//0;
+		}
 		$ingresoVehiculoTronco->id_vehiculos = $request->id_vehiculos;
 		$ingresoVehiculoTronco->id_conductores = $request->id_conductores;
 		$ingresoVehiculoTronco->id_encargados = 1;
@@ -188,14 +195,28 @@ class IngresoVehiculoTroncoController extends Controller
 			$ingresoVehiculoTroncoCubicaje->save();
 		}
 		
-		$empresasConductoresVehiculoExiste = EmpresasConductoresVehiculo::where("id_empresas",$request->id_empresa_transportista)->where("id_vehiculos",$request->id_vehiculos)->where("id_conductores",$request->id_conductores)->where("estado",1)->get();
-		if(count($empresasConductoresVehiculoExiste)==0){
-			$empresasConductoresVehiculo = new EmpresasConductoresVehiculo;
-			$empresasConductoresVehiculo->id_empresas = $request->id_empresa_transportista;
-			$empresasConductoresVehiculo->id_vehiculos = $request->id_vehiculos;
-			$empresasConductoresVehiculo->id_conductores = $request->id_conductores;
-			$empresasConductoresVehiculo->estado = "1";
-			$empresasConductoresVehiculo->save();
+		if($request->tipo_documento_empresa == 1){
+			$personasConductoresVehiculoExiste = EmpresasConductoresVehiculo::where("id_persona",$request->id_empresa_persona)->where("id_vehiculos",$request->id_vehiculos)->where("id_conductores",$request->id_conductores)->where("estado",1)->get();
+			if(count($personasConductoresVehiculoExiste)==0){
+				$empresasConductoresVehiculo = new EmpresasConductoresVehiculo;
+				$empresasConductoresVehiculo->id_tipo_cliente = $request->tipo_documento_empresa;
+				$empresasConductoresVehiculo->id_persona = $request->id_empresa_persona;
+				$empresasConductoresVehiculo->id_vehiculos = $request->id_vehiculos;
+				$empresasConductoresVehiculo->id_conductores = $request->id_conductores;
+				$empresasConductoresVehiculo->estado = "1";
+				$empresasConductoresVehiculo->save();
+			}
+		}else{
+			$empresasConductoresVehiculoExiste = EmpresasConductoresVehiculo::where("id_empresas",$request->id_empresa_transportista)->where("id_vehiculos",$request->id_vehiculos)->where("id_conductores",$request->id_conductores)->where("estado",1)->get();
+			if(count($empresasConductoresVehiculoExiste)==0){
+				$empresasConductoresVehiculo = new EmpresasConductoresVehiculo;
+				$empresasConductoresVehiculo->id_tipo_cliente = $request->tipo_documento_empresa;
+				$empresasConductoresVehiculo->id_empresas = $request->id_empresa_transportista;
+				$empresasConductoresVehiculo->id_vehiculos = $request->id_vehiculos;
+				$empresasConductoresVehiculo->id_conductores = $request->id_conductores;
+				$empresasConductoresVehiculo->estado = "1";
+				$empresasConductoresVehiculo->save();
+			}
 		}
     }
 
@@ -469,15 +490,26 @@ class IngresoVehiculoTroncoController extends Controller
 		$id_ingreso_vehiculo_troncos = $ingresoVehiculoTroncoTipoMadera->id_ingreso_vehiculo_troncos;
 		$ingresoVehiculoTronco = IngresoVehiculoTronco::find($id_ingreso_vehiculo_troncos);
 		
-		$empresa = Empresa::find($ingresoVehiculoTronco->id_empresa_transportista);
+		if($ingresoVehiculoTronco->id_tipo_cliente == 1){
+			$persona = Persona::find($ingresoVehiculoTronco->id_persona);
+			$cliente_nombre = $persona->nombres .' '. $persona->apellido_paterno .' '.$persona->apellido_materno;
+			$cliente_direccion = $persona->direccion;
+			$cliente_numero_documento = $persona->numero_documento;
+		}else{
+			$empresa = Empresa::find($ingresoVehiculoTronco->id_empresa_transportista);
+			$cliente_nombre = $empresa->razon_social;
+			$cliente_direccion = $empresa->direccion;
+			$cliente_numero_documento = $empresa->ruc;
+		}
+		
 		
 		$pago = new Pago;
 		$pago->id_modulo = 1;
 		$pago->pk_registro = $id_ingreso_vehiculo_troncos;
 		$pago->fecha = Carbon::now()->format('Y-m-d');
-		$pago->comprobante_destinatario = $empresa->razon_social;
-		$pago->comprobante_direccion = $empresa->direccion;
-		$pago->comprobante_ruc = $empresa->ruc;
+		$pago->comprobante_destinatario = $cliente_nombre;
+		$pago->comprobante_direccion = $cliente_direccion;
+		$pago->comprobante_ruc = $cliente_numero_documento;
 		$pago->subtotal = $precio_total_final;
 		$pago->impuesto = 0;
 		$pago->total = $precio_total_final;

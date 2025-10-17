@@ -345,6 +345,7 @@ label.form-control-sm{
                         <!--<input type="hidden" name="estado" id="estado" value="0">-->
 						
 						<input type="hidden" name="id_empresa_transportista" id="id_empresa_transportista" value="0">
+						<input type="hidden" name="id_empresa_persona" id="id_empresa_persona" value="0">
 						<input type="hidden" name="id_vehiculos" id="id_vehiculos" value="0">
 						<input type="hidden" name="id_conductores" id="id_conductores" value="0">
 						
@@ -409,12 +410,25 @@ label.form-control-sm{
 												<div class="row" style="padding-top:8px">
 
 													<div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
+														<label class="form-control-sm">Tipo Documento Empresa</label>
+														<select name="tipo_documento_empresa" id="tipo_documento_empresa" class="form-control form-control-sm" onchange="cambiarCliente()">
+															<option value="">--Seleccionar--</option>
+															<?php
+															foreach ($tipo_documento_cliente as $row){?>
+																<option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
+																<?php 
+															}
+															?>
+														</select>
+													</div>
+
+													<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12" id="input_ruc_empresa">
 														<label class="form-control-sm">Ruc Empresa</label>
 														<input type="text" name="ruc" id="ruc"
 															value="" class="form-control form-control-sm" onblur="obtenerEmpresaBuscar()">
 													</div>
 
-													<div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
+													<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12" id="input_razon_social_empresa">
 														<label class="form-control-sm">Raz&oacute;n Social</label>
 													
 														<div class="row">
@@ -426,6 +440,30 @@ label.form-control-sm{
 															<div class="col-lg-4 col-md-12 col-sm-12 col-xs-12">
 																<button id="btnEmpresa" type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#vehiculoModal">
 																	<i class="fas fa-plus-circle"></i> Empresa
+																</button>
+															</div>
+														</div>
+														
+													</div>
+
+													<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12" id="input_dni_empresa">
+														<label class="form-control-sm">DNI</label>
+														<input type="text" name="dni" id="dni"
+															value="" class="form-control form-control-sm" onblur="obtenerPersonaEmpresaBuscar()">
+													</div>
+
+													<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12" id="input_nombres_empresa">
+														<label class="form-control-sm">Nombres</label>
+													
+														<div class="row">
+															<div class="col-lg-8 col-md-12 col-sm-12 col-xs-12">
+																<input type="text" name="nombres" id="nombres"
+															value="" readonly="readonly" class="form-control form-control-sm" >
+															</div>
+															
+															<div class="col-lg-4 col-md-12 col-sm-12 col-xs-12">
+																<button id="btnPersona" type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#vehiculoModal">
+																	<i class="fas fa-plus-circle"></i> Persona
 																</button>
 															</div>
 														</div>
