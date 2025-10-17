@@ -12,6 +12,9 @@ use App\Models\Kardex;
 use App\Models\ProductoImagene;
 use App\Models\Familia;
 use App\Models\SubFamilia;
+use App\Models\Tienda;
+use App\Models\Chopeo;
+use App\Models\ChopeoDetalle;
 use RealRashid\SweetAlert\Facades\Alert;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -476,16 +479,55 @@ class ProductosController extends Controller
     public function create_chopeo_producto(){
 
 		$tablaMaestra_model = new TablaMaestra;
-        $familia_model = new Familia;
+        $tienda_model = new Tienda;
+        $producto_model = new Producto;
 
-		$estado_bien = $tablaMaestra_model->getMaestroByTipo(56);
-		$tipo_origen_producto = $tablaMaestra_model->getMaestroByTipo(58);
-		$tipo_producto = $tablaMaestra_model->getMaestroByTipo(44);
-        $familia = $familia_model->getFamiliaAll();
+		$competencia = $tablaMaestra_model->getMaestroByTipo(101);
+        $tienda = $tienda_model->getTiendasAll();
+        $producto = $producto_model->getProductoRetail();
+
 		
-		return view('frontend.productos.create_chopeo_producto',compact('estado_bien','tipo_origen_producto','tipo_producto','familia'));
+		return view('frontend.productos.create_chopeo_producto',compact('competencia','tienda','producto'));
 
 	}
+
+    public function listar_chopeo_producto_ajax(Request $request){
+
+		$producto_model = new Producto;
+		$p[]=$request->tienda;
+		$p[]=$request->producto;
+		$p[]=$request->NumeroPagina;
+		$p[]=$request->NumeroRegistros;
+		$data = $producto_model->listar_chopeo_producto_ajax($p);
+		$iTotalDisplayRecords = isset($data[0]->totalrows)?$data[0]->totalrows:0;
+
+		$result["PageStart"] = $request->NumeroPagina;
+		$result["pageSize"] = $request->NumeroRegistros;
+		$result["SearchText"] = "";
+		$result["ShowChildren"] = true;
+		$result["iTotalRecords"] = $iTotalDisplayRecords;
+		$result["iTotalDisplayRecords"] = $iTotalDisplayRecords;
+		$result["aaData"] = $data;
+
+        echo json_encode($result);
+
+	}
+
+    public function modal_chopeo_producto($id){
+		
+        $tablaMaestra_model = new TablaMaestra;
+        $tienda_model = new Tienda;
+        $producto_model = new Producto;
+		
+		$chopeo = new Chopeo;
+
+        $competencia = $tablaMaestra_model->getMaestroByTipo(101);
+        $tienda = $tienda_model->getTiendasAll();
+        $producto = $producto_model->getProductoRetail();
+        
+		return view('frontend.productos.modal_chopeo_productos_nuevoChopeoProducto',compact('id','chopeo','producto','competencia','tienda','producto'));
+
+    }
 
     public function testVision()
     {
