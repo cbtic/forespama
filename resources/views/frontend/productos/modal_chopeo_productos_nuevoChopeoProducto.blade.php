@@ -218,6 +218,7 @@ function fn_save_chopeo_producto(){
             contentType: false, 
             processData: false,
             success: function (result) {
+                console.log(response);
                 if (result.success) {
                     $('.loader').hide();
                     bootbox.alert(result.success, function() {
