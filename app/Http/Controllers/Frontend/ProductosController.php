@@ -558,7 +558,7 @@ class ProductosController extends Controller
 
             $imagePath = public_path($rutaFinal);
             
-            $keyFile = storage_path('app/google-key.json');
+            /*$keyFile = storage_path('app/google-key.json');
 
             //dd($rutaFinal);exit();
 
@@ -592,11 +592,11 @@ class ProductosController extends Controller
 
             if (!$equivalencia_producto) {
                 return response()->json(['error' => 'No se encontró el producto con el código detectado.']);
-            }
+            }*/
 
             $chopeo = new Chopeo();
             $chopeo->id_tienda = $request->tienda;
-            $chopeo->id_competencia = 1;
+            $chopeo->id_competencia = $request->competencia;
             $chopeo->fecha_chopeo = $request->fecha_chopeo;
             $chopeo->id_usuario_responsable = $id_user;
             $chopeo->ruta_imagen = $rutaFinal;

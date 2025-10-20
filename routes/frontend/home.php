@@ -48,6 +48,7 @@ use App\Http\Controllers\Frontend\OrdenProduccionController;
 use App\Http\Controllers\Frontend\FamiliaController;
 use App\Http\Controllers\Frontend\SubFamiliaController;
 use App\Http\Controllers\Frontend\UsuarioDescuentoController;
+use App\Http\Controllers\Frontend\ReusoController;
 
 //use App\Http\Controllers\VehiculoController;
 
@@ -808,4 +809,7 @@ Route::get('orden_compra/create_informe_b2b', [OrdenCompraController::class, 'cr
 Route::post('orden_compra/listar_informe_b2b_ajax', [OrdenCompraController::class, 'listar_informe_b2b_ajax'])->name('orden_compra.listar_informe_b2b_ajax');
 Route::post('orden_compra/upload_informe_b2b_compra', [OrdenCompraController::class, 'upload_informe_b2b_compra'])->name('orden_compra.upload_informe_b2b_compra');
 
-
+Route::get('reuso/create', [ReusoController::class, 'create'])->name('reuso.create');
+Route::post('reuso/listar_reuso_ajax', [ReusoController::class, 'listar_reuso_ajax'])->name('reuso.listar_reuso_ajax');
+Route::get('reuso/modal_reuso/{id}', [ReusoController::class, 'modal_reuso'])->name('reuso.modal_reuso');
+Route::post('reuso/send_reuso', [ReusoController::class, 'send_reuso'])->name('reuso.send_reuso');

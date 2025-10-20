@@ -237,6 +237,10 @@ function fn_save_chopeo_producto(){
 
 <body class="hold-transition skin-blue sidebar-mini">
 
+    <div class="panel-heading close-heading">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    </div>
+
     <div>
 		<!--
         <section class="content-header">
@@ -264,44 +268,63 @@ function fn_save_chopeo_producto(){
                             <input type="hidden" name="id" id="id" value="<?php echo $id?>">
                             <div class="row" style="padding-left:10px">
                             
-                            <div class="col-lg-4">
-                                <div class="form-group">
-                                    <label class="control-label form-control-sm">Tienda</label>
-                                    <select name="tienda" id="tienda" class="form-control form-control-sm" onchange="">
-                                        <option value="">--Seleccionar--</option>
-                                        <?php
-                                        foreach ($tienda as $row){?>
-                                            <option value="<?php echo $row->id ?>"><?php echo $row->denominacion ?></option>
-                                        <?php 
-                                        }
-                                        ?>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="col-lg-3">
-                                <div class="form-group">
-                                    <label class="control-label form-control-sm">Fecha</label>
-                                    <input id="fecha_chopeo" name="fecha_chopeo" on class="form-control form-control-sm"  value="<?php echo date('Y-m-d'); ?>" type="text">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row" style="padding-left:10px">
-                            <div class="form-group">
-                                <label class="control-label form-control-sm">Cargar Precio</label>
-                                <input type="file" class="form-control-file btn btn-sm btn-success" style="background-color: #F6F6F6 !important; border: none !important; padding: 0 !important; box-shadow: none !important; color:black" id="btnPrecioDimfer" name="btnPrecioDimfer">
-                                <?php if (!empty($producto->ruta_ficha_tecnica)) : ?>
-                                    <div class="mt-2">
-                                        <i class="fa fa-file-pdf-o"></i>
-                                        <a href="<?php echo asset($producto->ruta_ficha_tecnica); ?>" target="_blank">Descargar Precio Dimfer</a>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label class="control-label form-control-sm">Competencia</label>
+                                        <select name="competencia" id="competencia" class="form-control form-control-sm" onchange="">
+                                            <option value="">--Seleccionar--</option>
+                                            <?php
+                                            foreach ($competencia as $row){?>
+                                                <option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
+                                            <?php 
+                                            }
+                                            ?>
+                                        </select>
                                     </div>
-                                <?php endif; ?>
+                                </div>
+
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label class="control-label form-control-sm">Tienda</label>
+                                        <select name="tienda" id="tienda" class="form-control form-control-sm" onchange="">
+                                            <option value="">--Seleccionar--</option>
+                                            <?php
+                                            foreach ($tienda as $row){?>
+                                                <option value="<?php echo $row->id ?>"><?php echo $row->denominacion ?></option>
+                                            <?php 
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <label class="control-label form-control-sm">Fecha</label>
+                                        <input id="fecha_chopeo" name="fecha_chopeo" on class="form-control form-control-sm"  value="<?php echo date('Y-m-d'); ?>" type="text">
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        <div style="margin-top:15px" class="form-group">
-                            <div class="col-sm-12 controls">
-                                <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
-                                    <a href="javascript:void(0)" onClick="fn_save_chopeo_producto()" class="btn btn-sm btn-success">Registrar</a>
+                            <div class="row" style="padding-left:10px">
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label class="control-label form-control-sm">Cargar Precio</label>
+                                        <input type="file" class="form-control-file btn btn-sm btn-success" style="background-color: #F6F6F6 !important; border: none !important; padding: 0 !important; box-shadow: none !important; color:black" id="btnPrecioDimfer" name="btnPrecioDimfer">
+                                        <?php if (!empty($producto->ruta_ficha_tecnica)) : ?>
+                                            <div class="mt-2">
+                                                <i class="fa fa-file-pdf-o"></i>
+                                                <a href="<?php echo asset($producto->ruta_ficha_tecnica); ?>" target="_blank">Descargar Precio Dimfer</a>
+                                            </div>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="margin-top:15px" class="form-group">
+                                <div class="col-sm-12 controls">
+                                    <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
+                                        <a href="javascript:void(0)" onClick="fn_save_chopeo_producto()" class="btn btn-sm btn-success">Guardar</a>
+                                        <a href="javascript:void(0)" onClick="$('#openOverlayOpc').modal('hide');" class="btn btn-sm btn-info" style="margin-left:10px">Cerrar</a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
