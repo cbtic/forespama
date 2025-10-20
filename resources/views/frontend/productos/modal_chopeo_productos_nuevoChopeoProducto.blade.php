@@ -184,25 +184,17 @@ $('#openOverlayOpc').on('shown.bs.modal', function() {
 	 
 });
 
-function fn_save_producto(){
+function fn_save_chopeo_producto(){
 
     var msg = "";
 
-    var tipo_origen_producto = $('#tipo_origen_producto').val();
-    var bien_servicio = $('#bien_servicio').val();
-    var denominacion = $('#denominacion').val();
-    //var codigo = $('#codigo').val();
-    var peso = $('#peso').val();
-    var familia = $('#familia').val();
-    var sub_familia = $('#sub_familia').val();
+    var tienda = $('#tienda').val();
+    var fecha_chopeo = $('#fecha_chopeo').val();
+    var btnPrecioDimfer = $('#btnPrecioDimfer').val();
 	
-    if(tipo_origen_producto==""){msg+="Ingrese el Tipo de Origen del Producto <br>";}
-    if(bien_servicio==""){msg+="Ingrese el Bien o Servicio del Producto <br>";}
-    if(denominacion==""){msg+="Ingrese la Denominacion del Producto <br>";}
-    //if(codigo==""){msg+="Ingrese el Codigo del Producto <br>";}
-    if(peso==""){msg+="Ingrese el Peso del Producto <br>";}
-    //if(familia==""){msg+="Ingrese la Familia <br>";}
-    //if(sub_familia==""){msg+="Ingrese la Sub Familia <br>";}
+    if(tienda==""){msg+="Ingrese la Tienda <br>";}
+    if(fecha_chopeo==""){msg+="Ingrese la Fecha <br>";}
+    if(btnPrecioDimfer==""){msg+="Ingrese la Imagen del Producto <br>";}
 
     if(msg!=""){
 
@@ -216,23 +208,19 @@ function fn_save_producto(){
         var heightBrowser = $(window).width()/2;
         $('.loader').css("opacity","0.8").css("height",heightBrowser).html("<div id='Grd1_wrapper' class='dataTables_wrapper'><div id='Grd1_processing' class='dataTables_processing panel-default'>"+msgLoader+"</div></div>");
         $('.loader').show();
-        let form = document.getElementById('frmProducto');
-	    let formData = new FormData(form);
+        let form = document.getElementById('frmChopeoProducto');
+        let formData = new FormData(form);
 
         $.ajax({
-            url: "/productos/send_producto",
+            url: "/productos/send_chopeo_producto",
             type: "POST",
-            data : formData,
-            contentType: false,
-            processData: false, 
+            data : formData, 
+            contentType: false, 
+            processData: false,
             success: function (result) {
-                //alert(result);
                 if (result.success) {
                     $('.loader').hide();
                     bootbox.alert(result.success, function() {
-                        $('#openOverlayOpc').modal('hide');
-                        //bootbox.alert("Se guard&oacute; satisfactoriamente");
-                        //window.location.reload();
                         datatablenew();
                     });
                 } else if (result.error) {
@@ -244,28 +232,7 @@ function fn_save_producto(){
     }
 }
 
-function agregarProducto(){
-
-    let n = $('#contenedorArchivos .form-group').length + 1;
-    
-    let nuevoCampo = `
-        <div class="form-group">
-            <label class="control-label form-control-sm">Cargar Precio</label>
-            <div class="d-flex align-items-center gap-2">
-                <input type="file" class="form-control-file btn btn-sm btn-success"
-                       style="background-color: #F6F6F6 !important; border: none !important; padding: 0 !important; box-shadow: none !important; color:black"
-                       id="btnPrecioDimfer${n}" name="btnPrecioDimfer[]">
-                <button type="button" class="btn btn-danger btn-sm" onclick="eliminarCampo(this)">Eliminar</button>
-            </div>
-        </div>
-    `;
-
-    // Agregamos el bloque dentro del contenedor
-    $('#contenedorArchivos').append(nuevoCampo);
-}
-
 </script>
-
 
 <body class="hold-transition skin-blue sidebar-mini">
 
@@ -286,7 +253,7 @@ function agregarProducto(){
                 </div>
                 
                 <div class="card-body">
-                <form method="post" action="#" id="frmChopeoProducto" name="frmChopeoProducto">
+                <form method="post" action="#" id="frmChopeoProducto" name="frmChopeoProducto" enctype="multipart/form-data">
 
                     <div class="row">
 
@@ -314,39 +281,26 @@ function agregarProducto(){
                             <div class="col-lg-3">
                                 <div class="form-group">
                                     <label class="control-label form-control-sm">Fecha</label>
-                                    <input id="fecha_chopeo" name="fecha_chopeo" on class="form-control form-control-sm"  value="" type="text">
+                                    <input id="fecha_chopeo" name="fecha_chopeo" on class="form-control form-control-sm"  value="<?php echo date('Y-m-d'); ?>" type="text">
                                 </div>
                             </div>
                         </div>
                         <div class="row" style="padding-left:10px">
-                            <div class="col-lg-6">
-                                <div style="margin-top:15px" class="form-group">
-                                    <div class="col-sm-12 controls" style="padding-left:0px">
-                                        <div class="btn-group btn-group-sm" role="group" aria-label="Log Viewer Actions">
-                                            <a href="javascript:void(0)" onClick="agregarProducto()" class="btn btn-sm btn-success">Agregar</a>
-                                        </div>
+                            <div class="form-group">
+                                <label class="control-label form-control-sm">Cargar Precio</label>
+                                <input type="file" class="form-control-file btn btn-sm btn-success" style="background-color: #F6F6F6 !important; border: none !important; padding: 0 !important; box-shadow: none !important; color:black" id="btnPrecioDimfer" name="btnPrecioDimfer">
+                                <?php if (!empty($producto->ruta_ficha_tecnica)) : ?>
+                                    <div class="mt-2">
+                                        <i class="fa fa-file-pdf-o"></i>
+                                        <a href="<?php echo asset($producto->ruta_ficha_tecnica); ?>" target="_blank">Descargar Precio Dimfer</a>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row" style="padding-left:10px">
-                            <div class="col-lg-6" id="contenedorArchivos">
-                                <div class="form-group">
-                                    <label class="control-label form-control-sm">Cargar Precio</label>
-                                    <input type="file" class="form-control-file btn btn-sm btn-success" style="background-color: #F6F6F6 !important; border: none !important; padding: 0 !important; box-shadow: none !important; color:black" id="btnPrecioDimfer" name="btnPrecioDimfer">
-                                    <?php if (!empty($producto->ruta_ficha_tecnica)) : ?>
-                                        <div class="mt-2">
-                                            <i class="fa fa-file-pdf-o"></i>
-                                            <a href="<?php echo asset($producto->ruta_ficha_tecnica); ?>" target="_blank">Descargar Precio Dimfer</a>
-                                        </div>
-                                    <?php endif; ?>
-                                </div>
+                                <?php endif; ?>
                             </div>
                         </div>
                         <div style="margin-top:15px" class="form-group">
                             <div class="col-sm-12 controls">
                                 <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
-                                    <a href="javascript:void(0)" onClick="fn_save_producto()" class="btn btn-sm btn-success">Registrar</a>
+                                    <a href="javascript:void(0)" onClick="fn_save_chopeo_producto()" class="btn btn-sm btn-success">Registrar</a>
                                 </div>
                             </div>
                         </div>

@@ -221,7 +221,7 @@ Route::get('secciones/{secciones}/edit', 'App\Http\Controllers\SeccionesControll
 Route::get('productos/create_chopeo_producto', [ProductosController::class, 'create_chopeo_producto'])->name('productos.create_chopeo_producto');
 Route::post('productos/listar_chopeo_producto_ajax', [ProductosController::class, 'listar_chopeo_producto_ajax'])->name('productos.listar_chopeo_producto_ajax');
 Route::get('productos/modal_chopeo_producto/{id}', [ProductosController::class, 'modal_chopeo_producto'])->name('productos.modal_chopeo_producto');
-Route::post('productos/send_chopeo', [ProductosController::class, 'send_chopeo'])->name('productos.send_chopeo');
+Route::post('productos/send_chopeo_producto', [ProductosController::class, 'send_chopeo_producto'])->name('productos.send_chopeo_producto');
 Route::get('test-vision', [App\Http\Controllers\Frontend\ProductosController::class, 'testVision']);
 
 Route::get('productos', 'App\Http\Controllers\ProductosController@index')->name('productos.index');
