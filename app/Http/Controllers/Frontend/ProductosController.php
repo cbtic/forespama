@@ -12,6 +12,9 @@ use App\Models\Kardex;
 use App\Models\ProductoImagene;
 use App\Models\Familia;
 use App\Models\SubFamilia;
+use App\Models\Tienda;
+use App\Models\Chopeo;
+use App\Models\ChopeoDetalle;
 use RealRashid\SweetAlert\Facades\Alert;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -476,16 +479,149 @@ class ProductosController extends Controller
     public function create_chopeo_producto(){
 
 		$tablaMaestra_model = new TablaMaestra;
-        $familia_model = new Familia;
+        $tienda_model = new Tienda;
+        $producto_model = new Producto;
 
-		$estado_bien = $tablaMaestra_model->getMaestroByTipo(56);
-		$tipo_origen_producto = $tablaMaestra_model->getMaestroByTipo(58);
-		$tipo_producto = $tablaMaestra_model->getMaestroByTipo(44);
-        $familia = $familia_model->getFamiliaAll();
+		$competencia = $tablaMaestra_model->getMaestroByTipo(101);
+        $tienda = $tienda_model->getTiendasAll();
+        $producto = $producto_model->getProductoRetail();
+
 		
-		return view('frontend.productos.create_chopeo_producto',compact('estado_bien','tipo_origen_producto','tipo_producto','familia'));
+		return view('frontend.productos.create_chopeo_producto',compact('competencia','tienda','producto'));
 
 	}
+
+    public function listar_chopeo_producto_ajax(Request $request){
+
+		$producto_model = new Producto;
+		$p[]=$request->tienda;
+		$p[]=$request->producto;
+		$p[]=$request->NumeroPagina;
+		$p[]=$request->NumeroRegistros;
+		$data = $producto_model->listar_chopeo_producto_ajax($p);
+		$iTotalDisplayRecords = isset($data[0]->totalrows)?$data[0]->totalrows:0;
+
+		$result["PageStart"] = $request->NumeroPagina;
+		$result["pageSize"] = $request->NumeroRegistros;
+		$result["SearchText"] = "";
+		$result["ShowChildren"] = true;
+		$result["iTotalRecords"] = $iTotalDisplayRecords;
+		$result["iTotalDisplayRecords"] = $iTotalDisplayRecords;
+		$result["aaData"] = $data;
+
+        echo json_encode($result);
+
+	}
+
+    public function modal_chopeo_producto($id){
+		
+        $tablaMaestra_model = new TablaMaestra;
+        $tienda_model = new Tienda;
+        $producto_model = new Producto;
+		
+		$chopeo = new Chopeo;
+
+        $competencia = $tablaMaestra_model->getMaestroByTipo(101);
+        $tienda = $tienda_model->getTiendasAll();
+        $producto = $producto_model->getProductoRetail();
+        
+		return view('frontend.productos.modal_chopeo_productos_nuevoChopeoProducto',compact('id','chopeo','producto','competencia','tienda','producto'));
+
+    }
+    
+    public function send_chopeo_producto(Request $request)
+    {
+        $id_user = Auth::user()->id;
+
+        try {
+            $request->validate([
+                'btnPrecioDimfer' => 'file|mimes:jpg,jpeg,png',
+            ]);
+
+            //$path = $request->file('btnPrecioDimfer')->store('chopeos', 'public');
+
+            if ($request->hasFile('btnPrecioDimfer')) {
+
+                $path = public_path("img/chopeos/");
+                if (!is_dir($path)) {
+                    mkdir($path, 0777, true);
+                }
+
+                $filename = date("YmdHis") . substr((string)microtime(), 1, 6);
+                $extension = $this->extension($_FILES["btnPrecioDimfer"]["name"]);
+
+                move_uploaded_file($_FILES["btnPrecioDimfer"]["tmp_name"], $path . $filename . "." . $extension);
+
+                $rutaFinal = "img/chopeos/" . $filename . "." . $extension;
+            }
+
+            $imagePath = public_path($rutaFinal);
+            
+            $keyFile = storage_path('app/google-key.json');
+
+            $vision = new ImageAnnotatorClient([
+                'credentials' => $keyFile,
+            ]);
+
+            $image = file_get_contents($imagePath);
+            $response = $vision->textDetection($image);
+            $texts = $response->getTextAnnotations();
+
+            $vision->close();
+
+            if (count($texts) === 0) {
+                return response()->json(['error' => 'No se detectó texto en la imagen.']);
+            }
+
+            $texto = $texts[0]->getDescription();
+
+            preg_match('/\b\d{6}[A-Za-z0-9]\b/', $texto, $matchNumero);
+            $numero = $matchNumero[0] ?? null;
+
+            preg_match('/S\/\s*([\d.,]+)/', $texto, $matchPrecio);
+            $precio = isset($matchPrecio[1]) ? str_replace(',', '.', $matchPrecio[1]) : null;
+
+            if (!$numero && !$precio) {
+                return response()->json(['error' => 'No se encontraron datos válidos en la imagen.']);
+            }
+
+            $equivalencia_producto = EquivalenciaProducto::where('codigo_empresa',$numero)->where('estado',1)->first();
+
+            if (!$equivalencia_producto) {
+                return response()->json(['error' => 'No se encontró el producto con el código detectado.']);
+            }
+
+            $chopeo = new Chopeo();
+            $chopeo->id_tienda = $request->tienda;
+            $chopeo->id_competencia = 1;
+            $chopeo->fecha_chopeo = $request->fecha_chopeo;
+            $chopeo->id_usuario_responsable = $id_user;
+            $chopeo->ruta_imagen = $rutaFinal;
+            $chopeo->estado = 1;
+            $chopeo->id_usuario_inserta = $id_user;
+            $chopeo->save();
+            $id_chopeo = $chopeo->id;
+
+            $chopeo_detalle = new ChopeoDetalle();
+            $chopeo_detalle->id_chopeo = $id_chopeo;
+            $chopeo_detalle->id_producto = $equivalencia_producto->id_producto;
+            $chopeo_detalle->precio_competencia = $precio;
+            $chopeo_detalle->estado = 1;
+            $chopeo_detalle->id_usuario_inserta = $id_user;
+            $chopeo_detalle->save();
+
+            return response()->json(['success' => 'Chopeo registrado correctamente.']);
+
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'error' => $e->errors()
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => $e->getMessage()
+            ]);
+        }
+    }
 
     public function testVision()
     {

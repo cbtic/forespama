@@ -79,13 +79,20 @@ Begin
 	 v_where:=v_where||'And ivttm.id_estado_pago = '''||p_estado_pago||''' ';
 	End If;
 
-	If p_tipo_empresa<>'' Then
-	 v_where:=v_where||'And (select ec.id_tipo_empresa 
-			from empresa_cubicajes ec
-			where ec.id_empresa = ivt.id_empresa_proveedor 
-			and ec.estado = ''1''
-			and (ec.id_tipo_empresa = 1 OR (ec.id_tipo_empresa = 2 AND ec.id_conductor = ivt.id_conductores))) = '''||p_tipo_empresa||''' ';
-	End If;
+	IF p_tipo_empresa <> '' Then
+     v_where := v_where || 'AND ((ivt.id_tipo_cliente = 1 AND EXISTS (
+						    SELECT 1 FROM empresa_cubicajes ec
+						    WHERE ec.id_persona = ivt.id_persona
+						    AND ec.estado = ''1''
+						    AND ec.id_tipo_empresa = ' || p_tipo_empresa || '
+						    AND (ec.id_tipo_empresa = 1 OR (ec.id_tipo_empresa = 2 AND ec.id_conductor = ivt.id_conductores))))
+							OR (ivt.id_tipo_cliente = 5 AND EXISTS (
+						    SELECT 1 FROM empresa_cubicajes ec
+						    WHERE ec.id_empresa = ivt.id_empresa_proveedor
+						    AND ec.estado = ''1''
+						    AND ec.id_tipo_empresa = ' || p_tipo_empresa || '
+						    AND (ec.id_tipo_empresa = 1 OR (ec.id_tipo_empresa = 2 AND ec.id_conductor = ivt.id_conductores)))))';
+	END IF;
 	
 	EXECUTE ('SELECT count(1) '||v_tabla||v_where) INTO v_count;
 	v_col_count:=' ,'||v_count||' as TotalRows ';

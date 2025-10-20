@@ -346,35 +346,48 @@ label.form-control-sm{
 				
 				<div class="row" style="padding:20px 20px 0px 20px;">
 
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+					<!--<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
 						<input class="form-control form-control-sm" id="fecha_bus" name="fecha_bus" placeholder="Fecha">
-					</div>
+					</div>-->
 
 					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
 						<select name="tienda_bus" id="tienda_bus" class="form-control form-control-sm">
 							<option value="">--Seleccionar Tienda--</option>
 							<?php
-							foreach ($estado_bien as $row) {
+							foreach ($tienda as $row) {
 							?>
-							<option value="<?php echo $row->codigo?>"><?php echo $row->denominacion?></option>
+							<option value="<?php echo $row->id?>"><?php echo $row->denominacion?></option>
 							<?php
 							}
 							?>
 						</select>
 					</div>
 
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+					<!--<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
 						<select name="competencia_bus" id="competencia_bus" class="form-control form-control-sm">
 							<option value="">--Seleccionar Competencia--</option>
 							<?php
-							foreach ($estado_bien as $row) {
+							//foreach ($competencia as $row) {
 							?>
-							<option value="<?php echo $row->codigo?>"><?php echo $row->denominacion?></option>
+							<option value="<?php //echo $row->codigo?>"><?php //echo $row->denominacion?></option>
+							<?php
+							//}
+							?>
+						</select>
+					</div>-->
+					
+					<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+						<select name="producto_bus" id="producto_bus" class="form-control form-control-sm">
+							<option value="">--Seleccionar Producto--</option>
+							<?php
+							foreach ($producto as $row) {
+							?>
+							<option value="<?php echo $row->id?>"><?php echo $row->codigo . ' - ' . $row->denominacion?></option>
 							<?php
 							}
 							?>
 						</select>
-					</div>	
+					</div>
 					
                     <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
 						<select name="estado_bus" id="estado_bus" class="form-control form-control-sm">
@@ -388,9 +401,9 @@ label.form-control-sm{
 						<input class="btn btn-warning pull-rigth" value="Buscar" type="button" id="btnBuscar" />
 						<input class="btn btn-success pull-rigth" value="Nuevo" type="button" id="btnNuevo" style="margin-left:15px" />
 						
-						<button id="btnDescargar" type="button" class="btn btn-secondary pull-rigth" style="margin-left:10px;">
+						<!--<button id="btnDescargar" type="button" class="btn btn-secondary pull-rigth" style="margin-left:10px;">
 							<i class="fas fa-download"></i> Excel
-						</button>
+						</button>-->
 					</div>
 				</div>
 				
@@ -401,22 +414,12 @@ label.form-control-sm{
                         <thead>
                         <tr style="font-size:13px">
                             <th>Id</th>
-							<th>Bien/Servicio</th>
-							<th>Tipo Origen Producto</th>
-							<th>Serie</th>
-							<th>Denominaci&oacute;n</th>
+							<th>Producto</th>
                             <th>C&oacute;digo</th>
-                            <th>Unidad Producto</th>
-							<th>Contenido</th>
-							<th>Unidad Medida</th>
-							<th>Marca</th>
-							<th>Familia</th>
-							<th>Sub Familia</th>
-							<th>Estado Bien</th>
-							<th>F. Vencimiento</th>
-							<th>Stock M&iacute;nimo</th>
-							<th>Tiene Imagen</th>
-							<th>Estado</th>
+                            <th>SKU</th>
+							<th>Precio Pama</th>
+							<th>Precio Dimfer</th>
+							<th>Precio Ares</th>
                             <th>Acciones</th>
                         </tr>
                         </thead>
