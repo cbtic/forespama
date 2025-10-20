@@ -15,6 +15,7 @@ use App\Models\SubFamilia;
 use App\Models\Tienda;
 use App\Models\Chopeo;
 use App\Models\ChopeoDetalle;
+use App\Models\EquivalenciaProducto;
 use RealRashid\SweetAlert\Facades\Alert;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -558,6 +559,8 @@ class ProductosController extends Controller
             $imagePath = public_path($rutaFinal);
             
             $keyFile = storage_path('app/google-key.json');
+
+            dd($rutaFinal);exit();
 
             $vision = new ImageAnnotatorClient([
                 'credentials' => $keyFile,
