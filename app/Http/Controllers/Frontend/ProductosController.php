@@ -580,11 +580,11 @@ class ProductosController extends Controller
 
             preg_match('/\b\d{6}[A-Za-z0-9]\b/', $texto, $matchNumero);
             $numero = $matchNumero[0] ?? null;
-
-            preg_match('/S\/\s*([\d.,]+)/', $texto, $matchPrecio);
+            
+            preg_match('/S\s*\/?\s*([0-9]+(?:[.,][0-9]{1,2})?)/', $texto, $matchPrecio);
             $precio = isset($matchPrecio[1]) ? str_replace(',', '.', $matchPrecio[1]) : null;
 
-            if (!$numero && !$precio) {
+            if (!$numero || !$precio) {
                 return response()->json(['error' => 'No se encontraron datos válidos en la imagen.']);
             }
 
