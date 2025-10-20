@@ -578,14 +578,10 @@ class ProductosController extends Controller
 
             $texto = $texts[0]->getDescription();
 
-            return response()->json([
-                'debug_texto_detectado' => $texto
-            ]);
-
             preg_match('/\b\d{6}[A-Za-z0-9]\b/', $texto, $matchNumero);
             $numero = $matchNumero[0] ?? null;
 
-            preg_match('/S\s*\/?\s*([0-9]+(?:[.,][0-9]{1,2})?)/', $texto, $matchPrecio);
+            preg_match('/S[\/I]?\s*([\d.,]+)/i', $texto, $matchPrecio);
             $precio = isset($matchPrecio[1]) ? str_replace(',', '.', $matchPrecio[1]) : null;
 
             if (!$numero || !$precio) {
