@@ -223,6 +223,7 @@ function fn_save_chopeo_producto(){
                     bootbox.alert(result.success, function() {
                         datatablenew();
                     });
+                    $('#btnPrecioDimfer').val('');
                 } else if (result.error) {
                     $('.loader').hide();
                     bootbox.alert(result.error);
