@@ -560,7 +560,7 @@ class ProductosController extends Controller
             
             $keyFile = storage_path('app/google-key.json');
 
-            dd($rutaFinal);exit();
+            //dd($rutaFinal);exit();
 
             $vision = new ImageAnnotatorClient([
                 'credentials' => $keyFile,
