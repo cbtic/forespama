@@ -97,7 +97,6 @@ class ProductosController extends Controller
 		
 		if($id>0){
 			$producto = Producto::find($id);
-            //$imagenes = ProductoImagene::where('id_producto', $id)->pluck('ruta_imagen');
             $imagenes = ProductoImagene::where('id_producto', $id)->get();
 		}else{
 			$producto = new Producto;
@@ -113,18 +112,17 @@ class ProductosController extends Controller
 		$tipo_origen_producto = $tablaMaestra_model->getMaestroByTipo(58);
 		$bien_servicio = $tablaMaestra_model->getMaestroByTipo(73);
         $familia = $familia_model->getFamiliaAll();
+		$categoria = $tablaMaestra_model->getMaestroByTipo(102);
+		$sub_categoria = $tablaMaestra_model->getMaestroByTipo(103);
+		$modelo = $tablaMaestra_model->getMaestroByTipo(104);
+		$packet = $tablaMaestra_model->getMaestroByTipo(105);
+		$medida = $tablaMaestra_model->getMaestroByTipo(106);
         
-		//var_dump($id);exit();
-
-		return view('frontend.productos.modal_productos_nuevoProducto',compact('id','producto','unidad_medida','moneda','estado_bien','tipo_producto','unidad_producto','marca','tipo_origen_producto','imagenes','bien_servicio','familia'));
+		return view('frontend.productos.modal_productos_nuevoProducto',compact('id','producto','unidad_medida','moneda','estado_bien','tipo_producto','unidad_producto','marca','tipo_origen_producto','imagenes','bien_servicio','familia','categoria','sub_categoria','modelo','packet','medida'));
 
     }
 
     public function send_producto(Request $request){
-
-        //$btnFichaTecnica = $request->btnFichaTecnica;
-
-        //dd($btnFichaTecnica);exit();
 
 		if($request->id == 0){
 			$producto = new Producto;
@@ -167,7 +165,6 @@ class ProductosController extends Controller
         $producto->id_unidad_medida = $request->unidad_medida;
         $producto->stock_actual = $request->stock_actual;
         $producto->id_moneda = $request->moneda;
-        //$producto->id_tipo_producto = $request->tipo_producto;
         $producto->id_familia = $request->familia;
         $producto->id_sub_familia = $request->sub_familia;
         $producto->fecha_vencimiento = $request->fecha_vencimiento;
@@ -180,7 +177,11 @@ class ProductosController extends Controller
         $producto->id_marca = $request->marca;
         $producto->bien_servicio = $request->bien_servicio;
         $producto->peso = $request->peso;
-        //$producto->numero_corrrelativo = $numero_correlativo;
+        $producto->id_categoria = $request->categoria;
+        $producto->id_sub_categoria = $request->sub_categoria;
+        $producto->id_modelo = $request->modelo;
+        $producto->id_packet = $request->packet;
+        $producto->id_medida = $request->medida;
 		$producto->estado = 1;
 		$producto->save();
         $id_producto = $producto->id; 
@@ -194,14 +195,6 @@ class ProductosController extends Controller
 		
 		$img_foto = $request->img_foto;
         $id_img_foto = $request->id_img_foto;
-        /*
-		if(isset($img_foto) && is_array($img_foto) && count($img_foto) > 0){
-			$path = "img/productos/".$producto->id."/".$request->denominacion;
-			if (!is_dir($path)) {
-				mkdir($path);
-			}
-		}
-        */
         $imagenesExistentes = ProductoImagene::where('id_producto', $id_producto)->pluck('ruta_imagen')->toArray();
 		
         if (isset($img_foto) && is_array($img_foto)) {

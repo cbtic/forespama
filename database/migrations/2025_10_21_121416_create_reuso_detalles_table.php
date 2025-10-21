@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateReusosTable extends Migration
+class CreateReusoDetallesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,19 @@ class CreateReusosTable extends Migration
      */
     public function up()
     {
-        Schema::create('reusos', function (Blueprint $table) {
+        Schema::create('reuso_detalles', function (Blueprint $table) {
             $table->id();
-            $table->integer('id_tipo_documento')->nullable();
-            $table->string('codigo',20);
-            $table->date('fecha')->nullable();
-            $table->integer('id_almacen_destino')->nullable();
-
+            $table->bigInteger('id_reuso')->nullable();
+            $table->bigInteger('id_producto')->nullable();
+            $table->Integer('cantidad')->nullable();
+            $table->bigInteger('id_estado_producto')->nullable();
             $table->string('estado',1)->nullable()->default('1');
+
             $table->bigInteger('id_usuario_inserta')->unsigned()->index();
 			$table->bigInteger('id_usuario_actualiza')->nullable()->unsigned()->index();
+
+            $table->foreign('id_reuso')->references('id')->on('reusos');
+            $table->foreign('id_producto')->references('id')->on('productos');
             $table->timestamps();
         });
     }
@@ -34,6 +37,6 @@ class CreateReusosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('reusos');
+        Schema::dropIfExists('reuso_detalles');
     }
 }

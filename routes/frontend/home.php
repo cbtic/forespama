@@ -813,3 +813,4 @@ Route::get('reuso/create', [ReusoController::class, 'create'])->name('reuso.crea
 Route::post('reuso/listar_reuso_ajax', [ReusoController::class, 'listar_reuso_ajax'])->name('reuso.listar_reuso_ajax');
 Route::get('reuso/modal_reuso/{id}', [ReusoController::class, 'modal_reuso'])->name('reuso.modal_reuso');
 Route::post('reuso/send_reuso', [ReusoController::class, 'send_reuso'])->name('reuso.send_reuso');
+Route::get('reuso/cargar_detalle/{id}', [ReusoController::class, 'cargar_detalle'])->name('reuso.cargar_detalle');

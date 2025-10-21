@@ -31,7 +31,7 @@
 
 .modal-dialog {
     width: 100%;
-    max-width:100%!important
+    max-width:70%!important
 }
 
 .custom-select2-dropdown {
@@ -158,9 +158,9 @@ $(document).ready(function() {
         language: 'es'
     });
 
-    if($('#id').val()==0){
+    /*if($('#id').val()==0){
         obtenerCodigo();
-    }
+    }*/
 
 });
 
@@ -217,65 +217,43 @@ var productosSeleccionados = [];
 function cargarDetalle(){
 
     var id = $("#id").val();
-    const tbody = $('#divIngresoProduccionDetalle');
+    const tbody = $('#divReusoDetalle');
 
     tbody.empty();
 
     $.ajax({
-        url: "/ingreso_produccion/cargar_detalle/"+id,
+        url: "/reuso/cargar_detalle/"+id,
         type: "GET",
         success: function (result) {
 
             let n = 1;
 
-            //var total_acumulado=0;
+            result.reuso.forEach(reuso => {
 
-            result.ingreso_produccion.forEach(ingreso_produccion => {
-
-                let marcaOptions = '<option value="">--Seleccionar--</option>';
                 let productoOptions = '<option value="">--Seleccionar--</option>';
                 let estadoBienOptions = '<option value="">--Seleccionar--</option>';
-                let unidadMedidaOptions = '<option value="">--Seleccionar--</option>';
-
-                //alert(result.dispensacion[1]);
                 
-                result.marca.forEach(marca => {
-                    let selected = (marca.id == ingreso_produccion.id_marca) ? 'selected' : '';
-                    marcaOptions += `<option value="${marca.id}" ${selected}>${marca.denominiacion}</option>`;
-                });
-
                 result.producto.forEach(producto => {
-                    let selected = (producto.id == ingreso_produccion.id_producto) ? 'selected' : '';
+                    let selected = (producto.id == reuso.id_producto) ? 'selected' : '';
                     productoOptions += `<option value="${producto.id}" ${selected}>${producto.codigo} - ${producto.denominacion}</option>`;
                 });
 
                 result.estado_bien.forEach(estado_bien => {
-                    let selected = (estado_bien.codigo == ingreso_produccion.id_estado_producto) ? 'selected' : '';
+                    let selected = (estado_bien.codigo == reuso.id_estado_producto) ? 'selected' : '';
                     estadoBienOptions += `<option value="${estado_bien.codigo}" ${selected}>${estado_bien.denominacion}</option>`;
                 });
 
-                result.unidad_medida.forEach(unidad_medida => {
-                    let selected = (unidad_medida.codigo == ingreso_produccion.id_unidad_medida) ? 'selected' : '';
-                    unidadMedidaOptions += `<option value="${unidad_medida.codigo}" ${selected}>${unidad_medida.denominacion}</option>`;
-                });
-
-                //alert(dispensacion.id_producto);
-
-                if (ingreso_produccion.id_producto) {
-                    productosSeleccionados.push(ingreso_produccion.id_producto);
+                if (reuso.id_producto) {
+                    productosSeleccionados.push(reuso.id_producto);
                 }
-                //alert(productosSeleccionados);
-               
+                
                 const row = `
                     <tr>
                         <td>${n}</td>
-                        <td><input name="id_ingreso_produccion_detalle[]" id="id_ingreso_produccion_detalle${n}" class="form-control form-control-sm" value="${ingreso_produccion.id}" type="hidden"><input name="item[]" id="item${n}" class="form-control form-control-sm" value="${ingreso_produccion.item}" type="text" readonly></td>
-                        <td style="width: 450px !important;display:block"><select name="descripcion_[]" id="descripcion_${n}" class="form-control form-control-sm" onChange="verificarProductoSeleccionado(this, ${n});" disabled>${productoOptions}</select><input name="descripcion[]" id="descripcion${n}" class="form-control form-control-sm" value="${ingreso_produccion.id_producto}" type="hidden"></td>
-                        <td><input name="cod_interno[]" id="cod_interno${n}" class="form-control form-control-sm" value="${ingreso_produccion.codigo}" type="text" readonly></td>
-                        <td><select name="marca_[]" id="marca_${n}" class="form-control form-control-sm" disabled>${marcaOptions}</select><input name="marca[]" id="marca${n}" class="form-control form-control-sm" value="${ingreso_produccion.id_marca}" type="hidden"></td>
-                        <td><select name="estado_bien_[]" id="estado_bien_${n}" class="form-control form-control-sm" onChange="" disabled>${estadoBienOptions}</select><input name="estado_bien[]" id="estado_bien${n}" class="form-control form-control-sm" value="${ingreso_produccion.id_estado_producto}" type="hidden"></td>
-                        <td><select name="unidad_[]" id="unidad_${n}" class="form-control form-control-sm" disabled>${unidadMedidaOptions}</select><input name="unidad[]" id="unidad${n}" class="form-control form-control-sm" value="${ingreso_produccion.id_unidad_medida}" type="hidden"></td>
-                        <td><input name="cantidad[]" id="cantidad${n}" class="cantidad form-control form-control-sm" value="${ingreso_produccion.cantidad}" type="text" oninput="calcularCantidadPendiente(this);calcularSubTotal(this)" readonly></td>
+                        <td style="width: 650px !important;display:block"><input name="id_reuso_detalle[]" id="id_reuso_detalle${n}" class="form-control form-control-sm" value="${reuso.id}" type="hidden"><select name="descripcion_[]" id="descripcion_${n}" class="form-control form-control-sm" onChange="verificarProductoSeleccionado(this, ${n});" disabled>${productoOptions}</select><input name="descripcion[]" id="descripcion${n}" class="form-control form-control-sm" value="${reuso.id_producto}" type="hidden"></td>
+                        <td><input name="cod_interno[]" id="cod_interno${n}" class="form-control form-control-sm" value="${reuso.codigo}" type="text" readonly></td>
+                        <td><select name="estado_bien_[]" id="estado_bien_${n}" class="form-control form-control-sm" onChange="" disabled>${estadoBienOptions}</select><input name="estado_bien[]" id="estado_bien${n}" class="form-control form-control-sm" value="${reuso.id_estado_producto}" type="hidden"></td>
+                        <td><input name="cantidad[]" id="cantidad${n}" class="cantidad form-control form-control-sm" value="${reuso.cantidad}" type="text" oninput="calcularCantidadPendiente(this);calcularSubTotal(this)" readonly></td>
                     </tr>
                 `;
                 tbody.append(row);
@@ -284,15 +262,10 @@ function cargarDetalle(){
                     dropdownCssClass: 'custom-select2-dropdown'
                 });
 
-                $('#marca_' + n).select2({
-                    width: '100%',
-                });
-
                 n++;
-                });
-            }
+            });
+        }
     });
-
 }
 
 function agregarProducto(){
@@ -306,34 +279,27 @@ function agregarProducto(){
 
     var cantidad = 1;
     var newRow = "";
-    for (var i = 0; i < cantidad; i++) { 
+    for (var i = 0; i < cantidad; i++) {
 
-        var n = $('#tblIngresoProduccionDetalle tbody tr').length + 1;
-        var item = '<input name="id_ingreso_produccion_detalle[]" id="id_ingreso_produccion_detalle' + n + '" class="form-control form-control-sm" value="0" type="hidden"><input name="item[]" id="item' + n + '" class="form-control form-control-sm" value="" type="text">';
-        var descripcion = '<select name="descripcion[]" id="descripcion' + n + '" class="form-control form-control-sm" onChange="verificarProductoSeleccionado(this, ' + n + ')"> '+ opcionesDescripcion +' </select>';
+        var n = $('#tblReusoDetalle tbody tr').length + 1;
+        var descripcion = '<input name="id_reuso_detalle[]" id="id_reuso_detalle' + n + '" class="form-control form-control-sm" value="0" type="hidden"><select name="descripcion[]" id="descripcion' + n + '" class="form-control form-control-sm" onChange="verificarProductoSeleccionado(this, ' + n + ')"> '+ opcionesDescripcion +' </select>';
         var descripcion_ant = '<input type="hidden" name="descripcion_ant[]" id="descripcion_ant' + n + '" class="form-control form-control-sm" />';
         var cod_interno = '<input name="cod_interno[]" id="cod_interno' + n + '" class="form-control form-control-sm" value="" type="text">';
-        var marca = '<select name="marca[]" id="marca' + n + '" class="form-control form-control-sm" onchange=""> <option value="">--Seleccionar--</option><?php foreach ($marca as $row){?><option value="<?php echo htmlspecialchars($row->id); ?>"><?php echo htmlspecialchars(addslashes($row->denominiacion)); ?></option><?php }?></select>';
-        var estado_bien =  '<select name="estado_bien[]" id="estado_bien' + n + '" class="form-control form-control-sm" onChange=""><option value="">--Seleccionar--</option> <?php foreach ($estado_bien as $row) { ?> <option value="<?php echo $row->codigo ?>" <?php echo ($row->codigo == 1) ? "selected" : ""; ?>><?php echo $row->denominacion; ?></option> <?php } ?> </select>';
-        var unidad = '<select name="unidad[]" id="unidad' + n + '" class="form-control form-control-sm" onChange=""> <option value="">--Seleccionar--</option> <?php foreach ($unidad as $row) {?> <option value="<?php echo $row->codigo?>"><?php echo $row->denominacion?></option> <?php } ?> </select>';
+        var estado_bien =  '<select name="estado_bien[]" id="estado_bien' + n + '" class="form-control form-control-sm" onChange=""><option value="">--Seleccionar--</option> <?php foreach ($estado_bien as $row) { ?> <option value="<?php echo $row->codigo ?>" <?php echo ($row->codigo == 2) ? "selected" : ""; ?>><?php echo $row->denominacion; ?></option> <?php } ?> </select>';
         var cantidad_ingreso = '<input name="cantidad[]" id="cantidad' + n + '" class="cantidad form-control form-control-sm" value="" type="text" oninput="">';
-        //var stock_actual = '<input name="stock_actual[]" id="stock_actual' + n + '" class="form-control form-control-sm" value="" type="text">';
         
         var btnEliminar = '<button type="button" class="btn btn-danger btn-sm" onclick="eliminarFila(this)">Eliminar</button>';
 
         newRow += '<tr>';
         newRow += '<td>' + n + '</td>';
-        newRow += '<td>' + item + '</td>';
-        newRow += '<td style="width: 450px!important; display:block!important">' + descripcion_ant + descripcion + '</td>';
+        newRow += '<td style="width: 650px!important; display:block!important">' + descripcion_ant + descripcion + '</td>';
         newRow += '<td>' + cod_interno + '</td>';
-        newRow += '<td>' + marca + '</td>';
         newRow += '<td>' + estado_bien + '</td>';
-        newRow += '<td>' + unidad + '</td>';
         newRow += '<td>' + cantidad_ingreso + '</td>';
         newRow += '<td>' + btnEliminar + '</td>';
         newRow += '</tr>';
 
-        $('#tblIngresoProduccionDetalle tbody').append(newRow);
+        $('#tblReusoDetalle tbody').append(newRow);
 
         $('#descripcion' + n).select2({
             width: '100%',
@@ -396,18 +362,18 @@ function eliminarFila(button){
     console.log(productosSeleccionados);
 }
 
-function fn_save_ingreso_produccion(){
+function fn_save_reuso(){
 	
     var msg = "";
 
-    var tipo_documento = $('#tipo_documento').val();
+    var fecha = $('#fecha').val();
     var almacen_destino = $('#almacen_destino').val();
 
-    if(tipo_documento==""){msg+="Ingrese el Tipo de Documento <br>";}
+    if(fecha==""){msg+="Ingrese la Fecha <br>";}
     if(almacen_destino==""){msg+="Ingrese el Almacen Destino <br>";}
-        
+    
 
-    if ($('#tblIngresoProduccionDetalle tbody tr').length == 0) {
+    if ($('#tblReusoDetalle tbody tr').length == 0) {
         msg += "No se ha agregado ningún producto <br>";
     }
 
@@ -420,14 +386,14 @@ function fn_save_ingreso_produccion(){
             message: "&iquest;Est&aacute; seguro que son las cantidades correctas? Porque no se podr&aacute; editar.", 
             callback: function(result){
                 if (result==true) {
-                    save_produccion();
+                    save_reuso();
                 }
             }
         });
     }
 }
 
-function save_produccion(){
+function save_reuso(){
 
     var msgLoader = "";
     msgLoader = "Procesando, espere un momento por favor";
@@ -436,9 +402,9 @@ function save_produccion(){
     $('.loader').show();
 
     $.ajax({
-            url: "/ingreso_produccion/send_ingreso_produccion",
+            url: "/reuso/send_reuso",
             type: "POST",
-            data : $("#frmIngresoProduccion").serialize(),
+            data : $("#frmReuso").serialize(),
             success: function (result) {
                 $('#openOverlayOpc').modal('hide');
                 datatablenew();
@@ -524,21 +490,20 @@ function save_produccion(){
                             </div>
                         </div>
 
-                        <div class="card-body">	
+                        <div class="card-body">
 
 					<div class="table-responsive" style="overflow-y: auto; max-height: 400px;">
-						<table id="tblIngresoProduccionDetalle" class="table table-hover table-sm">
+						<table id="tblReusoDetalle" class="table table-hover table-sm">
 							<thead>
 							<tr style="font-size:13px">
 								<th>#</th>
-								<th>Descripci&oacute;n</th>
+								<th style="width:650px">Descripci&oacute;n</th>
                                 <th>COD. INT.</th>
                                 <th>Estado Bien</th>
-                                <th>Unidad</th>
                                 <th>Cantidad</th>
 							</tr>
 							</thead>
-							<tbody id="divIngresoProduccionDetalle">
+							<tbody id="divReusoDetalle">
 							</tbody>
 						</table>
 					</div>
@@ -563,11 +528,11 @@ function save_produccion(){
                                 <?php 
                                     }
                                 ?>
-                                <?php if($id_user==$ingreso_produccion->id_usuario_inserta){?>
-                                    <a href="javascript:void(0)" onClick="fn_save_ingreso_produccion()" class="btn btn-sm btn-success" style="margin-right:10px">Guardar</a>
+                                <?php if($id_user==$reuso->id_usuario_inserta){?>
+                                    <a href="javascript:void(0)" onClick="fn_save_reuso()" class="btn btn-sm btn-success" style="margin-right:10px">Guardar</a>
                                 <?php }?>
                                 <?php if($id==0){?>
-                                    <a href="javascript:void(0)" onClick="fn_save_ingreso_produccion()" class="btn btn-sm btn-success" style="margin-right:10px">Guardar</a>
+                                    <a href="javascript:void(0)" onClick="fn_save_reuso()" class="btn btn-sm btn-success" style="margin-right:10px">Guardar</a>
                                 <?php }?>
                                 <a href="javascript:void(0)" onClick="$('#openOverlayOpc').modal('hide');" class="btn btn-sm btn-info" style="">Cerrar</a>
                             </div>
