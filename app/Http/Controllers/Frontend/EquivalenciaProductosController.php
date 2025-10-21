@@ -95,6 +95,10 @@ class EquivalenciaProductosController extends Controller
         $equivalencia_producto->id_empresa = $request->empresa;
         $equivalencia_producto->codigo_empresa = $request->codigo_producto_empresa;
         $equivalencia_producto->descripcion_empresa = $request->denominacion_producto_empresa;
+        $equivalencia_producto->codigo_dimfer = $request->codigo_producto_dimfer;
+        $equivalencia_producto->descripcion_dimfer = $request->denominacion_producto_dimfer;
+        $equivalencia_producto->codigo_ares = $request->codigo_producto_ares;
+        $equivalencia_producto->descripcion_ares = $request->denominacion_producto_ares;
         $equivalencia_producto->sku = $request->sku_producto_empresa;
         $equivalencia_producto->id_usuario_inserta = $id_user;
 		$equivalencia_producto->estado = 1;

@@ -1,4 +1,4 @@
--- DROP FUNCTION public.sp_listar_kardex_paginado(varchar, varchar, varchar, varchar, refcursor);
+-- DROP FUNCTION public.sp_listar_kardex_paginado(varchar, varchar, varchar, varchar, varchar, varchar, refcursor);
 
 CREATE OR REPLACE FUNCTION public.sp_listar_kardex_paginado(p_producto character varying, p_almacen character varying, p_fecha_inicio character varying, p_fecha_fin character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
  RETURNS refcursor
@@ -24,11 +24,13 @@ begin
 	when k.id_salida_producto is not null then ''Salida''
 	when k.id_dispensacion is not null then ''Dispensacion''
 	when k.id_ingreso_produccion is not null then ''Ingreso Produccion''
+	when k.id_reuso is not null then ''Reuso''
 	end tipo_movimiento,
 	case when k.id_entrada_producto is not null then (select ep.codigo from entrada_productos ep where k.id_entrada_producto = ep.id)
 	when k.id_salida_producto is not null then (select sp.codigo from salida_productos sp where k.id_salida_producto = sp.id)
 	when k.id_dispensacion is not null then (select d.codigo from dispensaciones d where k.id_dispensacion = d.id)
 	when k.id_ingreso_produccion is not null then (select ip.codigo from ingreso_produccion ip where k.id_ingreso_produccion = ip.id)
+	when k.id_reuso is not null then (select r.codigo from reusos r where k.id_reuso = r.id)
 	end codigo_movimiento ';
 
 	v_tabla=' from kardex k 
