@@ -145,6 +145,24 @@
 						</li>
 						
 					@endif
+
+					@if(Gate::check('Chopeo Productos'))
+						
+						<li class="nav-item dropdown">
+							<a href="#" class="nav-link dropdown-toggle" id="navbarDropdownPrueba" data-toggle="dropdown"
+						   aria-haspopup="true" aria-expanded="false">Promotoria</a>
+
+						   <div class="dropdown-menu" aria-labelledby="navbarDropdownPrueba">
+
+								@can('Chopeo Productos')
+									<x-utils.link :href="route('frontend.productos.create_chopeo_producto')" class="dropdown-item" :text="__('Chopeo de Productos')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+								@endif
+								
+							</div>
+
+						</li>
+
+					@endif
 					
 					
 					@if(Gate::check('Requerimientos') || Gate::check('Entradas') || Gate::check('Orden Compra') || Gate::check('Consulta Stock') || Gate::check('Dispensacion') || Gate::check('Ingreso Produccion') || Gate::check('Kardex') || Gate::check('Movimientos') || Gate::check('Verificacion Aplicacion Comisiones') || Gate::check('Empaquetado') || Gate::check('Devolucion'))
@@ -207,8 +225,8 @@
 									<x-utils.link :href="route('frontend.orden_compra.create_informe_b2b')" class="dropdown-item" :text="__('Cargar Informe Venta B2B')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
 								@endif
 
-								@can('Chopeo Productos')
-									<x-utils.link :href="route('frontend.productos.create_chopeo_producto')" class="dropdown-item" :text="__('Chopeo de Productos')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+								@can('Reuso')
+									<x-utils.link :href="route('frontend.reuso.create')" class="dropdown-item" :text="__('Reuso')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
 								@endif
 
 								@can('Ajuste Stock')

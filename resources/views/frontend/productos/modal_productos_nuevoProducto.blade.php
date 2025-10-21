@@ -165,7 +165,13 @@ $(document).ready(function() {
 
     $("#marca").select2({ width: '100%' });
 
+    $("#modelo").select2({ width: '100%' });
+
+    $("#medida").select2({ width: '100%' });
+
     $("#tipo_producto").select2({ width: '100%' });
+
+	mostrarOpcionesPorFamilia();
 
 });
 </script>
@@ -453,6 +459,18 @@ function obtenerSubFamilia(){
     });
 }*/
 
+
+function mostrarOpcionesPorFamilia() {
+    var familia = $('#familia').val();
+
+    if (familia == 1) {
+        $('.combo_producto_terminado').show();
+    } else {
+        $('.combo_producto_terminado').hide();
+        $('.combo_producto_terminado select').val('');
+    }
+}
+
 </script>
 
 
@@ -600,7 +618,7 @@ function obtenerSubFamilia(){
                                     <div class="col-lg-4">
                                         <div class="form-group">
                                             <label class="control-label form-control-sm">Familia</label>
-                                            <select name="familia" id="familia" class="form-control form-control-sm" onchange="obtenerSubFamilia()">
+                                            <select name="familia" id="familia" class="form-control form-control-sm" onchange="obtenerSubFamilia();mostrarOpcionesPorFamilia()">
                                                 <option value="">--Seleccionar--</option>
                                                 <?php
                                                 foreach ($familia as $row){?>
@@ -616,6 +634,76 @@ function obtenerSubFamilia(){
                                             <label class="control-label form-control-sm">Sub Familia</label>
                                             <select name="sub_familia" id="sub_familia" class="form-control form-control-sm" onchange="/*obtenerCodigo()*/">
                                                 <option value="">--Seleccionar--</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 combo_producto_terminado">
+                                        <div class="form-group">
+                                            <label class="control-label form-control-sm">Categoria</label>
+                                            <select name="categoria" id="categoria" class="form-control form-control-sm" onchange="">
+                                                <option value="">--Seleccionar--</option>
+                                                <?php
+                                                foreach ($categoria as $row){?>
+                                                    <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$producto->id_categoria)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                                <?php 
+                                                }
+                                                ?>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 combo_producto_terminado">
+                                        <div class="form-group">
+                                            <label class="control-label form-control-sm">Sub Categoria</label>
+                                            <select name="sub_categoria" id="sub_categoria" class="form-control form-control-sm" onchange="">
+                                                <option value="">--Seleccionar--</option>
+                                                <?php
+                                                foreach ($sub_categoria as $row){?>
+                                                    <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$producto->id_sub_categoria)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                                <?php 
+                                                }
+                                                ?>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 combo_producto_terminado">
+                                        <div class="form-group">
+                                            <label class="control-label form-control-sm">Modelo</label>
+                                            <select name="modelo" id="modelo" class="form-control form-control-sm" onchange="">
+                                                <option value="">--Seleccionar--</option>
+                                                <?php
+                                                foreach ($modelo as $row){?>
+                                                    <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$producto->id_modelo)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                                <?php 
+                                                }
+                                                ?>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 combo_producto_terminado">
+                                        <div class="form-group">
+                                            <label class="control-label form-control-sm">Packet</label>
+                                            <select name="packet" id="packet" class="form-control form-control-sm" onchange="">
+                                                <option value="">--Seleccionar--</option>
+                                                <?php
+                                                foreach ($packet as $row){?>
+                                                    <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$producto->id_packet)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                                <?php 
+                                                }
+                                                ?>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 combo_producto_terminado">
+                                        <div class="form-group">
+                                            <label class="control-label form-control-sm">Medida</label>
+                                            <select name="medida" id="medida" class="form-control form-control-sm" onchange="">
+                                                <option value="">--Seleccionar--</option>
+                                                <?php
+                                                foreach ($medida as $row){?>
+                                                    <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$producto->id_medida)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                                <?php 
+                                                }
+                                                ?>
                                             </select>
                                         </div>
                                     </div>

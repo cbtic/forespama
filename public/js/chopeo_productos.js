@@ -180,9 +180,9 @@ function datatablenew(){
 					
 					var html = '<div class="btn-group btn-group-sm" role="group" aria-label="Log Viewer Actions">';
 					
-					html += '<button style="font-size:12px; margin-right:10px" type="button" class="btn btn-sm btn-success" data-toggle="modal" onclick="modalChopeoProducto('+row.id+',1'+')" ><i class="fa fa-edit"></i> Precio Dimfer</button>';
+					//html += '<button style="font-size:12px; margin-right:10px" type="button" class="btn btn-sm btn-success" data-toggle="modal" onclick="modalChopeoProducto('+row.id+',1'+')" ><i class="fa fa-edit"></i> Precio Dimfer</button>';
 					
-					html += '<button style="font-size:12px" type="button" class="btn btn-sm btn-success" data-toggle="modal" onclick="modalChopeoProducto('+row.id+',2'+')" ><i class="fa fa-edit"></i> Precio Ares</button>'; 
+					//html += '<button style="font-size:12px" type="button" class="btn btn-sm btn-success" data-toggle="modal" onclick="modalChopeoProducto('+row.id+',2'+')" ><i class="fa fa-edit"></i> Precio Ares</button>'; 
 					
 					//html += '<a href="javascript:void(0)" onclick=modalResponsable('+row.id+') class="btn btn-sm btn-info" style="font-size:12px;margin-left:10px">Detalle Responsable</a>';
 					
