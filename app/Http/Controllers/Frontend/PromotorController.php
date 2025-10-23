@@ -204,6 +204,7 @@ class PromotorController extends Controller
 	public function marcar_asistencia(Request $request)
 	{
 		$id_user = Auth::user()->id;
+		$rutaFinal = null;
 
 		if ($request->has('foto_base64')) {
 
@@ -240,6 +241,8 @@ class PromotorController extends Controller
 			}
 		}
 
+		//dd($rutaFinal);exit();
+
 		$asistencia_promotor = new AsistenciaPromotore;
 		$asistencia_promotor->id_promotor = $id_user;
 		$asistencia_promotor->id_tienda = $request->id_tienda;
@@ -249,6 +252,7 @@ class PromotorController extends Controller
 		$asistencia_promotor->ip = $request->ip();
 		$asistencia_promotor->latitud = $request->latitud;
 		$asistencia_promotor->longitud = $request->longitud;
+		$asistencia_promotor->ruta_imagen_ingreso = $rutaFinal;
 		$asistencia_promotor->id_usuario_inserta = $id_user;
 		$asistencia_promotor->save();
 
