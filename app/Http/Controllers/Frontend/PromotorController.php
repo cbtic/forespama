@@ -192,17 +192,21 @@ class PromotorController extends Controller
     }
 
 	public function create_asistencia(){
-		
-		return view('frontend.promotores.create_asistencia');
+
+		$tienda_model = new Tienda;
+
+        $tiendas = $tienda_model->getTiendasAll();
+
+	return view('frontend.promotores.create_asistencia',compact('tiendas'));
 
 	}
 
 	public function marcar_asistencia(Request $request)
 	{
-		$user = auth()->user();
+		$id_user = Auth::user()->id;
 
 		$asistencia_promotor = new AsistenciaPromotore;
-		$asistencia_promotor->id_promotor = $user->id;
+		$asistencia_promotor->id_promotor = $id_user;
 		$asistencia_promotor->id_tienda = $request->id_tienda;
 		$asistencia_promotor->fecha = now()->toDateString();
 		$asistencia_promotor->hora_entrada = now()->format('H:i:s');
@@ -210,7 +214,7 @@ class PromotorController extends Controller
 		$asistencia_promotor->ip = $request->ip();
 		$asistencia_promotor->latitud = $request->latitud;
 		$asistencia_promotor->longitud = $request->longitud;
-		$asistencia_promotor->id_usuario_inserta = $user->id;
+		$asistencia_promotor->id_usuario_inserta = $id_user;
 		$asistencia_promotor->save();
 
 		return response()->json(['message' => 'Asistencia marcada correctamente.']);
@@ -218,8 +222,11 @@ class PromotorController extends Controller
 
 	public function listar_asistencia_promotores_ajax(Request $request){
 
+		$id_user = Auth::user()->id;
+
 		$asistencia_promotor_model = new AsistenciaPromotore;
 		$p[]=$request->fecha;
+		$p[]=$id_user;
         $p[]=$request->estado;
 		$p[]=$request->NumeroPagina;
 		$p[]=$request->NumeroRegistros;
