@@ -173,7 +173,7 @@ function datatablenew(){
 			{
 				"mRender": function (data, type, row) {
 					if (row.ruta_imagen_ingreso) {
-						return '<img src="/' + row.ruta_imagen_ingreso + '" alt="Foto asistencia" width="60" height="60" style="border-radius:8px; object-fit:cover;">';
+						return '<a href="/' + row.ruta_imagen_ingreso + '" target="_blank"><img src="/' + row.ruta_imagen_ingreso + '" alt="Foto asistencia" width="60" height="60" style="border-radius:8px; object-fit:cover;">';
 					} else {
 						return '<span class="text-muted">Sin foto</span>';
 					}
