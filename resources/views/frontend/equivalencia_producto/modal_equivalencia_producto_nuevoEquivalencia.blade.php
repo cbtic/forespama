@@ -226,7 +226,7 @@ function actualizarLegend(){
     var legend = $('fieldset[name="equivalencia_empresa"] legend');
 
     if ($('#empresa').val()) {
-        legend.text('Equivalencia de ' + texto_empresa);
+        legend.text('Equivalencia de Nuestro Producto en ' + texto_empresa);
     } else {
         legend.text('Equivalencia de Nuestro Producto');
     }
