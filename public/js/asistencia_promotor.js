@@ -32,7 +32,13 @@ $(document).ready(function () {
 	
 	datatablenew();
 
-	$('#id_tienda').select2({ width: '100%' })
+	$('#id_tienda').select2({ 
+		width: '100%',
+		placeholder: '--Seleccionar--',
+		allowClear: true,
+		minimumResultsForSearch: 0,
+		dropdownParent: $('#openOverlayOpc') 
+	})
 
 });
 

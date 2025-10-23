@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION public.sp_listar_asistencia_promotor_paginado(p_fecha character varying, p_estado character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
+CREATE OR REPLACE FUNCTION public.sp_listar_asistencia_promotor_paginado(p_fecha character varying, p_id_user character varying, p_estado character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
  RETURNS refcursor
  LANGUAGE plpgsql
 AS $function$
@@ -25,6 +25,10 @@ begin
 
 	If p_fecha<>'' Then
 	 v_where:=v_where||'And ap.fecha = '''||p_fecha||''' ';
+	End If;
+
+	If p_id_user<>'' Then
+	 v_where:=v_where||'And ap.id_promotor = '''||p_id_user||''' ';
 	End If;
 
 	If p_estado<>'' Then
