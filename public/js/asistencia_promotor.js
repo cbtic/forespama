@@ -226,7 +226,8 @@ function marcarAsistencia() {
                 data: {
                     _token: $('meta[name="csrf-token"]').attr('content'),
                     latitud: position.coords.latitude,
-                    longitud: position.coords.longitude
+                    longitud: position.coords.longitude,
+					foto_base64: $('#foto_base64').val()
                 },
                 success: function (response) {
                     $('.loader').hide();
@@ -330,4 +331,40 @@ function fn_save_asistencia_promotor(){
             $('#btnAsistencia').attr('disabled', false);
         }
     }
+}
+
+$('#openOverlayOpc').on('shown.bs.modal', function () {
+    iniciarCamara();
+});
+
+function iniciarCamara() {
+    const video = document.getElementById('camera');
+    const container = document.getElementById('camera-container');
+
+    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+        container.style.display = 'block';
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(stream => {
+                video.srcObject = stream;
+            })
+            .catch(err => {
+                bootbox.alert('No se pudo acceder a la cámara: ' + err.message);
+            });
+    } else {
+        bootbox.alert('Tu navegador no soporta acceso a la cámara.');
+    }
+}
+
+function capturarFoto() {
+    const video = document.getElementById('camera');
+    const canvas = document.getElementById('canvas');
+    const foto = document.getElementById('foto_base64');
+
+    const contexto = canvas.getContext('2d');
+    contexto.drawImage(video, 0, 0, canvas.width, canvas.height);
+	
+    const dataURL = canvas.toDataURL('image/jpeg');
+    foto.value = dataURL;
+
+    bootbox.alert("📷 Foto capturada correctamente.");
 }

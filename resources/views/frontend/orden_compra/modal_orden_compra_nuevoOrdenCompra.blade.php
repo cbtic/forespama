@@ -884,7 +884,7 @@ function agregarProducto(){
     var newRow = "";
     for (var i = 0; i < cantidad; i++) { 
         var n = $('#tblOrdenCompraDetalle tbody tr').length + 1;
-        var descripcion = '<input name="id_orden_compra_detalle[]" id="id_orden_compra_detalle${n}" class="form-control form-control-sm" value="${orden_compra.id}" type="hidden"><input name="id_autorizacion_detalle[]" id="id_autorizacion_detalle' + n + '" class="form-control form-control-sm" value="2" type="hidden"><select name="descripcion[]" id="descripcion' + n + '" class="form-control form-control-sm" ' +(!tieneRolVendedor ? 'onChange="verificarProductoSeleccionado(this, ' + n + ');validarMuestraExhibicion(this)"' : 'onChange="obtenerCodInterno(this, ' + n + ');validarMuestraExhibicion(this)"') + '> ' + opcionesDescripcion +' </select>';
+        var descripcion = '<input name="id_orden_compra_detalle[]" id="id_orden_compra_detalle${n}" class="form-control form-control-sm" value="${orden_compra.id}" type="hidden"><input name="id_autorizacion_detalle[]" id="id_autorizacion_detalle' + n + '" class="form-control form-control-sm" value="2" type="hidden"><select name="descripcion[]" id="descripcion' + n + '" class="form-control form-control-sm" ' +(!tieneRolVendedor ? 'onChange="verificarProductoSeleccionado(this, ' + n + ');validarMuestraExhibicion(this);validarServicio(this)"' : 'onChange="obtenerCodInterno(this, ' + n + ');validarMuestraExhibicion(this);validarServicio(this)"') + '> ' + opcionesDescripcion +' </select>';
         var descripcion_ant = '<input type="hidden" name="descripcion_ant[]" id="descripcion_ant' + n + '" class="form-control form-control-sm" />';
         var cod_interno = '<input name="cod_interno[]" id="cod_interno' + n + '" class="form-control form-control-sm" value="" type="text">';
         var marca = '<select name="marca[]" id="marca' + n + '" class="form-control form-control-sm" onchange=""> <option value="">--Seleccionar--</option><?php foreach ($marca as $row){?><option value="<?php echo htmlspecialchars($row->id); ?>"><?php echo htmlspecialchars(addslashes($row->denominiacion)); ?></option><?php }?></select>'
@@ -1444,6 +1444,20 @@ function validarMuestraExhibicion(input){
         $('#descuento_general').val("0");
         $('#total_general').val("0");
 
+    }
+}
+
+function validarServicio(input){
+
+    const row = $(input).closest("tr");
+
+    var numero_orden_compra_cliente = $('#numero_orden_compra_cliente').val().toUpperCase().trim();
+    var descripcion_completo = $(input).find('option:selected').text().trim().toUpperCase();
+
+    if (descripcion_completo.startsWith('SERV')) {
+        row.find('.precio_unitario').attr('readonly',false);
+    }else{
+        row.find('.precio_unitario').attr('readonly',true);
     }
 }
 

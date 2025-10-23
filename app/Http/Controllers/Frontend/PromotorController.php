@@ -205,6 +205,41 @@ class PromotorController extends Controller
 	{
 		$id_user = Auth::user()->id;
 
+		if ($request->has('foto_base64')) {
+
+			$imageData = $request->foto_base64;
+			
+			if (preg_match('/^data:image\/(\w+);base64,/', $imageData, $type)) {
+				$extension = strtolower($type[1]);
+
+				if (!in_array($extension, ['jpg', 'jpeg', 'png'])) {
+					throw new \Exception('Formato de imagen no válido. Solo se permiten JPG o PNG.');
+				}
+
+				$imageData = substr($imageData, strpos($imageData, ',') + 1);
+				$imageData = base64_decode($imageData);
+
+				if ($imageData === false) {
+					throw new \Exception('Error al decodificar la imagen.');
+				}
+
+				$path = public_path("img/asistencias/");
+				if (!is_dir($path)) {
+					mkdir($path, 0777, true);
+				}
+
+				$filename = 'asistencia_' . date("YmdHis") . substr((string)microtime(), 1, 6) . '.' . $extension;
+
+				file_put_contents($path . $filename, $imageData);
+
+				$rutaFinal = "img/asistencias/" . $filename;
+
+				$imagePath = public_path($rutaFinal);
+			} else {
+				throw new \Exception('El formato base64 de la imagen es incorrecto.');
+			}
+		}
+
 		$asistencia_promotor = new AsistenciaPromotore;
 		$asistencia_promotor->id_promotor = $id_user;
 		$asistencia_promotor->id_tienda = $request->id_tienda;
@@ -254,4 +289,16 @@ class PromotorController extends Controller
 		return view('frontend.promotores.modal_asistencia_promotor',compact('tiendas'));
 
     }
+
+	public function calcularDistancia($lat1, $lon1, $lat2, $lon2)
+	{
+		$radioTierra = 6371;
+		$dLat = deg2rad($lat2 - $lat1);
+		$dLon = deg2rad($lon2 - $lon1);
+		$a = sin($dLat/2) * sin($dLat/2) +
+			cos(deg2rad($lat1)) * cos(deg2rad($lat2)) *
+			sin($dLon/2) * sin($dLon/2);
+		$c = 2 * atan2(sqrt($a), sqrt(1-$a));
+		return $radioTierra * $c;
+	}
 }
