@@ -249,6 +249,7 @@ class PromotorController extends Controller
 		$asistencia_promotor->ip = $request->ip();
 		$asistencia_promotor->latitud = $request->latitud;
 		$asistencia_promotor->longitud = $request->longitud;
+		$asistencia_promotor->ruta_imagen_ingreso = $rutaFinal;
 		$asistencia_promotor->id_usuario_inserta = $id_user;
 		$asistencia_promotor->save();
 
