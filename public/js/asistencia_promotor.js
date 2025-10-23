@@ -172,6 +172,18 @@ function datatablenew(){
 			},
 			{
 				"mRender": function (data, type, row) {
+					if (row.ruta_imagen_ingreso) {
+						return '<img src="/' + row.ruta_imagen_ingreso + '" alt="Foto asistencia" width="60" height="60" style="border-radius:8px; object-fit:cover;">';
+					} else {
+						return '<span class="text-muted">Sin foto</span>';
+					}
+				},
+				"bSortable": false,
+				"aTargets": [7], // 👈 índice de columna (ajusta según orden)
+				"className": "dt-center"
+			},
+			{
+				"mRender": function (data, type, row) {
 					var estado = "";
 					if(row.estado == 1){
 						estado = "Activo";
@@ -182,7 +194,7 @@ function datatablenew(){
 					return estado;
 				},
 				"bSortable": false,
-				"aTargets": [7]
+				"aTargets": [8]
 			},
 		]
     });
@@ -294,7 +306,8 @@ function fn_save_asistencia_promotor(){
                         _token: $('meta[name="csrf-token"]').attr('content'),
                         id_tienda: id_tienda,
                         latitud: latitud,
-                        longitud: longitud
+                        longitud: longitud,
+						foto_base64: $('#foto_base64').val()
                     },
                     success: function (response) {
                         $('.loader').hide();
@@ -362,7 +375,7 @@ function capturarFoto() {
 
     const contexto = canvas.getContext('2d');
     contexto.drawImage(video, 0, 0, canvas.width, canvas.height);
-	
+
     const dataURL = canvas.toDataURL('image/jpeg');
     foto.value = dataURL;
 

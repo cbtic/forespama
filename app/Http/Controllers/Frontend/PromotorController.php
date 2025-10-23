@@ -204,6 +204,7 @@ class PromotorController extends Controller
 	public function marcar_asistencia(Request $request)
 	{
 		$id_user = Auth::user()->id;
+		$rutaFinal = null;
 
 		if ($request->has('foto_base64')) {
 
@@ -239,6 +240,8 @@ class PromotorController extends Controller
 				throw new \Exception('El formato base64 de la imagen es incorrecto.');
 			}
 		}
+
+		//dd($rutaFinal);exit();
 
 		$asistencia_promotor = new AsistenciaPromotore;
 		$asistencia_promotor->id_promotor = $id_user;

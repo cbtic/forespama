@@ -373,6 +373,7 @@ label.form-control-sm{
 								<th>Hora Ingreso</th>
 								<th>Hora Salida</th>
 								<th>Ver Ubicaci&oacute;n</th>
+								<th>Imagen Ingreso</th>
 								<th>Estado</th>
 							</tr>
 							</thead>
