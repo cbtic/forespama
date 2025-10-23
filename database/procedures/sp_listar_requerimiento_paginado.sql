@@ -1,3 +1,5 @@
+-- DROP FUNCTION public.sp_listar_requerimiento_paginado(varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, refcursor);
+
 CREATE OR REPLACE FUNCTION public.sp_listar_requerimiento_paginado(p_tipo_documento character varying, p_fecha character varying, p_numero_requerimiento character varying, p_almacen character varying, p_situacion character varying, p_responsable_atencion character varying, p_estado_atencion character varying, p_tipo_requerimiento character varying, p_producto character varying, p_denominacion_producto character varying, p_estado character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
  RETURNS refcursor
  LANGUAGE plpgsql
@@ -15,7 +17,7 @@ begin
 
 	p_pagina=(p_pagina::Integer-1)*p_limit::Integer;
 
-	v_campos=' r.id, tm.denominacion tipo_documento, r.fecha, r.codigo, r.cerrado, a.denominacion almacen, r.estado, tm2.denominacion cerrado_situacion, id_usuario_inserta id_usuario, u.name responsable_atencion, tm3.denominacion estado_atencion, r.responsable_atencion id_responsable, tm4.denominacion tipo_requerimiento, r.estado_solicitud ';
+	v_campos=' r.id, tm.denominacion tipo_documento, r.fecha, r.codigo, r.cerrado, a.denominacion almacen, r.estado, tm2.denominacion cerrado_situacion, id_usuario_inserta id_usuario, u.name responsable_atencion, tm3.denominacion estado_atencion, r.responsable_atencion id_responsable, tm4.denominacion tipo_requerimiento, r.estado_solicitud, u2."name" usuario_inserta, r.estado_atencion id_estado_atencion ';
 
 	v_tabla=' from requerimientos r 
 	left join tabla_maestras tm on r.id_tipo_documento ::int = tm.codigo::int and tm.tipo = ''59''
@@ -23,7 +25,8 @@ begin
 	left join tabla_maestras tm2 on r.cerrado ::int = tm2.codigo::int and tm2.tipo = ''52''
 	left join users u on r.responsable_atencion = u.id
 	left join tabla_maestras tm3 on r.estado_atencion ::int = tm3.codigo::int and tm3.tipo = ''60''
-	left join tabla_maestras tm4 on r.id_tipo_requerimiento ::int = tm4.codigo::int and tm4.tipo = ''67'' ';
+	left join tabla_maestras tm4 on r.id_tipo_requerimiento ::int = tm4.codigo::int and tm4.tipo = ''67''
+	left join users u2 on r.id_usuario_inserta = u2.id ';
 	
 	v_where = ' Where 1=1 ';
 

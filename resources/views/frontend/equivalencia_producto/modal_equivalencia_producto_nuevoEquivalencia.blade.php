@@ -16,7 +16,7 @@
 
 .modal-dialog {
     width: 100%;
-    max-width:100%!important
+    max-width:80%!important
 }
 
 .custom-select2-dropdown {
@@ -138,6 +138,7 @@ $(document).ready(function() {
     $("#producto").select2({ width: '100%' });
     $("#empresa").select2({ width: '100%' });
 
+    actualizarLegend();
 });
 
 </script>
@@ -218,6 +219,19 @@ $('#producto').on('change', function(){
 
 });
 
+function actualizarLegend(){
+
+    var texto_empresa = $('#empresa option:selected').text();
+
+    var legend = $('fieldset[name="equivalencia_empresa"] legend');
+
+    if ($('#empresa').val()) {
+        legend.text('Equivalencia de Nuestro Producto en ' + texto_empresa);
+    } else {
+        legend.text('Equivalencia de Nuestro Producto');
+    }
+}
+
 </script>
 
 <body class="hold-transition skin-blue sidebar-mini">
@@ -275,8 +289,8 @@ $('#producto').on('change', function(){
                                 <div class="col-lg-2">
                                     Empresa
                                 </div>
-                                <div class="col-lg-2">
-                                    <select name="empresa" id="empresa" class="form-control form-control-sm">
+                                <div class="col-lg-4">
+                                    <select name="empresa" id="empresa" class="form-control form-control-sm" onchange="actualizarLegend()">
                                         <option value="">--Seleccionar--</option>
                                         <?php
                                         foreach ($empresa as $row){?>
@@ -286,27 +300,64 @@ $('#producto').on('change', function(){
                                         ?>
                                     </select>
                                 </div>
-                                <div class="col-lg-2">
-                                    C&oacute;digo Producto Empresa
-                                </div>
-                                <div class="col-lg-2">
-                                    <input id="codigo_producto_empresa" name="codigo_producto_empresa" on class="form-control form-control-sm"  value="<?php if($id>0){echo $equivalencia_producto->codigo_empresa;}?>" type="text">
-                                </div>
-                                <div class="col-lg-2">
-                                    SKU Producto Empresa
-                                </div>
-                                <div class="col-lg-2">
-                                    <input id="sku_producto_empresa" name="sku_producto_empresa" on class="form-control form-control-sm"  value="<?php if($id>0){echo $equivalencia_producto->sku;}?>" type="text">
-                                </div>
                             </div>
-                            <div class="row" style="padding-left:10px; padding-top : 10px">
-                                <div class="col-lg-2">
-                                Denominaci&oacute;n Producto Empresa
+                            <fieldset name="equivalencia_empresa" style="border:1px solid #A4A4A4; padding: 10px">
+                                <legend class="control-label form-control-sm">Equivalencia de Nuestro Producto</legend>
+                                <div class="row" style="padding-left:10px; padding-top : 10px">
+                                    <div class="col-lg-2">
+                                        C&oacute;digo Producto Empresa
+                                    </div>
+                                    <div class="col-lg-2">
+                                        <input id="codigo_producto_empresa" name="codigo_producto_empresa" on class="form-control form-control-sm"  value="<?php if($id>0){echo $equivalencia_producto->codigo_empresa;}?>" type="text">
+                                    </div>
+                                    <!--<div class="col-lg-2">
+                                        SKU Producto Empresa
+                                    </div>
+                                    <div class="col-lg-2">
+                                        <input id="sku_producto_empresa" name="sku_producto_empresa" on class="form-control form-control-sm"  value="<?php //if($id>0){echo $equivalencia_producto->sku;}?>" type="text">
+                                    </div>-->
+                                    <div class="col-lg-2">
+                                    Denominaci&oacute;n Producto Empresa
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <input id="denominacion_producto_empresa" name="denominacion_producto_empresa" on class="form-control form-control-sm"  value="<?php if($id>0){echo $equivalencia_producto->descripcion_empresa;}?>" type="text">
+                                    </div>
                                 </div>
-                                <div class="col-lg-4">
-                                    <input id="denominacion_producto_empresa" name="denominacion_producto_empresa" on class="form-control form-control-sm"  value="<?php if($id>0){echo $equivalencia_producto->descripcion_empresa;}?>" type="text">
+                            </fieldset>
+                            <fieldset name="equivalencia_dimfer" style="border:1px solid #A4A4A4; padding: 10px">
+                                <legend class="control-label form-control-sm">Equivalencia Dimfer</legend>
+                                <div class="row" style="padding-left:10px; padding-top : 10px">
+                                    <div class="col-lg-2">
+                                        C&oacute;digo
+                                    </div>
+                                    <div class="col-lg-2">
+                                        <input id="codigo_producto_dimfer" name="codigo_producto_dimfer" on class="form-control form-control-sm"  value="<?php if($id>0){echo $equivalencia_producto->codigo_dimfer;}?>" type="text">
+                                    </div>
+                                    <div class="col-lg-2">
+                                    Denominaci&oacute;n
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <input id="denominacion_producto_dimfer" name="denominacion_producto_dimfer" on class="form-control form-control-sm"  value="<?php if($id>0){echo $equivalencia_producto->descripcion_dimfer;}?>" type="text">
+                                    </div>
                                 </div>
-                            </div>
+                            </fieldset>
+                            <fieldset name="equivalencia_ares" style="border:1px solid #A4A4A4; padding: 10px">
+                                <legend class="control-label form-control-sm">Equivalencia Ares</legend>
+                                <div class="row" style="padding-left:10px; padding-top : 10px">
+                                    <div class="col-lg-2">
+                                        C&oacute;digo
+                                    </div>
+                                    <div class="col-lg-2">
+                                        <input id="codigo_producto_ares" name="codigo_producto_ares" on class="form-control form-control-sm"  value="<?php if($id>0){echo $equivalencia_producto->codigo_ares;}?>" type="text">
+                                    </div>
+                                    <div class="col-lg-2">
+                                    Denominaci&oacute;n
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <input id="denominacion_producto_ares" name="denominacion_producto_ares" on class="form-control form-control-sm"  value="<?php if($id>0){echo $equivalencia_producto->descripcion_ares;}?>" type="text">
+                                    </div>
+                                </div>
+                            </fieldset>
                         </div>
                         </div>
                             <div style="margin-top:15px" class="form-group">

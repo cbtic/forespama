@@ -8,6 +8,7 @@ use App\Models\TablaMaestra;
 use App\Models\PromotorRuta;
 use App\Models\Tienda;
 use App\Models\User;
+use App\Models\AsistenciaPromotore;
 use Auth;
 use Carbon\Carbon;
 
@@ -187,6 +188,63 @@ class PromotorController extends Controller
         }
 
         return response()->json(['success' => 'Dispensaci&oacute;n guardada exitosamente.']);
+
+    }
+
+	public function create_asistencia(){
+		
+		return view('frontend.promotores.create_asistencia');
+
+	}
+
+	public function marcar_asistencia(Request $request)
+	{
+		$user = auth()->user();
+
+		$asistencia_promotor = new AsistenciaPromotore;
+		$asistencia_promotor->id_promotor = $user->id;
+		$asistencia_promotor->id_tienda = $request->id_tienda;
+		$asistencia_promotor->fecha = now()->toDateString();
+		$asistencia_promotor->hora_entrada = now()->format('H:i:s');
+		//$asistencia->hora_salida = now()->format('H:i:s');
+		$asistencia_promotor->ip = $request->ip();
+		$asistencia_promotor->latitud = $request->latitud;
+		$asistencia_promotor->longitud = $request->longitud;
+		$asistencia_promotor->id_usuario_inserta = $user->id;
+		$asistencia_promotor->save();
+
+		return response()->json(['message' => 'Asistencia marcada correctamente.']);
+	}
+
+	public function listar_asistencia_promotores_ajax(Request $request){
+
+		$asistencia_promotor_model = new AsistenciaPromotore;
+		$p[]=$request->fecha;
+        $p[]=$request->estado;
+		$p[]=$request->NumeroPagina;
+		$p[]=$request->NumeroRegistros;
+		$data = $asistencia_promotor_model->listar_asistencia_promotores_ajax($p);
+		$iTotalDisplayRecords = isset($data[0]->totalrows)?$data[0]->totalrows:0;
+
+		$result["PageStart"] = $request->NumeroPagina;
+		$result["pageSize"] = $request->NumeroRegistros;
+		$result["SearchText"] = "";
+		$result["ShowChildren"] = true;
+		$result["iTotalRecords"] = $iTotalDisplayRecords;
+		$result["iTotalDisplayRecords"] = $iTotalDisplayRecords;
+		$result["aaData"] = $data;
+
+        echo json_encode($result);
+
+	}
+
+	public function modal_asistencia_promotor(){
+		
+        $tienda_model = new Tienda;
+
+        $tiendas = $tienda_model->getTiendasAll();
+
+		return view('frontend.promotores.modal_asistencia_promotor',compact('tiendas'));
 
     }
 }

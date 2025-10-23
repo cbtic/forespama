@@ -1,3 +1,5 @@
+-- DROP FUNCTION public.sp_listar_chopeo_productos_paginado(varchar, varchar, varchar, varchar, refcursor);
+
 CREATE OR REPLACE FUNCTION public.sp_listar_chopeo_productos_paginado(p_tienda character varying, p_producto character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
  RETURNS refcursor
  LANGUAGE plpgsql

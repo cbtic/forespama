@@ -454,7 +454,7 @@
 
 					@endif 
 
-					@if(Gate::check('Consulta de Facturacion'))
+					@if(Gate::check('Consulta de Facturacion') || Gate::check('Marcacion Promotor'))
 					
 						<li class="nav-item dropdown">
 							<a href="#" class="nav-link dropdown-toggle" id="navbarDropdownPrueba" data-toggle="dropdown"
@@ -464,6 +464,10 @@
 
 								@can('Asignacion Rutas')
 									<x-utils.link :href="route('frontend.promotores.create_ruta')" class="dropdown-item" :text="__('Asignacion Rutas')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+								@endif
+
+								@can('Marcacion Promotor')
+									<x-utils.link :href="route('frontend.promotores.create_asistencia')" class="dropdown-item" :text="__('Marcar Asistencia Promotor')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
 								@endif
 
 							</div>

@@ -814,3 +814,7 @@ Route::post('reuso/listar_reuso_ajax', [ReusoController::class, 'listar_reuso_aj
 Route::get('reuso/modal_reuso/{id}', [ReusoController::class, 'modal_reuso'])->name('reuso.modal_reuso');
 Route::post('reuso/send_reuso', [ReusoController::class, 'send_reuso'])->name('reuso.send_reuso');
 Route::get('reuso/cargar_detalle/{id}', [ReusoController::class, 'cargar_detalle'])->name('reuso.cargar_detalle');
+Route::get('promotores/create_asistencia', [PromotorController::class, 'create_asistencia'])->name('promotores.create_asistencia');
+Route::post('promotores/marcar_asistencia', [PromotorController::class, 'marcar_asistencia'])->name('promotores.marcar_asistencia');
+Route::post('promotores/listar_asistencia_promotores_ajax', [PromotorController::class, 'listar_asistencia_promotores_ajax'])->name('promotores.listar_asistencia_promotores_ajax');
+Route::get('promotores/modal_asistencia_promotor', [PromotorController::class, 'modal_asistencia_promotor'])->name('promotores.modal_asistencia_promotor');
