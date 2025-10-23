@@ -411,6 +411,13 @@ label.form-control-sm{
               <?php } ?>
             </select>
           </div>
+		  <div id="camera-container" style="display:none; text-align:center; margin-top:10px;">
+			<video id="camera" width="250" height="250" autoplay style="border:1px solid #ccc; border-radius:5px;"></video><br>
+			<button type="button" class="btn btn-primary btn-sm" onclick="capturarFoto()">📸 Tomar Foto</button>
+		</div>
+
+		<canvas id="canvas" width="250" height="250" style="display:none;"></canvas>
+		<input type="hidden" id="foto_base64" name="foto_base64">
         </form>
       </div>
 
