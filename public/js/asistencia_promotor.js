@@ -32,6 +32,8 @@ $(document).ready(function () {
 	
 	datatablenew();
 
+	$('#id_tienda').select2({ width: '100%' })
+
 });
 
 function datatablenew(){
@@ -186,8 +188,8 @@ function fn_ListarBusqueda() {
 
 function modalAsistencia(){
 	
-	$(".modal-dialog").css("width","85%");
-	$('#openOverlayOpc .modal-body').css('height', 'auto');
+	//$(".modal-dialog").css("width","40%");
+	//$('#openOverlayOpc .modal-body').css('height', 'auto');
 
 	$.ajax({
 		url: "/promotores/modal_asistencia_promotor",
@@ -251,5 +253,75 @@ function marcarAsistencia() {
     } else {
         bootbox.alert("Tu navegador no soporta geolocalización.");
         $('#btnAsistencia').attr('disabled', false);
+    }
+}
+
+function fn_save_asistencia_promotor(){
+	
+    var msg = "";
+
+    var id_tienda = $('#id_tienda').val();
+
+    if(id_tienda==""){msg+="Debe seleccionar una tienda antes de marcar asistencia. <br>";}
+    
+    if(msg!=""){
+        bootbox.alert(msg);
+        return false;
+    }else{
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+
+                const latitud = position.coords.latitude;
+                const longitud = position.coords.longitude;
+
+                var msgLoader = "Marcando asistencia, espere un momento...";
+                var heightBrowser = $(window).width() / 2;
+                $('.loader').css("opacity", "0.8").css("height", heightBrowser).html("<div id='Grd1_wrapper' class='dataTables_wrapper'><div id='Grd1_processing' class='dataTables_processing panel-default'>" + msgLoader + "</div></div>");
+                $('.loader').show();
+
+                $.ajax({
+                    url: "/promotores/marcar_asistencia",
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        _token: $('meta[name="csrf-token"]').attr('content'),
+                        id_tienda: id_tienda,
+                        latitud: latitud,
+                        longitud: longitud
+                    },
+                    success: function (response) {
+                        $('.loader').hide();
+                        bootbox.alert(response.message);
+                        $('#btnAsistencia').attr('disabled', false);
+                        $('#openOverlayOpc').modal('hide');
+                        datatablenew();
+                    },
+                    error: function (xhr, status, error) {
+                        $('.loader').hide();
+                        bootbox.alert("Ocurrió un error al marcar la asistencia: " + error);
+                        $('#btnAsistencia').attr('disabled', false);
+                    }
+                });
+
+            }, function (error) {
+
+                if (error.code === error.PERMISSION_DENIED) {
+                    bootbox.alert("Debes permitir el acceso a la ubicación para marcar asistencia.");
+                } else if (error.code === error.POSITION_UNAVAILABLE) {
+                    bootbox.alert("No se pudo determinar la ubicación.");
+                } else if (error.code === error.TIMEOUT) {
+                    bootbox.alert("Tiempo de espera agotado al obtener la ubicación.");
+                } else {
+                    bootbox.alert("Error desconocido al obtener la ubicación.");
+                }
+                $('#btnAsistencia').attr('disabled', false);
+            },
+            { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+        );
+
+        } else {
+            bootbox.alert("Tu navegador no soporta geolocalización.");
+            $('#btnAsistencia').attr('disabled', false);
+        }
     }
 }
