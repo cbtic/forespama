@@ -179,7 +179,7 @@ function datatablenew(){
 					}
 				},
 				"bSortable": false,
-				"aTargets": [7], // 👈 índice de columna (ajusta según orden)
+				"aTargets": [7],
 				"className": "dt-center"
 			},
 			{
@@ -205,16 +205,15 @@ function fn_ListarBusqueda() {
 };
 
 function modalAsistencia(){
+    $('#id_tienda').val("").trigger('change');
+    $('#foto_base64').val("");
 	
-	//$(".modal-dialog").css("width","40%");
-	//$('#openOverlayOpc .modal-body').css('height', 'auto');
-
-	$.ajax({
+    $.ajax({
 		url: "/promotores/modal_asistencia_promotor",
 		type: "GET",
 		success: function (result) {
 			$("#diveditpregOpc").html(result);
-			$('#openOverlayOpc').modal('show');
+			$('#openOverlayOpc').modal('show');        
 		}
 	});
 }
@@ -350,12 +349,21 @@ $('#openOverlayOpc').on('shown.bs.modal', function () {
     iniciarCamara();
 });
 
+$('#openOverlayOpc').on('hidden.bs.modal', function () {
+    detenerCamara();
+    limpiarPreview();
+});
+
 function iniciarCamara() {
     const video = document.getElementById('camera');
     const container = document.getElementById('camera-container');
+    const btnTomarFoto = document.getElementById('btnTomarFoto');
 
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
         container.style.display = 'block';
+        video.style.display = 'block';
+        btnTomarFoto.style.display = 'inline-block';
+
         navigator.mediaDevices.getUserMedia({ video: true })
             .then(stream => {
                 video.srcObject = stream;
@@ -368,10 +376,21 @@ function iniciarCamara() {
     }
 }
 
+function detenerCamara() {
+    const video = document.getElementById('camera');
+    if (video.srcObject) {
+        video.srcObject.getTracks().forEach(track => track.stop());
+        video.srcObject = null;
+    }
+}
+
 function capturarFoto() {
     const video = document.getElementById('camera');
     const canvas = document.getElementById('canvas');
     const foto = document.getElementById('foto_base64');
+    const preview = document.getElementById('preview');
+    const previewContainer = document.getElementById('preview-container');
+    const btnTomarFoto = document.getElementById('btnTomarFoto');
 
     const contexto = canvas.getContext('2d');
     contexto.drawImage(video, 0, 0, canvas.width, canvas.height);
@@ -379,5 +398,40 @@ function capturarFoto() {
     const dataURL = canvas.toDataURL('image/jpeg');
     foto.value = dataURL;
 
+    preview.src = dataURL;
+    previewContainer.style.display = 'block';
+    video.style.display = 'none';
+    btnTomarFoto.style.display = 'none';
+
+    // Pausa el video (para congelar el fotograma)
+    //const stream = video.srcObject;
+    //if (stream) stream.getTracks().forEach(track => track.enabled = false);
+
     bootbox.alert("📷 Foto capturada correctamente.");
+}
+
+function aceptarFoto() {
+    bootbox.alert("✅ Foto guardada, puede continuar con el registro.");
+}
+
+function retomarFoto() {
+    const video = document.getElementById('camera');
+    const previewContainer = document.getElementById('preview-container');
+    const btnTomarFoto = document.getElementById('btnTomarFoto');
+
+    previewContainer.style.display = 'none';
+    video.style.display = 'block';
+    btnTomarFoto.style.display = 'inline-block';
+}
+
+function limpiarPreview() {
+    const previewContainer = document.getElementById('preview-container');
+    const foto = document.getElementById('foto_base64');
+    const btnTomarFoto = document.getElementById('btnTomarFoto');
+    const video = document.getElementById('camera');
+
+    foto.value = "";
+    previewContainer.style.display = 'none';
+    video.style.display = 'block';
+    btnTomarFoto.style.display = 'inline-block';
 }

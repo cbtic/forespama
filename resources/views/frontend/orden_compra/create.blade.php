@@ -302,6 +302,44 @@ label.form-control-sm{
 	cursor:pointer
 }
 
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    background-color: white;
+    color: #0d6efd !important;
+    margin: 0 3px;
+    padding: 4px 10px;
+    cursor: pointer;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+    background-color: #e9ecef !important;
+    color: #0d6efd !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.current {
+    background-color: #0d6efd !important;
+    color: white !important;
+    border: 1px solid #0d6efd;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.disabled {
+    color: #adb5bd !important;
+    background-color: transparent !important;
+}
+
+.dataTables_wrapper .dataTables_length label {
+  color: #0d6efd;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.dataTables_wrapper .dataTables_info {
+  color: #0d6efd;
+  font-weight: 500;
+  font-size: 14px;
+}
+
 </style>
 
 <script>

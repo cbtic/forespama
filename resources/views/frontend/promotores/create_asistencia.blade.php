@@ -283,6 +283,22 @@ label.form-control-sm{
 	cursor:pointer
 }
 
+#camera-container, #preview-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+#camera {
+  display: block;
+  margin: 0 auto;
+}
+
+#btnTomarFoto {
+  margin-top: 10px;
+}
+
 </style>
 
 
@@ -412,15 +428,26 @@ label.form-control-sm{
               <?php } ?>
             </select>
           </div>
-		  <div id="camera-container" style="display:none; text-align:center; margin-top:10px;">
-			<video id="camera" width="250" height="250" autoplay style="border:1px solid #ccc; border-radius:5px;"></video><br>
-			<button type="button" class="btn btn-primary btn-sm" onclick="capturarFoto()">📸 Tomar Foto</button>
-		</div>
+		      <div id="camera-container" style="display:none; text-align:center; margin-top:10px;">
+            <video id="camera" width="250" height="250" autoplay style="border:1px solid #ccc; border-radius:5px"></video>
+            <button id="btnTomarFoto" type="button" class="btn btn-primary btn-sm" onclick="capturarFoto()">📸 Tomar Foto</button>
+            <!--<canvas id="canvas" width="320" height="240" style="display:none;"></canvas>
 
-		<canvas id="canvas" width="250" height="250" style="display:none;"></canvas>
-		<input type="hidden" id="foto_base64" name="foto_base64">
-        </form>
-      </div>
+            <div style="margin-top:10px;">
+              <button type="button" class="btn btn-primary btn-sm" onclick="capturarFoto()">📸 Tomar foto</button>
+          </div>-->
+          </div>
+          <div id="preview-container" style="display:none; text-align:center; margin-top:10px;">
+            <img id="preview" width="250" height="250" style="border:1px solid #ccc; border-radius:5px; object-fit:cover;"><br>
+            <div class="mt-2">
+                <button type="button" class="btn btn-success btn-sm" onclick="aceptarFoto()">✅ Aceptar</button>
+                <button type="button" class="btn btn-warning btn-sm" onclick="retomarFoto()">↩️ Retomar</button>
+            </div>
+          </div>
+          <canvas id="canvas" width="250" height="250" style="display:none;"></canvas>
+          <input type="hidden" id="foto_base64" name="foto_base64">
+          </form>
+        </div>
 
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
