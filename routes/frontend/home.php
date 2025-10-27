@@ -49,6 +49,7 @@ use App\Http\Controllers\Frontend\FamiliaController;
 use App\Http\Controllers\Frontend\SubFamiliaController;
 use App\Http\Controllers\Frontend\UsuarioDescuentoController;
 use App\Http\Controllers\Frontend\ReusoController;
+use App\Http\Controllers\Frontend\ProductoCompetenciaController;
 
 //use App\Http\Controllers\VehiculoController;
 
@@ -818,3 +819,10 @@ Route::get('promotores/create_asistencia', [PromotorController::class, 'create_a
 Route::post('promotores/marcar_asistencia', [PromotorController::class, 'marcar_asistencia'])->name('promotores.marcar_asistencia');
 Route::post('promotores/listar_asistencia_promotores_ajax', [PromotorController::class, 'listar_asistencia_promotores_ajax'])->name('promotores.listar_asistencia_promotores_ajax');
 Route::get('promotores/modal_asistencia_promotor', [PromotorController::class, 'modal_asistencia_promotor'])->name('promotores.modal_asistencia_promotor');
+
+Route::get('producto_competencia/create', [ProductoCompetenciaController::class, 'create'])->name('producto_competencia.create');
+Route::post('producto_competencia/listar_producto_competencia_ajax', [ProductoCompetenciaController::class, 'listar_producto_competencia_ajax'])->name('producto_competencia.listar_producto_competencia_ajax');
+Route::get('producto_competencia/modal_producto_competencia/{id}', [ProductoCompetenciaController::class, 'modal_producto_competencia'])->name('producto_competencia.modal_producto_competencia');
+Route::post('producto_competencia/send_producto_competencia', [ProductoCompetenciaController::class, 'send_producto_competencia'])->name('producto_competencia.send_producto_competencia');
+Route::get('producto_competencia/eliminar_producto_competencia/{id}/{estado}', [ProductoCompetenciaController::class, 'eliminar_producto_competencia'])->name('producto_competencia.eliminar_producto_competencia');
+Route::get('producto_competencia/obtener_producto_competencia/{id_producto}', [ProductoCompetenciaController::class, 'obtener_producto_competencia'])->name('producto_competencia.obtener_producto_competencia');

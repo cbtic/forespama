@@ -16,6 +16,7 @@ use App\Models\Tienda;
 use App\Models\Chopeo;
 use App\Models\ChopeoDetalle;
 use App\Models\EquivalenciaProducto;
+use App\Models\ProductosCompetencia;
 use RealRashid\SweetAlert\Facades\Alert;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -113,10 +114,10 @@ class ProductosController extends Controller
 		$bien_servicio = $tablaMaestra_model->getMaestroByTipo(73);
         $familia = $familia_model->getFamiliaAll();
 		$categoria = $tablaMaestra_model->getMaestroByTipo(102);
-		$sub_categoria = $tablaMaestra_model->getMaestroByTipo(103);
-		$modelo = $tablaMaestra_model->getMaestroByTipo(104);
-		$packet = $tablaMaestra_model->getMaestroByTipo(105);
-		$medida = $tablaMaestra_model->getMaestroByTipo(106);
+		$sub_categoria = $tablaMaestra_model->getMaestroByTipo(105);
+		$modelo = $tablaMaestra_model->getMaestroByTipo(106);
+		$packet = $tablaMaestra_model->getMaestroByTipo(107);
+		$medida = $tablaMaestra_model->getMaestroByTipo(108);
         
 		return view('frontend.productos.modal_productos_nuevoProducto',compact('id','producto','unidad_medida','moneda','estado_bien','tipo_producto','unidad_producto','marca','tipo_origen_producto','imagenes','bien_servicio','familia','categoria','sub_categoria','modelo','packet','medida'));
 
@@ -551,7 +552,7 @@ class ProductosController extends Controller
 
             $imagePath = public_path($rutaFinal);
             
-            /*$keyFile = storage_path('app/google-key.json');
+            $keyFile = storage_path('app/google-key.json');
 
             //dd($rutaFinal);exit();
 
@@ -581,11 +582,20 @@ class ProductosController extends Controller
                 return response()->json(['error' => 'No se encontraron datos válidos en la imagen.']);
             }
 
-            $equivalencia_producto = EquivalenciaProducto::where('codigo_empresa',$numero)->where('estado',1)->first();
+            //$numero="123456";
+            //$precio="100.20";
 
+            if($request->competencia==1){
+                $equivalencia_producto = EquivalenciaProducto::where('codigo_empresa',$numero)->where('estado',1)->first();
+                $id_producto = $equivalencia_producto->id_producto;
+            }else{
+                $equivalencia_producto = ProductosCompetencia::where('codigo',$numero)->where('id_competencia',$request->competencia)->where('estado',1)->first();
+                $id_producto = $equivalencia_producto->id;
+            }
+            
             if (!$equivalencia_producto) {
                 return response()->json(['error' => 'No se encontró el producto con el código detectado.']);
-            }*/
+            }
 
             $chopeo = new Chopeo();
             $chopeo->id_tienda = $request->tienda;
@@ -600,7 +610,7 @@ class ProductosController extends Controller
 
             $chopeo_detalle = new ChopeoDetalle();
             $chopeo_detalle->id_chopeo = $id_chopeo;
-            $chopeo_detalle->id_producto = $equivalencia_producto->id_producto;
+            $chopeo_detalle->id_producto = $id_producto;
             $chopeo_detalle->precio_competencia = $precio;
             $chopeo_detalle->estado = 1;
             $chopeo_detalle->id_usuario_inserta = $id_user;
