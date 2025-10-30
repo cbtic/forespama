@@ -17,9 +17,9 @@
 
 .modal-dialog {
 	width: 100%;
-	max-width:60%!important
-  }
-  
+	max-width:40%!important
+}
+
 #tablemodal{
     border-spacing: 0;
     display: flex;/*Se ajuste dinamicamente al tamano del dispositivo**/
@@ -80,26 +80,6 @@
 #tablemodalm{
 	
 }
-
-.scrolls {
-	overflow-x: scroll;
-	overflow-y: hidden;
-	height: 200px;
-	white-space:nowrap
-}
-
-.delete_ruta{
-	background-image:url(/img/delete.png);
-	top:0px;
-	left:110px;
-	background-size: 100%;
-	position:absolute;
-	display:block;
-	width:30px;
-	height:30px;
-	cursor:pointer
-}
-
 </style>
 
 <!--<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"/>-->
@@ -151,56 +131,34 @@ $.mask.definitions['p'] = "[Mm]";
 */
 $(document).ready(function() {
 
-    $('#fecha_chopeo').datepicker({
-        autoclose: true,
-		format: 'yyyy-mm-dd',
-		changeMonth: true,
-		changeYear: true,
-        language: 'es'
-    });
-
-    $("#producto").select2({ width: '100%' });
-
-    $("#tienda").select2({ width: '100%' });
-
+    
 });
 </script>
 
 <script type="text/javascript">
 
-$('#openOverlayOpc').on('shown.bs.modal', function() {
-     $('#fecha_solicitud').datepicker({
-		format: "dd-mm-yyyy",
-		autoclose: true,
-		//container: '#openOverlayOpc modal-body'
-		container: '#openOverlayOpc modal-body'
-     });
-	 /*
-	 $('#hora_solicitud').timepicker({
-		showInputs: false,
-		container: '#openOverlayOpc modal-body'
-	});
-	*/
+$(document).ready(function() {
 	 
 });
 
-function fn_save_chopeo_producto(){
+function fn_save_producto_competencia(){
 
     var msg = "";
 
-    var tienda = $('#tienda').val();
-    var fecha_chopeo = $('#fecha_chopeo').val();
-    var btnPrecioDimfer = $('#btnPrecioDimfer').val();
-	
-    if(tienda==""){msg+="Ingrese la Tienda <br>";}
-    if(fecha_chopeo==""){msg+="Ingrese la Fecha <br>";}
-    if(btnPrecioDimfer==""){msg+="Ingrese la Imagen del Producto <br>";}
+    $('#denominacion').val($('#denominacion').val().toUpperCase());
+    $('#codigo').val($('#codigo').val().toUpperCase());
 
+    var competencia = $('#competencia').val();
+    var denominacion = $('#denominacion').val();
+    var codigo = $('#codigo').val();
+
+    if(competencia==""){msg+="Ingrese la Competencia <br>";}
+    if(denominacion==""){msg+="Ingrese la Denominacion <br>";}
+    if(codigo==""){msg+="Ingrese el Codigo <br>";}
+    
     if(msg!=""){
-
         bootbox.alert(msg);
         return false;
-
     }else{
 
         var msgLoader = "";
@@ -208,68 +166,30 @@ function fn_save_chopeo_producto(){
         var heightBrowser = $(window).width()/2;
         $('.loader').css("opacity","0.8").css("height",heightBrowser).html("<div id='Grd1_wrapper' class='dataTables_wrapper'><div id='Grd1_processing' class='dataTables_processing panel-default'>"+msgLoader+"</div></div>");
         $('.loader').show();
-        let form = document.getElementById('frmChopeoProducto');
-        let formData = new FormData(form);
 
         $.ajax({
-            url: "/productos/send_chopeo_producto",
+            url: "/producto_competencia/send_producto_competencia",
             type: "POST",
-            data : formData, 
-            contentType: false, 
-            processData: false,
+            data : $("#frmProductoCompetencia").serialize(),
             success: function (result) {
-                $('.loader').hide();
-
                 if (result.success) {
+                    $('.loader').hide();
                     bootbox.alert(result.success, function() {
-                        datatablenew();
+                        $('#openOverlayOpc2').modal('hide');
+                        //datatablenew();
                     });
-                    $('#btnPrecioDimfer').val('');
-                }else if (result.error) {
+                } else if (result.error) {
                     bootbox.alert(result.error);
-                }else if (result.msg2) {
-                    // Si el mensaje tiene contenido => abrir modal
-                    if (result.msg2 !== "") {
-                        //$('#id').val(result.id);
-                        var codigo_producto_competencia = result.numero;
-                        var nombre_producto_competencia = result.nombre;
-                        var competencia_producto_competencia = result.competencia_;
-                        modalProductoCompetencia(codigo_producto_competencia, nombre_producto_competencia, competencia_producto_competencia);
-                        //$('#modalProductoCompetenciaNuevo').modal('show');
-                    }
                 }
             },
-            error: function (xhr) {
-                $('.loader').hide();
-                console.error(xhr.responseText);
-                bootbox.alert("Ocurrió un error al procesar la solicitud.");
-            }
         });
     }
 }
 
-function modalProductoCompetencia(codigo_producto_competencia,nombre_producto_competencia,competencia_producto_competencia){
-	
-	$(".modal-dialog").css("width","85%");
-	$('#openOverlayOpc2 .modal-body').css('height', 'auto');
-
-	$.ajax({
-		url: "/productos/modal_producto_competencia/"+codigo_producto_competencia+"/"+nombre_producto_competencia+"/"+competencia_producto_competencia,
-		type: "GET",
-		success: function (result) {
-			$("#diveditpregOpc2").html(result);
-			$('#openOverlayOpc2').modal('show');
-		}
-	});
-}
-
 </script>
 
+<!--<div class="modal fade" id="modalProductoCompetenciaNuevo" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">-->
 <body class="hold-transition skin-blue sidebar-mini">
-
-    <div class="panel-heading close-heading">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-    </div>
 
     <div>
 		<!--
@@ -284,80 +204,61 @@ function modalProductoCompetencia(codigo_producto_competencia,nombre_producto_co
             <div class="card">
                 
                 <div class="card-header" style="padding:5px!important;padding-left:20px!important">
-                    Registrar Chopeo de Producto - Dimfer
+                    Registrar Producto Competencia
                 </div>
                 
                 <div class="card-body">
-                <form method="post" action="#" id="frmChopeoProducto" name="frmChopeoProducto" enctype="multipart/form-data">
+                <form method="post" action="#" id="frmProductoCompetencia" name="frmProductoCompetencia">
 
                     <div class="row">
 
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding-top:5px;padding-bottom:20px">
                                 
                             <input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
-                            <input type="hidden" name="id" id="id" value="<?php echo $id?>">
-                            <div class="row" style="padding-left:10px">
+                            <!--<input type="hidden" name="id" id="id" value="<?php //echo $id?>">-->
                             
+                            
+                            <div class="row" style="padding-left:10px">
                                 <div class="col-lg-4">
                                     <div class="form-group">
                                         <label class="control-label form-control-sm">Competencia</label>
-                                        <select name="competencia" id="competencia" class="form-control form-control-sm" onchange="">
+                                        <select name="competencia" id="competencia" class="form-control form-control-sm">
                                             <option value="">--Seleccionar--</option>
-                                            <?php
+                                            <?php 
                                             foreach ($competencia as $row){?>
-                                                <option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
-                                            <?php 
+                                                <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$competencia_producto_competencia)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                                <?php 
                                             }
                                             ?>
                                         </select>
-                                    </div>
-                                </div>
-
-                                <div class="col-lg-4">
-                                    <div class="form-group">
-                                        <label class="control-label form-control-sm">Tienda</label>
-                                        <select name="tienda" id="tienda" class="form-control form-control-sm" onchange="">
-                                            <option value="">--Seleccionar--</option>
-                                            <?php
-                                            foreach ($tienda as $row){?>
-                                                <option value="<?php echo $row->id ?>"><?php echo $row->denominacion ?></option>
-                                            <?php 
-                                            }
-                                            ?>
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <div class="col-lg-3">
-                                    <div class="form-group">
-                                        <label class="control-label form-control-sm">Fecha</label>
-                                        <input id="fecha_chopeo" name="fecha_chopeo" on class="form-control form-control-sm"  value="<?php echo date('Y-m-d'); ?>" type="text">
                                     </div>
                                 </div>
                             </div>
                             <div class="row" style="padding-left:10px">
-                                <div class="col-lg-4">
+                                <div class="col-lg-8">
                                     <div class="form-group">
-                                        <label class="control-label form-control-sm">Cargar Precio</label>
-                                        <input type="file" class="form-control-file btn btn-sm btn-success" style="background-color: #F6F6F6 !important; border: none !important; padding: 0 !important; box-shadow: none !important; color:black" id="btnPrecioDimfer" name="btnPrecioDimfer">
-                                        <?php if (!empty($producto->ruta_ficha_tecnica)) : ?>
-                                            <div class="mt-2">
-                                                <i class="fa fa-file-pdf-o"></i>
-                                                <a href="<?php echo asset($producto->ruta_ficha_tecnica); ?>" target="_blank">Descargar Precio Dimfer</a>
-                                            </div>
-                                        <?php endif; ?>
+                                        <label class="control-label form-control-sm">Denominaci&oacute;n</label>
+                                        <input id="denominacion" name="denominacion" on class="form-control form-control-sm" value="<?php echo $nombre_producto_competencia?>" type="text" style="text-transform: uppercase;">
                                     </div>
                                 </div>
-                            </div>
-                            <div style="margin-top:15px" class="form-group">
-                                <div class="col-sm-12 controls">
-                                    <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
-                                        <a href="javascript:void(0)" onClick="fn_save_chopeo_producto()" class="btn btn-sm btn-success">Guardar</a>
-                                        <a href="javascript:void(0)" onClick="$('#openOverlayOpc').modal('hide');" class="btn btn-sm btn-info" style="margin-left:10px">Cerrar</a>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label class="control-label form-control-sm">C&oacute;digo</label>
+                                        <input id="codigo" name="codigo" on class="form-control form-control-sm" value="<?php echo $codigo_producto_competencia?>" type="text" style="text-transform: uppercase;">
                                     </div>
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    <div style="margin-top:15px" class="form-group">
+                        <div class="col-sm-12 controls">
+                            <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
+                                <a href="javascript:void(0)" onClick="fn_save_producto_competencia()" class="btn btn-sm btn-success">Registrar</a>
+                            </div>
+                                                
+                        </div>
+                    </div> 
+                            
                     </div>
                 </form>
                 </div>
@@ -372,38 +273,12 @@ function modalProductoCompetencia(codigo_producto_competencia,nombre_producto_co
 <!-- /.content -->
 </div>
 <!-- /.content-wrapper -->
-
-    
+<!--</div>-->
 <script type="text/javascript">
-$(document).ready(function () {
 
-	$('#ruc_').blur(function () {
-		var id = $('#id').val();
-			if(id==0) {
-				validaRuc(this.value);
-			}
-		//validaRuc(this.value);
-	});
-	
-	
-	
-	
-});
-
-
-</script>
-
-<script type="text/javascript">
 $(document).ready(function() {
-	//$('#numero_placa').focus();
-	//$('#numero_placa').mask('AAA-000');
-	//$('#vehiculo_numero_placa').mask('AAA-000');
-	
 	
 });
-
-
-
 
 </script>
 

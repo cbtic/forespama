@@ -826,3 +826,4 @@ Route::get('producto_competencia/modal_producto_competencia/{id}', [ProductoComp
 Route::post('producto_competencia/send_producto_competencia', [ProductoCompetenciaController::class, 'send_producto_competencia'])->name('producto_competencia.send_producto_competencia');
 Route::get('producto_competencia/eliminar_producto_competencia/{id}/{estado}', [ProductoCompetenciaController::class, 'eliminar_producto_competencia'])->name('producto_competencia.eliminar_producto_competencia');
 Route::get('producto_competencia/obtener_producto_competencia/{id_producto}', [ProductoCompetenciaController::class, 'obtener_producto_competencia'])->name('producto_competencia.obtener_producto_competencia');
+Route::get('productos/modal_producto_competencia/{codigo_producto_competencia}/{nombre_producto_competencia}/{competencia_producto_competencia}', [ProductosController::class, 'modal_producto_competencia'])->name('productos.modal_producto_competencia');

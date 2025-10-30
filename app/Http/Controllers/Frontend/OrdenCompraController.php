@@ -890,7 +890,6 @@ class OrdenCompraController extends Controller
 		
 		return response()->json($descuento);
 	}
-
     
     public function obtener_salida_prod_id($id){
         $oc_model = new OrdenCompra;

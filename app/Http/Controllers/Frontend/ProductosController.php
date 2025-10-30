@@ -523,6 +523,22 @@ class ProductosController extends Controller
 		return view('frontend.productos.modal_chopeo_productos_nuevoChopeoProducto',compact('id','chopeo','producto','competencia','tienda','producto'));
 
     }
+
+    public function modal_producto_competencia($codigo_producto_competencia, $nombre_producto_competencia, $competencia_producto_competencia){
+		
+		$tabla_maestra_model = new TablaMaestra;
+
+		/*if($id>0){
+			$producto_competencia = ProductosCompetencia::find($id);
+		}else{
+			$producto_competencia = new ProductosCompetencia;
+		}*/
+
+		$competencia = $tabla_maestra_model->getMaestroByTipo(101);
+
+		return view('frontend.productos.modal_productos_nuevoProducto_competencia',compact('codigo_producto_competencia','nombre_producto_competencia','competencia_producto_competencia','competencia'));
+
+    }
     
     public function send_chopeo_producto(Request $request)
     {
@@ -552,7 +568,7 @@ class ProductosController extends Controller
 
             $imagePath = public_path($rutaFinal);
             
-            $keyFile = storage_path('app/google-key.json');
+            /*$keyFile = storage_path('app/google-key.json');
 
             //dd($rutaFinal);exit();
 
@@ -580,21 +596,36 @@ class ProductosController extends Controller
 
             if (!$numero || !$precio) {
                 return response()->json(['error' => 'No se encontraron datos válidos en la imagen.']);
-            }
+            }*/
 
-            //$numero="123456";
-            //$precio="100.20";
+            $numero="123456";
+            $precio="100.20";
+            $nombre="PTA EJEMPLO";
+            $msg2 = "";
 
             if($request->competencia==1){
                 $equivalencia_producto = EquivalenciaProducto::where('codigo_empresa',$numero)->where('estado',1)->first();
-                $id_producto = $equivalencia_producto->id_producto;
+                if($equivalencia_producto){
+                    $id_producto = $equivalencia_producto->id_producto;
+                }
             }else{
                 $equivalencia_producto = ProductosCompetencia::where('codigo',$numero)->where('id_competencia',$request->competencia)->where('estado',1)->first();
-                $id_producto = $equivalencia_producto->id;
+                if($equivalencia_producto){
+                    $id_producto = $equivalencia_producto->id;
+                }
             }
             
             if (!$equivalencia_producto) {
-                return response()->json(['error' => 'No se encontró el producto con el código detectado.']);
+
+                $msg2 = "No se encontró el producto con el código detectado. Favor de crearlo";
+                return response()->json([
+                    'msg2' => $msg2,
+                    'id' => '0',
+                    'numero' => $numero,
+                    'precio' => $precio,
+                    'nombre' => $nombre,
+                    'competencia_' => $request->competencia
+                ]);
             }
 
             $chopeo = new Chopeo();
