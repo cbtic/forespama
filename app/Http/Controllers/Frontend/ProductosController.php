@@ -598,9 +598,9 @@ class ProductosController extends Controller
                 return response()->json(['error' => 'No se encontraron datos válidos en la imagen.']);
             }*/
 
-            $numero="123456";
-            $precio="100.20";
-            $nombre="PTA EJEMPLO";
+            $numero="999999991";
+            $precio="120.20";
+            $nombre="PTA EJEMPLO2S";
             $msg2 = "";
 
             if($request->competencia==1){

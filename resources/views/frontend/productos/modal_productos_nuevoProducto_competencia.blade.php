@@ -15,7 +15,7 @@
 }
 
 
-.modal-dialog {
+.modal-dialog2 {
 	width: 100%;
 	max-width:40%!important
 }

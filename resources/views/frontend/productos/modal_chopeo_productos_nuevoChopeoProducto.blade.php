@@ -224,7 +224,29 @@ function fn_save_chopeo_producto(){
                     bootbox.alert(result.success, function() {
                         datatablenew();
                     });
-                    $('#btnPrecioDimfer').val('');
+                    
+                    bootbox.confirm({
+                    message: "¿Desea seguir?",
+                    buttons: {
+                        confirm: {
+                            label: 'Sí',
+                            className: 'btn-success'
+                        },
+                        cancel: {
+                            label: 'No',
+                            className: 'btn-danger'
+                        }
+                    },
+                    callback: function (result) {
+                        if (result) {
+                            // Acción si elige "Sí"
+                            console.log("El usuario quiere seguir");
+                        } else {
+                            // Acción si elige "No"
+                            console.log("El usuario no quiere seguir");
+                        }
+                    }
+                });
                 }else if (result.error) {
                     bootbox.alert(result.error);
                 }else if (result.msg2) {
