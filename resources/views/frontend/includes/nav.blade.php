@@ -391,6 +391,10 @@
 									<x-utils.link :href="route('frontend.usuario_descuento.create')" class="dropdown-item" :text="__('Permisos Usuario Descuento')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
 								@endif
 
+								@can('Producto Competencia')
+									<x-utils.link :href="route('frontend.producto_competencia.create')" class="dropdown-item" :text="__('Producto Competencia')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+								@endif
+
 							</div>
 						</li>
 					

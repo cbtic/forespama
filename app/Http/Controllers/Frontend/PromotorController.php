@@ -206,6 +206,14 @@ class PromotorController extends Controller
 		$id_user = Auth::user()->id;
 		$rutaFinal = null;
 
+		$tienda = Tienda::find($request->id_tienda);
+
+		$distancia = $this->calcularDistancia($tienda->latitud, $tienda->longitud, $request->latitud, $request->longitud);
+
+		if ($distancia > 0.5) { // 0.2 km = 200 metros
+			return response()->json(['message' => 'No estás dentro del rango permitido para marcar asistencia.']);
+		}
+
 		if ($request->has('foto_base64')) {
 
 			$imageData = $request->foto_base64;

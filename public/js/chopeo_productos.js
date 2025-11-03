@@ -125,6 +125,16 @@ function datatablenew(){
 			"bSortable": true,
 			"aTargets": [2]
 			},
+
+			{
+			"mRender": function (data, type, row) {
+				var fecha_chopeo = "";
+				if(row.fecha_chopeo!= null)fecha_chopeo = row.fecha_chopeo;
+				return fecha_chopeo;
+			},
+			"bSortable": true,
+			"aTargets": [3]
+			},
 			
 			{
 			"mRender": function (data, type, row) {
@@ -133,7 +143,7 @@ function datatablenew(){
 				return sku;
 			},
 			"bSortable": true,
-			"aTargets": [3]
+			"aTargets": [4]
 			},
 
 			{
@@ -143,7 +153,7 @@ function datatablenew(){
 				return costo_unitario;
 			},
 			"bSortable": true,
-			"aTargets": [4]
+			"aTargets": [5]
 			},
 			
 			{
@@ -153,7 +163,7 @@ function datatablenew(){
 				return precio_dimfer;
 			},
 			"bSortable": true,
-			"aTargets": [5]
+			"aTargets": [6]
 			},
 
 			{
@@ -163,9 +173,9 @@ function datatablenew(){
 				return precio_ares;
 			},
 			"bSortable": true,
-			"aTargets": [6]
+			"aTargets": [7]
 			},
-			{
+			/*{
 				"mRender": function (data, type, row) {
 					var estado = "";
 					var clase = "";
@@ -190,8 +200,8 @@ function datatablenew(){
 					return html;
 				},
 				"bSortable": false,
-				"aTargets": [7],
-			},
+				"aTargets": [8],
+			},*/
 		]
     });
 }
@@ -202,8 +212,8 @@ function fn_ListarBusqueda() {
 
 function modalChopeoProducto(id){
 	
-	$(".modal-dialog").css("width","85%");
-	$('#openOverlayOpc .modal-body').css('height', 'auto');
+	//$(".modal-dialog").css("width","85%");
+	//$('#openOverlayOpc .modal-body').css('height', 'auto');
 
 	$.ajax({
 		url: "/productos/modal_chopeo_producto/"+id,

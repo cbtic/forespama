@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\EquivalenciaProducto;
 use App\Models\Empresa;
 use App\Models\Producto;
+use App\Models\ProductosCompetencia;
 use Auth;
 
 class EquivalenciaProductosController extends Controller
@@ -65,6 +66,8 @@ class EquivalenciaProductosController extends Controller
 		
         $producto_model = new Producto;
         $empresa_model = new Empresa;
+        $producto_competencia_model = new ProductosCompetencia;
+		
 		
 		if($id>0){
 			$equivalencia_producto = EquivalenciaProducto::find($id);
@@ -74,8 +77,10 @@ class EquivalenciaProductosController extends Controller
 
         $producto = $producto_model->getProductoExterno();
         $empresa = Empresa::all();
+		$producto_dimfer = $producto_competencia_model->getProductoDimfer();
+		$producto_ares = $producto_competencia_model->getProductoAres();
 
-		return view('frontend.equivalencia_producto.modal_equivalencia_producto_nuevoEquivalencia',compact('id','equivalencia_producto','producto','empresa'));
+		return view('frontend.equivalencia_producto.modal_equivalencia_producto_nuevoEquivalencia',compact('id','equivalencia_producto','producto','empresa','producto_dimfer','producto_ares'));
 
     }
 
@@ -95,11 +100,13 @@ class EquivalenciaProductosController extends Controller
         $equivalencia_producto->id_empresa = $request->empresa;
         $equivalencia_producto->codigo_empresa = $request->codigo_producto_empresa;
         $equivalencia_producto->descripcion_empresa = $request->denominacion_producto_empresa;
-        $equivalencia_producto->codigo_dimfer = $request->codigo_producto_dimfer;
-        $equivalencia_producto->descripcion_dimfer = $request->denominacion_producto_dimfer;
-        $equivalencia_producto->codigo_ares = $request->codigo_producto_ares;
-        $equivalencia_producto->descripcion_ares = $request->denominacion_producto_ares;
-        $equivalencia_producto->sku = $request->sku_producto_empresa;
+        $equivalencia_producto->id_producto_dimfer = $request->producto_dimfer;
+        $equivalencia_producto->id_producto_ares = $request->producto_ares;
+        //$equivalencia_producto->codigo_dimfer = $request->codigo_producto_dimfer;
+        //$equivalencia_producto->descripcion_dimfer = $request->denominacion_producto_dimfer;
+        //$equivalencia_producto->codigo_ares = $request->codigo_producto_ares;
+        //$equivalencia_producto->descripcion_ares = $request->denominacion_producto_ares;
+        //$equivalencia_producto->sku = $request->sku_producto_empresa;
         $equivalencia_producto->id_usuario_inserta = $id_user;
 		$equivalencia_producto->estado = 1;
 		$equivalencia_producto->save();

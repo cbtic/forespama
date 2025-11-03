@@ -27,15 +27,18 @@
 
 #tablemodal{
     border-spacing: 0;
+    display: flex;
     max-height: 80vh; /*El alto que necesitemos**/
     overflow-y: auto; /**El scroll verticalmente cuando sea necesario*/
     overflow-x: hidden;/*Sin scroll horizontal*/
     table-layout: fixed;/**Forzamos a que las filas tenga el mismo ancho**/
+    width: 98vw;
     border:1px solid #c4c0c9;
 }
 
 #tablemodal thead{
     background-color: #e2e3e5;
+    position: fixed !important;
 }
 
 
@@ -173,7 +176,6 @@ function fn_save_asistencia_promotor(){
 }
 
 </script>
-
 
 <div class="card">
     <div style="text-align: center; font-size:16px; margin-top: 20px">

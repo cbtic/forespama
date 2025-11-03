@@ -137,6 +137,8 @@ $(document).ready(function() {
 
     $("#producto").select2({ width: '100%' });
     $("#empresa").select2({ width: '100%' });
+    $("#producto_ares").select2({ width: '100%' });
+    $("#producto_dimfer").select2({ width: '100%' });
 
     actualizarLegend();
 });
@@ -159,6 +161,34 @@ function obtenerCodInterno(){
         success: function(result){
             //alert(result[0].codigo);
             $('#codigo_producto').val(result[0].codigo);
+        }
+    });
+}
+
+function obtenerCodgioDimfer(){
+
+    var id_producto_dimfer = $('#producto_dimfer').val();
+
+    $.ajax({
+        url: "/producto_competencia/obtener_producto_competencia/"+id_producto_dimfer,
+        dataType: "json",
+        success: function(result){
+            //alert(result[0].codigo);
+            $('#codigo_producto_dimfer').val(result[0].codigo);
+        }
+    });
+}
+
+function obtenerCodgioAres(){
+
+    var id_producto_ares = $('#producto_ares').val();
+
+    $.ajax({
+        url: "/producto_competencia/obtener_producto_competencia/"+id_producto_ares,
+        dataType: "json",
+        success: function(result){
+            //alert(result[0].codigo);
+            $('#codigo_producto_ares').val(result[0].codigo);
         }
     });
 }
@@ -327,35 +357,59 @@ function actualizarLegend(){
                             <fieldset name="equivalencia_dimfer" style="border:1px solid #A4A4A4; padding: 10px">
                                 <legend class="control-label form-control-sm">Equivalencia Dimfer</legend>
                                 <div class="row" style="padding-left:10px; padding-top : 10px">
+                                    <div class="col-lg-6">
+                                        <select name="producto_dimfer" id="producto_dimfer" class="form-control form-control-sm" onchange="obtenerCodgioDimfer()">
+                                            <option value="">--Seleccionar--</option>
+                                            <?php
+                                            foreach ($producto_dimfer as $row){?>
+                                                <option value="<?php echo $row->id ?>" <?php if($row->id==$equivalencia_producto->id_producto_dimfer)echo "selected='selected'"?>><?php echo $row->codigo .' - '. $row->denominacion;?></option>
+                                            <?php 
+                                            }
+                                            ?>
+                                            <input id="producto_descripcion_dimfer" name="producto_descripcion_dimfer" on class="form-control form-control-sm"  value="<?php if($id>0){echo $equivalencia_producto->descripcion_producto;}?>" hidden="hidden">
+                                        </select>
+                                    </div>
                                     <div class="col-lg-2">
                                         C&oacute;digo
                                     </div>
                                     <div class="col-lg-2">
-                                        <input id="codigo_producto_dimfer" name="codigo_producto_dimfer" on class="form-control form-control-sm"  value="<?php if($id>0){echo $equivalencia_producto->codigo_dimfer;}?>" type="text">
+                                        <input id="codigo_producto_dimfer" name="codigo_producto_dimfer" on class="form-control form-control-sm"  value="<?php if($id>0){echo $equivalencia_producto->codigo_dimfer;}?>" type="text" readonly="readonly">
                                     </div>
-                                    <div class="col-lg-2">
+                                    <!--<div class="col-lg-2">
                                     Denominaci&oacute;n
                                     </div>
                                     <div class="col-lg-4">
-                                        <input id="denominacion_producto_dimfer" name="denominacion_producto_dimfer" on class="form-control form-control-sm"  value="<?php if($id>0){echo $equivalencia_producto->descripcion_dimfer;}?>" type="text">
-                                    </div>
+                                        <input id="denominacion_producto_dimfer" name="denominacion_producto_dimfer" on class="form-control form-control-sm"  value="<?php //if($id>0){echo $equivalencia_producto->descripcion_dimfer;}?>" type="text">
+                                    </div>-->
                                 </div>
                             </fieldset>
                             <fieldset name="equivalencia_ares" style="border:1px solid #A4A4A4; padding: 10px">
                                 <legend class="control-label form-control-sm">Equivalencia Ares</legend>
                                 <div class="row" style="padding-left:10px; padding-top : 10px">
+                                    <div class="col-lg-6">
+                                        <select name="producto_ares" id="producto_ares" class="form-control form-control-sm" onchange="obtenerCodgioAres()">
+                                            <option value="">--Seleccionar--</option>
+                                            <?php
+                                            foreach ($producto_ares as $row){?>
+                                                <option value="<?php echo $row->id ?>" <?php if($row->id==$equivalencia_producto->id_producto_ares)echo "selected='selected'"?>><?php echo $row->codigo .' - '. $row->denominacion;?></option>
+                                            <?php 
+                                            }
+                                            ?>
+                                            <input id="producto_descripcion_ares" name="producto_descripcion_ares" on class="form-control form-control-sm"  value="<?php if($id>0){echo $equivalencia_producto->descripcion_producto;}?>" hidden="hidden">
+                                        </select>
+                                    </div>
                                     <div class="col-lg-2">
                                         C&oacute;digo
                                     </div>
                                     <div class="col-lg-2">
-                                        <input id="codigo_producto_ares" name="codigo_producto_ares" on class="form-control form-control-sm"  value="<?php if($id>0){echo $equivalencia_producto->codigo_ares;}?>" type="text">
+                                        <input id="codigo_producto_ares" name="codigo_producto_ares" on class="form-control form-control-sm"  value="<?php if($id>0){echo $equivalencia_producto->codigo_ares;}?>" type="text" readonly="readonly">
                                     </div>
-                                    <div class="col-lg-2">
+                                    <!--<div class="col-lg-2">
                                     Denominaci&oacute;n
                                     </div>
                                     <div class="col-lg-4">
-                                        <input id="denominacion_producto_ares" name="denominacion_producto_ares" on class="form-control form-control-sm"  value="<?php if($id>0){echo $equivalencia_producto->descripcion_ares;}?>" type="text">
-                                    </div>
+                                        <input id="denominacion_producto_ares" name="denominacion_producto_ares" on class="form-control form-control-sm"  value="<?php //if($id>0){echo $equivalencia_producto->descripcion_ares;}?>" type="text">
+                                    </div>-->
                                 </div>
                             </fieldset>
                         </div>
@@ -363,7 +417,7 @@ function actualizarLegend(){
                             <div style="margin-top:15px" class="form-group">
                                 <div class="col-sm-12 controls">
                                     <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
-                                    
+                                        
                                         <a href="javascript:void(0)" onClick="fn_save_equivalencia_producto()" class="btn btn-sm btn-success" style="margin-right:10px">Guardar</a>
                                         <a href="javascript:void(0)" onClick="$('#openOverlayOpc').modal('hide');" class="btn btn-sm btn-info" style="">Cerrar</a>
                                     </div>
