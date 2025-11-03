@@ -1,12 +1,22 @@
 <title>FORESPAMA</title>
 
 <style>
-/*
-.datepicker {
-  z-index: 1600 !important; 
+
+/*.modal-dialog {
+	//width: 100%;
+	max-width:60%!important;
+    margin: 1.75rem auto;
 }
-*/
-/*.datepicker{ z-index:99999 !important; }*/
+
+.modal-content {
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.modal-body {
+  //max-height: 70vh;  scroll interno 
+  overflow-y: auto;
+}*/
 
 .datepicker,
 .table-condensed {
@@ -14,12 +24,6 @@
   height:250px;
 }
 
-
-.modal-dialog {
-	width: 100%;
-	max-width:60%!important
-  }
-  
 #tablemodal{
     border-spacing: 0;
     display: flex;/*Se ajuste dinamicamente al tamano del dispositivo**/
@@ -119,6 +123,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker3.css" />
 
 
+
 <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>-->
 
 <!--
@@ -214,50 +219,46 @@ function fn_save_chopeo_producto(){
         $.ajax({
             url: "/productos/send_chopeo_producto",
             type: "POST",
-            data : formData, 
-            contentType: false, 
+            data : formData,
+            contentType: false,
             processData: false,
             success: function (result) {
                 $('.loader').hide();
 
                 if (result.success) {
                     bootbox.alert(result.success, function() {
+
                         datatablenew();
+
+                        bootbox.confirm({
+                            message: "¿Desea continuar con otro producto?",
+                            buttons: {
+                                confirm: {
+                                    label: 'Sí',
+                                    className: 'btn-success'
+                                },
+                                cancel: {
+                                    label: 'No',
+                                    className: 'btn-danger'
+                                }
+                            },
+                            callback: function (result) {
+                                if (result) {
+                                    $('#btnPrecioDimfer').val("");
+                                } else {
+                                    $('#openOverlayOpc').modal('hide');
+                                }
+                            }
+                        });
                     });
-                    
-                    bootbox.confirm({
-                    message: "¿Desea seguir?",
-                    buttons: {
-                        confirm: {
-                            label: 'Sí',
-                            className: 'btn-success'
-                        },
-                        cancel: {
-                            label: 'No',
-                            className: 'btn-danger'
-                        }
-                    },
-                    callback: function (result) {
-                        if (result) {
-                            // Acción si elige "Sí"
-                            console.log("El usuario quiere seguir");
-                        } else {
-                            // Acción si elige "No"
-                            console.log("El usuario no quiere seguir");
-                        }
-                    }
-                });
                 }else if (result.error) {
                     bootbox.alert(result.error);
                 }else if (result.msg2) {
-                    // Si el mensaje tiene contenido => abrir modal
                     if (result.msg2 !== "") {
-                        //$('#id').val(result.id);
                         var codigo_producto_competencia = result.numero;
                         var nombre_producto_competencia = result.nombre;
                         var competencia_producto_competencia = result.competencia_;
                         modalProductoCompetencia(codigo_producto_competencia, nombre_producto_competencia, competencia_producto_competencia);
-                        //$('#modalProductoCompetenciaNuevo').modal('show');
                     }
                 }
             },
@@ -287,145 +288,77 @@ function modalProductoCompetencia(codigo_producto_competencia,nombre_producto_co
 
 </script>
 
-<body class="hold-transition skin-blue sidebar-mini">
+<div class="modal-header bg-success text-white">
+    <h5 class="modal-title" id="chopeoModalLabel">Registrar Chopeo de Producto</h5>
+    <!--<button type="button" class="close text-white" data-dismiss="modal" aria-label="Cerrar">
+    <span aria-hidden="true">&times;</span>
+    </button>-->
+</div>
 
-    <div class="panel-heading close-heading">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+<div class="modal-body">
+<form method="post" action="#" id="frmChopeoProducto" name="frmChopeoProducto" enctype="multipart/form-data">
+                
+    <input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
+    <input type="hidden" name="id" id="id" value="<?php echo $id?>">
+
+    <div class="row">
+    
+        <div class="form-group col-md-4">
+            <label class="form-control-sm">Competencia</label>
+            <select name="competencia" id="competencia" class="form-control form-control-sm">
+                <option value="">--Seleccionar--</option>
+                <?php
+                foreach ($competencia as $row){?>
+                    <option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
+                <?php 
+                }
+                ?>
+            </select>
+        </div>
+
+        <div class="form-group col-md-4">
+            <label class="form-control-sm">Tienda</label>
+            <select name="tienda" id="tienda" class="form-control form-control-sm" onchange="">
+                <option value="">--Seleccionar--</option>
+                <?php
+                foreach ($tienda as $row){?>
+                    <option value="<?php echo $row->id ?>"><?php echo $row->denominacion ?></option>
+                <?php 
+                }
+                ?>
+            </select>
+        </div>
+
+        <div class="form-group col-md-3">
+            <label class="form-control-sm">Fecha</label>
+            <input id="fecha_chopeo" name="fecha_chopeo" on class="form-control form-control-sm"  value="<?php echo date('Y-m-d'); ?>" type="text">
+        </div>
     </div>
 
-    <div>
-		<!--
-        <section class="content-header">
-          <h1>
-            <small style="font-size: 20px">Programados del Medicos del dia <?php //echo $fecha_atencion?></small>
-          </h1>
-        </section>
-		-->
-		<div class="justify-content-center">		
-
-            <div class="card">
-                
-                <div class="card-header" style="padding:5px!important;padding-left:20px!important">
-                    Registrar Chopeo de Producto - Dimfer
+    <div class="row">
+        <div class="form-group col-md-4">
+            <label class="control-label form-control-sm">Cargar Precio</label>
+            <input type="file" class="form-control-file btn btn-sm btn-success" style="background-color: #F6F6F6 !important; border: none !important; padding: 0 !important; box-shadow: none !important; color:black" id="btnPrecioDimfer" name="btnPrecioDimfer">
+            <?php if (!empty($producto->ruta_ficha_tecnica)) : ?>
+                <div class="mt-2">
+                    <i class="fa fa-file-pdf-o"></i>
+                    <a href="<?php echo asset($producto->ruta_ficha_tecnica); ?>" target="_blank">Descargar Precio Dimfer</a>
                 </div>
-                
-                <div class="card-body">
-                <form method="post" action="#" id="frmChopeoProducto" name="frmChopeoProducto" enctype="multipart/form-data">
-
-                    <div class="row">
-
-                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding-top:5px;padding-bottom:20px">
-                                
-                            <input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
-                            <input type="hidden" name="id" id="id" value="<?php echo $id?>">
-                            <div class="row" style="padding-left:10px">
-                            
-                                <div class="col-lg-4">
-                                    <div class="form-group">
-                                        <label class="control-label form-control-sm">Competencia</label>
-                                        <select name="competencia" id="competencia" class="form-control form-control-sm" onchange="">
-                                            <option value="">--Seleccionar--</option>
-                                            <?php
-                                            foreach ($competencia as $row){?>
-                                                <option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
-                                            <?php 
-                                            }
-                                            ?>
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <div class="col-lg-4">
-                                    <div class="form-group">
-                                        <label class="control-label form-control-sm">Tienda</label>
-                                        <select name="tienda" id="tienda" class="form-control form-control-sm" onchange="">
-                                            <option value="">--Seleccionar--</option>
-                                            <?php
-                                            foreach ($tienda as $row){?>
-                                                <option value="<?php echo $row->id ?>"><?php echo $row->denominacion ?></option>
-                                            <?php 
-                                            }
-                                            ?>
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <div class="col-lg-3">
-                                    <div class="form-group">
-                                        <label class="control-label form-control-sm">Fecha</label>
-                                        <input id="fecha_chopeo" name="fecha_chopeo" on class="form-control form-control-sm"  value="<?php echo date('Y-m-d'); ?>" type="text">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row" style="padding-left:10px">
-                                <div class="col-lg-4">
-                                    <div class="form-group">
-                                        <label class="control-label form-control-sm">Cargar Precio</label>
-                                        <input type="file" class="form-control-file btn btn-sm btn-success" style="background-color: #F6F6F6 !important; border: none !important; padding: 0 !important; box-shadow: none !important; color:black" id="btnPrecioDimfer" name="btnPrecioDimfer">
-                                        <?php if (!empty($producto->ruta_ficha_tecnica)) : ?>
-                                            <div class="mt-2">
-                                                <i class="fa fa-file-pdf-o"></i>
-                                                <a href="<?php echo asset($producto->ruta_ficha_tecnica); ?>" target="_blank">Descargar Precio Dimfer</a>
-                                            </div>
-                                        <?php endif; ?>
-                                    </div>
-                                </div>
-                            </div>
-                            <div style="margin-top:15px" class="form-group">
-                                <div class="col-sm-12 controls">
-                                    <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
-                                        <a href="javascript:void(0)" onClick="fn_save_chopeo_producto()" class="btn btn-sm btn-success">Guardar</a>
-                                        <a href="javascript:void(0)" onClick="$('#openOverlayOpc').modal('hide');" class="btn btn-sm btn-info" style="margin-left:10px">Cerrar</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-                </div>
-                <!-- /.box -->
-                
-            </div>
-            <!--/.col (left) -->
-
+            <?php endif; ?>
         </div>
-        <!-- /.row -->
-    
-<!-- /.content -->
+    </div>  
+    <div class="modal-footer">
+        <a href="javascript:void(0)" onClick="fn_save_chopeo_producto()" class="btn btn-sm btn-success">Guardar</a>
+        <a href="javascript:void(0)" onClick="$('#openOverlayOpc').modal('hide');" class="btn btn-sm btn-info" style="margin-left:10px">Cerrar</a>
+    </div>
+</form>
 </div>
-<!-- /.content-wrapper -->
-
-    
-<script type="text/javascript">
-$(document).ready(function () {
-
-	$('#ruc_').blur(function () {
-		var id = $('#id').val();
-			if(id==0) {
-				validaRuc(this.value);
-			}
-		//validaRuc(this.value);
-	});
-	
-	
-	
-	
-});
-
-
-</script>
 
 <script type="text/javascript">
-$(document).ready(function() {
-	//$('#numero_placa').focus();
-	//$('#numero_placa').mask('AAA-000');
-	//$('#vehiculo_numero_placa').mask('AAA-000');
-	
-	
-});
 
+    $(document).ready(function() {
 
-
+    });
 
 </script>
 

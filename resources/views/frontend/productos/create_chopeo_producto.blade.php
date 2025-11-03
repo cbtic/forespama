@@ -288,6 +288,10 @@ label.form-control-sm{
 	cursor:pointer
 }
 
+/*#openOverlayOpc .modal-dialog {
+    max-width: 100% !important;
+}*/
+
 </style>
 
 @stack('before-scripts')
@@ -416,11 +420,12 @@ label.form-control-sm{
                             <th>Id</th>
 							<th>Producto</th>
                             <th>C&oacute;digo</th>
+                            <th>Fecha &Uacute;ltima Actualizaci&oacute;n</th>
                             <th>SKU</th>
 							<th>Precio Pama</th>
 							<th>Precio Dimfer</th>
 							<th>Precio Ares</th>
-                            <th>Acciones</th>
+                            <!--<th>Acciones</th>-->
                         </tr>
                         </thead>
                         <tbody>
@@ -436,7 +441,7 @@ label.form-control-sm{
 @endsection
 
 	<div id="openOverlayOpc" class="modal fade" role="dialog">
-	  <div class="modal-dialog" >
+	  <div class="modal-dialog">
 
 		<div id="id_content_OverlayoneOpc" class="modal-content" style="padding: 0px;margin: 0px">
 
@@ -453,7 +458,7 @@ label.form-control-sm{
 	</div>
 
 	<div id="openOverlayOpc2" class="modal fade" role="dialog">
-	  <div class="modal-dialog" >
+	  <div class="modal-dialog">
 
 		<div id="id_content_OverlayoneOpc" class="modal-content" style="padding: 0px;margin: 0px">
 

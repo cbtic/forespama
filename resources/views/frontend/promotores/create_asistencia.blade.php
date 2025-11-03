@@ -450,8 +450,8 @@ label.form-control-sm{
         </div>
 
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-        <button type="button" class="btn btn-success" onclick="fn_save_asistencia_promotor()">Guardar</button>
+        <button type="button" class="btn btn-sm btn-success" onclick="fn_save_asistencia_promotor()">Guardar</button>
+        <button type="button" class="btn btn-sm btn-info" data-dismiss="modal">Cerrar</button>
       </div>
     </div>
   </div>

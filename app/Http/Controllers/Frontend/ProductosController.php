@@ -568,7 +568,7 @@ class ProductosController extends Controller
 
             $imagePath = public_path($rutaFinal);
             
-            /*$keyFile = storage_path('app/google-key.json');
+            $keyFile = storage_path('app/google-key.json');
 
             //dd($rutaFinal);exit();
 
@@ -588,7 +588,8 @@ class ProductosController extends Controller
 
             $texto = $texts[0]->getDescription();
 
-            preg_match('/\b\d{6}[A-Za-z0-9]\b/', $texto, $matchNumero);
+            //preg_match('/\b\d{6}[A-Za-z0-9]\b/', $texto, $matchNumero);
+            preg_match('/\b[A-Za-z0-9]{6,7}\b/', $texto, $matchNumero);
             $numero = $matchNumero[0] ?? null;
 
             preg_match('/S[\/I]?\s*([\d.,]+)/i', $texto, $matchPrecio);
@@ -596,11 +597,11 @@ class ProductosController extends Controller
 
             if (!$numero || !$precio) {
                 return response()->json(['error' => 'No se encontraron datos válidos en la imagen.']);
-            }*/
+            }
 
-            $numero="999999991";
+            /*$numero="99999992";
             $precio="120.20";
-            $nombre="PTA EJEMPLO2S";
+            $nombre="PTA EJEMPLO2S";*/
             $msg2 = "";
 
             if($request->competencia==1){
