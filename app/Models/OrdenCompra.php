@@ -339,7 +339,8 @@ class OrdenCompra extends Model
         left join ubigeos p on p.id_ubigeo = SUBSTRING(u.id_ubigeo FROM 1 FOR 4) || '00'
         left join ubigeos dp on dp.id_ubigeo = SUBSTRING(u.id_ubigeo FROM 1 FOR 2) || '0000'
         left join ubigeos d on d.id_ubigeo = u.id_ubigeo 
-        where occe.id_orden_compra = oc.id)
+        where occe.id_orden_compra = oc.id
+        and occe.estado = '1')
         end direccion
         from orden_compras oc 
         --inner join empresas e on oc.id_empresa_compra = e.id 

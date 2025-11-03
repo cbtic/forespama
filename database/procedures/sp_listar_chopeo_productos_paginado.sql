@@ -17,22 +17,61 @@ begin
 	
 	p_pagina=(p_pagina::Integer-1)*p_limit::Integer;
 
-	v_campos=' p.id id_producto, p.denominacion producto, p.codigo, ep.sku, p.costo_unitario, 
-	(select cd2.precio_competencia from chopeo_detalles cd2 
-	inner join chopeos c2 on cd2.id_chopeo = c2.id 
-	where cd2.id_producto = p.id and c2.id_competencia = ''1'' 
-	order by c2.fecha_chopeo desc 
-	limit 1) precio_dimfer,
-	(select cd2.precio_competencia from chopeo_detalles cd2 
-	inner join chopeos c2 on cd2.id_chopeo = c2.id 
-	where cd2.id_producto = p.id and c2.id_competencia = ''2'' 
-	order by c2.fecha_chopeo desc 
-	limit 1) precio_ares ';
+	v_campos=' id_producto, producto, codigo, precio, fecha_chopeo, precio_dimfer, precio_ares, origen ';
 
-	v_tabla=' from productos p
-	left join equivalencia_productos ep on ep.id_producto = p.id and ep.estado = ''1'' ';
+	v_tabla=' (SELECT p.id id_producto, p.denominacion producto, p.codigo, p.costo_unitario precio, ' ||
+	'(SELECT c2.fecha_chopeo ' ||
+	'FROM chopeo_detalles cd2 ' ||
+	'INNER JOIN chopeos c2 ON cd2.id_chopeo = c2.id ' ||
+	'WHERE cd2.id_producto = ep.id_producto_dimfer ' || 
+	'AND c2.id_competencia = 2 ' ||
+	'ORDER BY c2.fecha_chopeo DESC ' ||
+	'LIMIT 1) fecha_chopeo, ' ||
+	'(SELECT cd2.precio_competencia ' ||
+	'FROM chopeo_detalles cd2 ' ||
+	'INNER JOIN chopeos c2 ON cd2.id_chopeo = c2.id ' ||
+	'WHERE cd2.id_producto = ep.id_producto_dimfer ' ||
+	'AND c2.id_competencia = 2 ' ||
+	'ORDER BY c2.fecha_chopeo DESC ' ||
+	'LIMIT 1) precio_dimfer, ' ||
+	'(SELECT cd2.precio_competencia ' ||
+	'FROM chopeo_detalles cd2 ' ||
+	'INNER JOIN chopeos c2 ON cd2.id_chopeo = c2.id ' ||
+	'WHERE cd2.id_producto = ep.id_producto_ares ' ||
+	'AND c2.id_competencia = 3 ' ||
+	'ORDER BY c2.fecha_chopeo DESC ' ||
+	'LIMIT 1) precio_ares, ''PROPIO'' origen ' ||
+	'FROM productos p ' ||
+	'LEFT JOIN equivalencia_productos ep ON ep.id_producto = p.id AND ep.estado = ''1'' ' ||
+	'WHERE p.denominacion ILIKE ''%(RT)%'' ' ||
+	'AND p.estado = ''1'' ' ||
+	'UNION all ' ||
+	'SELECT pc.id id_producto, pc.denominacion producto, pc.codigo, pc.precio, ' ||
+	'(SELECT c2.fecha_chopeo ' ||
+	'FROM chopeo_detalles cd2 ' ||
+	'INNER JOIN chopeos c2 ON cd2.id_chopeo = c2.id ' ||
+	'WHERE cd2.id_producto = pc.id ' ||
+	'AND c2.id_competencia = 2 ' ||
+	'ORDER BY c2.fecha_chopeo DESC ' ||
+	'LIMIT 1) fecha_chopeo, ' ||
+	'(SELECT cd2.precio_competencia ' ||
+	'FROM chopeo_detalles cd2 ' ||
+	'INNER JOIN chopeos c2 ON cd2.id_chopeo = c2.id ' ||
+	'WHERE cd2.id_producto = pc.id ' ||
+	'AND c2.id_competencia = 2 ' ||
+	'ORDER BY c2.fecha_chopeo DESC ' ||
+	'LIMIT 1) precio_dimfer, ' ||
+	'(SELECT cd2.precio_competencia ' ||
+	'FROM chopeo_detalles cd2 ' ||
+	'INNER JOIN chopeos c2 ON cd2.id_chopeo = c2.id ' ||
+	'WHERE cd2.id_producto = pc.id ' ||
+	'AND c2.id_competencia = 3 ' ||
+	'ORDER BY c2.fecha_chopeo DESC ' ||
+	'LIMIT 1) precio_ares, ''COMPETENCIA'' AS origen ' ||
+	'FROM productos_competencias pc ' ||
+	'WHERE pc.estado = ''1'') union_table ';
 	
-	v_where = ' Where 1=1 and p.denominacion ilike ''%(RT)%'' and p.estado = ''1'' ';
+	v_where = ' Where 1=1 ';
 
 	/*If p_tienda<>'' Then
 	 v_where:=v_where||'And m.denominiacion ilike  ''%'||p_tienda||'%'' ';
@@ -42,14 +81,13 @@ begin
 	 v_where:=v_where||'And p.id= '''||p_producto||''' ';
 	End If;
 	
-	
-	EXECUTE ('SELECT count(1) '||v_tabla||v_where) INTO v_count;
+	EXECUTE ('SELECT count(1) from '||v_tabla||v_where) INTO v_count;
 	v_col_count:=' ,'||v_count||' as TotalRows ';
 
 	If v_count::Integer > p_limit::Integer then
-		v_scad:='SELECT '||v_campos||v_col_count||v_tabla||v_where||' Order By p.codigo asc LIMIT '||p_limit||' OFFSET '||p_pagina||';'; 
+		v_scad:='SELECT '||v_campos||v_col_count|| 'from' ||v_tabla||v_where||' Order By origen desc, codigo asc LIMIT '||p_limit||' OFFSET '||p_pagina||';'; 
 	else
-		v_scad:='SELECT '||v_campos||v_col_count||v_tabla||v_where||' Order By p.codigo asc;'; 
+		v_scad:='SELECT '||v_campos||v_col_count|| 'from' ||v_tabla||v_where||' Order By origen desc, codigo asc;'; 
 	End If;
 
 	--Raise Notice '%',v_scad;
