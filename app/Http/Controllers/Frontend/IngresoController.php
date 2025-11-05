@@ -43,9 +43,9 @@ class IngresoController extends Controller
 			return $next($request);
     	});
 	}
-       
-    public function create(){      
-         
+    
+    public function create(){
+        
 		$id_user = Auth::user()->id;
         $persona = new Persona;
         $caja_model = new TablaMaestra;
