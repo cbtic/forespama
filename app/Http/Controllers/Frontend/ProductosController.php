@@ -586,8 +586,8 @@ class ProductosController extends Controller
                 return response()->json(['error' => 'No se detectó texto en la imagen.']);
             }
 
-            $texto = $texts[0]->getDescription();
-
+            /*$texto = $texts[0]->getDescription();
+            dd($texto);exit();
             //preg_match('/\b\d{6}[A-Za-z0-9]\b/', $texto, $matchNumero);
             preg_match('/\b[A-Za-z0-9]{6,7}\b/', $texto, $matchNumero);
             $numero = $matchNumero[0] ?? null;
@@ -597,7 +597,35 @@ class ProductosController extends Controller
 
             if (!$numero || !$precio) {
                 return response()->json(['error' => 'No se encontraron datos válidos en la imagen.']);
+            }*/
+
+            $texto = $texts[0]->getDescription();
+
+            $texto = strtoupper($texto);
+            $texto = str_replace(["\r", "\n"], " ", $texto);
+            $texto = preg_replace('/\s+/', ' ', $texto);
+            $texto = trim($texto);
+
+            $texto = preg_replace('/C\/U|C U|C\/ U|CU|[0-9]{1,2}\s*S-\d+-\d+-\d+-\d+/i', '', $texto);
+            $texto = trim(preg_replace('/\s+/', ' ', $texto));
+
+            //preg_match('/\b\d{6,7}\b/', $texto, $matchNumero);
+            preg_match('/\b\d{5,7}[A-Z]?\b/i', $texto, $matchNumero);
+            $numero = $matchNumero[0] ?? null;
+
+            preg_match('/S[\/\s]*([\d]+[.,]\d{1,2})/i', $texto, $matchPrecio);
+            $precio = isset($matchPrecio[1]) ? str_replace(',', '.', $matchPrecio[1]) : null;
+
+            $nombre = $texto;
+
+            $nombre = preg_replace(['/S[\/\s]*[\d.,]+/i', '/\b\d{6,7}\b/'], '', $nombre);
+            $nombre = trim(preg_replace('/\s+/', ' ', $nombre));
+
+            if (!$numero || !$precio || !$nombre) {
+                return response()->json(['error' => 'No se pudieron detectar correctamente los datos del producto.']);
             }
+
+            //dd(['nombre' => $nombre, 'precio' => $precio, 'numero' => $numero]);
 
             /*$numero="99999992";
             $precio="120.20";

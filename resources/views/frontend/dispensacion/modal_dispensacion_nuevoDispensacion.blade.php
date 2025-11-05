@@ -514,14 +514,14 @@ function fn_save_dispensacion(){
         const id_dispensacion_detalle_producto = parseInt($(row).find('input[name="id_dispensacion_detalle[]"]').val());
         const cantidad_ingreso_producto = parseInt($(row).find('input[name="cantidad[]"]').val());
         const stockActual = parseInt($(row).find('input[name="stock_actual[]"]').val());
+        const stock = isNaN(stockActual) ? 0 : stockActual;
         const descripcion_producto = $(row).find('select[name="descripcion[]"] option:selected').text();
         
-        if(stockActual<cantidad_ingreso_producto && id_dispensacion_detalle_producto==0){
+        if(stock < cantidad_ingreso_producto && id_dispensacion_detalle_producto==0){
             msg+="No hay stock para el producto "+descripcion_producto+" <br>";
         }
     });
-        
-
+    
     if ($('#tblDispensacionDetalle tbody tr').length == 0) {
         msg += "No se ha agregado ningún producto <br>";
     }
@@ -537,30 +537,23 @@ function fn_save_dispensacion(){
         $('.loader').show();
 
         $.ajax({
-                url: "/dispensacion/send_dispensacion",
-                type: "POST",
-                data : $("#frmDispensacion").serialize(),
-                success: function (result) {
-                    //alert(result.id)
-                    $('#openOverlayOpc').modal('hide');
-                    datatablenew();
-                    $('.loader').hide();
-                    bootbox.alert("Se guard&oacute; satisfactoriamente"); 
-                    /*if (result.id>0) {
-                        modalOrdenCompra(result.id);
-                    }*/
-                   
-                }
+            url: "/dispensacion/send_dispensacion",
+            type: "POST",
+            data : $("#frmDispensacion").serialize(),
+            success: function (result) {
+                //alert(result.id)
+                $('#openOverlayOpc').modal('hide');
+                datatablenew();
+                $('.loader').hide();
+                bootbox.alert("Se guard&oacute; satisfactoriamente"); 
+            }
         });
     }
 }
 
-
-
 function pdf_documento_dispensacion(){
 
     var id = $('#id').val();
-    //var tipo_movimiento = $('#tipo_movimiento').val();
 
     var href = '/dispensacion/movimiento_pdf_dispensacion/'+id;
     window.open(href, '_blank');
@@ -568,7 +561,6 @@ function pdf_documento_dispensacion(){
 }
 
 </script>
-
 
 <body class="hold-transition skin-blue sidebar-mini">
     
@@ -758,18 +750,14 @@ function pdf_documento_dispensacion(){
                 </form>
                 </div>
                 <!-- /.box -->
-                
             </div>
             <!--/.col (left) -->
-
         </div>
         <!-- /.row -->
-    
 <!-- /.content -->
 </div>
 <!-- /.content-wrapper -->
 
-    
 <script type="text/javascript">
 $(document).ready(function () {
 	
