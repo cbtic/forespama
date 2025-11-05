@@ -225,8 +225,26 @@ function fn_save_chopeo_producto(){
             success: function (result) {
                 $('.loader').hide();
 
+                /*if (result.error) {
+                    bootbox.alert(result.error);
+                    return;
+                }
+                
+                if (result.msg2 && result.msg2 !== "") {
+                    modalProductoCompetencia(result.numero, result.nombre, result.competencia_);
+                    return;
+                }
+
                 if (result.success) {
-                    bootbox.alert(result.success, function() {
+                    bootbox.alert("Chopeo registrado correctamente", function() {
+                        datatablenew();
+                        $('#btnPrecioDimfer').val("");
+                    });
+                    return;
+                }*/
+                
+                if (result.success === true) {
+                    bootbox.alert(result.message || "Chopeo registrado correctamente.", function() {
 
                         datatablenew();
 

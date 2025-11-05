@@ -613,16 +613,24 @@ class ProductosController extends Controller
             preg_match('/\b\d{5,7}[A-Z]?\b/i', $texto, $matchNumero);
             $numero = $matchNumero[0] ?? null;
 
-            preg_match('/S[\/\s]*([\d]+[.,]\d{1,2})/i', $texto, $matchPrecio);
+            preg_match('/S[\/I]?\s*([\d]+[.,]\d{1,2})/i', $texto, $matchPrecio);
             $precio = isset($matchPrecio[1]) ? str_replace(',', '.', $matchPrecio[1]) : null;
 
             $nombre = $texto;
 
-            $nombre = preg_replace(['/S[\/\s]*[\d.,]+/i', '/\b\d{6,7}\b/'], '', $nombre);
+            $nombre = preg_replace(['/S[\/I]?\s*[\d.,]+/i', '/\b\d{5,7}[A-Z]?\b/i'], '', $nombre);
+            //$nombre = preg_replace('/^\d{1,3}\s+/', '', $nombre);
             $nombre = trim(preg_replace('/\s+/', ' ', $nombre));
-
+            $nombre = preg_replace('/^\d{1,3}\s+/', '', $nombre);
+            //echo 'nombre: ' ,$nombre, 'precio: ' ,$precio, 'numero: ' ,$numero;
             if (!$numero || !$precio || !$nombre) {
-                return response()->json(['error' => 'No se pudieron detectar correctamente los datos del producto.']);
+                return response()->json([
+                    'success' => false,
+                    'error' => 'No se encontraron datos válidos en la imagen.',
+                    'nombre' => $nombre,
+                    'numero' => $numero,
+                    'precio' => $precio
+                ]);
             }
 
             //dd(['nombre' => $nombre, 'precio' => $precio, 'numero' => $numero]);
@@ -631,6 +639,8 @@ class ProductosController extends Controller
             $precio="120.20";
             $nombre="PTA EJEMPLO2S";*/
             $msg2 = "";
+            $id_producto = null;
+            $equivalencia_producto = null;
 
             if($request->competencia==1){
                 $equivalencia_producto = EquivalenciaProducto::where('codigo_empresa',$numero)->where('estado',1)->first();
@@ -643,18 +653,19 @@ class ProductosController extends Controller
                     $id_producto = $equivalencia_producto->id;
                 }
             }
-            
+            //dd($equivalencia_producto);exit();
             if (!$equivalencia_producto) {
 
                 $msg2 = "No se encontró el producto con el código detectado. Favor de crearlo";
                 return response()->json([
+                    'success' => true,
                     'msg2' => $msg2,
                     'id' => '0',
                     'numero' => $numero,
                     'precio' => $precio,
                     'nombre' => $nombre,
                     'competencia_' => $request->competencia
-                ]);
+                ],200);
             }
 
             $chopeo = new Chopeo();
@@ -676,8 +687,11 @@ class ProductosController extends Controller
             $chopeo_detalle->id_usuario_inserta = $id_user;
             $chopeo_detalle->save();
 
-            return response()->json(['success' => 'Chopeo registrado correctamente.']);
-
+            return response()->json([
+                'success' => true,
+                'message' => 'Chopeo registrado correctamente.'
+            ]);
+ 
         } catch (\Illuminate\Validation\ValidationException $e) {
             return response()->json([
                 'error' => $e->errors()
