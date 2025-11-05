@@ -353,11 +353,22 @@ class IngresoVehiculoTroncoController extends Controller
 		$ingresoVehiculoTroncoPago_model = new IngresoVehiculoTroncoPago;
 		$data = $ingresoVehiculoTroncoPago_model->getImportePago($request->id_ingreso_vehiculo_tronco_tipo_maderas);
 
-		if($data->pago==0){
+		$precio = round((float) $data->precio, 2);
+		$pago = round((float) $data->pago, 2);
+
+		/*if($data->pago==0){
 			$id_estado_pago = 1;
 		}else if($data->precio>$data->pago){
 			$id_estado_pago = 2;
 		}else if($data->precio<=$data->pago){
+			$id_estado_pago = 3;
+		}*/
+
+		if ($pago == 0) {
+			$id_estado_pago = 1;
+		} else if ($precio > $pago) {
+			$id_estado_pago = 2;
+		} else {
 			$id_estado_pago = 3;
 		}
 
