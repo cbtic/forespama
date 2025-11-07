@@ -158,7 +158,7 @@ class SalidaProductoDetalle extends Model
         limit 1) 
         else (select occe.direccion from orden_compra_contacto_entregas occe 
         inner join orden_compras oc2 on occe.id_orden_compra = oc2.id 
-        where oc2.id = sp.id_orden_compra)
+        where oc2.id = sp.id_orden_compra and occe.estado = '1')
         end direccion,
         case when oc.id_canal = 4 then 
         (select distinct t2.id_ubigeo from tienda_detalle_orden_compras tdoc2
@@ -167,7 +167,7 @@ class SalidaProductoDetalle extends Model
         limit 1)
         else (select occe.id_ubigeo from orden_compra_contacto_entregas occe 
         inner join orden_compras oc2 on occe.id_orden_compra = oc2.id 
-        where oc2.id = sp.id_orden_compra)
+        where oc2.id = sp.id_orden_compra and occe.estado = '1')
         end ubigeo
         from salida_producto_detalles spd 
         inner join productos p on spd.id_producto = p.id
