@@ -273,10 +273,12 @@ function fn_save_chopeo_producto(){
                     bootbox.alert(result.error);
                 }else if (result.msg2) {
                     if (result.msg2 !== "") {
-                        var codigo_producto_competencia = result.numero;
-                        var nombre_producto_competencia = result.nombre;
-                        var competencia_producto_competencia = result.competencia_;
-                        modalProductoCompetencia(codigo_producto_competencia, nombre_producto_competencia, competencia_producto_competencia);
+                        bootbox.alert(result.msg2, function() {
+                            var codigo_producto_competencia = result.numero;
+                            var nombre_producto_competencia = result.nombre;
+                            var competencia_producto_competencia = result.competencia_;
+                            modalProductoCompetencia(codigo_producto_competencia, nombre_producto_competencia, competencia_producto_competencia);
+                        });
                     }
                 }
             },

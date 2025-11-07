@@ -297,11 +297,18 @@ function cargarDetalle(){
                 let cantidad = parseFloat(requerimiento.cantidad || 0);
                 let cantidadAtendida = parseFloat(requerimiento.cantidad - requerimiento.cantidad_atendida || 0);
                 let precioUnitario = parseFloat(requerimiento.precio || 0);
+                let precioUnitarioDolares = parseFloat(requerimiento.precio_dolares || 0);
                 let tipoCambio = parseFloat(requerimiento.tipo_cambio || 0);
+                let totalPrecio = 0;
 
-                let totalPrecio =  precioUnitario * tipoCambio * cantidadAtendida;
+                if(requerimiento.id_moneda==1){
+                    totalPrecio = precioUnitario;
+                }else{
+                    totalPrecio =  precioUnitarioDolares * tipoCambio;
+                }
+                
                 let total =  totalPrecio * cantidadAtendida;
-
+                
                 const row = `
                     <tr>
                         <td>${n}</td>
@@ -311,12 +318,12 @@ function cargarDetalle(){
                         <td><input name="estado_bien[]" id="estado_bien${n}" class="form-control form-control-sm" value="${requerimiento.id_estado_producto}" type="hidden"><select name="estado_bien_[]" id="estado_bien_${n}" class="form-control form-control-sm" onChange="" disabled>${estadoBienOptions}</select></td>
                         <td><input name="unidad[]" id="unidad${n}" class="form-control form-control-sm" value="${requerimiento.id_unidad_medida}" type="hidden"><select name="unidad_[]" id="unidad_${n}" class="form-control form-control-sm" disabled>${unidadMedidaOptions}</select></td>
                         <td><input name="cantidad_ingreso[]" id="cantidad_ingreso${n}" class="cantidad_ingreso form-control form-control-sm" value="${requerimiento.cantidad}" type="text" oninput="" readonly></td>
-                        <td><input name="cantidad_atendida[]" id="cantidad_atendida${n}" class="form-control form-control-sm" value="${requerimiento.cantidad-requerimiento.cantidad_atendida}" type="text" oninput="calcularTotalPrecio(${n})"></td>
+                        <td><input name="cantidad_atendida[]" id="cantidad_atendida${n}" class="form-control form-control-sm" value="${cantidadAtendida/*requerimiento.cantidad-requerimiento.cantidad_atendida*/}" type="text" oninput="calcularTotalPrecio(${n})"></td>
                         <td><input name="moneda[]" id="moneda${n}" class="form-control form-control-sm" value="${requerimiento.id_moneda}" type="hidden"><select name="moneda_" id="moneda_${n}" class="form-control form-control-sm" onchange="">${monedaOptions}</select><input name="moneda_descripcion" id="moneda_descripcion" type="hidden"></td>
                         <td><input name="tipo_cambio[]" id="tipo_cambio${n}" class="tipo_cambio form-control form-control-sm" value="${parseFloat(requerimiento.tipo_cambio || 0).toFixed(3)}" type="text" oninput="calcularTotalPrecio(${n})" onblur="formatearDecimal(this)" ${isReadonly}></td>
                         <td><input name="precio_unitario[]" id="precio_unitario${n}" class="precio_unitario form-control form-control-sm" value="${parseFloat(requerimiento.precio_dolares || 0).toFixed(3)}" type="text" oninput="calcularTotalPrecio(${n})" onblur="formatearDecimal(this)" ${isReadonly}></td>
-                        <td><input name="total_precio[]" id="total_precio${n}" class="total_precio form-control form-control-sm" value="${totalPrecio.toFixed(2)}" type="text" oninput="" readonly></td>
-                        <td><input name="total[]" id="total${n}" class="total form-control form-control-sm" value="${total.toFixed(2)}" type="text" oninput="" readonly></td>
+                        <td><input name="total_precio[]" id="total_precio${n}" class="total_precio form-control form-control-sm" value="${totalPrecio.toFixed(3)}" type="text" oninput="" readonly></td>
+                        <td><input name="total[]" id="total${n}" class="total form-control form-control-sm" value="${total.toFixed(3)}" type="text" oninput="" readonly></td>
                         
                         <td><button type="button" class="btn btn-danger btn-sm" onclick="eliminarFila(this)">Eliminar</button></td>
                         <td><button type="button" class="btn btn-success btn-sm" onclick="modalObservacion(${n})">Observacion</button></td>

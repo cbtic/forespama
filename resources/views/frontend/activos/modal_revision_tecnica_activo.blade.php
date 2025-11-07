@@ -14,12 +14,11 @@
   height:250px;
 }
 
-
 .modal-dialog {
 	width: 100%;
 	max-width:40%!important
-  }
-  
+}
+
 #tablemodal{
     border-spacing: 0;
     display: flex;/*Se ajuste dinamicamente al tamano del dispositivo**/
@@ -35,7 +34,6 @@
     background-color: #e2e3e5;
     position: fixed !important;
 }
-
 
 #tablemodal th{
     border-bottom: 1px solid #c4c0c9;
