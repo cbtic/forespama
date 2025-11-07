@@ -567,7 +567,7 @@ class ProductosController extends Controller
             }
 
             $imagePath = public_path($rutaFinal);
-            
+            /////////////
             $keyFile = storage_path('app/google-key.json');
 
             //dd($rutaFinal);exit();
@@ -585,7 +585,7 @@ class ProductosController extends Controller
             if (count($texts) === 0) {
                 return response()->json(['error' => 'No se detectó texto en la imagen.']);
             }
-
+            /////////////////////////
             /*$texto = $texts[0]->getDescription();
             dd($texto);exit();
             //preg_match('/\b\d{6}[A-Za-z0-9]\b/', $texto, $matchNumero);
@@ -621,7 +621,13 @@ class ProductosController extends Controller
             $nombre = preg_replace(['/S[\/I]?\s*[\d.,]+/i', '/\b\d{5,7}[A-Z]?\b/i'], '', $nombre);
             //$nombre = preg_replace('/^\d{1,3}\s+/', '', $nombre);
             $nombre = trim(preg_replace('/\s+/', ' ', $nombre));
-            $nombre = preg_replace('/^\d{1,3}\s+/', '', $nombre);
+            //$nombre = preg_replace('/^\d{1,3}\s+/', '', $nombre);
+            $nombre = preg_replace('/^[^A-ZÁÉÍÓÚÑ]+/i', '', $nombre);
+
+            /*$numero="9999996";
+            $precio="125.20";
+            $nombre="PTA EJEMPLOSSSS";*/
+
             //echo 'nombre: ' ,$nombre, 'precio: ' ,$precio, 'numero: ' ,$numero;
             if (!$numero || !$precio || !$nombre) {
                 return response()->json([
@@ -658,7 +664,7 @@ class ProductosController extends Controller
 
                 $msg2 = "No se encontró el producto con el código detectado. Favor de crearlo";
                 return response()->json([
-                    'success' => true,
+                    'success' => false,
                     'msg2' => $msg2,
                     'id' => '0',
                     'numero' => $numero,
