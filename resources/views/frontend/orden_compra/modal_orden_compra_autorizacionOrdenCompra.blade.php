@@ -954,6 +954,32 @@ function fn_save_autorizacion_orden_compra(){
     });
 }
 
+function fn_save_denegar_autorizacion_orden_compra($id_proceso){
+	
+    $('#id_proceso').val($id_proceso);
+
+    var msgLoader = "";
+    msgLoader = "Procesando, espere un momento por favor";
+    var heightBrowser = $(window).width()/2;
+    $('.loader').css("opacity","0.8").css("height",heightBrowser).html("<div id='Grd1_wrapper' class='dataTables_wrapper'><div id='Grd1_processing' class='dataTables_processing panel-default'>"+msgLoader+"</div></div>");
+    $('.loader').show();
+
+    $.ajax({
+        url: "/orden_compra/send_denegar_orden_compra_autorizacion",
+        type: "POST",
+        data : $("#frmAutorizacionOrdenCompra").serialize(),
+        success: function (result) {
+            datatablenew();
+            $('.loader').hide();
+            bootbox.alert("No se Autoriz&oacute; el descuento del pedido. Se devolvi&oacute; el pedido al Vendedor", function () {
+                if (result.id > 0) {
+                    modalOrdenCompraAutorizacion(result.id);
+                }
+            });
+        }
+    });
+}
+
 function obtenerCodigo(){
 
     var tipo_documento = $('#tipo_documento').val();
@@ -1204,6 +1230,7 @@ function obtenerBeneficiario(){
                     <input type="hidden" name="id" id="id" value="<?php echo $id?>">
                     <input type="hidden" name="id_descuento_usuario" id="id_descuento_usuario" value="<?php echo $id_descuento_usuario?>">
                     <input type="hidden" name="id_autorizacion" id="id_autorizacion" value="2">
+                    <input type="hidden" name="id_proceso" id="id_proceso" value="2">
                     <input type="hidden" name="id_user" id="id_user" value="<?php echo $id_user?>">
                     
                     <div class="row" style="padding-left:10px">
@@ -1521,7 +1548,8 @@ function obtenerBeneficiario(){
                         <div class="col-sm-12 controls">
                             <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
                                 <?php if($orden_compra->id_autorizacion == 1){?>
-                                <a href="javascript:void(0)" onClick="fn_save_autorizacion_orden_compra()" class="btn btn-sm btn-success" style="margin-right:10px">Autorizar</a>
+                                    <a href="javascript:void(0)" onClick="fn_save_denegar_autorizacion_orden_compra(2)" class="btn btn-sm btn-danger" style="margin-right:10px">No Autorizar</a>
+                                    <a href="javascript:void(0)" onClick="fn_save_autorizacion_orden_compra()" class="btn btn-sm btn-success" style="margin-right:10px">Autorizar</a>
                                 <?php }?>
                                 <a href="javascript:void(0)" onClick="$('#openOverlayOpc').modal('hide');" class="btn btn-sm btn-info" style="margin-left:10px;">Cerrar</a>
                             </div>

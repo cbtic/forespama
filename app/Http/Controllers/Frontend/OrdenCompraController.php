@@ -25,6 +25,7 @@ use App\Models\OrdenCompraPago;
 use App\Models\UsuarioDescuento;
 use App\Models\GuiaInterna;
 use App\Models\InformeB2bVenta;
+use App\Models\AutorizacionOrdenCompra;
 use DateTime;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Auth;
@@ -139,6 +140,7 @@ class OrdenCompraController extends Controller
         $persona_model = new Persona;
         $empresa_model = new Empresa;
         $usuario_descuento_model = new UsuarioDescuento;
+        $id_proceso = null;
 		
 		if($id>0){
 
@@ -146,9 +148,13 @@ class OrdenCompraController extends Controller
             if($orden_compra->id_tipo_documento == '2'){
                 $descuento_usuario = $usuario_descuento_model->getDescuentoByUser($orden_compra->id_vendedor);
                 $id_descuento_usuario = $descuento_usuario[0]->descuento;
+                if($orden_compra->id_canal == 1 || $orden_compra->id_canal == 2 || $orden_compra->id_canal == 3){
+                    $autorizacion_orden_compra = AutorizacionOrdenCompra::where('id_orden_compra',$orden_compra->id)->where('estado',1)->orderBy('id', 'desc')->first();
+                    $id_proceso = $autorizacion_orden_compra->id_proceso_pedido;
+                }
             }else{
                 $id_descuento_usuario = 0;
-            }			
+            }
 		}else{
 			$orden_compra = new OrdenCompra;
             $id_descuento_usuario = 0;
@@ -172,7 +178,9 @@ class OrdenCompraController extends Controller
         $prioridad = $tablaMaestra_model->getMaestroByTipo(93);
         $canal = $tablaMaestra_model->getMaestroByTipo(98);
 
-		return view('frontend.orden_compra.modal_orden_compra_nuevoOrdenCompra',compact('id','orden_compra','tipo_documento','proveedor','producto','marca','estado_bien','unidad','igv_compra','descuento','almacen','unidad_origen','id_user','moneda','vendedor','tipo_documento_cliente','persona','prioridad','canal','id_descuento_usuario'));
+        //dd($id_proceso);exit();
+
+		return view('frontend.orden_compra.modal_orden_compra_nuevoOrdenCompra',compact('id','orden_compra','tipo_documento','proveedor','producto','marca','estado_bien','unidad','igv_compra','descuento','almacen','unidad_origen','id_user','moneda','vendedor','tipo_documento_cliente','persona','prioridad','canal','id_descuento_usuario','id_proceso'));
 
     }
 
@@ -332,8 +340,30 @@ class OrdenCompraController extends Controller
                 }
             }
         }
-
-        return response()->json(['id' => $orden_compra->id]);    
+        
+        if($request->tipo_documento == 2){
+            if($request->canal == 1 || $request->canal == 2 || $request->canal == 3){
+                $autorizacion_orden_compra = new AutorizacionOrdenCompra;
+                $autorizacion_orden_compra->id_orden_compra = $orden_compra->id;
+                $autorizacion_orden_compra->id_proceso_pedido = 1;
+                //$autorizacion_orden_compra->id_autorizacion = 1;
+                //$autorizacion_orden_compra->id_usuario_autoriza = $id_user;
+                $autorizacion_orden_compra->id_usuario_inserta = $id_user;
+                $autorizacion_orden_compra->estado = 1;
+                $autorizacion_orden_compra->save();
+            }else{
+                $autorizacion_orden_compra = new AutorizacionOrdenCompra;
+                $autorizacion_orden_compra->id_orden_compra = $orden_compra->id;
+                $autorizacion_orden_compra->id_proceso_pedido = 4;
+                $autorizacion_orden_compra->id_autorizacion = 2;
+                //$autorizacion_orden_compra->id_usuario_autoriza = $id_user;
+                $autorizacion_orden_compra->id_usuario_inserta = $id_user;
+                $autorizacion_orden_compra->estado = 1;
+                $autorizacion_orden_compra->save();
+            }
+        }
+        
+        return response()->json(['id' => $orden_compra->id]);
         
     }
 
@@ -2163,9 +2193,29 @@ class OrdenCompraController extends Controller
         $id_autorizacion_detalle = $request->input('id_autorizacion_detalle');
         $id_orden_compra_detalle =$request->id_orden_compra_detalle;
 
-        $orden_compra->id_autorizacion = $request->id_autorizacion;
+        /*$orden_compra->id_autorizacion = $request->id_autorizacion;
         $orden_compra->id_usuario_autoriza = $id_user;
-        $orden_compra->save();
+        $orden_compra->save();*/
+
+        $autorizacion_orden_compra = AutorizacionOrdenCompra::where('id_orden_compra',$orden_compra->id)->where('estado',1)->orderBy('id', 'desc')->first();
+
+        //dd($autorizacion_orden_compra);exit();
+
+        if($autorizacion_orden_compra->id_proceso_pedido == $request->id_proceso){
+            $autorizacion_orden_compra->id_autorizacion = 2;
+            $autorizacion_orden_compra->id_usuario_autoriza = $id_user;
+            $autorizacion_orden_compra->id_usuario_inserta = $id_user;
+            $autorizacion_orden_compra->estado = 1;
+            $autorizacion_orden_compra->save();
+            
+            $autorizacion_orden_compra_siguiente_proceso = new AutorizacionOrdenCompra;
+            $autorizacion_orden_compra_siguiente_proceso->id_orden_compra = $orden_compra->id;
+            $autorizacion_orden_compra_siguiente_proceso->id_proceso_pedido = $request->id_proceso+1;
+            //$autorizacion_orden_compra_siguiente_proceso->id_autorizacion = 1;
+            $autorizacion_orden_compra_siguiente_proceso->id_usuario_inserta = $id_user;
+            $autorizacion_orden_compra_siguiente_proceso->estado = 1;
+            $autorizacion_orden_compra_siguiente_proceso->save();
+        }
 
         $array_orden_compra_detalle = array();
 
@@ -2511,6 +2561,86 @@ class OrdenCompraController extends Controller
         $array["cantidad"] = 0;//count($count);
         echo json_encode($array);
 
+    }
+
+    public function send_pedido_orden_compra(Request $request){
+
+        $id_user = Auth::user()->id;
+
+        $autorizacion_orden_compra = AutorizacionOrdenCompra::where('id_orden_compra',$request->id)->where('estado',1)->orderBy('id', 'desc')->first();
+
+        //dd($autorizacion_orden_compra);exit();
+
+        if($autorizacion_orden_compra->id_proceso_pedido == $request->id_proceso){
+            $autorizacion_orden_compra->id_autorizacion = 2;
+            $autorizacion_orden_compra->id_usuario_autoriza = $id_user;
+            $autorizacion_orden_compra->id_usuario_inserta = $id_user;
+            $autorizacion_orden_compra->estado = 1;
+            $autorizacion_orden_compra->save();
+            
+            $autorizacion_orden_compra_siguiente_proceso = new AutorizacionOrdenCompra;
+            $autorizacion_orden_compra_siguiente_proceso->id_orden_compra = $request->id;
+            $autorizacion_orden_compra_siguiente_proceso->id_proceso_pedido = $request->id_proceso+1;
+            //$autorizacion_orden_compra_siguiente_proceso->id_autorizacion = 1;
+            $autorizacion_orden_compra_siguiente_proceso->id_usuario_inserta = $id_user;
+            $autorizacion_orden_compra_siguiente_proceso->estado = 1;
+            $autorizacion_orden_compra_siguiente_proceso->save();
+        }
+        
+        return response()->json(['id' => $request->id]);
+        
+    }
+
+    public function send_denegar_pago_orden_compra(Request $request){
+
+        $id_user = Auth::user()->id;
+
+        $autorizacion_orden_compra = AutorizacionOrdenCompra::where('id_orden_compra',$request->id)->where('estado',1)->orderBy('id', 'desc')->first();
+
+        if($autorizacion_orden_compra->id_proceso_pedido == $request->id_proceso){
+            $autorizacion_orden_compra->id_autorizacion = 1;
+            $autorizacion_orden_compra->id_usuario_autoriza = $id_user;
+            $autorizacion_orden_compra->id_usuario_inserta = $id_user;
+            $autorizacion_orden_compra->estado = 1;
+            $autorizacion_orden_compra->save();
+            
+            $autorizacion_orden_compra_siguiente_proceso = new AutorizacionOrdenCompra;
+            $autorizacion_orden_compra_siguiente_proceso->id_orden_compra = $request->id;
+            $autorizacion_orden_compra_siguiente_proceso->id_proceso_pedido = 1;
+            //$autorizacion_orden_compra_siguiente_proceso->id_autorizacion = 1;
+            $autorizacion_orden_compra_siguiente_proceso->id_usuario_inserta = $id_user;
+            $autorizacion_orden_compra_siguiente_proceso->estado = 1;
+            $autorizacion_orden_compra_siguiente_proceso->save();
+        }
+        
+        return response()->json(['id' => $request->id]);
+        
+    }
+
+    public function send_denegar_orden_compra_autorizacion(Request $request){
+
+        $id_user = Auth::user()->id;
+
+        $autorizacion_orden_compra = AutorizacionOrdenCompra::where('id_orden_compra',$request->id)->where('estado',1)->orderBy('id', 'desc')->first();
+
+        if($autorizacion_orden_compra->id_proceso_pedido == $request->id_proceso){
+            $autorizacion_orden_compra->id_autorizacion = 1;
+            $autorizacion_orden_compra->id_usuario_autoriza = $id_user;
+            $autorizacion_orden_compra->id_usuario_inserta = $id_user;
+            $autorizacion_orden_compra->estado = 1;
+            $autorizacion_orden_compra->save();
+            
+            $autorizacion_orden_compra_siguiente_proceso = new AutorizacionOrdenCompra;
+            $autorizacion_orden_compra_siguiente_proceso->id_orden_compra = $request->id;
+            $autorizacion_orden_compra_siguiente_proceso->id_proceso_pedido = 1;
+            //$autorizacion_orden_compra_siguiente_proceso->id_autorizacion = 1;
+            $autorizacion_orden_compra_siguiente_proceso->id_usuario_inserta = $id_user;
+            $autorizacion_orden_compra_siguiente_proceso->estado = 1;
+            $autorizacion_orden_compra_siguiente_proceso->save();
+        }
+        
+        return response()->json(['id' => $request->id]);
+        
     }
 }
 

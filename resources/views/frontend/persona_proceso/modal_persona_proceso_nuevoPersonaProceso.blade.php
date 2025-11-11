@@ -131,7 +131,8 @@ $.mask.definitions['p'] = "[Mm]";
 */
 $(document).ready(function() {
 
-    
+    $('#user').select2({ width : ' 100% ' })
+
 });
 </script>
 
@@ -144,52 +145,53 @@ $('#openOverlayOpc').on('shown.bs.modal', function() {
 		//container: '#openOverlayOpc modal-body'
 		container: '#openOverlayOpc modal-body'
      });
-	 /*
-	 $('#hora_solicitud').timepicker({
-		showInputs: false,
-		container: '#openOverlayOpc modal-body'
-	});
-	*/
 	 
 });
 
-$(document).ready(function() {
-	 
-});
-
-function limpiar(){
-	$('#id').val("0");
-	$('#id_tipo_documento').val("");
-	$('#denominacion').val("");
-	$('#img_foto').val("");
-}
-
-function fn_save_marca(){
-
-    $('#denominacion').val($('#denominacion').val().toUpperCase());
+function fn_save_persona_proceso(){
 	
-	$.ajax({
-			url: "/marcas/send_marca",
+    var msg = "";
+    var user = $('#user').val();
+    var proceso = $('#proceso').val();
+
+    if(user==""){msg+="Seleccione el Usuario <br>";}
+    if(proceso==""){msg+="Seleccione el Proceso <br>";}
+
+    if(msg!=""){
+        bootbox.alert(msg);
+        return false;
+    }else{
+
+        var msgLoader = "";
+        msgLoader = "Procesando, espere un momento por favor";
+        var heightBrowser = $(window).width()/2;
+        $('.loader').css("opacity","0.8").css("height",heightBrowser).html("<div id='Grd1_wrapper' class='dataTables_wrapper'><div id='Grd1_processing' class='dataTables_processing panel-default'>"+msgLoader+"</div></div>");
+        $('.loader').show();
+
+        $.ajax({
+            url: "/persona_proceso/send_persona_proceso",
             type: "POST",
-            data : $("#frmMarca").serialize(),
-			success: function (result) {
-				//alert(result);
+            data : $("#frmPersonaProceso").serialize(),
+            success: function (result) {
+                //alert(result);
                 if (result.success) {
+                    $('.loader').hide();
                     bootbox.alert(result.success, function() {
+                        
                         $('#openOverlayOpc').modal('hide');
-                        //bootbox.alert("Se guard&oacute; satisfactoriamente"); 
-                        //window.location.reload();
                         datatablenew();
                     });
                 } else if (result.error) {
+                    $('.loader').hide();
                     bootbox.alert(result.error);
+                    
                 }
             },
-    });
+        });
+    }
 }
 
 </script>
-
 
 <body class="hold-transition skin-blue sidebar-mini">
 
@@ -206,11 +208,11 @@ function fn_save_marca(){
             <div class="card">
                 
                 <div class="card-header" style="padding:5px!important;padding-left:20px!important">
-                    Registrar Marcas
+                    Registrar Persona por Proceso
                 </div>
                 
                 <div class="card-body">
-                <form method="post" action="#" id="frmMarca" name="frmMarca">
+                <form method="post" action="#" id="frmPersonaProceso" name="frmPersonaProceso">
 
                     <div class="row">
 
@@ -219,25 +221,29 @@ function fn_save_marca(){
                             <input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
                             <input type="hidden" name="id" id="id" value="<?php echo $id?>">
                             
-                            
                             <div class="row" style="padding-left:10px">
-                                
                                 <div class="col-lg-8">
                                     <div class="form-group">
-                                        <label class="control-label form-control-sm">Denominaci&oacute;n</label>
-                                        <input id="denominacion" name="denominacion" on class="form-control form-control-sm"  value="<?php echo $marca->denominiacion?>" type="text" style="text-transform: uppercase;">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row" style="padding-left:10px">
-                                <div class="col-lg-4">
-                                    <div class="form-group">
-                                        <label class="control-label form-control-sm">Tipo Marca</label>
-                                        <select name="tipo_marca" id="tipo_marca" class="form-control form-control-sm">
+                                        <label class="control-label form-control-sm">Usuaurio </label>
+                                        <select name="user" id="user" class="form-control form-control-sm">
                                             <option value="">--Seleccionar--</option>
                                             <?php 
-                                            foreach ($tipo_marca as $row){?>
-                                                <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$marca->id_tipo_marca)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                            foreach ($user as $row){?>
+                                                <option value="<?php echo $row->id ?>" <?php if($row->id==$persona_proceso->id_persona)echo "selected='selected'"?>><?php echo $row->name ?></option>
+                                                <?php 
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label class="control-label form-control-sm">Proceso</label>
+                                        <select name="proceso" id="proceso" class="form-control form-control-sm">
+                                            <option value="">--Seleccionar--</option>
+                                            <?php 
+                                            foreach ($proceso as $row){?>
+                                                <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$persona_proceso->id_proceso)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
                                                 <?php 
                                             }
                                             ?>
@@ -250,7 +256,7 @@ function fn_save_marca(){
                         <div style="margin-top:15px" class="form-group">
                             <div class="col-sm-12 controls">
                                 <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
-                                    <a href="javascript:void(0)" onClick="fn_save_marca()" class="btn btn-sm btn-success">Guardar</a>
+                                    <a href="javascript:void(0)" onClick="fn_save_persona_proceso()" class="btn btn-sm btn-success">Guardar</a>
                                 </div>
                                                     
                             </div>

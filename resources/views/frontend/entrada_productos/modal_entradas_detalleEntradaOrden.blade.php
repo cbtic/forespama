@@ -1154,7 +1154,6 @@ function fn_save_detalle_producto(){
                     //alert(result.codigo)
                     var codigo_ = result.codigo;
                     
-                    
                     datatablenew();
                     $('#openOverlayOpc').modal('hide');
                     $('.loader').hide();
@@ -1223,7 +1222,34 @@ function cambiarCliente(){
         $('#select_persona_compra').hide();
         
     }
+}
 
+function denegar_pedido($id_proceso){
+	
+    $('#id_proceso').val($id_proceso);
+
+    var msgLoader = "";
+    msgLoader = "Procesando, espere un momento por favor";
+    var heightBrowser = $(window).width()/2;
+    $('.loader').css("opacity","0.8").css("height",heightBrowser).html("<div id='Grd1_wrapper' class='dataTables_wrapper'><div id='Grd1_processing' class='dataTables_processing panel-default'>"+msgLoader+"</div></div>");
+    $('.loader').show();
+
+    $.ajax({
+        url: "/entrada_productos/send_denegar_pedido_orden_compra",
+        type: "POST",
+        data : $("#frmDetalleProductos").serialize(),
+        success: function (result) {
+            $('#openOverlayOpc').modal('hide');
+            datatablenew();
+            $('.loader').hide();
+            bootbox.alert("Se devolvi&oacute; el pedido al Vendedor");
+            /*bootbox.alert("Se devolvi&oacute; el pedido al Vendedor", function () {
+                if (result.id > 0) {
+                    modalOrdenCompra(result.id);
+                }
+            });*/
+        }
+    });
 }
 
 </script>
@@ -1259,6 +1285,7 @@ function cambiarCliente(){
                     <input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
                     <input type="hidden" name="id" id="id" value="<?php echo $id?>">
                     <input type="hidden" name="id_orden_compra" id="id_orden_compra" value="<?php echo $id_orden_compra?>">
+                    <input type="hidden" name="id_proceso" id="id_proceso" value="4">
                     
                     <div class="row" style="padding-left:10px">
 
@@ -1596,6 +1623,7 @@ function cambiarCliente(){
                                 <?php 
                                     } elseif($tipo== 2){
                                 ?>
+                                    <button style="font-size:12px;margin-left:10px; margin-right:10px" type="button" class="btn btn-sm btn-danger" data-toggle="modal" onclick="denegar_pedido(4)">Devolver a Vendedor</button>
                                     <a href="javascript:void(0)" onClick="fn_save_detalle_producto()" class="btn btn-sm btn-success" style="margin-right:10px">Entregar</a>
                                 <?php 
                                     }

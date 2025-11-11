@@ -1461,6 +1461,84 @@ function validarServicio(input){
     }
 }
 
+function enviar_pedido($id_proceso){
+	
+    $('#id_proceso').val($id_proceso);
+
+    var msgLoader = "";
+    msgLoader = "Procesando, espere un momento por favor";
+    var heightBrowser = $(window).width()/2;
+    $('.loader').css("opacity","0.8").css("height",heightBrowser).html("<div id='Grd1_wrapper' class='dataTables_wrapper'><div id='Grd1_processing' class='dataTables_processing panel-default'>"+msgLoader+"</div></div>");
+    $('.loader').show();
+
+    $.ajax({
+        url: "/orden_compra/send_pedido_orden_compra",
+        type: "POST",
+        data : $("#frmOrdenCompra").serialize(),
+        success: function (result) {
+            datatablenew();
+            $('.loader').hide();
+            bootbox.alert("Se envi&oacute; satisfactoriamente", function () {
+                if (result.id > 0) {
+                    modalOrdenCompra(result.id);
+                }
+            });
+        }
+    });
+}
+
+function aprobar_pago($id_proceso){
+	
+    $('#id_proceso').val($id_proceso);
+
+    var msgLoader = "";
+    msgLoader = "Procesando, espere un momento por favor";
+    var heightBrowser = $(window).width()/2;
+    $('.loader').css("opacity","0.8").css("height",heightBrowser).html("<div id='Grd1_wrapper' class='dataTables_wrapper'><div id='Grd1_processing' class='dataTables_processing panel-default'>"+msgLoader+"</div></div>");
+    $('.loader').show();
+
+    $.ajax({
+        url: "/orden_compra/send_pedido_orden_compra",
+        type: "POST",
+        data : $("#frmOrdenCompra").serialize(),
+        success: function (result) {
+            datatablenew();
+            $('.loader').hide();
+            bootbox.alert("Se envi&oacute; satisfactoriamente", function () {
+                if (result.id > 0) {
+                    modalOrdenCompra(result.id);
+                }
+            });
+        }
+    });
+}
+
+function denegar_pago($id_proceso){
+	
+    $('#id_proceso').val($id_proceso);
+
+    var msgLoader = "";
+    msgLoader = "Procesando, espere un momento por favor";
+    var heightBrowser = $(window).width()/2;
+    $('.loader').css("opacity","0.8").css("height",heightBrowser).html("<div id='Grd1_wrapper' class='dataTables_wrapper'><div id='Grd1_processing' class='dataTables_processing panel-default'>"+msgLoader+"</div></div>");
+    $('.loader').show();
+
+    $.ajax({
+        url: "/orden_compra/send_denegar_pago_orden_compra",
+        type: "POST",
+        data : $("#frmOrdenCompra").serialize(),
+        success: function (result) {
+            datatablenew();
+            $('.loader').hide();
+            bootbox.alert("Se devolvi&oacute; el pedido al vendedor", function () {
+                if (result.id > 0) {
+                    modalOrdenCompra(result.id);
+                }
+            });
+        }
+    });
+}
+
 </script>
 
 <body class="hold-transition skin-blue sidebar-mini">
@@ -1494,6 +1572,7 @@ function validarServicio(input){
                     <input type="hidden" name="id" id="id" value="<?php echo $id?>">
                     <input type="hidden" name="id_descuento_usuario" id="id_descuento_usuario" value="<?php echo $id_descuento_usuario?>">
                     <input type="hidden" name="id_autorizacion" id="id_autorizacion" value="2">
+                    <input type="hidden" name="id_proceso" id="id_proceso" value="1">
                     
                     <div class="row" style="padding-left:10px">
 
@@ -1824,14 +1903,21 @@ function validarServicio(input){
 
                                 <button style="font-size:12px;margin-left:10px" type="button" class="btn btn-sm btn-primary" data-toggle="modal" onclick="pdf_documento()" ><i class="fa fa-edit"></i>Imprimir</button>
 
-                                <button style="font-size:12px;margin-left:10px;" type="button" class="btn btn-sm btn-secondary" data-toggle="modal" onclick="modal_datos_pedido_orden_compra()">Agregar Datos Pedido</button>
+                                <button style="font-size:12px;margin-left:10px" type="button" class="btn btn-sm btn-secondary" data-toggle="modal" onclick="modal_datos_pedido_orden_compra()">Agregar Datos Pedido</button>
                                 
-                                <button style="font-size:12px;margin-left:10px; margin-right:10px" type="button" class="btn btn-sm btn-warning" data-toggle="modal" onclick="pdf_guia()" ><i class="fa fa-edit"></i>Imprimir Gu&iacute;a Remisi&oacute;n Electronica</button>
+                                <?php if($id_proceso == 1){?>
+                                    <button style="font-size:12px;margin-left:10px" type="button" class="btn btn-sm btn-warning" data-toggle="modal" onclick="enviar_pedido(1)">Enviar Pedido</button>
+                                <?php }?>
+                                <?php if($id_proceso == 3){?>
+                                    <button style="font-size:12px;margin-left:10px" type="button" class="btn btn-sm btn-danger" data-toggle="modal" onclick="denegar_pago(3)">Devolver a Vendedor</button>
+                                    <button style="font-size:12px;margin-left:10px" type="button" class="btn btn-sm btn-warning" data-toggle="modal" onclick="aprobar_pago(3)">Aprobar Pago</button>
+                                <?php }?>
+                                <!--<button style="font-size:12px;margin-left:10px; margin-right:10px" type="button" class="btn btn-sm btn-warning" data-toggle="modal" onclick="pdf_guia()" ><i class="fa fa-edit"></i>Imprimir Gu&iacute;a Remisi&oacute;n Electronica</button>-->
                                 <!--<a href="javascript:void(0)" onClick="fn_pdf_documento()" class="btn btn-sm btn-primary" style="margin-right:100px">Imprimir</a>-->
                                 <?php 
                                     }else{
                                 ?>
-                                    <button style="font-size:12px;margin-left:10px; margin-right:10px" type="button" class="btn btn-sm btn-primary" data-toggle="modal" onclick="pdf_documento()" ><i class="fa fa-edit"></i>Imprimir</button>
+                                    <button style="font-size:12px;margin-left:10px" type="button" class="btn btn-sm btn-primary" data-toggle="modal" onclick="pdf_documento()" ><i class="fa fa-edit"></i>Imprimir</button>
                                 <?php 
                                     }
                                 ?>
@@ -1840,17 +1926,17 @@ function validarServicio(input){
                                     if($id>0){
                                         if($orden_compra->id_empresa_compra==23){
                                 ?>
-                                <button style="font-size:12px;margin-right:40px;" type="button" class="btn btn-sm btn-light" data-toggle="modal" onclick="generarLPN()" >Generar LPN</button>
+                                <button style="font-size:12px;margin-left:40px;" type="button" class="btn btn-sm btn-light" data-toggle="modal" onclick="generarLPN()" >Generar LPN</button>
                                 <?php 
                                         }
                                     }
                                 ?>
                                 
                                 <?php if($id_user==$orden_compra->id_usuario_inserta && $orden_compra->cerrado == 1){?>
-                                    <a href="javascript:void(0)" onClick="fn_save_orden_compra()" class="btn btn-sm btn-success" style="margin-right:10px">Guardar</a>
+                                    <a href="javascript:void(0)" onClick="fn_save_orden_compra()" class="btn btn-sm btn-success" style="margin-left:10px">Guardar</a>
                                 <?php }?>
                                 <?php if($id==0){?>
-                                    <a href="javascript:void(0)" onClick="fn_save_orden_compra()" class="btn btn-sm btn-success" style="margin-right:10px">Guardar</a>
+                                    <a href="javascript:void(0)" onClick="fn_save_orden_compra()" class="btn btn-sm btn-success" style="margin-left:10px">Guardar</a>
                                 <?php }?>
                                 <a href="javascript:void(0)" onClick="$('#openOverlayOpc').modal('hide');" class="btn btn-sm btn-info" style="margin-left:10px;">Cerrar</a>
                             </div>

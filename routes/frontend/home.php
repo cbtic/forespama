@@ -50,6 +50,7 @@ use App\Http\Controllers\Frontend\SubFamiliaController;
 use App\Http\Controllers\Frontend\UsuarioDescuentoController;
 use App\Http\Controllers\Frontend\ReusoController;
 use App\Http\Controllers\Frontend\ProductoCompetenciaController;
+use App\Http\Controllers\Frontend\PersonaProcesoController;
 
 //use App\Http\Controllers\VehiculoController;
 
@@ -827,3 +828,15 @@ Route::post('producto_competencia/send_producto_competencia', [ProductoCompetenc
 Route::get('producto_competencia/eliminar_producto_competencia/{id}/{estado}', [ProductoCompetenciaController::class, 'eliminar_producto_competencia'])->name('producto_competencia.eliminar_producto_competencia');
 Route::get('producto_competencia/obtener_producto_competencia/{id_producto}', [ProductoCompetenciaController::class, 'obtener_producto_competencia'])->name('producto_competencia.obtener_producto_competencia');
 Route::get('productos/modal_producto_competencia/{codigo_producto_competencia}/{nombre_producto_competencia}/{competencia_producto_competencia}', [ProductosController::class, 'modal_producto_competencia'])->name('productos.modal_producto_competencia');
+
+Route::post('orden_compra/send_pedido_orden_compra', [OrdenCompraController::class, 'send_pedido_orden_compra'])->name('orden_compra.send_pedido_orden_compra');
+Route::post('orden_compra/send_denegar_pago_orden_compra', [OrdenCompraController::class, 'send_denegar_pago_orden_compra'])->name('orden_compra.send_denegar_pago_orden_compra');
+Route::post('orden_compra/send_denegar_orden_compra_autorizacion', [OrdenCompraController::class, 'send_denegar_orden_compra_autorizacion'])->name('orden_compra.send_denegar_orden_compra_autorizacion');
+
+Route::post('entrada_productos/send_denegar_pedido_orden_compra', [EntradaProductosController::class, 'send_denegar_pedido_orden_compra'])->name('entrada_productos.send_denegar_pedido_orden_compra');
+
+Route::get('persona_proceso/create', [PersonaProcesoController::class, 'create'])->name('persona_proceso.create');
+Route::post('persona_proceso/listar_persona_proceso_ajax', [PersonaProcesoController::class, 'listar_persona_proceso_ajax'])->name('persona_proceso.listar_persona_proceso_ajax');
+Route::get('persona_proceso/modal_persona_proceso/{id}', [PersonaProcesoController::class, 'modal_persona_proceso'])->name('persona_proceso.modal_persona_proceso');
+Route::post('persona_proceso/send_persona_proceso', [PersonaProcesoController::class, 'send_persona_proceso'])->name('persona_proceso.send_persona_proceso');
+Route::get('persona_proceso/eliminar_persona_proceso/{id}/{estado}', [PersonaProcesoController::class, 'eliminar_persona_proceso'])->name('persona_proceso.eliminar_persona_proceso');
