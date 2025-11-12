@@ -840,3 +840,4 @@ Route::post('persona_proceso/listar_persona_proceso_ajax', [PersonaProcesoContro
 Route::get('persona_proceso/modal_persona_proceso/{id}', [PersonaProcesoController::class, 'modal_persona_proceso'])->name('persona_proceso.modal_persona_proceso');
 Route::post('persona_proceso/send_persona_proceso', [PersonaProcesoController::class, 'send_persona_proceso'])->name('persona_proceso.send_persona_proceso');
 Route::get('persona_proceso/eliminar_persona_proceso/{id}/{estado}', [PersonaProcesoController::class, 'eliminar_persona_proceso'])->name('persona_proceso.eliminar_persona_proceso');
+Route::post('orden_compra/listar_orden_compra_proceso_ajax', [OrdenCompraController::class, 'listar_orden_compra_proceso_ajax'])->name('orden_compra.listar_orden_compra_proceso_ajax');

@@ -340,6 +340,13 @@ label.form-control-sm{
   font-size: 14px;
 }
 
+.icono-botones2{
+    margin-left:10px !important; 
+    display:inline-flex !important; 
+    align-items:center !important; 
+    gap:3px !important;
+}
+
 </style>
 
 <script>
@@ -567,17 +574,23 @@ label.form-control-sm{
 					</div>
                     
 					<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12" style="padding-right:0px">
-						<input class="btn btn-warning pull-rigth" value="Buscar" type="button" id="btnBuscar" />
-						<input class="btn btn-success pull-rigth" value="Nuevo" type="button" id="btnNuevo" style="margin-left:10px" />
+						<!--<input class="btn btn-warning pull-rigth" value="Buscar" type="button" id="btnBuscar" />-->
+						<button type="button" id="btnBuscar" class="btn btn-sm btn-warning pull-rigth icono-botones2" style="margin-left:10px">
+							<i class="fas fa-search" style="font-size:18px;"></i> Buscar
+						</button>
+						<!--<input class="btn btn-success pull-rigth" value="Nuevo" type="button" id="btnNuevo" style="margin-left:10px" />-->
+						<button type="button" id="btnNuevo" class="btn btn-sm btn-success icono-botones2" style="margin-left:10px">
+							<i class="fas fa-plus-circle" style="font-size:18px;"></i> Nuevo
+						</button>
 						<!--<input class="btn btn-secondary pull-rigth" value="Excel" name="excel" type="button" id="btnDescargar" style="margin-left:15px;margin-right:10px;"/>-->
 						
-						<button id="btnDescargar" type="button" class="btn btn-secondary pull-rigth" style="margin-left:10px;">
-							<i class="fas fa-download"></i> Excel
+						<button id="btnDescargar" type="button" class="btn btn-sm btn-secondary pull-rigth icono-botones2" style="margin-left:10px;">
+							<i class="fas fa-download" style="font-size:18px;"></i> Excel
 							<!--<img src="/img/icono_carro.png" alt="Carro" style="width: 16px; height: 16px; margin-left: 5px;">-->
 						</button>
 
-						<button id="btnDescargarDetalle" type="button" class="btn btn-secondary pull-rigth" style="margin-left:10px;">
-							<i class="fas fa-download"></i> Excel Detallado
+						<button id="btnDescargarDetalle" type="button" class="btn btn-sm btn-secondary pull-rigth icono-botones2" style="margin-left:10px;">
+							<i class="fas fa-download" style="font-size:18px;"></i> Excel Detallado
 							<!--<img src="/img/icono_carro.png" alt="Carro" style="width: 16px; height: 16px; margin-left: 5px;">-->
 						</button>
 					</div>

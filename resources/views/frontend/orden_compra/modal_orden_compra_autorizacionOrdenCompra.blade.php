@@ -918,6 +918,8 @@ function fn_save_autorizacion_orden_compra(){
             $('#id_autorizacion_detalle'+filaIndex).val(1);
 
             $('#id_autorizacion').val(1);
+
+            $('#aprobacion_total').val(0);
             
         }
     });
@@ -1232,6 +1234,7 @@ function obtenerBeneficiario(){
                     <input type="hidden" name="id_autorizacion" id="id_autorizacion" value="2">
                     <input type="hidden" name="id_proceso" id="id_proceso" value="2">
                     <input type="hidden" name="id_user" id="id_user" value="<?php echo $id_user?>">
+                    <input type="hidden" name="aprobacion_total" id="aprobacion_total" value="1">
                     
                     <div class="row" style="padding-left:10px">
 
@@ -1547,7 +1550,7 @@ function obtenerBeneficiario(){
                     <div style="margin-top:15px" class="form-group">
                         <div class="col-sm-12 controls">
                             <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
-                                <?php if($orden_compra->id_autorizacion == 1){?>
+                                <?php if($id_proceso == 2){?>
                                     <a href="javascript:void(0)" onClick="fn_save_denegar_autorizacion_orden_compra(2)" class="btn btn-sm btn-danger" style="margin-right:10px">No Autorizar</a>
                                     <a href="javascript:void(0)" onClick="fn_save_autorizacion_orden_compra()" class="btn btn-sm btn-success" style="margin-right:10px">Autorizar</a>
                                 <?php }?>

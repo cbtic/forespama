@@ -463,23 +463,24 @@ label.form-control-sm{
 					<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12" style="padding-right:0px">
 						
 						<input class="btn btn-warning float-left" value="Buscar" type="button" id="btnBuscar" />
+						
+						<?php if($id_user == 1){?>
+							<span class="btn btn-info btn-file float-left" style="margin-left:10px">
+								Examinar OC <input id="image" name="image" type="file" />
+							</span>
+							
+							<i id="fileExcel" class="fa fa-file-excel" style="display:none;color:#00B300;font-size:35px;block;float:left;padding-left:10px"></i>
+							
+							<input type="button" class="btn btn-success upload" value="Subir OC" style="margin-left:10px;float:left">
 
-						<span class="btn btn-info btn-file float-left" style="margin-left:10px">
-							Examinar OC <input id="image" name="image" type="file" />
-						</span>
-						
-						<i id="fileExcel" class="fa fa-file-excel" style="display:none;color:#00B300;font-size:35px;block;float:left;padding-left:10px"></i>
-						
-						<input type="button" class="btn btn-success upload" value="Subir OC" style="margin-left:10px;float:left">
-
-						<span class="btn btn-info btn-file float-left" style="margin-left:10px">
-							Examinar OD <input id="image2" name="image2" type="file" />
-						</span>
-						
-						<i id="fileExcel2" class="fa fa-file-excel" style="display:none;color:#00B300;font-size:35px;block;float:left;padding-left:10px"></i>
-						
-						<input type="button" class="btn btn-success upload2" value="Subir OD" style="margin-left:10px;float:left">
-						
+							<span class="btn btn-info btn-file float-left" style="margin-left:10px">
+								Examinar OD <input id="image2" name="image2" type="file" />
+							</span>
+							
+							<i id="fileExcel2" class="fa fa-file-excel" style="display:none;color:#00B300;font-size:35px;block;float:left;padding-left:10px"></i>
+							
+							<input type="button" class="btn btn-success upload2" value="Subir OD" style="margin-left:10px;float:left">
+						<?php }?>
 					</div>
 				</div>
 				

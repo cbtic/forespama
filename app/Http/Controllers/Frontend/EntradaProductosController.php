@@ -2017,7 +2017,7 @@ class EntradaProductosController extends Controller
             $autorizacion_orden_compra->save();
             
             $autorizacion_orden_compra_siguiente_proceso = new AutorizacionOrdenCompra;
-            $autorizacion_orden_compra_siguiente_proceso->id_orden_compra = $request->id;
+            $autorizacion_orden_compra_siguiente_proceso->id_orden_compra = $request->id_orden_compra;
             $autorizacion_orden_compra_siguiente_proceso->id_proceso_pedido = 1;
             //$autorizacion_orden_compra_siguiente_proceso->id_autorizacion = 1;
             $autorizacion_orden_compra_siguiente_proceso->id_usuario_inserta = $id_user;

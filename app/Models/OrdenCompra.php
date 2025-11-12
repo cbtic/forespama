@@ -82,6 +82,12 @@ class OrdenCompra extends Model
 
     }
 
+    public function listar_orden_compra_proceso_ajax($p){
+
+        return $this->readFuntionPostgres('sp_listar_orden_compra_proceso_paginado',$p);
+
+    }
+
     public function readFuntionPostgres($function, $parameters = null){
 
         $_parameters = '';

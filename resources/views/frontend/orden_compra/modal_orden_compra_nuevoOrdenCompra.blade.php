@@ -149,6 +149,13 @@
     background-color:  #E5D100 !important; /* Se oscurece un poco */
 }
 
+.icono-botones{
+    margin-left:10px !important; 
+    display:flex !important; 
+    align-items:center !important; 
+    gap:3px !important;
+}
+
 </style>
 
 <!--<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"/>-->
@@ -768,7 +775,7 @@ function cargarDetalle(){
                         <td><input name="sub_total[]" id="sub_total${n}" class="sub_total form-control form-control-sm" value="${parseFloat(orden_compra.sub_total || 0).toFixed(decimales) }" type="text" readonly="readonly"></td>
                         <td><input name="igv[]" id="igv${n}" class="igv form-control form-control-sm" value="${parseFloat(orden_compra.igv || 0).toFixed(decimales)}" type="text" readonly="readonly"></td>
                         <td><input name="total[]" id="total${n}" class="total form-control form-control-sm" value="${parseFloat(orden_compra.total || 0).toFixed(decimales)}" type="text" readonly="readonly"></td>
-                        <td><button type="button" class="btn btn-danger btn-sm" onclick="eliminarFila(this)">Eliminar</button></td>
+                        <td><button type="button" class="btn btn-danger btn-sm" onclick="eliminarFila(this)"><i class="fas fa-trash" style="font-size:18px;"></i></button></td>
 
                     </tr>
                 `;
@@ -900,7 +907,7 @@ function agregarProducto(){
         var igv = '<input name="igv[]" id="igv' + n + '" class="igv form-control form-control-sm" value="" type="text" readonly="readonly">';
         var total = '<input name="total[]" id="total' + n + '" class="total form-control form-control-sm" value="" type="text" readonly="readonly">';
         
-        var btnEliminar = '<button type="button" class="btn btn-danger btn-sm" onclick="eliminarFila(this)">Eliminar</button>';
+        var btnEliminar = '<button type="button" class="btn btn-danger btn-sm" onclick="eliminarFila(this)"><i class="fas fa-trash" style="font-size:18px;"></i></button>';
 
         newRow += '<tr>';
         newRow += '<td>' + n + '</td>';
@@ -1575,265 +1582,280 @@ function denegar_pago($id_proceso){
                     <input type="hidden" name="id_proceso" id="id_proceso" value="1">
                     
                     <div class="row" style="padding-left:10px">
+                        <div class="col-lg-11">
+                            <div class="row">
+                                <div class="col-lg-2">
+                                    Tipo Documento
+                                </div>
+                                <div class="col-lg-2">
+                                    <select name="tipo_documento" id="tipo_documento" class="form-control form-control-sm" onchange="obtenerCodigo(); obtenerFechaVencimiento(); obtenerCanal()">
+                                        <option value="">--Seleccionar--</option>
+                                        <?php
+                                        foreach ($tipo_documento as $row){?>
+                                            <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$orden_compra->id_tipo_documento)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                            <?php 
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
+                                <div class="col-lg-2" id="label_canal">
+                                    Canal
+                                </div>
+                                <div class="col-lg-2" id="select_canal">
+                                    <select name="canal" id="canal" class="form-control form-control-sm" onchange="obtenerBeneficiario()">
+                                        <option value="">--Seleccionar--</option>
+                                        <?php
+                                        foreach ($canal as $row){?>
+                                            <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$orden_compra->id_canal)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                            <?php 
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
+                                <div id="label_numero_orden_compra_matriz" class="col-lg-2" @if($orden_compra->id_tipo_documento != 4) style="display:none;" @endif>
+                                    N&uacute;mero Orden Compra Matriz
+                                </div>
+                                <div id="input_numero_orden_compra_matriz" class="col-lg-2" @if($orden_compra->id_tipo_documento != 4) style="display:none;" @endif>
+                                    <input id="numero_orden_compra_matriz" name="numero_orden_compra_matriz" on class="form-control form-control-sm"  value="" type="text" onchange="obtenerOrdenCompraMatriz()">
+                                </div>
+                                <div class="col-lg-2">
+                                    N&uacute;mero Orden Compra
+                                </div>
+                                <div class="col-lg-2">
+                                    <input id="numero_orden_compra" name="numero_orden_compra" on class="form-control form-control-sm"  value="<?php if($id>0){echo $orden_compra->numero_orden_compra;}?>" type="text" readonly ="readonly">
+                                </div>
+                                <div class="col-lg-2">
+                                    Empresa Vende
+                                </div>
+                                <div class="col-lg-2">
+                                    <select name="empresa_vende" id="empresa_vende" class="form-control form-control-sm" onchange="">
+                                        <option value="">--Seleccionar--</option>
+                                        <?php
+                                        foreach ($proveedor as $row){?>
+                                            <option value="<?php echo $row->id ?>" <?php if($row->id==$orden_compra->id_empresa_vende)echo "selected='selected'"?>><?php echo $row->razon_social ?></option>
+                                            <?php 
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
+                                <div class="col-lg-2">
+                                    Tipo Documento Cliente
+                                </div>
+                                <div class="col-lg-2">
+                                    <select name="tipo_documento_cliente" id="tipo_documento_cliente" class="form-control form-control-sm" onchange="cambiarCliente()">
+                                        <option value="">--Seleccionar--</option>
+                                        <?php
+                                        foreach ($tipo_documento_cliente as $row){?>
+                                            <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$orden_compra->id_tipo_cliente)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                            <?php 
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
+                                <div class="col-lg-2" id="label_persona_compra">
+                                    Persona Compra
+                                </div>
+                                <div class="col-lg-2" id="select_persona_compra">
+                                    <select name="persona_compra" id="persona_compra" class="form-control form-control-sm" onchange="">
+                                        <option value="">--Seleccionar--</option>
+                                        <?php
+                                        foreach ($persona as $row){?>
+                                            <option value="<?php echo $row->id ?>" <?php if($row->id==$orden_compra->id_persona)echo "selected='selected'"?>><?php echo $row->nombres .' '. $row->apellido_paterno .' '. $row->apellido_materno  ?></option>
+                                            <?php 
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
+                                <div class="col-lg-2" id="label_empresa_compra">
+                                    Empresa Compra
+                                </div>
+                                <div class="col-lg-2" id="select_empresa_compra">
+                                    <select name="empresa_compra" id="empresa_compra" class="form-control form-control-sm" onchange="">
+                                        <option value="">--Seleccionar--</option>
+                                        <?php
+                                        foreach ($proveedor as $row){?>
+                                            <option value="<?php echo $row->id ?>" <?php if($row->id==$orden_compra->id_empresa_compra)echo "selected='selected'"?>><?php echo $row->razon_social ?></option>
+                                            <?php 
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
+                                <div class="col-lg-2">
+                                    Fecha Orden Compra
+                                </div>
+                                <div class="col-lg-2">
+                                    <input id="fecha_orden_compra" name="fecha_orden_compra" on class="form-control form-control-sm"  value="<?php echo isset($orden_compra) && $orden_compra->fecha_orden_compra ? $orden_compra->fecha_orden_compra : date('Y-m-d'); ?>" type="text">
+                                </div>
+                                <div id="label_fecha_vencimiento" class="col-lg-2" @if($orden_compra->id_tipo_documento != 2) style="display:none;" @endif>
+                                    Fecha Vencimiento
+                                </div>
+                                <div id="input_fecha_vencimiento" class="col-lg-2" @if($orden_compra->id_tipo_documento != 2) style="display:none;" @endif>
+                                    <input id="fecha_vencimiento" name="fecha_vencimiento" class="form-control form-control-sm" type="text" value="{{ $orden_compra->fecha_vencimiento ?? '' }}" placeholder="YYYY-MM-DD">
+                                </div>
+                                <div class="col-lg-2">
+                                    N&uacute;mero Orden Compra Cliente
+                                </div>
+                                <div class="col-lg-2">
+                                    <input id="numero_orden_compra_cliente" name="numero_orden_compra_cliente" on class="form-control form-control-sm"  value="<?php echo $orden_compra->numero_orden_compra_cliente;?>" type="text">
+                                </div>
+                                <div class="col-lg-2">
+                                    Unidad Origen
+                                </div>
+                                <?php
+                                /*if($orden_compra->id_empresa_compra==30 && $orden_compra->id_empresa_vende==30){
+                                    $origen=3;
+                                }else if($orden_compra->id_empresa_compra==30){
+                                    $origen=2;
+                                }else if($orden_compra->id_empresa_vende==30){
+                                    $origen=1;
+                                }else{
+                                    $origen=null;
+                                }*/
+                                ?>
+                                <div class="col-lg-2">
+                                    <select name="unidad_origen" id="unidad_origen" class="form-control form-control-sm" onchange="cambiarOrigen()">
+                                        <option value="">--Seleccionar--</option>
+                                        <?php
+                                        foreach ($unidad_origen as $row){?>
+                                            <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$orden_compra->id_unidad_origen)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                            <?php 
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
+                                <div class="col-lg-2" id="almacen_salida_" style="color:green; font-weight:bold">
+                                    Almacen Origen
+                                </div>
+                                <div class="col-lg-2" id="almacen_salida_select">
+                                    <select name="almacen_salida" id="almacen_salida" class="form-control form-control-sm" onchange="//actualizarSecciones(this)">
+                                        <option value="">--Seleccionar--</option>
+                                        <?php 
+                                        foreach ($almacen as $row){?>
+                                            <option value="<?php echo $row->id ?>" <?php if($row->id==$orden_compra->id_almacen_salida)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                            <?php 
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
+                                <div class="col-lg-2" id="almacen_" style="color:red; font-weight:bold">
+                                    Almacen Destino
+                                </div>
+                                <div class="col-lg-2" id="almacen_select">
+                                    <select name="almacen" id="almacen" class="form-control form-control-sm" onchange="//actualizarSecciones(this)">
+                                        <option value="">--Seleccionar--</option>
+                                        <?php
+                                        foreach ($almacen as $row){?>
+                                            <option value="<?php echo $row->id ?>" <?php if($row->id==$orden_compra->id_almacen_destino)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                            <?php 
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
+                                <div class="col-lg-2">
+                                    Aplica IGV
+                                </div>
+                                <div class="col-lg-2">
+                                    <select name="igv_compra" id="igv_compra" class="form-control form-control-sm" onchange="">
+                                        <option value="">--Seleccionar--</option>
+                                        <?php
+                                        foreach ($igv_compra as $row){?>
+                                            <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$orden_compra->igv_compra)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                            <?php 
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
+                                <div class="col-lg-2">
+                                    Moneda
+                                </div>
+                                <div class="col-lg-2">
+                                    <select name="moneda" id="moneda" class="form-control form-control-sm" onchange="">
+                                        <option value="">--Seleccionar--</option>
+                                        <?php
+                                        foreach ($moneda as $row){?>
+                                            <option value="<?php echo $row->codigo; ?>" <?php echo ($id > 0 && $row->codigo == $orden_compra->id_moneda) ? "selected='selected'" : (($row->codigo == 1) ? "selected='selected'" : ""); ?>><?php echo $row->denominacion ?></option>
+                                            <?php 
+                                        }
+                                        ?>
+                                    </select>
+                                    <input name="moneda_descripcion" id="moneda_descripcion" type="hidden">
+                                </div>
+                                <div class="col-lg-2" id="label_entrada_salida">
+                                    N&uacute;mero Entrada/Salida
+                                </div>
+                                <div class="col-lg-2" id="input_entrada_salida">
+                                    <input id="numero_entrada_salida" name="numero_entrada_salida" style="color:red; font-weight:bold" on class="form-control form-control-sm"  value="<?php echo $orden_compra->numero_orden_compra_cliente;?>" type="text" readonly="readonly">
+                                </div>
 
-                        <div class="col-lg-2">
-                            Tipo Documento
-                        </div>
-                        <div class="col-lg-2">
-                            <select name="tipo_documento" id="tipo_documento" class="form-control form-control-sm" onchange="obtenerCodigo(); obtenerFechaVencimiento(); obtenerCanal()">
-                                <option value="">--Seleccionar--</option>
-                                <?php
-                                foreach ($tipo_documento as $row){?>
-                                    <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$orden_compra->id_tipo_documento)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
-                                    <?php 
-                                }
-                                ?>
-                            </select>
-                        </div>
-                        <div class="col-lg-2" id="label_canal">
-                            Canal
-                        </div>
-                        <div class="col-lg-2" id="select_canal">
-                            <select name="canal" id="canal" class="form-control form-control-sm" onchange="obtenerBeneficiario()">
-                                <option value="">--Seleccionar--</option>
-                                <?php
-                                foreach ($canal as $row){?>
-                                    <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$orden_compra->id_canal)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
-                                    <?php 
-                                }
-                                ?>
-                            </select>
-                        </div>
-                        <div id="label_numero_orden_compra_matriz" class="col-lg-2" @if($orden_compra->id_tipo_documento != 4) style="display:none;" @endif>
-                            N&uacute;mero Orden Compra Matriz
-                        </div>
-                        <div id="input_numero_orden_compra_matriz" class="col-lg-2" @if($orden_compra->id_tipo_documento != 4) style="display:none;" @endif>
-                            <input id="numero_orden_compra_matriz" name="numero_orden_compra_matriz" on class="form-control form-control-sm"  value="" type="text" onchange="obtenerOrdenCompraMatriz()">
-                        </div>
-                        <div class="col-lg-2">
-                            N&uacute;mero Orden Compra
-                        </div>
-                        <div class="col-lg-2">
-                            <input id="numero_orden_compra" name="numero_orden_compra" on class="form-control form-control-sm"  value="<?php if($id>0){echo $orden_compra->numero_orden_compra;}?>" type="text" readonly ="readonly">
-                        </div>
-                        <div class="col-lg-2">
-                            Empresa Vende
-                        </div>
-                        <div class="col-lg-2">
-                            <select name="empresa_vende" id="empresa_vende" class="form-control form-control-sm" onchange="">
-                                <option value="">--Seleccionar--</option>
-                                <?php
-                                foreach ($proveedor as $row){?>
-                                    <option value="<?php echo $row->id ?>" <?php if($row->id==$orden_compra->id_empresa_vende)echo "selected='selected'"?>><?php echo $row->razon_social ?></option>
-                                    <?php 
-                                }
-                                ?>
-                            </select>
-                        </div>
-                        <div class="col-lg-2">
-                            Tipo Documento Cliente
-                        </div>
-                        <div class="col-lg-2">
-                            <select name="tipo_documento_cliente" id="tipo_documento_cliente" class="form-control form-control-sm" onchange="cambiarCliente()">
-                                <option value="">--Seleccionar--</option>
-                                <?php
-                                foreach ($tipo_documento_cliente as $row){?>
-                                    <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$orden_compra->id_tipo_cliente)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
-                                    <?php 
-                                }
-                                ?>
-                            </select>
-                        </div>
-                        <div class="col-lg-2" id="label_persona_compra">
-                            Persona Compra
-                        </div>
-                        <div class="col-lg-2" id="select_persona_compra">
-                            <select name="persona_compra" id="persona_compra" class="form-control form-control-sm" onchange="">
-                                <option value="">--Seleccionar--</option>
-                                <?php
-                                foreach ($persona as $row){?>
-                                    <option value="<?php echo $row->id ?>" <?php if($row->id==$orden_compra->id_persona)echo "selected='selected'"?>><?php echo $row->nombres .' '. $row->apellido_paterno .' '. $row->apellido_materno  ?></option>
-                                    <?php 
-                                }
-                                ?>
-                            </select>
-                        </div>
-                        <div class="col-lg-2" id="label_empresa_compra">
-                            Empresa Compra
-                        </div>
-                        <div class="col-lg-2" id="select_empresa_compra">
-                            <select name="empresa_compra" id="empresa_compra" class="form-control form-control-sm" onchange="">
-                                <option value="">--Seleccionar--</option>
-                                <?php
-                                foreach ($proveedor as $row){?>
-                                    <option value="<?php echo $row->id ?>" <?php if($row->id==$orden_compra->id_empresa_compra)echo "selected='selected'"?>><?php echo $row->razon_social ?></option>
-                                    <?php 
-                                }
-                                ?>
-                            </select>
-                        </div>
-                        <div class="col-lg-2">
-                            Fecha Orden Compra
-                        </div>
-                        <div class="col-lg-2">
-                            <input id="fecha_orden_compra" name="fecha_orden_compra" on class="form-control form-control-sm"  value="<?php echo isset($orden_compra) && $orden_compra->fecha_orden_compra ? $orden_compra->fecha_orden_compra : date('Y-m-d'); ?>" type="text">
-                        </div>
-                        <div id="label_fecha_vencimiento" class="col-lg-2" @if($orden_compra->id_tipo_documento != 2) style="display:none;" @endif>
-                            Fecha Vencimiento
-                        </div>
-                        <div id="input_fecha_vencimiento" class="col-lg-2" @if($orden_compra->id_tipo_documento != 2) style="display:none;" @endif>
-                            <input id="fecha_vencimiento" name="fecha_vencimiento" class="form-control form-control-sm" type="text" value="{{ $orden_compra->fecha_vencimiento ?? '' }}" placeholder="YYYY-MM-DD">
-                        </div>
-                        <div class="col-lg-2">
-                            N&uacute;mero Orden Compra Cliente
-                        </div>
-                        <div class="col-lg-2">
-                            <input id="numero_orden_compra_cliente" name="numero_orden_compra_cliente" on class="form-control form-control-sm"  value="<?php echo $orden_compra->numero_orden_compra_cliente;?>" type="text">
-                        </div>
-                        <div class="col-lg-2">
-                            Unidad Origen
-                        </div>
-                        <?php
-                        /*if($orden_compra->id_empresa_compra==30 && $orden_compra->id_empresa_vende==30){
-                            $origen=3;
-                        }else if($orden_compra->id_empresa_compra==30){
-                            $origen=2;
-                        }else if($orden_compra->id_empresa_vende==30){
-                            $origen=1;
-                        }else{
-                            $origen=null;
-                        }*/
-                        ?>
-                        <div class="col-lg-2">
-                            <select name="unidad_origen" id="unidad_origen" class="form-control form-control-sm" onchange="cambiarOrigen()">
-                                <option value="">--Seleccionar--</option>
-                                <?php
-                                foreach ($unidad_origen as $row){?>
-                                    <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$orden_compra->id_unidad_origen)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
-                                    <?php 
-                                }
-                                ?>
-                            </select>
-                        </div>
-                        <div class="col-lg-2" id="almacen_salida_" style="color:green; font-weight:bold">
-                            Almacen Origen
-                        </div>
-                        <div class="col-lg-2" id="almacen_salida_select">
-                            <select name="almacen_salida" id="almacen_salida" class="form-control form-control-sm" onchange="//actualizarSecciones(this)">
-                                <option value="">--Seleccionar--</option>
-                                <?php 
-                                foreach ($almacen as $row){?>
-                                    <option value="<?php echo $row->id ?>" <?php if($row->id==$orden_compra->id_almacen_salida)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
-                                    <?php 
-                                }
-                                ?>
-                            </select>
-                        </div>
-                        <div class="col-lg-2" id="almacen_" style="color:red; font-weight:bold">
-                            Almacen Destino
-                        </div>
-                        <div class="col-lg-2" id="almacen_select">
-                            <select name="almacen" id="almacen" class="form-control form-control-sm" onchange="//actualizarSecciones(this)">
-                                <option value="">--Seleccionar--</option>
-                                <?php
-                                foreach ($almacen as $row){?>
-                                    <option value="<?php echo $row->id ?>" <?php if($row->id==$orden_compra->id_almacen_destino)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
-                                    <?php 
-                                }
-                                ?>
-                            </select>
-                        </div>
-                        <div class="col-lg-2">
-                            Aplica IGV
-                        </div>
-                        <div class="col-lg-2">
-                            <select name="igv_compra" id="igv_compra" class="form-control form-control-sm" onchange="">
-                                <option value="">--Seleccionar--</option>
-                                <?php
-                                foreach ($igv_compra as $row){?>
-                                    <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$orden_compra->igv_compra)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
-                                    <?php 
-                                }
-                                ?>
-                            </select>
-                        </div>
-                        <div class="col-lg-2">
-                            Moneda
-                        </div>
-                        <div class="col-lg-2">
-                            <select name="moneda" id="moneda" class="form-control form-control-sm" onchange="">
-                                <option value="">--Seleccionar--</option>
-                                <?php
-                                foreach ($moneda as $row){?>
-                                    <option value="<?php echo $row->codigo; ?>" <?php echo ($id > 0 && $row->codigo == $orden_compra->id_moneda) ? "selected='selected'" : (($row->codigo == 1) ? "selected='selected'" : ""); ?>><?php echo $row->denominacion ?></option>
-                                    <?php 
-                                }
-                                ?>
-                            </select>
-                            <input name="moneda_descripcion" id="moneda_descripcion" type="hidden">
-                        </div>
-                        <div class="col-lg-2" id="label_entrada_salida">
-                            N&uacute;mero Entrada/Salida
-                        </div>
-                        <div class="col-lg-2" id="input_entrada_salida">
-                            <input id="numero_entrada_salida" name="numero_entrada_salida" style="color:red; font-weight:bold" on class="form-control form-control-sm"  value="<?php echo $orden_compra->numero_orden_compra_cliente;?>" type="text" readonly="readonly">
-                        </div>
+                                <div class="col-lg-2">
+                                    Vendedor
+                                </div>
+                                <div class="col-lg-2">
+                                    <select name="id_vendedor" id="id_vendedor" class="form-control form-control-sm" onchange="obtenerPrioridad(); obtenerDescuento()">
+                                        <option value="">--Seleccionar--</option>
+                                        <?php
+                                        foreach ($vendedor as $row){?>
+                                            <option value="<?php echo $row->id; ?>"<?php if($row->id==$orden_compra->id_vendedor)echo "selected='selected'"?>><?php echo $row->name ?></option>
+                                            <?php 
+                                        }
+                                        ?>
+                                    </select>
+                                    <!--<input name="moneda_descripcion" id="moneda_descripcion" type="hidden">-->
+                                </div>
 
-                        <div class="col-lg-2">
-                            Vendedor
-                        </div>
-                        <div class="col-lg-2">
-                            <select name="id_vendedor" id="id_vendedor" class="form-control form-control-sm" onchange="obtenerPrioridad(); obtenerDescuento()">
-                                <option value="">--Seleccionar--</option>
-                                <?php
-                                foreach ($vendedor as $row){?>
-                                    <option value="<?php echo $row->id; ?>"<?php if($row->id==$orden_compra->id_vendedor)echo "selected='selected'"?>><?php echo $row->name ?></option>
-                                    <?php 
-                                }
-                                ?>
-                            </select>
-                            <!--<input name="moneda_descripcion" id="moneda_descripcion" type="hidden">-->
-                        </div>
+                                <div class="col-lg-2" id="prioridad_label">
+                                    Prioridad
+                                </div>
+                                <div class="col-lg-2" id="prioridad_select">
+                                    <select name="prioridad" id="prioridad" class="form-control form-control-sm" onchange="">
+                                        <option value="">--Seleccionar--</option>
+                                        <?php
+                                        foreach ($prioridad as $row){?>
+                                            <option value="<?php echo $row->codigo; ?>"<?php if($row->codigo==$orden_compra->id_prioridad)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                            <?php 
+                                        }
+                                        ?>
+                                    </select>
+                                    <input name="moneda_descripcion" id="moneda_descripcion" type="hidden">
+                                </div>
 
-                        <div class="col-lg-2" id="prioridad_label">
-                            Prioridad
+                                <div class="col-lg-2" id="label_entrada_salida">
+                                    Observaci&oacute;n
+                                </div>
+                                <div class="col-lg-2" id="input_entrada_salida">
+                                    <textarea id="observacion_vendedor" name="observacion_vendedor" class="form-control form-control-sm"><?php echo $orden_compra->observacion_vendedor?></textarea>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-lg-2" id="prioridad_select">
-                            <select name="prioridad" id="prioridad" class="form-control form-control-sm" onchange="">
-                                <option value="">--Seleccionar--</option>
-                                <?php
-                                foreach ($prioridad as $row){?>
-                                    <option value="<?php echo $row->codigo; ?>"<?php if($row->codigo==$orden_compra->id_prioridad)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
-                                    <?php 
-                                }
-                                ?>
-                            </select>
-                            <input name="moneda_descripcion" id="moneda_descripcion" type="hidden">
+                        <div class="col-lg-1">
+                            <div class="row">
+                                <button style="font-size:12px;margin-left:10px" type="button" class="btn btn-sm btn-primary icono-botones" data-toggle="modal" onclick="pdf_documento()" >
+                                    <i class="far fa-file-pdf" style="font-size:18px;"></i> Imprimir
+                                </button>
+                            </div>
                         </div>
-
-                        <div class="col-lg-2" id="label_entrada_salida">
-                            Observaci&oacute;n
-                        </div>
-                        <div class="col-lg-2" id="input_entrada_salida">
-                            <textarea id="observacion_vendedor" name="observacion_vendedor" class="form-control form-control-sm"><?php echo $orden_compra->observacion_vendedor?></textarea>
-                        </div>
-
                     </div>
                         <div style="margin-top:15px" class="form-group">
                             <div class="col-sm-12 controls">
                                 <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
                                 <?php if($id_user==$orden_compra->id_usuario_inserta && $orden_compra->cerrado == 1 ){?>
-                                    <a href="javascript:void(0)" onClick="agregarProducto()" class="btn btn-sm btn-success">Agregar</a>
+                                    <!--<a href="javascript:void(0)" onClick="agregarProducto()" class="btn btn-sm btn-success">Agregar</a>-->
+                                    <button type="button" class="btn btn-success icono-botones" data-toggle="modal" onclick="agregarProducto()">
+                                        <i class="fas fa-plus-circle" style="font-size:18px;"></i> Agregar
+                                    </button>
                                 <?php }?>
                                 <?php if($id==0){?>
-                                    <a href="javascript:void(0)" onClick="agregarProducto()" class="btn btn-sm btn-success">Agregar</a>
+                                    <!--<a href="javascript:void(0)" onClick="agregarProducto()" class="btn btn-sm btn-success">Agregar</a>-->
+                                    <button type="button" class="btn btn-success icono-botones" data-toggle="modal" onclick="agregarProducto()">
+                                        <i class="fas fa-plus-circle" style="font-size:18px;"></i> Agregar
+                                    </button>
                                 <?php }?>
                                 </div>
                             </div>
                         </div>
-
+                        
                         <div class="card-body" style="padding-right: 0px !important; padding-left: 0px !important;">
-
+                        
 					<div class="table-responsive" style="overflow-y: auto; max-height: 350px;">
 						<table id="tblOrdenCompraDetalle" class="table table-hover table-sm">
 							<thead>
@@ -1892,23 +1914,31 @@ function denegar_pago($id_proceso){
                                     if($id>0 && $orden_compra->cerrado == 1 ){
                                         if($orden_compra->tienda_asignada==0){
                                 ?>
-                                <button style="font-size:12px;margin-left:10px;" type="button" class="btn btn-sm btn-fosforescente" data-toggle="modal" onclick="modal_tiendas_orden_compra()" >Agregar Tiendas</button>
+                                <button style="font-size:12px;margin-left:10px;" type="button" class="btn btn-sm btn-fosforescente icono-botones" data-toggle="modal" onclick="modal_tiendas_orden_compra()" >
+                                    <i class="fas fa-store" style="font-size:18px;"></i> Agregar Tiendas
+                                </button>
                                 <?php 
                                         }else{
                                 ?>
-                                <button style="font-size:12px;margin-left:10px;" type="button" class="btn btn-sm btn-fosforescente" data-toggle="modal" onclick="modal_tiendas_orden_compra()">Editar Tiendas</button>
+                                <button style="font-size:12px;margin-left:10px;" type="button" class="btn btn-sm btn-fosforescente icono-botones" data-toggle="modal" onclick="modal_tiendas_orden_compra()">
+                                    <i class="fas fa-store" style="font-size:18px;"></i> Editar Tiendas
+                                </button>
                                 <?php
                                         }
                                 ?>
 
-                                <button style="font-size:12px;margin-left:10px" type="button" class="btn btn-sm btn-primary" data-toggle="modal" onclick="pdf_documento()" ><i class="fa fa-edit"></i>Imprimir</button>
+                                <button style="font-size:12px;margin-left:10px" type="button" class="btn btn-sm btn-primary icono-botones" data-toggle="modal" onclick="pdf_documento()" >
+                                    <i class="far fa-file-pdf" style="font-size:18px;"></i> Imprimir
+                                </button>
 
-                                <button style="font-size:12px;margin-left:10px" type="button" class="btn btn-sm btn-secondary" data-toggle="modal" onclick="modal_datos_pedido_orden_compra()">Agregar Datos Pedido</button>
+                                <button style="font-size:12px;margin-left:10px" type="button" class="btn btn-sm btn-secondary icono-botones" data-toggle="modal" onclick="modal_datos_pedido_orden_compra()">
+                                    <i class="fas fa-file" style="font-size:18px;"></i> Agregar Datos Pedido
+                                </button>
                                 
-                                <?php if($id_proceso == 1){?>
+                                <?php if($id_proceso == 1 && $id_proceso == $id_persona_proceso){?>
                                     <button style="font-size:12px;margin-left:10px" type="button" class="btn btn-sm btn-warning" data-toggle="modal" onclick="enviar_pedido(1)">Enviar Pedido</button>
                                 <?php }?>
-                                <?php if($id_proceso == 3){?>
+                                <?php if($id_proceso == 3 && $id_proceso == $id_persona_proceso){?>
                                     <button style="font-size:12px;margin-left:10px" type="button" class="btn btn-sm btn-danger" data-toggle="modal" onclick="denegar_pago(3)">Devolver a Vendedor</button>
                                     <button style="font-size:12px;margin-left:10px" type="button" class="btn btn-sm btn-warning" data-toggle="modal" onclick="aprobar_pago(3)">Aprobar Pago</button>
                                 <?php }?>
@@ -1917,7 +1947,9 @@ function denegar_pago($id_proceso){
                                 <?php 
                                     }else{
                                 ?>
-                                    <button style="font-size:12px;margin-left:10px" type="button" class="btn btn-sm btn-primary" data-toggle="modal" onclick="pdf_documento()" ><i class="fa fa-edit"></i>Imprimir</button>
+                                    <button style="font-size:12px;margin-left:10px" type="button" class="btn btn-sm btn-primary icono-botones" data-toggle="modal" onclick="pdf_documento()" >
+                                        <i class="far fa-file-pdf" style="font-size:18px;"></i>Imprimir
+                                    </button>
                                 <?php 
                                     }
                                 ?>
@@ -1932,13 +1964,29 @@ function denegar_pago($id_proceso){
                                     }
                                 ?>
                                 
-                                <?php if($id_user==$orden_compra->id_usuario_inserta && $orden_compra->cerrado == 1){?>
-                                    <a href="javascript:void(0)" onClick="fn_save_orden_compra()" class="btn btn-sm btn-success" style="margin-left:10px">Guardar</a>
+                                <?php if($id_user==$orden_compra->id_usuario_inserta && $orden_compra->cerrado == 1 && $id_proceso == 1 && $orden_compra->id_tipo_documento != 1){?>
+                                    <!--<a href="javascript:void(0)" onClick="fn_save_orden_compra()" class="btn btn-sm btn-success" style="margin-left:10px"></a>-->
+                                        
+                                    <button type="button" class="btn btn-success icono-botones" data-toggle="modal" onclick="fn_save_orden_compra()">
+                                        <i class="fas fa-save" style="font-size:18px;"></i> Guardar
+                                    </button>
+                                <?php }?>
+                                <?php if($id_user==$orden_compra->id_usuario_inserta && $orden_compra->cerrado == 1 && $orden_compra->id_tipo_documento == 1){?>
+                                    <!--<a href="javascript:void(0)" onClick="fn_save_orden_compra()" class="btn btn-sm btn-success" style="margin-left:10px"><i class="fas fa-save"></i></a>-->
+                                    <button type="button" class="btn btn-success icono-botones" data-toggle="modal" onclick="fn_save_orden_compra()">
+                                        <i class="fas fa-save" style="font-size:18px;"></i> Guardar
+                                    </button>
                                 <?php }?>
                                 <?php if($id==0){?>
-                                    <a href="javascript:void(0)" onClick="fn_save_orden_compra()" class="btn btn-sm btn-success" style="margin-left:10px">Guardar</a>
+                                    <!--<a href="javascript:void(0)" onClick="fn_save_orden_compra()" class="btn btn-sm btn-success" style="margin-left:10px"><i class="fas fa-save"></i></a>-->
+                                    <button type="button" class="btn btn-success icono-botones" data-toggle="modal" onclick="fn_save_orden_compra()">
+                                        <i class="fas fa-save" style="font-size:18px;"></i> Guardar
+                                    </button>
                                 <?php }?>
-                                <a href="javascript:void(0)" onClick="$('#openOverlayOpc').modal('hide');" class="btn btn-sm btn-info" style="margin-left:10px;">Cerrar</a>
+                                <!--<a href="javascript:void(0)" onClick="$('#openOverlayOpc').modal('hide');" class="btn btn-sm btn-info" style="margin-left:10px;">Cerrar</a>-->
+                                <button type="button" class="btn btn-info icono-botones" data-toggle="modal" onclick="$('#openOverlayOpc').modal('hide');">
+                                    <i class="fas fa-times-circle" style="font-size:18px;"></i> Cerrar
+                                </button>
                             </div>
                         </div>
                     </div>
