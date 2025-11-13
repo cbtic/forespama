@@ -156,6 +156,81 @@
     gap:3px !important;
 }
 
+.icono-botones-laterales{
+    display:flex !important; 
+    align-items:center !important; 
+    gap:3px !important;
+}
+
+.btn-clasico-blanco {
+    min-width: 132px !important;
+    color: #fff !important;
+    border: 1px solid #555 !important;
+    font-size: 12px !important;
+    /*font-weight: bold !important;*/
+    padding: 4px 10px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 3px !important;
+    box-shadow: inset 1px 1px 0 #fff, 3px 3px 6px rgba(0,0,0,0.3) !important;
+}
+
+.btn-clasico {
+    color: #fff !important;
+    border: 1px solid #555 !important;
+    font-size: 12px !important;
+    /*font-weight: bold !important;*/
+    padding: 4px 10px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 3px !important;
+    box-shadow: inset 1px 1px 0 #fff, 3px 3px 6px rgba(0,0,0,0.3) !important;
+}
+
+.btn-clasico-negro {
+    min-width: 132px !important;
+    color: #000000ff !important;
+    border: 1px solid #555 !important;
+    font-size: 12px !important;
+    /*font-weight: bold !important;*/
+    padding: 4px 10px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 3px !important;
+    box-shadow: inset 1px 1px 0 #fff, 3px 3px 6px rgba(0,0,0,0.3) !important;
+}
+
+/*.btn-guardar { background-color: #337AB7 !important; }
+.btn-nuevo { background-color: #4CAF50 !important; }
+.btn-buscar { background-color: #5BC0DE !important; }
+.btn-aprobar { background-color: #2E7D32 !important; }
+.btn-devolver { background-color: #B8860B !important; }
+.btn-cerrar { background-color: #6C757D !important; }
+.btn-eliminar { background-color: #C9302C !important; }
+.btn-agregar { background-color: #3C8D0D !important; }
+.btn-enviar { background-color: #0056B3 !important; }
+.btn-editar { background-color: #1E88E5 !important; }*/
+
+.btn-guardar { background-color: #80B2DC !important; }
+.btn-nuevo { background-color: #96D299 !important; }
+.btn-buscar { background-color: #59BFED !important; }
+.btn-aprobar { background-color: #96D299 !important; }
+.btn-devolver { background-color: #FEEC4A !important; }
+.btn-cerrar { background-color: #AEAAAA !important; }
+.btn-eliminar { background-color: #E60000 !important; }
+.btn-agregar { background-color: #79D9AE !important; }
+.btn-enviar { background-color: #87BFF1 !important; }
+.btn-editar { background-color: #87BFF1 !important; }
+
+.btn-clasico-blanco:hover {
+    color: #000000ff !important;
+    filter: brightness(0.9) !important;
+}
+
+.btn-clasico-negro:hover {
+    color: #ffffffff !important;
+}
+
 </style>
 
 <!--<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"/>-->
@@ -775,7 +850,7 @@ function cargarDetalle(){
                         <td><input name="sub_total[]" id="sub_total${n}" class="sub_total form-control form-control-sm" value="${parseFloat(orden_compra.sub_total || 0).toFixed(decimales) }" type="text" readonly="readonly"></td>
                         <td><input name="igv[]" id="igv${n}" class="igv form-control form-control-sm" value="${parseFloat(orden_compra.igv || 0).toFixed(decimales)}" type="text" readonly="readonly"></td>
                         <td><input name="total[]" id="total${n}" class="total form-control form-control-sm" value="${parseFloat(orden_compra.total || 0).toFixed(decimales)}" type="text" readonly="readonly"></td>
-                        <td><button type="button" class="btn btn-danger btn-sm" onclick="eliminarFila(this)"><i class="fas fa-trash" style="font-size:18px;"></i></button></td>
+                        <td><button type="button" class="btn btn-sm btn-clasico btn-eliminar" onclick="eliminarFila(this)"><i class="fas fa-trash" style="font-size:18px;"></i></button></td>
 
                     </tr>
                 `;
@@ -907,7 +982,7 @@ function agregarProducto(){
         var igv = '<input name="igv[]" id="igv' + n + '" class="igv form-control form-control-sm" value="" type="text" readonly="readonly">';
         var total = '<input name="total[]" id="total' + n + '" class="total form-control form-control-sm" value="" type="text" readonly="readonly">';
         
-        var btnEliminar = '<button type="button" class="btn btn-danger btn-sm" onclick="eliminarFila(this)"><i class="fas fa-trash" style="font-size:18px;"></i></button>';
+        var btnEliminar = '<button type="button" class="btn btn-sm btn-clasico btn-eliminar" onclick="eliminarFila(this)"><i class="fas fa-trash" style="font-size:18px;"></i></button>';
 
         newRow += '<tr>';
         newRow += '<td>' + n + '</td>';
@@ -1827,29 +1902,71 @@ function denegar_pago($id_proceso){
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-1">
-                            <div class="row">
-                                <button style="font-size:12px;margin-left:10px" type="button" class="btn btn-sm btn-primary icono-botones" data-toggle="modal" onclick="pdf_documento()" >
-                                    <i class="far fa-file-pdf" style="font-size:18px;"></i> Imprimir
+                        <div class="col-lg-1" style="padding:0px">
+                            <?php 
+                                //if($id>0 && $orden_compra->cerrado == 1 ){
+                                    //if($orden_compra->tienda_asignada==0){
+                            ?>
+                            <button style="font-size:12px;margin-bottom:10px" type="button" class="btn btn-sm btn-clasico-blanco btn-agregar" data-toggle="modal" onclick="modal_tiendas_orden_compra()" >
+                                <i class="fas fa-plus-circle" style="font-size:18px;"></i><i class="fas fa-store" style="font-size:18px;"></i> Tiendas
+                            </button>
+                            <?php 
+                                    //}else{
+                            ?>
+                            <button style="font-size:12px;margin-bottom:10px" type="button" class="btn btn-sm btn-clasico-blanco btn-buscar" data-toggle="modal" onclick="modal_tiendas_orden_compra()">
+                                <i class="fa fa-edit" style="font-size:18px;"></i><i class="fas fa-store" style="font-size:18px;"></i> Tiendas
+                            </button>
+                            <?php
+                                    //}
+                            ?>
+
+                            <button style="font-size:12px;margin-bottom:10px" type="button" class="btn btn-sm btn-clasico-blanco btn-agregar" data-toggle="modal" onclick="modal_datos_pedido_orden_compra()">
+                                <i class="fas fa-plus-circle" style="font-size:18px;"></i><i class="fas fa-file" style="font-size:18px;"></i> Datos Pedido
+                            </button>
+                            
+                            <?php //if($id_proceso == 1 && $id_proceso == $id_persona_proceso){?>
+                                <button style="font-size:12px;margin-bottom:10px" type="button" class="btn btn-sm btn-clasico-blanco btn-enviar" data-toggle="modal" onclick="enviar_pedido(1)">
+                                    <i class="fas fa-paper-plane" style="font-size:18px;"></i> Enviar Pedido
                                 </button>
-                            </div>
+                            <?php //}?>
+                            <?php //if($id_proceso == 3 && $id_proceso == $id_persona_proceso){?>
+                                <button style="font-size:12px;margin-bottom:10px" type="button" class="btn btn-sm btn-clasico-negro btn-devolver" data-toggle="modal" onclick="denegar_pago(3)">
+                                    <i class="fas fa-undo" style="font-size:18px;"></i> Devolver pedido
+                                </button>
+                                <button style="font-size:12px;" type="button" class="btn btn-sm btn-clasico-blanco btn-aprobar" data-toggle="modal" onclick="aprobar_pago(3)">
+                                    <i class="fas fa-check-circle" style="font-size:18px;"></i> Aprobar Pago
+                                </button>
+                            <?php //}?>
+                            <!--<button style="font-size:12px;margin-left:10px; margin-right:10px" type="button" class="btn btn-sm btn-warning" data-toggle="modal" onclick="pdf_guia()" ><i class="fa fa-edit"></i>Imprimir Gu&iacute;a Remisi&oacute;n Electronica</button>-->
+                            <!--<a href="javascript:void(0)" onClick="fn_pdf_documento()" class="btn btn-sm btn-primary" style="margin-right:100px">Imprimir</a>-->
+                            <?php 
+                                //}
+                            ?>
                         </div>
                     </div>
-                        <div style="margin-top:15px" class="form-group">
+                        <div style="margin-top:15px;" class="form-group">
                             <div class="col-sm-12 controls">
-                                <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
-                                <?php if($id_user==$orden_compra->id_usuario_inserta && $orden_compra->cerrado == 1 ){?>
-                                    <!--<a href="javascript:void(0)" onClick="agregarProducto()" class="btn btn-sm btn-success">Agregar</a>-->
-                                    <button type="button" class="btn btn-success icono-botones" data-toggle="modal" onclick="agregarProducto()">
-                                        <i class="fas fa-plus-circle" style="font-size:18px;"></i> Agregar
-                                    </button>
-                                <?php }?>
-                                <?php if($id==0){?>
-                                    <!--<a href="javascript:void(0)" onClick="agregarProducto()" class="btn btn-sm btn-success">Agregar</a>-->
-                                    <button type="button" class="btn btn-success icono-botones" data-toggle="modal" onclick="agregarProducto()">
-                                        <i class="fas fa-plus-circle" style="font-size:18px;"></i> Agregar
-                                    </button>
-                                <?php }?>
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <div class="btn-group btn-group-sm" role="group" aria-label="Log Viewer Actions">
+                                    <?php if($id_user==$orden_compra->id_usuario_inserta && $orden_compra->cerrado == 1 ){?>
+                                        <!--<a href="javascript:void(0)" onClick="agregarProducto()" class="btn btn-sm btn-success">Agregar</a>-->
+                                        <button type="button" class="btn btn-sm btn-clasico-blanco btn-agregar" data-toggle="modal" onclick="agregarProducto()">
+                                            <i class="fas fa-plus-circle" style="font-size:18px;"></i> Agregar Producto
+                                        </button>
+                                    <?php }?>
+                                    <?php if($id==0){?>
+                                        <!--<a href="javascript:void(0)" onClick="agregarProducto()" class="btn btn-sm btn-success">Agregar</a>-->
+                                        <button type="button" class="btn btn-sm btn-clasico-blanco btn-agregar" data-toggle="modal" onclick="agregarProducto()">
+                                            <i class="fas fa-plus-circle" style="font-size:18px;"></i> Agregar Producto
+                                        </button>
+                                    <?php }?>
+                                    </div>
+                                        <div class="flex-fill text-center" style="color: red; font-weight: bold;">
+                                            <?php if($id_proceso){?>
+                                                Etapa: <?php echo $proceso ?>
+                                            <?php }?>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -1912,42 +2029,15 @@ function denegar_pago($id_proceso){
                             <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
                                 <?php 
                                     if($id>0 && $orden_compra->cerrado == 1 ){
-                                        if($orden_compra->tienda_asignada==0){
                                 ?>
-                                <button style="font-size:12px;margin-left:10px;" type="button" class="btn btn-sm btn-fosforescente icono-botones" data-toggle="modal" onclick="modal_tiendas_orden_compra()" >
-                                    <i class="fas fa-store" style="font-size:18px;"></i> Agregar Tiendas
-                                </button>
-                                <?php 
-                                        }else{
-                                ?>
-                                <button style="font-size:12px;margin-left:10px;" type="button" class="btn btn-sm btn-fosforescente icono-botones" data-toggle="modal" onclick="modal_tiendas_orden_compra()">
-                                    <i class="fas fa-store" style="font-size:18px;"></i> Editar Tiendas
-                                </button>
-                                <?php
-                                        }
-                                ?>
-
-                                <button style="font-size:12px;margin-left:10px" type="button" class="btn btn-sm btn-primary icono-botones" data-toggle="modal" onclick="pdf_documento()" >
+                                <button style="font-size:12px;margin-left:10px" type="button" class="btn btn-sm btn-clasico btn-enviar" data-toggle="modal" onclick="pdf_documento()" >
                                     <i class="far fa-file-pdf" style="font-size:18px;"></i> Imprimir
                                 </button>
-
-                                <button style="font-size:12px;margin-left:10px" type="button" class="btn btn-sm btn-secondary icono-botones" data-toggle="modal" onclick="modal_datos_pedido_orden_compra()">
-                                    <i class="fas fa-file" style="font-size:18px;"></i> Agregar Datos Pedido
-                                </button>
                                 
-                                <?php if($id_proceso == 1 && $id_proceso == $id_persona_proceso){?>
-                                    <button style="font-size:12px;margin-left:10px" type="button" class="btn btn-sm btn-warning" data-toggle="modal" onclick="enviar_pedido(1)">Enviar Pedido</button>
-                                <?php }?>
-                                <?php if($id_proceso == 3 && $id_proceso == $id_persona_proceso){?>
-                                    <button style="font-size:12px;margin-left:10px" type="button" class="btn btn-sm btn-danger" data-toggle="modal" onclick="denegar_pago(3)">Devolver a Vendedor</button>
-                                    <button style="font-size:12px;margin-left:10px" type="button" class="btn btn-sm btn-warning" data-toggle="modal" onclick="aprobar_pago(3)">Aprobar Pago</button>
-                                <?php }?>
-                                <!--<button style="font-size:12px;margin-left:10px; margin-right:10px" type="button" class="btn btn-sm btn-warning" data-toggle="modal" onclick="pdf_guia()" ><i class="fa fa-edit"></i>Imprimir Gu&iacute;a Remisi&oacute;n Electronica</button>-->
-                                <!--<a href="javascript:void(0)" onClick="fn_pdf_documento()" class="btn btn-sm btn-primary" style="margin-right:100px">Imprimir</a>-->
                                 <?php 
                                     }else{
                                 ?>
-                                    <button style="font-size:12px;margin-left:10px" type="button" class="btn btn-sm btn-primary icono-botones" data-toggle="modal" onclick="pdf_documento()" >
+                                    <button style="font-size:12px;margin-left:10px" type="button" class="btn btn-sm btn-clasico btn-enviar" data-toggle="modal" onclick="pdf_documento()" >
                                         <i class="far fa-file-pdf" style="font-size:18px;"></i>Imprimir
                                     </button>
                                 <?php 
@@ -1955,36 +2045,36 @@ function denegar_pago($id_proceso){
                                 ?>
 
                                 <?php 
-                                    if($id>0){
+                                    /*if($id>0){
                                         if($orden_compra->id_empresa_compra==23){
                                 ?>
                                 <button style="font-size:12px;margin-left:40px;" type="button" class="btn btn-sm btn-light" data-toggle="modal" onclick="generarLPN()" >Generar LPN</button>
                                 <?php 
                                         }
-                                    }
+                                    }*/
                                 ?>
                                 
                                 <?php if($id_user==$orden_compra->id_usuario_inserta && $orden_compra->cerrado == 1 && $id_proceso == 1 && $orden_compra->id_tipo_documento != 1){?>
                                     <!--<a href="javascript:void(0)" onClick="fn_save_orden_compra()" class="btn btn-sm btn-success" style="margin-left:10px"></a>-->
                                         
-                                    <button type="button" class="btn btn-success icono-botones" data-toggle="modal" onclick="fn_save_orden_compra()">
+                                    <button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-nuevo" data-toggle="modal" onclick="fn_save_orden_compra()">
                                         <i class="fas fa-save" style="font-size:18px;"></i> Guardar
                                     </button>
                                 <?php }?>
                                 <?php if($id_user==$orden_compra->id_usuario_inserta && $orden_compra->cerrado == 1 && $orden_compra->id_tipo_documento == 1){?>
                                     <!--<a href="javascript:void(0)" onClick="fn_save_orden_compra()" class="btn btn-sm btn-success" style="margin-left:10px"><i class="fas fa-save"></i></a>-->
-                                    <button type="button" class="btn btn-success icono-botones" data-toggle="modal" onclick="fn_save_orden_compra()">
+                                    <button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-nuevo" data-toggle="modal" onclick="fn_save_orden_compra()">
                                         <i class="fas fa-save" style="font-size:18px;"></i> Guardar
                                     </button>
                                 <?php }?>
                                 <?php if($id==0){?>
                                     <!--<a href="javascript:void(0)" onClick="fn_save_orden_compra()" class="btn btn-sm btn-success" style="margin-left:10px"><i class="fas fa-save"></i></a>-->
-                                    <button type="button" class="btn btn-success icono-botones" data-toggle="modal" onclick="fn_save_orden_compra()">
+                                    <button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-nuevo" data-toggle="modal" onclick="fn_save_orden_compra()">
                                         <i class="fas fa-save" style="font-size:18px;"></i> Guardar
                                     </button>
                                 <?php }?>
                                 <!--<a href="javascript:void(0)" onClick="$('#openOverlayOpc').modal('hide');" class="btn btn-sm btn-info" style="margin-left:10px;">Cerrar</a>-->
-                                <button type="button" class="btn btn-info icono-botones" data-toggle="modal" onclick="$('#openOverlayOpc').modal('hide');">
+                                <button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-cerrar" data-toggle="modal" onclick="$('#openOverlayOpc').modal('hide');">
                                     <i class="fas fa-times-circle" style="font-size:18px;"></i> Cerrar
                                 </button>
                             </div>

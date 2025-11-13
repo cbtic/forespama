@@ -181,6 +181,7 @@ class OrdenCompraController extends Controller
         $empresa_model = new Empresa;
         $usuario_descuento_model = new UsuarioDescuento;
         $id_proceso = null;
+        $proceso = null;
         $id_persona_proceso = null;
 		
 		if($id>0){
@@ -192,6 +193,8 @@ class OrdenCompraController extends Controller
                 if($orden_compra->id_canal == 1 || $orden_compra->id_canal == 2 || $orden_compra->id_canal == 3){
                     $autorizacion_orden_compra = AutorizacionOrdenCompra::where('id_orden_compra',$orden_compra->id)->where('estado',1)->orderBy('id', 'desc')->first();
                     $id_proceso = $autorizacion_orden_compra->id_proceso_pedido;
+                    $data_proceso = $tablaMaestra_model->getMaestroC(109, $id_proceso);
+                    $proceso = $data_proceso[0]->denominacion;
                     $persona_proceso = PersonaProceso::where('id_persona',$id_user)->where('estado',1)->first();
                     $id_persona_proceso = $persona_proceso->id_proceso;
                 }
@@ -220,8 +223,8 @@ class OrdenCompraController extends Controller
         $persona = $persona_model->obtenerPersonaAll();
         $prioridad = $tablaMaestra_model->getMaestroByTipo(93);
         $canal = $tablaMaestra_model->getMaestroByTipo(98);
-
-		return view('frontend.orden_compra.modal_orden_compra_nuevoOrdenCompra',compact('id','orden_compra','tipo_documento','proveedor','producto','marca','estado_bien','unidad','igv_compra','descuento','almacen','unidad_origen','id_user','moneda','vendedor','tipo_documento_cliente','persona','prioridad','canal','id_descuento_usuario','id_proceso','id_persona_proceso'));
+        
+		return view('frontend.orden_compra.modal_orden_compra_nuevoOrdenCompra',compact('id','orden_compra','tipo_documento','proveedor','producto','marca','estado_bien','unidad','igv_compra','descuento','almacen','unidad_origen','id_user','moneda','vendedor','tipo_documento_cliente','persona','prioridad','canal','id_descuento_usuario','id_proceso','id_persona_proceso','proceso'));
 
     }
 

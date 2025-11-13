@@ -355,6 +355,15 @@ function datatablenew(){
 				"aTargets": [13]
 				},
 				{
+				"mRender": function (data, type, row) {
+					var prioridad = "";
+					if(row.prioridad!= null)prioridad = row.prioridad;
+					return prioridad;
+				},
+				"bSortable": true,
+				"aTargets": [14]
+				},
+				{
 					"mRender": function (data, type, row) {
 						var estado = "";
 						var clase = "";
@@ -412,7 +421,7 @@ function datatablenew(){
 						return html;
 					},
 					"bSortable": false,
-					"aTargets": [14],
+					"aTargets": [15],
 				},
 
             ]
