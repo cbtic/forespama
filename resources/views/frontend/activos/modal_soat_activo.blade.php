@@ -269,9 +269,7 @@ function fn_save_soat(){
 			<div class="card-header" style="padding:5px!important;padding-left:20px!important">
 				Registro SOAT
 			</div>
-			
-            <div class="card-body">
-
+      <div class="card-body">
 			<div class="row">
 
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding-top:5px;padding-bottom:20px">
@@ -280,7 +278,6 @@ function fn_save_soat(){
 					<input type="hidden" name="id" id="id" value="<?php echo $id?>">
 					
 					<div class="row" style="padding-left:10px">
-						
 						<div class="col-lg-6">
 							<div class="form-group">
 								<label class="control-label form-control-sm">N&uacute;mero Poliza</label>
@@ -288,7 +285,6 @@ function fn_save_soat(){
 							</div>
 						</div>
 					</div>
-
 					<div class="row" style="padding-left:10px">
 						<div class="col-lg-6">
 							<div class="form-group">
@@ -296,14 +292,12 @@ function fn_save_soat(){
 								<input id="fecha_emision" name="fecha_emision" on class="form-control form-control-sm mayusculas"  value="<?php echo $soat_activo->fecha_emision?>" type="text" placeholder="YYYY-MM-DD">
 							</div>
 						</div>
-
 						<div class="col-lg-6">
 							<div class="form-group">
 								<label class="control-label form-control-sm">Fecha Vencimiento</label>
 								<input id="fecha_vencimiento" name="fecha_vencimiento" on class="form-control form-control-sm mayusculas"  value="<?php echo $soat_activo->fecha_vencimiento?>" type="text" placeholder="YYYY-MM-DD">
 							</div>
-						</div>						
-
+						</div>
 						<div class="col-lg-6">
 							<div class="form-group">
 								<label class="control-label form-control-sm">Estado SOAT</label>
@@ -319,13 +313,14 @@ function fn_save_soat(){
 							</div>
 						</div>
 					</div>
-										
 					<div style="margin-top:15px" class="form-group">
 						<div class="col-sm-12 controls">
 							<div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
-								<a href="javascript:void(0)" onClick="fn_save_soat()" class="btn btn-sm btn-success">Guardar</a>
+								<!--<a href="javascript:void(0)" onClick="fn_save_soat()" class="btn btn-sm btn-success">Guardar</a>-->
+                <button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-nuevo" data-toggle="modal" onclick="fn_save_soat()">
+                    <i class="fas fa-save" style="font-size:18px;"></i> Guardar
+                </button>
 							</div>
-												
 						</div>
 					</div> 
               </div>

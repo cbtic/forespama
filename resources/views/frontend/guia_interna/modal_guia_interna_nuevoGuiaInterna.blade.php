@@ -1332,7 +1332,6 @@ function obtenerMotivo(){
                         </div>
                     </div>
                     <div class="row" style="padding-left:10px; padding-bottom:10px;">
-
                         <div class="col-lg-4">
                             <div class="row">
                                 <div class="col-lg-4">
@@ -1729,7 +1728,6 @@ function obtenerMotivo(){
                     </fieldset>
                     <fieldset name="punto_llegada_name" style="border:1px solid #A4A4A4; padding: 10px">
                         <legend class="control-label form-control-sm">Punto de Llegada</legend>
-                    
                         <div class="row" style="padding-left:10px; padding-bottom:10px;">
                             <div class="col-lg-3">
                                 <div class="row">
@@ -1822,7 +1820,6 @@ function obtenerMotivo(){
                         </div>
                     </fieldset>
                     <div class="card-body">	
-
 					<div class="table-responsive" style="overflow-y: auto; max-height: 300px;">
 						<table id="tblGuiaInternaDetalle" class="table table-hover table-sm">
 							<thead>
@@ -1851,12 +1848,17 @@ function obtenerMotivo(){
                                     }
                                 ?>
                                 <?php if($id_user==$guia_interna->id_usuario_inserta && $id>0 && $guia->guia_estado_sunat !='FIRMADO'){?>
-                                    <a href="javascript:void(0)" onClick="fn_save_guia_interna()" class="btn btn-sm btn-success" style="margin-right:10px">Guardar</a>
+                                    <!--<a href="javascript:void(0)" onClick="fn_save_guia_interna()" class="btn btn-sm btn-success" style="margin-right:10px">Guardar</a>-->
+                                    <button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-nuevo" data-toggle="modal" onclick="fn_save_guia_interna()">
+                                        <i class="fas fa-save" style="font-size:18px;"></i> Guardar
+                                    </button>
                                 <?php }?>
                                 <?php if($id==0){?>
-                                    <a href="javascript:void(0)" onClick="fn_save_guia_interna()" class="btn btn-sm btn-success" style="margin-right:10px">Guardar</a>
+                                    <!--<a href="javascript:void(0)" onClick="fn_save_guia_interna()" class="btn btn-sm btn-success" style="margin-right:10px">Guardar</a>-->
+                                    <button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-nuevo" data-toggle="modal" onclick="fn_save_guia_interna()">
+                                        <i class="fas fa-save" style="font-size:18px;"></i> Guardar
+                                    </button>
                                 <?php }?>
-
                                 <?php 
                                     if($id>0 && $guia->guia_estado_sunat !='FIRMADO'){
                                 ?>
@@ -1864,29 +1866,25 @@ function obtenerMotivo(){
                                 <?php } if($id>0 && $guia->guia_estado_sunat =='FIRMADO'){?>
                                     <a href="javascript:void(0)" onClick="generarGuia()" class="btn btn-sm btn-danger" style="margin-right:10px; pointer-events: none; opacity: 0.6; cursor: not-allowed;"><i class="fa fa-paper-plane"></i>Enviar Sunat</a> 
                                 <?php }?>
-
                                 <?php if($id>0 && $guia->guia_estado_sunat =='FIRMADO'){?>
                                     <a href="http://forespama.felmo.pe/<?php echo $guia->guia_ruta_comprobante;?>" target="_blank" class="btn btn-sm btn-warning" style="margin-right:10px"><i class="fa fa-file-pdf"></i>Ver Gu&iacute;a</a>
                                 <?php }?>
-
-                                <a href="javascript:void(0)" onClick="$('#openOverlayOpc').modal('hide');" class="btn btn-sm btn-info" style="">Cerrar</a>
+                                <!--<a href="javascript:void(0)" onClick="$('#openOverlayOpc').modal('hide');" class="btn btn-sm btn-info" style="">Cerrar</a>-->
+                                <button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-cerrar" data-toggle="modal" onclick="$('#openOverlayOpc').modal('hide');">
+                                    <i class="fas fa-times-circle" style="font-size:18px;"></i> Cerrar
+                                </button>
                             </div>
                         </div>
-                    </div> 
-
+                    </div>
 				</div>
-                            
                     </div>
                 </form>
                 </div>
                 <!-- /.box -->
-                
             </div>
             <!--/.col (left) -->
-
         </div>
         <!-- /.row -->
-    
 <!-- /.content -->
 </div>
 <!-- /.content-wrapper -->

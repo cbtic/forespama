@@ -314,7 +314,7 @@ $.ajax({
                         <td><input name="cantidad_ingreso[]" id="cantidad_ingreso${n}" class="cantidad_ingreso form-control form-control-sm" value="${requerimiento.cantidad}" type="text" oninput=""></td>
                         <td><textarea name="observacion[]" id="observacion${n}" class="form-control form-control-sm">${requerimiento.observacion}</textarea></td>
                         <td><textarea name="observacion_atencion[]" id="observacion_atencion${n}" class="form-control form-control-sm" readonly>${requerimiento.observacion_atencion ?? ''}</textarea></td>
-                        <td><button type="button" class="btn btn-danger btn-sm" onclick="eliminarFila(this)">Eliminar</button></td>
+                        <td><button type="button" class="btn btn-sm btn-clasico btn-eliminar" onclick="eliminarFila(this)"><i class="fas fa-trash" style="font-size:18px;"></i></button></td>
 
                     </tr>
                 `;
@@ -360,7 +360,7 @@ function agregarProducto(){
         var observacion = '<textarea name="observacion[]" id="observacion' + n + '" class="form-control form-control-sm"></textarea>';
         var observacion_atencion = '<textarea name="observacion_atencion[]" id="observacion_atencion' + n + '" class="form-control form-control-sm" readonly></textarea>';
 
-        var btnEliminar = '<button type="button" class="btn btn-danger btn-sm" onclick="eliminarFila(this)">Eliminar</button>';
+        var btnEliminar = '<button type="button" class="btn btn-sm btn-clasico btn-eliminar" onclick="eliminarFila(this)"><i class="fas fa-trash" style="font-size:18px;"></i></button>';
         //var btnObservacion = '<button type="button" class="btn btn-success btn-sm" onclick="modalObservacion(this)">Observacion</button>';
 
         newRow += '<tr>';
@@ -786,10 +786,16 @@ function modalCerrarAntiguedad(){
                             <div class="col-sm-12 controls">
                                 <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
                                 <?php if($id_user==$requerimiento->id_usuario_inserta){?>
-                                    <a href="javascript:void(0)" onClick="agregarProducto()" class="btn btn-sm btn-success">Agregar</a>
+                                    <!--<a href="javascript:void(0)" onClick="agregarProducto()" class="btn btn-sm btn-success">Agregar</a>-->
+                                    <button type="button" class="btn btn-sm btn-clasico-blanco btn-agregar" data-toggle="modal" onclick="agregarProducto()">
+                                            <i class="fas fa-plus-circle" style="font-size:18px;"></i> Agregar Producto
+                                        </button>
                                     <?php }?>
                                 <?php if($id==0){?>
-                                    <a href="javascript:void(0)" onClick="agregarProducto()" class="btn btn-sm btn-success">Agregar</a>
+                                    <!--<a href="javascript:void(0)" onClick="agregarProducto()" class="btn btn-sm btn-success">Agregar</a>-->
+                                    <button type="button" class="btn btn-sm btn-clasico-blanco btn-agregar" data-toggle="modal" onclick="agregarProducto()">
+                                            <i class="fas fa-plus-circle" style="font-size:18px;"></i> Agregar Producto
+                                        </button>
                                 <?php }?>
                                 </div>
                             </div>
@@ -837,28 +843,33 @@ function modalCerrarAntiguedad(){
                                         <?php 
                                             if($id>0){
                                         ?>
-                                        <button style="font-size:12px; margin-right:10px" type="button" class="btn btn-sm btn-primary" data-toggle="modal" onclick="pdf_documento()" ><i class="fas fa-print"></i> Imprimir</button>
+                                        <button style="font-size:12px; margin-right:10px" type="button" class="btn btn-sm btn-clasico btn-enviar" data-toggle="modal" onclick="pdf_documento()" >
+                                            <i class="far fa-file-pdf" style="font-size:18px;"></i> Imprimir
+                                        </button>
                                         <!--<button style="font-size:12px;margin-right:10px" type="button" class="btn btn-sm btn-warning" data-toggle="modal" onclick="save_orden_compra_requerimiento()" ><i class="fa fa-edit"></i>Generar Orden Compra</button>-->
                                         <?php 
                                             }
                                         ?>
                                         <?php if($id_user==$requerimiento->id_usuario_inserta && $requerimiento->estado_solicitud == '1'){?>
-                                            <a href="javascript:void(0)" onClick="fn_save_requerimiento()" class="btn btn-sm btn-success" style="margin-right:10px">Guardar</a>
+                                            <!--<a href="javascript:void(0)" onClick="fn_save_requerimiento()" class="btn btn-sm btn-success" style="margin-right:10px">Guardar</a>-->
+                                            <button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-nuevo" data-toggle="modal" onclick="fn_save_requerimiento()">
+                                                <i class="fas fa-save" style="font-size:18px;"></i> Guardar
+                                            </button>
                                         <?php }?>
                                         <?php if($id==0){?>
-                                            <a href="javascript:void(0)" onClick="fn_save_requerimiento()" class="btn btn-sm btn-success" style="margin-right:10px">Guardar</a>
+                                            <!--<a href="javascript:void(0)" onClick="fn_save_requerimiento()" class="btn btn-sm btn-success" style="margin-right:10px">Guardar</a>-->
+                                            <button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-nuevo" data-toggle="modal" onclick="fn_save_requerimiento()">
+                                                <i class="fas fa-save" style="font-size:18px;"></i> Guardar
+                                            </button>
                                         <?php }?>
-                                        <a href="javascript:void(0)" onClick="$('#openOverlayOpc').modal('hide');" class="btn btn-sm btn-info" style="margin-right:10px">Cerrar</a>
-
-                                       
-
-                                    </div>
-                                                        
+                                        <!--<a href="javascript:void(0)" onClick="$('#openOverlayOpc').modal('hide');" class="btn btn-sm btn-info" style="margin-right:10px">Cerrar</a>-->
+                                        <button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-cerrar" data-toggle="modal" onclick="$('#openOverlayOpc').modal('hide');">
+                                            <i class="fas fa-times-circle" style="font-size:18px;"></i> Cerrar
+                                        </button>
+                                    </div>       
                                 </div>
                             </div> 
-
-				            </div>
-                            
+				        </div>
                     </div>
                 </form>
                 </div>

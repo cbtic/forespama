@@ -28,8 +28,8 @@ begin
 	oc.fecha_orden_compra, oc.numero_orden_compra, oc.estado, oc.id_empresa_compra, oc.cerrado id_cerrado, tm2.denominacion cerrado,
 	oc.numero_orden_compra_cliente, u2.name vendedor,
 	oc.total, oc.estado_pedido,
-	(select 1 from comprobantes c where c.orden_compra = oc.id::varchar and c.anulado = ''N'' and c.estado = ''1'') facturado,
-	(select to_char(c.fecha,''yyyy-mm-dd'') from comprobantes c where c.orden_compra::int = oc.id and c.anulado = ''N'' and c.estado = ''1'') fecha_facturado,
+	(select 1 from comprobantes c where c.orden_compra = oc.id::varchar and c.anulado = ''N'' and c.estado = ''1'' order by c.id desc limit 1) facturado,
+	(select to_char(c.fecha,''yyyy-mm-dd'') from comprobantes c where c.orden_compra::int = oc.id and c.anulado = ''N'' and c.estado = ''1'' order by c.id desc limit 1) fecha_facturado,
 	(select to_char(sp.created_at,''yyyy-mm-dd'') from salida_productos sp 
 	where sp.id_orden_compra = oc.id
 	limit 1) fecha_salida,

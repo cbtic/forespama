@@ -366,7 +366,6 @@ function obtenerDistritoContacto_(callback){
                 <div style="text-align: center; font-size:16px; margin-top: 20px">
                     <b>Datos de Contacto Entrega de Orden Compra</b>
                 </div>
-                
                 <div class="card-body">
                 <form method="post" action="#" id="frmOrdenCompraContacto" name="frmOrdenCompraContacto">
 
@@ -378,12 +377,11 @@ function obtenerDistritoContacto_(callback){
 
                     <div class="row" style="padding-left:10px; padding-top: 15px;">
                         <div class="col-lg-2">
-                                Nombres
+                            Nombres
                         </div>
                         <div class="col-lg-2">
                             <input id="nombre_contacto" name="nombre_contacto" on class="form-control form-control-sm"  value="<?php if($orden_compra_contacto_entrega){echo $orden_compra_contacto_entrega->nombre;}?>" type="text">
                         </div>
-                        
                         <div class="col-lg-2">
                             Tel&eacute;fono
                         </div>
@@ -479,31 +477,29 @@ function obtenerDistritoContacto_(callback){
                             </fieldset>
                         </div>
                     </div>
-
                     <div style="margin-top:15px" class="form-group">
                         <div class="col-sm-12 controls">
                             <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
-                               
-                                <a href="javascript:void(0)" onClick="fn_save_datos_pedido()" class="btn btn-sm btn-success" style="margin-right:10px">Guardar</a>
-                                <a href="javascript:void(0)" onClick="$('#openOverlayOpc3').modal('hide');" class="btn btn-sm btn-info" style="margin-left:10px">Cerrar</a>
+                                <!--<a href="javascript:void(0)" onClick="fn_save_datos_pedido()" class="btn btn-sm btn-success" style="margin-right:10px">Guardar</a>-->
+                                <button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-nuevo" data-toggle="modal" onclick="fn_save_datos_pedido()">
+                                    <i class="fas fa-save" style="font-size:18px;"></i> Guardar
+                                </button>
+                                <!--<a href="javascript:void(0)" onClick="$('#openOverlayOpc3').modal('hide');" class="btn btn-sm btn-info" style="margin-left:10px">Cerrar</a>-->
+                                <button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-cerrar" data-toggle="modal" onclick="$('#openOverlayOpc3').modal('hide');">
+                                    <i class="fas fa-times-circle" style="font-size:18px;"></i> Cerrar
+                                </button>
                             </div>
-                                                
                         </div>
                     </div> 
-
-				</div>
-                            
+				</div> 
                     </div>
                 </form>
                 </div>
                 <!-- /.box -->
-                
             </div>
             <!--/.col (left) -->
-
         </div>
         <!-- /.row -->
-    
 <!-- /.content -->
 </div>
 <!-- /.content-wrapper -->

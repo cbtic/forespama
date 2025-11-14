@@ -228,9 +228,7 @@ function cambiarGeneralEspecifico(){
                             <input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
                             <input type="hidden" name="id" id="id" value="<?php echo $id?>">
                             
-                            
                             <div class="row" style="padding-left:10px">
-                                
                                 <div class="col-lg-11">
                                     <div class="form-group">
                                         <label class="control-label form-control-sm">Empresa</label>
@@ -253,7 +251,6 @@ function cambiarGeneralEspecifico(){
                                         <input id="anio" name="anio" on class="form-control form-control-sm"  value="<?php echo $parametro->anio?>" type="text">
                                     </div>
                                 </div>
-
                                 <div class="col-lg-8">
                                     <div class="form-group">
                                         <label class="control-label form-control-sm">Nombre Acuerdo Comercial</label>
@@ -292,7 +289,6 @@ function cambiarGeneralEspecifico(){
                                         </select>
                                     </div>
                                 </div>
-
                                 <div class="col-lg-4" id="div_general_especifico">
                                     <div class="form-group">
                                     <label class="control-label form-control-sm">General / Especifico</label>
@@ -303,30 +299,27 @@ function cambiarGeneralEspecifico(){
                                         </select>
                                     </div>
                                 </div>
-
-                            </div>
                             </div>
                         </div>
-                        <div style="margin-top:15px" class="form-group">
-                            <div class="col-sm-12 controls">
-                                <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
-                                    <a href="javascript:void(0)" onClick="fn_save_marca()" class="btn btn-sm btn-success">Registrar</a>
-                                </div>
-                                                    
-                            </div>
-                        </div> 
-                            
                     </div>
-                </form>
+                    <div style="margin-top:15px" class="form-group">
+                        <div class="col-sm-12 controls">
+                            <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
+                                <!--<a href="javascript:void(0)" onClick="fn_save_marca()" class="btn btn-sm btn-success">Registrar</a>-->
+                                <button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-nuevo" data-toggle="modal" onclick="fn_save_marca()">
+                                    <i class="fas fa-save" style="font-size:18px;"></i> Guardar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <!-- /.box -->
-                
+                </form>
             </div>
-            <!--/.col (left) -->
-
+                <!-- /.box -->
         </div>
+            <!--/.col (left) -->
+    </div>
         <!-- /.row -->
-    
 <!-- /.content -->
 </div>
 <!-- /.content-wrapper -->

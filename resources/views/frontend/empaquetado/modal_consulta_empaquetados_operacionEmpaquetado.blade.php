@@ -282,7 +282,7 @@ function obtenerDetalle(){
                         <td><select name="unidad_[]" id="unidad_${n}" class="form-control form-control-sm">${unidadMedidaOptions}</select><input name="unidad[]" id="unidad${n}" class="form-control form-control-sm" value="${empaquetado_operacion.id_unidad_medida}" type="hidden"></td>
                         <td><input name="cantidad[]" id="cantidad${n}" class="form-control form-control-sm" value="${empaquetado_operacion.cantidad}" type="text" data-cantidad-base="${empaquetado_operacion.cantidad}" readonly="readonly"></td>
                         <td><input name="stock[]" id="stock${n}" class="form-control form-control-sm" value="0" type="text" readonly="readonly"></td>
-                        <td><button type="button" class="btn btn-danger btn-sm" onclick="eliminarFila(this)">Eliminar</button></td>
+                        <td><button type="button" class="btn btn-sm btn-clasico btn-eliminar" onclick="eliminarFila(this)"><i class="fas fa-trash" style="font-size:18px;"></i></button></td>
                     </tr>
                 `;
                 tbody.append(row);
@@ -418,7 +418,10 @@ function obtenerDetalle(){
                                 <?php if($id==0){?>
                                     <a href="javascript:void(0)" onClick="fn_save_operacion_empaquetado()" class="btn btn-sm btn-success" style="margin-right:10px">Guardar</a>
                                 <?php }*/?>
-                                <a href="javascript:void(0)" onClick="$('#openOverlayOpc').modal('hide');" class="btn btn-sm btn-info" style="">Cerrar</a>
+                                <!--<a href="javascript:void(0)" onClick="$('#openOverlayOpc').modal('hide');" class="btn btn-sm btn-info" style="">Cerrar</a>-->
+                                <button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-cerrar" data-toggle="modal" onclick="$('#openOverlayOpc').modal('hide');">
+                                    <i class="fas fa-times-circle" style="font-size:18px;"></i> Cerrar
+                                </button>
                             </div>
                                                 
                         </div>

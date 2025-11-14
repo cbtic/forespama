@@ -474,21 +474,18 @@ function fn_save_almacen(){
                             <input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
                             <input type="hidden" name="id" id="id" value="<?php echo $id?>">
                             
-                            
                             <div class="row" style="padding-left:10px">
                                 
                                 <div class="col-lg-3">
                                     <div class="form-group">
                                         <label class="control-label form-control-sm">C&oacute;digo</label>
                                         <input id="codigo" name="codigo" on class="form-control form-control-sm"  value="<?php echo $codigo[0]->codigo?>" type="text" readonly="readonly">
-                                    
                                     </div>
                                 </div>
                                 <div class="col-lg-3">
                                     <div class="form-group">
                                         <label class="control-label form-control-sm">Denominaci&oacute;n</label>
                                         <input id="denominacion" name="denominacion" on class="form-control form-control-sm"  value="<?php echo $almacen->denominacion?>" type="text" >
-                                    
                                     </div>
                                 </div>
                                 <div class="col-lg-3">
@@ -499,9 +496,7 @@ function fn_save_almacen(){
                                     </div>
                                 </div>
                             </div>
-
                             <div class="row" style="padding-left:10px">
-                                
                                 <div class="col-lg-4">
                                     <div class="form-group">
                                         <label class="control-label form-control-sm">Departamento</label>
@@ -527,7 +522,6 @@ function fn_save_almacen(){
                                         </select>
                                     </div>
                                 </div>
-                                
                                 <div class="col-lg-4">
                                     <div class="form-group">
                                         <label class="control-label form-control-sm">Provincia</label>
@@ -536,7 +530,6 @@ function fn_save_almacen(){
                                         </select>
                                     </div>
                                 </div>
-                                
                                 <div class="col-lg-4">
                                     <div class="form-group">
                                         <label class="control-label form-control-sm">Distrito</label>
@@ -545,27 +538,22 @@ function fn_save_almacen(){
                                         </select>
                                     </div>
                                 </div>
-                                
                                 <div class="col-lg-6">
                                     <div class="form-group">
                                         <label class="control-label form-control-sm">Direcci&oacute;n</label>
                                         <input id="direccion" name="direccion" on class="form-control form-control-sm"  value="<?php echo $almacen->direccion?>" type="text" >
                                     </div>
                                 </div>
-
                                 <div class="col-lg-3">
                                     <div class="form-group">
                                         <label class="control-label form-control-sm">T&eacute;lefono</label>
                                         <input id="telefono" name="telefono" on class="form-control form-control-sm"  value="<?php echo $almacen->telefono?>" type="text">
-                                    
                                     </div>
                                 </div>
-
                                 <div class="col-lg-3">
                                     <div class="form-group">
                                         <label class="control-label form-control-sm">Encargado</label>
                                         <input id="encargado" name="encargado" on class="form-control form-control-sm"  value="<?php echo $almacen->encargado?>" type="text">
-                                    
                                     </div>
                                 </div>
                             </div>
@@ -588,7 +576,10 @@ function fn_save_almacen(){
                                 <div style="margin-top:37px" class="form-group">
                                     <div class="col-sm-12 controls">
                                         <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
-                                            <a href="javascript:void(0)" onClick="AddFila()" class="btn btn-sm btn-success">Agregar</a>
+                                            <!--<a href="javascript:void(0)" onClick="AddFila()" class="btn btn-sm btn-success">Agregar</a>-->
+                                            <button type="button" class="btn btn-sm btn-clasico-blanco btn-agregar" data-toggle="modal" onclick="AddFila()">
+                                                <i class="fas fa-plus-circle" style="font-size:18px;"></i> Agregar
+                                            </button>
                                         <!--</div>-->
                                         </div>
                                     </div>
@@ -598,20 +589,19 @@ function fn_save_almacen(){
                         <div style="margin-top:15px" class="form-group">
                             <div class="col-sm-12 controls">
                                 <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
-                                    <a href="javascript:void(0)" onClick="fn_save_almacen()" class="btn btn-sm btn-success">Registrar</a>
-                                </div>
-                                                    
+                                    <!--<a href="javascript:void(0)" onClick="fn_save_almacen()" class="btn btn-sm btn-success">Registrar</a>-->
+                                    <button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-nuevo" data-toggle="modal" onclick="fn_save_almacen()">
+                                        <i class="fas fa-save" style="font-size:18px;"></i> Guardar
+                                    </button>
+                                </div>   
                             </div>
-                        </div> 
-                            
+                        </div>
                     </div>
-                    
                 </div>
                 <!-- /.box -->
                 </form>
             </div>
             <!--/.col (left) -->
-
         </div>
         <!-- /.row -->
     </section>

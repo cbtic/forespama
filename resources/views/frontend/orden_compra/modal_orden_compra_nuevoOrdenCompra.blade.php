@@ -1861,7 +1861,6 @@ function denegar_pago($id_proceso){
                                 <div class="col-lg-2" id="input_entrada_salida">
                                     <input id="numero_entrada_salida" name="numero_entrada_salida" style="color:red; font-weight:bold" on class="form-control form-control-sm"  value="<?php echo $orden_compra->numero_orden_compra_cliente;?>" type="text" readonly="readonly">
                                 </div>
-
                                 <div class="col-lg-2">
                                     Vendedor
                                 </div>
@@ -1877,7 +1876,6 @@ function denegar_pago($id_proceso){
                                     </select>
                                     <!--<input name="moneda_descripcion" id="moneda_descripcion" type="hidden">-->
                                 </div>
-
                                 <div class="col-lg-2" id="prioridad_label">
                                     Prioridad
                                 </div>
@@ -1893,7 +1891,6 @@ function denegar_pago($id_proceso){
                                     </select>
                                     <input name="moneda_descripcion" id="moneda_descripcion" type="hidden">
                                 </div>
-
                                 <div class="col-lg-2" id="label_entrada_salida">
                                     Observaci&oacute;n
                                 </div>
@@ -1904,43 +1901,42 @@ function denegar_pago($id_proceso){
                         </div>
                         <div class="col-lg-1" style="padding:0px">
                             <?php 
-                                //if($id>0 && $orden_compra->cerrado == 1 ){
-                                    //if($orden_compra->tienda_asignada==0){
+                                if($id>0 && $orden_compra->cerrado == 1 ){
+                                    if($orden_compra->tienda_asignada==0){
                             ?>
                             <button style="font-size:12px;margin-bottom:10px" type="button" class="btn btn-sm btn-clasico-blanco btn-agregar" data-toggle="modal" onclick="modal_tiendas_orden_compra()" >
                                 <i class="fas fa-plus-circle" style="font-size:18px;"></i><i class="fas fa-store" style="font-size:18px;"></i> Tiendas
                             </button>
                             <?php 
-                                    //}else{
+                                    }else{
                             ?>
                             <button style="font-size:12px;margin-bottom:10px" type="button" class="btn btn-sm btn-clasico-blanco btn-buscar" data-toggle="modal" onclick="modal_tiendas_orden_compra()">
                                 <i class="fa fa-edit" style="font-size:18px;"></i><i class="fas fa-store" style="font-size:18px;"></i> Tiendas
                             </button>
                             <?php
-                                    //}
+                                    }
                             ?>
-
                             <button style="font-size:12px;margin-bottom:10px" type="button" class="btn btn-sm btn-clasico-blanco btn-agregar" data-toggle="modal" onclick="modal_datos_pedido_orden_compra()">
                                 <i class="fas fa-plus-circle" style="font-size:18px;"></i><i class="fas fa-file" style="font-size:18px;"></i> Datos Pedido
                             </button>
                             
-                            <?php //if($id_proceso == 1 && $id_proceso == $id_persona_proceso){?>
+                            <?php if($id_proceso == 1 && $id_proceso == $id_persona_proceso){?>
                                 <button style="font-size:12px;margin-bottom:10px" type="button" class="btn btn-sm btn-clasico-blanco btn-enviar" data-toggle="modal" onclick="enviar_pedido(1)">
                                     <i class="fas fa-paper-plane" style="font-size:18px;"></i> Enviar Pedido
                                 </button>
-                            <?php //}?>
-                            <?php //if($id_proceso == 3 && $id_proceso == $id_persona_proceso){?>
+                            <?php }?>
+                            <?php if($id_proceso == 3 && $id_proceso == $id_persona_proceso){?>
                                 <button style="font-size:12px;margin-bottom:10px" type="button" class="btn btn-sm btn-clasico-negro btn-devolver" data-toggle="modal" onclick="denegar_pago(3)">
                                     <i class="fas fa-undo" style="font-size:18px;"></i> Devolver pedido
                                 </button>
                                 <button style="font-size:12px;" type="button" class="btn btn-sm btn-clasico-blanco btn-aprobar" data-toggle="modal" onclick="aprobar_pago(3)">
                                     <i class="fas fa-check-circle" style="font-size:18px;"></i> Aprobar Pago
                                 </button>
-                            <?php //}?>
+                            <?php }?>
                             <!--<button style="font-size:12px;margin-left:10px; margin-right:10px" type="button" class="btn btn-sm btn-warning" data-toggle="modal" onclick="pdf_guia()" ><i class="fa fa-edit"></i>Imprimir Gu&iacute;a Remisi&oacute;n Electronica</button>-->
                             <!--<a href="javascript:void(0)" onClick="fn_pdf_documento()" class="btn btn-sm btn-primary" style="margin-right:100px">Imprimir</a>-->
                             <?php 
-                                //}
+                                }
                             ?>
                         </div>
                     </div>
@@ -1970,9 +1966,7 @@ function denegar_pago($id_proceso){
                                 </div>
                             </div>
                         </div>
-                        
                         <div class="card-body" style="padding-right: 0px !important; padding-left: 0px !important;">
-                        
 					<div class="table-responsive" style="overflow-y: auto; max-height: 350px;">
 						<table id="tblOrdenCompraDetalle" class="table table-hover table-sm">
 							<thead>
@@ -2033,7 +2027,6 @@ function denegar_pago($id_proceso){
                                 <button style="font-size:12px;margin-left:10px" type="button" class="btn btn-sm btn-clasico btn-enviar" data-toggle="modal" onclick="pdf_documento()" >
                                     <i class="far fa-file-pdf" style="font-size:18px;"></i> Imprimir
                                 </button>
-                                
                                 <?php 
                                     }else{
                                 ?>
@@ -2043,7 +2036,6 @@ function denegar_pago($id_proceso){
                                 <?php 
                                     }
                                 ?>
-
                                 <?php 
                                     /*if($id>0){
                                         if($orden_compra->id_empresa_compra==23){
@@ -2053,7 +2045,6 @@ function denegar_pago($id_proceso){
                                         }
                                     }*/
                                 ?>
-                                
                                 <?php if($id_user==$orden_compra->id_usuario_inserta && $orden_compra->cerrado == 1 && $id_proceso == 1 && $orden_compra->id_tipo_documento != 1){?>
                                     <!--<a href="javascript:void(0)" onClick="fn_save_orden_compra()" class="btn btn-sm btn-success" style="margin-left:10px"></a>-->
                                         
@@ -2081,18 +2072,14 @@ function denegar_pago($id_proceso){
                         </div>
                     </div>
 				</div>
-                            
                     </div>
                 </form>
                 </div>
                 <!-- /.box -->
-                
             </div>
             <!--/.col (left) -->
-
         </div>
         <!-- /.row -->
-    
 <!-- /.content -->
 </div>
 <!-- /.content-wrapper -->

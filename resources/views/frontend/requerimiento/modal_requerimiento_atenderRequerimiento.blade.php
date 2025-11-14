@@ -325,7 +325,7 @@ function cargarDetalle(){
                         <td><input name="total_precio[]" id="total_precio${n}" class="total_precio form-control form-control-sm" value="${totalPrecio.toFixed(3)}" type="text" oninput="" readonly></td>
                         <td><input name="total[]" id="total${n}" class="total form-control form-control-sm" value="${total.toFixed(3)}" type="text" oninput="" readonly></td>
                         
-                        <td><button type="button" class="btn btn-danger btn-sm" onclick="eliminarFila(this)">Eliminar</button></td>
+                        <td><button type="button" class="btn btn-sm btn-clasico btn-eliminar" onclick="eliminarFila(this)"><i class="fas fa-trash" style="font-size:18px;"></i></button></td>
                         <td><button type="button" class="btn btn-success btn-sm" onclick="modalObservacion(${n})">Observacion</button></td>
                     </tr>
                 `;
@@ -457,7 +457,7 @@ function agregarProducto(){
         var unidad = '<select name="unidad[]" id="unidad' + n + '" class="form-control form-control-sm" onChange=""> <option value="">--Seleccionar--</option> <?php foreach ($unidad as $row) {?> <option value="<?php echo $row->codigo?>"><?php echo $row->denominacion?></option> <?php } ?> </select>';
         var cantidad_ingreso = '<input name="cantidad_ingreso[]" id="cantidad_ingreso' + n + '" class="cantidad_ingreso form-control form-control-sm" value="" type="text" oninput="">';
         
-        var btnEliminar = '<button type="button" class="btn btn-danger btn-sm" onclick="eliminarFila(this)">Eliminar</button>';
+        var btnEliminar = '<button type="button" class="btn btn-sm btn-clasico btn-eliminar" onclick="eliminarFila(this)"><i class="fas fa-trash" style="font-size:18px;"></i></button>';
         var btnObservacion = '<button type="button" class="btn btn-success btn-sm" onclick="modalObservacion(' + n + ')">Observacion</button>';
 
         newRow += '<tr>';
@@ -889,13 +889,14 @@ function cambiarOrigen(){
                             <div style="margin-top:15px" class="form-group">
                                 <div class="col-sm-12 controls">
                                     <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
-                                        <a href="javascript:void(0)" onClick="agregarProducto()" class="btn btn-sm btn-success">Agregar</a>
+                                        <!--<a href="javascript:void(0)" onClick="agregarProducto()" class="btn btn-sm btn-success">Agregar</a>-->
+                                        <button type="button" class="btn btn-sm btn-clasico-blanco btn-agregar" data-toggle="modal" onclick="agregarProducto()">
+                                            <i class="fas fa-plus-circle" style="font-size:18px;"></i> Agregar Producto
+                                        </button>
                                     </div>
                                 </div>
                             </div>
-
                             <div class="card-body">
-
                         <div class="table-responsive">
                             <table id="tblRequerimientoDetalle" class="table table-hover table-sm">
                                 <thead>
@@ -925,14 +926,19 @@ function cambiarOrigen(){
                                     <?php 
                                         if($id>0){
                                     ?>
-                                    <button style="font-size:12px;margin-left:10px;margin-right:20px" type="button" class="btn btn-sm btn-primary" data-toggle="modal" onclick="pdf_documento()" ><i class="fa fa-edit"></i> Imprimir</button>
+                                    <button style="font-size:12px;margin-left:10px;margin-right:20px" type="button" class="btn btn-sm btn-clasico btn-enviar" data-toggle="modal" onclick="pdf_documento()" >
+                                        <i class="far fa-file-pdf" style="font-size:18px;"></i> Imprimir
+                                    </button>
                                     <button style="font-size:12px;margin-right:20px" type="button" class="btn btn-sm btn-warning" data-toggle="modal" onclick="save_orden_compra_requerimiento()" ><i class="fa fa-edit"></i> Generar Orden Compra</button>
                                     <button style="font-size:12px;margin-right:20px" type="button" class="btn btn-sm btn-success" data-toggle="modal" onclick="generar_requerimiento()" ><i class="fa fa-edit"></i> Generar Requerimiento Pedientes</button>
                                     <?php 
                                         }
                                     ?>
                                     <!--<a href="javascript:void(0)" onClick="fn_save_requerimiento()" class="btn btn-sm btn-success" style="margin-right:10px">Guardar</a>-->
-                                    <a href="javascript:void(0)" onClick="cerrarModalRequerimiento()" class="btn btn-sm btn-info" style="">Cerrar</a>
+                                    <!--<a href="javascript:void(0)" onClick="cerrarModalRequerimiento()" class="btn btn-sm btn-info" style="">Cerrar</a>-->
+                                    <button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-cerrar" data-toggle="modal" onclick="cerrarModalRequerimiento()">
+                                        <i class="fas fa-times-circle" style="font-size:18px;"></i> Cerrar
+                                    </button>
                                 </div>
                             </div>
                         </div> 

@@ -368,8 +368,14 @@ function modalProductoCompetencia(codigo_producto_competencia,nombre_producto_co
         </div>
     </div>  
     <div class="modal-footer">
-        <a href="javascript:void(0)" onClick="fn_save_chopeo_producto()" class="btn btn-sm btn-success">Guardar</a>
-        <a href="javascript:void(0)" onClick="$('#openOverlayOpc').modal('hide');" class="btn btn-sm btn-info" style="margin-left:10px">Cerrar</a>
+        <!--<a href="javascript:void(0)" onClick="fn_save_chopeo_producto()" class="btn btn-sm btn-success">Guardar</a>-->
+        <button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-nuevo" data-toggle="modal" onclick="fn_save_chopeo_producto()">
+            <i class="fas fa-save" style="font-size:18px;"></i> Guardar
+        </button>
+        <!--<a href="javascript:void(0)" onClick="$('#openOverlayOpc').modal('hide');" class="btn btn-sm btn-info" style="margin-left:10px">Cerrar</a>-->
+        <button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-cerrar" data-toggle="modal" onclick="$('#openOverlayOpc').modal('hide');">
+            <i class="fas fa-times-circle" style="font-size:18px;"></i> Cerrar
+        </button>
     </div>
 </form>
 </div>

@@ -667,7 +667,10 @@ container: '#myModal modal-body'
 					<div style="margin-top:20px;float:right" class="form-group">
 						<div class="col-sm-12 controls">
 							<div class="btn-group btn-group-sm" role="group" aria-label="Log Viewer Actions">
-								<a href="javascript:void(0)" onClick="fn_save()" class="btn btn-sm btn-success">Guardar</a>
+								<!--<a href="javascript:void(0)" onClick="fn_save()" class="btn btn-sm btn-success">Guardar</a>-->
+								<button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-nuevo" data-toggle="modal" onclick="fn_save()">
+									<i class="fas fa-save" style="font-size:18px;"></i> Guardar
+								</button>
 							</div>
 												
 						</div>

@@ -1554,7 +1554,10 @@ function obtenerBeneficiario(){
                                     <a href="javascript:void(0)" onClick="fn_save_denegar_autorizacion_orden_compra(2)" class="btn btn-sm btn-danger" style="margin-right:10px">No Autorizar</a>
                                     <a href="javascript:void(0)" onClick="fn_save_autorizacion_orden_compra()" class="btn btn-sm btn-success" style="margin-right:10px">Autorizar</a>
                                 <?php }?>
-                                <a href="javascript:void(0)" onClick="$('#openOverlayOpc').modal('hide');" class="btn btn-sm btn-info" style="margin-left:10px;">Cerrar</a>
+                                <!--<a href="javascript:void(0)" onClick="$('#openOverlayOpc').modal('hide');" class="btn btn-sm btn-info" style="margin-left:10px;">Cerrar</a>-->
+                                <button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-cerrar" data-toggle="modal" onclick="$('#openOverlayOpc').modal('hide');">
+                                    <i class="fas fa-times-circle" style="font-size:18px;"></i> Cerrar
+                                </button>
                             </div>
                         </div>
                     </div>

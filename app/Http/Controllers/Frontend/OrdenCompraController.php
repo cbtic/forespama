@@ -223,7 +223,7 @@ class OrdenCompraController extends Controller
         $persona = $persona_model->obtenerPersonaAll();
         $prioridad = $tablaMaestra_model->getMaestroByTipo(93);
         $canal = $tablaMaestra_model->getMaestroByTipo(98);
-        
+        //dd($id_persona_proceso);exit();
 		return view('frontend.orden_compra.modal_orden_compra_nuevoOrdenCompra',compact('id','orden_compra','tipo_documento','proveedor','producto','marca','estado_bien','unidad','igv_compra','descuento','almacen','unidad_origen','id_user','moneda','vendedor','tipo_documento_cliente','persona','prioridad','canal','id_descuento_usuario','id_proceso','id_persona_proceso','proceso'));
 
     }

@@ -273,6 +273,7 @@ label.form-control-sm{
 	height: 200px;
 	white-space:nowrap
 }
+
 .imageDiv img {
 	box-shadow: 1px 1px 10px #999;
 	margin: 2px;
@@ -283,7 +284,6 @@ label.form-control-sm{
 	*zoom:1;
 	vertical-align:top;
 }
-
 
 .img_ruta{
 	position:relative;
@@ -504,7 +504,7 @@ label.form-control-sm{
 					</div>
 
 					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<select name="almacen_origen_bus" id="almacen_origen_bus" class="form-control form-control-sm">
+						<select name="almacen_origen_bus" id="almacen_origen_bus" class="form-control form-control-sm filtro-select">
 							<option value="">--Seleccionar Almacen Origen--</option>
 							<?php
 							foreach ($almacen as $row){?>

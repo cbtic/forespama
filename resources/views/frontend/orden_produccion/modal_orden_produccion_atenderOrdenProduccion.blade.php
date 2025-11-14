@@ -276,7 +276,7 @@ function cargarDetalle(){
                         <td><input name="cantidad_pendiente[]" id="cantidad_pendiente${n}" class="cantidad_ingreso form-control form-control-sm" value="${orden_produccion.cantidad}" type="text" oninput="" readonly></td>
                         <td><input name="cantidad_atendida[]" id="cantidad_atendida${n}" class="cantidad_ingreso form-control form-control-sm" value="${orden_produccion.cantidad-orden_produccion.cantidad_atendida}" type="text" oninput=""></td>
                         
-                        <td><button type="button" class="btn btn-danger btn-sm" onclick="eliminarFila(this)">Eliminar</button></td>
+                        <td><button type="button" class="btn btn-sm btn-clasico btn-eliminar" onclick="eliminarFila(this)"><i class="fas fa-trash" style="font-size:18px;"></i></button></td>
                     </tr>
                 `;
                 tbody.append(row);
@@ -556,7 +556,10 @@ function obtenerUnidadTrabajo(){
                                         }
                                     ?>
                                     <!--<a href="javascript:void(0)" onClick="fn_save_requerimiento()" class="btn btn-sm btn-success" style="margin-right:10px">Guardar</a>-->
-                                    <a href="javascript:void(0)" onClick="cerrarModalAtenderOrdenProduccion()" class="btn btn-sm btn-info" style="">Cerrar</a>
+                                    <!--<a href="javascript:void(0)" onClick="cerrarModalAtenderOrdenProduccion()" class="btn btn-sm btn-info" style="">Cerrar</a>-->
+                                    <button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-cerrar" data-toggle="modal" onclick="cerrarModalAtenderOrdenProduccion()">
+                                        <i class="fas fa-times-circle" style="font-size:18px;"></i> Cerrar
+                                    </button>
                                 </div>
                             </div>
                         </div> 

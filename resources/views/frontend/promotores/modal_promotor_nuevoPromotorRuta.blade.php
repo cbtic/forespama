@@ -236,7 +236,7 @@ function agregarHorario(){
         var hora_estado_situacional = '<input name="hora_estado_situacional[]" id="hora_estado_situacional' + n + '" class="form-control form-control-sm" value="" type="time">'
         var hora_estado_promocion = '<input name="hora_estado_promocion[]" id="hora_estado_promocion' + n + '" class="form-control form-control-sm" value="" type="time">'
         
-        var btnEliminar = '<button type="button" class="btn btn-danger btn-sm" onclick="eliminarFila(this)">Eliminar</button>';
+        var btnEliminar = '<button type="button" class="btn btn-sm btn-clasico btn-eliminar" onclick="eliminarFila(this)"><i class="fas fa-trash" style="font-size:18px;"></i></button>';
         var newRow = "";
         newRow += '<tr>';
         newRow += '<td>' + n + '</td>';
@@ -343,9 +343,15 @@ function eliminarFila(button){
                         <div class="col-sm-12 controls">
                             <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
                                 
-                                <a href="javascript:void(0)" onClick="fn_save_promotor_ruta()" class="btn btn-sm btn-success" style="margin-right:10px">Guardar</a>
+                                <!--<a href="javascript:void(0)" onClick="fn_save_promotor_ruta()" class="btn btn-sm btn-success" style="margin-right:10px">Guardar</a>-->
+                                <button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-nuevo" data-toggle="modal" onclick="fn_save_promotor_ruta()">
+                                    <i class="fas fa-save" style="font-size:18px;"></i> Guardar
+                                </button>
                                 
-                                <a href="javascript:void(0)" onClick="$('#openOverlayOpc').modal('hide');" class="btn btn-sm btn-info" style="">Cerrar</a>
+                                <!--<a href="javascript:void(0)" onClick="$('#openOverlayOpc').modal('hide');" class="btn btn-sm btn-info" style="">Cerrar</a>-->
+                                <button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-cerrar" data-toggle="modal" onclick="$('#openOverlayOpc').modal('hide');">
+                                    <i class="fas fa-times-circle" style="font-size:18px;"></i> Cerrar
+                                </button>
                             </div>
                                                 
                         </div>

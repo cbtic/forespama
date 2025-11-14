@@ -280,7 +280,7 @@ function cargarDetalle(){
                         <td><input name="cantidad_ingreso[]" id="cantidad_ingreso${n}" class="cantidad_ingreso form-control form-control-sm" value="${orden_produccion.cantidad_total-orden_produccion.cantidad_orden_produccion}" type="text" readonly></td>
                         
                         <td><input name="cantidad_producir[]" id="cantidad_producir${n}" class="cantidad_producir form-control form-control-sm" value="" type="text"></td>
-                        <td><button type="button" class="btn btn-danger btn-sm" onclick="eliminarFila(this)">Eliminar</button></td>
+                        <td><button type="button" class="btn btn-sm btn-clasico btn-eliminar" onclick="eliminarFila(this)"><i class="fas fa-trash" style="font-size:18px;"></i></button></td>
 
                     </tr>
                 `;
@@ -377,7 +377,7 @@ function agregarProducto(){
         var cantidad_comprometida = '<input name="cantidad_comprometida[]" id="cantidad_comprometida' + n + '" class="cantidad_comprometida form-control form-control-sm" value="0" type="text" readonly>';
         var cantidad_producir = '<input name="cantidad_producir[]" id="cantidad_producir' + n + '" class="form-control form-control-sm" value="" type="text">';
         
-        var btnEliminar = '<button type="button" class="btn btn-danger btn-sm" onclick="eliminarFila(this)">Eliminar</button>';
+        var btnEliminar = '<button type="button" class="btn btn-sm btn-clasico btn-eliminar" onclick="eliminarFila(this)"><i class="fas fa-trash" style="font-size:18px;"></i></button>';
 
         newRow += '<tr>';
         newRow += '<td>' + n + '</td>';
@@ -608,7 +608,10 @@ function obtenerUnidadTrabajo(){
                             <div class="col-sm-12 controls">
                                 <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
                                 <?php if($id==0){?>
-                                    <a href="javascript:void(0)" onClick="agregarProducto()" class="btn btn-sm btn-success">Agregar</a>
+                                    <!--<a href="javascript:void(0)" onClick="agregarProducto()" class="btn btn-sm btn-success">Agregar</a>-->
+                                    <button type="button" class="btn btn-sm btn-clasico-blanco btn-agregar" data-toggle="modal" onclick="agregarProducto()">
+                                        <i class="fas fa-plus-circle" style="font-size:18px;"></i> Agregar Producto
+                                    </button>
                                 <?php }?>
                                 </div>
                             </div>
@@ -637,17 +640,28 @@ function obtenerUnidadTrabajo(){
                             <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
                                 
                                 <?php if($id>0){?>
-                                    <button style="font-size:12px;margin-left:10px;margin-right:10px" type="button" class="btn btn-sm btn-primary" data-toggle="modal" onclick="pdf_documento()" ><i class="fa fa-edit"></i>Imprimir Pdf</button>
+                                    <button style="font-size:12px;margin-left:10px;margin-right:10px" type="button" class="btn btn-sm btn-clasico btn-enviar" data-toggle="modal" onclick="pdf_documento()" >
+                                        <i class="far fa-file-pdf" style="font-size:18px;"></i>Imprimir Pdf
+                                    </button>
 
                                     <button style="font-size:12px;margin-right:10px" type="button" class="btn btn-sm btn-secondary" data-toggle="modal" onclick="descargarOrdenProduccion(<?php echo $id?>)"><i class="fa fa-download"></i>Descargar Excel</button>
 
-                                    <button style="font-size:12px;margin-left:10px;margin-right:10px" type="button" class="btn btn-sm btn-primary" data-toggle="modal" onclick="pdf_documento_detallado()" ><i class="fa fa-edit"></i>Imprimir Pdf Destallado</button>
+                                    <button style="font-size:12px;margin-left:10px;margin-right:10px" type="button" class="btn btn-sm btn-clasico btn-enviar" data-toggle="modal" onclick="pdf_documento_detallado()" >
+                                        <i class="far fa-file-pdf" style="font-size:18px;"></i>Imprimir Pdf Destallado
+                                    </button>
                                 <?php }?>
 
                                 <?php if($id==0){?>
-                                    <a href="javascript:void(0)" onClick="fn_save_orden_produccion()" class="btn btn-sm btn-success" style="margin-right:10px">Guardar</a>
+                                    <!--<a href="javascript:void(0)" onClick="fn_save_orden_produccion()" class="btn btn-sm btn-success" style="margin-right:10px">Guardar</a>-->
+                                    <button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-nuevo" data-toggle="modal" onclick="fn_save_orden_produccion()">
+                                        <i class="fas fa-save" style="font-size:18px;"></i> Guardar
+                                    </button>
+                                    
                                 <?php }?>
-                                <a href="javascript:void(0)" onClick="$('#openOverlayOpc').modal('hide');" class="btn btn-sm btn-info" style="">Cerrar</a>
+                                <!--<a href="javascript:void(0)" onClick="$('#openOverlayOpc').modal('hide');" class="btn btn-sm btn-info" style="">Cerrar</a>-->
+                                <button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-cerrar" data-toggle="modal" onclick="$('#openOverlayOpc').modal('hide');">
+                                    <i class="fas fa-times-circle" style="font-size:18px;"></i> Cerrar
+                                </button>
                             </div>
                         </div>
                     </div>

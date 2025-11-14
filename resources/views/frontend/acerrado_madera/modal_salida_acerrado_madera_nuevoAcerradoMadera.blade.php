@@ -355,7 +355,10 @@ function eliminarFila(button){
                             <div style="margin-top:15px" class="form-group">
                                 <div class="col-sm-12 controls">
                                     <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
-                                        <a href="javascript:void(0)" onClick="agregarSalidaAcerrado()" class="btn btn-sm btn-success">Agregar</a>
+                                        <!--<a href="javascript:void(0)" onClick="agregarSalidaAcerrado()" class="btn btn-sm btn-success">Agregar</a>-->
+                                        <button type="button" class="btn btn-sm btn-clasico-blanco btn-agregar" data-toggle="modal" onclick="agregarSalidaAcerrado()">
+                                            <i class="fas fa-plus-circle" style="font-size:18px;"></i> Agregar
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -384,21 +387,24 @@ function eliminarFila(button){
                                 <div class="col-sm-12 controls">
                                     <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
                                     
-                                        <a href="javascript:void(0)" onClick="fn_save_produccion_madera_acerrado()" class="btn btn-sm btn-success" style="margin-right:10px">Guardar</a>
-                                        <a href="javascript:void(0)" onClick="$('#openOverlayOpc').modal('hide');" class="btn btn-sm btn-info" style="">Cerrar</a>
+                                        <!--<a href="javascript:void(0)" onClick="fn_save_produccion_madera_acerrado()" class="btn btn-sm btn-success" style="margin-right:10px">Guardar</a>-->
+                                        <button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-nuevo" data-toggle="modal" onclick="fn_save_produccion_madera_acerrado()">
+                                            <i class="fas fa-save" style="font-size:18px;"></i> Guardar
+                                        </button>
+                                        <!--<a href="javascript:void(0)" onClick="$('#openOverlayOpc').modal('hide');" class="btn btn-sm btn-info" style="">Cerrar</a>-->
+                                        <button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-cerrar" data-toggle="modal" onclick="$('#openOverlayOpc').modal('hide');">
+                                            <i class="fas fa-times-circle" style="font-size:18px;"></i> Cerrar
+                                        </button>
                                     </div>
-                                                        
                                 </div>
-                            </div> 
+                            </div>
                         </div>
                     </div>
                     </form>
                 </div>
                 <!-- /.box -->
-                
             </div>
             <!--/.col (left) -->
-
         </div>
         <!-- /.row -->
         </section>
