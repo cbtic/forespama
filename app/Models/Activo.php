@@ -75,4 +75,32 @@ class Activo extends Model
 		$data = DB::select($cad);
         return $data;
     }
+
+    function getActivoSinEntrega(){
+
+        $cad = "select a.*
+        from activos a
+        left join (
+        select distinct on (id_activo) *
+        from activo_usuarios
+        order by id_activo, id desc) au on a.id = au.id_activo
+        where au.id_activo is null 
+        or au.fecha_devolucion is not null
+        and a.estado ='1'
+        and au.estado ='1'";
+
+		$data = DB::select($cad);
+        return $data;
+    }
+
+    function getActivosById($id){
+
+        $cad = " select a.*
+        from activos a
+        inner join activo_usuarios au on a.id = au.id_activo
+        where au.id = '".$id."' ";
+
+		$data = DB::select($cad);
+        return $data;
+    }
 }

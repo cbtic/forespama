@@ -40,8 +40,9 @@ class IngresoVehiculoTroncoController extends Controller
 		$tablaMaestra_model = new TablaMaestra;
 		$tipo_madera = $tablaMaestra_model->getMaestroByTipo(42);
 		$tipo_documento = $tablaMaestra_model->getMaestroByTipo(9);
+		$tipo_documento_cliente = $tablaMaestra_model->getMaestroByTipo(75);
 		
-		return view('frontend.ingreso.create',compact('tipo_madera','tipo_documento'));
+		return view('frontend.ingreso.create',compact('tipo_madera','tipo_documento','tipo_documento_cliente'));
 
 	}
 	
@@ -77,7 +78,7 @@ class IngresoVehiculoTroncoController extends Controller
 		}else{
 			$conductor = new Conductores;
 			$persona = new Persona;
-		} 
+		}
 		$tipo_documento = $tablaMaestra_model->getMaestroByTipo(9);
 
 		return view('frontend.conductores.modal_conductor_ingreso',compact('id','conductor','tipo_documento','persona'));
@@ -116,8 +117,14 @@ class IngresoVehiculoTroncoController extends Controller
 		$ingresoVehiculoTronco = new IngresoVehiculoTronco;
 		$ingresoVehiculoTronco->fecha_ingreso = $request->fecha_ingreso;
 		$ingresoVehiculoTronco->fecha_salida = $request->fecha_ingreso;
-		$ingresoVehiculoTronco->id_empresa_transportista = $request->id_empresa_transportista;
-		$ingresoVehiculoTronco->id_empresa_proveedor = $request->id_empresa_transportista;//0;
+		if($request->tipo_documento_empresa == 1){
+			$ingresoVehiculoTronco->id_tipo_cliente = $request->tipo_documento_empresa;
+			$ingresoVehiculoTronco->id_persona = $request->id_empresa_persona;
+		}else{
+			$ingresoVehiculoTronco->id_tipo_cliente = $request->tipo_documento_empresa;
+			$ingresoVehiculoTronco->id_empresa_transportista = $request->id_empresa_transportista;
+			$ingresoVehiculoTronco->id_empresa_proveedor = $request->id_empresa_transportista;//0;
+		}
 		$ingresoVehiculoTronco->id_vehiculos = $request->id_vehiculos;
 		$ingresoVehiculoTronco->id_conductores = $request->id_conductores;
 		$ingresoVehiculoTronco->id_encargados = 1;
@@ -160,7 +167,6 @@ class IngresoVehiculoTroncoController extends Controller
 				$ingresoVehiculoTroncoImagen->estado = 1;
 				$ingresoVehiculoTroncoImagen->save();
 			}
-			
 		}
 		
 		/*************************/
@@ -189,16 +195,29 @@ class IngresoVehiculoTroncoController extends Controller
 			$ingresoVehiculoTroncoCubicaje->save();
 		}
 		
-		$empresasConductoresVehiculoExiste = EmpresasConductoresVehiculo::where("id_empresas",$request->id_empresa_transportista)->where("id_vehiculos",$request->id_vehiculos)->where("id_conductores",$request->id_conductores)->where("estado",1)->get();
-		if(count($empresasConductoresVehiculoExiste)==0){
-			$empresasConductoresVehiculo = new EmpresasConductoresVehiculo;
-			$empresasConductoresVehiculo->id_empresas = $request->id_empresa_transportista;
-			$empresasConductoresVehiculo->id_vehiculos = $request->id_vehiculos;
-			$empresasConductoresVehiculo->id_conductores = $request->id_conductores;
-			$empresasConductoresVehiculo->estado = "1";
-			$empresasConductoresVehiculo->save();
+		if($request->tipo_documento_empresa == 1){
+			$personasConductoresVehiculoExiste = EmpresasConductoresVehiculo::where("id_persona",$request->id_empresa_persona)->where("id_vehiculos",$request->id_vehiculos)->where("id_conductores",$request->id_conductores)->where("estado",1)->get();
+			if(count($personasConductoresVehiculoExiste)==0){
+				$empresasConductoresVehiculo = new EmpresasConductoresVehiculo;
+				$empresasConductoresVehiculo->id_tipo_cliente = $request->tipo_documento_empresa;
+				$empresasConductoresVehiculo->id_persona = $request->id_empresa_persona;
+				$empresasConductoresVehiculo->id_vehiculos = $request->id_vehiculos;
+				$empresasConductoresVehiculo->id_conductores = $request->id_conductores;
+				$empresasConductoresVehiculo->estado = "1";
+				$empresasConductoresVehiculo->save();
+			}
+		}else{
+			$empresasConductoresVehiculoExiste = EmpresasConductoresVehiculo::where("id_empresas",$request->id_empresa_transportista)->where("id_vehiculos",$request->id_vehiculos)->where("id_conductores",$request->id_conductores)->where("estado",1)->get();
+			if(count($empresasConductoresVehiculoExiste)==0){
+				$empresasConductoresVehiculo = new EmpresasConductoresVehiculo;
+				$empresasConductoresVehiculo->id_tipo_cliente = $request->tipo_documento_empresa;
+				$empresasConductoresVehiculo->id_empresas = $request->id_empresa_transportista;
+				$empresasConductoresVehiculo->id_vehiculos = $request->id_vehiculos;
+				$empresasConductoresVehiculo->id_conductores = $request->id_conductores;
+				$empresasConductoresVehiculo->estado = "1";
+				$empresasConductoresVehiculo->save();
+			}
 		}
-		
     }
 
 	public function listar_ingreso_vehiculo_tronco_ajax(Request $request){
@@ -265,15 +284,14 @@ class IngresoVehiculoTroncoController extends Controller
 		}else{
 			$ingresoVehiculoTroncoPago = IngresoVehiculoTroncoPago::find($id);
 		}
-		//$adelantos = $adelanto_model->getAdelantoByPersona($id_persona);
+
 		$tipo_desembolso = $tablaMaestra_model->getMaestroByTipo(65);
-		//print_r($tipo_desembolso);
 
 		$ingresoVehiculoTroncoPago_model = new IngresoVehiculoTroncoPago;
 		$data = $ingresoVehiculoTroncoPago_model->getImportePago($id_ingreso_vehiculo_tronco_tipo_maderas);
 
 		$importe = $data->precio-$data->pago;
-		//echo $id;
+
 		return view('frontend.pagos.modal_pago',compact('id','ingresoVehiculoTroncoPago','id_ingreso_vehiculo_tronco_tipo_maderas','fecha_actual'/*,'adelantos'*/,'tipo_desembolso','importe'));
 	
 	}
@@ -305,12 +323,8 @@ class IngresoVehiculoTroncoController extends Controller
 			}
 		}
 
-		//$id_user = Auth::user()->id;
 		$maestra_model = new TablaMaestra;
-		//$fecha_hora = $maestra_model->getFechaHoraServidor();
 		
-		//if($request->id_moneda==113)$id_caja=$request->id_caja_soles;
-		//if($request->id_moneda==114)$id_caja=$request->id_caja_dolares;
 		if($request->id==0){
 			$pago = new IngresoVehiculoTroncoPago;
 			$pago->id_ingreso_vehiculo_tronco_tipo_maderas = $request->id_ingreso_vehiculo_tronco_tipo_maderas;
@@ -322,10 +336,6 @@ class IngresoVehiculoTroncoController extends Controller
 			$pago->fecha = $request->fecha;
 			$pago->observacion = $request->observacion;
 			$pago->foto_desembolso = $request->img_foto;
-			//$adelanto->fecha_hora = $fecha_hora;
-			//$pago->id_usuario = $id_user;
-			//$pago->id_caja = $id_caja;
-			//$pago->estado = "A";
 		}else{
 			$pago = IngresoVehiculoTroncoPago::find($request->id);
 			$pago->id_tipodesembolso = $request->id_tipodesembolso;
@@ -343,11 +353,22 @@ class IngresoVehiculoTroncoController extends Controller
 		$ingresoVehiculoTroncoPago_model = new IngresoVehiculoTroncoPago;
 		$data = $ingresoVehiculoTroncoPago_model->getImportePago($request->id_ingreso_vehiculo_tronco_tipo_maderas);
 
-		if($data->pago==0){
+		$precio = round((float) $data->precio, 2);
+		$pago = round((float) $data->pago, 2);
+
+		/*if($data->pago==0){
 			$id_estado_pago = 1;
 		}else if($data->precio>$data->pago){
 			$id_estado_pago = 2;
 		}else if($data->precio<=$data->pago){
+			$id_estado_pago = 3;
+		}*/
+
+		if ($pago == 0) {
+			$id_estado_pago = 1;
+		} else if ($precio > $pago) {
+			$id_estado_pago = 2;
+		} else {
 			$id_estado_pago = 3;
 		}
 
@@ -480,15 +501,26 @@ class IngresoVehiculoTroncoController extends Controller
 		$id_ingreso_vehiculo_troncos = $ingresoVehiculoTroncoTipoMadera->id_ingreso_vehiculo_troncos;
 		$ingresoVehiculoTronco = IngresoVehiculoTronco::find($id_ingreso_vehiculo_troncos);
 		
-		$empresa = Empresa::find($ingresoVehiculoTronco->id_empresa_transportista);
+		if($ingresoVehiculoTronco->id_tipo_cliente == 1){
+			$persona = Persona::find($ingresoVehiculoTronco->id_persona);
+			$cliente_nombre = $persona->nombres .' '. $persona->apellido_paterno .' '.$persona->apellido_materno;
+			$cliente_direccion = $persona->direccion;
+			$cliente_numero_documento = $persona->numero_documento;
+		}else{
+			$empresa = Empresa::find($ingresoVehiculoTronco->id_empresa_transportista);
+			$cliente_nombre = $empresa->razon_social;
+			$cliente_direccion = $empresa->direccion;
+			$cliente_numero_documento = $empresa->ruc;
+		}
+		
 		
 		$pago = new Pago;
 		$pago->id_modulo = 1;
 		$pago->pk_registro = $id_ingreso_vehiculo_troncos;
 		$pago->fecha = Carbon::now()->format('Y-m-d');
-		$pago->comprobante_destinatario = $empresa->razon_social;
-		$pago->comprobante_direccion = $empresa->direccion;
-		$pago->comprobante_ruc = $empresa->ruc;
+		$pago->comprobante_destinatario = $cliente_nombre;
+		$pago->comprobante_direccion = $cliente_direccion;
+		$pago->comprobante_ruc = $cliente_numero_documento;
 		$pago->subtotal = $precio_total_final;
 		$pago->impuesto = 0;
 		$pago->total = $precio_total_final;
@@ -512,14 +544,7 @@ class IngresoVehiculoTroncoController extends Controller
         if (!is_dir($path)) {
             mkdir($path);
         }
-		
-		/*
-        $path = "files/" . $ht . "/resolucion";
-        if (!is_dir($path)) {
-            mkdir($path);
-        }
-		*/
-		
+				
     	$filepath = public_path('img/ingreso/tmp/');
 		move_uploaded_file($_FILES["file"]["tmp_name"], $filepath.$_FILES["file"]["name"]);
 		echo $_FILES['file']['name'];
@@ -538,11 +563,8 @@ class IngresoVehiculoTroncoController extends Controller
 	public function cubicaje_pdf($id){
 
 		$vehiculo_tronco_model = new IngresoVehiculoTronco;
-		//$salida_producto_detalle_model = new IngresoVehiculoTronco;
 		$datos=$vehiculo_tronco_model->getIngresoVehiculoTroncoCubicajeCabeceraById($id);
 		$datos_detalle=$vehiculo_tronco_model->getIngresoVehiculoTroncoCubicajeReporteById($id);
-
-		//dd($datos_detalle);exit();
 
 		$fecha_ingreso=$datos[0]->fecha_ingreso;
 		$ruc=$datos[0]->ruc;
@@ -559,7 +581,6 @@ class IngresoVehiculoTroncoController extends Controller
 			return $item->precio_unitario;
 		}, $datos_detalle);
 
-		// Obtener precio mínimo y máximo
 		$precio_menor = !empty($precios) ? min($precios) : 0;
 		$precio_mayor = !empty($precios) ? max($precios) : 0;
 	 
@@ -633,7 +654,6 @@ class IngresoVehiculoTroncoController extends Controller
 		$msg = "";
 		$ingresoVehiculoTronco_model = new IngresoVehiculoTronco;
 		$vehiculo = $ingresoVehiculoTronco_model->getEmpresaConductorVehiculos($placa);
-		//dd($vehiculo);exit();
 		$conductores = $ingresoVehiculoTronco_model->getEmpresaConductoresVehiculos($vehiculo->id_empresas);
 		
 		if(!$vehiculo){
@@ -644,7 +664,6 @@ class IngresoVehiculoTroncoController extends Controller
 				$sw = false;
 				$msg = "El Vehiculo ingresado no existe !!!";
 			}
-			
 		}
 
 		if(!$conductores){
@@ -653,7 +672,6 @@ class IngresoVehiculoTroncoController extends Controller
 			$msg = "El Conductor no existe !!!";
 			
 		}
-
 		
 		$array["sw"] = $sw;
 		$array["msg"] = $msg;
@@ -679,10 +697,6 @@ class IngresoVehiculoTroncoController extends Controller
 	public function listar_ingreso_vehiculo_tronco_reporte_ajax(Request $request){
 
 		$ingresoVehiculoTronco_model = new IngresoVehiculoTronco();
-		/*$p[]=$request->ruc;
-		$p[]=$request->empresa;
-		$p[]=$request->placa;
-		$p[]=$request->tipo_madera;*/
 		$p[]=$request->fecha_inicio;
 		$p[]=$request->fecha_fin;
 		$p[]=$request->tipo_empresa;
@@ -706,10 +720,6 @@ class IngresoVehiculoTroncoController extends Controller
 	public function listar_ingreso_vehiculo_tronco_reporte_pago_ajax(Request $request){
 
 		$ingresoVehiculoTronco_model = new IngresoVehiculoTronco();
-		/*$p[]=$request->ruc;
-		$p[]=$request->empresa;
-		$p[]=$request->placa;
-		$p[]=$request->tipo_madera;*/
 		$p[]=$request->fecha_inicio;
 		$p[]=$request->fecha_fin;
 		$p[]=$request->tipo_empresa;
@@ -909,8 +919,6 @@ class IngresoVehiculoTroncoController extends Controller
 
 		$id_ingreso_vehiculo_tronco_tipo_madera = IngresoVehiculoTroncoTipoMadera::where('id_ingreso_vehiculo_troncos', $idIngreso)->where('estado',1)->first();
 		
-		//$id_ingreso_vehiculo_cubicaje = IngresoVehiculoTroncoCubicaje::where('id_ingreso_vehiculo_tronco_tipo_maderas', $id_ingreso_vehiculo_tronco_tipo_madera->id)->where('estado',1)->first();
-
 		$modal_ingreso_vehiculo_cubicaje = new IngresoVehiculoTronco;
 
 		$datos_cubicaje = $modal_ingreso_vehiculo_cubicaje->getIngresoVehiculoTroncoCubicajeById($id_ingreso_vehiculo_tronco_tipo_madera->id);
@@ -947,17 +955,23 @@ class IngresoVehiculoTroncoController extends Controller
 
 		$ingreso_vehiculo = IngresoVehiculoTronco::find($idIngreso);
 		$vehiculo = Vehiculo::find($ingreso_vehiculo->id_vehiculos);
-		$empresa = Empresa::find($ingreso_vehiculo->id_empresa_proveedor);
 
-		$ingreso_vehiculo_tronco_tipo_madera = IngresoVehiculoTroncoTipoMadera::where("id_ingreso_vehiculo_troncos",$idIngreso)
-			->where("estado",1)->first();
+		if($ingreso_vehiculo->id_tipo_cliente == 1){
+			$persona = Persona::find($ingreso_vehiculo->id_persona);
+			$ruc = $persona->numero_documento;
+		}else{
+			$empresa = Empresa::find($ingreso_vehiculo->id_empresa_proveedor);
+			$ruc = $empresa->ruc;
+		}
+
+		$ingreso_vehiculo_tronco_tipo_madera = IngresoVehiculoTroncoTipoMadera::where("id_ingreso_vehiculo_troncos",$idIngreso)->where("estado",1)->first();
 		$id_ingreso_vehiculo_tronco_tipo_madera = $ingreso_vehiculo_tronco_tipo_madera->id;
 
 		// Validaciones
 		$errores = [];
 		if($fecha != $ingreso_vehiculo->fecha_ingreso) $errores[] = "La fecha no coincide.\n";
 		if($placa != $vehiculo->placa) $errores[] = "La Placa no coincide.\n";
-		if($ruc != $empresa->ruc) $errores[] = "El RUC no coincide.\n";
+		if($ruc != $ruc) $errores[] = "El RUC no coincide.\n";
 		if($cantidad != $ingreso_vehiculo_tronco_tipo_madera->cantidad) $errores[] = "La Cantidad no coincide.\n";
 
 		if (!empty($errores)) {
@@ -984,13 +998,11 @@ class IngresoVehiculoTroncoController extends Controller
 			$volumen_pies = 220 * $volumen_m3;
 			$volumen_total_pies = $volumen_pies;
 
-			// Precio
 			$precio_unitario = ($diametro_dm >= $diametro_dm_) ? $precio_mayor : $precio_menor;
 			if ($longitud < 1.22) $precio_unitario = 1.20;
 
 			$precio_total = $volumen_total_pies * $precio_unitario;
 
-			// Actualizar registro
 			$registro->diametro_1 = $diametro1;
 			$registro->diametro_2 = $diametro2;
 			$registro->diametro_dm = number_format($diametro_dm,3);
@@ -1006,22 +1018,32 @@ class IngresoVehiculoTroncoController extends Controller
 			$precio_total_final += $precio_total;
 		}
 
-		// Guardar total en tipo_madera
 		$ingresoVehiculoTroncoTipoMadera = IngresoVehiculoTroncoTipoMadera::find($id_ingreso_vehiculo_tronco_tipo_madera);
 		$ingresoVehiculoTroncoTipoMadera->total = round($precio_total_final,2);
 		$ingresoVehiculoTroncoTipoMadera->save();
 
-		// Crear pago
 		$ingresoVehiculoTronco = IngresoVehiculoTronco::find($ingresoVehiculoTroncoTipoMadera->id_ingreso_vehiculo_troncos);
-		$empresa = Empresa::find($ingresoVehiculoTronco->id_empresa_transportista);
+		//$empresa = Empresa::find($ingresoVehiculoTronco->id_empresa_transportista);
+
+		if($ingresoVehiculoTronco->id_tipo_cliente == 1){
+			$persona = Persona::find($ingresoVehiculoTronco->id_persona);
+			$cliente_nombre = $persona->nombres .' '. $persona->apellido_paterno .' '.$persona->apellido_materno;
+			$cliente_direccion = $persona->direccion;
+			$cliente_numero_documento = $persona->numero_documento;
+		}else{
+			$empresa = Empresa::find($ingresoVehiculoTronco->id_empresa_transportista);
+			$cliente_nombre = $empresa->razon_social;
+			$cliente_direccion = $empresa->direccion;
+			$cliente_numero_documento = $empresa->ruc;
+		}
 
 		$pago = new Pago;
 		$pago->id_modulo = 1;
 		$pago->pk_registro = $ingresoVehiculoTronco->id;
 		$pago->fecha = Carbon::now()->format('Y-m-d');
-		$pago->comprobante_destinatario = $empresa->razon_social;
-		$pago->comprobante_direccion = $empresa->direccion;
-		$pago->comprobante_ruc = $empresa->ruc;
+		$pago->comprobante_destinatario = $cliente_nombre;
+		$pago->comprobante_direccion = $cliente_direccion;
+		$pago->comprobante_ruc = $cliente_numero_documento;
 		$pago->subtotal = round($precio_total_final,2);
 		$pago->impuesto = 0;
 		$pago->total = round($precio_total_final,2);
@@ -1138,8 +1160,6 @@ class IngresoVehiculoTroncoController extends Controller
 		$n = 1;
 
 		array_push($variable, array($titulo));
-
-		//array_push($variable, array("Fecha","Placa","RUC","Empresa","Tipo Madera","Cantidad"));
 		
 		array_push($variable, array($fecha_ingreso,$placa,$ruc,$razon_social,$tipo_madera,$cantidad));
 		
@@ -1281,10 +1301,6 @@ class InvoicesExport implements FromArray, WithHeadings, WithStyles
 
 		$sheet->fromArray($this->headings(), NULL, 'A2');
 
-		/*$sheet->getStyle('L3:L'.$sheet->getHighestRow())
-		->getNumberFormat()
-		->setFormatCode(\PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_NUMBER_00);*/ //SIRVE PARA PONER 2 DECIMALES A ESA COLUMNA
-        
         foreach (range('A', 'M') as $col) {
             $sheet->getColumnDimension($col)->setAutoSize(true);
         }
@@ -1351,17 +1367,12 @@ class InvoicesExport2 implements FromArray, WithHeadings, WithStyles
 
 		$sheet->fromArray($this->headings(), NULL, 'A2');
 
-		/*$sheet->getStyle('L3:L'.$sheet->getHighestRow())
-		->getNumberFormat()
-		->setFormatCode(\PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_NUMBER_00);*/ //SIRVE PARA PONER 2 DECIMALES A ESA COLUMNA
-        
         foreach (range('A', 'I') as $col) {
             $sheet->getColumnDimension($col)->setAutoSize(true);
         }
 
 		$lastRow = $sheet->getHighestRow();
 
-		// Aplicar estilo solo a la última fila
 		$sheet->getStyle("A{$lastRow}:I{$lastRow}")->applyFromArray([
 			'font' => [
 				'bold' => true,
@@ -1441,18 +1452,6 @@ class InvoicesExport3 implements FromArray, WithHeadings, WithStyles
             $sheet->getColumnDimension($col)->setAutoSize(true);
         }
 
-		//$lastRow = $sheet->getHighestRow();
-
-		/*$sheet->getStyle("A{$lastRow}:I{$lastRow}")->applyFromArray([
-			'font' => [
-				'bold' => true,
-			],
-			'fill' => [
-                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
-                'startColor' => ['rgb' => 'D9D9D9'],
-            ],
-		]);*/
-
 		$lastRow = $sheet->getHighestRow();
 
         return [
@@ -1526,10 +1525,6 @@ class InvoicesExport4 implements FromArray, WithHeadings, WithStyles
 
 		$sheet->fromArray($this->headings(), NULL, 'A2');
 
-		/*$sheet->getStyle('L3:L'.$sheet->getHighestRow())
-		->getNumberFormat()
-		->setFormatCode(\PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_NUMBER_00);*/ //SIRVE PARA PONER 2 DECIMALES A ESA COLUMNA
-        
         foreach (range('A', 'E') as $col) {
             $sheet->getColumnDimension($col)->setAutoSize(true);
         }
@@ -1537,7 +1532,6 @@ class InvoicesExport4 implements FromArray, WithHeadings, WithStyles
 		$lastRow = $sheet->getHighestRow();
 
     }
-
 }
 
 class InvoicesExport5 implements FromArray, WithHeadings, WithStyles
@@ -1597,44 +1591,39 @@ class InvoicesExport5 implements FromArray, WithHeadings, WithStyles
         ]);
 
 		$sheet->mergeCells('A5:I5');
-    $sheet->setCellValue('A5', "Cubicaje");
-    $sheet->getStyle('A5:I5')->applyFromArray([
-        'font' => [
-            'bold' => true,
-            'color' => ['rgb' => 'FFFFFF'],
-        ],
-        'fill' => [
-            'fillType' => Fill::FILL_SOLID,
-            'startColor' => ['rgb' => '246257'],
-        ],
-        'alignment' => [
-            'horizontal' => Alignment::HORIZONTAL_CENTER,
-        ],
-    ]);
-    $sheet->getRowDimension(5)->setRowHeight(30);
-    $sheet->getStyle('A5')->getAlignment()->setWrapText(true);
+		$sheet->setCellValue('A5', "Cubicaje");
+		$sheet->getStyle('A5:I5')->applyFromArray([
+			'font' => [
+				'bold' => true,
+				'color' => ['rgb' => 'FFFFFF'],
+			],
+			'fill' => [
+				'fillType' => Fill::FILL_SOLID,
+				'startColor' => ['rgb' => '246257'],
+			],
+			'alignment' => [
+				'horizontal' => Alignment::HORIZONTAL_CENTER,
+			],
+		]);
+		$sheet->getRowDimension(5)->setRowHeight(30);
+		$sheet->getStyle('A5')->getAlignment()->setWrapText(true);
 
-    // 👉 Cabecera secundaria en A6:I6
-    $sheet->getStyle('A6:I6')->applyFromArray([
-        'font' => ['bold' => true, 'color' => ['rgb' => '000000']],
-        'fill' => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['rgb' => '2EB85C']],
-        'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER],
-    ]);
+		// 👉 Cabecera secundaria en A6:I6
+		$sheet->getStyle('A6:I6')->applyFromArray([
+			'font' => ['bold' => true, 'color' => ['rgb' => '000000']],
+			'fill' => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['rgb' => '2EB85C']],
+			'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER],
+		]);
 
 		$sheet->fromArray($this->headings(), NULL, 'A2');
-
-		/*$sheet->getStyle('L3:L'.$sheet->getHighestRow())
-		->getNumberFormat()
-		->setFormatCode(\PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_NUMBER_00);*/ //SIRVE PARA PONER 2 DECIMALES A ESA COLUMNA
-        
-        foreach (range('A', 'I') as $col) {
-            $sheet->getColumnDimension($col)->setAutoSize(true);
-        }
+		
+		foreach (range('A', 'I') as $col) {
+			$sheet->getColumnDimension($col)->setAutoSize(true);
+		}
 
 		$lastRow = $sheet->getHighestRow();
 
     }
-
 }
 
 class InvoicesExport6 implements FromArray, WithHeadings, WithStyles
@@ -1698,18 +1687,5 @@ class InvoicesExport6 implements FromArray, WithHeadings, WithStyles
         foreach (range('A', 'H') as $col) {
             $sheet->getColumnDimension($col)->setAutoSize(true);
         }
-
-		/*$lastRow = $sheet->getHighestRow();
-
-		$sheet->getStyle("A{$lastRow}:I{$lastRow}")->applyFromArray([
-			'font' => [
-				'bold' => true,
-			],
-			'fill' => [
-                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
-                'startColor' => ['rgb' => 'D9D9D9'],
-            ],
-		]);*/
     }
-
 }

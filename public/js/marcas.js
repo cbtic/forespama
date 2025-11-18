@@ -104,14 +104,14 @@ function datatablenew(){
 				},
 
 				{
-					"mRender": function (data, type, row) {
-						var tipo_marca = "";
-						if(row.tipo_marca!= null)tipo_marca = row.tipo_marca;
-						return tipo_marca;
-					},
-					"bSortable": true,
-					"aTargets": [2]
-					},
+				"mRender": function (data, type, row) {
+					var tipo_marca = "";
+					if(row.tipo_marca!= null)tipo_marca = row.tipo_marca;
+					return tipo_marca;
+				},
+				"bSortable": true,
+				"aTargets": [2]
+				},
 				
 				{
 				"mRender": function (data, type, row) {
@@ -128,37 +128,33 @@ function datatablenew(){
 				"aTargets": [3]
 				},
 				{
-					"mRender": function (data, type, row) {
-						var estado = "";
-						var clase = "";
-						if(row.estado == 1){
-							estado = "Eliminar";
-							clase = "btn-danger";
-						}
-						if(row.estado == 0){
-							estado = "Activar";
-							clase = "btn-success";
-						}
-						
-						var html = '<div class="btn-group btn-group-sm" role="group" aria-label="Log Viewer Actions">';
-						
-						html += '<button style="font-size:12px" type="button" class="btn btn-sm btn-success" data-toggle="modal" onclick="modalMarca('+row.id+')" ><i class="fa fa-edit"></i> Editar</button>'; 
-						html += '<a href="javascript:void(0)" onclick=eliminarMarca('+row.id+','+row.estado+') class="btn btn-sm '+clase+'" style="font-size:12px;margin-left:10px">'+estado+'</a>';
-						
-						//html += '<a href="javascript:void(0)" onclick=modalResponsable('+row.id+') class="btn btn-sm btn-info" style="font-size:12px;margin-left:10px">Detalle Responsable</a>';
-						
-						html += '</div>';
-						return html;
-					},
-					"bSortable": false,
-					"aTargets": [4],
+				"mRender": function (data, type, row) {
+					var estado = "";
+					var clase = "";
+					if(row.estado == 1){
+						estado = "Eliminar";
+						clase = "btn-danger";
+					}
+					if(row.estado == 0){
+						estado = "Activar";
+						clase = "btn-success";
+					}
+					
+					var html = '<div class="btn-group btn-group-sm" role="group" aria-label="Log Viewer Actions">';
+					
+					html += '<button style="font-size:12px" type="button" class="btn btn-sm btn-success" data-toggle="modal" onclick="modalMarca('+row.id+')" ><i class="fa fa-edit"></i> Editar</button>'; 
+					html += '<a href="javascript:void(0)" onclick=eliminarMarca('+row.id+','+row.estado+') class="btn btn-sm '+clase+'" style="font-size:12px;margin-left:10px">'+estado+'</a>';
+					
+					//html += '<a href="javascript:void(0)" onclick=modalResponsable('+row.id+') class="btn btn-sm btn-info" style="font-size:12px;margin-left:10px">Detalle Responsable</a>';
+					
+					html += '</div>';
+					return html;
 				},
-
+				"bSortable": false,
+				"aTargets": [4],
+				},
             ]
-
-
     });
-
 }
 
 function fn_ListarBusqueda() {
@@ -171,14 +167,13 @@ function modalMarca(id){
 	$('#openOverlayOpc .modal-body').css('height', 'auto');
 
 	$.ajax({
-			url: "/marcas/modal_marca/"+id,
-			type: "GET",
-			success: function (result) {  
-					$("#diveditpregOpc").html(result);
-					$('#openOverlayOpc').modal('show');
-			}
+		url: "/marcas/modal_marca/"+id,
+		type: "GET",
+		success: function (result) {  
+			$("#diveditpregOpc").html(result);
+			$('#openOverlayOpc').modal('show');
+		}
 	});
-
 }
 
 function eliminarMarca(id,estado){
@@ -206,11 +201,11 @@ function eliminarMarca(id,estado){
 function fn_eliminar(id,estado){
 	
     $.ajax({
-            url: "/marcas/eliminar_marca/"+id+"/"+estado,
-            type: "GET",
-            success: function (result) {
-                //if(result="success")obtenerPlanDetalle(id_plan);
-				datatablenew();
-            }
+		url: "/marcas/eliminar_marca/"+id+"/"+estado,
+		type: "GET",
+		success: function (result) {
+			//if(result="success")obtenerPlanDetalle(id_plan);
+			datatablenew();
+		}
     });
 }

@@ -477,7 +477,6 @@ function modalFactura(id){
 
 function reporteFactura(){
 
-
     var fecha_ini = $('#fecha_ini').val();
     var fecha_fin = $('#fecha_fin').val();
     var tipo_documento = $('#tipo_documento').val();
@@ -486,15 +485,28 @@ function reporteFactura(){
     var razon_social = $('#razon_social').val();
     var estado_pago = $('#estado_pago').val();
     var anulado = $('#anulado').val();
+    var total_b = $('#total_b').val();
+    var caja_b = $('#id_caja').val();
+    var usuario_b = $('#id_usuario').val();
+    var medio_pago = $('#id_mediopago').val();
+    var formapago = $('#id_formapago').val();
+
+
 	if (fecha_ini == "")fecha_ini = 0;
     if (fecha_fin == "")fecha_fin = 0;
     if (tipo_documento == "") tipo_documento= 0;
     if (serie == "")serie = 0;
     if (numero == "")numero = 0;
-    if (razon_social == "")razon_social = 0;
+    if (razon_social == "")razon_social = "0";
     if (estado_pago == "")estado_pago = 0;
     if (anulado == "")anulado = 0;
-	location.href = '/factura/exportar_factura/'  + fecha_ini + '/' + fecha_fin + '/' + tipo_documento + '/'+ serie + '/'+ numero + '/'+  razon_social + '/'+ estado_pago + '/'+ anulado ;
+    if (total_b == "")total_b = "0";
+    if (caja_b == "")caja_b = 0;
+    if (usuario_b == "")usuario_b = 0;
+    if (medio_pago == "")medio_pago = 0;
+    if (formapago == "")formapago = 0;
+
+	location.href = '/comprobante/exportar_factura/'  + fecha_ini + '/' + fecha_fin + '/' + tipo_documento + '/'+ serie + '/'+ numero + '/'+  razon_social + '/'+ estado_pago + '/'+ anulado + '/'+ total_b + '/'+ caja_b + '/'+ usuario_b + '/'+ medio_pago + '/'+ formapago ;
 
 }
 

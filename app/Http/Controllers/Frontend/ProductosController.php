@@ -12,6 +12,11 @@ use App\Models\Kardex;
 use App\Models\ProductoImagene;
 use App\Models\Familia;
 use App\Models\SubFamilia;
+use App\Models\Tienda;
+use App\Models\Chopeo;
+use App\Models\ChopeoDetalle;
+use App\Models\EquivalenciaProducto;
+use App\Models\ProductosCompetencia;
 use RealRashid\SweetAlert\Facades\Alert;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -26,6 +31,8 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
+use Google\Cloud\Vision\V1\ImageAnnotatorClient;
+use GuzzleHttp\Client;
 
 class ProductosController extends Controller
 {
@@ -91,7 +98,6 @@ class ProductosController extends Controller
 		
 		if($id>0){
 			$producto = Producto::find($id);
-            //$imagenes = ProductoImagene::where('id_producto', $id)->pluck('ruta_imagen');
             $imagenes = ProductoImagene::where('id_producto', $id)->get();
 		}else{
 			$producto = new Producto;
@@ -107,18 +113,17 @@ class ProductosController extends Controller
 		$tipo_origen_producto = $tablaMaestra_model->getMaestroByTipo(58);
 		$bien_servicio = $tablaMaestra_model->getMaestroByTipo(73);
         $familia = $familia_model->getFamiliaAll();
+		$categoria = $tablaMaestra_model->getMaestroByTipo(102);
+		$sub_categoria = $tablaMaestra_model->getMaestroByTipo(105);
+		$modelo = $tablaMaestra_model->getMaestroByTipo(106);
+		$packet = $tablaMaestra_model->getMaestroByTipo(107);
+		$medida = $tablaMaestra_model->getMaestroByTipo(108);
         
-		//var_dump($id);exit();
-
-		return view('frontend.productos.modal_productos_nuevoProducto',compact('id','producto','unidad_medida','moneda','estado_bien','tipo_producto','unidad_producto','marca','tipo_origen_producto','imagenes','bien_servicio','familia'));
+		return view('frontend.productos.modal_productos_nuevoProducto',compact('id','producto','unidad_medida','moneda','estado_bien','tipo_producto','unidad_producto','marca','tipo_origen_producto','imagenes','bien_servicio','familia','categoria','sub_categoria','modelo','packet','medida'));
 
     }
 
     public function send_producto(Request $request){
-
-        //$btnFichaTecnica = $request->btnFichaTecnica;
-
-        //dd($btnFichaTecnica);exit();
 
 		if($request->id == 0){
 			$producto = new Producto;
@@ -161,7 +166,6 @@ class ProductosController extends Controller
         $producto->id_unidad_medida = $request->unidad_medida;
         $producto->stock_actual = $request->stock_actual;
         $producto->id_moneda = $request->moneda;
-        //$producto->id_tipo_producto = $request->tipo_producto;
         $producto->id_familia = $request->familia;
         $producto->id_sub_familia = $request->sub_familia;
         $producto->fecha_vencimiento = $request->fecha_vencimiento;
@@ -174,7 +178,11 @@ class ProductosController extends Controller
         $producto->id_marca = $request->marca;
         $producto->bien_servicio = $request->bien_servicio;
         $producto->peso = $request->peso;
-        //$producto->numero_corrrelativo = $numero_correlativo;
+        $producto->id_categoria = $request->categoria;
+        $producto->id_sub_categoria = $request->sub_categoria;
+        $producto->id_modelo = $request->modelo;
+        $producto->id_packet = $request->packet;
+        $producto->id_medida = $request->medida;
 		$producto->estado = 1;
 		$producto->save();
         $id_producto = $producto->id; 
@@ -188,14 +196,6 @@ class ProductosController extends Controller
 		
 		$img_foto = $request->img_foto;
         $id_img_foto = $request->id_img_foto;
-        /*
-		if(isset($img_foto) && is_array($img_foto) && count($img_foto) > 0){
-			$path = "img/productos/".$producto->id."/".$request->denominacion;
-			if (!is_dir($path)) {
-				mkdir($path);
-			}
-		}
-        */
         $imagenesExistentes = ProductoImagene::where('id_producto', $id_producto)->pluck('ruta_imagen')->toArray();
 		
         if (isset($img_foto) && is_array($img_foto)) {
@@ -423,7 +423,7 @@ class ProductosController extends Controller
 		return response()->json($producto);
 	}
 
-    public function exportar_listar_productos($tipo_origen_producto, $serie, $codigo, $denominacion, $estado_bien, $tipo_producto, $tiene_imagen, $estado) {
+    public function exportar_listar_productos($tipo_origen_producto, $serie, $codigo, $denominacion, $estado_bien, $tipo_producto, $tiene_imagen, $estado, $familia, $sub_familia) {
 
 		if($tipo_origen_producto==0)$tipo_origen_producto = "";
         if($serie=="0")$serie = "";
@@ -433,6 +433,8 @@ class ProductosController extends Controller
         if($tipo_producto==0)$tipo_producto = "";
         if($tiene_imagen==0)$tiene_imagen = "";
         if($estado==0)$estado = "";
+        if($familia==0)$familia = "";
+        if($sub_familia==0)$sub_familia = "";
 
         $producto_model = new Producto;
 		$p[]=$serie;
@@ -441,6 +443,8 @@ class ProductosController extends Controller
         $p[]=$estado_bien;
         $p[]=$tipo_origen_producto;
         $p[]=$tiene_imagen;
+        $p[]=$familia;
+        $p[]=$sub_familia;
         $p[]=$estado;
 		$p[]=1;
 		$p[]=10000;
@@ -449,7 +453,7 @@ class ProductosController extends Controller
 		$variable = [];
 		$n = 1;
 
-		array_push($variable, array("N°","Id","Bien/Servicio","Tipo Origen Producto","Serie","Denominación","Código","Unidad Producto","Contenido","Unidad Medida","Marca","Tipo Producto","Estado Bien","F. Vencimiento","Stock Minimo","Tiene Imagen","Estado"));
+		array_push($variable, array("N°","Id","Bien/Servicio","Tipo Origen Producto","Serie","Denominación","Código","Unidad Producto","Contenido","Unidad Medida","Marca","Familia","Sub Familia","Estado Bien","F. Vencimiento","Stock Minimo","Tiene Imagen","Estado"));
 		
 		foreach ($data as $r) {
 
@@ -459,7 +463,7 @@ class ProductosController extends Controller
             if($r->tiene_imagen==1){$tiene_imagen='SI';}
             if($r->tiene_imagen==0){$tiene_imagen='NO';}
 
-			array_push($variable, array($n++,$r->id, $r->bien_servicio, $r->tipo_origen_producto, $r->numero_serie, $r->denominacion, $r->codigo, $r->unidad, $r->contenido, $r->unidad_medida, $r->marca, $r->unidad_medida_producto,$r->estado_bien, $r->fecha_vencimiento, $r->stock_minimo, $tiene_imagen, $estado));
+			array_push($variable, array($n++,$r->id, $r->bien_servicio, $r->tipo_origen_producto, $r->numero_serie, $r->denominacion, $r->codigo, $r->unidad, $r->contenido, $r->unidad_medida, $r->marca, $r->familia, $r->sub_familia, $r->estado_bien, $r->fecha_vencimiento, $r->stock_minimo, $tiene_imagen, $estado));
 		}
 		
 		$export = new InvoicesExport([$variable]);
@@ -467,6 +471,265 @@ class ProductosController extends Controller
 		
     }
 
+    public function create_chopeo_producto(){
+
+		$tablaMaestra_model = new TablaMaestra;
+        $tienda_model = new Tienda;
+        $producto_model = new Producto;
+
+		$competencia = $tablaMaestra_model->getMaestroByTipo(101);
+        $tienda = $tienda_model->getTiendasAll();
+        $producto = $producto_model->getProductoRetail();
+
+		
+		return view('frontend.productos.create_chopeo_producto',compact('competencia','tienda','producto'));
+
+	}
+
+    public function listar_chopeo_producto_ajax(Request $request){
+
+		$producto_model = new Producto;
+		$p[]=$request->tienda;
+		$p[]=$request->producto;
+		$p[]=$request->NumeroPagina;
+		$p[]=$request->NumeroRegistros;
+		$data = $producto_model->listar_chopeo_producto_ajax($p);
+		$iTotalDisplayRecords = isset($data[0]->totalrows)?$data[0]->totalrows:0;
+
+		$result["PageStart"] = $request->NumeroPagina;
+		$result["pageSize"] = $request->NumeroRegistros;
+		$result["SearchText"] = "";
+		$result["ShowChildren"] = true;
+		$result["iTotalRecords"] = $iTotalDisplayRecords;
+		$result["iTotalDisplayRecords"] = $iTotalDisplayRecords;
+		$result["aaData"] = $data;
+
+        echo json_encode($result);
+
+	}
+
+    public function modal_chopeo_producto($id){
+		
+        $tablaMaestra_model = new TablaMaestra;
+        $tienda_model = new Tienda;
+        $producto_model = new Producto;
+		
+		$chopeo = new Chopeo;
+
+        $competencia = $tablaMaestra_model->getMaestroByTipo(101);
+        $tienda = $tienda_model->getTiendasAll();
+        $producto = $producto_model->getProductoRetail();
+        
+		return view('frontend.productos.modal_chopeo_productos_nuevoChopeoProducto',compact('id','chopeo','producto','competencia','tienda','producto'));
+
+    }
+
+    public function modal_producto_competencia($codigo_producto_competencia, $nombre_producto_competencia, $competencia_producto_competencia){
+		
+		$tabla_maestra_model = new TablaMaestra;
+
+		/*if($id>0){
+			$producto_competencia = ProductosCompetencia::find($id);
+		}else{
+			$producto_competencia = new ProductosCompetencia;
+		}*/
+
+		$competencia = $tabla_maestra_model->getMaestroByTipo(101);
+
+		return view('frontend.productos.modal_productos_nuevoProducto_competencia',compact('codigo_producto_competencia','nombre_producto_competencia','competencia_producto_competencia','competencia'));
+
+    }
+    
+    public function send_chopeo_producto(Request $request)
+    {
+        $id_user = Auth::user()->id;
+
+        try {
+            $request->validate([
+                'btnPrecioDimfer' => 'file|mimes:jpg,jpeg,png',
+            ]);
+
+            //$path = $request->file('btnPrecioDimfer')->store('chopeos', 'public');
+
+            if ($request->hasFile('btnPrecioDimfer')) {
+
+                $path = public_path("img/chopeos/");
+                if (!is_dir($path)) {
+                    mkdir($path, 0777, true);
+                }
+
+                $filename = date("YmdHis") . substr((string)microtime(), 1, 6);
+                $extension = $this->extension($_FILES["btnPrecioDimfer"]["name"]);
+
+                move_uploaded_file($_FILES["btnPrecioDimfer"]["tmp_name"], $path . $filename . "." . $extension);
+
+                $rutaFinal = "img/chopeos/" . $filename . "." . $extension;
+            }
+
+            $imagePath = public_path($rutaFinal);
+            /////////////
+            $keyFile = storage_path('app/google-key.json');
+
+            //dd($rutaFinal);exit();
+
+            $vision = new ImageAnnotatorClient([
+                'credentials' => $keyFile,
+            ]);
+
+            $image = file_get_contents($imagePath);
+            $response = $vision->textDetection($image);
+            $texts = $response->getTextAnnotations();
+
+            $vision->close();
+
+            if (count($texts) === 0) {
+                return response()->json(['error' => 'No se detectó texto en la imagen.']);
+            }
+            /////////////////////////
+            /*$texto = $texts[0]->getDescription();
+            dd($texto);exit();
+            //preg_match('/\b\d{6}[A-Za-z0-9]\b/', $texto, $matchNumero);
+            preg_match('/\b[A-Za-z0-9]{6,7}\b/', $texto, $matchNumero);
+            $numero = $matchNumero[0] ?? null;
+
+            preg_match('/S[\/I]?\s*([\d.,]+)/i', $texto, $matchPrecio);
+            $precio = isset($matchPrecio[1]) ? str_replace(',', '.', $matchPrecio[1]) : null;
+
+            if (!$numero || !$precio) {
+                return response()->json(['error' => 'No se encontraron datos válidos en la imagen.']);
+            }*/
+
+            $texto = $texts[0]->getDescription();
+
+            $texto = strtoupper($texto);
+            $texto = str_replace(["\r", "\n"], " ", $texto);
+            $texto = preg_replace('/\s+/', ' ', $texto);
+            $texto = trim($texto);
+
+            $texto = preg_replace('/C\/U|C U|C\/ U|CU|[0-9]{1,2}\s*S-\d+-\d+-\d+-\d+/i', '', $texto);
+            $texto = trim(preg_replace('/\s+/', ' ', $texto));
+
+            //preg_match('/\b\d{6,7}\b/', $texto, $matchNumero);
+            preg_match('/\b\d{5,7}[A-Z]?\b/i', $texto, $matchNumero);
+            $numero = $matchNumero[0] ?? null;
+
+            preg_match('/S[\/I]?\s*([\d]+[.,]\d{1,2})/i', $texto, $matchPrecio);
+            $precio = isset($matchPrecio[1]) ? str_replace(',', '.', $matchPrecio[1]) : null;
+
+            $nombre = $texto;
+
+            $nombre = preg_replace(['/S[\/I]?\s*[\d.,]+/i', '/\b\d{5,7}[A-Z]?\b/i'], '', $nombre);
+            //$nombre = preg_replace('/^\d{1,3}\s+/', '', $nombre);
+            $nombre = trim(preg_replace('/\s+/', ' ', $nombre));
+            //$nombre = preg_replace('/^\d{1,3}\s+/', '', $nombre);
+            $nombre = preg_replace('/^[^A-ZÁÉÍÓÚÑ]+/i', '', $nombre);
+
+            /*$numero="9999996";
+            $precio="125.20";
+            $nombre="PTA EJEMPLOSSSS";*/
+
+            //echo 'nombre: ' ,$nombre, 'precio: ' ,$precio, 'numero: ' ,$numero;
+            if (!$numero || !$precio || !$nombre) {
+                return response()->json([
+                    'success' => false,
+                    'error' => 'No se encontraron datos válidos en la imagen.',
+                    'nombre' => $nombre,
+                    'numero' => $numero,
+                    'precio' => $precio
+                ]);
+            }
+
+            //dd(['nombre' => $nombre, 'precio' => $precio, 'numero' => $numero]);
+
+            /*$numero="99999992";
+            $precio="120.20";
+            $nombre="PTA EJEMPLO2S";*/
+            $msg2 = "";
+            $id_producto = null;
+            $equivalencia_producto = null;
+
+            if($request->competencia==1){
+                $equivalencia_producto = EquivalenciaProducto::where('codigo_empresa',$numero)->where('estado',1)->first();
+                if($equivalencia_producto){
+                    $id_producto = $equivalencia_producto->id_producto;
+                }
+            }else{
+                $equivalencia_producto = ProductosCompetencia::where('codigo',$numero)->where('id_competencia',$request->competencia)->where('estado',1)->first();
+                if($equivalencia_producto){
+                    $id_producto = $equivalencia_producto->id;
+                }
+            }
+            //dd($equivalencia_producto);exit();
+            if (!$equivalencia_producto) {
+
+                $msg2 = "No se encontró el producto con el código detectado. Favor de crearlo";
+                return response()->json([
+                    'success' => false,
+                    'msg2' => $msg2,
+                    'id' => '0',
+                    'numero' => $numero,
+                    'precio' => $precio,
+                    'nombre' => $nombre,
+                    'competencia_' => $request->competencia
+                ],200);
+            }
+
+            $chopeo = new Chopeo();
+            $chopeo->id_tienda = $request->tienda;
+            $chopeo->id_competencia = $request->competencia;
+            $chopeo->fecha_chopeo = $request->fecha_chopeo;
+            $chopeo->id_usuario_responsable = $id_user;
+            $chopeo->ruta_imagen = $rutaFinal;
+            $chopeo->estado = 1;
+            $chopeo->id_usuario_inserta = $id_user;
+            $chopeo->save();
+            $id_chopeo = $chopeo->id;
+
+            $chopeo_detalle = new ChopeoDetalle();
+            $chopeo_detalle->id_chopeo = $id_chopeo;
+            $chopeo_detalle->id_producto = $id_producto;
+            $chopeo_detalle->precio_competencia = $precio;
+            $chopeo_detalle->estado = 1;
+            $chopeo_detalle->id_usuario_inserta = $id_user;
+            $chopeo_detalle->save();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Chopeo registrado correctamente.'
+            ]);
+ 
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'error' => $e->errors()
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => $e->getMessage()
+            ]);
+        }
+    }
+
+    public function testVision()
+    {
+        $imagePath = public_path('prueba.jpeg');
+        $keyFile = storage_path('app/google-key.json');
+
+        $visionClient = new ImageAnnotatorClient([
+            'credentials' => $keyFile,
+        ]);
+
+        $image = file_get_contents($imagePath);
+        $response = $visionClient->textDetection($image);
+        $texts = $response->getTextAnnotations();
+
+        if (count($texts) > 0) {
+            $texto = $texts[0]->getDescription();
+            preg_match('/\b\d{7}\b/', $texto, $match);
+            return $match[0] ?? 'No se encontró número de 7 dígitos';
+        } else {
+            return 'No se detectó texto en la imagen.';
+        }
+    }
 }
 
 class InvoicesExport implements FromArray, WithHeadings, WithStyles
@@ -485,16 +748,16 @@ class InvoicesExport implements FromArray, WithHeadings, WithStyles
 
     public function headings(): array
     {
-        return ["N°","Id","Bien/Servicio","Tipo Origen Producto","Serie","Denominación","Código","Unidad Producto","Contenido","Unidad Medida","Marca","Tipo Producto","Estado Bien","F. Vencimiento","Stock Minimo","Tiene Imagen","Estado"];
+        return ["N°","Id","Bien/Servicio","Tipo Origen Producto","Serie","Denominación","Código","Unidad Producto","Contenido","Unidad Medida","Marca","Familia","Sub Familia","Estado Bien","F. Vencimiento","Stock Minimo","Tiene Imagen","Estado"];
     }
 
 	public function styles(Worksheet $sheet)
     {
 
-		$sheet->mergeCells('A1:Q1');
+		$sheet->mergeCells('A1:R1');
 
         $sheet->setCellValue('A1', "LISTA DE PRODUCTOS - FORESPAMA");
-        $sheet->getStyle('A1:Q1')->applyFromArray([
+        $sheet->getStyle('A1:R1')->applyFromArray([
             'font' => [
                 'bold' => true,
                 'color' => ['rgb' => 'FFFFFF'],
@@ -511,7 +774,7 @@ class InvoicesExport implements FromArray, WithHeadings, WithStyles
 		$sheet->getStyle('A1')->getAlignment()->setWrapText(true);
 		$sheet->getRowDimension(1)->setRowHeight(30);
 
-        $sheet->getStyle('A2:Q2')->applyFromArray([
+        $sheet->getStyle('A2:R2')->applyFromArray([
             'font' => [
                 'bold' => true,
                 'color' => ['rgb' => '000000'],
@@ -531,7 +794,7 @@ class InvoicesExport implements FromArray, WithHeadings, WithStyles
 		->getNumberFormat()
 		->setFormatCode(\PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_NUMBER_00);*/ //SIRVE PARA PONER 2 DECIMALES A ESA COLUMNA
         
-        foreach (range('A', 'Q') as $col) {
+        foreach (range('A', 'R') as $col) {
             $sheet->getColumnDimension($col)->setAutoSize(true);
         }
     }

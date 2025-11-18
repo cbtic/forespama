@@ -269,6 +269,16 @@ function datatablenew(){
 
 				{
 					"mRender": function (data, type, row) {
+						var usuario_inserta = "";
+						if(row.usuario_inserta!= null)usuario_inserta = row.usuario_inserta;
+						return usuario_inserta;
+					},
+					"bSortable": true,
+					"aTargets": [9]
+				},
+
+				{
+					"mRender": function (data, type, row) {
 						var estado = "";
 						if(row.estado == 1){
 							estado = "Activo";
@@ -279,7 +289,7 @@ function datatablenew(){
 						return estado;
 					},
 					"bSortable": false,
-					"aTargets": [9]
+					"aTargets": [10]
 				},
 				{
 					"mRender": function (data, type, row) {
@@ -310,7 +320,7 @@ function datatablenew(){
 
 						html += '<button style="font-size:12px; margin-left:10px" type="button" class="btn btn-sm btn-warning" data-toggle="modal" onclick="modalControlProductos('+row.id+')">Control Productos</button>';  
 						
-						if(usuario == row.id_usuario && row.estado_solicitud == 1){
+						if((row.id_estado_atencion == 1 || row.id_estado_atencion == 2) && (usuario == 1 || usuario == 38)){
 							html += '<a href="javascript:void(0)" onclick=eliminarRequerimiento('+row.id+','+row.estado+') class="btn btn-sm '+clase+'" style="font-size:12px;margin-left:10px">'+estado+'</a>'; 
 						}else{
 							html += '<a href="javascript:void(0)" onclick=eliminarRequerimiento('+row.id+','+row.estado+') class="btn btn-sm '+clase+'" style="font-size:12px;margin-left:10px; pointer-events: none; opacity: 0.6; cursor: not-allowed;">'+estado+'</a>'; 	
@@ -320,7 +330,7 @@ function datatablenew(){
 						return html;
 					},
 					"bSortable": false,
-					"aTargets": [10],
+					"aTargets": [11],
 				},
             ]
     });

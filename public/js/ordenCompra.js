@@ -93,6 +93,13 @@ $(document).ready(function () {
 
 function datatablenew(){
     
+	$('[data-toggle="tooltip"]').tooltip('hide');
+    $('.tooltip').remove();
+
+    if ($.fn.DataTable.isDataTable('#tblOrdenCompra')) {
+        $('#tblOrdenCompra').empty();
+    }
+
     var oTable1 = $('#tblOrdenCompra').dataTable({
         "bServerSide": true,
         "sAjaxSource": "/orden_compra/listar_orden_compra_ajax",
@@ -113,6 +120,8 @@ function datatablenew(){
         ],
 		"dom": '<"top">rt<"bottom"flpi><"clear">',
         "fnDrawCallback": function(settings) {
+
+			$('[data-toggle="tooltip"]').tooltip({ trigger: 'hover' });
 
 			let totalImporte = 0;
 
@@ -175,7 +184,14 @@ function datatablenew(){
             });
         },
 		"fnRowCallback": function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
-           
+
+			$(nRow).removeClass("row_autorizacion row_autorizacion_selected row_selected");
+			$(nRow).removeAttr("data-original-title");
+
+			if (aData.id_autorizacion == 1) {
+				$(nRow).addClass("row_autorizacion");
+				$(nRow).attr("data-toggle", "tooltip").attr("data-placement", "top").attr("title", "REQUIERE AUTORIZACIÓN DE DESCUENTO");
+			}
 		},
 
         "aoColumnDefs":
@@ -240,7 +256,7 @@ function datatablenew(){
 				"bSortable": true,
 				"aTargets": [4]
 				},
-				{
+				/*{
                 "mRender": function (data, type, row) {
                 	var empresa_vende = "";
 					if(row.empresa_vende!= null)empresa_vende = row.empresa_vende;
@@ -248,7 +264,7 @@ function datatablenew(){
                 },
                 "bSortable": true,
                 "aTargets": [5]
-                },
+                },*/
 
 				{
 				"mRender": function (data, type, row) {
@@ -257,7 +273,7 @@ function datatablenew(){
 					return fecha_orden_compra;
 				},
 				"bSortable": true,
-				"aTargets": [6]
+				"aTargets": [5]
 				},
 				{
 				"mRender": function (data, type, row) {
@@ -266,7 +282,7 @@ function datatablenew(){
 					return numero_orden_compra;
 				},
 				"bSortable": true,
-				"aTargets": [7]
+				"aTargets": [6]
 				},
 				{
 				"mRender": function (data, type, row) {
@@ -275,7 +291,7 @@ function datatablenew(){
 					return almacen_origen;
 				},
 				"bSortable": true,
-				"aTargets": [8]
+				"aTargets": [7]
 				},
 				{
 				"mRender": function (data, type, row) {
@@ -284,7 +300,7 @@ function datatablenew(){
 					return almacen_destino;
 				},
 				"bSortable": true,
-				"aTargets": [9]
+				"aTargets": [8]
 				},
 				{
 				"mRender": function (data, type, row) {
@@ -293,7 +309,7 @@ function datatablenew(){
 					return cerrado;
 				},
 				"bSortable": true,
-				"aTargets": [10]
+				"aTargets": [9]
 				},
 				{
 				"mRender": function (data, type, row) {
@@ -302,7 +318,7 @@ function datatablenew(){
 					return vendedor;
 				},
 				"bSortable": true,
-				"aTargets": [11]
+				"aTargets": [10]
 				},
 				{
 					"mRender": function (data, type, row) {
@@ -316,7 +332,7 @@ function datatablenew(){
 						return tiene_direccion;
 					},
 					"bSortable": false,
-					"aTargets": [12]
+					"aTargets": [11]
 				},
 				{
 				"mRender": function (data, type, row) {
@@ -326,8 +342,17 @@ function datatablenew(){
 					
 				},
 				"bSortable": true,
-				"aTargets": [13],
+				"aTargets": [12],
 				"className": "text-right",
+				},
+				{
+				"mRender": function (data, type, row) {
+					var prioridad = "";
+					if(row.prioridad!= null)prioridad = row.prioridad;
+					return prioridad;
+				},
+				"bSortable": true,
+				"aTargets": [13]
 				},
 				{
 					"mRender": function (data, type, row) {
@@ -357,9 +382,9 @@ function datatablenew(){
 								html += '<a href="javascript:void(0)" onclick=eliminarOrdenCompra('+row.id+','+row.estado+') class="btn btn-sm '+clase+'" style="font-size:12px;margin-left:10px; pointer-events: none; opacity: 0.6; cursor: not-allowed;">'+estado+'</a>';
 							}
 						}
-						if(almacenUsuario.some(almacen => almacen.id_almacen == row.id_almacen_destino) && row.id_cerrado==1){
+						if(almacenUsuario.some(almacen => almacen.id_almacen == row.id_almacen_destino) && row.id_cerrado==1 && row.id_autorizacion != 1){
 							html += '<button style="font-size:12px; margin-left:10px" type="button" class="btn btn-sm btn-info" data-toggle="modal" onclick="modalEntradaProductoOrdenCompra('+row.id+','+row.id_tipo_documento+')">Atender</button>';
-						}else if(almacenUsuario.some(almacen => almacen.id_almacen == row.id_almacen_salida) && row.id_cerrado==1 && row.id_unidad_origen==4){
+						}else if(almacenUsuario.some(almacen => almacen.id_almacen == row.id_almacen_salida) && row.id_cerrado==1 && row.id_unidad_origen==4 && row.id_autorizacion != 1){
 							html += '<button style="font-size:12px; margin-left:10px" type="button" class="btn btn-sm btn-info" data-toggle="modal" onclick="modalEntradaProductoOrdenCompra('+row.id+','+row.id_tipo_documento+')">Atender</button>';
 						}else{
 							html += '<button style="font-size:12px; margin-left:10px" type="button" class="btn btn-sm btn-info" data-toggle="modal" onclick="modalEntradaProductoOrdenCompra('+row.id+','+row.id_tipo_documento+')" disabled>Atender</button>';
@@ -396,7 +421,23 @@ function datatablenew(){
 fn_util_LineaDatatable("#tblOrdenCompra");
 
 $('#tblOrdenCompra tbody').on('click', 'tr', function () {
-	
+	let table = $('#tblOrdenCompra').DataTable();
+    let data = table.row(this).data();
+
+    $('#tblOrdenCompra tbody tr')
+        .removeClass('row_selected row_autorizacion_selected')
+        .each(function () {
+            let d = table.row(this).data();
+            if (d && d.id_autorizacion == 1) {
+                $(this).addClass('row_autorizacion');
+            }
+        });
+
+    if (data.id_autorizacion == 1) {
+        $(this).removeClass('row_autorizacion').addClass('row_autorizacion_selected');
+    } else {
+        $(this).addClass('row_selected');
+    }
 });
 
 function fn_ListarBusqueda() {

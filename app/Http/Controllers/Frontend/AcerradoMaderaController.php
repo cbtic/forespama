@@ -160,7 +160,7 @@ class AcerradoMaderaController extends Controller
 
 				$array_ingreso_produccion_acerrado_madera_detalle[] = $ingreso_produccion_acerrado_madera_detalle->id;
 
-				$IngresoVehiculoTroncoTipoMaderaAll = IngresoVehiculoTroncoTipoMadera::where('id',$id_ingreso_acerrado_detalle)->where('estado',1)->first();
+				$IngresoVehiculoTroncoTipoMaderaAll = IngresoVehiculoTroncoTipoMadera::where('id',$id_ingreso_acerrado_detalle[$index])->where('estado',1)->first();
 
 				if($cantidad_ingreso_produccion[$index] == $cantidad_ingreso[$index]){
 					$IngresoVehiculoTroncoTipoMaderaAll->estado_acerrado = 0;
@@ -216,7 +216,7 @@ class AcerradoMaderaController extends Controller
 		foreach($tipo_madera as $index => $value) {
             
 			$produccion_acerrado_madera_detalle = new ProduccionAcerradoMaderaDetalle;
-		
+			
 			$produccion_acerrado_madera_detalle->id_produccion_acerrado_maderas = $id_produccion_acerrado_madera;
 			$produccion_acerrado_madera_detalle->id_medida = $medida[$index];
 			$produccion_acerrado_madera_detalle->id_tipo_madera = $tipo_madera[$index];
@@ -224,6 +224,7 @@ class AcerradoMaderaController extends Controller
 			$produccion_acerrado_madera_detalle->medida1_paquete = $medida_paquete1[$index];
 			$produccion_acerrado_madera_detalle->medida2_paquete = $medida_paquete2[$index];
 			$produccion_acerrado_madera_detalle->total_n_piezas = $n_piezas[$index];
+			$produccion_acerrado_madera_detalle->cantidad_pendiente = $paquete[$index];
 			$produccion_acerrado_madera_detalle->estado_produccion_acerrado = 1;
 			$produccion_acerrado_madera_detalle->estado = 1;
 			$produccion_acerrado_madera_detalle->id_usuario_inserta = $id_user;

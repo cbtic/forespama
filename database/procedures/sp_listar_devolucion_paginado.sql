@@ -1,3 +1,5 @@
+-- DROP FUNCTION public.sp_listar_devolucion_paginado(varchar, varchar, varchar, varchar, varchar, varchar, refcursor);
+
 CREATE OR REPLACE FUNCTION public.sp_listar_devolucion_paginado(p_empresa character varying, p_fecha character varying, p_numero_devolucion character varying, p_numero_orden_compra_cliente character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
  RETURNS refcursor
  LANGUAGE plpgsql
@@ -17,15 +19,13 @@ begin
 
 	v_campos=' id, tipo_documento, id_tipo_documento, codigo, empresa, numero_orden_compra_cliente, fecha_documento ';
 
-	v_tabla=' (select sp.id, ''SALIDA'' tipo_documento, 2 id_tipo_documento, sp.codigo, e.razon_social empresa, oc.numero_orden_compra_cliente, sp.fecha_salida fecha_documento ' ||
+	v_tabla=' (select sp.id, ''SALIDA'' tipo_documento, 2 id_tipo_documento, sp.codigo, case when sp.id_tipo_cliente = 1 then (select p.nombres ||'' ''|| p.apellido_paterno ||'' ''|| p.apellido_materno from personas p where p.id = sp.id_persona) else (select e2.razon_social from empresas e2 where e2.id = sp.id_empresa_compra) end empresa, oc.numero_orden_compra_cliente, sp.fecha_salida fecha_documento ' ||
               'FROM salida_productos sp ' ||
-              'inner join empresas e on sp.id_empresa_compra = e.id '||
               'inner join orden_compras oc on sp.id_orden_compra = oc.id '||
               'Where 1 = 1 and sp.tipo_devolucion = ''2'' ' ||
               'UNION ALL ' ||
-              'select ep.id, ''ENTRADA'' tipo_documento, 1 id_tipo_documento, ep.codigo, e.razon_social empresa, oc.numero_orden_compra_cliente, ep.fecha_ingreso fecha_documento ' ||
+              'select ep.id, ''ENTRADA'' tipo_documento, 1 id_tipo_documento, ep.codigo, case when ep.id_tipo_cliente = 1 then (select p.nombres ||'' ''|| p.apellido_paterno ||'' ''|| p.apellido_materno from personas p where p.id = ep.id_persona) else (select e2.razon_social from empresas e2 where e2.id = ep.id_empresa_compra) end empresa, oc.numero_orden_compra_cliente, ep.fecha_ingreso fecha_documento ' ||
               'from entrada_productos ep ' ||
-              'inner join empresas e on ep.id_empresa_compra  = e.id ' || 
 			  'inner join orden_compras oc on ep.id_orden_compra = oc.id '||
 			  'Where 1 = 1 and ep.tipo_devolucion = ''2'') union_table ';
 	

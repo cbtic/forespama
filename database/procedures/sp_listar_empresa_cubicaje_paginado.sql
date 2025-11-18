@@ -17,10 +17,16 @@ begin
 	
 	p_pagina=(p_pagina::Integer-1)*p_limit::Integer;
 
-	v_campos=' ec.id, tm.denominacion tipo_empresa, e.razon_social, p.nombres ||'' ''|| p.apellido_paterno ||'' ''|| p.apellido_materno conductor, tm2.denominacion tipo_pago, ec.diametro_dm, ec.precio_mayor,ec.precio_menor, ec.estado, ec.letra  ';
+	v_campos=' ec.id, tm.denominacion tipo_empresa, 
+	case when ec.id_tipo_cliente = 1 then 
+	(select p2.nombres ||'' ''|| p2.apellido_paterno ||'' ''|| p2.apellido_materno from personas p2
+	where p2.id = ec.id_persona)
+	else (select e2.razon_social from empresas e2 
+	where e2.id = ec.id_empresa) 
+	end razon_social,
+	p.nombres ||'' ''|| p.apellido_paterno ||'' ''|| p.apellido_materno conductor, tm2.denominacion tipo_pago, ec.diametro_dm, ec.precio_mayor,ec.precio_menor, ec.estado, ec.letra ';
 
 	v_tabla=' from empresa_cubicajes ec
-	inner join empresas e on ec.id_empresa = e.id and e.estado =''1''
 	left join conductores c on ec.id_conductor = c.id and c.estado =''ACTIVO''
 	left join personas p on c.id_personas = p.id
 	left join tabla_maestras tm on ec.id_tipo_empresa::int = tm.codigo::int and tm.tipo = ''79''

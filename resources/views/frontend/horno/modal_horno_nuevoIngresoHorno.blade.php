@@ -220,6 +220,8 @@ function cargarDetalleAcerrado(){
 
             result.detalle_acerrado.forEach(detalle_acerrado => {
 
+                var total_piezas_pendiente = detalle_acerrado.cantidad_paquetes * detalle_acerrado.medida1_paquete * detalle_acerrado.medida2_paquete;
+
                 const row = `
                     <tr>
                         <td>${n}</td>
@@ -229,7 +231,7 @@ function cargarDetalleAcerrado(){
                         <td><input name="cantidad_paquete[]" id="cantidad_paquete${n}" class="cantidad_paquete form-control form-control-sm" style="border: none; background-color: transparent;" value="${detalle_acerrado.cantidad_paquetes}" type="text" readonly></td>
                         <td><input name="medida1[]" id="medida1${n}" class="medida1 form-control form-control-sm" style="border: none; background-color: transparent;" value="${detalle_acerrado.medida1_paquete}" type="text" readonly></td>
                         <td><input name="medida2[]" id="medida2${n}" class="medida2 form-control form-control-sm" style="border: none; background-color: transparent;" value="${detalle_acerrado.medida2_paquete}" type="text" readonly></td>
-                        <td><input name="total_n_piezas[]" id="total_n_piezas${n}" class="total_n_piezas form-control form-control-sm" style="border: none; background-color: transparent;" value="${detalle_acerrado.total_n_piezas}" type="text" readonly></td>
+                        <td><input name="total_n_piezas[]" id="total_n_piezas${n}" class="total_n_piezas form-control form-control-sm" style="border: none; background-color: transparent;" value="${total_piezas_pendiente}" type="text" readonly></td>
                         <td><input name="cantidad_paquete_ingreso[]" id="cantidad_paquete_ingreso${n}" class="cantidad_paquete_ingreso form-control form-control-sm" value="" type="text" oninput="calcularTotalPiezasIngreso(this)"></td>
                         <td><input name="ingreso_horno[]" id="ingreso_horno${n}" class="ingreso_horno form-control form-control-sm" value="" type="text" oninput="calcularIngresoHorno(this)" readonly></td>
                     </tr>
@@ -321,7 +323,7 @@ function calcularTotalPiezasIngreso(input){
                                         <option value="">--Seleccionar--</option>
                                         <?php
                                         foreach ($horno as $row){?>
-                                            <option value="<?php echo $row->codigo ?>" <?php //echo ($id > 0 && $row->codigo == $orden_compra->id_moneda) ? "selected='selected'" : (($row->codigo == 1) ? "selected='selected'" : ""); ?>><?php echo $row->denominacion ?></option>
+                                            <option value="<?php echo $row->codigo ?>" <?php echo ($id > 0 && $row->codigo == $ingreso_horno->id_numero_horno) ? "selected='selected'" : ""; ?>><?php echo $row->denominacion ?></option>
                                             <?php 
                                         }
                                         ?>
@@ -333,14 +335,14 @@ function calcularTotalPiezasIngreso(input){
                                     Fecha Encendido
                                 </div>
                                 <div class="col-lg-2">
-                                    <input id="fecha" name="fecha" on class="form-control form-control-sm"  value="<?php echo /*isset($acerrado_madera) && $acerrado_madera->fecha_orden_compra ? $acerrado_madera->fecha_orden_compra :*/ date('Y-m-d'); ?>" type="text">
+                                    <input id="fecha" name="fecha" on class="form-control form-control-sm"  value="<?php echo isset($ingreso_horno) && $ingreso_horno->fecha_encendido ? $ingreso_horno->fecha_encendido : date('Y-m-d'); ?>" type="text">
                                 </div>
 
                                 <div class="col-lg-2">
                                     Hora Encendido
                                 </div>
                                 <div class="col-lg-2">
-                                    <input id="hora_encendido" name="hora_encendido" on class="form-control form-control-sm"  value="<?php /*echo isset($acerrado_madera) && $acerrado_madera->fecha_orden_compra ? $acerrado_madera->fecha_orden_compra :*/ ?>" type="time">
+                                    <input id="hora_encendido" name="hora_encendido" on class="form-control form-control-sm"  value="<?php echo isset($ingreso_horno) && $ingreso_horno->hora_encendido ? $ingreso_horno->hora_encendido : "" ?>" type="time">
                                 </div>
                             </div>
                             <div class="row" style="padding-left:10px">
@@ -348,14 +350,14 @@ function calcularTotalPiezasIngreso(input){
                                     Temperatura Inicio
                                 </div>
                                 <div class="col-lg-2">
-                                    <input id="temperatura_inicio" name="temperatura_inicio" class="form-control form-control-sm"  value="<?php /*echo isset($acerrado_madera) && $acerrado_madera->fecha_orden_compra ? $acerrado_madera->fecha_orden_compra :*/ ?>" placeholder="&#176;C" type="number">
+                                    <input id="temperatura_inicio" name="temperatura_inicio" class="form-control form-control-sm"  value="<?php echo isset($ingreso_horno) && $ingreso_horno->temperatura_inicio ? $ingreso_horno->temperatura_inicio : "" ?>" placeholder="&#176;C" type="number">
                                 </div>
                             
                                 <div class="col-lg-2">
                                     Humedad Inicio
                                 </div>
                                 <div class="col-lg-2">
-                                    <input id="humedad_inicio" name="humedad_inicio" on class="form-control form-control-sm"  value="<?php /*echo isset($acerrado_madera) && $acerrado_madera->fecha_orden_compra ? $acerrado_madera->fecha_orden_compra :*/ ?>" placeholder="&#37;" type="text">
+                                    <input id="humedad_inicio" name="humedad_inicio" on class="form-control form-control-sm"  value="<?php echo isset($ingreso_horno) && $ingreso_horno->humedad_inicio ? $ingreso_horno->humedad_inicio : "" ?>" placeholder="&#37;" type="text">
                                 </div>
                             </div>
                             <div class="row" style="padding-left:10px">
@@ -367,13 +369,12 @@ function calcularTotalPiezasIngreso(input){
                                         <option value="">--Seleccionar--</option>
                                         <?php
                                         foreach ($operador as $row){?>
-                                            <option value="<?php echo $row->id ?>" <?php //echo ($id > 0 && $row->codigo == $orden_compra->id_moneda) ? "selected='selected'" : (($row->codigo == 1) ? "selected='selected'" : ""); ?>><?php echo $row->nombres . ' ' . $row->apellido_paterno . ' ' . $row->apellido_materno ?></option>
+                                            <option value="<?php echo $row->id ?>" <?php echo ($id > 0 && $row->id == $ingreso_horno->id_operador_inicio) ? "selected='selected'" : ""; ?>><?php echo $row->nombres . ' ' . $row->apellido_paterno . ' ' . $row->apellido_materno ?></option>
                                             <?php 
                                         }
                                         ?>
                                     </select>
                                 </div>
-
                             </div>
 
                             <div class="card-body">
@@ -399,7 +400,7 @@ function calcularTotalPiezasIngreso(input){
                                         <tfoot>
                                             <tr>
                                                 <td colspan="9" style="text-align:right;"><strong>Total:</strong></td>
-                                                <td><input type="text" id="total_ingreso_horno" class="form-control form-control-sm" readonly></td>
+                                                <td><input type="text" id="total_ingreso_horno" name="total_ingreso_horno" class="form-control form-control-sm" readonly></td>
                                             </tr>
                                         </tfoot>
                                     </table>

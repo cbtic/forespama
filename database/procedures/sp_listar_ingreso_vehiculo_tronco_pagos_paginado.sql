@@ -1,4 +1,4 @@
--- DROP FUNCTION public.sp_listar_ingreso_vehiculo_tronco_pagos_paginado(varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, refcursor);
+-- DROP FUNCTION public.sp_listar_ingreso_vehiculo_tronco_pagos_paginado(varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, refcursor);
 
 CREATE OR REPLACE FUNCTION public.sp_listar_ingreso_vehiculo_tronco_pagos_paginado(p_ruc character varying, p_empresa character varying, p_placa character varying, p_tipo_madera character varying, p_fecha_desde character varying, p_fecha_hasta character varying, p_estado_pago character varying, p_tipo_empresa character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
  RETURNS refcursor
@@ -18,7 +18,20 @@ Begin
 
 	p_pagina=(p_pagina::Integer-1)*p_limit::Integer;
 
-	v_campos=' ivt.id,ivttm.id id_ingreso_vehiculo_tronco_tipo_maderas,to_char(ivt.fecha_ingreso,''dd-mm-yyyy'') fecha_ingreso,e.ruc,e.razon_social,v.placa,v.ejes,p.numero_documento,
+	v_campos=' ivt.id,ivttm.id id_ingreso_vehiculo_tronco_tipo_maderas,to_char(ivt.fecha_ingreso,''dd-mm-yyyy'') fecha_ingreso,
+	case when ivt.id_tipo_cliente = 1 then 
+	(select p.nombres ||'' ''|| p.apellido_paterno ||'' ''|| p.apellido_materno from personas p
+	where p.id = ivt.id_persona)
+	else (select e2.razon_social from empresas e2 
+	where e2.id = ivt.id_empresa_transportista ) 
+	end razon_social,
+	case when ivt.id_tipo_cliente = 1 then 
+	(select p.numero_documento from personas p
+	where p.id = ivt.id_persona)
+	else (select e2.ruc from empresas e2 
+	where e2.id = ivt.id_empresa_transportista ) 
+	end ruc,
+	v.placa,v.ejes,p.numero_documento,
 	p.apellido_paterno||'' ''||p.apellido_materno||'' ''||p.nombres conductor,
 	tm.denominacion tipo_madera,ivttm.cantidad,tmep.denominacion estado_pago, 
 	coalesce((select sum(volumen_total_m3) from ingreso_vehiculo_tronco_cubicajes ivtc where id_ingreso_vehiculo_tronco_tipo_maderas=ivttm.id),0)volumen_total_m3,
@@ -29,7 +42,6 @@ Begin
 	(select COALESCE(STRING_AGG(distinct ivtp.nro_cheque  ::TEXT, '', ''), '''') from ingreso_vehiculo_tronco_pagos ivtp where ivtp.id_ingreso_vehiculo_tronco_tipo_maderas = ivttm.id) numero_cheque ';
 
 	v_tabla=' from ingreso_vehiculo_troncos ivt
-	inner join empresas e on ivt.id_empresa_proveedor=e.id
 	inner join vehiculos v on ivt.id_vehiculos=v.id
 	inner join conductores c on ivt.id_conductores=c.id
 	inner join personas p on c.id_personas=p.id
@@ -67,13 +79,20 @@ Begin
 	 v_where:=v_where||'And ivttm.id_estado_pago = '''||p_estado_pago||''' ';
 	End If;
 
-	If p_tipo_empresa<>'' Then
-	 v_where:=v_where||'And (select ec.id_tipo_empresa 
-			from empresa_cubicajes ec
-			where ec.id_empresa = ivt.id_empresa_proveedor 
-			and ec.estado = ''1''
-			and (ec.id_tipo_empresa = 1 OR (ec.id_tipo_empresa = 2 AND ec.id_conductor = ivt.id_conductores))) = '''||p_tipo_empresa||''' ';
-	End If;
+	IF p_tipo_empresa <> '' Then
+     v_where := v_where || 'AND ((ivt.id_tipo_cliente = 1 AND EXISTS (
+						    SELECT 1 FROM empresa_cubicajes ec
+						    WHERE ec.id_persona = ivt.id_persona
+						    AND ec.estado = ''1''
+						    AND ec.id_tipo_empresa = ' || p_tipo_empresa || '
+						    AND (ec.id_tipo_empresa = 1 OR (ec.id_tipo_empresa = 2 AND ec.id_conductor = ivt.id_conductores))))
+							OR (ivt.id_tipo_cliente = 5 AND EXISTS (
+						    SELECT 1 FROM empresa_cubicajes ec
+						    WHERE ec.id_empresa = ivt.id_empresa_proveedor
+						    AND ec.estado = ''1''
+						    AND ec.id_tipo_empresa = ' || p_tipo_empresa || '
+						    AND (ec.id_tipo_empresa = 1 OR (ec.id_tipo_empresa = 2 AND ec.id_conductor = ivt.id_conductores)))))';
+	END IF;
 	
 	EXECUTE ('SELECT count(1) '||v_tabla||v_where) INTO v_count;
 	v_col_count:=' ,'||v_count||' as TotalRows ';

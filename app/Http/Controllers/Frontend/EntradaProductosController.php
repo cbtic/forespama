@@ -136,7 +136,7 @@ class EntradaProductosController extends Controller
             //    $entrada_producto = EntradaProducto::find($request->id);
             //}
 
-            $item = $request->input('item');
+            //$item = $request->input('item');
             //$cantidad = $request->input('cantidad');
             $descripcion = $request->input('descripcion');
             //$ubicacion_fisica_seccion = $request->input('ubicacion_fisica_seccion');
@@ -198,11 +198,10 @@ class EntradaProductosController extends Controller
 
             $valida_estado = true;
 
-            foreach($item as $index => $value) {
+            foreach($descripcion as $index => $value) {
                 
                 $entradaProducto_detalle = new EntradaProductoDetalle();
                 $entradaProducto_detalle->id_entrada_productos = $entrada_producto->id;
-                $entradaProducto_detalle->numero_serie = $item[$index];
                 $entradaProducto_detalle->cantidad = $cantidad_ingreso[$index];
 
                 //$entradaProducto_detalle->numero_lote = "";
@@ -218,7 +217,6 @@ class EntradaProductosController extends Controller
                 $entradaProducto_detalle->valor_venta = round($valor_venta[$index],3);
                 $entradaProducto_detalle->id_descuento = $id_descuento[$index];
                 //$entradaProducto_detalle->fecha_fabricacion = $fecha_fabricacion[$index];
-                $entradaProducto_detalle->id_estado_bien = $estado_bien[$index];
                 if($id_descuento[$index]==1){
                     $entradaProducto_detalle->descuento = $descuento[$index];
                 }else if($id_descuento[$index]==2){
@@ -384,7 +382,6 @@ class EntradaProductosController extends Controller
             if($request->id == 0){
                 $salida_producto = new SalidaProducto;
                 
-                $item = $request->input('item');
                 $descripcion = $request->input('descripcion');
                 $cod_interno = $request->input('cod_interno');
                 $marca = $request->input('marca');
@@ -406,7 +403,7 @@ class EntradaProductosController extends Controller
                 $id_descuento = $request->input('id_descuento');
 
 
-                $cantidad_items = count($item);
+                $cantidad_items = count($descripcion);
                 //echo $request->id_orden_compra;
                 //$salida_producto = SalidaProducto::where('id_orden_compra',$request->id_orden_compra)->first();
                 //print_r($salida_producto);
@@ -455,11 +452,10 @@ class EntradaProductosController extends Controller
                 //dd($codigo_nota_salida);exit();
                 $valida_estado = true;
 
-                foreach($item as $index => $value) {
+                foreach($descripcion as $index => $value) {
                     
                     $salida_producto_detalle = new SalidaProductoDetalle();
                     $salida_producto_detalle->id_salida_productos = $salida_producto->id;
-                    $salida_producto_detalle->numero_serie = $item[$index];
                     $salida_producto_detalle->cantidad = $cantidad_ingreso[$index];
 
                     //$salida_producto_detalle->numero_lote = "";
@@ -481,8 +477,6 @@ class EntradaProductosController extends Controller
                     }else if($id_descuento[$index]==2){
                         $salida_producto_detalle->descuento = $porcentaje[$index];
                     }
-                    //$salida_producto_detalle->fecha_fabricacion = "2024-08-18";
-                    $salida_producto_detalle->id_estado_productos = $estado_bien[$index];
 
                     $salida_producto_detalle->sub_total = round($sub_total[$index],2);
                     $salida_producto_detalle->igv = round($igv[$index],2);
@@ -648,11 +642,10 @@ class EntradaProductosController extends Controller
 
                 $valida_estado = true;
 
-                foreach($item as $index => $value) {
+                foreach($descripcion as $index => $value) {
                     
                     $salida_producto_detalle2 = new SalidaProductoDetalle();
                     $salida_producto_detalle2->id_salida_productos = $salida_producto2->id;
-                    $salida_producto_detalle2->numero_serie = $item[$index];
                     $salida_producto_detalle2->cantidad = $cantidad_ingreso[$index];
 
                     //$salida_producto_detalle->numero_lote = "";
@@ -674,8 +667,6 @@ class EntradaProductosController extends Controller
                     }else if($id_descuento[$index]==2){
                         $salida_producto_detalle2->descuento = $porcentaje[$index];
                     }
-                    //$salida_producto_detalle->fecha_fabricacion = "2024-08-18";
-                    $salida_producto_detalle2->id_estado_productos = $estado_bien[$index];
 
                     $salida_producto_detalle2->sub_total = round($sub_total[$index],2);
                     $salida_producto_detalle2->igv = round($igv[$index],2);
@@ -1096,7 +1087,6 @@ class EntradaProductosController extends Controller
         $empresa_model = new Empresa;
         $producto_model = new Producto;
         $almacen_model = new Almacene;
-        //$persona_model = new Persona;
         $marca_model = new Marca;
         $almacen_seccion_model = new AlmacenesSeccione;
         $anaquel_model = new Anaquele;
@@ -1133,15 +1123,12 @@ class EntradaProductosController extends Controller
             $tipo_cambio = $tipo_cambio_model->getTipoCambioUltimo();
             $almacen_ = null;
             $marca = $marca_model->getMarcaAll();
-            //$almacen__ = Almacene::getAlmacenById($entrada_producto->id_almacen);
             
             $almacen = $almacen_model->getAlmacenAll();
-            //$tipo_movimiento_=1;
 		}else{
 			$entrada_producto_detalle = new EntradaProductoDetalle;
             $entrada_producto = new EntradaProducto;
             $proveedor = Empresa::all();
-            //dd($proveedor);exit();
             $tipo_cambio = $tipo_cambio_model->getTipoCambioUltimo();
             $almacen = $almacen_model->getAlmacenAll();
             $marca = $marca_model->getMarcaAll();
@@ -1174,7 +1161,7 @@ class EntradaProductosController extends Controller
             $entrada_producto_model = new EntradaProducto;
             $entrada_producto = $entrada_producto_model->getEntradaByIdOrdenCompra($id);
 
-        }else if($id_tipo_documento==2){
+        }else if($id_tipo_documento==2 || $id_tipo_documento==4){
 
             $salida_producto_model = new SalidaProducto;
             $entrada_producto = $salida_producto_model->getSalidaByIdOrdenCompra($id);

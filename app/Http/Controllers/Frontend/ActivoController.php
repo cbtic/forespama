@@ -14,6 +14,7 @@ use App\Models\RevisionTecnicaActivo;
 use App\Models\ControlMantenimientoActivo;
 use App\Models\Familia;
 use App\Models\SubFamilia;
+use App\Models\ActivoUsuario;
 use Auth;
 use Carbon\Carbon;
 
@@ -547,4 +548,89 @@ class ActivoController extends Controller
 
 		echo json_encode($marca);
 	}
+
+	public function create_entrega_activo(){
+
+		$persona_model = new Persona;
+		$persona = $persona_model->obtenerPersonaAll();
+		
+		return view('frontend.activos.create_entrega_activo',compact('persona'));
+	}
+
+	public function listar_entrega_activos_ajax(Request $request){
+
+		$activos_model = new ActivoUsuario;
+		$p[]=$request->persona;
+		$p[]=$request->descripcion;
+		$p[]=$request->estado;
+		$p[]=$request->NumeroPagina;
+		$p[]=$request->NumeroRegistros;
+		$data = $activos_model->listar_entrega_activos_ajax($p);
+		$iTotalDisplayRecords = isset($data[0]->totalrows)?$data[0]->totalrows:0;
+
+		$result["PageStart"] = $request->NumeroPagina;
+		$result["pageSize"] = $request->NumeroRegistros;
+		$result["SearchText"] = "";
+		$result["ShowChildren"] = true;
+		$result["iTotalRecords"] = $iTotalDisplayRecords;
+		$result["iTotalDisplayRecords"] = $iTotalDisplayRecords;
+		$result["aaData"] = $data;
+
+        echo json_encode($result);
+
+	}
+
+	public function modal_entrega_activos($id){
+		
+        $marca_model = new Marca;
+        $activo_model = new Activo;
+        $persona_model = new Persona;
+		
+		if($id>0){
+			$activo_usuario = ActivoUsuario::find($id);
+        	$activo = $activo_model->getActivosById($id);
+		}else{
+			$activo_usuario = new ActivoUsuario;
+        	$activo = $activo_model->getActivoSinEntrega();
+		}
+
+        $marca = $marca_model->getMarcaVehiculo();
+        $persona = $persona_model->obtenerPersonaAll();
+
+		return view('frontend.activos.modal_activos_nuevoEntregaActivo',compact('id','activo_usuario','marca','activo','persona'));
+
+    }
+
+    public function send_entrega_activo(Request $request){
+
+        $id_user = Auth::user()->id;
+
+		if($request->id == 0){
+			$activo_usuario = new ActivoUsuario;
+		}else{
+			$activo_usuario = ActivoUsuario::find($request->id);
+		}
+
+        $activo_usuario->id_usuario = $request->persona;
+        $activo_usuario->id_activo = $request->activo;
+        $activo_usuario->fecha_entrega = $request->fecha_entrega;
+        $activo_usuario->fecha_devolucion = $request->fecha_devolucion;
+		$activo_usuario->estado = 1;
+        $activo_usuario->id_usuario_inserta = $id_user;
+		$activo_usuario->save();
+		$id_activo = $activo_usuario->id; 
+
+        return response()->json(['success' => 'Registro de Entrega de Activo guardado exitosamente.']);
+
+    }
+
+	public function eliminar_entrega_activo($id,$estado)
+    {
+		$activo = ActivoUsuario::find($id);
+
+		$activo->estado = $estado;
+		$activo->save();
+
+		echo $activo->id;
+    }
 }

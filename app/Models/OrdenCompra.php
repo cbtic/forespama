@@ -64,6 +64,24 @@ class OrdenCompra extends Model
 
     }
 
+    public function listar_orden_compra_autorizacion_ajax($p){
+
+        return $this->readFuntionPostgres('sp_listar_autorizacion_orden_compra_paginado',$p);
+
+    }
+
+    public function listar_reporte_comercializacion_general_ajax($p){
+
+        return $this->readFuntionPostgres('sp_listar_reporte_comercializacion_general_paginado',$p);
+
+    }
+
+    public function listar_informe_b2b_ajax($p){
+
+        return $this->readFuntionPostgres('sp_listar_informe_venta_b2b_paginado',$p);
+
+    }
+
     public function readFuntionPostgres($function, $parameters = null){
 
         $_parameters = '';
@@ -93,7 +111,7 @@ class OrdenCompra extends Model
         m.denominiacion marca,
         coalesce((select k.saldos_cantidad - (select sum(ocd.cantidad_requerida) cantidad_requerida from orden_compra_detalles ocd where ocd.id_producto = k.id_producto and ocd.comprometido ='1') stock_comprometido from kardex k where id_producto = ocd.id_producto and id_almacen_destino = 3  order by k.id desc limit 1),0)stock_ves, --ves
         coalesce((select k.saldos_cantidad - (select sum(ocd.cantidad_requerida) cantidad_requerida from orden_compra_detalles ocd where ocd.id_producto = k.id_producto and ocd.comprometido ='1') stock_comprometido from kardex k where id_producto = ocd.id_producto and id_almacen_destino = 2  order by k.id desc limit 1),0)stock_oxa, --oxa
-        ocd.valor_venta_bruto, precio_venta, valor_venta, ocd.id_descuento, ocd.descuento
+        ocd.valor_venta_bruto, precio_venta, valor_venta, ocd.id_descuento, ocd.descuento, ocd.id_autorizacion 
         from orden_compra_detalles ocd 
         inner join productos p on ocd.id_producto = p.id
         inner join orden_compras oc on ocd.id_orden_compra = oc.id
@@ -321,7 +339,8 @@ class OrdenCompra extends Model
         left join ubigeos p on p.id_ubigeo = SUBSTRING(u.id_ubigeo FROM 1 FOR 4) || '00'
         left join ubigeos dp on dp.id_ubigeo = SUBSTRING(u.id_ubigeo FROM 1 FOR 2) || '0000'
         left join ubigeos d on d.id_ubigeo = u.id_ubigeo 
-        where occe.id_orden_compra = oc.id)
+        where occe.id_orden_compra = oc.id
+        and occe.estado = '1')
         end direccion
         from orden_compras oc 
         --inner join empresas e on oc.id_empresa_compra = e.id 
@@ -426,9 +445,15 @@ class OrdenCompra extends Model
 
     function getCodigoOrdenCompra($tipo_documento){
 
+        if($tipo_documento == 2){
+            $id_tipo_documento_4 = " or id_tipo_documento = 4";
+        }else{
+            $id_tipo_documento_4 ="";
+        }
+
         $cad = "select lpad(coalesce(max(oc.numero_orden_compra::int) + 1, 1)::varchar, 6, '0') codigo
         from orden_compras oc
-        where id_tipo_documento = '".$tipo_documento."'";
+        where id_tipo_documento = '".$tipo_documento."' ".$id_tipo_documento_4." ";
 
 		$data = DB::select($cad);
         return $data;
@@ -470,7 +495,7 @@ class OrdenCompra extends Model
 
     function getDetalleOrdenCompraGuia(){
 
-        $cad = "select oc.id, oc.fecha_orden_compra fecha_movimiento, tm.denominacion tipo_documento, tm2.denominacion unidad_origen, e.razon_social, oc.numero_orden_compra codigo, oc.fecha_orden_compra fecha_comprobante, oc.estado, oc.created_at, tm3.denominacion moneda, '' observacion, tm4.denominacion igv_compra, a.denominacion almacen
+        $cad = "select oc.id, tm5.denominacion tipo_documento_orden, oc.fecha_orden_compra fecha_movimiento, tm.denominacion tipo_documento, tm2.denominacion unidad_origen, e.razon_social, oc.numero_orden_compra codigo, oc.fecha_orden_compra fecha_comprobante, oc.estado, oc.created_at, tm3.denominacion moneda, '' observacion, tm4.denominacion igv_compra, a.denominacion almacen
         from orden_compras oc
         inner join tabla_maestras tm on oc.id_tipo_documento = tm.codigo ::int and tm.tipo = '54'
         inner join tabla_maestras tm2 on oc.id_unidad_origen::int = tm2.codigo::int and tm2.tipo = '50'
@@ -478,6 +503,7 @@ class OrdenCompra extends Model
         inner join empresas e on oc.id_empresa_compra = e.id
         left join tabla_maestras tm4 on oc.igv_compra ::int = tm4.codigo::int and tm4.tipo = '51'
         inner join almacenes a on oc.id_almacen_destino = a.id
+        left join tabla_maestras tm5 on oc.id_tipo_documento = tm5.codigo::int and tm5.tipo ='54'
         where oc.estado='1'
         and oc.id_tipo_documento ='1'";
 
@@ -540,6 +566,7 @@ class OrdenCompra extends Model
         and ocd.cerrado ='1'
         and ocd.estado ='1'
         and oc.id_tipo_documento ='2'
+        and oc.cerrado ='1'
         group by p.id, p.denominacion, p.codigo, tm.denominacion, ocd.id_unidad_medida, ocd.id_producto
         having sum(ocd.cantidad_requerida) > coalesce((
         select sum(opd.cantidad) 

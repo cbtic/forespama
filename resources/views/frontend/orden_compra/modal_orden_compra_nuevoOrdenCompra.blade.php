@@ -361,10 +361,11 @@ function obtenerCodInterno(selectElement, n){
             $('#item' + n).val(result[0].numero_serie);
             $('#marca' + n).val(result[0].id_marca).trigger('change');
             $('#unidad' + n).val(result[0].id_unidad_producto);
+            $('#precio_unitario' + n).val(result[0].costo_unitario);
             
-            if(result[0].bien_servicio == 2){
+            /*if(result[0].bien_servicio == 2){
                 $('#precio_unitario' + n).val(result[0].costo_unitario);
-            }
+            }*/
 
             $('#fecha_vencimiento_' + n).datepicker({
                 autoclose: true,
@@ -373,7 +374,6 @@ function obtenerCodInterno(selectElement, n){
                 changeYear: true,
                 language: 'es'
             });
-            
         }
     });
     obtenerStock(selectElement, n);
@@ -750,19 +750,21 @@ function cargarDetalle(){
                 const row = `
                     <tr>
                         <td>${n}</td>
-                        <td style="width: 400px !important;display:block"><input name="id_orden_compra_detalle[]" id="id_orden_compra_detalle${n}" class="form-control form-control-sm" value="${orden_compra.id}" type="hidden"><select name="descripcion[]" id="descripcion${n}" class="form-control form-control-sm" onChange="verificarProductoSeleccionado(this, ${n});">${productoOptions}</select></td>
+                        <td style="width: 400px !important;display:block"><input name="id_orden_compra_detalle[]" id="id_orden_compra_detalle${n}" class="form-control form-control-sm" value="${orden_compra.id}" type="hidden"><input name="id_autorizacion_detalle[]" id="id_autorizacion_detalle${n}" class="form-control form-control-sm" value="2" type="hidden"><select name="descripcion[]" id="descripcion${n}" class="form-control form-control-sm" onChange="verificarProductoSeleccionado(this, ${n});">${productoOptions}</select></td>
                         
                         <td><select name="marca[]" id="marca${n}" class="form-control form-control-sm">${marcaOptions}</select></td>
                         <td><input name="cod_interno[]" id="cod_interno${n}" class="form-control form-control-sm" value="${orden_compra.codigo}" type="text"></td>
                         <td><select name="unidad[]" id="unidad${n}" class="form-control form-control-sm">${unidadMedidaOptions}</select></td>
-                        <td><input name="cantidad_ingreso[]" id="cantidad_ingreso${n}" class="cantidad_ingreso form-control form-control-sm" value="${orden_compra.cantidad_requerida}" type="text" oninput="calcularCantidadPendiente(this);calcularSubTotal(this);calcularPrecioUnitario(this)"></td>
+                        <td><input name="cantidad_ingreso[]" id="cantidad_ingreso${n}" class="cantidad_ingreso form-control form-control-sm" value="${orden_compra.cantidad_requerida}" type="text" oninput="calcularCantidadPendiente(this);calcularSubTotal(this);calcularPrecioUnitario(this);recalcularPorcentajeDescuento(this)"></td>
                         <td><input name="stock_actual[]" id="stock_actual${n}" class="form-control form-control-sm" value="${stock_mostrar}" type="text" readonly="readonly"></td>
-                        <td><input name="precio_unitario[]" id="precio_unitario${n}" class="precio_unitario form-control form-control-sm" value="${parseFloat(orden_compra.precio_venta || 0).toFixed(decimales)}" type="text" oninput="limitarDecimalesYCalcular(this, ${decimales})"></td>
-                        <td><input name="precio_unitario_[]" id="precio_unitario_${n}" class="precio_unitario_ form-control form-control-sm" value="${parseFloat(orden_compra.precio || 0).toFixed(decimales)}" type="text" oninput="calcularPrecioUnitario(this)"></td>
-                        <td><input name="valor_venta_bruto[]" id="valor_venta_bruto${n}" class="valor_venta_bruto form-control form-control-sm" value="${parseFloat(orden_compra.valor_venta_bruto || 0).toFixed(decimales)}" type="text" oninput="calcularSubTotal(this)"></td>
-                        <td><input name="valor_venta[]" id="valor_venta${n}" class="valor_venta form-control form-control-sm" value="${parseFloat(orden_compra.valor_venta || 0).toFixed(decimales)}" type="text" oninput="calcularSubTotal(this)"></td>
+                        <td><input name="precio_unitario[]" id="precio_unitario${n}" class="precio_unitario form-control form-control-sm" value="${parseFloat(orden_compra.precio_venta || 0).toFixed(decimales)}" type="text" oninput="limitarDecimalesYCalcular(this, ${decimales})" readonly="readonly"></td>
+                        <td><input name="precio_unitario_[]" id="precio_unitario_${n}" class="precio_unitario_ form-control form-control-sm" value="${parseFloat(orden_compra.precio || 0).toFixed(decimales)}" type="text" oninput="calcularPrecioUnitario(this)" readonly="readonly"></td>
+                        <td><input name="valor_venta_bruto[]" id="valor_venta_bruto${n}" class="valor_venta_bruto form-control form-control-sm" value="${parseFloat(orden_compra.valor_venta_bruto || 0).toFixed(decimales)}" type="text" oninput="calcularSubTotal(this)" readonly="readonly"></td>
+                        <td><input name="valor_venta[]" id="valor_venta${n}" class="valor_venta form-control form-control-sm" value="${parseFloat(orden_compra.valor_venta || 0).toFixed(decimales)}" type="text" oninput="calcularSubTotal(this)" readonly="readonly"></td>
 
-                        <td><div style="display: flex; align-items: center; gap: 5px;"> <button type="button" class="btn-custom" onclick="cambiarDescuento(this);calcularPrecioUnitario(this)"><i class="${orden_compra.id_descuento == 2 ? 'fas fa-percentage' : 'fas fa-paint-brush'}"></i></button> <input name="descuento[]" id="descuento${n}" class="descuento form-control form-control-sm" placeholder="S/ Descuento" value="${parseFloat((orden_compra.descuento ?? 0) || 0).toFixed(decimales)}" type="text" oninput="aplicaDescuentoEnSoles(this);calcularPrecioUnitario(this)" style="display: ${(!orden_compra.id_descuento || orden_compra.id_descuento == 1 || orden_compra.descuento == null || orden_compra.descuento === "") ? 'block' : 'none'};"> <input name="porcentaje[]" id="porcentaje${n}" class="porcentaje form-control form-control-sm" placeholder="% Descuento" value="${parseFloat(orden_compra.id_descuento == 2 ? (orden_compra.descuento ?? 0) : 0).toFixed(decimales)}" type="text" oninput="aplicaDescuentoEnPorcentaje(this);calcularPrecioUnitario(this)" style="display: ${orden_compra.id_descuento == 2 ? 'block' : 'none'};"><input name="id_descuento[]" id="id_descuento${n}" type="hidden" value="${orden_compra.id_descuento ?? 1}"></div></td>
+                        <td><div style="display: flex; align-items: center; gap: 5px;"> <button type="button" class="btn-custom" onclick="cambiarDescuento(this);calcularPrecioUnitario(this)" hidden><i class="${orden_compra.id_descuento == 2 ? 'fas fa-percentage' : 'fas fa-paint-brush'}"></i></button> <input name="descuento[]" id="descuento${n}" class="descuento form-control form-control-sm" placeholder="S/ Descuento" value="${parseFloat((orden_compra.descuento ?? 0) || 0).toFixed(decimales)}" type="text" oninput="aplicaDescuentoEnSoles(this);calcularPrecioUnitario(this);recalcularPorcentajeDescuento(this)" style="display: ${(!orden_compra.id_descuento || orden_compra.id_descuento == 1 || orden_compra.descuento == null || orden_compra.descuento === "") ? 'block' : 'none'};"> <input name="porcentaje[]" id="porcentaje${n}" class="porcentaje form-control form-control-sm" placeholder="% Descuento" value="${parseFloat(orden_compra.id_descuento == 2 ? (orden_compra.descuento ?? 0) : 0).toFixed(decimales)}" type="text" oninput="aplicaDescuentoEnPorcentaje(this);calcularPrecioUnitario(this);recalcularPorcentajeDescuento(this)" style="display: ${orden_compra.id_descuento == 2 ? 'block' : 'none'};"><input name="id_descuento[]" id="id_descuento${n}" type="hidden" value="${orden_compra.id_descuento ?? 1}"></div></td>
+                        <td><input name="porcentaje_descuento[]" id="porcentaje_descuento${n}" class="porcentaje_descuento form-control form-control-sm" value="" type="text" oninput="" readonly="readonly"></td>
+
                         <td><input name="sub_total[]" id="sub_total${n}" class="sub_total form-control form-control-sm" value="${parseFloat(orden_compra.sub_total || 0).toFixed(decimales) }" type="text" readonly="readonly"></td>
                         <td><input name="igv[]" id="igv${n}" class="igv form-control form-control-sm" value="${parseFloat(orden_compra.igv || 0).toFixed(decimales)}" type="text" readonly="readonly"></td>
                         <td><input name="total[]" id="total${n}" class="total form-control form-control-sm" value="${parseFloat(orden_compra.total || 0).toFixed(decimales)}" type="text" readonly="readonly"></td>
@@ -770,6 +772,7 @@ function cargarDetalle(){
 
                     </tr>
                 `;
+
                 tbody.append(row);
                 $('#descripcion' + n).select2({ 
                     width: '100%', 
@@ -795,6 +798,24 @@ function cargarDetalle(){
                     changeYear: true,
                     language: 'es'
                 });
+
+                let descuentoMonto = 0;
+
+                if (parseInt(orden_compra.id_descuento || 1) === 2) {
+                    let pct = parseFloat(orden_compra.descuento || 0);
+                    descuentoMonto = (pct / 100) * parseFloat(orden_compra.valor_venta_bruto || 0);
+                } else {
+                    descuentoMonto = parseFloat(orden_compra.descuento || 0);
+                }
+
+                let cantidadVal = parseFloat(orden_compra.cantidad_requerida || 1);
+
+                let precioVentaUnitario = parseFloat(orden_compra.precio_venta || 0);
+                let baseBrutoConIGV = precioVentaUnitario * cantidadVal;
+
+                let porcentajeRelativoAlBruto = (baseBrutoConIGV > 0) ? (descuentoMonto / baseBrutoConIGV * 100) : 0;
+
+                $(`#porcentaje_descuento${n}`).val(porcentajeRelativoAlBruto.toFixed(decimales));
 
                 n++;
                 sub_total_acumulado += parseFloat(orden_compra.sub_total || 0);
@@ -823,6 +844,29 @@ function limitarDecimalesYCalcular(input, decimales) {
     calcularPrecioUnitario_(input, decimales);
 }
 
+function recalcularPorcentajeDescuento(input) {
+    const row = $(input).closest("tr");
+    
+    const cantidad = parseFloat(row.find(".cantidad_ingreso").val()) || 0;
+    const precioUnitario = parseFloat(row.find(".precio_unitario").val()) || 0;
+    const valorVentaBruto = cantidad * precioUnitario;
+
+    const id_descuento = parseInt(row.find("input[name='id_descuento[]']").val()) || 1;
+    let descuento = parseFloat(row.find(".descuento").val()) || 0;
+    let porcentaje = parseFloat(row.find(".porcentaje").val()) || 0;
+    let descuentoCalculado = 0;
+
+    if (id_descuento === 2) {
+        descuentoCalculado = (porcentaje / 100) * valorVentaBruto;
+    } else {
+        descuentoCalculado = descuento;
+    }
+
+    const porcentajeRelativo = valorVentaBruto > 0 ? (descuentoCalculado / valorVentaBruto) * 100 : 0;
+
+    row.find(".porcentaje_descuento").val(porcentajeRelativo.toFixed(2));
+}
+
 function agregarProducto(){
 
     var usuarioRoles = @json(auth()->user()->getRoleNames());
@@ -840,18 +884,18 @@ function agregarProducto(){
     var newRow = "";
     for (var i = 0; i < cantidad; i++) { 
         var n = $('#tblOrdenCompraDetalle tbody tr').length + 1;
-        var descripcion = '<input name="id_orden_compra_detalle[]" id="id_orden_compra_detalle${n}" class="form-control form-control-sm" value="${orden_compra.id}" type="hidden"><select name="descripcion[]" id="descripcion' + n + '" class="form-control form-control-sm" ' +(!tieneRolVendedor ? 'onChange="verificarProductoSeleccionado(this, ' + n + ')"' : 'onChange="obtenerCodInterno(this, ' + n + ')"') + '> ' + opcionesDescripcion +' </select>';
+        var descripcion = '<input name="id_orden_compra_detalle[]" id="id_orden_compra_detalle${n}" class="form-control form-control-sm" value="${orden_compra.id}" type="hidden"><input name="id_autorizacion_detalle[]" id="id_autorizacion_detalle' + n + '" class="form-control form-control-sm" value="2" type="hidden"><select name="descripcion[]" id="descripcion' + n + '" class="form-control form-control-sm" ' +(!tieneRolVendedor ? 'onChange="verificarProductoSeleccionado(this, ' + n + ');validarMuestraExhibicion(this);validarServicio(this)"' : 'onChange="obtenerCodInterno(this, ' + n + ');validarMuestraExhibicion(this);validarServicio(this)"') + '> ' + opcionesDescripcion +' </select>';
         var descripcion_ant = '<input type="hidden" name="descripcion_ant[]" id="descripcion_ant' + n + '" class="form-control form-control-sm" />';
         var cod_interno = '<input name="cod_interno[]" id="cod_interno' + n + '" class="form-control form-control-sm" value="" type="text">';
         var marca = '<select name="marca[]" id="marca' + n + '" class="form-control form-control-sm" onchange=""> <option value="">--Seleccionar--</option><?php foreach ($marca as $row){?><option value="<?php echo htmlspecialchars($row->id); ?>"><?php echo htmlspecialchars(addslashes($row->denominiacion)); ?></option><?php }?></select>'
         var unidad = '<select name="unidad[]" id="unidad' + n + '" class="form-control form-control-sm" onChange=""> <option value="">--Seleccionar--</option> <?php foreach ($unidad as $row) {?> <option value="<?php echo $row->codigo?>"><?php echo $row->denominacion?></option> <?php } ?> </select>';
-        var cantidad_ingreso = '<input name="cantidad_ingreso[]" id="cantidad_ingreso' + n + '" class="cantidad_ingreso form-control form-control-sm" value="" type="text" oninput="calcularSubTotal(this);calcularPrecioUnitario(this)">';
+        var cantidad_ingreso = '<input name="cantidad_ingreso[]" id="cantidad_ingreso' + n + '" class="cantidad_ingreso form-control form-control-sm" value="" type="text" oninput="calcularSubTotal(this);calcularPrecioUnitario(this);validarMuestraExhibicion(this)">';
         var stock_actual = '<input name="stock_actual[]" id="stock_actual' + n + '" class="form-control form-control-sm" value="" type="text" readonly>';
-        var precio_unitario = '<input name="precio_unitario[]" id="precio_unitario' + n + '" class="precio_unitario form-control form-control-sm" value="" type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, \'\').replace(/(\\..*?)\\..*/g, \'$1\').replace(/(\\d+\\.\\d{0,2}).*/, \'$1\'); calcularSubTotal(this);calcularPrecioUnitario(this)">';
-        var precio_unitario_ = '<input name="precio_unitario_[]" id="precio_unitario_' + n + '" class="precio_unitario_ form-control form-control-sm" value="" type="text" oninput="calcularPrecioUnitario(this)">';
-        var valor_venta_bruto = '<input name="valor_venta_bruto[]" id="valor_venta_bruto' + n + '" class="valor_venta_bruto form-control form-control-sm" value="" type="text" oninput="calcularSubTotal(this)">';
-        var valor_venta = '<input name="valor_venta[]" id="valor_venta' + n + '" class="valor_venta form-control form-control-sm" value="" type="text" oninput="calcularSubTotal(this)">';
-        var descuento = '<div style="display: flex; align-items: center; gap: 5px;"><button type="button" class="btn-custom" onclick="cambiarDescuento(this);calcularPrecioUnitario(this)"><i class="fas fa-paint-brush"></i></button><input name="descuento[]" id="descuento' + n + '" class="descuento form-control form-control-sm" placeholder="S/ Descuento" value="" type="text" oninput="aplicaDescuentoEnSoles(this);calcularPrecioUnitario(this)"><input name="porcentaje[]" id="porcentaje' + n + '" class="porcentaje form-control form-control-sm" placeholder="% Descuento" type="text" oninput="aplicaDescuentoEnPorcentaje(this);calcularPrecioUnitario(this)" style="display: none;"> <input name="id_descuento[]" id="id_descuento${n}" type="hidden" value="1"></div>';
+        var precio_unitario = '<input name="precio_unitario[]" id="precio_unitario' + n + '" class="precio_unitario form-control form-control-sm" value="" type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, \'\').replace(/(\\..*?)\\..*/g, \'$1\').replace(/(\\d+\\.\\d{0,2}).*/, \'$1\'); calcularSubTotal(this);calcularPrecioUnitario(this)" readonly="readonly">';
+        var precio_unitario_ = '<input name="precio_unitario_[]" id="precio_unitario_' + n + '" class="precio_unitario_ form-control form-control-sm" value="" type="text" oninput="calcularPrecioUnitario(this)" readonly="readonly">';
+        var valor_venta_bruto = '<input name="valor_venta_bruto[]" id="valor_venta_bruto' + n + '" class="valor_venta_bruto form-control form-control-sm" value="" type="text" oninput="calcularSubTotal(this)" readonly="readonly">';
+        var valor_venta = '<input name="valor_venta[]" id="valor_venta' + n + '" class="valor_venta form-control form-control-sm" value="" type="text" oninput="calcularSubTotal(this)" readonly="readonly">';
+        var descuento = '<div style="display: flex; align-items: center; gap: 5px;"><button type="button" class="btn-custom" onclick="cambiarDescuento(this);calcularPrecioUnitario(this)" hidden><i class="fas fa-paint-brush"></i></button><input name="descuento[]" id="descuento' + n + '" class="descuento form-control form-control-sm" placeholder="S/ Descuento" value="" type="text" oninput="aplicaDescuentoEnSoles(this);calcularPrecioUnitario(this)"><input name="porcentaje[]" id="porcentaje' + n + '" class="porcentaje form-control form-control-sm" placeholder="% Descuento" type="text" oninput="aplicaDescuentoEnPorcentaje(this);calcularPrecioUnitario(this)" style="display: none;"> <input name="id_descuento[]" id="id_descuento${n}" type="hidden" value="1"></div>';
         var sub_total = '<input name="sub_total[]" id="sub_total' + n + '" class="sub_total form-control form-control-sm" value="" type="text" readonly="readonly">';
         var igv = '<input name="igv[]" id="igv' + n + '" class="igv form-control form-control-sm" value="" type="text" readonly="readonly">';
         var total = '<input name="total[]" id="total' + n + '" class="total form-control form-control-sm" value="" type="text" readonly="readonly">';
@@ -993,6 +1037,7 @@ function limpiar(){
 function fn_save_orden_compra(){
 	
     var msg = "";
+    var msg2 = "";
 
     var id = $('#id').val();
     var tipo_documento = $('#tipo_documento').val();
@@ -1001,13 +1046,59 @@ function fn_save_orden_compra(){
     var fecha_orden_compra = $('#fecha_orden_compra').val();
     var fecha_vencimiento = $('#fecha_vencimiento').val();
     var canal = $('#canal').val();
-
+    
     if(tipo_documento==""){msg+="Ingrese el Tipo de Documento <br>";}
     if(empresa_vende==""){msg+="Ingrese la Empresa que Vende <br>";}
     if(igv_compra==""){msg+="Ingrese el IGV <br>";}
 
     if ($('#tblOrdenCompraDetalle tbody tr').length == 0) {
-        msg += "No se ha agregado ningún producto <br>";
+        msg += "No se ha agregado ning&uacute;n producto <br>";
+    }
+
+    if(tipo_documento == 2){
+
+        $('#tblOrdenCompraDetalle tbody tr').each(function(index, fila){
+            var filaIndex = index + 1;
+
+            var precioUnitario = parseFloat($(fila).find('.precio_unitario').val()) || 0;
+            var descripcion_precio = $(fila).find('select[name="descripcion[]"] option:selected').text();
+
+            if(precioUnitario == "0" || precioUnitario ==""){
+
+                var numero_orden_compra_cliente = $('#numero_orden_compra_cliente').val().toUpperCase().trim();
+
+                if(!numero_orden_compra_cliente.includes('MUESTRA') && !numero_orden_compra_cliente.includes('EXHIBICION')){
+                    msg += "El producto " + descripcion_precio + " no tiene precio, contactarse con la persona encargada de definir el precio <br>";
+                }
+            }
+        });
+
+        var id_descuento_usuario = $('#id_descuento_usuario').val();
+        var descuento_num = parseFloat(id_descuento_usuario.replace('%', '')) / 100;
+
+        $('#tblOrdenCompraDetalle tbody tr').each(function(index, fila){
+            var filaIndex = index + 1;
+
+            var valorVentaBruto = parseFloat($(fila).find('.valor_venta_bruto').val()) || 0;
+            var descuentoFila   = parseFloat($(fila).find('.descuento').val()) || 0;
+            var descripcion = $(fila).find('select[name="descripcion[]"] option:selected').text();
+
+            var precio_unitario = parseFloat($(fila).find('.precio_unitario').val()) || 0;
+            var cantidad_ingreso = parseFloat($(fila).find('.cantidad_ingreso').val()) || 0;
+
+            var precio_total = precio_unitario * cantidad_ingreso;
+
+            var descuentoPermitidoFila = precio_total * descuento_num;
+
+            if(descuentoFila > descuentoPermitidoFila){
+                msg2 += "El producto " + descripcion + " supera el m&aacute;ximo de Descuento permitido <br>";
+                
+                $('#id_autorizacion_detalle'+filaIndex).val(1);
+
+                $('#id_autorizacion').val(1);
+                
+            }
+        });
     }
 
     if (id == 0 && tipo_documento == 2)
@@ -1021,7 +1112,7 @@ function fn_save_orden_compra(){
         const diferenciaDias = Math.ceil((fecha2 - fecha1) / (1000 * 60 * 60 * 24));
 
         if (diferenciaDias < 3) {
-            msg += "La Fecha de Vencimiento debe ser al menos 3 días después de la Fecha de Orden de Compra <br>";
+            msg += "La Fecha de Vencimiento debe ser al menos 3 días despu&eacute;s de la Fecha de Orden de Compra <br>";
         }
         
         if(canal==""){msg+="Ingrese el Canal <br>";}
@@ -1031,6 +1122,7 @@ function fn_save_orden_compra(){
         bootbox.alert(msg);
         return false;
     }else{
+
         var msgLoader = "";
         msgLoader = "Procesando, espere un momento por favor";
         var heightBrowser = $(window).width()/2;
@@ -1045,9 +1137,20 @@ function fn_save_orden_compra(){
                 
                 datatablenew();
                 $('.loader').hide();
-                bootbox.alert("Se guard&oacute; satisfactoriamente"); 
-                if (result.id>0) {
-                    modalOrdenCompra(result.id);
+                if (msg2 !== "") {
+                    bootbox.alert(msg2, function () {
+                        bootbox.alert("Se guard&oacute; satisfactoriamente", function () {
+                            if (result.id > 0) {
+                                modalOrdenCompra(result.id);
+                            }
+                        });
+                    });
+                } else {
+                    bootbox.alert("Se guard&oacute; satisfactoriamente", function () {
+                        if (result.id > 0) {
+                            modalOrdenCompra(result.id);
+                        }
+                    });
                 }
             }
         });
@@ -1168,6 +1271,23 @@ function obtenerPrioridad(){
         $('#prioridad_label').show();
         $('#prioridad_select').show();
     }
+}
+
+function obtenerDescuento(){
+
+    var id_vendedor = $('#id_vendedor').val();
+
+    $.ajax({
+        url: "/orden_compra/obtener_descuento/"+id_vendedor,
+        type: "GET",
+        success: function (result) {
+
+            var usuario_descuento = result[0].descuento;
+
+            $('#id_descuento_usuario').val(usuario_descuento);
+
+        }
+	});
 }
 
 function cambiarCliente(){
@@ -1301,6 +1421,46 @@ function obtenerBeneficiario(){
     }
 }
 
+function validarMuestraExhibicion(input){
+
+    const row = $(input).closest("tr");
+
+    var numero_orden_compra_cliente = $('#numero_orden_compra_cliente').val().toUpperCase().trim();
+
+    if(numero_orden_compra_cliente.includes('MUESTRA') || numero_orden_compra_cliente.includes('EXHIBICION')){
+
+        //alert("ok");
+        row.find(".precio_unitario").val(0);
+        row.find(".precio_unitario_").val(0);
+        row.find(".valor_venta_bruto").val("0");
+        row.find(".valor_venta").val("0");
+        row.find(".descuento").val("0");
+        row.find(".sub_total").val("0");
+        row.find(".igv").val("0");
+        row.find(".total").val("0");
+
+        $('#sub_total_general').val("0");
+        $('#igv_general').val("0");
+        $('#descuento_general').val("0");
+        $('#total_general').val("0");
+
+    }
+}
+
+function validarServicio(input){
+
+    const row = $(input).closest("tr");
+
+    var numero_orden_compra_cliente = $('#numero_orden_compra_cliente').val().toUpperCase().trim();
+    var descripcion_completo = $(input).find('option:selected').text().trim().toUpperCase();
+
+    if (descripcion_completo.startsWith('SERV')) {
+        row.find('.precio_unitario').attr('readonly',false);
+    }else{
+        row.find('.precio_unitario').attr('readonly',true);
+    }
+}
+
 </script>
 
 <body class="hold-transition skin-blue sidebar-mini">
@@ -1332,6 +1492,8 @@ function obtenerBeneficiario(){
                     
                     <input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
                     <input type="hidden" name="id" id="id" value="<?php echo $id?>">
+                    <input type="hidden" name="id_descuento_usuario" id="id_descuento_usuario" value="<?php echo $id_descuento_usuario?>">
+                    <input type="hidden" name="id_autorizacion" id="id_autorizacion" value="2">
                     
                     <div class="row" style="padding-left:10px">
 
@@ -1542,7 +1704,7 @@ function obtenerBeneficiario(){
                             Vendedor
                         </div>
                         <div class="col-lg-2">
-                            <select name="id_vendedor" id="id_vendedor" class="form-control form-control-sm" onchange="obtenerPrioridad()">
+                            <select name="id_vendedor" id="id_vendedor" class="form-control form-control-sm" onchange="obtenerPrioridad(); obtenerDescuento()">
                                 <option value="">--Seleccionar--</option>
                                 <?php
                                 foreach ($vendedor as $row){?>
@@ -1591,12 +1753,12 @@ function obtenerBeneficiario(){
                             </div>
                         </div>
 
-                        <div class="card-body" style="padding-right: 0px !important; padding-left: 0px !important;">	
+                        <div class="card-body" style="padding-right: 0px !important; padding-left: 0px !important;">
 
 					<div class="table-responsive" style="overflow-y: auto; max-height: 350px;">
 						<table id="tblOrdenCompraDetalle" class="table table-hover table-sm">
 							<thead>
-							<tr style="font-size:13px">
+							<tr style="font-size:12px">
 								<th>#</th>
 								<th>Descripci&oacute;n</th>
 								<th>Marca</th>
@@ -1608,13 +1770,14 @@ function obtenerBeneficiario(){
                                 <th>Precio Unitario</th>
                                 <th>Valor Venta Bruto</th>
                                 <th>Valor Venta</th>
-                                <th>Descuento</th>
+                                <th>Valor Descuento</th>
+                                <th>Porcentaje Descuento</th>
                                 <th>Sub Total</th>
                                 <th>IGV</th>
                                 <th>Total</th>
 							</tr>
 							</thead>
-							<tbody id="divOrdenCompraDetalle">
+							<tbody id="divOrdenCompraDetalle" style="font-size:14px">
 							</tbody>
 						</table>
 					</div>
@@ -1668,7 +1831,7 @@ function obtenerBeneficiario(){
                                 <?php 
                                     }else{
                                 ?>
-                                    <button style="font-size:12px;margin-left:10px" type="button" class="btn btn-sm btn-primary" data-toggle="modal" onclick="pdf_documento()" ><i class="fa fa-edit"></i>Imprimir</button>
+                                    <button style="font-size:12px;margin-left:10px; margin-right:10px" type="button" class="btn btn-sm btn-primary" data-toggle="modal" onclick="pdf_documento()" ><i class="fa fa-edit"></i>Imprimir</button>
                                 <?php 
                                     }
                                 ?>

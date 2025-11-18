@@ -157,9 +157,12 @@ $(document).ready(function() {
 	
     $('#empresa').select2({ width: '100%' })
     $('#conductor').select2({ width: '100%' })
+    $('#persona').select2({ width: '100%' })
 
     $('#conductor_div').hide();
     $('#conductor_div').hide();
+
+    cambiarCliente();
     
     validaTipoEmpresa();
 
@@ -175,15 +178,15 @@ function limpiar(){
 function fn_save_empresa_cubicaje(){
 	
 	$.ajax({
-			url: "/empresa_cubicaje/send_empresa_cubicaje",
-            type: "POST",
-            data : $("#frmEmpresaCubicaje").serialize(),
-			success: function (result) {
-				
-                $('#openOverlayOpc').modal('hide');
-                datatablenew();
-                
-            },
+        url: "/empresa_cubicaje/send_empresa_cubicaje",
+        type: "POST",
+        data : $("#frmEmpresaCubicaje").serialize(),
+        success: function (result) {
+            
+            $('#openOverlayOpc').modal('hide');
+            datatablenew();
+            
+        },
     });
 }
 
@@ -199,6 +202,29 @@ function validaTipoEmpresa(){
         $('#conductor_div').hide();
     }
 
+}
+
+function cambiarCliente(){
+
+    var tipo_documento_cliente = $('#tipo_documento_cliente').val();
+
+    $('#select_empresa').hide();
+    $('#select_persona').hide();
+
+    if(tipo_documento_cliente==1){
+
+        $('#select_empresa').hide();
+        $('#select_persona').show();
+        
+    }else if(tipo_documento_cliente==5){
+
+        $('#select_empresa').show();
+        $('#select_persona').hide();
+        
+    }else{
+        $('#select_empresa').hide();
+        $('#select_persona').hide();
+    }
 }
 
 </script>
@@ -234,7 +260,22 @@ function validaTipoEmpresa(){
                             
                             <div class="row" style="padding-left:10px">
 						
-                                <div class="col-lg-12">
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label class="control-label form-control-sm">Tipo Documento</label>
+                                        <select name="tipo_documento_cliente" id="tipo_documento_cliente" class="form-control form-control-sm" onchange="cambiarCliente()">
+                                            <option value="">--Seleccionar--</option>
+                                            <?php 
+                                            foreach ($tipo_documento_cliente as $row){?>
+                                                <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$empresa_cubicaje->id_tipo_cliente)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                                <?php 
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-12" id="select_empresa">
                                     <div class="form-group">
                                         <label class="control-label form-control-sm">Empresas</label>
                                         <select name="empresa" id="empresa" class="form-control form-control-sm">
@@ -242,6 +283,20 @@ function validaTipoEmpresa(){
                                             <?php 
                                             foreach ($empresas as $row){?>
                                                 <option value="<?php echo $row->id ?>" <?php if($row->id==$empresa_cubicaje->id_empresa)echo "selected='selected'"?>><?php echo $row->razon_social ?></option>
+                                                <?php 
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12" id="select_persona">
+                                    <div class="form-group">
+                                        <label class="control-label form-control-sm">Personas</label>
+                                        <select name="persona" id="persona" class="form-control form-control-sm">
+                                            <option value="">--Seleccionar--</option>
+                                            <?php 
+                                            foreach ($persona as $row){?>
+                                                <option value="<?php echo $row->id ?>" <?php if($row->id==$empresa_cubicaje->id_persona)echo "selected='selected'"?>><?php echo $row->nombres . ' ' . $row->apellido_paterno . ' ' . $row->apellido_materno ?></option>
                                                 <?php 
                                             }
                                             ?>

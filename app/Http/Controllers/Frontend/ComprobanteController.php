@@ -4113,6 +4113,71 @@ class ComprobanteController extends Controller
 		return Excel::download($export, 'reporte_factura_sodimac.xlsx');	
     }
 
+    public function exportar_factura($fecha_ini, $fecha_fin, $tipo_documento, $serie, $numero, $razon_social, $estado_pago, $anulado, $total_b, $caja_b, $usuario_b, $medio_pago, $formapago) {
+
+		if($fecha_ini=="0")$fecha_ini = "";
+		if($fecha_fin=="0")$fecha_fin = "";
+		if($tipo_documento==0)$tipo_documento = "";
+		if($serie==0)$serie = "";
+		if($numero==0)$numero = "";
+		if($razon_social=="0")$razon_social = "";
+		if($estado_pago==0)$estado_pago = "";
+		if($anulado==0)$anulado = "";
+		if($total_b=="0")$total_b = "";
+		if($caja_b==0)$caja_b = "";
+		if($usuario_b==0)$usuario_b = "";
+		if($medio_pago==0)$medio_pago = "";
+		if($formapago==0)$formapago = "";
+
+		$comprobante_model = new comprobante();
+		$p[]=$fecha_ini;
+		$p[]=$fecha_fin;
+		$p[]=$tipo_documento;
+        $p[]=$serie;
+        $p[]=$numero;
+        $p[]=$razon_social;
+        $p[]=$estado_pago;
+        $p[]=$anulado;
+        $p[]=$formapago;
+        $p[]=$total_b;
+        $p[]=$medio_pago;
+        $p[]=$caja_b;
+        $p[]=$usuario_b;
+		$p[]=1;
+		$p[]=1000;
+		
+		$data = $comprobante_model->listar_comprobante($p);
+		
+		$variable = [];
+		$n = 1;
+
+		array_push($variable, array("N","Serie","Nro","Tipo","Fecha","RUC", "Razon Social", "SubTotal", "IGV", "Total", "Estado", "Anulado", "Caja", "Usuario", "Forma Pago"));
+		
+		foreach ($data as $r) {
+            $tipo_documento ="";
+            if($r->tipo == "FT"){
+                $tipo_documento = "FACTURA";
+            }
+            if($r->tipo == "BV"){
+                $tipo_documento = "BOELTA";
+            }
+            if($r->tipo == "NC"){
+                $tipo_documento = "NOTA DE CREDITO";
+            }
+            if($r->tipo == "ND"){
+                $tipo_documento = "NOTA DE DEBITO";
+            }
+            if($r->tipo == "TK"){
+                $tipo_documento = "TICKET";
+            }
+
+			array_push($variable, array($n++, $r->serie, $r->numero, $tipo_documento, $r->fecha, $r->cod_tributario, $r->destinatario, $r->subtotal, $r->impuesto, $r->total, $r->estado_pago, $r->anulado, $r->caja, $r->usuario, $r->forma_pago));
+		}
+		
+		$export = new InvoicesExport4([$variable]);
+		return Excel::download($export, 'reporte_factura.xlsx');
+    }
+
     public function create_facturacion(){
         
         $tabla_model = new TablaMaestra;
@@ -4414,6 +4479,40 @@ class ComprobanteController extends Controller
 		$comprobante_sodimac_historico->save();
 
     }
+
+    public function create_facturacion_sodimac_detalle(){
+        
+        $tabla_model = new TablaMaestra;
+
+        $tipo_documento_cobro = $tabla_model->getMaestroByTipo('78');
+
+        return view('frontend.comprobante.create_facturacion_sodimac_detalle',compact('tipo_documento_cobro'));
+    }
+
+    public function listar_factura_sodimac_detalle_ajax(Request $request){
+
+		$factura_model = new Comprobante();
+		$p[]=$request->numero_documento;
+		$p[]=$request->tipo_documento_cobro;
+		$p[]=$request->NumeroPagina;
+		$p[]=$request->NumeroRegistros;
+		
+		$data = $factura_model->listar_factura_sodimac_detalle_ajax($p);
+		
+		$iTotalDisplayRecords = isset($data[0]->totalrows)?$data[0]->totalrows:0;
+		//print_r($afiliacion);exit();
+
+		$result["PageStart"] = $request->NumeroPagina;
+		$result["pageSize"] = $request->NumeroRegistros;
+		$result["SearchText"] = "";
+		$result["ShowChildren"] = true;
+		$result["iTotalRecords"] = $iTotalDisplayRecords;
+		$result["iTotalDisplayRecords"] = $iTotalDisplayRecords;
+		$result["aaData"] = $data;
+
+		echo json_encode($result);
+
+	}
 
     public function create_ventas(){
         
@@ -4898,6 +4997,74 @@ class InvoicesExport3 implements FromArray, WithHeadings, WithStyles
 		->setFormatCode(\PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_NUMBER_00);*/ //SIRVE PARA PONER 2 DECIMALES A ESA COLUMNA
         
         foreach (range('A', 'M') as $col) {
+            $sheet->getColumnDimension($col)->setAutoSize(true);
+        }
+    }
+}
+
+class InvoicesExport4 implements FromArray, WithHeadings, WithStyles
+{
+	protected $invoices;
+
+	public function __construct(array $invoices)
+	{
+		$this->invoices = $invoices;
+	}
+
+	public function array(): array
+	{
+		return $this->invoices;
+	}
+
+    public function headings(): array
+    {
+        return ["N","Serie","Nro","Tipo","Fecha","RUC", "Razon Social", "SubTotal", "IGV", "Total", "Estado", "Anulado", "Caja", "Usuario", "Forma Pago"];
+    }
+
+	public function styles(Worksheet $sheet)
+    {
+
+		$sheet->mergeCells('A1:O1');
+
+        $sheet->setCellValue('A1', "REPORTE FACTURACION - FORESPAMA");
+        $sheet->getStyle('A1:O1')->applyFromArray([
+            'font' => [
+                'bold' => true,
+                'color' => ['rgb' => 'FFFFFF'],
+            ],
+            'fill' => [
+                'fillType' => Fill::FILL_SOLID,
+                'startColor' => ['rgb' => '246257'],
+            ],
+            'alignment' => [
+                'horizontal' => Alignment::HORIZONTAL_CENTER,
+            ],
+        ]);
+
+		$sheet->getStyle('A1')->getAlignment()->setWrapText(true);
+		$sheet->getRowDimension(1)->setRowHeight(30);
+
+        $sheet->getStyle('A2:O2')->applyFromArray([
+            'font' => [
+                'bold' => true,
+                'color' => ['rgb' => '000000'],
+            ],
+            'fill' => [
+                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                'startColor' => ['rgb' => '2EB85C'],
+            ],
+			'alignment' => [
+			'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+    		],
+        ]);
+
+		$sheet->fromArray($this->headings(), NULL, 'A2');
+
+		/*$sheet->getStyle('L3:L'.$sheet->getHighestRow())
+		->getNumberFormat()
+		->setFormatCode(\PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_NUMBER_00);*/ //SIRVE PARA PONER 2 DECIMALES A ESA COLUMNA
+        
+        foreach (range('A', 'O') as $col) {
             $sheet->getColumnDimension($col)->setAutoSize(true);
         }
     }

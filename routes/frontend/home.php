@@ -47,6 +47,9 @@ use App\Http\Controllers\Frontend\ActivoController;
 use App\Http\Controllers\Frontend\OrdenProduccionController;
 use App\Http\Controllers\Frontend\FamiliaController;
 use App\Http\Controllers\Frontend\SubFamiliaController;
+use App\Http\Controllers\Frontend\UsuarioDescuentoController;
+use App\Http\Controllers\Frontend\ReusoController;
+use App\Http\Controllers\Frontend\ProductoCompetenciaController;
 
 //use App\Http\Controllers\VehiculoController;
 
@@ -85,6 +88,8 @@ Route::get('ingreso_vehiculo_tronco/modal_pago/{id}/{id_ingreso_vehiculo_tronco}
 Route::post('ingreso_vehiculo_tronco/send_pago', [IngresoVehiculoTroncoController::class, 'send_pago'])->name('ingreso_vehiculo_tronco.send_pago');
 Route::get('comprobante/create_consulta_sodimac', [ComprobanteController::class, 'create_consulta_sodimac'])->name('comprobante.create_consulta_sodimac');
 Route::get('comprobante/create_facturacion', [ComprobanteController::class, 'create_facturacion'])->name('comprobante.create_facturacion');
+Route::get('comprobante/create_facturacion_sodimac_detalle', [ComprobanteController::class, 'create_facturacion_sodimac_detalle'])->name('comprobante.create_facturacion_sodimac_detalle');
+Route::post('comprobante/listar_factura_sodimac_detalle_ajax', [ComprobanteController::class, 'listar_factura_sodimac_detalle_ajax'])->name('comprobante.listar_factura_sodimac_detalle_ajax');
 Route::get('comprobante/create_pagos', [ComprobanteController::class, 'create_pagos'])->name('comprobante.create_pagos');
 Route::get('comprobante/create_ventas', [ComprobanteController::class, 'create_ventas'])->name('comprobante.create_ventas');
 Route::get('comprobante/create_facturacion_orden_compra', [ComprobanteController::class, 'create_facturacion_orden_compra'])->name('comprobante.create_facturacion_orden_compra');
@@ -215,6 +220,12 @@ Route::put('secciones/{secciones}', 'App\Http\Controllers\SeccionesController@up
 Route::delete('secciones/{secciones}', 'App\Http\Controllers\SeccionesController@destroy')->name('secciones.destroy');
 Route::get('secciones/{secciones}/edit', 'App\Http\Controllers\SeccionesController@edit')->name('secciones.edit');
 
+Route::get('productos/create_chopeo_producto', [ProductosController::class, 'create_chopeo_producto'])->name('productos.create_chopeo_producto');
+Route::post('productos/listar_chopeo_producto_ajax', [ProductosController::class, 'listar_chopeo_producto_ajax'])->name('productos.listar_chopeo_producto_ajax');
+Route::get('productos/modal_chopeo_producto/{id}', [ProductosController::class, 'modal_chopeo_producto'])->name('productos.modal_chopeo_producto');
+Route::post('productos/send_chopeo_producto', [ProductosController::class, 'send_chopeo_producto'])->name('productos.send_chopeo_producto');
+Route::get('test-vision', [App\Http\Controllers\Frontend\ProductosController::class, 'testVision']);
+
 Route::get('productos', 'App\Http\Controllers\ProductosController@index')->name('productos.index');
 Route::post('productos', 'App\Http\Controllers\ProductosController@store')->name('productos.store');
 Route::get('productos/create', 'App\Http\Controllers\ProductosController@create')->name('productos.create');
@@ -223,7 +234,6 @@ Route::get('productos/{productos}', 'App\Http\Controllers\ProductosController@sh
 Route::put('productos/{productos}', 'App\Http\Controllers\ProductosController@update')->name('productos.update');
 Route::delete('productos/{productos}', 'App\Http\Controllers\ProductosController@destroy')->name('productos.destroy');
 Route::get('productos/{productos}/edit', 'App\Http\Controllers\ProductosController@edit')->name('productos.edit');
-
 
 Route::get('ingreso/create', [IngresoController::class, 'create'])->name('ingreso.create');
 Route::get('ingreso/obtener_valorizacion/{tipo_documento}/{id_persona}', [IngresoController::class, 'obtener_valorizacion'])->name('ingreso.obtener_valorizacion')->where('tipo_documento', '(.*)');
@@ -612,6 +622,7 @@ Route::get('empaquetado/modal_consulta_empaquetado_operacion/{id}', [Empaquetado
 Route::get('empaquetado/cargar_operacion_detalle/{id}', [EmpaquetadoController::class, 'cargar_operacion_detalle'])->name('empaquetado.cargar_operacion_detalle');
 Route::post('comprobante/listar_comprobante_sodimac_ajax', [ComprobanteController::class, 'listar_comprobante_sodimac_ajax'])->name('comprobante.listar_comprobante_sodimac_ajax');
 Route::get('comprobante/exportar_factura_sodimac/{fecha_ini}/{fecha_fin}/{tipo_documento}/{serie}/{numero}', [ComprobanteController::class, 'exportar_factura_sodimac'])->name('comprobante.exportar_factura_sodimac');
+Route::get('comprobante/exportar_factura/{fecha_ini}/{fecha_fin}/{tipo_documento}/{serie}/{numero}/{razon_social}/{estado_pago}/{anulado}/{total_b}/{caja_b}/{usuario_b}/{medio_pago}/{formapago}', [ComprobanteController::class, 'exportar_factura'])->name('comprobante.exportar_factura');
 
 Route::get('devolucion/create', [DevolucionController::class, 'create'])->name('devolucion.create');
 Route::post('devolucion/listar_devolucion_ajax', [DevolucionController::class, 'listar_devolucion_ajax'])->name('devolucion.listar_devolucion_ajax');
@@ -620,7 +631,7 @@ Route::get('devolucion/modal_devolucion/{id}/{id_tipo_documento}', [DevolucionCo
 Route::get('devolucion/cargar_salida/{numero_salida}', [DevolucionController::class, 'cargar_salida'])->name('devolucion.cargar_salida');
 Route::get('devolucion/cargar_detalle/{id}/{id_tipo_documento}', [DevolucionController::class, 'cargar_detalle'])->name('devolucion.cargar_detalle');
 
-Route::get('productos/exportar_listar_productos/{tipo_origen_producto}/{serie}/{codigo}/{denominacion}/{estado_bien}/{tipo_producto}/{tiene_imagen}/{estado}', [ProductosController::class, 'exportar_listar_productos'])->name('orden_compra.exportar_listar_productos');
+Route::get('productos/exportar_listar_productos/{tipo_origen_producto}/{serie}/{codigo}/{denominacion}/{estado_bien}/{tipo_producto}/{tiene_imagen}/{estado}/{familia}/{sub_familia}', [ProductosController::class, 'exportar_listar_productos'])->name('orden_compra.exportar_listar_productos');
 Route::get('orden_compra/modal_datos_pedido_orden_compra/{id}', [OrdenCompraController::class, 'modal_datos_pedido_orden_compra'])->name('orden_compra.modal_datos_pedido_orden_compra');
 Route::post('orden_compra/send_datos_contacto', [OrdenCompraController::class, 'send_datos_contacto'])->name('orden_compra.send_datos_contacto');
 Route::get('orden_compra/obtener_provincia_distrito/{idDepartamento}', [OrdenCompraController::class, 'obtener_provincia_distrito'])->name('orden_compra.obtener_provincia_distrito');
@@ -771,3 +782,48 @@ Route::get('ingreso_vehiculo_tronco/exportar_listar_reporte_excel/{placa}/{ruc}/
 Route::get('ingreso_vehiculo_tronco/eliminar_ingreso_vehiculo/{id}', [IngresoVehiculoTroncoController::class, 'eliminar_ingreso_vehiculo'])->name('ingreso_vehiculo_tronco.eliminar_ingreso_vehiculo');
 Route::get('orden_compra/exportar_listar_orden_compra_detalle/{tipo_documento}/{empresa_compra}/{empresa_vende}/{fecha_inicio}/{fecha_fin}/{numero_orden_compra}/{numero_orden_compra_cliente}/{almacen_origen}/{almacen_destino}/{situacion}/{estado}/{vendedor}/{estado_pedido}/{prioridad}/{canal}/{tipo_producto}', [OrdenCompraController::class, 'exportar_listar_orden_compra_detalle'])->name('orden_compra.exportar_listar_orden_compra_detalle');
 
+Route::get('usuario_descuento/create', [UsuarioDescuentoController::class, 'create'])->name('usuario_descuento.create');
+Route::post('usuario_descuento/listar_usuario_descuento_ajax', [UsuarioDescuentoController::class, 'listar_usuario_descuento_ajax'])->name('usuario_descuento.listar_usuario_descuento_ajax');
+Route::post('usuario_descuento/send_usuario_descuento', [UsuarioDescuentoController::class, 'send_usuario_descuento'])->name('usuario_descuento.send_usuario_descuento');
+Route::get('usuario_descuento/modal_usuario_descuento/{id}', [UsuarioDescuentoController::class, 'modal_usuario_descuento'])->name('usuario_descuento.modal_usuario_descuento');
+Route::get('usuario_descuento/eliminar_usuario_descuento/{id}/{estado}', [UsuarioDescuentoController::class, 'eliminar_usuario_descuento'])->name('usuario_descuento.eliminar_usuario_descuento');
+
+Route::get('orden_compra/obtener_descuento/{id_vendedor}', [OrdenCompraController::class, 'obtener_descuento'])->name('orden_compra.obtener_descuento');
+
+Route::get('orden_compra/create_autorizacion', [OrdenCompraController::class, 'create_autorizacion'])->name('orden_compra.create_autorizacion');
+Route::post('orden_compra/listar_orden_compra_autorizacion_ajax', [OrdenCompraController::class, 'listar_orden_compra_autorizacion_ajax'])->name('orden_compra.listar_orden_compra_autorizacion_ajax');
+Route::get('orden_compra/modal_orden_compra_autorizacion/{id}', [OrdenCompraController::class, 'modal_orden_compra_autorizacion'])->name('orden_compra.modal_orden_compra_autorizacion');
+Route::post('orden_compra/send_orden_compra_autorizacion', [OrdenCompraController::class, 'send_orden_compra_autorizacion'])->name('orden_compra.send_orden_compra_autorizacion');
+Route::get('orden_compra/obtener_descuento_usuario/{id_user}', [OrdenCompraController::class, 'obtener_descuento_usuario'])->name('orden_compra.obtener_descuento_usuario');
+
+Route::post('horno/send_salida_horno', [HornoController::class, 'send_salida_horno'])->name('horno.send_salida_horno');
+Route::get('activos/create_entrega_activo', [ActivoController::class, 'create_entrega_activo'])->name('activos.create_entrega_activo');
+Route::post('activos/listar_entrega_activos_ajax', [ActivoController::class, 'listar_entrega_activos_ajax'])->name('activos.listar_entrega_activos_ajax');
+Route::post('activos/send_entrega_activo', [ActivoController::class, 'send_entrega_activo'])->name('activos.send_entrega_activo');
+Route::get('activos/modal_entrega_activos/{id}', [ActivoController::class, 'modal_entrega_activos'])->name('activos.modal_entrega_activos');
+Route::get('activos/eliminar_entrega_activo/{id}/{estado}', [ActivoController::class, 'eliminar_entrega_activo'])->name('activos.eliminar_entrega_activo');
+
+Route::get('orden_compra/create_reporte_comercializacion_general', [OrdenCompraController::class, 'create_reporte_comercializacion_general'])->name('orden_compra.create_reporte_comercializacion_general');
+Route::post('orden_compra/listar_reporte_comercializacion_general_ajax', [OrdenCompraController::class, 'listar_reporte_comercializacion_general_ajax'])->name('orden_compra.listar_reporte_comercializacion_general_ajax');
+Route::get('orden_compra/exportar_reporte_comercializacion_general/{empresa_compra}/{fecha_inicio}/{fecha_fin}/{vendedor}/{canal}', [OrdenCompraController::class, 'exportar_reporte_comercializacion_general'])->name('orden_compra.exportar_reporte_comercializacion_general');
+Route::get('orden_compra/create_informe_b2b', [OrdenCompraController::class, 'create_informe_b2b'])->name('orden_compra.create_informe_b2b');
+Route::post('orden_compra/listar_informe_b2b_ajax', [OrdenCompraController::class, 'listar_informe_b2b_ajax'])->name('orden_compra.listar_informe_b2b_ajax');
+Route::post('orden_compra/upload_informe_b2b_compra', [OrdenCompraController::class, 'upload_informe_b2b_compra'])->name('orden_compra.upload_informe_b2b_compra');
+
+Route::get('reuso/create', [ReusoController::class, 'create'])->name('reuso.create');
+Route::post('reuso/listar_reuso_ajax', [ReusoController::class, 'listar_reuso_ajax'])->name('reuso.listar_reuso_ajax');
+Route::get('reuso/modal_reuso/{id}', [ReusoController::class, 'modal_reuso'])->name('reuso.modal_reuso');
+Route::post('reuso/send_reuso', [ReusoController::class, 'send_reuso'])->name('reuso.send_reuso');
+Route::get('reuso/cargar_detalle/{id}', [ReusoController::class, 'cargar_detalle'])->name('reuso.cargar_detalle');
+Route::get('promotores/create_asistencia', [PromotorController::class, 'create_asistencia'])->name('promotores.create_asistencia');
+Route::post('promotores/marcar_asistencia', [PromotorController::class, 'marcar_asistencia'])->name('promotores.marcar_asistencia');
+Route::post('promotores/listar_asistencia_promotores_ajax', [PromotorController::class, 'listar_asistencia_promotores_ajax'])->name('promotores.listar_asistencia_promotores_ajax');
+Route::get('promotores/modal_asistencia_promotor', [PromotorController::class, 'modal_asistencia_promotor'])->name('promotores.modal_asistencia_promotor');
+
+Route::get('producto_competencia/create', [ProductoCompetenciaController::class, 'create'])->name('producto_competencia.create');
+Route::post('producto_competencia/listar_producto_competencia_ajax', [ProductoCompetenciaController::class, 'listar_producto_competencia_ajax'])->name('producto_competencia.listar_producto_competencia_ajax');
+Route::get('producto_competencia/modal_producto_competencia/{id}', [ProductoCompetenciaController::class, 'modal_producto_competencia'])->name('producto_competencia.modal_producto_competencia');
+Route::post('producto_competencia/send_producto_competencia', [ProductoCompetenciaController::class, 'send_producto_competencia'])->name('producto_competencia.send_producto_competencia');
+Route::get('producto_competencia/eliminar_producto_competencia/{id}/{estado}', [ProductoCompetenciaController::class, 'eliminar_producto_competencia'])->name('producto_competencia.eliminar_producto_competencia');
+Route::get('producto_competencia/obtener_producto_competencia/{id_producto}', [ProductoCompetenciaController::class, 'obtener_producto_competencia'])->name('producto_competencia.obtener_producto_competencia');
+Route::get('productos/modal_producto_competencia/{codigo_producto_competencia}/{nombre_producto_competencia}/{competencia_producto_competencia}', [ProductosController::class, 'modal_producto_competencia'])->name('productos.modal_producto_competencia');

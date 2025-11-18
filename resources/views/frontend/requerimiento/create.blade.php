@@ -493,6 +493,7 @@ label.form-control-sm{
 							<th>Responsable Atenci&oacute;n</th>
 							<th>Estado Atenci&oacute;n</th>
 							<th>Tipo Requerimiento</th>
+							<th>Usuario Solicitante</th>
 							<th>Estado</th>
                             <th>Acciones</th>
                         </tr>

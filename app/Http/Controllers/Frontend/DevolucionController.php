@@ -154,7 +154,8 @@ class DevolucionController extends Controller
 		//$salida_producto->id_proveedor = $request->proveedor;
 		$entrada_producto->id_empresa_compra = $request->empresa;
 		$entrada_producto->id_proveedor = 30;
-		$entrada_producto->id_tipo_cliente = "5";
+		$entrada_producto->id_tipo_cliente = $salida_producto_->id_tipo_cliente;
+		$entrada_producto->id_persona = $salida_producto_->id_persona;
 		$entrada_producto->codigo = $salida_producto_->codigo;
 		//$salida_producto->id_usuario_recibe = $id_user;
 		//$salida_producto->id_persona_recibe = $request->persona_recibe;

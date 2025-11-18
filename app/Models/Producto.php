@@ -36,6 +36,12 @@ class Producto extends Model
 
     }
 
+    public function listar_chopeo_producto_ajax($p){
+
+        return $this->readFuntionPostgres('sp_listar_chopeo_productos_paginado',$p);
+
+    }
+
     public function readFuntionPostgres($function, $parameters = null){
 
         $_parameters = '';
@@ -209,6 +215,16 @@ class Producto extends Model
         left join productos p on p.id_sub_familia = sf.id and p.id_familia = '".$familia."' and p.id_sub_familia = '".$sub_familia."'
         where sf.id = '".$sub_familia."'
         group by sf.inicial_codigo";
+
+		$data = DB::select($cad);
+        return $data;
+    }
+
+    function getProductoRetail(){
+
+        $cad = "select * from productos p
+        where p.denominacion ilike '%(RT)%'
+        and p.estado='1'";
 
 		$data = DB::select($cad);
         return $data;

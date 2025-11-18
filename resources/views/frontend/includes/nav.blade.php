@@ -101,7 +101,11 @@
 								<div class="dropdown-menu" aria-labelledby="navbarDropdownPrueba">
 
 									@can('Registro Activos')
-										<x-utils.link :href="route('frontend.activos.create')" class="dropdown-item" :text="__('Registro de Activos')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" /><!--Control de Mantenimiento-->
+										<x-utils.link :href="route('frontend.activos.create')" class="dropdown-item" :text="__('Registro de Activos')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+									@endif
+
+									@can('Registro Entrega Activos')
+										<x-utils.link :href="route('frontend.activos.create_entrega_activo')" class="dropdown-item" :text="__('Registro de Entrega Activos')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
 									@endif
 
 								</div>
@@ -140,6 +144,24 @@
 
 						</li>
 						
+					@endif
+
+					@if(Gate::check('Chopeo Productos'))
+						
+						<li class="nav-item dropdown">
+							<a href="#" class="nav-link dropdown-toggle" id="navbarDropdownPrueba" data-toggle="dropdown"
+						   aria-haspopup="true" aria-expanded="false">Promotoria</a>
+
+						   <div class="dropdown-menu" aria-labelledby="navbarDropdownPrueba">
+
+								@can('Chopeo Productos')
+									<x-utils.link :href="route('frontend.productos.create_chopeo_producto')" class="dropdown-item" :text="__('Chopeo de Productos')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+								@endif
+								
+							</div>
+
+						</li>
+
 					@endif
 					
 					
@@ -193,6 +215,18 @@
 
 								@can('Devolucion')
 									<x-utils.link :href="route('frontend.devolucion.create')" class="dropdown-item" :text="__('Devolucion')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+								@endif
+
+								@can('Gestion Autorizacion')
+									<x-utils.link :href="route('frontend.orden_compra.create_autorizacion')" class="dropdown-item" :text="__('Gestion de Autorizacion')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+								@endif
+
+								@can('Cargar Informe Venta b2b')
+									<x-utils.link :href="route('frontend.orden_compra.create_informe_b2b')" class="dropdown-item" :text="__('Cargar Informe Venta B2B')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+								@endif
+
+								@can('Reuso')
+									<x-utils.link :href="route('frontend.reuso.create')" class="dropdown-item" :text="__('Reuso')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
 								@endif
 
 								@can('Ajuste Stock')
@@ -289,8 +323,8 @@
 						
 					@endif
 					
-					@if(Gate::check('Mantenimiento Personas') || Gate::check('Mantenimiento Empresas') || Gate::check('Mantenimiento Vehiculos') || Gate::check('Mantenimiento Tablas Maestras') || Gate::check('Mantenimiento Conductores') || Gate::check('Mantenimiento Tipo Cambio') || Gate::check('Mantenimiento Marcas') || Gate::check('Mantenimiento Tiendas') || Gate::check('Mantenimiento Equivalencia Producto') || Gate::check('Mantenimiento Parametro') || Gate::check('Mantenimiento Empaquetado') || Gate::check('Mantenimiento Empresas Cubicaje') || Gate::check('Mantenimiento Familia') || Gate::check('Mantenimiento Sub Familia'))
-							
+					@if(Gate::check('Mantenimiento Personas') || Gate::check('Mantenimiento Empresas') || Gate::check('Mantenimiento Vehiculos') || Gate::check('Mantenimiento Tablas Maestras') || Gate::check('Mantenimiento Conductores') || Gate::check('Mantenimiento Tipo Cambio') || Gate::check('Mantenimiento Marcas') || Gate::check('Mantenimiento Tiendas') || Gate::check('Mantenimiento Equivalencia Producto') || Gate::check('Mantenimiento Parametro') || Gate::check('Mantenimiento Empaquetado') || Gate::check('Mantenimiento Empresas Cubicaje') || Gate::check('Mantenimiento Familia') || Gate::check('Mantenimiento Sub Familia') || Gate::check('Mantenimiento Permisos Usuario Descuento'))
+						
 						<li class="nav-item dropdown">
 							<a href="#" class="nav-link dropdown-toggle" id="navbarDropdownPrueba" data-toggle="dropdown"
 						   aria-haspopup="true" aria-expanded="false">Mantenimiento</a>
@@ -353,6 +387,14 @@
 									<x-utils.link :href="route('frontend.sub_familia.create')" class="dropdown-item" :text="__('Sub Familia')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
 								@endif
 
+								@can('Mantenimiento Permisos Usuario Descuento')
+									<x-utils.link :href="route('frontend.usuario_descuento.create')" class="dropdown-item" :text="__('Permisos Usuario Descuento')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+								@endif
+
+								@can('Producto Competencia')
+									<x-utils.link :href="route('frontend.producto_competencia.create')" class="dropdown-item" :text="__('Producto Competencia')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+								@endif
+
 							</div>
 						</li>
 					
@@ -376,6 +418,10 @@
 
 								@can('Reporte Pedidos Tienda')
 									<x-utils.link :href="route('frontend.orden_compra.create_reporte_comercializacion_solicitado_tienda')" class="dropdown-item" :text="__('Reporte de Pedidos por Tienda')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+								@endif
+
+								@can('Reporte Comercializacion General')
+									<x-utils.link :href="route('frontend.orden_compra.create_reporte_comercializacion_general')" class="dropdown-item" :text="__('Reporte de Comercializacion General')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
 								@endif
 
 							</div>
@@ -403,12 +449,16 @@
 									<x-utils.link :href="route('frontend.comprobante.create_ventas')" class="dropdown-item" :text="__('Reporte Ventas')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
 								@endif
 
+								@can('Consulta de Facturacion Detalle')
+									<x-utils.link :href="route('frontend.comprobante.create_facturacion_sodimac_detalle')" class="dropdown-item" :text="__('Consulta de Facturacion Detalle')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+								@endif
+
 							</div>
 						</li>
 
 					@endif 
 
-					@if(Gate::check('Consulta de Facturacion'))
+					@if(Gate::check('Consulta de Facturacion') || Gate::check('Marcacion Promotor'))
 					
 						<li class="nav-item dropdown">
 							<a href="#" class="nav-link dropdown-toggle" id="navbarDropdownPrueba" data-toggle="dropdown"
@@ -418,6 +468,10 @@
 
 								@can('Asignacion Rutas')
 									<x-utils.link :href="route('frontend.promotores.create_ruta')" class="dropdown-item" :text="__('Asignacion Rutas')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+								@endif
+
+								@can('Marcacion Promotor')
+									<x-utils.link :href="route('frontend.promotores.create_asistencia')" class="dropdown-item" :text="__('Marcar Asistencia Promotor')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
 								@endif
 
 							</div>

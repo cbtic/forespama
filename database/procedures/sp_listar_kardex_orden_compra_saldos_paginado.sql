@@ -66,7 +66,7 @@ BEGIN
     -- Query principal con paginación
     v_scad := '
         WITH ordenes_agrupadas AS (
-            SELECT ocd.id_producto, oc.id_almacen_salida, SUM(ocd.cantidad_requerida) AS cantidad_orden_compra
+            SELECT ocd.id_producto, oc.id_almacen_salida, (SUM(ocd.cantidad_requerida) - SUM(coalesce(ocd.cantidad_despacho,0))) AS cantidad_orden_compra
             FROM orden_compra_detalles ocd
             INNER JOIN orden_compras oc ON ocd.id_orden_compra = oc.id
             WHERE oc.id_tipo_documento = ''2''

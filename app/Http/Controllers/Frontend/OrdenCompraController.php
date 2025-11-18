@@ -22,7 +22,10 @@ use App\Models\Ubigeo;
 use App\Models\Persona;
 use App\Models\OrdenCompraContactoEntrega;
 use App\Models\OrdenCompraPago;
+use App\Models\UsuarioDescuento;
 use App\Models\GuiaInterna;
+use App\Models\InformeB2bVenta;
+use DateTime;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Auth;
 use Carbon\Carbon;
@@ -53,10 +56,6 @@ class OrdenCompraController extends Controller
 
         $id_user = Auth::user()->id;
         $user_model = new User;
-        //echo $id_user;
-        //$id_rol = auth()->user()->roles->first()->id ?? null;
-        //echo $rol;
-        //exit();
 
 		$tablaMaestra_model = new TablaMaestra;
         $almacen_user_model = new Almacen_usuario;
@@ -70,8 +69,6 @@ class OrdenCompraController extends Controller
 		$prioridad = $tablaMaestra_model->getMaestroByTipo(93);
 		$canal = $tablaMaestra_model->getMaestroByTipo(98);
 		$bien_servicio = $tablaMaestra_model->getMaestroByTipo(73);
-        //$almacen_usuario2 = $almacen_user_model->getUsersByAlmacen($id_user);
-        //dd($almacen_usuario);exit();
 		
 		return view('frontend.orden_compra.create',compact('tipo_documento','cerrado_orden_compra','proveedor','almacen','almacen_usuario','vendedor','estado_pedido','prioridad','canal','bien_servicio'));
 
@@ -87,16 +84,12 @@ class OrdenCompraController extends Controller
         $proveedor = Empresa::all();
         $almacen = Almacene::all();
         $almacen_usuario = $almacen_user_model->getAlmacenByUser($id_user);
-        //$almacen_usuario2 = $almacen_user_model->getUsersByAlmacen($id_user);
-        //dd($almacen_usuario);exit();
 		
 		return view('frontend.orden_compra.consulta_stock_pedido',compact('tipo_documento','cerrado_orden_compra','proveedor','almacen','almacen_usuario'));
 
 	}
 
     public function listar_orden_compra_ajax(Request $request){
-
-        //$id_rol = auth()->user()->roles->first()->id ?? null;
 
         $id_user = Auth::user()->id;
 
@@ -145,25 +138,24 @@ class OrdenCompraController extends Controller
         $user_model = new User;
         $persona_model = new Persona;
         $empresa_model = new Empresa;
+        $usuario_descuento_model = new UsuarioDescuento;
 		
 		if($id>0){
 
             $orden_compra = OrdenCompra::find($id);
-            //$proveedor = Empresa::all();
-			
+            if($orden_compra->id_tipo_documento == '2'){
+                $descuento_usuario = $usuario_descuento_model->getDescuentoByUser($orden_compra->id_vendedor);
+                $id_descuento_usuario = $descuento_usuario[0]->descuento;
+            }else{
+                $id_descuento_usuario = 0;
+            }			
 		}else{
 			$orden_compra = new OrdenCompra;
-            //$proveedor = Empresa::all();
+            $id_descuento_usuario = 0;
 		}
 
         $proveedor = $empresa_model->getEmpresaAll();
-        //$orden_compra_model = new OrdenCompra;
         $tipo_documento = $tablaMaestra_model->getMaestroByTipo(54);
-        //$moneda = $tablaMaestra_model->getMaestroByTipo(1);
-        //$unidad_origen = $tablaMaestra_model->getMaestroByTipo(50);
-        //$cerrado_entrada = $tablaMaestra_model->getMaestroByTipo(52);
-        //$igv_compra = $tablaMaestra_model->getMaestroByTipo(51);
-        //$descuento = $tablaMaestra_model->getMaestroByTipo(55);
         $producto = $producto_model->getProductoAll();
         $marca = $marca_model->getMarcaAll();
         $estado_bien = $tablaMaestra_model->getMaestroByTipo(4);
@@ -171,7 +163,6 @@ class OrdenCompraController extends Controller
         $igv_compra = $tablaMaestra_model->getMaestroByTipo(51);
         $descuento = $tablaMaestra_model->getMaestroByTipo(55);
         $almacen = $almacen_model->getAlmacenAll();
-        //$almacen = Almacene::all();
         $unidad_origen = $tablaMaestra_model->getMaestroByTipo(50);
         $moneda = $tablaMaestra_model->getMaestroByTipo(1);
 
@@ -181,11 +172,7 @@ class OrdenCompraController extends Controller
         $prioridad = $tablaMaestra_model->getMaestroByTipo(93);
         $canal = $tablaMaestra_model->getMaestroByTipo(98);
 
-        //$codigo_orden_compra = $orden_compra_model->getCodigoOrdenCompra();
-        
-        //dd($proveedor);exit();
-
-		return view('frontend.orden_compra.modal_orden_compra_nuevoOrdenCompra',compact('id','orden_compra','tipo_documento','proveedor','producto','marca','estado_bien','unidad','igv_compra','descuento','almacen','unidad_origen','id_user','moneda','vendedor','tipo_documento_cliente','persona','prioridad','canal'));
+		return view('frontend.orden_compra.modal_orden_compra_nuevoOrdenCompra',compact('id','orden_compra','tipo_documento','proveedor','producto','marca','estado_bien','unidad','igv_compra','descuento','almacen','unidad_origen','id_user','moneda','vendedor','tipo_documento_cliente','persona','prioridad','canal','id_descuento_usuario'));
 
     }
 
@@ -256,6 +243,7 @@ class OrdenCompraController extends Controller
         $valor_venta = $request->input('valor_venta');
         $descuento = $request->input('descuento');
         $porcentaje = $request->input('porcentaje');
+        $id_autorizacion_detalle = $request->input('id_autorizacion_detalle');
         $id_orden_compra_detalle =$request->id_orden_compra_detalle;
 
         $orden_compra->id_empresa_compra = $request->empresa_compra;
@@ -286,6 +274,7 @@ class OrdenCompraController extends Controller
         $orden_compra->id_vendedor = $request->id_vendedor;
         $orden_compra->observacion_vendedor = $request->observacion_vendedor;
         $orden_compra->id_prioridad = $request->prioridad;
+        $orden_compra->id_autorizacion = $request->id_autorizacion;
         $orden_compra->id_canal = $request->canal;
         $orden_compra->estado = 1;
         if($request->tipo_documento == 4){
@@ -325,6 +314,7 @@ class OrdenCompraController extends Controller
             $orden_compra_detalle->id_marca = $marca[$index];
             $orden_compra_detalle->estado = 1;
             $orden_compra_detalle->cerrado = 1;
+            $orden_compra_detalle->id_autorizacion = $id_autorizacion_detalle[$index];
             $orden_compra_detalle->id_usuario_inserta = $id_user;
 
             $orden_compra_detalle->save();
@@ -390,12 +380,8 @@ class OrdenCompraController extends Controller
             }else {
                 $producto_stock[$detalle->id_producto] = ['stock_comprometido'=>0];
             }
-            
-            //var_dump($producto_stock);
         }
         
-        //exit();
-
         return response()->json([
             'orden_compra' => $orden_compra,
             'marca' => $marca,
@@ -439,12 +425,8 @@ class OrdenCompraController extends Controller
             }else {
                 $producto_stock[$detalle->id_producto] = ['stock_comprometido'=>0];
             }
-            
-            //var_dump($producto_stock);
         }
         
-        //exit();
-
         return response()->json([
             'orden_compra' => $orden_compra,
             'marca' => $marca,
@@ -490,12 +472,8 @@ class OrdenCompraController extends Controller
             }else {
                 $producto_stock[$detalle->id_producto] = ['stock_comprometido'=>0];
             }
-            
-            //var_dump($producto_stock);
         }
         
-        //exit();
-
         return response()->json([
             'orden_compra' => $orden_compra,
             'marca' => $marca,
@@ -580,13 +558,7 @@ class OrdenCompraController extends Controller
             $proveedor = Empresa::all();
 		}
 
-        //$orden_compra_model = new OrdenCompra;
         $tipo_documento = $tablaMaestra_model->getMaestroByTipo(54);
-        //$moneda = $tablaMaestra_model->getMaestroByTipo(1);
-        //$unidad_origen = $tablaMaestra_model->getMaestroByTipo(50);
-        //$cerrado_entrada = $tablaMaestra_model->getMaestroByTipo(52);
-        //$igv_compra = $tablaMaestra_model->getMaestroByTipo(51);
-        //$descuento = $tablaMaestra_model->getMaestroByTipo(55);
         $producto = $producto_model->getProductoAll();
         $marca = $marca_model->getMarcaAll();
         $estado_bien = $tablaMaestra_model->getMaestroByTipo(4);
@@ -594,12 +566,8 @@ class OrdenCompraController extends Controller
         $igv_compra = $tablaMaestra_model->getMaestroByTipo(51);
         $descuento = $tablaMaestra_model->getMaestroByTipo(55);
         $almacen = $almacen_model->getAlmacenAll();
-        //$almacen = Almacene::all();
         $unidad_origen = $tablaMaestra_model->getMaestroByTipo(50);
-        //$codigo_orden_compra = $orden_compra_model->getCodigoOrdenCompra();
         
-        //dd($proveedor);exit();
-
 		return view('frontend.orden_compra.modal_orden_compra_tienda',compact('id','orden_compra','tipo_documento','proveedor','producto','marca','estado_bien','unidad','igv_compra','descuento','almacen','unidad_origen'));
 
     }
@@ -662,7 +630,6 @@ class OrdenCompraController extends Controller
                 $orden_compra->tienda_asignada=1;
                 $orden_compra->save();
             } else {
-                // Manejar el caso en que no haya productos para una tienda específica
                 Log::warning('No hay productos para la tienda con índice ' . $index_offset);
             }
         }
@@ -721,8 +688,6 @@ class OrdenCompraController extends Controller
         $id_tipo_cliente = 5;
         $id_canal = 4;
 
-        // Ruta del archivo
-        //$filePath = storage_path('app/datos.txt');
         $filePath = public_path('orden_compra/'.$archivo);
 
         // Verifica si el archivo existe
@@ -740,26 +705,20 @@ class OrdenCompraController extends Controller
             return response()->json(['error' => 'El archivo está vacío o tiene un formato incorrecto.'], 400);
         }
 
-        // Procesa cada línea del archivo
-        $count = 0; // Contador de filas exitosas
+        $count = 0;
 
-        // Iterar sobre cada fila
         while (($line = fgets($file)) !== false) {
-            // Quitar posibles caracteres no deseados
-            $line = trim($line);
 
-            // Dividir en columnas
+            $line = trim($line);
+            
             $data = str_getcsv($line, '|');
             
-            // Asegurarse de que ambas tengan la misma cantidad de elementos
             $data = array_pad($data, count($header), null);
 
-            // Validar si la cantidad de columnas coincide con el encabezado
             if (count($data) !== count($header)) {
                 continue; // Ignorar filas mal formateadas
             }
 
-            // Asociar columnas del encabezado con valores de la fila
             $row = array_combine($header, $data);
 
             $empresa = Empresa::where("ruc",str_replace("-","",$row['RUT_PROVEEDOR']))->first();
@@ -768,7 +727,6 @@ class OrdenCompraController extends Controller
             $fecha_orden_compra = Carbon::createFromFormat('d/m/Y', $row['FECHA_AUTORIZACION']);
             $numero_orden_compra_cliente = $row['NRO_OC'];
             $fecha_vencimiento = Carbon::createFromFormat('d/m/Y', $row['FECHA_DESDE']);
-
 
             if($count == 0){
 
@@ -816,33 +774,8 @@ class OrdenCompraController extends Controller
             $cantidad_requerida = $row['CANTIDAD_PROD'];
             $id_unidad_medida = $producto->id_unidad_producto;
 
-            /*
-            $precio_venta = $row['COSTO_UNI'];
-
-            //$total = $sub_total + $igv;
-            $total = round($precio_venta * $cantidad_requerida, 2);
-            $valor_unitario = round($precio_venta / 1.18, 2);
-            //$igv = round(0.18 * $total,2);
-            $valor_venta_bruto = round($total / 1.18, 2);
-            $igv = round($valor_venta_bruto * 0.18, 2);
-            $sub_total = round($total - $igv, 2);
-
-            $sub_total_general += $sub_total;
-            $igv_general += $igv;
-            $total_general += $total;
-            */
-
             $valor_unitario = $row['COSTO_UNI'];
             $precio_venta = 1.18*$valor_unitario;
-
-            /*$total = round($precio_venta * $cantidad_requerida, 2);
-            $valor_venta_bruto = round($total / 1.18, 2);
-            $igv = round($valor_venta_bruto * 0.18, 2);
-            $sub_total = round($total - $igv, 2);
-
-            $sub_total_general += $sub_total;
-            $igv_general += $igv;
-            $total_general += $total;*/
 
             $total = $precio_venta * $cantidad_requerida;
             $valor_venta_bruto = $total / 1.18;
@@ -872,32 +805,6 @@ class OrdenCompraController extends Controller
             $ordenCompraDetalle->id_usuario_inserta = $id_user;
             $ordenCompraDetalle->save();
 
-            /*
-            //OrdenCompra::create([
-            $detalle = array(
-                'nro_oc' => $row['NRO_OC'],
-                'rut_proveedor' => $row['RUT_PROVEEDOR'],
-                'razon_social' => $row['RAZON_SOCIAL'],
-                'direccion' => $row['DIRECCION'],
-                'fono' => $row['FONO'] ?? null,
-                'comprador' => $row['COMPRADOR'],
-                'fecha_autorizacion' => Carbon::createFromFormat('d/m/Y', $row['FECHA_AUTORIZACION']),
-                'estado' => $row['ESTADO'],
-                'dias_pago' => $row['DIAS_PAGO'],
-                'total_venta' => $row['TOTAL_VENTA'] ?? null,
-                'total_costo' => $row['TOTAL_COSTO'] ?? null,
-                'costo_uni' => $row['COSTO_UNI'] ?? null,
-                'precio_uni' => $row['PRECIO_UNI'] ?? null,
-                'cantidad_prod' => $row['CANTIDAD_PROD'] ?? null,
-                'upc' => $row['UPC'] ?? null,
-                'sku' => $row['SKU'] ?? null,
-                'descripcion_larga' => $row['DESCRIPCION_LARGA'] ?? null,
-                'marca' => $row['MARCA'] ?? null,
-                'departamento' => $row['DEPARTAMENTO'] ?? null,
-            //]);
-            );
-            print_r($detalle);echo "<br>";
-            */
             $count++;
         }
 
@@ -911,13 +818,7 @@ class OrdenCompraController extends Controller
 
         $array["cantidad"] = count($OrdenCompraExiste);
         echo json_encode($array);
-        /*
-        return response()->json([
-            'message' => 'Datos importados correctamente.',
-            'filas_importadas' => $count,
-            'cantidad' => 0
-        ], 200);
-        */
+
     }
     
     function extension($filename){$file = explode(".",$filename); return strtolower(end($file));}
@@ -939,7 +840,6 @@ class OrdenCompraController extends Controller
 		
 		$archivo = $filename.".".$type;
 		
-        //echo $archivo;
 		$this->importar_archivo($archivo);
 		
 	}
@@ -983,6 +883,13 @@ class OrdenCompraController extends Controller
 		return response()->json($codigo);
 	}
 
+    public function obtener_descuento($id_vendedor){
+		
+        $usuario_descuento_model = new UsuarioDescuento;
+        $descuento = $usuario_descuento_model->getDescuentoByUser($id_vendedor);
+		
+		return response()->json($descuento);
+	}
     
     public function obtener_salida_prod_id($id){
         $oc_model = new OrdenCompra;
@@ -1050,7 +957,7 @@ class OrdenCompraController extends Controller
 		$variable = [];
 		$n = 1;
 
-		array_push($variable, array("N°","Id","Tipo Documento","Empresa Compra","N° OC Cliente","Empresa Vende","Fecha","Numero OC","Almacen Origen","Almacen Destino","Situacion","Vendedor","Total","Estado","Estado Pedido"));
+		array_push($variable, array("N°","Id","Tipo Documento","Empresa Compra","N° OC Cliente"/*,"Empresa Vende"*/,"Fecha","Numero OC","Almacen Origen","Almacen Destino","Situacion","Vendedor","Total","Estado","Estado Pedido","Prioridad"));
 		
 		foreach ($data as $r) {
 
@@ -1061,7 +968,7 @@ class OrdenCompraController extends Controller
             if($r->estado_pedido==2){$estado_pedido='ANULADO';}
             if($r->estado_pedido==3){$estado_pedido='CANCELADO';}
 
-			array_push($variable, array($n++,$r->id, $r->tipo_documento, $r->cliente, $r->numero_orden_compra_cliente, $r->empresa_vende, $r->fecha_orden_compra, $r->numero_orden_compra, $r->almacen_origen, $r->almacen_destino, $r->cerrado, $r->vendedor, (float)$r->total, $estado, $estado_pedido));
+			array_push($variable, array($n++,$r->id, $r->tipo_documento, $r->cliente, $r->numero_orden_compra_cliente/*, $r->empresa_vende*/, $r->fecha_orden_compra, $r->numero_orden_compra, $r->almacen_origen, $r->almacen_destino, $r->cerrado, $r->vendedor, (float)$r->total, $estado, $estado_pedido, $r->prioridad));
 		}
 		
 		$export = new InvoicesExport([$variable]);
@@ -1133,7 +1040,6 @@ class OrdenCompraController extends Controller
         $producto_model = new Producto;
         $marca_model = new Marca;
         $ubigeo_model = new Ubigeo;
-        //$id_orden_compra = $id;
 
         $existe_orden_compra_contacto_entrega = OrdenCompraContactoEntrega::where('id_orden_compra',$id)->where('estado',1)->first();
 		
@@ -1163,8 +1069,6 @@ class OrdenCompraController extends Controller
     public function send_datos_contacto(Request $request){
 
 		$id_user = Auth::user()->id;
-
-        //dd($request->id_datos_pedido);exit();
 
 		if($request->id_datos_pedido){
             $orden_compra_contacto_entrega = OrdenCompraContactoEntrega::find($request->id_datos_pedido);
@@ -1438,7 +1342,6 @@ class OrdenCompraController extends Controller
 		
 		$archivo = $filename.".".$type;
 		
-        //echo $archivo;
 		$this->importar_archivo_od($archivo);
 		
 	}
@@ -1491,12 +1394,10 @@ class OrdenCompraController extends Controller
             $producto = Producto::find($id_producto);
             $cantidad_requerida = $row['UNIDADES'];
 
-            //dd($count);exit();
-
             if($count == 0){
                 
                 $existeTiendaOrdenCompra = TiendaDetalleOrdenCompra::where("id_orden_compra",$orden_compra->id)->where("estado",1)->get();
-                //dd($existeTiendaOrdenCompra);exit();
+                
                 if(count($existeTiendaOrdenCompra)>0){
                     $array["cantidad"] = count($existeTiendaOrdenCompra);
                     echo json_encode($array);
@@ -1514,7 +1415,6 @@ class OrdenCompraController extends Controller
             $tienda_detalle_orden_compra->save();
 
             $count++;
-            //}
             
         }
 
@@ -1526,11 +1426,6 @@ class OrdenCompraController extends Controller
 
         $array["cantidad"] = count($existeTiendaOrdenCompra);
         echo json_encode($array);
-
-        /*return response()->json([
-            'message' => 'Datos importados correctamente.',
-            'filas_importadas' => $count,
-        ], 200);*/
 
     }
 
@@ -1610,16 +1505,15 @@ class OrdenCompraController extends Controller
 		}else{
 			$orden_compra_pago = OrdenCompraPago::find($id);
 		}
-		//$adelantos = $adelanto_model->getAdelantoByPersona($id_persona);
+
 		$tipo_desembolso = $tablaMaestra_model->getMaestroByTipo(65);
 		$banco = $tablaMaestra_model->getMaestroByTipo(16);
-		//print_r($tipo_desembolso);
 
 		$orden_compra_pago_model = new OrdenCompraPago;
 		$data = $orden_compra_pago_model->getImportePago($id_orden_compra);
 
 		$importe = $data->precio-$data->pago;
-		//echo $id;
+
 		return view('frontend.orden_compra.modal_pago',compact('id','orden_compra_pago','id_orden_compra','fecha_actual'/*,'adelantos'*/,'tipo_desembolso','importe','banco'));
 	
 	}
@@ -1633,8 +1527,6 @@ class OrdenCompraController extends Controller
 		}else{
 			$guia_interna = GuiaInterna::find($id);
 		}
-
-        //dd($guia_interna->guia_serie);exit();
 
 		return view('frontend.orden_compra.modal_guia',compact('id','guia_interna','id_orden_compra'));
 	
@@ -1651,7 +1543,6 @@ class OrdenCompraController extends Controller
 
     public function cargar_guia_orden_compra($id){
 		
-        //dd("ok");exit();
 		$orden_compra_model = new OrdenCompra;
         $guia = $orden_compra_model->getOrdenCompraGuiaById($id);
 		
@@ -1744,10 +1635,6 @@ class OrdenCompraController extends Controller
 			$pago->foto_desembolso = $request->img_foto;
 			$pago->estado = 1;
 			$pago->id_usuario_inserta = $id_user;
-			//$adelanto->fecha_hora = $fecha_hora;
-			//$pago->id_usuario = $id_user;
-			//$pago->id_caja = $id_caja;
-			//$pago->estado = "A";
 		}else{
 			$pago = OrdenCompraPago::find($request->id);
 			$pago->id_tipo_desembolso = $request->id_tipodesembolso;
@@ -2160,6 +2047,471 @@ class OrdenCompraController extends Controller
 
         return "Proceso de compromiso automático finalizado.";
     }
+
+    public function create_autorizacion(){
+		
+        $user_model = new User;
+        $tablaMaestra_model = new TablaMaestra;
+
+        $vendedor = $user_model->getUserByRol(7,11);
+		$estado_autorizacion = $tablaMaestra_model->getMaestroByTipo(100);
+
+		return view('frontend.orden_compra.create_autorizacion',compact('vendedor','estado_autorizacion'));
+
+	}
+
+    public function listar_orden_compra_autorizacion_ajax(Request $request){
+
+        $id_user = Auth::user()->id;
+
+		$orden_compra_model = new OrdenCompra;
+        $p[]=$request->empresa_compra;
+        $p[]=$request->numero_orden_compra;
+        $p[]=$request->numero_orden_compra_cliente;
+        $p[]=$id_user;
+        $p[]=$request->estado_autorizacion;
+        $p[]=$request->estado;
+		$p[]=$request->NumeroPagina;
+		$p[]=$request->NumeroRegistros;
+		$data = $orden_compra_model->listar_orden_compra_autorizacion_ajax($p);
+		$iTotalDisplayRecords = isset($data[0]->totalrows)?$data[0]->totalrows:0;
+
+		$result["PageStart"] = $request->NumeroPagina;
+		$result["pageSize"] = $request->NumeroRegistros;
+		$result["SearchText"] = "";
+		$result["ShowChildren"] = true;
+		$result["iTotalRecords"] = $iTotalDisplayRecords;
+		$result["iTotalDisplayRecords"] = $iTotalDisplayRecords;
+		$result["aaData"] = $data;
+
+        echo json_encode($result);
+
+	}
+
+    public function modal_orden_compra_autorizacion($id){
+		
+        $id_user = Auth::user()->id;
+        $tablaMaestra_model = new TablaMaestra;
+        $producto_model = new Producto;
+        $marca_model = new Marca;
+        $almacen_model = new Almacene;
+        $user_model = new User;
+        $persona_model = new Persona;
+        $empresa_model = new Empresa;
+        $usuario_descuento_model = new UsuarioDescuento;
+		
+		if($id>0){
+
+            $orden_compra = OrdenCompra::find($id);
+            $descuento_usuario = $usuario_descuento_model->getDescuentoByUser($orden_compra->id_vendedor);
+            $id_descuento_usuario = $descuento_usuario[0]->descuento;
+			
+		}else{
+			$orden_compra = new OrdenCompra;
+            $id_descuento_usuario = 0;
+		}
+
+        $proveedor = $empresa_model->getEmpresaAll();
+        $tipo_documento = $tablaMaestra_model->getMaestroByTipo(54);
+        $producto = $producto_model->getProductoAll();
+        $marca = $marca_model->getMarcaAll();
+        $estado_bien = $tablaMaestra_model->getMaestroByTipo(4);
+        $unidad = $tablaMaestra_model->getMaestroByTipo(43);
+        $igv_compra = $tablaMaestra_model->getMaestroByTipo(51);
+        $descuento = $tablaMaestra_model->getMaestroByTipo(55);
+        $almacen = $almacen_model->getAlmacenAll();
+        $unidad_origen = $tablaMaestra_model->getMaestroByTipo(50);
+        $moneda = $tablaMaestra_model->getMaestroByTipo(1);
+
+        $vendedor = $user_model->getUserByRol(7,11);
+        $tipo_documento_cliente = $tablaMaestra_model->getMaestroByTipo(75);
+        $persona = $persona_model->obtenerPersonaAll();
+        $prioridad = $tablaMaestra_model->getMaestroByTipo(93);
+        $canal = $tablaMaestra_model->getMaestroByTipo(98);
+
+		return view('frontend.orden_compra.modal_orden_compra_autorizacionOrdenCompra',compact('id','orden_compra','tipo_documento','proveedor','producto','marca','estado_bien','unidad','igv_compra','descuento','almacen','unidad_origen','id_user','moneda','vendedor','tipo_documento_cliente','persona','prioridad','canal','id_descuento_usuario'));
+
+    }
+
+    public function send_orden_compra_autorizacion(Request $request){
+
+        $id_user = Auth::user()->id;
+
+        if($request->id == 0){
+            $orden_compra = new OrdenCompra;
+		    
+        }else{
+            $orden_compra = OrdenCompra::find($request->id);
+        }
+
+        $descripcion = $request->input('descripcion');
+        $cod_interno = $request->input('cod_interno');
+        $marca = $request->input('marca');
+        $estado_bien = $request->input('estado_bien');
+        $unidad = $request->input('unidad');
+        $cantidad_ingreso = $request->input('cantidad_ingreso');
+        $precio_unitario = $request->input('precio_unitario');
+        $id_descuento = $request->input('id_descuento');
+        $sub_total = $request->input('sub_total');
+        $igv = $request->input('igv');
+        $total = $request->input('total');
+        $precio_unitario_ = $request->input('precio_unitario_');
+        $valor_venta_bruto = $request->input('valor_venta_bruto');
+        $valor_venta = $request->input('valor_venta');
+        $descuento = $request->input('descuento');
+        $porcentaje = $request->input('porcentaje');
+        $id_autorizacion_detalle = $request->input('id_autorizacion_detalle');
+        $id_orden_compra_detalle =$request->id_orden_compra_detalle;
+
+        $orden_compra->id_autorizacion = $request->id_autorizacion;
+        $orden_compra->id_usuario_autoriza = $id_user;
+        $orden_compra->save();
+
+        $array_orden_compra_detalle = array();
+
+        foreach($descripcion as $index => $value) {
+            
+            if($id_orden_compra_detalle[$index] == 0){
+                $orden_compra_detalle = new OrdenCompraDetalle;
+            }else{
+                $orden_compra_detalle = OrdenCompraDetalle::find($id_orden_compra_detalle[$index]);
+            }
+            
+            $orden_compra_detalle->id_orden_compra = $orden_compra->id;
+            $orden_compra_detalle->id_producto = $descripcion[$index];
+            $orden_compra_detalle->cantidad_requerida = $cantidad_ingreso[$index];
+            $orden_compra_detalle->precio = round($precio_unitario_[$index],2);
+            $orden_compra_detalle->valor_venta_bruto = round($valor_venta_bruto[$index],2);
+            $orden_compra_detalle->precio_venta = round($precio_unitario[$index],2);
+            $orden_compra_detalle->valor_venta = round($valor_venta[$index],2);
+            $orden_compra_detalle->id_descuento = $id_descuento[$index];
+            if($id_descuento[$index]==1){
+                $orden_compra_detalle->descuento = round($descuento[$index],2);
+            }else if($id_descuento[$index]==2){
+                $orden_compra_detalle->descuento = $porcentaje[$index];
+            }
+            $orden_compra_detalle->sub_total = round($sub_total[$index],2);
+            $orden_compra_detalle->igv = round($igv[$index],2);
+            $orden_compra_detalle->total = round($total[$index],2);
+            $orden_compra_detalle->estado = 1;
+            if($orden_compra_detalle->id_autorizacion == 1){
+                $orden_compra_detalle->id_autorizacion = $id_autorizacion_detalle[$index];
+                if($id_autorizacion_detalle[$index] == 2){
+                    $orden_compra_detalle->id_usuario_autoriza = $id_user;
+                }
+            }
+            $orden_compra_detalle->id_usuario_inserta = $id_user;
+            $orden_compra_detalle->save();
+
+            $array_orden_compra_detalle[] = $orden_compra_detalle->id;
+        }
+
+        return response()->json(['id' => $orden_compra->id]);
+        
+    }
+
+    public function obtener_descuento_usuario($id_user){
+        
+		$usuario_descuento_model = new UsuarioDescuento;
+		$descuento_usuario = $usuario_descuento_model->getDescuentoByUser($id_user);
+		
+		echo json_encode($descuento_usuario);
+	}
+
+    public function create_reporte_comercializacion_general(){
+
+        $id_user = Auth::user()->id;
+        $producto_model = new Producto;
+        $user_model = new User;
+
+		$tablaMaestra_model = new TablaMaestra;
+        $proveedor = Empresa::all();
+        $productos = $producto_model->getProductoExterno();
+        $vendedor = $user_model->getUserByRol(7,11);
+		$canal = $tablaMaestra_model->getMaestroByTipo(98);
+
+		return view('frontend.orden_compra.create_reporte_comercializacion_general',compact('proveedor','productos','vendedor','canal'));
+
+	}
+
+    public function listar_reporte_comercializacion_general_ajax(Request $request){
+
+        $id_user = Auth::user()->id;
+
+		$orden_compra_model = new OrdenCompra;
+        $p[]=$request->canal;
+        $p[]=$request->empresa_compra;
+        $p[]=$request->fecha_inicio;
+        $p[]=$request->fecha_fin;
+        $p[]=$request->vendedor;
+		$p[]=$request->NumeroPagina;
+		$p[]=$request->NumeroRegistros;
+		$data = $orden_compra_model->listar_reporte_comercializacion_general_ajax($p);
+		$iTotalDisplayRecords = isset($data[0]->totalrows)?$data[0]->totalrows:0;
+
+		$result["PageStart"] = $request->NumeroPagina;
+		$result["pageSize"] = $request->NumeroRegistros;
+		$result["SearchText"] = "";
+		$result["ShowChildren"] = true;
+		$result["iTotalRecords"] = $iTotalDisplayRecords;
+		$result["iTotalDisplayRecords"] = $iTotalDisplayRecords;
+		$result["aaData"] = $data;
+
+        echo json_encode($result);
+
+	}
+
+    public function exportar_reporte_comercializacion_general($empresa_compra, $fecha_inicio, $fecha_fin, $vendedor, $canal) {
+
+        if($empresa_compra==0)$empresa_compra = "";
+        if($fecha_inicio=="0")$fecha_inicio = "";
+        if($fecha_fin=="0")$fecha_fin = "";
+        if($vendedor==0)$vendedor = "";
+        if($canal==0)$canal = "";
+        
+        $orden_compra_model = new OrdenCompra;
+		$p[]=$canal;
+        $p[]=$empresa_compra;
+        $p[]=$fecha_inicio;
+        $p[]=$fecha_fin;
+        $p[]=$vendedor;
+        $p[]=1;
+		$p[]=10000;
+		$data = $orden_compra_model->listar_reporte_comercializacion_general_ajax($p);
+		$iTotalDisplayRecords = isset($data[0]->totalrows)?$data[0]->totalrows:0;
+		
+		$variable = [];
+		$n = 1;
+
+		array_push($variable, array("N°","Cliente","Canal","Vendedor","Monto","Fecha","Numero Orden Compra"));
+		
+		foreach ($data as $r) {
+
+			array_push($variable, array($n++,$r->cliente, $r->canal, $r->vendedor, $r->total_despacho, $r->fecha_orden_compra, $r->pedido));
+		}
+		
+		$export = new InvoicesExport6([$variable]);
+		return Excel::download($export, 'Reporte_comercializacion_general.xlsx');
+		
+    }
+
+    public function create_informe_b2b(){
+
+        $equivalencia_producto_model = new EquivalenciaProducto;
+        $tienda_model = new Tienda;
+
+        $equivalencia_producto = $equivalencia_producto_model->getEquivalenciaProductoAll();
+        $tienda = $tienda_model->getTiendasAll();
+
+		return view('frontend.orden_compra.create_informe_b2b',compact('equivalencia_producto','tienda'));
+
+	}
+
+    public function listar_informe_b2b_ajax(Request $request){
+
+        $id_user = Auth::user()->id;
+
+		$orden_compra_model = new OrdenCompra;
+		$p[]=$request->semana;
+        $p[]=$request->producto;
+        $p[]=$request->tienda;
+		$p[]=$request->NumeroPagina;
+		$p[]=$request->NumeroRegistros;
+		$data = $orden_compra_model->listar_informe_b2b_ajax($p);
+		$iTotalDisplayRecords = isset($data[0]->totalrows)?$data[0]->totalrows:0;
+
+		$result["PageStart"] = $request->NumeroPagina;
+		$result["pageSize"] = $request->NumeroRegistros;
+		$result["SearchText"] = "";
+		$result["ShowChildren"] = true;
+		$result["iTotalRecords"] = $iTotalDisplayRecords;
+		$result["iTotalDisplayRecords"] = $iTotalDisplayRecords;
+		$result["aaData"] = $data;
+
+        echo json_encode($result);
+
+	}
+
+    public function upload_informe_b2b_compra(Request $request){
+		
+		$filename = date("YmdHis") . substr((string)microtime(), 1, 6);
+		$type="";
+		
+        $path = "informe_b2b";
+        if (!is_dir($path)) {
+            mkdir($path);
+        }
+        
+        $filepath = public_path('informe_b2b/');
+		
+		$type=$this->extension($_FILES["file"]["name"]);
+		move_uploaded_file($_FILES["file"]["tmp_name"], $filepath . $filename.".".$type);
+		
+		$archivo = $filename.".".$type;
+		
+		$this->importar_informe_b2b($archivo);
+		
+	}
+
+    public function importar_informe_b2b($archivo)
+    {
+
+        $id_user = Auth::user()->id;
+
+        $filePath = public_path('informe_b2b/'.$archivo);
+
+        if (!file_exists($filePath)) {
+            return response()->json(['error' => 'Archivo no encontrado.'], 404);
+        }
+        
+        $file = fopen($filePath, 'r');
+
+        // Lee la cabecera
+        $header = fgetcsv($file, 0, '|');
+
+        //dd($header); exit();
+
+        if ($header === false) {
+            return response()->json(['error' => 'El archivo está vacío o tiene un formato incorrecto.'], 400);
+        }
+
+        $cleanHeader = [];
+        $semana = null;
+
+        foreach ($header as $col) {
+            $col = trim($col);
+            
+            if (preg_match('/_(\d{2}-\d{2})$/', $col, $matches)) {
+                [$nombreCampo, $fechaParte] = explode('_', $col);
+                $nombreCampo = strtoupper($nombreCampo);
+                [$dia, $mes] = explode('-', $fechaParte);
+                $anioActual = date('Y');
+                $fecha = DateTime::createFromFormat('d-m-Y', "$dia-$mes-$anioActual");
+
+                if ($fecha && !$semana) {
+                    $semana = (int)$fecha->format('W');
+                }
+            } else {
+                $nombreCampo = strtoupper($col);
+            }
+
+            $cleanHeader[] = $nombreCampo;
+        }
+
+        $header = $cleanHeader;
+
+        $count = 0;
+        
+        while (($line = fgets($file)) !== false) {
+
+            $line = trim($line);
+            
+            $data = str_getcsv($line, '|');
+            
+            $data = array_pad($data, count($header), null);
+
+            if (count($data) !== count($header)) {
+                continue; // Ignorar filas mal formateadas
+            }
+
+            $row = array_combine($header, $data);
+
+            /*if($count == 0){
+
+                $InformeVentaB2BExiste = InformeVentaB2b::where("numero_orden_compra_cliente",$numero_orden_compra_cliente)->where("estado","1")->get();
+            
+                if(count($OrdenCompraExiste)>0){
+                    $array["cantidad"] = count($OrdenCompraExiste);
+                    echo json_encode($array);
+                    exit();
+                }
+                
+                $informeVentaB2B = new InformeVentaB2b;
+                $informeVentaB2B->id_unidad_origen = $id_unidad_origen;
+                $informeVentaB2B->id_empresa_vende = $id_empresa_vende;
+                $informeVentaB2B->id_empresa_compra = $id_empresa_compra;
+                $informeVentaB2B->fecha_orden_compra = $fecha_orden_compra;
+                $informeVentaB2B->numero_orden_compra = $numero_orden_compra;
+                $informeVentaB2B->numero_orden_compra_cliente = $numero_orden_compra_cliente;
+                $informeVentaB2B->id_tipo_documento = $id_tipo_documento;
+                $informeVentaB2B->estado = $estado;
+                $informeVentaB2B->igv_compra = $igv_compra;
+                $informeVentaB2B->cerrado = $cerrado;
+                $informeVentaB2B->id_almacen_destino = $id_almacen_destino;
+                $informeVentaB2B->id_almacen_salida = $id_almacen_salida;
+                $informeVentaB2B->tienda_asignada = $tienda_asignada;
+                $informeVentaB2B->id_moneda = $id_moneda;
+                $informeVentaB2B->moneda = $moneda;
+                $informeVentaB2B->id_usuario_inserta = $id_user;
+                $informeVentaB2B->id_vendedor = $id_vendedor;
+                $informeVentaB2B->id_tipo_cliente = $id_tipo_cliente;
+                $informeVentaB2B->fecha_vencimiento = $fecha_vencimiento;
+                $informeVentaB2B->id_canal = $id_canal;
+                $informeVentaB2B->save();
+                $id_informeVentaB2B = $informeVentaB2B->id;
+
+            }*/
+            
+            $equivalenciaProducto = EquivalenciaProducto::where("codigo_empresa",trim($row['SKU']))->first();
+            $equivalenciaTienda = Tienda::where("numero_tienda",trim($row['NRO_LOCAL']))->first();
+            $id_producto = $equivalenciaProducto->id_producto;
+            $id_tienda = $equivalenciaTienda->id;
+            $producto = Producto::find($id_producto);
+            $upc = $row['UPC'];
+            $sku = $row['SKU'];
+            $subclase_conjunto = $row['SUBCLASE-CONJUNTO'];
+            $desc_subclase_conjunto = $row['DESC_SUBCLASE-DESC_CONJUNTO'];
+            //$id_local = $row['NRO_LOCAL'];
+
+            $lunes = $row['LUNES'];
+            $martes = $row['MARTES'];
+            $miercoles = $row['MIERCOLES'];
+            $jueves = $row['JUEVES'];
+            $viernes = $row['VIERNES'];
+            $sabado = $row['SABADO'];
+            $domingo = $row['DOMINGO'];
+
+            $venta_unidades = $row['VENTA_UNIDADES'];
+            $venta_soles = $row['VENTA_SOLES'];
+            $stock_contable = $row['STOCK_CONTABLE'];
+
+            $oc_pendiente = $row['OC_PENDIENTE'];
+            $trf_por_recibir = $row['TRF_POR_RECIBIR'];
+            $trf_enviadas = $row['TRF_ENVIADAS'];
+
+            $informeVentaB2B = new InformeB2bVenta;
+            $informeVentaB2B->upc = $upc;
+            $informeVentaB2B->sku = trim($sku);
+            $informeVentaB2B->id_producto = $id_producto;
+            $informeVentaB2B->subclase_conjunto = $subclase_conjunto;
+            $informeVentaB2B->desc_subclase_conjunto = $desc_subclase_conjunto;
+            $informeVentaB2B->id_tienda = $id_tienda;
+            $informeVentaB2B->semana = $semana;
+            $informeVentaB2B->lunes = $lunes;
+            $informeVentaB2B->martes = $martes;
+            $informeVentaB2B->miercoles = $miercoles;
+            $informeVentaB2B->jueves = $jueves;
+            $informeVentaB2B->viernes = $viernes;
+            $informeVentaB2B->sabado = $sabado;
+            $informeVentaB2B->domingo = $domingo;
+            $informeVentaB2B->venta_unidades = $venta_unidades;
+            $informeVentaB2B->venta_soles = $venta_soles;
+            $informeVentaB2B->stock_contable = $stock_contable;
+            $informeVentaB2B->oc_pendiente = $oc_pendiente;
+            $informeVentaB2B->trf_por_recibir = $trf_por_recibir;
+            $informeVentaB2B->trf_enviadas = $trf_enviadas;
+            $informeVentaB2B->id_usuario_inserta = $id_user;
+            $informeVentaB2B->save();
+
+            $count++;
+        }
+
+        fclose($file);
+
+        $array["cantidad"] = 0;//count($count);
+        echo json_encode($array);
+
+    }
 }
 
 class InvoicesExport implements FromArray, WithHeadings, WithStyles
@@ -2179,7 +2531,7 @@ class InvoicesExport implements FromArray, WithHeadings, WithStyles
 
     public function headings(): array
     {
-        return ["N", "Id", "Tipo Documento", "Empresa Compra", "N° OC Cliente", "Empresa Vende", "Fecha", "Numero OC", "Almacen Origen", "Almacen Destino", "Situacion", "Vendedor", "Total", "Estado", "Estado Pedido"];
+        return ["N", "Id", "Tipo Documento", "Empresa Compra", "N° OC Cliente"/*, "Empresa Vende"*/, "Fecha", "Numero OC", "Almacen Origen", "Almacen Destino", "Situacion", "Vendedor", "Total", "Estado", "Estado Pedido", "Prioridad"];
     }
 
 	public function styles(Worksheet $sheet)
@@ -2253,10 +2605,10 @@ class InvoicesExport2 implements FromArray, WithHeadings, WithStyles
 	public function styles(Worksheet $sheet)
     {
 
-		$sheet->mergeCells('A1:R1');
+		$sheet->mergeCells('A1:S1');
 
         $sheet->setCellValue('A1', "REPORTE DE COMERCIALIZACION - FORESPAMA");
-        $sheet->getStyle('A1:R1')->applyFromArray([
+        $sheet->getStyle('A1:S1')->applyFromArray([
             'font' => [
                 'bold' => true,
                 'color' => ['rgb' => 'FFFFFF'],
@@ -2273,7 +2625,7 @@ class InvoicesExport2 implements FromArray, WithHeadings, WithStyles
 		$sheet->getStyle('A1')->getAlignment()->setWrapText(true);
 		$sheet->getRowDimension(1)->setRowHeight(30);
 
-        $sheet->getStyle('A2:R2')->applyFromArray([
+        $sheet->getStyle('A2:S2')->applyFromArray([
             'font' => [
                 'bold' => true,
                 'color' => ['rgb' => '000000'],
@@ -2289,11 +2641,7 @@ class InvoicesExport2 implements FromArray, WithHeadings, WithStyles
 
 		$sheet->fromArray($this->headings(), NULL, 'A2');
 
-		/*$sheet->getStyle('L3:L'.$sheet->getHighestRow())
-		->getNumberFormat()
-		->setFormatCode(\PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_NUMBER_00);*/ //SIRVE PARA PONER 2 DECIMALES A ESA COLUMNA
-        
-        foreach (range('A', 'R') as $col) {
+        foreach (range('A', 'S') as $col) {
             $sheet->getColumnDimension($col)->setAutoSize(true);
         }
     }
@@ -2357,10 +2705,6 @@ class InvoicesExport3 implements FromArray, WithHeadings, WithStyles
 
 		$sheet->fromArray($this->headings(), NULL, 'A2');
 
-		/*$sheet->getStyle('L3:L'.$sheet->getHighestRow())
-		->getNumberFormat()
-		->setFormatCode(\PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_NUMBER_00);*/ //SIRVE PARA PONER 2 DECIMALES A ESA COLUMNA
-        
         foreach (range('A', 'N') as $col) {
             $sheet->getColumnDimension($col)->setAutoSize(true);
         }
@@ -2425,10 +2769,6 @@ class InvoicesExport4 implements FromArray, WithHeadings, WithStyles
 
 		$sheet->fromArray($this->headings(), NULL, 'A2');
 
-		/*$sheet->getStyle('L3:L'.$sheet->getHighestRow())
-		->getNumberFormat()
-		->setFormatCode(\PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_NUMBER_00);*/ //SIRVE PARA PONER 2 DECIMALES A ESA COLUMNA
-        
         foreach (range('A', 'L') as $col) {
             $sheet->getColumnDimension($col)->setAutoSize(true);
         }
@@ -2492,12 +2832,72 @@ class InvoicesExport5 implements FromArray, WithHeadings, WithStyles
         ]);
 
 		$sheet->fromArray($this->headings(), NULL, 'A2');
-
-		/*$sheet->getStyle('L3:L'.$sheet->getHighestRow())
-		->getNumberFormat()
-		->setFormatCode(\PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_NUMBER_00);*/ //SIRVE PARA PONER 2 DECIMALES A ESA COLUMNA
         
         foreach (range('A', 'O') as $col) {
+            $sheet->getColumnDimension($col)->setAutoSize(true);
+        }
+    }
+}
+
+class InvoicesExport6 implements FromArray, WithHeadings, WithStyles
+{
+	protected $invoices;
+
+	public function __construct(array $invoices)
+	{
+		$this->invoices = $invoices;
+	}
+
+	public function array(): array
+	{
+		return $this->invoices;
+	}
+
+    public function headings(): array
+    {
+        return ["N°","Cliente","Canal","Vendedor","Monto","Fecha","Numero Orden Compra"];
+    }
+
+	public function styles(Worksheet $sheet)
+    {
+
+		$sheet->mergeCells('A1:G1');
+
+        $sheet->setCellValue('A1', "REPORTE DE COMERCIALIZACION GENERAL - FORESPAMA");
+        $sheet->getStyle('A1:G1')->applyFromArray([
+            'font' => [
+                'bold' => true,
+                'color' => ['rgb' => 'FFFFFF'],
+            ],
+            'fill' => [
+                'fillType' => Fill::FILL_SOLID,
+                'startColor' => ['rgb' => '246257'],
+            ],
+            'alignment' => [
+                'horizontal' => Alignment::HORIZONTAL_CENTER,
+            ],
+        ]);
+
+		$sheet->getStyle('A1')->getAlignment()->setWrapText(true);
+		$sheet->getRowDimension(1)->setRowHeight(30);
+
+        $sheet->getStyle('A2:G2')->applyFromArray([
+            'font' => [
+                'bold' => true,
+                'color' => ['rgb' => '000000'],
+            ],
+            'fill' => [
+                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                'startColor' => ['rgb' => '2EB85C'],
+            ],
+			'alignment' => [
+			'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+    		],
+        ]);
+
+		$sheet->fromArray($this->headings(), NULL, 'A2');
+        
+        foreach (range('A', 'G') as $col) {
             $sheet->getColumnDimension($col)->setAutoSize(true);
         }
     }

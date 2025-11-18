@@ -11,9 +11,21 @@ class IngresoVehiculoTronco extends Model
 
 	function getEmpresaConductorVehiculos($placa){
 
-        $cad = "select ecv.id,ecv.id_empresas,ecv.id_vehiculos,ecv.id_conductores,e.razon_social,e.ruc,v.placa,v.ejes,v.peso_tracto,v.peso_carreta,v.peso_seco,c.licencia,to_char(c.fecha_licencia,'dd-mm-yyyy')fecha_licencia,p.id_tipo_documento,p.numero_documento,p.apellido_paterno||' '||p.apellido_materno||' '||p.nombres conductor, v.id_marca, m.denominiacion marca, c.licencia, v.constancia_inscripcion 
+        $cad = "select ecv.id,ecv.id_empresas,ecv.id_persona,ecv.id_vehiculos,ecv.id_conductores,
+        case when ecv.id_tipo_cliente = 1 then 
+        (select p.nombres ||' '|| p.apellido_paterno ||' '|| p.apellido_materno from personas p
+        where p.id = ecv.id_persona)
+        else (select e2.razon_social from empresas e2 
+        where e2.id = ecv.id_empresas ) 
+        end razon_social,
+        case when ecv.id_tipo_cliente = 1 then 
+        (select p.numero_documento from personas p
+        where p.id = ecv.id_persona)
+        else (select e2.ruc from empresas e2 
+        where e2.id = ecv.id_empresas) 
+        end ruc,
+        v.placa,v.ejes,v.peso_tracto,v.peso_carreta,v.peso_seco,c.licencia,to_char(c.fecha_licencia,'dd-mm-yyyy')fecha_licencia,p.id_tipo_documento,p.numero_documento,p.apellido_paterno||' '||p.apellido_materno||' '||p.nombres conductor, v.id_marca, m.denominiacion marca, c.licencia, v.constancia_inscripcion, ecv.id_tipo_cliente 
         from empresas_conductores_vehiculos ecv
-        inner join empresas e on ecv.id_empresas=e.id
         inner join vehiculos v on ecv.id_vehiculos=v.id and v.estado='1' 
         inner join conductores c on ecv.id_conductores=c.id and c.estado='ACTIVO'
         inner join personas p on c.id_personas=p.id and p.estado='1'
@@ -46,37 +58,25 @@ class IngresoVehiculoTronco extends Model
 
 	function getIngresoVehiculoTroncoCubicajeById($id){
 
-        $cad = "select ivtc.*, ivt.id_empresa_proveedor,
-        (select ec.diametro_dm
-        from empresa_cubicajes ec
-        where ec.id_empresa = ivt.id_empresa_proveedor 
-        and ((ec.id_tipo_empresa = 2 and ec.id_conductor = ivt.id_conductores) 
-        or (ec.id_tipo_empresa = 1))
-        and ec.estado ='1'
-        order by 1 desc 
-        limit 1) diametro_dm_proveedor,
-        (select ec.precio_mayor 
-        from empresa_cubicajes ec
-        where ec.id_empresa = ivt.id_empresa_proveedor 
-        and ((ec.id_tipo_empresa = 2 and ec.id_conductor = ivt.id_conductores) 
-        or (ec.id_tipo_empresa = 1))
-        and ec.estado ='1'
-        order by 1 desc 
-        limit 1) precio_mayor,
-        (select ec.precio_menor 
-        from empresa_cubicajes ec
-        where ec.id_empresa = ivt.id_empresa_proveedor 
-        and ((ec.id_tipo_empresa = 2 and ec.id_conductor = ivt.id_conductores) 
-        or (ec.id_tipo_empresa = 1))
-        and ec.estado ='1'
-        order by 1 desc 
-        limit 1) precio_menor
-        from ingreso_vehiculo_tronco_cubicajes ivtc 
-        left join ingreso_vehiculo_tronco_tipo_maderas ivttm on ivtc.id_ingreso_vehiculo_tronco_tipo_maderas = ivttm.id 
+        $cad = "select ivtc.*, COALESCE(p.id, e2.id) id_empresa_proveedor, ec.diametro_dm diametro_dm_proveedor, ec.precio_mayor, ec.precio_menor
+        from ingreso_vehiculo_tronco_cubicajes ivtc
+        left join ingreso_vehiculo_tronco_tipo_maderas ivttm on ivtc.id_ingreso_vehiculo_tronco_tipo_maderas = ivttm.id
         left join ingreso_vehiculo_troncos ivt on ivttm.id_ingreso_vehiculo_troncos = ivt.id
-        where id_ingreso_vehiculo_tronco_tipo_maderas='".$id."' 
+        left join personas p on ivt.id_tipo_cliente = 1 and p.id = ivt.id_persona
+        left join empresas e2 on ivt.id_tipo_cliente <> 1 and e2.id = ivt.id_empresa_proveedor
+        left join lateral (
+        select ec.diametro_dm, ec.precio_mayor, ec.precio_menor
+        from empresa_cubicajes ec
+        where ec.estado = '1'
+        and ((ivt.id_tipo_cliente = 1 and ec.id_persona = ivt.id_persona)
+        or (ivt.id_tipo_cliente <> 1 and ec.id_empresa = ivt.id_empresa_proveedor))
+        and ((ec.id_tipo_empresa = 2 and ec.id_conductor = ivt.id_conductores)
+        or ec.id_tipo_empresa = 1)
+        order by ec.id desc
+        limit 1) ec on true
+        where ivtc.id_ingreso_vehiculo_tronco_tipo_maderas = '".$id."'
         and ivtc.estado = '1'
-        order by 1 asc";
+        order by ivtc.id asc";
 
 		$data = DB::select($cad);
         return $data;
@@ -97,16 +97,31 @@ class IngresoVehiculoTronco extends Model
 
     function getIngresoVehiculoTroncoCubicajeCabeceraById($id){
 
-        $cad = "select ivt.id,ivttm.id id_ingreso_vehiculo_tronco_tipo_maderas,ivt.fecha_ingreso,e.ruc,e.razon_social,v.placa,v.ejes,p.numero_documento,
+        $cad = "select ivt.id,ivttm.id id_ingreso_vehiculo_tronco_tipo_maderas,ivt.fecha_ingreso,
+        case when ivt.id_tipo_cliente = 1 then 
+        (select p.nombres ||' '|| p.apellido_paterno ||' '|| p.apellido_materno from personas p
+        where p.id = ivt.id_persona)
+        else (select e2.razon_social from empresas e2 
+        where e2.id = ivt.id_empresa_transportista ) 
+        end razon_social,
+        case when ivt.id_tipo_cliente = 1 then 
+        (select p.numero_documento from personas p
+        where p.id = ivt.id_persona)
+        else (select e2.ruc from empresas e2 
+        where e2.id = ivt.id_empresa_transportista ) 
+        end ruc,
+        v.placa,v.ejes,p.numero_documento,
         p.apellido_paterno||' '||p.apellido_materno||' '||p.nombres conductor,
         tm.denominacion tipo_madera,ivttm.cantidad,
-        (select ec.id_tipo_empresa 
+        (select ec.id_tipo_empresa
         from empresa_cubicajes ec
-        where ec.id_empresa = ivt.id_empresa_proveedor 
-        and ec.estado = '1'
-        and (ec.id_tipo_empresa = 1 OR (ec.id_tipo_empresa = 2 AND ec.id_conductor = ivt.id_conductores))) tipo_empresa
+        where ec.estado = '1'
+        and ((ec.id_tipo_cliente = 1 and ec.id_persona = ivt.id_persona)
+        or (ec.id_tipo_cliente <> 1 and ec.id_empresa = ivt.id_empresa_proveedor))
+        and (ec.id_tipo_empresa = 1 
+        or (ec.id_tipo_empresa = 2 and ec.id_conductor = ivt.id_conductores))
+        limit 1)  tipo_empresa
         from ingreso_vehiculo_troncos ivt
-        inner join empresas e on ivt.id_empresa_transportista=e.id
         inner join vehiculos v on ivt.id_vehiculos=v.id
         inner join conductores c on ivt.id_conductores=c.id
         inner join personas p on c.id_personas=p.id

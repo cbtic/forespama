@@ -34,7 +34,8 @@ class ProduccionAcerradoMadera extends Model
 
     public function getDetalleAcerrado(){
     
-        $cad="select pamd.id, pam.fecha_produccion, tm.denominacion tipo_madera, tm2.denominacion medida, pamd.cantidad_paquetes, pamd.medida1_paquete, pamd.medida2_paquete, pamd.total_n_piezas from produccion_acerrado_madera_detalles pamd 
+        $cad="select pamd.id, pam.fecha_produccion, tm.denominacion tipo_madera, tm2.denominacion medida, pamd.cantidad_pendiente cantidad_paquetes, pamd.medida1_paquete, pamd.medida2_paquete, pamd.total_n_piezas 
+        from produccion_acerrado_madera_detalles pamd 
         inner join produccion_acerrado_maderas pam on pamd.id_produccion_acerrado_maderas = pam.id 
         inner join tabla_maestras tm on tm.codigo::int = pamd.id_tipo_madera and tm.tipo ='42'
         inner join tabla_maestras tm2 on tm2.codigo::int = pamd.id_medida and tm2.tipo ='82'

@@ -33,9 +33,9 @@ begin
 	a.valor_libros, a.valor_comercial, tm3.denominacion tipo_combustible, a.dimensiones, tm2.denominacion estado_activo, a.estado ';
 
 	v_tabla=' from activos a
-	inner join tabla_maestras tm on a.id_tipo_activo = tm.codigo::int and tm.tipo = ''84''
-	inner join tabla_maestras tm2 on a.id_estado_activo::int = tm2.codigo::int and tm2.tipo = ''85''
-	inner join tabla_maestras tm3 on a.id_tipo_combustible = tm3.codigo::int and tm3.tipo = ''86''
+	inner join tabla_maestras tm on a.id_sub_tipo_activo = tm.codigo::int and tm.tipo = ''84'' and tm.sub_codigo::int = a.id_tipo_activo
+	left join tabla_maestras tm2 on a.id_estado_activo::int = tm2.codigo::int and tm2.tipo = ''85''
+	left join tabla_maestras tm3 on a.id_tipo_combustible = tm3.codigo::int and tm3.tipo = ''86''
 	left join marcas m on a.id_marca = m.id 
 	inner join ubigeos u on a.id_ubigeo::int = u.id_ubigeo::int ';
 	

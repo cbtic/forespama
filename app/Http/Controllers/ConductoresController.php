@@ -120,7 +120,7 @@ class ConductoresController extends Controller
 				$request->id_personas = $persona->id;
 			}
 
-			$conductorExiste = Conductores::where("id_personas",$request->id_personas)->get();
+			$conductorExiste = Conductores::where("id_personas",$request->id_personas)->where("estado","ACTIVO")->get();
 			if(count($conductorExiste)==0){
 				$conductor = new Conductores;
 				$conductor->licencia = $request->licencia;
@@ -133,7 +133,6 @@ class ConductoresController extends Controller
 				$sw = false;
 				$msg = "El Conductor ingresado ya existe !!!";
 			}
-
 
 		}else{
 			$conductor = Conductores::find($request->id);

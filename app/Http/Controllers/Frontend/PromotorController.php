@@ -8,6 +8,7 @@ use App\Models\TablaMaestra;
 use App\Models\PromotorRuta;
 use App\Models\Tienda;
 use App\Models\User;
+use App\Models\AsistenciaPromotore;
 use Auth;
 use Carbon\Carbon;
 
@@ -189,4 +190,127 @@ class PromotorController extends Controller
         return response()->json(['success' => 'Dispensaci&oacute;n guardada exitosamente.']);
 
     }
+
+	public function create_asistencia(){
+
+		$tienda_model = new Tienda;
+
+        $tiendas = $tienda_model->getTiendasAll();
+
+	return view('frontend.promotores.create_asistencia',compact('tiendas'));
+
+	}
+
+	public function marcar_asistencia(Request $request)
+	{
+		$id_user = Auth::user()->id;
+		$rutaFinal = null;
+
+		$tienda = Tienda::find($request->id_tienda);
+
+		$distancia = $this->calcularDistancia($tienda->latitud, $tienda->longitud, $request->latitud, $request->longitud);
+
+		if ($distancia > 0.5) { // 0.2 km = 200 metros
+			return response()->json(['message' => 'No estás dentro del rango permitido para marcar asistencia.']);
+		}
+
+		if ($request->has('foto_base64')) {
+
+			$imageData = $request->foto_base64;
+			
+			if (preg_match('/^data:image\/(\w+);base64,/', $imageData, $type)) {
+				$extension = strtolower($type[1]);
+
+				if (!in_array($extension, ['jpg', 'jpeg', 'png'])) {
+					throw new \Exception('Formato de imagen no válido. Solo se permiten JPG o PNG.');
+				}
+
+				$imageData = substr($imageData, strpos($imageData, ',') + 1);
+				$imageData = base64_decode($imageData);
+
+				if ($imageData === false) {
+					throw new \Exception('Error al decodificar la imagen.');
+				}
+
+				$path = public_path("img/asistencias/");
+				if (!is_dir($path)) {
+					mkdir($path, 0777, true);
+				}
+
+				$filename = 'asistencia_' . date("YmdHis") . substr((string)microtime(), 1, 6) . '.' . $extension;
+
+				file_put_contents($path . $filename, $imageData);
+
+				$rutaFinal = "img/asistencias/" . $filename;
+
+				$imagePath = public_path($rutaFinal);
+			} else {
+				throw new \Exception('El formato base64 de la imagen es incorrecto.');
+			}
+		}
+
+		//dd($rutaFinal);exit();
+
+		$asistencia_promotor = new AsistenciaPromotore;
+		$asistencia_promotor->id_promotor = $id_user;
+		$asistencia_promotor->id_tienda = $request->id_tienda;
+		$asistencia_promotor->fecha = now()->toDateString();
+		$asistencia_promotor->hora_entrada = now()->format('H:i:s');
+		//$asistencia->hora_salida = now()->format('H:i:s');
+		$asistencia_promotor->ip = $request->ip();
+		$asistencia_promotor->latitud = $request->latitud;
+		$asistencia_promotor->longitud = $request->longitud;
+		$asistencia_promotor->ruta_imagen_ingreso = $rutaFinal;
+		$asistencia_promotor->id_usuario_inserta = $id_user;
+		$asistencia_promotor->save();
+
+		return response()->json(['message' => 'Asistencia marcada correctamente.']);
+	}
+
+	public function listar_asistencia_promotores_ajax(Request $request){
+
+		$id_user = Auth::user()->id;
+
+		$asistencia_promotor_model = new AsistenciaPromotore;
+		$p[]=$request->fecha;
+		$p[]=$id_user;
+        $p[]=$request->estado;
+		$p[]=$request->NumeroPagina;
+		$p[]=$request->NumeroRegistros;
+		$data = $asistencia_promotor_model->listar_asistencia_promotores_ajax($p);
+		$iTotalDisplayRecords = isset($data[0]->totalrows)?$data[0]->totalrows:0;
+
+		$result["PageStart"] = $request->NumeroPagina;
+		$result["pageSize"] = $request->NumeroRegistros;
+		$result["SearchText"] = "";
+		$result["ShowChildren"] = true;
+		$result["iTotalRecords"] = $iTotalDisplayRecords;
+		$result["iTotalDisplayRecords"] = $iTotalDisplayRecords;
+		$result["aaData"] = $data;
+
+        echo json_encode($result);
+
+	}
+
+	public function modal_asistencia_promotor(){
+		
+        $tienda_model = new Tienda;
+
+        $tiendas = $tienda_model->getTiendasAll();
+
+		return view('frontend.promotores.modal_asistencia_promotor',compact('tiendas'));
+
+    }
+
+	public function calcularDistancia($lat1, $lon1, $lat2, $lon2)
+	{
+		$radioTierra = 6371;
+		$dLat = deg2rad($lat2 - $lat1);
+		$dLon = deg2rad($lon2 - $lon1);
+		$a = sin($dLat/2) * sin($dLat/2) +
+			cos(deg2rad($lat1)) * cos(deg2rad($lat2)) *
+			sin($dLon/2) * sin($dLon/2);
+		$c = 2 * atan2(sqrt($a), sqrt(1-$a));
+		return $radioTierra * $c;
+	}
 }

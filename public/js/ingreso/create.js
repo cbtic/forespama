@@ -48,6 +48,9 @@ $(document).ready(function() {
         changeMonth: true,
         changeYear: true,
     });
+
+    cambiarCliente();
+
     /*
 	$('#fecha_hasta').datepicker({
         autoclose: true,
@@ -192,7 +195,7 @@ function validaTipoDocumento() {
 }
 
 function obtenerEmpresa(){
-		
+	
 	var placa = $("#placa").val();
 	var flagBalanza = $("#flagBalanza").val();
 	var msg = "";
@@ -201,9 +204,7 @@ function obtenerEmpresa(){
 		bootbox.alert(msg);
 		return false;
 	}
-	
-	//alert("ok");return false;
-	
+		
 	$('#tblProductos tbody').html("");
 	$('#nombre_empresa').val("");
 	$('#numero_ejes').val("");
@@ -226,19 +227,28 @@ function obtenerEmpresa(){
 				bootbox.alert(result.msg);
 			}else{
 				var vehiculo = result.vehiculo;
-				$('#ruc').val(vehiculo.ruc);
-				$('#empresa').val(vehiculo.razon_social);
+                if(vehiculo.id_tipo_cliente==1){
+                    $('#dni').val(vehiculo.ruc);
+				    $('#nombres').val(vehiculo.razon_social);
+                }else{
+                    $('#ruc').val(vehiculo.ruc);
+				    $('#empresa').val(vehiculo.razon_social);
+                }
 				$('#tipo_documento_bus').val(vehiculo.id_tipo_documento);
 				$('#numero_documento').val(vehiculo.numero_documento);
 				$('#conductor').val(vehiculo.conductor);
 				$('#id_empresa_transportista').val(vehiculo.id_empresas);
+				$('#id_empresa_persona').val(vehiculo.id_persona);
 				$('#id_vehiculos').val(vehiculo.id_vehiculos);
 				$('#id_conductores').val(vehiculo.id_conductores);
+				$('#tipo_documento_empresa').val(vehiculo.id_tipo_cliente);
 				$("#placa").attr("disabled",true);
 				
 				bootbox.alert("El Vehiculo ingresado ya esta registrado !!!");
 				
 				//$("#tipo_documento_bus").attr("disabled",true);
+
+                cambiarCliente();
 				
 			}
 			
@@ -246,6 +256,37 @@ function obtenerEmpresa(){
 		
 	});
 	
+}
+
+function cambiarCliente(){
+
+    var tipo_documento_cliente = $('#tipo_documento_empresa').val();
+
+    $('#input_ruc_empresa').hide();
+    $('#input_razon_social_empresa').hide();
+    $('#input_dni_empresa').hide();
+    $('#input_nombres_empresa').hide();
+
+    if(tipo_documento_cliente==1){
+
+        $('#input_ruc_empresa').hide();
+        $('#input_razon_social_empresa').hide();
+        $('#input_dni_empresa').show();
+        $('#input_nombres_empresa').show();
+        
+    }else if(tipo_documento_cliente==5){
+
+        $('#input_ruc_empresa').show();
+        $('#input_razon_social_empresa').show();
+        $('#input_dni_empresa').hide();
+        $('#input_nombres_empresa').hide();
+        
+    }else{
+        $('#input_ruc_empresa').hide();
+        $('#input_razon_social_empresa').hide();
+        $('#input_dni_empresa').hide();
+        $('#input_nombres_empresa').hide();
+    }
 }
 
 function AddFila() {
@@ -2537,6 +2578,38 @@ function obtenerPersonaBuscar(){
 	});
 }
 
+function obtenerPersonaEmpresaBuscar(){
+	
+	var tipo_documento = $("#tipo_documento_empresa").val();
+	var numero_documento = $("#dni").val();
+	
+	$("#tipo_documento_bus").attr("disabled",false);
+	$("#numero_documento").attr("disabled",false);
+	
+	$.ajax({
+		url: '/persona/obtener_persona/' + tipo_documento + '/' + numero_documento,
+		dataType: "json",
+		success: function(result){
+			
+			if(result.sw==false){
+				bootbox.alert(result.msg);
+			}else{
+                var dato_persona = result.persona
+
+				var nombre_persona = dato_persona.apellido_paterno+" "+dato_persona.apellido_materno+" "+dato_persona.nombres;
+				//$("#frmIngreso #conductor").val(nombre_conductor);
+                
+				$("#id_empresa_persona").val(dato_persona.id);
+				$("#nombres").val(nombre_persona);
+				$("#dni").attr("disabled",true);
+				$("#nombres").attr("disabled",true);
+			}
+			
+		}
+		
+	});
+}
+
 function obtenerEmpresaBuscar(){
 	
 	var ruc = $("#ruc").val();
@@ -2579,6 +2652,4 @@ function modalVerIngresoImagen(id){
 	});
 
 }
-
-
 

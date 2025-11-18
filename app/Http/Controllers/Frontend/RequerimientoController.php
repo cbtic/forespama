@@ -48,7 +48,6 @@ class RequerimientoController extends Controller
         $user_model = new User;
 		$tipo_documento = $tablaMaestra_model->getMaestroByTipo(59);
         $cerrado_requerimiento = $tablaMaestra_model->getMaestroByTipo(52);
-        //$proveedor = Empresa::all();
         $almacen = Almacene::all();
         $estado_atencion = $tablaMaestra_model->getMaestroByTipo(60);
         $responsable_atencion = $user_model->getUserAll();
@@ -320,7 +319,6 @@ class RequerimientoController extends Controller
         $orden_compra_model = new OrdenCompra;
         $codigo_orden_compra = $orden_compra_model->getCodigoOrdenCompra(1);
 
-        //$item = $request->input('item');
         $descripcion = $request->input('descripcion');
         $cod_interno = $request->input('cod_interno');
         $marca = $request->input('marca');
@@ -393,7 +391,7 @@ class RequerimientoController extends Controller
             if($unidad[$index]!=null && $unidad !=0){
 				$orden_compra_detalle->id_unidad_medida = (int)$unidad[$index];
 			}
-            //$orden_compra_detalle->id_marca = $marca[$index] ?? '';
+
             if($marca[$index]!=null && $marca[$index] !=0){
 				$orden_compra_detalle->id_marca = (int)$marca[$index];
 			}
@@ -456,15 +454,11 @@ class RequerimientoController extends Controller
 
         if($cantidadAbierto==0){
 
-                $RequerimientoObj = Requerimiento::find($id_requerimiento);
-                $RequerimientoObj->cerrado = 2;
-                $RequerimientoObj->estado_atencion = 3;
-                $RequerimientoObj->save();
+            $RequerimientoObj = Requerimiento::find($id_requerimiento);
+            $RequerimientoObj->cerrado = 2;
+            $RequerimientoObj->estado_atencion = 3;
+            $RequerimientoObj->save();
         }
-
-        /*$requerimiento->cerrado = $request->cerrado;
-        $requerimiento->estado_atencion = $request->estado_atencion;
-        $requerimiento->save();*/
 
         return response()->json(['id' => $orden_compra->id]);
     }
@@ -536,8 +530,6 @@ class RequerimientoController extends Controller
 		
 		$variable = [];
 		$n = 1;
-		//array_push($variable, array("SISTEMA CAP"));
-		//array_push($variable, array("CONSULTA DE CONCURSO","","","",""));
 		array_push($variable, array("N","Tipo Documento","Fecha","Numero Requerimiento","Almacen","Situacion", "Responsable Atencion", "Estado Atencion", "Tipo Requerimiento"));
 		
 		foreach ($data as $r) {
@@ -653,7 +645,6 @@ class RequerimientoController extends Controller
 
     public function send_genera_requerimiento(Request $request)
     {
-        //$id_user = Auth::user()->id;
 
         $requerimiento = Requerimiento::find($request->id);
         $requerimiento_model = new Requerimiento;
@@ -688,18 +679,16 @@ class RequerimientoController extends Controller
 
         foreach($req_detalle_abierto as $index => $value) {
             
-            //dd($value->id_usuario_inserta);exit();
             $requerimiento_detalle = new RequerimientoDetalle;
             
             $requerimiento_detalle->id_requerimiento = $id_requerimiento_nuevo;
             $requerimiento_detalle->id_producto = $value->id_producto;
             $requerimiento_detalle->cantidad = isset($cantidad_atendida[$index]) ? (float) $cantidad_atendida[$index] : 0;
             $requerimiento_detalle->id_estado_producto = $value->id_estado_producto;
-            //$orden_compra_detalle->id_unidad_medida = $unidad[$index];
             if($value->id_unidad_medida!=null && $value->id_unidad_medida !=0){
 				$requerimiento_detalle->id_unidad_medida = (int)$value->id_unidad_medida;
 			}
-            //$orden_compra_detalle->id_marca = $marca[$index] ?? '';
+            
             if($value->id_marca!=null && $value->id_marca !=0){
 				$requerimiento_detalle->id_marca = (int)$value->id_marca;
 			}
@@ -779,8 +768,6 @@ class RequerimientoController extends Controller
 
 		$id_user = Auth::user()->id;
 
-        //$observacion = $request->input('observacion');
-
         $requerimiento_detalle = RequerimientoDetalle::find($request->id);
 		
 		$requerimiento_detalle->observacion_atencion = $request->observacion;
@@ -801,8 +788,6 @@ class RequerimientoController extends Controller
     public function send_cerrar_antiguedad_requerimiento(Request $request){
 
 		$id_user = Auth::user()->id;
-
-        //$observacion = $request->input('observacion');
 
         $requerimiento = Requerimiento::find($request->id);
 		
@@ -874,10 +859,6 @@ class InvoicesExport implements FromArray, WithHeadings, WithStyles
 
 		$sheet->fromArray($this->headings(), NULL, 'A2');
 
-		/*$sheet->getStyle('L3:L'.$sheet->getHighestRow())
-		->getNumberFormat()
-		->setFormatCode(\PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_NUMBER_00);*/ //SIRVE PARA PONER 2 DECIMALES A ESA COLUMNA
-        
         foreach (range('A', 'I') as $col) {
             $sheet->getColumnDimension($col)->setAutoSize(true);
         }
@@ -941,10 +922,6 @@ class InvoicesExport2 implements FromArray, WithHeadings, WithStyles
         ]);
 
 		$sheet->fromArray($this->headings(), NULL, 'A2');
-
-		/*$sheet->getStyle('L3:L'.$sheet->getHighestRow())
-		->getNumberFormat()
-		->setFormatCode(\PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_NUMBER_00);*/ //SIRVE PARA PONER 2 DECIMALES A ESA COLUMNA
         
         foreach (range('A', 'L') as $col) {
             $sheet->getColumnDimension($col)->setAutoSize(true);

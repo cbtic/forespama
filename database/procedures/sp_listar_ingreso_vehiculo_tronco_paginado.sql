@@ -1,3 +1,5 @@
+-- DROP FUNCTION public.sp_listar_ingreso_vehiculo_tronco_paginado(varchar, varchar, varchar, varchar, varchar, varchar, varchar, refcursor);
+
 CREATE OR REPLACE FUNCTION public.sp_listar_ingreso_vehiculo_tronco_paginado(p_placa character varying, p_ruc character varying, p_anio character varying, p_fecha_inicio character varying, p_fecha_fin character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
  RETURNS refcursor
  LANGUAGE plpgsql
@@ -16,13 +18,25 @@ Begin
 
 	p_pagina=(p_pagina::Integer-1)*p_limit::Integer;
 
-	v_campos=' ivt.id, ivttm.id id_ingreso_vehiculo_tronco_tipo_maderas, ivt.fecha_ingreso, e.ruc, e.razon_social, v.placa, v.ejes, p.numero_documento,
+	v_campos=' ivt.id, ivttm.id id_ingreso_vehiculo_tronco_tipo_maderas, ivt.fecha_ingreso, 
+	case when ivt.id_tipo_cliente = 1 then 
+	(select p.nombres ||'' ''|| p.apellido_paterno ||'' ''|| p.apellido_materno from personas p
+	where p.id = ivt.id_persona)
+	else (select e2.razon_social from empresas e2 
+	where e2.id = ivt.id_empresa_transportista) 
+	end razon_social,
+	case when ivt.id_tipo_cliente = 1 then 
+	(select p.numero_documento from personas p
+	where p.id = ivt.id_persona)
+	else (select e2.ruc from empresas e2 
+	where e2.id = ivt.id_empresa_transportista) 
+	end ruc,
+	v.placa, v.ejes, p.numero_documento,
 	p.apellido_paterno||'' ''||p.apellido_materno||'' ''||p.nombres conductor,
 	tm.denominacion tipo_madera, ivttm.cantidad,
 	(select 1 from ingreso_vehiculo_tronco_imagenes ivti where ivti.id_ingreso_vehiculo_troncos = ivt.id limit 1) tiene_imagen ';
 
 	v_tabla=' from ingreso_vehiculo_troncos ivt
-	inner join empresas e on ivt.id_empresa_transportista=e.id
 	inner join vehiculos v on ivt.id_vehiculos=v.id
 	inner join conductores c on ivt.id_conductores=c.id
 	inner join personas p on c.id_personas=p.id

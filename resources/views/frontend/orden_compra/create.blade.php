@@ -2,6 +2,19 @@
 <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" defer></script>
 <style type="text/css">
 
+/* Rojo claro por defecto */
+.table-hover tbody tr.row_autorizacion td {
+    background-color: #f8d7da !important;
+    color: #000000 !important;
+}
+
+/* Rojo fuerte cuando está seleccionada */
+.table-hover tbody tr.row_autorizacion_selected td {
+    background-color: #da4a59ff !important;
+    color: #ffffff !important;
+}
+
+/* Verde seleccionado */
 .table-hover tbody tr.row_selected td{background-color:#239244!important;color:#ffffff!important}
 
 .table td.verde{
@@ -289,6 +302,44 @@ label.form-control-sm{
 	cursor:pointer
 }
 
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    background-color: white;
+    color: #0d6efd !important;
+    margin: 0 3px;
+    padding: 4px 10px;
+    cursor: pointer;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+    background-color: #e9ecef !important;
+    color: #0d6efd !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.current {
+    background-color: #0d6efd !important;
+    color: white !important;
+    border: 1px solid #0d6efd;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.disabled {
+    color: #adb5bd !important;
+    background-color: transparent !important;
+}
+
+.dataTables_wrapper .dataTables_length label {
+  color: #0d6efd;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.dataTables_wrapper .dataTables_info {
+  color: #0d6efd;
+  font-weight: 500;
+  font-size: 14px;
+}
+
 </style>
 
 <script>
@@ -543,7 +594,7 @@ label.form-control-sm{
 								<th>Empresa Compra</th>
 								<th>N° OC Cliente</th>
 								<th>N° Requerimiento</th>
-								<th>Empresa Vende</th>
+								<!--<th>Empresa Vende</th>-->
 								<th>Fecha</th>
 								<th>N&uacute;mero OC</th>
 								<th>Almacen Origen</th>
@@ -552,6 +603,7 @@ label.form-control-sm{
 								<th>Vendedor</th>
 								<th>Tiene Direcci&oacute;n</th>
 								<th style ="text-align:right">Total</th>
+								<th>Prioridad</th>
 								<!--<th>Estado</th>-->
 								<th>Acciones</th>
 							</tr>

@@ -31,7 +31,20 @@ class EntradaProductoDetalle extends Model
 
     function getDetalleProductoId($id){
 
-        $cad = "select epd.id,  ROW_NUMBER() OVER (PARTITION BY epd.id_entrada_productos ) AS row_num, epd.numero_serie, epd.id_producto, p.codigo, epd.id_marca, p.id_unidad_medida, epd.fecha_fabricacion, epd.fecha_vencimiento, epd.id_um, epd.id_estado_bien , epd.cantidad, epd.cantidad, epd.cantidad, '12' stock_actual, epd.costo, epd.sub_total , epd.igv , epd.total, ep.id_almacen_destino, p.denominacion nombre_producto, m.denominiacion nombre_marca, tm2.denominacion nombre_estado_bien, tm3.denominacion nombre_unidad_medida, ep.id_empresa_compra, e.ruc, e.razon_social, oc.numero_orden_compra_cliente,
+        $cad = "select epd.id,  ROW_NUMBER() OVER (PARTITION BY epd.id_entrada_productos ) AS row_num, epd.numero_serie, epd.id_producto, p.codigo, epd.id_marca, p.id_unidad_medida, epd.fecha_fabricacion, epd.fecha_vencimiento, epd.id_um, epd.id_estado_bien , epd.cantidad, epd.cantidad, epd.cantidad, '12' stock_actual, epd.costo, epd.sub_total , epd.igv , epd.total, ep.id_almacen_destino, p.denominacion nombre_producto, m.denominiacion nombre_marca, tm2.denominacion nombre_estado_bien, tm3.denominacion nombre_unidad_medida, ep.id_empresa_compra, 
+        case when ep.id_tipo_cliente = 1 then 
+        (select p.numero_documento from personas p
+        where p.id = ep.id_persona)
+        else (select e2.ruc from empresas e2 
+        where e2.id = ep.id_empresa_compra) 
+        end ruc,
+        case when ep.id_tipo_cliente = 1 then 
+        (select p.nombres ||' '|| p.apellido_paterno ||' '|| p.apellido_materno from personas p
+        where p.id = ep.id_persona)
+        else (select e2.razon_social from empresas e2 
+        where e2.id = ep.id_empresa_compra) 
+        end razon_social, 
+        oc.numero_orden_compra_cliente, tm5.denominacion tipo_documento_orden,
         (select COALESCE(STRING_AGG(DISTINCT t.denominacion ::TEXT, ', '), '') from tienda_detalle_orden_compras tdoc
         inner join tiendas t on tdoc.id_tienda = t.id
         where tdoc.id_orden_compra = oc.id) tiendas, p.peso
@@ -41,9 +54,9 @@ class EntradaProductoDetalle extends Model
         left join marcas m on epd.id_marca = m.id 
         left join tabla_maestras tm2 on epd.id_estado_bien ::int = tm2.codigo::int and tm2.tipo = '56'
         left join tabla_maestras tm3 on epd.id_um ::int = tm3.codigo::int and tm3.tipo = '43'
-        inner join empresas e on ep.id_empresa_compra = e.id
         inner join orden_compras oc on ep.id_orden_compra = oc.id 
-        where id_entrada_productos ='".$id."'
+        left join tabla_maestras tm5 on oc.id_tipo_documento = tm5.codigo::int and tm5.tipo ='54'
+        where id_entrada_productos = '".$id."'
         and epd.estado='1'";
 
 		$data = DB::select($cad);

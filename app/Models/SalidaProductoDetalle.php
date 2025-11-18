@@ -147,7 +147,7 @@ class SalidaProductoDetalle extends Model
         else (select e2.ruc from empresas e2 
         where e2.id = sp.id_empresa_compra) 
         end documento_cliente,
-        sp.id_tipo_cliente, oc.numero_orden_compra_cliente, oc.numero_orden_compra,
+        sp.id_tipo_cliente, oc.numero_orden_compra_cliente, oc.numero_orden_compra, tm5.denominacion tipo_documento_orden,
         (select COALESCE(STRING_AGG(DISTINCT t.denominacion ::TEXT, ', '), '') from tienda_detalle_orden_compras tdoc
         inner join tiendas t on tdoc.id_tienda = t.id
         where tdoc.id_orden_compra = oc.id) tiendas, spd.valor_venta_bruto, spd.precio_venta, spd.valor_venta, spd.descuento, spd.id_descuento, p.peso, sp.id_orden_compra,
@@ -158,7 +158,7 @@ class SalidaProductoDetalle extends Model
         limit 1) 
         else (select occe.direccion from orden_compra_contacto_entregas occe 
         inner join orden_compras oc2 on occe.id_orden_compra = oc2.id 
-        where oc2.id = sp.id_orden_compra)
+        where oc2.id = sp.id_orden_compra and occe.estado = '1')
         end direccion,
         case when oc.id_canal = 4 then 
         (select distinct t2.id_ubigeo from tienda_detalle_orden_compras tdoc2
@@ -167,7 +167,7 @@ class SalidaProductoDetalle extends Model
         limit 1)
         else (select occe.id_ubigeo from orden_compra_contacto_entregas occe 
         inner join orden_compras oc2 on occe.id_orden_compra = oc2.id 
-        where oc2.id = sp.id_orden_compra)
+        where oc2.id = sp.id_orden_compra and occe.estado = '1')
         end ubigeo
         from salida_producto_detalles spd 
         inner join productos p on spd.id_producto = p.id
@@ -176,6 +176,7 @@ class SalidaProductoDetalle extends Model
         left join tabla_maestras tm2 on spd.id_estado_productos ::int = tm2.codigo::int and tm2.tipo = '56'
         left join tabla_maestras tm3 on spd.id_um ::int = tm3.codigo::int and tm3.tipo = '43'
         inner join orden_compras oc on sp.id_orden_compra = oc.id 
+        left join tabla_maestras tm5 on oc.id_tipo_documento = tm5.codigo::int and tm5.tipo ='54'
         where id_salida_productos ='".$id."'
         and spd.estado='1'";
 
