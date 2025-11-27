@@ -344,166 +344,169 @@ label.form-control-sm{
                             <input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
 
                             <div class="row" style="padding:20px 20px 0px 20px;">
+                                <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
+                                    <div class="row">
+                                        <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+                                            <div class="form-group">
+                                                <label class="form-control-sm">Fecha inicio</label>
+                                                <input class="form-control form-control-sm filtro-input" id="fecha_ini" name="fecha_ini" value="<?php echo date("d-m-Y") ?>" placeholder="Fecha Inicio">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+                                            <div class="form-group">
+                                                <label class="form-control-sm">Fecha Fin</label>
+                                                <input class="form-control form-control-sm filtro-input" id="fecha_fin" name="fecha_fin" value="" placeholder="Fecha fin">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-2 col-md-12 col-sm-12 col-xs-12">
+                                            <div class="form-group">
+                                                <label class="form-control-sm">Tipo Documento</label>
+                                                <select name="tipo_documento" id="tipo_documento" class="form-control form-control-sm filtro-select" onchange="validaTipoDocumento()">
+                                                    <option value="FT">
+                                                        <?php echo "Factura" ?></option>
+                                                    <option value="BV">
+                                                        <?php echo "Boleta" ?></option>
+                                                    <option value="NC">
+                                                        <?php echo "Nota de Credito" ?></option>
+                                                    <option value="ND">
+                                                        <?php echo "Nota de Debito" ?></option>
+                                                    <option value="TK">
+                                                        <?php echo "Ticket" ?></option>
+                                                    <option selected="selected" value="">
+                                                        <?php echo "Todos" ?></option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-1 col-md-2 col-sm-12 col-xs-12">
+                                            <div class="form-group">
+                                                <label class="form-control-sm">Serie</label>
+                                                <input type="text" name="serie" id="serie" value="{{old('clinum')}}" placeholder="" class="form-control form-control-sm filtro-input">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-1 col-md-2 col-sm-12 col-xs-12">
+                                            <div class="form-group">
+                                                <label class="form-control-sm">Numero</label>
+                                                <input type="text" name="numero" id="numero" value="{{old('clinum')}}" placeholder="" class="form-control form-control-sm filtro-input">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4 col-md-2 col-sm-12 col-xs-12">
+                                            <div class="form-group">
+                                                <label class="form-control-sm">Razon Social</label>
+                                                <input type="text" name="razon_social" id="razon_social" value="{{old('clinum')}}" placeholder="" class="form-control form-control-sm filtro-input">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+                                            <div class="form-group">
+                                                <label class="form-control-sm">Estado de Pago</label>
+                                                <select name="estado_pago" id="estado_pago" class="form-control form-control-sm filtro-select" onchange="validaTipoDocumento()">
+                                                    <option value="C">
+                                                        <?php echo "Cancelado" ?></option>
+                                                    <option value="P">
+                                                        <?php echo "Pendiente" ?></option>
+                                                    <option selected="selected" value="">
+                                                        <?php echo "Todos" ?></option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-1 col-md-12 col-sm-12 col-xs-12">
+                                            <div class="form-group">
+                                                <label class="form-control-sm">Anulado</label>
+                                                <select name="anulado" id="anulado" class="form-control form-control-sm filtro-select" onchange="validaTipoDocumento()">
+                                                    <option value="S">
+                                                        <?php echo "Si" ?></option>
+                                                    <option value="N">
+                                                        <?php echo "No" ?></option>
+                                                    <option selected="selected" value="">
+                                                        <?php echo "Todos" ?></option>
+                                                </select>
+                                            </div>
+                                        </div>
 
-                                <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-                                    <div class="form-group">
-                                        <label class="form-control-sm">Fecha inicio</label>
-                                        <input class="form-control form-control-sm" id="fecha_ini" name="fecha_ini" value="<?php echo date("d-m-Y") ?>" placeholder="Fecha Inicio">
+                                        <div class="col-lg-2 col-md-12 col-sm-12 col-xs-12">
+                                            <label class="form-group">Caja</label>
+                                            <select name="id_caja" id="id_caja" class="form-control form-control-sm filtro-select" onChange="">
+                                                <option value="">--Selecionar--</option>
+                                                <?php
+                                                foreach ($caja as $row) { ?>
+                                                    <option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
+                                                <?php
+                                                }
+                                                ?>
+                                            </select>
+                                        </div>
+
+                                        <div class="col-lg-2 col-md-12 col-sm-12 col-xs-12">
+                                            <label class="form-group">Usuario</label>
+                                            <select name="id_usuario" id="id_usuario" class="form-control form-control-sm filtro-select" onChange="">
+                                                <option value="">--Selecionar--</option>
+                                                <?php
+                                                foreach ($usuario_caja as $row) { ?>
+                                                    <option value="<?php echo $row->id ?>"><?php echo $row->denominacion ?></option>
+                                                <?php
+                                                }
+                                                ?>
+                                            </select>
+                                        </div>
+
+                                        <div class="col-lg-2 col-md-12 col-sm-12 col-xs-12">
+                                            <label class="form-group">Forma de pago</label>
+                                            <select name="id_formapago" id="id_formapago" class="form-control form-control-sm filtro-select" onChange="">
+                                                <option value="">--Selecionar--</option>
+                                                <?php
+                                                foreach ($formapago as $row) { ?>
+                                                    <option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
+                                                <?php
+                                                }
+                                                ?>
+                                            </select>
+                                        </div>
+
+                                        <div class="col-lg-2 col-md-12 col-sm-12 col-xs-12">
+                                            <label class="form-group">Medio de pago</label>
+                                            <select name="id_mediopago" id="id_mediopago" class="form-control form-control-sm filtro-select" onChange="">
+                                                <option value="">--Selecionar--</option>
+                                                <?php
+                                                foreach ($medio_pago as $row) { ?>
+                                                    <option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
+                                                <?php
+                                                }
+                                                ?>
+                                            </select>
+                                        </div>
+                                        
+                                        <div class="col-lg-1 col-md-12 col-sm-12 col-xs-12">
+                                            <div class="form-group">
+                                                <label class="form-control-sm">Total</label>
+                                                <input type="text" name="total_b" id="total_b" value="" oninput="validarDecimal(this)" placeholder="" class="form-control form-control-sm filtro-input">
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-                                    <div class="form-group">
-                                        <label class="form-control-sm">Fecha Fin</label>
-                                        <input class="form-control form-control-sm" id="fecha_fin" name="fecha_fin" value="" placeholder="Fecha fin">
-                                    </div>
-                                </div>
-                                <div class="col-lg-2 col-md-12 col-sm-12 col-xs-12">
-                                    <div class="form-group">
-                                        <label class="form-control-sm">Tipo Documento</label>
-                                        <select name="tipo_documento" id="tipo_documento" class="form-control form-control-sm" onchange="validaTipoDocumento()">
-                                            <option value="FT">
-                                                <?php echo "Factura" ?></option>
-                                            <option value="BV">
-                                                <?php echo "Boleta" ?></option>
-                                            <option value="NC">
-                                                <?php echo "Nota de Credito" ?></option>
-                                            <option value="ND">
-                                                <?php echo "Nota de Debito" ?></option>
-                                            <option value="TK">
-                                                <?php echo "Ticket" ?></option>
-                                            <option selected="selected" value="">
-                                                <?php echo "Todos" ?></option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-lg-1 col-md-12 col-sm-12 col-xs-12">
-                                    <div class="form-group">
-                                        <label class="form-control-sm">Serie</label>
-                                        <input type="text" name="serie" id="serie" value="{{old('clinum')}}" placeholder="" class="form-control form-control-sm">
-                                    </div>
-                                </div>
-                                <div class="col-lg-1 col-md-12 col-sm-12 col-xs-12">
-                                    <div class="form-group">
-                                        <label class="form-control-sm">Numero</label>
-                                        <input type="text" name="numero" id="numero" value="{{old('clinum')}}" placeholder="" class="form-control form-control-sm">
-                                    </div>
-                                </div>
-                                <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12">
-                                    <div class="form-group">
-                                        <label class="form-control-sm">Razon Social</label>
-                                        <input type="text" name="razon_social" id="razon_social" value="{{old('clinum')}}" placeholder="" class="form-control form-control-sm">
-                                    </div>
-                                </div>
-                                <div class="col-lg-1 col-md-12 col-sm-12 col-xs-12">
-                                    <div class="form-group">
-                                        <label class="form-control-sm">Estado de Pago</label>
-                                        <select name="estado_pago" id="estado_pago" class="form-control form-control-sm" onchange="validaTipoDocumento()">
-                                            <option value="C">
-                                                <?php echo "Cancelado" ?></option>
-                                            <option value="P">
-                                                <?php echo "Pendiente" ?></option>
-                                            <option selected="selected" value="">
-                                                <?php echo "Todos" ?></option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-lg-1 col-md-12 col-sm-12 col-xs-12">
-                                    <div class="form-group">
-                                        <label class="form-control-sm">Anulado</label>
-                                        <select name="anulado" id="anulado" class="form-control form-control-sm" onchange="validaTipoDocumento()">
-                                            <option value="S">
-                                                <?php echo "Si" ?></option>
-                                            <option value="N">
-                                                <?php echo "No" ?></option>
-                                            <option selected="selected" value="">
-                                                <?php echo "Todos" ?></option>
-                                        </select>
-                                    </div>
-                                </div>
+                                
+                                <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                                    <div class="row">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding-right:0px">
+                                            <!--<input class="btn btn-warning pull-rigth" value="Buscar" type="button" id="btnBuscar" />-->
+                                            <button type="button" id="btnBuscar" class="btn btn-sm btn-warning pull-rigth icono-botones2" style="margin-left:10px">
+                                                <i class="fas fa-search" style="font-size:18px;"></i> Buscar
+                                            </button>
+                                        <!--<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12" style="padding-top:30px">
+                                            <input class="btn btn-success pull-rigth" value="Nuevo" type="button" id="btnNuevo1" data-toggle="modal" data-target="#exampleModal2" style="margin-left:15px" />
 
-                                <div class="col-lg-2 col-md-12 col-sm-12 col-xs-12">
-                                    <label class="form-group">Caja</label>
-                                    <select name="id_caja" id="id_caja" class="form-control form-control-sm" onChange="">
-                                        <option value="">--Selecionar--</option>
-                                        <?php
-                                        foreach ($caja as $row) { ?>
-                                            <option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
-                                        <?php
-                                        }
-                                        ?>
-                                    </select>
-                                </div>
-
-                                <div class="col-lg-2 col-md-12 col-sm-12 col-xs-12">
-                                    <label class="form-group">Usuario</label>
-                                    <select name="id_usuario" id="id_usuario" class="form-control form-control-sm" onChange="">
-                                        <option value="">--Selecionar--</option>
-                                        <?php
-                                        foreach ($usuario_caja as $row) { ?>
-                                            <option value="<?php echo $row->id ?>"><?php echo $row->denominacion ?></option>
-                                        <?php
-                                        }
-                                        ?>
-                                    </select>
-                                </div>
-
-                                <div class="col-lg-1 col-md-12 col-sm-12 col-xs-12">
-                                    <label class="form-group">Forma de pago</label>
-                                    <select name="id_formapago" id="id_formapago" class="form-control form-control-sm" onChange="">
-                                        <option value="">--Selecionar--</option>
-                                        <?php
-                                        foreach ($formapago as $row) { ?>
-                                            <option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
-                                        <?php
-                                        }
-                                        ?>
-                                    </select>
-                                </div>
-
-                                <div class="col-lg-1 col-md-12 col-sm-12 col-xs-12">
-                                    <label class="form-group">Medio de pago</label>
-                                    <select name="id_mediopago" id="id_mediopago" class="form-control form-control-sm" onChange="">
-                                        <option value="">--Selecionar--</option>
-                                        <?php
-                                        foreach ($medio_pago as $row) { ?>
-                                            <option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
-                                        <?php
-                                        }
-                                        ?>
-                                    </select>
-                                </div>
-
-
-                                <div class="col-lg-1 col-md-12 col-sm-12 col-xs-12">
-                                    <div class="form-group">
-                                        <label class="form-control-sm">Total</label>
-                                        <input type="text" name="total_b" id="total_b" value="" oninput="validarDecimal(this)" placeholder="" class="form-control form-control-sm">
+                                        </div>-->
+                                            <!--<input class="btn btn-success pull-rigth" value="Excel" type="button" id="btnExcel" onclick="reporteFactura()" />-->
+                                            <button id="btnExcel" type="button" class="btn btn-sm btn-secondary pull-rigth icono-botones2" style="margin-left:10px;" onclick="reporteFactura()">
+                                                <i class="fas fa-download" style="font-size:18px;"></i> Excel
+                                            </button>
+                                        </div>
+                                    <!--@hasanyrole('contabilidad')
+                                    @else
+                                    <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12" style="padding-top:30px">
+                                        <input class="btn btn-success pull-rigth" value="Excel" type="button" id="btnExcel" onclick="reporteFactura()"/>
                                     </div>
+                                    @endhasanyrole-->
                                 </div>
- 
-
-                                <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12" style="padding-top:30px">
-                                    <input class="btn btn-warning pull-rigth" value="Buscar" type="button" id="btnBuscar" />
-                                </div>
-<!--
-                                <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12" style="padding-top:30px">
-                                    <input class="btn btn-success pull-rigth" value="Nuevo" type="button" id="btnNuevo1" data-toggle="modal" data-target="#exampleModal2" style="margin-left:15px" />
-
-                                </div>
-                                    -->
-                                <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12" style="padding-top:30px">
-                                    <input class="btn btn-success pull-rigth" value="Excel" type="button" id="btnExcel" onclick="reporteFactura()" />
-                                </div>
-                                <!--
-					@hasanyrole('contabilidad')
-					@else
-					<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12" style="padding-top:30px">
-						<input class="btn btn-success pull-rigth" value="Excel" type="button" id="btnExcel" onclick="reporteFactura()"/>
-					</div>
-                    @endhasanyrole
--->
                             </div>
-
                             <div class="card-body">
 
                                 <div class="table-responsive">

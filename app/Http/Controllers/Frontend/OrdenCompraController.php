@@ -190,7 +190,7 @@ class OrdenCompraController extends Controller
             if($orden_compra->id_tipo_documento == '2'){
                 $descuento_usuario = $usuario_descuento_model->getDescuentoByUser($orden_compra->id_vendedor);
                 $id_descuento_usuario = $descuento_usuario[0]->descuento;
-                if($orden_compra->id_canal == 1 || $orden_compra->id_canal == 2 || $orden_compra->id_canal == 3){
+                if($orden_compra->id_canal == 1 || $orden_compra->id_canal == 2 || $orden_compra->id_canal == 3 || $orden_compra->id_canal == 4){
                     $autorizacion_orden_compra = AutorizacionOrdenCompra::where('id_orden_compra',$orden_compra->id)->where('estado',1)->orderBy('id', 'desc')->first();
                     $id_proceso = $autorizacion_orden_compra->id_proceso_pedido;
                     $data_proceso = $tablaMaestra_model->getMaestroC(109, $id_proceso);
@@ -2629,24 +2629,37 @@ class OrdenCompraController extends Controller
 
         $id_user = Auth::user()->id;
 
+        $necesita_aprobacion_descuento = $request->necesita_aprobacion_descuento;
+
         $autorizacion_orden_compra = AutorizacionOrdenCompra::where('id_orden_compra',$request->id)->where('estado',1)->orderBy('id', 'desc')->first();
 
         //dd($autorizacion_orden_compra);exit();
 
         if($autorizacion_orden_compra->id_proceso_pedido == $request->id_proceso){
+            
             $autorizacion_orden_compra->id_autorizacion = 2;
             $autorizacion_orden_compra->id_usuario_autoriza = $id_user;
             $autorizacion_orden_compra->id_usuario_inserta = $id_user;
             $autorizacion_orden_compra->estado = 1;
             $autorizacion_orden_compra->save();
-            
-            $autorizacion_orden_compra_siguiente_proceso = new AutorizacionOrdenCompra;
-            $autorizacion_orden_compra_siguiente_proceso->id_orden_compra = $request->id;
-            $autorizacion_orden_compra_siguiente_proceso->id_proceso_pedido = $request->id_proceso+1;
-            //$autorizacion_orden_compra_siguiente_proceso->id_autorizacion = 1;
-            $autorizacion_orden_compra_siguiente_proceso->id_usuario_inserta = $id_user;
-            $autorizacion_orden_compra_siguiente_proceso->estado = 1;
-            $autorizacion_orden_compra_siguiente_proceso->save();
+        
+            if($autorizacion_orden_compra->id_proceso_pedido == 1 && $necesita_aprobacion_descuento == 0){
+                $autorizacion_orden_compra_siguiente_proceso = new AutorizacionOrdenCompra;
+                $autorizacion_orden_compra_siguiente_proceso->id_orden_compra = $request->id;
+                $autorizacion_orden_compra_siguiente_proceso->id_proceso_pedido = $request->id_proceso+2;
+                //$autorizacion_orden_compra_siguiente_proceso->id_autorizacion = 1;
+                $autorizacion_orden_compra_siguiente_proceso->id_usuario_inserta = $id_user;
+                $autorizacion_orden_compra_siguiente_proceso->estado = 1;
+                $autorizacion_orden_compra_siguiente_proceso->save();
+            }else{      
+                $autorizacion_orden_compra_siguiente_proceso = new AutorizacionOrdenCompra;
+                $autorizacion_orden_compra_siguiente_proceso->id_orden_compra = $request->id;
+                $autorizacion_orden_compra_siguiente_proceso->id_proceso_pedido = $request->id_proceso+1;
+                //$autorizacion_orden_compra_siguiente_proceso->id_autorizacion = 1;
+                $autorizacion_orden_compra_siguiente_proceso->id_usuario_inserta = $id_user;
+                $autorizacion_orden_compra_siguiente_proceso->estado = 1;
+                $autorizacion_orden_compra_siguiente_proceso->save();
+            }
         }
         
         return response()->json(['id' => $request->id]);
@@ -2703,6 +2716,54 @@ class OrdenCompraController extends Controller
         
         return response()->json(['id' => $request->id]);
         
+    }
+
+    public function exportar_listar_orden_compra_individual($id) {
+
+        $id_user = Auth::user()->id;
+        
+		if($id==0)$id = "";
+
+        $orden_compra_model = new OrdenCompra;
+        $orden_compra_detalle_model = new OrdenCompraDetalle;
+
+        $datos=$orden_compra_model->getOrdenCompraByIdExcel($id);
+        $datos_detalle=$orden_compra_detalle_model->getDetalleOrdenCompraExcel($id);
+		//dd($datos);exit();
+		$variable = [];
+		$n = 1;
+
+		array_push($variable, array(""));
+		array_push($variable, array("Tipo Documento","Canal","Numero Orden Compra"));
+		array_push($variable, array($datos[0]->tipo_documento, $datos[0]->canal, $datos[0]->numero_orden_compra));
+		array_push($variable, array(""));
+
+        array_push($variable, array("Empresa Vende","Tipo Documento Cliente","Cliente"));
+		array_push($variable, array($datos[0]->empresa_vende, $datos[0]->tipo_cliente, $datos[0]->cliente));
+        array_push($variable, array(""));
+
+        array_push($variable, array("Fecha Orden Compra","Fecha Vencimiento","Unidad Origen"));
+		array_push($variable, array($datos[0]->fecha_orden_compra, $datos[0]->fecha_vencimiento, $datos[0]->unidad_origen));
+        array_push($variable, array(""));
+
+        array_push($variable, array("Almacen Origen","Aplica IGV","Vendedor"));
+		array_push($variable, array($datos[0]->almacen, $datos[0]->aplica_igv, $datos[0]->vendedor));
+        array_push($variable, array(""));
+
+        array_push($variable, array("Observacion"));
+		array_push($variable, array($datos[0]->observacion_vendedor));
+        array_push($variable, array(""));
+
+		array_push($variable, array("#","Descripcion","Marca","Codigo Interno","Unidad","Cantidad","Stock Disponible","Precio Venta", "Precio Unitario", "Valor Venta Bruto", "Valor Venta", "Valor Descuento","Sub Total", "IGV", "Total"));
+		
+		foreach ($datos_detalle as $r) {
+
+			array_push($variable, array($n, $r->producto, $r->marca, $r->codigo, $r->unidad_medida,$r->cantidad_requerida, $r->cantidad_requerida, $r->precio_venta, $r->precio, $r->valor_venta_bruto, $r->valor_venta, $r->descuento, $r->sub_total, $r->igv, $r->total));
+		}
+		
+		$export = new InvoicesExport7([$variable]);
+		return Excel::download($export, 'Reporte_orden_compra_individual.xlsx');
+		
     }
 }
 
@@ -3090,6 +3151,65 @@ class InvoicesExport6 implements FromArray, WithHeadings, WithStyles
 		$sheet->fromArray($this->headings(), NULL, 'A2');
         
         foreach (range('A', 'G') as $col) {
+            $sheet->getColumnDimension($col)->setAutoSize(true);
+        }
+    }
+}
+
+class InvoicesExport7 implements FromArray, WithStyles
+{
+	protected $invoices;
+
+	public function __construct(array $invoices)
+	{
+		$this->invoices = $invoices;
+	}
+
+	public function array(): array
+	{
+		return $this->invoices;
+	}
+
+	public function styles(Worksheet $sheet)
+    {
+
+		$sheet->mergeCells('A1:O1');
+
+        $sheet->setCellValue('A1', "ORDEN DE COMPRA INDIVIDUAL - FORESPAMA");
+        $sheet->getStyle('A1:O1')->applyFromArray([
+            'font' => [
+                'bold' => true,
+                'color' => ['rgb' => 'FFFFFF'],
+            ],
+            'fill' => [
+                'fillType' => Fill::FILL_SOLID,
+                'startColor' => ['rgb' => '246257'],
+            ],
+            'alignment' => [
+                'horizontal' => Alignment::HORIZONTAL_CENTER,
+            ],
+        ]);
+
+		$sheet->getStyle('A1')->getAlignment()->setWrapText(true);
+		$sheet->getRowDimension(1)->setRowHeight(30);
+
+        /*$sheet->getStyle('A2:O2')->applyFromArray([
+            'font' => [
+                'bold' => true,
+                'color' => ['rgb' => '000000'],
+            ],
+            'fill' => [
+                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                'startColor' => ['rgb' => '2EB85C'],
+            ],
+			'alignment' => [
+			'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+    		],
+        ]);*/
+
+		//$sheet->fromArray($this->headings(), NULL, 'A2');
+        
+        foreach (range('A', 'O') as $col) {
             $sheet->getColumnDimension($col)->setAutoSize(true);
         }
     }

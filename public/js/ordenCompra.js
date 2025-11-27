@@ -356,9 +356,9 @@ function datatablenew(){
 				},
 				{
 				"mRender": function (data, type, row) {
-					var prioridad = "";
-					if(row.prioridad!= null)prioridad = row.prioridad;
-					return prioridad;
+					var proceso_pedido = "";
+					if(row.proceso_pedido!= null)proceso_pedido = row.proceso_pedido;
+					return proceso_pedido;
 				},
 				"bSortable": true,
 				"aTargets": [14]
@@ -399,6 +399,7 @@ function datatablenew(){
 							html += '<button style="font-size:12px; margin-left:10px" type="button" class="btn btn-sm btn-info" data-toggle="modal" onclick="modalEntradaProductoOrdenCompra('+row.id+','+row.id_tipo_documento+')"><i class="fas fa-clipboard" style="font-size:18px;"></i>Atender</button>';
 						}else{
 							html += '<button style="font-size:12px; margin-left:10px" type="button" class="btn btn-sm btn-info" data-toggle="modal" onclick="modalEntradaProductoOrdenCompra('+row.id+','+row.id_tipo_documento+')" disabled><i class="fas fa-clipboard" style="font-size:18px;"></i>Atender</button>';
+							//html += '<button style="font-size:12px; margin-left:10px" type="button" class="btn btn-sm btn-info" data-toggle="modal" onclick="modalEntradaProductoOrdenCompra('+row.id+','+row.id_tipo_documento+')"><i class="fas fa-clipboard" style="font-size:18px;"></i>Atender</button>';
 						}
 						
 						if(row.tienda_asignada==1){

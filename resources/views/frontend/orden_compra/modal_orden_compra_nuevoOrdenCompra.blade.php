@@ -301,6 +301,7 @@ $(document).ready(function() {
     
     obtenerFechaVencimiento();
     obtenerCanal();
+    obtenerBeneficiario();
 
     $("#item").select2({ width: '100%' });
     $("#ubicacion_fisica_seccion").select2({ width: '100%' });
@@ -346,6 +347,11 @@ $(document).ready(function() {
         cambiarOrigen();
         obtenerEntradaSalida();
     }
+
+    $('#btnDescargarIndividual').on('click', function () {
+		DescargarArchivosExcelIndividual()
+
+	});
 });
 
 function cambiarTipoCambio(){
@@ -1178,6 +1184,8 @@ function fn_save_orden_compra(){
                 $('#id_autorizacion_detalle'+filaIndex).val(1);
 
                 $('#id_autorizacion').val(1);
+
+                $('#necesita_aprobacion_descuento').val(1);
                 
             }
         });
@@ -1365,7 +1373,6 @@ function obtenerDescuento(){
         success: function (result) {
 
             var usuario_descuento = result[0].descuento;
-
             $('#id_descuento_usuario').val(usuario_descuento);
 
         }
@@ -1375,6 +1382,7 @@ function obtenerDescuento(){
 function cambiarCliente(){
 
     var tipo_documento_cliente = $('#tipo_documento_cliente').val();
+    var canal = $('#canal').val();
 
     $('#label_empresa_compra').hide();
     $('#select_empresa_compra').hide();
@@ -1383,10 +1391,17 @@ function cambiarCliente(){
 
     if(tipo_documento_cliente==1){
 
-        $('#label_empresa_compra').hide();
-        $('#select_empresa_compra').hide();
-        $('#label_persona_compra').show();
-        $('#select_persona_compra').show();
+        if(canal==1){
+            $('#label_empresa_compra').show();
+            $('#select_empresa_compra').show();
+            $('#label_persona_compra').show();
+            $('#select_persona_compra').show();
+        }else{
+            $('#label_empresa_compra').hide();
+            $('#select_empresa_compra').hide();
+            $('#label_persona_compra').show();
+            $('#select_persona_compra').show();
+        }
         
     }else if(tipo_documento_cliente==5){
 
@@ -1491,13 +1506,15 @@ function obtenerCanal(){
 function obtenerBeneficiario(){
 
     var canal = $('#canal').val();
-
+    
     if(canal == 1){
+        //alert("ok");
         $('#tipo_documento_cliente').val(1);
         cambiarCliente();
         $('#label_empresa_compra').show();
         $('#select_empresa_compra').show();
-    } else {
+        //alert("ok");
+    }else {
         $('#tipo_documento_cliente').val(5);
         cambiarCliente();
     }
@@ -1621,6 +1638,15 @@ function denegar_pago($id_proceso){
     });
 }
 
+function DescargarArchivosExcelIndividual(){
+	
+	var id = $('#id').val();
+
+	if (id == "")id = 0;
+	
+	location.href = '/orden_compra/exportar_listar_orden_compra_individual/'+id;
+}
+
 </script>
 
 <body class="hold-transition skin-blue sidebar-mini">
@@ -1655,6 +1681,7 @@ function denegar_pago($id_proceso){
                     <input type="hidden" name="id_descuento_usuario" id="id_descuento_usuario" value="<?php echo $id_descuento_usuario?>">
                     <input type="hidden" name="id_autorizacion" id="id_autorizacion" value="2">
                     <input type="hidden" name="id_proceso" id="id_proceso" value="1">
+                    <input type="hidden" name="necesita_aprobacion_descuento" id="necesita_aprobacion_descuento" value="0">
                     
                     <div class="row" style="padding-left:10px">
                         <div class="col-lg-11">
@@ -2021,6 +2048,15 @@ function denegar_pago($id_proceso){
                     <div style="margin-top:15px" class="form-group">
                         <div class="col-sm-12 controls">
                             <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
+                                
+                                <?php if($id>0){ ?>
+
+                                    <button id="btnDescargarIndividual" type="button" class="btn btn-sm btn-secondary pull-rigth icono-botones2" style="margin-left:10px;">
+                                        <i class="fas fa-download" style="font-size:18px;"></i> Excel
+                                    </button>
+
+                                <?php }?>
+
                                 <?php 
                                     if($id>0 && $orden_compra->cerrado == 1 ){
                                 ?>

@@ -1,6 +1,4 @@
--- DROP FUNCTION public.sp_listar_requerimiento_paginado(varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, refcursor);
-
-CREATE OR REPLACE FUNCTION public.sp_listar_requerimiento_paginado(p_tipo_documento character varying, p_fecha character varying, p_numero_requerimiento character varying, p_almacen character varying, p_situacion character varying, p_responsable_atencion character varying, p_estado_atencion character varying, p_tipo_requerimiento character varying, p_producto character varying, p_denominacion_producto character varying, p_estado character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
+CREATE OR REPLACE FUNCTION public.sp_listar_requerimiento_paginado(p_tipo_documento character varying, p_fecha_inicio character varying, p_fecha_fin character varying, p_numero_requerimiento character varying, p_almacen character varying, p_situacion character varying, p_responsable_atencion character varying, p_estado_atencion character varying, p_tipo_requerimiento character varying, p_producto character varying, p_denominacion_producto character varying, p_estado character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
  RETURNS refcursor
  LANGUAGE plpgsql
 AS $function$
@@ -34,8 +32,12 @@ begin
 	 v_where:=v_where||'And r.id_tipo_documento =  '''||p_tipo_documento||''' ';
 	End If;
 
-	If p_fecha<>'' Then
-	 v_where:=v_where||'And r.fecha =  '''||p_fecha||''' ';
+	If p_fecha_inicio<>'' Then
+	 v_where:=v_where||'And r.fecha >= '''||p_fecha_inicio||''' ';
+	End If;
+
+	If p_fecha_fin<>'' Then
+	 v_where:=v_where||'And r.fecha <= '''||p_fecha_fin||''' ';
 	End If;
 
 	If p_numero_requerimiento<>'' Then

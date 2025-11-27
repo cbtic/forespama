@@ -339,7 +339,6 @@ label.form-control-sm{
 
 					<div class="col col-sm-12 align-self-center">
 
-
                         <input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
 
                         <!--<input type="hidden" name="estado" id="estado" value="0">-->
@@ -386,8 +385,7 @@ label.form-control-sm{
 														
 														<div class="row">
 															<div class="col-lg-7 col-md-12 col-sm-12 col-xs-12">
-															<input type="text" name="placa" id="placa"
-																value="" placeholder="" class="form-control form-control-sm" onblur="obtenerEmpresa()">
+															<input type="text" name="placa" id="placa" value="" placeholder="" class="form-control form-control-sm" onblur="obtenerEmpresa()">
 																
 															</div>
 															<div class="col-lg-5 col-md-12 col-sm-12 col-xs-12">
@@ -396,15 +394,12 @@ label.form-control-sm{
 																</button>
 															</div>
 														</div>
-														
 													</div>
 
 													<div class="col-lg-4 col-md-12 col-sm-12 col-xs-12">
 														<label class="form-control-sm">Fecha</label>
-														<input type="text" name="fecha_ingreso" id="fecha_ingreso"
-															value="" placeholder="" class="form-control form-control-sm" >
+														<input type="text" name="fecha_ingreso" id="fecha_ingreso" value="" placeholder="" class="form-control form-control-sm" >
 													</div>
-
                                                 </div>
 
 												<div class="row" style="padding-top:8px">
@@ -424,8 +419,7 @@ label.form-control-sm{
 
 													<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12" id="input_ruc_empresa">
 														<label class="form-control-sm">Ruc Empresa</label>
-														<input type="text" name="ruc" id="ruc"
-															value="" class="form-control form-control-sm" onblur="obtenerEmpresaBuscar()">
+														<input type="text" name="ruc" id="ruc" value="" class="form-control form-control-sm" onblur="obtenerEmpresaBuscar()">
 													</div>
 
 													<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12" id="input_razon_social_empresa">
@@ -433,8 +427,7 @@ label.form-control-sm{
 													
 														<div class="row">
 															<div class="col-lg-8 col-md-12 col-sm-12 col-xs-12">
-																<input type="text" name="empresa" id="empresa"
-															value="" readonly="readonly" class="form-control form-control-sm" >
+																<input type="text" name="empresa" id="empresa" value="" readonly="readonly" class="form-control form-control-sm" >
 															</div>
 															
 															<div class="col-lg-4 col-md-12 col-sm-12 col-xs-12">
@@ -448,8 +441,7 @@ label.form-control-sm{
 
 													<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12" id="input_dni_empresa">
 														<label class="form-control-sm">DNI</label>
-														<input type="text" name="dni" id="dni"
-															value="" class="form-control form-control-sm" onblur="obtenerPersonaEmpresaBuscar()">
+														<input type="text" name="dni" id="dni" value="" class="form-control form-control-sm" onblur="obtenerPersonaEmpresaBuscar()">
 													</div>
 
 													<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12" id="input_nombres_empresa">
@@ -457,8 +449,7 @@ label.form-control-sm{
 													
 														<div class="row">
 															<div class="col-lg-8 col-md-12 col-sm-12 col-xs-12">
-																<input type="text" name="nombres" id="nombres"
-															value="" readonly="readonly" class="form-control form-control-sm" >
+																<input type="text" name="nombres" id="nombres" value="" readonly="readonly" class="form-control form-control-sm" >
 															</div>
 															
 															<div class="col-lg-4 col-md-12 col-sm-12 col-xs-12">
@@ -467,9 +458,7 @@ label.form-control-sm{
 																</button>
 															</div>
 														</div>
-															
 													</div>
-
 												</div>
 
 												<div class="row">
@@ -489,8 +478,7 @@ label.form-control-sm{
 
 													<div class="col-lg-3 col-md-12 col-sm-12 col-xs-12" style="padding-right:0px!important">
 														<label class="form-control-sm">N. Doc</label>
-															<input type="text" name="numero_documento" id="numero_documento"
-															value="" class="form-control form-control-sm" onblur="obtenerPersonaBuscar()">
+															<input type="text" name="numero_documento" id="numero_documento" value="" class="form-control form-control-sm" onblur="obtenerPersonaBuscar()">
 													</div>
 
 													<div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
@@ -498,8 +486,7 @@ label.form-control-sm{
 															
 														<div class="row">	
 															<div class="col-lg-8 col-md-12 col-sm-12 col-xs-12">
-																<input type="text" name="conductor" id="conductor"
-																value="" readonly="readonly" class="form-control form-control-sm" >
+																<input type="text" name="conductor" id="conductor" value="" readonly="readonly" class="form-control form-control-sm" >
 															</div>
 															
 															<div class="col-lg-4 col-md-12 col-sm-12 col-xs-12" style="padding-left:0px!important;padding-right:0px!important">
@@ -508,9 +495,7 @@ label.form-control-sm{
 																</button>
 															</div>
 														</div>
-																
 													</div>
-
 												</div>
 
 												<div class="row">
@@ -530,16 +515,20 @@ label.form-control-sm{
 
 													<div class="col-lg-3 col-md-12 col-sm-12 col-xs-12" style="padding-right:0px">
 														<label class="form-control-sm">Cantidad Troncos</label>
-														<input type="text" name="cantidad" id="cantidad"
-															value="" class="form-control form-control-sm" >
+														<input type="text" name="cantidad" id="cantidad" value="" class="form-control form-control-sm" >
 													</div>
+												</div>
 
+												<div class="row">
+													<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding-right:0px">
+														<label class="form-control-sm">Observaci&oacute;n</label>
+														<textarea name="observacion" id="observacion" class="form-control form-control-sm" rows="2"></textarea>
+													</div>
 												</div>
 
 												<div style="clear:both"></div>
 												<div class="row">
-													<!--
-													<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+													<!--<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
 														<label class="form-control-sm">Estado</label>
 														<select name="estado_py" id="estado_py" class="form-control form-control-sm" onchange="">
 															<option value="">ESTADO PROYECTO</option>
@@ -547,32 +536,28 @@ label.form-control-sm{
 
 															?>
 														</select>
-													</div>
-													-->
+													</div>-->
 
 													<div class="col-xl-12 text-right" style="padding-top:15px">
 
-														<input class="btn btn-warning btn-sm float-rigth" value="NUEVO" type="button" id="btnNuevo" style="padding-left:20px;padding-right:20px"/>
-
-                                                        <input class="btn btn-sm btn-success float-rigth" value="GUARDAR" name="guardar" type="button" id="btnGuardar" style="margin-left:10px" />
-
-
+														<!--<input class="btn btn-warning btn-sm float-rigth" value="NUEVO" type="button" id="btnNuevo" style="padding-left:20px;padding-right:20px"/>-->
+														<button type="button" id="btnNuevo" class="btn btn-sm btn-success icono-botones2" style="margin-left:10px">
+															<i class="fas fa-plus-circle" style="font-size:18px;"></i> Nuevo
+														</button>
+                                                        <!--<input class="btn btn-sm btn-success float-rigth" value="GUARDAR" name="guardar" type="button" id="btnGuardar" style="margin-left:10px" />-->
+														<button type="button" id="btnGuardar" style="margin-left:10px" class="btn btn-sm btn-clasico btn-nuevo">
+															<i class="fas fa-save" style="font-size:18px;"></i> Guardar
+														</button>
 
                                                     </div>
-
 												</div>
-
-
                                             </div>
                                             <!--card-body-->
                                         </div>
                                         <!--card-->
-
-
                                     </div>
 
 									<div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
-
 
                                         <div class="card" style="min-height:140px">
                                             <div class="card-header">
@@ -590,11 +575,9 @@ label.form-control-sm{
 
 															<img src="" id="img_ruta_1" width="130px" height="165px" alt="" style="text-align:center;margin-top:8px;display:none;margin-left:10px" />
 															<span class="delete_ruta" style="display:none" onclick="DeleteImagen(this)"></span>
-
 															<input type="hidden" id="img_foto_1" name="img_foto[]" value="" />
 
 														</div>
-
 													</div>
 												</div>
 
@@ -605,16 +588,12 @@ label.form-control-sm{
 															<span class="btn btn-sm btn-warning btn-file">
 																Examinar <input id="image" name="image" type="file" />
 															</span>
-
 															<input type="hidden" id="ind_img" name="ind_img" value="1" />
-
 															<input type="button" class="btn btn-sm btn-primary upload" value="Subir" style="margin-left:10px">
-
 															<!--<input type="button" class="btn btn-sm btn-danger delete" value="Eliminar" style="margin-left:10px">-->
 
 														</div>
 													</div>
-
 												</div>
 
                                                 <!--table-responsive-->
@@ -630,29 +609,16 @@ label.form-control-sm{
                                                     </div>
                                                 </div>
 
-												<a class='flotante' name="guardar" id="guardar" onclick="guardarSolicitud()" href='#' ><img src='/img/btn_save.png' border="0"/></a>
-
-												-->
-
-
-
-
+												<a class='flotante' name="guardar" id="guardar" onclick="guardarSolicitud()" href='#' ><img src='/img/btn_save.png' border="0"/></a>-->
                                             </div>
                                             <!--card-body-->
                                         </div>
                                         <!--card-->
-
-
                                     </div>
                                     <!--card-->
-
-
                                 </div>
-
-
                             </div>
                         </div>
-
 
 					<div class="row" style="padding-top:15px">
 
@@ -706,7 +672,6 @@ label.form-control-sm{
 							<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
 								<input class="btn btn-warning btn-sm pull-rigth" value="Buscar" type="button" id="btnBuscar" />
 							</div>
-
 						</div>
 
 						<div class="card-body">
@@ -725,6 +690,7 @@ label.form-control-sm{
 								<th>Conductor</th>
 								<th>Tipo Madera</th>
 								<th>Cantidad</th>
+								<th>Observaci&oacute;n</th>
 								<th>Imagenes</th>
 							</tr>
 							</thead>
@@ -735,38 +701,20 @@ label.form-control-sm{
 							</div>
 						</div>
 
-
-						<!--
-                        <div id="" class="row">
+						<!--<div id="" class="row">
                             <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-
-
                             </div>
-
                             <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-
                                 <br>
-
                             </div>
-
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                             </div>
-
-                        </div>
-						-->
+                        </div>-->
                     </div>
-
                 </div>
-
-
-
         </div>
         <!--col-->
-
         </form>
-
-
-
     </div>
     <!--row-->
     @endsection

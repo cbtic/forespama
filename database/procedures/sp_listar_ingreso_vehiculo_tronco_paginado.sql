@@ -34,7 +34,7 @@ Begin
 	v.placa, v.ejes, p.numero_documento,
 	p.apellido_paterno||'' ''||p.apellido_materno||'' ''||p.nombres conductor,
 	tm.denominacion tipo_madera, ivttm.cantidad,
-	(select 1 from ingreso_vehiculo_tronco_imagenes ivti where ivti.id_ingreso_vehiculo_troncos = ivt.id limit 1) tiene_imagen ';
+	(select 1 from ingreso_vehiculo_tronco_imagenes ivti where ivti.id_ingreso_vehiculo_troncos = ivt.id limit 1) tiene_imagen, ivt.observacion ';
 
 	v_tabla=' from ingreso_vehiculo_troncos ivt
 	inner join vehiculos v on ivt.id_vehiculos=v.id

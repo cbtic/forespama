@@ -371,125 +371,135 @@ label.form-control-sm{
 						<input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
 				
 				<div class="row" style="padding:20px 20px 0px 20px;">
+					<div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
+						<div class="row">
+							<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+								<select name="tipo_documento_bus" id="tipo_documento_bus" class="form-control form-control-sm filtro-select">
+									<option value="">--Seleccionar Tipo Documento--</option>
+									<?php
+									foreach ($tipo_documento as $row){?>
+										<option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
+										<?php 
+									}
+									?>
+								</select>
+							</div>
 
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<select name="tipo_documento_bus" id="tipo_documento_bus" class="form-control form-control-sm">
-							<option value="">--Seleccionar Tipo Documento--</option>
-							<?php
-							foreach ($tipo_documento as $row){?>
-								<option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
-								<?php 
-							}
-							?>
-						</select>
+							<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+								<select name="empresa_compra_bus" id="empresa_compra_bus" class="form-control form-control-sm filtro-select">
+									<option value="">--Seleccionar Empresa Compra--</option>
+									<?php
+									foreach ($proveedor as $row){?>
+										<option value="<?php echo $row->id ?>"><?php echo $row->razon_social ?></option>
+										<?php 
+									}
+									?>
+								</select>
+							</div>
+
+							<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+								<select name="empresa_vende_bus" id="empresa_vende_bus" class="form-control form-control-sm filtro-select">
+									<option value="">--Seleccionar Empresa Vende--</option>
+									<?php
+									foreach ($proveedor as $row){?>
+										<option value="<?php echo $row->id ?>"><?php echo $row->razon_social ?></option>
+										<?php 
+									}
+									?>
+								</select>
+							</div>
+
+							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+								<input id="fecha_bus" name="fecha_bus" on class="form-control form-control-sm filtro-input"  placeholder="Fecha">
+							</div>
+
+							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+								<input id="numero_orden_compra_bus" name="numero_orden_compra_bus" on class="form-control form-control-sm filtro-input"  placeholder="N&uacute;mero Orden Compra">
+							</div>
+
+							<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+								<select name="almacen_origen_bus" id="almacen_origen_bus" class="form-control form-control-sm filtro-select">
+									<option value="">--Seleccionar Almacen Origen--</option>
+									<?php
+									foreach ($almacen as $row){?>
+										<option value="<?php echo $row->id ?>"><?php echo $row->denominacion ?></option>
+										<?php 
+									}
+									?>
+								</select>
+							</div>
+
+							<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+								<select name="almacen_destino_bus" id="almacen_destino_bus" class="form-control form-control-sm filtro-select">
+									<option value="">--Seleccionar Almacen Destino--</option>
+									<?php
+									foreach ($almacen as $row){?>
+										<option value="<?php echo $row->id ?>"><?php echo $row->denominacion ?></option>
+										<?php 
+									}
+									?>
+								</select>
+							</div>
+
+							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+								<select name="situacion_bus" id="situacion_bus" class="form-control form-control-sm filtro-select">
+									<option value="">--Seleccionar Situaci&oacute;n--</option>
+									<?php
+									foreach ($cerrado_orden_compra as $row){?>
+										<option value="<?php echo $row->codigo ?>" <?php if($row->codigo=='1')echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+										<?php 
+									}
+									?>
+								</select>
+							</div>
+
+							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+								<select name="estado_bus" id="estado_bus" class="form-control form-control-sm filtro-select">
+									<option value="">Todos</option>
+									<option value="1" selected="selected">Activo</option>
+									<option value="0">Eliminado</option>
+								</select>
+							</div>
+						</div>
 					</div>
+					
+					<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+						<div class="row">
+							<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding-right:0px">
+								
+								<div class="row">
+									<!--<input class="btn btn-warning float-left" value="Buscar" type="button" id="btnBuscar" />-->
+									<button type="button" id="btnBuscar" class="btn btn-sm btn-warning float-left icono-botones2">
+										<i class="fas fa-search" style="font-size:18px;"></i> Buscar
+									</button>
+								</div>
+								<div class="row">
+									<?php if($id_user == 1){?>
+										<span class="btn btn-sm btn-info btn-file float-left icono-botones2" style="margin-left:10px">
+											<i class="fas fa-folder-open"></i> Examinar OC <input id="image" name="image" type="file" />
+										</span>
+										
+										<i id="fileExcel" class="fa fa-file-excel" style="display:none;color:#00B300;font-size:35px;block;float:left;padding-left:10px"></i>
+										
+										<!--<input type="button" class="btn btn-success upload" value="Subir OC" style="margin-left:10px;float:left">-->
+										<button type="button" class="btn btn-sm btn-success upload float-left icono-botones2" style="margin-left:10px" title="Subir archivo OC">
+											<i class="fas fa-upload"></i> Subir OC
+										</button>
 
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<select name="empresa_compra_bus" id="empresa_compra_bus" class="form-control form-control-sm">
-							<option value="">--Seleccionar Empresa Compra--</option>
-							<?php
-							foreach ($proveedor as $row){?>
-								<option value="<?php echo $row->id ?>"><?php echo $row->razon_social ?></option>
-								<?php 
-							}
-							?>
-						</select>
-					</div>
-
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<select name="empresa_vende_bus" id="empresa_vende_bus" class="form-control form-control-sm">
-							<option value="">--Seleccionar Empresa Vende--</option>
-							<?php
-							foreach ($proveedor as $row){?>
-								<option value="<?php echo $row->id ?>"><?php echo $row->razon_social ?></option>
-								<?php 
-							}
-							?>
-						</select>
-					</div>
-
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-                        <input id="fecha_bus" name="fecha_bus" on class="form-control form-control-sm"  placeholder="Fecha">
-					</div>
-
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-                        <input id="numero_orden_compra_bus" name="numero_orden_compra_bus" on class="form-control form-control-sm"  placeholder="N&uacute;mero Orden Compra">
-					</div>
-
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<select name="almacen_origen_bus" id="almacen_origen_bus" class="form-control form-control-sm">
-							<option value="">--Seleccionar Almacen Origen--</option>
-							<?php
-							foreach ($almacen as $row){?>
-								<option value="<?php echo $row->id ?>"><?php echo $row->denominacion ?></option>
-								<?php 
-							}
-							?>
-						</select>
-					</div>
-
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<select name="almacen_destino_bus" id="almacen_destino_bus" class="form-control form-control-sm">
-							<option value="">--Seleccionar Almacen Destino--</option>
-							<?php
-							foreach ($almacen as $row){?>
-								<option value="<?php echo $row->id ?>"><?php echo $row->denominacion ?></option>
-								<?php 
-							}
-							?>
-						</select>
-					</div>
-
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<select name="situacion_bus" id="situacion_bus" class="form-control form-control-sm">
-							<option value="">--Seleccionar Situaci&oacute;n--</option>
-							<?php
-							foreach ($cerrado_orden_compra as $row){?>
-								<option value="<?php echo $row->codigo ?>" <?php if($row->codigo=='1')echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
-								<?php 
-							}
-							?>
-						</select>
-					</div>
-
-                    <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<select name="estado_bus" id="estado_bus" class="form-control form-control-sm">
-							<option value="">Todos</option>
-							<option value="1" selected="selected">Activo</option>
-							<option value="0">Eliminado</option>
-						</select>
-					</div>
-                    
-					<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12" style="padding-right:0px">
-						
-						<!--<input class="btn btn-warning float-left" value="Buscar" type="button" id="btnBuscar" />-->
-						<button type="button" id="btnBuscar" class="btn btn-warning float-left">
-							<i class="fas fa-search" style="font-size:18px;"></i> Buscar
-						</button>
-						
-						<?php if($id_user == 1){?>
-							<span class="btn btn-info btn-file float-left" style="margin-left:10px">
-								<i class="fas fa-folder-open"></i> Examinar OC <input id="image" name="image" type="file" />
-							</span>
-							
-							<i id="fileExcel" class="fa fa-file-excel" style="display:none;color:#00B300;font-size:35px;block;float:left;padding-left:10px"></i>
-							
-							<!--<input type="button" class="btn btn-success upload" value="Subir OC" style="margin-left:10px;float:left">-->
-							<button type="button" class="btn btn-success upload float-left" style="margin-left:10px" title="Subir archivo OC">
-								<i class="fas fa-upload"></i> Subir OC
-							</button>
-
-							<span class="btn btn-info btn-file float-left" style="margin-left:10px">
-								<i class="fas fa-folder-open"></i> Examinar OD <input id="image2" name="image2" type="file" />
-							</span>
-							
-							<i id="fileExcel2" class="fa fa-file-excel" style="display:none;color:#00B300;font-size:35px;block;float:left;padding-left:10px"></i>
-							
-							<!--<input type="button" class="btn btn-success upload2" value="Subir OD" style="margin-left:10px;float:left">-->
-							<button type="button" class="btn btn-success upload2 float-left" style="margin-left:10px" title="Subir archivo OD">
-								<i class="fas fa-upload"></i> Subir OD
-							</button>
-						<?php }?>
+										<span class="btn btn-sm btn-info btn-file float-left icono-botones2" style="margin-left:10px">
+											<i class="fas fa-folder-open"></i> Examinar OD <input id="image2" name="image2" type="file" />
+										</span>
+										
+										<i id="fileExcel2" class="fa fa-file-excel" style="display:none;color:#00B300;font-size:35px;block;float:left;padding-left:10px"></i>
+										
+										<!--<input type="button" class="btn btn-success upload2" value="Subir OD" style="margin-left:10px;float:left">-->
+										<button type="button" class="btn btn-sm btn-success upload2 float-left icono-botones2" style="margin-left:10px" title="Subir archivo OD">
+											<i class="fas fa-upload"></i> Subir OD
+										</button>
+									<?php }?>
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
 				

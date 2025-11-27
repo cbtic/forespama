@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION public.sp_listar_orden_compra_paginado(p_tipo_documento character varying, p_empresa_compra character varying, p_empresa_vende character varying, p_fecha_inicio character varying, p_fecha_fin character varying, p_numero_orden_compra character varying, p_numero_orden_compra_cliente character varying, p_situacion character varying, p_almacen_origen character varying, p_almacen_destino character varying, p_estado character varying, p_id_user character varying, p_id_vendedor character varying, p_estado_pedido character varying, p_prioridad character varying, p_canal character varying, p_tipo_producto character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
+CREATE OR REPLACE FUNCTION public.sp_listar_orden_compra_proceso_paginado(p_tipo_documento character varying, p_empresa_compra character varying, p_empresa_vende character varying, p_fecha_inicio character varying, p_fecha_fin character varying, p_numero_orden_compra character varying, p_numero_orden_compra_cliente character varying, p_situacion character varying, p_almacen_origen character varying, p_almacen_destino character varying, p_estado character varying, p_id_user character varying, p_id_vendedor character varying, p_estado_pedido character varying, p_prioridad character varying, p_canal character varying, p_tipo_producto character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
  RETURNS refcursor
  LANGUAGE plpgsql
 AS $function$
@@ -11,13 +11,16 @@ v_where varchar;
 v_count varchar;
 v_col_count varchar;
 v_id_rol integer;
+v_id_proceso integer;
 
 begin
 
-	select role_id into v_id_rol from model_has_roles mhr where mhr.model_id::varchar=p_id_user;
-
+	select role_id into v_id_rol from model_has_roles mhr where mhr.model_id::varchar = p_id_user;
+	
+	select id_proceso into v_id_proceso from persona_procesos pp where pp.id_persona::varchar = p_id_user;
+	
 	p_pagina=(p_pagina::Integer-1)*p_limit::Integer;
-
+	
 	v_campos=' oc.id, tm.denominacion tipo_documento, e2.razon_social empresa_vende,
 	case when oc.id_tipo_cliente = 1 then 
 	(select p.nombres ||'' ''|| p.apellido_paterno ||'' ''|| p.apellido_materno from personas p
@@ -33,7 +36,12 @@ begin
 	from orden_compra_contacto_entregas occe 
 	where occe.id_orden_compra = oc.id) then 1 else 0 
 	end) tiene_direccion, oc.total, oc.estado_pedido,
-	(select r.codigo  from requerimientos r where oc.id_requerimiento = r.id) codigo_requerimiento, oc.id_autorizacion, tm3.denominacion prioridad ';
+	(select r.codigo  from requerimientos r where oc.id_requerimiento = r.id) codigo_requerimiento, 
+	(coalesce((select aoc.id_proceso_pedido from autorizacion_orden_compras aoc
+	where aoc.id_orden_compra = oc.id
+	order by id desc
+	limit 1),0)) id_autorizacion,
+	tm3.denominacion prioridad, tm4.denominacion proceso_pedido ';
 
 	v_tabla=' from orden_compras oc 
 	inner join empresas e2 on oc.id_empresa_vende = e2.id
@@ -42,9 +50,11 @@ begin
 	left join tabla_maestras tm3 on oc.id_prioridad ::int = tm3.codigo ::int and tm3.tipo = ''93''
 	left join almacenes a on oc.id_almacen_destino = a.id
 	left join almacenes a2 on oc.id_almacen_salida = a2.id 
+	left join autorizacion_orden_compras aoc on aoc.id_orden_compra = oc.id and aoc.id = (select id from autorizacion_orden_compras where id_orden_compra = oc.id order by id desc limit 1)
+	left join tabla_maestras tm4 on aoc.id_proceso_pedido ::int = tm4.codigo ::int and tm4.tipo = ''109''
 	inner join users u on oc.id_usuario_inserta = u.id
 	left join users u2 on oc.id_vendedor = u2.id ';
-		
+	
 	v_where = ' Where 1=1 ';
 
 	If p_tipo_documento<>'' Then
@@ -140,6 +150,14 @@ begin
 		inner join productos p on ocd.id_producto = p.id 
 		where ocd.id_orden_compra = oc.id 
 		and p.bien_servicio = '''||p_tipo_producto||''') ';
+	End If;
+
+	If p_id_user <> '1' and v_id_proceso IS NOT NULL Then 
+		v_where:=v_where||' and(
+		select aoc.id_proceso_pedido from autorizacion_orden_compras aoc 
+		where aoc.id_orden_compra = oc.id
+		order by id desc
+		limit 1) >= '''||v_id_proceso||''' ' ; 
 	End If;
 
 	EXECUTE ('SELECT count(1) '||v_tabla||v_where) INTO v_count;

@@ -29,7 +29,14 @@ $(document).ready(function () {
 		}
 	});
 
-	$('#fecha_bus').keypress(function(e){
+	$('#fecha_inicio_bus').keypress(function(e){
+		if(e.which == 13) {
+			datatablenew();
+			return false;
+		}
+	});
+
+	$('#fecha_fin_bus').keypress(function(e){
 		if(e.which == 13) {
 			datatablenew();
 			return false;
@@ -64,7 +71,15 @@ $(document).ready(function () {
 		}
 	});
 
-	$('#fecha_bus').datepicker({
+	$('#fecha_inicio_bus').datepicker({
+        autoclose: true,
+		format: 'yyyy-mm-dd',
+		changeMonth: true,
+		changeYear: true,
+        language: 'es'
+    });
+
+	$('#fecha_fin_bus').datepicker({
         autoclose: true,
 		format: 'yyyy-mm-dd',
 		changeMonth: true,
@@ -141,7 +156,8 @@ function datatablenew(){
             var iCantMostrar 	= aoData[4].value;
 			
             var tipo_documento = $('#tipo_documento_bus').val();
-			var fecha = $('#fecha_bus').val();
+			var fecha_inicio = $('#fecha_inicio_bus').val();
+			var fecha_fin = $('#fecha_fin_bus').val();
 			var numero_requerimiento = $('#numero_requerimiento_bus').val();
 			var almacen = $('#almacen_bus').val();
 			var situacion = $('#situacion_bus').val();
@@ -159,7 +175,7 @@ function datatablenew(){
                 "type": "POST",
                 "url": sSource,
                 "data":{NumeroPagina:iNroPagina,NumeroRegistros:iCantMostrar,
-						tipo_documento:tipo_documento,fecha:fecha,numero_requerimiento:numero_requerimiento,almacen:almacen,
+						tipo_documento:tipo_documento,fecha_inicio:fecha_inicio,fecha_fin:fecha_fin,numero_requerimiento:numero_requerimiento,almacen:almacen,
 						situacion:situacion,estado:estado,responsable_atencion:responsable_atencion,estado_atencion:estado_atencion,
 						tipo_requerimiento:tipo_requerimiento,producto:producto,denominacion_producto:denominacion_producto,
 						_token:_token
@@ -421,7 +437,8 @@ function fn_eliminar(id,estado){
 function descargarArchivosRequerimiento(){
 		
 	var tipo_documento = $('#tipo_documento_bus').val();
-	var fecha = $('#fecha_bus').val();
+	var fecha_inicio = $('#fecha_inicio_bus').val();
+	var fecha_fin = $('#fecha_fin_bus').val();
 	var numero_requerimiento = $('#numero_requerimiento_bus').val();
 	var almacen = $('#almacen_bus').val();
 	var situacion = $('#situacion_bus').val();
@@ -434,7 +451,8 @@ function descargarArchivosRequerimiento(){
 	//var id_agremiado = 0;
 	//var id_regional = 0;
 	if (tipo_documento == "")tipo_documento = 0;
-	if (fecha == "")fecha = "0";
+	if (fecha_inicio == "")fecha_inicio = "0";
+	if (fecha_fin == "")fecha_fin = "0";
 	if (numero_requerimiento == "")numero_requerimiento = "0";
 	if (almacen == "")almacen = 0;
 	if (situacion == "")situacion = 0;
@@ -448,13 +466,14 @@ function descargarArchivosRequerimiento(){
 	//if (campo == "")campo = 0;
 	//if (orden == "")orden = 0;
 	
-	location.href = '/requerimiento/exportar_listar_requerimiento/'+tipo_documento+'/'+fecha+'/'+numero_requerimiento+'/'+almacen+'/'+situacion+'/'+responsable_atencion+'/'+estado_atencion+'/'+tipo_requerimiento+'/'+estado+'/'+producto+'/'+denominacion_producto;
+	location.href = '/requerimiento/exportar_listar_requerimiento/'+tipo_documento+'/'+fecha_inicio+'/'+fecha_fin+'/'+numero_requerimiento+'/'+almacen+'/'+situacion+'/'+responsable_atencion+'/'+estado_atencion+'/'+tipo_requerimiento+'/'+estado+'/'+producto+'/'+denominacion_producto;
 }
 
 function descargarArchivosRequerimientoReporte(){
 		
 	var tipo_documento = $('#tipo_documento_bus').val();
-	var fecha = $('#fecha_bus').val();
+	var fecha_inicio = $('#fecha_inicio_bus').val();
+	var fecha_fin = $('#fecha_fin_bus').val();
 	var numero_requerimiento = $('#numero_requerimiento_bus').val();
 	var almacen = $('#almacen_bus').val();
 	var situacion = $('#situacion_bus').val();
@@ -466,7 +485,8 @@ function descargarArchivosRequerimientoReporte(){
 	var denominacion_producto = $('#denominacion_producto_bus').val();
 
 	if (tipo_documento == "")tipo_documento = 0;
-	if (fecha == "")fecha = "0";
+	if (fecha_inicio == "")fecha_inicio = "0";
+	if (fecha_fin == "")fecha_fin = "0";
 	if (numero_requerimiento == "")numero_requerimiento = "0";
 	if (almacen == "")almacen = 0;
 	if (situacion == "")situacion = 0;
@@ -477,7 +497,7 @@ function descargarArchivosRequerimientoReporte(){
 	if (producto == "")producto = 0;
 	if (denominacion_producto == "")denominacion_producto = "0";
 	
-	location.href = '/requerimiento/exportar_listar_requerimiento_reporte/'+tipo_documento+'/'+fecha+'/'+numero_requerimiento+'/'+almacen+'/'+situacion+'/'+responsable_atencion+'/'+estado_atencion+'/'+tipo_requerimiento+'/'+estado+'/'+producto+'/'+denominacion_producto;
+	location.href = '/requerimiento/exportar_listar_requerimiento_reporte/'+tipo_documento+'/'+fecha_inicio+'/'+fecha_fin+'/'+numero_requerimiento+'/'+almacen+'/'+situacion+'/'+responsable_atencion+'/'+estado_atencion+'/'+tipo_requerimiento+'/'+estado+'/'+producto+'/'+denominacion_producto;
 }
 
 function modalControlProductos(id){

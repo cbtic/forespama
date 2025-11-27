@@ -112,6 +112,52 @@
             box-shadow: 0 0 6px rgba(25, 135, 84, 0.4) !important;
             outline: none !important;
         }
+
+        .icono-botones2{
+            margin-left:10px !important; 
+            display:inline-flex !important; 
+            align-items:center !important; 
+            gap:3px !important;
+        }
+
+        .dataTables_wrapper .dataTables_paginate .paginate_button {
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            background-color: white;
+            color: #212529 !important;
+            margin: 0 3px;
+            padding: 4px 10px;
+            cursor: pointer;
+        }
+
+        .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+            background-color: #e9ecef !important;
+            color: #000000ff !important;
+            font-weight:bold !important;
+        }
+
+        .dataTables_wrapper .dataTables_paginate .paginate_button.current {
+            background-color: #6b6d6dff !important;
+            color: white !important;
+            border: 1px solid #6b6d6dff;
+        }
+
+        .dataTables_wrapper .dataTables_paginate .paginate_button.disabled {
+            color: #adb5bd !important;
+            background-color: transparent !important;
+        }
+
+        .dataTables_wrapper .dataTables_length label {
+        color: #212529;
+        font-weight: 500;
+        font-size: 14px;
+        }
+
+        .dataTables_wrapper .dataTables_info {
+        color: #212529;
+        font-weight: 500;
+        font-size: 14px;
+        }
     </style>
 	
     <livewire:styles />

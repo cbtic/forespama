@@ -345,69 +345,84 @@ label.form-control-sm{
 						<input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
 				
 				<div class="row" style="padding:20px 20px 0px 20px;">
+					<div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
+						<div class="row">
+							<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+								<select name="tipo_documento_bus" id="tipo_documento_bus" class="form-control form-control-sm filtro-select">
+									<option value="">--Seleccionar Tipo Documento--</option>
+									<?php
+									foreach ($tipo_documento as $row){?>
+										<option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
+										<?php 
+									}
+									?>
+								</select>
+							</div>
 
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<select name="tipo_documento_bus" id="tipo_documento_bus" class="form-control form-control-sm">
-							<option value="">--Seleccionar Tipo Documento--</option>
-							<?php
-							foreach ($tipo_documento as $row){?>
-								<option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
-								<?php 
-							}
-							?>
-						</select>
-					</div>
+							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+								<input id="fecha_bus" name="fecha_bus" on class="form-control form-control-sm filtro-input"  placeholder="Fecha">
+							</div>
 
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-                        <input id="fecha_bus" name="fecha_bus" on class="form-control form-control-sm"  placeholder="Fecha">
-					</div>
+							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+								<input id="numero_ingreso_produccion_bus" name="numero_ingreso_produccion_bus" on class="form-control form-control-sm filtro-input"  placeholder="N&uacute;mero Dispensaci&oacute;n">
+							</div>
 
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-                        <input id="numero_ingreso_produccion_bus" name="numero_ingreso_produccion_bus" on class="form-control form-control-sm"  placeholder="N&uacute;mero Dispensaci&oacute;n">
-					</div>
+							<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+								<select name="almacen_destino_bus" id="almacen_destino_bus" class="form-control form-control-sm filtro-select">
+									<option value="">--Seleccionar Almacen Destino--</option>
+									<?php
+									foreach ($almacen_destino as $row){?>
+										<option value="<?php echo $row->id ?>"><?php echo $row->denominacion ?></option>
+										<?php 
+									}
+									?>
+								</select>
+							</div>
 
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<select name="almacen_destino_bus" id="almacen_destino_bus" class="form-control form-control-sm">
-							<option value="">--Seleccionar Almacen Destino--</option>
-							<?php
-							foreach ($almacen_destino as $row){?>
-								<option value="<?php echo $row->id ?>"><?php echo $row->denominacion ?></option>
-								<?php 
-							}
-							?>
-						</select>
-					</div>
+							<div class="col-lg-2">
+								<select name="area_trabajo_bus" id="area_trabajo_bus" class="form-control form-control-sm filtro-select" onchange="obtenerUnidadTrabajo()">
+									<option value="">--Seleccionar Area Trabajo--</option>
+									<?php 
+									foreach ($area_trabajo as $row){?>
+										<option value="<?php echo $row->id ?>"><?php echo $row->denominacion ?></option>
+										<?php 
+									}
+									?>
+								</select>
+							</div>
 
-					<div class="col-lg-2">
-						<select name="area_trabajo_bus" id="area_trabajo_bus" class="form-control form-control-sm" onchange="obtenerUnidadTrabajo()">
-							<option value="">--Seleccionar Area Trabajo--</option>
-							<?php 
-							foreach ($area_trabajo as $row){?>
-								<option value="<?php echo $row->id ?>"><?php echo $row->denominacion ?></option>
-								<?php 
-							}
-							?>
-						</select>
-					</div>
+							<div class="col-lg-3">
+								<select name="unidad_trabajo_bus" id="unidad_trabajo_bus" class="form-control form-control-sm filtro-select" onchange="//actualizarSecciones(this)">
+									<option value="">--Seleccionar Unidad Trabajo--</option>
+								</select>
+							</div>
 
-					<div class="col-lg-2">
-						<select name="unidad_trabajo_bus" id="unidad_trabajo_bus" class="form-control form-control-sm" onchange="//actualizarSecciones(this)">
-							<option value="">--Seleccionar Unidad Trabajo--</option>
-						</select>
+							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+								<select name="estado_bus" id="estado_bus" class="form-control form-control-sm filtro-select">
+									<option value="">Todos</option>
+									<option value="1" selected="selected">Activo</option>
+									<option value="0">Eliminado</option>
+								</select>
+							</div>
+						</div>
 					</div>
-
-                    <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<select name="estado_bus" id="estado_bus" class="form-control form-control-sm">
-							<option value="">Todos</option>
-							<option value="1" selected="selected">Activo</option>
-							<option value="0">Eliminado</option>
-						</select>
-					</div>
-                    
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12" style="padding-right:0px">
-						<input class="btn btn-warning pull-rigth" value="Buscar" type="button" id="btnBuscar" />
-						<input class="btn btn-success pull-rigth" value="Nuevo" type="button" id="btnNuevo" style="margin-left:15px" />
-						<buttom class="btn btn-secondary pull-rigth" type="button" id="btnDescargar" style="margin-left:15px" /><i class="fa fa-download"></i> Descargar</buttom>
+					
+					<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+						<div class="row">
+							<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding-right:0px">
+								<!--<input class="btn btn-warning pull-rigth" value="Buscar" type="button" id="btnBuscar" />-->
+								<button type="button" id="btnBuscar" class="btn btn-sm btn-warning pull-rigth icono-botones2" style="margin-left:10px">
+									<i class="fas fa-search" style="font-size:18px;"></i> Buscar
+								</button>
+								<!--<input class="btn btn-success pull-rigth" value="Nuevo" type="button" id="btnNuevo" style="margin-left:15px" />-->
+								<button type="button" id="btnNuevo" class="btn btn-sm btn-success icono-botones2" style="margin-left:10px">
+									<i class="fas fa-plus-circle" style="font-size:18px;"></i> Nuevo
+								</button>
+								<buttom class="btn btn-sm btn-secondary pull-rigth icono-botones2" type="button" id="btnDescargar" style="margin-left:15px" />
+									<i class="fa fa-download"></i> Descargar
+								</buttom>
+							</div>
+						</div>
 					</div>
 				</div>
 				

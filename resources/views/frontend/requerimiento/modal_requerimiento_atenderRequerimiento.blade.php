@@ -646,9 +646,12 @@ function save_orden_compra_requerimiento(){
                 type: "POST",
                 data : $("#frmRequerimiento").serialize(),
                 success: function (result) {
+
+                    var codigo_ = result.codigo;
+
                     datatablenew();
                     $('.loader').hide();
-                    bootbox.alert("Se guard&oacute; satisfactoriamente");
+                    bootbox.alert("Se guard&oacute; satisfactoriamente. <br> Codigo: "+codigo_);
                     $('#openOverlayOpc').modal('hide');
                 }
         });

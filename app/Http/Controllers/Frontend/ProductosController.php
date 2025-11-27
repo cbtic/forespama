@@ -133,7 +133,8 @@ class ProductosController extends Controller
             $codigo_producto = $producto_model->getCodigoProducto($request->familia, $request->sub_familia);
 		}else{
 			$producto = Producto::find($request->id);
-            $codigo_producto = $request->codigo;
+            //$codigo_producto = $request->codigo;
+            $codigo_producto = $producto_model->getCodigoProducto($request->familia, $request->sub_familia);
 		}
 
         if($request->id == 0){
@@ -160,7 +161,7 @@ class ProductosController extends Controller
 		if($request->id == 0){
             $producto->codigo = $codigo_producto[0]->codigo;
         }else{
-            $producto->codigo = $codigo_producto;
+            $producto->codigo = $codigo_producto[0]->codigo;
         }
         $producto->denominacion = $request->denominacion;
         $producto->id_unidad_medida = $request->unidad_medida;
