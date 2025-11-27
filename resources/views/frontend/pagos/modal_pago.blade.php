@@ -516,156 +516,116 @@ container: '#myModal modal-body'
           </h1>
         </section>
 		-->
-		<div class="justify-content-center">		
-
-		<div class="card">
-			
-			<div class="card-header" style="padding:5px!important;padding-left:20px!important">
-				Lista de Pagos
-			</div>
-			
-            <div class="card-body">
-
-			<div class="row">
-
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding-top:10px">
+		<div class="justify-content-center">
+			<div class="card">
+				<div class="card-header" style="padding:5px!important;padding-left:20px!important">
+					Lista de Pagos
+				</div>
+				<div class="card-body">
+					<div class="row">
+						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding-top:10px">
 					
-					<input type="hidden" name="_token" value="{{ csrf_token() }}">
-					<input type="hidden" name="id_ingreso_vehiculo_tronco_tipo_maderas_modal" id="id_ingreso_vehiculo_tronco_tipo_maderas_modal" value="<?php echo $id_ingreso_vehiculo_tronco_tipo_maderas?>">
-					<input type="hidden" name="id_modal" id="id_modal" value="<?php echo $id?>">
-					<div class="row">
-						
-					<div class="col-lg-8">
-						<div class="row">
-
-						<div class="col-lg-3">
-							<div class="form-group">
-								<label class="control-label">Fecha</label>
-								<input id="fecha" name="fecha" class="form-control form-control-sm"  value="<?php if($id==0){echo $fecha_actual;}else{echo date('d-m-Y',strtotime($ingresoVehiculoTroncoPago->fecha));}?>" type="text">
-							</div>
-						</div>
-
-						<div class="col-lg-4">
-							<div class="form-group">
-								<label class="control-label">Forma de Pago</label>
-								<select name="id_tipodesembolso" id="id_tipodesembolso" onchange="validar_tipo()" class="form-control form-control-sm" onChange="">
-									<?php foreach($tipo_desembolso as $row){?>
-									<option <?php if($row->codigo==$ingresoVehiculoTroncoPago->id_tipodesembolso)echo "selected='selected'";?> value="<?php echo $row->codigo?>"><?php echo $row->denominacion?></option>
-									<?php }?>
-								</select>
-							</div>
-						</div>
-						
-						<div class="col-lg-4" id="divCheque" <?php if($ingresoVehiculoTroncoPago->id_tipodesembolso!=2 || $id==0)echo "style='display:none'"?>>
-							<div class="form-group">
-								<label class="control-label">Cheque</label>
-								<input id="nro_cheque" name="nro_cheque" class="form-control form-control-sm"  value="<?php echo $ingresoVehiculoTroncoPago->nro_cheque?>" type="number">
-							</div>
-						</div>
-						
-					</div>
-
-					<div class="row">
-						
-						<div class="col-lg-4">
-							<div class="form-group">
-								<label class="control-label">Importe</label>
-								<input id="importe" name="importe" class="form-control form-control-sm"  value="<?php if($id==0){echo $importe;}else{echo $ingresoVehiculoTroncoPago->importe;}?>" type="number">
-							</div>
-						</div>
-
-						<div class="col-lg-3">
-							<div class="form-group">
-								<label class="control-label">Guia</label>
-								<input id="nro_guia" name="nro_guia" class="form-control form-control-sm"  value="<?php echo $ingresoVehiculoTroncoPago->nro_guia?>" type="text">
-							</div>
-						</div>
-
-						<div class="col-lg-3">
-							<div class="form-group">
-								<label class="control-label">Factura</label>
-								<input id="nro_factura" name="nro_factura" class="form-control form-control-sm"  value="<?php echo $ingresoVehiculoTroncoPago->nro_factura?>" type="text">
-							</div>
-						</div>
-						
-					</div>
-					
-					<div class="row">
-						
-						<div class="col-lg-12">
-							<div class="form-group">
-								<label class="control-label">Observaci&oacute;n</label>
-								<textarea id="observacion" name="observacion" class="form-control form-control-sm"><?php echo $ingresoVehiculoTroncoPago->observacion?></textarea>
-							</div>
-						</div>
-						
-					</div>
-						
-					</div>
-
-					<div class="col-lg-4">
-							
+							<input type="hidden" name="_token" value="{{ csrf_token() }}">
+							<input type="hidden" name="id_ingreso_vehiculo_tronco_tipo_maderas_modal" id="id_ingreso_vehiculo_tronco_tipo_maderas_modal" value="<?php echo $id_ingreso_vehiculo_tronco_tipo_maderas?>">
+							<input type="hidden" name="id_modal" id="id_modal" value="<?php echo $id?>">
 							<div class="row">
 						
-								<div class="col-lg-12">
-										
-								
-								<div class="form-group">
-										
-										<span class="btn btn-sm btn-warning btn-file">
-											Examinar <input id="image" name="image" type="file" />
-										</span>
-										<input type="button" class="btn btn-sm btn-primary upload" value="Subir" style="margin-left:10px">
-										
-										<?php
-											$url_foto = "/img/logo_forestalpama.jpg";
-											if ($ingresoVehiculoTroncoPago->foto_desembolso != "") $url_foto = "/img/pago/" . $ingresoVehiculoTroncoPago->foto_desembolso;
+								<div class="col-lg-8">
+									<div class="row">
+										<div class="col-lg-3">
+											<div class="form-group">
+												<label class="control-label">Fecha</label>
+												<input id="fecha" name="fecha" class="form-control form-control-sm"  value="<?php if($id==0){echo $fecha_actual;}else{echo date('d-m-Y',strtotime($ingresoVehiculoTroncoPago->fecha));}?>" type="text">
+											</div>
+										</div>
+										<div class="col-lg-4">
+											<div class="form-group">
+												<label class="control-label">Forma de Pago</label>
+												<select name="id_tipodesembolso" id="id_tipodesembolso" onchange="validar_tipo()" class="form-control form-control-sm" onChange="">
+													<?php foreach($tipo_desembolso as $row){?>
+													<option <?php if($row->codigo==$ingresoVehiculoTroncoPago->id_tipodesembolso)echo "selected='selected'";?> value="<?php echo $row->codigo?>"><?php echo $row->denominacion?></option>
+													<?php }?>
+												</select>
+											</div>
+										</div>
+										<div class="col-lg-4" id="divCheque" <?php if($ingresoVehiculoTroncoPago->id_tipodesembolso!=2 || $id==0)echo "style='display:none'"?>>
+											<div class="form-group">
+												<label class="control-label">Cheque</label>
+												<input id="nro_cheque" name="nro_cheque" class="form-control form-control-sm"  value="<?php echo $ingresoVehiculoTroncoPago->nro_cheque?>" type="number">
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-lg-4">
+											<div class="form-group">
+												<label class="control-label">Importe</label>
+												<input id="importe" name="importe" class="form-control form-control-sm"  value="<?php if($id==0){echo $importe;}else{echo $ingresoVehiculoTroncoPago->importe;}?>" type="number">
+											</div>
+										</div>
+										<div class="col-lg-3">
+											<div class="form-group">
+												<label class="control-label">Guia</label>
+												<input id="nro_guia" name="nro_guia" class="form-control form-control-sm"  value="<?php echo $ingresoVehiculoTroncoPago->nro_guia?>" type="text">
+											</div>
+										</div>
+										<div class="col-lg-3">
+											<div class="form-group">
+												<label class="control-label">Factura</label>
+												<input id="nro_factura" name="nro_factura" class="form-control form-control-sm"  value="<?php echo $ingresoVehiculoTroncoPago->nro_factura?>" type="text">
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-lg-12">
+											<div class="form-group">
+												<label class="control-label">Observaci&oacute;n</label>
+												<textarea id="observacion" name="observacion" class="form-control form-control-sm"><?php echo $ingresoVehiculoTroncoPago->observacion?></textarea>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-lg-4">
+									<div class="row">
+										<div class="col-lg-12">
+											<div class="form-group">
+													
+													<span class="btn btn-sm btn-warning btn-file">
+														Examinar <input id="image" name="image" type="file" />
+													</span>
+													<input type="button" class="btn btn-sm btn-primary upload" value="Subir" style="margin-left:10px">
+													
+													<?php
+														$url_foto = "/img/logo_forestalpama.jpg";
+														if ($ingresoVehiculoTroncoPago->foto_desembolso != "") $url_foto = "/img/pago/" . $ingresoVehiculoTroncoPago->foto_desembolso;
 
-											$foto = "";
-											if ($ingresoVehiculoTroncoPago->foto_desembolso != "") $foto = $ingresoVehiculoTroncoPago->foto_desembolso;
-										?>
+														$foto = "";
+														if ($ingresoVehiculoTroncoPago->foto_desembolso != "") $foto = $ingresoVehiculoTroncoPago->foto_desembolso;
+													?>
 
-										<img src="<?php echo $url_foto ?>" id="img_ruta" width="240px" height="150px" alt="" style="margin-top:10px" />
-										<input type="hidden" id="img_foto" name="img_foto" value="<?php echo $foto ?>" />
-									</div>	
-
-
+													<img src="<?php echo $url_foto ?>" id="img_ruta" width="240px" height="150px" alt="" style="margin-top:10px" />
+													<input type="hidden" id="img_foto" name="img_foto" value="<?php echo $foto ?>" />
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div style="margin-top:10px" class="row form-group">
+									<div class="col-sm-12 controls">
+										<div class="btn-group btn-group-sm" role="group" aria-label="Log Viewer Actions" style="float:right">
+											<!--<a href="javascript:void(0)" id="btnGuardar" onClick="fn_save()" class="btn btn-sm btn-success">Guardar</a>-->
+											<input class="btn btn-sm btn-success" value="Guardar" type="button" id="btnGuardar" onClick="fn_save()">
+										</div>
+									</div>
 								</div>
 							</div>
-					</div>
-
-
-					</div>
-
-					
-					
-					<div style="margin-top:10px" class="row form-group">
-						<div class="col-sm-12 controls">
-							<div class="btn-group btn-group-sm" role="group" aria-label="Log Viewer Actions" style="float:right">
-								<!--<a href="javascript:void(0)" id="btnGuardar" onClick="fn_save()" class="btn btn-sm btn-success">Guardar</a>-->
-								<input class="btn btn-sm btn-success" value="Guardar" type="button" id="btnGuardar" onClick="fn_save()">
-								
-								</div>
-							
+						<!-- /.box -->
 						</div>
-					</div> 
-					
-              </div>
-			  
-			  
-			  
-          <!-- /.box -->
-          
-
-        </div>
-        <!--/.col (left) -->
-            
-     
-          </div>
-          <!-- /.row -->
-        </section>
-        <!-- /.content -->
-    </div>
+			<!--/.col (left) -->
+				</div>
+			<!-- /.row -->
+			</section>
+			<!-- /.content -->
+		</div>
     <!-- /.content-wrapper -->
     
 <script type="text/javascript">

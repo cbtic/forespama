@@ -312,7 +312,7 @@ $.ajax({
                         <td><input name="sub_total[]" id="sub_total${n}" class="sub_total form-control form-control-sm" value="${parseFloat(orden_compra.sub_total) || 0}" type="text" readonly="readonly"></td>
                         <td><input name="igv[]" id="igv${n}" class="igv form-control form-control-sm" value="${parseFloat(orden_compra.igv) || 0}" type="text" readonly="readonly"></td>
                         <td><input name="total[]" id="total${n}" class="total form-control form-control-sm" value="${parseFloat(orden_compra.total) || 0}" type="text" readonly="readonly"></td>
-                        <td><button type="button" class="btn btn-danger btn-sm" onclick="eliminarFila(this)">Eliminar</button></td>
+                        <td><button type="button" class="btn btn-sm btn-clasico btn-eliminar" onclick="eliminarFila(this)"><i class="fas fa-trash" style="font-size:18px;"></i></button></td>
 
                     </tr>
                 `;
@@ -836,7 +836,7 @@ function agregarProducto(){
         var sub_total = '<input name="sub_total[]" id="sub_total' + n + '" class="sub_total form-control form-control-sm" value="" type="text" readonly="readonly">';
         var igv = '<input name="igv[]" id="igv' + n + '" class="igv form-control form-control-sm" value="" type="text" readonly="readonly">';
         var total = '<input name="total[]" id="total' + n + '" class="total form-control form-control-sm" value="" type="text" readonly="readonly">';
-        var btnEliminar = '<button type="button" class="btn btn-danger btn-sm" onclick="eliminarFila(this)">Eliminar</button>';
+        var btnEliminar = '<button type="button" class="btn btn-sm btn-clasico btn-eliminar" onclick="eliminarFila(this)"><i class="fas fa-trash" style="font-size:18px;"></i></button>';
 
         newRow += '<tr>';
         newRow += '<td>' + n + '</td>';
@@ -1154,7 +1154,6 @@ function fn_save_detalle_producto(){
                     //alert(result.codigo)
                     var codigo_ = result.codigo;
                     
-                    
                     datatablenew();
                     $('#openOverlayOpc').modal('hide');
                     $('.loader').hide();
@@ -1223,7 +1222,34 @@ function cambiarCliente(){
         $('#select_persona_compra').hide();
         
     }
+}
 
+function denegar_pedido($id_proceso){
+	
+    $('#id_proceso').val($id_proceso);
+
+    var msgLoader = "";
+    msgLoader = "Procesando, espere un momento por favor";
+    var heightBrowser = $(window).width()/2;
+    $('.loader').css("opacity","0.8").css("height",heightBrowser).html("<div id='Grd1_wrapper' class='dataTables_wrapper'><div id='Grd1_processing' class='dataTables_processing panel-default'>"+msgLoader+"</div></div>");
+    $('.loader').show();
+
+    $.ajax({
+        url: "/entrada_productos/send_denegar_pedido_orden_compra",
+        type: "POST",
+        data : $("#frmDetalleProductos").serialize(),
+        success: function (result) {
+            $('#openOverlayOpc').modal('hide');
+            datatablenew();
+            $('.loader').hide();
+            bootbox.alert("Se devolvi&oacute; el pedido al Vendedor");
+            /*bootbox.alert("Se devolvi&oacute; el pedido al Vendedor", function () {
+                if (result.id > 0) {
+                    modalOrdenCompra(result.id);
+                }
+            });*/
+        }
+    });
 }
 
 </script>
@@ -1259,6 +1285,7 @@ function cambiarCliente(){
                     <input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
                     <input type="hidden" name="id" id="id" value="<?php echo $id?>">
                     <input type="hidden" name="id_orden_compra" id="id_orden_compra" value="<?php echo $id_orden_compra?>">
+                    <input type="hidden" name="id_proceso" id="id_proceso" value="4">
                     
                     <div class="row" style="padding-left:10px">
 
@@ -1584,7 +1611,9 @@ function cambiarCliente(){
                                 <?php 
                                     if($id>0){
                                 ?>
-                                <button style="font-size:12px;margin-left:10px" type="button" class="btn btn-sm btn-primary" data-toggle="modal" onclick="pdf_documento()" ><i class="fa fa-edit"></i>Imprimir</button>
+                                <button style="font-size:12px;margin-left:10px" type="button" class="btn btn-sm btn-clasico btn-enviar" data-toggle="modal" onclick="pdf_documento()" >
+                                    <i class="far fa-file-pdf" style="font-size:18px;">Imprimir
+                                </button>
                                 <button style="font-size:12px;margin-left:10px; margin-right:100px" type="button" class="btn btn-sm btn-warning" data-toggle="modal" onclick="pdf_guia()" ><i class="fa fa-edit"></i>Imprimir Gu&iacute;a Remisi&oacute;n Electronica</button>
                                 <!--<a href="javascript:void(0)" onClick="fn_pdf_documento()" class="btn btn-sm btn-primary" style="margin-right:100px">Imprimir</a>-->
                                 <?php 
@@ -1596,12 +1625,16 @@ function cambiarCliente(){
                                 <?php 
                                     } elseif($tipo== 2){
                                 ?>
+                                    <button style="font-size:12px;margin-left:10px; margin-right:10px" type="button" class="btn btn-sm btn-danger" data-toggle="modal" onclick="denegar_pedido(4)">Devolver a Vendedor</button>
                                     <a href="javascript:void(0)" onClick="fn_save_detalle_producto()" class="btn btn-sm btn-success" style="margin-right:10px">Entregar</a>
                                 <?php 
                                     }
                                 ?>
                                 
-                                <a href="javascript:void(0)" onClick="$('#openOverlayOpc').modal('hide');" class="btn btn-sm btn-info" style="">Cerrar</a>
+                                <!--<a href="javascript:void(0)" onClick="$('#openOverlayOpc').modal('hide');" class="btn btn-sm btn-info" style="">Cerrar</a>-->
+                                <button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-cerrar" data-toggle="modal" onclick="$('#openOverlayOpc').modal('hide');">
+                                    <i class="fas fa-times-circle" style="font-size:18px;"></i> Cerrar
+                                </button>
                             </div>
                                                 
                         </div>

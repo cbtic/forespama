@@ -48,7 +48,9 @@ foreach($parametro_orden_compra as $row){
 <tfoot>
 	<tr>
 		<td  colspan="6" class="text-right">
-			<button style="font-size:12px" type="button" class="btn btn-sm btn-success" data-toggle="modal" onclick="save()" >Guardar</button>
+			<button style="font-size:12px" type="button" class="btn btn-sm btn-success" data-toggle="modal" onclick="save()" >
+				<i class="fas fa-save" style="font-size:18px;"></i> Guardar
+			</button>
 		</td>
 	</tr>
 </tfoot>

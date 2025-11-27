@@ -287,6 +287,10 @@ label.form-control-sm{
 	cursor:pointer
 }
 
+.filtro-select.select2-hidden-accessible {
+    display: none !important;
+}
+
 </style>
 
 
@@ -350,52 +354,65 @@ label.form-control-sm{
 						<input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
 				
 				<div class="row" style="padding:20px 20px 0px 20px;">
+					<div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
+						<div class="row">
+							<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+								<select name="almacen_bus" id="almacen_bus" class="form-control form-control-sm filtro-select" onchange="obtenerProductosAlmacenKardex()">
+									<option value="">--Seleccionar Almacen--</option>
+									<?php
+									foreach ($almacen as $row) {
+									?>
+									<option value="<?php echo $row->id?>"><?php echo $row->denominacion?></option>
+									<?php
+									}
+									?>
+								</select>
+							</div>
 
-					<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-						<select name="almacen_bus" id="almacen_bus" class="form-control form-control-sm" onchange="obtenerProductosAlmacenKardex()">
-							<option value="">--Seleccionar Almacen--</option>
-							<?php
-							foreach ($almacen as $row) {
-							?>
-							<option value="<?php echo $row->id?>"><?php echo $row->denominacion?></option>
-							<?php
-							}
-							?>
-						</select>
-					</div>
+							<div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
+								<select name="producto_bus" id="producto_bus" class="form-control form-control-sm filtro-select">
+									<option value="">--Seleccionar Producto--</option>
+									<?php
+									/*foreach ($producto as $row) {
+									?>
+									<option value="<?php echo $row->id?>"><?php echo $row->codigo ." - ".$row->denominacion?></option>
+									<?php
+									}*/
+									?>
+								</select>
+							</div>
 
-					<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-						<select name="producto_bus" id="producto_bus" class="form-control form-control-sm">
-							<option value="">--Seleccionar Producto--</option>
-							<?php
-							/*foreach ($producto as $row) {
-							?>
-							<option value="<?php echo $row->id?>"><?php echo $row->codigo ." - ".$row->denominacion?></option>
-							<?php
-							}*/
-							?>
-						</select>
-					</div>
+							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+								<input id="fecha_inicio_bus" name="fecha_inicio_bus" on class="form-control form-control-sm filtro-input"  placeholder="Fecha Inicio">
+							</div>
 
-					<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
-                        <input id="fecha_inicio_bus" name="fecha_inicio_bus" on class="form-control form-control-sm"  placeholder="Fecha Inicio">
-					</div>
-
-					<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
-                        <input id="fecha_fin_bus" name="fecha_fin_bus" on class="form-control form-control-sm"  placeholder="Fecha Fin">
+							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+								<input id="fecha_fin_bus" name="fecha_fin_bus" on class="form-control form-control-sm filtro-input"  placeholder="Fecha Fin">
+							</div>
+							
+							<!--<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+								<select name="estado_bus" id="estado_bus" class="form-control form-control-sm">
+									<option value="">Todos</option>
+									<option value="1" selected="selected">Activo</option>
+									<option value="0">Eliminado</option>
+								</select>
+							</div>-->
+						</div>
 					</div>
 					
-                    <!--<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<select name="estado_bus" id="estado_bus" class="form-control form-control-sm">
-							<option value="">Todos</option>
-							<option value="1" selected="selected">Activo</option>
-							<option value="0">Eliminado</option>
-						</select>
-					</div>-->
-                    
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12" style="padding-right:0px">
-						<input class="btn btn-warning pull-rigth" value="Buscar" type="button" id="btnBuscar" />
-						<input class="btn btn-success float-rigth" value="Excel" name="excel" type="button" id="btnDescargarKardex" style="padding-left:15px;padding-right:15px;margin-right:10px;" /> 
+					<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+						<div class="row">
+							<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding-right:0px">
+								<!--<input class="btn btn-warning pull-rigth" value="Buscar" type="button" id="btnBuscar" />-->
+								<button type="button" id="btnBuscar" class="btn btn-sm btn-warning pull-rigth icono-botones2" style="margin-left:10px">
+									<i class="fas fa-search" style="font-size:18px;"></i> Buscar
+								</button>
+								<!--<input class="btn btn-success float-rigth" value="Excel" name="excel" type="button" id="btnDescargarKardex" style="padding-left:15px;padding-right:15px;margin-right:10px;" />-->
+								<buttom class="btn btn-sm btn-secondary pull-rigth icono-botones2" type="button" id="btnDescargarKardex" style="margin-left:15px" />
+									<i class="fa fa-download"></i> Descargar
+								</buttom> 
+							</div>
+						</div>
 					</div>
 				</div>
 				

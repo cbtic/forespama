@@ -62,7 +62,8 @@ class RequerimientoController extends Controller
 
 		$requerimiento_model = new Requerimiento;
 		$p[]=$request->tipo_documento;
-        $p[]=$request->fecha;
+        $p[]=$request->fecha_inicio;
+        $p[]=$request->fecha_fin;
         $p[]=$request->numero_requerimiento;
         $p[]=$request->almacen;
         $p[]=$request->situacion;
@@ -460,7 +461,7 @@ class RequerimientoController extends Controller
             $RequerimientoObj->save();
         }
 
-        return response()->json(['id' => $orden_compra->id]);
+        return response()->json(['id' => $orden_compra->id, 'codigo' => $orden_compra->numero_orden_compra]);
     }
 
     public function modal_atender_requerimiento($id){
@@ -498,10 +499,11 @@ class RequerimientoController extends Controller
 
     }
 
-    public function exportar_listar_requerimiento($tipo_documento, $fecha, $numero_requerimiento, $almacen, $situacion, $responsable_atencion, $estado_atencion, $tipo_requerimiento, $estado, $producto, $denominacion_producto) {
+    public function exportar_listar_requerimiento($tipo_documento, $fecha_inicio, $fecha_fin, $numero_requerimiento, $almacen, $situacion, $responsable_atencion, $estado_atencion, $tipo_requerimiento, $estado, $producto, $denominacion_producto) {
 
 		if($tipo_documento==0)$tipo_documento = "";
-		if($fecha=="0")$fecha = "";
+		if($fecha_inicio=="0")$fecha_inicio = "";
+		if($fecha_fin=="0")$fecha_fin = "";
 		if($numero_requerimiento=="0")$numero_requerimiento = "";
 		if($almacen==0)$almacen = "";
 		if($situacion==0)$situacion = "";
@@ -514,7 +516,8 @@ class RequerimientoController extends Controller
         
 		$requerimiento_model = new Requerimiento;
 		$p[]=$tipo_documento;
-        $p[]=$fecha;
+        $p[]=$fecha_inicio;
+        $p[]=$fecha_fin;
         $p[]=$numero_requerimiento;
         $p[]=$almacen;
         $p[]=$situacion;
@@ -541,10 +544,11 @@ class RequerimientoController extends Controller
 		return Excel::download($export, 'reporte_requerimiento.xlsx');	
     }
 
-    public function exportar_listar_requerimiento_reporte($tipo_documento, $fecha, $numero_requerimiento, $almacen, $situacion, $responsable_atencion, $estado_atencion, $tipo_requerimiento, $estado, $producto, $denominacion_producto) {
+    public function exportar_listar_requerimiento_reporte($tipo_documento, $fecha_inicio, $fecha_fin, $numero_requerimiento, $almacen, $situacion, $responsable_atencion, $estado_atencion, $tipo_requerimiento, $estado, $producto, $denominacion_producto) {
 
 		if($tipo_documento==0)$tipo_documento = "";
-		if($fecha=="0")$fecha = "";
+		if($fecha_inicio=="0")$fecha_inicio = "";
+		if($fecha_fin=="0")$fecha_fin = "";
 		if($numero_requerimiento=="0")$numero_requerimiento = "";
 		if($almacen==0)$almacen = "";
 		if($situacion==0)$situacion = "";
@@ -557,7 +561,8 @@ class RequerimientoController extends Controller
 
 		$requerimiento_model = new Requerimiento;
 		$p[]=$tipo_documento;
-        $p[]=$fecha;
+        $p[]=$fecha_inicio;
+        $p[]=$fecha_fin;
         $p[]=$numero_requerimiento;
         $p[]=$almacen;
         $p[]=$situacion;

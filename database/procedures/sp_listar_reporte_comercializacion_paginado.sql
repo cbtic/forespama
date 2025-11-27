@@ -1,5 +1,3 @@
--- DROP FUNCTION public.sp_listar_reporte_comercializacion_paginado(varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, refcursor);
-
 CREATE OR REPLACE FUNCTION public.sp_listar_reporte_comercializacion_paginado(p_empresa_compra character varying, p_fecha_desde character varying, p_fecha_hasta character varying, p_numero_orden_compra_cliente character varying, p_situacion character varying, p_codigo_producto character varying, p_producto character varying, p_vendedor character varying, p_estado_pedido character varying, p_estado character varying, p_canal character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
  RETURNS refcursor
  LANGUAGE plpgsql
@@ -35,7 +33,7 @@ begin
 	left join tienda_detalle_orden_compras tdoc on tdoc.id_orden_compra = oc.id and tdoc.id_producto = ocd.id_producto 
 	left join users u on oc.id_vendedor = u.id
 	left join productos p on ocd.id_producto = p.id
-	left join equivalencia_productos ep on ep.codigo_producto = p.codigo 
+	left join equivalencia_productos ep on ep.codigo_producto = p.codigo and ep.id_empresa = oc.id_empresa_compra
 	inner join tabla_maestras tm on oc.estado_pedido::int = tm.codigo::int and tm.tipo = ''77'' ';
 	
 	v_where = ' Where 1=1 and oc.id_tipo_documento = ''2'' and oc.estado_pedido = ''1'' ';

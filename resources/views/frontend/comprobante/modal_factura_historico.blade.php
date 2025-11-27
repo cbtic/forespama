@@ -238,22 +238,19 @@ function actualizarDenominacionMoneda() {
                             <div class="col-lg-2">
                                 <input id="serie" name="serie" on class="form-control form-control-sm"  value="<?php //if($orden_compra_contacto_entrega){echo $orden_compra_contacto_entrega->telefono;}?>" type="text">
                             </div>
-                            
                             <div class="col-lg-2">
                                 N&uacute;mero
                             </div>
                             <div class="col-lg-2">
                                 <input id="numero" name="numero" class="form-control form-control-sm"  value="<?php //if($orden_compra_contacto_entrega){echo $orden_compra_contacto_entrega->telefono;}?>" type="text">
                             </div>
-
                             <div class="col-lg-2">
                                 Fecha
                             </div>
                             <div class="col-lg-2">
                                 <input id="fecha" name="fecha" class="form-control form-control-sm"  value="<?php //if($orden_compra_contacto_entrega){echo $orden_compra_contacto_entrega->telefono;}?>" type="text">
                             </div>
-                        </div> 
-                        
+                        </div>
                         <div class="row" style="padding-left:10px; padding-top: 15px;">
                             <div class="col-lg-2">
                                 Empresa
@@ -270,8 +267,7 @@ function actualizarDenominacionMoneda() {
                                 </select>
                             </div>
                             <input type="hidden" name="empresa_nombre" id="empresa_nombre" class="form-control form-control-sm">
-                        </div> 
-                        
+                        </div>
                         <div class="row" style="padding-left:10px; padding-top: 15px;">
                             <div class="col-lg-2">
                                 Direcci&oacute;n
@@ -279,8 +275,7 @@ function actualizarDenominacionMoneda() {
                             <div class="col-lg-10">
                                 <input id="direccion" name="direccion" class="form-control form-control-sm"  value="<?php //if($orden_compra_contacto_entrega){echo $orden_compra_contacto_entrega->telefono;}?>" type="text">
                             </div>
-                        </div> 
-                        
+                        </div>
                         <div class="row" style="padding-left:10px; padding-top: 15px;">
                             <div class="col-lg-2">
                                 SubTotal
@@ -288,22 +283,19 @@ function actualizarDenominacionMoneda() {
                             <div class="col-lg-2">
                                 <input id="subtotal" name="subtotal" class="form-control form-control-sm"  value="<?php //if($orden_compra_contacto_entrega){echo $orden_compra_contacto_entrega->telefono;}?>" type="text">
                             </div>
-
                             <div class="col-lg-2">
                                 Impuesto
                             </div>
                             <div class="col-lg-2">
                                 <input id="impuesto" name="impuesto" on class="form-control form-control-sm"  value="<?php //if($orden_compra_contacto_entrega){echo $orden_compra_contacto_entrega->telefono;}?>" type="text">
                             </div>
-
                             <div class="col-lg-2">
                                 Total
                             </div>
                             <div class="col-lg-2">
                                 <input id="total" name="total" on class="form-control form-control-sm"  value="<?php //if($orden_compra_contacto_entrega){echo $orden_compra_contacto_entrega->telefono;}?>" type="text">
                             </div>
-                        </div> 
-                        
+                        </div>
                         <div class="row" style="padding-left:10px; padding-top: 15px;">
                             <div class="col-lg-2">
                                 Retenci&oacute;n
@@ -311,7 +303,6 @@ function actualizarDenominacionMoneda() {
                             <div class="col-lg-2">
                                 <input id="retencion" name="retencion" on class="form-control form-control-sm"  value="<?php //if($orden_compra_contacto_entrega){echo $orden_compra_contacto_entrega->telefono;}?>" type="text">
                             </div>
-
                             <div class="col-lg-2">
                                 Moneda
                             </div>
@@ -328,30 +319,29 @@ function actualizarDenominacionMoneda() {
                                 <input type="hidden" name="moneda_nombre" id="moneda_nombre" class="form-control form-control-sm">
                             </div>
                         </div>
-                        
                         <div style="margin-top:15px" class="form-group">
                             <div class="col-sm-12 controls">
                                 <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
                                 
-                                    <a href="javascript:void(0)" onClick="fn_save_factura_historico()" class="btn btn-sm btn-success" style="margin-right:10px">Guardar</a>
-                                    <a href="javascript:void(0)" onClick="$('#openOverlayOpc').modal('hide');" class="btn btn-sm btn-info" style="margin-left:10px">Cerrar</a>
+                                    <!--<a href="javascript:void(0)" onClick="fn_save_factura_historico()" class="btn btn-sm btn-success" style="margin-right:10px">Guardar</a>-->
+                                    <button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-nuevo" data-toggle="modal" onclick="fn_save_factura_historico()">
+                                        <i class="fas fa-save" style="font-size:18px;"></i> Guardar
+                                    </button>
+                                    <!--<a href="javascript:void(0)" onClick="$('#openOverlayOpc').modal('hide');" class="btn btn-sm btn-info" style="margin-left:10px">Cerrar</a>-->
+                                    <button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-cerrar" data-toggle="modal" onclick="$('#openOverlayOpc').modal('hide');">
+                                        <i class="fas fa-times-circle" style="font-size:18px;"></i> Cerrar
+                                    </button>
                                 </div>
-                                                    
                             </div>
-                        </div> 
-
+                        </div>
                     </div>
-                            
                 </form>
                 </div>
                 <!-- /.box -->
-                
             </div>
             <!--/.col (left) -->
-
         </div>
         <!-- /.row -->
-    
 <!-- /.content -->
     </div>
 <!-- /.content-wrapper -->

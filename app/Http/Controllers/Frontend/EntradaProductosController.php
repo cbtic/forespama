@@ -22,6 +22,7 @@ use App\Models\OrdenCompra;
 use App\Models\OrdenCompraDetalle;
 use App\Models\Devolucione;
 use App\Models\DevolucionDetalle;
+use App\Models\AutorizacionOrdenCompra;
 use Auth;
 use RealRashid\SweetAlert\Facades\Alert;
 use App\Http\Controllers\Controller;
@@ -674,6 +675,17 @@ class EntradaProductosController extends Controller
 
                     $salida_producto_detalle2->save();
                 }
+
+                $autorizacion_orden_compra = AutorizacionOrdenCompra::where('id_orden_compra',$id_orden_compra)->where('estado',1)->orderBy('id', 'desc')->first();
+
+                if($autorizacion_orden_compra->id_proceso_pedido == $request->id_proceso){
+                    $autorizacion_orden_compra->id_autorizacion = 2;
+                    $autorizacion_orden_compra->id_usuario_autoriza = $id_user;
+                    $autorizacion_orden_compra->id_usuario_inserta = $id_user;
+                    $autorizacion_orden_compra->estado = 1;
+                    $autorizacion_orden_compra->save();
+                }
+
             }/*else{
                 $salida_producto = SalidaProducto::find($request->id);
             }*/
@@ -1989,7 +2001,31 @@ class EntradaProductosController extends Controller
         }else{
             return response()->json(['id' => $salida_producto->id]);
         }
-
     }
 
+    public function send_denegar_pedido_orden_compra(Request $request){
+
+        $id_user = Auth::user()->id;
+
+        $autorizacion_orden_compra = AutorizacionOrdenCompra::where('id_orden_compra',$request->id_orden_compra)->where('estado',1)->orderBy('id', 'desc')->first();
+
+        if($autorizacion_orden_compra->id_proceso_pedido == $request->id_proceso){
+            $autorizacion_orden_compra->id_autorizacion = 1;
+            $autorizacion_orden_compra->id_usuario_autoriza = $id_user;
+            $autorizacion_orden_compra->id_usuario_inserta = $id_user;
+            $autorizacion_orden_compra->estado = 1;
+            $autorizacion_orden_compra->save();
+            
+            $autorizacion_orden_compra_siguiente_proceso = new AutorizacionOrdenCompra;
+            $autorizacion_orden_compra_siguiente_proceso->id_orden_compra = $request->id_orden_compra;
+            $autorizacion_orden_compra_siguiente_proceso->id_proceso_pedido = 1;
+            //$autorizacion_orden_compra_siguiente_proceso->id_autorizacion = 1;
+            $autorizacion_orden_compra_siguiente_proceso->id_usuario_inserta = $id_user;
+            $autorizacion_orden_compra_siguiente_proceso->estado = 1;
+            $autorizacion_orden_compra_siguiente_proceso->save();
+        }
+        
+        return response()->json(['id' => $request->id]);
+        
+    }
 }

@@ -257,7 +257,6 @@ function fn_save_control_mantenimiento(){
 
 </script>
 
-
 <body class="hold-transition skin-blue sidebar-mini">
 
     <div>
@@ -268,18 +267,13 @@ function fn_save_control_mantenimiento(){
           </h1>
         </section>
 		-->
-		<div class="justify-content-center">		
-
+		<div class="justify-content-center">
 		<div class="card">
-			
 			<div class="card-header" style="padding:5px!important;padding-left:20px!important">
 				Registro Control Mantenimiento
 			</div>
-			
             <div class="card-body">
-
 			<div class="row">
-
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding-top:5px;padding-bottom:20px">
 					
 					<input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
@@ -294,7 +288,6 @@ function fn_save_control_mantenimiento(){
 							</div>
 						</div>
 					</div>
-
 					<div class="row" style="padding-left:10px">
 						<div class="col-lg-6">
 							<div class="form-group">
@@ -302,14 +295,12 @@ function fn_save_control_mantenimiento(){
 								<input id="kilometraje" name="kilometraje" on class="form-control form-control-sm mayusculas"  value="<?php echo $control_mantenimiento_activo->kilometraje?>" type="text">
 							</div>
 						</div>
-
 						<div class="col-lg-6">
 							<div class="form-group">
 								<label class="control-label form-control-sm">Pr&oacute;ximo Kilometraje</label>
 								<input id="proximo_kilometraje" name="proximo_kilometraje" on class="form-control form-control-sm mayusculas"  value="<?php echo $control_mantenimiento_activo->proximo_kilometraje?>" type="text">
 							</div>
 						</div>
-
 						<div class="col-lg-6">
 							<div class="form-group">
 								<label class="control-label form-control-sm">Tipo Mantenimiento</label>
@@ -324,14 +315,12 @@ function fn_save_control_mantenimiento(){
 								</select>
 							</div>
 						</div>
-
 						<div class="col-lg-6">
 							<div class="form-group">
 								<label class="control-label form-control-sm">Costo</label>
 								<input id="costo" name="costo" on class="form-control form-control-sm mayusculas"  value="<?php echo $control_mantenimiento_activo->costo?>" type="text">
 							</div>
 						</div>
-
 						<div class="col-lg-6">
 							<div class="form-group">
 								<label class="control-label form-control-sm">Fecha Pr&oacute;ximo Mantenimiento</label>
@@ -339,7 +328,6 @@ function fn_save_control_mantenimiento(){
 							</div>
 						</div>
 					</div>
-
 					<div class="row" style="padding-left:10px">
 						<div class="col-lg-12">
 							<div class="form-group">
@@ -348,15 +336,16 @@ function fn_save_control_mantenimiento(){
 							</div>
 						</div>
 					</div>
-					
 					<div style="margin-top:15px" class="form-group">
 						<div class="col-sm-12 controls">
 							<div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
-								<a href="javascript:void(0)" onClick="fn_save_control_mantenimiento()" class="btn btn-sm btn-success">Guardar</a>
+								<!--<a href="javascript:void(0)" onClick="fn_save_control_mantenimiento()" class="btn btn-sm btn-success">Guardar</a>-->
+								<button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-nuevo" data-toggle="modal" onclick="fn_save_control_mantenimiento()">
+                                    <i class="fas fa-save" style="font-size:18px;"></i> Guardar
+                                </button>
 							</div>
-												
 						</div>
-					</div> 
+					</div>
               </div>
           </div>
           <!-- /.box -->

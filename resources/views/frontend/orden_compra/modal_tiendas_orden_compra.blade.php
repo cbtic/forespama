@@ -491,7 +491,7 @@ function cargarDetalle(id, cantidad_tiendas) {
                                 <input type="hidden" name="cantidad_ingreso_total[${tienda}][]" id="cantidad_ingreso_total${tienda}_${productoContador}" class="cantidad_ingreso form-control form-control-sm" value="${orden_compra.cantidad_requerida}" oninput="">
                             </td>
                             <td>
-                                <button type="button" class="btn btn-danger btn-sm" onclick="eliminarFila(this)">Eliminar</button>
+                                <button type="button" class="btn btn-sm btn-clasico btn-eliminar" onclick="eliminarFila(this)"><i class="fas fa-trash" style="font-size:18px;"></i></button>
                             </td>
                         </tr>
                     `;
@@ -550,7 +550,7 @@ function agregarProducto(){
         var igv = '<input name="igv[]" id="igv' + n + '" class="igv form-control form-control-sm" value="" type="text" readonly="readonly">';
         var total = '<input name="total[]" id="total' + n + '" class="total form-control form-control-sm" value="" type="text" readonly="readonly">';
         
-        var btnEliminar = '<button type="button" class="btn btn-danger btn-sm" onclick="eliminarFila(this)">Eliminar</button>';
+        var btnEliminar = '<button type="button" class="btn btn-sm btn-clasico btn-eliminar" onclick="eliminarFila(this)"><i class="fas fa-trash" style="font-size:18px;"></i></button>';
 
         newRow += '<tr>';
         newRow += '<td>' + n + '</td>';
@@ -893,7 +893,7 @@ function cargaDetalleTienda(){
                                 
                                 <td style="width: 200px"><label style="border:none; background: none;" name="unidad_medida[]" id="unidad_medida${n}" class="form-control form-control-sm">${tienda_detalle_orden_compra.unidad_medida}</td>
                                 <td style="width: 100px"><input type="text" name="cantidad_ingreso[]" id="cantidad_ingreso${n}" class="form-control form-control-sm" value="${tienda_detalle_orden_compra.cantidad}"></td>
-                                <td><button type="button" class="btn btn-danger btn-sm" onclick="eliminarFila(this)">Eliminar</button></td>
+                                <td><button type="button" class="btn btn-sm btn-clasico btn-eliminar" onclick="eliminarFila(this)"><i class="fas fa-trash" style="font-size:18px;"></i></button></td>
                             </tr>
                         `;
                         /*const rowProducto  = `
@@ -977,8 +977,14 @@ function cargaDetalleTienda(){
                         <div class="col-sm-12 controls">
                             <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
                                 
-                                <a href="javascript:void(0)" onClick="fn_save_tienda_orden_compra()" class="btn btn-sm btn-success" style="margin-right:10px">Registrar</a>
-                                <a href="javascript:void(0)" onClick="$('#openOverlayOpc2').modal('hide');" class="btn btn-sm btn-info" style="">Cerrar</a>
+                                <!--<a href="javascript:void(0)" onClick="fn_save_tienda_orden_compra()" class="btn btn-sm btn-success" style="margin-right:10px">Registrar</a>-->
+                                <button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-nuevo" data-toggle="modal" onclick="fn_save_tienda_orden_compra()">
+                                    <i class="fas fa-save" style="font-size:18px;"></i> Guardar
+                                </button>
+                                <!--<a href="javascript:void(0)" onClick="$('#openOverlayOpc2').modal('hide');" class="btn btn-sm btn-info" style="">Cerrar</a>-->
+                                <button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-cerrar" data-toggle="modal" onclick="$('#openOverlayOpc2').modal('hide');">
+                                    <i class="fas fa-times-circle" style="font-size:18px;"></i> Cerrar
+                                </button>
                             </div>
                                                 
                         </div>

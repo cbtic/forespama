@@ -431,7 +431,10 @@ function fn_save_seccion(){
                                 <div style="margin-top:37px" class="form-group">
                                     <div class="col-sm-12 controls">
                                         <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
-                                            <a href="javascript:void(0)" onClick="AddFila()" class="btn btn-sm btn-success">Agregar</a>
+                                            <!--a href="javascript:void(0)" onClick="AddFila()" class="btn btn-sm btn-success">Agregar</a>-->
+                                            <button type="button" class="btn btn-sm btn-clasico-blanco btn-agregar" data-toggle="modal" onclick="AddFila()">
+                                                <i class="fas fa-plus-circle" style="font-size:18px;"></i> Agregar Producto
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
@@ -440,7 +443,10 @@ function fn_save_seccion(){
                         <div style="margin-top:15px" class="form-group">
                             <div class="col-sm-12 controls">
                                 <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
-                                    <a href="javascript:void(0)" onClick="fn_save_seccion()" class="btn btn-sm btn-success">Registrar</a>
+                                    <!--<a href="javascript:void(0)" onClick="fn_save_seccion()" class="btn btn-sm btn-success">Registrar</a>-->
+                                    <button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-nuevo" data-toggle="modal" onclick="fn_save_seccion()">
+                                        <i class="fas fa-save" style="font-size:18px;"></i> Guardar
+                                    </button>
                                 </div>
                                                     
                             </div>

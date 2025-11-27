@@ -129,6 +129,7 @@ class IngresoVehiculoTroncoController extends Controller
 		$ingresoVehiculoTronco->id_conductores = $request->id_conductores;
 		$ingresoVehiculoTronco->id_encargados = 1;
 		$ingresoVehiculoTronco->id_procedencias = 0;
+		$ingresoVehiculoTronco->observacion = $request->observacion;
 		$ingresoVehiculoTronco->save();
 		$id_ingreso_vehiculo_troncos = $ingresoVehiculoTronco->id;
 		

@@ -287,14 +287,12 @@ function modalDetalleProducto(id){
                             
                             
                             <div class="row" style="padding-left:10px">
-                                
                                 <div class="col-lg-4">
                                     <div class="form-group">
                                         <label class="control-label form-control-sm">Fecha Ingreso</label>
                                         <input id="fecha_entrada" name="fecha_entrada" on class="form-control form-control-sm"  value="<?php //echo $lote->fecha_fabricacion?>" type="text">
                                     </div>
                                 </div>
-
                                 <div class="col-lg-4">
                                     <div class="form-group">
                                         <label class="control-label form-control-sm">Tipo Doc.</label>
@@ -324,17 +322,16 @@ function modalDetalleProducto(id){
                                     </div>
                                 </div>
                                 <div class="form-group col-lg-4" id="proveedor_">
-                                    
-                                        <label class="control-label form-control-sm">Proveedor</label>
-                                        <select name="proveedor" id="proveedor" class="form-control form-control-sm" onchange="">
-                                            <option value="">--Seleccionar--</option>
-                                            <?php
-                                            foreach ($proveedor as $row){?>
-                                                <option value="<?php echo $row->id ?>" <?php //if($row->id==$lote->id_producto)echo "selected='selected'"?>><?php echo $row->razon_social ?></option>
-                                             <?php 
-                                            }
-                                            ?>
-                                        </select>
+                                    <label class="control-label form-control-sm">Proveedor</label>
+                                    <select name="proveedor" id="proveedor" class="form-control form-control-sm" onchange="">
+                                        <option value="">--Seleccionar--</option>
+                                        <?php
+                                        foreach ($proveedor as $row){?>
+                                            <option value="<?php echo $row->id ?>" <?php //if($row->id==$lote->id_producto)echo "selected='selected'"?>><?php echo $row->razon_social ?></option>
+                                            <?php 
+                                        }
+                                        ?>
+                                    </select>
                                 </div>
                                 <div class="col-lg-4">
                                     <div class="form-group">
@@ -377,8 +374,8 @@ function modalDetalleProducto(id){
                                     </div>
                                 </div>
                                 <div class="form-group col-lg-4" id="tipo_cambio_dolar_">
-                                        <label class="control-label form-control-sm">Tipo Cambio Dolar</label>
-                                        <input id="tipo_cambio_dolar" name="tipo_cambio_dolar" on class="form-control form-control-sm"  value="<?php echo $tipo_cambio[0]->valor_venta?>" type="text">
+                                    <label class="control-label form-control-sm">Tipo Cambio Dolar</label>
+                                    <input id="tipo_cambio_dolar" name="tipo_cambio_dolar" on class="form-control form-control-sm"  value="<?php echo $tipo_cambio[0]->valor_venta?>" type="text">
                                 </div>
                                 <div class="col-lg-4">
                                     <div class="form-group">
@@ -432,23 +429,21 @@ function modalDetalleProducto(id){
                         <div style="margin-top:15px" class="form-group">
                             <div class="col-sm-12 controls">
                                 <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
-                                    <a href="javascript:void(0)" onClick="modalDetalleProducto()" class="btn btn-sm btn-success">Registrar</a>
+                                    <!--<a href="javascript:void(0)" onClick="modalDetalleProducto()" class="btn btn-sm btn-success">Registrar</a>-->
+                                    <button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-nuevo" data-toggle="modal" onclick="modalDetalleProducto()">
+                                        <i class="fas fa-save" style="font-size:18px;"></i> Guardar
+                                    </button>
                                 </div>
-                                                    
                             </div>
-                        </div> 
-                            
+                        </div>
                     </div>
                 </form>
                 </div>
                 <!-- /.box -->
-                
             </div>
             <!--/.col (left) -->
-
         </div>
         <!-- /.row -->
-    
 <!-- /.content -->
 </div>
 <!-- /.content-wrapper -->

@@ -50,6 +50,7 @@ use App\Http\Controllers\Frontend\SubFamiliaController;
 use App\Http\Controllers\Frontend\UsuarioDescuentoController;
 use App\Http\Controllers\Frontend\ReusoController;
 use App\Http\Controllers\Frontend\ProductoCompetenciaController;
+use App\Http\Controllers\Frontend\PersonaProcesoController;
 
 //use App\Http\Controllers\VehiculoController;
 
@@ -581,7 +582,7 @@ Route::get('ingreso_vehiculo_tronco/cubicaje_pdf/{id}', [IngresoVehiculoTroncoCo
 
 Route::get('ingreso_vehiculo_tronco/exportar_listar_pagos/{ruc}/{empresa}/{placa}/{tipo_madera}/{fecha_inicio}/{fecha_fin}/{estado_pago}/{tipo_empresa}', [IngresoVehiculoTroncoController::class, 'exportar_listar_pagos'])->name('ingreso_vehiculo_tronco.exportar_listar_pagos');
 
-Route::get('requerimiento/exportar_listar_requerimiento/{tipo_documento}/{fecha}/{numero_requerimiento}/{almacen}/{situacion}/{responsable_atencion}/{estado_atencion}/{tipo_requerimiento}/{estado}/{producto}/{denominacion_producto}', [RequerimientoController::class, 'exportar_listar_requerimiento'])->name('requerimiento.exportar_listar_requerimiento');
+Route::get('requerimiento/exportar_listar_requerimiento/{tipo_documento}/{fecha_inicio}/{fecha_fin}/{numero_requerimiento}/{almacen}/{situacion}/{responsable_atencion}/{estado_atencion}/{tipo_requerimiento}/{estado}/{producto}/{denominacion_producto}', [RequerimientoController::class, 'exportar_listar_requerimiento'])->name('requerimiento.exportar_listar_requerimiento');
 Route::get('ingreso_vehiculo_tronco/obtener_datos_vehiculo_guia/{placa}', [IngresoVehiculoTroncoController::class, 'obtener_datos_vehiculo_guia'])->name('ingreso_vehiculo_tronco.obtener_datos_vehiculo_guia');
 Route::get('conductores/obtener_licencia/{conductor}', [ConductoresController::class, 'obtener_licencia'])->name('conductores.obtener_licencia');
 Route::post('conductores/send_conductor_guia', [ConductoresController::class, 'send_conductor_guia'])->name('conductores.send_conductor_guia');
@@ -645,7 +646,7 @@ Route::get('orden_compra/generar_lpn/{id_orden_compra}', [OrdenCompraController:
 Route::get('orden_compra/create_reporte_comercializacion', [OrdenCompraController::class, 'create_reporte_comercializacion'])->name('orden_compra.create_reporte_comercializacion');
 Route::post('orden_compra/listar_reporte_comercializacion_ajax', [OrdenCompraController::class, 'listar_reporte_comercializacion_ajax'])->name('orden_compra.listar_reporte_comercializacion_ajax');
 Route::get('orden_compra/exportar_reporte_comercializacion/{empresa_compra}/{fecha_inicio}/{fecha_fin}/{numero_orden_compra_cliente}/{situacion}/{codigo_producto}/{producto}/{vendedor}/{estado_pedido}/{canal}', [OrdenCompraController::class, 'exportar_reporte_comercializacion'])->name('orden_compra.exportar_reporte_comercializacion');
-Route::get('requerimiento/exportar_listar_requerimiento_reporte/{tipo_documento}/{fecha}/{numero_requerimiento}/{almacen}/{situacion}/{responsable_atencion}/{estado_atencion}/{tipo_requerimiento}/{estado}/{producto}/{denominacion_producto}', [RequerimientoController::class, 'exportar_listar_requerimiento_reporte'])->name('requerimiento.exportar_listar_requerimiento_reporte');
+Route::get('requerimiento/exportar_listar_requerimiento_reporte/{tipo_documento}/{fecha_inicio}/{fecha_fin}/{numero_requerimiento}/{almacen}/{situacion}/{responsable_atencion}/{estado_atencion}/{tipo_requerimiento}/{estado}/{producto}/{denominacion_producto}', [RequerimientoController::class, 'exportar_listar_requerimiento_reporte'])->name('requerimiento.exportar_listar_requerimiento_reporte');
 Route::post('orden_compra/upload_orden_distribucion', [OrdenCompraController::class, 'upload_orden_distribucion'])->name('orden_compra.upload_orden_distribucion');
 Route::post('comprobante/listar_factura_sodimac_ajax', [ComprobanteController::class, 'listar_factura_sodimac_ajax'])->name('comprobante.listar_factura_sodimac_ajax');
 Route::get('comprobante/modal_factura_sodimac_detalle/{id}', [ComprobanteController::class, 'modal_factura_sodimac_detalle'])->name('comprobante.modal_factura_sodimac_detalle');
@@ -827,3 +828,18 @@ Route::post('producto_competencia/send_producto_competencia', [ProductoCompetenc
 Route::get('producto_competencia/eliminar_producto_competencia/{id}/{estado}', [ProductoCompetenciaController::class, 'eliminar_producto_competencia'])->name('producto_competencia.eliminar_producto_competencia');
 Route::get('producto_competencia/obtener_producto_competencia/{id_producto}', [ProductoCompetenciaController::class, 'obtener_producto_competencia'])->name('producto_competencia.obtener_producto_competencia');
 Route::get('productos/modal_producto_competencia/{codigo_producto_competencia}/{nombre_producto_competencia}/{competencia_producto_competencia}', [ProductosController::class, 'modal_producto_competencia'])->name('productos.modal_producto_competencia');
+
+Route::post('orden_compra/send_pedido_orden_compra', [OrdenCompraController::class, 'send_pedido_orden_compra'])->name('orden_compra.send_pedido_orden_compra');
+Route::post('orden_compra/send_denegar_pago_orden_compra', [OrdenCompraController::class, 'send_denegar_pago_orden_compra'])->name('orden_compra.send_denegar_pago_orden_compra');
+Route::post('orden_compra/send_denegar_orden_compra_autorizacion', [OrdenCompraController::class, 'send_denegar_orden_compra_autorizacion'])->name('orden_compra.send_denegar_orden_compra_autorizacion');
+
+Route::post('entrada_productos/send_denegar_pedido_orden_compra', [EntradaProductosController::class, 'send_denegar_pedido_orden_compra'])->name('entrada_productos.send_denegar_pedido_orden_compra');
+
+Route::get('persona_proceso/create', [PersonaProcesoController::class, 'create'])->name('persona_proceso.create');
+Route::post('persona_proceso/listar_persona_proceso_ajax', [PersonaProcesoController::class, 'listar_persona_proceso_ajax'])->name('persona_proceso.listar_persona_proceso_ajax');
+Route::get('persona_proceso/modal_persona_proceso/{id}', [PersonaProcesoController::class, 'modal_persona_proceso'])->name('persona_proceso.modal_persona_proceso');
+Route::post('persona_proceso/send_persona_proceso', [PersonaProcesoController::class, 'send_persona_proceso'])->name('persona_proceso.send_persona_proceso');
+Route::get('persona_proceso/eliminar_persona_proceso/{id}/{estado}', [PersonaProcesoController::class, 'eliminar_persona_proceso'])->name('persona_proceso.eliminar_persona_proceso');
+Route::post('orden_compra/listar_orden_compra_proceso_ajax', [OrdenCompraController::class, 'listar_orden_compra_proceso_ajax'])->name('orden_compra.listar_orden_compra_proceso_ajax');
+Route::get('orden_compra/exportar_listar_orden_compra_individual/{id}', [OrdenCompraController::class, 'exportar_listar_orden_compra_individual'])->name('orden_compra.exportar_listar_orden_compra_individual');
+

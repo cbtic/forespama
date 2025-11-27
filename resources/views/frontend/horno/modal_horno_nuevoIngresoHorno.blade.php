@@ -314,7 +314,6 @@ function calcularTotalPiezasIngreso(input){
                             <input type="hidden" name="id" id="id" value="<?php echo $id?>">
                             
                             <div class="row" style="padding-left:10px">
-
                                 <div class="col-lg-2">
                                     Horno
                                 </div>
@@ -376,9 +375,7 @@ function calcularTotalPiezasIngreso(input){
                                     </select>
                                 </div>
                             </div>
-
                             <div class="card-body">
-
                                 <div class="table-responsive" style="overflow-y: auto; max-height: 400px; overflow-x: auto; ">
                                     <table id="tblIngresoHorno" class="table table-hover table-sm">
                                         <thead>
@@ -409,11 +406,15 @@ function calcularTotalPiezasIngreso(input){
                             <div style="margin-top:15px" class="form-group">
                                 <div class="col-sm-12 controls">
                                     <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
-                                    
-                                        <a href="javascript:void(0)" onClick="fn_save_ingreso_horno()" class="btn btn-sm btn-success" style="margin-right:10px">Guardar</a>
-                                        <a href="javascript:void(0)" onClick="$('#openOverlayOpc').modal('hide');" class="btn btn-sm btn-info" style="">Cerrar</a>
+                                        <!--<a href="javascript:void(0)" onClick="fn_save_ingreso_horno()" class="btn btn-sm btn-success" style="margin-right:10px">Guardar</a>-->
+                                        <button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-nuevo" data-toggle="modal" onclick="fn_save_ingreso_horno()">
+                                            <i class="fas fa-save" style="font-size:18px;"></i> Guardar
+                                        </button>
+                                        <!--<a href="javascript:void(0)" onClick="$('#openOverlayOpc').modal('hide');" class="btn btn-sm btn-info" style="">Cerrar</a>-->
+                                        <button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-cerrar" data-toggle="modal" onclick="$('#openOverlayOpc').modal('hide');">
+                                            <i class="fas fa-times-circle" style="font-size:18px;"></i> Cerrar
+                                        </button>
                                     </div>
-                                                        
                                 </div>
                             </div> 
                         </div>
@@ -421,10 +422,8 @@ function calcularTotalPiezasIngreso(input){
                     </form>
                 </div>
                 <!-- /.box -->
-                
             </div>
             <!--/.col (left) -->
-
         </div>
         <!-- /.row -->
         </section>

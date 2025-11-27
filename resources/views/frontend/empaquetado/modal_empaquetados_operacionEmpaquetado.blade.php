@@ -285,7 +285,7 @@ function cargarDetalle(){
                         <td><input name="cod_interno[]" id="cod_interno${n}" class="form-control form-control-sm" value="${empaquetado.codigo}" type="text"></td>
                         <td><select name="unidad_[]" id="unidad_${n}" class="form-control form-control-sm">${unidadMedidaOptions}</select><input name="unidad[]" id="unidad${n}" class="form-control form-control-sm" value="${empaquetado.id_unidad_medida}" type="hidden"></td>
                         <td><input name="cantidad[]" id="cantidad${n}" class="form-control form-control-sm" value="${empaquetado.cantidad}" type="text"></td>
-                        <td><button type="button" class="btn btn-danger btn-sm" onclick="eliminarFila(this)">Eliminar</button></td>
+                        <td><button type="button" class="btn btn-sm btn-clasico btn-eliminar" onclick="eliminarFila(this)"><i class="fas fa-trash" style="font-size:18px;"></i></button></td>
                     </tr>
                 `;
                 tbody.append(row);
@@ -324,7 +324,7 @@ function agregarProducto(){
         var cantidad_ingreso = '<input name="cantidad[]" id="cantidad' + n + '" class="cantidad form-control form-control-sm" value="" type="text" oninput="">';
         //var stock_actual = '<input name="stock_actual[]" id="stock_actual' + n + '" class="form-control form-control-sm" value="" type="text">';
         
-        var btnEliminar = '<button type="button" class="btn btn-danger btn-sm" onclick="eliminarFila(this)">Eliminar</button>';
+        var btnEliminar = '<button type="button" class="btn btn-sm btn-clasico btn-eliminar" onclick="eliminarFila(this)"><i class="fas fa-trash" style="font-size:18px;"></i></button>';
 
         newRow += '<tr>';
         newRow += '<td>' + n + '</td>';
@@ -517,7 +517,7 @@ function obtenerDetalle(){
                         <td><select name="unidad_[]" id="unidad_${n}" class="form-control form-control-sm">${unidadMedidaOptions}</select><input name="unidad[]" id="unidad${n}" class="form-control form-control-sm" value="${empaquetado_operacion.id_unidad_medida}" type="hidden"></td>
                         <td><input name="cantidad[]" id="cantidad${n}" class="form-control form-control-sm" value="${empaquetado_operacion.cantidad}" type="text" data-cantidad-base="${empaquetado_operacion.cantidad}" readonly="readonly"></td>
                         <td><input name="stock[]" id="stock${n}" class="form-control form-control-sm" value="0" type="text" readonly="readonly"></td>
-                        <td><button type="button" class="btn btn-danger btn-sm" onclick="eliminarFila(this)">Eliminar</button></td>
+                        <td><button type="button" class="btn btn-sm btn-clasico btn-eliminar" onclick="eliminarFila(this)"><i class="fas fa-trash" style="font-size:18px;"></i></button></td>
                     </tr>
                 `;
                 tbody.append(row);
@@ -585,7 +585,6 @@ function calcularCantidades(){
                     <input type="hidden" name="id" id="id" value="<?php echo $id?>">
                     
                     <div class="row" style="padding-left:10px">
-
                         <div class="col-lg-2">
                             Producto
                         </div>
@@ -648,9 +647,7 @@ function calcularCantidades(){
                                 </div>
                             </div>
                         </div>-->
-
-                        <div class="card-body">	
-
+                        <div class="card-body">
 					<div class="table-responsive">
 						<table id="tblOperacionEmpaquetadoDetalle" class="table table-hover table-sm">
 							<thead>
@@ -685,30 +682,33 @@ function calcularCantidades(){
                                 <a href="javascript:void(0)" onClick="fn_pdf_documento()" class="btn btn-sm btn-primary" style="margin-right:100px">Imprimir</a>-->
                                 
                                 <?php if($id_user==$empaquetado_operacion->id_usuario_inserta){?>
-                                    <a href="javascript:void(0)" onClick="fn_save_operacion_empaquetado()" class="btn btn-sm btn-success" style="margin-right:10px">Guardar</a>
+                                    <!--<a href="javascript:void(0)" onClick="fn_save_operacion_empaquetado()" class="btn btn-sm btn-success" style="margin-right:10px">Guardar</a>-->
+                                    <button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-nuevo" data-toggle="modal" onclick="fn_save_operacion_empaquetado()">
+                                        <i class="fas fa-save" style="font-size:18px;"></i> Guardar
+                                    </button>
                                 <?php }?>
                                 <?php if($id==0){?>
-                                    <a href="javascript:void(0)" onClick="fn_save_operacion_empaquetado()" class="btn btn-sm btn-success" style="margin-right:10px">Guardar</a>
+                                    <!--<a href="javascript:void(0)" onClick="fn_save_operacion_empaquetado()" class="btn btn-sm btn-success" style="margin-right:10px">Guardar</a>-->
+                                    <button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-nuevo" data-toggle="modal" onclick="fn_save_operacion_empaquetado()">
+                                        <i class="fas fa-save" style="font-size:18px;"></i> Guardar
+                                    </button>
                                 <?php }?>
-                                <a href="javascript:void(0)" onClick="$('#openOverlayOpc').modal('hide');" class="btn btn-sm btn-info" style="">Cerrar</a>
+                                <!--<a href="javascript:void(0)" onClick="$('#openOverlayOpc').modal('hide');" class="btn btn-sm btn-info" style="">Cerrar</a>-->
+                                <button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-cerrar" data-toggle="modal" onclick="$('#openOverlayOpc').modal('hide');">
+                                    <i class="fas fa-times-circle" style="font-size:18px;"></i> Cerrar
+                                </button>
                             </div>
-                                                
                         </div>
-                    </div> 
-
+                    </div>
 				</div>
-                            
                     </div>
                 </form>
                 </div>
                 <!-- /.box -->
-                
             </div>
             <!--/.col (left) -->
-
         </div>
         <!-- /.row -->
-    
 <!-- /.content -->
 </div>
 <!-- /.content-wrapper -->

@@ -352,49 +352,59 @@ label.form-control-sm{
 						<input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
 				
 				<div class="row" style="padding:20px 20px 0px 20px;">
+					<div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
+						<div class="row">
+							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+								<input id="numero_orden_compra_bus" name="numero_orden_compra_bus" on class="form-control form-control-sm filtro-input"  placeholder="N&uacute;mero Orden Compra">
+							</div>
 
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-                        <input id="numero_orden_compra_bus" name="numero_orden_compra_bus" on class="form-control form-control-sm"  placeholder="N&uacute;mero Orden Compra">
-					</div>
+							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+								<input id="numero_orden_compra_cliente_bus" name="numero_orden_compra_cliente_bus" on class="form-control form-control-sm filtro-input"  placeholder="N&uacute;mero OC Cliente">
+							</div>
 
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-                        <input id="numero_orden_compra_cliente_bus" name="numero_orden_compra_cliente_bus" on class="form-control form-control-sm"  placeholder="N&uacute;mero OC Cliente">
-					</div>
+							<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+								<select name="vendedor_bus" id="vendedor_bus" class="form-control form-control-sm filtro-select">
+									<option value="">--Seleccionar Vendedor--</option>
+									<?php
+									foreach ($vendedor as $row){?>
+										<option value="<?php echo $row->id ?>"><?php echo $row->name ?></option>
+										<?php 
+									}
+									?>
+								</select>
+							</div>
 
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<select name="vendedor_bus" id="vendedor_bus" class="form-control form-control-sm">
-							<option value="">--Seleccionar Vendedor--</option>
-							<?php
-							foreach ($vendedor as $row){?>
-								<option value="<?php echo $row->id ?>"><?php echo $row->name ?></option>
-								<?php 
-							}
-							?>
-						</select>
-					</div>
+							<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+								<select name="estado_autorizacion_bus" id="estado_autorizacion_bus" class="form-control form-control-sm filtro-select">
+									<option value="">--Seleccionar Esado Autorizacion--</option>
+									<?php
+									foreach ($estado_autorizacion as $row){?>
+										<option value="<?php echo $row->codigo ?>" <?php if($row->codigo==1)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+										<?php 
+									}
+									?>
+								</select>
+							</div>
 
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<select name="estado_autorizacion_bus" id="estado_autorizacion_bus" class="form-control form-control-sm">
-							<option value="">--Seleccionar Esado Autorizacion--</option>
-							<?php
-							foreach ($estado_autorizacion as $row){?>
-								<option value="<?php echo $row->codigo ?>" <?php if($row->codigo==1)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
-								<?php 
-							}
-							?>
-						</select>
+							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+								<select name="estado_bus" id="estado_bus" class="form-control form-control-sm filtro-select">
+									<option value="">Todos</option>
+									<option value="1" selected="selected">Activo</option>
+									<option value="0">Eliminado</option>
+								</select>
+							</div>
+						</div>
 					</div>
-
-                    <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
-						<select name="estado_bus" id="estado_bus" class="form-control form-control-sm">
-							<option value="">Todos</option>
-							<option value="1" selected="selected">Activo</option>
-							<option value="0">Eliminado</option>
-						</select>
-					</div>
-                    
-					<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12" style="padding-right:0px">
-						<input class="btn btn-warning pull-rigth" value="Buscar" type="button" id="btnBuscar" />
+					
+					<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+						<div class="row">
+							<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding-right:0px">
+								<!--<input class="btn btn-warning pull-rigth" value="Buscar" type="button" id="btnBuscar" />-->
+								<button type="button" id="btnBuscar" class="btn btn-sm btn-warning pull-rigth icono-botones2" style="margin-left:10px">
+									<i class="fas fa-search" style="font-size:18px;"></i> Buscar
+								</button>
+							</div>
+						</div>
 					</div>
 				</div>
 				

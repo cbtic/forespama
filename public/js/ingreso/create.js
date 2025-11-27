@@ -1796,6 +1796,16 @@ function datatablenew() {
                 "aTargets": [8]
             },
 			
+            {
+                "mRender": function(data, type, row) {
+                    var observacion = "";
+                    if (row.observacion != null) observacion = row.observacion;
+                    return observacion;
+                },
+                "bSortable": false,
+                "aTargets": [9]
+            },
+
 			{
 				"mRender": function (data, type, row) {
 					
@@ -1811,13 +1821,10 @@ function datatablenew() {
 					return html;
 				},
 				"bSortable": false,
-				"aTargets": [9],
+				"aTargets": [10],
 			},
-
-
+            
         ]
-
-
     });
 
 

@@ -102,7 +102,7 @@ function datatablenew(){
 
     var oTable1 = $('#tblOrdenCompra').dataTable({
         "bServerSide": true,
-        "sAjaxSource": "/orden_compra/listar_orden_compra_ajax",
+        "sAjaxSource": "/orden_compra/listar_orden_compra_proceso_ajax",
         "bProcessing": true,
         "sPaginationType": "full_numbers",
         //"paging":false,
@@ -355,6 +355,15 @@ function datatablenew(){
 				"aTargets": [13]
 				},
 				{
+				"mRender": function (data, type, row) {
+					var proceso_pedido = "";
+					if(row.proceso_pedido!= null)proceso_pedido = row.proceso_pedido;
+					return proceso_pedido;
+				},
+				"bSortable": true,
+				"aTargets": [14]
+				},
+				{
 					"mRender": function (data, type, row) {
 						var estado = "";
 						var clase = "";
@@ -371,7 +380,7 @@ function datatablenew(){
 						//alert(almacenUsuario.id_user);
 						//if(almacenUsuario.some(almacen => almacen.id_user == row.id_usuario) && row.id_cerrado==1){
 							
-							html += '<button style="font-size:12px" type="button" class="btn btn-sm btn-success" data-toggle="modal" onclick="modalOrdenCompra('+row.id+')" ><i class="fa fa-edit"></i> Editar</button>'; 
+							html += '<button style="font-size:12px" type="button" class="btn btn-sm btn-success" data-toggle="modal" onclick="modalOrdenCompra('+row.id+')" ><i class="fa fa-edit" style="font-size:18px;"></i> Editar</button>'; 
 						/*}else{
 							html += '<button style="font-size:12px" type="button" class="btn btn-sm btn-success" data-toggle="modal" onclick="modalOrdenCompra('+row.id+')" disabled><i class="fa fa-edit"></i> Editar</button>'; 
 						}*/
@@ -382,26 +391,29 @@ function datatablenew(){
 								html += '<a href="javascript:void(0)" onclick=eliminarOrdenCompra('+row.id+','+row.estado+') class="btn btn-sm '+clase+'" style="font-size:12px;margin-left:10px; pointer-events: none; opacity: 0.6; cursor: not-allowed;">'+estado+'</a>';
 							}
 						}
-						if(almacenUsuario.some(almacen => almacen.id_almacen == row.id_almacen_destino) && row.id_cerrado==1 && row.id_autorizacion != 1){
-							html += '<button style="font-size:12px; margin-left:10px" type="button" class="btn btn-sm btn-info" data-toggle="modal" onclick="modalEntradaProductoOrdenCompra('+row.id+','+row.id_tipo_documento+')">Atender</button>';
-						}else if(almacenUsuario.some(almacen => almacen.id_almacen == row.id_almacen_salida) && row.id_cerrado==1 && row.id_unidad_origen==4 && row.id_autorizacion != 1){
-							html += '<button style="font-size:12px; margin-left:10px" type="button" class="btn btn-sm btn-info" data-toggle="modal" onclick="modalEntradaProductoOrdenCompra('+row.id+','+row.id_tipo_documento+')">Atender</button>';
+						if(almacenUsuario.some(almacen => almacen.id_almacen == row.id_almacen_destino) && row.id_cerrado==1 && row.id_autorizacion == 4){
+							html += '<button style="font-size:12px; margin-left:10px" type="button" class="btn btn-sm btn-info" data-toggle="modal" onclick="modalEntradaProductoOrdenCompra('+row.id+','+row.id_tipo_documento+')"><i class="fas fa-clipboard" style="font-size:18px;"></i>Atender</button>';
+						}else if(almacenUsuario.some(almacen => almacen.id_almacen == row.id_almacen_salida) && row.id_cerrado==1 && row.id_unidad_origen==4 && row.id_autorizacion == 4 && row.id_tipo_documento != 1){
+							html += '<button style="font-size:12px; margin-left:10px" type="button" class="btn btn-sm btn-info" data-toggle="modal" onclick="modalEntradaProductoOrdenCompra('+row.id+','+row.id_tipo_documento+')"><i class="fas fa-clipboard" style="font-size:18px;"></i>Atender</button>';
+						}else if(almacenUsuario.some(almacen => almacen.id_almacen == row.id_almacen_destino) && row.id_cerrado==1 && row.id_tipo_documento == 1){
+							html += '<button style="font-size:12px; margin-left:10px" type="button" class="btn btn-sm btn-info" data-toggle="modal" onclick="modalEntradaProductoOrdenCompra('+row.id+','+row.id_tipo_documento+')"><i class="fas fa-clipboard" style="font-size:18px;"></i>Atender</button>';
 						}else{
-							html += '<button style="font-size:12px; margin-left:10px" type="button" class="btn btn-sm btn-info" data-toggle="modal" onclick="modalEntradaProductoOrdenCompra('+row.id+','+row.id_tipo_documento+')" disabled>Atender</button>';
+							html += '<button style="font-size:12px; margin-left:10px" type="button" class="btn btn-sm btn-info" data-toggle="modal" onclick="modalEntradaProductoOrdenCompra('+row.id+','+row.id_tipo_documento+')" disabled><i class="fas fa-clipboard" style="font-size:18px;"></i>Atender</button>';
+							//html += '<button style="font-size:12px; margin-left:10px" type="button" class="btn btn-sm btn-info" data-toggle="modal" onclick="modalEntradaProductoOrdenCompra('+row.id+','+row.id_tipo_documento+')"><i class="fas fa-clipboard" style="font-size:18px;"></i>Atender</button>';
 						}
-
+						
 						if(row.tienda_asignada==1){
 							
-							html += '<button style="font-size:12px; margin-left:10px" type="button" class="btn btn-sm btn-primary" data-toggle="modal" onclick="modalTiendaOrdenCompra('+row.id+')" > Punto Entrega</button>'; 
+							html += '<button style="font-size:12px; margin-left:10px" type="button" class="btn btn-sm btn-primary icono-botones" data-toggle="modal" onclick="modalTiendaOrdenCompra('+row.id+')" ><i class="fas fa-map-marked-alt" style="font-size:18px;"></i> Punto Entrega</button>'; 
 						}else{
 							
-							html += '<button style="font-size:12px; margin-left:10px" type="button" class="btn btn-sm btn-primary" data-toggle="modal" onclick="modalTiendaOrdenCompra('+row.id+')" disabled> Punto Entrega</button>'; 
+							html += '<button style="font-size:12px; margin-left:10px" type="button" class="btn btn-primary icono-botones" data-toggle="modal" onclick="modalTiendaOrdenCompra('+row.id+')" disabled><i class="fas fa-map-marked-alt" style="font-size:18px;"></i> Punto Entrega</button>'; 
 						}
 						//else{
 						//	html += '<button style="font-size:12px; margin-left:10px" type="button" class="btn btn-sm btn-primary" data-toggle="modal" onclick="modalTiendaOrdenCompra('+row.id+')" disabled> Punto Entrega</button>'; 
 						//}
 						
-						html += '<button style="font-size:12px; margin-left:10px" type="button" class="btn btn-sm btn-warning" data-toggle="modal" onclick="modalHistorialEntradaProducto('+row.id+','+row.id_tipo_documento+')">Historial</button>';  
+						html += '<button style="font-size:12px; margin-left:10px" type="button" class="btn btn-sm btn-warning" data-toggle="modal" onclick="modalHistorialEntradaProducto('+row.id+','+row.id_tipo_documento+')"><i class="fas fa-clipboard-list" style="font-size:18px;"></i> Historial</button>';  
 						//html += '<a href="javascript:void(0)" onclick=modalResponsable('+row.id+') class="btn btn-sm btn-info" style="font-size:12px;margin-left:10px">Detalle Responsable</a>';
 						if (esAdministrador) {
 							html += '<a href="javascript:void(0)" onclick=anularOrdenCompra('+row.id+') class="btn btn-sm '+clase+'" style="font-size:12px;margin-left:10px">Anular</a>';
@@ -410,7 +422,7 @@ function datatablenew(){
 						return html;
 					},
 					"bSortable": false,
-					"aTargets": [14],
+					"aTargets": [15],
 				},
 
             ]

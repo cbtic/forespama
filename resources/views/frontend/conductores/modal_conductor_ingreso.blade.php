@@ -422,118 +422,95 @@ container: '#myModal modal-body'
 		-->
 		<div class="justify-content-center">		
 
-		<div class="card">
-			
-			<div class="card-header" style="padding:5px!important;padding-left:20px!important">
-				Edici&oacute;n Conductor
+			<div class="card">
+				
+				<div class="card-header" style="padding:5px!important;padding-left:20px!important">
+					Edici&oacute;n Conductor
+				</div>
+				
+				<div class="card-body">
+
+					<div class="row">
+
+						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding-top:10px">
+							
+							<input type="hidden" name="_token" value="{{ csrf_token() }}">
+							<input type="hidden" name="id" id="id" value="<?php echo $id?>">
+							<input type="hidden" name="id_persona_" id="id_persona_" value="">
+							
+							<div class="row">
+								<div class="col-lg-12">
+									<div class="form-group">
+										<label class="control-label">Nro Brevete</label>
+										<input id="licencia" name="licencia" class="form-control form-control-sm"  value="<?php echo $conductor->licencia?>" type="text" >
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<?php 
+									$readonly=$id>0?"readonly='readonly'":'';
+									$readonly_=$id>0?'':"readonly='readonly'";
+								?>
+								<div class="col-lg-12">
+									<div class="form-group">
+										<label class="control-label">Tipo de Documento</label>
+										<select name="tipo_documento_" id="tipo_documento_" class="form-control form-control-sm" onChange="">
+											<option value="">--Selecionar--</option>
+											<?php
+											foreach ($tipo_documento as $row) { ?>
+												<option value="<?php echo $row->codigo ?>" <?php if ($row->codigo == $persona->id_tipo_documento) echo "selected='selected'" ?>><?php echo $row->denominacion ?></option>
+											<?php
+											}
+											?>
+										</select>
+									</div>
+								</div>
+								<div class="col-lg-12">
+									<div class="form-group">
+										<label class="control-label">Numero de Documento</label>
+										<input id="numero_documento_" name="numero_documento_" class="form-control form-control-sm"  value="<?php echo $persona->numero_documento?>" type="text" <?php echo $readonly?> >
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-lg-12">
+									<div class="form-group">
+										<label class="control-label">Apellido Paterno</label>
+										<input id="apellido_paterno_" name="apellido_paterno_" class="form-control form-control-sm"  value="<?php echo $persona->apellido_paterno?>" type="text" readonly>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-lg-12">
+									<div class="form-group">
+										<label class="control-label">Apellido Materno</label>
+										<input id="apellido_materno_" name="apellido_materno_" class="form-control form-control-sm"  value="<?php echo $persona->apellido_materno?>" type="text" readonly>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-lg-12">
+									<div class="form-group">
+										<label class="control-label">Nombres</label>
+										<input id="nombres_" name="nombres_" class="form-control form-control-sm"  value="<?php echo $persona->nombres?>" type="text" readonly>
+									</div>
+								</div>
+							</div>
+							<div style="margin-top:10px" class="form-group">
+								<div class="col-sm-12 controls">
+									<div class="btn-group btn-group-sm" role="group" aria-label="Log Viewer Actions">
+										<!--<a href="javascript:void(0)" onClick="fn_save()" class="btn btn-sm btn-success">Guardar</a>-->
+										<button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-nuevo" data-toggle="modal" onclick="fn_save()">
+											<i class="fas fa-save" style="font-size:18px;"></i> Guardar
+										</button>
+									</div>
+								</div>
+							</div>
+					</div>
+				</div>
+			<!-- /.box -->
 			</div>
-			
-            <div class="card-body">
-
-			<div class="row">
-
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding-top:10px">
-					
-					<input type="hidden" name="_token" value="{{ csrf_token() }}">
-					<input type="hidden" name="id" id="id" value="<?php echo $id?>">
-					<input type="hidden" name="id_persona_" id="id_persona_" value="">
-					
-					
-					<div class="row">
-						
-						<div class="col-lg-12">
-							<div class="form-group">
-								<label class="control-label">Nro Brevete</label>
-								<input id="licencia" name="licencia" class="form-control form-control-sm"  value="<?php echo $conductor->licencia?>" type="text" >
-							</div>
-						</div>
-						
-					</div>
-					
-					<div class="row">
-						
-						<?php 
-							$readonly=$id>0?"readonly='readonly'":'';
-							$readonly_=$id>0?'':"readonly='readonly'";
-						?>
-						
-						<div class="col-lg-12">
-							<div class="form-group">
-								<label class="control-label">Tipo de Documento</label>
-								<select name="tipo_documento_" id="tipo_documento_" class="form-control form-control-sm" onChange="">
-									<option value="">--Selecionar--</option>
-									<?php
-									foreach ($tipo_documento as $row) { ?>
-										<option value="<?php echo $row->codigo ?>" <?php if ($row->codigo == $persona->id_tipo_documento) echo "selected='selected'" ?>><?php echo $row->denominacion ?></option>
-									<?php
-									}
-									?>
-								</select>
-							</div>
-						</div>
-						
-						<div class="col-lg-12">
-							<div class="form-group">
-								<label class="control-label">Numero de Documento</label>
-								<input id="numero_documento_" name="numero_documento_" class="form-control form-control-sm"  value="<?php echo $persona->numero_documento?>" type="text" <?php echo $readonly?> >
-							</div>
-						</div>
-						
-					</div>
-					
-					<div class="row">
-						
-						<div class="col-lg-12">
-							<div class="form-group">
-								<label class="control-label">Apellido Paterno</label>
-								<input id="apellido_paterno_" name="apellido_paterno_" class="form-control form-control-sm"  value="<?php echo $persona->apellido_paterno?>" type="text" readonly>
-							</div>
-						</div>
-						
-					</div>
-					
-					<div class="row">
-						
-						<div class="col-lg-12">
-							<div class="form-group">
-								<label class="control-label">Apellido Materno</label>
-								<input id="apellido_materno_" name="apellido_materno_" class="form-control form-control-sm"  value="<?php echo $persona->apellido_materno?>" type="text" readonly>
-							</div>
-						</div>
-						
-					</div>
-					
-					<div class="row">
-						
-						<div class="col-lg-12">
-							<div class="form-group">
-								<label class="control-label">Nombres</label>
-								<input id="nombres_" name="nombres_" class="form-control form-control-sm"  value="<?php echo $persona->nombres?>" type="text" readonly>
-							</div>
-						</div>
-						
-					</div>
-					
-					<div style="margin-top:10px" class="form-group">
-						<div class="col-sm-12 controls">
-							<div class="btn-group btn-group-sm" role="group" aria-label="Log Viewer Actions">
-								<a href="javascript:void(0)" onClick="fn_save()" class="btn btn-sm btn-success">Guardar</a>
-							</div>
-												
-						</div>
-					</div> 
-					
-              </div>
-			  
-              
-          </div>
-          <!-- /.box -->
-          
-
-        </div>
         <!--/.col (left) -->
-            
-     
           </div>
           <!-- /.row -->
         </section>

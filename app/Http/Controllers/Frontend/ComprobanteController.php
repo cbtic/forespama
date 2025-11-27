@@ -24,6 +24,7 @@ use App\Models\ComprobanteSodimacHistorico;
 use App\Models\Tienda;
 use App\Models\OrdenCompra;
 use App\Models\OrdenCompraDetalle;
+use App\Models\AutorizacionOrdenCompra;
 
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
@@ -1198,6 +1199,15 @@ class ComprobanteController extends Controller
                     
                     $orden_compra->save();
                     $id_orden_compra = $orden_compra->id;
+
+                    $autorizacion_orden_compra = new AutorizacionOrdenCompra;
+                    $autorizacion_orden_compra->id_orden_compra = $id_orden_compra;
+                    $autorizacion_orden_compra->id_proceso_pedido = 4;
+                    $autorizacion_orden_compra->id_autorizacion = 2;
+                    //$autorizacion_orden_compra->id_usuario_autoriza = $id_user;
+                    $autorizacion_orden_compra->id_usuario_inserta = $id_user;
+                    $autorizacion_orden_compra->estado = 1;
+                    $autorizacion_orden_compra->save();
                     
                     $act_factura = Comprobante::find($id_factura);
                     $act_factura->orden_compra = $id_orden_compra; 

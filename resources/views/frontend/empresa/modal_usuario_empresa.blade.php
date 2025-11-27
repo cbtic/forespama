@@ -449,116 +449,85 @@ container: '#myModal modal-body'
 					<input type="hidden" name="id" id="id" value="<?php echo $id?>">
 					
 					<?php
-					
 					$display_empresa="display:block";
 					$display_proveedor="display:none";
 					$checked_tipo = "";
-					
+
 					if($userUbicacion->id > 0){
 						if($userUbicacion->tipo == 0){
 							$display_empresa="display:block";
 							$display_proveedor="display:none";
 							$checked_tipo = "";
 						}
-						
 						if($userUbicacion->tipo == 1){
 							$display_empresa="display:none";
 							$display_proveedor="display:block";
 							$checked_tipo = "checked='checked'";
 						}
 					}
-					
 					?>
-					
 					<div class="row" style="padding-left:10px">
-						
 						<div class="col-lg-12">
 							<div class="form-group">
 								<label class="control-label">Usuario</label>
 								<input id="usuario_" name="usuario_" class="form-control form-control-sm ui-autocomplete-input" value="<?php if($userUbicacion->id > 0)echo $userUbicacion->usuario;?>" type="text" autocomplete="off">
 								<input id="user_id" name="user_id" class="form-control form-control-sm" value="<?php if($userUbicacion->id > 0)echo $userUbicacion->user_id;?>" type="hidden">
 								<div class="input-group" id="usuario_busqueda"></div>
-								
 							</div>
 						</div>
-						
 					</div>
-					
 					<div class="row">
-					
 						<div class="col-lg-12" style="padding-right:0px">
-							
 							<div class="form-group">
-								
 								<div style="padding-right:0px;padding-left:0px;text-align:center;float:left">
 									<label class="form-control-sm"><strong>Tipo</strong></label>
 								</div>
-								
 								<div style="padding-right:0px;padding-left:0px;text-align:center;float:left">
-								
 									<span class="no">Empresa Transporte</span>
 									<label class="switch" style="float:left">
 										<input type="checkbox" <?php echo $checked_tipo?> id="tipo_" onChange="cargar_tipo()"/>
 										<span class="slider round"></span>
 									</label>
 									<span class="si">Proveedor</span>
-								
 								</div>
-	
 							</div>
 						</div>
-					
 					</div>
-					
 					<div class="row" id="divUbicacion" style="padding-left:10px">
-						
 						<div class="col-lg-12" style=" <?php echo $display_empresa?>">
 							<div class="form-group">
 								<label class="control-label">Empresa</label>
 								<input id="empresa_" name="empresa_" class="form-control form-control-sm" value="<?php if($userUbicacion->id > 0 && $userUbicacion->tipo==0)echo $userUbicacion->persona;?>" type="text" autocomplete="off">
 								<input id="ubicacion_id" name="ubicacion_id" class="form-control form-control-sm"  value="<?php if($userUbicacion->id > 0 && $userUbicacion->tipo==0)echo $userUbicacion->ubicacion_id;?>" type="hidden">
 								<div class="input-group" id="empresa_busqueda"></div>
-								
 							</div>
 						</div>
-						
 					</div>
-					
 					<div class="row" id="divProveedor" style="padding-left:10px;<?php echo $display_proveedor?>">
-						
 						<div class="col-lg-12">
 							<div class="form-group">
 								<label class="control-label">Proveedor</label>
 								<input id="proveedor_" name="proveedor_" class="form-control form-control-sm" value="<?php if($userUbicacion->id > 0 && $userUbicacion->tipo==1)echo $userUbicacion->persona;?>" type="text" autocomplete="off">
 								<input id="id_proveedor" name="id_proveedor" class="form-control form-control-sm"  value="<?php if($userUbicacion->id > 0 && $userUbicacion->tipo==1)echo $userUbicacion->id_proveedor;?>" type="hidden">
 								<div class="input-group" id="proveedor_busqueda"></div>
-								
 							</div>
 						</div>
-						
 					</div>
-										
-					
 					<div style="margin-top:10px" class="form-group">
 						<div class="col-sm-12 controls">
 							<div class="btn-group btn-group-sm" role="group" aria-label="Log Viewer Actions">
-								<a href="javascript:void(0)" onClick="fn_save()" class="btn btn-sm btn-success">Guardar</a>
+								<!--<a href="javascript:void(0)" onClick="fn_save()" class="btn btn-sm btn-success">Guardar</a>-->
+								<button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-nuevo" data-toggle="modal" onclick="fn_save()">
+									<i class="fas fa-save" style="font-size:18px;"></i> Guardar
+								</button>
 							</div>
-												
 						</div>
-					</div> 
-					
+					</div>
               </div>
-			  
-              
           </div>
           <!-- /.box -->
-          
-
         </div>
         <!--/.col (left) -->
-            
-     
           </div>
           <!-- /.row -->
         </section>

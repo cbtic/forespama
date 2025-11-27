@@ -272,9 +272,7 @@ function fn_save_revision_tecnica(){
 			</div>
 			
             <div class="card-body">
-
 			<div class="row">
-
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding-top:5px;padding-bottom:20px">
 					
 					<input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
@@ -289,7 +287,6 @@ function fn_save_revision_tecnica(){
 							</div>
 						</div>
 					</div>
-
 					<div class="row" style="padding-left:10px">
 						<div class="col-lg-6">
 							<div class="form-group">
@@ -297,14 +294,12 @@ function fn_save_revision_tecnica(){
 								<input id="fecha_emision" name="fecha_emision" on class="form-control form-control-sm mayusculas"  value="<?php echo $revision_tecnica_activo->fecha_emision?>" type="text" placeholder="YYYY-MM-DD">
 							</div>
 						</div>
-
 						<div class="col-lg-6">
 							<div class="form-group">
 								<label class="control-label form-control-sm">Fecha Pr&oacute;xima Revisi&oacute;n</label>
 								<input id="fecha_vencimiento" name="fecha_vencimiento" on class="form-control form-control-sm mayusculas"  value="<?php echo $revision_tecnica_activo->fecha_vencimiento?>" type="text" placeholder="YYYY-MM-DD">
 							</div>
-						</div>						
-
+						</div>
 						<div class="col-lg-6">
 							<div class="form-group">
 								<label class="control-label form-control-sm">Resultado Revisi&oacute;n T&eacute;cnica</label>
@@ -319,7 +314,6 @@ function fn_save_revision_tecnica(){
 								</select>
 							</div>
 						</div>
-
 						<div class="col-lg-6">
 							<div class="form-group">
 								<label class="control-label form-control-sm">Estado Revisi&oacute;n T&eacute;cnica</label>
@@ -335,15 +329,16 @@ function fn_save_revision_tecnica(){
 							</div>
 						</div>
 					</div>
-										
 					<div style="margin-top:15px" class="form-group">
 						<div class="col-sm-12 controls">
 							<div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
-								<a href="javascript:void(0)" onClick="fn_save_revision_tecnica()" class="btn btn-sm btn-success">Guardar</a>
-							</div>
-												
+								<!--<a href="javascript:void(0)" onClick="fn_save_revision_tecnica()" class="btn btn-sm btn-success">Guardar</a>-->
+								<button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-nuevo" data-toggle="modal" onclick="fn_save_revision_tecnica()">
+                                    <i class="fas fa-save" style="font-size:18px;"></i> Guardar
+                                </button>
+							</div>	
 						</div>
-					</div> 
+					</div>
               </div>
           </div>
           <!-- /.box -->

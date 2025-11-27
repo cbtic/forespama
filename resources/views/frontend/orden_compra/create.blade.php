@@ -273,6 +273,7 @@ label.form-control-sm{
 	height: 200px;
 	white-space:nowrap
 }
+
 .imageDiv img {
 	box-shadow: 1px 1px 10px #999;
 	margin: 2px;
@@ -283,7 +284,6 @@ label.form-control-sm{
 	*zoom:1;
 	vertical-align:top;
 }
-
 
 .img_ruta{
 	position:relative;
@@ -306,7 +306,7 @@ label.form-control-sm{
     border: 1px solid #dee2e6;
     border-radius: 6px;
     background-color: white;
-    color: #0d6efd !important;
+	color: #212529 !important;
     margin: 0 3px;
     padding: 4px 10px;
     cursor: pointer;
@@ -314,13 +314,14 @@ label.form-control-sm{
 
 .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
     background-color: #e9ecef !important;
-    color: #0d6efd !important;
+	color: #000000ff !important;
+	font-weight:bold !important;
 }
 
 .dataTables_wrapper .dataTables_paginate .paginate_button.current {
-    background-color: #0d6efd !important;
+	background-color: #6b6d6dff !important;
     color: white !important;
-    border: 1px solid #0d6efd;
+    border: 1px solid #6b6d6dff;
 }
 
 .dataTables_wrapper .dataTables_paginate .paginate_button.disabled {
@@ -329,15 +330,43 @@ label.form-control-sm{
 }
 
 .dataTables_wrapper .dataTables_length label {
-  color: #0d6efd;
+  color: #212529;
   font-weight: 500;
   font-size: 14px;
 }
 
 .dataTables_wrapper .dataTables_info {
-  color: #0d6efd;
+  color: #212529;
   font-weight: 500;
   font-size: 14px;
+}
+
+.icono-botones2{
+    margin-left:10px !important; 
+    display:inline-flex !important; 
+    align-items:center !important; 
+    gap:3px !important;
+}
+
+/*.filtro-input, .filtro-select {
+    border-radius: 12px !important;
+    border: 1px solid #ccc !important;
+}*/
+
+.filtro-input, .filtro-select {
+    width: 100% !important;
+    /*padding: 10px 12px !important;*/
+    border: 1px solid #ced4da !important;
+    border-radius: 8px !important;
+    background: #fff !important;
+    font-size: 13px !important;
+    transition: all 0.2s ease-in-out !important;
+}
+
+.filtro-input:focus, .filtro-select:focus {
+    border-color: #198754 !important;  /* Verde elegante */
+    box-shadow: 0 0 6px rgba(25, 135, 84, 0.4) !important;
+    outline: none !important;
 }
 
 </style>
@@ -409,177 +438,192 @@ label.form-control-sm{
 						<input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
 				
 				<div class="row" style="padding:20px 20px 0px 20px;">
+					<div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
+						<div class="row">
 
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<select name="tipo_documento_bus" id="tipo_documento_bus" class="form-control form-control-sm">
-							<option value="">--Seleccionar Tipo Documento--</option>
-							<?php
-							foreach ($tipo_documento as $row){?>
-								<option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
-								<?php 
-							}
-							?>
-						</select>
+							<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+								<select name="tipo_documento_bus" id="tipo_documento_bus" class="form-control form-control-sm filtro-select">
+									<option value="">--Seleccionar Tipo Documento--</option>
+									<?php
+									foreach ($tipo_documento as $row){?>
+										<option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
+										<?php 
+									}
+									?>
+								</select>
+							</div>
+
+							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+								<select name="canal_bus" id="canal_bus" class="form-control form-control-sm filtro-select">
+									<option value="">--Seleccionar Canal--</option>
+									<?php
+									foreach ($canal as $row){?>
+										<option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
+										<?php 
+									}
+									?>
+								</select>
+							</div>
+
+							<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+								<select name="empresa_compra_bus" id="empresa_compra_bus" class="form-control form-control-sm filtro-select">
+									<option value="">--Seleccionar Empresa Compra--</option>
+									<?php
+									foreach ($proveedor as $row){?>
+										<option value="<?php echo $row->id ?>"><?php echo $row->razon_social ?></option>
+										<?php 
+									}
+									?>
+								</select>
+							</div>
+
+							<!--<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+								<select name="empresa_vende_bus" id="empresa_vende_bus" class="form-control form-control-sm">
+									<option value="">--Seleccionar Empresa Vende--</option>
+									<?php
+									//foreach ($proveedor as $row){?>
+										<option value="<?php //echo $row->id ?>"><?php //echo $row->razon_social ?></option>
+										<?php 
+									//}
+									?>
+								</select>
+							</div>-->
+
+							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+								<input id="fecha_inicio_bus" name="fecha_inicio_bus" on class="form-control form-control-sm filtro-input" style=" content: \f073;" placeholder="Fecha Inicio">
+							</div>
+
+							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+								<input id="fecha_fin_bus" name="fecha_fin_bus" on class="form-control form-control-sm filtro-input"  placeholder="Fecha Fin">
+							</div>
+
+							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+								<input id="numero_orden_compra_bus" name="numero_orden_compra_bus" on class="form-control form-control-sm filtro-input"  placeholder="N&uacute;mero Orden Compra">
+							</div>
+
+							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+								<input id="numero_orden_compra_cliente_bus" name="numero_orden_compra_cliente_bus" on class="form-control form-control-sm filtro-input"  placeholder="N&uacute;mero OC Cliente">
+							</div>
+
+							<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+								<select name="almacen_origen_bus" id="almacen_origen_bus" class="form-control form-control-sm filtro-select">
+									<option value="">--Seleccionar Almacen Origen--</option>
+									<?php
+									foreach ($almacen as $row){?>
+										<option value="<?php echo $row->id ?>"><?php echo $row->denominacion ?></option>
+										<?php 
+									}
+									?>
+								</select>
+							</div>
+
+							<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+								<select name="almacen_destino_bus" id="almacen_destino_bus" class="form-control form-control-sm filtro-select">
+									<option value="">--Seleccionar Almacen Destino--</option>
+									<?php
+									foreach ($almacen as $row){?>
+										<option value="<?php echo $row->id ?>"><?php echo $row->denominacion ?></option>
+										<?php 
+									}
+									?>
+								</select>
+							</div>
+
+							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+								<select name="situacion_bus" id="situacion_bus" class="form-control form-control-sm filtro-select">
+									<option value="">--Seleccionar Situaci&oacute;n--</option>
+									<?php
+									foreach ($cerrado_orden_compra as $row){?>
+										<option value="<?php echo $row->codigo ?>" <?php if($row->codigo=='1')echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+										<?php 
+									}
+									?>
+								</select>
+							</div>
+
+							<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+								<select name="vendedor_bus" id="vendedor_bus" class="form-control form-control-sm filtro-select">
+									<option value="">--Seleccionar Vendedor--</option>
+									<?php
+									foreach ($vendedor as $row){?>
+										<option value="<?php echo $row->id ?>"><?php echo $row->name ?></option>
+										<?php 
+									}
+									?>
+								</select>
+							</div>
+
+							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+								<select name="prioridad_bus" id="prioridad_bus" class="form-control form-control-sm filtro-select">
+									<option value="">--Selec. Prioridad--</option>
+									<?php
+									foreach ($prioridad as $row){?>
+										<option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
+										<?php 
+									}
+									?>
+								</select>
+							</div>
+
+							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+								<select name="tipo_producto_bus" id="tipo_producto_bus" class="form-control form-control-sm filtro-select">
+									<option value="">--Seleccionar Tipo Producto--</option>
+									<?php
+									foreach ($bien_servicio as $row){?>
+										<option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
+										<?php 
+									}
+									?>
+								</select>
+							</div>
+
+							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+								<select name="estado_bus" id="estado_bus" class="form-control form-control-sm filtro-select">
+									<option value="">Todos</option>
+									<option value="1" selected="selected">Activo</option>
+									<option value="0">Eliminado</option>
+								</select>
+							</div>
+
+							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+								<select name="estado_pedido_bus" id="estado_pedido_bus" class="form-control form-control-sm filtro-select">
+									<option value="">--Selec. Estado Pedido--</option>
+									<?php
+									foreach ($estado_pedido as $row){?>
+										<option value="<?php echo $row->codigo ?>" <?php echo ($row->codigo == '1') ? 'selected' : ''; ?>><?php echo $row->denominacion ?></option>
+										<?php 
+									}
+									?>
+								</select>
+							</div>
+						</div>
 					</div>
-
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<select name="canal_bus" id="canal_bus" class="form-control form-control-sm">
-							<option value="">--Seleccionar Canal--</option>
-							<?php
-							foreach ($canal as $row){?>
-								<option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
-								<?php 
-							}
-							?>
-						</select>
-					</div>
-
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<select name="empresa_compra_bus" id="empresa_compra_bus" class="form-control form-control-sm">
-							<option value="">--Seleccionar Empresa Compra--</option>
-							<?php
-							foreach ($proveedor as $row){?>
-								<option value="<?php echo $row->id ?>"><?php echo $row->razon_social ?></option>
-								<?php 
-							}
-							?>
-						</select>
-					</div>
-
-					<!--<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<select name="empresa_vende_bus" id="empresa_vende_bus" class="form-control form-control-sm">
-							<option value="">--Seleccionar Empresa Vende--</option>
-							<?php
-							//foreach ($proveedor as $row){?>
-								<option value="<?php //echo $row->id ?>"><?php //echo $row->razon_social ?></option>
-								<?php 
-							//}
-							?>
-						</select>
-					</div>-->
-
-					<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
-                        <input id="fecha_inicio_bus" name="fecha_inicio_bus" on class="form-control form-control-sm"  placeholder="Fecha Inicio">
-					</div>
-
-					<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
-                        <input id="fecha_fin_bus" name="fecha_fin_bus" on class="form-control form-control-sm"  placeholder="Fecha Fin">
-					</div>
-
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-                        <input id="numero_orden_compra_bus" name="numero_orden_compra_bus" on class="form-control form-control-sm"  placeholder="N&uacute;mero Orden Compra">
-					</div>
-
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-                        <input id="numero_orden_compra_cliente_bus" name="numero_orden_compra_cliente_bus" on class="form-control form-control-sm"  placeholder="N&uacute;mero OC Cliente">
-					</div>
-
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<select name="almacen_origen_bus" id="almacen_origen_bus" class="form-control form-control-sm">
-							<option value="">--Seleccionar Almacen Origen--</option>
-							<?php
-							foreach ($almacen as $row){?>
-								<option value="<?php echo $row->id ?>"><?php echo $row->denominacion ?></option>
-								<?php 
-							}
-							?>
-						</select>
-					</div>
-
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<select name="almacen_destino_bus" id="almacen_destino_bus" class="form-control form-control-sm">
-							<option value="">--Seleccionar Almacen Destino--</option>
-							<?php
-							foreach ($almacen as $row){?>
-								<option value="<?php echo $row->id ?>"><?php echo $row->denominacion ?></option>
-								<?php 
-							}
-							?>
-						</select>
-					</div>
-
-					<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
-						<select name="situacion_bus" id="situacion_bus" class="form-control form-control-sm">
-							<option value="">--Seleccionar Situaci&oacute;n--</option>
-							<?php
-							foreach ($cerrado_orden_compra as $row){?>
-								<option value="<?php echo $row->codigo ?>" <?php if($row->codigo=='1')echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
-								<?php 
-							}
-							?>
-						</select>
-					</div>
-
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<select name="vendedor_bus" id="vendedor_bus" class="form-control form-control-sm">
-							<option value="">--Seleccionar Vendedor--</option>
-							<?php
-							foreach ($vendedor as $row){?>
-								<option value="<?php echo $row->id ?>"><?php echo $row->name ?></option>
-								<?php 
-							}
-							?>
-						</select>
-					</div>
-
-					<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
-						<select name="prioridad_bus" id="prioridad_bus" class="form-control form-control-sm">
-							<option value="">--Selec. Prioridad--</option>
-							<?php
-							foreach ($prioridad as $row){?>
-								<option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
-								<?php 
-							}
-							?>
-						</select>
-					</div>
-
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<select name="tipo_producto_bus" id="tipo_producto_bus" class="form-control form-control-sm">
-							<option value="">--Seleccionar Tipo Producto--</option>
-							<?php
-							foreach ($bien_servicio as $row){?>
-								<option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
-								<?php 
-							}
-							?>
-						</select>
-					</div>
-
-                    <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
-						<select name="estado_bus" id="estado_bus" class="form-control form-control-sm">
-							<option value="">Todos</option>
-							<option value="1" selected="selected">Activo</option>
-							<option value="0">Eliminado</option>
-						</select>
-					</div>
-
-					<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
-						<select name="estado_pedido_bus" id="estado_pedido_bus" class="form-control form-control-sm">
-							<option value="">--Selec. Estado Pedido--</option>
-							<?php
-							foreach ($estado_pedido as $row){?>
-								<option value="<?php echo $row->codigo ?>" <?php echo ($row->codigo == '1') ? 'selected' : ''; ?>><?php echo $row->denominacion ?></option>
-								<?php 
-							}
-							?>
-						</select>
-					</div>
-                    
-					<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12" style="padding-right:0px">
-						<input class="btn btn-warning pull-rigth" value="Buscar" type="button" id="btnBuscar" />
-						<input class="btn btn-success pull-rigth" value="Nuevo" type="button" id="btnNuevo" style="margin-left:10px" />
-						<!--<input class="btn btn-secondary pull-rigth" value="Excel" name="excel" type="button" id="btnDescargar" style="margin-left:15px;margin-right:10px;"/>-->
+					
+					<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+						<div class="row">
 						
-						<button id="btnDescargar" type="button" class="btn btn-secondary pull-rigth" style="margin-left:10px;">
-							<i class="fas fa-download"></i> Excel
-							<!--<img src="/img/icono_carro.png" alt="Carro" style="width: 16px; height: 16px; margin-left: 5px;">-->
-						</button>
+							<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding-right:0px">
+								<!--<input class="btn btn-warning pull-rigth" value="Buscar" type="button" id="btnBuscar" />-->
+								<button type="button" id="btnBuscar" class="btn btn-sm btn-warning pull-rigth icono-botones2" style="margin-left:10px">
+									<i class="fas fa-search" style="font-size:18px;"></i> Buscar
+								</button>
+								<!--<input class="btn btn-success pull-rigth" value="Nuevo" type="button" id="btnNuevo" style="margin-left:10px" />-->
+								<button type="button" id="btnNuevo" class="btn btn-sm btn-success icono-botones2" style="margin-left:10px">
+									<i class="fas fa-plus-circle" style="font-size:18px;"></i> Nuevo
+								</button>
+								<!--<input class="btn btn-secondary pull-rigth" value="Excel" name="excel" type="button" id="btnDescargar" style="margin-left:15px;margin-right:10px;"/>-->
+								
+								<button id="btnDescargar" type="button" class="btn btn-sm btn-secondary pull-rigth icono-botones2" style="margin-left:10px;">
+									<i class="fas fa-download" style="font-size:18px;"></i> Excel
+									<!--<img src="/img/icono_carro.png" alt="Carro" style="width: 16px; height: 16px; margin-left: 5px;">-->
+								</button>
 
-						<button id="btnDescargarDetalle" type="button" class="btn btn-secondary pull-rigth" style="margin-left:10px;">
-							<i class="fas fa-download"></i> Excel Detallado
-							<!--<img src="/img/icono_carro.png" alt="Carro" style="width: 16px; height: 16px; margin-left: 5px;">-->
-						</button>
+								<button id="btnDescargarDetalle" type="button" class="btn btn-sm btn-secondary pull-rigth icono-botones2" style="margin-left:10px;">
+									<i class="fas fa-download" style="font-size:18px;"></i> Excel Detallado
+									<!--<img src="/img/icono_carro.png" alt="Carro" style="width: 16px; height: 16px; margin-left: 5px;">-->
+								</button>
+							</div>
+						</div>
 					</div>
 				</div>
 				
@@ -604,6 +648,7 @@ label.form-control-sm{
 								<th>Tiene Direcci&oacute;n</th>
 								<th style ="text-align:right">Total</th>
 								<th>Prioridad</th>
+								<th>Etapa</th>
 								<!--<th>Estado</th>-->
 								<th>Acciones</th>
 							</tr>

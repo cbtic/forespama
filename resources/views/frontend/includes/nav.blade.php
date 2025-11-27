@@ -323,7 +323,7 @@
 						
 					@endif
 					
-					@if(Gate::check('Mantenimiento Personas') || Gate::check('Mantenimiento Empresas') || Gate::check('Mantenimiento Vehiculos') || Gate::check('Mantenimiento Tablas Maestras') || Gate::check('Mantenimiento Conductores') || Gate::check('Mantenimiento Tipo Cambio') || Gate::check('Mantenimiento Marcas') || Gate::check('Mantenimiento Tiendas') || Gate::check('Mantenimiento Equivalencia Producto') || Gate::check('Mantenimiento Parametro') || Gate::check('Mantenimiento Empaquetado') || Gate::check('Mantenimiento Empresas Cubicaje') || Gate::check('Mantenimiento Familia') || Gate::check('Mantenimiento Sub Familia') || Gate::check('Mantenimiento Permisos Usuario Descuento'))
+					@if(Gate::check('Mantenimiento Personas') || Gate::check('Mantenimiento Empresas') || Gate::check('Mantenimiento Vehiculos') || Gate::check('Mantenimiento Tablas Maestras') || Gate::check('Mantenimiento Conductores') || Gate::check('Mantenimiento Tipo Cambio') || Gate::check('Mantenimiento Marcas') || Gate::check('Mantenimiento Tiendas') || Gate::check('Mantenimiento Equivalencia Producto') || Gate::check('Mantenimiento Parametro') || Gate::check('Mantenimiento Empaquetado') || Gate::check('Mantenimiento Empresas Cubicaje') || Gate::check('Mantenimiento Familia') || Gate::check('Mantenimiento Sub Familia') || Gate::check('Mantenimiento Permisos Usuario Descuento') || Gate::check('Producto Competencia') || Gate::check('Mantenimiento Persona Proceso'))
 						
 						<li class="nav-item dropdown">
 							<a href="#" class="nav-link dropdown-toggle" id="navbarDropdownPrueba" data-toggle="dropdown"
@@ -393,6 +393,10 @@
 
 								@can('Producto Competencia')
 									<x-utils.link :href="route('frontend.producto_competencia.create')" class="dropdown-item" :text="__('Producto Competencia')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+								@endif
+
+								@can('Mantenimiento Persona Proceso')
+									<x-utils.link :href="route('frontend.persona_proceso.create')" class="dropdown-item" :text="__('Persona Proceso')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
 								@endif
 
 							</div>

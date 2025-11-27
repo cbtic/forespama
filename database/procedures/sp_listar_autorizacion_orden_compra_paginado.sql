@@ -1,4 +1,4 @@
--- DROP FUNCTION public.sp_listar_autorizacion_orden_compra_paginado(varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, refcursor);
+--DROP FUNCTION public.sp_listar_autorizacion_orden_compra_paginado(varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, refcursor);
 
 CREATE OR REPLACE FUNCTION public.sp_listar_autorizacion_orden_compra_paginado(p_empresa_compra character varying, p_numero_orden_compra character varying, p_numero_orden_compra_cliente character varying, p_user character varying, p_estado_autorizacion character varying, p_estado character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
  RETURNS refcursor
@@ -13,10 +13,13 @@ v_where varchar;
 v_count varchar;
 v_col_count varchar;
 v_id_rol integer;
+v_id_proceso integer;
 
 begin
 
 	select role_id into v_id_rol from model_has_roles mhr where mhr.model_id::varchar=p_user;
+
+	select id_proceso into v_id_proceso from persona_procesos pp where pp.id_persona::varchar = p_user;
 	
 	p_pagina=(p_pagina::Integer-1)*p_limit::Integer;
 	
@@ -38,7 +41,7 @@ begin
 	inner join users u on oc.id_usuario_inserta = u.id
 	left join users u2 on oc.id_vendedor = u2.id 
 	left join almacenes a2 on oc.id_almacen_salida = a2.id ';
-		
+	
 	v_where = ' Where 1=1 and oc.id_tipo_documento = ''2'' and oc.estado_pedido = ''1'' ';
 	
 	If p_empresa_compra<>'' Then
@@ -68,18 +71,75 @@ begin
 	 v_where:=v_where||'And oc.numero_orden_compra_cliente = '''||p_numero_orden_compra_cliente||''' ';
 	End If;
 	
-	If p_estado_autorizacion<>'' Then
-	 v_where:=v_where||'And oc.id_autorizacion = '''||p_estado_autorizacion||''' ';
-	End If;
+	If p_estado_autorizacion <> '' Then
 
+	    If p_estado_autorizacion = '1' Then
+	        v_where := v_where || ' And (
+	            coalesce((
+	                select aoc.id_proceso_pedido
+	                from autorizacion_orden_compras aoc
+	                where aoc.id_orden_compra = oc.id
+	                order by aoc.id desc
+	                limit 1
+	            ), 0) = 2
+	            and
+	            (coalesce((
+	                select aoc.id_autorizacion
+	                from autorizacion_orden_compras aoc
+	                where aoc.id_orden_compra = oc.id
+	                order by aoc.id desc
+	                limit 1
+	            ), 0) = 1
+				or
+	            coalesce((
+	                select aoc.id_autorizacion
+	                from autorizacion_orden_compras aoc
+	                where aoc.id_orden_compra = oc.id
+	                order by aoc.id desc
+	                limit 1
+	            ), 0) = 0)
+	        ) ';
+	
+	    ELSIF p_estado_autorizacion = '2' Then
+	        v_where := v_where || ' And (
+	            coalesce((
+	                select aoc.id_proceso_pedido
+	                from autorizacion_orden_compras aoc
+	                where aoc.id_orden_compra = oc.id
+	                order by aoc.id desc
+	                limit 1
+	            ), 0) > 2
+	            or
+	            coalesce((
+	                select aoc.id_autorizacion
+	                from autorizacion_orden_compras aoc
+	                where aoc.id_orden_compra = oc.id
+	                order by aoc.id desc
+	                limit 1
+	            ), 0) = 2
+	        ) ';
+	    END IF;
+	
+	END IF;
+
+
+	
 	If v_id_rol = 11 Then
-	   v_where := v_where || ' AND (oc.id_vendedor = ''' || p_user || ''' OR oc.id_vendedor IN (
-	       SELECT id_vendedor FROM jefe_vendedor_detalles WHERE id_jefe_vendedor = ' || p_user || '
+	   v_where := v_where || ' And (oc.id_vendedor = ''' || p_user || ''' or oc.id_vendedor in (
+	       select id_vendedor from jefe_vendedor_detalles where id_jefe_vendedor = ' || p_user || '
 	   ))';
 	End If;
 	
 	If p_estado<>'' Then
 	 v_where:=v_where||'And oc.estado = '''||p_estado||''' ';
+	End If;
+
+	If /*p_user <> '1' and*/ v_id_proceso IS NOT NULL Then 
+		v_where:=v_where||' and(
+		select aoc.id_proceso_pedido from autorizacion_orden_compras aoc 
+		where aoc.id_orden_compra = oc.id
+		order by id desc
+		limit 1) >= '''||v_id_proceso||''' ' ; 
 	End If;
 
 	EXECUTE ('SELECT count(1) '||v_tabla||v_where) INTO v_count;

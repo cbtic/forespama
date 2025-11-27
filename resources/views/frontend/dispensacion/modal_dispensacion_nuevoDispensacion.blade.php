@@ -412,7 +412,7 @@ function agregarProducto(){
         var cantidad_ingreso = '<input name="cantidad[]" id="cantidad' + n + '" class="cantidad form-control form-control-sm" value="" type="text" oninput="">';
         var stock_actual = '<input name="stock_actual[]" id="stock_actual' + n + '" class="form-control form-control-sm" value="" type="text" readonly>';
         
-        var btnEliminar = '<button type="button" class="btn btn-danger btn-sm" onclick="eliminarFila(this)">Eliminar</button>';
+        var btnEliminar = '<button type="button" class="btn btn-sm btn-clasico btn-eliminar" onclick="eliminarFila(this)"><i class="fas fa-trash" style="font-size:18px;"></i></button>';
 
         newRow += '<tr>';
         newRow += '<td>' + n + '</td>';
@@ -591,9 +591,8 @@ function pdf_documento_dispensacion(){
                     
                     <input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
                     <input type="hidden" name="id" id="id" value="<?php echo $id?>">
-                    
-                    <div class="row" style="padding-left:10px">
 
+                    <div class="row" style="padding-left:10px">
                         <div class="col-lg-2">
                             Tipo Documento
                         </div>
@@ -676,17 +675,21 @@ function pdf_documento_dispensacion(){
                             <div class="col-sm-12 controls">
                                 <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
                                 <?php if($id_user==$dispensacion->id_usuario_inserta && $id>0){?>
-                                    <a href="javascript:void(0)" onClick="agregarProducto()" class="btn btn-sm btn-success">Agregar</a>
+                                    <!--<a href="javascript:void(0)" onClick="agregarProducto()" class="btn btn-sm btn-success">Agregar</a>-->
+                                    <button type="button" class="btn btn-sm btn-clasico-blanco btn-agregar" data-toggle="modal" onclick="agregarProducto()">
+                                        <i class="fas fa-plus-circle" style="font-size:18px;"></i> Agregar
+                                    </button>
                                 <?php }?>
                                 <?php if($id==0){?>
-                                    <a href="javascript:void(0)" onClick="agregarProducto()" class="btn btn-sm btn-success">Agregar</a>
+                                    <!--<a href="javascript:void(0)" onClick="agregarProducto()" class="btn btn-sm btn-success">Agregar</a>-->
+                                    <button type="button" class="btn btn-sm btn-clasico-blanco btn-agregar" data-toggle="modal" onclick="agregarProducto()">
+                                        <i class="fas fa-plus-circle" style="font-size:18px;"></i> Agregar
+                                    </button>
                                 <?php }?>
                                 </div>
                             </div>
-                        </div> 
-
-                        <div class="card-body">	
-
+                        </div>
+                        <div class="card-body">
 					<div class="table-responsive" style="overflow-y: auto; max-height: 400px;">
 						<table id="tblDispensacionDetalle" class="table table-hover table-sm">
 							<thead>
@@ -726,26 +729,34 @@ function pdf_documento_dispensacion(){
                                 <?php 
                                     if($id>0){
                                 ?>
-                                <button style="font-size:12px;margin-left:10px; margin-right:10px" type="button" class="btn btn-sm btn-primary" data-toggle="modal" onclick="pdf_documento_dispensacion()"><i class="fa fa-edit" ></i>Imprimir</button>
+                                <button style="font-size:12px;margin-left:10px; margin-right:10px" type="button" class="btn btn-sm btn-clasico btn-enviar" data-toggle="modal" onclick="pdf_documento_dispensacion()">
+                                    <i class="far fa-file-pdf" style="font-size:18px;"></i>Imprimir
+                                </button>
                                 <!--<button style="font-size:12px;margin-left:10px; margin-right:100px" type="button" class="btn btn-sm btn-warning" data-toggle="modal" onclick="pdf_guia()" ><i class="fa fa-edit"></i>Imprimir Gu&iacute;a Remisi&oacute;n Electronica</button>
                                 <a href="javascript:void(0)" onClick="fn_pdf_documento()" class="btn btn-sm btn-primary" style="margin-right:100px">Imprimir</a>-->
                                 <?php 
                                     }
                                 ?>
                                 <?php if($id_user==$dispensacion->id_usuario_inserta && $id>0){?>
-                                    <a href="javascript:void(0)" onClick="fn_save_dispensacion()" class="btn btn-sm btn-success" style="margin-right:10px">Guardar</a>
+                                    <!--<a href="javascript:void(0)" onClick="fn_save_dispensacion()" class="btn btn-sm btn-success" style="margin-right:10px">Guardar</a>-->
+                                    <button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-nuevo" data-toggle="modal" onclick="fn_save_dispensacion()">
+                                        <i class="fas fa-save" style="font-size:18px;"></i> Guardar
+                                    </button>
                                 <?php }?>
                                 <?php if($id==0){?>
-                                    <a href="javascript:void(0)" onClick="fn_save_dispensacion()" class="btn btn-sm btn-success" style="margin-right:10px">Guardar</a>
+                                    <!--<a href="javascript:void(0)" onClick="fn_save_dispensacion()" class="btn btn-sm btn-success" style="margin-right:10px">Guardar</a>-->
+                                    <button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-nuevo" data-toggle="modal" onclick="fn_save_dispensacion()">
+                                        <i class="fas fa-save" style="font-size:18px;"></i> Guardar
+                                    </button>
                                 <?php }?>
-                                <a href="javascript:void(0)" onClick="$('#openOverlayOpc').modal('hide');" class="btn btn-sm btn-info" style="">Cerrar</a>
+                                <!--<a href="javascript:void(0)" onClick="$('#openOverlayOpc').modal('hide');" class="btn btn-sm btn-info" style="">Cerrar</a>-->
+                                <button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-cerrar" data-toggle="modal" onclick="$('#openOverlayOpc').modal('hide');">
+                                    <i class="fas fa-times-circle" style="font-size:18px;"></i> Cerrar
+                                </button>
                             </div>
-                                                
                         </div>
-                    </div> 
-
+                    </div>
 				</div>
-                            
                     </div>
                 </form>
                 </div>

@@ -301,16 +301,14 @@ function fn_save_requisito(){
 					<div class="form-group">
 						<div class="col-sm-12 controls">
 							<div class="btn-group btn-group-md float-right" role="group" aria-label="Log Viewer Actions">
-								<a href="javascript:void(0)" onClick="$('#openOverlayOpc').modal('hide');" class="btn btn-md btn-success" style="margin-bottom:15px;">Cerrar</a>
-								
-							</div>
-												
+								<!--<a href="javascript:void(0)" onClick="$('#openOverlayOpc').modal('hide');" class="btn btn-md btn-success" style="margin-bottom:15px;">Cerrar</a>-->
+                                <button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-cerrar" data-toggle="modal" onclick="$('#openOverlayOpc').modal('hide');">
+                                    <i class="fas fa-times-circle" style="font-size:18px;"></i> Cerrar
+                                </button>
+							</div>		
 						</div>
-					</div> 
-					
+					</div>
               </div>
-			  
-              
           </div>
           <!-- /.box -->
           

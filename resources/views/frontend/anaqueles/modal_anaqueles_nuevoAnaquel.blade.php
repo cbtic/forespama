@@ -396,7 +396,6 @@ function fn_save_anaquel(){
                             <input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
                             <input type="hidden" name="id" id="id" value="<?php echo $id?>">
                             
-                            
                             <div class="row" style="padding-left:10px">
                                 
                                 <div class="col-lg-12">
@@ -419,26 +418,22 @@ function fn_save_anaquel(){
                                     <div class="form-group">
                                         <label class="control-label form-control-sm">Fila</label>
                                         <input id="fila" name="fila" on class="form-control form-control-sm"  value="<?php echo $anaquel->codigo?>" type="text">
-                                    
                                     </div>
                                 </div>
                                 <div class="col-lg-4">
                                     <div class="form-group">
                                         <label class="control-label form-control-sm">Sigla</label>
                                         <input id="sigla" name="sigla" on class="form-control form-control-sm"  value="<?php echo $anaquel->codigo?>" type="text">
-                                    
                                     </div>
                                 </div>
                                 <div class="col-lg-4">
                                     <div class="form-group">
                                         <label class="control-label form-control-sm">C&oacute;digo</label>
                                         <input id="codigo" name="codigo" on class="form-control form-control-sm"  value="<?php echo $anaquel->codigo?>" type="text">
-                                    
                                     </div>
                                 </div>
                             </div>
                             <div class="row" style="padding-left:10px">
-                            
                                 <div class="col-lg-12">
                                     <div class="form-group">
                                         <label class="control-label form-control-sm">Denominaci&oacute;n</label>
@@ -452,20 +447,19 @@ function fn_save_anaquel(){
                         <div style="margin-top:15px" class="form-group">
                             <div class="col-sm-12 controls">
                                 <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
-                                    <a href="javascript:void(0)" onClick="fn_save_anaquel()" class="btn btn-sm btn-success">Registrar</a>
+                                    <!--<a href="javascript:void(0)" onClick="fn_save_anaquel()" class="btn btn-sm btn-success">Registrar</a>-->
+                                    <button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-nuevo" data-toggle="modal" onclick="fn_save_anaquel()">
+                                        <i class="fas fa-save" style="font-size:18px;"></i> Guardar
+                                    </button>
                                 </div>
-                                                    
                             </div>
-                        </div> 
-                            
+                        </div>
                     </div>
-                    
                 </div>
                 <!-- /.box -->
                 </form>
             </div>
             <!--/.col (left) -->
-
         </div>
         <!-- /.row -->
     </section>

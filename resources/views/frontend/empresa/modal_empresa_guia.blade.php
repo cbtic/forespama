@@ -388,98 +388,77 @@ container: '#myModal modal-body'
 					</div>
 					-->
 					<div class="row">
-						
 						<?php 
 							$readonly=$id>0?"readonly='readonly'":'';
 							$readonly_=$id>0?'':"readonly='readonly'";
 						?>
-
 						<div class="col-lg-12">
 							<div class="form-group">
 								<label class="control-label">Ruc</label>
 								<input id="ruc_" name="ruc_" class="form-control form-control-sm"  value="<?php echo $empresa->ruc?>" type="text" <?php echo $readonly?> >
 							</div>
 						</div>
-						
 					</div>
-					
 					<div class="row">
-						
 						<div class="col-lg-12">
 							<div class="form-group">
 								<label class="control-label">Raz&oacute;n Social</label>
 								<input id="razon_social_" name="razon_social_" class="form-control form-control-sm"  value="<?php echo $empresa->razon_social?>" type="text" readonly>
 							</div>
 						</div>
-						
 					</div>
-										
 					<div class="row">
-						
 						<div class="col-lg-12">
 							<div class="form-group">
 								<label class="control-label">Direcci&oacute;n</label>
 								<input id="direccion_" name="direccion_" class="form-control form-control-sm"  value="<?php echo $empresa->direccion?>" type="text" >
 							</div>
 						</div>
-						
 					</div>
-
 					<div class="row">
-						
 						<div class="col-lg-6">
 							<div class="form-group" style="padding-top:0px;padding-bottom:0px;margin-top:0px;margin-bottom:0px">
 								<label class="control-label">Tel&eacute;fono</label>
 								<input id="telefono_" name="telefono_" class="form-control form-control-sm"  value="<?php echo $empresa->telefono?>" type="text">
 							</div>
 						</div>
-						
 						<div class="col-lg-6">
 							<div class="form-group" style="padding-top:0px;padding-bottom:0px;margin-top:0px;margin-bottom:0px">
 								<label class="control-label">Correo</label>
 								<input id="email_" name="email_" class="form-control form-control-sm" value="<?php echo $empresa->email?>" type="text">
 							</div>
 						</div>
-						
 					</div>
-<!--					
-					<div class="row">						
+					<!--<div class="row">						
 						<div class="col-lg-6">
 							<div class="form-group" style="padding-top:0px;padding-bottom:0px;margin-top:0px;margin-bottom:0px">
 								<label class="control-label">Costo Estacionamiento</label>
-								<input id="costo_estacionamiento_" name="costo_estacionamiento_" class="form-control form-control-sm"  value="<?php echo $empresa->costo_estacionamiento?>" type="text">
+								<input id="costo_estacionamiento_" name="costo_estacionamiento_" class="form-control form-control-sm"  value="<?php //echo $empresa->costo_estacionamiento?>" type="text">
 							</div>
 						</div>
 						
 						<div class="col-lg-6">
 							<div class="form-group" style="padding-top:0px;padding-bottom:0px;margin-top:0px;margin-bottom:0px">
 								<label class="control-label">Costo Volumen</label>
-								<input id="costo_volumen_" name="costo_volumen_" class="form-control form-control-sm"  value="<?php echo $empresa->costo_volumen?>" type="text">
+								<input id="costo_volumen_" name="costo_volumen_" class="form-control form-control-sm"  value="<?php //echo $empresa->costo_volumen?>" type="text">
 							</div>
-						</div>						
-					</div>
--->
-					
+						</div>
+					</div>-->
 					<div style="margin-top:10px" class="form-group">
 						<div class="col-sm-12 controls">
 							<div class="btn-group btn-group-sm" role="group" aria-label="Log Viewer Actions">
-								<a href="javascript:void(0)" onClick="fn_save()" class="btn btn-sm btn-success">Guardar</a>
+								<!--<a href="javascript:void(0)" onClick="fn_save()" class="btn btn-sm btn-success">Guardar</a>-->
+								<button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-nuevo" data-toggle="modal" onclick="fn_save()">
+									<i class="fas fa-save" style="font-size:18px;"></i> Guardar
+								</button>
 							</div>
-												
 						</div>
-					</div> 
-					
+					</div>
               </div>
-			  
-              
           </div>
           <!-- /.box -->
-          
-
         </div>
         <!--/.col (left) -->
-            
-     
           </div>
           <!-- /.row -->
         </section>

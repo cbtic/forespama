@@ -241,7 +241,6 @@ function fn_save_familia(){
                             
                             
                             <div class="row" style="padding-left:10px">
-                                
                                 <div class="col-lg-8">
                                     <div class="form-group">
                                         <label class="control-label form-control-sm">Denominaci&oacute;n</label>
@@ -254,23 +253,21 @@ function fn_save_familia(){
                         <div style="margin-top:15px" class="form-group">
                             <div class="col-sm-12 controls">
                                 <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
-                                    <a href="javascript:void(0)" onClick="fn_save_familia()" class="btn btn-sm btn-success">Registrar</a>
+                                    <!--<a href="javascript:void(0)" onClick="fn_save_familia()" class="btn btn-sm btn-success">Registrar</a>-->
+                                    <button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-nuevo" data-toggle="modal" onclick="fn_save_familia()">
+                                        <i class="fas fa-save" style="font-size:18px;"></i> Guardar
+                                    </button>
                                 </div>
-                                                    
                             </div>
-                        </div> 
-                            
+                        </div>
                     </div>
                 </form>
                 </div>
                 <!-- /.box -->
-                
             </div>
             <!--/.col (left) -->
-
         </div>
         <!-- /.row -->
-    
 <!-- /.content -->
 </div>
 <!-- /.content-wrapper -->
