@@ -1679,9 +1679,9 @@ function DescargarArchivosExcelIndividual(){
                     <input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
                     <input type="hidden" name="id" id="id" value="<?php echo $id?>">
                     <input type="hidden" name="id_descuento_usuario" id="id_descuento_usuario" value="<?php echo $id_descuento_usuario?>">
-                    <input type="hidden" name="id_autorizacion" id="id_autorizacion" value="2">
+                    <input type="hidden" name="id_autorizacion" id="id_autorizacion" value="<?php echo $id_autorizacion?>">
                     <input type="hidden" name="id_proceso" id="id_proceso" value="1">
-                    <input type="hidden" name="necesita_aprobacion_descuento" id="necesita_aprobacion_descuento" value="0">
+                    <!--<input type="hidden" name="necesita_aprobacion_descuento" id="necesita_aprobacion_descuento" value="0">-->
                     
                     <div class="row" style="padding-left:10px">
                         <div class="col-lg-11">

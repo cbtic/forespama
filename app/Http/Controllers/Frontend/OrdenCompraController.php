@@ -41,6 +41,8 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
 use App\Models\User;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Shared\Date;
 
 class OrdenCompraController extends Controller
 {
@@ -201,9 +203,11 @@ class OrdenCompraController extends Controller
             }else{
                 $id_descuento_usuario = 0;
             }
+            $id_autorizacion = $orden_compra->id_autorizacion;
 		}else{
 			$orden_compra = new OrdenCompra;
             $id_descuento_usuario = 0;
+            $id_autorizacion = 2;
 		}
 
         $proveedor = $empresa_model->getEmpresaAll();
@@ -224,7 +228,7 @@ class OrdenCompraController extends Controller
         $prioridad = $tablaMaestra_model->getMaestroByTipo(93);
         $canal = $tablaMaestra_model->getMaestroByTipo(98);
         //dd($id_persona_proceso);exit();
-		return view('frontend.orden_compra.modal_orden_compra_nuevoOrdenCompra',compact('id','orden_compra','tipo_documento','proveedor','producto','marca','estado_bien','unidad','igv_compra','descuento','almacen','unidad_origen','id_user','moneda','vendedor','tipo_documento_cliente','persona','prioridad','canal','id_descuento_usuario','id_proceso','id_persona_proceso','proceso'));
+		return view('frontend.orden_compra.modal_orden_compra_nuevoOrdenCompra',compact('id','orden_compra','tipo_documento','proveedor','producto','marca','estado_bien','unidad','igv_compra','descuento','almacen','unidad_origen','id_user','moneda','vendedor','tipo_documento_cliente','persona','prioridad','canal','id_descuento_usuario','id_proceso','id_persona_proceso','proceso','id_autorizacion'));
 
     }
 
@@ -917,6 +921,7 @@ class OrdenCompraController extends Controller
         $id_almacen_salida = 3;
         $tienda_asignada = 1;
         $id_empresa_compra = 459;
+        $id_empresa_vende = 30;
         $id_marca = 278;
         $id_estado_producto = 1;
         $id_moneda = 1;
@@ -932,8 +937,11 @@ class OrdenCompraController extends Controller
 		$sheet = $spreadsheet->getActiveSheet();
 
         $numero_orden_compra_cliente = $sheet->getCell("B7")->getCalculatedValue();
-		$fecha_ingreso = $sheet->getCell("B8")->getCalculatedValue();
-		$fecha_vencimiento = $sheet->getCell("B9")->getCalculatedValue();
+		$fecha_ingreso_excel = $sheet->getCell("B8")->getValue();
+        $fecha_venc_excel = $sheet->getCell("B9")->getValue();
+
+        $fecha_ingreso = Carbon::instance(Date::excelToDateTimeObject($fecha_ingreso_excel));
+        $fecha_vencimiento = Carbon::instance(Date::excelToDateTimeObject($fecha_venc_excel));
 		$tienda_completo = $sheet->getCell("B10")->getCalculatedValue();
         $numero_tienda = explode('-', $tienda_completo)[0];
 
@@ -942,62 +950,52 @@ class OrdenCompraController extends Controller
 
         $rowIndex = 18;
 		$precio_total_final = 0;
+        //dd($numero_orden_compra_cliente+"-"+$fecha_ingreso);exit();
 
+        $OrdenCompraExiste = OrdenCompra::where("numero_orden_compra_cliente",$numero_orden_compra_cliente)->where("id_empresa_compra",459)->where("estado","1")->get();
+        
+        if(count($OrdenCompraExiste)>0){
+            $array["cantidad"] = count($OrdenCompraExiste);
+            echo json_encode($array);
+            exit();
+        }
+
+        $orden_compra_model = new OrdenCompra;
+        $codigo_orden_compra = $orden_compra_model->getCodigoOrdenCompra($id_tipo_documento);
+        $numero_orden_compra = $codigo_orden_compra[0]->codigo;
+
+        $ordenCompra = new OrdenCompra;
+        $ordenCompra->id_unidad_origen = $id_unidad_origen;
+        $ordenCompra->id_empresa_vende = $id_empresa_vende;
+        $ordenCompra->id_empresa_compra = $id_empresa_compra;
+        $ordenCompra->fecha_orden_compra = $fecha_ingreso;
+        $ordenCompra->numero_orden_compra = $numero_orden_compra;
+        $ordenCompra->numero_orden_compra_cliente = $numero_orden_compra_cliente;
+        $ordenCompra->id_tipo_documento = $id_tipo_documento;
+        $ordenCompra->estado = $estado;
+        $ordenCompra->igv_compra = $igv_compra;
+        $ordenCompra->cerrado = $cerrado;
+        $ordenCompra->id_almacen_destino = $id_almacen_destino;
+        $ordenCompra->id_almacen_salida = $id_almacen_salida;
+        $ordenCompra->tienda_asignada = $tienda_asignada;
+        $ordenCompra->id_moneda = $id_moneda;
+        $ordenCompra->moneda = $moneda;
+        $ordenCompra->id_usuario_inserta = $id_user;
+        $ordenCompra->id_vendedor = $id_vendedor;
+        $ordenCompra->id_tipo_cliente = $id_tipo_cliente;
+        $ordenCompra->fecha_vencimiento = $fecha_vencimiento;
+        $ordenCompra->id_canal = $id_canal;
+        $ordenCompra->save();
+        $id_orden_compra = $ordenCompra->id;
+        
         foreach($sheet as $registro){
 
             $sku = $sheet->getCell("A".$rowIndex)->getCalculatedValue();
 			$cantidad = $sheet->getCell("G".$rowIndex)->getCalculatedValue();
 			$costo  = $sheet->getCell("I".$rowIndex)->getCalculatedValue();
 			$rowIndex++; // AVANZAR FILA SIEMPRE
-
-            $empresa = Empresa::where("ruc",str_replace("-","",$row['RUT_PROVEEDOR']))->first();
-
-            $id_empresa_vende = $empresa->id;
-            $fecha_orden_compra = Carbon::createFromFormat('d/m/Y', $row['FECHA_AUTORIZACION']);
-            $numero_orden_compra_cliente = $row['NRO_OC'];
-            $fecha_vencimiento = Carbon::createFromFormat('d/m/Y', $row['FECHA_DESDE']);
-
-            if($count == 0){
-
-                $OrdenCompraExiste = OrdenCompra::where("numero_orden_compra_cliente",$numero_orden_compra_cliente)->where("estado","1")->get();
             
-                if(count($OrdenCompraExiste)>0){
-                    $array["cantidad"] = count($OrdenCompraExiste);
-                    echo json_encode($array);
-                    exit();
-                }
-                
-                $orden_compra_model = new OrdenCompra;
-		        $codigo_orden_compra = $orden_compra_model->getCodigoOrdenCompra($id_tipo_documento);
-                $numero_orden_compra = $codigo_orden_compra[0]->codigo;
-
-                $ordenCompra = new OrdenCompra;
-                $ordenCompra->id_unidad_origen = $id_unidad_origen;
-                $ordenCompra->id_empresa_vende = $id_empresa_vende;
-                $ordenCompra->id_empresa_compra = $id_empresa_compra;
-                $ordenCompra->fecha_orden_compra = $fecha_orden_compra;
-                $ordenCompra->numero_orden_compra = $numero_orden_compra;
-                $ordenCompra->numero_orden_compra_cliente = $numero_orden_compra_cliente;
-                $ordenCompra->id_tipo_documento = $id_tipo_documento;
-                $ordenCompra->estado = $estado;
-                $ordenCompra->igv_compra = $igv_compra;
-                $ordenCompra->cerrado = $cerrado;
-                $ordenCompra->id_almacen_destino = $id_almacen_destino;
-                $ordenCompra->id_almacen_salida = $id_almacen_salida;
-                $ordenCompra->tienda_asignada = $tienda_asignada;
-                $ordenCompra->id_moneda = $id_moneda;
-                $ordenCompra->moneda = $moneda;
-                $ordenCompra->id_usuario_inserta = $id_user;
-                $ordenCompra->id_vendedor = $id_vendedor;
-                $ordenCompra->id_tipo_cliente = $id_tipo_cliente;
-                $ordenCompra->fecha_vencimiento = $fecha_vencimiento;
-                $ordenCompra->id_canal = $id_canal;
-                $ordenCompra->save();
-                $id_orden_compra = $ordenCompra->id;
-
-            }
-            
-            $equivalenciaProducto = EquivalenciaProducto::where("codigo_empresa",trim($row['SKU']))->first();
+            $equivalenciaProducto = EquivalenciaProducto::where("codigo_empresa",trim($sku))->first();
             $id_producto = $equivalenciaProducto->id_producto;
             $producto = Producto::find($id_producto);
             $cantidad_requerida = $row['CANTIDAD_PROD'];
@@ -1034,7 +1032,6 @@ class OrdenCompraController extends Controller
             $ordenCompraDetalle->id_usuario_inserta = $id_user;
             $ordenCompraDetalle->save();
 
-            $count++;
         }
 
         $ordenCompraTotales = OrdenCompra::find($id_orden_compra);
@@ -1052,8 +1049,6 @@ class OrdenCompraController extends Controller
         $autorizacion_orden_compra->estado = 1;
         $autorizacion_orden_compra->save();
         
-        fclose($file);
-
         $array["cantidad"] = count($OrdenCompraExiste);
         echo json_encode($array);
 
@@ -2431,12 +2426,12 @@ class OrdenCompraController extends Controller
         /*$orden_compra->id_autorizacion = $request->id_autorizacion;
         $orden_compra->id_usuario_autoriza = $id_user;
         $orden_compra->save();*/
-
+        
         if($request->aprobacion_total == 1){
 
             $autorizacion_orden_compra = AutorizacionOrdenCompra::where('id_orden_compra',$orden_compra->id)->where('estado',1)->orderBy('id', 'desc')->first();
 
-            //dd($autorizacion_orden_compra);exit();
+            //dd($autorizacion_orden_compra->id);exit();
 
             if($autorizacion_orden_compra->id_proceso_pedido == $request->id_proceso){
                 $autorizacion_orden_compra->id_autorizacion = 2;
@@ -2452,6 +2447,11 @@ class OrdenCompraController extends Controller
                 $autorizacion_orden_compra_siguiente_proceso->id_usuario_inserta = $id_user;
                 $autorizacion_orden_compra_siguiente_proceso->estado = 1;
                 $autorizacion_orden_compra_siguiente_proceso->save();
+
+                $orden_compra_principal = OrdenCompra::find($orden_compra->id);
+                $orden_compra_principal->id_autorizacion = 2;
+                $orden_compra_principal->id_usuario_autoriza = $id_user;
+                $orden_compra_principal->save();
             }
         }
 
@@ -2805,7 +2805,7 @@ class OrdenCompraController extends Controller
 
         $id_user = Auth::user()->id;
 
-        $necesita_aprobacion_descuento = $request->necesita_aprobacion_descuento;
+        $id_autorizacion = $request->id_autorizacion;
 
         $autorizacion_orden_compra = AutorizacionOrdenCompra::where('id_orden_compra',$request->id)->where('estado',1)->orderBy('id', 'desc')->first();
 
@@ -2819,7 +2819,7 @@ class OrdenCompraController extends Controller
             $autorizacion_orden_compra->estado = 1;
             $autorizacion_orden_compra->save();
         
-            if($autorizacion_orden_compra->id_proceso_pedido == 1 && $necesita_aprobacion_descuento == 0){
+            if($autorizacion_orden_compra->id_proceso_pedido == 1 && $id_autorizacion == 0){
                 $autorizacion_orden_compra_siguiente_proceso = new AutorizacionOrdenCompra;
                 $autorizacion_orden_compra_siguiente_proceso->id_orden_compra = $request->id;
                 $autorizacion_orden_compra_siguiente_proceso->id_proceso_pedido = $request->id_proceso+2;

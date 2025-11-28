@@ -842,4 +842,4 @@ Route::post('persona_proceso/send_persona_proceso', [PersonaProcesoController::c
 Route::get('persona_proceso/eliminar_persona_proceso/{id}/{estado}', [PersonaProcesoController::class, 'eliminar_persona_proceso'])->name('persona_proceso.eliminar_persona_proceso');
 Route::post('orden_compra/listar_orden_compra_proceso_ajax', [OrdenCompraController::class, 'listar_orden_compra_proceso_ajax'])->name('orden_compra.listar_orden_compra_proceso_ajax');
 Route::get('orden_compra/exportar_listar_orden_compra_individual/{id}', [OrdenCompraController::class, 'exportar_listar_orden_compra_individual'])->name('orden_compra.exportar_listar_orden_compra_individual');
-
+Route::post('orden_compra/upload_orden_compra_promart', [OrdenCompraController::class, 'upload_orden_compra_promart'])->name('orden_compra.upload_orden_compra_promart');
