@@ -903,6 +903,161 @@ class OrdenCompraController extends Controller
         echo json_encode($array);
 
     }
+
+    public function importar_archivo_promart($archivo)
+    {
+
+        $id_user = Auth::user()->id;
+        $id_unidad_origen = 4;
+        $id_tipo_documento = 2;
+        $estado = 1;
+        $igv_compra = 2;
+        $cerrado = 1;
+        $id_almacen_destino = NULL;
+        $id_almacen_salida = 3;
+        $tienda_asignada = 1;
+        $id_empresa_compra = 459;
+        $id_marca = 278;
+        $id_estado_producto = 1;
+        $id_moneda = 1;
+        $moneda = "SOLES";
+        $sub_total_general = 0;
+        $igv_general = 0;
+        $total_general = 0;
+        $id_vendedor = 53;
+        $id_tipo_cliente = 5;
+        $id_canal = 4;
+
+        $spreadsheet = IOFactory::load(public_path("orden_compra_promart/".$archivo));
+		$sheet = $spreadsheet->getActiveSheet();
+
+        $numero_orden_compra_cliente = $sheet->getCell("B7")->getCalculatedValue();
+		$fecha_ingreso = $sheet->getCell("B8")->getCalculatedValue();
+		$fecha_vencimiento = $sheet->getCell("B9")->getCalculatedValue();
+		$tienda_completo = $sheet->getCell("B10")->getCalculatedValue();
+        $numero_tienda = explode('-', $tienda_completo)[0];
+
+        $tienda = Tienda::where("numero_tienda", $numero_tienda)->where("estado",1)->first();
+        $id_tienda = $tienda->id;
+
+        $rowIndex = 18;
+		$precio_total_final = 0;
+
+        foreach($sheet as $registro){
+
+            $sku = $sheet->getCell("A".$rowIndex)->getCalculatedValue();
+			$cantidad = $sheet->getCell("G".$rowIndex)->getCalculatedValue();
+			$costo  = $sheet->getCell("I".$rowIndex)->getCalculatedValue();
+			$rowIndex++; // AVANZAR FILA SIEMPRE
+
+            $empresa = Empresa::where("ruc",str_replace("-","",$row['RUT_PROVEEDOR']))->first();
+
+            $id_empresa_vende = $empresa->id;
+            $fecha_orden_compra = Carbon::createFromFormat('d/m/Y', $row['FECHA_AUTORIZACION']);
+            $numero_orden_compra_cliente = $row['NRO_OC'];
+            $fecha_vencimiento = Carbon::createFromFormat('d/m/Y', $row['FECHA_DESDE']);
+
+            if($count == 0){
+
+                $OrdenCompraExiste = OrdenCompra::where("numero_orden_compra_cliente",$numero_orden_compra_cliente)->where("estado","1")->get();
+            
+                if(count($OrdenCompraExiste)>0){
+                    $array["cantidad"] = count($OrdenCompraExiste);
+                    echo json_encode($array);
+                    exit();
+                }
+                
+                $orden_compra_model = new OrdenCompra;
+		        $codigo_orden_compra = $orden_compra_model->getCodigoOrdenCompra($id_tipo_documento);
+                $numero_orden_compra = $codigo_orden_compra[0]->codigo;
+
+                $ordenCompra = new OrdenCompra;
+                $ordenCompra->id_unidad_origen = $id_unidad_origen;
+                $ordenCompra->id_empresa_vende = $id_empresa_vende;
+                $ordenCompra->id_empresa_compra = $id_empresa_compra;
+                $ordenCompra->fecha_orden_compra = $fecha_orden_compra;
+                $ordenCompra->numero_orden_compra = $numero_orden_compra;
+                $ordenCompra->numero_orden_compra_cliente = $numero_orden_compra_cliente;
+                $ordenCompra->id_tipo_documento = $id_tipo_documento;
+                $ordenCompra->estado = $estado;
+                $ordenCompra->igv_compra = $igv_compra;
+                $ordenCompra->cerrado = $cerrado;
+                $ordenCompra->id_almacen_destino = $id_almacen_destino;
+                $ordenCompra->id_almacen_salida = $id_almacen_salida;
+                $ordenCompra->tienda_asignada = $tienda_asignada;
+                $ordenCompra->id_moneda = $id_moneda;
+                $ordenCompra->moneda = $moneda;
+                $ordenCompra->id_usuario_inserta = $id_user;
+                $ordenCompra->id_vendedor = $id_vendedor;
+                $ordenCompra->id_tipo_cliente = $id_tipo_cliente;
+                $ordenCompra->fecha_vencimiento = $fecha_vencimiento;
+                $ordenCompra->id_canal = $id_canal;
+                $ordenCompra->save();
+                $id_orden_compra = $ordenCompra->id;
+
+            }
+            
+            $equivalenciaProducto = EquivalenciaProducto::where("codigo_empresa",trim($row['SKU']))->first();
+            $id_producto = $equivalenciaProducto->id_producto;
+            $producto = Producto::find($id_producto);
+            $cantidad_requerida = $row['CANTIDAD_PROD'];
+            $id_unidad_medida = $producto->id_unidad_producto;
+
+            $valor_unitario = $row['COSTO_UNI'];
+            $precio_venta = 1.18*$valor_unitario;
+
+            $total = $precio_venta * $cantidad_requerida;
+            $valor_venta_bruto = $total / 1.18;
+            $igv = $valor_venta_bruto * 0.18;
+            $sub_total = $total - $igv;
+
+            $sub_total_general += $sub_total;
+            $igv_general += $igv;
+            $total_general += $total;
+
+            $ordenCompraDetalle = new OrdenCompraDetalle;
+            $ordenCompraDetalle->id_orden_compra = $id_orden_compra;
+            $ordenCompraDetalle->id_producto = $id_producto;
+            $ordenCompraDetalle->cantidad_requerida = $cantidad_requerida;
+            $ordenCompraDetalle->id_marca = $id_marca;
+            $ordenCompraDetalle->cerrado = $cerrado;
+            $ordenCompraDetalle->estado = $estado;
+            $ordenCompraDetalle->id_unidad_medida = $id_unidad_medida;
+            $ordenCompraDetalle->id_estado_producto = $id_estado_producto;
+            $ordenCompraDetalle->precio_venta = round($precio_venta, 2);
+            $ordenCompraDetalle->precio = round($valor_unitario, 2);
+            $ordenCompraDetalle->valor_venta_bruto = round($sub_total, 2);
+            $ordenCompraDetalle->valor_venta = round($sub_total, 2);
+            $ordenCompraDetalle->sub_total = round($sub_total, 2);
+            $ordenCompraDetalle->igv = round($igv, 2);
+            $ordenCompraDetalle->total = round($total, 2);
+            $ordenCompraDetalle->id_usuario_inserta = $id_user;
+            $ordenCompraDetalle->save();
+
+            $count++;
+        }
+
+        $ordenCompraTotales = OrdenCompra::find($id_orden_compra);
+        $ordenCompraTotales->sub_total = round($sub_total_general, 2);
+        $ordenCompraTotales->igv = round($igv_general, 2);
+        $ordenCompraTotales->total = round($total_general, 2);
+        $ordenCompraTotales->save();
+
+        $autorizacion_orden_compra = new AutorizacionOrdenCompra;
+        $autorizacion_orden_compra->id_orden_compra = $id_orden_compra;
+        $autorizacion_orden_compra->id_proceso_pedido = 4;
+        $autorizacion_orden_compra->id_autorizacion = 2;
+        $autorizacion_orden_compra->id_usuario_autoriza = $id_user;
+        $autorizacion_orden_compra->id_usuario_inserta = $id_user;
+        $autorizacion_orden_compra->estado = 1;
+        $autorizacion_orden_compra->save();
+        
+        fclose($file);
+
+        $array["cantidad"] = count($OrdenCompraExiste);
+        echo json_encode($array);
+
+    }
     
     function extension($filename){$file = explode(".",$filename); return strtolower(end($file));}
 
@@ -924,6 +1079,27 @@ class OrdenCompraController extends Controller
 		$archivo = $filename.".".$type;
 		
 		$this->importar_archivo($archivo);
+		
+	}
+
+    public function upload_orden_compra_promart(Request $request){
+		
+		$filename = date("YmdHis") . substr((string)microtime(), 1, 6);
+		$type="";
+		
+        $path = "orden_compra_promart";
+        if (!is_dir($path)) {
+            mkdir($path);
+        }
+        
+        $filepath = public_path('orden_compra_promart/');
+		
+		$type=$this->extension($_FILES["file"]["name"]);
+		move_uploaded_file($_FILES["file"]["tmp_name"], $filepath . $filename.".".$type);
+		
+		$archivo = $filename.".".$type;
+		
+		$this->importar_archivo_promart($archivo);
 		
 	}
 

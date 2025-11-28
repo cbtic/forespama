@@ -133,6 +133,7 @@ class ProductosController extends Controller
             $codigo_producto = $producto_model->getCodigoProducto($request->familia, $request->sub_familia);
 		}else{
 			$producto = Producto::find($request->id);
+            $producto_model = new Producto;
             //$codigo_producto = $request->codigo;
             $codigo_producto = $producto_model->getCodigoProducto($request->familia, $request->sub_familia);
 		}
