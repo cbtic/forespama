@@ -473,31 +473,45 @@ label.form-control-sm{
 										<i class="fas fa-search" style="font-size:18px;"></i> Buscar
 									</button>
 								</div>
+								@hasanyrole('Administrator|Orden Compra Sodimac')
 								<div class="row">
-									<?php if($id_user == 1){?>
-										<span class="btn btn-sm btn-info btn-file float-left icono-botones2" style="margin-left:10px">
-											<i class="fas fa-folder-open"></i> Examinar OC <input id="image" name="image" type="file" />
-										</span>
-										
-										<i id="fileExcel" class="fa fa-file-excel" style="display:none;color:#00B300;font-size:35px;block;float:left;padding-left:10px"></i>
-										
-										<!--<input type="button" class="btn btn-success upload" value="Subir OC" style="margin-left:10px;float:left">-->
-										<button type="button" class="btn btn-sm btn-success upload float-left icono-botones2" style="margin-left:10px" title="Subir archivo OC">
-											<i class="fas fa-upload"></i> Subir OC
-										</button>
+									<span class="btn btn-sm btn-info btn-file float-left icono-botones2" style="margin-left:10px">
+										<i class="fas fa-folder-open"></i> Examinar OC <input id="image" name="image" type="file" />
+									</span>
+									
+									<i id="fileExcel" class="fa fa-file-excel" style="display:none;color:#00B300;font-size:35px;block;float:left;padding-left:10px"></i>
+									
+									<!--<input type="button" class="btn btn-success upload" value="Subir OC" style="margin-left:10px;float:left">-->
+									<button type="button" class="btn btn-sm btn-success upload float-left icono-botones2" style="margin-left:10px" title="Subir archivo OC">
+										<i class="fas fa-upload"></i> Subir OC
+									</button>
 
-										<span class="btn btn-sm btn-info btn-file float-left icono-botones2" style="margin-left:10px">
-											<i class="fas fa-folder-open"></i> Examinar OD <input id="image2" name="image2" type="file" />
-										</span>
-										
-										<i id="fileExcel2" class="fa fa-file-excel" style="display:none;color:#00B300;font-size:35px;block;float:left;padding-left:10px"></i>
-										
-										<!--<input type="button" class="btn btn-success upload2" value="Subir OD" style="margin-left:10px;float:left">-->
-										<button type="button" class="btn btn-sm btn-success upload2 float-left icono-botones2" style="margin-left:10px" title="Subir archivo OD">
-											<i class="fas fa-upload"></i> Subir OD
-										</button>
-									<?php }?>
+									<span class="btn btn-sm btn-info btn-file float-left icono-botones2" style="margin-left:10px">
+										<i class="fas fa-folder-open"></i> Examinar OD <input id="image2" name="image2" type="file" />
+									</span>
+									
+									<i id="fileExcel2" class="fa fa-file-excel" style="display:none;color:#00B300;font-size:35px;block;float:left;padding-left:10px"></i>
+									
+									<!--<input type="button" class="btn btn-success upload2" value="Subir OD" style="margin-left:10px;float:left">-->
+									<button type="button" class="btn btn-sm btn-success upload2 float-left icono-botones2" style="margin-left:10px" title="Subir archivo OD">
+										<i class="fas fa-upload"></i> Subir OD
+									</button>
 								</div>
+								@endhasanyrole
+								@hasanyrole('Administrator|Orden Compra Promart')
+								<div class="row">
+									<span class="btn btn-sm btn-info btn-file float-left icono-botones2" style="margin-left:10px">
+										<i class="fas fa-folder-open"></i> Examinar OC - Promart<input id="image3" name="image3" type="file" />
+									</span>
+									
+									<i id="fileExcel3" class="fa fa-file-excel" style="display:none;color:#00B300;font-size:35px;block;float:left;padding-left:10px"></i>
+									
+									<!--<input type="button" class="btn btn-success upload" value="Subir OC" style="margin-left:10px;float:left">-->
+									<button type="button" class="btn btn-sm btn-success upload3 float-left icono-botones2" style="margin-left:10px" title="Subir archivo OC - Promart">
+										<i class="fas fa-upload"></i> Subir OC - Promart
+									</button>
+								</div>
+								@endhasanyrole
 							</div>
 						</div>
 					</div>
