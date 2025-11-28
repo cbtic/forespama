@@ -41,7 +41,7 @@ BEGIN
     left join tiendas t on tdoc.id_tienda = t.id
     left join users u on oc.id_vendedor = u.id
     left join productos p on ocd.id_producto = p.id
-	left join equivalencia_productos ep on ep.codigo_producto = p.codigo 
+	left join equivalencia_productos ep on ep.codigo_producto = p.codigo and ep.id_empresa = oc.id_empresa_compra
     left join (
         select distinct id_orden_compra
 		from tienda_detalle_orden_compras tdoc

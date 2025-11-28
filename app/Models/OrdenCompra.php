@@ -611,7 +611,7 @@ class OrdenCompra extends Model
         else (select e2.razon_social from empresas e2 
         where e2.id = oc.id_empresa_compra) 
         end cliente,
-        e2.razon_social empresa_vende, to_char(oc.fecha_orden_compra,'dd-mm-yyyy') fecha_orden_compra , 
+        e2.razon_social empresa_vende, e2.ruc, to_char(oc.fecha_orden_compra,'dd-mm-yyyy') fecha_orden_compra, 
         oc.numero_orden_compra, tm.denominacion tipo_documento, oc.estado, tm2.denominacion aplica_igv, oc.numero_orden_compra_cliente, 
         oc.total, oc.sub_total, oc.igv, COALESCE (oc.descuento, 0 , oc.descuento) descuento,
         case when oc.id_canal = 4 then 
