@@ -131,11 +131,17 @@ class ProductosController extends Controller
             $correlativo = $producto_model->getCorrelativo();
             $producto->numero_corrrelativo = $correlativo[0]->numero_correlativo;
             $codigo_producto = $producto_model->getCodigoProducto($request->familia, $request->sub_familia);
+            $codigo_final = $codigo_producto[0]->codigo;
 		}else{
 			$producto = Producto::find($request->id);
             $producto_model = new Producto;
             //$codigo_producto = $request->codigo;
-            $codigo_producto = $producto_model->getCodigoProducto($request->familia, $request->sub_familia);
+            if($request->sub_familia != $producto->id_sub_familia){
+                $codigo_producto = $producto_model->getCodigoProducto($request->familia, $request->sub_familia);
+                $codigo_final = $codigo_producto[0]->codigo;
+            }else{
+                $codigo_final = $request->codigo;
+            }
 		}
 
         if($request->id == 0){
@@ -160,9 +166,9 @@ class ProductosController extends Controller
         $producto->id_tipo_origen_producto = $request->tipo_origen_producto;
 		$producto->numero_serie = $request->numero_serie;
 		if($request->id == 0){
-            $producto->codigo = $codigo_producto[0]->codigo;
+            $producto->codigo = $codigo_final;
         }else{
-            $producto->codigo = $codigo_producto[0]->codigo;
+            $producto->codigo = $codigo_final;
         }
         $producto->denominacion = $request->denominacion;
         $producto->id_unidad_medida = $request->unidad_medida;
