@@ -2739,7 +2739,7 @@ class OrdenCompraController extends Controller
 		array_push($variable, array(""));
 
         array_push($variable, array("Empresa Vende","Tipo Documento Cliente","Cliente","RUC"));
-		array_push($variable, array($datos[0]->empresa_vende, $datos[0]->tipo_cliente, $datos[0]->cliente, $datos[0]->ruc));
+		array_push($variable, array($datos[0]->empresa_vende, $datos[0]->tipo_cliente, $datos[0]->cliente, $datos[0]->ruc_empresa_compra));
         array_push($variable, array(""));
 
         array_push($variable, array("Fecha Orden Compra","Fecha Vencimiento","Unidad Origen"));
