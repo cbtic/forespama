@@ -924,6 +924,9 @@ function fn_save_autorizacion_orden_compra(){
         }
     });
 
+    /*var aut = $('#id_proceso').val();
+    alert(aut);*/
+
     var msgLoader = "";
     msgLoader = "Procesando, espere un momento por favor";
     var heightBrowser = $(window).width()/2;
