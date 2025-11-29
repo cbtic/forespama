@@ -197,7 +197,9 @@ class PromotorController extends Controller
 
         $tiendas = $tienda_model->getTiendasAll();
 
-	return view('frontend.promotores.create_asistencia',compact('tiendas'));
+		$id=0;
+
+	return view('frontend.promotores.create_asistencia',compact('tiendas','id'));
 
 	}
 
@@ -210,7 +212,7 @@ class PromotorController extends Controller
 
 		$distancia = $this->calcularDistancia($tienda->latitud, $tienda->longitud, $request->latitud, $request->longitud);
 
-		if ($distancia > 0.5) { // 0.2 km = 200 metros
+		if ($distancia > 0.5) { // 0.5 km = 500 metros
 			return response()->json(['message' => 'No estás dentro del rango permitido para marcar asistencia.']);
 		}
 
@@ -267,6 +269,75 @@ class PromotorController extends Controller
 		return response()->json(['message' => 'Asistencia marcada correctamente.']);
 	}
 
+	public function marcar_asistencia_salida(Request $request)
+	{
+		$id_user = Auth::user()->id;
+		$rutaFinal = null;
+
+		$tienda = Tienda::find($request->id_tienda_salida);
+
+		$distancia = $this->calcularDistancia($tienda->latitud, $tienda->longitud, $request->latitud, $request->longitud);
+
+		if ($distancia > 0.5) { // 0.5 km = 500 metros
+			return response()->json(['message' => 'No estás dentro del rango permitido para marcar asistencia.']);
+		}
+
+		if ($request->has('foto_base64')) {
+
+			$imageData = $request->foto_base64;
+			
+			if (preg_match('/^data:image\/(\w+);base64,/', $imageData, $type)) {
+				$extension = strtolower($type[1]);
+
+				if (!in_array($extension, ['jpg', 'jpeg', 'png'])) {
+					throw new \Exception('Formato de imagen no válido. Solo se permiten JPG o PNG.');
+				}
+
+				$imageData = substr($imageData, strpos($imageData, ',') + 1);
+				$imageData = base64_decode($imageData);
+
+				if ($imageData === false) {
+					throw new \Exception('Error al decodificar la imagen.');
+				}
+
+				$path = public_path("img/asistencias_salida/");
+				if (!is_dir($path)) {
+					mkdir($path, 0777, true);
+				}
+
+				$filename = 'asistencia_salida_' . date("YmdHis") . substr((string)microtime(), 1, 6) . '.' . $extension;
+
+				file_put_contents($path . $filename, $imageData);
+
+				$rutaFinal = "img/asistencias_salida/" . $filename;
+
+				$imagePath = public_path($rutaFinal);
+			} else {
+				throw new \Exception('El formato base64 de la imagen es incorrecto.');
+			}
+		}
+
+		//dd($request->id);exit();
+
+		$asistencia_promotor = AsistenciaPromotore::find($request->id);
+
+		//$asistencia_promotor = new AsistenciaPromotore;
+		//$asistencia_promotor->id_promotor = $id_user;
+		//$asistencia_promotor->id_tienda = $request->id_tienda;
+		//$asistencia_promotor->fecha = now()->toDateString();
+		//$asistencia_promotor->hora_entrada = now()->format('H:i:s');
+		$asistencia_promotor->hora_salida = now()->format('H:i:s');
+		$asistencia_promotor->ip = $request->ip();
+		$asistencia_promotor->latitud_salida = $request->latitud;
+		$asistencia_promotor->longitud_salida = $request->longitud;
+		//$asistencia_promotor->ruta_imagen_ingreso = $rutaFinal;
+		$asistencia_promotor->ruta_imagen_salida = $rutaFinal;
+		$asistencia_promotor->id_usuario_actualiza = $id_user;
+		$asistencia_promotor->save();
+
+		return response()->json(['message' => 'Asistencia marcada correctamente.']);
+	}
+
 	public function listar_asistencia_promotores_ajax(Request $request){
 
 		$id_user = Auth::user()->id;
@@ -299,6 +370,16 @@ class PromotorController extends Controller
         $tiendas = $tienda_model->getTiendasAll();
 
 		return view('frontend.promotores.modal_asistencia_promotor',compact('tiendas'));
+
+    }
+
+	public function modal_asistencia_promotor_salida(){
+		
+        $tienda_model = new Tienda;
+
+        $tiendas = $tienda_model->getTiendasAll();
+
+		return view('frontend.promotores.modal_asistencia_promotor_salida',compact('tiendas'));
 
     }
 

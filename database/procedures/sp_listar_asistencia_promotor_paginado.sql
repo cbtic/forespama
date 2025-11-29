@@ -15,7 +15,7 @@ begin
 	
 	p_pagina=(p_pagina::Integer-1)*p_limit::Integer;
 
-	v_campos=' ap.id, t.denominacion tienda, u."name" promotor, ap.fecha, ap.hora_entrada, ap.hora_salida, ap.ip, ap.latitud, ap.longitud, ap.estado ';
+	v_campos=' ap.id, t.denominacion tienda, u."name" promotor, ap.fecha, ap.hora_entrada, ap.hora_salida, ap.ip, ap.latitud, ap.longitud, ap.latitud_salida, ap.longitud_salida, ap.estado, ap.ruta_imagen_ingreso, ap.ruta_imagen_salida ';
 
 	v_tabla=' from asistencia_promotores ap 
 	inner join users u on ap.id_promotor = u.id

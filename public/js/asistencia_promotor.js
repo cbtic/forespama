@@ -40,6 +40,14 @@ $(document).ready(function () {
 		dropdownParent: $('#openOverlayOpc') 
 	})
 
+    $('#id_tienda_salida').select2({
+		width: '100%',
+		placeholder: '--Seleccionar--',
+		allowClear: true,
+		minimumResultsForSearch: 0,
+		dropdownParent: $('#openOverlayOpc2') 
+	})
+
 });
 
 function datatablenew(){
@@ -170,6 +178,23 @@ function datatablenew(){
 				"bSortable": false,
 				"aTargets": [6],
 			},
+            {
+				"mRender": function (data, type, row) {
+									
+					var html = '<div class="btn-group btn-group-sm" role="group" aria-label="Log Viewer Actions">';
+					
+					//html += '<button style="font-size:12px" type="button" class="btn btn-sm btn-success" data-toggle="modal" onclick="modalPromotorRuta('+row.id+')" ><i class="fa fa-edit"></i> Editar</button>'; 
+					if (row.latitud_salida && row.longitud_salida) {
+					    html += '<a href="https://www.google.com/maps?q= '+row.latitud_salida +', '+row.longitud_salida +'" target="_blank"> Ver ubicación </a>'
+                    } else {
+						return '<span class="text-muted">Sin Ubicacion</span>';
+					}
+					html += '</div>';
+					return html;
+				},
+				"bSortable": false,
+				"aTargets": [7],
+			},
 			{
 				"mRender": function (data, type, row) {
 					if (row.ruta_imagen_ingreso) {
@@ -179,9 +204,34 @@ function datatablenew(){
 					}
 				},
 				"bSortable": false,
-				"aTargets": [7],
+				"aTargets": [8],
 				"className": "dt-center"
 			},
+            {
+				"mRender": function (data, type, row) {
+					if (row.ruta_imagen_salida) {
+						return '<a href="/' + row.ruta_imagen_salida + '" target="_blank"><img src="/' + row.ruta_imagen_salida + '" alt="Foto asistencia" width="60" height="60" style="border-radius:8px; object-fit:cover;">';
+					} else {
+						return '<span class="text-muted">Sin foto</span>';
+					}
+				},
+				"bSortable": false,
+				"aTargets": [9],
+				"className": "dt-center"
+			},
+            {
+                "mRender": function (data, type, row) {
+                    
+                    var html = '<div class="btn-group btn-group-sm" role="group" aria-label="Log Viewer Actions">';
+                    
+                    html += '<button style="font-size:12px" type="button" class="btn btn-sm btn-info" data-toggle="modal" onclick="modalAsistenciaSalida('+row.id+')" ><i class="fa fa-edit"></i> Marcar Salida</button>'; 
+                    
+                    html += '</div>';
+                    return html;
+                },
+                "bSortable": false,
+                "aTargets": [10],
+            },
 			{
 				"mRender": function (data, type, row) {
 					var estado = "";
@@ -194,7 +244,7 @@ function datatablenew(){
 					return estado;
 				},
 				"bSortable": false,
-				"aTargets": [8]
+				"aTargets": [11]
 			},
 		]
     });
@@ -214,6 +264,21 @@ function modalAsistencia(){
 		success: function (result) {
 			$("#diveditpregOpc").html(result);
 			$('#openOverlayOpc').modal('show');        
+		}
+	});
+}
+
+function modalAsistenciaSalida(id){
+    $('#id_tienda').val("").trigger('change');
+    $('#foto_base64').val("");
+    $('#id').val(id);
+	
+    $.ajax({
+		url: "/promotores/modal_asistencia_promotor_salida",
+		type: "GET",
+		success: function (result) {
+			$("#diveditpregOpc").html(result);
+			$('#openOverlayOpc2').modal('show');
 		}
 	});
 }
@@ -291,7 +356,7 @@ function fn_save_asistencia_promotor(){
 
                 const latitud = position.coords.latitude;
                 const longitud = position.coords.longitude;
-
+                //alert(latitud+"-"+longitud);
                 var msgLoader = "Marcando asistencia, espere un momento...";
                 var heightBrowser = $(window).width() / 2;
                 $('.loader').css("opacity", "0.8").css("height", heightBrowser).html("<div id='Grd1_wrapper' class='dataTables_wrapper'><div id='Grd1_processing' class='dataTables_processing panel-default'>" + msgLoader + "</div></div>");
@@ -345,6 +410,79 @@ function fn_save_asistencia_promotor(){
     }
 }
 
+function fn_save_asistencia_promotor_salida(){
+	
+    var msg = "";
+
+    var id_tienda_salida = $('#id_tienda_salida').val();
+    var id = $('#id').val();
+
+    if(id_tienda_salida==""){msg+="Debe seleccionar una tienda antes de marcar asistencia. <br>";}
+    
+    if(msg!=""){
+        bootbox.alert(msg);
+        return false;
+    }else{
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+
+                const latitud = position.coords.latitude;
+                const longitud = position.coords.longitude;
+
+                var msgLoader = "Marcando asistencia, espere un momento...";
+                var heightBrowser = $(window).width() / 2;
+                $('.loader').css("opacity", "0.8").css("height", heightBrowser).html("<div id='Grd1_wrapper' class='dataTables_wrapper'><div id='Grd1_processing' class='dataTables_processing panel-default'>" + msgLoader + "</div></div>");
+                $('.loader').show();
+
+                $.ajax({
+                    url: "/promotores/marcar_asistencia_salida",
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        _token: $('meta[name="csrf-token"]').attr('content'),
+                        id_tienda_salida: id_tienda_salida,
+                        latitud: latitud,
+                        longitud: longitud,
+						foto_base64: $('#foto_base64_salida').val(),
+                        id:id
+                    },
+                    success: function (response) {
+                        $('.loader').hide();
+                        bootbox.alert(response.message);
+                        $('#btnAsistencia_salida').attr('disabled', false);
+                        $('#openOverlayOpc2').modal('hide');
+                        datatablenew();
+                    },
+                    error: function (xhr, status, error) {
+                        $('.loader').hide();
+                        bootbox.alert("Ocurrió un error al marcar la asistencia: " + error);
+                        $('#btnAsistencia_salida').attr('disabled', false);
+                    }
+                });
+
+            }, function (error) {
+
+                if (error.code === error.PERMISSION_DENIED) {
+                    bootbox.alert("Debes permitir el acceso a la ubicación para marcar asistencia.");
+                } else if (error.code === error.POSITION_UNAVAILABLE) {
+                    bootbox.alert("No se pudo determinar la ubicación.");
+                } else if (error.code === error.TIMEOUT) {
+                    bootbox.alert("Tiempo de espera agotado al obtener la ubicación.");
+                } else {
+                    bootbox.alert("Error desconocido al obtener la ubicación.");
+                }
+                $('#btnAsistencia_salida').attr('disabled', false);
+            },
+            { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+        );
+
+        } else {
+            bootbox.alert("Tu navegador no soporta geolocalización.");
+            $('#btnAsistencia_salida').attr('disabled', false);
+        }
+    }
+}
+
 $('#openOverlayOpc').on('shown.bs.modal', function () {
     iniciarCamara();
 });
@@ -352,6 +490,15 @@ $('#openOverlayOpc').on('shown.bs.modal', function () {
 $('#openOverlayOpc').on('hidden.bs.modal', function () {
     detenerCamara();
     limpiarPreview();
+});
+
+$('#openOverlayOpc2').on('shown.bs.modal', function () {
+    iniciarCamaraSalida();
+});
+
+$('#openOverlayOpc2').on('hidden.bs.modal', function () {
+    detenerCamaraSalida();
+    limpiarPreviewSalida();
 });
 
 function iniciarCamara() {
@@ -376,8 +523,38 @@ function iniciarCamara() {
     }
 }
 
+function iniciarCamaraSalida() {
+    const video = document.getElementById('camera_salida');
+    const container = document.getElementById('camera-container_salida');
+    const btnTomarFoto = document.getElementById('btnTomarFoto_salida');
+
+    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+        container.style.display = 'block';
+        video.style.display = 'block';
+        btnTomarFoto.style.display = 'inline-block';
+
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(stream => {
+                video.srcObject = stream;
+            })
+            .catch(err => {
+                bootbox.alert('No se pudo acceder a la cámara: ' + err.message);
+            });
+    } else {
+        bootbox.alert('Tu navegador no soporta acceso a la cámara.');
+    }
+}
+
 function detenerCamara() {
     const video = document.getElementById('camera');
+    if (video.srcObject) {
+        video.srcObject.getTracks().forEach(track => track.stop());
+        video.srcObject = null;
+    }
+}
+
+function detenerCamaraSalida() {
+    const video = document.getElementById('camera_salida');
     if (video.srcObject) {
         video.srcObject.getTracks().forEach(track => track.stop());
         video.srcObject = null;
@@ -410,7 +587,37 @@ function capturarFoto() {
     bootbox.alert("📷 Foto capturada correctamente.");
 }
 
+function capturarFotoSalida() {
+    const video = document.getElementById('camera_salida');
+    const canvas = document.getElementById('canvas_salida');
+    const foto = document.getElementById('foto_base64_salida');
+    const preview = document.getElementById('preview_salida');
+    const previewContainer = document.getElementById('preview-container_salida');
+    const btnTomarFoto = document.getElementById('btnTomarFoto_salida');
+
+    const contexto = canvas.getContext('2d');
+    contexto.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+    const dataURL = canvas.toDataURL('image/jpeg');
+    foto.value = dataURL;
+
+    preview.src = dataURL;
+    previewContainer.style.display = 'block';
+    video.style.display = 'none';
+    btnTomarFoto.style.display = 'none';
+
+    // Pausa el video (para congelar el fotograma)
+    //const stream = video.srcObject;
+    //if (stream) stream.getTracks().forEach(track => track.enabled = false);
+
+    bootbox.alert("📷 Foto capturada correctamente.");
+}
+
 function aceptarFoto() {
+    bootbox.alert("✅ Foto guardada, puede continuar con el registro.");
+}
+
+function aceptarFotoSalida() {
     bootbox.alert("✅ Foto guardada, puede continuar con el registro.");
 }
 
@@ -424,11 +631,33 @@ function retomarFoto() {
     btnTomarFoto.style.display = 'inline-block';
 }
 
+function retomarFotoSalida() {
+    const video = document.getElementById('camera_salida');
+    const previewContainer = document.getElementById('preview-container_salida');
+    const btnTomarFoto = document.getElementById('btnTomarFoto_salida');
+
+    previewContainer.style.display = 'none';
+    video.style.display = 'block';
+    btnTomarFoto.style.display = 'inline-block';
+}
+
 function limpiarPreview() {
     const previewContainer = document.getElementById('preview-container');
     const foto = document.getElementById('foto_base64');
     const btnTomarFoto = document.getElementById('btnTomarFoto');
     const video = document.getElementById('camera');
+
+    foto.value = "";
+    previewContainer.style.display = 'none';
+    video.style.display = 'block';
+    btnTomarFoto.style.display = 'inline-block';
+}
+
+function limpiarPreviewSalida() {
+    const previewContainer = document.getElementById('preview-container_salida');
+    const foto = document.getElementById('foto_base64_salida');
+    const btnTomarFoto = document.getElementById('btnTomarFoto_salida');
+    const video = document.getElementById('camera_salida');
 
     foto.value = "";
     previewContainer.style.display = 'none';
