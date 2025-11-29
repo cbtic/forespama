@@ -818,8 +818,10 @@ Route::post('reuso/send_reuso', [ReusoController::class, 'send_reuso'])->name('r
 Route::get('reuso/cargar_detalle/{id}', [ReusoController::class, 'cargar_detalle'])->name('reuso.cargar_detalle');
 Route::get('promotores/create_asistencia', [PromotorController::class, 'create_asistencia'])->name('promotores.create_asistencia');
 Route::post('promotores/marcar_asistencia', [PromotorController::class, 'marcar_asistencia'])->name('promotores.marcar_asistencia');
+Route::post('promotores/marcar_asistencia_salida', [PromotorController::class, 'marcar_asistencia_salida'])->name('promotores.marcar_asistencia_salida');
 Route::post('promotores/listar_asistencia_promotores_ajax', [PromotorController::class, 'listar_asistencia_promotores_ajax'])->name('promotores.listar_asistencia_promotores_ajax');
 Route::get('promotores/modal_asistencia_promotor', [PromotorController::class, 'modal_asistencia_promotor'])->name('promotores.modal_asistencia_promotor');
+Route::get('promotores/modal_asistencia_promotor_salida', [PromotorController::class, 'modal_asistencia_promotor_salida'])->name('promotores.modal_asistencia_promotor_salida');
 
 Route::get('producto_competencia/create', [ProductoCompetenciaController::class, 'create'])->name('producto_competencia.create');
 Route::post('producto_competencia/listar_producto_competencia_ajax', [ProductoCompetenciaController::class, 'listar_producto_competencia_ajax'])->name('producto_competencia.listar_producto_competencia_ajax');

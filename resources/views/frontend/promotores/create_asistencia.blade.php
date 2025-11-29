@@ -299,6 +299,22 @@ label.form-control-sm{
   margin-top: 10px;
 }
 
+#camera-container_salida, #preview-container_salida {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+#camera_salida {
+  display: block;
+  margin: 0 auto;
+}
+
+#btnTomarFoto_salida {
+  margin-top: 10px;
+}
+
 </style>
 
 
@@ -371,7 +387,8 @@ label.form-control-sm{
                     
 					<div class="col-12 col-md-5 d-flex justify-content-start justify-content-md-end gap-2" style="padding-right:0px">
 						<input class="btn btn-warning pull-rigth" value="Buscar" type="button" id="btnBuscar" />
-						<button type="button" class="btn btn-success" onclick="modalAsistencia()" style="margin-left:15px" >Marcar Asistencia</button>
+						<button type="button" class="btn btn-success" onclick="modalAsistencia()" style="margin-left:15px" >Marcar Ingreso</button>
+						<!--<button type="button" class="btn btn-info" onclick="modalAsistenciaSalida()" style="margin-left:15px" >Marcar Salida</button>-->
 						
 					</div>
 				</div>
@@ -388,8 +405,11 @@ label.form-control-sm{
 								<th>Fecha</th>
 								<th>Hora Ingreso</th>
 								<th>Hora Salida</th>
-								<th>Ver Ubicaci&oacute;n</th>
+								<th>Ver Ubicaci&oacute;n Ingreso</th>
+								<th>Ver Ubicaci&oacute;n Salida</th>
 								<th>Imagen Ingreso</th>
+								<th>Imagen Salida</th>
+								<th>Salida</th>
 								<th>Estado</th>
 							</tr>
 							</thead>
@@ -412,12 +432,13 @@ label.form-control-sm{
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header bg-success text-white">
-        <h5 class="modal-title" id="asistenciaModalLabel">Registrar Asistencia</h5>
+        <h5 class="modal-title" id="asistenciaModalLabel">Registrar Ingreso</h5>
       </div>
 
       <div class="modal-body">
         <form id="frmAsistenciaPromotor" method="post" action="#">
           <input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
+          <input type="hidden" name="d" id="id" value="<?php echo $id?>">
           
           <div class="form-group">
             <label><b>Tienda</b></label>
@@ -451,6 +472,57 @@ label.form-control-sm{
 
       <div class="modal-footer">
         <button type="button" class="btn btn-sm btn-success" onclick="fn_save_asistencia_promotor()">Guardar</button>
+        <button type="button" class="btn btn-sm btn-info" data-dismiss="modal">
+          <i class="fas fa-times-circle" style="font-size:18px;"></i> Cerrar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="openOverlayOpc2" tabindex="-1" role="dialog" aria-labelledby="asistenciaModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-success text-white">
+        <h5 class="modal-title" id="asistenciaModalLabel">Registrar Salida</h5>
+      </div>
+
+      <div class="modal-body">
+        <form id="frmAsistenciaPromotorSalida" method="post" action="#">
+          <input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
+          
+          <div class="form-group">
+            <label><b>Tienda</b></label>
+            <select name="id_tienda_salida" id="id_tienda_salida" class="form-control form-control-sm">
+              <option value="">--Seleccionar--</option>
+              <?php foreach ($tiendas as $row){ ?>
+                <option value="<?php echo $row->id ?>"><?php echo $row->denominacion ?></option>
+              <?php } ?>
+            </select>
+          </div>
+		      <div id="camera-container_salida" style="display:none; text-align:center; margin-top:10px;">
+            <video id="camera_salida" width="250" height="250" autoplay style="border:1px solid #ccc; border-radius:5px"></video>
+            <button id="btnTomarFoto_salida" type="button" class="btn btn-primary btn-sm" onclick="capturarFotoSalida()">📸 Tomar Foto</button>
+            <!--<canvas id="canvas" width="320" height="240" style="display:none;"></canvas>
+
+            <div style="margin-top:10px;">
+              <button type="button" class="btn btn-primary btn-sm" onclick="capturarFoto()">📸 Tomar foto</button>
+          </div>-->
+          </div>
+          <div id="preview-container_salida" style="display:none; text-align:center; margin-top:10px;">
+            <img id="preview_salida" width="250" height="250" style="border:1px solid #ccc; border-radius:5px; object-fit:cover;"><br>
+            <div class="mt-2">
+                <button type="button" class="btn btn-success btn-sm" onclick="aceptarFotoSalida()">✅ Aceptar</button>
+                <button type="button" class="btn btn-warning btn-sm" onclick="retomarFotoSalida()">↩️ Retomar</button>
+            </div>
+          </div>
+          <canvas id="canvas_salida" width="250" height="250" style="display:none;"></canvas>
+          <input type="hidden" id="foto_base64_salida" name="foto_base64_salida">
+          </form>
+        </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-sm btn-success" onclick="fn_save_asistencia_promotor_salida()">Guardar</button>
         <button type="button" class="btn btn-sm btn-info" data-dismiss="modal">
           <i class="fas fa-times-circle" style="font-size:18px;"></i> Cerrar
         </button>

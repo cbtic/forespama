@@ -988,20 +988,24 @@ class OrdenCompraController extends Controller
         $ordenCompra->save();
         $id_orden_compra = $ordenCompra->id;
         
-        foreach($sheet as $registro){
+        while(true){
 
             $sku = $sheet->getCell("A".$rowIndex)->getCalculatedValue();
-			$cantidad = $sheet->getCell("G".$rowIndex)->getCalculatedValue();
-			$costo  = $sheet->getCell("I".$rowIndex)->getCalculatedValue();
-			$rowIndex++; // AVANZAR FILA SIEMPRE
+
+            if ($sku === null || $sku === "") {
+                break;
+            }
+            
+			$cantidad_requerida = $sheet->getCell("G".$rowIndex)->getCalculatedValue();
+			$valor_unitario  = $sheet->getCell("I".$rowIndex)->getCalculatedValue();
             
             $equivalenciaProducto = EquivalenciaProducto::where("codigo_empresa",trim($sku))->first();
             $id_producto = $equivalenciaProducto->id_producto;
             $producto = Producto::find($id_producto);
-            $cantidad_requerida = $row['CANTIDAD_PROD'];
+            //$cantidad_requerida = $row['CANTIDAD_PROD'];
             $id_unidad_medida = $producto->id_unidad_producto;
 
-            $valor_unitario = $row['COSTO_UNI'];
+            //$valor_unitario = $row['COSTO_UNI'];
             $precio_venta = 1.18*$valor_unitario;
 
             $total = $precio_venta * $cantidad_requerida;
@@ -1031,6 +1035,23 @@ class OrdenCompraController extends Controller
             $ordenCompraDetalle->total = round($total, 2);
             $ordenCompraDetalle->id_usuario_inserta = $id_user;
             $ordenCompraDetalle->save();
+
+            $tienda_detalle_completo = $sheet->getCell("F".$rowIndex)->getCalculatedValue();
+            $numero_tienda_detalle = explode('-', $tienda_detalle_completo)[0];
+
+            $tienda_detalle = Tienda::where("numero_tienda", $numero_tienda_detalle)->where("estado",1)->first();
+            $id_tienda = $tienda_detalle->id;
+            
+            $tienda_detalle_orden_compra = new TiendaDetalleOrdenCompra;
+            $tienda_detalle_orden_compra->id_tienda = $id_tienda;
+            $tienda_detalle_orden_compra->id_orden_compra = $id_orden_compra;
+            $tienda_detalle_orden_compra->id_producto = $id_producto;
+            $tienda_detalle_orden_compra->cantidad = $cantidad_requerida;
+            $tienda_detalle_orden_compra->estado = $estado;
+            $tienda_detalle_orden_compra->id_usuario_inserta = $id_user;
+            $tienda_detalle_orden_compra->save();
+
+            $rowIndex++;
 
         }
 
