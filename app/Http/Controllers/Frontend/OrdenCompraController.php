@@ -988,7 +988,109 @@ class OrdenCompraController extends Controller
         $ordenCompra->save();
         $id_orden_compra = $ordenCompra->id;
         
+        $items = [];
+
         while(true){
+
+            $sku = trim($sheet->getCell("A".$rowIndex)->getCalculatedValue());
+
+            if ($sku === null || $sku === "") {
+                break;
+            }
+
+            $cantidad_requerida = $sheet->getCell("G".$rowIndex)->getCalculatedValue();
+            $valor_unitario = $sheet->getCell("I".$rowIndex)->getCalculatedValue();
+            
+            if (!isset($items[$sku])) {
+                $items[$sku] = [
+                    "cantidad" => 0,
+                    "precio" => $valor_unitario
+                ];
+            }
+
+            $items[$sku]["cantidad"] += $cantidad_requerida;
+
+            $rowIndex++;
+        }
+
+        foreach ($items as $sku => $data) {
+
+            $equivalenciaProducto = EquivalenciaProducto::where("codigo_empresa", $sku)->first();
+            if (!$equivalenciaProducto) continue;
+
+            $id_producto = $equivalenciaProducto->id_producto;
+            $producto = Producto::find($id_producto);
+
+            $id_unidad_medida = $producto->id_unidad_producto;
+
+            $cantidad_requerida = $data["cantidad"];
+            $valor_unitario = $data["precio"];
+
+            $precio_venta = 1.18 * $valor_unitario;
+            $total = $precio_venta * $cantidad_requerida;
+            $valor_venta_bruto = $total / 1.18;
+            $igv = $valor_venta_bruto * 0.18;
+            $sub_total = $total - $igv;
+
+            $sub_total_general += $sub_total;
+            $igv_general += $igv;
+            $total_general += $total;
+
+            $detalle = new OrdenCompraDetalle;
+            $detalle->id_orden_compra = $id_orden_compra;
+            $detalle->id_producto = $id_producto;
+            $detalle->cantidad_requerida = $cantidad_requerida;
+            $detalle->id_marca = $id_marca;
+            $detalle->cerrado = $cerrado;
+            $detalle->estado = $estado;
+            $detalle->id_unidad_medida = $id_unidad_medida;
+            $detalle->id_estado_producto = $id_estado_producto;
+            $detalle->precio_venta = round($precio_venta, 2);
+            $detalle->precio = round($valor_unitario, 2);
+            $detalle->sub_total = round($sub_total, 2);
+            $detalle->igv = round($igv, 2);
+            $detalle->total = round($total, 2);
+            $detalle->id_usuario_inserta = $id_user;
+            $detalle->save();
+
+        }
+
+        $rowIndex = 18;
+        
+        while(true){
+
+            $sku = $sheet->getCell("A".$rowIndex)->getCalculatedValue();
+
+            if ($sku === null || $sku === "") {
+                break;
+            }
+            
+			$cantidad_requerida = $sheet->getCell("G".$rowIndex)->getCalculatedValue();
+			$valor_unitario  = $sheet->getCell("I".$rowIndex)->getCalculatedValue();
+            
+            $equivalenciaProducto = EquivalenciaProducto::where("codigo_empresa",trim($sku))->first();
+            $id_producto = $equivalenciaProducto->id_producto;
+
+            $tienda_detalle_completo = $sheet->getCell("F".$rowIndex)->getCalculatedValue();
+            $numero_tienda_detalle = explode('-', $tienda_detalle_completo)[0];
+
+            $tienda_detalle = Tienda::where("numero_tienda", $numero_tienda_detalle)->where("estado",1)->first();
+            $id_tienda = $tienda_detalle->id;
+            
+            $tienda_detalle_orden_compra = new TiendaDetalleOrdenCompra;
+            $tienda_detalle_orden_compra->id_tienda = $id_tienda;
+            $tienda_detalle_orden_compra->id_orden_compra = $id_orden_compra;
+            $tienda_detalle_orden_compra->id_producto = $id_producto;
+            $tienda_detalle_orden_compra->cantidad = $cantidad_requerida;
+            $tienda_detalle_orden_compra->estado = $estado;
+            $tienda_detalle_orden_compra->id_usuario_inserta = $id_user;
+            $tienda_detalle_orden_compra->save();
+
+            $rowIndex++;
+
+        }
+
+        /*while(true){
 
             $sku = $sheet->getCell("A".$rowIndex)->getCalculatedValue();
 
@@ -1053,7 +1155,7 @@ class OrdenCompraController extends Controller
 
             $rowIndex++;
 
-        }
+        }*/
 
         $ordenCompraTotales = OrdenCompra::find($id_orden_compra);
         $ordenCompraTotales->sub_total = round($sub_total_general, 2);

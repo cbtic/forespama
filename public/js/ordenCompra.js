@@ -79,6 +79,10 @@ $(document).ready(function () {
 	
 	datatablenew();
 
+	setInterval(function () {
+        datatablenew(); // solo hace reload al ya estar inicializado
+    }, 60000);
+
 	$('#btnDescargar').on('click', function () {
 		DescargarArchivosExcel()
 
@@ -91,16 +95,23 @@ $(document).ready(function () {
 
 });
 
+var tablaOrdenCompra = null;
+
 function datatablenew(){
     
 	$('[data-toggle="tooltip"]').tooltip('hide');
     $('.tooltip').remove();
 
-    if ($.fn.DataTable.isDataTable('#tblOrdenCompra')) {
+    /*if ($.fn.DataTable.isDataTable('#tblOrdenCompra')) {
         $('#tblOrdenCompra').empty();
     }
+*/
+	if (tablaOrdenCompra !== null) {
+        tablaOrdenCompra.ajax.reload(null, false);
+        return; // ⬅ evita reconstruir toda la tabla
+    }
 
-    var oTable1 = $('#tblOrdenCompra').dataTable({
+    tablaOrdenCompra  = $('#tblOrdenCompra').DataTable({
         "bServerSide": true,
         "sAjaxSource": "/orden_compra/listar_orden_compra_proceso_ajax",
         "bProcessing": true,
