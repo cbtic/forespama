@@ -481,6 +481,10 @@ function modalOrdenCompra(id){
 			type: "GET",
 			success: function (result) {
 					$("#diveditpregOpc").html(result);
+					$('#openOverlayOpc').modal({
+						backdrop: 'static',
+						keyboard: false
+					});
 					$('#openOverlayOpc').modal('show');
 			}
 	});

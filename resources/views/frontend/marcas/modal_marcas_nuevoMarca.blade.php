@@ -18,7 +18,7 @@
 .modal-dialog {
 	width: 100%;
 	max-width:40%!important
-  }
+}
   
 #tablemodal{
     border-spacing: 0;

@@ -845,3 +845,4 @@ Route::get('persona_proceso/eliminar_persona_proceso/{id}/{estado}', [PersonaPro
 Route::post('orden_compra/listar_orden_compra_proceso_ajax', [OrdenCompraController::class, 'listar_orden_compra_proceso_ajax'])->name('orden_compra.listar_orden_compra_proceso_ajax');
 Route::get('orden_compra/exportar_listar_orden_compra_individual/{id}', [OrdenCompraController::class, 'exportar_listar_orden_compra_individual'])->name('orden_compra.exportar_listar_orden_compra_individual');
 Route::post('orden_compra/upload_orden_compra_promart', [OrdenCompraController::class, 'upload_orden_compra_promart'])->name('orden_compra.upload_orden_compra_promart');
+Route::post('orden_compra/send_duplicar_orden_compra', [OrdenCompraController::class, 'send_duplicar_orden_compra'])->name('orden_compra.send_duplicar_orden_compra');

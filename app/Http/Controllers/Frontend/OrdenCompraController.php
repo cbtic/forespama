@@ -1056,7 +1056,7 @@ class OrdenCompraController extends Controller
         }
 
         $rowIndex = 18;
-        
+
         while(true){
 
             $sku = $sheet->getCell("A".$rowIndex)->getCalculatedValue();
@@ -3063,6 +3063,90 @@ class OrdenCompraController extends Controller
 		$export = new InvoicesExport7([$variable]);
 		return Excel::download($export, 'Reporte_orden_compra_individual.xlsx');
 		
+    }
+
+    public function send_duplicar_orden_compra(Request $request){
+
+        $id_user = Auth::user()->id;
+
+        $orden_compra_matriz = OrdenCompra::find($request->id);
+
+        $orden_compra_model = new OrdenCompra;
+        $codigo_orden_compra = $orden_compra_model->getCodigoOrdenCompra($orden_compra_matriz->id_tipo_documento);
+        $numero_orden_compra = $codigo_orden_compra[0]->codigo;
+
+        $orden_compra = new OrdenCompra;
+        $orden_compra->id_empresa_compra = $orden_compra_matriz->id_empresa_compra;
+        $orden_compra->id_empresa_vende = $orden_compra_matriz->id_empresa_vende;
+        $orden_compra->fecha_orden_compra = $orden_compra_matriz->fecha_orden_compra;
+        $orden_compra->numero_orden_compra = $numero_orden_compra;
+        $orden_compra->id_tipo_documento = $orden_compra_matriz->id_tipo_documento;
+        $orden_compra->estado = $orden_compra_matriz->estado;
+        $orden_compra->id_usuario_inserta = $id_user;
+        $orden_compra->igv_compra = $orden_compra_matriz->igv_compra;
+        $orden_compra->cerrado = 1;
+        $orden_compra->id_unidad_origen = $orden_compra_matriz->id_unidad_origen;
+        $orden_compra->id_almacen_destino = $orden_compra_matriz->id_almacen_destino;
+        $orden_compra->id_almacen_salida = $orden_compra_matriz->id_almacen_salida;
+        $orden_compra->numero_orden_compra_cliente = $orden_compra_matriz->numero_orden_compra_cliente;
+        $orden_compra->tienda_asignada = $orden_compra_matriz->tienda_asignada;
+        $orden_compra->id_requerimiento = $orden_compra_matriz->id_requerimiento;
+        $orden_compra->sub_total = $orden_compra_matriz->sub_total;
+        $orden_compra->igv = $orden_compra_matriz->igv;
+        $orden_compra->total = $orden_compra_matriz->total;
+        $orden_compra->id_moneda = $orden_compra_matriz->id_moneda;
+        $orden_compra->moneda = $orden_compra_matriz->moneda;
+        $orden_compra->descuento = $orden_compra_matriz->descuento;
+        $orden_compra->id_vendedor = $orden_compra_matriz->id_vendedor;
+        $orden_compra->id_tipo_cliente = $orden_compra_matriz->id_tipo_cliente;
+        $orden_compra->id_persona = $orden_compra_matriz->id_persona;
+        $orden_compra->fecha_vencimiento = $orden_compra_matriz->fecha_vencimiento;
+        $orden_compra->estado_pedido = $orden_compra_matriz->estado_pedido;
+        $orden_compra->motivo = $orden_compra_matriz->motivo;
+        $orden_compra->observacion_vendedor = $orden_compra_matriz->observacion_vendedor;
+        $orden_compra->observacion_contabilidad = $orden_compra_matriz->observacion_contabilidad;
+        $orden_compra->comprometido = 0;
+        $orden_compra->id_prioridad = $orden_compra_matriz->id_prioridad;
+        $orden_compra->id_canal = $orden_compra_matriz->id_canal;
+        $orden_compra->save();
+        $id_orden_compra = $orden_compra->id;
+
+        $orden_compra_detalle_matriz = OrdenCompraDetalle::where('id_orden_compra',$request->id)->where('estado',1)->get();
+
+        //dd($orden_compra_detalle_matriz);exit();
+
+        foreach($orden_compra_detalle_matriz as $detalle){
+            $orden_compra_detalle = new OrdenCompraDetalle;
+            $orden_compra_detalle->id_orden_compra = $id_orden_compra;
+            $orden_compra_detalle->id_producto = $detalle->id_producto;
+            $orden_compra_detalle->precio = $detalle->precio;
+            $orden_compra_detalle->id_descuento = $detalle->id_descuento;
+            $orden_compra_detalle->sub_total = $detalle->sub_total;
+            $orden_compra_detalle->igv = $detalle->igv;
+            $orden_compra_detalle->total = $detalle->total;
+            $orden_compra_detalle->id_unidad_medida = $detalle->id_unidad_medida;
+            $orden_compra_detalle->id_marca = $detalle->id_marca;
+            $orden_compra_detalle->estado = 1;
+            $orden_compra_detalle->id_usuario_inserta = $id_user;
+            $orden_compra_detalle->cantidad_requerida = $detalle->cantidad_requerida;
+            $orden_compra_detalle->cerrado = 1;
+            $orden_compra_detalle->valor_venta_bruto = $detalle->valor_venta_bruto;
+            $orden_compra_detalle->precio_venta = $detalle->precio_venta;
+            $orden_compra_detalle->valor_venta = $detalle->valor_venta;
+            $orden_compra_detalle->descuento = $detalle->descuento;
+            $orden_compra_detalle->comprometido = 0;
+            $orden_compra_detalle->save();
+        }
+
+        $autorizacion_orden_compra = new AutorizacionOrdenCompra;
+        $autorizacion_orden_compra->id_orden_compra = $id_orden_compra;
+        $autorizacion_orden_compra->id_proceso_pedido = 1;
+        $autorizacion_orden_compra->id_usuario_inserta = $id_user;
+        $autorizacion_orden_compra->estado = 1;
+        $autorizacion_orden_compra->save();
+        
+        return response()->json(['id' => $id_orden_compra]);
+        
     }
 }
 

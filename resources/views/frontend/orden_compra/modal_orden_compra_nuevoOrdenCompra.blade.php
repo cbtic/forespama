@@ -1647,6 +1647,28 @@ function DescargarArchivosExcelIndividual(){
 	location.href = '/orden_compra/exportar_listar_orden_compra_individual/'+id;
 }
 
+function duplicar_pedido(){
+
+    var id = $('#id').val();
+
+    var msgLoader = "";
+    msgLoader = "Procesando, espere un momento por favor";
+    var heightBrowser = $(window).width()/2;
+    $('.loader').css("opacity","0.8").css("height",heightBrowser).html("<div id='Grd1_wrapper' class='dataTables_wrapper'><div id='Grd1_processing' class='dataTables_processing panel-default'>"+msgLoader+"</div></div>");
+    $('.loader').show();
+
+    $.ajax({
+        url: "/orden_compra/send_duplicar_orden_compra",
+        type: "POST",
+        data : $("#frmOrdenCompra").serialize(),
+        success: function (result) {
+            datatablenew();
+            $('.loader').hide();
+            bootbox.alert("Se duplico el pedido satisfactoriamente");
+        }
+    });
+}
+
 </script>
 
 <body class="hold-transition skin-blue sidebar-mini">
@@ -2049,6 +2071,14 @@ function DescargarArchivosExcelIndividual(){
                         <div class="col-sm-12 controls">
                             <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
                                 
+                                <?php if($id>0 && $orden_compra->id_tipo_documento == 2){ ?>
+
+                                    <button type="button" class="btn btn-sm btn-clasico btn-buscar" style="margin-left:10px;" data-toggle="modal" onclick="duplicar_pedido()" >
+                                        <i class="fas fa-copy" style="font-size:18px;"></i>Duplicar Pedido
+                                    </button>
+
+                                <?php }?>
+
                                 <?php if($id>0){ ?>
 
                                     <button id="btnDescargarIndividual" type="button" class="btn btn-sm btn-secondary pull-rigth icono-botones2" style="margin-left:10px;">
