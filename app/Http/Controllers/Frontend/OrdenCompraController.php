@@ -207,7 +207,7 @@ class OrdenCompraController extends Controller
 		}else{
 			$orden_compra = new OrdenCompra;
             $id_descuento_usuario = 0;
-            $id_autorizacion = 2;
+            $id_autorizacion = 0;
 		}
 
         $proveedor = $empresa_model->getEmpresaAll();
@@ -331,7 +331,7 @@ class OrdenCompraController extends Controller
         $orden_compra->id_vendedor = $request->id_vendedor;
         $orden_compra->observacion_vendedor = $request->observacion_vendedor;
         $orden_compra->id_prioridad = $request->prioridad;
-        //$orden_compra->id_autorizacion = $request->id_autorizacion;
+        $orden_compra->id_autorizacion = $request->id_autorizacion;
         $orden_compra->id_canal = $request->canal;
         $orden_compra->estado = 1;
         if($request->tipo_documento == 4){
@@ -2951,7 +2951,7 @@ class OrdenCompraController extends Controller
                 $autorizacion_orden_compra_siguiente_proceso->id_usuario_inserta = $id_user;
                 $autorizacion_orden_compra_siguiente_proceso->estado = 1;
                 $autorizacion_orden_compra_siguiente_proceso->save();
-            }else{      
+            }else{
                 $autorizacion_orden_compra_siguiente_proceso = new AutorizacionOrdenCompra;
                 $autorizacion_orden_compra_siguiente_proceso->id_orden_compra = $request->id;
                 $autorizacion_orden_compra_siguiente_proceso->id_proceso_pedido = $request->id_proceso+1;
