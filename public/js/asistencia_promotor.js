@@ -8,7 +8,14 @@ $(document).ready(function () {
 		modalPromotorRuta(0);
 	});
 
-	$('#fecha_bus').keypress(function(e){
+	$('#fecha_inicio_bus').keypress(function(e){
+		if(e.which == 13) {
+			datatablenew();
+			return false;
+		}
+	});
+
+    $('#fecha_fin_bus').keypress(function(e){
 		if(e.which == 13) {
 			datatablenew();
 			return false;
@@ -22,7 +29,15 @@ $(document).ready(function () {
 		}
 	});
 
-	$('#fecha_bus').datepicker({
+	$('#fecha_inicio_bus').datepicker({
+        autoclose: true,
+		format: 'yyyy-mm-dd',
+		changeMonth: true,
+		changeYear: true,
+        language: 'es'
+    });
+
+    $('#fecha_fin_bus').datepicker({
         autoclose: true,
 		format: 'yyyy-mm-dd',
 		changeMonth: true,
@@ -47,6 +62,10 @@ $(document).ready(function () {
 		minimumResultsForSearch: 0,
 		dropdownParent: $('#openOverlayOpc2') 
 	})
+
+    $('#btnDescargar').on('click', function () {
+		descargarAsistencia();
+	});
 
     function calcularTiempoTrabajado() {
         let horaIngreso = $('#hora_ingreso').val();
@@ -141,7 +160,8 @@ function datatablenew(){
             var iNroPagina 	= parseFloat(fn_util_obtieneNroPagina(aoData[3].value, aoData[4].value)).toFixed();
             var iCantMostrar 	= aoData[4].value;
 			
-			var fecha = $('#fecha_bus').val();
+			var fecha_inicio = $('#fecha_inicio_bus').val();
+			var fecha_fin = $('#fecha_fin_bus').val();
 			var estado = $('#estado_bus').val();
 			
 			var _token = $('#_token').val();
@@ -151,7 +171,7 @@ function datatablenew(){
                 "type": "POST",
                 "url": sSource,
                 "data":{NumeroPagina:iNroPagina,NumeroRegistros:iCantMostrar,
-						fecha:fecha,estado:estado,
+						fecha_inicio:fecha_inicio,fecha_fin:fecha_fin,estado:estado,
 						_token:_token
                        },
                 "success": function (result) {
@@ -725,4 +745,15 @@ function limpiarPreviewSalida() {
     btnTomarFoto.style.display = 'inline-block';
 }
 
-
+function descargarAsistencia(){
+	
+	var fecha_inicio = $('#fecha_inicio_bus').val();
+    var fecha_fin = $('#fecha_fin_bus').val();
+    var estado = $('#estado_bus').val();
+	
+	if (fecha_inicio == "")fecha_inicio = "0";
+	if (fecha_fin == "")fecha_fin = "0";
+	if (estado == "")estado = 0;
+    
+	location.href = '/promotores/exportar_asistencia/'+fecha_inicio+'/'+fecha_fin+'/'+estado;
+}

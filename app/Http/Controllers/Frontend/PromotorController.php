@@ -11,6 +11,13 @@ use App\Models\User;
 use App\Models\AsistenciaPromotore;
 use Auth;
 use Carbon\Carbon;
+use Maatwebsite\Excel\Facades\Excel;
+use Maatwebsite\Excel\Concerns\FromArray;
+use Maatwebsite\Excel\Concerns\WithStyles;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
+use Maatwebsite\Excel\Concerns\WithHeadings;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
 
 class PromotorController extends Controller
 {
@@ -352,7 +359,8 @@ class PromotorController extends Controller
 		$id_user = Auth::user()->id;
 
 		$asistencia_promotor_model = new AsistenciaPromotore;
-		$p[]=$request->fecha;
+		$p[]=$request->fecha_inicio;
+		$p[]=$request->fecha_fin;
 		$p[]=$id_user;
         $p[]=$request->estado;
 		$p[]=$request->NumeroPagina;
@@ -403,4 +411,98 @@ class PromotorController extends Controller
 		$c = 2 * atan2(sqrt($a), sqrt(1-$a));
 		return $radioTierra * $c;
 	}
+
+	public function exportar_asistencia($fecha_inicio, $fecha_fin, $estado) {
+
+		$id_user = Auth::user()->id;
+
+		if($fecha_inicio=="0")$fecha_inicio = "";
+		if($fecha_fin=="0")$fecha_fin = "";
+        if($estado==0)$estado = "";
+        
+		$asistencia_promotor_model = new AsistenciaPromotore;
+		$p[]=$fecha_inicio;
+		$p[]=$fecha_fin;
+		$p[]=$id_user;
+        $p[]=$estado;
+		$p[]=1;
+		$p[]=1000;
+		$data = $asistencia_promotor_model->listar_asistencia_promotores_ajax($p);
+		
+		$variable = [];
+		$n = 1;
+		array_push($variable, array("N","Promotor","Tienda","Fecha","Hora Ingreso","Hora Salida"));
+		
+		foreach ($data as $r) {
+
+			array_push($variable, array($n++,$r->promotor, $r->tienda, $r->fecha, $r->hora_entrada,$r->hora_salida));
+		}
+		
+		$export = new InvoicesExport([$variable]);
+		return Excel::download($export, 'reporte_asistencia.xlsx');
+    }
+}
+
+class InvoicesExport implements FromArray, WithHeadings, WithStyles
+{
+	protected $invoices;
+
+	public function __construct(array $invoices)
+	{
+		$this->invoices = $invoices;
+	}
+
+	public function array(): array
+	{
+		return $this->invoices;
+	}
+
+    public function headings(): array
+    {
+        return ["N","Promotor","Tienda","Fecha","Hora Ingreso","Hora Salida"];
+    }
+
+	public function styles(Worksheet $sheet)
+    {
+
+		$sheet->mergeCells('A1:F1');
+
+        $sheet->setCellValue('A1', "REPORTE DE ASISTENCIA PROMOTORES - FORESPAMA");
+        $sheet->getStyle('A1:F1')->applyFromArray([
+            'font' => [
+                'bold' => true,
+                'color' => ['rgb' => 'FFFFFF'],
+            ],
+            'fill' => [
+                'fillType' => Fill::FILL_SOLID,
+                'startColor' => ['rgb' => '246257'],
+            ],
+            'alignment' => [
+                'horizontal' => Alignment::HORIZONTAL_CENTER,
+            ],
+        ]);
+
+		$sheet->getStyle('A1')->getAlignment()->setWrapText(true);
+		$sheet->getRowDimension(1)->setRowHeight(30);
+
+        $sheet->getStyle('A2:F2')->applyFromArray([
+            'font' => [
+                'bold' => true,
+                'color' => ['rgb' => '000000'],
+            ],
+            'fill' => [
+                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                'startColor' => ['rgb' => '2EB85C'],
+            ],
+			'alignment' => [
+			'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+    		],
+        ]);
+
+		$sheet->fromArray($this->headings(), NULL, 'A2');
+
+        foreach (range('A', 'F') as $col) {
+            $sheet->getColumnDimension($col)->setAutoSize(true);
+        }
+    }
 }
