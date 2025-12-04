@@ -378,14 +378,25 @@ label.form-control-sm{
                     <input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
 				            <div class="row" style="padding:20px 20px 0px 20px;">
 
-                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-                      <input id="fecha_inicio_bus" name="fecha_inicio_bus" on class="form-control form-control-sm"  placeholder="Fecha">
+                    <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+                      <select name="empresa_retail_bus" id="empresa_retail_bus" class="form-control form-control-sm filtro-select">
+                        <option value="">--Seleccionar Empresa--</option>
+                        <?php
+                        foreach ($empresa_retail as $row){?>
+                          <option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
+                          <?php 
+                        }
+                        ?>
+                      </select>
                     </div>
-                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-                      <input id="fecha_fin_bus" name="fecha_fin_bus" on class="form-control form-control-sm"  placeholder="Fecha">
+                    <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+                      <input id="fecha_inicio_bus" name="fecha_inicio_bus" on class="form-control form-control-sm filtro-input"  placeholder="Fecha">
+                    </div>
+                    <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+                      <input id="fecha_fin_bus" name="fecha_fin_bus" on class="form-control form-control-sm filtro-input"  placeholder="Fecha">
                     </div>
                       <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-                      <select name="estado_bus" id="estado_bus" class="form-control form-control-sm">
+                      <select name="estado_bus" id="estado_bus" class="form-control form-control-sm filtro-select">
                         <option value="">Todos</option>
                         <option value="1" selected="selected">Activo</option>
                         <option value="0">Eliminado</option>

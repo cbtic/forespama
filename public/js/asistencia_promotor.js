@@ -160,6 +160,7 @@ function datatablenew(){
             var iNroPagina 	= parseFloat(fn_util_obtieneNroPagina(aoData[3].value, aoData[4].value)).toFixed();
             var iCantMostrar 	= aoData[4].value;
 			
+			var empresa_retail = $('#empresa_retail_bus').val();
 			var fecha_inicio = $('#fecha_inicio_bus').val();
 			var fecha_fin = $('#fecha_fin_bus').val();
 			var estado = $('#estado_bus').val();
@@ -171,7 +172,7 @@ function datatablenew(){
                 "type": "POST",
                 "url": sSource,
                 "data":{NumeroPagina:iNroPagina,NumeroRegistros:iCantMostrar,
-						fecha_inicio:fecha_inicio,fecha_fin:fecha_fin,estado:estado,
+						empresa_retail:empresa_retail,fecha_inicio:fecha_inicio,fecha_fin:fecha_fin,estado:estado,
 						_token:_token
                        },
                 "success": function (result) {
@@ -746,7 +747,8 @@ function limpiarPreviewSalida() {
 }
 
 function descargarAsistencia(){
-	
+
+	var empresa_retail = $('#empresa_retail_bus').val();
 	var fecha_inicio = $('#fecha_inicio_bus').val();
     var fecha_fin = $('#fecha_fin_bus').val();
     var estado = $('#estado_bus').val();
@@ -755,5 +757,5 @@ function descargarAsistencia(){
 	if (fecha_fin == "")fecha_fin = "0";
 	if (estado == "")estado = 0;
     
-	location.href = '/promotores/exportar_asistencia/'+fecha_inicio+'/'+fecha_fin+'/'+estado;
+	location.href = '/promotores/exportar_asistencia/'+empresa_retail+'/'+fecha_inicio+'/'+fecha_fin+'/'+estado;
 }

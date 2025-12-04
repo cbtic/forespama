@@ -1,3 +1,5 @@
+-- DROP FUNCTION public.sp_listar_orden_compra_proceso_paginado(varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, refcursor);
+
 CREATE OR REPLACE FUNCTION public.sp_listar_orden_compra_proceso_paginado(p_tipo_documento character varying, p_empresa_compra character varying, p_empresa_vende character varying, p_fecha_inicio character varying, p_fecha_fin character varying, p_numero_orden_compra character varying, p_numero_orden_compra_cliente character varying, p_situacion character varying, p_almacen_origen character varying, p_almacen_destino character varying, p_estado character varying, p_id_user character varying, p_id_vendedor character varying, p_estado_pedido character varying, p_prioridad character varying, p_canal character varying, p_tipo_producto character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
  RETURNS refcursor
  LANGUAGE plpgsql
@@ -153,11 +155,13 @@ begin
 	End If;
 
 	If p_id_user <> '1' and v_id_proceso IS NOT NULL Then 
-		v_where:=v_where||' and(
+		v_where:=v_where||' AND (
+		oc.id_tipo_documento = ''1''
+		OR (
 		select aoc.id_proceso_pedido from autorizacion_orden_compras aoc 
 		where aoc.id_orden_compra = oc.id
 		order by id desc
-		limit 1) >= '''||v_id_proceso||''' ' ; 
+		limit 1) >= '''||v_id_proceso||''' )' ; 
 	End If;
 
 	EXECUTE ('SELECT count(1) '||v_tabla||v_where) INTO v_count;

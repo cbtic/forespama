@@ -204,10 +204,12 @@ class PromotorController extends Controller
 
 		$tienda_model = new Tienda;
 		$asisntencia_promotor_model = new AsistenciaPromotore;
+		$tablaMaestra_model = new TablaMaestra;
 
 		$fecha_actual = Carbon::now()->format('d-m-Y');
 
 		$asistencia_diaria = $asisntencia_promotor_model->getHoraIngresoDiario($id_user,$fecha_actual);
+        $empresa_retail = $tablaMaestra_model->getMaestroByTipo(110);
 
 		$hora_ingreso = count($asistencia_diaria) > 0 ? $asistencia_diaria[0]->hora_entrada : '';
 
@@ -215,7 +217,7 @@ class PromotorController extends Controller
 
 		$id=0;
 
-		return view('frontend.promotores.create_asistencia',compact('tiendas','id','hora_ingreso'));
+		return view('frontend.promotores.create_asistencia',compact('tiendas','id','hora_ingreso','empresa_retail'));
 
 	}
 
@@ -362,6 +364,7 @@ class PromotorController extends Controller
 		$p[]=$request->fecha_inicio;
 		$p[]=$request->fecha_fin;
 		$p[]=$id_user;
+		$p[]=$request->empresa_retail;
         $p[]=$request->estado;
 		$p[]=$request->NumeroPagina;
 		$p[]=$request->NumeroRegistros;
@@ -412,10 +415,11 @@ class PromotorController extends Controller
 		return $radioTierra * $c;
 	}
 
-	public function exportar_asistencia($fecha_inicio, $fecha_fin, $estado) {
+	public function exportar_asistencia($empresa_retail, $fecha_inicio, $fecha_fin, $estado) {
 
 		$id_user = Auth::user()->id;
 
+		if($empresa_retail==0)$empresa_retail = "";
 		if($fecha_inicio=="0")$fecha_inicio = "";
 		if($fecha_fin=="0")$fecha_fin = "";
         if($estado==0)$estado = "";
@@ -424,6 +428,7 @@ class PromotorController extends Controller
 		$p[]=$fecha_inicio;
 		$p[]=$fecha_fin;
 		$p[]=$id_user;
+        $p[]=$empresa_retail;
         $p[]=$estado;
 		$p[]=1;
 		$p[]=1000;

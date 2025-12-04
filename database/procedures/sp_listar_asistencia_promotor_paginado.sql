@@ -1,6 +1,4 @@
--- DROP FUNCTION public.sp_listar_asistencia_promotor_paginado(varchar, varchar, varchar, varchar, varchar, refcursor);
-
-CREATE OR REPLACE FUNCTION public.sp_listar_asistencia_promotor_paginado(p_fecha character varying, p_id_user character varying, p_estado character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
+CREATE OR REPLACE FUNCTION public.sp_listar_asistencia_promotor_paginado(p_fecha_inicio character varying, p_fecha_fin character varying, p_id_user character varying, p_estado character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
  RETURNS refcursor
  LANGUAGE plpgsql
 AS $function$
@@ -31,8 +29,12 @@ begin
 	
 	v_where = ' Where 1=1 ';
 
-	If p_fecha<>'' Then
-	 v_where:=v_where||'And ap.fecha = '''||p_fecha||''' ';
+	If p_fecha_inicio<>'' Then
+	 v_where:=v_where||'And ap.fecha >= '''||p_fecha_inicio||''' ';
+	End If;
+
+	If p_fecha_fin<>'' Then
+	 v_where:=v_where||'And ap.fecha <= '''||p_fecha_fin||''' ';
 	End If;
 
 	If p_id_user<>'' and (v_id_rol_admin is null or v_id_rol_admin not in (1,22)) Then
