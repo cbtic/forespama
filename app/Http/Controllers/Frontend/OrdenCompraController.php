@@ -1399,11 +1399,11 @@ class OrdenCompraController extends Controller
 		$variable = [];
 		$n = 1;
 
-		array_push($variable, array("N°","Empresa","Numero OC","Fecha","Codigo","Producto","Cantidad","Precio Venta","Precio Unitario","Valor Venta Bruto","Valor Venta","Descuento","Sub Total","IGV","Total"));
+		array_push($variable, array("N°","Vendedor","Empresa","Numero OC","Fecha","Codigo","Producto","Cantidad","Precio Venta","Precio Unitario","Valor Venta Bruto","Valor Venta","Descuento","Sub Total","IGV","Total"));
 		
 		foreach ($data as $r) {
 
-			array_push($variable, array($n++,$r->cliente, $r->numero_orden_compra, $r->fecha_orden_compra, $r->codigo, $r->producto, $r->cantidad_requerida, (float)$r->precio_venta, (float)$r->precio, (float)$r->valor_venta_bruto, (float)$r->valor_venta, (float)$r->descuento, (float)$r->sub_total, (float)$r->igv, (float)$r->total));
+			array_push($variable, array($n++,$r->vendedor, $r->cliente, $r->numero_orden_compra, $r->fecha_orden_compra, $r->codigo, $r->producto, $r->cantidad_requerida, (float)$r->precio_venta, (float)$r->precio, (float)$r->valor_venta_bruto, (float)$r->valor_venta, (float)$r->descuento, (float)$r->sub_total, (float)$r->igv, (float)$r->total));
 		}
 		
 		$export = new InvoicesExport5([$variable]);
@@ -3427,16 +3427,16 @@ class InvoicesExport5 implements FromArray, WithHeadings, WithStyles
 
     public function headings(): array
     {
-        return ["N°","Empresa","Numero OC","Fecha","Codigo","Producto","Cantidad","Precio Venta","Precio Unitario","Valor Venta Bruto","Valor Venta","Descuento","Sub Total","IGV","Total"];
+        return ["N°","Vendedor","Empresa","Numero OC","Fecha","Codigo","Producto","Cantidad","Precio Venta","Precio Unitario","Valor Venta Bruto","Valor Venta","Descuento","Sub Total","IGV","Total"];
     }
 
 	public function styles(Worksheet $sheet)
     {
 
-		$sheet->mergeCells('A1:O1');
+		$sheet->mergeCells('A1:P1');
 
         $sheet->setCellValue('A1', "REPORTE DE ORDEN DE COMPRA DETALLADO- FORESPAMA");
-        $sheet->getStyle('A1:O1')->applyFromArray([
+        $sheet->getStyle('A1:P1')->applyFromArray([
             'font' => [
                 'bold' => true,
                 'color' => ['rgb' => 'FFFFFF'],
@@ -3453,7 +3453,7 @@ class InvoicesExport5 implements FromArray, WithHeadings, WithStyles
 		$sheet->getStyle('A1')->getAlignment()->setWrapText(true);
 		$sheet->getRowDimension(1)->setRowHeight(30);
 
-        $sheet->getStyle('A2:O2')->applyFromArray([
+        $sheet->getStyle('A2:P2')->applyFromArray([
             'font' => [
                 'bold' => true,
                 'color' => ['rgb' => '000000'],
@@ -3469,7 +3469,7 @@ class InvoicesExport5 implements FromArray, WithHeadings, WithStyles
 
 		$sheet->fromArray($this->headings(), NULL, 'A2');
         
-        foreach (range('A', 'O') as $col) {
+        foreach (range('A', 'P') as $col) {
             $sheet->getColumnDimension($col)->setAutoSize(true);
         }
     }

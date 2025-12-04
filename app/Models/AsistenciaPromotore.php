@@ -31,4 +31,17 @@ class AsistenciaPromotore extends Model
         return $data;
 
     }
+
+    function getHoraIngresoDiario($id_promotor, $fecha){
+
+        $cad = "select ap.hora_entrada from asistencia_promotores ap 
+        where ap.id_promotor ='".$id_promotor."'
+        and ap.fecha ='".$fecha."'
+        and ap.estado ='1'
+        order by 1 asc
+        limit 1";
+
+		$data = DB::select($cad);
+        return $data;
+    }
 }

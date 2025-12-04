@@ -1,3 +1,5 @@
+-- DROP FUNCTION public.sp_listar_asistencia_promotor_paginado(varchar, varchar, varchar, varchar, varchar, refcursor);
+
 CREATE OR REPLACE FUNCTION public.sp_listar_asistencia_promotor_paginado(p_fecha character varying, p_id_user character varying, p_estado character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
  RETURNS refcursor
  LANGUAGE plpgsql
@@ -10,8 +12,14 @@ v_tabla varchar;
 v_where varchar;
 v_count varchar;
 v_col_count varchar;
+v_id_rol integer;
+v_id_rol_admin integer;
 
 begin
+	
+	select role_id into v_id_rol from model_has_roles mhr where mhr.model_id::varchar=p_id_user;
+
+	select role_id into v_id_rol_admin from model_has_roles mhr where mhr.model_id::varchar=p_id_user and mhr.role_id in ('1','22');
 	
 	p_pagina=(p_pagina::Integer-1)*p_limit::Integer;
 
@@ -27,7 +35,7 @@ begin
 	 v_where:=v_where||'And ap.fecha = '''||p_fecha||''' ';
 	End If;
 
-	If p_id_user<>'' Then
+	If p_id_user<>'' and (v_id_rol_admin is null or v_id_rol_admin not in (1,22)) Then
 	 v_where:=v_where||'And ap.id_promotor = '''||p_id_user||''' ';
 	End If;
 

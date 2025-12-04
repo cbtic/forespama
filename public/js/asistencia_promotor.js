@@ -48,6 +48,66 @@ $(document).ready(function () {
 		dropdownParent: $('#openOverlayOpc2') 
 	})
 
+    function calcularTiempoTrabajado() {
+        let horaIngreso = $('#hora_ingreso').val();
+
+        if (!horaIngreso) {
+            $('#tiempo_trabajado').val("00:00:00");
+            return;
+        }
+
+        // Hora actual
+        const ahora = new Date();
+
+        // Separar hora de ingreso
+        const partes = horaIngreso.split(':');
+        const h = parseInt(partes[0]);
+        const m = parseInt(partes[1]);
+        const s = parseInt(partes[2]);
+
+        // Crear fecha con hora de ingreso
+        const ingreso = new Date();
+        ingreso.setHours(h, m, s, 0);
+
+        // Diferencia en milisegundos
+        let diff = ahora - ingreso;
+
+        if (diff < 0) diff = 0; // seguridad
+
+        // Convertir diferencia a hh:mm:ss
+        const horas  = String(Math.floor(diff / 3600000)).padStart(2, '0');
+        const minutos = String(Math.floor((diff % 3600000) / 60000)).padStart(2, '0');
+        const segundos = String(Math.floor((diff % 60000) / 1000)).padStart(2, '0');
+
+        const tiempo = `${horas}:${minutos}:${segundos}`;
+
+        $('#tiempo_trabajado').val(tiempo);
+    }
+
+    // Actualizar cada segundo
+    setInterval(calcularTiempoTrabajado, 1000);
+
+    // Llamar una vez
+    calcularTiempoTrabajado();
+
+    /*function actualizarHora() {
+        const ahora = new Date();
+
+        const horas = String(ahora.getHours()).padStart(2, '0');
+        const minutos = String(ahora.getMinutes()).padStart(2, '0');
+        const segundos = String(ahora.getSeconds()).padStart(2, '0');
+
+        const horaFormateada = `${horas}:${minutos}:${segundos}`;
+
+        $('#hora_actual').val(horaFormateada);
+    }
+
+    // Actualizar cada 1 segundo
+    setInterval(actualizarHora, 1000);
+
+    // Llamar una vez al abrir la página
+    actualizarHora();*/
+
 });
 
 function datatablenew(){
@@ -664,3 +724,5 @@ function limpiarPreviewSalida() {
     video.style.display = 'block';
     btnTomarFoto.style.display = 'inline-block';
 }
+
+

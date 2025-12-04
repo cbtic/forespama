@@ -362,65 +362,69 @@ label.form-control-sm{
                             Asistencia Promotores
                         </h4>
                     </div>
+                    <!--<div class="col-7 col-md-7 d-flex justify-content-end" style="margin-top:15px">
+                      <div class="form-group">
+                          <label><b>Tiempo Trabajado Diario</b></label>
+                          <input type="text" id="tiempo_trabajado" class="form-control form-control-sm" readonly>
+                      </div>
+                  </div>
+
+                  <input type="hidden" id="hora_ingreso" value="{{ $hora_ingreso }}">-->
                 </div>
                 <div class="row justify-content-center" style="margin-top:15px">
 
-                    <input type="hidden" name="flag_ocultar" id="flag_ocultar" value="0">
+                  <input type="hidden" name="flag_ocultar" id="flag_ocultar" value="0">
+                  <div class="col col-sm-12 align-self-center">
+                    <input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
+				            <div class="row" style="padding:20px 20px 0px 20px;">
 
-					<div class="col col-sm-12 align-self-center">
-
-
-                        <input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
+                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                                  <input id="fecha_bus" name="fecha_bus" on class="form-control form-control-sm"  placeholder="Fecha">
+                    </div>
+                      <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+                      <select name="estado_bus" id="estado_bus" class="form-control form-control-sm">
+                        <option value="">Todos</option>
+                        <option value="1" selected="selected">Activo</option>
+                        <option value="0">Eliminado</option>
+                      </select>
+                    </div>
+                              
+                    <div class="col-12 col-md-5 d-flex justify-content-start justify-content-md-end gap-2" style="padding-right:0px">
+                      <input class="btn btn-warning pull-rigth" value="Buscar" type="button" id="btnBuscar" />
+                      <button type="button" class="btn btn-success" onclick="modalAsistencia()" style="margin-left:15px" >Marcar Ingreso</button>
+                      <!--<button type="button" class="btn btn-info" onclick="modalAsistenciaSalida()" style="margin-left:15px" >Marcar Salida</button>-->
+                      
+                    </div>
+                  </div>
 				
-				<div class="row" style="padding:20px 20px 0px 20px;">
-
-					<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-                        <input id="fecha_bus" name="fecha_bus" on class="form-control form-control-sm"  placeholder="Fecha">
-					</div>
-                    <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<select name="estado_bus" id="estado_bus" class="form-control form-control-sm">
-							<option value="">Todos</option>
-							<option value="1" selected="selected">Activo</option>
-							<option value="0">Eliminado</option>
-						</select>
-					</div>
-                    
-					<div class="col-12 col-md-5 d-flex justify-content-start justify-content-md-end gap-2" style="padding-right:0px">
-						<input class="btn btn-warning pull-rigth" value="Buscar" type="button" id="btnBuscar" />
-						<button type="button" class="btn btn-success" onclick="modalAsistencia()" style="margin-left:15px" >Marcar Ingreso</button>
-						<!--<button type="button" class="btn btn-info" onclick="modalAsistenciaSalida()" style="margin-left:15px" >Marcar Salida</button>-->
-						
-					</div>
-				</div>
-				
-                <div class="card-body">
-					<div class="card-body p-2">
-						<div class="table-responsive">
-						<table id="tblAsistenciaPromotores" class="table table-hover table-sm">
-							<thead>
-							<tr style="font-size:13px">
-								<th>Id</th>
-								<th>Promotor</th>
-								<th>Tienda</th>
-								<th>Fecha</th>
-								<th>Hora Ingreso</th>
-								<th>Hora Salida</th>
-								<th>Ver Ubicaci&oacute;n Ingreso</th>
-								<th>Ver Ubicaci&oacute;n Salida</th>
-								<th>Imagen Ingreso</th>
-								<th>Imagen Salida</th>
-								<th>Salida</th>
-								<th>Estado</th>
-							</tr>
-							</thead>
-							<tbody>
-							</tbody>
-						</table>
+                  <div class="card-body">
+                    <div class="card-body p-2">
+                      <div class="table-responsive">
+                      <table id="tblAsistenciaPromotores" class="table table-hover table-sm">
+                        <thead>
+                        <tr style="font-size:13px">
+                          <th>Id</th>
+                          <th>Promotor</th>
+                          <th>Tienda</th>
+                          <th>Fecha</th>
+                          <th>Hora Ingreso</th>
+                          <th>Hora Salida</th>
+                          <th>Ver Ubicaci&oacute;n Ingreso</th>
+                          <th>Ver Ubicaci&oacute;n Salida</th>
+                          <th>Imagen Ingreso</th>
+                          <th>Imagen Salida</th>
+                          <th>Salida</th>
+                          <th>Estado</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                      </table>
 					
-            		</div>
-                </div>
-                </div><!--table-responsive-->
-                </form>
+                      </div>
+                    </div>
+                  </div><!--table-responsive-->
+                  </form>
                 </div><!--card-body-->
             </div><!--card-->
         <!--</div>--><!--col-->
@@ -439,7 +443,7 @@ label.form-control-sm{
         <form id="frmAsistenciaPromotor" method="post" action="#">
           <input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
           <input type="hidden" name="d" id="id" value="<?php echo $id?>">
-          
+
           <div class="form-group">
             <label><b>Tienda</b></label>
             <select name="id_tienda" id="id_tienda" class="form-control form-control-sm">

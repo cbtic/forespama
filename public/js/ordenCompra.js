@@ -435,10 +435,8 @@ function datatablenew(){
 					"bSortable": false,
 					"aTargets": [15],
 				},
-
             ]
     });
-
 }
 
 fn_util_LineaDatatable("#tblOrdenCompra");
@@ -477,16 +475,16 @@ function modalOrdenCompra(id){
 	$('#openOverlayOpc .modal-body').css('height', 'auto');
 
 	$.ajax({
-			url: "/orden_compra/modal_orden_compra/"+id,
-			type: "GET",
-			success: function (result) {
-					$("#diveditpregOpc").html(result);
-					$('#openOverlayOpc').modal({
-						backdrop: 'static',
-						keyboard: false
-					});
-					$('#openOverlayOpc').modal('show');
-			}
+		url: "/orden_compra/modal_orden_compra/"+id,
+		type: "GET",
+		success: function (result) {
+			$("#diveditpregOpc").html(result);
+			$('#openOverlayOpc').modal({
+				backdrop: 'static',
+				keyboard: false
+			});
+			$('#openOverlayOpc').modal('show');
+		}
 	});
 }
 
@@ -515,12 +513,12 @@ function eliminarOrdenCompra(id,estado){
 function fn_eliminar(id,estado){
 	
     $.ajax({
-            url: "/orden_compra/eliminar_orden_compra/"+id+"/"+estado,
-            type: "GET",
-            success: function (result) {
-                //if(result="success")obtenerPlanDetalle(id_plan);
-				datatablenew();
-            }
+		url: "/orden_compra/eliminar_orden_compra/"+id+"/"+estado,
+		type: "GET",
+		success: function (result) {
+			//if(result="success")obtenerPlanDetalle(id_plan);
+			datatablenew();
+		}
     });
 }
 
@@ -530,14 +528,13 @@ function anularOrdenCompra(id){
 	$('#openOverlayOpc .modal-body').css('height', 'auto');
 
 	$.ajax({
-			url: "/orden_compra/modal_anular_orden_compra/"+id,
-			type: "GET",
-			success: function (result) {
-					$("#diveditpregOpc").html(result);
-					$('#openOverlayOpc').modal('show');
-			}
+		url: "/orden_compra/modal_anular_orden_compra/"+id,
+		type: "GET",
+		success: function (result) {
+			$("#diveditpregOpc").html(result);
+			$('#openOverlayOpc').modal('show');
+		}
 	});
-
 }
 
 function modalEntradaProductoOrdenCompra(id,id_tipo_documento){
@@ -550,12 +547,12 @@ function modalEntradaProductoOrdenCompra(id,id_tipo_documento){
 	$('#openOverlayOpc .modal-body').css('height', 'auto');
 
 	$.ajax({
-			url: "/entrada_productos/modal_detalle_producto_orden_compra/"+id+"/"+id_tipo_documento,
-			type: "GET",
-			success: function (result) {
-					$("#diveditpregOpc").html(result);
-					$('#openOverlayOpc').modal('show');
-			}
+		url: "/entrada_productos/modal_detalle_producto_orden_compra/"+id+"/"+id_tipo_documento,
+		type: "GET",
+		success: function (result) {
+			$("#diveditpregOpc").html(result);
+			$('#openOverlayOpc').modal('show');
+		}
 	});
 }
 
@@ -568,8 +565,8 @@ function modalHistorialEntradaProducto(id, id_tipo_documento){
 		url: "/entrada_productos/modal_historial_entrada_producto/"+id+"/"+id_tipo_documento,
 		type: "GET",
 		success: function (result) {
-				$("#diveditpregOpc").html(result);
-				$('#openOverlayOpc').modal('show');
+			$("#diveditpregOpc").html(result);
+			$('#openOverlayOpc').modal('show');
 		}
 	});
 }
@@ -587,8 +584,8 @@ function modalTiendaOrdenCompra(id){
 		url: "/orden_compra/modal_orden_compra_tienda/"+id,
 		type: "GET",
 		success: function (result) {  
-				$("#diveditpregOpc").html(result);
-				$('#openOverlayOpc').modal('show');
+			$("#diveditpregOpc").html(result);
+			$('#openOverlayOpc').modal('show');
 		}
 	});
 }
@@ -679,9 +676,9 @@ function generarLPN(){
 		url: "/orden_compra/generar_lpn/"+id_orden_compra,
 		type: "GET",
 		success: function (result) {
-				//$("#diveditpregOpc").html(result);
-				//$('#openOverlayOpc').modal('show');
-				bootbox.alert("Generado Exitosamente");
+			//$("#diveditpregOpc").html(result);
+			//$('#openOverlayOpc').modal('show');
+			bootbox.alert("Generado Exitosamente");
 		}
 	});
 }

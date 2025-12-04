@@ -193,13 +193,22 @@ class PromotorController extends Controller
 
 	public function create_asistencia(){
 
+		$id_user = Auth::user()->id;
+
 		$tienda_model = new Tienda;
+		$asisntencia_promotor_model = new AsistenciaPromotore;
+
+		$fecha_actual = Carbon::now()->format('d-m-Y');
+
+		$asistencia_diaria = $asisntencia_promotor_model->getHoraIngresoDiario($id_user,$fecha_actual);
+
+		$hora_ingreso = count($asistencia_diaria) > 0 ? $asistencia_diaria[0]->hora_entrada : '';
 
         $tiendas = $tienda_model->getTiendasAll();
 
 		$id=0;
 
-	return view('frontend.promotores.create_asistencia',compact('tiendas','id'));
+		return view('frontend.promotores.create_asistencia',compact('tiendas','id','hora_ingreso'));
 
 	}
 
