@@ -301,7 +301,7 @@ $(document).ready(function() {
     
     obtenerFechaVencimiento();
     obtenerCanal();
-    obtenerBeneficiario();
+    obtenerBeneficiarioGuardado();
 
     $("#item").select2({ width: '100%' });
     $("#ubicacion_fisica_seccion").select2({ width: '100%' });
@@ -339,7 +339,8 @@ $(document).ready(function() {
         cambiarOrigen();
     }*/
 
-    cambiarCliente();
+    //cambiarCliente();
+    cambiarClienteGuardado();
     obtenerPrioridad();
 
     if($('#id').val()>0){
@@ -1413,6 +1414,41 @@ function cambiarCliente(){
     }
 }
 
+function cambiarClienteGuardado(){
+
+    var tipo_documento_cliente = $('#tipo_documento_cliente').val();
+    //alert(tipo_documento_cliente);
+    var canal = $('#canal').val();
+
+    $('#label_empresa_compra').hide();
+    $('#select_empresa_compra').hide();
+    $('#label_persona_compra').hide();
+    $('#select_persona_compra').hide();
+
+    if(tipo_documento_cliente==1){
+
+        if(canal==1){
+            $('#label_empresa_compra').show();
+            $('#select_empresa_compra').show();
+            $('#label_persona_compra').show();
+            $('#select_persona_compra').show();
+        }else{
+            $('#label_empresa_compra').hide();
+            $('#select_empresa_compra').hide();
+            $('#label_persona_compra').show();
+            $('#select_persona_compra').show();
+        }
+        
+    }else if(tipo_documento_cliente==5){
+
+        $('#label_empresa_compra').show();
+        $('#select_empresa_compra').show();
+        $('#label_persona_compra').hide();
+        $('#select_persona_compra').hide();
+        
+    }
+}
+
 function obtenerStock(selectElement, n){
 
     var id_producto = $(selectElement).val();
@@ -1517,6 +1553,29 @@ function obtenerBeneficiario(){
     }else {
         $('#tipo_documento_cliente').val(5);
         cambiarCliente();
+    }
+}
+
+function obtenerBeneficiarioGuardado(){
+
+    var canal = $('#canal').val();
+    var tipo_documento_cliente = $('#tipo_documento_cliente').val();
+    //alert(tipo_documento_cliente);
+    if(canal == 1){
+        if(tipo_documento_cliente==1){
+            $('#tipo_documento_cliente').val(1);
+            cambiarClienteGuardado();
+            $('#label_empresa_compra').show();
+            $('#select_empresa_compra').show();
+        }else{
+            $('#tipo_documento_cliente').val(5);
+            cambiarClienteGuardado();
+            $('#label_empresa_compra').show();
+            $('#select_empresa_compra').show();
+        }
+    }else {
+        $('#tipo_documento_cliente').val(5);
+        cambiarClienteGuardado();
     }
 }
 

@@ -1,4 +1,4 @@
--- DROP FUNCTION public.sp_listar_orden_compra_detalle_paginado(varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, refcursor);
+-- DROP FUNCTION public.sp_listar_orden_compra_detalle_paginado(varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, refcursor);
 
 CREATE OR REPLACE FUNCTION public.sp_listar_orden_compra_detalle_paginado(p_tipo_documento character varying, p_empresa_compra character varying, p_empresa_vende character varying, p_fecha_inicio character varying, p_fecha_fin character varying, p_numero_orden_compra character varying, p_numero_orden_compra_cliente character varying, p_situacion character varying, p_almacen_origen character varying, p_almacen_destino character varying, p_estado character varying, p_id_user character varying, p_id_vendedor character varying, p_estado_pedido character varying, p_prioridad character varying, p_canal character varying, p_tipo_producto character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
  RETURNS refcursor
@@ -26,11 +26,12 @@ begin
 	where p.id = oc.id_persona)
 	else (select e.razon_social from empresas e 
 	where e.id = oc.id_empresa_compra) 
-	end cliente, oc.numero_orden_compra, oc.fecha_orden_compra, p.codigo, p.denominacion producto, ocd.cantidad_requerida, ocd.precio_venta, ocd.precio, ocd.valor_venta_bruto, ocd.valor_venta, ocd.descuento, ocd.sub_total, ocd.igv, ocd.total ';
+	end cliente, oc.numero_orden_compra, oc.fecha_orden_compra, p.codigo, p.denominacion producto, ocd.cantidad_requerida, ocd.precio_venta, ocd.precio, ocd.valor_venta_bruto, ocd.valor_venta, ocd.descuento, ocd.sub_total, ocd.igv, ocd.total, u."name" vendedor ';
 	
 	v_tabla=' from orden_compras oc 
 	inner join orden_compra_detalles ocd on oc.id = ocd.id_orden_compra and ocd.estado = ''1''
-	inner join productos p on ocd.id_producto = p.id ';
+	inner join productos p on ocd.id_producto = p.id
+	left join users u on oc.id_vendedor = u.id  ';
 		
 	v_where = ' Where 1=1 ';
 
