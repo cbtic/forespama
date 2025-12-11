@@ -305,8 +305,11 @@ function datatablenew(){
                     
                     var html = '<div class="btn-group btn-group-sm" role="group" aria-label="Log Viewer Actions">';
                     
-                    html += '<button style="font-size:12px" type="button" class="btn btn-sm btn-info" data-toggle="modal" onclick="modalAsistenciaSalida('+row.id+')" ><i class="fa fa-edit"></i> Marcar Salida</button>'; 
-                    
+                    if(row.hora_salida == null){
+                        html += '<button style="font-size:12px" type="button" class="btn btn-sm btn-info" data-toggle="modal" onclick="modalAsistenciaSalida('+row.id+')" ><i class="fa fa-edit"></i> Marcar Salida</button>'; 
+                    }else{
+                        html += '<button style="font-size:12px" type="button" class="btn btn-sm btn-info" data-toggle="modal" onclick="modalAsistenciaSalida('+row.id+')" disabled><i class="fa fa-edit"></i> Marcar Salida</button>'; 
+                    }
                     html += '</div>';
                     return html;
                 },
@@ -423,7 +426,6 @@ function marcarAsistencia() {
 function fn_save_asistencia_promotor(){
 	
     var msg = "";
-
     var id_tienda = $('#id_tienda').val();
 
     if(id_tienda==""){msg+="Debe seleccionar una tienda antes de marcar asistencia. <br>";}
@@ -432,16 +434,20 @@ function fn_save_asistencia_promotor(){
         bootbox.alert(msg);
         return false;
     }else{
+
+        var msgLoader = "Marcando asistencia, espere un momento...";
+        $('.loader').css("opacity", "0.8").css("width", "100vw").css("height", "100vh").html("<div id='Grd1_wrapper' class='dataTables_wrapper'><div id='Grd1_processing' class='dataTables_processing panel-default'>Marcando asistencia, espere un momento...</div></div>").show();
+
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function(position) {
 
                 const latitud = position.coords.latitude;
                 const longitud = position.coords.longitude;
                 //alert(latitud+"-"+longitud);
-                var msgLoader = "Marcando asistencia, espere un momento...";
-                var heightBrowser = $(window).width() / 2;
-                $('.loader').css("opacity", "0.8").css("height", heightBrowser).html("<div id='Grd1_wrapper' class='dataTables_wrapper'><div id='Grd1_processing' class='dataTables_processing panel-default'>" + msgLoader + "</div></div>");
-                $('.loader').show();
+                //var msgLoader = "Marcando asistencia, espere un momento...";
+                //var heightBrowser = $(window).width() / 2;
+                //$('.loader').css("opacity", "0.8").css("height", heightBrowser).html("<div id='Grd1_wrapper' class='dataTables_wrapper'><div id='Grd1_processing' class='dataTables_processing panel-default'>" + msgLoader + "</div></div>");
+                //$('.loader').show();
 
                 $.ajax({
                     url: "/promotores/marcar_asistencia",
@@ -456,10 +462,13 @@ function fn_save_asistencia_promotor(){
                     },
                     success: function (response) {
                         $('.loader').hide();
-                        bootbox.alert(response.message);
-                        $('#btnAsistencia').attr('disabled', false);
-                        $('#openOverlayOpc').modal('hide');
-                        datatablenew();
+                        bootbox.alert(response.message, function(){
+                            $('#btnAsistencia').attr('disabled', false);
+                            $('#openOverlayOpc').modal('hide');
+                            //datatablenew();
+                            window.location.reload();
+                        });
+                        
                     },
                     error: function (xhr, status, error) {
                         $('.loader').hide();
@@ -469,6 +478,8 @@ function fn_save_asistencia_promotor(){
                 });
 
             }, function (error) {
+
+                $('.loader').hide();
 
                 if (error.code === error.PERMISSION_DENIED) {
                     bootbox.alert("Debes permitir el acceso a la ubicación para marcar asistencia.");
@@ -504,16 +515,20 @@ function fn_save_asistencia_promotor_salida(){
         bootbox.alert(msg);
         return false;
     }else{
+
+        var msgLoader = "Marcando salida, espere un momento...";
+        $('.loader').css("opacity", "0.8").css("width", "100vw").css("height", "100vh").html("<div id='Grd1_wrapper' class='dataTables_wrapper'><div id='Grd1_processing' class='dataTables_processing panel-default'>Marcando salida, espere un momento...</div></div>").show();
+
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function(position) {
 
                 const latitud = position.coords.latitude;
                 const longitud = position.coords.longitude;
 
-                var msgLoader = "Marcando asistencia, espere un momento...";
-                var heightBrowser = $(window).width() / 2;
-                $('.loader').css("opacity", "0.8").css("height", heightBrowser).html("<div id='Grd1_wrapper' class='dataTables_wrapper'><div id='Grd1_processing' class='dataTables_processing panel-default'>" + msgLoader + "</div></div>");
-                $('.loader').show();
+                //var msgLoader = "Marcando asistencia, espere un momento...";
+                //var heightBrowser = $(window).width() / 2;
+                //$('.loader').css("opacity", "0.8").css("height", heightBrowser).html("<div id='Grd1_wrapper' class='dataTables_wrapper'><div id='Grd1_processing' class='dataTables_processing panel-default'>" + msgLoader + "</div></div>");
+                //$('.loader').show();
 
                 $.ajax({
                     url: "/promotores/marcar_asistencia_salida",
@@ -542,6 +557,8 @@ function fn_save_asistencia_promotor_salida(){
                 });
 
             }, function (error) {
+
+                $('.loader').hide();
 
                 if (error.code === error.PERMISSION_DENIED) {
                     bootbox.alert("Debes permitir el acceso a la ubicación para marcar asistencia.");

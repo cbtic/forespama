@@ -117,16 +117,26 @@ function fn_save_asistencia_promotor(){
         bootbox.alert(msg);
         return false;
     }else{
+
+        var msgLoader = "Marcando asistencia, espere un momento...";
+        $('.loader')
+        .css("opacity", "0.8")
+        .css("width", "100vw")
+        .css("height", "100vh")
+        .html("<div id='Grd1_processing'>Marcando asistencia, espere un momento...</div>")
+        .show();
+
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function(position) {
 
                 const latitud = position.coords.latitude;
                 const longitud = position.coords.longitude;
-
-                var msgLoader = "Marcando asistencia, espere un momento...";
-                var heightBrowser = $(window).width() / 2;
-                $('.loader').css("opacity", "0.8").css("height", heightBrowser).html("<div id='Grd1_wrapper' class='dataTables_wrapper'><div id='Grd1_processing' class='dataTables_processing panel-default'>" + msgLoader + "</div></div>");
-                $('.loader').show();
+                
+                //var msgLoader = "Marcando asistencia, espere un momento...";
+                //var heightBrowser = $(window).width() / 2;
+                //$('.loader').css("opacity", "0.8").css("height", heightBrowser).html("<div id='Grd1_wrapper' class='dataTables_wrapper'><div id='Grd1_processing' class='dataTables_processing panel-default'>" + msgLoader + "</div></div>");
+                //$('.loader').css("opacity", "0.8").css("width", "100vw").css("height", "100vh").html("<div id='Grd1_wrapper' class='dataTables_wrapper'><div id='Grd1_processing' class='dataTables_processing panel-default'>" + msgLoader + "</div></div>");
+                //$('.loader').show();
 
                 $.ajax({
                     url: "/promotores/marcar_asistencia",
@@ -153,6 +163,8 @@ function fn_save_asistencia_promotor(){
                 });
 
             }, function (error) {
+
+                $('.loader').hide();
 
                 if (error.code === error.PERMISSION_DENIED) {
                     bootbox.alert("Debes permitir el acceso a la ubicación para marcar asistencia.");

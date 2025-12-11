@@ -1585,7 +1585,7 @@ function validarMuestraExhibicion(input){
 
     var numero_orden_compra_cliente = $('#numero_orden_compra_cliente').val().toUpperCase().trim();
 
-    if(numero_orden_compra_cliente.includes('MUESTRA') || numero_orden_compra_cliente.includes('EXHIBICION')){
+    if(numero_orden_compra_cliente.includes('MUESTRA') || numero_orden_compra_cliente.includes('EXHIBICION') || numero_orden_compra_cliente.includes('POSVENTA') || numero_orden_compra_cliente.includes('POSTVENTA')){
 
         //alert("ok");
         row.find(".precio_unitario").val(0);
@@ -2075,128 +2075,128 @@ function duplicar_pedido(){
                             </div>
                         </div>
                         <div class="card-body" style="padding-right: 0px !important; padding-left: 0px !important;">
-					<div class="table-responsive" style="overflow-y: auto; max-height: 350px;">
-						<table id="tblOrdenCompraDetalle" class="table table-hover table-sm">
-							<thead>
-							<tr style="font-size:12px">
-								<th>#</th>
-								<th>Descripci&oacute;n</th>
-								<th>Marca</th>
-                                <th>COD. INT.</th>
-                                <th>Unidad</th>
-                                <th>Cantidad</th>
-                                <th>Stock Disponible</th>
-                                <th>Precio Venta</th>
-                                <th>Precio Unitario</th>
-                                <th>Valor Venta Bruto</th>
-                                <th>Valor Venta</th>
-                                <th>Valor Descuento</th>
-                                <th>Porcentaje Descuento</th>
-                                <th>Sub Total</th>
-                                <th>IGV</th>
-                                <th>Total</th>
-							</tr>
-							</thead>
-							<tbody id="divOrdenCompraDetalle" style="font-size:14px">
-							</tbody>
-						</table>
-					</div>
-                    <table style="background-color:white !important;border-collapse:collapse;border-spacing:1px; width: 100%; margin: 0 auto; font-size:12px">
-                        <tbody>
-                            <tr>
-                                <td class="td" style ="text-align: left; width: 5%; font-size:13px"><b>Sub-Total:</b></td>
-                                <td id="subTotalGeneral" class="td" style="text-align: left; width: 10%; font-size:13px">
-                                    <input type="text" name="sub_total_general" id="sub_total_general" class="form-control" value="0.00" readonly style="border: none; background: transparent; text-align: left; pointer-events: none;">
-                                </td>
-                                <td class="td" style ="text-align: left; width: 10%; font-size:13px"></td>
-                                <td class="td" style ="text-align: left; width: 5%; font-size:13px"><b>IGV Total:</b></td>
-                                <td id="igvGeneral" class="td" style="text-align: left; width: 10%; font-size:13px">
-                                    <input type="text" name="igv_general" id="igv_general" class="form-control" value="0.00" readonly style="border: none; background: transparent; text-align: left; pointer-events: none;">
-                                </td>
-                                <td class="td" style ="text-align: left; width: 10%; font-size:13px"></td>
-                                <td class="td" style ="text-align: left; width: 5%; font-size:13px"><b>Descuento Total:</b></td>
-                                <td id="descuentoGeneral" class="td" style="text-align: left; width: 5%; font-size:13px">
-                                    <input type="text" name="descuento_general" id="descuento_general" class="form-control" value="0.00" readonly style="border: none; background: transparent; text-align: left; pointer-events: none;">
-                                </td>
-                                <td class="td" style ="text-align: left; width: 10%; font-size:13px"></td>
-                                <td class="td" style ="text-align: left; width: 5%; font-size:13px"><b>Total:</b></td>
-                                <td id="totalGeneral" class="td" style="text-align: left; width: 10%; font-size:13px">
-                                    <input type="text" name="total_general" id="total_general" class="form-control" value="0.00" readonly style="border: none; background: transparent; text-align: left; pointer-events: none;">
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <div style="margin-top:15px" class="form-group">
-                        <div class="col-sm-12 controls">
-                            <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
-                                
-                                <?php if($id>0 && $orden_compra->id_tipo_documento == 2){ ?>
-
-                                    <button type="button" class="btn btn-sm btn-clasico btn-buscar" style="margin-left:10px;" data-toggle="modal" onclick="duplicar_pedido()" >
-                                        <i class="fas fa-copy" style="font-size:18px;"></i>Duplicar Pedido
-                                    </button>
-
-                                <?php }?>
-
-                                <?php if($id>0){ ?>
-
-                                    <button id="btnDescargarIndividual" type="button" class="btn btn-sm btn-secondary pull-rigth icono-botones2" style="margin-left:10px;">
-                                        <i class="fas fa-download" style="font-size:18px;"></i> Excel
-                                    </button>
-
-                                <?php }?>
-
-                                <?php 
-                                    if($id>0 && $orden_compra->cerrado == 1 ){
-                                ?>
-                                <button style="font-size:12px;margin-left:10px" type="button" class="btn btn-sm btn-clasico btn-enviar" data-toggle="modal" onclick="pdf_documento()" >
-                                    <i class="far fa-file-pdf" style="font-size:18px;"></i> Imprimir
-                                </button>
-                                <?php 
-                                    }else{
-                                ?>
-                                    <button style="font-size:12px;margin-left:10px" type="button" class="btn btn-sm btn-clasico btn-enviar" data-toggle="modal" onclick="pdf_documento()" >
-                                        <i class="far fa-file-pdf" style="font-size:18px;"></i>Imprimir
-                                    </button>
-                                <?php 
-                                    }
-                                ?>
-                                <?php 
-                                    /*if($id>0){
-                                        if($orden_compra->id_empresa_compra==23){
-                                ?>
-                                <button style="font-size:12px;margin-left:40px;" type="button" class="btn btn-sm btn-light" data-toggle="modal" onclick="generarLPN()" >Generar LPN</button>
-                                <?php 
-                                        }
-                                    }*/
-                                ?>
-                                <?php if($id_user==$orden_compra->id_usuario_inserta && $orden_compra->cerrado == 1 && $id_proceso == 1 && $orden_compra->id_tipo_documento != 1){?>
-                                    <!--<a href="javascript:void(0)" onClick="fn_save_orden_compra()" class="btn btn-sm btn-success" style="margin-left:10px"></a>-->
+                            <div class="table-responsive" style="overflow-y: auto; max-height: 350px;">
+                                <table id="tblOrdenCompraDetalle" class="table table-hover table-sm">
+                                    <thead>
+                                    <tr style="font-size:12px">
+                                        <th>#</th>
+                                        <th>Descripci&oacute;n</th>
+                                        <th>Marca</th>
+                                        <th>COD. INT.</th>
+                                        <th>Unidad</th>
+                                        <th>Cantidad</th>
+                                        <th>Stock Disponible</th>
+                                        <th>Precio Venta</th>
+                                        <th>Precio Unitario</th>
+                                        <th>Valor Venta Bruto</th>
+                                        <th>Valor Venta</th>
+                                        <th>Valor Descuento</th>
+                                        <th>Porcentaje Descuento</th>
+                                        <th>Sub Total</th>
+                                        <th>IGV</th>
+                                        <th>Total</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="divOrdenCompraDetalle" style="font-size:14px">
+                                    </tbody>
+                                </table>
+                            </div>
+                            <table style="background-color:white !important;border-collapse:collapse;border-spacing:1px; width: 100%; margin: 0 auto; font-size:12px">
+                                <tbody>
+                                    <tr>
+                                        <td class="td" style ="text-align: left; width: 5%; font-size:13px"><b>Sub-Total:</b></td>
+                                        <td id="subTotalGeneral" class="td" style="text-align: left; width: 10%; font-size:13px">
+                                            <input type="text" name="sub_total_general" id="sub_total_general" class="form-control" value="0.00" readonly style="border: none; background: transparent; text-align: left; pointer-events: none;">
+                                        </td>
+                                        <td class="td" style ="text-align: left; width: 10%; font-size:13px"></td>
+                                        <td class="td" style ="text-align: left; width: 5%; font-size:13px"><b>IGV Total:</b></td>
+                                        <td id="igvGeneral" class="td" style="text-align: left; width: 10%; font-size:13px">
+                                            <input type="text" name="igv_general" id="igv_general" class="form-control" value="0.00" readonly style="border: none; background: transparent; text-align: left; pointer-events: none;">
+                                        </td>
+                                        <td class="td" style ="text-align: left; width: 10%; font-size:13px"></td>
+                                        <td class="td" style ="text-align: left; width: 5%; font-size:13px"><b>Descuento Total:</b></td>
+                                        <td id="descuentoGeneral" class="td" style="text-align: left; width: 5%; font-size:13px">
+                                            <input type="text" name="descuento_general" id="descuento_general" class="form-control" value="0.00" readonly style="border: none; background: transparent; text-align: left; pointer-events: none;">
+                                        </td>
+                                        <td class="td" style ="text-align: left; width: 10%; font-size:13px"></td>
+                                        <td class="td" style ="text-align: left; width: 5%; font-size:13px"><b>Total:</b></td>
+                                        <td id="totalGeneral" class="td" style="text-align: left; width: 10%; font-size:13px">
+                                            <input type="text" name="total_general" id="total_general" class="form-control" value="0.00" readonly style="border: none; background: transparent; text-align: left; pointer-events: none;">
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div style="margin-top:15px" class="form-group">
+                                <div class="col-sm-12 controls">
+                                    <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
                                         
-                                    <button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-nuevo" data-toggle="modal" onclick="fn_save_orden_compra()">
-                                        <i class="fas fa-save" style="font-size:18px;"></i> Guardar
-                                    </button>
-                                <?php }?>
-                                <?php if($id_user==$orden_compra->id_usuario_inserta && $orden_compra->cerrado == 1 && $orden_compra->id_tipo_documento == 1){?>
-                                    <!--<a href="javascript:void(0)" onClick="fn_save_orden_compra()" class="btn btn-sm btn-success" style="margin-left:10px"><i class="fas fa-save"></i></a>-->
-                                    <button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-nuevo" data-toggle="modal" onclick="fn_save_orden_compra()">
-                                        <i class="fas fa-save" style="font-size:18px;"></i> Guardar
-                                    </button>
-                                <?php }?>
-                                <?php if($id==0){?>
-                                    <!--<a href="javascript:void(0)" onClick="fn_save_orden_compra()" class="btn btn-sm btn-success" style="margin-left:10px"><i class="fas fa-save"></i></a>-->
-                                    <button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-nuevo" data-toggle="modal" onclick="fn_save_orden_compra()">
-                                        <i class="fas fa-save" style="font-size:18px;"></i> Guardar
-                                    </button>
-                                <?php }?>
-                                <!--<a href="javascript:void(0)" onClick="$('#openOverlayOpc').modal('hide');" class="btn btn-sm btn-info" style="margin-left:10px;">Cerrar</a>-->
-                                <button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-cerrar" data-toggle="modal" onclick="$('#openOverlayOpc').modal('hide');">
-                                    <i class="fas fa-times-circle" style="font-size:18px;"></i> Cerrar
-                                </button>
+                                        <?php if($id>0 && $orden_compra->id_tipo_documento == 2){ ?>
+
+                                            <button type="button" class="btn btn-sm btn-clasico btn-buscar" style="margin-left:10px;" data-toggle="modal" onclick="duplicar_pedido()" >
+                                                <i class="fas fa-copy" style="font-size:18px;"></i>Duplicar Pedido
+                                            </button>
+
+                                        <?php }?>
+
+                                        <?php if($id>0){ ?>
+
+                                            <button id="btnDescargarIndividual" type="button" class="btn btn-sm btn-secondary pull-rigth icono-botones2" style="margin-left:10px;">
+                                                <i class="fas fa-download" style="font-size:18px;"></i> Excel
+                                            </button>
+
+                                        <?php }?>
+
+                                        <?php 
+                                            if($id>0 && $orden_compra->cerrado == 1 ){
+                                        ?>
+                                        <button style="font-size:12px;margin-left:10px" type="button" class="btn btn-sm btn-clasico btn-enviar" data-toggle="modal" onclick="pdf_documento()" >
+                                            <i class="far fa-file-pdf" style="font-size:18px;"></i> Imprimir
+                                        </button>
+                                        <?php 
+                                            }else{
+                                        ?>
+                                            <button style="font-size:12px;margin-left:10px" type="button" class="btn btn-sm btn-clasico btn-enviar" data-toggle="modal" onclick="pdf_documento()" >
+                                                <i class="far fa-file-pdf" style="font-size:18px;"></i>Imprimir
+                                            </button>
+                                        <?php 
+                                            }
+                                        ?>
+                                        <?php 
+                                            /*if($id>0){
+                                                if($orden_compra->id_empresa_compra==23){
+                                        ?>
+                                        <button style="font-size:12px;margin-left:40px;" type="button" class="btn btn-sm btn-light" data-toggle="modal" onclick="generarLPN()" >Generar LPN</button>
+                                        <?php 
+                                                }
+                                            }*/
+                                        ?>
+                                        <?php if($id_user==$orden_compra->id_usuario_inserta && $orden_compra->cerrado == 1 && $id_proceso == 1 && $orden_compra->id_tipo_documento != 1){?>
+                                            <!--<a href="javascript:void(0)" onClick="fn_save_orden_compra()" class="btn btn-sm btn-success" style="margin-left:10px"></a>-->
+                                                
+                                            <button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-nuevo" data-toggle="modal" onclick="fn_save_orden_compra()">
+                                                <i class="fas fa-save" style="font-size:18px;"></i> Guardar
+                                            </button>
+                                        <?php }?>
+                                        <?php if($id_user==$orden_compra->id_usuario_inserta && $orden_compra->cerrado == 1 && $orden_compra->id_tipo_documento == 1){?>
+                                            <!--<a href="javascript:void(0)" onClick="fn_save_orden_compra()" class="btn btn-sm btn-success" style="margin-left:10px"><i class="fas fa-save"></i></a>-->
+                                            <button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-nuevo" data-toggle="modal" onclick="fn_save_orden_compra()">
+                                                <i class="fas fa-save" style="font-size:18px;"></i> Guardar
+                                            </button>
+                                        <?php }?>
+                                        <?php if($id==0){?>
+                                            <!--<a href="javascript:void(0)" onClick="fn_save_orden_compra()" class="btn btn-sm btn-success" style="margin-left:10px"><i class="fas fa-save"></i></a>-->
+                                            <button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-nuevo" data-toggle="modal" onclick="fn_save_orden_compra()">
+                                                <i class="fas fa-save" style="font-size:18px;"></i> Guardar
+                                            </button>
+                                        <?php }?>
+                                        <!--<a href="javascript:void(0)" onClick="$('#openOverlayOpc').modal('hide');" class="btn btn-sm btn-info" style="margin-left:10px;">Cerrar</a>-->
+                                        <button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-cerrar" data-toggle="modal" onclick="$('#openOverlayOpc').modal('hide');">
+                                            <i class="fas fa-times-circle" style="font-size:18px;"></i> Cerrar
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-				</div>
                     </div>
                 </form>
                 </div>

@@ -199,7 +199,7 @@ function datatablenew(){
 			$(nRow).removeClass("row_autorizacion row_autorizacion_selected row_selected");
 			$(nRow).removeAttr("data-original-title");
 
-			if (aData.id_autorizacion == 1) {
+			if (aData.id_proceso_pedido == 2) {
 				$(nRow).addClass("row_autorizacion");
 				$(nRow).attr("data-toggle", "tooltip").attr("data-placement", "top").attr("title", "REQUIERE AUTORIZACIÓN DE DESCUENTO");
 			}

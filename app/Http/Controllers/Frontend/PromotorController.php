@@ -203,16 +203,16 @@ class PromotorController extends Controller
 		$id_user = Auth::user()->id;
 
 		$tienda_model = new Tienda;
-		$asisntencia_promotor_model = new AsistenciaPromotore;
+		$asistencia_promotor_model = new AsistenciaPromotore;
 		$tablaMaestra_model = new TablaMaestra;
 
 		$fecha_actual = Carbon::now()->format('d-m-Y');
 
-		$asistencia_diaria = $asisntencia_promotor_model->getHoraIngresoDiario($id_user,$fecha_actual);
+		$asistencia_diaria = $asistencia_promotor_model->getHoraIngresoDiario($id_user,$fecha_actual);
         $empresa_retail = $tablaMaestra_model->getMaestroByTipo(110);
 
 		$hora_ingreso = count($asistencia_diaria) > 0 ? $asistencia_diaria[0]->hora_entrada : '';
-
+		//dd($hora_ingreso);exit();
         $tiendas = $tienda_model->getTiendasAll();
 
 		$id=0;

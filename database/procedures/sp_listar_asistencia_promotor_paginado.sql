@@ -1,4 +1,6 @@
-CREATE OR REPLACE FUNCTION public.sp_listar_asistencia_promotor_paginado(p_fecha_inicio character varying, p_fecha_fin character varying, p_id_user character varying, p_estado character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
+-- DROP FUNCTION public.sp_listar_asistencia_promotor_paginado(varchar, varchar, varchar, varchar, varchar, varchar, refcursor);
+
+CREATE OR REPLACE FUNCTION public.sp_listar_asistencia_promotor_paginado(p_fecha_inicio character varying, p_fecha_fin character varying, p_id_user character varying, p_empresa_retail character varying, p_estado character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
  RETURNS refcursor
  LANGUAGE plpgsql
 AS $function$
@@ -45,6 +47,13 @@ begin
 	 v_where:=v_where||'And ap.estado  = '''||p_estado||''' ';
 	End If;
 	
+	If p_empresa_retail<>'' Then
+	 v_where := v_where || 'AND EXISTS (
+		SELECT 1 FROM tiendas t2 
+		inner join tienda_detalle td on t2.id = td.id_tienda 
+		WHERE t2.id= t.id 
+		AND td.id_empresa= ''' || p_empresa_retail || ''') ';
+	End If;
 	
 	EXECUTE ('SELECT count(1) '||v_tabla||v_where) INTO v_count;
 	v_col_count:=' ,'||v_count||' as TotalRows ';

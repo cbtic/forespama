@@ -21,7 +21,7 @@ class TiendaDetalleOrdenCompra extends Model
         inner join productos p on tdoc.id_producto = p.id 
         inner join tiendas t on tdoc.id_tienda = t.id
         left join tabla_maestras tm on p.id_unidad_producto ::int = tm.codigo::int and tm.tipo = '43'
-        where oc.id='".$id."'
+        where oc.id='".$id."' and tdoc.estado ='1'
         order by tdoc.id asc";
 
 		$data = DB::select($cad);

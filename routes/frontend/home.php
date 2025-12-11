@@ -847,3 +847,4 @@ Route::get('orden_compra/exportar_listar_orden_compra_individual/{id}', [OrdenCo
 Route::post('orden_compra/upload_orden_compra_promart', [OrdenCompraController::class, 'upload_orden_compra_promart'])->name('orden_compra.upload_orden_compra_promart');
 Route::post('orden_compra/send_duplicar_orden_compra', [OrdenCompraController::class, 'send_duplicar_orden_compra'])->name('orden_compra.send_duplicar_orden_compra');
 Route::get('promotores/exportar_asistencia/{empresa_retail}/{fecha_inicio}/{fecha_fin}/{estado}', [PromotorController::class, 'exportar_asistencia'])->name('promotores.exportar_asistencia');
+Route::get('requerimiento/modal_agregar_cotizacion/{id}', [RequerimientoController::class, 'modal_agregar_cotizacion'])->name('requerimiento.modal_agregar_cotizacion');

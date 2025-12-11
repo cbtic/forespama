@@ -328,6 +328,8 @@ function datatablenew(){
 						//	html += '<button style="font-size:12px" type="button" class="btn btn-sm btn-success" data-toggle="modal" onclick="modalRequerimiento('+row.id+')" disabled><i class="fa fa-edit"></i> Editar</button>'; 	
 						//}
 
+						html += '<button style="font-size:12px;margin-left:10px" type="button" class="btn btn-sm btn-success" data-toggle="modal" onclick="modalAgregarCotizacion('+row.id+')" ><i class="fa fa-plus-circle" style="font-size:17px;"></i> Cotizaciones</button>';
+
 						if(usuario == row.id_responsable){	
 							html += '<button style="font-size:12px;margin-left:10px" type="button" class="btn btn-sm btn-info" data-toggle="modal" onclick="modalAtenderRequerimiento('+row.id+')" ><i class="fa fa-edit"></i> Atender</button>'; 
 						}else{
@@ -372,12 +374,27 @@ function modalRequerimiento(id){
 	$('#openOverlayOpc .modal-body').css('height', 'auto');
 
 	$.ajax({
-			url: "/requerimiento/modal_requerimiento/"+id,
-			type: "GET",
-			success: function (result) {  
-					$("#diveditpregOpc").html(result);
-					$('#openOverlayOpc').modal('show');
-			}
+		url: "/requerimiento/modal_requerimiento/"+id,
+		type: "GET",
+		success: function (result) {  
+			$("#diveditpregOpc").html(result);
+			$('#openOverlayOpc').modal('show');
+		}
+	});
+}
+
+function modalAgregarCotizacion(id){
+	
+	$(".modal-dialog").css("width","95%");
+	$('#openOverlayOpc .modal-body').css('height', 'auto');
+
+	$.ajax({
+		url: "/requerimiento/modal_agregar_cotizacion/"+id,
+		type: "GET",
+		success: function (result) {  
+			$("#diveditpregOpc").html(result);
+			$('#openOverlayOpc').modal('show');
+		}
 	});
 }
 

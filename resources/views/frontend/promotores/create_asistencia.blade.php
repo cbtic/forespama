@@ -390,10 +390,10 @@ label.form-control-sm{
                       </select>
                     </div>
                     <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-                      <input id="fecha_inicio_bus" name="fecha_inicio_bus" on class="form-control form-control-sm filtro-input"  placeholder="Fecha">
+                      <input id="fecha_inicio_bus" name="fecha_inicio_bus" on class="form-control form-control-sm filtro-input"  placeholder="Fecha Inicio">
                     </div>
                     <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-                      <input id="fecha_fin_bus" name="fecha_fin_bus" on class="form-control form-control-sm filtro-input"  placeholder="Fecha">
+                      <input id="fecha_fin_bus" name="fecha_fin_bus" on class="form-control form-control-sm filtro-input"  placeholder="Fecha Fin">
                     </div>
                       <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
                       <select name="estado_bus" id="estado_bus" class="form-control form-control-sm filtro-select">
@@ -402,13 +402,19 @@ label.form-control-sm{
                         <option value="0">Eliminado</option>
                       </select>
                     </div>
-                              
+                    
                     <div class="col-12 col-md-5 d-flex justify-content-start justify-content-md-end gap-2" style="padding-right:0px">
                       <input class="btn btn-warning pull-rigth" value="Buscar" type="button" id="btnBuscar" />
-                      <button type="button" class="btn btn-success" onclick="modalAsistencia()" style="margin-left:15px" >Marcar Ingreso</button>
+                      <?php if($hora_ingreso==""){ ?>
+                        <button type="button" class="btn btn-success" onclick="modalAsistencia()" style="margin-left:15px" >Marcar Ingreso</button>
+                      <?php }else{ ?>
+                        <button type="button" class="btn btn-success" onclick="modalAsistencia()" style="margin-left:15px" disabled>Marcar Ingreso</button>
+                      <?php } ?>
+                      @hasanyrole('Administrator|ADMINISTRADOR ASISTENCIA')
                       <buttom class="btn btn-sm btn-secondary pull-rigth icono-botones2" type="button" id="btnDescargar" style="margin-left:10px" />
                         <i class="fas fa-download" style="font-size:18px;"></i> Descargar
                       </buttom>
+                      @endhasanyrole
                       <!--<button type="button" class="btn btn-info" onclick="modalAsistenciaSalida()" style="margin-left:15px" >Marcar Salida</button>-->
                       
                     </div>

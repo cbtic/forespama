@@ -804,6 +804,27 @@ class RequerimientoController extends Controller
         return response()->json(['success' => 'Observacion guardada exitosamente.']);
 
     }
+
+    public function modal_agregar_cotizacion($id){
+		
+        $id_user = Auth::user()->id;
+		
+		$requerimiento = new Requerimiento;
+        $producto_model = new Producto;
+        $tablaMaestra_model = new TablaMaestra;
+        $marca_model = new Marca;
+        $empresa_model = new Empresa;
+
+        $producto = $producto_model->getProductoAll();
+        $marca = $marca_model->getMarcaAll();
+        $unidad = $tablaMaestra_model->getMaestroByTipo(43);
+        $igv_compra = $tablaMaestra_model->getMaestroByTipo(51);
+        $moneda = $tablaMaestra_model->getMaestroByTipo(1);
+        $proveedor = $empresa_model->getEmpresaAll();
+
+        return view('frontend.requerimiento.modal_requerimiento_nuevoCotizacion',compact('id','requerimiento','producto','marca','unidad','igv_compra','moneda','proveedor'));
+
+    }
 }
 
 class InvoicesExport implements FromArray, WithHeadings, WithStyles

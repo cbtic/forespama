@@ -1604,7 +1604,7 @@ class OrdenCompraController extends Controller
 		$variable = [];
 		$n = 1;
 
-		array_push($variable, array("N°","Empresa","Orden Compra","Pedido","Fecha Pedido","Fecha Vencimiento","Fecha Entrega Real","Fecha Facturado","Codigo Interno","Codigo Sodimac","Descripcion","Precio Unitario","Descuento","Cantidad Pedida","Cantidad Entregada","Cantidad Cancelada","Pendiente Entrega","Vendedor","Estado Pedido"));
+		array_push($variable, array("N°","Empresa","Orden Compra","Pedido","Fecha Pedido","Fecha Vencimiento","Fecha Entrega Real","Fecha Facturado","Codigo Interno","Codigo Retail","Descripcion","Precio Unitario","Descuento","Cantidad Pedida","Cantidad Entregada","Cantidad Cancelada","Pendiente Entrega","Vendedor","Estado Pedido"));
 		
 		foreach ($data as $r) {
 
@@ -3112,7 +3112,7 @@ class OrdenCompraController extends Controller
         $orden_compra->save();
         $id_orden_compra = $orden_compra->id;
 
-        $orden_compra_detalle_matriz = OrdenCompraDetalle::where('id_orden_compra',$request->id)->where('estado',1)->get();
+        $orden_compra_detalle_matriz = OrdenCompraDetalle::where('id_orden_compra',$request->id)->where('estado',1)->orderBy('id', 'asc')->get();
 
         //dd($orden_compra_detalle_matriz);exit();
 
@@ -3236,7 +3236,7 @@ class InvoicesExport2 implements FromArray, WithHeadings, WithStyles
 
     public function headings(): array
     {
-        return ["N°", "Empresa", "Orden Compra", "Pedido", "Fecha Pedido", "Fecha Vencimiento","Fecha Entrega Real", "Fecha Facturado", "Codigo Interno", "Codigo Sodimac", "Descripcion", "Precio Unitario", "Descuento", "Cantidad Pedida", "Cantidad Entregada", "Cantidad Cancelada", "Pendiente Entrega", "Vendedor", "Estado Pedido"];
+        return ["N°", "Empresa", "Orden Compra", "Pedido", "Fecha Pedido", "Fecha Vencimiento","Fecha Entrega Real", "Fecha Facturado", "Codigo Interno", "Codigo Retail", "Descripcion", "Precio Unitario", "Descuento", "Cantidad Pedida", "Cantidad Entregada", "Cantidad Cancelada", "Pendiente Entrega", "Vendedor", "Estado Pedido"];
     }
 
 	public function styles(Worksheet $sheet)
