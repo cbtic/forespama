@@ -22,7 +22,7 @@ begin
 	inner join almacenes a on k.id_almacen_destino = a.id 
 	inner join tabla_maestras tm on p.id_unidad_producto ::int = tm.codigo::int and tm.tipo = ''43''';
 	
-	v_where = ' Where 1=1 ';
+	v_where = ' Where 1=1 and p.estado = ''1'' ';
 
 	If p_producto<>'' Then
 	 v_where:=v_where||'And k.id_producto =  '''||p_producto||''' ';
