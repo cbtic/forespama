@@ -15,7 +15,6 @@ class CreateCotizacionRequerimientosTable extends Migration
     {
         Schema::create('cotizacion_requerimientos', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('id_producto')->nullable();
             $table->string('codigo',20);
             $table->date('fecha')->nullable();
             $table->bigInteger('id_empresa')->nullable();
@@ -26,7 +25,7 @@ class CreateCotizacionRequerimientosTable extends Migration
             $table->double('igv',15,8)->nullable();
             $table->double('total',15,8)->nullable();
             $table->string('observacion',500)->nullable();
-            $table->string('ruta_imagen',300)->nullable();
+            $table->string('ruta_cotizacion',300)->nullable();
             $table->string('estado',1)->nullable()->default('1');
 
             $table->bigInteger('id_usuario_inserta')->unsigned()->index();

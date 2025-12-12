@@ -15,6 +15,8 @@ use App\Models\RequerimientoDetalle;
 use App\Models\OrdenCompra;
 use App\Models\OrdenCompraDetalle;
 use App\Models\ProductoPrecioDetalle;
+use App\Models\CotizacionRequerimiento;
+use App\Models\CotizacionDetalleRequerimiento;
 use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Auth;
@@ -233,6 +235,29 @@ class RequerimientoController extends Controller
         $tablaMaestra_model = new TablaMaestra;
 
         $requerimiento = $requerimiento_model->getDetalleRequerimientoId($id);
+        $marca = $marca_model->getMarcaAll();
+        $producto = $producto_model->getProductoAll();
+        $estado_bien = $tablaMaestra_model->getMaestroByTipo(4);
+        $unidad_medida = $tablaMaestra_model->getMaestroByTipo(43);
+
+        return response()->json([
+            'requerimiento' => $requerimiento,
+            'marca' => $marca,
+            'producto' => $producto,
+            'estado_bien' => $estado_bien,
+            'unidad_medida' => $unidad_medida
+        ]);
+    }
+
+    public function cargar_detalle_requerimiento_cotizacion($id)
+    {
+
+        $requerimiento_model = new Requerimiento;
+        $marca_model = new Marca;
+        $producto_model = new Producto;
+        $tablaMaestra_model = new TablaMaestra;
+
+        $requerimiento = $requerimiento_model->getDetalleRequerimientoIdCotizacion($id);
         $marca = $marca_model->getMarcaAll();
         $producto = $producto_model->getProductoAll();
         $estado_bien = $tablaMaestra_model->getMaestroByTipo(4);
@@ -824,6 +849,95 @@ class RequerimientoController extends Controller
 
         return view('frontend.requerimiento.modal_requerimiento_nuevoCotizacion',compact('id','requerimiento','producto','marca','unidad','igv_compra','moneda','proveedor'));
 
+    }
+
+    public function send_cotizacion_requerimiento(Request $request)
+    {
+        $id_user = Auth::user()->id;
+
+        if($request->id_cotizacion == 0){
+            $cotizacion_requerimiento = new CotizacionRequerimiento;
+            $cotizacion_requerimiento_model = new CotizacionRequerimiento;
+		    $codigo_cotizacion = $cotizacion_requerimiento_model->getCodigoCotizacion();
+        }else{
+            $cotizacion_requerimiento = CotizacionRequerimiento::find($request->id);
+            $codigo_cotizacion = $request->codigo;
+        }
+
+        $id_producto = $request->input('id_producto');
+        $marca = $request->input('marca');
+        $cod_interno = $request->input('cod_interno');
+        $unidad = $request->input('unidad');
+        $cantidad_ingreso = $request->input('cantidad_ingreso');
+        $precio_venta = $request->input('precio_venta');
+        $precio_unitario = $request->input('precio_unitario');
+        $valor_venta_bruto = $request->input('valor_venta_bruto');
+        $valor_venta = $request->input('valor_venta');
+        $sub_total = $request->input('sub_total');
+        $igv = $request->input('igv');
+        $total = $request->input('total');
+        
+        //$id_requerimiento_detalle =$request->id_requerimiento_detalle;
+        
+        $cotizacion_requerimiento->fecha = $request->fecha_requerimiento;
+        if($request->id == 0){
+            $cotizacion_requerimiento->codigo = $codigo_cotizacion[0]->codigo;
+        }else{
+            $cotizacion_requerimiento->codigo = $codigo_cotizacion;
+        }
+        $cotizacion_requerimiento->id_empresa = $request->almacen;
+        $cotizacion_requerimiento->telefono = $request->sustento_requerimiento;
+        $cotizacion_requerimiento->id_moneda = $request->responsable;
+        $cotizacion_requerimiento->tipo_cambio = $request->estado_atencion;
+        $cotizacion_requerimiento->sub_total = $request->unidad_origen;
+        $cotizacion_requerimiento->igv = $request->almacen_salida;
+        $cotizacion_requerimiento->total = $request->tipo_requerimiento;
+        $cotizacion_requerimiento->observacion = 1;
+        $cotizacion_requerimiento->ruta_cotizacion = 1;
+        $cotizacion_requerimiento->id_usuario_inserta = $id_user;
+        $cotizacion_requerimiento->estado = 1;
+        $cotizacion_requerimiento->save();
+
+        $id_cotizacion_requerimiento = $cotizacion_requerimiento->id;
+
+        $array_requerimiento_detalle = array();
+
+        foreach($descripcion as $index => $value) {
+            
+            if($id_requerimiento_detalle[$index] == 0){
+                $requerimiento_detalle = new RequerimientoDetalle;
+            }else{
+                $requerimiento_detalle = RequerimientoDetalle::find($id_requerimiento_detalle[$index]);
+            }
+            
+            $requerimiento_detalle->id_requerimiento = $requerimiento->id;
+            $requerimiento_detalle->id_producto = $descripcion[$index];
+            $requerimiento_detalle->cantidad = $cantidad_ingreso[$index];
+            $requerimiento_detalle->id_estado_producto = $estado_bien[$index];
+            $requerimiento_detalle->id_unidad_medida = $unidad[$index];
+            $requerimiento_detalle->id_marca = $marca[$index];
+            $requerimiento_detalle->estado = 1;
+            $requerimiento_detalle->cerrado = 1;
+            $requerimiento_detalle->observacion = $observacion[$index];
+            $requerimiento_detalle->id_usuario_inserta = $id_user;
+
+            $requerimiento_detalle->save();
+
+            $array_requerimiento_detalle[] = $requerimiento_detalle->id;
+
+            $RequerimientoAll = RequerimientoDetalle::where("id_requerimiento",$requerimiento->id)->where("estado","1")->get();
+            
+            foreach($RequerimientoAll as $key=>$row){
+                
+                if (!in_array($row->id, $array_requerimiento_detalle)){
+                    $requerimiento_detalle = RequerimientoDetalle::find($row->id);
+                    $requerimiento_detalle->estado = 0;
+                    $requerimiento_detalle->save();
+                }
+            }
+        }
+
+        return response()->json(['id' => $requerimiento->id]);
     }
 }
 

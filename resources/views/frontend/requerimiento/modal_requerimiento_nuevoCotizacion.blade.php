@@ -197,7 +197,7 @@ function cargarDetalleCotizacion(){
     tbody.empty();
 
     $.ajax({
-        url: "/requerimiento/cargar_detalle/"+id_requerimiento,
+        url: "/requerimiento/cargar_detalle_requerimiento_cotizacion/"+id_requerimiento,
         type: "GET",
         success: function (result) {
 
@@ -208,8 +208,10 @@ function cargarDetalleCotizacion(){
             result.requerimiento.forEach(requerimiento => {
 
                 let marcaOptions = '<option value="">--Seleccionar--</option>';
-                let productoOptions = '<option value="">--Seleccionar--</option>';
                 let unidadMedidaOptions = '<option value="">--Seleccionar--</option>';
+
+                let id_marca = requerimiento.id_marca ?? '';
+                let marca = requerimiento.marca ?? '';
             
                 result.marca.forEach(marca => {
                     let selected = (marca.id == requerimiento.id_marca) ? 'selected' : '';
@@ -221,40 +223,27 @@ function cargarDetalleCotizacion(){
                     unidadMedidaOptions += `<option value="${unidad_medida.codigo}" ${selected}>${unidad_medida.denominacion}</option>`;
                 });
 
-                result.producto.forEach(producto => {
-                    let selected = (producto.id == requerimiento.id_producto) ? 'selected' : '';
-                    productoOptions += `<option value="${producto.id}" ${selected}>${producto.codigo} - ${producto.denominacion}</option>`;
-                });
-
                 const row = `
                     <tr>
                         <td>${n}</td>
-                        <td style="width: 450px !important;display:block"><input name="id_requerimiento_detalle[]" id="id_requerimiento_detalle${n}" class="form-control form-control-sm" value="${requerimiento.id}" type="hidden"><select name="descripcion[]" id="descripcion${n}" class="form-control form-control-sm" onChange="verificarProductoSeleccionado(this, ${n});">${productoOptions}</select></td>
+                        <td style="width: 450px !important;display:block"><input name="id_producto[]" id="id_producto${n}" class="form-control form-control-sm" value="${requerimiento.id_producto}" type="hidden"><input name="descripcion[]" id="descripcion${n}" class="form-control form-control-sm" style="border: none; background-color: transparent;" value="${requerimiento.nombre_producto}" type="text" disabled></td>
                         
-                        <td><select name="marca[]" id="marca${n}" class="form-control form-control-sm">${marcaOptions}</select></td>
-                        <td><input name="cod_interno[]" id="cod_interno${n}" class="form-control form-control-sm" value="${requerimiento.codigo}" type="text"></td>
-                        <td><select name="unidad[]" id="unidad${n}" class="form-control form-control-sm">${unidadMedidaOptions}</select></td>
+                        <td><input name="marca[]" id="marca${n}" class="form-control form-control-sm" value="${id_marca}" type="hidden"><input name="marca_descripcion[]" id="marca_descripcion${n}" class="form-control form-control-sm" style="border: none; background-color: transparent;" value="${marca}" type="text" disabled></td>
+                        <td><input name="cod_interno[]" id="cod_interno${n}" class="form-control form-control-sm" style="border: none; background-color: transparent;" value="${requerimiento.codigo}" type="text" disabled></td>
+                        <td><input name="unidad[]" id="unidad${n}" class="form-control form-control-sm" value="${requerimiento.id_unidad_medida}" type="hidden"><input name="unidad[]" id="unidad${n}" class="form-control form-control-sm" style="border: none; background-color: transparent;" value="${requerimiento.unidad_medida}" disabled></td>
                         <td><input name="cantidad_ingreso[]" id="cantidad_ingreso${n}" class="cantidad_ingreso form-control form-control-sm" value="${requerimiento.cantidad}" type="text" oninput=""></td>
-                        <td><input name="precio_venta[]" id="precio_venta${n}" class="precio_venta form-control form-control-sm" value="" type="text" oninput=""></td>
-                        <td><input name="precio_unitario[]" id="precio_unitario${n}" class="precio_unitario form-control form-control-sm" value="" type="text" oninput=""></td>
-                        <td><input name="valor_venta_bruto[]" id="valor_venta_bruto${n}" class="valor_venta_bruto form-control form-control-sm" value="" type="text" oninput=""></td>
-                        <td><input name="valor_venta[]" id="valor_venta${n}" class="valor_venta form-control form-control-sm" value="" type="text" oninput=""></td>
-                        <td><input name="sub_total[]" id="sub_total${n}" class="sub_total form-control form-control-sm" value="" type="text" oninput=""></td>
-                        <td><input name="igv[]" id="igv${n}" class="igv form-control form-control-sm" value="" type="text" oninput=""></td>
-                        <td><input name="total[]" id="total${n}" class="total form-control form-control-sm" value="" type="text" oninput=""></td>
+                        <td><input name="precio_venta[]" id="precio_venta${n}" class="precio_venta form-control form-control-sm" value="" type="text" oninput="calcularPrecioUnitario(this)"></td>
+                        <td><input name="precio_unitario[]" id="precio_unitario${n}" class="precio_unitario form-control form-control-sm" style="border: none; background-color: transparent;" value="" type="text" disabled></td>
+                        <td><input name="valor_venta_bruto[]" id="valor_venta_bruto${n}" class="valor_venta_bruto form-control form-control-sm" style="border: none; background-color: transparent;" value="" type="text" disabled></td>
+                        <td><input name="valor_venta[]" id="valor_venta${n}" class="valor_venta form-control form-control-sm" style="border: none; background-color: transparent;" value="" type="text" disabled></td>
+                        <td><input name="sub_total[]" id="sub_total${n}" class="sub_total form-control form-control-sm" style="border: none; background-color: transparent;" value="" type="text" disabled></td>
+                        <td><input name="igv[]" id="igv${n}" class="igv form-control form-control-sm" value="" style="border: none; background-color: transparent;" type="text" disabled></td>
+                        <td><input name="total[]" id="total${n}" class="total form-control form-control-sm" style="border: none; background-color: transparent;" value="" type="text" disabled></td>
                         <td><button type="button" class="btn btn-sm btn-clasico btn-eliminar" onclick="eliminarFila(this)"><i class="fas fa-trash" style="font-size:18px;"></i></button></td>
 
                     </tr>
                 `;
                 tbody.append(row);
-                $('#descripcion' + n).select2({ 
-                    width: '100%', 
-                    dropdownCssClass: 'custom-select2-dropdown'
-                });
-
-                $('#marca' + n).select2({
-                    width: '100%',
-                });
 
                 n++;
             });
@@ -262,84 +251,67 @@ function cargarDetalleCotizacion(){
     });
 }
 
+function calcularPrecioUnitario(input) {
+
+    var fila = $(input).closest('tr');
+    var igvPorcentaje = $('#igv_compra').val() == 2 ? 1.18 : 0;
+    var precio_unitario_ = 0;
+    var valor_venta_bruto = 0;
+    var valor_venta = 0;
+    var igv = 0;
+    var total = 0;
+
+    var precio_venta = parseFloat(fila.find('.precio_venta').val()) || 0;
+    //var precio_venta = parseFloat(fila.find('.precio_unitario').val()) || 0;
+    var cantidad_ingreso = parseFloat(fila.find('.cantidad_ingreso').val()) || 0;
+
+    //alert(precio_venta);
+    if(igvPorcentaje==1.18){
+        precio_unitario_ = precio_venta / igvPorcentaje;
+    }else{
+        precio_unitario_ = precio_venta
+    }
+
+    if(igvPorcentaje==1.18){
+        valor_venta_bruto = (cantidad_ingreso * precio_venta) / igvPorcentaje;
+    }else{
+        valor_venta_bruto = cantidad_ingreso * precio_venta;
+    }
+    
+    valor_venta = valor_venta_bruto;
+    
+    if(igvPorcentaje==1.18){
+        igv = valor_venta * 0.18;
+    }
+
+    total = valor_venta + igv;
+
+    fila.find('.precio_unitario').val(precio_unitario_.toFixed(2));
+    fila.find('.valor_venta_bruto').val(valor_venta_bruto.toFixed(2));
+    fila.find('.valor_venta').val(valor_venta.toFixed(2));
+    fila.find('.igv').val(igv.toFixed(2));
+    fila.find('.sub_total').val(valor_venta.toFixed(2));
+    fila.find('.total').val(total.toFixed(2));
+
+    //actualizarTotalGeneral();
+}
+
 function agregarCotizacion(){
 
-    var opcionesDescripcion = `<?php
-        echo '<option value="">--Seleccionar--</option>';
-        foreach ($producto as $row) {
-            echo '<option value="' . htmlspecialchars($row->id, ENT_QUOTES, 'UTF-8') . '">' . htmlspecialchars($row->codigo . ' - ' . $row->denominacion, ENT_QUOTES, 'UTF-8') . '</option>';
-        }
-    ?>`;
+    $("#colDetalle").show();
 
-    var cantidad = 1;
-    var newRow = "";
-    for (var i = 0; i < cantidad; i++) { 
-        var n = $('#tblOrdenCompraDetalle tbody tr').length + 1;
-        var descripcion = '<input name="id_orden_compra_detalle[]" id="id_orden_compra_detalle${n}" class="form-control form-control-sm" value="${orden_compra.id}" type="hidden"><input name="id_autorizacion_detalle[]" id="id_autorizacion_detalle' + n + '" class="form-control form-control-sm" value="2" type="hidden"><select name="descripcion[]" id="descripcion' + n + '" class="form-control form-control-sm" ' +(!tieneRolVendedor ? 'onChange="verificarProductoSeleccionado(this, ' + n + ');validarMuestraExhibicion(this);validarServicio(this)"' : 'onChange="obtenerCodInterno(this, ' + n + ');validarMuestraExhibicion(this);validarServicio(this)"') + '> ' + opcionesDescripcion +' </select>';
-        var descripcion_ant = '<input type="hidden" name="descripcion_ant[]" id="descripcion_ant' + n + '" class="form-control form-control-sm" />';
-        var cod_interno = '<input name="cod_interno[]" id="cod_interno' + n + '" class="form-control form-control-sm" value="" type="text">';
-        var marca = '<select name="marca[]" id="marca' + n + '" class="form-control form-control-sm" onchange=""> <option value="">--Seleccionar--</option><?php foreach ($marca as $row){?><option value="<?php echo htmlspecialchars($row->id); ?>"><?php echo htmlspecialchars(addslashes($row->denominiacion)); ?></option><?php }?></select>'
-        var unidad = '<select name="unidad[]" id="unidad' + n + '" class="form-control form-control-sm" onChange=""> <option value="">--Seleccionar--</option> <?php foreach ($unidad as $row) {?> <option value="<?php echo $row->codigo?>"><?php echo $row->denominacion?></option> <?php } ?> </select>';
-        var cantidad_ingreso = '<input name="cantidad_ingreso[]" id="cantidad_ingreso' + n + '" class="cantidad_ingreso form-control form-control-sm" value="" type="text" oninput="calcularSubTotal(this);calcularPrecioUnitario(this);validarMuestraExhibicion(this)">';
-        var stock_actual = '<input name="stock_actual[]" id="stock_actual' + n + '" class="form-control form-control-sm" value="" type="text" readonly>';
-        var precio_unitario = '<input name="precio_unitario[]" id="precio_unitario' + n + '" class="precio_unitario form-control form-control-sm" value="" type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, \'\').replace(/(\\..*?)\\..*/g, \'$1\').replace(/(\\d+\\.\\d{0,2}).*/, \'$1\'); calcularSubTotal(this);calcularPrecioUnitario(this)" readonly="readonly">';
-        var precio_unitario_ = '<input name="precio_unitario_[]" id="precio_unitario_' + n + '" class="precio_unitario_ form-control form-control-sm" value="" type="text" oninput="calcularPrecioUnitario(this)" readonly="readonly">';
-        var valor_venta_bruto = '<input name="valor_venta_bruto[]" id="valor_venta_bruto' + n + '" class="valor_venta_bruto form-control form-control-sm" value="" type="text" oninput="calcularSubTotal(this)" readonly="readonly">';
-        var valor_venta = '<input name="valor_venta[]" id="valor_venta' + n + '" class="valor_venta form-control form-control-sm" value="" type="text" oninput="calcularSubTotal(this)" readonly="readonly">';
-        var descuento = '<div style="display: flex; align-items: center; gap: 5px;"><button type="button" class="btn-custom" onclick="cambiarDescuento(this);calcularPrecioUnitario(this)" hidden><i class="fas fa-paint-brush"></i></button><input name="descuento[]" id="descuento' + n + '" class="descuento form-control form-control-sm" placeholder="S/ Descuento" value="" type="text" oninput="aplicaDescuentoEnSoles(this);calcularPrecioUnitario(this)"><input name="porcentaje[]" id="porcentaje' + n + '" class="porcentaje form-control form-control-sm" placeholder="% Descuento" type="text" oninput="aplicaDescuentoEnPorcentaje(this);calcularPrecioUnitario(this)" style="display: none;"> <input name="id_descuento[]" id="id_descuento${n}" type="hidden" value="1"></div>';
-        var sub_total = '<input name="sub_total[]" id="sub_total' + n + '" class="sub_total form-control form-control-sm" value="" type="text" readonly="readonly">';
-        var igv = '<input name="igv[]" id="igv' + n + '" class="igv form-control form-control-sm" value="" type="text" readonly="readonly">';
-        var total = '<input name="total[]" id="total' + n + '" class="total form-control form-control-sm" value="" type="text" readonly="readonly">';
-        
-        var btnEliminar = '<button type="button" class="btn btn-sm btn-clasico btn-eliminar" onclick="eliminarFila(this)"><i class="fas fa-trash" style="font-size:18px;"></i></button>';
+    $("#numero_cotizacion").val('');
+    $("#empresa_vende").val('');
+    $("#fecha_cotizacion").val('');
+    $("#telefono").val('');
+    $("#moneda").val('');
+    $("#tipo_cambio").val('');
+    $("#igv_compra").val('');
 
-        newRow += '<tr>';
-        newRow += '<td>' + n + '</td>';
-        newRow += '<td style="width: 400px!important; display:block!important">' +descripcion_ant + descripcion + '</td>';
-        newRow += '<td>' + marca + '</td>';
-        newRow += '<td>' + cod_interno + '</td>';
-        newRow += '<td>' + unidad + '</td>';
-        newRow += '<td>' + cantidad_ingreso + '</td>';
-        newRow += '<td>' + stock_actual + '</td>';
-        newRow += '<td>' + precio_unitario + '</td>';
-        newRow += '<td>' + precio_unitario_ + '</td>';
-        newRow += '<td>' + valor_venta_bruto + '</td>';
-        newRow += '<td>' + valor_venta + '</td>';
-        newRow += '<td>' + descuento + '</td>';
-        newRow += '<td>' + sub_total + '</td>';
-        newRow += '<td>' + igv + '</td>';
-        newRow += '<td>' + total + '</td>';
-        newRow += '<td>' + btnEliminar + '</td>';
-        newRow += '</tr>';
+    $('#divCotizacionDetalle').empty();
 
-        $('#tblOrdenCompraDetalle tbody').append(newRow);
+    cargarDetalleCotizacion();
 
-        $('#descripcion' + n).select2({
-            width: '100%',
-            dropdownCssClass: 'custom-select2-dropdown',
-        });
-
-        $('#marca' + n).select2({
-            width: '100%',
-        });
-        
-        $('#fecha_fabricacion_' + n).datepicker({
-            autoclose: true,
-            format: 'yyyy-mm-dd',
-            changeMonth: true,
-            changeYear: true,
-            language: 'es'
-        });
-
-        $('#fecha_vencimiento_' + n).datepicker({
-            autoclose: true,
-            format: 'yyyy-mm-dd',
-            changeMonth: true,
-            changeYear: true,
-            language: 'es'
-        });
-
-    }
 }
 
 function eliminarFila(button){
@@ -347,33 +319,25 @@ function eliminarFila(button){
     //actualizarTotalGeneral();
 }
 
-function fn_save_requerimiento(){
+function fn_save_cotizacion(){
 	
     var msg = "";
 
-    var tipo_documento = $('#tipo_documento').val();
-    //var numero_requerimiento = $('#numero_requerimiento').val();
-    var fecha_requerimiento = $('#fecha_requerimiento').val();
-    var responsable = $('#responsable').val();
-    var estado_atencion = $('#estado_atencion').val();
-    var almacen = $('#almacen').val();
-    var cerrado = $('#cerrado').val();
-    var sustento_requerimiento = $('#sustento_requerimiento').val();
-    var unidad_origen = $('#unidad_origen').val();
+    var empresa_vende = $('#empresa_vende').val();
+    var fecha_cotizacion = $('#fecha_cotizacion').val();
+    var telefono = $('#telefono').val();
+    var moneda = $('#moneda').val();
+    var tipo_cambio = $('#tipo_cambio').val();
+    var igv_compra = $('#igv_compra').val();
 
-    if(tipo_documento==""){msg+="Ingrese el Tipo de Documento <br>";}
-    //if(numero_requerimiento==""){msg+="Ingrese el Numero de Requerimiento <br>";}
-    if(responsable==""){msg+="Ingrese el Responsable de Atencion <br>";}
-    if(estado_atencion==""){msg+="Ingrese el Estado de Atencion <br>";}
-    if(fecha_requerimiento==""){msg+="Ingrese la Fecha <br>";}
-    if(unidad_origen==""){msg+="Ingrese la Unidad de Origen <br>";}
-    if(almacen==""){msg+="Ingrese el Almacen <br>";}
-    if(cerrado==""){msg+="Ingrese el campo Cerrado <br>";}
-    if(sustento_requerimiento==""){msg+="Ingrese el Sustento de Requerimiento <br>";}
-
-    if ($('#tblRequerimientoDetalle tbody tr').length == 0) {
-        msg += "No se ha agregado ningún producto <br>";
+    if(empresa_vende==""){msg+="Seleccione la Empresa <br>";}
+    if(fecha_cotizacion==""){msg+="Ingrese la Fecha <br>";}
+    if(telefono==""){msg+="Ingrese el Telefono <br>";}
+    if(moneda==""){msg+="Ingrese la Moneda <br>";}
+    if(moneda==2){
+        if(tipo_cambio==""){msg+="Ingrese el Tipo de Cambio <br>";}
     }
+    if(igv_compra==""){msg+="Seleccione Aplica IGV <br>";}
 
     if(msg!=""){
         bootbox.alert(msg);
@@ -386,9 +350,9 @@ function fn_save_requerimiento(){
         $('.loader').show();
 
         $.ajax({
-            url: "/requerimiento/send_requerimiento",
+            url: "/requerimiento/send_cotizacion_requerimiento",
             type: "POST",
-            data : $("#frmRequerimiento").serialize(),
+            data : $("#frmCotizacion").serialize(),
             success: function (result) {
                 datatablenew();
                 $('.loader').hide();
@@ -458,10 +422,10 @@ function pdf_documento(){
                             </div>
                         </div>
                         
-                        <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12" style="padding-top:5px;padding-bottom:20px">
+                        <div id="colDetalle" class="col-lg-9 col-md-9 col-sm-12 col-xs-12" style="padding-top:5px;padding-bottom:20px; display:none;">
                             <input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
                             <input type="hidden" name="id_requerimiento" id="id_requerimiento" value="<?php echo $id?>">
-                            <input type="hidden" name="id_cotizacion" id="id_cotizacion" value="<?php echo $id?>">
+                            <input type="hidden" name="id_cotizacion" id="id_cotizacion" value="0">
 
                             <div class="row" style="padding-left:10px">
                                 <div class="col-lg-2">
@@ -522,7 +486,22 @@ function pdf_documento(){
                                 <div class="col-lg-2">
                                     <input id="tipo_cambio" name="tipo_cambio" on class="form-control form-control-sm"  value="<?php //if($id>0){echo $orden_compra->numero_orden_compra;}?>" type="text">
                                 </div>
+                                <div class="col-lg-2">
+                                    Aplica IGV
+                                </div>
+                                <div class="col-lg-2">
+                                    <select name="igv_compra" id="igv_compra" class="form-control form-control-sm" onchange="">
+                                        <option value="">--Seleccionar--</option>
+                                        <?php
+                                        foreach ($igv_compra as $row){?>
+                                            <option value="<?php echo $row->codigo ?>" <?php //if($row->codigo==$orden_compra->igv_compra)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                            <?php 
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
                             </div>
+                            
                             
                             <!--<div class="row" style="padding-left:10px">
                                 <div class="col-lg-12">
@@ -570,7 +549,7 @@ function pdf_documento(){
                                     <div class="col-sm-12 controls">
                                         <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
 
-                                            <button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-nuevo" data-toggle="modal" onclick="fn_save_requerimiento()">
+                                            <button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-nuevo" data-toggle="modal" onclick="fn_save_cotizacion()">
                                                 <i class="fas fa-save" style="font-size:18px;"></i> Guardar
                                             </button>
                                             

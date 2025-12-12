@@ -795,7 +795,7 @@ function cargarDetalle(){
     const tbody = $('#divOrdenCompraDetalle');
 
     tbody.empty();
-
+    
     $.ajax({
         url: "/orden_compra/cargar_detalle/"+id,
         type: "GET",

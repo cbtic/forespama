@@ -43,7 +43,7 @@ begin
 	where aoc.id_orden_compra = oc.id
 	order by id desc
 	limit 1),0)) id_autorizacion,
-	tm3.denominacion prioridad, tm4.denominacion proceso_pedido ';
+	tm3.denominacion prioridad, tm4.denominacion proceso_pedido, aoc.id_proceso_pedido ';
 
 	v_tabla=' from orden_compras oc 
 	inner join empresas e2 on oc.id_empresa_vende = e2.id

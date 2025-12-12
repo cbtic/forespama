@@ -145,6 +145,26 @@ class Requerimiento extends Model
         return $data;
     }
 
+    function getDetalleRequerimientoIdCotizacion($id){
+
+        $cad = "select rd.id,  ROW_NUMBER() OVER (PARTITION BY rd.id_requerimiento ) AS row_num, p.numero_serie item, rd.id_producto, p.codigo, p.denominacion nombre_producto, rd.id_marca, m.denominiacion marca, rd.id_unidad_medida, tm.denominacion unidad_medida,
+        rd.id_estado_producto , rd.cantidad, r.id_almacen_destino,
+        (select coalesce(sum(ocd.cantidad_requerida),0) from orden_compras oc
+        inner join orden_compra_detalles ocd on ocd.id_orden_compra = oc.id 
+        where oc.id_requerimiento = r.id and ocd.id_producto = rd.id_producto) cantidad_atendida, coalesce(rd.observacion,'') observacion, coalesce(rd.observacion_atencion,'') observacion_atencion
+        from requerimiento_detalles rd 
+        inner join productos p on rd.id_producto = p.id
+        inner join requerimientos r on rd.id_requerimiento = r.id
+        left join marcas m on rd.id_marca = m.id 
+        left join tabla_maestras tm on rd.id_unidad_medida = tm.codigo ::int and tm.tipo = '43'
+        where id_requerimiento ='".$id."'
+        and rd.estado='1'
+        order by 1 asc";
+
+		$data = DB::select($cad);
+        return $data;
+    }
+
     function inhabilitarModificacionRequerimiento(){
         $p=array();
 		return $this->readFunctionPostgresTransaction('sp_crud_requerimiento_inhabilitar_editar',$p);
