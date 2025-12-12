@@ -125,6 +125,8 @@ class ProductosController extends Controller
 
     public function send_producto(Request $request){
 
+        $id_user = Auth::user()->id;
+
 		if($request->id == 0){
 			$producto = new Producto;
             $producto_model = new Producto;
@@ -192,8 +194,9 @@ class ProductosController extends Controller
         $producto->id_packet = $request->packet;
         $producto->id_medida = $request->medida;
 		$producto->estado = 1;
+		$producto->id_usuario_inserta = $id_user;
 		$producto->save();
-        $id_producto = $producto->id; 
+        $id_producto = $producto->id;
 
         //////////////////imagenes producto
 		
