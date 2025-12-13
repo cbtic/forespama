@@ -131,13 +131,15 @@ class KardexController extends Controller
 
 	}
 
-	public function exportar_listar_existencia($consulta_almacen) {
+	public function exportar_listar_existencia($consulta_almacen, $cantidad_producto) {
 
 		if($consulta_almacen=="0")$consulta_almacen = "";
+		if($cantidad_producto=="0")$cantidad_producto = "";
 
 		$kardex_model = new Kardex;
 		$p[]="";
 		$p[]=$consulta_almacen;
+		$p[]=$cantidad_producto;
 		$p[]=1;
 		$p[]=10000;
 		$data = $kardex_model->listar_kardex_existencia_ajax($p);
