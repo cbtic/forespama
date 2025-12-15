@@ -609,7 +609,7 @@ class EntradaProductosController extends Controller
 
                 $salida_producto2 = new SalidaProducto;
 
-                $salida_producto2->fecha_salida = $request->fecha_entrada;
+                $salida_producto2->fecha_salida = Carbon::now();
                 $salida_producto2->id_tipo_documento = $request->tipo_documento;
                 $salida_producto2->unidad_destino = $request->unidad_origen;
                 $salida_producto2->numero_comprobante = $request->numero_comprobante;

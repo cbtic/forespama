@@ -390,7 +390,7 @@ class OrdenCompraController extends Controller
             }
         }
         
-        if($request->tipo_documento == 2){
+        if($request->tipo_documento == 2 || $request->tipo_documento == 4){
             if($request->canal == 1 || $request->canal == 2 || $request->canal == 3){
                 $autorizacion_orden_compra = new AutorizacionOrdenCompra;
                 $autorizacion_orden_compra->id_orden_compra = $orden_compra->id;

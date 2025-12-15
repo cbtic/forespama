@@ -879,19 +879,20 @@ class RequerimientoController extends Controller
         
         //$id_requerimiento_detalle =$request->id_requerimiento_detalle;
         
-        $cotizacion_requerimiento->fecha = $request->fecha_requerimiento;
+        $cotizacion_requerimiento->id_requerimiento = $request->id_requerimiento;
+        $cotizacion_requerimiento->fecha = $request->fecha_cotizacion;
         if($request->id == 0){
             $cotizacion_requerimiento->codigo = $codigo_cotizacion[0]->codigo;
         }else{
             $cotizacion_requerimiento->codigo = $codigo_cotizacion;
         }
-        $cotizacion_requerimiento->id_empresa = $request->almacen;
-        $cotizacion_requerimiento->telefono = $request->sustento_requerimiento;
-        $cotizacion_requerimiento->id_moneda = $request->responsable;
-        $cotizacion_requerimiento->tipo_cambio = $request->estado_atencion;
-        $cotizacion_requerimiento->sub_total = $request->unidad_origen;
-        $cotizacion_requerimiento->igv = $request->almacen_salida;
-        $cotizacion_requerimiento->total = $request->tipo_requerimiento;
+        $cotizacion_requerimiento->id_empresa = $request->empresa_vende;
+        $cotizacion_requerimiento->telefono = $request->telefono;
+        $cotizacion_requerimiento->id_moneda = $request->moneda;
+        $cotizacion_requerimiento->tipo_cambio = $request->tipo_cambio;
+        $cotizacion_requerimiento->sub_total = "0";//$request->unidad_origen;
+        $cotizacion_requerimiento->igv = "0";//$request->almacen_salida;
+        $cotizacion_requerimiento->total = "0";//$request->tipo_requerimiento;
         $cotizacion_requerimiento->observacion = 1;
         $cotizacion_requerimiento->ruta_cotizacion = 1;
         $cotizacion_requerimiento->id_usuario_inserta = $id_user;
@@ -900,44 +901,56 @@ class RequerimientoController extends Controller
 
         $id_cotizacion_requerimiento = $cotizacion_requerimiento->id;
 
-        $array_requerimiento_detalle = array();
+        $array_cotizacion_requerimiento_detalle = array();
 
-        foreach($descripcion as $index => $value) {
+        foreach($id_producto as $index => $value) {
             
-            if($id_requerimiento_detalle[$index] == 0){
-                $requerimiento_detalle = new RequerimientoDetalle;
-            }else{
-                $requerimiento_detalle = RequerimientoDetalle::find($id_requerimiento_detalle[$index]);
-            }
+            //if($id_requerimiento_detalle[$index] == 0){
+                $cotizacion_detalle_requerimiento = new CotizacionDetalleRequerimiento;
+            //}else{
+                //$requerimiento_detalle = RequerimientoDetalle::find($id_requerimiento_detalle[$index]);
+            //}
             
-            $requerimiento_detalle->id_requerimiento = $requerimiento->id;
-            $requerimiento_detalle->id_producto = $descripcion[$index];
-            $requerimiento_detalle->cantidad = $cantidad_ingreso[$index];
-            $requerimiento_detalle->id_estado_producto = $estado_bien[$index];
-            $requerimiento_detalle->id_unidad_medida = $unidad[$index];
-            $requerimiento_detalle->id_marca = $marca[$index];
-            $requerimiento_detalle->estado = 1;
-            $requerimiento_detalle->cerrado = 1;
-            $requerimiento_detalle->observacion = $observacion[$index];
-            $requerimiento_detalle->id_usuario_inserta = $id_user;
+            $cotizacion_detalle_requerimiento->id_cotizacion_requerimientos = $id_cotizacion_requerimiento;
+            $cotizacion_detalle_requerimiento->id_producto = $id_producto[$index];
+            $cotizacion_detalle_requerimiento->cantidad = $cantidad_ingreso[$index];
+            $cotizacion_detalle_requerimiento->id_unidad_medida = $unidad[$index];
+            $cotizacion_detalle_requerimiento->precio_venta = $precio_venta[$index];
+            $cotizacion_detalle_requerimiento->precio_unitario = $precio_unitario[$index];
+            $cotizacion_detalle_requerimiento->valor_venta_bruto = $valor_venta_bruto[$index];
+            $cotizacion_detalle_requerimiento->valor_venta = $valor_venta[$index];
+            $cotizacion_detalle_requerimiento->sub_total = $sub_total[$index];
+            $cotizacion_detalle_requerimiento->igv = $igv[$index];
+            $cotizacion_detalle_requerimiento->total = $total[$index];
+            $cotizacion_detalle_requerimiento->estado = 1;
+            $cotizacion_detalle_requerimiento->id_usuario_inserta = $id_user;
+            $cotizacion_detalle_requerimiento->save();
 
-            $requerimiento_detalle->save();
-
-            $array_requerimiento_detalle[] = $requerimiento_detalle->id;
-
-            $RequerimientoAll = RequerimientoDetalle::where("id_requerimiento",$requerimiento->id)->where("estado","1")->get();
-            
-            foreach($RequerimientoAll as $key=>$row){
-                
-                if (!in_array($row->id, $array_requerimiento_detalle)){
-                    $requerimiento_detalle = RequerimientoDetalle::find($row->id);
-                    $requerimiento_detalle->estado = 0;
-                    $requerimiento_detalle->save();
-                }
-            }
+            $array_cotizacion_requerimiento_detalle[] = $cotizacion_detalle_requerimiento->id;
         }
 
-        return response()->json(['id' => $requerimiento->id]);
+        return response()->json(['id' => $id_cotizacion_requerimiento]);
+    }
+
+    public function obtener_cotizacion($id_requerimiento){
+
+        $cotizacion_requerimiento_model = new CotizacionRequerimiento;
+		$cotizacion_requerimiento = $cotizacion_requerimiento_model->getCotizacionByIdRequerimiento($id_requerimiento);
+		
+		return response()->json(['cotizacion_requerimiento' => $cotizacion_requerimiento]);
+
+    }
+
+    public function cargar_detalle_cotizacion($id)
+    {
+
+        $cotizacion_requerimiento_model = new CotizacionRequerimiento;
+
+        $cotizacion_requerimiento = $cotizacion_requerimiento_model->getCotizacionById($id);
+
+        return response()->json([
+            'cotizacion_requerimiento' => $cotizacion_requerimiento
+        ]);
     }
 }
 
