@@ -16,7 +16,6 @@
 		height: 250px;
 	}
 
-
 	.modal-dialog {
 		width: 100%;
 		max-width: 50% !important
@@ -263,6 +262,26 @@ $.mask.definitions['p'] = "[Mm]";
 				validaRuc(this.value);
 			}
 			//validaRuc(this.value);
+		});
+
+		$('#numero_documento').blur(function() {
+			var id = $('#id').val();
+			var tipo_documento = $('#tipo_documento').val();
+			var nombre = $('#nombre').val();
+			if ((id == 0 && tipo_documento!=2) || (id > 0 && tipo_documento!=2 && nombre=="")) {
+				validaDni(this.value);
+			}else if(id == 0 && tipo_documento==2){
+				$('#nombre').val('');
+				$('#apellido_paterno').val('');
+				$('#apellido_materno').val('');
+				$('#nombre').prop('readonly', false);
+				$('#apellido_paterno').prop('readonly', false);
+				$('#apellido_materno').prop('readonly', false);
+			}else if(tipo_documento==2){
+				$('#nombre').prop('readonly', false);
+				$('#apellido_paterno').prop('readonly', false);
+				$('#apellido_materno').prop('readonly', false);
+			}
 		});
 
 	});
@@ -1067,7 +1086,7 @@ $.mask.definitions['p'] = "[Mm]";
 										<div class="col-lg-7">
 											<div class="form-group">
 												<label class="control-label form-control-sm">Tipo Documento</label>
-												<select name="tipo_documento" id="tipo_documento" class="form-control form-control-sm" onChange="">
+												<select name="tipo_documento" id="tipo_documento" class="form-control form-control-sm" onchange="">
 													<option value="">--Selecionar--</option>
 													<?php
 													foreach ($tipo_documento as $row) { ?>
@@ -1285,14 +1304,13 @@ $.mask.definitions['p'] = "[Mm]";
 
 		<script type="text/javascript">
 			$(document).ready(function() {
-
-
-				$('#numero_documento').blur(function() {
+				
+				/*$('#numero_documento').blur(function() {
 					var id = $('#id').val();
 					if (id == 0) {
 						validaDni(this.value);
 					}
-				});
+				});*/
 
 				$('#tblReservaEstacionamiento').DataTable({
 					"dom": '<"top">rt<"bottom"flpi><"clear">'

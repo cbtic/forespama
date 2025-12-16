@@ -34,7 +34,7 @@ Begin
 	v.placa, v.ejes, p.numero_documento,
 	p.apellido_paterno||'' ''||p.apellido_materno||'' ''||p.nombres conductor,
 	tm.denominacion tipo_madera, ivttm.cantidad,
-	(select 1 from ingreso_vehiculo_tronco_imagenes ivti where ivti.id_ingreso_vehiculo_troncos = ivt.id limit 1) tiene_imagen, ivt.observacion ';
+	(select 1 from ingreso_vehiculo_tronco_imagenes ivti where ivti.id_ingreso_vehiculo_troncos = ivt.id limit 1) tiene_imagen ';
 
 	v_tabla=' from ingreso_vehiculo_troncos ivt
 	inner join vehiculos v on ivt.id_vehiculos=v.id
@@ -49,8 +49,19 @@ Begin
 	 v_where:=v_where||'And v.placa = '''||p_placa||''' ';
 	End If;
 
-	If p_ruc<>'' Then
-	 v_where:=v_where||'And e.ruc = '''||p_ruc||''' ';
+	If p_ruc <> '' Then
+	  v_where := v_where || '
+	  And (
+	        (ivt.id_tipo_cliente = 1 AND
+	         (select p2.numero_documento
+	          from personas p2
+	          where p2.id = ivt.id_persona) = ''' || p_ruc || ''')
+	     OR
+	        (ivt.id_tipo_cliente <> 1 AND
+	         (select e2.ruc
+	          from empresas e2
+	          where e2.id = ivt.id_empresa_transportista) = ''' || p_ruc || ''')
+	      ) ';
 	End If;
 
 	If p_anio<>'' Then

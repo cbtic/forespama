@@ -1223,7 +1223,7 @@ function cargarSalida(){
                                 <option value="">--Seleccionar--</option>
                                 <?php
                                 foreach ($almacen_destino as $row){?>
-                                    <option value="<?php echo $row->id ?>" <?php if($row->id==$salida->id_almacen_salida)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                    <option value="<?php echo $row->id ?>" <?php if($row->id==$salida->id_almacen_destino)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
                                     <?php 
                                 }
                                 ?>

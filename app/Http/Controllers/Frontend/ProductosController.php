@@ -117,7 +117,7 @@ class ProductosController extends Controller
 		$sub_categoria = $tablaMaestra_model->getMaestroByTipo(105);
 		$modelo = $tablaMaestra_model->getMaestroByTipo(106);
 		$packet = $tablaMaestra_model->getMaestroByTipo(107);
-		$medida = $tablaMaestra_model->getMaestroByTipo(108);
+		$medida = $tablaMaestra_model->getMaestroByTipo(111);
         
 		return view('frontend.productos.modal_productos_nuevoProducto',compact('id','producto','unidad_medida','moneda','estado_bien','tipo_producto','unidad_producto','marca','tipo_origen_producto','imagenes','bien_servicio','familia','categoria','sub_categoria','modelo','packet','medida'));
 

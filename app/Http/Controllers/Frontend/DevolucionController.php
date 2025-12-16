@@ -72,12 +72,12 @@ class DevolucionController extends Controller
         $almacen_model = new Almacene;
 		
 		if($id>0){
-			$salida = SalidaProducto::find($id);
+			$salida = EntradaProducto::find($id);
 			/*$devolucion = Devolucione::find($id);
 			$salida = SalidaProducto::find($devolucion->id_salida);*/
 			$orden_compra = OrdenCompra::find($salida->id_orden_compra);
 		}else{
-			$salida = new SalidaProducto;
+			$salida = new EntradaProducto;
 			/*$devolucion = new Devolucione;
 			$salida = new SalidaProducto;*/
 			$orden_compra = new OrdenCompra;
