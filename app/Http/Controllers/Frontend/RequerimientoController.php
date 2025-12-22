@@ -860,8 +860,8 @@ class RequerimientoController extends Controller
             $cotizacion_requerimiento_model = new CotizacionRequerimiento;
 		    $codigo_cotizacion = $cotizacion_requerimiento_model->getCodigoCotizacion();
         }else{
-            $cotizacion_requerimiento = CotizacionRequerimiento::find($request->id);
-            $codigo_cotizacion = $request->codigo;
+            $cotizacion_requerimiento = CotizacionRequerimiento::find($request->id_cotizacion);
+            $codigo_cotizacion = $request->codigo_cotizacion;
         }
 
         $id_producto = $request->input('id_producto');
@@ -877,15 +877,19 @@ class RequerimientoController extends Controller
         $igv = $request->input('igv');
         $total = $request->input('total');
         
-        //$id_requerimiento_detalle =$request->id_requerimiento_detalle;
+        $id_cotizacion_detalle =$request->id_cotizacion_detalle;
+        //dd($id_cotizacion_detalle);exit();
         
         $cotizacion_requerimiento->id_requerimiento = $request->id_requerimiento;
         $cotizacion_requerimiento->fecha = $request->fecha_cotizacion;
-        if($request->id == 0){
+        if($request->id_cotizacion == 0){
             $cotizacion_requerimiento->codigo = $codigo_cotizacion[0]->codigo;
         }else{
             $cotizacion_requerimiento->codigo = $codigo_cotizacion;
         }
+        $cotizacion_requerimiento->vendedor = $request->vendedor;
+        $cotizacion_requerimiento->numero_cotizacion = $request->numero_cotizacion;
+        $cotizacion_requerimiento->igv_compra = $request->igv_compra;
         $cotizacion_requerimiento->id_empresa = $request->empresa_vende;
         $cotizacion_requerimiento->telefono = $request->telefono;
         $cotizacion_requerimiento->id_moneda = $request->moneda;
@@ -905,11 +909,11 @@ class RequerimientoController extends Controller
 
         foreach($id_producto as $index => $value) {
             
-            //if($id_requerimiento_detalle[$index] == 0){
+            if($id_cotizacion_detalle[$index] == 0){
                 $cotizacion_detalle_requerimiento = new CotizacionDetalleRequerimiento;
-            //}else{
-                //$requerimiento_detalle = RequerimientoDetalle::find($id_requerimiento_detalle[$index]);
-            //}
+            }else{
+                $cotizacion_detalle_requerimiento = CotizacionDetalleRequerimiento::find($id_cotizacion_detalle[$index]);
+            }
             
             $cotizacion_detalle_requerimiento->id_cotizacion_requerimientos = $id_cotizacion_requerimiento;
             $cotizacion_detalle_requerimiento->id_producto = $id_producto[$index];

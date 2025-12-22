@@ -268,6 +268,23 @@ function fn_save_anular_orden_compra(){
                         </div>
                     </div>
                     
+                    <div class="row" style="padding-left:10px; padding-top:20px">
+                        <div class="col-lg-3">
+                            Estado
+                        </div>
+                        <div class="col-lg-6">
+                            <select name="estado" id="estado" class="form-control form-control-sm" onchange="">
+                                <option value="">--Seleccionar--</option>
+                                <?php
+                                foreach ($estado_pedido as $row){?>
+                                    <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$orden_compra->estado_pedido)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                    <?php 
+                                }
+                                ?>
+                            </select>
+                        </div>
+                    </div>
+                    
                     <div class="card-body" style="margin-top:20px">	
 
                     <div style="margin-top:15px" class="form-group">

@@ -851,4 +851,5 @@ Route::get('requerimiento/modal_agregar_cotizacion/{id}', [RequerimientoControll
 Route::get('requerimiento/cargar_detalle_requerimiento_cotizacion/{id}', [RequerimientoController::class, 'cargar_detalle_requerimiento_cotizacion'])->name('requerimiento.cargar_detalle_requerimiento_cotizacion');
 Route::post('requerimiento/send_cotizacion_requerimiento', [RequerimientoController::class, 'send_cotizacion_requerimiento'])->name('requerimiento.send_cotizacion_requerimiento');
 Route::get('requerimiento/obtener_cotizacion/{id_requerimiento}', [RequerimientoController::class, 'obtener_cotizacion'])->name('requerimiento.obtener_cotizacion');
+Route::get('requerimiento/cargar_detalle_cotizacion/{idCotizacion}', [RequerimientoController::class, 'cargar_detalle_cotizacion'])->name('requerimiento.cargar_detalle_cotizacion');
 

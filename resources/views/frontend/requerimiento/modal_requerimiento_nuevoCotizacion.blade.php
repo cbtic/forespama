@@ -215,11 +215,11 @@ function cargarDetalleCotizacion(){
                 const row = `
                     <tr>
                         <td>${n}</td>
-                        <td style="width: 410px !important;display:block"><input name="id_producto[]" id="id_producto${n}" class="form-control form-control-sm" value="${requerimiento.id_producto}" type="hidden"><input name="descripcion[]" id="descripcion${n}" class="form-control form-control-sm" style="border: none; background-color: transparent; font-size:11px" value="${requerimiento.nombre_producto}" type="text" readonly></td>
+                        <td style="width: 410px !important;display:block"><input name="id_cotizacion_detalle[]" id="id_cotizacion_detalle${n}" class="id_cotizacion_detalle form-control form-control-sm" value="0" type="hidden"><input name="id_producto[]" id="id_producto${n}" class="form-control form-control-sm" value="${requerimiento.id_producto}" type="hidden"><input name="descripcion[]" id="descripcion${n}" class="form-control form-control-sm" style="border: none; background-color: transparent; font-size:11px" value="${requerimiento.nombre_producto}" type="text" readonly></td>
                         
                         <td><input name="marca[]" id="marca${n}" class="form-control form-control-sm" value="${id_marca}" type="hidden"><input name="marca_descripcion[]" id="marca_descripcion${n}" class="form-control form-control-sm" style="border: none; background-color: transparent;font-size:11px" value="${marca}" type="text" readonly></td>
                         <td><input name="cod_interno[]" id="cod_interno${n}" class="form-control form-control-sm" style="border: none; background-color: transparent;font-size:11px" value="${requerimiento.codigo}" type="text" readonly></td>
-                        <td><input name="unidad[]" id="unidad${n}" class="form-control form-control-sm" value="${requerimiento.id_unidad_medida}" type="hidden"><input name="unidad[]" id="unidad${n}" class="form-control form-control-sm" style="border: none; background-color: transparent;font-size:11px" value="${requerimiento.unidad_medida}" readonly></td>
+                        <td><input name="unidad[]" id="unidad${n}" class="form-control form-control-sm" value="${requerimiento.id_unidad_medida}" type="hidden"><input name="unidad_nombre[]" id="unidad_nombre${n}" class="form-control form-control-sm" style="border: none; background-color: transparent;font-size:11px" value="${requerimiento.unidad_medida}" readonly></td>
                         <td><input name="cantidad_ingreso[]" id="cantidad_ingreso${n}" class="cantidad_ingreso form-control form-control-sm" style="font-size:11px" value="${requerimiento.cantidad}" type="text" oninput="calcularPrecioUnitario(this)"></td>
                         <td><input name="precio_venta[]" id="precio_venta${n}" class="precio_venta form-control form-control-sm" style="font-size:11px" value="" type="text" oninput="calcularPrecioUnitario(this)"></td>
                         <td><input name="precio_unitario[]" id="precio_unitario${n}" class="precio_unitario form-control form-control-sm" style="border: none; background-color: transparent;font-size:11px" value="" type="text" readonly></td>
@@ -360,6 +360,7 @@ function limpiar(){
     $("#numero_cotizacion").val('');
     $("#empresa_vende").val('').trigger('change');
     $("#fecha_cotizacion").val('');
+    $("#vendedor").val('');
     $("#telefono").val('');
     $("#moneda").val('');
     $("#tipo_cambio").val('');
@@ -379,25 +380,42 @@ function cargar_cotizacion_detalle(idCotizacion){
         type: "GET",
         success: function (result) {
 
+            cotizacion = result.cotizacion_requerimiento[0];
+
+            //alert(result.cotizacion_requerimiento[0].codigo);
+
+            $("#id_cotizacion").val(idCotizacion);
+            $('#divCotizacionDetalle').empty();
+            $("#colDetalle").show();
+            $("#codigo_cotizacion").val(cotizacion.codigo);
+            $("#numero_cotizacion").val(cotizacion.numero_cotizacion);
+            $("#empresa_vende").val(cotizacion.id_empresa).trigger('change');
+            $("#fecha_cotizacion").val(cotizacion.fecha);
+            $("#vendedor").val(cotizacion.vendedor);
+            $("#telefono").val(cotizacion.telefono);
+            $("#moneda").val(cotizacion.id_moneda);
+            $("#tipo_cambio").val(cotizacion.tipo_cambio);
+            $("#igv_compra").val(cotizacion.igv_compra);
+            
             let n = 1;
 
             var total_acumulado=0;
 
-            result.requerimiento.forEach(requerimiento => {
-                
-                let id_marca = requerimiento.id_marca ?? '';
-                let marca = requerimiento.marca ?? '';
+            result.cotizacion_requerimiento.forEach(cotizacion_requerimiento => {
+
+                let id_marca = cotizacion_requerimiento.id_marca ?? '';
+                let marca = cotizacion_requerimiento.marca ?? '';
                 
                 const row = `
                     <tr>
                         <td>${n}</td>
-                        <td style="width: 410px !important;display:block"><input name="id_producto[]" id="id_producto${n}" class="form-control form-control-sm" value="${requerimiento.id_producto}" type="hidden"><input name="descripcion[]" id="descripcion${n}" class="form-control form-control-sm" style="border: none; background-color: transparent; font-size:11px" value="${requerimiento.nombre_producto}" type="text" readonly></td>
+                        <td style="width: 410px !important;display:block"><input name="id_cotizacion_detalle[]" id="id_cotizacion_detalle${n}" class="id_cotizacion_detalle form-control form-control-sm" value="${cotizacion_requerimiento.id}" type="hidden"><input name="id_producto[]" id="id_producto${n}" class="form-control form-control-sm" value="${cotizacion_requerimiento.id_producto}" type="hidden"><input name="descripcion[]" id="descripcion${n}" class="form-control form-control-sm" style="border: none; background-color: transparent; font-size:11px" value="${cotizacion_requerimiento.producto}" type="text" readonly></td>
                         
                         <td><input name="marca[]" id="marca${n}" class="form-control form-control-sm" value="${id_marca}" type="hidden"><input name="marca_descripcion[]" id="marca_descripcion${n}" class="form-control form-control-sm" style="border: none; background-color: transparent;font-size:11px" value="${marca}" type="text" readonly></td>
-                        <td><input name="cod_interno[]" id="cod_interno${n}" class="form-control form-control-sm" style="border: none; background-color: transparent;font-size:11px" value="${requerimiento.codigo}" type="text" readonly></td>
-                        <td><input name="unidad[]" id="unidad${n}" class="form-control form-control-sm" value="${requerimiento.id_unidad_medida}" type="hidden"><input name="unidad[]" id="unidad${n}" class="form-control form-control-sm" style="border: none; background-color: transparent;font-size:11px" value="${requerimiento.unidad_medida}" readonly></td>
-                        <td><input name="cantidad_ingreso[]" id="cantidad_ingreso${n}" class="cantidad_ingreso form-control form-control-sm" style="font-size:11px" value="${requerimiento.cantidad}" type="text" oninput="calcularPrecioUnitario(this)"></td>
-                        <td><input name="precio_venta[]" id="precio_venta${n}" class="precio_venta form-control form-control-sm" style="font-size:11px" value="" type="text" oninput="calcularPrecioUnitario(this)"></td>
+                        <td><input name="cod_interno[]" id="cod_interno${n}" class="form-control form-control-sm" style="border: none; background-color: transparent;font-size:11px" value="${cotizacion_requerimiento.codigo}" type="text" readonly></td>
+                        <td><input name="unidad[]" id="unidad${n}" class="form-control form-control-sm" value="${cotizacion_requerimiento.id_unidad_medida}" type="hidden"><input name="unidad[]" id="unidad${n}" class="form-control form-control-sm" style="border: none; background-color: transparent;font-size:11px" value="${cotizacion_requerimiento.unidad_medida}" readonly></td>
+                        <td><input name="cantidad_ingreso[]" id="cantidad_ingreso${n}" class="cantidad_ingreso form-control form-control-sm" style="font-size:11px" value="${cotizacion_requerimiento.cantidad}" type="text" oninput="calcularPrecioUnitario(this)"></td>
+                        <td><input name="precio_venta[]" id="precio_venta${n}" class="precio_venta form-control form-control-sm" style="font-size:11px" value="${cotizacion_requerimiento.precio_venta}" type="text" oninput="calcularPrecioUnitario(this)"></td>
                         <td><input name="precio_unitario[]" id="precio_unitario${n}" class="precio_unitario form-control form-control-sm" style="border: none; background-color: transparent;font-size:11px" value="" type="text" readonly></td>
                         <td><input name="valor_venta_bruto[]" id="valor_venta_bruto${n}" class="valor_venta_bruto form-control form-control-sm" style="border: none; background-color: transparent;font-size:11px" value="" type="text" readonly></td>
                         <td><input name="valor_venta[]" id="valor_venta${n}" class="valor_venta form-control form-control-sm" style="border: none; background-color: transparent;font-size:11px" value="" type="text" readonly></td>
@@ -409,6 +427,8 @@ function cargar_cotizacion_detalle(idCotizacion){
                     </tr>
                 `;
                 tbody.append(row);
+
+                calcularPrecioUnitario(document.getElementById(`precio_venta${n}`));
 
                 n++;
             });
@@ -466,7 +486,7 @@ function cargarCotizaciones(){
     });
 }
 
-$(document).on('click', '.fila-cotizacion', function () {
+$(document).off('click', '.fila-cotizacion').on('click', '.fila-cotizacion', function () {
     const idCotizacion = $(this).data('id');
 
     cargar_cotizacion_detalle(idCotizacion);
@@ -531,7 +551,7 @@ $(document).on('click', '.fila-cotizacion', function () {
                                     C&oacute;digo Cotizaci&oacute;n
                                 </div>
                                 <div class="col-lg-2">
-                                    <input id="codigo_cotizacion" name="codigo_cotizacion" on class="form-control form-control-sm"  value="<?php //if($id>0){echo $orden_compra->numero_orden_compra;}?>" type="text" readonly ="readonly">
+                                    <input id="codigo_cotizacion" name="codigo_cotizacion" on class="form-control form-control-sm"  value="<?php //if($id_cotizacion>0){echo $orden_compra->numero_orden_compra;}?>" type="text" readonly ="readonly">
                                 </div>
                             </div>
                             <div class="row" style="padding-left:10px">
@@ -539,7 +559,7 @@ $(document).on('click', '.fila-cotizacion', function () {
                                     N&uacute;mero Cotizaci&oacute;n
                                 </div>
                                 <div class="col-lg-2">
-                                    <input id="numero_cotizacion" name="numero_cotizacion" on class="form-control form-control-sm"  value="<?php //if($id>0){echo $orden_compra->numero_orden_compra;}?>" type="text">
+                                    <input id="numero_cotizacion" name="numero_cotizacion" on class="form-control form-control-sm"  value="<?php //if($id_cotizacion>0){echo $orden_compra->numero_orden_compra;}?>" type="text">
                                 </div>
                                 <div class="col-lg-2">
                                     Empresa Vende
@@ -561,15 +581,22 @@ $(document).on('click', '.fila-cotizacion', function () {
                                     Fecha Cotizaci&oacute;n
                                 </div>
                                 <div class="col-lg-2">
-                                    <input id="fecha_cotizacion" name="fecha_cotizacion" on class="form-control form-control-sm"  value="<?php //echo isset($orden_compra) && $orden_compra->fecha_orden_compra ? $orden_compra->fecha_orden_compra : date('Y-m-d'); ?>" type="text">
+                                    <input id="fecha_cotizacion" name="fecha_cotizacion" on class="form-control form-control-sm"  value="<?php //echo isset($id_cotizacion) && $orden_compra->fecha_orden_compra ? $orden_compra->fecha_orden_compra : date('Y-m-d'); ?>" type="text">
                                 </div>
-                            
+                                 <div class="col-lg-2">
+                                    Vendedor
+                                </div>
+                                <div class="col-lg-2">
+                                    <input id="vendedor" name="vendedor" on class="form-control form-control-sm"  value="<?php //if($id>0){echo $orden_compra->numero_orden_compra;}?>" type="text">
+                                </div>
                                 <div class="col-lg-2">
                                     Telefono
                                 </div>
                                 <div class="col-lg-2">
                                     <input id="telefono" name="telefono" on class="form-control form-control-sm"  value="<?php //if($id>0){echo $orden_compra->numero_orden_compra;}?>" type="text">
                                 </div>
+                            </div>
+                            <div class="row" style="padding-left:10px">
                                 <div class="col-lg-2">
                                     Moneda
                                 </div>
@@ -585,8 +612,6 @@ $(document).on('click', '.fila-cotizacion', function () {
                                     </select>
                                     <input name="moneda_descripcion" id="moneda_descripcion" type="hidden">
                                 </div>
-                            </div>
-                            <div class="row" style="padding-left:10px">
                                 <div class="col-lg-2">
                                     Tipo de Cambio
                                 </div>

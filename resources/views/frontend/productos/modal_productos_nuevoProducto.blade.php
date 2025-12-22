@@ -845,6 +845,13 @@ function mostrarOpcionesPorFamilia() {
                                     <button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-nuevo" data-toggle="modal" onclick="fn_save_producto()">
                                         <i class="fas fa-save" style="font-size:18px;"></i> Guardar
                                     </button>
+                                    
+                                    @hasanyrole('Administrator|Aprobar Producto')
+                                    <button style="font-size:12px;margin-left:10px" type="button" class="btn btn-sm btn-clasico-blanco btn-enviar" data-toggle="modal" onclick="fn_save_producto()">
+                                        <i class="fas fa-check-circle" style="font-size:18px;"></i> Aprobar Producto
+                                    </button>
+                                    @endhasanyrole
+
                                 </div>
                                                     
                             </div>

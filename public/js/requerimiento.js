@@ -328,7 +328,7 @@ function datatablenew(){
 						//	html += '<button style="font-size:12px" type="button" class="btn btn-sm btn-success" data-toggle="modal" onclick="modalRequerimiento('+row.id+')" disabled><i class="fa fa-edit"></i> Editar</button>'; 	
 						//}
 
-						html += '<button style="font-size:12px;margin-left:10px" type="button" class="btn btn-sm btn-success" data-toggle="modal" onclick="modalAgregarCotizacion('+row.id+')" ><i class="fa fa-plus-circle" style="font-size:17px;"></i> Cotizaciones</button>';
+						html += '<button style="font-size:12px;margin-left:10px" type="button" class="btn btn-primary icono-botones" data-toggle="modal" onclick="modalAgregarCotizacion('+row.id+')" ><i class="fa fa-plus-circle" style="font-size:17px;"></i> Cotizaciones</button>';
 
 						if(usuario == row.id_responsable){	
 							html += '<button style="font-size:12px;margin-left:10px" type="button" class="btn btn-sm btn-info" data-toggle="modal" onclick="modalAtenderRequerimiento('+row.id+')" ><i class="fa fa-edit"></i> Atender</button>'; 

@@ -17,6 +17,7 @@ use App\Models\Chopeo;
 use App\Models\ChopeoDetalle;
 use App\Models\EquivalenciaProducto;
 use App\Models\ProductosCompetencia;
+use App\Models\User;
 use RealRashid\SweetAlert\Facades\Alert;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -127,50 +128,83 @@ class ProductosController extends Controller
 
         $id_user = Auth::user()->id;
 
+        $user_model = new User;
+        $rol = $user_model->getRolByUser($id_user);
+        $aprobado = 1;
+
+        foreach ($rol as $r) {
+            if ($r->id_rol == 26 || $r->id_rol == 1) {
+                $aprobado = 2;
+                break;
+            }
+        }
+
 		if($request->id == 0){
 			$producto = new Producto;
             $producto_model = new Producto;
             $correlativo = $producto_model->getCorrelativo();
             $producto->numero_corrrelativo = $correlativo[0]->numero_correlativo;
-            $codigo_producto = $producto_model->getCodigoProducto($request->familia, $request->sub_familia);
-            $codigo_final = $codigo_producto[0]->codigo;
+            if($aprobado == 2){
+                $codigo_producto = $producto_model->getCodigoProducto($request->familia, $request->sub_familia);
+                $codigo_final = $codigo_producto[0]->codigo;
+            }
+
 		}else{
 			$producto = Producto::find($request->id);
             $producto_model = new Producto;
             //$codigo_producto = $request->codigo;
-            if($request->sub_familia != $producto->id_sub_familia){
-                $codigo_producto = $producto_model->getCodigoProducto($request->familia, $request->sub_familia);
-                $codigo_final = $codigo_producto[0]->codigo;
+            if($aprobado == 2){
+                if($request->sub_familia != $producto->id_sub_familia){
+                    $codigo_producto = $producto_model->getCodigoProducto($request->familia, $request->sub_familia);
+                    $codigo_final = $codigo_producto[0]->codigo;
+                }else if($request->codigo == ""){
+                    $codigo_producto = $producto_model->getCodigoProducto($request->familia, $request->sub_familia);
+                    $codigo_final = $codigo_producto[0]->codigo;
+                }else{
+                    $codigo_final = $request->codigo;
+                }
             }else{
                 $codigo_final = $request->codigo;
             }
 		}
-
+        
         if($request->id == 0){
 
-            $existe_producto_codigo = Producto::where('codigo', $codigo_producto[0]->codigo)->first();
+            if($aprobado == 2 && $request->codigo == ""){
+                $existe_producto_codigo = Producto::where('codigo', $codigo_producto[0]->codigo)->where('estado',1)->first();
+
+                if ($existe_producto_codigo && $existe_producto_codigo->id != $request->id) {
+                    return response()->json([
+                    'error' => 'El código ya está registrado.'
+                    ]);
+                }
+            }
 
             $existe_producto_serie = Producto::where('numero_serie', $request->numero_serie)->whereNotNull('numero_serie')->where('numero_serie', '!=', '')->first();
-
+            
             if ($existe_producto_serie && $existe_producto_serie->id != $request->id) {
                 return response()->json([
                 'error' => 'El número de serie ya está registrado.'
                 ]);
             }
 
-            if ($existe_producto_codigo && $existe_producto_codigo->id != $request->id) {
+            $existe_producto_nombre = Producto::where('denominacion', $request->denominacion)->where('estado',1)->first();
+
+            if ($existe_producto_nombre && $existe_producto_nombre->id != $request->id) {
                 return response()->json([
-                'error' => 'El código ya está registrado.'
+                'error' => 'El nombre del producto ya está registrado.'
                 ]);
             }
         }
 
         $producto->id_tipo_origen_producto = $request->tipo_origen_producto;
 		$producto->numero_serie = $request->numero_serie;
-		if($request->id == 0){
-            $producto->codigo = $codigo_final;
-        }else{
-            $producto->codigo = $codigo_final;
+		if($aprobado == 2){
+            if($request->id == 0){
+                $producto->codigo = $codigo_final;
+            }else{
+                $producto->codigo = $codigo_final;
+            }
         }
         $producto->denominacion = $request->denominacion;
         $producto->id_unidad_medida = $request->unidad_medida;
@@ -193,6 +227,7 @@ class ProductosController extends Controller
         $producto->id_modelo = $request->modelo;
         $producto->id_packet = $request->packet;
         $producto->id_medida = $request->medida;
+        $producto->aprobado = $aprobado;
 		$producto->estado = 1;
 		$producto->id_usuario_inserta = $id_user;
 		$producto->save();

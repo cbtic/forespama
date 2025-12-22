@@ -1014,6 +1014,8 @@ class OrdenCompraController extends Controller
             $rowIndex++;
         }
 
+        //dd($items);exit();
+
         foreach ($items as $sku => $data) {
 
             $equivalenciaProducto = EquivalenciaProducto::where("codigo_empresa", $sku)->first();
@@ -1026,6 +1028,7 @@ class OrdenCompraController extends Controller
 
             $cantidad_requerida = $data["cantidad"];
             $valor_unitario = $data["precio"];
+            //dd($valor_unitario);exit();
 
             $precio_venta = 1.18 * $valor_unitario;
             $total = $precio_venta * $cantidad_requerida;
@@ -1037,6 +1040,8 @@ class OrdenCompraController extends Controller
             $igv_general += $igv;
             $total_general += $total;
 
+            //dd($valor_venta_bruto);exit();
+
             $detalle = new OrdenCompraDetalle;
             $detalle->id_orden_compra = $id_orden_compra;
             $detalle->id_producto = $id_producto;
@@ -1047,6 +1052,8 @@ class OrdenCompraController extends Controller
             $detalle->id_unidad_medida = $id_unidad_medida;
             $detalle->id_estado_producto = $id_estado_producto;
             $detalle->precio_venta = round($precio_venta, 2);
+            $detalle->valor_venta_bruto = round($sub_total, 2);
+            $detalle->valor_venta = round($sub_total, 2);
             $detalle->precio = round($valor_unitario, 2);
             $detalle->sub_total = round($sub_total, 2);
             $detalle->igv = round($igv, 2);
@@ -1814,8 +1821,9 @@ class OrdenCompraController extends Controller
         $orden_compra = OrdenCompra::find($id);
 
         $estado_pedido = $tablaMaestra_model->getMaestroByTipo(77);
+        $estado_pedido_cancelado = $tablaMaestra_model->getMaestroByTipo(112);
         
-		return view('frontend.orden_compra.modal_anular_orden_compra',compact('id','orden_compra','estado_pedido'));
+		return view('frontend.orden_compra.modal_anular_orden_compra',compact('id','orden_compra','estado_pedido','estado_pedido_cancelado'));
 
     }
 
