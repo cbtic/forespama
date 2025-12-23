@@ -1,6 +1,6 @@
 -- DROP FUNCTION public.sp_listar_productos_paginado(varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, refcursor);
 
-CREATE OR REPLACE FUNCTION public.sp_listar_productos_paginado(p_serie character varying, p_denominacion character varying, p_codigo character varying, p_estado_bien character varying, p_tipo_origen_producto character varying, p_tiene_imagen character varying, p_familia character varying, p_sub_familia character varying, p_estado character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
+CREATE OR REPLACE FUNCTION public.sp_listar_productos_paginado(p_serie character varying, p_denominacion character varying, p_codigo character varying, p_estado_bien character varying, p_tipo_origen_producto character varying, p_tiene_imagen character varying, p_familia character varying, p_sub_familia character varying, p_aprobado character varying, p_estado character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
  RETURNS refcursor
  LANGUAGE plpgsql
 AS $function$
@@ -23,7 +23,7 @@ begin
     SELECT 1 
     FROM producto_imagenes pi 
     WHERE pi.id_producto = p.id) THEN 1 ELSE 0 
-	END) tiene_imagen, tm6.denominacion bien_servicio, f.denominacion familia, sf.denominacion sub_familia ';
+	END) tiene_imagen, tm6.denominacion bien_servicio, f.denominacion familia, sf.denominacion sub_familia, tm7.denominacion aprobado ';
 
 	v_tabla=' from productos p 
 	left join tabla_maestras tm on p.id_tipo_producto = tm.codigo::int and tm.tipo =''44''
@@ -32,6 +32,7 @@ begin
 	left join tabla_maestras tm4 on p.id_unidad_medida = tm4.codigo::int and tm4.tipo =''57''
 	left join tabla_maestras tm5 on p.id_tipo_origen_producto = tm5.codigo::int and tm5.tipo =''58''
 	left join tabla_maestras tm6 on p.bien_servicio = tm6.codigo::int and tm6.tipo =''73''
+	left join tabla_maestras tm7 on p.aprobado = tm7.codigo::int and tm7.tipo =''113''
 	left join marcas m on p.id_marca = m.id
 	left join familias f on p.id_familia = f.id 
 	left join sub_familias sf on p.id_sub_familia = sf.id ';
@@ -72,6 +73,10 @@ begin
 
 	If p_sub_familia<>'' Then
 	 v_where:=v_where||'And p.id_sub_familia =  '''||p_sub_familia||''' ';
+	End If;
+
+	If p_aprobado<>'' Then
+	 v_where:=v_where||'And p.aprobado =  '''||p_aprobado||''' ';
 	End If;
 
 	If p_estado<>'' Then
