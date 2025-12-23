@@ -95,6 +95,7 @@ function datatablenew(){
 			var tiene_imagen = $('#tiene_imagen_bus').val();
 			var familia = $('#familia_bus').val();
 			var sub_familia = $('#sub_familia_bus').val();
+			var aprobado = $('#aprobado_bus').val();
 			var estado = $('#estado_bus').val();
 			
 			var _token = $('#_token').val();
@@ -105,7 +106,7 @@ function datatablenew(){
                 "url": sSource,
                 "data":{NumeroPagina:iNroPagina,NumeroRegistros:iCantMostrar,
 						serie:serie,denominacion:denominacion,codigo:codigo,estado_bien:estado_bien,tipo_origen_producto:tipo_origen_producto,
-						estado:estado,tiene_imagen:tiene_imagen,familia:familia,sub_familia:sub_familia,
+						estado:estado,tiene_imagen:tiene_imagen,familia:familia,sub_familia:sub_familia,aprobado:aprobado,
 						_token:_token
                        },
                 "success": function (result) {
@@ -277,6 +278,15 @@ function datatablenew(){
 					"aTargets": [15]
 				},
 				{
+				"mRender": function (data, type, row) {
+					var aprobado = "";
+					if(row.aprobado!= null)aprobado = row.aprobado;
+					return aprobado;
+				},
+				"bSortable": true,
+				"aTargets": [16]
+				},
+				{
 					"mRender": function (data, type, row) {
 						var estado = "";
 						if(row.estado == 1){
@@ -288,7 +298,7 @@ function datatablenew(){
 						return estado;
 					},
 					"bSortable": false,
-					"aTargets": [16]
+					"aTargets": [17]
 				},
 				{
 					"mRender": function (data, type, row) {
@@ -315,7 +325,7 @@ function datatablenew(){
 						return html;
 					},
 					"bSortable": false,
-					"aTargets": [17],
+					"aTargets": [18],
 				},
             ]
     });

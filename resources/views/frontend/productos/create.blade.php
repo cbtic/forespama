@@ -433,8 +433,21 @@ label.form-control-sm{
 							<option value="0">No</option>
 						</select>
 					</div>
+
+					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+						<select name="aprobado_bus" id="aprobado_bus" class="form-control form-control-sm">
+							<option value="">--Seleccionar Aprobado--</option>
+							<?php
+							foreach ($aprobado as $row) {
+							?>
+							<option value="<?php echo $row->codigo?>"><?php echo $row->denominacion?></option>
+							<?php
+							}
+							?>
+						</select>
+					</div>
 					
-                    <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+                    <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
 						<select name="estado_bus" id="estado_bus" class="form-control form-control-sm">
 							<option value="">Todos</option>
 							<option value="1" selected="selected">Activo</option>
@@ -475,6 +488,7 @@ label.form-control-sm{
 							<th>F. Vencimiento</th>
 							<th>Stock M&iacute;nimo</th>
 							<th>Tiene Imagen</th>
+							<th>Aprobado</th>
 							<th>Estado</th>
                             <th>Acciones</th>
                         </tr>
