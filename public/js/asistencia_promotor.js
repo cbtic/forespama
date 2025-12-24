@@ -130,7 +130,7 @@ $(document).ready(function () {
 });
 
 function datatablenew(){
-                      
+    
     var oTable1 = $('#tblAsistenciaPromotores').dataTable({
         "bServerSide": true,
         "sAjaxSource": "/promotores/listar_asistencia_promotores_ajax",
@@ -770,6 +770,7 @@ function descargarAsistencia(){
     var fecha_fin = $('#fecha_fin_bus').val();
     var estado = $('#estado_bus').val();
 	
+	if (empresa_retail == "")empresa_retail = "0";
 	if (fecha_inicio == "")fecha_inicio = "0";
 	if (fecha_fin == "")fecha_fin = "0";
 	if (estado == "")estado = 0;
