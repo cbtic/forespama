@@ -527,8 +527,8 @@ function obtenerSubCategoria(){
 
     if(categoria == 1){ tipo = 1;}
     else if(categoria == 2){tipo = 2;}
-    else if(categoria == 3){tipo = 3;}
-    else{tipo = 4;}
+    else if(categoria == 3 || categoria == 4){tipo = 3;}
+    //else{tipo = 4;}
 
     $.ajax({
         url: "/productos/obtener_sub_categoria/"+tipo,
@@ -561,7 +561,7 @@ function obtenerModelo(){
     if(categoria == 1){ tipo = 1;}
     else if(categoria == 2){tipo = 2;}
     else if(categoria == 3){tipo = 3;}
-    else{tipo = 4;}
+    else if(categoria == 4){tipo = 4;}
 
     $.ajax({
         url: "/productos/obtener_modelo/"+tipo,
@@ -626,7 +626,7 @@ function obtenerMedida(){
     if(categoria == 1){ tipo = 1;}
     else if(categoria == 2){tipo = 2;}
     else if(categoria == 3){tipo = 3;}
-    else{tipo = 4;}
+    else if(categoria == 4){tipo = 4;}
 
     $.ajax({
         url: "/productos/obtener_medida/"+tipo,
