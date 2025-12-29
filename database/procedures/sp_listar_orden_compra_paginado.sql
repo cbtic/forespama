@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION public.sp_listar_orden_compra_paginado(p_tipo_documento character varying, p_empresa_compra character varying, p_empresa_vende character varying, p_fecha_inicio character varying, p_fecha_fin character varying, p_numero_orden_compra character varying, p_numero_orden_compra_cliente character varying, p_situacion character varying, p_almacen_origen character varying, p_almacen_destino character varying, p_estado character varying, p_id_user character varying, p_id_vendedor character varying, p_estado_pedido character varying, p_prioridad character varying, p_canal character varying, p_tipo_producto character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
+CREATE OR REPLACE FUNCTION public.sp_listar_orden_compra_paginado(p_tipo_documento character varying, p_empresa_compra character varying, p_empresa_vende character varying, p_fecha_inicio character varying, p_fecha_fin character varying, p_numero_orden_compra character varying, p_numero_orden_compra_cliente character varying, p_situacion character varying, p_almacen_origen character varying, p_almacen_destino character varying, p_estado character varying, p_id_user character varying, p_id_vendedor character varying, p_estado_pedido character varying, p_prioridad character varying, p_canal character varying, p_tipo_producto character varying, p_estado_pedido_cancelado character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
  RETURNS refcursor
  LANGUAGE plpgsql
 AS $function$
@@ -140,6 +140,10 @@ begin
 		inner join productos p on ocd.id_producto = p.id 
 		where ocd.id_orden_compra = oc.id 
 		and p.bien_servicio = '''||p_tipo_producto||''') ';
+	End If;
+	
+	If p_estado_pedido_cancelado<>'' Then
+	 v_where:=v_where||'And oc.estado_pedido_cancelado = '''||p_estado_pedido_cancelado||''' ';
 	End If;
 
 	EXECUTE ('SELECT count(1) '||v_tabla||v_where) INTO v_count;

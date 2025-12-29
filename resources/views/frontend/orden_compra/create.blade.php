@@ -598,7 +598,7 @@ label.form-control-sm{
 							</div>
 							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
 								<select name="estado_pedido_cancelado_bus" id="estado_pedido_cancelado_bus" class="form-control form-control-sm filtro-select">
-									<option value="">--Selec. Estado Pedido--</option>
+									<option value="">--Selec. Estado Cancelado--</option>
 									<?php
 									foreach ($estado_pedido_cancelado as $row){?>
 										<option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>

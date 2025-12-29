@@ -611,6 +611,7 @@ function DescargarArchivosExcel(){
 	var prioridad = $('#prioridad_bus').val();
 	var canal = $('#canal_bus').val();
 	var tipo_producto = $('#tipo_producto_bus').val();
+	var estado_pedido_cancelado = $('#estado_pedido_cancelado_bus').val();
 
 	if (tipo_documento == "")tipo_documento = 0;
 	if (empresa_compra == "")empresa_compra = 0;
@@ -628,8 +629,9 @@ function DescargarArchivosExcel(){
 	if (prioridad == "")prioridad = 0;
 	if (canal == "")canal = 0;
 	if (tipo_producto == "")tipo_producto = 0;
+	if (estado_pedido_cancelado == "")estado_pedido_cancelado = 0;
 	
-	location.href = '/orden_compra/exportar_listar_orden_compra/'+tipo_documento+'/'+empresa_compra+'/'+empresa_vende+'/'+fecha_inicio+'/'+fecha_fin+'/'+numero_orden_compra+'/'+numero_orden_compra_cliente+'/'+almacen_origen+'/'+almacen_destino+'/'+situacion+'/'+estado+'/'+vendedor+'/'+estado_pedido+'/'+prioridad+'/'+canal+'/'+tipo_producto;
+	location.href = '/orden_compra/exportar_listar_orden_compra/'+tipo_documento+'/'+empresa_compra+'/'+empresa_vende+'/'+fecha_inicio+'/'+fecha_fin+'/'+numero_orden_compra+'/'+numero_orden_compra_cliente+'/'+almacen_origen+'/'+almacen_destino+'/'+situacion+'/'+estado+'/'+vendedor+'/'+estado_pedido+'/'+prioridad+'/'+canal+'/'+tipo_producto+'/'+estado_pedido_cancelado;
 }
 
 function DescargarOrdenCompraDetalleExcel(){
@@ -650,6 +652,7 @@ function DescargarOrdenCompraDetalleExcel(){
 	var prioridad = $('#prioridad_bus').val();
 	var canal = $('#canal_bus').val();
 	var tipo_producto = $('#tipo_producto_bus').val();
+	var estado_pedido_cancelado = $('#estado_pedido_cancelado_bus').val();
 
 	if (tipo_documento == "")tipo_documento = 0;
 	if (empresa_compra == "")empresa_compra = 0;
@@ -667,8 +670,9 @@ function DescargarOrdenCompraDetalleExcel(){
 	if (prioridad == "")prioridad = 0;
 	if (canal == "")canal = 0;
 	if (tipo_producto == "")tipo_producto = 0;
+	if (estado_pedido_cancelado == "")estado_pedido_cancelado = 0;
 	
-	location.href = '/orden_compra/exportar_listar_orden_compra_detalle/'+tipo_documento+'/'+empresa_compra+'/'+empresa_vende+'/'+fecha_inicio+'/'+fecha_fin+'/'+numero_orden_compra+'/'+numero_orden_compra_cliente+'/'+almacen_origen+'/'+almacen_destino+'/'+situacion+'/'+estado+'/'+vendedor+'/'+estado_pedido+'/'+prioridad+'/'+canal+'/'+tipo_producto;
+	location.href = '/orden_compra/exportar_listar_orden_compra_detalle/'+tipo_documento+'/'+empresa_compra+'/'+empresa_vende+'/'+fecha_inicio+'/'+fecha_fin+'/'+numero_orden_compra+'/'+numero_orden_compra_cliente+'/'+almacen_origen+'/'+almacen_destino+'/'+situacion+'/'+estado+'/'+vendedor+'/'+estado_pedido+'/'+prioridad+'/'+canal+'/'+tipo_producto+'/'+estado_pedido_cancelado;
 }
 
 function generarLPN(){

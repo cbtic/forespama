@@ -155,6 +155,7 @@ class OrdenCompraController extends Controller
         $p[]=$request->prioridad;
         $p[]=$request->canal;
         $p[]=$request->tipo_producto;
+        $p[]=$request->estado_pedido_cancelado;
 		$p[]=$request->NumeroPagina;
 		$p[]=$request->NumeroRegistros;
 		$data = $orden_compra_model->listar_orden_compra_proceso_ajax($p);
@@ -1297,7 +1298,7 @@ class OrdenCompraController extends Controller
 
     }
 
-    public function exportar_listar_orden_compra($tipo_documento, $empresa_compra, $empresa_vende, $fecha_inicio, $fecha_fin, $numero_orden_compra, $numero_orden_compra_cliente, $almacen_origen, $almacen_destino, $situacion, $estado, $vendedor, $estado_pedido, $prioridad, $canal, $tipo_producto) {
+    public function exportar_listar_orden_compra($tipo_documento, $empresa_compra, $empresa_vende, $fecha_inicio, $fecha_fin, $numero_orden_compra, $numero_orden_compra_cliente, $almacen_origen, $almacen_destino, $situacion, $estado, $vendedor, $estado_pedido, $prioridad, $canal, $tipo_producto, $estado_pedido_cancelado) {
 
         $id_user = Auth::user()->id;
         
@@ -1317,6 +1318,7 @@ class OrdenCompraController extends Controller
         if($prioridad==0)$prioridad = "";
         if($canal==0)$canal = "";
         if($tipo_producto==0)$tipo_producto = "";
+        if($estado_pedido_cancelado==0)$estado_pedido_cancelado = "";
 
         $orden_compra_model = new OrdenCompra;
 		$p[]=$tipo_documento;
@@ -1336,6 +1338,7 @@ class OrdenCompraController extends Controller
         $p[]=$prioridad;
         $p[]=$canal;
         $p[]=$tipo_producto;
+        $p[]=$estado_pedido_cancelado;
         $p[]=1;
 		$p[]=10000;
 		$data = $orden_compra_model->listar_orden_compra_ajax($p);
@@ -1362,7 +1365,7 @@ class OrdenCompraController extends Controller
 		
     }
 
-    public function exportar_listar_orden_compra_detalle($tipo_documento, $empresa_compra, $empresa_vende, $fecha_inicio, $fecha_fin, $numero_orden_compra, $numero_orden_compra_cliente, $almacen_origen, $almacen_destino, $situacion, $estado, $vendedor, $estado_pedido, $prioridad, $canal, $tipo_producto) {
+    public function exportar_listar_orden_compra_detalle($tipo_documento, $empresa_compra, $empresa_vende, $fecha_inicio, $fecha_fin, $numero_orden_compra, $numero_orden_compra_cliente, $almacen_origen, $almacen_destino, $situacion, $estado, $vendedor, $estado_pedido, $prioridad, $canal, $tipo_producto, $estado_pedido_cancelado) {
 
         $id_user = Auth::user()->id;
         
@@ -1382,6 +1385,7 @@ class OrdenCompraController extends Controller
         if($prioridad==0)$prioridad = "";
         if($canal==0)$canal = "";
         if($tipo_producto==0)$tipo_producto = "";
+        if($estado_pedido_cancelado==0)$estado_pedido_cancelado = "";
 
         $orden_compra_model = new OrdenCompra;
 		$p[]=$tipo_documento;
@@ -1401,6 +1405,7 @@ class OrdenCompraController extends Controller
         $p[]=$prioridad;
         $p[]=$canal;
         $p[]=$tipo_producto;
+        $p[]=$estado_pedido_cancelado;
         $p[]=1;
 		$p[]=10000;
 		$data = $orden_compra_model->listar_orden_compra_detalle_ajax($p);
