@@ -93,6 +93,8 @@ $(document).ready(function () {
 
 	});
 
+	cambiarEstadoCancelado();
+
 });
 
 var tablaOrdenCompra = null;
@@ -172,6 +174,7 @@ function datatablenew(){
 			var prioridad = $('#prioridad_bus').val();
 			var canal = $('#canal_bus').val();
 			var tipo_producto = $('#tipo_producto_bus').val();
+			var estado_pedido_cancelado = $('#estado_pedido_cancelado_bus').val();
 			
 			var _token = $('#_token').val();
             oSettings.jqXHR = $.ajax({
@@ -183,7 +186,7 @@ function datatablenew(){
 						tipo_documento:tipo_documento,empresa_compra:empresa_compra,empresa_vende:empresa_vende,
 						fecha_inicio:fecha_inicio,fecha_fin:fecha_fin,numero_orden_compra:numero_orden_compra,almacen_origen:almacen_origen,
 						almacen_destino:almacen_destino,situacion:situacion,estado:estado,numero_orden_compra_cliente:numero_orden_compra_cliente,
-						vendedor:vendedor,estado_pedido:estado_pedido,prioridad:prioridad,canal:canal,tipo_producto:tipo_producto,
+						vendedor:vendedor,estado_pedido:estado_pedido,prioridad:prioridad,canal:canal,tipo_producto:tipo_producto,estado_pedido_cancelado:estado_pedido_cancelado,
 						_token:_token
                        },
                 "success": function (result) {
@@ -682,3 +685,15 @@ function generarLPN(){
 		}
 	});
 }
+
+function cambiarEstadoCancelado(){
+
+	$estado_pedido = $('#estado_pedido_bus').val();
+
+	if($estado_pedido==3){
+		$('#estado_pedido_cancelado_bus').show();
+	}else{
+		$('#estado_pedido_cancelado_bus').hide();
+	}
+}
+

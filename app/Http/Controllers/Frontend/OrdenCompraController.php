@@ -73,8 +73,9 @@ class OrdenCompraController extends Controller
 		$prioridad = $tablaMaestra_model->getMaestroByTipo(93);
 		$canal = $tablaMaestra_model->getMaestroByTipo(98);
 		$bien_servicio = $tablaMaestra_model->getMaestroByTipo(73);
+		$estado_pedido_cancelado = $tablaMaestra_model->getMaestroByTipo(112);
 		
-		return view('frontend.orden_compra.create',compact('tipo_documento','cerrado_orden_compra','proveedor','almacen','almacen_usuario','vendedor','estado_pedido','prioridad','canal','bien_servicio'));
+		return view('frontend.orden_compra.create',compact('tipo_documento','cerrado_orden_compra','proveedor','almacen','almacen_usuario','vendedor','estado_pedido','prioridad','canal','bien_servicio','estado_pedido_cancelado'));
 
 	}
 
@@ -1832,6 +1833,7 @@ class OrdenCompraController extends Controller
 		$orden_compra = OrdenCompra::find($request->id);
 
 		$orden_compra->estado_pedido = $request->estado;
+		$orden_compra->estado_pedido_cancelado = $request->estado_cancelado;
 		$orden_compra->motivo = $request->motivo;
 		$orden_compra->save();
 

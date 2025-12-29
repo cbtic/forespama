@@ -43,7 +43,7 @@ $(document).ready(function () {
 		}
 	});
 
-	$('#numero_orden_compra_bus').keypress(function(e){
+	$('#numero_requerimiento_bus').keypress(function(e){
 		if(e.which == 13) {
 			datatablenew();
 			return false;

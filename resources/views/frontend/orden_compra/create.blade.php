@@ -577,7 +577,7 @@ label.form-control-sm{
 								</select>
 							</div>
 
-							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+							<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
 								<select name="estado_bus" id="estado_bus" class="form-control form-control-sm filtro-select">
 									<option value="">Todos</option>
 									<option value="1" selected="selected">Activo</option>
@@ -586,11 +586,22 @@ label.form-control-sm{
 							</div>
 
 							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-								<select name="estado_pedido_bus" id="estado_pedido_bus" class="form-control form-control-sm filtro-select">
+								<select name="estado_pedido_bus" id="estado_pedido_bus" class="form-control form-control-sm filtro-select" onchange="cambiarEstadoCancelado()">
 									<option value="">--Selec. Estado Pedido--</option>
 									<?php
 									foreach ($estado_pedido as $row){?>
 										<option value="<?php echo $row->codigo ?>" <?php echo ($row->codigo == '1') ? 'selected' : ''; ?>><?php echo $row->denominacion ?></option>
+										<?php 
+									}
+									?>
+								</select>
+							</div>
+							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+								<select name="estado_pedido_cancelado_bus" id="estado_pedido_cancelado_bus" class="form-control form-control-sm filtro-select">
+									<option value="">--Selec. Estado Pedido--</option>
+									<?php
+									foreach ($estado_pedido_cancelado as $row){?>
+										<option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
 										<?php 
 									}
 									?>

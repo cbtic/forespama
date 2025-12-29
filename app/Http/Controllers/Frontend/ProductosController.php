@@ -778,6 +778,46 @@ class ProductosController extends Controller
             return 'No se detectó texto en la imagen.';
         }
     }
+
+    public function obtener_categoria($tipo){
+        
+		$tabla_maestra_model = new TablaMaestra;
+		$categoria = $tabla_maestra_model->getMaestroByTipoAndSubTipo(102, $tipo);
+		
+		echo json_encode($categoria);
+	}
+
+    public function obtener_sub_categoria($tipo){
+        
+		$tabla_maestra_model = new TablaMaestra;
+		$sub_categoria = $tabla_maestra_model->getMaestroByTipoAndSubTipo(105, $tipo);
+		
+		echo json_encode($sub_categoria);
+	}
+
+    public function obtener_modelo($tipo){
+        
+		$tabla_maestra_model = new TablaMaestra;
+		$modelo = $tabla_maestra_model->getMaestroByTipoAndSubTipo(106, $tipo);
+		
+		echo json_encode($modelo);
+	}
+
+    public function obtener_packet($tipo){
+        
+		$tabla_maestra_model = new TablaMaestra;
+		$packet = $tabla_maestra_model->getMaestroByTipoAndSubTipo(107, $tipo);
+		
+		echo json_encode($packet);
+	}
+
+    public function obtener_medida($tipo){
+        
+		$tabla_maestra_model = new TablaMaestra;
+		$medida = $tabla_maestra_model->getMaestroByTipoAndSubTipo(111, $tipo);
+		
+		echo json_encode($medida);
+	}
 }
 
 class InvoicesExport implements FromArray, WithHeadings, WithStyles

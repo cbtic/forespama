@@ -852,4 +852,8 @@ Route::get('requerimiento/cargar_detalle_requerimiento_cotizacion/{id}', [Requer
 Route::post('requerimiento/send_cotizacion_requerimiento', [RequerimientoController::class, 'send_cotizacion_requerimiento'])->name('requerimiento.send_cotizacion_requerimiento');
 Route::get('requerimiento/obtener_cotizacion/{id_requerimiento}', [RequerimientoController::class, 'obtener_cotizacion'])->name('requerimiento.obtener_cotizacion');
 Route::get('requerimiento/cargar_detalle_cotizacion/{idCotizacion}', [RequerimientoController::class, 'cargar_detalle_cotizacion'])->name('requerimiento.cargar_detalle_cotizacion');
-
+Route::get('productos/obtener_categoria/{tipo}', [ProductosController::class, 'obtener_categoria'])->name('productos.obtener_categoria');
+Route::get('productos/obtener_sub_categoria/{tipo}', [ProductosController::class, 'obtener_sub_categoria'])->name('productos.obtener_sub_categoria');
+Route::get('productos/obtener_modelo/{tipo}', [ProductosController::class, 'obtener_modelo'])->name('productos.obtener_modelo');
+Route::get('productos/obtener_packet/{tipo}', [ProductosController::class, 'obtener_packet'])->name('productos.obtener_packet');
+Route::get('productos/obtener_medida/{tipo}', [ProductosController::class, 'obtener_medida'])->name('productos.obtener_medida');

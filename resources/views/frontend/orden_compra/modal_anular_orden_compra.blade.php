@@ -260,7 +260,7 @@ function fn_save_anular_orden_compra(){
                                 <option value="">--Seleccionar--</option>
                                 <?php
                                 foreach ($estado_pedido as $row){?>
-                                    <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$orden_compra->estado_pedido)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                    <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==3)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
                                     <?php 
                                 }
                                 ?>
@@ -270,14 +270,14 @@ function fn_save_anular_orden_compra(){
                     
                     <div class="row" style="padding-left:10px; padding-top:20px">
                         <div class="col-lg-3">
-                            Estado
+                            Estado Cancelado
                         </div>
-                        <div class="col-lg-6">
-                            <select name="estado" id="estado" class="form-control form-control-sm" onchange="">
+                        <div class="col-lg-7">
+                            <select name="estado_cancelado" id="estado_cancelado" class="form-control form-control-sm" onchange="">
                                 <option value="">--Seleccionar--</option>
                                 <?php
-                                foreach ($estado_pedido as $row){?>
-                                    <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$orden_compra->estado_pedido)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                foreach ($estado_pedido_cancelado as $row){?>
+                                    <option value="<?php echo $row->codigo ?>" <?php //if($row->codigo==$orden_compra->estado_pedido)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
                                     <?php 
                                 }
                                 ?>

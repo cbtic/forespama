@@ -159,20 +159,27 @@ $(document).ready(function() {
         language: 'es'
     });
 
-    $("#unidad_producto").select2({ width: '100%' });
+    $("#unidad_producto, #unidad_medida, #marca, #modelo, #medida, #tipo_producto").select2({ width: '100%' });
 
-    $("#unidad_medida").select2({ width: '100%' });
+    $("#sub_familia").select2({ width: '100%' });
 
-    $("#marca").select2({ width: '100%' });
+    if($('#id').val() > 0){
+        //mostrarOpcionesPorSubFamilia();
+        /*setTimeout(() => {
+            obtenerCategoria($('#sub_familia').val());
+            setTimeout(() => {
+                obtenerSubCategoria();
+                obtenerModelo();
+                obtenerPacket();
+                obtenerMedida()
+            }, 500);
+        }, 500);*/
+    } 
 
-    $("#modelo").select2({ width: '100%' });
+});
 
-    $("#medida").select2({ width: '100%' });
-
-    $("#tipo_producto").select2({ width: '100%' });
-
-	mostrarOpcionesPorFamilia();
-
+$('#sub_familia').on('change', function () {
+    mostrarOpcionesPorSubFamilia();
 });
 </script>
 
@@ -425,6 +432,10 @@ function obtenerSubFamilia(){
 			
 			$('#sub_familia').attr("disabled",false);
 			
+            if (subFamiliaSeleccionada) {
+                $('#sub_familia').trigger('change');
+            }
+
 			$('.loader').hide();
 
         }
@@ -459,15 +470,205 @@ function obtenerSubFamilia(){
     });
 }*/
 
+function mostrarOpcionesPorSubFamilia() {
+    var sub_familia = $('#sub_familia').val();
 
-function mostrarOpcionesPorFamilia() {
-    var familia = $('#familia').val();
+    limpiarCombosDependientes();
 
-    if (familia == 1) {
+    if ([1,2,3,4,5,6,7,8,9].includes(parseInt(sub_familia))) {
         $('.combo_producto_terminado').show();
+        obtenerCategoria(sub_familia);
     } else {
         $('.combo_producto_terminado').hide();
-        $('.combo_producto_terminado select').val('');
+        //$('.combo_producto_terminado select').val('');
+    }
+}
+
+var categoriaSeleccionada = "<?php echo isset($producto->id_categoria) ? $producto->id_categoria : ''; ?>";
+
+function obtenerCategoria(sub_familia){
+
+    var tipo = "";
+
+    if([1,2,3,4].includes(parseInt(sub_familia))){tipo = 3;}
+    else if(sub_familia == 6){tipo = 4;}
+    else if([5,7,9].includes(parseInt(sub_familia))){tipo = 1;}
+    else if(sub_familia == 8){tipo = 2;}
+
+    //alert(categoriaSeleccionada);
+    $.ajax({
+        url: "/productos/obtener_categoria/"+tipo,
+        dataType: "json",
+        success: function (result) {
+
+            //alert(result);
+            var option = "<option value='' selected='selected'>--Seleccionar--</option>";
+			$('#categoria').html("");
+
+			$(result).each(function (ii, oo) {
+				var selected = (oo.id == categoriaSeleccionada) ? "selected='selected'" : "";
+                option += "<option value='" + oo.codigo + "' " + selected + ">" + oo.denominacion + "</option>";
+			});
+			$('#categoria').html(option);
+			
+			$('#categoria').attr("disabled",false);
+
+            $('#categoria').val(categoriaSeleccionada).trigger('change');
+        }
+    });
+}
+
+var subCategoriaSeleccionada = "<?php echo isset($producto->id_sub_categoria) ? $producto->id_sub_categoria : ''; ?>";
+
+function obtenerSubCategoria(){
+
+    var categoria = $('#categoria').val();
+    var tipo = "";
+
+    if(categoria == 1){ tipo = 1;}
+    else if(categoria == 2){tipo = 2;}
+    else if(categoria == 3){tipo = 3;}
+    else{tipo = 4;}
+
+    $.ajax({
+        url: "/productos/obtener_sub_categoria/"+tipo,
+        dataType: "json",
+        success: function (result) {
+
+            var option = "<option value='' selected='selected'>--Seleccionar--</option>";
+			$('#sub_categoria').html("");
+
+			$(result).each(function (ii, oo) {
+				var selected = (oo.id == subCategoriaSeleccionada) ? "selected='selected'" : "";
+                option += "<option value='" + oo.codigo + "' " + selected + ">" + oo.denominacion + "</option>";
+			});
+			$('#sub_categoria').html(option);
+			
+			$('#sub_categoria').attr("disabled",false);
+            
+			$('#sub_categoria').val(subCategoriaSeleccionada).trigger('change');
+        }
+    });
+}
+
+var modeloSeleccionada = "<?php echo isset($producto->id_modelo) ? $producto->id_modelo : ''; ?>";
+
+function obtenerModelo(){
+
+    var categoria = $('#categoria').val();
+    var tipo = "";
+
+    if(categoria == 1){ tipo = 1;}
+    else if(categoria == 2){tipo = 2;}
+    else if(categoria == 3){tipo = 3;}
+    else{tipo = 4;}
+
+    $.ajax({
+        url: "/productos/obtener_modelo/"+tipo,
+        dataType: "json",
+        success: function (result) {
+
+            var option = "<option value='' selected='selected'>--Seleccionar--</option>";
+			$('#modelo').html("");
+
+			$(result).each(function (ii, oo) {
+				var selected = (oo.id == modeloSeleccionada) ? "selected='selected'" : "";
+                option += "<option value='" + oo.codigo + "' " + selected + ">" + oo.denominacion + "</option>";
+			});
+			$('#modelo').html(option);
+			
+			$('#modelo').attr("disabled",false);
+
+            $('#modelo').val(modeloSeleccionada).trigger('change');
+        }
+    });
+}
+
+var packetSeleccionada = "<?php echo isset($producto->id_packet) ? $producto->id_packet : ''; ?>";
+
+function obtenerPacket(){
+
+    var categoria = $('#categoria').val();
+    var tipo = "";
+
+    if(categoria == 1){ tipo = 1;}
+    else if(categoria == 2){tipo = 2;}
+    else if(categoria == 3 || categoria == 4){tipo = 3;}
+
+    $.ajax({
+        url: "/productos/obtener_packet/"+tipo,
+        dataType: "json",
+        success: function (result) {
+
+            var option = "<option value='' selected='selected'>--Seleccionar--</option>";
+			$('#packet').html("");
+
+			$(result).each(function (ii, oo) {
+				var selected = (oo.id == packetSeleccionada) ? "selected='selected'" : "";
+                option += "<option value='" + oo.codigo + "' " + selected + ">" + oo.denominacion + "</option>";
+			});
+			$('#packet').html(option);
+			
+			$('#packet').attr("disabled",false);
+
+            $('#packet').val(packetSeleccionada).trigger('change');
+        }
+    });
+}
+
+var medidaSeleccionada = "<?php echo isset($producto->id_medida) ? $producto->id_medida : ''; ?>";
+
+function obtenerMedida(){
+
+    var categoria = $('#categoria').val();
+    var tipo = "";
+
+    if(categoria == 1){ tipo = 1;}
+    else if(categoria == 2){tipo = 2;}
+    else if(categoria == 3){tipo = 3;}
+    else{tipo = 4;}
+
+    $.ajax({
+        url: "/productos/obtener_medida/"+tipo,
+        dataType: "json",
+        success: function (result) {
+
+            var option = "<option value='' selected='selected'>--Seleccionar--</option>";
+			$('#medida').html("");
+
+			$(result).each(function (ii, oo) {
+				var selected = (oo.id == medidaSeleccionada) ? "selected='selected'" : "";
+                option += "<option value='" + oo.codigo + "' " + selected + ">" + oo.denominacion + "</option>";
+			});
+			$('#medida').html(option);
+			
+			$('#medida').attr("disabled",false);
+
+            $('#medida').val(medidaSeleccionada).trigger('change');
+        }
+    });
+}
+
+function limpiarCombosDependientes() {
+
+    const combos = [
+        '#categoria',
+        '#sub_categoria',
+        '#modelo',
+        '#packet',
+        '#medida'
+    ];
+
+    combos.forEach(id => {
+        $(id).html("<option value=''>--Seleccionar--</option>").val('');
+    });
+
+    if (!$('#id').val()) {
+        categoriaSeleccionada = '';
+        subCategoriaSeleccionada = '';
+        modeloSeleccionada = '';
+        packetSeleccionada = '';
+        medidaSeleccionada = '';
     }
 }
 
@@ -618,7 +819,7 @@ function mostrarOpcionesPorFamilia() {
                                     <div class="col-lg-4">
                                         <div class="form-group">
                                             <label class="control-label form-control-sm">Familia</label>
-                                            <select name="familia" id="familia" class="form-control form-control-sm" onchange="obtenerSubFamilia();mostrarOpcionesPorFamilia()">
+                                            <select name="familia" id="familia" class="form-control form-control-sm" onchange="obtenerSubFamilia()">
                                                 <option value="">--Seleccionar--</option>
                                                 <?php
                                                 foreach ($familia as $row){?>
@@ -632,7 +833,7 @@ function mostrarOpcionesPorFamilia() {
                                     <div class="col-lg-4">
                                         <div class="form-group">
                                             <label class="control-label form-control-sm">Sub Familia</label>
-                                            <select name="sub_familia" id="sub_familia" class="form-control form-control-sm" onchange="/*obtenerCodigo()*/">
+                                            <select name="sub_familia" id="sub_familia" class="form-control form-control-sm" onchange="mostrarOpcionesPorSubFamilia()">
                                                 <option value="">--Seleccionar--</option>
                                             </select>
                                         </div>
@@ -640,13 +841,13 @@ function mostrarOpcionesPorFamilia() {
                                     <div class="col-lg-4 combo_producto_terminado">
                                         <div class="form-group">
                                             <label class="control-label form-control-sm">Categoria</label>
-                                            <select name="categoria" id="categoria" class="form-control form-control-sm" onchange="">
+                                            <select name="categoria" id="categoria" class="form-control form-control-sm" onchange="obtenerSubCategoria();obtenerModelo();obtenerPacket();obtenerMedida()">
                                                 <option value="">--Seleccionar--</option>
                                                 <?php
-                                                foreach ($categoria as $row){?>
+                                                /*foreach ($categoria as $row){?>
                                                     <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$producto->id_categoria)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
                                                 <?php 
-                                                }
+                                                }*/
                                                 ?>
                                             </select>
                                         </div>
@@ -657,10 +858,10 @@ function mostrarOpcionesPorFamilia() {
                                             <select name="sub_categoria" id="sub_categoria" class="form-control form-control-sm" onchange="">
                                                 <option value="">--Seleccionar--</option>
                                                 <?php
-                                                foreach ($sub_categoria as $row){?>
+                                                /*foreach ($sub_categoria as $row){?>
                                                     <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$producto->id_sub_categoria)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
                                                 <?php 
-                                                }
+                                                }*/
                                                 ?>
                                             </select>
                                         </div>
@@ -671,10 +872,10 @@ function mostrarOpcionesPorFamilia() {
                                             <select name="modelo" id="modelo" class="form-control form-control-sm" onchange="">
                                                 <option value="">--Seleccionar--</option>
                                                 <?php
-                                                foreach ($modelo as $row){?>
+                                                /*foreach ($modelo as $row){?>
                                                     <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$producto->id_modelo)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
                                                 <?php 
-                                                }
+                                                }*/
                                                 ?>
                                             </select>
                                         </div>
@@ -685,10 +886,10 @@ function mostrarOpcionesPorFamilia() {
                                             <select name="packet" id="packet" class="form-control form-control-sm" onchange="">
                                                 <option value="">--Seleccionar--</option>
                                                 <?php
-                                                foreach ($packet as $row){?>
+                                                /*foreach ($packet as $row){?>
                                                     <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$producto->id_packet)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
                                                 <?php 
-                                                }
+                                                }*/
                                                 ?>
                                             </select>
                                         </div>
@@ -699,10 +900,10 @@ function mostrarOpcionesPorFamilia() {
                                             <select name="medida" id="medida" class="form-control form-control-sm" onchange="">
                                                 <option value="">--Seleccionar--</option>
                                                 <?php
-                                                foreach ($medida as $row){?>
+                                                /*foreach ($medida as $row){?>
                                                     <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$producto->id_medida)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
                                                 <?php 
-                                                }
+                                                }*/
                                                 ?>
                                             </select>
                                         </div>
@@ -846,11 +1047,13 @@ function mostrarOpcionesPorFamilia() {
                                         <i class="fas fa-save" style="font-size:18px;"></i> Guardar
                                     </button>
                                     
+                                    <!--
                                     @hasanyrole('Administrator|Aprobar Producto')
                                     <button style="font-size:12px;margin-left:10px" type="button" class="btn btn-sm btn-clasico-blanco btn-enviar" data-toggle="modal" onclick="fn_save_producto()">
                                         <i class="fas fa-check-circle" style="font-size:18px;"></i> Aprobar Producto
                                     </button>
                                     @endhasanyrole
+                                    -->
 
                                 </div>
                                                     
