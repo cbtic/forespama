@@ -88,6 +88,7 @@ Route::post('ingreso_vehiculo_tronco/listar_ingreso_vehiculo_tronco_pagos_ajax',
 Route::get('ingreso_vehiculo_tronco/modal_pago/{id}/{id_ingreso_vehiculo_tronco}', [IngresoVehiculoTroncoController::class, 'modal_pago'])->name('ingreso_vehiculo_tronco.modal_pago');
 Route::post('ingreso_vehiculo_tronco/send_pago', [IngresoVehiculoTroncoController::class, 'send_pago'])->name('ingreso_vehiculo_tronco.send_pago');
 Route::get('comprobante/create_consulta_sodimac', [ComprobanteController::class, 'create_consulta_sodimac'])->name('comprobante.create_consulta_sodimac');
+Route::get('comprobante/create_consulta_promart', [ComprobanteController::class, 'create_consulta_promart'])->name('comprobante.create_consulta_promart');
 Route::get('comprobante/create_facturacion', [ComprobanteController::class, 'create_facturacion'])->name('comprobante.create_facturacion');
 Route::get('comprobante/create_facturacion_sodimac_detalle', [ComprobanteController::class, 'create_facturacion_sodimac_detalle'])->name('comprobante.create_facturacion_sodimac_detalle');
 Route::post('comprobante/listar_factura_sodimac_detalle_ajax', [ComprobanteController::class, 'listar_factura_sodimac_detalle_ajax'])->name('comprobante.listar_factura_sodimac_detalle_ajax');
@@ -622,7 +623,9 @@ Route::get('empaquetado/obtener_codigo_operacion_empaquetado', [EmpaquetadoContr
 Route::get('empaquetado/modal_consulta_empaquetado_operacion/{id}', [EmpaquetadoController::class, 'modal_consulta_empaquetado_operacion'])->name('empaquetado.modal_consulta_empaquetado_operacion');
 Route::get('empaquetado/cargar_operacion_detalle/{id}', [EmpaquetadoController::class, 'cargar_operacion_detalle'])->name('empaquetado.cargar_operacion_detalle');
 Route::post('comprobante/listar_comprobante_sodimac_ajax', [ComprobanteController::class, 'listar_comprobante_sodimac_ajax'])->name('comprobante.listar_comprobante_sodimac_ajax');
+Route::post('comprobante/listar_comprobante_promart_ajax', [ComprobanteController::class, 'listar_comprobante_promart_ajax'])->name('comprobante.listar_comprobante_promart_ajax');
 Route::get('comprobante/exportar_factura_sodimac/{fecha_ini}/{fecha_fin}/{tipo_documento}/{serie}/{numero}', [ComprobanteController::class, 'exportar_factura_sodimac'])->name('comprobante.exportar_factura_sodimac');
+Route::get('comprobante/exportar_factura_promart/{fecha_ini}/{fecha_fin}/{tipo_documento}/{serie}/{numero}', [ComprobanteController::class, 'exportar_factura_promart'])->name('comprobante.exportar_factura_promart');
 Route::get('comprobante/exportar_factura/{fecha_ini}/{fecha_fin}/{tipo_documento}/{serie}/{numero}/{razon_social}/{estado_pago}/{anulado}/{total_b}/{caja_b}/{usuario_b}/{medio_pago}/{formapago}', [ComprobanteController::class, 'exportar_factura'])->name('comprobante.exportar_factura');
 
 Route::get('devolucion/create', [DevolucionController::class, 'create'])->name('devolucion.create');

@@ -261,7 +261,7 @@
 						
 					@endif
 
-						@if(Gate::check('Ingreso Caja') || Gate::check('Comprobante') || Gate::check('Guia') || Gate::check('Consulta Sodimac') || Gate::check('Pagos Orden Compra') || Gate::check('Facturacion Orden Compra'))
+						@if(Gate::check('Ingreso Caja') || Gate::check('Comprobante') || Gate::check('Guia') || Gate::check('Consulta Sodimac') || Gate::check('Consulta Promart') || Gate::check('Pagos Orden Compra') || Gate::check('Facturacion Orden Compra'))
  
 						<li class="nav-item dropdown">
 							<a href="#" class="nav-link dropdown-toggle" id="navbarDropdownPrueba" data-toggle="dropdown"
@@ -279,6 +279,10 @@
 
 								@can('Consulta Sodimac')
 									<x-utils.link :href="route('frontend.comprobante.create_consulta_sodimac')" class="dropdown-item" :text="__('Consulta de Facturas Sodimac')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />                  
+								@endif
+
+								@can('Consulta Promart')
+									<x-utils.link :href="route('frontend.comprobante.create_consulta_promart')" class="dropdown-item" :text="__('Consulta de Facturas Promart')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />                  
 								@endif
 
 								@can('Guia')
