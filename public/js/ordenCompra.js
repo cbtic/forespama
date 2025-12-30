@@ -426,10 +426,10 @@ function datatablenew(){
 						//else{
 						//	html += '<button style="font-size:12px; margin-left:10px" type="button" class="btn btn-sm btn-primary" data-toggle="modal" onclick="modalTiendaOrdenCompra('+row.id+')" disabled> Punto Entrega</button>'; 
 						//}
-						
+						//alert(esUsuario);
 						html += '<button style="font-size:12px; margin-left:10px" type="button" class="btn btn-sm btn-warning" data-toggle="modal" onclick="modalHistorialEntradaProducto('+row.id+','+row.id_tipo_documento+')"><i class="fas fa-clipboard-list" style="font-size:18px;"></i> Historial</button>';  
 						//html += '<a href="javascript:void(0)" onclick=modalResponsable('+row.id+') class="btn btn-sm btn-info" style="font-size:12px;margin-left:10px">Detalle Responsable</a>';
-						if (esAdministrador || esUsuarioAutorizado) {
+						if (esAdministrador || (esUsuarioAutorizado && row.id_vendedor==esUsuario)) {
 							html += '<a href="javascript:void(0)" onclick=anularOrdenCompra('+row.id+') class="btn btn-sm '+clase+'" style="font-size:12px;margin-left:10px">Anular</a>';
 						}
 						html += '</div>';

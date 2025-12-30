@@ -376,7 +376,8 @@ label.form-control-sm{
 	//alert(almacenUsuario.id_user);
 	var esAdministrador = {{ auth()->user()->hasAnyRole('Administrator') ? 'true' : 'false' }};
 	var esUsuarioAutorizado = {{ auth()->user()->hasAnyRole('Encargado de OC') ? 'true' : 'false' }};
-	//console.log(almacenUsuario);
+	var esUsuario = @json($id_user);
+	//console.log(esUsuario);
 </script>
 
 

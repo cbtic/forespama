@@ -75,7 +75,7 @@ class OrdenCompraController extends Controller
 		$bien_servicio = $tablaMaestra_model->getMaestroByTipo(73);
 		$estado_pedido_cancelado = $tablaMaestra_model->getMaestroByTipo(112);
 		
-		return view('frontend.orden_compra.create',compact('tipo_documento','cerrado_orden_compra','proveedor','almacen','almacen_usuario','vendedor','estado_pedido','prioridad','canal','bien_servicio','estado_pedido_cancelado'));
+		return view('frontend.orden_compra.create',compact('tipo_documento','cerrado_orden_compra','proveedor','almacen','almacen_usuario','vendedor','estado_pedido','prioridad','canal','bien_servicio','estado_pedido_cancelado','id_user'));
 
 	}
 
