@@ -124,7 +124,7 @@ class OrdenCompra extends Model
         left join marcas m on ocd.id_marca=m.id
         where id_orden_compra ='".$id."'
         and ocd.estado='1'
-        order by 1 asc";
+        order by ocd.id asc";
 
 		$data = DB::select($cad);
         return $data;
@@ -153,7 +153,7 @@ class OrdenCompra extends Model
         left join tabla_maestras tm2 on ocd.id_estado_producto = tm2.codigo::int and tm2.tipo = '56'
         where id_orden_compra ='".$id."'
         and ocd.estado='1'
-        order by 1 asc";
+        order by ocd.id asc";
 
 		$data = DB::select($cad);
         return $data;
@@ -182,7 +182,7 @@ class OrdenCompra extends Model
         where id_orden_compra ='".$id."'
         and ocd.cerrado ='1'
         and ocd.estado='1'
-        order by 1 asc";
+        order by ocd.id asc";
 
 		$data = DB::select($cad);
         return $data;
@@ -209,7 +209,7 @@ class OrdenCompra extends Model
         where id_orden_compra ='".$id."'
         and ocd.cerrado ='1'
         and ocd.estado='1'
-        order by 1 asc";
+        order by ocd.id asc";
 
 		$data = DB::select($cad);
         return $data;
@@ -466,19 +466,19 @@ class OrdenCompra extends Model
     }
 
     function getOrdenCompraDetalle($id, $emp){
-        $cad = "SELECT pd.id, '' serie, oc.numero_orden_compra, oc.fecha_orden_compra fecha, oc.id_moneda, 'SOLES' moneda, pd.sub_total sub_total_, pd.igv igv_, pd.total total_, 
+        $cad = "select pd.id, '' serie, oc.numero_orden_compra, oc.fecha_orden_compra fecha, oc.id_moneda, 'SOLES' moneda, pd.sub_total sub_total_, pd.igv igv_, pd.total total_, 
             '01/01/2025' fecha_vencimiento, pd.id_producto,  pr.codigo, pr.denominacion,
             --case when  oc.id_empresa_compra = ".$emp." then 
             case when  oc.id_empresa_compra = 23 then 
-            --(SELECT pe.codigo_producto ||'-'|| pr.denominacion ||'('|| pe.codigo_empresa||'-'|| pe. descripcion_empresa||')'
-            (SELECT  pr.denominacion ||'('|| pe.codigo_empresa||'-'|| pe. descripcion_empresa||')'  
-            FROM equivalencia_productos pe
+            --(select pe.codigo_producto ||'-'|| pr.denominacion ||'('|| pe.codigo_empresa||'-'|| pe. descripcion_empresa||')'
+            (select  pr.denominacion ||'('|| pe.codigo_empresa||'-'|| pe. descripcion_empresa||')'  
+            from equivalencia_productos pe
             where pe.id_empresa = oc.id_empresa_compra and pe.id_producto = pd.id_producto and pe.estado= '1'            
             --)	else pr.codigo ||'-'|| pr.denominacion end  producto_prof,
             )	else  pr.denominacion end  producto_prof,
             um.denominacion um, um.abreviatura, pd.cantidad_requerida cantidad, pd.id_descuento, pd.precio precio_unitario, pd.sub_total, pd.igv, pd.total, pd.id_unidad_medida, pd.descuento, pd.valor_venta_bruto,
             pd.precio_venta, pd.valor_venta
-            FROM orden_compras oc
+            from orden_compras oc
             inner join orden_compra_detalles pd on pd.id_orden_compra = oc.id 
             inner join productos pr on pr.id = pd.id_producto
             inner join tabla_maestras um on um.codigo::int = pd.id_unidad_medida and um.tipo = '43'
@@ -524,7 +524,7 @@ class OrdenCompra extends Model
         inner join tabla_maestras tm on ocp.id_tipo_desembolso = tm.codigo::int and tm.tipo='65' 
         where ocp.id_orden_compra = ".$id."
         and ocp.estado = '1'
-        order by 1 desc";
+        order by ocp.id desc";
 
 		$data = DB::select($cad);
         return $data;
@@ -538,7 +538,7 @@ class OrdenCompra extends Model
         left join orden_compras oc on sp.id_orden_compra = oc.id 
         where oc.id = '".$id."'
         and gi.estado = '1'
-        order by 1 desc";
+        order by gi.id desc";
 
 		$data = DB::select($cad);
         return $data;
@@ -583,7 +583,7 @@ class OrdenCompra extends Model
         and opd.estado ='1'
         and opd.cerrado ='1'
         and opd.id_producto = ocd.id_producto), 0)
-        order by 1 desc";
+        order by p.id desc";
 
 		$data = DB::select($cad);
         return $data;

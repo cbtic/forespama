@@ -203,6 +203,7 @@ $(document).ready(function() {
 	}
     if($('#id').val()==0){
         $('#select_punto_llegada').hide();
+        $('#input_punto_partida').hide();
     }
 
     if($('#placa_guia').val()!=""){
@@ -244,7 +245,10 @@ function fn_save_guia_interna(){
     var descripcion_motivo = $('#descripcion_motivo').val();
 
     if(fecha_emision==""){msg+="Ingrese la Fecha de Emision <br>";}
-    if(punto_partida==""){msg+="Ingrese el Punto de Partida <br>";}
+    //alert(motivo_traslado!==06);
+    if(motivo_traslado!=='06' && motivo_traslado!=='07'){
+        if(punto_partida==""){msg+="Ingrese el Punto de Partida <br>";}
+    }
     if(fecha_inicio_traslado==""){msg+="Ingrese la Fecha de traslado <br>";}
     if(marca_placa==""){msg+="Ingrese la Marca y Placa <br>";}
     if(numero_licencia==""){msg+="Ingrese el Numero de Licencia <br>";}
@@ -579,7 +583,6 @@ function obtenerProvinciaContacto(ubigeo){
             obtenerDatosUbigeoContacto(ubigeo);
 		}
 	});
-    
 }
 
 function obtenerDatosUbigeoContacto(ubigeo){
@@ -593,7 +596,6 @@ function obtenerDatosUbigeoContacto(ubigeo){
         $('#distrito_llegada').val(ubigeo);
 
     });
-       
 }
 
 function obtenerDistritoContacto_(callback){
@@ -1011,11 +1013,19 @@ function cambiarPuntoLlegada(){
     if(motivo_traslado=='04'){
         $('#select_punto_llegada').show();
         $('#input_punto_llegada').hide();
+        $('#select_punto_partida').show();
+        $('#input_punto_partida').hide();
+    }else if(motivo_traslado == '06' || motivo_traslado == '07'){
+        $('#select_punto_llegada').show();
+        $('#input_punto_llegada').hide();
+        $('#select_punto_partida').hide();
+        $('#input_punto_partida').show();
     }else{
         $('#select_punto_llegada').hide();
         $('#input_punto_llegada').show();
+        $('#select_punto_partida').show();
+        $('#input_punto_partida').hide();
     }
-
 }
 
 function actualizarDescripciones() {
@@ -1705,7 +1715,7 @@ function obtenerMotivo(){
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-lg-3">
+                            <div class="col-lg-3" id="select_punto_partida">
                                 <div class="row">
                                     <div class="col-lg-3">
                                         Punto de Partida
@@ -1721,6 +1731,16 @@ function obtenerMotivo(){
                                             ?>
                                         </select>
                                         <input name="punto_partida_descripcion" id="punto_partida_descripcion" type="hidden">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3" id="input_punto_partida">
+                                <div class="row">
+                                    <div class="col-lg-3">
+                                        Punto de Partida
+                                    </div>
+                                    <div class="col-lg-9">
+                                        <input id="punto_partida_input" name="punto_partida_input" on class="form-control form-control-sm" value="<?php if($id>0){echo $guia_interna->punto_partida;}?>" type="text">
                                     </div>
                                 </div>
                             </div>

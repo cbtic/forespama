@@ -170,6 +170,9 @@ class GuiaInternaController extends Controller
         $guia_interna->id_tipo_documento = $request->tipo_documento;
         $guia_interna->numero_documento = $request->numero_documento;
         $guia_interna->id_motivo_traslado = $request->motivo_traslado;
+        if($request->motivo_traslado=='06'){
+            $guia_interna->descripcion_motivo = "RECOJO POR DEVOLUCION";
+        }
         if($request->motivo_traslado=='13'){
             $guia_interna->descripcion_motivo = $request->descripcion_motivo;
         }
@@ -201,6 +204,10 @@ class GuiaInternaController extends Controller
             $guia_interna->guia_cod_estab_partida = $request->punto_partida;
             $guia_interna->punto_partida = $request->punto_partida_descripcion;
             $guia_interna->punto_llegada = $request->punto_llegada_descripcion;
+        }else if($request->motivo_traslado=='06' || $request->motivo_traslado=='07'){
+            $guia_interna->punto_llegada = $request->punto_llegada_descripcion;
+            $guia_interna->guia_cod_estab_llegada = $request->punto_llegada_select;
+            $guia_interna->punto_partida = $request->punto_partida_input." - ".$departamento." - ".$provincia." - ".$distrito;
         }else{
             $guia_interna->punto_llegada = $request->punto_llegada_input." - ".$departamento." - ".$provincia." - ".$distrito;
             $guia_interna->guia_cod_estab_partida = $request->punto_partida;
@@ -280,10 +287,18 @@ class GuiaInternaController extends Controller
             $guia->guia_cod_estab_partida = $request->punto_partida;
             $guia->guia_partida_direccion = $request->punto_partida_descripcion;
             $guia->guia_llegada_direccion = $request->punto_llegada_descripcion;
+        }else if($request->motivo_traslado=='06' || $request->motivo_traslado=='07'){
+            $guia->guia_llegada_direccion = $request->punto_llegada_descripcion;
+            $guia->guia_cod_estab_llegada = $request->punto_llegada_select;
+            $guia->guia_partida_direccion = $request->punto_partida_input." - ".$departamento." - ".$provincia." - ".$distrito;
         }else{
             $guia->guia_llegada_direccion = $request->punto_llegada_input." - ".$departamento." - ".$provincia." - ".$distrito;
             $guia->guia_cod_estab_partida = $request->punto_partida;
             $guia->guia_partida_direccion = $request->punto_partida_descripcion;
+        }
+
+        if($request->motivo_traslado=='06'){
+            $guia->guia_desc_motivo = "RECOJO POR DEVOLUCION";
         }
 
         if($request->motivo_traslado=='13'){
