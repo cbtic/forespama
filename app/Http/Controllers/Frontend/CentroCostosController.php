@@ -74,6 +74,7 @@ class CentroCostosController extends Controller
 		
         $centro_costo->periodo = $request->periodo;
         $centro_costo->denominacion = $request->denominacion;
+        $centro_costo->operacion = $request->operacion;
 		$centro_costo->codigo = $request->codigo;
 		$centro_costo->estado = 1;
         $centro_costo->id_usuario_inserta = $id_user;

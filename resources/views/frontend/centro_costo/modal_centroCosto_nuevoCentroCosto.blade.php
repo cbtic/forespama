@@ -196,6 +196,12 @@ function fn_save_centro_costo(){
                                         <input id="periodo" name="periodo" on class="form-control form-control-sm"  value="<?php echo $centro_costo->periodo?>" type="text">
                                     </div>
                                 </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label class="control-label form-control-sm">Operaciones</label>
+                                        <input id="operacion" name="operacion" on class="form-control form-control-sm"  value="<?php echo $centro_costo->operacion?>" type="text">
+                                    </div>
+                                </div>
                                 <div class="col-lg-8">
                                     <div class="form-group">
                                         <label class="control-label form-control-sm">Denominaci&oacute;n</label>

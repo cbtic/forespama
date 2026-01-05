@@ -379,6 +379,7 @@ label.form-control-sm{
 							<tr style="font-size:13px">
 								<th>Id</th>
 								<th>Periodo</th>
+								<th>Operaciones</th>
 								<th>Denominaci&oacute;n</th>
 								<th>C&oacute;digo</th>
 								<th>Estado</th>

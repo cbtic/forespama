@@ -114,12 +114,22 @@ function datatablenew(){
 
 				{
 				"mRender": function (data, type, row) {
+					var operacion = "";
+					if(row.operacion!= null)operacion = row.operacion;
+					return operacion;
+				},
+				"bSortable": true,
+				"aTargets": [2]
+				},
+
+				{
+				"mRender": function (data, type, row) {
 					var denominacion = "";
 					if(row.denominacion!= null)denominacion = row.denominacion;
 					return denominacion;
 				},
 				"bSortable": true,
-				"aTargets": [2]
+				"aTargets": [3]
 				},
 
 				{
@@ -129,7 +139,7 @@ function datatablenew(){
 					return codigo;
 				},
 				"bSortable": true,
-				"aTargets": [3]
+				"aTargets": [4]
 				},
 				
 				{
@@ -144,7 +154,7 @@ function datatablenew(){
 					return estado;
 				},
 				"bSortable": false,
-				"aTargets": [4]
+				"aTargets": [5]
 				},
 				{
 				"mRender": function (data, type, row) {
@@ -170,7 +180,7 @@ function datatablenew(){
 					return html;
 				},
 				"bSortable": false,
-				"aTargets": [5],
+				"aTargets": [6],
 				},
             ]
     });
