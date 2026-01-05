@@ -198,8 +198,16 @@ function fn_save_centro_costo(){
                                 </div>
                                 <div class="col-lg-4">
                                     <div class="form-group">
-                                        <label class="control-label form-control-sm">Operaciones</label>
-                                        <input id="operacion" name="operacion" on class="form-control form-control-sm"  value="<?php echo $centro_costo->operacion?>" type="text">
+                                        <label class="control-label form-control-sm">Operacion</label>
+                                        <select name="operacion" id="operacion" class="form-control form-control-sm" onchange="">
+                                            <option value="">--Seleccionar--</option>
+                                            <?php
+                                            foreach ($operacion as $row){?>
+                                                <option value="<?php echo $row->codigo; ?>" <?php echo ($id > 0 && $row->codigo == $centro_costo->operacion) ? "selected='selected'" : ""; ?>><?php echo $row->denominacion ?></option>
+                                                <?php 
+                                            }
+                                            ?>
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="col-lg-8">

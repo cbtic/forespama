@@ -64,6 +64,7 @@ function datatablenew(){
             var iNroPagina 	= parseFloat(fn_util_obtieneNroPagina(aoData[3].value, aoData[4].value)).toFixed();
             var iCantMostrar 	= aoData[4].value;
 
+            var operacion = $('#operacion_bus').val();
             var denominacion = $('#denominacion_bus').val();
             var codigo = $('#codigo_bus').val();
             var periodo = $('#periodo_bus').val();
@@ -76,7 +77,7 @@ function datatablenew(){
                 "type": "POST",
                 "url": sSource,
                 "data":{NumeroPagina:iNroPagina,NumeroRegistros:iCantMostrar,
-						denominacion:denominacion,codigo:codigo,periodo:periodo,estado:estado,
+						operacion:operacion,denominacion:denominacion,codigo:codigo,periodo:periodo,estado:estado,
 						_token:_token
                        },
                 "success": function (result) {

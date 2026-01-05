@@ -2,9 +2,9 @@
 <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" defer></script>
 <style type="text/css">
 
-#tblProductos tbody tr{
-		font-size:13px
-	}
+/*#tblProductos tbody tr{
+	font-size:13px
+}*/
 
 .table td.verde{
 	background:#CAE983  !important
@@ -347,122 +347,128 @@ label.form-control-sm{
 
 					<div class="col col-sm-12 align-self-center">
 
-
                         <input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
-
-                        <!--<input type="hidden" name="estado" id="estado" value="0">-->
-						
-						<input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
 				
 				<div class="row" style="padding:20px 20px 0px 20px;">
+					<div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
+						<div class="row">
 
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<select name="tipo_origen_producto_bus" id="tipo_origen_producto_bus" class="form-control form-control-sm">
-							<option value="">--Seleccionar Tipo Origen Producto--</option>
-							<?php
-							foreach ($tipo_origen_producto as $row) {
-							?>
-							<option value="<?php echo $row->codigo?>"><?php echo $row->denominacion?></option>
-							<?php
-							}
-							?>
-						</select>
+							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+								<select name="tipo_origen_producto_bus" id="tipo_origen_producto_bus" class="form-control form-control-sm filtro-select">
+									<option value="">--Seleccionar Tipo Origen Producto--</option>
+									<?php
+									foreach ($tipo_origen_producto as $row) {
+									?>
+									<option value="<?php echo $row->codigo?>"><?php echo $row->denominacion?></option>
+									<?php
+									}
+									?>
+								</select>
+							</div>
+
+							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+								<input class="form-control form-control-sm filtro-input" id="serie_bus" name="serie_bus" placeholder="Serie">
+							</div>
+
+							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+								<input class="form-control form-control-sm filtro-input" id="codigo_bus" name="codigo_bus" placeholder="C&oacute;digo">
+							</div>
+
+							<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+								<input id="denominacion_bus" name="denominacion_bus" on class="form-control form-control-sm filtro-input"  placeholder="Denominaci&oacute;n">
+							</div>
+
+							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+								<select name="estado_bien_bus" id="estado_bien_bus" class="form-control form-control-sm filtro-select">
+									<option value="">--Seleccionar Estado Bien--</option>
+									<?php
+									foreach ($estado_bien as $row) {
+									?>
+									<option value="<?php echo $row->codigo?>"><?php echo $row->denominacion?></option>
+									<?php
+									}
+									?>
+								</select>
+							</div>	
+							
+							<!--<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+								<select name="tipo_producto_bus" id="tipo_producto_bus" class="form-control form-control-sm">
+									<option value="">--Seleccionar Tipo Producto--</option>
+									<?php
+									//foreach ($tipo_producto as $row) {
+									?>
+									<option value="<?php //echo $row->codigo?>"><?php //echo $row->denominacion?></option>
+									<?php
+									//}
+									?>
+								</select>
+							</div>-->
+
+							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+								<select name="familia_bus" id="familia_bus" class="form-control form-control-sm filtro-select" onchange="obtenerSubFamiliaBus()">
+									<option value="">--Seleccionar Familia--</option>
+									<?php
+									foreach ($familia as $row) {
+									?>
+									<option value="<?php echo $row->id?>"><?php echo $row->denominacion?></option>
+									<?php
+									}
+									?>
+								</select>
+							</div>
+
+							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+								<select name="sub_familia_bus" id="sub_familia_bus" class="form-control form-control-sm filtro-select">
+									<option value="">--Seleccionar Sub Familia--</option>
+								</select>
+							</div>
+
+							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+								<select name="tiene_imagen_bus" id="tiene_imagen_bus" class="form-control form-control-sm filtro-select">
+									<option value="" selected="selected">--Seleccionar Tiene Imagen--</option>
+									<option value="1">Si</option>
+									<option value="0">No</option>
+								</select>
+							</div>
+
+							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+								<select name="aprobado_bus" id="aprobado_bus" class="form-control form-control-sm filtro-select">
+									<option value="">--Seleccionar Aprobado--</option>
+									<?php
+									foreach ($aprobado as $row) {
+									?>
+									<option value="<?php echo $row->codigo?>"><?php echo $row->denominacion?></option>
+									<?php
+									}
+									?>
+								</select>
+							</div>
+							
+							<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+								<select name="estado_bus" id="estado_bus" class="form-control form-control-sm filtro-select">
+									<option value="">Todos</option>
+									<option value="1" selected="selected">Activo</option>
+									<option value="0">Eliminado</option>
+								</select>
+							</div>
+						</div>
 					</div>
-
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<input class="form-control form-control-sm" id="serie_bus" name="serie_bus" placeholder="Serie">
-					</div>
-
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<input class="form-control form-control-sm" id="codigo_bus" name="codigo_bus" placeholder="C&oacute;digo">
-					</div>
-
-                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-                        <input id="denominacion_bus" name="denominacion_bus" on class="form-control form-control-sm"  placeholder="Denominaci&oacute;n">
-					</div>
-
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<select name="estado_bien_bus" id="estado_bien_bus" class="form-control form-control-sm">
-							<option value="">--Seleccionar Estado Bien--</option>
-							<?php
-							foreach ($estado_bien as $row) {
-							?>
-							<option value="<?php echo $row->codigo?>"><?php echo $row->denominacion?></option>
-							<?php
-							}
-							?>
-						</select>
-					</div>	
-					
-					<!--<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<select name="tipo_producto_bus" id="tipo_producto_bus" class="form-control form-control-sm">
-							<option value="">--Seleccionar Tipo Producto--</option>
-							<?php
-							//foreach ($tipo_producto as $row) {
-							?>
-							<option value="<?php //echo $row->codigo?>"><?php //echo $row->denominacion?></option>
-							<?php
-							//}
-							?>
-						</select>
-					</div>-->
-
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<select name="familia_bus" id="familia_bus" class="form-control form-control-sm" onchange="obtenerSubFamiliaBus()">
-							<option value="">--Seleccionar Familia--</option>
-							<?php
-							foreach ($familia as $row) {
-							?>
-							<option value="<?php echo $row->id?>"><?php echo $row->denominacion?></option>
-							<?php
-							}
-							?>
-						</select>
-					</div>
-
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<select name="sub_familia_bus" id="sub_familia_bus" class="form-control form-control-sm">
-							<option value="">--Seleccionar Sub Familia--</option>
-						</select>
-					</div>
-
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<select name="tiene_imagen_bus" id="tiene_imagen_bus" class="form-control form-control-sm">
-							<option value="" selected="selected">--Seleccionar Tiene Imagen--</option>
-							<option value="1">Si</option>
-							<option value="0">No</option>
-						</select>
-					</div>
-
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<select name="aprobado_bus" id="aprobado_bus" class="form-control form-control-sm">
-							<option value="">--Seleccionar Aprobado--</option>
-							<?php
-							foreach ($aprobado as $row) {
-							?>
-							<option value="<?php echo $row->codigo?>"><?php echo $row->denominacion?></option>
-							<?php
-							}
-							?>
-						</select>
-					</div>
-					
-                    <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
-						<select name="estado_bus" id="estado_bus" class="form-control form-control-sm">
-							<option value="">Todos</option>
-							<option value="1" selected="selected">Activo</option>
-							<option value="0">Eliminado</option>
-						</select>
-					</div>
-
-                    
-					<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12" style="padding-right:0px">
-						<input class="btn btn-warning pull-rigth" value="Buscar" type="button" id="btnBuscar" />
-						<input class="btn btn-success pull-rigth" value="Nuevo" type="button" id="btnNuevo" style="margin-left:15px" />
-						
-						<button id="btnDescargar" type="button" class="btn btn-secondary pull-rigth" style="margin-left:10px;">
-							<i class="fas fa-download"></i> Excel
-						</button>
+					<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+						<div class="row">
+							<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding-right:0px">
+								<!--<input class="btn btn-warning pull-rigth" value="Buscar" type="button" id="btnBuscar" />-->
+								<button type="button" id="btnBuscar" class="btn btn-sm btn-warning pull-rigth icono-botones2" style="margin-left:10px">
+									<i class="fas fa-search" style="font-size:18px;"></i> Buscar
+								</button>
+								<!--<input class="btn btn-success pull-rigth" value="Nuevo" type="button" id="btnNuevo" style="margin-left:15px" />-->
+								<button type="button" id="btnNuevo" class="btn btn-sm btn-success icono-botones2" style="margin-left:10px">
+									<i class="fas fa-plus-circle" style="font-size:18px;"></i> Nuevo
+								</button>
+								<button id="btnDescargar" type="button" class="btn btn-secondary pull-rigth" style="margin-left:10px;">
+									<i class="fas fa-download"></i> Excel
+								</button>
+							</div>
+						</div>
 					</div>
 				</div>
 				
@@ -493,7 +499,7 @@ label.form-control-sm{
                             <th>Acciones</th>
                         </tr>
                         </thead>
-                        <tbody>
+                        <tbody style="font-size:13px">
                         </tbody>
                     </table>
                 </div><!--table-responsive-->

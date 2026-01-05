@@ -22,14 +22,18 @@ class CentroCostosController extends Controller
 
     public function create(){
 		
-		return view('frontend.centro_costo.create');
+		$tabla_maestra_model = new TablaMaestra;
 
+		$operacion = $tabla_maestra_model->getMaestroByTipo('115');
+
+		return view('frontend.centro_costo.create',compact('operacion'));
 	}
 
     public function listar_centro_costo_ajax(Request $request){
 
 		$centro_costo_model = new CentroCosto;
 		$p[]=$request->periodo;
+		$p[]=$request->operacion;
 		$p[]=$request->denominacion;
 		$p[]=$request->codigo;
         $p[]=$request->estado;
@@ -51,14 +55,18 @@ class CentroCostosController extends Controller
 	}
 
     public function modal_centro_costo($id){
-				
+		
+		$tabla_maestra_model = new TablaMaestra;
+
 		if($id>0){
 			$centro_costo = CentroCosto::find($id);
 		}else{
 			$centro_costo = new CentroCosto;
 		}
 
-		return view('frontend.centro_costo.modal_centroCosto_nuevoCentroCosto',compact('id','centro_costo'));
+		$operacion = $tabla_maestra_model->getMaestroByTipo('115');
+
+		return view('frontend.centro_costo.modal_centroCosto_nuevoCentroCosto',compact('id','centro_costo','operacion'));
 
     }
 

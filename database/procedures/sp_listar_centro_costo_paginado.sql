@@ -1,4 +1,6 @@
-CREATE OR REPLACE FUNCTION public.sp_listar_centro_costo_paginado(p_periodo character varying, p_denominacion character varying, p_codigo character varying, p_estado character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
+-- DROP FUNCTION public.sp_listar_centro_costo_paginado(varchar, varchar, varchar, varchar, varchar, varchar, refcursor);
+
+CREATE OR REPLACE FUNCTION public.sp_listar_centro_costo_paginado(p_periodo character varying, p_operacion character varying, p_denominacion character varying, p_codigo character varying, p_estado character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
  RETURNS refcursor
  LANGUAGE plpgsql
 AS $function$
@@ -15,14 +17,19 @@ begin
 	
 	p_pagina=(p_pagina::Integer-1)*p_limit::Integer;
 
-	v_campos=' cc.id, cc.periodo, cc.codigo, cc.denominacion, cc.estado ';
+	v_campos=' cc.id, cc.periodo, tm.denominacion operacion, cc.codigo, cc.denominacion, cc.estado ';
 
-	v_tabla=' from centro_costos cc ';
+	v_tabla=' from centro_costos cc 
+	left join tabla_maestras tm on cc.operacion::int = tm.codigo::int and tm.tipo = ''115'' ';
 	
 	v_where = ' Where 1=1 ';
 
 	If p_periodo<>'' Then
 	 v_where:=v_where||'And cc.periodo = '''||p_periodo||''' ';
+	End If;
+
+	If p_operacion<>'' Then
+	 v_where:=v_where||'And cc.operacion = '''||p_operacion||''' ';
 	End If;
 
 	If p_denominacion<>'' Then

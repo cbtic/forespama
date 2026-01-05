@@ -3,8 +3,8 @@
 <style type="text/css">
 
 #tblProductos tbody tr{
-		font-size:13px
-	}
+    font-size:13px
+}
 
 .table td.verde{
 	background:#CAE983  !important
