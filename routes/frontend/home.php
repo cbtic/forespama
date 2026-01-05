@@ -51,6 +51,7 @@ use App\Http\Controllers\Frontend\UsuarioDescuentoController;
 use App\Http\Controllers\Frontend\ReusoController;
 use App\Http\Controllers\Frontend\ProductoCompetenciaController;
 use App\Http\Controllers\Frontend\PersonaProcesoController;
+use App\Http\Controllers\Frontend\CentroCostosController;
 
 //use App\Http\Controllers\VehiculoController;
 
@@ -860,3 +861,9 @@ Route::get('productos/obtener_sub_categoria/{tipo}', [ProductosController::class
 Route::get('productos/obtener_modelo/{tipo}', [ProductosController::class, 'obtener_modelo'])->name('productos.obtener_modelo');
 Route::get('productos/obtener_packet/{tipo}', [ProductosController::class, 'obtener_packet'])->name('productos.obtener_packet');
 Route::get('productos/obtener_medida/{tipo}', [ProductosController::class, 'obtener_medida'])->name('productos.obtener_medida');
+
+Route::get('centro_costo/create', [CentroCostosController::class, 'create'])->name('centro_costo.create');
+Route::post('centro_costo/listar_centro_costo_ajax', [CentroCostosController::class, 'listar_centro_costo_ajax'])->name('centro_costo.listar_centro_costo_ajax');
+Route::get('centro_costo/modal_centro_costo/{id}', [CentroCostosController::class, 'modal_centro_costo'])->name('centro_costo.modal_centro_costo');
+Route::post('centro_costo/send_centro_costo', [CentroCostosController::class, 'send_centro_costo'])->name('centro_costo.send_centro_costo');
+Route::get('centro_costo/eliminar_centro_costo/{id}/{estado}', [CentroCostosController::class, 'eliminar_centro_costo'])->name('centro_costo.eliminar_centro_costo');
