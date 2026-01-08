@@ -943,16 +943,18 @@ function fn_save_autorizacion_orden_compra(){
             if (msg !== "") {
                 bootbox.alert(msg, function () {
                     bootbox.alert("Se guard&oacute; satisfactoriamente", function () {
-                        if (result.id > 0) {
+                        /*if (result.id > 0) {
                             modalOrdenCompraAutorizacion(result.id);
-                        }
+                        }*/
+                       $('#openOverlayOpc').modal('hide');
                     });
                 });
             } else {
                 bootbox.alert("Se guard&oacute; satisfactoriamente", function () {
-                    if (result.id > 0) {
+                    /*if (result.id > 0) {
                         modalOrdenCompraAutorizacion(result.id);
-                    }
+                    }*/
+                   $('#openOverlayOpc').modal('hide');
                 });
             }
         }

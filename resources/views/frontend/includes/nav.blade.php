@@ -407,6 +407,10 @@
 									<x-utils.link :href="route('frontend.centro_costo.create')" class="dropdown-item" :text="__('Centro de Costos')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
 								@endif
 
+								@can('Mantenimiento Sedes')
+									<x-utils.link :href="route('frontend.sedes.create')" class="dropdown-item" :text="__('Sedes')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+								@endif
+
 							</div>
 						</li>
 					

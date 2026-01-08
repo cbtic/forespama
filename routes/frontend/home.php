@@ -52,6 +52,7 @@ use App\Http\Controllers\Frontend\ReusoController;
 use App\Http\Controllers\Frontend\ProductoCompetenciaController;
 use App\Http\Controllers\Frontend\PersonaProcesoController;
 use App\Http\Controllers\Frontend\CentroCostosController;
+use App\Http\Controllers\Frontend\SedesController;
 
 //use App\Http\Controllers\VehiculoController;
 
@@ -867,3 +868,9 @@ Route::post('centro_costo/listar_centro_costo_ajax', [CentroCostosController::cl
 Route::get('centro_costo/modal_centro_costo/{id}', [CentroCostosController::class, 'modal_centro_costo'])->name('centro_costo.modal_centro_costo');
 Route::post('centro_costo/send_centro_costo', [CentroCostosController::class, 'send_centro_costo'])->name('centro_costo.send_centro_costo');
 Route::get('centro_costo/eliminar_centro_costo/{id}/{estado}', [CentroCostosController::class, 'eliminar_centro_costo'])->name('centro_costo.eliminar_centro_costo');
+
+Route::get('sedes/create', [SedesController::class, 'create'])->name('sedes.create');
+Route::post('sedes/listar_sede_ajax', [SedesController::class, 'listar_sede_ajax'])->name('sedes.listar_sede_ajax');
+Route::get('sedes/modal_sede/{id}', [SedesController::class, 'modal_sede'])->name('sedes.modal_sede');
+Route::post('sedes/send_sede', [SedesController::class, 'send_sede'])->name('sedes.send_sede');
+Route::get('sedes/eliminar_sede/{id}/{estado}', [SedesController::class, 'eliminar_sede'])->name('sedes.eliminar_sede');

@@ -1319,7 +1319,6 @@ function obtenerMotivo(){
                                 </div>
                                 <div class="col-lg-5">
                                     <select name="serie_guia" id="serie_guia" class="form-control form-control-sm" onchange="//obtenerNumeroGuia()">
-                                        <option value="">--Seleccionar--</option>
                                         <?php 
                                         foreach ($serie_guia as $row){?>
                                             <option value="<?php echo $row->denominacion ?>" <?php echo ($id > 0 && $row->denominacion==$guia_interna->guia_serie) ? "selected='selected'" : (($row->denominacion == "T001")  ? "selected='selected'" : "");?>><?php echo $row->denominacion ?></option>

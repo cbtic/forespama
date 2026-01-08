@@ -195,11 +195,15 @@ function fn_save_chopeo_producto(){
 
     var tienda = $('#tienda').val();
     var fecha_chopeo = $('#fecha_chopeo').val();
-    var btnPrecioDimfer = $('#btnPrecioDimfer').val();
+    var sku = $('#sku').val();
+    var precio = $('#precio').val();
+    //var btnPrecioDimfer = $('#btnPrecioDimfer').val();
 	
     if(tienda==""){msg+="Ingrese la Tienda <br>";}
     if(fecha_chopeo==""){msg+="Ingrese la Fecha <br>";}
-    if(btnPrecioDimfer==""){msg+="Ingrese la Imagen del Producto <br>";}
+    if(sku==""){msg+="Ingrese el SKU <br>";}
+    if(precio==""){msg+="Ingrese el Precio <br>";}
+    //if(btnPrecioDimfer==""){msg+="Ingrese la Imagen del Producto <br>";}
 
     if(msg!=""){
 
@@ -356,17 +360,25 @@ function modalProductoCompetencia(codigo_producto_competencia,nombre_producto_co
     </div>
 
     <div class="row">
-        <div class="form-group col-md-4">
+        <!--<div class="form-group col-md-4">
             <label class="control-label form-control-sm">Cargar Precio</label>
             <input type="file" class="form-control-file btn btn-sm btn-success" style="background-color: #F6F6F6 !important; border: none !important; padding: 0 !important; box-shadow: none !important; color:black" id="btnPrecioDimfer" name="btnPrecioDimfer">
-            <?php if (!empty($producto->ruta_ficha_tecnica)) : ?>
+            <?php /*if (!empty($producto->ruta_ficha_tecnica)) : ?>
                 <div class="mt-2">
                     <i class="fa fa-file-pdf-o"></i>
                     <a href="<?php echo asset($producto->ruta_ficha_tecnica); ?>" target="_blank">Descargar Precio Dimfer</a>
                 </div>
-            <?php endif; ?>
+            <?php endif; */?>
+        </div>-->
+        <div class="form-group col-md-4">
+            <label class="form-control-sm">SKU</label>
+            <input id="sku" name="sku" on class="form-control form-control-sm"  value="" type="text">
         </div>
-    </div>  
+        <div class="form-group col-md-4">
+            <label class="form-control-sm">Precio</label>
+            <input id="precio" name="precio" on class="form-control form-control-sm"  value="" type="text">
+        </div>
+    </div>
     <div class="modal-footer">
         <!--<a href="javascript:void(0)" onClick="fn_save_chopeo_producto()" class="btn btn-sm btn-success">Guardar</a>-->
         <button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-nuevo" data-toggle="modal" onclick="fn_save_chopeo_producto()">

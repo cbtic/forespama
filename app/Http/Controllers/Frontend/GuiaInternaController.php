@@ -16,6 +16,7 @@ use App\Models\GuiaDetalle;
 use App\Models\Conductores;
 use App\Models\Persona;
 use App\Models\EmpresaVehiculo;
+use App\Models\Sede;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Auth;
 use Carbon\Carbon;
@@ -84,6 +85,8 @@ class GuiaInternaController extends Controller
         $marca_model = new Marca;
         $empresa_model = new Empresa;
         $ubigeo_model = new Ubigeo;
+        $sede_model = new Sede;
+        $id_sede = session('id_sede');
 		
 		if($id>0){
             $guia_interna = GuiaInterna::find($id);
@@ -102,7 +105,8 @@ class GuiaInternaController extends Controller
         $empresas = Empresa::all();
         $motivo_traslado = $tablaMaestra_model->getMaestroByTipo(63);
         $departamento = $ubigeo_model->getDepartamento();
-        $serie_guia = $tablaMaestra_model->getMaestroC(95,"GR");
+        //$serie_guia = $tablaMaestra_model->getMaestroC(95,"GR");
+        $serie_guia = $sede_model->getSerie($id_sede, 'GR');
         $punto_partida = $tablaMaestra_model->getMaestroByTipo(68);
         $unidad_peso = $tablaMaestra_model->getMaestroByTipo(43);
         $tipo_documento_cliente = $tablaMaestra_model->getMaestroByTipo(75);

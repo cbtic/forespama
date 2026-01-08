@@ -25,6 +25,7 @@ use App\Models\Tienda;
 use App\Models\OrdenCompra;
 use App\Models\OrdenCompraDetalle;
 use App\Models\AutorizacionOrdenCompra;
+use App\Models\Sede;
 
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
@@ -150,6 +151,7 @@ class ComprobanteController extends Controller
 
         $empresa_model = new Empresa;
         $serie_model = new TablaMaestra;
+        $sede_model = new Sede;
 
 		$tabla_model = new TablaMaestra;
 		//$forma_pago = $tabla_model->getMaestroByTipo('19');
@@ -165,8 +167,11 @@ class ComprobanteController extends Controller
         if ($trans == 'FA'){
 
             //$serie = $serie_model->getMaestro('SERIES',$TipoF);
-            $serie = $serie_model->getMaestroC('95',$TipoF);            
-
+            //$serie = $serie_model->getMaestroC('95',$TipoF);
+            $serie = $sede_model->getSerie($id_sede, $TipoF);
+            //if($TipoF=='FT'){$serie = $serie_lista[0]->serie_factura;}
+            //if($TipoF=='BV'){$serie = $serie_lista[0]->serie_boleta;}
+            //dd($serie);exit();
             //$MonAd = $request->MonAd;
             $MonAd = 0;
             $total   = $request->total;
@@ -379,7 +384,7 @@ class ComprobanteController extends Controller
 
             //echo $TipoF; exit();
 
-            //print_r($facturad); exit();         
+            //print_r($facturad); exit();
 
             return view('frontend.comprobante.create',compact('trans', 'titulo','empresa', 'facturad', 'total', 'igv', 'stotal','TipoF','ubicacion', 'persona','id_caja','serie', 'adelanto','MonAd','forma_pago','tipooperacion','formapago', 'totalDescuento','id_tipo_afectacion_pp', 'valorizad','descuentopp','id_pronto_pago', 'medio_pago', 'id_orden_compra', 'id_proforma','afecta_a'));
         }

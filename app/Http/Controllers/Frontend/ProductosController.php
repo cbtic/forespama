@@ -582,6 +582,10 @@ class ProductosController extends Controller
 			$producto_competencia = new ProductosCompetencia;
 		}*/
 
+        if($nombre_producto_competencia == '0'){
+            $nombre_producto_competencia = '';
+        }
+
 		$competencia = $tabla_maestra_model->getMaestroByTipo(101);
 
 		return view('frontend.productos.modal_productos_nuevoProducto_competencia',compact('codigo_producto_competencia','nombre_producto_competencia','competencia_producto_competencia','competencia'));
@@ -593,12 +597,15 @@ class ProductosController extends Controller
         $id_user = Auth::user()->id;
 
         try {
+            /*////////////////////////////////////funciona
             $request->validate([
                 'btnPrecioDimfer' => 'file|mimes:jpg,jpeg,png',
             ]);
+            funciona////////////////////////////////////*/
 
             //$path = $request->file('btnPrecioDimfer')->store('chopeos', 'public');
 
+            /*////////////////////////////////////funciona
             if ($request->hasFile('btnPrecioDimfer')) {
 
                 $path = public_path("img/chopeos/");
@@ -613,7 +620,9 @@ class ProductosController extends Controller
 
                 $rutaFinal = "img/chopeos/" . $filename . "." . $extension;
             }
+            funciona////////////////////////////////////*/
 
+            /*////////////////////////////////////funciona
             $imagePath = public_path($rutaFinal);
             /////////////
             $keyFile = storage_path('app/google-key.json');
@@ -633,6 +642,8 @@ class ProductosController extends Controller
             if (count($texts) === 0) {
                 return response()->json(['error' => 'No se detectó texto en la imagen.']);
             }
+            funciona////////////////////////////////////*/
+            
             /////////////////////////
             /*$texto = $texts[0]->getDescription();
             dd($texto);exit();
@@ -646,7 +657,8 @@ class ProductosController extends Controller
             if (!$numero || !$precio) {
                 return response()->json(['error' => 'No se encontraron datos válidos en la imagen.']);
             }*/
-
+            
+            /*////////////////////////////////////funciona
             $texto = $texts[0]->getDescription();
 
             $texto = strtoupper($texto);
@@ -671,12 +683,15 @@ class ProductosController extends Controller
             $nombre = trim(preg_replace('/\s+/', ' ', $nombre));
             //$nombre = preg_replace('/^\d{1,3}\s+/', '', $nombre);
             $nombre = preg_replace('/^[^A-ZÁÉÍÓÚÑ]+/i', '', $nombre);
+            funciona////////////////////////////////////*/
 
             /*$numero="9999996";
             $precio="125.20";
             $nombre="PTA EJEMPLOSSSS";*/
 
             //echo 'nombre: ' ,$nombre, 'precio: ' ,$precio, 'numero: ' ,$numero;
+
+            /*////////////////////////////////////funciona
             if (!$numero || !$precio || !$nombre) {
                 return response()->json([
                     'success' => false,
@@ -686,6 +701,7 @@ class ProductosController extends Controller
                     'precio' => $precio
                 ]);
             }
+            funciona////////////////////////////////////*/
 
             //dd(['nombre' => $nombre, 'precio' => $precio, 'numero' => $numero]);
 
@@ -697,12 +713,12 @@ class ProductosController extends Controller
             $equivalencia_producto = null;
 
             if($request->competencia==1){
-                $equivalencia_producto = EquivalenciaProducto::where('codigo_empresa',$numero)->where('estado',1)->first();
+                $equivalencia_producto = EquivalenciaProducto::where('codigo_empresa',$request->sku)->where('estado',1)->first();
                 if($equivalencia_producto){
                     $id_producto = $equivalencia_producto->id_producto;
                 }
             }else{
-                $equivalencia_producto = ProductosCompetencia::where('codigo',$numero)->where('id_competencia',$request->competencia)->where('estado',1)->first();
+                $equivalencia_producto = ProductosCompetencia::where('codigo',$request->sku)->where('id_competencia',$request->competencia)->where('estado',1)->first();
                 if($equivalencia_producto){
                     $id_producto = $equivalencia_producto->id;
                 }
@@ -715,9 +731,11 @@ class ProductosController extends Controller
                     'success' => false,
                     'msg2' => $msg2,
                     'id' => '0',
-                    'numero' => $numero,
-                    'precio' => $precio,
-                    'nombre' => $nombre,
+                    'numero' => $request->sku,
+                    //'precio' => $precio,
+                    'precio' => $request->precio,
+                    //'nombre' => $nombre,
+                    'nombre' => '0',
                     'competencia_' => $request->competencia
                 ],200);
             }
@@ -727,7 +745,7 @@ class ProductosController extends Controller
             $chopeo->id_competencia = $request->competencia;
             $chopeo->fecha_chopeo = $request->fecha_chopeo;
             $chopeo->id_usuario_responsable = $id_user;
-            $chopeo->ruta_imagen = $rutaFinal;
+            //$chopeo->ruta_imagen = $rutaFinal;
             $chopeo->estado = 1;
             $chopeo->id_usuario_inserta = $id_user;
             $chopeo->save();
@@ -736,7 +754,7 @@ class ProductosController extends Controller
             $chopeo_detalle = new ChopeoDetalle();
             $chopeo_detalle->id_chopeo = $id_chopeo;
             $chopeo_detalle->id_producto = $id_producto;
-            $chopeo_detalle->precio_competencia = $precio;
+            $chopeo_detalle->precio_competencia = $request->precio;
             $chopeo_detalle->estado = 1;
             $chopeo_detalle->id_usuario_inserta = $id_user;
             $chopeo_detalle->save();
