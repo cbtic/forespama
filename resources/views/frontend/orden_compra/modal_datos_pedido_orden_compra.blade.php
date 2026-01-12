@@ -515,26 +515,6 @@ $(document).ready(function () {
 			}
 		//validaRuc(this.value);
 	});
-	
-	
-	
-	
 });
 
-
 </script>
-
-<script type="text/javascript">
-$(document).ready(function() {
-	//$('#numero_placa').focus();
-	//$('#numero_placa').mask('AAA-000');
-	//$('#vehiculo_numero_placa').mask('AAA-000');
-	
-	
-});
-
-
-
-
-</script>
-

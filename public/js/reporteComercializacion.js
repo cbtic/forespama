@@ -65,11 +65,10 @@ $(document).ready(function () {
 		DescargarArchivosExcel()
 
 	});
-
 });
 
 function datatablenew(){
-                      
+    
     var oTable1 = $('#tblReporteComercializacion').dataTable({
         "bServerSide": true,
         "sAjaxSource": "/orden_compra/listar_reporte_comercializacion_ajax",
@@ -273,14 +272,22 @@ function datatablenew(){
 				},
 				{
 				"mRender": function (data, type, row) {
-					var cerrado = "";
-						if(row.cerrado == 1){
-							cerrado = "SI";
-						}
-						if(row.cerrado == 2){
-							cerrado = "NO";
-						}
-						return cerrado;
+					/*var cerrado = "";
+					if(row.cerrado == 1){
+						cerrado = "SI";
+					}
+					if(row.cerrado == 2){
+						cerrado = "NO";
+					}
+					return cerrado;*/
+
+					var pendiente_entrega = "";
+					if(row.cantidad_despacho >= row.cantidad_requerida){
+						pendiente_entrega = "NO";
+					}else{
+						pendiente_entrega = "SI";
+					}
+					return pendiente_entrega;
 				},
 				"bSortable": true,
 				"aTargets": [15]

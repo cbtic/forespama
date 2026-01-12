@@ -18,7 +18,7 @@ begin
 	v_campos=' rd.id, tm.denominacion tipo_documento, r.fecha, r.codigo numero_requerimiento, a.denominacion almacen_solicitante, u.name responsable_atencion, r.estado, p.denominacion producto, p.codigo, m.denominiacion marca, rd.cantidad,
 	(select coalesce(sum(ocd.cantidad_requerida),0) from orden_compras oc
 	inner join orden_compra_detalles ocd on ocd.id_orden_compra = oc.id 
-	where oc.id_requerimiento = r.id and ocd.id_producto = rd.id_producto and oc.estado =''1'') cantidad_atendida,
+	where oc.id_requerimiento = r.id and ocd.id_producto = rd.id_producto and ocd.estado = ''1'' and oc.estado =''1'') cantidad_atendida,
 	tm2.denominacion cerrado ';
 
 	v_tabla=' from requerimiento_detalles rd 

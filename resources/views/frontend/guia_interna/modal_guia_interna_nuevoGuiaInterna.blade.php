@@ -437,10 +437,6 @@ function cargar_detalle_documento(id_documento){
                     let selected = (unidad_medida.codigo == entrada_producto.id_unidad_medida) ? 'selected' : '';
                     unidadMedidaOptions += `<option value="${unidad_medida.codigo}" ${selected}>${unidad_medida.denominacion}</option>`;
                 });
-
-                //if (entrada_producto.id_producto) {
-                //    productosSeleccionados.push(entrada_producto.id_producto);
-                //}
                
                 const row = `
                     <tr>
@@ -542,7 +538,6 @@ function cargar_detalle_documento(id_documento){
             if(entrada.ubigeo){
                 obtenerProvinciaContacto(entrada.ubigeo);
             }
-            
         }
     });
 }
@@ -1020,6 +1015,9 @@ function cambiarPuntoLlegada(){
         $('#input_punto_llegada').hide();
         $('#select_punto_partida').hide();
         $('#input_punto_partida').show();
+
+        cambiarLlegadaPartida();
+
     }else{
         $('#select_punto_llegada').hide();
         $('#input_punto_llegada').show();
@@ -1028,12 +1026,23 @@ function cambiarPuntoLlegada(){
     }
 }
 
+function cambiarLlegadaPartida(){
+    
+    var departamento_llegada = $('#departamento_llegada').val();
+    var provincia_llegada = $('#provincia_llegada').val();
+    var distrito_llegada = $('#distrito_llegada').val();
+
+
+
+}        
+
 function actualizarDescripciones() {
     var descripcion_partida = $('#punto_partida option:selected').text();
     $('#punto_partida_descripcion').val(descripcion_partida);
 
     var descripcion_llegada = $('#punto_llegada_select option:selected').text();
     $('#punto_llegada_descripcion').val(descripcion_llegada);
+    //alert(descripcion_llegada);
 }
 
 $('#punto_partida').on('change', function(){
@@ -1043,6 +1052,22 @@ $('#punto_partida').on('change', function(){
     $('#punto_partida_descripcion').val(descripcion);
 
 });
+
+/*$('#punto_llegada').on('change', function(){
+
+    var descripcion = $('#punto_llegada option:selected').text();
+
+    $('#punto_llegada_descripcion').val(descripcion);
+
+});
+
+$('#punto_partida_select').on('change', function(){
+
+    var descripcion = $('#punto_partida_select option:selected').text();
+
+    $('#punto_partida_descripcion').val(descripcion);
+
+});*/
 
 $('#punto_llegada_select').on('change', function(){
 

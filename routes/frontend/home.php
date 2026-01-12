@@ -874,3 +874,7 @@ Route::post('sedes/listar_sede_ajax', [SedesController::class, 'listar_sede_ajax
 Route::get('sedes/modal_sede/{id}', [SedesController::class, 'modal_sede'])->name('sedes.modal_sede');
 Route::post('sedes/send_sede', [SedesController::class, 'send_sede'])->name('sedes.send_sede');
 Route::get('sedes/eliminar_sede/{id}/{estado}', [SedesController::class, 'eliminar_sede'])->name('sedes.eliminar_sede');
+
+Route::get('orden_compra/modal_cerrar_pedido/{id}', [OrdenCompraController::class, 'modal_cerrar_pedido'])->name('orden_compra.modal_cerrar_pedido');
+Route::post('orden_compra/send_cerrar_orden_compra_detalle', [OrdenCompraController::class, 'send_cerrar_orden_compra_detalle'])->name('orden_compra.send_cerrar_orden_compra_detalle');
+

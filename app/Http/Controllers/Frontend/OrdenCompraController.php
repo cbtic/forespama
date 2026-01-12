@@ -3164,6 +3164,35 @@ class OrdenCompraController extends Controller
         return response()->json(['id' => $id_orden_compra]);
         
     }
+
+    public function modal_cerrar_pedido($id){
+		
+		$orden_compra = OrdenCompra::find($id);
+        
+		return view('frontend.orden_compra.modal_cerrar_pedido',compact('id','orden_compra'));
+
+    }
+
+    public function send_cerrar_orden_compra_detalle(Request $request){
+
+		$id_user = Auth::user()->id;
+
+        $orden_compra = OrdenCompra::find($request->id);
+		
+		$orden_compra->cerrado = '2';
+		$orden_compra->motivo = $request->motivo;
+		$orden_compra->save();
+
+        $orden_compra_detalle = OrdenCompraDetalle::where('id_orden_compra',$request->id)->where('estado',1)->where('cerrado','1')->get();
+
+        foreach($orden_compra_detalle as $detalle){
+            $detalle->cerrado = '2';
+            $detalle->save();
+        }
+
+        return response()->json(['success' => 'Observacion guardada exitosamente.']);
+
+    }
 }
 
 class InvoicesExport implements FromArray, WithHeadings, WithStyles

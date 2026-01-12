@@ -15,10 +15,14 @@
 }
 
 .modal-dialog {
-	width: 100%;
-	max-width:100%!important
-  }
-  
+    width: 100%;
+    max-width:100%!important
+}
+
+.modal-cerrar_pedido .modal-dialog {
+    width: 50% !important;
+}
+
 #tablemodal{
     border-spacing: 0;
     display: flex;/*Se ajuste dinamicamente al tamano del dispositivo**/
@@ -1252,8 +1256,21 @@ function denegar_pedido($id_proceso){
     });
 }
 
-</script>
+function modal_cerrar_pedido(id){
+	
+	var id_orden_compra = $('#id_orden_compra').val();
 
+	$.ajax({
+        url: "/orden_compra/modal_cerrar_pedido/"+id_orden_compra,
+        type: "GET",
+        success: function (result) {
+            $("#diveditpregOpc2").html(result);
+            $('#openOverlayOpc2').modal('show');
+        }
+	});
+}
+
+</script>
 
 <body class="hold-transition skin-blue sidebar-mini">
     
@@ -1625,6 +1642,9 @@ function denegar_pedido($id_proceso){
                                 <?php 
                                     } elseif($tipo== 2){
                                 ?>
+                                    @hasanyrole('Administrator|Encargado Cerrar OC')
+                                    <button style="font-size:12px;margin-left:10px; margin-right:10px" type="button" class="btn btn-sm btn-buscar" data-toggle="modal" onclick="modal_cerrar_pedido()">Cerrar Pedido</button>
+                                    @endhasanyrole
                                     <button style="font-size:12px;margin-left:10px; margin-right:10px" type="button" class="btn btn-sm btn-danger" data-toggle="modal" onclick="denegar_pedido(4)">Devolver a Vendedor</button>
                                     <a href="javascript:void(0)" onClick="fn_save_detalle_producto()" class="btn btn-sm btn-success" style="margin-right:10px">Entregar</a>
                                 <?php 
@@ -1657,6 +1677,22 @@ function denegar_pedido($id_proceso){
 </div>
 <!-- /.content-wrapper -->
 
+<div id="openOverlayOpc2" class="modal fade modal-cerrar_pedido" tabindex="-1" role="dialog">
+    <div class="modal-dialog" >
+
+        <div id="id_content_OverlayoneOpc2" class="modal-content" style="padding: 0px;margin: 0px">
+        
+            <div class="modal-body" style="padding: 0px;margin: 0px">
+
+                <div id="diveditpregOpc2"></div>
+
+            </div>
+        
+        </div>
+
+    </div>
+    
+</div>
     
 <script type="text/javascript">
 $(document).ready(function () {
