@@ -1621,10 +1621,13 @@ class OrdenCompraController extends Controller
 		
 		foreach ($data as $r) {
 
-            if($r->cerrado==1){$cerrado='SI';}
-            if($r->cerrado==2){$cerrado='NO';}
+            if($r->cantidad_despacho  >= $r->cantidad_requerida){
+                $pendiente_entrega='NO';
+            }else{
+                $pendiente_entrega='SI';
+            }
 
-			array_push($variable, array($n++,$r->cliente, $r->numero_orden_compra_cliente, $r->pedido, $r->fecha_orden_compra, $r->fecha_vencimiento, $r->fecha_salida, $r->fecha_facturado, $r->codigo, $r->codigo_empresa, $r->producto, $r->precio, $r->descuento, $r->cantidad_requerida, $r->cantidad_despacho, $r->cantidad_cancelada, $cerrado, $r->vendedor, $r->estado_pedido));
+			array_push($variable, array($n++,$r->cliente, $r->numero_orden_compra_cliente, $r->pedido, $r->fecha_orden_compra, $r->fecha_vencimiento, $r->fecha_salida, $r->fecha_facturado, $r->codigo, $r->codigo_empresa, $r->producto, $r->precio, $r->descuento, $r->cantidad_requerida, $r->cantidad_despacho, $r->cantidad_cancelada, $pendiente_entrega, $r->vendedor, $r->estado_pedido));
 		}
 		
 		$export = new InvoicesExport2([$variable]);
