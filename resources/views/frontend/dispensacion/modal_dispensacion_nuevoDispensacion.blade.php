@@ -19,9 +19,9 @@
   overflow: hidden;
 }
 
-.modal-body {
+/*.modal-body {
   overflow-y: auto;
-}
+}*/
 
 .datepicker,
 .table-condensed {
@@ -371,6 +371,7 @@ $.ajax({
                 tbody.append(row);
                 $('#descripcion_' + n).select2({ 
                     width: '100%',
+                    dropdownParent: $('#openOverlayOpc'),
                     dropdownCssClass: 'custom-select2-dropdown'
                 });
 
@@ -431,6 +432,7 @@ function agregarProducto(){
 
         $('#descripcion' + n).select2({
             width: '100%',
+            dropdownParent: $('#openOverlayOpc'),
             dropdownCssClass: 'custom-select2-dropdown'
         });
 

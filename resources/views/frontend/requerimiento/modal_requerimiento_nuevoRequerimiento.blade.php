@@ -19,9 +19,9 @@
   overflow: hidden;
 }
 
-.modal-body {
+/*.modal-body {
   overflow-y: auto;
-}
+}*/
 
 .datepicker,
 .table-condensed {
@@ -59,7 +59,10 @@
 
 #tablemodal thead{
     background-color: #e2e3e5;
-    position: fixed !important;
+    /*position: fixed !important;*/
+    position: sticky;
+    top: 0;
+    z-index: 5;
 }
 
 
@@ -321,6 +324,7 @@ $.ajax({
                 tbody.append(row);
                 $('#descripcion' + n).select2({ 
                     width: '100%', 
+                    dropdownParent: $('#openOverlayOpc'), /*borrar*/
                     dropdownCssClass: 'custom-select2-dropdown'
                 });
 
@@ -381,6 +385,7 @@ function agregarProducto(){
 
         $('#descripcion' + n).select2({
             width: '100%',
+            dropdownParent: $('#openOverlayOpc'),
             dropdownCssClass: 'custom-select2-dropdown'
             //dropdownCssClass: 'form-control form-control-sm',
             //containerCssClass: 'form-control form-control-sm'
@@ -803,7 +808,7 @@ function modalCerrarAntiguedad(){
                    
                         <div class="card-body">
 
-                            <div class="table-responsive" style="overflow-y: auto; max-height: 400px; overflow-x: auto; ">
+                            <div class="table-responsive" style="overflow-y: auto; max-height: 400px; overflow-x: hidden; ">
                                 <table id="tblRequerimientoDetalle" class="table table-hover table-sm">
                                     <thead>
                                     <tr style="font-size:13px">

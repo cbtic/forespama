@@ -332,6 +332,7 @@ function cargarDetalle(){
                 tbody.append(row);
                 $('#descripcion_' + n).select2({ 
                     width: '100%', 
+                    dropdownParent: $('#openOverlayOpc'),
                     dropdownCssClass: 'custom-select2-dropdown'
                 });
 
@@ -477,6 +478,7 @@ function agregarProducto(){
 
         $('#descripcion' + n).select2({
             width: '100%',
+            dropdownParent: $('#openOverlayOpc'),
             dropdownCssClass: 'custom-select2-dropdown'
             //dropdownCssClass: 'form-control form-control-sm',
             //containerCssClass: 'form-control form-control-sm'
@@ -900,7 +902,7 @@ function cambiarOrigen(){
                                 </div>
                             </div>
                             <div class="card-body">
-                        <div class="table-responsive">
+                        <div class="table-responsive" style="overflow-y: auto; max-height: 400px;">
                             <table id="tblRequerimientoDetalle" class="table table-hover table-sm">
                                 <thead>
                                 <tr style="font-size:13px">

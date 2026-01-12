@@ -154,6 +154,7 @@ function fn_save_cerrar_pedido(){
                 $('#openOverlayOpc').modal('hide');
                 $('.loader').hide();
                 bootbox.alert("Se guardo satisfactoriamente");
+                datatablenew();
             }
         });
     }

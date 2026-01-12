@@ -961,7 +961,7 @@ function cargaDetalleTienda(){
                     
                     <div class="card-body" style="margin-top:20px">	
 
-					<div class="table-responsive">
+					<div class="table-responsive" style="overflow-y: auto; max-height: 585px;">
 						<table id="tblTiendaOrdenCompra" class="table table-hover table-sm">
 							<thead>
 							<tr style="font-size:13px">

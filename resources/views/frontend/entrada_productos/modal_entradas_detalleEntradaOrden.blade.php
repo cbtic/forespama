@@ -8,6 +8,17 @@
 */
 /*.datepicker{ z-index:99999 !important; }*/
 
+.modal-dialog {
+  max-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-content {
+  flex: 1 1 auto;
+  overflow: hidden;
+}
+
 .datepicker,
 .table-condensed {
   width: 250px;
@@ -325,6 +336,7 @@ $.ajax({
 
                 $('#descripcion' + n).select2({
                     width: '100%',
+                    dropdownParent: $('#openOverlayOpc'),
                     dropdownCssClass: 'custom-select2-dropdown'
                     //dropdownCssClass: 'form-control form-control-sm',
                     //containerCssClass: 'form-control form-control-sm'
@@ -1570,7 +1582,7 @@ function modal_cerrar_pedido(id){
 
                         <div class="card-body">	
 
-					<div class="table-responsive">
+					<div class="table-responsive" style="overflow-y: auto; max-height: 450px;">
 						<table id="tblDetalleEntrada" class="table table-hover table-sm">
 							<thead>
 							<tr style="font-size:13px">
