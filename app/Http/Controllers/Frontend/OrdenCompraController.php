@@ -2729,11 +2729,13 @@ class OrdenCompraController extends Controller
 
         $equivalencia_producto_model = new EquivalenciaProducto;
         $tienda_model = new Tienda;
+        $tablaMaestra_model = new TablaMaestra;
 
         $equivalencia_producto = $equivalencia_producto_model->getEquivalenciaProductoAll();
         $tienda = $tienda_model->getTiendasAll();
+        $empresa = $tablaMaestra_model->getMaestroByTipo(110);
 
-		return view('frontend.orden_compra.create_informe_b2b',compact('equivalencia_producto','tienda'));
+		return view('frontend.orden_compra.create_informe_b2b',compact('equivalencia_producto','tienda','empresa'));
 
 	}
 
@@ -2745,6 +2747,7 @@ class OrdenCompraController extends Controller
 		$p[]=$request->semana;
         $p[]=$request->producto;
         $p[]=$request->tienda;
+        $p[]=$request->empresa;
 		$p[]=$request->NumeroPagina;
 		$p[]=$request->NumeroRegistros;
 		$data = $orden_compra_model->listar_informe_b2b_ajax($p);
@@ -2883,7 +2886,7 @@ class OrdenCompraController extends Controller
             }*/
             
             $equivalenciaProducto = EquivalenciaProducto::where("codigo_empresa",trim($row['SKU']))->first();
-            $equivalenciaTienda = Tienda::where("numero_tienda",trim($row['NRO_LOCAL']))->first();
+            $equivalenciaTienda = Tienda::where("numero_tienda",trim($row['NRO_LOCAL']))->where("estado",1)->first();
             $id_producto = $equivalenciaProducto->id_producto;
             $id_tienda = $equivalenciaTienda->id;
             $producto = Producto::find($id_producto);

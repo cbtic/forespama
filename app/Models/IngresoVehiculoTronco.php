@@ -148,8 +148,11 @@ class IngresoVehiculoTronco extends Model
 
     function obtenerAniosIngreso(){
 
-        $cad = "select distinct DATE_PART('YEAR', ivt.fecha_ingreso)::varchar anio from ingreso_vehiculo_troncos ivt 
-        order by  DATE_PART('YEAR', ivt.fecha_ingreso)::varchar ";
+        $cad = "select distinct DATE_PART('YEAR', ivt.fecha_ingreso)::varchar anio 
+        from ingreso_vehiculo_troncos ivt 
+        inner join ingreso_vehiculo_tronco_tipo_maderas ivttm on ivt.id = ivttm.id_ingreso_vehiculo_troncos 
+        where ivttm.estado = '1'
+        order by DATE_PART('YEAR', ivt.fecha_ingreso)::varchar ";
 
 		$data = DB::select($cad);
         return $data;

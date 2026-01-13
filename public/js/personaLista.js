@@ -1,6 +1,3 @@
-//alert("ok");
-//jQuery.noConflict(true);
-
 $(document).ready(function () {
 	
 	$('#btnBuscar').click(function () {
@@ -15,102 +12,43 @@ $(document).ready(function () {
 	
 	$("#plan_id").select2();
 	$("#ubicacion_id").select2();
-	
-	/*
-	$('#fecha_inicio').datepicker({
-        autoclose: true,
-		dateFormat: 'dd/mm/yy',
-		changeMonth: true,
-		changeYear: true,
-    });
-	
-	$('#fecha_vencimiento').datepicker({
-        autoclose: true,
-        dateFormat: 'dd/mm/yy',
-		changeMonth: true,
-		changeYear: true,
-    });
-	*/
-	
-	/*
-    $('#tblAlquiler').dataTable({
-    	"language": {
-    	"emptyTable": "No se encontraron resultados"
-    	}
-	});
-	*/
-	/*
-	$('#tblAlquiler').dataTable( {
-            "language": {
-                "sProcessing":     "Procesando...",
-                "sLengthMenu":     "Mostrar _MENU_ registros",
-                "sZeroRecords":    "No se encontraron resultados",
-                "sEmptyTable":     "Ningun dato disponible en esta tabla",
-                "sInfo":           "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
-                "sInfoEmpty":      "Mostrando registros del 0 al 0 de un total de 0 registros",
-                "sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
-                "sInfoPostFix":    "",
-                "sSearch":         "Buscar:",
-                "sUrl":            "",
-                "sInfoThousands":  ",",
-                "sLoadingRecords": "Cargando...",
-                "oPaginate": {
-                        "sFirst":    "Primero",
-                        "sLast":     "ultimo",
-                        "sNext":     "Siguiente",
-                        "sPrevious": "Anterior"
-                },
-                "oAria": {
-                        "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
-                        "sSortDescending": ": Activar para ordenar la columna de manera descendente"
-                }
-            }
-        } );
-	*/
-
 
 	$(function() {
 		$('#modalPersonaForm #apellido_paterno').keyup(function() {
 			this.value = this.value.toLocaleUpperCase();
 		});
 	});
+
 	$(function() {
 		$('#modalPersonaForm #apellido_materno').keyup(function() {
 			this.value = this.value.toLocaleUpperCase();
 		});
 	});
+
 	$(function() {
 		$('#modalPersonaForm #nombres').keyup(function() {
 			this.value = this.value.toLocaleUpperCase();
 		});
 	});
 
-
 	$(function() {
 		$('#modalPersonaTitularForm #apellido_paterno').keyup(function() {
 			this.value = this.value.toLocaleUpperCase();
 		});
 	});
+
 	$(function() {
 		$('#modalPersonaTitularForm #apellido_materno').keyup(function() {
 			this.value = this.value.toLocaleUpperCase();
 		});
 	});
+
 	$(function() {
 		$('#modalPersonaTitularForm #nombres').keyup(function() {
 			this.value = this.value.toLocaleUpperCase();
 		});
 	});
 });
-
-function habiliarTitular(){
-	/*
-	$('#divTitular').hide();
-	if(!$("#chkTitular").is(':checked')) {
-    	$('#divTitular').show();
-	}
-	*/
-}
 
 function guardarAfiliacion(){
     
@@ -128,16 +66,7 @@ function guardarAfiliacion(){
     if(plan_id == "0")msg+="Debe seleccionar un Plan/Tarifario <br>";
 	if(fecha_inicio == "")msg += "Debe ingresar la fecha de inicio de la afiliacion <br>";
 	if(fecha_vencimiento == "")msg += "Debe ingresar la fecha de fin de la afiliacion <br>";
-	/*
-	if($('input[name=horario]').is(':checked')==true){
-		var horario = $('input[name=horario]:checked').val();
-		var data = horario.split("#");
-		var fecha_cita = data[0];
-		var id_medico = data[1];
-	}
-	*/
 
-	
     if(msg!=""){
         bootbox.alert(msg); 
         return false;
@@ -145,28 +74,17 @@ function guardarAfiliacion(){
     else{
         fn_save();
 	}
-	
-	//fn_save();
 }
 
 function fn_save_(){
     
-    //var fecha_atencion_original = $('#fecha_atencion').val();
-	//var id_user = $('#id_user').val();
     $.ajax({
-			url: "/afiliacion/send",
-            type: "POST",
-            //data : $("#frmCita").serialize()+"&id_medico="+id_medico+"&fecha_cita="+fecha_cita,
-            data : $("#frmAfiliacion").serialize(),
-            success: function (result) {  
-                    /*$('#openOverlayOpc').modal('hide');
-					$('#calendar').fullCalendar("refetchEvents");
-					modalDelegar(fecha_atencion_original);*/
-					//modalTurnos();
-					//modalHistorial();
-					//location.href="ver_cita/"+id_user+"/"+result;
-					location.href="/afiliacion";
-            }
+		url: "/afiliacion/send",
+		type: "POST",
+		data : $("#frmAfiliacion").serialize(),
+		success: function (result) {  
+			location.href="/afiliacion";
+		}
     });
 }
 
@@ -194,8 +112,6 @@ function validaTipoDocumento(){
 	}
 }
 
-
-
 function obtenerPersona(){
 		
 	var tipo_documento = $("#tipo_documento").val();
@@ -207,7 +123,6 @@ function obtenerPersona(){
 		return false;
 	}
 	
-	//$('#empresa_id').val("");
 	$('#persona_id').val("");
 	
 	$.ajax({
@@ -232,15 +147,11 @@ function obtenerPersona(){
 			alert("Persona no encontrada en la Base de Datos.");
 			$('#personaModal').modal('show');
 		}
-		
 	});
-	
 }
 
 function obtenerTitularActual(tipo_documento,numero_documento){
-		
-	//var tipo_documento = $("#tipo_documento_tit").val();
-	//var numero_documento = $("#numero_documento_tit").val();
+	
 	var msg = "";
 	
 	if (msg != "") {
@@ -248,7 +159,6 @@ function obtenerTitularActual(tipo_documento,numero_documento){
 		return false;
 	}
 	
-	//$('#empresa_id').val("");
 	$('#titular_id').val("");
 	
 	$.ajax({
@@ -263,9 +173,7 @@ function obtenerTitularActual(tipo_documento,numero_documento){
 			alert("Persona no encontrada en la Base de Datos.");
 			$('#personaTitularModal').modal('show');
 		}
-		
 	});
-	
 }
 
 function obtenerTitular(){
@@ -279,7 +187,6 @@ function obtenerTitular(){
 		return false;
 	}
 	
-	//$('#empresa_id').val("");
 	$('#titular_id').val("");
 	
 	$.ajax({
@@ -294,9 +201,7 @@ function obtenerTitular(){
 			alert("Persona no encontrada en la Base de Datos.");
 			$('#personaTitularModal').modal('show');
 		}
-		
 	});
-	
 }
 
 function obtenerPlanDetalle(){
@@ -311,7 +216,6 @@ function obtenerPlanDetalle(){
 		url: '/supervision/obtener_plan_detalle/'+id,
 		dataType: "json",
 		success: function(result){
-			//var productos = result.productos;
 			var option = "";
 			$('#tblPlan tbody').html("");
 			$(result).each(function (ii, oo) {
@@ -319,46 +223,8 @@ function obtenerPlanDetalle(){
 			});
 			$('#tblPlan tbody').html(option);
 		}
-		
 	});
-	
 }
-
-/*
-function cargarAlquiler(){
-    
-    var empresa_id = $('#empresa_id').val();
-	if(empresa_id == "")empresa_id=0;
-	
-    $("#tblAlquiler tbody").html("");
-	$.ajax({
-			url: "/alquiler/obtener_alquiler/"+empresa_id,
-			type: "GET",
-			success: function (result) {  
-					$("#tblAlquiler tbody").html(result);
-					//$('#tblAlquiler').dataTable();
-			}
-	});
-
-}
-
-
-function cargarDevolucion(){
-    
-    
-    var numero_documento = $("#numero_documento").val();
-    $("#tblPago tbody").html("");
-	$.ajax({
-			url: "/alquiler/obtener_devolucion/"+numero_documento,
-			type: "GET",
-			success: function (result) {  
-					$("#tblDevolucion tbody").html(result);
-			}
-	});
-
-}
-*/
-
 
 $('#modalPersonaSaveBtn').click(function (e) {
 	e.preventDefault();
@@ -419,7 +285,6 @@ $('#modalPersonaTitularSaveBtn').click(function (e) {
   }
   });
 });
-
 
 function datatablenew(){	
     var oTable1 = $('#tblAfiliado').dataTable({

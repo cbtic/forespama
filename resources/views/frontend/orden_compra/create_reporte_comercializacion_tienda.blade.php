@@ -303,9 +303,20 @@ label.form-control-sm{
 				
                 <div class="row">
                     <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12" style="margin-top:15px">
-                        <h4 class="card-title mb-0 text-primary" style="font-size:22px">
+                        <!--<h4 class="card-title mb-0 text-primary" style="font-size:22px">
 							Reporte de Comercializaci&oacute;n por Tiendas
-                        </h4>
+                        </h4>-->
+						<div class="card-header bg-white border-bottom">
+							<h5 class="mb-0 text-primary">
+								<i class="fas fa-clipboard-list me-2"></i>
+								<!--<i class="fas fa-chart-line me-2"></i>    //gráfico / estadísticas 
+								<i class="fas fa-cogs me-2"></i>         //sistema 
+								<i class="fas fa-boxes me-2"></i>        //inventario 
+								<i class="fas fa-industry me-2"></i>      //producción 
+								<i class="fas fa-clipboard-list me-2"></i> //gestión -->
+								Reporte de Comercializaci&oacute;n por Tiendas
+							</h5>
+						</div>
                     </div>
                 </div>
                 <div class="row justify-content-center" style="margin-top:15px">
@@ -314,75 +325,83 @@ label.form-control-sm{
 
 					<div class="col col-sm-12 align-self-center">
 
-
                         <input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
-
-                        <!--<input type="hidden" name="estado" id="estado" value="0">-->
-						
-						<input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
 				
-				<div class="row" style="padding:20px 20px 0px 20px;">
+				<div class="bg-light p-3 rounded mb-3 border">
+					<div class="row">
+						<div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
+							<div class="row">
 
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<select name="empresa_compra_bus" id="empresa_compra_bus" class="form-control form-control-sm">
-							<option value="">--Seleccionar Empresa Compra--</option>
-							<?php
-							foreach ($proveedor as $row){?>
-								<option value="<?php echo $row->id ?>"><?php echo $row->razon_social ?></option>
-								<?php 
-							}
-							?>
-						</select>
-					</div>
+								<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+									<select name="empresa_compra_bus" id="empresa_compra_bus" class="form-control form-control-sm filtro-select">
+										<option value="">--Seleccionar Empresa Compra--</option>
+										<?php
+										foreach ($proveedor as $row){?>
+											<option value="<?php echo $row->id ?>"><?php echo $row->razon_social ?></option>
+											<?php 
+										}
+										?>
+									</select>
+								</div>
 
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-                        <input id="fecha_inicio_bus" name="fecha_inicio_bus" on class="form-control form-control-sm"  placeholder="Fecha Inicio">
-					</div>
+								<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+									<input id="fecha_inicio_bus" name="fecha_inicio_bus" on class="form-control form-control-sm filtro-input"  placeholder="Fecha Inicio">
+								</div>
 
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<input class="form-control form-control-sm" id="fecha_fin_bus" name="fecha_fin_bus" placeholder="Fecha Fin">
-					</div>
+								<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+									<input class="form-control form-control-sm filtro-input" id="fecha_fin_bus" name="fecha_fin_bus" placeholder="Fecha Fin">
+								</div>
 
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-                        <input id="numero_orden_compra_cliente_bus" name="numero_orden_compra_cliente_bus" on class="form-control form-control-sm"  placeholder="N&uacute;mero OC Cliente">
-					</div>
+								<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+									<input id="numero_orden_compra_cliente_bus" name="numero_orden_compra_cliente_bus" on class="form-control form-control-sm filtro-input"  placeholder="N&uacute;mero OC Cliente">
+								</div>
 
-					<!--<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-                        <input id="codigo_producto_bus" name="codigo_producto_bus" on class="form-control form-control-sm"  placeholder="C&oacute;digo Producto">
-					</div>-->
+								<!--<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+									<input id="codigo_producto_bus" name="codigo_producto_bus" on class="form-control form-control-sm"  placeholder="C&oacute;digo Producto">
+								</div>-->
 
-					<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-						<select name="producto_bus" id="producto_bus" class="form-control form-control-sm">
-							<option value="">--Seleccionar Producto--</option>
-							<?php
-							foreach ($productos as $row){?>
-								<option value="<?php echo $row->id ?>"><?php echo $row->codigo ." - ".$row->denominacion ?></option>
-								<?php 
-							}
-							?>
-						</select>
-					</div>
+								<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+									<select name="producto_bus" id="producto_bus" class="form-control form-control-sm filtro-select">
+										<option value="">--Seleccionar Producto--</option>
+										<?php
+										foreach ($productos as $row){?>
+											<option value="<?php echo $row->id ?>"><?php echo $row->codigo ." - ".$row->denominacion ?></option>
+											<?php 
+										}
+										?>
+									</select>
+								</div>
 
-					<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-						<select name="tienda_bus" id="tienda_bus" class="form-control form-control-sm">
-							<option value="">--Seleccionar Tienda--</option>
-							<?php
-							foreach ($tiendas as $row){?>
-								<option value="<?php echo $row->id ?>"><?php echo $row->id ." - ".$row->denominacion ?></option>
-								<?php 
-							}
-							?>
-						</select>
-					</div>
-
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12" style="padding-right:0px">
-						<input class="btn btn-warning pull-rigth" value="Buscar" type="button" id="btnBuscar" />
-						<!--<input class="btn btn-success pull-rigth" value="Nuevo" type="button" id="btnNuevo" style="margin-left:10px" />
-						<input class="btn btn-secondary pull-rigth" value="Excel" name="excel" type="button" id="btnDescargar" style="margin-left:15px;margin-right:10px;"/>-->
-						
-						<button id="btnDescargar" type="button" class="btn btn-secondary pull-rigth" style="margin-left:10px;">
-							<i class="fas fa-download"></i> Excel
-						</button>
+								<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+									<select name="tienda_bus" id="tienda_bus" class="form-control form-control-sm filtro-select">
+										<option value="">--Seleccionar Tienda--</option>
+										<?php
+										foreach ($tiendas as $row){?>
+											<option value="<?php echo $row->id ?>"><?php echo $row->id ." - ".$row->denominacion ?></option>
+											<?php 
+										}
+										?>
+									</select>
+								</div>
+							</div>
+						</div>
+					
+						<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+							<div class="row">
+								<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding-right:0px">
+									<!--<input class="btn btn-warning pull-rigth" value="Buscar" type="button" id="btnBuscar" />-->
+									<button type="button" id="btnBuscar" class="btn btn-sm btn-warning pull-rigth icono-botones2" style="margin-left:10px">
+										<i class="fas fa-search" style="font-size:18px;"></i> Buscar
+									</button>
+									<!--<input class="btn btn-success pull-rigth" value="Nuevo" type="button" id="btnNuevo" style="margin-left:10px" />
+									<input class="btn btn-secondary pull-rigth" value="Excel" name="excel" type="button" id="btnDescargar" style="margin-left:15px;margin-right:10px;"/>-->
+									
+									<button id="btnDescargar" type="button" class="btn btn-sm btn-secondary pull-rigth" style="margin-left:10px;">
+										<i class="fas fa-download" style="font-size:18px;"></i> Excel
+									</button>
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
 				
@@ -407,7 +426,7 @@ label.form-control-sm{
 							<th>Tienda</th>
                         </tr>
                         </thead>
-                        <tbody>
+                        <tbody style="font-size:14px">
                         </tbody>
                     </table>
                 </div><!--table-responsive-->

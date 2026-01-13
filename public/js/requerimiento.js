@@ -71,6 +71,13 @@ $(document).ready(function () {
 		}
 	});
 
+	$('#responsable_atencion_bus').keypress(function(e){
+		if(e.which == 13) {
+			datatablenew();
+			return false;
+		}
+	});
+
 	$('#fecha_inicio_bus').datepicker({
         autoclose: true,
 		format: 'yyyy-mm-dd',
@@ -100,6 +107,8 @@ $(document).ready(function () {
 	});
 
 	$('#producto_bus').select2({ width :'100%'})
+
+	$('#responsable_atencion_bus').select2({ width :'100%'})
 
 });
 

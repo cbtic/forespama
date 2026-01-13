@@ -49,6 +49,34 @@ $(document).ready(function () {
 	
 	datatablenew();
 
+	$('#producto_bus').keypress(function(e){
+		if(e.which == 13) {
+			datatablenew();
+			return false;
+		}
+	});
+
+	$('#tienda_bus').keypress(function(e){
+		if(e.which == 13) {
+			datatablenew();
+			return false;
+		}
+	});
+
+	$('#semana_bus').keypress(function(e){
+		if(e.which == 13) {
+			datatablenew();
+			return false;
+		}
+	});
+
+	$('#empresa_bus').keypress(function(e){
+		if(e.which == 13) {
+			datatablenew();
+			return false;
+		}
+	});
+
 });
 
 function datatablenew(){
@@ -85,6 +113,7 @@ function datatablenew(){
 			var semana = $('#semana_bus').val();
 			var producto = $('#producto_bus').val();
 			var tienda = $('#tienda_bus').val();
+			var empresa = $('#empresa_bus').val();
 			
 			var _token = $('#_token').val();
             oSettings.jqXHR = $.ajax({
@@ -93,7 +122,7 @@ function datatablenew(){
                 "type": "POST",
                 "url": sSource,
                 "data":{NumeroPagina:iNroPagina,NumeroRegistros:iCantMostrar,
-						semana:semana,producto:producto,tienda:tienda,
+						semana:semana,producto:producto,tienda:tienda,empresa:empresa,
 						_token:_token
                        },
                 "success": function (result) {

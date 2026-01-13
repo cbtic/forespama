@@ -391,6 +391,7 @@ function agregarProducto(){
 
         $('#descripcion' + n).select2({
             width: '100%',
+            //dropdownParent: $('#openOverlayOpc'),
             dropdownCssClass: 'custom-select2-dropdown'
         });
 

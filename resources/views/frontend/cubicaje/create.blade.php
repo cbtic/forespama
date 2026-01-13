@@ -466,24 +466,22 @@ label.form-control-sm{
         <div class="card-body">
 
             <form class="form-horizontal" method="post" action="" id="frmIngreso" autocomplete="off" enctype="multipart/form-data">
-				<!--
-                <div class="row">
-                    <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12" style="margin-top:15px">
-                        <h4 class="card-title mb-0 text-primary" style="font-size:22px">
-                            Registro Solicitudes
-                        </h4>
-                    </div>
-                </div>
-				-->
-                <div class="row justify-content-center" style="margin-top:15px">
-					
-                    <input type="hidden" name="flag_ocultar" id="flag_ocultar" value="0">
-					
-					<div class="col col-sm-12 align-self-center">
+			<!--<div class="row">
+				<div class="col-lg-5 col-md-5 col-sm-12 col-xs-12" style="margin-top:15px">
+					<h4 class="card-title mb-0 text-primary" style="font-size:22px">
+						Registro Solicitudes
+					</h4>
+				</div>
+			</div>-->
+			<div class="row justify-content-center" style="margin-top:15px">
+				
+				<input type="hidden" name="flag_ocultar" id="flag_ocultar" value="0">
+				
+				<div class="col col-sm-12 align-self-center">
 
-                        <input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
-						<input type="hidden" name="id_ingreso_vehiculo_tronco_tipo_maderas" id="id_ingreso_vehiculo_tronco_tipo_maderas" value="0">
-						
+					<input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
+					<input type="hidden" name="id_ingreso_vehiculo_tronco_tipo_maderas" id="id_ingreso_vehiculo_tronco_tipo_maderas" value="0">
+
 					<div class="row" style="padding-top:15px">
 
 						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -499,98 +497,117 @@ label.form-control-sm{
 						</div>
 						
 						<div id="divTablaIngreso" class="row col align-self-center" style="padding:10px 20px 10px 20px;">
-					
-							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-								<input class="form-control form-control-sm" id="placa_bus" name="placa_bus" placeholder="Placa">
-							</div>
-							
-							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-								<input class="form-control form-control-sm" id="ruc_bus" name="ruc_bus" placeholder="RUC">
-							</div>
-
-							<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
-								<input id="fecha_inicio_bus" name="fecha_inicio_bus" on class="form-control form-control-sm"  placeholder="Fecha Inicio">
-							</div>
-
-							<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
-								<input id="fecha_fin_bus" name="fecha_fin_bus" on class="form-control form-control-sm"  placeholder="Fecha Fin">
-							</div>
-
-							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-								<select name="anio_bus" id="anio_bus" class="form-control form-control-sm" onchange="">
-                                    <option value="">--Seleccionar Año--</option>
-                                    <?php 
-                                    foreach ($anio as $row){?>
-                                        <option value="<?php echo $row->anio ?>"><?php echo $row->anio ?></option>
-                                        <?php 
-                                    }
-                                    ?>
-                                </select>
-							</div>
-							
-							<!--<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-								<select name="estado_py_bus" id="estado_py_bus" class="form-control form-control-sm" onchange="">
-									<option value="">ESTADO PROYECTO</option>
-									<?php
+							<div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
+								<div class="row">
+									<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+										<input class="form-control form-control-sm filtro-input" id="placa_bus" name="placa_bus" placeholder="Placa">
+									</div>
 									
-									?>
-								</select>
+									<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+										<input class="form-control form-control-sm filtro-input" id="ruc_bus" name="ruc_bus" placeholder="RUC">
+									</div>
+
+									<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+										<input id="fecha_inicio_bus" name="fecha_inicio_bus" on class="form-control form-control-sm filtro-input"  placeholder="Fecha Inicio">
+									</div>
+
+									<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+										<input id="fecha_fin_bus" name="fecha_fin_bus" on class="form-control form-control-sm filtro-input"  placeholder="Fecha Fin">
+									</div>
+
+									<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+										<select name="anio_bus" id="anio_bus" class="form-control form-control-sm filtro-select" onchange="">
+											<option value="">--Seleccionar Año--</option>
+											<?php 
+											foreach ($anio as $row){?>
+												<option value="<?php echo $row->anio ?>"><?php echo $row->anio ?></option>
+												<?php 
+											}
+											?>
+										</select>
+									</div>
+									
+									<!--<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+										<select name="estado_py_bus" id="estado_py_bus" class="form-control form-control-sm" onchange="">
+											<option value="">ESTADO PROYECTO</option>
+											<?php
+											
+											?>
+										</select>
+									</div>
+									
+									<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+										<select name="estado" id="estado" class="form-control form-control-sm" onchange="">
+											<option value="">ESTADO</option>
+											<option value="1">ACTIVO</option>
+											<option value="0">INACTIVO</option>
+										</select>
+									</div>-->
+									
+									<!--
+									<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+										<select name="id_estado" id="id_estado" class="form-control form-control-sm" onchange="">
+											<option value="0">Todos</option>
+											<option value="1">PENDIENTE</option>
+											<option value="2">VALORIZADO</option>
+											<option value="3">APROBADO</option>
+											<option value="4">RECHAZADO</option>
+											<option value="5">DESEMBOLSADO</option>
+										</select>
+									</div>
+									-->
+								</div>
 							</div>
-							
-							<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
-								<select name="estado" id="estado" class="form-control form-control-sm" onchange="">
-									<option value="">ESTADO</option>
-									<option value="1">ACTIVO</option>
-									<option value="0">INACTIVO</option>
-								</select>
-							</div>-->
-							
-							<!--
-							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-								<select name="id_estado" id="id_estado" class="form-control form-control-sm" onchange="">
-									<option value="0">Todos</option>
-									<option value="1">PENDIENTE</option>
-									<option value="2">VALORIZADO</option>
-									<option value="3">APROBADO</option>
-									<option value="4">RECHAZADO</option>
-									<option value="5">DESEMBOLSADO</option>
-								</select>
-							</div>
-							-->
-							<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-								<input class="btn btn-warning btn-sm pull-rigth" value="Buscar" type="button" id="btnBuscar" />
-								<a type="button" href="/img/cubicaje/plantilla/Plantilla_cubicaje_actualizado_30122025.xlsx" class="btn btn-secondary btn-sm" style="margin-left:15px;">Plantilla</a>
-								<a type="button" href="/img/cubicaje/plantilla/Plantilla_cubicaje_4diametros_06092025.xlsx" class="btn btn-secondary btn-sm" style="margin-left:15px;">Plantilla 4D</a>
-								<buttom class="btn btn-secondary btn-sm" type="button" id="btnDescargarExcel" style="margin-left:15px" /><i class="fa fa-download"></i> Descarga Excel</buttom>
-								<buttom class="btn btn-secondary btn-sm" type="button" id="btnDescargarReporteAnual" style="margin-left:15px" /><i class="fa fa-download"></i> Descarga Reporte Anual</buttom>
-							</div>
-							</div>
-							
+					
+							<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+								<div class="row">
+									<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+										<!--<input class="btn btn-warning btn-sm pull-rigth" value="Buscar" type="button" id="btnBuscar" />-->
+										<button type="button" id="btnBuscar" class="btn btn-sm btn-warning pull-rigth icono-botones2" style="margin-left:10px">
+											<i class="fas fa-search" style="font-size:18px;"></i> Buscar
+										</button>
+										<!--<a type="button" href="/img/cubicaje/plantilla/Plantilla_cubicaje_actualizado_30122025.xlsx" class="btn btn-sm btn-secondary pull-rigth icono-botones2" style="margin-left:10px;">
+											<i class="fas fa-file-excel" style="font-size:18px;"></i>Plantilla
+										</a>-->
+										<button type="button" onclick="window.location.href='/img/cubicaje/plantilla/Plantilla_cubicaje_actualizado_30122025.xlsx'" class="btn btn-sm btn-secondary pull-rigth icono-botones2" style="margin-left:10px;">
+											<i class="fas fa-file-excel" style="font-size:18px;"></i> Plantilla
+										</button>
+										<!--<a type="button" href="/img/cubicaje/plantilla/Plantilla_cubicaje_4diametros_06092025.xlsx" class="btn btn-secondary btn-sm" style="margin-left:15px;">Plantilla 4D</a>-->
+										<button type="button" onclick="window.location.href='/img/cubicaje/plantilla/Plantilla_cubicaje_4diametros_06092025.xlsx'" class="btn btn-sm btn-secondary pull-rigth icono-botones2" style="margin-left:10px;">
+											<i class="fas fa-file-excel" style="font-size:18px;"></i> Plantilla 4D
+										</button>
+										<buttom class="btn btn-secondary btn-sm" type="button" id="btnDescargarExcel" style="margin-left:10px" />
+											<i class="fa fa-download" style="font-size:18px;"></i> Descarga Excel
+										</buttom>
+										<buttom class="btn btn-secondary btn-sm" type="button" id="btnDescargarReporteAnual" style="margin-left:10px" />
+											<i class="fa fa-download" style="font-size:18px;"></i> Descarga Reporte Anual
+										</buttom>
+									</div>
+								</div>
 						</div>
 						
 						<div class="card-body">
 							
 							<div class="table-responsive" style="overflow-y: auto; max-height: 500px;">
-							<!--table-hover-grid-->
-							<table id="tblSolicitud" class="table table-hover table-sm">
-							<thead>
-							<tr style="font-size:13px">
-								<th>Id</th>
-								<th>Fecha</th>
-								<th>Placa</th>
-								<th>Ruc</th>
-								<th>Empresa</th>
-								<th>Doc Conductor</th>
-								<th>Conductor</th>
-								<th>Tipo Madera</th>
-								<th>Cantidad</th>
-								<th class="cubicaje">Cubicaje</th>
-							</tr>
-							</thead>
-							<tbody style="font-size:13px">
-							</tbody>
-							</table>
-							
+								<!--table-hover-grid-->
+								<table id="tblSolicitud" class="table table-hover table-sm">
+									<thead>
+										<tr style="font-size:13px">
+											<th>Id</th>
+											<th>Fecha</th>
+											<th>Placa</th>
+											<th>Ruc</th>
+											<th>Empresa</th>
+											<th>Doc Conductor</th>
+											<th>Conductor</th>
+											<th>Tipo Madera</th>
+											<th>Cantidad</th>
+											<th class="cubicaje">Cubicaje</th>
+										</tr>
+									</thead>
+									<tbody style="font-size:13px">
+									</tbody>
+								</table>
 							</div>
 						</div>
                     </div>

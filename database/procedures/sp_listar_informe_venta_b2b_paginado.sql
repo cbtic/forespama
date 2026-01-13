@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION public.sp_listar_informe_venta_b2b_paginado(p_semana character varying, p_producto character varying, p_tienda character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
+CREATE OR REPLACE FUNCTION public.sp_listar_informe_venta_b2b_paginado(p_semana character varying, p_producto character varying, p_tienda character varying, p_empresa character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
  RETURNS refcursor
  LANGUAGE plpgsql
 AS $function$
@@ -19,9 +19,9 @@ begin
 	ibbv.sabado, ibbv.domingo, ibbv.venta_unidades, ibbv.venta_soles, ibbv.stock_contable, ibbv.oc_pendiente, ibbv.trf_por_recibir, ibbv.trf_enviadas, ibbv.estado ';
 
 	v_tabla=' from informe_b2b_ventas ibbv 
-	inner join productos p on ibbv.id_producto = p.id 
-	left join equivalencia_productos ep on p.id = ep.id_producto 
-	left join tiendas t on ibbv.id_tienda = t.id ';
+	inner join productos p on ibbv.id_producto = p.id and p.estado = ''1''
+	left join equivalencia_productos ep on p.id = ep.id_producto and ep.estado = ''1''
+	left join tiendas t on ibbv.id_tienda = t.id and t.estado = ''1'' ';
 	
 	v_where = ' Where 1=1 and ibbv.estado = ''1'' ';
 
@@ -35,6 +35,10 @@ begin
 
 	If p_tienda<>'' Then
 	 v_where:=v_where||'And ibbv.id_tienda = '''||p_tienda||''' ';
+	End If;
+
+	If p_empresa<>'' Then
+	 v_where:=v_where||'And ep.id_empresa = '''||p_empresa||''' ';
 	End If;
 	
 	EXECUTE ('SELECT count(1) '||v_tabla||v_where) INTO v_count;

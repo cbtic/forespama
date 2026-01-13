@@ -423,8 +423,6 @@ label.form-control-sm{
 
 </style>
 
-
-
 @stack('before-scripts')
 @stack('after-scripts')
 
@@ -495,157 +493,153 @@ label.form-control-sm{
 								</div>
 							
 								<div id="divTablaIngreso" class="row col align-self-center" style="padding:10px 20px 10px 20px;">
+									<div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
+										<div class="row">
 							
-									<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-										<input class="form-control form-control-sm" id="ruc_bus" name="ruc_bus" placeholder="Ruc">
-									</div>
-									
-									<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-										<input class="form-control form-control-sm" id="empresa_bus" name="empresa_bus" placeholder="Empresa">
+											<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+												<input class="form-control form-control-sm filtro-input" id="ruc_bus" name="ruc_bus" placeholder="Ruc">
+											</div>
+											
+											<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+												<input class="form-control form-control-sm filtro-input" id="empresa_bus" name="empresa_bus" placeholder="Empresa">
+											</div>
+
+											<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+												<input class="form-control form-control-sm filtro-input" id="placa_bus" name="placa_bus" placeholder="Placa">
+											</div>
+
+											<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+												<select name="tipo_madera_bus" id="tipo_madera_bus" class="form-control form-control-sm filtro-select">
+													<option value="">--Seleccionar Tipo Madera--</option>
+													<?php
+													foreach ($tipo_madera as $row){?>
+														<option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
+														<?php 
+													}
+													?>
+												</select>
+											</div>
+
+											<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+												<input class="form-control form-control-sm filtro-input" id="fecha_inicio_bus" name="fecha_inicio_bus" placeholder="Fecha Inicio">
+											</div>
+
+											<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+												<input class="form-control form-control-sm filtro-input" id="fecha_fin_bus" name="fecha_fin_bus" placeholder="Fecha Fin">
+											</div>
+											
+											<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+												<select name="estado_pago_bus" id="estado_pago_bus" class="form-control form-control-sm filtro-select">
+													<option value="">--Seleccionar Estado Pago--</option>
+													<?php
+													foreach ($estado_pago as $row){?>
+														<option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
+														<?php 
+													}
+													?>
+												</select>
+											</div>
+
+											<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+												<select name="tipo_empresa_bus" id="tipo_empresa_bus" class="form-control form-control-sm filtro-select">
+													<option value="">--Seleccionar Tipo Empresa--</option>
+													<?php
+													foreach ($tipo_empresa as $row){?>
+														<option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
+														<?php 
+													}
+													?>
+												</select>
+											</div>
+										</div>
 									</div>
 
-									<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-										<input class="form-control form-control-sm" id="placa_bus" name="placa_bus" placeholder="Placa">
-									</div>
-
 									<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-										<select name="tipo_madera_bus" id="tipo_madera_bus" class="form-control form-control-sm">
-											<option value="">--Seleccionar Tipo Madera--</option>
-											<?php
-											foreach ($tipo_madera as $row){?>
-												<option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
-												<?php 
-											}
-											?>
-										</select>
+										<div class="row">
+											<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+												<!--<input class="btn btn-warning btn-sm pull-rigth" value="Buscar" type="button" id="btnBuscar" />-->
+												<button type="button" id="btnBuscar" class="btn btn-sm btn-warning pull-rigth icono-botones2" style="margin-left:10px">
+													<i class="fas fa-search" style="font-size:12px;"></i> Buscar
+												</button>
+												<!--<input class="btn btn-success btn-sm pull-rigth" value="Pagar" type="button" id="btnPagar" onclick="modalPago(0)"  />-->
+												<button type="button" id="btnPagar" onclick="modalPago(0)" class="btn btn-sm btn-success icono-botones2" style="margin-left:10px">
+													<i class="fas fa-plus-circle" style="font-size:12px;"></i> Pagar
+												</button>
+												<!--<input class="btn btn-secondary btn-sm pull-rigth" value="Descargar" type="button" id="btnDescargar" /> -->
+												<button id="btnDescargar" type="button" class="btn btn-sm btn-secondary pull-rigth icono-botones2" style="margin-left:10px;">
+													<i class="fas fa-download" style="font-size:12px;"></i> Descargar
+												</button>
+											</div>
+										</div>
 									</div>
-
-									<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-										<input class="form-control form-control-sm" id="fecha_inicio_bus" name="fecha_inicio_bus" placeholder="Fecha Inicio">
-									</div>
-
-									<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-										<input class="form-control form-control-sm" id="fecha_fin_bus" name="fecha_fin_bus" placeholder="Fecha Fin">
-									</div>
-									
-									<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-										<select name="estado_pago_bus" id="estado_pago_bus" class="form-control form-control-sm">
-											<option value="">--Seleccionar Estado Pago--</option>
-											<?php
-											foreach ($estado_pago as $row){?>
-												<option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
-												<?php 
-											}
-											?>
-										</select>
-									</div>
-
-									<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-										<select name="tipo_empresa_bus" id="tipo_empresa_bus" class="form-control form-control-sm">
-											<option value="">--Seleccionar Tipo Empresa--</option>
-											<?php
-											foreach ($tipo_empresa as $row){?>
-												<option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
-												<?php 
-											}
-											?>
-										</select>
-									</div>
-									
-									<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-										<input class="btn btn-warning btn-sm pull-rigth" value="Buscar" type="button" id="btnBuscar" />
-										<input class="btn btn-success btn-sm pull-rigth" value="Pagar" type="button" id="btnPagar" onclick="modalPago(0)"  />
-										<input class="btn btn-secondary btn-sm pull-rigth" value="Descargar" type="button" id="btnDescargar" /> 
-									</div>
-									
 								</div>
 						
 								<div class="card-body">
 									
 									<div class="table-responsive">
-									<!--table-hover-grid-->
-									<table id="tblSolicitud" class="table table-hover table-sm">
-									<thead>
-									<tr style="font-size:13px">
-										<th>N°</th>
-										<!--<th>Id</th>-->
-										<th>Fecha</th>
-										<th>Ruc</th>
-										<th>Empresa</th>
-										<th>Placa</th>
-										<th>Tipo Madera</th>
-										<th>Cantidad</th>
-										<th>Volumen Total M3</th>
-										<th>Volumen Total Pies</th>
-										<th>Precio Total</th>
-										<th>Estado Pago</th>
-										<!--<th class="cubicaje">Cubicaje</th>-->
-									</tr>
-									</thead>
-									<tbody style="font-size:13px">
-									</tbody>
-									</table>
+										<!--table-hover-grid-->
+										<table id="tblSolicitud" class="table table-hover table-sm">
+											<thead>
+												<tr style="font-size:13px">
+													<th>N°</th>
+													<!--<th>Id</th>-->
+													<th>Fecha</th>
+													<th>Ruc</th>
+													<th>Empresa</th>
+													<th>Placa</th>
+													<th>Tipo Madera</th>
+													<th>Cantidad</th>
+													<th>Volumen Total M3</th>
+													<th>Volumen Total Pies</th>
+													<th>Precio Total</th>
+													<th>Estado Pago</th>
+													<!--<th class="cubicaje">Cubicaje</th>-->
+												</tr>
+											</thead>
+										<tbody style="font-size:13px">
+										</tbody>
+										</table>
 									</div>
 								</div>
                     		</div>
                 		</div>
-				
+
 						<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
 
 							<div class="card">
-									<div class="card-header">
-										<strong>
-											Pagos
-										</strong>
-									</div>
-
-									<div class="card-body">
-										
-										<div id="divCubicaje" class="table-responsive overflow-auto" style="max-height: 500px">
-											<table id="tblCubicaje" class="table table-hover table-sm">
-												<thead>
-													<tr style="font-size:13px">
-														<th width="2%">Id</th>
-														<th width="10%">Fecha</th>
-														<th width="10%">Tipo Doc</th>
-														<th width="10%">Guia</th>
-														<th width="10%">Factura</th>
-														<th width="10%">Importe</th>
-														<th width="10%">Archivo</th>
-													</tr>
-												</thead>
-												<tbody>
-
-												</tbody>
-											</table>
-										</div>
-										
-										
-									</div>
+								<div class="card-header">
+									<strong>
+										Pagos
+									</strong>
 								</div>
 
+								<div class="card-body">
+									
+									<div id="divCubicaje" class="table-responsive overflow-auto" style="max-height: 600px">
+										<table id="tblCubicaje" class="table table-hover table-sm">
+											<thead>
+												<tr style="font-size:13px">
+													<th width="2%">Id</th>
+													<th width="10%">Fecha</th>
+													<th width="10%">Tipo Doc</th>
+													<th width="10%">Guia</th>
+													<th width="10%">Factura</th>
+													<th width="10%">Importe</th>
+													<th width="10%">Archivo</th>
+												</tr>
+											</thead>
+											<tbody>
+											</tbody>
+										</table>
+									</div>
+								</div>
 							</div>
-						
-						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-
-									
-							
 						</div>
-				
-				
-					
-									
-									
-									
-									
-
+			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+			</div>
         </div>
         <!--col-->
-
         </form>
-
-        
-
     </div>
     <!--row-->
     @endsection

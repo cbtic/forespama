@@ -344,103 +344,110 @@ label.form-control-sm{
 
             <form class="form-horizontal" method="post" action="" id="frmInformeB2B" autocomplete="off" enctype="multipart/form-data">
 				
-                <div class="row">
-                    <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12" style="margin-top:15px">
-                        <h4 class="card-title mb-0 text-primary" style="font-size:22px">
-						Consulta de Ventas B2B
-                        </h4>
-                    </div>
+            <div class="row">
+                <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12" style="margin-top:15px">
+                    <h4 class="card-title mb-0 text-primary" style="font-size:22px">
+                    Consulta de Ventas B2B
+                    </h4>
                 </div>
-                <div class="row justify-content-center" style="margin-top:15px">
+            </div>
+            <div class="row justify-content-center" style="margin-top:15px">
 
-                    <input type="hidden" name="flag_ocultar" id="flag_ocultar" value="0">
+                <input type="hidden" name="flag_ocultar" id="flag_ocultar" value="0">
 
-					<div class="col col-sm-12 align-self-center">
+                <div class="col col-sm-12 align-self-center">
 
-
-                        <input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
-
-                        <!--<input type="hidden" name="estado" id="estado" value="0">-->
-						
-						<input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
+                    <input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
 				
-				<div class="row" style="padding:20px 20px 0px 20px;">
+                    <div class="row" style="padding:20px 20px 0px 20px;">
 
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-                        <input id="semana_bus" name="semana_bus" on class="form-control form-control-sm"  placeholder="Semana">
-					</div>
+                        <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+                            <select name="empresa_bus" id="empresa_bus" class="form-control form-control-sm">
+                                <option value="">--Seleccionar Empresa--</option>
+                                <?php
+                                foreach ($empresa as $row){?>
+                                    <option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
+                                    <?php 
+                                }
+                                ?>
+                            </select>
+                        </div>
 
-					<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-						<select name="producto_bus" id="producto_bus" class="form-control form-control-sm">
-							<option value="">--Seleccionar Producto--</option>
-							<?php
-							foreach ($equivalencia_producto as $row){?>
-								<option value="<?php echo $row->id_producto ?>"><?php echo $row->codigo_empresa . ' ' . $row->descripcion_empresa ?></option>
-								<?php 
-							}
-							?>
-						</select>
-					</div>
+                        <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+                            <input id="semana_bus" name="semana_bus" on class="form-control form-control-sm"  placeholder="Semana">
+                        </div>
 
-                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-						<select name="tienda_bus" id="tienda_bus" class="form-control form-control-sm">
-							<option value="">--Seleccionar Tienda--</option>
-							<?php
-							foreach ($tienda as $row){?>
-								<option value="<?php echo $row->id ?>"><?php echo $row->denominacion ?></option>
-								<?php 
-							}
-							?>
-						</select>
-					</div>
+                        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                            <select name="producto_bus" id="producto_bus" class="form-control form-control-sm">
+                                <option value="">--Seleccionar Producto--</option>
+                                <?php
+                                foreach ($equivalencia_producto as $row){?>
+                                    <option value="<?php echo $row->id_producto ?>"><?php echo $row->codigo_empresa . ' ' . $row->descripcion_empresa ?></option>
+                                    <?php 
+                                }
+                                ?>
+                            </select>
+                        </div>
 
-					<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12" style="padding-right:0px">
-						
-						<input class="btn btn-warning float-left" value="Buscar" type="button" id="btnBuscar" />
+                        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                            <select name="tienda_bus" id="tienda_bus" class="form-control form-control-sm">
+                                <option value="">--Seleccionar Tienda--</option>
+                                <?php
+                                foreach ($tienda as $row){?>
+                                    <option value="<?php echo $row->id ?>"><?php echo $row->denominacion ?></option>
+                                    <?php 
+                                }
+                                ?>
+                            </select>
+                        </div>
 
-						<span class="btn btn-info btn-file float-left" style="margin-left:10px">
-							Examinar OC <input id="image" name="image" type="file" />
-						</span>
-						
-						<i id="fileExcel" class="fa fa-file-excel" style="display:none;color:#00B300;font-size:35px;block;float:left;padding-left:10px"></i>
-						
-						<input type="button" class="btn btn-success upload" value="Subir OC" style="margin-left:10px;float:left">
+                        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12" style="padding-right:0px">
+                            
+                            <input class="btn btn-warning float-left" value="Buscar" type="button" id="btnBuscar" />
 
-					</div>
-				</div>
-				
-                <div class="card-body">				
+                            <span class="btn btn-info btn-file float-left" style="margin-left:10px">
+                                Examinar OC <input id="image" name="image" type="file" />
+                            </span>
+                            
+                            <i id="fileExcel" class="fa fa-file-excel" style="display:none;color:#00B300;font-size:35px;block;float:left;padding-left:10px"></i>
+                            
+                            <input type="button" class="btn btn-success upload" value="Subir OC" style="margin-left:10px;float:left">
 
-                    <div class="table-responsive">
-                    <table id="tblInformeB2B" class="table table-hover table-sm">
-                        <thead>
-                        <tr style="font-size:13px">
-                            <th>Id</th>
-							<th>UPC</th>
-							<th>SKU</th>
-							<th>Descipci&oacute;n</th>
-							<th>SubClase Conjunto</th>
-							<th>Desc SubClase Conjunto</th>
-							<th>N° Tienda</th>
-							<th>Local</th>
-							<th>Semana</th>
-							<th>Lunes</th>
-							<th>Martes</th>
-                            <th>Miercoles</th>
-							<th>Jueves</th>
-							<th>Viernes</th>
-							<th>Sabado</th>
-							<th>Domingo</th>
-							<th>Venta Unidades</th>
-							<th>Venta Soles</th>
-							<th>Stock Contable</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                    </table>
-                </div><!--table-responsive-->
-                </form>
+                        </div>
+                    </div>
+                    
+                    <div class="card-body">				
+
+                        <div class="table-responsive">
+                        <table id="tblInformeB2B" class="table table-hover table-sm">
+                            <thead>
+                            <tr style="font-size:13px">
+                                <th>Id</th>
+                                <th>UPC</th>
+                                <th>SKU</th>
+                                <th>Descipci&oacute;n</th>
+                                <th>SubClase Conjunto</th>
+                                <th>Desc SubClase Conjunto</th>
+                                <th>N° Tienda</th>
+                                <th>Local</th>
+                                <th>Semana</th>
+                                <th>Lunes</th>
+                                <th>Martes</th>
+                                <th>Miercoles</th>
+                                <th>Jueves</th>
+                                <th>Viernes</th>
+                                <th>Sabado</th>
+                                <th>Domingo</th>
+                                <th>Venta Unidades</th>
+                                <th>Venta Soles</th>
+                                <th>Stock Contable</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div><!--table-responsive-->
+                    </form>
                 </div><!--card-body-->
             </div><!--card-->
         <!--</div>--><!--col-->

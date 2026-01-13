@@ -19,9 +19,9 @@
   overflow: hidden;
 }
 
-.modal-body {
+/*.modal-body {
   overflow-y: auto;
-}
+}*/
 
 .datepicker,
 .table-condensed {
