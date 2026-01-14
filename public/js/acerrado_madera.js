@@ -164,6 +164,16 @@ function datatablenew(){
 					"bSortable": true,
 					"aTargets": [6]
 				},
+
+				{
+					"mRender": function (data, type, row) {
+						var lote = "";
+						if(row.lote!= null)lote = row.lote;
+						return lote;
+					},
+					"bSortable": true,
+					"aTargets": [7]
+				},
 				
 				/*{
 					"mRender": function (data, type, row) {

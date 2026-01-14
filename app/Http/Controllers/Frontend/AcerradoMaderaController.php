@@ -135,7 +135,13 @@ class AcerradoMaderaController extends Controller
 		$porcentaje = $request->input('porcentaje');
         $id_ingreso_acerrado_detalle =$request->id_ingreso_acerrado_detalle;
 
+		$fecha = Carbon::now()->format('Ymd');
+
+		$ingreso_produccion_acerrado_model = new IngresoProduccionAcerradoMadera;
+		$lote = $ingreso_produccion_acerrado_model->obtenerLote($fecha);
+
         $ingreso_produccion_acerrado_madera->fecha_ingreso = $request->fecha;
+		$ingreso_produccion_acerrado_madera->lote = $lote[0]->lote;
 		$ingreso_produccion_acerrado_madera->estado = 1;
         $ingreso_produccion_acerrado_madera->id_usuario_inserta = $id_user;
 		$ingreso_produccion_acerrado_madera->save();

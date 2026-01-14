@@ -166,6 +166,16 @@ class IngresoVehiculoTronco extends Model
         return $data[0]->fecha_actual;
 		
 	}
+
+    function obtenerLote($letra, $fecha){
+
+        $cad = "select '".$letra."' || '-' || '".$fecha."' || '-' || lpad(coalesce(max(split_part(ivt.lote, '-', 3))::int + 1, 1)::text, 2, '0') as lote
+        from ingreso_vehiculo_troncos ivt
+        where ivt.lote like '".$letra."' || '-' || '".$fecha."' || '-%'";
+
+		$data = DB::select($cad);
+        return $data;
+    }
     
 	public function listar_ingreso_vehiculo_tronco_ajax($p){
 

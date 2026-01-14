@@ -251,7 +251,7 @@ function datatablenew(){
 					
 					//html += '<button style="font-size:12px" type="button" class="btn btn-sm btn-success" data-toggle="modal" onclick="modalPromotorRuta('+row.id+')" ><i class="fa fa-edit"></i> Editar</button>'; 
 					
-					html += '<a href="https://www.google.com/maps?q= '+row.latitud +', '+row.longitud +'" target="_blank"> Ver ubicación </a>'
+					html += '<a href="https://www.google.com/maps?q= '+row.latitud +', '+row.longitud +'" target="_blank"> <i class="fa fa-map-marker text-danger"></i> Ver ubicación </a>'
 
 					html += '</div>';
 					return html;
@@ -266,7 +266,7 @@ function datatablenew(){
 					
 					//html += '<button style="font-size:12px" type="button" class="btn btn-sm btn-success" data-toggle="modal" onclick="modalPromotorRuta('+row.id+')" ><i class="fa fa-edit"></i> Editar</button>'; 
 					if (row.latitud_salida && row.longitud_salida) {
-					    html += '<a href="https://www.google.com/maps?q= '+row.latitud_salida +', '+row.longitud_salida +'" target="_blank"> Ver ubicación </a>'
+					    html += '<a href="https://www.google.com/maps?q= '+row.latitud_salida +', '+row.longitud_salida +'" target="_blank"><i class="fa fa-map-marker text-danger"></i> Ver ubicación </a>'
                     } else {
 						return '<span class="text-muted">Sin Ubicacion</span>';
 					}
@@ -316,7 +316,7 @@ function datatablenew(){
                 "bSortable": false,
                 "aTargets": [10],
             },
-			{
+			/*{
 				"mRender": function (data, type, row) {
 					var estado = "";
 					if(row.estado == 1){
@@ -329,7 +329,7 @@ function datatablenew(){
 				},
 				"bSortable": false,
 				"aTargets": [11]
-			},
+			},*/
 		]
     });
 }

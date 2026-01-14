@@ -1806,6 +1806,16 @@ function datatablenew() {
                 "aTargets": [9]
             },
 
+            {
+                "mRender": function(data, type, row) {
+                    var lote = "";
+                    if (row.lote != null) lote = row.lote;
+                    return lote;
+                },
+                "bSortable": false,
+                "aTargets": [10]
+            },
+
 			{
 				"mRender": function (data, type, row) {
 					
@@ -1821,12 +1831,10 @@ function datatablenew() {
 					return html;
 				},
 				"bSortable": false,
-				"aTargets": [10],
+				"aTargets": [11],
 			},
-            
         ]
     });
-
 
     fn_util_LineaDatatable("#tblSolicitud");
 

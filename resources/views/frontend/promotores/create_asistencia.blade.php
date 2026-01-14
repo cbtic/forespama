@@ -41,7 +41,7 @@ body {
 
 /* Begin - Overriding styles for this page */
 .card-body {
-    padding: 0 1.25rem !important;
+    padding: 0 0 0 0 !important;
 }
 
 .form-control-sm {
@@ -357,10 +357,16 @@ label.form-control-sm{
             <form class="form-horizontal" method="post" action="" id="frmAsistenciaPromotores" autocomplete="off" enctype="multipart/form-data">
 				<div class="container-fluid py-3">
                 <div class="row mb-3">
-                    <div class="col-5 col-md-5" style="margin-top:15px">
-                        <h4 class="card-title mb-0 text-primary" style="font-size:22px">
+                    <div class="col-6 col-md-6" style="margin-top:0px">
+                        <!--<h4 class="card-title mb-0 text-primary" style="font-size:22px">
                             Asistencia Promotores
-                        </h4>
+                        </h4>-->
+                        <div class="card-header bg-white border-bottom">
+                          <h5 class="mb-0 text-primary">
+                            <i class="fas fa-user-check me-2"></i>
+                            Asistencia Promotores
+                          </h5>
+                        </div>
                     </div>
                     <!--<div class="col-7 col-md-7 d-flex justify-content-end" style="margin-top:15px">
                       <div class="form-group">
@@ -371,44 +377,51 @@ label.form-control-sm{
 
                   <input type="hidden" id="hora_ingreso" value="{{ $hora_ingreso }}">-->
                 </div>
-                <div class="row justify-content-center" style="margin-top:15px">
+                
+                <div class="row justify-content-center" style="margin-top:0px">
 
                   <input type="hidden" name="flag_ocultar" id="flag_ocultar" value="0">
                   <div class="col col-sm-12 align-self-center">
                     <input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
-				            <div class="row" style="padding:20px 20px 0px 20px;">
 
-                    <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-                      <select name="empresa_retail_bus" id="empresa_retail_bus" class="form-control form-control-sm filtro-select">
-                        <option value="">--Seleccionar Empresa--</option>
-                        <?php
-                        foreach ($empresa_retail as $row){?>
-                          <option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
-                          <?php 
-                        }
-                        ?>
-                      </select>
-                    </div>
-                    <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-                      <input id="fecha_inicio_bus" name="fecha_inicio_bus" on class="form-control form-control-sm filtro-input"  placeholder="Fecha Inicio">
-                    </div>
-                    <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-                      <input id="fecha_fin_bus" name="fecha_fin_bus" on class="form-control form-control-sm filtro-input"  placeholder="Fecha Fin">
-                    </div>
+                    <div class="bg-light p-3 rounded border">
+                      <div class="row">
+
                       <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-                      <select name="estado_bus" id="estado_bus" class="form-control form-control-sm filtro-select">
-                        <option value="">Todos</option>
-                        <option value="1" selected="selected">Activo</option>
-                        <option value="0">Eliminado</option>
-                      </select>
+                        <select name="empresa_retail_bus" id="empresa_retail_bus" class="form-control form-control-sm filtro-select">
+                          <option value="">--Seleccionar Empresa--</option>
+                          <?php
+                          foreach ($empresa_retail as $row){?>
+                            <option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
+                            <?php 
+                          }
+                          ?>
+                        </select>
+                      </div>
+                      <div class="col-lg-2 col-md-2 col-sm-6 col-xs-6">
+                        <input id="fecha_inicio_bus" name="fecha_inicio_bus" on class="form-control form-control-sm filtro-input"  placeholder="Fecha Inicio">
+                      </div>
+                      <div class="col-lg-2 col-md-2 col-sm-6 col-xs-6">
+                        <input id="fecha_fin_bus" name="fecha_fin_bus" on class="form-control form-control-sm filtro-input"  placeholder="Fecha Fin">
+                      </div>
+                        <div class="col-lg-2 col-md-2 col-sm-4 col-xs-4">
+                        <select name="estado_bus" id="estado_bus" class="form-control form-control-sm filtro-select">
+                          <option value="">Todos</option>
+                          <option value="1" selected="selected">Activo</option>
+                          <option value="0">Eliminado</option>
+                        </select>
+                      </div>
                     </div>
                     
                     <div class="col-12 col-md-5 d-flex justify-content-start justify-content-md-end gap-2" style="padding-right:0px">
-                      <input class="btn btn-warning pull-rigth" value="Buscar" type="button" id="btnBuscar" />
+                      <!--<input class="btn btn-warning pull-rigth" value="Buscar" type="button" id="btnBuscar" />-->
+                      <button type="button" id="btnBuscar" class="btn btn-sm btn-warning pull-rigth icono-botones2" style="margin-left:10px">
+                        <i class="fas fa-search" style="font-size:18px;"></i> Buscar
+                      </button>
                       <?php if($hora_ingreso==""){ ?>
-                        <button type="button" class="btn btn-success" onclick="modalAsistencia()" style="margin-left:15px" >Marcar Ingreso</button>
+                        <button type="button" class="btn btn-sm btn-success icono-botones2" onclick="modalAsistencia()" style="margin-left:10px" >Marcar Ingreso</button>
                       <?php }else{ ?>
-                        <button type="button" class="btn btn-success" onclick="modalAsistencia()" style="margin-left:15px" disabled>Marcar Ingreso</button>
+                        <button type="button" class="btn btn-sm btn-success icono-botones2" onclick="modalAsistencia()" style="margin-left:10px" disabled>Marcar Ingreso</button>
                       <?php } ?>
                       @hasanyrole('Administrator|ADMINISTRADOR ASISTENCIA')
                       <buttom class="btn btn-sm btn-secondary pull-rigth icono-botones2" type="button" id="btnDescargar" style="margin-left:10px" />
@@ -432,15 +445,15 @@ label.form-control-sm{
                           <th>Fecha</th>
                           <th>Hora Ingreso</th>
                           <th>Hora Salida</th>
-                          <th>Ver Ubicaci&oacute;n Ingreso</th>
-                          <th>Ver Ubicaci&oacute;n Salida</th>
+                          <th>Ubicaci&oacute;n Ingreso</th>
+                          <th>Ubicaci&oacute;n Salida</th>
                           <th>Imagen Ingreso</th>
                           <th>Imagen Salida</th>
                           <th>Salida</th>
-                          <th>Estado</th>
+                          <!--<th>Estado</th>-->
                         </tr>
                         </thead>
-                        <tbody>
+                        <tbody style="font-size:13px">
                         </tbody>
                       </table>
 					

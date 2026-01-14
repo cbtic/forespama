@@ -17,13 +17,24 @@ begin
 	
 	p_pagina=(p_pagina::Integer-1)*p_limit::Integer;
 
-	v_campos=' ipd.id, ipam.fecha_ingreso, e.ruc, e.razon_social, v.placa, tm.denominacion tipo_madera, ipd.cantidad_ingreso_tronco, ipd.estado ';
+	v_campos=' ipd.id, ipam.fecha_ingreso,
+	case when ivt.id_tipo_cliente = 1 then 
+	(select p.nombres ||'' ''|| p.apellido_paterno ||'' ''|| p.apellido_materno from personas p
+	where p.id = ivt.id_persona)
+	else (select e2.razon_social from empresas e2 
+	where e2.id = ivt.id_empresa_transportista ) 
+	end razon_social,
+	case when ivt.id_tipo_cliente = 1 then 
+	(select p.numero_documento from personas p
+	where p.id = ivt.id_persona)
+	else (select e2.ruc from empresas e2 
+	where e2.id = ivt.id_empresa_transportista ) 
+	end ruc, v.placa, tm.denominacion tipo_madera, ipd.cantidad_ingreso_tronco, ipd.estado ';
 
 	v_tabla=' from ingreso_produccion_acerrado_madera_detalles ipd 
 	inner join ingreso_produccion_acerrado_maderas ipam on ipd.id_ingreso_produccion_acerrado_maderas = ipam.id 
 	inner join ingreso_vehiculo_tronco_tipo_maderas ivttm on ivttm.id = ipd.id_ingreso_vehiculo_tronco_tipo_maderas 
 	inner join ingreso_vehiculo_troncos ivt on ivttm.id_ingreso_vehiculo_troncos = ivt.id 
-	inner join empresas e on e.id = ivt.id_empresa_proveedor 
 	inner join vehiculos v on ivt.id_vehiculos = v.id
 	inner join tabla_maestras tm on tm.codigo::int = ipd.id_tipo_madera and tm.tipo =''42'' ';
 	

@@ -386,6 +386,7 @@ label.form-control-sm{
 											<th>Placa</th>
 											<th>Tipo Madera</th>
 											<th>Cantidad Ingreso</th>
+											<th>Lote</th>
 											<!--<th>Estado</th>
 											<th>Acciones</th>-->
 										</tr>

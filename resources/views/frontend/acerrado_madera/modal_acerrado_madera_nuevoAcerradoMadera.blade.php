@@ -339,7 +339,7 @@ function calcularPorcentaje(input) {
                             </div>
 
                             <div class="card-body">
-                                <div class="table-responsive" style="overflow-y: auto; max-height: 400px; overflow-x: auto; ">
+                                <div class="table-responsive" style="overflow-y: auto; max-height: 550px; overflow-x: auto; ">
                                     <table id="tblAcerradoMadera" class="table table-hover table-sm">
                                         <thead>
                                         <tr style="font-size:13px">

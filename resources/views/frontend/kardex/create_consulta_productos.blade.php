@@ -344,84 +344,93 @@ label.form-control-sm{
 
 					<div class="col col-sm-12 align-self-center">
 
-
                         <input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
-
-                        <!--<input type="hidden" name="estado" id="estado" value="0">-->
-						
-						<input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
 				
 				<div class="row" style="padding:20px 20px 0px 20px;">
+					<div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
+						<div class="row">
 
-					<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-						<select name="consulta_existencia_producto_bus" id="consulta_existencia_producto_bus" class="form-control form-control-sm">
-							<option value="">--Seleccionar Producto--</option>
-							@unless(auth()->user()->hasRole('Vendedor FORESPAMA|Vendedor FORESPAMA jefe'))
-							<?php
-							foreach ($producto_all as $row) {
-							?>
-							<option value="<?php echo $row->id?>"><?php echo $row->codigo ." - ".$row->denominacion?></option>
-							<?php
-							}
-							?>
-							@endunless
-							@hasanyrole('Vendedor FORESPAMA|Vendedor FORESPAMA jefe')
-							<?php
-							foreach ($producto as $row) {
-							?>
-							<option value="<?php echo $row->id?>"><?php echo $row->codigo ." - ".$row->denominacion?></option>
-							<?php
-							}
-							?>
-							@endhasanyrole
-						</select>
+							<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+								<select name="consulta_existencia_producto_bus" id="consulta_existencia_producto_bus" class="form-control form-control-sm">
+									<option value="">--Seleccionar Producto--</option>
+									@unless(auth()->user()->hasRole('Vendedor FORESPAMA|Vendedor FORESPAMA jefe'))
+									<?php
+									foreach ($producto_all as $row) {
+									?>
+									<option value="<?php echo $row->id?>"><?php echo $row->codigo ." - ".$row->denominacion?></option>
+									<?php
+									}
+									?>
+									@endunless
+									@hasanyrole('Vendedor FORESPAMA|Vendedor FORESPAMA jefe')
+									<?php
+									foreach ($producto as $row) {
+									?>
+									<option value="<?php echo $row->id?>"><?php echo $row->codigo ." - ".$row->denominacion?></option>
+									<?php
+									}
+									?>
+									@endhasanyrole
+								</select>
+							</div>
+
+							<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+								<select name="consulta_almacen_producto_bus" id="consulta_almacen_producto_bus" class="form-control form-control-sm" onchange="">
+									<option value="">--Seleccionar Almacen--</option>
+									<?php
+									foreach ($almacen as $row) {
+									?>
+									<option value="<?php echo $row->id?>"><?php echo $row->denominacion?></option>
+									<?php
+									}
+									?>
+								</select>
+							</div>
+
+							<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+								<select name="consulta_tipo_producto_bus" id="consulta_tipo_producto_bus" class="form-control form-control-sm" onchange="">
+									<option value="">--Seleccionar Tipo Producto--</option>
+									<?php
+									foreach ($tipo_producto as $row) {
+									?>
+									<option value="<?php echo $row->codigo?>"><?php echo $row->denominacion?></option>
+									<?php
+									}
+									?>
+								</select>
+							</div>
+
+							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+								<select name="cantidad_existencia_producto_bus" id="cantidad_existencia_producto_bus" class="form-control form-control-sm">
+									<!--<option value="">--Seleccionar Cantidad Producto</option>-->
+									<option value="0">Igual a 0</option>
+									<option value="1" selected="selected">Mayor a 0</option>
+								</select>
+							</div>
+							<!--<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+								<select name="estado_bus" id="estado_bus" class="form-control form-control-sm">
+									<option value="">Todos</option>
+									<option value="1" selected="selected">Activo</option>
+									<option value="0">Eliminado</option>
+								</select>
+							</div>-->
+						</div>
 					</div>
-
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<select name="consulta_almacen_producto_bus" id="consulta_almacen_producto_bus" class="form-control form-control-sm" onchange="">
-							<option value="">--Seleccionar Almacen--</option>
-							<?php
-							foreach ($almacen as $row) {
-							?>
-							<option value="<?php echo $row->id?>"><?php echo $row->denominacion?></option>
-							<?php
-							}
-							?>
-						</select>
-					</div>
-
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<select name="consulta_tipo_producto_bus" id="consulta_tipo_producto_bus" class="form-control form-control-sm" onchange="">
-							<option value="">--Seleccionar Tipo Producto--</option>
-							<?php
-							foreach ($tipo_producto as $row) {
-							?>
-							<option value="<?php echo $row->codigo?>"><?php echo $row->denominacion?></option>
-							<?php
-							}
-							?>
-						</select>
-					</div>
-
-					<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
-						<select name="cantidad_existencia_producto_bus" id="cantidad_existencia_producto_bus" class="form-control form-control-sm">
-							<!--<option value="">--Seleccionar Cantidad Producto</option>-->
-							<option value="0">Igual a 0</option>
-							<option value="1" selected="selected">Mayor a 0</option>
-						</select>
-					</div>
-                    <!--<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<select name="estado_bus" id="estado_bus" class="form-control form-control-sm">
-							<option value="">Todos</option>
-							<option value="1" selected="selected">Activo</option>
-							<option value="0">Eliminado</option>
-						</select>
-					</div>-->
-
-                    
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12" style="padding-right:0px">
-						<input class="btn btn-warning pull-rigth" value="Buscar" type="button" id="btnBuscarConsultaProducto" />
-						<input class="btn btn-success float-rigth" value="Excel" name="excel" type="button" id="btnDescargarConsultaProductos" style="padding-left:15px;padding-right:15px;margin-right:10px;" /> 
+					
+					<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+						<div class="row">
+							
+							<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding-right:0px">
+								<!--<input class="btn btn-warning pull-rigth" value="Buscar" type="button" id="btnBuscarConsultaProducto" />-->
+								<button type="button" id="btnBuscarConsultaProducto" class="btn btn-sm btn-warning pull-rigth icono-botones2" style="margin-left:10px">
+									<i class="fas fa-search" style="font-size:18px;"></i> Buscar
+								</button>
+								<!--<input class="btn btn-success float-rigth" value="Excel" name="excel" type="button" id="btnDescargarConsultaProductos" style="padding-left:15px;padding-right:15px;margin-right:10px;" />-->
+								<button id="btnDescargarConsultaProductos" type="button" class="btn btn-sm btn-secondary pull-rigth icono-botones2" style="margin-left:10px;">
+									<i class="fas fa-download" style="font-size:18px;"></i> Excel
+								</button>
+							</div>
+						</div>
 					</div>
 				</div>
 				

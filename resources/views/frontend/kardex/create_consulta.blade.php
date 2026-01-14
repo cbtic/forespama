@@ -344,53 +344,61 @@ label.form-control-sm{
 
 					<div class="col col-sm-12 align-self-center">
 
-
                         <input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
-
-                        <!--<input type="hidden" name="estado" id="estado" value="0">-->
-						
-						<input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
 				
 				<div class="row" style="padding:20px 20px 0px 20px;">
+					<div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
+						<div class="row">
 
-					<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-						<select name="consulta_almacen_bus" id="consulta_almacen_bus" class="form-control form-control-sm" onchange="obtenerProductosAlmacen()">
-							<option value="">--Seleccionar Almacen--</option>
-							<?php
-							foreach ($almacen as $row) {
-							?>
-							<option value="<?php echo $row->id?>"><?php echo $row->denominacion?></option>
-							<?php
-							}
-							?>
-						</select>
-					</div>
+							<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+								<select name="consulta_almacen_bus" id="consulta_almacen_bus" class="form-control form-control-sm filtro-select" onchange="obtenerProductosAlmacen()">
+									<option value="">--Seleccionar Almacen--</option>
+									<?php
+									foreach ($almacen as $row) {
+									?>
+									<option value="<?php echo $row->id?>"><?php echo $row->denominacion?></option>
+									<?php
+									}
+									?>
+								</select>
+							</div>
 
-					<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-						<select name="consulta_producto_bus" id="consulta_producto_bus" class="form-control form-control-sm">
-							<option value="">--Seleccionar Producto--</option>
-							<?php
-							/*foreach ($producto as $row) {
-							?>
-							<option value="<?php echo $row->id?>"><?php echo $row->codigo ." - ".$row->denominacion?></option>
-							<?php
-							}*/
-							?>
-						</select>
+							<div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
+								<select name="consulta_producto_bus" id="consulta_producto_bus" class="form-control form-control-sm filtro-select">
+									<option value="">--Seleccionar Producto--</option>
+									<?php
+									/*foreach ($producto as $row) {
+									?>
+									<option value="<?php echo $row->id?>"><?php echo $row->codigo ." - ".$row->denominacion?></option>
+									<?php
+									}*/
+									?>
+								</select>
+							</div>
+							<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+								<select name="cantidad_producto_bus" id="cantidad_producto_bus" class="form-control form-control-sm filtro-select">
+									<option value="" selected="selected">--Seleccionar Cantidad Producto</option>
+									<option value="0">Igual a 0</option>
+									<option value="1">Mayor a 0</option>
+								</select>
+							</div>
+						</div>
 					</div>
-                    <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<select name="cantidad_producto_bus" id="cantidad_producto_bus" class="form-control form-control-sm">
-							<option value="" selected="selected">--Seleccionar Cantidad Producto</option>
-							<option value="0">Igual a 0</option>
-							<option value="1">Mayor a 0</option>
-						</select>
-					</div>
-
-                    
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12" style="padding-right:0px">
-						<input class="btn btn-warning pull-rigth" value="Buscar" type="button" id="btnBuscarConsulta" />
-						<input class="btn btn-success float-rigth" value="Excel" name="excel" type="button" id="btnDescargar" style="padding-left:15px;padding-right:15px;margin-right:10px;" /> 
-						<!--<input class="btn btn-success pull-rigth" value="Nuevo" type="button" id="btnNuevo" style="margin-left:15px" />-->
+					
+					<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+						<div class="row">
+							
+							<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding-right:0px">
+								<!--<input class="btn btn-warning pull-rigth" value="Buscar" type="button" id="btnBuscarConsulta" />-->
+								<button type="button" id="btnBuscarConsulta" class="btn btn-sm btn-warning pull-rigth icono-botones2" style="margin-left:10px">
+									<i class="fas fa-search" style="font-size:18px;"></i> Buscar
+								</button>
+								<!--<input class="btn btn-success float-rigth" value="Excel" name="excel" type="button" id="btnDescargar" style="padding-left:15px;padding-right:15px;margin-right:10px;" />-->
+								<button id="btnDescargar" type="button" class="btn btn-sm btn-secondary pull-rigth icono-botones2" style="margin-left:10px;">
+									<i class="fas fa-download" style="font-size:18px;"></i> Excel
+								</button>
+							</div>
+						</div>
 					</div>
 				</div>
 				

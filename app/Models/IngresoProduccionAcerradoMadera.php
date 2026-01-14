@@ -16,6 +16,16 @@ class IngresoProduccionAcerradoMadera extends Model
 
     }
 
+    function obtenerLote($fecha){
+
+        $cad = "select 'AM' || '-' || '".$fecha."' || '-' || lpad(coalesce(max(split_part(ipam.lote, '-', 3))::int + 1, 1)::text, 2, '0') as lote
+        from ingreso_produccion_acerrado_maderas ipam
+        where ipam.lote like 'AM' || '-' || '".$fecha."' || '-%'";
+
+		$data = DB::select($cad);
+        return $data;
+    }
+
     public function readFuntionPostgres($function, $parameters = null){
 
         $_parameters = '';

@@ -17,6 +17,7 @@ use App\Models\Pago;
 use App\Models\Persona;
 use App\Models\IngresoVehiculoTroncoPago;
 use App\Models\Almacen_usuario;
+use App\Models\EmpresaCubicaje;
 use Auth;
 use Carbon\Carbon;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -114,6 +115,19 @@ class IngresoVehiculoTroncoController extends Controller
 
 		$id_user = Auth::user()->id;
 
+		$fecha = Carbon::now()->format('Ymd');
+		if($request->tipo_documento_empresa == 1){
+			$empresa_cubicaje = EmpresaCubicaje::where('id_persona',$request->id_empresa_persona)->where('estado',1)->first();
+		}else{
+			$empresa_cubicaje = EmpresaCubicaje::where('id_empresa',$request->id_empresa_transportista)->where('estado',1)->first();
+		}
+		
+		$letra = $empresa_cubicaje->letra;
+
+		$ingreso_vehiculo_model = new IngresoVehiculoTronco;
+		$lote = $ingreso_vehiculo_model->obtenerLote($letra, $fecha);
+		//dd($lote[0]->lote);exit();
+
 		$ingresoVehiculoTronco = new IngresoVehiculoTronco;
 		$ingresoVehiculoTronco->fecha_ingreso = $request->fecha_ingreso;
 		$ingresoVehiculoTronco->fecha_salida = $request->fecha_ingreso;
@@ -130,6 +144,7 @@ class IngresoVehiculoTroncoController extends Controller
 		$ingresoVehiculoTronco->id_encargados = 1;
 		$ingresoVehiculoTronco->id_procedencias = 0;
 		$ingresoVehiculoTronco->observacion = $request->observacion;
+		$ingresoVehiculoTronco->lote = $lote[0]->lote;
 		$ingresoVehiculoTronco->save();
 		$id_ingreso_vehiculo_troncos = $ingresoVehiculoTronco->id;
 		

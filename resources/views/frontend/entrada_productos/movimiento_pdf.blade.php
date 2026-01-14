@@ -208,7 +208,7 @@ $(document).ready(function() {
                 <tbody>
                     <tr class="data">
                         <td class="td" style ="text-align: left; width: 5%; height:25px; border-bottom: 1px solid black;"><b>#</b></td>
-                        <td class="td" style ="text-align: left; width: 5%; height:25px; border-bottom: 1px solid black;"><b>ITEM</b></td>
+                        <!--<td class="td" style ="text-align: left; width: 5%; height:25px; border-bottom: 1px solid black;"><b>ITEM</b></td>-->
                         <td class="td" style ="text-align: left; width: 10%; height:25px; border-bottom: 1px solid black;"><b>DESCRIPCI&Oacute;N</b></td>
                         <td class="td" style ="text-align: left; width: 5%; height:25px; border-bottom: 1px solid black;"><b>MARCA</b></td>
                         <td class="td" style ="text-align: left; width: 5%; height:25px; border-bottom: 1px solid black;"><b>COD. INTERNO</b></td>
@@ -229,7 +229,7 @@ $(document).ready(function() {
                     foreach($datos_detalle as $key=>$r) { ?>
                         <tr>
                             <td class="td" style ="text-align: left; width: 5%; height:25px"><?php echo $r->row_num;?></td>
-                            <td class="td" style ="text-align: left; width: 5%; height:25px"><?php echo $r->numero_serie;?></td>
+                            <!--<td class="td" style ="text-align: left; width: 5%; height:25px"><?php /*echo $r->numero_serie;*/ ?></td>-->
                             <td class="td" style ="text-align: left; width: 10%; height:25px"><?php echo $r->producto;?></td>
                             <td class="td" style ="text-align: left; width: 5%; height:25px"><?php echo $r->marca;?></td>
                             <td class="td" style ="text-align: left; width: 5%; height:25px"><?php echo $r->codigo;?></td>

@@ -691,6 +691,7 @@ label.form-control-sm{
 								<th>Tipo Madera</th>
 								<th>Cantidad</th>
 								<th>Observaci&oacute;n</th>
+								<th>Lote</th>
 								<th>Imagenes</th>
 							</tr>
 							</thead>

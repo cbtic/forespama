@@ -339,100 +339,110 @@ label.form-control-sm{
 
 
                         <input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
-
-                        <!--<input type="hidden" name="estado" id="estado" value="0">-->
-						
-						<input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
 				
 				<div class="row" style="padding:20px 20px 0px 20px;">
+					<div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
+						<div class="row">
 
-					<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
-                        <input id="numero_guia_bus" name="numero_guia_bus" on class="form-control form-control-sm"  placeholder="N&uacute;mero Guia">
+							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+								<input id="numero_guia_bus" name="numero_guia_bus" on class="form-control form-control-sm"  placeholder="N&uacute;mero Guia">
+							</div>
+
+							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+								<input id="fecha_bus" name="fecha_bus" on class="form-control form-control-sm"  placeholder="Fecha">
+							</div>
+
+							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+								<input id="numero_documento_bus" name="numero_documento_bus" on class="form-control form-control-sm"  placeholder="N&uacute;mero Documento">
+							</div>
+
+							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+								<input id="placa_bus" name="placa_bus" on class="form-control form-control-sm"  placeholder="N&uacute;mero Placa">
+							</div>
+
+							<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+								<select name="empresa_transporte_bus" id="empresa_transporte_bus" class="form-control form-control-sm">
+									<option value="">--Seleccionar Empresa Transporte--</option>
+									<?php
+									foreach ($transporte_razon_social as $row){?>
+										<option value="<?php echo $row->id ?>"><?php echo $row->razon_social ?></option>
+										<?php 
+									}
+									?>
+								</select>
+							</div>
+
+							<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+								<select name="empresa_bus" id="empresa_bus" class="form-control form-control-sm">
+									<option value="">--Seleccionar Empresa Cliente--</option>
+									<?php
+									foreach ($empresa as $row){?>
+										<option value="<?php echo $row->id ?>"><?php echo $row->razon_social ?></option>
+										<?php 
+									}
+									?>
+								</select>
+							</div>
+
+							<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+								<select name="persona_bus" id="persona_bus" class="form-control form-control-sm">
+									<option value="">--Seleccionar Persona Cliente--</option>
+									<?php
+									foreach ($persona as $row){?>
+										<option value="<?php echo $row->id ?>"><?php echo $row->nombres. ' ' . $row->apellido_paterno . ' ' . $row->apellido_materno ?></option>
+										<?php 
+									}
+									?>
+								</select>
+							</div>
+
+							<!--<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+								<select name="empresa_transporte_bus" id="empresa_transporte_bus" class="form-control form-control-sm">
+									<option value="">--Seleccionar Empresa Transporte--</option>
+									<?php
+									//foreach ($transporte_razon_social as $row){?>
+										<option value="<?php //echo $row->id ?>"><?php //echo $row->razon_social ?></option>
+										<?php 
+									//}
+									?>
+								</select>
+							</div>
+
+							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+								<input id="empresa_transporte_bus" name="empresa_transporte_bus" on class="form-control form-control-sm"  placeholder="Razon Social Transporte">
+							</div>
+
+							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+								<input id="origen_bus" name="origen_bus" on class="form-control form-control-sm"  placeholder="Origen">
+							</div>
+
+							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+								<input id="destino_bus" name="destino_bus" on class="form-control form-control-sm"  placeholder="Destino">
+							</div>-->
+
+							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+								<select name="estado_bus" id="estado_bus" class="form-control form-control-sm">
+									<option value="">Todos</option>
+									<option value="1" selected="selected">Activo</option>
+									<option value="0">Eliminado</option>
+								</select>
+							</div>
+						</div>
 					</div>
-
-					<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
-                        <input id="fecha_bus" name="fecha_bus" on class="form-control form-control-sm"  placeholder="Fecha">
-					</div>
-
-					<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
-                        <input id="numero_documento_bus" name="numero_documento_bus" on class="form-control form-control-sm"  placeholder="N&uacute;mero Documento">
-					</div>
-
-					<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
-                        <input id="placa_bus" name="placa_bus" on class="form-control form-control-sm"  placeholder="N&uacute;mero Placa">
-					</div>
-
+					
 					<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-						<select name="empresa_transporte_bus" id="empresa_transporte_bus" class="form-control form-control-sm">
-							<option value="">--Seleccionar Empresa Transporte--</option>
-							<?php
-							foreach ($transporte_razon_social as $row){?>
-								<option value="<?php echo $row->id ?>"><?php echo $row->razon_social ?></option>
-								<?php 
-							}
-							?>
-						</select>
-					</div>
-
-					<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-						<select name="empresa_bus" id="empresa_bus" class="form-control form-control-sm">
-							<option value="">--Seleccionar Empresa Cliente--</option>
-							<?php
-							foreach ($empresa as $row){?>
-								<option value="<?php echo $row->id ?>"><?php echo $row->razon_social ?></option>
-								<?php 
-							}
-							?>
-						</select>
-					</div>
-
-					<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-						<select name="persona_bus" id="persona_bus" class="form-control form-control-sm">
-							<option value="">--Seleccionar Persona Cliente--</option>
-							<?php
-							foreach ($persona as $row){?>
-								<option value="<?php echo $row->id ?>"><?php echo $row->nombres. ' ' . $row->apellido_paterno . ' ' . $row->apellido_materno ?></option>
-								<?php 
-							}
-							?>
-						</select>
-					</div>
-
-					<!--<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<select name="empresa_transporte_bus" id="empresa_transporte_bus" class="form-control form-control-sm">
-							<option value="">--Seleccionar Empresa Transporte--</option>
-							<?php
-							//foreach ($transporte_razon_social as $row){?>
-								<option value="<?php //echo $row->id ?>"><?php //echo $row->razon_social ?></option>
-								<?php 
-							//}
-							?>
-						</select>
-					</div>
-
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-                        <input id="empresa_transporte_bus" name="empresa_transporte_bus" on class="form-control form-control-sm"  placeholder="Razon Social Transporte">
-					</div>
-
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-                        <input id="origen_bus" name="origen_bus" on class="form-control form-control-sm"  placeholder="Origen">
-					</div>
-
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-                        <input id="destino_bus" name="destino_bus" on class="form-control form-control-sm"  placeholder="Destino">
-					</div>-->
-
-                    <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<select name="estado_bus" id="estado_bus" class="form-control form-control-sm">
-							<option value="">Todos</option>
-							<option value="1" selected="selected">Activo</option>
-							<option value="0">Eliminado</option>
-						</select>
-					</div>
-                    
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12" style="padding-right:0px">
-						<input class="btn btn-warning pull-rigth" value="Buscar" type="button" id="btnBuscar" />
-						<input class="btn btn-success pull-rigth" value="Nuevo" type="button" id="btnNuevo" style="margin-left:15px" />
+						<div class="row">
+							<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding-right:0px">
+								<!--<input class="btn btn-warning pull-rigth" value="Buscar" type="button" id="btnBuscar" />-->
+								<button type="button" id="btnBuscar" class="btn btn-sm btn-warning pull-rigth icono-botones2" style="margin-left:10px">
+									<i class="fas fa-search" style="font-size:18px;"></i> Buscar
+								</button>
+								<!--<input class="btn btn-success pull-rigth" value="Nuevo" type="button" id="btnNuevo" style="margin-left:15px" />-->
+								<button type="button" id="btnNuevo" class="btn btn-sm btn-success icono-botones2" style="margin-left:10px">
+									<i class="fas fa-plus-circle" style="font-size:18px;"></i> Nuevo
+								</button>
+							</div>
+						</div>
 					</div>
 				</div>
 				
