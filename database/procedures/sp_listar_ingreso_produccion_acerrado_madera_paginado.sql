@@ -29,7 +29,7 @@ begin
 	where p.id = ivt.id_persona)
 	else (select e2.ruc from empresas e2 
 	where e2.id = ivt.id_empresa_transportista ) 
-	end ruc, v.placa, tm.denominacion tipo_madera, ipd.cantidad_ingreso_tronco, ipd.estado ';
+	end ruc, v.placa, tm.denominacion tipo_madera, ipd.cantidad_ingreso_tronco, ipd.estado, ipam.lote ';
 
 	v_tabla=' from ingreso_produccion_acerrado_madera_detalles ipd 
 	inner join ingreso_produccion_acerrado_maderas ipam on ipd.id_ingreso_produccion_acerrado_maderas = ipam.id 
