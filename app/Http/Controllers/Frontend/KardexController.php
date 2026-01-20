@@ -90,6 +90,7 @@ class KardexController extends Controller
 		$p[]="";
 		$p[]=$request->almacen_existencia;
 		$p[]=$request->cantidad_producto;
+		$p[]=$request->fecha;
 		$p[]=$request->NumeroPagina;
 		$p[]=$request->NumeroRegistros;
 		$data = $kardex_model->listar_kardex_existencia_ajax($p);

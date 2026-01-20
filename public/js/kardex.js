@@ -83,6 +83,14 @@ $(document).ready(function () {
         language: 'es'
     });
 
+	$('#fecha_bus').datepicker({
+        autoclose: true,
+		format: 'yyyy-mm-dd',
+		changeMonth: true,
+		changeYear: true,
+        language: 'es'
+    });
+
 	activarBotonExcel();
 
 });
@@ -344,6 +352,7 @@ function datatablenew_existencia(){
             var producto_existencia = $('#consulta_producto_bus').val();
 			var almacen_existencia = $('#consulta_almacen_bus').val();
 			var cantidad_producto = $('#cantidad_producto_bus').val();
+			var fecha = $('#fecha_bus').val();
 			
 			var _token = $('#_token').val();
             oSettings.jqXHR = $.ajax({
@@ -352,7 +361,7 @@ function datatablenew_existencia(){
                 "type": "POST",
                 "url": sSource,
                 "data":{NumeroPagina:iNroPagina,NumeroRegistros:iCantMostrar,producto_existencia:producto_existencia,
-						almacen_existencia:almacen_existencia,cantidad_producto:cantidad_producto,
+						almacen_existencia:almacen_existencia,cantidad_producto:cantidad_producto,fecha:fecha,
 						_token:_token
                        },
                 "success": function (result) {
@@ -827,7 +836,7 @@ function obtenerProductosAlmacen(){
 					);
 				});
 
-				$('#consulta_producto_bus').select2();
+				$('#consulta_producto_bus').select2({ width : '100%' });
 			} else {
 				bootbox.alert("No se encontraron productos en este almacén.");
 			}

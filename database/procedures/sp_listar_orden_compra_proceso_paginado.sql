@@ -1,3 +1,5 @@
+-- DROP FUNCTION public.sp_listar_orden_compra_proceso_paginado(varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, refcursor);
+
 CREATE OR REPLACE FUNCTION public.sp_listar_orden_compra_proceso_paginado(p_tipo_documento character varying, p_empresa_compra character varying, p_empresa_vende character varying, p_fecha_inicio character varying, p_fecha_fin character varying, p_numero_orden_compra character varying, p_numero_orden_compra_cliente character varying, p_situacion character varying, p_almacen_origen character varying, p_almacen_destino character varying, p_estado character varying, p_id_user character varying, p_id_vendedor character varying, p_estado_pedido character varying, p_prioridad character varying, p_canal character varying, p_tipo_producto character varying, p_estado_pedido_cancelado character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
  RETURNS refcursor
  LANGUAGE plpgsql
@@ -29,7 +31,7 @@ begin
 	where e2.id = oc.id_empresa_compra) 
 	end cliente,
 	oc.fecha_orden_compra, oc.numero_orden_compra, oc.estado, oc.id_tipo_documento, oc.id_tipo_documento, oc.id_empresa_compra, oc.id_empresa_vende, oc.cerrado id_cerrado, tm2.denominacion cerrado,
-	oc.id_almacen_salida, oc.id_almacen_destino, a.denominacion almacen_destino, a2.denominacion almacen_origen, u.id id_usuario, oc.id_unidad_origen, oc.numero_orden_compra_cliente, oc.tienda_asignada, u2.name vendedor,
+	oc.id_almacen_salida, oc.id_almacen_destino, a.denominacion almacen_destino, a2.denominacion almacen_origen, u.id id_usuario, oc.id_unidad_origen, oc.numero_orden_compra_cliente, oc.tienda_asignada, u2.name vendedor, oc.id_vendedor,
 	(select case
 	when exists (
 	select 1 
