@@ -473,7 +473,6 @@ class PersonaController extends Controller
 		echo $_FILES['file']['name'];
 	}
 
-
 	public function send(Request $request){
 
         $sw = true;
@@ -482,7 +481,6 @@ class PersonaController extends Controller
         //$validaDni = $this -> consultaDniWS($request->numero_documento);
         //print_r ($validaDni);
         //exit();
-
 
         //print_r($buscapersona->count());
         //exit();
@@ -505,12 +503,10 @@ class PersonaController extends Controller
             $buscapersona = Persona::where("numero_documento", $request->numero_documento)->where("estado", "1")->get();
 
             if ($buscapersona->count()==0){
-/*
-                if($codigo==""){
+                /*if($codigo==""){
                     $array_tipo_documento = array('DNI' => 'DNI','CARNET_EXTRANJERIA' => 'CE','PASAPORTE' => 'PAS','RUC' => 'RUC','CEDULA' => 'CED','PTP/PTEP' => 'PTP/PTEP', 'CPP/CSR' => 'CPP/CSR');
                     $codigo = $array_tipo_documento[$request->tipo_documento]."-".$request->numero_documento;
-                }
-*/
+                }*/
                 //if($telefono=="")$telefono="999999999";
                 //if($email=="")$email="mail@mail.com";
 
@@ -533,13 +529,12 @@ class PersonaController extends Controller
                 $persona->id_nacionalidad = $request->nacionalidad;
                 $persona->direccion = $request->direccion;
                 $persona->save();
-/*
-                $negativo = new Negativo;
+                
+                /*$negativo = new Negativo;
                 $negativo->persona_id = $persona->id;
                 $negativo->flag_negativo = $request->flag_negativo;
                 $negativo->observacion = $request->observacion;
-                $negativo->fecha = Carbon::now()->format('Y-m-d');
-                */
+                $negativo->fecha = Carbon::now()->format('Y-m-d');*/
             }
             else{
                 $sw = false;
@@ -567,6 +562,7 @@ class PersonaController extends Controller
 			$persona->id_sexo = $request->sexo;
 			$persona->fecha_nacimiento = $request->fecha_nacimiento;
 			$persona->grupo_sanguineo = $request->grupo_sanguineo;
+            $persona->id_ubigeo_nacimiento = $request->id_ubigeo_nacimiento;
 			$persona->lugar_nacimiento = $request->lugar_nacimiento;
 			$persona->id_nacionalidad = $request->nacionalidad;
 			$persona->email = $request->correo;
@@ -578,8 +574,7 @@ class PersonaController extends Controller
             //print ($persona->ruc);exit();
 			$persona->save();
 
-/*
-            if($flag_negativo!=$request->flag_negativo){
+            /*if($flag_negativo!=$request->flag_negativo){
                 $negativo = new Negativo;
                 $negativo->persona_id = $persona->id;
                 $negativo->flag_negativo = $request->flag_negativo;
@@ -592,8 +587,7 @@ class PersonaController extends Controller
                     $negativo->observacion = $request->observacion;
                     $negativo->save();
                 }
-             }
-             */
+            }*/
         }
 
         $array["sw"] = $sw;

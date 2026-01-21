@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION public.sp_listar_kardex_existencia_producto_paginado(p_producto character varying, p_almacen character varying, p_cantidad_producto character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
+CREATE OR REPLACE FUNCTION public.sp_listar_kardex_existencia_producto_paginado(p_producto character varying, p_almacen character varying, p_cantidad_producto character varying, p_fecha character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
  RETURNS refcursor
  LANGUAGE plpgsql
 AS $function$
@@ -50,6 +50,10 @@ begin
 									order by k1.id desc 
 									limit 1) and k.saldos_cantidad > 0 ';
 	    End If;
+	End If;
+
+	If p_fecha<>'' Then
+	 v_where := v_where || 'And to_char(k.created_at,''yyyy-mm-dd'') <= ''' || p_fecha || ''' ';
 	End If;
 	
 	--EXECUTE ('SELECT count(1) '||v_tabla||v_where) INTO v_count;

@@ -383,7 +383,7 @@ label.form-control-sm{
 								</select>
 							</div>
 							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-								<input id="fecha_bus" name="fecha_bus" on class="form-control form-control-sm filtro-input" style=" content: \f073;" placeholder="Fecha Inicio">
+								<input id="fecha_bus" name="fecha_bus" on class="form-control form-control-sm filtro-input" placeholder="Fecha">
 							</div>
 						</div>
 					</div>
