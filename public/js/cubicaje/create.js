@@ -1880,14 +1880,19 @@ function datatablenew() {
 				{
                 "mRender": function (data, type, row) {
                 	var html = '<div class="btn-group btn-group-sm" role="group" aria-label="Log Viewer Actions">';
-					html += '<button style="font-size:12px;color:#FFFFFF;margin-left:10px" type="button" class="btn btn-sm btn-info" data-toggle="modal" onclick="cargarCubicaje('+row.id_ingreso_vehiculo_tronco_tipo_maderas+')"><i class="fa fa-edit" style="font-size:17px!important"></i> Cubicar</button>';
-					html += '<button style="font-size:12px;color:#FFFFFF;margin-left:10px" type="button" class="btn btn-sm btn-danger" data-toggle="modal" onclick="cargarReporteCubicaje('+row.id_ingreso_vehiculo_tronco_tipo_maderas+')"><i class="fa fa-edit" style="font-size:17px!important"></i> Reporte</button>';
+                    if (esAdministrador || esUsuarioPermitido || esUsuarioSupervisor) {
+					    html += '<button style="font-size:12px;color:#FFFFFF;margin-left:10px" type="button" class="btn btn-sm btn-info" data-toggle="modal" onclick="cargarCubicaje('+row.id_ingreso_vehiculo_tronco_tipo_maderas+')"><i class="fa fa-edit" style="font-size:17px!important"></i> Cubicar</button>';
+                    }
+
+                    html += '<button style="font-size:12px;color:#FFFFFF;margin-left:10px" type="button" class="btn btn-sm btn-danger" data-toggle="modal" onclick="cargarReporteCubicaje('+row.id_ingreso_vehiculo_tronco_tipo_maderas+')"><i class="fa fa-edit" style="font-size:17px!important"></i> Reporte</button>';
+                    
+                    if (esAdministrador || esUsuarioPermitido || esUsuarioSupervisor) {
                     html += '<span class="btn btn-warning btn-file" style="float:left; margin-left: 10px">';
                     html += 'Examinar <input id="image" name="image" type="file" />';
                     html += '</span>';
                     html += '<i id="fileExcel" class="fa fa-file-excel" style="display:none;color:#00B300;font-size:35px;float:left;padding-left:10px"></i>';
                     html += '<input type="button" class="btn btn-primary upload" data-id="'+row.id+'" value="Subir" style="margin-left:10px;float:left">';
-                    
+                    }
                     if (esAdministrador || esUsuarioPermitido) {
 
                         html += '<a href="javascript:void(0)" onclick=eliminarIngresoVehiculo('+row.id_ingreso_vehiculo_tronco_tipo_maderas+') class="btn btn-sm btn-danger" style="font-size:12px;margin-left:10px">Eliminar</a>';

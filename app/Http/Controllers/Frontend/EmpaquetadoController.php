@@ -194,10 +194,11 @@ class EmpaquetadoController extends Controller
 		}
 
         $tablaMaestra_model = new TablaMaestra;
+        $almacen_model = new Almacene;
 
         $producto = Producto::all();
         $unidad = $tablaMaestra_model->getMaestroByTipo(43);
-        $almacen_destino = Almacene::all();
+        $almacen_destino = $almacen_model->getAlmacenAll();
 
         //dd($id);exit();
         

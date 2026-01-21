@@ -426,6 +426,7 @@ label.form-control-sm{
 	//alert(almacenUsuario.id_user);
 	var esAdministrador = {{ auth()->user()->hasAnyRole('Administrator') ? 'true' : 'false' }};
 	var esUsuarioPermitido = {{ auth()->user()->hasAnyRole('Encargado Cubicaje') ? 'true' : 'false' }};
+	var esUsuarioSupervisor = {{ auth()->user()->hasAnyRole('Supervisor Cubicaje') ? 'true' : 'false' }};
 	//console.log(almacenUsuario);
 </script>
 
@@ -569,6 +570,7 @@ label.form-control-sm{
 										<!--<a type="button" href="/img/cubicaje/plantilla/Plantilla_cubicaje_actualizado_30122025.xlsx" class="btn btn-sm btn-secondary pull-rigth icono-botones2" style="margin-left:10px;">
 											<i class="fas fa-file-excel" style="font-size:18px;"></i>Plantilla
 										</a>-->
+										@hasanyrole('Administrator|Encargado Cubicaje|Supervisor Cubicaje')
 										<button type="button" onclick="window.location.href='/img/cubicaje/plantilla/Plantilla_cubicaje_actualizado_30122025.xlsx'" class="btn btn-sm btn-secondary pull-rigth icono-botones2" style="margin-left:10px;">
 											<i class="fas fa-file-excel" style="font-size:18px;"></i> Plantilla
 										</button>
@@ -582,6 +584,7 @@ label.form-control-sm{
 										<buttom class="btn btn-secondary btn-sm" type="button" id="btnDescargarReporteAnual" style="margin-left:10px" />
 											<i class="fa fa-download" style="font-size:18px;"></i> Descarga Reporte Anual
 										</buttom>
+										@endhasanyrole
 									</div>
 								</div>
 						</div>
