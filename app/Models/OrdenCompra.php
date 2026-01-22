@@ -322,34 +322,40 @@ class OrdenCompra extends Model
     function getOrdenCompraByIdPdf($id){
 
         $cad = "select oc.id, 
-        --e.razon_social empresa_compra, 
         case when oc.id_tipo_cliente = 1 then 
-        (select p.nombres ||' '|| p.apellido_paterno ||' '|| p.apellido_materno from personas p
+        (select p.nombres ||' '|| p.apellido_paterno ||' '|| p.apellido_materno 
+        from personas p
         where p.id = oc.id_persona)
         else (select e2.razon_social from empresas e2 
-        where e2.id = oc.id_empresa_compra) 
-        end cliente,
-        e2.razon_social empresa_vende, to_char(oc.fecha_orden_compra,'dd-mm-yyyy') fecha_orden_compra , 
+        where e2.id = oc.id_empresa_compra) end cliente,
+        e2.razon_social empresa_vende, to_char(oc.fecha_orden_compra,'dd-mm-yyyy') fecha_orden_compra, 
         oc.numero_orden_compra, tm.denominacion tipo_documento, oc.estado, tm2.denominacion igv, oc.numero_orden_compra_cliente, 
         oc.total, oc.sub_total, oc.igv, COALESCE (oc.descuento, 0 , oc.descuento) descuento,
         case when oc.id_canal = 4 then 
-        (select t.direccion || ' - ' || dp.desc_ubigeo || ' - ' || p.desc_ubigeo  || ' - ' || d.desc_ubigeo AS direccion_completa from tienda_detalle_orden_compras tdoc 
+        (select t.direccion || ' - ' || dp.desc_ubigeo || ' - ' || p.desc_ubigeo  || ' - ' || d.desc_ubigeo direccion_completa 
+        from tienda_detalle_orden_compras tdoc 
         inner join tiendas t on tdoc.id_tienda = t.id 
         inner join ubigeos u on t.id_ubigeo = u.id_ubigeo
         left join ubigeos p on p.id_ubigeo = SUBSTRING(u.id_ubigeo FROM 1 FOR 4) || '00'
         left join ubigeos dp on dp.id_ubigeo = SUBSTRING(u.id_ubigeo FROM 1 FOR 2) || '0000'
         left join ubigeos d on d.id_ubigeo = u.id_ubigeo 
         where tdoc.id_orden_compra = oc.id limit 1) else
-        (select occe.direccion || ' - ' ||  dp.desc_ubigeo || ' - ' || p.desc_ubigeo || ' - ' || d.desc_ubigeo || ' - ' ||  COALESCE(occe.referencia,'') from orden_compra_contacto_entregas occe
+        (select occe.direccion || ' - ' ||  dp.desc_ubigeo || ' - ' || p.desc_ubigeo || ' - ' || d.desc_ubigeo ||
+        case
+            when occe.referencia is not null and occe.referencia <> ''
+            then ' - ' || occe.referencia
+            else ''
+        end 
+        from orden_compra_contacto_entregas occe
         inner join ubigeos u on occe.id_ubigeo = u.id_ubigeo
         left join ubigeos p on p.id_ubigeo = SUBSTRING(u.id_ubigeo FROM 1 FOR 4) || '00'
         left join ubigeos dp on dp.id_ubigeo = SUBSTRING(u.id_ubigeo FROM 1 FOR 2) || '0000'
         left join ubigeos d on d.id_ubigeo = u.id_ubigeo 
         where occe.id_orden_compra = oc.id
-        and occe.estado = '1')
-        end direccion
+        and occe.estado = '1'
+        order by occe.id desc
+        limit 1) end direccion
         from orden_compras oc 
-        --inner join empresas e on oc.id_empresa_compra = e.id 
         inner join empresas e2 on oc.id_empresa_vende = e2.id 
         inner join tabla_maestras tm on oc.id_tipo_documento = tm.codigo ::int and tm.tipo = '54'
         inner join tabla_maestras tm2 on oc.igv_compra = tm2.codigo ::int and tm2.tipo = '51'

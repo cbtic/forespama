@@ -595,7 +595,7 @@ container: '#myModal modal-body'
 													<input type="button" class="btn btn-sm btn-primary upload" value="Subir" style="margin-left:10px">
 													
 													<?php
-														$url_foto = "/img/logo_forestalpama.jpg";
+														$url_foto = "/img/logo_forestalpama5.jpeg";
 														if ($ingresoVehiculoTroncoPago->foto_desembolso != "") $url_foto = "/img/pago/" . $ingresoVehiculoTroncoPago->foto_desembolso;
 
 														$foto = "";

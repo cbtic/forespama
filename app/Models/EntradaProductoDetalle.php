@@ -54,7 +54,7 @@ class EntradaProductoDetalle extends Model
         left join marcas m on epd.id_marca = m.id 
         left join tabla_maestras tm2 on epd.id_estado_bien ::int = tm2.codigo::int and tm2.tipo = '56'
         left join tabla_maestras tm3 on epd.id_um ::int = tm3.codigo::int and tm3.tipo = '43'
-        inner join orden_compras oc on ep.id_orden_compra = oc.id 
+        left join orden_compras oc on ep.id_orden_compra = oc.id 
         left join tabla_maestras tm5 on oc.id_tipo_documento = tm5.codigo::int and tm5.tipo ='54'
         where id_entrada_productos = '".$id."'
         and epd.estado='1'";

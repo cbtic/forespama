@@ -426,7 +426,7 @@ label.form-control-sm{
 
 @extends('frontend.layouts.app')
 
-@section('title', ' | ' . __('labels.frontend.afiliacion.box_title'))
+@section('title', __('Pagos Orden de Compra'))
 
 @section('breadcrumb')
 <ol class="breadcrumb" style="padding-left:130px;margin-top:0px;background-color:#283659">
@@ -465,7 +465,7 @@ label.form-control-sm{
                     <div class="col-lg-8 mb-4">
                         <div class="card h-100">
                             <div class="divlogoimpresora" style="display:none;">
-                                <img class="logoimpresora" src="/img/logo_forestalpama.jpg" align="right">
+                                <img class="logoimpresora" src="/img/logo_forestalpama4.png" align="right">
                             </div>
 
                             <div class="card-header">

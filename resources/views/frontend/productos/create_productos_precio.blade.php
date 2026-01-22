@@ -2,9 +2,9 @@
 <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" defer></script>
 <style type="text/css">
 
-#tblProductos tbody tr{
-		font-size:13px
-	}
+/*#tblProductos tbody tr{
+	font-size:13px
+}*/
 
 .table td.verde{
 	background:#CAE983  !important
@@ -12,10 +12,6 @@
 
 body {
     background-color: #bdc3c7;
-}
-
-.fila-par {
-    background-color: #E2EFDA;
 }
 
 .table-fixed {
@@ -260,7 +256,8 @@ label.form-control-sm{
 	overflow-x: scroll;
 	overflow-y: hidden;
 	height: 200px;
-	white-space:nowrap
+	white-space:nowrap;
+	width: 300px;
 }
 .imageDiv img {
 	box-shadow: 1px 1px 10px #999;
@@ -293,17 +290,23 @@ label.form-control-sm{
 
 </style>
 
+<script>
+    var userIsAdmin = @json(auth()->check() ? auth()->user()->hasRole('Administrator') : false);
+
+    //console.log(userIsAdmin);
+</script>
+
 @stack('before-scripts')
 @stack('after-scripts')
 
 @extends('frontend.layouts.app')
 
-@section('title', __('Existencia de Productos por Orden de Compra'))
+@section('title', __('Precio Productos'))
 
 @section('breadcrumb')
 <ol class="breadcrumb" style="padding-left:130px;margin-top:0px;background-color:#283659">
     <li class="breadcrumb-item text-primary">Inicio</li>
-    <li class="breadcrumb-item active">Consultas de Existencias</li>
+    <li class="breadcrumb-item active">Registro de Productos</li>
     </li>
 </ol>
 
@@ -329,12 +332,12 @@ label.form-control-sm{
 
         <div class="card-body">
 
-            <form class="form-horizontal" method="post" action="" id="frmKardexConsultaProductos" autocomplete="off" enctype="multipart/form-data">
+            <form class="form-horizontal" method="post" action="" id="frmPrecioProductos" autocomplete="off" enctype="multipart/form-data">
 				
                 <div class="row">
                     <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12" style="margin-top:15px">
                         <h4 class="card-title mb-0 text-primary" style="font-size:22px">
-							Consultas de Existencias de Productos por Orden de Compra
+                            Precio Productos
                         </h4>
                     </div>
                 </div>
@@ -345,82 +348,62 @@ label.form-control-sm{
 					<div class="col col-sm-12 align-self-center">
 
                         <input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
-
-                        <!--<input type="hidden" name="estado" id="estado" value="0">-->
-						
-						<input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
 				
 				<div class="row" style="padding:20px 20px 0px 20px;">
+					<div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
+						<div class="row">
 
-					<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-						<select name="consulta_oc_existencia_producto_bus" id="consulta_oc_existencia_producto_bus" class="form-control form-control-sm">
-							<option value="">--Seleccionar Producto--</option>
-							<?php
-							foreach ($producto as $row) {
-							?>
-							<option value="<?php echo $row->id?>"><?php echo $row->codigo ." - ".$row->denominacion?></option>
-							<?php
-							}
-							?>
-						</select>
-					</div>
+							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+								<input class="form-control form-control-sm filtro-input" id="codigo_bus" name="codigo_bus" placeholder="C&oacute;digo">
+							</div>
 
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<select name="consulta_oc_almacen_producto_bus" id="consulta_oc_almacen_producto_bus" class="form-control form-control-sm" onchange="">
-							<option value="">--Seleccionar Almacen--</option>
-							<?php
-							foreach ($almacen as $row) {
-							?>
-							<option value="<?php echo $row->id?>"><?php echo $row->denominacion?></option>
-							<?php
-							}
-							?>
-						</select>
+							<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+								<input id="denominacion_bus" name="denominacion_bus" on class="form-control form-control-sm filtro-input"  placeholder="Denominaci&oacute;n">
+							</div>
+							
+							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+								<select name="estado_bus" id="estado_bus" class="form-control form-control-sm filtro-select">
+									<option value="">Todos</option>
+									<option value="1" selected="selected">Activo</option>
+									<option value="0">Eliminado</option>
+								</select>
+							</div>
+						</div>
 					</div>
-
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<select name="consulta_oc_empresa_bus" id="consulta_oc_empresa_bus" class="form-control form-control-sm" onchange="">
-							<option value="">--Seleccionar Empresa--</option>
-							<?php
-							foreach ($empresas as $row) {
-							?>
-							<option value="<?php echo $row->id?>"><?php echo $row->razon_social?></option>
-							<?php
-							}
-							?>
-						</select>
-					</div>
-                    
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12" style="padding-right:0px">
-						<input class="btn btn-warning pull-rigth" value="Buscar" type="button" id="btnBuscarConsultaProductoOC" style="margin-right:10px;"/>
-						<input class="btn btn-success float-rigth" value="Excel" name="excel" type="button" id="btnDescargarConsultaProductos" style="padding-left:15px;padding-right:15px;margin-right:10px;" />
+					<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+						<div class="row">
+							<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding-right:0px">
+								<!--<input class="btn btn-warning pull-rigth" value="Buscar" type="button" id="btnBuscar" />-->
+								<button type="button" id="btnBuscar" class="btn btn-sm btn-warning pull-rigth icono-botones2" style="margin-left:10px">
+									<i class="fas fa-search" style="font-size:18px;"></i> Buscar
+								</button>
+								<!--<button id="btnDescargar" type="button" class="btn btn-secondary pull-rigth" style="margin-left:10px;">
+									<i class="fas fa-download"></i> Excel
+								</button>-->
+							</div>
+						</div>
 					</div>
 				</div>
 				
-                <div class="card-body">				
+                <div class="card-body">
 
                     <div class="table-responsive">
-                    <table id="tblKardexConsultaProductosOC" class="table table-hover table-sm">
+                    <table id="tblPrecioProductos" class="table table-hover table-sm">
                         <thead>
                         <tr style="font-size:13px">
                             <th>Id</th>
-							<th>C&oacute;digo</th>
-							<th>Producto</th>
-							<th>Saldos</th>
-							<th>Stock Comprometido</th>
-							<th>Cantidad Disponible</th>
-							<th>Almacen</th>
+							<th>Denominaci&oacute;n</th>
+                            <th>C&oacute;digo</th>
+                            <th>Unidad Producto</th>
+							<th>Marca</th>
+							<th>Precio</th>
+							<th>Fecha</th>
+							<th>Estado</th>
+                            <th>Acciones</th>
                         </tr>
                         </thead>
-                        <tbody>
+                        <tbody style="font-size:13px">
                         </tbody>
-						<tfoot>
-							<tr>
-								<td colspan="3">Total</td>
-								<td></td>
-								<td></td>
-							</tr>
-						</tfoot>
                     </table>
                 </div><!--table-responsive-->
                 </form>
@@ -431,80 +414,73 @@ label.form-control-sm{
 
 @endsection
 
-	<div id="openOverlayOpc" class="modal fade" role="dialog">
-	  <div class="modal-dialog" >
-
+<div id="openOverlayOpc" class="modal fade" role="dialog">
+	<div class="modal-dialog" >
 		<div id="id_content_OverlayoneOpc" class="modal-content" style="padding: 0px;margin: 0px">
-
-		  <div class="modal-body" style="padding: 0px;margin: 0px">
-
+			<div class="modal-body" style="padding: 0px;margin: 0px">
 				<div id="diveditpregOpc"></div>
-
-		  </div>
-
+			</div>
 		</div>
-
-	  </div>
-
 	</div>
+</div>
 
-    @push('after-scripts')
+@push('after-scripts')
 
-	<script type="text/javascript">
+<script type="text/javascript">
 
-	/*$(document).ready(function() {
-		$(".upload").on('click', function() {
-			var formData = new FormData();
-			var files = $('#image')[0].files[0];
-			formData.append('file',files);
-			$.ajax({
-				headers: {
-					'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-				},
-				url: "/ingreso_vehiculo_tronco/upload_imagen_ingreso",
-				type: 'post',
-				data: formData,
-				contentType: false,
-				processData: false,
-				success: function(response) {
-					
-					var ind_img = $("#ind_img").val();
-					
-					if (response != 0) {
-						$("#img_ruta_"+ind_img).attr("src", "/img/ingreso/tmp/"+response).show();
-						$(".delete_ruta").show();
-						$("#img_foto_"+ind_img).val(response);
+/*$(document).ready(function() {
+	$(".upload").on('click', function() {
+		var formData = new FormData();
+		var files = $('#image')[0].files[0];
+		formData.append('file',files);
+		$.ajax({
+			headers: {
+				'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			},
+			url: "/ingreso_vehiculo_tronco/upload_imagen_ingreso",
+			type: 'post',
+			data: formData,
+			contentType: false,
+			processData: false,
+			success: function(response) {
+				
+				var ind_img = $("#ind_img").val();
+				
+				if (response != 0) {
+					$("#img_ruta_"+ind_img).attr("src", "/img/ingreso/tmp/"+response).show();
+					$(".delete_ruta").show();
+					$("#img_foto_"+ind_img).val(response);
 
-						ind_img++;
+					ind_img++;
 
-						var newRow = "";
-						newRow += '<div class="img_ruta">';
-						newRow += '<img src="" id="img_ruta_'+ind_img+'" width="130px" height="165px" alt="" style="text-align:center;margin-top:8px;display:none;margin-left:10px" />';
-						newRow += '<span class="delete_ruta" style="display:none" onclick="DeleteImagen(this)"></span>';
-						newRow += '<input type="hidden" id="img_foto_'+ind_img+'" name="img_foto[]" value="" />';
-						newRow += '</div>';
+					var newRow = "";
+					newRow += '<div class="img_ruta">';
+					newRow += '<img src="" id="img_ruta_'+ind_img+'" width="130px" height="165px" alt="" style="text-align:center;margin-top:8px;display:none;margin-left:10px" />';
+					newRow += '<span class="delete_ruta" style="display:none" onclick="DeleteImagen(this)"></span>';
+					newRow += '<input type="hidden" id="img_foto_'+ind_img+'" name="img_foto[]" value="" />';
+					newRow += '</div>';
 
-						$("#divImagenes").append(newRow);
-						$("#ind_img").val(ind_img);
+					$("#divImagenes").append(newRow);
+					$("#ind_img").val(ind_img);
 
-					} else {
-						alert('Formato de imagen incorrecto.');
-					}
-					
+				} else {
+					alert('Formato de imagen incorrecto.');
 				}
-			});
-			return false;
+				
+			}
 		});
+		return false;
+	});
 
-		$(".delete").on('click', function() {
-			$("#img_ruta0").attr("src", "/dist/img/profile-icon.png");
-			$("#img_foto0").val("");
-		});
+	$(".delete").on('click', function() {
+		$("#img_ruta0").attr("src", "/dist/img/profile-icon.png");
+		$("#img_foto0").val("");
+	});
 
-	});*/
+});*/
 
-	</script>
+</script>
 
-	<script src="{{ asset('js/kardex_consulta_oc.js') }}"></script>
+<script src="{{ asset('js/productos_precio.js') }}"></script>
 
-	@endpush
+@endpush

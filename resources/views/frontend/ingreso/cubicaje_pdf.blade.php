@@ -154,10 +154,6 @@ $(document).ready(function() {
 
 <script type="text/javascript">
 
-
-
-
-
 </script>
 
 <body class="hold-transition skin-blue sidebar-mini">
@@ -168,7 +164,7 @@ $(document).ready(function() {
                 <h3 style="margin: 0;">Ingreso de Camiones - Cubicaje</h3>
             </td>
             <td style="text-align: right;">
-                <img src="img/logo_forestalpama.jpg" width="110" height="40" style="margin-top: -10px;">
+                <img src="img/logo_forestalpama4.png" width="110" height="40" style="margin-top: -10px;">
             </td>
         </tr>
     </table>

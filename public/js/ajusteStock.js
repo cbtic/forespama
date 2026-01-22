@@ -201,7 +201,7 @@ function datatablenew(){
 						
 						var html = '<div class="btn-group btn-group-sm" role="group" aria-label="Log Viewer Actions">';
 						
-						html += '<button style="font-size:12px" type="button" class="btn btn-sm btn-success" data-toggle="modal" onclick="modalAjusteStock('+row.id+')" ><i class="fa fa-edit"></i> Editar</button>'; 
+						html += '<button style="font-size:12px" type="button" class="btn btn-sm btn-success" data-toggle="modal" onclick="modalAjusteStock('+row.id+','+row.id_tipo_movimiento+')" ><i class="fa fa-edit"></i> Editar</button>'; 
 						
 						//html += '<a href="javascript:void(0)" onclick=eliminarDispensacion('+row.id+','+row.estado+') class="btn btn-sm '+clase+'" style="font-size:12px;margin-left:10px">'+estado+'</a>';			
 						
@@ -219,7 +219,7 @@ function fn_ListarBusqueda() {
     datatablenew();
 };
 
-function modalAjusteStock(id){
+function modalAjusteStock(id,id_tipo_movimiento){
 	
 	/*var tipo_mov="";
 	if(tipo=='INGRESO'){tipo_mov=1};
@@ -229,11 +229,11 @@ function modalAjusteStock(id){
 	$('#openOverlayOpc .modal-body').css('height', 'auto');
 
 	$.ajax({
-			url: "/entrada_productos/modal_ajuste_stock/"+id,
-			type: "GET",
-			success: function (result) {  
-					$("#diveditpregOpc").html(result);
-					$('#openOverlayOpc').modal('show');
-			}
+		url: "/entrada_productos/modal_ajuste_stock/"+id+"/"+id_tipo_movimiento,
+		type: "GET",
+		success: function (result) {
+			$("#diveditpregOpc").html(result);
+			$('#openOverlayOpc').modal('show');
+		}
 	});
 }

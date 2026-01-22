@@ -392,7 +392,7 @@ function fn_save(){
 										<input type="button" class="btn btn-sm btn-primary upload" value="Subir" style="margin-left:10px">
 										
 										<?php
-											$url_foto = "/img/logo_forestalpama.jpg";
+											$url_foto = "/img/logo_forestalpama5.jpeg";
 											if ($orden_compra_pago->foto_desembolso != "") $url_foto = "/img/pago_orden_compra/" . $id_orden_compra . "/" . $orden_compra_pago->foto_desembolso;
 
 											$foto = "";

@@ -18,6 +18,7 @@ use App\Models\ChopeoDetalle;
 use App\Models\EquivalenciaProducto;
 use App\Models\ProductosCompetencia;
 use App\Models\User;
+use App\Models\ProductoPrecioDetalle;
 use RealRashid\SweetAlert\Facades\Alert;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -836,6 +837,44 @@ class ProductosController extends Controller
 		
 		echo json_encode($medida);
 	}
+
+    public function create_productos_precio(){
+		
+		return view('frontend.productos.create_productos_precio');
+
+	}
+
+    public function listar_precio_producto_ajax(Request $request){
+
+		$producto_model = new Producto;
+		$p[]=$request->denominacion;
+        $p[]=$request->codigo;
+        $p[]=$request->estado;
+		$p[]=$request->NumeroPagina;
+		$p[]=$request->NumeroRegistros;
+		$data = $producto_model->listar_precio_producto_ajax($p);
+		$iTotalDisplayRecords = isset($data[0]->totalrows)?$data[0]->totalrows:0;
+
+		$result["PageStart"] = $request->NumeroPagina;
+		$result["pageSize"] = $request->NumeroRegistros;
+		$result["SearchText"] = "";
+		$result["ShowChildren"] = true;
+		$result["iTotalRecords"] = $iTotalDisplayRecords;
+		$result["iTotalDisplayRecords"] = $iTotalDisplayRecords;
+		$result["aaData"] = $data;
+
+        echo json_encode($result);
+
+	}
+
+    public function modal_historial_precio_producto($id){
+	
+            $producto_precio_detalle_model = new ProductoPrecioDetalle;
+            $producto_precio_detalle = $producto_precio_detalle_model->getHistorialPrecioByProducto($id);    
+
+		return view('frontend.productos.modal_productos_nuevoHistorialPrecioProducto',compact('producto_precio_detalle'));
+
+    }
 }
 
 class InvoicesExport implements FromArray, WithHeadings, WithStyles

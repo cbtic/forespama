@@ -7,7 +7,7 @@
 	-->
 	
 		<a href="{{ route('frontend.index') }}" class="navbar-brand">
-            <img src="<?php echo URL::to('/') ?>/img/logo_forestalpama.jpg" alt="" width="190" style="padding:0px;margin:0px">
+            <img src="<?php echo URL::to('/') ?>/img/logo_forestalpama2.png" alt="" width="190" style="padding:0px;margin:0px">
         </a>
 		<br>
 		
@@ -134,6 +134,10 @@
 								
 								@can('Productos')
 									<x-utils.link :href="route('frontend.productos.create')" class="dropdown-item" :text="__('Productos')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+								@endif
+
+								@can('Precio Productos')
+									<x-utils.link :href="route('frontend.productos.create_productos_precio')" class="dropdown-item" :text="__('Precio Productos')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
 								@endif
 								
 								@can('Lotes')

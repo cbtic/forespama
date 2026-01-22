@@ -10,6 +10,27 @@ $(document).ready(function () {
 	$('#btnNuevo').click(function () {
 		modalVehiculo(0);
 	});
+
+	$('#placa_bus').keypress(function(e){
+		if(e.which == 13) {
+			datatablenew();
+			return false;
+		}
+	});
+
+	$('#ejes_bus').keypress(function(e){
+		if(e.which == 13) {
+			datatablenew();
+			return false;
+		}
+	});
+
+	$('#estado').keypress(function(e){
+		if(e.which == 13) {
+			datatablenew();
+			return false;
+		}
+	});
 		
 	datatablenew();
 	

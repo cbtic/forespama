@@ -101,7 +101,7 @@
 
 @extends('frontend.layouts.app')
 
-@section('title', ' | ' . __('labels.frontend.afiliacion.box_title'))
+@section('title', __('Consulta Vehiculos'))
 
 @section('breadcrumb')
 <ol class="breadcrumb" style="padding-left:130px;margin-top:0px;background-color:#283659">
@@ -117,8 +117,7 @@
         <li class="breadcrumb-item text-primary">Inicio</li>
             <li class="breadcrumb-item active">Consulta de Afiliados</li>
         </li>
-    </ol>
-    -->
+    </ol>-->
 
 <div class="loader"></div>
 
@@ -149,7 +148,7 @@
 				
 				<!--<strong><a class="edicion mt_20 mb_10" id="link_ruta_desembolso" href="javascript:void(0)" onClick="upload_imagen()">Adjuntar Imagen</a></strong>-->
 				
-				<form class="form-horizontal" method="post" action="{{ route('frontend.vehiculo.send')}}" id="frmAfiliacion" autocomplete="off">
+				<form class="form-horizontal" method="post" id="frmAfiliacion" autocomplete="off">
 				<input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
 				
 				<div class="row" style="padding:20px 20px 0px 20px;">

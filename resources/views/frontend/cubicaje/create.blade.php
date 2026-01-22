@@ -435,7 +435,7 @@ label.form-control-sm{
 
 @extends('frontend.layouts.app')
 
-@section('title', ' | ' . __('labels.frontend.afiliacion.box_title'))
+@section('title', __('Cubicaje'))
 
 @section('breadcrumb')
 <ol class="breadcrumb" style="padding-left:130px;margin-top:0px;background-color:#283659">
@@ -490,7 +490,7 @@ label.form-control-sm{
 						<div class="card">
 						
 						<div class="divlogoimpresora" style="display:none;">
-							<img class="logoimpresora" src="/img/logo_forestalpama.jpg" align="right">
+							<img class="logoimpresora" src="/img/logo_forestalpama4.png" align="right">
 						</div>
 						
 						<div class="card-header">

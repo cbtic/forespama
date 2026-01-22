@@ -1835,7 +1835,7 @@ class EntradaProductosController extends Controller
 
 	}
 
-    public function modal_ajuste_stock($id){
+    public function modal_ajuste_stock($id, $id_tipo_movimiento){
 		
 		$id_user = Auth::user()->id;
         $tablaMaestra_model = new TablaMaestra;
@@ -1843,11 +1843,19 @@ class EntradaProductosController extends Controller
         $producto_model = new Producto;
         $almacen_model = new Almacene;
 		
-		if($id>0){
-			$entrada_producto = EntradaProducto::find($id);
-		}else{
-			$entrada_producto = new EntradaProducto;
-		}
+        if($id_tipo_movimiento==1){
+            if($id>0){
+                $entrada_producto = EntradaProducto::find($id);
+            }else{
+                $entrada_producto = new EntradaProducto;
+            }
+        }else{
+            if($id>0){
+                $entrada_producto = SalidaProducto::find($id);
+            }else{
+                $entrada_producto = new SalidaProducto;
+            }
+        }
 
         $tipo_documento = $tablaMaestra_model->getMaestroByTipo(53);
         $producto = $producto_model->getProductoAll();
@@ -1860,7 +1868,7 @@ class EntradaProductosController extends Controller
         $almacen_destino = $almacen_model->getAlmacenAll();
 		//var_dump($id);exit();
 
-		return view('frontend.entrada_productos.modal_ajuste_stock',compact('id','entrada_producto','unidad_medida','moneda','estado_bien','tipo_producto','unidad','marca','producto','tipo_documento','almacen_destino','id_user'));
+		return view('frontend.entrada_productos.modal_ajuste_stock',compact('id','entrada_producto','unidad_medida','moneda','estado_bien','tipo_producto','unidad','marca','producto','tipo_documento','almacen_destino','id_user','id_tipo_movimiento'));
 
     }
 

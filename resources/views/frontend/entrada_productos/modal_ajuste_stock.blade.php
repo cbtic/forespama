@@ -201,6 +201,7 @@ function cargarDetalle(){
 
     var id = $("#id").val();
     var tipo_documento = $("#tipo_documento").val();
+    var id_tipo_movimiento = $("#id_tipo_movimiento").val();
     const tbody = $('#divAjusteStockDetalle');
 
     tbody.empty();
@@ -212,18 +213,14 @@ function cargarDetalle(){
 
             let n = 1;
 
-            //var total_acumulado=0;
-
             result.entrada_producto.forEach(entrada_producto => {
 
                 let marcaOptions = '<option value="">--Seleccionar--</option>';
                 let productoOptions = '<option value="">--Seleccionar--</option>';
                 let estadoBienOptions = '<option value="">--Seleccionar--</option>';
                 let unidadMedidaOptions = '<option value="">--Seleccionar--</option>';
-
-                //alert(result.dispensacion[1]);
                 
-                var producto_stock = result.producto_stock[dispensacion.id_producto];
+                var producto_stock = result.producto_stock[entrada_producto.id_producto];
 
                 result.marca.forEach(marca => {
                     let selected = (marca.id == entrada_producto.id_marca) ? 'selected' : '';
@@ -246,12 +243,12 @@ function cargarDetalle(){
                     productosSeleccionados.push(entrada_producto.id_producto);
                 }
                 //alert(productosSeleccionados);
-               
+            
                 const row = `
                     <tr>
                         <td>${n}</td>
                         <td><input name="id_ingreso_produccion_detalle[]" id="id_ingreso_produccion_detalle${n}" class="form-control form-control-sm" value="${entrada_producto.id}" type="hidden"><input name="item[]" id="item${n}" class="form-control form-control-sm" value="${entrada_producto.item}" type="text" readonly></td>
-                        <td style="width: 450px !important;display:block"><select name="descripcion_[]" id="descripcion_${n}" class="form-control form-control-sm" onChange="verificarProductoSeleccionado(this, ${n});" disabled>${productoOptions}</select><input name="descripcion[]" id="descripcion${n}" class="form-control form-control-sm" value="${ingreso_produccion.id_producto}" type="hidden"></td>
+                        <td style="width: 450px !important;display:block"><select name="descripcion_[]" id="descripcion_${n}" class="form-control form-control-sm" onChange="verificarProductoSeleccionado(this, ${n});" disabled>${productoOptions}</select><input name="descripcion[]" id="descripcion${n}" class="form-control form-control-sm" value="${entrada_producto.id_producto}" type="hidden"></td>
                         <td><input name="cod_interno[]" id="cod_interno${n}" class="form-control form-control-sm" value="${entrada_producto.codigo}" type="text" readonly></td>
                         <td><select name="marca_[]" id="marca_${n}" class="form-control form-control-sm" disabled>${marcaOptions}</select><input name="marca[]" id="marca${n}" class="form-control form-control-sm" value="${entrada_producto.id_marca}" type="hidden"></td>
                         <td><select name="unidad_[]" id="unidad_${n}" class="form-control form-control-sm" disabled>${unidadMedidaOptions}</select><input name="unidad[]" id="unidad${n}" class="form-control form-control-sm" value="${entrada_producto.id_unidad_medida}" type="hidden"></td>
@@ -270,10 +267,9 @@ function cargarDetalle(){
                 });
 
                 n++;
-                });
-            }
+            });
+        }
     });
-
 }
 
 function agregarProducto(){
@@ -375,10 +371,7 @@ function eliminarFila(button){
 
     row.remove();
 
-    //actualizarTotalGeneral();
-
     console.log(productosSeleccionados);
-    //$(button).closest('tr').remove();
 }
 
 function fn_save_ajuste_stock(){
@@ -422,7 +415,6 @@ function fn_save_ajuste_stock(){
                 }
             }
         });
-        
     }
 }
 
@@ -435,16 +427,15 @@ function save_ajuste(){
     $('.loader').show();
 
     $.ajax({
-            url: "/entrada_productos/send_ajuste_stock",
-            type: "POST",
-            data : $("#frmAjusteStock").serialize(),
-            success: function (result) {
-                $('#openOverlayOpc').modal('hide');
-                datatablenew();
-                $('.loader').hide();
-                bootbox.alert("Se guard&oacute; satisfactoriamente"); 
-                
-            }
+        url: "/entrada_productos/send_ajuste_stock",
+        type: "POST",
+        data : $("#frmAjusteStock").serialize(),
+        success: function (result) {
+            $('#openOverlayOpc').modal('hide');
+            datatablenew();
+            $('.loader').hide();
+            bootbox.alert("Se guard&oacute; satisfactoriamente"); 
+        }
     });
 }
 
@@ -467,7 +458,6 @@ function obtenerStock(selectElement, n){
 
 </script>
 
-
 <body class="hold-transition skin-blue sidebar-mini">
     
     <div>
@@ -485,6 +475,7 @@ function obtenerStock(selectElement, n){
                     
                     <input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
                     <input type="hidden" name="id" id="id" value="<?php echo $id?>">
+                    <input type="hidden" name="id_tipo_movimiento" id="id_tipo_movimiento" value="<?php echo $id_tipo_movimiento?>">
                     
                     <div class="row" style="padding-left:10px">
 
@@ -495,7 +486,7 @@ function obtenerStock(selectElement, n){
                             <select name="tipo_documento" id="tipo_documento" class="form-control form-control-sm" onchange="">
                                 <option value="">--Seleccionar--</option>
                                 <?php
-                                $selectedDocumento = isset($ingreso_produccion->id_tipo_documento) ? $ingreso_produccion->id_tipo_documento : 1;
+                                $selectedDocumento = isset($entrada_producto->id_tipo_documento) ? $entrada_producto->id_tipo_documento : 1;
                                 foreach ($tipo_documento as $row){?>
                                     <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$selectedDocumento)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
                                     <?php
@@ -536,18 +527,18 @@ function obtenerStock(selectElement, n){
                             <input id="observacion" name="observacion" on class="form-control form-control-sm"  value="<?php if($id>0){echo $entrada_producto->observacion;}?>" type="text">
                         </div>
                     </div>
-                        <div style="margin-top:15px" class="form-group">
-                            <div class="col-sm-12 controls">
-                                <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
-                                    <!--<a href="javascript:void(0)" onClick="agregarProducto()" class="btn btn-sm btn-success">Agregar</a>-->
-                                    <button type="button" class="btn btn-sm btn-clasico-blanco btn-agregar" data-toggle="modal" onclick="agregarProducto()">
-                                        <i class="fas fa-plus-circle" style="font-size:18px;"></i> Agregar
-                                    </button>
-                                </div>
+                    <div style="margin-top:15px" class="form-group">
+                        <div class="col-sm-12 controls">
+                            <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
+                                <!--<a href="javascript:void(0)" onClick="agregarProducto()" class="btn btn-sm btn-success">Agregar</a>-->
+                                <button type="button" class="btn btn-sm btn-clasico-blanco btn-agregar" data-toggle="modal" onclick="agregarProducto()">
+                                    <i class="fas fa-plus-circle" style="font-size:18px;"></i> Agregar
+                                </button>
                             </div>
                         </div>
+                    </div>
 
-                        <div class="card-body">	
+                    <div class="card-body">	
 
 					<div class="table-responsive" style="overflow-y: auto; max-height: 400px;">
 						<table id="tblAjusteStockDetalle" class="table table-hover table-sm">
@@ -581,38 +572,23 @@ function obtenerStock(selectElement, n){
                             </div>
                         </div>
                     </div> 
-
 				</div>
-                            
-                    </div>
-                </form>
                 </div>
-                <!-- /.box -->
-                
+            </form>
             </div>
-            <!--/.col (left) -->
-
+            <!-- /.box -->
         </div>
-        <!-- /.row -->
-    
+        <!--/.col (left) -->
+    </div>
+    <!-- /.row -->
 <!-- /.content -->
 </div>
 <!-- /.content-wrapper -->
 
-    
 <script type="text/javascript">
-$(document).ready(function () {
-	
-});
 
+    $(document).ready(function () {
+        
+    });
 
 </script>
-
-<script type="text/javascript">
-$(document).ready(function() {
-	
-	
-});
-
-</script>
-

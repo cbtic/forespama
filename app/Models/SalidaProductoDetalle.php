@@ -26,9 +26,7 @@ class SalidaProductoDetalle extends Model
 
     function getDetalleProductoId($id){
 
-        $cad = "select spd.id,  ROW_NUMBER() OVER (PARTITION BY spd.id_salida_productos ) AS row_num, spd.numero_serie, spd.id_producto, p.codigo, spd.id_marca, p.id_unidad_medida, spd.fecha_vencimiento, spd.id_um, spd.id_estado_productos id_estado_bien, spd.cantidad, spd.cantidad, spd.cantidad, '12' stock_actual, spd.costo, spd.sub_total , spd.igv, spd.total, sp.id_almacen_salida, p.denominacion nombre_producto, m.denominiacion nombre_marca, tm2.denominacion nombre_estado_bien, tm3.denominacion nombre_unidad_medida, 
-        --sp.id_empresa_compra, 
-        --e.ruc, e.razon_social, 
+        $cad = "select spd.id,  ROW_NUMBER() OVER (PARTITION BY spd.id_salida_productos ) AS row_num, spd.numero_serie, spd.id_producto, p.codigo, spd.id_marca, p.id_unidad_medida, spd.fecha_vencimiento, spd.id_um, spd.id_estado_productos id_estado_bien, spd.cantidad, spd.cantidad, spd.cantidad, '12' stock_actual, spd.costo, spd.sub_total , spd.igv, spd.total, sp.id_almacen_salida, p.denominacion nombre_producto, m.denominiacion nombre_marca, tm2.denominacion nombre_estado_bien, tm3.denominacion nombre_unidad_medida,  
         case when sp.id_tipo_cliente = 1 then 
         (select p.id from personas p
         where p.id = sp.id_persona)
@@ -86,9 +84,7 @@ class SalidaProductoDetalle extends Model
         left join marcas m on spd.id_marca = m.id 
         left join tabla_maestras tm2 on spd.id_estado_productos ::int = tm2.codigo::int and tm2.tipo = '56'
         left join tabla_maestras tm3 on spd.id_um ::int = tm3.codigo::int and tm3.tipo = '43'
-        --inner join empresas e on sp.id_empresa_compra = e.id
-        inner join orden_compras oc on sp.id_orden_compra = oc.id 
-        --left join tienda_detalle_orden_compras tdoc on tdoc.id_orden_compra = oc.id
+        left join orden_compras oc on sp.id_orden_compra = oc.id 
         where id_salida_productos ='".$id."'
         and spd.estado='1'";
 

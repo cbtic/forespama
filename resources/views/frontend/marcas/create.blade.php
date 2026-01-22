@@ -269,7 +269,6 @@ label.form-control-sm{
 	vertical-align:top;
 }
 
-
 .img_ruta{
 	position:relative;
 	float:left
@@ -289,14 +288,12 @@ label.form-control-sm{
 
 </style>
 
-
-
 @stack('before-scripts')
 @stack('after-scripts')
 
 @extends('frontend.layouts.app')
 
-@section('title', ' | ' . __('labels.frontend.afiliacion.box_title'))
+@section('title', __('Consulta Marcas'))
 
 @section('breadcrumb')
 <ol class="breadcrumb" style="padding-left:130px;margin-top:0px;background-color:#283659">

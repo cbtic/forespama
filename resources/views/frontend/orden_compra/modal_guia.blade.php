@@ -285,7 +285,7 @@ function fn_save(){
 								<input type="button" class="btn btn-sm btn-primary upload2" value="Subir" style="margin-left:10px">
 								
 								<?php
-									$url_foto = "/img/logo_forestalpama.jpg";
+									$url_foto = "/img/logo_forestalpama5.jpeg";
 									if ($guia_interna->ruta_imagen != "") $url_foto = "/img/guia_orden_compra/" . $id_orden_compra . "/" . $guia_interna->ruta_imagen;
 
 									$foto = "";

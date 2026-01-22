@@ -225,6 +225,9 @@ Route::delete('secciones/{secciones}', 'App\Http\Controllers\SeccionesController
 Route::get('secciones/{secciones}/edit', 'App\Http\Controllers\SeccionesController@edit')->name('secciones.edit');
 
 Route::get('productos/create_chopeo_producto', [ProductosController::class, 'create_chopeo_producto'])->name('productos.create_chopeo_producto');
+Route::get('productos/create_productos_precio', [ProductosController::class, 'create_productos_precio'])->name('productos.create_productos_precio');
+Route::post('productos/listar_precio_producto_ajax', [ProductosController::class, 'listar_precio_producto_ajax'])->name('productos.listar_precio_producto_ajax');
+Route::get('productos/modal_historial_precio_producto/{id}', [ProductosController::class, 'modal_historial_precio_producto'])->name('productos.modal_historial_precio_producto');
 Route::post('productos/listar_chopeo_producto_ajax', [ProductosController::class, 'listar_chopeo_producto_ajax'])->name('productos.listar_chopeo_producto_ajax');
 Route::get('productos/modal_chopeo_producto/{id}', [ProductosController::class, 'modal_chopeo_producto'])->name('productos.modal_chopeo_producto');
 Route::post('productos/send_chopeo_producto', [ProductosController::class, 'send_chopeo_producto'])->name('productos.send_chopeo_producto');
@@ -666,7 +669,7 @@ Route::get('orden_compra/exportar_reporte_comercializacion_tienda/{empresa_compr
 Route::get('entrada_productos/create_ajuste_stock', [EntradaProductosController::class, 'create_ajuste_stock'])->name('entrada_productos.create_ajuste_stock');
 Route::post('entrada_productos/listar_ajuste_stock_ajax', [EntradaProductosController::class, 'listar_ajuste_stock_ajax'])->name('entrada_productos.listar_ajuste_stock_ajax');
 Route::post('entrada_productos/send_ajuste_stock', [EntradaProductosController::class, 'send_ajuste_stock'])->name('entrada_productos.send_ajuste_stock');
-Route::get('entrada_productos/modal_ajuste_stock/{id}', [EntradaProductosController::class, 'modal_ajuste_stock'])->name('entrada_productos.modal_ajuste_stock');
+Route::get('entrada_productos/modal_ajuste_stock/{id}/{id_tipo_movimiento}', [EntradaProductosController::class, 'modal_ajuste_stock'])->name('entrada_productos.modal_ajuste_stock');
 Route::get('orden_compra/modal_anular_orden_compra/{id}', [OrdenCompraController::class, 'modal_anular_orden_compra'])->name('orden_compra.modal_anular_orden_compra');
 Route::post('orden_compra/anular_orden_compra', [OrdenCompraController::class, 'anular_orden_compra'])->name('orden_compra.anular_orden_compra');
 Route::post('ingreso_vehiculo_tronco/upload_cubicaje', [IngresoVehiculoTroncoController::class, 'upload_cubicaje'])->name('ingreso_vehiculo_tronco.upload_cubicaje');
