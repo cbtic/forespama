@@ -33,9 +33,11 @@ class EmpresaController extends Controller
      */
     public function index()
     {
-        //$afiliacion_model = new Afiliacion;
-        //$afiliacion = $afiliacion_model->getAfiliacionesAll();
-        return view('frontend.empresa.all'/*,compact('afiliacion')*/);
+        $tablaMaestra_model = new TablaMaestra;
+		
+        $tipo_empresa = $tablaMaestra_model->getMaestroByTipo(116);
+
+        return view('frontend.empresa.all',compact('tipo_empresa'));
     }
 	
 	public function consulta_usuario_empresa()
@@ -332,6 +334,7 @@ class EmpresaController extends Controller
 	public function listar_empresa_ajax(Request $request){
 		
 		$empresa_model = new Empresa;
+		$p[]=$request->tipo_empresa;
 		$p[]=$request->razon_social;
 		$p[]=$request->ruc;
         $p[]=$request->estado;
@@ -390,13 +393,17 @@ class EmpresaController extends Controller
 	public function modal_empresa($id){
 		$id_user = Auth::user()->id;
 		$empresa = new Empresa;
+        $tablaMaestra_model = new TablaMaestra;
+		
 		if($id>0)$empresa = Empresa::find($id);
 		else $empresa = new Empresa;
+		
+        $tipo_empresa = $tablaMaestra_model->getMaestroByTipo(116);
 		//$solicitud_model = new Solicitude;
 		//$fecha_actual = Carbon::now()->timezone('America/Lima')->format('Y-m-d H:i:s');
 		//$solicitud = $solicitud_model->getSolicitudById($id);
 		//$usuario = User::find($id_user);
-		return view('frontend.empresa.modal_empresa',compact('id','empresa'));
+		return view('frontend.empresa.modal_empresa',compact('id','empresa','tipo_empresa'));
 	
 	}
 
@@ -462,10 +469,7 @@ class EmpresaController extends Controller
 		$msg = "";
 
         $validaRuc = $this -> consultaRucWS($request->ruc);
-
-        //print_r ($validaRuc);
-        //exit();
-		
+				
 		if($request->id == 0){
 			
 			$empresaExiste = Empresa::where("ruc",$request->ruc)->get();

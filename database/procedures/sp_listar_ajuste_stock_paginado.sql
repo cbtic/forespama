@@ -17,16 +17,16 @@ begin
 	
 	p_pagina=(p_pagina::Integer-1)*p_limit::Integer;
 
-	v_campos=' id, tipo, fecha_movimiento, tipo_documento, codigo, estado, id_tipo_documento, almacen, id_almacen, usuario, created_at ';
+	v_campos=' id, tipo, fecha_movimiento, tipo_documento, id_tipo_movimiento, codigo, estado, id_tipo_documento, almacen, id_almacen, usuario, created_at ';
 
-	v_tabla=' (SELECT ep.id, ''INGRESO'' tipo, ep.fecha_ingreso fecha_movimiento, tm.denominacion tipo_documento, ep.codigo, ep.estado, ep.id_tipo_documento, a.denominacion almacen, ep.id_almacen_destino id_almacen, u.name usuario, ep.created_at ' ||
+	v_tabla=' (SELECT ep.id, ''INGRESO'' tipo, 1 id_tipo_movimiento, ep.fecha_ingreso fecha_movimiento, tm.denominacion tipo_documento, ep.codigo, ep.estado, ep.id_tipo_documento, a.denominacion almacen, ep.id_almacen_destino id_almacen, u.name usuario, ep.created_at ' ||
               'FROM entrada_productos ep ' ||
               'INNER JOIN tabla_maestras tm ON ep.id_tipo_documento = tm.codigo::int AND tm.tipo = ''48'' ' ||
               'inner join almacenes a on ep.id_almacen_destino = a.id ' ||
               'left join users u on ep.id_usuario_inserta = u.id ' ||
 			  'where ep.ajuste = ''1'' ' ||
               'UNION ALL ' ||
-              'SELECT sp.id, ''SALIDA'' tipo, sp.fecha_salida fecha_movimiento, tm.denominacion tipo_documento, sp.codigo, sp.estado, sp.id_tipo_documento, a.denominacion almacen, sp.id_almacen_salida id_almacen, u.name usuario, sp.created_at ' ||
+              'SELECT sp.id, ''SALIDA'' tipo, 2 id_tipo_movimiento, sp.fecha_salida fecha_movimiento, tm.denominacion tipo_documento, sp.codigo, sp.estado, sp.id_tipo_documento, a.denominacion almacen, sp.id_almacen_salida id_almacen, u.name usuario, sp.created_at ' ||
               'FROM salida_productos sp ' ||
               'INNER JOIN tabla_maestras tm ON sp.id_tipo_documento = tm.codigo::int AND tm.tipo = ''49'' ' ||
               'inner join almacenes a on sp.id_almacen_salida = a.id ' ||

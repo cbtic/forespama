@@ -285,7 +285,6 @@ label.form-control-sm{
 
 </style>
 
-
 @stack('before-scripts')
 @stack('after-scripts')
 
@@ -324,94 +323,91 @@ label.form-control-sm{
 
             <form class="form-horizontal" method="post" action="" id="frmAjusteStock" autocomplete="off" enctype="multipart/form-data">
 				
-                <div class="row">
-                    <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12" style="margin-top:15px">
-                        <h4 class="card-title mb-0 text-primary" style="font-size:22px">
-                            M&oacute;dulo de Ajuste de Stock
-                        </h4>
-                    </div>
+            <div class="row">
+                <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12" style="margin-top:15px">
+                    <h4 class="card-title mb-0 text-primary" style="font-size:22px">
+                        M&oacute;dulo de Ajuste de Stock
+                    </h4>
                 </div>
-                <div class="row justify-content-center" style="margin-top:15px">
+            </div>
+            <div class="row justify-content-center" style="margin-top:15px">
 
-                    <input type="hidden" name="flag_ocultar" id="flag_ocultar" value="0">
+                <input type="hidden" name="flag_ocultar" id="flag_ocultar" value="0">
 
-					<div class="col col-sm-12 align-self-center">
+                <div class="col col-sm-12 align-self-center">
 
-
-                        <input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
-
-                        <!--<input type="hidden" name="estado" id="estado" value="0">-->
-						
-						<input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
+                    <input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
 				
-				<div class="row" style="padding:20px 20px 0px 20px;">
+                    <div class="row" style="padding:20px 20px 0px 20px;">
 
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<select name="tipo_documento_bus" id="tipo_documento_bus" class="form-control form-control-sm">
-							<option value="">--Seleccionar Tipo Documento--</option>
-							<?php
-							foreach ($tipo_documento as $row){?>
-								<option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
-								<?php 
-							}
-							?>
-						</select>
-					</div>
+                        <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+                            <select name="tipo_documento_bus" id="tipo_documento_bus" class="form-control form-control-sm">
+                                <option value="">--Seleccionar Tipo Documento--</option>
+                                <?php
+                                foreach ($tipo_documento as $row){?>
+                                    <option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
+                                    <?php 
+                                }
+                                ?>
+                            </select>
+                        </div>
 
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-                        <input id="fecha_bus" name="fecha_bus" on class="form-control form-control-sm"  placeholder="Fecha">
-					</div>
+                        <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+                            <input id="fecha_bus" name="fecha_bus" on class="form-control form-control-sm"  placeholder="Fecha">
+                        </div>
 
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-                        <input id="numero_ajuste_bus" name="numero_ajuste_bus" on class="form-control form-control-sm"  placeholder="N&uacute;mero Operaci&oacute;n">
-					</div>
+                        <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+                            <input id="numero_ajuste_bus" name="numero_ajuste_bus" on class="form-control form-control-sm"  placeholder="N&uacute;mero Operaci&oacute;n">
+                        </div>
 
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<select name="almacen_bus" id="almacen_bus" class="form-control form-control-sm">
-							<option value="">--Seleccionar Almacen--</option>
-							<?php
-							foreach ($almacen_destino as $row){?>
-								<option value="<?php echo $row->id ?>"><?php echo $row->denominacion ?></option>
-								<?php 
-							}
-							?>
-						</select>
-					</div>
+                        <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+                            <select name="almacen_bus" id="almacen_bus" class="form-control form-control-sm">
+                                <option value="">--Seleccionar Almacen--</option>
+                                <?php
+                                foreach ($almacen_destino as $row){?>
+                                    <option value="<?php echo $row->id ?>"><?php echo $row->denominacion ?></option>
+                                    <?php 
+                                }
+                                ?>
+                            </select>
+                        </div>
 
-                    <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<select name="estado_bus" id="estado_bus" class="form-control form-control-sm">
-							<option value="">Todos</option>
-							<option value="1" selected="selected">Activo</option>
-							<option value="0">Eliminado</option>
-						</select>
-					</div>
-                    
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12" style="padding-right:0px">
-						<input class="btn btn-warning pull-rigth" value="Buscar" type="button" id="btnBuscar" />
-						<input class="btn btn-success pull-rigth" value="Nuevo" type="button" id="btnNuevo" style="margin-left:15px" />
-					</div>
-				</div>
+                        <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+                            <select name="estado_bus" id="estado_bus" class="form-control form-control-sm">
+                                <option value="">Todos</option>
+                                <option value="1" selected="selected">Activo</option>
+                                <option value="0">Eliminado</option>
+                            </select>
+                        </div>
+                        
+                        <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12" style="padding-right:0px">
+                            <input class="btn btn-warning pull-rigth" value="Buscar" type="button" id="btnBuscar" />
+                            @hasanyrole('Administrator|Administrador Ajuste Stock')
+                            <input class="btn btn-success pull-rigth" value="Nuevo" type="button" id="btnNuevo" style="margin-left:15px" />
+                            @endhasanyrole
+                        </div>
+                    </div>
 				
-                <div class="card-body">
+                    <div class="card-body">
 
-                    <div class="table-responsive">
-                    <table id="tblAjusteStock" class="table table-hover table-sm">
-                        <thead>
-                        <tr style="font-size:13px">
-                            <th>Id</th>
-							<th>Tipo Documento</th>
-                            <th>Fecha</th>
-							<th>N&uacute;mero Ingreso</th>
-							<th>Almacen Destino</th>
-							<th>Usuario Registra</th>
-							<th>Estado</th>
-                            <th>Acciones</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                    </table>
-                </div><!--table-responsive-->
+                        <div class="table-responsive">
+                        <table id="tblAjusteStock" class="table table-hover table-sm">
+                            <thead>
+                            <tr style="font-size:13px">
+                                <th>Id</th>
+                                <th>Tipo Documento</th>
+                                <th>Fecha</th>
+                                <th>N&uacute;mero Ingreso</th>
+                                <th>Almacen Destino</th>
+                                <th>Usuario Registra</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div><!--table-responsive-->
                 </form>
                 </div><!--card-body-->
             </div><!--card-->
@@ -433,7 +429,6 @@ label.form-control-sm{
 @push('after-scripts')
 
 <script type="text/javascript">
-
 
 </script>
 

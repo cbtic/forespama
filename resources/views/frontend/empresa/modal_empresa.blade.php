@@ -200,13 +200,12 @@ function fn_save(){
 	var direccion = $('#direccion_').val();
 	var email = $('#email_').val();
 	var telefono = $('#telefono_').val();
-	var costo_estacionamiento = $('#costo_estacionamiento_').val();
-	var costo_volumen = $('#costo_volumen_').val();
+	var tipo_empresa = $('#tipo_empresa_').val();
 	
     $.ajax({
 			url: "/empresa/send",
             type: "POST",
-            data : {_token:_token,id:id,ruc:ruc,razon_social:razon_social,direccion:direccion,email:email,telefono:telefono,costo_estacionamiento:costo_estacionamiento,costo_volumen:costo_volumen},
+            data : {_token:_token,id:id,tipo_empresa:tipo_empresa,ruc:ruc,razon_social:razon_social,direccion:direccion,email:email,telefono:telefono},
 			dataType: 'json',
             success: function (result) {
 				
@@ -380,11 +379,23 @@ container: '#myModal modal-body'
 						</div>
 					</div>-->
 					<div class="row">
+						<div class="col-lg-4">
+							<label class="control-label">Tipo Empresa</label>
+							<select name="tipo_empresa_" id="tipo_empresa_" class="form-control form-control-sm" onchange="">
+								<option value="">--Seleccionar--</option>
+								<?php
+								foreach ($tipo_empresa as $row){?>
+									<option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$empresa->id_tipo_empresa)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+									<?php 
+								}
+								?>
+							</select>
+						</div>
 						<?php 
 							$readonly=$id>0?"readonly='readonly'":'';
 							$readonly_=$id>0?'':"readonly='readonly'";
 						?>
-						<div class="col-lg-12">
+						<div class="col-lg-4">
 							<div class="form-group">
 								<label class="control-label">Ruc</label>
 								<input id="ruc_" name="ruc_" class="form-control form-control-sm"  value="<?php echo $empresa->ruc?>" type="text" <?php echo $readonly?> >
@@ -421,25 +432,9 @@ container: '#myModal modal-body'
 							</div>
 						</div>
 					</div>
-					<!--<div class="row">						
-						<div class="col-lg-6">
-							<div class="form-group" style="padding-top:0px;padding-bottom:0px;margin-top:0px;margin-bottom:0px">
-								<label class="control-label">Costo Estacionamiento</label>
-								<input id="costo_estacionamiento_" name="costo_estacionamiento_" class="form-control form-control-sm"  value="<?php //echo $empresa->costo_estacionamiento?>" type="text">
-							</div>
-						</div>
-						
-						<div class="col-lg-6">
-							<div class="form-group" style="padding-top:0px;padding-bottom:0px;margin-top:0px;margin-bottom:0px">
-								<label class="control-label">Costo Volumen</label>
-								<input id="costo_volumen_" name="costo_volumen_" class="form-control form-control-sm"  value="<?php //echo $empresa->costo_volumen?>" type="text">
-							</div>
-						</div>						
-					</div>-->
 					<div style="margin-top:10px" class="form-group">
 						<div class="col-sm-12 controls">
 							<div class="btn-group btn-group-sm" role="group" aria-label="Log Viewer Actions">
-								<!--<a href="javascript:void(0)" onClick="fn_save()" class="btn btn-sm btn-success">Guardar</a>-->
 								<button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-nuevo" data-toggle="modal" onclick="fn_save()">
 									<i class="fas fa-save" style="font-size:18px;"></i> Guardar
 								</button>

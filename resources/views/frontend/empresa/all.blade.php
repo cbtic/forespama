@@ -155,6 +155,17 @@
 						<div class="row">
 				
                             <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+                                <select name="tipo_empresa_bus" id="tipo_empresa_bus" class="form-control form-control-sm filtro-select">
+                                    <option value="">--Seleccionar Tipo Empresa--</option>
+                                    <?php
+                                    foreach ($tipo_empresa as $row){?>
+                                        <option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
+                                        <?php 
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                            <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
                                 <input class="form-control form-control-sm filtro-input" id="ruc" name="ruc" placeholder="Ruc">
                             </div>
                             <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
