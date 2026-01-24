@@ -203,6 +203,7 @@
                     <table id="tblAfiliado" class="table table-hover table-sm">
                         <thead>
                         <tr style="font-size:13px">
+                            <th>Tipo Empresa</th>
                             <th>Ruc</th>
                             <th>Razon Social</th>
 							<th>Direcci&oacute;n</th>

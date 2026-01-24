@@ -476,6 +476,7 @@ class EmpresaController extends Controller
 			if(count($empresaExiste)==0){
 				$empresa = new Empresa;
 				$empresa->ruc = $request->ruc;
+				$empresa->id_tipo_empresa = $request->tipo_empresa;
 				$empresa->razon_social = $request->razon_social;
 				$empresa->nombre_comercial = $request->razon_social;
 				$empresa->direccion = $request->direccion;
@@ -497,6 +498,7 @@ class EmpresaController extends Controller
 			if(count($empresaExiste)==0){
 				$empresa = Empresa::find($request->id);
 				$empresa->ruc = $request->ruc;
+				$empresa->id_tipo_empresa = $request->tipo_empresa;
 				$empresa->razon_social = $request->razon_social;
 				$empresa->nombre_comercial = $request->razon_social;
 				$empresa->direccion = $request->direccion;

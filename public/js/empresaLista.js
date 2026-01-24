@@ -448,12 +448,23 @@ function datatablenew(){
             [	
 				{
                 "mRender": function (data, type, row) {
+                	var tipo_empresa = "";
+					if(row.tipo_empresa!= null)tipo_empresa = row.tipo_empresa;
+					return tipo_empresa;
+                },
+                "bSortable": false,
+                "aTargets": [0],
+				"className": "dt-center",
+				//"className": 'control'
+                },
+				{
+                "mRender": function (data, type, row) {
                 	var ruc = "";
 					if(row.ruc!= null)ruc = row.ruc;
 					return ruc;
                 },
                 "bSortable": false,
-                "aTargets": [0],
+                "aTargets": [1],
 				"className": "dt-center",
 				//"className": 'control'
                 },
@@ -464,7 +475,7 @@ function datatablenew(){
 					return razon_social;
                 },
                 "bSortable": false,
-                "aTargets": [1]
+                "aTargets": [2]
                 },
                 {
                 "mRender": function (data, type, row) {
@@ -473,7 +484,7 @@ function datatablenew(){
 					return direccion;
                 },
                 "bSortable": false,
-                "aTargets": [2]
+                "aTargets": [3]
                 },
 				{
 					"mRender": function (data, type, row) {
@@ -482,7 +493,7 @@ function datatablenew(){
 						return _email;
 					},
 					"bSortable": false,
-					"aTargets": [3]
+					"aTargets": [4]
 				},
 				{
 					"mRender": function (data, type, row) {
@@ -492,7 +503,7 @@ function datatablenew(){
 						return nombre_estado;
 					},
 					"bSortable": false,
-					"aTargets": [4]
+					"aTargets": [5]
 				},
 				{
 					"mRender": function (data, type, row) {
@@ -515,7 +526,7 @@ function datatablenew(){
 						return html;
 					},
 					"bSortable": false,
-					"aTargets": [5],
+					"aTargets": [6],
 				},
             ]
 		}

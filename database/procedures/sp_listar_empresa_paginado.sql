@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION public.sp_listar_empresa_paginado(p_razon_social character varying, p_ruc character varying, p_estado character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
+CREATE OR REPLACE FUNCTION public.sp_listar_empresa_paginado(p_tipo_empresa character varying, p_razon_social character varying, p_ruc character varying, p_estado character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
  RETURNS refcursor
  LANGUAGE plpgsql
 AS $function$
@@ -18,14 +18,19 @@ Begin
 
 	p_pagina=(p_pagina::Integer-1)*p_limit::Integer;
 	
-	v_campos=' e.id, e.ruc, e.nombre_comercial, e.razon_social, e.direccion, e.email, e.telefono, e.representante, e.estado ';
+	v_campos=' e.id, e.ruc, e.nombre_comercial, e.razon_social, e.direccion, e.email, e.telefono, e.representante, tm.denominacion tipo_empresa, e.estado ';
 
-	v_tabla='from empresas e';
+	v_tabla='from empresas e
+	left join tabla_maestras tm on e.id_tipo_empresa = tm.codigo::int and tm.tipo = ''116'' ';
 	
 	v_where = ' Where 1=1  ';
 	
 	If p_ruc<>'' Then
 	 v_where:=v_where||'And e.ruc ilike ''%'||p_ruc||'%'' ';
+	End If;
+
+	If p_tipo_empresa<>'' Then
+	 v_where:=v_where||'And e.id_tipo_empresa = '''||p_tipo_empresa||''' ';
 	End If;
 	
 	If p_razon_social<>'' Then
