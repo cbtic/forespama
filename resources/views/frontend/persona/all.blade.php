@@ -157,6 +157,18 @@
 						<div class="row">
 				
                             <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+                                <select name="tipo_persona_bus" id="tipo_persona_bus" class="form-control form-control-sm filtro-select">
+                                    <option value="">--Seleccionar Tipo Persona--</option>
+                                    <?php
+                                    foreach ($tipo_persona as $row){?>
+                                        <option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
+                                        <?php 
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+
+                            <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
                                 <input class="form-control form-control-sm filtro-input" id="numero_documento_bus" name="numero_documento_bus" placeholder="Num. documento">
                             </div>
 
@@ -204,6 +216,7 @@
                     <table id="tblAfiliado" class="table table-hover table-sm">
                         <thead>
                         <tr style="font-size:13px">
+                            <th>Tipo Persona</th>
                             <th>Tipo Documento</th>
                             <th>Numero Documento</th>
 							<th>Persona</th>

@@ -445,7 +445,7 @@ function datatablenew(){
         },
 
         "aoColumnDefs":
-            [	
+            [
 				{
                 "mRender": function (data, type, row) {
                 	var tipo_empresa = "";

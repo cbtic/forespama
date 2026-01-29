@@ -146,6 +146,8 @@ class ReusoController extends Controller
 				}
 				$kardex->id_almacen_destino = $request->almacen_destino;
 				$kardex->id_reuso = $id_reuso;
+				$kardex->fecha = $request->fecha;
+                $kardex->id_usuario_inserta = $id_user;
 
 				$kardex->save();
 			}else{

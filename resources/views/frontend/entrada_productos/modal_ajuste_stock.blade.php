@@ -443,9 +443,10 @@ function obtenerStock(selectElement, n){
 
     var id_producto = $(selectElement).val();
     var almacen = $('#almacen_destino').val();
+    var fecha = $('#fecha').val();
 
     $.ajax({
-        url: "/productos/obtener_stock_producto/"+almacen+"/"+id_producto,
+        url: "/productos/obtener_stock_producto_fecha/"+almacen+"/"+id_producto+"/"+fecha,
         dataType: "json",
         success: function(result){
 

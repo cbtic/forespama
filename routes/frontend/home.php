@@ -881,3 +881,5 @@ Route::get('sedes/eliminar_sede/{id}/{estado}', [SedesController::class, 'elimin
 Route::get('orden_compra/modal_cerrar_pedido/{id}', [OrdenCompraController::class, 'modal_cerrar_pedido'])->name('orden_compra.modal_cerrar_pedido');
 Route::post('orden_compra/send_cerrar_orden_compra_detalle', [OrdenCompraController::class, 'send_cerrar_orden_compra_detalle'])->name('orden_compra.send_cerrar_orden_compra_detalle');
 
+Route::get('productos/obtener_stock_producto_fecha/{almacen}/{id_producto}/{fecha}', [ProductosController::class, 'obtener_stock_producto_fecha'])->name('productos.obtener_stock_producto_fecha');
+

@@ -19,7 +19,7 @@ begin
 
 	v_campos=' k.id, p.codigo, p.denominacion producto, k.entradas_cantidad entrada, k.costo_entradas_cantidad costo_entrada, k.total_entradas_cantidad total_entrada, k.salidas_cantidad salida, 
 	k.costo_salidas_cantidad costo_salida, k.total_salidas_cantidad total_salida, k.saldos_cantidad saldos, k.costo_saldos_cantidad costo_saldos, k.total_saldos_cantidad total_saldos, a.denominacion almacen_destino, 
-	a2.denominacion almacen_salida, to_char(k.created_at, ''DD-MM-YYYY'') fecha_kardex,
+	a2.denominacion almacen_salida, k.fecha fecha_kardex,
 	case when k.id_entrada_producto is not null then ''Ingreso''
 	when k.id_salida_producto is not null then ''Salida''
 	when k.id_dispensacion is not null then ''Dispensacion''
@@ -60,9 +60,9 @@ begin
 	v_col_count:=' ,'||v_count||' as TotalRows ';
 
 	If v_count::Integer > p_limit::Integer then
-		v_scad:='SELECT '||v_campos||v_col_count||v_tabla||v_where||' Order By k.id desc LIMIT '||p_limit||' OFFSET '||p_pagina||';'; 
+		v_scad:='SELECT '||v_campos||v_col_count||v_tabla||v_where||' Order By k.fecha desc, k.id desc LIMIT '||p_limit||' OFFSET '||p_pagina||';'; 
 	else
-		v_scad:='SELECT '||v_campos||v_col_count||v_tabla||v_where||' Order By k.id desc;'; 
+		v_scad:='SELECT '||v_campos||v_col_count||v_tabla||v_where||' Order By k.fecha desc, k.id desc;'; 
 	End If;
 
 	--Raise Notice '%',v_scad;

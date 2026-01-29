@@ -393,17 +393,13 @@ class EmpresaController extends Controller
 	public function modal_empresa($id){
 		$id_user = Auth::user()->id;
 		$empresa = new Empresa;
-        $tablaMaestra_model = new TablaMaestra;
 		
-		if($id>0)$empresa = Empresa::find($id);
-		else $empresa = new Empresa;
-		
-        $tipo_empresa = $tablaMaestra_model->getMaestroByTipo(116);
-		//$solicitud_model = new Solicitude;
-		//$fecha_actual = Carbon::now()->timezone('America/Lima')->format('Y-m-d H:i:s');
-		//$solicitud = $solicitud_model->getSolicitudById($id);
-		//$usuario = User::find($id_user);
-		return view('frontend.empresa.modal_empresa',compact('id','empresa','tipo_empresa'));
+		if($id>0){
+			$empresa = Empresa::find($id);
+		}
+		else $empresa = new Empresa;		
+
+		return view('frontend.empresa.modal_empresa',compact('id','empresa'));
 	
 	}
 
@@ -476,13 +472,15 @@ class EmpresaController extends Controller
 			if(count($empresaExiste)==0){
 				$empresa = new Empresa;
 				$empresa->ruc = $request->ruc;
-				$empresa->id_tipo_empresa = $request->tipo_empresa;
 				$empresa->razon_social = $request->razon_social;
 				$empresa->nombre_comercial = $request->razon_social;
 				$empresa->direccion = $request->direccion;
 				$empresa->email = $request->email;
 				$empresa->telefono = $request->telefono;
 				$empresa->representante = "Representante";
+				$empresa->cliente = $request->input('cliente', 0);
+				$empresa->proveedor = $request->input('proveedor', 0);
+				$empresa->transporte = $request->input('transportista', 0);
 				//$empresa->costo_estacionamiento = $request->costo_estacionamiento;
 				//$empresa->costo_volumen = $request->costo_volumen;
 				$empresa->save();
@@ -498,12 +496,14 @@ class EmpresaController extends Controller
 			if(count($empresaExiste)==0){
 				$empresa = Empresa::find($request->id);
 				$empresa->ruc = $request->ruc;
-				$empresa->id_tipo_empresa = $request->tipo_empresa;
 				$empresa->razon_social = $request->razon_social;
 				$empresa->nombre_comercial = $request->razon_social;
 				$empresa->direccion = $request->direccion;
 				$empresa->email = $request->email;
 				$empresa->telefono = $request->telefono;
+				$empresa->cliente = $request->input('cliente', 0);
+				$empresa->proveedor = $request->input('proveedor', 0);
+				$empresa->transporte = $request->input('transportista', 0);
 				//$empresa->costo_estacionamiento = $request->costo_estacionamiento;
 				//$empresa->costo_volumen = $request->costo_volumen;
 				$empresa->save();

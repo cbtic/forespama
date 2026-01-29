@@ -165,6 +165,8 @@ class PromotorController extends Controller
 				//$kardex->id_entrada_producto = $entrada_producto->id;
 				$kardex->id_almacen_destino = $request->almacen;
 				$kardex->id_dispensacion = $dispensacion->id;
+				$kardex->fecha = $fecha;
+				$kardex->id_usuario_inserta = $id_user;
 
 				$kardex->save();
 			}else{

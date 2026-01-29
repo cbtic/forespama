@@ -200,23 +200,25 @@ function fn_save(){
 	var direccion = $('#direccion_').val();
 	var email = $('#email_').val();
 	var telefono = $('#telefono_').val();
-	var tipo_empresa = $('#tipo_empresa_').val();
+	var cliente = $('#cliente').is(':checked') ? 1 : 0;
+	var proveedor = $('#proveedor').is(':checked') ? 1 : 0;
+	var transportista = $('#transportista').is(':checked') ? 1 : 0;
 	
     $.ajax({
-			url: "/empresa/send",
-            type: "POST",
-            data : {_token:_token,id:id,tipo_empresa:tipo_empresa,ruc:ruc,razon_social:razon_social,direccion:direccion,email:email,telefono:telefono},
-			dataType: 'json',
-            success: function (result) {
-				
-				if(result.sw==false){
-					bootbox.alert(result.msg);
-				}
-				
-				$('#openOverlayOpc').modal('hide');
-				datatablenew();
-				
-            }
+		url: "/empresa/send",
+		type: "POST",
+		data : {_token:_token,id:id,ruc:ruc,razon_social:razon_social,direccion:direccion,email:email,telefono:telefono,cliente:cliente,proveedor:proveedor,transportista:transportista},
+		dataType: 'json',
+		success: function (result) {
+			
+			if(result.sw==false){
+				bootbox.alert(result.msg);
+			}
+			
+			$('#openOverlayOpc').modal('hide');
+			datatablenew();
+			
+		}
     });
 }
 
@@ -379,18 +381,6 @@ container: '#myModal modal-body'
 						</div>
 					</div>-->
 					<div class="row">
-						<div class="col-lg-4">
-							<label class="control-label">Tipo Empresa</label>
-							<select name="tipo_empresa_" id="tipo_empresa_" class="form-control form-control-sm" onchange="">
-								<option value="">--Seleccionar--</option>
-								<?php
-								foreach ($tipo_empresa as $row){?>
-									<option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$empresa->id_tipo_empresa)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
-									<?php 
-								}
-								?>
-							</select>
-						</div>
 						<?php 
 							$readonly=$id>0?"readonly='readonly'":'';
 							$readonly_=$id>0?'':"readonly='readonly'";
@@ -429,6 +419,25 @@ container: '#myModal modal-body'
 							<div class="form-group" style="padding-top:0px;padding-bottom:0px;margin-top:0px;margin-bottom:0px">
 								<label class="control-label">Correo</label>
 								<input id="email_" name="email_" class="form-control form-control-sm" value="<?php echo $empresa->email?>" type="text">
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-lg-4">
+							<label class="control-label">Tipo Empresa</label>
+							<div class="form-check">
+								<input class="form-check-input" type="checkbox" name="cliente" value="1" id="cliente" <?php if($empresa->cliente == 1) echo 'checked'; ?>>
+								<label class="form-check-label" for="cliente">Cliente</label>
+							</div>
+
+							<div class="form-check">
+								<input class="form-check-input" type="checkbox" name="proveedor" value="1" id="proveedor" <?php if($empresa->proveedor == 1) echo 'checked'; ?>>
+								<label class="form-check-label" for="proveedor">Proveedor</label>
+							</div>
+
+							<div class="form-check">
+								<input class="form-check-input" type="checkbox" name="transportista" value="1" id="transportista" <?php if($empresa->transportista == 1) echo 'checked'; ?>>
+								<label class="form-check-label" for="transportista">Transportista</label>
 							</div>
 						</div>
 					</div>

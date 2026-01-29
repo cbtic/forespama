@@ -525,45 +525,10 @@ $.mask.definitions['p'] = "[Mm]";
 		var img_foto = $('#img_foto').val();
 		var ruc = $('#ruc').val();
 		var id_ubigeo_nacimiento = $('#id_distrito_nacimiento').val();
-/*
-		if(result.sw==false){
-			bootbox.alert("El DNI ingresado ya existe !!!");
-			return false;
-		}
-		else{
-			$.ajax({
-			url: "/persona/send_persona_nuevoPersona",
-			type: "POST",
-			data: {
-				_token: _token,
-				id: id,
-				tipo_documento: tipo_documento,
-				numero_documento: numero_documento,
-				nombre: nombre,
-				apellido_paterno: apellido_paterno,
-				apellido_materno: apellido_materno,
-				fecha_nacimiento: fecha_nacimiento,
-				grupo_sanguineo: grupo_sanguineo,
-				lugar_nacimiento: lugar_nacimiento,
-				nacionalidad: nacionalidad,
-				sexo: sexo,
-				numero_celular: numero_celular,
-				correo: correo,
-				direccion: direccion,
-				img_foto: img_foto
-			},
-			dataType: 'json',
-			success: function(result) {
-				if(result.sw==false){
-					bootbox.alert(result.msg);
-					$('#openOverlayOpc').modal('hide');
-				}else{
-					$('#openOverlayOpc').modal('hide');
-					window.location.reload();
-				}
-            }
-		});
-		}*/
+		var cliente = $('#cliente').is(':checked') ? 1 : 0;
+		var proveedor = $('#proveedor').is(':checked') ? 1 : 0;
+		var personal = $('#personal').is(':checked') ? 1 : 0;
+
 		$.ajax({
 			url: "/persona/send",
 			type: "POST",
@@ -585,7 +550,10 @@ $.mask.definitions['p'] = "[Mm]";
 				direccion: direccion,
 				img_foto: img_foto,
 				ruc:ruc,
-				id_ubigeo_nacimiento:id_ubigeo_nacimiento
+				id_ubigeo_nacimiento:id_ubigeo_nacimiento,
+				cliente:cliente,
+				proveedor:proveedor,
+				personal:personal
 			},
 			dataType: 'json',
 			success: function(result) {
@@ -1272,7 +1240,25 @@ $.mask.definitions['p'] = "[Mm]";
 											</div>
 										</div>
 									</div>
+									<div class="row">
+										<div class="col-lg-4">
+											<label class="control-label">Tipo Persona</label>
+											<div class="form-check">
+												<input class="form-check-input" type="checkbox" name="cliente" value="1" id="cliente" <?php if($persona->cliente == 1) echo 'checked'; ?>>
+												<label class="form-check-label" for="cliente">Cliente</label>
+											</div>
 
+											<div class="form-check">
+												<input class="form-check-input" type="checkbox" name="proveedor" value="1" id="proveedor" <?php if($persona->proveedor == 1) echo 'checked'; ?>>
+												<label class="form-check-label" for="proveedor">Proveedor</label>
+											</div>
+
+											<div class="form-check">
+												<input class="form-check-input" type="checkbox" name="personal" value="1" id="personal" <?php if($persona->personal == 1) echo 'checked'; ?>>
+												<label class="form-check-label" for="personal">Personal</label>
+											</div>
+										</div>
+									</div>
 									<div style="margin-top:15px" class="form-group">
 										<div class="col-sm-12 controls">
 											<div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">

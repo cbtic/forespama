@@ -181,6 +181,8 @@ class IngresoProduccionController extends Controller
 				}
 				$kardex->id_almacen_destino = $request->almacen_destino;
 				$kardex->id_ingreso_produccion = $ingreso_produccion->id;
+				$kardex->fecha = $request->fecha;
+				$kardex->id_usuario_inserta = $id_user;
 
 				$kardex->save();
 			}else{

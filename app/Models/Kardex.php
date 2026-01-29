@@ -90,6 +90,24 @@ class Kardex extends Model
         return $data;
     }
 
+    function getExistenciaProductoByFecha($id, $id_almacen_salida, $fecha){
+
+        $cad = "select *, k.saldos_cantidad - coalesce((select sum(ocd.cantidad_requerida) cantidad_requerida 
+        from orden_compra_detalles ocd 
+        inner join orden_compras oc on ocd.id_orden_compra = oc.id and oc.estado ='1' and oc.id_tipo_documento ='2' and oc.cerrado ='1' and oc.estado_pedido ='1'
+        where ocd.id_producto = '".$id."' 
+        and ocd.comprometido = '1' 
+        and ocd.cerrado = '1' 
+        and ocd.estado ='1'),0) stock_comprometido
+        from kardex k 
+        where k.id_producto = '".$id."' and  k.id_almacen_destino = '".$id_almacen_salida."' and k.fecha <= '".$fecha."'
+        order by k.fecha desc, k.id desc
+        limit 1";
+
+		$data = DB::select($cad);
+        return $data;
+    }
+
     function getStockComprometidoProductoById($id, $id_almacen_salida){
 
         $cad = "select k.saldos_cantidad - (select sum(ocd.cantidad_requerida) cantidad_requerida from orden_compra_detalles ocd where ocd.id_producto = '".$id."' and ocd.comprometido = '".$id_almacen_salida."') stock_comprometido
@@ -100,6 +118,34 @@ class Kardex extends Model
 
 		$data = DB::select($cad);
         return $data;
+    }
+
+    function updateSaldos($id_producto, $id_almacen_destino, $fechaAjuste, $id_ajuste, $saldoInicial){
+
+        $cad = "with movimientos as (
+                select
+                    k.id,
+                    sum(
+                        coalesce(k.entradas_cantidad, 0)
+                        - coalesce(k.salidas_cantidad, 0)
+                    ) over (
+                        ORDER BY k.fecha, k.id
+                        ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
+                    ) AS acumulado
+                FROM kardex k
+                WHERE k.id_producto = ?
+                AND k.id_almacen_destino = ?
+                AND (
+                    k.fecha > ?
+                    OR (k.fecha = ? AND k.id > ?)
+                )
+            )
+            UPDATE kardex k
+            SET saldos_cantidad = ? + m.acumulado
+            FROM movimientos m
+            WHERE k.id = m.id ";
+
+		DB::statement($cad, [$id_producto, $id_almacen_destino, $fechaAjuste, $fechaAjuste, $id_ajuste, $saldoInicial]);
     }
 
 }

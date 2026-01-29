@@ -320,6 +320,7 @@ function datatablenew(){
             var persona = $('#persona_bus').val();
 			var estado = $('#estado_bus').val();
 			var empresa = $('#empresa').val();
+			var tipo_persona = $('#tipo_persona_bus').val();
 			var _token = $('#_token').val();
 			
             oSettings.jqXHR = $.ajax({
@@ -328,7 +329,7 @@ function datatablenew(){
                 "type": "POST",
                 "url": sSource,
                 "data":{NumeroPagina:iNroPagina,NumeroRegistros:iCantMostrar,
-						numero_documento:numero_documento,persona:persona,estado:estado,empresa:empresa,
+						numero_documento:numero_documento,persona:persona,estado:estado,empresa:empresa,tipo_persona:tipo_persona,
 						_token:_token
                        },
                 "success": function (result) {
@@ -344,12 +345,23 @@ function datatablenew(){
             [	
 				{
                 "mRender": function (data, type, row) {
+                	var tipo_persona = "";
+					if(row.tipo_persona!= null)tipo_persona = row.tipo_persona;
+					return tipo_persona;
+                },
+                "bSortable": false,
+                "aTargets": [0],
+				"className": "dt-center",
+				//"className": 'control'
+                },
+				{
+                "mRender": function (data, type, row) {
                 	var tipo_documento = "";
 					if(row.tipo_documento!= null)tipo_documento = row.tipo_documento;
 					return tipo_documento;
                 },
                 "bSortable": false,
-                "aTargets": [0],
+                "aTargets": [1],
 				"className": "dt-center",
 				//"className": 'control'
                 },
@@ -360,7 +372,7 @@ function datatablenew(){
 					return numero_documento;
                 },
                 "bSortable": false,
-                "aTargets": [1]
+                "aTargets": [2]
                 },
                 {
                 "mRender": function (data, type, row) {
@@ -369,7 +381,7 @@ function datatablenew(){
 					return persona;
                 },
                 "bSortable": false,
-                "aTargets": [2]
+                "aTargets": [3]
                 },
 				{
                 "mRender": function (data, type, row) {
@@ -380,7 +392,7 @@ function datatablenew(){
 					return html_foto;
                 },
                 "bSortable": false,
-                "aTargets": [3]
+                "aTargets": [4]
                 },
 				{
                 "mRender": function (data, type, row) {
@@ -389,7 +401,7 @@ function datatablenew(){
 					return fecha_nacimiento;
                 },
                 "bSortable": false,
-                "aTargets": [4]
+                "aTargets": [5]
                 },
 				{
                 "mRender": function (data, type, row) {
@@ -398,7 +410,7 @@ function datatablenew(){
 					return sexo;
                 },
                 "bSortable": false,
-                "aTargets": [5]
+                "aTargets": [6]
                 },
 
 				{
@@ -409,7 +421,7 @@ function datatablenew(){
 					return nombre_estado;
                 },
                 "bSortable": false,
-                "aTargets": [6]
+                "aTargets": [7]
                 },
 				{
                 "mRender": function (data, type, row) {
@@ -431,13 +443,10 @@ function datatablenew(){
 					return html;
                 },
                 "bSortable": false,
-                "aTargets": [7],
+                "aTargets": [8],
                 },
             ]
-
-
     });
-
 }
 
 function fn_ListarBusqueda() {

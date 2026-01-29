@@ -34,7 +34,11 @@ class PersonaController extends Controller
      */
     public function index()
     {
-        return view('frontend.persona.all');
+        $tablaMaestra_model = new TablaMaestra;
+		
+        $tipo_persona = $tablaMaestra_model->getMaestroByTipo(117);
+
+        return view('frontend.persona.all',compact('tipo_persona'));
     }
 
     /**
@@ -269,6 +273,7 @@ class PersonaController extends Controller
        // echo("ok"); exit();
 
 		$persona_model = new Persona;
+		$p[]=$request->tipo_persona;
 		$p[]=$request->numero_documento;
 		$p[]=$request->persona;
         $p[]=$request->empresa;
@@ -528,6 +533,9 @@ class PersonaController extends Controller
                 $persona->lugar_nacimiento = $request->lugar_nacimiento;
                 $persona->id_nacionalidad = $request->nacionalidad;
                 $persona->direccion = $request->direccion;
+                $persona->cliente = $request->cliente;
+                $persona->proveedor = $request->proveedor;
+                $persona->personal = $request->personal;
                 $persona->save();
                 
                 /*$negativo = new Negativo;
@@ -568,26 +576,14 @@ class PersonaController extends Controller
 			$persona->email = $request->correo;
 			$persona->foto = $request->img_foto;
             $persona->numero_ruc = $request->ruc;
+            $persona->cliente = $request->cliente;
+            $persona->proveedor = $request->proveedor;
+            $persona->personal = $request->personal;
 			//$flag_negativo = $persona->flag_negativo;
 
             //$persona->flag_negativo = $request->flag_negativo;
             //print ($persona->ruc);exit();
 			$persona->save();
-
-            /*if($flag_negativo!=$request->flag_negativo){
-                $negativo = new Negativo;
-                $negativo->persona_id = $persona->id;
-                $negativo->flag_negativo = $request->flag_negativo;
-                $negativo->observacion = $request->observacion;
-                $negativo->fecha = Carbon::now()->format('Y-m-d');
-                $negativo->save();
-            }else{
-                $negativo = Negativo::where('persona_id',$persona->id)->orderBy('id', 'desc')->first();
-                if($negativo && $negativo->observacion=="" && $request->observacion!=""){
-                    $negativo->observacion = $request->observacion;
-                    $negativo->save();
-                }
-            }*/
         }
 
         $array["sw"] = $sw;

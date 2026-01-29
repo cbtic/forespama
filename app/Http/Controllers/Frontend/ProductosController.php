@@ -420,17 +420,33 @@ class ProductosController extends Controller
 
         $producto_stock = [];
 
-        //foreach($dispensacion as $detalle){
-            $stock = $kardex_model->getExistenciaProductoById($id_producto, $almacen);
-            if(count($stock)>0){
-                $producto_stock[$id_producto] = $stock[0];
-            }else {
-                $producto_stock[$id_producto] = ['stock_comprometido'=>0];
-            }
-        //}
+        $stock = $kardex_model->getExistenciaProductoById($id_producto, $almacen);
+        if(count($stock)>0){
+            $producto_stock[$id_producto] = $stock[0];
+        }else {
+            $producto_stock[$id_producto] = ['stock_comprometido'=>0];
+        }
 
         return response()->json([
-            //'dispensacion' => $dispensacion,
+            'producto_stock' =>$producto_stock
+        ]);
+    }
+
+    public function obtener_stock_producto_fecha($almacen, $id_producto, $fecha)
+    {
+
+		$kardex_model = new Kardex;
+
+        $producto_stock = [];
+
+        $stock = $kardex_model->getExistenciaProductoByFecha($id_producto, $almacen, $fecha);
+        if(count($stock)>0){
+            $producto_stock[$id_producto] = $stock[0];
+        }else {
+            $producto_stock[$id_producto] = ['stock_comprometido'=>0];
+        }
+
+        return response()->json([
             'producto_stock' =>$producto_stock
         ]);
     }

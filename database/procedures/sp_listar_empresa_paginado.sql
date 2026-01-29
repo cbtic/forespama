@@ -12,16 +12,19 @@ v_tabla varchar;
 v_where varchar;
 v_count varchar;
 v_col_count varchar;
---v_perfil varchar;
+--v_perfil varchar;23
 
 Begin
 
 	p_pagina=(p_pagina::Integer-1)*p_limit::Integer;
 	
-	v_campos=' e.id, e.ruc, e.nombre_comercial, e.razon_social, e.direccion, e.email, e.telefono, e.representante, tm.denominacion tipo_empresa, e.estado ';
+	v_campos=' e.id, e.ruc, e.nombre_comercial, e.razon_social, e.direccion, e.email, e.telefono, e.representante, e.cliente, e.proveedor, e.transporte, e.estado,
+	concat_ws('' | '',
+        case when e.cliente = ''1'' then ''CLIENTE'' end,
+        case when e.proveedor = ''1'' then ''PROVEEDOR'' end,
+        case when e.transporte = ''1'' then ''TRANSPORTE'' end) tipo_empresa ';
 
-	v_tabla='from empresas e
-	left join tabla_maestras tm on e.id_tipo_empresa = tm.codigo::int and tm.tipo = ''116'' ';
+	v_tabla='from empresas e ';
 	
 	v_where = ' Where 1=1  ';
 	
@@ -30,7 +33,15 @@ Begin
 	End If;
 
 	If p_tipo_empresa<>'' Then
-	 v_where:=v_where||'And e.id_tipo_empresa = '''||p_tipo_empresa||''' ';
+		If p_tipo_empresa = '1' then
+			v_where:=v_where||'And e.cliente = ''1'' ';
+		End If;
+		if p_tipo_empresa = '2' then
+			v_where:=v_where||'And e.proveedor = ''1'' ';
+		End If;
+		if p_tipo_empresa = '3' then
+			v_where:=v_where||'And e.transporte = ''1'' ';
+		End If;
 	End If;
 	
 	If p_razon_social<>'' Then

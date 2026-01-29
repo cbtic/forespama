@@ -43,6 +43,7 @@ BEGIN
               AND oc.cerrado = ''1''
               AND ocd.cerrado = ''1''
               AND oc.estado = ''1''
+              AND ocd.estado = ''1''
 			  AND oc.estado_pedido = ''1''
 			' || CASE WHEN p_id_empresa <> '' THEN 'AND oc.id_empresa_compra = ''' || p_id_empresa || '''' ELSE '' END || '
             GROUP BY ocd.id_producto, oc.id_almacen_salida
@@ -73,6 +74,7 @@ BEGIN
               AND oc.cerrado = ''1''
               AND ocd.cerrado = ''1''
               AND oc.estado = ''1''
+              AND ocd.estado = ''1''
 			  AND oc.estado_pedido = ''1''
 			' || CASE WHEN p_id_empresa <> '' THEN 'AND oc.id_empresa_compra = ''' || p_id_empresa || '''' ELSE '' END || '
             GROUP BY ocd.id_producto, oc.id_almacen_salida

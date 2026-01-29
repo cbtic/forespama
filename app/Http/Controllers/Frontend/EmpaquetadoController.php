@@ -317,6 +317,8 @@ class EmpaquetadoController extends Controller
                 $kardex->saldos_cantidad = $cantidad[$index];
             }
             $kardex->id_almacen_destino = $request->almacen_destino;
+            $kardex->fecha = $request->fecha;
+            $kardex->id_usuario_inserta = $id_user;
 
             $kardex->save();
             
@@ -334,6 +336,8 @@ class EmpaquetadoController extends Controller
             $kardex->saldos_cantidad = $request->cantidad_producto;
         }
         $kardex->id_almacen_destino = $request->almacen_destino;
+        $kardex->fecha = $request->fecha;
+        $kardex->id_usuario_inserta = $id_user;
 
         $kardex->save();
     }

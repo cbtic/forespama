@@ -257,6 +257,8 @@ class DevolucionController extends Controller
 							}
 							$kardex->id_entrada_producto = $entrada_producto->id;
 							$kardex->id_almacen_destino = $request->almacen;
+							$kardex->fecha = $request->fecha_devolucion;
+							$kardex->id_usuario_inserta = $id_user;
 	
 							$kardex->save();
 
@@ -274,6 +276,8 @@ class DevolucionController extends Controller
 							}
 							$kardex->id_entrada_producto = $entrada_producto->id;
 							$kardex->id_almacen_destino = $request->almacen;
+							$kardex->fecha = $request->fecha_devolucion;
+							$kardex->id_usuario_inserta = $id_user;
 	
 							$kardex->save();
 						}
