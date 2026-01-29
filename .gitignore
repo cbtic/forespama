@@ -42,3 +42,5 @@ phpunit.dusk.xml
 !/public/img/logo_forestalpama3.jpeg
 !/public/img/logo_forestalpama4.png
 !/public/img/logo_forestalpama5.jpeg
+!/public/favicon.ico
+!/public/favicon2.ico
