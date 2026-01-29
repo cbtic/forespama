@@ -37,3 +37,8 @@ yarn-error.log
 phpunit.dusk.xml
 /public/factura_sodimac
 /public/orden_distribucion
+!/public/img/logo_forestalpama.jpg
+!/public/img/logo_forestalpama2.png
+!/public/img/logo_forestalpama3.jpeg
+!/public/img/logo_forestalpama4.png
+!/public/img/logo_forestalpama5.jpeg
