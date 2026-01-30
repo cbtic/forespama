@@ -1,4 +1,4 @@
--- DROP FUNCTION public.sp_listar_kardex_existencia_producto_paginado(varchar, varchar, varchar, varchar, varchar, refcursor);
+-- DROP FUNCTION public.sp_listar_kardex_existencia_producto_paginado(varchar, varchar, varchar, varchar, varchar, varchar, refcursor);
 
 CREATE OR REPLACE FUNCTION public.sp_listar_kardex_existencia_producto_paginado(p_producto character varying, p_almacen character varying, p_cantidad_producto character varying, p_fecha character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
  RETURNS refcursor
@@ -55,7 +55,7 @@ begin
 	End If;
 
 	If p_fecha<>'' Then
-	 v_where := v_where || 'And to_char(k.created_at,''dd-mm-yyyy'') <= ''' || p_fecha || ''' ';
+	 v_where := v_where || 'And k.fecha <= ''' || p_fecha || ''' ';
 	End If;
 	
 	--EXECUTE ('SELECT count(1) '||v_tabla||v_where) INTO v_count;
@@ -63,9 +63,9 @@ begin
 	v_col_count:=' ,'||v_count||' as TotalRows ';
 
 	If v_count::Integer > p_limit::Integer then
-		v_scad:='SELECT '||v_campos||v_col_count||v_tabla||v_where||' Order By k.id_producto, k.id_almacen_destino, k.id desc LIMIT '||p_limit||' OFFSET '||p_pagina||';'; 
+		v_scad:='SELECT '||v_campos||v_col_count||v_tabla||v_where||' Order By k.id_producto, k.id_almacen_destino, k.fecha desc, k.id desc LIMIT '||p_limit||' OFFSET '||p_pagina||';'; 
 	else
-		v_scad:='SELECT '||v_campos||v_col_count||v_tabla||v_where||' Order By k.id_producto, k.id_almacen_destino, k.id desc ;'; 
+		v_scad:='SELECT '||v_campos||v_col_count||v_tabla||v_where||' Order By k.id_producto, k.id_almacen_destino, k.fecha desc, k.id desc ;'; 
 	End If;             
              
 	--Raise Notice '%',v_scad;
