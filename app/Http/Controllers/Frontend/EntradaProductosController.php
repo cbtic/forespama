@@ -2060,8 +2060,8 @@ class EntradaProductosController extends Controller
                         $kardex->id_almacen_destino = $request->almacen_destino;
                         $kardex->fecha = $request->fecha;
 
-                        $kardex->entradas_cantidad = $cantidad[$index];
-                        $kardex->salidas_cantidad = 0;
+                        $kardex->salidas_cantidad = $cantidad[$index];
+                        $kardex->entradas_cantidad = 0;
 
                         $kardex->saldos_cantidad = $saldoBase - $cantidad[$index];
 
@@ -2098,7 +2098,7 @@ class EntradaProductosController extends Controller
                     $saldoBase = Kardex::where('id', $idAjuste)->value('saldos_cantidad');
 
                     $kardex_ajuste_model = new Kardex;
-                    $kardex_ajuste = $kardex_ajuste_model->updateSaldos($idProducto, $request->almacen_destino, $request->fecha, $idAjuste, $saldoBase);
+                    $kardex_ajuste = $kardex_ajuste_model->updateSaldosSalida($idProducto, $request->almacen_destino, $request->fecha, $idAjuste, $saldoBase);
                 }
             }
         }

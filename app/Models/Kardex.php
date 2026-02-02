@@ -148,4 +148,32 @@ class Kardex extends Model
 		DB::statement($cad, [$id_producto, $id_almacen_destino, $fechaAjuste, $fechaAjuste, $id_ajuste, $saldoInicial]);
     }
 
+    function updateSaldosSalida($id_producto, $id_almacen_destino, $fechaAjuste, $id_ajuste, $saldoInicial){
+
+        $cad = "with movimientos as (
+                select
+                    k.id,
+                    sum(
+                        coalesce(k.entradas_cantidad, 0)
+                        - coalesce(k.salidas_cantidad, 0)
+                    ) over (
+                        ORDER BY k.fecha, k.id
+                        ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
+                    ) AS acumulado
+                FROM kardex k
+                WHERE k.id_producto = ?
+                AND k.id_almacen_destino = ?
+                AND (
+                    k.fecha > ?
+                    OR (k.fecha = ? AND k.id > ?)
+                )
+            )
+            UPDATE kardex k
+            SET saldos_cantidad = ? + m.acumulado
+            FROM movimientos m
+            WHERE k.id = m.id ";
+
+		DB::statement($cad, [$id_producto, $id_almacen_destino, $fechaAjuste, $fechaAjuste, $id_ajuste, $saldoInicial]);
+    }
+
 }
