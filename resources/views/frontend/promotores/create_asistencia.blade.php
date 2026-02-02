@@ -423,6 +423,7 @@ label.form-control-sm{
                       <?php }else{ ?>
                         <button type="button" class="btn btn-sm btn-success icono-botones2" onclick="modalAsistencia()" style="margin-left:10px" disabled>Marcar Ingreso</button>
                       <?php } ?>
+                      <!--<button type="button" class="btn btn-sm btn-success icono-botones2" onclick="modalEditarAsistencia()" style="margin-left:10px" >Editar Asistencia</button>-->
                       @hasanyrole('Administrator|ADMINISTRADOR ASISTENCIA')
                       <buttom class="btn btn-sm btn-secondary pull-rigth icono-botones2" type="button" id="btnDescargar" style="margin-left:10px" />
                         <i class="fas fa-download" style="font-size:18px;"></i> Descargar
