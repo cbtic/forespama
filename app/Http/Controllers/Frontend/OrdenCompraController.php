@@ -765,7 +765,7 @@ class OrdenCompraController extends Controller
         $sub_total_general = 0;
         $igv_general = 0;
         $total_general = 0;
-        $id_vendedor = 35;
+        $id_vendedor = 84;
         $id_tipo_cliente = 5;
         $id_canal = 4;
 
