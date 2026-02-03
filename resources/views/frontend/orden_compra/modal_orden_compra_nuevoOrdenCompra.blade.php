@@ -1360,7 +1360,7 @@ function obtenerPrioridad(){
     $('#prioridad_select').hide();
     var vendedor = $('#id_vendedor').val();
 
-    if(vendedor==35){
+    if(vendedor==35 || vendedor==84){
         $('#prioridad_label').show();
         $('#prioridad_select').show();
     }
