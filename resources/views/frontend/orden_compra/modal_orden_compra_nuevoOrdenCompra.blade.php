@@ -1158,7 +1158,7 @@ function fn_save_orden_compra(){
 
                 var numero_orden_compra_cliente = $('#numero_orden_compra_cliente').val().toUpperCase().trim();
 
-                if(!numero_orden_compra_cliente.includes('MUESTRA') && !numero_orden_compra_cliente.includes('EXHIBICION')){
+                if(!numero_orden_compra_cliente.includes('MUESTRA') && !numero_orden_compra_cliente.includes('EXHIBICION') && !numero_orden_compra_cliente.includes('POSVENTA') && !numero_orden_compra_cliente.includes('POSTVENTA') && !numero_orden_compra_cliente.includes('FERIA')){
                     msg += "El producto " + descripcion_precio + " no tiene precio, contactarse con la persona encargada de definir el precio <br>";
                 }
             }
@@ -1587,7 +1587,7 @@ function validarMuestraExhibicion(input){
 
     var numero_orden_compra_cliente = $('#numero_orden_compra_cliente').val().toUpperCase().trim();
 
-    if(numero_orden_compra_cliente.includes('MUESTRA') || numero_orden_compra_cliente.includes('EXHIBICION') || numero_orden_compra_cliente.includes('POSVENTA') || numero_orden_compra_cliente.includes('POSTVENTA')){
+    if(numero_orden_compra_cliente.includes('MUESTRA') || numero_orden_compra_cliente.includes('EXHIBICION') || numero_orden_compra_cliente.includes('POSVENTA') || numero_orden_compra_cliente.includes('POSTVENTA') || numero_orden_compra_cliente.includes('FERIA')){
 
         //alert("ok");
         row.find(".precio_unitario").val(0);
