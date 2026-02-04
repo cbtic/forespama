@@ -38,6 +38,8 @@ class KardexController extends Controller
 		$this->middleware('can:Inventario')->only(['create_consulta']);
 		$this->middleware('can:Consulta Productos Venta')->only(['create_consulta_productos']);
 		$this->middleware('can:Consulta Productos Orden Compra')->only(['create_consulta_productos_orden_compra']);
+		$this->middleware('can:Inventario')->only(['exportar_listar_existencia']);
+		
 	}
 
     public function create(){
