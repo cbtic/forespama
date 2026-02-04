@@ -45,6 +45,27 @@ use DateTime;
 
 class ComprobanteController extends Controller
 {
+
+    public function __construct(){
+
+		/*$this->middleware(function ($request, $next) {
+			if(!Auth::check()) {
+                return redirect('login');
+            }
+			return $next($request);
+    	});*/
+
+		$this->middleware('auth');
+		$this->middleware('can:Comprobante')->only(['all']);
+		$this->middleware('can:Consulta Sodimac')->only(['create_consulta_sodimac']);
+		$this->middleware('can:Consulta Promart')->only(['create_consulta_promart']);
+		$this->middleware('can:Facturacion Orden Compra')->only(['create_facturacion_orden_compra']);
+		$this->middleware('can:Consulta de Facturacion')->only(['create_facturacion']);
+		$this->middleware('can:Facturacion de Pagos')->only(['create_pagos']);
+		$this->middleware('can:Reporte Ventas')->only(['create_ventas']);
+		$this->middleware('can:Consulta de Facturacion Detalle')->only(['create_facturacion_sodimac_detalle']);
+	}
+
 	public function index(){
         $tabla_model = new TablaMaestra;
 

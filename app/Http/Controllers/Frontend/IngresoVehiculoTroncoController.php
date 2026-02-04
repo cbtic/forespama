@@ -36,6 +36,23 @@ use PhpOffice\PhpSpreadsheet\Shared\Date;
 
 class IngresoVehiculoTroncoController extends Controller
 {
+
+	public function __construct(){
+
+		/*$this->middleware(function ($request, $next) {
+			if(!Auth::check()) {
+                return redirect('login');
+            }
+			return $next($request);
+    	});*/
+
+		$this->middleware('auth');
+		$this->middleware('can:Ingreso de Camiones')->only(['index']);
+		$this->middleware('can:Cubicaje de Troncos')->only(['cubicaje']);
+		$this->middleware('can:Pagos')->only(['pagos']);
+		$this->middleware('can:Reporte Pagos')->only(['reporte_pagos']);
+	}
+
     public function index(){
 
 		$tablaMaestra_model = new TablaMaestra;

@@ -83,7 +83,7 @@ class Kardex extends Model
         and ocd.estado ='1'),0) stock_comprometido
         from kardex k 
         where k.id_producto = '".$id."' and  k.id_almacen_destino = '".$id_almacen_salida."'
-        order by 1 desc
+        order by k.fecha desc, k.id desc
         limit 1";
 
 		$data = DB::select($cad);

@@ -49,11 +49,11 @@ begin
 	End If;
 
 	If p_fecha_inicio<>'' Then
-	 v_where:=v_where||'And k.created_at  >= '''||p_fecha_inicio||''' ';
+	 v_where:=v_where||'And k.fecha  >= '''||p_fecha_inicio||''' ';
 	End If;
 
 	If p_fecha_fin<>'' Then
-	 v_where:=v_where||'And k.created_at <= '''||p_fecha_fin|| ' 23:59:59'' ';
+	 v_where:=v_where||'And k.fecha <= '''||p_fecha_fin|| ' 23:59:59'' ';
 	End If;
 
 	EXECUTE ('SELECT count(1) '||v_tabla||v_where) INTO v_count;

@@ -16,12 +16,16 @@ class ParametroController extends Controller
 {
     public function __construct(){
 
-		$this->middleware(function ($request, $next) {
+		/*$this->middleware(function ($request, $next) {
 			if(!Auth::check()) {
                 return redirect('login');
             }
 			return $next($request);
-    	});
+    	});*/
+
+		$this->middleware('auth');
+		$this->middleware('can:Mantenimiento Parametro')->only(['create']);
+		$this->middleware('can:Verificacion Aplicacion Comisiones')->only(['create_valida_parametro']);
 	}
 
     public function create(){		

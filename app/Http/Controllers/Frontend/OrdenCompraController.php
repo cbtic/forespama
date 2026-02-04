@@ -48,12 +48,24 @@ class OrdenCompraController extends Controller
 {
     public function __construct(){
 
-		$this->middleware(function ($request, $next) {
+		/*$this->middleware(function ($request, $next) {
 			if(!Auth::check()) {
                 return redirect('login');
             }
 			return $next($request);
-    	});
+    	});*/
+
+        $this->middleware('auth');
+		$this->middleware('can:Orden Compra')->only(['create']);
+		$this->middleware('can:Consulta Stock')->only(['consulta_stock_pedido']);
+		$this->middleware('can:Gestion Autorizacion')->only(['create_autorizacion']);
+		$this->middleware('can:Cargar Informe Venta b2b')->only(['create_informe_b2b']);
+		$this->middleware('can:Control Produccion Orden Compra')->only(['create_control_produccion']);
+		$this->middleware('can:Pagos Orden Compra')->only(['create_pago_orden_compra']);
+		$this->middleware('can:Reporte Comercializacion')->only(['create_reporte_comercializacion']);
+		$this->middleware('can:Reporte Comercializacion Tienda')->only(['create_reporte_comercializacion_tienda']);
+		$this->middleware('can:Reporte Pedidos Tienda')->only(['create_reporte_comercializacion_solicitado_tienda']);
+		$this->middleware('can:Reporte Comercializacion General')->only(['create_reporte_comercializacion_general']);
 	}
 
     public function create(){

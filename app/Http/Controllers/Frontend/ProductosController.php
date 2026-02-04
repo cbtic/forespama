@@ -41,12 +41,17 @@ class ProductosController extends Controller
     
     public function __construct(){
 
-		$this->middleware(function ($request, $next) {
+		/*$this->middleware(function ($request, $next) {
 			if(!Auth::check()) {
                 return redirect('login');
             }
 			return $next($request);
-    	});
+    	});*/
+
+        $this->middleware('auth');
+		$this->middleware('can:Productos')->only(['create']);
+		$this->middleware('can:Precio Productos')->only(['create_productos_precio']);
+		$this->middleware('can:Chopeo Productos')->only(['create_chopeo_producto']);
 	}
 
     public function create(){

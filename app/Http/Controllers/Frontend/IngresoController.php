@@ -326,7 +326,7 @@ class IngresoController extends Controller
     }
 
     
-    public function obtener_proforma($tipo_documento,$id_persona){       
+    public function obtener_proforma($tipo_documento,$id_persona){
         $proforma_model = new Valorizacione;
         $sw = true;
         $proforma = $proforma_model->getProforma($tipo_documento,$id_persona);

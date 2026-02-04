@@ -20,12 +20,16 @@ class EmpaquetadoController extends Controller
     
     public function __construct(){
 
-		$this->middleware(function ($request, $next) {
+		/*$this->middleware(function ($request, $next) {
 			if(!Auth::check()) {
                 return redirect('login');
             }
 			return $next($request);
-    	});
+    	});*/
+
+        $this->middleware('auth');
+		$this->middleware('can:Mantenimiento Empaquetado')->only(['create']);
+		$this->middleware('can:Empaquetado')->only(['create_empaquetado']);
 	}
 
     public function create(){

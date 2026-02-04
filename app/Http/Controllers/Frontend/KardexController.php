@@ -26,12 +26,18 @@ class KardexController extends Controller
 {
     public function __construct(){
 
-		$this->middleware(function ($request, $next) {
+		/*$this->middleware(function ($request, $next) {
 			if(!Auth::check()) {
                 return redirect('login');
             }
 			return $next($request);
-    	});
+    	});*/
+
+		$this->middleware('auth');
+		$this->middleware('can:Kardex')->only(['create']);
+		$this->middleware('can:Inventario')->only(['create_consulta']);
+		$this->middleware('can:Consulta Productos Venta')->only(['create_consulta_productos']);
+		$this->middleware('can:Consulta Productos Orden Compra')->only(['create_consulta_productos_orden_compra']);
 	}
 
     public function create(){

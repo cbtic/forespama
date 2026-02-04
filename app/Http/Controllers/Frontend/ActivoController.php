@@ -23,12 +23,16 @@ class ActivoController extends Controller
     
     public function __construct(){
 
-		$this->middleware(function ($request, $next) {
+		/*$this->middleware(function ($request, $next) {
 			if(!Auth::check()) {
                 return redirect('login');
             }
 			return $next($request);
-    	});
+    	});*/
+
+		$this->middleware('auth');
+		$this->middleware('can:Registro Activos')->only(['create']);
+		$this->middleware('can:Registro Entrega Activos')->only(['create_entrega_activo']);
 	}
 
     public function create(){

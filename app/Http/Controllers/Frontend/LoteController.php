@@ -20,12 +20,15 @@ class LoteController extends Controller
 
     public function __construct(){
 
-		$this->middleware(function ($request, $next) {
+		/*$this->middleware(function ($request, $next) {
 			if(!Auth::check()) {
                 return redirect('login');
             }
 			return $next($request);
-    	});
+    	});*/
+
+        $this->middleware('auth');
+		$this->middleware('can:Lotes')->only(['create']);
 	}
 
     public function create(){

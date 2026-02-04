@@ -23,12 +23,16 @@ class PromotorController extends Controller
 {
     public function __construct(){
 
-		$this->middleware(function ($request, $next) {
+		/*$this->middleware(function ($request, $next) {
 			if(!Auth::check()) {
                 return redirect('login');
             }
 			return $next($request);
-    	});
+    	});*/
+
+		$this->middleware('auth');
+		$this->middleware('can:Asignacion Rutas')->only(['create_ruta']);
+		$this->middleware('can:Marcacion Promotor')->only(['create_asistencia']);
 	}
 
     public function create_ruta(){

@@ -93,7 +93,7 @@
 					@endif
 					
 					
-					@if(Gate::check('Registro Activos'))
+					@if(Gate::check('Registro Activos') || Gate::check('Registro Entrega Activos'))
 						<li class="nav-item dropdown">
 							<a href="#" class="nav-link dropdown-toggle" id="navbarDropdownPrueba" data-toggle="dropdown"
 							aria-haspopup="true" aria-expanded="false">Activos</a>
@@ -112,7 +112,7 @@
 						</li>
 					@endif
 
-					@if(Gate::check('Almacenes') || Gate::check('Secciones') || Gate::check('Anaqueles') || Gate::check('Productos') || Gate::check('Lotes') || Gate::check('Precio Productos'))
+					@if(Gate::check('Almacenes') || Gate::check('Secciones') || Gate::check('Anaqueles') || Gate::check('Productos') || Gate::check('Precio Productos') || Gate::check('Lotes'))
 
 						<li class="nav-item dropdown">
 							<a href="#" class="nav-link dropdown-toggle" id="navbarDropdownPrueba" data-toggle="dropdown"
@@ -169,7 +169,7 @@
 					@endif
 					
 					
-					@if(Gate::check('Requerimientos') || Gate::check('Entradas') || Gate::check('Orden Compra') || Gate::check('Consulta Stock') || Gate::check('Dispensacion') || Gate::check('Ingreso Produccion') || Gate::check('Kardex') || Gate::check('Movimientos') || Gate::check('Verificacion Aplicacion Comisiones') || Gate::check('Empaquetado') || Gate::check('Devolucion'))
+					@if(Gate::check('Requerimientos') || Gate::check('Entradas') || Gate::check('Orden Compra') || Gate::check('Consulta Stock') || Gate::check('Dispensacion') || Gate::check('Ingreso Produccion') || Gate::check('Kardex') || Gate::check('Movimientos') || Gate::check('Verificacion Aplicacion Comisiones') || Gate::check('Empaquetado') || Gate::check('Devolucion') || Gate::check('Gestion Autorizacion') || Gate::check('Cargar Informe Venta b2b') || Gate::check('Reuso') || Gate::check('Ajuste Stock'))
 						
 						<li class="nav-item dropdown">
 							<a href="#" class="nav-link dropdown-toggle" id="navbarDropdownPrueba" data-toggle="dropdown"
@@ -265,7 +265,7 @@
 						
 					@endif
 
-						@if(Gate::check('Ingreso Caja') || Gate::check('Comprobante') || Gate::check('Guia') || Gate::check('Consulta Sodimac') || Gate::check('Consulta Promart') || Gate::check('Pagos Orden Compra') || Gate::check('Facturacion Orden Compra'))
+						@if(Gate::check('Ingreso Caja') || Gate::check('Comprobante') || Gate::check('Consulta Sodimac') || Gate::check('Consulta Promart') || Gate::check('Guia') || Gate::check('Pagos Orden Compra') || Gate::check('Facturacion Orden Compra'))
  
 						<li class="nav-item dropdown">
 							<a href="#" class="nav-link dropdown-toggle" id="navbarDropdownPrueba" data-toggle="dropdown"
@@ -306,7 +306,7 @@
 						
 					@endif
 					
-					@if(Gate::check('Inventario') || Gate::check('Consulta Productos Venta'))
+					@if(Gate::check('Inventario') || Gate::check('Consulta Productos Venta') || Gate::check('Consulta Productos Orden Compra'))
 
 						<li class="nav-item dropdown">
 							<a href="#" class="nav-link dropdown-toggle" id="navbarDropdownPrueba" data-toggle="dropdown"
@@ -331,7 +331,7 @@
 						
 					@endif
 					
-					@if(Gate::check('Mantenimiento Personas') || Gate::check('Mantenimiento Empresas') || Gate::check('Mantenimiento Vehiculos') || Gate::check('Mantenimiento Tablas Maestras') || Gate::check('Mantenimiento Conductores') || Gate::check('Mantenimiento Tipo Cambio') || Gate::check('Mantenimiento Marcas') || Gate::check('Mantenimiento Tiendas') || Gate::check('Mantenimiento Equivalencia Producto') || Gate::check('Mantenimiento Parametro') || Gate::check('Mantenimiento Empaquetado') || Gate::check('Mantenimiento Empresas Cubicaje') || Gate::check('Mantenimiento Familia') || Gate::check('Mantenimiento Sub Familia') || Gate::check('Mantenimiento Permisos Usuario Descuento') || Gate::check('Producto Competencia') || Gate::check('Mantenimiento Persona Proceso') || Gate::check('Mantenimiento Centro Costos'))
+					@if(Gate::check('Mantenimiento Personas') || Gate::check('Mantenimiento Empresas') || Gate::check('Mantenimiento Vehiculos') || Gate::check('Mantenimiento Tablas Maestras') || Gate::check('Mantenimiento Conductores') || Gate::check('Mantenimiento Tipo Cambio') || Gate::check('Mantenimiento Marcas') || Gate::check('Mantenimiento Tiendas') || Gate::check('Mantenimiento Equivalencia Producto') || Gate::check('Mantenimiento Parametro') || Gate::check('Mantenimiento Empaquetado') || Gate::check('Mantenimiento Empresas Cubicaje') || Gate::check('Mantenimiento Familia') || Gate::check('Mantenimiento Sub Familia') || Gate::check('Mantenimiento Permisos Usuario Descuento') || Gate::check('Producto Competencia') || Gate::check('Mantenimiento Persona Proceso') || Gate::check('Mantenimiento Centro Costos') || Gate::check('Mantenimiento Sedes'))
 						
 						<li class="nav-item dropdown">
 							<a href="#" class="nav-link dropdown-toggle" id="navbarDropdownPrueba" data-toggle="dropdown"
@@ -420,7 +420,7 @@
 					
 					@endif
 					
-					@if(Gate::check('Reporte Comercializacion') || Gate::check('Reporte Comercializacion Tienda') || Gate::check('Reporte Pedidos Tienda'))
+					@if(Gate::check('Reporte Comercializacion') || Gate::check('Reporte Comercializacion Tienda') || Gate::check('Reporte Pedidos Tienda') || Gate::check('Reporte Comercializacion General'))
 					
 						<li class="nav-item dropdown">
 							<a href="#" class="nav-link dropdown-toggle" id="navbarDropdownPrueba" data-toggle="dropdown"
@@ -449,7 +449,7 @@
 
 					@endif
 
-					@if(Gate::check('Consulta de Facturacion') || Gate::check('Facturacion de Pagos') || Gate::check('Reporte Ventas'))
+					@if(Gate::check('Consulta de Facturacion') || Gate::check('Facturacion de Pagos') || Gate::check('Reporte Ventas') || Gate::check('Consulta de Facturacion Detalle'))
 					
 						<li class="nav-item dropdown">
 							<a href="#" class="nav-link dropdown-toggle" id="navbarDropdownPrueba" data-toggle="dropdown"
@@ -478,7 +478,7 @@
 
 					@endif 
 
-					@if(Gate::check('Consulta de Facturacion') || Gate::check('Marcacion Promotor'))
+					@if(Gate::check('Asignacion Rutas') || Gate::check('Marcacion Promotor'))
 					
 						<li class="nav-item dropdown">
 							<a href="#" class="nav-link dropdown-toggle" id="navbarDropdownPrueba" data-toggle="dropdown"
