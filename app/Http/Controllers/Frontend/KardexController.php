@@ -145,6 +145,7 @@ class KardexController extends Controller
 
 		if($consulta_almacen=="0")$consulta_almacen = "";
 		if($cantidad_producto=="0")$cantidad_producto = "";
+		if($fecha=="0")$fecha = "";
 
 		$kardex_model = new Kardex;
 		$p[]="";
