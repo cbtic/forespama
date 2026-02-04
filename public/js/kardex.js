@@ -795,11 +795,13 @@ function DescargarArchivosExcel(){
 	
 	var consulta_almacen = $('#consulta_almacen_bus').val();
 	var cantidad_producto = $('#cantidad_producto_bus').val();
+	var fecha = $('#fecha_bus').val();
 
 	if (consulta_almacen == "")consulta_almacen = 0;
 	if (cantidad_producto == "")cantidad_producto = 0;
+	if (fecha == "")fecha = "0";
 	
-	location.href = '/kardex/exportar_listar_existencia/'+consulta_almacen+'/'+cantidad_producto;
+	location.href = '/kardex/exportar_listar_existencia/'+consulta_almacen+'/'+cantidad_producto+'/'+fecha;
 }
 
 function DescargarConsultaProductoArchivosExcel(){

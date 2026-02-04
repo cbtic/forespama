@@ -139,7 +139,7 @@ class KardexController extends Controller
 
 	}
 
-	public function exportar_listar_existencia($consulta_almacen, $cantidad_producto) {
+	public function exportar_listar_existencia($consulta_almacen, $cantidad_producto, $fecha) {
 
 		if($consulta_almacen=="0")$consulta_almacen = "";
 		if($cantidad_producto=="0")$cantidad_producto = "";
@@ -148,6 +148,7 @@ class KardexController extends Controller
 		$p[]="";
 		$p[]=$consulta_almacen;
 		$p[]=$cantidad_producto;
+		$p[]=$fecha;
 		$p[]=1;
 		$p[]=10000;
 		$data = $kardex_model->listar_kardex_existencia_ajax($p);
