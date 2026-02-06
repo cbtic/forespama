@@ -196,10 +196,12 @@ class DispensacionController extends Controller
 
             $dispensacion_detalle->save();
 
-			if($id_dispensacion_detalle[$index] == 0){
-				$producto = Producto::find($descripcion[$index]);
+			$producto = Producto::find($descripcion[$index]);
 
-				$kardex_buscar = Kardex::where("id_producto",$descripcion[$index])->where("id_almacen_destino",$request->almacen)->orderBy('id', 'desc')->first();
+			if($id_dispensacion_detalle[$index] == 0){
+				//$producto = Producto::find($descripcion[$index]);
+
+				/*$kardex_buscar = Kardex::where("id_producto",$descripcion[$index])->where("id_almacen_destino",$request->almacen)->orderBy('id', 'desc')->first();
 				$kardex = new Kardex;
 				$kardex->id_producto = $descripcion[$index];
 				$kardex->salidas_cantidad = $cantidad[$index];
@@ -223,7 +225,31 @@ class DispensacionController extends Controller
 				$kardex->fecha = $request->fecha;
 				$kardex->id_usuario_inserta = $id_user;
 
+				$kardex->save();*/
+
+				//$idCorte = Kardex::where('id_producto', $descripcion[$index])->where('id_almacen_destino', $request->almacen)->whereDate('fecha', '<=', $request->fecha)->max('id');
+				
+				$idProducto = $descripcion[$index];
+				
+				$idCorte = Kardex::where('id_producto', $descripcion[$index])->where('id_almacen_destino', $request->almacen)->whereDate('fecha', '<=', $request->fecha)->orderBy('fecha', 'desc')->orderBy('id', 'desc')->value('id');
+                
+				$saldoBase = $idCorte > 0 ? Kardex::where('id', $idCorte)->value('saldos_cantidad') : 0;
+
+				$kardex = new Kardex;
+				$kardex->id_producto = $idProducto;
+				$kardex->id_almacen_destino = $request->almacen;
+				$kardex->fecha = $request->fecha;
+
+				$kardex->entradas_cantidad = 0;
+				$kardex->salidas_cantidad = $cantidad[$index];
+
+				$kardex->saldos_cantidad = $saldoBase - $cantidad[$index];
+
+				$kardex->id_dispensacion = $dispensacion->id;
+				//$kardex->fecha = $request->fecha;
+				$kardex->id_usuario_inserta = $id_user;
 				$kardex->save();
+
 			}else{
 				/*$producto = Producto::find($descripcion[$index]);
 

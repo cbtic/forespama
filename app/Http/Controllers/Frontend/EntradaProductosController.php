@@ -252,7 +252,7 @@ class EntradaProductosController extends Controller
 
                 $producto = Producto::find($descripcion[$index]);
                 if($request->almacen_salida!=""){
-                    $kardex_buscar = Kardex::where("id_producto",$descripcion[$index])->where("id_almacen_destino",$request->almacen_salida)->orderBy('id', 'desc')->first();
+                    /*$kardex_buscar = Kardex::where("id_producto",$descripcion[$index])->where("id_almacen_destino",$request->almacen_salida)->orderBy('id', 'desc')->first();
                     $kardex = new Kardex;
                     $kardex->id_producto = $descripcion[$index];
                     $kardex->salidas_cantidad = $cantidad_ingreso[$index];
@@ -275,10 +275,35 @@ class EntradaProductosController extends Controller
                     $kardex->fecha = $request->fecha_entrada;
                     $kardex->id_usuario_inserta = $id_user;
 
+                    $kardex->save();*/
+
+                    $idProducto = $descripcion[$index];
+				
+                    $idCorte = Kardex::where('id_producto', $descripcion[$index])->where('id_almacen_destino', $request->almacen_salida)->whereDate('fecha', '<=', Carbon::now())->orderBy('fecha', 'desc')->orderBy('id', 'desc')->value('id');
+                    
+                    $saldoBase = $idCorte > 0 ? Kardex::where('id', $idCorte)->value('saldos_cantidad') : 0;
+
+                    $kardex = new Kardex;
+                    $kardex->id_producto = $idProducto;
+                    $kardex->id_almacen_destino = $request->almacen_salida;
+                    $kardex->fecha = Carbon::now();
+
+                    $kardex->entradas_cantidad = 0;
+                    $kardex->salidas_cantidad = $cantidad_ingreso[$index];
+                    $kardex->costo_salidas_cantidad = $precio_unitario_[$index];
+                    $kardex->total_salidas_cantidad = $total[$index];
+
+                    $kardex->saldos_cantidad = $saldoBase - $cantidad_ingreso[$index];
+                    $kardex->costo_saldos_cantidad = $producto->costo_unitario;
+                    $total_kardex = $cantidad_ingreso[$index] * $producto->costo_unitario;
+                    $kardex->total_saldos_cantidad = $total_kardex;
+
+                    $kardex->id_entrada_producto = $entrada_producto->id;
+                    $kardex->id_usuario_inserta = $id_user;
                     $kardex->save();
                 }
                 if($request->almacen!=""){
-                    $kardex_buscar = Kardex::where("id_producto",$descripcion[$index])->where("id_almacen_destino",$request->almacen)->orderBy('id', 'desc')->first();
+                    /*$kardex_buscar = Kardex::where("id_producto",$descripcion[$index])->where("id_almacen_destino",$request->almacen)->orderBy('id', 'desc')->first();
                     $kardex = new Kardex;
                     $kardex->id_producto = $descripcion[$index];
                     $kardex->entradas_cantidad = $cantidad_ingreso[$index];
@@ -301,6 +326,31 @@ class EntradaProductosController extends Controller
                     $kardex->fecha = $request->fecha_entrada;
                     $kardex->id_usuario_inserta = $id_user;
 
+                    $kardex->save();*/
+
+                    $idProducto = $descripcion[$index];
+				
+                    $idCorte = Kardex::where('id_producto', $descripcion[$index])->where('id_almacen_destino', $request->almacen)->whereDate('fecha', '<=', Carbon::now())->orderBy('fecha', 'desc')->orderBy('id', 'desc')->value('id');
+                    
+                    $saldoBase = $idCorte > 0 ? Kardex::where('id', $idCorte)->value('saldos_cantidad') : 0;
+
+                    $kardex = new Kardex;
+                    $kardex->id_producto = $idProducto;
+                    $kardex->id_almacen_destino = $request->almacen;
+                    $kardex->fecha = Carbon::now();
+
+                    $kardex->entradas_cantidad = $cantidad_ingreso[$index];
+                    $kardex->costo_entradas_cantidad = $precio_unitario_[$index];
+                    $kardex->total_entradas_cantidad = $total[$index];
+                    $kardex->salidas_cantidad = 0;
+
+                    $kardex->saldos_cantidad = $saldoBase + $cantidad_ingreso[$index];
+                    $kardex->costo_saldos_cantidad = $producto->costo_unitario;
+                    $total_kardex = $cantidad_ingreso[$index] * $producto->costo_unitario;
+                    $kardex->total_saldos_cantidad = $total_kardex;
+
+                    $kardex->id_entrada_producto = $entrada_producto->id;
+                    $kardex->id_usuario_inserta = $id_user;
                     $kardex->save();
 
                 /*$kardex_buscar = Kardex::where("id_producto",$descripcion[$index])->orderBy('id', 'desc')->first();
@@ -506,7 +556,7 @@ class EntradaProductosController extends Controller
                     $producto = Producto::find($descripcion[$index]);
 
                     if($request->almacen_salida!=""){
-                        $kardex_buscar = Kardex::where("id_producto",$descripcion[$index])->where("id_almacen_destino",$request->almacen_salida)->orderBy('id', 'desc')->first();
+                        /*$kardex_buscar = Kardex::where("id_producto",$descripcion[$index])->where("id_almacen_destino",$request->almacen_salida)->orderBy('id', 'desc')->first();
                         $kardex = new Kardex;
                         $kardex->id_producto = $descripcion[$index];
                         $kardex->salidas_cantidad = $cantidad_ingreso[$index];
@@ -529,10 +579,35 @@ class EntradaProductosController extends Controller
                         $kardex->fecha = Carbon::now();
                         $kardex->id_usuario_inserta = $id_user;
 
+                        $kardex->save();*/
+
+                        $idProducto = $descripcion[$index];
+				
+                        $idCorte = Kardex::where('id_producto', $descripcion[$index])->where('id_almacen_destino', $request->almacen_salida)->whereDate('fecha', '<=', Carbon::now())->orderBy('fecha', 'desc')->orderBy('id', 'desc')->value('id');
+                        
+                        $saldoBase = $idCorte > 0 ? Kardex::where('id', $idCorte)->value('saldos_cantidad') : 0;
+
+                        $kardex = new Kardex;
+                        $kardex->id_producto = $idProducto;
+                        $kardex->id_almacen_destino = $request->almacen_salida;
+                        $kardex->fecha = Carbon::now();
+
+                        $kardex->entradas_cantidad = 0;
+                        $kardex->salidas_cantidad = $cantidad_ingreso[$index];
+                        $kardex->costo_salidas_cantidad = $precio_unitario_[$index];
+                        $kardex->total_salidas_cantidad = $total[$index];
+
+                        $kardex->saldos_cantidad = $saldoBase - $cantidad_ingreso[$index];
+                        $kardex->costo_saldos_cantidad = $producto->costo_unitario;
+                        $total_kardex = $cantidad_ingreso[$index] * $producto->costo_unitario;
+                        $kardex->total_saldos_cantidad = $total_kardex;
+
+                        $kardex->id_salida_producto = $salida_producto->id;
+                        $kardex->id_usuario_inserta = $id_user;
                         $kardex->save();
                     }
                     if($request->almacen!=""){
-                        $kardex_buscar = Kardex::where("id_producto",$descripcion[$index])->where("id_almacen_destino",$request->almacen)->orderBy('id', 'desc')->first();
+                        /*$kardex_buscar = Kardex::where("id_producto",$descripcion[$index])->where("id_almacen_destino",$request->almacen)->orderBy('id', 'desc')->first();
                         $kardex = new Kardex;
                         $kardex->id_producto = $descripcion[$index];
                         $kardex->salidas_cantidad = $cantidad_ingreso[$index];
@@ -555,6 +630,31 @@ class EntradaProductosController extends Controller
                         $kardex->fecha = Carbon::now();
                         $kardex->id_usuario_inserta = $id_user;
 
+                        $kardex->save();*/
+
+                        $idProducto = $descripcion[$index];
+				
+                        $idCorte = Kardex::where('id_producto', $descripcion[$index])->where('id_almacen_destino', $request->almacen)->whereDate('fecha', '<=', Carbon::now())->orderBy('fecha', 'desc')->orderBy('id', 'desc')->value('id');
+                        
+                        $saldoBase = $idCorte > 0 ? Kardex::where('id', $idCorte)->value('saldos_cantidad') : 0;
+
+                        $kardex = new Kardex;
+                        $kardex->id_producto = $idProducto;
+                        $kardex->id_almacen_destino = $request->almacen;
+                        $kardex->fecha = Carbon::now();
+
+                        $kardex->entradas_cantidad = 0;
+                        $kardex->salidas_cantidad = $cantidad_ingreso[$index];
+                        $kardex->costo_salidas_cantidad = $precio_unitario_[$index];
+                        $kardex->total_salidas_cantidad = $total[$index];
+
+                        $kardex->saldos_cantidad = $saldoBase - $cantidad_ingreso[$index];
+                        $kardex->costo_saldos_cantidad = $producto->costo_unitario;
+                        $total_kardex = $cantidad_ingreso[$index] * $producto->costo_unitario;
+                        $kardex->total_saldos_cantidad = $total_kardex;
+
+                        $kardex->id_salida_producto = $salida_producto->id;
+                        $kardex->id_usuario_inserta = $id_user;
                         $kardex->save();
                     }
                 }
@@ -1949,7 +2049,8 @@ class EntradaProductosController extends Controller
                     $idProducto = $descripcion[$index];
                     
                     //$kardex_buscar = Kardex::where("id_producto",$descripcion[$index])->where("id_almacen_destino",$request->almacen_destino)->orderBy('id', 'desc')->first();
-                    $idCorte = Kardex::where('id_producto', $descripcion[$index])->where('id_almacen_destino', $request->almacen_destino)->whereDate('fecha', '<=', $request->fecha)->max('id');
+                    //$idCorte = Kardex::where('id_producto', $descripcion[$index])->where('id_almacen_destino', $request->almacen_destino)->whereDate('fecha', '<=', $request->fecha)->max('id');
+                    $idCorte = Kardex::where('id_producto', $descripcion[$index])->where('id_almacen_destino', $request->almacen_destino)->whereDate('fecha', '<=', $request->fecha)->orderBy('fecha', 'desc')->orderBy('id', 'desc')->value('id');
                     //$idCorte = $idCorte ?? 0;
 
                     $saldoBase = $idCorte > 0 ? Kardex::where('id', $idCorte)->value('saldos_cantidad') : 0;
@@ -2055,8 +2156,10 @@ class EntradaProductosController extends Controller
 
                         $idProducto = $descripcion[$index];
                         
-                        $idCorte = Kardex::where('id_producto', $descripcion[$index])->where('id_almacen_destino', $request->almacen_destino)->whereDate('fecha', '<=', $request->fecha)->max('id');
+                        //$idCorte = Kardex::where('id_producto', $descripcion[$index])->where('id_almacen_destino', $request->almacen_destino)->whereDate('fecha', '<=', $request->fecha)->max('id');
                         
+                        $idCorte = Kardex::where('id_producto', $descripcion[$index])->where('id_almacen_destino', $request->almacen_destino)->whereDate('fecha', '<=', $request->fecha)->orderBy('fecha', 'desc')->orderBy('id', 'desc')->value('id');
+
                         $saldoBase = $idCorte > 0 ? Kardex::where('id', $idCorte)->value('saldos_cantidad') : 0;
                         
                         $kardex = new Kardex;

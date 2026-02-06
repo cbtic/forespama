@@ -167,10 +167,11 @@ class IngresoProduccionController extends Controller
 
             $ingreso_produccion_detalle->save();
 
-			if($id_ingreso_produccion_detalle[$index] == 0){
-				$producto = Producto::find($descripcion[$index]);
+			$producto = Producto::find($descripcion[$index]);
 
-				$kardex_buscar = Kardex::where("id_producto",$descripcion[$index])->where("id_almacen_destino",$request->almacen_destino)->orderBy('id', 'desc')->first();
+			if($id_ingreso_produccion_detalle[$index] == 0){
+				
+				/*$kardex_buscar = Kardex::where("id_producto",$descripcion[$index])->where("id_almacen_destino",$request->almacen_destino)->orderBy('id', 'desc')->first();
 				$kardex = new Kardex;
 				$kardex->id_producto = $descripcion[$index];
 				$kardex->entradas_cantidad = $cantidad[$index];
@@ -187,6 +188,27 @@ class IngresoProduccionController extends Controller
 				$kardex->fecha = $request->fecha;
 				$kardex->id_usuario_inserta = $id_user;
 
+				$kardex->save();*/
+
+				$idProducto = $descripcion[$index];
+				
+				$idCorte = Kardex::where('id_producto', $descripcion[$index])->where('id_almacen_destino', $request->almacen_destino)->whereDate('fecha', '<=', $request->fecha)->orderBy('fecha', 'desc')->orderBy('id', 'desc')->value('id');
+                
+				$saldoBase = $idCorte > 0 ? Kardex::where('id', $idCorte)->value('saldos_cantidad') : 0;
+
+				$kardex = new Kardex;
+				$kardex->id_producto = $idProducto;
+				$kardex->id_almacen_destino = $request->almacen_destino;
+				$kardex->fecha = $request->fecha;
+
+				$kardex->entradas_cantidad = $cantidad[$index];
+				$kardex->salidas_cantidad = 0;
+
+				$kardex->saldos_cantidad = $saldoBase + $cantidad[$index];
+
+				$kardex->id_ingreso_produccion = $ingreso_produccion->id;
+				//$kardex->fecha = $request->fecha;
+				$kardex->id_usuario_inserta = $id_user;
 				$kardex->save();
 			}else{
 				/*$producto = Producto::find($descripcion[$index]);
