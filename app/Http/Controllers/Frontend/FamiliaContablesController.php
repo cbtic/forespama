@@ -75,10 +75,8 @@ class FamiliaContablesController extends Controller
 			$familia_contable = FamiliaContable::find($request->id);
 		}
 		
-        $familia_contable->periodo = $request->periodo;
         $familia_contable->denominacion = $request->denominacion;
-        $familia_contable->operacion = $request->operacion;
-		$familia_contable->codigo = $request->codigo;
+        $familia_contable->id_plan_contable = $request->cuenta_contable;
 		$familia_contable->estado = 1;
         $familia_contable->id_usuario_inserta = $id_user;
 		$familia_contable->save();

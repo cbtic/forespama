@@ -139,14 +139,14 @@ function limpiar(){
 	$('#img_foto').val("");
 }
 
-function fn_save_centro_costo(){
+function fn_save_cuenta_contable(){
 
     $('#denominacion').val($('#denominacion').val().toUpperCase());
 	
 	$.ajax({
-        url: "/centro_costo/send_centro_costo",
+        url: "/familia_contable/send_familia_contable",
         type: "POST",
-        data : $("#frmCentroCosto").serialize(),
+        data : $("#frmFamiliaContable").serialize(),
         success: function (result) {
             if (result.success) {
                 bootbox.alert(result.success, function() {
@@ -181,7 +181,7 @@ function fn_save_centro_costo(){
                 </div>
                 
                 <div class="card-body">
-                <form method="post" action="#" id="frmCentroCosto" name="frmCentroCosto">
+                <form method="post" action="#" id="frmFamiliaContable" name="frmFamiliaContable">
 
                     <div class="row">
 
@@ -195,7 +195,7 @@ function fn_save_centro_costo(){
                                 <div class="col-lg-12">
                                     <div class="form-group">
                                         <label class="control-label form-control-sm">Denominaci&oacute;n</label>
-                                        <input id="denominacion" name="denominacion" on class="form-control form-control-sm"  value="<?php echo $familia_contable->denominacion?>" type="text">
+                                        <input id="denominacion" name="denominacion" on class="form-control form-control-sm"  value="<?php echo $familia_contable->denominacion?>" type="text" style="text-transform: uppercase;">
                                     </div>
                                 </div>
                                 <div class="col-lg-8">
@@ -218,7 +218,7 @@ function fn_save_centro_costo(){
                     <div style="margin-top:15px" class="form-group">
                         <div class="col-sm-12 controls">
                             <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
-                                <button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-nuevo" data-toggle="modal" onclick="fn_save_centro_costo()">
+                                <button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-nuevo" data-toggle="modal" onclick="fn_save_cuenta_contable()">
                                     <i class="fas fa-save" style="font-size:18px;"></i> Guardar
                                 </button>
                             </div>
