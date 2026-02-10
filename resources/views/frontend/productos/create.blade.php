@@ -490,6 +490,7 @@ label.form-control-sm{
 							<th>Marca</th>
 							<th>Familia</th>
 							<th>Sub Familia</th>
+							<th>Familia Contable</th>
 							<th>Estado Bien</th>
 							<th>F. Vencimiento</th>
 							<th>Stock M&iacute;nimo</th>

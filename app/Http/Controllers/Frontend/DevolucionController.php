@@ -150,7 +150,7 @@ class DevolucionController extends Controller
 		else {$moneda_descripcion="SOLES";}
 		$entrada_producto->moneda = $moneda_descripcion;
 		$entrada_producto->cerrado = "2";
-		//$salida_producto->observacion = $request->observacion;
+		$entrada_producto->observacion = $request->observacion;
 		$entrada_producto->id_almacen_destino = $request->almacen;
 		$entrada_producto->estado = 1;
 		$entrada_producto->id_orden_compra = $salida_producto_->id_orden_compra;
@@ -163,6 +163,7 @@ class DevolucionController extends Controller
 		//$salida_producto->id_usuario_recibe = $id_user;
 		//$salida_producto->id_persona_recibe = $request->persona_recibe;
 		$entrada_producto->tipo_devolucion = "2";
+		$entrada_producto->id_motivo_devolucion = $request->motivo_devolucion;
 		$entrada_producto->id_usuario_inserta = $id_user;
 		$entrada_producto->save();
 

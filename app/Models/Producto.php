@@ -243,4 +243,16 @@ class Producto extends Model
 		$data = DB::select($cad);
         return $data;
     }
+
+    function getProductoByTipoMadera($id_tipo_madera){
+
+        $cad = "select p.* from productos p 
+        inner join tabla_maestras tm on p.id = tm.sub_codigo::int and tm.tipo ='42'
+        where tm.codigo='".$id_tipo_madera."'
+        and p.estado ='1'
+        and tm.estado ='1'";
+
+		$data = DB::select($cad);
+        return $data;
+    }
 }

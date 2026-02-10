@@ -53,6 +53,9 @@ use App\Http\Controllers\Frontend\ProductoCompetenciaController;
 use App\Http\Controllers\Frontend\PersonaProcesoController;
 use App\Http\Controllers\Frontend\CentroCostosController;
 use App\Http\Controllers\Frontend\SedesController;
+use App\Http\Controllers\Frontend\FamiliaContablesController;
+use App\Http\Controllers\Frontend\CuentaContablesController;
+use App\Http\Controllers\Frontend\EquivalenciaSubFamiliaFamiliaContablesController;
 
 //use App\Http\Controllers\VehiculoController;
 
@@ -882,4 +885,22 @@ Route::get('orden_compra/modal_cerrar_pedido/{id}', [OrdenCompraController::clas
 Route::post('orden_compra/send_cerrar_orden_compra_detalle', [OrdenCompraController::class, 'send_cerrar_orden_compra_detalle'])->name('orden_compra.send_cerrar_orden_compra_detalle');
 
 Route::get('productos/obtener_stock_producto_fecha/{almacen}/{id_producto}/{fecha}', [ProductosController::class, 'obtener_stock_producto_fecha'])->name('productos.obtener_stock_producto_fecha');
+
+Route::get('familia_contable/create', [FamiliaContablesController::class, 'create'])->name('familia_contable.create');
+Route::post('familia_contable/listar_familia_contable_ajax', [FamiliaContablesController::class, 'listar_familia_contable_ajax'])->name('familia_contable.listar_familia_contable_ajax');
+Route::get('familia_contable/modal_familia_contable/{id}', [FamiliaContablesController::class, 'modal_familia_contable'])->name('familia_contable.modal_familia_contable');
+Route::post('familia_contable/send_familia_contable', [FamiliaContablesController::class, 'send_familia_contable'])->name('familia_contable.send_familia_contable');
+Route::get('familia_contable/eliminar_familia_contable/{id}/{estado}', [FamiliaContablesController::class, 'eliminar_familia_contable'])->name('familia_contable.eliminar_familia_contable');
+
+Route::get('cuenta_contable/create', [CuentaContablesController::class, 'create'])->name('cuenta_contable.create');
+Route::post('cuenta_contable/listar_cuenta_contable_ajax', [CuentaContablesController::class, 'listar_cuenta_contable_ajax'])->name('cuenta_contable.listar_cuenta_contable_ajax');
+Route::get('cuenta_contable/modal_cuenta_contable/{id}', [CuentaContablesController::class, 'modal_cuenta_contable'])->name('cuenta_contable.modal_cuenta_contable');
+Route::post('cuenta_contable/send_cuenta_contable', [CuentaContablesController::class, 'send_cuenta_contable'])->name('cuenta_contable.send_cuenta_contable');
+Route::get('cuenta_contable/eliminar_cuenta_contable/{id}/{estado}', [CuentaContablesController::class, 'eliminar_cuenta_contable'])->name('cuenta_contable.eliminar_cuenta_contable');
+
+Route::get('equivalencia_sub_familia_familia_contable/create', [EquivalenciaSubFamiliaFamiliaContablesController::class, 'create'])->name('equivalencia_sub_familia_familia_contable.create');
+Route::post('equivalencia_sub_familia_familia_contable/listar_equivalencia_sub_familia_familia_contable_ajax', [EquivalenciaSubFamiliaFamiliaContablesController::class, 'listar_equivalencia_sub_familia_familia_contable_ajax'])->name('equivalencia_sub_familia_familia_contable.listar_equivalencia_sub_familia_familia_contable_ajax');
+Route::get('equivalencia_sub_familia_familia_contable/modal_equivalencia_sub_familia_familia_contable/{id}', [EquivalenciaSubFamiliaFamiliaContablesController::class, 'modal_equivalencia_sub_familia_familia_contable'])->name('equivalencia_sub_familia_familia_contable.modal_equivalencia_sub_familia_familia_contable');
+Route::post('equivalencia_sub_familia_familia_contable/send_equivalencia_sub_familia_familia_contable', [EquivalenciaSubFamiliaFamiliaContablesController::class, 'send_equivalencia_sub_familia_familia_contable'])->name('equivalencia_sub_familia_familia_contable.send_equivalencia_sub_familia_familia_contable');
+Route::get('equivalencia_sub_familia_familia_contable/eliminar_equivalencia_sub_familia_familia_contable/{id}/{estado}', [EquivalenciaSubFamiliaFamiliaContablesController::class, 'eliminar_equivalencia_sub_familia_familia_contable'])->name('equivalencia_sub_familia_familia_contable.eliminar_equivalencia_sub_familia_familia_contable');
 

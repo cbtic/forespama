@@ -226,6 +226,8 @@ $(document).ready(function() {
         cambiarOrigen();
         //obtenerEntradaSalida();
     }
+
+    obtenerObservacion();
 });
 
 function cambiarTipoCambio(){
@@ -926,22 +928,21 @@ function save_devolucion(){
     $('.loader').show();
 
     $.ajax({
-            url: "/devolucion/send_devolucion",
-            type: "POST",
-            data : $("#frmDevolucion").serialize(),
-            success: function (result) {
-                //alert(result.id)
-                $('#openOverlayOpc').modal('hide');
-                datatablenew();
-                $('.loader').hide();
-                bootbox.alert("Se guard&oacute; satisfactoriamente"); 
-                /*if (result.id>0) {
-                    modalOrdenCompra(result.id);
-                }*/
-                
-            }
+        url: "/devolucion/send_devolucion",
+        type: "POST",
+        data : $("#frmDevolucion").serialize(),
+        success: function (result) {
+            //alert(result.id)
+            $('#openOverlayOpc').modal('hide');
+            datatablenew();
+            $('.loader').hide();
+            bootbox.alert("Se guard&oacute; satisfactoriamente"); 
+            /*if (result.id>0) {
+                modalOrdenCompra(result.id);
+            }*/
+            
+        }
     });
-    
 }
 
 function obtenerCodigo(){
@@ -1148,6 +1149,17 @@ function cargarSalida(){
     });
 }
 
+function obtenerObservacion(){
+
+    var motivo_devolucion = $('#motivo_devolucion').val();
+
+    if(motivo_devolucion==4){
+        $('#areaobservacion').show();
+    }else{
+        $('#areaobservacion').hide();
+    }
+}
+
 </script>
 
 <body class="hold-transition skin-blue sidebar-mini">
@@ -1268,15 +1280,24 @@ function cargarSalida(){
                             Motivo Devoluci&oacute;n
                         </div>
                         <div class="col-lg-2">
-                            <select name="motivo_devolucion" id="motivo_devolucion" class="form-control form-control-sm" onchange="">
+                            <select name="motivo_devolucion" id="motivo_devolucion" class="form-control form-control-sm" onchange="obtenerObservacion()">
                                 <option value="">--Seleccionar--</option>
                                 <?php
                                 foreach ($motivo_devolucion as $row){?>
-                                    <option value="<?php echo $row->codigo ?>" <?php //if($row->codigo==$devolucion->motivo_devolucion)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                    <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$salida->id_motivo_devolucion)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
                                     <?php 
                                 }
                                 ?>
                             </select>
+                        </div>
+                    </div>
+                    <div class="row" style="padding-left:10px; padding-top: 15px;" id="areaobservacion">
+                            <div class="col-lg-2">
+                                Observaci&oacute;n
+                            </div>
+                            <div class="col-lg-10">
+                                <textarea id="observacion" name="observacion" class="form-control form-control-sm"type="text"><?php echo $salida->observacion?></textarea>
+                            </div>
                         </div>
                     </div>
                         <div class="card-body">	

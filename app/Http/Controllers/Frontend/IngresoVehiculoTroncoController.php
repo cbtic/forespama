@@ -18,6 +18,8 @@ use App\Models\Persona;
 use App\Models\IngresoVehiculoTroncoPago;
 use App\Models\Almacen_usuario;
 use App\Models\EmpresaCubicaje;
+use App\Models\Producto;
+use App\Models\Kardex;
 use Auth;
 use Carbon\Carbon;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -251,6 +253,31 @@ class IngresoVehiculoTroncoController extends Controller
 				$empresasConductoresVehiculo->save();
 			}
 		}
+
+		$producto_model = new Producto;
+
+		$producto = $producto_model->getProductoByTipoMadera($request->tipo_maderas_id);
+
+		$idProducto = $producto[0]->id;
+		
+		$idCorte = Kardex::where('id_producto', $idProducto)->where('id_almacen_destino', 21)->whereDate('fecha', '<=', $request->fecha_ingreso)->orderBy('fecha', 'desc')->orderBy('id', 'desc')->value('id');
+		
+		$saldoBase = $idCorte > 0 ? Kardex::where('id', $idCorte)->value('saldos_cantidad') : 0;
+
+		$kardex = new Kardex;
+		$kardex->id_producto = $idProducto;
+		$kardex->id_almacen_destino = 21;
+		$kardex->fecha = $request->fecha_ingreso;
+
+		$kardex->entradas_cantidad = $request->cantidad;
+		$kardex->salidas_cantidad = 0;
+
+		$kardex->saldos_cantidad = $saldoBase + $request->cantidad;
+
+		$kardex->id_ingreso_vehiculo_tronco = $id_ingreso_vehiculo_troncos;
+		//$kardex->fecha = $request->fecha;
+		$kardex->id_usuario_inserta = $id_user;
+		$kardex->save();
     }
 
 	public function listar_ingreso_vehiculo_tronco_ajax(Request $request){

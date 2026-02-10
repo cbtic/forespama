@@ -62,4 +62,13 @@ class SubFamilia extends Model
         $data = DB::select($cad);
         return $data;
     }
+
+    function getSubFamilias(){
+
+        $cad = "select sf.id, sf.id_familia, sf.denominacion sub_familia, sf.inicial_codigo, sf.estado from sub_familias sf 
+        where sf.estado = '1'";
+        
+        $data = DB::select($cad);
+        return $data;
+    }
 }
