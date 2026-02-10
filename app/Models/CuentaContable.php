@@ -31,4 +31,14 @@ class CuentaContable extends Model
         return $data;
 
     }
+
+    function getCuentaContables(){
+
+        $cad = "select cc.id, cc.denominacion, cc.cuenta, cc.id_tipo, cc.estado 
+        from cuenta_contables cc 
+        where cc.estado = '1'";
+        
+		$data = DB::select($cad);
+        return $data;
+    }
 }

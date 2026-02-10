@@ -1,5 +1,3 @@
--- DROP FUNCTION public.sp_listar_kardex_orden_compra_saldos_paginado(varchar, varchar, varchar, varchar, varchar, varchar, refcursor);
-
 CREATE OR REPLACE FUNCTION public.sp_listar_kardex_orden_compra_saldos_paginado(p_producto character varying, p_almacen character varying, p_id_user character varying, p_id_empresa character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
  RETURNS refcursor
  LANGUAGE plpgsql
@@ -58,7 +56,7 @@ BEGIN
                 ON oa.id_producto = k.id_producto 
                 AND oa.id_almacen_salida = k.id_almacen_destino
             ' || v_where || '
-            ORDER BY k.id_producto, k.id_almacen_destino, k.id DESC
+            ORDER BY k.id_producto, k.id_almacen_destino, k.fecha desc, k.id DESC
         ) sub_count
     ' INTO v_count;
 
@@ -92,7 +90,7 @@ BEGIN
             ON oa.id_producto = k.id_producto 
             AND oa.id_almacen_salida = k.id_almacen_destino
         ' || v_where || '
-        ORDER BY k.id_producto, k.id_almacen_destino, k.id DESC
+        ORDER BY k.id_producto, k.id_almacen_destino, k.fecha desc, k.id DESC
         LIMIT ' || p_limit || ' OFFSET ' || v_offset || ';';
 
     -- Ejecutar y retornar

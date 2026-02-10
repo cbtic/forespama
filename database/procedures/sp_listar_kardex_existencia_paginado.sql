@@ -43,13 +43,13 @@ begin
 									from kardex k1 
 									where k1.id_producto = k.id_producto 
 									and k1.id_almacen_destino = k.id_almacen_destino 
-									order by k1.id desc 
+									order by k1.fecha desc, k1.id desc 
 									limit 1) and k.saldos_cantidad > 0 ';
 	    End If;
 	End If;
 
 	If p_fecha<>'' Then
-	 v_where := v_where || 'And to_char(k.created_at,''yyyy-mm-dd'') <= ''' || p_fecha ||''' ';
+	 v_where := v_where || 'And k.fecha <= ''' || p_fecha ||''' ';
 	End If;
 	
 	--EXECUTE ('SELECT count(1) '||v_tabla||v_where) INTO v_count;
@@ -57,9 +57,9 @@ begin
 	v_col_count:=' ,'||v_count||' as TotalRows ';
 
 	If v_count::Integer > p_limit::Integer then
-		v_scad:='SELECT '||v_campos||v_col_count||v_tabla||v_where||' Order By k.id_producto ASC, k.id desc LIMIT '||p_limit||' OFFSET '||p_pagina||';'; 
+		v_scad:='SELECT '||v_campos||v_col_count||v_tabla||v_where||' Order By k.id_producto ASC, k.fecha desc, k.id desc LIMIT '||p_limit||' OFFSET '||p_pagina||';'; 
 	else
-		v_scad:='SELECT '||v_campos||v_col_count||v_tabla||v_where||' Order By k.id_producto ASC, k.id desc;'; 
+		v_scad:='SELECT '||v_campos||v_col_count||v_tabla||v_where||' Order By k.id_producto ASC, k.fecha desc, k.id desc;'; 
 	End If;
 
 	--Raise Notice '%',v_scad;

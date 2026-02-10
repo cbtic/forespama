@@ -72,7 +72,7 @@ begin
 									from kardex k1 
 									where k1.id_producto = k.id_producto 
 									and k1.id_almacen_destino = k.id_almacen_destino 
-									order by k1.id desc 
+									order by k1.fecha desc, k1.id desc 
 									limit 1) and k.saldos_cantidad =0 ';
 	    Else
 	        v_where := v_where || ' AND k.id in(
@@ -80,7 +80,7 @@ begin
 									from kardex k1 
 									where k1.id_producto = k.id_producto 
 									and k1.id_almacen_destino = k.id_almacen_destino 
-									order by k1.id desc 
+									order by k1.fecha desc, k1.id desc 
 									limit 1) and k.saldos_cantidad > 0 ';
 	    End If;
 	End If;
@@ -93,7 +93,7 @@ begin
                FROM (
                    SELECT DISTINCT ON (k.id_producto, k.id_almacen_destino) k.saldos_cantidad
                    ' || v_tabla || v_where || '
-                   ORDER BY k.id_producto, k.id_almacen_destino, k.id DESC
+                   ORDER BY k.id_producto, k.id_almacen_destino, k.fecha desc, k.id DESC
                ) AS saldos';
 
     --Raise Notice 'suma es : %',v_scad;
@@ -105,9 +105,9 @@ begin
 	v_col_count:=' ,'||v_count||' as TotalRows ';
 
 	If v_count::Integer > p_limit::Integer then
-		v_scad:='SELECT '||v_campos||v_col_count || ' ,' || v_total_saldos || ' AS total_saldos2 ' ||v_tabla||v_where||' Order By k.id_producto, k.id_almacen_destino, k.id desc LIMIT '||p_limit||' OFFSET '||p_pagina||';'; 
+		v_scad:='SELECT '||v_campos||v_col_count || ' ,' || v_total_saldos || ' AS total_saldos2 ' ||v_tabla||v_where||' Order By k.id_producto, k.id_almacen_destino, k.fecha desc, k.id desc LIMIT '||p_limit||' OFFSET '||p_pagina||';'; 
 	else
-		v_scad:='SELECT '||v_campos||v_col_count|| ' ,' || v_total_saldos || ' AS total_saldos2 ' ||v_tabla||v_where||' Order By k.id_producto, k.id_almacen_destino, k.id desc ;'; 
+		v_scad:='SELECT '||v_campos||v_col_count|| ' ,' || v_total_saldos || ' AS total_saldos2 ' ||v_tabla||v_where||' Order By k.id_producto, k.id_almacen_destino, k.fecha desc, k.id desc ;'; 
 	End If;           
 
 	--Raise Notice '%',v_scad;

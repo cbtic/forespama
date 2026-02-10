@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\FamiliaContable;
+use App\Models\CuentaContable;
 use App\Models\TablaMaestra;
 use Auth;
 
@@ -50,7 +51,7 @@ class FamiliaContablesController extends Controller
 
     public function modal_familia_contable($id){
 		
-		$tabla_maestra_model = new TablaMaestra;
+		$cuenta_contable_model = new CuentaContable;
 
 		if($id>0){
 			$familia_contable = FamiliaContable::find($id);
@@ -58,9 +59,9 @@ class FamiliaContablesController extends Controller
 			$familia_contable = new FamiliaContable;
 		}
 
-		$operacion = $tabla_maestra_model->getMaestroByTipo('115');
+		$cuenta_contable = $cuenta_contable_model->getCuentaContables();
 
-		return view('frontend.familia_contable.modal_familiaContable_nuevoFamiliaContable',compact('id','familia_contable','operacion'));
+		return view('frontend.familia_contable.modal_familiaContable_nuevoFamiliaContable',compact('id','familia_contable','cuenta_contable'));
 
     }
 

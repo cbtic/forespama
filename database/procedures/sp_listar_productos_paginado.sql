@@ -1,5 +1,3 @@
--- DROP FUNCTION public.sp_listar_productos_paginado(varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, refcursor);
-
 CREATE OR REPLACE FUNCTION public.sp_listar_productos_paginado(p_serie character varying, p_denominacion character varying, p_codigo character varying, p_estado_bien character varying, p_tipo_origen_producto character varying, p_tiene_imagen character varying, p_familia character varying, p_sub_familia character varying, p_aprobado character varying, p_estado character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
  RETURNS refcursor
  LANGUAGE plpgsql
@@ -23,7 +21,7 @@ begin
     SELECT 1 
     FROM producto_imagenes pi 
     WHERE pi.id_producto = p.id) THEN 1 ELSE 0 
-	END) tiene_imagen, tm6.denominacion bien_servicio, f.denominacion familia, sf.denominacion sub_familia, tm7.denominacion aprobado ';
+	END) tiene_imagen, tm6.denominacion bien_servicio, f.denominacion familia, sf.denominacion sub_familia, tm7.denominacion aprobado, fc.denominacion familia_contable ';
 
 	v_tabla=' from productos p 
 	left join tabla_maestras tm on p.id_tipo_producto = tm.codigo::int and tm.tipo =''44''
@@ -35,7 +33,9 @@ begin
 	left join tabla_maestras tm7 on p.aprobado = tm7.codigo::int and tm7.tipo =''113''
 	left join marcas m on p.id_marca = m.id
 	left join familias f on p.id_familia = f.id 
-	left join sub_familias sf on p.id_sub_familia = sf.id ';
+	left join sub_familias sf on p.id_sub_familia = sf.id
+	left join equivalencia_sub_familia_familia_contables esffc on p.id_sub_familia = esffc.id_sub_familia 
+	left join familia_contables fc on esffc.id_familia_contable = fc.id ';
 	
 	v_where = ' Where 1=1 ';
 

@@ -116,7 +116,9 @@ $.mask.definitions['p'] = "[Mm]";
 });
 */
 $(document).ready(function() {
-    
+
+    $("#cuenta_contable").select2({ width : '100%' })
+
 });
 </script>
 
@@ -190,36 +192,24 @@ function fn_save_centro_costo(){
                             
                             <div class="row" style="padding-left:10px">
                                 
-                                <div class="col-lg-2">
+                                <div class="col-lg-12">
                                     <div class="form-group">
-                                        <label class="control-label form-control-sm">Periodo</label>
-                                        <input id="periodo" name="periodo" on class="form-control form-control-sm"  value="<?php echo $centro_costo->periodo?>" type="text">
-                                    </div>
-                                </div>
-                                <div class="col-lg-4">
-                                    <div class="form-group">
-                                        <label class="control-label form-control-sm">Operacion</label>
-                                        <select name="operacion" id="operacion" class="form-control form-control-sm" onchange="">
-                                            <option value="">--Seleccionar--</option>
-                                            <?php
-                                            foreach ($operacion as $row){?>
-                                                <option value="<?php echo $row->codigo; ?>" <?php echo ($id > 0 && $row->codigo == $centro_costo->operacion) ? "selected='selected'" : ""; ?>><?php echo $row->denominacion ?></option>
-                                                <?php 
-                                            }
-                                            ?>
-                                        </select>
+                                        <label class="control-label form-control-sm">Denominaci&oacute;n</label>
+                                        <input id="denominacion" name="denominacion" on class="form-control form-control-sm"  value="<?php echo $familia_contable->denominacion?>" type="text">
                                     </div>
                                 </div>
                                 <div class="col-lg-8">
                                     <div class="form-group">
-                                        <label class="control-label form-control-sm">Denominaci&oacute;n</label>
-                                        <input id="denominacion" name="denominacion" on class="form-control form-control-sm"  value="<?php echo $centro_costo->denominacion?>" type="text" style="text-transform: uppercase;">
-                                    </div>
-                                </div>
-                                <div class="col-lg-2">
-                                    <div class="form-group">
-                                        <label class="control-label form-control-sm">C&oacute;digo</label>
-                                        <input id="codigo" name="codigo" on class="form-control form-control-sm"  value="<?php echo $centro_costo->codigo?>" type="text">
+                                        <label class="control-label form-control-sm">Cuenta Contable</label>
+                                        <select name="cuenta_contable" id="cuenta_contable" class="form-control form-control-sm" onchange="">
+                                            <option value="">--Seleccionar--</option>
+                                            <?php
+                                            foreach ($cuenta_contable as $row){?>
+                                                <option value="<?php echo $row->id; ?>" <?php echo ($id > 0 && $row->id == $familia_contable->id_plan_contable) ? "selected='selected'" : ""; ?>><?php echo $row->cuenta . ' - ' . $row->denominacion ?></option>
+                                                <?php 
+                                            }
+                                            ?>
+                                        </select>
                                     </div>
                                 </div>
                             </div>

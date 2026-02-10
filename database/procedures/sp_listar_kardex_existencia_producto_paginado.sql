@@ -1,5 +1,3 @@
--- DROP FUNCTION public.sp_listar_kardex_existencia_producto_paginado(varchar, varchar, varchar, varchar, varchar, varchar, refcursor);
-
 CREATE OR REPLACE FUNCTION public.sp_listar_kardex_existencia_producto_paginado(p_producto character varying, p_almacen character varying, p_cantidad_producto character varying, p_fecha character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
  RETURNS refcursor
  LANGUAGE plpgsql
@@ -49,7 +47,7 @@ begin
 									from kardex k1 
 									where k1.id_producto = k.id_producto 
 									and k1.id_almacen_destino = k.id_almacen_destino 
-									order by k1.id desc 
+									order by k1.fecha desc, k1.id desc 
 									limit 1) and k.saldos_cantidad > 0 ';
 	    End If;
 	End If;
