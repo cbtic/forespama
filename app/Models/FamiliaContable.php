@@ -34,9 +34,10 @@ class FamiliaContable extends Model
 
     function getFamiliaContables(){
 
-        $cad = "select fc.id, fc.denominacion familia_contable, fc.id_plan_contable, pc.cuenta, fc.estado from familia_contables fc 
-        inner join plan_contables pc on fc.id_plan_contable = pc.id 
-        where fc.estado = '1'";
+        $cad = " select fc.id, fc.denominacion familia_contable, fc.id_plan_contable, cc.cuenta, fc.estado 
+        from familia_contables fc 
+        inner join cuenta_contables cc on fc.id_plan_contable = cc.id 
+        where fc.estado = '1' ";
         
         $data = DB::select($cad);
         return $data;

@@ -198,7 +198,7 @@ function fn_save_cuenta_contable(){
                                         <input id="denominacion" name="denominacion" on class="form-control form-control-sm"  value="<?php echo $familia_contable->denominacion?>" type="text" style="text-transform: uppercase;">
                                     </div>
                                 </div>
-                                <div class="col-lg-8">
+                                <div class="col-lg-12">
                                     <div class="form-group">
                                         <label class="control-label form-control-sm">Cuenta Contable</label>
                                         <select name="cuenta_contable" id="cuenta_contable" class="form-control form-control-sm" onchange="">
