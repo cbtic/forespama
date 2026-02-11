@@ -11,6 +11,8 @@ use App\Models\IngresoProduccionAcerradoMaderaDetalle;
 use App\Models\ProduccionAcerradoMadera;
 use App\Models\ProduccionAcerradoMaderaDetalle;
 use App\Models\IngresoVehiculoTroncoTipoMadera;
+use App\Models\Producto;
+use App\Models\Kardex;
 use Auth;
 use Carbon\Carbon;
 
@@ -186,6 +188,31 @@ class AcerradoMaderaController extends Controller
 						$orden_compra_detalle->save();
 					}
 				}*/
+
+				$producto_model = new Producto;
+
+				$producto = $producto_model->getProductoByTipoMadera($id_tipo_madera[$index]);
+				
+				$idProducto = $producto[0]->id;
+
+				$idCorte = Kardex::where('id_producto', $idProducto)->where('id_almacen_destino', 21)->whereDate('fecha', '<=', $request->fecha)->orderBy('fecha', 'desc')->orderBy('id', 'desc')->value('id');
+				
+				$saldoBase = $idCorte > 0 ? Kardex::where('id', $idCorte)->value('saldos_cantidad') : 0;
+
+				$kardex = new Kardex;
+				$kardex->id_producto = $idProducto;
+				$kardex->id_almacen_destino = 21;
+				$kardex->fecha = $request->fecha;
+
+				$kardex->entradas_cantidad = 0;
+				$kardex->salidas_cantidad = $cantidad_ingreso_produccion[$index];
+
+				$kardex->saldos_cantidad = $saldoBase - $cantidad_ingreso_produccion[$index];
+
+				$kardex->id_ingreso_vehiculo_tronco = $id_ingreso_produccion_acerrado_madera;
+				//$kardex->fecha = $request->fecha;
+				$kardex->id_usuario_inserta = $id_user;
+				$kardex->save();
 
 			}
             

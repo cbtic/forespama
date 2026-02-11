@@ -162,6 +162,8 @@ $(document).ready(function() {
     $("#unidad_producto, #unidad_medida, #marca, #modelo, #medida, #tipo_producto").select2({ width: '100%' });
 
     $("#sub_familia").select2({ width: '100%' });
+    
+    $("#familia_contable").select2({ width: '100%' });
 
     if($('#id').val() > 0){
         //mostrarOpcionesPorSubFamilia();
@@ -835,6 +837,20 @@ function limpiarCombosDependientes() {
                                             <label class="control-label form-control-sm">Sub Familia</label>
                                             <select name="sub_familia" id="sub_familia" class="form-control form-control-sm" onchange="mostrarOpcionesPorSubFamilia()">
                                                 <option value="">--Seleccionar--</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="form-group">
+                                            <label class="control-label form-control-sm">Familia Contable</label>
+                                            <select name="familia_contable" id="familia_contable" class="form-control form-control-sm" onchange="">
+                                                <option value="">--Seleccionar--</option>
+                                                <?php
+                                                foreach ($familia_contable as $row){?>
+                                                    <option value="<?php echo $row->id ?>" <?php if($row->id==$producto->id_familia_contable)echo "selected='selected'"?>><?php echo $row->familia_contable ?></option>
+                                                <?php 
+                                                }
+                                                ?>
                                             </select>
                                         </div>
                                     </div>

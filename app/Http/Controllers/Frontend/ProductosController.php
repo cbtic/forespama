@@ -19,6 +19,7 @@ use App\Models\EquivalenciaProducto;
 use App\Models\ProductosCompetencia;
 use App\Models\User;
 use App\Models\ProductoPrecioDetalle;
+use App\Models\FamiliaContable;
 use RealRashid\SweetAlert\Facades\Alert;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -104,6 +105,7 @@ class ProductosController extends Controller
         $tablaMaestra_model = new TablaMaestra;
         $marca_model = new Marca;
         $familia_model = new Familia;
+        $familia_contable_model = new FamiliaContable;
 		
 		if($id>0){
 			$producto = Producto::find($id);
@@ -127,8 +129,9 @@ class ProductosController extends Controller
 		$modelo = $tablaMaestra_model->getMaestroByTipo(106);
 		$packet = $tablaMaestra_model->getMaestroByTipo(107);
 		$medida = $tablaMaestra_model->getMaestroByTipo(111);
+        $familia_contable = $familia_contable_model->getFamiliaContables();
         
-		return view('frontend.productos.modal_productos_nuevoProducto',compact('id','producto','unidad_medida','moneda','estado_bien','tipo_producto','unidad_producto','marca','tipo_origen_producto','imagenes','bien_servicio','familia','categoria','sub_categoria','modelo','packet','medida'));
+		return view('frontend.productos.modal_productos_nuevoProducto',compact('id','producto','unidad_medida','moneda','estado_bien','tipo_producto','unidad_producto','marca','tipo_origen_producto','imagenes','bien_servicio','familia','categoria','sub_categoria','modelo','packet','medida','familia_contable'));
 
     }
 
@@ -220,6 +223,7 @@ class ProductosController extends Controller
         $producto->id_moneda = $request->moneda;
         $producto->id_familia = $request->familia;
         $producto->id_sub_familia = $request->sub_familia;
+        $producto->id_familia_contable = $request->familia_contable;
         $producto->fecha_vencimiento = $request->fecha_vencimiento;
         $producto->id_estado_bien = $request->estado_bien;
         $producto->stock_minimo = $request->stock_minimo;
@@ -493,7 +497,7 @@ class ProductosController extends Controller
 		return response()->json($producto);
 	}
 
-    public function exportar_listar_productos($tipo_origen_producto, $serie, $codigo, $denominacion, $estado_bien, $tipo_producto, $tiene_imagen, $estado, $familia, $sub_familia) {
+    public function exportar_listar_productos($tipo_origen_producto, $serie, $codigo, $denominacion, $estado_bien, $tipo_producto, $tiene_imagen, $estado, $familia, $sub_familia, $aprobado) {
 
 		if($tipo_origen_producto==0)$tipo_origen_producto = "";
         if($serie=="0")$serie = "";
@@ -505,6 +509,7 @@ class ProductosController extends Controller
         if($estado==0)$estado = "";
         if($familia==0)$familia = "";
         if($sub_familia==0)$sub_familia = "";
+        if($aprobado==0)$aprobado = "";
 
         $producto_model = new Producto;
 		$p[]=$serie;
@@ -515,6 +520,7 @@ class ProductosController extends Controller
         $p[]=$tiene_imagen;
         $p[]=$familia;
         $p[]=$sub_familia;
+        $p[]=$aprobado;
         $p[]=$estado;
 		$p[]=1;
 		$p[]=10000;
@@ -523,7 +529,7 @@ class ProductosController extends Controller
 		$variable = [];
 		$n = 1;
 
-		array_push($variable, array("N°","Id","Bien/Servicio","Tipo Origen Producto","Serie","Denominación","Código","Unidad Producto","Contenido","Unidad Medida","Marca","Familia","Sub Familia","Estado Bien","F. Vencimiento","Stock Minimo","Tiene Imagen","Estado"));
+		array_push($variable, array("N°","Id","Bien/Servicio","Tipo Origen Producto","Serie","Denominación","Código","Unidad Producto","Contenido","Unidad Medida","Marca","Familia","Sub Familia","Familia Contable","Estado Bien","F. Vencimiento","Stock Minimo","Tiene Imagen","Estado"));
 		
 		foreach ($data as $r) {
 
@@ -533,7 +539,7 @@ class ProductosController extends Controller
             if($r->tiene_imagen==1){$tiene_imagen='SI';}
             if($r->tiene_imagen==0){$tiene_imagen='NO';}
 
-			array_push($variable, array($n++,$r->id, $r->bien_servicio, $r->tipo_origen_producto, $r->numero_serie, $r->denominacion, $r->codigo, $r->unidad, $r->contenido, $r->unidad_medida, $r->marca, $r->familia, $r->sub_familia, $r->estado_bien, $r->fecha_vencimiento, $r->stock_minimo, $tiene_imagen, $estado));
+			array_push($variable, array($n++,$r->id, $r->bien_servicio, $r->tipo_origen_producto, $r->numero_serie, $r->denominacion, $r->codigo, $r->unidad, $r->contenido, $r->unidad_medida, $r->marca, $r->familia, $r->sub_familia, $r->familia_contable, $r->estado_bien, $r->fecha_vencimiento, $r->stock_minimo, $tiene_imagen, $estado));
 		}
 		
 		$export = new InvoicesExport([$variable]);
@@ -914,7 +920,7 @@ class InvoicesExport implements FromArray, WithHeadings, WithStyles
 
     public function headings(): array
     {
-        return ["N°","Id","Bien/Servicio","Tipo Origen Producto","Serie","Denominación","Código","Unidad Producto","Contenido","Unidad Medida","Marca","Familia","Sub Familia","Estado Bien","F. Vencimiento","Stock Minimo","Tiene Imagen","Estado"];
+        return ["N°","Id","Bien/Servicio","Tipo Origen Producto","Serie","Denominación","Código","Unidad Producto","Contenido","Unidad Medida","Marca","Familia","Sub Familia","Familia Contable","Estado Bien","F. Vencimiento","Stock Minimo","Tiene Imagen","Estado"];
     }
 
 	public function styles(Worksheet $sheet)
