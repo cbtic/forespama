@@ -424,6 +424,20 @@ label.form-control-sm{
 							</div>
 
 							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+								<select name="familia_contable_bus" id="familia_contable_bus" class="form-control form-control-sm filtro-select" onchange="">
+									<option value="">--Familia Contable--</option>
+									<option value="99">SIN FAMILIA CONTABLE</option>
+									<?php
+									foreach ($familia_contable as $row) {
+									?>
+									<option value="<?php echo $row->id?>"><?php echo $row->familia_contable?></option>
+									<?php
+									}
+									?>
+								</select>
+							</div>
+
+							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
 								<select name="tiene_imagen_bus" id="tiene_imagen_bus" class="form-control form-control-sm filtro-select">
 									<option value="" selected="selected">--Seleccionar Tiene Imagen--</option>
 									<option value="1">Si</option>

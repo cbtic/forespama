@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION public.sp_listar_productos_paginado(p_serie character varying, p_denominacion character varying, p_codigo character varying, p_estado_bien character varying, p_tipo_origen_producto character varying, p_tiene_imagen character varying, p_familia character varying, p_sub_familia character varying, p_aprobado character varying, p_estado character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
+CREATE OR REPLACE FUNCTION public.sp_listar_productos_paginado(p_serie character varying, p_denominacion character varying, p_codigo character varying, p_estado_bien character varying, p_tipo_origen_producto character varying, p_tiene_imagen character varying, p_familia character varying, p_sub_familia character varying, p_familia_contable character varying, p_aprobado character varying, p_estado character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
  RETURNS refcursor
  LANGUAGE plpgsql
 AS $function$
@@ -72,6 +72,14 @@ begin
 
 	If p_sub_familia<>'' Then
 	 v_where:=v_where||'And p.id_sub_familia =  '''||p_sub_familia||''' ';
+	End If;
+
+	If p_familia_contable<>'' Then
+		 If p_familia_contable = '99' Then
+	        v_where := v_where || ' and p.id_familia_contable is null ';
+	    Else
+	        v_where := v_where || ' and p.id_familia_contable = ' || p_familia_contable || ' ';
+	    End If;
 	End If;
 
 	If p_aprobado<>'' Then

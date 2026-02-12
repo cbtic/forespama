@@ -47,6 +47,10 @@ $(document).ready(function () {
 		width : "100%"
 	})
 
+	$('#familia_contable_bus').select2({
+		width : "100%"
+	})
+
 	$('#btnDescargar').on('click', function () {
 		DescargarArchivosExcel()
 
@@ -96,6 +100,7 @@ function datatablenew(){
 			var familia = $('#familia_bus').val();
 			var sub_familia = $('#sub_familia_bus').val();
 			var aprobado = $('#aprobado_bus').val();
+			var familia_contable = $('#familia_contable_bus').val();
 			var estado = $('#estado_bus').val();
 			
 			var _token = $('#_token').val();
@@ -106,7 +111,7 @@ function datatablenew(){
                 "url": sSource,
                 "data":{NumeroPagina:iNroPagina,NumeroRegistros:iCantMostrar,
 						serie:serie,denominacion:denominacion,codigo:codigo,estado_bien:estado_bien,tipo_origen_producto:tipo_origen_producto,
-						estado:estado,tiene_imagen:tiene_imagen,familia:familia,sub_familia:sub_familia,aprobado:aprobado,
+						estado:estado,tiene_imagen:tiene_imagen,familia:familia,sub_familia:sub_familia,aprobado:aprobado,familia_contable:familia_contable,
 						_token:_token
                        },
                 "success": function (result) {
@@ -423,6 +428,7 @@ function DescargarArchivosExcel(){
 	var familia = $('#familia_bus').val();
 	var sub_familia = $('#sub_familia_bus').val();
 	var aprobado = $('#aprobado_bus').val();
+	var familia_contable = $('#familia_contable_bus').val();
 
 	if (tipo_origen_producto == "")tipo_origen_producto = 0;
 	if (serie == "")serie = "0";
@@ -435,8 +441,9 @@ function DescargarArchivosExcel(){
 	if (familia == "")familia = 0;
 	if (sub_familia == "")sub_familia = 0;
 	if (aprobado == "")aprobado = 0;
+	if (familia_contable == "")familia_contable = 0;
 	
-	location.href = '/productos/exportar_listar_productos/'+tipo_origen_producto+'/'+serie+'/'+codigo+'/'+denominacion+'/'+estado_bien+'/'+tipo_producto+'/'+tiene_imagen+'/'+estado+'/'+familia+'/'+sub_familia+'/'+aprobado;
+	location.href = '/productos/exportar_listar_productos/'+tipo_origen_producto+'/'+serie+'/'+codigo+'/'+denominacion+'/'+estado_bien+'/'+tipo_producto+'/'+tiene_imagen+'/'+estado+'/'+familia+'/'+sub_familia+'/'+aprobado+'/'+familia_contable;
 }
 
 function obtenerSubFamiliaBus(){

@@ -59,14 +59,16 @@ class ProductosController extends Controller
 
 		$tablaMaestra_model = new TablaMaestra;
         $familia_model = new Familia;
+        $familia_contable_model = new FamiliaContable;
 
 		$estado_bien = $tablaMaestra_model->getMaestroByTipo(56);
 		$tipo_origen_producto = $tablaMaestra_model->getMaestroByTipo(58);
 		$tipo_producto = $tablaMaestra_model->getMaestroByTipo(44);
 		$aprobado = $tablaMaestra_model->getMaestroByTipo(113);
         $familia = $familia_model->getFamiliaAll();
+        $familia_contable = $familia_contable_model->getFamiliaContables();
 		
-		return view('frontend.productos.create',compact('estado_bien','tipo_origen_producto','tipo_producto','familia','aprobado'));
+		return view('frontend.productos.create',compact('estado_bien','tipo_origen_producto','tipo_producto','familia','aprobado','familia_contable'));
 
 	}
 
@@ -81,6 +83,7 @@ class ProductosController extends Controller
         $p[]=$request->tiene_imagen;
         $p[]=$request->familia;
         $p[]=$request->sub_familia;
+        $p[]=$request->familia_contable;
         $p[]=$request->aprobado;
         $p[]=$request->estado;
 		$p[]=$request->NumeroPagina;
@@ -159,6 +162,7 @@ class ProductosController extends Controller
                 $codigo_producto = $producto_model->getCodigoProducto($request->familia, $request->sub_familia);
                 $codigo_final = $codigo_producto[0]->codigo;
             }
+		    $producto->id_usuario_inserta = $id_user;
 
 		}else{
 			$producto = Producto::find($request->id);
@@ -177,6 +181,7 @@ class ProductosController extends Controller
             }else{
                 $codigo_final = $request->codigo;
             }
+		    $producto->id_usuario_actualiza = $id_user;
 		}
         
         if($request->id == 0){
@@ -241,7 +246,6 @@ class ProductosController extends Controller
         $producto->id_medida = $request->medida;
         $producto->aprobado = $aprobado;
 		$producto->estado = 1;
-		$producto->id_usuario_inserta = $id_user;
 		$producto->save();
         $id_producto = $producto->id;
 
@@ -497,7 +501,7 @@ class ProductosController extends Controller
 		return response()->json($producto);
 	}
 
-    public function exportar_listar_productos($tipo_origen_producto, $serie, $codigo, $denominacion, $estado_bien, $tipo_producto, $tiene_imagen, $estado, $familia, $sub_familia, $aprobado) {
+    public function exportar_listar_productos($tipo_origen_producto, $serie, $codigo, $denominacion, $estado_bien, $tipo_producto, $tiene_imagen, $estado, $familia, $sub_familia, $aprobado, $familia_contable) {
 
 		if($tipo_origen_producto==0)$tipo_origen_producto = "";
         if($serie=="0")$serie = "";
@@ -510,6 +514,7 @@ class ProductosController extends Controller
         if($familia==0)$familia = "";
         if($sub_familia==0)$sub_familia = "";
         if($aprobado==0)$aprobado = "";
+        if($familia_contable==0)$familia_contable = "";
 
         $producto_model = new Producto;
 		$p[]=$serie;
@@ -520,6 +525,7 @@ class ProductosController extends Controller
         $p[]=$tiene_imagen;
         $p[]=$familia;
         $p[]=$sub_familia;
+        $p[]=$familia_contable;
         $p[]=$aprobado;
         $p[]=$estado;
 		$p[]=1;

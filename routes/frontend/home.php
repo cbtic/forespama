@@ -643,7 +643,7 @@ Route::get('devolucion/modal_devolucion/{id}/{id_tipo_documento}', [DevolucionCo
 Route::get('devolucion/cargar_salida/{numero_salida}', [DevolucionController::class, 'cargar_salida'])->name('devolucion.cargar_salida');
 Route::get('devolucion/cargar_detalle/{id}/{id_tipo_documento}', [DevolucionController::class, 'cargar_detalle'])->name('devolucion.cargar_detalle');
 
-Route::get('productos/exportar_listar_productos/{tipo_origen_producto}/{serie}/{codigo}/{denominacion}/{estado_bien}/{tipo_producto}/{tiene_imagen}/{estado}/{familia}/{sub_familia}/{aprobado}', [ProductosController::class, 'exportar_listar_productos'])->name('orden_compra.exportar_listar_productos');
+Route::get('productos/exportar_listar_productos/{tipo_origen_producto}/{serie}/{codigo}/{denominacion}/{estado_bien}/{tipo_producto}/{tiene_imagen}/{estado}/{familia}/{sub_familia}/{aprobado}/{familia_contable}', [ProductosController::class, 'exportar_listar_productos'])->name('orden_compra.exportar_listar_productos');
 Route::get('orden_compra/modal_datos_pedido_orden_compra/{id}', [OrdenCompraController::class, 'modal_datos_pedido_orden_compra'])->name('orden_compra.modal_datos_pedido_orden_compra');
 Route::post('orden_compra/send_datos_contacto', [OrdenCompraController::class, 'send_datos_contacto'])->name('orden_compra.send_datos_contacto');
 Route::get('orden_compra/obtener_provincia_distrito/{idDepartamento}', [OrdenCompraController::class, 'obtener_provincia_distrito'])->name('orden_compra.obtener_provincia_distrito');
