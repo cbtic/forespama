@@ -250,7 +250,7 @@ function datatablenew(){
 					var html = '<div class="btn-group btn-group-sm" role="group" aria-label="Log Viewer Actions">';
 					
 					//html += '<button style="font-size:12px" type="button" class="btn btn-sm btn-success" data-toggle="modal" onclick="modalPromotorRuta('+row.id+')" ><i class="fa fa-edit"></i> Editar</button>'; 
-					if (row.latitud_salida && row.longitud_salida) {
+					if (row.latitud && row.longitud) {
 					    html += '<a href="https://www.google.com/maps?q= '+row.latitud +', '+row.longitud +'" target="_blank"> <i class="fa fa-map-marker text-danger"></i> Ver ubicación </a>'
                     } else {
 						return '<span class="text-muted">Sin Ubicacion</span>';

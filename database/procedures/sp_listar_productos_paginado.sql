@@ -34,8 +34,7 @@ begin
 	left join marcas m on p.id_marca = m.id
 	left join familias f on p.id_familia = f.id 
 	left join sub_familias sf on p.id_sub_familia = sf.id
-	left join equivalencia_sub_familia_familia_contables esffc on p.id_sub_familia = esffc.id_sub_familia 
-	left join familia_contables fc on esffc.id_familia_contable = fc.id ';
+	left join familia_contables fc on p.id_familia_contable = fc.id ';
 	
 	v_where = ' Where 1=1 ';
 
