@@ -10,15 +10,14 @@
 
 .datepicker,
 .table-condensed {
-  width: 250px;
-  height:250px;
+    width: 250px;
+    height:250px;
 }
 
-
 .modal-dialog {
-	width: 100%;
-	max-width:60%!important
-  }
+    width: 100%;
+    max-width:70%!important
+}
   
 #tablemodal{
     border-spacing: 0;
@@ -84,8 +83,9 @@
 .scrolls {
 	overflow-x: scroll;
 	overflow-y: hidden;
-	height: 200px;
-	white-space:nowrap
+	height: 300px;
+	white-space:nowrap;
+    width: 350px;
 }
 
 .delete_ruta{
@@ -98,6 +98,29 @@
 	width:30px;
 	height:30px;
 	cursor:pointer
+}
+
+.img_ruta img {
+  border-radius: 6px;
+  box-shadow: 0 2px 6px rgba(0,0,0,.15);
+  transition: transform .2s;
+}
+
+.img_ruta img:hover {
+  transform: scale(1.05);
+}
+
+input[readonly] {
+  background-color: #f8f9fa;
+  cursor: not-allowed;
+}
+
+.fieldset {
+  background-color: #f8f9fb;   /* gris suave */
+  border: 1px solid #e2e6ea;
+  border-radius: 10px;
+  padding: 16px;
+  margin-bottom: 25px;
 }
 
 </style>
@@ -176,8 +199,7 @@ $(document).ready(function() {
                 obtenerMedida()
             }, 500);
         }, 500);*/
-    } 
-
+    }
 });
 
 $('#sub_familia').on('change', function () {
@@ -200,7 +222,6 @@ $('#openOverlayOpc').on('shown.bs.modal', function() {
 		container: '#openOverlayOpc modal-body'
 	});
 	*/
-	 
 });
 
 $(document).ready(function() {
@@ -242,7 +263,6 @@ $(document).ready(function() {
                 } else {
                     alert('Formato de imagen incorrecto.');
                 }
-                
             }
         });
         return false;
@@ -257,7 +277,6 @@ $(document).ready(function() {
         cargarImagenes();
         obtenerSubFamilia();
     }
-    
 });
 
 function AddFila(){
@@ -273,7 +292,6 @@ function AddFila(){
                 <option value="">--Seleccionar--</option>
             </select>
         </div>`;
-        
     
     // Agregar el nuevo div al contenedor
     document.getElementById('contenedor-anaqueles').appendChild(newDiv);
@@ -302,16 +320,11 @@ function obtenerAnaquel(){
                     $(this).html(option);
                     $(this).attr("disabled", false);
                 }
-                
             });
 			//$('#anaquel').attr("disabled",false);
 			//$('.loader').hide();
-			
-
 		}
-		
 	});
-
 }
 
 function limpiar(){
@@ -357,26 +370,26 @@ function fn_save_producto(){
 	    let formData = new FormData(form);
 
         $.ajax({
-                url: "/productos/send_producto",
-                type: "POST",
-                data : formData,
-                contentType: false,
-			    processData: false, 
-                success: function (result) {
-                    //alert(result);
-                    if (result.success) {
-                        $('.loader').hide();
-                        bootbox.alert(result.success, function() {
-                            $('#openOverlayOpc').modal('hide');
-                            //bootbox.alert("Se guard&oacute; satisfactoriamente");
-                            //window.location.reload();
-                            datatablenew();
-                        });
-                    } else if (result.error) {
-                        $('.loader').hide();
-                        bootbox.alert(result.error);
-                    }
-                },
+            url: "/productos/send_producto",
+            type: "POST",
+            data : formData,
+            contentType: false,
+            processData: false, 
+            success: function (result) {
+                //alert(result);
+                if (result.success) {
+                    $('.loader').hide();
+                    bootbox.alert(result.success, function() {
+                        $('#openOverlayOpc').modal('hide');
+                        //bootbox.alert("Se guard&oacute; satisfactoriamente");
+                        //window.location.reload();
+                        datatablenew();
+                    });
+                } else if (result.error) {
+                    $('.loader').hide();
+                    bootbox.alert(result.error);
+                }
+            },
         });
     }
 }
@@ -439,7 +452,6 @@ function obtenerSubFamilia(){
             }
 
 			$('.loader').hide();
-
         }
     });
 }
@@ -473,15 +485,18 @@ function obtenerSubFamilia(){
 }*/
 
 function mostrarOpcionesPorSubFamilia() {
+
     var sub_familia = $('#sub_familia').val();
 
     limpiarCombosDependientes();
 
     if ([1,2,3,4,5,6,7,8,9].includes(parseInt(sub_familia))) {
         $('.combo_producto_terminado').show();
+        $('.bloque_producto_terminado').show();
         obtenerCategoria(sub_familia);
     } else {
         $('.combo_producto_terminado').hide();
+        $('.bloque_producto_terminado').hide();
         //$('.combo_producto_terminado select').val('');
     }
 }
@@ -674,8 +689,17 @@ function limpiarCombosDependientes() {
     }
 }
 
-</script>
+$('.combo_producto_terminado').hide();
 
+$('#bien_servicio').on('change', function () {
+  if ($(this).val() === 'PRODUCTO') {
+    $('#bloque_producto_terminado').slideDown();
+  } else {
+    $('#bloque_producto_terminado').slideUp();
+  }
+});
+
+</script>
 
 <body class="hold-transition skin-blue sidebar-mini">
 
@@ -689,12 +713,11 @@ function limpiarCombosDependientes() {
 		-->
 		<div class="justify-content-center">		
 
-            <div class="card">
-                
-                <div class="card-header" style="padding:5px!important;padding-left:20px!important">
+            <div class="card mb-3">
+                <div class="card-header bg-light font-weight-bold" style="padding:5px!important;padding-left:20px!important">
                     Registrar un producto / servicio
                 </div>
-                
+            
                 <div class="card-body">
                 <form method="post" action="#" id="frmProducto" name="frmProducto">
 
@@ -706,8 +729,9 @@ function limpiarCombosDependientes() {
                             <input type="hidden" name="id" id="id" value="<?php echo $id?>">
                             <div class="row" style="padding-left:10px">
                             <div class="col-lg-8">
+                                <fieldset class="fieldset" name="datos_generales" style="border:1px solid #A4A4A4; padding: 10px">
+                                <legend class="control-label form-control-sm">Datos generales</legend>
                                 <div class="row" style="padding-left:10px">
-                                    
                                     <div class="col-lg-4">
                                         <div class="form-group">
                                             <label class="control-label form-control-sm">Tipo Origen Producto</label>
@@ -744,6 +768,8 @@ function limpiarCombosDependientes() {
                                             <input id="numero_serie" name="numero_serie" on class="form-control form-control-sm"  value="<?php echo $producto->numero_serie?>" type="text">
                                         </div>
                                     </div>
+                                </div>
+                                <div class="row" style="padding-left:10px">
                                     <div class="col-lg-8">
                                         <div class="form-group">
                                             <label class="control-label form-control-sm">Denominaci&oacute;n</label>
@@ -756,6 +782,8 @@ function limpiarCombosDependientes() {
                                             <input id="codigo" name="codigo" on class="form-control form-control-sm"  value="<?php echo $producto->codigo?>" type="text" readonly>
                                         </div>
                                     </div>
+                                </div>
+                                <div class="row" style="padding-left:10px">
                                     <div class="col-lg-4">
                                         <div class="form-group">
                                             <label class="control-label form-control-sm">Unidad Producto</label>
@@ -790,6 +818,8 @@ function limpiarCombosDependientes() {
                                             </select>
                                         </div>
                                     </div>
+                                </div>
+                                <div class="row" style="padding-left:10px">
                                     <div class="col-lg-4">
                                         <div class="form-group">
                                             <label class="control-label form-control-sm">Marca</label>
@@ -804,196 +834,164 @@ function limpiarCombosDependientes() {
                                             </select>
                                         </div>
                                     </div>
-                                    <!--<div class="col-lg-4">
-                                        <div class="form-group">
-                                            <label class="control-label form-control-sm">Tipo Producto</label>
-                                            <select name="tipo_producto" id="tipo_producto" class="form-control form-control-sm" onchange="">
-                                                <option value="">--Seleccionar--</option>
-                                                <?php
-                                                //foreach ($tipo_producto as $row){?>
-                                                    <option value="<?php //echo $row->codigo ?>" <?php //if($row->codigo==$producto->id_tipo_producto)echo "selected='selected'"?>><?php //echo $row->denominacion ?></option>
-                                                <?php 
-                                                //}
-                                                ?>
-                                            </select>
+                                </div>
+                                </fieldset>
+                                <fieldset class="fieldset" name="familias" style="border:1px solid #A4A4A4; padding: 10px">
+                                <legend class="control-label form-control-sm">Familias</legend>
+                                <div class="card card-body bg-light border-0 p-3">
+                                    <div class="row">
+                                        <div class="col-lg-4">
+                                            <div class="form-group">
+                                                <label class="control-label form-control-sm">Familia</label>
+                                                <select name="familia" id="familia" class="form-control form-control-sm" onchange="obtenerSubFamilia()">
+                                                    <option value="">--Seleccionar--</option>
+                                                    <?php
+                                                    foreach ($familia as $row){?>
+                                                        <option value="<?php echo $row->id ?>" <?php if($row->id==$producto->id_familia)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                                    <?php 
+                                                    }
+                                                    ?>
+                                                </select>
+                                            </div>
                                         </div>
-                                    </div>-->
-                                    <div class="col-lg-4">
-                                        <div class="form-group">
-                                            <label class="control-label form-control-sm">Familia</label>
-                                            <select name="familia" id="familia" class="form-control form-control-sm" onchange="obtenerSubFamilia()">
-                                                <option value="">--Seleccionar--</option>
-                                                <?php
-                                                foreach ($familia as $row){?>
-                                                    <option value="<?php echo $row->id ?>" <?php if($row->id==$producto->id_familia)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
-                                                <?php 
-                                                }
-                                                ?>
-                                            </select>
+                                        <div class="col-lg-4">
+                                            <div class="form-group">
+                                                <label class="control-label form-control-sm">Sub Familia</label>
+                                                <select name="sub_familia" id="sub_familia" class="form-control form-control-sm" onchange="mostrarOpcionesPorSubFamilia()">
+                                                    <option value="">--Seleccionar--</option>
+                                                </select>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="col-lg-4">
-                                        <div class="form-group">
-                                            <label class="control-label form-control-sm">Sub Familia</label>
-                                            <select name="sub_familia" id="sub_familia" class="form-control form-control-sm" onchange="mostrarOpcionesPorSubFamilia()">
-                                                <option value="">--Seleccionar--</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4">
-                                        <div class="form-group">
-                                            <label class="control-label form-control-sm">Familia Contable</label>
-                                            <select name="familia_contable" id="familia_contable" class="form-control form-control-sm" onchange="">
-                                                <option value="">--Seleccionar--</option>
-                                                <?php
-                                                foreach ($familia_contable as $row){?>
-                                                    <option value="<?php echo $row->id ?>" <?php if($row->id==$producto->id_familia_contable)echo "selected='selected'"?>><?php echo $row->familia_contable ?></option>
-                                                <?php 
-                                                }
-                                                ?>
-                                            </select>
+                                        <div class="col-lg-4">
+                                            <div class="form-group">
+                                                <label class="control-label form-control-sm">Familia Contable</label>
+                                                <select name="familia_contable" id="familia_contable" class="form-control form-control-sm" onchange="">
+                                                    <option value="">--Seleccionar--</option>
+                                                    <?php
+                                                    foreach ($familia_contable as $row){?>
+                                                        <option value="<?php echo $row->id ?>" <?php if($row->id==$producto->id_familia_contable)echo "selected='selected'"?>><?php echo $row->familia_contable ?></option>
+                                                    <?php 
+                                                    }
+                                                    ?>
+                                                </select>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-4 combo_producto_terminado">
-                                        <div class="form-group">
-                                            <label class="control-label form-control-sm">Categoria</label>
-                                            <select name="categoria" id="categoria" class="form-control form-control-sm" onchange="obtenerSubCategoria();obtenerModelo();obtenerPacket();obtenerMedida()">
-                                                <option value="">--Seleccionar--</option>
-                                                <?php
-                                                /*foreach ($categoria as $row){?>
-                                                    <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$producto->id_categoria)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
-                                                <?php 
-                                                }*/
-                                                ?>
-                                            </select>
+                                </div>
+                                </fieldset>
+                                <div class="row" style="padding-left:10px" id="bloque_producto_terminado">
+                                    <div class="row">
+                                        <div class="col-lg-4 combo_producto_terminado">
+                                            <div class="form-group">
+                                                <label class="control-label form-control-sm">Categoria</label>
+                                                <select name="categoria" id="categoria" class="form-control form-control-sm" onchange="obtenerSubCategoria();obtenerModelo();obtenerPacket();obtenerMedida()">
+                                                    <option value="">--Seleccionar--</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4 combo_producto_terminado">
+                                            <div class="form-group">
+                                                <label class="control-label form-control-sm">Sub Categoria</label>
+                                                <select name="sub_categoria" id="sub_categoria" class="form-control form-control-sm" onchange="">
+                                                    <option value="">--Seleccionar--</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4 combo_producto_terminado">
+                                            <div class="form-group">
+                                                <label class="control-label form-control-sm">Modelo</label>
+                                                <select name="modelo" id="modelo" class="form-control form-control-sm" onchange="">
+                                                    <option value="">--Seleccionar--</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4 combo_producto_terminado">
+                                            <div class="form-group">
+                                                <label class="control-label form-control-sm">Packet</label>
+                                                <select name="packet" id="packet" class="form-control form-control-sm" onchange="">
+                                                    <option value="">--Seleccionar--</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4 combo_producto_terminado">
+                                            <div class="form-group">
+                                                <label class="control-label form-control-sm">Medida</label>
+                                                <select name="medida" id="medida" class="form-control form-control-sm" onchange="">
+                                                    <option value="">--Seleccionar--</option>
+                                                </select>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-4 combo_producto_terminado">
-                                        <div class="form-group">
-                                            <label class="control-label form-control-sm">Sub Categoria</label>
-                                            <select name="sub_categoria" id="sub_categoria" class="form-control form-control-sm" onchange="">
-                                                <option value="">--Seleccionar--</option>
-                                                <?php
-                                                /*foreach ($sub_categoria as $row){?>
-                                                    <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$producto->id_sub_categoria)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
-                                                <?php 
-                                                }*/
-                                                ?>
-                                            </select>
+                                </div>
+                                <fieldset class="fieldset" name="familias" style="border:1px solid #A4A4A4; padding: 10px">
+                                <legend class="control-label form-control-sm">Familias</legend>
+                                <div class="card card-body bg-light border-0 p-3">
+                                    <div class="row">
+                                        <div class="col-lg-4">
+                                            <div class="form-group">
+                                                <label class="control-label form-control-sm">Estado Bien</label>
+                                                <select name="estado_bien" id="estado_bien" class="form-control form-control-sm" onchange="">
+                                                    <option value="">--Seleccionar--</option>
+                                                    <?php
+                                                    foreach ($estado_bien as $row){?>
+                                                        <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$producto->id_estado_bien)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                                    <?php 
+                                                    }
+                                                    ?>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <div class="form-group">
+                                                <label class="control-label form-control-sm">Costo Unitario</label>
+                                                <input id="costo_unitario" name="costo_unitario" on class="form-control form-control-sm"  value="<?php echo $producto->costo_unitario?>" type="text">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <div class="form-group">
+                                                <label class="control-label form-control-sm">Moneda</label>
+                                                <select name="moneda" id="moneda" class="form-control form-control-sm" onchange="">
+                                                    <option value="">--Seleccionar--</option>
+                                                    <?php
+                                                    foreach ($moneda as $row){?>
+                                                        <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$producto->id_moneda)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                                    <?php 
+                                                    }
+                                                    ?>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <div class="form-group">
+                                                <label class="control-label form-control-sm">Fecha Vencimiento</label>
+                                                <input id="fecha_vencimiento" name="fecha_vencimiento" on class="form-control form-control-sm"  value="<?php echo $producto->fecha_vencimiento?>" type="text">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <div class="form-group">
+                                                <label class="control-label form-control-sm">Stock M&iacute;nimo</label>
+                                                <input id="stock_minimo" name="stock_minimo" on class="form-control form-control-sm"  value="<?php echo $producto->stock_minimo?>" type="text">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <div class="form-group">
+                                                <label class="control-label form-control-sm">Peso</label>
+                                                <input id="peso" name="peso" on class="form-control form-control-sm"  value="<?php echo $producto->peso?>" type="text">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label class="control-label form-control-sm">Ficha T&eacute;cnica</label>
+                                                <input type="file" class="form-control-file btn btn-sm btn-success" style="background-color: #F6F6F6 !important; border: none !important; padding: 0 !important; box-shadow: none !important; color:black" id="btnFichaTecnica" name="btnFichaTecnica">
+                                                <?php if (!empty($producto->ruta_ficha_tecnica)) : ?>
+                                                    <div class="mt-2">
+                                                        <i class="fa fa-file-pdf-o"></i>
+                                                        <a href="<?php echo asset($producto->ruta_ficha_tecnica); ?>" target="_blank">Descargar ficha técnica</a>
+                                                    </div>
+                                                <?php endif; ?>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-4 combo_producto_terminado">
-                                        <div class="form-group">
-                                            <label class="control-label form-control-sm">Modelo</label>
-                                            <select name="modelo" id="modelo" class="form-control form-control-sm" onchange="">
-                                                <option value="">--Seleccionar--</option>
-                                                <?php
-                                                /*foreach ($modelo as $row){?>
-                                                    <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$producto->id_modelo)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
-                                                <?php 
-                                                }*/
-                                                ?>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4 combo_producto_terminado">
-                                        <div class="form-group">
-                                            <label class="control-label form-control-sm">Packet</label>
-                                            <select name="packet" id="packet" class="form-control form-control-sm" onchange="">
-                                                <option value="">--Seleccionar--</option>
-                                                <?php
-                                                /*foreach ($packet as $row){?>
-                                                    <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$producto->id_packet)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
-                                                <?php 
-                                                }*/
-                                                ?>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4 combo_producto_terminado">
-                                        <div class="form-group">
-                                            <label class="control-label form-control-sm">Medida</label>
-                                            <select name="medida" id="medida" class="form-control form-control-sm" onchange="">
-                                                <option value="">--Seleccionar--</option>
-                                                <?php
-                                                /*foreach ($medida as $row){?>
-                                                    <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$producto->id_medida)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
-                                                <?php 
-                                                }*/
-                                                ?>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4">
-                                        <div class="form-group">
-                                            <label class="control-label form-control-sm">Estado Bien</label>
-                                            <select name="estado_bien" id="estado_bien" class="form-control form-control-sm" onchange="">
-                                                <option value="">--Seleccionar--</option>
-                                                <?php
-                                                foreach ($estado_bien as $row){?>
-                                                    <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$producto->id_estado_bien)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
-                                                <?php 
-                                                }
-                                                ?>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <!--<div class="col-lg-4">
-                                        <div class="form-group">
-                                            <label class="control-label form-control-sm">Stock Actual</label>
-                                            <input id="stock_actual" name="stock_actual" on class="form-control form-control-sm"  value="<?php echo $producto->stock_actual?>" type="text">
-                                        </div>
-                                    </div>-->
-                                    <div class="col-lg-4">
-                                        <div class="form-group">
-                                            <label class="control-label form-control-sm">Costo Unitario</label>
-                                            <input id="costo_unitario" name="costo_unitario" on class="form-control form-control-sm"  value="<?php echo $producto->costo_unitario?>" type="text">
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4">
-                                        <div class="form-group">
-                                            <label class="control-label form-control-sm">Moneda</label>
-                                            <select name="moneda" id="moneda" class="form-control form-control-sm" onchange="">
-                                                <option value="">--Seleccionar--</option>
-                                                <?php
-                                                foreach ($moneda as $row){?>
-                                                    <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$producto->id_moneda)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
-                                                <?php 
-                                                }
-                                                ?>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4">
-                                        <div class="form-group">
-                                            <label class="control-label form-control-sm">Fecha Vencimiento</label>
-                                            <input id="fecha_vencimiento" name="fecha_vencimiento" on class="form-control form-control-sm"  value="<?php echo $producto->fecha_vencimiento?>" type="text">
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4">
-                                        <div class="form-group">
-                                            <label class="control-label form-control-sm">Stock M&iacute;nimo</label>
-                                            <input id="stock_minimo" name="stock_minimo" on class="form-control form-control-sm"  value="<?php echo $producto->stock_minimo?>" type="text">
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4">
-                                        <div class="form-group">
-                                            <label class="control-label form-control-sm">Peso</label>
-                                            <input id="peso" name="peso" on class="form-control form-control-sm"  value="<?php echo $producto->peso?>" type="text">
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <div class="form-group">
-                                            <label class="control-label form-control-sm">Ficha T&eacute;cnica</label>
-                                            <input type="file" class="form-control-file btn btn-sm btn-success" style="background-color: #F6F6F6 !important; border: none !important; padding: 0 !important; box-shadow: none !important; color:black" id="btnFichaTecnica" name="btnFichaTecnica">
-                                            <?php if (!empty($producto->ruta_ficha_tecnica)) : ?>
-                                                <div class="mt-2">
-                                                    <i class="fa fa-file-pdf-o"></i>
-                                                    <a href="<?php echo asset($producto->ruta_ficha_tecnica); ?>" target="_blank">Descargar ficha técnica</a>
-                                                </div>
-                                            <?php endif; ?>
-                                        </div>
-							        </div>
                                 </div>
                             </div>
                             <div class="col-lg-4">
@@ -1058,35 +1056,20 @@ function limpiarCombosDependientes() {
                         <div style="margin-top:15px" class="form-group">
                             <div class="col-sm-12 controls">
                                 <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
-                                    <!--<a href="javascript:void(0)" onClick="fn_save_producto()" class="btn btn-sm btn-success">Registrar</a>-->
                                     <button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-nuevo" data-toggle="modal" onclick="fn_save_producto()">
                                         <i class="fas fa-save" style="font-size:18px;"></i> Guardar
                                     </button>
-                                    
-                                    <!--
-                                    @hasanyrole('Administrator|Aprobar Producto')
-                                    <button style="font-size:12px;margin-left:10px" type="button" class="btn btn-sm btn-clasico-blanco btn-enviar" data-toggle="modal" onclick="fn_save_producto()">
-                                        <i class="fas fa-check-circle" style="font-size:18px;"></i> Aprobar Producto
-                                    </button>
-                                    @endhasanyrole
-                                    -->
-
                                 </div>
-                                                    
                             </div>
-                        </div> 
-                            
+                        </div>
                     </div>
                 </form>
                 </div>
                 <!-- /.box -->
-                
             </div>
             <!--/.col (left) -->
-
         </div>
         <!-- /.row -->
-    
 <!-- /.content -->
 </div>
 <!-- /.content-wrapper -->

@@ -438,6 +438,8 @@ label.form-control-sm{
 							<th>Fecha</th>
 							<th>Tipo Movimiento</th>
 							<th>C&oacute;digo Movimiento</th>
+							<th>Usuario</th>
+							<th>Fecha Creaci&oacute;n</th>
 							<!--<th>Almacen Salida</th>-->
                         </tr>
                         </thead>

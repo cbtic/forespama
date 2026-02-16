@@ -303,6 +303,24 @@ function datatablenew(){
 				"bSortable": true,
 				"aTargets": [15]
 				},
+				{
+				"mRender": function (data, type, row) {
+					var usuario = "";
+					if(row.usuario!= null)usuario = row.usuario;
+					return usuario;
+				},
+				"bSortable": true,
+				"aTargets": [16]
+				},
+				{
+				"mRender": function (data, type, row) {
+					var fecha_creacion = "";
+					if(row.fecha_creacion!= null)fecha_creacion = row.fecha_creacion;
+					return fecha_creacion;
+				},
+				"bSortable": true,
+				"aTargets": [17]
+				},
 				/*{
 				"mRender": function (data, type, row) {
 					var almacen_salida = "";
