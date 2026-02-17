@@ -239,7 +239,14 @@ class AcerradoMaderaController extends Controller
 		$medida_paquete2 = $request->input('medida_paquete2');
 		$n_piezas = $request->input('n_piezas');
         $id_salida_acerrado_madera =$request->id_salida_acerrado_madera;
+		$seleccionados = $request->input('seleccionados', []);
 		
+		if (!$request->has('seleccionados')) {
+			return response()->json([
+				'error' => 'Debe seleccionar al menos un lote'
+			], 422);
+		}
+
         //$produccion_acerrado_madera->id_ingreso_produccion_acerrado_maderas = $request->denominacion;
 		$produccion_acerrado_madera->fecha_produccion = $request->fecha;
 		$produccion_acerrado_madera->estado = 1;
@@ -287,6 +294,16 @@ class AcerradoMaderaController extends Controller
 		
 		return response()->json([
 			'detalle_ingreso_acerrado' => $detalle_ingreso_acerrado
+		]);
+	}
+
+	public function cargar_acerrado_pendiente(){
+		
+		$produccion_acerrado_madera_model = new ProduccionAcerradoMadera;
+		$detalle_acerrado_pendiente = $produccion_acerrado_madera_model->getDetalleAcerradoPendienteByLote();
+		
+		return response()->json([
+			'detalle_acerrado_pendiente' => $detalle_acerrado_pendiente
 		]);
 	}
 }

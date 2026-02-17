@@ -16,7 +16,7 @@
 
 .modal-dialog {
     width: 100%;
-    max-width:70%!important
+    max-width:85%!important
 }
   
 #tablemodal{
@@ -723,16 +723,16 @@ $('#bien_servicio').on('change', function () {
 
                     <div class="row">
 
-                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding-top:5px;padding-bottom:20px">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding-top:5px;padding-bottom:10px">
                                 
                             <input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
                             <input type="hidden" name="id" id="id" value="<?php echo $id?>">
                             <div class="row" style="padding-left:10px">
                             <div class="col-lg-8">
-                                <fieldset class="fieldset" name="datos_generales" style="border:1px solid #A4A4A4; padding: 10px">
+                                <fieldset class="fieldset" name="datos_generales" style="border:1px solid #A4A4A4; padding: 5px">
                                 <legend class="control-label form-control-sm">Datos generales</legend>
                                 <div class="row" style="padding-left:10px">
-                                    <div class="col-lg-4">
+                                    <div class="col-lg-3">
                                         <div class="form-group">
                                             <label class="control-label form-control-sm">Tipo Origen Producto</label>
                                             <select name="tipo_origen_producto" id="tipo_origen_producto" class="form-control form-control-sm" onchange="">
@@ -747,7 +747,7 @@ $('#bien_servicio').on('change', function () {
                                         </div>
                                     </div>
 
-                                    <div class="col-lg-4">
+                                    <div class="col-lg-3">
                                         <div class="form-group">
                                             <label class="control-label form-control-sm">Bien / Servicio</label>
                                             <select name="bien_servicio" id="bien_servicio" class="form-control form-control-sm" onchange="">
@@ -762,10 +762,17 @@ $('#bien_servicio').on('change', function () {
                                         </div>
                                     </div>
 
-                                    <div class="col-lg-4">
+                                    <div class="col-lg-3">
                                         <div class="form-group">
                                             <label class="control-label form-control-sm">N&uacute;mero Serie</label>
                                             <input id="numero_serie" name="numero_serie" on class="form-control form-control-sm"  value="<?php echo $producto->numero_serie?>" type="text">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-3">
+                                        <div class="form-group">
+                                            <label class="control-label form-control-sm">C&oacute;digo</label>
+                                            <input id="codigo" name="codigo" on class="form-control form-control-sm"  value="<?php echo $producto->codigo?>" type="text" readonly>
                                         </div>
                                     </div>
                                 </div>
@@ -776,15 +783,9 @@ $('#bien_servicio').on('change', function () {
                                             <input id="denominacion" name="denominacion" on class="form-control form-control-sm"  value="<?php echo htmlspecialchars($producto->denominacion, ENT_QUOTES, 'UTF-8')?>" type="text">
                                         </div>
                                     </div>
-                                    <div class="col-lg-4">
-                                        <div class="form-group">
-                                            <label class="control-label form-control-sm">C&oacute;digo</label>
-                                            <input id="codigo" name="codigo" on class="form-control form-control-sm"  value="<?php echo $producto->codigo?>" type="text" readonly>
-                                        </div>
-                                    </div>
                                 </div>
                                 <div class="row" style="padding-left:10px">
-                                    <div class="col-lg-4">
+                                    <div class="col-lg-3">
                                         <div class="form-group">
                                             <label class="control-label form-control-sm">Unidad Producto</label>
                                             <select name="unidad_producto" id="unidad_producto" class="form-control form-control-sm" onchange="">
@@ -798,13 +799,13 @@ $('#bien_servicio').on('change', function () {
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-lg-4">
+                                    <div class="col-lg-3">
                                         <div class="form-group">
                                             <label class="control-label form-control-sm">Contenido</label>
                                             <input id="contenido" name="contenido" on class="form-control form-control-sm"  value="<?php echo $producto->contenido?>" type="text">
                                         </div>
                                     </div>
-                                    <div class="col-lg-4">
+                                    <div class="col-lg-3">
                                         <div class="form-group">
                                             <label class="control-label form-control-sm">Unidad Medida</label>
                                             <select name="unidad_medida" id="unidad_medida" class="form-control form-control-sm" onchange="">
@@ -818,9 +819,8 @@ $('#bien_servicio').on('change', function () {
                                             </select>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="row" style="padding-left:10px">
-                                    <div class="col-lg-4">
+
+                                    <div class="col-lg-3">
                                         <div class="form-group">
                                             <label class="control-label form-control-sm">Marca</label>
                                             <select name="marca" id="marca" class="form-control form-control-sm" onchange="">
@@ -836,10 +836,10 @@ $('#bien_servicio').on('change', function () {
                                     </div>
                                 </div>
                                 </fieldset>
-                                <fieldset class="fieldset" name="familias" style="border:1px solid #A4A4A4; padding: 10px">
+                                <fieldset class="fieldset" name="familias" style="border:1px solid #A4A4A4; padding: 5px">
                                 <legend class="control-label form-control-sm">Familias</legend>
-                                <div class="card card-body bg-light border-0 p-3">
-                                    <div class="row">
+                                <!--<div class="card card-body bg-light border-0 p-3">-->
+                                    <div class="row" style="padding-left:10px">
                                         <div class="col-lg-4">
                                             <div class="form-group">
                                                 <label class="control-label form-control-sm">Familia</label>
@@ -877,11 +877,10 @@ $('#bien_servicio').on('change', function () {
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                <!--</div>-->
                                 </fieldset>
                                 <div class="row" style="padding-left:10px" id="bloque_producto_terminado">
-                                    <div class="row">
-                                        <div class="col-lg-4 combo_producto_terminado">
+                                        <div class="col-lg-3 combo_producto_terminado">
                                             <div class="form-group">
                                                 <label class="control-label form-control-sm">Categoria</label>
                                                 <select name="categoria" id="categoria" class="form-control form-control-sm" onchange="obtenerSubCategoria();obtenerModelo();obtenerPacket();obtenerMedida()">
@@ -889,7 +888,7 @@ $('#bien_servicio').on('change', function () {
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="col-lg-4 combo_producto_terminado">
+                                        <div class="col-lg-3 combo_producto_terminado">
                                             <div class="form-group">
                                                 <label class="control-label form-control-sm">Sub Categoria</label>
                                                 <select name="sub_categoria" id="sub_categoria" class="form-control form-control-sm" onchange="">
@@ -897,7 +896,7 @@ $('#bien_servicio').on('change', function () {
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="col-lg-4 combo_producto_terminado">
+                                        <div class="col-lg-3 combo_producto_terminado">
                                             <div class="form-group">
                                                 <label class="control-label form-control-sm">Modelo</label>
                                                 <select name="modelo" id="modelo" class="form-control form-control-sm" onchange="">
@@ -905,7 +904,7 @@ $('#bien_servicio').on('change', function () {
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="col-lg-4 combo_producto_terminado">
+                                        <div class="col-lg-3 combo_producto_terminado">
                                             <div class="form-group">
                                                 <label class="control-label form-control-sm">Packet</label>
                                                 <select name="packet" id="packet" class="form-control form-control-sm" onchange="">
@@ -913,7 +912,7 @@ $('#bien_servicio').on('change', function () {
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="col-lg-4 combo_producto_terminado">
+                                        <div class="col-lg-3 combo_producto_terminado">
                                             <div class="form-group">
                                                 <label class="control-label form-control-sm">Medida</label>
                                                 <select name="medida" id="medida" class="form-control form-control-sm" onchange="">
@@ -921,12 +920,11 @@ $('#bien_servicio').on('change', function () {
                                                 </select>
                                             </div>
                                         </div>
-                                    </div>
                                 </div>
-                                <fieldset class="fieldset" name="familias" style="border:1px solid #A4A4A4; padding: 10px">
-                                <legend class="control-label form-control-sm">Familias</legend>
-                                <div class="card card-body bg-light border-0 p-3">
-                                    <div class="row">
+                                <fieldset class="fieldset" name="informacion_adicional" style="border:1px solid #A4A4A4; padding: 5px">
+                                <legend class="control-label form-control-sm">Informaci&oacute;n Adicional</legend>
+                                <!--<div class="card card-body bg-light border-0 p-3">-->
+                                    <div class="row" style="padding-left:10px">
                                         <div class="col-lg-4">
                                             <div class="form-group">
                                                 <label class="control-label form-control-sm">Estado Bien</label>
@@ -992,7 +990,7 @@ $('#bien_servicio').on('change', function () {
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                <!--</div>-->
                             </div>
                             <div class="col-lg-4">
                                 <div class="card" style="min-height:140px">

@@ -904,3 +904,4 @@ Route::get('equivalencia_sub_familia_familia_contable/modal_equivalencia_sub_fam
 Route::post('equivalencia_sub_familia_familia_contable/send_equivalencia_sub_familia_familia_contable', [EquivalenciaSubFamiliaFamiliaContablesController::class, 'send_equivalencia_sub_familia_familia_contable'])->name('equivalencia_sub_familia_familia_contable.send_equivalencia_sub_familia_familia_contable');
 Route::get('equivalencia_sub_familia_familia_contable/eliminar_equivalencia_sub_familia_familia_contable/{id}/{estado}', [EquivalenciaSubFamiliaFamiliaContablesController::class, 'eliminar_equivalencia_sub_familia_familia_contable'])->name('equivalencia_sub_familia_familia_contable.eliminar_equivalencia_sub_familia_familia_contable');
 
+Route::get('acerrado_madera/cargar_acerrado_pendiente', [AcerradoMaderaController::class, 'cargar_acerrado_pendiente'])->name('acerrado_madera.cargar_acerrado_pendiente');

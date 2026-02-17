@@ -46,4 +46,17 @@ class ProduccionAcerradoMadera extends Model
         return $data;
 
     }
+
+    public function getDetalleAcerradoPendienteByLote(){
+    
+        $cad="select ipam.id, ipam.lote, sum(ipamd.cantidad_ingreso_tronco) cantidad from ingreso_produccion_acerrado_madera_detalles ipamd 
+        inner join ingreso_produccion_acerrado_maderas ipam on ipamd.id_ingreso_produccion_acerrado_maderas = ipam.id 
+        where ipamd.estado_ingreso_acerrado ='1'
+        and ipamd.estado ='1'
+        group by ipam.id, ipam.lote";
+        
+        $data = DB::select($cad);
+        return $data;
+
+    }
 }

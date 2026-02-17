@@ -145,6 +145,8 @@ $(document).ready(function() {
         language: 'es'
     });
 
+    cargarDetallePendiente();
+
 });
 
 </script>
@@ -275,8 +277,8 @@ function agregarSalidaAcerrado(){
     var newRow = "";
     for (var i = 0; i < cantidad; i++) { 
         var n = $('#tblSalidaAcerradoMadera tbody tr').length + 1;
-        var tipo_madera = '<select name="tipo_madera[]" id="tipo_madera' + n + '" class="form-control form-control-sm" onchange=""> <option value="">--Seleccionar--</option><?php foreach ($tipo_madera as $row){?><option value="<?php echo $row->codigo; ?>"><?php echo $row->denominacion; ?></option><?php }?></select>';
-        var medida = '<input name="id_salida_acerrado_madera[]" id="id_salida_acerrado_madera${n}" class="form-control form-control-sm" value="1" type="hidden"><select name="medida[]" id="medida' + n + '" class="form-control form-control-sm" onchange=""> <option value="">--Seleccionar--</option><?php foreach ($medida_acerrado as $row){?><option value="<?php echo $row->codigo; ?>"><?php echo $row->denominacion; ?></option><?php }?></select>';
+        var tipo_madera = '<select name="tipo_madera[]" id="tipo_madera' + n + '" class="form-control form-control-sm" onchange="obtenerProducto()"> <option value="">--Seleccionar--</option><?php foreach ($tipo_madera as $row){?><option value="<?php echo $row->codigo; ?>"><?php echo $row->denominacion; ?></option><?php }?></select>';
+        var medida = '<input name="id_salida_acerrado_madera[]" id="id_salida_acerrado_madera${n}" class="form-control form-control-sm" value="1" type="hidden"><select name="medida[]" id="medida' + n + '" class="form-control form-control-sm" onchange="obtenerProducto()"> <option value="">--Seleccionar--</option><?php foreach ($medida_acerrado as $row){?><option value="<?php echo $row->codigo; ?>"><?php echo $row->denominacion; ?></option><?php }?></select>';
         var paquete = '<input name="paquete[]" id="paquete' + n + '" class="paquete form-control form-control-sm" value="" type="text" oninput="calcularNPiezas(this)">';
         var medida_paquete1 = '<input name="medida_paquete1[]" id="medida_paquete1' + n + '" class="medida_paquete1 form-control form-control-sm" value="" type="text" oninput="calcularNPiezas(this)">';
         var medida_paquete2 = '<input name="medida_paquete2[]" id="medida_paquete2' + n + '" class="medida_paquete2 form-control form-control-sm" value="" type="text" oninput="calcularNPiezas(this)">';
@@ -321,6 +323,57 @@ function eliminarFila(button){
 
 }
 
+function cargarDetallePendiente(){
+
+    var id = $("#id").val();
+    const tbody = $('#divAcerradoMaderaPendiente');
+
+    tbody.empty();
+
+    $.ajax({
+        url: "/acerrado_madera/cargar_acerrado_pendiente",
+        dataType: "json",
+        success: function(result){
+
+            let n = 1;
+
+            var total_acumulado=0;
+
+            result.detalle_acerrado_pendiente.forEach(detalle_acerrado_pendiente => {
+
+                const row = `
+                    <tr>
+                        <td class="text-center"><input type="checkbox" name="seleccionados[]" value="${detalle_acerrado_pendiente.id}" id="chk${n}">
+                        </td>
+                        <td>${n}</td>
+                        <td><input name="id_ingreso_produccion_acerrado_madera[]" id="id_ingreso_produccion_acerrado_madera${n}" class="form-control form-control-sm" value="${detalle_acerrado_pendiente.id}" type="hidden"><input name="lote[]" id="lote${n}" class="form-control form-control-sm" style="border: none; background-color: transparent;" value="${detalle_acerrado_pendiente.lote}" type="text" readonly></td>
+                        <td><input name="cantidad[]" id="cantidad${n}" class="form-control form-control-sm" style="border: none; background-color: transparent;" value="${detalle_acerrado_pendiente.cantidad}" type="text" readonly></td>
+                    </tr>
+                `;
+                tbody.append(row);
+                
+                n++;
+            });
+        }
+    })
+}
+
+function obtenerProducto(){
+
+    var tipo_madera = $('#tipo_madera').val();
+    var medida = $('#medida').val();
+
+    $.ajax({
+        url: "/productos/obtener_producto_acerrado/"+tipo_madera+"/"+medida,
+        dataType: "json",
+        success: function (result) {
+
+            $('#id_salida_acerrado_madera').val(result.id);
+            
+        }
+    });
+}
+
 </script>
 
 <body class="hold-transition skin-blue sidebar-mini">
@@ -342,7 +395,6 @@ function eliminarFila(button){
                             <input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
                             
                             <input type="hidden" name="id" id="id" value="<?php echo $id?>">
-                            
                             <div class="row" style="padding-left:10px">
 
                                 <div class="col-lg-2">
@@ -351,36 +403,60 @@ function eliminarFila(button){
                                 <div class="col-lg-2">
                                     <input id="fecha" name="fecha" on class="form-control form-control-sm"  value="<?php echo /*isset($acerrado_madera) && $acerrado_madera->fecha_orden_compra ? $acerrado_madera->fecha_orden_compra :*/ date('Y-m-d'); ?>" type="text">
                                 </div>
-                            </div>
-                            <div style="margin-top:15px" class="form-group">
-                                <div class="col-sm-12 controls">
-                                    <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
-                                        <!--<a href="javascript:void(0)" onClick="agregarSalidaAcerrado()" class="btn btn-sm btn-success">Agregar</a>-->
-                                        <button type="button" class="btn btn-sm btn-clasico-blanco btn-agregar" data-toggle="modal" onclick="agregarSalidaAcerrado()">
-                                            <i class="fas fa-plus-circle" style="font-size:18px;"></i> Agregar
-                                        </button>
+                                <div class="col-lg-8">
+                                    <div style="margin-top:15px" class="form-group">
+                                        <div class="col-sm-12 controls">
+                                            <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
+                                                <!--<a href="javascript:void(0)" onClick="agregarSalidaAcerrado()" class="btn btn-sm btn-success">Agregar</a>-->
+                                                <button type="button" class="btn btn-sm btn-clasico-blanco btn-agregar" data-toggle="modal" onclick="agregarSalidaAcerrado()">
+                                                    <i class="fas fa-plus-circle" style="font-size:18px;"></i> Agregar
+                                                </button>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="card-body">
+                            <div class="row" style="padding-left:10px">
+                                <div class="col-lg-4">
+                                    <div class="card-body">
+                                        <div class="table-responsive" style="overflow-y: auto; max-height: 550px; overflow-x: auto; ">
+                                            <table id="tblAcerradoMaderaPendiente" class="table table-hover table-sm">
+                                                <thead>
+                                                <tr style="font-size:13px">
+                                                    <th style="width : 20%"></th>
+                                                    <th style="width : 20%">#</th>
+                                                    <th style="width : 50%">Lote</th>
+                                                    <th style="width : 30%">Cantidad</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody id="divAcerradoMaderaPendiente">
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-8">
+                                    <div class="card-body">
 
-                                <div class="table-responsive" style="overflow-y: auto; max-height: 550px; overflow-x: auto; ">
-                                    <table id="tblSalidaAcerradoMadera" class="table table-hover table-sm">
-                                        <thead>
-                                        <tr style="font-size:13px">
-                                            <th style="width : 5%">#</th>
-                                            <th style="width : 20%">Tipo Madera</th>
-                                            <th style="width : 20%">Medida</th>
-                                            <th style="width : 10%">Paquetes</th>
-                                            <th style="width : 10%">Cantidad 1</th>
-                                            <th style="width : 10%">Cantidad 2</th>
-                                            <th style="width : 10%">N° Piezas</th>
-                                            <th style="width : 10%"></th>
-                                        </tr>
-                                        </thead>
-                                        <tbody id="divSalidaAcerradoMadera">
-                                        </tbody>
-                                    </table>
+                                        <div class="table-responsive" style="overflow-y: auto; max-height: 550px; overflow-x: auto; ">
+                                            <table id="tblSalidaAcerradoMadera" class="table table-hover table-sm">
+                                                <thead>
+                                                <tr style="font-size:13px">
+                                                    <th style="width : 5%">#</th>
+                                                    <th style="width : 20%">Tipo Madera</th>
+                                                    <th style="width : 20%">Medida</th>
+                                                    <th style="width : 10%">Paquetes</th>
+                                                    <th style="width : 10%">Cantidad 1</th>
+                                                    <th style="width : 10%">Cantidad 2</th>
+                                                    <th style="width : 10%">N° Piezas</th>
+                                                    <th style="width : 10%"></th>
+                                                </tr>
+                                                </thead>
+                                                <tbody id="divSalidaAcerradoMadera">
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div style="margin-top:15px" class="form-group">
