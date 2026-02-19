@@ -246,33 +246,38 @@ class HornoController extends Controller
         $ingreso_horno->humedad_apagado = $request->humedad_fin;
         $ingreso_horno->id_operador_apagado = $request->operador_salida;
         $ingreso_horno->observacion = $request->observacion;
+		$ingreso_horno->estado_ingreso_horno = 0;
 		$ingreso_horno->estado = 1;
         $ingreso_horno->id_usuario_actualiza = $id_user;
 		$ingreso_horno->save();
 		$id_ingreso_horno = $ingreso_horno->id;
 
-		$ingreso_horno_actualizado = IngresoHorno::find($id_ingreso_horno);
+		$ingreso_horno_actualizado = HornoDetalle::where('id_ingreso_horno', $id_ingreso_horno)->where('estado', 1)->get();
 
-		$idProducto = $producto_acerrado[0]->id_producto;
+		foreach($ingreso_horno_actualizado as $detalle) {
 
-		$idCorte = Kardex::where('id_producto', $idProducto)->where('id_almacen_destino', 22)->whereDate('fecha', '<=', $request->fecha)->orderBy('fecha', 'desc')->orderBy('id', 'desc')->value('id');
-		
-		$saldoBase = $idCorte > 0 ? Kardex::where('id', $idCorte)->value('saldos_cantidad') : 0;
+			$idProducto = $detalle->id_producto;
 
-		$kardex = new Kardex;
-		$kardex->id_producto = $idProducto;
-		$kardex->id_almacen_destino = 22;
-		$kardex->fecha = $request->fecha;
+			$idCorte = Kardex::where('id_producto', $idProducto)->where('id_almacen_destino', 23)->whereDate('fecha', '<=', $request->fecha_salida)->orderBy('fecha', 'desc')->orderBy('id', 'desc')->value('id');
+			
+			$saldoBase = $idCorte > 0 ? Kardex::where('id', $idCorte)->value('saldos_cantidad') : 0;
 
-		$kardex->entradas_cantidad = 0;
-		$kardex->salidas_cantidad = $ingreso_horno_[$index];
+			$kardex = new Kardex;
+			$kardex->id_producto = $idProducto;
+			$kardex->id_almacen_destino = 23;
+			$kardex->fecha = $request->fecha;
 
-		$kardex->saldos_cantidad = $saldoBase - $ingreso_horno_[$index];
+			$kardex->entradas_cantidad = 0;
+			$kardex->salidas_cantidad = $detalle->cantidad_salida;
 
-		$kardex->id_ingreso_vehiculo_tronco = $id_ingreso_horno;
-		//$kardex->fecha = $request->fecha;
-		$kardex->id_usuario_inserta = $id_user;
-		$kardex->save();
+			$kardex->saldos_cantidad = $saldoBase -  $detalle->cantidad_salida;
+
+			$kardex->id_ingreso_vehiculo_tronco = $id_ingreso_horno;
+			//$kardex->fecha = $request->fecha;
+			$kardex->id_usuario_inserta = $id_user;
+			$kardex->save();
+
+		}
 
         return response()->json(['success' => 'Registro guardado exitosamente.']);
 

@@ -306,7 +306,7 @@ $.ajax({
 
             result.usuario_solicita.forEach(usuario_solicita => {
                 let selected = (usuario_solicita.id == requerimiento.id_usuario_solicita) ? 'selected' : '';
-                usuarioSolicitaOptions += `<option value="${usuario_solicita.codigo}" ${selected}>${usuario_solicita.apellido_paterno + ' ' + usuario_solicita.apellido_materno + ' ' + usuario_solicita.nombres}</option>`;
+                usuarioSolicitaOptions += `<option value="${usuario_solicita.id}" ${selected}>${usuario_solicita.apellido_paterno + ' ' + usuario_solicita.apellido_materno + ' ' + usuario_solicita.nombres}</option>`;
             });
 
             result.prioridad.forEach(prioridad => {
