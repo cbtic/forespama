@@ -12,7 +12,14 @@ $(document).ready(function () {
 		modalSalidaAcerradoMadera(0);
 	});
 
-	$('#fecha_bus').keypress(function(e){
+	$('#fecha_inicio_bus').keypress(function(e){
+		if(e.which == 13) {
+			datatablenew();
+			return false;
+		}
+	});
+
+	$('#fecha_fin_bus').keypress(function(e){
 		if(e.which == 13) {
 			datatablenew();
 			return false;
@@ -29,7 +36,15 @@ $(document).ready(function () {
 	datatablenew();
 	datatablenew2();
 
-	$('#fecha_bus').datepicker({
+	$('#fecha_inicio_bus').datepicker({
+        autoclose: true,
+		format: 'yyyy-mm-dd',
+		changeMonth: true,
+		changeYear: true,
+        language: 'es'
+    });
+
+	$('#fecha_fin_bus').datepicker({
         autoclose: true,
 		format: 'yyyy-mm-dd',
 		changeMonth: true,
@@ -70,7 +85,9 @@ function datatablenew(){
             var iNroPagina 	= parseFloat(fn_util_obtieneNroPagina(aoData[3].value, aoData[4].value)).toFixed();
             var iCantMostrar 	= aoData[4].value;
 			
-            var fecha = $('#fecha_bus').val();
+            var fecha_inicio = $('#fecha_inicio_bus').val();
+            var fecha_fin = $('#fecha_fin_bus').val();
+            var situacion = $('#situacion_bus').val();
             var estado = $('#estado_bus').val();
 			
 			var _token = $('#_token').val();
@@ -80,7 +97,7 @@ function datatablenew(){
                 "type": "POST",
                 "url": sSource,
                 "data":{NumeroPagina:iNroPagina,NumeroRegistros:iCantMostrar,
-						fecha:fecha,estado:estado,_token:_token
+						fecha_inicio:fecha_inicio,fecha_fin:fecha_fin,situacion:situacion,estado:estado,_token:_token
                        },
                 "success": function (result) {
                     fnCallback(result);
@@ -219,7 +236,7 @@ function datatablenew(){
 }
 
 function datatablenew2(){
-                      
+    
     var oTable1 = $('#tblProduccionMaderaAcerradaCreate').dataTable({
         "bServerSide": true,
         "sAjaxSource": "/acerrado_madera/listar_produccion_acerrado_madera_ajax",
@@ -249,7 +266,9 @@ function datatablenew2(){
             var iNroPagina 	= parseFloat(fn_util_obtieneNroPagina(aoData[3].value, aoData[4].value)).toFixed();
             var iCantMostrar 	= aoData[4].value;
 			
-            var fecha = $('#fecha_bus').val();
+            var fecha_inicio = $('#fecha_inicio_bus').val();
+            var fecha_fin = $('#fecha_fin_bus').val();
+            var situacion = $('#situacion_bus').val();
             var estado = $('#estado_bus').val();
 			
 			var _token = $('#_token').val();
@@ -259,7 +278,7 @@ function datatablenew2(){
                 "type": "POST",
                 "url": sSource,
                 "data":{NumeroPagina:iNroPagina,NumeroRegistros:iCantMostrar,
-						fecha:fecha,estado:estado,_token:_token
+						fecha_inicio:fecha_inicio,fecha_fin:fecha_fin,situacion:situacion,estado:estado,_token:_token
                        },
                 "success": function (result) {
                     fnCallback(result);

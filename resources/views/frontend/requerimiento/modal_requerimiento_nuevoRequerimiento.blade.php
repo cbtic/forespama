@@ -8,16 +8,18 @@
 */
 /*.datepicker{ z-index:99999 !important; }*/
 
-.modal-dialog {
+/*.modal-dialog {
   max-height: 100vh;
   display: flex;
   flex-direction: column;
+  width: 100%;
+  max-width:90%!important
 }
-
-.modal-content {
+*/
+/*.modal-content {
   flex: 1 1 auto;
   overflow: hidden;
-}
+}*/
 
 /*.modal-body {
   overflow-y: auto;
@@ -34,13 +36,13 @@
     max-width:100%!important
 }
 
-.modal-tienda .modal-dialog {
+.modal-antiguedad .modal-dialog {
     width: 65% !important;
 }
 
-.modal-tienda .modal-body {
+/*.modal-tienda .modal-body {
     height: auto !important;
-}
+}*/
 
 .custom-select2-dropdown {
     width: 700px !important; 
@@ -225,25 +227,24 @@ function obtenerCodInterno(selectElement, n){
     var id_producto = $(selectElement).val();
 
     $.ajax({
-            url: "/productos/obtener_producto/"+id_producto,
-            dataType: "json",
-            success: function(result){
-                //alert(result[0].codigo);
-                $('#cod_interno' + n).val(result[0].codigo);
-                $('#item' + n).val(result[0].numero_serie);
-                $('#marca' + n).val(result[0].id_marca).trigger('change');
-                $('#unidad' + n).val(result[0].id_unidad_producto);
+        url: "/productos/obtener_producto/"+id_producto,
+        dataType: "json",
+        success: function(result){
+            //alert(result[0].codigo);
+            $('#cod_interno' + n).val(result[0].codigo);
+            $('#item' + n).val(result[0].numero_serie);
+            $('#marca' + n).val(result[0].id_marca).trigger('change');
+            $('#unidad' + n).val(result[0].id_unidad_producto);
 
-                $('#fecha_vencimiento_' + n).datepicker({
-                    autoclose: true,
-                    format: 'yyyy-mm-dd',
-                    changeMonth: true,
-                    changeYear: true,
-                    language: 'es'
-                });
-                
-            }
-        });
+            $('#fecha_vencimiento_' + n).datepicker({
+                autoclose: true,
+                format: 'yyyy-mm-dd',
+                changeMonth: true,
+                changeYear: true,
+                language: 'es'
+            });
+        }
+    });
 }
 
 function obtenerCodigo(selectElement){
@@ -266,78 +267,94 @@ const tbody = $('#divRequerimientoDetalle');
 tbody.empty();
 
 $.ajax({
-        url: "/requerimiento/cargar_detalle/"+id,
-        type: "GET",
-        success: function (result) {
+    url: "/requerimiento/cargar_detalle/"+id,
+    type: "GET",
+    success: function (result) {
 
-            let n = 1;
+        let n = 1;
 
-            var total_acumulado=0;
+        var total_acumulado=0;
 
-            result.requerimiento.forEach(requerimiento => {
+        result.requerimiento.forEach(requerimiento => {
 
-                let marcaOptions = '<option value="">--Seleccionar--</option>';
-                let productoOptions = '<option value="">--Seleccionar--</option>';
-                let estadoBienOptions = '<option value="">--Seleccionar--</option>';
-                let unidadMedidaOptions = '<option value="">--Seleccionar--</option>';
-                
-                result.marca.forEach(marca => {
-                    let selected = (marca.id == requerimiento.id_marca) ? 'selected' : '';
-                    marcaOptions += `<option value="${marca.id}" ${selected}>${marca.denominiacion}</option>`;
-                });
-
-                result.producto.forEach(producto => {
-                    let selected = (producto.id == requerimiento.id_producto) ? 'selected' : '';
-                    productoOptions += `<option value="${producto.id}" ${selected}>${producto.codigo} - ${producto.denominacion}</option>`;
-                });
-
-                result.estado_bien.forEach(estado_bien => {
-                    let selected = (estado_bien.codigo == requerimiento.id_estado_producto) ? 'selected' : '';
-                    estadoBienOptions += `<option value="${estado_bien.codigo}" ${selected}>${estado_bien.denominacion}</option>`;
-                });
-
-                result.unidad_medida.forEach(unidad_medida => {
-                    let selected = (unidad_medida.codigo == requerimiento.id_unidad_medida) ? 'selected' : '';
-                    unidadMedidaOptions += `<option value="${unidad_medida.codigo}" ${selected}>${unidad_medida.denominacion}</option>`;
-                });
-
-                if (requerimiento.id_producto) {
-                    productosSeleccionados.push(requerimiento.id_producto);
-                }
-
-                const row = `
-                    <tr>
-                        <td>${n}</td>
-                        <td style="width: 450px !important;display:block"><input name="id_requerimiento_detalle[]" id="id_requerimiento_detalle${n}" class="form-control form-control-sm" value="${requerimiento.id}" type="hidden"><select name="descripcion[]" id="descripcion${n}" class="form-control form-control-sm" onChange="verificarProductoSeleccionado(this, ${n});">${productoOptions}</select></td>
-                        
-                        <td><select name="marca[]" id="marca${n}" class="form-control form-control-sm">${marcaOptions}</select></td>
-                        <td><input name="cod_interno[]" id="cod_interno${n}" class="form-control form-control-sm" value="${requerimiento.codigo}" type="text"></td>
-                        <td><select name="estado_bien[]" id="estado_bien${n}" class="form-control form-control-sm" onChange="">${estadoBienOptions}</select></td>
-                        <td><select name="unidad[]" id="unidad${n}" class="form-control form-control-sm">${unidadMedidaOptions}</select></td>
-                        <td><input name="cantidad_ingreso[]" id="cantidad_ingreso${n}" class="cantidad_ingreso form-control form-control-sm" value="${requerimiento.cantidad}" type="text" oninput=""></td>
-                        <td><textarea name="observacion[]" id="observacion${n}" class="form-control form-control-sm">${requerimiento.observacion}</textarea></td>
-                        <td><textarea name="observacion_atencion[]" id="observacion_atencion${n}" class="form-control form-control-sm" readonly>${requerimiento.observacion_atencion ?? ''}</textarea></td>
-                        <td><button type="button" class="btn btn-sm btn-clasico btn-eliminar" onclick="eliminarFila(this)"><i class="fas fa-trash" style="font-size:18px;"></i></button></td>
-
-                    </tr>
-                `;
-                tbody.append(row);
-                $('#descripcion' + n).select2({ 
-                    width: '100%', 
-                    dropdownParent: $('#openOverlayOpc'), /*borrar*/
-                    dropdownCssClass: 'custom-select2-dropdown'
-                });
-
-                $('#marca' + n).select2({
-                    width: '100%',
-                });
-
-                n++;
-                });
-            }
+            let marcaOptions = '<option value="">--Seleccionar--</option>';
+            let productoOptions = '<option value="">--Seleccionar--</option>';
+            //let estadoBienOptions = '<option value="">--Seleccionar--</option>';
+            let unidadMedidaOptions = '<option value="">--Seleccionar--</option>';
+            let usuarioSolicitaOptions = '<option value="">--Seleccionar--</option>';
+            let prioridadOptions = '<option value="">--Seleccionar--</option>';
             
-    });
+            result.marca.forEach(marca => {
+                let selected = (marca.id == requerimiento.id_marca) ? 'selected' : '';
+                marcaOptions += `<option value="${marca.id}" ${selected}>${marca.denominiacion}</option>`;
+            });
 
+            result.producto.forEach(producto => {
+                let selected = (producto.id == requerimiento.id_producto) ? 'selected' : '';
+                productoOptions += `<option value="${producto.id}" ${selected}>${producto.codigo} - ${producto.denominacion}</option>`;
+            });
+
+            /*result.estado_bien.forEach(estado_bien => {
+                let selected = (estado_bien.codigo == requerimiento.id_estado_producto) ? 'selected' : '';
+                estadoBienOptions += `<option value="${estado_bien.codigo}" ${selected}>${estado_bien.denominacion}</option>`;
+            });*/
+
+            result.unidad_medida.forEach(unidad_medida => {
+                let selected = (unidad_medida.codigo == requerimiento.id_unidad_medida) ? 'selected' : '';
+                unidadMedidaOptions += `<option value="${unidad_medida.codigo}" ${selected}>${unidad_medida.denominacion}</option>`;
+            });
+
+            result.usuario_solicita.forEach(usuario_solicita => {
+                let selected = (usuario_solicita.id == requerimiento.id_usuario_solicita) ? 'selected' : '';
+                usuarioSolicitaOptions += `<option value="${usuario_solicita.codigo}" ${selected}>${usuario_solicita.apellido_paterno + ' ' + usuario_solicita.apellido_materno + ' ' + usuario_solicita.nombres}</option>`;
+            });
+
+            result.prioridad.forEach(prioridad => {
+                let selected = (prioridad.codigo == requerimiento.id_prioridad) ? 'selected' : '';
+                prioridadOptions += `<option value="${prioridad.codigo}" ${selected}>${prioridad.denominacion}</option>`;
+            });
+
+            if (requerimiento.id_producto) {
+                productosSeleccionados.push(requerimiento.id_producto);
+            }
+
+            const row = `
+                <tr>
+                    <td>${n}</td>
+                    <td style="width: 450px !important;display:block"><input name="id_requerimiento_detalle[]" id="id_requerimiento_detalle${n}" class="form-control form-control-sm" value="${requerimiento.id}" type="hidden"><select name="descripcion[]" id="descripcion${n}" class="form-control form-control-sm" onChange="verificarProductoSeleccionado(this, ${n});">${productoOptions}</select></td>
+                    
+                    <td><select name="marca[]" id="marca${n}" class="form-control form-control-sm">${marcaOptions}</select></td>
+                    <td><input name="cod_interno[]" id="cod_interno${n}" class="form-control form-control-sm" value="${requerimiento.codigo}" type="text"></td>
+                    
+                    <td><select name="unidad[]" id="unidad${n}" class="form-control form-control-sm">${unidadMedidaOptions}</select></td>
+                    <td><input name="cantidad_ingreso[]" id="cantidad_ingreso${n}" class="cantidad_ingreso form-control form-control-sm" value="${requerimiento.cantidad}" type="text" oninput=""></td>
+                    <td><select name="usuario[]" id="usuario${n}" class="form-control form-control-sm" onChange="">${usuarioSolicitaOptions}</select></td>
+                    <td><select name="prioridad[]" id="prioridad${n}" class="form-control form-control-sm" onChange="">${prioridadOptions}</select></td>
+                    <td><textarea name="observacion[]" id="observacion${n}" class="form-control form-control-sm">${requerimiento.observacion}</textarea></td>
+                    <td><textarea name="observacion_atencion[]" id="observacion_atencion${n}" class="form-control form-control-sm" readonly>${requerimiento.observacion_atencion ?? ''}</textarea></td>
+                    <td><button type="button" class="btn btn-sm btn-clasico btn-eliminar" onclick="eliminarFila(this)"><i class="fas fa-trash" style="font-size:18px;"></i></button></td>
+
+                </tr>
+            `;
+            tbody.append(row);
+            $('#descripcion' + n).select2({ 
+                width: '100%', 
+                dropdownParent: $('#openOverlayOpc'), /*borrar*/
+                dropdownCssClass: 'custom-select2-dropdown'
+            });
+
+            $('#marca' + n).select2({
+                width: '100%',
+            });
+
+            $('#usuario' + n).select2({
+                width: '100%',
+            });
+
+            n++;
+            });
+        }
+    });
 }
 
 function agregarProducto(){
@@ -358,9 +375,11 @@ function agregarProducto(){
         var descripcion_ant = '<input type="hidden" name="descripcion_ant[]" id="descripcion_ant' + n + '" class="form-control form-control-sm" />';
         var cod_interno = '<input name="cod_interno[]" id="cod_interno' + n + '" class="form-control form-control-sm" value="" type="text">';
         var marca = '<select name="marca[]" id="marca' + n + '" class="form-control form-control-sm" onchange=""> <option value="">--Seleccionar--</option><?php foreach ($marca as $row){?><option value="<?php echo htmlspecialchars($row->id); ?>"><?php echo htmlspecialchars(addslashes($row->denominiacion)); ?></option><?php }?></select>'
-        var estado_bien =  '<select name="estado_bien[]" id="estado_bien' + n + '" class="form-control form-control-sm" onChange=""><option value="">--Seleccionar--</option> <?php foreach ($estado_bien as $row) { ?> <option value="<?php echo $row->codigo ?>" <?php echo ($row->codigo == 1) ? "selected" : ""; ?>><?php echo $row->denominacion ?></option> <?php } ?> </select>';
+        //var estado_bien =  '<select name="estado_bien[]" id="estado_bien' + n + '" class="form-control form-control-sm" onChange=""><option value="">--Seleccionar--</option> <?php foreach ($estado_bien as $row) { ?> <option value="<?php echo $row->codigo ?>" <?php echo ($row->codigo == 1) ? "selected" : ""; ?>><?php echo $row->denominacion ?></option> <?php } ?> </select>';
         var unidad = '<select name="unidad[]" id="unidad' + n + '" class="form-control form-control-sm" onChange=""> <option value="">--Seleccionar--</option> <?php foreach ($unidad as $row) {?> <option value="<?php echo $row->codigo?>"><?php echo $row->denominacion?></option> <?php } ?> </select>';
         var cantidad_ingreso = '<input name="cantidad_ingreso[]" id="cantidad_ingreso' + n + '" class="cantidad_ingreso form-control form-control-sm" value="" type="text" oninput="">';
+        var usuario = '<select name="usuario[]" id="usuario' + n + '" class="form-control form-control-sm" onChange=""> <option value="">--Seleccionar--</option> <?php foreach ($usuario as $row) {?> <option value="<?php echo $row->id?>"><?php echo $row->apellido_paterno .' '. $row->apellido_materno .' '. $row->nombres ?></option> <?php } ?> </select>';
+        var prioridad = '<select name="prioridad[]" id="prioridad' + n + '" class="form-control form-control-sm" onChange=""> <option value="">--Seleccionar--</option> <?php foreach ($prioridad as $row) {?> <option value="<?php echo $row->codigo?>"><?php echo $row->denominacion?></option> <?php } ?> </select>';
         var observacion = '<textarea name="observacion[]" id="observacion' + n + '" class="form-control form-control-sm"></textarea>';
         var observacion_atencion = '<textarea name="observacion_atencion[]" id="observacion_atencion' + n + '" class="form-control form-control-sm" readonly></textarea>';
 
@@ -372,9 +391,11 @@ function agregarProducto(){
         newRow += '<td style="width: 450px!important; display:block!important">' +descripcion_ant + descripcion + '</td>';
         newRow += '<td>' + marca + '</td>';
         newRow += '<td>' + cod_interno + '</td>';
-        newRow += '<td>' + estado_bien + '</td>';
+        //newRow += '<td>' + estado_bien + '</td>';
         newRow += '<td>' + unidad + '</td>';
         newRow += '<td>' + cantidad_ingreso + '</td>';
+        newRow += '<td>' + usuario + '</td>';
+        newRow += '<td>' + prioridad + '</td>';
         newRow += '<td>' + observacion + '</td>';
         newRow += '<td>' + observacion_atencion + '</td>';
         newRow += '<td>' + btnEliminar + '</td>';
@@ -394,9 +415,11 @@ function agregarProducto(){
         $('#marca' + n).select2({
             width: '100%',
         });
-        
-    }
 
+        $('#usuario' + n).select2({
+            width: '100%',
+        });
+    }
     //actualizarTotalGeneral();
 }
 
@@ -483,16 +506,16 @@ function fn_save_requerimiento(){
         $('.loader').show();
 
         $.ajax({
-                url: "/requerimiento/send_requerimiento",
-                type: "POST",
-                data : $("#frmRequerimiento").serialize(),
-                success: function (result) {
-                    datatablenew();
-                    $('.loader').hide();
-                    bootbox.alert("Se guard&oacute; satisfactoriamente"); 
-                    $('#openOverlayOpc').modal('hide');
-               
-                }
+            url: "/requerimiento/send_requerimiento",
+            type: "POST",
+            data : $("#frmRequerimiento").serialize(),
+            success: function (result) {
+                datatablenew();
+                $('.loader').hide();
+                bootbox.alert("Se guard&oacute; satisfactoriamente"); 
+                $('#openOverlayOpc').modal('hide');
+            
+            }
         });
     }
 }
@@ -532,15 +555,15 @@ function save_orden_compra_requerimiento(){
         $('.loader').show();
 
         $.ajax({
-                url: "/requerimiento/send_requerimiento_orden_compra",
-                type: "POST",
-                data : $("#frmRequerimiento").serialize(),
-                success: function (result) {
-                    datatablenew();
-                    $('.loader').hide();
-                    bootbox.alert("Se guard&oacute; satisfactoriamente"); 
-                    $('#openOverlayOpc').modal('hide');
-                }
+            url: "/requerimiento/send_requerimiento_orden_compra",
+            type: "POST",
+            data : $("#frmRequerimiento").serialize(),
+            success: function (result) {
+                datatablenew();
+                $('.loader').hide();
+                bootbox.alert("Se guard&oacute; satisfactoriamente"); 
+                $('#openOverlayOpc').modal('hide');
+            }
         });
     }
 }
@@ -560,7 +583,6 @@ function obtenerCodigo(){
 
         }
     });
-
 }
 
 function pdf_documento(){
@@ -608,12 +630,12 @@ function modalCerrarAntiguedad(){
     const id = $('#id').val();
 
     $.ajax({
-			url: "/requerimiento/modal_cerrar_antiguedad/"+id,
-			type: "GET",
-			success: function (result) {
-                $("#diveditpregOpc2").html(result);
-                $('#openOverlayOpc2').modal('show');
-			}
+        url: "/requerimiento/modal_cerrar_antiguedad/"+id,
+        type: "GET",
+        success: function (result) {
+            $("#diveditpregOpc2").html(result);
+            $('#openOverlayOpc2').modal('show');
+        }
 	});
 }
 
@@ -812,18 +834,20 @@ function modalCerrarAntiguedad(){
                                 <table id="tblRequerimientoDetalle" class="table table-hover table-sm">
                                     <thead>
                                     <tr style="font-size:13px">
-                                        <th>#</th>
-                                        <th>Descripci&oacute;n</th>
-                                        <th>Marca</th>
+                                        <th style="width : 3%">#</th>
+                                        <th style="width : 7%">Descripci&oacute;n</th>
+                                        <th style="width : 10%">Marca</th>
                                         <th style="width : 10%">COD. INT.</th>
-                                        <th style="width : 10%">Estado Bien</th>
+                                        <!--<th style="width : 10%">Estado Bien</th>-->
                                         <th style="width : 10%">Unidad</th>
                                         <th style="width : 8%">Cantidad</th>
-                                        <th style="width : 20%">Observaci&oacute;n</th>
-                                        <th style="width : 20%">Observaci&oacute;n Atenci&oacute;n</th>
+                                        <th style="width : 12%">Usuario Solicita</th>
+                                        <th style="width : 10%">Prioridad</th>
+                                        <th style="width : 15%">Observaci&oacute;n</th>
+                                        <th style="width : 15%">Observaci&oacute;n Atenci&oacute;n</th>
                                     </tr>
                                     </thead>
-                                    <tbody id="divRequerimientoDetalle">
+                                    <tbody id="divRequerimientoDetalle" style="font-size:12px">
                                     </tbody>
                                 </table>
                             </div>
@@ -891,53 +915,27 @@ function modalCerrarAntiguedad(){
 <!-- /.content-wrapper -->
 
 <div id="openOverlayOpc2" class="modal fade modal-antiguedad" tabindex="-1" role="dialog">
-	  <div class="modal-dialog" >
-	
-		<div id="id_content_OverlayoneOpc2" class="modal-content" style="padding: 0px;margin: 0px">
-		
-		  <div class="modal-body" style="padding: 0px;margin: 0px">
-	
-				<div id="diveditpregOpc2"></div>
-	
-		  </div>
-		
-		</div>
-	
-	  </div>
-		
-	</div>
-
+    <div class="modal-dialog" >
+        <div id="id_content_OverlayoneOpc2" class="modal-content" style="padding: 0px;margin: 0px">
+            <div class="modal-body" style="padding: 0px;margin: 0px">
+                <div id="diveditpregOpc2"></div>
+            </div>
+        </div>
+    </div>
+</div>
     
 <script type="text/javascript">
-$(document).ready(function () {
 
-	$('#ruc_').blur(function () {
-		var id = $('#id').val();
-			if(id==0) {
-				validaRuc(this.value);
-			}
-		//validaRuc(this.value);
-	});
-	
-	
-	
-	
-});
+    $(document).ready(function () {
 
-
-</script>
-
-<script type="text/javascript">
-$(document).ready(function() {
-	//$('#numero_placa').focus();
-	//$('#numero_placa').mask('AAA-000');
-	//$('#vehiculo_numero_placa').mask('AAA-000');
-	
-	
-});
-
-
-
+        $('#ruc_').blur(function () {
+            var id = $('#id').val();
+                if(id==0) {
+                    validaRuc(this.value);
+                }
+            //validaRuc(this.value);
+        });
+    });
 
 </script>
 

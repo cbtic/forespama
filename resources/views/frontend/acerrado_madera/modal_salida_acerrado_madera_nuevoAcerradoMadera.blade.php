@@ -206,6 +206,7 @@ function save_produccion(){
             $('#openOverlayOpc').modal('hide');
             $('.loader').hide();
             bootbox.alert("Se guard&oacute; satisfactoriamente"); 
+            datatablenew();
             datatablenew2();
         }
     });
@@ -277,8 +278,8 @@ function agregarSalidaAcerrado(){
     var newRow = "";
     for (var i = 0; i < cantidad; i++) { 
         var n = $('#tblSalidaAcerradoMadera tbody tr').length + 1;
-        var tipo_madera = '<select name="tipo_madera[]" id="tipo_madera' + n + '" class="form-control form-control-sm" onchange="obtenerProducto()"> <option value="">--Seleccionar--</option><?php foreach ($tipo_madera as $row){?><option value="<?php echo $row->codigo; ?>"><?php echo $row->denominacion; ?></option><?php }?></select>';
-        var medida = '<input name="id_salida_acerrado_madera[]" id="id_salida_acerrado_madera${n}" class="form-control form-control-sm" value="1" type="hidden"><select name="medida[]" id="medida' + n + '" class="form-control form-control-sm" onchange="obtenerProducto()"> <option value="">--Seleccionar--</option><?php foreach ($medida_acerrado as $row){?><option value="<?php echo $row->codigo; ?>"><?php echo $row->denominacion; ?></option><?php }?></select>';
+        var tipo_madera = '<select name="tipo_madera[]" id="tipo_madera' + n + '" class="tipo_madera form-control form-control-sm" onchange="obtenerProducto(this)"> <option value="">--Seleccionar--</option><?php foreach ($tipo_madera as $row){?><option value="<?php echo $row->codigo; ?>"><?php echo $row->denominacion; ?></option><?php }?></select>';
+        var medida = '<input name="id_salida_acerrado_madera[]" id="id_salida_acerrado_madera${n}" class="id_producto form-control form-control-sm" value="1" type="hidden"><select name="medida[]" id="medida' + n + '" class="medida form-control form-control-sm" onchange="obtenerProducto(this)"> <option value="">--Seleccionar--</option><?php foreach ($medida_acerrado as $row){?><option value="<?php echo $row->codigo; ?>"><?php echo $row->denominacion; ?></option><?php }?></select>';
         var paquete = '<input name="paquete[]" id="paquete' + n + '" class="paquete form-control form-control-sm" value="" type="text" oninput="calcularNPiezas(this)">';
         var medida_paquete1 = '<input name="medida_paquete1[]" id="medida_paquete1' + n + '" class="medida_paquete1 form-control form-control-sm" value="" type="text" oninput="calcularNPiezas(this)">';
         var medida_paquete2 = '<input name="medida_paquete2[]" id="medida_paquete2' + n + '" class="medida_paquete2 form-control form-control-sm" value="" type="text" oninput="calcularNPiezas(this)">';
@@ -358,17 +359,28 @@ function cargarDetallePendiente(){
     })
 }
 
-function obtenerProducto(){
+function obtenerProducto(select){
 
-    var tipo_madera = $('#tipo_madera').val();
-    var medida = $('#medida').val();
+    var fila = $(select).closest('tr');
+
+    var tipo_madera = fila.find('.tipo_madera').val();
+    var medida = fila.find('.medida').val();
+
+    if(!tipo_madera || !medida){
+        fila.find('.id_producto').val('');
+        return;
+    }
 
     $.ajax({
         url: "/productos/obtener_producto_acerrado/"+tipo_madera+"/"+medida,
         dataType: "json",
         success: function (result) {
 
-            $('#id_salida_acerrado_madera').val(result.id);
+            var producto = result[0];
+
+            //alert(producto.id_producto);
+
+            fila.find('.id_producto').val(producto.id_producto);
             
         }
     });

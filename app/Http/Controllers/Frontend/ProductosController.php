@@ -20,6 +20,7 @@ use App\Models\ProductosCompetencia;
 use App\Models\User;
 use App\Models\ProductoPrecioDetalle;
 use App\Models\FamiliaContable;
+use App\Models\ProductoAcerrado;
 use RealRashid\SweetAlert\Facades\Alert;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -901,13 +902,21 @@ class ProductosController extends Controller
 	}
 
     public function modal_historial_precio_producto($id){
-	
-            $producto_precio_detalle_model = new ProductoPrecioDetalle;
-            $producto_precio_detalle = $producto_precio_detalle_model->getHistorialPrecioByProducto($id);    
+
+        $producto_precio_detalle_model = new ProductoPrecioDetalle;
+        $producto_precio_detalle = $producto_precio_detalle_model->getHistorialPrecioByProducto($id);    
 
 		return view('frontend.productos.modal_productos_nuevoHistorialPrecioProducto',compact('producto_precio_detalle'));
 
     }
+
+    public function obtener_producto_acerrado($tipo_madera, $medida){
+        
+		$producto_acerrado_model = new ProductoAcerrado;
+		$producto_acerrado = $producto_acerrado_model->getProductoByTipoMaderaMedida($tipo_madera, $medida);
+		
+		echo json_encode($producto_acerrado);
+	}
 }
 
 class InvoicesExport implements FromArray, WithHeadings, WithStyles

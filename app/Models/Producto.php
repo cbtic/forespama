@@ -255,4 +255,5 @@ class Producto extends Model
 		$data = DB::select($cad);
         return $data;
     }
+
 }

@@ -18,6 +18,7 @@ use App\Models\ProductoPrecioDetalle;
 use App\Models\CotizacionRequerimiento;
 use App\Models\CotizacionDetalleRequerimiento;
 use App\Models\User;
+use App\Models\Persona;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Auth;
 use Carbon\Carbon;
@@ -103,6 +104,7 @@ class RequerimientoController extends Controller
         $marca_model = new Marca;
         $almacen_model = new Almacene;
         $user_model = new User;
+        $persona_model = new Persona;
 		
 		if($id>0){
 
@@ -122,8 +124,10 @@ class RequerimientoController extends Controller
         $responsable_atencion = $user_model->getUserAll();
         $unidad_origen = $tablaMaestra_model->getMaestroByTipo(50);
         $tipo_requerimiento = $tablaMaestra_model->getMaestroByTipo(67);
+        $usuario = $persona_model->obtenerPersonaAll();
+        $prioridad = $tablaMaestra_model->getMaestroByTipo(93);
 
-        return view('frontend.requerimiento.modal_requerimiento_nuevoRequerimiento',compact('id','requerimiento','tipo_documento','producto','marca','unidad','almacen','cerrado_requerimiento','estado_bien','estado_atencion','responsable_atencion','unidad_origen','id_user','tipo_requerimiento'));
+        return view('frontend.requerimiento.modal_requerimiento_nuevoRequerimiento',compact('id','requerimiento','tipo_documento','producto','marca','unidad','almacen','cerrado_requerimiento','estado_bien','estado_atencion','responsable_atencion','unidad_origen','id_user','tipo_requerimiento','usuario','prioridad'));
 
     }
 
@@ -145,6 +149,8 @@ class RequerimientoController extends Controller
         $marca = $request->input('marca');
         $estado_bien = $request->input('estado_bien');
         $unidad = $request->input('unidad');
+        $usuario = $request->input('usuario');
+        $prioridad = $request->input('prioridad');
         $cantidad_ingreso = $request->input('cantidad_ingreso');
         $observacion = $request->input('observacion');
         
@@ -184,9 +190,11 @@ class RequerimientoController extends Controller
             $requerimiento_detalle->id_requerimiento = $requerimiento->id;
             $requerimiento_detalle->id_producto = $descripcion[$index];
             $requerimiento_detalle->cantidad = $cantidad_ingreso[$index];
-            $requerimiento_detalle->id_estado_producto = $estado_bien[$index];
+            $requerimiento_detalle->id_estado_producto = 1;//$estado_bien[$index];
             $requerimiento_detalle->id_unidad_medida = $unidad[$index];
             $requerimiento_detalle->id_marca = $marca[$index];
+            $requerimiento_detalle->id_usuario_solicita = $usuario[$index];
+            $requerimiento_detalle->id_prioridad = $prioridad[$index];
             $requerimiento_detalle->estado = 1;
             $requerimiento_detalle->cerrado = 1;
             $requerimiento_detalle->observacion = $observacion[$index];
@@ -236,19 +244,24 @@ class RequerimientoController extends Controller
         $marca_model = new Marca;
         $producto_model = new Producto;
         $tablaMaestra_model = new TablaMaestra;
+        $persona_model = new Persona;
 
         $requerimiento = $requerimiento_model->getDetalleRequerimientoId($id);
         $marca = $marca_model->getMarcaAll();
         $producto = $producto_model->getProductoAll();
         $estado_bien = $tablaMaestra_model->getMaestroByTipo(4);
         $unidad_medida = $tablaMaestra_model->getMaestroByTipo(43);
+        $usuario_solicita = $persona_model->obtenerPersonaAll();
+        $prioridad = $tablaMaestra_model->getMaestroByTipo(93);
 
         return response()->json([
             'requerimiento' => $requerimiento,
             'marca' => $marca,
             'producto' => $producto,
             'estado_bien' => $estado_bien,
-            'unidad_medida' => $unidad_medida
+            'unidad_medida' => $unidad_medida,
+            'usuario_solicita' => $usuario_solicita,
+            'prioridad' => $prioridad
         ]);
     }
 

@@ -32,16 +32,22 @@ class AcerradoMaderaController extends Controller
 	}
 
     public function create(){
+
+		$tablaMaestra_model = new TablaMaestra;
+
+		$cerrado = $tablaMaestra_model->getMaestroByTipo(119);
 		
-		return view('frontend.acerrado_madera.create');
+		return view('frontend.acerrado_madera.create',compact('cerrado'));
 
 	}
 
     public function listar_ingreso_produccion_acerrado_madera_ajax(Request $request){
 
 		$ingreso_produccion_acerrado_madera_model = new IngresoProduccionAcerradoMadera;
-		$p[]=$request->fecha;
-        $p[]=1;
+		$p[]=$request->fecha_inicio;
+		$p[]=$request->fecha_fin;
+		$p[]=$request->situacion;
+        $p[]=$request->estado;
 		$p[]=$request->NumeroPagina;
 		$p[]=$request->NumeroRegistros;
 		$data = $ingreso_produccion_acerrado_madera_model->listar_ingreso_produccion_acerrado_madera_ajax($p);
@@ -62,8 +68,10 @@ class AcerradoMaderaController extends Controller
 	public function listar_produccion_acerrado_madera_ajax(Request $request){
 
 		$produccion_acerrado_madera_model = new ProduccionAcerradoMadera;
-		$p[]=$request->fecha;
-        $p[]=1;
+		$p[]=$request->fecha_inicio;
+		$p[]=$request->fecha_fin;
+		$p[]=$request->situacion;
+        $p[]=$request->estado;
 		$p[]=$request->NumeroPagina;
 		$p[]=$request->NumeroRegistros;
 		$data = $produccion_acerrado_madera_model->listar_produccion_acerrado_madera_ajax($p);
@@ -240,14 +248,14 @@ class AcerradoMaderaController extends Controller
 		$n_piezas = $request->input('n_piezas');
         $id_salida_acerrado_madera =$request->id_salida_acerrado_madera;
 		$seleccionados = $request->input('seleccionados', []);
-		
+		//dd($seleccionados);exit();
 		if (!$request->has('seleccionados')) {
 			return response()->json([
 				'error' => 'Debe seleccionar al menos un lote'
 			], 422);
 		}
 
-        //$produccion_acerrado_madera->id_ingreso_produccion_acerrado_maderas = $request->denominacion;
+        $produccion_acerrado_madera->id_ingreso_produccion_acerrado_maderas = $seleccionados[0];
 		$produccion_acerrado_madera->fecha_produccion = $request->fecha;
 		$produccion_acerrado_madera->estado = 1;
         $produccion_acerrado_madera->id_usuario_inserta = $id_user;
@@ -275,12 +283,44 @@ class AcerradoMaderaController extends Controller
 
 			$array_produccion_acerrado_madera_detalle[] = $produccion_acerrado_madera_detalle->id;
 
-			/*$IngresoVehiculoTroncoTipoMaderaAll = ProduccionAcerradoMaderaDetalle::where('id',$id_ingreso_acerrado_detalle)->where('estado',1)->first();
+			/*$produccionAcerradoMaderaDetalleAll = ProduccionAcerradoMaderaDetalle::where('id_ingreso_produccion_acerrado_maderas',$id_ingreso_acerrado_detalle)->where('estado',1)->first();
 
 			if($cantidad_ingreso_produccion[$index] == $cantidad_ingreso[$index]){
-				$IngresoVehiculoTroncoTipoMaderaAll->estado_acerrado = 0;
-				$IngresoVehiculoTroncoTipoMaderaAll->save();
+				$produccionAcerradoMaderaDetalleAll->estado_ingreso_acerrado = 0;
+				$produccionAcerradoMaderaDetalleAll->save();
 			}*/
+
+			$ingresoProduccionAcerradoMaderaDetalleAll = IngresoProduccionAcerradoMaderaDetalle::where("id_ingreso_produccion_acerrado_maderas",$seleccionados[0])->where("estado","1")->get();
+				
+			foreach($ingresoProduccionAcerradoMaderaDetalleAll as $key=>$row){
+				
+				if (!in_array($row->id, $array_produccion_acerrado_madera_detalle)){
+					$ingreso_produccion_acerrado_madera_detalle = IngresoProduccionAcerradoMaderaDetalle::find($row->id);
+					$ingreso_produccion_acerrado_madera_detalle->estado_ingreso_acerrado = 0;
+					$ingreso_produccion_acerrado_madera_detalle->save();
+				}
+			}
+
+			$idProducto = $id_salida_acerrado_madera[$index];
+
+			$idCorte = Kardex::where('id_producto', $idProducto)->where('id_almacen_destino', 22)->whereDate('fecha', '<=', $request->fecha)->orderBy('fecha', 'desc')->orderBy('id', 'desc')->value('id');
+			
+			$saldoBase = $idCorte > 0 ? Kardex::where('id', $idCorte)->value('saldos_cantidad') : 0;
+
+			$kardex = new Kardex;
+			$kardex->id_producto = $idProducto;
+			$kardex->id_almacen_destino = 22;
+			$kardex->fecha = $request->fecha;
+
+			$kardex->entradas_cantidad = $n_piezas[$index];
+			$kardex->salidas_cantidad = 0;
+
+			$kardex->saldos_cantidad = $saldoBase + $n_piezas[$index];
+
+			$kardex->id_ingreso_vehiculo_tronco = $id_produccion_acerrado_madera;
+			//$kardex->fecha = $request->fecha;
+			$kardex->id_usuario_inserta = $id_user;
+			$kardex->save();
         }
 
         return response()->json(['success' => 'Registro de produccion de acerrado guardado exitosamente.']);
