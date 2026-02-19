@@ -340,7 +340,7 @@ class RequerimientoController extends Controller
 		
 		$pdf->setPaper('A4'); // Tamaño de papel (puedes cambiarlo según tus necesidades)
         
-		$pdf->setPaper('A4', 'portrait');
+		$pdf->setPaper('A4', 'Landscape');
     	$pdf->setOption('margin-top', 20); // Márgen superior en milímetros
    		$pdf->setOption('margin-right', 50); // Márgen derecho en milímetros
     	$pdf->setOption('margin-bottom', 20); // Márgen inferior en milímetros
