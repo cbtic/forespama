@@ -2,9 +2,9 @@
 <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" defer></script>
 <style type="text/css">
 
-/*#tblProductos tbody tr{
-	font-size:13px
-}*/
+#tblProductos tbody tr{
+		font-size:13px
+	}
 
 .table td.verde{
 	background:#CAE983  !important
@@ -256,8 +256,7 @@ label.form-control-sm{
 	overflow-x: scroll;
 	overflow-y: hidden;
 	height: 200px;
-	white-space:nowrap;
-	width: 300px;
+	white-space:nowrap
 }
 .imageDiv img {
 	box-shadow: 1px 1px 10px #999;
@@ -269,7 +268,6 @@ label.form-control-sm{
 	*zoom:1;
 	vertical-align:top;
 }
-
 
 .img_ruta{
 	position:relative;
@@ -291,9 +289,9 @@ label.form-control-sm{
 </style>
 
 <script>
-    var userIsAdmin = @json(auth()->check() ? auth()->user()->hasRole('Administrator') : false);
 
-    //console.log(userIsAdmin);
+	var esAdministrador = {{ auth()->user()->hasAnyRole('Administrator') ? 'true' : 'false' }};
+
 </script>
 
 @stack('before-scripts')
@@ -301,12 +299,12 @@ label.form-control-sm{
 
 @extends('frontend.layouts.app')
 
-@section('title', __('Productos'))
+@section('title', __('Consulta Descanso'))
 
 @section('breadcrumb')
 <ol class="breadcrumb" style="padding-left:130px;margin-top:0px;background-color:#283659">
     <li class="breadcrumb-item text-primary">Inicio</li>
-    <li class="breadcrumb-item active">Registro de Productos</li>
+    <li class="breadcrumb-item active">Registro de Descanso</li>
     </li>
 </ol>
 
@@ -332,12 +330,12 @@ label.form-control-sm{
 
         <div class="card-body">
 
-            <form class="form-horizontal" method="post" action="" id="frmProductos" autocomplete="off" enctype="multipart/form-data">
+            <form class="form-horizontal" method="post" action="" id="frmDescanso" autocomplete="off" enctype="multipart/form-data">
 				
                 <div class="row">
                     <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12" style="margin-top:15px">
                         <h4 class="card-title mb-0 text-primary" style="font-size:22px">
-                            Productos / Servicios
+                            Descanso
                         </h4>
                     </div>
                 </div>
@@ -354,111 +352,26 @@ label.form-control-sm{
 						<div class="row">
 
 							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-								<select name="tipo_origen_producto_bus" id="tipo_origen_producto_bus" class="form-control form-control-sm filtro-select">
-									<option value="">--Seleccionar Tipo Origen Producto--</option>
-									<?php
-									foreach ($tipo_origen_producto as $row) {
-									?>
-									<option value="<?php echo $row->codigo?>"><?php echo $row->denominacion?></option>
-									<?php
-									}
-									?>
-								</select>
+								<input id="fecha_inicio_bus" name="fecha_inicio_bus" on class="form-control form-control-sm"  placeholder="Fecha Inicio">
 							</div>
-
-							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-								<input class="form-control form-control-sm filtro-input" id="serie_bus" name="serie_bus" placeholder="Serie">
-							</div>
-
-							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-								<input class="form-control form-control-sm filtro-input" id="codigo_bus" name="codigo_bus" placeholder="C&oacute;digo">
-							</div>
-
-							<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-								<input id="denominacion_bus" name="denominacion_bus" on class="form-control form-control-sm filtro-input"  placeholder="Denominaci&oacute;n">
-							</div>
-
-							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-								<select name="estado_bien_bus" id="estado_bien_bus" class="form-control form-control-sm filtro-select">
-									<option value="">--Seleccionar Estado Bien--</option>
-									<?php
-									foreach ($estado_bien as $row) {
-									?>
-									<option value="<?php echo $row->codigo?>"><?php echo $row->denominacion?></option>
-									<?php
-									}
-									?>
-								</select>
-							</div>	
 							
-							<!--<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-								<select name="tipo_producto_bus" id="tipo_producto_bus" class="form-control form-control-sm">
-									<option value="">--Seleccionar Tipo Producto--</option>
-									<?php
-									//foreach ($tipo_producto as $row) {
-									?>
-									<option value="<?php //echo $row->codigo?>"><?php //echo $row->denominacion?></option>
-									<?php
-									//}
-									?>
-								</select>
-							</div>-->
-
 							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-								<select name="familia_bus" id="familia_bus" class="form-control form-control-sm filtro-select" onchange="obtenerSubFamiliaBus()">
-									<option value="">--Seleccionar Familia--</option>
-									<?php
-									foreach ($familia as $row) {
-									?>
-									<option value="<?php echo $row->id?>"><?php echo $row->denominacion?></option>
-									<?php
-									}
-									?>
-								</select>
+								<input id="fecha_fin_bus" name="fecha_fin_bus" on class="form-control form-control-sm"  placeholder="Fecha Fin">
 							</div>
 
 							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-								<select name="sub_familia_bus" id="sub_familia_bus" class="form-control form-control-sm filtro-select">
-									<option value="">--Seleccionar Sub Familia--</option>
-								</select>
-							</div>
-
-							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-								<select name="familia_contable_bus" id="familia_contable_bus" class="form-control form-control-sm filtro-select" onchange="">
-									<option value="">--Familia Contable--</option>
-									<option value="99">SIN FAMILIA CONTABLE</option>
+								<select name="situacion_bus" id="situacion_bus" class="form-control form-control-sm filtro-select">
+									<option value="">--Seleccionar Situaci&oacute;n--</option>
 									<?php
-									foreach ($familia_contable as $row) {
-									?>
-									<option value="<?php echo $row->id?>"><?php echo $row->familia_contable?></option>
-									<?php
-									}
-									?>
-								</select>
-							</div>
-
-							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-								<select name="tiene_imagen_bus" id="tiene_imagen_bus" class="form-control form-control-sm filtro-select">
-									<option value="" selected="selected">--Seleccionar Tiene Imagen--</option>
-									<option value="1">Si</option>
-									<option value="0">No</option>
-								</select>
-							</div>
-
-							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-								<select name="aprobado_bus" id="aprobado_bus" class="form-control form-control-sm filtro-select">
-									<option value="">--Seleccionar Aprobado--</option>
-									<?php
-									foreach ($aprobado as $row) {
-									?>
-									<option value="<?php echo $row->codigo?>"><?php echo $row->denominacion?></option>
-									<?php
+									foreach ($cerrado as $row){?>
+										<option value="<?php echo $row->codigo ?>" <?php if($row->codigo=='1')echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+										<?php 
 									}
 									?>
 								</select>
 							</div>
 							
-							<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
 								<select name="estado_bus" id="estado_bus" class="form-control form-control-sm filtro-select">
 									<option value="">Todos</option>
 									<option value="1" selected="selected">Activo</option>
@@ -470,52 +383,36 @@ label.form-control-sm{
 					<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
 						<div class="row">
 							<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding-right:0px">
-								<!--<input class="btn btn-warning pull-rigth" value="Buscar" type="button" id="btnBuscar" />-->
 								<button type="button" id="btnBuscar" class="btn btn-sm btn-warning pull-rigth icono-botones2" style="margin-left:10px">
 									<i class="fas fa-search" style="font-size:18px;"></i> Buscar
 								</button>
-								<!--<input class="btn btn-success pull-rigth" value="Nuevo" type="button" id="btnNuevo" style="margin-left:15px" />-->
-								<button type="button" id="btnNuevo" class="btn btn-sm btn-success icono-botones2" style="margin-left:10px">
+								<!--<button type="button" id="btnNuevo" class="btn btn-sm btn-success icono-botones2" style="margin-left:10px">
 									<i class="fas fa-plus-circle" style="font-size:18px;"></i> Nuevo
-								</button>
-								<button id="btnDescargar" type="button" class="btn btn-secondary pull-rigth" style="margin-left:10px;">
-									<i class="fas fa-download"></i> Excel
-								</button>
+								</button>-->
 							</div>
 						</div>
 					</div>
 				</div>
 				
-                <div class="card-body">
+                <div class="card-body">				
 
                     <div class="table-responsive">
-                    <table id="tblProductos" class="table table-hover table-sm">
+                    <table id="tblDescanso" class="table table-hover table-sm">
                         <thead>
                         <tr style="font-size:13px">
                             <th>Id</th>
-							<th>Bien/Servicio</th>
-							<th>Tipo Origen Producto</th>
-							<th>Serie</th>
+                            <th>Id Descanso</th>
 							<th>Denominaci&oacute;n</th>
-                            <th>C&oacute;digo</th>
-                            <th>Unidad Producto</th>
-							<th>Contenido</th>
-							<th>Unidad Medida</th>
-							<th>Marca</th>
-							<th>Familia</th>
-							<th>Sub Familia</th>
-							<th>Familia Contable</th>
-							<th>Estado Bien</th>
-							<th>F. Vencimiento</th>
-							<th>Stock M&iacute;nimo</th>
-							<th>Tiene Imagen</th>
-							<th>Aprobado</th>
-							<th>Usuario Inserta</th>
+							<th>Cantidad</th>
+							<th>Fecha Ingreso</th>
+							<th>Fecha Salida</th>
+							<th>D&iacute;as Descanso</th>
+							<th>Situacion</th>
 							<th>Estado</th>
                             <th>Acciones</th>
                         </tr>
                         </thead>
-                        <tbody style="font-size:13px">
+                        <tbody>
                         </tbody>
                     </table>
                 </div><!--table-responsive-->
@@ -548,59 +445,8 @@ label.form-control-sm{
 
 	<script type="text/javascript">
 
-	/*$(document).ready(function() {
-		$(".upload").on('click', function() {
-			var formData = new FormData();
-			var files = $('#image')[0].files[0];
-			formData.append('file',files);
-			$.ajax({
-				headers: {
-					'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-				},
-				url: "/ingreso_vehiculo_tronco/upload_imagen_ingreso",
-				type: 'post',
-				data: formData,
-				contentType: false,
-				processData: false,
-				success: function(response) {
-					
-					var ind_img = $("#ind_img").val();
-					
-					if (response != 0) {
-						$("#img_ruta_"+ind_img).attr("src", "/img/ingreso/tmp/"+response).show();
-						$(".delete_ruta").show();
-						$("#img_foto_"+ind_img).val(response);
-
-						ind_img++;
-
-						var newRow = "";
-						newRow += '<div class="img_ruta">';
-						newRow += '<img src="" id="img_ruta_'+ind_img+'" width="130px" height="165px" alt="" style="text-align:center;margin-top:8px;display:none;margin-left:10px" />';
-						newRow += '<span class="delete_ruta" style="display:none" onclick="DeleteImagen(this)"></span>';
-						newRow += '<input type="hidden" id="img_foto_'+ind_img+'" name="img_foto[]" value="" />';
-						newRow += '</div>';
-
-						$("#divImagenes").append(newRow);
-						$("#ind_img").val(ind_img);
-
-					} else {
-						alert('Formato de imagen incorrecto.');
-					}
-					
-				}
-			});
-			return false;
-		});
-
-		$(".delete").on('click', function() {
-			$("#img_ruta0").attr("src", "/dist/img/profile-icon.png");
-			$("#img_foto0").val("");
-		});
-
-	});*/
-
 	</script>
 
-	<script src="{{ asset('js/productos.js') }}"></script>
+	<script src="{{ asset('js/descanso.js') }}"></script>
 
 	@endpush

@@ -64,6 +64,7 @@ class ComprobanteController extends Controller
 		$this->middleware('can:Facturacion de Pagos')->only(['create_pagos']);
 		$this->middleware('can:Reporte Ventas')->only(['create_ventas']);
 		$this->middleware('can:Consulta de Facturacion Detalle')->only(['create_facturacion_sodimac_detalle']);
+		$this->middleware('can:Consulta de Facturacion Promart')->only(['create_facturacion_promart']);
 	}
 
 	public function index(){
@@ -4325,6 +4326,24 @@ class ComprobanteController extends Controller
         return view('frontend.comprobante.create_facturacion',compact('formapago','caja','medio_pago','usuario_caja'));
     }
 
+    public function create_facturacion_promart(){
+        
+        $tabla_model = new TablaMaestra;
+
+        $formapago = $tabla_model->getMaestroByTipo('104');
+
+        $caja = $tabla_model->getMaestroByTipoBySubcogioNull('27');
+
+        $medio_pago = $tabla_model->getMaestroByTipoBySubcogioNull('11');
+
+        $caja_model = new CajaIngreso;
+
+        $usuario_caja = $caja_model->getCajaUsuario_all();
+
+
+        return view('frontend.comprobante.create_facturacion_promart',compact('formapago','caja','medio_pago','usuario_caja'));
+    }
+
     public function listar_factura_sodimac_ajax(Request $request){
 
 		$factura_model = new Comprobante();
@@ -4338,6 +4357,33 @@ class ComprobanteController extends Controller
 		$p[]=$request->NumeroRegistros;
 		
 		$data = $factura_model->listar_factura_sodimac_ajax($p);
+		
+		$iTotalDisplayRecords = isset($data[0]->totalrows)?$data[0]->totalrows:0;
+		//print_r($afiliacion);exit();
+
+		$result["PageStart"] = $request->NumeroPagina;
+		$result["pageSize"] = $request->NumeroRegistros;
+		$result["SearchText"] = "";
+		$result["ShowChildren"] = true;
+		$result["iTotalRecords"] = $iTotalDisplayRecords;
+		$result["iTotalDisplayRecords"] = $iTotalDisplayRecords;
+		$result["aaData"] = $data;
+
+		echo json_encode($result);
+
+	}
+
+    public function listar_factura_promart_ajax(Request $request){
+
+		$factura_model = new Comprobante();
+		$p[]=$request->fecha_ini;
+		$p[]=$request->fecha_fin;
+		$p[]=$request->tiene_tipo_cobro;
+        $p[]=$request->estado;
+		$p[]=$request->NumeroPagina;
+		$p[]=$request->NumeroRegistros;
+		
+		$data = $factura_model->listar_factura_promart_ajax($p);
 		
 		$iTotalDisplayRecords = isset($data[0]->totalrows)?$data[0]->totalrows:0;
 		//print_r($afiliacion);exit();
@@ -4430,6 +4476,28 @@ class ComprobanteController extends Controller
 		
         //echo $archivo;
 		$this->importar_archivo($archivo);
+		
+	}
+
+    public function upload_factura_promart(Request $request){
+		
+		$filename = date("YmdHis") . substr((string)microtime(), 1, 6);
+		$type="";
+		
+        $path = "factura_promart";
+        if (!is_dir($path)) {
+            mkdir($path);
+        }
+        
+        $filepath = public_path('factura_promart/');
+		
+		$type=$this->extension($_FILES["file"]["name"]);
+		move_uploaded_file($_FILES["file"]["tmp_name"], $filepath . $filename.".".$type);
+		
+		$archivo = $filename.".".$type;
+		
+        //echo $archivo;
+		$this->importar_archivo_promart($archivo);
 		
 	}
 
@@ -4549,6 +4617,114 @@ class ComprobanteController extends Controller
         return response()->json(['success' => 'Archivo importado exitosamente.']);
     }
 
+    public function importar_archivo_promart($archivo)
+    {
+        $id_user = Auth::user()->id;
+        $moneda = 1;
+        $moneda_detalle = 1;
+        $ruc_cliente = 20536557858;
+        
+        $filePath = public_path('factura_promart/'.$archivo);
+
+        if (!file_exists($filePath)) {
+            return response()->json(['error' => 'Archivo no encontrado.'], 404);
+        }
+
+        $data = Excel::toArray([], $filePath);
+
+        $sheet = $data[0];
+
+        if (empty($data) || empty($data[0])) {
+            return response()->json(['error' => 'El archivo está vacío o tiene un formato incorrecto.'], 400);
+        }
+
+        $count = 0;
+        $generalData = [];
+        $detalleData = [];
+
+        foreach ($sheet as $row) {
+            //var_dump($sheet[8][1]);
+            
+            $detalleData[] = $row;
+            
+            $empresa = Empresa::where("ruc",  $ruc_cliente)->first();
+            
+            $fecha_pago = null;
+            if (isset($sheet[1][11]) && is_numeric($sheet[1][11])) {
+                try {
+                    $fecha_pago = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($sheet[1][11])->format('d-m-Y');
+                } catch (\Exception $e) {
+                    $fecha_pago = null;
+                }
+            }else{
+                $fecha_pago = trim($sheet[1][11]);
+            }
+            if ($count == 0) {
+
+                $tabla_maestra_model = new TablaMaestra;
+                $id_medio_pago = $tabla_maestra_model->getMaestroC('65',$sheet[1][13]);
+                $id_banco = $tabla_maestra_model->getMaestroDenominacion('16',$sheet[1][12]);
+
+                $promart_factura = new PromartFactura;
+                $promart_factura->id_medio_pago = $id_medio_pago[0]->codigo;
+                $promart_factura->cuenta_bancaria = $sheet[1][14];
+                $promart_factura->id_banco = $id_banco[0]->codigo;
+                $promart_factura->fecha_pago = $fecha_pago;
+                $promart_factura->id_empresa = $empresa->id;
+                //$sodimac_factura->total_pagado = $sheet[10][1];
+                $promart_factura->id_moneda = $moneda;
+                $promart_factura->estado = 1;
+                $promart_factura->id_usuario_inserta = $id_user;
+                $promart_factura->save();
+            }
+            
+            $count++;
+        }
+
+        foreach ($detalleData as $row) {
+            if (count($row) < 7) {
+                continue; // Si la fila no tiene suficiente información, la saltamos
+            }
+            
+            if ($count >= 1 && empty($row[0])) {
+                continue; // Si la fila es un total y está después de la 14, se ignora
+            }
+
+            $fecha_emision = $row[0]; // Tipo Documento
+            $tipo_documento = $row[1]; // Tipo Documento
+            $numero_documento = $row[3]; // Nro. Documento
+            $importe_inicial = //$row[2]; // Importe Inicial
+            $importe_retencion = //$row[3]; // Importe Retención
+            $importe_detraccion = //$row[4]; // Importe Detracción
+            $importe_compensado = $row[5]; // Importe Compensado
+            $fecha_deposito_detraccion = $row[8];
+            $numero_deposito_detraccion = $row[9];
+            $observacion = $row[10];
+    
+            if($tipo_documento == 'RA'){
+                $tipo_documento='1';
+            }else {
+                $tipo_documento='2';
+            }
+
+            // Guardar el detalle de la factura
+            $promart_factura_detalle = new PromartFacturaDetalle;
+            $promart_factura_detalle->id_promart_factura = $promart_factura->id;
+            $promart_factura_detalle->id_tipo_documento = $tipo_documento;
+            $promart_factura_detalle->numero_documento = $numero_documento;
+            $promart_factura_detalle->importe_inicial = $importe_inicial;
+            $promart_factura_detalle->importe_retencion = $importe_retencion;
+            $promart_factura_detalle->importe_detraccion = $importe_detraccion;
+            $promart_factura_detalle->importe_total = $importe_compensado;
+            $promart_factura_detalle->id_moneda = $moneda_detalle;
+            $promart_factura_detalle->estado = 1;
+            $promart_factura_detalle->id_usuario_inserta = $id_user;
+            $promart_factura_detalle->save();
+        }
+
+        return response()->json(['success' => 'Archivo importado exitosamente.']);
+    }
+
     public function modal_factura_sodimac_detalle($id){
 		
         $comprobante_model = new Comprobante;
@@ -4560,6 +4736,20 @@ class ComprobanteController extends Controller
         $tiendas = $tienda_model->getTiendasAll();
 
 		return view('frontend.comprobante.modal_factura_sodimac_detalle',compact('id','sodimac_factura_detalle','cobros_sodimac','tiendas'));
+
+    }
+
+    public function modal_factura_promart_detalle($id){
+		
+        $comprobante_model = new Comprobante;
+        $tablaMaestra_model = new TablaMaestra;
+        $tienda_model = new Tienda;
+
+        $sodimac_factura_detalle = $comprobante_model->obtenerFacturaDetalle($id);
+        $cobros_sodimac = $tablaMaestra_model->getMaestroByTipo(78);
+        $tiendas = $tienda_model->getTiendasAll();
+
+		return view('frontend.comprobante.modal_factura_promart_detalle',compact('id','sodimac_factura_detalle','cobros_sodimac','tiendas'));
 
     }
 

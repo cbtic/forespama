@@ -2,6 +2,16 @@
 <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" defer></script>
 <style type="text/css">
 
+.fila-roja {
+    background-color: #f8d7da !important;
+    color: #721c24;
+}
+
+.fila-verde {
+    background-color: #d4edda !important;
+    color: #155724;
+}
+
 .table td.verde{
 	background:#CAE983  !important
 }

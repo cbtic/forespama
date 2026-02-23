@@ -1869,7 +1869,8 @@ function duplicar_pedido(){
                                     Fecha Orden Compra
                                 </div>
                                 <div class="col-lg-2">
-                                    <input id="fecha_orden_compra" name="fecha_orden_compra" on class="form-control form-control-sm"  value="<?php echo isset($orden_compra) && $orden_compra->fecha_orden_compra ? $orden_compra->fecha_orden_compra : date('Y-m-d'); ?>" type="text">
+                                    <input id="fecha_orden_compra_" name="fecha_orden_compra_" on class="form-control form-control-sm"  value="<?php echo isset($orden_compra) && $orden_compra->fecha_orden_compra ? $orden_compra->fecha_orden_compra : date('Y-m-d'); ?>" type="text" disabled>
+                                    <input id="fecha_orden_compra" name="fecha_orden_compra" on class="form-control form-control-sm"  value="<?php echo date('Y-m-d'); ?>" type="hidden">
                                 </div>
                                 <div id="label_fecha_vencimiento" class="col-lg-2" @if($orden_compra->id_tipo_documento != 2) style="display:none;" @endif>
                                     Fecha Vencimiento

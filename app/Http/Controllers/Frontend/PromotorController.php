@@ -221,9 +221,11 @@ class PromotorController extends Controller
 		//dd($hora_ingreso);exit();
         $tiendas = $tienda_model->getTiendasAll();
 
+		$promotores = $asistencia_promotor_model->getPromotoresAll();
+
 		$id=0;
 
-		return view('frontend.promotores.create_asistencia',compact('tiendas','id','hora_ingreso','empresa_retail'));
+		return view('frontend.promotores.create_asistencia',compact('tiendas','id','hora_ingreso','empresa_retail','promotores'));
 
 	}
 
@@ -371,6 +373,7 @@ class PromotorController extends Controller
 		$p[]=$request->fecha_fin;
 		$p[]=$id_user;
 		$p[]=$request->empresa_retail;
+		$p[]=$request->promotor;
         $p[]=$request->estado;
 		$p[]=$request->NumeroPagina;
 		$p[]=$request->NumeroRegistros;
@@ -421,13 +424,14 @@ class PromotorController extends Controller
 		return $radioTierra * $c;
 	}
 
-	public function exportar_asistencia($empresa_retail, $fecha_inicio, $fecha_fin, $estado) {
+	public function exportar_asistencia($empresa_retail, $fecha_inicio, $fecha_fin, $promotor, $estado) {
 
 		$id_user = Auth::user()->id;
 
 		if($empresa_retail==0)$empresa_retail = "";
 		if($fecha_inicio=="0")$fecha_inicio = "";
 		if($fecha_fin=="0")$fecha_fin = "";
+		if($promotor==0)$promotor = "";
         if($estado==0)$estado = "";
         
 		$asistencia_promotor_model = new AsistenciaPromotore;
@@ -435,6 +439,7 @@ class PromotorController extends Controller
 		$p[]=$fecha_fin;
 		$p[]=$id_user;
         $p[]=$empresa_retail;
+		$p[]=$promotor;
         $p[]=$estado;
 		$p[]=1;
 		$p[]=1000;

@@ -88,6 +88,12 @@ class OrdenCompra extends Model
 
     }
 
+    public function listar_reporte_autorizacion_pedido_ajax($p){
+
+        return $this->readFuntionPostgres('sp_listar_reporte_autorizacion_pedido_paginado',$p);
+
+    }
+
     public function readFuntionPostgres($function, $parameters = null){
 
         $_parameters = '';
@@ -652,5 +658,19 @@ class OrdenCompra extends Model
 
 		$data = DB::select($cad);
         return $data;
+    }
+
+    function getFechaAprobacionByIdPdf($id){
+
+        $cad = "select to_char(aoc.updated_at, 'dd-mm-yyyy') fecha_autorizacion from autorizacion_orden_compras aoc 
+        where aoc.id_orden_compra ='".$id."'
+        and aoc.id_proceso_pedido ='3'
+        and aoc.id_autorizacion ='2'
+        and aoc.estado ='1'
+        order by aoc.id desc 
+        limit 1";
+
+		$data = DB::select($cad);
+        if(isset($data[0]))return $data[0];
     }
 }

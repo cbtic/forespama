@@ -15,10 +15,10 @@
 }
 
 /* Verde seleccionado */
-.table-hover tbody tr.row_selected td{background-color:#239244!important;color:#ffffff!important}
+.table-hover tbody tr.row_selected td{background-color: #239244!important;color: #ffffff!important}
 
 .table td.verde{
-	background:#CAE983  !important
+	background: #CAE983  !important
 }
 
 #tblOrdenCompra tbody tr.even{

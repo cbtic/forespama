@@ -107,7 +107,14 @@ function datatablenew(){
                 }
             });
         },
-
+		"rowCallback": function (row, data) {
+			
+			if (data.estado_ingreso_acerrado == 0) {
+				$(row).addClass('fila-roja');
+			} else if (data.estado_ingreso_acerrado == 1) {
+				$(row).addClass('fila-verde');
+			}
+		},
         "aoColumnDefs":
             [	
 				{

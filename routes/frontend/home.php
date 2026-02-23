@@ -56,6 +56,7 @@ use App\Http\Controllers\Frontend\SedesController;
 use App\Http\Controllers\Frontend\FamiliaContablesController;
 use App\Http\Controllers\Frontend\CuentaContablesController;
 use App\Http\Controllers\Frontend\EquivalenciaSubFamiliaFamiliaContablesController;
+use App\Http\Controllers\Frontend\DescansoController;
 
 //use App\Http\Controllers\VehiculoController;
 
@@ -107,6 +108,10 @@ Route::get('comprobante/lista_pagos_anio/{anio}/{empresa}', [ComprobanteControll
 Route::get('comprobante/lista_retencion_anio/{anio}/{empresa}', [ComprobanteController::class, 'lista_retencion_anio'])->name('comprobante.lista_retencion_anio');
 Route::get('comprobante/lista_cobros_anio/{anio}/{empresa}', [ComprobanteController::class, 'lista_cobros_anio'])->name('comprobante.lista_cobros_anio');
 Route::post('comprobante/send_detalle_factura', [ComprobanteController::class, 'send_detalle_factura'])->name('comprobante.send_detalle_factura');
+Route::get('comprobante/create_facturacion_promart', [ComprobanteController::class, 'create_facturacion_promart'])->name('comprobante.create_facturacion_promart');
+Route::post('comprobante/upload_factura_promart', [ComprobanteController::class, 'upload_factura_promart'])->name('comprobante.upload_factura_promart');
+Route::post('comprobante/listar_factura_promart_ajax', [ComprobanteController::class, 'listar_factura_promart_ajax'])->name('comprobante.listar_factura_promart_ajax');
+Route::get('comprobante/modal_factura_promart_detalle/{id}', [ComprobanteController::class, 'modal_factura_promart_detalle'])->name('comprobante.modal_factura_promart_detalle');
 
 Route::get('ingreso_vehiculo_tronco/modal_placa/{id}', [IngresoVehiculoTroncoController::class, 'modal_placa'])->name('ingreso_vehiculo_tronco.modal_placa');
 Route::get('ingreso_vehiculo_tronco/modal_empresa/{id}', [IngresoVehiculoTroncoController::class, 'modal_empresa'])->name('ingreso_vehiculo_tronco.modal_empresa');
@@ -656,7 +661,7 @@ Route::get('ingreso_vehiculo_tronco/exportar_reporte_pago/{fecha_inicio}/{fecha_
 Route::get('orden_compra/generar_lpn/{id_orden_compra}', [OrdenCompraController::class, 'generar_lpn'])->name('orden_compra.generar_lpn');
 Route::get('orden_compra/create_reporte_comercializacion', [OrdenCompraController::class, 'create_reporte_comercializacion'])->name('orden_compra.create_reporte_comercializacion');
 Route::post('orden_compra/listar_reporte_comercializacion_ajax', [OrdenCompraController::class, 'listar_reporte_comercializacion_ajax'])->name('orden_compra.listar_reporte_comercializacion_ajax');
-Route::get('orden_compra/exportar_reporte_comercializacion/{empresa_compra}/{fecha_inicio}/{fecha_fin}/{numero_orden_compra_cliente}/{situacion}/{codigo_producto}/{producto}/{vendedor}/{estado_pedido}/{canal}', [OrdenCompraController::class, 'exportar_reporte_comercializacion'])->name('orden_compra.exportar_reporte_comercializacion');
+Route::get('orden_compra/exportar_reporte_comercializacion/{empresa_compra}/{fecha_inicio}/{fecha_fin}/{fecha_inicio_facturado}/{fecha_fin_facturado}/{numero_orden_compra_cliente}/{situacion}/{codigo_producto}/{producto}/{vendedor}/{estado_pedido}/{canal}', [OrdenCompraController::class, 'exportar_reporte_comercializacion'])->name('orden_compra.exportar_reporte_comercializacion');
 Route::get('requerimiento/exportar_listar_requerimiento_reporte/{tipo_documento}/{fecha_inicio}/{fecha_fin}/{numero_requerimiento}/{almacen}/{situacion}/{responsable_atencion}/{estado_atencion}/{tipo_requerimiento}/{estado}/{producto}/{denominacion_producto}', [RequerimientoController::class, 'exportar_listar_requerimiento_reporte'])->name('requerimiento.exportar_listar_requerimiento_reporte');
 Route::post('orden_compra/upload_orden_distribucion', [OrdenCompraController::class, 'upload_orden_distribucion'])->name('orden_compra.upload_orden_distribucion');
 Route::post('comprobante/listar_factura_sodimac_ajax', [ComprobanteController::class, 'listar_factura_sodimac_ajax'])->name('comprobante.listar_factura_sodimac_ajax');
@@ -857,7 +862,7 @@ Route::post('orden_compra/listar_orden_compra_proceso_ajax', [OrdenCompraControl
 Route::get('orden_compra/exportar_listar_orden_compra_individual/{id}', [OrdenCompraController::class, 'exportar_listar_orden_compra_individual'])->name('orden_compra.exportar_listar_orden_compra_individual');
 Route::post('orden_compra/upload_orden_compra_promart', [OrdenCompraController::class, 'upload_orden_compra_promart'])->name('orden_compra.upload_orden_compra_promart');
 Route::post('orden_compra/send_duplicar_orden_compra', [OrdenCompraController::class, 'send_duplicar_orden_compra'])->name('orden_compra.send_duplicar_orden_compra');
-Route::get('promotores/exportar_asistencia/{empresa_retail}/{fecha_inicio}/{fecha_fin}/{estado}', [PromotorController::class, 'exportar_asistencia'])->name('promotores.exportar_asistencia');
+Route::get('promotores/exportar_asistencia/{empresa_retail}/{fecha_inicio}/{fecha_fin}/{promotor}/{estado}', [PromotorController::class, 'exportar_asistencia'])->name('promotores.exportar_asistencia');
 Route::get('requerimiento/modal_agregar_cotizacion/{id}', [RequerimientoController::class, 'modal_agregar_cotizacion'])->name('requerimiento.modal_agregar_cotizacion');
 Route::get('requerimiento/cargar_detalle_requerimiento_cotizacion/{id}', [RequerimientoController::class, 'cargar_detalle_requerimiento_cotizacion'])->name('requerimiento.cargar_detalle_requerimiento_cotizacion');
 Route::post('requerimiento/send_cotizacion_requerimiento', [RequerimientoController::class, 'send_cotizacion_requerimiento'])->name('requerimiento.send_cotizacion_requerimiento');
@@ -907,5 +912,13 @@ Route::get('equivalencia_sub_familia_familia_contable/eliminar_equivalencia_sub_
 Route::get('acerrado_madera/cargar_acerrado_pendiente', [AcerradoMaderaController::class, 'cargar_acerrado_pendiente'])->name('acerrado_madera.cargar_acerrado_pendiente');
 Route::get('productos/obtener_producto_acerrado/{tipo_madera}/{medida}', [ProductosController::class, 'obtener_producto_acerrado'])->name('productos.obtener_producto_acerrado');
 
+Route::get('orden_compra/create_reporte_autorizacion_pedido', [OrdenCompraController::class, 'create_reporte_autorizacion_pedido'])->name('orden_compra.create_reporte_autorizacion_pedido');
+Route::post('orden_compra/listar_reporte_autorizacion_pedido_ajax', [OrdenCompraController::class, 'listar_reporte_autorizacion_pedido_ajax'])->name('orden_compra.listar_reporte_autorizacion_pedido_ajax');
+Route::get('orden_compra/modal_autorizacion_pedido/{id}', [OrdenCompraController::class, 'modal_autorizacion_pedido'])->name('orden_compra.modal_autorizacion_pedido');
 
-
+Route::get('descanso/create', [DescansoController::class, 'create'])->name('descanso.create');
+Route::post('descanso/listar_descanso_ajax', [DescansoController::class, 'listar_descanso_ajax'])->name('descanso.listar_descanso_ajax');
+Route::get('descanso/modal_descanso/{id}', [DescansoController::class, 'modal_descanso'])->name('descanso.modal_descanso');
+Route::post('descanso/send_descanso', [DescansoController::class, 'send_descanso'])->name('descanso.send_descanso');
+Route::get('descanso/eliminar_descanso/{id}/{estado}', [DescansoController::class, 'eliminar_descanso'])->name('descanso.eliminar_descanso');
+Route::get('descanso/cargar_detalle/{id}', [DescansoController::class, 'cargar_detalle'])->name('descanso.cargar_detalle');

@@ -24,6 +24,10 @@ class Comprobante extends Model
 		return $this->readFuntionPostgres('sp_listar_sodimac_factura_paginado',$p);
     }
 
+    public function listar_factura_promart_ajax($p){
+		return $this->readFuntionPostgres('sp_listar_promart_factura_paginado',$p);
+    }
+
     public function listar_factura_sodimac_detalle_ajax($p){
 		return $this->readFuntionPostgres('sp_listar_comprobante_sodimac_detalle_paginado',$p);
     }

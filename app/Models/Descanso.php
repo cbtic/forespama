@@ -6,13 +6,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use DB;
 
-class AsistenciaPromotore extends Model
+class Descanso extends Model
 {
     use HasFactory;
 
-    public function listar_asistencia_promotores_ajax($p){
+    public function listar_descanso_ajax($p){
 
-        return $this->readFuntionPostgres('sp_listar_asistencia_promotor_paginado',$p);
+        return $this->readFuntionPostgres('sp_listar_descanso_paginado',$p);
 
     }
 
@@ -32,25 +32,17 @@ class AsistenciaPromotore extends Model
 
     }
 
-    function getHoraIngresoDiario($id_promotor, $fecha){
+    function getDetalleDescansoId($id){
 
-        $cad = "select ap.hora_entrada from asistencia_promotores ap 
-        where ap.id_promotor ='".$id_promotor."'
-        and ap.fecha ='".$fecha."'
-        and ap.estado ='1'
-        order by 1 asc
-        limit 1";
-
-		$data = DB::select($cad);
-        return $data;
-    }
-
-    function getPromotoresAll(){
-
-        $cad = "select distinct u.id, u.name promotor from  asistencia_promotores ap 
-        inner join users u on ap.id_promotor = u.id 
-        where u.active = '1'";
-
+        $cad = "select dd.id,  ROW_NUMBER() OVER (PARTITION BY dd.id_descanso  ) AS row_num, dd.id_producto, p.codigo, p.denominacion nombre_producto, p.id_unidad_medida, 
+        dd.cantidad 
+        from descanso_detalles dd 
+        inner join productos p on dd.id_producto = p.id
+        inner join descansos d on dd.id_descanso = d.id
+        where dd.id_descanso ='".$id."'
+        and dd.estado='1'
+        order by dd.id asc";
+        
 		$data = DB::select($cad);
         return $data;
     }

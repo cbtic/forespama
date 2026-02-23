@@ -196,6 +196,13 @@ $(document).ready(function() {
                         <td class="td" style ="text-align: left; width: 20%;"><?php echo $direccion; ?></td>
                         <td class="td" style ="text-align: left; width: 10%;"></td>
                     </tr>
+                    <?php if($fecha_aprobacion_pago){?>
+                    <tr>
+                        <td class="td" style ="text-align: left; width: 10%;"><b>Pago Aprobado a Fecha:</b></td>
+                        <td class="td" style ="text-align: left; width: 20%;"><?php echo $fecha_aprobacion_pago; ?></td>
+                        <td class="td" style ="text-align: left; width: 10%;"></td>
+                    </tr>
+                    <?php }?>
                 </tbody>
             </table>
             &nbsp;

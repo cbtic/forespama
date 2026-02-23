@@ -359,6 +359,18 @@ label.form-control-sm{
 									</div>
 
 									<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+										<select name="situacion_bus" id="situacion_bus" class="form-control form-control-sm filtro-select">
+											<option value="">--Seleccionar Situaci&oacute;n--</option>
+											<?php
+											foreach ($cerrado as $row){?>
+												<option value="<?php echo $row->codigo ?>" <?php if($row->codigo=='1')echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+												<?php 
+											}
+											?>
+										</select>
+									</div>
+
+									<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
 										<select name="estado_bus" id="estado_bus" class="form-control form-control-sm">
 											<option value="">Todos</option>
 											<option value="1" selected="selected">Activo</option>
@@ -368,8 +380,8 @@ label.form-control-sm{
 									
 									<div class="col-lg-5 col-md-5 col-sm-12 col-xs-12" style="padding-right:0px">
 										<input class="btn btn-warning btn-sm pull-rigth" value="Buscar" type="button" id="btnBuscar" />
-										<input class="btn btn-success btn-sm pull-rigth" value="Nuevo" type="button" id="btnNuevoIngreso" style="margin-left:15px" />
-										<input class="btn btn-success btn-sm pull-rigth" value="Nuevo" type="button" id="btnNuevoSalida" style="margin-left:15px" />
+										<input class="btn btn-success btn-sm pull-rigth" value="Nuevo Ingreso" type="button" id="btnNuevoIngreso" style="margin-left:15px" />
+										<!--<input class="btn btn-success btn-sm pull-rigth" value="Nuevo" type="button" id="btnNuevoSalida" style="margin-left:15px" />-->
 									</div>
 								</div>
 

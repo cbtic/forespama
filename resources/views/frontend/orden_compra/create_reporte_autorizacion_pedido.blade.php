@@ -2,16 +2,6 @@
 <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" defer></script>
 <style type="text/css">
 
-.table-hover tbody tr.row_selected td{background-color:#239244!important;color:#ffffff!important}
-
-.table td.verde{
-	background:#CAE983  !important
-}
-
-#tblOrdenCompra tbody tr.even{
-	/*display: none !important*/ 
-}
-
 body {
     background-color: #bdc3c7;
 }
@@ -152,12 +142,6 @@ input:focus + .slider {
   box-shadow: 0 0 1px #2196F3;
 }
 
-input:checked + .slider:before {
-  -webkit-transform: translateX(26px);
-  -ms-transform: translateX(26px);
-  transform: translateX(26px);
-}
-
 /* Rounded sliders */
 .slider.round {
   border-radius: 34px;
@@ -165,23 +149,6 @@ input:checked + .slider:before {
 
 .slider.round:before {
   border-radius: 50%;
-}
-
-.no {padding-right:3px;padding-left:0px;display:block;width:20px;float:left;font-size:11px;text-align:right;padding-top:5px}
-.si {padding-right:0px;padding-left:3px;display:block;width:20px;float:left;font-size:11px;text-align:left;padding-top:5px}
-
-.flotante {
-    display:inline;
-        position:fixed;
-        bottom:0px;
-        right:0px;
-		z-index:1000
-}
-.flotanteC {
-    display:inline;
-        position:fixed;
-        bottom:65px;
-        right:0px;
 }
 
 label.form-control-sm{
@@ -268,12 +235,12 @@ label.form-control-sm{
 
 @extends('frontend.layouts.app')
 
-@section('title', __('Reporte de Comercializacion'))
+@section('title', __('Reporte de Autorizacion de Pedidos'))
 
 @section('breadcrumb')
 <ol class="breadcrumb" style="padding-left:130px;margin-top:0px;background-color:#283659">
     <li class="breadcrumb-item text-primary">Inicio</li>
-    <li class="breadcrumb-item active">Reporte de Comercializaci&oacute;n</li>
+    <li class="breadcrumb-item active">Reporte de Autorizaci&oacute;n de Pedidos</li>
     </li>
 </ol>
 
@@ -299,7 +266,7 @@ label.form-control-sm{
 
         <div class="card-body">
 
-            <form class="form-horizontal" method="post" action="" id="frmReporteComercializacion" autocomplete="off" enctype="multipart/form-data">
+            <form class="form-horizontal" method="post" action="" id="frmReporteAutorizacionPedido" autocomplete="off" enctype="multipart/form-data">
 				
                 <div class="row">
                     <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12" style="margin-top:15px">
@@ -309,7 +276,7 @@ label.form-control-sm{
 						<div class="card-header bg-white border-bottom">
 							<h5 class="mb-0 text-primary">
 								<i class="fas fa-chart-line me-2"></i>
-								Reporte de Comercializaci&oacute;n
+								Reporte de Autorizaci&oacute;n de Pedidos
 							</h5>
 						</div>
                     </div>
@@ -339,7 +306,7 @@ label.form-control-sm{
 									</select>
 								</div>
 
-								<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+								<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
 									<select name="empresa_compra_bus" id="empresa_compra_bus" class="form-control form-control-sm filtro-select">
 										<option value="">--Seleccionar Empresa Compra--</option>
 										<?php
@@ -352,54 +319,34 @@ label.form-control-sm{
 								</div>
 
 								<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-									<input id="fecha_inicio_bus" name="fecha_inicio_bus" on class="form-control form-control-sm filtro-input"  placeholder="Fecha Inicio">
+									<input id="fecha_inicio_bus" name="fecha_inicio_bus" on class="form-control form-control-sm filtro-input" style=" content: \f073;" placeholder="Fecha Inicio">
 								</div>
 
 								<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-									<input class="form-control form-control-sm filtro-input" id="fecha_fin_bus" name="fecha_fin_bus" placeholder="Fecha Fin">
+									<input id="fecha_fin_bus" name="fecha_fin_bus" on class="form-control form-control-sm filtro-input"  placeholder="Fecha Fin">
 								</div>
 
 								<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-									<input id="fecha_inicio_facturado_bus" name="fecha_inicio_facturado_bus" on class="form-control form-control-sm filtro-input"  placeholder="Fecha Inicio Factura">
+									<input id="numero_orden_compra_bus" name="numero_orden_compra_bus" on class="form-control form-control-sm filtro-input"  placeholder="N&uacute;mero Orden Compra">
 								</div>
-
-								<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-									<input class="form-control form-control-sm filtro-input" id="fecha_fin_facturado_bus" name="fecha_fin_facturado_bus" placeholder="Fecha Fin Factura">
-								</div>
-
-								<!--<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-									<input id="numero_orden_compra_bus" name="numero_orden_compra_bus" on class="form-control form-control-sm"  placeholder="N&uacute;mero Orden Compra">
-								</div>-->
 
 								<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
 									<input id="numero_orden_compra_cliente_bus" name="numero_orden_compra_cliente_bus" on class="form-control form-control-sm filtro-input"  placeholder="N&uacute;mero OC Cliente">
 								</div>
 
 								<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-									<input id="codigo_producto_bus" name="codigo_producto_bus" on class="form-control form-control-sm filtro-input"  placeholder="C&oacute;digo Producto">
-								</div>
-
-								<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-									<select name="producto_bus" id="producto_bus" class="form-control form-control-sm filtro-select">
-										<option value="">--Seleccionar Producto--</option>
+									<select name="situacion_bus" id="situacion_bus" class="form-control form-control-sm filtro-select">
+										<option value="">--Seleccionar Situaci&oacute;n--</option>
 										<?php
-										foreach ($productos as $row){?>
-											<option value="<?php echo $row->id ?>"><?php echo $row->denominacion ?></option>
+										foreach ($cerrado_orden_compra as $row){?>
+											<option value="<?php echo $row->codigo ?>" <?php if($row->codigo=='1')echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
 											<?php 
 										}
 										?>
 									</select>
 								</div>
 
-								<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-									<select name="situacion_bus" id="situacion_bus" class="form-control form-control-sm filtro-select">
-										<option value="" selected="selected">--Seleccionar Atendido--</option>
-										<option value="1">NO</option>
-										<option value="2">SI</option>
-									</select>
-								</div>
-
-								<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+								<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
 									<select name="vendedor_bus" id="vendedor_bus" class="form-control form-control-sm filtro-select">
 										<option value="">--Seleccionar Vendedor--</option>
 										<?php
@@ -410,16 +357,12 @@ label.form-control-sm{
 										?>
 									</select>
 								</div>
-
-								<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-									<select name="estado_pedido_bus" id="estado_pedido_bus" class="form-control form-control-sm filtro-select">
-										<option value="">--Seleccionar Estado Pedido--</option>
-										<?php
-										foreach ($estado_pedido as $row){?>
-											<option value="<?php echo $row->codigo ?>" <?php echo ($row->codigo == '1') ? 'selected' : ''; ?>><?php echo $row->denominacion ?></option>
-											<?php 
-										}
-										?>
+								
+								<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+									<select name="estado_bus" id="estado_bus" class="form-control form-control-sm filtro-select">
+										<option value="">Todos</option>
+										<option value="1" selected="selected">Activo</option>
+										<option value="0">Eliminado</option>
 									</select>
 								</div>
 							</div>
@@ -428,16 +371,8 @@ label.form-control-sm{
 						<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
 							<div class="row">
 								<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding-right:0px">
-									<!--<input class="btn btn-warning pull-rigth" value="Buscar" type="button" id="btnBuscar" />-->
 									<button type="button" id="btnBuscar" class="btn btn-sm btn-warning pull-rigth icono-botones2" style="margin-left:10px">
 										<i class="fas fa-search" style="font-size:18px;"></i> Buscar
-									</button>
-									<!--<input class="btn btn-success pull-rigth" value="Nuevo" type="button" id="btnNuevo" style="margin-left:10px" />
-									<input class="btn btn-secondary pull-rigth" value="Excel" name="excel" type="button" id="btnDescargar" style="margin-left:15px;margin-right:10px;"/>-->
-									
-									<button id="btnDescargar" type="button" class="btn btn-sm btn-secondary pull-rigth" style="margin-left:10px;">
-										<i class="fas fa-download" style="font-size:18px;"></i> Excel
-										<!--<img src="/img/icono_carro.png" alt="Carro" style="width: 16px; height: 16px; margin-left: 5px;">-->
 									</button>
 								</div>
 							</div>
@@ -448,27 +383,19 @@ label.form-control-sm{
                 <div class="card-body">
 
                     <div class="table-responsive">
-                    <table id="tblReporteComercializacion" class="table table-hover table-sm">
+                    <table id="tblReporteAutorizacionPedido" class="table table-hover table-sm">
                         <thead>
                         <tr style="font-size:13px">
-                            <th>Cliente</th>
-							<th>Orden Compra</th>
-							<th>Pedido</th>
-							<th>Fecha Pedido</th>
-                            <th>Fecha Vencimiento</th>
-                            <th>Fecha Entrega Real</th>
-                            <th>Fecha Facturado</th>
-							<th>C&oacute;digo Interno</th>
-							<th>C&oacute;digo Retail</th>
-							<th>Descripci&oacute;n</th>
-							<th>Precio Unitario</th>
-							<th>Descuento</th>
-							<th>Cantidad Pedida</th>
-							<th>Cantidad Entregada</th>
-							<th>Cantidad Cancelada</th>
-							<th>Pendiente Entrega</th>
+                            <th>Id</th>
+							<th>Canal</th>
+							<th>Empresa Compra</th>
+							<th>N° OC Cliente</th>
+							<th>Fecha</th>
+							<th>N&uacute;mero OC</th>
+							<th>Situaci&oacute;n</th>
 							<th>Vendedor</th>
-							<th>Estado Pedido</th>
+							<th>Etapa</th>
+							<th>Acciones</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -504,59 +431,8 @@ label.form-control-sm{
 
 	<script type="text/javascript">
 
-	/*$(document).ready(function() {
-		$(".upload").on('click', function() {
-			var formData = new FormData();
-			var files = $('#image')[0].files[0];
-			formData.append('file',files);
-			$.ajax({
-				headers: {
-					'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-				},
-				url: "/ingreso_vehiculo_tronco/upload_imagen_ingreso",
-				type: 'post',
-				data: formData,
-				contentType: false,
-				processData: false,
-				success: function(response) {
-					
-					var ind_img = $("#ind_img").val();
-					
-					if (response != 0) {
-						$("#img_ruta_"+ind_img).attr("src", "/img/ingreso/tmp/"+response).show();
-						$(".delete_ruta").show();
-						$("#img_foto_"+ind_img).val(response);
-
-						ind_img++;
-
-						var newRow = "";
-						newRow += '<div class="img_ruta">';
-						newRow += '<img src="" id="img_ruta_'+ind_img+'" width="130px" height="165px" alt="" style="text-align:center;margin-top:8px;display:none;margin-left:10px" />';
-						newRow += '<span class="delete_ruta" style="display:none" onclick="DeleteImagen(this)"></span>';
-						newRow += '<input type="hidden" id="img_foto_'+ind_img+'" name="img_foto[]" value="" />';
-						newRow += '</div>';
-
-						$("#divImagenes").append(newRow);
-						$("#ind_img").val(ind_img);
-
-					} else {
-						alert('Formato de imagen incorrecto.');
-					}
-					
-				}
-			});
-			return false;
-		});
-
-		$(".delete").on('click', function() {
-			$("#img_ruta0").attr("src", "/dist/img/profile-icon.png");
-			$("#img_foto0").val("");
-		});
-
-	});*/
-
 	</script>
 
-	<script src="{{ asset('js/reporteComercializacion.js') }}"></script>
+	<script src="{{ asset('js/reporteAutorizacionPedido.js') }}"></script>
 
 	@endpush

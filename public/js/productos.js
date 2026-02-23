@@ -301,6 +301,15 @@ function datatablenew(){
 				"aTargets": [17]
 				},
 				{
+				"mRender": function (data, type, row) {
+					var usuario_inserta = "";
+					if(row.usuario_inserta!= null)usuario_inserta = row.usuario_inserta;
+					return usuario_inserta;
+				},
+				"bSortable": true,
+				"aTargets": [18]
+				},
+				{
 					"mRender": function (data, type, row) {
 						var estado = "";
 						if(row.estado == 1){
@@ -312,7 +321,7 @@ function datatablenew(){
 						return estado;
 					},
 					"bSortable": false,
-					"aTargets": [18]
+					"aTargets": [19]
 				},
 				{
 					"mRender": function (data, type, row) {
@@ -339,7 +348,7 @@ function datatablenew(){
 						return html;
 					},
 					"bSortable": false,
-					"aTargets": [19],
+					"aTargets": [20],
 				},
             ]
     });

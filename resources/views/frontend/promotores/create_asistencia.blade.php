@@ -398,6 +398,17 @@ label.form-control-sm{
                           ?>
                         </select>
                       </div>
+                      <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+                        <select name="promotor_bus" id="promotor_bus" class="form-control form-control-sm filtro-select">
+                          <option value="">--Seleccionar Promotor--</option>
+                          <?php
+                          foreach ($promotores as $row){?>
+                            <option value="<?php echo $row->id ?>"><?php echo $row->promotor ?></option>
+                            <?php 
+                          }
+                          ?>
+                        </select>
+                      </div>
                       <div class="col-lg-2 col-md-2 col-sm-6 col-xs-6">
                         <input id="fecha_inicio_bus" name="fecha_inicio_bus" on class="form-control form-control-sm filtro-input"  placeholder="Fecha Inicio">
                       </div>

@@ -66,6 +66,8 @@ class OrdenCompraController extends Controller
 		$this->middleware('can:Reporte Comercializacion Tienda')->only(['create_reporte_comercializacion_tienda']);
 		$this->middleware('can:Reporte Pedidos Tienda')->only(['create_reporte_comercializacion_solicitado_tienda']);
 		$this->middleware('can:Reporte Comercializacion General')->only(['create_reporte_comercializacion_general']);
+		$this->middleware('can:Reporte Comercializacion')->only(['exportar_reporte_comercializacion']);
+		$this->middleware('can:Reporte Autorizacion Pedidos')->only(['create_reporte_autorizacion_pedido']);
 	}
 
     public function create(){
@@ -588,8 +590,9 @@ class OrdenCompraController extends Controller
         $tiendas_orden_compra_detalle = $tienda_detalle_orden_compra_model->getDetalleTiendaOrdenCompraId($id);
         $tiendas_orden_compra = $tienda_orden_compra_model->getTiendaOrdenCompraId($id);
 
-        $datos=$orden_compra_model->getOrdenCompraByIdPdf($id);
-        $datos_detalle=$orden_compra_detalle_model->getDetalleOrdenCompraPdf($id);
+        $datos = $orden_compra_model->getOrdenCompraByIdPdf($id);
+        $datos_detalle = $orden_compra_detalle_model->getDetalleOrdenCompraPdf($id);
+        $fecha_aprobacion_pago = $orden_compra_model->getFechaAprobacionByIdPdf($id);
 
         $tipo_documento=$datos[0]->tipo_documento;
         $empresa_compra=$datos[0]->cliente;
@@ -599,6 +602,11 @@ class OrdenCompraController extends Controller
         $numero_orden_compra_cliente = $datos[0]->numero_orden_compra_cliente;
         $igv=$datos[0]->igv;
         $direccion=$datos[0]->direccion;
+        if($fecha_aprobacion_pago){
+            $fecha_aprobacion_pago=$fecha_aprobacion_pago->fecha_autorizacion;
+        }else{
+            $fecha_aprobacion_pago="";
+        }
         
 		$year = Carbon::now()->year;
 
@@ -610,7 +618,7 @@ class OrdenCompraController extends Controller
 
 		$currentHour = Carbon::now()->format('H:i:s');
 
-		$pdf = Pdf::loadView('frontend.orden_compra.movimiento_orden_compra_pdf',compact('tipo_documento','empresa_compra','empresa_vende','fecha_orden_compra','numero_orden_compra','igv','datos_detalle','numero_orden_compra_cliente','tiendas_orden_compra_detalle','tiendas_orden_compra','direccion'));
+		$pdf = Pdf::loadView('frontend.orden_compra.movimiento_orden_compra_pdf',compact('tipo_documento','empresa_compra','empresa_vende','fecha_orden_compra','numero_orden_compra','igv','datos_detalle','numero_orden_compra_cliente','tiendas_orden_compra_detalle','tiendas_orden_compra','direccion','fecha_aprobacion_pago'));
 
 		$pdf->setPaper('A4'); // Tamaño de papel (puedes cambiarlo según tus necesidades)
 
@@ -1571,6 +1579,8 @@ class OrdenCompraController extends Controller
 		$p[]=$request->empresa_compra;
         $p[]=$request->fecha_inicio;
         $p[]=$request->fecha_fin;
+        $p[]=$request->fecha_inicio_facturado;
+        $p[]=$request->fecha_fin_facturado;
         $p[]=$request->numero_orden_compra_cliente;
         $p[]=$request->situacion;
         $p[]=$request->codigo_producto;
@@ -1596,11 +1606,13 @@ class OrdenCompraController extends Controller
 
 	}
 
-    public function exportar_reporte_comercializacion($empresa_compra, $fecha_inicio, $fecha_fin, $numero_orden_compra_cliente, $situacion, $codigo_producto, $producto, $vendedor, $estado_pedido, $canal) {
+    public function exportar_reporte_comercializacion($empresa_compra, $fecha_inicio, $fecha_fin, $fecha_inicio_facturado, $fecha_fin_facturado, $numero_orden_compra_cliente, $situacion, $codigo_producto, $producto, $vendedor, $estado_pedido, $canal) {
 
         if($empresa_compra==0)$empresa_compra = "";
         if($fecha_inicio=="0")$fecha_inicio = "";
         if($fecha_fin=="0")$fecha_fin = "";
+        if($fecha_inicio_facturado=="0")$fecha_inicio_facturado = "";
+        if($fecha_fin_facturado=="0")$fecha_fin_facturado = "";
         if($numero_orden_compra_cliente=="0")$numero_orden_compra_cliente = "";
         if($situacion==0)$situacion = "";
         if($codigo_producto=="0")$codigo_producto = "";
@@ -1613,6 +1625,8 @@ class OrdenCompraController extends Controller
 		$p[]=$empresa_compra;
         $p[]=$fecha_inicio;
         $p[]=$fecha_fin;
+        $p[]=$fecha_inicio_facturado;
+        $p[]=$fecha_fin_facturado;
         $p[]=$numero_orden_compra_cliente;
         $p[]=$situacion;
         $p[]=$codigo_producto;
@@ -3209,6 +3223,67 @@ class OrdenCompraController extends Controller
         }
 
         return response()->json(['success' => 'Observacion guardada exitosamente.']);
+
+    }
+
+    public function create_reporte_autorizacion_pedido(){
+
+        $id_user = Auth::user()->id;
+        $user_model = new User;
+
+		$tablaMaestra_model = new TablaMaestra;
+        $almacen_user_model = new Almacen_usuario;
+		$tipo_documento = $tablaMaestra_model->getMaestroByTipo(54);
+        $cerrado_orden_compra = $tablaMaestra_model->getMaestroByTipo(52);
+        $proveedor = Empresa::all();
+        $almacen = Almacene::all();
+        $almacen_usuario = $almacen_user_model->getAlmacenByUser($id_user);
+        $vendedor = $user_model->getUserByRol(7,11);
+		$estado_pedido = $tablaMaestra_model->getMaestroByTipo(77);
+		$prioridad = $tablaMaestra_model->getMaestroByTipo(93);
+		$canal = $tablaMaestra_model->getMaestroByTipo(98);
+		$bien_servicio = $tablaMaestra_model->getMaestroByTipo(73);
+		$estado_pedido_cancelado = $tablaMaestra_model->getMaestroByTipo(112);
+		
+		return view('frontend.orden_compra.create_reporte_autorizacion_pedido',compact('tipo_documento','cerrado_orden_compra','proveedor','almacen','almacen_usuario','vendedor','estado_pedido','prioridad','canal','bien_servicio','estado_pedido_cancelado','id_user'));
+
+	}
+
+    public function listar_reporte_autorizacion_pedido_ajax(Request $request){
+
+		$orden_compra_model = new OrdenCompra;
+		$p[]=$request->canal;
+        $p[]=$request->empresa_compra;
+        $p[]=$request->fecha_inicio;
+        $p[]=$request->fecha_fin;
+        $p[]=$request->numero_orden_compra;
+        $p[]=$request->numero_orden_compra_cliente;
+        $p[]=$request->situacion;
+        $p[]=$request->vendedor;
+        $p[]=$request->estado;
+		$p[]=$request->NumeroPagina;
+		$p[]=$request->NumeroRegistros;
+		$data = $orden_compra_model->listar_reporte_autorizacion_pedido_ajax($p);
+		$iTotalDisplayRecords = isset($data[0]->totalrows)?$data[0]->totalrows:0;
+
+		$result["PageStart"] = $request->NumeroPagina;
+		$result["pageSize"] = $request->NumeroRegistros;
+		$result["SearchText"] = "";
+		$result["ShowChildren"] = true;
+		$result["iTotalRecords"] = $iTotalDisplayRecords;
+		$result["iTotalDisplayRecords"] = $iTotalDisplayRecords;
+		$result["aaData"] = $data;
+
+        echo json_encode($result);
+
+	}
+
+	public function modal_autorizacion_pedido($id){
+
+        $autorizacion_orden_compra_model = new AutorizacionOrdenCompra;
+        $historial_autorizacion_pedido = $autorizacion_orden_compra_model->getHistorialAutorizacionPedido($id);
+
+        return view('frontend.orden_compra.modal_autorizacion_pedido',compact('id','historial_autorizacion_pedido'));
 
     }
 }

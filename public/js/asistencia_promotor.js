@@ -63,6 +63,8 @@ $(document).ready(function () {
 		dropdownParent: $('#openOverlayOpc2') 
 	})
 
+    $('#promotor_bus').select2({ width: '100%'})
+
     $('#btnDescargar').on('click', function () {
 		descargarAsistencia();
 	});
@@ -163,6 +165,7 @@ function datatablenew(){
 			var empresa_retail = $('#empresa_retail_bus').val();
 			var fecha_inicio = $('#fecha_inicio_bus').val();
 			var fecha_fin = $('#fecha_fin_bus').val();
+			var promotor = $('#promotor_bus').val();
 			var estado = $('#estado_bus').val();
 			
 			var _token = $('#_token').val();
@@ -172,7 +175,7 @@ function datatablenew(){
                 "type": "POST",
                 "url": sSource,
                 "data":{NumeroPagina:iNroPagina,NumeroRegistros:iCantMostrar,
-						empresa_retail:empresa_retail,fecha_inicio:fecha_inicio,fecha_fin:fecha_fin,estado:estado,
+						empresa_retail:empresa_retail,fecha_inicio:fecha_inicio,fecha_fin:fecha_fin,promotor:promotor,estado:estado,
 						_token:_token
                        },
                 "success": function (result) {
@@ -770,12 +773,14 @@ function descargarAsistencia(){
 	var empresa_retail = $('#empresa_retail_bus').val();
 	var fecha_inicio = $('#fecha_inicio_bus').val();
     var fecha_fin = $('#fecha_fin_bus').val();
+    var promotor = $('#promotor_bus').val();
     var estado = $('#estado_bus').val();
 	
 	if (empresa_retail == "")empresa_retail = "0";
 	if (fecha_inicio == "")fecha_inicio = "0";
 	if (fecha_fin == "")fecha_fin = "0";
+	if (promotor == "")promotor = 0;
 	if (estado == "")estado = 0;
     
-	location.href = '/promotores/exportar_asistencia/'+empresa_retail+'/'+fecha_inicio+'/'+fecha_fin+'/'+estado;
+	location.href = '/promotores/exportar_asistencia/'+empresa_retail+'/'+fecha_inicio+'/'+fecha_fin+'/'+promotor+'/'+estado;
 }

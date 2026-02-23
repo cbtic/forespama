@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddIdTipoDocumentoCobroToSodimacFacturaDetallesTable extends Migration
+class AddFechaEmisionToPromartFacturaDetallesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,8 @@ class AddIdTipoDocumentoCobroToSodimacFacturaDetallesTable extends Migration
      */
     public function up()
     {
-        Schema::table('sodimac_factura_detalles', function (Blueprint $table) {
-            $table->bigInteger('id_tipo_documento_cobro')->nullable();
-            $table->bigInteger('id_tienda')->nullable();
+        Schema::table('promart_factura_detalles', function (Blueprint $table) {
+            $table->date('fecha_emision')->nullable();
         });
     }
 
@@ -26,7 +25,7 @@ class AddIdTipoDocumentoCobroToSodimacFacturaDetallesTable extends Migration
      */
     public function down()
     {
-        Schema::table('sodimac_factura_detalles', function (Blueprint $table) {
+        Schema::table('promart_factura_detalles', function (Blueprint $table) {
             //
         });
     }

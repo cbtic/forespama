@@ -19,6 +19,13 @@ $(document).ready(function () {
 		}
 	});
 
+	$('#situacion_bus').keypress(function(e){
+		if(e.which == 13) {
+			datatablenew();
+			return false;
+		}
+	});
+
 	$('#estado_bus').keypress(function(e){
 		if(e.which == 13) {
 			datatablenew();
@@ -70,6 +77,7 @@ function datatablenew(){
             var iCantMostrar 	= aoData[4].value;
 			
             var fecha = $('#fecha_bus').val();
+            var situacion = $('#situacion_bus').val();
             var estado = $('#estado_bus').val();
 			
 			var _token = $('#_token').val();
@@ -79,7 +87,7 @@ function datatablenew(){
                 "type": "POST",
                 "url": sSource,
                 "data":{NumeroPagina:iNroPagina,NumeroRegistros:iCantMostrar,
-						fecha:fecha,estado:estado,_token:_token
+						fecha:fecha,situacion:situacion,estado:estado,_token:_token
                        },
                 "success": function (result) {
                     fnCallback(result);
