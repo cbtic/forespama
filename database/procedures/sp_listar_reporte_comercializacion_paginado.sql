@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION public.sp_listar_reporte_comercializacion_paginado(p_empresa_compra character varying, p_fecha_desde character varying, p_fecha_hasta character varying, p_numero_orden_compra_cliente character varying, p_situacion character varying, p_codigo_producto character varying, p_producto character varying, p_vendedor character varying, p_estado_pedido character varying, p_estado character varying, p_canal character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
+CREATE OR REPLACE FUNCTION public.sp_listar_reporte_comercializacion_paginado(p_empresa_compra character varying, p_fecha_desde character varying, p_fecha_hasta character varying, p_fecha_desde_facturado character varying, p_fecha_hasta_facturado character varying, p_numero_orden_compra_cliente character varying, p_situacion character varying, p_codigo_producto character varying, p_producto character varying, p_vendedor character varying, p_estado_pedido character varying, p_estado character varying, p_canal character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
  RETURNS refcursor
  LANGUAGE plpgsql
 AS $function$
@@ -25,7 +25,7 @@ begin
 	limit 1) fecha_salida,
 	p.codigo, ep.codigo_empresa, 
 	p.denominacion producto, ocd.precio, ocd.descuento, ocd.cantidad_requerida, coalesce(ocd.cantidad_despacho, 0) cantidad_despacho, coalesce((ocd.cantidad_requerida - ocd.cantidad_despacho), 0) cantidad_cancelada, ocd.cerrado, u."name" vendedor, tm.denominacion estado_pedido,
-	(select to_char(c.fecha,''dd-mm-yyyy'') fecha_facturado from comprobantes c where c.orden_compra::int = oc.id and c.anulado = ''N'' and c.estado = ''1'' limit 1) fecha_facturado ';
+	to_char(c.fecha,''dd-mm-yyyy'') fecha_facturado ';
 
 	v_tabla=' from orden_compras oc 
 	left join empresas e on oc.id_empresa_compra = e.id 
@@ -34,7 +34,8 @@ begin
 	left join users u on oc.id_vendedor = u.id
 	left join productos p on ocd.id_producto = p.id
 	left join equivalencia_productos ep on ep.codigo_producto = p.codigo and ep.id_empresa = oc.id_empresa_compra
-	inner join tabla_maestras tm on oc.estado_pedido::int = tm.codigo::int and tm.tipo = ''77'' ';
+	inner join tabla_maestras tm on oc.estado_pedido::int = tm.codigo::int and tm.tipo = ''77'' 
+	left join comprobantes c on oc.id = c.orden_compra::int and c.anulado = ''N'' and c.estado = ''1'' ';
 	
 	v_where = ' Where 1=1 and oc.id_tipo_documento = ''2'' and oc.estado_pedido = ''1'' ';
 
@@ -49,6 +50,14 @@ begin
 	If p_fecha_hasta<>'' Then
 	 v_where:=v_where||'And oc.fecha_orden_compra <= '''||p_fecha_hasta||''' ';
 	End If;	
+
+	If p_fecha_desde_facturado<>'' Then
+	 v_where:=v_where||'And c.fecha >= '''||p_fecha_desde_facturado||''' ';
+	End If;
+
+	If p_fecha_hasta_facturado<>'' Then
+	 v_where:=v_where||'And c.fecha <= '''||p_fecha_hasta_facturado||''' ';
+	End If;
 
 	If p_numero_orden_compra_cliente<>'' Then
 	 v_where:=v_where||'And oc.numero_orden_compra_cliente  = '''||p_numero_orden_compra_cliente||''' ';

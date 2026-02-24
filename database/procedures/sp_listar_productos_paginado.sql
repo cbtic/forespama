@@ -21,7 +21,7 @@ begin
     SELECT 1 
     FROM producto_imagenes pi 
     WHERE pi.id_producto = p.id) THEN 1 ELSE 0 
-	END) tiene_imagen, tm6.denominacion bien_servicio, f.denominacion familia, sf.denominacion sub_familia, tm7.denominacion aprobado, fc.denominacion familia_contable ';
+	END) tiene_imagen, tm6.denominacion bien_servicio, f.denominacion familia, sf.denominacion sub_familia, tm7.denominacion aprobado, fc.denominacion familia_contable, u.name usuario_inserta ';
 
 	v_tabla=' from productos p 
 	left join tabla_maestras tm on p.id_tipo_producto = tm.codigo::int and tm.tipo =''44''
@@ -34,7 +34,8 @@ begin
 	left join marcas m on p.id_marca = m.id
 	left join familias f on p.id_familia = f.id 
 	left join sub_familias sf on p.id_sub_familia = sf.id
-	left join familia_contables fc on p.id_familia_contable = fc.id ';
+	left join familia_contables fc on p.id_familia_contable = fc.id 
+	left join users u on p.id_usuario_inserta = u.id ';
 	
 	v_where = ' Where 1=1 ';
 

@@ -55,6 +55,22 @@ $(document).ready(function () {
         language: 'es'
     });
 
+	$('#fecha_inicio_facturado_bus').datepicker({
+        autoclose: true,
+		format: 'dd-mm-yyyy',
+		changeMonth: true,
+		changeYear: true,
+        language: 'es'
+    });
+
+	$('#fecha_fin_facturado_bus').datepicker({
+        autoclose: true,
+		format: 'dd-mm-yyyy',
+		changeMonth: true,
+		changeYear: true,
+        language: 'es'
+    });
+
 	$('#empresa_compra_bus').select2({ width : '100%' })
 
 	$('#producto_bus').select2({ width : '100%' })

@@ -31,12 +31,13 @@ begin
 	when k.id_dispensacion is not null then (select d.codigo from dispensaciones d where k.id_dispensacion = d.id)
 	when k.id_ingreso_produccion is not null then (select ip.codigo from ingreso_produccion ip where k.id_ingreso_produccion = ip.id)
 	when k.id_reuso is not null then (select r.codigo from reusos r where k.id_reuso = r.id)
-	end codigo_movimiento ';
+	end codigo_movimiento, u."name" usuario, to_char(k.created_at,''yyyy-mm-dd'') fecha_creacion ';
 
 	v_tabla=' from kardex k 
-	inner join productos p on k.id_producto = p.id
+	inner join productos p on k.id_producto = p.id 
 	left join almacenes a on k.id_almacen_destino = a.id 
-	left join almacenes a2 on k.id_almacen_salida = a2.id ';
+	left join almacenes a2 on k.id_almacen_salida = a2.id 
+	left join users u on k.id_usuario_inserta = u.id ';
 	
 	v_where = ' Where 1=1 ';
 

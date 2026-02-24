@@ -1,6 +1,4 @@
--- DROP FUNCTION public.sp_listar_asistencia_promotor_paginado(varchar, varchar, varchar, varchar, varchar, varchar, varchar, refcursor);
-
-CREATE OR REPLACE FUNCTION public.sp_listar_asistencia_promotor_paginado(p_fecha_inicio character varying, p_fecha_fin character varying, p_id_user character varying, p_empresa_retail character varying, p_estado character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
+CREATE OR REPLACE FUNCTION public.sp_listar_asistencia_promotor_paginado(p_fecha_inicio character varying, p_fecha_fin character varying, p_id_user character varying, p_empresa_retail character varying, p_promotor character varying, p_estado character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
  RETURNS refcursor
  LANGUAGE plpgsql
 AS $function$
@@ -43,6 +41,10 @@ begin
 	 v_where:=v_where||'And ap.id_promotor = '''||p_id_user||''' ';
 	End If;
 
+	If p_promotor<>'' Then
+	 v_where:=v_where||'And ap.id_promotor  = '''||p_promotor||''' ';
+	End If;
+
 	If p_estado<>'' Then
 	 v_where:=v_where||'And ap.estado  = '''||p_estado||''' ';
 	End If;
@@ -59,9 +61,9 @@ begin
 	v_col_count:=' ,'||v_count||' as TotalRows ';
 
 	If v_count::Integer > p_limit::Integer then
-		v_scad:='SELECT '||v_campos||v_col_count||v_tabla||v_where||' Order By ap.fecha desc, ap.id desc LIMIT '||p_limit||' OFFSET '||p_pagina||';'; 
+		v_scad:='SELECT '||v_campos||v_col_count||v_tabla||v_where||' Order By ap.id desc LIMIT '||p_limit||' OFFSET '||p_pagina||';'; 
 	else
-		v_scad:='SELECT '||v_campos||v_col_count||v_tabla||v_where||' Order By ap.fecha desc, ap.id desc;'; 
+		v_scad:='SELECT '||v_campos||v_col_count||v_tabla||v_where||' Order By ap.id desc;'; 
 	End If;
 
 	--Raise Notice '%',v_scad;

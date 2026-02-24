@@ -1,6 +1,4 @@
--- DROP FUNCTION public.sp_listar_ingreso_produccion_acerrado_madera_paginado(varchar, varchar, varchar, varchar, refcursor);
-
-CREATE OR REPLACE FUNCTION public.sp_listar_ingreso_produccion_acerrado_madera_paginado(p_fecha character varying, p_estado character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
+CREATE OR REPLACE FUNCTION public.sp_listar_ingreso_produccion_acerrado_madera_paginado(p_fecha_inicio character varying, p_fecha_fin character varying, p_situacion character varying, p_estado character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
  RETURNS refcursor
  LANGUAGE plpgsql
 AS $function$
@@ -29,7 +27,7 @@ begin
 	where p.id = ivt.id_persona)
 	else (select e2.ruc from empresas e2 
 	where e2.id = ivt.id_empresa_transportista ) 
-	end ruc, v.placa, tm.denominacion tipo_madera, ipd.cantidad_ingreso_tronco, ipd.estado, ipam.lote ';
+	end ruc, v.placa, tm.denominacion tipo_madera, ipd.cantidad_ingreso_tronco, ipd.estado, ipam.lote, ipd.estado_ingreso_acerrado ';
 
 	v_tabla=' from ingreso_produccion_acerrado_madera_detalles ipd 
 	inner join ingreso_produccion_acerrado_maderas ipam on ipd.id_ingreso_produccion_acerrado_maderas = ipam.id 
@@ -40,8 +38,16 @@ begin
 	
 	v_where = ' Where 1=1 ';
 
-	If p_fecha<>'' Then
-	 v_where:=v_where||'And ipam.fecha_ingreso = '''||p_fecha||''' ';
+	If p_fecha_inicio<>'' Then
+	 v_where:=v_where||'And ipam.fecha_ingreso >= '''||p_fecha_inicio||''' ';
+	End If;
+
+	If p_fecha_fin<>'' Then
+	 v_where:=v_where||'And ipam.fecha_ingreso <= '''||p_fecha_fin||''' ';
+	End If;
+
+	If p_situacion<>'' Then
+	 v_where:=v_where||'And ipd.estado_ingreso_acerrado = '''||p_situacion||''' ';
 	End If;
 
 	If p_estado<>'' Then
