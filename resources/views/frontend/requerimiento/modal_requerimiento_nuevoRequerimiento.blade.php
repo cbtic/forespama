@@ -25,6 +25,17 @@
   overflow-y: auto;
 }*/
 
+.modal-dialog {
+  max-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-content {
+  flex: 1 1 auto;
+  overflow: hidden;
+}
+
 .datepicker,
 .table-condensed {
   width: 250px;

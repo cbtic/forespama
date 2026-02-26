@@ -661,7 +661,7 @@ Route::get('ingreso_vehiculo_tronco/exportar_reporte_pago/{fecha_inicio}/{fecha_
 Route::get('orden_compra/generar_lpn/{id_orden_compra}', [OrdenCompraController::class, 'generar_lpn'])->name('orden_compra.generar_lpn');
 Route::get('orden_compra/create_reporte_comercializacion', [OrdenCompraController::class, 'create_reporte_comercializacion'])->name('orden_compra.create_reporte_comercializacion');
 Route::post('orden_compra/listar_reporte_comercializacion_ajax', [OrdenCompraController::class, 'listar_reporte_comercializacion_ajax'])->name('orden_compra.listar_reporte_comercializacion_ajax');
-Route::get('orden_compra/exportar_reporte_comercializacion/{empresa_compra}/{fecha_inicio}/{fecha_fin}/{fecha_inicio_facturado}/{fecha_fin_facturado}/{numero_orden_compra_cliente}/{situacion}/{codigo_producto}/{producto}/{vendedor}/{estado_pedido}/{canal}', [OrdenCompraController::class, 'exportar_reporte_comercializacion'])->name('orden_compra.exportar_reporte_comercializacion');
+Route::get('orden_compra/exportar_reporte_comercializacion/{empresa_compra}/{fecha_inicio}/{fecha_fin}/{fecha_inicio_facturado}/{fecha_fin_facturado}/{numero_orden_compra_cliente}/{situacion}/{codigo_producto}/{producto}/{vendedor}/{estado_pedido}/{tipo_producto}/{canal}', [OrdenCompraController::class, 'exportar_reporte_comercializacion'])->name('orden_compra.exportar_reporte_comercializacion');
 Route::get('requerimiento/exportar_listar_requerimiento_reporte/{tipo_documento}/{fecha_inicio}/{fecha_fin}/{numero_requerimiento}/{almacen}/{situacion}/{responsable_atencion}/{estado_atencion}/{tipo_requerimiento}/{estado}/{producto}/{denominacion_producto}', [RequerimientoController::class, 'exportar_listar_requerimiento_reporte'])->name('requerimiento.exportar_listar_requerimiento_reporte');
 Route::post('orden_compra/upload_orden_distribucion', [OrdenCompraController::class, 'upload_orden_distribucion'])->name('orden_compra.upload_orden_distribucion');
 Route::post('comprobante/listar_factura_sodimac_ajax', [ComprobanteController::class, 'listar_factura_sodimac_ajax'])->name('comprobante.listar_factura_sodimac_ajax');
@@ -922,3 +922,4 @@ Route::get('descanso/modal_descanso/{id}', [DescansoController::class, 'modal_de
 Route::post('descanso/send_descanso', [DescansoController::class, 'send_descanso'])->name('descanso.send_descanso');
 Route::get('descanso/eliminar_descanso/{id}/{estado}', [DescansoController::class, 'eliminar_descanso'])->name('descanso.eliminar_descanso');
 Route::get('descanso/cargar_detalle/{id}', [DescansoController::class, 'cargar_detalle'])->name('descanso.cargar_detalle');
+

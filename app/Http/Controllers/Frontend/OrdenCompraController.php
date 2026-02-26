@@ -1568,8 +1568,9 @@ class OrdenCompraController extends Controller
         $vendedor = $user_model->getUserByRol(7,11);
         $estado_pedido = $tablaMaestra_model->getMaestroByTipo(77);
 		$canal = $tablaMaestra_model->getMaestroByTipo(98);
+        $bien_servicio = $tablaMaestra_model->getMaestroByTipo(73);
 
-		return view('frontend.orden_compra.create_reporte_comercializacion',compact('tipo_documento','cerrado_orden_compra','proveedor','tiendas','productos','vendedor','estado_pedido','canal'));
+		return view('frontend.orden_compra.create_reporte_comercializacion',compact('tipo_documento','cerrado_orden_compra','proveedor','tiendas','productos','vendedor','estado_pedido','canal','bien_servicio'));
 
 	}
 
@@ -1587,6 +1588,7 @@ class OrdenCompraController extends Controller
         $p[]=$request->producto;
         $p[]=$request->vendedor;
         $p[]=$request->estado_pedido;
+        $p[]=$request->tipo_producto;
         $p[]=1;
         $p[]=$request->canal;
         $p[]=$request->NumeroPagina;
@@ -1606,7 +1608,7 @@ class OrdenCompraController extends Controller
 
 	}
 
-    public function exportar_reporte_comercializacion($empresa_compra, $fecha_inicio, $fecha_fin, $fecha_inicio_facturado, $fecha_fin_facturado, $numero_orden_compra_cliente, $situacion, $codigo_producto, $producto, $vendedor, $estado_pedido, $canal) {
+    public function exportar_reporte_comercializacion($empresa_compra, $fecha_inicio, $fecha_fin, $fecha_inicio_facturado, $fecha_fin_facturado, $numero_orden_compra_cliente, $situacion, $codigo_producto, $producto, $vendedor, $estado_pedido, $tipo_producto, $canal) {
 
         if($empresa_compra==0)$empresa_compra = "";
         if($fecha_inicio=="0")$fecha_inicio = "";
@@ -1619,6 +1621,7 @@ class OrdenCompraController extends Controller
         if($producto==0)$producto = "";
         if($vendedor==0)$vendedor = "";
         if($estado_pedido==0)$estado_pedido = "";
+        if($tipo_producto==0)$tipo_producto = "";
         if($canal==0)$canal = "";
         
         $orden_compra_model = new OrdenCompra;
@@ -1633,10 +1636,11 @@ class OrdenCompraController extends Controller
         $p[]=$producto;
         $p[]=$vendedor;
         $p[]=$estado_pedido;
+        $p[]=$tipo_producto;
         $p[]=1;
         $p[]=$canal;
         $p[]=1;
-		$p[]=10000;
+		$p[]=15000;
 		$data = $orden_compra_model->listar_reporte_comercializacion_ajax($p);
 		$iTotalDisplayRecords = isset($data[0]->totalrows)?$data[0]->totalrows:0;
 		
@@ -1726,7 +1730,7 @@ class OrdenCompraController extends Controller
         $p[]=$tienda;
         $p[]=1;
         $p[]=1;
-		$p[]=10000;
+		$p[]=15000;
 		$data = $orden_compra_model->listar_reporte_comercializacion_tienda_ajax($p);
 		$iTotalDisplayRecords = isset($data[0]->totalrows)?$data[0]->totalrows:0;
 		

@@ -39,6 +39,13 @@ $(document).ready(function () {
 		}
 	});
 
+	$('#tipo_producto_bus').keypress(function(e){
+		if(e.which == 13) {
+			datatablenew();
+			return false;
+		}
+	});
+
 	$('#fecha_inicio_bus').datepicker({
         autoclose: true,
 		format: 'dd-mm-yyyy',
@@ -126,6 +133,7 @@ function datatablenew(){
 			var vendedor = $('#vendedor_bus').val();
 			var estado_pedido = $('#estado_pedido_bus').val();
 			var canal = $('#canal_bus').val();
+			var tipo_producto = $('#tipo_producto_bus').val();
 
 			var _token = $('#_token').val();
             oSettings.jqXHR = $.ajax({
@@ -136,7 +144,7 @@ function datatablenew(){
                 "data":{NumeroPagina:iNroPagina,NumeroRegistros:iCantMostrar,
 						empresa_compra:empresa_compra, fecha_inicio:fecha_inicio, fecha_fin:fecha_fin, numero_orden_compra_cliente:numero_orden_compra_cliente, 
 						situacion:situacion,codigo_producto:codigo_producto,producto:producto,vendedor:vendedor,estado_pedido:estado_pedido,canal:canal,
-						fecha_inicio_facturado:fecha_inicio_facturado,fecha_fin_facturado:fecha_fin_facturado,
+						fecha_inicio_facturado:fecha_inicio_facturado,fecha_fin_facturado:fecha_fin_facturado,tipo_producto:tipo_producto,
 						_token:_token
                        },
                 "success": function (result) {
@@ -356,6 +364,7 @@ function DescargarArchivosExcel(){
 	var producto = $('#producto_bus').val();
 	var vendedor = $('#vendedor_bus').val();
 	var estado_pedido = $('#estado_pedido_bus').val();
+	var tipo_producto = $('#tipo_producto_bus').val();
 	var canal = $('#canal_bus').val();
 
 	if (empresa_compra == "")empresa_compra = 0;
@@ -369,7 +378,8 @@ function DescargarArchivosExcel(){
 	if (producto == "")producto = 0;
 	if (vendedor == "")vendedor = 0;
 	if (estado_pedido == "")estado_pedido = 0;
+	if (tipo_producto == "")tipo_producto = 0;
 	if (canal == "")canal = 0;
 	
-	location.href = '/orden_compra/exportar_reporte_comercializacion/'+empresa_compra+'/'+fecha_inicio+'/'+fecha_fin+'/'+fecha_inicio_facturado+'/'+fecha_fin_facturado+'/'+numero_orden_compra_cliente+'/'+situacion+'/'+codigo_producto+'/'+producto+'/'+vendedor+'/'+estado_pedido+'/'+canal;
+	location.href = '/orden_compra/exportar_reporte_comercializacion/'+empresa_compra+'/'+fecha_inicio+'/'+fecha_fin+'/'+fecha_inicio_facturado+'/'+fecha_fin_facturado+'/'+numero_orden_compra_cliente+'/'+situacion+'/'+codigo_producto+'/'+producto+'/'+vendedor+'/'+estado_pedido+'/'+tipo_producto+'/'+canal;
 }

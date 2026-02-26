@@ -400,6 +400,18 @@ label.form-control-sm{
 								</div>
 
 								<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+									<select name="tipo_producto_bus" id="tipo_producto_bus" class="form-control form-control-sm filtro-select">
+										<option value="">--Seleccionar Tipo Producto--</option>
+										<?php
+										foreach ($bien_servicio as $row){?>
+											<option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
+											<?php 
+										}
+										?>
+									</select>
+								</div>
+
+								<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
 									<select name="vendedor_bus" id="vendedor_bus" class="form-control form-control-sm filtro-select">
 										<option value="">--Seleccionar Vendedor--</option>
 										<?php
