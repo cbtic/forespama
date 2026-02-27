@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 use App\Models\Empresa;
+use App\Models\Persona;
 use App\Models\Vehiculo;
 use App\Models\EmpresasConductoresVehiculo;
 //use App\Models\Negativo;
@@ -219,81 +220,25 @@ class EmpresaController extends Controller
 
             if ($request->numero_ruc_dni != '') {
                 if ($request->empresa_particular == 'particular') {   
-					/*
-                    $id_empresa=0;                    
-                    $result_empresa = Empresa::where('ruc', $data_empresa["numero_ruc_dni"])->get()->all();
-                    if (count($result_empresa)) {
-                        $id_empresa = $result_empresa[0]["id"];
-                    }
-
-                    if ($id_empresa == 0) {
-                        $result_persona = Persona::where('numero_documento', 
-                        $data_empresa["numero_ruc_dni"])->get()->all();
-                    } else {
-					
-                        $result_ubicacion = UbicacionTrabajo::where('ubicacion_empresa_id', $result_empresa[0]["id"])->get()->all();
-                        $ubicacion_id = isset($result_ubicacion[0]["id"])?$result_ubicacion[0]["id"]:0;
-                        $result_persona = Persona::where('numero_documento', $data_empresa["numero_ruc_dni"])
-						//->where('ubicacion_id',$ubicacion_id)
-						->get()->all(); 
-                    }
-					*/
+					 
 						$result_persona = Persona::where('numero_documento', $data_empresa["numero_ruc_dni"])->where('estado', 1)->get()->all();
                         if (count($result_persona)) {
-						
+							
+							$empresa_id = $request->empresa_id;
 							if($request->empresa_id > 0){
-								$ubicacion_trabajo = UbicacionTrabajo::firstOrCreate(['ubicacion_empresa_id' => $request->empresa_id, 'ubicacion_unidad_id' => 1, 'ubicacion_estado' => 'A']);
-								$result_afiliado = Afiliacion::where('persona_id', $result_persona[0]["id"])->where('ubicacion_id',$ubicacion_trabajo->id)->get()->all();
-								if (count($result_afiliado) && $result_afiliado[0]["ubicacion_id"] > 0) {
-									$ubicacion_id = $result_afiliado[0]["ubicacion_id"];
-								}else{
-									$data_afiliacion["persona_id"] = $result_persona[0]["id"];
-									$data_afiliacion["codigo"] = $result_persona[0]["codigo"];
-									$data_afiliacion["fecha_inicio"] = Carbon::now()->format('Y-m-d');
-									$data_afiliacion["fecha_vencimiento"] = Carbon::now()->addDay(365)->format('Y-m-d');
-									$data_afiliacion["estado"] = true;
-									$data_afiliacion["area_id"] = 14;
-									$data_afiliacion["ubicacion_id"] = $ubicacion_trabajo->id;
-									$data_afiliacion["titular_id"] = 0;
-									$result_afiliacion = Afiliacion::create($data_afiliacion);
-									$ubicacion_id = $ubicacion_trabajo->id;
-								}
+								//$ubicacion_id = $result_afiliado[0]["ubicacion_id"];
 							}else{
-							
-								$result_afiliado = Afiliacion::where('persona_id', $result_persona[0]["id"])->where('estado', 1)->get()->all();
-								if (count($result_afiliado) && $result_afiliado[0]["ubicacion_id"] > 0) {
-									$ubicacion_id = $result_afiliado[0]["ubicacion_id"];
-								}else{
-									$data_afiliacion["persona_id"] = $result_persona[0]["id"];
-									$data_afiliacion["codigo"] = $result_persona[0]["codigo"];
-									$data_afiliacion["fecha_inicio"] = Carbon::now()->format('Y-m-d');
-									$data_afiliacion["fecha_vencimiento"] = Carbon::now()->addDay(365)->format('Y-m-d');
-									$data_afiliacion["estado"] = true;
-									$data_afiliacion["area_id"] = 14;
-									$data_afiliacion["ubicacion_id"] = 3070;
-									$data_afiliacion["titular_id"] = 0;
-									$result_afiliacion = Afiliacion::create($data_afiliacion);
-									$ubicacion_id = 3070;
-								}
-								
+								//$ubicacion_id = $result_afiliado[0]["ubicacion_id"];
 							}
-							
-							
                         }
                 } else {
                         $result_empresa = Empresa::where('ruc', $data_empresa["numero_ruc_dni"])->get()->all();
                         if (count($result_empresa)) {
-                            //$result_ubicacion = UbicacionTrabajo::where('ubicacion_empresa_id', $result_empresa[0]["id"])->get()->all();
-                            //$ubicacion_id = isset($result_ubicacion[0]["id"])?$result_ubicacion[0]["id"]:0;
-							$ubicacion_trabajo = UbicacionTrabajo::firstOrCreate(['ubicacion_empresa_id' => $result_empresa[0]["id"], 'ubicacion_unidad_id' => 1, 'ubicacion_estado' => 'A']);
-							$ubicacion_id = $ubicacion_trabajo->id;
+							//print_r($result_empresa);
+                            $empresa_id = $result_empresa[0]->id;
                         }
                 }
             }
-
-            if(count($result_empresa)+count($result_persona) == 0){ 
-                $arr = array('numero_ruc_dni' => $data_empresa["numero_ruc_dni"], 'nueva' => $persona_o_empresa[$request->empresa_particular], 'msg' => 'La '.$persona_o_empresa[$request->empresa_particular].' no se encuentra registrada en el sistema o no tiene afiliacion, la persona no puede registrar servicios.', 'status' => false);
-            } else {
                 //Incluyendo los resultados:
                 if ($request->empresa_particular == 'particular') {  
 					
@@ -308,18 +253,15 @@ class EmpresaController extends Controller
 					if (count($result_empresa) == 0) {
 						$arr = array('numero_ruc_dni' => $data_empresa["numero_ruc_dni"], 'nueva' => $persona_o_empresa[$request->empresa_particular], 'msg' => 'La '.$persona_o_empresa[$request->empresa_particular].' no se encuentra registrada en el sistema.', 'status' => false);
 					}else{
-						$arr = array('razon_social' => $result_empresa[0]["razon_social"], 'nombre_comercial' => $result_empresa[0]["nombre_comercial"], 'nombre_comercial' => $result_empresa[0]["nombre_comercial"], 'direccion' => $result_empresa[0]["direccion"], 'email' => $result_empresa[0]["email"], 'ruc' => $result_empresa[0]["ruc"], 'persona_id' => 0,'ubicacion_id' => $ubicacion_id,  'msg' => 'Encontramos '.(count($result_empresa)+count($result_persona)).' ocurrencias!', 'status' => true);
+						$arr = array('razon_social' => $result_empresa[0]["razon_social"], 'nombre_comercial' => $result_empresa[0]["nombre_comercial"], 'nombre_comercial' => $result_empresa[0]["nombre_comercial"], 'direccion' => $result_empresa[0]["direccion"], 'email' => $result_empresa[0]["email"], 'ruc' => $result_empresa[0]["ruc"], 'persona_id' => 0,'empresa_id' => $empresa_id,  'msg' => 'Encontramos '.(count($result_empresa)+count($result_persona)).' ocurrencias!', 'status' => true);
 					}
                     
                 }
-            }
+           
         } else {
             $arr = array('msg' => 'Error al mandar los datos en formato desconocido!', 'status' => false);
         }
 
-        //echo Response()->json($arr);
-        //print_r ('aqui');
-        //exit();
         return Response()->json($arr);
     }
 

@@ -163,6 +163,25 @@ class Comprobante extends Model
         return $data;
     }
 
+    function listar_factura_credito_pendiente($ruc){
+
+        $cad = "select * 
+from comprobantes c 
+where c.tipo='FT' 
+and c.cod_tributario='".$ruc."' 
+and c.id_forma_pago='2' 
+and c.estado_pago='P'
+and c.estado='1' 
+and c.eliminado is null 
+and c.anulado='N' 
+order by 1 desc" ;
+
+                //print_r($cad); exit();
+		$data = DB::select($cad);
+        //print_r($data); exit();
+        return $data;
+    }
+
     public function listar_credito_pago_paginado($p){
 
         return $this->readFuntionPostgres('sp_listar_comprobante_cuota_pago_paginado',$p);
@@ -194,7 +213,7 @@ class Comprobante extends Model
 		$data = DB::select($cad);
 
         if ( empty($data)){
-            $cad = "select distinct u.name as usuario, '' numero_cap,p.id_persona  
+            $cad = "select distinct u.name as usuario, '' numero_cap,p.id id_persona  
                     from comprobantes c
                     inner join personas p on c.cod_tributario =p.numero_documento 
                     --inner join agremiados a on a.id_persona = p.id  
@@ -206,7 +225,7 @@ class Comprobante extends Model
         }
 
         if ( empty($data)){
-            $cad = "select distinct u.name as usuario,'' numero_cap,a.id_persona  
+            $cad = "select distinct u.name as usuario,'' numero_cap,p.id id_persona
                     from comprobantes c
                     left join personas p on c.cod_tributario =p.numero_ruc 
                     --left join agremiados a on a.id_persona = p.id  

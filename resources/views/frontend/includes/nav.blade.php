@@ -301,6 +301,8 @@
 									<x-utils.link :href="route('frontend.comprobante.create_facturacion_orden_compra')" class="dropdown-item" :text="__('Facturacion Orden Compra')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />                  
 								@endif
 
+								<x-utils.link :href="route('frontend.comprobante.nc_prontopago')" class="dropdown-item" :text="__('Nota de Credito por Pronto Pago')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+
 							</div>
 						</li> 
 						
