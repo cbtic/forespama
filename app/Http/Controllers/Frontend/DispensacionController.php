@@ -95,6 +95,7 @@ class DispensacionController extends Controller
         $almacen_model = new Almacene;
 		$area_trabajo_model = new AreaTrabajo;
 		$unidad_trabajo_model = new UnidadTrabajo;
+		$persona_model = new Persona;
 		
 		if($id>0){
 			$dispensacion = Dispensacione::find($id);
@@ -112,7 +113,7 @@ class DispensacionController extends Controller
         $marca = $marca_model->getMarcaAll();
         $almacen = $almacen_model->getAlmacenAll();
 		$area_trabajo = $area_trabajo_model->getAreaTrabajoAll();
-		$persona = Persona::all();
+		$persona = $persona_model->obtenerPersonaAll();
 		//var_dump($id);exit();
 
 		return view('frontend.dispensacion.modal_dispensacion_nuevoDispensacion',compact('id','dispensacion','unidad_medida','moneda','estado_bien','tipo_producto','unidad','marca','producto','tipo_documento','almacen','area_trabajo','persona','id_user'));

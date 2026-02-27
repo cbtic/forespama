@@ -268,7 +268,7 @@
 						
 					@endif
 
-						@if(Gate::check('Ingreso Caja') || Gate::check('Comprobante') || Gate::check('Consulta Sodimac') || Gate::check('Consulta Promart') || Gate::check('Guia') || Gate::check('Pagos Orden Compra') || Gate::check('Facturacion Orden Compra'))
+						@if(Gate::check('Ingreso Caja') || Gate::check('Comprobante') || Gate::check('Consulta Sodimac') || Gate::check('Consulta Promart') || Gate::check('Guia') || Gate::check('Pagos Orden Venta') || Gate::check('Pagos Orden Compra') || Gate::check('Facturacion Orden Compra'))
  
 						<li class="nav-item dropdown">
 							<a href="#" class="nav-link dropdown-toggle" id="navbarDropdownPrueba" data-toggle="dropdown"
@@ -296,8 +296,12 @@
 									<x-utils.link :href="route('frontend.guia_interna.create')" class="dropdown-item" :text="__('Consulta de Guias')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />                  
 								@endif
 
+								@can('Pagos Orden Venta')
+									<x-utils.link :href="route('frontend.orden_compra.create_pago_orden_compra')" class="dropdown-item" :text="__('Pagos Orden Venta')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />                  
+								@endif
+
 								@can('Pagos Orden Compra')
-									<x-utils.link :href="route('frontend.orden_compra.create_pago_orden_compra')" class="dropdown-item" :text="__('Pagos Orden Compra')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />                  
+									<x-utils.link :href="route('frontend.orden_compra.create_orden_compra_pagos')" class="dropdown-item" :text="__('Pagos Orden Compra')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />                  
 								@endif
 
 								@can('Facturacion Orden Compra')
@@ -477,7 +481,7 @@
 						   <div class="dropdown-menu" aria-labelledby="navbarDropdownPrueba">
 
 								@can('Consulta de Facturacion')
-									<x-utils.link :href="route('frontend.comprobante.create_facturacion')" class="dropdown-item" :text="__('Consulta de Facturacion')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+									<x-utils.link :href="route('frontend.comprobante.create_facturacion')" class="dropdown-item" :text="__('Consulta de Facturacion Sodimac')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
 								@endif
 
 								@can('Consulta de Facturacion Promart')

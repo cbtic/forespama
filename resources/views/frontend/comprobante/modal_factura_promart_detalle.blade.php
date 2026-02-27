@@ -1,4 +1,4 @@
-<title>FORESPAMA</title>
+    <title>FORESPAMA</title>
 
 <style>
 /*
@@ -17,7 +17,7 @@
 
 .modal-dialog {
 	width: 100%;
-	max-width:90%!important
+	max-width:95%!important
   }
   
 #tablemodal{
@@ -79,6 +79,14 @@
 
 #tablemodalm{
 	
+}
+
+.text-left{
+    font-size: 13px;
+}
+
+.text-right{
+    font-size: 13px;
 }
 </style>
 
@@ -147,9 +155,9 @@ $(document).ready(function() {
 function fn_save_detalle_factura(){
 	
 	$.ajax({
-			url: "/comprobante/send_detalle_factura",
+			url: "/comprobante/send_detalle_factura_promart",
             type: "POST",
-            data : $("#frmDetalleFacturaSodimac").serialize(),
+            data : $("#frmDetalleFacturaPromart").serialize(),
 			success: function (result) {
                 //alert(result.id)
                 $('#openOverlayOpc').modal('hide');
@@ -219,7 +227,7 @@ function actualizarVisibilidadTiendas() {
                 </div>
                 
                 <div class="card-body">
-                <form method="post" action="#" id="frmDetalleFacturaSodimac" name="frmDetalleFacturaSodimac">
+                <form method="post" action="#" id="frmDetalleFacturaPromart" name="frmDetalleFacturaPromart">
 
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding-top:5px;padding-bottom:20px">
                     
@@ -230,16 +238,20 @@ function actualizarVisibilidadTiendas() {
 					<div class="table-responsive">
 						<table id="tblDetalleFacturaSodimac" class="table table-hover table-sm">
 							<thead>
-							<tr style="font-size:13px">
-								<th>Id</th>
+							<tr style="font-size:12px">
+								<!--<th>Id</th>-->
+								<th>Fecha Emisi&oacute;n</th>
 								<th>Tipo Documento</th>
+								<th>Descripci&oacute;n Tipo Documento</th>
 								<th>N&uacute;mero Documento</th>
 								<th>Tipo Cobro</th>
-								<th>Tienda</th>
+								<!--<th>Tienda</th>-->
                                 <th style="text-align : right">Importe Inicial</th>
                                 <th style="text-align : right">Importe Retenci&oacute;n</th>
-                                <th style="text-align : right">Importe Detracci&oacute;n</th>
                                 <th style="text-align : right">Importe Total</th>
+								<!--<th>Fecha Deposito Detracci&oacute;n</th>
+								<th>N&uacute;mero Deposito Detracci&oacute;n</th>-->
+								<th>Comentario</th>
                                 <!--<th>Acciones</th>-->
 							</tr>
 							</thead>
@@ -248,14 +260,16 @@ function actualizarVisibilidadTiendas() {
                             $suma_total_sodimac = 0;
                             $suma_cobro_sodimac = 0;
                             $suma_total_ingreso = 0;
-                            foreach($sodimac_factura_detalle as $key => $row){
+                            foreach($promart_factura_detalle as $key => $row){
                             ?>
                             <?php
                             //$selected_cobro = collect($cobros_sodimac)->firstWhere('codigo', $row->id_tipo_documento_cobro);
                             ?>
                             <tr>
-                                <td class="text-left" style="vertical-align:middle"><?php echo $row->id?></td>
+                                <!--<td class="text-left" style="vertical-align:middle"><?php //echo $row->id?></td>-->
+                                <td class="text-left" style="vertical-align:middle"><?php echo $row->fecha_emision?></td>
                                 <td class="text-left" style="vertical-align:middle"><?php echo $row->tipo_documento?></td>
+                                <td class="text-left" style="vertical-align:middle"><?php echo $row->descripcion_tipo_documento?></td>
                                 <td class="text-left" style="vertical-align:middle"><?php echo $row->numero_documento?></td>
                                 <td class="text-left" style="vertical-align:middle">
                                     <?php if($row->id_tipo_documento == 2){?>
@@ -263,30 +277,32 @@ function actualizarVisibilidadTiendas() {
                                         <option value="">--Seleccionar--</option>
                                         <?php
                                         foreach ($cobros_sodimac as $row2){?>
-                                            <option value="<?php echo $row2->codigo ?>" data-sub-codigo="<?php echo $row2->sub_codigo ?>" <?php if($row2->codigo==$sodimac_factura_detalle[$key]->id_tipo_documento_cobro)echo "selected='selected'"?>><?php echo $row2->denominacion ?></option>
+                                            <option value="<?php echo $row2->codigo ?>" data-sub-codigo="<?php echo $row2->sub_codigo ?>" <?php if($row2->codigo==$promart_factura_detalle[$key]->id_tipo_documento_cobro)echo "selected='selected'"?>><?php echo $row2->denominacion ?></option>
                                         <?php 
                                         }
                                         ?>
                                     </select>
                                     <?php }?>
                                 </td>
-                                <td class="text-left" style="vertical-align:middle">
-                                    <?php if($row->id_tipo_documento == 2){?>
-                                    <select name="tienda[<?php echo $row->id ?>]" id="tienda-<?php echo $row->id ?>"  class="form-control form-control-sm tienda-select" style="display: none;">
+                                <!--<td class="text-left" style="vertical-align:middle">
+                                    <?php //if($row->id_tipo_documento == 2){?>
+                                    <select name="tienda[<?php //echo $row->id ?>]" id="tienda-<?php //echo $row->id ?>"  class="form-control form-control-sm tienda-select" style="display: none;">
                                         <option value="">--Seleccionar--</option>
                                         <?php
-                                        foreach ($tiendas as $row3){?>
-                                            <option value="<?php echo $row3->id ?>" <?php if($row3->id==$sodimac_factura_detalle[$key]->id_tipo_documento_cobro)echo "selected='selected'"?>><?php echo $row3->denominacion ?></option>
+                                        //foreach ($tiendas as $row3){?>
+                                            <option value="<?php //echo $row3->id ?>" <?php //if($row3->id==$promart_factura_detalle[$key]->id_tipo_documento_cobro)echo "selected='selected'"?>><?php //echo $row3->denominacion ?></option>
                                         <?php 
-                                        }
+                                        //}
                                         ?>
                                     </select>
-                                    <?php }?>
-                                </td>
+                                    <?php //}?>
+                                </td>-->
                                 <td class="text-right" style="vertical-align:middle"><?php echo $row->importe_inicial?></td>
                                 <td class="text-right" style="vertical-align:middle"><?php echo $row->importe_retencion?></td>
-                                <td class="text-right" style="vertical-align:middle"><?php echo $row->importe_detraccion?></td>
                                 <td class="text-right" style="vertical-align:middle"><?php echo $row->importe_total?></td>
+                                <!--<td class="text-left" style="vertical-align:middle"><?php //echo $row->fecha_deposito_detraccion?></td>
+                                <td class="text-left" style="vertical-align:middle"><?php //echo $row->numero_deposito_detraccion?></td>-->
+                                <td class="text-left" style="vertical-align:middle"><?php echo $row->observacion?></td>
                             </tr>
                             <?php 
                                 if($row->id_tipo_documento == '1'){
@@ -299,15 +315,15 @@ function actualizarVisibilidadTiendas() {
                             $suma_total_ingreso = $suma_total_sodimac + $suma_cobro_sodimac;
                             ?>
                             <tr>
-                            <td class="text-right" colspan ="6" style="vertical-align:middle; font-weight: bold;">TOTAL FACTURA</td>
+                            <td class="text-right" colspan ="7" style="vertical-align:middle; font-weight: bold;">TOTAL FACTURA</td>
                             <td class="text-right" style="vertical-align:middle; font-weight: bold;"><?php echo $suma_total_sodimac?></td>
                             </tr>
                             <tr>
-                            <td class="text-right" colspan ="6" style="vertical-align:middle; font-weight: bold;">COBRO SODIMAC</td>
+                            <td class="text-right" colspan ="7" style="vertical-align:middle; font-weight: bold;">COBRO PROMART</td>
                             <td class="text-right" style="vertical-align:middle; font-weight: bold;"><?php echo $suma_cobro_sodimac?></td>
                             </tr>	
                             <tr>
-                            <td class="text-right" colspan ="6" style="vertical-align:middle; font-weight: bold;">TOTAL INGRESO</td>
+                            <td class="text-right" colspan ="7" style="vertical-align:middle; font-weight: bold;">TOTAL INGRESO</td>
                             <td class="text-right" style="vertical-align:middle; font-weight: bold;"><?php echo $suma_total_ingreso?></td>
                             </tr>	
                             </tbody>

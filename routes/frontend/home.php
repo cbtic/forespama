@@ -923,3 +923,7 @@ Route::post('descanso/send_descanso', [DescansoController::class, 'send_descanso
 Route::get('descanso/eliminar_descanso/{id}/{estado}', [DescansoController::class, 'eliminar_descanso'])->name('descanso.eliminar_descanso');
 Route::get('descanso/cargar_detalle/{id}', [DescansoController::class, 'cargar_detalle'])->name('descanso.cargar_detalle');
 
+Route::get('orden_compra/create_orden_compra_pagos', [OrdenCompraController::class, 'create_orden_compra_pagos'])->name('orden_compra.create_orden_compra_pagos');
+Route::post('orden_compra/listar_compras_pagos_ajax', [OrdenCompraController::class, 'listar_compras_pagos_ajax'])->name('orden_compra.listar_compras_pagos_ajax');
+Route::post('comprobante/send_detalle_factura_promart', [ComprobanteController::class, 'send_detalle_factura_promart'])->name('comprobante.send_detalle_factura_promart');
+Route::get('orden_compra/modal_pago_orden_compra/{id}/{id_orden_compra}', [OrdenCompraController::class, 'modal_pago_orden_compra'])->name('orden_compra.modal_pago_orden_compra');

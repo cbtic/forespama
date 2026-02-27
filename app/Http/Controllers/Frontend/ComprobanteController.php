@@ -26,7 +26,8 @@ use App\Models\OrdenCompra;
 use App\Models\OrdenCompraDetalle;
 use App\Models\AutorizacionOrdenCompra;
 use App\Models\Sede;
-
+use App\Models\PromartFactura;
+use App\Models\PromartFacturaDetalle;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
 
@@ -4643,9 +4644,15 @@ class ComprobanteController extends Controller
         $detalleData = [];
 
         foreach ($sheet as $row) {
-            //var_dump($sheet[8][1]);
             
-            $detalleData[] = $row;
+            if ($count < 1) {
+                $generalData[] = $row;
+            } else {
+                
+                $detalleData[] = $row;
+            }
+
+            //$detalleData[] = $row;
             
             $empresa = Empresa::where("ruc",  $ruc_cliente)->first();
             
@@ -4663,7 +4670,7 @@ class ComprobanteController extends Controller
 
                 $tabla_maestra_model = new TablaMaestra;
                 $id_medio_pago = $tabla_maestra_model->getMaestroC('65',$sheet[1][13]);
-                $id_banco = $tabla_maestra_model->getMaestroDenominacion('16',$sheet[1][12]);
+                $id_banco = $tabla_maestra_model->getMaestroC('16',$sheet[1][12]);
 
                 $promart_factura = new PromartFactura;
                 $promart_factura->id_medio_pago = $id_medio_pago[0]->codigo;
@@ -4676,10 +4683,13 @@ class ComprobanteController extends Controller
                 $promart_factura->estado = 1;
                 $promart_factura->id_usuario_inserta = $id_user;
                 $promart_factura->save();
+                $id_promart_factura = $promart_factura->id;
             }
             
             $count++;
         }
+
+        $importe_total_ingreso = 0;
 
         foreach ($detalleData as $row) {
             if (count($row) < 7) {
@@ -4690,16 +4700,48 @@ class ComprobanteController extends Controller
                 continue; // Si la fila es un total y está después de la 14, se ignora
             }
 
-            $fecha_emision = $row[0]; // Tipo Documento
+            //$fecha_emision = $row[0]; // Tipo Documento
             $tipo_documento = $row[1]; // Tipo Documento
             $numero_documento = $row[3]; // Nro. Documento
-            $importe_inicial = //$row[2]; // Importe Inicial
-            $importe_retencion = //$row[3]; // Importe Retención
-            $importe_detraccion = //$row[4]; // Importe Detracción
+            $importe_detraccion = 0; // Importe Detracción
             $importe_compensado = $row[5]; // Importe Compensado
+            //$importe_inicial = round(($importe_compensado/0.97),2); // Importe Inicial
+            if($tipo_documento =='RA'){
+                $importe_retencion = -round(($importe_compensado*0.03),2); // Importe Retención
+                $importe_total = round(($importe_compensado+$importe_retencion),2); // Importe Inicial
+            }else{
+                $importe_retencion = 0; // Importe Retención
+                $importe_total = $importe_compensado; // Importe Inicial
+            }
+            
             $fecha_deposito_detraccion = $row[8];
             $numero_deposito_detraccion = $row[9];
+            if($numero_deposito_detraccion == 'N/A'){
+                $numero_deposito_detraccion = null;
+            }
             $observacion = $row[10];
+            
+            $fecha_emision = null;
+            if (isset($row[0]) && is_numeric($row[0])) {
+                try {
+                    $fecha_emision = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row[0])->format('d-m-Y');
+                } catch (\Exception $e) {
+                    $fecha_emision = null;
+                }
+            }else{
+                $fecha_emision = trim($row[0]);
+            }
+
+            $fecha_deposito_detraccion = null;
+            if (isset($row[8]) && is_numeric($row[8])) {
+                try {
+                    $fecha_deposito_detraccion = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row[8])->format('d-m-Y');
+                } catch (\Exception $e) {
+                    $fecha_deposito_detraccion = null;
+                }
+            }else{
+                $fecha_deposito_detraccion = !empty($row[8]) ? trim($row[8]) : null;
+            }
     
             if($tipo_documento == 'RA'){
                 $tipo_documento='1';
@@ -4709,18 +4751,29 @@ class ComprobanteController extends Controller
 
             // Guardar el detalle de la factura
             $promart_factura_detalle = new PromartFacturaDetalle;
-            $promart_factura_detalle->id_promart_factura = $promart_factura->id;
+            $promart_factura_detalle->id_promart_factura = $id_promart_factura;
             $promart_factura_detalle->id_tipo_documento = $tipo_documento;
             $promart_factura_detalle->numero_documento = $numero_documento;
-            $promart_factura_detalle->importe_inicial = $importe_inicial;
+            $promart_factura_detalle->importe_inicial = $importe_compensado;
             $promart_factura_detalle->importe_retencion = $importe_retencion;
-            $promart_factura_detalle->importe_detraccion = $importe_detraccion;
-            $promart_factura_detalle->importe_total = $importe_compensado;
-            $promart_factura_detalle->id_moneda = $moneda_detalle;
+            //$promart_factura_detalle->importe_detraccion = $importe_detraccion;
+            $promart_factura_detalle->importe_total = $importe_total;
+            $promart_factura_detalle->fecha_deposito_detraccion = $fecha_deposito_detraccion;
+            $promart_factura_detalle->numero_deposito_detraccion = $numero_deposito_detraccion;
+            $promart_factura_detalle->observacion = $observacion;
+            $promart_factura_detalle->fecha_emision = $fecha_emision;
+            //$promart_factura_detalle->id_tipo_documento_cobro = $observacion;
+            //$promart_factura_detalle->id_moneda = $moneda_detalle;
             $promart_factura_detalle->estado = 1;
             $promart_factura_detalle->id_usuario_inserta = $id_user;
             $promart_factura_detalle->save();
+
+            $importe_total_ingreso = $importe_total_ingreso + $importe_total;
         }
+
+        $promart_factura_actualizado = PromartFactura::find($id_promart_factura);
+        $promart_factura_actualizado->total_pagado = $importe_total_ingreso;
+        $promart_factura_actualizado->save();
 
         return response()->json(['success' => 'Archivo importado exitosamente.']);
     }
@@ -4745,11 +4798,11 @@ class ComprobanteController extends Controller
         $tablaMaestra_model = new TablaMaestra;
         $tienda_model = new Tienda;
 
-        $sodimac_factura_detalle = $comprobante_model->obtenerFacturaDetalle($id);
-        $cobros_sodimac = $tablaMaestra_model->getMaestroByTipo(78);
+        $promart_factura_detalle = $comprobante_model->obtenerFacturaDetallePromart($id);
+        $cobros_sodimac = $tablaMaestra_model->getMaestroByTipo(121);
         $tiendas = $tienda_model->getTiendasAll();
 
-		return view('frontend.comprobante.modal_factura_promart_detalle',compact('id','sodimac_factura_detalle','cobros_sodimac','tiendas'));
+		return view('frontend.comprobante.modal_factura_promart_detalle',compact('id','promart_factura_detalle','cobros_sodimac','tiendas'));
 
     }
 
@@ -4889,14 +4942,6 @@ class ComprobanteController extends Controller
     public function send_detalle_factura(Request $request){
 
 		$id_user = Auth::user()->id;
-
-		/*if($request->id > 0 ){
-            $sodimac_factura_detalle = SodimacFacturaDetalle::find($request->id);
-		}else{
-			$sodimac_factura_detalle = new SodimacFacturaDetalle;
-		}*/
-        
-        //dd($request->cobros_sodimac);exit();
         
         foreach ($request->cobros_sodimac as $id_detalle => $codigo_cobro) {
             if ($codigo_cobro) {
@@ -4914,6 +4959,27 @@ class ComprobanteController extends Controller
             }
         }
 
+    }
+
+    public function send_detalle_factura_promart(Request $request){
+
+		$id_user = Auth::user()->id;
+        
+        foreach ($request->cobros_sodimac as $id_detalle => $codigo_cobro) {
+            if ($codigo_cobro) {
+                $detalle = PromartFacturaDetalle::find($id_detalle);
+                if ($detalle) {
+                    $detalle->id_tipo_documento_cobro = $codigo_cobro;
+                    /*if (!empty($request->tienda[$id_detalle])) {
+                        $detalle->id_tienda = $request->tienda[$id_detalle];
+                    } else {
+                        $detalle->id_tienda = null;
+                    }*/
+                    $detalle->id_usuario_inserta = $id_user;
+                    $detalle->save();
+                }
+            }
+        }
     }
 
     public function exportar_listar_pagos_sodimac($fecha_ini, $fecha_fin, $tipo_documento, $serie, $numero, $estado_pago, $observacion_pago, $dias_pagado, $color, $anulado, $empresa) {

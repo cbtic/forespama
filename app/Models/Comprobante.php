@@ -494,6 +494,21 @@ class Comprobante extends Model
         return $data;
     }
 
+    function obtenerFacturaDetallePromart($id){
+        
+        $cad = "select pfd.id, pfd.fecha_emision, pfd.id_tipo_documento, tm.denominacion descripcion_tipo_documento, tm.sub_codigo tipo_documento,pfd.numero_documento, pfd.importe_inicial,
+        pfd.importe_retencion, pfd.importe_total, pfd.estado, pfd.id_tipo_documento_cobro, pfd.fecha_deposito_detraccion, pfd.numero_deposito_detraccion, pfd.observacion 
+        from promart_factura_detalles pfd 
+        inner join tabla_maestras tm on pfd.id_tipo_documento = tm.codigo::int and tipo ='120'
+        where pfd.id_promart_factura  ='".$id."'
+        and pfd.estado ='1'
+        order by 1 asc ";
+        
+        $data = DB::select($cad);
+        
+        return $data;
+    }
+
     function obtenerVentasByAnio($anio, $empresa){
 
         $empresa_ = "";

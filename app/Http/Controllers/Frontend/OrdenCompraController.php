@@ -61,7 +61,8 @@ class OrdenCompraController extends Controller
 		$this->middleware('can:Gestion Autorizacion')->only(['create_autorizacion']);
 		$this->middleware('can:Cargar Informe Venta b2b')->only(['create_informe_b2b']);
 		$this->middleware('can:Control Produccion Orden Compra')->only(['create_control_produccion']);
-		$this->middleware('can:Pagos Orden Compra')->only(['create_pago_orden_compra']);
+		$this->middleware('can:Pagos Orden Venta')->only(['create_pago_orden_compra']);
+		$this->middleware('can:Pagos Orden Compra')->only(['create_orden_compra_pagos']);
 		$this->middleware('can:Reporte Comercializacion')->only(['create_reporte_comercializacion']);
 		$this->middleware('can:Reporte Comercializacion Tienda')->only(['create_reporte_comercializacion_tienda']);
 		$this->middleware('can:Reporte Pedidos Tienda')->only(['create_reporte_comercializacion_solicitado_tienda']);
@@ -1893,6 +1894,20 @@ class OrdenCompraController extends Controller
 
 	}
 
+    public function create_orden_compra_pagos(){
+
+		$tablaMaestra_model = new TablaMaestra;
+        $empresa_model = new Empresa;
+        $persona_model = new Persona;
+
+		$estado_pago = $tablaMaestra_model->getMaestroByTipo(66);
+        $empresa = $empresa_model->getEmpresaAll();
+        $persona = $persona_model->obtenerPersonaAll();
+
+		return view('frontend.orden_compra.create_orden_compra_pagos',compact('estado_pago','empresa','persona'));
+
+	}
+
     public function listar_orden_compra_pagos_ajax(Request $request){
 
         $id_user = Auth::user()->id;
@@ -1906,6 +1921,33 @@ class OrdenCompraController extends Controller
 		$p[]=$request->NumeroPagina;
 		$p[]=$request->NumeroRegistros;
 		$data = $orden_compra_model->listar_orden_compra_pagos_ajax($p);
+		$iTotalDisplayRecords = isset($data[0]->totalrows)?$data[0]->totalrows:0;
+
+		$result["PageStart"] = $request->NumeroPagina;
+		$result["pageSize"] = $request->NumeroRegistros;
+		$result["SearchText"] = "";
+		$result["ShowChildren"] = true;
+		$result["iTotalRecords"] = $iTotalDisplayRecords;
+		$result["iTotalDisplayRecords"] = $iTotalDisplayRecords;
+		$result["aaData"] = $data;
+
+        echo json_encode($result);
+
+	}
+
+    public function listar_compras_pagos_ajax(Request $request){
+
+        $id_user = Auth::user()->id;
+
+		$orden_compra_model = new OrdenCompra;
+        $p[]=$request->empresa;
+        $p[]=$request->persona;
+        $p[]=$request->fecha_inicio;
+        $p[]=$request->fecha_fin;
+        $p[]=$request->estado_pago;
+		$p[]=$request->NumeroPagina;
+		$p[]=$request->NumeroRegistros;
+		$data = $orden_compra_model->listar_compras_pagos_ajax($p);
 		$iTotalDisplayRecords = isset($data[0]->totalrows)?$data[0]->totalrows:0;
 
 		$result["PageStart"] = $request->NumeroPagina;
@@ -1941,6 +1983,31 @@ class OrdenCompraController extends Controller
 		$importe = $data->precio-$data->pago;
 
 		return view('frontend.orden_compra.modal_pago',compact('id','orden_compra_pago','id_orden_compra','fecha_actual'/*,'adelantos'*/,'tipo_desembolso','importe','banco'));
+	
+	}
+
+    public function modal_pago_orden_compra($id, $id_orden_compra){
+		
+		$tablaMaestra_model = new TablaMaestra;
+		$orden_compra_model = new OrdenCompra;
+		$fecha_actual = $orden_compra_model->fecha_actual();
+
+		if($id==0){
+			$orden_compra_pago = new OrdenCompraPago;
+		}else{
+			$orden_compra_pago = OrdenCompraPago::find($id);
+		}
+
+		$tipo_desembolso = $tablaMaestra_model->getMaestroByTipo(65);
+		$banco = $tablaMaestra_model->getMaestroByTipo(16);
+		$conversion = $tablaMaestra_model->getMaestroByTipo(122);
+
+		$orden_compra_pago_model = new OrdenCompraPago;
+		$data = $orden_compra_pago_model->getImportePago($id_orden_compra);
+
+		$importe = $data->precio-$data->pago;
+
+		return view('frontend.orden_compra.modal_pago_orden_compra',compact('id','orden_compra_pago','id_orden_compra','fecha_actual'/*,'adelantos'*/,'tipo_desembolso','importe','banco','conversion'));
 	
 	}
 

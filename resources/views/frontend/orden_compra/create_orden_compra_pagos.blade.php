@@ -426,12 +426,12 @@ label.form-control-sm{
 
 @extends('frontend.layouts.app')
 
-@section('title', __('Pagos Orden de Venta'))
+@section('title', __('Pagos Orden de Compra'))
 
 @section('breadcrumb')
 <ol class="breadcrumb" style="padding-left:130px;margin-top:0px;background-color:#283659">
     <li class="breadcrumb-item text-primary">Inicio</li>
-    <li class="breadcrumb-item active">Pago Orden Venta</li>
+    <li class="breadcrumb-item active">Pago Orden Compra</li>
     </li>
 </ol>
 
@@ -469,7 +469,7 @@ label.form-control-sm{
                             </div>
 
                             <div class="card-header">
-                                <strong>Pagos Orden Venta</strong>
+                                <strong>Pagos Orden Compra</strong>
                             </div>
 
                             <div class="card-body">
@@ -523,8 +523,6 @@ label.form-control-sm{
                                                 <th>N°</th>
                                                 <th>Fecha</th>
                                                 <th>Cliente</th>
-                                                <th>Vendedor</th>
-                                                <th>Tipo Producto</th>
                                                 <th>N° OC</th>
                                                 <th>Fecha Factura</th>
                                                 <th>N° Factura</th>
@@ -533,8 +531,6 @@ label.form-control-sm{
                                                 <th>Total</th>
                                                 <th>Abono</th>
                                                 <th>Forma Pago</th>
-                                                <th>Fecha Vencimiento</th>
-                                                <th>Guía</th>
                                                 <th>Estado Pago</th>
                                             </tr>
                                         </thead>
@@ -542,13 +538,7 @@ label.form-control-sm{
                                         </tbody>
                                         <tfoot>
                                             <tr style="font-size:13px">
-                                                <td colspan="10"><strong>Total:</strong></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
+                                                <td colspan="1"><strong>Total:</strong></td>
                                             </tr>
                                         </tfoot>
                                     </table>
@@ -692,6 +682,6 @@ label.form-control-sm{
 	
 	</script>
 	
-	<script src="{{ asset('js/pago_orden_compra.js') }}"></script>
+	<script src="{{ asset('js/orden_compra_pago.js') }}"></script>
 	
 	@endpush
