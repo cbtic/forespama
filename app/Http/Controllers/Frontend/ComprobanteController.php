@@ -405,11 +405,12 @@ class ComprobanteController extends Controller
                 
             }
 
+            $ruc = $empresa->ruc;
+            $adelanto_pendiente = Comprobante::where('adelanto', '1')->where("cod_tributario",$ruc)->get(); 
             //echo $TipoF; exit();
-
             //print_r($facturad); exit();
 
-            return view('frontend.comprobante.create',compact('trans', 'titulo','empresa', 'facturad', 'total', 'igv', 'stotal','TipoF','ubicacion', 'persona','id_caja','serie', 'adelanto','MonAd','forma_pago','tipooperacion','formapago', 'totalDescuento','id_tipo_afectacion_pp', 'valorizad','descuentopp','id_pronto_pago', 'medio_pago', 'id_orden_compra', 'id_proforma','afecta_a'));
+            return view('frontend.comprobante.create',compact('trans', 'titulo','empresa', 'facturad', 'total', 'igv', 'stotal','TipoF','ubicacion', 'persona','id_caja','serie', 'adelanto','MonAd','forma_pago','tipooperacion','formapago', 'totalDescuento','id_tipo_afectacion_pp', 'valorizad','descuentopp','id_pronto_pago', 'medio_pago', 'id_orden_compra', 'id_proforma','afecta_a','adelanto_pendiente'));
         }
         if ($trans == 'FN'){
             //$serie = $serie_model->getMaestro('SERIES',$TipoF);
@@ -599,9 +600,9 @@ class ComprobanteController extends Controller
     }
     public function send(Request $request)
     {
-
 		$sw = true;
 		$msg = "";
+        $flag_adelanto = "";
 
 		$id_user = Auth::user()->id;
         $facturas_model = new Comprobante;
@@ -721,7 +722,7 @@ class ComprobanteController extends Controller
 				
 				/*************************************/
 				$id_moneda=1;
-
+                $flag_adelanto = "";
 				foreach ($tarifa as $key => $value) {
 					//$vestab = $value['vestab'];
 					//$vcodigo = $value['vcodigo'];
@@ -729,6 +730,8 @@ class ComprobanteController extends Controller
                     $id_concepto = $value['id_concepto'];
 
                     $id_moneda = $value['id_moneda'];
+
+                    if($value['id_producto']==7401)$flag_adelanto = "1";
 
 				}
 				
@@ -1051,6 +1054,8 @@ class ComprobanteController extends Controller
                     $factura_upd->monto_retencion = $request->monto_retencion;
                 }
 
+                //facturad[1][id_producto]
+                $factura_upd->adelanto = $flag_adelanto;
                 $factura_upd->save();
 
 
@@ -1518,6 +1523,18 @@ class ComprobanteController extends Controller
                     endforeach;
                 endif;
 
+                if (isset($request->idAdelanto)){
+                    foreach ($request->idAdelanto as $key => $value){
+                        if ($request->idAdelanto[$key] != "") {
+                            $idAdelanto = $request->idAdelanto[$key];
+                            $Comprobante_upd = Comprobante::find($idAdelanto);
+                            $Comprobante_upd->id_comprobante_adelanto = $id_factura;
+                            $Comprobante_upd->adelanto = 2;
+                            $Comprobante_upd->save();
+                            //echo $idAdelanto;
+                        }
+                    }
+                }
 
                 $estado_ws = $ws_model->getMaestroByTipo('96');
                 $flagWs = isset($estado_ws[0]->codigo) ? $estado_ws[0]->codigo : 1;
@@ -2376,7 +2393,7 @@ class ComprobanteController extends Controller
 	public function show($id){
 
         $factura_model = new Comprobante;
-
+        
         $factura = Comprobante::where('id', $id)->get()[0];
 
         if (is_null($factura->id_comprobante_ncnd) ){
@@ -2390,7 +2407,7 @@ class ComprobanteController extends Controller
             $ref_tipo=$factura_referencia->tipo;
         }
 
-        ;
+        
         
         $facd_serie = $factura->serie;
         $facd_numero = $factura->numero;
@@ -2406,6 +2423,7 @@ class ComprobanteController extends Controller
 		
         $datos=  $datos_model->getDatosByComprobante($id);
         //dd($datos);exit();
+        
         $cronograma=  $datos_model->getCronogramaPagos($id);
         
 		if($factura->nro_guia!=""){
@@ -2417,7 +2435,7 @@ class ComprobanteController extends Controller
 			$id_guia = $guia->id;
 		}
         //echo "fac_tipo=>".$factura->fac_tipo."<br>";
-
+        
         $factura_detail_model = new ComprobanteDetalle;
         $factura_detalles = ComprobanteDetalle::where([
             'serie' => $facd_serie,
@@ -2483,6 +2501,145 @@ class ComprobanteController extends Controller
 		return view('frontend.factura.modal_factura',compact('id','factura','negativo'));
 	}
     
+    public function nc_prontopago(Request $request){
+        
+        /*
+        $id_caja = $request->id_caja_;
+        $id = $request->id_comprobante;
+        $id_origen= $request->id_comprobante_origen;
+        
+        if ($id=="" ){
+            $trans = "FN";
+        }
+        else{
+            $trans = "FE";
+        }
+        
+        $id_sede = session('id_sede');
+		if($id_caja==""){
+			$valorizaciones_model = new Valorizacione;
+			$id_user = Auth::user()->id;
+			$caja_usuario = $valorizaciones_model->getCajaIngresoByusuario($id_user,'91',$id_sede);
+			$id_caja = (isset($caja_usuario->id_caja))?$caja_usuario->id_caja:0;
+		}
+        
+        if ( $trans == "FN"){
+
+            $comprobante_model=new Comprobante;
+            $comprobante=$comprobante_model->getComprobanteById($id_origen);
+
+            $facturad = ComprobanteDetalle::where([
+                'serie' => $comprobante->serie,
+                'numero' => $comprobante->numero,
+                'tipo' => $comprobante->tipo
+            ])->get();
+           
+            $afectacion=$facturad[0]->afect_igv;
+
+       
+        }
+        else {
+            $comprobante_model=new Comprobante;
+            $comprobante=$comprobante_model->getComprobanteById($id);
+
+            $facturad = ComprobanteDetalle::where([
+                'serie' => $comprobante->serie,
+                'numero' => $comprobante->numero,
+                'tipo' => $comprobante->tipo
+            ])->get();
+        }
+
+        if ($comprobante->tipo=="BV"){
+            $persona_model= new Comprobante;
+            $persona=  $persona_model->getPersonaDni($comprobante->cod_tributario);
+            $idcliente=$persona->id;
+            
+            $direccion=$persona->direccion;
+            $correo=$persona->email;
+            
+        }
+
+        if ($comprobante->tipo=="FT"){
+            $empresa_model= new Comprobante;
+            $empresa=  $empresa_model->getEmpresaRuc($comprobante->cod_tributario);
+
+            if($comprobante){
+                $persona_model= new Comprobante;
+                $persona=  $persona_model->getPersonaRuc($comprobante->cod_tributario);
+                if($persona){
+                    $idcliente=$persona->id;
+                    $direccion=$persona->direccion;
+                    $correo=$persona->email;
+                }else{
+                    $idcliente=$empresa->id;
+                    $direccion=$empresa->direccion;
+                    $correo=$empresa->email;
+                }
+
+            }else{
+                 $idcliente=$empresa->id;
+                 $direccion=$empresa->direccion;
+                 $correo=$empresa->email;
+            }
+           
+        }
+
+        if ($comprobante->tipo=="NC"||$comprobante->tipo=="ND"){
+            $empresa_model= new Comprobante;
+            $empresa=  $empresa_model->getEmpresaRuc($comprobante->cod_tributario);
+
+            if($comprobante){
+                $persona_model= new Comprobante;
+                $persona=  $persona_model->getPersonaRuc($comprobante->cod_tributario);
+                if($persona){
+                    $idcliente=$persona->id;                 
+                    $direccion=$persona->direccion;
+                    $correo=$persona->email;
+                }else{
+                    $idcliente=$empresa->id;
+                    $direccion=$empresa->direccion;
+                    $correo=$empresa->email;
+                }
+
+            }else{
+                 $idcliente=$empresa->id;
+                 $direccion=$empresa->direccion;
+                 $correo=$empresa->email;
+            }
+           
+        }
+        */
+        
+        $empresa_model = new Empresa;
+        $serie_model = new TablaMaestra;
+
+		$tabla_model = new TablaMaestra;
+		$forma_pago = $tabla_model->getMaestroByTipo('108');
+        $tipooperacion = $tabla_model->getMaestroByTipo('18');
+        $formapago = $tabla_model->getMaestroByTipo('104');
+
+        //$serie = $serie_model->getMaestro('95');
+        
+        $sede_model = new Sede;
+        $factura_model = new comprobante;
+        //$factura_credito = $factura_model->listar_factura_credito_pendiente("20112273922");
+        $id_sede = session('id_sede');
+        //$TipoF="NC";
+        $TipoF="FT";
+        $serie = $sede_model->getSerie($id_sede, $TipoF);
+
+        return view('frontend.comprobante.create_nc_prontopago',compact(/*'trans',*/ /*'comprobante',*//*'factura_credito',*/'tipooperacion','serie',/*'facturad',*//*'id_caja',*/'forma_pago',/*'direccion',*//*'correo',*//*'afectacion'*/));
+
+    }
+
+    public function obtener_fatura_credito($ruc){
+		
+		$factura_model = new comprobante;
+		$factura_credito = $factura_model->listar_factura_credito_pendiente($ruc);
+		
+		echo json_encode($factura_credito);
+	}
+
     public function nc_edita(Request $request){
 
         $id_caja = $request->id_caja_;
@@ -3646,6 +3803,156 @@ class ComprobanteController extends Controller
             //$id_factura = 0;
         //}
  
+        $array["sw"] = $sw;
+        $array["msg"] = $msg;
+        $array["id_factura"] = $id_factura;
+        echo json_encode($array);
+    }
+
+    public function send_nc_prontopago(Request $request)
+    {
+        $sw = true;
+        $msg = "";
+       
+
+        $id_user = Auth::user()->id;
+        $facturas_model = new Comprobante;
+        $guia_model = new Guia;
+ 
+            /**********RUC***********/
+
+            $tarifa = $request->facturad;
+
+            $total = $request->totalP;
+            $serieF = $request->serieF;
+            $tipoF = $request->tipoF;
+            $ubicacion_id = $request->ubicacion;
+            $cod_tributario = $request->numero_documento;
+            $razon_social=$request->razon_social;
+            $direccion=$request->direccion;
+            $correo=$request->correo;
+            $id_caja = $request->id_caja;
+            $adelanto   = $request->adelanto;
+            $afecta=$request->_afecta;
+            $tiponota=$request->_afecta;
+        	$motivo=$request->motivo_; /*falta devolucion_nc*/
+            $afecta_ingreso=$request->afecta_ingreso;  /*falta*/
+          
+ 
+            $id_comprobante_ncdc = $request->id_comprobante_ncdc;
+            $id_comprobante = $request->id_comprobante;
+
+            $id_comprobante_origen=$request->id_comprobante_origen;
+
+            //echo("id_comprobante_origen: ".$id_comprobante_origen);
+            
+            $trans = $request->trans;
+            
+            //1	DOLARES
+            //2	SOLES
+            
+            if ($trans == 'FA' || $trans == 'FN'){
+ 
+                $ws_model = new TablaMaestra;
+                
+                /*************************************/
+                
+                foreach ($tarifa as $key => $value) {
+                    //$vestab = $value['vestab'];
+                    //$vcodigo = $value['vcodigo'];
+                    $id_val = $value['id'];
+ 
+                }
+                
+                $id_moneda=1;
+ 
+                $descuento = $value['descuento'];
+                
+                $id_factura = $facturas_model->registrar_comprobante_ncnd($serieF,     0, $tipoF,  $cod_tributario, $total,          '',           '',    $id_comprobante, $id_caja,          0,    'f',      $id_user,  1,$razon_social,$direccion,$id_comprobante_ncdc,$correo,$afecta,$tiponota,   $motivo,$afecta_ingreso,0,0,0);
+                //$id_factura = $facturas_model->registrar_factura_moneda($serieF,     $id_tipo_afectacion_pp, $tipoF, $ubicacion_id, $id_persona, $total,          '',           '',    0, $id_caja,          $descuento,    'f',     $id_user,  $id_moneda);
+ 
+                //print_r($id_factura); exit();					       //(serie,  numero,   tipo,     ubicacion,     persona,  total, descripcion, cod_contable, id_v,   id_caja, descuento, accion, p_id_usuario, p_id_moneda)
+              
+                $factura = Comprobante::where('id', $id_factura)->get()[0];
+ 
+                $fac_serie = $factura->serie;
+                $fac_numero = $factura->numero;
+ 
+                $factura_upd = Comprobante::find($id_factura);
+                if(isset($factura_upd->tipo_cambio)) $factura_upd->tipo_cambio = $request->tipo_cambio;
+                //print_r($tarifa); exit();
+
+                $factura_upd->save();
+                
+                $value['item'] = 1;
+                $value['descripcion']="DESCUENTO POR PRONTO PAGO";
+                $value['cantidad'] = 1;
+                $value['id'] = 0;
+                
+                $id_factura_detalle = $facturas_model->registrar_comprobante_ncnd($serieF, $fac_numero, $tipoF, $value['item'], $total, $value['descripcion'], "", $value['id'], $id_factura, $descuento,    'd',     $id_user,  $id_moneda,$razon_social,$direccion,$id_comprobante_ncdc,$correo,$afecta,$tiponota,$motivo,$afecta_ingreso,0,$value['item'],$value['cantidad']);
+                //(  serie,      numero,   tipo,      ubicacion, persona,  total,            descripcion,           cod_contable,         id_v,     id_caja,  descuento, accion, p_id_usuario, p_id_moneda)
+                $facturaDet_upd = ComprobanteDetalle::find($id_factura_detalle);
+
+                $facturaDet_upd->codigo = $value['codigo_producto'];
+                $facturaDet_upd->unidad = $value['abreviatura'];
+                $facturaDet_upd->save();
+               /*
+                foreach ($tarifa as $key => $value) {
+                    //echo "denominacion=>".$value['denominacion']."<br>";
+                    if ($adelanto == 'S'){
+                        $total   = $request->MonAd;
+                    }
+                    else{
+                        //$total   = $value['importe'];
+                        $total   =$value['importe'];
+                    }
+                    $descuento = $value['descuento'];
+                    if ($value['descuento']=='') $descuento = 0;
+                    $id_factura_detalle = $facturas_model->registrar_comprobante_ncnd($serieF, $fac_numero, $tipoF, $value['item'], $total, $value['descripcion'], "", $value['id'], $id_factura, $descuento,    'd',     $id_user,  $id_moneda,$razon_social,$direccion,$id_comprobante_ncdc,$correo,$afecta,$tiponota,$motivo,$afecta_ingreso,0,$value['item'],$value['cantidad']);
+                                                                                     //(  serie,      numero,   tipo,      ubicacion, persona,  total,            descripcion,           cod_contable,         id_v,     id_caja,  descuento, accion, p_id_usuario, p_id_moneda)
+                
+                    $facturaDet_upd = ComprobanteDetalle::find($id_factura_detalle);
+
+                    $facturaDet_upd->codigo = $value['codigo_producto'];
+                    $facturaDet_upd->unidad = $value['abreviatura'];
+                    $facturaDet_upd->save();
+                    
+                }
+                */
+
+                $estado_ws = $ws_model->getMaestroByTipo('96');
+                $flagWs = isset($estado_ws[0]->codigo)?$estado_ws[0]->codigo:1;
+ 
+                if ($flagWs==2 && $id_factura>0 && ($tipoF=="FT" || $tipoF=="BV")){
+                    $this->firmar($id_factura);
+                }
+ 
+                //echo $id_factura;
+ 
+ 
+            }
+            if ($trans == 'FE') {
+                //echo $request->id_factura;
+                $id_factura = $request->id_factura;
+            }
+ 
+        //}else{
+            //$sw = false;
+            //$msg = "La Factura ingresada ya existe !!!";
+            //$id_factura = 0;
+        //}
+ 
+        if (isset($request->idFacturaCredito)){
+            foreach ($request->idFacturaCredito as $key => $value){
+                if ($request->idFacturaCredito[$key] != "") {
+                    $idFacturaCredito = $request->idFacturaCredito[$key];
+                    $Comprobante_upd = Comprobante::find($idFacturaCredito);
+                    $Comprobante_upd->id_comprobante_pronto_pago = $id_factura;
+                    $Comprobante_upd->save();
+                }
+            }
+        }
+
         $array["sw"] = $sw;
         $array["msg"] = $msg;
         $array["id_factura"] = $id_factura;

@@ -522,7 +522,7 @@ function fn_save(){
             data : $("#frmFacturacion").serialize(),
 			dataType: 'json',
             success: function (result) {
-							
+				//return false;			
 				//alert(result.msg);
 
 				/*
@@ -936,6 +936,8 @@ function obtenerTitular(){
 	}
 
 	AddFila();
+	AddFilaAdelanto();
+
 	function AddFila(){
 		
 		var newRow = "";
@@ -1089,6 +1091,137 @@ function obtenerTitular(){
 					
 		});
 		
+	}
+
+	function AddFilaAdelanto(){
+		
+		var newRow = "";
+		var ind = $('#tblAdelanto tbody tr').length;
+		var tabindex = 11;
+		//var nuevalperiodo = "";
+
+		//var f = new Date();
+		var f = new Date();
+		var fecha_ = f.getDate() + "-"+ f.getMonth()+ "-" +f.getFullYear();
+
+	
+		var item_producto 	= "";
+		$('#idAdelantoTemp option').each(function(){
+			if($(this).val()==""){
+				item_producto += "<option value="+$(this).val()+">"+$(this).html()+"</option>"	
+			}else{
+				item_producto += "<option value="+$(this).val()+" data-destinatario='"+$(this).attr("data-destinatario")+"' data-ruc='"+$(this).attr("data-ruc")+"' data-total='"+$(this).attr("data-total")+"'>"+$(this).html()+"</option>"	
+			}
+		});
+	
+		newRow +='<tr>';
+		newRow +='<td><select multiple="multiple" class="form-control form-control-sm idAdelanto" id="idAdelanto'+ind+'" ind="'+ind+'" tabindex="'+tabindex+'" name="idAdelanto[]" >'+item_producto+'</select></td>';
+		//newRow +='<td><button type="button" class="btn btn-danger deleteFila btn-xs" style="margin-left:4px"><i class="fa fa-times"></i> Eliminar</button></td>';
+
+		newRow +='</tr>';
+		$('#tblAdelanto tbody').append(newRow);
+
+		//$("#idAdelanto"+ind).select2({max_selected_options: 4});
+
+		$("#idAdelanto"+ind).select2({
+			templateResult: function (data) {
+				if (!data.id) return data.text;
+
+				let opt = $(data.element);
+
+				return $(`
+				<div>
+					<strong>${data.text}</strong><br>
+					<small>
+					${opt.data('destinatario')} |
+					RUC: ${opt.data('ruc')} |
+					Total: S/ ${parseFloat(opt.data('total')).toFixed(2)}
+					</small>
+				</div>
+				`);
+			},
+			templateSelection: function (data) {
+				return data.text;
+			}
+		});
+		
+		/*
+		$("#idAdelanto"+ind).on("change", function (e) {
+			var flagx = 0;
+			cmb = $(this);
+			idMedio = $("#idMedio"+ind).val();
+
+			$("#tr_total_pagar").hide();
+			$("#tr_total_pagar_abono").hide();
+			$("#total_pagar").val("0");
+			$("#total_pagar_abono").val("0");
+			
+		
+			$('.idMedio').each(function(){
+				var ind_tmp = $(this).val();
+				if($(this).val() == idMedio)flagx++;
+			});
+		
+			if(flagx > 1 && idMedio!='3'){
+					bootbox.alert("El Medio de Pago ya ha sido ingresado");
+					$("#idMedio"+ind).val("").trigger("change");
+					return false;				
+			}
+			else{
+				
+				if(ind==0){
+					monto = $("#total_fac_").val();
+					$("#totalMedioPago").val(monto);
+
+					if(idMedio=='1'){
+						monto_r = redondeoContableAFavor(Number(monto), 1);
+						$("#monto"+ind).val(monto_r.toFixed(2));
+
+						if(Number(monto)!=Number(monto_r)){
+							$("#tr_total_pagar").show();
+							$("#total_pagar").val(monto_r.toFixed(2));
+						}
+
+					}else{
+
+						$("#monto"+ind).val(monto);
+
+						monto_r = Number(monto);
+						
+						$("#tr_total_pagar_abono").show();
+						$("#total_pagar_abono").val(monto_r);						
+
+					}
+					
+				}
+
+				$("#fecha"+ind).val(fecha_);
+
+				
+			}
+					
+		});
+		*/
+
+		/*
+		$("#monto"+ind).on("keyup", function (e) {
+			monto = $("#monto"+ind).val();
+
+			var total = 0;
+			var val_total = 0;
+			
+			$(".monto").each(function (){
+				val_total = $(this).val();
+				
+				if(val_total!="")total += Number(val_total);
+			});
+			
+			$("#totalMedioPago").val(total.toFixed(2));
+			$("#total_pagar_abono").val(total.toFixed(2));
+					
+		});
+		*/
+
 	}
 
 	function redondeoContableAFavor(valor, decimales = 1) {

@@ -170,6 +170,8 @@ Route::post('empresa/send_empresa_ingreso', [EmpresaController::class, 'send_emp
 
 Route::get('empresa/obtener_empresa/{ruc}', [EmpresaController::class, 'obtener_empresa'])->name('empresa.obtener_empresa');
 
+Route::post('empresa/buscar_ajax', [EmpresaController::class, 'buscar_ajax'])->name('empresa.buscar_ajax');
+
 // Route::get('vehiculos', [VehiculoController::class, 'index'])->name('vehiculos');
 Route::post('vehiculo/send_vehiculo_ingreso', 'App\Http\Controllers\VehiculoController@send_vehiculo_ingreso')->name('vehiculo.send_vehiculo_ingreso');
 // Route::get('vehiculo/consulta_vehiculo', [VehiculoController::class, 'consulta_vehiculo'])->name('vehiculo.consulta_vehiculo');
@@ -302,7 +304,9 @@ Route::post('proforma/send', [ProformaController::class, 'send'])->name('proform
 Route::get('proforma/proforma_pdf/{id}', [ProformaController::class, 'proforma_pdf'])->name('proforma.proforma_pdf');
 Route::get('proforma/obtener_proforma_id/{id}', [ProformaController::class, 'obtener_proforma_id'])->name('proforma.obtener_proforma_id');
 
+Route::get('comprobante/nc_prontopago', [ComprobanteController::class, 'nc_prontopago'])->name('comprobante.nc_prontopago');
 
+Route::get('comprobante/obtener_fatura_credito/{ruc}', [ComprobanteController::class, 'obtener_fatura_credito'])->name('comprobante.obtener_fatura_credito');
 
 Route::post('comprobante/edit', [ComprobanteController::class, 'edit'])->name('comprobante.edit');
 Route::get('comprobante', [ComprobanteController::class, 'index'])->name('comprobante.all');
@@ -311,9 +315,12 @@ Route::post('comprobante/send', [ComprobanteController::class, 'send'])->name('c
 Route::get('comprobante/{id}', [ComprobanteController::class, 'show'])->name('comprobante.show');
 Route::post('comprobante/send_nc', [ComprobanteController::class, 'send_nc'])->name('comprobante.send_nc');
 Route::post('comprobante/send_nd', [ComprobanteController::class, 'send_nd'])->name('comprobante.send_nd');
+Route::post('comprobante/send_nc_prontopago', [ComprobanteController::class, 'send_nc_prontopago'])->name('comprobante.send_nc_prontopago');
 //Route::get('comprobante/nc_edit/{id}/{id_caja}', [ComprobanteController::class, 'nc_edit'])->name('comprobante.nc_edit');
 Route::post('comprobante/nc_edita', [ComprobanteController::class, 'nc_edita'])->name('comprobante.nc_edita');
 Route::post('comprobante/nd_edita', [ComprobanteController::class, 'nd_edita'])->name('comprobante.nd_edita');
+
+
 
 Route::get('comprobante/firmar/{id}', [ComprobanteController::class, 'firmar'])->name('comprobante.firmar');
 Route::get('comprobante/firmar_nc/{id}', [ComprobanteController::class, 'firmar_nc'])->name('comprobante.firmar_nc');

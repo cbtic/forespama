@@ -1237,6 +1237,53 @@
                                     </div>
                                 </div>
 
+                                <br>
+
+                                <div class="card" id="card_Adelanto">
+                                    <div class="card-header">
+                                        <strong>                                            
+                                            Adelantos
+                                        </strong>
+                                    </div>
+
+                                    <div class="card-body">
+                                        <div class="table-responsive overflow-auto" style="max-height: 500px;">
+
+                                            <div style="display:none">
+                                                <select class="form-control" id="idAdelantoTemp" tabindex="16" style="width: 500px"> 
+                                                    <option value="">Seleccionar una Factura</option>
+                                                    <?php foreach ($adelanto_pendiente as $row) : ?>
+                                                        <option 
+                                                        value="<?php echo $row->id ?>"
+                                                        data-destinatario="<?= $row->destinatario ?>"
+                                                        data-ruc="<?= $row->cod_tributario ?>"
+                                                        data-total="<?= $row->total ?>"
+                                                        ><?php echo $row->serie."-".$row->numero ?></option>
+                                                    <?php endforeach; ?>
+                                                </select>
+                                            </div>
+                                            <!--
+                                            <button type="button" id="addRow" style="margin-left:10px" class="btn btn-info btn-xs"><i class="fa fa-plus"></i> Agregar Pago(s)</button>
+                                            -->
+
+                                            <table id="tblAdelanto" class="table table-hover table-sm">
+                                                <thead>
+                                                    <tr>
+                                                        <th width="40%">Factura</th>
+                                                        <!--<th width="10%"></th>-->
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        
+                                    </div>
+                                    <br><br>
+                                </div>
+
+                                <br>
+
                                 <div class="card" id="card_cuotas">
                                     <div class="card-header">
                                         <div id="" class="row">
