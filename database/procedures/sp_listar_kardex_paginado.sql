@@ -17,7 +17,7 @@ begin
 	
 	p_pagina=(p_pagina::Integer-1)*p_limit::Integer;
 
-	v_campos=' k.id, p.codigo, p.denominacion producto, k.entradas_cantidad entrada, k.costo_entradas_cantidad costo_entrada, k.total_entradas_cantidad total_entrada, k.salidas_cantidad salida, 
+	v_campos=' k.id, k.id_producto, p.codigo, p.denominacion producto, k.entradas_cantidad entrada, k.costo_entradas_cantidad costo_entrada, k.total_entradas_cantidad total_entrada, k.salidas_cantidad salida, 
 	k.costo_salidas_cantidad costo_salida, k.total_salidas_cantidad total_salida, k.saldos_cantidad saldos, k.costo_saldos_cantidad costo_saldos, k.total_saldos_cantidad total_saldos, a.denominacion almacen_destino, 
 	a2.denominacion almacen_salida, k.fecha fecha_kardex,
 	case when k.id_entrada_producto is not null then ''Ingreso''

@@ -130,8 +130,6 @@ class ComprobanteController extends Controller
         return view('frontend.comprobante.cuadre_caja');
     }
 
-
-
 	public function edit(Request $request){
 
         $trans = $request->Trans;
@@ -2587,7 +2585,6 @@ class ComprobanteController extends Controller
            
         }
         */
-        
         $empresa_model = new Empresa;
         $serie_model = new TablaMaestra;
 
@@ -3799,6 +3796,9 @@ class ComprobanteController extends Controller
           
  
             $id_comprobante_ncdc = $request->id_comprobante_ncdc;
+            $factura_nc_principal = ComprobanteDetalle::where('id_comprobante',$id_comprobante_ncdc)->where('estado','1')->first();
+            $afecta=$factura_nc_principal->afect_igv;
+            //dd($afecta_ingreso);exit();
             $id_comprobante = $request->id_comprobante;
 
             $id_comprobante_origen=$request->id_comprobante_origen;
@@ -3847,6 +3847,8 @@ class ComprobanteController extends Controller
                 $value['descripcion']="DESCUENTO POR PRONTO PAGO";
                 $value['cantidad'] = 1;
                 $value['id'] = 0;
+                $value['codigo_producto'] = "";
+                $value['abreviatura'] = "ZZ";
                 
                 $id_factura_detalle = $facturas_model->registrar_comprobante_ncnd($serieF, $fac_numero, $tipoF, $value['item'], $total, $value['descripcion'], "", $value['id'], $id_factura, $descuento,    'd',     $id_user,  $id_moneda,$razon_social,$direccion,$id_comprobante_ncdc,$correo,$afecta,$tiponota,$motivo,$afecta_ingreso,0,$value['item'],$value['cantidad']);
                 //(  serie,      numero,   tipo,      ubicacion, persona,  total,            descripcion,           cod_contable,         id_v,     id_caja,  descuento, accion, p_id_usuario, p_id_moneda)

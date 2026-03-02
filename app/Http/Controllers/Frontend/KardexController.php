@@ -159,11 +159,11 @@ class KardexController extends Controller
 		$variable = [];
 		$n = 1;
 
-		array_push($variable, array("N","Codigo","Producto","Saldos","Almacen"));
+		array_push($variable, array("N","Id Producto","Codigo","Producto","Saldos","Almacen"));
 		
 		foreach ($data as $r) {
 
-			array_push($variable, array($n++,$r->codigo, $r->denominacion, $r->saldos_cantidad, $r->almacen_kardex));
+			array_push($variable, array($n++, $r->id, $r->codigo, $r->denominacion, $r->saldos_cantidad, $r->almacen_kardex));
 		}
 		
 		$export = new InvoicesExport([$variable]);
@@ -268,11 +268,11 @@ class KardexController extends Controller
 		$variable = [];
 		$n = 1;
 
-		array_push($variable, array("N","Codigo","Producto","Entrada","Costo Entrada","Total Entrada","Salidas","Costo Salidas","Total Salidas","Saldos","Costo Saldos","Total Saldos","Almacen","Fecha","Tipo Movimiento","Codigo Movimiento"));
+		array_push($variable, array("N","Id Producto","Codigo","Producto","Entrada","Costo Entrada","Total Entrada","Salidas","Costo Salidas","Total Salidas","Saldos","Costo Saldos","Total Saldos","Almacen","Fecha","Tipo Movimiento","Codigo Movimiento"));
 		
 		foreach ($data as $r) {
 
-			array_push($variable, array($n++,$r->codigo, $r->producto, $r->entrada, $r->costo_entrada, $r->total_entrada, $r->salida, $r->costo_salida, $r->total_salida, $r->saldos, $r->costo_saldos, $r->total_saldos, $r->almacen_destino, $r->fecha_kardex, $r->tipo_movimiento, $r->codigo_movimiento));
+			array_push($variable, array($n++, $r->id_producto, $r->codigo, $r->producto, $r->entrada, $r->costo_entrada, $r->total_entrada, $r->salida, $r->costo_salida, $r->total_salida, $r->saldos, $r->costo_saldos, $r->total_saldos, $r->almacen_destino, $r->fecha_kardex, $r->tipo_movimiento, $r->codigo_movimiento));
 		}
 		
 		$export = new InvoicesExport3([$variable]);
@@ -373,16 +373,16 @@ class InvoicesExport implements FromArray, WithHeadings, WithStyles
 
     public function headings(): array
     {
-        return ["N","Codigo","Producto","Saldos","Almacen"];
+        return ["N","Id Producto","Codigo","Producto","Saldos","Almacen"];
     }
 
 	public function styles(Worksheet $sheet)
     {
 
-		$sheet->mergeCells('A1:E1');
+		$sheet->mergeCells('A1:F1');
 
         $sheet->setCellValue('A1', "REPORTE DE CONSULTA DE EXISTENCIAS - FORESPAMA");
-        $sheet->getStyle('A1:E1')->applyFromArray([
+        $sheet->getStyle('A1:F1')->applyFromArray([
             'font' => [
                 'bold' => true,
                 'color' => ['rgb' => 'FFFFFF'],
@@ -399,7 +399,7 @@ class InvoicesExport implements FromArray, WithHeadings, WithStyles
 		$sheet->getStyle('A1')->getAlignment()->setWrapText(true);
 		$sheet->getRowDimension(1)->setRowHeight(30);
 
-        $sheet->getStyle('A2:E2')->applyFromArray([
+        $sheet->getStyle('A2:F2')->applyFromArray([
             'font' => [
                 'bold' => true,
                 'color' => ['rgb' => '000000'],
@@ -415,7 +415,7 @@ class InvoicesExport implements FromArray, WithHeadings, WithStyles
 
 		$sheet->fromArray($this->headings(), NULL, 'A2');
 
-        foreach (range('A', 'E') as $col) {
+        foreach (range('A', 'F') as $col) {
             $sheet->getColumnDimension($col)->setAutoSize(true);
         }
     }
@@ -499,16 +499,16 @@ class InvoicesExport3 implements FromArray, WithHeadings, WithStyles
 
     public function headings(): array
     {
-        return ["N","Codigo","Producto","Entrada","Costo Entrada","Total Entrada","Salidas","Costo Salidas","Total Salidas","Saldos","Costo Saldos","Total Saldos","Almacen","Fecha","Tipo Movimiento","Codigo Movimiento"];
+        return ["N","Id Producto","Codigo","Producto","Entrada","Costo Entrada","Total Entrada","Salidas","Costo Salidas","Total Salidas","Saldos","Costo Saldos","Total Saldos","Almacen","Fecha","Tipo Movimiento","Codigo Movimiento"];
     }
 
 	public function styles(Worksheet $sheet)
     {
 
-		$sheet->mergeCells('A1:P1');
+		$sheet->mergeCells('A1:Q1');
 
         $sheet->setCellValue('A1', "REPORTE DE KARDEX - FORESPAMA");
-        $sheet->getStyle('A1:P1')->applyFromArray([
+        $sheet->getStyle('A1:Q1')->applyFromArray([
             'font' => [
                 'bold' => true,
                 'color' => ['rgb' => 'FFFFFF'],
@@ -525,7 +525,7 @@ class InvoicesExport3 implements FromArray, WithHeadings, WithStyles
 		$sheet->getStyle('A1')->getAlignment()->setWrapText(true);
 		$sheet->getRowDimension(1)->setRowHeight(30);
 
-        $sheet->getStyle('A2:P2')->applyFromArray([
+        $sheet->getStyle('A2:Q2')->applyFromArray([
             'font' => [
                 'bold' => true,
                 'color' => ['rgb' => '000000'],
@@ -539,7 +539,7 @@ class InvoicesExport3 implements FromArray, WithHeadings, WithStyles
     		],
         ]);
 
-        foreach (range('A', 'P') as $col) {
+        foreach (range('A', 'Q') as $col) {
             $sheet->getColumnDimension($col)->setAutoSize(true);
         }
     }

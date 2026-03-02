@@ -99,8 +99,8 @@ begin
 								from valorizaciones v2
 								where id_comprobante = p_comprobante_origen;
 						
-						if p_afecta_ingreso='C' then
-
+						if p_afecta_ingreso='20' then
+						
 							select c.fecha, cp.id_medio, cp.nro_operacion
 							into  _fecha_comp,_id_medio, _nro_operacion
 							from comprobantes c inner join comprobante_pagos cp on c.id =cp.id_comprobante where c.id=p_comprobante_origen;
@@ -115,7 +115,7 @@ begin
 							end if;
 						end if;
 					end if;			
-			
+		
 		When 'd' then
 
 			if numero > 0 Then
