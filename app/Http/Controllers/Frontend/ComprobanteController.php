@@ -1338,8 +1338,6 @@ class ComprobanteController extends Controller
                     $valorizacion->save();
                 }
 
-
-
                 $valorizad_ = $request->valorizad;
                 $numero_documento_b = $request->numero_documento_b;
 
@@ -1357,10 +1355,6 @@ class ComprobanteController extends Controller
                     }
                 }
 
-
-
-
-
                 $descuentopp = $request->descuentopp;
                 $id_pronto_pago = $request->id_pronto_pago;
 
@@ -1370,16 +1364,11 @@ class ComprobanteController extends Controller
 
                 //echo "id_factura=>".$id_factura."<br>"; exit();
 
-
                 //echo "id_val=>".$id_val."<br>"; exit();
-
-
-
 
                 $valorizad = $request->valorizad;
 
                 //print_r($tarifa); exit();
-
 
                 /*
                         foreach ($valorizad as $key => $value) {
@@ -1387,14 +1376,11 @@ class ComprobanteController extends Controller
                             
                             $valoriza_upd = Valorizacione::find($id_val);
 
-                        
-
                             $valoriza_upd->id_comprobante = $id_factura;
                             $valoriza_upd->pagado = "1";
 
                             $valoriza_upd->valor_unitario = $value['monto'];
                             $valoriza_upd->cantidad = $value['cantidad'];    
-
 
                             if ($descuentopp =="S")$valoriza_upd->id_pronto_pago = $id_pronto_pago;
 
@@ -1404,7 +1390,6 @@ class ComprobanteController extends Controller
                             */
 
                 //}
-
 
                 /*                    
                     foreach ($tarifa as $key => $value) {
@@ -1429,13 +1414,8 @@ class ComprobanteController extends Controller
                     */
                 }
 
-
-
-
-
                 $id_persona = $request->persona;
                 $ubicacion_id = $request->ubicacion;
-
 
                 /*
                 if ($id_concepto == 26411) {
@@ -1487,8 +1467,6 @@ class ComprobanteController extends Controller
                         $comprobanteCuota->save();
                     }
                 }
-
-
 
                 if (isset($request->idMedio)):
                     foreach ($request->idMedio as $key => $value):
@@ -3484,19 +3462,7 @@ class ComprobanteController extends Controller
                 
             $items[$index] = $items1;
         }
-/*
-        $items2 = array(
-            "serie"=>$factura->serie,
-            "numero"=> $factura->numero,
-            "idEmpresa"=> 1034,
-            "idUsuario"=> 2564,
-            "noValidar"=> false,
-            "idPuntoventa"=> 1700,
-            "idListaPrecio"=> 0,
-            "enviarAdjuntoDescomprimido"=> false
-        );
-        $items2[$index]=$items2;
- */
+
 		$data["items"] = $items;
        // $data["server"] = $items2;
 
@@ -3568,11 +3534,6 @@ class ComprobanteController extends Controller
 		$data["tipoDocIdentidadReceptor"] = $this->getTipoDocPersona_nc($factura_nc->tipo);//"6";                
 		$data["numeroDocIdentidadReceptor"] = $factura->cod_tributario; //"10040834643";
 
-        //$data["direccionReceptor"] = $factura->direccion;
-
-        //print_r($data); exit();
-
-        //dd($data);exit();
 		$databuild_string = json_encode($data);
        
         //print_r($databuild_string);exit();
@@ -3656,9 +3617,6 @@ class ComprobanteController extends Controller
                 $mes = substr($fecha, 5, 2); //$porciones[1];
                 $anio = substr($fecha, 0, 4);
                 //$anio = $fecha; //$porciones[0];
-
-
-
 
                 $fac_ruta_comprobante = config('values.ws_fac_host')."/see/server/consult/pdf?nde=20160453908&td=" .$this->getTipoDocumento($factura->tipo) ."&se=" .$factura->serie. "&nu=" .$factura->numero. "&fe=".date("Y-m-d",strtotime($factura->fecha))."&am=" .$factura->total;
                 //$fac_ruta_comprobante = config('values.ws_fac_host')."/see/server/consult/pdf?nde=20601973759&td=" .$this->getTipoDocumento($factura->tipo) ."&se=" .$factura->serie. "&nu=" .$factura->numero. "&fe=".date("Y-m-d",strtotime($factura->fecha))."&am=" .$factura->total;
@@ -3813,7 +3771,7 @@ class ComprobanteController extends Controller
     {
         $sw = true;
         $msg = "";
-       
+        
 
         $id_user = Auth::user()->id;
         $facturas_model = new Comprobante;
@@ -3822,6 +3780,7 @@ class ComprobanteController extends Controller
             /**********RUC***********/
 
             $tarifa = $request->facturad;
+            //dd($tarifa);exit();
 
             $total = $request->totalP;
             $serieF = $request->serieF;
@@ -3928,7 +3887,6 @@ class ComprobanteController extends Controller
                 }
  
                 //echo $id_factura;
- 
  
             }
             if ($trans == 'FE') {
