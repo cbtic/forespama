@@ -2173,7 +2173,7 @@ function duplicar_pedido(){
                                                 }
                                             }*/
                                         ?>
-                                        <?php if($id_user==$orden_compra->id_usuario_inserta && $orden_compra->cerrado == 1 && $id_proceso == 1 && $orden_compra->id_tipo_documento != 1){?>
+                                        <?php if(($id_user==$orden_compra->id_usuario_inserta|| in_array($orden_compra->id_usuario_inserta, $id_vendedores)) && $orden_compra->cerrado == 1 && $id_proceso == 1 && $orden_compra->id_tipo_documento != 1){?>
                                             <!--<a href="javascript:void(0)" onClick="fn_save_orden_compra()" class="btn btn-sm btn-success" style="margin-left:10px"></a>-->
                                                 
                                             <button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-nuevo" data-toggle="modal" onclick="fn_save_orden_compra()">

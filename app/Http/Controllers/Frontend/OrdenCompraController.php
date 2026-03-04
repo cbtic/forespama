@@ -27,6 +27,7 @@ use App\Models\GuiaInterna;
 use App\Models\InformeB2bVenta;
 use App\Models\AutorizacionOrdenCompra;
 use App\Models\PersonaProceso;
+use App\Models\JefeVendedorDetalle;
 use DateTime;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Auth;
@@ -199,9 +200,11 @@ class OrdenCompraController extends Controller
         $persona_model = new Persona;
         $empresa_model = new Empresa;
         $usuario_descuento_model = new UsuarioDescuento;
+        $jefe_vendedor_detalle_model = new JefeVendedorDetalle;
         $id_proceso = null;
         $proceso = null;
         $id_persona_proceso = null;
+        $id_vendedores = [];
 		
 		if($id>0){
 
@@ -221,6 +224,10 @@ class OrdenCompraController extends Controller
                 $id_descuento_usuario = 0;
             }
             $id_autorizacion = $orden_compra->id_autorizacion;
+            $vendedores = $jefe_vendedor_detalle_model->obtenerVendedoresByJefe($id_user);
+            foreach ($vendedores as $row) {
+                $id_vendedores[] = $row->id_vendedor;
+            }
 		}else{
 			$orden_compra = new OrdenCompra;
             $id_descuento_usuario = 0;
@@ -246,7 +253,7 @@ class OrdenCompraController extends Controller
         $canal = $tablaMaestra_model->getMaestroByTipo(98);
         //dd($orden_compra->id_tipo_cliente);exit();
         
-		return view('frontend.orden_compra.modal_orden_compra_nuevoOrdenCompra',compact('id','orden_compra','tipo_documento','proveedor','producto','marca','estado_bien','unidad','igv_compra','descuento','almacen','unidad_origen','id_user','moneda','vendedor','tipo_documento_cliente','persona','prioridad','canal','id_descuento_usuario','id_proceso','id_persona_proceso','proceso','id_autorizacion'));
+		return view('frontend.orden_compra.modal_orden_compra_nuevoOrdenCompra',compact('id','orden_compra','tipo_documento','proveedor','producto','marca','estado_bien','unidad','igv_compra','descuento','almacen','unidad_origen','id_user','moneda','vendedor','tipo_documento_cliente','persona','prioridad','canal','id_descuento_usuario','id_proceso','id_persona_proceso','proceso','id_autorizacion','id_vendedores'));
 
     }
 
@@ -2971,7 +2978,7 @@ class OrdenCompraController extends Controller
                 if ($fecha) {
                     $fecha_informe = $fecha->format('Y-m-d');
                     $anio = $fecha->format('Y');
-                    $semana = (int)$fecha->format('W') - 1;
+                    $semana = (int)$fecha->format('W');
                 }
             }
         }
