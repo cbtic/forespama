@@ -1,5 +1,3 @@
--- DROP FUNCTION public.sp_listar_devolucion_paginado(varchar, varchar, varchar, varchar, varchar, varchar, refcursor);
-
 CREATE OR REPLACE FUNCTION public.sp_listar_devolucion_paginado(p_empresa character varying, p_fecha character varying, p_numero_devolucion character varying, p_numero_orden_compra_cliente character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
  RETURNS refcursor
  LANGUAGE plpgsql

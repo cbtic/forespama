@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION public.sp_listar_informe_venta_b2b_paginado(p_semana character varying, p_producto character varying, p_tienda character varying, p_empresa character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
+CREATE OR REPLACE FUNCTION public.sp_listar_informe_venta_b2b_paginado(p_semana character varying, p_producto character varying, p_tienda character varying, p_empresa character varying, p_anio character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
  RETURNS refcursor
  LANGUAGE plpgsql
 AS $function$
@@ -12,15 +12,15 @@ v_count varchar;
 v_col_count varchar;
 
 begin
-	
+
 	p_pagina=(p_pagina::Integer-1)*p_limit::Integer;
 
-	v_campos=' ibbv.id, ibbv.upc, ibbv.sku, ep.descripcion_empresa, ibbv.subclase_conjunto, ibbv.desc_subclase_conjunto, t.numero_tienda, t.denominacion tienda, /*t.denominacion,*/ibbv.semana, ibbv.lunes, ibbv.martes, ibbv.miercoles, ibbv.jueves, ibbv.viernes, 
-	ibbv.sabado, ibbv.domingo, ibbv.venta_unidades, ibbv.venta_soles, ibbv.stock_contable, ibbv.oc_pendiente, ibbv.trf_por_recibir, ibbv.trf_enviadas, ibbv.estado ';
+	v_campos=' ibbv.id, ibbv.upc, ibbv.sku, ep.descripcion_empresa, ibbv.subclase_conjunto, ibbv.desc_subclase_conjunto, t.numero_tienda, t.denominacion tienda, ibbv.semana, ibbv.lunes, ibbv.martes, ibbv.miercoles, ibbv.jueves, ibbv.viernes, 
+	ibbv.sabado, ibbv.domingo, ibbv.venta_unidades, ibbv.venta_soles, ibbv.stock_contable, ibbv.oc_pendiente, ibbv.trf_por_recibir, ibbv.trf_enviadas, ibbv.estado, ibbv.anio ';
 
 	v_tabla=' from informe_b2b_ventas ibbv 
 	inner join productos p on ibbv.id_producto = p.id and p.estado = ''1''
-	left join equivalencia_productos ep on p.id = ep.id_producto and ep.estado = ''1''
+	left join equivalencia_productos ep on p.id = ep.id_producto and ibbv.id_empresa = ep.id_empresa and ep.estado = ''1''
 	left join tiendas t on ibbv.id_tienda = t.id and t.estado = ''1'' ';
 	
 	v_where = ' Where 1=1 and ibbv.estado = ''1'' ';
@@ -40,14 +40,18 @@ begin
 	If p_empresa<>'' Then
 	 v_where:=v_where||'And ep.id_empresa = '''||p_empresa||''' ';
 	End If;
+
+	If p_anio<>'' Then
+	 v_where:=v_where||'And ibbv.anio = '''||p_anio||''' ';
+	End If;
 	
 	EXECUTE ('SELECT count(1) '||v_tabla||v_where) INTO v_count;
 	v_col_count:=' ,'||v_count||' as TotalRows ';
 
 	If v_count::Integer > p_limit::Integer then
-		v_scad:='SELECT '||v_campos||v_col_count||v_tabla||v_where||' Order By ibbv.semana desc, ibbv.id asc LIMIT '||p_limit||' OFFSET '||p_pagina||';'; 
+		v_scad:='SELECT '||v_campos||v_col_count||v_tabla||v_where||' Order By ibbv.anio desc, ibbv.semana desc, ibbv.id asc LIMIT '||p_limit||' OFFSET '||p_pagina||';'; 
 	else
-		v_scad:='SELECT '||v_campos||v_col_count||v_tabla||v_where||' Order By ibbv.semana desc, ibbv.id asc;'; 
+		v_scad:='SELECT '||v_campos||v_col_count||v_tabla||v_where||' Order By ibbv.anio desc, ibbv.semana desc, ibbv.id asc;'; 
 	End If;
 
 	--Raise Notice '%',v_scad;
