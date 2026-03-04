@@ -238,6 +238,7 @@ function modalEntradaProductoHistorial(id, tipo){
 								<th>N° Comprobante</th>
                                 <th>Fecha Comprobante</th>
                                 <th>Tiendas</th>
+                                <th>Guia</th>
                                 <th>Acciones</th>
 							</tr>
 							</thead>
@@ -252,6 +253,7 @@ function modalEntradaProductoHistorial(id, tipo){
                                 <td class="text-left" style="vertical-align:middle"><?php echo $row->codigo?></td>
                                 <td class="text-left" style="vertical-align:middle"><?php if($row->fecha_movimiento!=null) {echo date('Y-m-d', strtotime($row->fecha_movimiento));}else{ echo'';}?></td>
                                 <td class="text-left" style="vertical-align:middle"><?php echo $row->tiendas?></td>
+                                <td class="text-left" style="vertical-align:middle"><?php echo $row->guia?></td>
                                 <td class="text-left" style="vertical-align:middle">
                                     <?php if($row->tipo=='ENTRADA')$tipo=1;
                                     else $tipo=2;?>

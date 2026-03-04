@@ -78,7 +78,7 @@ class EntradaProducto extends Model
         $cad = "select ep.id, 'ENTRADA' tipo, ep.fecha_ingreso fecha_movimiento, tm.denominacion tipo_documento, tm2.denominacion unidad_origen, e.razon_social, ep.codigo, ep.fecha_comprobante, ep.estado, ep.created_at, tm3.denominacion moneda, ep.observacion, tm4.denominacion igv_compra, a.denominacion almacen,
         (select COALESCE(STRING_AGG(DISTINCT t.denominacion ::TEXT, ', '), '') from tienda_detalle_orden_compras tdoc
         inner join tiendas t on tdoc.id_tienda = t.id
-        where tdoc.id_orden_compra = oc.id) tiendas
+        where tdoc.id_orden_compra = oc.id) tiendas, concat_ws('-', gi.guia_serie, gi.numero_documento) guia
         from entrada_productos ep 
         inner join tabla_maestras tm on ep.id_tipo_documento = tm.codigo ::int and tm.tipo = '48'
         inner join tabla_maestras tm2 on ep.unidad_origen::int = tm2.codigo::int and tm2.tipo = '50'
@@ -87,8 +87,9 @@ class EntradaProducto extends Model
         left join tabla_maestras tm4 on ep.igv_compra ::int = tm4.codigo::int and tm4.tipo = '51'
         inner join almacenes a on ep.id_almacen_destino = a.id
         inner join orden_compras oc on ep.id_orden_compra = oc.id
+        left join guia_internas gi on oc.id = gi.numero_documento::int and gi.id_tipo_documento='4'
         where oc.id = '".$id."'
-        and ep.estado='1'";
+        and ep.estado='1' ";
 
 		$data = DB::select($cad);
         return $data;

@@ -360,68 +360,114 @@ label.form-control-sm{
                     <input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
 				
                     <div class="row" style="padding:20px 20px 0px 20px;">
+                        <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
+                            <div class="row">
 
-                        <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-                            <select name="empresa_bus" id="empresa_bus" class="form-control form-control-sm">
-                                <option value="">--Seleccionar Empresa--</option>
-                                <?php
-                                foreach ($empresa as $row){?>
-                                    <option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
-                                    <?php 
-                                }
-                                ?>
-                            </select>
-                        </div>
+                                <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+                                    <select name="empresa_bus" id="empresa_bus" class="form-control form-control-sm">
+                                        <option value="">--Seleccionar Empresa--</option>
+                                        <?php
+                                        foreach ($empresa as $row){?>
+                                            <option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
+                                            <?php 
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
 
-                        <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
-                            <input id="semana_bus" name="semana_bus" on class="form-control form-control-sm"  placeholder="Semana">
+                                <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+                                    <select name="anio_bus" id="anio_bus" class="form-control form-control-sm">
+                                        <option value="">--Seleccionar Año--</option>
+                                        <?php
+                                        foreach ($anio as $row){?>
+                                            <option value="<?php echo $row->anio ?>"><?php echo $row->anio ?></option>
+                                            <?php 
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
+
+                                <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+                                    <input id="semana_bus" name="semana_bus" on class="form-control form-control-sm"  placeholder="Semana">
+                                </div>
+
+                                <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                                    <select name="producto_bus" id="producto_bus" class="form-control form-control-sm">
+                                        <option value="">--Seleccionar Producto--</option>
+                                        <?php
+                                        foreach ($equivalencia_producto as $row){?>
+                                            <option value="<?php echo $row->id_producto ?>"><?php echo $row->codigo_empresa . ' ' . $row->descripcion_empresa ?></option>
+                                            <?php 
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
+
+                                <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                                    <select name="tienda_bus" id="tienda_bus" class="form-control form-control-sm">
+                                        <option value="">--Seleccionar Tienda--</option>
+                                        <?php
+                                        foreach ($tienda as $row){?>
+                                            <option value="<?php echo $row->id ?>"><?php echo $row->denominacion ?></option>
+                                            <?php 
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-                            <select name="producto_bus" id="producto_bus" class="form-control form-control-sm">
-                                <option value="">--Seleccionar Producto--</option>
-                                <?php
-                                foreach ($equivalencia_producto as $row){?>
-                                    <option value="<?php echo $row->id_producto ?>"><?php echo $row->codigo_empresa . ' ' . $row->descripcion_empresa ?></option>
-                                    <?php 
-                                }
-                                ?>
-                            </select>
-                        </div>
-
-                        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-                            <select name="tienda_bus" id="tienda_bus" class="form-control form-control-sm">
-                                <option value="">--Seleccionar Tienda--</option>
-                                <?php
-                                foreach ($tienda as $row){?>
-                                    <option value="<?php echo $row->id ?>"><?php echo $row->denominacion ?></option>
-                                    <?php 
-                                }
-                                ?>
-                            </select>
-                        </div>
-
-                        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12" style="padding-right:0px">
+                            <div class="row">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding-right:0px">
+                                    
+                                    <div class="row">
                             
-                            <input class="btn btn-warning float-left" value="Buscar" type="button" id="btnBuscar" />
+                                        <!--<input class="btn-sm btn-warning float-left" value="Buscar" type="button" id="btnBuscar" />-->
+                                        <button type="button" id="btnBuscar" class="btn btn-sm btn-warning float-left icono-botones2">
+                                            <i class="fas fa-search" style="font-size:18px;"></i> Buscar
+                                        </button>
+                                    </div>
 
-                            <span class="btn btn-info btn-file float-left" style="margin-left:10px">
-                                Examinar OC <input id="image" name="image" type="file" />
-                            </span>
-                            
-                            <i id="fileExcel" class="fa fa-file-excel" style="display:none;color:#00B300;font-size:35px;block;float:left;padding-left:10px"></i>
-                            
-                            <input type="button" class="btn btn-success upload" value="Subir OC" style="margin-left:10px;float:left">
-
+                                    @hasanyrole('Administrator|Orden Compra Sodimac')
+								    <div class="row">
+                                        <span class="btn-sm btn-info btn-file float-left" style="margin-left:10px">
+                                            Examinar Sodimac <input id="image" name="image" type="file" />
+                                        </span>
+                                        
+                                        <i id="fileExcel" class="fa fa-file-excel" style="display:none;color:#00B300;font-size:35px;block;float:left;padding-left:10px"></i>
+                                        
+                                        <!--<input type="button" class="btn btn-success upload" value="Subir Sodimac" style="margin-left:10px;float:left">-->
+                                        <button type="button" class="btn btn-sm btn-success upload float-left icono-botones2" style="margin-left:10px" title="Subir Sodimac">
+                                            <i class="fas fa-upload"></i> Subir Sodimac
+                                        </button>
+                                    </div>
+                                    @endhasanyrole
+                                    @hasanyrole('Administrator|Orden Compra Promart')
+                                    <div class="row">
+                                        <span class="btn-sm btn-info btn-file float-left" style="margin-left:10px">
+                                            Examinar Promart <input id="image2" name="image2" type="file" />
+                                        </span>
+                                        
+                                        <i id="fileExcel" class="fa fa-file-excel" style="display:none;color:#00B300;font-size:35px;block;float:left;padding-left:10px"></i>
+                                        
+                                        <!--<input type="button" class="btn btn-success upload2" value="Subir Promart" style="margin-left:10px;float:left">-->
+                                        <button type="button" class="btn btn-sm btn-success upload2 float-left icono-botones2" style="margin-left:10px" title="Subir Promart">
+                                            <i class="fas fa-upload"></i> Subir Promart
+                                        </button>
+                                    </div>
+								    @endhasanyrole
+                                </div>
+						    </div>
                         </div>
                     </div>
                     
-                    <div class="card-body">				
+                    <div class="card-body">
 
                         <div class="table-responsive">
                         <table id="tblInformeB2B" class="table table-hover table-sm">
                             <thead>
-                            <tr style="font-size:13px">
+                            <tr style="font-size:12px">
                                 <th>Id</th>
                                 <th>UPC</th>
                                 <th>SKU</th>
@@ -443,7 +489,7 @@ label.form-control-sm{
                                 <th>Stock Contable</th>
                             </tr>
                             </thead>
-                            <tbody>
+                            <tbody style="font-size:13px">
                             </tbody>
                         </table>
                     </div><!--table-responsive-->

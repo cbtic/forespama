@@ -38,6 +38,44 @@ $(document).ready(function () {
 		return false;
     });
 
+	$(".upload2").on('click', function() {
+
+		var msgLoader = "";
+        msgLoader = "Procesando, espere un momento por favor";
+        var heightBrowser = $(window).width()/2;
+        $('.loader').css("opacity","0.8").css("height",heightBrowser).html("<div id='Grd1_wrapper' class='dataTables_wrapper'><div id='Grd1_processing' class='dataTables_processing panel-default'>"+msgLoader+"</div></div>");
+        $('.loader').show();
+		
+        var formData = new FormData();
+        var files = $('#image2')[0].files[0];
+        formData.append('file',files);
+        $.ajax({
+			headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            url: "/orden_compra/upload_informe_b2b_compra_promart",
+            type: 'post',
+            data: formData,
+            contentType: false,
+            processData: false,
+			dataType: 'json', 
+            success: function(response) {
+				
+				console.log(response); 
+
+				if(response.cantidad>0){
+					$('.loader').hide();
+					bootbox.alert("El informe de venta del B2B ya existe. Por favor ingrese otro.");
+					return false;
+				}else{
+					datatablenew();
+					$('.loader').hide();
+				}
+            }
+        });
+		return false;
+    });
+
 	$('#btnBuscar').click(function () {
 		fn_ListarBusqueda();
 	});
@@ -57,6 +95,13 @@ $(document).ready(function () {
 	});
 
 	$('#tienda_bus').keypress(function(e){
+		if(e.which == 13) {
+			datatablenew();
+			return false;
+		}
+	});
+
+	$('#anio_bus').keypress(function(e){
 		if(e.which == 13) {
 			datatablenew();
 			return false;
@@ -110,6 +155,7 @@ function datatablenew(){
             var iNroPagina 	= parseFloat(fn_util_obtieneNroPagina(aoData[3].value, aoData[4].value)).toFixed();
             var iCantMostrar 	= aoData[4].value;
 			
+			var anio = $('#anio_bus').val();
 			var semana = $('#semana_bus').val();
 			var producto = $('#producto_bus').val();
 			var tienda = $('#tienda_bus').val();
@@ -122,7 +168,7 @@ function datatablenew(){
                 "type": "POST",
                 "url": sSource,
                 "data":{NumeroPagina:iNroPagina,NumeroRegistros:iCantMostrar,
-						semana:semana,producto:producto,tienda:tienda,empresa:empresa,
+						semana:semana,producto:producto,tienda:tienda,empresa:empresa,anio:anio,
 						_token:_token
                        },
                 "success": function (result) {
