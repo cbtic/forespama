@@ -3078,7 +3078,7 @@ class ComprobanteController extends Controller
 		$data["esFicticio"] = false;
 		$data["keepNumber"] = "false";
 		$data["tipoCorreo"] = "1";
-        $data["formaPago"] = ($factura->id_forma_pago =="1")?"CONTADO":"CREDITO"; //"CONTADO";        
+        $data["formaPago"] = ($factura->id_forma_pago =="1")?"CONTADO":"CREDITO"; //"CONTADO";
 		$data["tipoMoneda"] = ($factura->id_moneda=="2")?"USD":"PEN"; //"PEN";
 		$data["adicionales"] = [];
 		$data["horaEmision"] = date("h:i:s", strtotime($factura->fecha)); // "12:12:04";//$cabecera->fecha

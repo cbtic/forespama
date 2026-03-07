@@ -1057,8 +1057,12 @@ $('#bien_servicio').on('change', function () {
                                     <button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-nuevo" data-toggle="modal" onclick="fn_save_producto()">
                                         <i class="fas fa-save" style="font-size:18px;"></i> Guardar
                                     </button>
+                                    <button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-cerrar" data-toggle="modal" onclick="$('#openOverlayOpc').modal('hide');">
+                                        <i class="fas fa-times-circle" style="font-size:18px;"></i> Cerrar
+                                    </button>
                                 </div>
                             </div>
+                            
                         </div>
                     </div>
                 </form>

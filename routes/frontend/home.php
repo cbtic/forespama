@@ -57,6 +57,7 @@ use App\Http\Controllers\Frontend\FamiliaContablesController;
 use App\Http\Controllers\Frontend\CuentaContablesController;
 use App\Http\Controllers\Frontend\EquivalenciaSubFamiliaFamiliaContablesController;
 use App\Http\Controllers\Frontend\DescansoController;
+use App\Http\Controllers\Frontend\ConsultaOxapampaMovimientoController;
 
 //use App\Http\Controllers\VehiculoController;
 
@@ -936,5 +937,13 @@ Route::post('comprobante/send_detalle_factura_promart', [ComprobanteController::
 Route::get('orden_compra/modal_pago_orden_compra/{id}/{id_orden_compra}', [OrdenCompraController::class, 'modal_pago_orden_compra'])->name('orden_compra.modal_pago_orden_compra');
 
 Route::post('orden_compra/upload_informe_b2b_compra_promart', [OrdenCompraController::class, 'upload_informe_b2b_compra_promart'])->name('orden_compra.upload_informe_b2b_compra_promart');
+
+Route::get('guia_interna/create_transportista', [GuiaInternaController::class, 'create_transportista'])->name('guia_interna.create_transportista');
+Route::post('guia_interna/listar_guia_transportista_ajax', [GuiaInternaController::class, 'listar_guia_transportista_ajax'])->name('guia_interna.listar_guia_transportista_ajax');
+Route::post('guia_interna/send_guia_transportista', [GuiaInternaController::class, 'send_guia_transportista'])->name('guia_interna.send_guia_transportista');
+Route::get('guia_interna/modal_guia_transportista/{id}', [GuiaInternaController::class, 'modal_guia_transportista'])->name('guia_interna.modal_guia_transportista');
+
+Route::get('consulta_oxapampa_movimiento/create', [ConsultaOxapampaMovimientoController::class, 'create'])->name('consulta_oxapampa_movimiento.create');
+Route::post('consulta_oxapampa_movimiento/listar_oxapampa_movimiento_ajax', [ConsultaOxapampaMovimientoController::class, 'listar_oxapampa_movimiento_ajax'])->name('consulta_oxapampa_movimiento.listar_oxapampa_movimiento_ajax');
 
 

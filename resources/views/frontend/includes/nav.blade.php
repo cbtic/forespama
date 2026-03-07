@@ -172,7 +172,7 @@
 					@endif
 					
 					
-					@if(Gate::check('Requerimientos') || Gate::check('Entradas') || Gate::check('Orden Compra') || Gate::check('Consulta Stock') || Gate::check('Dispensacion') || Gate::check('Ingreso Produccion') || Gate::check('Kardex') || Gate::check('Movimientos') || Gate::check('Verificacion Aplicacion Comisiones') || Gate::check('Empaquetado') || Gate::check('Devolucion') || Gate::check('Gestion Autorizacion') || Gate::check('Cargar Informe Venta b2b') || Gate::check('Reuso') || Gate::check('Ajuste Stock'))
+					@if(Gate::check('Requerimientos') || Gate::check('Entradas') || Gate::check('Orden Compra') || Gate::check('Consulta Stock') || Gate::check('Dispensacion') || Gate::check('Ingreso Produccion') || Gate::check('Kardex') || Gate::check('Movimientos Oxapampa') || Gate::check('Movimientos') || Gate::check('Verificacion Aplicacion Comisiones') || Gate::check('Empaquetado') || Gate::check('Devolucion') || Gate::check('Gestion Autorizacion') || Gate::check('Cargar Informe Venta b2b') || Gate::check('Reuso') || Gate::check('Ajuste Stock'))
 						
 						<li class="nav-item dropdown">
 							<a href="#" class="nav-link dropdown-toggle" id="navbarDropdownPrueba" data-toggle="dropdown"
@@ -206,6 +206,10 @@
 								
 								@can('Kardex')
 									<x-utils.link :href="route('frontend.kardex.create')" class="dropdown-item" :text="__('Kardex')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+								@endif
+
+								@can('Consulta Oxapampa Movimientos')
+									<x-utils.link :href="route('frontend.consulta_oxapampa_movimiento.create')" class="dropdown-item" :text="__('Movimientos Oxapampa')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
 								@endif
 								
 								@can('Movimientos')
@@ -268,7 +272,7 @@
 						
 					@endif
 
-						@if(Gate::check('Ingreso Caja') || Gate::check('Comprobante') || Gate::check('Consulta Sodimac') || Gate::check('Consulta Promart') || Gate::check('Guia') || Gate::check('Pagos Orden Venta') || Gate::check('Pagos Orden Compra') || Gate::check('Facturacion Orden Compra'))
+						@if(Gate::check('Ingreso Caja') || Gate::check('Comprobante') || Gate::check('Consulta Sodimac') || Gate::check('Consulta Promart') || Gate::check('Guia') || Gate::check('Guia Transportista') || Gate::check('Pagos Orden Venta') || Gate::check('Pagos Orden Compra') || Gate::check('Facturacion Orden Compra'))
  
 						<li class="nav-item dropdown">
 							<a href="#" class="nav-link dropdown-toggle" id="navbarDropdownPrueba" data-toggle="dropdown"
@@ -293,7 +297,11 @@
 								@endif
 
 								@can('Guia')
-									<x-utils.link :href="route('frontend.guia_interna.create')" class="dropdown-item" :text="__('Consulta de Guias')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />                  
+									<x-utils.link :href="route('frontend.guia_interna.create')" class="dropdown-item" :text="__('Consulta de Guias Remitente')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />                  
+								@endif
+
+								@can('Guia Transportista')
+									<x-utils.link :href="route('frontend.guia_interna.create_transportista')" class="dropdown-item" :text="__('Consulta de Guias Transportista')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />                  
 								@endif
 
 								@can('Pagos Orden Venta')

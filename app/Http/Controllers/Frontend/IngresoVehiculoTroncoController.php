@@ -20,6 +20,7 @@ use App\Models\Almacen_usuario;
 use App\Models\EmpresaCubicaje;
 use App\Models\Producto;
 use App\Models\Kardex;
+use App\Models\ConsultaOxapampaMovimiento;
 use Auth;
 use Carbon\Carbon;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -278,6 +279,25 @@ class IngresoVehiculoTroncoController extends Controller
 		//$kardex->fecha = $request->fecha;
 		$kardex->id_usuario_inserta = $id_user;
 		$kardex->save();
+
+		$consulta_oxapampa_movimiento = new ConsultaOxapampaMovimiento;
+		$consulta_oxapampa_movimiento->id_producto = $idProducto;
+		$consulta_oxapampa_movimiento->id_tipo_movimiento = '1';
+		$consulta_oxapampa_movimiento->id_movimiento = $id_ingreso_vehiculo_troncos;
+		$consulta_oxapampa_movimiento->entradas = 0;
+		$consulta_oxapampa_movimiento->costo_entradas = 0;
+		$consulta_oxapampa_movimiento->total_entradas = 0;
+		$consulta_oxapampa_movimiento->salidas = 0;
+		$consulta_oxapampa_movimiento->costo_salidas = 0;
+		$consulta_oxapampa_movimiento->total_salidas = 0;
+		$consulta_oxapampa_movimiento->saldos = 0;
+		$consulta_oxapampa_movimiento->costo_saldos = 0;
+		$consulta_oxapampa_movimiento->total_saldos = 0;
+		$consulta_oxapampa_movimiento->id_almacen = '21';
+		$consulta_oxapampa_movimiento->fecha = Carbon::now()->format('Y-m-d');
+		$consulta_oxapampa_movimiento->estado = '1';
+		$consulta_oxapampa_movimiento->id_usuario_inserta = $id_user;
+		$consulta_oxapampa_movimiento->save();
     }
 
 	public function listar_ingreso_vehiculo_tronco_ajax(Request $request){
@@ -511,6 +531,9 @@ class IngresoVehiculoTroncoController extends Controller
 		$precio_unitario = $request->precio_unitario;
 		$precio_total = $request->precio_total;
 		$precio_total_final = 0;
+		$precio_promedio_final = 0;
+		$cantidad_total_final = 0;
+		$n = 0;
 
 		$items = [];
 
@@ -549,8 +572,13 @@ class IngresoVehiculoTroncoController extends Controller
 			$ingresoVehiculoTroncoCubicaje->precio_total = $item['precio_total'];
 			$ingresoVehiculoTroncoCubicaje->save();
 			
-			$precio_total_final+=$precio_total[$key];
+			$cantidad_total_final+=$item['volumen_total_pies'];
+			$precio_promedio_final+=$item['precio_unitario'];
+			$precio_total_final+=$item['precio_total'];
+			$n++;
 		}
+
+		$precio_promedio_final=$precio_total_final/$cantidad_total_final;
 		
 		$ingresoVehiculoTroncoTipoMadera = IngresoVehiculoTroncoTipoMadera::find($request->id_ingreso_vehiculo_tronco_tipo_maderas);
 		$ingresoVehiculoTroncoTipoMadera->total = $precio_total_final;
@@ -573,6 +601,35 @@ class IngresoVehiculoTroncoController extends Controller
 			$cliente_numero_documento = $empresa->ruc;
 		}
 		
+		$producto_model = new Producto;
+
+		$producto = $producto_model->getProductoByTipoMadera($ingresoVehiculoTroncoTipoMadera->id_tipo_maderas);
+
+		$idProducto = $producto[0]->id;
+
+		$idCorte = ConsultaOxapampaMovimiento::where('id_producto', $idProducto)->where('id_almacen', '21')->where('id_tipo_movimiento', 1)->where('id_movimiento', '!=', $id_ingreso_vehiculo_troncos)->whereDate('fecha', '<=', Carbon::now())->orderBy('fecha', 'desc')->orderBy('id', 'desc')->value('id');
+        
+        $saldoBase = $idCorte > 0 ? ConsultaOxapampaMovimiento::where('id', $idCorte)->value('saldos') : 0;
+        $totalSaldosCantidadBase = $idCorte > 0 ? ConsultaOxapampaMovimiento::where('id', $idCorte)->value('total_saldos') : 0;
+
+		$consulta_oxapampa_movimiento = ConsultaOxapampaMovimiento::where('id_tipo_movimiento','1')->where('id_movimiento',$id_ingreso_vehiculo_troncos)->where('estado',1)->first();
+		$consulta_oxapampa_movimiento->id_producto = $idProducto;
+		$consulta_oxapampa_movimiento->id_tipo_movimiento = '1';
+		$consulta_oxapampa_movimiento->id_movimiento = $id_ingreso_vehiculo_troncos;
+		$consulta_oxapampa_movimiento->entradas = $cantidad_total_final;
+		$consulta_oxapampa_movimiento->costo_entradas = number_format($precio_promedio_final,2);
+		$consulta_oxapampa_movimiento->total_entradas = $precio_total_final;
+		$consulta_oxapampa_movimiento->salidas = 0;
+		$consulta_oxapampa_movimiento->costo_salidas = 0;
+		$consulta_oxapampa_movimiento->total_salidas = 0;
+		$consulta_oxapampa_movimiento->saldos = $saldoBase + $cantidad_total_final;
+		$consulta_oxapampa_movimiento->costo_saldos = number_format($precio_promedio_final,2);
+		$consulta_oxapampa_movimiento->total_saldos = $totalSaldosCantidadBase + $precio_total_final;
+		$consulta_oxapampa_movimiento->id_almacen = '21';
+		$consulta_oxapampa_movimiento->fecha = Carbon::now()->format('Y-m-d');
+		$consulta_oxapampa_movimiento->estado = '1';
+		$consulta_oxapampa_movimiento->id_usuario_inserta = $id_user;
+		$consulta_oxapampa_movimiento->save();
 		
 		$pago = new Pago;
 		$pago->id_modulo = 1;

@@ -279,7 +279,7 @@ function agregarSalidaAcerrado(){
     for (var i = 0; i < cantidad; i++) { 
         var n = $('#tblSalidaAcerradoMadera tbody tr').length + 1;
         var tipo_madera = '<select name="tipo_madera[]" id="tipo_madera' + n + '" class="tipo_madera form-control form-control-sm" onchange="obtenerProducto(this)"> <option value="">--Seleccionar--</option><?php foreach ($tipo_madera as $row){?><option value="<?php echo $row->codigo; ?>"><?php echo $row->denominacion; ?></option><?php }?></select>';
-        var medida = '<input name="id_salida_acerrado_madera[]" id="id_salida_acerrado_madera${n}" class="id_producto form-control form-control-sm" value="1" type="hidden"><select name="medida[]" id="medida' + n + '" class="medida form-control form-control-sm" onchange="obtenerProducto(this)"> <option value="">--Seleccionar--</option><?php foreach ($medida_acerrado as $row){?><option value="<?php echo $row->codigo; ?>"><?php echo $row->denominacion; ?></option><?php }?></select>';
+        var medida = '<input name="id_salida_acerrado_madera[]" id="id_salida_acerrado_madera${n}" class="id_producto form-control form-control-sm" value="1" type="hidden"><input name="medida_texto[]" id="medida_texto'+n+'" class ="medida_texto form-control form-control-sm" type="hidden"><select name="medida[]" id="medida' + n + '" class="medida form-control form-control-sm" onchange="obtenerProducto(this)"> <option value="">--Seleccionar--</option><?php foreach ($medida_acerrado as $row){?><option value="<?php echo $row->codigo; ?>"><?php echo $row->denominacion; ?></option><?php }?></select>';
         var paquete = '<input name="paquete[]" id="paquete' + n + '" class="paquete form-control form-control-sm" value="" type="text" oninput="calcularNPiezas(this)">';
         var medida_paquete1 = '<input name="medida_paquete1[]" id="medida_paquete1' + n + '" class="medida_paquete1 form-control form-control-sm" value="" type="text" oninput="calcularNPiezas(this)">';
         var medida_paquete2 = '<input name="medida_paquete2[]" id="medida_paquete2' + n + '" class="medida_paquete2 form-control form-control-sm" value="" type="text" oninput="calcularNPiezas(this)">';
@@ -370,6 +370,9 @@ function obtenerProducto(select){
         fila.find('.id_producto').val('');
         return;
     }
+
+    var texto = select.options[select.selectedIndex].text;
+    fila.find('.medida_texto').val(texto);
 
     $.ajax({
         url: "/productos/obtener_producto_acerrado/"+tipo_madera+"/"+medida,

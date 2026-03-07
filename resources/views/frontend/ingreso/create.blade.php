@@ -539,7 +539,6 @@ label.form-control-sm{
 													</div>-->
 
 													<div class="col-xl-12 text-right" style="padding-top:15px">
-
 														<!--<input class="btn btn-warning btn-sm float-rigth" value="NUEVO" type="button" id="btnNuevo" style="padding-left:20px;padding-right:20px"/>-->
 														<button type="button" id="btnNuevo" class="btn btn-sm btn-success icono-botones2" style="margin-left:10px">
 															<i class="fas fa-plus-circle" style="font-size:18px;"></i> Nuevo
@@ -548,7 +547,6 @@ label.form-control-sm{
 														<button type="button" id="btnGuardar" style="margin-left:10px" class="btn btn-sm btn-clasico btn-nuevo">
 															<i class="fas fa-save" style="font-size:18px;"></i> Guardar
 														</button>
-
                                                     </div>
 												</div>
                                             </div>

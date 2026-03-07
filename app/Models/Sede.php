@@ -48,6 +48,10 @@ class Sede extends Model
             $serie = " s.serie_guia ";
         }
 
+        if($tipo_documento=='GT'){
+            $serie = " s.serie_guia_transportista ";
+        }
+
         $cad = "select ".$serie." denominacion from sedes s 
         where s.id = '".$id_sede."'
         and s.estado='1'";
