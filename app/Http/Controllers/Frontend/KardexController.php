@@ -159,11 +159,11 @@ class KardexController extends Controller
 		$variable = [];
 		$n = 1;
 
-		array_push($variable, array("N","Id Producto","Codigo","Producto","Saldos","Almacen"));
+		array_push($variable, array("N","Id Producto","Codigo","Producto","Unidad Medida","Saldos","Almacen"));
 		
 		foreach ($data as $r) {
 
-			array_push($variable, array($n++, $r->id, $r->codigo, $r->denominacion, $r->saldos_cantidad, $r->almacen_kardex));
+			array_push($variable, array($n++, $r->id, $r->codigo, $r->denominacion, $r->unidad_medida, $r->saldos_cantidad, $r->almacen_kardex));
 		}
 		
 		$export = new InvoicesExport([$variable]);
@@ -373,16 +373,16 @@ class InvoicesExport implements FromArray, WithHeadings, WithStyles
 
     public function headings(): array
     {
-        return ["N","Id Producto","Codigo","Producto","Saldos","Almacen"];
+        return ["N","Id Producto","Codigo","Producto","Unidad Medida","Saldos","Almacen"];
     }
 
 	public function styles(Worksheet $sheet)
     {
 
-		$sheet->mergeCells('A1:F1');
+		$sheet->mergeCells('A1:G1');
 
         $sheet->setCellValue('A1', "REPORTE DE CONSULTA DE EXISTENCIAS - FORESPAMA");
-        $sheet->getStyle('A1:F1')->applyFromArray([
+        $sheet->getStyle('A1:G1')->applyFromArray([
             'font' => [
                 'bold' => true,
                 'color' => ['rgb' => 'FFFFFF'],
@@ -399,7 +399,7 @@ class InvoicesExport implements FromArray, WithHeadings, WithStyles
 		$sheet->getStyle('A1')->getAlignment()->setWrapText(true);
 		$sheet->getRowDimension(1)->setRowHeight(30);
 
-        $sheet->getStyle('A2:F2')->applyFromArray([
+        $sheet->getStyle('A2:G2')->applyFromArray([
             'font' => [
                 'bold' => true,
                 'color' => ['rgb' => '000000'],
@@ -415,7 +415,7 @@ class InvoicesExport implements FromArray, WithHeadings, WithStyles
 
 		$sheet->fromArray($this->headings(), NULL, 'A2');
 
-        foreach (range('A', 'F') as $col) {
+        foreach (range('A', 'G') as $col) {
             $sheet->getColumnDimension($col)->setAutoSize(true);
         }
     }

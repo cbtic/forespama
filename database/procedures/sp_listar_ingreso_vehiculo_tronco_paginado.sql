@@ -40,6 +40,7 @@ Begin
 	inner join vehiculos v on ivt.id_vehiculos=v.id
 	inner join conductores c on ivt.id_conductores=c.id
 	inner join personas p on c.id_personas=p.id
+	left join empresas e on ivt.id_empresa_transportista = e.id
 	inner join ingreso_vehiculo_tronco_tipo_maderas ivttm on ivt.id=ivttm.id_ingreso_vehiculo_troncos and ivttm.estado=''1''
 	inner join tabla_maestras tm on ivttm.id_tipo_maderas=tm.codigo::int and tm.tipo=''42'' ';
 
@@ -50,9 +51,11 @@ Begin
 	End If;
 
 	If p_ruc<>'' Then
-	 v_where:=v_where||'And e.ruc = '''||p_ruc||''' ';
+	 v_where:=v_where||' And (
+     p.numero_documento = '''||p_ruc||'''
+     OR e.ruc =  '''||p_ruc||''')  ';
 	End If;
-
+	
 	If p_anio<>'' Then
 	 v_where:=v_where||'And to_char(ivt.fecha_ingreso, ''YYYY'') = '''||p_anio||''' ';
 	End If;
