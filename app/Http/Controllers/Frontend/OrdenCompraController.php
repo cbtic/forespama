@@ -681,6 +681,27 @@ class OrdenCompraController extends Controller
 
     }
 
+    public function send_producto_tienda_detalle(Request $request)
+    {
+        $id_user = Auth::user()->id;
+
+        $cantidad_atendida = $request->input('cantidad_atendida', []);
+        $id_detalle_tienda_producto = $request->input('id_detalle_tienda_producto', []);
+    
+        if (empty($cantidad_atendida) || empty($id_detalle_tienda_producto)) {
+            return response()->json(['success' => false, 'message' => 'Datos incompletos.']);
+        }
+
+        foreach ($id_detalle_tienda_producto as $index => $detalle) {
+            
+            $tienda_detalle_orden_compra = TiendaDetalleOrdenCompra::find($detalle);
+            $tienda_detalle_orden_compra->cantidad_despacho = $cantidad_atendida[$index];
+            $tienda_detalle_orden_compra->save();
+
+        }
+        return response()->json(['success' => true]);
+    }
+
     public function modal_tiendas_orden_compra($id){
 		
         $tablaMaestra_model = new TablaMaestra;
@@ -711,7 +732,7 @@ class OrdenCompraController extends Controller
         $tiendas = $request->input('tiendas', []);
         $productos = $request->input('id_orden_compra_detalle', []);
         $cantidades = $request->input('cantidad_ingreso', []);
-        $descripcion = $request->input('descripcion', []);
+        $descripcion = $request->input('descripcion', []); 
     
         if (empty($tiendas) || empty($productos) || empty($cantidades) || empty($descripcion)) {
             return response()->json(['success' => false, 'message' => 'Datos incompletos.']);

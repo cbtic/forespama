@@ -14,7 +14,7 @@ class TiendaDetalleOrdenCompra extends Model
 
         $cad = "select distinct tdoc.id, t.id id_tienda, t.denominacion tienda, p.denominacion producto,
         tm.denominacion unidad_medida, 
-        tdoc.cantidad, oc.id id_orden_compra, p.id id_producto
+        tdoc.cantidad, oc.id id_orden_compra, p.id id_producto, tdoc.cantidad_despacho 
         from tienda_detalle_orden_compras tdoc 
         inner join orden_compras oc on tdoc.id_orden_compra = oc.id 
         left join orden_compra_detalles ocd on ocd.id_orden_compra = oc.id 

@@ -263,9 +263,10 @@ function cargarDetalle(){
                         const rowProducto  = `
                             <tr>
                                 <td></td> 
-                                <td><label style="border:none; background: none;" name="producto[]" id="producto${n}" class="form-control form-control-sm"> ${tienda_detalle_orden_compra.producto}</td>
+                                <td><input name="id_detalle_tienda_producto[]" id="id_detalle_tienda_producto${n}" class="form-control form-control-sm" value="${tienda_detalle_orden_compra.id}" type="hidden"><label style="border:none; background: none;" name="producto[]" id="producto${n}" class="form-control form-control-sm"> ${tienda_detalle_orden_compra.producto}</td>
                                 <td style="width: 200px"><label style="border:none; background: none;" name="unidad_medida[]" id="unidad_medida${n}" class="form-control form-control-sm">${tienda_detalle_orden_compra.unidad_medida}</td>
                                 <td style="width: 100px"><label style="border:none; background: none;" name="cantidad[]" id="cantidad${n}" class="form-control form-control-sm">${tienda_detalle_orden_compra.cantidad}</td>
+                                <td style="width: 100px"><input name="cantidad_atendida[]" id="cantidad_atendida${n}" class="form-control form-control-sm" value="${tienda_detalle_orden_compra.cantidad_despacho != null ? tienda_detalle_orden_compra.cantidad_despacho : tienda_detalle_orden_compra.cantidad}"></td>
                             </tr>
                         `;
                         /*const rowProducto  = `
@@ -335,6 +336,36 @@ function pdf_documento(){
 
 }
 
+function fn_save_detalle_producto(){
+
+    var msg="";
+	
+    if(msg!=""){
+        bootbox.alert({
+            message: msg,
+        });
+        return false;
+    }else{
+        var msgLoader = "";
+        msgLoader = "Procesando, espere un momento por favor";
+        var heightBrowser = $(window).width()/2;
+        $('.loader').css("opacity","0.8").css("height",heightBrowser).html("<div id='Grd1_wrapper' class='dataTables_wrapper'><div id='Grd1_processing' class='dataTables_processing panel-default'>"+msgLoader+"</div></div>");
+        $('.loader').show();
+
+        $.ajax({
+            url: "/orden_compra/send_producto_tienda_detalle",
+            type: "POST",
+            data :  $('#frmOrdenCompraTienda').serialize(),
+            success: function (result) {
+                
+                $('#openOverlayOpc').modal('hide');
+                $('.loader').hide();
+                
+            }
+        });
+    }
+}
+
 </script>
 
 
@@ -368,138 +399,6 @@ function pdf_documento(){
                     <input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
                     <input type="hidden" name="id" id="id" value="<?php echo $id?>">
                     
-                    <!--<div class="row" style="padding-left:10px">
-
-                        <div class="col-lg-2">
-                            Tipo Documento
-                        </div>
-                        <div class="col-lg-2">
-                            <select name="tipo_documento" id="tipo_documento" class="form-control form-control-sm" onchange="obtenerCodigo()">
-                                <option value="">--Seleccionar--</option>
-                                <?php
-                                //foreach ($tipo_documento as $row){?>
-                                    <option value="<?php //echo $row->codigo ?>" <?php //if($row->codigo==$orden_compra->id_tipo_documento)echo "selected='selected'"?>><?php //echo $row->denominacion ?></option>
-                                    <?php 
-                                //}
-                                ?>
-                            </select>
-                        </div>
-                        <div class="col-lg-2">
-                            N&uacute;mero Orden Compra
-                        </div>
-                        <div class="col-lg-2">
-                            <input id="numero_orden_compra" name="numero_orden_compra" on class="form-control form-control-sm"  value="<?php if($id>0){echo $orden_compra->numero_orden_compra;}?>" type="text" readonly ="readonly">
-                        </div>
-                        <div class="col-lg-2">
-                            Empresa Compra
-                        </div>
-                        <div class="col-lg-2">
-                            <select name="empresa_compra" id="empresa_compra" class="form-control form-control-sm" onchange="">
-                                <option value="">--Seleccionar--</option>
-                                <?php
-                                //foreach ($proveedor as $row){?>
-                                    <option value="<?php //echo $row->id ?>" <?php //if($row->id==$orden_compra->id_empresa_compra)echo "selected='selected'"?>><?php //echo $row->razon_social ?></option>
-                                    <?php 
-                                //}
-                                ?>
-                            </select>
-                        </div>
-                        <div class="col-lg-2">
-                            Empresa Vende
-                        </div>
-                        <div class="col-lg-2">
-                            <select name="empresa_vende" id="empresa_vende" class="form-control form-control-sm" onchange="">
-                                <option value="">--Seleccionar--</option>
-                                <?php
-                                //foreach ($proveedor as $row){?>
-                                    <option value="<?php //echo $row->id ?>" <?php //if($row->id==$orden_compra->id_empresa_vende)echo "selected='selected'"?>><?php //echo $row->razon_social ?></option>
-                                    <?php 
-                                //}
-                                ?>
-                            </select>
-                        </div>
-                        <div class="col-lg-2">
-                            Fecha Orden Compra
-                        </div>
-                        <div class="col-lg-2">
-                            <input id="fecha_orden_compra" name="fecha_orden_compra" on class="form-control form-control-sm"  value="<?php //echo isset($orden_compra) && $orden_compra->fecha_orden_compra ? $orden_compra->fecha_orden_compra : date('Y-m-d'); ?>" type="text">
-                        </div>
-                        <div class="col-lg-2">
-                            Aplica IGV
-                        </div>
-                        <div class="col-lg-2">
-                            <select name="igv_compra" id="igv_compra" class="form-control form-control-sm" onchange="">
-                                <option value="">--Seleccionar--</option>
-                                <?php
-                                //foreach ($igv_compra as $row){?>
-                                    <option value="<?php //echo $row->codigo ?>" <?php //if($row->codigo==$orden_compra->igv_compra)echo "selected='selected'"?>><?php //echo $row->denominacion ?></option>
-                                    <?php 
-                                //}
-                                ?>
-                            </select>
-                        </div>
-                        <div class="col-lg-2">
-                            Unidad Origen
-                        </div>
-                        <?php
-                        /*if($orden_compra->id_empresa_compra==30 && $orden_compra->id_empresa_vende==30){
-                            $origen=3;
-                        }else if($orden_compra->id_empresa_compra==30){
-                            $origen=2;
-                        }else if($orden_compra->id_empresa_vende==30){
-                            $origen=1;
-                        }else{
-                            $origen=null;
-                        }*/
-                        ?>
-                        <div class="col-lg-2">
-                            <select name="unidad_origen" id="unidad_origen" class="form-control form-control-sm" onchange="cambiarOrigen()">
-                                <option value="">--Seleccionar--</option>
-                                <?php
-                                //foreach ($unidad_origen as $row){?>
-                                    <option value="<?php //echo $row->codigo ?>" <?php //if($row->codigo==$orden_compra->id_unidad_origen)echo "selected='selected'"?>><?php //echo $row->denominacion ?></option>
-                                    <?php 
-                                //}
-                                ?>
-                            </select>
-                        </div>
-                        <div class="col-lg-2" id="almacen_salida_" style="color:green; font-weight:bold">
-                            Almacen Origen
-                        </div>
-                        <div class="col-lg-2" id="almacen_salida_select">
-                            <select name="almacen_salida" id="almacen_salida" class="form-control form-control-sm" onchange="//actualizarSecciones(this)">
-                                <option value="">--Seleccionar--</option>
-                                <?php 
-                                //foreach ($almacen as $row){?>
-                                    <option value="<?php //echo $row->id ?>" <?php //if($row->id==$orden_compra->id_almacen_salida)echo "selected='selected'"?>><?php //echo $row->denominacion ?></option>
-                                    <?php 
-                                //}
-                                ?>
-                            </select>
-                        </div>
-                        <div class="col-lg-2" id="almacen_" style="color:red; font-weight:bold">
-                            Almacen Destino
-                        </div>
-                        <div class="col-lg-2" id="almacen_select">
-                            <select name="almacen" id="almacen" class="form-control form-control-sm" onchange="//actualizarSecciones(this)">
-                                <option value="">--Seleccionar--</option>
-                                <?php
-                                //foreach ($almacen as $row){?>
-                                    <option value="<?php //echo $row->id ?>" <?php //if($row->id==$orden_compra->id_almacen_destino)echo "selected='selected'"?>><?php //echo $row->denominacion ?></option>
-                                    <?php 
-                                //}
-                                ?>
-                            </select>
-                        </div>
-                    </div>
-                        <div style="margin-top:15px" class="form-group">
-                            <div class="col-sm-12 controls">
-                                <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
-                                    <a href="javascript:void(0)" onClick="agregarProducto()" class="btn btn-sm btn-success">Agregar</a>
-                                </div>
-                            </div>
-                        </div> -->
-
                         <div class="card-body">	
 
 					<div class="table-responsive">
@@ -507,20 +406,7 @@ function pdf_documento(){
 							<thead>
 							<tr style="font-size:13px">
 								<th>#</th>
-								<!--<th>Item</th>-->
 								<th>Tienda</th>
-								<!--<th>Marca</th>
-                                <th>COD. INT.</th>
-                                <th>F. Fabricaci&oacute;n</th>
-                                <th>F. Vencimiento</th>
-                                <th>Estado Bien</th>
-                                <th>Unidad</th>
-                                <th>Cantidad</th>-->
-                                <!--<th>Precio Unitario</th>
-                                <th>Descuento</th>
-                                <th>Sub Total</th>
-                                <th>IGV</th>
-                                <th>Total</th>-->
 							</tr>
 							</thead>
 							<tbody id="divOrdenCompraTienda">
@@ -533,6 +419,7 @@ function pdf_documento(){
                                 <?php 
                                     if($id>0){
                                 ?>
+                                <a href="javascript:void(0)" onClick="fn_save_detalle_producto()" class="btn btn-sm btn-success" style="margin-right:10px">Entregar</a>
                                 <button style="font-size:12px;margin-left:10px" type="button" class="btn btn-sm btn-clasico btn-enviar" data-toggle="modal" onclick="pdf_documento()" >
                                     <i class="far fa-file-pdf" style="font-size:18px;"></i>Imprimir
                                 </button>

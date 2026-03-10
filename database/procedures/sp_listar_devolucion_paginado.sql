@@ -15,14 +15,14 @@ begin
 	
 	p_pagina=(p_pagina::Integer-1)*p_limit::Integer;
 
-	v_campos=' id, tipo_documento, id_tipo_documento, codigo, empresa, numero_orden_compra_cliente, fecha_documento ';
+	v_campos=' id, tipo_documento, id_tipo_documento, codigo, empresa, id_empresa, numero_orden_compra_cliente, fecha_documento ';
 
-	v_tabla=' (select sp.id, ''SALIDA'' tipo_documento, 2 id_tipo_documento, sp.codigo, case when sp.id_tipo_cliente = 1 then (select p.nombres ||'' ''|| p.apellido_paterno ||'' ''|| p.apellido_materno from personas p where p.id = sp.id_persona) else (select e2.razon_social from empresas e2 where e2.id = sp.id_empresa_compra) end empresa, oc.numero_orden_compra_cliente, sp.fecha_salida fecha_documento ' ||
+	v_tabla=' (select sp.id, ''SALIDA'' tipo_documento, 2 id_tipo_documento, sp.codigo, case when sp.id_tipo_cliente = 1 then (select p.nombres ||'' ''|| p.apellido_paterno ||'' ''|| p.apellido_materno from personas p where p.id = sp.id_persona) else (select e2.razon_social from empresas e2 where e2.id = sp.id_empresa_compra) end empresa, case when sp.id_tipo_cliente = 1 then (select p.id from personas p where p.id = sp.id_persona) else (select e2.id from empresas e2 where e2.id = sp.id_empresa_compra) end id_empresa, oc.numero_orden_compra_cliente, sp.fecha_salida fecha_documento ' ||
               'FROM salida_productos sp ' ||
               'inner join orden_compras oc on sp.id_orden_compra = oc.id '||
               'Where 1 = 1 and sp.tipo_devolucion = ''2'' ' ||
               'UNION ALL ' ||
-              'select ep.id, ''ENTRADA'' tipo_documento, 1 id_tipo_documento, ep.codigo, case when ep.id_tipo_cliente = 1 then (select p.nombres ||'' ''|| p.apellido_paterno ||'' ''|| p.apellido_materno from personas p where p.id = ep.id_persona) else (select e2.razon_social from empresas e2 where e2.id = ep.id_empresa_compra) end empresa, oc.numero_orden_compra_cliente, ep.fecha_ingreso fecha_documento ' ||
+              'select ep.id, ''ENTRADA'' tipo_documento, 1 id_tipo_documento, ep.codigo, case when ep.id_tipo_cliente = 1 then (select p.nombres ||'' ''|| p.apellido_paterno ||'' ''|| p.apellido_materno from personas p where p.id = ep.id_persona) else (select e2.razon_social from empresas e2 where e2.id = ep.id_empresa_compra) end empresa, case when ep.id_tipo_cliente = 1 then (select p.id from personas p where p.id = ep.id_persona) else (select e2.id from empresas e2 where e2.id = ep.id_empresa_compra) end id_empresa, oc.numero_orden_compra_cliente, ep.fecha_ingreso fecha_documento ' ||
               'from entrada_productos ep ' ||
 			  'inner join orden_compras oc on ep.id_orden_compra = oc.id '||
 			  'Where 1 = 1 and ep.tipo_devolucion = ''2'') union_table ';
@@ -30,11 +30,11 @@ begin
 	v_where = ' Where 1=1 ';
 
 	If p_empresa<>'' Then
-	 v_where:=v_where||'And sp.id_empresa_compra  = '''||p_empresa||''' ';
+	 v_where:=v_where||'And id_empresa  = '''||p_empresa||''' ';
 	End If;
 
 	If p_fecha<>'' Then
-	 v_where:=v_where||'And sp.fecha_salida  = '''||p_fecha||''' ';
+	 v_where:=v_where||'And fecha_documento  = '''||p_fecha||''' ';
 	End If;
 
 	/*If p_numero_devolucion<>'' Then
@@ -42,7 +42,7 @@ begin
 	End If;*/
 
 	If p_numero_orden_compra_cliente<>'' Then
-	 v_where:=v_where||'And oc.numero_orden_compra_cliente  = '''||p_numero_orden_compra_cliente||''' ';
+	 v_where:=v_where||'And numero_orden_compra_cliente  = '''||p_numero_orden_compra_cliente||''' ';
 	End If;
 	
 	EXECUTE ('SELECT count(1) from '||v_tabla||v_where) INTO v_count;

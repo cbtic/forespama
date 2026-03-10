@@ -946,4 +946,5 @@ Route::get('guia_interna/modal_guia_transportista/{id}', [GuiaInternaController:
 Route::get('consulta_oxapampa_movimiento/create', [ConsultaOxapampaMovimientoController::class, 'create'])->name('consulta_oxapampa_movimiento.create');
 Route::post('consulta_oxapampa_movimiento/listar_oxapampa_movimiento_ajax', [ConsultaOxapampaMovimientoController::class, 'listar_oxapampa_movimiento_ajax'])->name('consulta_oxapampa_movimiento.listar_oxapampa_movimiento_ajax');
 
+Route::post('orden_compra/send_producto_tienda_detalle', [OrdenCompraController::class, 'send_producto_tienda_detalle'])->name('orden_compra.send_producto_tienda_detalle');
 

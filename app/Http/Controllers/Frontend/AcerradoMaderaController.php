@@ -14,6 +14,7 @@ use App\Models\IngresoVehiculoTroncoTipoMadera;
 use App\Models\Producto;
 use App\Models\Kardex;
 use App\Models\ConsultaOxapampaMovimiento;
+use App\Models\IngresoVehiculoTroncoCubicaje;
 use Auth;
 use Carbon\Carbon;
 
@@ -168,7 +169,7 @@ class AcerradoMaderaController extends Controller
 			if($cantidad_ingreso_produccion[$index] != "" || $cantidad_ingreso_produccion[$index] > 0){
 
 				$ingreso_produccion_acerrado_madera_detalle = new IngresoProduccionAcerradoMaderaDetalle;
-            
+	
 				$ingreso_produccion_acerrado_madera_detalle->id_ingreso_produccion_acerrado_maderas = $id_ingreso_produccion_acerrado_madera;
 				$ingreso_produccion_acerrado_madera_detalle->id_ingreso_vehiculo_tronco_tipo_maderas = $id_ingreso_acerrado_detalle[$index];
 				$ingreso_produccion_acerrado_madera_detalle->cantidad_ingreso_tronco = $cantidad_ingreso_produccion[$index];
@@ -223,11 +224,49 @@ class AcerradoMaderaController extends Controller
 				$kardex->id_usuario_inserta = $id_user;
 				$kardex->save();
 
+				$cantidad_ingreso_produccion[$index];
+
+				$ingreso = IngresoVehiculoTroncoCubicaje::where('id_ingreso_vehiculo_tronco_tipo_maderas',$id_ingreso_acerrado_detalle[$index])->where('estado',1)->orderBy('id', 'desc')->get();
+
+				$total_volumen = 0;
+				$total_precio = 0;
+				$total_costo = 0;
+
+				foreach ($ingreso as $item) {
+					$total_volumen += $item->volumen_total_pies;
+					$total_precio += $item->precio_total;
+				}
+
+				$total_costo = $total_precio / $total_volumen;
+
+				$idCorte_ = ConsultaOxapampaMovimiento::where('id_producto', $idProducto)->where('id_almacen', '21')->where('id_tipo_movimiento', 1)->whereDate('fecha', '<=', Carbon::now())->orderBy('fecha', 'desc')->orderBy('id', 'desc')->value('id');
+
+				$saldoBase = $idCorte_ > 0 ? ConsultaOxapampaMovimiento::where('id', $idCorte_)->value('saldos') : 0;
+				$totalSaldosCantidadBase = $idCorte_ > 0 ? ConsultaOxapampaMovimiento::where('id', $idCorte_)->value('total_saldos') : 0;
+
+				$consulta_oxapampa_movimiento = new ConsultaOxapampaMovimiento;
+				$consulta_oxapampa_movimiento->id_producto = $idProducto;
+				$consulta_oxapampa_movimiento->id_tipo_movimiento = '1';
+				$consulta_oxapampa_movimiento->id_movimiento = $id_ingreso_acerrado_detalle[$index];
+				$consulta_oxapampa_movimiento->entradas = 0;
+				$consulta_oxapampa_movimiento->costo_entradas = 0;//number_format($precio_promedio_final,2);
+				$consulta_oxapampa_movimiento->total_entradas = 0;//$precio_total_final;
+				$consulta_oxapampa_movimiento->salidas = $total_volumen;
+				$consulta_oxapampa_movimiento->costo_salidas = number_format($total_costo,2);
+				$consulta_oxapampa_movimiento->total_salidas = number_format($total_precio,2);
+				$consulta_oxapampa_movimiento->saldos = $saldoBase + $total_volumen;
+				$consulta_oxapampa_movimiento->costo_saldos = 0;//number_format($precio_promedio_final,2);
+				$consulta_oxapampa_movimiento->total_saldos = $totalSaldosCantidadBase - number_format($total_precio,2);
+				$consulta_oxapampa_movimiento->id_almacen = '21';
+				$consulta_oxapampa_movimiento->fecha = Carbon::now()->format('Y-m-d');
+				$consulta_oxapampa_movimiento->estado = '1';
+				$consulta_oxapampa_movimiento->id_usuario_inserta = $id_user;
+				$consulta_oxapampa_movimiento->save();
+
 			}
-            
         }
 
-        return response()->json(['success' => 'Registro de ingreso guardado exitosamente.']);
+        return response()->json(['success' => 'Registro de Ingreso Acerrio guardado exitosamente.']);
 
     }
 
@@ -322,7 +361,7 @@ class AcerradoMaderaController extends Controller
 			$kardex->id_ingreso_vehiculo_tronco = $id_produccion_acerrado_madera;
 			//$kardex->fecha = $request->fecha;
 			$kardex->id_usuario_inserta = $id_user;
-			//$kardex->save();
+			$kardex->save();
 
 			$medida_tabla = $medida_texto[$index];
 

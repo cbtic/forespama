@@ -17,6 +17,7 @@ use App\Models\SalidaProductoDetalle;
 use App\Models\EntradaProducto;
 use App\Models\EntradaProductoDetalle;
 use App\Models\OrdenCompra;
+use App\Models\OrdenCompraDetalle;
 use Auth;
 
 class DevolucionController extends Controller
@@ -210,6 +211,12 @@ class DevolucionController extends Controller
 				'cantidad' => $entrada_producto_detalle->cantidad,
 				'id' => $entrada_producto_detalle->id
 			];
+
+			$orden_compra_detalle_matriz = OrdenCompraDetalle::where('id_orden_compra',$salida_producto_->id_orden_compra)->where('id_producto',$descripcion[$index])->where('estado',1)->first();
+			$orden_compra_detalle_edit = OrdenCompraDetalle::find($orden_compra_detalle_matriz->id);
+			$orden_compra_detalle_edit->cantidad_despacho = $orden_compra_detalle_matriz->cantidad_despacho - $cantidad[$index];
+			$orden_compra_detalle_edit->save();
+
 		}
 
 		$salida_producto_final = SalidaProducto::where('codigo',$salida_producto_->codigo)->where('tipo_devolucion',3)->where('estado',1)->first();
