@@ -2645,9 +2645,8 @@ class ComprobanteController extends Controller
 			$id_caja = (isset($caja_usuario->id_caja))?$caja_usuario->id_caja:0;
 		}
         
-
+        //echo $trans;
         if ( $trans == "FN"){
-
             $comprobante_model=new Comprobante;
             $comprobante=$comprobante_model->getComprobanteById($id_origen);
 
@@ -3642,15 +3641,26 @@ class ComprobanteController extends Controller
     {
         $sw = true;
         $msg = "";
-       
-
+    
         $id_user = Auth::user()->id;
         $facturas_model = new Comprobante;
         $guia_model = new Guia;
- 
-            /**********RUC***********/
+        $tarifa = $request->facturad;
 
-            $tarifa = $request->facturad;
+        $totalNc = $facturas_model->getTotalComprobanteNC($request->id_comprobante_ncdc);
+        $totalNc+=$request->totalP;
+        $totalCom = $tarifa[0]['total'];
+
+        if($totalNc > $totalCom){
+            $sw = false;
+            $id_factura = 0;
+            $msg = "El monto ingresado de la Nota de Credito, excede el total de la factura !!!";
+        }
+
+        //echo $totalNc."|".$totalCom;
+
+        if($msg==""){
+            /**********RUC***********/
 
             $total = $request->totalP;
             $serieF = $request->serieF;
@@ -3758,6 +3768,8 @@ class ComprobanteController extends Controller
             //$id_factura = 0;
         //}
  
+        }
+
         $array["sw"] = $sw;
         $array["msg"] = $msg;
         $array["id_factura"] = $id_factura;

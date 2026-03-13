@@ -1330,7 +1330,9 @@ function obtenerTitular(){
 			// si hay uno que hace negativo el total
 			if (opcionInvalida) {
 
-				alert("Los anticipos no pueden ser mayores al total");
+				//alert("Los anticipos no pueden ser mayores al total");
+				bootbox.alert("Los anticipos no pueden ser mayores al total");
+				//return false;
 
 				opcionInvalida.prop("selected", false);
 

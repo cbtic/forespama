@@ -203,6 +203,17 @@ order by 1 desc" ;
         return $data[0];
     }
 
+    function getTotalComprobanteNC($id){
+
+        $cad = "select coalesce(sum(c.total),0) total
+from comprobantes c 
+where c.id_comprobante_ncnd=".$id."
+and c.estado='1'";
+    
+		$data = DB::select($cad);
+        return $data[0]->total;
+    }
+
    
 
     function getDatosByComprobante($id){
