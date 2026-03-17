@@ -821,6 +821,7 @@ function cargarDetalle(){
                 let marcaOptions = '<option value="">--Seleccionar--</option>';
                 let productoOptions = '<option value="">--Seleccionar--</option>';
                 let unidadMedidaOptions = '<option value="">--Seleccionar--</option>';
+                let bloqueado = (orden_compra.cantidad_ingresada && orden_compra.cantidad_ingresada > 0);
 
                 var producto_stock = result.producto_stock[orden_compra.id_producto];
 
@@ -849,19 +850,19 @@ function cargarDetalle(){
                 const row =`
                 <tr>
                     <td>${n}</td>
-                    <td style="width: 400px !important;display:block"><input name="id_orden_compra_detalle[]" id="id_orden_compra_detalle${n}" class="form-control form-control-sm" value="${orden_compra.id}" type="hidden"><input name="id_autorizacion_detalle[]" id="id_autorizacion_detalle${n}" class="form-control form-control-sm" value="2" type="hidden"><select name="descripcion[]" id="descripcion${n}" class="form-control form-control-sm select-producto" onChange="verificarProductoSeleccionado(this, ${n});">${productoOptions}</select></td>
+                    <td style="width: 400px !important;display:block"><input name="id_orden_compra_detalle[]" id="id_orden_compra_detalle${n}" class="form-control form-control-sm" value="${orden_compra.id}" type="hidden"><input name="id_autorizacion_detalle[]" id="id_autorizacion_detalle${n}" class="form-control form-control-sm" value="2" type="hidden"><select name="descripcion_[]" id="descripcion_${n}" class="form-control form-control-sm select-producto" ${bloqueado ? 'disabled' : ''} onChange="cambiarDescripcion(this, ${n});verificarProductoSeleccionado(this, ${n});">${productoOptions}</select><input name="descripcion[]" id="descripcion${n}" class="form-control form-control-sm" value="${orden_compra.id_producto}" type="hidden"></td>
                     
                     <td><select name="marca[]" id="marca${n}" class="form-control form-control-sm select-marca">${marcaOptions}</select></td>
                     <td><input name="cod_interno[]" id="cod_interno${n}" class="form-control form-control-sm" value="${orden_compra.codigo}" type="text"></td>
                     <td><select name="unidad[]" id="unidad${n}" class="form-control form-control-sm">${unidadMedidaOptions}</select></td>
-                    <td><input name="cantidad_ingreso[]" id="cantidad_ingreso${n}" class="cantidad_ingreso form-control form-control-sm" value="${orden_compra.cantidad_requerida}" type="text" oninput="calcularCantidadPendiente(this);calcularSubTotal(this);calcularPrecioUnitario(this);recalcularPorcentajeDescuento(this)"></td>
+                    <td><input name="cantidad_ingreso[]" id="cantidad_ingreso${n}" class="cantidad_ingreso form-control form-control-sm" value="${orden_compra.cantidad_requerida}" type="text" ${bloqueado ? 'readonly' : ''} oninput="calcularCantidadPendiente(this);calcularSubTotal(this);calcularPrecioUnitario(this);recalcularPorcentajeDescuento(this)"></td>
                     <td><input name="stock_actual[]" id="stock_actual${n}" class="form-control form-control-sm" value="${stock_mostrar}" type="text" readonly="readonly"></td>
                     <td><input name="precio_unitario[]" id="precio_unitario${n}" class="precio_unitario form-control form-control-sm" value="${parseFloat(orden_compra.precio_venta || 0).toFixed(decimales)}" type="text" oninput="limitarDecimalesYCalcular(this, ${decimales})" readonly="readonly"></td>
                     <td><input name="precio_unitario_[]" id="precio_unitario_${n}" class="precio_unitario_ form-control form-control-sm" value="${parseFloat(orden_compra.precio || 0).toFixed(decimales)}" type="text" oninput="calcularPrecioUnitario(this)" readonly="readonly"></td>
                     <td><input name="valor_venta_bruto[]" id="valor_venta_bruto${n}" class="valor_venta_bruto form-control form-control-sm" value="${parseFloat(orden_compra.valor_venta_bruto || 0).toFixed(decimales)}" type="text" oninput="calcularSubTotal(this)" readonly="readonly"></td>
                     <td><input name="valor_venta[]" id="valor_venta${n}" class="valor_venta form-control form-control-sm" value="${parseFloat(orden_compra.valor_venta || 0).toFixed(decimales)}" type="text" oninput="calcularSubTotal(this)" readonly="readonly"></td>
 
-                    <td><div style="display: flex; align-items: center; gap: 5px;"> <button type="button" class="btn-custom" onclick="cambiarDescuento(this);calcularPrecioUnitario(this)" hidden><i class="${orden_compra.id_descuento == 2 ? 'fas fa-percentage' : 'fas fa-paint-brush'}"></i></button> <input name="descuento[]" id="descuento${n}" class="descuento form-control form-control-sm" placeholder="S/ Descuento" value="${parseFloat((orden_compra.descuento ?? 0) || 0).toFixed(decimales)}" type="text" oninput="aplicaDescuentoEnSoles(this);calcularPrecioUnitario(this);recalcularPorcentajeDescuento(this)" style="display: ${(!orden_compra.id_descuento || orden_compra.id_descuento == 1 || orden_compra.descuento == null || orden_compra.descuento === "") ? 'block' : 'none'};"> <input name="porcentaje[]" id="porcentaje${n}" class="porcentaje form-control form-control-sm" placeholder="% Descuento" value="${parseFloat(orden_compra.id_descuento == 2 ? (orden_compra.descuento ?? 0) : 0).toFixed(decimales)}" type="text" oninput="aplicaDescuentoEnPorcentaje(this);calcularPrecioUnitario(this);recalcularPorcentajeDescuento(this)" style="display: ${orden_compra.id_descuento == 2 ? 'block' : 'none'};"><input name="id_descuento[]" id="id_descuento${n}" type="hidden" value="${orden_compra.id_descuento ?? 1}"></div></td>
+                    <td><div style="display: flex; align-items: center; gap: 5px;"> <button type="button" class="btn-custom" onclick="cambiarDescuento(this);calcularPrecioUnitario(this)" hidden><i class="${orden_compra.id_descuento == 2 ? 'fas fa-percentage' : 'fas fa-paint-brush'}"></i></button> <input name="descuento[]" id="descuento${n}" class="descuento form-control form-control-sm" ${bloqueado ? 'readonly' : ''} placeholder="S/ Descuento" value="${parseFloat((orden_compra.descuento ?? 0) || 0).toFixed(decimales)}" type="text" oninput="aplicaDescuentoEnSoles(this);calcularPrecioUnitario(this);recalcularPorcentajeDescuento(this)" style="display: ${(!orden_compra.id_descuento || orden_compra.id_descuento == 1 || orden_compra.descuento == null || orden_compra.descuento === "") ? 'block' : 'none'};"> <input name="porcentaje[]" id="porcentaje${n}" class="porcentaje form-control form-control-sm" placeholder="% Descuento" value="${parseFloat(orden_compra.id_descuento == 2 ? (orden_compra.descuento ?? 0) : 0).toFixed(decimales)}" type="text" oninput="aplicaDescuentoEnPorcentaje(this);calcularPrecioUnitario(this);recalcularPorcentajeDescuento(this)" style="display: ${orden_compra.id_descuento == 2 ? 'block' : 'none'};"><input name="id_descuento[]" id="id_descuento${n}" type="hidden" value="${orden_compra.id_descuento ?? 1}"></div></td>
                     <td><input name="porcentaje_descuento[]" id="porcentaje_descuento${n}" class="porcentaje_descuento form-control form-control-sm" value="" type="text" oninput="" readonly="readonly"></td>
 
                     <td><input name="sub_total[]" id="sub_total${n}" class="sub_total form-control form-control-sm" value="${parseFloat(orden_compra.sub_total || 0).toFixed(decimales) }" type="text" readonly="readonly"></td>
@@ -920,6 +921,11 @@ function cargarDetalle(){
             $('#total_general').val(total_acumulado.toFixed(decimales) || '0.00');
         }
     });
+}
+
+function cambiarDescripcion(select, n){
+    var valor = $(select).val();
+    $("#descripcion"+n).val(valor);
 }
 
 function limitarDecimalesYCalcular(input, decimales) {
@@ -1730,6 +1736,20 @@ function duplicar_pedido(){
     });
 }
 
+function modal_cerrar_pedido(id){
+	
+	var id_orden_compra = $('#id').val();
+
+	$.ajax({
+        url: "/orden_compra/modal_cerrar_pedido/"+id_orden_compra,
+        type: "GET",
+        success: function (result) {
+            $("#diveditpregOpc4").html(result);
+            $('#openOverlayOpc4').modal('show');
+        }
+	});
+}
+
 </script>
 
 <body class="hold-transition skin-blue sidebar-mini">
@@ -2090,7 +2110,7 @@ function duplicar_pedido(){
                                         <th>Cantidad</th>
                                         <th>Stock Disponible</th>
                                         <th>Precio Venta</th>
-                                        <th>Precio Unitario</th>
+                                        <th>Valor Unitario</th>
                                         <th>Valor Venta Bruto</th>
                                         <th>Valor Venta</th>
                                         <th>Valor Descuento</th>
@@ -2134,7 +2154,9 @@ function duplicar_pedido(){
                                     <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
                                         
                                         <?php if($id>0 && $orden_compra->id_tipo_documento == 2){ ?>
-
+                                            @hasanyrole('Administrator|Encargado Cerrar OC')
+                                            <button style="font-size:12px;margin-left:10px; margin-right:10px" type="button" class="btn btn-sm btn-buscar" data-toggle="modal" onclick="modal_cerrar_pedido()">Cerrar Pedido</button>
+                                            @endhasanyrole
                                             <button type="button" class="btn btn-sm btn-clasico btn-buscar" style="margin-left:10px;" data-toggle="modal" onclick="duplicar_pedido()" >
                                                 <i class="fas fa-copy" style="font-size:18px;"></i>Duplicar Pedido
                                             </button>
@@ -2214,36 +2236,32 @@ function duplicar_pedido(){
 
 <div id="openOverlayOpc2" class="modal fade modal-tienda" tabindex="-1" role="dialog">
     <div class="modal-dialog" >
-
         <div id="id_content_OverlayoneOpc2" class="modal-content" style="padding: 0px;margin: 0px">
-        
             <div class="modal-body" style="padding: 0px;margin: 0px">
-
                 <div id="diveditpregOpc2"></div>
-
             </div>
-        
         </div>
-
     </div>
-    
 </div>
 
 <div id="openOverlayOpc3" class="modal fade modal-datos_pedido" tabindex="-1" role="dialog">
     <div class="modal-dialog" >
-
         <div id="id_content_OverlayoneOpc3" class="modal-content" style="padding: 0px;margin: 0px">
-        
             <div class="modal-body" style="padding: 0px;margin: 0px">
-
                 <div id="diveditpregOpc3"></div>
-
             </div>
-        
         </div>
-
     </div>
-    
+</div>
+
+<div id="openOverlayOpc4" class="modal fade modal-cerrar_pedido" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div id="id_content_OverlayoneOpc4" class="modal-content" style="padding: 0px;margin: 0px">
+            <div class="modal-body" style="padding: 0px;margin: 0px">
+                <div id="diveditpregOpc4"></div>
+            </div>
+        </div>
+    </div>
 </div>
 
     

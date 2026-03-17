@@ -290,6 +290,7 @@ class PromotorController extends Controller
 		$asistencia_promotor->longitud = $request->longitud;
 		$asistencia_promotor->ruta_imagen_ingreso = $rutaFinal;
 		$asistencia_promotor->id_usuario_inserta = $id_user;
+		$asistencia_promotor->flag_enviado = 0;
 		$asistencia_promotor->save();
 
 		return response()->json(['message' => 'Asistencia marcada correctamente.']);
@@ -359,6 +360,7 @@ class PromotorController extends Controller
 		//$asistencia_promotor->ruta_imagen_ingreso = $rutaFinal;
 		$asistencia_promotor->ruta_imagen_salida = $rutaFinal;
 		$asistencia_promotor->id_usuario_actualiza = $id_user;
+		$asistencia_promotor->flag_enviado = 0;
 		$asistencia_promotor->save();
 
 		return response()->json(['message' => 'Asistencia marcada correctamente.']);

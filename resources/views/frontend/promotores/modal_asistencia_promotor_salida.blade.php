@@ -136,7 +136,7 @@ function fn_save_asistencia_promotor(){
                 //var heightBrowser = $(window).width() / 2;
                 //$('.loader').css("opacity", "0.8").css("height", heightBrowser).html("<div id='Grd1_wrapper' class='dataTables_wrapper'><div id='Grd1_processing' class='dataTables_processing panel-default'>" + msgLoader + "</div></div>");
                 //$('.loader').show();
-
+                //alert(latitud);
                 $.ajax({
                     url: "/promotores/marcar_asistencia",
                     type: "POST",

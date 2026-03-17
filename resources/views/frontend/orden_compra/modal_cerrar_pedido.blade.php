@@ -14,13 +14,13 @@
   height:250px;
 }
 
-.modal-dialog2 {
+.modal-cerrar_pedido .modal-dialog {
     width: 100%;
     max-width:40%!important
 }
 
 .custom-select2-dropdown {
-    width: 700px !important; 
+    width: 700px !important;
 }
 
 #tablemodal{
@@ -150,7 +150,7 @@ function fn_save_cerrar_pedido(){
             type: "POST",
             data : $("#frmCerrarOrdenCompra").serialize(),
             success: function (result) {
-                $('#openOverlayOpc2').modal('hide');
+                $('#openOverlayOpc4').modal('hide');
                 $('#openOverlayOpc').modal('hide');
                 $('.loader').hide();
                 bootbox.alert("Se guardo satisfactoriamente");
@@ -192,11 +192,27 @@ function fn_save_cerrar_pedido(){
                     <input type="hidden" name="id" id="id" value="<?php echo $id?>">
 
                     <div class="row" style="padding-left:10px; padding-top: 15px;">
-                        <div class="col-lg-2">
+                        <div class="col-lg-3">
                             Motivo
                         </div>
-                        <div class="col-lg-10">
+                        <div class="col-lg-9">
                             <textarea id="motivo" name="motivo" class="form-control form-control-sm"type="text"></textarea>
+                        </div>
+                    </div>
+                    <div class="row" style="padding-left:10px; padding-top:20px">
+                        <div class="col-lg-3">
+                            Estado Cerrado
+                        </div>
+                        <div class="col-lg-7">
+                            <select name="estado_cerrado" id="estado_cerrado" class="form-control form-control-sm" onchange="">
+                                <option value="">--Seleccionar--</option>
+                                <?php
+                                foreach ($estado_pedido_cerrado as $row){?>
+                                    <option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
+                                    <?php 
+                                }
+                                ?>
+                            </select>
                         </div>
                     </div>
                     <div style="margin-top:15px" class="form-group">
@@ -205,7 +221,7 @@ function fn_save_cerrar_pedido(){
                                 <button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-nuevo" data-toggle="modal" onclick="fn_save_cerrar_pedido()">
                                     <i class="fas fa-save" style="font-size:18px;"></i> Guardar
                                 </button>
-                                <button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-cerrar" data-toggle="modal" onclick="$('#openOverlayOpc2').modal('hide');">
+                                <button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-cerrar" data-toggle="modal" onclick="$('#openOverlayOpc4').modal('hide');">
                                     <i class="fas fa-times-circle" style="font-size:18px;"></i> Cerrar
                                 </button>
                             </div>
@@ -223,7 +239,7 @@ function fn_save_cerrar_pedido(){
 <!-- /.content -->
 </div>
 <!-- /.content-wrapper -->
-    
+
 <script type="text/javascript">
 
 $(document).ready(function () {

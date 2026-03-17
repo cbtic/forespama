@@ -3400,7 +3400,7 @@ class OrdenCompraController extends Controller
         $orden_compra = new OrdenCompra;
         $orden_compra->id_empresa_compra = $orden_compra_matriz->id_empresa_compra;
         $orden_compra->id_empresa_vende = $orden_compra_matriz->id_empresa_vende;
-        $orden_compra->fecha_orden_compra = $orden_compra_matriz->fecha_orden_compra;
+        $orden_compra->fecha_orden_compra = Carbon::now();
         $orden_compra->numero_orden_compra = $numero_orden_compra;
         $orden_compra->id_tipo_documento = $orden_compra_matriz->id_tipo_documento;
         $orden_compra->estado = $orden_compra_matriz->estado;
@@ -3474,8 +3474,11 @@ class OrdenCompraController extends Controller
     public function modal_cerrar_pedido($id){
 		
 		$orden_compra = OrdenCompra::find($id);
+        $tablaMaestra_model = new TablaMaestra;
         
-		return view('frontend.orden_compra.modal_cerrar_pedido',compact('id','orden_compra'));
+        $estado_pedido_cerrado = $tablaMaestra_model->getMaestroByTipo(123);
+        
+		return view('frontend.orden_compra.modal_cerrar_pedido',compact('id','orden_compra','estado_pedido_cerrado'));
 
     }
 
@@ -3493,10 +3496,11 @@ class OrdenCompraController extends Controller
 
         foreach($orden_compra_detalle as $detalle){
             $detalle->cerrado = '2';
+		    $detalle->estado_pedido_cerrado = $request->estado_cerrado;
             $detalle->save();
         }
 
-        return response()->json(['success' => 'Observacion guardada exitosamente.']);
+        return response()->json(['success' => 'Cerrado exitosamente.']);
 
     }
 

@@ -31,14 +31,14 @@
                     </li>
 
                     @if (config('boilerplate.access.user.registration'))
-                        <li class="nav-item">
+                        <!--<li class="nav-item">
                             <x-utils.link
                                 :href="route('frontend.auth.register')"
                                 :active="activeClass(Route::is('frontend.auth.register'))"
                                 :text="__('Register')"
                                 class="nav-link" />
 
-                        </li>
+                        </li>-->
                     @endif
                 @else
 					

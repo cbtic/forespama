@@ -128,6 +128,16 @@ td.data, th.data {
 #tablemodalm{
 	
 }
+
+.footer-final {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    font-size: 12px;
+    background-color: white;
+}
+
 </style>
 
 
@@ -229,6 +239,16 @@ $(document).ready(function() {
                       ?>
                 </tbody>
             </table>
+            <div class="footer-final">
+                <table style="width:100%; font-size:12px;">
+                    <tbody>
+                        <tr style="text-align:center">
+                            <td style="text-align: left; width: 20%;"><b>Requerimiento Solicitado por:</b></td>
+                            <td colspan="4" style="text-align: left; width: 90%;"><?php echo $usuario_solicita; ?></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
     <!-- /.content-wrapper -->

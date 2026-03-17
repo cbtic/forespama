@@ -327,6 +327,7 @@ class RequerimientoController extends Controller
         $codigo=$datos[0]->codigo;
         $responsable_atencion=$datos[0]->responsable_atencion;
         $sustento_requerimiento=$datos[0]->sustento_requerimiento;
+        $usuario_solicita=$datos[0]->usuario_solicita;
         
 		$year = Carbon::now()->year;
 
@@ -336,7 +337,7 @@ class RequerimientoController extends Controller
 
 		$currentHour = Carbon::now()->format('H:i:s');
 
-		$pdf = Pdf::loadView('frontend.requerimiento.movimiento_pdf_requerimiento',compact('tipo_documento','almacen','fecha','codigo','datos_detalle','responsable_atencion','sustento_requerimiento'));
+		$pdf = Pdf::loadView('frontend.requerimiento.movimiento_pdf_requerimiento',compact('tipo_documento','almacen','fecha','codigo','datos_detalle','responsable_atencion','sustento_requerimiento','usuario_solicita'));
 		
 		$pdf->setPaper('A4'); // Tamaño de papel (puedes cambiarlo según tus necesidades)
         
@@ -574,11 +575,11 @@ class RequerimientoController extends Controller
 		
 		$variable = [];
 		$n = 1;
-		array_push($variable, array("N","Tipo Documento","Fecha","Numero Requerimiento","Almacen","Situacion", "Responsable Atencion", "Estado Atencion", "Tipo Requerimiento"));
+		array_push($variable, array("N","Tipo Documento","Fecha","Numero Requerimiento","Almacen","Situacion", "Responsable Atencion", "Estado Atencion", "Tipo Requerimiento","Usuario Solicitante"));
 		
 		foreach ($data as $r) {
 
-			array_push($variable, array($n++,$r->tipo_documento, $r->fecha, $r->codigo, $r->almacen,$r->cerrado_situacion,$r->responsable_atencion, $r->estado_atencion, $r->tipo_requerimiento));
+			array_push($variable, array($n++,$r->tipo_documento, $r->fecha, $r->codigo, $r->almacen,$r->cerrado_situacion,$r->responsable_atencion, $r->estado_atencion, $r->tipo_requerimiento, $r->usuario_inserta));
 		}
 		
 		$export = new InvoicesExport([$variable]);
@@ -620,11 +621,11 @@ class RequerimientoController extends Controller
 		$variable = [];
 		$n = 1;
 		
-		array_push($variable, array("N","Tipo Documento","Fecha","Numero Requerimiento","Almacen", "Responsable Atencion", "Producto", "Codigo", "Marca", "Cantidad", "Cantidad Atendida", "Estado"));
+		array_push($variable, array("N", "Tipo Documento", "Fecha", "Numero Requerimiento", "Almacen", "Responsable Atencion", "Producto", "Codigo", "Unidad Medida", "Marca", "Cantidad", "Cantidad Atendida", "Persona Solicita", "Prioridad", "Observacion", "Usuario Solicita Requerimiento", "Estado"));
 		
 		foreach ($data as $r) {
 
-			array_push($variable, array($n++,$r->tipo_documento, $r->fecha, $r->numero_requerimiento, $r->almacen_solicitante,$r->responsable_atencion,$r->producto, $r->codigo, $r->marca, $r->cantidad, $r->cantidad_atendida, $r->cerrado));
+			array_push($variable, array($n++,$r->tipo_documento, $r->fecha, $r->numero_requerimiento, $r->almacen_solicitante,$r->responsable_atencion,$r->producto, $r->codigo, $r->unidad_medida, $r->marca, $r->cantidad, $r->cantidad_atendida,  $r->usuario_solicita_detalle,  $r->prioridad,  $r->observacion,  $r->usuario_solicita_requerimiento, $r->cerrado));
 		}
 		
 		$export = new InvoicesExport2([$variable]);
@@ -990,16 +991,16 @@ class InvoicesExport implements FromArray, WithHeadings, WithStyles
 
     public function headings(): array
     {
-        return ["N","Tipo Documento","Fecha","Numero Requerimiento","Almacen","Situacion", "Responsable Atencion", "Estado Atencion", "Tipo Requerimiento"];
+        return ["N","Tipo Documento","Fecha","Numero Requerimiento","Almacen","Situacion", "Responsable Atencion", "Estado Atencion", "Tipo Requerimiento", "Usuario Solicitante"];
     }
 
 	public function styles(Worksheet $sheet)
     {
 
-		$sheet->mergeCells('A1:I1');
+		$sheet->mergeCells('A1:J1');
 
         $sheet->setCellValue('A1', "REPORTE DE REQUERIMIENTOS - FORESPAMA");
-        $sheet->getStyle('A1:I1')->applyFromArray([
+        $sheet->getStyle('A1:J1')->applyFromArray([
             'font' => [
                 'bold' => true,
                 'color' => ['rgb' => 'FFFFFF'],
@@ -1016,7 +1017,7 @@ class InvoicesExport implements FromArray, WithHeadings, WithStyles
 		$sheet->getStyle('A1')->getAlignment()->setWrapText(true);
 		$sheet->getRowDimension(1)->setRowHeight(30);
 
-        $sheet->getStyle('A2:I2')->applyFromArray([
+        $sheet->getStyle('A2:J2')->applyFromArray([
             'font' => [
                 'bold' => true,
                 'color' => ['rgb' => '000000'],
@@ -1032,7 +1033,7 @@ class InvoicesExport implements FromArray, WithHeadings, WithStyles
 
 		$sheet->fromArray($this->headings(), NULL, 'A2');
 
-        foreach (range('A', 'I') as $col) {
+        foreach (range('A', 'J') as $col) {
             $sheet->getColumnDimension($col)->setAutoSize(true);
         }
     }
@@ -1054,16 +1055,16 @@ class InvoicesExport2 implements FromArray, WithHeadings, WithStyles
 
     public function headings(): array
     {
-        return ["N","Tipo Documento","Fecha","Numero Requerimiento","Almacen", "Responsable Atencion", "Producto", "Codigo", "Marca", "Cantidad", "Cantidad Atendida", "Estado"];
+        return ["N","Tipo Documento","Fecha","Numero Requerimiento","Almacen", "Responsable Atencion", "Producto", "Codigo", "Unidad Medida", "Marca", "Cantidad", "Cantidad Atendida", "Persona Solicita", "Prioridad", "Observacion", "Usuario Solicita Requerimiento", "Estado"];
     }
 
 	public function styles(Worksheet $sheet)
     {
 
-		$sheet->mergeCells('A1:L1');
+		$sheet->mergeCells('A1:Q1');
 
         $sheet->setCellValue('A1', "REPORTE DE DETALLE DE REQUERIMIENTO - FORESPAMA");
-        $sheet->getStyle('A1:L1')->applyFromArray([
+        $sheet->getStyle('A1:Q1')->applyFromArray([
             'font' => [
                 'bold' => true,
                 'color' => ['rgb' => 'FFFFFF'],
@@ -1080,7 +1081,7 @@ class InvoicesExport2 implements FromArray, WithHeadings, WithStyles
 		$sheet->getStyle('A1')->getAlignment()->setWrapText(true);
 		$sheet->getRowDimension(1)->setRowHeight(30);
 
-        $sheet->getStyle('A2:L2')->applyFromArray([
+        $sheet->getStyle('A2:Q2')->applyFromArray([
             'font' => [
                 'bold' => true,
                 'color' => ['rgb' => '000000'],
@@ -1096,7 +1097,7 @@ class InvoicesExport2 implements FromArray, WithHeadings, WithStyles
 
 		$sheet->fromArray($this->headings(), NULL, 'A2');
         
-        foreach (range('A', 'L') as $col) {
+        foreach (range('A', 'Q') as $col) {
             $sheet->getColumnDimension($col)->setAutoSize(true);
         }
     }

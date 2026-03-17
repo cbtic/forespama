@@ -1613,22 +1613,22 @@ function modal_cerrar_pedido(id){
                         <tbody>
                             <tr>
                                 <td class="td" style ="text-align: left; width: 5%; font-size:13px"><b>Sub-Total:</b></td>
-                                <td id="subTotalGeneral" class="td" style="text-align: left; width: 5%; font-size:13px">
+                                <td id="subTotalGeneral" class="td" style="text-align: left; width: 10%; font-size:13px">
                                     <input type="text" name="sub_total_general" id="sub_total_general" class="form-control" value="0.00" readonly style="border: none; background: transparent; text-align: left; pointer-events: none;">
                                 </td>
-                                <td class="td" style ="text-align: left; width: 20%; font-size:13px"></td>
+                                <td class="td" style ="text-align: left; width: 10%; font-size:13px"></td>
                                 <td class="td" style ="text-align: left; width: 5%; font-size:13px"><b>IGV Total:</b></td>
-                                <td id="igvGeneral" class="td" style="text-align: left; width: 5%; font-size:13px">
+                                <td id="igvGeneral" class="td" style="text-align: left; width: 10%; font-size:13px">
                                     <input type="text" name="igv_general" id="igv_general" class="form-control" value="0.00" readonly style="border: none; background: transparent; text-align: left; pointer-events: none;">
                                 </td>
-                                <td class="td" style ="text-align: left; width: 20%; font-size:13px"></td>
+                                <td class="td" style ="text-align: left; width: 10%; font-size:13px"></td>
                                 <td class="td" style ="text-align: left; width: 5%; font-size:13px"><b>Descuento Total:</b></td>
-                                <td id="descuentoGeneral" class="td" style="text-align: left; width: 5%; font-size:13px">
+                                <td id="descuentoGeneral" class="td" style="text-align: left; width: 10%; font-size:13px">
                                     <input type="text" name="descuento_general" id="descuento_general" class="form-control" value="0.00" readonly style="border: none; background: transparent; text-align: left; pointer-events: none;">
                                 </td>
-                                <td class="td" style ="text-align: left; width: 20%; font-size:13px"></td>
+                                <td class="td" style ="text-align: left; width: 10%; font-size:13px"></td>
                                 <td class="td" style ="text-align: left; width: 5%; font-size:13px"><b>Total:</b></td>
-                                <td id="totalGeneral" class="td" style="text-align: left; width: 5%; font-size:13px">
+                                <td id="totalGeneral" class="td" style="text-align: left; width: 10%; font-size:13px">
                                     <input type="text" name="total_general" id="total_general" class="form-control" value="0.00" readonly style="border: none; background: transparent; text-align: left; pointer-events: none;">
                                 </td>
                             </tr>
@@ -1655,7 +1655,7 @@ function modal_cerrar_pedido(id){
                                     } elseif($tipo== 2){
                                 ?>
                                     @hasanyrole('Administrator|Encargado Cerrar OC')
-                                    <button style="font-size:12px;margin-left:10px; margin-right:10px" type="button" class="btn btn-sm btn-buscar" data-toggle="modal" onclick="modal_cerrar_pedido()">Cerrar Pedido</button>
+                                    <!--<button style="font-size:12px;margin-left:10px; margin-right:10px" type="button" class="btn btn-sm btn-buscar" data-toggle="modal" onclick="modal_cerrar_pedido()">Cerrar Pedido</button>-->
                                     @endhasanyrole
                                     <button style="font-size:12px;margin-left:10px; margin-right:10px" type="button" class="btn btn-sm btn-danger" data-toggle="modal" onclick="denegar_pedido(4)">Devolver a Vendedor</button>
                                     <a href="javascript:void(0)" onClick="fn_save_detalle_producto()" class="btn btn-sm btn-success" style="margin-right:10px">Entregar</a>

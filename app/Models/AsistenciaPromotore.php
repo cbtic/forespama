@@ -54,4 +54,23 @@ class AsistenciaPromotore extends Model
 		$data = DB::select($cad);
         return $data;
     }
+
+    public function getAsistenciasPendientes()
+    {
+        $cad = "select ap.id, p.numero_documento, ap.fecha, ap.hora_entrada, ap.hora_salida  from asistencia_promotores ap 
+            inner join users u on ap.id_promotor = u.id 
+            inner join personas p on u.id_persona = p.id 
+            where ap.flag_enviado = '0' 
+            order by ap.fecha, ap.hora_entrada ";
+
+        $data = DB::select($cad);
+        
+        $ids = array_column($data, 'id');
+
+        if(!empty($ids)){
+            DB::table('asistencia_promotores')->whereIn('id',$ids)->update(['flag_enviado' => 1,'fecha_envio_api' => now(),'updated_at' => now()]);
+        }
+
+        return $data;
+    }
 }

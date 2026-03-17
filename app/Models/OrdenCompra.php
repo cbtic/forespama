@@ -120,11 +120,19 @@ class OrdenCompra extends Model
 
         $cad = "select ocd.id,  ROW_NUMBER() OVER (PARTITION BY ocd.id_orden_compra ) AS row_num, p.numero_serie item, ocd.id_producto, p.codigo, p.denominacion nombre_producto, ocd.id_marca, ocd.id_unidad_medida, ocd.fecha_fabricacion, ocd.fecha_vencimiento, 
         ocd.id_estado_producto , ocd.cantidad_requerida, 
-        coalesce((select sum(cantidad)
-        from entrada_productos ep
-        inner join entrada_producto_detalles epd on ep.id=epd.id_entrada_productos 
-        where id_orden_compra =ocd.id_orden_compra 
-        and epd.id_producto=ocd.id_producto),0)cantidad_ingresada,
+        case when oc.id_tipo_documento = '1' then
+            coalesce((select sum(cantidad)
+            from entrada_productos ep
+            inner join entrada_producto_detalles epd on ep.id=epd.id_entrada_productos 
+            where id_orden_compra =ocd.id_orden_compra 
+            and epd.id_producto=ocd.id_producto),0)
+            else coalesce((select sum(cantidad)
+            from salida_productos sp
+            inner join salida_producto_detalles spd on sp.id=spd.id_salida_productos 
+            where id_orden_compra =ocd.id_orden_compra 
+            and spd.id_producto=ocd.id_producto
+            and sp.tipo_devolucion = '3'),0)
+        end as cantidad_ingresada,
         ocd.precio, ocd.sub_total, ocd.igv, ocd.total, ocd.id_descuento, oc.id_almacen_salida, oc.id_unidad_origen, oc.id_almacen_destino ,
         m.denominiacion marca,
         coalesce((select k.saldos_cantidad - (select sum(ocd.cantidad_requerida) cantidad_requerida from orden_compra_detalles ocd where ocd.id_producto = k.id_producto and ocd.comprometido ='1') stock_comprometido from kardex k where id_producto = ocd.id_producto and id_almacen_destino = 3  order by k.id desc limit 1),0)stock_ves, --ves

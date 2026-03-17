@@ -23,7 +23,7 @@
         "langleyfoxall/laravel-nist-password-rules": "^4.1",
         "laravel-json-api/laravel": "^2.6",
         "laravel/framework": "^8.54",
-        "laravel/sanctum": "^2.11",
+        "laravel/sanctum": "^2.15",
         "laravel/socialite": "^5.0",
         "laravel/tinker": "^2.5",
         "laravel/ui": "^3.0",

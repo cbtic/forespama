@@ -2,6 +2,8 @@
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Api\AuthController as ApiAuthController;
+use App\Http\Controllers\Api\AsistenciaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,6 +33,10 @@ Route::group([
         Route::post('me', [AuthController::class, 'me']);
 
     });
+
+Route::post('/api-login', [ApiAuthController::class, 'login']);
+
+Route::middleware('auth:sanctum')->get('/asistencias', [AsistenciaController::class, 'index']);
 
 JsonApiRoute::server('v1')
 ->prefix('v1')
