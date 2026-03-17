@@ -74,11 +74,13 @@ foreach($pago as $row){?>
 		
 
 		<?php 
-		if($row->tiene_nc=== null){?>
-			
-			<input class="btn btn-secondary pull-light" value="NC" type="button" id="btnBoleta" onclick="nc(<?php echo $row->id_comprobante?>,<?php echo $row->tiene_nc?>)">
-
+		/*
+		if($row->tiene_nc=== null){
+		*/
+		?>	
+			<input class="btn btn-secondary pull-light" value="NC" type="button" id="btnBoleta" onclick="nc(<?php echo $row->id_comprobante?>,''<?php //echo $row->tiene_nc?>)">
 		<?php 	
+		/*
 		}else{
 		?>
 			
@@ -86,7 +88,9 @@ foreach($pago as $row){?>
 
 
 		<?php 	
-		};                       
+		/*
+		};
+		*/                  
 		?>
 
 		

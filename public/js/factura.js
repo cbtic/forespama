@@ -1222,6 +1222,147 @@ function obtenerTitular(){
 		});
 		*/
 
+		/*
+		let totalOriginal = parseFloat($("#total").val());
+
+		$('#idAdelanto0').on('change', function () {
+			let selectedOptions = $(this).find('option:selected');
+			let anticipos = 0;
+			selectedOptions.each(function () {
+				anticipos += $(this).data('total');
+			});
+			console.log(anticipos);
+			$("#trAnticipo").show();
+			$("#anticipos").val(anticipos);
+
+			let totalTmp = totalOriginal - anticipos;
+
+			$("input[name='totalF']").val(totalTmp);
+			$("#total").val(totalTmp);
+			$("input[name='total']").val(totalTmp);
+			$("#total_fac").val(totalTmp);
+			$("#total_fac_").val(totalTmp);
+
+			let ValorVenta_ = totalTmp/1.18;
+			ValorVenta_ = Number(ValorVenta_ .toFixed(2));
+			
+			let Igv_ = totalTmp - ValorVenta_;
+			Igv_ = Number(Igv_ .toFixed(2));
+			$('#igv').val(Igv_);
+			$('#gravadas').val(ValorVenta_);
+
+		});
+		*/
+
+		/*
+		let totalOriginal = parseFloat($("#total").val());
+
+		$('#idAdelanto0').on('change', function () {
+
+			let anticipos = 0;
+
+			$(this).find('option:selected').each(function () {
+				anticipos += parseFloat($(this).data('total')) || 0;
+			});
+
+			let totalTmp = totalOriginal - anticipos;
+
+			if (totalTmp < 0) {
+				alert("Los anticipos no pueden ser mayores al total de la factura");
+
+				// quitar la última opción seleccionada
+				$(this).find('option:selected').last().prop('selected', false);
+
+				// recalcular anticipos
+				anticipos = 0;
+				$(this).find('option:selected').each(function () {
+					anticipos += parseFloat($(this).data('total')) || 0;
+				});
+
+				totalTmp = totalOriginal - anticipos;
+			}
+
+			console.log(anticipos);
+
+			$("#trAnticipo").show();
+			$("#anticipos").val(anticipos);
+
+			$("input[name='totalF']").val(totalTmp);
+			$("#total").val(totalTmp);
+			$("input[name='total']").val(totalTmp);
+			$("#total_fac").val(totalTmp);
+			$("#total_fac_").val(totalTmp);
+
+			let ValorVenta_ = totalTmp / 1.18;
+			ValorVenta_ = Number(ValorVenta_.toFixed(2));
+
+			let Igv_ = totalTmp - ValorVenta_;
+			Igv_ = Number(Igv_.toFixed(2));
+
+			$('#igv').val(Igv_);
+			$('#gravadas').val(ValorVenta_);
+
+		});
+		*/
+
+		let totalOriginal = parseFloat($("#total").val());
+
+		$('#idAdelanto0').on('change', function () {
+
+			let anticipos = 0;
+			let totalTmp = totalOriginal;
+			let opcionInvalida = null;
+
+			$(this).find('option:selected').each(function () {
+
+				let valor = parseFloat($(this).data('total')) || 0;
+
+				anticipos += valor;
+				totalTmp = totalOriginal - anticipos;
+
+				// si se vuelve negativo guardamos el option
+				if (totalTmp < 0 && opcionInvalida === null) {
+					opcionInvalida = $(this);
+				}
+
+			});
+
+			// si hay uno que hace negativo el total
+			if (opcionInvalida) {
+
+				//alert("Los anticipos no pueden ser mayores al total");
+				bootbox.alert("Los anticipos no pueden ser mayores al total");
+				//return false;
+
+				opcionInvalida.prop("selected", false);
+
+				// recalcular anticipos
+				anticipos = 0;
+
+				$(this).find('option:selected').each(function () {
+					anticipos += parseFloat($(this).data('total')) || 0;
+				});
+
+				totalTmp = totalOriginal - anticipos;
+			}
+
+			$("#trAnticipo").show();
+			$("#anticipos").val(anticipos);
+
+			$("input[name='totalF']").val(totalTmp);
+			$("#total").val(totalTmp);
+			$("input[name='total']").val(totalTmp);
+			$("#total_fac").val(totalTmp);
+			$("#total_fac_").val(totalTmp);
+
+			let ValorVenta_ = Number((totalTmp / 1.18).toFixed(2));
+			let Igv_ = Number((totalTmp - ValorVenta_).toFixed(2));
+
+			$('#igv').val(Igv_);
+			$('#gravadas').val(ValorVenta_);
+			$('#idAdelanto0').trigger('change.select2');
+		});
+
 	}
 
 	function redondeoContableAFavor(valor, decimales = 1) {

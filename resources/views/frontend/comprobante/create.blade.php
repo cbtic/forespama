@@ -1017,12 +1017,15 @@
                                         <div class="table-responsive">
                                             <table id="tblPago" class="table table-hover">
                                                 <tbody>
-                                                    <tr style="display:none">
+                                                    <tr id="trAnticipo" style="display:none">
                                                         <th></th>
                                                         <th>Anticipos</th>
                                                         <th></th>
                                                         <th></th>
-                                                        <th class="text-right"><span id="anticipos"></span> 0.00</th>
+                                                        <th class="text-right">
+                                                            <!--<span id="anticipos"></span> 0.00-->
+                                                            <input type="text" readonly name="anticipos" id="anticipos" value="0.00" class="form-control form-control-sm text-center">
+                                                        </th>
                                                     </tr>
                                                     <tr>
                                                         <th></th>
