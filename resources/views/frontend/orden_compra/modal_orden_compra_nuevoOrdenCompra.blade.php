@@ -446,11 +446,11 @@ function obtenerCodInterno(selectElement, n){
         dataType: "json",
         success: function(result){
             //alert(result[0].codigo);
-            $('#cod_interno' + n).val(result[0].codigo);
-            $('#item' + n).val(result[0].numero_serie);
+            //$('#cod_interno' + n).val(result[0].codigo);
+            //$('#item' + n).val(result[0].numero_serie);
             $('#marca' + n).val(result[0].id_marca).trigger('change');
             $('#unidad' + n).val(result[0].id_unidad_producto);
-            $('#precio_unitario' + n).val(result[0].costo_unitario);
+            $('#precio_unitario' + n).val(result[0].precio_venta);
             
             /*if(result[0].bien_servicio == 2){
                 $('#precio_unitario' + n).val(result[0].costo_unitario);
@@ -853,7 +853,6 @@ function cargarDetalle(){
                     <td style="width: 400px !important;display:block"><input name="id_orden_compra_detalle[]" id="id_orden_compra_detalle${n}" class="form-control form-control-sm" value="${orden_compra.id}" type="hidden"><input name="id_autorizacion_detalle[]" id="id_autorizacion_detalle${n}" class="form-control form-control-sm" value="2" type="hidden"><select name="descripcion_[]" id="descripcion_${n}" class="form-control form-control-sm select-producto" ${bloqueado ? 'disabled' : ''} onChange="cambiarDescripcion(this, ${n});verificarProductoSeleccionado(this, ${n});">${productoOptions}</select><input name="descripcion[]" id="descripcion${n}" class="form-control form-control-sm" value="${orden_compra.id_producto}" type="hidden"></td>
                     
                     <td><select name="marca[]" id="marca${n}" class="form-control form-control-sm select-marca">${marcaOptions}</select></td>
-                    <td><input name="cod_interno[]" id="cod_interno${n}" class="form-control form-control-sm" value="${orden_compra.codigo}" type="text"></td>
                     <td><select name="unidad[]" id="unidad${n}" class="form-control form-control-sm">${unidadMedidaOptions}</select></td>
                     <td><input name="cantidad_ingreso[]" id="cantidad_ingreso${n}" class="cantidad_ingreso form-control form-control-sm" value="${orden_compra.cantidad_requerida}" type="text" ${bloqueado ? 'readonly' : ''} oninput="calcularCantidadPendiente(this);calcularSubTotal(this);calcularPrecioUnitario(this);recalcularPorcentajeDescuento(this)"></td>
                     <td><input name="stock_actual[]" id="stock_actual${n}" class="form-control form-control-sm" value="${stock_mostrar}" type="text" readonly="readonly"></td>
@@ -862,6 +861,7 @@ function cargarDetalle(){
                     <td><input name="valor_venta_bruto[]" id="valor_venta_bruto${n}" class="valor_venta_bruto form-control form-control-sm" value="${parseFloat(orden_compra.valor_venta_bruto || 0).toFixed(decimales)}" type="text" oninput="calcularSubTotal(this)" readonly="readonly"></td>
                     <td><input name="valor_venta[]" id="valor_venta${n}" class="valor_venta form-control form-control-sm" value="${parseFloat(orden_compra.valor_venta || 0).toFixed(decimales)}" type="text" oninput="calcularSubTotal(this)" readonly="readonly"></td>
 
+                    <td><input name="descuento_unitario[]" id="descuento_unitario' + n + '" class="descuento_unitario form-control form-control-sm" placeholder="S/ Descuento Unitario" value="${parseFloat((orden_compra.descuento ?? 0) || 0).toFixed(decimales)/orden_compra.cantidad_requerida}" type="text" oninput="calcularDescuentoProducto(this)"></td>
                     <td><div style="display: flex; align-items: center; gap: 5px;"> <button type="button" class="btn-custom" onclick="cambiarDescuento(this);calcularPrecioUnitario(this)" hidden><i class="${orden_compra.id_descuento == 2 ? 'fas fa-percentage' : 'fas fa-paint-brush'}"></i></button> <input name="descuento[]" id="descuento${n}" class="descuento form-control form-control-sm" ${bloqueado ? 'readonly' : ''} placeholder="S/ Descuento" value="${parseFloat((orden_compra.descuento ?? 0) || 0).toFixed(decimales)}" type="text" oninput="aplicaDescuentoEnSoles(this);calcularPrecioUnitario(this);recalcularPorcentajeDescuento(this)" style="display: ${(!orden_compra.id_descuento || orden_compra.id_descuento == 1 || orden_compra.descuento == null || orden_compra.descuento === "") ? 'block' : 'none'};"> <input name="porcentaje[]" id="porcentaje${n}" class="porcentaje form-control form-control-sm" placeholder="% Descuento" value="${parseFloat(orden_compra.id_descuento == 2 ? (orden_compra.descuento ?? 0) : 0).toFixed(decimales)}" type="text" oninput="aplicaDescuentoEnPorcentaje(this);calcularPrecioUnitario(this);recalcularPorcentajeDescuento(this)" style="display: ${orden_compra.id_descuento == 2 ? 'block' : 'none'};"><input name="id_descuento[]" id="id_descuento${n}" type="hidden" value="${orden_compra.id_descuento ?? 1}"></div></td>
                     <td><input name="porcentaje_descuento[]" id="porcentaje_descuento${n}" class="porcentaje_descuento form-control form-control-sm" value="" type="text" oninput="" readonly="readonly"></td>
 
@@ -871,7 +871,7 @@ function cargarDetalle(){
                     <td><button type="button" class="btn btn-sm btn-clasico btn-eliminar" onclick="eliminarFila(this)"><i class="fas fa-trash" style="font-size:18px;"></i></button></td>
                 </tr>
                 `;
-
+                
                 //fragment.appendChild(row);
                 tbody.append(row);
                 /*$('#descripcion' + n).select2({ 
@@ -980,7 +980,7 @@ function agregarProducto(){
         var n = $('#tblOrdenCompraDetalle tbody tr').length + 1;
         var descripcion = '<input name="id_orden_compra_detalle[]" id="id_orden_compra_detalle${n}" class="form-control form-control-sm" value="${orden_compra.id}" type="hidden"><input name="id_autorizacion_detalle[]" id="id_autorizacion_detalle' + n + '" class="form-control form-control-sm" value="2" type="hidden"><select name="descripcion[]" id="descripcion' + n + '" class="form-control form-control-sm" ' +(!tieneRolVendedor ? 'onChange="verificarProductoSeleccionado(this, ' + n + ');validarMuestraExhibicion(this);validarServicio(this)"' : 'onChange="obtenerCodInterno(this, ' + n + ');validarMuestraExhibicion(this);validarServicio(this)"') + '> ' + opcionesDescripcion +' </select>';
         var descripcion_ant = '<input type="hidden" name="descripcion_ant[]" id="descripcion_ant' + n + '" class="form-control form-control-sm" />';
-        var cod_interno = '<input name="cod_interno[]" id="cod_interno' + n + '" class="form-control form-control-sm" value="" type="text">';
+        //var cod_interno = '<input name="cod_interno[]" id="cod_interno' + n + '" class="form-control form-control-sm" value="" type="text">';
         var marca = '<select name="marca[]" id="marca' + n + '" class="form-control form-control-sm" onchange=""> <option value="">--Seleccionar--</option><?php foreach ($marca as $row){?><option value="<?php echo htmlspecialchars($row->id); ?>"><?php echo htmlspecialchars(addslashes($row->denominiacion)); ?></option><?php }?></select>'
         var unidad = '<select name="unidad[]" id="unidad' + n + '" class="form-control form-control-sm" onChange=""> <option value="">--Seleccionar--</option> <?php foreach ($unidad as $row) {?> <option value="<?php echo $row->codigo?>"><?php echo $row->denominacion?></option> <?php } ?> </select>';
         var cantidad_ingreso = '<input name="cantidad_ingreso[]" id="cantidad_ingreso' + n + '" class="cantidad_ingreso form-control form-control-sm" value="" type="text" oninput="calcularSubTotal(this);calcularPrecioUnitario(this);validarMuestraExhibicion(this)">';
@@ -989,6 +989,7 @@ function agregarProducto(){
         var precio_unitario_ = '<input name="precio_unitario_[]" id="precio_unitario_' + n + '" class="precio_unitario_ form-control form-control-sm" value="" type="text" oninput="calcularPrecioUnitario(this)" readonly="readonly">';
         var valor_venta_bruto = '<input name="valor_venta_bruto[]" id="valor_venta_bruto' + n + '" class="valor_venta_bruto form-control form-control-sm" value="" type="text" oninput="calcularSubTotal(this)" readonly="readonly">';
         var valor_venta = '<input name="valor_venta[]" id="valor_venta' + n + '" class="valor_venta form-control form-control-sm" value="" type="text" oninput="calcularSubTotal(this);recalcularPorcentajeDescuento(this)" readonly="readonly">';
+        var descuento_unitario = '<div style="display: flex; align-items: center; gap: 5px;"><input name="descuento_unitario[]" id="descuento_unitario' + n + '" class="descuento_unitario form-control form-control-sm" placeholder="S/ Descuento Unitario" value="" type="text" oninput="calcularDescuentoProducto(this)"></div>';
         var descuento = '<div style="display: flex; align-items: center; gap: 5px;"><button type="button" class="btn-custom" onclick="aplicaDescuentoEnSoles(this);calcularPrecioUnitario(this);recalcularPorcentajeDescuento(this)" hidden><i class="fas fa-paint-brush"></i></button><input name="descuento[]" id="descuento' + n + '" class="descuento form-control form-control-sm" placeholder="S/ Descuento" value="" type="text" oninput="aplicaDescuentoEnSoles(this);calcularPrecioUnitario(this);recalcularPorcentajeDescuento(this)"><input name="porcentaje[]" id="porcentaje' + n + '" class="porcentaje form-control form-control-sm" placeholder="% Descuento" type="text" oninput="aplicaDescuentoEnPorcentaje(this);calcularPrecioUnitario(this)" style="display: none;"> <input name="id_descuento[]" id="id_descuento${n}" type="hidden" value="1"></div>';
         var porcentaje_descuento = '<input name="porcentaje_descuento[]" id="porcentaje_descuento${n}" class="porcentaje_descuento form-control form-control-sm" value="" type="text" oninput="" readonly="readonly">'
         var sub_total = '<input name="sub_total[]" id="sub_total' + n + '" class="sub_total form-control form-control-sm" value="" type="text" readonly="readonly">';
@@ -1001,7 +1002,7 @@ function agregarProducto(){
         newRow += '<td>' + n + '</td>';
         newRow += '<td style="width: 400px!important; display:block!important">' +descripcion_ant + descripcion + '</td>';
         newRow += '<td>' + marca + '</td>';
-        newRow += '<td>' + cod_interno + '</td>';
+        //newRow += '<td>' + cod_interno + '</td>';
         newRow += '<td>' + unidad + '</td>';
         newRow += '<td>' + cantidad_ingreso + '</td>';
         newRow += '<td>' + stock_actual + '</td>';
@@ -1009,6 +1010,7 @@ function agregarProducto(){
         newRow += '<td>' + precio_unitario_ + '</td>';
         newRow += '<td>' + valor_venta_bruto + '</td>';
         newRow += '<td>' + valor_venta + '</td>';
+        newRow += '<td>' + descuento_unitario + '</td>';
         newRow += '<td>' + descuento + '</td>';
         newRow += '<td>' + porcentaje_descuento + '</td>';
         newRow += '<td>' + sub_total + '</td>';
@@ -1048,6 +1050,24 @@ function agregarProducto(){
     }
 
     actualizarTotalGeneral();
+}
+
+function calcularDescuentoProducto(input){
+
+    var fila = $(input).closest('tr');
+
+    var descuento_unitario = fila.find(".descuento_unitario").val() || 0;
+    var cantidad_ingreso = fila.find(".cantidad_ingreso").val() || 0;
+    //var precio_unitario = fila.find(".precio_unitario_").val() || 0;
+
+    var descuento_total = descuento_unitario * cantidad_ingreso;
+
+    fila.find('.descuento').val(descuento_total.toFixed(2));
+
+    aplicaDescuentoEnSoles(input);
+    calcularPrecioUnitario(input);
+    recalcularPorcentajeDescuento(input);
+
 }
 
 function cambiarDescuento(button){
@@ -2105,7 +2125,7 @@ function modal_cerrar_pedido(id){
                                         <th>#</th>
                                         <th>Descripci&oacute;n</th>
                                         <th>Marca</th>
-                                        <th>COD. INT.</th>
+                                        <!--<th>COD. INT.</th>-->
                                         <th>Unidad</th>
                                         <th>Cantidad</th>
                                         <th>Stock Disponible</th>
@@ -2113,6 +2133,7 @@ function modal_cerrar_pedido(id){
                                         <th>Valor Unitario</th>
                                         <th>Valor Venta Bruto</th>
                                         <th>Valor Venta</th>
+                                        <th>Descuento Unitario</th>
                                         <th>Valor Descuento</th>
                                         <th>Porcentaje Descuento</th>
                                         <th>Sub Total</th>

@@ -1375,8 +1375,6 @@ function obtenerTitular(){
 		return valorRedondeado;
 	}
 
-
-
 	function obtenerRepresentante(){
 
 		var tipo_documento = "";

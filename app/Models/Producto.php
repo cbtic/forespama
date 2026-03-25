@@ -15,7 +15,7 @@ class Producto extends Model
         'denominacion',
         'id_unidad_medida',
         'stock_actual',
-        'costo_unitario',
+        'precio_venta',
         'id_moneda',
         'id_tipo_producto',
         'fecha_vencimiento',
@@ -66,7 +66,7 @@ class Producto extends Model
 
     function getProductoAll(){
 
-        $cad = "select id, numero_serie, codigo, trim(denominacion) denominacion, id_unidad_medida, stock_actual, id_moneda, id_tipo_producto, fecha_vencimiento, id_estado_bien, stock_minimo, observacion, estado, created_at, updated_at, costo_unitario, contenido, id_unidad_producto, id_marca, numero_corrrelativo, id_tipo_origen_producto
+        $cad = "select id, numero_serie, codigo, trim(denominacion) denominacion, id_unidad_medida, stock_actual, id_moneda, id_tipo_producto, fecha_vencimiento, id_estado_bien, stock_minimo, observacion, estado, created_at, updated_at, costo_unitario, precio_venta, contenido, id_unidad_producto, id_marca, numero_corrrelativo, id_tipo_origen_producto
         from productos p 
         where p.estado='1'
         and p.aprobado='2'
@@ -107,7 +107,7 @@ class Producto extends Model
         if ($tipo == '') $tipo_v =" ";
 
         $cad = "select p.id, p.codigo ||' - '|| p.denominacion producto_desc,  p.codigo, p.denominacion, p.id_unidad_medida, um.denominacion um,  p.stock_actual, 
-                    p.id_moneda, m.denominacion moneda_desc, m.abreviatura moneda_abreviatura, p.costo_unitario, p.numero_corrrelativo, p.id_tipo_origen_producto 
+                    p.id_moneda, m.denominacion moneda_desc, m.abreviatura moneda_abreviatura, p.costo_unitario, p.precio_venta, p.numero_corrrelativo, p.id_tipo_origen_producto 
                 from productos p
                     left join tabla_maestras um on um.codigo::int=p.id_unidad_medida and um.tipo = '43'
                     left join tabla_maestras m on m.codigo::int=p.id_moneda and m.tipo = '1'
@@ -128,7 +128,7 @@ class Producto extends Model
         if ($tipo == '') $tipo_v =" ";
 
         $cad = "select p.id, p.codigo ||' - '|| p.denominacion denominacion,   p.denominacion producto, p.codigo,  p.id_unidad_producto id_unidad_medida, um.denominacion um, um.abreviatura,  p.stock_actual, 
-                    p.id_moneda, m.denominacion moneda_desc, m.abreviatura moneda_abreviatura, p.costo_unitario, p.numero_corrrelativo, p.id_tipo_origen_producto,
+                    p.id_moneda, m.denominacion moneda_desc, m.abreviatura moneda_abreviatura, p.costo_unitario, p.precio_venta, p.numero_corrrelativo, p.id_tipo_origen_producto,
                     case when  e.id_empresa = '".$id_empresa."' then 
                     (select pe.codigo_producto ||'-'|| pe.descripcion_producto||' ('|| pe.codigo_empresa||'-'|| pe. descripcion_empresa||')'  
                     from equivalencia_productos pe
@@ -160,7 +160,7 @@ class Producto extends Model
 
 
         $cad = "select p.id, p.codigo ||' - '|| p.denominacion denominacion,   p.denominacion producto, p.codigo,  p.id_unidad_producto id_unidad_medida, um.denominacion um, um.abreviatura, p.stock_actual, 
-                    p.id_moneda, m.denominacion moneda_desc, m.abreviatura moneda_abreviatura, p.costo_unitario, p.numero_corrrelativo, p.id_tipo_origen_producto,
+                    p.id_moneda, m.denominacion moneda_desc, m.abreviatura moneda_abreviatura, p.costo_unitario, p.precio_venta, p.numero_corrrelativo, p.id_tipo_origen_producto,
                     case when  e.id_empresa = '".$id_empresa."' then 
                     (SELECT pe.codigo_producto ||'-'|| pe.descripcion_producto||' ('|| pe.codigo_empresa||'-'|| pe. descripcion_empresa||')'  
                     FROM equivalencia_productos pe

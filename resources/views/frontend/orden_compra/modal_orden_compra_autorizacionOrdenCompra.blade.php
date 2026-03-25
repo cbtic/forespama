@@ -358,7 +358,7 @@ function obtenerCodInterno(selectElement, n){
             $('#item' + n).val(result[0].numero_serie);
             $('#marca' + n).val(result[0].id_marca).trigger('change');
             $('#unidad' + n).val(result[0].id_unidad_producto);
-            $('#precio_unitario' + n).val(result[0].costo_unitario);
+            $('#precio_unitario' + n).val(result[0].precio_venta);
             
             /*if(result[0].bien_servicio == 2){
                 $('#precio_unitario' + n).val(result[0].costo_unitario);

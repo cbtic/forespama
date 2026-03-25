@@ -426,6 +426,7 @@ class EmpresaController extends Controller
 				$empresa->cliente = $request->input('cliente', 0);
 				$empresa->proveedor = $request->input('proveedor', 0);
 				$empresa->transporte = $request->input('transportista', 0);
+				$empresa->agente_retenedor = $request->agente_retenedor;
 				//$empresa->costo_estacionamiento = $request->costo_estacionamiento;
 				//$empresa->costo_volumen = $request->costo_volumen;
 				$empresa->save();
@@ -449,6 +450,7 @@ class EmpresaController extends Controller
 				$empresa->cliente = $request->input('cliente', 0);
 				$empresa->proveedor = $request->input('proveedor', 0);
 				$empresa->transporte = $request->input('transportista', 0);
+				$empresa->agente_retenedor = $request->agente_retenedor;
 				//$empresa->costo_estacionamiento = $request->costo_estacionamiento;
 				//$empresa->costo_volumen = $request->costo_volumen;
 				$empresa->save();

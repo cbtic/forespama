@@ -95,19 +95,23 @@ class Comprobante extends Model
     function getComprobanteId($id){
 
         $cad = "select c.*,  oc.numero_orden_compra_cliente, 
-                (select string_agg(gi.guia_serie||'-'||gi.guia_numero ,', ') from salida_productos sp 
-                left join guia_internas gi on gi.numero_documento::int = sp.id 
-                where sp.tipo_devolucion='3'
-                and gi.id_tipo_documento !='4'
-                and gi.guia_anulado ='N'
-                and sp.id_orden_compra=oc.id) guia,
-                (select tm.denominacion medio_pago from comprobante_pagos cp 
-                inner join tabla_maestras tm on cp.id_medio = tm.codigo::int and tm.tipo='11'
-                where cp.id_comprobante = c.id) medio_pago
-                from comprobantes c 
-                left join orden_compras oc on oc.id = case c.orden_compra when '' then '0' else  c.orden_compra::int end
-                and c.estado ='1'
-                where c.id = '".$id."' ";
+        (select string_agg(gi.guia_serie||'-'||gi.guia_numero ,', ') from salida_productos sp 
+        left join guia_internas gi on gi.numero_documento::int = sp.id 
+        where sp.tipo_devolucion='3'
+        and gi.id_tipo_documento !='4'
+        and gi.guia_anulado ='N'
+        and sp.id_orden_compra=oc.id) guia,
+        (select tm.denominacion medio_pago from comprobante_pagos cp 
+        inner join tabla_maestras tm on cp.id_medio = tm.codigo::int and tm.tipo='11'
+        where cp.id_comprobante = c.id) medio_pago,
+        ca.serie ||'-'|| ca.numero AS serie_adelanto,
+        ca.fecha AS fecha_adelanto,
+        ca.total AS monto_adelanto
+        from comprobantes c 
+        left join orden_compras oc on oc.id = case c.orden_compra when '' then '0' else  c.orden_compra::int end
+        left join comprobantes ca on ca.id_comprobante_adelanto = c.id
+        where c.id = '".$id."'
+        and c.estado ='1' ";
 
 /*
         $cad = "select c.*,  oc.numero_orden_compra_cliente, gi.guia_serie, gi.guia_numero

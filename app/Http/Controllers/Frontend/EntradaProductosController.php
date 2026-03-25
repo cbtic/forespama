@@ -294,8 +294,8 @@ class EntradaProductosController extends Controller
                     $kardex->total_salidas_cantidad = $total[$index];
 
                     $kardex->saldos_cantidad = $saldoBase - $cantidad_ingreso[$index];
-                    $kardex->costo_saldos_cantidad = $producto->costo_unitario;
-                    $total_kardex = $cantidad_ingreso[$index] * $producto->costo_unitario;
+                    $kardex->costo_saldos_cantidad = $producto->precio_venta;
+                    $total_kardex = $cantidad_ingreso[$index] * $producto->precio_venta;
                     $kardex->total_saldos_cantidad = $total_kardex;
 
                     $kardex->id_entrada_producto = $entrada_producto->id;
@@ -345,8 +345,8 @@ class EntradaProductosController extends Controller
                     $kardex->salidas_cantidad = 0;
 
                     $kardex->saldos_cantidad = $saldoBase + $cantidad_ingreso[$index];
-                    $kardex->costo_saldos_cantidad = $producto->costo_unitario;
-                    $total_kardex = $cantidad_ingreso[$index] * $producto->costo_unitario;
+                    $kardex->costo_saldos_cantidad = $producto->precio_venta;
+                    $total_kardex = $cantidad_ingreso[$index] * $producto->precio_venta;
                     $kardex->total_saldos_cantidad = $total_kardex;
 
                     $kardex->id_entrada_producto = $entrada_producto->id;
@@ -598,8 +598,8 @@ class EntradaProductosController extends Controller
                         $kardex->total_salidas_cantidad = $total[$index];
 
                         $kardex->saldos_cantidad = $saldoBase - $cantidad_ingreso[$index];
-                        $kardex->costo_saldos_cantidad = $producto->costo_unitario;
-                        $total_kardex = $cantidad_ingreso[$index] * $producto->costo_unitario;
+                        $kardex->costo_saldos_cantidad = $producto->precio_venta;
+                        $total_kardex = $cantidad_ingreso[$index] * $producto->precio_venta;
                         $kardex->total_saldos_cantidad = $total_kardex;
 
                         $kardex->id_salida_producto = $salida_producto->id;
@@ -649,8 +649,8 @@ class EntradaProductosController extends Controller
                         $kardex->total_salidas_cantidad = $total[$index];
 
                         $kardex->saldos_cantidad = $saldoBase - $cantidad_ingreso[$index];
-                        $kardex->costo_saldos_cantidad = $producto->costo_unitario;
-                        $total_kardex = $cantidad_ingreso[$index] * $producto->costo_unitario;
+                        $kardex->costo_saldos_cantidad = $producto->precio_venta;
+                        $total_kardex = $cantidad_ingreso[$index] * $producto->precio_venta;
                         $kardex->total_saldos_cantidad = $total_kardex;
 
                         $kardex->id_salida_producto = $salida_producto->id;
@@ -1218,7 +1218,7 @@ class EntradaProductosController extends Controller
         $persona_model = new Persona;
         $empresa_model = new Empresa;
         $id_user = Auth::user()->id;
-      
+        
         if($id>0){
             if($tipo == 1){
                 $orden_compra = OrdenCompra::find($id);
@@ -1393,13 +1393,13 @@ class EntradaProductosController extends Controller
                     if($kardex_buscar){
                         $cantidad_saldo = $kardex_buscar->saldos_cantidad - $cantidad_ingreso[$index];
                         $kardex->saldos_cantidad = $cantidad_saldo;
-                        $kardex->costo_saldos_cantidad = $producto->costo_unitario;
-                        $total_kardex = $cantidad_saldo * $producto->costo_unitario;
+                        $kardex->costo_saldos_cantidad = $producto->precio_venta;
+                        $total_kardex = $cantidad_saldo * $producto->precio_venta;
                         $kardex->total_saldos_cantidad = $total_kardex;
                     }else{
                         $kardex->saldos_cantidad = $cantidad_ingreso[$index];
-                        $kardex->costo_saldos_cantidad = $producto->costo_unitario;
-                        $total_kardex = $cantidad_ingreso[$index] * $producto->costo_unitario;
+                        $kardex->costo_saldos_cantidad = $producto->precio_venta;
+                        $total_kardex = $cantidad_ingreso[$index] * $producto->precio_venta;
                         $kardex->total_saldos_cantidad = $total_kardex;
                     }
                     $kardex->id_entrada_producto = $entrada_producto->id;
@@ -1419,13 +1419,13 @@ class EntradaProductosController extends Controller
                     if($kardex_buscar){
                         $cantidad_saldo = $kardex_buscar->saldos_cantidad + $cantidad_ingreso[$index];
                         $kardex->saldos_cantidad = $cantidad_saldo;
-                        $kardex->costo_saldos_cantidad = $producto->costo_unitario;
-                        $total_kardex = $cantidad_saldo * $producto->costo_unitario;
+                        $kardex->costo_saldos_cantidad = $producto->precio_venta;
+                        $total_kardex = $cantidad_saldo * $producto->precio_venta;
                         $kardex->total_saldos_cantidad = $total_kardex;
                     }else{
                         $kardex->saldos_cantidad = $cantidad_ingreso[$index];
-                        $kardex->costo_saldos_cantidad = $producto->costo_unitario;
-                        $total_kardex = $cantidad_ingreso[$index] * $producto->costo_unitario;
+                        $kardex->costo_saldos_cantidad = $producto->precio_venta;
+                        $total_kardex = $cantidad_ingreso[$index] * $producto->precio_venta;
                         $kardex->total_saldos_cantidad = $total_kardex;
                     }
                     $kardex->id_entrada_producto = $entrada_producto->id;
@@ -1596,13 +1596,13 @@ class EntradaProductosController extends Controller
                     if($kardex_buscar){
                         $cantidad_saldo = $kardex_buscar->saldos_cantidad - $cantidad_ingreso[$index];
                         $kardex->saldos_cantidad = $cantidad_saldo;
-                        $kardex->costo_saldos_cantidad = $producto->costo_unitario;
-                        $total_kardex = $cantidad_saldo * $producto->costo_unitario;
+                        $kardex->costo_saldos_cantidad = $producto->precio_venta;
+                        $total_kardex = $cantidad_saldo * $producto->precio_venta;
                         $kardex->total_saldos_cantidad = $total_kardex;
                     }else{
                         $kardex->saldos_cantidad = $cantidad_ingreso[$index];
-                        $kardex->costo_saldos_cantidad = $producto->costo_unitario;
-                        $total_kardex = $cantidad_ingreso[$index] * $producto->costo_unitario;
+                        $kardex->costo_saldos_cantidad = $producto->precio_venta;
+                        $total_kardex = $cantidad_ingreso[$index] * $producto->precio_venta;
                         $kardex->total_saldos_cantidad = $total_kardex;
                     }
                     $kardex->id_entrada_producto = $entrada_producto->id;
@@ -1622,13 +1622,13 @@ class EntradaProductosController extends Controller
                     if($kardex_buscar){
                         $cantidad_saldo = $kardex_buscar->saldos_cantidad + $cantidad_ingreso[$index];
                         $kardex->saldos_cantidad = $cantidad_saldo;
-                        $kardex->costo_saldos_cantidad = $producto->costo_unitario;
-                        $total_kardex = $cantidad_saldo * $producto->costo_unitario;
+                        $kardex->costo_saldos_cantidad = $producto->precio_venta;
+                        $total_kardex = $cantidad_saldo * $producto->precio_venta;
                         $kardex->total_saldos_cantidad = $total_kardex;
                     }else{
                         $kardex->saldos_cantidad = $cantidad_ingreso[$index];
-                        $kardex->costo_saldos_cantidad = $producto->costo_unitario;
-                        $total_kardex = $cantidad_ingreso[$index] * $producto->costo_unitario;
+                        $kardex->costo_saldos_cantidad = $producto->precio_venta;
+                        $total_kardex = $cantidad_ingreso[$index] * $producto->precio_venta;
                         $kardex->total_saldos_cantidad = $total_kardex;
                     }
                     $kardex->id_entrada_producto = $entrada_producto->id;

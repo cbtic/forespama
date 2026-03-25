@@ -259,7 +259,7 @@ function obtenerCodInterno(selectElement, n){
             $('#unidad' + n).val(result[0].id_unidad_producto);
             
             if(result[0].bien_servicio == 2){
-                $('#precio_unitario' + n).val(result[0].costo_unitario);
+                $('#precio_unitario' + n).val(result[0].precio_venta);
             }
 
             $('#fecha_vencimiento_' + n).datepicker({
@@ -269,7 +269,6 @@ function obtenerCodInterno(selectElement, n){
                 changeYear: true,
                 language: 'es'
             });
-            
         }
     });
 

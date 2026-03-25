@@ -111,20 +111,9 @@
 
 <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.js"></script>-->
 <script type="text/javascript">
-/*
-jQuery(function($){
-$.mask.definitions['H'] = "[0-1]";
-$.mask.definitions['h'] = "[0-9]";
-$.mask.definitions['M'] = "[0-5]";
-$.mask.definitions['m'] = "[0-9]";
-$.mask.definitions['P'] = "[AaPp]";
-$.mask.definitions['p'] = "[Mm]";
-});
-*/
+
 $(document).ready(function() {
-	//$('#hora_solicitud').focus();
-	//$('#hora_solicitud').mask('00:00');
-	//$("#id_empresa").select2({ width: '100%' });
+
 });
 </script>
 
@@ -137,13 +126,6 @@ $('#openOverlayOpc').on('shown.bs.modal', function() {
 		//container: '#openOverlayOpc modal-body'
 		container: '#openOverlayOpc modal-body'
      });
-	 /*
-	 $('#hora_solicitud').timepicker({
-		showInputs: false,
-		container: '#openOverlayOpc modal-body'
-	});
-	*/
-	 
 });
 
 $(document).ready(function() {
@@ -203,11 +185,14 @@ function fn_save(){
 	var cliente = $('#cliente').is(':checked') ? 1 : 0;
 	var proveedor = $('#proveedor').is(':checked') ? 1 : 0;
 	var transportista = $('#transportista').is(':checked') ? 1 : 0;
+	var agente_retenedor = $('#agente_retenedor').val();
 	
     $.ajax({
 		url: "/empresa/send",
 		type: "POST",
-		data : {_token:_token,id:id,ruc:ruc,razon_social:razon_social,direccion:direccion,email:email,telefono:telefono,cliente:cliente,proveedor:proveedor,transportista:transportista},
+		data : {_token:_token,
+				id:id,ruc:ruc,razon_social:razon_social,direccion:direccion,email:email,telefono:telefono,cliente:cliente,proveedor:proveedor,
+				agente_retenedor:agente_retenedor,transportista:transportista},
 		dataType: 'json',
 		success: function (result) {
 			
@@ -228,16 +213,15 @@ function fn_liberar(id){
 	var _token = $('#_token').val();
 	
     $.ajax({
-			url: "/estacionamiento/liberar_asignacion_estacionamiento_vehiculo",
-            type: "POST",
-            data : {_token:_token,id:id},
-            success: function (result) {
-				$('#openOverlayOpc').modal('hide');
-				cargarAsignarEstacionamiento();
-            }
+		url: "/estacionamiento/liberar_asignacion_estacionamiento_vehiculo",
+		type: "POST",
+		data : {_token:_token,id:id},
+		success: function (result) {
+			$('#openOverlayOpc').modal('hide');
+			cargarAsignarEstacionamiento();
+		}
     });
 }
-
 
 function validarLiquidacion() {
 	
@@ -259,7 +243,6 @@ function validarLiquidacion() {
 	}
 	return false;
 }
-
 
 function obtenerVehiculo(id,obj){
 	
@@ -302,46 +285,12 @@ function obtenerVehiculo(id,obj){
 			$("#system-search2").keyup(function() {
 				var dataTable = $('#tblPlanDetalle').dataTable();
 			   dataTable.fnFilter(this.value);
-			});
-			
+			});	
 		}
-		
 	});
-	
 }
 
-/*
-$('#fecha_solicitud').datepicker({
-	autoclose: true,
-	dateFormat: 'dd-mm-yy',
-	changeMonth: true,
-	changeYear: true,
-	container: '#openOverlayOpc modal-body'
-});
-*/
-/*
-$('#fecha_solicitud').datepicker({
-	format: "dd/mm/yyyy",
-	startDate: "01-01-2015",
-	endDate: "01-01-2020",
-	todayBtn: "linked",
-	autoclose: true,
-	todayHighlight: true,
-	container: '#openOverlayOpc modal-body'
-});
-*/
-
-/*				
-format: "dd/mm/yyyy",
-startDate: "01-01-2015",
-endDate: "01-01-2020",
-todayBtn: "linked",
-autoclose: true,
-todayHighlight: true,
-container: '#myModal modal-body'
-*/	
 </script>
-
 
 <body class="hold-transition skin-blue sidebar-mini">
 
@@ -438,6 +387,18 @@ container: '#myModal modal-body'
 							<div class="form-check">
 								<input class="form-check-input" type="checkbox" name="transportista" value="1" id="transportista" <?php if($empresa->transportista == 1) echo 'checked'; ?>>
 								<label class="form-check-label" for="transportista">Transportista</label>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-lg-3">
+							<div class="form-group">
+								<label class="control-label form-control-sm">Agente Retenedor</label>
+								<select name="agente_retenedor" id="agente_retenedor" class="form-control form-control-sm" onChange="">
+									<option value="" <?php if($empresa->agente_retenedor == "") echo 'selected'; ?>>--Selecionar--</option>
+									<option value="1" <?php if($empresa->agente_retenedor == 1) echo 'selected'; ?>>SI</option>
+									<option value="0" <?php if($empresa->agente_retenedor == 0) echo 'selected'; ?>>NO</option>
+								</select>
 							</div>
 						</div>
 					</div>

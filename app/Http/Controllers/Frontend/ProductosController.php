@@ -235,6 +235,9 @@ class ProductosController extends Controller
         $producto->stock_minimo = $request->stock_minimo;
         $producto->observacion = "";
         $producto->costo_unitario = $request->costo_unitario;
+        $producto->margen = $request->margen;
+        $producto->valor_venta = $request->valor_venta;
+        $producto->precio_venta = $request->precio_venta;
         $producto->contenido = $request->contenido;
         $producto->id_unidad_producto = $request->unidad_producto;
         $producto->id_marca = $request->marca;

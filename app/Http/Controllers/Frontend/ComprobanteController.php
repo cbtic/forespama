@@ -3005,7 +3005,6 @@ class ComprobanteController extends Controller
 
 	
 	}
-
 	
     public function firmar($id_factura){
 
@@ -3078,7 +3077,24 @@ class ComprobanteController extends Controller
 		$data["keepNumber"] = "false";
 		$data["tipoCorreo"] = "1";
         $data["formaPago"] = ($factura->id_forma_pago =="1")?"CONTADO":"CREDITO"; //"CONTADO";
-		$data["tipoMoneda"] = ($factura->id_moneda=="2")?"USD":"PEN"; //"PEN";
+        
+        if($factura->serie_adelanto){
+
+            $data["anticipos"] = [
+                [
+                    "fechaPagoAnticipo"=>date("Y-m-d",strtotime($factura->fecha_adelanto)),
+                    "serieNumeroAnticipo"=>$factura->serie_adelanto,
+                    "tipoDocEmisorAnticipo"=>$this->getTipoDocPersona($factura->tipo, $factura->cod_tributario),
+                    "tipoDocumentoAnticipo"=>"02",
+                    "montoPrepagoAnticipado"=>str_replace(",","",number_format($factura->monto_adelanto,2)),
+                    "nroIdentidadEmisorAnticipo"=>$factura->cod_tributario
+                ]
+            ];
+
+            $data["totalAnticipos"] = str_replace(",","",number_format($factura->monto_adelanto,2));
+        }
+		
+        $data["tipoMoneda"] = ($factura->id_moneda=="2")?"USD":"PEN"; //"PEN";
 		$data["adicionales"] = [];
 		$data["horaEmision"] = date("h:i:s", strtotime($factura->fecha)); // "12:12:04";//$cabecera->fecha
 		$data["serieNumero"] = $factura->serie."-".$factura->numero; // "F001-000002";
@@ -3094,7 +3110,7 @@ class ComprobanteController extends Controller
 		$data["distritoEmisor"] = "LIMA";
 		$data["esContingencia"] = false;
 		$data["telefonoEmisor"] = "51 63506623";
-		$data["totalAnticipos"] = "0.00";
+		//$data["totalAnticipos"] = "0.00";
 		$data["direccionEmisor"] = "CAR.MARGINAL KM. 42 SEC. MIRAFLORES (A UNA CDRA. UNIVERSIDAD DE OXAPAMPA) PASCO - OXAPAMPA - OXAPAMPA";
 		$data["provinciaEmisor"] = "OXAPAMPA";
 		$data["totalDescuentos"] = str_replace(",","",$factura->total_descuentos);
