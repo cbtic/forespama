@@ -395,9 +395,9 @@ function obtenerVehiculo(id,obj){
 							<div class="form-group">
 								<label class="control-label form-control-sm">Agente Retenedor</label>
 								<select name="agente_retenedor" id="agente_retenedor" class="form-control form-control-sm" onChange="">
-									<option value="" <?php if($empresa->agente_retenedor == "") echo 'selected'; ?>>--Selecionar--</option>
-									<option value="1" <?php if($empresa->agente_retenedor == 1) echo 'selected'; ?>>SI</option>
-									<option value="0" <?php if($empresa->agente_retenedor == 0) echo 'selected'; ?>>NO</option>
+									<option value="" {{ is_null($empresa->agente_retenedor) ? 'selected' : ''  }} >--Selecionar--</option>
+									<option value="1" {{ $empresa->agente_retenedor === 1 || $empresa->agente_retenedor === '1' ? 'selected' : '' }}>SI</option>
+									<option value="0" {{ $empresa->agente_retenedor === 0 || $empresa->agente_retenedor === '0' ? 'selected' : '' }}>NO</option>
 								</select>
 							</div>
 						</div>

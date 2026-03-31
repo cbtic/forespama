@@ -342,7 +342,7 @@ class EmpresaController extends Controller
 		if($id>0){
 			$empresa = Empresa::find($id);
 		}
-		else $empresa = new Empresa;		
+		else $empresa = new Empresa;
 
 		return view('frontend.empresa.modal_empresa',compact('id','empresa'));
 	

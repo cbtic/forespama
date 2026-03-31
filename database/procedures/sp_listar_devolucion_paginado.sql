@@ -1,3 +1,5 @@
+-- DROP FUNCTION public.sp_listar_devolucion_paginado(varchar, varchar, varchar, varchar, varchar, varchar, refcursor);
+
 CREATE OR REPLACE FUNCTION public.sp_listar_devolucion_paginado(p_empresa character varying, p_fecha character varying, p_numero_devolucion character varying, p_numero_orden_compra_cliente character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
  RETURNS refcursor
  LANGUAGE plpgsql
@@ -15,16 +17,18 @@ begin
 	
 	p_pagina=(p_pagina::Integer-1)*p_limit::Integer;
 
-	v_campos=' id, tipo_documento, id_tipo_documento, codigo, empresa, id_empresa, numero_orden_compra_cliente, fecha_documento ';
+	v_campos=' id, tipo_documento, id_tipo_documento, codigo, empresa, id_empresa, numero_orden_compra_cliente, fecha_documento, usuario ';
 
-	v_tabla=' (select sp.id, ''SALIDA'' tipo_documento, 2 id_tipo_documento, sp.codigo, case when sp.id_tipo_cliente = 1 then (select p.nombres ||'' ''|| p.apellido_paterno ||'' ''|| p.apellido_materno from personas p where p.id = sp.id_persona) else (select e2.razon_social from empresas e2 where e2.id = sp.id_empresa_compra) end empresa, case when sp.id_tipo_cliente = 1 then (select p.id from personas p where p.id = sp.id_persona) else (select e2.id from empresas e2 where e2.id = sp.id_empresa_compra) end id_empresa, oc.numero_orden_compra_cliente, sp.fecha_salida fecha_documento ' ||
+	v_tabla=' (select sp.id, ''SALIDA'' tipo_documento, 2 id_tipo_documento, sp.codigo, case when sp.id_tipo_cliente = 1 then (select p.nombres ||'' ''|| p.apellido_paterno ||'' ''|| p.apellido_materno from personas p where p.id = sp.id_persona) else (select e2.razon_social from empresas e2 where e2.id = sp.id_empresa_compra) end empresa, case when sp.id_tipo_cliente = 1 then (select p.id from personas p where p.id = sp.id_persona) else (select e2.id from empresas e2 where e2.id = sp.id_empresa_compra) end id_empresa, oc.numero_orden_compra_cliente, sp.fecha_salida fecha_documento, u.name usuario ' ||
               'FROM salida_productos sp ' ||
               'inner join orden_compras oc on sp.id_orden_compra = oc.id '||
+			  'inner join users u on sp.id_usuario_inserta = u.id '||
               'Where 1 = 1 and sp.tipo_devolucion = ''2'' ' ||
               'UNION ALL ' ||
-              'select ep.id, ''ENTRADA'' tipo_documento, 1 id_tipo_documento, ep.codigo, case when ep.id_tipo_cliente = 1 then (select p.nombres ||'' ''|| p.apellido_paterno ||'' ''|| p.apellido_materno from personas p where p.id = ep.id_persona) else (select e2.razon_social from empresas e2 where e2.id = ep.id_empresa_compra) end empresa, case when ep.id_tipo_cliente = 1 then (select p.id from personas p where p.id = ep.id_persona) else (select e2.id from empresas e2 where e2.id = ep.id_empresa_compra) end id_empresa, oc.numero_orden_compra_cliente, ep.fecha_ingreso fecha_documento ' ||
+              'select ep.id, ''ENTRADA'' tipo_documento, 1 id_tipo_documento, ep.codigo, case when ep.id_tipo_cliente = 1 then (select p.nombres ||'' ''|| p.apellido_paterno ||'' ''|| p.apellido_materno from personas p where p.id = ep.id_persona) else (select e2.razon_social from empresas e2 where e2.id = ep.id_empresa_compra) end empresa, case when ep.id_tipo_cliente = 1 then (select p.id from personas p where p.id = ep.id_persona) else (select e2.id from empresas e2 where e2.id = ep.id_empresa_compra) end id_empresa, oc.numero_orden_compra_cliente, ep.fecha_ingreso fecha_documento, u.name usuario ' ||
               'from entrada_productos ep ' ||
 			  'inner join orden_compras oc on ep.id_orden_compra = oc.id '||
+			  'inner join users u on ep.id_usuario_inserta = u.id '||
 			  'Where 1 = 1 and ep.tipo_devolucion = ''2'') union_table ';
 	
 	v_where = ' Where 1=1 ';
