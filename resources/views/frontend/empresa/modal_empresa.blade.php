@@ -411,17 +411,17 @@ function obtenerVehiculo(id,obj){
 							</div>
 						</div>
 					</div>
-              </div>
-          </div>
+              	</div>
+          	</div>
           <!-- /.box -->
         </div>
         <!--/.col (left) -->
-          </div>
-          <!-- /.row -->
-        </section>
-        <!-- /.content -->
-    </div>
-    <!-- /.content-wrapper -->
+	</div>
+	<!-- /.row -->
+	</section>
+	<!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
 
 <script type="text/javascript">
 $(document).ready(function () {
