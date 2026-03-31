@@ -422,7 +422,7 @@ function obtenerVehiculo(id,obj){
         <!-- /.content -->
     </div>
     <!-- /.content-wrapper -->
-    
+
 <script type="text/javascript">
 $(document).ready(function () {
 
