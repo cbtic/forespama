@@ -486,17 +486,6 @@ class PersonaController extends Controller
         $sw = true;
 		$msg = "";
 
-        //$validaDni = $this -> consultaDniWS($request->numero_documento);
-        //print_r ($validaDni);
-        //exit();
-
-        //print_r($buscapersona->count());
-        //exit();
-
-        //if ($buscapersona)
-
-        //$id_r =  $request->id;
-
 		if($request->img_foto!=""){
 			$filepath_tmp = public_path('img/frontend/tmp/');
 			$filepath_nuevo = public_path('img/dni_asociados/');
@@ -511,12 +500,6 @@ class PersonaController extends Controller
             $buscapersona = Persona::where("numero_documento", $request->numero_documento)->where("estado", "1")->get();
 
             if ($buscapersona->count()==0){
-                /*if($codigo==""){
-                    $array_tipo_documento = array('DNI' => 'DNI','CARNET_EXTRANJERIA' => 'CE','PASAPORTE' => 'PAS','RUC' => 'RUC','CEDULA' => 'CED','PTP/PTEP' => 'PTP/PTEP', 'CPP/CSR' => 'CPP/CSR');
-                    $codigo = $array_tipo_documento[$request->tipo_documento]."-".$request->numero_documento;
-                }*/
-                //if($telefono=="")$telefono="999999999";
-                //if($email=="")$email="mail@mail.com";
 
                 $persona = new Persona;
                 $persona->id_tipo_documento = $request->tipo_documento;
@@ -541,24 +524,12 @@ class PersonaController extends Controller
                 $persona->personal = $request->personal;
                 $persona->save();
                 
-                /*$negativo = new Negativo;
-                $negativo->persona_id = $persona->id;
-                $negativo->flag_negativo = $request->flag_negativo;
-                $negativo->observacion = $request->observacion;
-                $negativo->fecha = Carbon::now()->format('Y-m-d');*/
             }
             else{
                 $sw = false;
                 $msg = "El DNI ingresado ya existe !!!";
             }
-
-
 		}else{
-
-            //$buscapersona = Persona::where("numero_documento", $request->numero_documento)->where("estado", "1")->get();
-            //echo $buscapersona[0]->id;
-            //exit();
-            //$request->id = $buscapersona[0]->id;
 
 			$persona = Persona::find($request->id);
 			$persona->id_tipo_documento = $request->tipo_documento;
@@ -566,8 +537,6 @@ class PersonaController extends Controller
 			$persona->apellido_paterno = $request->apellido_paterno;
 			$persona->apellido_materno = $request->apellido_materno;
 			$persona->nombres = $request->nombre;
-			//$persona->codigo = $request->codigo;
-            //$persona->ocupacion = $request->ocupacion;
 			$persona->telefono = $request->numero_celular;
 			$persona->direccion = $request->direccion;
 			$persona->id_sexo = $request->sexo;
@@ -582,10 +551,6 @@ class PersonaController extends Controller
             $persona->cliente = $request->cliente;
             $persona->proveedor = $request->proveedor;
             $persona->personal = $request->personal;
-			//$flag_negativo = $persona->flag_negativo;
-
-            //$persona->flag_negativo = $request->flag_negativo;
-            //print ($persona->ruc);exit();
 			$persona->save();
         }
 

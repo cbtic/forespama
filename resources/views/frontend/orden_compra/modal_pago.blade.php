@@ -175,7 +175,10 @@ $('#openOverlayOpc').on('shown.bs.modal', function() {
 
 $(document).ready(function() {
 	 
-	//$("#divCheque").hide(); 
+	if($('#id_modal').val()>0)
+	{
+		habilitarTCEdit();
+	}	
 
 });
 
@@ -221,6 +224,11 @@ function fn_save(){
 	var img_foto = $('#img_foto').val();
 	var id_banco = $('#id_banco').val();
 	var nro_operacion = $('#nro_operacion').val();
+	var glosa_movimiento = $('#glosa_movimiento').val();
+	var conversion = $('#conversion').val();
+	var tasa_cambio_especial = $('#tasa_cambio_especial').val();
+	var fecha_tc = $('#fecha_tc').val();
+	var tasa_cambio = $('#tasa_cambio').val();
 
 	var msg = "";
     if(id_orden_compra_modal == "")msg += "Debe ingresar el numero de documento <br>";
@@ -245,7 +253,8 @@ function fn_save(){
             type: "POST",
             data : {_token:_token,
 					id:id_modal, id_orden_compra:id_orden_compra_modal, importe:importe, fecha:fecha,observacion:observacion, id_tipodesembolso:id_tipodesembolso,
-					nro_guia:nro_guia, nro_factura:nro_factura, nro_cheque:nro_cheque, img_foto:img_foto, id_banco:id_banco, nro_operacion:nro_operacion},
+					nro_guia:nro_guia, nro_factura:nro_factura, nro_cheque:nro_cheque, img_foto:img_foto, id_banco:id_banco, nro_operacion:nro_operacion,
+					glosa_movimiento:glosa_movimiento, conversion:conversion, tasa_cambio_especial:tasa_cambio_especial, fecha_tc:fecha_tc, tasa_cambio:tasa_cambio},
             success: function (result) {
 				/*
 				$('.loader').hide();
@@ -256,6 +265,45 @@ function fn_save(){
 				
             }
     });
+}
+
+function habilitarTC(){
+
+	var conversion = $('#conversion').val();
+	$('#tasa_cambio').val('');
+	$('#tasa_cambio_especial').val('');
+	
+	if(conversion== '1' || conversion == '2'){
+		$("#tasa_cambio_especial").prop('disabled', true);
+		$('#tasa_cambio').prop('disabled', false);
+
+		$.ajax({
+			url: '/tipo_cambio/obtenerUltimoTipoCambio',
+			dataType: 'json',
+			type: 'GET',
+			success: function(result){
+				//alert(result[0].valor_compra);
+				$('#tasa_cambio').val(result[0].valor_compra);
+
+			},
+		});
+	}else{
+		$("#tasa_cambio_especial").prop('disabled', false);
+		$('#tasa_cambio').prop('disabled', true);
+	}
+}
+
+function habilitarTCEdit(){
+
+	var conversion = $('#conversion').val();
+	
+	if(conversion== '1' || conversion == '2'){
+		$("#tasa_cambio_especial").prop('disabled', true);
+		$('#tasa_cambio').prop('disabled', false);
+	}else{
+		$("#tasa_cambio_especial").prop('disabled', false);
+		$('#tasa_cambio').prop('disabled', true);
+	}
 }
 
 </script>
@@ -329,7 +377,7 @@ function fn_save(){
 
 					<div class="row">
 						
-						<div class="col-lg-4">
+						<div class="col-lg-3">
 							<div class="form-group">
 								<label class="control-label">Importe</label>
 								<input id="importe" name="importe" class="form-control form-control-sm"  value="<?php if($id==0){echo $importe;}else{echo $orden_compra_pago->importe;}?>" type="number">
@@ -347,6 +395,50 @@ function fn_save(){
 								</select>
 							</div>
 						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-lg-12">
+							<div class="form-group">
+								<label class="control-label">Glosa Movimiento</label>
+								<input id="glosa_movimiento" name="glosa_movimiento" class="form-control form-control-sm"  value="<?php echo $orden_compra_pago->glosa_movimiento?>" type="text">
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-lg-3">
+							<div class="form-group">
+								<label class="control-label">Conversi&oacute;n</label>
+								<select name="conversion" id="conversion" class="form-control form-control-sm" onchange="habilitarTC()">
+									<option value="">--Seleccionar--</option>
+									<?php foreach($conversion as $row){?>
+									<option <?php if($row->codigo==$orden_compra_pago->id_conversion)echo "selected='selected'";?> value="<?php echo $row->codigo?>"><?php echo $row->denominacion?></option>
+									<?php }?>
+								</select>
+							</div>
+						</div>
+
+						<div class="col-lg-3">
+							<div class="form-group">
+								<label class="control-label">T/C Especial</label>
+								<input id="tasa_cambio_especial" name="tasa_cambio_especial" class="form-control form-control-sm"  value="<?php echo $orden_compra_pago->tasa_especial?>" type="text">
+							</div>
+						</div>
+
+						<div class="col-lg-3">
+							<div class="form-group">
+								<label class="control-label">Fecha T/C</label>
+								<input id="fecha_tc" name="fecha_tc" class="form-control form-control-sm"  value="<?php echo date('d-m-Y')?>" type="text">
+							</div>
+						</div>
+
+						<div class="col-lg-3">
+							<div class="form-group">
+								<label class="control-label">Tasa de Cambio</label>
+								<input id="tasa_cambio" name="tasa_cambio" class="form-control form-control-sm"  value="<?php echo $orden_compra_pago->tasa_cambio?>" type="text">
+							</div>
+						</div>
+					</div>
 
 						<!--<div class="col-lg-3">
 							<div class="form-group">
@@ -361,9 +453,7 @@ function fn_save(){
 								<input id="nro_factura" name="nro_factura" class="form-control form-control-sm"  value="<?php //echo $orden_compra_pago->nro_factura?>" type="text">
 							</div>
 						</div>-->
-						
-					</div>
-					
+
 					<div class="row">
 						
 						<div class="col-lg-12">

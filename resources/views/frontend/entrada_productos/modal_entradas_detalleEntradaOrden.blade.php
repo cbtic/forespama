@@ -119,6 +119,18 @@
     background-color: #f8f9fa; /* Fondo ligeramente gris al pasar el cursor */
     border-color: #bbb;
 }
+
+.btn-guardar { background-color: #80B2DC !important; }
+.btn-nuevo { background-color: #96D299 !important; }
+.btn-buscar { background-color: #59BFED !important; }
+.btn-aprobar { background-color: #96D299 !important; }
+.btn-devolver { background-color: #FEEC4A !important; }
+.btn-cerrar { background-color: #AEAAAA !important; }
+.btn-eliminar { background-color: #E60000 !important; }
+.btn-agregar { background-color: #79D9AE !important; }
+.btn-enviar { background-color: #87BFF1 !important; }
+.btn-editar { background-color: #87BFF1 !important; }
+
 </style>
 
 <!--<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"/>-->
@@ -281,7 +293,6 @@ $.ajax({
                 //console.log('producto_stock:', result.producto_stock);
                 var producto_stock = result.producto_stock[orden_compra.id_producto];
                 
-
                 result.marca.forEach(marca => {
                     let selected = (marca.id == orden_compra.id_marca) ? 'selected' : '';
                     marcaOptions += `<option value="${marca.id}" ${selected}>${marca.denominiacion}</option>`;
@@ -312,7 +323,6 @@ $.ajax({
                         <td>${n}</td>
                         <td style="width: 450px !important;display:block"><select name="descripcion[]" id="descripcion${n}" class="form-control form-control-sm" onChange="verificarProductoSeleccionado(this, ${n});">${productoOptions}</select></td>
                         <td><select name="marca[]" id="marca${n}" class="form-control form-control-sm">${marcaOptions}</select></td>
-                        <td><input name="cod_interno[]" id="cod_interno${n}" class="form-control form-control-sm" value="${orden_compra.codigo}" type="text"></td>
                         <td><select name="unidad[]" id="unidad${n}" class="form-control form-control-sm">${unidadMedidaOptions}</select><input type="hidden" class="cantidad_ingresada" name="cantidad_ingresada[]" id="cantidad_ingresada${n}" value="${orden_compra.cantidad_ingresada}"></td>
                         <td><input name="cantidad_ingreso[]" id="cantidad_ingreso${n}" class="cantidad_ingreso form-control form-control-sm" value="${orden_compra.cantidad_requerida-orden_compra.cantidad_ingresada}" type="text" oninput="calcularCantidadPendiente(this);calcularDescuentoParcial(this,${/*orden_compra.cantidad_requerida-orden_compra.cantidad_ingresada*/orden_compra.cantidad_requerida},${parseFloat((orden_compra.descuento ?? 0) || 0).toFixed(decimales)});calcularSubTotal(this);calcularPrecioUnitario(this,${decimales})"></td>
                         <td><input name="cantidad_compra[]" id="cantidad_compra${n}" class="cantidad_compra form-control form-control-sm" value="${orden_compra.cantidad_requerida}" type="text" oninput="calcularCantidadPendiente(this)" readonly="readonly"></td>
@@ -1282,6 +1292,15 @@ function modal_cerrar_pedido(id){
 	});
 }
 
+function pdf_documento(){
+
+    var id_orden_compra = $('#id_orden_compra').val();
+
+    var href = '/orden_compra/movimiento_pdf/'+id_orden_compra;
+    window.open(href, '_blank');
+
+}
+
 </script>
 
 <body class="hold-transition skin-blue sidebar-mini">
@@ -1589,7 +1608,7 @@ function modal_cerrar_pedido(id){
 								<th>#</th>
 								<th>Descripci&oacute;n</th>
 								<th>Marca</th>
-                                <th>COD. INT.</th>
+                                <!--<th>COD. INT.</th>-->
                                 <th>Unidad</th>
                                 <th>Cantidad Ingreso</th>
                                 <th>Cantidad Compra</th>
@@ -1637,13 +1656,16 @@ function modal_cerrar_pedido(id){
                     <div style="margin-top:15px" class="form-group">
                         <div class="col-sm-12 controls">
                             <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
+                                
+                                <button style="font-size:12px;margin-left:10px" type="button" class="btn btn-sm btn-clasico btn-enviar" data-toggle="modal" onclick="pdf_documento()" >
+                                    <i class="far fa-file-pdf" style="font-size:18px;"></i> Imprimir
+                                </button>
                                 <?php 
                                     if($id>0){
                                 ?>
-                                <button style="font-size:12px;margin-left:10px" type="button" class="btn btn-sm btn-clasico btn-enviar" data-toggle="modal" onclick="pdf_documento()" >
-                                    <i class="far fa-file-pdf" style="font-size:18px;">Imprimir
+                                <button style="font-size:12px;margin-left:10px; margin-right:100px" type="button" class="btn btn-sm btn-warning" data-toggle="modal" onclick="pdf_guia()" >
+                                    <i class="fa fa-edit"></i>Imprimir Gu&iacute;a Remisi&oacute;n Electronica
                                 </button>
-                                <button style="font-size:12px;margin-left:10px; margin-right:100px" type="button" class="btn btn-sm btn-warning" data-toggle="modal" onclick="pdf_guia()" ><i class="fa fa-edit"></i>Imprimir Gu&iacute;a Remisi&oacute;n Electronica</button>
                                 <!--<a href="javascript:void(0)" onClick="fn_pdf_documento()" class="btn btn-sm btn-primary" style="margin-right:100px">Imprimir</a>-->
                                 <?php 
                                     }

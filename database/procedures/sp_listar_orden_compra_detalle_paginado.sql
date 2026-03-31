@@ -1,3 +1,5 @@
+-- DROP FUNCTION public.sp_listar_orden_compra_detalle_paginado(varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, refcursor);
+
 CREATE OR REPLACE FUNCTION public.sp_listar_orden_compra_detalle_paginado(p_tipo_documento character varying, p_empresa_compra character varying, p_empresa_vende character varying, p_fecha_inicio character varying, p_fecha_fin character varying, p_numero_orden_compra character varying, p_numero_orden_compra_cliente character varying, p_situacion character varying, p_almacen_origen character varying, p_almacen_destino character varying, p_estado character varying, p_id_user character varying, p_id_vendedor character varying, p_estado_pedido character varying, p_prioridad character varying, p_canal character varying, p_tipo_producto character varying, p_estado_pedido_cancelado character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
  RETURNS refcursor
  LANGUAGE plpgsql
@@ -24,7 +26,17 @@ begin
 	where p.id = oc.id_persona)
 	else (select e.razon_social from empresas e 
 	where e.id = oc.id_empresa_compra) 
-	end cliente, oc.numero_orden_compra, oc.fecha_orden_compra, p.codigo, p.denominacion producto, ocd.cantidad_requerida, ocd.precio_venta, ocd.precio, ocd.valor_venta_bruto, ocd.valor_venta, ocd.descuento, ocd.sub_total, ocd.igv, ocd.total, u."name" vendedor ';
+	end cliente, oc.numero_orden_compra, oc.fecha_orden_compra, p.codigo, p.denominacion producto, ocd.cantidad_requerida, ocd.precio_venta, ocd.precio, ocd.valor_venta_bruto, ocd.valor_venta, ocd.descuento, ocd.sub_total, ocd.igv, ocd.total, u."name" vendedor,
+	COALESCE(
+	(select STRING_AGG(DISTINCT sp.codigo::TEXT, '', '')
+	 from salida_productos sp 
+	 where sp.id_orden_compra = oc.id 
+	 and sp.estado = ''1''),
+	(select STRING_AGG(DISTINCT ep.codigo::TEXT, '', '')
+	 from entrada_productos ep  
+	 where ep.id_orden_compra = oc.id 
+	 and ep.estado = ''1'')) as nota,
+	oc.observacion_vendedor ';
 	
 	v_tabla=' from orden_compras oc 
 	inner join orden_compra_detalles ocd on oc.id = ocd.id_orden_compra and ocd.estado = ''1''

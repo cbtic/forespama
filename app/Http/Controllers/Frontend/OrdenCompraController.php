@@ -484,6 +484,50 @@ class OrdenCompraController extends Controller
                 $producto_stock[$detalle->id_producto] = ['stock_comprometido'=>0];
             }
         }
+
+        /*$orden_compra_model = new OrdenCompra;
+        $marca_model = new Marca;
+        $producto_model = new Producto;
+        $tablaMaestra_model = new TablaMaestra;
+        $kardex_model = new Kardex;
+
+        $orden_compra = $orden_compra_model->getDetalleOrdenCompraId($id);
+        $marca = $marca_model->getMarcaAll();
+        $producto = $producto_model->getProductoAll();
+        $estado_bien = $tablaMaestra_model->getMaestroByTipo(4);
+        $unidad_medida = $tablaMaestra_model->getMaestroByTipo(43);
+        $descuento = $tablaMaestra_model->getMaestroByTipo(55);
+
+        $producto_stock = [];
+        $stock_cache = [];
+
+        foreach($orden_compra as $detalle){
+
+            $id_almacen_bus = $detalle->id_almacen_salida;
+            
+            if($detalle->id_unidad_origen==1){$id_almacen_bus = $detalle->id_almacen_salida;}
+            if($detalle->id_unidad_origen==2){$id_almacen_bus = $detalle->id_almacen_destino;}
+            if($detalle->id_unidad_origen==3){$id_almacen_bus = $detalle->id_almacen_salida;}
+            if($detalle->id_unidad_origen==4){$id_almacen_bus = $detalle->id_almacen_salida;}
+
+            $key = $detalle->id_producto.'_'.$id_almacen_bus;
+
+            if(!isset($stock_cache[$key])){
+
+                $stock = $kardex_model->getExistenciaProductoById(
+                    $detalle->id_producto,
+                    $id_almacen_bus
+                );
+
+                if(count($stock)>0){
+                    $stock_cache[$key] = $stock[0];
+                }else{
+                    $stock_cache[$key] = ['stock_comprometido'=>0];
+                }
+            }
+
+            $producto_stock[$detalle->id_producto] = $stock_cache[$key];
+        }*/
         
         return response()->json([
             'orden_compra' => $orden_compra,
@@ -1462,11 +1506,11 @@ class OrdenCompraController extends Controller
 		$variable = [];
 		$n = 1;
 
-		array_push($variable, array("N°","Vendedor","Empresa","Numero OC","Fecha","Codigo","Producto","Cantidad","Precio Venta","Precio Unitario","Valor Venta Bruto","Valor Venta","Descuento","Sub Total","IGV","Total"));
+		array_push($variable, array("N°","Vendedor","Empresa","Numero OC","Fecha","Codigo","Producto","Cantidad","Precio Venta","Precio Unitario","Valor Venta Bruto","Valor Venta","Descuento","Sub Total","IGV","Total","Nota Entrada-Salida", "Observacion"));
 		
 		foreach ($data as $r) {
 
-			array_push($variable, array($n++,$r->vendedor, $r->cliente, $r->numero_orden_compra, $r->fecha_orden_compra, $r->codigo, $r->producto, $r->cantidad_requerida, (float)$r->precio_venta, (float)$r->precio, (float)$r->valor_venta_bruto, (float)$r->valor_venta, (float)$r->descuento, (float)$r->sub_total, (float)$r->igv, (float)$r->total));
+			array_push($variable, array($n++,$r->vendedor, $r->cliente, $r->numero_orden_compra, $r->fecha_orden_compra, $r->codigo, $r->producto, $r->cantidad_requerida, (float)$r->precio_venta, (float)$r->precio, (float)$r->valor_venta_bruto, (float)$r->valor_venta, (float)$r->descuento, (float)$r->sub_total, (float)$r->igv, (float)$r->total, $r->nota, $r->observacion_vendedor));
 		}
 		
 		$export = new InvoicesExport5([$variable]);
@@ -2004,13 +2048,14 @@ class OrdenCompraController extends Controller
 
 		$tipo_desembolso = $tablaMaestra_model->getMaestroByTipo(65);
 		$banco = $tablaMaestra_model->getMaestroByTipo(16);
+        $conversion = $tablaMaestra_model->getMaestroByTipo(122);
 
 		$orden_compra_pago_model = new OrdenCompraPago;
 		$data = $orden_compra_pago_model->getImportePago($id_orden_compra);
 
 		$importe = $data->precio-$data->pago;
 
-		return view('frontend.orden_compra.modal_pago',compact('id','orden_compra_pago','id_orden_compra','fecha_actual'/*,'adelantos'*/,'tipo_desembolso','importe','banco'));
+		return view('frontend.orden_compra.modal_pago',compact('id','orden_compra_pago','id_orden_compra','fecha_actual'/*,'adelantos'*/,'tipo_desembolso','importe','banco','conversion'));
 	
 	}
 
@@ -2156,11 +2201,22 @@ class OrdenCompraController extends Controller
 			$pago->foto_desembolso = $request->img_foto;
 			$pago->estado = 1;
 			$pago->id_usuario_inserta = $id_user;
+			$pago->tipo_documento_compra = $request->tipo_documento;
+			$pago->serie_compra = $request->serie_factura;
+			$pago->numero_compra = $request->nro_factura;
+			$pago->fecha_compra = $request->fecha_factura;
+			$pago->glosa_comprobante = $request->glosa_comprobante;
+			$pago->glosa_movimiento = $request->glosa_movimiento;
+			$pago->id_conversion = $request->conversion;
+			$pago->tasa_especial = $request->tasa_cambio_especial;
+			$pago->fecha_tasa_cambio = $request->fecha_tc;
+			$pago->tasa_cambio = $request->tasa_cambio;
 		}else{
 			$pago = OrdenCompraPago::find($request->id);
 			$pago->id_tipo_desembolso = $request->id_tipodesembolso;
 			$pago->importe = $request->importe;
 			$pago->nro_guia = $request->nro_guia;
+            $pago->nro_cheque = $request->nro_cheque;
 			$pago->nro_factura = $request->nro_factura;
 			$pago->id_banco = $request->id_banco;
 			$pago->nro_operacion = $request->nro_operacion;
@@ -2169,6 +2225,16 @@ class OrdenCompraController extends Controller
 			$pago->foto_desembolso = $request->img_foto;
 			$pago->estado = 1;
 			$pago->id_usuario_inserta = $id_user;
+            $pago->tipo_documento_compra = $request->tipo_documento;
+			$pago->serie_compra = $request->serie_factura;
+			$pago->numero_compra = $request->nro_factura;
+			$pago->fecha_compra = $request->fecha_factura;
+			$pago->glosa_comprobante = $request->glosa_comprobante;
+			$pago->glosa_movimiento = $request->glosa_movimiento;
+			$pago->id_conversion = $request->conversion;
+			$pago->tasa_especial = $request->tasa_cambio_especial;
+			$pago->fecha_tasa_cambio = $request->fecha_tc;
+			$pago->tasa_cambio = $request->tasa_cambio;
 		}
 
 		$pago->save();
@@ -3843,16 +3909,16 @@ class InvoicesExport5 implements FromArray, WithHeadings, WithStyles
 
     public function headings(): array
     {
-        return ["N°","Vendedor","Empresa","Numero OC","Fecha","Codigo","Producto","Cantidad","Precio Venta","Precio Unitario","Valor Venta Bruto","Valor Venta","Descuento","Sub Total","IGV","Total"];
+        return ["N°","Vendedor","Empresa","Numero OC","Fecha","Codigo","Producto","Cantidad","Precio Venta","Precio Unitario","Valor Venta Bruto","Valor Venta","Descuento","Sub Total","IGV","Total","Nota Entrada-Salida","Observacion"];
     }
 
 	public function styles(Worksheet $sheet)
     {
 
-		$sheet->mergeCells('A1:P1');
+		$sheet->mergeCells('A1:R1');
 
         $sheet->setCellValue('A1', "REPORTE DE ORDEN DE COMPRA DETALLADO- FORESPAMA");
-        $sheet->getStyle('A1:P1')->applyFromArray([
+        $sheet->getStyle('A1:R1')->applyFromArray([
             'font' => [
                 'bold' => true,
                 'color' => ['rgb' => 'FFFFFF'],
@@ -3869,7 +3935,7 @@ class InvoicesExport5 implements FromArray, WithHeadings, WithStyles
 		$sheet->getStyle('A1')->getAlignment()->setWrapText(true);
 		$sheet->getRowDimension(1)->setRowHeight(30);
 
-        $sheet->getStyle('A2:P2')->applyFromArray([
+        $sheet->getStyle('A2:R2')->applyFromArray([
             'font' => [
                 'bold' => true,
                 'color' => ['rgb' => '000000'],
@@ -3885,7 +3951,7 @@ class InvoicesExport5 implements FromArray, WithHeadings, WithStyles
 
 		$sheet->fromArray($this->headings(), NULL, 'A2');
         
-        foreach (range('A', 'P') as $col) {
+        foreach (range('A', 'R') as $col) {
             $sheet->getColumnDimension($col)->setAutoSize(true);
         }
     }

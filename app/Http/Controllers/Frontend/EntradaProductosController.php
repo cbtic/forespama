@@ -1196,12 +1196,10 @@ class EntradaProductosController extends Controller
                 'unidad_medida' => $unidad_medida,
                 'producto_stock' =>$producto_stock
             ]);
-
-
         }
 
         //$id
-       // $detalle = ssdsd->fgfffg($id);
+        // $detalle = ssdsd->fgfffg($id);
         //return view('frontend.entrada_producto_detalles.show', compact('id','detalle'));
     }
 

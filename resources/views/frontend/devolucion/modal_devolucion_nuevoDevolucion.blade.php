@@ -1219,7 +1219,7 @@ function obtenerObservacion(){
                             Fecha Devoluci&oacute;n
                         </div>
                         <div class="col-lg-2">
-                            <input id="fecha_devolucion" name="fecha_devolucion" on class="form-control form-control-sm"  value="<?php echo isset($salida) && $salida->fecha_salida ? $salida->fecha_salida : date('Y-m-d'); ?>" type="text">
+                            <input id="fecha_devolucion" name="fecha_devolucion" on class="form-control form-control-sm"  value="<?php echo isset($salida) && $salida->fecha_ingreso ? $salida->fecha_ingreso : date('Y-m-d'); ?>" type="text">
                         </div>
                         <!--<div class="col-lg-2">
                             N&uacute;mero Devoluci&oacute;n

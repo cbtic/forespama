@@ -186,6 +186,15 @@ function datatablenew(){
 				"bSortable": true,
 				"aTargets": [5]
 				},
+				{
+				"mRender": function (data, type, row) {
+					var usuario = "";
+					if(row.usuario!= null)usuario = row.usuario;
+					return usuario;
+				},
+				"bSortable": true,
+				"aTargets": [6]
+				},
 				/*{
 				"mRender": function (data, type, row) {
 					var numero_devolucion = "";
@@ -226,7 +235,7 @@ function datatablenew(){
 						return html;
 					},
 					"bSortable": false,
-					"aTargets": [6],
+					"aTargets": [7],
 				},
 
             ]
