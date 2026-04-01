@@ -474,6 +474,7 @@ label.form-control-sm{
 							<th>C&oacute;digo Retail</th>
 							<th>Descripci&oacute;n</th>
 							<th>Precio Unitario</th>
+							<th>Precio Total</th>
 							<th>Descuento</th>
 							<th>Cantidad Pedida</th>
 							<th>Cantidad Entregada</th>

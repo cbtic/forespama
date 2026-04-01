@@ -28,6 +28,7 @@ use App\Models\InformeB2bVenta;
 use App\Models\AutorizacionOrdenCompra;
 use App\Models\PersonaProceso;
 use App\Models\JefeVendedorDetalle;
+use App\Models\StarsoftDestinoOperacione;
 use DateTime;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Auth;
@@ -1720,7 +1721,7 @@ class OrdenCompraController extends Controller
 		$variable = [];
 		$n = 1;
 
-		array_push($variable, array("N°","Empresa","Orden Compra","Pedido","Fecha Pedido","Fecha Vencimiento","Fecha Entrega Real","Fecha Facturado","Codigo Interno","Codigo Retail","Descripcion","Precio Unitario","Descuento","Cantidad Pedida","Cantidad Entregada","Cantidad Cancelada","Pendiente Entrega","Vendedor","Estado Pedido"));
+		array_push($variable, array("N°","Empresa","Orden Compra","Pedido","Fecha Pedido","Fecha Vencimiento","Fecha Entrega Real","Fecha Facturado","Codigo Interno","Codigo Retail","Descripcion","Precio Unitario","Precio Total","Descuento","Cantidad Pedida","Cantidad Entregada","Cantidad Cancelada","Pendiente Entrega","Vendedor","Estado Pedido"));
 		
 		foreach ($data as $r) {
 
@@ -1730,7 +1731,7 @@ class OrdenCompraController extends Controller
                 $pendiente_entrega='SI';
             }
 
-			array_push($variable, array($n++,$r->cliente, $r->numero_orden_compra_cliente, $r->pedido, $r->fecha_orden_compra, $r->fecha_vencimiento, $r->fecha_salida, $r->fecha_facturado, $r->codigo, $r->codigo_empresa, $r->producto, $r->precio, $r->descuento, $r->cantidad_requerida, $r->cantidad_despacho, $r->cantidad_cancelada, $pendiente_entrega, $r->vendedor, $r->estado_pedido));
+			array_push($variable, array($n++,$r->cliente, $r->numero_orden_compra_cliente, $r->pedido, $r->fecha_orden_compra, $r->fecha_vencimiento, $r->fecha_salida, $r->fecha_facturado, $r->codigo, $r->codigo_empresa, $r->producto, $r->precio, $r->sub_total, $r->descuento, $r->cantidad_requerida, $r->cantidad_despacho, $r->cantidad_cancelada, $pendiente_entrega, $r->vendedor, $r->estado_pedido));
 		}
 		
 		$export = new InvoicesExport2([$variable]);
@@ -2063,6 +2064,7 @@ class OrdenCompraController extends Controller
 		
 		$tablaMaestra_model = new TablaMaestra;
 		$orden_compra_model = new OrdenCompra;
+        $destino_operaciones_model = new StarsoftDestinoOperacione;
 		$fecha_actual = $orden_compra_model->fecha_actual();
 
 		if($id==0){
@@ -2080,7 +2082,9 @@ class OrdenCompraController extends Controller
 
 		$importe = $data->precio-$data->pago;
 
-		return view('frontend.orden_compra.modal_pago_orden_compra',compact('id','orden_compra_pago','id_orden_compra','fecha_actual'/*,'adelantos'*/,'tipo_desembolso','importe','banco','conversion'));
+        $destino_operaciones = $destino_operaciones_model->getDestinoOperacionesAll();
+
+		return view('frontend.orden_compra.modal_pago_orden_compra',compact('id','orden_compra_pago','id_orden_compra','fecha_actual'/*,'adelantos'*/,'tipo_desembolso','importe','banco','conversion','destino_operaciones'));
 	
 	}
 
@@ -3717,7 +3721,7 @@ class InvoicesExport2 implements FromArray, WithHeadings, WithStyles
 
     public function headings(): array
     {
-        return ["N°", "Empresa", "Orden Compra", "Pedido", "Fecha Pedido", "Fecha Vencimiento","Fecha Entrega Real", "Fecha Facturado", "Codigo Interno", "Codigo Retail", "Descripcion", "Precio Unitario", "Descuento", "Cantidad Pedida", "Cantidad Entregada", "Cantidad Cancelada", "Pendiente Entrega", "Vendedor", "Estado Pedido"];
+        return ["N°", "Empresa", "Orden Compra", "Pedido", "Fecha Pedido", "Fecha Vencimiento","Fecha Entrega Real", "Fecha Facturado", "Codigo Interno", "Codigo Retail", "Descripcion", "Precio Unitario", "Precio Total", "Descuento", "Cantidad Pedida", "Cantidad Entregada", "Cantidad Cancelada", "Pendiente Entrega", "Vendedor", "Estado Pedido"];
     }
 
 	public function styles(Worksheet $sheet)

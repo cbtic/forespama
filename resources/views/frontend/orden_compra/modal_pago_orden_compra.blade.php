@@ -235,6 +235,16 @@ function fn_save(){
 	var img_foto = $('#img_foto').val();
 	var id_banco = $('#id_banco').val();
 	var nro_operacion = $('#nro_operacion').val();
+	var tipo_documento = $('#tipo_documento').val();
+	var serie_factura = $('#serie_factura').val();
+	var nro_factura = $('#nro_factura').val();
+	var fecha_factura = $('#fecha_factura').val();
+	var glosa_comprobante = $('#glosa_comprobante').val();
+	var glosa_movimiento = $('#glosa_movimiento').val();
+	var conversion = $('#conversion').val();
+	var tasa_cambio_especial = $('#tasa_cambio_especial').val();
+	var fecha_tc = $('#fecha_tc').val();
+	var tasa_cambio = $('#tasa_cambio').val();
 
 	var msg = "";
     if(id_orden_compra_modal == "")msg += "Debe ingresar el numero de documento <br>";
@@ -259,7 +269,9 @@ function fn_save(){
             type: "POST",
             data : {_token:_token,
 					id:id_modal, id_orden_compra:id_orden_compra_modal, importe:importe, fecha:fecha,observacion:observacion, id_tipodesembolso:id_tipodesembolso,
-					nro_guia:nro_guia, nro_factura:nro_factura, nro_cheque:nro_cheque, img_foto:img_foto, id_banco:id_banco, nro_operacion:nro_operacion},
+					nro_guia:nro_guia, nro_factura:nro_factura, nro_cheque:nro_cheque, img_foto:img_foto, id_banco:id_banco, nro_operacion:nro_operacion,
+					tipo_documento:tipo_documento, serie_factura:serie_factura, nro_factura:nro_factura, fecha_factura:fecha_factura, glosa_comprobante:glosa_comprobante,
+					glosa_movimiento:glosa_movimiento, conversion:conversion, tasa_cambio_especial:tasa_cambio_especial, fecha_tc:fecha_tc, tasa_cambio:tasa_cambio},
             success: function (result) {
 				/*
 				$('.loader').hide();
@@ -463,7 +475,6 @@ function habilitarTC(){
 					</div>
 
 					<div class="row">
-
 						<div class="col-lg-3">
 							<div class="form-group">
 								<label class="control-label">Conversi&oacute;n</label>
@@ -494,6 +505,20 @@ function habilitarTC(){
 							<div class="form-group">
 								<label class="control-label">Tasa de Cambio</label>
 								<input id="tasa_cambio" name="tasa_cambio" class="form-control form-control-sm"  value="<?php //echo $orden_compra_pago->nro_factura?>" type="text">
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-lg-4">
+							<div class="form-group">
+								<label class="control-label">Destino</label>
+								<select name="destino" id="destino" onchange="" class="form-control form-control-sm" onChange="">
+									<option value="">--Seleccionar--</option>
+									<?php foreach($destino_operaciones as $row){?>
+									<option <?php if($row->id==$orden_compra_pago->id_destino)echo "selected='selected'";?> value="<?php echo $row->id?>"><?php echo $row->descripcion?></option>
+									<?php }?>
+								</select>
 							</div>
 						</div>
 					</div>

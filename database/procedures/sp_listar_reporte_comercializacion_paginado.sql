@@ -1,3 +1,5 @@
+-- DROP FUNCTION public.sp_listar_reporte_comercializacion_paginado(varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, refcursor);
+
 CREATE OR REPLACE FUNCTION public.sp_listar_reporte_comercializacion_paginado(p_empresa_compra character varying, p_fecha_desde character varying, p_fecha_hasta character varying, p_fecha_desde_facturado character varying, p_fecha_hasta_facturado character varying, p_numero_orden_compra_cliente character varying, p_situacion character varying, p_codigo_producto character varying, p_producto character varying, p_vendedor character varying, p_estado_pedido character varying, p_tipo_producto character varying, p_estado character varying, p_canal character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
  RETURNS refcursor
  LANGUAGE plpgsql
@@ -24,7 +26,7 @@ begin
 	where sp.id_orden_compra = oc.id
 	limit 1) fecha_salida,
 	p.codigo, ep.codigo_empresa, 
-	p.denominacion producto, ocd.precio, ocd.descuento, ocd.cantidad_requerida, coalesce(ocd.cantidad_despacho, 0) cantidad_despacho, coalesce((ocd.cantidad_requerida - ocd.cantidad_despacho), 0) cantidad_cancelada, ocd.cerrado, u."name" vendedor, tm.denominacion estado_pedido,
+	p.denominacion producto, ocd.precio, ocd.sub_total, ocd.descuento, ocd.cantidad_requerida, coalesce(ocd.cantidad_despacho, 0) cantidad_despacho, coalesce((ocd.cantidad_requerida - ocd.cantidad_despacho), 0) cantidad_cancelada, ocd.cerrado, u."name" vendedor, tm.denominacion estado_pedido,
 	to_char(c.fecha,''dd-mm-yyyy'') fecha_facturado ';
 
 	v_tabla=' from orden_compras oc 
