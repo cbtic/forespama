@@ -3727,10 +3727,10 @@ class InvoicesExport2 implements FromArray, WithHeadings, WithStyles
 	public function styles(Worksheet $sheet)
     {
 
-		$sheet->mergeCells('A1:S1');
+		$sheet->mergeCells('A1:T1');
 
         $sheet->setCellValue('A1', "REPORTE DE COMERCIALIZACION - FORESPAMA");
-        $sheet->getStyle('A1:S1')->applyFromArray([
+        $sheet->getStyle('A1:T1')->applyFromArray([
             'font' => [
                 'bold' => true,
                 'color' => ['rgb' => 'FFFFFF'],
@@ -3747,7 +3747,7 @@ class InvoicesExport2 implements FromArray, WithHeadings, WithStyles
 		$sheet->getStyle('A1')->getAlignment()->setWrapText(true);
 		$sheet->getRowDimension(1)->setRowHeight(30);
 
-        $sheet->getStyle('A2:S2')->applyFromArray([
+        $sheet->getStyle('A2:T2')->applyFromArray([
             'font' => [
                 'bold' => true,
                 'color' => ['rgb' => '000000'],
@@ -3763,7 +3763,7 @@ class InvoicesExport2 implements FromArray, WithHeadings, WithStyles
 
 		$sheet->fromArray($this->headings(), NULL, 'A2');
 
-        foreach (range('A', 'S') as $col) {
+        foreach (range('A', 'T') as $col) {
             $sheet->getColumnDimension($col)->setAutoSize(true);
         }
     }
