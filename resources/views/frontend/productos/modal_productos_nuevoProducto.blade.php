@@ -699,7 +699,7 @@ $('#bien_servicio').on('change', function () {
   }
 });
 
-function obtenerPrecios(){
+function obtenerPrecios(campo){
 
     var costo = parseFloat($('#costo_unitario').val());
     var margen = parseFloat($('#margen').val());
@@ -708,7 +708,61 @@ function obtenerPrecios(){
 
     var igv = 1.18;
 
-    if (costo && margen) {
+    if(campo == 'costo'){
+
+        if(precio){
+            valor = precio / igv;
+            margen = (1 - (costo / valor)) * 100;
+
+            $('#valor_venta').val(valor.toFixed(2));
+            $('#margen').val(margen.toFixed(2));
+
+        }else if(margen){
+
+            valor = costo * (1 + margen/100);
+            precio = valor * igv;
+
+            $('#valor_venta').val(valor.toFixed(2));
+            $('#precio_venta').val(precio.toFixed(2));
+        }
+
+    }
+
+    if(campo == 'margen'){
+
+        if(costo){
+
+            valor = costo / (1 - margen/100);
+            precio = valor * igv;
+
+            $('#valor_venta').val(valor.toFixed(2));
+            $('#precio_venta').val(precio.toFixed(2));
+
+        }
+
+    }
+
+    if(campo == 'valor'){
+
+        margen = (1 - (costo / valor)) * 100;
+        precio = valor * igv;
+
+        $('#margen').val(margen.toFixed(2));
+        $('#precio_venta').val(precio.toFixed(2));
+
+    }
+
+    if(campo == 'precio'){
+
+        valor = precio / igv;
+        margen = (1 - (costo / valor)) * 100;
+
+        $('#valor_venta').val(valor.toFixed(2));
+        $('#margen').val(margen.toFixed(2));
+
+    }
+
+    /*if (costo && margen) {
         let valor_venta = costo * (1 + margen / 100);
         let precio_venta = valor_venta * igv;
 
@@ -716,12 +770,12 @@ function obtenerPrecios(){
         $('#precio_venta').val(precio_venta.toFixed(2));
     }else if (costo && precio) {
         let valor_venta = precio / igv;
-        let margen_calculado = ((valor_venta / costo) - 1) * 100;
+        let margen_calculado = (1 - (costo / valor_venta)) * 100;
         
         $('#valor_venta').val(valor_venta.toFixed(2));
         $('#margen').val(margen_calculado.toFixed(2));
     }else if (costo && valor) {
-        let margen_calculado = ((valor / costo) - 1) * 100;
+        let margen_calculado = (1 - (costo / valor_venta)) * 100;
         let precio_venta = valor * igv;
 
         $('#margen').val(margen_calculado.toFixed(2));
@@ -740,11 +794,11 @@ function obtenerPrecios(){
         $('#precio_venta').val(precio_venta.toFixed(2));
     }else if (valor && precio) {
         let costo_calculado = valor / (1 + (margen || 0) / 100);
-        let margen_calculado = ((valor / costo_calculado) - 1) * 100;
+        let margen_calculado = (1 - (costo / valor_venta)) * 100;
 
         $('#costo_unitario').val(costo_calculado.toFixed(2));
         $('#margen').val(margen_calculado.toFixed(2));
-    }
+    }*/
 }
 
 </script>
@@ -990,25 +1044,25 @@ function obtenerPrecios(){
                                         <div class="col-lg-4">
                                             <div class="form-group">
                                                 <label class="control-label form-control-sm">Costo Unitario</label>
-                                                <input id="costo_unitario" name="costo_unitario" on class="form-control form-control-sm" value="<?php echo $producto->costo_unitario?>" type="text" onchange="obtenerPrecios()">
+                                                <input id="costo_unitario" name="costo_unitario" on class="form-control form-control-sm" value="<?php echo $producto->costo_unitario?>" type="text" onchange="obtenerPrecios('costo')">
                                             </div>
                                         </div>
                                         <div class="col-lg-4">
                                             <div class="form-group">
                                                 <label class="control-label form-control-sm">Margen</label>
-                                                <input id="margen" name="margen" on class="form-control form-control-sm" value="<?php echo $producto->margen?>" type="text" onchange="obtenerPrecios()">
+                                                <input id="margen" name="margen" on class="form-control form-control-sm" value="<?php echo $producto->margen?>" type="text" onchange="obtenerPrecios('margen')">
                                             </div>
                                         </div>
                                         <div class="col-lg-4">
                                             <div class="form-group">
                                                 <label class="control-label form-control-sm">Valor Venta</label>
-                                                <input id="valor_venta" name="valor_venta" on class="form-control form-control-sm" value="<?php echo $producto->valor_venta?>" type="text" onchange="obtenerPrecios()">
+                                                <input id="valor_venta" name="valor_venta" on class="form-control form-control-sm" value="<?php echo $producto->valor_venta?>" type="text" onchange="obtenerPrecios('valor')">
                                             </div>
                                         </div>
                                         <div class="col-lg-4">
                                             <div class="form-group">
                                                 <label class="control-label form-control-sm">Precio Venta</label>
-                                                <input id="precio_venta" name="precio_venta" on class="form-control form-control-sm" value="<?php echo $producto->precio_venta?>" type="text" onchange="obtenerPrecios()">
+                                                <input id="precio_venta" name="precio_venta" on class="form-control form-control-sm" value="<?php echo $producto->precio_venta?>" type="text" onchange="obtenerPrecios('precio')">
                                             </div>
                                         </div>
                                         <div class="col-lg-4">
