@@ -2993,7 +2993,7 @@ class OrdenCompraController extends Controller
 			array_push($variable, array($n++,$r->cliente, $r->canal, $r->vendedor, $r->total_despacho, $r->fecha_orden_compra, $r->pedido));
 		}
 		
-		$export = new InvoicesExport6([$variable]);
+		$export = new InvoicesExport8([$variable]);
 		return Excel::download($export, 'Reporte_comercializacion_general.xlsx');
 		
     }
@@ -4157,6 +4157,70 @@ class InvoicesExport7 implements FromArray, WithStyles
 		//$sheet->fromArray($this->headings(), NULL, 'A2');
         
         foreach (range('A', 'O') as $col) {
+            $sheet->getColumnDimension($col)->setAutoSize(true);
+        }
+    }
+}
+
+class InvoicesExport8 implements FromArray, WithHeadings, WithStyles
+{
+	protected $invoices;
+
+	public function __construct(array $invoices)
+	{
+		$this->invoices = $invoices;
+	}
+
+	public function array(): array
+	{
+		return $this->invoices;
+	}
+
+    public function headings(): array
+    {
+        return ["N°","Cliente","Canal","Vendedor","Monto","Fecha","Numero Orden Compra"];
+    }
+
+	public function styles(Worksheet $sheet)
+    {
+
+		$sheet->mergeCells('A1:G1');
+
+        $sheet->setCellValue('A1', "REPORTE DE COMERCIALIZACION GENERAL SIN IGV - FORESPAMA");
+        $sheet->getStyle('A1:G1')->applyFromArray([
+            'font' => [
+                'bold' => true,
+                'color' => ['rgb' => 'FFFFFF'],
+            ],
+            'fill' => [
+                'fillType' => Fill::FILL_SOLID,
+                'startColor' => ['rgb' => '246257'],
+            ],
+            'alignment' => [
+                'horizontal' => Alignment::HORIZONTAL_CENTER,
+            ],
+        ]);
+
+		$sheet->getStyle('A1')->getAlignment()->setWrapText(true);
+		$sheet->getRowDimension(1)->setRowHeight(30);
+
+        $sheet->getStyle('A2:G2')->applyFromArray([
+            'font' => [
+                'bold' => true,
+                'color' => ['rgb' => '000000'],
+            ],
+            'fill' => [
+                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                'startColor' => ['rgb' => '2EB85C'],
+            ],
+			'alignment' => [
+			'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+    		],
+        ]);
+
+		$sheet->fromArray($this->headings(), NULL, 'A2');
+        
+        foreach (range('A', 'G') as $col) {
             $sheet->getColumnDimension($col)->setAutoSize(true);
         }
     }
