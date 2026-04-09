@@ -69,6 +69,7 @@ class OrdenCompraController extends Controller
 		$this->middleware('can:Reporte Comercializacion Tienda')->only(['create_reporte_comercializacion_tienda']);
 		$this->middleware('can:Reporte Pedidos Tienda')->only(['create_reporte_comercializacion_solicitado_tienda']);
 		$this->middleware('can:Reporte Comercializacion General')->only(['create_reporte_comercializacion_general']);
+		$this->middleware('can:Reporte Comercializacion Sin IGV')->only(['create_reporte_comercializacion_sin_igv']);
 		$this->middleware('can:Reporte Comercializacion')->only(['exportar_reporte_comercializacion']);
 		$this->middleware('can:Reporte Autorizacion Pedidos')->only(['create_reporte_autorizacion_pedido']);
 	}
@@ -2859,6 +2860,22 @@ class OrdenCompraController extends Controller
 
 	}
 
+    public function create_reporte_comercializacion_sin_igv(){
+
+        $id_user = Auth::user()->id;
+        $producto_model = new Producto;
+        $user_model = new User;
+
+		$tablaMaestra_model = new TablaMaestra;
+        $proveedor = Empresa::all();
+        $productos = $producto_model->getProductoExterno();
+        $vendedor = $user_model->getUserByRol(7,11);
+		$canal = $tablaMaestra_model->getMaestroByTipo(98);
+
+		return view('frontend.orden_compra.create_reporte_comercializacion_sin_igv',compact('proveedor','productos','vendedor','canal'));
+
+	}
+
     public function listar_reporte_comercializacion_general_ajax(Request $request){
 
         $id_user = Auth::user()->id;
@@ -2872,6 +2889,33 @@ class OrdenCompraController extends Controller
 		$p[]=$request->NumeroPagina;
 		$p[]=$request->NumeroRegistros;
 		$data = $orden_compra_model->listar_reporte_comercializacion_general_ajax($p);
+		$iTotalDisplayRecords = isset($data[0]->totalrows)?$data[0]->totalrows:0;
+
+		$result["PageStart"] = $request->NumeroPagina;
+		$result["pageSize"] = $request->NumeroRegistros;
+		$result["SearchText"] = "";
+		$result["ShowChildren"] = true;
+		$result["iTotalRecords"] = $iTotalDisplayRecords;
+		$result["iTotalDisplayRecords"] = $iTotalDisplayRecords;
+		$result["aaData"] = $data;
+
+        echo json_encode($result);
+
+	}
+
+    public function listar_reporte_comercializacion_sin_igv_ajax(Request $request){
+
+        $id_user = Auth::user()->id;
+
+		$orden_compra_model = new OrdenCompra;
+        $p[]=$request->canal;
+        $p[]=$request->empresa_compra;
+        $p[]=$request->fecha_inicio;
+        $p[]=$request->fecha_fin;
+        $p[]=$request->vendedor;
+		$p[]=$request->NumeroPagina;
+		$p[]=$request->NumeroRegistros;
+		$data = $orden_compra_model->listar_reporte_comercializacion_sin_igv_ajax($p);
 		$iTotalDisplayRecords = isset($data[0]->totalrows)?$data[0]->totalrows:0;
 
 		$result["PageStart"] = $request->NumeroPagina;
@@ -2903,6 +2947,40 @@ class OrdenCompraController extends Controller
         $p[]=1;
 		$p[]=10000;
 		$data = $orden_compra_model->listar_reporte_comercializacion_general_ajax($p);
+		$iTotalDisplayRecords = isset($data[0]->totalrows)?$data[0]->totalrows:0;
+		
+		$variable = [];
+		$n = 1;
+
+		array_push($variable, array("N°","Cliente","Canal","Vendedor","Monto","Fecha","Numero Orden Compra"));
+		
+		foreach ($data as $r) {
+
+			array_push($variable, array($n++,$r->cliente, $r->canal, $r->vendedor, $r->total_despacho, $r->fecha_orden_compra, $r->pedido));
+		}
+		
+		$export = new InvoicesExport6([$variable]);
+		return Excel::download($export, 'Reporte_comercializacion_general.xlsx');
+		
+    }
+
+    public function exportar_reporte_comercializacion_sin_igv($empresa_compra, $fecha_inicio, $fecha_fin, $vendedor, $canal) {
+
+        if($empresa_compra==0)$empresa_compra = "";
+        if($fecha_inicio=="0")$fecha_inicio = "";
+        if($fecha_fin=="0")$fecha_fin = "";
+        if($vendedor==0)$vendedor = "";
+        if($canal==0)$canal = "";
+        
+        $orden_compra_model = new OrdenCompra;
+		$p[]=$canal;
+        $p[]=$empresa_compra;
+        $p[]=$fecha_inicio;
+        $p[]=$fecha_fin;
+        $p[]=$vendedor;
+        $p[]=1;
+		$p[]=10000;
+		$data = $orden_compra_model->listar_reporte_comercializacion_sin_igv_ajax($p);
 		$iTotalDisplayRecords = isset($data[0]->totalrows)?$data[0]->totalrows:0;
 		
 		$variable = [];

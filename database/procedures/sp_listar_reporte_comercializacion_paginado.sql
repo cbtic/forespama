@@ -31,13 +31,14 @@ begin
 
 	v_tabla=' from orden_compras oc 
 	left join empresas e on oc.id_empresa_compra = e.id 
-	left join orden_compra_detalles ocd on oc.id = ocd.id_orden_compra and ocd.estado = ''1''
+	left join comprobantes c on oc.id = c.orden_compra::int and c.anulado = ''N'' and c.estado = ''1'' 
+	left join comprobante_detalles cd on c.id = cd.id_comprobante 
+	left join productos p on cd.codigo = p.codigo and p.estado = ''1'' 
+	left join orden_compra_detalles ocd on oc.id = ocd.id_orden_compra and ocd.id_producto = p.id and ocd.estado = ''1'' 
 	left join tienda_detalle_orden_compras tdoc on tdoc.id_orden_compra = oc.id and tdoc.id_producto = ocd.id_producto 
-	left join users u on oc.id_vendedor = u.id
-	left join productos p on ocd.id_producto = p.id
-	left join equivalencia_productos ep on ep.codigo_producto = p.codigo and ep.id_empresa = oc.id_empresa_compra
-	inner join tabla_maestras tm on oc.estado_pedido::int = tm.codigo::int and tm.tipo = ''77'' 
-	left join comprobantes c on oc.id = c.orden_compra::int and c.anulado = ''N'' and c.estado = ''1'' ';
+	left join users u on oc.id_vendedor = u.id 
+	left join equivalencia_productos ep on ep.codigo_producto = p.codigo and ep.id_empresa = oc.id_empresa_compra 
+	inner join tabla_maestras tm on oc.estado_pedido::int = tm.codigo::int and tm.tipo = ''77'' ';
 	
 	v_where = ' Where 1=1 and oc.id_tipo_documento = ''2'' and oc.estado_pedido = ''1'' ';
 

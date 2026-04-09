@@ -949,3 +949,6 @@ Route::post('consulta_oxapampa_movimiento/listar_oxapampa_movimiento_ajax', [Con
 
 Route::post('orden_compra/send_producto_tienda_detalle', [OrdenCompraController::class, 'send_producto_tienda_detalle'])->name('orden_compra.send_producto_tienda_detalle');
 
+Route::get('orden_compra/create_reporte_comercializacion_sin_igv', [OrdenCompraController::class, 'create_reporte_comercializacion_sin_igv'])->name('orden_compra.create_reporte_comercializacion_sin_igv');
+Route::post('orden_compra/listar_reporte_comercializacion_sin_igv_ajax', [OrdenCompraController::class, 'listar_reporte_comercializacion_sin_igv_ajax'])->name('orden_compra.listar_reporte_comercializacion_sin_igv_ajax');
+Route::get('orden_compra/exportar_reporte_comercializacion_sin_igv/{empresa_compra}/{fecha_inicio}/{fecha_fin}/{vendedor}/{canal}', [OrdenCompraController::class, 'exportar_reporte_comercializacion_sin_igv'])->name('orden_compra.exportar_reporte_comercializacion_sin_igv');

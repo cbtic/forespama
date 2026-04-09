@@ -449,7 +449,7 @@
 					
 					@endif
 					
-					@if(Gate::check('Reporte Comercializacion') || Gate::check('Reporte Comercializacion Tienda') || Gate::check('Reporte Pedidos Tienda') || Gate::check('Reporte Comercializacion General') || Gate::check('Reporte Autorizacion Pedidos'))
+					@if(Gate::check('Reporte Comercializacion') || Gate::check('Reporte Comercializacion Tienda') || Gate::check('Reporte Pedidos Tienda') || Gate::check('Reporte Comercializacion General') || Gate::check('Reporte Autorizacion Pedidos') || Gate::check('Reporte Comercializacion Sin IGV'))
 					
 						<li class="nav-item dropdown">
 							<a href="#" class="nav-link dropdown-toggle" id="navbarDropdownPrueba" data-toggle="dropdown"
@@ -471,6 +471,10 @@
 
 								@can('Reporte Comercializacion General')
 									<x-utils.link :href="route('frontend.orden_compra.create_reporte_comercializacion_general')" class="dropdown-item" :text="__('Reporte de Comercializacion General')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+								@endif
+
+								@can('Reporte Comercializacion Sin IGV')
+									<x-utils.link :href="route('frontend.orden_compra.create_reporte_comercializacion_sin_igv')" class="dropdown-item" :text="__('Reporte de Comercializacion Sin IGV')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
 								@endif
 
 								@can('Reporte Autorizacion Pedidos')

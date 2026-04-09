@@ -76,6 +76,12 @@ class OrdenCompra extends Model
 
     }
 
+    public function listar_reporte_comercializacion_sin_igv_ajax($p){
+
+        return $this->readFuntionPostgres('sp_listar_reporte_comercializacion_sin_igv_paginado',$p);
+
+    }
+
     public function listar_informe_b2b_ajax($p){
 
         return $this->readFuntionPostgres('sp_listar_informe_venta_b2b_paginado',$p);
