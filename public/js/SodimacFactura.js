@@ -45,10 +45,12 @@ $(document).ready(function () {
             processData: false,
             success: function(response) {
                 datatablenew();
+                $('#image').val('');
             },
             error: function(xhr, status, error) {
                 console.log(xhr.responseText); 
                 alert('Hubo un error al cargar el archivo. Intenta nuevamente.');
+                $('#image').val('');
             }
         });
     

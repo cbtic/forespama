@@ -3028,6 +3028,8 @@ class ComprobanteController extends Controller
 
         $totalOPGravadas = 0;
         $totalOPNoGravadas = 0;
+        $opGratuito = 0;
+        $totalOpGratuito = 0;
 
 		foreach($factura_detalles as $index => $row ) {
 
@@ -3051,22 +3053,26 @@ class ComprobanteController extends Controller
                 "valorUnitarioSinIgv"=> str_replace(",","",$row->pu), //"42.3728813559",
                 "precioUnitarioConIgv"=> str_replace(",","",$row->precio_venta), //"50.0000000000",
                 "unidadMedidaComercial"=> $tabla_maestras->abreviatura_comercial,
-                "codigoAfectacionIGVItem"=> $row->afect_igv,
-                "porcentajeDescuentoItem"=> str_replace(",","",($row->descuento*100)/$row->pu),
-                "codTipoPrecioVtaUnitarioItem"=> "01"
+                "porcentajeDescuentoItem"=>  $row->pu != 0 ? str_replace(",", "", ($row->descuento * 100) / $row->pu) : 0,
+                "codigoAfectacionIGVItem" => $row->pu == 0 ? 21 : $row->afect_igv,
+                "montoReferenciaItem"=> $row->pu == 0 ? (1 * $row->cantidad) : 0,
+                "montoReferencialUnitarioItem"=> $row->pu == 0 ? 1 : 0,
+                "codTipoPrecioVtaUnitarioItem"=> $row->pu == 0 ? "02" : "01",                
             );
+            if ($row->pu == 0) {
+                $opGratuito = 1;
+                $totalOpGratuito += (1 * $row->cantidad);
+            }
 
             if ($row->afect_igv == '10') {
                 $totalOPGravadas = $totalOPGravadas + str_replace(",", "", $row->valor_venta);
             } else {
                 $totalOPNoGravadas = $totalOPNoGravadas + str_replace(",", "", $row->valor_venta);
             }
-            
 			$items[$index]=$items1;
 
             $afect_igv = $row->afect_igv;
         }
- 
 		$data["items"] = $items;
 		$data["anulado"] = false;
 		$data["declare"] = "0"; // 0->dechlare 1>declare instante
@@ -3093,7 +3099,6 @@ class ComprobanteController extends Controller
 
             $data["totalAnticipos"] = str_replace(",","",number_format($factura->monto_adelanto,2));
         }
-		
         $data["tipoMoneda"] = ($factura->id_moneda=="2")?"USD":"PEN"; //"PEN";
 		$data["adicionales"] = [];
 		$data["horaEmision"] = date("h:i:s", strtotime($factura->fecha)); // "12:12:04";//$cabecera->fecha
@@ -3102,6 +3107,7 @@ class ComprobanteController extends Controller
 		$data["importeTotal"] = str_replace(",","",$factura->total); //"150.00";
 		$data["notification"] = "1";
 		$data["sumatoriaIGV"] = str_replace(",","",$factura->impuesto); //"22.88";
+        $data["totalOPGratuitas"] = $opGratuito == 1 ? (1 * $totalOpGratuito) : 0;
         $data["sumatoriaISC"] = "0.00";
 		$data["ubigeoEmisor"] = "150139";
 		//$data["montoEnLetras"] = $factura->letras; //"CIENTO CINCUENTA Y 00/100";
@@ -3116,7 +3122,7 @@ class ComprobanteController extends Controller
 		$data["totalDescuentos"] = str_replace(",","",$factura->total_descuentos);
 		$data["totalOPGravadas"] = str_replace(",","",number_format($totalOPGravadas,2)); //"127.12";
 		$data["codigoPaisEmisor"] = "PE";
-		$data["totalOPGratuitas"] = "0.00";
+		//$data["totalOPGratuitas"] = "0.00";
 		$data["docAfectadoFisico"] = false;
 		$data["importeTotalVenta"] = str_replace(",","",$factura->total); //"150.00";
 		$data["razonSocialEmisor"] = "FORESTAL PAMA S.A.C.";

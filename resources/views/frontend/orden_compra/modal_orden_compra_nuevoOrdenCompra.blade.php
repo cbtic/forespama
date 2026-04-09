@@ -1160,7 +1160,7 @@ function fn_save_orden_compra(){
             var precioUnitario = parseFloat($(fila).find('.precio_unitario').val()) || 0;
             var descripcion_precio = $(fila).find('select[name="descripcion[]"] option:selected').text();
 
-            if(precioUnitario == "0" || precioUnitario ==""){
+            if((precioUnitario == "0" || precioUnitario =="") && !descripcion_precio.includes('TAPACANTO')){
 
                 var numero_orden_compra_cliente = $('#numero_orden_compra_cliente').val().toUpperCase().trim();
 

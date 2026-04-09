@@ -56,55 +56,55 @@ begin
 	End If;*/
 
 	If p_tipo<>'' Then
-	 v_where:=v_where||'And tipo = '''||p_tipo||''' ';
+	 v_where:=v_where||' And tipo = '''||p_tipo||''' ';
 	End If;
 
 	If p_serie<>'' Then
-	 v_where:=v_where||'And serie = '''||p_serie||''' ';
+	 v_where:=v_where||' And serie = '''||p_serie||''' ';
 	End If;
 
-	If p_numero<>'' Then
-	 v_where:=v_where||'And numero = '''||p_numero||''' ';
+	If p_numero<>'' Then 
+	 v_where:=v_where||' And numero = '''||p_numero||''' ';
 	End If;
 
 	If p_estado_pago<>'' Then
-	 v_where:=v_where||'And estado_pago_sodimac = '''||p_estado_pago||''' ';
+	 v_where:=v_where||' And estado_pago_sodimac = '''||p_estado_pago||''' ';
 	End If;
 
 	If p_observacion_pago<>'' Then
-	 v_where:=v_where||'And coincide_total_inicial = '''||p_observacion_pago||''' ';
+	 v_where:=v_where||' And coincide_total_inicial = '''||p_observacion_pago||''' ';
 	End If;
 	
 	If p_dias_pagado<>'' Then
 		If p_dias_pagado='1' Then
-	 		v_where:=v_where||'And dias_diferencia_pago <= 60 ';
+	 		v_where:=v_where||' And dias_diferencia_pago <= 60 ';
 		End If;
 		If p_dias_pagado='2' Then
-	 		v_where:=v_where||'And dias_diferencia_pago > 60 AND dias_diferencia_pago <= 80 ';
+	 		v_where:=v_where||' And dias_diferencia_pago > 60 AND dias_diferencia_pago <= 80 ';
 		End If;
 		If p_dias_pagado='3' Then
-	 		v_where:=v_where||'And dias_diferencia_pago > 80 and dias_diferencia_pago <= 100 ';
+	 		v_where:=v_where||' And dias_diferencia_pago > 80 and dias_diferencia_pago <= 100 ';
 		End If;
 		If p_dias_pagado='4' Then
-	 		v_where:=v_where||'And dias_diferencia_pago > 100 ';
+	 		v_where:=v_where||' And dias_diferencia_pago > 100 ';
 		End If;
 	End If;
 
 	If p_color<>'' Then
 		If p_color='1' Then
-	 		v_where:=v_where||'And dias_diferencia_pago <= 60 ';
+	 		v_where:=v_where||' And dias_diferencia_pago <= 60 ';
 		End If;
 		If p_color='2' Then
-	 		v_where:=v_where||'And dias_diferencia_pago > 60';
+	 		v_where:=v_where||' And dias_diferencia_pago > 60 ';
 		End If;
 	End If;
 
 	If p_anulado<>'' Then
-	 v_where:=v_where||'And anulado = '''||p_anulado||''' ';
+	 v_where:=v_where||' And anulado = '''||p_anulado||''' ';
 	End If;
 
 	If p_ruc_empresa<>'' Then
-	 v_where:=v_where||'And cod_tributario = '''||p_ruc_empresa||''' ';
+	 v_where:=v_where||' And cod_tributario = '''||p_ruc_empresa||''' ';
 	End If;
 	
 	EXECUTE ('SELECT count(1) from '||v_tabla||v_where) INTO v_count;
