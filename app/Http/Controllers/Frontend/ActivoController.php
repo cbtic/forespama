@@ -284,7 +284,10 @@ class ActivoController extends Controller
         $activo->id_tipo_combustible = $request->tipo_combustible;
         $activo->dimensiones = $request->dimension;
         $activo->id_estado_activo = $request->estado_activo;
-        $activo->ruta_imagen = $request->img_foto;
+		if($request->img_foto != ""){
+			$activo->ruta_imagen = $request->img_foto;
+		}
+        //$activo->ruta_imagen = $request->img_foto;
         $activo->id_pais_procedencia = $request->pais_procedencia;
         $activo->anio_fabricacion = $request->anio_fabricacion;
         $activo->potencia = $request->potencia;
