@@ -366,6 +366,18 @@ label.form-control-sm{
                                                                         ?>
                                                                     </select>
                                                                 </div>
+                                                                <?php if($id > 0){ ?>
+                                                                    <input type="hidden" name="tipo_activo" value="<?= $activo->id_tipo_activo ?>">
+                                                                <?php } ?>
+                                                                <?php if($id > 0){ ?>
+                                                                    <input type="hidden" name="familia" value="<?= $activo->id_familia ?>">
+                                                                <?php } ?>
+                                                                <?php if($id > 0){ ?>
+                                                                    <input type="hidden" name="sub_familia" value="<?= $activo->id_sub_familia  ?>">
+                                                                <?php } ?>
+                                                                <?php if($id > 0){ ?>
+                                                                    <input type="hidden" name="sub_tipo_activo" value="<?= $activo->id_sub_tipo_activo ?>">
+                                                                <?php } ?>
                                                                 <div class="col-lg-1 col-md-12 col-sm-12 col-xs-12">
                                                                     Familia <span style="color:red;">*</span>
                                                                 </div>
