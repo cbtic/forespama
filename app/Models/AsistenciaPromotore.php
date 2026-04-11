@@ -61,15 +61,16 @@ class AsistenciaPromotore extends Model
             inner join users u on ap.id_promotor = u.id 
             inner join personas p on u.id_persona = p.id 
             where ap.flag_enviado = '0' 
+            and ap.estado = '1'
             order by ap.fecha, ap.hora_entrada ";
 
         $data = DB::select($cad);
         
-        $ids = array_column($data, 'id');
+        /*$ids = array_column($data, 'id');
 
         if(!empty($ids)){
             DB::table('asistencia_promotores')->whereIn('id',$ids)->update(['flag_enviado' => 1,'fecha_envio_api' => now(),'updated_at' => now()]);
-        }
+        }*/
 
         return $data;
     }

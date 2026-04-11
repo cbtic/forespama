@@ -37,6 +37,7 @@ Route::group([
 Route::post('/api-login', [ApiAuthController::class, 'login']);
 
 Route::middleware('auth:sanctum')->get('/asistencias', [AsistenciaController::class, 'index']);
+Route::middleware('auth:sanctum')->post('/asistencias/confirmar', [AsistenciaController::class, 'confirmar']);
 
 JsonApiRoute::server('v1')
 ->prefix('v1')
