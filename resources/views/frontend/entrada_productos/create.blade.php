@@ -422,7 +422,7 @@ label.form-control-sm{
 							<option value="">--Seleccionar Situaci&oacute;n--</option>
 							<?php
 							foreach ($cerrado_entrada as $row){?>
-								<option value="<?php echo $row->codigo ?>" <?php if($row->codigo=='1')echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+								<option value="<?php echo $row->codigo ?>" <?php if($row->codigo=='2')echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
 								<?php 
 							}
 							?>
