@@ -17,6 +17,7 @@ use App\Models\Agremiado;
 use App\Models\ComprobantePago;
 use App\Models\ComprobanteCuotaPago;
 use App\Models\ComprobanteCuota;
+use App\Models\ComprobanteAdelanto;
 use App\Models\CajaIngreso;
 use App\Models\SodimacFactura;
 use App\Models\SodimacFacturaDetalle;
@@ -404,7 +405,10 @@ class ComprobanteController extends Controller
             }
 
             $ruc = $empresa->ruc;
-            $adelanto_pendiente = Comprobante::where('adelanto', '1')->where("cod_tributario",$ruc)->get(); 
+            //$adelanto_pendiente = Comprobante::where('adelanto', '1')->where("cod_tributario",$ruc)->get(); 
+            $comprobante_model = new Comprobante;
+            $adelanto_pendiente = $comprobante_model->getComprobanteAdelantoByRuc($ruc);
+
             //echo $TipoF; exit();
             //print_r($facturad); exit();
 
@@ -1054,6 +1058,7 @@ class ComprobanteController extends Controller
 
                 //facturad[1][id_producto]
                 $factura_upd->adelanto = $flag_adelanto;
+                $factura_upd->monto_adelanto = $request->anticipos;
                 $factura_upd->save();
 
 
@@ -1503,10 +1508,12 @@ class ComprobanteController extends Controller
                     foreach ($request->idAdelanto as $key => $value){
                         if ($request->idAdelanto[$key] != "") {
                             $idAdelanto = $request->idAdelanto[$key];
-                            $Comprobante_upd = Comprobante::find($idAdelanto);
-                            $Comprobante_upd->id_comprobante_adelanto = $id_factura;
-                            $Comprobante_upd->adelanto = 2;
-                            $Comprobante_upd->save();
+                            //$Comprobante_upd = Comprobante::find($idAdelanto);
+                            $comprobanteAdelanto = new ComprobanteAdelanto;
+                            $comprobanteAdelanto->id_comprobante = $id_factura;
+                            $comprobanteAdelanto->id_comprobante_adelanto = $idAdelanto;
+                            //$comprobanteAdelanto->adelanto = 2;
+                            $comprobanteAdelanto->save();
                             //echo $idAdelanto;
                         }
                     }

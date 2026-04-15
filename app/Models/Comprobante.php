@@ -332,6 +332,27 @@ and c.estado='1'";
 		$data = DB::select($cad);
         return $data;
     }
+
+    function getComprobanteAdelantoByRuc($ruc){
+		
+        $cad = "select *,
+coalesce((select sum(c2.monto_adelanto)importe
+from comprobante_adelantos a 
+inner join comprobantes c2 on a.id_comprobante=c2.id
+where a.id_comprobante_adelanto=c.id),0)importe_adelanto
+from comprobantes c 
+where c.cod_tributario='".$ruc."' 
+and c.anulado='N'
+and adelanto='1'
+and (c.total-coalesce((select sum(c2.monto_adelanto)importe
+from comprobante_adelantos a 
+inner join comprobantes c2 on a.id_comprobante=c2.id
+where a.id_comprobante_adelanto=c.id),0))>0
+";
+		
+		$data = DB::select($cad);
+        return $data;
+    }
     
     function get_envio_pendiente_guia_sunat($fecha){
 		

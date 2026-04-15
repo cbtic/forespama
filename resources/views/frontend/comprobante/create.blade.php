@@ -1261,6 +1261,7 @@
                                                         data-destinatario="<?= $row->destinatario ?>"
                                                         data-ruc="<?= $row->cod_tributario ?>"
                                                         data-total="<?= $row->total ?>"
+                                                        data-importe-adelanto="<?= $row->importe_adelanto ?>"
                                                         ><?php echo $row->serie."-".$row->numero ?></option>
                                                     <?php endforeach; ?>
                                                 </select>

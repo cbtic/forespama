@@ -1110,7 +1110,7 @@ function obtenerTitular(){
 			if($(this).val()==""){
 				item_producto += "<option value="+$(this).val()+">"+$(this).html()+"</option>"	
 			}else{
-				item_producto += "<option value="+$(this).val()+" data-destinatario='"+$(this).attr("data-destinatario")+"' data-ruc='"+$(this).attr("data-ruc")+"' data-total='"+$(this).attr("data-total")+"'>"+$(this).html()+"</option>"	
+				item_producto += "<option value="+$(this).val()+" data-destinatario='"+$(this).attr("data-destinatario")+"' data-ruc='"+$(this).attr("data-ruc")+"' data-total='"+$(this).attr("data-total")+"' data-importe-adelanto='"+$(this).attr("data-importe-adelanto")+"'>"+$(this).html()+"</option>"	
 			}
 		});
 	
@@ -1128,6 +1128,9 @@ function obtenerTitular(){
 				if (!data.id) return data.text;
 
 				let opt = $(data.element);
+				let total = Number(opt.data('total')) || 0;
+				let adelanto = Number(opt.data('importe-adelanto')) || 0;
+				let resto = total - adelanto;
 
 				return $(`
 				<div>
@@ -1135,7 +1138,8 @@ function obtenerTitular(){
 					<small>
 					${opt.data('destinatario')} |
 					RUC: ${opt.data('ruc')} |
-					Total: S/ ${parseFloat(opt.data('total')).toFixed(2)}
+					Total: S/ ${parseFloat(opt.data('total')).toFixed(2)} |
+					Resta: S/ ${parseFloat(resto).toFixed(2)}
 					</small>
 				</div>
 				`);
@@ -1306,26 +1310,36 @@ function obtenerTitular(){
 		*/
 
 		let totalOriginal = parseFloat($("#total").val());
+		console.log(totalOriginal)
 
 		$('#idAdelanto0').on('change', function () {
 
 			let anticipos = 0;
 			let totalTmp = totalOriginal;
 			let opcionInvalida = null;
+			let resto = 0;
 
 			$(this).find('option:selected').each(function () {
 
 				let valor = parseFloat($(this).data('total')) || 0;
-
+				let valor_resto = parseFloat($(this).data('importe-adelanto')) || 0;
+				//console.log(resto)
 				anticipos += valor;
 				totalTmp = totalOriginal - anticipos;
+				resto += valor_resto;
 
 				// si se vuelve negativo guardamos el option
+				/*
 				if (totalTmp < 0 && opcionInvalida === null) {
 					opcionInvalida = $(this);
 				}
+				*/
 
 			});
+
+			//console.log(resto)
+
+			//console.log(totalOriginal, totalTmp)
 
 			// si hay uno que hace negativo el total
 			if (opcionInvalida) {
@@ -1338,13 +1352,35 @@ function obtenerTitular(){
 
 				// recalcular anticipos
 				anticipos = 0;
+				resto = 0;
 
 				$(this).find('option:selected').each(function () {
 					anticipos += parseFloat($(this).data('total')) || 0;
+					resto += parseFloat($(this).data('importe-adelanto')) || 0;
 				});
 
+			}
+
+			//totalOriginal -= resto;
+			console.log(totalOriginal, resto, anticipos)
+			//200	0	1000
+			//1100	200	1000
+
+			anticipos -= resto;
+
+			//totalOriginal -= resto;
+
+			console.log(anticipos)
+
+			if(anticipos > totalOriginal){
+				totalTmp = 0;
+				anticipos = totalOriginal;
+			}else{
+				console.log("ingresa")
 				totalTmp = totalOriginal - anticipos;
 			}
+
+			console.log(totalTmp)
 
 			$("#trAnticipo").show();
 			$("#anticipos").val(anticipos);
