@@ -71,7 +71,7 @@ class OrdenCompraController extends Controller
 		$this->middleware('can:Reporte Comercializacion General')->only(['create_reporte_comercializacion_general']);
 		$this->middleware('can:Reporte Comercializacion Sin IGV')->only(['create_reporte_comercializacion_sin_igv']);
 		$this->middleware('can:Reporte Comercializacion')->only(['exportar_reporte_comercializacion']);
-		$this->middleware('can:Reporte Comercializacion')->only(['exportar_reporte_comercializacion_sin_igv']);
+		$this->middleware('can:Reporte Comercializacion Sin IGV')->only(['exportar_reporte_comercializacion_sin_igv']);
 		$this->middleware('can:Reporte Autorizacion Pedidos')->only(['create_reporte_autorizacion_pedido']);
 	}
 
