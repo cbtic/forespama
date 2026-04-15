@@ -1,6 +1,5 @@
--- DROP FUNCTION public.sp_listar_reporte_comercializacion_paginado(varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, refcursor);
-
-CREATE OR REPLACE FUNCTION public.sp_listar_reporte_comercializacion_paginado(p_empresa_compra character varying, p_fecha_desde character varying, p_fecha_hasta character varying, p_fecha_desde_facturado character varying, p_fecha_hasta_facturado character varying, p_numero_orden_compra_cliente character varying, p_situacion character varying, p_codigo_producto character varying, p_producto character varying, p_vendedor character varying, p_estado_pedido character varying, p_tipo_producto character varying, p_estado character varying, p_canal character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
+--DROP FUNCTION public.sp_listar_reporte_comercializacion_paginado(varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, refcursor);
+CREATE OR REPLACE FUNCTION public.sp_listar_reporte_comercializacion_paginado(p_empresa_compra character varying, p_fecha_desde character varying, p_fecha_hasta character varying, p_numero_orden_compra_cliente character varying, p_situacion character varying, p_codigo_producto character varying, p_producto character varying, p_vendedor character varying, p_estado_pedido character varying, p_tipo_producto character varying, p_estado character varying, p_canal character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
  RETURNS refcursor
  LANGUAGE plpgsql
 AS $function$
@@ -15,7 +14,7 @@ v_col_count varchar;
 v_id_rol integer;
 
 begin
-	
+
 	p_pagina=(p_pagina::Integer-1)*p_limit::Integer;
 
 	v_campos=' distinct oc.id, 
@@ -26,20 +25,17 @@ begin
 	where sp.id_orden_compra = oc.id
 	limit 1) fecha_salida,
 	p.codigo, ep.codigo_empresa, 
-	p.denominacion producto, ocd.precio, ocd.sub_total, ocd.descuento, ocd.cantidad_requerida, coalesce(ocd.cantidad_despacho, 0) cantidad_despacho, coalesce((ocd.cantidad_requerida - ocd.cantidad_despacho), 0) cantidad_cancelada, ocd.cerrado, u."name" vendedor, tm.denominacion estado_pedido,
-	to_char(c.fecha,''dd-mm-yyyy'') fecha_facturado ';
+	p.denominacion producto, ocd.precio, ocd.descuento, ocd.sub_total, ocd.cantidad_requerida, coalesce(ocd.cantidad_despacho, 0) cantidad_despacho, coalesce((ocd.cantidad_requerida - ocd.cantidad_despacho), 0) cantidad_cancelada, ocd.cerrado, u."name" vendedor, tm.denominacion estado_pedido ';
 
 	v_tabla=' from orden_compras oc 
 	left join empresas e on oc.id_empresa_compra = e.id 
-	left join comprobantes c on oc.id = c.orden_compra::int and c.anulado = ''N'' and c.estado = ''1'' 
-	left join comprobante_detalles cd on c.id = cd.id_comprobante 
-	left join productos p on cd.codigo = p.codigo and p.estado = ''1'' 
-	left join orden_compra_detalles ocd on oc.id = ocd.id_orden_compra and ocd.id_producto = p.id and ocd.estado = ''1'' 
+	left join orden_compra_detalles ocd on oc.id = ocd.id_orden_compra and ocd.estado = ''1''
 	left join tienda_detalle_orden_compras tdoc on tdoc.id_orden_compra = oc.id and tdoc.id_producto = ocd.id_producto 
-	left join users u on oc.id_vendedor = u.id 
-	left join equivalencia_productos ep on ep.codigo_producto = p.codigo and ep.id_empresa = oc.id_empresa_compra 
+	left join users u on oc.id_vendedor = u.id
+	left join productos p on ocd.id_producto = p.id
+	left join equivalencia_productos ep on ep.codigo_producto = p.codigo and ep.id_empresa = oc.id_empresa_compra
 	inner join tabla_maestras tm on oc.estado_pedido::int = tm.codigo::int and tm.tipo = ''77'' ';
-	
+
 	v_where = ' Where 1=1 and oc.id_tipo_documento = ''2'' and oc.estado_pedido = ''1'' ';
 
 	If p_empresa_compra<>'' Then
@@ -53,15 +49,7 @@ begin
 	If p_fecha_hasta<>'' Then
 	 v_where:=v_where||'And oc.fecha_orden_compra <= '''||p_fecha_hasta||''' ';
 	End If;	
-
-	If p_fecha_desde_facturado<>'' Then
-	 v_where:=v_where||'And c.fecha >= '''||p_fecha_desde_facturado||''' ';
-	End If;
-
-	If p_fecha_hasta_facturado<>'' Then
-	 v_where:=v_where||'And c.fecha <= '''||p_fecha_hasta_facturado||''' ';
-	End If;
-
+	
 	If p_numero_orden_compra_cliente<>'' Then
 	 v_where:=v_where||'And oc.numero_orden_compra_cliente  = '''||p_numero_orden_compra_cliente||''' ';
 	End If;
@@ -77,7 +65,7 @@ begin
 	If p_producto<>'' Then
 	 v_where:=v_where||'And ocd.id_producto = '''||p_producto||''' ';
 	End If;
-	
+
 	If p_vendedor<>'' Then
 	 v_where:=v_where||'And oc.id_vendedor = '''||p_vendedor||''' ';
 	End If;
@@ -85,6 +73,7 @@ begin
 	If p_estado_pedido<>'' Then
 	 v_where:=v_where||'And oc.estado_pedido = '''||p_estado_pedido||''' ';
 	End If;
+
 	
 	If p_tipo_producto<>'' Then
 	 v_where:=v_where||' and exists (

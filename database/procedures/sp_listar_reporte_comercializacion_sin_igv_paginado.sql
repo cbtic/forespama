@@ -1,6 +1,6 @@
--- DROP FUNCTION public.sp_listar_reporte_comercializacion_general_paginado(varchar, varchar, varchar, varchar, varchar, varchar, varchar, refcursor);
+-- DROP FUNCTION public.sp_listar_reporte_comercializacion_sin_igv_paginado(varchar, varchar, varchar, varchar, varchar, varchar, varchar, refcursor);
 
-CREATE OR REPLACE FUNCTION public.sp_listar_reporte_comercializacion_sin_igv_paginado(p_canal character varying, p_empresa_compra character varying, p_fecha_inicio character varying, p_fecha_fin character varying, p_vendedor character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
+CREATE OR REPLACE FUNCTION public.sp_listar_reporte_comercializacion_sin_igv_paginado(p_canal character varying, p_empresa_compra character varying, p_fecha_inicio character varying, p_fecha_fin character varying, p_vendedor character varying, p_tipo_producto character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
  RETURNS refcursor
  LANGUAGE plpgsql
 AS $function$
@@ -45,6 +45,14 @@ begin
 	If p_vendedor<>'' Then
 	 v_where:=v_where||' And oc.id_vendedor = '''||p_vendedor||''' ';
 	End If;	
+
+	If p_tipo_producto<>'' Then
+	 v_where:=v_where||' and EXISTS (
+	SELECT 1 FROM orden_compra_detalles ocd
+	inner join productos p on ocd.id_producto = p.id 
+	WHERE ocd.id_orden_compra = oc.id
+	AND p.bien_servicio = '''||p_tipo_producto||''') ';
+	End If;
 	
 	EXECUTE ('SELECT count(1) '||v_tabla||v_where) INTO v_count;
 	v_col_count:=' ,'||v_count||' as TotalRows ';
