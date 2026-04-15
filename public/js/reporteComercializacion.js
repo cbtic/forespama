@@ -390,5 +390,5 @@ function DescargarArchivosExcel(){
 	if (tipo_producto == "")tipo_producto = 0;
 	if (canal == "")canal = 0;
 	
-	location.href = '/orden_compra/exportar_reporte_comercializacion/'+empresa_compra+'/'+fecha_inicio+'/'+fecha_fin+'/'+fecha_fin_facturado+'/'+numero_orden_compra_cliente+'/'+situacion+'/'+codigo_producto+'/'+producto+'/'+vendedor+'/'+estado_pedido+'/'+tipo_producto+'/'+canal;
+	location.href = '/orden_compra/exportar_reporte_comercializacion/'+empresa_compra+'/'+fecha_inicio+'/'+fecha_fin+'/'+numero_orden_compra_cliente+'/'+situacion+'/'+codigo_producto+'/'+producto+'/'+vendedor+'/'+estado_pedido+'/'+tipo_producto+'/'+canal;
 }
