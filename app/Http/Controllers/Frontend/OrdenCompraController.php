@@ -1655,8 +1655,8 @@ class OrdenCompraController extends Controller
 		$p[]=$request->empresa_compra;
         $p[]=$request->fecha_inicio;
         $p[]=$request->fecha_fin;
-        $p[]=$request->fecha_inicio_facturado;
-        $p[]=$request->fecha_fin_facturado;
+        //$p[]=$request->fecha_inicio_facturado;
+        //$p[]=$request->fecha_fin_facturado;
         $p[]=$request->numero_orden_compra_cliente;
         $p[]=$request->situacion;
         $p[]=$request->codigo_producto;
@@ -1683,13 +1683,13 @@ class OrdenCompraController extends Controller
 
 	}
 
-    public function exportar_reporte_comercializacion($empresa_compra, $fecha_inicio, $fecha_fin, $fecha_inicio_facturado, $fecha_fin_facturado, $numero_orden_compra_cliente, $situacion, $codigo_producto, $producto, $vendedor, $estado_pedido, $tipo_producto, $canal) {
+    public function exportar_reporte_comercializacion($empresa_compra, $fecha_inicio, $fecha_fin, /*$fecha_inicio_facturado, $fecha_fin_facturado,*/ $numero_orden_compra_cliente, $situacion, $codigo_producto, $producto, $vendedor, $estado_pedido, $tipo_producto, $canal) {
 
         if($empresa_compra==0)$empresa_compra = "";
         if($fecha_inicio=="0")$fecha_inicio = "";
         if($fecha_fin=="0")$fecha_fin = "";
-        if($fecha_inicio_facturado=="0")$fecha_inicio_facturado = "";
-        if($fecha_fin_facturado=="0")$fecha_fin_facturado = "";
+        //if($fecha_inicio_facturado=="0")$fecha_inicio_facturado = "";
+        //if($fecha_fin_facturado=="0")$fecha_fin_facturado = "";
         if($numero_orden_compra_cliente=="0")$numero_orden_compra_cliente = "";
         if($situacion==0)$situacion = "";
         if($codigo_producto=="0")$codigo_producto = "";
@@ -1703,8 +1703,8 @@ class OrdenCompraController extends Controller
 		$p[]=$empresa_compra;
         $p[]=$fecha_inicio;
         $p[]=$fecha_fin;
-        $p[]=$fecha_inicio_facturado;
-        $p[]=$fecha_fin_facturado;
+        //$p[]=$fecha_inicio_facturado;
+        //$p[]=$fecha_fin_facturado;
         $p[]=$numero_orden_compra_cliente;
         $p[]=$situacion;
         $p[]=$codigo_producto;
@@ -1722,7 +1722,7 @@ class OrdenCompraController extends Controller
 		$variable = [];
 		$n = 1;
 
-		array_push($variable, array("N°","Empresa","Orden Compra","Pedido","Fecha Pedido","Fecha Vencimiento","Fecha Entrega Real","Fecha Facturado","Codigo Interno","Codigo Retail","Descripcion","Precio Unitario","Precio Total","Descuento","Cantidad Pedida","Cantidad Entregada","Cantidad Cancelada","Pendiente Entrega","Vendedor","Estado Pedido"));
+		array_push($variable, array("N°","Empresa","Orden Compra","Pedido","Fecha Pedido","Fecha Vencimiento","Fecha Entrega Real",/*"Fecha Facturado",*/"Codigo Interno","Codigo Retail","Descripcion","Precio Unitario","Precio Total","Descuento","Cantidad Pedida","Cantidad Entregada","Cantidad Cancelada","Pendiente Entrega","Vendedor","Estado Pedido"));
 		
 		foreach ($data as $r) {
 
@@ -2871,8 +2871,9 @@ class OrdenCompraController extends Controller
         $productos = $producto_model->getProductoExterno();
         $vendedor = $user_model->getUserByRol(7,11);
 		$canal = $tablaMaestra_model->getMaestroByTipo(98);
+        $tipo_producto = $tablaMaestra_model->getMaestroByTipo(67);
 
-		return view('frontend.orden_compra.create_reporte_comercializacion_sin_igv',compact('proveedor','productos','vendedor','canal'));
+		return view('frontend.orden_compra.create_reporte_comercializacion_sin_igv',compact('proveedor','productos','vendedor','canal','tipo_producto'));
 
 	}
 
@@ -2913,6 +2914,7 @@ class OrdenCompraController extends Controller
         $p[]=$request->fecha_inicio;
         $p[]=$request->fecha_fin;
         $p[]=$request->vendedor;
+        $p[]=$request->tipo_producto;
 		$p[]=$request->NumeroPagina;
 		$p[]=$request->NumeroRegistros;
 		$data = $orden_compra_model->listar_reporte_comercializacion_sin_igv_ajax($p);
@@ -2964,13 +2966,14 @@ class OrdenCompraController extends Controller
 		
     }
 
-    public function exportar_reporte_comercializacion_sin_igv($empresa_compra, $fecha_inicio, $fecha_fin, $vendedor, $canal) {
+    public function exportar_reporte_comercializacion_sin_igv($empresa_compra, $fecha_inicio, $fecha_fin, $vendedor, $canal, $tipo_producto) {
 
         if($empresa_compra==0)$empresa_compra = "";
         if($fecha_inicio=="0")$fecha_inicio = "";
         if($fecha_fin=="0")$fecha_fin = "";
         if($vendedor==0)$vendedor = "";
         if($canal==0)$canal = "";
+        if($tipo_producto==0)$tipo_producto = "";
         
         $orden_compra_model = new OrdenCompra;
 		$p[]=$canal;
@@ -2978,6 +2981,7 @@ class OrdenCompraController extends Controller
         $p[]=$fecha_inicio;
         $p[]=$fecha_fin;
         $p[]=$vendedor;
+        $p[]=$tipo_producto;
         $p[]=1;
 		$p[]=10000;
 		$data = $orden_compra_model->listar_reporte_comercializacion_sin_igv_ajax($p);

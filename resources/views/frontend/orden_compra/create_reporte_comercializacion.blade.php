@@ -359,13 +359,13 @@ label.form-control-sm{
 									<input class="form-control form-control-sm filtro-input" id="fecha_fin_bus" name="fecha_fin_bus" placeholder="Fecha Fin">
 								</div>
 
-								<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+								<!--<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
 									<input id="fecha_inicio_facturado_bus" name="fecha_inicio_facturado_bus" on class="form-control form-control-sm filtro-input"  placeholder="Fecha Inicio Factura">
 								</div>
 
 								<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
 									<input class="form-control form-control-sm filtro-input" id="fecha_fin_facturado_bus" name="fecha_fin_facturado_bus" placeholder="Fecha Fin Factura">
-								</div>
+								</div>-->
 
 								<!--<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
 									<input id="numero_orden_compra_bus" name="numero_orden_compra_bus" on class="form-control form-control-sm"  placeholder="N&uacute;mero Orden Compra">
@@ -469,7 +469,7 @@ label.form-control-sm{
 							<th>Fecha Pedido</th>
                             <th>Fecha Vencimiento</th>
                             <th>Fecha Entrega Real</th>
-                            <th>Fecha Facturado</th>
+                            <!--<th>Fecha Facturado</th>-->
 							<th>C&oacute;digo Interno</th>
 							<th>C&oacute;digo Retail</th>
 							<th>Descripci&oacute;n</th>

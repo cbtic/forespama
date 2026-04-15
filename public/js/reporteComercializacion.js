@@ -62,7 +62,7 @@ $(document).ready(function () {
         language: 'es'
     });
 
-	$('#fecha_inicio_facturado_bus').datepicker({
+	/*$('#fecha_inicio_facturado_bus').datepicker({
         autoclose: true,
 		format: 'dd-mm-yyyy',
 		changeMonth: true,
@@ -76,7 +76,7 @@ $(document).ready(function () {
 		changeMonth: true,
 		changeYear: true,
         language: 'es'
-    });
+    });*/
 
 	$('#empresa_compra_bus').select2({ width : '100%' })
 
@@ -124,8 +124,8 @@ function datatablenew(){
 			var empresa_compra = $('#empresa_compra_bus').val();
 			var fecha_inicio = $('#fecha_inicio_bus').val();
 			var fecha_fin = $('#fecha_fin_bus').val();
-			var fecha_inicio_facturado = $('#fecha_inicio_facturado_bus').val();
-			var fecha_fin_facturado = $('#fecha_fin_facturado_bus').val();
+			//var fecha_inicio_facturado = $('#fecha_inicio_facturado_bus').val();
+			//var fecha_fin_facturado = $('#fecha_fin_facturado_bus').val();
 			var numero_orden_compra_cliente = $('#numero_orden_compra_cliente_bus').val();
 			var situacion = $('#situacion_bus').val();
 			var codigo_producto = $('#codigo_producto_bus').val();
@@ -144,7 +144,7 @@ function datatablenew(){
                 "data":{NumeroPagina:iNroPagina,NumeroRegistros:iCantMostrar,
 						empresa_compra:empresa_compra, fecha_inicio:fecha_inicio, fecha_fin:fecha_fin, numero_orden_compra_cliente:numero_orden_compra_cliente, 
 						situacion:situacion,codigo_producto:codigo_producto,producto:producto,vendedor:vendedor,estado_pedido:estado_pedido,canal:canal,
-						fecha_inicio_facturado:fecha_inicio_facturado,fecha_fin_facturado:fecha_fin_facturado,tipo_producto:tipo_producto,
+						/*fecha_inicio_facturado:fecha_inicio_facturado,fecha_fin_facturado:fecha_fin_facturado,*/tipo_producto:tipo_producto,
 						_token:_token
                        },
                 "success": function (result) {
@@ -216,7 +216,7 @@ function datatablenew(){
 				"bSortable": true,
 				"aTargets": [5]
 				},
-				{
+				/*{
 				"mRender": function (data, type, row) {
 					var fecha_facturado = "";
 					if(row.fecha_facturado!= null)fecha_facturado = row.fecha_facturado;
@@ -224,7 +224,7 @@ function datatablenew(){
 				},
 				"bSortable": true,
 				"aTargets": [6]
-				},
+				},*/
 				{
 				"mRender": function (data, type, row) {
 					var codigo = "";
@@ -232,7 +232,7 @@ function datatablenew(){
 					return codigo;
 				},
 				"bSortable": true,
-				"aTargets": [7]
+				"aTargets": [6]
 				},
 				{
 				"mRender": function (data, type, row) {
@@ -241,7 +241,7 @@ function datatablenew(){
 					return codigo_empresa;
 				},
 				"bSortable": true,
-				"aTargets": [8]
+				"aTargets": [7]
 				},
 				{
 				"mRender": function (data, type, row) {
@@ -250,7 +250,7 @@ function datatablenew(){
 					return producto;
 				},
 				"bSortable": true,
-				"aTargets": [9]
+				"aTargets": [8]
 				},
 				{
 				"mRender": function (data, type, row) {
@@ -259,7 +259,7 @@ function datatablenew(){
 					return precio;
 				},
 				"bSortable": true,
-				"aTargets": [10]
+				"aTargets": [9]
 				},
 				{
 				"mRender": function (data, type, row) {
@@ -268,7 +268,7 @@ function datatablenew(){
 					return sub_total;
 				},
 				"bSortable": true,
-				"aTargets": [11]
+				"aTargets": [10]
 				},
 				{
 				"mRender": function (data, type, row) {
@@ -277,7 +277,7 @@ function datatablenew(){
 					return descuento;
 				},
 				"bSortable": true,
-				"aTargets": [12]
+				"aTargets": [11]
 				},
 				{
 				"mRender": function (data, type, row) {
@@ -286,7 +286,7 @@ function datatablenew(){
 					return cantidad_requerida;
 				},
 				"bSortable": true,
-				"aTargets": [13]
+				"aTargets": [12]
 				},
 				{
 				"mRender": function (data, type, row) {
@@ -295,7 +295,7 @@ function datatablenew(){
 					return cantidad_despacho;
 				},
 				"bSortable": true,
-				"aTargets": [14]
+				"aTargets": [13]
 				},
 				{
 				"mRender": function (data, type, row) {
@@ -304,7 +304,7 @@ function datatablenew(){
 					return cantidad_cancelada;
 				},
 				"bSortable": true,
-				"aTargets": [15]
+				"aTargets": [14]
 				},
 				{
 				"mRender": function (data, type, row) {
@@ -326,7 +326,7 @@ function datatablenew(){
 					return pendiente_entrega;
 				},
 				"bSortable": true,
-				"aTargets": [16]
+				"aTargets": [15]
 				},
 				{
 				"mRender": function (data, type, row) {
@@ -335,7 +335,7 @@ function datatablenew(){
 					return vendedor;
 				},
 				"bSortable": true,
-				"aTargets": [17]
+				"aTargets": [16]
 				},
 				{
 				"mRender": function (data, type, row) {
@@ -344,7 +344,7 @@ function datatablenew(){
 					return estado_pedido;
 				},
 				"bSortable": true,
-				"aTargets": [18]
+				"aTargets": [17]
 				},
             ]
     });
@@ -365,8 +365,8 @@ function DescargarArchivosExcel(){
 	var empresa_compra = $('#empresa_compra_bus').val();
 	var fecha_inicio = $('#fecha_inicio_bus').val();
 	var fecha_fin = $('#fecha_fin_bus').val();
-	var fecha_inicio_facturado = $('#fecha_inicio_facturado_bus').val();
-	var fecha_fin_facturado = $('#fecha_fin_facturado_bus').val();
+	//var fecha_inicio_facturado = $('#fecha_inicio_facturado_bus').val();
+	//var fecha_fin_facturado = $('#fecha_fin_facturado_bus').val();
 	var numero_orden_compra_cliente = $('#numero_orden_compra_cliente_bus').val();
 	var situacion = $('#situacion_bus').val();
 	var codigo_producto = $('#codigo_producto_bus').val();
@@ -379,8 +379,8 @@ function DescargarArchivosExcel(){
 	if (empresa_compra == "")empresa_compra = 0;
 	if (fecha_inicio == "")fecha_inicio = "0";
 	if (fecha_fin == "")fecha_fin = "0";
-	if (fecha_inicio_facturado == "")fecha_inicio_facturado = "0";
-	if (fecha_fin_facturado == "")fecha_fin_facturado = "0";
+	//if (fecha_inicio_facturado == "")fecha_inicio_facturado = "0";
+	//if (fecha_fin_facturado == "")fecha_fin_facturado = "0";
 	if (numero_orden_compra_cliente == "")numero_orden_compra_cliente = "0";
 	if (situacion == "")situacion = 0;
 	if (codigo_producto == "")codigo_producto = "0";

@@ -25,6 +25,13 @@ $(document).ready(function () {
 		}
 	});
 
+	$('#tipo_producto_bus').keypress(function(e){
+		if(e.which == 13) {
+			datatablenew();
+			return false;
+		}
+	});
+
 	$('#fecha_inicio_bus').datepicker({
         autoclose: true,
 		format: 'dd-mm-yyyy',
@@ -55,7 +62,7 @@ $(document).ready(function () {
 });
 
 function datatablenew(){
-                      
+    
     var oTable1 = $('#tblReporteComercializacionSinIgv').dataTable({
         "bServerSide": true,
         "sAjaxSource": "/orden_compra/listar_reporte_comercializacion_sin_igv_ajax",
@@ -90,6 +97,7 @@ function datatablenew(){
 			var fecha_inicio = $('#fecha_inicio_bus').val();
 			var fecha_fin = $('#fecha_fin_bus').val();
 			var vendedor = $('#vendedor_bus').val();
+			var tipo_producto = $('#tipo_producto_bus').val();
 
 			var _token = $('#_token').val();
             oSettings.jqXHR = $.ajax({
@@ -99,7 +107,7 @@ function datatablenew(){
                 "url": sSource,
                 "data":{NumeroPagina:iNroPagina,NumeroRegistros:iCantMostrar,
 						empresa_compra:empresa_compra, fecha_inicio:fecha_inicio, fecha_fin:fecha_fin, 
-						vendedor:vendedor,canal:canal,
+						vendedor:vendedor,canal:canal,tipo_producto:tipo_producto,
 						_token:_token
                        },
                 "success": function (result) {
@@ -192,6 +200,7 @@ function DescargarArchivosExcel(){
 	var fecha_fin = $('#fecha_fin_bus').val();
 	var vendedor = $('#vendedor_bus').val();
 	var canal = $('#canal_bus').val();
+	var tipo_producto = $('#tipo_producto_bus').val();
 
 	if (empresa_compra == "")empresa_compra = 0;
 	if (fecha_inicio == "")fecha_inicio = "0";
@@ -199,5 +208,5 @@ function DescargarArchivosExcel(){
 	if (vendedor == "")vendedor = 0;
 	if (canal == "")canal = 0;
 	
-	location.href = '/orden_compra/exportar_reporte_comercializacion_sin_igv/'+empresa_compra+'/'+fecha_inicio+'/'+fecha_fin+'/'+vendedor+'/'+canal;
+	location.href = '/orden_compra/exportar_reporte_comercializacion_sin_igv/'+empresa_compra+'/'+fecha_inicio+'/'+fecha_fin+'/'+vendedor+'/'+canal+'/'+tipo_producto;
 }
