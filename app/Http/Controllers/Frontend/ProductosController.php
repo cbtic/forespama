@@ -61,6 +61,7 @@ class ProductosController extends Controller
 		$tablaMaestra_model = new TablaMaestra;
         $familia_model = new Familia;
         $familia_contable_model = new FamiliaContable;
+        $producto_model = new Producto;
 
 		$estado_bien = $tablaMaestra_model->getMaestroByTipo(56);
 		$tipo_origen_producto = $tablaMaestra_model->getMaestroByTipo(58);
@@ -68,13 +69,14 @@ class ProductosController extends Controller
 		$aprobado = $tablaMaestra_model->getMaestroByTipo(113);
         $familia = $familia_model->getFamiliaAll();
         $familia_contable = $familia_contable_model->getFamiliaContables();
+        $usuario_inserta = $producto_model->getUsuarioInsertaByProducto();
 		
-		return view('frontend.productos.create',compact('estado_bien','tipo_origen_producto','tipo_producto','familia','aprobado','familia_contable'));
+		return view('frontend.productos.create',compact('estado_bien','tipo_origen_producto','tipo_producto','familia','aprobado','familia_contable','usuario_inserta'));
 
 	}
 
     public function listar_producto_ajax(Request $request){
-
+        //dd($request->aprobado);exit();
 		$producto_model = new Producto;
 		$p[]=$request->serie;
 		$p[]=$request->denominacion;
@@ -86,7 +88,8 @@ class ProductosController extends Controller
         $p[]=$request->sub_familia;
         $p[]=$request->familia_contable;
         $p[]=$request->aprobado;
-        $p[]=$request->estado;
+        $p[]=$request->usuario_inserta;
+        $p[]=1;
 		$p[]=$request->NumeroPagina;
 		$p[]=$request->NumeroRegistros;
 		$data = $producto_model->listar_producto_ajax($p);

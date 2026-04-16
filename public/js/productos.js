@@ -36,6 +36,13 @@ $(document).ready(function () {
 		}
 	});
 
+	$('#usuario_inserta_bus').keypress(function(e){
+		if(e.which == 13) {
+			datatablenew();
+			return false;
+		}
+	});
+
 	$('#estado_bus').keypress(function(e){
 		if(e.which == 13) {
 			datatablenew();
@@ -47,6 +54,10 @@ $(document).ready(function () {
 		width : "100%"
 	})
 
+	$('#usuario_inserta_bus').select2({
+		width : "100%"
+	})
+
 	$('#familia_contable_bus').select2({
 		width : "100%"
 	})
@@ -55,7 +66,7 @@ $(document).ready(function () {
 		DescargarArchivosExcel()
 
 	});
-		
+	
 	datatablenew();
 
 });
@@ -101,7 +112,8 @@ function datatablenew(){
 			var sub_familia = $('#sub_familia_bus').val();
 			var aprobado = $('#aprobado_bus').val();
 			var familia_contable = $('#familia_contable_bus').val();
-			var estado = $('#estado_bus').val();
+			//var estado = $('#estado_bus').val();
+			var usuario_inserta = $('#usuario_inserta_bus').val();
 			
 			var _token = $('#_token').val();
             oSettings.jqXHR = $.ajax({
@@ -111,7 +123,7 @@ function datatablenew(){
                 "url": sSource,
                 "data":{NumeroPagina:iNroPagina,NumeroRegistros:iCantMostrar,
 						serie:serie,denominacion:denominacion,codigo:codigo,estado_bien:estado_bien,tipo_origen_producto:tipo_origen_producto,
-						estado:estado,tiene_imagen:tiene_imagen,familia:familia,sub_familia:sub_familia,aprobado:aprobado,familia_contable:familia_contable,
+						usuario_inserta:usuario_inserta,tiene_imagen:tiene_imagen,familia:familia,sub_familia:sub_familia,aprobado:aprobado,familia_contable:familia_contable,
 						_token:_token
                        },
                 "success": function (result) {

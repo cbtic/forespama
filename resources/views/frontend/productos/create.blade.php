@@ -457,14 +457,27 @@ label.form-control-sm{
 									?>
 								</select>
 							</div>
+
+							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+								<select name="usuario_inserta_bus" id="usuario_inserta_bus" class="form-control form-control-sm filtro-select">
+									<option value="">--Seleccionar Usuario--</option>
+									<?php
+									foreach ($usuario_inserta as $row) {
+									?>
+									<option value="<?php echo $row->id?>"><?php echo $row->usuario?></option>
+									<?php
+									}
+									?>
+								</select>
+							</div>
 							
-							<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+							<!--<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
 								<select name="estado_bus" id="estado_bus" class="form-control form-control-sm filtro-select">
 									<option value="">Todos</option>
 									<option value="1" selected="selected">Activo</option>
 									<option value="0">Eliminado</option>
 								</select>
-							</div>
+							</div>-->
 						</div>
 					</div>
 					<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">

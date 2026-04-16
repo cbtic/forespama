@@ -3071,16 +3071,14 @@ class ComprobanteController extends Controller
                 $totalOpGratuito += (1 * $row->cantidad);
             }
 
-            if ($row->afect_igv == '20') {
+            if ($row->afect_igv == '10') {
+                $totalOPGravadas = str_replace(",", "", $factura->subtotal);
+            }else{
                 $totalOPNoGravadas = $totalOPNoGravadas + str_replace(",", "", $row->valor_venta);
             }
 			$items[$index]=$items1;
 
             $afect_igv = $row->afect_igv;
-        }
-
-        if ($row->afect_igv == '10') {
-            $totalOPGravadas = $totalOPGravadas + str_replace(",", "", $factura->subtotal);
         }
         
 		$data["items"] = $items;

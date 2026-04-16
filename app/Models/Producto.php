@@ -256,4 +256,16 @@ class Producto extends Model
         return $data;
     }
 
+    function getUsuarioInsertaByProducto(){
+
+        $cad = "select distinct u.id, u.name usuario from productos p 
+        inner join users u on p.id_usuario_inserta = u.id 
+        where u.active ='1'
+        and p.estado ='1'
+        order by u.name asc";
+
+		$data = DB::select($cad);
+        return $data;
+    }
+
 }
