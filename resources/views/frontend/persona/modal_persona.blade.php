@@ -464,25 +464,23 @@ $.mask.definitions['p'] = "[Mm]";
 		var numero_celular = $('#numero_celular').val();
 		var correo = $('#correo').val();
 		var direccion = $('#direccion').val();
+		var cliente = $('#cliente').is(':checked');
+		var proveedor = $('#proveedor').is(':checked');
+		var personal = $('#personal').is(':checked');
 
-		if (tipo_documento==""){
-			msg= "Falta seleccionar un Tipo de Documento";
-		}else if (numero_documento==""){
-			msg= "Falta ingresar una N&uacute;mero de Documento";
-		}else if (nombre==""){
-			msg= "Falta ingresar un Nombre";
-		}else if (apellido_paterno==""){
-			msg= "Falta ingresar un Apellido Paterno";
-		}else if (apellido_materno==""){
-			msg= "Falta ingresar un Apellido Materno";
-		}else if (fecha_nacimiento==""){
-			msg= "Falta seleccionar una Fecha de Nacimiento";
-		}else if (sexo==""){
-			msg= "Falta seleccionar un Sexo";
-		}else if (numero_celular==""){
-			msg= "Falta ingresar un N&uacute;mero de Celular";
-		}else if (!validarCelular(numero_celular)) {
-			msg = "Ingrese un Número de Celular V&aacute;lido";
+		if (tipo_documento==""){msg= "Debe seleccionar un Tipo de Documento";
+		}else if (numero_documento==""){msg= "Debe ingresar un N&uacute;mero de Documento";
+		}else if (nombre==""){msg= "Debe ingresar un Nombre";
+		}else if (apellido_paterno==""){msg= "Debe ingresar un Apellido Paterno";
+		}else if (apellido_materno==""){msg= "Debe ingresar un Apellido Materno";
+		//}else if (fecha_nacimiento==""){msg= "Falta seleccionar una Fecha de Nacimiento";
+		//}else if (sexo==""){msg= "Falta seleccionar un Sexo";
+		//}else if (numero_celular==""){msg= "Falta ingresar un N&uacute;mero de Celular";
+		//}else if (!validarCelular(numero_celular)) {msg = "Ingrese un Número de Celular V&aacute;lido";
+		}
+
+		if (!cliente && !proveedor && !personal) {
+			msg = "Debe seleccionar al menos un Tipo de Persona";
 		}
 
 		if (msg=="0"){
@@ -491,7 +489,6 @@ $.mask.definitions['p'] = "[Mm]";
 		else {
 			Swal.fire(msg);
 		}
-
 	}
 
 	function validateEmail(email) {

@@ -207,6 +207,7 @@ function DescargarArchivosExcel(){
 	if (fecha_fin == "")fecha_fin = "0";
 	if (vendedor == "")vendedor = 0;
 	if (canal == "")canal = 0;
+	if (tipo_producto == "")tipo_producto = 0;
 	
 	location.href = '/orden_compra/exportar_reporte_comercializacion_sin_igv/'+empresa_compra+'/'+fecha_inicio+'/'+fecha_fin+'/'+vendedor+'/'+canal+'/'+tipo_producto;
 }

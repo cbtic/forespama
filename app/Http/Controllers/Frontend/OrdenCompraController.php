@@ -2916,6 +2916,7 @@ class OrdenCompraController extends Controller
         $p[]=$request->fecha_fin;
         $p[]=$request->vendedor;
         $p[]=$request->tipo_producto;
+        $p[]=$id_user;
 		$p[]=$request->NumeroPagina;
 		$p[]=$request->NumeroRegistros;
 		$data = $orden_compra_model->listar_reporte_comercializacion_sin_igv_ajax($p);
@@ -2969,6 +2970,8 @@ class OrdenCompraController extends Controller
 
     public function exportar_reporte_comercializacion_sin_igv($empresa_compra, $fecha_inicio, $fecha_fin, $vendedor, $canal, $tipo_producto) {
 
+        $id_user = Auth::user()->id;
+
         if($empresa_compra==0)$empresa_compra = "";
         if($fecha_inicio=="0")$fecha_inicio = "";
         if($fecha_fin=="0")$fecha_fin = "";
@@ -2983,6 +2986,7 @@ class OrdenCompraController extends Controller
         $p[]=$fecha_fin;
         $p[]=$vendedor;
         $p[]=$tipo_producto;
+        $p[]=$id_user;
         $p[]=1;
 		$p[]=10000;
 		$data = $orden_compra_model->listar_reporte_comercializacion_sin_igv_ajax($p);

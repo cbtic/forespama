@@ -57,7 +57,7 @@ class SalidaProducto extends Model
         left join tabla_maestras tm4 on sp.igv_compra ::int = tm4.codigo::int and tm4.tipo = '51'
         inner join almacenes a on sp.id_almacen_salida = a.id
         inner join orden_compras oc on sp.id_orden_compra = oc.id
-        left join guia_internas gi on sp.id = (gi.numero_documento::int-1) and gi.id_tipo_documento='2'
+        left join guia_internas gi on sp.id = (gi.numero_documento::int-1) and gi.id_tipo_documento='2' and gi.guia_anulado = 'N'
         where oc.id = '".$id."'
         and sp.estado='1'
         and sp.tipo_devolucion ='1'";

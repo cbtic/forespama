@@ -104,12 +104,22 @@ class Comprobante extends Model
         (select tm.denominacion medio_pago from comprobante_pagos cp 
         inner join tabla_maestras tm on cp.id_medio = tm.codigo::int and tm.tipo='11'
         where cp.id_comprobante = c.id) medio_pago,
-        ca.serie ||'-'|| ca.numero AS serie_adelanto,
-        ca.fecha AS fecha_adelanto,
-        ca.total AS monto_adelanto
+        (select c5.serie ||'-'|| c5.numero serie_numero
+        from comprobante_adelantos ca 
+        inner join comprobantes c5 on ca.id_comprobante_adelanto = c5.id
+        where c5.anulado = 'N' 
+        and c5.estado = '1'
+        and ca.id_comprobante= c.id
+        LIMIT 1) serie_adelanto,
+        (select to_char(c6.fecha,'dd-mm-yyyy') fecha 
+        from comprobante_adelantos ca 
+        inner join comprobantes c6 on ca.id_comprobante_adelanto = c6.id
+        where c6.anulado = 'N' 
+        and c6.estado = '1'
+        and ca.id_comprobante = c.id
+        LIMIT 1) fecha_adelanto
         from comprobantes c 
         left join orden_compras oc on oc.id = case c.orden_compra when '' then '0' else  c.orden_compra::int end
-        left join comprobantes ca on ca.id_comprobante_adelanto = c.id
         where c.id = '".$id."'
         and c.estado ='1' ";
 

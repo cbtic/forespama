@@ -1,3 +1,4 @@
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <title>Sistema de Felmo</title>
 
 <style>
@@ -171,6 +172,37 @@ function guardarCita(id_medico,fecha_cita){
     else{
         fn_save_cita(id_medico,fecha_cita);
     }
+}
+
+function valida(){
+
+	var msg = "0";
+
+	var _token = $('#_token').val();
+	var id = $('#id').val();
+	var ruc = $('#ruc_').val();
+	var razon_social = $('#razon_social_').val();
+	var direccion = $('#direccion_').val();
+	var email = $('#email_').val();
+	var cliente = $('#cliente').is(':checked');
+	var proveedor = $('#proveedor').is(':checked');
+	var transportista = $('#transportista').is(':checked');
+
+	if (ruc==""){msg= "Debe ingresar un RUC";}
+	else if (razon_social==""){msg= "Debe ingresar una Razon Social";}
+	else if (direccion==""){msg= "Debe ingresar una Direccion";}
+	else if (email==""){msg= "Debe ingresar un Correo";}
+
+	if (!cliente && !proveedor && !transportista) {
+		msg = "Debe seleccionar al menos un Tipo de Persona";
+	}
+
+	if (msg=="0"){
+		fn_save()
+	}
+	else {
+		Swal.fire(msg);
+	}
 }
 
 function fn_save(){
@@ -405,7 +437,7 @@ function obtenerVehiculo(id,obj){
 					<div style="margin-top:10px" class="form-group">
 						<div class="col-sm-12 controls">
 							<div class="btn-group btn-group-sm" role="group" aria-label="Log Viewer Actions">
-								<button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-nuevo" data-toggle="modal" onclick="fn_save()">
+								<button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-nuevo" data-toggle="modal" onclick="valida()">
 									<i class="fas fa-save" style="font-size:18px;"></i> Guardar
 								</button>
 							</div>

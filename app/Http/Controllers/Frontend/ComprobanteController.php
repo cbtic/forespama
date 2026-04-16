@@ -3071,15 +3071,18 @@ class ComprobanteController extends Controller
                 $totalOpGratuito += (1 * $row->cantidad);
             }
 
-            if ($row->afect_igv == '10') {
-                $totalOPGravadas = $totalOPGravadas + str_replace(",", "", $row->valor_venta);
-            } else {
+            if ($row->afect_igv == '20') {
                 $totalOPNoGravadas = $totalOPNoGravadas + str_replace(",", "", $row->valor_venta);
             }
 			$items[$index]=$items1;
 
             $afect_igv = $row->afect_igv;
         }
+
+        if ($row->afect_igv == '10') {
+            $totalOPGravadas = $totalOPGravadas + str_replace(",", "", $factura->subtotal);
+        }
+        
 		$data["items"] = $items;
 		$data["anulado"] = false;
 		$data["declare"] = "0"; // 0->dechlare 1>declare instante
@@ -3174,7 +3177,6 @@ class ComprobanteController extends Controller
 
             $data["dtmedioPagoDetraccion"] = $factura->medio_pago_detrac;
             $data["dtcodigoBienServicio"] = $factura->afecta_detrac;
-
             
         }
 
