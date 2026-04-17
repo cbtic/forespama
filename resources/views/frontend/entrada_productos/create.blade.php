@@ -306,16 +306,8 @@ label.form-control-sm{
 <div class="loader"></div>
 
 @section('content')
-<!--
-    <ol class="breadcrumb" style="padding-left:120px;margin-top:0px;background-color:#355C9D">
-        <li class="breadcrumb-item text-primary">Inicio</li>
-            <li class="breadcrumb-item active">Nueva Asistencia</li>
-        </li>
-    </ol>
-    -->
 
 <div class="justify-content-center">
-    <!--<div class="container-fluid">-->
 
 	<a href="javascript:void(0)" onclick=""><i class="fa fa-bars fa-lg" style="position:absolute;right:50%;top:-24px;color:#FFFFFF"></i></a>
 
@@ -338,139 +330,150 @@ label.form-control-sm{
 
 					<div class="col col-sm-12 align-self-center">
 
-
                         <input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
+						<div class="bg-light p-3 rounded mb-3 border">
+							<div class="row">
+								<div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
+									<div class="row">
+										<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+											<select name="tipo_movimiento_bus" id="tipo_movimiento_bus" class="form-control form-control-sm">
+												<option value="">--Seleccionar Tipo Movimiento--</option>
+												<?php
+												foreach ($tipo_movimiento as $row){?>
+													<option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
+													<?php 
+												}
+												?>
+											</select>
+										</div>
 
-                        <!--<input type="hidden" name="estado" id="estado" value="0">-->
-						
-						<input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
+										<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+											<select name="tipo_documento_bus" id="tipo_documento_bus" class="form-control form-control-sm">
+												<option value="">--Seleccionar Tipo Movimiento--</option>
+												<?php
+												foreach ($tipo_documento_entrada as $row){?>
+													<option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
+													<?php 
+												}
+												?>
+												<?php
+												foreach ($tipo_documento_salida as $row){?>
+													<option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
+													<?php 
+												}
+												?>
+											</select>
+										</div>
+
+										<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+											<select name="unidad_origen_bus" id="unidad_origen_bus" class="form-control form-control-sm">
+												<option value="">--Seleccionar Unidad Origen--</option>
+												<?php
+												foreach ($unidad_origen as $row){?>
+													<option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
+													<?php 
+												}
+												?>
+											</select>
+										</div>
+
+										<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+											<select name="almacen_destino_bus" id="almacen_destino_bus" class="form-control form-control-sm">
+												<option value="">--Seleccionar Unidad Destino--</option>
+												<?php
+												foreach ($almacen as $row){?>
+													<option value="<?php echo $row->id ?>"><?php echo $row->denominacion ?></option>
+													<?php 
+												}
+												?>
+											</select>
+										</div>
+
+										<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+											<select name="proveedor_bus" id="proveedor_bus" class="form-control form-control-sm">
+												<option value="">--Seleccionar Proveedor--</option>
+												<?php
+												foreach ($proveedor as $row){?>
+													<option value="<?php echo $row->id ?>"><?php echo $row->razon_social ?></option>
+													<?php 
+												}
+												?>
+											</select>
+										</div>
+										
+										<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+											<input id="numero_comprobante_bus" name="numero_comprobante_bus" on class="form-control form-control-sm"  placeholder="N&uacute;mero Comprobante">
+										</div>
+
+										<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+											<select name="situacion_bus" id="situacion_bus" class="form-control form-control-sm">
+												<option value="">--Seleccionar Situaci&oacute;n--</option>
+												<?php
+												foreach ($cerrado_entrada as $row){?>
+													<option value="<?php echo $row->codigo ?>" <?php if($row->codigo=='2')echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+													<?php 
+												}
+												?>
+											</select>
+										</div>
+
+										<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+											<input id="fecha_inicio_bus" name="fecha_inicio_bus" on class="form-control form-control-sm filtro-input" style=" content: \f073;" placeholder="Fecha Inicio">
+										</div>
+
+										<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+											<input id="fecha_fin_bus" name="fecha_fin_bus" on class="form-control form-control-sm filtro-input"  placeholder="Fecha Fin">
+										</div>
+
+										<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+											<select name="estado_bus" id="estado_bus" class="form-control form-control-sm">
+												<option value="">Todos</option>
+												<option value="1" selected="selected">Activo</option>
+												<option value="0">Eliminado</option>
+											</select>
+										</div>
+									</div>
+								</div>
+								<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+									<div class="row">
+										<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding-right:0px">
+											<input class="btn btn-sm btn-warning pull-rigth" value="Buscar" type="button" id="btnBuscar" />
+											<button id="btnDescargar" type="button" class="btn btn-sm btn-secondary pull-rigth icono-botones2" style="margin-left:10px;">
+												<i class="fas fa-download" style="font-size:18px;"></i> Excel
+											</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
 				
-				<div class="row" style="padding:20px 20px 0px 20px;">
+						<div class="card-body">				
 
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<select name="tipo_movimiento_bus" id="tipo_movimiento_bus" class="form-control form-control-sm">
-							<option value="">--Seleccionar Tipo Movimiento--</option>
-							<?php
-							foreach ($tipo_movimiento as $row){?>
-								<option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
-								<?php 
-							}
-							?>
-						</select>
-					</div>
-
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<select name="tipo_documento_bus" id="tipo_documento_bus" class="form-control form-control-sm">
-							<option value="">--Seleccionar Tipo Movimiento--</option>
-							<?php
-							foreach ($tipo_documento_entrada as $row){?>
-								<option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
-								<?php 
-							}
-							?>
-							<?php
-							foreach ($tipo_documento_salida as $row){?>
-								<option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
-								<?php 
-							}
-							?>
-						</select>
-					</div>
-
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<select name="unidad_origen_bus" id="unidad_origen_bus" class="form-control form-control-sm">
-							<option value="">--Seleccionar Unidad Origen--</option>
-							<?php
-							foreach ($unidad_origen as $row){?>
-								<option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
-								<?php 
-							}
-							?>
-						</select>
-					</div>
-
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<select name="almacen_destino_bus" id="almacen_destino_bus" class="form-control form-control-sm">
-							<option value="">--Seleccionar Unidad Destino--</option>
-							<?php
-							foreach ($almacen as $row){?>
-								<option value="<?php echo $row->id ?>"><?php echo $row->denominacion ?></option>
-								<?php 
-							}
-							?>
-						</select>
-					</div>
-
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<select name="proveedor_bus" id="proveedor_bus" class="form-control form-control-sm">
-							<option value="">--Seleccionar Proveedor--</option>
-							<?php
-							foreach ($proveedor as $row){?>
-								<option value="<?php echo $row->id ?>"><?php echo $row->razon_social ?></option>
-								<?php 
-							}
-							?>
-						</select>
-					</div>
-					
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-                        <input id="numero_comprobante_bus" name="numero_comprobante_bus" on class="form-control form-control-sm"  placeholder="N&uacute;mero Comprobante">
-					</div>
-
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<select name="situacion_bus" id="situacion_bus" class="form-control form-control-sm">
-							<option value="">--Seleccionar Situaci&oacute;n--</option>
-							<?php
-							foreach ($cerrado_entrada as $row){?>
-								<option value="<?php echo $row->codigo ?>" <?php if($row->codigo=='2')echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
-								<?php 
-							}
-							?>
-						</select>
-					</div>
-
-                    <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-						<select name="estado_bus" id="estado_bus" class="form-control form-control-sm">
-							<option value="">Todos</option>
-							<option value="1" selected="selected">Activo</option>
-							<option value="0">Eliminado</option>
-						</select>
-					</div>
-                    
-					<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12" style="padding-right:0px">
-						<input class="btn btn-warning pull-rigth" value="Buscar" type="button" id="btnBuscar" />
-						<!--<input class="btn btn-success pull-rigth" value="Nuevo" type="button" id="btnNuevo" style="margin-left:15px" />-->
-					</div>
-				</div>
-				
-                <div class="card-body">				
-
-                    <div class="table-responsive">
-                    <table id="tblEntradaProductos" class="table table-hover table-sm">
-                        <thead>
-                        <tr style="font-size:13px">
-                            <th>Id</th>
-							<th>Tipo Movimiento</th>
-							<!--<th>Ingreso</th>-->
-                            <th>Tipo Doc.</th>
-							<th>Unidad Origen</th>
-                            <th>Proveedor</th>
-							<th>Almacen Salida/Destino</th>
-                            <th>Nro. Comprobante</th>
-							<th>Fecha Comprobante</th>
-							<th>Recibido Por</th>
-							<th>Cerrado</th>
-							<th>Estado</th>
-                            <th>Acciones</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                    </table>
-                </div><!--table-responsive-->
-                </form>
-                </div><!--card-body-->
-            </div><!--card-->
+							<div class="table-responsive">
+							<table id="tblEntradaProductos" class="table table-hover table-sm">
+								<thead>
+								<tr style="font-size:13px">
+									<th>Id</th>
+									<th>Tipo Movimiento</th>
+									<th>Tipo Doc.</th>
+									<th>Unidad Origen</th>
+									<th>Proveedor</th>
+									<th>Almacen Salida/Destino</th>
+									<th>Nro. Comprobante</th>
+									<th>Fecha Movimiento</th>
+									<th>Recibido Por</th>
+									<th>Cerrado</th>
+									<th>Estado</th>
+									<th>Acciones</th>
+								</tr>
+								</thead>
+								<tbody>
+								</tbody>
+							</table>
+						</div><!--table-responsive-->
+						</form>
+						</div><!--card-body-->
+					</div><!--card-->
         <!--</div>--><!--col-->
     <!--</div>--><!--row-->
 
@@ -496,57 +499,6 @@ label.form-control-sm{
     @push('after-scripts')
 
 	<script type="text/javascript">
-
-	/*$(document).ready(function() {
-		$(".upload").on('click', function() {
-			var formData = new FormData();
-			var files = $('#image')[0].files[0];
-			formData.append('file',files);
-			$.ajax({
-				headers: {
-					'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-				},
-				url: "/ingreso_vehiculo_tronco/upload_imagen_ingreso",
-				type: 'post',
-				data: formData,
-				contentType: false,
-				processData: false,
-				success: function(response) {
-					
-					var ind_img = $("#ind_img").val();
-					
-					if (response != 0) {
-						$("#img_ruta_"+ind_img).attr("src", "/img/ingreso/tmp/"+response).show();
-						$(".delete_ruta").show();
-						$("#img_foto_"+ind_img).val(response);
-
-						ind_img++;
-
-						var newRow = "";
-						newRow += '<div class="img_ruta">';
-						newRow += '<img src="" id="img_ruta_'+ind_img+'" width="130px" height="165px" alt="" style="text-align:center;margin-top:8px;display:none;margin-left:10px" />';
-						newRow += '<span class="delete_ruta" style="display:none" onclick="DeleteImagen(this)"></span>';
-						newRow += '<input type="hidden" id="img_foto_'+ind_img+'" name="img_foto[]" value="" />';
-						newRow += '</div>';
-
-						$("#divImagenes").append(newRow);
-						$("#ind_img").val(ind_img);
-
-					} else {
-						alert('Formato de imagen incorrecto.');
-					}
-					
-				}
-			});
-			return false;
-		});
-
-		$(".delete").on('click', function() {
-			$("#img_ruta0").attr("src", "/dist/img/profile-icon.png");
-			$("#img_foto0").val("");
-		});
-
-	});*/
 
 	</script>
 

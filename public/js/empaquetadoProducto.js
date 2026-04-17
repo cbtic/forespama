@@ -203,7 +203,7 @@ function datatablenew(){
 						
 						html += '<button style="font-size:12px" type="button" class="btn btn-sm btn-success" data-toggle="modal" onclick="modalEmpaquetadoProducto('+row.id+')" ><i class="fa fa-edit"></i> Editar</button>'; 
 						
-						//html += '<a href="javascript:void(0)" onclick=eliminarDispensacion('+row.id+','+row.estado+') class="btn btn-sm '+clase+'" style="font-size:12px;margin-left:10px">'+estado+'</a>';			
+						html += '<a href="javascript:void(0)" onclick=eliminarEmpaquetado('+row.id+','+row.estado+') class="btn btn-sm '+clase+'" style="font-size:12px;margin-left:10px">'+estado+'</a>';			
 						
 						html += '</div>';
 						return html;
@@ -221,24 +221,20 @@ function fn_ListarBusqueda() {
 
 function modalEmpaquetadoProducto(id){
 	
-	/*var tipo_mov="";
-	if(tipo=='INGRESO'){tipo_mov=1};
-	if(tipo=='SALIDA'){tipo_mov=2};*/
-
 	$(".modal-dialog").css("width","85%");
 	$('#openOverlayOpc .modal-body').css('height', 'auto');
 
 	$.ajax({
-			url: "/empaquetado/modal_empaquetado/"+id,
-			type: "GET",
-			success: function (result) {  
-					$("#diveditpregOpc").html(result);
-					$('#openOverlayOpc').modal('show');
-			}
+		url: "/empaquetado/modal_empaquetado/"+id,
+		type: "GET",
+		success: function (result) {  
+			$("#diveditpregOpc").html(result);
+			$('#openOverlayOpc').modal('show');
+		}
 	});
 }
 
-function eliminarIngresoProduccion(id,estado){
+function eliminarEmpaquetado(id,estado){
 	var act_estado = "";
 	if(estado==1){
 		act_estado = "Eliminar";
@@ -250,7 +246,7 @@ function eliminarIngresoProduccion(id,estado){
 	}
     bootbox.confirm({ 
         size: "small",
-        message: "&iquest;Deseas "+act_estado+" el ingreso?", 
+        message: "&iquest;Deseas "+act_estado+" el registro?", 
         callback: function(result){
             if (result==true) {
                 fn_eliminar(id,estado_);
@@ -263,11 +259,11 @@ function eliminarIngresoProduccion(id,estado){
 function fn_eliminar(id,estado){
 	
     $.ajax({
-            url: "/ingreso_produccion/eliminar_ingreso_produccion/"+id+"/"+estado,
-            type: "GET",
-            success: function (result) {
-                //if(result="success")obtenerPlanDetalle(id_plan);
-				datatablenew();
-            }
+		url: "/empaquetado/eliminar_empaquetado/"+id+"/"+estado,
+		type: "GET",
+		success: function (result) {
+			//if(result="success")obtenerPlanDetalle(id_plan);
+			datatablenew();
+		}
     });
 }

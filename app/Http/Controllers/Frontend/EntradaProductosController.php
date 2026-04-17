@@ -29,6 +29,15 @@ use App\Http\Controllers\Controller;
 use Carbon\Carbon;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Luecano\NumeroALetras\NumeroALetras;
+use Maatwebsite\Excel\Facades\Excel;
+use Maatwebsite\Excel\Concerns\FromArray;
+use stdClass;
+use Illuminate\Support\Facades\Response;
+use Maatwebsite\Excel\Concerns\WithStyles;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
+use Maatwebsite\Excel\Concerns\WithHeadings;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
 
 class EntradaProductosController extends Controller
 {
@@ -75,6 +84,8 @@ class EntradaProductosController extends Controller
         $p[]=$request->proveedor;
         $p[]=$request->numero_comprobante;
         $p[]=$request->situacion;
+        $p[]=$request->fecha_inicio;
+        $p[]=$request->fecha_fin;
         $p[]=$request->estado;
 		$p[]=$request->NumeroPagina;
 		$p[]=$request->NumeroRegistros;
@@ -2239,5 +2250,114 @@ class EntradaProductosController extends Controller
         
         return response()->json(['id' => $request->id]);
         
+    }
+
+    public function exportar_listar_entrada_salida($tipo_movimiento, $tipo_documento, $unidad_origen, $almacen_destino, $proveedor, $numero_comprobante, $situacion, $fecha_inicio, $fecha_fin, $estado) {
+
+        $id_user = Auth::user()->id;
+        
+		if($tipo_movimiento==0)$tipo_movimiento = "";
+        if($tipo_documento==0)$tipo_documento = "";
+        if($unidad_origen==0)$unidad_origen = "";
+        if($almacen_destino=="0")$almacen_destino = "";
+        if($proveedor=="0")$proveedor = "";
+        if($numero_comprobante=="0")$numero_comprobante = "";
+        if($situacion=="0")$situacion = "";
+        if($fecha_inicio=="0")$fecha_inicio = "";
+        if($fecha_fin=="0")$fecha_fin = "";
+        if($estado==0)$estado = "";
+
+        $entrada_producto_model = new EntradaProducto;
+		$p[]=$tipo_movimiento;
+        $p[]=$tipo_documento;
+        $p[]=$unidad_origen;
+        $p[]=$almacen_destino;
+        $p[]=$proveedor;
+        $p[]=$numero_comprobante;
+        $p[]=$situacion;
+        $p[]=$fecha_inicio;
+        $p[]=$fecha_fin;
+        $p[]=$estado;
+        $p[]=1;
+		$p[]=10000;
+		$data = $entrada_producto_model->listar_entrada_productos_ajax($p);
+		
+		$variable = [];
+		$n = 1;
+
+		array_push($variable, array("N°","Id","Tipo Movimiento","Tipo Documento","Unidad Origen","Proveedor","Almacen Salida/Destino","Nro. Comprobante","Fecha Movimiento","Recibido Por","Cerrado"));
+		
+		foreach ($data as $r) {
+
+			array_push($variable, array($n++,$r->id, $r->tipo, $r->tipo_documento, $r->unidad_origen, $r->razon_social, $r->almacen, $r->codigo, $r->fecha_movimiento, $r->usuario_recibe, $r->cerrado));
+		}
+		
+		$export = new InvoicesExport([$variable]);
+		return Excel::download($export, 'Reporte_salidas_entradas.xlsx');
+		
+    }
+}
+
+class InvoicesExport implements FromArray, WithHeadings, WithStyles
+{
+	protected $invoices;
+
+	public function __construct(array $invoices)
+	{
+		$this->invoices = $invoices;
+	}
+
+	public function array(): array
+	{
+		return $this->invoices;
+	}
+
+    public function headings(): array
+    {
+        return ["N°","Id","Tipo Movimiento","Tipo Documento","Unidad Origen","Proveedor","Almacen Salida/Destino","Nro. Comprobante","Fecha Movimiento","Recibido Por","Cerrado"];
+    }
+
+	public function styles(Worksheet $sheet)
+    {
+
+		$sheet->mergeCells('A1:L1');
+
+        $sheet->setCellValue('A1', "REPORTE DE ENTRADAS Y SALIDAS - FORESPAMA");
+        $sheet->getStyle('A1:L1')->applyFromArray([
+            'font' => [
+                'bold' => true,
+                'color' => ['rgb' => 'FFFFFF'],
+            ],
+            'fill' => [
+                'fillType' => Fill::FILL_SOLID,
+                'startColor' => ['rgb' => '246257'],
+            ],
+            'alignment' => [
+                'horizontal' => Alignment::HORIZONTAL_CENTER,
+            ],
+        ]);
+
+		$sheet->getStyle('A1')->getAlignment()->setWrapText(true);
+		$sheet->getRowDimension(1)->setRowHeight(30);
+
+        $sheet->getStyle('A2:L2')->applyFromArray([
+            'font' => [
+                'bold' => true,
+                'color' => ['rgb' => '000000'],
+            ],
+            'fill' => [
+                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                'startColor' => ['rgb' => '2EB85C'],
+            ],
+			'alignment' => [
+			'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+    		],
+        ]);
+
+		$sheet->fromArray($this->headings(), NULL, 'A2');
+        
+        foreach (range('A', 'L') as $col) {
+            $sheet->getColumnDimension($col)->setAutoSize(true);
+        }
     }
 }

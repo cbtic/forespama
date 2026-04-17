@@ -952,3 +952,6 @@ Route::post('orden_compra/send_producto_tienda_detalle', [OrdenCompraController:
 Route::get('orden_compra/create_reporte_comercializacion_sin_igv', [OrdenCompraController::class, 'create_reporte_comercializacion_sin_igv'])->name('orden_compra.create_reporte_comercializacion_sin_igv');
 Route::post('orden_compra/listar_reporte_comercializacion_sin_igv_ajax', [OrdenCompraController::class, 'listar_reporte_comercializacion_sin_igv_ajax'])->name('orden_compra.listar_reporte_comercializacion_sin_igv_ajax');
 Route::get('orden_compra/exportar_reporte_comercializacion_sin_igv/{empresa_compra}/{fecha_inicio}/{fecha_fin}/{vendedor}/{canal}/{tipo_producto}', [OrdenCompraController::class, 'exportar_reporte_comercializacion_sin_igv'])->name('orden_compra.exportar_reporte_comercializacion_sin_igv');
+
+Route::get('entrada_productos/exportar_listar_entrada_salida/{tipo_movimiento}/{tipo_documento}/{unidad_origen}/{almacen_destino}/{proveedor}/{numero_comprobante}/{situacion}/{fecha_inicio}/{fecha_fin}/{estado}', [EntradaProductosController::class, 'exportar_listar_entrada_salida'])->name('entrada_productos.exportar_listar_entrada_salida');
+

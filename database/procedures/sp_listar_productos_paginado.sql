@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION public.sp_listar_productos_paginado(p_serie character varying, p_denominacion character varying, p_codigo character varying, p_estado_bien character varying, p_tipo_origen_producto character varying, p_tiene_imagen character varying, p_familia character varying, p_sub_familia character varying, p_familia_contable character varying, p_aprobado character varying, p_estado character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
+CREATE OR REPLACE FUNCTION public.sp_listar_productos_paginado(p_serie character varying, p_denominacion character varying, p_codigo character varying, p_estado_bien character varying, p_tipo_origen_producto character varying, p_tiene_imagen character varying, p_familia character varying, p_sub_familia character varying, p_familia_contable character varying, p_aprobado character varying, p_usuario_inserta character varying, p_estado character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
  RETURNS refcursor
  LANGUAGE plpgsql
 AS $function$
@@ -84,11 +84,15 @@ begin
 	End If;
 
 	If p_aprobado<>'' Then
-	 v_where:=v_where||'And p.aprobado =  '''||p_aprobado||''' ';
+	 v_where:=v_where||'And p.aprobado = '''||p_aprobado||''' ';
+	End If;
+
+	If p_usuario_inserta<>'' Then
+	 v_where:=v_where||'And p.id_usuario_inserta = '''||p_usuario_inserta||''' ';
 	End If;
 
 	If p_estado<>'' Then
-	 v_where:=v_where||'And p.estado  = '''||p_estado||''' ';
+	 v_where:=v_where||'And p.estado = '''||p_estado||''' ';
 	End If;
 	
 	EXECUTE ('SELECT count(1) '||v_tabla||v_where) INTO v_count;

@@ -364,7 +364,7 @@ label.form-control-sm{
 							</div>
 
 							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-								<input id="numero_ingreso_produccion_bus" name="numero_ingreso_produccion_bus" on class="form-control form-control-sm filtro-input"  placeholder="N&uacute;mero Dispensaci&oacute;n">
+								<input id="numero_ingreso_produccion_bus" name="numero_ingreso_produccion_bus" on class="form-control form-control-sm filtro-input"  placeholder="N&uacute;mero Ingreso Producci&oacute;n">
 							</div>
 
 							<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">

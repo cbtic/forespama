@@ -63,8 +63,31 @@ $(document).ready(function () {
 			return false;
 		}
 	});
-		
+
+	$('#fecha_inicio_bus').datepicker({
+        autoclose: true,
+		format: 'yyyy-mm-dd',
+		changeMonth: true,
+		changeYear: true,
+        language: 'es'
+    });
+
+	$('#fecha_fin_bus').datepicker({
+        autoclose: true,
+		format: 'yyyy-mm-dd',
+		changeMonth: true,
+		changeYear: true,
+        language: 'es'
+    });
+
+	$('#proveedor_bus').select2({ width : '100%' })
+	
 	datatablenew();
+
+	$('#btnDescargar').on('click', function () {
+		DescargarArchivosExcel()
+
+	});
 
 });
 
@@ -106,6 +129,8 @@ function datatablenew(){
 			var proveedor = $('#proveedor_bus').val();
 			var numero_comprobante = $('#numero_comprobante_bus').val();
 			var situacion = $('#situacion_bus').val();
+			var fecha_inicio = $('#fecha_inicio_bus').val();
+			var fecha_fin = $('#fecha_fin_bus').val();
 			var estado = $('#estado_bus').val();
 			
 			var _token = $('#_token').val();
@@ -117,7 +142,7 @@ function datatablenew(){
                 "data":{NumeroPagina:iNroPagina,NumeroRegistros:iCantMostrar,
 						tipo_movimiento:tipo_movimiento,tipo_documento:tipo_documento,unidad_origen:unidad_origen,
 						almacen_destino:almacen_destino,proveedor:proveedor,numero_comprobante:numero_comprobante,
-						situacion:situacion,estado:estado,
+						situacion:situacion,fecha_inicio:fecha_inicio,fecha_fin:fecha_fin,estado:estado,
 						_token:_token
                        },
                 "success": function (result) {
@@ -214,9 +239,9 @@ function datatablenew(){
 				},
 				{
 				"mRender": function (data, type, row) {
-					var fecha_comprobante = "";
-					if(row.fecha_comprobante!= null)fecha_comprobante = row.fecha_comprobante;
-					return fecha_comprobante;
+					var fecha_movimiento = "";
+					if(row.fecha_movimiento!= null)fecha_movimiento = row.fecha_movimiento;
+					return fecha_movimiento;
 				},
 				"bSortable": true,
 				"aTargets": [7]
@@ -352,4 +377,31 @@ function fn_eliminar(id,estado){
 				datatablenew();
             }
     });
+}
+
+function DescargarArchivosExcel(){
+	
+	var tipo_movimiento = $('#tipo_movimiento_bus').val();
+	var tipo_documento = $('#tipo_documento_bus').val();
+	var unidad_origen = $('#unidad_origen_bus').val();
+	var almacen_destino = $('#almacen_destino_bus').val();
+	var proveedor = $('#proveedor_bus').val();
+	var numero_comprobante = $('#numero_comprobante_bus').val();
+	var situacion = $('#situacion_bus').val();
+	var fecha_inicio = $('#fecha_inicio_bus').val();
+	var fecha_fin = $('#fecha_fin_bus').val();
+	var estado = $('#estado_bus').val();
+
+	if (tipo_movimiento == "")tipo_movimiento = 0;
+	if (tipo_documento == "")tipo_documento = 0;
+	if (unidad_origen == "")unidad_origen = 0;
+	if (almacen_destino == "")almacen_destino = 0;
+	if (proveedor == "")proveedor = 0;
+	if (numero_comprobante == "")numero_comprobante = "0";
+	if (situacion == "")situacion = 0;
+	if (fecha_inicio == "")fecha_inicio = "0";
+	if (fecha_fin == "")fecha_fin = "0";
+	if (estado == "")estado = 0;
+
+	location.href = '/entrada_productos/exportar_listar_entrada_salida/'+tipo_movimiento+'/'+tipo_documento+'/'+unidad_origen+'/'+almacen_destino+'/'+proveedor+'/'+numero_comprobante+'/'+situacion+'/'+fecha_inicio+'/'+fecha_fin+'/'+estado;
 }

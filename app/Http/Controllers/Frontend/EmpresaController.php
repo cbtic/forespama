@@ -282,6 +282,7 @@ class EmpresaController extends Controller
 		$p[]=$request->tipo_empresa;
 		$p[]=$request->razon_social;
 		$p[]=$request->ruc;
+		$p[]=$request->agente_retenedor;
         $p[]=$request->estado;
 		$p[]=$request->NumeroPagina;
 		$p[]=$request->NumeroRegistros;

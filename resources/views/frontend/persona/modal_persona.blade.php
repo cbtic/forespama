@@ -3,12 +3,6 @@
 <title>Sistema FORESPAMA</title>
 
 <style>
-	/*
-.datepicker {
-  z-index: 1600 !important;
-}
-*/
-	/*.datepicker{ z-index:99999 !important; }*/
 
 	.datepicker,
 	.table-condensed {
@@ -241,27 +235,14 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.js"></script>
 <script type="text/javascript">
-	/*
-jQuery(function($){
-$.mask.definitions['H'] = "[0-1]";
-$.mask.definitions['h'] = "[0-9]";
-$.mask.definitions['M'] = "[0-5]";
-$.mask.definitions['m'] = "[0-9]";
-$.mask.definitions['P'] = "[AaPp]";
-$.mask.definitions['p'] = "[Mm]";
-});
-*/
+
 	$(document).ready(function() {
-		//$('#hora_solicitud').focus();
-		//$('#hora_solicitud').mask('00:00');
-		//$("#id_empresa").select2({ width: '100%' });
 
 		$('#ruc').blur(function() {
 			var id = $('#id').val();
 			if (id == 0) {
 				validaRuc(this.value);
 			}
-			//validaRuc(this.value);
 		});
 
 		$('#numero_documento').blur(function() {
@@ -305,8 +286,6 @@ $.mask.definitions['p'] = "[Mm]";
 	});
 
 	$(document).ready(function() {
-
-
 
 	});
 
@@ -356,19 +335,11 @@ $.mask.definitions['p'] = "[Mm]";
 					$('#direccion').attr('readonly', false);
 				}
 
-				//alert(data.direccion_completa);
-
 			} else {
 				Swal.fire("RUC Inv&aacute;lido. Revise el RUC digitado!");
 				return false;
 			}
-
-
 		});
-	}
-
-	function guardarCita__() {
-		alert("fdssf");
 	}
 
 	function guardarCita(id_medico, fecha_cita) {
@@ -411,9 +382,6 @@ $.mask.definitions['p'] = "[Mm]";
 		var libro = $('#libro').val();
 		var folio = $('#folio').val();
 
-		//alert(id_agremiado);
-		//return false;
-
 		$.ajax({
 			url: "/agremiado/send_agremiado_estudio",
 			type: "POST",
@@ -434,14 +402,6 @@ $.mask.definitions['p'] = "[Mm]";
 				$('#openOverlayOpc').modal('hide');
 				window.location.reload();
 
-				/*
-				$('#openOverlayOpc').modal('hide');
-				if(result==1){
-					bootbox.alert("La persona o empresa ya se encuentra registrado");
-				}else{
-					window.location.reload();
-				}
-				*/
 			}
 		});
 	}
@@ -531,26 +491,10 @@ $.mask.definitions['p'] = "[Mm]";
 			type: "POST",
 			data: {
 				_token: _token,
-				id: id,
-				tipo_documento: tipo_documento,
-				numero_documento: numero_documento,
-				nombre: nombre,
-				apellido_paterno: apellido_paterno,
-				apellido_materno: apellido_materno,
-				fecha_nacimiento: fecha_nacimiento,
-				grupo_sanguineo: grupo_sanguineo,
-				lugar_nacimiento: lugar_nacimiento,
-				nacionalidad: nacionalidad,
-				sexo: sexo,
-				numero_celular: numero_celular,
-				correo: correo,
-				direccion: direccion,
-				img_foto: img_foto,
-				ruc:ruc,
-				id_ubigeo_nacimiento:id_ubigeo_nacimiento,
-				cliente:cliente,
-				proveedor:proveedor,
-				personal:personal
+				id: id, tipo_documento: tipo_documento, numero_documento: numero_documento, nombre: nombre, apellido_paterno: apellido_paterno, 
+				apellido_materno: apellido_materno, fecha_nacimiento: fecha_nacimiento, grupo_sanguineo: grupo_sanguineo, lugar_nacimiento: lugar_nacimiento, 
+				nacionalidad: nacionalidad, sexo: sexo, numero_celular: numero_celular, correo: correo, direccion: direccion, img_foto: img_foto, ruc:ruc, 
+				id_ubigeo_nacimiento:id_ubigeo_nacimiento, cliente:cliente, proveedor:proveedor, personal:personal
 			},
 			dataType: 'json',
 			success: function(result) {
@@ -566,7 +510,6 @@ $.mask.definitions['p'] = "[Mm]";
 
 	function fn_liberar(id) {
 
-		//var id_estacionamiento = $('#id_estacionamiento').val();
 		var _token = $('#_token').val();
 
 		$.ajax({
@@ -585,13 +528,8 @@ $.mask.definitions['p'] = "[Mm]";
 
 	function obtenerBeneficiario(){
 
-		//var id_tipo_documento = $("#tipo_documento").val();
 		var numero_documento = $("#numero_documento").val();
 		var msg = "";
-
-		//alert(tipo_documento);
-		//alert(numero_documento);
-		//exit();
 
 		if (msg != "") {
 			bootbox.alert(msg);
@@ -602,7 +540,6 @@ $.mask.definitions['p'] = "[Mm]";
 			bootbox.alert(msg);
 			return false;
 		}
-
 
 		$.ajax({
 			url: '/persona/buscar_persona/'+ numero_documento,
@@ -624,7 +561,6 @@ $.mask.definitions['p'] = "[Mm]";
 
 				var persona = result.persona;
 				var persona_detalle = result.persona_detalle;
-				//bootbox.alert("Datos recuperados ->" + persona.apellido_materno);
 
 				var nombre = persona.apellido_paterno+" "+persona.apellido_materno+", "+persona.nombres;
 				$('#nombres').val(nombre);
@@ -633,11 +569,6 @@ $.mask.definitions['p'] = "[Mm]";
 				$('#id').val(persona.id);
 				$('#id_per_det').val(0);
 
-
-				//$('#telefono_').val(persona_detalle.telefono);
-				//$('#email_').val(persona_detalle.email);
-
-				//$('#tipo_documento').attr("disabled",true);
 				$('#numero_documento').attr("disabled",true);
 			}
 		},
@@ -648,33 +579,16 @@ $.mask.definitions['p'] = "[Mm]";
 
 				if(result.sw==2){
 					bootbox.alert("No es colaborador de CAP - Lima, los datos han sido obtenidos de Reniec");
-					//$('#telefono').attr("disabled",false);
-					//$('#email').attr("disabled",false);
 				}
 				if(result.sw==3){
 					bootbox.alert("El numero de documento no se encontro en CAP - Lima ni en Reniec");
-					//$('#numero_documento').val("");
-
-					/*
-					$('#numero_documento').attr("disabled",false);
-					$('#nombres').attr("disabled",false).attr("placeholder","Ingrese Nombres");
-
-					$('#divApellidoP').show();
-					$('#divApellidoM').show();
-
-					$('#apellidop').attr("placeholder","Apellido Paterno");
-					$('#apellidom').attr("placeholder","Apellido Materno");
-
-					$('#telefono').attr("disabled",false);
-					$('#email').attr("disabled",false);
-					*/
+					
 					return false;
 				}
 
 
 				var persona = result.persona;
 				var persona_detalle = result.persona_detalle;
-				//bootbox.alert("Datos recuperados ->" + persona.apellido_materno);
 
 				var nombre = persona.apellido_paterno+" "+persona.apellido_materno+", "+persona.nombres;
 				$('#nombres').val(nombre);
@@ -682,17 +596,9 @@ $.mask.definitions['p'] = "[Mm]";
 				$('#sexo').val(persona.sexo);
 				$('#id').val(persona.id);
 				$('#id_per_det').val(0);
-
-
-				//$('#telefono').val(persona_detalle.telefono);
-				//$('#email').val(persona_detalle.email);
-
-				//$('#tipo_documento').attr("disabled",true);
-				//$('#numero_documento').attr("disabled",true);
 			}
 		}
 		);
-
 	}
 
 	function validarLiquidacion() {
@@ -719,7 +625,6 @@ $.mask.definitions['p'] = "[Mm]";
 
 	function obtenerVehiculo(id, obj) {
 
-		//$("#tblPlan tbody text-white").attr('class','bg-primary text-white');
 		if (obj != undefined) {
 			$("#tblSinReservaEstacionamiento tbody tr").each(function(ii, oo) {
 				var clase = $(this).attr("clase");
@@ -728,7 +633,7 @@ $.mask.definitions['p'] = "[Mm]";
 
 			$(obj).attr('class', 'bg-success text-white');
 		}
-		//$('#tblPlanDetalle tbody').html("");
+
 		$('#id_empresa').val(id);
 		var id_estacionamiento = $('#id_estacionamiento').val();
 		$.ajax({
@@ -761,11 +666,8 @@ $.mask.definitions['p'] = "[Mm]";
 					var dataTable = $('#tblPlanDetalle').dataTable();
 					dataTable.fnFilter(this.value);
 				});
-
 			}
-
 		});
-
 	}
 
 	function cargar_tipo_proveedor() {
@@ -865,9 +767,7 @@ $.mask.definitions['p'] = "[Mm]";
 				$('.loader').hide();
 
 			}
-
 		});
-
 	}
 
 	function obtenerDistritoNacimiento(){
@@ -898,9 +798,7 @@ $.mask.definitions['p'] = "[Mm]";
 				$('.loader').hide();
 
 			}
-
 		});
-
 	}
 
 	function obtenerProvinciaNacimientoEdit(idProvincia){
@@ -930,18 +828,12 @@ $.mask.definitions['p'] = "[Mm]";
 				});
 				$('#id_provincia_nacimiento').html(option);
 
-				//var option2 = "<option value=''>Seleccionar</option>";
-				//$('#id_distrito_nacimiento').html(option2);
-
 				$('#id_provincia_nacimiento').attr("disabled",false);
-				//$('#id_distrito_nacimiento').attr("disabled",false);
 
 				$('.loader').hide();
 
 			}
-
 		});
-
 	}
 
 	function obtenerDistritoNacimientoEdit(idProvincia,idDistrito){
@@ -979,36 +871,6 @@ $.mask.definitions['p'] = "[Mm]";
 
 	}
 
-	/*
-	$('#fecha_solicitud').datepicker({
-		autoclose: true,
-		dateFormat: 'dd-mm-yy',
-		changeMonth: true,
-		changeYear: true,
-		container: '#openOverlayOpc modal-body'
-	});
-	*/
-	/*
-	$('#fecha_solicitud').datepicker({
-		format: "dd/mm/yyyy",
-		startDate: "01-01-2015",
-		endDate: "01-01-2020",
-		todayBtn: "linked",
-		autoclose: true,
-		todayHighlight: true,
-		container: '#openOverlayOpc modal-body'
-	});
-	*/
-
-	/*
-	format: "dd/mm/yyyy",
-	startDate: "01-01-2015",
-	endDate: "01-01-2020",
-	todayBtn: "linked",
-	autoclose: true,
-	todayHighlight: true,
-	container: '#myModal modal-body'
-	*/
 </script>
 
 
@@ -1019,14 +881,6 @@ $.mask.definitions['p'] = "[Mm]";
 	</div>
 
 	<div>
-		<!--
-        <section class="content-header">
-          <h1>
-            <small style="font-size: 20px">Programados del Medicos del dia <?php //echo $fecha_atencion
-																			?></small>
-          </h1>
-        </section>
-		-->
 		<div class="justify-content-center">
 
 			<div class="card">
@@ -1038,7 +892,6 @@ $.mask.definitions['p'] = "[Mm]";
 				<div class="card-body">
 
 					<div class="row">
-						<!--aaaa-->
 						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding-top:5px;padding-bottom:20px">
 
 							<form method="post" action="#" enctype="multipart/form-data">
@@ -1264,211 +1117,169 @@ $.mask.definitions['p'] = "[Mm]";
 													<i class="fas fa-save" style="font-size:18px;"></i> Guardar
 												</button>
 											</div>
-
 										</div>
 									</div>
 								</div>
-
+							</div>
 						</div>
-
+						<!-- /.box -->
 					</div>
-					<!-- /.box -->
-
+					<!--/.col (left) -->
 				</div>
-				<!--/.col (left) -->
-
-
+				<!-- /.row -->
+				</section>
+				<!-- /.content -->
 			</div>
-			<!-- /.row -->
-			</section>
-			<!-- /.content -->
-		</div>
-		<!-- /.content-wrapper -->
+			<!-- /.content-wrapper -->
 
-		<script type="text/javascript">
-			$(document).ready(function() {
-				
-				/*$('#numero_documento').blur(function() {
-					var id = $('#id').val();
-					if (id == 0) {
-						validaDni(this.value);
-					}
-				});*/
+<script type="text/javascript">
+	$(document).ready(function() {
+		
+		$('#tblReservaEstacionamiento').DataTable({
+			"dom": '<"top">rt<"bottom"flpi><"clear">'
+		});
+		$("#system-search").keyup(function() {
+			var dataTable = $('#tblReservaEstacionamiento').dataTable();
+			dataTable.fnFilter(this.value);
+		});
 
-				$('#tblReservaEstacionamiento').DataTable({
-					"dom": '<"top">rt<"bottom"flpi><"clear">'
-				});
-				$("#system-search").keyup(function() {
-					var dataTable = $('#tblReservaEstacionamiento').dataTable();
-					dataTable.fnFilter(this.value);
-				});
+		$('#tblReservaEstacionamientoPreferente').DataTable({
+			"dom": '<"top">rt<"bottom"flpi><"clear">'
+		});
+		$("#system-searchp").keyup(function() {
+			var dataTable = $('#tblReservaEstacionamientoPreferente').dataTable();
+			dataTable.fnFilter(this.value);
+		});
 
-				$('#tblReservaEstacionamientoPreferente').DataTable({
-					"dom": '<"top">rt<"bottom"flpi><"clear">'
-				});
-				$("#system-searchp").keyup(function() {
-					var dataTable = $('#tblReservaEstacionamientoPreferente').dataTable();
-					dataTable.fnFilter(this.value);
-				});
-
-				$('#tblSinReservaEstacionamiento').DataTable({
-					"dom": '<"top">rt<"bottom"flpi><"clear">'
-				});
-				$("#system-search2").keyup(function() {
-					var dataTable = $('#tblSinReservaEstacionamiento').dataTable();
-					dataTable.fnFilter(this.value);
-				});
+		$('#tblSinReservaEstacionamiento').DataTable({
+			"dom": '<"top">rt<"bottom"flpi><"clear">'
+		});
+		$("#system-search2").keyup(function() {
+			var dataTable = $('#tblSinReservaEstacionamiento').dataTable();
+			dataTable.fnFilter(this.value);
+		});
 
 
-			});
-		</script>
+	});
+</script>
 
-		<script type="text/javascript">
-			$(document).ready(function() {
+<script type="text/javascript">
+	$(document).ready(function() {
 
-				$('#persona_').keyup(function() {
-					this.value = this.value.toLocaleUpperCase();
-				});
+		$('#persona_').keyup(function() {
+			this.value = this.value.toLocaleUpperCase();
+		});
 
-				$('#persona_').focusin(function() {
-					$('#persona_').select();
-				});
-				/*
-				$('#usuario_').autocomplete({
-					appendTo: "#usuario_busqueda",
-					source: function(request, response) {
-						$.ajax({
-						url: '/empresa/list_usuario/'+$('#usuario_').val(),
-						dataType: "json",
-						success: function(data){
-							var resp = $.map(data,function(obj){
-								var hash = {key: obj.id, value: obj.usuario};
-								return hash;
-							});
-							response(resp);
-						},
-						error: function() {
-						}
-					});
-					},
-					select: function (event, ui) {
-						$("#user_id").val(ui.item.key);
-					},
-						minLength: 2,
-						delay: 100
-					});
-				*/
+		$('#persona_').focusin(function() {
+			$('#persona_').select();
+		});
+		
+		$('#empresa_').keyup(function() {
+			this.value = this.value.toLocaleUpperCase();
+		});
 
-				$('#empresa_').keyup(function() {
-					this.value = this.value.toLocaleUpperCase();
-				});
+		$('#empresa_').focusin(function() {
+			$('#empresa_').select();
+		});
 
-				$('#empresa_').focusin(function() {
-					$('#empresa_').select();
-				});
-
-				$('#empresa_').autocomplete({
-					appendTo: "#empresa_busqueda",
-					source: function(request, response) {
-						$.ajax({
-							url: '/empresa/list_empresa/' + $('#empresa_').val(),
-							dataType: "json",
-							success: function(data) {
-								var resp = $.map(data, function(obj) {
-									var hash = {
-										key: obj.id,
-										value: obj.razon_social,
-										ruc: obj.ruc
-									};
-									return hash;
-								});
-								response(resp);
-							},
-							error: function() {}
+		$('#empresa_').autocomplete({
+			appendTo: "#empresa_busqueda",
+			source: function(request, response) {
+				$.ajax({
+					url: '/empresa/list_empresa/' + $('#empresa_').val(),
+					dataType: "json",
+					success: function(data) {
+						var resp = $.map(data, function(obj) {
+							var hash = {
+								key: obj.id,
+								value: obj.razon_social,
+								ruc: obj.ruc
+							};
+							return hash;
 						});
+						response(resp);
 					},
-					select: function(event, ui) {
-						$("#id_empresa").val(ui.item.key);
-					},
-					minLength: 1,
-					delay: 100
+					error: function() {}
 				});
+			},
+			select: function(event, ui) {
+				$("#id_empresa").val(ui.item.key);
+			},
+			minLength: 1,
+			delay: 100
+		});
 
-				$('#persona_').autocomplete({
-					appendTo: "#persona_busqueda",
-					source: function(request, response) {
-						$.ajax({
-							url: '/persona/list_persona/' + $('#persona_').val(),
-							dataType: "json",
-							success: function(data) {
-								var resp = $.map(data, function(obj) {
-									var hash = {
-										key: obj.id,
-										value: obj.persona
-									};
-									return hash;
-								});
-								response(resp);
-							},
-							error: function() {}
+		$('#persona_').autocomplete({
+			appendTo: "#persona_busqueda",
+			source: function(request, response) {
+				$.ajax({
+					url: '/persona/list_persona/' + $('#persona_').val(),
+					dataType: "json",
+					success: function(data) {
+						var resp = $.map(data, function(obj) {
+							var hash = {
+								key: obj.id,
+								value: obj.persona
+							};
+							return hash;
 						});
+						response(resp);
 					},
-					select: function(event, ui) {
-						$("#id_persona").val(ui.item.key);
-					},
-					minLength: 1,
-					delay: 100
+					error: function() {}
 				});
+			},
+			select: function(event, ui) {
+				$("#id_persona").val(ui.item.key);
+			},
+			minLength: 1,
+			delay: 100
+		});
+	});
 
+	function validaDni(dni) {
 
-			});
+		var numero_documento = $("#numero_documento").val();
+		var msg = "";
 
-			function validaDni(dni) {
+		if (msg != "") {
+			bootbox.alert(msg);
+			return false;
+		}
 
-				var numero_documento = $("#numero_documento").val();
-				var msg = "";
+		if (tipo_documento == "0" || numero_documento == "") {
+			bootbox.alert(msg);
+			return false;
+		}
 
-				if (msg != "") {
-					bootbox.alert(msg);
-					return false;
-				}
+		var settings = {
+			"url": "https://apiperu.dev/api/dni/" + dni,
+			"method": "GET",
+			"timeout": 0,
+			"headers": {
+				"Authorization": "Bearer 20b6666ddda099db4204cf53854f8ca04d950a4eead89029e77999b0726181cb"
+			},
+		};
 
-				if (tipo_documento == "0" || numero_documento == "") {
-					bootbox.alert(msg);
-					return false;
-				}
+		$.ajax(settings).done(function(response) {
+			console.log(response);
 
-				var settings = {
-					"url": "https://apiperu.dev/api/dni/" + dni,
-					"method": "GET",
-					"timeout": 0,
-					"headers": {
-						"Authorization": "Bearer 20b6666ddda099db4204cf53854f8ca04d950a4eead89029e77999b0726181cb"
-					},
-				};
+			if (response.success == true) {
 
-				$.ajax(settings).done(function(response) {
-					console.log(response);
+				var data = response.data;
 
-					if (response.success == true) {
+				$('#apellido_paterno').val('')
+				$('#apellido_materno').val('')
+				$('#nombre').val('')
 
-						var data = response.data;
+				$('#apellido_paterno').val(data.apellido_paterno);
+				$('#apellido_materno').val(data.apellido_materno);
+				$('#nombre').val(data.nombres);
 
-						$('#apellido_paterno').val('')
-						$('#apellido_materno').val('')
-						$('#nombre').val('')
-
-						$('#apellido_paterno').val(data.apellido_paterno);
-						$('#apellido_materno').val(data.apellido_materno);
-						$('#nombre').val(data.nombres);
-
-						//alert(data.nombre_o_razon_social);
-
-					} else {
-						Swal.fire("DNI Inv&aacute;lido. Revise el DNI digitado!");
-						return false;
-					}
-
-				});
+			} else {
+				Swal.fire("DNI Inv&aacute;lido. Revise el DNI digitado!");
+				return false;
 			}
-		</script>
+
+		});
+	}
+</script>

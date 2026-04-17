@@ -208,9 +208,7 @@ function obtenerEmpresa(){
 }
 
 function obtenerTitularActual(tipo_documento,numero_documento){
-		
-	//var tipo_documento = $("#tipo_documento_tit").val();
-	//var numero_documento = $("#numero_documento_tit").val();
+	
 	var msg = "";
 	
 	if (msg != "") {
@@ -218,7 +216,6 @@ function obtenerTitularActual(tipo_documento,numero_documento){
 		return false;
 	}
 	
-	//$('#empresa_id').val("");
 	$('#titular_id').val("");
 	
 	$.ajax({
@@ -233,9 +230,7 @@ function obtenerTitularActual(tipo_documento,numero_documento){
 			alert("Persona no encontrada en la Base de Datos.");
 			$('#personaTitularModal').modal('show');
 		}
-		
 	});
-	
 }
 
 function obtenerTitular(){
@@ -249,7 +244,6 @@ function obtenerTitular(){
 		return false;
 	}
 	
-	//$('#empresa_id').val("");
 	$('#titular_id').val("");
 	
 	$.ajax({
@@ -294,42 +288,6 @@ function obtenerPlanDetalle(){
 	
 }
 
-/*
-function cargarAlquiler(){
-    
-    var empresa_id = $('#empresa_id').val();
-	if(empresa_id == "")empresa_id=0;
-	
-    $("#tblAlquiler tbody").html("");
-	$.ajax({
-			url: "/alquiler/obtener_alquiler/"+empresa_id,
-			type: "GET",
-			success: function (result) {  
-					$("#tblAlquiler tbody").html(result);
-					//$('#tblAlquiler').dataTable();
-			}
-	});
-
-}
-
-
-function cargarDevolucion(){
-    
-    
-    var numero_documento = $("#numero_documento").val();
-    $("#tblPago tbody").html("");
-	$.ajax({
-			url: "/alquiler/obtener_devolucion/"+numero_documento,
-			type: "GET",
-			success: function (result) {  
-					$("#tblDevolucion tbody").html(result);
-			}
-	});
-
-}
-*/
-
-
 $('#modalEmpresaSaveBtn').click(function (e) {
 	e.preventDefault();
 	$(this).html('Enviando datos..');
@@ -365,29 +323,29 @@ $('#modalEmpresaTitularSaveBtn').click(function (e) {
 	$(this).html('Enviando datos..');
 
 	$.ajax({
-	  data: $('#modalEmpresaTitularForm').serialize(),
-	  url: "/afiliacion/nueva_inscripcion_ajax",
-	  type: "POST",
-	  dataType: 'json',
-	  success: function (data) {
+		data: $('#modalEmpresaTitularForm').serialize(),
+		url: "/afiliacion/nueva_inscripcion_ajax",
+		type: "POST",
+		dataType: 'json',
+		success: function (data) {
 
-		  $('#modalEmpresaTitularForm #modalEmpresaForm').trigger("reset");
-		  $('#personaTitularModal').modal('hide');
-		  $('#numero_documento_tit').val(data.numero_documento);
-		  $('#nombre_titular').val(data.nombre_apellido);
+			$('#modalEmpresaTitularForm #modalEmpresaForm').trigger("reset");
+			$('#personaTitularModal').modal('hide');
+			$('#numero_documento_tit').val(data.numero_documento);
+			$('#nombre_titular').val(data.nombre_apellido);
 
-		  alert("La persona ha sido ingresada correctamente!");
+			alert("La persona ha sido ingresada correctamente!");
 
-	  },
-	  error: function(data) {
-	mensaje = "Revisar el formulario:\n\n";
-	$.each( data["responseJSON"].errors, function( key, value ) {
-	  mensaje += value +"\n";
+	  	},
+	  	error: function(data) {
+			mensaje = "Revisar el formulario:\n\n";
+			$.each( data["responseJSON"].errors, function( key, value ) {
+			mensaje += value +"\n";
+			});
+			$("#modalEmpresaTitularForm  #modalEmpresaSaveBtn").html("Grabar");
+			alert(mensaje);
+		}
 	});
-	$("#modalEmpresaTitularForm  #modalEmpresaSaveBtn").html("Grabar");
-	alert(mensaje);
-  }
-  });
 });
 
 
@@ -424,6 +382,7 @@ function datatablenew(){
 			var tipo_empresa = $('#tipo_empresa_bus').val();
 			var razon_social = $('#razon_social').val();
             var ruc = $('#ruc').val();
+			var agente_retenedor = $('#agente_retenedor_bus').val();
 			var estado = $('#estado').val();
 			var _token = $('#_token').val();
             oSettings.jqXHR = $.ajax({
@@ -432,7 +391,7 @@ function datatablenew(){
                 "type": "POST",
                 "url": sSource,
                 "data":{NumeroPagina:iNroPagina,NumeroRegistros:iCantMostrar,
-						tipo_empresa:tipo_empresa,razon_social:razon_social,ruc:ruc,estado:estado,
+						tipo_empresa:tipo_empresa,razon_social:razon_social,ruc:ruc,agente_retenedor:agente_retenedor,estado:estado,
 						_token:_token
                        },
                 "success": function (result) {
@@ -497,13 +456,22 @@ function datatablenew(){
 				},
 				{
 					"mRender": function (data, type, row) {
+						var agente_retenedor = "";
+						if(row.agente_retenedor!= null)agente_retenedor = row.agente_retenedor;
+						return agente_retenedor;
+					},
+					"bSortable": false,
+					"aTargets": [5]
+				},
+				{
+					"mRender": function (data, type, row) {
 						var nombre_estado = "";
 						if(row.estado == 1)nombre_estado = "Activo";
 						if(row.estado == 0)nombre_estado = "Eliminado";
 						return nombre_estado;
 					},
 					"bSortable": false,
-					"aTargets": [5]
+					"aTargets": [6]
 				},
 				{
 					"mRender": function (data, type, row) {
@@ -526,7 +494,7 @@ function datatablenew(){
 						return html;
 					},
 					"bSortable": false,
-					"aTargets": [6],
+					"aTargets": [7],
 				},
             ]
 		}

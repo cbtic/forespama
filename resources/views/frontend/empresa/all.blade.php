@@ -121,7 +121,7 @@
     -->
 
 <div class="loader"></div>
-
+@section('content')
     <div class="justify-content-center">
         
         <div class="card">
@@ -150,48 +150,58 @@
 				<form class="form-horizontal" method="post" action="{{ route('frontend.empresa.send')}}" id="frmAfiliacion" autocomplete="off">
 				<input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
 				
-				<div class="row" style="padding:20px 20px 0px 20px;">
-                    <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
-						<div class="row">
-				
-                            <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-                                <select name="tipo_empresa_bus" id="tipo_empresa_bus" class="form-control form-control-sm filtro-select">
-                                    <option value="">--Seleccionar Tipo Empresa--</option>
-                                    <?php
-                                    foreach ($tipo_empresa as $row){?>
-                                        <option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
-                                        <?php 
-                                    }
-                                    ?>
-                                </select>
-                            </div>
-                            <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-                                <input class="form-control form-control-sm filtro-input" id="ruc" name="ruc" placeholder="Ruc">
-                            </div>
-                            <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
-                                <input class="form-control form-control-sm filtro-input" id="razon_social" name="razon_social" placeholder="Razon Social">
-                            </div>
-                            <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-                                <select name="estado" id="estado" class="form-control form-control-sm filtro-select">
-                                    <option value="">Todos</option>
-                                    <option value="1" selected="selected">Activo</option>
-                                    <option value="0">Eliminado</option>
-                                </select>
+				<div class="bg-light p-3 rounded mb-3 border">
+                    <div class="row">
+                        <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
+                            <div class="row">
+                            
+                                <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+                                    <select name="tipo_empresa_bus" id="tipo_empresa_bus" class="form-control form-control-sm filtro-select">
+                                        <option value="">--Seleccionar Tipo Empresa--</option>
+                                        <?php
+                                        foreach ($tipo_empresa as $row){?>
+                                            <option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
+                                            <?php 
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
+                                <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+                                    <input class="form-control form-control-sm filtro-input" id="ruc" name="ruc" placeholder="Ruc">
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                                    <input class="form-control form-control-sm filtro-input" id="razon_social" name="razon_social" placeholder="Razon Social">
+                                </div>
+                                <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+                                    <select name="agente_retenedor_bus" id="agente_retenedor_bus" class="form-control form-control-sm filtro-select">
+                                        <option value="" selected="selected">--Seleccione Agente Retenedor--</option>
+                                        <option value="1">SI</option>
+                                        <option value="0">NO</option>
+                                        <option value="2">Sin Asignar</option>
+                                    </select>
+                                </div>
+                                <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+                                    <select name="estado" id="estado" class="form-control form-control-sm filtro-select">
+                                        <option value="">Todos</option>
+                                        <option value="1" selected="selected">Activo</option>
+                                        <option value="0">Eliminado</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
-					</div>
-					
-					<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-						<div class="row">
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding-right:0px">
-                                <!--<input class="btn btn-warning pull-rigth" value="Buscar" type="button" id="btnBuscar" />-->
-                                <button type="button" id="btnBuscar" class="btn btn-sm btn-warning pull-rigth icono-botones2" style="margin-left:10px">
-									<i class="fas fa-search" style="font-size:18px;"></i> Buscar
-								</button>
-                                <!--<input class="btn btn-success pull-rigth" value="Nuevo" type="button" id="btnNuevo" style="margin-left:15px" />-->
-                                <button type="button" id="btnNuevo" class="btn btn-sm btn-success icono-botones2" style="margin-left:10px">
-									<i class="fas fa-plus-circle" style="font-size:18px;"></i> Nuevo
-								</button>
+    
+                        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                            <div class="row">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding-right:0px">
+                                    <!--<input class="btn btn-warning pull-rigth" value="Buscar" type="button" id="btnBuscar" />-->
+                                    <button type="button" id="btnBuscar" class="btn btn-sm btn-warning pull-rigth icono-botones2" style="margin-left:10px">
+                                        <i class="fas fa-search" style="font-size:18px;"></i> Buscar
+                                    </button>
+                                    <!--<input class="btn btn-success pull-rigth" value="Nuevo" type="button" id="btnNuevo" style="margin-left:15px" />-->
+                                    <button type="button" id="btnNuevo" class="btn btn-sm btn-success icono-botones2" style="margin-left:10px">
+                                        <i class="fas fa-plus-circle" style="font-size:18px;"></i> Nuevo
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -206,10 +216,11 @@
                             <th>Tipo Empresa</th>
                             <th>Ruc</th>
                             <th>Razon Social</th>
-							<th>Direcci&oacute;n</th>
+                            <th>Direcci&oacute;n</th>
                             <th>Email</th>
+                            <th>Agente Retenedor</th>
                             <th>Estado</th>
-							<th>Acciones</th>
+                            <th>Acciones</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -217,13 +228,10 @@
                     </table>
                 </div><!--table-responsive-->
                 </form>
-
-
-
                 </div><!--card-body-->
             </div><!--card-->
-        <!--</div>--><!--col-->
-    <!--</div>--><!--row-->
+<!--</div>--><!--col-->
+<!--</div>--><!--row-->
 
 @endsection
 
