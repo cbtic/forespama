@@ -48,6 +48,12 @@ class Producto extends Model
 
     }
 
+    public function listar_reporte_productos_ajax($p){
+
+        return $this->readFuntionPostgres('sp_listar_reporte_productos_paginado',$p);
+
+    }
+
     public function readFuntionPostgres($function, $parameters = null){
 
         $_parameters = '';

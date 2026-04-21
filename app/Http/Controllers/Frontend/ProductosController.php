@@ -54,6 +54,8 @@ class ProductosController extends Controller
 		$this->middleware('can:Productos')->only(['create']);
 		$this->middleware('can:Precio Productos')->only(['create_productos_precio']);
 		$this->middleware('can:Chopeo Productos')->only(['create_chopeo_producto']);
+		$this->middleware('can:Reporte Productos')->only(['create_reporte_productos']);
+		$this->middleware('can:Reporte Productos')->only(['exportar_reporte_productos']);
 	}
 
     public function create(){
@@ -923,6 +925,66 @@ class ProductosController extends Controller
 		
 		echo json_encode($producto_acerrado);
 	}
+
+    public function create_reporte_productos(){
+		
+		return view('frontend.productos.create_reporte_productos');
+
+	}
+
+    public function listar_reporte_productos_ajax(Request $request){
+        
+		$producto_model = new Producto;
+		$p[]=$request->denominacion;
+        $p[]=$request->codigo;
+        $p[]=1;
+		$p[]=$request->NumeroPagina;
+		$p[]=$request->NumeroRegistros;
+		$data = $producto_model->listar_reporte_productos_ajax($p);
+		$iTotalDisplayRecords = isset($data[0]->totalrows)?$data[0]->totalrows:0;
+
+		$result["PageStart"] = $request->NumeroPagina;
+		$result["pageSize"] = $request->NumeroRegistros;
+		$result["SearchText"] = "";
+		$result["ShowChildren"] = true;
+		$result["iTotalRecords"] = $iTotalDisplayRecords;
+		$result["iTotalDisplayRecords"] = $iTotalDisplayRecords;
+		$result["aaData"] = $data;
+
+        echo json_encode($result);
+
+	}
+
+    public function exportar_reporte_productos($codigo, $denominacion) {
+
+        if($codigo=="0")$codigo = "";
+        if($denominacion=="0")$denominacion = "";
+
+        $producto_model = new Producto;
+		$p[]=$denominacion;
+        $p[]=$codigo;
+        $p[]=1;
+		$p[]=1;
+		$p[]=10000;
+		$data = $producto_model->listar_reporte_productos_ajax($p);
+
+		$variable = [];
+		$n = 1;
+
+		array_push($variable, array("N°","Id","Denominación","Código","Unidad Producto","Categoria","Sub Categoria","Modelo","Packet","Medida","Peso","Estado"));
+		
+		foreach ($data as $r) {
+
+            if($r->estado==1){$estado='ACTIVO';}
+            if($r->estado==0){$estado='INACTIVO';}
+
+			array_push($variable, array($n++,$r->id, $r->denominacion, $r->codigo, $r->unidad, $r->categoria, $r->sub_categoria, $r->modelo, $r->packet, $r->medida, $r->peso, $estado));
+		}
+		
+		$export = new InvoicesExport2([$variable]);
+		return Excel::download($export, 'Lista_reporte_productos.xlsx');
+		
+    }
 }
 
 class InvoicesExport implements FromArray, WithHeadings, WithStyles
@@ -988,6 +1050,74 @@ class InvoicesExport implements FromArray, WithHeadings, WithStyles
 		->setFormatCode(\PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_NUMBER_00);*/ //SIRVE PARA PONER 2 DECIMALES A ESA COLUMNA
         
         foreach (range('A', 'U') as $col) {
+            $sheet->getColumnDimension($col)->setAutoSize(true);
+        }
+    }
+}
+
+class InvoicesExport2 implements FromArray, WithHeadings, WithStyles
+{
+	protected $invoices;
+
+	public function __construct(array $invoices)
+	{
+		$this->invoices = $invoices;
+	}
+
+	public function array(): array
+	{
+		return $this->invoices;
+	}
+
+    public function headings(): array
+    {
+        return ["N°","Id","Denominación","Código","Unidad Producto","Categoria","Sub Categoria","Modelo","Packet","Medida","Peso","Estado"];
+    }
+
+	public function styles(Worksheet $sheet)
+    {
+
+		$sheet->mergeCells('A1:L1');
+
+        $sheet->setCellValue('A1', "REPORTE DE PRODUCTOS - FORESPAMA");
+        $sheet->getStyle('A1:L1')->applyFromArray([
+            'font' => [
+                'bold' => true,
+                'color' => ['rgb' => 'FFFFFF'],
+            ],
+            'fill' => [
+                'fillType' => Fill::FILL_SOLID,
+                'startColor' => ['rgb' => '246257'],
+            ],
+            'alignment' => [
+                'horizontal' => Alignment::HORIZONTAL_CENTER,
+            ],
+        ]);
+
+		$sheet->getStyle('A1')->getAlignment()->setWrapText(true);
+		$sheet->getRowDimension(1)->setRowHeight(30);
+
+        $sheet->getStyle('A2:L2')->applyFromArray([
+            'font' => [
+                'bold' => true,
+                'color' => ['rgb' => '000000'],
+            ],
+            'fill' => [
+                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                'startColor' => ['rgb' => '2EB85C'],
+            ],
+			'alignment' => [
+			'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+    		],
+        ]);
+
+		$sheet->fromArray($this->headings(), NULL, 'A2');
+
+		/*$sheet->getStyle('L3:L'.$sheet->getHighestRow())
+		->getNumberFormat()
+		->setFormatCode(\PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_NUMBER_00);*/ //SIRVE PARA PONER 2 DECIMALES A ESA COLUMNA
+        
+        foreach (range('A', 'L') as $col) {
             $sheet->getColumnDimension($col)->setAutoSize(true);
         }
     }

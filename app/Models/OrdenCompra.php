@@ -34,6 +34,12 @@ class OrdenCompra extends Model
 
     }
 
+    public function listar_reporte_comercializacion_retail_ajax($p){
+
+        return $this->readFuntionPostgres('sp_listar_reporte_comercializacion_retail_paginado',$p);
+
+    }
+
     public function listar_reporte_comercializacion_tienda_ajax($p){
 
         return $this->readFuntionPostgres('sp_listar_reporte_comercializacion_tienda_paginado',$p);

@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION public.sp_listar_empresa_paginado(p_tipo_empresa character varying, p_razon_social character varying, p_ruc character varying, p_estado character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
+CREATE OR REPLACE FUNCTION public.sp_listar_empresa_paginado(p_tipo_empresa character varying, p_razon_social character varying, p_ruc character varying, p_agente_retenedor character varying, p_estado character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
  RETURNS refcursor
  LANGUAGE plpgsql
 AS $function$
@@ -22,7 +22,12 @@ Begin
 	concat_ws('' | '',
         case when e.cliente = ''1'' then ''CLIENTE'' end,
         case when e.proveedor = ''1'' then ''PROVEEDOR'' end,
-        case when e.transporte = ''1'' then ''TRANSPORTE'' end) tipo_empresa ';
+        case when e.transporte = ''1'' then ''TRANSPORTE'' end) tipo_empresa,
+	case 
+		when e.agente_retenedor = ''1'' then ''SI''
+		when e.agente_retenedor = ''0'' then ''NO''
+		when e.agente_retenedor is null then ''SIN ASIGNAR''
+	end agente_retenedor ';
 
 	v_tabla='from empresas e ';
 	
@@ -44,6 +49,15 @@ Begin
 		End If;
 	End If;
 	
+	If p_agente_retenedor<>'' Then
+		if p_agente_retenedor<>'2' Then
+	 		v_where:=v_where||'And e.agente_retenedor = '''||p_agente_retenedor||''' ';
+		End If;
+		If p_agente_retenedor='2' Then
+	 		v_where:=v_where||'And e.agente_retenedor is null ';
+		End If;
+	End If;
+
 	If p_razon_social<>'' Then
 	 v_where:=v_where||'And e.razon_social ilike ''%'||p_razon_social||'%'' ';
 	End If;

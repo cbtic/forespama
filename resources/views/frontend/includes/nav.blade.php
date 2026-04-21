@@ -449,7 +449,7 @@
 					
 					@endif
 					
-					@if(Gate::check('Reporte Comercializacion') || Gate::check('Reporte Comercializacion Tienda') || Gate::check('Reporte Pedidos Tienda') || Gate::check('Reporte Comercializacion General') || Gate::check('Reporte Autorizacion Pedidos') || Gate::check('Reporte Comercializacion Sin IGV'))
+					@if(Gate::check('Reporte Comercializacion') || Gate::check('Reporte Comercializacion Retail') || Gate::check('Reporte Comercializacion Tienda') || Gate::check('Reporte Pedidos Tienda') || Gate::check('Reporte Comercializacion General') || Gate::check('Reporte Autorizacion Pedidos') || Gate::check('Reporte Comercializacion Sin IGV') || Gate::check('Reporte Productos'))
 					
 						<li class="nav-item dropdown">
 							<a href="#" class="nav-link dropdown-toggle" id="navbarDropdownPrueba" data-toggle="dropdown"
@@ -459,6 +459,10 @@
 
 								@can('Reporte Comercializacion')
 									<x-utils.link :href="route('frontend.orden_compra.create_reporte_comercializacion')" class="dropdown-item" :text="__('Reporte de Comercializacion')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+								@endif
+
+								@can('Reporte Comercializacion Retail')
+									<x-utils.link :href="route('frontend.orden_compra.create_reporte_comercializacion_retail')" class="dropdown-item" :text="__('Reporte de Comercializacion - Retail')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
 								@endif
 
 								@can('Reporte Comercializacion Tienda')
@@ -479,6 +483,10 @@
 
 								@can('Reporte Autorizacion Pedidos')
 									<x-utils.link :href="route('frontend.orden_compra.create_reporte_autorizacion_pedido')" class="dropdown-item" :text="__('Reporte Autorizacion Pedidos')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+								@endif
+
+								@can('Reporte Productos')
+									<x-utils.link :href="route('frontend.productos.create_reporte_productos')" class="dropdown-item" :text="__('Reporte Productos')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
 								@endif
 
 							</div>

@@ -245,6 +245,10 @@ Route::get('productos/modal_chopeo_producto/{id}', [ProductosController::class, 
 Route::post('productos/send_chopeo_producto', [ProductosController::class, 'send_chopeo_producto'])->name('productos.send_chopeo_producto');
 Route::get('test-vision', [App\Http\Controllers\Frontend\ProductosController::class, 'testVision']);
 
+Route::get('productos/create_reporte_productos', [ProductosController::class, 'create_reporte_productos'])->name('productos.create_reporte_productos');
+Route::post('productos/listar_reporte_productos_ajax', [ProductosController::class, 'listar_reporte_productos_ajax'])->name('productos.listar_reporte_productos_ajax');
+Route::get('productos/exportar_reporte_productos/{codigo}/{denominacion}', [ProductosController::class, 'exportar_reporte_productos'])->name('productos.exportar_reporte_productos');
+
 Route::get('productos', 'App\Http\Controllers\ProductosController@index')->name('productos.index');
 Route::post('productos', 'App\Http\Controllers\ProductosController@store')->name('productos.store');
 Route::get('productos/create', 'App\Http\Controllers\ProductosController@create')->name('productos.create');
@@ -481,7 +485,6 @@ Route::get('orden_compra/obtener_orden_compra_persona_id/{id}', [OrdenCompraCont
 
 Route::get('orden_compra/obtener_salida_prod_id/{id}', [OrdenCompraController::class, 'obtener_salida_prod_id'])->name('orden_compra.obtener_salida_prod_id');
 Route::get('orden_compra/listar_salida_prod_det/{id}/{emp}', [OrdenCompraController::class, 'listar_salida_prod_det'])->name('orden_compra.listar_salida_prod_det');
-
 
 Route::get('kardex/create', [KardexController::class, 'create'])->name('kardex.create');
 Route::post('kardex/listar_kardex_ajax', [KardexController::class, 'listar_kardex_ajax'])->name('kardex.listar_kardex_ajax');
@@ -954,4 +957,9 @@ Route::post('orden_compra/listar_reporte_comercializacion_sin_igv_ajax', [OrdenC
 Route::get('orden_compra/exportar_reporte_comercializacion_sin_igv/{empresa_compra}/{fecha_inicio}/{fecha_fin}/{vendedor}/{canal}/{tipo_producto}', [OrdenCompraController::class, 'exportar_reporte_comercializacion_sin_igv'])->name('orden_compra.exportar_reporte_comercializacion_sin_igv');
 
 Route::get('entrada_productos/exportar_listar_entrada_salida/{tipo_movimiento}/{tipo_documento}/{unidad_origen}/{almacen_destino}/{proveedor}/{numero_comprobante}/{situacion}/{fecha_inicio}/{fecha_fin}/{estado}', [EntradaProductosController::class, 'exportar_listar_entrada_salida'])->name('entrada_productos.exportar_listar_entrada_salida');
+
+Route::get('orden_compra/create_reporte_comercializacion_retail', [OrdenCompraController::class, 'create_reporte_comercializacion_retail'])->name('orden_compra.create_reporte_comercializacion_retail');
+Route::get('orden_compra/exportar_reporte_comercializacion_retail/{empresa_compra}/{fecha_inicio}/{fecha_fin}/{fecha_inicio_facturado}/{fecha_fin_facturado}/{numero_orden_compra_cliente}/{situacion}/{codigo_producto}/{producto}/{vendedor}/{estado_pedido}/{tipo_producto}/{canal}', [OrdenCompraController::class, 'exportar_reporte_comercializacion_retail'])->name('orden_compra.exportar_reporte_comercializacion_retail');
+Route::post('orden_compra/listar_reporte_comercializacion_retail_ajax', [OrdenCompraController::class, 'listar_reporte_comercializacion_retail_ajax'])->name('orden_compra.listar_reporte_comercializacion_retail_ajax');
+
 
