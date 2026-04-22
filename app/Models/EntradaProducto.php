@@ -39,6 +39,12 @@ class EntradaProducto extends Model
 
     }
 
+    public function listar_entrada_producto_detalles_ajax($p){
+
+        return $this->readFuntionPostgres('sp_listar_entrada_producto_detalle_paginado',$p);
+
+    }
+
     public function readFuntionPostgres($function, $parameters = null){
 
         $_parameters = '';

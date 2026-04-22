@@ -441,6 +441,9 @@ label.form-control-sm{
 											<button id="btnDescargar" type="button" class="btn btn-sm btn-secondary pull-rigth icono-botones2" style="margin-left:10px;">
 												<i class="fas fa-download" style="font-size:18px;"></i> Excel
 											</button>
+											<button id="btnDescargarDetalle" type="button" class="btn btn-sm btn-secondary pull-rigth icono-botones2" style="margin-left:10px;">
+												<i class="fas fa-download" style="font-size:18px;"></i> Excel Detallado
+											</button>
 										</div>
 									</div>
 								</div>

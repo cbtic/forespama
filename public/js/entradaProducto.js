@@ -89,6 +89,11 @@ $(document).ready(function () {
 
 	});
 
+	$('#btnDescargarDetalle').on('click', function () {
+		DescargarArchivoDetalleExcel()
+
+	});
+
 });
 
 function datatablenew(){
@@ -404,4 +409,31 @@ function DescargarArchivosExcel(){
 	if (estado == "")estado = 0;
 
 	location.href = '/entrada_productos/exportar_listar_entrada_salida/'+tipo_movimiento+'/'+tipo_documento+'/'+unidad_origen+'/'+almacen_destino+'/'+proveedor+'/'+numero_comprobante+'/'+situacion+'/'+fecha_inicio+'/'+fecha_fin+'/'+estado;
+}
+
+function DescargarArchivoDetalleExcel(){
+	
+	var tipo_movimiento = $('#tipo_movimiento_bus').val();
+	var tipo_documento = $('#tipo_documento_bus').val();
+	var unidad_origen = $('#unidad_origen_bus').val();
+	var almacen_destino = $('#almacen_destino_bus').val();
+	var proveedor = $('#proveedor_bus').val();
+	var numero_comprobante = $('#numero_comprobante_bus').val();
+	var situacion = $('#situacion_bus').val();
+	var fecha_inicio = $('#fecha_inicio_bus').val();
+	var fecha_fin = $('#fecha_fin_bus').val();
+	var estado = $('#estado_bus').val();
+
+	if (tipo_movimiento == "")tipo_movimiento = 0;
+	if (tipo_documento == "")tipo_documento = 0;
+	if (unidad_origen == "")unidad_origen = 0;
+	if (almacen_destino == "")almacen_destino = 0;
+	if (proveedor == "")proveedor = 0;
+	if (numero_comprobante == "")numero_comprobante = "0";
+	if (situacion == "")situacion = 0;
+	if (fecha_inicio == "")fecha_inicio = "0";
+	if (fecha_fin == "")fecha_fin = "0";
+	if (estado == "")estado = 0;
+
+	location.href = '/entrada_productos/exportar_listar_entrada_salida_detalle/'+tipo_movimiento+'/'+tipo_documento+'/'+unidad_origen+'/'+almacen_destino+'/'+proveedor+'/'+numero_comprobante+'/'+situacion+'/'+fecha_inicio+'/'+fecha_fin+'/'+estado;
 }
