@@ -290,12 +290,12 @@ label.form-control-sm{
 
 @extends('frontend.layouts.app')
 
-@section('title', __('Ajuste de Stock'))
+@section('title', __('Ingreso Salida B'))
 
 @section('breadcrumb')
 <ol class="breadcrumb" style="padding-left:130px;margin-top:0px;background-color:#283659">
     <li class="breadcrumb-item text-primary">Inicio</li>
-    <li class="breadcrumb-item active">Modulo de Ajuste de Stock</li>
+    <li class="breadcrumb-item active">Modulo de Ingresos y Salidas B</li>
     </li>
 </ol>
 
@@ -321,12 +321,12 @@ label.form-control-sm{
 
         <div class="card-body">
 
-            <form class="form-horizontal" method="post" action="" id="frmAjusteStock" autocomplete="off" enctype="multipart/form-data">
+            <form class="form-horizontal" method="post" action="" id="frmIngresoSalidaB" autocomplete="off" enctype="multipart/form-data">
 				
             <div class="row">
                 <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12" style="margin-top:15px">
                     <h4 class="card-title mb-0 text-primary" style="font-size:22px">
-                        M&oacute;dulo de Ajuste de Stock
+                        M&oacute;dulo de Ingresos y Salidas B
                     </h4>
                 </div>
             </div>
@@ -352,6 +352,18 @@ label.form-control-sm{
                             </select>
                         </div>
 
+                        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                            <select name="empresa_bus" id="empresa_bus" class="form-control form-control-sm filtro-select">
+                                <option value="">--Seleccionar Empresa Compra--</option>
+                                <?php
+                                foreach ($proveedor as $row){?>
+                                    <option value="<?php echo $row->id ?>"><?php echo $row->razon_social ?></option>
+                                    <?php 
+                                }
+                                ?>
+                            </select>
+                        </div>
+
                         <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
                             <input id="fecha_inicio_bus" name="fecha_inicio_bus" on class="form-control form-control-sm"  placeholder="Fecha Inicio">
                         </div>
@@ -361,19 +373,7 @@ label.form-control-sm{
                         </div>
 
                         <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
-                            <input id="numero_ajuste_bus" name="numero_ajuste_bus" on class="form-control form-control-sm"  placeholder="N&uacute;mero Operaci&oacute;n">
-                        </div>
-
-                        <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-                            <select name="almacen_bus" id="almacen_bus" class="form-control form-control-sm">
-                                <option value="">--Seleccionar Almacen--</option>
-                                <?php
-                                foreach ($almacen_destino as $row){?>
-                                    <option value="<?php echo $row->id ?>"><?php echo $row->denominacion ?></option>
-                                    <?php 
-                                }
-                                ?>
-                            </select>
+                            <input id="numero_ingreso_salida_bus" name="numero_ingreso_salida_bus" on class="form-control form-control-sm"  placeholder="N&uacute;mero Operaci&oacute;n">
                         </div>
 
                         <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
@@ -384,29 +384,27 @@ label.form-control-sm{
                             </select>
                         </div>
                         
-                        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12" style="padding-right:0px">
+                        <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12" style="padding-right:0px">
                             <input class="btn btn-warning pull-rigth" value="Buscar" type="button" id="btnBuscar" />
-                            @hasanyrole('Administrator|Administrador Ajuste Stock')
                             <input class="btn btn-success pull-rigth" value="Nuevo" type="button" id="btnNuevo" style="margin-left:15px" />
-                            @endhasanyrole
-                            <button id="btnDescargarDetalle" type="button" class="btn btn-sm btn-secondary pull-rigth icono-botones2" style="margin-left:10px;">
+                            <!--<button id="btnDescargarDetalle" type="button" class="btn btn-sm btn-secondary pull-rigth icono-botones2" style="margin-left:10px;">
                                 <i class="fas fa-download" style="font-size:18px;"></i> Excel Detallado
-                            </button>
+                            </button>-->
                         </div>
                     </div>
 				
                     <div class="card-body">
 
                         <div class="table-responsive">
-                        <table id="tblAjusteStock" class="table table-hover table-sm">
+                        <table id="tblIngresoSalidaB" class="table table-hover table-sm">
                             <thead>
                             <tr style="font-size:13px">
                                 <th>Id</th>
                                 <th>Tipo Documento</th>
+                                <th>Empresa</th>
                                 <th>Fecha</th>
-                                <th>N&uacute;mero Ingreso</th>
-                                <th>Almacen Destino</th>
-                                <th>Usuario Registra</th>
+                                <th>N&uacute;mero Operaci&oacute;n</th>
+                                <th>Almacen</th>
                                 <th>Estado</th>
                                 <th>Acciones</th>
                             </tr>
@@ -439,6 +437,6 @@ label.form-control-sm{
 
 </script>
 
-<script src="{{ asset('js/ajusteStock.js') }}"></script>
+<script src="{{ asset('js/IngresoSalidaSecundario.js') }}"></script>
 
 @endpush

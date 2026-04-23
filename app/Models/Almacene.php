@@ -87,8 +87,9 @@ class Almacene extends Model
         inner join almacen_usuarios au on au.id_almacen = a.id 
         inner join users u on au.id_user = u.id 
         where u.id = '".$id."'
-        and au.estado='1'
-        and a.estado='1'
+        and au.estado = '1'
+        and a.estado = '1'
+        and a.id <> '23'
         order by 1 asc";
 
 		$data = DB::select($cad);
@@ -98,7 +99,19 @@ class Almacene extends Model
     function getAlmacenAll(){
 
         $cad = "select * from almacenes a 
-        where a.estado='1'
+        where a.estado = '1'
+        and a.id <> '23'
+        order by 1 asc";
+
+		$data = DB::select($cad);
+        return $data;
+    }
+
+    function getAlmacenB(){
+
+        $cad = "select * from almacenes a 
+        where a.estado = '1'
+        and a.id = '23'
         order by 1 asc";
 
 		$data = DB::select($cad);
@@ -110,6 +123,7 @@ class Almacene extends Model
         $cad = "select * from almacenes a
         where a.id='".$id."'
         and a.estado='1'
+        and a.id <> '23'
         order by 1 asc";
 
 		$data = DB::select($cad);

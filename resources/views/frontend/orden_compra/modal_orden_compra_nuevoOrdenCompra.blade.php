@@ -614,6 +614,7 @@ function calcularIGV(subTotal, igvInputId, totalInputId) {
 }
 
 function actualizarTotalGeneral() {
+    
     var sub_totalGeneral = 0;
     var igv_totalGeneral = 0;
     var totalGeneral = 0;

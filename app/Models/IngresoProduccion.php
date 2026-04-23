@@ -50,6 +50,15 @@ class IngresoProduccion extends Model
         return $data;
     }
 
+    function getCodigoIngresoProduccion_(){
+
+        $cad = "select lpad(coalesce(max(ip.codigo::int) + 1, 1)::varchar, 6, '0') codigo
+        from ingreso_produccion ip ";
+
+		$data = DB::select($cad);
+        return $data;
+    }
+
     function getDetalleIngresoProduccionById($id){
 
         $cad = "select ipd.id,  ROW_NUMBER() OVER (PARTITION BY ipd.id_ingreso_produccion) AS row_num, p.numero_serie item, ipd.id_producto, p.codigo, ipd.id_marca, ipd.id_unidad_medida, 

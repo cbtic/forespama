@@ -158,9 +158,9 @@ $(document).ready(function() {
         language: 'es'
     });
 
-    if($('#id').val()==0){
+    /*if($('#id').val()==0){
         obtenerCodigo();
-    }
+    }*/
 
     if($('#id').val()>0){
         obtenerUnidadTrabajo();
@@ -197,7 +197,7 @@ $(document).ready(function() {
 
 });
 
-function obtenerCodigo(){
+/*function obtenerCodigo(){
 
     var tipo_documento = $('#tipo_documento').val();
 
@@ -213,7 +213,7 @@ function obtenerCodigo(){
         }
     });
 
-}
+}*/
 
 function obtenerUnidadTrabajo(){
     
@@ -593,7 +593,7 @@ function activarObservacion() {
                             Tipo Documento
                         </div>
                         <div class="col-lg-2">
-                            <select name="tipo_documento" id="tipo_documento" class="form-control form-control-sm" onchange="obtenerCodigo()">
+                            <select name="tipo_documento" id="tipo_documento" class="form-control form-control-sm" onchange="//obtenerCodigo()">
                                 <option value="">--Seleccionar--</option>
                                 <?php
                                 $selectedDocumento = isset($ingreso_produccion->id_tipo_documento) ? $ingreso_produccion->id_tipo_documento : 1;
@@ -727,12 +727,6 @@ function activarObservacion() {
                                 <?php 
                                     }
                                 ?>
-                                <?php if($id_user==$ingreso_produccion->id_usuario_inserta){?>
-                                    <!--<a href="javascript:void(0)" onClick="fn_save_ingreso_produccion()" class="btn btn-sm btn-success" style="margin-right:10px">Guardar</a>-->
-                                    <button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-nuevo" data-toggle="modal" onclick="fn_save_ingreso_produccion()">
-                                        <i class="fas fa-save" style="font-size:18px;"></i> Guardar
-                                    </button>
-                                <?php }?>
                                 <?php if($id==0){?>
                                     <!--<a href="javascript:void(0)" onClick="fn_save_ingreso_produccion()" class="btn btn-sm btn-success" style="margin-right:10px">Guardar</a>-->
                                     <button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-nuevo" data-toggle="modal" onclick="fn_save_ingreso_produccion()">

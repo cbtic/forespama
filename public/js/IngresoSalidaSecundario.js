@@ -5,10 +5,17 @@ $(document).ready(function () {
 	});
 
 	$('#btnNuevo').click(function () {
-		modalAjusteStock(0);
+		modalIngresoSalidaSecundario(0);
 	});
 
 	$('#tipo_documento_bus').keypress(function(e){
+		if(e.which == 13) {
+			datatablenew();
+			return false;
+		}
+	});
+
+	$('#empresa_bus').keypress(function(e){
 		if(e.which == 13) {
 			datatablenew();
 			return false;
@@ -29,14 +36,7 @@ $(document).ready(function () {
 		}
 	});
 
-	$('#numero_ajuste_bus').keypress(function(e){
-		if(e.which == 13) {
-			datatablenew();
-			return false;
-		}
-	});
-
-	$('#almacen_bus').keypress(function(e){
+	$('#numero_ingreso_salida_bus').keypress(function(e){
 		if(e.which == 13) {
 			datatablenew();
 			return false;
@@ -65,21 +65,23 @@ $(document).ready(function () {
 		changeYear: true,
         language: 'es'
     });
-		
+	
+	$('#empresa_bus').select2({ width : '100%' })
+	
 	datatablenew();
 
-	$('#btnDescargarDetalle').on('click', function () {
+	/*$('#btnDescargarDetalle').on('click', function () {
 		DescargarArchivoDetalleExcel()
 
-	});
+	});*/
 
 });
 
 function datatablenew(){
                       
-    var oTable1 = $('#tblAjusteStock').dataTable({
+    var oTable1 = $('#tblIngresoSalidaB').dataTable({
         "bServerSide": true,
-        "sAjaxSource": "/entrada_productos/listar_ajuste_stock_ajax",
+        "sAjaxSource": "/ingreso_salida_secundarios/listar_ingreso_salida_secundarios_ajax",
         "bProcessing": true,
         "sPaginationType": "full_numbers",
         //"paging":false,
@@ -107,10 +109,10 @@ function datatablenew(){
             var iCantMostrar 	= aoData[4].value;
 			
             var tipo_documento = $('#tipo_documento_bus').val();
+            var empresa = $('#empresa_bus').val();
 			var fecha_inicio = $('#fecha_inicio_bus').val();
 			var fecha_fin = $('#fecha_fin_bus').val();
-			var numero_ajuste = $('#numero_ajuste_bus').val();
-			var almacen = $('#almacen_bus').val();
+			var numero_ingreso_salida = $('#numero_ingreso_salida_bus').val();
 			var estado = $('#estado_bus').val();
 			
 			var _token = $('#_token').val();
@@ -120,7 +122,7 @@ function datatablenew(){
                 "type": "POST",
                 "url": sSource,
                 "data":{NumeroPagina:iNroPagina,NumeroRegistros:iCantMostrar,
-						tipo_documento:tipo_documento,fecha_inicio:fecha_inicio,fecha_fin:fecha_fin,numero_ajuste:numero_ajuste,almacen:almacen,estado:estado,
+						tipo_documento:tipo_documento,empresa:empresa,fecha_inicio:fecha_inicio,fecha_fin:fecha_fin,numero_ingreso_salida:numero_ingreso_salida,estado:estado,
 						_token:_token
                        },
                 "success": function (result) {
@@ -222,7 +224,7 @@ function datatablenew(){
 						
 						var html = '<div class="btn-group btn-group-sm" role="group" aria-label="Log Viewer Actions">';
 						
-						html += '<button style="font-size:12px" type="button" class="btn btn-sm btn-success" data-toggle="modal" onclick="modalAjusteStock('+row.id+','+row.id_tipo_movimiento+')" ><i class="fa fa-edit"></i> Editar</button>'; 
+						html += '<button style="font-size:12px" type="button" class="btn btn-sm btn-success" data-toggle="modal" onclick="modalIngresoSalidaSecundario('+row.id+')" ><i class="fa fa-edit"></i> Editar</button>'; 
 						
 						//html += '<a href="javascript:void(0)" onclick=eliminarDispensacion('+row.id+','+row.estado+') class="btn btn-sm '+clase+'" style="font-size:12px;margin-left:10px">'+estado+'</a>';			
 						
@@ -240,17 +242,13 @@ function fn_ListarBusqueda() {
     datatablenew();
 };
 
-function modalAjusteStock(id,id_tipo_movimiento){
+function modalIngresoSalidaSecundario(id){
 	
-	/*var tipo_mov="";
-	if(tipo=='INGRESO'){tipo_mov=1};
-	if(tipo=='SALIDA'){tipo_mov=2};*/
-
 	$(".modal-dialog").css("width","85%");
 	$('#openOverlayOpc .modal-body').css('height', 'auto');
 
 	$.ajax({
-		url: "/entrada_productos/modal_ajuste_stock/"+id+"/"+id_tipo_movimiento,
+		url: "/ingreso_salida_secundarios/modal_ingreso_salida_secundario/"+id,
 		type: "GET",
 		success: function (result) {
 			$("#diveditpregOpc").html(result);
@@ -259,7 +257,7 @@ function modalAjusteStock(id,id_tipo_movimiento){
 	});
 }
 
-function DescargarArchivoDetalleExcel(){
+/*function DescargarArchivoDetalleExcel(){
 	
 	var tipo_documento = $('#tipo_documento_bus').val();
 	var fecha_inicio = $('#fecha_inicio_bus').val();
@@ -276,4 +274,4 @@ function DescargarArchivoDetalleExcel(){
 	if (estado == "")estado = 0;
 
 	location.href = '/entrada_productos/exportar_listar_ajuste_detalle/'+tipo_documento+'/'+fecha_inicio+'/'+fecha_fin+'/'+numero_ajuste+'/'+almacen+'/'+estado;
-}
+}*/

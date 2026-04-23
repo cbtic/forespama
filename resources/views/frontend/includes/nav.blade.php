@@ -243,6 +243,10 @@
 								@can('Ajuste Stock')
 									<x-utils.link :href="route('frontend.entrada_productos.create_ajuste_stock')" class="dropdown-item" :text="__('Ajuste de Stock')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
 								@endif
+
+								@can('Ingreso Salida Secundario')
+									<x-utils.link :href="route('frontend.ingreso_salida_secundarios.create')" class="dropdown-item" :text="__('Ingreso Salida B')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+								@endif
 								
 							</div>
 

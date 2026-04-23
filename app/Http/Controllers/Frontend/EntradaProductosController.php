@@ -1931,9 +1931,12 @@ class EntradaProductosController extends Controller
     public function create_ajuste_stock(){
 
 		$tablaMaestra_model = new TablaMaestra;
+		$almacen_model = new Almacene;
+        
 		$tipo_documento = $tablaMaestra_model->getMaestroByTipo(53);
         //$cerrado_orden_compra = $tablaMaestra_model->getMaestroByTipo(52);
-        $almacen_destino = Almacene::all();
+        //$almacen_destino = Almacene::all();
+        $almacen_destino = $almacen_model->getAlmacenAll();
 		
 		return view('frontend.entrada_productos.create_ajuste_stock',compact('tipo_documento','almacen_destino'));
 
@@ -1943,8 +1946,9 @@ class EntradaProductosController extends Controller
 
 		$entrada_producto_model = new EntradaProducto;
 		$p[]=$request->tipo_documento;
-		$p[]=$request->fecha;
-        $p[]=$request->numero_ingreso_produccion;
+		$p[]=$request->fecha_inicio;
+		$p[]=$request->fecha_fin;
+        $p[]=$request->numero_ajuste;
         $p[]=$request->almacen_destino;
         $p[]=$request->estado;
 		$p[]=$request->NumeroPagina;
@@ -2341,6 +2345,41 @@ class EntradaProductosController extends Controller
 		return Excel::download($export, 'Reporte_salidas_entradas_detallado.xlsx');
 		
     }
+
+    public function exportar_listar_ajuste_detalle($tipo_documento, $fecha_inicio, $fecha_fin, $numero_ajuste, $almacen, $estado) {
+        
+		if($tipo_documento==0)$tipo_documento = "";
+        if($fecha_inicio==0)$fecha_inicio = "";
+        if($fecha_fin==0)$fecha_fin = "";
+        if($numero_ajuste=="0")$numero_ajuste = "";
+        if($almacen=="0")$almacen = "";
+        if($estado=="0")$estado = "";
+
+        $entrada_producto_model = new EntradaProducto;
+		$p[]=$tipo_documento;
+		$p[]=$fecha_inicio;
+		$p[]=$fecha_fin;
+        $p[]=$numero_ajuste;
+        $p[]=$almacen;
+        $p[]=$estado;
+        $p[]=1;
+		$p[]=10000;
+		$data = $entrada_producto_model->listar_ajuste_detallado_ajax($p);
+		
+		$variable = [];
+		$n = 1;
+
+		array_push($variable, array("N°","Id","Tipo Movimiento","Fecha Movimiento","Codigo","Almacen","Usuario","Codigo Producto","Producto","Cantidad"));
+		
+		foreach ($data as $r) {
+
+			array_push($variable, array($n++,$r->id, $r->tipo_documento, $r->fecha_movimiento, $r->codigo, $r->almacen, $r->usuario, $r->codigo_producto, $r->producto, $r->cantidad));
+		}
+		
+		$export = new InvoicesExport3([$variable]);
+		return Excel::download($export, 'Reporte_ajuste_detallado.xlsx');
+		
+    }
 }
 
 class InvoicesExport implements FromArray, WithHeadings, WithStyles
@@ -2466,6 +2505,70 @@ class InvoicesExport2 implements FromArray, WithHeadings, WithStyles
 		$sheet->fromArray($this->headings(), NULL, 'A2');
         
         foreach (range('A', 'L') as $col) {
+            $sheet->getColumnDimension($col)->setAutoSize(true);
+        }
+    }
+}
+
+class InvoicesExport3 implements FromArray, WithHeadings, WithStyles
+{
+	protected $invoices;
+
+	public function __construct(array $invoices)
+	{
+		$this->invoices = $invoices;
+	}
+
+	public function array(): array
+	{
+		return $this->invoices;
+	}
+
+    public function headings(): array
+    {
+        return ["N°","Id","Tipo Movimiento","Fecha Movimiento","Codigo","Almacen","Usuario","Codigo Producto","Producto","Cantidad"];
+    }
+
+	public function styles(Worksheet $sheet)
+    {
+
+		$sheet->mergeCells('A1:J1');
+
+        $sheet->setCellValue('A1', "REPORTE DE AJUSTES DETALLADO - FORESPAMA");
+        $sheet->getStyle('A1:J1')->applyFromArray([
+            'font' => [
+                'bold' => true,
+                'color' => ['rgb' => 'FFFFFF'],
+            ],
+            'fill' => [
+                'fillType' => Fill::FILL_SOLID,
+                'startColor' => ['rgb' => '246257'],
+            ],
+            'alignment' => [
+                'horizontal' => Alignment::HORIZONTAL_CENTER,
+            ],
+        ]);
+
+		$sheet->getStyle('A1')->getAlignment()->setWrapText(true);
+		$sheet->getRowDimension(1)->setRowHeight(30);
+
+        $sheet->getStyle('A2:J2')->applyFromArray([
+            'font' => [
+                'bold' => true,
+                'color' => ['rgb' => '000000'],
+            ],
+            'fill' => [
+                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                'startColor' => ['rgb' => '2EB85C'],
+            ],
+			'alignment' => [
+			'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+    		],
+        ]);
+
+		$sheet->fromArray($this->headings(), NULL, 'A2');
+        
+        foreach (range('A', 'J') as $col) {
             $sheet->getColumnDimension($col)->setAutoSize(true);
         }
     }

@@ -35,10 +35,14 @@ class ProformaController extends Controller
         $id_user = Auth::user()->id;
 		$tablaMaestra_model = new TablaMaestra;
         $almacen_user_model = new Almacen_usuario;
+        $almacen_model = new Almacene;
+        $empresa_model = new Empresa;
 		$tipo_documento = $tablaMaestra_model->getMaestroByTipo(54);
         $cerrado_orden_compra = $tablaMaestra_model->getMaestroByTipo(52);
-        $proveedor = Empresa::all();
-        $almacen = Almacene::all();
+        //$proveedor = Empresa::all();
+        $proveedor = $empresa_model->getEmpresaAll();
+        //$almacen = Almacene::all();
+        $almacen = $almacen_model->getAlmacenAll();
         $almacen_usuario = $almacen_user_model->getAlmacenByUser($id_user);
         //$almacen_usuario2 = $almacen_user_model->getUsersByAlmacen($id_user);
         //dd($almacen_usuario);exit();

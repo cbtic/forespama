@@ -58,6 +58,7 @@ use App\Http\Controllers\Frontend\CuentaContablesController;
 use App\Http\Controllers\Frontend\EquivalenciaSubFamiliaFamiliaContablesController;
 use App\Http\Controllers\Frontend\DescansoController;
 use App\Http\Controllers\Frontend\ConsultaOxapampaMovimientoController;
+use App\Http\Controllers\Frontend\IngresoSalidaSecundarioController;
 
 
 //use App\Http\Controllers\VehiculoController;
@@ -963,4 +964,9 @@ Route::get('orden_compra/exportar_reporte_comercializacion_retail/{empresa_compr
 Route::post('orden_compra/listar_reporte_comercializacion_retail_ajax', [OrdenCompraController::class, 'listar_reporte_comercializacion_retail_ajax'])->name('orden_compra.listar_reporte_comercializacion_retail_ajax');
 
 Route::get('entrada_productos/exportar_listar_entrada_salida_detalle/{tipo_movimiento}/{tipo_documento}/{unidad_origen}/{almacen_destino}/{proveedor}/{numero_comprobante}/{situacion}/{fecha_inicio}/{fecha_fin}/{estado}', [EntradaProductosController::class, 'exportar_listar_entrada_salida_detalle'])->name('entrada_productos.exportar_listar_entrada_salida_detalle');
+Route::get('entrada_productos/exportar_listar_ajuste_detalle/{tipo_documento}/{fecha_inicio}/{fecha_fin}/{numero_ajuste}/{almacen}/{estado}', [EntradaProductosController::class, 'exportar_listar_ajuste_detalle'])->name('entrada_productos.exportar_listar_ajuste_detalle');
 
+Route::get('ingreso_salida_secundarios/create', [IngresoSalidaSecundarioController::class, 'create'])->name('ingreso_salida_secundarios.create');
+Route::post('ingreso_salida_secundarios/listar_ingreso_salida_secundarios_ajax', [IngresoSalidaSecundarioController::class, 'listar_ingreso_salida_secundarios_ajax'])->name('ingreso_salida_secundarios.listar_ingreso_salida_secundarios_ajax');
+Route::post('ingreso_salida_secundarios/send_ingreso_salida_secundario', [IngresoSalidaSecundarioController::class, 'send_ingreso_salida_secundario'])->name('ingreso_salida_secundarios.send_ingreso_salida_secundario');
+Route::get('ingreso_salida_secundarios/modal_ingreso_salida_secundario/{id}', [IngresoSalidaSecundarioController::class, 'modal_ingreso_salida_secundario'])->name('ingreso_salida_secundarios.modal_ingreso_salida_secundario');

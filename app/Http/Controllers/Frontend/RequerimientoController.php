@@ -52,9 +52,12 @@ class RequerimientoController extends Controller
 		$tablaMaestra_model = new TablaMaestra;
         $producto_model = new Producto;
         $user_model = new User;
+        $almacen_model = new Almacene;
+
 		$tipo_documento = $tablaMaestra_model->getMaestroByTipo(59);
         $cerrado_requerimiento = $tablaMaestra_model->getMaestroByTipo(52);
-        $almacen = Almacene::all();
+        //$almacen = Almacene::all();
+        $almacen = $almacen_model->getAlmacenAll();
         $estado_atencion = $tablaMaestra_model->getMaestroByTipo(60);
         $responsable_atencion = $user_model->getUserAll();
         $tipo_requerimiento = $tablaMaestra_model->getMaestroByTipo(67);

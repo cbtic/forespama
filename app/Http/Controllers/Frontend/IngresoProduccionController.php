@@ -43,9 +43,12 @@ class IngresoProduccionController extends Controller
 
 		$tablaMaestra_model = new TablaMaestra;
 		$area_trabajo_model = new AreaTrabajo;
+		$almacen_model = new Almacene;
+		
 		$tipo_documento = $tablaMaestra_model->getMaestroByTipo(53);
         //$cerrado_orden_compra = $tablaMaestra_model->getMaestroByTipo(52);
-        $almacen_destino = Almacene::all();
+        //$almacen_destino = Almacene::all();
+        $almacen_destino = $almacen_model->getAlmacenAll();
         //$area = $tablaMaestra_model->getMaestroByTipo(81);
 		$area_trabajo = $area_trabajo_model->getAreaTrabajoProduccion();
 		
@@ -118,11 +121,11 @@ class IngresoProduccionController extends Controller
 
 		if($request->id == 0){
 			$ingreso_produccion = new IngresoProduccion;
-            //$dispensacion_model = new Dispensacione;
-            //$correlativo = $dispensacion_model->getCorrelativo();
-            //$dispensacion->numero_corrrelativo = $correlativo[0]->numero_correlativo;
+			$ingreso_produccion_model = new IngresoProduccion;
+		    $codigo_ingreso_produccion = $ingreso_produccion_model->getCodigoIngresoProduccion_();
 		}else{
 			$ingreso_produccion = IngresoProduccion::find($request->id);
+			$codigo_ingreso_produccion = $request->numero_ingreso_produccion;
 		}
 
 		$item = $request->input('item');
@@ -137,8 +140,13 @@ class IngresoProduccionController extends Controller
 		$ingreso_produccion->id_tipo_documento = $request->tipo_documento;
         $ingreso_produccion->id_almacen_destino = $request->almacen_destino;
         $ingreso_produccion->fecha = $request->fecha;
-        $ingreso_produccion->codigo = $request->numero_ingreso_produccion;
-        $ingreso_produccion->producto_defectuoso = $request->input('producto_defectuoso', 0) == '1' ? 1 : 0;
+        //$ingreso_produccion->codigo = $request->numero_ingreso_produccion;
+        if($request->id == 0){
+            $ingreso_produccion->codigo = $codigo_ingreso_produccion[0]->codigo;
+        }else{
+            $ingreso_produccion->codigo = $codigo_ingreso_produccion;
+        }
+		$ingreso_produccion->producto_defectuoso = $request->input('producto_defectuoso', 0) == '1' ? 1 : 0;
 		$ingreso_produccion->observacion = $request->observacion;
 		$ingreso_produccion->id_area = $request->area_trabajo;
 		$ingreso_produccion->id_unidad_trabajo = $request->unidad_trabajo;

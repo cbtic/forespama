@@ -83,10 +83,15 @@ class OrdenCompraController extends Controller
 
 		$tablaMaestra_model = new TablaMaestra;
         $almacen_user_model = new Almacen_usuario;
+        $almacen_model = new Almacene;
+        $empresa_model = new Empresa;
+
 		$tipo_documento = $tablaMaestra_model->getMaestroByTipo(54);
         $cerrado_orden_compra = $tablaMaestra_model->getMaestroByTipo(52);
-        $proveedor = Empresa::all();
-        $almacen = Almacene::all();
+        //$proveedor = Empresa::all();
+        $proveedor = $empresa_model->getEmpresaAll();
+        //$almacen = Almacene::all();
+        $almacen = $almacen_model->getAlmacenAll();
         $almacen_usuario = $almacen_user_model->getAlmacenByUser($id_user);
         $vendedor = $user_model->getUserByRol(7,11);
 		$estado_pedido = $tablaMaestra_model->getMaestroByTipo(77);
@@ -104,10 +109,15 @@ class OrdenCompraController extends Controller
         $id_user = Auth::user()->id;
 		$tablaMaestra_model = new TablaMaestra;
         $almacen_user_model = new Almacen_usuario;
+        $almacen_model = new Almacene;
+        $empresa_model = new Empresa;
+        
 		$tipo_documento = $tablaMaestra_model->getMaestroByTipo(54);
         $cerrado_orden_compra = $tablaMaestra_model->getMaestroByTipo(52);
-        $proveedor = Empresa::all();
-        $almacen = Almacene::all();
+        //$proveedor = Empresa::all();
+        $proveedor = $empresa_model->getEmpresaAll();
+        //$almacen = Almacene::all();
+        $almacen = $almacen_model->getAlmacenAll();
         $almacen_usuario = $almacen_user_model->getAlmacenByUser($id_user);
 		
 		return view('frontend.orden_compra.consulta_stock_pedido',compact('tipo_documento','cerrado_orden_compra','proveedor','almacen','almacen_usuario','id_user'));
@@ -2419,10 +2429,14 @@ class OrdenCompraController extends Controller
         $almacen_user_model = new Almacen_usuario;
         $persona_model = new Persona;
         $producto_model = new Producto;
+        $almacen_model = new Almacene;
+        $empresa_model = new Empresa;
 
         $cerrado_orden_compra = $tablaMaestra_model->getMaestroByTipo(52);
-        $proveedor = Empresa::all();
-        $almacen = Almacene::all();
+        //$proveedor = Empresa::all();
+        $proveedor = $empresa_model->getEmpresaAll();
+        //$almacen = Almacene::all();
+        $almacen = $almacen_model->getAlmacenAll();
         $almacen_usuario = $almacen_user_model->getAlmacenByUser($id_user);
         $vendedor = $user_model->getUserByRol(7,11);
 		$estado_pedido = $tablaMaestra_model->getMaestroByTipo(77);
@@ -3669,10 +3683,15 @@ class OrdenCompraController extends Controller
 
 		$tablaMaestra_model = new TablaMaestra;
         $almacen_user_model = new Almacen_usuario;
+        $almacen_model = new Almacene;
+        $empresa_model = new Empresa;
+
 		$tipo_documento = $tablaMaestra_model->getMaestroByTipo(54);
         $cerrado_orden_compra = $tablaMaestra_model->getMaestroByTipo(52);
-        $proveedor = Empresa::all();
-        $almacen = Almacene::all();
+        //$proveedor = Empresa::all();
+        $proveedor = $empresa_model->getEmpresaAll();
+        //$almacen = Almacene::all();
+        $almacen = $almacen_model->getAlmacenAll();
         $almacen_usuario = $almacen_user_model->getAlmacenByUser($id_user);
         $vendedor = $user_model->getUserByRol(7,11);
 		$estado_pedido = $tablaMaestra_model->getMaestroByTipo(77);

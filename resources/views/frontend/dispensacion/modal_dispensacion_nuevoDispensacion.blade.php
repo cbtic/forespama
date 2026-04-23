@@ -739,12 +739,6 @@ function pdf_documento_dispensacion(){
                                 <?php 
                                     }
                                 ?>
-                                <?php if($id_user==$dispensacion->id_usuario_inserta && $id>0){?>
-                                    <!--<a href="javascript:void(0)" onClick="fn_save_dispensacion()" class="btn btn-sm btn-success" style="margin-right:10px">Guardar</a>-->
-                                    <button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-nuevo" data-toggle="modal" onclick="fn_save_dispensacion()">
-                                        <i class="fas fa-save" style="font-size:18px;"></i> Guardar
-                                    </button>
-                                <?php }?>
                                 <?php if($id==0){?>
                                     <!--<a href="javascript:void(0)" onClick="fn_save_dispensacion()" class="btn btn-sm btn-success" style="margin-right:10px">Guardar</a>-->
                                     <button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-nuevo" data-toggle="modal" onclick="fn_save_dispensacion()">

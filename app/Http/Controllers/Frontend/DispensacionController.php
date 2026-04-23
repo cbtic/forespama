@@ -47,9 +47,10 @@ class DispensacionController extends Controller
 
 		$tablaMaestra_model = new TablaMaestra;
 		$area_trabajo_model = new AreaTrabajo;
+		$almacen_model = new Almacene;
 		$tipo_documento = $tablaMaestra_model->getMaestroByTipo(53);
         //$cerrado_orden_compra = $tablaMaestra_model->getMaestroByTipo(52);
-        $almacen = Almacene::all();
+        $almacen = $almacen_model->getAlmacenAll();
 		$area_trabajo = $area_trabajo_model->getAreaTrabajoAll();
 		$persona = Persona::all();
 		
