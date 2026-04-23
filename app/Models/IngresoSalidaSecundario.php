@@ -31,4 +31,15 @@ class IngresoSalidaSecundario extends Model
         return $data;
 
     }
+
+    function getCodigoIngresoSalidaB($tipo_documento){
+
+        $cad = "select lpad(coalesce(max(iss.numero_ingreso_salida::int) + 1, 1)::varchar, 6, '0') codigo
+        from ingreso_salida_secundarios iss
+        where iss.id = '".$tipo_documento."' ";
+
+		$data = DB::select($cad);
+        return $data;
+    }
+
 }

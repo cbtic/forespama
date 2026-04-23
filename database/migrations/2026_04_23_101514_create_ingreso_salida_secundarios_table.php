@@ -21,13 +21,13 @@ class CreateIngresoSalidaSecundariosTable extends Migration
             $table->bigInteger('id_empresa')->nullable();
             $table->bigInteger('id_almacen')->nullable();
             $table->date('fecha_ingreso_salida')->nullable();
-            $table->Integer('numero_ingreso_salida')->nullable();
+            $table->string('numero_ingreso_salida')->nullable();
             $table->string('observacion',500)->nullable();
-            $table->double('igv_compra')->nullable();
+            $table->bigInteger('igv_compra')->nullable();
             $table->bigInteger('id_moneda')->nullable();
-            $table->double('sub_total')->nullable();
-            $table->double('igv')->nullable();
-            $table->double('total')->nullable();
+            $table->double('sub_total',15,8)->nullable();
+            $table->double('igv',15,8)->nullable();
+            $table->double('total',15,8)->nullable();
             $table->string('estado',1)->nullable()->default('1');
 
             $table->bigInteger('id_usuario_inserta')->unsigned()->index();

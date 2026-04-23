@@ -96,149 +96,84 @@ class IngresoSalidaSecundarioController extends Controller
         $id_user = Auth::user()->id;
 
         if($request->id == 0){
-            $orden_compra = new OrdenCompra;
-            $orden_compra_model = new OrdenCompra;
-
-            if($request->tipo_documento != 4){
-                $codigo_orden_compra = $orden_compra_model->getCodigoOrdenCompra($request->tipo_documento);
-            }else if($request->tipo_documento == 4){
-                $codigo_orden_compra = $orden_compra_model->getCodigoOrdenCompra(2);
-            }
-		    
+            $ingreso_salida_secundario = new IngresoSalidaSecundario;
+            $ingreso_salida_secundario_model = new IngresoSalidaSecundario;
+            $codigo_ingreso_salida_secundario = $ingreso_salida_secundario_model->getCodigoIngresoSalidaB($request->tipo_documento);
         }else{
-            $orden_compra = OrdenCompra::find($request->id);
-            $codigo_orden_compra = $request->numero_orden_compra;
+            $ingreso_salida_secundario = IngresoSalidaSecundario::find($request->id);
+            $codigo_ingreso_salida_secundario = $request->numero_ingreso_salida;
         }
 
         $descripcion = $request->input('descripcion');
-        $cod_interno = $request->input('cod_interno');
+        $codigo = $request->input('codigo');
         $marca = $request->input('marca');
-        $estado_bien = $request->input('estado_bien');
         $unidad = $request->input('unidad');
-        $cantidad_ingreso = $request->input('cantidad_ingreso');
+        $cantidad = $request->input('cantidad');
         $precio_unitario = $request->input('precio_unitario');
-        $id_descuento = $request->input('id_descuento');
         $sub_total = $request->input('sub_total');
         $igv = $request->input('igv');
         $total = $request->input('total');
-        $precio_unitario_ = $request->input('precio_unitario_');
-        $valor_venta_bruto = $request->input('valor_venta_bruto');
-        $valor_venta = $request->input('valor_venta');
-        $descuento = $request->input('descuento');
-        $porcentaje = $request->input('porcentaje');
-        $id_autorizacion_detalle = $request->input('id_autorizacion_detalle');
-        $id_orden_compra_detalle =$request->id_orden_compra_detalle;
+        $id_ingreso_salida_b_detalle =$request->id_ingreso_salida_b_detalle;
 
-        $orden_compra->id_empresa_compra = $request->empresa_compra;
-        $orden_compra->id_empresa_vende = $request->empresa_vende;
-        $orden_compra->id_tipo_cliente = $request->tipo_documento_cliente;
-        $orden_compra->id_persona = $request->persona_compra;
-        $orden_compra->fecha_orden_compra = $request->fecha_orden_compra;
-        $orden_compra->fecha_vencimiento = $request->fecha_vencimiento;
+        $ingreso_salida_secundario->id_tipo_documento = $request->tipo_documento;
+        $ingreso_salida_secundario->id_tipo_cliente = $request->tipo_documento_cliente;
+        $ingreso_salida_secundario->id_persona = $request->persona;
+        $ingreso_salida_secundario->id_empresa = $request->empresa;
+        $ingreso_salida_secundario->id_almacen = $request->almacen;
+        $ingreso_salida_secundario->fecha_ingreso_salida = $request->fecha;
         if($request->id == 0){
-            $orden_compra->numero_orden_compra = $codigo_orden_compra[0]->codigo;
+            $ingreso_salida_secundario->numero_ingreso_salida = $codigo_ingreso_salida_secundario[0]->codigo;
         }else{
-            $orden_compra->numero_orden_compra = $codigo_orden_compra;
+            $ingreso_salida_secundario->numero_ingreso_salida = $codigo_ingreso_salida_secundario;
         }
-        $orden_compra->id_tipo_documento = $request->tipo_documento;
-        $orden_compra->igv_compra = $request->igv_compra;
-        $orden_compra->id_unidad_origen = $request->unidad_origen;
-        $orden_compra->id_almacen_destino = $request->almacen;
-        $orden_compra->id_almacen_salida = $request->almacen_salida;
-        $orden_compra->numero_orden_compra_cliente = $request->numero_orden_compra_cliente;
-        $orden_compra->sub_total = round($request->sub_total_general,2);
-        $orden_compra->igv = round($request->igv_general,2);
-        $orden_compra->total = round($request->total_general,2);
-        $orden_compra->id_moneda = $request->moneda;
-        $orden_compra->moneda = $request->moneda_descripcion;
-        $orden_compra->descuento = $request->descuento_general;
-        $orden_compra->cerrado = 1;
-        $orden_compra->id_usuario_inserta = $id_user;
-        $orden_compra->id_vendedor = $request->id_vendedor;
-        $orden_compra->observacion_vendedor = $request->observacion_vendedor;
-        $orden_compra->id_prioridad = $request->prioridad;
-        $orden_compra->id_autorizacion = $request->id_autorizacion;
-        $orden_compra->id_canal = $request->canal;
-        $orden_compra->estado = 1;
-        if($request->tipo_documento == 4){
-            $orden_compra_matriz = OrdenCompra::where('numero_orden_compra',$request->numero_orden_compra_matriz)->where('id_tipo_documento',2)->where('estado',1)->where('estado_pedido',1)->first();
-            $orden_compra->id_orden_compra_matriz = $orden_compra_matriz->id;
-        }
-        $orden_compra->save();
-
-        $array_orden_compra_detalle = array();
+        $ingreso_salida_secundario->observacion = $request->igv_compra;//
+        $ingreso_salida_secundario->igv_compra = $request->igv_compra;
+        $ingreso_salida_secundario->id_moneda = $request->moneda;
+        $ingreso_salida_secundario->sub_total = round($request->sub_total_general,2);
+        $ingreso_salida_secundario->igv = round($request->igv_general,2);
+        $ingreso_salida_secundario->total = round($request->total_general,2);
+        $ingreso_salida_secundario->id_usuario_inserta = $id_user;
+        $ingreso_salida_secundario->estado = 1;
+        $ingreso_salida_secundario->save();
+        $id_ingreso_salida_secundario = $ingreso_salida_secundario->id;
+        $array_ingreso_salida_secundario_detalle = array();
 
         foreach($descripcion as $index => $value) {
             
-            if($id_orden_compra_detalle[$index] == 0){
-                $orden_compra_detalle = new OrdenCompraDetalle;
+            if($id_ingreso_salida_b_detalle[$index] == 0){
+                $ingreso_salida_secundario_detalle = new IngresoSalidaSecundarioDetalle;
             }else{
-                $orden_compra_detalle = OrdenCompraDetalle::find($id_orden_compra_detalle[$index]);
+                $ingreso_salida_secundario_detalle = IngresoSalidaSecundarioDetalle::find($id_ingreso_salida_b_detalle[$index]);
             }
             
-            $orden_compra_detalle->id_orden_compra = $orden_compra->id;
-            $orden_compra_detalle->id_producto = $descripcion[$index];
-            $orden_compra_detalle->cantidad_requerida = $cantidad_ingreso[$index];
-            $orden_compra_detalle->precio = round($precio_unitario_[$index],2);
-            $orden_compra_detalle->valor_venta_bruto = round($valor_venta_bruto[$index],2);
-            $orden_compra_detalle->precio_venta = round($precio_unitario[$index],2);
-            $orden_compra_detalle->valor_venta = round($valor_venta[$index],2);
-            $orden_compra_detalle->id_descuento = $id_descuento[$index];
-            if($id_descuento[$index]==1){
-                $orden_compra_detalle->descuento = round($descuento[$index],2);
-            }else if($id_descuento[$index]==2){
-                $orden_compra_detalle->descuento = $porcentaje[$index];
-            }
-            $orden_compra_detalle->sub_total = round($sub_total[$index],2);
-            $orden_compra_detalle->igv = round($igv[$index],2);
-            $orden_compra_detalle->total = round($total[$index],2);
-            //$orden_compra_detalle->id_estado_producto = $estado_bien[$index];
-            $orden_compra_detalle->id_unidad_medida = $unidad[$index];
-            $orden_compra_detalle->id_marca = $marca[$index];
-            $orden_compra_detalle->estado = 1;
-            $orden_compra_detalle->cerrado = 1;
-            $orden_compra_detalle->id_autorizacion = $id_autorizacion_detalle[$index];
-            $orden_compra_detalle->id_usuario_inserta = $id_user;
+            $ingreso_salida_secundario_detalle->id_ingreso_salida_secundario = $id_ingreso_salida_secundario;
+            $ingreso_salida_secundario_detalle->id_producto = $descripcion[$index];
+            $ingreso_salida_secundario_detalle->cantidad = $cantidad[$index];
+            $ingreso_salida_secundario_detalle->precio = round($precio_unitario[$index],2);
+            $ingreso_salida_secundario_detalle->sub_total = round($sub_total[$index],2);
+            $ingreso_salida_secundario_detalle->igv = round($igv[$index],2);
+            $ingreso_salida_secundario_detalle->total = round($total[$index],2);
+            $ingreso_salida_secundario_detalle->id_unidad_medida = $unidad[$index];
+            $ingreso_salida_secundario_detalle->id_marca = $marca[$index];
+            $ingreso_salida_secundario_detalle->estado = 1;
+            $ingreso_salida_secundario_detalle->id_usuario_inserta = $id_user;
+            $ingreso_salida_secundario_detalle->save();
 
-            $orden_compra_detalle->save();
+            $array_ingreso_salida_secundario_detalle[] = $ingreso_salida_secundario_detalle->id;
 
-            $array_orden_compra_detalle[] = $orden_compra_detalle->id;
-
-            $OrdenCompraAll = OrdenCompraDetalle::where("id_orden_compra",$orden_compra->id)->where("estado","1")->get();
+            /*$IngresoSalidaSecundarioAll = IngresoSalidaSecundarioDetalle::where("id_ingreso_salida_secundario",$id_ingreso_salida_secundario)->where("estado","1")->get();
             
-            foreach($OrdenCompraAll as $key=>$row){
+            foreach($IngresoSalidaSecundarioAll as $key=>$row){
                 
-                if (!in_array($row->id, $array_orden_compra_detalle)){
-                    $orden_compra_detalle = OrdenCompraDetalle::find($row->id);
-                    $orden_compra_detalle->estado = 0;
-                    $orden_compra_detalle->save();
+                if (!in_array($row->id, $array_ingreso_salida_secundario_detalle)){
+                    $ingreso_salida_secundario_detalle = IngresoSalidaSecundarioDetalle::find($row->id);
+                    $ingreso_salida_secundario_detalle->estado = 0;
+                    $ingreso_salida_secundario_detalle->save();
                 }
-            }
+            }*/
         }
         
-        if($request->tipo_documento == 2 || $request->tipo_documento == 4){
-            if($request->canal == 1 || $request->canal == 2 || $request->canal == 3){
-                $autorizacion_orden_compra = new AutorizacionOrdenCompra;
-                $autorizacion_orden_compra->id_orden_compra = $orden_compra->id;
-                $autorizacion_orden_compra->id_proceso_pedido = 1;
-                //$autorizacion_orden_compra->id_autorizacion = 1;
-                //$autorizacion_orden_compra->id_usuario_autoriza = $id_user;
-                $autorizacion_orden_compra->id_usuario_inserta = $id_user;
-                $autorizacion_orden_compra->estado = 1;
-                $autorizacion_orden_compra->save();
-            }else{
-                $autorizacion_orden_compra = new AutorizacionOrdenCompra;
-                $autorizacion_orden_compra->id_orden_compra = $orden_compra->id;
-                $autorizacion_orden_compra->id_proceso_pedido = 4;
-                $autorizacion_orden_compra->id_autorizacion = 2;
-                //$autorizacion_orden_compra->id_usuario_autoriza = $id_user;
-                $autorizacion_orden_compra->id_usuario_inserta = $id_user;
-                $autorizacion_orden_compra->estado = 1;
-                $autorizacion_orden_compra->save();
-            }
-        }
-        
-        return response()->json(['id' => $orden_compra->id]);
+        return response()->json(['id' => $ingreso_salida_secundario->id]);
         
     }
 }

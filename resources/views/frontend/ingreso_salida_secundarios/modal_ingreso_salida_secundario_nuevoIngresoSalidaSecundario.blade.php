@@ -138,29 +138,6 @@
 
 <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.js"></script>-->
 <script type="text/javascript">
-/*
-jQuery(function($){
-$.mask.definitions['H'] = "[0-1]";
-$.mask.definitions['h'] = "[0-9]";
-$.mask.definitions['M'] = "[0-5]";
-$.mask.definitions['m'] = "[0-9]";
-$.mask.definitions['P'] = "[AaPp]";
-$.mask.definitions['p'] = "[Mm]";
-});
-*/
-$(document).ready(function() {
-
-    $('#fecha').datepicker({
-        autoclose: true,
-		format: 'yyyy-mm-dd',
-		changeMonth: true,
-		changeYear: true,
-        language: 'es'
-    });
-
-    $("#item").select2({ width: '100%' });
-
-});
 
 </script>
 
@@ -285,7 +262,7 @@ function agregarProducto(){
     for (var i = 0; i < cantidad; i++) { 
 
         var n = $('#tblIngresoSalidaBDetalle tbody tr').length + 1;
-        var descripcion = '<select name="descripcion[]" id="descripcion' + n + '" class="form-control form-control-sm" onChange="verificarProductoSeleccionado(this, ' + n + ')"> '+ opcionesDescripcion +' </select>';
+        var descripcion = '<input name="id_ingreso_salida_b_detalle[]" id="id_ingreso_salida_b_detalle${n}" class="form-control form-control-sm" value="${ingreso_salida_secundario.id}" type="hidden"><select name="descripcion[]" id="descripcion' + n + '" class="form-control form-control-sm" onChange="verificarProductoSeleccionado(this, ' + n + ')"> '+ opcionesDescripcion +' </select>';
         var descripcion_ant = '<input type="hidden" name="descripcion_ant[]" id="descripcion_ant' + n + '" class="form-control form-control-sm" />';
         var codigo = '<input name="codigo[]" id="codigo' + n + '" class="form-control form-control-sm" value="" type="text" readonly>';
         var marca = '<select name="marca[]" id="marca' + n + '" class="form-control form-control-sm" onchange=""> <option value="">--Seleccionar--</option><?php foreach ($marca as $row){?><option value="<?php echo htmlspecialchars($row->id); ?>"><?php echo htmlspecialchars(addslashes($row->denominiacion)); ?></option><?php }?></select>';
@@ -431,12 +408,16 @@ function fn_save_ingreso_salida_b(){
     var msg = "";
 
     var tipo_documento = $('#tipo_documento').val();
-    var almacen_destino = $('#almacen_destino').val();
+    var tipo_documento_cliente = $('#tipo_documento_cliente').val();
+    var almacen = $('#almacen').val();
+    var igv_compra = $('#igv_compra').val();
 
     if(tipo_documento==""){msg+="Ingrese el Tipo de Documento <br>";}
-    if(almacen_destino==""){msg+="Ingrese el Almacen Destino <br>";}
+    if(tipo_documento_cliente==""){msg+="Ingrese el Tipo de Documento Cliente<br>";}
+    if(almacen==""){msg+="Ingrese el Almacen <br>";}
+    if(igv_compra==""){msg+="Ingrese si Aplica IGV <br>";}
         
-    if(tipo_documento == 2){
+    /*if(tipo_documento == 2){
         $('#tblIngresoSalidaBDetalle tbody tr').each(function(index, row) {
 
             const id_entrada_productos_detalle = parseInt($(row).find('input[name="id_entrada_productos_detalle[]"]').val());
@@ -448,7 +429,7 @@ function fn_save_ingreso_salida_b(){
                 msg+="No hay stock para el producto "+descripcion_producto+" <br>";
             }
         });
-    }
+    }*/
 
     if ($('#tblIngresoSalidaBDetalle tbody tr').length == 0) {
         msg += "No se ha agregado ningún producto <br>";
@@ -463,14 +444,14 @@ function fn_save_ingreso_salida_b(){
             message: "&iquest;Est&aacute; seguro que son las cantidades correctas? Porque no se podr&aacute; editar.", 
             callback: function(result){
                 if (result==true) {
-                    save_ajuste();
+                    save_ingreso_salida_b();
                 }
             }
         });
     }
 }
 
-function save_ajuste(){
+function save_ingreso_salida_b(){
 
     var msgLoader = "";
     msgLoader = "Procesando, espere un momento por favor";
@@ -479,9 +460,9 @@ function save_ajuste(){
     $('.loader').show();
 
     $.ajax({
-        url: "/entrada_productos/send_ajuste_stock",
+        url: "/ingreso_salida_secundarios/send_ingreso_salida_secundario",
         type: "POST",
-        data : $("#frmAjusteStock").serialize(),
+        data : $("#frmIngresoSalidasB").serialize(),
         success: function (result) {
             $('#openOverlayOpc').modal('hide');
             datatablenew();

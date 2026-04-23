@@ -18,10 +18,10 @@ class CreateIngresoSalidaSecundarioDetallesTable extends Migration
             $table->bigInteger('id_ingreso_salida_secundario')->nullable();
             $table->bigInteger('id_producto')->nullable();
             $table->Integer('cantidad')->nullable();
-            $table->double('precio')->nullable();
-            $table->double('sub_total')->nullable();
-            $table->double('igv')->nullable();
-            $table->double('total')->nullable();
+            $table->double('precio',15,8)->nullable();
+            $table->double('sub_total',15,8)->nullable();
+            $table->double('igv',15,8)->nullable();
+            $table->double('total',15,8)->nullable();
             $table->bigInteger('id_unidad_medida')->nullable();
             $table->bigInteger('id_marca')->nullable();
             $table->string('estado',1)->nullable()->default('1');
