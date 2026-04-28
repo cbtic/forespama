@@ -112,16 +112,7 @@
 
 <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.js"></script>-->
 <script type="text/javascript">
-/*
-jQuery(function($){
-$.mask.definitions['H'] = "[0-1]";
-$.mask.definitions['h'] = "[0-9]";
-$.mask.definitions['M'] = "[0-5]";
-$.mask.definitions['m'] = "[0-9]";
-$.mask.definitions['P'] = "[AaPp]";
-$.mask.definitions['p'] = "[Mm]";
-});
-*/
+
 $(document).ready(function() {
 		
 });
@@ -151,6 +142,9 @@ $(document).ready(function() {
         });
         return false;
     });
+
+	checkBoxDetraccion();
+	
 });
 
 </script>
@@ -161,36 +155,24 @@ $('#openOverlayOpc').on('shown.bs.modal', function() {
      $('#fecha').datepicker({
 		format: "dd-mm-yyyy",
 		autoclose: true,
-		//container: '#openOverlayOpc modal-body'
 		container: '#openOverlayOpc modal-body'
      });
 
 	 $('#fecha_factura').datepicker({
 		format: "dd-mm-yyyy",
 		autoclose: true,
-		//container: '#openOverlayOpc modal-body'
 		container: '#openOverlayOpc modal-body'
      });
 
 	 $('#fecha_tc').datepicker({
 		format: "dd-mm-yyyy",
 		autoclose: true,
-		//container: '#openOverlayOpc modal-body'
 		container: '#openOverlayOpc modal-body'
-     });
-	 /*
-	 $('#hora_solicitud').timepicker({
-		showInputs: false,
-		container: '#openOverlayOpc modal-body'
-	});
-	*/
-	 
+     });	 
 });
 
 $(document).ready(function() {
 	 
-	//$("#divCheque").hide(); 
-
 });
 
 function validacion(){
@@ -217,7 +199,6 @@ function validar_tipo(){
 	if(id_tipodesembolso==3){
 		$("#divNumeroOperacion").show();
 	}
-
 }
 
 function fn_save(){
@@ -261,26 +242,22 @@ function fn_save(){
 	var heightBrowser = $(window).width()/2;
 	$('.loader').css("opacity","0.8").css("height",heightBrowser).html("<div id='Grd1_wrapper' class='dataTables_wrapper'><div id='Grd1_processing' class='dataTables_processing panel-default'>"+msgLoader+"</div></div>");
     $('.loader').show();
-	//$('#guardar').hide();
+
 	$("#btnGuardar").prop('disabled', true);
 	
     $.ajax({
-			url: "/orden_compra/send_pago",
-            type: "POST",
-            data : {_token:_token,
-					id:id_modal, id_orden_compra:id_orden_compra_modal, importe:importe, fecha:fecha,observacion:observacion, id_tipodesembolso:id_tipodesembolso,
-					nro_guia:nro_guia, nro_factura:nro_factura, nro_cheque:nro_cheque, img_foto:img_foto, id_banco:id_banco, nro_operacion:nro_operacion,
-					tipo_documento:tipo_documento, serie_factura:serie_factura, nro_factura:nro_factura, fecha_factura:fecha_factura, glosa_comprobante:glosa_comprobante,
-					glosa_movimiento:glosa_movimiento, conversion:conversion, tasa_cambio_especial:tasa_cambio_especial, fecha_tc:fecha_tc, tasa_cambio:tasa_cambio},
-            success: function (result) {
-				/*
-				$('.loader').hide();
-				$('#openOverlayOpc').modal('hide');
-				obtenerBeneficiario();
-				*/
-				location.href="/orden_compra/create_pago_orden_compra";
-				
-            }
+		url: "/orden_compra/send_pago",
+		type: "POST",
+		data : {_token:_token,
+				id:id_modal, id_orden_compra:id_orden_compra_modal, importe:importe, fecha:fecha,observacion:observacion, id_tipodesembolso:id_tipodesembolso,
+				nro_guia:nro_guia, nro_factura:nro_factura, nro_cheque:nro_cheque, img_foto:img_foto, id_banco:id_banco, nro_operacion:nro_operacion,
+				tipo_documento:tipo_documento, serie_factura:serie_factura, nro_factura:nro_factura, fecha_factura:fecha_factura, glosa_comprobante:glosa_comprobante,
+				glosa_movimiento:glosa_movimiento, conversion:conversion, tasa_cambio_especial:tasa_cambio_especial, fecha_tc:fecha_tc, tasa_cambio:tasa_cambio},
+		success: function (result) {
+			
+			location.href="/orden_compra/create_pago_orden_compra";
+			
+		}
     });
 }
 
@@ -310,7 +287,7 @@ function habilitarTC(){
 			dataType: 'json',
 			type: 'GET',
 			success: function(result){
-				//alert(result[0].valor_compra);
+
 				$('#tasa_cambio').val(result[0].valor_compra);
 
 			},
@@ -320,6 +297,21 @@ function habilitarTC(){
 		$('#tasa_cambio').prop('disabled', true);
 	}
 }
+
+function checkBoxDetraccion() {
+
+    let activo = $('#detraccion').is(':checked');
+
+    if (activo) {
+        $('#bloque_detraccion').show();
+    } else {
+        $('#bloque_detraccion').hide();
+    }
+}
+
+$('#detraccion').on('change', function() {
+    checkBoxDetraccion();
+});
 
 </script>
 
@@ -335,298 +327,294 @@ function habilitarTC(){
 		-->
 		<div class="justify-content-center">		
 
-		<div class="card">
-			
-			<div class="card-header" style="padding:5px!important;padding-left:20px!important">
-				Lista de Pagos
-			</div>
-			
-            <div class="card-body">
-
-			<div class="row">
-
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding-top:10px">
-					
-					<input type="hidden" name="_token" value="{{ csrf_token() }}">
-					<input type="hidden" name="id_orden_compra_modal" id="id_orden_compra_modal" value="<?php echo $id_orden_compra?>">
-					<input type="hidden" name="id_modal" id="id_modal" value="<?php echo $id?>">
-					<div class="row">
-						
-					<div class="col-lg-8">
-						<div class="row">
-
-						<div class="col-lg-3">
-							<div class="form-group">
-								<label class="control-label">Fecha Pago</label>
-								<input id="fecha" name="fecha" class="form-control form-control-sm"  value="<?php if($id==0){echo $fecha_actual;}else{echo date('d-m-Y',strtotime($orden_compra_pago->fecha));}?>" type="text">
-							</div>
-						</div>
-
-						<div class="col-lg-4">
-							<div class="form-group">
-								<label class="control-label">Forma de Pago</label>
-								<select name="id_tipodesembolso" id="id_tipodesembolso" onchange="validar_tipo()" class="form-control form-control-sm" onChange="">
-									<?php foreach($tipo_desembolso as $row){?>
-									<option <?php if($row->codigo==$orden_compra_pago->id_tipo_desembolso)echo "selected='selected'";?> value="<?php echo $row->codigo?>"><?php echo $row->denominacion?></option>
-									<?php }?>
-								</select>
-							</div>
-						</div>
-						
-						<div class="col-lg-4" id="divCheque" <?php if($orden_compra_pago->id_tipodesembolso!=2 || $id==0)echo "style='display:none'"?>>
-							<div class="form-group">
-								<label class="control-label">Cheque</label>
-								<input id="nro_cheque" name="nro_cheque" class="form-control form-control-sm"  value="<?php echo $orden_compra_pago->nro_cheque?>" type="number">
-							</div>
-						</div>
-
-						<div class="col-lg-4" id="divNumeroOperacion" <?php if($orden_compra_pago->id_tipodesembolso!=3 || $id==0)echo "style='display:none'"?>>
-							<div class="form-group">
-								<label class="control-label">N&uacute;mero Operaci&oacute;n</label>
-								<input id="nro_operacion" name="nro_operacion" class="form-control form-control-sm"  value="<?php echo $orden_compra_pago->nro_operacion?>" type="number">
-							</div>
-						</div>
-						
-					</div>
+			<div class="card">
+				
+				<div class="card-header" style="padding:5px!important;padding-left:20px!important">
+					Lista de Pagos
+				</div>
+				
+				<div class="card-body">
 
 					<div class="row">
-						
-						<div class="col-lg-4">
-							<div class="form-group">
-								<label class="control-label">Importe</label>
-								<input id="importe" name="importe" class="form-control form-control-sm"  value="<?php if($id==0){echo $importe;}else{echo $orden_compra_pago->importe;}?>" type="number">
-							</div>
-						</div>
 
-						<div class="col-lg-4">
-							<div class="form-group">
-								<label class="control-label">Banco</label>
-								<select name="id_banco" id="id_banco" onchange="" class="form-control form-control-sm" onChange="">
-									<option value="">--Seleccionar--</option>
-									<?php foreach($banco as $row){?>
-									<option <?php if($row->codigo==$orden_compra_pago->id_banco)echo "selected='selected'";?> value="<?php echo $row->codigo?>"><?php echo $row->denominacion?></option>
-									<?php }?>
-								</select>
-							</div>
-						</div>
+						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding-top:10px">
+								
+							<input type="hidden" name="_token" value="{{ csrf_token() }}">
+							<input type="hidden" name="id_orden_compra_modal" id="id_orden_compra_modal" value="<?php echo $id_orden_compra?>">
+							<input type="hidden" name="id_modal" id="id_modal" value="<?php echo $id?>">
 
-						<!--<div class="col-lg-3">
-							<div class="form-group">
-								<label class="control-label">Guia</label>
-								<input id="nro_guia" name="nro_guia" class="form-control form-control-sm"  value="<?php //echo $orden_compra_pago->nro_guia?>" type="text">
-							</div>
-						</div>-->
-					</div>
-
-					<div class="row">
-						<div class="col-lg-3">
-							<div class="form-group">
-								<label class="control-label">Tipo Documento</label>
-								<select name="tipo_documento" id="tipo_documento" class="form-control form-control-sm filtro-select" onchange="obtenerGlosaCompuesta()">
-									<option selected="selected" value="FT">
-										<?php echo "Factura" ?></option>
-									<option value="BV">
-										<?php echo "Boleta" ?></option>
-									<option value="NC">
-										<?php echo "Nota de Credito" ?></option>
-									<option value="ND">
-										<?php echo "Nota de Debito" ?></option>
-									<option value="TK">
-										<?php echo "Ticket" ?></option>
-								</select>
-							</div>
-						</div>
-
-						<div class="col-lg-3">
-							<div class="form-group">
-								<label class="control-label">Serie</label>
-								<input id="serie_factura" name="serie_factura" class="form-control form-control-sm"  value="<?php //echo $orden_compra_pago->nro_factura?>" type="text" oninput="obtenerGlosaCompuesta()">
-							</div>
-						</div>
-
-						<div class="col-lg-3">
-							<div class="form-group">
-								<label class="control-label">N° Documento</label>
-								<input id="nro_factura" name="nro_factura" class="form-control form-control-sm"  value="<?php //echo $orden_compra_pago->nro_factura?>" type="text" oninput="obtenerGlosaCompuesta()">
-							</div>
-						</div>
-
-						<div class="col-lg-3">
-							<div class="form-group">
-								<label class="control-label">Fecha Factura</label>
-								<input id="fecha_factura" name="fecha_factura" class="form-control form-control-sm"  value="<?php //if($id==0){echo $fecha_actual;}else{echo date('d-m-Y',strtotime($orden_compra_pago->fecha));}?>" type="text">
-							</div>
-						</div>
-					</div>
-
-					<div class="row">
-						<div class="col-lg-6">
-							<div class="form-group">
-								<label class="control-label">Glosa Comprobante</label>
-								<input id="glosa_comprobante" name="glosa_comprobante" class="form-control form-control-sm"  value="<?php //echo $orden_compra_pago->nro_factura?>" type="text" readonly>
-							</div>
-						</div>
-						<div class="col-lg-6">
-							<div class="form-group">
-								<label class="control-label">Glosa Movimiento</label>
-								<input id="glosa_movimiento" name="glosa_movimiento" class="form-control form-control-sm"  value="<?php //echo $orden_compra_pago->nro_factura?>" type="text">
-							</div>
-						</div>
-					</div>
-
-					<div class="row">
-						<div class="col-lg-3">
-							<div class="form-group">
-								<label class="control-label">Conversi&oacute;n</label>
-								<select name="conversion" id="conversion" class="form-control form-control-sm" onchange="habilitarTC()">
-									<option value="">--Seleccionar--</option>
-									<?php foreach($conversion as $row){?>
-									<option <?php //if($row->codigo==$orden_compra_pago->id_banco)echo "selected='selected'";?> value="<?php echo $row->codigo?>"><?php echo $row->denominacion?></option>
-									<?php }?>
-								</select>
-							</div>
-						</div>
-
-						<div class="col-lg-3">
-							<div class="form-group">
-								<label class="control-label">T/C Especial</label>
-								<input id="tasa_cambio_especial" name="tasa_cambio_especial" class="form-control form-control-sm"  value="<?php //echo $orden_compra_pago->nro_factura?>" type="text">
-							</div>
-						</div>
-
-						<div class="col-lg-3">
-							<div class="form-group">
-								<label class="control-label">Fecha T/C</label>
-								<input id="fecha_tc" name="fecha_tc" class="form-control form-control-sm"  value="<?php echo date('d-m-Y')?>" type="text">
-							</div>
-						</div>
-
-						<div class="col-lg-3">
-							<div class="form-group">
-								<label class="control-label">Tasa de Cambio</label>
-								<input id="tasa_cambio" name="tasa_cambio" class="form-control form-control-sm"  value="<?php //echo $orden_compra_pago->nro_factura?>" type="text">
-							</div>
-						</div>
-					</div>
-
-					<div class="row">
-						<div class="col-lg-4">
-							<div class="form-group">
-								<label class="control-label">Destino</label>
-								<select name="destino" id="destino" onchange="" class="form-control form-control-sm" onChange="">
-									<option value="">--Seleccionar--</option>
-									<?php foreach($destino_operaciones as $row){?>
-									<option <?php if($row->id==$orden_compra_pago->id_destino)echo "selected='selected'";?> value="<?php echo $row->id?>"><?php echo $row->descripcion?></option>
-									<?php }?>
-								</select>
-							</div>
-						</div>
-					</div>
-					
-					<div class="row">
-						<div class="col-lg-12">
-							<div class="form-group">
-								<label class="control-label">Observaci&oacute;n</label>
-								<textarea id="observacion" name="observacion" class="form-control form-control-sm"><?php echo $orden_compra_pago->observacion?></textarea>
-							</div>
-						</div>
-						
-					</div>
-						
-					</div>
-
-					<div class="col-lg-4">
-							
 							<div class="row">
-						
-								<div class="col-lg-12">
-										
+								<div class="col-lg-8">
+									<div class="row">
+
+										<div class="col-lg-3">
+											<div class="form-group">
+												<label class="control-label">Fecha Pago</label>
+												<input id="fecha" name="fecha" class="form-control form-control-sm"  value="<?php if($id==0){echo $fecha_actual;}else{echo date('d-m-Y',strtotime($orden_compra_pago->fecha));}?>" type="text">
+											</div>
+										</div>
+
+										<div class="col-lg-4">
+											<div class="form-group">
+												<label class="control-label">Forma de Pago</label>
+												<select name="id_tipodesembolso" id="id_tipodesembolso" onchange="validar_tipo()" class="form-control form-control-sm" onChange="">
+													<?php foreach($tipo_desembolso as $row){?>
+													<option <?php if($row->codigo==$orden_compra_pago->id_tipo_desembolso)echo "selected='selected'";?> value="<?php echo $row->codigo?>"><?php echo $row->denominacion?></option>
+													<?php }?>
+												</select>
+											</div>
+										</div>
+									
+										<div class="col-lg-4" id="divCheque" <?php if($orden_compra_pago->id_tipodesembolso!=2 || $id==0)echo "style='display:none'"?>>
+											<div class="form-group">
+												<label class="control-label">Cheque</label>
+												<input id="nro_cheque" name="nro_cheque" class="form-control form-control-sm"  value="<?php echo $orden_compra_pago->nro_cheque?>" type="number">
+											</div>
+										</div>
+
+										<div class="col-lg-4" id="divNumeroOperacion" <?php if($orden_compra_pago->id_tipodesembolso!=3 || $id==0)echo "style='display:none'"?>>
+											<div class="form-group">
+												<label class="control-label">N&uacute;mero Operaci&oacute;n</label>
+												<input id="nro_operacion" name="nro_operacion" class="form-control form-control-sm"  value="<?php echo $orden_compra_pago->nro_operacion?>" type="number">
+											</div>
+										</div>
+									</div>
+
+									<div class="row">
+										<div class="col-lg-4">
+											<div class="form-group">
+												<label class="control-label">Importe</label>
+												<input id="importe" name="importe" class="form-control form-control-sm"  value="<?php if($id==0){echo $importe;}else{echo $orden_compra_pago->importe;}?>" type="number">
+											</div>
+										</div>
+
+										<div class="col-lg-4">
+											<div class="form-group">
+												<label class="control-label">Banco</label>
+												<select name="id_banco" id="id_banco" onchange="" class="form-control form-control-sm" onChange="">
+													<option value="">--Seleccionar--</option>
+													<?php foreach($banco as $row){?>
+													<option <?php if($row->codigo==$orden_compra_pago->id_banco)echo "selected='selected'";?> value="<?php echo $row->codigo?>"><?php echo $row->denominacion?></option>
+													<?php }?>
+												</select>
+											</div>
+										</div>
+									</div>
+
+									<div class="row">
+										<div class="col-lg-3">
+											<div class="form-group">
+												<label class="control-label">Tipo Documento</label>
+												<select name="tipo_documento" id="tipo_documento" class="form-control form-control-sm filtro-select" onchange="obtenerGlosaCompuesta()">
+													<option selected="selected" value="FT">
+														<?php echo "Factura" ?></option>
+													<option value="BV">
+														<?php echo "Boleta" ?></option>
+													<option value="NC">
+														<?php echo "Nota de Credito" ?></option>
+													<option value="ND">
+														<?php echo "Nota de Debito" ?></option>
+													<option value="TK">
+														<?php echo "Ticket" ?></option>
+												</select>
+											</div>
+										</div>
+
+										<div class="col-lg-3">
+											<div class="form-group">
+												<label class="control-label">Serie</label>
+												<input id="serie_factura" name="serie_factura" class="form-control form-control-sm"  value="<?php //echo $orden_compra_pago->nro_factura?>" type="text" oninput="obtenerGlosaCompuesta()">
+											</div>
+										</div>
+
+										<div class="col-lg-3">
+											<div class="form-group">
+												<label class="control-label">N° Documento</label>
+												<input id="nro_factura" name="nro_factura" class="form-control form-control-sm"  value="<?php //echo $orden_compra_pago->nro_factura?>" type="text" oninput="obtenerGlosaCompuesta()">
+											</div>
+										</div>
+
+										<div class="col-lg-3">
+											<div class="form-group">
+												<label class="control-label">Fecha Factura</label>
+												<input id="fecha_factura" name="fecha_factura" class="form-control form-control-sm"  value="<?php //if($id==0){echo $fecha_actual;}else{echo date('d-m-Y',strtotime($orden_compra_pago->fecha));}?>" type="text">
+											</div>
+										</div>
+									</div>
+
+									<div class="row">
+										<div class="col-lg-6">
+											<div class="form-group">
+												<label class="control-label">Glosa Comprobante</label>
+												<input id="glosa_comprobante" name="glosa_comprobante" class="form-control form-control-sm"  value="<?php //echo $orden_compra_pago->nro_factura?>" type="text" readonly>
+											</div>
+										</div>
+										<div class="col-lg-6">
+											<div class="form-group">
+												<label class="control-label">Glosa Movimiento</label>
+												<input id="glosa_movimiento" name="glosa_movimiento" class="form-control form-control-sm"  value="<?php //echo $orden_compra_pago->nro_factura?>" type="text">
+											</div>
+										</div>
+									</div>
+
+									<div class="row">
+										<div class="col-lg-3">
+											<div class="form-group">
+												<label class="control-label">Conversi&oacute;n</label>
+												<select name="conversion" id="conversion" class="form-control form-control-sm" onchange="habilitarTC()">
+													<option value="">--Seleccionar--</option>
+													<?php foreach($conversion as $row){?>
+													<option <?php //if($row->codigo==$orden_compra_pago->id_banco)echo "selected='selected'";?> value="<?php echo $row->codigo?>"><?php echo $row->denominacion?></option>
+													<?php }?>
+												</select>
+											</div>
+										</div>
+
+										<div class="col-lg-3">
+											<div class="form-group">
+												<label class="control-label">T/C Especial</label>
+												<input id="tasa_cambio_especial" name="tasa_cambio_especial" class="form-control form-control-sm"  value="<?php //echo $orden_compra_pago->nro_factura?>" type="text">
+											</div>
+										</div>
+
+										<div class="col-lg-3">
+											<div class="form-group">
+												<label class="control-label">Fecha T/C</label>
+												<input id="fecha_tc" name="fecha_tc" class="form-control form-control-sm"  value="<?php echo date('d-m-Y')?>" type="text">
+											</div>
+										</div>
+
+										<div class="col-lg-3">
+											<div class="form-group">
+												<label class="control-label">Tasa de Cambio</label>
+												<input id="tasa_cambio" name="tasa_cambio" class="form-control form-control-sm"  value="<?php //echo $orden_compra_pago->nro_factura?>" type="text">
+											</div>
+										</div>
+									</div>
+
+									<div class="row">
+										<div class="col-lg-4">
+											<div class="form-group">
+												<label class="control-label">Destino</label>
+												<select name="destino" id="destino" onchange="" class="form-control form-control-sm" onChange="">
+													<option value="">--Seleccionar--</option>
+													<?php foreach($destino_operaciones as $row){?>
+													<option <?php if($row->id==$orden_compra_pago->id_destino)echo "selected='selected'";?> value="<?php echo $row->id?>"><?php echo $row->descripcion?></option>
+													<?php }?>
+												</select>
+											</div>
+										</div>
+									</div>
+
+									<div class="row">
+										<div class="col-lg-4">
+											<div class="form-check">
+												<input class="form-check-input" type="checkbox" name="detraccion" value="1" id="detraccion" <?php //if($orden_compra_pago->detraccion == 1) echo 'checked'; ?>>
+												<label class="form-check-label" for="cliente">Detracci&oacute;n</label>
+											</div>
+										</div>
+									</div>
+									<div id="bloque_detraccion">
+										<div class="row">
+											<div class="col-lg-4">
+												<div class="form-group">
+													<label class="control-label">Tipo Operaci&oacute;n</label>
+													<select name="tipo_operacion" id="tipo_operacion" onchange="" class="form-control form-control-sm" onChange="">
+														<option value="">--Seleccionar--</option>
+														<?php //foreach($tipo_operacion as $row){?>
+														<option <?php //if($row->id==$orden_compra_pago->id_tipo_operacion)echo "selected='selected'";?> value="<?php //echo $row->id?>"><?php //echo $row->denominacion?></option>
+														<?php //}?>
+													</select>
+												</div>
+											</div>
+											<div class="col-lg-4">
+												<div class="form-group">
+													<label class="control-label">C&oacute;digo Detraci&oacute;n</label>
+													<select name="codigo_detraccion" id="codigo_detraccion" onchange="" class="form-control form-control-sm" onChange="">
+														<option value="">--Seleccionar--</option>
+														<?php //foreach($codigo_detraccion as $row){?>
+														<option <?php //if($row->id==$orden_compra_pago->id_tipo_operacion)echo "selected='selected'";?> value="<?php //echo $row->id?>"><?php //echo $row->denominacion?></option>
+														<?php //}?>
+													</select>
+												</div>
+											</div>
+											<div class="col-lg-4">
+												<div class="form-group">
+													<label class="control-label">Documento</label>
+													<input id="documento_detraccion" name="documento_detraccion" class="form-control form-control-sm"  value="<?php //echo $orden_compra_pago->nro_factura?>" type="text">
+												</div>
+											</div>
+											<div class="col-lg-4">
+												<div class="form-group">
+													<label class="control-label">Fecha Detracci&oacute;n</label>
+													<input id="fecha_detraccion" name="fecha_detraccion" class="form-control form-control-sm"  value="<?php echo date('d-m-Y')?>" type="text">
+												</div>
+											</div>
+											<div class="col-lg-4">
+												<div class="form-group">
+													<label class="control-label">Importe Referencial</label>
+													<input id="importe_referencial" name="importe_referencial" class="form-control form-control-sm"  value="<?php //echo $orden_compra_pago->nro_factura?>" type="text">
+												</div>
+											</div>
+										</div>
+									</div>
 								
-								<div class="form-group">
-										
-										<span class="btn btn-sm btn-warning btn-file">
-											Examinar <input id="image" name="image" type="file" />
-										</span>
-										<input type="button" class="btn btn-sm btn-primary upload" value="Subir" style="margin-left:10px">
-										
-										<?php
-											$url_foto = "/img/logo_forestalpama5.jpeg";
-											if ($orden_compra_pago->foto_desembolso != "") $url_foto = "/img/pago_orden_compra/" . $id_orden_compra . "/" . $orden_compra_pago->foto_desembolso;
+									<div class="row">
+										<div class="col-lg-12">
+											<div class="form-group">
+												<label class="control-label">Observaci&oacute;n</label>
+												<textarea id="observacion" name="observacion" class="form-control form-control-sm"><?php echo $orden_compra_pago->observacion?></textarea>
+											</div>
+										</div>
+									</div>
+								</div>
 
-											$foto = "";
-											if ($orden_compra_pago->foto_desembolso != "") $foto = $orden_compra_pago->foto_desembolso;
-										?>
+								<div class="col-lg-4">
+									<div class="row">
+										<div class="col-lg-12">
+											<div class="form-group">
+												<span class="btn btn-sm btn-warning btn-file">
+													Examinar <input id="image" name="image" type="file" />
+												</span>
+												<input type="button" class="btn btn-sm btn-primary upload" value="Subir" style="margin-left:10px">
+												
+												<?php
+													$url_foto = "/img/logo_forestalpama5.jpeg";
+													if ($orden_compra_pago->foto_desembolso != "") $url_foto = "/img/pago_orden_compra/" . $id_orden_compra . "/" . $orden_compra_pago->foto_desembolso;
 
-										<img src="<?php echo $url_foto ?>" id="img_ruta" width="240px" height="150px" alt="" style="margin-top:10px" />
-										<input type="hidden" id="img_foto" name="img_foto" value="<?php echo $foto ?>" />
-									</div>	
+													$foto = "";
+													if ($orden_compra_pago->foto_desembolso != "") $foto = $orden_compra_pago->foto_desembolso;
+												?>
 
-
+												<img src="<?php echo $url_foto ?>" id="img_ruta" width="240px" height="150px" alt="" style="margin-top:10px" />
+												<input type="hidden" id="img_foto" name="img_foto" value="<?php echo $foto ?>" />
+											</div>
+										</div>
+									</div>
 								</div>
 							</div>
-					</div>
 
-
-					</div>
-
-					
-					
-					<div style="margin-top:10px" class="row form-group">
-						<div class="col-sm-12 controls">
-							<div class="btn-group btn-group-sm" role="group" aria-label="Log Viewer Actions" style="float:right">
-								<!--<a href="javascript:void(0)" id="btnGuardar" onClick="fn_save()" class="btn btn-sm btn-success">Guardar</a>-->
-								<input class="btn btn-sm btn-success" value="Guardar" type="button" id="btnGuardar" onClick="fn_save()">
-								
+							<div style="margin-top:10px" class="row form-group">
+								<div class="col-sm-12 controls">
+									<div class="btn-group btn-group-sm" role="group" aria-label="Log Viewer Actions" style="float:right">
+										<!--<a href="javascript:void(0)" id="btnGuardar" onClick="fn_save()" class="btn btn-sm btn-success">Guardar</a>-->
+										<input class="btn btn-sm btn-success" value="Guardar" type="button" id="btnGuardar" onClick="fn_save()">
+									</div>
 								</div>
-							
-						</div>
-					</div> 
-					
-              </div>
-			  
-			  
-			  
-          <!-- /.box -->
-          
-
-        </div>
-        <!--/.col (left) -->
-            
-     
-          </div>
-          <!-- /.row -->
-        </section>
-        <!-- /.content -->
-    </div>
-    <!-- /.content-wrapper -->
+							</div>
+						</div> 
+					<!-- /.box -->
+					</div>
+				<!--/.col (left) -->
+				</div>
+			<!-- /.row -->
+			</section>
+		<!-- /.content -->
+		</div>
+		<!-- /.content-wrapper -->
     
 <script type="text/javascript">
 $(document).ready(function () {
-	
-	
-	$('#tblReservaEstacionamiento').DataTable({
-		"dom": '<"top">rt<"bottom"flpi><"clear">'
-		});
-	$("#system-search").keyup(function() {
-		var dataTable = $('#tblReservaEstacionamiento').dataTable();
-		dataTable.fnFilter(this.value);
-	}); 
-	
-	$('#tblReservaEstacionamientoPreferente').DataTable({
-		"dom": '<"top">rt<"bottom"flpi><"clear">'
-		});
-	$("#system-searchp").keyup(function() {
-		var dataTable = $('#tblReservaEstacionamientoPreferente').dataTable();
-		dataTable.fnFilter(this.value);
-	});
-	
-	$('#tblSinReservaEstacionamiento').DataTable({
-		"dom": '<"top">rt<"bottom"flpi><"clear">'
-		});
-	$("#system-search2").keyup(function() {
-		var dataTable = $('#tblSinReservaEstacionamiento').dataTable();
-		dataTable.fnFilter(this.value);
-	}); 
 	
 	
 });
@@ -636,91 +624,6 @@ $(document).ready(function () {
 <script type="text/javascript">
 $(document).ready(function() {
 
-	/*
-	$('#numero_placa').focus();
-	$('#numero_placa').mask('AAA-000');
-	$('#vehiculo_numero_placa').mask('AAA-000');
-	
-	$('#vehiculo_numero_placa').keyup(function() {
-		this.value = this.value.toLocaleUpperCase();
-	});
-	
-	$('#vehiculo_empresa').keyup(function() {
-		this.value = this.value.toLocaleUpperCase();
-	});
-		
-	$('#vehiculo_empresa').focusin(function() { $('#vehiculo_empresa').select(); });
-	
-	$('#vehiculo_empresa').autocomplete({
-		appendTo: "#vehiculo_empresa_busqueda",
-		source: function(request, response) {
-			$.ajax({
-			url: '/pesaje/list/'+$('#vehiculo_empresa').val(),
-			dataType: "json",
-			success: function(data){
-			   var resp = $.map(data,function(obj){
-					var hash = {key: obj.id, value: obj.razon_social, ruc: obj.ruc};
-					//if(obj.razon_social=='') { actualiza_ruc("") }
-					return hash;
-			   }); 
-			   response(resp);
-			},
-			error: function() {
-				//actualiza_ruc("");
-			}
-		});
-		},
-		select: function (event, ui) {
-			$('#vehiculo_empresa').blur();
-			$('#ruc').val(ui.item.ruc);
-			//if (ui.item.value != ''){
-			//actualiza_ruc(ui.item.value);
-			//}
-			obtener_vehiculos(ui.item.key);
-			$("#id_empresa").val(ui.item.key); // save selected id to hidden input
-		},
-			minLength: 2,
-			delay: 100
-	  });
-	  
-	
-	$('#modalVehiculoSaveBtn').click(function (e) {
-		e.preventDefault();
-		$(this).html('Enviando datos..');
-	
-		$.ajax({
-		  data: $('#modalVehiculoForm').serialize(),
-		  url: "/vehiculo/send_ajax_asignar",
-		  type: "POST",
-		  dataType: 'json',
-		  success: function (data) {
-	
-			  $('#modalVehiculoForm').trigger("reset");
-			  //$('#vehiculoModal').modal('hide');
-			  $('#openOverlayOpc').modal('hide');
-
-        alert(data.msg);
-        $("#nombre_empresa").val(data.vehiculo_empresa);
-        $("#numero_placa").val(data.vehiculo_numero_placa);
-        $("#numero_ejes").val(data.ejes);
-        $("#numero_documento").val(data.ruc);
-        $("#nombres_razon_social").val(data.razon_social);
-        $("#empresa_direccion").val(data.direccion);
-
-        $("#modalVehiculoSaveBtn").html("Grabar");
-	
-		  },
-		  error: function(data) {
-        mensaje = "Revisar el formulario:\n\n";
-        $.each( data["responseJSON"].errors, function( key, value ) {
-          mensaje += value +"\n";
-        });
-        $("#modalVehiculoSaveBtn").html("Grabar");
-        alert(mensaje);
-      }
-	  });
-	});	  
-	*/
 });
 
 function actualiza_ruc(razon_social) {
@@ -729,7 +632,7 @@ function actualiza_ruc(razon_social) {
 		dataType: 'json',
 		type: 'GET',
 		success: function(result){
-			//alert(result);
+
 			$('#ruc').val(result);
 		},
 		error: function(){
@@ -758,24 +661,7 @@ function obtener_vehiculos(id){
 		$("#id_vehiculo").html(option);
 		$("#id_vehiculo").val(id).select2();
 		
-		/*
-		var cantidad = data.cantidad;
-		var cantidadEstablecimiento = data.cantidadEstablecimiento;
-		var cantidadAlmacen = data.cantidadAlmacen;
-		$(cmb).closest("tr").find(".limpia_text").val("");                
-		$(cmb).closest("tr").find("#nro_stocks").val(cantidad);
-		$(cmb).closest("tr").find("#nro_stocks_establecimiento").val(cantidadEstablecimiento);
-		$(cmb).closest("tr").find("#nro_stocks_almacen").val(cantidadAlmacen);
-		$(cmb).closest("tr").find("#nro_med_solictados").val("");  
-		$(cmb).closest("tr").find("#nro_med_entregados").val("");
-		$(cmb).closest("tr").find("#lotes_lote").val("");
-		$(cmb).closest("tr").find("#lotes_cantidad").val("");
-		$(cmb).closest("tr").find("#lotes_registro_sanitario").val("");
-		$(cmb).closest("tr").find("#lotes_fecha_vencimiento").val("");
-		*/
 	});
-	
-		
 }
-</script>
 
+</script>

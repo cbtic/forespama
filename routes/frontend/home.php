@@ -977,3 +977,6 @@ Route::post('kardex_secundarios/listar_kardex_secundario_ajax', [KardexSecundari
 
 Route::get('tipo_cambio/obtenerTipoCambioByFecha/{fecha_comprobante}', [TipoCambioController::class, 'obtenerTipoCambioByFecha'])->name('tipo_cambio.obtenerTipoCambioByFecha');
 Route::get('kardex_secundarios/obtener_precio_salida/{producto}', [KardexSecundarioController::class, 'obtener_precio_salida'])->name('kardex_secundarios.obtener_precio_salida');
+
+Route::get('ingreso_salida_secundarios/cargar_detalle/{id}', [IngresoSalidaSecundarioController::class, 'cargar_detalle'])->name('ingreso_salida_secundarios.cargar_detalle');
+

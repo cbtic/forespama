@@ -203,6 +203,8 @@ function cargarDetalle(){
 
     var id = $("#id").val();
     var tipo_documento = $("#tipo_documento").val();
+    let bloqueado = (tipo_documento == 2);
+
     const tbody = $('#divIngresoSalidaBDetalle');
 
     tbody.empty();
@@ -214,44 +216,48 @@ function cargarDetalle(){
 
             let n = 1;
 
-            result.entrada_producto.forEach(entrada_producto => {
+            result.ingreso_salida_secundario.forEach(ingreso_salida_secundario => {
 
                 let marcaOptions = '<option value="">--Seleccionar--</option>';
                 let productoOptions = '<option value="">--Seleccionar--</option>';
-                let estadoBienOptions = '<option value="">--Seleccionar--</option>';
                 let unidadMedidaOptions = '<option value="">--Seleccionar--</option>';
                 
-                var producto_stock = result.producto_stock[entrada_producto.id_producto];
-
                 result.marca.forEach(marca => {
-                    let selected = (marca.id == entrada_producto.id_marca) ? 'selected' : '';
+                    let selected = (marca.id == ingreso_salida_secundario.id_marca) ? 'selected' : '';
                     marcaOptions += `<option value="${marca.id}" ${selected}>${marca.denominiacion}</option>`;
                 });
 
                 result.producto.forEach(producto => {
-                    let selected = (producto.id == entrada_producto.id_producto) ? 'selected' : '';
+                    let selected = (producto.id == ingreso_salida_secundario.id_producto) ? 'selected' : '';
                     productoOptions += `<option value="${producto.id}" ${selected}>${producto.codigo} - ${producto.denominacion}</option>`;
                 });
 
                 result.unidad_medida.forEach(unidad_medida => {
-                    let selected = (unidad_medida.codigo == entrada_producto.id_unidad_medida) ? 'selected' : '';
+                    let selected = (unidad_medida.codigo == ingreso_salida_secundario.id_unidad_medida) ? 'selected' : '';
                     unidadMedidaOptions += `<option value="${unidad_medida.codigo}" ${selected}>${unidad_medida.denominacion}</option>`;
                 });
 
-                if (entrada_producto.id_producto) {
-                    productosSeleccionados.push(entrada_producto.id_producto);
+                if (ingreso_salida_secundario.id_producto) {
+                    productosSeleccionados.push(ingreso_salida_secundario.id_producto);
                 }
-            
-                const row = `
+
+                let precio_unitario = `<input name="precio_unitario[]" id="precio_unitario${n}" class="precio_unitario form-control form-control-sm"
+                                        ${bloqueado ? 'readonly' : ''}
+                                        value="${ingreso_salida_secundario.precio ?? ''}" type="text"oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\\..*?)\\..*/g, '$1').replace(/(\\d+\\.\\d{0,2}).*/, '$1');calcularSubTotal(this)">`;
+
+                    const row = `
                     <tr>
                         <td>${n}</td>
-                        <td><input name="id_ingreso_produccion_detalle[]" id="id_ingreso_produccion_detalle${n}" class="form-control form-control-sm" value="${entrada_producto.id}" type="hidden"><input name="item[]" id="item${n}" class="form-control form-control-sm" value="${entrada_producto.item}" type="text" readonly></td>
-                        <td style="width: 450px !important;display:block"><select name="descripcion_[]" id="descripcion_${n}" class="form-control form-control-sm" onChange="verificarProductoSeleccionado(this, ${n});" disabled>${productoOptions}</select><input name="descripcion[]" id="descripcion${n}" class="form-control form-control-sm" value="${entrada_producto.id_producto}" type="hidden"></td>
-                        <td><input name="codigo[]" id="codigo${n}" class="form-control form-control-sm" value="${entrada_producto.codigo}" type="text" readonly></td>
-                        <td><select name="marca_[]" id="marca_${n}" class="form-control form-control-sm" disabled>${marcaOptions}</select><input name="marca[]" id="marca${n}" class="form-control form-control-sm" value="${entrada_producto.id_marca}" type="hidden"></td>
-                        <td><select name="unidad_[]" id="unidad_${n}" class="form-control form-control-sm" disabled>${unidadMedidaOptions}</select><input name="unidad[]" id="unidad${n}" class="form-control form-control-sm" value="${entrada_producto.id_unidad_medida}" type="hidden"></td>
-                        <td><input name="cantidad[]" id="cantidad${n}" class="cantidad form-control form-control-sm" value="${entrada_producto.cantidad}" type="text" oninput="calcularCantidadPendiente(this);calcularSubTotal(this)" readonly></td>
-                        <td><input name="stock_actual[]" id="stock_actual${n}" class="form-control form-control-sm" value="${producto_stock.saldos_cantidad}" type="text" readonly></td>
+                        <td style="width: 450px !important;display:block"><input name="id_ingreso_salida_secundario_detalle[]" id="id_ingreso_salida_secundario_detalle${n}" class="form-control form-control-sm" value="${ingreso_salida_secundario.id}" type="hidden"><select name="descripcion_[]" id="descripcion_${n}" class="form-control form-control-sm" onChange="verificarProductoSeleccionado(this, ${n});" disabled>${productoOptions}</select><input name="descripcion[]" id="descripcion${n}" class="form-control form-control-sm" value="${ingreso_salida_secundario.id_producto}" type="hidden"></td>
+                        <td><input name="codigo[]" id="codigo${n}" class="form-control form-control-sm" value="${ingreso_salida_secundario.codigo}" type="text" readonly></td>
+                        <td><select name="marca_[]" id="marca_${n}" class="form-control form-control-sm" disabled>${marcaOptions}</select><input name="marca[]" id="marca${n}" class="form-control form-control-sm" value="${ingreso_salida_secundario.id_marca}" type="hidden"></td>
+                        <td><select name="unidad_[]" id="unidad_${n}" class="form-control form-control-sm" disabled>${unidadMedidaOptions}</select><input name="unidad[]" id="unidad${n}" class="form-control form-control-sm" value="${ingreso_salida_secundario.id_unidad_medida}" type="hidden"></td>
+                        <td><input name="cantidad[]" id="cantidad${n}" class="cantidad form-control form-control-sm" value="${ingreso_salida_secundario.cantidad}" type="text" oninput="calcularCantidadPendiente(this);calcularSubTotal(this)" readonly></td>
+                        <td class="td_contable"><input name="precio_dolar[]" id="precio_dolar${n}" class="precio_dolar form-control form-control-sm" value="${ingreso_salida_secundario.precio_dolar ?? ''}" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\\..*?)\\..*/g, '$1').replace(/(\\d+\\.\\d{0,2}).*/, '$1');calcularSoles(this)"></td>
+                        <td>${precio_unitario}</td>
+                        <td><input name="sub_total[]" id="sub_total${n}" class="sub_total form-control form-control-sm" value="${ingreso_salida_secundario.sub_total ?? ''}" readonly></td>
+                        <td><input name="igv[]" id="igv${n}" class="igv form-control form-control-sm" value="${ingreso_salida_secundario.igv ?? ''}" readonly></td>
+                        <td><input name="total[]" id="total${n}" class="total form-control form-control-sm" value="${ingreso_salida_secundario.total ?? ''}" readonly></td>
                     </tr>
                 `;
                 tbody.append(row);
@@ -263,9 +269,10 @@ function cargarDetalle(){
                 $('#marca_' + n).select2({
                     width: '100%',
                 });
-
                 n++;
             });
+            validarMoneda();
+            actualizarTotalGeneral();
         }
     });
 }
@@ -342,16 +349,15 @@ function cargarTipoCambioDelDia() {
         url: "/tipo_cambio/obtenerTipoCambioByFecha/"+fecha_comprobante,
         method: 'GET',
         success: function(response) {
-            // Asegura que el resultado no esté vacío
             if (response.length > 0) {
                 const tipoCambio = parseFloat(response[0].valor_venta || 0).toFixed(3);
-                $('#tipo_cambio').val(tipoCambio);
+                $('#tipo_cambio_sunat').val(tipoCambio);
             } else {
-                alert('No se encontró tipo de cambio del día.');
+                bootbox.alert('No se encontró el tipo de cambio del día: ' + fecha_comprobante);
             }
         },
         error: function() {
-            alert('Error al obtener el tipo de cambio del día.');
+            bootbox.alert('Error al obtener el tipo de cambio del día: ' + fecha_comprobante);
         }
     });
 }
@@ -387,9 +393,13 @@ function calcularSubTotal(input) {
 
 function actualizarTotalGeneral() {
     
+    var moneda = $('#moneda').val();
+    var tipo_cambio_sunat = $('#tipo_cambio_sunat').val();
+
     var sub_totalGeneral = 0;
     var igv_totalGeneral = 0;
     var totalGeneral = 0;
+    var totalContableGeneral = 0;
     
     $('#tblIngresoSalidaBDetalle tbody tr').each(function() {
         var sub_totalFila = parseFloat($(this).find('.sub_total').val()) || 0;
@@ -399,11 +409,19 @@ function actualizarTotalGeneral() {
         sub_totalGeneral += sub_totalFila;
         igv_totalGeneral += igv_totalFila;
         totalGeneral += totalFila;
+
+        if(moneda == 2){
+            var precioDolarFila = parseFloat($(this).find('.precio_dolar').val()) || 0;
+            var cantidadFila = parseFloat($(this).find('.cantidad').val()) || 0;
+            var totalContable = tipo_cambio_sunat * precioDolarFila * cantidadFila;
+            totalContableGeneral += totalContable;
+        }
     });
     
     $('#sub_total_general').val(sub_totalGeneral.toFixed(2));
     $('#igv_general').val(igv_totalGeneral.toFixed(2));
     $('#total_general').val(totalGeneral.toFixed(2));
+    $('#total_contable_general').val(totalContableGeneral.toFixed(2));
 }
 
 function verificarProductoSeleccionado(selectElement, rowIndex, valor) {
@@ -562,17 +580,24 @@ function habilitarTipoCambio(){
     $('#fecha_comprobante_input').hide();
     $('#tipo_cambio_label').hide();
     $('#tipo_cambio_input').hide();
+    $('#tipo_cambio_sunat_label').hide();
+    $('#tipo_cambio_sunat_input').hide();
+    
     
     if(moneda == 1){
         $('#fecha_comprobante_label').hide();
         $('#fecha_comprobante_input').hide();
         $('#tipo_cambio_label').hide();
         $('#tipo_cambio_input').hide();
+        $('#tipo_cambio_sunat_label').hide();
+        $('#tipo_cambio_sunat_input').hide();
     }else if(moneda == 2){
         $('#fecha_comprobante_label').show();
         $('#fecha_comprobante_input').show();
         $('#tipo_cambio_label').show();
         $('#tipo_cambio_input').show();
+        $('#tipo_cambio_sunat_label').show();
+        $('#tipo_cambio_sunat_input').show();
     }
 }
 
@@ -594,12 +619,15 @@ function calcularSoles(input){
     var fila = $(input).closest('tr');
 
     var igvPorcentaje = $('#igv_compra').val() == 2 ? 1.18 : 0;
+    var tipo_cambio = $('#tipo_cambio').val();
     var cantidad = parseFloat(fila.find('.cantidad').val()) || 0;
     var precio_dolar = parseFloat(fila.find('.precio_dolar').val()) || 0;
-    var precio_unitario = parseFloat(fila.find('.precio_unitario').val()) || 0;
+    //var precio_unitario = parseFloat(fila.find('.precio_unitario').val()) || 0;
     var sub_total = 0;
     var igv = 0;
     var total = 0;
+
+    var precio_unitario = precio_dolar * tipo_cambio;
 
     if(igvPorcentaje==1.18){
         sub_total = (cantidad * precio_unitario) / igvPorcentaje;
@@ -613,6 +641,7 @@ function calcularSoles(input){
 
     total = sub_total + igv;
 
+    fila.find('.precio_unitario').val(precio_unitario.toFixed(2));
     fila.find('.igv').val(igv.toFixed(2));
     fila.find('.sub_total').val(sub_total.toFixed(2));
     fila.find('.total').val(total.toFixed(2));
@@ -758,13 +787,19 @@ function calcularSoles(input){
                             Fecha Comprobante
                         </div>
                         <div class="col-lg-2" id="fecha_comprobante_input">
-                            <input id="fecha_comprobante" name="fecha_comprobante" on class="form-control form-control-sm"  value="<?php //echo isset($ingreso_salida_secundario) && $ingreso_salida_secundario->fecha_ingreso_salida ? $ingreso_salida_secundario->fecha_ingreso_salida : date('Y-m-d'); ?>" type="text" onchange="">
+                            <input id="fecha_comprobante" name="fecha_comprobante" on class="form-control form-control-sm"  value="<?php echo isset($ingreso_salida_secundario) && $ingreso_salida_secundario->fecha_comprobante ? $ingreso_salida_secundario->fecha_comprobante : ''; ?>" type="text" onchange="">
                         </div>
                         <div class="col-lg-2" id="tipo_cambio_label">
                             Tipo de Cambio
                         </div>
                         <div class="col-lg-2" id="tipo_cambio_input">
-                            <input id="tipo_cambio" name="tipo_cambio" on class="form-control form-control-sm"  value="<?php //if($id>0){echo $ingreso_salida_secundario->tipo_cambio;}?>" type="text" readonly ="readonly">
+                            <input id="tipo_cambio" name="tipo_cambio" on class="form-control form-control-sm"  value="<?php if($id>0){echo $ingreso_salida_secundario->tipo_cambio;}?>" type="text">
+                        </div>
+                        <div class="col-lg-2" id="tipo_cambio_sunat_label">
+                            Tipo de Cambio Sunat
+                        </div>
+                        <div class="col-lg-2" id="tipo_cambio_sunat_input">
+                            <input id="tipo_cambio_sunat" name="tipo_cambio_sunat" on class="form-control form-control-sm"  value="<?php if($id>0){echo $ingreso_salida_secundario->tipo_cambio_sunat;}?>" type="text" readonly ="readonly">
                         </div>
                         <div class="col-lg-2" id="observacion_label">
                             Observaci&oacute;n
@@ -776,9 +811,11 @@ function calcularSoles(input){
                     <div style="margin-top:15px" class="form-group">
                         <div class="col-sm-12 controls">
                             <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
-                                <button type="button" class="btn btn-sm btn-clasico-blanco btn-agregar" data-toggle="modal" onclick="agregarProducto()">
-                                    <i class="fas fa-plus-circle" style="font-size:18px;"></i> Agregar
-                                </button>
+                                <?php if($id == 0) {?>
+                                    <button type="button" class="btn btn-sm btn-clasico-blanco btn-agregar" data-toggle="modal" onclick="agregarProducto()">
+                                        <i class="fas fa-plus-circle" style="font-size:18px;"></i> Agregar
+                                    </button>
+                                <?php }; ?>
                             </div>
                         </div>
                     </div>
@@ -834,9 +871,11 @@ function calcularSoles(input){
                     <div style="margin-top:15px" class="form-group">
                         <div class="col-sm-12 controls">
                             <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
+                                <?php if($id == 0) {?>
                                 <button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-nuevo" data-toggle="modal" onclick="fn_save_ingreso_salida_b()">
 									<i class="fas fa-save" style="font-size:18px;"></i> Guardar
 								</button>
+                                <?php }; ?>
                                 <button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-cerrar" data-toggle="modal" onclick="$('#openOverlayOpc').modal('hide');">
                                     <i class="fas fa-times-circle" style="font-size:18px;"></i> Cerrar
                                 </button>

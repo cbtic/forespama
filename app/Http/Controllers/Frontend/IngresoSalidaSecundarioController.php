@@ -117,6 +117,7 @@ class IngresoSalidaSecundarioController extends Controller
         $unidad = $request->input('unidad');
         $cantidad = $request->input('cantidad');
         $precio_unitario = $request->input('precio_unitario');
+        $precio_dolar = $request->input('precio_dolar');
         $sub_total = $request->input('sub_total');
         $igv = $request->input('igv');
         $total = $request->input('total');
@@ -128,6 +129,7 @@ class IngresoSalidaSecundarioController extends Controller
         $ingreso_salida_secundario->id_empresa = $request->empresa;
         $ingreso_salida_secundario->id_almacen = $request->almacen;
         $ingreso_salida_secundario->fecha_ingreso_salida = $request->fecha;
+        $ingreso_salida_secundario->fecha_comprobante = $request->fecha_comprobante;
         if($request->id == 0){
             $ingreso_salida_secundario->numero_ingreso_salida = $codigo_ingreso_salida_secundario[0]->codigo;
         }else{
@@ -136,9 +138,12 @@ class IngresoSalidaSecundarioController extends Controller
         $ingreso_salida_secundario->observacion = $request->observacion;
         $ingreso_salida_secundario->igv_compra = $request->igv_compra;
         $ingreso_salida_secundario->id_moneda = $request->moneda;
+        $ingreso_salida_secundario->tipo_cambio = $request->tipo_cambio;
+        $ingreso_salida_secundario->tipo_cambio_sunat = $request->tipo_cambio_sunat;
         $ingreso_salida_secundario->sub_total = round($request->sub_total_general,2);
         $ingreso_salida_secundario->igv = round($request->igv_general,2);
         $ingreso_salida_secundario->total = round($request->total_general,2);
+        $ingreso_salida_secundario->total_contabilidad = round($request->total_contable_general,2);
         $ingreso_salida_secundario->id_usuario_inserta = $id_user;
         $ingreso_salida_secundario->estado = 1;
         $ingreso_salida_secundario->save();
@@ -157,6 +162,7 @@ class IngresoSalidaSecundarioController extends Controller
             $ingreso_salida_secundario_detalle->id_producto = $descripcion[$index];
             $ingreso_salida_secundario_detalle->cantidad = $cantidad[$index];
             $ingreso_salida_secundario_detalle->precio = round($precio_unitario[$index],2);
+            $ingreso_salida_secundario_detalle->precio_dolar = round($precio_dolar[$index],2);
             $ingreso_salida_secundario_detalle->sub_total = round($sub_total[$index],2);
             $ingreso_salida_secundario_detalle->igv = round($igv[$index],2);
             $ingreso_salida_secundario_detalle->total = round($total[$index],2);
@@ -225,7 +231,6 @@ class IngresoSalidaSecundarioController extends Controller
                 $kardex_secundario->total_entradas_cantidad = $sub_total[$index];
                 $kardex_secundario->saldos_cantidad = $saldoBase + $cantidad[$index];
                 $kardex_secundario->costo_saldos_cantidad = $costo_unitario;
-                //$total_kardex = ($saldoBase + $cantidad[$index]) * $costo_unitario;
                 $kardex_secundario->total_saldos_cantidad = $total_kardex;
             }else{
                 $kardex_secundario->entradas_cantidad = 0;
@@ -234,7 +239,6 @@ class IngresoSalidaSecundarioController extends Controller
                 $kardex_secundario->total_salidas_cantidad = $total_salida;
                 $kardex_secundario->saldos_cantidad = $saldoBase - $cantidad[$index];
                 $kardex_secundario->costo_saldos_cantidad = $costo_unitario;
-                //$total_kardex = ($saldoBase - $cantidad[$index]) * $costo_unitario;
                 $kardex_secundario->total_saldos_cantidad = $total_kardex;
             }
 
@@ -245,5 +249,26 @@ class IngresoSalidaSecundarioController extends Controller
         
         return response()->json(['id' => $id_ingreso_salida_secundario]);
         
+    }
+
+    public function cargar_detalle($id)
+    {
+
+        $ingreso_salida_secundario_model = new IngresoSalidaSecundario;
+        $marca_model = new Marca;
+        $producto_model = new Producto;
+        $tablaMaestra_model = new TablaMaestra;
+
+        $ingreso_salida_secundario = $ingreso_salida_secundario_model->getDetalleIngresoSalidaSecundarioById($id);
+        $marca = $marca_model->getMarcaAll();
+        $producto = $producto_model->getProductoAll();
+        $unidad_medida = $tablaMaestra_model->getMaestroByTipo(43);
+
+        return response()->json([
+            'ingreso_salida_secundario' => $ingreso_salida_secundario,
+            'marca' => $marca,
+            'producto' => $producto,
+            'unidad_medida' => $unidad_medida
+        ]);
     }
 }
