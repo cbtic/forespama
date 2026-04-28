@@ -29,7 +29,7 @@ begin
 	inner join productos p on rd.id_producto = p.id 
 	inner join tabla_maestras tm on r.id_tipo_documento::int = tm.codigo::int and tm.tipo = ''59'' 
 	inner join tabla_maestras tm2 on rd.cerrado::int = tm2.codigo::int and tm2.tipo = ''52''
-	inner join tabla_maestras tm3 on rd.id_prioridad::int = tm3.codigo::int and tm3.tipo = ''93'' 
+	left join tabla_maestras tm3 on rd.id_prioridad::int = tm3.codigo::int and tm3.tipo = ''93'' 
 	inner join tabla_maestras tm4 on rd.id_unidad_medida::int = tm4.codigo::int and tm4.tipo = ''43''
 	inner join almacenes a on r.id_almacen_destino = a.id 
 	inner join users u on r.responsable_atencion = u.id 
