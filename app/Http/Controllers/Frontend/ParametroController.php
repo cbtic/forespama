@@ -43,10 +43,12 @@ class ParametroController extends Controller
 		}
 
         $tabla_maestra_model = new TablaMaestra;
+		$empresa_model = new Empresa;
 
         $tipo_parametro = $tabla_maestra_model->getMaestroByTipo(72);
 
-        $empresa = Empresa::all();
+        //$empresa = Empresa::all();
+		$empresa = $empresa_model->getEmpresaAll();
 		//var_dump($codigo[0]->codigo);exit();
 
 		return view('frontend.parametro.modal_parametros_nuevoParametro',compact('id','parametro','empresa','tipo_parametro'));
@@ -112,7 +114,10 @@ class ParametroController extends Controller
 
     public function create_valida_parametro(){
 
-        $empresa = Empresa::all();
+		$empresa_model = new Empresa;
+		
+        //$empresa = Empresa::all();
+		$empresa = $empresa_model->getEmpresaAll();
 
 		return view('frontend.parametro.create_valida_parametro',compact('empresa'));
 

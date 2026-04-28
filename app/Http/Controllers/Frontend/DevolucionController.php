@@ -37,7 +37,10 @@ class DevolucionController extends Controller
 
     public function create(){
 
-		$empresa = Empresa::all();
+		$empresa_model = new Empresa;
+
+		//$empresa = Empresa::all();
+		$empresa = $empresa_model->getEmpresaAll();
 		
 		return view('frontend.devolucion.create',compact('empresa'));
 
@@ -74,6 +77,7 @@ class DevolucionController extends Controller
         $marca_model = new Marca;
         $producto_model = new Producto;
         $almacen_model = new Almacene;
+		$empresa_model = new Empresa;
 		
 		if($id>0){
 			$salida = EntradaProducto::find($id);
@@ -98,7 +102,8 @@ class DevolucionController extends Controller
         $motivo_devolucion = $tablaMaestra_model->getMaestroByTipo(74);
         $marca = $marca_model->getMarcaAll();
         $almacen_destino = $almacen_model->getAlmacenAll();
-        $empresa = Empresa::All();
+        //$empresa = Empresa::All();
+		$empresa = $empresa_model->getEmpresaAll();
 		//var_dump($id);exit();
 
 		return view('frontend.devolucion.modal_devolucion_nuevoDevolucion',compact('id','id_tipo_documento','salida','unidad_medida','moneda','estado_bien','tipo_producto','unidad','marca','producto','tipo_documento','almacen_destino','id_user','empresa','igv_compra','motivo_devolucion','orden_compra'));

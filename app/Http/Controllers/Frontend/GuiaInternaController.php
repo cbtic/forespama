@@ -91,6 +91,7 @@ class GuiaInternaController extends Controller
         $empresa_model = new Empresa;
         $ubigeo_model = new Ubigeo;
         $sede_model = new Sede;
+        $empresa_model = new Empresa;
         $id_sede = session('id_sede');
 		
 		if($id>0){
@@ -107,7 +108,8 @@ class GuiaInternaController extends Controller
         $marca = $marca_model->getMarcaVehiculo();
         $estado_bien = $tablaMaestra_model->getMaestroByTipo(4);
         $unidad = $tablaMaestra_model->getMaestroByTipo(43);
-        $empresas = Empresa::all();
+        //$empresas = Empresa::all();
+        $empresas = $empresa_model->getEmpresaAll();
         $motivo_traslado = $tablaMaestra_model->getMaestroByTipo(63);
         $departamento = $ubigeo_model->getDepartamento();
         //$serie_guia = $tablaMaestra_model->getMaestroC(95,"GR");

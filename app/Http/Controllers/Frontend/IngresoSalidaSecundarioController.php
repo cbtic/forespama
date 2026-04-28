@@ -12,6 +12,7 @@ use App\Models\Persona;
 use App\Models\Marca;
 use App\Models\IngresoSalidaSecundario;
 use App\Models\IngresoSalidaSecundarioDetalle;
+use App\Models\KardexSecundario;
 use Auth;
 use Carbon\Carbon;
 
@@ -26,10 +27,15 @@ class IngresoSalidaSecundarioController extends Controller
     public function create(){
 
 		$tablaMaestra_model = new TablaMaestra;
+		$empresa_model = new Empresa;
+		$persona_model = new Persona;
+
 		$tipo_documento = $tablaMaestra_model->getMaestroByTipo(53);
-        $proveedor = Empresa::all();
+        //$proveedor = Empresa::all();
+        $proveedor = $empresa_model->getEmpresaAll();
+        $persona = $persona_model->obtenerPersonaAll();
 		
-		return view('frontend.ingreso_salida_secundarios.create',compact('tipo_documento','proveedor'));
+		return view('frontend.ingreso_salida_secundarios.create',compact('tipo_documento','proveedor','persona'));
 
 	}
 
@@ -38,6 +44,7 @@ class IngresoSalidaSecundarioController extends Controller
 		$ingreso_salida_secundario_model = new IngresoSalidaSecundario;
 		$p[]=$request->tipo_documento;
         $p[]=$request->empresa;
+        $p[]=$request->persona;
         $p[]=$request->fecha_inicio;
         $p[]=$request->fecha_fin;
         $p[]=$request->numero_ingreso_salida;
@@ -126,7 +133,7 @@ class IngresoSalidaSecundarioController extends Controller
         }else{
             $ingreso_salida_secundario->numero_ingreso_salida = $codigo_ingreso_salida_secundario;
         }
-        $ingreso_salida_secundario->observacion = $request->igv_compra;//
+        $ingreso_salida_secundario->observacion = $request->observacion;
         $ingreso_salida_secundario->igv_compra = $request->igv_compra;
         $ingreso_salida_secundario->id_moneda = $request->moneda;
         $ingreso_salida_secundario->sub_total = round($request->sub_total_general,2);
@@ -171,9 +178,72 @@ class IngresoSalidaSecundarioController extends Controller
                     $ingreso_salida_secundario_detalle->save();
                 }
             }*/
+
+            $producto = Producto::find($descripcion[$index]);
+            
+            $idProducto = $descripcion[$index];
+			
+            $idCorte = KardexSecundario::where('id_producto', $descripcion[$index])->where('id_almacen', $request->almacen)->whereDate('fecha', '<=', Carbon::now())->orderBy('fecha', 'desc')->orderBy('id', 'desc')->value('id');
+            
+            $saldoBase = $idCorte > 0 ? KardexSecundario::where('id', $idCorte)->value('saldos_cantidad') : 0;
+            $costoBase = $idCorte > 0 ? KardexSecundario::where('id', $idCorte)->value('costo_saldos_cantidad') : 0;
+            $totalBase = $idCorte > 0 ? KardexSecundario::where('id', $idCorte)->value('total_saldos_cantidad') : 0;
+
+            $kardex_secundario = new KardexSecundario;
+            $kardex_secundario->id_producto = $idProducto;
+            $kardex_secundario->id_unidad_medida = $unidad[$index];
+            $kardex_secundario->id_almacen = $request->almacen;
+            $kardex_secundario->fecha = Carbon::now();
+
+            if($request->tipo_documento == 1){
+                if($saldoBase == 0){
+                    if($request->igv_compra == 2){
+                        $costo_unitario = round(($precio_unitario[$index] / 1.18),2);
+                        $costo_unitario_ = $costo_unitario;
+                        $total_kardex = round($sub_total[$index],2);
+                    }else{
+                        $costo_unitario = round(($precio_unitario[$index]),2);
+                        $costo_unitario_ = $costo_unitario;
+                        $total_kardex = round($sub_total[$index],2);
+                    }
+                }else{
+                    $total_kardex = $totalBase + $sub_total[$index];
+                    $costo_unitario = round($total_kardex / ($saldoBase + $cantidad[$index]),2);
+                    $costo_unitario_ = round(($precio_unitario[$index] / 1.18),2);
+                }
+            }else{
+                $costo_unitario_ = $costoBase;
+                $total_salida = round(($costo_unitario_ * $cantidad[$index]),2);
+                $total_kardex = round(($totalBase - $total_salida),2);
+                $costo_unitario = round($total_kardex / ($saldoBase - $cantidad[$index]),2);
+            }
+
+            if($request->tipo_documento == 1){
+                $kardex_secundario->entradas_cantidad = $cantidad[$index];
+                $kardex_secundario->salidas_cantidad = 0;
+                $kardex_secundario->costo_entradas_cantidad = $costo_unitario_;
+                $kardex_secundario->total_entradas_cantidad = $sub_total[$index];
+                $kardex_secundario->saldos_cantidad = $saldoBase + $cantidad[$index];
+                $kardex_secundario->costo_saldos_cantidad = $costo_unitario;
+                //$total_kardex = ($saldoBase + $cantidad[$index]) * $costo_unitario;
+                $kardex_secundario->total_saldos_cantidad = $total_kardex;
+            }else{
+                $kardex_secundario->entradas_cantidad = 0;
+                $kardex_secundario->salidas_cantidad = $cantidad[$index];
+                $kardex_secundario->costo_salidas_cantidad = $costo_unitario_;
+                $kardex_secundario->total_salidas_cantidad = $total_salida;
+                $kardex_secundario->saldos_cantidad = $saldoBase - $cantidad[$index];
+                $kardex_secundario->costo_saldos_cantidad = $costo_unitario;
+                //$total_kardex = ($saldoBase - $cantidad[$index]) * $costo_unitario;
+                $kardex_secundario->total_saldos_cantidad = $total_kardex;
+            }
+
+            $kardex_secundario->id_entrada_salida_secundario = $id_ingreso_salida_secundario;
+            $kardex_secundario->id_usuario_inserta = $id_user;
+            $kardex_secundario->save();
         }
         
-        return response()->json(['id' => $ingreso_salida_secundario->id]);
+        return response()->json(['id' => $id_ingreso_salida_secundario]);
         
     }
 }

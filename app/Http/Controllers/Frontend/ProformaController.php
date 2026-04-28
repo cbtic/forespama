@@ -86,15 +86,18 @@ class ProformaController extends Controller
         $producto_model = new Producto;
         $marca_model = new Marca;
         $almacen_model = new Almacene;
+        $empresa_model = new Empresa;
 		
 		if($id>0){
 
             $proforma = Proforma::find($id);
-            $proveedor = Empresa::all();
+            //$proveedor = Empresa::all();
+            $proveedor = $empresa_model->getEmpresaAll();
 			
 		}else{
 			$proforma = new Proforma;
-            $proveedor = Empresa::all();
+            //$proveedor = Empresa::all();
+            $proveedor = $empresa_model->getEmpresaAll();
 		}
 
         //$proforma_model = new OrdenCompra;

@@ -172,7 +172,7 @@
 					@endif
 					
 					
-					@if(Gate::check('Requerimientos') || Gate::check('Entradas') || Gate::check('Orden Compra') || Gate::check('Consulta Stock') || Gate::check('Dispensacion') || Gate::check('Ingreso Produccion') || Gate::check('Kardex') || Gate::check('Movimientos Oxapampa') || Gate::check('Movimientos') || Gate::check('Verificacion Aplicacion Comisiones') || Gate::check('Empaquetado') || Gate::check('Devolucion') || Gate::check('Gestion Autorizacion') || Gate::check('Cargar Informe Venta b2b') || Gate::check('Reuso') || Gate::check('Ajuste Stock'))
+					@if(Gate::check('Requerimientos') || Gate::check('Entradas') || Gate::check('Orden Compra') || Gate::check('Consulta Stock') || Gate::check('Dispensacion') || Gate::check('Ingreso Produccion') || Gate::check('Kardex') || Gate::check('Movimientos Oxapampa') || Gate::check('Movimientos') || Gate::check('Verificacion Aplicacion Comisiones') || Gate::check('Empaquetado') || Gate::check('Devolucion') || Gate::check('Gestion Autorizacion') || Gate::check('Cargar Informe Venta b2b') || Gate::check('Reuso') || Gate::check('Ajuste Stock') || Gate::check('Ingreso Salida Secundario') || Gate::check('Kardex Secundario'))
 						
 						<li class="nav-item dropdown">
 							<a href="#" class="nav-link dropdown-toggle" id="navbarDropdownPrueba" data-toggle="dropdown"
@@ -246,6 +246,10 @@
 
 								@can('Ingreso Salida Secundario')
 									<x-utils.link :href="route('frontend.ingreso_salida_secundarios.create')" class="dropdown-item" :text="__('Ingreso Salida B')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+								@endif
+
+								@can('Kardex Secundario')
+									<x-utils.link :href="route('frontend.kardex_secundarios.create')" class="dropdown-item" :text="__('Kardex B')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
 								@endif
 								
 							</div>

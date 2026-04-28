@@ -60,6 +60,7 @@ class EntradaProductosController extends Controller
 
 		$tablaMaestra_model = new TablaMaestra;
         $almacen_model = new Almacene;
+        $empresa_model = new Empresa;
         $id_user = Auth::user()->id;
 
         $tipo_movimiento = $tablaMaestra_model->getMaestroByTipo(53);
@@ -68,7 +69,8 @@ class EntradaProductosController extends Controller
         $unidad_origen = $tablaMaestra_model->getMaestroByTipo(50);
         $cerrado_entrada = $tablaMaestra_model->getMaestroByTipo(52);
         $almacen = $almacen_model->getAlmacenByUser($id_user);
-        $proveedor = Empresa::all();
+        //$proveedor = Empresa::all();
+        $proveedor = $empresa_model->getEmpresaAll();
 		
 		return view('frontend.entrada_productos.create',compact('cerrado_entrada','tipo_movimiento','tipo_documento_entrada','tipo_documento_salida','unidad_origen','almacen','proveedor'));
 
@@ -121,7 +123,10 @@ class EntradaProductosController extends Controller
 			
 		}else{
 			$entrada_producto = new EntradaProducto;
-            $proveedor = Empresa::all();
+            $empresa_model = new Empresa;
+
+            //$proveedor = Empresa::all();
+            $proveedor = $empresa_model->getEmpresaAll();
             $tipo_cambio = $tipo_cambio_model->getTipoCambioUltimo();
             $almacen = $almacen_model->getAlmacenByUser($id_user);
 		}
@@ -846,16 +851,20 @@ class EntradaProductosController extends Controller
        
         if($id>0){
             if($tipo==1){
+                $empresa_model = new Empresa;
                 $entrada_producto_detalle = EntradaProductoDetalle::find($id);
                 $entrada_producto = EntradaProducto::find($id);
                 //$proveedor_ = Empresa::find($entrada_producto->id_proveedor);
                 //$proveedor = $proveedor_->getEmpresa($entrada_producto->id_proveedor);
-                $proveedor = Empresa::all();
+                //$proveedor = Empresa::all();
+                $proveedor = $empresa_model->getEmpresaAll();
             }else if($tipo==2){
+                $empresa_model = new Empresa;
                 $entrada_producto_detalle = SalidaProductoDetalle::find($id);
                 $entrada_producto = SalidaProducto::find($id);
                 //$proveedor=[];
-                $proveedor = Empresa::all();
+                //$proveedor = Empresa::all();
+                $proveedor = $empresa_model->getEmpresaAll();
             }
 			
             $tipo_cambio = null;
@@ -868,7 +877,10 @@ class EntradaProductosController extends Controller
 		}else{
 			$entrada_producto_detalle = new EntradaProductoDetalle;
             $entrada_producto = new EntradaProducto;
-            $proveedor = Empresa::all();
+            $empresa_model = new Empresa;
+
+            //$proveedor = Empresa::all();
+            $proveedor = $empresa_model->getEmpresaAll();
             //dd($proveedor);exit();
             $tipo_cambio = $tipo_cambio_model->getTipoCambioUltimo();
             $almacen = $almacen_model->getAlmacenAll();
@@ -1233,21 +1245,30 @@ class EntradaProductosController extends Controller
                 $orden_compra = OrdenCompra::find($id);
                 $entrada_producto_detalle = new EntradaProductoDetalle;
                 $entrada_producto = new EntradaProducto;
-                $proveedor = Empresa::all();
+                $empresa_model = new Empresa;
+
+                //$proveedor = Empresa::all();
+                $proveedor = $empresa_model->getEmpresaAll();
                 $id_orden_compra = $id;
                 $id = '0';
             }else if($tipo == 2){
                 $orden_compra = OrdenCompra::find($id);
                 $entrada_producto_detalle = new SalidaProductoDetalle;
                 $entrada_producto = new SalidaProducto;
-                $proveedor = Empresa::all();
+                $empresa_model = new Empresa;
+
+                //$proveedor = Empresa::all();
+                $proveedor = $empresa_model->getEmpresaAll();
                 $id_orden_compra = $id;
                 $id = '0';
             }else if($tipo == 4){
                 $orden_compra = OrdenCompra::find($id);
                 $entrada_producto_detalle = new SalidaProductoDetalle;
                 $entrada_producto = new SalidaProducto;
-                $proveedor = Empresa::all();
+                $empresa_model = new Empresa;
+
+                //$proveedor = Empresa::all();
+                $proveedor = $empresa_model->getEmpresaAll();
                 $id_orden_compra = $id;
                 $id = '0';
                 $tipo = 2;
@@ -1261,7 +1282,10 @@ class EntradaProductosController extends Controller
 		}else{
 			$entrada_producto_detalle = new EntradaProductoDetalle;
             $entrada_producto = new EntradaProducto;
-            $proveedor = Empresa::all();
+            $empresa_model = new Empresa;
+
+            //$proveedor = Empresa::all();
+            $proveedor = $empresa_model->getEmpresaAll();
             $tipo_cambio = $tipo_cambio_model->getTipoCambioUltimo();
             $almacen = $almacen_model->getAlmacenAll();
             $marca = $marca_model->getMarcaAll();
@@ -1733,18 +1757,22 @@ class EntradaProductosController extends Controller
        
         if($id>0){
             if($tipo==1){
+                $empresa_model = new Empresa;
                 $entrada_producto_detalle = EntradaProductoDetalle::find($id);
                 $entrada_producto = EntradaProducto::find($id);
                 $orden_compra = OrdenCompra::find($entrada_producto->id_orden_compra);
                 //$proveedor_ = Empresa::find($entrada_producto->id_proveedor);
                 //$proveedor = $proveedor_->getEmpresa($entrada_producto->id_proveedor);
-                $proveedor = Empresa::all();
+                //$proveedor = Empresa::all();
+                $proveedor = $empresa_model->getEmpresaAll();
             }else if($tipo==2){
+                $empresa_model = new Empresa;
                 $entrada_producto_detalle = SalidaProductoDetalle::find($id);
                 $entrada_producto = SalidaProducto::find($id);
                 $orden_compra = OrdenCompra::find($entrada_producto->id_orden_compra);
                 //$proveedor=[];
-                $proveedor = Empresa::all();
+                //$proveedor = Empresa::all();
+                $proveedor = $empresa_model->getEmpresaAll();
             }
 			
             $tipo_cambio = null;
@@ -1757,7 +1785,10 @@ class EntradaProductosController extends Controller
 		}else{
 			$entrada_producto_detalle = new EntradaProductoDetalle;
             $entrada_producto = new EntradaProducto;
-            $proveedor = Empresa::all();
+            $empresa_model = new Empresa;
+
+            //$proveedor = Empresa::all();
+            $proveedor = $empresa_model->getEmpresaAll();
             //dd($proveedor);exit();
             $tipo_cambio = $tipo_cambio_model->getTipoCambioUltimo();
             $almacen = $almacen_model->getAlmacenByUser($id_user);
@@ -1800,7 +1831,8 @@ class EntradaProductosController extends Controller
         $marca = $marca_model->getMarcaAll();
         $estado_bien = $tablaMaestra_model->getMaestroByTipo(4);
         $unidad = $tablaMaestra_model->getMaestroByTipo(43);
-        $empresas = Empresa::all();
+        //$empresas = Empresa::all();
+        $empresas = $empresa_model->getEmpresaAll();
         $transporte_razon_social = $empresa_model->obtenerRazonSocialTransporteAll();
 
 		return view('frontend.entrada_productos.modal_datos_guia',compact('id','entrada_producto','tipo_documento','producto','marca','estado_bien','unidad','empresas','transporte_razon_social'));
@@ -1932,7 +1964,7 @@ class EntradaProductosController extends Controller
 
 		$tablaMaestra_model = new TablaMaestra;
 		$almacen_model = new Almacene;
-        
+
 		$tipo_documento = $tablaMaestra_model->getMaestroByTipo(53);
         //$cerrado_orden_compra = $tablaMaestra_model->getMaestroByTipo(52);
         //$almacen_destino = Almacene::all();

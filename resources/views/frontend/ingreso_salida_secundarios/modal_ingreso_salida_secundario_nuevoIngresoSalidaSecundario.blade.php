@@ -157,6 +157,28 @@ $(document).ready(function() {
     $("#persona").select2({ width: '100%' });
 
     cambiarCliente();
+    habilitarTipoCambio();
+    validarMoneda();
+
+    $('#fecha').datepicker({
+        autoclose: true,
+		format: 'yyyy-mm-dd',
+		changeMonth: true,
+		changeYear: true,
+        language: 'es'
+    });
+
+    $('#fecha_comprobante').datepicker({
+        autoclose: true,
+		format: 'yyyy-mm-dd',
+		changeMonth: true,
+		changeYear: true,
+        language: 'es'
+    });
+
+    $('#fecha_comprobante').on('change', function () {
+        cargarTipoCambioDelDia();
+    });
 
 });
 
@@ -257,6 +279,9 @@ function agregarProducto(){
         }
     ?>`;
 
+    var tipo_documento = $('#tipo_documento').val();
+    let bloqueado = (tipo_documento == 2);
+
     var cantidad = 1;
     var newRow = "";
     for (var i = 0; i < cantidad; i++) { 
@@ -267,8 +292,11 @@ function agregarProducto(){
         var codigo = '<input name="codigo[]" id="codigo' + n + '" class="form-control form-control-sm" value="" type="text" readonly>';
         var marca = '<select name="marca[]" id="marca' + n + '" class="form-control form-control-sm" onchange=""> <option value="">--Seleccionar--</option><?php foreach ($marca as $row){?><option value="<?php echo htmlspecialchars($row->id); ?>"><?php echo htmlspecialchars(addslashes($row->denominiacion)); ?></option><?php }?></select>';
         var unidad = '<select name="unidad[]" id="unidad' + n + '" class="form-control form-control-sm" onChange=""> <option value="">--Seleccionar--</option> <?php foreach ($unidad as $row) {?> <option value="<?php echo $row->codigo?>"><?php echo $row->denominacion?></option> <?php } ?> </select>';
-        var cantidad = '<input name="cantidad[]" id="cantidad' + n + '" class="cantidad form-control form-control-sm" value="" type="text" oninput="calcularSubTotal(this)">';
-        var precio_unitario = '<input name="precio_unitario[]" id="precio_unitario' + n + '" class="precio_unitario form-control form-control-sm" value="" type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, \'\').replace(/(\\..*?)\\..*/g, \'$1\').replace(/(\\d+\\.\\d{0,2}).*/, \'$1\'); calcularSubTotal(this)">';
+        var cantidad_producto = '<input name="cantidad[]" id="cantidad' + n + '" class="cantidad form-control form-control-sm" value="" type="text" oninput="calcularSubTotal(this)">';
+        var precio_dolar = '<input name="precio_dolar[]" id="precio_dolar' + n + '" class="precio_dolar form-control form-control-sm" value="" type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, \'\').replace(/(\\..*?)\\..*/g, \'$1\').replace(/(\\d+\\.\\d{0,2}).*/, \'$1\');calcularSoles(this)">';
+        var precio_unitario = '<input name="precio_unitario[]" id="precio_unitario' + n + '" class="precio_unitario form-control form-control-sm"'
+                              + (bloqueado ? 'readonly' : '') + 
+                              ' value="" type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, \'\').replace(/(\\..*?)\\..*/g, \'$1\').replace(/(\\d+\\.\\d{0,2}).*/, \'$1\'); calcularSubTotal(this)">';
         var sub_total = '<input name="sub_total[]" id="sub_total' + n + '" class="sub_total form-control form-control-sm" value="" type="text" readonly="readonly">';
         var igv = '<input name="igv[]" id="igv' + n + '" class="igv form-control form-control-sm" value="" type="text" readonly="readonly">';
         var total = '<input name="total[]" id="total' + n + '" class="total form-control form-control-sm" value="" type="text" readonly="readonly">';
@@ -281,7 +309,8 @@ function agregarProducto(){
         newRow += '<td>' + codigo + '</td>';
         newRow += '<td>' + marca + '</td>';
         newRow += '<td>' + unidad + '</td>';
-        newRow += '<td>' + cantidad + '</td>';
+        newRow += '<td>' + cantidad_producto + '</td>';
+        newRow += '<td class="td_contable">' + precio_dolar + '</td>';
         newRow += '<td>' + precio_unitario + '</td>';
         newRow += '<td>' + sub_total + '</td>';
         newRow += '<td>' + igv + '</td>';
@@ -300,7 +329,31 @@ function agregarProducto(){
         $('#marca' + n).select2({
             width: '100%',
         });
+
+        validarMoneda();
     }
+}
+
+function cargarTipoCambioDelDia() {
+
+    var fecha_comprobante = $('#fecha_comprobante').val();
+
+    $.ajax({
+        url: "/tipo_cambio/obtenerTipoCambioByFecha/"+fecha_comprobante,
+        method: 'GET',
+        success: function(response) {
+            // Asegura que el resultado no esté vacío
+            if (response.length > 0) {
+                const tipoCambio = parseFloat(response[0].valor_venta || 0).toFixed(3);
+                $('#tipo_cambio').val(tipoCambio);
+            } else {
+                alert('No se encontró tipo de cambio del día.');
+            }
+        },
+        error: function() {
+            alert('Error al obtener el tipo de cambio del día.');
+        }
+    });
 }
 
 function calcularSubTotal(input) {
@@ -502,6 +555,72 @@ function cambiarCliente(){
     }
 }
 
+function habilitarTipoCambio(){
+
+    var moneda = $('#moneda').val();
+    $('#fecha_comprobante_label').hide();
+    $('#fecha_comprobante_input').hide();
+    $('#tipo_cambio_label').hide();
+    $('#tipo_cambio_input').hide();
+    
+    if(moneda == 1){
+        $('#fecha_comprobante_label').hide();
+        $('#fecha_comprobante_input').hide();
+        $('#tipo_cambio_label').hide();
+        $('#tipo_cambio_input').hide();
+    }else if(moneda == 2){
+        $('#fecha_comprobante_label').show();
+        $('#fecha_comprobante_input').show();
+        $('#tipo_cambio_label').show();
+        $('#tipo_cambio_input').show();
+    }
+}
+
+function validarMoneda() {
+
+    var moneda = $('#moneda').val();
+
+    if (moneda == 2) {
+        $('.th_contable, .td_contable').show();
+        $('.total-contable-label, .total-contable-input').show();
+    } else {
+        $('.th_contable, .td_contable').hide();
+        $('.total-contable-label, .total-contable-input').hide();
+    }
+}
+
+function calcularSoles(input){
+
+    var fila = $(input).closest('tr');
+
+    var igvPorcentaje = $('#igv_compra').val() == 2 ? 1.18 : 0;
+    var cantidad = parseFloat(fila.find('.cantidad').val()) || 0;
+    var precio_dolar = parseFloat(fila.find('.precio_dolar').val()) || 0;
+    var precio_unitario = parseFloat(fila.find('.precio_unitario').val()) || 0;
+    var sub_total = 0;
+    var igv = 0;
+    var total = 0;
+
+    if(igvPorcentaje==1.18){
+        sub_total = (cantidad * precio_unitario) / igvPorcentaje;
+    }else{
+        sub_total = cantidad * precio_unitario;
+    }
+
+    if(igvPorcentaje==1.18){
+        igv = sub_total * 0.18;
+    }
+
+    total = sub_total + igv;
+
+    fila.find('.igv').val(igv.toFixed(2));
+    fila.find('.sub_total').val(sub_total.toFixed(2));
+    fila.find('.total').val(total.toFixed(2));
+
+    actualizarTotalGeneral();
+
+}
+
 </script>
 
 <body class="hold-transition skin-blue sidebar-mini">
@@ -625,7 +744,7 @@ function cambiarCliente(){
                             Moneda
                         </div>
                         <div class="col-lg-2">
-                            <select name="moneda" id="moneda" class="form-control form-control-sm" onchange="">
+                            <select name="moneda" id="moneda" class="form-control form-control-sm" onchange="habilitarTipoCambio();validarMoneda()">
                                 <option value="">--Seleccionar--</option>
                                 <?php
                                 foreach ($moneda as $row){?>
@@ -634,6 +753,18 @@ function cambiarCliente(){
                                 }
                                 ?>
                             </select>
+                        </div>
+                        <div class="col-lg-2" id="fecha_comprobante_label">
+                            Fecha Comprobante
+                        </div>
+                        <div class="col-lg-2" id="fecha_comprobante_input">
+                            <input id="fecha_comprobante" name="fecha_comprobante" on class="form-control form-control-sm"  value="<?php //echo isset($ingreso_salida_secundario) && $ingreso_salida_secundario->fecha_ingreso_salida ? $ingreso_salida_secundario->fecha_ingreso_salida : date('Y-m-d'); ?>" type="text" onchange="">
+                        </div>
+                        <div class="col-lg-2" id="tipo_cambio_label">
+                            Tipo de Cambio
+                        </div>
+                        <div class="col-lg-2" id="tipo_cambio_input">
+                            <input id="tipo_cambio" name="tipo_cambio" on class="form-control form-control-sm"  value="<?php //if($id>0){echo $ingreso_salida_secundario->tipo_cambio;}?>" type="text" readonly ="readonly">
                         </div>
                         <div class="col-lg-2" id="observacion_label">
                             Observaci&oacute;n
@@ -664,6 +795,7 @@ function cambiarCliente(){
                                 <th>Marca</th>
                                 <th>Unidad</th>
                                 <th>Cantidad</th>
+                                <th class="th_contable">Precio Dolar</th>
                                 <th>Precio Venta</th>
                                 <th>Sub Total</th>
                                 <th>IGV</th>
@@ -681,15 +813,20 @@ function cambiarCliente(){
                                 <td id="subTotalGeneral" class="td" style="text-align: left; width: 15%; font-size:13px">
                                     <input type="text" name="sub_total_general" id="sub_total_general" class="form-control" value="0.00" readonly style="border: none; background: transparent; text-align: left; pointer-events: none;">
                                 </td>
-                                <td class="td" style ="text-align: left; width: 10%; font-size:13px"></td>
+                                <!--<td class="td" style ="text-align: left; width: 10%; font-size:13px"></td>-->
                                 <td class="td" style ="text-align: left; width: 10%; font-size:13px"><b>IGV Total:</b></td>
                                 <td id="igvGeneral" class="td" style="text-align: left; width: 15%; font-size:13px">
                                     <input type="text" name="igv_general" id="igv_general" class="form-control" value="0.00" readonly style="border: none; background: transparent; text-align: left; pointer-events: none;">
                                 </td>
-                                <td class="td" style ="text-align: left; width: 10%; font-size:13px"></td>
+                                <!--<td class="td" style ="text-align: left; width: 10%; font-size:13px"></td>-->
                                 <td class="td" style ="text-align: left; width: 10%; font-size:13px"><b>Total:</b></td>
                                 <td id="totalGeneral" class="td" style="text-align: left; width: 15%; font-size:13px">
                                     <input type="text" name="total_general" id="total_general" class="form-control" value="0.00" readonly style="border: none; background: transparent; text-align: left; pointer-events: none;">
+                                </td>
+                                <!--<td class="td" style ="text-align: left; width: 10%; font-size:13px"></td>-->
+                                <td class="td total-contable-label" style ="text-align: left; width: 10%; font-size:13px"><b>Total Contable:</b></td>
+                                <td id="totalContableGeneral" class="td total-contable-input" style="text-align: left; width: 15%; font-size:13px">
+                                    <input type="text" name="total_contable_general" id="total_contable_general" class="form-control" value="0.00" readonly style="border: none; background: transparent; text-align: left; pointer-events: none;">
                                 </td>
                             </tr>
                         </tbody>

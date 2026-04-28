@@ -1,6 +1,6 @@
--- DROP FUNCTION public.sp_listar_ajuste_stock_paginado(varchar, varchar, varchar, varchar, varchar, varchar, varchar, refcursor);
+DROP FUNCTION public.sp_listar_ajuste_stock_paginado(varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, refcursor);
 
-CREATE OR REPLACE FUNCTION public.sp_listar_ajuste_stock_paginado(p_tipo_documento character varying, p_fecha character varying, p_numero_operacion character varying, p_almacen_destino character varying, p_estado character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
+CREATE OR REPLACE FUNCTION public.sp_listar_ajuste_stock_paginado(p_tipo_documento character varying, p_fecha_inicio character varying, p_fecha_fin character varying, p_numero_operacion character varying, p_almacen_destino character varying, p_estado character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
  RETURNS refcursor
  LANGUAGE plpgsql
 AS $function$
@@ -41,6 +41,14 @@ begin
 
 	If p_tipo_documento<>'' Then
 	 v_where:=v_where||'And id_tipo_documento  = '''||p_tipo_documento||''' ';
+	End If;
+
+	If p_fecha_inicio<>'' Then
+	 v_where:=v_where||'And fecha_movimiento >= '''||p_fecha_inicio||''' ';
+	End If;
+
+	If p_fecha_fin<>'' Then
+	 v_where:=v_where||'And fecha_movimiento <= '''||p_fecha_fin||''' ';
 	End If;
 
 	If p_almacen_destino<>'' Then

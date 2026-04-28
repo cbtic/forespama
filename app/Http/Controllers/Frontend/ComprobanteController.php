@@ -5381,10 +5381,12 @@ class ComprobanteController extends Controller
 
 		$tablaMaestra_model = new TablaMaestra;
         $user_model = new User;
+        $empresa_model = new Empresa;
 
 		$tipo_documento = $tablaMaestra_model->getMaestroByTipo(54);
         $cerrado_orden_compra = $tablaMaestra_model->getMaestroByTipo(52);
-        $proveedor = Empresa::all();
+        //$proveedor = Empresa::all();
+        $proveedor = $empresa_model->getEmpresaAll();
 		$estado_pedido = $tablaMaestra_model->getMaestroByTipo(77);
         $vendedor = $user_model->getUserByRol(7,11);
 

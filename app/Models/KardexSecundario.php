@@ -6,13 +6,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use DB;
 
-class IngresoSalidaSecundario extends Model
+class KardexSecundario extends Model
 {
     use HasFactory;
 
-    public function listar_ingreso_salida_secundarios_ajax($p){
+    public function listar_kardex_secundario_ajax($p){
 
-        return $this->readFuntionPostgres('sp_listar_ingreso_salida_secundario_paginado',$p);
+        return $this->readFuntionPostgres('sp_listar_kardex_secundario_paginado',$p);
 
     }
 
@@ -32,14 +32,13 @@ class IngresoSalidaSecundario extends Model
 
     }
 
-    function getCodigoIngresoSalidaB($tipo_documento){
-
-        $cad = "select lpad(coalesce(max(iss.numero_ingreso_salida::int) + 1, 1)::varchar, 6, '0') codigo
-        from ingreso_salida_secundarios iss
-        where iss.id_tipo_documento = '".$tipo_documento."' ";
-
-		$data = DB::select($cad);
-        return $data;
+    function getUltimoPrecioSalida($producto){
+        $cad = "select * from kardex_secundarios ks 
+        where ks.id_producto ='".$producto."'
+        order by 1 desc
+        limit 1 ";
+    
+    $data = DB::select($cad);
+    return $data;
     }
-
 }

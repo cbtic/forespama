@@ -68,6 +68,8 @@ $(document).ready(function () {
 	
 	$('#empresa_bus').select2({ width : '100%' })
 	
+	$('#persona_bus').select2({ width : '100%' })
+
 	datatablenew();
 
 	/*$('#btnDescargarDetalle').on('click', function () {
@@ -110,6 +112,7 @@ function datatablenew(){
 			
             var tipo_documento = $('#tipo_documento_bus').val();
             var empresa = $('#empresa_bus').val();
+            var persona = $('#persona_bus').val();
 			var fecha_inicio = $('#fecha_inicio_bus').val();
 			var fecha_fin = $('#fecha_fin_bus').val();
 			var numero_ingreso_salida = $('#numero_ingreso_salida_bus').val();
@@ -122,7 +125,8 @@ function datatablenew(){
                 "type": "POST",
                 "url": sSource,
                 "data":{NumeroPagina:iNroPagina,NumeroRegistros:iCantMostrar,
-						tipo_documento:tipo_documento,empresa:empresa,fecha_inicio:fecha_inicio,fecha_fin:fecha_fin,numero_ingreso_salida:numero_ingreso_salida,estado:estado,
+						tipo_documento:tipo_documento,empresa:empresa,persona:persona,fecha_inicio:fecha_inicio,fecha_fin:fecha_fin,
+						numero_ingreso_salida:numero_ingreso_salida,estado:estado,
 						_token:_token
                        },
                 "success": function (result) {
@@ -160,36 +164,36 @@ function datatablenew(){
 				
 				{
 					"mRender": function (data, type, row) {
-						var fecha_movimiento = "";
-						if(row.fecha_movimiento!= null)fecha_movimiento = row.fecha_movimiento;
-						return fecha_movimiento;
+						var proveedor = "";
+						if(row.proveedor!= null)proveedor = row.proveedor;
+						return proveedor;
 					},
 					"bSortable": true,
 					"aTargets": [2]
 				},
 				{
 					"mRender": function (data, type, row) {
-						var codigo = "";
-						if(row.codigo!= null)codigo = row.codigo;
-						return codigo;
+						var fecha_ingreso_salida = "";
+						if(row.fecha_ingreso_salida!= null)fecha_ingreso_salida = row.fecha_ingreso_salida;
+						return fecha_ingreso_salida;
 					},
 					"bSortable": true,
 					"aTargets": [3]
 				},
 				{
 					"mRender": function (data, type, row) {
-						var almacen = "";
-						if(row.almacen!= null)almacen = row.almacen;
-						return almacen;
+						var numero_ingreso_salida = "";
+						if(row.numero_ingreso_salida!= null)numero_ingreso_salida = row.numero_ingreso_salida;
+						return numero_ingreso_salida;
 					},
 					"bSortable": true,
 					"aTargets": [4]
 				},
 				{
 					"mRender": function (data, type, row) {
-						var usuario = "";
-						if(row.usuario!= null)usuario = row.usuario;
-						return usuario;
+						var almacen = "";
+						if(row.almacen!= null)almacen = row.almacen;
+						return almacen;
 					},
 					"bSortable": true,
 					"aTargets": [5]
@@ -225,8 +229,6 @@ function datatablenew(){
 						var html = '<div class="btn-group btn-group-sm" role="group" aria-label="Log Viewer Actions">';
 						
 						html += '<button style="font-size:12px" type="button" class="btn btn-sm btn-success" data-toggle="modal" onclick="modalIngresoSalidaSecundario('+row.id+')" ><i class="fa fa-edit"></i> Editar</button>'; 
-						
-						//html += '<a href="javascript:void(0)" onclick=eliminarDispensacion('+row.id+','+row.estado+') class="btn btn-sm '+clase+'" style="font-size:12px;margin-left:10px">'+estado+'</a>';			
 						
 						html += '</div>';
 						return html;

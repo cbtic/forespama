@@ -44,6 +44,7 @@ class VehiculoController extends Controller
 		$id_user = Auth::user()->id;
 		$conductor_model = new Conductores;
 		$marca_model = new Marca;
+		$empresa_model = new Empresa;
 
 		if($id>0){
 			$vehiculo = Vehiculo::find($id);
@@ -52,7 +53,8 @@ class VehiculoController extends Controller
 			$vehiculo = new Vehiculo;
 			$empresas_conductores_vehiculo = new EmpresasConductoresVehiculo;
 		}
-		$empresas = Empresa::all();
+		//$empresas = Empresa::all();
+        $empresas = $empresa_model->getEmpresaAll();
 		$conductores = $conductor_model->getConductorAll();
 		$marcas = $marca_model->getMarcaVehiculo();
 
@@ -64,6 +66,7 @@ class VehiculoController extends Controller
 		$id_user = Auth::user()->id;
 		$conductor_model = new Conductores;
 		$marca_model = new Marca;
+		$empresa_model = new Empresa;
 
 		if($id>0){
 			$vehiculo = Vehiculo::find($id);
@@ -73,7 +76,8 @@ class VehiculoController extends Controller
 			$empresas_conductores_vehiculo = new EmpresasConductoresVehiculo;
 		}
 
-		$empresas = Empresa::all();
+		//$empresas = Empresa::all();
+		$empresas = $empresa_model->getEmpresaAll();
 		$conductores = $conductor_model->getConductorAll();
 		$marcas = $marca_model->getMarcaVehiculo();
 

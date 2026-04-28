@@ -31,7 +31,10 @@ class EquivalenciaProductosController extends Controller
 		//$tablaMaestra_model = new TablaMaestra;
 		//$tipo_documento = $tablaMaestra_model->getMaestroByTipo(53);
         //$cerrado_orden_compra = $tablaMaestra_model->getMaestroByTipo(52);
-        $empresa = Empresa::all();
+		$empresa_model = new Empresa;
+
+		$empresa = $empresa_model->getEmpresaAll();
+        //$empresa = Empresa::all();
         $producto = $producto_model->getProductoExterno();
 		
 		return view('frontend.equivalencia_producto.create',compact('empresa','producto'));
@@ -70,7 +73,7 @@ class EquivalenciaProductosController extends Controller
         $producto_model = new Producto;
         $empresa_model = new Empresa;
         $producto_competencia_model = new ProductosCompetencia;
-		
+		$empresa_model = new Empresa;
 		
 		if($id>0){
 			$equivalencia_producto = EquivalenciaProducto::find($id);
@@ -79,7 +82,8 @@ class EquivalenciaProductosController extends Controller
 		}
 
         $producto = $producto_model->getProductoExterno();
-        $empresa = Empresa::all();
+        //$empresa = Empresa::all();
+		$empresa = $empresa_model->getEmpresaAll();
 		$producto_dimfer = $producto_competencia_model->getProductoDimfer();
 		$producto_ares = $producto_competencia_model->getProductoAres();
 

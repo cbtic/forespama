@@ -318,10 +318,10 @@ function datatablenew(){
 					return cerrado;*/
 
 					var pendiente_entrega = "";
-					if(row.cantidad_despacho >= row.cantidad_requerida){
-						pendiente_entrega = "NO";
-					}else{
+					if(row.cerrado == 1){
 						pendiente_entrega = "SI";
+					}else{
+						pendiente_entrega = "NO";
 					}
 					return pendiente_entrega;
 				},

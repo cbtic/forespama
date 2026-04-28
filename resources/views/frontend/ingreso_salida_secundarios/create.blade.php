@@ -338,86 +338,109 @@ label.form-control-sm{
 
                     <input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
 				
-                    <div class="row" style="padding:20px 20px 0px 20px;">
+                    <div class="bg-light p-3 rounded mb-3 border">
+                        <div class="row">
+                            <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
+                                <div class="row">
 
-                        <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-                            <select name="tipo_documento_bus" id="tipo_documento_bus" class="form-control form-control-sm">
-                                <option value="">--Seleccionar Tipo Documento--</option>
-                                <?php
-                                foreach ($tipo_documento as $row){?>
-                                    <option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
-                                    <?php 
-                                }
-                                ?>
-                            </select>
+                                <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+                                    <select name="tipo_documento_bus" id="tipo_documento_bus" class="form-control form-control-sm">
+                                        <option value="">--Seleccionar Tipo Documento--</option>
+                                        <?php
+                                        foreach ($tipo_documento as $row){?>
+                                            <option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
+                                            <?php 
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
+
+                                <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                                    <select name="empresa_bus" id="empresa_bus" class="form-control form-control-sm filtro-select">
+                                        <option value="">--Seleccionar Empresa--</option>
+                                        <?php
+                                        foreach ($proveedor as $row){?>
+                                            <option value="<?php echo $row->id ?>"><?php echo $row->razon_social ?></option>
+                                            <?php 
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
+
+                                <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                                    <select name="persona_bus" id="persona_bus" class="form-control form-control-sm filtro-select">
+                                        <option value="">--Seleccionar Persona--</option>
+                                        <?php
+                                        foreach ($persona as $row){?>
+                                            <option value="<?php echo $row->id ?>"><?php echo $row->apellido_paterno .' '. $row->apellido_materno .' '. $row->nombres?></option>
+                                            <?php 
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
+
+                                <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+                                    <input id="fecha_inicio_bus" name="fecha_inicio_bus" on class="form-control form-control-sm"  placeholder="Fecha Inicio">
+                                </div>
+
+                                <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+                                    <input id="fecha_fin_bus" name="fecha_fin_bus" on class="form-control form-control-sm"  placeholder="Fecha Fin">
+                                </div>
+
+                                <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+                                    <input id="numero_ingreso_salida_bus" name="numero_ingreso_salida_bus" on class="form-control form-control-sm"  placeholder="N&uacute;mero Operaci&oacute;n">
+                                </div>
+
+                                <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+                                    <select name="estado_bus" id="estado_bus" class="form-control form-control-sm">
+                                        <option value="">Todos</option>
+                                        <option value="1" selected="selected">Activo</option>
+                                        <option value="0">Eliminado</option>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-                            <select name="empresa_bus" id="empresa_bus" class="form-control form-control-sm filtro-select">
-                                <option value="">--Seleccionar Empresa Compra--</option>
-                                <?php
-                                foreach ($proveedor as $row){?>
-                                    <option value="<?php echo $row->id ?>"><?php echo $row->razon_social ?></option>
-                                    <?php 
-                                }
-                                ?>
-                            </select>
-                        </div>
-
-                        <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
-                            <input id="fecha_inicio_bus" name="fecha_inicio_bus" on class="form-control form-control-sm"  placeholder="Fecha Inicio">
-                        </div>
-
-                        <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
-                            <input id="fecha_fin_bus" name="fecha_fin_bus" on class="form-control form-control-sm"  placeholder="Fecha Fin">
-                        </div>
-
-                        <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
-                            <input id="numero_ingreso_salida_bus" name="numero_ingreso_salida_bus" on class="form-control form-control-sm"  placeholder="N&uacute;mero Operaci&oacute;n">
-                        </div>
-
-                        <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
-                            <select name="estado_bus" id="estado_bus" class="form-control form-control-sm">
-                                <option value="">Todos</option>
-                                <option value="1" selected="selected">Activo</option>
-                                <option value="0">Eliminado</option>
-                            </select>
-                        </div>
-                        
-                        <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12" style="padding-right:0px">
-                            <input class="btn btn-warning pull-rigth" value="Buscar" type="button" id="btnBuscar" />
-                            <input class="btn btn-success pull-rigth" value="Nuevo" type="button" id="btnNuevo" style="margin-left:15px" />
-                            <!--<button id="btnDescargarDetalle" type="button" class="btn btn-sm btn-secondary pull-rigth icono-botones2" style="margin-left:10px;">
-                                <i class="fas fa-download" style="font-size:18px;"></i> Excel Detallado
-                            </button>-->
-                        </div>
-                    </div>
+							<div class="row">
+                                
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding-right:0px">
+                                    <input class="btn btn-warning pull-rigth" value="Buscar" type="button" id="btnBuscar" />
+                                    <input class="btn btn-success pull-rigth" value="Nuevo" type="button" id="btnNuevo" style="margin-left:15px" />
+                                    <!--<button id="btnDescargarDetalle" type="button" class="btn btn-sm btn-secondary pull-rigth icono-botones2" style="margin-left:10px;">
+                                        <i class="fas fa-download" style="font-size:18px;"></i> Excel Detallado
+                                    </button>-->
+                                </div>
+                            </div>
+						</div>
+					</div>
+				</div>
 				
-                    <div class="card-body">
+                <div class="card-body">
 
-                        <div class="table-responsive">
-                        <table id="tblIngresoSalidaB" class="table table-hover table-sm">
-                            <thead>
-                            <tr style="font-size:13px">
-                                <th>Id</th>
-                                <th>Tipo Documento</th>
-                                <th>Empresa</th>
-                                <th>Fecha</th>
-                                <th>N&uacute;mero Operaci&oacute;n</th>
-                                <th>Almacen</th>
-                                <th>Estado</th>
-                                <th>Acciones</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            </tbody>
-                        </table>
-                    </div><!--table-responsive-->
-                </form>
-                </div><!--card-body-->
-            </div><!--card-->
-        <!--</div>--><!--col-->
-    <!--</div>--><!--row-->
+                    <div class="table-responsive">
+                    <table id="tblIngresoSalidaB" class="table table-hover table-sm">
+                        <thead>
+                        <tr style="font-size:13px">
+                            <th>Id</th>
+                            <th>Tipo Documento</th>
+                            <th>Empresa</th>
+                            <th>Fecha</th>
+                            <th>N&uacute;mero Operaci&oacute;n</th>
+                            <th>Almacen</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div><!--table-responsive-->
+            </form>
+            </div><!--card-body-->
+        </div><!--card-->
+    <!--</div>--><!--col-->
+<!--</div>--><!--row-->
 
 @endsection
 

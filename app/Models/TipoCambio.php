@@ -39,5 +39,16 @@ class TipoCambio extends Model
         $data = DB::select($cad);
         return $data;
     }
+
+    function getTipoCambioByFecha($fecha){
+
+        $cad = "select tc.id, to_char(tc.fecha,'dd-mm-yyyy') fecha, tc.id_tipo_moneda_compra, tc.id_tipo_moneda_venta, tc.valor_compra, tc.valor_venta, tc.estado from tipo_cambios tc 
+        where tc.estado = '1'
+        and tc.fecha ='".$fecha."'
+        limit 1";
+
+        $data = DB::select($cad);
+        return $data;
+    }
    
 }

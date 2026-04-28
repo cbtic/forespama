@@ -29,7 +29,10 @@ class TiendaController extends Controller
     public function create(){
 
 		$tablaMaestra_model = new TablaMaestra;
-        $empresa = Empresa::all();
+		$empresa_model = new Empresa;
+
+        //$empresa = Empresa::all();
+		$empresa = $empresa_model->getEmpresaAll();
 
 		$zona = $tablaMaestra_model->getMaestroByTipo(69);
 		$tienda_s_m = $tablaMaestra_model->getMaestroByTipo(70);
@@ -69,6 +72,7 @@ class TiendaController extends Controller
 		
 		$tablaMaestra_model = new TablaMaestra;
         $ubigeo_model = new Ubigeo;
+		$empresa_model = new Empresa;
 
 		if($id>0){
             $tienda_detalle = TiendaDetalle::find($id);
@@ -78,7 +82,8 @@ class TiendaController extends Controller
             $tienda_detalle = new TiendaDetalle;
 		}
 
-        $empresa = Empresa::all();
+        //$empresa = Empresa::all();
+		$empresa = $empresa_model->getEmpresaAll();
 		$zona = $tablaMaestra_model->getMaestroByTipo(69);
 		$tienda_s_m = $tablaMaestra_model->getMaestroByTipo(70);
 		$zona_especifica = $tablaMaestra_model->getMaestroByTipo(71);

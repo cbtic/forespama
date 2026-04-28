@@ -111,7 +111,7 @@ class OrdenCompraController extends Controller
         $almacen_user_model = new Almacen_usuario;
         $almacen_model = new Almacene;
         $empresa_model = new Empresa;
-        
+
 		$tipo_documento = $tablaMaestra_model->getMaestroByTipo(54);
         $cerrado_orden_compra = $tablaMaestra_model->getMaestroByTipo(52);
         //$proveedor = Empresa::all();
@@ -282,11 +282,17 @@ class OrdenCompraController extends Controller
 		if($id>0){
 
             $orden_compra = OrdenCompra::find($id);
-            $proveedor = Empresa::all();
+            $empresa_model = new Empresa;
+
+            $proveedor = $empresa_model->getEmpresaAll();
+            //$proveedor = Empresa::all();
 			
 		}else{
 			$orden_compra = new OrdenCompra;
-            $proveedor = Empresa::all();
+            $empresa_model = new Empresa;
+
+            $proveedor = $empresa_model->getEmpresaAll();
+            //$proveedor = Empresa::all();
 		}
 
         $tipo_documento = $tablaMaestra_model->getMaestroByTipo(54);
@@ -718,11 +724,17 @@ class OrdenCompraController extends Controller
 		if($id>0){
 
             $orden_compra = OrdenCompra::find($id);
-            $proveedor = Empresa::all();
+            $empresa_model = new Empresa;
+
+            //$proveedor = Empresa::all();
+            $proveedor = $empresa_model->getEmpresaAll();
 			
 		}else{
 			$orden_compra = new OrdenCompra;
-            $proveedor = Empresa::all();
+            $empresa_model = new Empresa;
+
+            //$proveedor = Empresa::all();
+            $proveedor = $empresa_model->getEmpresaAll();
 		}
 
         $tipo_documento = $tablaMaestra_model->getMaestroByTipo(54);
@@ -1645,11 +1657,13 @@ class OrdenCompraController extends Controller
         $tienda_model = new Tienda;
         $producto_model = new Producto;
         $user_model = new User;
+        $empresa_model = new Empresa;
 
 		$tablaMaestra_model = new TablaMaestra;
 		$tipo_documento = $tablaMaestra_model->getMaestroByTipo(54);
         $cerrado_orden_compra = $tablaMaestra_model->getMaestroByTipo(52);
-        $proveedor = Empresa::all();
+        //$proveedor = Empresa::all();
+        $proveedor = $empresa_model->getEmpresaAll();
         $tiendas = $tienda_model->getTiendasAll();
         $productos = $producto_model->getProductoExterno();
         $vendedor = $user_model->getUserByRol(7,11);
@@ -1759,11 +1773,13 @@ class OrdenCompraController extends Controller
         $producto_model = new Producto;
         $user_model = new User;
         $tienda_model = new Tienda;
+        $empresa_model = new Empresa;
 
 		$tablaMaestra_model = new TablaMaestra;
 		$tipo_documento = $tablaMaestra_model->getMaestroByTipo(54);
         $cerrado_orden_compra = $tablaMaestra_model->getMaestroByTipo(52);
-        $proveedor = Empresa::all();
+        //$proveedor = Empresa::all();
+        $proveedor = $empresa_model->getEmpresaAll();
         $tiendas = $tienda_model->getTiendasAll();
         $productos = $producto_model->getProductoExterno();
         $vendedor = $user_model->getUserByRol(7,11);
@@ -2309,11 +2325,13 @@ class OrdenCompraController extends Controller
         $producto_model = new Producto;
         $user_model = new User;
         $tienda_model = new Tienda;
+        $empresa_model = new Empresa;
 
 		$tablaMaestra_model = new TablaMaestra;
 		$tipo_documento = $tablaMaestra_model->getMaestroByTipo(54);
         $cerrado_orden_compra = $tablaMaestra_model->getMaestroByTipo(52);
-        $proveedor = Empresa::all();
+        //$proveedor = Empresa::all();
+        $proveedor = $empresa_model->getEmpresaAll();
         $tiendas = $tienda_model->getTiendasAll();
         $productos = $producto_model->getProductoExterno();
         $vendedor = $user_model->getUserByRol(7,11);
@@ -2865,9 +2883,11 @@ class OrdenCompraController extends Controller
         $id_user = Auth::user()->id;
         $producto_model = new Producto;
         $user_model = new User;
+        $empresa_model = new Empresa;
 
 		$tablaMaestra_model = new TablaMaestra;
-        $proveedor = Empresa::all();
+        //$proveedor = Empresa::all();
+        $proveedor = $empresa_model->getEmpresaAll();
         $productos = $producto_model->getProductoExterno();
         $vendedor = $user_model->getUserByRol(7,11);
 		$canal = $tablaMaestra_model->getMaestroByTipo(98);
@@ -2881,9 +2901,11 @@ class OrdenCompraController extends Controller
         $id_user = Auth::user()->id;
         $producto_model = new Producto;
         $user_model = new User;
+        $empresa_model = new Empresa;
 
 		$tablaMaestra_model = new TablaMaestra;
-        $proveedor = Empresa::all();
+        //$proveedor = Empresa::all();
+        $proveedor = $empresa_model->getEmpresaAll();
         $productos = $producto_model->getProductoExterno();
         $vendedor = $user_model->getUserByRol(7,11);
 		$canal = $tablaMaestra_model->getMaestroByTipo(98);
@@ -3748,11 +3770,13 @@ class OrdenCompraController extends Controller
         $tienda_model = new Tienda;
         $producto_model = new Producto;
         $user_model = new User;
+        $empresa_model = new Empresa;
 
 		$tablaMaestra_model = new TablaMaestra;
 		$tipo_documento = $tablaMaestra_model->getMaestroByTipo(54);
         $cerrado_orden_compra = $tablaMaestra_model->getMaestroByTipo(52);
-        $proveedor = Empresa::all();
+        //$proveedor = Empresa::all();
+        $proveedor = $empresa_model->getEmpresaAll();
         $tiendas = $tienda_model->getTiendasAll();
         $productos = $producto_model->getProductoExterno();
         $vendedor = $user_model->getUserByRol(7,11);

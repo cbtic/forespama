@@ -144,4 +144,14 @@ class TipoCambioController extends Controller
 
 	}
 
+	public function obtenerTipoCambioByFecha($fecha){
+
+		$tipo_cambio_model = new TipoCambio;
+
+		$tipo_cambio_fecha = $tipo_cambio_model->getTipoCambioByFecha($fecha);
+
+		return response()->json($tipo_cambio_fecha);
+
+	}
+
 }

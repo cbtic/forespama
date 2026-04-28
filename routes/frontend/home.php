@@ -59,6 +59,7 @@ use App\Http\Controllers\Frontend\EquivalenciaSubFamiliaFamiliaContablesControll
 use App\Http\Controllers\Frontend\DescansoController;
 use App\Http\Controllers\Frontend\ConsultaOxapampaMovimientoController;
 use App\Http\Controllers\Frontend\IngresoSalidaSecundarioController;
+use App\Http\Controllers\Frontend\KardexSecundarioController;
 
 
 //use App\Http\Controllers\VehiculoController;
@@ -970,3 +971,9 @@ Route::get('ingreso_salida_secundarios/create', [IngresoSalidaSecundarioControll
 Route::post('ingreso_salida_secundarios/listar_ingreso_salida_secundarios_ajax', [IngresoSalidaSecundarioController::class, 'listar_ingreso_salida_secundarios_ajax'])->name('ingreso_salida_secundarios.listar_ingreso_salida_secundarios_ajax');
 Route::post('ingreso_salida_secundarios/send_ingreso_salida_secundario', [IngresoSalidaSecundarioController::class, 'send_ingreso_salida_secundario'])->name('ingreso_salida_secundarios.send_ingreso_salida_secundario');
 Route::get('ingreso_salida_secundarios/modal_ingreso_salida_secundario/{id}', [IngresoSalidaSecundarioController::class, 'modal_ingreso_salida_secundario'])->name('ingreso_salida_secundarios.modal_ingreso_salida_secundario');
+
+Route::get('kardex_secundarios/create', [KardexSecundarioController::class, 'create'])->name('kardex_secundarios.create');
+Route::post('kardex_secundarios/listar_kardex_secundario_ajax', [KardexSecundarioController::class, 'listar_kardex_secundario_ajax'])->name('kardex_secundarios.listar_kardex_secundario_ajax');
+
+Route::get('tipo_cambio/obtenerTipoCambioByFecha/{fecha_comprobante}', [TipoCambioController::class, 'obtenerTipoCambioByFecha'])->name('tipo_cambio.obtenerTipoCambioByFecha');
+Route::get('kardex_secundarios/obtener_precio_salida/{producto}', [KardexSecundarioController::class, 'obtener_precio_salida'])->name('kardex_secundarios.obtener_precio_salida');
