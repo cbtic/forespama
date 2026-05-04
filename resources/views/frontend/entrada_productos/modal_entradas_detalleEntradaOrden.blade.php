@@ -380,10 +380,13 @@ $.ajax({
 
                 setTimeout(() => {
                     const $cantidadIngreso = $('#cantidad_ingreso' + currentIndex);
+                    const cantidadRequerida = orden_compra.cantidad_requerida;
+                    const descuento = parseFloat((orden_compra.descuento ?? 0) || 0).toFixed(decimales);
                     const $precioUnitario = $('#precio_unitario' + currentIndex);
                     const $precioUnitario_ = $('#precio_unitario_' + currentIndex);
 
                     calcularCantidadPendiente($cantidadIngreso[0]);
+                    calcularDescuentoParcial($cantidadIngreso[0], cantidadRequerida, descuento);
                     calcularPrecioUnitario($precioUnitario[0], decimales);
                 }, 0);
 

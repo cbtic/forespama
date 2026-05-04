@@ -1215,7 +1215,7 @@ class ComprobanteController extends Controller
                     if($tipoF == 'FT'){
                         $orden_compra->id_empresa_compra = $ubicacion_id;
                         $orden_compra->id_tipo_documento = 2;
-                         $orden_compra->id_tipo_cliente = '5';
+                        $orden_compra->id_tipo_cliente = '5';
                     }else { //if($tipoF == 'BV'){
                         $orden_compra->id_persona = $id_persona_act;
                         $orden_compra->id_tipo_documento = 2;

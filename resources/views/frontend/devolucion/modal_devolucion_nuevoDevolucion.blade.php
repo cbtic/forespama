@@ -670,7 +670,7 @@ function cargarDetalle(){
                         <td><select name="marca[]" id="marca${n}" class="form-control form-control-sm">${marcaOptions}</select></td>
                         <td><input name="cod_interno[]" id="cod_interno${n}" class="form-control form-control-sm" value="${devolucion.codigo}" type="text"></td>
                         <td><select name="unidad[]" id="unidad${n}" class="form-control form-control-sm">${unidadMedidaOptions}</select></td>
-                        <td><input name="cantidad_ingreso[]" id="cantidad_ingreso${n}" class="cantidad_ingreso form-control form-control-sm" value="${devolucion.cantidad}" type="text" oninput="calcularSubTotal(this);calcularPrecioUnitario(this)"></td>
+                        <td><input name="cantidad_ingreso[]" id="cantidad_ingreso${n}" class="cantidad_ingreso form-control form-control-sm" value="${devolucion.cantidad}" type="text" oninput="calcularSubTotal(this);calcularPrecioUnitario(this);)"></td>
                         <td><input name="precio_unitario[]" id="precio_unitario${n}" class="precio_unitario form-control form-control-sm" value="${parseFloat(devolucion.precio_venta || 0).toFixed(2)}" type="text" oninput="calcularSubTotal(this);calcularPrecioUnitario(this)"></td>
                         <td><input name="precio_unitario_[]" id="precio_unitario_${n}" class="precio_unitario_ form-control form-control-sm" value="${parseFloat(devolucion.costo || 0).toFixed(2)}" type="text" oninput="calcularPrecioUnitario(this)"></td>
                         <td><input name="valor_venta_bruto[]" id="valor_venta_bruto${n}" class="valor_venta_bruto form-control form-control-sm" value="${parseFloat(devolucion.valor_venta_bruto || 0).toFixed(2)}" type="text" oninput="calcularSubTotal(this)"></td>
@@ -1035,7 +1035,6 @@ function obtenerEntradaSalida(){
 
         }
 	});
-
 }
 
 function cargarSalida(){
@@ -1096,7 +1095,7 @@ function cargarSalida(){
                         <td><select name="marca[]" id="marca${n}" class="form-control form-control-sm">${marcaOptions}</select></td>
                         <td><input name="cod_interno[]" id="cod_interno${n}" class="form-control form-control-sm" value="${devolucion.codigo}" type="text"></td>
                         <td><select name="unidad[]" id="unidad${n}" class="form-control form-control-sm">${unidadMedidaOptions}</select></td>
-                        <td><input name="cantidad_ingreso[]" id="cantidad_ingreso${n}" class="cantidad_ingreso form-control form-control-sm" value="${devolucion.cantidad}" type="text" oninput="calcularCantidadPendiente(this);calcularSubTotal(this);calcularPrecioUnitario(this)"></td>
+                        <td><input name="cantidad_ingreso[]" id="cantidad_ingreso${n}" class="cantidad_ingreso form-control form-control-sm" value="${devolucion.cantidad}" type="text" oninput="calcularDescuentoParcial(this,${devolucion.cantidad},${parseFloat(devolucion.descuento ?? 0) || 0});calcularCantidadPendiente(this);calcularSubTotal(this);calcularPrecioUnitario(this)"></td>
                         <td><input name="precio_unitario[]" id="precio_unitario${n}" class="precio_unitario form-control form-control-sm" value="${parseFloat(devolucion.precio_venta || 0).toFixed(2)}" type="text" oninput="calcularSubTotal(this);calcularPrecioUnitario(this)"></td>
                         <td><input name="precio_unitario_[]" id="precio_unitario_${n}" class="precio_unitario_ form-control form-control-sm" value="${parseFloat(devolucion.costo || 0).toFixed(2)}" type="text" oninput="calcularPrecioUnitario(this)"></td>
                         <td><input name="valor_venta_bruto[]" id="valor_venta_bruto${n}" class="valor_venta_bruto form-control form-control-sm" value="${parseFloat(devolucion.valor_venta_bruto || 0).toFixed(2)}" type="text" oninput="calcularSubTotal(this)"></td>
@@ -1158,6 +1157,20 @@ function obtenerObservacion(){
     }else{
         $('#areaobservacion').hide();
     }
+}
+
+function calcularDescuentoParcial(input, cantidad, descuento){
+
+    //alert(cantidad);
+    var fila = $(input).closest('tr');
+
+    var cantidad_ingreso = parseFloat(fila.find('.cantidad_ingreso').val()) || 0;
+
+    var descuento_unitario = descuento / cantidad;
+
+    var descuento_parcial = descuento_unitario * cantidad_ingreso;
+
+    fila.find('.descuento').val(descuento_parcial.toFixed(2));
 }
 
 </script>

@@ -393,9 +393,9 @@ label.form-control-sm{
 									<button type="button" id="btnBuscar" class="btn btn-sm btn-warning pull-rigth icono-botones2" style="margin-left:10px">
 										<i class="fas fa-search" style="font-size:18px;"></i> Buscar
 									</button>
-									<buttom class="btn btn-sm btn-secondary pull-rigth icono-botones2" type="button" id="btnDescargarKardex" style="margin-left:15px" />
+									<!--<buttom class="btn btn-sm btn-secondary pull-rigth icono-botones2" type="button" id="btnDescargarKardex" style="margin-left:15px" />
 										<i class="fa fa-download"></i> Descargar
-									</buttom>
+									</buttom>-->
 								</div>
 							</div>
 						</div>

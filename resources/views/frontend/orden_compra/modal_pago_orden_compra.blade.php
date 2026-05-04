@@ -144,7 +144,7 @@ $(document).ready(function() {
     });
 
 	checkBoxDetraccion();
-	
+
 });
 
 </script>
@@ -168,7 +168,15 @@ $('#openOverlayOpc').on('shown.bs.modal', function() {
 		format: "dd-mm-yyyy",
 		autoclose: true,
 		container: '#openOverlayOpc modal-body'
-     });	 
+     });
+
+	 $('#fecha_detraccion').datepicker({
+		format: "dd-mm-yyyy",
+		autoclose: true,
+		container: '#openOverlayOpc modal-body'
+     });
+
+	 $('#codigo_detraccion').select2({ width : '100%'})
 });
 
 $(document).ready(function() {
@@ -437,7 +445,7 @@ $('#detraccion').on('change', function() {
 										<div class="col-lg-3">
 											<div class="form-group">
 												<label class="control-label">Fecha Factura</label>
-												<input id="fecha_factura" name="fecha_factura" class="form-control form-control-sm"  value="<?php //if($id==0){echo $fecha_actual;}else{echo date('d-m-Y',strtotime($orden_compra_pago->fecha));}?>" type="text">
+												<input id="fecha_factura" name="fecha_factura" class="form-control form-control-sm" placeholder="dd-mm-yyyy" value="<?php //if($id==0){echo $fecha_actual;}else{echo date('d-m-Y',strtotime($orden_compra_pago->fecha));}?>" type="text">
 											</div>
 										</div>
 									</div>
@@ -446,13 +454,13 @@ $('#detraccion').on('change', function() {
 										<div class="col-lg-6">
 											<div class="form-group">
 												<label class="control-label">Glosa Comprobante</label>
-												<input id="glosa_comprobante" name="glosa_comprobante" class="form-control form-control-sm"  value="<?php //echo $orden_compra_pago->nro_factura?>" type="text" readonly>
+												<input id="glosa_comprobante" name="glosa_comprobante" class="form-control form-control-sm" value="<?php //echo $orden_compra_pago->nro_factura?>" type="text" readonly>
 											</div>
 										</div>
 										<div class="col-lg-6">
 											<div class="form-group">
 												<label class="control-label">Glosa Movimiento</label>
-												<input id="glosa_movimiento" name="glosa_movimiento" class="form-control form-control-sm"  value="<?php //echo $orden_compra_pago->nro_factura?>" type="text">
+												<input id="glosa_movimiento" name="glosa_movimiento" class="form-control form-control-sm" value="<?php //echo $orden_compra_pago->nro_factura?>" type="text">
 											</div>
 										</div>
 									</div>
@@ -480,7 +488,7 @@ $('#detraccion').on('change', function() {
 										<div class="col-lg-3">
 											<div class="form-group">
 												<label class="control-label">Fecha T/C</label>
-												<input id="fecha_tc" name="fecha_tc" class="form-control form-control-sm"  value="<?php echo date('d-m-Y')?>" type="text">
+												<input id="fecha_tc" name="fecha_tc" class="form-control form-control-sm" placeholder="dd-mm-yyyy" value="<?php echo date('d-m-Y')?>" type="text">
 											</div>
 										</div>
 
@@ -493,7 +501,7 @@ $('#detraccion').on('change', function() {
 									</div>
 
 									<div class="row">
-										<div class="col-lg-4">
+										<div class="col-lg-5">
 											<div class="form-group">
 												<label class="control-label">Destino</label>
 												<select name="destino" id="destino" onchange="" class="form-control form-control-sm" onChange="">
@@ -516,25 +524,26 @@ $('#detraccion').on('change', function() {
 									</div>
 									<div id="bloque_detraccion">
 										<div class="row">
-											<div class="col-lg-4">
+											<div class="col-lg-5">
 												<div class="form-group">
 													<label class="control-label">Tipo Operaci&oacute;n</label>
 													<select name="tipo_operacion" id="tipo_operacion" onchange="" class="form-control form-control-sm" onChange="">
 														<option value="">--Seleccionar--</option>
 														<?php //foreach($tipo_operacion as $row){?>
-														<option <?php //if($row->id==$orden_compra_pago->id_tipo_operacion)echo "selected='selected'";?> value="<?php //echo $row->id?>"><?php //echo $row->denominacion?></option>
+														<!--<option <?php //if($row->id==$orden_compra_pago->id_tipo_operacion)echo "selected='selected'";?> value="<?php //echo $row->id?>"><?php //echo $row->denominacion?></option>-->
 														<?php //}?>
+														<option value="01">Venta de bienes o prestación de servicio</option>
 													</select>
 												</div>
 											</div>
-											<div class="col-lg-4">
+											<div class="col-lg-7">
 												<div class="form-group">
 													<label class="control-label">C&oacute;digo Detraci&oacute;n</label>
 													<select name="codigo_detraccion" id="codigo_detraccion" onchange="" class="form-control form-control-sm" onChange="">
 														<option value="">--Seleccionar--</option>
-														<?php //foreach($codigo_detraccion as $row){?>
-														<option <?php //if($row->id==$orden_compra_pago->id_tipo_operacion)echo "selected='selected'";?> value="<?php //echo $row->id?>"><?php //echo $row->denominacion?></option>
-														<?php //}?>
+														<?php foreach($detracciones as $row){?>
+														<option <?php //if($row->id==$orden_compra_pago->id_tipo_operacion)echo "selected='selected'";?> value="<?php echo $row->id?>"><?php echo $row->codigo . ' - '. $row->descripcion . ' - '. $row->tasa .'%'?></option>
+														<?php }?>
 													</select>
 												</div>
 											</div>
@@ -547,7 +556,7 @@ $('#detraccion').on('change', function() {
 											<div class="col-lg-4">
 												<div class="form-group">
 													<label class="control-label">Fecha Detracci&oacute;n</label>
-													<input id="fecha_detraccion" name="fecha_detraccion" class="form-control form-control-sm"  value="<?php echo date('d-m-Y')?>" type="text">
+													<input id="fecha_detraccion" name="fecha_detraccion" class="form-control form-control-sm" placeholder="dd-mm-yyyy" value="<?php //echo date('d-m-Y')?>" type="text">
 												</div>
 											</div>
 											<div class="col-lg-4">

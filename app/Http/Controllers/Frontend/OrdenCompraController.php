@@ -29,6 +29,7 @@ use App\Models\AutorizacionOrdenCompra;
 use App\Models\PersonaProceso;
 use App\Models\JefeVendedorDetalle;
 use App\Models\StarsoftDestinoOperacione;
+use App\Models\StarsoftDetraccione;
 use DateTime;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Auth;
@@ -2094,6 +2095,7 @@ class OrdenCompraController extends Controller
 		$tablaMaestra_model = new TablaMaestra;
 		$orden_compra_model = new OrdenCompra;
         $destino_operaciones_model = new StarsoftDestinoOperacione;
+        $detracciones_model = new StarsoftDetraccione;
 		$fecha_actual = $orden_compra_model->fecha_actual();
 
 		if($id==0){
@@ -2112,8 +2114,9 @@ class OrdenCompraController extends Controller
 		$importe = $data->precio-$data->pago;
 
         $destino_operaciones = $destino_operaciones_model->getDestinoOperacionesAll();
+        $detracciones = $detracciones_model->getDetraccionesAll();
 
-		return view('frontend.orden_compra.modal_pago_orden_compra',compact('id','orden_compra_pago','id_orden_compra','fecha_actual'/*,'adelantos'*/,'tipo_desembolso','importe','banco','conversion','destino_operaciones'));
+		return view('frontend.orden_compra.modal_pago_orden_compra',compact('id','orden_compra_pago','id_orden_compra','fecha_actual'/*,'adelantos'*/,'tipo_desembolso','importe','banco','conversion','destino_operaciones','detracciones'));
 	
 	}
 
