@@ -148,7 +148,10 @@ class ReusoController extends Controller
 					$kardex->saldos_cantidad = $cantidad[$index];
 				}
 				$kardex->id_almacen_destino = $request->almacen_destino;
-				$kardex->id_reuso = $id_reuso;
+				//$kardex->id_reuso = $id_reuso;
+                $kardex->id_tipo_movimiento = 8;
+		        $kardex->id_movimiento = $id_reuso;
+                $kardex->codigo_movimiento = $reuso->codigo;
 				$kardex->fecha = $request->fecha;
                 $kardex->id_usuario_inserta = $id_user;
 

@@ -205,7 +205,10 @@ class HornoController extends Controller
 
 				$kardex->saldos_cantidad = $saldoBase - $ingreso_horno_[$index];
 
-				$kardex->id_ingreso_vehiculo_tronco = $id_ingreso_horno;
+				//$kardex->id_ingreso_vehiculo_tronco = $id_ingreso_horno;
+				$kardex->id_tipo_movimiento = 32;
+				$kardex->id_movimiento = $id_ingreso_horno;
+				$kardex->codigo_movimiento = "";
 				//$kardex->fecha = $request->fecha;
 				$kardex->id_usuario_inserta = $id_user;
 				$kardex->save();
@@ -279,7 +282,7 @@ class HornoController extends Controller
 
 			$kardex = new Kardex;
 			$kardex->id_producto = $idProducto;
-			$kardex->id_almacen_destino = 23;
+			$kardex->id_almacen_destino = 24;
 			$kardex->fecha = $request->fecha_salida;
 
 			$kardex->entradas_cantidad = 0;
@@ -287,7 +290,10 @@ class HornoController extends Controller
 
 			$kardex->saldos_cantidad = $saldoBase -  $detalle->cantidad;
 
-			$kardex->id_ingreso_vehiculo_tronco = $id_ingreso_horno;
+			//$kardex->id_ingreso_vehiculo_tronco = $id_ingreso_horno;
+			$kardex->id_tipo_movimiento = 32;
+			$kardex->id_movimiento = $id_ingreso_horno;
+			$kardex->codigo_movimiento = "";
 			//$kardex->fecha = $request->fecha;
 			$kardex->id_usuario_inserta = $id_user;
 			$kardex->save();
@@ -313,7 +319,10 @@ class HornoController extends Controller
 
 			$kardex_->saldos_cantidad = $saldoBase_ +  $detalle->cantidad;
 
-			$kardex_->id_ingreso_vehiculo_tronco = $id_ingreso_horno;
+			//$kardex_->id_ingreso_vehiculo_tronco = $id_ingreso_horno;
+			$kardex->id_tipo_movimiento = 16;
+			$kardex->id_movimiento = $id_ingreso_horno;
+			$kardex->codigo_movimiento = "";
 			//$kardex->fecha = $request->fecha;
 			$kardex_->id_usuario_inserta = $id_user;
 			$kardex_->save();

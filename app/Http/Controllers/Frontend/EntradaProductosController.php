@@ -314,7 +314,14 @@ class EntradaProductosController extends Controller
                     $total_kardex = $cantidad_ingreso[$index] * $producto->precio_venta;
                     $kardex->total_saldos_cantidad = $total_kardex;
 
-                    $kardex->id_entrada_producto = $entrada_producto->id;
+                    //$kardex->id_entrada_producto = $entrada_producto->id;
+                    
+                    if($request->unidad_origen == 1 || $request->unidad_origen == 3){
+                        $kardex->id_tipo_movimiento = 32;
+                    }
+
+                    $kardex->id_movimiento = $entrada_producto->id;
+                    $kardex->codigo_movimiento = $entrada_producto->codigo;
                     $kardex->id_usuario_inserta = $id_user;
                     $kardex->save();
                 }
@@ -365,7 +372,16 @@ class EntradaProductosController extends Controller
                     $total_kardex = $cantidad_ingreso[$index] * $producto->precio_venta;
                     $kardex->total_saldos_cantidad = $total_kardex;
 
-                    $kardex->id_entrada_producto = $entrada_producto->id;
+                    //$kardex->id_entrada_producto = $entrada_producto->id;
+                    if($request->unidad_origen == 1 || $request->unidad_origen == 3){
+                        $kardex->id_tipo_movimiento = 16;
+                    }
+                    if($request->unidad_origen == 2){
+                        $kardex->id_tipo_movimiento = 5;
+                    }
+
+                    $kardex->id_movimiento = $entrada_producto->id;
+                    $kardex->codigo_movimiento = $entrada_producto->codigo;
                     $kardex->id_usuario_inserta = $id_user;
                     $kardex->save();
 
@@ -449,9 +465,7 @@ class EntradaProductosController extends Controller
                         $OrdenCompraObj->save();
                 }
                 //}
-
             //}
-
         }else if($request->tipo_movimiento==2){
 
             if($request->id == 0){
@@ -476,7 +490,6 @@ class EntradaProductosController extends Controller
                 $descuento = $request->input('descuento');
                 $porcentaje = $request->input('porcentaje');
                 $id_descuento = $request->input('id_descuento');
-
 
                 $cantidad_items = count($descripcion);
                 //echo $request->id_orden_compra;
@@ -618,7 +631,21 @@ class EntradaProductosController extends Controller
                         $total_kardex = $cantidad_ingreso[$index] * $producto->precio_venta;
                         $kardex->total_saldos_cantidad = $total_kardex;
 
-                        $kardex->id_salida_producto = $salida_producto->id;
+                        //$kardex->id_salida_producto = $salida_producto->id;
+                        if($request->unidad_origen == 4){
+                            if($request->numero_orden_compra_cliente == "EXHIBICION"){
+                                $kardex->id_tipo_movimiento = 24;
+                                $kardex->id_movimiento = $salida_producto->id;
+                            }else{
+                                $kardex->id_tipo_movimiento = 23;
+		                        $kardex->id_movimiento = $salida_producto->id;
+                            }
+                        }
+                        if($request->unidad_origen == 1 || $request->unidad_origen == 3){
+                            $kardex->id_tipo_movimiento = 32;
+		                    $kardex->id_movimiento = $salida_producto->id;
+                        }
+                        $kardex->codigo_movimiento = $salida_producto->codigo;
                         $kardex->id_usuario_inserta = $id_user;
                         $kardex->save();
                     }
@@ -669,7 +696,18 @@ class EntradaProductosController extends Controller
                         $total_kardex = $cantidad_ingreso[$index] * $producto->precio_venta;
                         $kardex->total_saldos_cantidad = $total_kardex;
 
-                        $kardex->id_salida_producto = $salida_producto->id;
+                        //$kardex->id_salida_producto = $salida_producto->id;
+                        if($request->unidad_origen == 4){
+                            $kardex->id_tipo_movimiento = 23;
+                        }
+                        if($request->unidad_origen == 1 || $request->unidad_origen == 3){
+                            $kardex->id_tipo_movimiento = 16;
+                        }
+                        if($request->unidad_origen == 2){
+                            $kardex->id_tipo_movimiento = 5;
+                        }
+                        $kardex->id_movimiento = $salida_producto->id;
+                        $kardex->codigo_movimiento = $salida_producto->codigo;
                         $kardex->id_usuario_inserta = $id_user;
                         $kardex->save();
                     }
@@ -2123,7 +2161,10 @@ class EntradaProductosController extends Controller
 
                     $kardex->saldos_cantidad = $saldoBase + $cantidad[$index];
 
-                    $kardex->id_entrada_producto = $entrada_producto->id;
+                    //$kardex->id_entrada_producto = $entrada_producto->id;
+                    $kardex->id_tipo_movimiento = 1;
+			        $kardex->id_movimiento = $entrada_producto->id;
+                    $kardex->codigo_movimiento = $entrada_producto->codigo;
                     //$kardex->fecha = $request->fecha;
                     $kardex->id_usuario_inserta = $id_user;
                     $kardex->save();
@@ -2217,7 +2258,10 @@ class EntradaProductosController extends Controller
 
                         $kardex->saldos_cantidad = $saldoBase - $cantidad[$index];
 
-                        $kardex->id_salida_producto = $salida_producto->id;
+                        //$kardex->id_salida_producto = $salida_producto->id;
+                        $kardex->id_tipo_movimiento = 17;
+			            $kardex->id_movimiento = $salida_producto->id;
+                        $kardex->codigo_movimiento = $salida_producto->codigo;
                         $kardex->id_usuario_inserta = $id_user;
                         $kardex->save();
 

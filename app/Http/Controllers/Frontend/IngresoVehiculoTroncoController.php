@@ -275,7 +275,10 @@ class IngresoVehiculoTroncoController extends Controller
 
 		$kardex->saldos_cantidad = $saldoBase + $request->cantidad;
 
-		$kardex->id_ingreso_vehiculo_tronco = $id_ingreso_vehiculo_troncos;
+		//$kardex->id_ingreso_vehiculo_tronco = $id_ingreso_vehiculo_troncos;
+		$kardex->id_tipo_movimiento = 5;
+		$kardex->id_movimiento = $id_ingreso_vehiculo_troncos;
+		$kardex->codigo_movimiento = "";
 		//$kardex->fecha = $request->fecha;
 		$kardex->id_usuario_inserta = $id_user;
 		$kardex->save();

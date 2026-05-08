@@ -325,10 +325,12 @@ class EmpaquetadoController extends Controller
             $kardex->id_almacen_destino = $request->almacen_destino;
             $kardex->fecha = $request->fecha;
             $kardex->id_usuario_inserta = $id_user;
-
+            $kardex->id_tipo_movimiento = 18;
+			$kardex->id_movimiento = $empaquetado_operacion->id;
+            $kardex->codigo_movimiento = $empaquetado_operacion->codigo;
             $kardex->save();
-            
         }
+
         $producto = Producto::find($request->producto);
 
         $kardex_buscar = Kardex::where("id_producto",$request->producto)->where("id_almacen_destino",$request->almacen_destino)->orderBy('id', 'desc')->first();
@@ -344,7 +346,9 @@ class EmpaquetadoController extends Controller
         $kardex->id_almacen_destino = $request->almacen_destino;
         $kardex->fecha = $request->fecha;
         $kardex->id_usuario_inserta = $id_user;
-
+        $kardex->id_tipo_movimiento = 2;
+		$kardex->id_movimiento = $empaquetado_operacion->id;
+        $kardex->codigo_movimiento = $empaquetado_operacion->codigo;
         $kardex->save();
     }
 

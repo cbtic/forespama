@@ -247,7 +247,10 @@ class DispensacionController extends Controller
 
 				$kardex->saldos_cantidad = $saldoBase - $cantidad[$index];
 
-				$kardex->id_dispensacion = $dispensacion->id;
+				//$kardex->id_dispensacion = $dispensacion->id;
+				$kardex->id_tipo_movimiento = 30;
+				$kardex->id_movimiento = $dispensacion->id;
+				$kardex->codigo_movimiento = $dispensacion->codigo;
 				//$kardex->fecha = $request->fecha;
 				$kardex->id_usuario_inserta = $id_user;
 				$kardex->save();

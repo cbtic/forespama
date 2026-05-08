@@ -421,7 +421,7 @@ label.form-control-sm{
                     <div class="table-responsive">
                     <table id="tblKardex" class="table table-hover table-sm">
                         <thead>
-                        <tr style="font-size:13px">
+                        <tr style="font-size:12px">
                             <th>Id</th>
 							<th>C&oacute;digo</th>
 							<th>Producto</th>
@@ -443,7 +443,7 @@ label.form-control-sm{
 							<!--<th>Almacen Salida</th>-->
                         </tr>
                         </thead>
-                        <tbody>
+                        <tbody style="font-size:13px">
                         </tbody>
                     </table>
                 </div><!--table-responsive-->

@@ -183,18 +183,17 @@ class Comprobante extends Model
 
     function listar_factura_credito_pendiente($ruc){
 
-        $cad = "select * 
-from comprobantes c 
-where c.tipo='FT' 
-and c.cod_tributario='".$ruc."' 
-and c.id_forma_pago='2' 
-and c.estado_pago='P'
-and c.estado='1' 
-and c.eliminado is null 
-and c.anulado='N' 
-order by 1 desc" ;
+        $cad = "select * from comprobantes c 
+        where c.tipo='FT' 
+        and c.cod_tributario='".$ruc."' 
+        and c.id_forma_pago='2' 
+        and c.estado_pago='P' 
+        and c.estado='1' 
+        and c.eliminado is null 
+        and c.anulado='N' 
+        and c.id_comprobante_pronto_pago is null 
+        order by 1 desc" ;
 
-                //print_r($cad); exit();
 		$data = DB::select($cad);
         //print_r($data); exit();
         return $data;

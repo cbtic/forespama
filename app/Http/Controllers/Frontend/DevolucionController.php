@@ -271,14 +271,17 @@ class DevolucionController extends Controller
 							}else{
 								$kardex->saldos_cantidad = $detalle['cantidad'];
 							}
-							$kardex->id_entrada_producto = $entrada_producto->id;
+							//$kardex->id_entrada_producto = $entrada_producto->id;
+							$kardex->id_tipo_movimiento = 6;
+							$kardex->id_movimiento = $entrada_producto->id;
+							$kardex->codigo_movimiento = $entrada_producto->codigo;
 							$kardex->id_almacen_destino = $request->almacen;
 							$kardex->fecha = $request->fecha_devolucion;
 							$kardex->id_usuario_inserta = $id_user;
 	
 							$kardex->save();
 
-						} else {
+						}else {
 							$salida_detalle_3->estado = 0;
 							$kardex_buscar = Kardex::where("id_producto",$detalle['id_producto'])->where("id_almacen_destino",$request->almacen)->orderBy('id', 'desc')->first();
 							$kardex = new Kardex;
@@ -290,7 +293,10 @@ class DevolucionController extends Controller
 							}else{
 								$kardex->saldos_cantidad = $detalle['cantidad'];
 							}
-							$kardex->id_entrada_producto = $entrada_producto->id;
+							//$kardex->id_entrada_producto = $entrada_producto->id;
+							$kardex->id_tipo_movimiento = 10;
+							$kardex->id_movimiento = $entrada_producto->id;
+							$kardex->codigo_movimiento = $entrada_producto->codigo;
 							$kardex->id_almacen_destino = $request->almacen;
 							$kardex->fecha = $request->fecha_devolucion;
 							$kardex->id_usuario_inserta = $id_user;

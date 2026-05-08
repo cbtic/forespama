@@ -3064,7 +3064,7 @@ class ComprobanteController extends Controller
                 "codigoAfectacionIGVItem" => $row->pu == 0 ? 21 : $row->afect_igv,
                 "montoReferenciaItem"=> $row->pu == 0 ? (1 * $row->cantidad) : 0,
                 "montoReferencialUnitarioItem"=> $row->pu == 0 ? 1 : 0,
-                "codTipoPrecioVtaUnitarioItem"=> $row->pu == 0 ? "02" : "01",                
+                "codTipoPrecioVtaUnitarioItem"=> $row->pu == 0 ? "02" : "01",
             );
             if ($row->pu == 0) {
                 $opGratuito = 1;
@@ -3810,7 +3810,6 @@ class ComprobanteController extends Controller
         $sw = true;
         $msg = "";
         
-
         $id_user = Auth::user()->id;
         $facturas_model = new Comprobante;
         $guia_model = new Guia;

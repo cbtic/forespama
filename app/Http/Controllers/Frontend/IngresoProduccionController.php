@@ -214,7 +214,10 @@ class IngresoProduccionController extends Controller
 
 				$kardex->saldos_cantidad = $saldoBase + $cantidad[$index];
 
-				$kardex->id_ingreso_produccion = $ingreso_produccion->id;
+				//$kardex->id_ingreso_produccion = $ingreso_produccion->id;
+				$kardex->id_tipo_movimiento = 9;
+				$kardex->id_movimiento = $ingreso_produccion->id;
+				$kardex->codigo_movimiento = $ingreso_produccion->codigo;
 				//$kardex->fecha = $request->fecha;
 				$kardex->id_usuario_inserta = $id_user;
 				$kardex->save();

@@ -219,7 +219,10 @@ class AcerradoMaderaController extends Controller
 
 				$kardex->saldos_cantidad = $saldoBase - $cantidad_ingreso_produccion[$index];
 
-				$kardex->id_ingreso_vehiculo_tronco = $id_ingreso_produccion_acerrado_madera;
+				//$kardex->id_ingreso_vehiculo_tronco = $id_ingreso_produccion_acerrado_madera;
+				$kardex->id_tipo_movimiento = 32;//CONSULTAR CONTADOR
+				$kardex->id_movimiento = $id_ingreso_produccion_acerrado_madera;
+				$kardex->codigo_movimiento = "";
 				//$kardex->fecha = $request->fecha;
 				$kardex->id_usuario_inserta = $id_user;
 				$kardex->save();
@@ -358,7 +361,10 @@ class AcerradoMaderaController extends Controller
 
 			$kardex->saldos_cantidad = $saldoBase + $n_piezas[$index];
 
-			$kardex->id_ingreso_vehiculo_tronco = $id_produccion_acerrado_madera;
+			//$kardex->id_ingreso_vehiculo_tronco = $id_produccion_acerrado_madera;
+			$kardex->id_tipo_movimiento = 9;
+			$kardex->id_movimiento = $id_produccion_acerrado_madera;
+			$kardex->codigo_movimiento = "";
 			//$kardex->fecha = $request->fecha;
 			$kardex->id_usuario_inserta = $id_user;
 			$kardex->save();

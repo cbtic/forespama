@@ -18,7 +18,7 @@
     width: 100%;
     max-width:85%!important
 }
-  
+
 #tablemodal{
     border-spacing: 0;
     display: flex;/*Se ajuste dinamicamente al tamano del dispositivo**/
@@ -831,7 +831,7 @@ function obtenerPrecios(campo){
                             <input type="hidden" name="id" id="id" value="<?php echo $id?>">
                             <div class="row" style="padding-left:10px">
                             <div class="col-lg-8">
-                                <fieldset class="fieldset" name="datos_generales" style="border:1px solid #A4A4A4; padding: 5px">
+                                <fieldset class="fieldset" name="datos_generales" style="border:1px solid #A4A4A4; padding: 5px; margin:0px">
                                 <legend class="control-label form-control-sm">Datos generales</legend>
                                 <div class="row" style="padding-left:10px">
                                     <div class="col-lg-3">
@@ -938,7 +938,7 @@ function obtenerPrecios(campo){
                                     </div>
                                 </div>
                                 </fieldset>
-                                <fieldset class="fieldset" name="familias" style="border:1px solid #A4A4A4; padding: 5px">
+                                <fieldset class="fieldset" name="familias" style="border:1px solid #A4A4A4; padding: 5px; margin:0px">
                                 <legend class="control-label form-control-sm">Familias</legend>
                                 <!--<div class="card card-body bg-light border-0 p-3">-->
                                     <div class="row" style="padding-left:10px">
@@ -1023,7 +1023,7 @@ function obtenerPrecios(campo){
                                             </div>
                                         </div>
                                 </div>
-                                <fieldset class="fieldset" name="informacion_adicional" style="border:1px solid #A4A4A4; padding: 5px">
+                                <fieldset class="fieldset" name="informacion_adicional" style="border:1px solid #A4A4A4; padding: 5px; margin:0px">
                                 <legend class="control-label form-control-sm">Informaci&oacute;n Adicional</legend>
                                 <!--<div class="card card-body bg-light border-0 p-3">-->
                                     <div class="row" style="padding-left:10px">
@@ -1122,7 +1122,7 @@ function obtenerPrecios(campo){
 
                                     <div class="card-body">
 
-                                        <div class="wrapper">
+                                        <div class="wrapper" style="width: 400px;">
                                             <div id="divImagenes" class="scrolls">
                                                 @if(!empty($imagenes) && count($imagenes) > 0)
                                                     @foreach($imagenes as $index => $imagen)
