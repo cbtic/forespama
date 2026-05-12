@@ -158,13 +158,11 @@ $(document).ready(function() {
         language: 'es'
     });
 
-    if($('#id').val()==0){
-        obtenerCodigo();
-    }
-
     if($('#id').val()>0){
         obtenerUnidadTrabajo();
     }
+
+    obtenerUnidadTrabajo();
 
     $("#item").select2({ width: '100%' });
     $("#persona_recibe").select2({ width: '100%' });
@@ -181,7 +179,7 @@ $('#openOverlayOpc').on('shown.bs.modal', function() {
 
 $(document).ready(function() {
 
-    if($('#id').val()>0){
+    if($('#id_dispensacion').val()>0){
         cargarDetalle();
     }
 
@@ -195,29 +193,11 @@ $(document).ready(function() {
 
 });
 
-function obtenerCodigo(){
-
-    var tipo_documento = $('#tipo_documento').val();
-
-    $.ajax({
-        url: "/dispensacion/obtener_codigo_dispensacion/"+tipo_documento,
-        dataType: "json",
-        success: function (result) {
-
-            //alert(result[0].codigo);
-            //console.log(result);
-            //$('#numero_dispensacion').val(result[0].codigo);
-
-        }
-    });
-
-}
-
 function obtenerUnidadTrabajo(){
     
     var area_trabajo = $('#area_trabajo').val();
     var selectedUnidad = "<?php echo isset($dispensacion->id_unidad_trabajo) ? $dispensacion->id_unidad_trabajo : ''; ?>";
-    //alert(selectedUnidad);
+    
     $.ajax({
         url: "/dispensacion/obtener_unidad_trabajo/"+area_trabajo,
         dataType: "json",
@@ -234,27 +214,9 @@ function obtenerUnidadTrabajo(){
                 
             });
             $('#unidad_trabajo').html(option);
-            //$('#unidad_trabajo').select2();
-            
-            //$('.loader').hide();
         }
-        
     });
 }
-
-/*function obtenerDescripcion(selectElement){
-
-    var fila = $(selectElement).closest('tr');
-
-    var descripcion_completo = $(selectElement).find('option:selected').text();
-
-    var descripcion_partes = descripcion_completo.split('-');
-
-    var descripcion = descripcion_partes.length > 1 ? descripcion_partes[1].trim() : '';
-
-    fila.find('input[name="descripcion[]"]').val(descripcion);
-
-}*/
 
 function obtenerCodInterno(selectElement, n){
 
@@ -290,103 +252,84 @@ function obtenerStock(selectElement, n){
     });
 }
 
-/*function obtenerCodigo(selectElement){
-
-    var selectedOption = selectElement.options[selectElement.selectedIndex];
-    
-    var codigo = selectedOption.text.split('-')[0].trim();
-
-    selectedOption.text = codigo;
-
-}*/
-
 var productosSeleccionados = [];
 
 function cargarDetalle(){
 
-var id = $("#id").val();
+var id = $("#id_dispensacion").val();
 const tbody = $('#divDispensacionDetalle');
 
 tbody.empty();
 
 $.ajax({
-        url: "/dispensacion/cargar_detalle/"+id,
-        type: "GET",
-        success: function (result) {
+    url: "/dispensacion/cargar_detalle/"+id,
+    type: "GET",
+    success: function (result) {
 
-            let n = 1;
+        let n = 1;
 
-            //var total_acumulado=0;
+        //var total_acumulado=0;
 
-            result.dispensacion.forEach(dispensacion => {
+        result.dispensacion.forEach(dispensacion => {
 
-                let marcaOptions = '<option value="">--Seleccionar--</option>';
-                let productoOptions = '<option value="">--Seleccionar--</option>';
-                let estadoBienOptions = '<option value="">--Seleccionar--</option>';
-                let unidadMedidaOptions = '<option value="">--Seleccionar--</option>';
+            let marcaOptions = '<option value="">--Seleccionar--</option>';
+            let productoOptions = '<option value="">--Seleccionar--</option>';
+            let estadoBienOptions = '<option value="">--Seleccionar--</option>';
+            let unidadMedidaOptions = '<option value="">--Seleccionar--</option>';
 
-                //alert(result.dispensacion[1]);
-                var producto_stock = result.producto_stock[dispensacion.id_producto];
+            var producto_stock = result.producto_stock[dispensacion.id_producto];
 
-                result.marca.forEach(marca => {
-                    let selected = (marca.id == dispensacion.id_marca) ? 'selected' : '';
-                    marcaOptions += `<option value="${marca.id}" ${selected}>${marca.denominiacion}</option>`;
-                });
+            result.marca.forEach(marca => {
+                let selected = (marca.id == dispensacion.id_marca) ? 'selected' : '';
+                marcaOptions += `<option value="${marca.id}" ${selected}>${marca.denominiacion}</option>`;
+            });
 
-                result.producto.forEach(producto => {
-                    let selected = (producto.id == dispensacion.id_producto) ? 'selected' : '';
-                    productoOptions += `<option value="${producto.id}" ${selected}>${producto.codigo} - ${producto.denominacion}</option>`;
-                });
+            result.producto.forEach(producto => {
+                let selected = (producto.id == dispensacion.id_producto) ? 'selected' : '';
+                productoOptions += `<option value="${producto.id}" ${selected}>${producto.codigo} - ${producto.denominacion}</option>`;
+            });
 
-                result.estado_bien.forEach(estado_bien => {
-                    let selected = (estado_bien.codigo == dispensacion.id_estado_producto) ? 'selected' : '';
-                    estadoBienOptions += `<option value="${estado_bien.codigo}" ${selected}>${estado_bien.denominacion}</option>`;
-                });
+            result.estado_bien.forEach(estado_bien => {
+                let selected = (estado_bien.codigo == dispensacion.id_estado_producto) ? 'selected' : '';
+                estadoBienOptions += `<option value="${estado_bien.codigo}" ${selected}>${estado_bien.denominacion}</option>`;
+            });
 
-                result.unidad_medida.forEach(unidad_medida => {
-                    let selected = (unidad_medida.codigo == dispensacion.id_unidad_medida) ? 'selected' : '';
-                    unidadMedidaOptions += `<option value="${unidad_medida.codigo}" ${selected}>${unidad_medida.denominacion}</option>`;
-                });
-
-                //alert(dispensacion.id_producto);
-
-                if (dispensacion.id_producto) {
-                    productosSeleccionados.push(dispensacion.id_producto);
-                }
-                //alert(productosSeleccionados);
-               
-                const row = `
-                    <tr>
-                        <td>${n}</td>
-                        <td><input name="id_dispensacion_detalle[]" id="id_dispensacion_detalle${n}" class="form-control form-control-sm" value="${dispensacion.id}" type="hidden"><input name="item[]" id="item${n}" class="form-control form-control-sm" value="${dispensacion.item}" type="text" readonly></td>
-                        <td style="width: 450px !important;display:block"><select name="descripcion_[]" id="descripcion_${n}" class="form-control form-control-sm" onChange="verificarProductoSeleccionado(this, ${n});" disabled>${productoOptions}</select><input name="descripcion[]" id="descripcion${n}" class="form-control form-control-sm" value="${dispensacion.id_producto}" type="hidden"></td>
-                        <td><select name="marca_[]" id="marca_${n}" class="form-control form-control-sm" disabled>${marcaOptions}</select><input name="marca[]" id="marca${n}" class="form-control form-control-sm" value="${dispensacion.id_marca}" type="hidden"></td>
-                        <td><input name="cod_interno[]" id="cod_interno${n}" class="form-control form-control-sm" value="${dispensacion.codigo}" type="text" readonly></td>
-                        <td><select name="estado_bien_[]" id="estado_bien_${n}" class="form-control form-control-sm" onChange="" disabled>${estadoBienOptions}</select><input name="estado_bien[]" id="estado_bien${n}" class="form-control form-control-sm" value="${dispensacion.id_estado_producto}" type="hidden"></td>
-                        <td><select name="unidad_[]" id="unidad_${n}" class="form-control form-control-sm" disabled>${unidadMedidaOptions}</select><input name="unidad[]" id="unidad${n}" class="form-control form-control-sm" value="${dispensacion.id_unidad_medida}" type="hidden"></td>
-                        <td><input name="cantidad[]" id="cantidad${n}" class="cantidad form-control form-control-sm" value="${dispensacion.cantidad}" type="text" oninput="calcularCantidadPendiente(this);calcularSubTotal(this)" readonly></td>
-                        <td><input name="stock_actual[]" id="stock_actual${n}" class="form-control form-control-sm" value="${producto_stock.saldos_cantidad}" type="text" readonly></td>
-                    </tr>
-                `;
-                tbody.append(row);
-                $('#descripcion_' + n).select2({ 
-                    width: '100%',
-                    dropdownParent: $('#openOverlayOpc'),
-                    dropdownCssClass: 'custom-select2-dropdown'
-                });
-
-                $('#marca_' + n).select2({
-                    width: '100%',
-                });
-
-                n++;
-                //total_acumulado += parseFloat(orden_compra.total);
-                });
-                //$('#totalGeneral').text(total_acumulado.toFixed(2));
+            result.unidad_medida.forEach(unidad_medida => {
+                let selected = (unidad_medida.codigo == dispensacion.id_unidad_medida) ? 'selected' : '';
+                unidadMedidaOptions += `<option value="${unidad_medida.codigo}" ${selected}>${unidad_medida.denominacion}</option>`;
+            });
+            
+            if (dispensacion.id_producto) {
+                productosSeleccionados.push(dispensacion.id_producto);
             }
             
-    });
+            const row = `
+                <tr>
+                    <td>${n}</td>
+                    <td style="width: 450px !important;display:block"><input name="id_dispensacion_detalle[]" id="id_dispensacion_detalle${n}" class="form-control form-control-sm" value="${dispensacion.id}" type="hidden"><select name="descripcion_[]" id="descripcion_${n}" class="form-control form-control-sm" onChange="verificarProductoSeleccionado(this, ${n});" disabled>${productoOptions}</select><input name="descripcion[]" id="descripcion${n}" class="form-control form-control-sm" value="${dispensacion.id_producto}" type="hidden"></td>
+                    <td><select name="marca_[]" id="marca_${n}" class="form-control form-control-sm" disabled>${marcaOptions}</select><input name="marca[]" id="marca${n}" class="form-control form-control-sm" value="${dispensacion.id_marca}" type="hidden"></td>
+                    <td><input name="cod_interno[]" id="cod_interno${n}" class="form-control form-control-sm" value="${dispensacion.codigo}" type="text" readonly></td>
+                    <td><select name="estado_bien_[]" id="estado_bien_${n}" class="form-control form-control-sm" onChange="" disabled>${estadoBienOptions}</select><input name="estado_bien[]" id="estado_bien${n}" class="form-control form-control-sm" value="${dispensacion.id_estado_producto}" type="hidden"></td>
+                    <td><select name="unidad_[]" id="unidad_${n}" class="form-control form-control-sm" disabled>${unidadMedidaOptions}</select><input name="unidad[]" id="unidad${n}" class="form-control form-control-sm" value="${dispensacion.id_unidad_medida}" type="hidden"></td>
+                    <td><input name="cantidad[]" id="cantidad${n}" class="cantidad form-control form-control-sm" value="${dispensacion.cantidad}" type="text" oninput="verificarCantidad(this,${dispensacion.cantidad})"></td>
+                    <td><input name="stock_actual[]" id="stock_actual${n}" class="form-control form-control-sm" value="${producto_stock.saldos_cantidad}" type="text" readonly></td>
+                </tr>
+            `;
+            tbody.append(row);
+            $('#descripcion_' + n).select2({ 
+                width: '100%',
+                dropdownParent: $('#openOverlayOpc'),
+                dropdownCssClass: 'custom-select2-dropdown'
+            });
 
+            $('#marca_' + n).select2({
+                width: '100%',
+            });
+
+            n++;
+            });
+        }
+    });
 }
 
 function agregarProducto(){
@@ -439,9 +382,7 @@ function agregarProducto(){
         $('#marca' + n).select2({
             width: '100%',
         });
-
     }
-
 }
 
 function verificarProductoSeleccionado(selectElement, rowIndex, valor) {
@@ -477,20 +418,17 @@ function verificarProductoSeleccionado(selectElement, rowIndex, valor) {
     console.log(productosSeleccionados);
 }
 
-/*function verificarProductoSeleccionado(selectElement, rowIndex) {
-    var selectedValue = $(selectElement).val();
+function verificarCantidad(input, cantidad_matriz){
 
-    if (selectedValue) {
-        if (productosSeleccionados.includes(selectedValue)) {
-            bootbox.alert("Este producto ya ha sido seleccionado.", function() {
-                $(selectElement).val('').trigger('change'); 
-            });
-        } else {
-            productosSeleccionados.push(selectedValue);
-            obtenerCodInterno(selectElement, rowIndex);
-        }
+    const row = $(input).closest("tr");
+
+    var cantidad = parseFloat(row.find('.cantidad').val()) || 0;
+
+    if(cantidad > cantidad_matriz){
+        bootbox.alert("La cantidad ingresada no puede ser mayor a la dispensada.")
+        row.find('.cantidad').val(cantidad_matriz);
     }
-}*/
+}
 
 function eliminarFila(button){
     $(button).closest('tr').remove();
@@ -539,27 +477,17 @@ function fn_save_dispensacion(){
         $('.loader').show();
 
         $.ajax({
-            url: "/dispensacion/send_dispensacion",
+            url: "/dispensacion/send_dispensacion_devolucion",
             type: "POST",
-            data : $("#frmDispensacion").serialize(),
+            data : $("#frmDispensacionDevolucion").serialize(),
             success: function (result) {
-                //alert(result.id)
                 $('#openOverlayOpc').modal('hide');
                 datatablenew();
                 $('.loader').hide();
-                bootbox.alert("Se guard&oacute; satisfactoriamente"); 
+                bootbox.alert("Se guard&oacute; satisfactoriamente");
             }
         });
     }
-}
-
-function pdf_documento_dispensacion(){
-
-    var id = $('#id').val();
-
-    var href = '/dispensacion/movimiento_pdf_dispensacion/'+id;
-    window.open(href, '_blank');
-
 }
 
 </script>
@@ -583,50 +511,56 @@ function pdf_documento_dispensacion(){
                     </div>
                 </div>-->
                 <div style="text-align: center; font-size:16px; margin-top: 20px">
-                    <b><?php if($id_tipo_documento == '1')""?>Dispensaci&oacute;n</b>
+                    <b>Devoluci&oacute;n de Dispensaci&oacute;n</b>
                 </div>
                 
                 <div class="card-body">
-                <form method="post" action="#" id="frmDispensacion" name="frmDispensacion">
+                <form method="post" action="#" id="frmDispensacionDevolucion" name="frmDispensacionDevolucion">
 
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding-top:5px;padding-bottom:20px">
                     
                     <input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
-                    <input type="hidden" name="id" id="id" value="<?php echo $id?>">
+                    <input type="hidden" name="id_dispensacion" id="id_dispensacion" value="<?php echo $id?>">
+                    <input type="hidden" name="id" id="id" value="0<?php //echo $id_dispensacion?>">
 
                     <div class="row" style="padding-left:10px">
                         <div class="col-lg-2">
                             Tipo Documento
                         </div>
                         <div class="col-lg-2">
-                            <select name="tipo_documento" id="tipo_documento" class="form-control form-control-sm" onchange="obtenerCodigo()">
+                            <select name="tipo_documento" id="tipo_documento" class="form-control form-control-sm" onchange="">
                                 <option value="">--Seleccionar--</option>
                                 <?php
-                                $selectedDocumento = isset($dispensacion->id_tipo_documento) ? $dispensacion->id_tipo_documento : 2;
                                 foreach ($tipo_documento as $row){?>
-                                    <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$selectedDocumento)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                    <option value="<?php echo $row->codigo ?>" <?php if($row->codigo=='1')echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
                                     <?php
                                 }
                                 ?>
                             </select>
                         </div>
                         <div class="col-lg-2">
-                            N&uacute;mero de Dispensaci&oacute;n
+                            N&uacute;mero de Dispensaci&oacute;n Matriz
                         </div>
                         <div class="col-lg-2">
-                            <input id="numero_dispensacion" name="numero_dispensacion" on class="form-control form-control-sm"  value="<?php if($id>0){echo $dispensacion->codigo;}?>" type="text" readonly ="readonly">
+                            <input id="numero_dispensacion_matriz" name="numero_dispensacion_matriz" on class="form-control form-control-sm"  value="<?php if($id>0){echo $dispensacion->codigo;}?>" type="text" readonly ="readonly">
+                        </div>
+                        <div class="col-lg-2">
+                            N&uacute;mero de Devoluci&oacute;n
+                        </div>
+                        <div class="col-lg-2">
+                            <input id="numero_dispensacion" name="numero_dispensacion" on class="form-control form-control-sm"  value="" type="text" readonly ="readonly">
                         </div>
                         <div class="col-lg-2">
                             Fecha
                         </div>
                         <div class="col-lg-2">
-                            <input id="fecha" name="fecha" on class="form-control form-control-sm"  value="<?php echo isset($dispensacion) && $dispensacion->fecha ? $dispensacion->fecha : date('Y-m-d'); ?>" type="text">
+                            <input id="fecha" name="fecha" on class="form-control form-control-sm"  value="<?php echo date('Y-m-d'); ?>" type="text">
                         </div>
                         <div class="col-lg-2" style="color:green; font-weight:bold">
                             Almacen
                         </div>
                         <div class="col-lg-2" id="almacen_salida_select">
-                            <select name="almacen" id="almacen" class="form-control form-control-sm" onchange="//actualizarSecciones(this)">
+                            <select name="almacen" id="almacen" class="form-control form-control-sm" onchange="">
                                 <option value="">--Seleccionar--</option>
                                 <?php 
                                 foreach ($almacen as $row){?>
@@ -654,7 +588,7 @@ function pdf_documento_dispensacion(){
                             Unidad de Trabajo
                         </div>
                         <div class="col-lg-2" id="almacen_salida_select">
-                            <select name="unidad_trabajo" id="unidad_trabajo" class="form-control form-control-sm" onchange="//actualizarSecciones(this)">
+                            <select name="unidad_trabajo" id="unidad_trabajo" class="form-control form-control-sm" onchange="">
                                 <option value="">--Seleccionar--</option>
                             </select>
                         </div>
@@ -697,55 +631,25 @@ function pdf_documento_dispensacion(){
 							<thead>
 							<tr style="font-size:13px">
 								<th>#</th>
-								<th>Item</th>
 								<th>Descripci&oacute;n</th>
 								<th>Marca</th>
                                 <th>COD. INT.</th>
-                                <!--<th>F. Fabricaci&oacute;n</th>
-                                <th>F. Vencimiento</th>-->
                                 <th>Estado Bien</th>
                                 <th>Unidad</th>
                                 <th>Cantidad</th>
                                 <th>Stock</th>
-                                <!--<th>Sub Total</th>
-                                <th>IGV</th>
-                                <th>Total</th>-->
 							</tr>
 							</thead>
 							<tbody id="divDispensacionDetalle">
 							</tbody>
 						</table>
 					</div>
-                    <!--<table style="background-color:white !important;border-collapse:collapse;border-spacing:1px; width: 100%; margin: 0 auto; font-size:12px">
-                        <tbody>
-                            <tr>
-                                <td class="td" style ="text-align: left; width: 90%; font-size:13px"></td>
-                                <td class="td" style ="text-align: left; width: 5%; font-size:13px"><b>Total:</b></td>
-                                <td id="totalGeneral" class="td" style="text-align: left; width: 5%; font-size:13px">0.00</td>
-                            </tr>
-                        </tbody>
-                    </table>-->
                     <div style="margin-top:15px" class="form-group">
                         <div class="col-sm-12 controls">
                             <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
-                                <?php 
-                                    if($id>0){
-                                ?>
-                                <button style="font-size:12px;margin-left:10px; margin-right:10px" type="button" class="btn btn-sm btn-clasico btn-enviar" data-toggle="modal" onclick="pdf_documento_dispensacion()">
-                                    <i class="far fa-file-pdf" style="font-size:18px;"></i>Imprimir
+                                <button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-nuevo" data-toggle="modal" onclick="fn_save_dispensacion()">
+                                    <i class="fas fa-save" style="font-size:18px;"></i> Guardar
                                 </button>
-                                <!--<button style="font-size:12px;margin-left:10px; margin-right:100px" type="button" class="btn btn-sm btn-warning" data-toggle="modal" onclick="pdf_guia()" ><i class="fa fa-edit"></i>Imprimir Gu&iacute;a Remisi&oacute;n Electronica</button>
-                                <a href="javascript:void(0)" onClick="fn_pdf_documento()" class="btn btn-sm btn-primary" style="margin-right:100px">Imprimir</a>-->
-                                <?php 
-                                    }
-                                ?>
-                                <?php if($id==0){?>
-                                    <!--<a href="javascript:void(0)" onClick="fn_save_dispensacion()" class="btn btn-sm btn-success" style="margin-right:10px">Guardar</a>-->
-                                    <button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-nuevo" data-toggle="modal" onclick="fn_save_dispensacion()">
-                                        <i class="fas fa-save" style="font-size:18px;"></i> Guardar
-                                    </button>
-                                <?php }?>
-                                <!--<a href="javascript:void(0)" onClick="$('#openOverlayOpc').modal('hide');" class="btn btn-sm btn-info" style="">Cerrar</a>-->
                                 <button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-cerrar" data-toggle="modal" onclick="$('#openOverlayOpc').modal('hide');">
                                     <i class="fas fa-times-circle" style="font-size:18px;"></i> Cerrar
                                 </button>

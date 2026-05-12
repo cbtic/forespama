@@ -3009,7 +3009,6 @@ class ComprobanteController extends Controller
 
         //print_r(json_encode($result)); exit();
 		echo json_encode($result);
-
 	
 	}
 	
@@ -3477,7 +3476,7 @@ class ComprobanteController extends Controller
                 );
                 //dd($row->afect_igv);exit();
 
-                $valor = (float) str_replace(",", "", $row->valor_venta ?? 0);
+                $valor = (float) str_replace(",", "", $row->pu ?? 0);
 
                 if ($row->afect_igv=='10'){
                     $totalOPGravadas += $valor;
@@ -3487,7 +3486,7 @@ class ComprobanteController extends Controller
                 
             $items[$index] = $items1;
         }
-
+        
 		$data["items"] = $items;
        // $data["server"] = $items2;
 
@@ -3512,7 +3511,6 @@ class ComprobanteController extends Controller
 		$data["sumatoriaISC"] = "0.00";
 		$data["ubigeoEmisor"] = "150139";
         $data["creditoCuotas"] = [];
-
         
 		//$data["montoEnLetras"] = $factura->letras; //"CIENTO CINCUENTA Y 00/100";
 		$data["tipoDocumento"] = $this->getTipoDocumento($factura->tipo);
@@ -3779,7 +3777,7 @@ class ComprobanteController extends Controller
                 $flagWs = isset($estado_ws[0]->codigo)?$estado_ws[0]->codigo:1;
  
                 if ($flagWs==2 && $id_factura>0 && ($tipoF=="FT" || $tipoF=="BV")){
-                    $this->firmar($id_factura);
+                    $this->firmar_nc($id_factura);
                 }
  
                 //echo $id_factura;

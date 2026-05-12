@@ -980,3 +980,5 @@ Route::get('kardex_secundarios/obtener_precio_salida/{producto}', [KardexSecunda
 
 Route::get('ingreso_salida_secundarios/cargar_detalle/{id}', [IngresoSalidaSecundarioController::class, 'cargar_detalle'])->name('ingreso_salida_secundarios.cargar_detalle');
 
+Route::get('dispensacion/modal_dispensacion_devolucion/{id}', [DispensacionController::class, 'modal_dispensacion_devolucion'])->name('dispensacion.modal_dispensacion_devolucion');
+Route::post('dispensacion/send_dispensacion_devolucion', [DispensacionController::class, 'send_dispensacion_devolucion'])->name('dispensacion.send_dispensacion_devolucion');

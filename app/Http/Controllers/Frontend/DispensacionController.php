@@ -467,6 +467,127 @@ class DispensacionController extends Controller
 		return Excel::download($export, 'reporte_dispensacion_ejecutivo.xlsx');
     }
 
+	public function modal_dispensacion_devolucion($id){
+		
+		$id_user = Auth::user()->id;
+        $tablaMaestra_model = new TablaMaestra;
+        $marca_model = new Marca;
+        $producto_model = new Producto;
+        $almacen_model = new Almacene;
+		$area_trabajo_model = new AreaTrabajo;
+		$unidad_trabajo_model = new UnidadTrabajo;
+		$persona_model = new Persona;
+		
+		if($id>0){
+			$dispensacion = Dispensacione::find($id);
+		}else{
+			$dispensacion = new Dispensacione;
+		}
+
+        $tipo_documento = $tablaMaestra_model->getMaestroByTipo(53);
+        $producto = $producto_model->getProductoAll();
+        $unidad = $tablaMaestra_model->getMaestroByTipo(43);
+        $moneda = $tablaMaestra_model->getMaestroByTipo(1);
+        $tipo_producto = $tablaMaestra_model->getMaestroByTipo(44);
+        $estado_bien = $tablaMaestra_model->getMaestroByTipo(56);
+        $unidad_medida = $tablaMaestra_model->getMaestroByTipo(57);
+        $marca = $marca_model->getMarcaAll();
+        $almacen = $almacen_model->getAlmacenAll();
+		$area_trabajo = $area_trabajo_model->getAreaTrabajoAll();
+		$persona = $persona_model->obtenerPersonaAll();
+
+		return view('frontend.dispensacion.modal_dispensacion_nuevoDispensacionDevolucion',compact('id','dispensacion','unidad_medida','moneda','estado_bien','tipo_producto','unidad','marca','producto','tipo_documento','almacen','area_trabajo','persona','id_user'));
+
+    }
+
+	public function send_dispensacion_devolucion(Request $request){
+
+		$id_user = Auth::user()->id;
+
+		if($request->id == 0){
+			$dispensacion = new Dispensacione;
+			$dispensacion_model = new Dispensacione;
+		    $codigo_dispensacion = $dispensacion_model->getCodigoDispensacion('1');
+		}else{
+			$dispensacion = Dispensacione::find($request->id);
+            $codigo_dispensacion = $request->numero_dispensacion;
+		}
+
+        $descripcion = $request->input('descripcion');
+        $cod_interno = $request->input('cod_interno');
+        $marca = $request->input('marca');
+        $estado_bien = $request->input('estado_bien');
+        $unidad = $request->input('unidad');
+        $cantidad = $request->input('cantidad');
+        $id_dispensacion_detalle =$request->id_dispensacion_detalle;
+		
+		$dispensacion->id_tipo_documento = $request->tipo_documento;
+		$dispensacion->id_area_trabajo = $request->area_trabajo;
+        $dispensacion->id_almacen = $request->almacen;
+        $dispensacion->id_unidad_trabajo = $request->unidad_trabajo;
+        $dispensacion->fecha = $request->fecha;
+		if($request->id == 0){
+            $dispensacion->codigo = $codigo_dispensacion[0]->codigo;
+        }else{
+            $dispensacion->codigo = $codigo_dispensacion;
+        }
+		$dispensacion->id_usuario_recibe = $request->persona_recibe;
+        $dispensacion->id_usuario_inserta = $id_user;
+		$dispensacion->estado = 1;
+		$dispensacion->save();
+		
+		$id_dispensacion = $dispensacion->id;
+
+		foreach($descripcion as $index => $value) {
+            
+            if($id_dispensacion_detalle[$index] == 0){
+                $dispensacion_detalle = new DispensacionDetalle;
+            }else{
+                $dispensacion_detalle = DispensacionDetalle::find($id_dispensacion_detalle[$index]);
+            }
+            
+            $dispensacion_detalle->id_dispensacion = $dispensacion->id;
+            $dispensacion_detalle->id_producto = $descripcion[$index];
+            $dispensacion_detalle->cantidad = $cantidad[$index];
+            $dispensacion_detalle->id_estado_producto = $estado_bien[$index];
+            $dispensacion_detalle->id_unidad_medida = $unidad[$index];
+			if($marca[$index]!=null && $marca[$index] !=0){
+				$dispensacion_detalle->id_marca = (int)$marca[$index];
+			}
+            $dispensacion_detalle->estado = 1;
+            $dispensacion_detalle->id_usuario_inserta = $id_user;
+
+            $dispensacion_detalle->save();
+
+			//$producto = Producto::find($descripcion[$index]);
+			
+			$idProducto = $descripcion[$index];
+			
+			$idCorte = Kardex::where('id_producto', $descripcion[$index])->where('id_almacen_destino', $request->almacen)->whereDate('fecha', '<=', $request->fecha)->orderBy('fecha', 'desc')->orderBy('id', 'desc')->value('id');
+			
+			$saldoBase = $idCorte > 0 ? Kardex::where('id', $idCorte)->value('saldos_cantidad') : 0;
+
+			$kardex = new Kardex;
+			$kardex->id_producto = $idProducto;
+			$kardex->id_almacen_destino = $request->almacen;
+			$kardex->fecha = $request->fecha;
+
+			$kardex->entradas_cantidad = $cantidad[$index];
+			$kardex->salidas_cantidad = 0;
+
+			$kardex->saldos_cantidad = $saldoBase + $cantidad[$index];
+
+			$kardex->id_tipo_movimiento = 8;
+			$kardex->id_movimiento = $id_dispensacion;
+			$kardex->codigo_movimiento = $dispensacion->codigo;
+			$kardex->id_usuario_inserta = $id_user;
+			$kardex->save();
+
+        }
+
+        return response()->json(['success' => 'Devoluci&oacute;n de Dispensaci&oacute;n guardada exitosamente.']);
+
+    }
 }
 
 class InvoicesExport implements FromArray, WithHeadings, WithStyles
