@@ -3466,7 +3466,7 @@ class ComprobanteController extends Controller
                     "descripcionItem" => $row->descripcion, //"TRANSBORDO",
                     "unidadMedidaItem" => $row->unidad,
                     "codigoProductoItem"=> ($row->codigo!="")?$row->codigo:"0000000", //"002",
-                    "valorUnitarioSinIgv" => str_replace(",", "", number_format($row->pu_con_igv, 2)), //"42.3728813559",
+                    "valorUnitarioSinIgv" => str_replace(",", "", number_format($row->pu, 2)), //"42.3728813559",
                     "precioUnitarioConIgv" => str_replace(",", "", number_format($row->importe, 2)), //"50.0000000000",
                     "unidadMedidaComercial" => $tabla_maestras->abreviatura_comercial,
                     //"codigoAfectacionIGVItem" => "10",
@@ -3486,7 +3486,7 @@ class ComprobanteController extends Controller
                 
             $items[$index] = $items1;
         }
-        
+        //dd($factura_nc->serie."-".$factura_nc->numero);exit();
 		$data["items"] = $items;
        // $data["server"] = $items2;
 
@@ -3540,13 +3540,15 @@ class ComprobanteController extends Controller
 		$data["departamentoEmisor"] = "OXAPAMPA";
 		//$data["descuentosGlobales"] = "0.00";
 		//$data["codigoTipoOperacion"] = "0101";
+        
+		$data["tipoNotaCredito"] = "04";
 		$data["razonSocialReceptor"] = $factura->destinatario;//"Freddy Rimac Coral";
         $data["serieNumeroAfectado"] = $factura_nc->serie."-".$factura_nc->numero;
         $data["serieNumeroModifica"] = $factura_nc->serie."-".$factura_nc->numero;
 
         $data["sumatoriaOtrosCargos"] = "0";
 
-		//$data["nombreComercialEmisor"] = "CAP";		       
+		//$data["nombreComercialEmisor"] = "CAP";
         $data["nombreComercialEmisor"] = "FORESTAL PAMA";
         //$data["tipoDocumentoModifica"] = "01";
         $data["tipoDocumentoModifica"] = $this->getTipoDocumento($factura_nc->tipo); 

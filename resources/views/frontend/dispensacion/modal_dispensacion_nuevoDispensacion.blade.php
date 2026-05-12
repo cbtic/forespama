@@ -583,7 +583,7 @@ function pdf_documento_dispensacion(){
                     </div>
                 </div>-->
                 <div style="text-align: center; font-size:16px; margin-top: 20px">
-                    <b><?php if($id_tipo_documento == '1')""?>Dispensaci&oacute;n</b>
+                    <b><?php if($dispensacion->id_tipo_documento == '1'){echo "Devoluci&oacute;n de "; }""?>Dispensaci&oacute;n</b>
                 </div>
                 
                 <div class="card-body">
