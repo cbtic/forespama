@@ -159,12 +159,19 @@ class ProductosController extends Controller
             }
         }
 
+        foreach ($rol as $r) {
+            if ($r->id_rol == 35) {
+                $aprobado = 3;
+                break;
+            }
+        }
+
 		if($request->id == 0){
 			$producto = new Producto;
             $producto_model = new Producto;
             $correlativo = $producto_model->getCorrelativo();
             $producto->numero_corrrelativo = $correlativo[0]->numero_correlativo;
-            if($aprobado == 2){
+            if($aprobado == 2 || $aprobado == 3){
                 $codigo_producto = $producto_model->getCodigoProducto($request->familia, $request->sub_familia);
                 $codigo_final = $codigo_producto[0]->codigo;
             }
@@ -174,7 +181,7 @@ class ProductosController extends Controller
 			$producto = Producto::find($request->id);
             $producto_model = new Producto;
             //$codigo_producto = $request->codigo;
-            if($aprobado == 2){
+            if($aprobado == 2 || $aprobado == 3){
                 if($request->sub_familia != $producto->id_sub_familia){
                     $codigo_producto = $producto_model->getCodigoProducto($request->familia, $request->sub_familia);
                     $codigo_final = $codigo_producto[0]->codigo;
@@ -192,7 +199,7 @@ class ProductosController extends Controller
         
         if($request->id == 0){
 
-            if($aprobado == 2 && $request->codigo == ""){
+            if(($aprobado == 2  || $aprobado == 3) && $request->codigo == ""){
                 $existe_producto_codigo = Producto::where('codigo', $codigo_producto[0]->codigo)->where('estado',1)->first();
 
                 if ($existe_producto_codigo && $existe_producto_codigo->id != $request->id) {
@@ -221,7 +228,7 @@ class ProductosController extends Controller
 
         $producto->id_tipo_origen_producto = $request->tipo_origen_producto;
 		$producto->numero_serie = $request->numero_serie;
-		if($aprobado == 2){
+		if($aprobado == 2 || $aprobado == 3){
             if($request->id == 0){
                 $producto->codigo = $codigo_final;
             }else{
@@ -315,7 +322,6 @@ class ProductosController extends Controller
                     $productoImagen->estado = 1;
                     $productoImagen->save();
                 }
-                
             }
         }
 		//////////////////

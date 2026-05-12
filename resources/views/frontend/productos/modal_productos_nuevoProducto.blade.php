@@ -692,7 +692,7 @@ function limpiarCombosDependientes() {
 $('.combo_producto_terminado').hide();
 
 $('#bien_servicio').on('change', function () {
-  if ($(this).val() === 'PRODUCTO') {
+  if ($(this).val() === '1') {
     $('#bloque_producto_terminado').slideDown();
   } else {
     $('#bloque_producto_terminado').slideUp();

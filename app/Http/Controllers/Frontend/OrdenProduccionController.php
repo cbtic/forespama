@@ -171,6 +171,7 @@ class OrdenProduccionController extends Controller
         }
         $orden_produccion->id_situacion = 1;
         $orden_produccion->id_usuario_inserta = $id_user;
+        $orden_produccion->codigo_orden_compra = $request->numero_orden_compra;
         $orden_produccion->estado = 1;
         $orden_produccion->save();
         $id_orden_produccion = $orden_produccion->id;

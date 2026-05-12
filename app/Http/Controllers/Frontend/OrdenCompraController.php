@@ -852,7 +852,8 @@ class OrdenCompraController extends Controller
         $producto = $producto_model->getProductoAll();
         $estado_bien = $tablaMaestra_model->getMaestroByTipo(4);
         $unidad_medida = $tablaMaestra_model->getMaestroByTipo(43);
-        $tiendas = Tienda::all();
+        $tiendas = $tienda_orden_compra_model->getTiendasAll();
+        //$tiendas = Tienda::all();
 
         return response()->json([
             'orden_compra' => $orden_compra,
@@ -1551,6 +1552,7 @@ class OrdenCompraController extends Controller
         $producto_model = new Producto;
         $marca_model = new Marca;
         $ubigeo_model = new Ubigeo;
+        $tienda_model = new Tienda;
 
         $existe_orden_compra_contacto_entrega = OrdenCompraContactoEntrega::where('id_orden_compra',$id)->where('estado',1)->first();
 		
@@ -1570,7 +1572,8 @@ class OrdenCompraController extends Controller
         $igv_compra = $tablaMaestra_model->getMaestroByTipo(51);
         $descuento = $tablaMaestra_model->getMaestroByTipo(55);
         $unidad_origen = $tablaMaestra_model->getMaestroByTipo(50);
-        $tiendas = Tienda::all();
+        $tiendas = $tienda_model->getTiendasAll();
+        //$tiendas = Tienda::all();
         $departamento = $ubigeo_model->getDepartamento();
 
 		return view('frontend.orden_compra.modal_datos_pedido_orden_compra',compact('id','orden_compra','orden_compra_contacto_entrega','tipo_documento','producto','marca','estado_bien','unidad','igv_compra','descuento','unidad_origen','tiendas','departamento'));

@@ -75,7 +75,7 @@ class Producto extends Model
         $cad = "select id, numero_serie, codigo, trim(denominacion) denominacion, id_unidad_medida, stock_actual, id_moneda, id_tipo_producto, fecha_vencimiento, id_estado_bien, stock_minimo, observacion, estado, created_at, updated_at, costo_unitario, precio_venta, contenido, id_unidad_producto, id_marca, numero_corrrelativo, id_tipo_origen_producto
         from productos p 
         where p.estado='1'
-        and p.aprobado='2'
+        and p.aprobado in('2','3')
         order by p.id ";
 
         //limit 2620";
@@ -88,7 +88,7 @@ class Producto extends Model
 
         $cad = "select * from productos p
         where p.id_tipo_origen_producto = '1'
-        and p.aprobado='2'
+        and p.aprobado in('2','3')
         and p.estado='1'";
 
 		$data = DB::select($cad);
@@ -99,7 +99,7 @@ class Producto extends Model
 
         $cad = "select * from productos p
         where p.id_tipo_origen_producto = '2'
-        and p.aprobado='2'
+        and p.aprobado in('2','3')
         and p.estado='1'";
 
 		$data = DB::select($cad);
@@ -118,7 +118,7 @@ class Producto extends Model
                     left join tabla_maestras um on um.codigo::int=p.id_unidad_medida and um.tipo = '43'
                     left join tabla_maestras m on m.codigo::int=p.id_moneda and m.tipo = '1'
                 where p.estado = '1' 
-                and p.aprobado = '2' 
+                and p.aprobado in('2','3')
                 ".$tipo_v."
                 order by p.denominacion"
 		;
@@ -145,7 +145,7 @@ class Producto extends Model
                     left join tabla_maestras m on m.codigo::int=p.id_moneda and m.tipo = '1'
                     left join equivalencia_productos e on e.id_producto = p.id
                 where p.estado = '1' 
-                and p.aprobado = '2'
+                and p.aprobado in('2','3')
                 and case when  e.id_empresa = '".$id_empresa."' then 
                     (select pe.codigo_producto ||'-'|| pe.descripcion_producto||' ('|| pe.codigo_empresa||'-'|| pe. descripcion_empresa||')'  
                     from equivalencia_productos pe
@@ -189,7 +189,7 @@ class Producto extends Model
 
         $cad = "select * from productos p 
         where p.id='".$id_producto."'
-        and p.aprobado = '2'";
+        and p.aprobado in('2','3') ";
 
 		$data = DB::select($cad);
         return $data;
@@ -210,7 +210,7 @@ class Producto extends Model
         inner join almacenes a on k.id_almacen_destino = a.id and a.estado ='1'
         inner join productos p on k.id_producto = p.id and p.estado = '1'
         where k.id_almacen_destino = '".$id_almacen."'
-        and p.aprobado = '2' 
+        and p.aprobado in('2','3') 
         order by p.id desc";
 
 		$data = DB::select($cad);
@@ -244,7 +244,7 @@ class Producto extends Model
         $cad = "select * from productos p
         where p.denominacion ilike '%(RT)%'
         and p.estado = '1'
-        and p.aprobado = '2'";
+        and p.aprobado in('2','3') ";
 
 		$data = DB::select($cad);
         return $data;

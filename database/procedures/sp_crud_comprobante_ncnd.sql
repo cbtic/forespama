@@ -1,5 +1,3 @@
--- DROP FUNCTION public.sp_crud_comprobante_ncnd(varchar, int4, varchar, varchar, varchar, varchar, varchar, int4, int4, numeric, varchar, int4, int4, varchar, varchar, int4, varchar, int4, varchar, varchar, varchar, int4, int4, int4);
-
 CREATE OR REPLACE FUNCTION public.sp_crud_comprobante_ncnd(serie character varying, numero integer, tipo character varying, cod_tributario character varying, total character varying, descripcion character varying, cod_contable character varying, id_v integer, id_caja integer, descuento numeric, accion character varying, p_id_usuario integer, p_id_moneda integer, p_razon_social character varying, p_direccion character varying, p_comprobante_origen integer, correo character varying, p_afectacion integer, p_tipo_nota character varying, p_motivo character varying, p_afecta_ingreso character varying, p_id_concepto integer, p_item integer, p_cantidad integer)
  RETURNS character varying
  LANGUAGE plpgsql
@@ -36,23 +34,32 @@ declare
 	_id_medio integer;
 	_nro_operacion character varying;
 
+	_correlativo_starsoft character varying;
+
+	_fecha date;
+
 begin
 	_serie:=serie;
 	_tipo:=tipo;
 
+	_fecha:= now();
+
 	_total := to_number(total,'9999999999.99');
 	select CAST(descuento AS numeric) into _descuento;
 	
+	select lpad(coalesce(max(nullif(c.correlativo_starsoft,'')::int) + 1, 1)::varchar, 4, '0') into _correlativo_starsoft
+	from comprobantes c 
+	where date_trunc('month', c.fecha) = date_trunc('month', _fecha);
 
-				if p_afectacion=30 then
-					_sub_total=_total;
-					_igv=0;
-							
-				else
-					_sub_total:=round(_total/1.18,2);
-					_igv:=round(_total-_sub_total,2);
+	if p_afectacion=30 then
+		_sub_total=_total;
+		_igv=0;
 				
-				end if;	
+	else
+		_sub_total:=round(_total/1.18,2);
+		_igv:=round(_total-_sub_total,2);
+	
+	end if;	
 
 	Case accion
 
@@ -78,12 +85,12 @@ begin
 						fecha_programado, observacion, id_moneda, tipo, id_forma_pago, afecta, cerrado, id_tipo_documento,serie_ncnd ,id_numero_ncnd ,tipo_ncnd,
 						solictante,orden_compra,  total_anticipo, total_descuentos, desc_globales,monto_perce, monto_detrac, porc_detrac, totalconperce, tipo_guia,
 						serie_refer, nro_refer, tipo_refer, codtipo_ncnd, motivo_ncnd, correo_des, tipo_operacion, base_perce, tipo_emision, ope_gratuitas,
-						subtotal, codigo_bbss_detrac, cuenta_detrac, notas, cond_pago, id_caja, id_usuario_inserta, id_comprobante_ncnd,afecta_caja)
+						subtotal, codigo_bbss_detrac, cuenta_detrac, notas, cond_pago, id_caja, id_usuario_inserta, id_comprobante_ncnd,afecta_caja, correlativo_starsoft)
 						
 					Values (serie,(select coalesce(max(fi.numero),'0')+1 from comprobantes fi where fi.serie = _serie and fi.tipo=_tipo),now(),p_razon_social,p_direccion,cod_tributario,'', '',
 						_sub_total,0.00,0.00,_igv,CAST(_total AS numeric),_total_letras,_moneda,18,0.000,'P','N',now(),now(),
 						now(),now(),'',p_id_moneda, tipo, 1, p_afectacion, 'S',6,'',0,'','','',0.00, 0.00, 0.00, 0.00, 0.00, 0, CAST(_total AS numeric), '', '', '', '', p_tipo_nota,p_motivo, correo, '01',
-						CAST(_total AS numeric), 'SINCRONO', 0, _sub_total, '', '', '', '', id_caja, p_id_usuario, p_comprobante_origen,p_afecta_ingreso);
+						CAST(_total AS numeric), 'SINCRONO', 0, _sub_total, '', '', '', '', id_caja, p_id_usuario, p_comprobante_origen,p_afecta_ingreso, _correlativo_starsoft);
 
 				idp := (SELECT currval('comprobantes_id_seq'));
 

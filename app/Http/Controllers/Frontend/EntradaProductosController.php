@@ -1329,8 +1329,11 @@ class EntradaProductosController extends Controller
             $marca = $marca_model->getMarcaAll();
             $tipo_movimiento_ = '';
 		}
-        
-        $persona = Persona::all();
+
+        $persona_model = new Persona;
+
+        $persona = $persona_model->obtenerPersonaAll();
+        //$persona = Persona::all();
 
         $producto = $producto_model->getProductoAll();
         $unidad = $tablaMaestra_model->getMaestroByTipo(43);
@@ -1833,8 +1836,12 @@ class EntradaProductosController extends Controller
             $marca = $marca_model->getMarcaAll();
             $tipo_movimiento_='';
 		}
+
+        $persona_model = new Persona;
+
+        $persona = $persona_model->obtenerPersonaAll();
+        //$persona = Persona::all();
         
-        $persona = Persona::all();
         $producto = $producto_model->getProductoAll();
         $unidad = $tablaMaestra_model->getMaestroByTipo(43);
 

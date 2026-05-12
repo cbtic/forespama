@@ -457,6 +457,12 @@ function obtenerUnidadTrabajo(){
                                 <option value="">--Seleccionar--</option>
                             </select>
                         </div>
+                        <div class="col-lg-2">
+                            N&uacute;mero Orden Compra
+                        </div>
+                        <div class="col-lg-2">
+                            <input id="numero_orden_compra" name="numero_orden_compra" on class="form-control form-control-sm"  value="<?php if($id>0){echo $orden_produccion->codigo_orden_compra;}?>" type="text">
+                        </div>
                     </div>
                         <div style="margin-top:15px" class="form-group">
                             <div class="col-sm-12 controls">

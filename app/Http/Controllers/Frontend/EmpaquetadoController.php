@@ -34,7 +34,8 @@ class EmpaquetadoController extends Controller
 
     public function create(){
 
-        $producto = Producto::all();
+		$producto_model = new Producto;
+        $producto = $producto_model->getProductoAll();
 		
 		return view('frontend.empaquetado.create',compact('producto'));
 
@@ -52,8 +53,10 @@ class EmpaquetadoController extends Controller
 
         $tablaMaestra_model = new TablaMaestra;
 		$almacen_model = new Almacene;
+        $producto_model = new Producto;
 
-        $producto = Producto::all();
+        $producto = $producto_model->getProductoAll();
+        //$producto = Producto::all();
         $unidad = $tablaMaestra_model->getMaestroByTipo(43);
         //$almacen_destino = Almacene::all();
         $almacen_destino = $almacen_model->getAlmacenAll();
@@ -201,8 +204,9 @@ class EmpaquetadoController extends Controller
 
         $tablaMaestra_model = new TablaMaestra;
         $almacen_model = new Almacene;
+        $producto_model = new Producto;
 
-        $producto = Producto::all();
+        $producto = $producto_model->getProductoAll();
         $unidad = $tablaMaestra_model->getMaestroByTipo(43);
         $almacen_destino = $almacen_model->getAlmacenAll();
 
