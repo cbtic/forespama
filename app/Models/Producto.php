@@ -274,4 +274,17 @@ class Producto extends Model
         return $data;
     }
 
+    function getProductoAllB(){
+
+        $cad = "select id, numero_serie, codigo, trim(denominacion) denominacion, id_unidad_medida, stock_actual, id_moneda, id_tipo_producto, fecha_vencimiento, id_estado_bien, stock_minimo, observacion, estado, created_at, updated_at, costo_unitario, precio_venta, contenido, id_unidad_producto, id_marca, numero_corrrelativo, id_tipo_origen_producto
+        from productos p 
+        where p.estado='1'
+        and p.aprobado in('2','3')
+        and p.operacion_secundario = '1'
+        order by p.id ";
+        
+		$data = DB::select($cad);
+        return $data;
+    }
+
 }

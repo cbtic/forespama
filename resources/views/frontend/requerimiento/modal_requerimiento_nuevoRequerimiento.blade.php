@@ -650,6 +650,62 @@ function modalCerrarAntiguedad(){
 	});
 }
 
+function aprobarRequerimiento(){
+
+    bootbox.confirm({ 
+        size: "small",
+        message: "&iquest;Est&aacute; seguro de Aprobar el Requerimiento?", 
+        callback: function(result){
+            if (result==true) {
+                guardarAprobacionRequerimiento();
+            }
+        }
+    });
+}
+
+function guardarAprobacionRequerimiento(){
+
+    var msgLoader = "";
+    msgLoader = "Procesando, espere un momento por favor";
+    var heightBrowser = $(window).width()/2;
+    $('.loader').css("opacity","0.8").css("height",heightBrowser).html("<div id='Grd1_wrapper' class='dataTables_wrapper'><div id='Grd1_processing' class='dataTables_processing panel-default'>"+msgLoader+"</div></div>");
+    $('.loader').show();
+
+    $.ajax({
+        url: "/requerimiento/send_aprobar_requerimiento",
+        type: "POST",
+        data : $("#frmRequerimiento").serialize(),
+        success: function (result) {
+            datatablenew();
+            $('.loader').hide();
+            bootbox.alert("Se aprob&oacute; satisfactoriamente");
+            $('#openOverlayOpc').modal('hide');
+        
+        }
+    });
+}
+
+function generarRequerimientoInsumos(){
+
+    var msgLoader = "";
+    msgLoader = "Procesando, espere un momento por favor";
+    var heightBrowser = $(window).width()/2;
+    $('.loader').css("opacity","0.8").css("height",heightBrowser).html("<div id='Grd1_wrapper' class='dataTables_wrapper'><div id='Grd1_processing' class='dataTables_processing panel-default'>"+msgLoader+"</div></div>");
+    $('.loader').show();
+
+    $.ajax({
+        url: "/requerimiento/genera_requerimiento_insumo",
+        type: "POST",
+        data : $("#frmRequerimiento").serialize(),
+        success: function (result) {
+            datatablenew();
+            $('.loader').hide();
+            bootbox.alert("Se gener&oacute; satisfactoriamente");
+            $('#openOverlayOpc').modal('hide');
+        }
+    });
+}
+
 </script>
 
 <body class="hold-transition skin-blue sidebar-mini">
@@ -815,8 +871,14 @@ function modalCerrarAntiguedad(){
                             <div class="col-lg-2">
                                 Sustento Requerimiento
                             </div>
-                            <div class="col-lg-10">
+                            <div class="col-lg-6">
                                 <textarea id="sustento_requerimiento" name="sustento_requerimiento" class="form-control form-control-sm" rows="2"><?php echo $requerimiento->sustento_requerimiento?></textarea>
+                            </div>
+                            <div class="col-lg-2">
+                                Destino
+                            </div>
+                            <div class="col-lg-2">
+                                <input id="destino" name="destino" on class="form-control form-control-sm"  value="<?php if($id>0){echo $requerimiento->observacion;}?>" type="text">
                             </div>
                         </div>
                     
@@ -876,8 +938,28 @@ function modalCerrarAntiguedad(){
                                                 }else{
                                             ?>
                                                 <button type="button" class="btn btn-warning btn-sm" onclick="modalCerrarAntiguedad()" style="margin-right:10px" disabled>Cerrar por Antiguedad</button>
-                                            <?php } 
+                                            <?php }
                                             }?>
+                                        @endhasanyrole
+
+                                        @hasanyrole('Administrator|Aprobar Requerimiento')
+                                            <?php 
+                                            if($id>0 && $requerimiento->aprobado == 1){
+                                            ?>
+                                                <button type="button" class="btn btn-warning btn-sm" onclick="generarRequerimientoInsumos()" style="margin-right:10px">Generar Rq de Insumos</button>
+                                            <?php 
+                                                }
+                                            ?>
+                                        @endhasanyrole
+
+                                        @hasanyrole('Administrator|Aprobar Requerimiento')
+                                            <?php 
+                                            if($id>0 && $requerimiento->aprobado == 0 && $requerimiento->cerrado == 1){
+                                            ?>
+                                                <button type="button" class="btn btn-success btn-sm" onclick="aprobarRequerimiento()" style="margin-right:10px">Aprobar</button>
+                                            <?php 
+                                                }
+                                            ?>
                                         @endhasanyrole
 
                                         <?php 

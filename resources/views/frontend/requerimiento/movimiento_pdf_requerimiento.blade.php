@@ -193,6 +193,13 @@ $(document).ready(function() {
                         <td class="td" style ="text-align: left; width: 15%;"><b>Sustento:</b></td>
                         <td class="td" style ="text-align: left; width: 20%;"><?php echo $sustento_requerimiento;?></td>
                     </tr>
+                    <?php if($observacion){?>
+                    <tr>
+                        <td class="td" style ="text-align: left; width: 15%;"><b>Destino:</b></td>
+                        <td class="td" style ="text-align: left; width: 20%;"><?php echo $observacion;?></td>
+                        <td class="td" style ="text-align: left; width: 10%;"></td>
+                    </tr>
+                    <?php }?>
                 </tbody>
             </table>
             &nbsp;

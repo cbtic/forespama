@@ -833,7 +833,7 @@ function calcularSoles(input){
                                 <th>Unidad</th>
                                 <th>Cantidad</th>
                                 <th class="th_contable">Precio Dolar</th>
-                                <th>Precio Venta</th>
+                                <th>Precio Compra</th>
                                 <th>Sub Total</th>
                                 <th>IGV</th>
                                 <th>Total</th>

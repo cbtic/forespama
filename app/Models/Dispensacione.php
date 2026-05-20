@@ -64,11 +64,11 @@ class Dispensacione extends Model
 
     function getDispensacionById($id){
 
-        $cad = "select d.id, tm.denominacion tipo_documento, at.denominacion area_trabajo, a.denominacion almacen, ut.denominacion unidad_trabajo, d.fecha, d.codigo, p.nombres ||' '|| p.apellido_paterno ||' '|| p.apellido_materno usuario_recibe from dispensaciones d 
+        $cad = "select d.id, tm.denominacion tipo_documento, s.denominacion sede, a.denominacion almacen, cc.denominacion centro_costo, d.fecha, d.codigo, p.nombres ||' '|| p.apellido_paterno ||' '|| p.apellido_materno usuario_recibe from dispensaciones d 
         inner join tabla_maestras tm on d.id_tipo_documento ::int = tm.codigo::int and tm.tipo = '53'
-        inner join area_trabajo at on d.id_area_trabajo = at.id 
+        left join sedes s on d.id_sede = s.id 
         inner join almacenes a on d.id_almacen = a.id 
-        inner join unidad_trabajo ut on d.id_unidad_trabajo = ut.id 
+        left join centro_costos cc on d.id_centro_costo = cc.id 
         left join personas p on d.id_usuario_recibe = p.id
         where d.id ='".$id."'";
 

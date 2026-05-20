@@ -172,7 +172,7 @@
 					@endif
 					
 					
-					@if(Gate::check('Requerimientos') || Gate::check('Entradas') || Gate::check('Orden Compra') || Gate::check('Consulta Stock') || Gate::check('Dispensacion') || Gate::check('Ingreso Produccion') || Gate::check('Kardex') || Gate::check('Movimientos Oxapampa') || Gate::check('Movimientos') || Gate::check('Verificacion Aplicacion Comisiones') || Gate::check('Empaquetado') || Gate::check('Devolucion') || Gate::check('Gestion Autorizacion') || Gate::check('Cargar Informe Venta b2b') || Gate::check('Reuso') || Gate::check('Ajuste Stock') || Gate::check('Ingreso Salida Secundario') || Gate::check('Kardex Secundario'))
+					@if(Gate::check('Requerimientos') || Gate::check('Entradas') || Gate::check('Orden Compra') || Gate::check('Consulta Stock') || Gate::check('Requerimiento Insumos') || Gate::check('Dispensacion') || Gate::check('Ingreso Produccion') || Gate::check('Kardex') || Gate::check('Movimientos Oxapampa') || Gate::check('Movimientos') || Gate::check('Verificacion Aplicacion Comisiones') || Gate::check('Empaquetado') || Gate::check('Devolucion') || Gate::check('Gestion Autorizacion') || Gate::check('Cargar Informe Venta b2b') || Gate::check('Reuso') || Gate::check('Ajuste Stock') || Gate::check('Ingreso Salida Secundario') || Gate::check('Kardex Secundario'))
 						
 						<li class="nav-item dropdown">
 							<a href="#" class="nav-link dropdown-toggle" id="navbarDropdownPrueba" data-toggle="dropdown"
@@ -196,6 +196,10 @@
 									<x-utils.link :href="route('frontend.orden_compra.consulta_stock_pedido')" class="dropdown-item" :text="__('Consulta de Stock de Pedidos')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
 								@endif
 								
+								@can('Requerimiento Insumos')
+									<x-utils.link :href="route('frontend.requerimiento_dispensacion.create')" class="dropdown-item" :text="__('Requerimiento de Insumos')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+								@endif
+
 								@can('Dispensacion')
 									<x-utils.link :href="route('frontend.dispensacion.create')" class="dropdown-item" :text="__('Dispensacion')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
 								@endif

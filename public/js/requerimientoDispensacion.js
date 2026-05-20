@@ -5,11 +5,7 @@ $(document).ready(function () {
 	});
 
 	$('#btnNuevo').click(function () {
-		modalDispensacion(0);
-	});
-
-	$('#btnNuevoDevolucion').click(function () {
-		modalDispensacionDevolucion(0);
+		modalRequerimientoDispensacion(0);
 	});
 
 	$('#tipo_documento_bus').keypress(function(e){
@@ -83,9 +79,9 @@ $(document).ready(function () {
 
 function datatablenew(){
                       
-    var oTable1 = $('#tblDispensacion').dataTable({
+    var oTable1 = $('#tblRequerimientoDispensacion').dataTable({
         "bServerSide": true,
-        "sAjaxSource": "/dispensacion/listar_dispensacion_ajax",
+        "sAjaxSource": "/requerimiento_dispensacion/listar_requerimiento_dispensacion_ajax",
         "bProcessing": true,
         "sPaginationType": "full_numbers",
         //"paging":false,
@@ -115,12 +111,12 @@ function datatablenew(){
             var tipo_documento = $('#tipo_documento_bus').val();
 			var fecha_inicio = $('#fecha_inicio_bus').val();
 			var fecha_fin = $('#fecha_fin_bus').val();
-			var numero_dispensacion = $('#numero_dispensacion_bus').val();
-			var situacion = $('#situacion_bus').val();
+			var numero_requerimiento_dispensacion = $('#numero_requerimiento_dispensacion_bus').val();
 			var almacen = $('#almacen_bus').val();
 			var sede = $('#sede_bus').val();
 			var centro_costo = $('#centro_costo_bus').val();
 			var persona_recibe = $('#persona_recibe_bus').val();
+			var situacion = $('#situacion_bus').val();
 			var estado = $('#estado_bus').val();
 			
 			var _token = $('#_token').val();
@@ -130,9 +126,8 @@ function datatablenew(){
                 "type": "POST",
                 "url": sSource,
                 "data":{NumeroPagina:iNroPagina,NumeroRegistros:iCantMostrar,
-						tipo_documento:tipo_documento,fecha_inicio:fecha_inicio,fecha_fin:fecha_fin,numero_dispensacion:numero_dispensacion,
-						almacen:almacen,sede:sede,centro_costo:centro_costo,persona_recibe:persona_recibe,
-						almacen:almacen,situacion:situacion,estado:estado,
+						tipo_documento:tipo_documento,fecha_inicio:fecha_inicio,fecha_fin:fecha_fin,numero_requerimiento_dispensacion:numero_requerimiento_dispensacion,
+						almacen:almacen,sede:sede,centro_costo:centro_costo,persona_recibe:persona_recibe,situacion:situacion,estado:estado,
 						_token:_token
                        },
                 "success": function (result) {
@@ -189,9 +184,9 @@ function datatablenew(){
 				},
 				{
 				"mRender": function (data, type, row) {
-					var numero_dispensacion = "";
-					if(row.numero_dispensacion!= null)numero_dispensacion = row.numero_dispensacion;
-					return numero_dispensacion;
+					var codigo = "";
+					if(row.codigo!= null)codigo = row.codigo;
+					return codigo;
 				},
 				"bSortable": true,
 				"aTargets": [3]
@@ -225,21 +220,39 @@ function datatablenew(){
 				},
 				{
 				"mRender": function (data, type, row) {
-					var persona_recibe = "";
-					if(row.persona_recibe!= null)persona_recibe = row.persona_recibe;
-					return persona_recibe;
+					var persona = "";
+					if(row.persona!= null)persona = row.persona;
+					return persona;
 				},
 				"bSortable": true,
 				"aTargets": [7]
 				},
 				{
 				"mRender": function (data, type, row) {
-					var codigo_requerimiento_dispensacion = "";
-					if(row.codigo_requerimiento_dispensacion!= null)codigo_requerimiento_dispensacion = row.codigo_requerimiento_dispensacion;
-					return codigo_requerimiento_dispensacion;
+					var persona_genera = "";
+					if(row.persona_genera!= null)persona_genera = row.persona_genera;
+					return persona_genera;
 				},
 				"bSortable": true,
 				"aTargets": [8]
+				},
+				{
+				"mRender": function (data, type, row) {
+					var persona_aprueba = "";
+					if(row.persona_aprueba!= null)persona_aprueba = row.persona_aprueba;
+					return persona_aprueba;
+				},
+				"bSortable": true,
+				"aTargets": [9]
+				},
+				{
+				"mRender": function (data, type, row) {
+					var codigo_requerimiento = "";
+					if(row.codigo_requerimiento!= null)codigo_requerimiento = row.codigo_requerimiento;
+					return codigo_requerimiento;
+				},
+				"bSortable": true,
+				"aTargets": [10]
 				},
 				/*{
 				"mRender": function (data, type, row) {
@@ -262,7 +275,7 @@ function datatablenew(){
 						return estado;
 					},
 					"bSortable": false,
-					"aTargets": [9]
+					"aTargets": [11]
 				},
 				{
 					"mRender": function (data, type, row) {
@@ -279,21 +292,20 @@ function datatablenew(){
 						
 						var html = '<div class="btn-group btn-group-sm" role="group" aria-label="Log Viewer Actions">';
 						
-						html += '<button style="font-size:12px" type="button" class="btn btn-sm btn-success" data-toggle="modal" onclick="modalDispensacion('+row.id+')" ><i class="fa fa-edit"></i> Visualizar</button>'; 
+						html += '<button style="font-size:12px" type="button" class="btn btn-sm btn-success" data-toggle="modal" onclick="modalRequerimientoDispensacion('+row.id+')" ><i class="fa fa-edit"></i> Editar</button>'; 
 						
-						if((esAdministrador || esUsuarioAutorizado) && !row.id_dispensacion_matriz){
-							html += '<button style="font-size:12px;margin-left:10px" type="button" class="btn btn-sm btn-danger" data-toggle="modal" onclick="modalDispensacionDevolucion('+row.id+')" ><i class="fas fa-minus-circle"></i> Devoluci&oacute;n</button>';
+						if(row.aprobado == 1 && row.cerrado == 1){
+							html += '<button style="font-size:12px;margin-left:10px" type="button" class="btn btn-sm btn-info" data-toggle="modal" onclick="modalAtenderRequerimientoDispensacion('+row.id+')" ><i class="fa fa-edit"></i> Atender</button>';
 						}else{
-							html += '<button style="font-size:12px;margin-left:10px" type="button" class="btn btn-sm btn-danger" data-toggle="modal" onclick="modalDispensacionDevolucion('+row.id+')" disabled><i class="fas fa-minus-circle"></i> Devoluci&oacute;n</button>';
+							html += '<button style="font-size:12px;margin-left:10px" type="button" class="btn btn-sm btn-info" data-toggle="modal" onclick="modalAtenderRequerimientoDispensacion('+row.id+')" disabled><i class="fa fa-edit"></i> Atender</button>';
 						}
-						
 						//html += '<a href="javascript:void(0)" onclick=eliminarDispensacion('+row.id+','+row.estado+') class="btn btn-sm '+clase+'" style="font-size:12px;margin-left:10px">'+estado+'</a>';			
 						
 						html += '</div>';
 						return html;
 					},
 					"bSortable": false,
-					"aTargets": [10],
+					"aTargets": [12],
 				},
             ]
     });
@@ -303,30 +315,15 @@ function fn_ListarBusqueda() {
     datatablenew();
 };
 
-function modalDispensacion(id){
+function modalRequerimientoDispensacion(id){
 	
 	$(".modal-dialog").css("width","85%");
 	$('#openOverlayOpc .modal-body').css('height', 'auto');
 
 	$.ajax({
-		url: "/dispensacion/modal_dispensacion/"+id,
+		url: "/requerimiento_dispensacion/modal_requerimiento_dispensacion/"+id,
 		type: "GET",
 		success: function (result) {  
-			$("#diveditpregOpc").html(result);
-			$('#openOverlayOpc').modal('show');
-		}
-	});
-}
-
-function modalDispensacionDevolucion(id){
-	
-	$(".modal-dialog").css("width","85%");
-	$('#openOverlayOpc .modal-body').css('height', 'auto');
-
-	$.ajax({
-		url: "/dispensacion/modal_dispensacion_devolucion/"+id,
-		type: "GET",
-		success: function (result) {
 			$("#diveditpregOpc").html(result);
 			$('#openOverlayOpc').modal('show');
 		}
@@ -381,11 +378,7 @@ function obtenerUnidadTrabajo(){
               	option += "<option value='" + oo.id + "'>" + oo.denominacion + "</option>"; 
             });
             $('#unidad_trabajo_bus').html(option);
-            //$('#unidad_trabajo').select2();
-            
-            //$('.loader').hide();
         }
-        
     });
 }
 
@@ -412,6 +405,21 @@ function descargarArchivosDispensacionReporte(){
 	if (estado == "")estado = 0;
 	
 	location.href = '/dispensacion/exportar_listar_dispensacion_reporte/'+tipo_documento+'/'+fecha_inicio+'/'+fecha_fin+'/'+numero_dispensacion+'/'+almacen+'/'+area_trabajo+'/'+unidad_trabajo+'/'+persona_recibe+'/'+estado;
+}
+
+function modalAtenderRequerimientoDispensacion(id){
+	
+	$(".modal-dialog").css("width","95%");
+	$('#openOverlayOpc .modal-body').css('height', 'auto');
+
+	$.ajax({
+		url: "/requerimiento_dispensacion/modal_atender_requerimiento_dispensacion/"+id,
+		type: "GET",
+		success: function (result) {
+			$("#diveditpregOpc").html(result);
+			$('#openOverlayOpc').modal('show');
+		}
+	});
 }
 
 function obtenerCentroCosto(){

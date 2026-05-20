@@ -60,6 +60,16 @@ class Sede extends Model
         return $data;
     }
 
+    function getSedeAll(){
+
+        $cad = " select s.id, s.denominacion, s.id_afectacion, s.estado 
+        from sedes s 
+        where s.estado = '1' ";
+
+		$data = DB::select($cad);
+        return $data;
+    }
+
     public function users() 
     {
         return $this->belongsToMany(User::Class);

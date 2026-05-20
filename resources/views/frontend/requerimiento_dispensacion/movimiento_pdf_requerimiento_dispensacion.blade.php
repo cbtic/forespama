@@ -170,7 +170,7 @@ $(document).ready(function() {
     </div>-->
     <table class="data" style="width:100%; font-size:11px">
         <tr>
-            <th><h2><?php echo "DISPENSACION N° ". $codigo;?></h2></th>
+            <th><h2><?php echo "REQUERIMIENTO DE DISPENSACION N° ". $codigo;?></h2></th>
         </tr>
     </table>
     <!--<div style="display: flex !important; width:100%">
@@ -213,7 +213,6 @@ $(document).ready(function() {
                         <td class="td" style ="text-align: left; width: 30%; height:25px; border-bottom: 1px solid black;"><b>DESCRIPCI&Oacute;N</b></td>
                         <td class="td" style ="text-align: left; width: 10%; height:25px; border-bottom: 1px solid black;"><b>MARCA</b></td>
                         <td class="td" style ="text-align: left; width: 15%; height:25px; border-bottom: 1px solid black;"><b>COD. INTERNO</b></td>
-                        <td class="td" style ="text-align: left; width: 10%; height:25px; border-bottom: 1px solid black;"><b>ESTADO BIEN</b></td>
                         <td class="td" style ="text-align: left; width: 10%; height:25px; border-bottom: 1px solid black;"><b>UNIDAD</b></td>
                         <td class="td" style ="text-align: left; width: 10%; height:25px; border-bottom: 1px solid black;"><b>CANTIDAD</b></td>
                     </tr>
@@ -226,7 +225,6 @@ $(document).ready(function() {
                             <td class="td" style ="text-align: left; width: 30%; height:25px"><?php echo $r->producto;?></td>
                             <td class="td" style ="text-align: left; width: 10%; height:25px"><?php echo $r->marca;?></td>
                             <td class="td" style ="text-align: left; width: 15%; height:25px"><?php echo $r->codigo;?></td>
-                            <td class="td" style ="text-align: left; width: 10%; height:25px"><?php echo $r->estado_producto;?></td>
                             <td class="td" style ="text-align: left; width: 10%; height:25px"><?php echo $r->unidad_medida;?></td>
                             <td class="td" style ="text-align: center; width: 10%; height:25px"><?php echo $r->cantidad;?></td>
                         </tr>

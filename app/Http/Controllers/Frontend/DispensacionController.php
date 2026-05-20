@@ -14,6 +14,7 @@ use App\Models\UnidadTrabajo;
 use RealRashid\SweetAlert\Facades\Alert;
 use App\Models\Kardex;
 use App\Models\Persona;
+use App\Models\Sede;
 use Illuminate\Http\Request;
 use Auth;
 use Carbon\Carbon;
@@ -32,13 +33,6 @@ class DispensacionController extends Controller
 {
     public function __construct(){
 
-		/*$this->middleware(function ($request, $next) {
-			if(!Auth::check()) {
-                return redirect('login');
-            }
-			return $next($request);
-    	});*/
-
 		$this->middleware('auth');
 		$this->middleware('can:Dispensacion')->only(['create']);
 	}
@@ -49,14 +43,16 @@ class DispensacionController extends Controller
 		$area_trabajo_model = new AreaTrabajo;
 		$almacen_model = new Almacene;
 		$persona_model = new Persona;
+		$sede_model = new Sede;
 
 		$tipo_documento = $tablaMaestra_model->getMaestroByTipo(53);
         //$cerrado_orden_compra = $tablaMaestra_model->getMaestroByTipo(52);
         $almacen = $almacen_model->getAlmacenAll();
 		$area_trabajo = $area_trabajo_model->getAreaTrabajoAll();
 		$persona = $persona_model->obtenerPersonaAll();
+        $sede = $sede_model->getSedeAll();
 		
-		return view('frontend.dispensacion.create',compact('tipo_documento','almacen','area_trabajo','persona'));
+		return view('frontend.dispensacion.create',compact('tipo_documento','almacen','sede','persona'));
 
 	}
 
@@ -68,8 +64,8 @@ class DispensacionController extends Controller
 		$p[]=$request->fecha_fin;
         $p[]=$request->numero_dispensacion;
         $p[]=$request->almacen;
-		$p[]=$request->area_trabajo;
-		$p[]=$request->unidad_trabajo;
+		$p[]=$request->sede;
+		$p[]=$request->centro_costo;
 		$p[]=$request->persona_recibe;
         $p[]=$request->estado;
 		$p[]=$request->NumeroPagina;
@@ -96,9 +92,8 @@ class DispensacionController extends Controller
         $marca_model = new Marca;
         $producto_model = new Producto;
         $almacen_model = new Almacene;
-		$area_trabajo_model = new AreaTrabajo;
-		$unidad_trabajo_model = new UnidadTrabajo;
 		$persona_model = new Persona;
+		$sede_model = new Sede;
 		
 		if($id>0){
 			$dispensacion = Dispensacione::find($id);
@@ -115,11 +110,10 @@ class DispensacionController extends Controller
         $unidad_medida = $tablaMaestra_model->getMaestroByTipo(57);
         $marca = $marca_model->getMarcaAll();
         $almacen = $almacen_model->getAlmacenAll();
-		$area_trabajo = $area_trabajo_model->getAreaTrabajoAll();
 		$persona = $persona_model->obtenerPersonaAll();
-		//var_dump($id);exit();
+        $sede = $sede_model->getSedeAll();
 
-		return view('frontend.dispensacion.modal_dispensacion_nuevoDispensacion',compact('id','dispensacion','unidad_medida','moneda','estado_bien','tipo_producto','unidad','marca','producto','tipo_documento','almacen','area_trabajo','persona','id_user'));
+		return view('frontend.dispensacion.modal_dispensacion_nuevoDispensacion',compact('id','dispensacion','unidad_medida','moneda','estado_bien','tipo_producto','unidad','marca','producto','tipo_documento','almacen','sede','persona','id_user'));
 
     }
 
@@ -156,9 +150,9 @@ class DispensacionController extends Controller
         $id_dispensacion_detalle =$request->id_dispensacion_detalle;
 		
 		$dispensacion->id_tipo_documento = $request->tipo_documento;
-		$dispensacion->id_area_trabajo = $request->area_trabajo;
+		$dispensacion->id_sede = $request->sede;
+        $dispensacion->id_centro_costo = $request->centro_costo;
         $dispensacion->id_almacen = $request->almacen;
-        $dispensacion->id_unidad_trabajo = $request->unidad_trabajo;
         $dispensacion->fecha = $request->fecha;
         //$dispensacion->codigo = $request->numero_dispensacion;
 		if($request->id == 0){
@@ -398,9 +392,9 @@ class DispensacionController extends Controller
         $datos_detalle=$dispensacion_detalle_model->getDetalleDispensacionPdf($id);
 
         $tipo_documento=$datos[0]->tipo_documento;
-        $area_trabajo=$datos[0]->area_trabajo;
+        $sede=$datos[0]->sede;
+        $centro_costo = $datos[0]->centro_costo;
         $almacen=$datos[0]->almacen;
-        $unidad_trabajo = $datos[0]->unidad_trabajo;
         $fecha = $datos[0]->fecha;
         $codigo=$datos[0]->codigo;
 		$usuario_recibe=$datos[0]->usuario_recibe;
@@ -413,7 +407,7 @@ class DispensacionController extends Controller
 
 		$currentHour = Carbon::now()->format('H:i:s');
 
-		$pdf = Pdf::loadView('frontend.dispensacion.movimiento_pdf_dispensacion',compact('tipo_documento','area_trabajo','almacen','unidad_trabajo','fecha','codigo','usuario_recibe','datos_detalle'));
+		$pdf = Pdf::loadView('frontend.dispensacion.movimiento_pdf_dispensacion',compact('tipo_documento','sede','almacen','centro_costo','fecha','codigo','usuario_recibe','datos_detalle'));
 		
 		$pdf->setPaper('A4'); // Tamaño de papel (puedes cambiarlo según tus necesidades)
 
@@ -456,11 +450,11 @@ class DispensacionController extends Controller
 		$variable = [];
 		$n = 1;
 		
-		array_push($variable, array("N","Codigo Dispensacion","Fecha","Almacen","Persona Recibe", "Area Trabajo", "Unidad Trabajo", "Codigo Producto", "Producto", "Cantidad"));
+		array_push($variable, array("N","Tipo Movimiento","Codigo Dispensacion","Fecha","Almacen","Persona Recibe", "Area Trabajo", "Unidad Trabajo", "Codigo Producto", "Producto", "Cantidad"));
 		
 		foreach ($data as $r) {
 
-			array_push($variable, array($n++,$r->codigo_dispensacion, $r->fecha, $r->almacen_salida, $r->usuario_recibe,$r->area_trabajo, $r->unidad_trabajo, $r->codigo_producto, $r->producto, $r->cantidad));
+			array_push($variable, array($n++,$r->tipo_movimiento, $r->codigo_dispensacion, $r->fecha, $r->almacen_salida, $r->usuario_recibe,$r->area_trabajo, $r->unidad_trabajo, $r->codigo_producto, $r->producto, $r->cantidad));
 		}
 		
 		$export = new InvoicesExport([$variable]);
@@ -532,6 +526,7 @@ class DispensacionController extends Controller
             $dispensacion->codigo = $codigo_dispensacion;
         }
 		$dispensacion->id_usuario_recibe = $request->persona_recibe;
+        $dispensacion->id_dispensacion_matriz = $request->id_dispensacion;
         $dispensacion->id_usuario_inserta = $id_user;
 		$dispensacion->estado = 1;
 		$dispensacion->save();
@@ -606,16 +601,16 @@ class InvoicesExport implements FromArray, WithHeadings, WithStyles
 
     public function headings(): array
     {
-        return ["N","Codigo Dispensacion","Fecha","Almacen","Persona Recibe", "Area Trabajo", "Unidad Trabajo", "Codigo Producto", "Producto", "Cantidad"];
+        return ["N","Tipo Movimiento","Codigo Dispensacion","Fecha","Almacen","Persona Recibe", "Area Trabajo", "Unidad Trabajo", "Codigo Producto", "Producto", "Cantidad"];
     }
 
 	public function styles(Worksheet $sheet)
     {
 
-		$sheet->mergeCells('A1:J1');
+		$sheet->mergeCells('A1:K1');
 
         $sheet->setCellValue('A1', "REPORTE DE DETALLE DE DISPENSACION - FORESPAMA");
-        $sheet->getStyle('A1:J1')->applyFromArray([
+        $sheet->getStyle('A1:K1')->applyFromArray([
             'font' => [
                 'bold' => true,
                 'color' => ['rgb' => 'FFFFFF'],
@@ -632,7 +627,7 @@ class InvoicesExport implements FromArray, WithHeadings, WithStyles
 		$sheet->getStyle('A1')->getAlignment()->setWrapText(true);
 		$sheet->getRowDimension(1)->setRowHeight(30);
 
-        $sheet->getStyle('A2:J2')->applyFromArray([
+        $sheet->getStyle('A2:K2')->applyFromArray([
             'font' => [
                 'bold' => true,
                 'color' => ['rgb' => '000000'],
@@ -652,7 +647,7 @@ class InvoicesExport implements FromArray, WithHeadings, WithStyles
 		->getNumberFormat()
 		->setFormatCode(\PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_NUMBER_00);*/ //SIRVE PARA PONER 2 DECIMALES A ESA COLUMNA
         
-        foreach (range('A', 'J') as $col) {
+        foreach (range('A', 'K') as $col) {
             $sheet->getColumnDimension($col)->setAutoSize(true);
         }
     }

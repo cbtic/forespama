@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddIdPersonaRecibeToSalidaProductosTable extends Migration
+class AddOperacionSecundarioToProductosTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddIdPersonaRecibeToSalidaProductosTable extends Migration
      */
     public function up()
     {
-        Schema::table('salida_productos', function (Blueprint $table) {
-            $table->integer('id_persona_recibe')->nullable();
+        Schema::table('productos', function (Blueprint $table) {
+            $table->string('operacion_secundario',1)->nullable()->default('0');
         });
     }
 
@@ -25,7 +25,7 @@ class AddIdPersonaRecibeToSalidaProductosTable extends Migration
      */
     public function down()
     {
-        Schema::table('salida_productos', function (Blueprint $table) {
+        Schema::table('productos', function (Blueprint $table) {
             //
         });
     }

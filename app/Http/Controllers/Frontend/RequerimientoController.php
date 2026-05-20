@@ -17,6 +17,8 @@ use App\Models\OrdenCompraDetalle;
 use App\Models\ProductoPrecioDetalle;
 use App\Models\CotizacionRequerimiento;
 use App\Models\CotizacionDetalleRequerimiento;
+use App\Models\RequerimientoDispensacione;
+use App\Models\RequerimientoDispensacionDetalle;
 use App\Models\User;
 use App\Models\Persona;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -81,6 +83,7 @@ class RequerimientoController extends Controller
         $p[]=$request->tipo_requerimiento;
         $p[]=$request->producto;
         $p[]=$request->denominacion_producto;
+        $p[]=$request->aprobado;
         $p[]=$request->estado;
 		$p[]=$request->NumeroPagina;
 		$p[]=$request->NumeroRegistros;
@@ -173,6 +176,7 @@ class RequerimientoController extends Controller
         $requerimiento->id_unidad_origen = $request->unidad_origen;
         $requerimiento->id_almacen_salida = $request->almacen_salida;
         $requerimiento->id_tipo_requerimiento = $request->tipo_requerimiento;
+        $requerimiento->observacion = $request->destino;
         $requerimiento->cerrado = 1;
         $requerimiento->id_usuario_inserta = $id_user;
         $requerimiento->estado = 1;
@@ -331,6 +335,7 @@ class RequerimientoController extends Controller
         $responsable_atencion=$datos[0]->responsable_atencion;
         $sustento_requerimiento=$datos[0]->sustento_requerimiento;
         $usuario_solicita=$datos[0]->usuario_solicita;
+        $observacion=$datos[0]->observacion;
         
 		$year = Carbon::now()->year;
 
@@ -340,7 +345,7 @@ class RequerimientoController extends Controller
 
 		$currentHour = Carbon::now()->format('H:i:s');
 
-		$pdf = Pdf::loadView('frontend.requerimiento.movimiento_pdf_requerimiento',compact('tipo_documento','almacen','fecha','codigo','datos_detalle','responsable_atencion','sustento_requerimiento','usuario_solicita'));
+		$pdf = Pdf::loadView('frontend.requerimiento.movimiento_pdf_requerimiento',compact('tipo_documento','almacen','fecha','codigo','datos_detalle','responsable_atencion','sustento_requerimiento','usuario_solicita','observacion'));
 		
 		$pdf->setPaper('A4'); // Tamaño de papel (puedes cambiarlo según tus necesidades)
         
@@ -544,7 +549,7 @@ class RequerimientoController extends Controller
 
     }
 
-    public function exportar_listar_requerimiento($tipo_documento, $fecha_inicio, $fecha_fin, $numero_requerimiento, $almacen, $situacion, $responsable_atencion, $estado_atencion, $tipo_requerimiento, $estado, $producto, $denominacion_producto) {
+    public function exportar_listar_requerimiento($tipo_documento, $fecha_inicio, $fecha_fin, $numero_requerimiento, $almacen, $situacion, $responsable_atencion, $estado_atencion, $tipo_requerimiento, $estado, $producto, $denominacion_producto, $aprobado) {
 
 		if($tipo_documento==0)$tipo_documento = "";
 		if($fecha_inicio=="0")$fecha_inicio = "";
@@ -558,6 +563,7 @@ class RequerimientoController extends Controller
         if($estado==0)$estado = "";
         if($producto==0)$producto = "";
         if($denominacion_producto=="0")$denominacion_producto = "";
+        if($aprobado==0)$aprobado = "";
         
 		$requerimiento_model = new Requerimiento;
 		$p[]=$tipo_documento;
@@ -571,6 +577,7 @@ class RequerimientoController extends Controller
         $p[]=$tipo_requerimiento;
         $p[]=$producto;
         $p[]=$denominacion_producto;
+        $p[]=$aprobado;
         $p[]=$estado;
 		$p[]=1;
 		$p[]=1000;
@@ -975,6 +982,80 @@ class RequerimientoController extends Controller
         return response()->json([
             'cotizacion_requerimiento' => $cotizacion_requerimiento
         ]);
+    }
+
+    public function send_aprobar_requerimiento(Request $request){
+
+        $id_user = Auth::user()->id;
+
+        $requerimiento = Requerimiento::find($request->id);
+        $requerimiento->aprobado = 1;
+        $requerimiento->id_usuario_aprueba = $id_user;
+        $requerimiento->save();
+        
+        return response()->json(['id' => $request->id]);
+        
+    }
+
+    public function genera_requerimiento_insumo(Request $request){
+
+        $id_user = Auth::user()->id;
+
+        $requerimiento_dispensacion = new RequerimientoDispensacione;
+        $requerimiento_dispensacion_model = new RequerimientoDispensacione;
+        $codigo_requerimiento_dispensacion = $requerimiento_dispensacion_model->getCodigoRequerimientoDispensacion();
+		
+        $descripcion = $request->input('descripcion');
+        $cod_interno = $request->input('cod_interno');
+        $marca = $request->input('marca');
+        $unidad = $request->input('unidad');
+        $cantidad_ingreso = $request->input('cantidad_ingreso');
+        
+        $id_requerimiento_detalle =$request->id_requerimiento_detalle;
+        
+        $requerimiento_dispensacion->id_tipo_documento = $request->tipo_documento;
+        $requerimiento_dispensacion->fecha = $request->fecha_requerimiento;
+        //if($request->id == 0){
+            $requerimiento_dispensacion->codigo = $codigo_requerimiento_dispensacion[0]->codigo;
+        //}else{
+            //$requerimiento_dispensacion->codigo = $codigo_requerimiento_dispensacion;
+        //}
+        $requerimiento_dispensacion->id_almacen = $request->almacen_salida;
+        $requerimiento_dispensacion->id_usuario_inserta = $id_user;
+        $requerimiento_dispensacion->id_requerimiento = $request->id;
+        $requerimiento_dispensacion->estado = 1;
+        $requerimiento_dispensacion->save();
+
+        $id_requerimiento_dispensacion_detalle = $requerimiento_dispensacion->id;
+
+        $array_requerimiento_dispensacion_detalle = array();
+
+        foreach($descripcion as $index => $value) {
+            
+            //if($id_requerimiento_detalle[$index] == 0){
+                $requerimiento_dispensacion_detalle = new RequerimientoDispensacionDetalle;
+            //}else{
+                //$requerimiento_dispensacion_detalle = RequerimientoDispensacionDetalle::find($id_requerimiento_detalle[$index]);
+            //}
+            
+            $requerimiento_dispensacion_detalle->id_requerimiento_dispensacion = $id_requerimiento_dispensacion_detalle;
+            $requerimiento_dispensacion_detalle->id_producto = $descripcion[$index];
+            $requerimiento_dispensacion_detalle->cantidad = $cantidad_ingreso[$index];
+            $requerimiento_dispensacion_detalle->id_unidad_medida = $unidad[$index];
+            if($marca[$index]!=null && $marca[$index] !=0){
+				$requerimiento_dispensacion_detalle->id_marca = (int)$marca[$index];
+			}
+            $requerimiento_dispensacion_detalle->estado = 1;
+            $requerimiento_dispensacion_detalle->id_usuario_inserta = $id_user;
+
+            $requerimiento_dispensacion_detalle->save();
+
+            $array_requerimiento_dispensacion_detalle[] = $requerimiento_dispensacion_detalle->id;
+
+        }
+
+        return response()->json(['success' => 'Requerimiento de Insumos generado exitosamente.']);
+        
     }
 }
 

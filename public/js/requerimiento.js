@@ -176,6 +176,7 @@ function datatablenew(){
 			var estado = $('#estado_bus').val();
 			var producto = $('#producto_bus').val();
 			var denominacion_producto = $('#denominacion_producto_bus').val();
+			var aprobado = $('#aprobado_bus').val();
 			
 			var _token = $('#_token').val();
             oSettings.jqXHR = $.ajax({
@@ -186,7 +187,7 @@ function datatablenew(){
                 "data":{NumeroPagina:iNroPagina,NumeroRegistros:iCantMostrar,
 						tipo_documento:tipo_documento,fecha_inicio:fecha_inicio,fecha_fin:fecha_fin,numero_requerimiento:numero_requerimiento,almacen:almacen,
 						situacion:situacion,estado:estado,responsable_atencion:responsable_atencion,estado_atencion:estado_atencion,
-						tipo_requerimiento:tipo_requerimiento,producto:producto,denominacion_producto:denominacion_producto,
+						tipo_requerimiento:tipo_requerimiento,producto:producto,denominacion_producto:denominacion_producto,aprobado:aprobado,
 						_token:_token
                        },
                 "success": function (result) {
@@ -304,6 +305,21 @@ function datatablenew(){
 
 				{
 					"mRender": function (data, type, row) {
+						var aprobado = "";
+						if(row.aprobado == 1){
+							aprobado = "APROBADO";
+						}
+						if(row.aprobado == 0){
+							aprobado = "PENDIENTE";
+						}
+						return aprobado;
+					},
+					"bSortable": false,
+					"aTargets": [10]
+				},
+
+				{
+					"mRender": function (data, type, row) {
 						var estado = "";
 						if(row.estado == 1){
 							estado = "Activo";
@@ -314,7 +330,7 @@ function datatablenew(){
 						return estado;
 					},
 					"bSortable": false,
-					"aTargets": [10]
+					"aTargets": [11]
 				},
 				{
 					"mRender": function (data, type, row) {
@@ -339,7 +355,7 @@ function datatablenew(){
 
 						html += '<button style="font-size:12px;margin-left:10px" type="button" class="btn btn-primary icono-botones" data-toggle="modal" onclick="modalAgregarCotizacion('+row.id+')" ><i class="fa fa-plus-circle" style="font-size:17px;"></i> Cotizaciones</button>';
 
-						if(usuario == row.id_responsable){	
+						if(usuario == row.id_responsable && row.aprobado == 1){	
 							html += '<button style="font-size:12px;margin-left:10px" type="button" class="btn btn-sm btn-info" data-toggle="modal" onclick="modalAtenderRequerimiento('+row.id+')" ><i class="fa fa-edit"></i> Atender</button>'; 
 						}else{
 							html += '<button style="font-size:12px;margin-left:10px" type="button" class="btn btn-sm btn-info" data-toggle="modal" onclick="modalAtenderRequerimiento('+row.id+')" disabled><i class="fa fa-edit"></i> Atender</button>'; 	
@@ -357,7 +373,7 @@ function datatablenew(){
 						return html;
 					},
 					"bSortable": false,
-					"aTargets": [11],
+					"aTargets": [12],
 				},
             ]
     });
@@ -409,20 +425,16 @@ function modalAgregarCotizacion(id){
 
 function modalAtenderRequerimiento(id){
 	
-	/*var tipo_mov="";
-	if(tipo=='INGRESO'){tipo_mov=1};
-	if(tipo=='SALIDA'){tipo_mov=2};*/
-
 	$(".modal-dialog").css("width","95%");
 	$('#openOverlayOpc .modal-body').css('height', 'auto');
 
 	$.ajax({
-			url: "/requerimiento/modal_atender_requerimiento/"+id,
-			type: "GET",
-			success: function (result) {  
-					$("#diveditpregOpc").html(result);
-					$('#openOverlayOpc').modal('show');
-			}
+		url: "/requerimiento/modal_atender_requerimiento/"+id,
+		type: "GET",
+		success: function (result) {  
+			$("#diveditpregOpc").html(result);
+			$('#openOverlayOpc').modal('show');
+		}
 	});
 }
 
@@ -474,6 +486,7 @@ function descargarArchivosRequerimiento(){
 	var estado = $('#estado_bus').val();
 	var producto = $('#producto_bus').val();
 	var denominacion_producto = $('#denominacion_producto_bus').val();
+	var aprobado = $('#aprobado_bus').val();
 	//var id_agremiado = 0;
 	//var id_regional = 0;
 	if (tipo_documento == "")tipo_documento = 0;
@@ -488,11 +501,12 @@ function descargarArchivosRequerimiento(){
 	if (estado == "")estado = 0;
 	if (producto == "")producto = 0;
 	if (denominacion_producto == "")denominacion_producto = "0";
+	if (aprobado == "")aprobado = "0";
 
 	//if (campo == "")campo = 0;
 	//if (orden == "")orden = 0;
 	
-	location.href = '/requerimiento/exportar_listar_requerimiento/'+tipo_documento+'/'+fecha_inicio+'/'+fecha_fin+'/'+numero_requerimiento+'/'+almacen+'/'+situacion+'/'+responsable_atencion+'/'+estado_atencion+'/'+tipo_requerimiento+'/'+estado+'/'+producto+'/'+denominacion_producto;
+	location.href = '/requerimiento/exportar_listar_requerimiento/'+tipo_documento+'/'+fecha_inicio+'/'+fecha_fin+'/'+numero_requerimiento+'/'+almacen+'/'+situacion+'/'+responsable_atencion+'/'+estado_atencion+'/'+tipo_requerimiento+'/'+estado+'/'+producto+'/'+denominacion_producto+'/'+aprobado;
 }
 
 function descargarArchivosRequerimientoReporte(){

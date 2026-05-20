@@ -104,4 +104,12 @@ class CentroCostosController extends Controller
 
 		echo $centro_costo->id;
     }
+
+	public function obtener_centro_costo($sede){
+		
+		$centro_costo_model = new CentroCosto;
+		$centro_costo = $centro_costo_model->getCentroCostoBySede($sede);
+		
+		return response()->json($centro_costo);
+	}
 }

@@ -60,6 +60,7 @@ use App\Http\Controllers\Frontend\DescansoController;
 use App\Http\Controllers\Frontend\ConsultaOxapampaMovimientoController;
 use App\Http\Controllers\Frontend\IngresoSalidaSecundarioController;
 use App\Http\Controllers\Frontend\KardexSecundarioController;
+use App\Http\Controllers\Frontend\RequerimientoDispensacionController;
 
 
 //use App\Http\Controllers\VehiculoController;
@@ -610,7 +611,7 @@ Route::get('ingreso_vehiculo_tronco/cubicaje_pdf/{id}', [IngresoVehiculoTroncoCo
 
 Route::get('ingreso_vehiculo_tronco/exportar_listar_pagos/{ruc}/{empresa}/{placa}/{tipo_madera}/{fecha_inicio}/{fecha_fin}/{estado_pago}/{tipo_empresa}', [IngresoVehiculoTroncoController::class, 'exportar_listar_pagos'])->name('ingreso_vehiculo_tronco.exportar_listar_pagos');
 
-Route::get('requerimiento/exportar_listar_requerimiento/{tipo_documento}/{fecha_inicio}/{fecha_fin}/{numero_requerimiento}/{almacen}/{situacion}/{responsable_atencion}/{estado_atencion}/{tipo_requerimiento}/{estado}/{producto}/{denominacion_producto}', [RequerimientoController::class, 'exportar_listar_requerimiento'])->name('requerimiento.exportar_listar_requerimiento');
+Route::get('requerimiento/exportar_listar_requerimiento/{tipo_documento}/{fecha_inicio}/{fecha_fin}/{numero_requerimiento}/{almacen}/{situacion}/{responsable_atencion}/{estado_atencion}/{tipo_requerimiento}/{estado}/{producto}/{denominacion_producto}/{aprobado}', [RequerimientoController::class, 'exportar_listar_requerimiento'])->name('requerimiento.exportar_listar_requerimiento');
 Route::get('ingreso_vehiculo_tronco/obtener_datos_vehiculo_guia/{placa}', [IngresoVehiculoTroncoController::class, 'obtener_datos_vehiculo_guia'])->name('ingreso_vehiculo_tronco.obtener_datos_vehiculo_guia');
 Route::get('conductores/obtener_licencia/{conductor}', [ConductoresController::class, 'obtener_licencia'])->name('conductores.obtener_licencia');
 Route::post('conductores/send_conductor_guia', [ConductoresController::class, 'send_conductor_guia'])->name('conductores.send_conductor_guia');
@@ -982,3 +983,22 @@ Route::get('ingreso_salida_secundarios/cargar_detalle/{id}', [IngresoSalidaSecun
 
 Route::get('dispensacion/modal_dispensacion_devolucion/{id}', [DispensacionController::class, 'modal_dispensacion_devolucion'])->name('dispensacion.modal_dispensacion_devolucion');
 Route::post('dispensacion/send_dispensacion_devolucion', [DispensacionController::class, 'send_dispensacion_devolucion'])->name('dispensacion.send_dispensacion_devolucion');
+
+Route::get('requerimiento_dispensacion/create', [RequerimientoDispensacionController::class, 'create'])->name('requerimiento_dispensacion.create');
+Route::post('requerimiento_dispensacion/listar_requerimiento_dispensacion_ajax', [RequerimientoDispensacionController::class, 'listar_requerimiento_dispensacion_ajax'])->name('requerimiento_dispensacion.listar_requerimiento_dispensacion_ajax');
+Route::post('requerimiento_dispensacion/send_requerimiento_dispensacion', [RequerimientoDispensacionController::class, 'send_requerimiento_dispensacion'])->name('requerimiento_dispensacion.send_requerimiento_dispensacion');
+Route::get('requerimiento_dispensacion/modal_requerimiento_dispensacion/{id}', [RequerimientoDispensacionController::class, 'modal_requerimiento_dispensacion'])->name('requerimiento_dispensacion.modal_requerimiento_dispensacion');
+Route::get('requerimiento_dispensacion/modal_atender_requerimiento_dispensacion/{id}', [RequerimientoDispensacionController::class, 'modal_atender_requerimiento_dispensacion'])->name('requerimiento_dispensacion.modal_atender_requerimiento_dispensacion');
+Route::get('requerimiento_dispensacion/eliminar_requerimiento_dispensacion/{id}/{estado}', [RequerimientoDispensacionController::class, 'eliminar_requerimiento_dispensacion'])->name('requerimiento_dispensacion.eliminar_requerimiento_dispensacion');
+Route::get('requerimiento_dispensacion/cargar_detalle/{id}', [RequerimientoDispensacionController::class, 'cargar_detalle'])->name('requerimiento_dispensacion.cargar_detalle');
+Route::post('requerimiento_dispensacion/send_dispensacion_producto', [RequerimientoDispensacionController::class, 'send_dispensacion_producto'])->name('requerimiento_dispensacion.send_dispensacion_producto');
+
+Route::post('requerimiento/send_aprobar_requerimiento', [RequerimientoController::class, 'send_aprobar_requerimiento'])->name('requerimiento.send_aprobar_requerimiento');
+Route::get('centro_costo/obtener_centro_costo/{sede}', [CentroCostosController::class, 'obtener_centro_costo'])->name('centro_costo.obtener_centro_costo');
+
+Route::get('requerimiento_dispensacion/modal_atender_requerimiento_dispensacion/{id}', [RequerimientoDispensacionController::class, 'modal_atender_requerimiento_dispensacion'])->name('requerimiento_dispensacion.modal_atender_requerimiento_dispensacion');
+Route::post('requerimiento_dispensacion/send_aprobar_requerimiento_dispensacion', [RequerimientoDispensacionController::class, 'send_aprobar_requerimiento_dispensacion'])->name('requerimiento_dispensacion.send_aprosend_aprobar_requerimiento_dispensacionar_requerimiento');
+Route::get('requerimiento_dispensacion/movimiento_pdf_requerimiento_dispensacion/{id}', [RequerimientoDispensacionController::class, 'movimiento_pdf_requerimiento_dispensacion'])->name('requerimiento_dispensacion.movimiento_pdf_requerimiento_dispensacion');
+
+Route::post('requerimiento/genera_requerimiento_insumo', [RequerimientoController::class, 'genera_requerimiento_insumo'])->name('requerimiento.genera_requerimiento_insumo');
+

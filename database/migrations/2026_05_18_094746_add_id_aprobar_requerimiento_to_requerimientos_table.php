@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddIdPersonaRecibeToSalidaProductosTable extends Migration
+class AddIdAprobarRequerimientoToRequerimientosTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,9 @@ class AddIdPersonaRecibeToSalidaProductosTable extends Migration
      */
     public function up()
     {
-        Schema::table('salida_productos', function (Blueprint $table) {
-            $table->integer('id_persona_recibe')->nullable();
+        Schema::table('requerimientos', function (Blueprint $table) {
+            $table->Integer('aprobado')->nullable()->default('0');
+            $table->bigInteger('id_usuario_aprueba')->nullable();
         });
     }
 
@@ -25,7 +26,7 @@ class AddIdPersonaRecibeToSalidaProductosTable extends Migration
      */
     public function down()
     {
-        Schema::table('salida_productos', function (Blueprint $table) {
+        Schema::table('requerimientos', function (Blueprint $table) {
             //
         });
     }

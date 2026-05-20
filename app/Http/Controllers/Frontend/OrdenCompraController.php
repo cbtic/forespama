@@ -3871,10 +3871,16 @@ class OrdenCompraController extends Controller
 		
 		foreach ($data as $r) {
 
-            if($r->cantidad_despacho  >= $r->cantidad_requerida){
+            /*if($r->cantidad_despacho  >= $r->cantidad_requerida){
                 $pendiente_entrega='NO';
             }else{
                 $pendiente_entrega='SI';
+            }*/
+
+            if($r->cerrado == 1){
+                $pendiente_entrega = 'SI';
+            }else{
+                $pendiente_entrega = 'NO';
             }
 
 			array_push($variable, array($n++,$r->cliente, $r->numero_orden_compra_cliente, $r->pedido, $r->fecha_orden_compra, $r->fecha_vencimiento, $r->fecha_salida, $r->fecha_facturado, $r->codigo, $r->codigo_empresa, $r->producto, $r->precio, $r->sub_total, $r->descuento, $r->cantidad_requerida, $r->cantidad_despacho, $r->cantidad_cancelada, $pendiente_entrega, $r->vendedor, $r->estado_pedido));

@@ -68,7 +68,7 @@ class Requerimiento extends Model
 
     function getRequerimientoById($id){
 
-        $cad = "select r.id, tm.denominacion tipo_documento, a.denominacion almacen, r.fecha, r.codigo, u.name responsable_atencion, tm2.denominacion estado_atencion, r.sustento_requerimiento, u2.name usuario_solicita
+        $cad = "select r.id, tm.denominacion tipo_documento, a.denominacion almacen, r.fecha, r.codigo, u.name responsable_atencion, tm2.denominacion estado_atencion, r.sustento_requerimiento, u2.name usuario_solicita, r.observacion
         from requerimientos r
         inner join tabla_maestras tm on r.id_tipo_documento ::int = tm.codigo::int and tm.tipo = '59'
         inner join almacenes a on r.id_almacen_destino = a.id

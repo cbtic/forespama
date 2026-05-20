@@ -85,7 +85,7 @@ class IngresoSalidaSecundarioController extends Controller
         $tipo_documento = $tablaMaestra_model->getMaestroByTipo(53);
         $empresas = $empresa_model->getEmpresaAll();
         $personas = $persona_model->obtenerPersonaAll();
-        $producto = $producto_model->getProductoAll();
+        $producto = $producto_model->getProductoAllB();
         $marca = $marca_model->getMarcaAll();
         $unidad = $tablaMaestra_model->getMaestroByTipo(43);
         $igv_compra = $tablaMaestra_model->getMaestroByTipo(51);
@@ -261,7 +261,7 @@ class IngresoSalidaSecundarioController extends Controller
 
         $ingreso_salida_secundario = $ingreso_salida_secundario_model->getDetalleIngresoSalidaSecundarioById($id);
         $marca = $marca_model->getMarcaAll();
-        $producto = $producto_model->getProductoAll();
+        $producto = $producto_model->getProductoAllB();
         $unidad_medida = $tablaMaestra_model->getMaestroByTipo(43);
 
         return response()->json([

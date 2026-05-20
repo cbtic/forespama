@@ -285,6 +285,10 @@ label.form-control-sm{
 
 </style>
 
+<script>
+	var esAdministrador = {{ auth()->user()->hasAnyRole('Administrator') ? 'true' : 'false' }};
+	var esUsuarioAutorizado = {{ auth()->user()->hasAnyRole('Encargado de dispensacion') ? 'true' : 'false' }};
+</script>
 
 @stack('before-scripts')
 @stack('after-scripts')
@@ -387,10 +391,10 @@ label.form-control-sm{
 								</div>
 
 								<div class="col-lg-2">
-									<select name="area_trabajo_bus" id="area_trabajo_bus" class="form-control form-control-sm filtro-select" onchange="obtenerUnidadTrabajo()">
-										<option value="">--Seleccionar Area Trabajo--</option>
+									<select name="sede_bus" id="sede_bus" class="form-control form-control-sm filtro-select" onchange="obtenerCentroCosto()">
+										<option value="">--Seleccionar Sede--</option>
 										<?php 
-										foreach ($area_trabajo as $row){?>
+										foreach ($sede as $row){?>
 											<option value="<?php echo $row->id ?>"><?php echo $row->denominacion ?></option>
 											<?php 
 										}
@@ -399,8 +403,8 @@ label.form-control-sm{
 								</div>
 
 								<div class="col-lg-2">
-									<select name="unidad_trabajo_bus" id="unidad_trabajo_bus" class="form-control form-control-sm filtro-select" onchange="//actualizarSecciones(this)">
-										<option value="">--Seleccionar Unidad Trabajo--</option>
+									<select name="centro_costo_bus" id="centro_costo_bus" class="form-control form-control-sm filtro-select" onchange="//actualizarSecciones(this)">
+										<option value="">--Seleccionar Centro Costo--</option>
 									</select>
 								</div>
 
@@ -470,9 +474,10 @@ label.form-control-sm{
                             <th>Fecha</th>
 							<th>N&uacute;mero Dispensaci&oacute;n</th>
 							<th>Almacen</th>
-							<th>&Aacute;rea Trabajo</th>
-							<th>Unidad Trabajo</th>
+							<th>Sede</th>
+							<th>Centro de Costo</th>
 							<th>Persona Recibe</th>
+							<th>Codigo Requerimiento</th>
 							<th>Estado</th>
                             <th>Acciones</th>
                         </tr>

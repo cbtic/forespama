@@ -470,6 +470,13 @@ label.form-control-sm{
 									<input id="denominacion_producto_bus" name="denominacion_producto_bus" on class="form-control form-control-sm mayusculas filtro-input"  placeholder="Denominaci&oacute;n Producto">
 								</div>
 								<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+									<select name="aprobado_bus" id="aprobado_bus" class="form-control form-control-sm filtro-select">
+										<option value="" selected="selected">Todos</option>
+										<option value="1">Aprobado</option>
+										<option value="0">Pendiente</option>
+									</select>
+								</div>
+								<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
 									<select name="estado_bus" id="estado_bus" class="form-control form-control-sm filtro-select">
 										<option value="">Todos</option>
 										<option value="1" selected="selected">Activo</option>
@@ -519,6 +526,7 @@ label.form-control-sm{
 							<th>Estado Atenci&oacute;n</th>
 							<th>Tipo Requerimiento</th>
 							<th>Usuario Solicitante</th>
+							<th>Aprobaci&oacute;n</th>
 							<th>Estado</th>
                             <th>Acciones</th>
                         </tr>

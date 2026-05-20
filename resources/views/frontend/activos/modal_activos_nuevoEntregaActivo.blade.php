@@ -158,7 +158,7 @@ $('#openOverlayOpc').on('shown.bs.modal', function() {
         language: 'es'
     });
 
-
+    $('#activo').select2({ width : '100%' })
 	 
 });
 

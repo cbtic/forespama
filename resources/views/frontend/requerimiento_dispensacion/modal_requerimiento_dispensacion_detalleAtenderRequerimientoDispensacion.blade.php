@@ -162,13 +162,11 @@ $(document).ready(function() {
         obtenerCodigo();
     }
 
-    if($('#id').val()>0){
+    /*if($('#id').val()>0){
         obtenerUnidadTrabajo();
-        obtenerCentroCosto();
-    }
+    }*/
 
-    $("#item").select2({ width: '100%' });
-    $("#persona_recibe").select2({ width: '100%' });
+    $("#persona_recibe_").select2({ width: '100%' });
 
 });
 
@@ -184,15 +182,8 @@ $(document).ready(function() {
 
     if($('#id').val()>0){
         cargarDetalle();
+        obtenerCentroCosto();
     }
-
-    /*if ($('#id').val()==0){
-        $('#tblDispensacionDetalle tbody').append(`
-            <tr>
-                <td><button type="button" class="btn btn-danger btn-sm" onclick="eliminarFila(this)">Eliminar</button></td>
-            </tr>
-        `)
-    }*/
 
 });
 
@@ -205,19 +196,14 @@ function obtenerCodigo(){
         dataType: "json",
         success: function (result) {
 
-            //alert(result[0].codigo);
-            //console.log(result);
-            //$('#numero_dispensacion').val(result[0].codigo);
-
         }
     });
-
 }
 
-function obtenerUnidadTrabajo(){
+/*function obtenerUnidadTrabajo(){
     
     var area_trabajo = $('#area_trabajo').val();
-    var selectedUnidad = "<?php echo isset($dispensacion->id_unidad_trabajo) ? $dispensacion->id_unidad_trabajo : ''; ?>";
+    var selectedUnidad = "<?php echo isset($requerimiento_dispensacion->id_unidad_trabajo) ? $requerimiento_dispensacion->id_unidad_trabajo : ''; ?>";
     //alert(selectedUnidad);
     $.ajax({
         url: "/dispensacion/obtener_unidad_trabajo/"+area_trabajo,
@@ -235,26 +221,8 @@ function obtenerUnidadTrabajo(){
                 
             });
             $('#unidad_trabajo').html(option);
-            //$('#unidad_trabajo').select2();
-            
-            //$('.loader').hide();
         }
-        
     });
-}
-
-/*function obtenerDescripcion(selectElement){
-
-    var fila = $(selectElement).closest('tr');
-
-    var descripcion_completo = $(selectElement).find('option:selected').text();
-
-    var descripcion_partes = descripcion_completo.split('-');
-
-    var descripcion = descripcion_partes.length > 1 ? descripcion_partes[1].trim() : '';
-
-    fila.find('input[name="descripcion[]"]').val(descripcion);
-
 }*/
 
 function obtenerCodInterno(selectElement, n){
@@ -262,16 +230,16 @@ function obtenerCodInterno(selectElement, n){
     var id_producto = $(selectElement).val();
 
     $.ajax({
-            url: "/productos/obtener_producto/"+id_producto,
-            dataType: "json",
-            success: function(result){
-                //alert(result[0].codigo);
-                $('#cod_interno' + n).val(result[0].codigo);
-                $('#item' + n).val(result[0].numero_serie);
-                $('#marca' + n).val(result[0].id_marca).trigger('change');
-                $('#unidad' + n).val(result[0].id_unidad_producto);
-            }
-        });
+        url: "/productos/obtener_producto/"+id_producto,
+        dataType: "json",
+        success: function(result){
+            //alert(result[0].codigo);
+            $('#cod_interno' + n).val(result[0].codigo);
+            $('#item' + n).val(result[0].numero_serie);
+            $('#marca' + n).val(result[0].id_marca).trigger('change');
+            $('#unidad' + n).val(result[0].id_unidad_producto);
+        }
+    });
 }
 
 function obtenerStock(selectElement, n){
@@ -291,103 +259,76 @@ function obtenerStock(selectElement, n){
     });
 }
 
-/*function obtenerCodigo(selectElement){
-
-    var selectedOption = selectElement.options[selectElement.selectedIndex];
-    
-    var codigo = selectedOption.text.split('-')[0].trim();
-
-    selectedOption.text = codigo;
-
-}*/
-
 var productosSeleccionados = [];
 
 function cargarDetalle(){
 
 var id = $("#id").val();
-const tbody = $('#divDispensacionDetalle');
+const tbody = $('#divRequerimientoDispensacionDetalle');
 
 tbody.empty();
 
 $.ajax({
-        url: "/dispensacion/cargar_detalle/"+id,
-        type: "GET",
-        success: function (result) {
+    url: "/requerimiento_dispensacion/cargar_detalle/"+id,
+    type: "GET",
+    success: function (result) {
 
-            let n = 1;
+        let n = 1;
 
-            //var total_acumulado=0;
+        result.requerimiento_dispensacion.forEach(requerimiento_dispensacion => {
 
-            result.dispensacion.forEach(dispensacion => {
+            let marcaOptions = '<option value="">--Seleccionar--</option>';
+            let productoOptions = '<option value="">--Seleccionar--</option>';
+            let unidadMedidaOptions = '<option value="">--Seleccionar--</option>';
 
-                let marcaOptions = '<option value="">--Seleccionar--</option>';
-                let productoOptions = '<option value="">--Seleccionar--</option>';
-                let estadoBienOptions = '<option value="">--Seleccionar--</option>';
-                let unidadMedidaOptions = '<option value="">--Seleccionar--</option>';
+            var producto_stock = result.producto_stock[requerimiento_dispensacion.id_producto];
 
-                //alert(result.dispensacion[1]);
-                var producto_stock = result.producto_stock[dispensacion.id_producto];
+            result.marca.forEach(marca => {
+                let selected = (marca.id == requerimiento_dispensacion.id_marca) ? 'selected' : '';
+                marcaOptions += `<option value="${marca.id}" ${selected}>${marca.denominiacion}</option>`;
+            });
 
-                result.marca.forEach(marca => {
-                    let selected = (marca.id == dispensacion.id_marca) ? 'selected' : '';
-                    marcaOptions += `<option value="${marca.id}" ${selected}>${marca.denominiacion}</option>`;
-                });
+            result.producto.forEach(producto => {
+                let selected = (producto.id == requerimiento_dispensacion.id_producto) ? 'selected' : '';
+                productoOptions += `<option value="${producto.id}" ${selected}>${producto.codigo} - ${producto.denominacion}</option>`;
+            });
 
-                result.producto.forEach(producto => {
-                    let selected = (producto.id == dispensacion.id_producto) ? 'selected' : '';
-                    productoOptions += `<option value="${producto.id}" ${selected}>${producto.codigo} - ${producto.denominacion}</option>`;
-                });
+            result.unidad_medida.forEach(unidad_medida => {
+                let selected = (unidad_medida.codigo == requerimiento_dispensacion.id_unidad_medida) ? 'selected' : '';
+                unidadMedidaOptions += `<option value="${unidad_medida.codigo}" ${selected}>${unidad_medida.denominacion}</option>`;
+            });
 
-                result.estado_bien.forEach(estado_bien => {
-                    let selected = (estado_bien.codigo == dispensacion.id_estado_producto) ? 'selected' : '';
-                    estadoBienOptions += `<option value="${estado_bien.codigo}" ${selected}>${estado_bien.denominacion}</option>`;
-                });
-
-                result.unidad_medida.forEach(unidad_medida => {
-                    let selected = (unidad_medida.codigo == dispensacion.id_unidad_medida) ? 'selected' : '';
-                    unidadMedidaOptions += `<option value="${unidad_medida.codigo}" ${selected}>${unidad_medida.denominacion}</option>`;
-                });
-
-                //alert(dispensacion.id_producto);
-
-                if (dispensacion.id_producto) {
-                    productosSeleccionados.push(dispensacion.id_producto);
-                }
-                //alert(productosSeleccionados);
-               
-                const row = `
-                    <tr>
-                        <td>${n}</td>
-                        <td><input name="id_dispensacion_detalle[]" id="id_dispensacion_detalle${n}" class="form-control form-control-sm" value="${dispensacion.id}" type="hidden"><input name="item[]" id="item${n}" class="form-control form-control-sm" value="${dispensacion.item}" type="text" readonly></td>
-                        <td style="width: 450px !important;display:block"><select name="descripcion_[]" id="descripcion_${n}" class="form-control form-control-sm" onChange="verificarProductoSeleccionado(this, ${n});" disabled>${productoOptions}</select><input name="descripcion[]" id="descripcion${n}" class="form-control form-control-sm" value="${dispensacion.id_producto}" type="hidden"></td>
-                        <td><select name="marca_[]" id="marca_${n}" class="form-control form-control-sm" disabled>${marcaOptions}</select><input name="marca[]" id="marca${n}" class="form-control form-control-sm" value="${dispensacion.id_marca}" type="hidden"></td>
-                        <td><input name="cod_interno[]" id="cod_interno${n}" class="form-control form-control-sm" value="${dispensacion.codigo}" type="text" readonly></td>
-                        <td><select name="estado_bien_[]" id="estado_bien_${n}" class="form-control form-control-sm" onChange="" disabled>${estadoBienOptions}</select><input name="estado_bien[]" id="estado_bien${n}" class="form-control form-control-sm" value="${dispensacion.id_estado_producto}" type="hidden"></td>
-                        <td><select name="unidad_[]" id="unidad_${n}" class="form-control form-control-sm" disabled>${unidadMedidaOptions}</select><input name="unidad[]" id="unidad${n}" class="form-control form-control-sm" value="${dispensacion.id_unidad_medida}" type="hidden"></td>
-                        <td><input name="cantidad[]" id="cantidad${n}" class="cantidad form-control form-control-sm" value="${dispensacion.cantidad}" type="text" oninput="calcularCantidadPendiente(this);calcularSubTotal(this)" readonly></td>
-                        <td><input name="stock_actual[]" id="stock_actual${n}" class="form-control form-control-sm" value="${producto_stock.saldos_cantidad}" type="text" readonly></td>
-                    </tr>
-                `;
-                tbody.append(row);
-                $('#descripcion_' + n).select2({ 
-                    width: '100%',
-                    dropdownParent: $('#openOverlayOpc'),
-                    dropdownCssClass: 'custom-select2-dropdown'
-                });
-
-                $('#marca_' + n).select2({
-                    width: '100%',
-                });
-
-                n++;
-                //total_acumulado += parseFloat(orden_compra.total);
-                });
-                //$('#totalGeneral').text(total_acumulado.toFixed(2));
+            if (requerimiento_dispensacion.id_producto) {
+                productosSeleccionados.push(requerimiento_dispensacion.id_producto);
             }
-            
-    });
 
+            const row = `
+                <tr>
+                    <td>${n}</td>
+                    <td style="width: 550px !important;display:block"><input name="id_requerimiento_dispensacion_detalle[]" id="id_requerimiento_dispensacion_detalle${n}" class="form-control form-control-sm" value="${requerimiento_dispensacion.id}" type="hidden"><select name="descripcion_[]" id="descripcion_${n}" class="form-control form-control-sm" onChange="verificarProductoSeleccionado(this, ${n});" disabled>${productoOptions}</select><input name="descripcion[]" id="descripcion${n}" class="form-control form-control-sm" value="${requerimiento_dispensacion.id_producto}" type="hidden"></td>
+                    <td><select name="marca_[]" id="marca_${n}" class="form-control form-control-sm" disabled>${marcaOptions}</select><input name="marca[]" id="marca${n}" class="form-control form-control-sm" value="${requerimiento_dispensacion.id_marca}" type="hidden"></td>
+                    <td><input name="cod_interno[]" id="cod_interno${n}" class="form-control form-control-sm" value="${requerimiento_dispensacion.codigo}" type="text" readonly></td>
+                    <td><select name="unidad_[]" id="unidad_${n}" class="form-control form-control-sm" disabled>${unidadMedidaOptions}</select><input name="unidad[]" id="unidad${n}" class="form-control form-control-sm" value="${requerimiento_dispensacion.id_unidad_medida}" type="hidden"></td>
+                    <td><input name="cantidad[]" id="cantidad${n}" class="cantidad form-control form-control-sm" value="${requerimiento_dispensacion.cantidad}" type="text" oninput="calcularCantidadPendiente(this);calcularSubTotal(this)" readonly></td>
+                    <td><input name="stock_actual[]" id="stock_actual${n}" class="form-control form-control-sm" value="${producto_stock.saldos_cantidad}" type="text" readonly></td>
+                </tr>
+            `;
+            
+            tbody.append(row);
+            $('#descripcion_' + n).select2({ 
+                width: '100%',
+                dropdownParent: $('#openOverlayOpc'),
+                dropdownCssClass: 'custom-select2-dropdown'
+            });
+
+            $('#marca_' + n).select2({
+                width: '100%',
+            });
+
+            n++;
+            });
+        }
+    });
 }
 
 function agregarProducto(){
@@ -403,13 +344,11 @@ function agregarProducto(){
     var newRow = "";
     for (var i = 0; i < cantidad; i++) { 
 
-        var n = $('#tblDispensacionDetalle tbody tr').length + 1;
-        var item = '<input name="id_dispensacion_detalle[]" id="id_dispensacion_detalle' + n + '" class="form-control form-control-sm" value="0" type="hidden"><input name="item[]" id="item' + n + '" class="form-control form-control-sm" value="" type="text">';
-        var descripcion = '<select name="descripcion[]" id="descripcion' + n + '" class="form-control form-control-sm" onChange="verificarProductoSeleccionado(this, ' + n + ')"> '+ opcionesDescripcion +' </select>';
+        var n = $('#tblRequerimientoDispensacionDetalle tbody tr').length + 1;
+        var descripcion = '<input name="id_requerimiento_dispensacion_detalle[]" id="id_requerimiento_dispensacion_detalle' + n + '" class="form-control form-control-sm" value="0" type="hidden"><select name="descripcion[]" id="descripcion' + n + '" class="form-control form-control-sm" onChange="verificarProductoSeleccionado(this, ' + n + ')"> '+ opcionesDescripcion +' </select>';
         var descripcion_ant = '<input type="hidden" name="descripcion_ant[]" id="descripcion_ant' + n + '" class="form-control form-control-sm" />';
         var cod_interno = '<input name="cod_interno[]" id="cod_interno' + n + '" class="form-control form-control-sm" value="" type="text">';
         var marca = '<select name="marca[]" id="marca' + n + '" class="form-control form-control-sm" onchange=""> <option value="">--Seleccionar--</option><?php foreach ($marca as $row){?><option value="<?php echo htmlspecialchars($row->id); ?>"><?php echo htmlspecialchars(addslashes($row->denominiacion)); ?></option><?php }?></select>';
-        var estado_bien =  '<select name="estado_bien[]" id="estado_bien' + n + '" class="form-control form-control-sm" onChange=""><option value="">--Seleccionar--</option> <?php foreach ($estado_bien as $row) { ?> <option value="<?php echo $row->codigo ?>" <?php echo ($row->codigo == 1) ? "selected" : ""; ?>><?php echo $row->denominacion; ?></option> <?php } ?> </select>';
         var unidad = '<select name="unidad[]" id="unidad' + n + '" class="form-control form-control-sm" onChange=""> <option value="">--Seleccionar--</option> <?php foreach ($unidad as $row) {?> <option value="<?php echo $row->codigo?>"><?php echo $row->denominacion?></option> <?php } ?> </select>';
         var cantidad_ingreso = '<input name="cantidad[]" id="cantidad' + n + '" class="cantidad form-control form-control-sm" value="" type="text" oninput="">';
         var stock_actual = '<input name="stock_actual[]" id="stock_actual' + n + '" class="form-control form-control-sm" value="" type="text" readonly>';
@@ -418,18 +357,16 @@ function agregarProducto(){
 
         newRow += '<tr>';
         newRow += '<td>' + n + '</td>';
-        newRow += '<td>' + item + '</td>';
-        newRow += '<td style="width: 450px!important; display:block!important">' + descripcion_ant + descripcion + '</td>';
+        newRow += '<td style="width: 550px!important; display:block!important">' + descripcion_ant + descripcion + '</td>';
         newRow += '<td>' + marca + '</td>';
         newRow += '<td>' + cod_interno + '</td>';
-        newRow += '<td>' + estado_bien + '</td>';
         newRow += '<td>' + unidad + '</td>';
         newRow += '<td>' + cantidad_ingreso + '</td>';
         newRow += '<td>' + stock_actual + '</td>';
         newRow += '<td>' + btnEliminar + '</td>';
         newRow += '</tr>';
 
-        $('#tblDispensacionDetalle tbody').append(newRow);
+        $('#tblRequerimientoDispensacionDetalle tbody').append(newRow);
 
         $('#descripcion' + n).select2({
             width: '100%',
@@ -440,9 +377,7 @@ function agregarProducto(){
         $('#marca' + n).select2({
             width: '100%',
         });
-
     }
-
 }
 
 function verificarProductoSeleccionado(selectElement, rowIndex, valor) {
@@ -478,41 +413,26 @@ function verificarProductoSeleccionado(selectElement, rowIndex, valor) {
     console.log(productosSeleccionados);
 }
 
-/*function verificarProductoSeleccionado(selectElement, rowIndex) {
-    var selectedValue = $(selectElement).val();
-
-    if (selectedValue) {
-        if (productosSeleccionados.includes(selectedValue)) {
-            bootbox.alert("Este producto ya ha sido seleccionado.", function() {
-                $(selectElement).val('').trigger('change'); 
-            });
-        } else {
-            productosSeleccionados.push(selectedValue);
-            obtenerCodInterno(selectElement, rowIndex);
-        }
-    }
-}*/
-
 function eliminarFila(button){
     $(button).closest('tr').remove();
     actualizarTotalGeneral();
 }
 
-function fn_save_dispensacion(){
+function fn_save_requerimiento_dispensacion(){
 	
     var msg = "";
 
     var tipo_documento = $('#tipo_documento').val();
     var almacen = $('#almacen').val();
-    var sede = $('#sede').val();
-    var centro_costo = $('#centro_costo').val();
+    var area_trabajo = $('#area_trabajo').val();
+    var unidad_trabajo = $('#unidad_trabajo').val();
 
     if(tipo_documento==""){msg+="Ingrese el Tipo de Documento <br>";}
     if(almacen==""){msg+="Ingrese el Almacen <br>";}
-    if(sede==""){msg+="Seleccione la Sede <br>";}
-    if(centro_costo==""){msg+="Selecciona el Centro de Costo <br>";}
+    if(area_trabajo==""){msg+="Ingrese el Area de Trabajo <br>";}
+    if(unidad_trabajo==""){msg+="Ingrese la Unidad de Trabajo <br>";}
 
-    $('#tblDispensacionDetalle tbody tr').each(function(index, row) {
+    $('#tblRequerimientoDispensacionDetalle tbody tr').each(function(index, row) {
 
         const id_dispensacion_detalle_producto = parseInt($(row).find('input[name="id_dispensacion_detalle[]"]').val());
         const cantidad_ingreso_producto = parseInt($(row).find('input[name="cantidad[]"]').val());
@@ -525,7 +445,7 @@ function fn_save_dispensacion(){
         }
     });
     
-    if ($('#tblDispensacionDetalle tbody tr').length == 0) {
+    if ($('#tblRequerimientoDispensacionDetalle tbody tr').length == 0) {
         msg += "No se ha agregado ningún producto <br>";
     }
 
@@ -540,9 +460,9 @@ function fn_save_dispensacion(){
         $('.loader').show();
 
         $.ajax({
-            url: "/dispensacion/send_dispensacion",
+            url: "/requerimiento_dispensacion/send_requerimiento_dispensacion",
             type: "POST",
-            data : $("#frmDispensacion").serialize(),
+            data : $("#frmRequerimientoDispensacion").serialize(),
             success: function (result) {
                 //alert(result.id)
                 $('#openOverlayOpc').modal('hide');
@@ -565,8 +485,8 @@ function pdf_documento_dispensacion(){
 
 function obtenerCentroCosto(){
 
-    var sede = $('#sede').val();
-    var selectedUnidad = "<?php echo isset($dispensacion->id_centro_costo) ? $dispensacion->id_centro_costo : ''; ?>";
+    var sede = $('#sede_').val();
+    var selectedUnidad = "<?php echo isset($requerimiento_dispensacion->id_centro_costo) ? $requerimiento_dispensacion->id_centro_costo : ''; ?>";
 
     $.ajax({
         url: "/centro_costo/obtener_centro_costo/"+sede,
@@ -574,7 +494,7 @@ function obtenerCentroCosto(){
         success: function(result){
             var option = "<option value='' selected='selected'>--Seleccionar--</option>";
             var option;
-            $('#centro_costo').html("");
+            $('#centro_costo_').html("");
             $(result).each(function (ii, oo) {
                 if (oo.id == selectedUnidad) {
                     option += "<option value='" + oo.id + "' selected='selected'>" + oo.codigo +" - "+oo.denominacion + "</option>";
@@ -583,12 +503,67 @@ function obtenerCentroCosto(){
                 }
                 
             });
-            $('#centro_costo').html(option);
-            $('#centro_costo').select2({
+            $('#centro_costo_').html(option);
+            $('#centro_costo_').select2({
                 width: '100%'
             });
         }
     });
+}
+
+function fn_save_detalle_producto(){
+
+    var tipo_documento = $('#tipo_documento').val();
+    var almacen = $('#almacen').val();
+    var sede = $('#sede').val();
+    var centro_costo = $('#centro_costo').val();
+    var persona_recibe = $('#persona_recibe').val();
+
+    var msg="";
+
+    if(tipo_documento==""){msg+="Seleccione el Tipo de Documento <br>";}
+    if(almacen==""){msg+="Seleccione Almacen <br>";}
+    if(sede==""){msg+="Seleccione la Sede <br>";}
+    if(centro_costo==""){msg+="Seleccione el Centro de Costo <br>";}
+    if(persona_recibe==""){msg+="Seleccione la Persona <br>";}
+	
+    $('#tblRequerimientoDispensacionDetalle tbody tr').each(function(index, row) {
+
+        const cantidad_producto = parseInt($(row).find('input[name="cantidad[]"]').val()) || 0;
+        const stockActual = parseInt($(row).find('input[name="stock_actual[]"]').val()) || 0;
+        const descripcion_producto = $(row).find('select[name="descripcion[]"] option:selected').text();
+
+        if(stockActual<cantidad_producto){
+            msg+="No hay stock para el producto "+descripcion_producto+" <br>";
+        }
+    });
+
+    if(msg!=""){
+        bootbox.alert({
+            message: msg,
+        });
+        return false;
+    }else{
+        var msgLoader = "";
+        msgLoader = "Procesando, espere un momento por favor";
+        var heightBrowser = $(window).width()/2;
+        $('.loader').css("opacity","0.8").css("height",heightBrowser).html("<div id='Grd1_wrapper' class='dataTables_wrapper'><div id='Grd1_processing' class='dataTables_processing panel-default'>"+msgLoader+"</div></div>");
+        $('.loader').show();
+
+        $.ajax({
+            url: "/requerimiento_dispensacion/send_dispensacion_producto",
+            type: "POST",
+            data :  $('#frmRequerimientoDispensacion').serialize(),
+            success: function (result) {
+                
+                datatablenew();
+                $('#openOverlayOpc').modal('hide');
+                $('.loader').hide();
+                bootbox.alert("Se guard&oacute; satisfactoriamente. <br>");
+                
+            }
+        });
+    }
 }
 
 </script>
@@ -612,11 +587,11 @@ function obtenerCentroCosto(){
                     </div>
                 </div>-->
                 <div style="text-align: center; font-size:16px; margin-top: 20px">
-                    <b><?php if($dispensacion->id_tipo_documento == '1'){echo "Devoluci&oacute;n de "; }""?>Dispensaci&oacute;n</b>
+                    <b>Requerimiento de Insumos</b>
                 </div>
                 
                 <div class="card-body">
-                <form method="post" action="#" id="frmDispensacion" name="frmDispensacion">
+                <form method="post" action="#" id="frmRequerimientoDispensacion" name="frmRequerimientoDispensacion">
 
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding-top:5px;padding-bottom:20px">
                     
@@ -628,91 +603,94 @@ function obtenerCentroCosto(){
                             Tipo Documento
                         </div>
                         <div class="col-lg-2">
-                            <select name="tipo_documento" id="tipo_documento" class="form-control form-control-sm" onchange="obtenerCodigo()">
+                            <select name="tipo_documento_" id="tipo_documento_" class="form-control form-control-sm" onchange="obtenerCodigo()" disabled>
                                 <option value="">--Seleccionar--</option>
                                 <?php
-                                $selectedDocumento = isset($dispensacion->id_tipo_documento) ? $dispensacion->id_tipo_documento : 2;
                                 foreach ($tipo_documento as $row){?>
-                                    <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$selectedDocumento)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                    <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==2)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
                                     <?php
                                 }
                                 ?>
                             </select>
+                            <input type="hidden" name="tipo_documento" id="tipo_documento" value="2">
                         </div>
                         <div class="col-lg-2">
-                            N&uacute;mero de Dispensaci&oacute;n
+                            N° Requerimiento de Insumo
                         </div>
                         <div class="col-lg-2">
-                            <input id="numero_dispensacion" name="numero_dispensacion" on class="form-control form-control-sm"  value="<?php if($id>0){echo $dispensacion->codigo;}?>" type="text" readonly ="readonly">
+                            <input id="numero_requerimiento_insumo" name="numero_requerimiento_insumo" on class="form-control form-control-sm"  value="" type="text" readonly ="readonly">
                         </div>
                         <div class="col-lg-2">
                             Fecha
                         </div>
                         <div class="col-lg-2">
-                            <input id="fecha" name="fecha" on class="form-control form-control-sm"  value="<?php echo isset($dispensacion) && $dispensacion->fecha ? $dispensacion->fecha : date('Y-m-d'); ?>" type="text">
+                            <input id="fecha_" name="fecha_" on class="form-control form-control-sm"  value="<?php echo date('Y-m-d'); ?>" type="text" disabled>
+                            <input type="hidden" name="fecha" id="fecha" value="<?php echo date('Y-m-d'); ?>">
                         </div>
                         <div class="col-lg-2" style="color:green; font-weight:bold">
                             Almacen
                         </div>
-                        <div class="col-lg-2" id="almacen_salida_select">
-                            <select name="almacen" id="almacen" class="form-control form-control-sm" onchange="//actualizarSecciones(this)">
+                        <div class="col-lg-2">
+                            <select name="almacen_" id="almacen_" class="form-control form-control-sm" onchange="" disabled>
                                 <option value="">--Seleccionar--</option>
                                 <?php 
                                 foreach ($almacen as $row){?>
-                                    <option value="<?php echo $row->id ?>" <?php if($row->id==$dispensacion->id_almacen)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                    <option value="<?php echo $row->id ?>" <?php if($row->id==$requerimiento_dispensacion->id_almacen)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
                                     <?php 
                                 }
                                 ?>
                             </select>
+                            <input type="hidden" name="almacen" id="almacen" value="<?php echo $requerimiento_dispensacion->id_almacen ?>">
                         </div>
                         <div class="col-lg-2">
                             Sede
                         </div>
-                        <div class="col-lg-2" id="almacen_salida_select">
-                            <select name="sede" id="sede" class="form-control form-control-sm" onchange="obtenerCentroCosto()">
+                        <div class="col-lg-2">
+                            <select name="sede_" id="sede_" class="form-control form-control-sm" onchange="obtenerCentroCosto()" disabled>
                                 <option value="">--Seleccionar--</option>
                                 <?php 
                                 foreach ($sede as $row){?>
-                                    <option value="<?php echo $row->id ?>" <?php if($row->id==$dispensacion->id_sede)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                    <option value="<?php echo $row->id ?>" <?php if($row->id==$requerimiento_dispensacion->id_sede)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
                                     <?php 
                                 }
                                 ?>
                             </select>
+                            <input type="hidden" name="sede" id="sede" value="<?php echo $requerimiento_dispensacion->id_sede ?>">
                         </div>
                         <div class="col-lg-2">
-                            Centro de Costo
+                            Centro Costo
                         </div>
-                        <div class="col-lg-2" id="almacen_salida_select">
-                            <select name="centro_costo" id="centro_costo" class="form-control form-control-sm" onchange="//actualizarSecciones(this)">
+                        <div class="col-lg-2">
+                            <select name="centro_costo_" id="centro_costo_" class="form-control form-control-sm" onchange="//actualizarSecciones(this)" disabled>
                                 <option value="">--Seleccionar--</option>
                             </select>
+                            <input type="hidden" name="centro_costo" id="centro_costo" value="<?php echo $requerimiento_dispensacion->id_centro_costo?>">
                         </div>
                         <div class="col-lg-2">
                             Persona Recibe
                         </div>
-                        <div class="col-lg-2">
-                            <select name="persona_recibe" id="persona_recibe" class="form-control form-control-sm" onchange="">
+                        <div class="col-lg-4">
+                            <select name="persona_recibe_" id="persona_recibe_" class="form-control form-control-sm" onchange="" disabled>
                                 <option value="">--Seleccionar--</option>
                                 <?php
                                 foreach ($persona as $row){?>
-                                    <option value="<?php echo $row->id ?>" <?php if($row->id==$dispensacion->id_usuario_recibe)echo "selected='selected'"?>><?php echo $row->nombres." ".$row->apellido_paterno." ".$row->apellido_materno ?></option>
+                                    <option value="<?php echo $row->id ?>" <?php if($row->id==$requerimiento_dispensacion->id_persona)echo "selected='selected'"?>><?php echo $row->nombres." ".$row->apellido_paterno." ".$row->apellido_materno ?></option>
                                     <?php 
                                 }
                                 ?>
                             </select>
+                            <input type="hidden" name="persona_recibe" id="persona_recibe" value="<?php echo $requerimiento_dispensacion->id_persona?>">
                         </div>
                     </div>
                         <div style="margin-top:15px" class="form-group">
                             <div class="col-sm-12 controls">
                                 <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
-                                <?php if($id_user==$dispensacion->id_usuario_inserta && $id>0){?>
-                                    <!--<a href="javascript:void(0)" onClick="agregarProducto()" class="btn btn-sm btn-success">Agregar</a>-->
+                                <?php if($id_user==$requerimiento_dispensacion->id_usuario_inserta && $id>0){?>
                                     <button type="button" class="btn btn-sm btn-clasico-blanco btn-agregar" data-toggle="modal" onclick="agregarProducto()">
                                         <i class="fas fa-plus-circle" style="font-size:18px;"></i> Agregar
                                     </button>
                                 <?php }?>
                                 <?php if($id==0){?>
-                                    <!--<a href="javascript:void(0)" onClick="agregarProducto()" class="btn btn-sm btn-success">Agregar</a>-->
                                     <button type="button" class="btn btn-sm btn-clasico-blanco btn-agregar" data-toggle="modal" onclick="agregarProducto()">
                                         <i class="fas fa-plus-circle" style="font-size:18px;"></i> Agregar
                                     </button>
@@ -722,59 +700,26 @@ function obtenerCentroCosto(){
                         </div>
                         <div class="card-body">
 					<div class="table-responsive" style="overflow-y: auto; max-height: 400px;">
-						<table id="tblDispensacionDetalle" class="table table-hover table-sm">
+						<table id="tblRequerimientoDispensacionDetalle" class="table table-hover table-sm">
 							<thead>
 							<tr style="font-size:13px">
 								<th>#</th>
-								<th>Item</th>
 								<th>Descripci&oacute;n</th>
 								<th>Marca</th>
                                 <th>COD. INT.</th>
-                                <!--<th>F. Fabricaci&oacute;n</th>
-                                <th>F. Vencimiento</th>-->
-                                <th>Estado Bien</th>
                                 <th>Unidad</th>
                                 <th>Cantidad</th>
                                 <th>Stock</th>
-                                <!--<th>Sub Total</th>
-                                <th>IGV</th>
-                                <th>Total</th>-->
 							</tr>
 							</thead>
-							<tbody id="divDispensacionDetalle">
+							<tbody id="divRequerimientoDispensacionDetalle">
 							</tbody>
 						</table>
 					</div>
-                    <!--<table style="background-color:white !important;border-collapse:collapse;border-spacing:1px; width: 100%; margin: 0 auto; font-size:12px">
-                        <tbody>
-                            <tr>
-                                <td class="td" style ="text-align: left; width: 90%; font-size:13px"></td>
-                                <td class="td" style ="text-align: left; width: 5%; font-size:13px"><b>Total:</b></td>
-                                <td id="totalGeneral" class="td" style="text-align: left; width: 5%; font-size:13px">0.00</td>
-                            </tr>
-                        </tbody>
-                    </table>-->
                     <div style="margin-top:15px" class="form-group">
                         <div class="col-sm-12 controls">
                             <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
-                                <?php 
-                                    if($id>0){
-                                ?>
-                                <button style="font-size:12px;margin-left:10px; margin-right:10px" type="button" class="btn btn-sm btn-clasico btn-enviar" data-toggle="modal" onclick="pdf_documento_dispensacion()">
-                                    <i class="far fa-file-pdf" style="font-size:18px;"></i>Imprimir
-                                </button>
-                                <!--<button style="font-size:12px;margin-left:10px; margin-right:100px" type="button" class="btn btn-sm btn-warning" data-toggle="modal" onclick="pdf_guia()" ><i class="fa fa-edit"></i>Imprimir Gu&iacute;a Remisi&oacute;n Electronica</button>
-                                <a href="javascript:void(0)" onClick="fn_pdf_documento()" class="btn btn-sm btn-primary" style="margin-right:100px">Imprimir</a>-->
-                                <?php 
-                                    }
-                                ?>
-                                <?php if($id==0){?>
-                                    <!--<a href="javascript:void(0)" onClick="fn_save_dispensacion()" class="btn btn-sm btn-success" style="margin-right:10px">Guardar</a>-->
-                                    <button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-nuevo" data-toggle="modal" onclick="fn_save_dispensacion()">
-                                        <i class="fas fa-save" style="font-size:18px;"></i> Guardar
-                                    </button>
-                                <?php }?>
-                                <!--<a href="javascript:void(0)" onClick="$('#openOverlayOpc').modal('hide');" class="btn btn-sm btn-info" style="">Cerrar</a>-->
+                                <a href="javascript:void(0)" onClick="fn_save_detalle_producto()" class="btn btn-sm btn-success" style="margin-right:10px">Dispensar</a>
                                 <button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-cerrar" data-toggle="modal" onclick="$('#openOverlayOpc').modal('hide');">
                                     <i class="fas fa-times-circle" style="font-size:18px;"></i> Cerrar
                                 </button>
@@ -782,14 +727,14 @@ function obtenerCentroCosto(){
                         </div>
                     </div>
 				</div>
-                    </div>
-                </form>
                 </div>
-                <!-- /.box -->
+            </form>
             </div>
-            <!--/.col (left) -->
+            <!-- /.box -->
         </div>
-        <!-- /.row -->
+        <!--/.col (left) -->
+    </div>
+    <!-- /.row -->
 <!-- /.content -->
 </div>
 <!-- /.content-wrapper -->
@@ -799,20 +744,11 @@ $(document).ready(function () {
 	
 });
 
-
 </script>
 
 <script type="text/javascript">
 $(document).ready(function() {
-	//$('#numero_placa').focus();
-	//$('#numero_placa').mask('AAA-000');
-	//$('#vehiculo_numero_placa').mask('AAA-000');
-	
 	
 });
 
-
-
-
 </script>
-
