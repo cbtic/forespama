@@ -67,7 +67,7 @@ class OrdenProduccion extends Model
         left join area_trabajo at on op.id_area = at.id 
         left join unidad_trabajo ut on ut.id = op.id_unidad_trabajo
         inner join users u on op.id_usuario_inserta = u.id
-        where op.id = '14'
+        where op.id = '".$id."'
         and op.estado = '1' ";
 
 		$data = DB::select($cad);
