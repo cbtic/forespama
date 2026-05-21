@@ -718,7 +718,7 @@ Route::get('orden_compra/modal_guia/{id}/{id_orden_compra}', [OrdenCompraControl
 Route::post('orden_compra/upload_guia', [OrdenCompraController::class, 'upload_guia'])->name('orden_compra.upload_guia');
 Route::post('orden_compra/send_orden_compra_guia', [OrdenCompraController::class, 'send_orden_compra_guia'])->name('orden_compra.send_orden_compra_guia');
 Route::get('orden_compra/eliminar_pago/{id}', [OrdenCompraController::class, 'eliminar_pago'])->name('orden_compra.eliminar_pago');
-Route::get('dispensacion/exportar_listar_dispensacion_reporte/{tipo_documento}/{fecha_inicio}/{fecha_fin}/{numero_dispensacion}/{almacen}/{area_trabajo}/{unidad_trabajo}/{persona_recibe}/{estado}', [DispensacionController::class, 'exportar_listar_dispensacion_reporte'])->name('dispensacion.exportar_listar_dispensacion_reporte');
+Route::get('dispensacion/exportar_listar_dispensacion_reporte/{tipo_documento}/{fecha_inicio}/{fecha_fin}/{numero_dispensacion}/{almacen}/{sede}/{centro_costo}/{persona_recibe}/{estado}', [DispensacionController::class, 'exportar_listar_dispensacion_reporte'])->name('dispensacion.exportar_listar_dispensacion_reporte');
 Route::get('requerimiento/movimiento_pdf_requerimiento_control/{id}', [RequerimientoController::class, 'movimiento_pdf_requerimiento_control'])->name('requerimiento.movimiento_pdf_requerimiento_control');
 Route::get('empresa_cubicaje/create', [EmpresaCubicajeController::class, 'create'])->name('empresa_cubicaje.create');
 Route::post('empresa_cubicaje/listar_empresa_cubicaje_ajax', [EmpresaCubicajeController::class, 'listar_empresa_cubicaje_ajax'])->name('empresa_cubicaje.listar_empresa_cubicaje_ajax');

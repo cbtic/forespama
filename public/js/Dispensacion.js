@@ -396,8 +396,8 @@ function descargarArchivosDispensacionReporte(){
 	var fecha_fin = $('#fecha_fin_bus').val();
 	var numero_dispensacion = $('#numero_dispensacion_bus').val();
 	var almacen = $('#almacen_bus').val();
-	var area_trabajo = $('#area_trabajo_bus').val();
-	var unidad_trabajo = $('#unidad_trabajo_bus').val();
+	var sede = $('#sede_bus').val();
+	var centro_costo = $('#centro_costo_bus').val();
 	var persona_recibe = $('#persona_recibe_bus').val();
 	var estado = $('#estado_bus').val();
 
@@ -406,12 +406,12 @@ function descargarArchivosDispensacionReporte(){
 	if (fecha_fin == "")fecha_fin = "0";
 	if (numero_dispensacion == "")numero_dispensacion = "0";
 	if (almacen == "")almacen = 0;
-	if (area_trabajo == "")area_trabajo = 0;
-	if (unidad_trabajo == "")unidad_trabajo = 0;
+	if (sede == "")sede = 0;
+	if (centro_costo == "")centro_costo = 0;
 	if (persona_recibe == "")persona_recibe = 0;
 	if (estado == "")estado = 0;
 	
-	location.href = '/dispensacion/exportar_listar_dispensacion_reporte/'+tipo_documento+'/'+fecha_inicio+'/'+fecha_fin+'/'+numero_dispensacion+'/'+almacen+'/'+area_trabajo+'/'+unidad_trabajo+'/'+persona_recibe+'/'+estado;
+	location.href = '/dispensacion/exportar_listar_dispensacion_reporte/'+tipo_documento+'/'+fecha_inicio+'/'+fecha_fin+'/'+numero_dispensacion+'/'+almacen+'/'+sede+'/'+centro_costo+'/'+persona_recibe+'/'+estado;
 }
 
 function obtenerCentroCosto(){

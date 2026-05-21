@@ -136,7 +136,7 @@ class OrdenProduccionController extends Controller
 			$orden_produccion = new OrdenProduccion;
 		}
 
-        $producto = $producto_model->getProductoExterno();
+        $producto = $producto_model->getProductoAll();
         $unidad = $tablaMaestra_model->getMaestroByTipo(43);
         //$encargado = $encargado_model->obtenerEncargadoByTipo(2);
         $area_trabajo = $area_trabajo_model->getAreaTrabajoAll();

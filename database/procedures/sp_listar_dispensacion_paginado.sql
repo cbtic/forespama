@@ -1,6 +1,6 @@
--- DROP FUNCTION public.sp_listar_dispensacion_paginado(varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, refcursor);
+DROP FUNCTION public.sp_listar_dispensacion_paginado(varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, refcursor);
 
-CREATE OR REPLACE FUNCTION public.sp_listar_dispensacion_paginado(p_tipo_documento character varying, p_fecha_desde character varying, p_fecha_hasta character varying, p_numero_dispensacion character varying, p_almacen character varying, p_area_trabajo character varying, p_unidad_trabajo character varying, p_persona_recibe character varying, p_estado character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
+CREATE OR REPLACE FUNCTION public.sp_listar_dispensacion_paginado(p_tipo_documento character varying, p_fecha_desde character varying, p_fecha_hasta character varying, p_numero_dispensacion character varying, p_almacen character varying, p_sede character varying, p_centro_costo character varying, p_persona_recibe character varying, p_estado character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
  RETURNS refcursor
  LANGUAGE plpgsql
 AS $function$
@@ -16,15 +16,16 @@ v_col_count varchar;
 begin
 	p_pagina=(p_pagina::Integer-1)*p_limit::Integer;
 
-	v_campos=' d.id, tm.denominacion tipo_documento, d.fecha, d.codigo numero_dispensacion, d.estado, a.denominacion almacen, at.denominacion area_trabajo, ut.denominacion unidad_trabajo, p.nombres ||'' ''|| p.apellido_paterno ||'' ''|| p.apellido_materno persona_recibe, d.id_area_trabajo, d.id_unidad_trabajo, d.id_usuario_recibe, d.id_dispensacion_matriz ';
+	v_campos=' d.id, tm.denominacion tipo_documento, d.fecha, d.codigo numero_dispensacion, d.estado, a.denominacion almacen, s.denominacion sede, cc.denominacion centro_costo, p.nombres ||'' ''|| p.apellido_paterno ||'' ''|| p.apellido_materno persona_recibe, d.id_area_trabajo, d.id_unidad_trabajo, d.id_usuario_recibe, d.id_dispensacion_matriz, rd.codigo codigo_requerimiento_dispensacion ';
 
 	v_tabla=' from dispensaciones d
 	inner join tabla_maestras tm on d.id_tipo_documento ::int = tm.codigo ::int and tm.tipo=''53''
 	--inner join tabla_maestras tm2 on oc.cerrado ::int = tm2.codigo ::int and tm2.tipo=''52''
 	left join almacenes a on d.id_almacen = a.id
-	inner join area_trabajo at on d.id_area_trabajo = at.id
-	inner join unidad_trabajo ut on d.id_unidad_trabajo = ut.id
-	inner join personas p on d.id_usuario_recibe = p.id ';
+	left join sedes s on d.id_sede = s.id
+	left join centro_costos cc on d.id_centro_costo = cc.id
+	inner join personas p on d.id_usuario_recibe = p.id 
+	left join requerimiento_dispensaciones rd on rd.id = d.id_requerimiento_dispensacion';
 	
 	v_where = ' Where 1=1 ';
 
@@ -52,12 +53,12 @@ begin
 	 v_where:=v_where||'And d.id_almacen = '''||p_almacen||''' ';
 	End If;
 
-	If p_area_trabajo<>'' Then
-	 v_where:=v_where||'And d.id_area_trabajo = '''||p_area_trabajo||''' ';
+	If p_sede<>'' Then
+	 v_where:=v_where||'And d.id_sede = '''||p_sede||''' ';
 	End If;
 
-	If p_unidad_trabajo<>'' Then
-	 v_where:=v_where||'And d.id_unidad_trabajo = '''||p_unidad_trabajo||''' ';
+	If p_centro_costo<>'' Then
+	 v_where:=v_where||'And d.id_centro_costo = '''||p_centro_costo||''' ';
 	End If;
 
 	If p_persona_recibe<>'' Then

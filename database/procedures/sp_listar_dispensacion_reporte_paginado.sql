@@ -1,6 +1,6 @@
--- DROP FUNCTION public.sp_listar_dispensacion_reporte_paginado(varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, refcursor);
+DROP FUNCTION public.sp_listar_dispensacion_reporte_paginado(varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, refcursor);
 
-CREATE OR REPLACE FUNCTION public.sp_listar_dispensacion_reporte_paginado(p_tipo_documento character varying, p_fecha_desde character varying, p_fecha_hasta character varying, p_numero_dispensacion character varying, p_almacen character varying, p_area_trabajo character varying, p_unidad_trabajo character varying, p_persona_recibe character varying, p_estado character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
+CREATE OR REPLACE FUNCTION public.sp_listar_dispensacion_reporte_paginado(p_tipo_documento character varying, p_fecha_desde character varying, p_fecha_hasta character varying, p_numero_dispensacion character varying, p_almacen character varying, p_sede character varying, p_centro_costo character varying, p_persona_recibe character varying, p_estado character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
  RETURNS refcursor
  LANGUAGE plpgsql
 AS $function$
@@ -17,16 +17,17 @@ begin
 
 	p_pagina=(p_pagina::Integer-1)*p_limit::Integer;
 
-	v_campos=' dd.id, at.denominacion area_trabajo, ut.denominacion unidad_trabajo, to_char(d.fecha, ''dd-mm-yyyy'') fecha, d.codigo codigo_dispensacion, a.denominacion almacen_salida, pe.nombres ||'' ''|| pe.apellido_paterno ||'' ''|| pe.apellido_materno usuario_recibe,
+	v_campos=' dd.id, tm.denominacion tipo_movimiento, s.denominacion sede, cc.denominacion centro_costo, to_char(d.fecha, ''dd-mm-yyyy'') fecha, d.codigo codigo_dispensacion, a.denominacion almacen_salida, pe.nombres ||'' ''|| pe.apellido_paterno ||'' ''|| pe.apellido_materno usuario_recibe,
 	p.codigo codigo_producto, p.denominacion producto, dd.cantidad ';
 
 	v_tabla=' from dispensaciones d
 	inner join dispensacion_detalles dd on dd.id_dispensacion = d.id 
 	inner join productos p on dd.id_producto = p.id 
-	left join area_trabajo at on d.id_area_trabajo = at.id
-	left join unidad_trabajo ut on d.id_unidad_trabajo = ut.id 
+	left join sedes s on d.id_sede = s.id
+	left join centro_costos cc on d.id_centro_costo = cc.id
 	left join almacenes a on d.id_almacen = a.id 
-	left join personas pe on d.id_usuario_recibe = pe.id ';
+	left join personas pe on d.id_usuario_recibe = pe.id
+	inner join tabla_maestras tm on d.id_tipo_documento = tm.codigo::int and tm.tipo = ''53'' ';
 		
 	v_where = ' Where 1=1 and dd.estado = ''1'' ';
 
@@ -50,12 +51,12 @@ begin
 	 v_where:=v_where||'And d.id_almacen = '''||p_almacen||''' ';
 	End If;
 
-	If p_area_trabajo<>'' Then
-	 v_where:=v_where||'And d.id_area_trabajo = '''||p_area_trabajo||''' ';
+	If p_sede<>'' Then
+	 v_where:=v_where||'And d.id_sede = '''||p_sede||''' ';
 	End If;
 
-	If p_unidad_trabajo<>'' Then
-	 v_where:=v_where||'And d.id_unidad_trabajo = '''||p_unidad_trabajo||''' ';
+	If p_centro_costo<>'' Then
+	 v_where:=v_where||'And d.id_centro_costo = '''||p_centro_costo||''' ';
 	End If;
 
 	If p_persona_recibe<>'' Then

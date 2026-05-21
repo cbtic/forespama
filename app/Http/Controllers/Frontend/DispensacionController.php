@@ -421,15 +421,15 @@ class DispensacionController extends Controller
 
 	}
 
-	public function exportar_listar_dispensacion_reporte($tipo_documento, $fecha_inicio, $fecha_fin, $numero_dispensacion, $almacen, $area_trabajo, $unidad_trabajo, $persona_recibe, $estado) {
+	public function exportar_listar_dispensacion_reporte($tipo_documento, $fecha_inicio, $fecha_fin, $numero_dispensacion, $almacen, $sede, $centro_costo, $persona_recibe, $estado) {
 
 		if($tipo_documento==0)$tipo_documento = "";
 		if($fecha_inicio=="0")$fecha_inicio = "";
 		if($fecha_fin=="0")$fecha_fin = "";
 		if($numero_dispensacion=="0")$numero_dispensacion = "";
 		if($almacen==0)$almacen = "";
-		if($area_trabajo==0)$area_trabajo = "";
-        if($unidad_trabajo==0)$unidad_trabajo = "";
+		if($sede==0)$sede = "";
+        if($centro_costo==0)$centro_costo = "";
         if($persona_recibe==0)$persona_recibe = "";
         if($estado==0)$estado = "";
 
@@ -439,8 +439,8 @@ class DispensacionController extends Controller
 		$p[]=$fecha_fin;
         $p[]=$numero_dispensacion;
         $p[]=$almacen;
-		$p[]=$area_trabajo;
-		$p[]=$unidad_trabajo;
+		$p[]=$sede;
+		$p[]=$centro_costo;
 		$p[]=$persona_recibe;
         $p[]=$estado;
 		$p[]=1;
@@ -450,11 +450,11 @@ class DispensacionController extends Controller
 		$variable = [];
 		$n = 1;
 		
-		array_push($variable, array("N","Tipo Movimiento","Codigo Dispensacion","Fecha","Almacen","Persona Recibe", "Area Trabajo", "Unidad Trabajo", "Codigo Producto", "Producto", "Cantidad"));
+		array_push($variable, array("N","Tipo Movimiento","Codigo Dispensacion","Fecha","Almacen","Persona Recibe", "Sede", "Centro Costo", "Codigo Producto", "Producto", "Cantidad"));
 		
 		foreach ($data as $r) {
 
-			array_push($variable, array($n++,$r->tipo_movimiento, $r->codigo_dispensacion, $r->fecha, $r->almacen_salida, $r->usuario_recibe,$r->area_trabajo, $r->unidad_trabajo, $r->codigo_producto, $r->producto, $r->cantidad));
+			array_push($variable, array($n++,$r->tipo_movimiento, $r->codigo_dispensacion, $r->fecha, $r->almacen_salida, $r->usuario_recibe,$r->sede, $r->centro_costo, $r->codigo_producto, $r->producto, $r->cantidad));
 		}
 		
 		$export = new InvoicesExport([$variable]);
@@ -601,7 +601,7 @@ class InvoicesExport implements FromArray, WithHeadings, WithStyles
 
     public function headings(): array
     {
-        return ["N","Tipo Movimiento","Codigo Dispensacion","Fecha","Almacen","Persona Recibe", "Area Trabajo", "Unidad Trabajo", "Codigo Producto", "Producto", "Cantidad"];
+        return ["N","Tipo Movimiento","Codigo Dispensacion","Fecha","Almacen","Persona Recibe", "Sede", "Centro Costo", "Codigo Producto", "Producto", "Cantidad"];
     }
 
 	public function styles(Worksheet $sheet)
