@@ -111,7 +111,7 @@ class OrdenProduccionController extends Controller
 			$orden_produccion = new OrdenProduccion;
 		}
 
-        $producto = $producto_model->getProductoExterno();
+        $producto = $producto_model->getProductoAll();
         $unidad = $tablaMaestra_model->getMaestroByTipo(43);
         //$encargado = $encargado_model->obtenerEncargadoByTipo(2);
         $area_trabajo = $area_trabajo_model->getAreaTrabajoAll();
@@ -220,7 +220,7 @@ class OrdenProduccionController extends Controller
         $tablaMaestra_model = new TablaMaestra;
 
         $orden_produccion = $orden_compra_model->getDetalleProductosNoComprometidosId();
-        $producto = $producto_model->getProductoExterno();
+        $producto = $producto_model->getProductoAll();
         $unidad_medida = $tablaMaestra_model->getMaestroByTipo(43);
 
         $producto_stock = [];
@@ -241,7 +241,7 @@ class OrdenProduccionController extends Controller
         $tablaMaestra_model = new TablaMaestra;
 
         $orden_produccion = $orden_produccion_model->getDetalleOrdenProduccionById($id);
-        $producto = $producto_model->getProductoExterno();
+        $producto = $producto_model->getProductoAll();
         $unidad_medida = $tablaMaestra_model->getMaestroByTipo(43);
 
         $producto_stock = [];
