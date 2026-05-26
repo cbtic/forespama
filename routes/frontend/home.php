@@ -61,6 +61,7 @@ use App\Http\Controllers\Frontend\ConsultaOxapampaMovimientoController;
 use App\Http\Controllers\Frontend\IngresoSalidaSecundarioController;
 use App\Http\Controllers\Frontend\KardexSecundarioController;
 use App\Http\Controllers\Frontend\RequerimientoDispensacionController;
+use App\Http\Controllers\Frontend\AsientoContableAnexoController;
 
 
 //use App\Http\Controllers\VehiculoController;
@@ -1002,3 +1003,11 @@ Route::get('requerimiento_dispensacion/movimiento_pdf_requerimiento_dispensacion
 
 Route::post('requerimiento/genera_requerimiento_insumo', [RequerimientoController::class, 'genera_requerimiento_insumo'])->name('requerimiento.genera_requerimiento_insumo');
 
+Route::get('asiento_contable_anexo/create', [AsientoContableAnexoController::class, 'create'])->name('asiento_contable_anexo.create');
+Route::post('asiento_contable_anexo/listar_asiento_contable_anexo_ajax', [AsientoContableAnexoController::class, 'listar_asiento_contable_anexo_ajax'])->name('asiento_contable_anexo.listar_asiento_contable_anexo_ajax');
+Route::post('asiento_contable_anexo/generar_asiento_contable_anexo', [AsientoContableAnexoController::class, 'generar_asiento_contable_anexo'])->name('asiento_contable_anexo.generar_asiento_contable_anexo');
+
+Route::post('asiento_contable_anexo/generar_token_starsoft', [AsientoContableAnexoController::class, 'generar_token_starsoft'])->name('asiento_contable_anexo.generar_token_starsoft');
+Route::post('asiento_contable_anexo/migrar_anexos_starsoft', [AsientoContableAnexoController::class, 'migrar_anexos_starsoft'])->name('asiento_contable_anexo.migrar_anexos_starsoft');
+
+Route::post('requerimiento/send_requerimiento_dispensacion', [RequerimientoController::class, 'send_requerimiento_dispensacion'])->name('requerimiento.send_requerimiento_dispensacion');

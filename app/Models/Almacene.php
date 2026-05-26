@@ -62,7 +62,8 @@ class Almacene extends Model
 
     function getUsuarioAlmacen($id){
 
-        $cad = "select u.id, u.name, u.email from almacenes a
+        $cad = "select u.id, u.name, u.email 
+        from almacenes a
         inner join almacen_usuarios au on au.id_almacen = a.id and au.estado ='1'
         left join users u on au.id_user = u.id
         where a.id = '".$id."'";
@@ -73,7 +74,8 @@ class Almacene extends Model
 
     function getProvinciaDistritoById($id){
 
-        $cad = "select u.id_provincia provincia, u.id_ubigeo distrito from almacenes a2 
+        $cad = "select u.id_provincia provincia, u.id_ubigeo distrito 
+        from almacenes a2 
         inner join ubigeos u on a2.id_ubigeo = u.id_ubigeo 
         where a2.id='".$id."'";
 
@@ -89,7 +91,7 @@ class Almacene extends Model
         where u.id = '".$id."'
         and au.estado = '1'
         and a.estado = '1'
-        and a.id <> '23'
+        and a.id not in ('23', '24')
         order by 1 asc";
 
 		$data = DB::select($cad);
@@ -100,7 +102,7 @@ class Almacene extends Model
 
         $cad = "select * from almacenes a 
         where a.estado = '1'
-        and a.id <> '23'
+        and a.id not in ('23', '24')
         order by 1 asc";
 
 		$data = DB::select($cad);
@@ -111,7 +113,7 @@ class Almacene extends Model
 
         $cad = "select * from almacenes a 
         where a.estado = '1'
-        and a.id = '23'
+        and a.id in ('23','24')
         order by 1 asc";
 
 		$data = DB::select($cad);
@@ -123,7 +125,7 @@ class Almacene extends Model
         $cad = "select * from almacenes a
         where a.id='".$id."'
         and a.estado='1'
-        and a.id <> '23'
+        and a.id not in ('23', '24')
         order by 1 asc";
 
 		$data = DB::select($cad);

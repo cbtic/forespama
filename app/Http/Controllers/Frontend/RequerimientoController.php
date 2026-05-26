@@ -21,6 +21,9 @@ use App\Models\RequerimientoDispensacione;
 use App\Models\RequerimientoDispensacionDetalle;
 use App\Models\User;
 use App\Models\Persona;
+use App\Models\EntradaProducto;
+use App\Models\EntradaProductoDetalle;
+use App\Models\Kardex;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Auth;
 use Carbon\Carbon;
@@ -336,6 +339,8 @@ class RequerimientoController extends Controller
         $sustento_requerimiento=$datos[0]->sustento_requerimiento;
         $usuario_solicita=$datos[0]->usuario_solicita;
         $observacion=$datos[0]->observacion;
+        $aprobado=$datos[0]->aprobado;
+        $usuario_aprueba=$datos[0]->usuario_aprueba;
         
 		$year = Carbon::now()->year;
 
@@ -345,7 +350,7 @@ class RequerimientoController extends Controller
 
 		$currentHour = Carbon::now()->format('H:i:s');
 
-		$pdf = Pdf::loadView('frontend.requerimiento.movimiento_pdf_requerimiento',compact('tipo_documento','almacen','fecha','codigo','datos_detalle','responsable_atencion','sustento_requerimiento','usuario_solicita','observacion'));
+		$pdf = Pdf::loadView('frontend.requerimiento.movimiento_pdf_requerimiento',compact('tipo_documento','almacen','fecha','codigo','datos_detalle','responsable_atencion','sustento_requerimiento','usuario_solicita','observacion','aprobado','usuario_aprueba'));
 		
 		$pdf->setPaper('A4'); // Tamaño de papel (puedes cambiarlo según tus necesidades)
         
@@ -512,6 +517,373 @@ class RequerimientoController extends Controller
         }
 
         return response()->json(['id' => $orden_compra->id, 'codigo' => $orden_compra->numero_orden_compra]);
+    }
+
+    public function send_requerimiento_dispensacion(Request $request)
+    {
+        $id_user = Auth::user()->id;
+
+        $requerimiento = Requerimiento::find($request->id);
+        $id_requerimiento = $requerimiento->id;
+
+        $orden_compra = new OrdenCompra;
+
+        $orden_compra_model = new OrdenCompra;
+        $codigo_orden_compra = $orden_compra_model->getCodigoOrdenCompra(1);
+
+        $descripcion = $request->input('descripcion');
+        $cod_interno = $request->input('cod_interno');
+        $marca = $request->input('marca');
+        $estado_bien = $request->input('estado_bien');
+        $unidad = $request->input('unidad');
+        $cantidad_ingreso = $request->input('cantidad_ingreso');
+        $cantidad_atendida = $request->input('cantidad_atendida');
+        $moneda = $request->input('moneda');
+        $tipo_cambio = $request->input('tipo_cambio');
+        $precio_unitario = $request->input('precio_unitario');
+        $total_precio = $request->input('total_precio');
+        $total = $request->input('total');
+        
+        $id_requerimiento_detalle =$request->id_requerimiento_detalle;
+        
+        $orden_compra->id_empresa_compra = 30;
+        $orden_compra->id_empresa_vende = 30;
+        $orden_compra->fecha_orden_compra = Carbon::now()->toDateString();
+        $orden_compra->numero_orden_compra = $codigo_orden_compra[0]->codigo;
+        $orden_compra->id_tipo_documento = 1;
+        $orden_compra->igv_compra = 2;
+        $orden_compra->cerrado = 1;
+        $orden_compra->id_unidad_origen = $request->unidad_origen;
+        $orden_compra->id_almacen_destino = $request->almacen;
+        $orden_compra->id_almacen_salida = $request->almacen_salida;
+        $orden_compra->id_requerimiento = $request->id;
+        $orden_compra->id_tipo_cliente = '5';
+        $orden_compra->id_usuario_inserta = $id_user;
+        $orden_compra->estado = 1;
+        $orden_compra->save();
+        $id_orden_compra = $orden_compra->id;
+
+        $array_orden_compra_detalle = array();
+
+        $acumulado_sub_total = 0;
+        $acumulado_igv = 0;
+        $acumulado_total = 0;
+
+        foreach($descripcion as $index => $value) {
+            
+            $precio_unitario_ = 0;
+            $valor_venta_bruto = 0;
+            $valor_venta = 0;
+            $igv = 0;
+            $total = 0;
+
+            $orden_compra_detalle = new OrdenCompraDetalle;
+
+            $precio_unitario_ = $total_precio[$index] / 1.18;
+            $valor_venta_bruto = ($cantidad_atendida[$index] * $total_precio[$index]) / 1.18;
+            $valor_venta = $valor_venta_bruto;
+            $igv = $valor_venta * 0.18;
+            $total = $valor_venta + $igv;
+            
+            $orden_compra_detalle->id_orden_compra = $id_orden_compra;
+            $orden_compra_detalle->id_producto = $descripcion[$index];
+            $orden_compra_detalle->cantidad_requerida = $cantidad_atendida[$index];
+            $orden_compra_detalle->id_estado_producto = $estado_bien[$index];
+
+            $orden_compra_detalle->precio = round($precio_unitario_,3);
+
+            $orden_compra_detalle->valor_venta_bruto = round($valor_venta_bruto,3);
+
+            $orden_compra_detalle->precio_venta = round($total_precio[$index],3);
+
+            $orden_compra_detalle->valor_venta = round($valor_venta,3);
+            $orden_compra_detalle->sub_total = round($valor_venta,3);
+            $orden_compra_detalle->igv = round($igv,3);
+            $orden_compra_detalle->total = round($total,3);
+            if($unidad[$index]!=null && $unidad !=0){
+				$orden_compra_detalle->id_unidad_medida = (int)$unidad[$index];
+			}
+
+            if($marca[$index]!=null && $marca[$index] !=0){
+				$orden_compra_detalle->id_marca = (int)$marca[$index];
+			}
+            $orden_compra_detalle->id_descuento = 1;
+            $orden_compra_detalle->descuento = 0;
+            $orden_compra_detalle->estado = 1;
+            $orden_compra_detalle->cerrado = 1;
+            $orden_compra_detalle->id_usuario_inserta = $id_user;
+
+            $orden_compra_detalle->save();
+
+            $array_orden_compra_detalle[] = $orden_compra_detalle->id;
+
+            $acumulado_sub_total += $valor_venta;
+            $acumulado_igv += $igv;
+            $acumulado_total += $total;
+
+        }
+
+        $orden_compra_actualizado = OrdenCompra::find($id_orden_compra);
+        $orden_compra_actualizado->sub_total = round($acumulado_sub_total, 3);
+        $orden_compra_actualizado->igv = round($acumulado_igv, 3);
+        $orden_compra_actualizado->total = round($acumulado_total, 3);
+        $orden_compra_actualizado->save();
+
+        $requerimiento_detalle = RequerimientoDetalle::where('id_requerimiento',$id_requerimiento)->where('estado','1')->get();
+
+        $requerimiento_detalle_model = new RequerimientoDetalle;
+
+        foreach($requerimiento_detalle as $index => $detalle){
+            
+            $detalle_requerimiento = RequerimientoDetalle::where('id_requerimiento',$id_requerimiento)->where('id_producto',$detalle->id_producto)->where('estado','1')->first();
+
+            $cantidad_requerida = $detalle_requerimiento->cantidad;
+            
+            $cantidad_ingresada = $requerimiento_detalle_model->getCantidadOrdenCompraByRequerimientoProducto($id_requerimiento,$detalle->id_producto);
+            
+            if($cantidad_requerida <= $cantidad_ingresada){
+                $RequerimientoDetalleObj = RequerimientoDetalle::find($detalle->id);
+                $RequerimientoDetalleObj->cerrado = 2;
+                $RequerimientoDetalleObj->save();
+            }
+        }
+
+        $requerimiento_detalle_valida = RequerimientoDetalle::where('id_requerimiento',$id_requerimiento)->where('cerrado','2')->get();
+
+        $requerimiento_detalles_model = new RequerimientoDetalle;
+        $cantidadAbierto = $requerimiento_detalles_model->getCantidadAbiertoRequerimientoDetalleByIdRequerimiento($id_requerimiento);
+
+        if($cantidadAbierto==0){
+
+            $RequerimientoObj = Requerimiento::find($id_requerimiento);
+            $RequerimientoObj->cerrado = 2;
+            $RequerimientoObj->estado_atencion = 3;
+            $RequerimientoObj->save();
+        }
+
+        $entrada_producto = new EntradaProducto;
+
+        $entrada_producto_model = new EntradaProducto;
+        $codigo = $entrada_producto_model->getCodigoEntradaProducto($orden_compra->id_tipo_documento);
+        
+        $entrada_producto->fecha_ingreso = $orden_compra->fecha_orden_compra;
+        $entrada_producto->id_tipo_documento = $orden_compra->id_tipo_documento;
+        $entrada_producto->unidad_origen = $orden_compra->id_unidad_origen;
+        $entrada_producto->id_proveedor = $orden_compra->id_empresa_vende;
+        $entrada_producto->fecha_comprobante = "18/08/2024";
+        $entrada_producto->id_moneda = $orden_compra->id_moneda;
+        $entrada_producto->sub_total_compra = $orden_compra->sub_total;
+        $entrada_producto->igv_compra = $orden_compra->igv;
+        $entrada_producto->total_compra = $orden_compra->total;
+        $entrada_producto->descuento = $orden_compra->descuento;
+        $moneda_descripcion="";
+        if($orden_compra->id_moneda==1){$moneda_descripcion="SOLES";}
+        else if($orden_compra->id_moneda==2){$moneda_descripcion="DOLARES";}
+        else {$moneda_descripcion="SOLES";}
+        $entrada_producto->moneda = $moneda_descripcion;
+        $entrada_producto->cerrado = 2;
+        $entrada_producto->observacion = $orden_compra->observacion_vendedor;
+        $entrada_producto->id_almacen_destino = $orden_compra->id_almacen_destino;
+        $entrada_producto->id_empresa_compra = $orden_compra->id_empresa_compra;
+        $entrada_producto->id_tipo_cliente = $orden_compra->id_tipo_cliente;
+        $entrada_producto->id_persona = $orden_compra->id_persona;
+        $entrada_producto->codigo = $codigo[0]->codigo;
+        $entrada_producto->id_usuario_recibe = $id_user;
+        $entrada_producto->estado = 1;
+        $entrada_producto->id_orden_compra = $id_orden_compra;
+        $entrada_producto->id_usuario_inserta = $id_user;
+        $entrada_producto->save();
+        $id_entrada_productos = $entrada_producto->id;
+        $id_orden_compra = $entrada_producto->id_orden_compra;
+        $codigo_nota_entrada = $entrada_producto->codigo;
+
+        $valida_estado = true;
+
+        foreach($descripcion as $index => $value) {
+            
+            $entradaProducto_detalle = new EntradaProductoDetalle();
+            $entradaProducto_detalle->id_entrada_productos = $id_entrada_productos;
+            $entradaProducto_detalle->cantidad = $orden_compra_detalle->cantidad_requerida;
+            $entradaProducto_detalle->aplica_precio = "";
+            $entradaProducto_detalle->id_um = $orden_compra_detalle->id_unidad_medida;
+            $entradaProducto_detalle->id_marca = $orden_compra_detalle->id_marca;
+            $entradaProducto_detalle->estado = 1;
+            $entradaProducto_detalle->id_producto = $orden_compra_detalle->id_producto;
+            $entradaProducto_detalle->costo = $orden_compra_detalle->precio;
+            $entradaProducto_detalle->valor_venta_bruto = $orden_compra_detalle->valor_venta_bruto;
+            $entradaProducto_detalle->precio_venta = $orden_compra_detalle->precio_venta;
+            $entradaProducto_detalle->valor_venta = $orden_compra_detalle->valor_venta;
+            $entradaProducto_detalle->id_descuento = $orden_compra_detalle->id_descuento;
+            if($orden_compra_detalle->id_descuento==1){
+                $entradaProducto_detalle->descuento = $orden_compra_detalle->descuento;
+            }else if($orden_compra_detalle->id_descuento==2){
+                $entradaProducto_detalle->descuento = $orden_compra_detalle->descuento;
+            }
+            $entradaProducto_detalle->sub_total = $orden_compra_detalle->sub_total;
+            $entradaProducto_detalle->igv = $orden_compra_detalle->igv;
+            $entradaProducto_detalle->cerrado = 1;
+            $entradaProducto_detalle->total = $orden_compra_detalle->total;
+
+            /*if($cantidad_pendiente[$index]!=0){
+                $valida_estado = false;
+            }*/
+
+            $entradaProducto_detalle->save();
+
+            $orden_compra_detalle_cantidad = OrdenCompraDetalle::where('id_orden_compra',$entrada_producto->id_orden_compra)->where('id_producto',$orden_compra_detalle->id_producto)->where('estado',1)->first();
+            $cantidad_despacho_actual = $orden_compra_detalle_cantidad->cantidad_despacho;
+            $cantidad_despacho_actualizado = $cantidad_despacho_actual + $orden_compra_detalle->cantidad_requerida;
+            $orden_compra_detalle_cantidad->cantidad_despacho = $cantidad_despacho_actualizado;
+            $orden_compra_detalle_cantidad->save();
+
+            $producto = Producto::find($orden_compra_detalle->id_producto);
+            if($orden_compra->id_almacen_salida!=""){
+
+                $idProducto = $orden_compra_detalle->id_producto;
+
+                $idCorte = Kardex::where('id_producto', $orden_compra_detalle->id_producto)->where('id_almacen_destino', $orden_compra->id_almacen_salida)->whereDate('fecha', '<=', Carbon::now())->orderBy('fecha', 'desc')->orderBy('id', 'desc')->value('id');
+                
+                $saldoBase = $idCorte > 0 ? Kardex::where('id', $idCorte)->value('saldos_cantidad') : 0;
+
+                $kardex = new Kardex;
+                $kardex->id_producto = $idProducto;
+                $kardex->id_almacen_destino = $orden_compra->id_almacen_salida;
+                $kardex->fecha = Carbon::now();
+
+                $kardex->entradas_cantidad = 0;
+                $kardex->salidas_cantidad = $orden_compra_detalle->cantidad_requerida;
+                $kardex->costo_salidas_cantidad = $orden_compra_detalle->precio;
+                $kardex->total_salidas_cantidad = $orden_compra_detalle->sub_total;
+
+                $kardex->saldos_cantidad = $saldoBase - $orden_compra_detalle->cantidad_requerida;
+                $kardex->costo_saldos_cantidad = $producto->precio_venta;
+                $total_kardex = $orden_compra_detalle->cantidad_requerida * $producto->precio_venta;
+                $kardex->total_saldos_cantidad = $total_kardex;
+                
+                if($orden_compra->id_unidad_origen == 1 || $orden_compra->id_unidad_origen == 3){
+                    $kardex->id_tipo_movimiento = 32;
+                }
+
+                $kardex->id_movimiento = $entrada_producto->id;
+                $kardex->codigo_movimiento = $entrada_producto->codigo;
+                $kardex->id_usuario_inserta = $id_user;
+                $kardex->save();
+            }
+            if($orden_compra->id_almacen_destino!=""){
+
+                $idProducto = $orden_compra_detalle->id_producto;
+            
+                $idCorte = Kardex::where('id_producto', $orden_compra_detalle->id_producto)->where('id_almacen_destino', $orden_compra->id_almacen_destino)->whereDate('fecha', '<=', Carbon::now())->orderBy('fecha', 'desc')->orderBy('id', 'desc')->value('id');
+                
+                $saldoBase = $idCorte > 0 ? Kardex::where('id', $idCorte)->value('saldos_cantidad') : 0;
+
+                $kardex = new Kardex;
+                $kardex->id_producto = $idProducto;
+                $kardex->id_almacen_destino = $orden_compra->id_almacen_destino;
+                $kardex->fecha = Carbon::now();
+
+                $kardex->entradas_cantidad = $orden_compra_detalle->cantidad_requerida;
+                $kardex->costo_entradas_cantidad = $orden_compra_detalle->precio;
+                $kardex->total_entradas_cantidad = $orden_compra_detalle->sub_total;
+                $kardex->salidas_cantidad = 0;
+
+                $kardex->saldos_cantidad = $saldoBase + $orden_compra_detalle->cantidad_requerida;
+                $kardex->costo_saldos_cantidad = $producto->precio_venta;
+                $total_kardex = $orden_compra_detalle->cantidad_requerida * $producto->precio_venta;
+                $kardex->total_saldos_cantidad = $total_kardex;
+
+                if($orden_compra->id_unidad_origen == 1 || $orden_compra->id_unidad_origen == 3){
+                    $kardex->id_tipo_movimiento = 16;
+                }
+                if($orden_compra->id_unidad_origen == 2){
+                    $kardex->id_tipo_movimiento = 5;
+                }
+
+                $kardex->id_movimiento = $entrada_producto->id;
+                $kardex->codigo_movimiento = $entrada_producto->codigo;
+                $kardex->id_usuario_inserta = $id_user;
+                $kardex->save();
+            }
+        }
+
+        $entrada_producto_detalle = EntradaProductoDetalle::where('id_entrada_productos',$id_entrada_productos)->where('estado','1')->get();
+        $entrada_producto_detalle_model = new EntradaProductoDetalle;
+        foreach($entrada_producto_detalle as $index => $detalle){
+            
+            $detalle_orden = OrdenCompraDetalle::where('id_orden_compra',$id_orden_compra)->where('id_producto',$detalle->id_producto)->where('estado','1')->first();
+            
+            $cantidad_requerida = $detalle_orden->cantidad_requerida;
+            
+            $cantidad_ingresada = $entrada_producto_detalle_model->getCantidadEntradaProductoByOrdenProducto($id_orden_compra,$detalle->id_producto);
+            if($cantidad_requerida - $cantidad_ingresada==0){
+                $entradaProductoDetalleObj = EntradaProductoDetalle::find($detalle->id);
+                $entradaProductoDetalleObj->cerrado = 2;
+                $entradaProductoDetalleObj->save();
+
+                $ordenCompraDetalleObj = OrdenCompraDetalle::find($detalle_orden->id);
+                $ordenCompraDetalleObj->cerrado = 2;
+                $ordenCompraDetalleObj->save();
+            }
+        }
+
+        $entrada_producto_detalle_valida = EntradaProductoDetalle::where('id_entrada_productos',$id_entrada_productos)->where('cerrado','2')->get();
+
+        $orden_compra_detalle_model = new OrdenCompraDetalle;
+        $cantidadAbierto = $orden_compra_detalle_model->getCantidadAbiertoOrdenCompraDetalleByIdOrdenCompra($id_orden_compra);
+
+        if($cantidadAbierto==0){
+
+            $OrdenCompraObj = OrdenCompra::find($id_orden_compra);
+            $OrdenCompraObj->cerrado = 2;
+            $OrdenCompraObj->save();
+        }
+
+        $requerimiento_dispensacion = new RequerimientoDispensacione;
+        $requerimiento_dispensacion_model = new RequerimientoDispensacione;
+        $codigo_requerimiento_dispensacion = $requerimiento_dispensacion_model->getCodigoRequerimientoDispensacion();
+        
+        $requerimiento_dispensacion->id_tipo_documento = $requerimiento->id_tipo_documento;
+        $requerimiento_dispensacion->fecha = $requerimiento->fecha;
+        //if($request->id == 0){
+            $requerimiento_dispensacion->codigo = $codigo_requerimiento_dispensacion[0]->codigo;
+        //}else{
+            //$requerimiento_dispensacion->codigo = $codigo_requerimiento_dispensacion;
+        //}
+        $requerimiento_dispensacion->id_almacen = $requerimiento->id_almacen_destino;
+        $requerimiento_dispensacion->id_usuario_inserta = $id_user;
+        $requerimiento_dispensacion->id_requerimiento = $requerimiento->id;
+        $requerimiento_dispensacion->estado = 1;
+        $requerimiento_dispensacion->save();
+
+        $id_requerimiento_dispensacion_detalle = $requerimiento_dispensacion->id;
+
+        $array_requerimiento_dispensacion_detalle = array();
+
+        foreach($descripcion as $index => $value) {
+            
+            //if($id_requerimiento_detalle[$index] == 0){
+                $requerimiento_dispensacion_detalle = new RequerimientoDispensacionDetalle;
+            //}else{
+                //$requerimiento_dispensacion_detalle = RequerimientoDispensacionDetalle::find($id_requerimiento_detalle[$index]);
+            //}
+            
+            $requerimiento_dispensacion_detalle->id_requerimiento_dispensacion = $id_requerimiento_dispensacion_detalle;
+            $requerimiento_dispensacion_detalle->id_producto = $orden_compra_detalle->id_producto;
+            $requerimiento_dispensacion_detalle->cantidad = $orden_compra_detalle->cantidad_requerida;
+            $requerimiento_dispensacion_detalle->id_unidad_medida = $orden_compra_detalle->id_unidad_medida;
+            if($orden_compra_detalle->id_marca!=null && $orden_compra_detalle->id_marca !=0){
+				$requerimiento_dispensacion_detalle->id_marca = (int)$orden_compra_detalle->id_marca;
+			}
+            $requerimiento_dispensacion_detalle->estado = 1;
+            $requerimiento_dispensacion_detalle->id_usuario_inserta = $id_user;
+
+            $requerimiento_dispensacion_detalle->save();
+
+            $array_requerimiento_dispensacion_detalle[] = $requerimiento_dispensacion_detalle->id;
+
+        }
+
+        return response()->json(['success' => 'Requerimiento de Insumos generado exitosamente.']);
     }
 
     public function modal_atender_requerimiento($id){
@@ -1020,7 +1392,7 @@ class RequerimientoController extends Controller
         //}else{
             //$requerimiento_dispensacion->codigo = $codigo_requerimiento_dispensacion;
         //}
-        $requerimiento_dispensacion->id_almacen = $request->almacen_salida;
+        $requerimiento_dispensacion->id_almacen = $request->almacen;
         $requerimiento_dispensacion->id_usuario_inserta = $id_user;
         $requerimiento_dispensacion->id_requerimiento = $request->id;
         $requerimiento_dispensacion->estado = 1;

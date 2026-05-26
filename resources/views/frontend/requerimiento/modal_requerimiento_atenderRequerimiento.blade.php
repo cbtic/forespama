@@ -644,18 +644,73 @@ function save_orden_compra_requerimiento(){
         $('.loader').show();
 
         $.ajax({
-                url: "/requerimiento/send_requerimiento_orden_compra",
-                type: "POST",
-                data : $("#frmRequerimiento").serialize(),
-                success: function (result) {
+            url: "/requerimiento/send_requerimiento_orden_compra",
+            type: "POST",
+            data : $("#frmRequerimiento").serialize(),
+            success: function (result) {
 
-                    var codigo_ = result.codigo;
+                var codigo_ = result.codigo;
 
-                    datatablenew();
-                    $('.loader').hide();
-                    bootbox.alert("Se guard&oacute; satisfactoriamente. <br> Codigo: "+codigo_);
-                    $('#openOverlayOpc').modal('hide');
-                }
+                datatablenew();
+                $('.loader').hide();
+                bootbox.alert("Se guard&oacute; satisfactoriamente. <br> Codigo: "+codigo_);
+                $('#openOverlayOpc').modal('hide');
+            }
+        });
+    }
+}
+
+function save_dispensacion_requerimiento(){
+	
+    var msg = "";
+
+    var tipo_documento = $('#tipo_documento').val();
+    var numero_requerimiento = $('#numero_requerimiento').val();
+    var fecha_requerimiento = $('#fecha_requerimiento').val();
+    var responsable = $('#responsable').val();
+    var estado_atencion = $('#estado_atencion').val();
+    var almacen = $('#almacen').val();
+    var cerrado = $('#cerrado').val();
+    var sustento_requerimiento = $('#sustento_requerimiento').val();
+    var unidad_origen = $('#unidad_origen').val();
+
+    if(tipo_documento==""){msg+="Ingrese el Tipo de Documento <br>";}
+    if(numero_requerimiento==""){msg+="Ingrese el Numero de Requerimiento <br>";}
+    if(responsable==""){msg+="Ingrese el Responsable de Atencion <br>";}
+    if(estado_atencion==""){msg+="Ingrese el Estado de Atencion <br>";}
+    if(fecha_requerimiento==""){msg+="Ingrese la Fecha <br>";}
+    if(unidad_origen==""){msg+="Ingrese la Unidad de Origen <br>";}
+    if(almacen==""){msg+="Ingrese el Almacen <br>";}
+    if(cerrado==""){msg+="Ingrese el campo Cerrado <br>";}
+    if(sustento_requerimiento==""){msg+="Ingrese el Sustento de Requerimiento <br>";}
+
+    if ($('#tblRequerimientoDetalle tbody tr').length == 0) {
+        msg += "No se ha agregado ningún producto <br>";
+    }
+
+    if(msg!=""){
+        bootbox.alert(msg);
+        return false;
+    }else{
+        var msgLoader = "";
+        msgLoader = "Procesando, espere un momento por favor";
+        var heightBrowser = $(window).width()/2;
+        $('.loader').css("opacity","0.8").css("height",heightBrowser).html("<div id='Grd1_wrapper' class='dataTables_wrapper'><div id='Grd1_processing' class='dataTables_processing panel-default'>"+msgLoader+"</div></div>");
+        $('.loader').show();
+
+        $.ajax({
+            url: "/requerimiento/send_requerimiento_dispensacion",
+            type: "POST",
+            data : $("#frmRequerimiento").serialize(),
+            success: function (result) {
+
+                var codigo_ = result.codigo;
+
+                datatablenew();
+                $('.loader').hide();
+                bootbox.alert("Se guard&oacute; satisfactoriamente. <br> Codigo: "+codigo_);
+                $('#openOverlayOpc').modal('hide');
+            }
         });
     }
 }
@@ -934,7 +989,12 @@ function cambiarOrigen(){
                                     <button style="font-size:12px;margin-left:10px;margin-right:20px" type="button" class="btn btn-sm btn-clasico btn-enviar" data-toggle="modal" onclick="pdf_documento()" >
                                         <i class="far fa-file-pdf" style="font-size:18px;"></i> Imprimir
                                     </button>
+                                    <?php if($requerimiento->id_tipo_documento == '1'){?>
                                     <button style="font-size:12px;margin-right:20px" type="button" class="btn btn-sm btn-warning" data-toggle="modal" onclick="save_orden_compra_requerimiento()" ><i class="fa fa-edit"></i> Generar Orden Compra</button>
+                                    <?php }?>
+                                    <?php if($requerimiento->id_tipo_documento == '2'){?>
+                                    <button style="font-size:12px;margin-right:20px" type="button" class="btn btn-sm btn-warning" data-toggle="modal" onclick="save_dispensacion_requerimiento()" ><i class="fa fa-edit"></i> Generar Dispensación de Requerimiento</button>
+                                    <?php }?>
                                     <button style="font-size:12px;margin-right:20px" type="button" class="btn btn-sm btn-success" data-toggle="modal" onclick="generar_requerimiento()" ><i class="fa fa-edit"></i> Generar Requerimiento Pedientes</button>
                                     <?php 
                                         }

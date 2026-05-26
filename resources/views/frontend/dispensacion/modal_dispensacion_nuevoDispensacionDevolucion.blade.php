@@ -158,11 +158,12 @@ $(document).ready(function() {
         language: 'es'
     });
 
-    if($('#id').val()>0){
-        obtenerUnidadTrabajo();
+    if($('#id_dispensacion').val()>0){
+        //obtenerUnidadTrabajo();
+        obtenerCentroCosto();
     }
 
-    obtenerUnidadTrabajo();
+    //obtenerUnidadTrabajo();
 
     $("#item").select2({ width: '100%' });
     $("#persona_recibe").select2({ width: '100%' });
@@ -490,6 +491,34 @@ function fn_save_dispensacion(){
     }
 }
 
+function obtenerCentroCosto(){
+
+    var sede = $('#sede_').val();
+    var selectedUnidad = "<?php echo isset($dispensacion->id_centro_costo) ? $dispensacion->id_centro_costo : ''; ?>";
+
+    $.ajax({
+        url: "/centro_costo/obtener_centro_costo/"+sede,
+        dataType: "json",
+        success: function(result){
+            var option = "<option value='' selected='selected'>--Seleccionar--</option>";
+            var option;
+            $('#centro_costo_').html("");
+            $(result).each(function (ii, oo) {
+                if (oo.id == selectedUnidad) {
+                    option += "<option value='" + oo.id + "' selected='selected'>" + oo.codigo +" - "+oo.denominacion + "</option>";
+                }else {
+                    option += "<option value='"+oo.id+"'>"+oo.codigo +" - "+oo.denominacion+"</option>";
+                }
+                
+            });
+            $('#centro_costo_').html(option);
+            $('#centro_costo_').select2({
+                width: '100%'
+            });
+        }
+    });
+}
+
 </script>
 
 <body class="hold-transition skin-blue sidebar-mini">
@@ -570,17 +599,17 @@ function fn_save_dispensacion(){
                                 ?>
                             </select>
                         </div>
-                        <div class="col-lg-2">
+                        <!--<div class="col-lg-2">
                             &Aacute;rea de Trabajo
                         </div>
                         <div class="col-lg-2" id="almacen_salida_select">
                             <select name="area_trabajo" id="area_trabajo" class="form-control form-control-sm" onchange="obtenerUnidadTrabajo()">
                                 <option value="">--Seleccionar--</option>
                                 <?php 
-                                foreach ($area_trabajo as $row){?>
-                                    <option value="<?php echo $row->id ?>" <?php if($row->id==$dispensacion->id_area_trabajo)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                //foreach ($area_trabajo as $row){?>
+                                    <option value="<?php //echo $row->id ?>" <?php //if($row->id==$dispensacion->id_area_trabajo)echo "selected='selected'"?>><?php //echo $row->denominacion ?></option>
                                     <?php 
-                                }
+                                //}
                                 ?>
                             </select>
                         </div>
@@ -589,6 +618,28 @@ function fn_save_dispensacion(){
                         </div>
                         <div class="col-lg-2" id="almacen_salida_select">
                             <select name="unidad_trabajo" id="unidad_trabajo" class="form-control form-control-sm" onchange="">
+                                <option value="">--Seleccionar--</option>
+                            </select>
+                        </div>-->
+                        <div class="col-lg-2">
+                            Sede
+                        </div>
+                        <div class="col-lg-2" id="almacen_salida_select">
+                            <select name="sede_" id="sede_" class="form-control form-control-sm" onchange="obtenerCentroCosto()">
+                                <option value="">--Seleccionar--</option>
+                                <?php 
+                                foreach ($sede as $row){?>
+                                    <option value="<?php echo $row->id ?>" <?php if($row->id==$dispensacion->id_sede)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                    <?php 
+                                }
+                                ?>
+                            </select>
+                        </div>
+                        <div class="col-lg-2">
+                            Centro de Costo
+                        </div>
+                        <div class="col-lg-2" id="almacen_salida_select">
+                            <select name="centro_costo_" id="centro_costo_" class="form-control form-control-sm" onchange="//actualizarSecciones(this)">
                                 <option value="">--Seleccionar--</option>
                             </select>
                         </div>

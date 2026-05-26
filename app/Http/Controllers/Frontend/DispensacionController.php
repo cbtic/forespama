@@ -471,6 +471,8 @@ class DispensacionController extends Controller
 		$area_trabajo_model = new AreaTrabajo;
 		$unidad_trabajo_model = new UnidadTrabajo;
 		$persona_model = new Persona;
+		$sede_model = new Sede;
+		
 		
 		if($id>0){
 			$dispensacion = Dispensacione::find($id);
@@ -489,8 +491,9 @@ class DispensacionController extends Controller
         $almacen = $almacen_model->getAlmacenAll();
 		$area_trabajo = $area_trabajo_model->getAreaTrabajoAll();
 		$persona = $persona_model->obtenerPersonaAll();
+        $sede = $sede_model->getSedeAll();
 
-		return view('frontend.dispensacion.modal_dispensacion_nuevoDispensacionDevolucion',compact('id','dispensacion','unidad_medida','moneda','estado_bien','tipo_producto','unidad','marca','producto','tipo_documento','almacen','area_trabajo','persona','id_user'));
+		return view('frontend.dispensacion.modal_dispensacion_nuevoDispensacionDevolucion',compact('id','dispensacion','unidad_medida','moneda','estado_bien','tipo_producto','unidad','marca','producto','tipo_documento','almacen','area_trabajo','persona','id_user','sede'));
 
     }
 
@@ -516,9 +519,9 @@ class DispensacionController extends Controller
         $id_dispensacion_detalle =$request->id_dispensacion_detalle;
 		
 		$dispensacion->id_tipo_documento = $request->tipo_documento;
-		$dispensacion->id_area_trabajo = $request->area_trabajo;
         $dispensacion->id_almacen = $request->almacen;
-        $dispensacion->id_unidad_trabajo = $request->unidad_trabajo;
+		$dispensacion->id_sede = $request->sede_;
+        $dispensacion->id_centro_costo = $request->centro_costo_;
         $dispensacion->fecha = $request->fecha;
 		if($request->id == 0){
             $dispensacion->codigo = $codigo_dispensacion[0]->codigo;

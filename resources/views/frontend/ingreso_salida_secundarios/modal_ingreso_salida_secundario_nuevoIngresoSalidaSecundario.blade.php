@@ -153,6 +153,11 @@ $(document).ready(function() {
         cargarDetalle();
     }
 
+    if($('#id').val()>0){
+        obtenerCentroCosto();
+        cambiarOrigen();
+    }
+
     $("#empresa").select2({ width: '100%' });
     $("#persona").select2({ width: '100%' });
 
@@ -650,6 +655,84 @@ function calcularSoles(input){
 
 }
 
+function cambiarOrigen(){
+
+    var unidad_origen = $('#unidad_origen').val();
+
+    if(unidad_origen==1){
+        $('#almacen_select, #almacen_').show();
+        $('#almacen_salida_select, #almacen_salida_').show();
+        $('#centro_costo_select, #centro_costo_label').hide();
+        $('#sede_select, #sede_label').hide();
+    }else if(unidad_origen==2){
+        $('#almacen_salida').val("");
+        $('#almacen_select, #almacen_').show();
+        $('#almacen_salida_select, #almacen_salida_').hide();
+        $('#centro_costo_select, #centro_costo_label').show();
+        $('#sede_select, #sede_label').show();
+    }else if(unidad_origen==3){
+        $('#almacen_select, #almacen_').show();
+        $('#almacen_salida_select, #almacen_salida_').show();
+        $('#centro_costo_select, #centro_costo_label').hide();
+        $('#sede_select, #sede_label').hide();
+    }else if(unidad_origen==4){
+        $('#almacen').val("");
+        $('#almacen_select, #almacen_').hide();
+        $('#almacen_salida_select, #almacen_salida_').show();
+        $('#centro_costo_select, #centro_costo_label').hide();
+        $('#sede_select, #sede_label').hide();
+    }else{
+        $('#almacen_select, #almacen_').show();
+        $('#almacen_salida_select, #almacen_salida_').show();
+        $('#centro_costo_select, #centro_costo_label').hide();
+        $('#sede_select, #sede_label').hide();
+    }
+}
+
+function obtenerCentroCosto(){
+
+    var sede = $('#sede').val();
+    var selectedUnidad = "<?php echo isset($dispensacion->id_centro_costo) ? $dispensacion->id_centro_costo : ''; ?>";
+
+    $.ajax({
+        url: "/centro_costo/obtener_centro_costo/"+sede,
+        dataType: "json",
+        success: function(result){
+            var option = "<option value='' selected='selected'>--Seleccionar--</option>";
+            var option;
+            $('#centro_costo').html("");
+            $(result).each(function (ii, oo) {
+                if (oo.id == selectedUnidad) {
+                    option += "<option value='" + oo.id + "' selected='selected'>" + oo.codigo +" - "+oo.denominacion + "</option>";
+                }else {
+                    option += "<option value='"+oo.id+"'>"+oo.codigo +" - "+oo.denominacion+"</option>";
+                }
+                
+            });
+            $('#centro_costo').html(option);
+            $('#centro_costo').select2({
+                width: '100%'
+            });
+        }
+    });
+}
+
+function obtenerSede(){
+
+	var almacen = $('#almacen').val();
+	var unidad_origen = $('#unidad_origen').val();
+
+    if(unidad_origen == 2){
+        if(almacen == '23'){
+            $('#sede').val('1');
+            obtenerCentroCosto();
+        }else{
+            $('#sede').val('2');
+            obtenerCentroCosto();
+        }
+    }
+}
+
 </script>
 
 <body class="hold-transition skin-blue sidebar-mini">
@@ -730,12 +813,42 @@ function calcularSoles(input){
                             </select>
                         </div>
                         <div class="col-lg-2">
-                            Almacen
+                            Unidad Origen
                         </div>
+                        <?php
+                        ?>
                         <div class="col-lg-2">
-                            <select name="almacen" id="almacen" class="form-control form-control-sm" onchange="">
+                            <select name="unidad_origen" id="unidad_origen" class="form-control form-control-sm" onchange="cambiarOrigen()">
+                                <option value="">--Seleccionar--</option>
+                                <?php
+                                foreach ($unidad_origen as $row){?>
+                                    <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$ingreso_salida_secundario->id_unidad_origen)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                    <?php 
+                                }
+                                ?>
+                            </select>
+                        </div>
+                        <div class="col-lg-2" id="almacen_salida_" style="color:green; font-weight:bold">
+                            Almacen Origen
+                        </div>
+                        <div class="col-lg-2" id="almacen_salida_select">
+                            <select name="almacen_salida" id="almacen_salida" class="form-control form-control-sm" onchange="">
                                 <option value="">--Seleccionar--</option>
                                 <?php 
+                                foreach ($almacen as $row){?>
+                                    <option value="<?php echo $row->id ?>" <?php if($row->id==$ingreso_salida_secundario->id_almacen_salida)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                    <?php 
+                                }
+                                ?>
+                            </select>
+                        </div>
+                        <div class="col-lg-2" id="almacen_" style="color:red; font-weight:bold">
+                            Almacen Destino
+                        </div>
+                        <div class="col-lg-2" id="almacen_select">
+                            <select name="almacen" id="almacen" class="form-control form-control-sm" onchange="obtenerSede()">
+                                <option value="">--Seleccionar--</option>
+                                <?php
                                 foreach ($almacen as $row){?>
                                     <option value="<?php echo $row->id ?>" <?php if($row->id==$ingreso_salida_secundario->id_almacen)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
                                     <?php 
@@ -806,6 +919,28 @@ function calcularSoles(input){
                         </div>
                         <div class="col-lg-2" id="observacion_input">
                             <input id="observacion" name="observacion" on class="form-control form-control-sm"  value="<?php if($id>0){echo $ingreso_salida_secundario->observacion;}?>" type="text">
+                        </div>
+                        <div class="col-lg-2" id="sede_label">
+                            Sede
+                        </div>
+                        <div class="col-lg-2" id="sede_select">
+                            <select name="sede" id="sede" class="form-control form-control-sm" onchange="obtenerCentroCosto()">
+                                <option value="">--Seleccionar--</option>
+                                <?php 
+                                foreach ($sede as $row){?>
+                                    <option value="<?php echo $row->id ?>" <?php if($row->id==$ingreso_salida_secundario->id_sede)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                    <?php 
+                                }
+                                ?>
+                            </select>
+                        </div>
+                        <div class="col-lg-2" id="centro_costo_label">
+                            Centro de Costo
+                        </div>
+                        <div class="col-lg-2" id="centro_costo_select">
+                            <select name="centro_costo" id="centro_costo" class="form-control form-control-sm" onchange="//actualizarSecciones(this)">
+                                <option value="">--Seleccionar--</option>
+                            </select>
                         </div>
                     </div>
                     <div style="margin-top:15px" class="form-group">

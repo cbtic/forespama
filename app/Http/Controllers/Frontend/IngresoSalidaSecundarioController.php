@@ -13,6 +13,7 @@ use App\Models\Marca;
 use App\Models\IngresoSalidaSecundario;
 use App\Models\IngresoSalidaSecundarioDetalle;
 use App\Models\KardexSecundario;
+use App\Models\Sede;
 use Auth;
 use Carbon\Carbon;
 
@@ -30,7 +31,7 @@ class IngresoSalidaSecundarioController extends Controller
 		$empresa_model = new Empresa;
 		$persona_model = new Persona;
 
-		$tipo_documento = $tablaMaestra_model->getMaestroByTipo(53);
+		$tipo_documento = $tablaMaestra_model->getMaestroByTipo(54);
         //$proveedor = Empresa::all();
         $proveedor = $empresa_model->getEmpresaAll();
         $persona = $persona_model->obtenerPersonaAll();
@@ -75,6 +76,7 @@ class IngresoSalidaSecundarioController extends Controller
         $almacen_model = new Almacene;
         $empresa_model = new Empresa;
         $persona_model = new Persona;
+		$sede_model = new Sede;
 		
         if($id>0){
             $ingreso_salida_secundario = IngresoSalidaSecundario::find($id);
@@ -82,7 +84,8 @@ class IngresoSalidaSecundarioController extends Controller
             $ingreso_salida_secundario = new IngresoSalidaSecundario;
         }
         
-        $tipo_documento = $tablaMaestra_model->getMaestroByTipo(53);
+        $tipo_documento = $tablaMaestra_model->getMaestroByTipo(54);
+        $unidad_origen = $tablaMaestra_model->getMaestroByTipo(50);
         $empresas = $empresa_model->getEmpresaAll();
         $personas = $persona_model->obtenerPersonaAll();
         $producto = $producto_model->getProductoAllB();
@@ -93,8 +96,9 @@ class IngresoSalidaSecundarioController extends Controller
         $moneda = $tablaMaestra_model->getMaestroByTipo(1);
         $unidad_medida = $tablaMaestra_model->getMaestroByTipo(43);
         $tipo_documento_cliente = $tablaMaestra_model->getMaestroByTipo(75);
+        $sede = $sede_model->getSedeAll();
         
-		return view('frontend.ingreso_salida_secundarios.modal_ingreso_salida_secundario_nuevoIngresoSalidaSecundario',compact('id','ingreso_salida_secundario','tipo_documento','empresas','personas','producto','marca','unidad','igv_compra','almacen','moneda','unidad_medida','tipo_documento_cliente'));
+		return view('frontend.ingreso_salida_secundarios.modal_ingreso_salida_secundario_nuevoIngresoSalidaSecundario',compact('id','ingreso_salida_secundario','tipo_documento','unidad_origen','empresas','personas','producto','marca','unidad','igv_compra','almacen','moneda','unidad_medida','tipo_documento_cliente','sede'));
 
     }
 
@@ -135,6 +139,10 @@ class IngresoSalidaSecundarioController extends Controller
         }else{
             $ingreso_salida_secundario->numero_ingreso_salida = $codigo_ingreso_salida_secundario;
         }
+        $ingreso_salida_secundario->id_unidad_origen = $request->unidad_origen;
+        $ingreso_salida_secundario->id_almacen_salida = $request->almacen_salida;
+        $ingreso_salida_secundario->id_sede = $request->sede;
+        $ingreso_salida_secundario->id_centro_costo = $request->centro_costo;
         $ingreso_salida_secundario->observacion = $request->observacion;
         $ingreso_salida_secundario->igv_compra = $request->igv_compra;
         $ingreso_salida_secundario->id_moneda = $request->moneda;

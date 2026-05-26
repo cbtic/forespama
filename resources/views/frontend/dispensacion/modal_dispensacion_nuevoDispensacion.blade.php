@@ -163,7 +163,7 @@ $(document).ready(function() {
     }
 
     if($('#id').val()>0){
-        obtenerUnidadTrabajo();
+        //obtenerUnidadTrabajo();
         obtenerCentroCosto();
     }
 
