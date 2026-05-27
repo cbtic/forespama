@@ -992,9 +992,11 @@ function cambiarOrigen(){
                                     <?php if($requerimiento->id_tipo_documento == '1'){?>
                                     <button style="font-size:12px;margin-right:20px" type="button" class="btn btn-sm btn-warning" data-toggle="modal" onclick="save_orden_compra_requerimiento()" ><i class="fa fa-edit"></i> Generar Orden Compra</button>
                                     <?php }?>
+                                    @hasanyrole('Administrator|Generar Dispensacion Requerimiento')
                                     <?php if($requerimiento->id_tipo_documento == '2'){?>
                                     <button style="font-size:12px;margin-right:20px" type="button" class="btn btn-sm btn-warning" data-toggle="modal" onclick="save_dispensacion_requerimiento()" ><i class="fa fa-edit"></i> Generar Dispensación de Requerimiento</button>
                                     <?php }?>
+                                    @endhasanyrole
                                     <button style="font-size:12px;margin-right:20px" type="button" class="btn btn-sm btn-success" data-toggle="modal" onclick="generar_requerimiento()" ><i class="fa fa-edit"></i> Generar Requerimiento Pedientes</button>
                                     <?php 
                                         }
