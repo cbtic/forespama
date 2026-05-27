@@ -944,11 +944,11 @@ function generarRequerimientoInsumos(){
 
                                         @hasanyrole('Administrator|Aprobar Requerimiento')
                                             <?php 
-                                            if($id>0 && $requerimiento->aprobado == 1){
+                                            /*if($id>0 && $requerimiento->aprobado == 1){
                                             ?>
                                                 <button type="button" class="btn btn-warning btn-sm" onclick="generarRequerimientoInsumos()" style="margin-right:10px">Generar Rq de Insumos</button>
                                             <?php 
-                                                }
+                                                }*/
                                             ?>
                                         @endhasanyrole
 

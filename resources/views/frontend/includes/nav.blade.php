@@ -197,7 +197,7 @@
 								@endif
 								
 								@can('Requerimiento Insumos')
-									<x-utils.link :href="route('frontend.requerimiento_dispensacion.create')" class="dropdown-item" :text="__('Requerimiento de Insumos')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+									<x-utils.link :href="route('frontend.requerimiento_dispensacion.create')" class="dropdown-item" :text="__('Dispensacion de Requerimiento')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
 								@endif
 
 								@can('Dispensacion')
