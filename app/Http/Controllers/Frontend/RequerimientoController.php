@@ -332,6 +332,7 @@ class RequerimientoController extends Controller
         $datos_detalle=$requerimiento_detalle_model->getDetalleRequerimientoPdf($id);
 
         $tipo_documento=$datos[0]->tipo_documento;
+        $id_tipo_documento=$datos[0]->id_tipo_documento;
         $almacen=$datos[0]->almacen;
         $fecha = $datos[0]->fecha;
         $codigo=$datos[0]->codigo;
@@ -350,7 +351,7 @@ class RequerimientoController extends Controller
 
 		$currentHour = Carbon::now()->format('H:i:s');
 
-		$pdf = Pdf::loadView('frontend.requerimiento.movimiento_pdf_requerimiento',compact('tipo_documento','almacen','fecha','codigo','datos_detalle','responsable_atencion','sustento_requerimiento','usuario_solicita','observacion','aprobado','usuario_aprueba'));
+		$pdf = Pdf::loadView('frontend.requerimiento.movimiento_pdf_requerimiento',compact('tipo_documento','id_tipo_documento','almacen','fecha','codigo','datos_detalle','responsable_atencion','sustento_requerimiento','usuario_solicita','observacion','aprobado','usuario_aprueba'));
 		
 		$pdf->setPaper('A4'); // Tamaño de papel (puedes cambiarlo según tus necesidades)
         
@@ -620,7 +621,6 @@ class RequerimientoController extends Controller
             $acumulado_sub_total += $valor_venta;
             $acumulado_igv += $igv;
             $acumulado_total += $total;
-
         }
 
         $orden_compra_actualizado = OrdenCompra::find($id_orden_compra);
@@ -723,10 +723,6 @@ class RequerimientoController extends Controller
             $entradaProducto_detalle->igv = $orden_compra_detalle->igv;
             $entradaProducto_detalle->cerrado = 1;
             $entradaProducto_detalle->total = $orden_compra_detalle->total;
-
-            /*if($cantidad_pendiente[$index]!=0){
-                $valida_estado = false;
-            }*/
 
             $entradaProducto_detalle->save();
 
@@ -844,11 +840,7 @@ class RequerimientoController extends Controller
         
         $requerimiento_dispensacion->id_tipo_documento = $requerimiento->id_tipo_documento;
         $requerimiento_dispensacion->fecha = $requerimiento->fecha;
-        //if($request->id == 0){
-            $requerimiento_dispensacion->codigo = $codigo_requerimiento_dispensacion[0]->codigo;
-        //}else{
-            //$requerimiento_dispensacion->codigo = $codigo_requerimiento_dispensacion;
-        //}
+        $requerimiento_dispensacion->codigo = $codigo_requerimiento_dispensacion[0]->codigo;
         $requerimiento_dispensacion->id_almacen = $requerimiento->id_almacen_destino;
         $requerimiento_dispensacion->id_usuario_inserta = $id_user;
         $requerimiento_dispensacion->id_requerimiento = $requerimiento->id;
@@ -861,11 +853,7 @@ class RequerimientoController extends Controller
 
         foreach($descripcion as $index => $value) {
             
-            //if($id_requerimiento_detalle[$index] == 0){
-                $requerimiento_dispensacion_detalle = new RequerimientoDispensacionDetalle;
-            //}else{
-                //$requerimiento_dispensacion_detalle = RequerimientoDispensacionDetalle::find($id_requerimiento_detalle[$index]);
-            //}
+            $requerimiento_dispensacion_detalle = new RequerimientoDispensacionDetalle;
             
             $requerimiento_dispensacion_detalle->id_requerimiento_dispensacion = $id_requerimiento_dispensacion_detalle;
             $requerimiento_dispensacion_detalle->id_producto = $orden_compra_detalle->id_producto;

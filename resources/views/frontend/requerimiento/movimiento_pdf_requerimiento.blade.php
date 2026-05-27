@@ -193,17 +193,17 @@ $(document).ready(function() {
                         <td class="td" style ="text-align: left; width: 15%;"><b>Sustento:</b></td>
                         <td class="td" style ="text-align: left; width: 20%;"><?php echo $sustento_requerimiento;?></td>
                     </tr>
-                    <?php if($observacion){?>
+                    <?php if($id_tipo_documento == 2){?>
                     <tr>
                         <td class="td" style ="text-align: left; width: 15%;"><b>Destino:</b></td>
                         <td class="td" style ="text-align: left; width: 20%;"><?php echo $observacion;?></td>
                         <td class="td" style ="text-align: left; width: 10%;"></td>
-                    <?php }?>
+
                         <td class="td" style ="text-align: left; width: 15%;"><b>Estado:</b></td>
                         <td class="td" style ="text-align: left; width: 20%;"><?php if ($aprobado == 0) { echo "PENDIENTE"; } else { echo "APROBADO"; } ?></td>
                         <td class="td" style ="text-align: left; width: 10%;"></td>
                     </tr>
-                    <?php if($usuario_aprueba){?>
+
                     <tr>
                         <td class="td" style ="text-align: left; width: 15%;"><b>Aprobado por:</b></td>
                         <td class="td" style ="text-align: left; width: 20%;"><?php echo $usuario_aprueba;?></td>
