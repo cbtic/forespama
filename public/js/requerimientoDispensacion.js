@@ -292,7 +292,7 @@ function datatablenew(){
 						
 						var html = '<div class="btn-group btn-group-sm" role="group" aria-label="Log Viewer Actions">';
 						
-						html += '<button style="font-size:12px" type="button" class="btn btn-sm btn-success" data-toggle="modal" onclick="modalRequerimientoDispensacion('+row.id+')" ><i class="fa fa-edit"></i> Editar</button>'; 
+						html += '<button style="font-size:12px" type="button" class="btn btn-sm btn-warning" data-toggle="modal" onclick="modalRequerimientoDispensacion('+row.id+')" ><i class="fa fa-edit"></i> Visualizar</button>'; 
 						
 						if(row.aprobado == 1 && row.cerrado == 1){
 							html += '<button style="font-size:12px;margin-left:10px" type="button" class="btn btn-sm btn-info" data-toggle="modal" onclick="modalAtenderRequerimientoDispensacion('+row.id+')" ><i class="fa fa-edit"></i> Atender</button>';

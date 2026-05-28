@@ -554,6 +554,7 @@ class RequerimientoController extends Controller
         $orden_compra->id_tipo_documento = 1;
         $orden_compra->igv_compra = 2;
         $orden_compra->cerrado = 1;
+        $orden_compra->id_moneda = 1;
         $orden_compra->id_unidad_origen = $request->unidad_origen;
         $orden_compra->id_almacen_destino = $request->almacen;
         $orden_compra->id_almacen_salida = $request->almacen_salida;
@@ -842,6 +843,8 @@ class RequerimientoController extends Controller
         $requerimiento_dispensacion->fecha = $requerimiento->fecha;
         $requerimiento_dispensacion->codigo = $codigo_requerimiento_dispensacion[0]->codigo;
         $requerimiento_dispensacion->id_almacen = $requerimiento->id_almacen_destino;
+        $requerimiento_dispensacion->aprobado = 1;
+        $requerimiento_dispensacion->id_usuario_aprueba = $id_user;
         $requerimiento_dispensacion->id_usuario_inserta = $id_user;
         $requerimiento_dispensacion->id_requerimiento = $requerimiento->id;
         $requerimiento_dispensacion->estado = 1;

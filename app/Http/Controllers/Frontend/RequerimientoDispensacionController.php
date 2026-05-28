@@ -316,6 +316,9 @@ class RequerimientoDispensacionController extends Controller
 
         $requerimiento_dispensacion = RequerimientoDispensacione::find($request->id);
         $requerimiento_dispensacion->cerrado = 2;
+        $requerimiento_dispensacion->id_sede = $request->sede;
+        $requerimiento_dispensacion->id_centro_costo = $request->centro_costo;
+        $requerimiento_dispensacion->id_persona = $request->persona_recibe;
         $requerimiento_dispensacion->save();
 
 		foreach($descripcion as $index => $value) {
@@ -366,6 +369,7 @@ class RequerimientoDispensacionController extends Controller
 
 			//}
         }
+
 
         return response()->json(['success' => 'Dispensaci&oacute;n guardada exitosamente.']);
 

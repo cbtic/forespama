@@ -167,7 +167,7 @@ $(document).ready(function() {
     }*/
 
     $("#item").select2({ width: '100%' });
-    $("#persona_recibe").select2({ width: '100%' });
+    //$("#persona_recibe").select2({ width: '100%' });
 
 });
 
@@ -594,7 +594,7 @@ function pdf_documento_requerimiento_dispensacion(){
                             Tipo Documento
                         </div>
                         <div class="col-lg-2">
-                            <select name="tipo_documento" id="tipo_documento" class="form-control form-control-sm" onchange="obtenerCodigo()">
+                            <select name="tipo_documento" id="tipo_documento" class="form-control form-control-sm" onchange="obtenerCodigo()" disabled>
                                 <option value="">--Seleccionar--</option>
                                 <?php
                                 foreach ($tipo_documento as $row){?>
@@ -614,13 +614,13 @@ function pdf_documento_requerimiento_dispensacion(){
                             Fecha
                         </div>
                         <div class="col-lg-2">
-                            <input id="fecha" name="fecha" on class="form-control form-control-sm"  value="<?php echo isset($requerimiento_dispensacion) && $requerimiento_dispensacion->fecha ? $requerimiento_dispensacion->fecha : date('Y-m-d'); ?>" type="text">
+                            <input id="fecha" name="fecha" on class="form-control form-control-sm"  value="<?php echo isset($requerimiento_dispensacion) && $requerimiento_dispensacion->fecha ? $requerimiento_dispensacion->fecha : date('Y-m-d'); ?>" type="text" disabled>
                         </div>
                         <div class="col-lg-2" style="color:green; font-weight:bold">
                             Almacen
                         </div>
                         <div class="col-lg-2">
-                            <select name="almacen" id="almacen" class="form-control form-control-sm" onchange="//actualizarSecciones(this)">
+                            <select name="almacen" id="almacen" class="form-control form-control-sm" onchange="//actualizarSecciones(this)" disabled>
                                 <option value="">--Seleccionar--</option>
                                 <?php 
                                 foreach ($almacen as $row){?>
@@ -634,7 +634,7 @@ function pdf_documento_requerimiento_dispensacion(){
                             Sede
                         </div>
                         <div class="col-lg-2">
-                            <select name="sede" id="sede" class="form-control form-control-sm" onchange="obtenerCentroCosto()">
+                            <select name="sede" id="sede" class="form-control form-control-sm" onchange="obtenerCentroCosto()" disabled>
                                 <option value="">--Seleccionar--</option>
                                 <?php 
                                 foreach ($sede as $row){?>
@@ -648,7 +648,7 @@ function pdf_documento_requerimiento_dispensacion(){
                             Centro Costo
                         </div>
                         <div class="col-lg-2">
-                            <select name="centro_costo" id="centro_costo" class="form-control form-control-sm" onchange="//actualizarSecciones(this)">
+                            <select name="centro_costo" id="centro_costo" class="form-control form-control-sm" onchange="//actualizarSecciones(this)" disabled>
                                 <option value="">--Seleccionar--</option>
                             </select>
                         </div>
@@ -656,7 +656,7 @@ function pdf_documento_requerimiento_dispensacion(){
                             Persona Recibe
                         </div>
                         <div class="col-lg-4">
-                            <select name="persona_recibe" id="persona_recibe" class="form-control form-control-sm" onchange="">
+                            <select name="persona_recibe" id="persona_recibe" class="form-control form-control-sm" onchange="" disabled>
                                 <option value="">--Seleccionar--</option>
                                 <?php
                                 foreach ($persona as $row){?>
@@ -670,7 +670,7 @@ function pdf_documento_requerimiento_dispensacion(){
                         <div style="margin-top:15px" class="form-group">
                             <div class="col-sm-12 controls">
                                 <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
-                                <?php if($id_user==$requerimiento_dispensacion->id_usuario_inserta && $id>0){?>
+                                <?php /*if($id_user==$requerimiento_dispensacion->id_usuario_inserta && $id>0){?>
                                     <button type="button" class="btn btn-sm btn-clasico-blanco btn-agregar" data-toggle="modal" onclick="agregarProducto()">
                                         <i class="fas fa-plus-circle" style="font-size:18px;"></i> Agregar
                                     </button>
@@ -679,7 +679,7 @@ function pdf_documento_requerimiento_dispensacion(){
                                     <button type="button" class="btn btn-sm btn-clasico-blanco btn-agregar" data-toggle="modal" onclick="agregarProducto()">
                                         <i class="fas fa-plus-circle" style="font-size:18px;"></i> Agregar
                                     </button>
-                                <?php }?>
+                                <?php }*/?>
                                 </div>
                             </div>
                         </div>
@@ -725,9 +725,9 @@ function pdf_documento_requerimiento_dispensacion(){
                                 <?php 
                                     }
                                 ?>
-                                    <button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-nuevo" data-toggle="modal" onclick="fn_save_requerimiento_dispensacion()">
+                                    <!--<button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-nuevo" data-toggle="modal" onclick="fn_save_requerimiento_dispensacion()">
                                         <i class="fas fa-save" style="font-size:18px;"></i> Guardar
-                                    </button>
+                                    </button>-->
                                 <?php //}?>
                                 <button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-cerrar" data-toggle="modal" onclick="$('#openOverlayOpc').modal('hide');">
                                     <i class="fas fa-times-circle" style="font-size:18px;"></i> Cerrar

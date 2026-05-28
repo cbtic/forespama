@@ -166,7 +166,7 @@ $(document).ready(function() {
         obtenerUnidadTrabajo();
     }*/
 
-    $("#persona_recibe_").select2({ width: '100%' });
+    $("#persona_recibe").select2({ width: '100%' });
 
 });
 
@@ -309,7 +309,7 @@ $.ajax({
                     <td><select name="marca_[]" id="marca_${n}" class="form-control form-control-sm" disabled>${marcaOptions}</select><input name="marca[]" id="marca${n}" class="form-control form-control-sm" value="${requerimiento_dispensacion.id_marca}" type="hidden"></td>
                     <td><input name="cod_interno[]" id="cod_interno${n}" class="form-control form-control-sm" value="${requerimiento_dispensacion.codigo}" type="text" readonly></td>
                     <td><select name="unidad_[]" id="unidad_${n}" class="form-control form-control-sm" disabled>${unidadMedidaOptions}</select><input name="unidad[]" id="unidad${n}" class="form-control form-control-sm" value="${requerimiento_dispensacion.id_unidad_medida}" type="hidden"></td>
-                    <td><input name="cantidad[]" id="cantidad${n}" class="cantidad form-control form-control-sm" value="${requerimiento_dispensacion.cantidad}" type="text" oninput="calcularCantidadPendiente(this);calcularSubTotal(this)" readonly></td>
+                    <td><input name="cantidad[]" id="cantidad${n}" class="cantidad form-control form-control-sm" value="${requerimiento_dispensacion.cantidad}" type="text" oninput="calcularCantidadPendiente(this);calcularSubTotal(this)" ></td>
                     <td><input name="stock_actual[]" id="stock_actual${n}" class="form-control form-control-sm" value="${producto_stock.saldos_cantidad}" type="text" readonly></td>
                 </tr>
             `;
@@ -424,13 +424,15 @@ function fn_save_requerimiento_dispensacion(){
 
     var tipo_documento = $('#tipo_documento').val();
     var almacen = $('#almacen').val();
-    var area_trabajo = $('#area_trabajo').val();
-    var unidad_trabajo = $('#unidad_trabajo').val();
+    var sede = $('#sede').val();
+    var centro_costo = $('#centro_costo').val();
+    var persona_recibe = $('#persona_recibe').val();
 
     if(tipo_documento==""){msg+="Ingrese el Tipo de Documento <br>";}
     if(almacen==""){msg+="Ingrese el Almacen <br>";}
-    if(area_trabajo==""){msg+="Ingrese el Area de Trabajo <br>";}
-    if(unidad_trabajo==""){msg+="Ingrese la Unidad de Trabajo <br>";}
+    if(sede==""){msg+="Seleccione la Sede <br>";}
+    if(centro_costo==""){msg+="Seleccione el Centro de Costo <br>";}
+    if(persona_recibe==""){msg+="Seleccione la Persona <br>";}
 
     $('#tblRequerimientoDispensacionDetalle tbody tr').each(function(index, row) {
 
@@ -485,7 +487,7 @@ function pdf_documento_dispensacion(){
 
 function obtenerCentroCosto(){
 
-    var sede = $('#sede_').val();
+    var sede = $('#sede').val();
     var selectedUnidad = "<?php echo isset($requerimiento_dispensacion->id_centro_costo) ? $requerimiento_dispensacion->id_centro_costo : ''; ?>";
 
     $.ajax({
@@ -494,7 +496,7 @@ function obtenerCentroCosto(){
         success: function(result){
             var option = "<option value='' selected='selected'>--Seleccionar--</option>";
             var option;
-            $('#centro_costo_').html("");
+            $('#centro_costo').html("");
             $(result).each(function (ii, oo) {
                 if (oo.id == selectedUnidad) {
                     option += "<option value='" + oo.id + "' selected='selected'>" + oo.codigo +" - "+oo.denominacion + "</option>";
@@ -503,8 +505,8 @@ function obtenerCentroCosto(){
                 }
                 
             });
-            $('#centro_costo_').html(option);
-            $('#centro_costo_').select2({
+            $('#centro_costo').html(option);
+            $('#centro_costo').select2({
                 width: '100%'
             });
         }
@@ -646,40 +648,40 @@ function fn_save_detalle_producto(){
                             Sede
                         </div>
                         <div class="col-lg-2">
-                            <select name="sede_" id="sede_" class="form-control form-control-sm" onchange="obtenerCentroCosto()" disabled>
+                            <select name="sede" id="sede" class="form-control form-control-sm" onchange="obtenerCentroCosto()">
                                 <option value="">--Seleccionar--</option>
                                 <?php 
                                 foreach ($sede as $row){?>
-                                    <option value="<?php echo $row->id ?>" <?php if($row->id==$requerimiento_dispensacion->id_sede)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                    <option value="<?php echo $row->id ?>" <?php //if($row->id==$requerimiento_dispensacion->id_sede)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
                                     <?php 
                                 }
                                 ?>
                             </select>
-                            <input type="hidden" name="sede" id="sede" value="<?php echo $requerimiento_dispensacion->id_sede ?>">
+                            <!--<input type="hidden" name="sede" id="sede" value="<?php //echo $requerimiento_dispensacion->id_sede ?>">-->
                         </div>
                         <div class="col-lg-2">
                             Centro Costo
                         </div>
                         <div class="col-lg-2">
-                            <select name="centro_costo_" id="centro_costo_" class="form-control form-control-sm" onchange="//actualizarSecciones(this)" disabled>
+                            <select name="centro_costo" id="centro_costo" class="form-control form-control-sm" onchange="//actualizarSecciones(this)" >
                                 <option value="">--Seleccionar--</option>
                             </select>
-                            <input type="hidden" name="centro_costo" id="centro_costo" value="<?php echo $requerimiento_dispensacion->id_centro_costo?>">
+                            <!--<input type="hidden" name="centro_costo" id="centro_costo" value="<?php //echo $requerimiento_dispensacion->id_centro_costo?>">-->
                         </div>
                         <div class="col-lg-2">
                             Persona Recibe
                         </div>
                         <div class="col-lg-4">
-                            <select name="persona_recibe_" id="persona_recibe_" class="form-control form-control-sm" onchange="" disabled>
+                            <select name="persona_recibe" id="persona_recibe" class="form-control form-control-sm" onchange="">
                                 <option value="">--Seleccionar--</option>
                                 <?php
                                 foreach ($persona as $row){?>
-                                    <option value="<?php echo $row->id ?>" <?php if($row->id==$requerimiento_dispensacion->id_persona)echo "selected='selected'"?>><?php echo $row->nombres." ".$row->apellido_paterno." ".$row->apellido_materno ?></option>
+                                    <option value="<?php echo $row->id ?>" <?php //if($row->id==$requerimiento_dispensacion->id_persona)echo "selected='selected'"?>><?php echo $row->nombres." ".$row->apellido_paterno." ".$row->apellido_materno ?></option>
                                     <?php 
                                 }
                                 ?>
                             </select>
-                            <input type="hidden" name="persona_recibe" id="persona_recibe" value="<?php echo $requerimiento_dispensacion->id_persona?>">
+                            <!--<input type="hidden" name="persona_recibe" id="persona_recibe" value="<?php //echo $requerimiento_dispensacion->id_persona?>">-->
                         </div>
                     </div>
                         <div style="margin-top:15px" class="form-group">
