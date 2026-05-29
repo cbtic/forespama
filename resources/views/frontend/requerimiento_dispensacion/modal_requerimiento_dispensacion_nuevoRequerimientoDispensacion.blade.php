@@ -598,7 +598,7 @@ function pdf_documento_requerimiento_dispensacion(){
                                 <option value="">--Seleccionar--</option>
                                 <?php
                                 foreach ($tipo_documento as $row){?>
-                                    <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==1)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                    <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$requerimiento_dispensacion->id_tipo_documento)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
                                     <?php
                                 }
                                 ?>
