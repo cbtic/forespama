@@ -743,7 +743,7 @@ function generarRequerimientoInsumos(){
                                     <option value="">--Seleccionar--</option>
                                     <?php
                                     foreach ($tipo_documento as $row){
-                                        $selected = ($row->codigo == ($requerimiento->id_tipo_documento ?? 1)) ? "selected='selected'" : "";
+                                        $selected = ($row->codigo == ($requerimiento->id_tipo_documento ?? '')) ? "selected='selected'" : "";
                                     ?>
                                         <option value="<?php echo $row->codigo ?>" <?php echo $selected;?>><?php echo $row->denominacion ?></option>
                                         <?php 

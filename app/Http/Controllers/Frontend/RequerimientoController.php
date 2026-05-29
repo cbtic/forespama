@@ -147,7 +147,7 @@ class RequerimientoController extends Controller
         if($request->id == 0){
             $requerimiento = new Requerimiento;
             $requerimiento_model = new Requerimiento;
-		    $codigo_requerimiento = $requerimiento_model->getCodigoRequerimiento(1);
+		    $codigo_requerimiento = $requerimiento_model->getCodigoRequerimiento();
         }else{
             $requerimiento = Requerimiento::find($request->id);
             $codigo_requerimiento = $request->numero_requerimiento;
@@ -242,7 +242,7 @@ class RequerimientoController extends Controller
     public function obtener_codigo_requerimiento($tipo_documento){
 		
 		$requerimiento_model = new Requerimiento;
-		$codigo_requerimiento = $requerimiento_model->getCodigoRequerimiento($tipo_documento);
+		$codigo_requerimiento = $requerimiento_model->getCodigoRequerimiento();
 		
 		return response()->json($codigo_requerimiento);
 	}
@@ -1073,7 +1073,7 @@ class RequerimientoController extends Controller
         $cantidad_atendida = $request->input('cantidad_atendida');
 
         $fecha_actual = Carbon::now();
-        $codigo_requerimiento = $requerimiento_model->getCodigoRequerimiento(1);
+        $codigo_requerimiento = $requerimiento_model->getCodigoRequerimiento();
         
         $requerimiento_nuevo = new Requerimiento;
         $requerimiento_nuevo->id_tipo_documento = $requerimiento->id_tipo_documento;

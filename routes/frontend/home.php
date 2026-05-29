@@ -1011,3 +1011,5 @@ Route::post('asiento_contable_anexo/generar_token_starsoft', [AsientoContableAne
 Route::post('asiento_contable_anexo/migrar_anexos_starsoft', [AsientoContableAnexoController::class, 'migrar_anexos_starsoft'])->name('asiento_contable_anexo.migrar_anexos_starsoft');
 
 Route::post('requerimiento/send_requerimiento_dispensacion', [RequerimientoController::class, 'send_requerimiento_dispensacion'])->name('requerimiento.send_requerimiento_dispensacion');
+Route::get('requerimiento_dispensacion/exportar_listar_requerimiento_dispensacion_reporte/{tipo_documento}/{fecha_inicio}/{fecha_fin}/{numero_rq_dispensacion}/{almacen}/{sede}/{centro_costo}/{persona_recibe}/{situacion}/{estado}', [RequerimientoDispensacionController::class, 'exportar_listar_requerimiento_dispensacion_reporte'])->name('requerimiento_dispensacion.exportar_listar_requerimiento_dispensacion_reporte');
+

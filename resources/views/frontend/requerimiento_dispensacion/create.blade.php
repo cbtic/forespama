@@ -465,9 +465,9 @@ label.form-control-sm{
 										<!--<button type="button" id="btnNuevo" class="btn btn-sm btn-success icono-botones2" style="margin-left:10px">
 											<i class="fas fa-plus-circle" style="font-size:18px;"></i> Nuevo
 										</button>+-->
-										<!--<buttom class="btn btn-sm btn-secondary pull-rigth icono-botones2" type="button" id="btnDescargar" style="margin-left:15px" />
+										<buttom class="btn btn-sm btn-secondary pull-rigth icono-botones2" type="button" id="btnDescargar" style="margin-left:15px" />
 											<i class="fa fa-download"></i> Descargar
-										</buttom>-->
+										</buttom>-
 										
 									</div>
 								</div>

@@ -38,11 +38,11 @@ class Requerimiento extends Model
 
     }
 
-    function getCodigoRequerimiento($tipo_documento){
+    function getCodigoRequerimiento(){
 
         $cad = "select lpad(coalesce(max(r.codigo::int) + 1, 1)::varchar, 6, '0') codigo
         from requerimientos r
-        where id_tipo_documento = '".$tipo_documento."'";
+        where estado ='1'";
 
 		$data = DB::select($cad);
         return $data;

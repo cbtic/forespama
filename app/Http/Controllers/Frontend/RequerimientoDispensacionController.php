@@ -20,6 +20,15 @@ use App\Models\DispensacionDetalle;
 use Auth;
 use Carbon\Carbon;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Maatwebsite\Excel\Facades\Excel;
+use Maatwebsite\Excel\Concerns\FromArray;
+use stdClass;
+use Illuminate\Support\Facades\Response;
+use Maatwebsite\Excel\Concerns\WithStyles;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
+use Maatwebsite\Excel\Concerns\WithHeadings;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
 
 class RequerimientoDispensacionController extends Controller
 {
@@ -412,4 +421,127 @@ class RequerimientoDispensacionController extends Controller
 		return $pdf->stream();
 
 	}
+
+    public function exportar_listar_requerimiento_dispensacion_reporte($tipo_documento, $fecha_inicio, $fecha_fin, $numero_rq_dispensacion, $almacen, $sede, $centro_costo, $persona_recibe, $situacion, $estado) {
+
+		if($tipo_documento==0)$tipo_documento = "";
+		if($fecha_inicio=="0")$fecha_inicio = "";
+		if($fecha_fin=="0")$fecha_fin = "";
+		if($numero_rq_dispensacion=="0")$numero_rq_dispensacion = "";
+		if($almacen==0)$almacen = "";
+		if($sede==0)$sede = "";
+        if($centro_costo==0)$centro_costo = "";
+        if($persona_recibe==0)$persona_recibe = "";
+        if($situacion==0)$situacion = "";
+        if($estado==0)$estado = "";
+
+		$requerimiento_dispensacion_model = new RequerimientoDispensacione;
+		$p[]=$tipo_documento;
+		$p[]=$fecha_inicio;
+		$p[]=$fecha_fin;
+		$p[]=$numero_rq_dispensacion;
+		$p[]=$almacen;
+		$p[]=$sede;
+		$p[]=$centro_costo;
+		$p[]=$persona_recibe;
+		$p[]=$situacion;
+        $p[]=$estado;
+		$p[]=1;
+		$p[]=10000;
+		$data = $requerimiento_dispensacion_model->listar_reporte_requerimiento_dispensacion_ajax($p);
+		
+		$variable = [];
+		$n = 1;
+		
+		array_push($variable, array("N","Tipo Movimiento","Codigo RQ Dispensacion","Fecha","Almacen","Persona Recibe", "Sede", "Centro Costo", "Estado", "Usuario Aprueba", "Situacion", "Codigo Requerimiento","Codigo Producto", "Producto", "Cantidad"));
+		
+		foreach ($data as $r) {
+
+            if($r->cerrado == "0"){
+                $cerrado = "Cerrado";
+            }else{
+                $cerrado = "Abierto";
+            }
+
+            if($r->aprobado == "1"){
+                $aprobado = "Aprobado";
+            }else{
+                $aprobado = "Pendiente";
+            }
+
+			array_push($variable, array($n++,$r->tipo_documento, $r->codigo, $r->fecha, $r->almacen, $r->nombres,$r->sede, $r->centro_costo, $aprobado, $r->usuario_aprueba, $cerrado, $r->codigo_requerimiento, $r->codigo_producto, $r->producto, $r->cantidad));
+		}
+		
+		$export = new InvoicesExport([$variable]);
+		return Excel::download($export, 'reporte_requerimiento_dispensacion.xlsx');
+    }
+}
+
+
+class InvoicesExport implements FromArray, WithHeadings, WithStyles
+{
+	protected $invoices;
+
+	public function __construct(array $invoices)
+	{
+		$this->invoices = $invoices;
+	}
+
+	public function array(): array
+	{
+		return $this->invoices;
+	}
+
+    public function headings(): array
+    {
+        return ["N","Tipo Movimiento","Codigo RQ Dispensacion","Fecha","Almacen","Persona Recibe", "Sede", "Centro Costo", "Estado", "Usuario Aprueba", "Situacion", "Codigo Requerimiento","Codigo Producto", "Producto", "Cantidad"];
+    }
+
+	public function styles(Worksheet $sheet)
+    {
+
+		$sheet->mergeCells('A1:O1');
+
+        $sheet->setCellValue('A1', "REPORTE DE DETALLE DE REQUERIMIENTO DE DISPENSACION - FORESPAMA");
+        $sheet->getStyle('A1:O1')->applyFromArray([
+            'font' => [
+                'bold' => true,
+                'color' => ['rgb' => 'FFFFFF'],
+            ],
+            'fill' => [
+                'fillType' => Fill::FILL_SOLID,
+                'startColor' => ['rgb' => '246257'],
+            ],
+            'alignment' => [
+                'horizontal' => Alignment::HORIZONTAL_CENTER,
+            ],
+        ]);
+
+		$sheet->getStyle('A1')->getAlignment()->setWrapText(true);
+		$sheet->getRowDimension(1)->setRowHeight(30);
+
+        $sheet->getStyle('A2:O2')->applyFromArray([
+            'font' => [
+                'bold' => true,
+                'color' => ['rgb' => '000000'],
+            ],
+            'fill' => [
+                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                'startColor' => ['rgb' => '2EB85C'],
+            ],
+			'alignment' => [
+			'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+    		],
+        ]);
+
+		$sheet->fromArray($this->headings(), NULL, 'A2');
+
+		/*$sheet->getStyle('L3:L'.$sheet->getHighestRow())
+		->getNumberFormat()
+		->setFormatCode(\PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_NUMBER_00);*/ //SIRVE PARA PONER 2 DECIMALES A ESA COLUMNA
+        
+        foreach (range('A', 'O') as $col) {
+            $sheet->getColumnDimension($col)->setAutoSize(true);
+        }
+    }
 }
