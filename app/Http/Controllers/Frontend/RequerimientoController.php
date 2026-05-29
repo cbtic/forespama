@@ -704,12 +704,15 @@ class RequerimientoController extends Controller
             
             $entradaProducto_detalle = new EntradaProductoDetalle();
             $entradaProducto_detalle->id_entrada_productos = $id_entrada_productos;
-            $entradaProducto_detalle->cantidad = $orden_compra_detalle->cantidad_requerida;
+            $entradaProducto_detalle->cantidad = $cantidad_atendida[$index];
             $entradaProducto_detalle->aplica_precio = "";
-            $entradaProducto_detalle->id_um = $orden_compra_detalle->id_unidad_medida;
-            $entradaProducto_detalle->id_marca = $orden_compra_detalle->id_marca;
+            $entradaProducto_detalle->id_um = (int)$unidad[$index];
+            //$entradaProducto_detalle->id_marca = $orden_compra_detalle->id_marca;
+            if($marca[$index]!=null && $marca[$index] !=0){
+				$entradaProducto_detalle->id_marca = (int)$marca[$index];
+			}
             $entradaProducto_detalle->estado = 1;
-            $entradaProducto_detalle->id_producto = $orden_compra_detalle->id_producto;
+            $entradaProducto_detalle->id_producto = $descripcion[$index];
             $entradaProducto_detalle->costo = $orden_compra_detalle->precio;
             $entradaProducto_detalle->valor_venta_bruto = $orden_compra_detalle->valor_venta_bruto;
             $entradaProducto_detalle->precio_venta = $orden_compra_detalle->precio_venta;
@@ -727,18 +730,18 @@ class RequerimientoController extends Controller
 
             $entradaProducto_detalle->save();
 
-            $orden_compra_detalle_cantidad = OrdenCompraDetalle::where('id_orden_compra',$entrada_producto->id_orden_compra)->where('id_producto',$orden_compra_detalle->id_producto)->where('estado',1)->first();
-            $cantidad_despacho_actual = $orden_compra_detalle_cantidad->cantidad_despacho;
-            $cantidad_despacho_actualizado = $cantidad_despacho_actual + $orden_compra_detalle->cantidad_requerida;
+            $orden_compra_detalle_cantidad = OrdenCompraDetalle::where('id_orden_compra',$entrada_producto->id_orden_compra)->where('id_producto',$descripcion[$index])->where('estado',1)->first();
+            $cantidad_despacho_actual = $cantidad_atendida[$index];
+            $cantidad_despacho_actualizado = $cantidad_despacho_actual + $cantidad_atendida[$index];
             $orden_compra_detalle_cantidad->cantidad_despacho = $cantidad_despacho_actualizado;
             $orden_compra_detalle_cantidad->save();
 
-            $producto = Producto::find($orden_compra_detalle->id_producto);
+            $producto = Producto::find($descripcion[$index]);
             if($orden_compra->id_almacen_salida!=""){
 
-                $idProducto = $orden_compra_detalle->id_producto;
+                $idProducto = $descripcion[$index];
 
-                $idCorte = Kardex::where('id_producto', $orden_compra_detalle->id_producto)->where('id_almacen_destino', $orden_compra->id_almacen_salida)->whereDate('fecha', '<=', Carbon::now())->orderBy('fecha', 'desc')->orderBy('id', 'desc')->value('id');
+                $idCorte = Kardex::where('id_producto', $descripcion[$index])->where('id_almacen_destino', $orden_compra->id_almacen_salida)->whereDate('fecha', '<=', Carbon::now())->orderBy('fecha', 'desc')->orderBy('id', 'desc')->value('id');
                 
                 $saldoBase = $idCorte > 0 ? Kardex::where('id', $idCorte)->value('saldos_cantidad') : 0;
 
@@ -748,13 +751,13 @@ class RequerimientoController extends Controller
                 $kardex->fecha = Carbon::now();
 
                 $kardex->entradas_cantidad = 0;
-                $kardex->salidas_cantidad = $orden_compra_detalle->cantidad_requerida;
+                $kardex->salidas_cantidad = $cantidad_atendida[$index];
                 $kardex->costo_salidas_cantidad = $orden_compra_detalle->precio;
                 $kardex->total_salidas_cantidad = $orden_compra_detalle->sub_total;
 
-                $kardex->saldos_cantidad = $saldoBase - $orden_compra_detalle->cantidad_requerida;
+                $kardex->saldos_cantidad = $saldoBase - $cantidad_atendida[$index];
                 $kardex->costo_saldos_cantidad = $producto->precio_venta;
-                $total_kardex = $orden_compra_detalle->cantidad_requerida * $producto->precio_venta;
+                $total_kardex = $cantidad_atendida[$index] * $producto->precio_venta;
                 $kardex->total_saldos_cantidad = $total_kardex;
                 
                 if($orden_compra->id_unidad_origen == 1 || $orden_compra->id_unidad_origen == 3){
@@ -768,9 +771,9 @@ class RequerimientoController extends Controller
             }
             if($orden_compra->id_almacen_destino!=""){
 
-                $idProducto = $orden_compra_detalle->id_producto;
+                $idProducto = $descripcion[$index];
             
-                $idCorte = Kardex::where('id_producto', $orden_compra_detalle->id_producto)->where('id_almacen_destino', $orden_compra->id_almacen_destino)->whereDate('fecha', '<=', Carbon::now())->orderBy('fecha', 'desc')->orderBy('id', 'desc')->value('id');
+                $idCorte = Kardex::where('id_producto', $descripcion[$index])->where('id_almacen_destino', $orden_compra->id_almacen_destino)->whereDate('fecha', '<=', Carbon::now())->orderBy('fecha', 'desc')->orderBy('id', 'desc')->value('id');
                 
                 $saldoBase = $idCorte > 0 ? Kardex::where('id', $idCorte)->value('saldos_cantidad') : 0;
 
@@ -779,14 +782,14 @@ class RequerimientoController extends Controller
                 $kardex->id_almacen_destino = $orden_compra->id_almacen_destino;
                 $kardex->fecha = Carbon::now();
 
-                $kardex->entradas_cantidad = $orden_compra_detalle->cantidad_requerida;
+                $kardex->entradas_cantidad = $cantidad_atendida[$index];
                 $kardex->costo_entradas_cantidad = $orden_compra_detalle->precio;
                 $kardex->total_entradas_cantidad = $orden_compra_detalle->sub_total;
                 $kardex->salidas_cantidad = 0;
 
-                $kardex->saldos_cantidad = $saldoBase + $orden_compra_detalle->cantidad_requerida;
+                $kardex->saldos_cantidad = $saldoBase + $cantidad_atendida[$index];
                 $kardex->costo_saldos_cantidad = $producto->precio_venta;
-                $total_kardex = $orden_compra_detalle->cantidad_requerida * $producto->precio_venta;
+                $total_kardex = $cantidad_atendida[$index] * $producto->precio_venta;
                 $kardex->total_saldos_cantidad = $total_kardex;
 
                 if($orden_compra->id_unidad_origen == 1 || $orden_compra->id_unidad_origen == 3){
@@ -811,7 +814,7 @@ class RequerimientoController extends Controller
             
             $cantidad_requerida = $detalle_orden->cantidad_requerida;
             
-            $cantidad_ingresada = $entrada_producto_detalle_model->getCantidadEntradaProductoByOrdenProducto($id_orden_compra,$detalle->id_producto);
+            $cantidad_ingresada = $entrada_producto_detalle_model->getCantidadEntradaProductoByOrdenProducto($id_orden_compra, $detalle->id_producto);
             if($cantidad_requerida - $cantidad_ingresada==0){
                 $entradaProductoDetalleObj = EntradaProductoDetalle::find($detalle->id);
                 $entradaProductoDetalleObj->cerrado = 2;
@@ -859,11 +862,14 @@ class RequerimientoController extends Controller
             $requerimiento_dispensacion_detalle = new RequerimientoDispensacionDetalle;
             
             $requerimiento_dispensacion_detalle->id_requerimiento_dispensacion = $id_requerimiento_dispensacion_detalle;
-            $requerimiento_dispensacion_detalle->id_producto = $orden_compra_detalle->id_producto;
-            $requerimiento_dispensacion_detalle->cantidad = $orden_compra_detalle->cantidad_requerida;
-            $requerimiento_dispensacion_detalle->id_unidad_medida = $orden_compra_detalle->id_unidad_medida;
-            if($orden_compra_detalle->id_marca!=null && $orden_compra_detalle->id_marca !=0){
+            $requerimiento_dispensacion_detalle->id_producto = $descripcion[$index];
+            $requerimiento_dispensacion_detalle->cantidad = $cantidad_atendida[$index];
+            $requerimiento_dispensacion_detalle->id_unidad_medida = (int)$unidad[$index];
+            /*if($orden_compra_detalle->id_marca!=null && $orden_compra_detalle->id_marca !=0){
 				$requerimiento_dispensacion_detalle->id_marca = (int)$orden_compra_detalle->id_marca;
+			}*/
+            if($marca[$index]!=null && $marca[$index] !=0){
+				$requerimiento_dispensacion_detalle->id_marca = (int)$marca[$index];
 			}
             $requerimiento_dispensacion_detalle->estado = 1;
             $requerimiento_dispensacion_detalle->id_usuario_inserta = $id_user;
