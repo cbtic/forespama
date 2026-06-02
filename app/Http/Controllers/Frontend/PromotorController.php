@@ -238,7 +238,7 @@ class PromotorController extends Controller
 
 		$distancia = $this->calcularDistancia($tienda->latitud, $tienda->longitud, $request->latitud, $request->longitud);
 
-		if ($distancia > 0.5) { // 0.5 km = 500 metros
+		if ($distancia > 0.8) { // 0.5 km = 500 metros
 			return response()->json(['message' => 'No estás dentro del rango permitido para marcar asistencia.']);
 		}
 
@@ -305,7 +305,7 @@ class PromotorController extends Controller
 
 		$distancia = $this->calcularDistancia($tienda->latitud, $tienda->longitud, $request->latitud, $request->longitud);
 
-		if ($distancia > 0.5) { // 0.5 km = 500 metros
+		if ($distancia > 0.8) { // 0.5 km = 500 metros
 			return response()->json(['message' => 'No estás dentro del rango permitido para marcar asistencia.']);
 		}
 

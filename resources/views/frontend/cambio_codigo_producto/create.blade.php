@@ -293,12 +293,12 @@ label.form-control-sm{
 
 @extends('frontend.layouts.app')
 
-@section('title', __('Consulta Marcas'))
+@section('title', __('Consulta Cambio de C&oacute;digo'))
 
 @section('breadcrumb')
 <ol class="breadcrumb" style="padding-left:130px;margin-top:0px;background-color:#283659">
     <li class="breadcrumb-item text-primary">Inicio</li>
-    <li class="breadcrumb-item active">Registro de Marcas</li>
+    <li class="breadcrumb-item active">Registro de Cambio de C&oacute;digo</li>
     </li>
 </ol>
 
@@ -324,12 +324,12 @@ label.form-control-sm{
 
         <div class="card-body">
 
-            <form class="form-horizontal" method="post" action="" id="frmMarcas" autocomplete="off" enctype="multipart/form-data">
+            <form class="form-horizontal" method="post" action="" id="frmCambioCodigo" autocomplete="off" enctype="multipart/form-data">
 				
                 <div class="row">
                     <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12" style="margin-top:15px">
                         <h4 class="card-title mb-0 text-primary" style="font-size:22px">
-                            Marcas
+                            Cambio de C&oacute;digo
                         </h4>
                     </div>
                 </div>
@@ -340,13 +340,25 @@ label.form-control-sm{
 					<div class="col col-sm-12 align-self-center">
 
                         <input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
-
+				
 				<div class="row" style="padding:20px 20px 0px 20px;">
 					<div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
 						<div class="row">
 
 							<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-								<input id="denominacion_bus" name="denominacion_bus" on class="form-control form-control-sm filtro-input"  placeholder="Denominaci&oacute;n">
+								<input id="codigo_bus" name="codigo_bus" on class="form-control form-control-sm filtro-input"  placeholder="Denominaci&oacute;n">
+							</div>
+
+							<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+								<select name="producto_bus" id="producto_bus" class="form-control form-control-sm filtro-select">
+									<option value="">--Seleccionar Producto--</option>
+									<?php
+									foreach ($producto as $row){?>
+										<option value="<?php echo $row->id ?>"><?php echo $row->codigo . ' - ' . $row->denominacion ?></option>
+										<?php 
+									}
+									?>
+								</select>
 							</div>
 							
 							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
@@ -377,7 +389,7 @@ label.form-control-sm{
                 <div class="card-body">				
 
                     <div class="table-responsive">
-                    <table id="tblMarcas" class="table table-hover table-sm">
+                    <table id="tblCambioCodigo" class="table table-hover table-sm">
                         <thead>
                         <tr style="font-size:13px">
                             <th>Id</th>
@@ -420,59 +432,8 @@ label.form-control-sm{
 
 	<script type="text/javascript">
 
-	/*$(document).ready(function() {
-		$(".upload").on('click', function() {
-			var formData = new FormData();
-			var files = $('#image')[0].files[0];
-			formData.append('file',files);
-			$.ajax({
-				headers: {
-					'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-				},
-				url: "/ingreso_vehiculo_tronco/upload_imagen_ingreso",
-				type: 'post',
-				data: formData,
-				contentType: false,
-				processData: false,
-				success: function(response) {
-					
-					var ind_img = $("#ind_img").val();
-					
-					if (response != 0) {
-						$("#img_ruta_"+ind_img).attr("src", "/img/ingreso/tmp/"+response).show();
-						$(".delete_ruta").show();
-						$("#img_foto_"+ind_img).val(response);
-
-						ind_img++;
-
-						var newRow = "";
-						newRow += '<div class="img_ruta">';
-						newRow += '<img src="" id="img_ruta_'+ind_img+'" width="130px" height="165px" alt="" style="text-align:center;margin-top:8px;display:none;margin-left:10px" />';
-						newRow += '<span class="delete_ruta" style="display:none" onclick="DeleteImagen(this)"></span>';
-						newRow += '<input type="hidden" id="img_foto_'+ind_img+'" name="img_foto[]" value="" />';
-						newRow += '</div>';
-
-						$("#divImagenes").append(newRow);
-						$("#ind_img").val(ind_img);
-
-					} else {
-						alert('Formato de imagen incorrecto.');
-					}
-					
-				}
-			});
-			return false;
-		});
-
-		$(".delete").on('click', function() {
-			$("#img_ruta0").attr("src", "/dist/img/profile-icon.png");
-			$("#img_foto0").val("");
-		});
-
-	});*/
-
 	</script>
 
-	<script src="{{ asset('js/marcas.js') }}"></script>
+	<script src="{{ asset('js/cambioCodigo.js') }}"></script>
 
 	@endpush
