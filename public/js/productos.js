@@ -450,6 +450,7 @@ function DescargarArchivosExcel(){
 	var sub_familia = $('#sub_familia_bus').val();
 	var aprobado = $('#aprobado_bus').val();
 	var familia_contable = $('#familia_contable_bus').val();
+	var usuario_inserta = $('#usuario_inserta_bus').val();
 
 	if (tipo_origen_producto == "")tipo_origen_producto = 0;
 	if (serie == "")serie = "0";
@@ -463,8 +464,9 @@ function DescargarArchivosExcel(){
 	if (sub_familia == "")sub_familia = 0;
 	if (aprobado == "")aprobado = 0;
 	if (familia_contable == "")familia_contable = 0;
+	if (usuario_inserta == "")usuario_inserta = 0;
 	
-	location.href = '/productos/exportar_listar_productos/'+tipo_origen_producto+'/'+serie+'/'+codigo+'/'+denominacion+'/'+estado_bien+'/'+tipo_producto+'/'+tiene_imagen+'/'+estado+'/'+familia+'/'+sub_familia+'/'+aprobado+'/'+familia_contable;
+	location.href = '/productos/exportar_listar_productos/'+tipo_origen_producto+'/'+serie+'/'+codigo+'/'+denominacion+'/'+estado_bien+'/'+tipo_producto+'/'+tiene_imagen+'/'+estado+'/'+familia+'/'+sub_familia+'/'+aprobado+'/'+familia_contable+'/'+usuario_inserta;
 }
 
 function obtenerSubFamiliaBus(){

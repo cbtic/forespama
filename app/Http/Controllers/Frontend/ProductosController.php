@@ -516,7 +516,7 @@ class ProductosController extends Controller
 		return response()->json($producto);
 	}
 
-    public function exportar_listar_productos($tipo_origen_producto, $serie, $codigo, $denominacion, $estado_bien, $tipo_producto, $tiene_imagen, $estado, $familia, $sub_familia, $aprobado, $familia_contable) {
+    public function exportar_listar_productos($tipo_origen_producto, $serie, $codigo, $denominacion, $estado_bien, $tipo_producto, $tiene_imagen, $estado, $familia, $sub_familia, $aprobado, $familia_contable, $usuario_inserta) {
 
 		if($tipo_origen_producto==0)$tipo_origen_producto = "";
         if($serie=="0")$serie = "";
@@ -530,6 +530,7 @@ class ProductosController extends Controller
         if($sub_familia==0)$sub_familia = "";
         if($aprobado==0)$aprobado = "";
         if($familia_contable==0)$familia_contable = "";
+        if($usuario_inserta==0)$usuario_inserta = "";
 
         $producto_model = new Producto;
 		$p[]=$serie;
@@ -542,7 +543,8 @@ class ProductosController extends Controller
         $p[]=$sub_familia;
         $p[]=$familia_contable;
         $p[]=$aprobado;
-        $p[]=$estado;
+        $p[]=$usuario_inserta;
+        $p[]=1;
 		$p[]=1;
 		$p[]=10000;
 		$data = $producto_model->listar_producto_ajax($p);
