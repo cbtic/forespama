@@ -55,6 +55,7 @@ class ProductosController extends Controller
 		$this->middleware('can:Precio Productos')->only(['create_productos_precio']);
 		$this->middleware('can:Chopeo Productos')->only(['create_chopeo_producto']);
 		$this->middleware('can:Reporte Productos')->only(['create_reporte_productos']);
+		$this->middleware('can:Productos')->only(['exportar_listar_productos']);
 		$this->middleware('can:Reporte Productos')->only(['exportar_reporte_productos']);
 	}
 
