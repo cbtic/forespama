@@ -338,7 +338,7 @@ function cargarDetalle(){
                         
                         <td><select name="unidad[]" id="unidad${n}" class="form-control form-control-sm">${unidadMedidaOptions}</select></td>
                         <td><input name="cantidad_ingreso[]" id="cantidad_ingreso${n}" class="cantidad_ingreso form-control form-control-sm" value="${requerimiento.cantidad}" type="text" oninput=""></td>
-                        <td><input name="stock[]" id="stock${n}" class="stock form-control form-control-sm" value="${stock_mostrar}" type="text" oninput=""></td>
+                        <td><input name="stock[]" id="stock${n}" class="stock form-control form-control-sm" value="${stock_mostrar}" type="text" oninput="" readonly></td>
                         <td><select name="usuario[]" id="usuario${n}" class="form-control form-control-sm" onChange="">${usuarioSolicitaOptions}</select></td>
                         <td><select name="prioridad[]" id="prioridad${n}" class="form-control form-control-sm" onChange="">${prioridadOptions}</select></td>
                         <td><textarea name="observacion[]" id="observacion${n}" class="form-control form-control-sm">${requerimiento.observacion}</textarea></td>
