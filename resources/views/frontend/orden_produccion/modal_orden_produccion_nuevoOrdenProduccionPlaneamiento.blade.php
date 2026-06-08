@@ -19,9 +19,9 @@
   overflow: hidden;
 }
 
-.modal-body {
+/*.modal-body {
   overflow-y: auto;
-}
+}*/
 
 .datepicker,
 .table-condensed {
@@ -317,9 +317,11 @@ function fn_save_orden_produccion(){
 
     var fecha_orden_produccion = $('#fecha_orden_produccion').val();
     var area = $('#area').val();
+    var sustento = $('#sustento').val();
 
-    if(fecha_orden_produccion==""){msg+="Ingrese la Fecha de la Orden de Produccion <br>";}
-    if(area==""){msg+="Ingrese un Area <br>";}
+    if(fecha_orden_produccion==""){msg+="Ingrese la Fecha de la Orden de Produccion. <br>";}
+    if(area==""){msg+="Ingrese un Area. <br>";}
+    if(sustento==""){msg+="Ingrese un Sustento. <br>";}
 
     if ($('#tblOrdenProduccionDetalle tbody tr').length == 0) {
         msg += "No se ha agregado ningún producto <br>";
@@ -463,6 +465,12 @@ function obtenerUnidadTrabajo(){
                         <div class="col-lg-2">
                             <input id="numero_orden_compra" name="numero_orden_compra" on class="form-control form-control-sm"  value="<?php if($id>0){echo $orden_produccion->codigo_orden_compra;}?>" type="text">
                         </div>
+                        <div class="col-lg-2">
+                            Sustento
+                        </div>
+                        <div class="col-lg-2">
+                            <textarea id="sustento" name="sustento" class="form-control form-control-sm"><?php echo $orden_produccion->sustento?></textarea>
+                        </div>
                     </div>
                         <div style="margin-top:15px" class="form-group">
                             <div class="col-sm-12 controls">
@@ -479,7 +487,7 @@ function obtenerUnidadTrabajo(){
 
                         <div class="card-body">
 
-					<div class="table-responsive" style="overflow-y: auto; max-height: 600px;">
+					<div class="table-responsive" style="overflow-y: auto; max-height: 500px;">
 						<table id="tblOrdenProduccionDetalle" class="table table-hover table-sm">
 							<thead>
 							<tr style="font-size:13px">

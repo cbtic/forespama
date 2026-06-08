@@ -523,14 +523,9 @@ function obtenerUnidadTrabajo(){
                 }else {
                     option += "<option value='"+oo.id+"'>"+oo.denominacion+"</option>";
                 }
-                
             });
             $('#unidad_trabajo').html(option);
-            //$('#unidad_trabajo').select2();
-            
-            //$('.loader').hide();
         }
-        
     });
 }
 
@@ -599,7 +594,7 @@ function obtenerUnidadTrabajo(){
                             Unidad de Trabajo
                         </div>
                         <div class="col-lg-2" id="almacen_salida_select">
-                            <select name="unidad_trabajo" id="unidad_trabajo" class="form-control form-control-sm" onchange="//actualizarSecciones(this)">
+                            <select name="unidad_trabajo" id="unidad_trabajo" class="form-control form-control-sm" onchange="">
                                 <option value="">--Seleccionar--</option>
                             </select>
                         </div>
@@ -609,12 +604,17 @@ function obtenerUnidadTrabajo(){
                         <div class="col-lg-2">
                             <input id="numero_orden_compra" name="numero_orden_compra" on class="form-control form-control-sm"  value="<?php if($id>0){echo $orden_produccion->codigo_orden_compra;}?>" type="text">
                         </div>
+                        <div class="col-lg-2">
+                            Sustento
+                        </div>
+                        <div class="col-lg-2">
+                            <textarea id="sustento" name="sustento" class="form-control form-control-sm"><?php echo $orden_produccion->sustento?></textarea>
+                        </div>
                     </div>
                         <div style="margin-top:15px" class="form-group">
                             <div class="col-sm-12 controls">
                                 <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
                                 <?php if($id==0){?>
-                                    <!--<a href="javascript:void(0)" onClick="agregarProducto()" class="btn btn-sm btn-success">Agregar</a>-->
                                     <button type="button" class="btn btn-sm btn-clasico-blanco btn-agregar" data-toggle="modal" onclick="agregarProducto()">
                                         <i class="fas fa-plus-circle" style="font-size:18px;"></i> Agregar Producto
                                     </button>

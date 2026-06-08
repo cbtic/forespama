@@ -649,7 +649,8 @@ function obtenerCentroCosto(){
                             Fecha
                         </div>
                         <div class="col-lg-2">
-                            <input id="fecha" name="fecha" on class="form-control form-control-sm"  value="<?php echo isset($dispensacion) && $dispensacion->fecha ? $dispensacion->fecha : date('Y-m-d'); ?>" type="text">
+                            <input id="fecha_" name="fecha_" on class="form-control form-control-sm"  value="<?php echo isset($dispensacion) && $dispensacion->fecha ? $dispensacion->fecha : date('Y-m-d'); ?>" type="text" disabled>
+                            <input id="fecha" name="fecha" on class="form-control form-control-sm"  value="<?php echo date('Y-m-d'); ?>" type="hidden">
                         </div>
                         <div class="col-lg-2" style="color:green; font-weight:bold">
                             Almacen

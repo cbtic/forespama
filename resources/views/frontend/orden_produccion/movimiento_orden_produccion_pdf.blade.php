@@ -188,6 +188,10 @@ $(document).ready(function() {
                         <td class="td" style ="text-align: left; width: 20%;"><b>Unidad Trabajo:</b></td>
                         <td class="td" style ="text-align: left; width: 20%;"><?php echo $unidad_trabajo;?></td>
                     </tr>
+                    <tr>
+                        <td class="td" style ="text-align: left; width: 10%;"><b>Sustento:</b></td>
+                        <td class="td" style ="text-align: left; width: 20%;"><?php echo $sustento;?></td>
+                    </tr>
                 </tbody>
             </table>
             &nbsp;

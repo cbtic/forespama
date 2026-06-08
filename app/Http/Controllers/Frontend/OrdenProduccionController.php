@@ -172,6 +172,7 @@ class OrdenProduccionController extends Controller
         $orden_produccion->id_situacion = 1;
         $orden_produccion->id_usuario_inserta = $id_user;
         $orden_produccion->codigo_orden_compra = $request->numero_orden_compra;
+        $orden_produccion->sustento = $request->sustento;
         $orden_produccion->estado = 1;
         $orden_produccion->save();
         $id_orden_produccion = $orden_produccion->id;
@@ -268,6 +269,7 @@ class OrdenProduccionController extends Controller
         $area_trabajo = $datos[0]->area_trabajo;
         $unidad_trabajo = $datos[0]->unidad_trabajo;
         $usuario = $datos[0]->usuario;
+        $sustento = $datos[0]->sustento;
                 
 		$year = Carbon::now()->year;
 
@@ -277,7 +279,7 @@ class OrdenProduccionController extends Controller
 
 		$currentHour = Carbon::now()->format('H:i:s');
 
-		$pdf = Pdf::loadView('frontend.orden_produccion.movimiento_orden_produccion_pdf',compact('id_situacion','fecha_orden_produccion','codigo','area_trabajo','usuario','datos_detalle','unidad_trabajo'));
+		$pdf = Pdf::loadView('frontend.orden_produccion.movimiento_orden_produccion_pdf',compact('id_situacion','fecha_orden_produccion','codigo','area_trabajo','usuario','datos_detalle','unidad_trabajo','sustento'));
 
 		$pdf->setPaper('A4'); // Tamaño de papel (puedes cambiarlo según tus necesidades)
 
@@ -305,6 +307,7 @@ class OrdenProduccionController extends Controller
         $area_trabajo = $datos[0]->area_trabajo;
         $unidad_trabajo = $datos[0]->unidad_trabajo;
         $usuario = $datos[0]->usuario;
+        $sustento = $datos[0]->sustento;
                 
 		$year = Carbon::now()->year;
 
@@ -314,7 +317,7 @@ class OrdenProduccionController extends Controller
 
 		$currentHour = Carbon::now()->format('H:i:s');
 
-		$pdf = Pdf::loadView('frontend.orden_produccion.movimiento_orden_produccion_pdf',compact('id_situacion','fecha_orden_produccion','codigo','area_trabajo','usuario','datos_detalle','unidad_trabajo'));
+		$pdf = Pdf::loadView('frontend.orden_produccion.movimiento_orden_produccion_pdf',compact('id_situacion','fecha_orden_produccion','codigo','area_trabajo','usuario','datos_detalle','unidad_trabajo','sustento'));
 
 		$pdf->setPaper('A4'); // Tamaño de papel (puedes cambiarlo según tus necesidades)
 
@@ -491,6 +494,7 @@ class OrdenProduccionController extends Controller
         $codigo=$data_cabecera[0]->codigo;
         $area_trabajo = $data_cabecera[0]->area_trabajo;
         $unidad_trabajo = $data_cabecera[0]->unidad_trabajo;
+        $sustento = $data_cabecera[0]->sustento;
 		
 		$data_detalle = $orden_produccion_model->getDetalleOrdenProduccionById($id);
 		
@@ -502,7 +506,7 @@ class OrdenProduccionController extends Controller
 			$variable[] = [$n++, $r->nombre_producto, $r->codigo, $r->unidad_medida, $r->cantidad];
 		}
 		
-		$export = new InvoicesExport($variable, $codigo, $fecha_orden_produccion, $area_trabajo, $unidad_trabajo);
+		$export = new InvoicesExport($variable, $codigo, $fecha_orden_produccion, $area_trabajo, $unidad_trabajo, $sustento);
 		return Excel::download($export, 'orden_produccion.xlsx');
     }
 
@@ -524,14 +528,16 @@ class InvoicesExport implements FromArray, WithStyles
     protected $fecha;
     protected $area_trabajo;
     protected $unidad_trabajo;
+    protected $sustento;
 
-	public function __construct(array $invoices, $codigo, $fecha, $area_trabajo, $unidad_trabajo)
+	public function __construct(array $invoices, $codigo, $fecha, $area_trabajo, $unidad_trabajo, $sustento)
 	{
 		$this->invoices = $invoices;
 		$this->codigo = $codigo;
         $this->fecha = $fecha;
         $this->area_trabajo = $area_trabajo;
         $this->unidad_trabajo = $unidad_trabajo;
+        $this->sustento = $sustento;
 	}
 
 	public function array(): array
@@ -540,9 +546,9 @@ class InvoicesExport implements FromArray, WithStyles
         
         $data[] = ["",""];
 
-        $data[] = ["Fecha Orden Producción", "Area Trabajo", "Unidad Trabajo"];
+        $data[] = ["Fecha Orden Producción", "Area Trabajo", "Unidad Trabajo", "Sustento"];
 
-        $data[] = [$this->fecha, $this->area_trabajo, $this->unidad_trabajo];
+        $data[] = [$this->fecha, $this->area_trabajo, $this->unidad_trabajo, $this->sustento];
 
         $data[] = ["#", "Descripción", "Código", "Unidad", "Cantidad"];
 
@@ -575,7 +581,7 @@ class InvoicesExport implements FromArray, WithStyles
         ]);
         $sheet->getRowDimension(1)->setRowHeight(30);
 
-        $sheet->getStyle('A2:C2')->applyFromArray([
+        $sheet->getStyle('A2:D2')->applyFromArray([
             'font' => [
                 'bold' => true,
             ],

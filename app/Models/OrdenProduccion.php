@@ -62,7 +62,7 @@ class OrdenProduccion extends Model
 
         $cad = "select op.id, op.id_situacion,
         to_char(op.fecha_orden_produccion,'dd-mm-yyyy') fecha_orden_produccion, 
-        op.codigo, at.denominacion area_trabajo, ut.denominacion unidad_trabajo, u.name usuario, op.estado
+        op.codigo, at.denominacion area_trabajo, ut.denominacion unidad_trabajo, u.name usuario, op.estado, op.sustento 
         from orden_produccion op
         left join area_trabajo at on op.id_area = at.id 
         left join unidad_trabajo ut on ut.id = op.id_unidad_trabajo
