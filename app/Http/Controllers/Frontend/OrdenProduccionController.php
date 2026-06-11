@@ -219,7 +219,6 @@ class OrdenProduccionController extends Controller
         $orden_compra_model = new OrdenCompra;
         $producto_model = new Producto;
         $tablaMaestra_model = new TablaMaestra;
-
         $orden_produccion = $orden_compra_model->getDetalleProductosNoComprometidosId();
         $producto = $producto_model->getProductoAll();
         $unidad_medida = $tablaMaestra_model->getMaestroByTipo(43);

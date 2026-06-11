@@ -2073,7 +2073,7 @@ class EntradaProductosController extends Controller
         $moneda = $tablaMaestra_model->getMaestroByTipo(1);
         $tipo_producto = $tablaMaestra_model->getMaestroByTipo(44);
         $estado_bien = $tablaMaestra_model->getMaestroByTipo(56);
-        $unidad_medida = $tablaMaestra_model->getMaestroByTipo(57);
+        $unidad_medida = $tablaMaestra_model->getMaestroByTipo(43);
         $marca = $marca_model->getMarcaAll();
         $almacen_destino = $almacen_model->getAlmacenAll();
 		//var_dump($id);exit();

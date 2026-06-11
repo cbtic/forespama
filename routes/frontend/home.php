@@ -62,6 +62,7 @@ use App\Http\Controllers\Frontend\IngresoSalidaSecundarioController;
 use App\Http\Controllers\Frontend\KardexSecundarioController;
 use App\Http\Controllers\Frontend\RequerimientoDispensacionController;
 use App\Http\Controllers\Frontend\AsientoContableAnexoController;
+use App\Http\Controllers\Frontend\CambioCodigoProductoController;
 
 
 //use App\Http\Controllers\VehiculoController;
@@ -524,6 +525,7 @@ Route::get('dispensacion/movimiento_pdf_dispensacion/{id}', [DispensacionControl
 Route::get('kardex/create_consulta_productos', [KardexController::class, 'create_consulta_productos'])->name('kardex.create_consulta_productos');
 Route::post('kardex/listar_kardex_consulta_producto_ajax', [KardexController::class, 'listar_kardex_consulta_producto_ajax'])->name('kardex.listar_kardex_consulta_producto_ajax');
 Route::get('productos/obtener_stock_producto/{almacen}/{id_producto}', [ProductosController::class, 'obtener_stock_producto'])->name('productos.obtener_stock_producto');
+Route::get('productos/obtener_unidad_medida/{id_producto}', [ProductosController::class, 'obtener_unidad_medida'])->name('productos.obtener_unidad_medida');
 
 Route::get('orden_compra/modal_orden_compra_tienda/{id}', [OrdenCompraController::class, 'modal_orden_compra_tienda'])->name('orden_compra.modal_orden_compra_tienda');
 
@@ -1012,4 +1014,9 @@ Route::post('asiento_contable_anexo/migrar_anexos_starsoft', [AsientoContableAne
 
 Route::post('requerimiento/send_requerimiento_dispensacion', [RequerimientoController::class, 'send_requerimiento_dispensacion'])->name('requerimiento.send_requerimiento_dispensacion');
 Route::get('requerimiento_dispensacion/exportar_listar_requerimiento_dispensacion_reporte/{tipo_documento}/{fecha_inicio}/{fecha_fin}/{numero_rq_dispensacion}/{almacen}/{sede}/{centro_costo}/{persona_recibe}/{situacion}/{estado}', [RequerimientoDispensacionController::class, 'exportar_listar_requerimiento_dispensacion_reporte'])->name('requerimiento_dispensacion.exportar_listar_requerimiento_dispensacion_reporte');
+
+Route::get('cambio_codigo_producto/create', [CambioCodigoProductoController::class, 'create'])->name('cambio_codigo_producto.create');
+Route::post('cambio_codigo_producto/listar_cambio_codigo_producto_ajax', [CambioCodigoProductoController::class, 'listar_cambio_codigo_producto_ajax'])->name('cambio_codigo_producto.listar_cambio_codigo_producto_ajax');
+Route::post('cambio_codigo_producto/send_cambio_codigo_producto', [CambioCodigoProductoController::class, 'send_cambio_codigo_producto'])->name('cambio_codigo_producto.send_cambio_codigo_producto');
+Route::get('cambio_codigo_producto/modal_cambio_codigo_producto/{id}', [CambioCodigoProductoController::class, 'modal_cambio_codigo_producto'])->name('cambio_codigo_producto.modal_cambio_codigo_producto');
 

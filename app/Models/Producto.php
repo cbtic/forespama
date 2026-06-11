@@ -287,4 +287,14 @@ class Producto extends Model
         return $data;
     }
 
+    function getUnidadProductoById($id_producto){
+
+        $cad = "select p.id_unidad_producto 
+        from productos p 
+        where id='".$id_producto."'
+        and p.estado ='1'";
+
+		$data = DB::select($cad);
+        return $data;
+    }
 }

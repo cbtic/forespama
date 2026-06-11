@@ -576,34 +576,23 @@ function obtenerUnidadTrabajo(){
             </form>
             </div>
             <!-- /.box -->
-            
         </div>
         <!--/.col (left) -->
-
     </div>
         <!-- /.row -->
-    
 <!-- /.content -->
 </div>
 <!-- /.content-wrapper -->
 
 <div id="openOverlayOpc2" class="modal fade modal-observacion" tabindex="-1" role="dialog">
-	  <div class="modal-dialog" >
-	
+	<div class="modal-dialog" >
 		<div id="id_content_OverlayoneOpc" class="modal-content" style="padding: 0px;margin: 0px">
-		
-		  <div class="modal-body" style="padding: 0px;margin: 0px">
-	
+		    <div class="modal-body" style="padding: 0px;margin: 0px">
 				<div id="diveditpregOpc2"></div>
-	
-		  </div>
-		
+		    </div>
 		</div>
-	
-	  </div>
-		
-	</div>
-
+	</div>	
+</div>
     
 <script type="text/javascript">
 $(document).ready(function () {
@@ -615,26 +604,13 @@ $(document).ready(function () {
 			}
 		//validaRuc(this.value);
 	});
-	
-	
-	
-	
 });
-
 
 </script>
 
 <script type="text/javascript">
 $(document).ready(function() {
-	//$('#numero_placa').focus();
-	//$('#numero_placa').mask('AAA-000');
-	//$('#vehiculo_numero_placa').mask('AAA-000');
-	
-	
+
 });
 
-
-
-
 </script>
-

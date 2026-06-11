@@ -346,7 +346,7 @@ label.form-control-sm{
 						<div class="row">
 
 							<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-								<input id="codigo_bus" name="codigo_bus" on class="form-control form-control-sm filtro-input"  placeholder="Denominaci&oacute;n">
+								<input id="codigo_bus" name="codigo_bus" on class="form-control form-control-sm filtro-input"  placeholder="C&oacute;digo">
 							</div>
 
 							<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">

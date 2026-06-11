@@ -13,7 +13,7 @@ class CambioCodigoProductoController extends Controller
     public function __construct(){
 
 		$this->middleware('auth');
-		//$this->middleware('can:Cambio Codigo')->only(['create']);
+		$this->middleware('can:Cambio Stock Codigo')->only(['create']);
 	}
 
     public function create(){

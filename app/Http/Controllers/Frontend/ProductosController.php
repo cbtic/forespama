@@ -480,6 +480,18 @@ class ProductosController extends Controller
         ]);
     }
 
+    public function obtener_unidad_medida($id_producto)
+    {
+
+		$producto_model = new Producto;
+
+        $unidad = $producto_model->getUnidadProductoById($id_producto);
+        
+        return response()->json([
+            'unidad' =>$unidad
+        ]);
+    }
+
     public function upload_producto(Request $request){
 		
 		$path = "img/productos";

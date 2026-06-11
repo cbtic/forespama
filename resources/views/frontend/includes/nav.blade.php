@@ -172,7 +172,7 @@
 					@endif
 					
 					
-					@if(Gate::check('Requerimientos') || Gate::check('Entradas') || Gate::check('Orden Compra') || Gate::check('Consulta Stock') || Gate::check('Requerimiento Insumos') || Gate::check('Dispensacion') || Gate::check('Ingreso Produccion') || Gate::check('Kardex') || Gate::check('Movimientos Oxapampa') || Gate::check('Movimientos') || Gate::check('Verificacion Aplicacion Comisiones') || Gate::check('Empaquetado') || Gate::check('Devolucion') || Gate::check('Gestion Autorizacion') || Gate::check('Cargar Informe Venta b2b') || Gate::check('Reuso') || Gate::check('Ajuste Stock') || Gate::check('Ingreso Salida Secundario') || Gate::check('Kardex Secundario'))
+					@if(Gate::check('Requerimientos') || Gate::check('Entradas') || Gate::check('Orden Compra') || Gate::check('Consulta Stock') || Gate::check('Requerimiento Insumos') || Gate::check('Dispensacion') || Gate::check('Ingreso Produccion') || Gate::check('Kardex') || Gate::check('Movimientos Oxapampa') || Gate::check('Movimientos') || Gate::check('Verificacion Aplicacion Comisiones') || Gate::check('Empaquetado') || Gate::check('Devolucion') || Gate::check('Gestion Autorizacion') || Gate::check('Cargar Informe Venta b2b') || Gate::check('Reuso') || Gate::check('Cambio Stock Codigo') || Gate::check('Ajuste Stock') || Gate::check('Ingreso Salida Secundario') || Gate::check('Kardex Secundario'))
 						
 						<li class="nav-item dropdown">
 							<a href="#" class="nav-link dropdown-toggle" id="navbarDropdownPrueba" data-toggle="dropdown"
@@ -242,6 +242,10 @@
 
 								@can('Reuso')
 									<x-utils.link :href="route('frontend.reuso.create')" class="dropdown-item" :text="__('Reuso')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+								@endif
+
+								@can('Cambio Stock Codigo')
+									<x-utils.link :href="route('frontend.cambio_codigo_producto.create')" class="dropdown-item" :text="__('Cambio Stock por Codigo')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
 								@endif
 
 								@can('Ajuste Stock')

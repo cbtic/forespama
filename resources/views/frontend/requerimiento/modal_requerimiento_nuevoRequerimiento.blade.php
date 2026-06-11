@@ -336,7 +336,7 @@ function cargarDetalle(){
                         <td><select name="marca[]" id="marca${n}" class="form-control form-control-sm">${marcaOptions}</select></td>
                         <td><input name="cod_interno[]" id="cod_interno${n}" class="form-control form-control-sm" value="${requerimiento.codigo}" type="text"></td>
                         
-                        <td><select name="unidad[]" id="unidad${n}" class="form-control form-control-sm">${unidadMedidaOptions}</select></td>
+                        <td><select name="unidad_[]" id="unidad_${n}" class="form-control form-control-sm" disabled>${unidadMedidaOptions}</select><input name="unidad[]" id="unidad${n}" class="form-control form-control-sm" value="${requerimiento.id_unidad_medida}" type="hidden"></td>
                         <td><input name="cantidad_ingreso[]" id="cantidad_ingreso${n}" class="cantidad_ingreso form-control form-control-sm" value="${requerimiento.cantidad}" type="text" oninput=""></td>
                         <td><input name="stock[]" id="stock${n}" class="stock form-control form-control-sm" value="${stock_mostrar}" type="text" oninput="" readonly></td>
                         <td><select name="usuario[]" id="usuario${n}" class="form-control form-control-sm" onChange="">${usuarioSolicitaOptions}</select></td>
@@ -384,10 +384,10 @@ function agregarProducto(){
         //var cantidad = '<input name="cantidad[]" id="cantidad' + n + '" class="form-control form-control-sm" value="" type="text">';
         var descripcion = '<input name="id_requerimiento_detalle[]" id="id_requerimiento_detalle${n}" class="form-control form-control-sm" value="${requerimiento.id}" type="hidden"><select name="descripcion[]" id="descripcion' + n + '" class="form-control form-control-sm" onChange="verificarProductoSeleccionado(this, ' + n + ')"> '+ opcionesDescripcion +' </select>';
         var descripcion_ant = '<input type="hidden" name="descripcion_ant[]" id="descripcion_ant' + n + '" class="form-control form-control-sm" />';
-        var cod_interno = '<input name="cod_interno[]" id="cod_interno' + n + '" class="form-control form-control-sm" value="" type="text">';
-        var marca = '<select name="marca[]" id="marca' + n + '" class="form-control form-control-sm" onchange=""> <option value="">--Seleccionar--</option><?php foreach ($marca as $row){?><option value="<?php echo htmlspecialchars($row->id); ?>"><?php echo htmlspecialchars(addslashes($row->denominiacion)); ?></option><?php }?></select>'
+        var cod_interno = '<input name="cod_interno[]" id="cod_interno' + n + '" class="form-control form-control-sm" value="" type="text" readonly>';
+        var marca = '<select name="marca[]" id="marca' + n + '" class="form-control form-control-sm" onchange=""><option value="">--Seleccionar--</option><?php foreach ($marca as $row){?><option value="<?php echo htmlspecialchars($row->id); ?>"><?php echo htmlspecialchars(addslashes($row->denominiacion)); ?></option><?php }?></select>'
         //var estado_bien =  '<select name="estado_bien[]" id="estado_bien' + n + '" class="form-control form-control-sm" onChange=""><option value="">--Seleccionar--</option> <?php foreach ($estado_bien as $row) { ?> <option value="<?php echo $row->codigo ?>" <?php echo ($row->codigo == 1) ? "selected" : ""; ?>><?php echo $row->denominacion ?></option> <?php } ?> </select>';
-        var unidad = '<select name="unidad[]" id="unidad' + n + '" class="form-control form-control-sm" onChange=""> <option value="">--Seleccionar--</option> <?php foreach ($unidad as $row) {?> <option value="<?php echo $row->codigo?>"><?php echo $row->denominacion?></option> <?php } ?> </select>';
+        var unidad = '<select name="unidad_[]" id="unidad_' + n + '" class="form-control form-control-sm" onChange="" disabled> <option value="">--Seleccionar--</option> <?php foreach ($unidad as $row) {?> <option value="<?php echo $row->codigo?>"><?php echo $row->denominacion?></option> <?php } ?> </select><input type="hidden" name="unidad[]" id="unidad' + n + '" value="">';
         var cantidad_ingreso = '<input name="cantidad_ingreso[]" id="cantidad_ingreso' + n + '" class="cantidad_ingreso form-control form-control-sm" value="" type="text" oninput="">';
         var stock = '<input name="stock[]" id="stock' + n + '" class="stock form-control form-control-sm" value="" type="text" oninput="" readonly>';
         var usuario = '<select name="usuario[]" id="usuario' + n + '" class="form-control form-control-sm" onChange=""> <option value="">--Seleccionar--</option> <?php foreach ($usuario as $row) {?> <option value="<?php echo $row->id?>"><?php echo $row->apellido_paterno .' '. $row->apellido_materno .' '. $row->nombres ?></option> <?php } ?> </select>';
@@ -449,6 +449,8 @@ function verificarProductoSeleccionado(selectElement, rowIndex, valor) {
 
             obtenerCodInterno(selectElement, rowIndex);
             obtenerStock(selectElement, rowIndex);
+            obtenerUnidad(selectElement, rowIndex);
+            
         } else {
             bootbox.alert("Este producto ya ha sido seleccionado. Por favor elige otro.");
             $(selectElement).val('').trigger('change');
@@ -459,6 +461,9 @@ function verificarProductoSeleccionado(selectElement, rowIndex, valor) {
         if (index > -1) {
             productosSeleccionados.splice(index, 1);
         }
+
+        $('#unidad_' + rowIndex).val('');
+        $('#unidad' + rowIndex).val('');
     }
 
     console.log(productosSeleccionados);
@@ -684,6 +689,24 @@ function obtenerStock(selectElement, n){
             }else{
                 $('#stock' + n).val(producto_stock.stock_comprometido);
             }
+        }
+    });
+}
+
+function obtenerUnidad(selectElement, n){
+
+    var id_producto = $(selectElement).val();
+    
+    $.ajax({
+        url: "/productos/obtener_unidad_medida/"+id_producto,
+        dataType: "json",
+        success: function(result){
+
+            var unidad = result.unidad[0].id_unidad_producto;
+            
+            $('#unidad' + n).val(unidad);
+            $('#unidad_' + n).val(unidad);
+            
         }
     });
 }

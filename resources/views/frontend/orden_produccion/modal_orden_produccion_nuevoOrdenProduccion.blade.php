@@ -19,9 +19,9 @@
   overflow: hidden;
 }
 
-.modal-body {
+/*.modal-body {
   overflow-y: auto;
-}
+}*/
 
 .datepicker,
 .table-condensed {
@@ -249,11 +249,32 @@ function cargarDetalle(){
         type: "GET",
         success: function (result) {
 
+            let html = '';
             let n = 1;
+
+            let productoOptionsBase = '<option value="">--Seleccionar--</option>';
+
+            result.producto.forEach(producto => {
+                productoOptionsBase += `
+                    <option value="${producto.id}">
+                        ${producto.codigo} - ${producto.denominacion}
+                    </option>
+                `;
+            });
+
+            let unidadMedidaOptionsBase = '<option value="">--Seleccionar--</option>';
+
+            result.unidad_medida.forEach(unidad => {
+                unidadMedidaOptionsBase += `
+                    <option value="${unidad.codigo}">
+                        ${unidad.denominacion}
+                    </option>
+                `;
+            });
 
             result.orden_produccion.forEach(orden_produccion => {
 
-                let productoOptions = '<option value="">--Seleccionar--</option>';
+                /*let productoOptions = '<option value="">--Seleccionar--</option>';
                 let unidadMedidaOptions = '<option value="">--Seleccionar--</option>';
 
                 result.producto.forEach(producto => {
@@ -264,19 +285,20 @@ function cargarDetalle(){
                 result.unidad_medida.forEach(unidad_medida => {
                     let selected = (unidad_medida.codigo == orden_produccion.id_unidad_medida) ? 'selected' : '';
                     unidadMedidaOptions += `<option value="${unidad_medida.codigo}" ${selected}>${unidad_medida.denominacion}</option>`;
-                });
+                });*/
                 
                 if (orden_produccion.id) {
                     productosSeleccionados.push(orden_produccion.id);
                 }
 
-                const row = `
+                //const row = `
+                html += `
                     <tr>
                         <td>${n}</td>
-                        <td style="width: 900px !important;display:block"><input name="id_producto[]" id="id_producto${n}" class="form-control form-control-sm" value="${orden_produccion.id}" type="hidden"><select name="descripcion[]" id="descripcion${n}" class="form-control form-control-sm" onChange="">${productoOptions}</select></td>
+                        <td style="width: 900px !important;display:block"><input name="id_producto[]" id="id_producto${n}" class="form-control form-control-sm" value="${orden_produccion.id}" type="hidden"><select name="descripcion[]" id="descripcion${n}" class="form-control form-control-sm" onChange="">${productoOptionsBase}</select></td>
                         <td><input name="cod_interno[]" id="cod_interno${n}" class="form-control form-control-sm" value="${orden_produccion.codigo}" type="text"></td>
                         
-                        <td><select name="unidad[]" id="unidad${n}" class="form-control form-control-sm">${unidadMedidaOptions}</select></td>
+                        <td><select name="unidad[]" id="unidad${n}" class="form-control form-control-sm">${unidadMedidaOptionsBase}</select></td>
                         <td><input name="cantidad_ingreso[]" id="cantidad_ingreso${n}" class="cantidad_ingreso form-control form-control-sm" value="${orden_produccion.cantidad_total-orden_produccion.cantidad_orden_produccion}" type="text" readonly></td>
                         
                         <td><input name="cantidad_producir[]" id="cantidad_producir${n}" class="cantidad_producir form-control form-control-sm" value="" type="text"></td>
@@ -285,11 +307,30 @@ function cargarDetalle(){
                     </tr>
                 `;
 
-                tbody.append(row);
+                /*tbody.append(row);
                 $('#descripcion' + n).select2({ 
                     width: '100%', 
                     dropdownCssClass: 'custom-select2-dropdown'
-                });
+                });*/
+
+                n++;
+            });
+
+            tbody.html(html);
+
+            n = 1;
+
+            result.orden_produccion.forEach(orden_produccion => {
+
+                $('#descripcion' + n)
+                    .val(orden_produccion.id)
+                    .select2({
+                        width: '100%',
+                        dropdownCssClass: 'custom-select2-dropdown'
+                    });
+
+                $('#unidad' + n)
+                    .val(orden_produccion.id_unidad_medida);
 
                 n++;
             });
