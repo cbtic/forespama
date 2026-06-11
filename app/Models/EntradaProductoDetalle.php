@@ -31,7 +31,7 @@ class EntradaProductoDetalle extends Model
 
     function getDetalleProductoId($id){
 
-        $cad = "select epd.id,  ROW_NUMBER() OVER (PARTITION BY epd.id_entrada_productos ) AS row_num, epd.numero_serie, epd.id_producto, p.codigo, epd.id_marca, p.id_unidad_medida, epd.fecha_fabricacion, epd.fecha_vencimiento, epd.id_um, epd.id_estado_bien , epd.cantidad, epd.cantidad, epd.cantidad, '12' stock_actual, epd.costo, epd.sub_total , epd.igv , epd.total, ep.id_almacen_destino, p.denominacion nombre_producto, m.denominiacion nombre_marca, tm2.denominacion nombre_estado_bien, tm3.denominacion nombre_unidad_medida, ep.id_empresa_compra, 
+        $cad = "select epd.id,  ROW_NUMBER() OVER (PARTITION BY epd.id_entrada_productos ) AS row_num, epd.numero_serie, epd.id_producto, p.codigo, epd.id_marca, epd.id_um id_unidad_medida, epd.fecha_fabricacion, epd.fecha_vencimiento, epd.id_um, epd.id_estado_bien , epd.cantidad, epd.cantidad, epd.cantidad, '12' stock_actual, epd.costo, epd.sub_total , epd.igv , epd.total, ep.id_almacen_destino, p.denominacion nombre_producto, m.denominiacion nombre_marca, tm2.denominacion nombre_estado_bien, tm3.denominacion nombre_unidad_medida, ep.id_empresa_compra, 
         case when ep.id_tipo_cliente = 1 then 
         (select p.numero_documento from personas p
         where p.id = ep.id_persona)
