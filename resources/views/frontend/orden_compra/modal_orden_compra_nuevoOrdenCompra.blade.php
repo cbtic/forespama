@@ -491,7 +491,7 @@ function calcularSubTotal(input) {
 }
 
 function calcularPrecioUnitario(input) {
-
+    
     var fila = $(input).closest('tr');
     var igvPorcentaje = $('#igv_compra').val() == 2 ? 1.18 : 0;
     var precio_unitario_ = 0;
@@ -852,7 +852,7 @@ function cargarDetalle(){
                 html +=`
                 <tr>
                     <td>${n}</td>
-                    <td style="width: 400px !important;display:block"><input name="id_orden_compra_detalle[]" id="id_orden_compra_detalle${n}" class="form-control form-control-sm" value="${orden_compra.id}" type="hidden"><input name="id_autorizacion_detalle[]" id="id_autorizacion_detalle${n}" class="form-control form-control-sm" value="2" type="hidden"><select name="descripcion_[]" id="descripcion_${n}" class="form-control form-control-sm select-producto" ${bloqueado ? 'disabled' : ''} onChange="cambiarDescripcion(this, ${n});verificarProductoSeleccionado(this, ${n});">${productoOptions}</select><input name="descripcion[]" id="descripcion${n}" class="form-control form-control-sm" value="${orden_compra.id_producto}" type="hidden"></td>
+                    <td style="width: 400px !important;display:block"><input name="id_orden_compra_detalle[]" id="id_orden_compra_detalle${n}" class="form-control form-control-sm" value="${orden_compra.id}" type="hidden"><input name="id_autorizacion_detalle[]" id="id_autorizacion_detalle${n}" class="form-control form-control-sm" value="2" type="hidden"><select name="descripcion_[]" id="descripcion_${n}" class="form-control form-control-sm select-producto" ${bloqueado ? 'disabled' : ''} onChange="cambiarDescripcion(this, ${n});verificarProductoSeleccionado(this, ${n});calcularSubTotal(this);">${productoOptions}</select><input name="descripcion[]" id="descripcion${n}" class="form-control form-control-sm" value="${orden_compra.id_producto}" type="hidden"></td>
                     
                     <td><select name="marca[]" id="marca${n}" class="form-control form-control-sm select-marca">${marcaOptions}</select></td>
                     <td><select name="unidad[]" id="unidad${n}" class="form-control form-control-sm">${unidadMedidaOptions}</select></td>
@@ -923,7 +923,21 @@ function cargarDetalle(){
 function cambiarDescripcion(select, n){
     var valor = $(select).val();
     $("#descripcion"+n).val(valor);
+
 }
+
+$(document).on('change', '.cantidad_ingreso', function () {
+    calcularPrecioUnitario(this);
+});
+
+$(document).on('select2:select', '.select-producto', function () {
+    let fila = $(this).closest('tr');
+
+    // IMPORTANTE: recalcula después de actualizar datos del producto
+    setTimeout(() => {
+        calcularPrecioUnitario(fila.find('.cantidad_ingreso'));
+    }, 50);
+});
 
 function limitarDecimalesYCalcular(input, decimales) {
     input.value = input.value

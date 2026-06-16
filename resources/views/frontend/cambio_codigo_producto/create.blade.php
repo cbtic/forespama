@@ -345,15 +345,15 @@ label.form-control-sm{
 					<div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
 						<div class="row">
 
-							<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-								<input id="codigo_bus" name="codigo_bus" on class="form-control form-control-sm filtro-input"  placeholder="C&oacute;digo">
+							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+								<input id="codigo_bus" name="codigo_bus" on class="form-control form-control-sm filtro-input"  placeholder="C&oacute;digo Movimiento">
 							</div>
 
-							<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+							<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
 								<select name="producto_bus" id="producto_bus" class="form-control form-control-sm filtro-select">
 									<option value="">--Seleccionar Producto--</option>
 									<?php
-									foreach ($producto as $row){?>
+									foreach ($productos as $row){?>
 										<option value="<?php echo $row->id ?>"><?php echo $row->codigo . ' - ' . $row->denominacion ?></option>
 										<?php 
 									}
@@ -373,11 +373,9 @@ label.form-control-sm{
 					<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
 						<div class="row">
 							<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding-right:0px">
-								<!--<input class="btn btn-warning pull-rigth" value="Buscar" type="button" id="btnBuscar" />-->
 								<button type="button" id="btnBuscar" class="btn btn-sm btn-warning pull-rigth icono-botones2" style="margin-left:10px">
 									<i class="fas fa-search" style="font-size:18px;"></i> Buscar
 								</button>
-								<!--<input class="btn btn-success pull-rigth" value="Nuevo" type="button" id="btnNuevo" style="margin-left:15px" />-->
 								<button type="button" id="btnNuevo" class="btn btn-sm btn-success icono-botones2" style="margin-left:10px">
 									<i class="fas fa-plus-circle" style="font-size:18px;"></i> Nuevo
 								</button>
@@ -393,8 +391,13 @@ label.form-control-sm{
                         <thead>
                         <tr style="font-size:13px">
                             <th>Id</th>
+							<th>C&oacute;digo Movimiento</th>
+							<th>Almacen</th>
+							<th>C&oacute;digo Principal</th>
 							<th>Denominaci&oacute;n</th>
-							<th>Tipo Marca</th>
+							<th>C&oacute;digo Secundario</th>
+							<th>Denominaci&oacute;n Secundario</th>
+							<th>Cantidad</th>
 							<th>Estado</th>
                             <th>Acciones</th>
                         </tr>
@@ -411,29 +414,22 @@ label.form-control-sm{
 
 @endsection
 
-	<div id="openOverlayOpc" class="modal fade" role="dialog">
-	  <div class="modal-dialog" >
-
+<div id="openOverlayOpc" class="modal fade" role="dialog">
+	<div class="modal-dialog" >
 		<div id="id_content_OverlayoneOpc" class="modal-content" style="padding: 0px;margin: 0px">
-
-		  <div class="modal-body" style="padding: 0px;margin: 0px">
-
+		  	<div class="modal-body" style="padding: 0px;margin: 0px">
 				<div id="diveditpregOpc"></div>
-
-		  </div>
-
+		  	</div>
 		</div>
-
-	  </div>
-
 	</div>
+</div>
 
-    @push('after-scripts')
+@push('after-scripts')
 
-	<script type="text/javascript">
+<script type="text/javascript">
 
-	</script>
+</script>
 
-	<script src="{{ asset('js/cambioCodigo.js') }}"></script>
+<script src="{{ asset('js/cambioCodigo.js') }}"></script>
 
-	@endpush
+@endpush

@@ -1,3 +1,5 @@
+-- DROP FUNCTION public.sp_listar_kardex_consulta_producto_paginado(varchar, varchar, varchar, varchar, varchar, varchar, varchar, refcursor);
+
 CREATE OR REPLACE FUNCTION public.sp_listar_kardex_consulta_producto_paginado(p_producto character varying, p_almacen character varying, p_cantidad_producto character varying, p_tipo_producto character varying, p_id_user character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
  RETURNS refcursor
  LANGUAGE plpgsql
@@ -28,6 +30,7 @@ begin
 	and oc.cerrado =''1''
 	and ocd.cerrado =''1''
 	and oc.estado =''1''
+	and oc.estado_pedido =''1''
 	and oc.id_almacen_salida = k.id_almacen_destino) cantidad_orden_compra,
 	k.saldos_cantidad - COALESCE(
 	(SELECT SUM(ocd.cantidad_requerida) 
@@ -38,6 +41,7 @@ begin
 	and oc.cerrado =''1''
 	and ocd.cerrado =''1''
 	and oc.estado =''1''
+	and oc.estado_pedido =''1''
 	AND oc.id_almacen_salida = k.id_almacen_destino), 
 	0) AS saldo_final ';
 

@@ -119,18 +119,8 @@
 
 <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.js"></script>-->
 <script type="text/javascript">
-/*
-jQuery(function($){
-$.mask.definitions['H'] = "[0-1]";
-$.mask.definitions['h'] = "[0-9]";
-$.mask.definitions['M'] = "[0-5]";
-$.mask.definitions['m'] = "[0-9]";
-$.mask.definitions['P'] = "[AaPp]";
-$.mask.definitions['p'] = "[Mm]";
-});
-*/
-$(document).ready(function() {
 
+$(document).ready(function() {
     
 });
 </script>
@@ -141,15 +131,12 @@ $('#openOverlayOpc').on('shown.bs.modal', function() {
      $('#fecha_solicitud').datepicker({
 		format: "dd-mm-yyyy",
 		autoclose: true,
-		//container: '#openOverlayOpc modal-body'
 		container: '#openOverlayOpc modal-body'
      });
-	 /*
-	 $('#hora_solicitud').timepicker({
-		showInputs: false,
-		container: '#openOverlayOpc modal-body'
-	});
-	*/
+
+     $('#producto_principal').select2({ width:'100%' })
+     
+     $('#producto_secundario').select2({ width:'100%' })
 	 
 });
 
@@ -164,53 +151,105 @@ function limpiar(){
 	$('#img_foto').val("");
 }
 
-function fn_save_marca(){
+function fn_save_cambio_codigo(){
 
-    $('#denominacion').val($('#denominacion').val().toUpperCase());
-	
-	$.ajax({
-			url: "/marcas/send_marca",
+    var msg = "";
+
+    var almacen = $('#almacen').val();
+    var producto_principal = $('#producto_principal').val();
+    var producto_secundario = $('#producto_secundario').val();
+    var stock_principal = parseFloat($('#stock_principal').val()) || 0;
+    var cantidad_principal = parseFloat($('#cantidad_principal').val()) || 0;
+
+    if(almacen==""){msg+="Seleccione el Almacen <br>";}
+    if(producto_principal==""){msg+="Seleccione el Producto de Salida <br>";}
+    if(producto_secundario==""){msg+="Seleccione el Producto de Ingreso <br>";}
+    if(cantidad_principal==""){msg+="Ingrese la Cantidad <br>";}
+    
+    if(cantidad_principal > stock_principal){
+        msg+="No hay Stock para realizar la transaccion <br>";
+    }
+
+    if(msg!=""){
+        bootbox.alert(msg);
+        return false;
+    }else{
+
+        var msgLoader = "";
+        msgLoader = "Procesando, espere un momento por favor";
+        var heightBrowser = $(window).width()/2;
+        $('.loader').css("opacity","0.8").css("height",heightBrowser).html("<div id='Grd1_wrapper' class='dataTables_wrapper'><div id='Grd1_processing' class='dataTables_processing panel-default'>"+msgLoader+"</div></div>");
+        $('.loader').show();
+
+        $.ajax({
+            url: "/cambio_codigo_producto/send_cambio_codigo_producto",
             type: "POST",
-            data : $("#frmMarca").serialize(),
-			success: function (result) {
-				//alert(result);
+            data : $("#frmCambioCodigo").serialize(),
+            success: function (result) {
                 if (result.success) {
+                    ('.loader').hide();
                     bootbox.alert(result.success, function() {
-                        $('#openOverlayOpc').modal('hide');
-                        //bootbox.alert("Se guard&oacute; satisfactoriamente"); 
-                        //window.location.reload();
                         datatablenew();
+                        $('#openOverlayOpc').modal('hide');
                     });
                 } else if (result.error) {
+                    $('.loader').hide();
                     bootbox.alert(result.error);
                 }
             },
+        });
+    }
+}
+
+function obtenerStockPrincipal(){
+
+    var producto_principal = $('#producto_principal').val();
+    var almacen = $('#almacen').val();
+
+    $.ajax({
+        url: "/productos/obtener_stock_producto/"+almacen+"/"+producto_principal,
+        dataType: "json",
+        success: function(result){
+
+            var producto_stock = result.producto_stock[producto_principal];
+            
+            $('#stock_principal').val(producto_stock.saldos_cantidad);
+        }
+    });
+}
+
+function obtenerStockSecundario(){
+
+    var producto_secundario = $('#producto_secundario').val();
+    var almacen = $('#almacen').val();
+
+    $.ajax({
+        url: "/productos/obtener_stock_producto/"+almacen+"/"+producto_secundario,
+        dataType: "json",
+        success: function(result){
+
+            var producto_stock = result.producto_stock[producto_secundario];
+            
+            $('#stock_secundario').val(producto_stock.saldos_cantidad);
+        }
     });
 }
 
 </script>
 
-
 <body class="hold-transition skin-blue sidebar-mini">
 
     <div>
-		<!--
-        <section class="content-header">
-          <h1>
-            <small style="font-size: 20px">Programados del Medicos del dia <?php //echo $fecha_atencion?></small>
-          </h1>
-        </section>
-		-->
 		<div class="justify-content-center">		
 
             <div class="card">
                 
                 <div class="card-header" style="padding:5px!important;padding-left:20px!important">
-                    Registrar Marcas
+                    Registrar Cambio de C&oacute;digo
                 </div>
                 
                 <div class="card-body">
-                <form method="post" action="#" id="frmMarca" name="frmMarca">
+                <form method="post" action="#" id="frmCambioCodigo" name="frmCambioCodigo">
 
                     <div class="row">
 
@@ -219,25 +258,15 @@ function fn_save_marca(){
                             <input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
                             <input type="hidden" name="id" id="id" value="<?php echo $id?>">
                             
-                            
                             <div class="row" style="padding-left:10px">
-                                
-                                <div class="col-lg-8">
+                                <div class="col-lg-6">
                                     <div class="form-group">
-                                        <label class="control-label form-control-sm">Denominaci&oacute;n</label>
-                                        <input id="denominacion" name="denominacion" on class="form-control form-control-sm"  value="<?php echo $marca->denominiacion?>" type="text" style="text-transform: uppercase;">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row" style="padding-left:10px">
-                                <div class="col-lg-4">
-                                    <div class="form-group">
-                                        <label class="control-label form-control-sm">Tipo Marca</label>
-                                        <select name="tipo_marca" id="tipo_marca" class="form-control form-control-sm">
+                                        <label class="control-label form-control-sm">Almacen</label>
+                                        <select name="almacen" id="almacen" class="form-control form-control-sm">
                                             <option value="">--Seleccionar--</option>
                                             <?php 
-                                            foreach ($tipo_marca as $row){?>
-                                                <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$marca->id_tipo_marca)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                            foreach ($almacen as $row){?>
+                                                <option value="<?php echo $row->id ?>" <?php if($row->id==$cambio_codigo_producto->id_almacen)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
                                                 <?php 
                                             }
                                             ?>
@@ -245,25 +274,75 @@ function fn_save_marca(){
                                     </div>
                                 </div>
                             </div>
+
+                            <div class="row" style="padding-left:10px">
+                                <div class="col-lg-9">
+                                    <div class="form-group">
+                                        <label class="control-label form-control-sm">Producto Salida</label>
+                                        <select name="producto_principal" id="producto_principal" class="form-control form-control-sm" onchange="obtenerStockPrincipal()">
+                                            <option value="">--Seleccionar--</option>
+                                            <?php 
+                                            foreach ($productos as $row){?>
+                                                <option value="<?php echo $row->id ?>" <?php if($row->id==$cambio_codigo_producto->id_producto)echo "selected='selected'"?>><?php echo $row->codigo . '-' . $row->denominacion ?></option>
+                                                <?php 
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <label class="control-label form-control-sm">Stock</label>
+                                    <input id="stock_principal" name="stock_principal" on class="form-control form-control-sm"  value="<?php //echo $cambio_codigo_producto->cantidad;?>" type="text" readonly>
+                                </div>
                             </div>
-                        </div>
-                        <div style="margin-top:15px" class="form-group">
-                            <div class="col-sm-12 controls">
-                                <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
-                                    <!--<a href="javascript:void(0)" onClick="fn_save_marca()" class="btn btn-sm btn-success">Guardar</a>-->
-                                    <button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-nuevo" data-toggle="modal" onclick="fn_save_marca()">
-                                        <i class="fas fa-save" style="font-size:18px;"></i> Guardar
-                                    </button>
+                            <div class="row" style="padding-left:10px">
+                                <div class="col-lg-9">
+                                    <div class="form-group">
+                                        <label class="control-label form-control-sm">Producto Ingreso</label>
+                                        <select name="producto_secundario" id="producto_secundario" class="form-control form-control-sm" onchange="obtenerStockSecundario()">
+                                            <option value="">--Seleccionar--</option>
+                                            <?php 
+                                            foreach ($productos as $row){?>
+                                                <option value="<?php echo $row->id ?>" <?php if($row->id==$cambio_codigo_producto->id_producto_secundario)echo "selected='selected'"?>><?php echo $row->codigo . '-' . $row->denominacion ?></option>
+                                                <?php 
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <label class="control-label form-control-sm">Stock</label>
+                                    <input id="stock_secundario" name="stock_secundario" on class="form-control form-control-sm"  value="<?php //echo $cambio_codigo_producto->cantidad;?>" type="text" readonly>
+                                </div>
+                            </div>
+                            <div class="row" style="padding-left:10px">
+                                <div class="col-lg-3">
+                                    <label class="control-label form-control-sm">Cantidad</label>
+                                    <input id="cantidad_principal" name="cantidad_principal" on class="form-control form-control-sm"  value="<?php echo $cambio_codigo_producto->cantidad;?>" type="text">
                                 </div>
                             </div>
                         </div>
                     </div>
-                </form>
+                    <?php if($id ==0){?>
+                    <div style="margin-top:15px" class="form-group">
+                        <div class="col-sm-12 controls">
+                            <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
+                                <!--<a href="javascript:void(0)" onClick="fn_save_marca()" class="btn btn-sm btn-success">Guardar</a>-->
+                                <button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-nuevo" data-toggle="modal" onclick="fn_save_cambio_codigo()">
+                                    <i class="fas fa-save" style="font-size:18px;"></i> Guardar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <?php }?>
+
                 </div>
-                <!-- /.box -->
+            </form>
             </div>
-            <!--/.col (left) -->
+            <!-- /.box -->
         </div>
+        <!--/.col (left) -->
+    </div>
         <!-- /.row -->
 <!-- /.content -->
 </div>

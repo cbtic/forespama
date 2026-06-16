@@ -5,7 +5,7 @@ $(document).ready(function () {
 	});
 		
 	$('#btnNuevo').click(function () {
-		modalMarca(0);
+		modalCambioProducto(0);
 	});
 
 	$('#codigo_bus').keypress(function(e){
@@ -28,16 +28,18 @@ $(document).ready(function () {
 			return false;
 		}
 	});
+
+	$('#producto_bus').select2({ width : '100%'})
 		
 	datatablenew();
 
 });
 
 function datatablenew(){
-                      
-    var oTable1 = $('#tblMarcas').dataTable({
+
+    var oTable1 = $('#tblCambioCodigo').dataTable({
         "bServerSide": true,
-        "sAjaxSource": "/marcas/listar_marca_ajax",
+        "sAjaxSource": "/cambio_codigo_producto/listar_cambio_codigo_producto_ajax",
         "bProcessing": true,
         "sPaginationType": "full_numbers",
         //"paging":false,
@@ -64,7 +66,8 @@ function datatablenew(){
             var iNroPagina 	= parseFloat(fn_util_obtieneNroPagina(aoData[3].value, aoData[4].value)).toFixed();
             var iCantMostrar 	= aoData[4].value;
 
-            var denominacion = $('#denominacion_bus').val();
+            var codigo = $('#codigo_bus').val();
+            var producto = $('#producto_bus').val();
 			var estado = $('#estado_bus').val();
 			
 			var _token = $('#_token').val();
@@ -74,7 +77,7 @@ function datatablenew(){
                 "type": "POST",
                 "url": sSource,
                 "data":{NumeroPagina:iNroPagina,NumeroRegistros:iCantMostrar,
-						denominacion:denominacion,estado:estado,
+						codigo:codigo,producto:producto,estado:estado,
 						_token:_token
                        },
                 "success": function (result) {
@@ -102,9 +105,9 @@ function datatablenew(){
 
 				{
 				"mRender": function (data, type, row) {
-					var denominiacion = "";
-					if(row.denominiacion!= null)denominiacion = row.denominiacion;
-					return denominiacion;
+					var codigo = "";
+					if(row.codigo!= null)codigo = row.codigo;
+					return codigo;
 				},
 				"bSortable": true,
 				"aTargets": [1]
@@ -112,12 +115,62 @@ function datatablenew(){
 
 				{
 				"mRender": function (data, type, row) {
-					var tipo_marca = "";
-					if(row.tipo_marca!= null)tipo_marca = row.tipo_marca;
-					return tipo_marca;
+					var almacen = "";
+					if(row.almacen!= null)almacen = row.almacen;
+					return almacen;
 				},
 				"bSortable": true,
 				"aTargets": [2]
+				},
+				
+				{
+				"mRender": function (data, type, row) {
+					var codigo_producto_principal = "";
+					if(row.codigo_producto_principal!= null)codigo_producto_principal = row.codigo_producto_principal;
+					return codigo_producto_principal;
+				},
+				"bSortable": true,
+				"aTargets": [3]
+				},
+				
+				{
+				"mRender": function (data, type, row) {
+					var producto_principal = "";
+					if(row.producto_principal!= null)producto_principal = row.producto_principal;
+					return producto_principal;
+				},
+				"bSortable": true,
+				"aTargets": [4]
+				},
+				
+				{
+				"mRender": function (data, type, row) {
+					var codigo_producto_principal = "";
+					if(row.codigo_producto_principal!= null)codigo_producto_principal = row.codigo_producto_principal;
+					return codigo_producto_principal;
+				},
+				"bSortable": true,
+				"aTargets": [5]
+				},
+
+				{
+				"mRender": function (data, type, row) {
+					var producto_secundario = "";
+					if(row.producto_secundario!= null)producto_secundario = row.producto_secundario;
+					return producto_secundario;
+				},
+				"bSortable": true,
+				"aTargets": [6]
+				},
+
+				{
+				"mRender": function (data, type, row) {
+					var cantidad = "";
+					if(row.cantidad!= null)cantidad = row.cantidad;
+					return cantidad;
+				},
+				"bSortable": true,
+				"aTargets": [7]
 				},
 				
 				{
@@ -132,7 +185,7 @@ function datatablenew(){
 					return estado;
 				},
 				"bSortable": false,
-				"aTargets": [3]
+				"aTargets": [8]
 				},
 				{
 				"mRender": function (data, type, row) {
@@ -149,8 +202,8 @@ function datatablenew(){
 					
 					var html = '<div class="btn-group btn-group-sm" role="group" aria-label="Log Viewer Actions">';
 					
-					html += '<button style="font-size:12px" type="button" class="btn btn-sm btn-success" data-toggle="modal" onclick="modalMarca('+row.id+')" ><i class="fa fa-edit"></i> Editar</button>'; 
-					html += '<a href="javascript:void(0)" onclick=eliminarMarca('+row.id+','+row.estado+') class="btn btn-sm '+clase+'" style="font-size:12px;margin-left:10px"><i class="fa fa-eraser" style="font-size:18px;"></i> '+estado+'</a>';
+					html += '<button style="font-size:12px" type="button" class="btn btn-sm btn-info" data-toggle="modal" onclick="modalCambioProducto('+row.id+')" ><i class="fa fa-eye"></i> Visualizar</button>'; 
+					//html += '<a href="javascript:void(0)" onclick=eliminarMarca('+row.id+','+row.estado+') class="btn btn-sm '+clase+'" style="font-size:12px;margin-left:10px"><i class="fa fa-eraser" style="font-size:18px;"></i> '+estado+'</a>';
 					
 					//html += '<a href="javascript:void(0)" onclick=modalResponsable('+row.id+') class="btn btn-sm btn-info" style="font-size:12px;margin-left:10px">Detalle Responsable</a>';
 					
@@ -158,7 +211,7 @@ function datatablenew(){
 					return html;
 				},
 				"bSortable": false,
-				"aTargets": [4],
+				"aTargets": [9],
 				},
             ]
     });
@@ -168,13 +221,13 @@ function fn_ListarBusqueda() {
     datatablenew();
 };
 
-function modalMarca(id){
+function modalCambioProducto(id){
 	
 	$(".modal-dialog").css("width","85%");
 	$('#openOverlayOpc .modal-body').css('height', 'auto');
 
 	$.ajax({
-		url: "/marcas/modal_marca/"+id,
+		url: "/cambio_codigo_producto/modal_cambio_codigo_producto/"+id,
 		type: "GET",
 		success: function (result) {  
 			$("#diveditpregOpc").html(result);
