@@ -63,6 +63,7 @@ use App\Http\Controllers\Frontend\KardexSecundarioController;
 use App\Http\Controllers\Frontend\RequerimientoDispensacionController;
 use App\Http\Controllers\Frontend\AsientoContableAnexoController;
 use App\Http\Controllers\Frontend\CambioCodigoProductoController;
+use App\Http\Controllers\Frontend\AsientoContableVentaController;
 
 
 //use App\Http\Controllers\VehiculoController;
@@ -1019,4 +1020,9 @@ Route::get('cambio_codigo_producto/create', [CambioCodigoProductoController::cla
 Route::post('cambio_codigo_producto/listar_cambio_codigo_producto_ajax', [CambioCodigoProductoController::class, 'listar_cambio_codigo_producto_ajax'])->name('cambio_codigo_producto.listar_cambio_codigo_producto_ajax');
 Route::post('cambio_codigo_producto/send_cambio_codigo_producto', [CambioCodigoProductoController::class, 'send_cambio_codigo_producto'])->name('cambio_codigo_producto.send_cambio_codigo_producto');
 Route::get('cambio_codigo_producto/modal_cambio_codigo_producto/{id}', [CambioCodigoProductoController::class, 'modal_cambio_codigo_producto'])->name('cambio_codigo_producto.modal_cambio_codigo_producto');
+
+Route::get('asiento_contable_venta/create', [AsientoContableVentaController::class, 'create'])->name('asiento_contable_venta.create');
+Route::post('asiento_contable_venta/listar_asiento_contable_venta_ajax', [AsientoContableVentaController::class, 'listar_asiento_contable_venta_ajax'])->name('asiento_contable_venta.listar_asiento_contable_venta_ajax');
+Route::post('asiento_contable_venta/generar_asiento_contable_venta', [AsientoContableVentaController::class, 'generar_asiento_contable_venta'])->name('asiento_contable_venta.generar_asiento_contable_venta');
+Route::post('asiento_contable_venta/migrar_ventas_starsoft', [AsientoContableVentaController::class, 'migrar_ventas_starsoft'])->name('asiento_contable_venta.migrar_ventas_starsoft');
 

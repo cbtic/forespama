@@ -269,7 +269,6 @@ label.form-control-sm{
 	vertical-align:top;
 }
 
-
 .img_ruta{
 	position:relative;
 	float:left
@@ -294,12 +293,12 @@ label.form-control-sm{
 
 @extends('frontend.layouts.app')
 
-@section('title', __('Consulta Cuenta Contable'))
+@section('title', __('Asiento Contable Ventas'))
 
 @section('breadcrumb')
 <ol class="breadcrumb" style="padding-left:130px;margin-top:0px;background-color:#283659">
     <li class="breadcrumb-item text-primary">Inicio</li>
-    <li class="breadcrumb-item active">Registro de Cuenta Contable</li>
+    <li class="breadcrumb-item active">Generar Asientos Contables de Ventas</li>
     </li>
 </ol>
 
@@ -325,45 +324,62 @@ label.form-control-sm{
 
         <div class="card-body">
 
-            <form class="form-horizontal" method="post" action="" id="frmCuentaContable" autocomplete="off" enctype="multipart/form-data">
+            <form class="form-horizontal" method="post" action="" id="frmAsientoContableVenta" autocomplete="off" enctype="multipart/form-data">
 				
-			<div class="row">
-				<div class="col-lg-5 col-md-5 col-sm-12 col-xs-12" style="margin-top:15px">
-					<h4 class="card-title mb-0 text-primary" style="font-size:22px">
-						Cuenta Contable
-					</h4>
-				</div>
-			</div>
-			<div class="row justify-content-center" style="margin-top:15px">
+                <div class="row">
+                    <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12" style="margin-top:15px">
+                        <h4 class="card-title mb-0 text-primary" style="font-size:22px">
+                            Asientos Contables de Ventas
+                        </h4>
+                    </div>
+                </div>
+                <div class="row justify-content-center" style="margin-top:15px">
 
-				<input type="hidden" name="flag_ocultar" id="flag_ocultar" value="0">
+                    <input type="hidden" name="flag_ocultar" id="flag_ocultar" value="0">
 
-				<div class="col col-sm-12 align-self-center">
+					<div class="col col-sm-12 align-self-center">
 
-					<input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
+
+                        <input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
 				
 				<div class="row" style="padding:20px 20px 0px 20px;">
 					<div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
 						<div class="row">
-							
-							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-								<select name="tipo_bus" id="tipo_bus" class="form-control form-control-sm filtro-select">
-									<option value="">--Seleccionar Tipo--</option>
+
+							<!--<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+								<select name="tipo_anexo_bus" id="tipo_anexo_bus" class="form-control form-control-sm filtro-select">
+									<option value="">--Seleccionar Tipo Anexo--</option>
 									<?php
-									foreach ($tipo as $row){?>
-										<option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
+									//foreach ($tipo_anexo as $row){?>
+										<option value="<?php //echo $row->codigo_tipo_anexo ?>"><?php //echo $row->descripcion ?></option>
 										<?php 
-									}
+									//}
 									?>
 								</select>
-							</div>
+							</div>-->
 
-							<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-								<input id="denominacion_bus" name="denominacion_bus" on class="form-control form-control-sm filtro-input"  placeholder="Denominaci&oacute;n">
+							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+								<input id="numero_comprobante_bus" name="numero_comprobante_bus" on class="form-control form-control-sm filtro-input"  placeholder="N&uacute;mero Comprobante">
 							</div>
 
 							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-								<input id="cuenta_bus" name="cuenta_bus" on class="form-control form-control-sm filtro-input"  placeholder="Cuenta">
+								<input id="numero_documento_bus" name="numero_documento_bus" on class="form-control form-control-sm filtro-input"  placeholder="N&uacute;mero Documento">
+							</div>
+
+							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+								<input id="fecha_inicio_bus" name="fecha_inicio_bus" on class="form-control form-control-sm filtro-input" style=" content: \f073;" placeholder="Fecha Inicio">
+							</div>
+
+							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+								<input id="fecha_fin_bus" name="fecha_fin_bus" on class="form-control form-control-sm filtro-input"  placeholder="Fecha Fin">
+							</div>
+
+							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+								<select name="migrado_bus" id="migrado_bus" class="form-control form-control-sm filtro-select">
+									<option value="" selected="selected">--Seleccionar Migrado--</option>
+									<option value="1">SI</option>
+									<option value="0">No</option>
+								</select>
 							</div>
 							
 							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
@@ -381,35 +397,53 @@ label.form-control-sm{
 								<button type="button" id="btnBuscar" class="btn btn-sm btn-warning pull-rigth icono-botones2" style="margin-left:10px">
 									<i class="fas fa-search" style="font-size:18px;"></i> Buscar
 								</button>
-								<button type="button" id="btnNuevo" class="btn btn-sm btn-success icono-botones2" style="margin-left:10px">
-									<i class="fas fa-plus-circle" style="font-size:18px;"></i> Nuevo
+								<button type="button" id="btnGenerarAsientos" class="btn btn-sm btn-success icono-botones2" style="margin-left:10px">
+									<i class="fas fa-sync-alt" style="font-size:18px;"></i> Generar Asientos
+								</button>
+								<button type="button" id="btnMigrar" class="btn btn-sm btn-info icono-botones2" style="margin-left:10px">
+									<i class="fas fa-paper-plane" style="font-size:18px;"></i> Migrar
 								</button>
 							</div>
 						</div>
 					</div>
 				</div>
-				<div class="card-body">				
-					<div class="table-responsive">
-					<table id="tblCuentaContable" class="table table-hover table-sm">
-						<thead>
-							<tr style="font-size:13px">
-								<th>Id</th>
-								<th>Tipo</th>
-								<th>Denominaci&oacute;n</th>
-								<th>Cuenta Existencia</th>
-								<th>Cuenta Ventas</th>
-								<th>Estado</th>
-								<th>Acciones</th>
-							</tr>
-						</thead>
-						<tbody>
-						</tbody>
-					</table>
-				</div><!--table-responsive-->
-				</form>
-			</div><!--card-body-->
-		</div><!--card-->
-	<!--</div>--><!--col-->
+				
+                <div class="card-body">				
+
+                    <div class="table-responsive">
+                    <table id="tblAsientoContableVenta" class="table table-hover table-sm">
+                        <thead>
+                        <tr style="font-size:12px">
+                            <th>Id</th>
+							<th>Cuenta</th>
+							<th>Annomes</th>
+							<th>Subdiario</th>
+							<th>Comprobante</th>
+							<th>Fecha Registro</th>
+							<th>Tipo Anexo</th>
+							<th>C&oacute;digo Cliente</th>
+							<th>Tipo Documento</th>
+							<th>N&uacute;mero Documento</th>
+							<th>Fecha Documento</th>
+							<th>Igv</th>
+							<th>Importe</th>
+							<th>Glosa</th>
+							<th>Glosa Movimiento</th>
+							<th>Ruc Cliente</th>
+							<th>Raz&oacute;n Social</th>
+							<th>Fecha Vencimiento</th>
+							<th>Migrado</th>
+							<th>Fecha Migrado</th>
+                        </tr>
+                        </thead>
+                        <tbody style="font-size:12px">
+                        </tbody>
+                    </table>
+                </div><!--table-responsive-->
+                </form>
+                </div><!--card-body-->
+            </div><!--card-->
+        <!--</div>--><!--col-->
     <!--</div>--><!--row-->
 
 @endsection
@@ -431,12 +465,12 @@ label.form-control-sm{
 
 	</div>
 
-@push('after-scripts')
+    @push('after-scripts')
 
-<script type="text/javascript">
+	<script type="text/javascript">
 
-</script>
+	</script>
 
-<script src="{{ asset('js/cuentaContable.js') }}"></script>
+	<script src="{{ asset('js/asiento_contable_venta.js') }}"></script>
 
-@endpush
+	@endpush

@@ -510,7 +510,7 @@
 
 					@endif
 
-					@if(Gate::check('Consulta de Facturacion') || Gate::check('Facturacion de Pagos') || Gate::check('Reporte Ventas') || Gate::check('Consulta de Facturacion Detalle'))
+					@if(Gate::check('Consulta de Facturacion') || Gate::check('Facturacion de Pagos') || Gate::check('Reporte Ventas') || Gate::check('Consulta de Facturacion Detalle') || Gate::check('Asiento Contable Anexo') || Gate::check('Asiento Contable Venta'))
 					
 						<li class="nav-item dropdown">
 							<a href="#" class="nav-link dropdown-toggle" id="navbarDropdownPrueba" data-toggle="dropdown"
@@ -540,6 +540,10 @@
 
 								@can('Asiento Contable Anexo')
 									<x-utils.link :href="route('frontend.asiento_contable_anexo.create')" class="dropdown-item" :text="__('Asiento Contable Anexo')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+								@endif
+
+								@can('Asiento Contable Venta')
+									<x-utils.link :href="route('frontend.asiento_contable_venta.create')" class="dropdown-item" :text="__('Asiento Contable Venta')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
 								@endif
 
 							</div>

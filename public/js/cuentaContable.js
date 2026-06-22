@@ -141,6 +141,16 @@ function datatablenew(){
 				
 				{
 				"mRender": function (data, type, row) {
+					var cuenta_venta = "";
+					if(row.cuenta_venta!= null)cuenta_venta = row.cuenta_venta;
+					return cuenta_venta;
+				},
+				"bSortable": true,
+				"aTargets": [4]
+				},
+				
+				{
+				"mRender": function (data, type, row) {
 					var estado = "";
 					if(row.estado == 1){
 						estado = "Activo";
@@ -151,7 +161,7 @@ function datatablenew(){
 					return estado;
 				},
 				"bSortable": false,
-				"aTargets": [4]
+				"aTargets": [5]
 				},
 				{
 				"mRender": function (data, type, row) {
@@ -177,7 +187,7 @@ function datatablenew(){
 					return html;
 				},
 				"bSortable": false,
-				"aTargets": [5],
+				"aTargets": [6],
 				},
             ]
     });

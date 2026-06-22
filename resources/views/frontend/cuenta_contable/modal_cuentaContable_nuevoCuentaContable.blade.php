@@ -207,6 +207,12 @@ function fn_save_cuenta_contable(){
                                         <input id="cuenta" name="cuenta" on class="form-control form-control-sm"  value="<?php echo $cuenta_contable->cuenta?>" type="text">
                                     </div>
                                 </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label class="control-label form-control-sm">Cuenta Ventas</label>
+                                        <input id="cuenta_venta" name="cuenta_venta" on class="form-control form-control-sm"  value="<?php echo $cuenta_contable->cuenta_venta?>" type="text">
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

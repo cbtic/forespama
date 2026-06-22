@@ -4188,7 +4188,7 @@ class ComprobanteController extends Controller
     ];
 
 
-        $data["horaEmision"] =date("h:i:s", strtotime($guia->guia_fecha_emision)); // "12:12:04";//$cabecera->fecha
+        $data["horaEmision"] =date("h:i:s", strtotime($guia->created_at)); // "12:12:04";//$cabecera->fecha
         $data["serieNumero"] =$guia->guia_serie."-".$guia->guia_numero; // "F001-000002";
         $data["fechaEmision"] =date("Y-m-d",strtotime($guia->guia_fecha_emision)); //"2021-03-18";
         $data["notification"] ="0";

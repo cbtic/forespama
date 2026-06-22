@@ -78,6 +78,7 @@ class CuentaContablesController extends Controller
         $cuenta_contable->id_tipo = $request->tipo;
         $cuenta_contable->denominacion = $request->denominacion;
         $cuenta_contable->cuenta = $request->cuenta;
+        $cuenta_contable->cuenta_venta = $request->cuenta_venta;
 		$cuenta_contable->estado = 1;
         $cuenta_contable->id_usuario_inserta = $id_user;
 		$cuenta_contable->save();
