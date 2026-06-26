@@ -375,6 +375,12 @@ function generar_asientos_ventas(id){
 
 function generar_token_starsoft(){
 
+	var msgLoader = "";
+	msgLoader = "Procesando, espere un momento por favor";
+	var heightBrowser = $(window).width()/2;
+	$('.loader').css("opacity","0.8").css("height",heightBrowser).html("<div id='Grd1_wrapper' class='dataTables_wrapper'><div id='Grd1_processing' class='dataTables_processing panel-default'>"+msgLoader+"</div></div>");
+	$('.loader').show();
+
 	$.ajax({
         url: '/asiento_contable_anexo/generar_token_starsoft',
         type: 'POST',
@@ -382,16 +388,24 @@ function generar_token_starsoft(){
             _token: $('#_token').val()
         },
         success: function(response){
+			$('.loader').hide();
             console.log(response);
 			migrar_ventas_starsoft(response.data.datos.access_token);
         },
         error: function(xhr){
+			$('.loader').hide();
             console.log(xhr.responseText);
         }
     });
 }
 
 function migrar_ventas_starsoft(token){
+
+	var msgLoader = "";
+	msgLoader = "Procesando, espere un momento por favor";
+	var heightBrowser = $(window).width()/2;
+	$('.loader').css("opacity","0.8").css("height",heightBrowser).html("<div id='Grd1_wrapper' class='dataTables_wrapper'><div id='Grd1_processing' class='dataTables_processing panel-default'>"+msgLoader+"</div></div>");
+	$('.loader').show();
 
 	$.ajax({
         url: '/asiento_contable_venta/migrar_ventas_starsoft',
@@ -402,9 +416,11 @@ function migrar_ventas_starsoft(token){
         },
         success: function(response){
 			datatablenew();
+			$('.loader').hide();
             console.log(response);
         },
         error: function(xhr){
+			$('.loader').hide();
             console.log(xhr.responseText);
         }
     });

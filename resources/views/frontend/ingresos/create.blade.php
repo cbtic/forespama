@@ -540,7 +540,7 @@
                                     <div class="card-header">
                                         <strong>
                                             Datos de la Persona
-                                        </strong>                                       
+                                        </strong>
                                     </div>
 
                                     <div class="card-body">

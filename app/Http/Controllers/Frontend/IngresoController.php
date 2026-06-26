@@ -145,15 +145,11 @@ class IngresoController extends Controller
             $numero_documento_b = "";
         }
         
-
-
         //print_r("-".$numero_documento_b);exit();
-
 
         $valorizaciones_model = new Valorizacione;
         $sw = true;
         
-
         if ($SelFracciona=="S"){
             $valorizacion = $valorizaciones_model->getValorizacionFrac($tipo_documento,$id_persona,$periodo,$tipo_couta,$concepto,$filas);
         }else{

@@ -15,7 +15,7 @@ begin
 	
 	p_pagina=(p_pagina::Integer-1)*p_limit::Integer;
 
-	v_campos=' cc.id, cc.denominacion, cc.cuenta, tm.denominacion tipo, cc.estado ';
+	v_campos=' cc.id, cc.denominacion, cc.cuenta, tm.denominacion tipo, cc.cuenta_venta, cc.estado ';
 
 	v_tabla=' from cuenta_contables cc 
 	inner join tabla_maestras tm on cc.id_tipo = tm.codigo::int and tm.tipo = ''118'' ';

@@ -336,10 +336,7 @@ function obtenerNotaCreditoComprobante(id_orden_compra){
 			//return ('No');
 
 		}
-		
-		
 	});
-	
 }
 
 function guardarFactura(){
@@ -351,7 +348,6 @@ function guardarFactura(){
 	var forma_pago = $('#forma_pago').val();
 
 	var valorizad = $('#valorizad').val();
-
 
 	var ind = $('#tblMedioPago tbody tr').length;
 	
@@ -381,16 +377,13 @@ function guardarFactura(){
 	    var minDate_m = new Date();
     minDate_m.setDate(today.getDate() - 2);
 
-
 	var selectedDate = $('#fechaF').datepicker('getDate');
     
 	if (selectedDate < minDate || selectedDate > today) {
-            msg+= 'Por favor seleccione una fecha entre ' + 
-                  $.datepicker.formatDate('dd/mm/yy', minDate_m) + 
-                  ' y ' + $.datepicker.formatDate('dd/mm/yy', today)+'<br>';            
+		msg+= 'Por favor seleccione una fecha entre ' + 
+				$.datepicker.formatDate('dd/mm/yy', minDate_m) + 
+				' y ' + $.datepicker.formatDate('dd/mm/yy', today)+'<br>';            
     }
-       
-
 
 	if(total_!=total_fac_ && id_formapago_==1){
 
@@ -401,11 +394,7 @@ function guardarFactura(){
 		if($total_pagar_abono=="0"){
 			msg+="El total de medio de pago no coincide al total del comprobante..<br>";
 		}
-		
 	}
-
-
-
 
 	var direccion = $('#direccion').val();
 	var email = $('#email').val();
@@ -421,12 +410,9 @@ function guardarFactura(){
 	if(direccion=='')msg+="Debe ingresar la direcci&oacute;n del comprobante<br>";
 	if(email=='')msg+="Debe ingresar el Email del comprobante<br>";
 
-
 	//if (id_formapago_==2)
 
-
 	//
-
 	
 	var ruc_e = $('#numero_documento').val();
 	var ruc_p = $('#numero_documento2').val();
@@ -445,7 +431,6 @@ function guardarFactura(){
 		
 	}
 
-
     if(smodulo_guia=="32"){
 		var guia_llegada_direccion = $('#guia_llegada_direccion').val();
 		if(guia_llegada_direccion=="")msg+="Debe ingresar un direcci&oacute;n de punto de llegada<br>";	
@@ -461,9 +446,6 @@ function guardarFactura(){
 
 	//if (esiste_oc=="Si"){msg+="La Orden de Compra ya fue Facturado...<br>";	}
 
-
-
-
     if(msg!=""){
 		
 		bootbox.alert(msg);
@@ -472,8 +454,6 @@ function guardarFactura(){
     else{
         fn_save();
 	}
-	
-
 }
 
 function guardarnc(){
@@ -501,7 +481,6 @@ function guardarnc(){
 
 }
  
-
 function fn_save(){
 
     //var fecha_atencion_original = $('#fecha_atencion').val();

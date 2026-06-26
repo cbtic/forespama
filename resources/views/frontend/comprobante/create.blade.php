@@ -558,6 +558,7 @@
                         <input type="hidden" name="id_factura" value="<?php if ($trans == 'FE') {echo $facturas->id;} ?>">
 
                         <input type="hidden" name="id_orden_compra" id="id_orden_compra" value="<?php echo $id_orden_compra; ?>">
+                        <input type="hidden" name="id_salida_prod" id="id_salida_prod" value="<?php echo $id_salida_prod; ?>">
                         <input type="hidden" name="id_proforma" id="id_proforma" value="<?php echo $id_proforma; ?>">
 
                         <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
@@ -567,7 +568,6 @@
                                 ?>
                             </div>
                         </div>
-
 
                         <div class="row">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">

@@ -973,11 +973,8 @@ function obtenerBeneficiario() {
 	var tipo_documento_b = $("#tipo_documento_b").val();
 	$("#tipo_documento").val(tipo_documento_b);
 
-
 	var numero_documento_b = $("#numero_documento_b").val();
 	$("#numero_documento").val(numero_documento_b);
-
-	
 	
 	var tipo_documento = $("#tipo_documento").val();
 	var numero_documento = $("#numero_documento").val();
@@ -988,8 +985,6 @@ function obtenerBeneficiario() {
 	$('#example-select-all').prop( "checked", false );
 	
 	//alert($("#tipo_documento").val());
-
-	
 	
 	if (msg != "") {
 		bootbox.alert(msg);
@@ -1035,7 +1030,6 @@ function obtenerBeneficiario() {
 
 	$("#chkExonerado").prop('checked', false);
 	$('#Exonerado').val("0");
-
 	
 	$("#divAgregar").hide();
 	$("#divAlmacen").hide();
@@ -1043,7 +1037,6 @@ function obtenerBeneficiario() {
 	$('#cboAlmacen').val("");
 	
 	$("#btnProforma").hide();
-	
 	
 	$.ajax({
 		url: '/persona/obtener_personas/' + tipo_documento + '/' + numero_documento,
@@ -1064,9 +1057,7 @@ function obtenerBeneficiario() {
 				//validaTipoDocumento();
 				//tipo_documento = $("#tipo_documento").val();
 				//numero_documento = $("#numero_documento").val();
-
 				
-
 				//alert($("#tipo_documento").val());
 				//alert($("#numero_documento").val());
 
@@ -1108,8 +1099,6 @@ function obtenerBeneficiario() {
 					//$("#divAlmacen").show();
 				}
 
-
-
 				if (tipo_documento == "5")//RUC
 				{
 					$('#empresa_razon_social').val(result.agremiado.razon_social);
@@ -1125,7 +1114,6 @@ function obtenerBeneficiario() {
 					$('#id_tipo_documento').val(tipo_documento);
 
 					$('#email').val(result.agremiado.email);
-
 
 					$('#btnOtroConcepto').attr("disabled", false);
 					$('#btnBeneficiario').attr("disabled",false);
@@ -1159,8 +1147,6 @@ function obtenerBeneficiario() {
 					$("#divAgregar").show();
 					$("#divAlmacen").show();
 					
-
-
 				}
 
 				if (result.agremiado.foto != null && result.agremiado.foto != "") {
@@ -1174,9 +1160,7 @@ function obtenerBeneficiario() {
 				cargarValorizacion();
 				cargarPagos();
 				cargarProforma();
-
 				
-
 				if (tipo_documento_b=="1" && result.id_orden_compra!="0"){  //DNI
 					cargarOrdenCompraSel(result.id_orden_compra, result.id_tipo_cliente);
 					$('#id_orden_compra').val(result.id_orden_compra);
@@ -1205,7 +1189,6 @@ function obtenerBeneficiario() {
 				Swal.fire("Numero de documento no fue registrado!");
 
 			}
-			
 		},
 		"error": function (msg, textStatus, errorThrown) {
 
@@ -1214,13 +1197,8 @@ function obtenerBeneficiario() {
 			}else{
 				confirma_accion();
 			}
-			
-
 		}
-		
-		
 	});
-	
 }
 
 function confirma_accion(){
@@ -1239,8 +1217,7 @@ function confirma_accion(){
 		
 	  }
 	});
-  }
-
+}
 
 function eliminarAfiliado(id){
 	
@@ -1262,19 +1239,17 @@ function fn_eliminar_afiliado(id){
 	
 	var id_plan = $('#id_plan').val();
     $.ajax({
-            url: "/afiliacion/desafiliar/"+id,
-            type: "GET",
-            success: function (result) {
-                if(result="success"){
-					obtenerBeneficiario();	
-				}
-            }
+		url: "/afiliacion/desafiliar/"+id,
+		type: "GET",
+		success: function (result) {
+			if(result="success"){
+				obtenerBeneficiario();	
+			}
+		}
     });
 }
 
-
 function cargarValorizacion1(){
-    
     
 	//var numero_documento = $("#numero_documento").val();
 	var tipo_documento = $("#tipo_documento").val();
@@ -1284,14 +1259,14 @@ function cargarValorizacion1(){
 
     $("#tblValorizacion tbody").html("");
 	$.ajax({
-			url: "/ingreso/obtener_valorizacion/"+tipo_documento+"/"+id_persona,
-			type: "GET",
-			success: function (result) {  
-					$("#tblValorizacion tbody").html(result);
-			}
+		url: "/ingreso/obtener_valorizacion/"+tipo_documento+"/"+id_persona,
+		type: "GET",
+		success: function (result) {  
+			$("#tblValorizacion tbody").html(result);
+		}
 	});
-
 }
+
 function cargarProformaId(id){
 	$.ajax({
 		url: '/proforma/obtener_proforma_id/' + id,
@@ -1405,7 +1380,6 @@ function cargarOrdenCompraSel(id, tipo_cliente){
 		cargarOrdenCompraId(id);
 	}
 	
-
 	cargarOrdenCompraDet(id);
 }
 
@@ -1413,7 +1387,6 @@ function cargaSalidaProdSel(id){
 	cargaSalidaProdId(id);
 	cargarSalidaProdDet(id);
 }
-
 
 function cargaSalidaProdId(id) {
     $.ajax({
@@ -1482,13 +1455,13 @@ function cargarProformaDet(id){
 
     $("#tblValorizacion tbody").html("");
 	$.ajax({
-			url: "/ingreso/listar_proforma_det/"+id,
-			type: "GET",
-			success: function (result) {					  					
-				$("#tblValorizacion tbody").html(result);				
-				$("#btnBoleta").prop('disabled', false);
-				$("#btnFactura").prop('disabled', false);									
-			}
+		url: "/ingreso/listar_proforma_det/"+id,
+		type: "GET",
+		success: function (result) {					  					
+			$("#tblValorizacion tbody").html(result);				
+			$("#btnBoleta").prop('disabled', false);
+			$("#btnFactura").prop('disabled', false);									
+		}
 	});
 }
 */
@@ -1519,7 +1492,6 @@ function cargarProformaDet(id) {
     });
 }
 
-
 function calcular_total_pf(){
 	var total = 0;
 	var descuento = 0;
@@ -1534,7 +1506,6 @@ function calcular_total_pf(){
 
 }
 
-
 function cargarValorizacion(){
 
 	
@@ -1545,9 +1516,7 @@ function cargarValorizacion(){
 	$("#btnExonerarS").prop('disabled', true);
 	$("#btnExonerarN").prop('disabled', true);
 	
-
 	//cargarcboPeriodo();
-    
     
 	//var numero_documento = $("#numero_documento").val();
 	var tipo_documento = $("#tipo_documento").val();
@@ -1558,22 +1527,17 @@ function cargarValorizacion(){
 	$("#SelFracciona").val("");
 	if (x) $("#SelFracciona").val("S");
 
-	
 	var idconcepto = $("#cboTipoConcepto_b").val();
-
 
 	$("#idConcepto").val(idconcepto);
 
 	$("#id_concepto_sel").val("");
 
 	$('#example-select-all').prop( "checked", false );
-
 	
-
 	//if(tipo_documento=="RUC")id_persona = $('#empresa_id').val();
 	//else id_persona = $('#id_persona').val();
 
- 
     $("#tblValorizacion tbody").html("");
 
 	var msgLoader = "";
@@ -1652,9 +1616,7 @@ function cargarValorizacion(){
 
 				$("#SelFracciona").val("");
 
-
 			}
-
 
 			if (cboTipoConcepto_b==26412) {
 
@@ -1664,26 +1626,16 @@ function cargarValorizacion(){
 
 			}else{
 
-
 				$("#btnAnulaFrac").hide();
 
 			}
 
-
-
-
 			total_deuda();
-
-
-
 
 			$('.loader').hide();
 		}
-});
-
+	});
 }
-
-
 
 function cargarPagos(){
 	var tipo_documento = $("#tipo_documento").val();
@@ -1694,26 +1646,24 @@ function cargarPagos(){
 	$('#tblPago').dataTable().fnDestroy();
     $("#tblPago tbody").html("");
 	$.ajax({
-			//url: "/ingreso/obtener_pago/"+numero_documento,
-			url: "/ingreso/obtener_pago/"+tipo_documento+"/"+id_persona,
-			type: "GET",
-			success: function (result) {  
-					$("#tblPago").html(result);
-					$('[data-toggle="tooltip"]').tooltip();
-					
-					$('#tblPago').DataTable({
-						//"sPaginationType": "full_numbers",
-						//"paging":false,
-						"searching": false,
-						"info": false,
-						"bSort" : false,
-						"dom": '<"top">rt<"bottom"flpi><"clear">',
-						"language": {"url": "/js/Spanish.json"},
-					});
-							
-			}
+		//url: "/ingreso/obtener_pago/"+numero_documento,
+		url: "/ingreso/obtener_pago/"+tipo_documento+"/"+id_persona,
+		type: "GET",
+		success: function (result) {  
+			$("#tblPago").html(result);
+			$('[data-toggle="tooltip"]').tooltip();
+			
+			$('#tblPago').DataTable({
+				//"sPaginationType": "full_numbers",
+				//"paging":false,
+				"searching": false,
+				"info": false,
+				"bSort" : false,
+				"dom": '<"top">rt<"bottom"flpi><"clear">',
+				"language": {"url": "/js/Spanish.json"},
+			});	
+		}
 	});
-
 }
 
 function cargarProforma(){
@@ -1725,26 +1675,24 @@ function cargarProforma(){
 	$('#tblProforma').dataTable().fnDestroy();
     $("#tblProforma tbody").html("");
 	$.ajax({
-			//url: "/ingreso/obtener_pago/"+numero_documento,
-			url: "/ingreso/obtener_proforma/"+tipo_documento+"/"+id_persona,
-			type: "GET",
-			success: function (result) {  
-					$("#tblProforma").html(result);
-					$('[data-toggle="tooltip"]').tooltip();
-					
-					$('#tblProforma').DataTable({
-						//"sPaginationType": "full_numbers",
-						//"paging":false,
-						"searching": false,
-						"info": false,
-						"bSort" : false,
-						"dom": '<"top">rt<"bottom"flpi><"clear">',
-						"language": {"url": "/js/Spanish.json"},
-					});
-							
-			}
+		//url: "/ingreso/obtener_pago/"+numero_documento,
+		url: "/ingreso/obtener_proforma/"+tipo_documento+"/"+id_persona,
+		type: "GET",
+		success: function (result) {  
+			$("#tblProforma").html(result);
+			$('[data-toggle="tooltip"]').tooltip();
+			
+			$('#tblProforma').DataTable({
+				//"sPaginationType": "full_numbers",
+				//"paging":false,
+				"searching": false,
+				"info": false,
+				"bSort" : false,
+				"dom": '<"top">rt<"bottom"flpi><"clear">',
+				"language": {"url": "/js/Spanish.json"},
+			});
+		}
 	});
-
 }
 
 function cargarDudoso(){
@@ -1756,14 +1704,12 @@ function cargarDudoso(){
 
     $("#tblDudoso tbody").html("");
 	$.ajax({
-			url: "/ingreso/obtener_dudoso/"+tipo_documento+"/"+id_persona,
-			type: "GET",
-			success: function (result) {  
-					$("#tblDudoso tbody").html(result);
-			}
+		url: "/ingreso/obtener_dudoso/"+tipo_documento+"/"+id_persona,
+		type: "GET",
+		success: function (result) {  
+			$("#tblDudoso tbody").html(result);
+		}
 	});
-
-
 }
 
 function ValidarDeudasVencidas(tipo){
@@ -1782,7 +1728,6 @@ function ValidarDeudasVencidas(tipo){
 
 			//var id = result[0].id;
 			
-			
 			//alert(result[0].anio);
 			
 			$('#anio_deuda').val(result[0].anio);
@@ -1790,19 +1735,14 @@ function ValidarDeudasVencidas(tipo){
 
 			validar(tipo);
 
-
 	}
-		
-
-
-
-
+	
 			//$('#empresa_razon_social').val(result.agremiado.razon_social);
 
 
 
-/*			
-			var option = "<option value='' selected='selected'>Seleccionar Concepto</option>";
+			
+			/*var option = "<option value='' selected='selected'>Seleccionar Concepto</option>";
 			var option;
 			$('#cboTipoConcepto_b').html("");
 			
@@ -1810,22 +1750,15 @@ function ValidarDeudasVencidas(tipo){
 				option += "<option value='"+oo.id+"'>"+oo.denominacion+"</option>";
 			});
 			$('#cboTipoConcepto_b').html(option);
-			$('#cboTipoConcepto_b').select2();
-*/			
+			$('#cboTipoConcepto_b').select2();*/
+			
 			//$('.loader').hide();			
 		
-		
 	});
-
-
 }
 
-
-
 function enviarTipo(tipo){
-
 	
-
 	var exonerado = $('#Exonerado').val();
 
 	//alert(exonerado);
@@ -1835,7 +1768,6 @@ function enviarTipo(tipo){
 		exit();
 	}
 	
-
 	if(tipo == 1)$('#TipoF').val("FTFT");
 	if(tipo == 2)$('#TipoF').val("BVBV");
 	if(tipo == 3)$('#TipoF').val("TKTK");
@@ -1844,8 +1776,8 @@ function enviarTipo(tipo){
 	if(tipo == 6)$('#NDFT').val("NDFT"); //'Nueva Nota Dévito Factura'
 	if(tipo == 7)$('#NDBV').val("NDBV"); //'Nueva Nota Dévito Boleta de Venta'
 
-/*
-	$('#DescuentoPP').val("N");
+
+	/*$('#DescuentoPP').val("N");
 
 	Swal.fire({
 		title: "Tiene un descuento desea Aplicarlo?",
@@ -1864,8 +1796,7 @@ function enviarTipo(tipo){
 		  $('#DescuentoPP').val("N");
 		  validar(tipo);
 		}
-	  });
-*/
+	  });*/
 
 //ValidarDeudasVencidas(tipo);
 //validar(tipo);
@@ -1886,9 +1817,7 @@ function validar(tipo) {
     var id_persona = $('#id_persona').val();
 	var empresa_id = $('#empresa_id').val();
 	var mov = $('.mov:checked').length;
-
 	
-
 	var id_ubicacion_p = $('#id_ubicacion_p').val();
 
 	//alert("id_persona-->"+ tipo_documento);
@@ -1915,27 +1844,22 @@ function validar(tipo) {
 			msg += "Tiene Deudas Vencidas en el mes " + mes + " que tiene que cancelar para continuar <br>";	
 		}
 	}
-
 	
-
 	if(tipo_documento != "5" && id_persona == "")msg += "Debe ingresar el Numero de Documento <br>";
 	if(tipo_documento == "5" && empresa_id == "")msg += "Debe ingresar el Numero de Documento <br>";
-	/*
-	if (tipo != 4) {
+	
+	/*if (tipo != 4) {
 		if(mov=="0")msg+="Debe seleccionar minimo un Concepto del Estado de Cuenta <br>";
-	}
-*/
-	//if(tipo_documento == "DNI" && id_ubicacion_p == "" && tipo == 1)msg += "Para crear la Factura requiere RUC Personal <br>";
+	}*/
 
+	//if(tipo_documento == "DNI" && id_ubicacion_p == "" && tipo == 1)msg += "Para crear la Factura requiere RUC Personal <br>";
 	
 	if(msg!=""){
 		bootbox.alert(msg);
 		//return false;
 	} else{
 
-
 		if(tipo == 1 || tipo==2 || tipo==3) {
-
 
 			//submitFrm();
 			document.frmValorizacion.submit();
@@ -1943,17 +1867,12 @@ function validar(tipo) {
 		}
 
 		if(tipo = 5){
-
-			
-
-
 			//fn_nota_credito();
 		}
 	}
 
 	return false;
 }
-
 
 function modalLiquidacion(id){
 	
@@ -1962,15 +1881,13 @@ function modalLiquidacion(id){
 	$('#openOverlayOpc .modal-body').css('height', 'auto');
 
 	$.ajax({
-			url: "/ingreso/modal_liquidacion/"+id,
-			type: "GET",
-			success: function (result) {  
-					$("#diveditpregOpc").html(result);
-			}
+		url: "/ingreso/modal_liquidacion/"+id,
+		type: "GET",
+		success: function (result) {  
+			$("#diveditpregOpc").html(result);
+		}
 	});
-
 }
-
 
 function guardarEstado(estado){
     
@@ -2006,17 +1923,16 @@ function guardarEstado(estado){
 function fn_save_estado(estado){
     
     $.ajax({
-			url: "/ingreso/send_estado",
-            type: "POST",
-            data : $("#frmValorizacion").serialize()+"&estado="+estado,
-            success: function (result) {  
-					cargarValorizacion();
-					cargarPagos();
-					//cargarDudoso();
-            }
+		url: "/ingreso/send_estado",
+		type: "POST",
+		data : $("#frmValorizacion").serialize()+"&estado="+estado,
+		success: function (result) {  
+			cargarValorizacion();
+			cargarPagos();
+			//cargarDudoso();
+		}
     });
 }
-
 
 function eliminarPersonaTarjeta(){
 	
@@ -2040,16 +1956,14 @@ function eliminarPersonaTarjeta(){
 function fn_eliminar_persona_tarjeta(id_persona,estado){
 	
     $.ajax({
-            url: "/tarjeta/eliminar_persona_tarjeta/"+id_persona+"/"+estado,
-            type: "GET",
-			dataType: 'json',
-            success: function (result) {
-                
-				if(result.sw==true){
-					obtenerBeneficiario();
-				}
-				
-            }
+		url: "/tarjeta/eliminar_persona_tarjeta/"+id_persona+"/"+estado,
+		type: "GET",
+		dataType: 'json',
+		success: function (result) {
+			if(result.sw==true){
+				obtenerBeneficiario();
+			}
+		}
     });
 }
 
@@ -2069,18 +1983,16 @@ function modal_otro_pago(){
 		idAgremiado = 0;
 	}		
 	
-
 	$.ajax({
-			url: "/ingreso/modal_otro_pago/"+perido+"/"+idPersona+"/"+idAgremiado+"/"+tipo_documento,
-			type: "GET",
-			success: function (result) {  
-					$("#diveditpregOpc").html(result);
-					//$('#openOverlayOpc').modal('show');
-					
-			}
+		url: "/ingreso/modal_otro_pago/"+perido+"/"+idPersona+"/"+idAgremiado+"/"+tipo_documento,
+		type: "GET",
+		success: function (result) {  
+				$("#diveditpregOpc").html(result);
+				//$('#openOverlayOpc').modal('show');
+				
+		}
 	});
 	//cargarConceptos();
-
 }
 
 function modal_persona(){
@@ -2099,18 +2011,15 @@ function modal_persona(){
 		idAgremiado = 0;
 	}		
 	
-
 	$.ajax({
-			url: "/ingreso/modal_persona/"+perido+"/"+idPersona+"/"+idAgremiado+"/"+tipo_documento,
-			type: "GET",
-			success: function (result) {  
-					$("#diveditpregOpc").html(result);
-					//$('#openOverlayOpc').modal('show');
-					
-			}
+		url: "/ingreso/modal_persona/"+perido+"/"+idPersona+"/"+idAgremiado+"/"+tipo_documento,
+		type: "GET",
+		success: function (result) {  
+				$("#diveditpregOpc").html(result);
+				//$('#openOverlayOpc').modal('show');
+		}
 	});
 	//cargarConceptos();
-
 }
 
 function modal_beneficiario_(){
@@ -2132,19 +2041,17 @@ function modal_beneficiario_(){
 	}
 
 	$.ajax({
-			url: "/ingreso/modal_beneficiario_/"+perido+"/"+idPersona+"/"+idAgremiado+"/"+tipo_documento,
-			type: "GET",
-			success: function (result) {  
-					$("#diveditpregOpc").html(result);
-					//$('#openOverlayOpc').modal('show');
-					//$('#openOverlayOpc').modal('show');
-					
-			}
+		url: "/ingreso/modal_beneficiario_/"+perido+"/"+idPersona+"/"+idAgremiado+"/"+tipo_documento,
+		type: "GET",
+		success: function (result) {  
+			$("#diveditpregOpc").html(result);
+			//$('#openOverlayOpc').modal('show');
+			//$('#openOverlayOpc').modal('show');
+				
+		}
 	});
 	//cargarConceptos();
-
 }
-
 
 function cargarConceptos(){
         
@@ -2153,13 +2060,12 @@ function cargarConceptos(){
 
     $("#tblConceptos tbody").html("");
 	$.ajax({
-			url: "/ingreso/obtener_conceptos/"+periodo,
-			type: "GET",
-			success: function (result) {  
-					$("#tblConceptos tbody").html(result);
-			}
+		url: "/ingreso/obtener_conceptos/"+periodo,
+		type: "GET",
+		success: function (result) {  
+			$("#tblConceptos tbody").html(result);
+		}
 	});
-
 }
 
 function modalValorizacionFactura(id){

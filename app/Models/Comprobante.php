@@ -219,9 +219,9 @@ class Comprobante extends Model
     function getTotalComprobanteNC($id){
 
         $cad = "select coalesce(sum(c.total),0) total
-from comprobantes c 
-where c.id_comprobante_ncnd=".$id."
-and c.estado='1'";
+        from comprobantes c 
+        where c.id_comprobante_ncnd=".$id."
+        and c.estado='1'";
     
 		$data = DB::select($cad);
         return $data[0]->total;

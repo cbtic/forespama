@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\AsientoContableVenta;
 use App\Models\StarsoftTipoAnexo;
 use App\Models\Comprobante;
+use App\Models\TipoCambio;
 use Illuminate\Support\Facades\Http;
 use Auth;
 use Illuminate\Support\Facades\DB;
@@ -64,6 +65,7 @@ class AsientoContableVentaController extends Controller
         $asientos_contables_ventas = $asiento_contable_venta_model->generarAsientosVentas();
 
         foreach($asientos_contables_ventas as $row){
+
             $asiento_contable_anexo_venta = new AsientoContableVenta;
 		
             $asiento_contable_anexo_venta->cuenta = $row->cuenta;
@@ -103,9 +105,246 @@ class AsientoContableVentaController extends Controller
             $asiento_contable_anexo_venta->id_usuario_inserta = $id_user;
             $asiento_contable_anexo_venta->save();
 
+            $asiento_contable_venta_igv_model = new AsientoContableVenta;
+            $asiento_contable_venta_igv = $asiento_contable_venta_igv_model->asientosContableVentaIgvPendientes($row->id);
+
+            if($asiento_contable_venta_igv[0]->afect_igv == 10){
+
+                $asiento_contable_anexo_venta_igv = new AsientoContableVenta;
+                $asiento_contable_anexo_venta_igv->cuenta = $asiento_contable_venta_igv[0]->cuenta;
+                $asiento_contable_anexo_venta_igv->annomes = $row->annomes;
+                $asiento_contable_anexo_venta_igv->subdiario = $row->subdiario;
+                $asiento_contable_anexo_venta_igv->comprobante = $row->comprobante;
+                $asiento_contable_anexo_venta_igv->fecha_registro = $row->fecha_registro;
+                $asiento_contable_anexo_venta_igv->tipo_anexo = $row->tipo_anexo;
+                $asiento_contable_anexo_venta_igv->codigo_cliente = $row->codigo_cliente;
+                $asiento_contable_anexo_venta_igv->tipo_documento = $row->tipo_documento;
+                $asiento_contable_anexo_venta_igv->numero_documento = $row->numero_documento;
+                $asiento_contable_anexo_venta_igv->fecha_documento = $row->fecha_documento;
+                $asiento_contable_anexo_venta_igv->tipo_documento_referencial = $row->tipo_documento_referencial;
+                $asiento_contable_anexo_venta_igv->numero_documento_referencial = $row->numero_documento_referencial;
+                $asiento_contable_anexo_venta_igv->igv = '';
+                $asiento_contable_anexo_venta_igv->valor_isc = $row->valor_isc;
+                $asiento_contable_anexo_venta_igv->tasa_igv = '';
+                $asiento_contable_anexo_venta_igv->importe = $row->igv;
+                $asiento_contable_anexo_venta_igv->tasa_cambio_conversion = $row->tasa_conversion;
+                $asiento_contable_anexo_venta_igv->tasa_cambio = $row->tc;
+                $asiento_contable_anexo_venta_igv->glosa = $row->glosa_documento;
+                $asiento_contable_anexo_venta_igv->glosa_movimiento = $row->glosa_movimiento;
+                $asiento_contable_anexo_venta_igv->anulado = $row->anulado;
+                $asiento_contable_anexo_venta_igv->debe_haber = $asiento_contable_venta_igv[0]->debe_haber;
+                $asiento_contable_anexo_venta_igv->ruc_cliente = $row->ruc_cliente;
+                $asiento_contable_anexo_venta_igv->razon_social = $row->razon_social;
+                //$asiento_contable_anexo_venta->centro_costo = $row->razon_social;
+                $asiento_contable_anexo_venta_igv->fecha_vencimiento = $row->fecha_vencimiento;
+                $asiento_contable_anexo_venta_igv->fecha_documento_referencial = $row->fecha_documento_referencial;
+                $asiento_contable_anexo_venta_igv->exportacion = $row->exportacion;
+                $asiento_contable_anexo_venta_igv->otro_impuesto = $row->otros_impuestos;
+                $asiento_contable_anexo_venta_igv->exonerado = $row->exonerado;
+                $asiento_contable_anexo_venta_igv->otros_cargos = $row->otros_cargos;
+                $asiento_contable_anexo_venta_igv->impuesto_bolsa = $row->impuesto_bolsa;
+                $asiento_contable_anexo_venta_igv->id_comprobante = $row->id;
+                $asiento_contable_anexo_venta_igv->estado = 1;
+                $asiento_contable_anexo_venta_igv->id_usuario_inserta = $id_user;
+                $asiento_contable_anexo_venta_igv->save();
+            }
+
+            $asiento_contable_venta_detalles_model = new AsientoContableVenta;
+            $asiento_contable_venta_detalle = $asiento_contable_venta_detalles_model->asientosContableVentaDetallePendientes($row->id);
+
+            foreach($asiento_contable_venta_detalle as $row2){
+
+                $asiento_contable_anexo_venta_detalle = new AsientoContableVenta;
+
+                $asiento_contable_anexo_venta_detalle->cuenta = $row2->cuenta_venta;
+                $asiento_contable_anexo_venta_detalle->annomes = $row->annomes;
+                $asiento_contable_anexo_venta_detalle->subdiario = $row->subdiario;
+                $asiento_contable_anexo_venta_detalle->comprobante = $row->comprobante;
+                $asiento_contable_anexo_venta_detalle->fecha_registro = $row->fecha_registro;
+                $asiento_contable_anexo_venta_detalle->tipo_anexo = $row->tipo_anexo;
+                $asiento_contable_anexo_venta_detalle->codigo_cliente = $row->codigo_cliente;
+                $asiento_contable_anexo_venta_detalle->tipo_documento = $row->tipo_documento;
+                $asiento_contable_anexo_venta_detalle->numero_documento = $row->numero_documento;
+                $asiento_contable_anexo_venta_detalle->fecha_documento = $row->fecha_documento;
+                $asiento_contable_anexo_venta_detalle->tipo_documento_referencial = $row->tipo_documento_referencial;
+                $asiento_contable_anexo_venta_detalle->numero_documento_referencial = $row->numero_documento_referencial;
+                $asiento_contable_anexo_venta_detalle->igv = '';
+                $asiento_contable_anexo_venta_detalle->valor_isc = $row->valor_isc;
+                $asiento_contable_anexo_venta_detalle->tasa_igv = '';
+                $asiento_contable_anexo_venta_detalle->importe = $row2->total_pu;
+                $asiento_contable_anexo_venta_detalle->tasa_cambio_conversion = $row->tasa_conversion;
+                $asiento_contable_anexo_venta_detalle->tasa_cambio = $row->tc;
+                $asiento_contable_anexo_venta_detalle->glosa = $row->glosa_documento;
+                $asiento_contable_anexo_venta_detalle->glosa_movimiento = $row->glosa_movimiento;
+                $asiento_contable_anexo_venta_detalle->anulado = $row->anulado;
+                $asiento_contable_anexo_venta_detalle->debe_haber = $row2->debe_haber;
+                $asiento_contable_anexo_venta_detalle->ruc_cliente = $row->ruc_cliente;
+                $asiento_contable_anexo_venta_detalle->razon_social = $row->razon_social;
+                //$asiento_contable_anexo_venta->centro_costo = $row->razon_social;
+                $asiento_contable_anexo_venta_detalle->fecha_vencimiento = $row->fecha_vencimiento;
+                $asiento_contable_anexo_venta_detalle->fecha_documento_referencial = $row->fecha_documento_referencial;
+                $asiento_contable_anexo_venta_detalle->exportacion = $row->exportacion;
+                $asiento_contable_anexo_venta_detalle->otro_impuesto = $row->otros_impuestos;
+                $asiento_contable_anexo_venta_detalle->exonerado = $row->exonerado;
+                $asiento_contable_anexo_venta_detalle->otros_cargos = $row->otros_cargos;
+                $asiento_contable_anexo_venta_detalle->impuesto_bolsa = $row->impuesto_bolsa;
+                $asiento_contable_anexo_venta_detalle->id_comprobante = $row->id;
+                $asiento_contable_anexo_venta_detalle->estado = 1;
+                $asiento_contable_anexo_venta_detalle->id_usuario_inserta = $id_user;
+                $asiento_contable_anexo_venta_detalle->save();
+            }
+
             $comprobante = Comprobante::find($row->id);
             $comprobante->asiento_generado = 1;
             $comprobante->save();
+        }
+
+        $asiento_contable_venta_nc_model = new AsientoContableVenta;
+		
+        $asientos_contables_ventas_nc = $asiento_contable_venta_nc_model->generarAsientosVentasNC();
+
+        foreach($asientos_contables_ventas_nc as $row3){
+
+            $tipo_cambio_model = new TipoCambio;
+            $tipo_cambio = $tipo_cambio_model->getTipoCambioByFecha($row3->fecha_registro);
+
+            $asiento_contable_anexo_venta_nc = new AsientoContableVenta;
+        
+            $asiento_contable_anexo_venta_nc->cuenta = $row3->cuenta;
+            $asiento_contable_anexo_venta_nc->annomes = $row3->annomes;
+            $asiento_contable_anexo_venta_nc->subdiario = $row3->subdiario;
+            $asiento_contable_anexo_venta_nc->comprobante = $row3->comprobante;
+            $asiento_contable_anexo_venta_nc->fecha_registro = $row3->fecha_registro;
+            $asiento_contable_anexo_venta_nc->tipo_anexo = $row3->tipo_anexo;
+            $asiento_contable_anexo_venta_nc->codigo_cliente = $row3->codigo_cliente;
+            $asiento_contable_anexo_venta_nc->tipo_documento = $row3->tipo_documento;
+            $asiento_contable_anexo_venta_nc->numero_documento = $row3->numero_documento;
+            $asiento_contable_anexo_venta_nc->fecha_documento = $row3->fecha_documento;
+            $asiento_contable_anexo_venta_nc->tipo_documento_referencial = $row3->tipo_documento_referencial;
+            $asiento_contable_anexo_venta_nc->numero_documento_referencial = $row3->numero_documento_referencial;
+            $asiento_contable_anexo_venta_nc->igv = $row3->igv;
+            $asiento_contable_anexo_venta_nc->valor_isc = $row3->valor_isc;
+            $asiento_contable_anexo_venta_nc->tasa_igv = $row3->tasa_igv;
+            $asiento_contable_anexo_venta_nc->importe = $row3->importe;
+            $asiento_contable_anexo_venta_nc->tasa_cambio_conversion = $row3->tasa_conversion;
+            $asiento_contable_anexo_venta_nc->tasa_cambio = $tipo_cambio[0]->valor_venta;
+            $asiento_contable_anexo_venta_nc->glosa = $row3->glosa_documento;
+            $asiento_contable_anexo_venta_nc->glosa_movimiento = $row3->glosa_movimiento;
+            $asiento_contable_anexo_venta_nc->anulado = $row3->anulado;
+            $asiento_contable_anexo_venta_nc->debe_haber = $row3->debe_haber;
+            $asiento_contable_anexo_venta_nc->ruc_cliente = $row3->ruc_cliente;
+            $asiento_contable_anexo_venta_nc->razon_social = $row3->razon_social;
+            //$asiento_contable_anexo_venta->centro_costo = $row->razon_social;
+            $asiento_contable_anexo_venta_nc->fecha_vencimiento = $row3->fecha_vencimiento;
+            $asiento_contable_anexo_venta_nc->fecha_documento_referencial = $row3->fecha_documento_referencial;
+            $asiento_contable_anexo_venta_nc->exportacion = $row3->exportacion;
+            $asiento_contable_anexo_venta_nc->otro_impuesto = $row3->otros_impuestos;
+            $asiento_contable_anexo_venta_nc->exonerado = $row3->exonerado;
+            $asiento_contable_anexo_venta_nc->otros_cargos = $row3->otros_cargos;
+            $asiento_contable_anexo_venta_nc->impuesto_bolsa = $row3->impuesto_bolsa;
+            $asiento_contable_anexo_venta_nc->id_comprobante = $row3->id;
+            $asiento_contable_anexo_venta_nc->estado = 1;
+            $asiento_contable_anexo_venta_nc->id_usuario_inserta = $id_user;
+            $asiento_contable_anexo_venta_nc->save();
+            
+            //$asientos_contables_ventas_nc = $asiento_contable_venta_model->generarAsientosVentasByNC($row3->tipo_matriz, $row3->numero_matriz);
+
+            $asiento_contable_venta_igv_nc_model = new AsientoContableVenta;
+            $asiento_contable_venta_igv_nc = $asiento_contable_venta_igv_nc_model->asientosContableVentaIgvNCPendientes($row3->serie_matriz, $row3->tipo_matriz, $row3->numero_matriz);
+
+            if($asiento_contable_venta_igv_nc[0]->afect_igv == 10){
+
+                $asiento_contable_anexo_venta_igv = new AsientoContableVenta;
+                $asiento_contable_anexo_venta_igv->cuenta = $asiento_contable_venta_igv_nc[0]->cuenta;
+                $asiento_contable_anexo_venta_igv->annomes = $row3->annomes;
+                $asiento_contable_anexo_venta_igv->subdiario = $row3->subdiario;
+                $asiento_contable_anexo_venta_igv->comprobante = $row3->comprobante;
+                $asiento_contable_anexo_venta_igv->fecha_registro = $row3->fecha_registro;
+                $asiento_contable_anexo_venta_igv->tipo_anexo = $row3->tipo_anexo;
+                $asiento_contable_anexo_venta_igv->codigo_cliente = $row3->codigo_cliente;
+                $asiento_contable_anexo_venta_igv->tipo_documento = $row3->tipo_documento;
+                $asiento_contable_anexo_venta_igv->numero_documento = $row3->numero_documento;
+                $asiento_contable_anexo_venta_igv->fecha_documento = $row3->fecha_documento;
+                $asiento_contable_anexo_venta_igv->tipo_documento_referencial = $row3->tipo_documento_referencial;
+                $asiento_contable_anexo_venta_igv->numero_documento_referencial = $row3->numero_documento_referencial;
+                $asiento_contable_anexo_venta_igv->igv = '';
+                $asiento_contable_anexo_venta_igv->valor_isc = $row3->valor_isc;
+                $asiento_contable_anexo_venta_igv->tasa_igv = '';
+                $asiento_contable_anexo_venta_igv->importe = $row3->igv;
+                $asiento_contable_anexo_venta_igv->tasa_cambio_conversion = $row3->tasa_conversion;
+                $asiento_contable_anexo_venta_igv->tasa_cambio = $tipo_cambio[0]->valor_venta;
+                $asiento_contable_anexo_venta_igv->glosa = $row3->glosa_documento;
+                $asiento_contable_anexo_venta_igv->glosa_movimiento = $row3->glosa_movimiento;
+                $asiento_contable_anexo_venta_igv->anulado = $row3->anulado;
+                $asiento_contable_anexo_venta_igv->debe_haber = $asiento_contable_venta_igv_nc[0]->debe_haber;
+                $asiento_contable_anexo_venta_igv->ruc_cliente = $row3->ruc_cliente;
+                $asiento_contable_anexo_venta_igv->razon_social = $row3->razon_social;
+                //$asiento_contable_anexo_venta->centro_costo = $row->razon_social;
+                $asiento_contable_anexo_venta_igv->fecha_vencimiento = $row3->fecha_vencimiento;
+                $asiento_contable_anexo_venta_igv->fecha_documento_referencial = $row3->fecha_documento_referencial;
+                $asiento_contable_anexo_venta_igv->exportacion = $row3->exportacion;
+                $asiento_contable_anexo_venta_igv->otro_impuesto = $row3->otros_impuestos;
+                $asiento_contable_anexo_venta_igv->exonerado = $row3->exonerado;
+                $asiento_contable_anexo_venta_igv->otros_cargos = $row3->otros_cargos;
+                $asiento_contable_anexo_venta_igv->impuesto_bolsa = $row3->impuesto_bolsa;
+                $asiento_contable_anexo_venta_igv->id_comprobante = $row3->id;
+                $asiento_contable_anexo_venta_igv->estado = 1;
+                $asiento_contable_anexo_venta_igv->id_usuario_inserta = $id_user;
+                $asiento_contable_anexo_venta_igv->save();
+
+                $asiento_contable_venta_detalles_nc_model = new AsientoContableVenta;
+                $asiento_contable_venta_detalle_nc = $asiento_contable_venta_detalles_nc_model->asientosContableVentaDetalleNCPendientes($row3->serie_matriz, $row3->tipo_matriz, $row3->numero_matriz);
+
+                foreach($asiento_contable_venta_detalle_nc as $row4){
+
+                    $asiento_contable_anexo_venta_detalle = new AsientoContableVenta;
+
+                    $asiento_contable_anexo_venta_detalle->cuenta = $row4->cuenta_venta;
+                    $asiento_contable_anexo_venta_detalle->annomes = $row3->annomes;
+                    $asiento_contable_anexo_venta_detalle->subdiario = $row3->subdiario;
+                    $asiento_contable_anexo_venta_detalle->comprobante = $row3->comprobante;
+                    $asiento_contable_anexo_venta_detalle->fecha_registro = $row3->fecha_registro;
+                    $asiento_contable_anexo_venta_detalle->tipo_anexo = $row3->tipo_anexo;
+                    $asiento_contable_anexo_venta_detalle->codigo_cliente = $row3->codigo_cliente;
+                    $asiento_contable_anexo_venta_detalle->tipo_documento = $row3->tipo_documento;
+                    $asiento_contable_anexo_venta_detalle->numero_documento = $row3->numero_documento;
+                    $asiento_contable_anexo_venta_detalle->fecha_documento = $row3->fecha_documento;
+                    $asiento_contable_anexo_venta_detalle->tipo_documento_referencial = $row3->tipo_documento_referencial;
+                    $asiento_contable_anexo_venta_detalle->numero_documento_referencial = $row3->numero_documento_referencial;
+                    $asiento_contable_anexo_venta_detalle->igv = '';
+                    $asiento_contable_anexo_venta_detalle->valor_isc = $row3->valor_isc;
+                    $asiento_contable_anexo_venta_detalle->tasa_igv = '';
+                    $asiento_contable_anexo_venta_detalle->importe = $row4->total_pu;
+                    $asiento_contable_anexo_venta_detalle->tasa_cambio_conversion = $row3->tasa_conversion;
+                    $asiento_contable_anexo_venta_detalle->tasa_cambio = $tipo_cambio[0]->valor_venta;
+                    $asiento_contable_anexo_venta_detalle->glosa = $row3->glosa_documento;
+                    $asiento_contable_anexo_venta_detalle->glosa_movimiento = $row3->glosa_movimiento;
+                    $asiento_contable_anexo_venta_detalle->anulado = $row3->anulado;
+                    $asiento_contable_anexo_venta_detalle->debe_haber = $row4->debe_haber;
+                    $asiento_contable_anexo_venta_detalle->ruc_cliente = $row3->ruc_cliente;
+                    $asiento_contable_anexo_venta_detalle->razon_social = $row3->razon_social;
+                    //$asiento_contable_anexo_venta->centro_costo = $row->razon_social;
+                    $asiento_contable_anexo_venta_detalle->fecha_vencimiento = $row3->fecha_vencimiento;
+                    $asiento_contable_anexo_venta_detalle->fecha_documento_referencial = $row3->fecha_documento_referencial;
+                    $asiento_contable_anexo_venta_detalle->exportacion = $row3->exportacion;
+                    $asiento_contable_anexo_venta_detalle->otro_impuesto = $row3->otros_impuestos;
+                    $asiento_contable_anexo_venta_detalle->exonerado = $row3->exonerado;
+                    $asiento_contable_anexo_venta_detalle->otros_cargos = $row3->otros_cargos;
+                    $asiento_contable_anexo_venta_detalle->impuesto_bolsa = $row3->impuesto_bolsa;
+                    $asiento_contable_anexo_venta_detalle->id_comprobante = $row3->id;
+                    $asiento_contable_anexo_venta_detalle->estado = 1;
+                    $asiento_contable_anexo_venta_detalle->id_usuario_inserta = $id_user;
+                    $asiento_contable_anexo_venta_detalle->save();
+                }
+
+                $comprobante_nc = Comprobante::find($row3->id);
+                $comprobante_nc->asiento_generado = 1;
+                $comprobante_nc->save();
+            }
+
+            $comprobante_nc = Comprobante::find($row3->id);
+            $comprobante_nc->asiento_generado = 1;
+            $comprobante_nc->save();
         }
 
         return response()->json(['success' => 'Asientos generados exitosamente.']);
@@ -160,7 +399,7 @@ class AsientoContableVentaController extends Controller
                     'impBolsa' => (float)($item->impuesto_bolsa ?? 0)
                 ];
                 
-                $asiento_contable_venta_igv_model = new AsientoContableVenta;
+                /*$asiento_contable_venta_igv_model = new AsientoContableVenta;
                 $asiento_contable_venta_igv = $asiento_contable_venta_igv_model->asientosContableVentaIgvPendientes($item->id_comprobante);
 
                 if($asiento_contable_venta_igv[0]->afect_igv == 10){
@@ -202,7 +441,7 @@ class AsientoContableVentaController extends Controller
                 }
 
                 $asiento_contable_venta_detalles_model = new AsientoContableVenta;
-                $asiento_contable_venta_detalle = $asiento_contable_venta_detalles_model->asientosContableVentaDetallePendientes($item->id_comprobante);
+                $asiento_contable_venta_detalle = $asiento_contable_venta_detalles_model->asientosContableVentaDetallePendientes($item->id_comprobante);*/
 
 
             }

@@ -186,14 +186,14 @@ function fn_save_cambio_codigo(){
             type: "POST",
             data : $("#frmCambioCodigo").serialize(),
             success: function (result) {
+
+                $('.loader').hide();
                 if (result.success) {
-                    ('.loader').hide();
                     bootbox.alert(result.success, function() {
                         datatablenew();
                         $('#openOverlayOpc').modal('hide');
                     });
                 } else if (result.error) {
-                    $('.loader').hide();
                     bootbox.alert(result.error);
                 }
             },
