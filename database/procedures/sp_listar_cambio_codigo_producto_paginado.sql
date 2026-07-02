@@ -1,4 +1,4 @@
--- DROP FUNCTION public.sp_listar_marcas_paginado(varchar, varchar, varchar, varchar, refcursor);
+-- DROP FUNCTION public.sp_listar_cambio_codigo_producto_paginado(varchar, varchar, varchar, varchar, varchar, refcursor);
 
 CREATE OR REPLACE FUNCTION public.sp_listar_cambio_codigo_producto_paginado(p_codigo character varying, p_producto character varying, p_estado character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
  RETURNS refcursor
@@ -17,12 +17,13 @@ begin
 	
 	p_pagina=(p_pagina::Integer-1)*p_limit::Integer;
 
-	v_campos=' ccp.id, ccp.codigo, p.codigo codigo_producto_principal, p.denominacion producto_principal, p2.codigo codigo_producto_principal, p2.denominacion producto_secundario, ccp.cantidad, a.denominacion almacen, ccp.estado ';
+	v_campos=' ccp.id, ccp.codigo, p.codigo codigo_producto_principal, p.denominacion producto_principal, p2.codigo codigo_producto_principal, p2.denominacion producto_secundario, ccp.cantidad, a.denominacion almacen, ccp.estado, u.name usuario_registra ';
 
 	v_tabla=' from cambio_codigo_productos ccp 
 	inner join productos p on ccp.id_producto::int = p.id 
 	inner join productos p2 on ccp.id_producto_secundario::int = p2.id 
-	inner join almacenes a on ccp.id_almacen::int = a.id ';
+	inner join almacenes a on ccp.id_almacen::int = a.id 
+	inner join users u on ccp.id_usuario_inserta = u.id';
 	
 	v_where = ' Where 1=1 ';
 

@@ -398,11 +398,12 @@ label.form-control-sm{
 							<th>C&oacute;digo Secundario</th>
 							<th>Denominaci&oacute;n Secundario</th>
 							<th>Cantidad</th>
+							<th>Usuario Registra</th>
 							<th>Estado</th>
                             <th>Acciones</th>
                         </tr>
                         </thead>
-                        <tbody>
+                        <tbody style="font-size:13px">
                         </tbody>
                     </table>
                 </div><!--table-responsive-->

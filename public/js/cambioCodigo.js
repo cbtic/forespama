@@ -172,6 +172,16 @@ function datatablenew(){
 				"bSortable": true,
 				"aTargets": [7]
 				},
+
+				{
+				"mRender": function (data, type, row) {
+					var usuario_registra = "";
+					if(row.usuario_registra!= null)usuario_registra = row.usuario_registra;
+					return usuario_registra;
+				},
+				"bSortable": true,
+				"aTargets": [8]
+				},
 				
 				{
 				"mRender": function (data, type, row) {
@@ -185,7 +195,7 @@ function datatablenew(){
 					return estado;
 				},
 				"bSortable": false,
-				"aTargets": [8]
+				"aTargets": [9]
 				},
 				{
 				"mRender": function (data, type, row) {
@@ -211,7 +221,7 @@ function datatablenew(){
 					return html;
 				},
 				"bSortable": false,
-				"aTargets": [9],
+				"aTargets": [10],
 				},
             ]
     });
