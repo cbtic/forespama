@@ -270,12 +270,12 @@ $(document).ready(function() {
                             $precio_total_suma+=$r->precio_total;
                             
                             if($tipo_empresa==1){
-                                if($r->precio_unitario==1.20){
+                                if($r->precio_unitario == $precio_menor){
                                     $suma_cantidad_reporte_1_2+=$r->cantidad;
                                     $suma_volumen_m3_1_2+=$r->volumen_total_m3;
                                     $suma_volumen_pies_1_2+=$r->volumen_total_pies;
                                     $suma_total_1_2+=$r->precio_total;
-                                }else{
+                                }else if ($r->precio_unitario == $precio_mayor){
                                     $suma_cantidad_reporte_1_7+=$r->cantidad;
                                     $suma_volumen_m3_1_7+=$r->volumen_total_m3;
                                     $suma_volumen_pies_1_7+=$r->volumen_total_pies;
