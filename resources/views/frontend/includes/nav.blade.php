@@ -364,7 +364,7 @@
 						
 					@endif
 					
-					@if(Gate::check('Mantenimiento Personas') || Gate::check('Mantenimiento Empresas') || Gate::check('Mantenimiento Vehiculos') || Gate::check('Mantenimiento Tablas Maestras') || Gate::check('Mantenimiento Conductores') || Gate::check('Mantenimiento Tipo Cambio') || Gate::check('Mantenimiento Marcas') || Gate::check('Mantenimiento Tiendas') || Gate::check('Mantenimiento Equivalencia Producto') || Gate::check('Mantenimiento Parametro') || Gate::check('Mantenimiento Empaquetado') || Gate::check('Mantenimiento Empresas Cubicaje') || Gate::check('Mantenimiento Familia') || Gate::check('Mantenimiento Sub Familia') || Gate::check('Mantenimiento Permisos Usuario Descuento') || Gate::check('Producto Competencia') || Gate::check('Mantenimiento Persona Proceso') || Gate::check('Mantenimiento Centro Costos') || Gate::check('Mantenimiento Sedes') || Gate::check('Mantenimiento Cuenta Contable') || Gate::check('Mantenimiento Familia Contable') || Gate::check('Equivalencia Sub Familia Familia Contable'))
+					@if(Gate::check('Mantenimiento Personas') || Gate::check('Mantenimiento Empresas') || Gate::check('Mantenimiento Vehiculos') || Gate::check('Mantenimiento Tablas Maestras') || Gate::check('Mantenimiento Conductores') || Gate::check('Mantenimiento Tipo Cambio') || Gate::check('Mantenimiento Marcas') || Gate::check('Mantenimiento Tiendas') || Gate::check('Mantenimiento Equivalencia Producto') || Gate::check('Mantenimiento Parametro') || Gate::check('Mantenimiento Empaquetado') || Gate::check('Mantenimiento Empresas Cubicaje') || Gate::check('Mantenimiento Familia') || Gate::check('Mantenimiento Sub Familia') || Gate::check('Mantenimiento Permisos Usuario Descuento') || Gate::check('Producto Competencia') || Gate::check('Mantenimiento Persona Proceso') || Gate::check('Mantenimiento Centro Costos') || Gate::check('Mantenimiento Sedes') || Gate::check('Mantenimiento Cuenta Contable') || Gate::check('Mantenimiento Familia Contable') || Gate::check('Equivalencia Sub Familia Familia Contable') || Gate::check('Mantenimiento Precio Productos'))
 						
 						<li class="nav-item dropdown">
 							<a href="#" class="nav-link dropdown-toggle" id="navbarDropdownPrueba" data-toggle="dropdown"
@@ -460,6 +460,10 @@
 									<x-utils.link :href="route('frontend.equivalencia_sub_familia_familia_contable.create')" class="dropdown-item" :text="__('Equivalencia Sub Familia Familia Contable')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
 								@endif
 
+								@can('Mantenimiento Precio Productos')
+									<x-utils.link :href="route('frontend.productos.create_mantenimiento_precio_productos')" class="dropdown-item" :text="__('Mantenimiento Precio Productos')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+								@endif
+
 							</div>
 						</li>
 					
@@ -536,6 +540,10 @@
 
 								@can('Consulta de Facturacion Detalle')
 									<x-utils.link :href="route('frontend.comprobante.create_facturacion_sodimac_detalle')" class="dropdown-item" :text="__('Consulta de Facturacion Detalle')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+								@endif
+
+								@can('Asignacion Cuentas')
+									<x-utils.link :href="route('frontend.asignacion_cuenta.create')" class="dropdown-item" :text="__('Asignacion Cuentas')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
 								@endif
 
 								@can('Asiento Contable Anexo')

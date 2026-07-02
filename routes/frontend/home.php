@@ -64,6 +64,7 @@ use App\Http\Controllers\Frontend\RequerimientoDispensacionController;
 use App\Http\Controllers\Frontend\AsientoContableAnexoController;
 use App\Http\Controllers\Frontend\CambioCodigoProductoController;
 use App\Http\Controllers\Frontend\AsientoContableVentaController;
+use App\Http\Controllers\Frontend\AsignacionCuentaController;
 
 
 //use App\Http\Controllers\VehiculoController;
@@ -241,6 +242,11 @@ Route::get('secciones/{secciones}', 'App\Http\Controllers\SeccionesController@sh
 Route::put('secciones/{secciones}', 'App\Http\Controllers\SeccionesController@update')->name('secciones.update');
 Route::delete('secciones/{secciones}', 'App\Http\Controllers\SeccionesController@destroy')->name('secciones.destroy');
 Route::get('secciones/{secciones}/edit', 'App\Http\Controllers\SeccionesController@edit')->name('secciones.edit');
+
+Route::get('productos/create_mantenimiento_precio_productos', [ProductosController::class, 'create_mantenimiento_precio_productos'])->name('productos.create_mantenimiento_precio_productos');
+Route::post('productos/listar_mantenimiento_precio_producto_ajax', [ProductosController::class, 'listar_mantenimiento_precio_producto_ajax'])->name('productos.listar_mantenimiento_precio_producto_ajax');
+Route::post('productos/send_mantenimiento_precio_producto', [ProductosController::class, 'send_mantenimiento_precio_producto'])->name('productos.send_mantenimiento_precio_producto');
+Route::get('productos/modal_mantenimiento_precio_producto/{id}', [ProductosController::class, 'modal_mantenimiento_precio_producto'])->name('productos.modal_mantenimiento_precio_producto');
 
 Route::get('productos/create_chopeo_producto', [ProductosController::class, 'create_chopeo_producto'])->name('productos.create_chopeo_producto');
 Route::get('productos/create_productos_precio', [ProductosController::class, 'create_productos_precio'])->name('productos.create_productos_precio');
@@ -1025,4 +1031,9 @@ Route::get('asiento_contable_venta/create', [AsientoContableVentaController::cla
 Route::post('asiento_contable_venta/listar_asiento_contable_venta_ajax', [AsientoContableVentaController::class, 'listar_asiento_contable_venta_ajax'])->name('asiento_contable_venta.listar_asiento_contable_venta_ajax');
 Route::post('asiento_contable_venta/generar_asiento_contable_venta', [AsientoContableVentaController::class, 'generar_asiento_contable_venta'])->name('asiento_contable_venta.generar_asiento_contable_venta');
 Route::post('asiento_contable_venta/migrar_ventas_starsoft', [AsientoContableVentaController::class, 'migrar_ventas_starsoft'])->name('asiento_contable_venta.migrar_ventas_starsoft');
+
+Route::get('asignacion_cuenta/create', [AsignacionCuentaController::class, 'create'])->name('asignacion_cuenta.create');
+Route::post('asignacion_cuenta/listar_asignacion_cuenta_ajax', [AsignacionCuentaController::class, 'listar_asignacion_cuenta_ajax'])->name('asignacion_cuenta.listar_asignacion_cuenta_ajax');
+Route::post('asignacion_cuenta/send_asignacion_cuenta', [AsignacionCuentaController::class, 'send_asignacion_cuenta'])->name('asignacion_cuenta.send_asignacion_cuenta');
+Route::get('asignacion_cuenta/modal_asignacion_cuenta/{id}', [AsignacionCuentaController::class, 'modal_asignacion_cuenta'])->name('asignacion_cuenta.modal_asignacion_cuenta');
 

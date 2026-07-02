@@ -54,6 +54,12 @@ class Producto extends Model
 
     }
 
+    public function listar_mantenimiento_precio_producto_ajax($p){
+
+        return $this->readFuntionPostgres('sp_listar_mantenimiento_precio_productos_paginado',$p);
+
+    }
+
     public function readFuntionPostgres($function, $parameters = null){
 
         $_parameters = '';

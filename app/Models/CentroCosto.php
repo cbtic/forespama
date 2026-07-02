@@ -44,4 +44,16 @@ class CentroCosto extends Model
 		$data = DB::select($cad);
         return $data;
     }
+
+    function getCentroCosto(){
+
+        $cad = "select cc.id, cc.periodo, cc.codigo, cc.denominacion, cc.operacion, s.denominacion sede, cc.estado 
+        from centro_costos cc 
+        left join sedes s on cc.id_sede = s.id 
+        where cc.estado = '1' 
+        order by 1 asc";
+
+		$data = DB::select($cad);
+        return $data;
+    }
 }

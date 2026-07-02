@@ -57,6 +57,7 @@ class ProductosController extends Controller
 		$this->middleware('can:Reporte Productos')->only(['create_reporte_productos']);
 		$this->middleware('can:Productos')->only(['exportar_listar_productos']);
 		$this->middleware('can:Reporte Productos')->only(['exportar_reporte_productos']);
+		$this->middleware('can:Mantenimiento Precio Productos')->only(['create_precio_productos']);
 	}
 
     public function create(){
@@ -1005,6 +1006,108 @@ class ProductosController extends Controller
 		$export = new InvoicesExport2([$variable]);
 		return Excel::download($export, 'Lista_reporte_productos.xlsx');
 		
+    }
+
+    public function create_mantenimiento_precio_productos(){
+
+		$tablaMaestra_model = new TablaMaestra;
+        $familia_model = new Familia;
+        $familia_contable_model = new FamiliaContable;
+        $producto_model = new Producto;
+
+		$estado_bien = $tablaMaestra_model->getMaestroByTipo(56);
+		$tipo_origen_producto = $tablaMaestra_model->getMaestroByTipo(58);
+		$tipo_producto = $tablaMaestra_model->getMaestroByTipo(44);
+		$aprobado = $tablaMaestra_model->getMaestroByTipo(113);
+        $familia = $familia_model->getFamiliaAll();
+        $familia_contable = $familia_contable_model->getFamiliaContables();
+        $usuario_inserta = $producto_model->getUsuarioInsertaByProducto();
+		
+		return view('frontend.productos.create_mantenimiento_precio_productos',compact('estado_bien','tipo_origen_producto','tipo_producto','familia','aprobado','familia_contable','usuario_inserta'));
+
+	}
+
+    public function listar_mantenimiento_precio_producto_ajax(Request $request){
+
+		$producto_model = new Producto;
+		$p[]=$request->denominacion;
+        $p[]=$request->codigo;
+        $p[]=$request->familia;
+        $p[]=$request->sub_familia;
+        $p[]=$request->familia_contable;
+        $p[]=1;
+		$p[]=$request->NumeroPagina;
+		$p[]=$request->NumeroRegistros;
+		$data = $producto_model->listar_mantenimiento_precio_producto_ajax($p);
+		$iTotalDisplayRecords = isset($data[0]->totalrows)?$data[0]->totalrows:0;
+
+		$result["PageStart"] = $request->NumeroPagina;
+		$result["pageSize"] = $request->NumeroRegistros;
+		$result["SearchText"] = "";
+		$result["ShowChildren"] = true;
+		$result["iTotalRecords"] = $iTotalDisplayRecords;
+		$result["iTotalDisplayRecords"] = $iTotalDisplayRecords;
+		$result["aaData"] = $data;
+
+        echo json_encode($result);
+
+	}
+
+    public function modal_mantenimiento_precio_producto($id){
+		
+        $tablaMaestra_model = new TablaMaestra;
+        $marca_model = new Marca;
+        $familia_model = new Familia;
+        $familia_contable_model = new FamiliaContable;
+		
+		if($id>0){
+			$producto = Producto::find($id);
+            $imagenes = ProductoImagene::where('id_producto', $id)->get();
+		}else{
+			$producto = new Producto;
+            $imagenes = [];
+		}
+
+        $unidad_producto = $tablaMaestra_model->getMaestroByTipo(43);
+        $moneda = $tablaMaestra_model->getMaestroByTipo(1);
+        $tipo_producto = $tablaMaestra_model->getMaestroByTipo(44);
+        $estado_bien = $tablaMaestra_model->getMaestroByTipo(56);
+        $unidad_medida = $tablaMaestra_model->getMaestroByTipo(57);
+        $marca = $marca_model->getMarcaProducto();
+		$tipo_origen_producto = $tablaMaestra_model->getMaestroByTipo(58);
+		$bien_servicio = $tablaMaestra_model->getMaestroByTipo(73);
+        $familia = $familia_model->getFamiliaAll();
+		$categoria = $tablaMaestra_model->getMaestroByTipo(102);
+		$sub_categoria = $tablaMaestra_model->getMaestroByTipo(105);
+		$modelo = $tablaMaestra_model->getMaestroByTipo(106);
+		$packet = $tablaMaestra_model->getMaestroByTipo(107);
+		$medida = $tablaMaestra_model->getMaestroByTipo(111);
+        $familia_contable = $familia_contable_model->getFamiliaContables();
+        
+		return view('frontend.productos.modal_productos_nuevoMantenimientoPrecioProducto',compact('id','producto','unidad_medida','moneda','estado_bien','tipo_producto','unidad_producto','marca','tipo_origen_producto','imagenes','bien_servicio','familia','categoria','sub_categoria','modelo','packet','medida','familia_contable'));
+
+    }
+
+    public function send_mantenimiento_precio_producto(Request $request){
+
+        $id_user = Auth::user()->id;
+
+		if($request->id == 0){
+			$producto = new Producto;
+		}else{
+			$producto = Producto::find($request->id);
+		}
+
+        $producto->id_moneda = $request->moneda;
+        $producto->costo_unitario = $request->costo_unitario;
+        $producto->margen = $request->margen;
+        $producto->valor_venta = $request->valor_venta;
+        $producto->precio_venta = $request->precio_venta;
+		$producto->save();
+        $id_producto = $producto->id;
+		
+        return response()->json(['success' => 'Precio de Producto guardado exitosamente.']);
+
     }
 }
 
