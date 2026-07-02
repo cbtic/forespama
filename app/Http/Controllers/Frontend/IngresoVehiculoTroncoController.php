@@ -703,6 +703,8 @@ class IngresoVehiculoTroncoController extends Controller
 
 		$precio_menor = !empty($precios) ? min($precios) : 0;
 		$precio_mayor = !empty($precios) ? max($precios) : 0;
+
+		//dd($precio_menor);exit();
 	 
 		$year = Carbon::now()->year;
 

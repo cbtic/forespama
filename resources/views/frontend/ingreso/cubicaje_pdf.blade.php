@@ -242,14 +242,14 @@ $(document).ready(function() {
                     $precio_menor = null;
                     $precio_mayor = null;
 
-                    if ($tipo_empresa == 2) {
+                    //if ($tipo_empresa == 2) {
                         $precios = array_map(function($item) {
                             return $item->precio_unitario;
                         }, $datos_detalle);
 
                         $precio_menor = min($precios);
                         $precio_mayor = max($precios);
-                    }
+                    //}
 
                     foreach($datos_detalle as $key=>$r) { ?>
                         <tr>
@@ -332,14 +332,14 @@ $(document).ready(function() {
                         <td class="td" style ="text-align: right; width: 8%; height:13px"><?php echo $suma_cantidad_reporte_1_2;?></td>
                         <td class="td" style ="text-align: right; width: 8%; height:13px"><?php echo number_format($suma_volumen_m3_1_2,2);?></td>
                         <td class="td" style ="text-align: right; width: 8%; height:13px"><?php echo number_format($suma_volumen_pies_1_2,2);?></td>
-                        <td class="td" style ="text-align: right; width: 8%; height:13px">1.20</td>
+                        <td class="td" style ="text-align: right; width: 8%; height:13px"><?php echo number_format($precio_menor,2);?></td>
                         <td class="td" style ="text-align: right; width: 8%; height:13px"><?php echo number_format($suma_total_1_2,2);?></td>
                     </tr>
                     <tr>
                         <td class="td" style ="text-align: right; width: 8%; height:13px"><?php echo $suma_cantidad_reporte_1_7;?></td>
                         <td class="td" style ="text-align: right; width: 8%; height:13px"><?php echo number_format($suma_volumen_m3_1_7,2);?></td>
                         <td class="td" style ="text-align: right; width: 8%; height:13px"><?php echo number_format($suma_volumen_pies_1_7,2);?></td>
-                        <td class="td" style ="text-align: right; width: 8%; height:13px">1.70</td>
+                        <td class="td" style ="text-align: right; width: 8%; height:13px"><?php echo number_format($precio_mayor,2);?></td>
                         <td class="td" style ="text-align: right; width: 8%; height:13px"><?php echo number_format($suma_total_1_7,2);?></td>
                     </tr>
                     <tr style="border-top:1px solid">
