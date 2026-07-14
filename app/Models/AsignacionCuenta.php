@@ -31,4 +31,15 @@ class AsignacionCuenta extends Model
         return $data;
 
     }
+
+    function obtenerAsignacionCuentaVenta(){
+
+        $cad = "select *
+        from asignacion_cuentas ac 
+        where ac.id_origen = '2'
+        and ac.id_tipo_cuenta = '1'";
+
+		$data = DB::select($cad);
+        return $data;
+    }
 }

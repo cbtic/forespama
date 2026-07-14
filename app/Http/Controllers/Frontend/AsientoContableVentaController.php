@@ -60,8 +60,36 @@ class AsientoContableVentaController extends Controller
 
         $id_user = Auth::user()->id;
 
+        DB::beginTransaction();
+
+        try{
+
         $asiento_contable_venta_model = new AsientoContableVenta;
-		
+        $asiento_contable_venta_model->generarAsiento(1, $id_user);//BOLETAS Y FACTURAS
+        $asiento_contable_venta_model->generarAsiento(2, $id_user);//NOTA DE CREDITO
+
+        DB::commit();
+
+        return response()->json([
+            'success' => true,
+            'mensaje' => 'Asientos contables generados correctamente.'
+        ]);
+
+    }catch (\Exception $e) {
+
+        DB::rollBack();
+        
+        return response()->json([
+            'success' => false,
+            'mensaje' => $e->getMessage()
+        ], 500);
+    }
+
+        /*$asignacion_cuenta_model = new AsignacionCuenta;
+        $asignacion_cuenta = $asignacion_cuenta_model->obtenerAsignacionCuentaVenta();
+
+        $asiento_contable_venta_model = new AsientoContableVenta;
+        
         $asientos_contables_ventas = $asiento_contable_venta_model->generarAsientosVentas();
 
         foreach($asientos_contables_ventas as $row){
@@ -347,7 +375,7 @@ class AsientoContableVentaController extends Controller
             $comprobante_nc->save();
         }
 
-        return response()->json(['success' => 'Asientos generados exitosamente.']);
+        return response()->json(['success' => 'Asientos generados exitosamente.']);*/
 
     }
 

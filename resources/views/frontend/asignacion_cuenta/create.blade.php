@@ -345,12 +345,12 @@ label.form-control-sm{
 					<div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
 						<div class="row">
 
-							<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+							<div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
 								<select name="cuenta_bus" id="cuenta_bus" class="form-control form-control-sm filtro-select">
 									<option value="">--Seleccionar Cuenta--</option>
 									<?php
 									foreach ($cuenta as $row){?>
-										<option value="<?php echo $row->id ?>"><?php echo $row->denominacion ?></option>
+										<option value="<?php echo $row->id ?>"><?php echo $row->cuenta.' - '.$row->denominacion ?></option>
 										<?php 
 									}
 									?>
@@ -372,18 +372,18 @@ label.form-control-sm{
 									<option value="">--Seleccionar Centro de Costo--</option>
 									<?php
 									foreach ($centro_costo as $row){?>
-										<option value="<?php echo $row->id ?>"><?php echo $row->denominacion ?></option>
+										<option value="<?php echo $row->id ?>"><?php echo $row->codigo.' - '.$row->denominacion ?></option>
 										<?php 
 									}
 									?>
 								</select>
 							</div>
-							<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+							<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
 								<select name="medio_pago_bus" id="medio_pago_bus" class="form-control form-control-sm filtro-select">
 									<option value="">--Seleccionar Medio Pago--</option>
 									<?php
 									foreach ($medio_pago as $row){?>
-										<option value="<?php echo $row->codigo ?>"><?php echo $row->denominacion ?></option>
+										<option value="<?php echo $row->codigo ?>"><?php echo $row->codigo.' - '.$row->denominacion ?></option>
 										<?php 
 									}
 									?>
@@ -394,7 +394,7 @@ label.form-control-sm{
 									<option value="">--Seleccionar Origen--</option>
 									<?php
 									foreach ($origen as $row){?>
-										<option value="<?php echo $row->id ?>"><?php echo $row->denominacion ?></option>
+										<option value="<?php echo $row->id ?>"><?php echo $row->codigo.' - '.$row->descripcion ?></option>
 										<?php 
 									}
 									?>
@@ -437,6 +437,7 @@ label.form-control-sm{
 							<th>Centro Costo</th>
 							<th>Medio Pago</th>
 							<th>Origen</th>
+							<th>Moneda</th>
 							<th>Estado</th>
                             <th>Acciones</th>
                         </tr>

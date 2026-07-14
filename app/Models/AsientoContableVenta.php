@@ -207,4 +207,12 @@ class AsientoContableVenta extends Model
 		$data = DB::select($cad);
         return $data;
     }
+
+    public function generarAsiento($tipo, $id_usuario)
+    {
+        return DB::selectOne(
+            "select sp_generar_asiento_ventas(?, ?) as resultado",
+            [$tipo, $id_usuario]
+        );
+    }
 }

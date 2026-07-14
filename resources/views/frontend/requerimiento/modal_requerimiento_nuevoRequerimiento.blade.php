@@ -660,6 +660,19 @@ function aprobarRequerimiento(){
     });
 }
 
+function desaprobarRequerimiento(){
+
+    bootbox.confirm({ 
+        size: "small",
+        message: "&iquest;Est&aacute; seguro de Desaprobar el Requerimiento?", 
+        callback: function(result){
+            if (result==true) {
+                guardarDesaprobacionRequerimiento();
+            }
+        }
+    });
+}
+
 function obtenerStock(selectElement, n){
 
     var id_producto = $(selectElement).val();
@@ -721,6 +734,28 @@ function guardarAprobacionRequerimiento(){
 
     $.ajax({
         url: "/requerimiento/send_aprobar_requerimiento",
+        type: "POST",
+        data : $("#frmRequerimiento").serialize(),
+        success: function (result) {
+            datatablenew();
+            $('.loader').hide();
+            bootbox.alert("Se aprob&oacute; satisfactoriamente");
+            $('#openOverlayOpc').modal('hide');
+        
+        }
+    });
+}
+
+function guardarDesaprobacionRequerimiento(){
+
+    var msgLoader = "";
+    msgLoader = "Procesando, espere un momento por favor";
+    var heightBrowser = $(window).width()/2;
+    $('.loader').css("opacity","0.8").css("height",heightBrowser).html("<div id='Grd1_wrapper' class='dataTables_wrapper'><div id='Grd1_processing' class='dataTables_processing panel-default'>"+msgLoader+"</div></div>");
+    $('.loader').show();
+
+    $.ajax({
+        url: "/requerimiento/send_desaprobar_requerimiento",
         type: "POST",
         data : $("#frmRequerimiento").serialize(),
         success: function (result) {
@@ -1006,6 +1041,7 @@ function generarRequerimientoInsumos(){
                                             if($id>0 && $requerimiento->aprobado == 0 && $requerimiento->cerrado == 1){
                                             ?>
                                                 <button type="button" class="btn btn-success btn-sm" onclick="aprobarRequerimiento()" style="margin-right:10px">Aprobar</button>
+                                                <button type="button" class="btn btn-danger btn-sm" onclick="desaprobarRequerimiento()" style="margin-right:10px">No Aprobar</button>
                                             <?php 
                                                 }
                                             ?>

@@ -52,6 +52,12 @@ class OrdenCompra extends Model
 
     }
 
+    public function listar_comprobantes_pagos_ajax($p){
+
+        return $this->readFuntionPostgres('sp_listar_comprobante_pagos_paginado',$p);
+
+    }
+
     public function listar_reporte_comercializacion_solicitado_tienda_ajax($p){
 
         return $this->readFuntionPostgres('sp_listar_reporte_comercializacion_tienda_pedido_paginado',$p);

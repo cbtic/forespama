@@ -312,6 +312,9 @@ function datatablenew(){
 						if(row.aprobado == 0){
 							aprobado = "PENDIENTE";
 						}
+						if(row.aprobado == 2){
+							aprobado = "NO APROBADO";
+						}
 						return aprobado;
 					},
 					"bSortable": false,

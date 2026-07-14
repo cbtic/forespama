@@ -1388,6 +1388,19 @@ class RequerimientoController extends Controller
         
     }
 
+    public function send_desaprobar_requerimiento(Request $request){
+
+        $id_user = Auth::user()->id;
+
+        $requerimiento = Requerimiento::find($request->id);
+        $requerimiento->aprobado = 2;
+        $requerimiento->id_usuario_aprueba = $id_user;
+        $requerimiento->save();
+        
+        return response()->json(['id' => $request->id]);
+        
+    }
+
     public function genera_requerimiento_insumo(Request $request){
 
         $id_user = Auth::user()->id;

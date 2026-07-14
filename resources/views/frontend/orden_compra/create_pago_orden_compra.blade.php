@@ -459,6 +459,7 @@ label.form-control-sm{
                 <input type="hidden" name="flag_ocultar" id="flag_ocultar" value="0">
                 <input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
                 <input type="hidden" name="id_orden_compra" id="id_orden_compra" value="0">
+                <input type="hidden" name="id_comprobante" id="id_comprobante" value="0">
 
                 <div class="row">
                     <!-- Panel principal (izquierdo) -->
@@ -606,10 +607,7 @@ label.form-control-sm{
 								</div>
 							</div>
 						</div>
-
 					</div>
-
-
                 </div> <!-- fin row -->
             </form>
         </div>

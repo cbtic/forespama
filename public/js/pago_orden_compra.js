@@ -60,7 +60,7 @@ $(document).ready(function () {
 function datatablenew() {
     var oTable = $('#tblPagoOrdenCompra').dataTable({
         "bServerSide": true,
-        "sAjaxSource": "/orden_compra/listar_orden_compra_pagos_ajax",
+        "sAjaxSource": "/orden_compra/listar_comprobantes_pagos_ajax",
         "bProcessing": true,
         "sPaginationType": "full_numbers",
         "bFilter": false,
@@ -315,7 +315,8 @@ function datatablenew() {
                 },
                 "bSortable": false,
                 "aTargets": [14]
-            },{
+            },
+            {
                 "mRender": function(data, type, row) {
                     var estado_pago = "";
                     if (row.estado_pago != null) estado_pago = row.estado_pago;
@@ -352,50 +353,54 @@ function datatablenew() {
         if (anSelected.length != 0) {
 			var odtable = $("#tblPagoOrdenCompra").DataTable();
 			var idPagoOrdenCompra = odtable.row(this).data().id;
+			var idPagoComprobante = odtable.row(this).data().id_comprobante;
             $("#id_orden_compra").val(idPagoOrdenCompra);
+            $("#id_comprobante").val(idPagoComprobante);
             //alert(idSolicitud);
 			var id_estado = odtable.row(this).data().id_estado;
 			$('#estado').val(id_estado);
 			
-            cargarPagoOrdenCompra(idPagoOrdenCompra);
+            cargarPagoOrdenCompra(idPagoComprobante);
             
-            cargarGuiaOrdenCompra(idPagoOrdenCompra);
+            cargarGuiaOrdenCompra(idPagoComprobante);
 
         }
     });
 
 }
 
-function cargarPagoOrdenCompra(id){
+function cargarPagoOrdenCompra(idPagoComprobante){
 
 	//$("#tblCubicaje tbody").html("");
 	$("#divOrdenCompra").html("");
 	
 	$.ajax({
-        url: "/orden_compra/cargar_pago_orden_compra/"+id,
+        url: "/orden_compra/cargar_pago_orden_compra/"+idPagoComprobante,
         type: "GET",
-        success: function (result) {  
+        success: function (result) {
                 //$("#tblCubicaje tbody").html(result);
                 $("#divOrdenCompra").html(result);
-                $("#id_orden_compra").val(id);
+                //$("#id_orden_compra").val(id);
+                $("#id_comprobante").val(idPagoComprobante);
                 $('[data-toggle="tooltip"]').tooltip();
         }
 	});
 	
 }
 
-function cargarGuiaOrdenCompra(id){
+function cargarGuiaOrdenCompra(idPagoComprobante){
 
 	//$("#tblCubicaje tbody").html("");
 	$("#divOrdenCompraGuia").html("");
 	
 	$.ajax({
-        url: "/orden_compra/cargar_guia_orden_compra/"+id,
+        url: "/orden_compra/cargar_guia_orden_compra/"+idPagoComprobante,
         type: "GET",
         success: function (result) {  
                 //$("#tblCubicaje tbody").html(result);
                 $("#divOrdenCompraGuia").html(result);
-                $("#id_orden_compra").val(id);
+                //$("#id_orden_compra").val(id);
+                $("#id_comprobante").val(idPagoComprobante);
                 $('[data-toggle="tooltip"]').tooltip();
         }
 	});
@@ -431,7 +436,8 @@ function modalPago(id){
 	$(".modal-dialog").css("width","55%");
 	$('#openOverlayOpc .modal-body').css('height', 'auto');
 	
-	var id_orden_compra = $('#id_orden_compra').val();
+	//var id_orden_compra = $('#id_orden_compra').val();
+	var id_comprobante = $('#id_comprobante').val();
 	
 	var msg = "";
 
@@ -441,7 +447,7 @@ function modalPago(id){
     }
 	
 	$.ajax({
-			url: "/orden_compra/modal_pago/"+id+"/"+id_orden_compra,
+			url: "/orden_compra/modal_pago/"+id+"/"+id_comprobante,
 			type: "GET",
 			success: function (result) {  
 					$("#diveditpregOpc").html(result);

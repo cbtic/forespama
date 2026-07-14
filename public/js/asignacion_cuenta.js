@@ -5,7 +5,7 @@ $(document).ready(function () {
 	});
 		
 	$('#btnNuevo').click(function () {
-		modalMarca(0);
+		modalAsignacionCuenta(0);
 	});
 
 	$('#cuenta_bus').keypress(function(e){
@@ -135,9 +135,9 @@ function datatablenew(){
 
 				{
 				"mRender": function (data, type, row) {
-					var denominiacion = "";
-					if(row.denominiacion!= null)denominiacion = row.denominiacion;
-					return denominiacion;
+					var cuenta = "";
+					if(row.cuenta!= null)cuenta = row.cuenta;
+					return cuenta;
 				},
 				"bSortable": true,
 				"aTargets": [1]
@@ -145,12 +145,62 @@ function datatablenew(){
 
 				{
 				"mRender": function (data, type, row) {
-					var tipo_marca = "";
-					if(row.tipo_marca!= null)tipo_marca = row.tipo_marca;
-					return tipo_marca;
+					var denominacion = "";
+					if(row.denominacion!= null)denominacion = row.denominacion;
+					return denominacion;
 				},
 				"bSortable": true,
 				"aTargets": [2]
+				},
+
+				{
+				"mRender": function (data, type, row) {
+					var tipo_cuenta = "";
+					if(row.tipo_cuenta!= null)tipo_cuenta = row.tipo_cuenta;
+					return tipo_cuenta;
+				},
+				"bSortable": true,
+				"aTargets": [3]
+				},
+
+				{
+				"mRender": function (data, type, row) {
+					var centro_costo = "";
+					if(row.centro_costo!= null)centro_costo = row.centro_costo;
+					return centro_costo;
+				},
+				"bSortable": true,
+				"aTargets": [4]
+				},
+
+				{
+				"mRender": function (data, type, row) {
+					var medio_pago = "";
+					if(row.medio_pago!= null)medio_pago = row.medio_pago;
+					return medio_pago;
+				},
+				"bSortable": true,
+				"aTargets": [5]
+				},
+
+				{
+				"mRender": function (data, type, row) {
+					var origen = "";
+					if(row.origen!= null)origen = row.origen;
+					return origen;
+				},
+				"bSortable": true,
+				"aTargets": [6]
+				},
+
+				{
+				"mRender": function (data, type, row) {
+					var moneda = "";
+					if(row.moneda!= null)moneda = row.moneda;
+					return moneda;
+				},
+				"bSortable": true,
+				"aTargets": [7]
 				},
 				
 				{
@@ -165,7 +215,7 @@ function datatablenew(){
 					return estado;
 				},
 				"bSortable": false,
-				"aTargets": [3]
+				"aTargets": [8]
 				},
 				{
 				"mRender": function (data, type, row) {
@@ -182,8 +232,8 @@ function datatablenew(){
 					
 					var html = '<div class="btn-group btn-group-sm" role="group" aria-label="Log Viewer Actions">';
 					
-					html += '<button style="font-size:12px" type="button" class="btn btn-sm btn-success" data-toggle="modal" onclick="modalMarca('+row.id+')" ><i class="fa fa-edit"></i> Editar</button>'; 
-					html += '<a href="javascript:void(0)" onclick=eliminarMarca('+row.id+','+row.estado+') class="btn btn-sm '+clase+'" style="font-size:12px;margin-left:10px"><i class="fa fa-eraser" style="font-size:18px;"></i> '+estado+'</a>';
+					html += '<button style="font-size:12px" type="button" class="btn btn-sm btn-success" data-toggle="modal" onclick="modalAsignacionCuenta('+row.id+')" ><i class="fa fa-edit"></i> Editar</button>'; 
+					html += '<a href="javascript:void(0)" onclick=eliminarAsignacionCuenta('+row.id+','+row.estado+') class="btn btn-sm '+clase+'" style="font-size:12px;margin-left:10px"><i class="fa fa-eraser" style="font-size:18px;"></i> '+estado+'</a>';
 					
 					//html += '<a href="javascript:void(0)" onclick=modalResponsable('+row.id+') class="btn btn-sm btn-info" style="font-size:12px;margin-left:10px">Detalle Responsable</a>';
 					
@@ -191,7 +241,7 @@ function datatablenew(){
 					return html;
 				},
 				"bSortable": false,
-				"aTargets": [4],
+				"aTargets": [9],
 				},
             ]
     });
@@ -201,13 +251,13 @@ function fn_ListarBusqueda() {
     datatablenew();
 };
 
-function modalMarca(id){
+function modalAsignacionCuenta(id){
 	
 	$(".modal-dialog").css("width","85%");
 	$('#openOverlayOpc .modal-body').css('height', 'auto');
 
 	$.ajax({
-		url: "/marcas/modal_marca/"+id,
+		url: "/asignacion_cuenta/modal_asignacion_cuenta/"+id,
 		type: "GET",
 		success: function (result) {  
 			$("#diveditpregOpc").html(result);
@@ -216,7 +266,7 @@ function modalMarca(id){
 	});
 }
 
-function eliminarMarca(id,estado){
+function eliminarAsignacionCuenta(id,estado){
 	var act_estado = "";
 	if(estado==1){
 		act_estado = "Eliminar";
@@ -228,7 +278,7 @@ function eliminarMarca(id,estado){
 	}
     bootbox.confirm({ 
         size: "small",
-        message: "&iquest;Deseas "+act_estado+" la Marca?", 
+        message: "&iquest;Deseas "+act_estado+" la Asignacion de Cuenta?", 
         callback: function(result){
             if (result==true) {
                 fn_eliminar(id,estado_);
@@ -241,7 +291,7 @@ function eliminarMarca(id,estado){
 function fn_eliminar(id,estado){
 	
     $.ajax({
-		url: "/marcas/eliminar_marca/"+id+"/"+estado,
+		url: "/asignacion_cuenta/eliminar_asignacion_cuenta/"+id+"/"+estado,
 		type: "GET",
 		success: function (result) {
 			//if(result="success")obtenerPlanDetalle(id_plan);

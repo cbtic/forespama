@@ -474,6 +474,7 @@ label.form-control-sm{
 										<option value="" selected="selected">Todos</option>
 										<option value="1">Aprobado</option>
 										<option value="0">Pendiente</option>
+										<option value="2">No Aprobado</option>
 									</select>
 								</div>
 								<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">

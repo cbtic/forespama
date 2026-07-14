@@ -30,6 +30,7 @@ use App\Models\PersonaProceso;
 use App\Models\JefeVendedorDetalle;
 use App\Models\StarsoftDestinoOperacione;
 use App\Models\StarsoftDetraccione;
+use App\Models\StarsoftComprobantePago;
 use DateTime;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Auth;
@@ -1032,6 +1033,172 @@ class OrdenCompraController extends Controller
 
     }
 
+    public function importar_archivo2($archivo)
+    {
+
+        $id_user = Auth::user()->id;
+        $id_unidad_origen = 4;
+        $id_tipo_documento = 2;
+        $estado = 1;
+        $igv_compra = 2;
+        $cerrado = 1;
+        $id_almacen_destino = NULL;
+        $id_almacen_salida = 3;
+        $tienda_asignada = 0;
+        $id_empresa_compra = 23;
+        $id_marca = 278;
+        $id_estado_producto = 1;
+        $id_moneda = 1;
+        $moneda = "SOLES";
+        $sub_total_general = 0;
+        $igv_general = 0;
+        $total_general = 0;
+        $id_vendedor = 84;
+        $id_tipo_cliente = 5;
+        $id_canal = 4;
+
+        $filePath = public_path('orden_compra/'.$archivo);
+
+        // Verifica si el archivo existe
+        if (!file_exists($filePath)) {
+            return response()->json(['error' => 'Archivo no encontrado.'], 404);
+        }
+
+        // Abre el archivo
+        $file = fopen($filePath, 'r');
+
+        // Lee la cabecera
+        $header = fgetcsv($file, 0, ',');
+
+        if ($header === false) {
+            return response()->json(['error' => 'El archivo está vacío o tiene un formato incorrecto.'], 400);
+        }
+
+        $count = 0;
+
+        while (($line = fgets($file)) !== false) {
+
+            $line = trim($line);
+            
+            $data = str_getcsv($line, ',');
+            
+            $data = array_pad($data, count($header), null);
+
+            if (count($data) !== count($header)) {
+                continue; // Ignorar filas mal formateadas
+            }
+
+            $row = array_combine($header, $data);
+
+            $empresa = Empresa::where("ruc",str_replace("-","",$row['Tax id proveedor']))->first();
+
+            $id_empresa_vende = $empresa->id;
+            $fecha_orden_compra = Carbon::createFromFormat('d-m-Y', $row['Fecha de emisión']);
+            $numero_orden_compra_cliente = $row['Número OC'];
+            $fecha_vencimiento = Carbon::createFromFormat('d-m-Y', $row['Fecha inicio recepción']);
+            
+            if($count == 0){
+
+                $OrdenCompraExiste = OrdenCompra::where("numero_orden_compra_cliente",$numero_orden_compra_cliente)->where("estado","1")->get();
+            
+                if(count($OrdenCompraExiste)>0){
+                    $array["cantidad"] = count($OrdenCompraExiste);
+                    echo json_encode($array);
+                    exit();
+                }
+                
+                $orden_compra_model = new OrdenCompra;
+		        $codigo_orden_compra = $orden_compra_model->getCodigoOrdenCompra($id_tipo_documento);
+                $numero_orden_compra = $codigo_orden_compra[0]->codigo;
+
+                $ordenCompra = new OrdenCompra;
+                $ordenCompra->id_unidad_origen = $id_unidad_origen;
+                $ordenCompra->id_empresa_vende = $id_empresa_vende;
+                $ordenCompra->id_empresa_compra = $id_empresa_compra;
+                $ordenCompra->fecha_orden_compra = $fecha_orden_compra;
+                $ordenCompra->numero_orden_compra = $numero_orden_compra;
+                $ordenCompra->numero_orden_compra_cliente = $numero_orden_compra_cliente;
+                $ordenCompra->id_tipo_documento = $id_tipo_documento;
+                $ordenCompra->estado = $estado;
+                $ordenCompra->igv_compra = $igv_compra;
+                $ordenCompra->cerrado = $cerrado;
+                $ordenCompra->id_almacen_destino = $id_almacen_destino;
+                $ordenCompra->id_almacen_salida = $id_almacen_salida;
+                $ordenCompra->tienda_asignada = $tienda_asignada;
+                $ordenCompra->id_moneda = $id_moneda;
+                $ordenCompra->moneda = $moneda;
+                $ordenCompra->id_usuario_inserta = $id_user;
+                $ordenCompra->id_vendedor = $id_vendedor;
+                $ordenCompra->id_tipo_cliente = $id_tipo_cliente;
+                $ordenCompra->fecha_vencimiento = $fecha_vencimiento;
+                $ordenCompra->id_canal = $id_canal;
+                $ordenCompra->save();
+                $id_orden_compra = $ordenCompra->id;
+
+            }
+            
+            $equivalenciaProducto = EquivalenciaProducto::where("codigo_empresa",trim($row['SKU']))->first();
+            $id_producto = $equivalenciaProducto->id_producto;
+            $producto = Producto::find($id_producto);
+            $cantidad_requerida = $row['Unidades compradas'];
+            $id_unidad_medida = $producto->id_unidad_producto;
+
+            $valor_unitario = str_replace(',', '.', trim($row['Costo']));
+            $precio_venta = 1.18*$valor_unitario;
+
+            $total = $precio_venta * $cantidad_requerida;
+            $valor_venta_bruto = $total / 1.18;
+            $igv = $valor_venta_bruto * 0.18;
+            $sub_total = $total - $igv;
+
+            $sub_total_general += $sub_total;
+            $igv_general += $igv;
+            $total_general += $total;
+
+            $ordenCompraDetalle = new OrdenCompraDetalle;
+            $ordenCompraDetalle->id_orden_compra = $id_orden_compra;
+            $ordenCompraDetalle->id_producto = $id_producto;
+            $ordenCompraDetalle->cantidad_requerida = $cantidad_requerida;
+            $ordenCompraDetalle->id_marca = $id_marca;
+            $ordenCompraDetalle->cerrado = $cerrado;
+            $ordenCompraDetalle->estado = $estado;
+            $ordenCompraDetalle->id_unidad_medida = $id_unidad_medida;
+            $ordenCompraDetalle->id_estado_producto = $id_estado_producto;
+            $ordenCompraDetalle->precio_venta = round($precio_venta, 2);
+            $ordenCompraDetalle->precio = round($valor_unitario, 2);
+            $ordenCompraDetalle->valor_venta_bruto = round($sub_total, 2);
+            $ordenCompraDetalle->valor_venta = round($sub_total, 2);
+            $ordenCompraDetalle->sub_total = round($sub_total, 2);
+            $ordenCompraDetalle->igv = round($igv, 2);
+            $ordenCompraDetalle->total = round($total, 2);
+            $ordenCompraDetalle->id_usuario_inserta = $id_user;
+            $ordenCompraDetalle->save();
+
+            $count++;
+        }
+
+        $ordenCompraTotales = OrdenCompra::find($id_orden_compra);
+        $ordenCompraTotales->sub_total = round($sub_total_general, 2);
+        $ordenCompraTotales->igv = round($igv_general, 2);
+        $ordenCompraTotales->total = round($total_general, 2);
+        $ordenCompraTotales->save();
+
+        $autorizacion_orden_compra = new AutorizacionOrdenCompra;
+        $autorizacion_orden_compra->id_orden_compra = $id_orden_compra;
+        $autorizacion_orden_compra->id_proceso_pedido = 4;
+        $autorizacion_orden_compra->id_autorizacion = 2;
+        $autorizacion_orden_compra->id_usuario_autoriza = $id_user;
+        $autorizacion_orden_compra->id_usuario_inserta = $id_user;
+        $autorizacion_orden_compra->estado = 1;
+        $autorizacion_orden_compra->save();
+        
+        fclose($file);
+
+        $array["cantidad"] = count($OrdenCompraExiste);
+        echo json_encode($array);
+
+    }
+
     public function importar_archivo_promart($archivo)
     {
 
@@ -1966,6 +2133,89 @@ class OrdenCompraController extends Controller
 
     }
 
+    public function importar_archivo_od2($archivo)
+    {
+
+        $id_user = Auth::user()->id;
+        $estado = 1;
+        $tienda_asignada = 1;
+
+        $filePath = public_path('orden_distribucion/'.$archivo);
+
+        if (!file_exists($filePath)) {
+            return response()->json(['error' => 'Archivo no encontrado.'], 404);
+        }
+
+        $file = fopen($filePath, 'r');
+
+        $header = fgetcsv($file, 0, ',');
+
+        if ($header === false) {
+            return response()->json(['error' => 'El archivo está vacío o tiene un formato incorrecto.'], 400);
+        }
+
+        $count = 0;
+
+        while (($line = fgets($file)) !== false) {
+
+            $line = trim($line);
+
+            $data = str_getcsv($line, ',');
+            
+            $data = array_pad($data, count($header), null);
+
+            if (count($data) !== count($header)) {
+                continue;
+            }
+
+            $row = array_combine($header, $data);
+
+            $tienda = Tienda::where("numero_tienda",$row['Id de local'])->first();
+            $orden_compra = OrdenCompra::where("numero_orden_compra_cliente",$row['Número OC'])->where("estado",1)->first();
+
+            $id_tienda = $tienda->id;
+            $id_orden_compra = $orden_compra->id;
+            
+            $equivalenciaProducto = EquivalenciaProducto::where("codigo_empresa",trim($row['SKU']))->first();
+            $id_producto = $equivalenciaProducto->id_producto;
+            $producto = Producto::find($id_producto);
+            $cantidad_requerida = $row['Unidades compradas'];
+
+            if($count == 0){
+                
+                $existeTiendaOrdenCompra = TiendaDetalleOrdenCompra::where("id_orden_compra",$orden_compra->id)->where("estado",1)->get();
+                
+                if(count($existeTiendaOrdenCompra)>0){
+                    $array["cantidad"] = count($existeTiendaOrdenCompra);
+                    echo json_encode($array);
+                    exit();
+                }
+            }
+                
+            $tienda_detalle_orden_compra = new TiendaDetalleOrdenCompra;
+            $tienda_detalle_orden_compra->id_tienda = $id_tienda;
+            $tienda_detalle_orden_compra->id_orden_compra = $id_orden_compra;
+            $tienda_detalle_orden_compra->id_producto = $id_producto;
+            $tienda_detalle_orden_compra->cantidad = $cantidad_requerida;
+            $tienda_detalle_orden_compra->estado = $estado;
+            $tienda_detalle_orden_compra->id_usuario_inserta = $id_user;
+            $tienda_detalle_orden_compra->save();
+
+            $count++;
+            
+        }
+
+        $ordenCompra = OrdenCompra::find($id_orden_compra);
+        $ordenCompra->tienda_asignada = $tienda_asignada;
+        $ordenCompra->save();
+
+        fclose($file);
+
+        $array["cantidad"] = count($existeTiendaOrdenCompra);
+        echo json_encode($array);
+
+    }
+
     public function modal_anular_orden_compra($id){
 		
         $tablaMaestra_model = new TablaMaestra;
@@ -2047,6 +2297,33 @@ class OrdenCompraController extends Controller
 
 	}
 
+    public function listar_comprobantes_pagos_ajax(Request $request){
+
+        $id_user = Auth::user()->id;
+
+		$orden_compra_model = new OrdenCompra;
+        $p[]=$request->empresa;
+        $p[]=$request->persona;
+        $p[]=$request->fecha_inicio;
+        $p[]=$request->fecha_fin;
+        $p[]=$request->estado_pago;
+		$p[]=$request->NumeroPagina;
+		$p[]=$request->NumeroRegistros;
+		$data = $orden_compra_model->listar_comprobantes_pagos_ajax($p);
+		$iTotalDisplayRecords = isset($data[0]->totalrows)?$data[0]->totalrows:0;
+
+		$result["PageStart"] = $request->NumeroPagina;
+		$result["pageSize"] = $request->NumeroRegistros;
+		$result["SearchText"] = "";
+		$result["ShowChildren"] = true;
+		$result["iTotalRecords"] = $iTotalDisplayRecords;
+		$result["iTotalDisplayRecords"] = $iTotalDisplayRecords;
+		$result["aaData"] = $data;
+
+        echo json_encode($result);
+
+	}
+
     public function listar_compras_pagos_ajax(Request $request){
 
         $id_user = Auth::user()->id;
@@ -2074,28 +2351,30 @@ class OrdenCompraController extends Controller
 
 	}
 
-    public function modal_pago($id, $id_orden_compra){
+    public function modal_pago($id, $id_comprobante){
 		
 		$tablaMaestra_model = new TablaMaestra;
 		$orden_compra_model = new OrdenCompra;
+        $detracciones_model = new StarsoftDetraccione;
 		$fecha_actual = $orden_compra_model->fecha_actual();
 
 		if($id==0){
-			$orden_compra_pago = new OrdenCompraPago;
+			$starsoft_comprobante_pago = new StarsoftComprobantePago;
 		}else{
-			$orden_compra_pago = OrdenCompraPago::find($id);
+			$starsoft_comprobante_pago = StarsoftComprobantePago::find($id);
 		}
 
 		$tipo_desembolso = $tablaMaestra_model->getMaestroByTipo(65);
 		$banco = $tablaMaestra_model->getMaestroByTipo(16);
         $conversion = $tablaMaestra_model->getMaestroByTipo(122);
 
-		$orden_compra_pago_model = new OrdenCompraPago;
-		$data = $orden_compra_pago_model->getImportePago($id_orden_compra);
+		$orden_compra_pago_model = new StarsoftComprobantePago;
+		$data = $orden_compra_pago_model->getImportePago($id_comprobante);
 
 		$importe = $data->precio-$data->pago;
+        $detracciones = $detracciones_model->getDetraccionesAll();
 
-		return view('frontend.orden_compra.modal_pago',compact('id','orden_compra_pago','id_orden_compra','fecha_actual'/*,'adelantos'*/,'tipo_desembolso','importe','banco','conversion'));
+		return view('frontend.orden_compra.modal_pago',compact('id','starsoft_comprobante_pago','id_comprobante','fecha_actual'/*,'adelantos'*/,'tipo_desembolso','importe','banco','conversion','detracciones'));
 	
 	}
 
@@ -2143,19 +2422,19 @@ class OrdenCompraController extends Controller
 	
 	}
 
-    public function cargar_pago_orden_compra($id){
-		 
-		$orden_compra_model = new OrdenCompra;
-        $pago = $orden_compra_model->getOrdenCompraPagoById($id);
+    public function cargar_pago_orden_compra($idPagoComprobante){
+
+		$starsoft_comprobante_pago_model = new StarsoftComprobantePago;
+        $pago = $starsoft_comprobante_pago_model->getComprobantePagoById($idPagoComprobante);
 		
         return view('frontend.orden_compra.orden_compra_pago_ajax',compact('pago'));
 		
     }
 
-    public function cargar_guia_orden_compra($id){
+    public function cargar_guia_orden_compra($idPagoComprobante){
 		
-		$orden_compra_model = new OrdenCompra;
-        $guia = $orden_compra_model->getOrdenCompraGuiaById($id);
+		$starsoft_comprobante_pago_model = new StarsoftComprobantePago;
+        $guia = $starsoft_comprobante_pago_model->getComprobanteGuiaById($idPagoComprobante);
 		
         return view('frontend.orden_compra.orden_compra_guia_ajax',compact('guia'));
 		
@@ -2232,60 +2511,60 @@ class OrdenCompraController extends Controller
 		$maestra_model = new TablaMaestra;
 		
 		if($request->id==0){
-			$pago = new OrdenCompraPago;
-			$pago->id_orden_compra = $request->id_orden_compra;
+			$pago = new StarsoftComprobantePago;
+			$pago->id_comprobante = $request->id_orden_compra;
+			$pago->fecha = $request->fecha;
 			$pago->id_tipo_desembolso = $request->id_tipodesembolso;
-			$pago->importe = $request->importe;
-			$pago->nro_guia = $request->nro_guia;
 			$pago->nro_cheque = $request->nro_cheque;
-			$pago->nro_factura = $request->nro_factura;
-			$pago->id_banco = $request->id_banco;
 			$pago->nro_operacion = $request->nro_operacion;
-			$pago->fecha = $request->fecha;
-			$pago->observacion = $request->observacion;
-			$pago->foto_desembolso = $request->img_foto;
-			$pago->estado = 1;
-			$pago->id_usuario_inserta = $id_user;
-			$pago->tipo_documento_compra = $request->tipo_documento;
-			$pago->serie_compra = $request->serie_factura;
-			$pago->numero_compra = $request->nro_factura;
-			$pago->fecha_compra = $request->fecha_factura;
-			$pago->glosa_comprobante = $request->glosa_comprobante;
-			$pago->glosa_movimiento = $request->glosa_movimiento;
-			$pago->id_conversion = $request->conversion;
-			$pago->tasa_especial = $request->tasa_cambio_especial;
-			$pago->fecha_tasa_cambio = $request->fecha_tc;
-			$pago->tasa_cambio = $request->tasa_cambio;
-		}else{
-			$pago = OrdenCompraPago::find($request->id);
-			$pago->id_tipo_desembolso = $request->id_tipodesembolso;
 			$pago->importe = $request->importe;
-			$pago->nro_guia = $request->nro_guia;
-            $pago->nro_cheque = $request->nro_cheque;
-			$pago->nro_factura = $request->nro_factura;
 			$pago->id_banco = $request->id_banco;
-			$pago->nro_operacion = $request->nro_operacion;
-			$pago->fecha = $request->fecha;
-			$pago->observacion = $request->observacion;
-			$pago->foto_desembolso = $request->img_foto;
-			$pago->estado = 1;
-			$pago->id_usuario_inserta = $id_user;
-            $pago->tipo_documento_compra = $request->tipo_documento;
-			$pago->serie_compra = $request->serie_factura;
-			$pago->numero_compra = $request->nro_factura;
-			$pago->fecha_compra = $request->fecha_factura;
-			$pago->glosa_comprobante = $request->glosa_comprobante;
 			$pago->glosa_movimiento = $request->glosa_movimiento;
-			$pago->id_conversion = $request->conversion;
+            $pago->id_conversion = $request->conversion;
 			$pago->tasa_especial = $request->tasa_cambio_especial;
 			$pago->fecha_tasa_cambio = $request->fecha_tc;
 			$pago->tasa_cambio = $request->tasa_cambio;
+			$pago->foto_desembolso = $request->img_foto;
+			$pago->detraccion = $request->detraccion ? '1' : '0';
+            $pago->id_tipo_operacion = $request->tipo_operacion;
+			$pago->id_codigo_detraccion = $request->codigo_detraccion;
+			$pago->documento_referencial = $request->documento_detraccion;
+			$pago->fecha_detraccion = $request->fecha_detraccion;
+			$pago->importe_referencial = $request->importe_referencial;
+			$pago->observacion = $request->observacion;
+			$pago->id_usuario_inserta = $id_user;
+			$pago->estado = 1;
+			
+		}else{
+			$pago = StarsoftComprobantePago::find($request->id);
+			$pago->id_comprobante = $request->id_orden_compra;
+			$pago->fecha = $request->fecha;
+			$pago->id_tipo_desembolso = $request->id_tipodesembolso;
+			$pago->nro_cheque = $request->nro_cheque;
+			$pago->nro_operacion = $request->nro_operacion;
+			$pago->importe = $request->importe;
+			$pago->id_banco = $request->id_banco;
+			$pago->glosa_movimiento = $request->glosa_movimiento;
+            $pago->id_conversion = $request->conversion;
+			$pago->tasa_especial = $request->tasa_cambio_especial;
+			$pago->fecha_tasa_cambio = $request->fecha_tc;
+			$pago->tasa_cambio = $request->tasa_cambio;
+			$pago->foto_desembolso = $request->img_foto;
+			$pago->detraccion = $request->glosa_comprobante;
+            $pago->id_tipo_operacion = $request->tipo_documento;
+			$pago->id_codigo_detraccion = $request->serie_factura;
+			$pago->documento_referencial = $request->nro_factura;
+			$pago->fecha_detraccion = $request->nro_factura;
+			$pago->importe_referencial = $request->nro_factura;
+			$pago->observacion = $request->observacion;
+			$pago->id_usuario_inserta = $id_user;
+			$pago->estado = 1;
 		}
 
 		$pago->save();
 
-		$ordenCompraPago_model = new OrdenCompraPago;
-		$data = $ordenCompraPago_model->getImportePago($request->id_orden_compra);
+		$starsoft_comprobante_pago_model = new StarsoftComprobantePago;
+		$data = $starsoft_comprobante_pago_model->getImportePago($request->id_orden_compra);
 
 		if($data->pago==0){
 			$id_estado_pago = 1;
@@ -2295,7 +2574,7 @@ class OrdenCompraController extends Controller
 			$id_estado_pago = 3;
 		}
 
-		$OrdenCompraPagoActual = OrdenCompraPago::where('id_orden_compra', $request->id_orden_compra)->where('estado', 1)->get();
+		$OrdenCompraPagoActual = StarsoftComprobantePago::where('id_comprobante', $request->id_orden_compra)->where('estado', 1)->get();
         foreach($OrdenCompraPagoActual as $pago){
             $pago->id_estado_pago=$id_estado_pago;
             $pago->save();

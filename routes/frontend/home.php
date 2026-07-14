@@ -1004,6 +1004,7 @@ Route::get('requerimiento_dispensacion/cargar_detalle/{id}', [RequerimientoDispe
 Route::post('requerimiento_dispensacion/send_dispensacion_producto', [RequerimientoDispensacionController::class, 'send_dispensacion_producto'])->name('requerimiento_dispensacion.send_dispensacion_producto');
 
 Route::post('requerimiento/send_aprobar_requerimiento', [RequerimientoController::class, 'send_aprobar_requerimiento'])->name('requerimiento.send_aprobar_requerimiento');
+Route::post('requerimiento/send_desaprobar_requerimiento', [RequerimientoController::class, 'send_desaprobar_requerimiento'])->name('requerimiento.send_desaprobar_requerimiento');
 Route::get('centro_costo/obtener_centro_costo/{sede}', [CentroCostosController::class, 'obtener_centro_costo'])->name('centro_costo.obtener_centro_costo');
 
 Route::get('requerimiento_dispensacion/modal_atender_requerimiento_dispensacion/{id}', [RequerimientoDispensacionController::class, 'modal_atender_requerimiento_dispensacion'])->name('requerimiento_dispensacion.modal_atender_requerimiento_dispensacion');
@@ -1036,4 +1037,7 @@ Route::get('asignacion_cuenta/create', [AsignacionCuentaController::class, 'crea
 Route::post('asignacion_cuenta/listar_asignacion_cuenta_ajax', [AsignacionCuentaController::class, 'listar_asignacion_cuenta_ajax'])->name('asignacion_cuenta.listar_asignacion_cuenta_ajax');
 Route::post('asignacion_cuenta/send_asignacion_cuenta', [AsignacionCuentaController::class, 'send_asignacion_cuenta'])->name('asignacion_cuenta.send_asignacion_cuenta');
 Route::get('asignacion_cuenta/modal_asignacion_cuenta/{id}', [AsignacionCuentaController::class, 'modal_asignacion_cuenta'])->name('asignacion_cuenta.modal_asignacion_cuenta');
+Route::get('asignacion_cuenta/eliminar_asignacion_cuenta/{id}/{estado}', [AsignacionCuentaController::class, 'eliminar_asignacion_cuenta'])->name('asignacion_cuenta.eliminar_asignacion_cuenta');
+
+Route::post('orden_compra/listar_comprobantes_pagos_ajax', [OrdenCompraController::class, 'listar_comprobantes_pagos_ajax'])->name('orden_compra.listar_comprobantes_pagos_ajax');
 

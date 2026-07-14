@@ -150,6 +150,12 @@ $('#openOverlayOpc').on('shown.bs.modal', function() {
 		container: '#openOverlayOpc modal-body'
 	});
 	*/
+
+    $('#cuenta').select2({ width : '100%' })
+
+    $('#centro_costo').select2({ width : '100%' })
+
+    $('#medio_pago').select2({ width : '100%' })
 	 
 });
 
@@ -164,32 +170,47 @@ function limpiar(){
 	$('#img_foto').val("");
 }
 
-function fn_save_marca(){
-
-    $('#denominacion').val($('#denominacion').val().toUpperCase());
+function fn_save_asignacion_cuenta(){
 	
-	$.ajax({
-			url: "/marcas/send_marca",
+    var msg = "";
+
+    var origen = $('#origen').val();
+    var cuenta = $('#cuenta').val();
+    var tipo = $('#tipo').val();
+    //var centro_costo = $('#centro_costo').val();
+    //var medio_pago = $('#medio_pago').val();
+    
+    if(origen==""){msg+="Seleccione el Origen <br>";}
+    if(cuenta==""){msg+="Seleccione la Cuenta <br>";}
+    if(tipo==""){msg+="Seleccione el Tipo <br>";}
+    //if(centro_costo==""){msg+="Seleccione el Centro de Costo <br>";}
+    //if(medio_pago==""){msg+="Seleccione el Medio de Pago <br>";}
+
+    if(msg!=""){
+        bootbox.alert(msg);
+        return false;
+    }else{
+
+        $.ajax({
+            url: "/asignacion_cuenta/send_asignacion_cuenta",
             type: "POST",
-            data : $("#frmMarca").serialize(),
-			success: function (result) {
-				//alert(result);
+            data : $("#frmAsignacionCuenta").serialize(),
+            success: function (result) {
+
                 if (result.success) {
                     bootbox.alert(result.success, function() {
                         $('#openOverlayOpc').modal('hide');
-                        //bootbox.alert("Se guard&oacute; satisfactoriamente"); 
-                        //window.location.reload();
                         datatablenew();
                     });
                 } else if (result.error) {
                     bootbox.alert(result.error);
                 }
             },
-    });
+        });
+    }
 }
 
 </script>
-
 
 <body class="hold-transition skin-blue sidebar-mini">
 
@@ -206,11 +227,11 @@ function fn_save_marca(){
             <div class="card">
                 
                 <div class="card-header" style="padding:5px!important;padding-left:20px!important">
-                    Registrar Marcas
+                    Registrar Asignaci&oacute;n de Cuentas
                 </div>
                 
                 <div class="card-body">
-                <form method="post" action="#" id="frmMarca" name="frmMarca">
+                <form method="post" action="#" id="frmAsignacionCuenta" name="frmAsignacionCuenta">
 
                     <div class="row">
 
@@ -221,23 +242,28 @@ function fn_save_marca(){
                             
                             
                             <div class="row" style="padding-left:10px">
-                                
-                                <div class="col-lg-8">
-                                    <div class="form-group">
-                                        <label class="control-label form-control-sm">Denominaci&oacute;n</label>
-                                        <input id="denominacion" name="denominacion" on class="form-control form-control-sm"  value="<?php echo $marca->denominiacion?>" type="text" style="text-transform: uppercase;">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row" style="padding-left:10px">
                                 <div class="col-lg-4">
                                     <div class="form-group">
-                                        <label class="control-label form-control-sm">Tipo Marca</label>
-                                        <select name="tipo_marca" id="tipo_marca" class="form-control form-control-sm">
+                                        <label class="control-label form-control-sm">Origen</label>
+                                        <select name="origen" id="origen" class="form-control form-control-sm">
                                             <option value="">--Seleccionar--</option>
                                             <?php 
-                                            foreach ($tipo_marca as $row){?>
-                                                <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$marca->id_tipo_marca)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                            foreach ($origen as $row){?>
+                                                <option value="<?php echo $row->id ?>" <?php if($row->id==$asignacion_cuenta->id_origen)echo "selected='selected'"?>><?php echo $row->codigo.' - '.$row->descripcion ?></option>
+                                                <?php 
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-8">
+                                    <div class="form-group">
+                                        <label class="control-label form-control-sm">Cuenta</label>
+                                        <select name="cuenta" id="cuenta" class="form-control form-control-sm">
+                                            <option value="">--Seleccionar--</option>
+                                            <?php 
+                                            foreach ($cuenta as $row){?>
+                                                <option value="<?php echo $row->id ?>" <?php if($row->id==$asignacion_cuenta->id_plan_contable)echo "selected='selected'"?>><?php echo $row->cuenta.' - '.$row->denominacion ?></option>
                                                 <?php 
                                             }
                                             ?>
@@ -245,31 +271,90 @@ function fn_save_marca(){
                                     </div>
                                 </div>
                             </div>
+                            <div class="row" style="padding-left:10px">
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label class="control-label form-control-sm">Tipo</label>
+                                        <select name="tipo" id="tipo" class="form-control form-control-sm">
+                                            <option value="">--Seleccionar--</option>
+                                            <?php 
+                                            foreach ($tipo as $row){?>
+                                                <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$asignacion_cuenta->id_tipo_cuenta)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                                <?php 
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-8">
+                                    <div class="form-group">
+                                        <label class="control-label form-control-sm">Centro Costos</label>
+                                        <select name="centro_costo" id="centro_costo" class="form-control form-control-sm">
+                                            <option value="">--Seleccionar--</option>
+                                            <?php 
+                                            foreach ($centro_costo as $row){?>
+                                                <option value="<?php echo $row->id ?>" <?php if($row->id==$asignacion_cuenta->id_centro_costo)echo "selected='selected'"?>><?php echo $row->codigo.' - '.$row->denominacion ?></option>
+                                                <?php 
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        <div style="margin-top:15px" class="form-group">
-                            <div class="col-sm-12 controls">
-                                <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
-                                    <!--<a href="javascript:void(0)" onClick="fn_save_marca()" class="btn btn-sm btn-success">Guardar</a>-->
-                                    <button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-nuevo" data-toggle="modal" onclick="fn_save_marca()">
-                                        <i class="fas fa-save" style="font-size:18px;"></i> Guardar
-                                    </button>
+                            <div class="row" style="padding-left:10px">
+                                <div class="col-lg-8">
+                                    <div class="form-group">
+                                        <label class="control-label form-control-sm">Medio Pago</label>
+                                        <select name="medio_pago" id="medio_pago" class="form-control form-control-sm">
+                                            <option value="">--Seleccionar--</option>
+                                            <?php 
+                                            foreach ($medio_pago as $row){?>
+                                                <option value="<?php echo $row->codigo ?>" <?php if($row->codigo==$asignacion_cuenta->id_medio_pago)echo "selected='selected'"?>><?php echo $row->codigo.' - '.$row->denominacion ?></option>
+                                                <?php 
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label class="control-label form-control-sm">Moneda</label>
+                                        <select name="moneda" id="moneda" class="form-control form-control-sm" onchange="">
+                                            <option value="">--Seleccionar--</option>
+                                            <?php
+                                            foreach ($moneda as $row){?>
+                                                <option value="<?php echo $row->codigo; ?>" <?php echo ($id > 0 && $row->codigo == $asignacion_cuenta->id_moneda) ? "selected='selected'" : ""; ?>><?php echo $row->denominacion ?></option>
+                                                <?php 
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </form>
+                    <div style="margin-top:15px" class="form-group">
+                        <div class="col-sm-12 controls">
+                            <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
+                                <!--<a href="javascript:void(0)" onClick="fn_save_marca()" class="btn btn-sm btn-success">Guardar</a>-->
+                                <button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-nuevo" data-toggle="modal" onclick="fn_save_asignacion_cuenta()">
+                                    <i class="fas fa-save" style="font-size:18px;"></i> Guardar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <!-- /.box -->
+            </form>
             </div>
-            <!--/.col (left) -->
+            <!-- /.box -->
         </div>
-        <!-- /.row -->
+        <!--/.col (left) -->
+    </div>
+    <!-- /.row -->
 <!-- /.content -->
 </div>
 <!-- /.content-wrapper -->
 
-    
 <script type="text/javascript">
 $(document).ready(function () {
 

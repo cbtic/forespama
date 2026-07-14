@@ -364,12 +364,27 @@ function generar_asientos_ventas(id){
 		success: function (result) {
 			
             $('.loader').hide();
-			if (result.success) {
+			/*if (result.success) {
 				datatablenew();
 			} else if (result.error) {
 				bootbox.alert(result.error);
-			}
+			}*/
+			datatablenew();
+			Swal.fire({
+				icon: 'success',
+				title: result.mensaje
+        	});
 		},
+
+		error: function (xhr) {
+			
+			$('.loader').hide();
+
+			Swal.fire({
+				icon: 'error',
+				title: xhr.responseJSON.mensaje
+			});
+		}
     });
 }
 
