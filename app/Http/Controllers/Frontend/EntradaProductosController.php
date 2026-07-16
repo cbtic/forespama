@@ -377,7 +377,11 @@ class EntradaProductosController extends Controller
                         $kardex->id_tipo_movimiento = 16;
                     }
                     if($request->unidad_origen == 2){
-                        $kardex->id_tipo_movimiento = 5;
+                        if($request->importacion == 1){
+                            $kardex->id_tipo_movimiento = 4;
+                        }else{
+                            $kardex->id_tipo_movimiento = 5;
+                        }
                     }
 
                     $kardex->id_movimiento = $entrada_producto->id;

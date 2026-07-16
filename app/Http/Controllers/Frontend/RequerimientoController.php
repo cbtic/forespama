@@ -181,6 +181,7 @@ class RequerimientoController extends Controller
         $requerimiento->id_tipo_requerimiento = $request->tipo_requerimiento;
         $requerimiento->observacion = $request->destino;
         $requerimiento->cerrado = 1;
+        $requerimiento->importacion = $request->input('importacion', 0);
         $requerimiento->id_usuario_inserta = $id_user;
         $requerimiento->estado = 1;
         $requerimiento->save();
@@ -426,6 +427,7 @@ class RequerimientoController extends Controller
         $orden_compra->id_requerimiento = $request->id;
         $orden_compra->id_tipo_cliente = '5';
         $orden_compra->id_usuario_inserta = $id_user;
+        $orden_compra->importacion = $request->input('importacion', 0);
         $orden_compra->estado = 1;
         $orden_compra->save();
         $id_orden_compra = $orden_compra->id;

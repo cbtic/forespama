@@ -379,6 +379,7 @@ class OrdenCompraController extends Controller
         $orden_compra->id_prioridad = $request->prioridad;
         $orden_compra->id_autorizacion = $request->id_autorizacion;
         $orden_compra->id_canal = $request->canal;
+        $orden_compra->importacion = $request->input('importacion', 0);
         $orden_compra->estado = 1;
         if($request->tipo_documento == 4){
             $orden_compra_matriz = OrdenCompra::where('numero_orden_compra',$request->numero_orden_compra_matriz)->where('id_tipo_documento',2)->where('estado',1)->where('estado_pedido',1)->first();

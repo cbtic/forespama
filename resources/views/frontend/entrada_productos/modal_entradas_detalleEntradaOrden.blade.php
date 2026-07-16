@@ -1515,6 +1515,18 @@ function pdf_documento(){
                             </div>
                         <?php } ?>
                     </div>
+                    <?php if($tipo==1){?>
+                    <div class="row" id="label_importacion" style="padding-left:10px">
+                        <div class="col-lg-4">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="importacion_" value="1" id="cliente" disabled <?php if($orden_compra->importacion == 1) echo 'checked';?>>
+                                <label class="form-check-label" for="importacion_">Importaci&oacute;n</label>
+                                <input type="hidden" name="importacion" id="importacion" value="<?php echo $orden_compra->importacion ?>">
+                            </div>
+                        </div>
+                    </div>
+                    <?php } ?>
+                    
                         <!--<div style="margin-top:15px" class="form-group">
                             <div class="col-sm-12 controls">
                                 <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
@@ -1596,7 +1608,7 @@ function pdf_documento(){
                         
                                     if($tipo == 1){
                                 ?>
-                                    <a href="javascript:void(0)" onClick="fn_save_detalle_producto()" class="btn btn-sm btn-danger" style="margin-right:10px">Recibir</a>
+                                    <a href="javascript:void(0)" onClick="fn_save_detalle_producto()" class="btn btn-sm btn-danger" style="margin-left:10px; margin-right:10px">Recibir</a>
                                 <?php 
                                     } elseif($tipo== 2){
                                 ?>

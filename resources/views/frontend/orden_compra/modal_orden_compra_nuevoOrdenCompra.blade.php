@@ -302,6 +302,7 @@ $(document).ready(function() {
     obtenerFechaVencimiento();
     obtenerCanal();
     obtenerBeneficiarioGuardado();
+    obtenerImportacion();
 
     $("#item").select2({ width: '100%' });
     $("#ubicacion_fisica_seccion").select2({ width: '100%' });
@@ -310,7 +311,6 @@ $(document).ready(function() {
     $("#empresa_compra").select2({ width: '100%' });
     $("#persona_compra").select2({ width: '100%' });
     
-
 });
 
 </script>
@@ -1520,6 +1520,17 @@ function obtenerFechaVencimiento(){
     }
 }
 
+function obtenerImportacion(){
+
+    var tipo_documento = $('#tipo_documento').val();
+
+    if(tipo_documento == 1){
+        $('#label_importacion').show();
+    }else{
+        $('#label_importacion').hide();
+    }
+}
+
 function obtenerOrdenCompraMatriz(){
 
     var numero_orden_compra_matriz = $('#numero_orden_compra_matriz').val();
@@ -1809,7 +1820,7 @@ function modal_cerrar_pedido(id){
                                     Tipo Documento
                                 </div>
                                 <div class="col-lg-2">
-                                    <select name="tipo_documento" id="tipo_documento" class="form-control form-control-sm" onchange="obtenerCodigo(); obtenerFechaVencimiento(); obtenerCanal()">
+                                    <select name="tipo_documento" id="tipo_documento" class="form-control form-control-sm" onchange="obtenerCodigo(); obtenerFechaVencimiento(); obtenerCanal(); obtenerImportacion()">
                                         <option value="">--Seleccionar--</option>
                                         <?php
                                         foreach ($tipo_documento as $row){?>
@@ -2043,6 +2054,14 @@ function modal_cerrar_pedido(id){
                                 </div>
                                 <div class="col-lg-2" id="input_entrada_salida">
                                     <textarea id="observacion_vendedor" name="observacion_vendedor" class="form-control form-control-sm"><?php echo $orden_compra->observacion_vendedor?></textarea>
+                                </div>
+                            </div>
+                            <div class="row" id="label_importacion">
+                                <div class="col-lg-4">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="importacion" value="1" id="cliente" <?php if($orden_compra->importacion == 1) echo 'checked'; ?>>
+                                        <label class="form-check-label" for="importacion">Importaci&oacute;n</label>
+                                    </div>
                                 </div>
                             </div>
                         </div>

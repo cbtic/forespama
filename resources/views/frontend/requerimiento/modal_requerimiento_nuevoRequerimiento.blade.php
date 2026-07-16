@@ -186,6 +186,8 @@ $(document).ready(function() {
 
     $("#responsable").select2({ width: '100%' });
 
+    obtenerImportacion();
+
 });
 
 </script>
@@ -789,6 +791,17 @@ function generarRequerimientoInsumos(){
     });
 }
 
+function obtenerImportacion(){
+
+    var tipo_documento = $('#tipo_documento').val();
+
+    if(tipo_documento == 1){
+        $('#label_importacion').show();
+    }else{
+        $('#label_importacion').hide();
+    }
+}
+
 </script>
 
 <body class="hold-transition skin-blue sidebar-mini">
@@ -822,7 +835,7 @@ function generarRequerimientoInsumos(){
                                 Tipo Documento
                             </div>
                             <div class="col-lg-2">
-                                <select name="tipo_documento" id="tipo_documento" class="form-control form-control-sm" onchange="//obtenerCodigo()">
+                                <select name="tipo_documento" id="tipo_documento" class="form-control form-control-sm" onchange="obtenerImportacion();//obtenerCodigo()">
                                     <option value="">--Seleccionar--</option>
                                     <?php
                                     foreach ($tipo_documento as $row){
@@ -962,6 +975,14 @@ function generarRequerimientoInsumos(){
                             </div>
                             <div class="col-lg-2">
                                 <input id="destino" name="destino" on class="form-control form-control-sm"  value="<?php if($id>0){echo $requerimiento->observacion;}?>" type="text">
+                            </div>
+                        </div>
+                        <div class="row" id="label_importacion" style="padding-left:10px">
+                            <div class="col-lg-4">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="importacion" value="1" id="cliente" <?php if($requerimiento->importacion == 1) echo 'checked'; ?>>
+                                    <label class="form-check-label" for="importacion">Importaci&oacute;n</label>
+                                </div>
                             </div>
                         </div>
                     

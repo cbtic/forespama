@@ -166,13 +166,6 @@ $('#openOverlayOpc').on('shown.bs.modal', function() {
 		//container: '#openOverlayOpc modal-body'
 		container: '#openOverlayOpc modal-body'
      });
-	 /*
-	 $('#hora_solicitud').timepicker({
-		showInputs: false,
-		container: '#openOverlayOpc modal-body'
-	});
-	*/
-	 
 });
 
 $(document).ready(function() {
@@ -205,25 +198,24 @@ function obtenerCodInterno(selectElement, n){
     var id_producto = $(selectElement).val();
 
     $.ajax({
-            url: "/productos/obtener_producto/"+id_producto,
-            dataType: "json",
-            success: function(result){
-                //alert(result[0].codigo);
-                $('#cod_interno' + n).val(result[0].codigo);
-                $('#item' + n).val(result[0].numero_serie);
-                $('#marca' + n).val(result[0].id_marca).trigger('change');
-                $('#unidad' + n).val(result[0].id_unidad_producto);
+        url: "/productos/obtener_producto/"+id_producto,
+        dataType: "json",
+        success: function(result){
+            //alert(result[0].codigo);
+            $('#cod_interno' + n).val(result[0].codigo);
+            $('#item' + n).val(result[0].numero_serie);
+            $('#marca' + n).val(result[0].id_marca).trigger('change');
+            $('#unidad' + n).val(result[0].id_unidad_producto);
 
-                $('#fecha_vencimiento_' + n).datepicker({
-                    autoclose: true,
-                    format: 'yyyy-mm-dd',
-                    changeMonth: true,
-                    changeYear: true,
-                    language: 'es'
-                });
-                
-            }
-        });
+            $('#fecha_vencimiento_' + n).datepicker({
+                autoclose: true,
+                format: 'yyyy-mm-dd',
+                changeMonth: true,
+                changeYear: true,
+                language: 'es'
+            });
+        }
+    });
 }
 
 function obtenerCodigo(selectElement){
@@ -489,7 +481,6 @@ function agregarProducto(){
         });
         
     }
-
     //actualizarTotalGeneral();
 }
 
@@ -505,19 +496,19 @@ function verificarProductoSeleccionado(selectElement, rowIndex, valor) {
             $("#descripcion_ant"+rowIndex).val("");
         }
 
-        if (!productosSeleccionados.includes(Number(selectedValue))) {
+        if(!productosSeleccionados.includes(Number(selectedValue))) {
             productosSeleccionados.push(Number(selectedValue));
             $("#descripcion_ant"+rowIndex).val(selectedValue);
 
             obtenerCodInterno(selectElement, rowIndex);
-        } else {
+        }else{
             bootbox.alert("Este producto ya ha sido seleccionado. Por favor elige otro.");
             $(selectElement).val('').trigger('change');
         }
-    } else {
+    }else{
         
         const index = productosSeleccionados.indexOf(Number(selectedValue));
-        if (index > -1) {
+        if(index > -1) {
             productosSeleccionados.splice(index, 1);
         }
     }
@@ -537,13 +528,13 @@ function modalObservacion(n){
     const idDetalle = $('#id_requerimiento_detalle' + n).val();
 
     $.ajax({
-			url: "/requerimiento/modal_observacion/"+idDetalle,
-			type: "GET",
-			success: function (result) {
-					$("#diveditpregOpc2").html(result);
-					$('#openOverlayOpc2').modal('show');
-                    
-			}
+        url: "/requerimiento/modal_observacion/"+idDetalle,
+        type: "GET",
+        success: function (result) {
+                $("#diveditpregOpc2").html(result);
+                $('#openOverlayOpc2').modal('show');
+                
+        }
 	});
 }
 
@@ -591,16 +582,16 @@ function fn_save_requerimiento(){
         $('.loader').show();
 
         $.ajax({
-                url: "/requerimiento/send_requerimiento",
-                type: "POST",
-                data : $("#frmRequerimiento").serialize(),
-                success: function (result) {
-                    datatablenew();
-                    $('.loader').hide();
-                    bootbox.alert("Se guard&oacute; satisfactoriamente"); 
-                    $('#openOverlayOpc').modal('hide');
-               
-                }
+            url: "/requerimiento/send_requerimiento",
+            type: "POST",
+            data : $("#frmRequerimiento").serialize(),
+            success: function (result) {
+                datatablenew();
+                $('.loader').hide();
+                bootbox.alert("Se guard&oacute; satisfactoriamente"); 
+                $('#openOverlayOpc').modal('hide');
+            
+            }
         });
     }
 }
@@ -724,17 +715,16 @@ function generar_requerimiento(){
     $('.loader').show();
 
     $.ajax({
-            url: "/requerimiento/send_genera_requerimiento",
-            type: "POST",
-            data : $("#frmRequerimiento").serialize(),
-            success: function (result) {
-                datatablenew();
-                $('.loader').hide();
-                bootbox.alert("Se gener&oacute; requerimiento satisfactoriamente");
-                $('#openOverlayOpc').modal('hide');
-            }
-    });
-    
+        url: "/requerimiento/send_genera_requerimiento",
+        type: "POST",
+        data : $("#frmRequerimiento").serialize(),
+        success: function (result) {
+            datatablenew();
+            $('.loader').hide();
+            bootbox.alert("Se gener&oacute; requerimiento satisfactoriamente");
+            $('#openOverlayOpc').modal('hide');
+        }
+    });    
 }
 
 function obtenerCodigo(){
@@ -752,7 +742,6 @@ function obtenerCodigo(){
 
         }
     });
-
 }
 
 function pdf_documento(){
@@ -768,7 +757,6 @@ function pdf_documento(){
 function cerrarModalRequerimiento(){
 
     $('#openOverlayOpc').modal('hide');
-
     //datatablenew();
 }
 
@@ -946,6 +934,16 @@ function cambiarOrigen(){
                                 <textarea id="sustento_requerimiento" name="sustento_requerimiento" class="form-control form-control-sm" rows="2"><?php echo $requerimiento->sustento_requerimiento?></textarea>
                             </div>
                         </div>
+                        <?php if($requerimiento->id_tipo_documento==1){?>
+                        <div class="row" id="label_importacion" style="padding-left:10px">
+                            <div class="col-lg-4">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="importacion" value="1" id="cliente" <?php if($requerimiento->importacion == 1) echo 'checked'; ?>>
+                                    <label class="form-check-label" for="importacion">Importaci&oacute;n</label>
+                                </div>
+                            </div>
+                        </div>
+                        <?php } ?>
                             <div style="margin-top:15px" class="form-group">
                                 <div class="col-sm-12 controls">
                                     <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
