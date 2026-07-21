@@ -439,14 +439,25 @@ class OrdenCompraController extends Controller
         
         if($request->tipo_documento == 2 || $request->tipo_documento == 4){
             if($request->canal == 1 || $request->canal == 2 || $request->canal == 3){
+                if(!in_array($request->numero_orden_compra_cliente, ['MUESTRA', 'EXHIBICION', 'POSVENTA', 'POSTVENTA', 'FERIA'])) {
+                    $autorizacion_orden_compra = new AutorizacionOrdenCompra;
+                    $autorizacion_orden_compra->id_orden_compra = $orden_compra->id;
+                    $autorizacion_orden_compra->id_proceso_pedido = 1;
+                    //$autorizacion_orden_compra->id_autorizacion = 1;
+                    //$autorizacion_orden_compra->id_usuario_autoriza = $id_user;
+                    $autorizacion_orden_compra->id_usuario_inserta = $id_user;
+                    $autorizacion_orden_compra->estado = 1;
+                    $autorizacion_orden_compra->save();
+                }else{
                 $autorizacion_orden_compra = new AutorizacionOrdenCompra;
                 $autorizacion_orden_compra->id_orden_compra = $orden_compra->id;
-                $autorizacion_orden_compra->id_proceso_pedido = 1;
-                //$autorizacion_orden_compra->id_autorizacion = 1;
+                $autorizacion_orden_compra->id_proceso_pedido = 4;
+                $autorizacion_orden_compra->id_autorizacion = 2;
                 //$autorizacion_orden_compra->id_usuario_autoriza = $id_user;
                 $autorizacion_orden_compra->id_usuario_inserta = $id_user;
                 $autorizacion_orden_compra->estado = 1;
                 $autorizacion_orden_compra->save();
+                }
             }else{
                 $autorizacion_orden_compra = new AutorizacionOrdenCompra;
                 $autorizacion_orden_compra->id_orden_compra = $orden_compra->id;
