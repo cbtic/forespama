@@ -511,6 +511,20 @@ function fn_save_requerimiento(){
         msg += "No se ha agregado ningún producto <br>";
     }
 
+    if(tipo_documento==2){
+
+        $('#tblRequerimientoDetalle tbody tr').each(function(index, row) {
+
+            const cantidad_ingreso_producto = parseInt($(row).find('input[name="cantidad_ingreso[]"]').val()) || 0;
+            const stockActual = parseInt($(row).find('input[name="stock[]"]').val()) || 0;
+            const descripcion_producto = $(row).find('select[name="descripcion[]"] option:selected').text();
+
+            if(stockActual<cantidad_ingreso_producto){
+                msg+="No hay stock para el producto "+descripcion_producto+" <br>";
+            }
+        });
+    }
+
     if(msg!=""){
         bootbox.alert(msg);
         return false;
@@ -528,7 +542,7 @@ function fn_save_requerimiento(){
             success: function (result) {
                 datatablenew();
                 $('.loader').hide();
-                bootbox.alert("Se guard&oacute; satisfactoriamente"); 
+                bootbox.alert("Se guard&oacute; satisfactoriamente");
                 $('#openOverlayOpc').modal('hide');
             
             }

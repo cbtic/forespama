@@ -133,10 +133,11 @@ $(document).ready(function() {
 
 $('#openOverlayOpc').on('shown.bs.modal', function() {
      $('#fecha').datepicker({
-		format: "dd/mm/yyyy",
+		format: "dd-mm-yyyy",
 		autoclose: true,
 		//container: '#openOverlayOpc modal-body'
-		container: '#openOverlayOpc modal-body'
+		container: '#openOverlayOpc modal-body',
+		endDate: new Date()
      });
 	 /*
 	 $('#hora_solicitud').timepicker({
@@ -192,8 +193,56 @@ function guardarCita(id_medico,fecha_cita){
     }
 }
 
-function fn_save(){
+function validarFecha(){
+
+	var msg = "";
+
+    var id = $('#id').val();
+    var fecha = $('#fecha').val();
+    var id_tipo_moneda_compra = $('#id_tipo_moneda_compra').val();
+    var id_tipo_moneda_venta = $('#id_tipo_moneda_venta').val();
+    var valor_compra = $('#valor_compra').val();
+    var valor_venta = $('#valor_venta').val();
     
+    if(fecha==""){msg+="Ingrese la Fecha <br>";}
+    if(id_tipo_moneda_compra==""){msg+="Seleccione la Moneda de Compra <br>";}
+    if(id_tipo_moneda_venta==""){msg+="Seleccione la Moneda de Venta <br>";}
+    if(valor_compra==""){msg+="Ingrese el Valor de Compra <br>";}
+    if(valor_venta==""){msg+="Ingrese el valor de Venta <br>";}
+
+	if(msg!=""){
+        bootbox.alert(msg);
+        return false;
+    }else{
+		var msgLoader = "";
+        msgLoader = "Procesando, espere un momento por favor";
+        var heightBrowser = $(window).width()/2;
+        $('.loader').css("opacity","0.8").css("height",heightBrowser).html("<div id='Grd1_wrapper' class='dataTables_wrapper'><div id='Grd1_processing' class='dataTables_processing panel-default'>"+msgLoader+"</div></div>");
+        $('.loader').show();
+
+        $.ajax({
+            url: "/tipo_cambio/validar_existencia_fecha/"+fecha,
+            method: 'GET',
+            success: function (result) {
+                
+                $('.loader').hide();
+                
+				if(id>0){
+					fn_save();
+				}else{
+					if(result[0].cantidad == 0){
+						fn_save();
+					}else{
+						bootbox.alert("Ya existe un Tipo de Cambio con la Fecha ingresada");
+					}
+				}
+            }
+        });
+    }
+}
+
+function fn_save(){
+
 	var _token = $('#_token').val();
 	var id  = $('#id').val();
 	var fecha = $('#fecha').val();
@@ -202,17 +251,24 @@ function fn_save(){
 	var valor_compra = $('#valor_compra').val();
 	var valor_venta = $('#valor_venta').val();
 	
+	var msgLoader = "";
+	msgLoader = "Procesando, espere un momento por favor";
+	var heightBrowser = $(window).width()/2;
+	$('.loader').css("opacity","0.8").css("height",heightBrowser).html("<div id='Grd1_wrapper' class='dataTables_wrapper'><div id='Grd1_processing' class='dataTables_processing panel-default'>"+msgLoader+"</div></div>");
+	$('.loader').show();
+
     $.ajax({
-			url: "/tipo_cambio/send",
-            type: "POST",
-            data : {_token:_token,id:id,fecha:fecha,id_tipo_moneda_compra:id_tipo_moneda_compra,id_tipo_moneda_venta:id_tipo_moneda_venta,valor_compra:valor_compra,valor_venta:valor_venta},
-			//dataType: 'json',
-            success: function (result) {
-				
-				$('#openOverlayOpc').modal('hide');
-				datatablenew();
-				
-            }
+		url: "/tipo_cambio/send",
+		type: "POST",
+		data : {_token:_token,id:id,fecha:fecha,id_tipo_moneda_compra:id_tipo_moneda_compra,id_tipo_moneda_venta:id_tipo_moneda_venta,valor_compra:valor_compra,valor_venta:valor_venta},
+		//dataType: 'json',
+		success: function (result) {
+
+			$('.loader').hide();
+			$('#openOverlayOpc').modal('hide');
+			datatablenew();
+			
+		}
     });
 }
 
@@ -377,21 +433,25 @@ container: '#myModal modal-body'
 					</div>
 					-->
 					<div class="row">
-						
-						
-
 						<div class="col-lg-3">
 							<div class="form-group">
 								<label class="control-label">Fecha</label>
-								<input id="fecha" name="fecha" class="form-control form-control-sm" value="<?php if($tipoCambio->fecha)echo date("d/m/Y", strtotime($tipoCambio->fecha))?>" type="text" >
+								<input id="fecha" name="fecha" class="form-control form-control-sm" value="<?php if($tipoCambio->fecha)echo date("d-m-Y", strtotime($tipoCambio->fecha))?>" type="text" placeholder="dd-mm-yyyy">
 							</div>
 						</div>
-						
+						<div class="col-lg-9">
+							<div class="form-group">
+								<label class="control-label">
+									Para ingresar el tipo de cambio de forma manual, consulte y registre el valor publicado en la siguiente p&aacute;gina oficial de la SUNAT:
+									<br>
+									<a href="https://e-consulta.sunat.gob.pe/cl-at-ittipcam/tcS01Alias" target="_blank">
+										https://e-consulta.sunat.gob.pe/cl-at-ittipcam/tcS01Alias
+									</a>
+								</label>
+							</div>
+						</div>
 					</div>
-					
-										
 					<div class="row">
-						
 						<div class="col-lg-6">
 							<div class="form-group">
 								<label class="control-label">Moneda Compra</label>
@@ -446,7 +506,7 @@ container: '#myModal modal-body'
 						<div class="col-sm-12 controls">
 							<div class="btn-group btn-group-sm" role="group" aria-label="Log Viewer Actions">
 								<!--<a href="javascript:void(0)" onClick="fn_save()" class="btn btn-sm btn-success">Guardar</a>-->
-								<button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-nuevo" data-toggle="modal" onclick="fn_save()">
+								<button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-nuevo" data-toggle="modal" onclick="validarFecha()">
 									<i class="fas fa-save" style="font-size:18px;"></i> Guardar
 								</button>
 							</div>

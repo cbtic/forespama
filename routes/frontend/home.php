@@ -1040,4 +1040,6 @@ Route::get('asignacion_cuenta/modal_asignacion_cuenta/{id}', [AsignacionCuentaCo
 Route::get('asignacion_cuenta/eliminar_asignacion_cuenta/{id}/{estado}', [AsignacionCuentaController::class, 'eliminar_asignacion_cuenta'])->name('asignacion_cuenta.eliminar_asignacion_cuenta');
 
 Route::post('orden_compra/listar_comprobantes_pagos_ajax', [OrdenCompraController::class, 'listar_comprobantes_pagos_ajax'])->name('orden_compra.listar_comprobantes_pagos_ajax');
-
+Route::get('tipo_cambio/validar_existencia_fecha/{fecha}', [TipoCambioController::class, 'validar_existencia_fecha'])->name('tipo_cambio.validar_existencia_fecha');
+Route::get('tipo_cambio/obtenerTipoCambioDiario', [TipoCambioController::class, 'obtenerTipoCambioDiario'])->name('tipo_cambio.obtenerTipoCambioDiario');
+Route::get('tipo_cambio/verificar', [TipoCambioController::class, 'verificar'])->name('tipo_cambio.verificar');

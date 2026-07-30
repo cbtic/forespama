@@ -321,6 +321,16 @@ function datatablenew(){
 				"bSortable": true,
 				"aTargets": [17]
 				},
+
+				{
+				"mRender": function (data, type, row) {
+					var centro_costo = "";
+					if(row.centro_costo!= null)centro_costo = row.centro_costo;
+					return centro_costo;
+				},
+				"bSortable": true,
+				"aTargets": [18]
+				},
 				/*{
 				"mRender": function (data, type, row) {
 					var almacen_salida = "";

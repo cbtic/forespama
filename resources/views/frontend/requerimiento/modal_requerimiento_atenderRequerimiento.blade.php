@@ -233,6 +233,7 @@ var productosSeleccionados = [];
 function cargarDetalle(){
 
     var id = $("#id").val();
+    var tipo_documento = $("#tipo_documento").val();
     const tbody = $('#divRequerimientoDetalle');
 
     tbody.empty();
@@ -247,6 +248,8 @@ function cargarDetalle(){
             var total_acumulado=0;
 
             result.requerimiento.forEach(requerimiento => {
+
+                var producto_stock = result.producto_stock[requerimiento.id_producto];
 
                 let marcaOptions = '<option value="">--Seleccionar--</option>';
                 let productoOptions = '<option value="">--Seleccionar--</option>';
@@ -300,6 +303,7 @@ function cargarDetalle(){
                 }
                 
                 let total =  totalPrecio * cantidadAtendida;
+                var stock_mostrar = (tipo_documento == 1) ? (producto_stock.saldos_cantidad ?? 0) : (producto_stock.stock_comprometido ?? 0);
                 
                 const row = `
                     <tr>
@@ -311,6 +315,7 @@ function cargarDetalle(){
                         <td><input name="unidad[]" id="unidad${n}" class="form-control form-control-sm" value="${requerimiento.id_unidad_medida}" type="hidden"><select name="unidad_[]" id="unidad_${n}" class="form-control form-control-sm" disabled>${unidadMedidaOptions}</select></td>
                         <td><input name="cantidad_ingreso[]" id="cantidad_ingreso${n}" class="cantidad_ingreso form-control form-control-sm" value="${requerimiento.cantidad}" type="text" oninput="" readonly></td>
                         <td><input name="cantidad_atendida[]" id="cantidad_atendida${n}" class="form-control form-control-sm" value="${cantidadAtendida/*requerimiento.cantidad-requerimiento.cantidad_atendida*/}" type="text" oninput="calcularTotalPrecio(${n})"></td>
+                        <td><input name="stock[]" id="stock${n}" class="stock form-control form-control-sm" value="${stock_mostrar}" type="text" oninput="" readonly></td>
                         <td><input name="moneda[]" id="moneda${n}" class="form-control form-control-sm" value="${requerimiento.id_moneda}" type="hidden"><select name="moneda_" id="moneda_${n}" class="form-control form-control-sm" onchange="">${monedaOptions}</select><input name="moneda_descripcion" id="moneda_descripcion" type="hidden"></td>
                         <td><input name="tipo_cambio[]" id="tipo_cambio${n}" class="tipo_cambio form-control form-control-sm" value="${parseFloat(requerimiento.tipo_cambio || 0).toFixed(3)}" type="text" oninput="calcularTotalPrecio(${n})" onblur="formatearDecimal(this)" ${isReadonly}></td>
                         <td><input name="precio_unitario[]" id="precio_unitario${n}" class="precio_unitario form-control form-control-sm" value="${parseFloat(requerimiento.precio_dolares || 0).toFixed(3)}" type="text" oninput="calcularTotalPrecio(${n})" onblur="formatearDecimal(this)" ${isReadonly}></td>
@@ -679,6 +684,20 @@ function save_dispensacion_requerimiento(){
         msg += "No se ha agregado ningún producto <br>";
     }
 
+    if(tipo_documento==2){
+
+        $('#tblRequerimientoDetalle tbody tr').each(function(index, row) {
+
+            const cantidad_ingreso_producto = parseInt($(row).find('input[name="cantidad_ingreso[]"]').val()) || 0;
+            const stockActual = parseInt($(row).find('input[name="stock[]"]').val()) || 0;
+            const descripcion_producto = $(row).find('select[name="descripcion_[]"] option:selected').text();
+
+            if(stockActual<cantidad_ingreso_producto){
+                msg+="No hay stock para el producto "+descripcion_producto+" <br>";
+            }
+        });
+    }
+
     if(msg!=""){
         bootbox.alert(msg);
         return false;
@@ -967,6 +986,7 @@ function cambiarOrigen(){
                                     <th style="width : 10%">Unidad</th>
                                     <th style="width : 8%">Cantidad</th>
                                     <th style="width : 8%">Cantidad Pendiente</th>
+                                    <th style="width : 8%">Stock</th>
                                     <th style="width : 8%">Moneda</th>
                                     <th style="width : 8%">Tipo Cambio</th>
                                     <th style="width : 8%">Precio</th>

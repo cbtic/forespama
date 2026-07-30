@@ -1,3 +1,5 @@
+-- DROP FUNCTION public.sp_listar_kardex_paginado(varchar, varchar, varchar, varchar, varchar, varchar, refcursor);
+
 CREATE OR REPLACE FUNCTION public.sp_listar_kardex_paginado(p_producto character varying, p_almacen character varying, p_fecha_inicio character varying, p_fecha_fin character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
  RETURNS refcursor
  LANGUAGE plpgsql
@@ -17,14 +19,16 @@ begin
 
 	v_campos=' k.id, k.id_producto, p.codigo, p.denominacion producto, k.entradas_cantidad entrada, k.costo_entradas_cantidad costo_entrada, k.total_entradas_cantidad total_entrada, k.salidas_cantidad salida, 
 	k.costo_salidas_cantidad costo_salida, k.total_salidas_cantidad total_salida, k.saldos_cantidad saldos, k.costo_saldos_cantidad costo_saldos, k.total_saldos_cantidad total_saldos, a.denominacion almacen_destino, 
-	a2.denominacion almacen_salida, k.fecha fecha_kardex, tm.descripcion tipo_movimiento, k.codigo_movimiento, u."name" usuario, to_char(k.created_at,''yyyy-mm-dd'') fecha_creacion ';
+	a2.denominacion almacen_salida, k.fecha fecha_kardex, tm.descripcion tipo_movimiento, k.codigo_movimiento, u."name" usuario, to_char(k.created_at,''yyyy-mm-dd'') fecha_creacion, cc.codigo centro_costo ';
 
 	v_tabla=' from kardex k 
 	inner join productos p on k.id_producto = p.id 
 	left join almacenes a on k.id_almacen_destino = a.id 
 	left join almacenes a2 on k.id_almacen_salida = a2.id 
 	left join users u on k.id_usuario_inserta = u.id
-	left join tipo_movimientos tm on k.id_tipo_movimiento = tm.id ';
+	left join tipo_movimientos tm on k.id_tipo_movimiento = tm.id
+	left join dispensaciones d on k.id_movimiento = d.id and tm.id = ''30'' and d.estado = ''1''
+	left join centro_costos cc on d.id_centro_costo = cc.id and cc.estado = ''1'' ';
 	
 	v_where = ' Where 1=1 ';
 

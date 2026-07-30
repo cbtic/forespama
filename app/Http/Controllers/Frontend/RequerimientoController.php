@@ -328,6 +328,7 @@ class RequerimientoController extends Controller
         $marca_model = new Marca;
         $producto_model = new Producto;
         $tablaMaestra_model = new TablaMaestra;
+        $kardex_model = new Kardex;
 
         $requerimiento = $requerimiento_model->getDetalleRequerimientoIdAbierto($id);
         $marca = $marca_model->getMarcaAll();
@@ -336,13 +337,34 @@ class RequerimientoController extends Controller
         $unidad_medida = $tablaMaestra_model->getMaestroByTipo(43);
         $moneda = $tablaMaestra_model->getMaestroByTipo(1);
 
+        $producto_stock = [];
+
+        foreach($requerimiento as $detalle){
+
+            $id_almacen_bus = $detalle->id_almacen_salida;
+            
+            if($detalle->id_unidad_origen==1){$id_almacen_bus = $detalle->id_almacen_salida;}
+            if($detalle->id_unidad_origen==2){$id_almacen_bus = $detalle->id_almacen_destino;}
+            if($detalle->id_unidad_origen==3){$id_almacen_bus = $detalle->id_almacen_salida;}
+            if($detalle->id_unidad_origen==4){$id_almacen_bus = $detalle->id_almacen_salida;}
+            
+            $stock = $kardex_model->getExistenciaProductoById($detalle->id_producto, $id_almacen_bus);
+            
+            if(count($stock)>0){
+                $producto_stock[$detalle->id_producto] = $stock[0];
+            }else {
+                $producto_stock[$detalle->id_producto] = ['stock_comprometido'=>0];
+            }
+        }
+        
         return response()->json([
             'requerimiento' => $requerimiento,
             'marca' => $marca,
             'producto' => $producto,
             'estado_bien' => $estado_bien,
             'unidad_medida' => $unidad_medida,
-            'moneda' => $moneda
+            'moneda' => $moneda,
+            'producto_stock' => $producto_stock
         ]);
     }
 

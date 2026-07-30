@@ -50,5 +50,15 @@ class TipoCambio extends Model
         $data = DB::select($cad);
         return $data;
     }
-   
+    
+    function getExistenciaTipoCambioByFecha($fecha){
+
+        $cad = "select count(*) cantidad
+        from tipo_cambios tc 
+        where tc.estado = '1'
+        and tc.fecha = '".$fecha."'";
+
+        $data = DB::select($cad);
+        return $data;
+    }
 }

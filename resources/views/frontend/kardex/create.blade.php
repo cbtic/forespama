@@ -440,6 +440,7 @@ label.form-control-sm{
 							<th>C&oacute;digo Movimiento</th>
 							<th>Usuario</th>
 							<th>Fecha Creaci&oacute;n</th>
+							<th>Centro Costo</th>
 							<!--<th>Almacen Salida</th>-->
                         </tr>
                         </thead>

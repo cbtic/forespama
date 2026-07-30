@@ -125,7 +125,7 @@ class Requerimiento extends Model
     function getDetalleRequerimientoIdAbierto($id){
 
         $cad = "select rd.id,  ROW_NUMBER() OVER (PARTITION BY rd.id_requerimiento ) AS row_num, p.numero_serie item, rd.id_producto, p.codigo, p.denominacion nombre_producto, rd.id_marca, rd.id_unidad_medida, 
-        rd.id_estado_producto , rd.cantidad, r.id_almacen_destino,
+        rd.id_estado_producto , rd.cantidad, r.id_almacen_destino, r.id_almacen_salida, r.id_unidad_origen,
         (select coalesce(sum(ocd.cantidad_requerida),0) from orden_compras oc
         inner join orden_compra_detalles ocd on ocd.id_orden_compra = oc.id and ocd.estado='1'
         where oc.id_requerimiento = r.id and ocd.id_producto = rd.id_producto and oc.estado ='1') cantidad_atendida,

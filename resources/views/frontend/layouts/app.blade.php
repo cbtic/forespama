@@ -193,5 +193,25 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker3.css" />
     <livewire:scripts />
     @stack('after-scripts')
+
+    <script>
+
+        $(document).ready(function () {
+
+            $.get('/tipo_cambio/verificar', function (r) {
+
+                if (r.falta_tipo_cambio) {
+
+                    bootbox.alert({
+                        title: 'Aviso',
+                        message: 'Falta ingresar el tipo de cambio del día de hoy. Por favor, comuníquese con el área de Contabilidad para realizar el registro correspondiente.'
+                    });
+
+                }
+
+            });
+
+        });
+    </script>
 </body>
 </html>

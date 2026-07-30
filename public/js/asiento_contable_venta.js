@@ -370,19 +370,19 @@ function generar_asientos_ventas(id){
 				bootbox.alert(result.error);
 			}*/
 			datatablenew();
-			Swal.fire({
-				icon: 'success',
-				title: result.mensaje
-        	});
+			bootbox.alert({
+				title: "Correcto",
+				message: result.mensaje
+			});
 		},
 
 		error: function (xhr) {
 			
 			$('.loader').hide();
 
-			Swal.fire({
-				icon: 'error',
-				title: xhr.responseJSON.mensaje
+			bootbox.alert({
+				title: "Error",
+				message: xhr.responseJSON.mensaje
 			});
 		}
     });

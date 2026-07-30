@@ -105,7 +105,7 @@ class TipoCambioController extends Controller
 		
 		$fecha = Carbon::now()->toDateString();
 
-        if (TipoCambio::where('fecha', $fecha)->exists()) {
+        if (TipoCambio::where('fecha', $fecha)->where('estado', 1)->exists()) {
             \Log::info("Tipo de cambio ya registrado para la fecha: $fecha");
             return response()->json(['message' => 'Tipo de cambio ya registrado para hoy.'], 200);
         }
@@ -154,4 +154,22 @@ class TipoCambioController extends Controller
 
 	}
 
+	public function validar_existencia_fecha($fecha){
+
+		$tipo_cambio_model = new TipoCambio;
+
+		$tipo_cambio = $tipo_cambio_model->getExistenciaTipoCambioByFecha($fecha);
+
+		return response()->json($tipo_cambio);
+
+	}
+
+	public function verificar()
+	{
+		$existe = TipoCambio::whereDate('fecha', Carbon::today())->where('estado', 1)->exists();
+
+		return response()->json([
+			'falta_tipo_cambio' => !$existe
+		]);
+	}
 }

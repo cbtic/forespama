@@ -10,6 +10,10 @@ $(document).ready(function () {
 	$('#btnNuevo').click(function () {
 		modalTipoCambio(0);
 	});
+
+	$('#btnObtenerTipoCambio').click(function () {
+		obtenerTipoCambio();
+	});
 		
 	datatablenew();
 	
@@ -618,3 +622,13 @@ function fn_eliminar_tipo_cambio(id,estado){
     });
 }
 
+function obtenerTipoCambio(){
+
+	$.ajax({
+		url: "/tipo_cambio/obtenerTipoCambioDiario",
+		type: "GET",
+		success: function (result) {
+			datatablenew();
+		}
+    });
+}
