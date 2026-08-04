@@ -1,6 +1,8 @@
+-- DROP FUNCTION public.sp_generar_asiento_ventas(varchar, int4);
+
 CREATE OR REPLACE FUNCTION public.sp_generar_asiento_ventas(p_tipo character varying, p_id_usuario integer)
-RETURNS character varying
-LANGUAGE plpgsql
+ RETURNS character varying
+ LANGUAGE plpgsql
 AS $function$
 
 DECLARE
@@ -22,21 +24,53 @@ BEGIN
             select c.id, cc_cliente.cuenta cuenta_cliente, cc_igv.cuenta cuenta_igv, to_char(c.fecha,'YYYYMM') annomes, '03' subdiario, c.correlativo_starsoft comprobante, 
 			to_char(c.fecha,'yyyy-mm-dd') fecha_registro, '02' tipo_anexo, c.cod_tributario codigo_cliente, c.tipo tipo_documento, c.serie || c.numero numero_documento, 
 			to_char(c.fecha,'yyyy-mm-dd') fecha_documento, (select c2.tipo from comprobantes c2 where c.id_comprobante_ncnd = c2.id ) tipo_documento_referencial,
-			c.impuesto igv, c.impuesto_factor tasa_igv, c.total importe, tm2.denominacion tasa_conversion, scp.tasa_cambio, 
-			c.tipo || ' ' || c.serie || '-' || c.numero glosa_documento, scp.glosa_movimiento, case when c.anulado = 'N' then 0 else 1 end anulado, 'D' debe_haber, c.cod_tributario ruc_cliente, 
+			c.impuesto igv, c.impuesto_factor tasa_igv, c.total importe,
+			c.tipo || ' ' || c.serie || '-' || c.numero glosa_documento, 
+			'VTA' tasa_conversion,
+			tc.valor_venta tasa_cambio,
+			c.tipo || ' ' || c.serie || '-' || c.numero glosa_documento, 
+			case
+				when c.adelanto = '1' then 'POR ANTICIPO DEL CLIENTE MES DE ' || to_char(c.fecha,'TMMonth')-- 1. ANTICIPO DE CLIENTE
+				when exists (
+				    select 1
+				    from comprobante_detalles cd
+				    where cd.id_comprobante = c.id
+				    and cd.codigo ilike '%SERV%')
+				then
+				    case
+				        when exists (
+				            select 1
+				            from comprobante_detalles cd
+				            where cd.id_comprobante = c.id
+				            and upper(cd.descripcion) like '%TRANSPORTE%')
+				        then
+				            'SERVICIOS DE TRANSP MES ' || to_char(c.fecha,'TMMonth')
+				        else 
+							'SERVICIO DE INSTAL ' || (select string_agg(cd.descripcion, ', ') from comprobante_detalles cd where cd.id_comprobante = c.id and cd.unidad = 'SERV') 
+							|| ' ORD VENT ' || oc.numero_orden_compra end -- 2. SERVICIO
+						when c.id_forma_pago = 1
+							then 'VENTAS MES ' || to_char(c.fecha,'TMMonth') || ', OV ' || oc.numero_orden_compra
+			    			|| ', CONDICION ' || tm3.denominacion -- 3. VENTA NORMAL CONTADO
+							else
+						    'VENTAS MES ' || to_char(c.fecha,'TMMonth') || ', OV ' || oc.numero_orden_compra 
+							|| ', CONDICION ' || tm3.denominacion -- 4. VENTA CREDITO
+			end glosa_movimiento,
+			case when c.anulado = 'N' then 0 else 1 end anulado, 'D' debe_haber, c.cod_tributario ruc_cliente, 
 			c.destinatario razon_social, to_char(c.fecha_vencimiento,'yyyy-mm-dd') fecha_vencimiento, 
 			(select to_char(c2.fecha,'yyyy-mm-dd') from comprobantes c2 where c.id_comprobante_ncnd = c2.id ) fecha_documento_referencial,
 			false exportacion, '' otros_impuestos, '' exonerado, '' otros_cargos, '' impuesto_bolsa, c.id_moneda, 
 			(select c2.serie ||' '|| c2.numero from comprobantes c2 where c.id_comprobante_ncnd = c2.id ) numero_documento_referencial, '' valor_isc
 			from comprobantes c
-			--inner join orden_compras oc on nullif(c.orden_compra,'')::integer = oc.id
+			inner join orden_compras oc on nullif(c.orden_compra,'')::integer = oc.id
             --left join orden_compra_pagos ocp on oc.id = ocp.id_orden_compra
-			inner join starsoft_comprobante_pagos scp on c.id = scp.id_comprobante
+			left join starsoft_comprobante_pagos scp on c.id = scp.id_comprobante
             left join tabla_maestras tm2 on tm2.codigo::integer = scp.id_conversion and tm2.tipo = '122'
+            left join tabla_maestras tm3 on tm3.codigo::integer = c.id_forma_pago and tm3.tipo = '12'
             left join asignacion_cuentas ac on ac.id_origen = 2 and ac.id_tipo_cuenta = 1 and ac.id_moneda = c.id_moneda
 			left join cuenta_contables cc_cliente on cc_cliente.id = ac.id_plan_contable
 			left join asignacion_cuentas ac_igv on ac_igv.id_origen = 2 and ac_igv.id_tipo_cuenta = 2 and ac_igv.id_moneda = c.id_moneda
 			left join cuenta_contables cc_igv on cc_igv.id = ac_igv.id_plan_contable
+			left join tipo_cambios tc on tc.fecha::date = c.fecha::date and tc.estado = '1'
             where c.serie <> 'E001'
             and c.asiento_generado = '0'
             and c.tipo in ('FT','BV')
@@ -139,7 +173,7 @@ BEGIN
 			to_char(c.fecha,'yyyy-mm-dd') fecha_registro, '02' tipo_anexo, c.cod_tributario codigo_cliente, 'CC' tipo_documento, c.serie || c.numero numero_documento,
 			to_char(c.fecha,'yyyy-mm-dd') fecha_documento, c2.tipo tipo_documento_referencial, c2.serie||c2.numero numero_documento_referencial, c.impuesto igv, '' valor_isc,
 			c.impuesto_factor tasa_igv, to_char(c2.fecha,'yyyy-mm-dd') fecha_documento_referencial, c.impuesto igv, c.total importe, 'VTA' tasa_conversion,
-			(select tc.valor_venta from tipo_cambios tc where tc.fecha::date = c.fecha::date) tasa_cambio, 'CC ' || c.serie || '-' || c.numero glosa_documento, 
+			(select tc.valor_venta from tipo_cambios tc where tc.fecha::date = c.fecha::date and tc.estado = '1') tasa_cambio, 'CC ' || c.serie || '-' || c.numero glosa_documento, 
 			'ANULACIÓN DE FACTURA ' || c2.serie || '-' || c2.numero glosa_movimiento,
 			case when c.anulado = 'N' then 0 else 1 end anulado, c.cod_tributario ruc_cliente, c.destinatario razon_social, to_char(c.fecha_vencimiento,'yyyy-mm-dd') fecha_vencimiento,
 			false exportacion, '' otros_impuestos, '' exonerado, '' otros_cargos, '' impuesto_bolsa, c.id_moneda, c2.serie serie_matriz, c2.numero numero_matriz, c2.tipo tipo_matriz
@@ -273,4 +307,5 @@ BEGIN
 	--EXCEPTION WHEN OTHERS THEN RAISE EXCEPTION '%', SQLERRM;
 
 END;
-$function$;
+$function$
+;

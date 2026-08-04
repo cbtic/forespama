@@ -120,7 +120,7 @@ class ProductosController extends Controller
 		
 		if($id>0){
 			$producto = Producto::find($id);
-            $imagenes = ProductoImagene::where('id_producto', $id)->get();
+            $imagenes = ProductoImagene::where('id_producto', $id)->where('estado',1)->get();
 		}else{
 			$producto = new Producto;
             $imagenes = [];
