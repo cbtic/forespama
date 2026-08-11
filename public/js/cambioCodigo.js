@@ -145,9 +145,9 @@ function datatablenew(){
 				
 				{
 				"mRender": function (data, type, row) {
-					var codigo_producto_principal = "";
-					if(row.codigo_producto_principal!= null)codigo_producto_principal = row.codigo_producto_principal;
-					return codigo_producto_principal;
+					var codigo_producto_secundario = "";
+					if(row.codigo_producto_secundario!= null)codigo_producto_secundario = row.codigo_producto_secundario;
+					return codigo_producto_secundario;
 				},
 				"bSortable": true,
 				"aTargets": [5]

@@ -17,7 +17,7 @@ begin
 	
 	p_pagina=(p_pagina::Integer-1)*p_limit::Integer;
 
-	v_campos=' ccp.id, ccp.codigo, p.codigo codigo_producto_principal, p.denominacion producto_principal, p2.codigo codigo_producto_principal, p2.denominacion producto_secundario, ccp.cantidad, a.denominacion almacen, ccp.estado, u.name usuario_registra ';
+	v_campos=' ccp.id, ccp.codigo, p.codigo codigo_producto_principal, p.denominacion producto_principal, p2.codigo codigo_producto_secundario, p2.denominacion producto_secundario, ccp.cantidad, a.denominacion almacen, ccp.estado, u.name usuario_registra ';
 
 	v_tabla=' from cambio_codigo_productos ccp 
 	inner join productos p on ccp.id_producto::int = p.id 
