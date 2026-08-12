@@ -148,9 +148,9 @@ function datatablenew(){
 
 				{
 				"mRender": function (data, type, row) {
-					var cuenta = "";
-					if(row.cuenta!= null)cuenta = row.cuenta;
-					return cuenta;
+					var numero_cuenta = "";
+					if(row.numero_cuenta!= null)numero_cuenta = row.numero_cuenta;
+					return numero_cuenta;
 				},
 				"bSortable": true,
 				"aTargets": [1]

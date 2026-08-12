@@ -463,6 +463,7 @@ label.form-control-sm{
                     <table id="tblReporteComercializacion" class="table table-hover table-sm">
                         <thead>
                         <tr style="font-size:13px">
+                            <th>Canal</th>
                             <th>Cliente</th>
 							<th>Orden Compra</th>
 							<th>Pedido</th>

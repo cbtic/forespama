@@ -1,3 +1,5 @@
+-- DROP FUNCTION public.sp_listar_asiento_contable_venta_paginado(varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, refcursor);
+
 CREATE OR REPLACE FUNCTION public.sp_listar_asiento_contable_venta_paginado(p_numero_comprobante character varying, p_numero_documento character varying, p_fecha_inicio character varying, p_fecha_fin character varying, p_migrado character varying, p_estado character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
  RETURNS refcursor
  LANGUAGE plpgsql
@@ -15,7 +17,7 @@ begin
 
 	p_pagina=(p_pagina::Integer-1)*p_limit::Integer;
 
-	v_campos=' acv.id, cc.denominacion cuenta, acv.annomes, ss.descripcion subdiario, acv.comprobante, acv.fecha_registro, sta.descripcion tipo_anexo, acv.codigo_cliente, acv.tipo_documento,
+	v_campos=' acv.id, cc.denominacion cuenta, acv.cuenta numero_cuenta, acv.annomes, ss.descripcion subdiario, acv.comprobante, acv.fecha_registro, sta.descripcion tipo_anexo, acv.codigo_cliente, acv.tipo_documento,
 	acv.numero_documento, acv.fecha_documento, acv.tipo_documento_referencial, acv.numero_documento_referencial, acv.igv, acv.valor_isc, acv.tasa_igv, acv.importe, acv.tasa_cambio_conversion,
 	acv.tasa_cambio, acv.glosa, acv.glosa_movimiento, acv.anulado, acv.debe_haber, acv.ruc_cliente, acv.razon_social, acv.centro_costo, acv.fecha_vencimiento, acv.fecha_documento_referencial,
 	acv.exportacion, acv.otros_cargos, acv.impuesto_bolsa, acv.flag_migrado, acv.fecha_migrado, acv.estado ';

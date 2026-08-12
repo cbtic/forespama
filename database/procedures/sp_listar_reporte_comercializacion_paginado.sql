@@ -1,4 +1,5 @@
---DROP FUNCTION public.sp_listar_reporte_comercializacion_paginado(varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, refcursor);
+-- DROP FUNCTION public.sp_listar_reporte_comercializacion_paginado(varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, refcursor);
+
 CREATE OR REPLACE FUNCTION public.sp_listar_reporte_comercializacion_paginado(p_empresa_compra character varying, p_fecha_desde character varying, p_fecha_hasta character varying, p_numero_orden_compra_cliente character varying, p_situacion character varying, p_codigo_producto character varying, p_producto character varying, p_vendedor character varying, p_estado_pedido character varying, p_tipo_producto character varying, p_estado character varying, p_canal character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
  RETURNS refcursor
  LANGUAGE plpgsql
@@ -25,7 +26,7 @@ begin
 	where sp.id_orden_compra = oc.id
 	limit 1) fecha_salida,
 	p.codigo, ep.codigo_empresa, 
-	p.denominacion producto, ocd.precio, ocd.descuento, ocd.sub_total, ocd.cantidad_requerida, coalesce(ocd.cantidad_despacho, 0) cantidad_despacho, coalesce((ocd.cantidad_requerida - ocd.cantidad_despacho), 0) cantidad_cancelada, ocd.cerrado, u."name" vendedor, tm.denominacion estado_pedido ';
+	p.denominacion producto, ocd.precio, ocd.descuento, ocd.sub_total, ocd.cantidad_requerida, coalesce(ocd.cantidad_despacho, 0) cantidad_despacho, coalesce((ocd.cantidad_requerida - ocd.cantidad_despacho), 0) cantidad_cancelada, ocd.cerrado, u."name" vendedor, tm.denominacion estado_pedido, tm2.denominacion canal ';
 
 	v_tabla=' from orden_compras oc 
 	left join empresas e on oc.id_empresa_compra = e.id 
@@ -34,7 +35,8 @@ begin
 	left join users u on oc.id_vendedor = u.id
 	left join productos p on ocd.id_producto = p.id
 	left join equivalencia_productos ep on ep.codigo_producto = p.codigo and ep.id_empresa = oc.id_empresa_compra
-	inner join tabla_maestras tm on oc.estado_pedido::int = tm.codigo::int and tm.tipo = ''77'' ';
+	inner join tabla_maestras tm on oc.estado_pedido::int = tm.codigo::int and tm.tipo = ''77'' 
+	left join tabla_maestras tm2 on oc.id_canal = tm2.codigo::int and tm2.tipo = ''98'' ';
 
 	v_where = ' Where 1=1 and oc.id_tipo_documento = ''2'' and oc.estado_pedido = ''1'' ';
 
