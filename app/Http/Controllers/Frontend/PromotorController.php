@@ -272,7 +272,7 @@ class PromotorController extends Controller
 				$rutaFinal = "img/asistencias/" . $filename;
 
 				$imagePath = public_path($rutaFinal);
-			} else {
+			}else{
 				throw new \Exception('El formato base64 de la imagen es incorrecto.');
 			}
 		}
