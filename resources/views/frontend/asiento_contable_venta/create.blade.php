@@ -403,6 +403,9 @@ label.form-control-sm{
 								<button type="button" id="btnMigrar" class="btn btn-sm btn-info icono-botones2" style="margin-left:10px">
 									<i class="fas fa-paper-plane" style="font-size:18px;"></i> Migrar
 								</button>
+								<button id="btnDescargar" type="button" class="btn btn-sm btn-secondary pull-rigth icono-botones2" style="margin-left:10px;">
+									<i class="fas fa-download" style="font-size:18px;"></i> Excel
+								</button>
 							</div>
 						</div>
 					</div>
@@ -429,6 +432,7 @@ label.form-control-sm{
 							<th>Importe</th>
 							<th>Glosa</th>
 							<th>Glosa Movimiento</th>
+							<th>D/H</th>
 							<th>Ruc Cliente</th>
 							<th>Raz&oacute;n Social</th>
 							<th>Fecha Vencimiento</th>

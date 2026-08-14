@@ -11,6 +11,13 @@ use App\Models\TipoCambio;
 use Illuminate\Support\Facades\Http;
 use Auth;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
+use Maatwebsite\Excel\Concerns\FromArray;
+use Maatwebsite\Excel\Concerns\WithStyles;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
+use Maatwebsite\Excel\Concerns\WithHeadings;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
 
 class AsientoContableVentaController extends Controller
 {
@@ -504,6 +511,119 @@ class AsientoContableVentaController extends Controller
                 'success' => false,
                 'message' => $e->getMessage()
             ], 500);
+        }
+    }
+
+    public function exportar_listar_asiento_contable_venta($numero_comprobante, $numero_documento, $fecha_inicio, $fecha_fin, $migrado, $estado) {
+
+        $id_user = Auth::user()->id;
+        
+		if($numero_comprobante=="0")$numero_comprobante = "";
+        if($numero_documento=="0")$numero_documento = "";
+        if($fecha_inicio=="0")$fecha_inicio = "";
+        if($fecha_fin=="0")$fecha_fin = "";
+        if($migrado=="0")$migrado = "";
+        if($estado=="0")$estado = "";
+
+        $asiento_contable_venta_model = new AsientoContableVenta;
+		$p[]=$numero_comprobante;
+		$p[]=$numero_documento;
+		$p[]=$fecha_inicio;
+		$p[]=$fecha_fin;
+		$p[]=$migrado;
+        $p[]=$estado;
+		$p[]=1;
+		$p[]=10000;
+		$data = $asiento_contable_venta_model->listar_asiento_contable_venta_ajax($p);
+        
+		$variable = [];
+		$n = 1;
+
+		array_push($variable, array("N°", "Cuenta", "Annomes", "Subdiario", "Comprobante", "Fecha Registro", "Tipo Anexo", "Codigo Cliente", "Tipo Documento", "Numero Documento", "Fecha Documento", "Igv", "Importe", "Glosa", "Glosa Movimiento", "Debe/Haber", "Ruc Cliente", "Razón Social", "Fecha Vencimiento", "Migrado", "Fecha Migrado"));
+		
+		foreach ($data as $r) {
+
+            if($r->flag_migrado==1){$flag_migrado='Migrado';}
+            if($r->flag_migrado==0){$flag_migrado='No Migrado';}
+
+			array_push($variable, array($n++,$r->numero_cuenta, $r->annomes, $r->subdiario, $r->comprobante, $r->fecha_registro, $r->tipo_anexo, $r->codigo_cliente, $r->tipo_documento, $r->numero_documento, $r->fecha_documento, (float)$r->igv, (float)$r->importe, $r->glosa, $r->glosa_movimiento, $r->debe_haber, $r->ruc_cliente, $r->razon_social, $r->fecha_vencimiento, $flag_migrado, $r->fecha_migrado));
+		}
+		
+		$export = new InvoicesExport([$variable]);
+		return Excel::download($export, 'Reporte_asientos_contables_ventas.xlsx');
+		
+    }
+}
+
+class InvoicesExport implements FromArray, WithHeadings, WithStyles
+{
+    
+	protected $invoices;
+
+	public function __construct(array $invoices)
+	{
+		$this->invoices = $invoices;
+	}
+
+	public function array(): array
+	{
+		return $this->invoices;
+	}
+
+    public function headings(): array
+    {
+        return ["N°", "Cuenta", "Annomes", "Subdiario", "Comprobante", "Fecha Registro", "Tipo Anexo", "Codigo Cliente", "Tipo Documento", "Numero Documento", "Fecha Documento", "Igv", "Importe", "Glosa", "Glosa Movimiento", "Debe/Haber", "Ruc Cliente", "Razón Social", "Fecha Vencimiento", "Migrado", "Fecha Migrado"];
+    }
+
+	public function styles(Worksheet $sheet)
+    {
+
+		$sheet->mergeCells('A1:U1');
+
+        $sheet->setCellValue('A1', "REPORTE ASIENTO CONTABLE VENTAS - FORESPAMA");
+        $sheet->getStyle('A1:U1')->applyFromArray([
+            'font' => [
+                'bold' => true,
+                'color' => ['rgb' => 'FFFFFF'],
+            ],
+            'fill' => [
+                'fillType' => Fill::FILL_SOLID,
+                'startColor' => ['rgb' => '246257'],
+            ],
+            'alignment' => [
+                'horizontal' => Alignment::HORIZONTAL_CENTER,
+            ],
+        ]);
+
+		$sheet->getStyle('A1')->getAlignment()->setWrapText(true);
+		$sheet->getRowDimension(1)->setRowHeight(30);
+
+        $sheet->getStyle('A2:U2')->applyFromArray([
+            'font' => [
+                'bold' => true,
+                'color' => ['rgb' => '000000'],
+            ],
+            'fill' => [
+                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                'startColor' => ['rgb' => '2EB85C'],
+            ],
+			'alignment' => [
+			'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+    		],
+        ]);
+
+		$sheet->fromArray($this->headings(), NULL, 'A2');
+
+		$sheet->getStyle('L3:L'.$sheet->getHighestRow())
+		->getNumberFormat()
+		->setFormatCode('#,##0.00');
+
+        $sheet->getStyle('M3:M'.$sheet->getHighestRow())
+		->getNumberFormat()
+		->setFormatCode('#,##0.00');
+        
+        foreach (range('A', 'U') as $col) {
+            $sheet->getColumnDimension($col)->setAutoSize(true);
         }
     }
 }

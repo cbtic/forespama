@@ -1043,3 +1043,6 @@ Route::post('orden_compra/listar_comprobantes_pagos_ajax', [OrdenCompraControlle
 Route::get('tipo_cambio/validar_existencia_fecha/{fecha}', [TipoCambioController::class, 'validar_existencia_fecha'])->name('tipo_cambio.validar_existencia_fecha');
 Route::get('tipo_cambio/obtenerTipoCambioDiario', [TipoCambioController::class, 'obtenerTipoCambioDiario'])->name('tipo_cambio.obtenerTipoCambioDiario');
 Route::get('tipo_cambio/verificar', [TipoCambioController::class, 'verificar'])->name('tipo_cambio.verificar');
+
+Route::get('asiento_contable_venta/exportar_listar_asiento_contable_venta/{numero_comprobante}/{numero_documento}/{fecha_inicio}/{fecha_fin}/{migrado}/{estado}', [AsientoContableVentaController::class, 'exportar_listar_asiento_contable_venta'])->name('asiento_contable_venta.exportar_listar_asiento_contable_venta');
+

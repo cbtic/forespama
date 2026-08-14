@@ -72,6 +72,11 @@ $(document).ready(function () {
 
 	datatablenew();
 
+	$('#btnDescargar').on('click', function () {
+		DescargarArchivosExcel()
+
+	});
+
 });
 
 function datatablenew(){
@@ -288,12 +293,22 @@ function datatablenew(){
 
 				{
 				"mRender": function (data, type, row) {
+					var debe_haber = "";
+					if(row.debe_haber!= null)debe_haber = row.debe_haber;
+					return debe_haber;
+				},
+				"bSortable": true,
+				"aTargets": [15]
+				},
+
+				{
+				"mRender": function (data, type, row) {
 					var ruc_cliente = "";
 					if(row.ruc_cliente!= null)ruc_cliente = row.ruc_cliente;
 					return ruc_cliente;
 				},
 				"bSortable": true,
-				"aTargets": [15]
+				"aTargets": [16]
 				},
 
 				{
@@ -303,7 +318,7 @@ function datatablenew(){
 					return razon_social;
 				},
 				"bSortable": true,
-				"aTargets": [16]
+				"aTargets": [17]
 				},
 
 				{
@@ -313,7 +328,7 @@ function datatablenew(){
 					return fecha_vencimiento;
 				},
 				"bSortable": true,
-				"aTargets": [17]
+				"aTargets": [18]
 				},
 
 				{
@@ -328,7 +343,7 @@ function datatablenew(){
 					return flag_migrado;
 				},
 				"bSortable": false,
-				"aTargets": [18]
+				"aTargets": [19]
 				},
 				
 				{
@@ -338,7 +353,7 @@ function datatablenew(){
 					return fecha_migrado;
 				},
 				"bSortable": true,
-				"aTargets": [19]
+				"aTargets": [20]
 				},
 
             ]
@@ -473,4 +488,23 @@ function fn_eliminar(id,estado){
 			datatablenew();
 		}
     });
+}
+
+function DescargarArchivosExcel(){
+	
+	var numero_comprobante = $('#numero_comprobante_bus').val();
+	var numero_documento = $('#numero_documento_bus').val();
+	var fecha_inicio = $('#fecha_inicio_bus').val();
+	var fecha_fin = $('#fecha_fin_bus').val();
+	var migrado = $('#migrado_bus').val();
+	var estado = $('#estado_bus').val();
+
+	if (numero_comprobante == "")numero_comprobante = "0";
+	if (numero_documento == "")numero_documento = "0";
+	if (fecha_inicio == "")fecha_inicio = "0";
+	if (fecha_fin == "")fecha_fin = "0";
+	if (migrado == "")migrado = "0";
+	if (estado == "")estado = "0";
+	
+	location.href = '/asiento_contable_venta/exportar_listar_asiento_contable_venta/'+numero_comprobante+'/'+numero_documento+'/'+fecha_inicio+'/'+fecha_fin+'/'+migrado+'/'+estado;
 }

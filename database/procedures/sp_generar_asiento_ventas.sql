@@ -24,12 +24,15 @@ BEGIN
             select c.id, cc_cliente.cuenta cuenta_cliente, cc_igv.cuenta cuenta_igv, to_char(c.fecha,'YYYYMM') annomes, '03' subdiario, c.correlativo_starsoft comprobante, 
 			to_char(c.fecha,'yyyy-mm-dd') fecha_registro, '02' tipo_anexo, c.cod_tributario codigo_cliente, c.tipo tipo_documento, c.serie || c.numero numero_documento, 
 			to_char(c.fecha,'yyyy-mm-dd') fecha_documento, (select c2.tipo from comprobantes c2 where c.id_comprobante_ncnd = c2.id ) tipo_documento_referencial,
-			c.impuesto igv, c.impuesto_factor tasa_igv, c.total importe,
+			case when c.anulado = 'N' then c.impuesto else 0 end igv, 
+			c.impuesto_factor tasa_igv, 
+			case when c.anulado = 'N' then c.total else 0 end importe,
 			c.tipo || ' ' || c.serie || '-' || c.numero glosa_documento, 
 			'VTA' tasa_conversion,
 			tc.valor_venta tasa_cambio,
 			c.tipo || ' ' || c.serie || '-' || c.numero glosa_documento, 
 			case
+				when c.anulado = 'S' then 'ANULADO'
 				when c.adelanto = '1' then 'POR ANTICIPO DEL CLIENTE MES DE ' || to_char(c.fecha,'TMMonth')-- 1. ANTICIPO DE CLIENTE
 				when exists (
 				    select 1
@@ -74,6 +77,7 @@ BEGIN
             where c.serie <> 'E001'
             and c.asiento_generado = '0'
             and c.tipo in ('FT','BV')
+            --and c.anulado = 'N'
             order by c.id
 
         loop
@@ -146,13 +150,14 @@ BEGIN
             
 			select cursor_venta.id, coalesce(cc.cuenta_venta, cc.cuenta), cursor_venta.annomes, cursor_venta.subdiario, cursor_venta.comprobante, cursor_venta.fecha_registro,
             cursor_venta.tipo_anexo, cursor_venta.codigo_cliente, cursor_venta.tipo_documento, cursor_venta.numero_documento, cursor_venta.fecha_documento, 'H',
-            sum(cd.valor_venta_bruto), cursor_venta.glosa_documento, cursor_venta.glosa_movimiento, cursor_venta.anulado, cursor_venta.ruc_cliente, cursor_venta.razon_social,
+            sum(case when cursor_venta.anulado = 'N' then cd.valor_venta_bruto else 0 end) valor_venta_bruto, cursor_venta.glosa_documento, cursor_venta.glosa_movimiento, cursor_venta.anulado, cursor_venta.ruc_cliente, cursor_venta.razon_social,
             cursor_venta.fecha_vencimiento, cursor_venta.exportacion, cursor_venta.otros_impuestos, cursor_venta.exonerado, cursor_venta.otros_cargos, cursor_venta.impuesto_bolsa, 
 			p_id_usuario, CURRENT_TIMESTAMP
             from comprobante_detalles cd
             inner join productos p on cd.codigo = p.codigo and p.estado = '1'
             inner join familia_contables fc on p.id_familia_contable = fc.id
             inner join cuenta_contables cc on fc.id_plan_contable = cc.id
+			left join comprobantes c on cd.id_comprobante = c.id
             where cd.id_comprobante = cursor_venta.id
             and cd.estado = '1'
             group by coalesce(cc.cuenta_venta, cc.cuenta);
@@ -189,6 +194,7 @@ BEGIN
 	        where c.asiento_generado = '0'
 	        and c.serie <> 'E001'
 	        and c.tipo = 'NC'
+            --and c.anulado = 'N'
 	        order by c.id
 
 	    loop
