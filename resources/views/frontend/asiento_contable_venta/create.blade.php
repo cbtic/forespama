@@ -436,6 +436,7 @@ label.form-control-sm{
 							<th>Ruc Cliente</th>
 							<th>Raz&oacute;n Social</th>
 							<th>Fecha Vencimiento</th>
+							<th>Anulado</th>
 							<th>Migrado</th>
 							<th>Fecha Migrado</th>
                         </tr>

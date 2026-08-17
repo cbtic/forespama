@@ -132,7 +132,7 @@ class AsientoContableAnexoController extends Controller
                 [
                     'clientID' => '6528cc2f-ae25-49b1-bb1a-25103fd4f9b3',
                     'clientSecret' => 'A67Q1jEHlK2oZ11w/rsx5A==',
-                    'codEmpresa' => '003',
+                    'codEmpresa' => '005',
                     'codSistema' => 'FORESP'
                 ]
             );

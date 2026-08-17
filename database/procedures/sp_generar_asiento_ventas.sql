@@ -150,7 +150,7 @@ BEGIN
             
 			select cursor_venta.id, coalesce(cc.cuenta_venta, cc.cuenta), cursor_venta.annomes, cursor_venta.subdiario, cursor_venta.comprobante, cursor_venta.fecha_registro,
             cursor_venta.tipo_anexo, cursor_venta.codigo_cliente, cursor_venta.tipo_documento, cursor_venta.numero_documento, cursor_venta.fecha_documento, 'H',
-            sum(case when cursor_venta.anulado = 'N' then cd.valor_venta_bruto else 0 end) valor_venta_bruto, cursor_venta.glosa_documento, cursor_venta.glosa_movimiento, cursor_venta.anulado, cursor_venta.ruc_cliente, cursor_venta.razon_social,
+            sum(case when c.anulado = 'N' then cd.valor_venta_bruto else 0 end) valor_venta_bruto, cursor_venta.glosa_documento, cursor_venta.glosa_movimiento, cursor_venta.anulado, cursor_venta.ruc_cliente, cursor_venta.razon_social,
             cursor_venta.fecha_vencimiento, cursor_venta.exportacion, cursor_venta.otros_impuestos, cursor_venta.exonerado, cursor_venta.otros_cargos, cursor_venta.impuesto_bolsa, 
 			p_id_usuario, CURRENT_TIMESTAMP
             from comprobante_detalles cd

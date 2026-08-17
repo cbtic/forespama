@@ -333,6 +333,21 @@ function datatablenew(){
 
 				{
 				"mRender": function (data, type, row) {
+					var anulado = "";
+					if(row.anulado == 1){
+						anulado = "S";
+					}
+					if(row.anulado == 0){
+						anulado = "N";
+					}
+					return anulado;
+				},
+				"bSortable": false,
+				"aTargets": [19]
+				},
+
+				{
+				"mRender": function (data, type, row) {
 					var flag_migrado = "";
 					if(row.flag_migrado == 1){
 						flag_migrado = "Migrado";
@@ -343,7 +358,7 @@ function datatablenew(){
 					return flag_migrado;
 				},
 				"bSortable": false,
-				"aTargets": [19]
+				"aTargets": [20]
 				},
 				
 				{
@@ -353,7 +368,7 @@ function datatablenew(){
 					return fecha_migrado;
 				},
 				"bSortable": true,
-				"aTargets": [20]
+				"aTargets": [21]
 				},
 
             ]
