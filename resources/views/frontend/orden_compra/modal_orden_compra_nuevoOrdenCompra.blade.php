@@ -449,6 +449,8 @@ function obtenerCodInterno(selectElement, n){
             $('#marca' + n).val(result[0].id_marca).trigger('change');
             $('#unidad' + n).val(result[0].id_unidad_producto);
             $('#precio_unitario' + n).val(result[0].precio_venta);
+
+            calcularPrecioUnitario($('#cantidad_ingreso' + n));
             
         }
     });
@@ -904,6 +906,10 @@ function cargarDetalle(){
             tbody.append(html);
 
             setTimeout(function(){
+                $('.select-producto').each(function(){
+                    validarServicio(this);
+                });
+
                 $('.cantidad_ingreso').each(function(){
                     recalcularPorcentajeDescuento(this);
                 });
