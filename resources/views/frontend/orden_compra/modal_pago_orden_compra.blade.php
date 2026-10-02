@@ -230,10 +230,10 @@ function fn_save(){
 	var fecha_factura = $('#fecha_factura').val();
 	var glosa_comprobante = $('#glosa_comprobante').val();
 	var glosa_movimiento = $('#glosa_movimiento').val();
-	var conversion = $('#conversion').val();
-	var tasa_cambio_especial = $('#tasa_cambio_especial').val();
-	var fecha_tc = $('#fecha_tc').val();
-	var tasa_cambio = $('#tasa_cambio').val();
+	//var conversion = $('#conversion').val();
+	//var tasa_cambio_especial = $('#tasa_cambio_especial').val();
+	//var fecha_tc = $('#fecha_tc').val();
+	//var tasa_cambio = $('#tasa_cambio').val();
 
 	var msg = "";
     if(id_orden_compra_modal == "")msg += "Debe ingresar el numero de documento <br>";
@@ -260,7 +260,7 @@ function fn_save(){
 				id:id_modal, id_orden_compra:id_orden_compra_modal, importe:importe, fecha:fecha,observacion:observacion, id_tipodesembolso:id_tipodesembolso,
 				nro_guia:nro_guia, nro_factura:nro_factura, nro_cheque:nro_cheque, img_foto:img_foto, id_banco:id_banco, nro_operacion:nro_operacion,
 				tipo_documento:tipo_documento, serie_factura:serie_factura, nro_factura:nro_factura, fecha_factura:fecha_factura, glosa_comprobante:glosa_comprobante,
-				glosa_movimiento:glosa_movimiento, conversion:conversion, tasa_cambio_especial:tasa_cambio_especial, fecha_tc:fecha_tc, tasa_cambio:tasa_cambio},
+				glosa_movimiento:glosa_movimiento/*, conversion:conversion, tasa_cambio_especial:tasa_cambio_especial, fecha_tc:fecha_tc, tasa_cambio:tasa_cambio*/},
 		success: function (result) {
 			
 			location.href="/orden_compra/create_pago_orden_compra";
@@ -465,15 +465,15 @@ $('#detraccion').on('change', function() {
 										</div>
 									</div>
 
-									<div class="row">
+									<!--<div class="row">
 										<div class="col-lg-3">
 											<div class="form-group">
 												<label class="control-label">Conversi&oacute;n</label>
 												<select name="conversion" id="conversion" class="form-control form-control-sm" onchange="habilitarTC()">
 													<option value="">--Seleccionar--</option>
-													<?php foreach($conversion as $row){?>
-													<option <?php //if($row->codigo==$orden_compra_pago->id_banco)echo "selected='selected'";?> value="<?php echo $row->codigo?>"><?php echo $row->denominacion?></option>
-													<?php }?>
+													<?php //foreach($conversion as $row){?>
+													<option <?php //if($row->codigo==$orden_compra_pago->id_banco)echo "selected='selected'";?> value="<?php //echo $row->codigo?>"><?php //echo $row->denominacion?></option>
+													<?php //} ?>
 												</select>
 											</div>
 										</div>
@@ -488,7 +488,7 @@ $('#detraccion').on('change', function() {
 										<div class="col-lg-3">
 											<div class="form-group">
 												<label class="control-label">Fecha T/C</label>
-												<input id="fecha_tc" name="fecha_tc" class="form-control form-control-sm" placeholder="dd-mm-yyyy" value="<?php echo date('d-m-Y')?>" type="text">
+												<input id="fecha_tc" name="fecha_tc" class="form-control form-control-sm" placeholder="dd-mm-yyyy" value="<?php //echo date('d-m-Y')?>" type="text">
 											</div>
 										</div>
 
@@ -498,7 +498,7 @@ $('#detraccion').on('change', function() {
 												<input id="tasa_cambio" name="tasa_cambio" class="form-control form-control-sm"  value="<?php //echo $orden_compra_pago->nro_factura?>" type="text">
 											</div>
 										</div>
-									</div>
+									</div>-->
 
 									<div class="row">
 										<div class="col-lg-5">

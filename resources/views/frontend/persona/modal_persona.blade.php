@@ -622,7 +622,6 @@
 		return false;
 	}
 
-
 	function obtenerVehiculo(id, obj) {
 
 		if (obj != undefined) {

@@ -721,5 +721,23 @@ where a.id_comprobante_adelanto=c.id),0))>0
         
         return $data;
     }
+
+    function obtenerComprobanteBySerieNumero($numero_comprobante, $serie){
+        
+        $cad = "select c.id, c.serie, c.numero, to_char(c.fecha,'yyyy-mm-dd') fecha, c.destinatario, c.cod_tributario ruc, c.subtotal, c.impuesto, c.total,
+        cd.id id_comprobante_detalle, cd.descripcion producto, cd.pu valor_unitario, cd.importe, cd.pu_con_igv, cd.igv_total, cd.descuento, cd.cantidad, cd.precio_venta, cd.valor_venta_bruto, cd.valor_venta, cd.codigo, cd.afect_igv 
+        from comprobantes c 
+        inner join comprobante_detalles cd on c.id = cd.id_comprobante 
+        where c.estado = '1'
+        and c.anulado = 'N'
+        and cd.estado = '1'
+        and c.serie = '".$serie."'
+        and c.numero = '".$numero_comprobante."'
+        order by cd.id asc";
+        
+        $data = DB::select($cad);
+        
+        return $data;
+    }
 	
 }

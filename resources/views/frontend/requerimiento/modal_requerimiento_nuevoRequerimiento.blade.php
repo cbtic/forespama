@@ -716,7 +716,7 @@ function obtenerStock(selectElement, n){
             if(tipo_documento == 1){
                 $('#stock' + n).val(producto_stock.saldos_cantidad);
             }else{
-                $('#stock' + n).val(producto_stock.stock_comprometido);
+                $('#stock' + n).val(producto_stock.saldos_cantidad);
             }
         }
     });

@@ -26,7 +26,7 @@ class PersonaController extends Controller
 			return $next($request);
     	});*/
 
-        $this->middleware('auth');
+        $this->middleware('auth')->except(['obtener_provincia', 'obtener_distrito']);
 		$this->middleware('can:Mantenimiento Personas')->only(['index']);
 	}
 
@@ -337,7 +337,7 @@ class PersonaController extends Controller
 		//$universidad = $tablaMaestra_model->getMaestroByTipo(85);
 		//$especialidad = $tablaMaestra_model->getMaestroByTipo(86);
 		
-		return view('frontend.persona.modal_persona',compact('id','persona','sexo','tipo_documento','grupo_sanguineo','nacionalidad','departamento'));        
+		return view('frontend.persona.modal_persona',compact('id','persona','sexo','tipo_documento','grupo_sanguineo','nacionalidad','departamento'));
 
 	}
 

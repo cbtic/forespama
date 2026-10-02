@@ -1,3 +1,5 @@
+-- DROP FUNCTION public.sp_listar_orden_compra_proceso_paginado(varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, refcursor);
+
 CREATE OR REPLACE FUNCTION public.sp_listar_orden_compra_proceso_paginado(p_tipo_documento character varying, p_empresa_compra character varying, p_empresa_vende character varying, p_fecha_inicio character varying, p_fecha_fin character varying, p_numero_orden_compra character varying, p_numero_orden_compra_cliente character varying, p_situacion character varying, p_almacen_origen character varying, p_almacen_destino character varying, p_estado character varying, p_id_user character varying, p_id_vendedor character varying, p_estado_pedido character varying, p_prioridad character varying, p_canal character varying, p_tipo_producto character varying, p_estado_pedido_cancelado character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
  RETURNS refcursor
  LANGUAGE plpgsql
@@ -12,11 +14,26 @@ v_count varchar;
 v_col_count varchar;
 v_id_rol integer;
 v_id_proceso integer;
+v_tiene_rol_7 boolean := false;
+v_tiene_rol_11 boolean := false;
 
 begin
 
-	select role_id into v_id_rol from model_has_roles mhr where mhr.model_id::varchar = p_id_user;
-	
+	--select role_id into v_id_rol from model_has_roles mhr where mhr.model_id::varchar = p_id_user;
+
+	select 
+	    exists(
+	        select 1
+	        from model_has_roles mhr
+	        where mhr.model_id::varchar = p_id_user
+	        and mhr.role_id = 7),
+	    exists(
+	        select 1
+	        from model_has_roles mhr
+	        where mhr.model_id::varchar = p_id_user
+	        and mhr.role_id = 11)
+	into v_tiene_rol_7, v_tiene_rol_11;
+
 	select id_proceso into v_id_proceso from persona_procesos pp where pp.id_persona::varchar = p_id_user;
 	
 	p_pagina=(p_pagina::Integer-1)*p_limit::Integer;
@@ -41,7 +58,7 @@ begin
 	where aoc.id_orden_compra = oc.id
 	order by id desc
 	limit 1),0)) id_autorizacion,
-	tm3.denominacion prioridad, tm4.denominacion proceso_pedido, aoc.id_proceso_pedido ';
+	tm3.denominacion prioridad, tm4.denominacion proceso_pedido, aoc.id_proceso_pedido, oc.estado_pago_comision ';
 
 	v_tabla=' from orden_compras oc 
 	inner join empresas e2 on oc.id_empresa_vende = e2.id
@@ -116,7 +133,7 @@ begin
 	 v_where:=v_where||'And oc.estado = '''||p_estado||''' ';
 	End If;
 
-	If v_id_rol=7 Then 
+	/*If v_id_rol= 7 Then 
 		v_where:=v_where||'And oc.id_vendedor = '''||p_id_user||''' ';
 	End If;
 
@@ -126,7 +143,20 @@ begin
 	   ))';
 	/*Else
 	   v_where := v_where || ' AND oc.id_vendedor = ''' || p_id_user || '''';*/
-	End If;
+	End If;*/
+
+	IF v_tiene_rol_11 THEN
+	    v_where := v_where || ' AND (
+	        oc.id_vendedor = ''' || p_id_user || '''
+	        OR oc.id_vendedor IN (
+	            SELECT jvd.id_vendedor
+	            FROM jefe_vendedor_detalles jvd
+	            WHERE jvd.id_jefe_vendedor = ' || p_id_user || '))';
+	
+	ELSIF v_tiene_rol_7 THEN
+	    v_where := v_where || ' AND oc.id_vendedor = ''' || p_id_user || '''';
+	
+	END IF;
 
 	If p_id_vendedor<>'' Then
 	 v_where:=v_where||'And oc.id_vendedor = '''||p_id_vendedor||''' ';

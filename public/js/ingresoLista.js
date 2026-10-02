@@ -249,16 +249,12 @@ function obtenerBeneficiario(){
 
 			cargarValorizacion();
 			cargarPagos();
-			
 		}
-		
 	});
-	
 }
 
 
 function cargarValorizacion(){
-    
     
 	//var numero_documento = $("#numero_documento").val();
 	var tipo_documento = $("#tipo_documento").val();
@@ -268,18 +264,15 @@ function cargarValorizacion(){
 
     $("#tblValorizacion tbody").html("");
 	$.ajax({
-			url: "/ingreso/obtener_valorizacion/"+tipo_documento+"/"+persona_id,
-			type: "GET",
-			success: function (result) {  
-					$("#tblValorizacion tbody").html(result);
-			}
+		url: "/ingreso/obtener_valorizacion/"+tipo_documento+"/"+persona_id,
+		type: "GET",
+		success: function (result) {  
+				$("#tblValorizacion tbody").html(result);
+		}
 	});
-
 }
 
-
 function cargarPagos(){
-    
     
 	//var numero_documento = $("#numero_documento").val();
 	var tipo_documento = $("#tipo_documento").val();
@@ -289,16 +282,14 @@ function cargarPagos(){
 
     $("#tblPago tbody").html("");
 	$.ajax({
-			//url: "/ingreso/obtener_pago/"+numero_documento,
-			url: "/ingreso/obtener_pago/"+tipo_documento+"/"+persona_id,
-			type: "GET",
-			success: function (result) {  
-					$("#tblPago tbody").html(result);
-			}
+		//url: "/ingreso/obtener_pago/"+numero_documento,
+		url: "/ingreso/obtener_pago/"+tipo_documento+"/"+persona_id,
+		type: "GET",
+		success: function (result) {  
+				$("#tblPago tbody").html(result);
+		}
 	});
-
 }
-
 
 function enviarTipo(tipo){
 	if(tipo == 1)$('#TipoF').val("FTFT");
@@ -334,7 +325,6 @@ function validar() {
 	return false;
 }
 
-
 function modalLiquidacion(id){
 	
 	$(".modal-dialog").css("width","80%");
@@ -342,15 +332,13 @@ function modalLiquidacion(id){
 	$('#openOverlayOpc .modal-body').css('height', 'auto');
 
 	$.ajax({
-			url: "/ingreso/modal_liquidacion/"+id,
-			type: "GET",
-			success: function (result) {  
-					$("#diveditpregOpc").html(result);
-			}
+		url: "/ingreso/modal_liquidacion/"+id,
+		type: "GET",
+		success: function (result) {  
+				$("#diveditpregOpc").html(result);
+		}
 	});
-
 }
-
 
 function fn_ordenar(order){
 	
@@ -602,10 +590,7 @@ function datatablenew(){
                 },
 				
             ]
-
-
     });
-
 }
 
 function fn_ListarBusqueda() {
@@ -616,13 +601,12 @@ function estadoCuentaAutomatico(){
     
 	var fecha = $("#fecha_proceso").val();
 	$.ajax({
-			url: "/ingreso/estado_cuenta_automatico/"+fecha,
-			type: "GET",
-			success: function (result) {  
-					datatablenew();
-			}
+		url: "/ingreso/estado_cuenta_automatico/"+fecha,
+		type: "GET",
+		success: function (result) {  
+			datatablenew();
+		}
 	});
-
 }
 
 function reporteEstadoCuenta(){
@@ -647,7 +631,6 @@ function reporteEstadoCuenta(){
 	if (order == "")order = 0;
 	
 	location.href = '/ingreso/exportar_estado_cuenta/' + tipo + '/' + afiliado + '/' + numero_documento + '/' + periodo + '/' + fecha_inicio + '/' + fecha_fin + '/' + pago + '/' + order + '/' + sort_;
-	
 }
 
 function fn_eliminar_valorizacion_bloque(){
@@ -660,17 +643,16 @@ function fn_eliminar_valorizacion_bloque(){
 	$('#btnEliminarBloque').hide();
 	
 	$.ajax({
-			url: "/ingreso/eliminar_valorizacion_bloque",
-			data: $("#frmAfiliacion").serialize(),
-			type: "POST",
-			success: function (result) {  
-				$('.loader').hide();
-				$('#btnEliminarBloque').show();
-				$('#example-select-all').prop('checked', false);
-				datatablenew();
-			}
+		url: "/ingreso/eliminar_valorizacion_bloque",
+		data: $("#frmAfiliacion").serialize(),
+		type: "POST",
+		success: function (result) {  
+			$('.loader').hide();
+			$('#btnEliminarBloque').show();
+			$('#example-select-all').prop('checked', false);
+			datatablenew();
+		}
 	});
-
 }
 
 function fn_eliminar_tarjeta_bloque(){
@@ -683,18 +665,14 @@ function fn_eliminar_tarjeta_bloque(){
 	$('#btnInactivarTarjetaBloque').hide();
 	
 	$.ajax({
-			url: "/tarjeta/eliminar_persona_tarjeta_bloque",
-			data: $("#frmAfiliacion").serialize(),
-			type: "POST",
-			success: function (result) {  
-				$('.loader').hide();
-				$('#btnInactivarTarjetaBloque').show();
-				$('#example-select-all').prop('checked', false);
-				datatablenew();
-			}
+		url: "/tarjeta/eliminar_persona_tarjeta_bloque",
+		data: $("#frmAfiliacion").serialize(),
+		type: "POST",
+		success: function (result) {  
+			$('.loader').hide();
+			$('#btnInactivarTarjetaBloque').show();
+			$('#example-select-all').prop('checked', false);
+			datatablenew();
+		}
 	});
-
 }
-
-
-

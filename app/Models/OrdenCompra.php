@@ -118,6 +118,12 @@ class OrdenCompra extends Model
 
     }
 
+    public function listar_orden_compra_autorizacion_postventa_ajax($p){
+
+        return $this->readFuntionPostgres('sp_listar_autorizacion_postventa_orden_compra_paginado',$p);
+
+    }
+
     public function readFuntionPostgres($function, $parameters = null){
 
         $_parameters = '';
@@ -635,7 +641,7 @@ class OrdenCompra extends Model
 
     function getOrdenCompraMatriz($numero_orden_compra_matriz){
 
-        $cad = "select oc.id, oc.id_empresa_compra, oc.id_empresa_vende, oc.id_tipo_cliente, oc.id_empresa_compra, oc.id_persona, oc.id_unidad_origen, oc.id_almacen_salida, oc.id_almacen_destino, oc.igv_compra, oc.id_vendedor, oc.numero_orden_compra_cliente, oc.estado 
+        $cad = "select oc.id, oc.id_empresa_compra, oc.id_canal, oc.id_empresa_vende, oc.id_tipo_cliente, oc.id_empresa_compra, oc.id_persona, oc.id_unidad_origen, oc.id_almacen_salida, oc.id_almacen_destino, oc.igv_compra, oc.id_vendedor, oc.numero_orden_compra_cliente, oc.estado 
         from orden_compras oc 
         where oc.numero_orden_compra = '".$numero_orden_compra_matriz."'
         and oc.estado ='1'

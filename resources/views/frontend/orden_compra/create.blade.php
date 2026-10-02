@@ -611,6 +611,17 @@ label.form-control-sm{
 										?>
 									</select>
 								</div>
+								<!--<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+									<select name="estado_transaccion_bus" id="estado_transaccion_bus" class="form-control form-control-sm filtro-select">
+										<option value="">--Selec. Estado Transaccion NC--</option>
+										<?php
+										//foreach ($estado_transaccion as $row){?>
+											<option value="<?php //echo $row->codigo ?>" <?php //echo ($row->codigo == '1') ? 'selected' : ''; ?>><?php //echo $row->denominacion ?></option>
+											<?php 
+										//}
+										?>
+									</select>
+								</div>-->
 							</div>
 						</div>
 						

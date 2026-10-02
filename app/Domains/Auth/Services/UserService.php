@@ -9,11 +9,15 @@ use App\Domains\Auth\Events\User\UserRestored;
 use App\Domains\Auth\Events\User\UserStatusChanged;
 use App\Domains\Auth\Events\User\UserUpdated;
 use App\Domains\Auth\Models\User;
+use App\Models\Persona;
+use App\Models\AliadoPama;
+use App\Models\ComisionParametro;
 use App\Exceptions\GeneralException;
 use App\Services\BaseService;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 
 /**
  * Class UserService.
@@ -53,18 +57,91 @@ class UserService extends BaseService
     public function registerUser(array $data = []): User
     {
         DB::beginTransaction();
-
         try {
-            $user = $this->createUser($data);
+
+            $persona = Persona::where("numero_documento",$data['numero_documento'])->where("estado",1)->first();
+
+            if($persona){
+                $id_persona = $persona->id;
+            }else{
+                $persona = Persona::create([
+                    'id_tipo_documento' => $data['tipo_documento'],
+                    'numero_documento' => $data['numero_documento'],
+                    'nombres' => $data['name'],
+                    'apellido_paterno' => $data['apellido_paterno'],
+                    'apellido_materno' => $data['apellido_materno'],
+                    'telefono' => $data['numero_celular'],
+                    'email' => $data['email'],
+                    'id_ubigeo_nacimiento' => $data['distrito'],
+                    'direccion' => $data['direccion'],
+                    'fecha_nacimiento' => $data['fecha_nacimiento'],
+                    'cliente' => "1",
+                ]);
+                
+                $id_persona = $persona->id;
+            }
+
+            //$user = $this->createUser($data);
+
+            $usuarioExistente = User::where('id_persona', $id_persona)->first();
+
+            if ($usuarioExistente) {
+                throw new GeneralException(
+                    __('Esta persona ya tiene una cuenta registrada.')
+                );
+            }
+
+            $user = User::create([
+                'type' => $data['type'] ?? $this->model::TYPE_USER,
+                'name' => ($data['name'] ?? '') . ' ' . ($data['apellido_paterno'] ?? '') . ' ' . ($data['apellido_materno'] ?? ''),
+                'email' => $data['email'] ?? null,
+                'password' => $data['password'] ?? null,
+                'provider' => $data['provider'] ?? null,
+                'provider_id' => $data['provider_id'] ?? null,
+                'email_verified_at' => $data['email_verified_at'] ?? null,
+                'active' => $data['active'] ?? true,
+                'id_sede' => 1,
+                'id_persona' => $id_persona,
+            ]);
+
+            $aliadoPamaExistente = AliadoPama::where('id_persona', $id_persona)->first();
+
+            if ($aliadoPamaExistente) {
+                throw new GeneralException(
+                    __('Esta persona ya está registrada como Aliado PAMA.')
+                );
+            }
+
+            $comision_parametro_model = new ComisionParametro;
+
+            $ultimo_parametro = $comision_parametro_model->getUltimoParametro();
+            
+            $aliadoPama = AliadoPama::create([
+                'id_persona' => $id_persona,
+                'porcentaje_comision' => $ultimo_parametro[0]->porcentaje_comision,
+                'fecha_inicio' => now(),
+                'id_usuario_inserta' => $user->id,
+            ]);
+
+            $user->assignRole('Aliado PAMA');
+
+            DB::commit();
+
+            //$user->sendEmailVerificationNotification();
+
+            return $user;
+
         } catch (Exception $e) {
             DB::rollBack();
 
-            throw new GeneralException(__('There was a problem creating your account.'));
+            //throw new GeneralException(__('There was a problem creating your account.'));
+            dd([
+        'mensaje' => $e->getMessage(),
+        'archivo' => $e->getFile(),
+        'linea' => $e->getLine(),
+        'trace' => $e->getTraceAsString(),
+    ]);
         }
-
-        DB::commit();
-
-        return $user;
     }
 
     /**

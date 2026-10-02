@@ -66,6 +66,9 @@ use App\Http\Controllers\Frontend\CambioCodigoProductoController;
 use App\Http\Controllers\Frontend\AsientoContableVentaController;
 use App\Http\Controllers\Frontend\AsignacionCuentaController;
 
+use App\Http\Controllers\Frontend\AliadosPamaComisionesController;
+use App\Http\Controllers\Frontend\AliadoPamaController;
+use App\Http\Controllers\Frontend\ComisionParametroController;
 
 //use App\Http\Controllers\VehiculoController;
 
@@ -93,6 +96,14 @@ Route::get('terms', [TermsController::class, 'index'])
         $trail->parent('frontend.index')
             ->push(__('Terms & Conditions'), route('frontend.pages.terms'));
     });
+
+
+Route::get('comprobante/create_ajuste_comprobante', [ComprobanteController::class, 'create_ajuste_comprobante'])->name('comprobante.create_ajuste_comprobante');
+Route::post('comprobante/listar_ajuste_comprobante_ajax', [ComprobanteController::class, 'listar_ajuste_comprobante_ajax'])->name('comprobante.listar_ajuste_comprobante_ajax');
+Route::post('comprobante/send_ajuste_comprobante', [ComprobanteController::class, 'send_ajuste_comprobante'])->name('comprobante.send_ajuste_comprobante');
+Route::get('comprobante/modal_ajuste_comprobante/{id}', [ComprobanteController::class, 'modal_ajuste_comprobante'])->name('comprobante.modal_ajuste_comprobante');
+
+Route::get('comprobante/obtener_datos_comprobante/{numero_comprobante}/{serie}', [ComprobanteController::class, 'obtener_datos_comprobante'])->name('comprobante.obtener_datos_comprobante');
 
 Route::get('ingreso_vehiculo_tronco', [IngresoVehiculoTroncoController::class, 'index'])->name('ingreso_vehiculo_tronco');
 Route::get('ingreso_vehiculo_tronco/obtener_datos_vehiculo/{placa}', [IngresoVehiculoTroncoController::class, 'obtener_datos_vehiculo'])->name('ingreso_vehiculo_tronco.obtener_datos_vehiculo');
@@ -1046,3 +1057,46 @@ Route::get('tipo_cambio/verificar', [TipoCambioController::class, 'verificar'])-
 
 Route::get('asiento_contable_venta/exportar_listar_asiento_contable_venta/{numero_comprobante}/{numero_documento}/{fecha_inicio}/{fecha_fin}/{migrado}/{estado}', [AsientoContableVentaController::class, 'exportar_listar_asiento_contable_venta'])->name('asiento_contable_venta.exportar_listar_asiento_contable_venta');
 
+Route::get('aliados_pama_comisiones/create', [AliadosPamaComisionesController::class, 'create'])->name('aliados_pama_comisiones.create');
+Route::post('aliados_pama_comisiones/listar_aliados_pama_comisiones_ajax', [AliadosPamaComisionesController::class, 'listar_aliados_pama_comisiones_ajax'])->name('aliados_pama_comisiones.listar_aliados_pama_comisiones_ajax');
+Route::post('aliados_pama_comisiones/send_retiro_comision_aliado_pama', [AliadosPamaComisionesController::class, 'send_retiro_comision_aliado_pama'])->name('aliados_pama_comisiones.send_retiro_comision_aliado_pama');
+Route::post('aliados_pama_comisiones/solicitar_retiro_comision_aliado_pama', [AliadosPamaComisionesController::class, 'solicitar_retiro_comision_aliado_pama'])->name('aliados_pama_comisiones.solicitar_retiro_comision_aliado_pama');
+
+Route::get('aliados_pama_comisiones/obtener_datos_aliado/{numero_documento}', [AliadosPamaComisionesController::class, 'obtener_datos_aliado'])->name('aliados_pama_comisiones.obtener_datos_aliado');
+
+Route::get('aliado_pama/create', [AliadoPamaController::class, 'create'])->name('aliado_pama.create');
+Route::post('aliado_pama/listar_aliado_pama_ajax', [AliadoPamaController::class, 'listar_aliado_pama_ajax'])->name('aliado_pama.listar_aliado_pama_ajax');
+Route::post('aliado_pama/send_aliado_pama', [AliadoPamaController::class, 'send_aliado_pama'])->name('aliado_pama.send_aliado_pama');
+Route::get('aliado_pama/modal_aliado_pama/{id}', [AliadoPamaController::class, 'modal_aliado_pama'])->name('aliado_pama.modal_aliado_pama');
+Route::get('aliado_pama/eliminar_aliado_pama/{id}/{estado}', [AliadoPamaController::class, 'eliminar_aliado_pama'])->name('aliado_pama.eliminar_aliado_pama');
+
+Route::post('orden_compra/aprobar_transferencia_orden_compra', [OrdenCompraController::class, 'aprobar_transferencia_orden_compra'])->name('orden_compra.aprobar_transferencia_orden_compra');
+
+Route::get('orden_compra/create_autorizacion_postventa', [OrdenCompraController::class, 'create_autorizacion_postventa'])->name('orden_compra.create_autorizacion_postventa');
+Route::post('orden_compra/listar_orden_compra_autorizacion_postventa_ajax', [OrdenCompraController::class, 'listar_orden_compra_autorizacion_postventa_ajax'])->name('orden_compra.listar_orden_compra_autorizacion_postventa_ajax');
+
+Route::get('aliado_pama/actualizar_porcentaje_general/{porcentaje_general}', [AliadoPamaController::class, 'actualizar_porcentaje_general'])->name('aliado_pama.actualizar_porcentaje_general');
+
+Route::get('aliados_pama_comisiones/modal_aliado_pama_caja', [AliadosPamaComisionesController::class, 'modal_aliado_pama_caja'])->name('aliados_pama_comisiones.modal_aliado_pama_caja');
+Route::get('aliados_pama_comisiones/modal_detalle_comision_aliado_pama/{id}', [AliadosPamaComisionesController::class, 'modal_detalle_comision_aliado_pama'])->name('aliados_pama_comisiones.modal_detalle_comision_aliado_pama');
+Route::get('aliados_pama_comisiones/modal_retiro_comision_aliado_pama/{id}', [AliadosPamaComisionesController::class, 'modal_retiro_comision_aliado_pama'])->name('aliados_pama_comisiones.modal_retiro_comision_aliado_pama');
+
+Route::get('comision_parametro/create', [ComisionParametroController::class, 'create'])->name('comision_parametro.create');
+Route::post('comision_parametro/listar_comision_parametro_ajax', [ComisionParametroController::class, 'listar_comision_parametro_ajax'])->name('comision_parametro.listar_comision_parametro_ajax');
+Route::post('comision_parametro/send_comision_parametro', [ComisionParametroController::class, 'send_comision_parametro'])->name('comision_parametro.send_comision_parametro');
+Route::get('comision_parametro/modal_comision_parametro/{id}', [ComisionParametroController::class, 'modal_comision_parametro'])->name('comision_parametro.modal_comision_parametro');
+
+Route::get('aliados_pama_comisiones/cargar_detalle/{id}', [AliadosPamaComisionesController::class, 'cargar_detalle'])->name('aliados_pama_comisiones.cargar_detalle');
+
+Route::get('aliados_pama_comisiones/create_solicitud', [AliadosPamaComisionesController::class, 'create_solicitud'])->name('aliados_pama_comisiones.create_solicitud');
+Route::post('aliados_pama_comisiones/listar_aliados_pama_solicitud_comisiones_ajax', [AliadosPamaComisionesController::class, 'listar_aliados_pama_solicitud_comisiones_ajax'])->name('aliados_pama_comisiones.listar_aliados_pama_solicitud_comisiones_ajax');
+Route::get('aliados_pama_comisiones/aprobar_aliados_pama_solicitud_comisiones/{id}', [AliadosPamaComisionesController::class, 'aprobar_aliados_pama_solicitud_comisiones'])->name('aliados_pama_comisiones.aprobar_aliados_pama_solicitud_comisiones');
+Route::get('aliados_pama_comisiones/rechazar_aliados_pama_solicitud_comisiones/{id}', [AliadosPamaComisionesController::class, 'rechazar_aliados_pama_solicitud_comisiones'])->name('aliados_pama_comisiones.rechazar_aliados_pama_solicitud_comisiones');
+Route::get('aliados_pama_comisiones/aprobar_aliados_pama_solicitud_pago/{id}', [AliadosPamaComisionesController::class, 'aprobar_aliados_pama_solicitud_pago'])->name('aliados_pama_comisiones.aprobar_aliados_pama_solicitud_pago');
+//Route::post('aliado_pama/send_aliado_pama', [AliadoPamaController::class, 'send_aliado_pama'])->name('aliado_pama.send_aliado_pama');
+//Route::get('aliado_pama/modal_aliado_pama/{id}', [AliadoPamaController::class, 'modal_aliado_pama'])->name('aliado_pama.modal_aliado_pama');
+
+Route::get('orden_compra/modal_orden_compra_autorizacion_servicio_cliente/{id}', [OrdenCompraController::class, 'modal_orden_compra_autorizacion_servicio_cliente'])->name('orden_compra.modal_orden_compra_autorizacion_servicio_cliente');
+
+Route::post('orden_compra/send_oc_autorizacion_servicio_cliente', [OrdenCompraController::class, 'send_oc_autorizacion_servicio_cliente'])->name('orden_compra.send_oc_autorizacion_servicio_cliente');
+Route::post('orden_compra/send_denegar_oc_autorizacion_servicio_cliente', [OrdenCompraController::class, 'send_denegar_oc_autorizacion_servicio_cliente'])->name('orden_compra.send_denegar_oc_autorizacion_servicio_cliente');

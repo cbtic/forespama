@@ -1164,6 +1164,8 @@ function fn_save_orden_compra(){
     var fecha_orden_compra = $('#fecha_orden_compra').val();
     var fecha_vencimiento = $('#fecha_vencimiento').val();
     var canal = $('#canal').val();
+    var almacen_destino = $('#almacen').val();
+    var observacion = $('#observacion_vendedor').val();
     
     if(tipo_documento==""){msg+="Ingrese el Tipo de Documento <br>";}
     if(empresa_vende==""){msg+="Ingrese la Empresa que Vende <br>";}
@@ -1171,6 +1173,14 @@ function fn_save_orden_compra(){
 
     if ($('#tblOrdenCompraDetalle tbody tr').length == 0) {
         msg += "No se ha agregado ning&uacute;n producto <br>";
+    }
+
+    if(tipo_documento == 1){
+        if(almacen_destino == 10){
+            if(observacion == ""){
+                msg += "Debe ingresar una observacion mencionando el motivo del porque se esta enviando al almacen: VES ALMACEN PRODUCTOS NO CONFORMES"
+            }
+        }
     }
 
     if(tipo_documento == 2){
@@ -1559,6 +1569,7 @@ function obtenerOrdenCompraMatriz(){
                 $('#igv_compra').val(orden_compra_matriz.igv_compra);
                 $('#id_vendedor').val(orden_compra_matriz.id_vendedor);
                 $('#numero_orden_compra_cliente').val(orden_compra_matriz.numero_orden_compra_cliente);
+                $('#canal').val(orden_compra_matriz.id_canal);
             } else {
                 bootbox.alert('No se encontró la orden de compra matriz');
             }
@@ -1570,7 +1581,7 @@ function obtenerCanal(){
 
     var tipo_documento = $('#tipo_documento').val();
 
-    if(tipo_documento == 2){
+    if(tipo_documento == 2 || tipo_documento == 4){
         $('#label_canal').show();
         $('#select_canal').show();
     } else {
@@ -1783,6 +1794,28 @@ function modal_cerrar_pedido(id){
 	});
 }
 
+function gestionar_transferencia($resultado){
+
+    $('#resultado_transferencia').val($resultado);
+	
+    var msgLoader = "";
+    msgLoader = "Procesando, espere un momento por favor";
+    var heightBrowser = $(window).width()/2;
+    $('.loader').css("opacity","0.8").css("height",heightBrowser).html("<div id='Grd1_wrapper' class='dataTables_wrapper'><div id='Grd1_processing' class='dataTables_processing panel-default'>"+msgLoader+"</div></div>");
+    $('.loader').show();
+
+    $.ajax({
+        url: "/orden_compra/aprobar_transferencia_orden_compra",
+        type: "POST",
+        data : $("#frmOrdenCompra").serialize(),
+        success: function (result) {
+            datatablenew();
+            $('.loader').hide();
+            bootbox.alert("Se envi&oacute; satisfactoriamente");
+        }
+    });
+}
+
 </script>
 
 <body class="hold-transition skin-blue sidebar-mini">
@@ -1817,6 +1850,7 @@ function modal_cerrar_pedido(id){
                     <input type="hidden" name="id_descuento_usuario" id="id_descuento_usuario" value="<?php echo $id_descuento_usuario?>">
                     <input type="hidden" name="id_autorizacion" id="id_autorizacion" value="<?php echo $id_autorizacion?>">
                     <input type="hidden" name="id_proceso" id="id_proceso" value="1">
+                    <input type="hidden" name="resultado_transferencia" id="resultado_transferencia" value="">
                     <!--<input type="hidden" name="necesita_aprobacion_descuento" id="necesita_aprobacion_descuento" value="0">-->
                     
                     <div class="row" style="padding-left:10px">
@@ -1836,6 +1870,12 @@ function modal_cerrar_pedido(id){
                                         ?>
                                     </select>
                                 </div>
+                                <div id="label_numero_orden_compra_matriz" class="col-lg-2" @if($orden_compra->id_tipo_documento != 4) style="display:none;" @endif>
+                                    N&uacute;mero Orden Compra Matriz
+                                </div>
+                                <div id="input_numero_orden_compra_matriz" class="col-lg-2" @if($orden_compra->id_tipo_documento != 4) style="display:none;" @endif>
+                                    <input id="numero_orden_compra_matriz" name="numero_orden_compra_matriz" on class="form-control form-control-sm"  value="" type="text" onchange="obtenerOrdenCompraMatriz()">
+                                </div>
                                 <div class="col-lg-2" id="label_canal">
                                     Canal
                                 </div>
@@ -1849,12 +1889,6 @@ function modal_cerrar_pedido(id){
                                         }
                                         ?>
                                     </select>
-                                </div>
-                                <div id="label_numero_orden_compra_matriz" class="col-lg-2" @if($orden_compra->id_tipo_documento != 4) style="display:none;" @endif>
-                                    N&uacute;mero Orden Compra Matriz
-                                </div>
-                                <div id="input_numero_orden_compra_matriz" class="col-lg-2" @if($orden_compra->id_tipo_documento != 4) style="display:none;" @endif>
-                                    <input id="numero_orden_compra_matriz" name="numero_orden_compra_matriz" on class="form-control form-control-sm"  value="" type="text" onchange="obtenerOrdenCompraMatriz()">
                                 </div>
                                 <div class="col-lg-2">
                                     N&uacute;mero Orden Compra
@@ -2105,6 +2139,18 @@ function modal_cerrar_pedido(id){
                                     <i class="fas fa-check-circle" style="font-size:18px;"></i> Aprobar Pago
                                 </button>
                             <?php }?>
+
+                            @hasanyrole('Administrator|Aprobar transferencia no conformes')
+                            <?php if($orden_compra->id_tipo_documento == 1 && $orden_compra->id_almacen_destino == 10 && $orden_compra->estado_pago_comision == 1){?>
+                            <button style="font-size:12px;margin-bottom:10px" type="button" class="btn btn-sm btn-clasico-negro btn-devolver" data-toggle="modal" onclick="gestionar_transferencia(3)">
+                                <i class="fas fa-undo" style="font-size:18px;"></i> Rechazar
+                            </button>
+                            <button style="font-size:12px;" type="button" class="btn btn-sm btn-clasico-blanco btn-aprobar" data-toggle="modal" onclick="gestionar_transferencia(2)">
+                                <i class="fas fa-check-circle" style="font-size:18px;"></i> Aprobar
+                            </button>
+                            <?php }?>
+                            @endhasanyrole
+                            
                             <!--<button style="font-size:12px;margin-left:10px; margin-right:10px" type="button" class="btn btn-sm btn-warning" data-toggle="modal" onclick="pdf_guia()" ><i class="fa fa-edit"></i>Imprimir Gu&iacute;a Remisi&oacute;n Electronica</button>-->
                             <!--<a href="javascript:void(0)" onClick="fn_pdf_documento()" class="btn btn-sm btn-primary" style="margin-right:100px">Imprimir</a>-->
                             <?php 
@@ -2239,7 +2285,7 @@ function modal_cerrar_pedido(id){
                                         ?>
                                         <?php if(($id_user==$orden_compra->id_usuario_inserta|| in_array($orden_compra->id_usuario_inserta, $id_vendedores)) && $orden_compra->cerrado == 1 && $id_proceso == 1 && $orden_compra->id_tipo_documento != 1){?>
                                             <!--<a href="javascript:void(0)" onClick="fn_save_orden_compra()" class="btn btn-sm btn-success" style="margin-left:10px"></a>-->
-                                                
+                                            
                                             <button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-nuevo" data-toggle="modal" onclick="fn_save_orden_compra()">
                                                 <i class="fas fa-save" style="font-size:18px;"></i> Guardar
                                             </button>

@@ -406,8 +406,6 @@
                                 </div>
                             </div>
 
-                
-
                             <div class="col-lg-7 col-md-7 col-sm-12 col-xs-12" style="padding:0px">
 
                                 <div class="row">
@@ -465,14 +463,13 @@
                                                 readonly="" placeholder="" class="form-control form-control-sm text-right">
                                         </div>
                                     </div>
-
-
+                                    
                                     <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12" style="padding:5px 0px 0px 0px;color:#28a745">
                                         <div class="form-group">
                                             <label class="form-control-sm">DOLARES</label>
                                         </div>
                                     </div>
-
+                                    
                                     <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12" style="padding:0px">
                                         <div class="form-group">
 
@@ -516,36 +513,28 @@
                                                 readonly="" placeholder="" class="form-control form-control-sm text-right">
                                         </div>
                                     </div>
-
                                 </div>
                             </div>
-
                         </div>
-
                     </div><!--col-->
                 </div>
 
                 <div class="row justify-content-center">
-
                     <div class="col col-sm-12 align-self-center">
-
                         <!--<form class="form-horizontal" method="post" action="{{ route('frontend.ingreso.create')}}" id="frmValorizacion" name="frmValorizacion" autocomplete="off" >-->
                         <input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
 
                         <div class="row">
-
                             <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-
                                 <div class="card">
                                     <div class="card-header">
                                         <strong>
                                             Datos de la Persona
                                         </strong>
                                     </div>
-
                                     <div class="card-body">
-                                        <input type='hidden' name='txt_IdEmpresa' id="txt_IdEmpresa" value='{{Auth::user()->IdEmpresa}}'>
 
+                                        <input type='hidden' name='txt_IdEmpresa' id="txt_IdEmpresa" value='{{Auth::user()->IdEmpresa}}'>
 
                                         <div class="row">
                                             <div class="col">
@@ -618,10 +607,8 @@
                                                     <span class="input-group-btn">
                                                         <button class="btn btn-info btn-sm" type="button" id="btnBusPer" onClick="modal_consulta_persona()" tabindex="0"><i class="glyphicon glyphicon-search"></i> ... </button>
                                                     </span>
-
                                                 </div>
                                             </div>
-
                                         </div>
 
                                         <div class="row" id="divNombreApellido">
@@ -660,13 +647,11 @@
                                             </div>
                                         </div>
 
-
                                         <div class="row" id="divDireccionEmpresa" style="display:none">
                                             <div class="col">
                                                 <div class="form-group">
                                                     <label class="form-control-sm">Direcci&oacute;n</label>
                                                     <input type="text" readonly name="empresa_direccion" id="empresa_direccion" value="{{old('clinom')}}" class="form-control form-control-sm">
-
                                                 </div>
                                             </div>
                                         </div>
@@ -698,7 +683,6 @@
                                             </div>
                                         </div>
 
-
                                         <div class="row" id="divRucP">
                                             <div class="col">
                                                 <div class="form-group">
@@ -716,10 +700,33 @@
                                                 </div>
                                             </div>
                                         </div>
-
-
                                     </div>
-
+                                </div>
+                                <div class="card-header">
+                                    <strong>
+                                        Datos de Aliado Pama
+                                    </strong>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col">
+                                            <label><small>Nro. de Documento</small></label>
+                                            <div class="input-group input-group-sm">
+                                                <input class="form-control input-sm text-uppercase" type="text" name="numero_documento_aliado" id="numero_documento_aliado" autocomplete="OFF" maxlength="20" required="" tabindex="0" readonly>
+                                                <!--<span class="input-group-btn">
+                                                    <button class="btn btn-success btn-sm" type="button" id="btnAliado" onclick="obtenerAliado()" disabled tabindex="0"><i class="glyphicon glyphicon-search"></i> Buscar </button>
+                                                </span>-->
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row" id="divNombreApellidoAliado">
+                                        <div class="col">
+                                            <div class="form-group">
+                                                <label class="form-control-sm">Nombres y Apellidos</label>
+                                                <textarea rows="2" readonly name="nombre_aliado" id="nombre_aliado" class="auto_height" style="background-color: #ced5d9;" onInput="auto_height()"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
@@ -727,20 +734,26 @@
 
                                 <div class="card">
                                     <div class="card-header">
-                                        <strong>
-                                            <!--@lang('labels.frontend.asistencia.box_asistencia')-->
-                                            Registro de Estado de Cuenta
-                                            @hasanyrole('administrator')
-                                            <input class="btn btn-warning btn-sm pull-right" value="DUDOSO" type="button" id="btnEstado" onclick="guardarEstado('D')" style="margin-left:20px" />
-                                            @endhasanyrole
-                                        </strong>
+                                        <div class="row d-flex align-items-center">
+                                            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                                <strong>
+                                                    <!--@lang('labels.frontend.asistencia.box_asistencia')-->
+                                                    Registro de Estado de Cuenta
+                                                    @hasanyrole('administrator')
+                                                    <input class="btn btn-warning btn-sm pull-right" value="DUDOSO" type="button" id="btnEstado" onclick="guardarEstado('D')" style="margin-left:20px" />
+                                                    @endhasanyrole
+                                                </strong>
+                                            </div>
+                                            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                                <strong>
+                                                    <label class="form-control-sm" id="titulo_tipo_venta" style="color:#183e39!important;font-size:16px"></label>
+                                                </strong>
+                                            </div>
+                                        </div>
                                     </div>
 
                                     <div class="card-body">
-
-
                                         <div class="row">
-
                                             <div class="col-lg-2 col-md-3 col-sm-12 col-xs-12" style="display:none">
                                                 <div class="form-group form-group-sm">
                                                     <select id="cboPeriodo_b" name="cboPeriodo_b" class="form-control form-control-sm" onchange="cargarValorizacion()">
@@ -765,8 +778,6 @@
                                                 </div>
                                             </div>
 
-
-
                                             <div class="col-lg-5 col-md-3 col-sm-12 col-xs-12" style="display:none">
                                                 <div class="form-group form-group-sm">
 
@@ -775,12 +786,9 @@
                                                     <input type="checkbox" id="cbox2" value="1" style="display:none" onchange="cargarValorizacion()" />
                                                     <label for="cbox2" id="lblFrac" style="display:none">Incluir Fraccionamiento y Cuota Gremial Vencido</label>
 
-
-
                                                     <!--
                                                     <select class="form-control form-control-sm" id="cboTipoConcepto_b" data-placeholder="Seleccionar Concepto" onchange="cargarValorizacion()" multiple >
                                                     -->
-
 
                                                 </div>
                                             </div>
@@ -818,11 +826,13 @@
                                                     </div>
                                                 </div>
                                             </div>
-
+                                            <!--<div class="col-lg-8 col-md-8 col-sm-12 col-xs-12 d-flex align-items-center justify-content-center">
+                                                <h4 class="card-subtitle mb-0" id="titulo_tipo_venta" style="color:#183e39!important;bold">
+                                                </h4>
+                                            </div>-->
                                         </div>
 
                                         <?php $seleccionar_todos = "style='display:block'"; ?>
-
 
                                         <div class="table-responsive overflow-auto" style="max-height: 500px">
                                             <table id="tblValorizacion" class="table table-hover table-sm">
@@ -839,14 +849,11 @@
                                                         <th width="10%" class="text-center">Total</th>
                                                         <!--<th width="10%"> Opc</th>-->
                                                         <!--<th>Estado</th>-->
-
                                                     </tr>
                                                 </thead>
                                                 <tbody id="divValorizacion">
                                                 </tbody>
                                                 <tfoot>
-
-
                                                 </tfoot>
                                             </table>
                                         </div><!--table-responsive-->
@@ -865,15 +872,12 @@
                                                                 <option value="100">100</option>
 
                                                             </select>
-
                                                         <th colspan="4" style="text-align:right;padding-right:55px!important;padding-bottom:0px;margin-bottom:0px">Deuda Total</th>
                                                         <td style="padding-bottom:0px;margin-bottom:0px">
                                                             <input type="text" readonly name="deudaTotales" id="deudaTotales" value="0" class="form-control form-control-sm text-right">
                                                         </td>
                                                         </td>
                                                     </tr>
-
-
                                                     <tr>
                                                         <td style="padding-bottom:0px;margin-bottom:0px">
                                                         <th colspan="4" style="text-align:right;padding-right:55px!important;padding-bottom:0px;margin-bottom:0px">Descuento</th>
@@ -882,30 +886,21 @@
                                                         </td>
                                                         </td>
                                                     </tr>
-
                                                     <tr>
                                                         <td style="padding-bottom:0px;margin-bottom:0px">
-
                                                         <th colspan="4" style="text-align:right;padding-right:55px!important;padding-bottom:0px;margin-bottom:0px">Total a Pagar</th>
                                                         <td style="padding-bottom:0px;margin-bottom:0px">
                                                             <input type="text" readonly name="total" id="total" value="0" class="form-control form-control-sm text-right">
                                                             <input type="hidden" readonly name="stotal" id="stotal" value="" class="form-control form-control-sm">
                                                             <input type="hidden" readonly name="igv" id="igv" value="" class="form-control form-control-sm">
                                                             <input type="hidden" readonly name="idConcepto" id="idConcepto" value="" class="form-control form-control-sm">
-                                                            
                                                             <input type="hidden" readonly name="id_proforma" id="id_proforma" value="" class="form-control form-control-sm">
                                                             <input type="hidden" readonly name="accion_" id="accion_" value="" class="form-control form-control-sm">
-
                                                         </td>
                                                         </td>
                                                     </tr>
-
-
-
-
                                                 </tfoot>
                                             </table>
-
 
                                         </div><!--table-responsive-->
 
@@ -950,17 +945,13 @@
 
                                         @endhasanyrole
 
-
-
                                         @hasanyrole('Administrator|Asuntos Gremiales|Asuntos Gremiales Jefe')
                                         <?php $rol_exonera = 1; ?>
                                         <div class="row">
                                             <div class="col">
                                                 <div class="form-group mb-0 clearfix">
-
                                                     <input style="display:none" class="btn btn-warning pull-rigth" value="EXONERAR" type="button" id="btnExonerarS" disabled="disabled" onclick="modal_exonerar()" />
                                                     <input style="display:none" class="btn btn-success pull-rigth" value="NO EXONERAR" type="button" id="btnExonerarN" disabled="disabled" onclick="fn_exonerar_valorizacion()" />
-
                                                 </div><!--form-group-->
                                             </div><!--col-->
                                         </div><!--row-->
@@ -978,7 +969,6 @@
                                                 </div><!--form-group-->
                                             </div><!--col-->
                                         </div><!--row-->
-
 
                                     </div><!--card-body-->
                                 </div><!--card-->
@@ -1013,7 +1003,6 @@
                                             </table>
                                         </div>
                                     </div>
-
                                 </div>
 
                                 <div class="card">
@@ -1041,30 +1030,19 @@
                                             </table>
                                         </div>
                                     </div>
-
                                 </div>
                             </div>
-
                         </div>
-
                     </div><!--col-->
-
 
                     <div id="openOverlayOpc" class="modal fade" role="dialog">
                         <div class="modal-dialog">
-
                             <div id="id_content_OverlayoneOpc" class="modal-content" style="padding: 0px;margin: 0px">
-
                                 <div class="modal-body" style="padding: 0px;margin: 0px">
-
                                     <div id="diveditpregOpc"></div>
-
                                 </div>
-
                             </div>
-
                         </div>
-
                     </div>
 
                     <!-- Modal -->
@@ -1072,7 +1050,6 @@
                         aria-hidden="true">
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
-
                                 <div class="modal-header">
                                     <h5 class="modal-title" id="exampleModalLabel2">Registre Nuevo Producto</h5>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -1080,67 +1057,41 @@
                                     </button>
                                 </div>
                                 <div class="modal-body">
-
                                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                         <div class="card-body">
-
                                             <div id="" class="row">
                                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-
                                                     <div class="form-group form-group-sm">
                                                         <label class="form-control-sm">Producto</label>
-
-                                                        <td><input type="text" name="txtProducto" id="txtProducto"
-                                                                class="form-control form-control-sm">
-
-                                                            <div class="input-group" style="position: absolute;"
-                                                                id="producto_list"></div>
+                                                        <td><input type="text" name="txtProducto" id="txtProducto" class="form-control form-control-sm">
+                                                            <div class="input-group" style="position: absolute;" id="producto_list"></div>
                                                         </td>
-
                                                     </div>
-
-
-
-
-
                                                 </div>
                                             </div>
-
                                         </div>
                                     </div>
-
                                 </div>
                                 <div class="modal-footer">
-
                                 </div>
-
                             </div>
                         </div>
                     </div>
                     <!--ModalEnd-->
-
-
-
                 </div>
-
             </form>
         </div>
     </div>
-
 </div>
 
 @endsection
 
-
-<!--
-            <form class="form-horizontal" method="post" action="{{route('frontend.comprobante.nc_edita')}}" id="frmPagos" name="frmPagos" autocomplete="off">
-                <input type="hidden" name="id_comprobante_" id="id_comprobante_" value="" />
-                <input type="hidden" name="id_caja_" id="id_caja_" value="<?php //echo $caja_usuario->id_caja 
-                                                                            ?>" />
-            </form>
-			-->
-
-
+    <!--<form class="form-horizontal" method="post" action="{{route('frontend.comprobante.nc_edita')}}" id="frmPagos" name="frmPagos" autocomplete="off">
+        <input type="hidden" name="id_comprobante_" id="id_comprobante_" value="" />
+        <input type="hidden" name="id_caja_" id="id_caja_" value="<?php //echo $caja_usuario->id_caja 
+                                                                    ?>" />
+    </form>-->
+			
 @push('after-scripts')
 <script type="text/javascript">
     var id_caja_usuario = "<?php echo ($caja_usuario) ? $caja_usuario->id_caja : 0 ?>";
@@ -1208,27 +1159,27 @@
                     }
 
                     const row = `
-                    <tr>
-                        <td>${n}</td>
-                        <td><input name="id_orden_compra_detalle[]" id="id_orden_compra_detalle${n}" class="form-control form-control-sm" value="${orden_compra.id}" type="hidden"><input name="item[]" id="item${n}" class="form-control form-control-sm" value="${orden_compra.item}" type="text"></td>
-                        <td style="width: 450px !important;display:block"><select name="descripcion[]" id="descripcion${n}" class="form-control form-control-sm" onChange="verificarProductoSeleccionado(this, ${n});">${productoOptions}</select></td>
-                        
-                        <td><select name="marca[]" id="marca${n}" class="form-control form-control-sm">${marcaOptions}</select></td>
-                        <td><input name="cod_interno[]" id="cod_interno${n}" class="form-control form-control-sm" value="${orden_compra.codigo}" type="text"></td>
-                        <td><input id="fecha_fabricacion_${n}" name="fecha_fabricacion[]"  on class="form-control form-control-sm"  value="${orden_compra.fecha_fabricacion ? orden_compra.fecha_fabricacion : ''}" type="text"></td>
-                        <td><input id="fecha_vencimiento_${n}" name="fecha_vencimiento[]"  on class="form-control form-control-sm"  value="${orden_compra.fecha_vencimiento ? orden_compra.fecha_vencimiento : ''}" type="text"></td>
-                        <td><select name="estado_bien[]" id="estado_bien${n}" class="form-control form-control-sm" onChange="">${estadoBienOptions}</select></td>
-                        <td><select name="unidad[]" id="unidad${n}" class="form-control form-control-sm">${unidadMedidaOptions}</select></td>
-                        <td><input name="cantidad_ingreso[]" id="cantidad_ingreso${n}" class="cantidad_ingreso form-control form-control-sm" value="${orden_compra.cantidad_requerida}" type="text" oninput="calcularCantidadPendiente(this);calcularSubTotal(this)"></td>
-                        <td><input name="precio_unitario[]" id="precio_unitario${n}" class="precio_unitario form-control form-control-sm" value="${orden_compra.precio || 0}" type="text" oninput="calcularSubTotal(this)"></td>
-                        <td><select name="descuento[]" id="descuento${n}" class="form-control form-control-sm" onChange="">${descuentoOptions}</select></td>
-                        <td><input name="sub_total[]" id="sub_total${n}" class="sub_total form-control form-control-sm" value="${orden_compra.sub_total}" type="text" readonly="readonly"></td>
-                        <td><input name="igv[]" id="igv${n}" class="igv form-control form-control-sm" value="${orden_compra.igv}" type="text" readonly="readonly"></td>
-                        <td><input name="total[]" id="total${n}" class="total form-control form-control-sm" value="${orden_compra.total}" type="text" readonly="readonly"></td>
-                        <td><button type="button" class="btn btn-sm btn-clasico btn-eliminar" onclick="eliminarFila(this)"><i class="fas fa-trash" style="font-size:18px;"></i></button></td>
+                        <tr>
+                            <td>${n}</td>
+                            <td><input name="id_orden_compra_detalle[]" id="id_orden_compra_detalle${n}" class="form-control form-control-sm" value="${orden_compra.id}" type="hidden"><input name="item[]" id="item${n}" class="form-control form-control-sm" value="${orden_compra.item}" type="text"></td>
+                            <td style="width: 450px !important;display:block"><select name="descripcion[]" id="descripcion${n}" class="form-control form-control-sm" onChange="verificarProductoSeleccionado(this, ${n});">${productoOptions}</select></td>
+                            
+                            <td><select name="marca[]" id="marca${n}" class="form-control form-control-sm">${marcaOptions}</select></td>
+                            <td><input name="cod_interno[]" id="cod_interno${n}" class="form-control form-control-sm" value="${orden_compra.codigo}" type="text"></td>
+                            <td><input id="fecha_fabricacion_${n}" name="fecha_fabricacion[]"  on class="form-control form-control-sm"  value="${orden_compra.fecha_fabricacion ? orden_compra.fecha_fabricacion : ''}" type="text"></td>
+                            <td><input id="fecha_vencimiento_${n}" name="fecha_vencimiento[]"  on class="form-control form-control-sm"  value="${orden_compra.fecha_vencimiento ? orden_compra.fecha_vencimiento : ''}" type="text"></td>
+                            <td><select name="estado_bien[]" id="estado_bien${n}" class="form-control form-control-sm" onChange="">${estadoBienOptions}</select></td>
+                            <td><select name="unidad[]" id="unidad${n}" class="form-control form-control-sm">${unidadMedidaOptions}</select></td>
+                            <td><input name="cantidad_ingreso[]" id="cantidad_ingreso${n}" class="cantidad_ingreso form-control form-control-sm" value="${orden_compra.cantidad_requerida}" type="text" oninput="calcularCantidadPendiente(this);calcularSubTotal(this)"></td>
+                            <td><input name="precio_unitario[]" id="precio_unitario${n}" class="precio_unitario form-control form-control-sm" value="${orden_compra.precio || 0}" type="text" oninput="calcularSubTotal(this)"></td>
+                            <td><select name="descuento[]" id="descuento${n}" class="form-control form-control-sm" onChange="">${descuentoOptions}</select></td>
+                            <td><input name="sub_total[]" id="sub_total${n}" class="sub_total form-control form-control-sm" value="${orden_compra.sub_total}" type="text" readonly="readonly"></td>
+                            <td><input name="igv[]" id="igv${n}" class="igv form-control form-control-sm" value="${orden_compra.igv}" type="text" readonly="readonly"></td>
+                            <td><input name="total[]" id="total${n}" class="total form-control form-control-sm" value="${orden_compra.total}" type="text" readonly="readonly"></td>
+                            <td><button type="button" class="btn btn-sm btn-clasico btn-eliminar" onclick="eliminarFila(this)"><i class="fas fa-trash" style="font-size:18px;"></i></button></td>
 
-                    </tr>
-                `;
+                        </tr>
+                    `;
                     tbody.append(row);
                     $('#descripcion' + n).select2({
                         width: '100%',
@@ -1260,14 +1211,10 @@
                 });
                 $('#totalGeneral').text(total_acumulado.toFixed(2));
             }
-
         });
-
     }
 
     function agregarProducto() {
-
-
 
         var opcionesDescripcion = '<?php
                                     echo '<option value="">--Seleccionar--</option>';
@@ -1277,9 +1224,7 @@
                                     }
                                     ?>';
 
-
         //alert(opcionesDescripcion);
-
 
         var cantidad = 1;
         var newRow = "";
@@ -1292,10 +1237,10 @@
             var descripcion_ant = '<input type="hidden" name="descripcion_ant[]" id="descripcion_ant' + n + '" class="form-control form-control-sm" />';
 
             //var ubicacion_fisica_seccion = '<select name="ubicacion_fisica_seccion[]" id="ubicacion_fisica_seccion' + n + '" class="form-control form-control-sm" onChange="obtenerAnaquel(this)"> <option value="">- Selecione -</option> <?php //foreach ($almacen_seccion as $row) {
-                                                                                                                                                                                                                                                ?> <option value="<?php //echo $row->id
-                                                                                                                                                                                                                                                                                                            ?>"><?php //echo $row->codigo_seccion."-".$row->seccion
-                                                                                                                                                                                                                                                                                                                                    ?></option> <?php //} 
-                                                                                                                                                                                                                                                                                                                                                                                                    ?> </select>';
+            ?> <option value="<?php //echo $row->id
+            ?>"><?php //echo $row->codigo_seccion."-".$row->seccion
+            ?></option> <?php //} 
+            ?> </select>';
             //var ubicacion_fisica_anaquel = '<select name="ubicacion_fisica_anaquel[]" id="ubicacion_fisica_anaquel' + n + '" class="form-control form-control-sm" onChange=""> <option value="">- Selecione -</option>} ?> </select>';
             var cod_interno = '<input name="cod_interno[]" id="cod_interno' + n + '" class="form-control form-control-sm" value="" type="text">';
             var marca = '<select name="marca[]" id="marca' + n + '" class="form-control form-control-sm" onchange=""> <option value="">--Seleccionar--</option><?php foreach ($marca as $row) { ?><option value="<?php echo htmlspecialchars($row->id); ?>"><?php echo htmlspecialchars(addslashes($row->denominiacion)); ?></option><?php } ?></select>'
@@ -1333,7 +1278,6 @@
             newRow += '<td>' + btnEliminar + '</td>';
             newRow += '</tr>';
 
-
             $('#tblOrdenCompraDetalle tbody').append(newRow);
 
             $('#descripcion' + n).select2({
@@ -1362,7 +1306,6 @@
                 changeYear: true,
                 language: 'es'
             });
-
         }
 
         actualizarTotalGeneral();
@@ -1426,7 +1369,6 @@
                     changeYear: true,
                     language: 'es'
                 });
-
                 $('#fecha_vencimiento_' + n).datepicker('setDate', result[0].fecha_vencimiento);
             }
         });
@@ -1466,7 +1408,6 @@
 </script>
 
 @endpush
-
 
 @push('after-scripts')
 

@@ -559,6 +559,8 @@
 
                         <input type="hidden" name="id_orden_compra" id="id_orden_compra" value="<?php echo $id_orden_compra; ?>">
                         <input type="hidden" name="id_salida_prod" id="id_salida_prod" value="<?php echo $id_salida_prod; ?>">
+                        <input type="hidden" name="id_aliado_pama" id="id_aliado_pama" value="<?php echo $id_aliado_pama; ?>">
+                        <input type="hidden" name="porcentaje_comision" id="porcentaje_comision" value="<?php echo $porcentaje_comision; ?>">
                         <input type="hidden" name="id_proforma" id="id_proforma" value="<?php echo $id_proforma; ?>">
 
                         <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">

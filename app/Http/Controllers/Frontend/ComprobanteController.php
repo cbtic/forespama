@@ -29,6 +29,7 @@ use App\Models\AutorizacionOrdenCompra;
 use App\Models\Sede;
 use App\Models\PromartFactura;
 use App\Models\PromartFacturaDetalle;
+use App\Models\AliadoPama;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
 
@@ -44,6 +45,7 @@ use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
 use App\Models\User;
 use DateTime;
+use Luecano\NumeroALetras\NumeroALetras;
 
 class ComprobanteController extends Controller
 {
@@ -67,6 +69,7 @@ class ComprobanteController extends Controller
 		$this->middleware('can:Reporte Ventas')->only(['create_ventas']);
 		$this->middleware('can:Consulta de Facturacion Detalle')->only(['create_facturacion_sodimac_detalle']);
 		$this->middleware('can:Consulta de Facturacion Promart')->only(['create_facturacion_promart']);
+		$this->middleware('can:Ajuste de Comprobante')->only(['create_ajuste_comprobante']);
 	}
 
 	public function index(){
@@ -133,11 +136,22 @@ class ComprobanteController extends Controller
 
 	public function edit(Request $request){
 
+        //dd($request);exit();
         $trans = $request->Trans;
-        $id_caja=$request->id_caja;
-        $descuentopp=$request->DescuentoPP;
-        $id_pronto_pago=$request->id_pronto_pago;
+        $id_caja = $request->id_caja;
+        $descuentopp = $request->DescuentoPP;
+        $id_pronto_pago = $request->id_pronto_pago;
+        $numero_documento_aliado = $request->numero_documento_aliado;
 
+        if($numero_documento_aliado){
+            $persona_aliado = Persona::where('numero_documento',$numero_documento_aliado)->where('estado',1)->first();
+            if($persona_aliado){
+                $aliado_pama = AliadoPama::where('id_persona',$persona_aliado->id)->where('estado',1)->first();
+            }
+        }
+        
+        //dd($aliado_pama);exit();
+        
         $SelProducto=$request->SelProducto;
 
         $totalDescuento=$request->totalDescuento;
@@ -336,6 +350,13 @@ class ComprobanteController extends Controller
             $id_orden_compra = $request->id_orden_compra;
             $id_salida_prod = $request->id_salida_prod;
             $id_proforma = $request->id_proforma;
+            if($aliado_pama){
+                $id_aliado_pama = $aliado_pama->id;
+                $porcentaje_comision = $aliado_pama->porcentaje_comision;
+            }else{
+                $id_aliado_pama = null;
+                $porcentaje_comision = null;
+            }
             //dd($id_salida_prod);exit();
             //echo $$id_orden_compra;exit();
 
@@ -389,7 +410,7 @@ class ComprobanteController extends Controller
             //echo $TipoF; exit();
             //print_r($facturad); exit();
 
-            return view('frontend.comprobante.create',compact('trans', 'titulo','empresa', 'facturad', 'total', 'igv', 'stotal','TipoF','ubicacion', 'persona','id_caja','serie', 'adelanto','MonAd','forma_pago','tipooperacion','formapago', 'totalDescuento','id_tipo_afectacion_pp', 'valorizad','descuentopp','id_pronto_pago', 'medio_pago', 'id_orden_compra', 'id_proforma','afecta_a','adelanto_pendiente','id_salida_prod'));
+            return view('frontend.comprobante.create',compact('trans', 'titulo','empresa', 'facturad', 'total', 'igv', 'stotal','TipoF','ubicacion', 'persona','id_caja','serie', 'adelanto','MonAd','forma_pago','tipooperacion','formapago', 'totalDescuento','id_tipo_afectacion_pp', 'valorizad','descuentopp','id_pronto_pago', 'medio_pago', 'id_orden_compra', 'id_proforma','afecta_a','adelanto_pendiente','id_salida_prod','id_aliado_pama','porcentaje_comision'));
         }
         if ($trans == 'FN'){
             //$serie = $serie_model->getMaestro('SERIES',$TipoF);
@@ -590,6 +611,8 @@ class ComprobanteController extends Controller
 
         $id_orden_compra = $request->id_orden_compra;
         $id_salida_prod = $request->id_salida_prod;
+        $id_aliado_pama = $request->id_aliado_pama;
+        $porcentaje_comision = $request->porcentaje_comision;
         
         /*if ((string)$id_orden_compra!=""){
             //$factura_upd->orden_compra =  $id_orden_compra;
@@ -977,6 +1000,11 @@ class ComprobanteController extends Controller
                 if ((string)$id_salida_prod != "") {
                     $factura_upd->id_salida_productos =  $id_salida_prod;
                 }
+                if ((string)$id_aliado_pama != "") {
+                    $factura_upd->id_aliado_pama =  $id_aliado_pama;
+                    $factura_upd->porcentaje_comision =  $porcentaje_comision;
+                }
+                
                 $factura_upd->estado_pago =  $request->estado_pago;
 
                 $factura_upd->id_forma_pago =  $request->id_formapago_;
@@ -3116,7 +3144,7 @@ class ComprobanteController extends Controller
 
             foreach($factura_cuota as $index => $row ) {
                 $items2 = array(
-                                "fecha"=> $row->fecha_vencimiento, 
+                                "fecha"=> $row->fecha_vencimiento,
                                 "monto"=> str_replace(",","",$row->monto),
                                 "orden"=> $row->item, 
                                 );
@@ -5198,7 +5226,6 @@ class ComprobanteController extends Controller
                 }
             }
         }
-
     }
 
     public function send_detalle_factura_promart(Request $request){
@@ -5422,6 +5449,150 @@ class ComprobanteController extends Controller
 		$export = new InvoicesExport3([$variable]);
 		return Excel::download($export, 'Reporte_facturacion_orden_compra.xlsx');
 		
+    }
+
+    public function create_ajuste_comprobante(){
+
+        $tabla_model = new TablaMaestra;
+
+        $formapago = $tabla_model->getMaestroByTipo('104');
+
+        $caja = $tabla_model->getMaestroByTipoBySubcogioNull('27');
+
+        $medio_pago = $tabla_model->getMaestroByTipoBySubcogioNull('11');
+
+        $caja_model = new CajaIngreso;
+
+        $usuario_caja = $caja_model->getCajaUsuario_all();
+
+
+        return view('frontend.comprobante.create_ajuste_comprobante',compact('formapago','caja','medio_pago','usuario_caja'));
+    }
+
+    public function obtener_datos_comprobante($numero_comprobante, $serie){
+		
+		$comprobante_model = new comprobante;
+		$comprobante = $comprobante_model->obtenerComprobanteBySerieNumero($numero_comprobante, $serie);
+		
+		return response()->json(['comprobante' => $comprobante]);
+	}
+
+    public function send_ajuste_comprobante(Request $request){
+
+        $id_user = Auth::user()->id;
+
+        $comprobante = Comprobante::find($request->id_comprobante);
+        
+        $afect_igv = $request->input('afect_igv');
+        $descripcion = $request->input('descripcion');
+        $cantidad = $request->input('cantidad');
+        $precio_venta = $request->input('precio_venta');
+        $valor_unitario = $request->input('valor_unitario');
+        $valor_venta_bruto = $request->input('valor_venta_bruto');
+        $valor_venta = $request->input('valor_venta');
+        $descuento_unitario = $request->input('descuento_unitario');
+        $valor_descuento = $request->input('valor_descuento');
+        $sub_total = $request->input('sub_total');
+        $igv = $request->input('igv');
+        $total = $request->input('total');
+        $id_comprobante_detalle =$request->id_comprobante_detalle;
+
+        $subtotal = round((float) $request->sub_total_general, 2);
+        $impuesto = round((float) $request->igv_general, 2);
+        $totalGeneral = round((float) $request->total_general, 2);
+        $descuentoGeneral = round((float) $request->descuento_general, 2);
+
+        $entero = (int) floor($totalGeneral);
+
+        $decimal = (int) round(($totalGeneral - $entero) * 100);
+
+        if ($decimal == 100) {
+            $entero++;
+            $decimal = 0;
+        }
+
+        $decimalTexto = str_pad($decimal, 2, '0', STR_PAD_LEFT);
+
+        $formatter = new NumeroALetras();
+
+        $totalLetras = strtoupper($formatter->toWords($entero));
+        
+        $totalEnLetras = $totalLetras . ' CON ' . $decimalTexto . '/100 SOLES';
+
+        $comprobante->subtotal = $subtotal;
+        $comprobante->impuesto = $impuesto;
+        $comprobante->total = $totalGeneral;
+        $comprobante->letras = $totalEnLetras;
+        $comprobante->total_grav = $totalGeneral;
+        $comprobante->total_descuentos = $request->descuento_general;
+        $comprobante->base_perce = $totalGeneral;
+        $comprobante->totalconperce = $totalGeneral;
+
+        $porcDetrac = (float) ($comprobante->porc_detrac ?? 0);
+        if($porcDetrac > 0) {
+            $comprobante->monto_detrac = round($totalGeneral * ($porcDetrac / 100), 2);
+        }else{
+            $comprobante->monto_detrac = 0;
+        }
+
+        $porcRetencion = (float) ($comprobante->porc_retencion ?? 0);
+        if($porcRetencion > 0) {
+            $comprobante->monto_retencion = round($totalGeneral * ($porcRetencion / 100), 2);
+        }else{
+            $comprobante->monto_retencion = 0;
+        }
+
+        $comprobante->id_usuario_actualiza = $id_user;
+        $comprobante->save();
+        
+        $array_comprobante_detalle = array();
+
+        foreach($descripcion as $index => $value) {
+            
+            $comprobante_detalle = ComprobanteDetalle::find($id_comprobante_detalle[$index]);
+
+            $cantidad = (float) ($cantidad[$index] ?? 0);
+            $totalDetalle = round((float) ($total[$index] ?? 0), 4);
+            $descuentoDetalle = round((float) ($valor_descuento[$index] ?? 0), 4);
+
+            $idTipoAfectacion = (int) ($afect_igv[$index] ?? 10);
+            
+            if($idTipoAfectacion == 20) {
+                $pu = $totalDetalle;
+                $igvTotal = 0;
+                $puConIgv = $pu;
+            }else{
+                $pu = round($totalDetalle / 1.18, 4);
+                $igvTotal = round(($totalDetalle / 1.18) * 0.18, 4);
+                $puConIgv = round($totalDetalle / 1.18, 0);
+                $idTipoAfectacion = 10;
+            }
+
+            /*$facturaDet_upd->pu = $value['pu'];
+            $facturaDet_upd->importe = $value['total'];
+            $facturaDet_upd->igv_total = $value['igv'];
+            $facturaDet_upd->precio_venta = $value['pv'];
+            $facturaDet_upd->valor_venta_bruto = $value['valor_venta_bruto'];
+            $facturaDet_upd->valor_venta = $value['valor_venta'];
+            $facturaDet_upd->codigo = $value['codigo_producto'];
+            $facturaDet_upd->unidad = $value['abreviatura'];
+            $facturaDet_upd->save();*/
+            
+            $comprobante_detalle->pu = round($valor_unitario[$index], 4);
+            $comprobante_detalle->importe = round($total[$index], 4);
+            $comprobante_detalle->pu_con_igv = round($sub_total[$index], 4);
+            $comprobante_detalle->igv_total = round($igv[$index], 4);
+            $comprobante_detalle->descuento = round($descuentoDetalle, 4);
+            $comprobante_detalle->precio_venta = round($precio_venta[$index],4);
+            $comprobante_detalle->valor_venta_bruto = round($valor_venta_bruto[$index],4);
+            $comprobante_detalle->valor_venta = round($valor_venta[$index],4);
+            $comprobante_detalle->id_usuario_actualiza = $id_user;
+
+            $comprobante_detalle->save();
+        }
+        
+        return response()->json(['id' => $comprobante->id]);
+        
     }
 }
 

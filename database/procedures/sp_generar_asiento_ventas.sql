@@ -150,7 +150,7 @@ BEGIN
             
 			select cursor_venta.id, coalesce(cc.cuenta_venta, cc.cuenta), cursor_venta.annomes, cursor_venta.subdiario, cursor_venta.comprobante, cursor_venta.fecha_registro,
             cursor_venta.tipo_anexo, cursor_venta.codigo_cliente, cursor_venta.tipo_documento, cursor_venta.numero_documento, cursor_venta.fecha_documento, 'H',
-            sum(case when c.anulado = 'N' then cd.valor_venta_bruto else 0 end) valor_venta_bruto, cursor_venta.glosa_documento, cursor_venta.glosa_movimiento, cursor_venta.anulado, cursor_venta.ruc_cliente, cursor_venta.razon_social,
+            sum(case when c.anulado = 'N' then cd.valor_venta else 0 end) valor_venta_bruto, cursor_venta.glosa_documento, cursor_venta.glosa_movimiento, cursor_venta.anulado, cursor_venta.ruc_cliente, cursor_venta.razon_social,
             cursor_venta.fecha_vencimiento, cursor_venta.exportacion, cursor_venta.otros_impuestos, cursor_venta.exonerado, cursor_venta.otros_cargos, cursor_venta.impuesto_bolsa, 
 			p_id_usuario, CURRENT_TIMESTAMP
             from comprobante_detalles cd
@@ -161,6 +161,32 @@ BEGIN
             where cd.id_comprobante = cursor_venta.id
             and cd.estado = '1'
             group by coalesce(cc.cuenta_venta, cc.cuenta);
+
+			update asiento_contable_ventas
+			set importe = round(importe::numeric, 2)
+			where id_comprobante = cursor_venta.id;
+			
+			select coalesce(sum(case when debe_haber = 'D' then round(importe::numeric, 2) else 0 end), 0), coalesce(sum(case when debe_haber = 'H' then round(importe::numeric, 2) else 0 end), 0)
+			
+			into v_debe, v_haber
+			from asiento_contable_ventas 
+			where id_comprobante = cursor_venta.id;
+
+			v_diferencia := round(v_debe - v_haber, 2);
+
+			If v_diferencia <> 0 then
+			
+			    update asiento_contable_ventas 
+			    set importe = round(importe + v_diferencia, 2) 
+			    where id = (select id 
+			    			from asiento_contable_ventas 
+			    			where id_comprobante = cursor_venta.id 
+			    			and debe_haber = 'H'
+			    			and cuenta like '70%'
+			    			order by id desc 
+			    			limit 1);
+			
+			End If;
 
             update comprobantes
 			set asiento_generado = '1'

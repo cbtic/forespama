@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use LangleyFoxall\LaravelNISTPasswordRules\PasswordRules;
+use App\Models\Ubigeo;
 
 /**
  * Class RegisterController.
@@ -61,7 +62,10 @@ class RegisterController
     {
         abort_unless(config('boilerplate.access.user.registration'), 404);
 
-        return view('frontend.auth.register');
+        $ubigeo_model = new Ubigeo;
+		$departamento = $ubigeo_model->getDepartamento();
+
+        return view('frontend.auth.register',compact('departamento'));
     }
 
     /**
@@ -73,8 +77,15 @@ class RegisterController
     protected function validator(array $data)
     {
         return Validator::make($data, [
+            'numero_documento' => ['required', 'string', 'max:12'],
             'name' => ['required', 'string', 'max:100'],
+            'numero_celular' => ['required', 'string', 'max:12'],
             'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')],
+            'departamento' => ['string'],
+            'provincia' => ['string'],
+            'distrito' => ['string'],
+            'direccion' => ['string', 'max:400'],
+            'fecha_nacimiento' => ['date'],
             'password' => array_merge(['max:100'], PasswordRules::register($data['email'] ?? null)),
             'terms' => ['required', 'in:1'],
             'g-recaptcha-response' => ['required_if:captcha_status,true', new Captcha],

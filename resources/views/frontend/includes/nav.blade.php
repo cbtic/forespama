@@ -31,14 +31,14 @@
                     </li>
 
                     @if (config('boilerplate.access.user.registration'))
-                        <!--<li class="nav-item">
+                        <li class="nav-item">
                             <x-utils.link
                                 :href="route('frontend.auth.register')"
                                 :active="activeClass(Route::is('frontend.auth.register'))"
-                                :text="__('Register')"
+                                :text="__('Registro Aliado Pama')"
                                 class="nav-link" />
 
-                        </li>-->
+                        </li>
                     @endif
                 @else
 					
@@ -172,7 +172,7 @@
 					@endif
 					
 					
-					@if(Gate::check('Requerimientos') || Gate::check('Entradas') || Gate::check('Orden Compra') || Gate::check('Consulta Stock') || Gate::check('Requerimiento Insumos') || Gate::check('Dispensacion') || Gate::check('Ingreso Produccion') || Gate::check('Kardex') || Gate::check('Movimientos Oxapampa') || Gate::check('Movimientos') || Gate::check('Verificacion Aplicacion Comisiones') || Gate::check('Empaquetado') || Gate::check('Devolucion') || Gate::check('Gestion Autorizacion') || Gate::check('Cargar Informe Venta b2b') || Gate::check('Reuso') || Gate::check('Cambio Stock Codigo') || Gate::check('Ajuste Stock') || Gate::check('Ingreso Salida Secundario') || Gate::check('Kardex Secundario'))
+					@if(Gate::check('Requerimientos') || Gate::check('Entradas') || Gate::check('Orden Compra') || Gate::check('Consulta Stock') || Gate::check('Requerimiento Insumos') || Gate::check('Dispensacion') || Gate::check('Ingreso Produccion') || Gate::check('Kardex') || Gate::check('Movimientos Oxapampa') || Gate::check('Movimientos') || Gate::check('Verificacion Aplicacion Comisiones') || Gate::check('Empaquetado') || Gate::check('Devolucion') || Gate::check('Gestion Autorizacion') || Gate::check('Gestion Autorizacion Postventa') || Gate::check('Cargar Informe Venta b2b') || Gate::check('Reuso') || Gate::check('Cambio Stock Codigo') || Gate::check('Ajuste Stock') || Gate::check('Ingreso Salida Secundario') || Gate::check('Kardex Secundario'))
 						
 						<li class="nav-item dropdown">
 							<a href="#" class="nav-link dropdown-toggle" id="navbarDropdownPrueba" data-toggle="dropdown"
@@ -233,7 +233,11 @@
 								@endif
 
 								@can('Gestion Autorizacion')
-									<x-utils.link :href="route('frontend.orden_compra.create_autorizacion')" class="dropdown-item" :text="__('Gestion de Autorizacion')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+									<x-utils.link :href="route('frontend.orden_compra.create_autorizacion')" class="dropdown-item" :text="__('Gestion de Autorizacion Descuento')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+								@endif
+
+								@can('Gestion Autorizacion Postventa')
+									<x-utils.link :href="route('frontend.orden_compra.create_autorizacion_postventa')" class="dropdown-item" :text="__('Gestion de Aprobacion Servicio al Cliente')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
 								@endif
 
 								@can('Cargar Informe Venta b2b')
@@ -288,7 +292,7 @@
 						
 					@endif
 
-						@if(Gate::check('Ingreso Caja') || Gate::check('Comprobante') || Gate::check('Consulta Sodimac') || Gate::check('Consulta Promart') || Gate::check('Guia') || Gate::check('Guia Transportista') || Gate::check('Pagos Orden Venta') || Gate::check('Pagos Orden Compra') || Gate::check('Facturacion Orden Compra'))
+						@if(Gate::check('Ingreso Caja') || Gate::check('Comprobante') || Gate::check('Consulta Sodimac') || Gate::check('Consulta Promart') || Gate::check('Guia') || Gate::check('Guia Transportista') || Gate::check('Pagos Orden Venta') || Gate::check('Pagos Orden Compra') || Gate::check('Facturacion Orden Compra') || Gate::check('Ajuste de Comprobante'))
  
 						<li class="nav-item dropdown">
 							<a href="#" class="nav-link dropdown-toggle" id="navbarDropdownPrueba" data-toggle="dropdown"
@@ -334,11 +338,36 @@
 
 								<x-utils.link :href="route('frontend.comprobante.nc_prontopago')" class="dropdown-item" :text="__('Nota de Credito por Pronto Pago')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
 
+								@can('Ajuste de Comprobante')
+									<x-utils.link :href="route('frontend.comprobante.create_ajuste_comprobante')" class="dropdown-item" :text="__('Ajuste de Comprobante')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />                  
+								@endif
+
 							</div>
 						</li> 
 						
 					@endif
 					
+					@if(Gate::check('Estado de Cuenta Aliados Pama'))
+
+						<li class="nav-item dropdown">
+							<a href="#" class="nav-link dropdown-toggle" id="navbarDropdownPrueba" data-toggle="dropdown"
+						   aria-haspopup="true" aria-expanded="false">Aliados Pama</a>
+
+						   <div class="dropdown-menu" aria-labelledby="navbarDropdownPrueba">
+
+								@can('Estado de Cuenta Aliados Pama')
+									<x-utils.link :href="route('frontend.aliados_pama_comisiones.create')" class="dropdown-item" :text="__('Estado de Cuenta Aliados Pama')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+								@endif
+
+								@can('Solicitudes Aliados Pama')
+									<x-utils.link :href="route('frontend.aliados_pama_comisiones.create_solicitud')" class="dropdown-item" :text="__('Solicitudes Aliados Pama')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+								@endif
+
+							</div>
+						</li>
+						
+					@endif
+
 					@if(Gate::check('Inventario') || Gate::check('Consulta Productos Venta') || Gate::check('Consulta Productos Orden Compra'))
 
 						<li class="nav-item dropdown">
@@ -364,7 +393,7 @@
 						
 					@endif
 					
-					@if(Gate::check('Mantenimiento Personas') || Gate::check('Mantenimiento Empresas') || Gate::check('Mantenimiento Vehiculos') || Gate::check('Mantenimiento Tablas Maestras') || Gate::check('Mantenimiento Conductores') || Gate::check('Mantenimiento Tipo Cambio') || Gate::check('Mantenimiento Marcas') || Gate::check('Mantenimiento Tiendas') || Gate::check('Mantenimiento Equivalencia Producto') || Gate::check('Mantenimiento Parametro') || Gate::check('Mantenimiento Empaquetado') || Gate::check('Mantenimiento Empresas Cubicaje') || Gate::check('Mantenimiento Familia') || Gate::check('Mantenimiento Sub Familia') || Gate::check('Mantenimiento Permisos Usuario Descuento') || Gate::check('Producto Competencia') || Gate::check('Mantenimiento Persona Proceso') || Gate::check('Mantenimiento Centro Costos') || Gate::check('Mantenimiento Sedes') || Gate::check('Mantenimiento Cuenta Contable') || Gate::check('Mantenimiento Familia Contable') || Gate::check('Equivalencia Sub Familia Familia Contable') || Gate::check('Mantenimiento Precio Productos'))
+					@if(Gate::check('Mantenimiento Personas') || Gate::check('Mantenimiento Empresas') || Gate::check('Mantenimiento Vehiculos') || Gate::check('Mantenimiento Tablas Maestras') || Gate::check('Mantenimiento Conductores') || Gate::check('Mantenimiento Tipo Cambio') || Gate::check('Mantenimiento Marcas') || Gate::check('Mantenimiento Tiendas') || Gate::check('Mantenimiento Equivalencia Producto') || Gate::check('Mantenimiento Parametro') || Gate::check('Mantenimiento Empaquetado') || Gate::check('Mantenimiento Empresas Cubicaje') || Gate::check('Mantenimiento Familia') || Gate::check('Mantenimiento Sub Familia') || Gate::check('Mantenimiento Permisos Usuario Descuento') || Gate::check('Producto Competencia') || Gate::check('Mantenimiento Persona Proceso') || Gate::check('Mantenimiento Centro Costos') || Gate::check('Mantenimiento Sedes') || Gate::check('Mantenimiento Cuenta Contable') || Gate::check('Mantenimiento Familia Contable') || Gate::check('Equivalencia Sub Familia Familia Contable') || Gate::check('Mantenimiento Precio Productos') || Gate::check('Mantenimiento Aliado Pama') || Gate::check('Configuracion Comision Aliado'))
 						
 						<li class="nav-item dropdown">
 							<a href="#" class="nav-link dropdown-toggle" id="navbarDropdownPrueba" data-toggle="dropdown"
@@ -464,6 +493,13 @@
 									<x-utils.link :href="route('frontend.productos.create_mantenimiento_precio_productos')" class="dropdown-item" :text="__('Mantenimiento Precio Productos')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
 								@endif
 
+								@can('Mantenimiento Aliado Pama')
+									<x-utils.link :href="route('frontend.aliado_pama.create')" class="dropdown-item" :text="__('Mantenimiento Aliado Pama')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+								@endif
+
+								@can('Configuracion Comision Aliado')
+									<x-utils.link :href="route('frontend.comision_parametro.create')" class="dropdown-item" :text="__('Configuracion Comision Aliado')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+								@endif
 							</div>
 						</li>
 					
