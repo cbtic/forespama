@@ -225,6 +225,7 @@ function copiar_caja_aliado_comision(){
 
     if(tipo_venta == 'venta_tienda'){
         $('#titulo_tipo_venta').text('Venta en Tienda');
+        $('#openOverlayOpc').modal('hide');
     }else{
         if(numero_documento_aliado_pama != "" && nombre_aliado_pama != ""){
 

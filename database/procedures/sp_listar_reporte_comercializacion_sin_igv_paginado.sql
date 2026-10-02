@@ -1,4 +1,4 @@
--- DROP FUNCTION public.sp_listar_reporte_comercializacion_sin_igv_paginado(varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, refcursor);
+-- DROP FUNCTION public.sp_listar_reporte_comercializacion_sin_igv_paginado(varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, refcursor);
 
 CREATE OR REPLACE FUNCTION public.sp_listar_reporte_comercializacion_sin_igv_paginado(p_canal character varying, p_empresa_compra character varying, p_fecha_inicio character varying, p_fecha_fin character varying, p_vendedor character varying, p_tipo_producto character varying, p_id_user character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
  RETURNS refcursor
@@ -13,10 +13,25 @@ v_where varchar;
 v_count varchar;
 v_col_count varchar;
 v_id_rol integer;
+v_tiene_rol_7 boolean := false;
+v_tiene_rol_11 boolean := false;
 
 begin
 
-	select role_id into v_id_rol from model_has_roles mhr where mhr.model_id::varchar = p_id_user;
+	--select role_id into v_id_rol from model_has_roles mhr where mhr.model_id::varchar = p_id_user;
+
+	select 
+	    exists(
+	        select 1
+	        from model_has_roles mhr
+	        where mhr.model_id::varchar = p_id_user
+	        and mhr.role_id = 7),
+	    exists(
+	        select 1
+	        from model_has_roles mhr
+	        where mhr.model_id::varchar = p_id_user
+	        and mhr.role_id = 11)
+	into v_tiene_rol_7, v_tiene_rol_11;
 	
 	p_pagina=(p_pagina::Integer-1)*p_limit::Integer;
 
@@ -27,8 +42,8 @@ begin
 	left join tabla_maestras tm on oc.id_canal = tm.codigo::int and tm.tipo = ''98''
 	left join users u on oc.id_vendedor = u.id ';
 	
-	v_where = ' Where 1=1 and oc.id_tipo_documento = ''2'' and oc.estado_pedido = ''1'' and oc.estado = ''1'' and c.anulado = ''N'' ';
-
+	v_where = ' Where 1=1 and oc.id_tipo_documento = ''2'' and oc.estado_pedido = ''1'' and oc.estado = ''1'' and c.anulado = ''N'' and c.adelanto <> ''1'' ';
+	
 	If p_canal<>'' Then
 	 v_where:=v_where||' And oc.id_canal = '''||p_canal||''' ';
 	End If;
@@ -45,11 +60,7 @@ begin
 	 v_where:=v_where||' And c.fecha  <= '''||p_fecha_fin||''' ';
 	End If;
 
-	If p_vendedor<>'' Then
-	 v_where:=v_where||' And oc.id_vendedor = '''||p_vendedor||''' ';
-	End If;
-
-	If v_id_rol=7 Then 
+	/*If v_id_rol=7 Then 
 		v_where:=v_where||'And oc.id_vendedor = '''||p_id_user||''' ';
 	End If;
 
@@ -57,8 +68,25 @@ begin
 	   v_where := v_where || ' AND (oc.id_vendedor = ''' || p_id_user || ''' OR oc.id_vendedor IN (
 	       SELECT id_vendedor FROM jefe_vendedor_detalles WHERE id_jefe_vendedor = ' || p_id_user || '
 	   ))';
-	End If;
+	End If;*/
+
+	IF v_tiene_rol_11 THEN
+	    v_where := v_where || ' AND (
+	        oc.id_vendedor = ''' || p_id_user || '''
+	        OR oc.id_vendedor IN (
+	            SELECT jvd.id_vendedor
+	            FROM jefe_vendedor_detalles jvd
+	            WHERE jvd.id_jefe_vendedor = ' || p_id_user || '))';
 	
+	ELSIF v_tiene_rol_7 THEN
+	    v_where := v_where || ' AND oc.id_vendedor = ''' || p_id_user || '''';
+	
+	END IF;
+	
+	If p_vendedor<>'' Then
+	 v_where:=v_where||' And oc.id_vendedor = '''||p_vendedor||''' ';
+	End If;
+
 	If p_tipo_producto<>'' Then
 	 v_where:=v_where||' and EXISTS (
 	SELECT 1 FROM orden_compra_detalles ocd

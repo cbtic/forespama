@@ -1,3 +1,5 @@
+-- DROP FUNCTION public.sp_listar_compras_pagos_paginado(varchar, varchar, varchar, varchar, varchar, varchar, varchar, refcursor);
+
 CREATE OR REPLACE FUNCTION public.sp_listar_compras_pagos_paginado(p_empresa character varying, p_persona character varying, p_fecha_desde character varying, p_fecha_hasta character varying, p_estado_pago character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
  RETURNS refcursor
  LANGUAGE plpgsql
@@ -52,7 +54,7 @@ Begin
 	left join tabla_maestras tm2 on c.id_forma_pago = tm2.codigo::int and tm2.tipo = ''104''
 	left join users u on oc.id_vendedor = u.id ';
 
-	v_where = ' where 1=1 and oc.estado = ''1'' and oc.id_tipo_documento = ''1'' ';
+	v_where = ' where 1=1 and oc.estado = ''1'' and oc.id_tipo_documento = ''1'' and oc.id_unidad_origen = ''2'' ';
 
 	IF p_empresa <> '' THEN
 	  v_where := v_where || ' AND oc.id_empresa_compra = ''' || p_empresa || ''' ';
