@@ -143,6 +143,8 @@ class ComprobanteController extends Controller
         $id_pronto_pago = $request->id_pronto_pago;
         $numero_documento_aliado = $request->numero_documento_aliado;
 
+        $aliado_pama = null;
+        
         if($numero_documento_aliado){
             $persona_aliado = Persona::where('numero_documento',$numero_documento_aliado)->where('estado',1)->first();
             if($persona_aliado){
