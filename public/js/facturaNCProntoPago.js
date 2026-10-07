@@ -170,7 +170,7 @@ function guardarnc(){
     }
     else{
 		
-        fn_save_nc();
+        fn_save_nc_();
 	}
 	
 
@@ -1152,7 +1152,7 @@ function guardarnc(){
     }
     else{
 		
-        fn_save_nc();
+        fn_save_nc_();
 	}
 	
 
@@ -1199,7 +1199,7 @@ function fn_save(){
     });
 }
 
-function fn_save_nc(){
+function fn_save_nc_(){
 
 	var msgLoader = "";
 	msgLoader = "Procesando, espere un momento por favor";

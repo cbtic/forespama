@@ -3842,6 +3842,7 @@ class ComprobanteController extends Controller
  
                 $factura_upd = Comprobante::find($id_factura);
                 if(isset($factura_upd->tipo_cambio)) $factura_upd->tipo_cambio = $request->tipo_cambio;
+                $factura_upd->orden_compra = -1;
                 //print_r($tarifa); exit();
 
                 $factura_upd->save();
