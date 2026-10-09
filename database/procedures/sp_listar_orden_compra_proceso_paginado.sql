@@ -146,12 +146,12 @@ begin
 	End If;*/
 
 	IF v_tiene_rol_11 THEN
-	    v_where := v_where || ' AND (
+	    v_where := v_where || ' and (
 	        oc.id_vendedor = ''' || p_id_user || '''
-	        OR oc.id_vendedor IN (
-	            SELECT jvd.id_vendedor
-	            FROM jefe_vendedor_detalles jvd
-	            WHERE jvd.id_jefe_vendedor = ' || p_id_user || '))';
+	        or oc.id_vendedor in (
+	            select jvd.id_vendedor
+	            from jefe_vendedor_detalles jvd
+	            where jvd.id_jefe_vendedor = ' || p_id_user || ' and jvd.estado = ''1'' ))';
 	
 	ELSIF v_tiene_rol_7 THEN
 	    v_where := v_where || ' AND oc.id_vendedor = ''' || p_id_user || '''';

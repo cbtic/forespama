@@ -1511,7 +1511,7 @@ class OrdenCompraController extends Controller
 		
 		$archivo = $filename.".".$type;
 		
-		$this->importar_archivo($archivo);
+		$this->importar_archivo2($archivo);
 		
 	}
 
@@ -2063,7 +2063,7 @@ class OrdenCompraController extends Controller
 		
 		$archivo = $filename.".".$type;
 		
-		$this->importar_archivo_od($archivo);
+		$this->importar_archivo_od2($archivo);
 		
 	}
 

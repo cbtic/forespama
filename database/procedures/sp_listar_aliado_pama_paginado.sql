@@ -1,3 +1,5 @@
+-- DROP FUNCTION public.sp_listar_aliado_pama_paginado(varchar, varchar, varchar, varchar, varchar, refcursor);
+
 CREATE OR REPLACE FUNCTION public.sp_listar_aliado_pama_paginado(p_numero_documento character varying, p_aliado character varying, p_estado character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
  RETURNS refcursor
  LANGUAGE plpgsql
@@ -15,7 +17,7 @@ begin
 	
 	p_pagina=(p_pagina::Integer-1)*p_limit::Integer;
 
-	v_campos=' ap.id, p.nombres ||'' ''|| p.apellido_paterno ||'' ''|| p.apellido_materno nombres, tm.denominacion tipo_documento, p.numero_documento, dp.desc_ubigeo departamento, pr.desc_ubigeo provincia, d.desc_ubigeo distrito, p.direccion, p.telefono, p.email, ap.fecha_inicio, ap.porcentaje_comision, ap.estado ';
+	v_campos=' ap.id, p.nombres ||'' ''|| p.apellido_paterno ||'' ''|| p.apellido_materno nombres, tm.denominacion tipo_documento, p.numero_documento, dp.desc_ubigeo departamento, pr.desc_ubigeo provincia, d.desc_ubigeo distrito, p.direccion, p.telefono, p.email, ap.fecha_inicio, ap.porcentaje_comision, ap.estado, ap.porcentaje_personalizado ';
 
 	v_tabla=' from aliado_pamas ap 
 	inner join personas p on ap.id_persona = p.id 

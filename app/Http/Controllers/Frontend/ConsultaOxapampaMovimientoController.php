@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\ConsultaOxapampaMovimiento;
 use App\Models\TablaMaestra;
+use App\Models\Almacene;
 use Auth;
 
 class ConsultaOxapampaMovimientoController extends Controller
@@ -17,14 +18,21 @@ class ConsultaOxapampaMovimientoController extends Controller
 
     public function create(){
 		
-		return view('frontend.consulta_oxapampa_movimiento.create');
+        $almacen_model = new Almacene;
+
+        $almacen = $almacen_model->getAlmacenAll();
+
+		return view('frontend.consulta_oxapampa_movimiento.create',compact('almacen'));
 
 	}
 
     public function listar_oxapampa_movimiento_ajax(Request $request){
 
 		$consulta_oxapampa_movimiento_model = new ConsultaOxapampaMovimiento;
-		$p[]=$request->denominacion;
+		$p[]=$request->almacen;
+		$p[]=$request->producto;
+		$p[]=$request->fecha_inicio;
+		$p[]=$request->fecha_fin;
         $p[]=$request->estado;
 		$p[]=$request->NumeroPagina;
 		$p[]=$request->NumeroRegistros;

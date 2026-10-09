@@ -345,17 +345,47 @@ label.form-control-sm{
 					<div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
 						<div class="row">
 
-							<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-								<input id="denominacion_bus" name="denominacion_bus" on class="form-control form-control-sm filtro-input"  placeholder="Denominaci&oacute;n">
+							<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+								<select name="almacen_bus" id="almacen_bus" class="form-control form-control-sm filtro-select" onchange="obtenerProductosAlmacenKardex()">
+									<option value="">--Seleccionar Almacen--</option>
+									<?php
+									foreach ($almacen as $row) {
+									?>
+									<option value="<?php echo $row->id?>"><?php echo $row->denominacion?></option>
+									<?php
+									}
+									?>
+								</select>
+							</div>
+
+							<div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
+								<select name="producto_bus" id="producto_bus" class="form-control form-control-sm filtro-select">
+									<option value="">--Seleccionar Producto--</option>
+									<?php
+									/*foreach ($producto as $row) {
+									?>
+									<option value="<?php echo $row->id?>"><?php echo $row->codigo ." - ".$row->denominacion?></option>
+									<?php
+									}*/
+									?>
+								</select>
+							</div>
+
+							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+								<input id="fecha_inicio_bus" name="fecha_inicio_bus" on class="form-control form-control-sm filtro-input"  placeholder="Fecha Inicio">
+							</div>
+
+							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+								<input id="fecha_fin_bus" name="fecha_fin_bus" on class="form-control form-control-sm filtro-input"  placeholder="Fecha Fin">
 							</div>
 							
-							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+							<!--<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
 								<select name="estado_bus" id="estado_bus" class="form-control form-control-sm filtro-select">
 									<option value="">Todos</option>
 									<option value="1" selected="selected">Activo</option>
 									<option value="0">Eliminado</option>
 								</select>
-							</div>
+							</div>-->
 						</div>
 					</div>
 					<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
@@ -393,9 +423,11 @@ label.form-control-sm{
 							<th>Almacen</th>
 							<th>Fecha</th>
 							<th>Tipo Movimiento</th>
+							<th>Usuario</th>
+							<th>Fecha Creaci&oacute;n</th>
                         </tr>
                         </thead>
-                        <tbody>
+                        <tbody style = "font-size:13px">
                         </tbody>
                     </table>
                 </div><!--table-responsive-->

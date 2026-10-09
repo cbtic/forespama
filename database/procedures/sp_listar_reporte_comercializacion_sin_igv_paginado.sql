@@ -76,7 +76,7 @@ begin
 	        OR oc.id_vendedor IN (
 	            SELECT jvd.id_vendedor
 	            FROM jefe_vendedor_detalles jvd
-	            WHERE jvd.id_jefe_vendedor = ' || p_id_user || '))';
+	            WHERE jvd.id_jefe_vendedor = ' || p_id_user || ' and jvd.estado = ''1'' ))';
 	
 	ELSIF v_tiene_rol_7 THEN
 	    v_where := v_where || ' AND oc.id_vendedor = ''' || p_id_user || '''';

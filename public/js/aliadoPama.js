@@ -67,6 +67,7 @@ function datatablenew(){
 
             var numero_documento = $('#numero_documento_bus').val();
             var aliado = $('#aliado_bus').val();
+            var porcentaje_personalizado = $('#porcentaje_personalizado_bus').val();
             var estado = $('#estado_bus').val();
             
 			var _token = $('#_token').val();
@@ -76,7 +77,7 @@ function datatablenew(){
                 "type": "POST",
                 "url": sSource,
                 "data":{NumeroPagina:iNroPagina,NumeroRegistros:iCantMostrar,
-						numero_documento:numero_documento,aliado:aliado,estado:estado,
+						numero_documento:numero_documento,aliado:aliado,estado:estado,porcentaje_personalizado:porcentaje_personalizado,
 						_token:_token
                        },
                 "success": function (result) {
@@ -214,6 +215,21 @@ function datatablenew(){
 
 				{
 				"mRender": function (data, type, row) {
+					var porcentaje_personalizado = "";
+					if(row.porcentaje_personalizado == 1){
+						porcentaje_personalizado = "SI";
+					}
+					if(row.porcentaje_personalizado == 0){
+						porcentaje_personalizado = "NO";
+					}
+					return porcentaje_personalizado;
+				},
+				"bSortable": false,
+				"aTargets": [12]
+				},
+
+				{
+				"mRender": function (data, type, row) {
 					var estado = "";
 					if(row.estado == 1){
 						estado = "Activo";
@@ -224,7 +240,7 @@ function datatablenew(){
 					return estado;
 				},
 				"bSortable": false,
-				"aTargets": [12]
+				"aTargets": [13]
 				},
 				{
 				"mRender": function (data, type, row) {
@@ -250,7 +266,7 @@ function datatablenew(){
 					return html;
 				},
 				"bSortable": false,
-				"aTargets": [13],
+				"aTargets": [14],
 				},
             ]
     });
@@ -353,9 +369,8 @@ function actualizar_porcentaje_general(){
 
 			$('.loader').hide();
 			
+			$('#porcentaje_general').val("");
 			datatablenew();
         }
 	});
-
 }
-

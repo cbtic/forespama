@@ -29,6 +29,7 @@ class AliadoPamaController extends Controller
 		$aliado_pama_model = new AliadoPama;
 		$p[]=$request->numero_documento;
 		$p[]=$request->aliado;
+		$p[]=$request->porcentaje_personalizado;
         $p[]=$request->estado;
 		$p[]=$request->NumeroPagina;
 		$p[]=$request->NumeroRegistros;

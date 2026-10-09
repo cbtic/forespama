@@ -126,7 +126,7 @@ begin
 	
 	If v_id_rol = 11 Then
 	   v_where := v_where || ' And (oc.id_vendedor = ''' || p_user || ''' or oc.id_vendedor in (
-	       select id_vendedor from jefe_vendedor_detalles where id_jefe_vendedor = ' || p_user || '
+	       select id_vendedor from jefe_vendedor_detalles where id_jefe_vendedor = ' || p_user || ' and estado = ''1''
 	   ))';
 	End If;
 	

@@ -42,7 +42,7 @@ function datatablenew(){
         "autoWidth": false,
         "bLengthChange": true,
         "destroy": true,
-        "lengthMenu": [[10, 50, 100, 200, 60000], [10, 50, 100, 200, "Todos"]],
+        "lengthMenu": [[20, 50, 100, 200, 60000], [20, 50, 100, 200, "Todos"]],
         "aoColumns": [
                         {},
         ],
@@ -57,7 +57,10 @@ function datatablenew(){
             var iNroPagina 	= parseFloat(fn_util_obtieneNroPagina(aoData[3].value, aoData[4].value)).toFixed();
             var iCantMostrar 	= aoData[4].value;
 
-            var denominacion = $('#denominacion_bus').val();
+            var almacen = $('#almacen_bus').val();
+            var producto = $('#producto_bus').val();
+            var fecha_inicio = $('#fecha_inicio_bus').val();
+            var fecha_fin = $('#fecha_fin_bus').val();
 			var estado = $('#estado_bus').val();
 			
 			var _token = $('#_token').val();
@@ -67,7 +70,7 @@ function datatablenew(){
                 "type": "POST",
                 "url": sSource,
                 "data":{NumeroPagina:iNroPagina,NumeroRegistros:iCantMostrar,
-						denominacion:denominacion,estado:estado,
+						almacen:almacen,producto:producto,fecha_inicio:fecha_inicio,fecha_fin:fecha_fin,estado:estado,
 						_token:_token
                        },
                 "success": function (result) {
@@ -95,9 +98,9 @@ function datatablenew(){
 
 				{
 				"mRender": function (data, type, row) {
-					var denominiacion = "";
-					if(row.denominiacion!= null)denominiacion = row.denominiacion;
-					return denominiacion;
+					var codigo = "";
+					if(row.codigo!= null)codigo = row.codigo;
+					return codigo;
 				},
 				"bSortable": true,
 				"aTargets": [1]
@@ -105,53 +108,152 @@ function datatablenew(){
 
 				{
 				"mRender": function (data, type, row) {
-					var tipo_marca = "";
-					if(row.tipo_marca!= null)tipo_marca = row.tipo_marca;
-					return tipo_marca;
+					var producto = "";
+					if(row.producto!= null)producto = row.producto;
+					return producto;
 				},
 				"bSortable": true,
 				"aTargets": [2]
 				},
+
+				{
+				"mRender": function (data, type, row) {
+					var entradas = "";
+					if(row.entradas!= null)entradas = row.entradas;
+					return entradas;
+				},
+				"bSortable": true,
+				"aTargets": [3]
+				},
+
+				{
+				"mRender": function (data, type, row) {
+					var costo_entradas = "";
+					if(row.costo_entradas!= null)costo_entradas = row.costo_entradas;
+					return costo_entradas;
+				},
+				"bSortable": true,
+				"aTargets": [4]
+				},
+
+				{
+				"mRender": function (data, type, row) {
+					var total_entradas = "";
+					if(row.total_entradas!= null)total_entradas = row.total_entradas;
+					return total_entradas;
+				},
+				"bSortable": true,
+				"aTargets": [5]
+				},
+
+				{
+				"mRender": function (data, type, row) {
+					var salidas = "";
+					if(row.salidas!= null)salidas = row.salidas;
+					return salidas;
+				},
+				"bSortable": true,
+				"aTargets": [6]
+				},
+
+				{
+				"mRender": function (data, type, row) {
+					var costo_salidas = "";
+					if(row.costo_salidas!= null)costo_salidas = row.costo_salidas;
+					return costo_salidas;
+				},
+				"bSortable": true,
+				"aTargets": [7]
+				},
+
+				{
+				"mRender": function (data, type, row) {
+					var total_salidas = "";
+					if(row.total_salidas!= null)total_salidas = row.total_salidas;
+					return total_salidas;
+				},
+				"bSortable": true,
+				"aTargets": [8]
+				},
+
+				{
+				"mRender": function (data, type, row) {
+					var saldos = "";
+					if(row.saldos!= null)saldos = row.saldos;
+					return saldos;
+				},
+				"bSortable": true,
+				"aTargets": [9]
+				},
+
+				{
+				"mRender": function (data, type, row) {
+					var costo_saldos = "";
+					if(row.costo_saldos!= null)costo_saldos = row.costo_saldos;
+					return costo_saldos;
+				},
+				"bSortable": true,
+				"aTargets": [10]
+				},
 				
 				{
 				"mRender": function (data, type, row) {
-					var estado = "";
-					if(row.estado == 1){
-						estado = "Activo";
-					}
-					if(row.estado == 0){
-						estado = "Inactivo";
-					}
-					return estado;
+					var total_saldos = "";
+					if(row.total_saldos!= null)total_saldos = row.total_saldos;
+					return total_saldos;
 				},
-				"bSortable": false,
-				"aTargets": [3]
+				"bSortable": true,
+				"aTargets": [11]
 				},
+
 				{
 				"mRender": function (data, type, row) {
-					var estado = "";
-					var clase = "";
-					if(row.estado == 1){
-						estado = "Eliminar";
-						clase = "btn-danger";
-					}
-					if(row.estado == 0){
-						estado = "Activar";
-						clase = "btn-success";
-					}
-					
-					var html = '<div class="btn-group btn-group-sm" role="group" aria-label="Log Viewer Actions">';
-					
-					html += '<button style="font-size:12px" type="button" class="btn btn-sm btn-success" data-toggle="modal" onclick="modalMarca('+row.id+')" ><i class="fa fa-edit"></i> Editar</button>'; 
-					html += '<a href="javascript:void(0)" onclick=eliminarMarca('+row.id+','+row.estado+') class="btn btn-sm '+clase+'" style="font-size:12px;margin-left:10px"><i class="fa fa-eraser" style="font-size:18px;"></i> '+estado+'</a>';
-					
-					//html += '<a href="javascript:void(0)" onclick=modalResponsable('+row.id+') class="btn btn-sm btn-info" style="font-size:12px;margin-left:10px">Detalle Responsable</a>';
-					
-					html += '</div>';
-					return html;
+					var almacen_destino = "";
+					if(row.almacen_destino!= null)almacen_destino = row.almacen_destino;
+					return almacen_destino;
 				},
-				"bSortable": false,
-				"aTargets": [4],
+				"bSortable": true,
+				"aTargets": [12]
+				},
+
+				{
+				"mRender": function (data, type, row) {
+					var fecha_kardex = "";
+					if(row.fecha_kardex!= null)fecha_kardex = row.fecha_kardex;
+					return fecha_kardex;
+				},
+				"bSortable": true,
+				"aTargets": [13]
+				},
+
+				{
+				"mRender": function (data, type, row) {
+					var tipo_movimiento = "";
+					if(row.tipo_movimiento!= null)tipo_movimiento = row.tipo_movimiento;
+					return tipo_movimiento;
+				},
+				"bSortable": true,
+				"aTargets": [14]
+				},
+
+				{
+				"mRender": function (data, type, row) {
+					var usuario = "";
+					if(row.usuario!= null)usuario = row.usuario;
+					return usuario;
+				},
+				"bSortable": true,
+				"aTargets": [15]
+				},
+
+				{
+				"mRender": function (data, type, row) {
+					var fecha_creacion = "";
+					if(row.fecha_creacion!= null)fecha_creacion = row.fecha_creacion;
+					return fecha_creacion;
+				},
+				"bSortable": true,
+				"aTargets": [16]
 				},
             ]
     });
@@ -208,4 +310,33 @@ function fn_eliminar(id,estado){
 			datatablenew();
 		}
     });
+}
+
+function obtenerProductosAlmacenKardex(){
+
+    var id_almacen = $('#almacen_bus').val();
+
+    $.ajax({
+		url: "/productos/obtener_producto_almacen/"+id_almacen,
+		dataType: "json",
+		success: function(result){
+			
+			$('#producto_bus').empty().append('<option value="">--Seleccionar Producto--</option>');
+			
+			if(result.length > 0) {
+				$.each(result, function(ii, oo) {
+					$('#producto_bus').append(
+						$('<option>', {
+							value: oo.id,
+							text: oo.codigo+' - '+oo.denominacion
+						})
+					);
+				});
+
+				$('#producto_bus').select2();
+			} else {
+				bootbox.alert("No se encontraron productos en este almacén.");
+			}
+		}
+	});
 }

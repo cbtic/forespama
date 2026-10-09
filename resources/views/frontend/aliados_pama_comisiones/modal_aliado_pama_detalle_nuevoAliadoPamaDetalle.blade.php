@@ -165,6 +165,12 @@ function cargarDetalle(){
             let n = 1;
 
             let html = "";
+
+            let suma_total = 0; 
+            let suma_total_comision = 0; 
+            let suma_monto_pagado_comision = 0; 
+            let suma_total_pendiente_comision = 0;
+            
             result.detalle_comision_aliado_pama.forEach(detalle_comision_aliado_pama => {
 
                 let total = parseFloat(detalle_comision_aliado_pama.total || 0);
@@ -173,6 +179,11 @@ function cargarDetalle(){
                 let porcentaje = parseFloat(detalle_comision_aliado_pama.porcentaje_comision || 0);
 
                 let total_comision = total * porcentaje / 100;
+
+                suma_total += total; 
+                suma_total_comision += total_comision; 
+                suma_monto_pagado_comision += monto_pagado_comision; 
+                suma_total_pendiente_comision += total_pendiente_comision;
 
                 html +=`
                 <tr>
@@ -192,7 +203,19 @@ function cargarDetalle(){
                 </tr>
                 `;
 
+                n++;
             });
+
+            html += ` 
+            <tr style="font-weight:bold; background-color:#f5f5f5;"> 
+                <td colspan="6" style="text-align:right;"> Total </td> 
+                <td> ${suma_total.toFixed(2)} </td> 
+                <td></td> 
+                <td> ${suma_total_comision.toFixed(2)} </td> 
+                <td> ${suma_monto_pagado_comision.toFixed(2)} </td> 
+                <td> ${suma_total_pendiente_comision.toFixed(2)} </td> 
+                <td></td> 
+            </tr> `;
             
             tbody.append(html);
             

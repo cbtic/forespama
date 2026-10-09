@@ -349,10 +349,18 @@ label.form-control-sm{
 								<input id="numero_documento_bus" name="numero_documento_bus" on class="form-control form-control-sm filtro-input" placeholder="N&uacute;mero Documento">
 							</div>
 
-							<div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
+							<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
 								<input id="aliado_bus" name="aliado_bus" on class="form-control form-control-sm filtro-input" placeholder="Nombres">
 							</div>
 							
+							<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+								<select name="porcentaje_personalizado_bus" id="porcentaje_personalizado_bus" class="form-control form-control-sm filtro-select">
+									<option value="" selected="selected">--Porcentaje Personalizado--</option>
+									<option value="1">SI</option>
+									<option value="0">NO</option>
+								</select>
+							</div>
+
 							<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
 								<select name="estado_bus" id="estado_bus" class="form-control form-control-sm filtro-select">
 									<option value="">Todos</option>
@@ -401,6 +409,7 @@ label.form-control-sm{
 								<th>Correo</th>
 								<th>Fecha Afiliaci&oacute;n</th>
 								<th>Porcentaje Comisi&oacute;n</th>
+								<th>Porcentaje Personalizado</th>
 								<th>Estado</th>
 								<th>Acciones</th>
 							</tr>

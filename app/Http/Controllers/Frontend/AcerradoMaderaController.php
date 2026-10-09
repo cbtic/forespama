@@ -166,7 +166,21 @@ class AcerradoMaderaController extends Controller
 
 		foreach($ruc as $index => $value) {
             
-			if($cantidad_ingreso_produccion[$index] != "" || $cantidad_ingreso_produccion[$index] > 0){
+			if(
+				!isset($cantidad_ingreso_produccion[$index]) ||
+				(float)$cantidad_ingreso_produccion[$index] <= 0
+			){
+				continue;
+			}
+
+			// Validamos también los demás índices necesarios
+			if(
+				!isset($id_ingreso_acerrado_detalle[$index]) ||
+				!isset($id_tipo_madera[$index]) ||
+				!isset($cantidad_ingreso[$index])
+			){
+				continue;
+			}
 
 				$ingreso_produccion_acerrado_madera_detalle = new IngresoProduccionAcerradoMaderaDetalle;
 	
@@ -267,7 +281,7 @@ class AcerradoMaderaController extends Controller
 				$consulta_oxapampa_movimiento->save();
 
 			}
-        }
+        
 
         return response()->json(['success' => 'Registro de Ingreso Acerrio guardado exitosamente.']);
 
