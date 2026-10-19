@@ -50,13 +50,13 @@ class RequerimientoDispensacione extends Model
     function getDetalleRequerimientoDispensacionId($id){
 
         $cad = "select rdd.id,  ROW_NUMBER() OVER (PARTITION BY rdd.id_requerimiento_dispensacion ) AS row_num, rdd.id_producto, p.codigo, p.denominacion nombre_producto, rdd.id_marca, rdd.id_unidad_medida, 
-        rdd.cantidad, rd.id_almacen
+        rdd.cantidad, rd.id_almacen, coalesce(rdd.cantidad_despacho,0) cantidad_despacho
         from requerimiento_dispensacion_detalles rdd 
         inner join productos p on rdd.id_producto = p.id
         inner join requerimiento_dispensaciones rd on rdd.id_requerimiento_dispensacion = rd.id
         where rdd.id_requerimiento_dispensacion = '".$id."'
         and rdd.estado = '1'
-        order by 1 asc ";
+        order by 1 asc";
 
 		$data = DB::select($cad);
         return $data;

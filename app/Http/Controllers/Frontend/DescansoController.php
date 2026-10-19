@@ -9,6 +9,7 @@ use App\Models\TablaMaestra;
 use App\Models\Producto;
 use App\Models\Kardex;
 use App\Models\Almacene;
+use App\Models\DescansoDetalle;
 use Auth;
 
 class DescansoController extends Controller
@@ -75,15 +76,18 @@ class DescansoController extends Controller
 
 		if($request->id == 0){
 			$descanso = new Descanso;
+			$descanso_detalle = new DescansoDetalle;
 		}else{
 			$descanso = Descanso::find($request->id);
+			$descanso_detalle = DescansoDetalle::where('id_descanso',$descanso->id)->where('estado',1)->get();
 		}
-		
-        $descanso->denominiacion = $request->denominacion;
-		$descanso->id_tipo_marca = $request->tipo_marca;
-		$descanso->estado = 1;
-        $descanso->id_usuario_inserta = $id_user;
-		$descanso->save();
+
+		foreach($descanso_detalle as $key){
+			$descanso_detalle->fecha_salida_descanso = $request->fecha_salida_descanso;
+			$descanso_detalle->estado_descanso = 2;
+			$descanso_detalle->id_usuario_actualiza = $id_user;
+			$descanso_detalle->save();
+		}
 
         return response()->json(['success' => 'Descanso guardada exitosamente.']);
 
@@ -110,6 +114,8 @@ class DescansoController extends Controller
         $descanso = $descanso_model->getDetalleDescansoId($id);
         $producto = $producto_model->getProductoAll();
         $unidad_medida = $tablaMaestra_model->getMaestroByTipo(43);
+
+		//dd($descanso);exit();
         
         return response()->json([
             'descanso' => $descanso,

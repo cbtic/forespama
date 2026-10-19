@@ -34,7 +34,7 @@ class Descanso extends Model
 
     function getDetalleDescansoId($id){
 
-        $cad = "select dd.id,  ROW_NUMBER() OVER (PARTITION BY dd.id_descanso  ) AS row_num, dd.id_producto, p.codigo, p.denominacion nombre_producto, p.id_unidad_medida, 
+        $cad = "select dd.id,  ROW_NUMBER() OVER (PARTITION BY dd.id_descanso  ) AS row_num, dd.id_producto, p.codigo, p.denominacion nombre_producto, p.id_unidad_producto id_unidad_medida, 
         dd.cantidad 
         from descanso_detalles dd 
         inner join productos p on dd.id_producto = p.id

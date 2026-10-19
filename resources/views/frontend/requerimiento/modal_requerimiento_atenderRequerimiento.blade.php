@@ -656,6 +656,24 @@ function save_orden_compra_requerimiento(){
     }
 }
 
+function validar(){
+
+    Swal.fire({
+        title: '¡Alerta!',
+        text: "¿Está usted seguro de la información consignada? Verifique que los almacenes registrados sean los correctos, porque luego no podrá modificarse.",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.value) {
+            save_dispensacion_requerimiento();
+        }
+    });
+}
+
 function save_dispensacion_requerimiento(){
 	
     var msg = "";
@@ -666,6 +684,7 @@ function save_dispensacion_requerimiento(){
     var responsable = $('#responsable').val();
     var estado_atencion = $('#estado_atencion').val();
     var almacen = $('#almacen').val();
+    var almacen_salida = $('#almacen_salida').val();
     var cerrado = $('#cerrado').val();
     var sustento_requerimiento = $('#sustento_requerimiento').val();
     var unidad_origen = $('#unidad_origen').val();
@@ -696,6 +715,8 @@ function save_dispensacion_requerimiento(){
                 msg+="No hay stock para el producto "+descripcion_producto+" <br>";
             }
         });
+        
+        if(almacen_salida==almacen){msg+="El Almacen Origen y el Almacen Solicitante no puede ser el mismo <br>";}
     }
 
     if(msg!=""){
@@ -1012,7 +1033,7 @@ function cambiarOrigen(){
                                     <?php }?>
                                     @hasanyrole('Administrator|Generar Dispensacion Requerimiento')
                                     <?php if($requerimiento->id_tipo_documento == '2'){?>
-                                    <button style="font-size:12px;margin-right:20px" type="button" class="btn btn-sm btn-warning" data-toggle="modal" onclick="save_dispensacion_requerimiento()" ><i class="fa fa-edit"></i> Generar Dispensación de Requerimiento</button>
+                                    <button style="font-size:12px;margin-right:20px" type="button" class="btn btn-sm btn-warning" data-toggle="modal" onclick="validar()" ><i class="fa fa-edit"></i> Generar Dispensación de Requerimiento</button>
                                     <?php }?>
                                     @endhasanyrole
                                     <button style="font-size:12px;margin-right:20px" type="button" class="btn btn-sm btn-success" data-toggle="modal" onclick="generar_requerimiento()" ><i class="fa fa-edit"></i> Generar Requerimiento Pedientes</button>

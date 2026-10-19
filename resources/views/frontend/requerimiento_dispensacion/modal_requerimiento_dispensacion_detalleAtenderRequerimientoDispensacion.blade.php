@@ -308,9 +308,13 @@ $.ajax({
                     <td style="width: 550px !important;display:block"><input name="id_requerimiento_dispensacion_detalle[]" id="id_requerimiento_dispensacion_detalle${n}" class="form-control form-control-sm" value="${requerimiento_dispensacion.id}" type="hidden"><select name="descripcion_[]" id="descripcion_${n}" class="form-control form-control-sm" onChange="verificarProductoSeleccionado(this, ${n});" disabled>${productoOptions}</select><input name="descripcion[]" id="descripcion${n}" class="form-control form-control-sm" value="${requerimiento_dispensacion.id_producto}" type="hidden"></td>
                     <td><select name="marca_[]" id="marca_${n}" class="form-control form-control-sm" disabled>${marcaOptions}</select><input name="marca[]" id="marca${n}" class="form-control form-control-sm" value="${requerimiento_dispensacion.id_marca}" type="hidden"></td>
                     <td><input name="cod_interno[]" id="cod_interno${n}" class="form-control form-control-sm" value="${requerimiento_dispensacion.codigo}" type="text" readonly></td>
-                    <td><select name="unidad_[]" id="unidad_${n}" class="form-control form-control-sm" disabled>${unidadMedidaOptions}</select><input name="unidad[]" id="unidad${n}" class="form-control form-control-sm" value="${requerimiento_dispensacion.id_unidad_medida}" type="hidden"></td>
-                    <td><input name="cantidad[]" id="cantidad${n}" class="cantidad form-control form-control-sm" value="${requerimiento_dispensacion.cantidad}" type="text" oninput="calcularCantidadPendiente(this);calcularSubTotal(this)" ></td>
+                    <td><select name="unidad_[]" id="unidad_${n}" class="form-control form-control-sm" disabled>${unidadMedidaOptions}</select><input name="unidad[]" id="unidad${n}" class="form-control form-control-sm" value="${requerimiento_dispensacion.id_unidad_medida}" type="hidden"><input type="hidden" class="cantidad_ingresada" name="cantidad_ingresada[]" id="cantidad_ingresada${n}" value="${requerimiento_dispensacion.cantidad_despacho}"></td>
+                    <td><input name="cantidad[]" id="cantidad${n}" class="cantidad form-control form-control-sm" value="${requerimiento_dispensacion.cantidad - requerimiento_dispensacion.cantidad_despacho}" type="text" oninput="calcularCantidadPendiente(this);calcularSubTotal(this)" ></td>
+                    <td><input name="cantidad_total[]" id="cantidad_total${n}" class="cantidad_total form-control form-control-sm" value="${requerimiento_dispensacion.cantidad}" type="text" oninput="calcularCantidadPendiente(this);calcularSubTotal(this)" ></td>
+                    <td><input name="cantidad_pendiente[]" id="cantidad_pendiente${n}" class="cantidad_pendiente form-control form-control-sm" value="" type="text" oninput="calcularCantidadPendiente(this);calcularSubTotal(this)" ></td>
                     <td><input name="stock_actual[]" id="stock_actual${n}" class="form-control form-control-sm" value="${producto_stock.saldos_cantidad}" type="text" readonly></td>
+                    <td><button type="button" class="btn btn-sm btn-clasico btn-eliminar" onclick="eliminarFila(this)"><i class="fas fa-trash" style="font-size:18px;"></i></button></td>
+
                 </tr>
             `;
             
@@ -324,6 +328,10 @@ $.ajax({
             $('#marca_' + n).select2({
                 width: '100%',
             });
+
+            let currentIndex = n;
+
+            calcularCantidadPendiente($('#cantidad' + currentIndex)[0]);
 
             n++;
             });
@@ -380,6 +388,20 @@ function agregarProducto(){
     }
 }
 
+function calcularCantidadPendiente(input) {
+    var fila = $(input).closest('tr');
+
+    var cantidad = parseFloat(fila.find('.cantidad').val()) || 0;
+    var cantidad_total = parseFloat(fila.find('.cantidad_total').val()) || 0;
+    var cantidad_ingresada = parseFloat(fila.find('.cantidad_ingresada').val()) || 0;
+    //alert(cantidad_ingresada);
+    var cantidad_pendiente = cantidad_total - cantidad_ingresada - cantidad;
+
+    cantidad_pendiente = cantidad_pendiente <= 0 ? 0 : cantidad_pendiente;
+
+    fila.find('.cantidad_pendiente').val(cantidad_pendiente.toFixed(2));
+}
+
 function verificarProductoSeleccionado(selectElement, rowIndex, valor) {
     var selectedValue = $(selectElement).val();
 
@@ -415,7 +437,7 @@ function verificarProductoSeleccionado(selectElement, rowIndex, valor) {
 
 function eliminarFila(button){
     $(button).closest('tr').remove();
-    actualizarTotalGeneral();
+    //actualizarTotalGeneral();
 }
 
 function fn_save_requerimiento_dispensacion(){
@@ -710,7 +732,9 @@ function fn_save_detalle_producto(){
 								<th>Marca</th>
                                 <th>COD. INT.</th>
                                 <th>Unidad</th>
-                                <th>Cantidad</th>
+                                <th>Cantidad a Dispensar</th>
+                                <th>Cantidad Total</th>
+                                <th>Cantidad Pendiente</th>
                                 <th>Stock</th>
 							</tr>
 							</thead>

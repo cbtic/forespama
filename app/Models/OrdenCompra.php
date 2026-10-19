@@ -209,7 +209,7 @@ class OrdenCompra extends Model
         ocd.id_estado_producto , ocd.cantidad_requerida, 
         coalesce((select sum(cantidad)
         from salida_productos sp 
-        inner join salida_producto_detalles spd on sp.id=spd.id_salida_productos  
+        inner join salida_producto_detalles spd on sp.id=spd.id_salida_productos 
         where id_orden_compra =ocd.id_orden_compra 
         and spd.id_producto=ocd.id_producto
         and sp.tipo_devolucion ='1'

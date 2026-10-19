@@ -186,7 +186,6 @@ class AsientoContableAnexoController extends Controller
 
             $response = Http::withHeaders([
                 'Accept' => 'text/plain',
-                //'Content-Type' => 'application/json',
                 'Authorization' => 'Bearer ' . $token
             ])->withBody(
                 json_encode($payload),
@@ -203,8 +202,6 @@ class AsientoContableAnexoController extends Controller
             return response()->json([
                 'success' => $response->successful(),
                 'status' => $response->status(),
-                //'payload_enviado' => $payload,
-                //'response_raw' => $response->body(),
             'data' => $response->json()
             ]);
 

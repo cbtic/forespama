@@ -176,6 +176,15 @@ class IngresoVehiculoTronco extends Model
 		$data = DB::select($cad);
         return $data;
     }
+
+    function getCodigoIngresoVehiculo(){
+
+        $cad = "select lpad(coalesce(max(ivt.codigo::int) + 1, 1)::varchar, 6, '0') codigo
+        from ingreso_vehiculo_troncos ivt ";
+
+		$data = DB::select($cad);
+        return $data;
+    }
     
 	public function listar_ingreso_vehiculo_tronco_ajax($p){
 

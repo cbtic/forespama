@@ -148,6 +148,9 @@ class IngresoVehiculoTroncoController extends Controller
 		$lote = $ingreso_vehiculo_model->obtenerLote($letra, $fecha);
 		//dd($lote[0]->lote);exit();
 
+		$codigo_ingreso_vehiculo_model = new IngresoVehiculoTronco;
+		$codigo = $codigo_ingreso_vehiculo_model->getCodigoIngresoVehiculo();
+
 		$ingresoVehiculoTronco = new IngresoVehiculoTronco;
 		$ingresoVehiculoTronco->fecha_ingreso = $request->fecha_ingreso;
 		$ingresoVehiculoTronco->fecha_salida = $request->fecha_ingreso;
@@ -165,6 +168,7 @@ class IngresoVehiculoTroncoController extends Controller
 		$ingresoVehiculoTronco->id_procedencias = 0;
 		$ingresoVehiculoTronco->observacion = $request->observacion;
 		$ingresoVehiculoTronco->lote = $lote[0]->lote;
+		$ingresoVehiculoTronco->codigo = $codigo[0]->codigo;
 		$ingresoVehiculoTronco->save();
 		$id_ingreso_vehiculo_troncos = $ingresoVehiculoTronco->id;
 		

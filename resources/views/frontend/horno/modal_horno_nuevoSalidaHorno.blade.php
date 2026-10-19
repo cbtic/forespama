@@ -355,12 +355,12 @@ function calcularIngresoHorno(input) {
                                         <option value="">--Seleccionar--</option>
                                         <?php 
                                         foreach ($almacen as $row){?>
-                                            <option value="<?php echo $row->id ?>" <?php if($row->id==24)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+                                            <option value="<?php echo $row->id ?>" <?php if($row->id==27)echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
                                             <?php 
                                         }
                                         ?>
                                     </select>
-                                    <input id="almacen_destino" name="almacen_destino" on class="form-control form-control-sm"  value="24" type="hidden">
+                                    <input id="almacen_destino" name="almacen_destino" on class="form-control form-control-sm"  value="26" type="hidden">
                                 </div>
                             </div>
                             <div class="row" style="padding-left:10px">

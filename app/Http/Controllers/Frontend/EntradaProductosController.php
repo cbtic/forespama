@@ -146,7 +146,7 @@ class EntradaProductosController extends Controller
     }
 
     public function send_entrada_producto(Request $request){
-
+    
         $id_user = Auth::user()->id;
 
         if($request->tipo_movimiento==1){

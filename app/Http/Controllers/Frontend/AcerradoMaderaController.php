@@ -139,16 +139,16 @@ class AcerradoMaderaController extends Controller
 			$ingreso_produccion_acerrado_madera = IngresoProduccionAcerradoMadera::find($request->id);
 		}
 		
-		$ruc = $request->input('ruc');
+		$ruc = $request->input('ruc', []);
 		$razon_social = $request->input('razon_social');
 		$letra = $request->input('letra');
 		$placa = $request->input('placa');
-		$id_tipo_madera = $request->input('id_tipo_madera');
+		$id_tipo_madera = $request->input('id_tipo_madera', []);
 		$tipo_madera = $request->input('tipo_madera');
-		$cantidad_ingreso = $request->input('cantidad_ingreso');
-		$cantidad_ingreso_produccion = $request->input('cantidad_ingreso_produccion');
+		$cantidad_ingreso = $request->input('cantidad_ingreso', []);
+		$cantidad_ingreso_produccion = $request->input('cantidad_ingreso_produccion', []);
 		$porcentaje = $request->input('porcentaje');
-        $id_ingreso_acerrado_detalle =$request->id_ingreso_acerrado_detalle;
+        $id_ingreso_acerrado_detalle = $request->input('id_ingreso_acerrado_detalle', []);
 
 		$fecha = Carbon::now()->format('Ymd');
 
@@ -197,7 +197,12 @@ class AcerradoMaderaController extends Controller
 
 				$IngresoVehiculoTroncoTipoMaderaAll = IngresoVehiculoTroncoTipoMadera::where('id',$id_ingreso_acerrado_detalle[$index])->where('estado',1)->first();
 
-				if($cantidad_ingreso_produccion[$index] == $cantidad_ingreso[$index]){
+				/*if($cantidad_ingreso_produccion[$index] == $cantidad_ingreso[$index]){
+					$IngresoVehiculoTroncoTipoMaderaAll->estado_acerrado = 0;
+					$IngresoVehiculoTroncoTipoMaderaAll->save();
+				}*/
+
+				if ($IngresoVehiculoTroncoTipoMaderaAll && (float)$cantidad_ingreso_produccion[$index] == (float)$cantidad_ingreso[$index]){
 					$IngresoVehiculoTroncoTipoMaderaAll->estado_acerrado = 0;
 					$IngresoVehiculoTroncoTipoMaderaAll->save();
 				}
@@ -254,7 +259,7 @@ class AcerradoMaderaController extends Controller
 					$total_precio += $item->precio_total;
 				}
 
-				$total_costo = $total_precio / $total_volumen;
+				$total_costo = $total_volumen > 0 ? $total_precio / $total_volumen : 0;
 
 				$idCorte_ = ConsultaOxapampaMovimiento::where('id_producto', $idProducto)->where('id_almacen', '21')->where('id_tipo_movimiento', 1)->whereDate('fecha', '<=', Carbon::now())->orderBy('fecha', 'desc')->orderBy('id', 'desc')->value('id');
 
@@ -304,7 +309,8 @@ class AcerradoMaderaController extends Controller
 		$medida_paquete1 = $request->input('medida_paquete1');
 		$medida_paquete2 = $request->input('medida_paquete2');
 		$n_piezas = $request->input('n_piezas');
-        $id_salida_acerrado_madera =$request->id_salida_acerrado_madera;
+		$id_salida_acerrado_madera = $request->input('id_salida_acerrado_madera');
+        //$id_salida_acerrado_madera =$request->id_salida_acerrado_madera;
 		$seleccionados = $request->input('seleccionados', []);
 		//dd($seleccionados);exit();
 		if (!$request->has('seleccionados')) {
@@ -349,7 +355,7 @@ class AcerradoMaderaController extends Controller
 			}*/
 
 			$ingresoProduccionAcerradoMaderaDetalleAll = IngresoProduccionAcerradoMaderaDetalle::where("id_ingreso_produccion_acerrado_maderas",$seleccionados[0])->where("estado","1")->get();
-				
+			
 			foreach($ingresoProduccionAcerradoMaderaDetalleAll as $key=>$row){
 				
 				if (!in_array($row->id, $array_produccion_acerrado_madera_detalle)){
@@ -359,15 +365,19 @@ class AcerradoMaderaController extends Controller
 				}
 			}
 
-			$idProducto = $id_salida_acerrado_madera[$index];
+			//$producto_model = new Producto;
 
-			$idCorte = Kardex::where('id_producto', $idProducto)->where('id_almacen_destino', 22)->whereDate('fecha', '<=', $request->fecha)->orderBy('fecha', 'desc')->orderBy('id', 'desc')->value('id');
+			//$producto = $producto_model->getProductoByTipoMaderaMedida($tipo_madera[$index]);
+			
+			$idProducto = $id_salida_acerrado_madera[$index];
+			
+			$idCorte = Kardex::where('id_producto', $idProducto)->where('id_almacen_destino', 25)->whereDate('fecha', '<=', $request->fecha)->orderBy('fecha', 'desc')->orderBy('id', 'desc')->value('id');
 			
 			$saldoBase = $idCorte > 0 ? Kardex::where('id', $idCorte)->value('saldos_cantidad') : 0;
 
 			$kardex = new Kardex;
 			$kardex->id_producto = $idProducto;
-			$kardex->id_almacen_destino = 22;
+			$kardex->id_almacen_destino = 25;
 			$kardex->fecha = $request->fecha;
 
 			$kardex->entradas_cantidad = $n_piezas[$index];
@@ -405,7 +415,7 @@ class AcerradoMaderaController extends Controller
 
 			$cantidad_acerrado_pies = $n_piezas[$index] * $volumen_pies;//120*0.457 = 54.84
 
-			$idCorte_ = ConsultaOxapampaMovimiento::where('id_producto', $idProducto)->where('id_almacen', '22')->where('id_tipo_movimiento', 2)->where('id_movimiento', '!=', $produccion_acerrado_madera_detalle->id)->whereDate('fecha', '<=', Carbon::now())->orderBy('fecha', 'desc')->orderBy('id', 'desc')->value('id');
+			$idCorte_ = ConsultaOxapampaMovimiento::where('id_producto', $idProducto)->where('id_almacen', '25')->where('id_tipo_movimiento', 2)->where('id_movimiento', '!=', $produccion_acerrado_madera_detalle->id)->whereDate('fecha', '<=', Carbon::now())->orderBy('fecha', 'desc')->orderBy('id', 'desc')->value('id');
         
 			$saldoBase = $idCorte_ > 0 ? ConsultaOxapampaMovimiento::where('id', $idCorte_)->value('saldos') : 0;
 			$totalSaldosCantidadBase = $idCorte_ > 0 ? ConsultaOxapampaMovimiento::where('id', $idCorte_)->value('total_saldos') : 0;
@@ -424,7 +434,7 @@ class AcerradoMaderaController extends Controller
 			$consulta_oxapampa_movimiento->saldos = $saldoBase + $cantidad_acerrado_pies;
 			$consulta_oxapampa_movimiento->costo_saldos = 0;//number_format($precio_promedio_final,2);
 			$consulta_oxapampa_movimiento->total_saldos = 0;//$totalSaldosCantidadBase + $precio_total_final;
-			$consulta_oxapampa_movimiento->id_almacen = '22';
+			$consulta_oxapampa_movimiento->id_almacen = '25';
 			$consulta_oxapampa_movimiento->fecha = Carbon::now()->format('Y-m-d');
 			$consulta_oxapampa_movimiento->estado = '1';
 			$consulta_oxapampa_movimiento->id_usuario_inserta = $id_user;

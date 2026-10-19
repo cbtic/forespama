@@ -304,6 +304,8 @@ class RequerimientoDispensacionController extends Controller
         $marca = $request->input('marca');
         $unidad = $request->input('unidad');
         $cantidad = $request->input('cantidad');
+        $cantidad_total = $request->input('cantidad_total');
+        $cantidad_pendiente = $request->input('cantidad_pendiente');
         $id_requerimiento_dispensacion_detalle =$request->id_requerimiento_dispensacion_detalle;
 		
 		$dispensacion->id_tipo_documento = $request->tipo_documento;
@@ -324,12 +326,18 @@ class RequerimientoDispensacionController extends Controller
         $id_dispensacion = $dispensacion->id;
 
         $requerimiento_dispensacion = RequerimientoDispensacione::find($request->id);
-        $requerimiento_dispensacion->cerrado = 2;
+        //$requerimiento_dispensacion->cerrado = 2;
         $requerimiento_dispensacion->id_sede = $request->sede;
         $requerimiento_dispensacion->id_centro_costo = $request->centro_costo;
         $requerimiento_dispensacion->id_persona = $request->persona_recibe;
         $requerimiento_dispensacion->save();
+        $id_requerimiento_dispensacion = $requerimiento_dispensacion->id;
 
+        //$requerimiento_dispensacion_detalle_model = new RequerimientoDispensacionDetalle;
+        //$cantidadAbierto = $requerimiento_dispensacion_detalle_model->getCantidadAbiertoRequerimientoDispensacionDetalleByIdRequerimientoDispensacion($id_requerimiento_dispensacion);
+
+        //$requerimiento_dispensacion_detalle_ = RequerimientoDispensacionDetalle::where('id_requerimiento_dispensacion',$id_requerimiento_dispensacion)->where('estado',1)->get();
+        
 		foreach($descripcion as $index => $value) {
             
             //if($id_requerimiento_dispensacion_detalle[$index] == 0){
@@ -350,6 +358,28 @@ class RequerimientoDispensacionController extends Controller
             $dispensacion_detalle->id_usuario_inserta = $id_user;
 
             $dispensacion_detalle->save();
+
+            $id_detalle = $id_requerimiento_dispensacion_detalle[$index];
+
+            $requerimiento_dispensacion_detalle = RequerimientoDispensacionDetalle::find($id_detalle);
+
+            if ($requerimiento_dispensacion_detalle) {
+
+                // Acumular la cantidad despachada
+                $cantidad_despachada = (float) $requerimiento_dispensacion_detalle->cantidad_despacho
+                    + (float) $cantidad[$index];
+
+                $requerimiento_dispensacion_detalle->cantidad_despacho = $cantidad_despachada;
+
+                // Cerrar el detalle cuando se complete la cantidad requerida
+                if ($cantidad_despachada >= (float) $requerimiento_dispensacion_detalle->cantidad) {
+                    $requerimiento_dispensacion_detalle->cerrado = 2;
+                } else {
+                    $requerimiento_dispensacion_detalle->cerrado = 1;
+                }
+
+                $requerimiento_dispensacion_detalle->save();
+            }
 
 			$producto = Producto::find($descripcion[$index]);
 
@@ -380,6 +410,14 @@ class RequerimientoDispensacionController extends Controller
 			//}
         }
 
+        $cantidadPendiente = RequerimientoDispensacionDetalle::where('id_requerimiento_dispensacion', $id_requerimiento_dispensacion)->where('estado', 1)->where('cerrado', 1)->count();
+
+        // Verificar si existe algún detalle que no esté cerrado en 2
+        $hayDetallesAbiertos = RequerimientoDispensacionDetalle::where('id_requerimiento_dispensacion', $id_requerimiento_dispensacion)->where('estado', 1)->where(function ($query) {$query->where('cerrado', '!=', 2)->orWhereNull('cerrado');})->exists();
+
+        // Actualizar el estado del requerimiento principal
+        $requerimiento_dispensacion->cerrado = $hayDetallesAbiertos ? 1 : 2;
+        $requerimiento_dispensacion->save();
 
         return response()->json(['success' => 'Dispensaci&oacute;n guardada exitosamente.']);
 

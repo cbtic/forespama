@@ -264,137 +264,137 @@ var productosSeleccionados = [];
 
 function cargarDetalle(){
 
-var id = <?php echo $orden_compra->id?>;
-var tipo_movimiento = $("#tipo_movimiento").val();
-var decimales = (tipo_movimiento == "1") ? 3 : 2;
+    var id = <?php echo $orden_compra->id?>;
+    var tipo_movimiento = $("#tipo_movimiento").val();
+    var decimales = (tipo_movimiento == "1") ? 3 : 2;
 
-//$("#divDetalle tbody").html("");
-const tbody = $('#divDetalle');
+    //$("#divDetalle tbody").html("");
+    const tbody = $('#divDetalle');
 
-tbody.empty();
+    tbody.empty();
 
-$.ajax({
-    url: "/orden_compra/cargar_detalle_abierto/"+id+"/"+tipo_movimiento,
-    type: "GET",
-    success: function (result) {
+    $.ajax({
+        url: "/orden_compra/cargar_detalle_abierto/"+id+"/"+tipo_movimiento,
+        type: "GET",
+        success: function (result) {
 
-        let n = 1;
-        var sub_total_acumulado=0;
-        var igv_total_acumulado=0;
-        var total_acumulado=0;
-        var descuento_total_acumulado=0;
+            let n = 1;
+            var sub_total_acumulado=0;
+            var igv_total_acumulado=0;
+            var total_acumulado=0;
+            var descuento_total_acumulado=0;
 
-        result.orden_compra.forEach(orden_compra => {
+            result.orden_compra.forEach(orden_compra => {
 
-            let marcaOptions = '<option value="">--Seleccionar--</option>';
-            let productoOptions = '<option value="">--Seleccionar--</option>';
-            let estadoBienOptions = '<option value="">--Seleccionar--</option>';
-            let unidadMedidaOptions = '<option value="">--Seleccionar--</option>';
-            //console.log('producto_stock:', result.producto_stock);
-            var producto_stock = result.producto_stock[orden_compra.id_producto];
-            
-            result.marca.forEach(marca => {
-                let selected = (marca.id == orden_compra.id_marca) ? 'selected' : '';
-                marcaOptions += `<option value="${marca.id}" ${selected}>${marca.denominiacion}</option>`;
-            });
+                let marcaOptions = '<option value="">--Seleccionar--</option>';
+                let productoOptions = '<option value="">--Seleccionar--</option>';
+                let estadoBienOptions = '<option value="">--Seleccionar--</option>';
+                let unidadMedidaOptions = '<option value="">--Seleccionar--</option>';
+                //console.log('producto_stock:', result.producto_stock);
+                var producto_stock = result.producto_stock[orden_compra.id_producto];
+                
+                result.marca.forEach(marca => {
+                    let selected = (marca.id == orden_compra.id_marca) ? 'selected' : '';
+                    marcaOptions += `<option value="${marca.id}" ${selected}>${marca.denominiacion}</option>`;
+                });
 
-            result.producto.forEach(producto => {
-                let selected = (producto.id == orden_compra.id_producto) ? 'selected' : '';
-                productoOptions += `<option value="${producto.id}" ${selected}>${producto.codigo} - ${producto.denominacion}</option>`;
-            });
+                result.producto.forEach(producto => {
+                    let selected = (producto.id == orden_compra.id_producto) ? 'selected' : '';
+                    productoOptions += `<option value="${producto.id}" ${selected}>${producto.codigo} - ${producto.denominacion}</option>`;
+                });
 
-            result.estado_bien.forEach(estado_bien => {
-                let selected = (estado_bien.codigo == orden_compra.id_estado_producto) ? 'selected' : '';
-                estadoBienOptions += `<option value="${estado_bien.codigo}" ${selected}>${estado_bien.denominacion}</option>`;
-            });
+                result.estado_bien.forEach(estado_bien => {
+                    let selected = (estado_bien.codigo == orden_compra.id_estado_producto) ? 'selected' : '';
+                    estadoBienOptions += `<option value="${estado_bien.codigo}" ${selected}>${estado_bien.denominacion}</option>`;
+                });
 
-            result.unidad_medida.forEach(unidad_medida => {
-                let selected = (unidad_medida.codigo == orden_compra.id_unidad_medida) ? 'selected' : '';
-                unidadMedidaOptions += `<option value="${unidad_medida.codigo}" ${selected}>${unidad_medida.denominacion}</option>`;
-            });
+                result.unidad_medida.forEach(unidad_medida => {
+                    let selected = (unidad_medida.codigo == orden_compra.id_unidad_medida) ? 'selected' : '';
+                    unidadMedidaOptions += `<option value="${unidad_medida.codigo}" ${selected}>${unidad_medida.denominacion}</option>`;
+                });
 
-            if (orden_compra.id_producto) {
-                productosSeleccionados.push(orden_compra.id_producto);
-            }
-            
-            const row = `
-                <tr>
-                    <td>${n}</td>
-                    <td style="width: 450px !important;display:block"><select name="descripcion[]" id="descripcion${n}" class="form-control form-control-sm" onChange="verificarProductoSeleccionado(this, ${n});">${productoOptions}</select></td>
-                    <td><select name="marca[]" id="marca${n}" class="form-control form-control-sm">${marcaOptions}</select></td>
-                    <td><select name="unidad[]" id="unidad${n}" class="form-control form-control-sm">${unidadMedidaOptions}</select><input type="hidden" class="cantidad_ingresada" name="cantidad_ingresada[]" id="cantidad_ingresada${n}" value="${orden_compra.cantidad_ingresada}"></td>
-                    <td><input name="cantidad_ingreso[]" id="cantidad_ingreso${n}" class="cantidad_ingreso form-control form-control-sm" value="${orden_compra.cantidad_requerida-orden_compra.cantidad_ingresada}" type="text" oninput="calcularCantidadPendiente(this);calcularDescuentoParcial(this,${/*orden_compra.cantidad_requerida-orden_compra.cantidad_ingresada*/orden_compra.cantidad_requerida},${parseFloat((orden_compra.descuento ?? 0) || 0).toFixed(decimales)});calcularSubTotal(this);calcularPrecioUnitario(this,${decimales})"></td>
-                    <td><input name="cantidad_compra[]" id="cantidad_compra${n}" class="cantidad_compra form-control form-control-sm" value="${orden_compra.cantidad_requerida}" type="text" oninput="calcularCantidadPendiente(this)" readonly="readonly"></td>
-                    <td><input name="cantidad_pendiente[]" id="cantidad_pendiente${n}" class="cantidad_pendiente form-control form-control-sm" value="" type="text" readonly="readonly"></td>
-                    <td><input name="stock_actual[]" id="stock_actual${n}" class="form-control form-control-sm" value="${producto_stock.saldos_cantidad}" type="text" readonly="readonly"></td>
-                    <td><input name="precio_unitario[]" id="precio_unitario${n}" class="precio_unitario form-control form-control-sm" value="${parseFloat(orden_compra.precio_venta || 0).toFixed(decimales)}" type="text" oninput="calcularSubTotal(this);calcularPrecioUnitario(this,${decimales})"></td>
-                    <td><input name="precio_unitario_[]" id="precio_unitario_${n}" class="precio_unitario_ form-control form-control-sm" value="${parseFloat(orden_compra.precio || 0).toFixed(decimales)}" type="text" oninput="calcularPrecioUnitario(this,${decimales})"></td>
-                    <td><input name="valor_venta_bruto[]" id="valor_venta_bruto${n}" class="valor_venta_bruto form-control form-control-sm" value="${parseFloat(orden_compra.valor_venta_bruto || 0).toFixed(decimales)}" type="text" oninput="calcularSubTotal(this)"></td>
-                    <td><input name="valor_venta[]" id="valor_venta${n}" class="valor_venta form-control form-control-sm" value="${parseFloat(orden_compra.valor_venta || 0).toFixed(decimales)}" type="text" oninput="calcularSubTotal(this)"></td>
+                if (orden_compra.id_producto) {
+                    productosSeleccionados.push(orden_compra.id_producto);
+                }
+                
+                const row = `
+                    <tr>
+                        <td>${n}</td>
+                        <td style="width: 450px !important;display:block"><select name="descripcion[]" id="descripcion${n}" class="form-control form-control-sm" onChange="verificarProductoSeleccionado(this, ${n});">${productoOptions}</select></td>
+                        <td><select name="marca[]" id="marca${n}" class="form-control form-control-sm">${marcaOptions}</select></td>
+                        <td><select name="unidad[]" id="unidad${n}" class="form-control form-control-sm">${unidadMedidaOptions}</select><input type="hidden" class="cantidad_ingresada" name="cantidad_ingresada[]" id="cantidad_ingresada${n}" value="${orden_compra.cantidad_ingresada}"></td>
+                        <td><input name="cantidad_ingreso[]" id="cantidad_ingreso${n}" class="cantidad_ingreso form-control form-control-sm" value="${orden_compra.cantidad_requerida-orden_compra.cantidad_ingresada}" type="text" oninput="calcularCantidadPendiente(this);calcularDescuentoParcial(this,${/*orden_compra.cantidad_requerida-orden_compra.cantidad_ingresada*/orden_compra.cantidad_requerida},${parseFloat((orden_compra.descuento ?? 0) || 0).toFixed(decimales)});calcularSubTotal(this);calcularPrecioUnitario(this,${decimales})"></td>
+                        <td><input name="cantidad_compra[]" id="cantidad_compra${n}" class="cantidad_compra form-control form-control-sm" value="${orden_compra.cantidad_requerida}" type="text" oninput="calcularCantidadPendiente(this)" readonly="readonly"></td>
+                        <td><input name="cantidad_pendiente[]" id="cantidad_pendiente${n}" class="cantidad_pendiente form-control form-control-sm" value="" type="text" readonly="readonly"></td>
+                        <td><input name="stock_actual[]" id="stock_actual${n}" class="form-control form-control-sm" value="${producto_stock.saldos_cantidad}" type="text" readonly="readonly"></td>
+                        <td><input name="precio_unitario[]" id="precio_unitario${n}" class="precio_unitario form-control form-control-sm" value="${parseFloat(orden_compra.precio_venta || 0).toFixed(decimales)}" type="text" oninput="calcularSubTotal(this);calcularPrecioUnitario(this,${decimales})"></td>
+                        <td><input name="precio_unitario_[]" id="precio_unitario_${n}" class="precio_unitario_ form-control form-control-sm" value="${parseFloat(orden_compra.precio || 0).toFixed(decimales)}" type="text" oninput="calcularPrecioUnitario(this,${decimales})"></td>
+                        <td><input name="valor_venta_bruto[]" id="valor_venta_bruto${n}" class="valor_venta_bruto form-control form-control-sm" value="${parseFloat(orden_compra.valor_venta_bruto || 0).toFixed(decimales)}" type="text" oninput="calcularSubTotal(this)"></td>
+                        <td><input name="valor_venta[]" id="valor_venta${n}" class="valor_venta form-control form-control-sm" value="${parseFloat(orden_compra.valor_venta || 0).toFixed(decimales)}" type="text" oninput="calcularSubTotal(this)"></td>
 
-                    <td><div style="display: flex; align-items: center; gap: 5px;"> <button type="button" class="btn-custom" onclick="cambiarDescuento(this)" hidden><i class="${orden_compra.id_descuento == 2 ? 'fas fa-percentage' : 'fas fa-paint-brush'}"></i></button> <input name="descuento[]" id="descuento${n}" class="descuento form-control form-control-sm" placeholder="S/ Descuento" value="${parseFloat((orden_compra.descuento ?? 0) || 0).toFixed(decimales)}" type="text" oninput="aplicaDescuentoEnSoles(this);calcularPrecioUnitario(this, decimales)" style="display: ${(!orden_compra.id_descuento || orden_compra.id_descuento == 1 || orden_compra.descuento == null || orden_compra.descuento === "") ? 'block' : 'none'};"> <input name="porcentaje[]" id="porcentaje${n}" class="porcentaje form-control form-control-sm" placeholder="% Descuento" value="${parseFloat(orden_compra.id_descuento == 2 ? (orden_compra.descuento ?? 0) : 0).toFixed(decimales)}" type="text" oninput="aplicaDescuentoEnPorcentaje(this);calcularPrecioUnitario(this, decimales)" style="display: ${orden_compra.id_descuento == 2 ? 'block' : 'none'};"><input name="id_descuento[]" id="id_descuento${n}" type="hidden" value="${orden_compra.id_descuento ?? 1}"></div></td>
-                    <td><input name="sub_total[]" id="sub_total${n}" class="sub_total form-control form-control-sm" value="${parseFloat(orden_compra.sub_total) || 0}" type="text" readonly="readonly"></td>
-                    <td><input name="igv[]" id="igv${n}" class="igv form-control form-control-sm" value="${parseFloat(orden_compra.igv) || 0}" type="text" readonly="readonly"></td>
-                    <td><input name="total[]" id="total${n}" class="total form-control form-control-sm" value="${parseFloat(orden_compra.total) || 0}" type="text" readonly="readonly"></td>
-                    <td><button type="button" class="btn btn-sm btn-clasico btn-eliminar" onclick="eliminarFila(this)"><i class="fas fa-trash" style="font-size:18px;"></i></button></td>
+                        <td><div style="display: flex; align-items: center; gap: 5px;"> <button type="button" class="btn-custom" onclick="cambiarDescuento(this)" hidden><i class="${orden_compra.id_descuento == 2 ? 'fas fa-percentage' : 'fas fa-paint-brush'}"></i></button> <input name="descuento[]" id="descuento${n}" class="descuento form-control form-control-sm" placeholder="S/ Descuento" value="${parseFloat((orden_compra.descuento ?? 0) || 0).toFixed(decimales)}" type="text" oninput="aplicaDescuentoEnSoles(this);calcularPrecioUnitario(this, decimales)" style="display: ${(!orden_compra.id_descuento || orden_compra.id_descuento == 1 || orden_compra.descuento == null || orden_compra.descuento === "") ? 'block' : 'none'};"> <input name="porcentaje[]" id="porcentaje${n}" class="porcentaje form-control form-control-sm" placeholder="% Descuento" value="${parseFloat(orden_compra.id_descuento == 2 ? (orden_compra.descuento ?? 0) : 0).toFixed(decimales)}" type="text" oninput="aplicaDescuentoEnPorcentaje(this);calcularPrecioUnitario(this, decimales)" style="display: ${orden_compra.id_descuento == 2 ? 'block' : 'none'};"><input name="id_descuento[]" id="id_descuento${n}" type="hidden" value="${orden_compra.id_descuento ?? 1}"></div></td>
+                        <td><input name="sub_total[]" id="sub_total${n}" class="sub_total form-control form-control-sm" value="${parseFloat(orden_compra.sub_total) || 0}" type="text" readonly="readonly"></td>
+                        <td><input name="igv[]" id="igv${n}" class="igv form-control form-control-sm" value="${parseFloat(orden_compra.igv) || 0}" type="text" readonly="readonly"></td>
+                        <td><input name="total[]" id="total${n}" class="total form-control form-control-sm" value="${parseFloat(orden_compra.total) || 0}" type="text" readonly="readonly"></td>
+                        <td><button type="button" class="btn btn-sm btn-clasico btn-eliminar" onclick="eliminarFila(this)"><i class="fas fa-trash" style="font-size:18px;"></i></button></td>
 
-                </tr>
-            `;
-            //alert(orden_compra.id_descuento);
-            tbody.append(row);
+                    </tr>
+                `;
+                //alert(orden_compra.id_descuento);
+                tbody.append(row);
 
-            $('#descripcion' + n).select2({
-                width: '100%',
-                dropdownParent: $('#openOverlayOpc'),
-                dropdownCssClass: 'custom-select2-dropdown'
-                //dropdownCssClass: 'form-control form-control-sm',
-                //containerCssClass: 'form-control form-control-sm'
-            });
+                $('#descripcion' + n).select2({
+                    width: '100%',
+                    dropdownParent: $('#openOverlayOpc'),
+                    dropdownCssClass: 'custom-select2-dropdown'
+                    //dropdownCssClass: 'form-control form-control-sm',
+                    //containerCssClass: 'form-control form-control-sm'
+                });
 
-            $('#marca' + n).select2({
-                width: '100%',
-            });
+                $('#marca' + n).select2({
+                    width: '100%',
+                });
 
-            $('#fecha_fabricacion_' + n).datepicker({
-                autoclose: true,
-                format: 'yyyy-mm-dd',
-                changeMonth: true,
-                changeYear: true,
-                language: 'es'
-            });
+                $('#fecha_fabricacion_' + n).datepicker({
+                    autoclose: true,
+                    format: 'yyyy-mm-dd',
+                    changeMonth: true,
+                    changeYear: true,
+                    language: 'es'
+                });
 
-            $('#fecha_vencimiento_' + n).datepicker({
-                autoclose: true,
-                format: 'yyyy-mm-dd',
-                changeMonth: true,
-                changeYear: true,
-                language: 'es'
-            });
-            
-            let currentIndex = n;
+                $('#fecha_vencimiento_' + n).datepicker({
+                    autoclose: true,
+                    format: 'yyyy-mm-dd',
+                    changeMonth: true,
+                    changeYear: true,
+                    language: 'es'
+                });
+                
+                let currentIndex = n;
 
-            //tbody.append(row);
+                //tbody.append(row);
 
-            calcularCantidadPendiente($('#cantidad_ingreso' + currentIndex)[0]);
+                calcularCantidadPendiente($('#cantidad_ingreso' + currentIndex)[0]);
 
-            setTimeout(() => {
-                const $cantidadIngreso = $('#cantidad_ingreso' + currentIndex);
-                const cantidadRequerida = orden_compra.cantidad_requerida;
-                const descuento = parseFloat((orden_compra.descuento ?? 0) || 0).toFixed(decimales);
-                const $precioUnitario = $('#precio_unitario' + currentIndex);
-                const $precioUnitario_ = $('#precio_unitario_' + currentIndex);
+                setTimeout(() => {
+                    const $cantidadIngreso = $('#cantidad_ingreso' + currentIndex);
+                    const cantidadRequerida = orden_compra.cantidad_requerida;
+                    const descuento = parseFloat((orden_compra.descuento ?? 0) || 0).toFixed(decimales);
+                    const $precioUnitario = $('#precio_unitario' + currentIndex);
+                    const $precioUnitario_ = $('#precio_unitario_' + currentIndex);
 
-                calcularCantidadPendiente($cantidadIngreso[0]);
-                calcularDescuentoParcial($cantidadIngreso[0], cantidadRequerida, descuento);
-                calcularPrecioUnitario($precioUnitario[0], decimales);
-            }, 0);
+                    calcularCantidadPendiente($cantidadIngreso[0]);
+                    calcularDescuentoParcial($cantidadIngreso[0], cantidadRequerida, descuento);
+                    calcularPrecioUnitario($precioUnitario[0], decimales);
+                }, 0);
 
-            n++;
-            sub_total_acumulado += parseFloat(orden_compra.sub_total || 0);
-            igv_total_acumulado += parseFloat(orden_compra.igv || 0);
-            descuento_total_acumulado += parseFloat(orden_compra.descuento || 0);
-            descuento_total_acumulado += parseFloat(orden_compra.porcentaje || 0);
-            total_acumulado += parseFloat(orden_compra.total || 0);
+                n++;
+                sub_total_acumulado += parseFloat(orden_compra.sub_total || 0);
+                igv_total_acumulado += parseFloat(orden_compra.igv || 0);
+                descuento_total_acumulado += parseFloat(orden_compra.descuento || 0);
+                descuento_total_acumulado += parseFloat(orden_compra.porcentaje || 0);
+                total_acumulado += parseFloat(orden_compra.total || 0);
             
             });
 

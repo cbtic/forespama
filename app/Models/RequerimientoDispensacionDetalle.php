@@ -23,4 +23,17 @@ class RequerimientoDispensacionDetalle extends Model
 		$data = DB::select($cad);
         return $data;
     }
+
+    function getCantidadAbiertoRequerimientoDispensacionDetalleByIdRequerimientoDispensacion($id_requerimiento_dispensacion){
+
+        $cad = "select count(id) cantidad
+        from requerimiento_dispensacion_detalles rdd 
+        where id_requerimiento_dispensacion = '".$id_requerimiento_dispensacion."'
+        and rdd.estado = '1'
+        and rdd.cerrado != '2'";
+
+		$data = DB::select($cad);
+        //return $data;
+        if(isset($data[0]))return $data[0]->cantidad;
+    }
 }

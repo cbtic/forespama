@@ -15,6 +15,7 @@ use App\Models\Kardex;
 use App\Models\HornoDetalle;
 use App\Models\Descanso;
 use App\Models\DescansoDetalle;
+use App\Models\Producto;
 use Auth;
 use Carbon\Carbon;
 
@@ -150,7 +151,7 @@ class HornoController extends Controller
 
 		$array_ingreso_horno_detalle = array();
 
-		foreach($tipo_madera as $index => $value) {
+		foreach($tipo_madera as $index => $value){
             
 			if($cantidad_paquete_ingreso[$index] != "" || $cantidad_paquete_ingreso[$index] > 0){
 
@@ -158,16 +159,17 @@ class HornoController extends Controller
 
 				if($total_n_piezas[$index] <= $ingreso_horno_[$index]){
 					$produccionAcerradoMaderaDetalleAll->estado_produccion_acerrado = 0;
-					$produccionAcerradoMaderaDetalleAll->save();
+					//$produccionAcerradoMaderaDetalleAll->save();
 				}else{
 					$produccionAcerradoMaderaDetalleAll->cantidad_pendiente = $cantidad_paquete[$index] - $cantidad_paquete_ingreso[$index];
-					$produccionAcerradoMaderaDetalleAll->save();
+					//$produccionAcerradoMaderaDetalleAll->save();
 				}
 
 				$producto_acerrado_model = new ProductoAcerrado;
+				//dd($id_medida[$index]);exit();
 				$producto_acerrado = $producto_acerrado_model->getProductoByTipoMaderaMedida($id_tipo_madera[$index], $id_medida[$index]);
-
-				if (empty($producto_acerrado)) {
+				//dd($producto_acerrado);exit();
+				if (empty($producto_acerrado)){
 					continue;
 				}
 
@@ -191,13 +193,73 @@ class HornoController extends Controller
 					$IngresoVehiculoTroncoTipoMaderaAll->save();
 				}*/
 
-				$idCorte = Kardex::where('id_producto', $idProducto)->where('id_almacen_destino', 22)->whereDate('fecha', '<=', $request->fecha)->orderBy('fecha', 'desc')->orderBy('id', 'desc')->value('id');
+				/******************************SALIDA PARA CONVERSION DE TIPO DE PRODUCTO***********************************/
+				
+				/*$producto_model = new Producto;
+
+				$producto = $producto_model->getProductoByTipoMadera($id_tipo_madera[$index]);
+
+				$idProductoSalidaConv = $producto[0]->id;
+
+				$idCorteSalidaConv = Kardex::where('id_producto', $idProductoSalidaConv)->where('id_almacen_destino', 25)->whereDate('fecha', '<=', $request->fecha)->orderBy('fecha', 'desc')->orderBy('id', 'desc')->value('id');
+				
+				$saldoBaseSalidaConv = $idCorteSalidaConv > 0 ? Kardex::where('id', $idCorteSalidaConv)->value('saldos_cantidad') : 0;
+
+				$kardexSalidaConv = new Kardex;
+				$kardexSalidaConv->id_producto = $idProductoSalidaConv;
+				$kardexSalidaConv->id_almacen_destino = 25;
+				$kardexSalidaConv->fecha = $request->fecha;
+
+				$kardexSalidaConv->entradas_cantidad = 0;
+				$kardexSalidaConv->salidas_cantidad = $ingreso_horno_[$index];
+
+				$kardexSalidaConv->saldos_cantidad = $saldoBaseSalidaConv - $ingreso_horno_[$index];
+
+				//$kardex->id_ingreso_vehiculo_tronco = $id_ingreso_horno;
+				$kardexSalidaConv->id_tipo_movimiento = 32;
+				$kardexSalidaConv->id_movimiento = $id_ingreso_horno;
+				$kardexSalidaConv->codigo_movimiento = "";
+				//$kardex->fecha = $request->fecha;
+				$kardexSalidaConv->id_usuario_inserta = $id_user;
+				$kardexSalidaConv->save();*/
+
+				/************************************************************************************************************/
+
+				/******************************iNGRESO PARA CONVERSION DE TIPO DE PRODUCTO***********************************/
+
+				/*$idCorteIngresoConv = Kardex::where('id_producto', $idProducto)->where('id_almacen_destino', 25)->whereDate('fecha', '<=', $request->fecha)->orderBy('fecha', 'desc')->orderBy('id', 'desc')->value('id');
+				
+				$saldoBaseIngresoConv = $idCorteIngresoConv > 0 ? Kardex::where('id', $idCorteIngresoConv)->value('saldos_cantidad') : 0;
+
+				$kardexIngresoConv = new Kardex;
+				$kardexIngresoConv->id_producto = $idProducto;
+				$kardexIngresoConv->id_almacen_destino = 25;
+				$kardexIngresoConv->fecha = $request->fecha;
+
+				$kardexIngresoConv->entradas_cantidad = $ingreso_horno_[$index];
+				$kardexIngresoConv->salidas_cantidad = 0;
+
+				$kardexIngresoConv->saldos_cantidad = $saldoBaseIngresoConv + $ingreso_horno_[$index];
+
+				//$kardex->id_ingreso_vehiculo_tronco = $id_ingreso_horno;
+				$kardexIngresoConv->id_tipo_movimiento = 15;
+				$kardexIngresoConv->id_movimiento = $id_ingreso_horno;
+				$kardexIngresoConv->codigo_movimiento = "";
+				//$kardex->fecha = $request->fecha;
+				$kardexIngresoConv->id_usuario_inserta = $id_user;
+				$kardexIngresoConv->save();*/
+
+				/************************************************************************************************************/
+
+				/*************************************SALIDA TRANSFERENCIA DE TABLAS*****************************************/
+
+				$idCorte = Kardex::where('id_producto', $idProducto)->where('id_almacen_destino', 25)->whereDate('fecha', '<=', $request->fecha)->orderBy('fecha', 'desc')->orderBy('id', 'desc')->value('id');
 				
 				$saldoBase = $idCorte > 0 ? Kardex::where('id', $idCorte)->value('saldos_cantidad') : 0;
 
 				$kardex = new Kardex;
 				$kardex->id_producto = $idProducto;
-				$kardex->id_almacen_destino = 22;
+				$kardex->id_almacen_destino = 25;
 				$kardex->fecha = $request->fecha;
 
 				$kardex->entradas_cantidad = 0;
@@ -213,15 +275,19 @@ class HornoController extends Controller
 				$kardex->id_usuario_inserta = $id_user;
 				$kardex->save();
 
+				/************************************************************************************************************/
+
+				/*************************************iNGRESO TRANSFERENCIA DE TABLAS*****************************************/
+
 				$idProducto_ = $producto_acerrado[0]->id_producto;
 
-				$idCorte_ = Kardex::where('id_producto', $idProducto_)->where('id_almacen_destino', 23)->whereDate('fecha', '<=', $request->fecha)->orderBy('fecha', 'desc')->orderBy('id', 'desc')->value('id');
+				$idCorte_ = Kardex::where('id_producto', $idProducto_)->where('id_almacen_destino', 26)->whereDate('fecha', '<=', $request->fecha)->orderBy('fecha', 'desc')->orderBy('id', 'desc')->value('id');
 				
 				$saldoBase_ = $idCorte_ > 0 ? Kardex::where('id', $idCorte_)->value('saldos_cantidad') : 0;
 
 				$kardex_ = new Kardex;
 				$kardex_->id_producto = $idProducto_;
-				$kardex_->id_almacen_destino = 23;
+				$kardex_->id_almacen_destino = 26;
 				$kardex_->fecha = $request->fecha;
 
 				$kardex_->entradas_cantidad = $ingreso_horno_[$index];
@@ -229,10 +295,15 @@ class HornoController extends Controller
 
 				$kardex_->saldos_cantidad = $saldoBase_ + $ingreso_horno_[$index];
 
-				$kardex_->id_ingreso_vehiculo_tronco = $id_ingreso_horno;
+				//$kardex_->id_ingreso_vehiculo_tronco = $id_ingreso_horno;
+				$kardex_->id_tipo_movimiento = 9;
+				$kardex_->id_movimiento = $id_ingreso_horno;
+				$kardex->codigo_movimiento = "";
 				//$kardex->fecha = $request->fecha;
 				$kardex_->id_usuario_inserta = $id_user;
 				$kardex_->save();
+
+				/************************************************************************************************************/
 			
 			}
 		}
@@ -276,13 +347,13 @@ class HornoController extends Controller
 
 			$idProducto = $detalle->id_producto;
 
-			$idCorte = Kardex::where('id_producto', $idProducto)->where('id_almacen_destino', 23)->whereDate('fecha', '<=', $request->fecha_salida)->orderBy('fecha', 'desc')->orderBy('id', 'desc')->value('id');
+			$idCorte = Kardex::where('id_producto', $idProducto)->where('id_almacen_destino', 26)->whereDate('fecha', '<=', $request->fecha_salida)->orderBy('fecha', 'desc')->orderBy('id', 'desc')->value('id');
 			
 			$saldoBase = $idCorte > 0 ? Kardex::where('id', $idCorte)->value('saldos_cantidad') : 0;
 
 			$kardex = new Kardex;
 			$kardex->id_producto = $idProducto;
-			$kardex->id_almacen_destino = 24;
+			$kardex->id_almacen_destino = 26;
 			$kardex->fecha = $request->fecha_salida;
 
 			$kardex->entradas_cantidad = 0;
