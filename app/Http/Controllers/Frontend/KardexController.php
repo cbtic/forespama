@@ -268,11 +268,11 @@ class KardexController extends Controller
 		$variable = [];
 		$n = 1;
 
-		array_push($variable, array("N","Id Producto","Codigo","Producto","Entrada","Costo Entrada","Total Entrada","Salidas","Costo Salidas","Total Salidas","Saldos","Costo Saldos","Total Saldos","Almacen","Fecha","Tipo Movimiento","Codigo Movimiento"));
+		array_push($variable, array("N","Id Producto","Codigo","Producto","Entrada","Costo Entrada","Total Entrada","Salidas","Costo Salidas","Total Salidas","Saldos","Costo Saldos","Total Saldos","Almacen","Fecha","Tipo Movimiento","Codigo Movimiento","Centro de Costo"));
 		
 		foreach ($data as $r) {
 
-			array_push($variable, array($n++, $r->id_producto, $r->codigo, $r->producto, $r->entrada, $r->costo_entrada, $r->total_entrada, $r->salida, $r->costo_salida, $r->total_salida, $r->saldos, $r->costo_saldos, $r->total_saldos, $r->almacen_destino, $r->fecha_kardex, $r->tipo_movimiento, $r->codigo_movimiento));
+			array_push($variable, array($n++, $r->id_producto, $r->codigo, $r->producto, $r->entrada, $r->costo_entrada, $r->total_entrada, $r->salida, $r->costo_salida, $r->total_salida, $r->saldos, $r->costo_saldos, $r->total_saldos, $r->almacen_destino, $r->fecha_kardex, $r->tipo_movimiento, $r->codigo_movimiento, $r->centro_costo));
 		}
 		
 		$export = new InvoicesExport3([$variable]);
@@ -499,7 +499,7 @@ class InvoicesExport3 implements FromArray, WithHeadings, WithStyles
 
     public function headings(): array
     {
-        return ["N","Id Producto","Codigo","Producto","Entrada","Costo Entrada","Total Entrada","Salidas","Costo Salidas","Total Salidas","Saldos","Costo Saldos","Total Saldos","Almacen","Fecha","Tipo Movimiento","Codigo Movimiento"];
+        return ["N","Id Producto","Codigo","Producto","Entrada","Costo Entrada","Total Entrada","Salidas","Costo Salidas","Total Salidas","Saldos","Costo Saldos","Total Saldos","Almacen","Fecha","Tipo Movimiento","Codigo Movimiento","Centro de Costo"];
     }
 
 	public function styles(Worksheet $sheet)
