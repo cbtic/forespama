@@ -127,7 +127,7 @@ function fn_save_asistencia_promotor(){
         .show();
 
         if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function(position) {
+            navigator.geolocation.getCurrentPosition(function(position){
 
                 const latitud = position.coords.latitude;
                 const longitud = position.coords.longitude;
@@ -166,18 +166,18 @@ function fn_save_asistencia_promotor(){
 
                 $('.loader').hide();
 
-                if (error.code === error.PERMISSION_DENIED) {
+                if(error.code === error.PERMISSION_DENIED){
                     bootbox.alert("Debes permitir el acceso a la ubicación para marcar asistencia.");
-                } else if (error.code === error.POSITION_UNAVAILABLE) {
-                    bootbox.alert("No se pudo determinar la ubicación.");
-                } else if (error.code === error.TIMEOUT) {
-                    bootbox.alert("Tiempo de espera agotado al obtener la ubicación.");
-                } else {
+                }else if(error.code === error.POSITION_UNAVAILABLE){
+                    bootbox.alert("No se pudo determinar la ubicación. Verifica el GPS.");
+                }else if(error.code === error.TIMEOUT){
+                    bootbox.alert("Tiempo de espera agotado al obtener la ubicación. Inténtalo nuevamente.");
+                }else{
                     bootbox.alert("Error desconocido al obtener la ubicación.");
                 }
                 $('#btnAsistencia').attr('disabled', false);
             },
-            { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+            { enableHighAccuracy: true, timeout: 20000, maximumAge: 0 }
         );
 
         } else {

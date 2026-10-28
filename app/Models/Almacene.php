@@ -98,6 +98,21 @@ class Almacene extends Model
         return $data;
     }
 
+    function getAlmacenByUserProduccion($id){
+
+        $cad = "select distinct(a.*) from almacenes a 
+        inner join almacen_usuarios au on au.id_almacen = a.id 
+        inner join users u on au.id_user = u.id 
+        where u.id = '".$id."'
+        and au.estado = '1'
+        and a.estado = '1'
+        and a.id in ('6', '8')
+        order by 1 asc";
+
+		$data = DB::select($cad);
+        return $data;
+    }
+
     function getAlmacenAll(){
 
         $cad = "select * from almacenes a 

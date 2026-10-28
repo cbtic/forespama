@@ -106,7 +106,7 @@ class IngresoProduccionController extends Controller
         $estado_bien = $tablaMaestra_model->getMaestroByTipo(56);
         $unidad_medida = $tablaMaestra_model->getMaestroByTipo(57);
         $marca = $marca_model->getMarcaAll();
-        $almacen_destino = $almacen_model->getAlmacenAll();
+        $almacen_destino = $almacen_model->getAlmacenByUserProduccion($id_user);
         //$area = $tablaMaestra_model->getMaestroByTipo(81);
 		$area_trabajo = $area_trabajo_model->getAreaTrabajoProduccion();
 		//var_dump($id);exit();
