@@ -411,7 +411,7 @@ class AcerradoMaderaController extends Controller
 			$ancho_pies = $ancho / 30.48;//13/30.48 = 0.426
 			$largo_pies = $largo * 3.28084;//2.5*3.28084 = 8.202
 
-			$volumen_pies = $espesor_pies * $ancho_pies * $largo_pies;//0.457
+			$volumen_pies = $espesor_pies * $ancho_pies * $largo_pies;//0.457  PIES TABLARES
 
 			$cantidad_acerrado_pies = $n_piezas[$index] * $volumen_pies;//120*0.457 = 54.84
 

@@ -238,30 +238,31 @@ class PromotorController extends Controller
 
 		$distancia = $this->calcularDistancia($tienda->latitud, $tienda->longitud, $request->latitud, $request->longitud);
 
-		if ($distancia > 0.5) { // 0.5 km = 500 metros
+		if($distancia > 0.5){ // 0.5 km = 500 metros
 			return response()->json(['message' => 'No estás dentro del rango permitido para marcar asistencia.']);
 		}
 
-		if ($request->has('foto_base64')) {
+		if($request->has('foto_base64')) {
 
 			$imageData = $request->foto_base64;
 			
 			if (preg_match('/^data:image\/(\w+);base64,/', $imageData, $type)) {
 				$extension = strtolower($type[1]);
 
-				if (!in_array($extension, ['jpg', 'jpeg', 'png'])) {
+				if(!in_array($extension, ['jpg', 'jpeg', 'png'])) {
 					throw new \Exception('Formato de imagen no válido. Solo se permiten JPG o PNG.');
 				}
 
 				$imageData = substr($imageData, strpos($imageData, ',') + 1);
 				$imageData = base64_decode($imageData);
 
-				if ($imageData === false) {
+				if($imageData === false) {
 					throw new \Exception('Error al decodificar la imagen.');
 				}
 
 				$path = public_path("img/asistencias/");
-				if (!is_dir($path)) {
+				
+				if(!is_dir($path)) {
 					mkdir($path, 0777, true);
 				}
 

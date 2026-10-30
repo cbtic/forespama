@@ -3086,7 +3086,7 @@ class OrdenCompraController extends Controller
             $descuento_usuario = $usuario_descuento_model->getDescuentoByUser($orden_compra->id_vendedor);
             $id_descuento_usuario = $descuento_usuario[0]->descuento;
 
-            if($orden_compra->id_canal == 1 || $orden_compra->id_canal == 2 || $orden_compra->id_canal == 3){
+            if($orden_compra->id_canal == 1 || $orden_compra->id_canal == 2 || $orden_compra->id_canal == 3 || $orden_compra->id_canal == 5){
                 $autorizacion_orden_compra = AutorizacionOrdenCompra::where('id_orden_compra',$orden_compra->id)->where('estado',1)->orderBy('id', 'desc')->first();
                 $id_proceso = $autorizacion_orden_compra->id_proceso_pedido;
             }

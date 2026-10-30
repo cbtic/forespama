@@ -116,75 +116,127 @@ function fn_save_asistencia_promotor(){
     if(msg!=""){
         bootbox.alert(msg);
         return false;
-    }else{
+    }
+    
+    var msgLoader = "Marcando asistencia, espere un momento...";
+    $('.loader')
+    .css("opacity", "0.8")
+    .css("width", "100vw")
+    .css("height", "100vh")
+    .html("<div id='Grd1_processing'>Marcando asistencia, espere un momento...</div>")
+    .show();
 
-        var msgLoader = "Marcando asistencia, espere un momento...";
-        $('.loader')
-        .css("opacity", "0.8")
-        .css("width", "100vw")
-        .css("height", "100vh")
-        .html("<div id='Grd1_processing'>Marcando asistencia, espere un momento...</div>")
-        .show();
+    obtenerMejorUbicacion(function(position) {
 
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function(position){
-
-                const latitud = position.coords.latitude;
-                const longitud = position.coords.longitude;
-                
-                //var msgLoader = "Marcando asistencia, espere un momento...";
-                //var heightBrowser = $(window).width() / 2;
-                //$('.loader').css("opacity", "0.8").css("height", heightBrowser).html("<div id='Grd1_wrapper' class='dataTables_wrapper'><div id='Grd1_processing' class='dataTables_processing panel-default'>" + msgLoader + "</div></div>");
-                //$('.loader').css("opacity", "0.8").css("width", "100vw").css("height", "100vh").html("<div id='Grd1_wrapper' class='dataTables_wrapper'><div id='Grd1_processing' class='dataTables_processing panel-default'>" + msgLoader + "</div></div>");
-                //$('.loader').show();
-
-                $.ajax({
-                    url: "/promotores/marcar_asistencia",
-                    type: "POST",
-                    dataType: "json",
-                    data: {
-                        _token: $('meta[name="csrf-token"]').attr('content'),
-                        id_tienda: id_tienda,
-                        latitud: latitud,
-                        longitud: longitud
-                    },
-                    success: function (response) {
-                        $('.loader').hide();
-                        bootbox.alert(response.message);
-                        $('#btnAsistencia').attr('disabled', false);
-                        $('#openOverlayOpc').modal('hide');
-                        datatablenew();
-                    },
-                    error: function (xhr, status, error) {
-                        $('.loader').hide();
-                        bootbox.alert("Ocurrió un error al marcar la asistencia: " + error);
-                        $('#btnAsistencia').attr('disabled', false);
-                    }
-                });
-
-            }, function (error) {
-
-                $('.loader').hide();
-
-                if(error.code === error.PERMISSION_DENIED){
-                    bootbox.alert("Debes permitir el acceso a la ubicación para marcar asistencia.");
-                }else if(error.code === error.POSITION_UNAVAILABLE){
-                    bootbox.alert("No se pudo determinar la ubicación. Verifica el GPS.");
-                }else if(error.code === error.TIMEOUT){
-                    bootbox.alert("Tiempo de espera agotado al obtener la ubicación. Inténtalo nuevamente.");
-                }else{
-                    bootbox.alert("Error desconocido al obtener la ubicación.");
-                }
-                $('#btnAsistencia').attr('disabled', false);
+        const latitud = position.coords.latitude;
+        const longitud = position.coords.longitude;
+        const precision = position.coords.accuracy;
+        
+        $.ajax({
+            url: "/promotores/marcar_asistencia",
+            type: "POST",
+            dataType: "json",
+            data: {
+                _token: $('meta[name="csrf-token"]').attr('content'),
+                id_tienda: id_tienda,
+                latitud: latitud,
+                longitud: longitud,
+                precision: precision
             },
-            { enableHighAccuracy: true, timeout: 20000, maximumAge: 0 }
-        );
+            success: function (response) {
+                $('.loader').hide();
+                bootbox.alert(response.message);
+                $('#btnAsistencia').attr('disabled', false);
+                $('#openOverlayOpc').modal('hide');
+                datatablenew();
+            },
+            error: function (xhr, status, error) {
+                $('.loader').hide();
+                bootbox.alert("Ocurrió un error al marcar la asistencia: " + error);
+                $('#btnAsistencia').attr('disabled', false);
+            }
+        });
 
+    }, function(mensaje){
+
+        $('.loader').hide();
+        bootbox.alert(mensaje);
+        $('#btnAsistencia').attr('disabled', false);
+    });
+}
+
+function obtenerMejorUbicacion(callbackExito, callbackError) {
+    if (!navigator.geolocation) {
+        callbackError('Tu navegador no soporta geolocalización.');
+        return;
+    }
+
+    let mejorPosicion = null;
+    let observador = null;
+    let temporizador = null;
+    let finalizado = false;
+
+    function finalizar() {
+        if (finalizado) return;
+        finalizado = true;
+
+        if (observador !== null) {
+            navigator.geolocation.clearWatch(observador);
+        }
+
+        if (temporizador !== null) {
+            clearTimeout(temporizador);
+        }
+
+        if (mejorPosicion) {
+            callbackExito(mejorPosicion);
         } else {
-            bootbox.alert("Tu navegador no soporta geolocalización.");
-            $('#btnAsistencia').attr('disabled', false);
+            callbackError('No se pudo obtener la ubicación. ' + 'Verifica que la ubicación esté activada e inténtalo nuevamente.'
+            );
         }
     }
+
+    observador = navigator.geolocation.watchPosition(
+        function(position) {
+            if (
+                !mejorPosicion ||
+                position.coords.accuracy < mejorPosicion.coords.accuracy
+            ) {
+                mejorPosicion = position;
+            }
+
+            if (position.coords.accuracy <= 50) {
+                finalizar();
+            }
+        },
+        function(error) {
+            if (error.code === error.PERMISSION_DENIED) {
+                if (observador !== null) {
+                    navigator.geolocation.clearWatch(observador);
+                    observador = null;
+                }
+
+                if (temporizador !== null) {
+                    clearTimeout(temporizador);
+                    temporizador = null;
+                }
+
+                if (!finalizado) {
+                    finalizado = true;
+                    callbackError(
+                        'Debes permitir el acceso a la ubicación del celular.'
+                    );
+                }
+            }
+        },
+        {
+            enableHighAccuracy: true,
+            timeout: 20000,
+            maximumAge: 0
+        }
+    );
+
+    temporizador = setTimeout(finalizar, 15000);
 }
 
 </script>
