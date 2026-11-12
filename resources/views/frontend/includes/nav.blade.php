@@ -545,7 +545,7 @@
 								@endif
 
 								@can('Reporte Pedidos Detalle')
-									<x-utils.link :href="route('frontend.orden_compra.create_reporte_pedido_detalle')" class="dropdown-item" :text="__('Reporte Pedidos Detalle')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+									<x-utils.link :href="route('frontend.orden_compra.create_reporte_pedido_detalle')" class="dropdown-item" :text="__('Reporte Retail Detalle')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
 								@endif
 
 							</div>

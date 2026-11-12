@@ -4483,7 +4483,7 @@ class OrdenCompraController extends Controller
 		}
 		
 		$export = new InvoicesExport10([$variable]);
-		return Excel::download($export, 'Reporte_pedido_detalle.xlsx');
+		return Excel::download($export, 'Reporte_retail_detalle.xlsx');
 		
     }
 }

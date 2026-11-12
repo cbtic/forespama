@@ -1,6 +1,4 @@
--- DROP FUNCTION public.sp_listar_aliado_pama_paginado(varchar, varchar, varchar, varchar, varchar, refcursor);
-
-CREATE OR REPLACE FUNCTION public.sp_listar_aliado_pama_paginado(p_numero_documento character varying, p_aliado character varying, p_estado character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
+CREATE OR REPLACE FUNCTION public.sp_listar_aliado_pama_paginado(p_numero_documento character varying, p_aliado character varying, p_porcentaje_personalizado character varying, p_estado character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
  RETURNS refcursor
  LANGUAGE plpgsql
 AS $function$
@@ -35,6 +33,10 @@ begin
 
 	If p_aliado<>'' Then
 	 v_where:=v_where||'And p.nombres ||'' ''|| p.apellido_paterno ||'' ''|| p.apellido_materno ilike ''%'||p_aliado||'%'' ';
+	End If;
+
+	If p_porcentaje_personalizado<>'' Then
+	 v_where:=v_where||'And ap.porcentaje_personalizado  = '''||p_porcentaje_personalizado||''' ';
 	End If;
 
 	If p_estado<>'' Then

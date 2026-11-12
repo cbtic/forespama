@@ -268,12 +268,12 @@ label.form-control-sm{
 
 @extends('frontend.layouts.app')
 
-@section('title', __('Reporte de Detalle Pedido'))
+@section('title', __('Reporte Retail Detalle'))
 
 @section('breadcrumb')
 <ol class="breadcrumb" style="padding-left:130px;margin-top:0px;background-color:#283659">
     <li class="breadcrumb-item text-primary">Inicio</li>
-    <li class="breadcrumb-item active">Reporte de Detalle Pedido</li>
+    <li class="breadcrumb-item active">Reporte Retail Detalle</li>
     </li>
 </ol>
 
@@ -309,7 +309,7 @@ label.form-control-sm{
 						<div class="card-header bg-white border-bottom">
 							<h5 class="mb-0 text-primary">
 								<i class="fas fa-chart-line me-2"></i>
-								Reporte de Detalle Pedido
+								Reporte Retail Detalle
 							</h5>
 						</div>
                     </div>
