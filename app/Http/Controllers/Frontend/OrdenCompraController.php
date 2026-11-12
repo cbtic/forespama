@@ -76,6 +76,7 @@ class OrdenCompraController extends Controller
 		$this->middleware('can:Reporte Comercializacion Sin IGV')->only(['exportar_reporte_comercializacion_sin_igv']);
 		$this->middleware('can:Reporte Autorizacion Pedidos')->only(['create_reporte_autorizacion_pedido']);
 		$this->middleware('can:Reporte Comercializacion Retail')->only(['create_reporte_comercializacion_retail']);
+		$this->middleware('can:Reporte Pedidos Detalle')->only(['exportar_reporte_pedido_detalle']);
 	}
 
     public function create(){
@@ -4405,6 +4406,86 @@ class OrdenCompraController extends Controller
         return response()->json(['id' => $request->id]);
         
     }
+
+    public function create_reporte_pedido_detalle(){
+
+        $id_user = Auth::user()->id;
+        $tienda_model = new Tienda;
+        $producto_model = new Producto;
+        $user_model = new User;
+        $empresa_model = new Empresa;
+
+		$tablaMaestra_model = new TablaMaestra;
+		$tipo_documento = $tablaMaestra_model->getMaestroByTipo(54);
+        $cerrado_orden_compra = $tablaMaestra_model->getMaestroByTipo(52);
+        $tiendas = $tienda_model->getTiendasAll();
+        $productos = $producto_model->getProductoExterno();
+        $vendedor_retail = $user_model->getUserRetailByRol(23,24);
+        $proveedor = $empresa_model->getEmpresasRetail();
+		
+		return view('frontend.orden_compra.create_reporte_pedido_detalle',compact('tipo_documento','cerrado_orden_compra','tiendas','productos','vendedor_retail','proveedor'));
+
+	}
+
+    public function listar_reporte_pedido_detalle_ajax(Request $request){
+
+		$orden_compra_model = new OrdenCompra;
+		$p[]=$request->empresa_compra;
+        $p[]=$request->fecha_inicio;
+        $p[]=$request->fecha_fin;
+        $p[]=$request->vendedor;
+        $p[]=1;
+        $p[]=1;
+        $p[]=$request->NumeroPagina;
+		$p[]=$request->NumeroRegistros;
+		$data = $orden_compra_model->listar_reporte_pedido_detalle_ajax($p);
+		$iTotalDisplayRecords = isset($data[0]->totalrows)?$data[0]->totalrows:0;
+
+		$result["PageStart"] = $request->NumeroPagina;
+		$result["pageSize"] = $request->NumeroRegistros;
+		$result["SearchText"] = "";
+		$result["ShowChildren"] = true;
+		$result["iTotalRecords"] = $iTotalDisplayRecords;
+		$result["iTotalDisplayRecords"] = $iTotalDisplayRecords;
+		$result["aaData"] = $data;
+
+        echo json_encode($result);
+
+	}
+
+    public function exportar_reporte_pedido_detalle($empresa_compra, $fecha_inicio, $fecha_fin, $vendedor) {
+
+        if($empresa_compra==0)$empresa_compra = "";
+        if($fecha_inicio=="0")$fecha_inicio = "";
+        if($fecha_fin=="0")$fecha_fin = "";
+        if($vendedor==0)$vendedor = "";
+
+        $orden_compra_model = new OrdenCompra;
+		$p[]=$empresa_compra;
+        $p[]=$fecha_inicio;
+        $p[]=$fecha_fin;
+        $p[]=$vendedor;
+        $p[]=1;
+        $p[]=1;
+        $p[]=1;
+		$p[]=15000;
+		$data = $orden_compra_model->listar_reporte_pedido_detalle_ajax($p);
+		$iTotalDisplayRecords = isset($data[0]->totalrows)?$data[0]->totalrows:0;
+		
+		$variable = [];
+		$n = 1;
+
+		array_push($variable, array("N°","Empresa","Fecha Pedido","Codigo Interno","Descripcion","Precio Unitario","Precio Total","Cantidad Pedida","Cantidad Entregada","Cantidad Cancelada","Vendedor"));
+		
+		foreach ($data as $r) {
+            
+			array_push($variable, array($n++,$r->cliente, $r->fecha_orden_compra, $r->codigo, $r->producto, $r->precio, $r->sub_total, $r->cantidad_requerida, $r->cantidad_despacho, $r->cantidad_cancelada, $r->vendedor));
+		}
+		
+		$export = new InvoicesExport10([$variable]);
+		return Excel::download($export, 'Reporte_pedido_detalle.xlsx');
+		
+    }
 }
 
 class InvoicesExport implements FromArray, WithHeadings, WithStyles
@@ -4978,6 +5059,70 @@ class InvoicesExport9 implements FromArray, WithHeadings, WithStyles
 		$sheet->fromArray($this->headings(), NULL, 'A2');
 
         foreach (range('A', 'T') as $col) {
+            $sheet->getColumnDimension($col)->setAutoSize(true);
+        }
+    }
+}
+
+class InvoicesExport10 implements FromArray, WithHeadings, WithStyles
+{
+	protected $invoices;
+
+	public function __construct(array $invoices)
+	{
+		$this->invoices = $invoices;
+	}
+
+	public function array(): array
+	{
+		return $this->invoices;
+	}
+
+    public function headings(): array
+    {
+        return ["N°","Empresa","Fecha Pedido","Codigo Interno","Descripcion","Precio Unitario","Precio Total","Cantidad Pedida","Cantidad Entregada","Cantidad Cancelada","Vendedor"];
+    }
+
+	public function styles(Worksheet $sheet)
+    {
+
+		$sheet->mergeCells('A1:K1');
+
+        $sheet->setCellValue('A1', "REPORTE DE PEDIDOS DETALLE RETAIL - FORESPAMA");
+        $sheet->getStyle('A1:K1')->applyFromArray([
+            'font' => [
+                'bold' => true,
+                'color' => ['rgb' => 'FFFFFF'],
+            ],
+            'fill' => [
+                'fillType' => Fill::FILL_SOLID,
+                'startColor' => ['rgb' => '246257'],
+            ],
+            'alignment' => [
+                'horizontal' => Alignment::HORIZONTAL_CENTER,
+            ],
+        ]);
+
+		$sheet->getStyle('A1')->getAlignment()->setWrapText(true);
+		$sheet->getRowDimension(1)->setRowHeight(30);
+
+        $sheet->getStyle('A2:K2')->applyFromArray([
+            'font' => [
+                'bold' => true,
+                'color' => ['rgb' => '000000'],
+            ],
+            'fill' => [
+                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                'startColor' => ['rgb' => '2EB85C'],
+            ],
+			'alignment' => [
+			'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+    		],
+        ]);
+
+		$sheet->fromArray($this->headings(), NULL, 'A2');
+
+        foreach (range('A', 'K') as $col) {
             $sheet->getColumnDimension($col)->setAutoSize(true);
         }
     }

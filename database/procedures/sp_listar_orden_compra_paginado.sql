@@ -13,11 +13,26 @@ v_where varchar;
 v_count varchar;
 v_col_count varchar;
 v_id_rol integer;
+v_tiene_rol_7 boolean := false;
+v_tiene_rol_11 boolean := false;
 
 begin
 
-	select role_id into v_id_rol from model_has_roles mhr where mhr.model_id::varchar=p_id_user;
+	--select role_id into v_id_rol from model_has_roles mhr where mhr.model_id::varchar=p_id_user;
 
+	select 
+	    exists(
+	        select 1
+	        from model_has_roles mhr
+	        where mhr.model_id::varchar = p_id_user
+	        and mhr.role_id = 7),
+	    exists(
+	        select 1
+	        from model_has_roles mhr
+	        where mhr.model_id::varchar = p_id_user
+	        and mhr.role_id = 11)
+	into v_tiene_rol_7, v_tiene_rol_11;
+	
 	p_pagina=(p_pagina::Integer-1)*p_limit::Integer;
 
 	v_campos=' oc.id, tm.denominacion tipo_documento, e2.razon_social empresa_vende,
@@ -109,7 +124,7 @@ begin
 	 v_where:=v_where||'And oc.estado = '''||p_estado||''' ';
 	End If;
 
-	If v_id_rol=7 Then 
+	/*If v_id_rol=7 Then 
 		v_where:=v_where||'And oc.id_vendedor = '''||p_id_user||''' ';
 	End If;
 
@@ -119,7 +134,20 @@ begin
 	   ))';
 	/*Else
 	   v_where := v_where || ' AND oc.id_vendedor = ''' || p_id_user || '''';*/
-	End If;
+	End If;*/
+
+	IF v_tiene_rol_11 THEN
+	    v_where := v_where || ' and (
+	        oc.id_vendedor = ''' || p_id_user || '''
+	        or oc.id_vendedor IN (
+	            select jvd.id_vendedor
+	            from jefe_vendedor_detalles jvd
+	            where jvd.id_jefe_vendedor = ' || p_id_user || ' and jvd.estado = ''1'' ))';
+	
+	ELSIF v_tiene_rol_7 THEN
+	    v_where := v_where || ' AND oc.id_vendedor = ''' || p_id_user || '''';
+	
+	END IF;
 
 	If p_id_vendedor<>'' Then
 	 v_where:=v_where||'And oc.id_vendedor = '''||p_id_vendedor||''' ';

@@ -69,6 +69,7 @@ use App\Http\Controllers\Frontend\AsignacionCuentaController;
 use App\Http\Controllers\Frontend\AliadosPamaComisionesController;
 use App\Http\Controllers\Frontend\AliadoPamaController;
 use App\Http\Controllers\Frontend\ComisionParametroController;
+use App\Http\Controllers\Frontend\DeveloperModeController;
 
 //use App\Http\Controllers\VehiculoController;
 
@@ -1100,3 +1101,15 @@ Route::get('orden_compra/modal_orden_compra_autorizacion_servicio_cliente/{id}',
 
 Route::post('orden_compra/send_oc_autorizacion_servicio_cliente', [OrdenCompraController::class, 'send_oc_autorizacion_servicio_cliente'])->name('orden_compra.send_oc_autorizacion_servicio_cliente');
 Route::post('orden_compra/send_denegar_oc_autorizacion_servicio_cliente', [OrdenCompraController::class, 'send_denegar_oc_autorizacion_servicio_cliente'])->name('orden_compra.send_denegar_oc_autorizacion_servicio_cliente');
+
+Route::get('orden_compra/create_reporte_pedido_detalle', [OrdenCompraController::class, 'create_reporte_pedido_detalle'])->name('orden_compra.create_reporte_pedido_detalle');
+Route::post('orden_compra/listar_reporte_pedido_detalle_ajax', [OrdenCompraController::class, 'listar_reporte_pedido_detalle_ajax'])->name('orden_compra.listar_reporte_pedido_detalle_ajax');
+Route::get('orden_compra/exportar_reporte_pedido_detalle/{empresa_compra}/{fecha_inicio}/{fecha_fin}/{vendedor}', [OrdenCompraController::class, 'exportar_reporte_pedido_detalle'])->name('orden_compra.exportar_reporte_pedido_detalle');
+
+// Rutas para modo desarrollador
+Route::middleware(['auth', 'throttle:5,1'])->group(function () {
+
+    Route::post('developer-mode/activar', [DeveloperModeController::class, 'activar'])->name('developer-mode.activar');
+    Route::post('developer-mode/desactivar', [DeveloperModeController::class, 'desactivar'])->name('developer-mode.desactivar');
+
+});

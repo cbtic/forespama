@@ -171,7 +171,6 @@
 
 					@endif
 					
-					
 					@if(Gate::check('Requerimientos') || Gate::check('Entradas') || Gate::check('Orden Compra') || Gate::check('Consulta Stock') || Gate::check('Requerimiento Insumos') || Gate::check('Dispensacion') || Gate::check('Ingreso Produccion') || Gate::check('Kardex') || Gate::check('Movimientos Oxapampa') || Gate::check('Movimientos') || Gate::check('Verificacion Aplicacion Comisiones') || Gate::check('Empaquetado') || Gate::check('Devolucion') || Gate::check('Gestion Autorizacion') || Gate::check('Gestion Autorizacion Postventa') || Gate::check('Cargar Informe Venta b2b') || Gate::check('Reuso') || Gate::check('Cambio Stock Codigo') || Gate::check('Ajuste Stock') || Gate::check('Ingreso Salida Secundario') || Gate::check('Kardex Secundario'))
 						
 						<li class="nav-item dropdown">
@@ -543,6 +542,10 @@
 
 								@can('Reporte Productos')
 									<x-utils.link :href="route('frontend.productos.create_reporte_productos')" class="dropdown-item" :text="__('Reporte Productos')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+								@endif
+
+								@can('Reporte Pedidos Detalle')
+									<x-utils.link :href="route('frontend.orden_compra.create_reporte_pedido_detalle')" class="dropdown-item" :text="__('Reporte Pedidos Detalle')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
 								@endif
 
 							</div>

@@ -213,5 +213,125 @@
 
         });
     </script>
+
+    {{-- MODO DESARROLLADOR --}}
+    @if(session('developer_mode_until') && session('developer_mode_until') > time())
+        <div id="developer-mode-badge"
+            style="position:fixed;bottom:15px;right:15px;z-index:99999;
+                    background:#198754;color:white;padding:8px 15px;
+                    border-radius:6px;font-size:12px;">
+            MODO DESARROLLADOR ACTIVO
+        </div>
+    @endif
+
+    <script>
+        $(document).ready(function () {
+
+            var csrfToken = @json(csrf_token());
+
+            // Atajo: Ctrl + Shift + D
+            $(document).on('keydown', function (e) {
+
+                if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'd') {
+                    e.preventDefault();
+
+                    bootbox.prompt({
+                        title: 'Modo desarrollador',
+                        inputType: 'password',
+                        placeholder: 'Ingrese la contraseña',
+                        callback: function (password) {
+
+                            if (password === null) {
+                                return;
+                            }
+
+                            activarDeveloperMode(password);
+                        }
+                    });
+                }
+            });
+
+            function activarDeveloperMode(password) {
+
+                $.ajax({
+                    url: @json(route('frontend.developer-mode.activar')),
+                    type: 'POST',
+                    data: {
+                        password: password,
+                        _token: csrfToken
+                    },
+                    success: function (response) {
+
+                        if (response.success) {
+                            bootbox.alert(response.message, function () {
+                                location.reload();
+                            });
+                        }
+
+                    },
+                    error: function (xhr) {
+
+                        var mensaje = 'No se pudo activar el modo desarrollador.';
+
+                        if (xhr.responseJSON && xhr.responseJSON.message) {
+                            mensaje = xhr.responseJSON.message;
+                        }
+
+                        bootbox.alert(mensaje);
+                    }
+                });
+            }
+
+            // Desactivar el modo desarrollador con Ctrl + Shift + X
+            $(document).on('keydown', function (e) {
+
+                if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'x') {
+                    e.preventDefault();
+
+                    bootbox.confirm({
+                        title: 'Desactivar modo desarrollador',
+                        message: '¿Desea desactivar el modo desarrollador?',
+                        callback: function (result) {
+
+                            if (!result) {
+                                return;
+                            }
+
+                            $.ajax({
+                                url: @json(route('frontend.developer-mode.desactivar')),
+                                type: 'POST',
+                                data: {
+                                    _token: csrfToken
+                                },
+                                success: function (response) {
+                                    location.reload();
+                                },
+                                error: function () {
+                                    bootbox.alert('No se pudo desactivar el modo desarrollador.');
+                                }
+                            });
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+
+    <script>
+    document.addEventListener('keydown', function(e) {
+        if (
+            e.key === 'F12' ||
+            (e.ctrlKey && e.shiftKey && ['I', 'J', 'C'].includes(e.key.toUpperCase()))
+        ) {
+            e.preventDefault();
+            e.stopPropagation();
+            return false;
+        }
+    });
+
+    document.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+    });
+    </script>
 </body>
 </html>

@@ -45,4 +45,14 @@ class User extends Authenticatable
         return $data;
     }
 
+    function getUserRetailByRol($id_rol1, $id_rol2){
+
+        $cad = "select distinct u.id, u.name
+        from model_has_roles mhr 
+        inner join users u on mhr.model_id=u.id and u.active = '1'
+        where mhr.role_id = '".$id_rol1."' or mhr.role_id = '".$id_rol2."' ";
+
+		$data = DB::select($cad);
+        return $data;
+    }
 }
