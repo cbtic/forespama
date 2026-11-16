@@ -51,7 +51,7 @@ class Dispensacione extends Model
     function getDetalleDispensacionById($id){
 
         $cad = "select dd.id,  ROW_NUMBER() OVER (PARTITION BY dd.id_dispensacion ) AS row_num, p.numero_serie item, dd.id_producto, p.codigo, dd.id_marca, dd.id_unidad_medida, 
-        dd.id_estado_producto , dd.cantidad, d.id_almacen 
+        dd.id_estado_producto , dd.cantidad, d.id_almacen, dd.lote
         from dispensacion_detalles dd 
         inner join productos p on dd.id_producto = p.id
         inner join dispensaciones d on dd.id_dispensacion = d.id

@@ -367,6 +367,7 @@ $.ajax({
                         <td><select name="unidad_[]" id="unidad_${n}" class="form-control form-control-sm" disabled>${unidadMedidaOptions}</select><input name="unidad[]" id="unidad${n}" class="form-control form-control-sm" value="${dispensacion.id_unidad_medida}" type="hidden"></td>
                         <td><input name="cantidad[]" id="cantidad${n}" class="cantidad form-control form-control-sm" value="${dispensacion.cantidad}" type="text" oninput="calcularCantidadPendiente(this);calcularSubTotal(this)" readonly></td>
                         <td><input name="stock_actual[]" id="stock_actual${n}" class="form-control form-control-sm" value="${producto_stock.saldos_cantidad}" type="text" readonly></td>
+                        <td><input name="lote[]" id="lote${n}" class="form-control form-control-sm" value="${dispensacion.lote}" type="text" readonly></td>
                     </tr>
                 `;
                 tbody.append(row);
@@ -737,6 +738,7 @@ function obtenerCentroCosto(){
                                 <th>Unidad</th>
                                 <th>Cantidad</th>
                                 <th>Stock</th>
+                                <th>Lote</th>
                                 <!--<th>Sub Total</th>
                                 <th>IGV</th>
                                 <th>Total</th>-->

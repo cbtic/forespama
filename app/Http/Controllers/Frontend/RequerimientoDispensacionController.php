@@ -306,6 +306,7 @@ class RequerimientoDispensacionController extends Controller
         $cantidad = $request->input('cantidad');
         $cantidad_total = $request->input('cantidad_total');
         $cantidad_pendiente = $request->input('cantidad_pendiente');
+        $lote = $request->input('lote');
         $id_requerimiento_dispensacion_detalle =$request->id_requerimiento_dispensacion_detalle;
 		
 		$dispensacion->id_tipo_documento = $request->tipo_documento;
@@ -350,6 +351,7 @@ class RequerimientoDispensacionController extends Controller
             $dispensacion_detalle->id_producto = $descripcion[$index];
             $dispensacion_detalle->cantidad = $cantidad[$index];
             $dispensacion_detalle->id_unidad_medida = $unidad[$index];
+            $dispensacion_detalle->lote = $lote[$index];
             $dispensacion_detalle->id_estado_producto = 1;
 			if($marca[$index]!=null && $marca[$index] !=0){
 				$dispensacion_detalle->id_marca = (int)$marca[$index];

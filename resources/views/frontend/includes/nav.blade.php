@@ -77,7 +77,7 @@
 
 						<li class="nav-item dropdown">
 							<a href="#" class="nav-link dropdown-toggle" id="navbarDropdownPrueba" data-toggle="dropdown"
-							aria-haspopup="true" aria-expanded="false">Acerrado</a>
+							aria-haspopup="true" aria-expanded="false">Producci&oacute;n OXA</a>
 							<div class="dropdown-menu" aria-labelledby="navbarDropdownPrueba">
 								
 								@can('Acerrado')
@@ -90,6 +90,10 @@
 
 								@can('Descanso')
 									<x-utils.link :href="route('frontend.descanso.create')" class="dropdown-item" :text="__('Descanso')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
+								@endif
+
+								@can('Finger Joint')
+									<x-utils.link :href="route('frontend.finger_joint_proceso.create')" class="dropdown-item" :text="__('Finger Joint')" :active="activeClass(Route::is('admin.auth.user.*'), 'c-active')" />
 								@endif
 								
 							</div>

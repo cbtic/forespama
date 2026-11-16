@@ -313,6 +313,7 @@ $.ajax({
                     <td><input name="cantidad_total[]" id="cantidad_total${n}" class="cantidad_total form-control form-control-sm" value="${requerimiento_dispensacion.cantidad}" type="text" oninput="calcularCantidadPendiente(this);calcularSubTotal(this)" readonly></td>
                     <td><input name="cantidad_pendiente[]" id="cantidad_pendiente${n}" class="cantidad_pendiente form-control form-control-sm" value="" type="text" oninput="calcularCantidadPendiente(this);calcularSubTotal(this)" readonly></td>
                     <td><input name="stock_actual[]" id="stock_actual${n}" class="form-control form-control-sm" value="${producto_stock.saldos_cantidad}" type="text" readonly></td>
+                    <td><input name="lote[]" id="lote${n}" class="lote form-control form-control-sm" value="" type="text" oninput="" ></td>
                     <td><button type="button" class="btn btn-sm btn-clasico btn-eliminar" onclick="eliminarFila(this)"><i class="fas fa-trash" style="font-size:18px;"></i></button></td>
 
                 </tr>
@@ -736,6 +737,7 @@ function fn_save_detalle_producto(){
                                 <th>Cantidad Total</th>
                                 <th>Cantidad Pendiente</th>
                                 <th>Stock</th>
+                                <th>Lote</th>
 							</tr>
 							</thead>
 							<tbody id="divRequerimientoDispensacionDetalle">

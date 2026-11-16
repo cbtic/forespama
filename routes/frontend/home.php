@@ -70,6 +70,7 @@ use App\Http\Controllers\Frontend\AliadosPamaComisionesController;
 use App\Http\Controllers\Frontend\AliadoPamaController;
 use App\Http\Controllers\Frontend\ComisionParametroController;
 use App\Http\Controllers\Frontend\DeveloperModeController;
+use App\Http\Controllers\Frontend\FingerJointProcesoController;
 
 //use App\Http\Controllers\VehiculoController;
 
@@ -1105,6 +1106,12 @@ Route::post('orden_compra/send_denegar_oc_autorizacion_servicio_cliente', [Orden
 Route::get('orden_compra/create_reporte_pedido_detalle', [OrdenCompraController::class, 'create_reporte_pedido_detalle'])->name('orden_compra.create_reporte_pedido_detalle');
 Route::post('orden_compra/listar_reporte_pedido_detalle_ajax', [OrdenCompraController::class, 'listar_reporte_pedido_detalle_ajax'])->name('orden_compra.listar_reporte_pedido_detalle_ajax');
 Route::get('orden_compra/exportar_reporte_pedido_detalle/{empresa_compra}/{fecha_inicio}/{fecha_fin}/{vendedor}', [OrdenCompraController::class, 'exportar_reporte_pedido_detalle'])->name('orden_compra.exportar_reporte_pedido_detalle');
+
+Route::get('finger_joint_proceso/create', [FingerJointProcesoController::class, 'create'])->name('finger_joint_proceso.create');
+Route::post('finger_joint_proceso/listar_finger_joint_proceso_ajax', [FingerJointProcesoController::class, 'listar_finger_joint_proceso_ajax'])->name('finger_joint_proceso.listar_finger_joint_proceso_ajax');
+Route::post('finger_joint_proceso/send_finger_joint_proceso', [FingerJointProcesoController::class, 'send_finger_joint_proceso'])->name('finger_joint_proceso.send_finger_joint_proceso');
+Route::get('finger_joint_proceso/modal_finger_joint_proceso/{id}', [FingerJointProcesoController::class, 'modal_finger_joint_proceso'])->name('finger_joint_proceso.modal_finger_joint_proceso');
+
 
 // Rutas para modo desarrollador
 Route::middleware(['auth', 'throttle:5,1'])->group(function () {

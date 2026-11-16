@@ -91,9 +91,7 @@ class OrdenCompraController extends Controller
 
 		$tipo_documento = $tablaMaestra_model->getMaestroByTipo(54);
         $cerrado_orden_compra = $tablaMaestra_model->getMaestroByTipo(52);
-        //$proveedor = Empresa::all();
         $proveedor = $empresa_model->getEmpresaAll();
-        //$almacen = Almacene::all();
         $almacen = $almacen_model->getAlmacenAll();
         $almacen_usuario = $almacen_user_model->getAlmacenByUser($id_user);
         $vendedor = $user_model->getUserByRol(7,11);
@@ -4490,7 +4488,6 @@ class OrdenCompraController extends Controller
 
 class InvoicesExport implements FromArray, WithHeadings, WithStyles
 {
-    
 	protected $invoices;
 
 	public function __construct(array $invoices)

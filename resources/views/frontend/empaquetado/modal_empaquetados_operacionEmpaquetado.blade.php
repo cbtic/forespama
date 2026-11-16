@@ -436,7 +436,6 @@ function fn_save_operacion_empaquetado(){
                 }
             }
         });
-        
     }
 }
 
@@ -449,20 +448,20 @@ function save_operacion_empaquetado(){
     $('.loader').show();
 
     $.ajax({
-            url: "/empaquetado/send_operacion_empaquetado",
-            type: "POST",
-            data : $("#frmOperacionEmpaquetadoProducto").serialize(),
-            success: function (result) {
-                //alert(result.id)
-                $('#openOverlayOpc').modal('hide');
-                datatablenew();
-                $('.loader').hide();
-                bootbox.alert("Se guard&oacute; satisfactoriamente");
-                /*if (result.id>0) {
-                    modalOrdenCompra(result.id);
-                }*/
-                
-            }
+        url: "/empaquetado/send_operacion_empaquetado",
+        type: "POST",
+        data : $("#frmOperacionEmpaquetadoProducto").serialize(),
+        success: function (result) {
+            //alert(result.id)
+            $('#openOverlayOpc').modal('hide');
+            datatablenew();
+            $('.loader').hide();
+            bootbox.alert("Se guard&oacute; satisfactoriamente");
+            /*if (result.id>0) {
+                modalOrdenCompra(result.id);
+            }*/
+            
+        }
     });
 }
 
@@ -527,8 +526,8 @@ function obtenerDetalle(){
                 });
 
                 n++;
-                });
-            }
+            });
+        }
     })
 }
 
@@ -552,7 +551,6 @@ function calcularCantidades(){
 }
 
 </script>
-
 
 <body class="hold-transition skin-blue sidebar-mini">
     
@@ -648,67 +646,67 @@ function calcularCantidades(){
                             </div>
                         </div>-->
                         <div class="card-body">
-					<div class="table-responsive">
-						<table id="tblOperacionEmpaquetadoDetalle" class="table table-hover table-sm">
-							<thead>
-							<tr style="font-size:13px">
-								<th>#</th>
-								<th>Descripci&oacute;n</th>
-                                <th>COD. INT.</th>
-                                <th>Unidad</th>
-                                <th>Cantidad</th>
-                                <th>Stock</th>
-                                <th>Acciones</th>
-                                <!--<th>Cantidad</th>-->
-							</tr>
-							</thead>
-							<tbody id="divOperacionEmpaquetadoDetalle">
-							</tbody>
-						</table>
-					</div>
-                    <!--<table style="background-color:white !important;border-collapse:collapse;border-spacing:1px; width: 100%; margin: 0 auto; font-size:12px">
-                        <tbody>
-                            <tr>
-                                <td class="td" style ="text-align: left; width: 90%; font-size:13px"></td>
-                                <td class="td" style ="text-align: left; width: 5%; font-size:13px"><b>Total:</b></td>
-                                <td id="totalGeneral" class="td" style="text-align: left; width: 5%; font-size:13px">0.00</td>
-                            </tr>
-                        </tbody>
-                    </table>-->
-                    <div style="margin-top:15px" class="form-group">
-                        <div class="col-sm-12 controls">
-                            <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
-                               <!--<button style="font-size:12px;margin-left:10px; margin-right:100px" type="button" class="btn btn-sm btn-warning" data-toggle="modal" onclick="pdf_guia()" ><i class="fa fa-edit"></i>Imprimir Gu&iacute;a Remisi&oacute;n Electronica</button>
-                                <a href="javascript:void(0)" onClick="fn_pdf_documento()" class="btn btn-sm btn-primary" style="margin-right:100px">Imprimir</a>-->
-                                
-                                <?php if($id_user==$empaquetado_operacion->id_usuario_inserta){?>
-                                    <!--<a href="javascript:void(0)" onClick="fn_save_operacion_empaquetado()" class="btn btn-sm btn-success" style="margin-right:10px">Guardar</a>-->
-                                    <button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-nuevo" data-toggle="modal" onclick="fn_save_operacion_empaquetado()">
-                                        <i class="fas fa-save" style="font-size:18px;"></i> Guardar
+                        <div class="table-responsive">
+                            <table id="tblOperacionEmpaquetadoDetalle" class="table table-hover table-sm">
+                                <thead>
+                                <tr style="font-size:13px">
+                                    <th>#</th>
+                                    <th>Descripci&oacute;n</th>
+                                    <th>COD. INT.</th>
+                                    <th>Unidad</th>
+                                    <th>Cantidad</th>
+                                    <th>Stock</th>
+                                    <th>Acciones</th>
+                                    <!--<th>Cantidad</th>-->
+                                </tr>
+                                </thead>
+                                <tbody id="divOperacionEmpaquetadoDetalle">
+                                </tbody>
+                            </table>
+                        </div>
+                        <!--<table style="background-color:white !important;border-collapse:collapse;border-spacing:1px; width: 100%; margin: 0 auto; font-size:12px">
+                            <tbody>
+                                <tr>
+                                    <td class="td" style ="text-align: left; width: 90%; font-size:13px"></td>
+                                    <td class="td" style ="text-align: left; width: 5%; font-size:13px"><b>Total:</b></td>
+                                    <td id="totalGeneral" class="td" style="text-align: left; width: 5%; font-size:13px">0.00</td>
+                                </tr>
+                            </tbody>
+                        </table>-->
+                        <div style="margin-top:15px" class="form-group">
+                            <div class="col-sm-12 controls">
+                                <div class="btn-group btn-group-sm float-right" role="group" aria-label="Log Viewer Actions">
+                                <!--<button style="font-size:12px;margin-left:10px; margin-right:100px" type="button" class="btn btn-sm btn-warning" data-toggle="modal" onclick="pdf_guia()" ><i class="fa fa-edit"></i>Imprimir Gu&iacute;a Remisi&oacute;n Electronica</button>
+                                    <a href="javascript:void(0)" onClick="fn_pdf_documento()" class="btn btn-sm btn-primary" style="margin-right:100px">Imprimir</a>-->
+                                    
+                                    <?php if($id_user==$empaquetado_operacion->id_usuario_inserta){?>
+                                        <!--<a href="javascript:void(0)" onClick="fn_save_operacion_empaquetado()" class="btn btn-sm btn-success" style="margin-right:10px">Guardar</a>-->
+                                        <button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-nuevo" data-toggle="modal" onclick="fn_save_operacion_empaquetado()">
+                                            <i class="fas fa-save" style="font-size:18px;"></i> Guardar
+                                        </button>
+                                    <?php }?>
+                                    <?php if($id==0){?>
+                                        <!--<a href="javascript:void(0)" onClick="fn_save_operacion_empaquetado()" class="btn btn-sm btn-success" style="margin-right:10px">Guardar</a>-->
+                                        <button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-nuevo" data-toggle="modal" onclick="fn_save_operacion_empaquetado()">
+                                            <i class="fas fa-save" style="font-size:18px;"></i> Guardar
+                                        </button>
+                                    <?php }?>
+                                    <!--<a href="javascript:void(0)" onClick="$('#openOverlayOpc').modal('hide');" class="btn btn-sm btn-info" style="">Cerrar</a>-->
+                                    <button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-cerrar" data-toggle="modal" onclick="$('#openOverlayOpc').modal('hide');">
+                                        <i class="fas fa-times-circle" style="font-size:18px;"></i> Cerrar
                                     </button>
-                                <?php }?>
-                                <?php if($id==0){?>
-                                    <!--<a href="javascript:void(0)" onClick="fn_save_operacion_empaquetado()" class="btn btn-sm btn-success" style="margin-right:10px">Guardar</a>-->
-                                    <button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-nuevo" data-toggle="modal" onclick="fn_save_operacion_empaquetado()">
-                                        <i class="fas fa-save" style="font-size:18px;"></i> Guardar
-                                    </button>
-                                <?php }?>
-                                <!--<a href="javascript:void(0)" onClick="$('#openOverlayOpc').modal('hide');" class="btn btn-sm btn-info" style="">Cerrar</a>-->
-                                <button type="button" style="font-size:12px;margin-left:10px" class="btn btn-sm btn-clasico btn-cerrar" data-toggle="modal" onclick="$('#openOverlayOpc').modal('hide');">
-                                    <i class="fas fa-times-circle" style="font-size:18px;"></i> Cerrar
-                                </button>
+                                </div>
                             </div>
                         </div>
                     </div>
-				</div>
-                    </div>
-                </form>
                 </div>
-                <!-- /.box -->
+            </form>
             </div>
-            <!--/.col (left) -->
+            <!-- /.box -->
         </div>
-        <!-- /.row -->
+        <!--/.col (left) -->
+    </div>
+    <!-- /.row -->
 <!-- /.content -->
 </div>
 <!-- /.content-wrapper -->
