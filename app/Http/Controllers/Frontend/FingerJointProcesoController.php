@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\FingerJointProceso;
+use App\Models\FingerJointProcesoDetalle;
 use App\Models\User;
 use App\Models\Producto;
 use App\Models\Almacene;
@@ -80,17 +81,54 @@ class FingerJointProcesoController extends Controller
 
 		if($request->id == 0){
 			$finger_joint_proceso = new FingerJointProceso;
+            $finger_joint_proceso_model = new FingerJointProceso;
+		    $codigo_finger_joint_proceso = $finger_joint_proceso_model->getCodigoFingerJoint();
 		}else{
 			$finger_joint_proceso = FingerJointProceso::find($request->id);
+            $codigo_finger_joint_proceso = $request->numero_requerimiento;
 		}
+
+        $descripcion = $request->input('descripcion');
+        $cod_interno = $request->input('cod_interno');
+        $unidad = $request->input('unidad');
+        $cantidad_ingreso = $request->input('cantidad_ingreso');
 		
-        $finger_joint_proceso->denominiacion = $request->denominacion;
-		$finger_joint_proceso->id_tipo_marca = $request->tipo_marca;
+        $id_finger_joint_proceso_detalle =$request->id_finger_joint_proceso_detalle;
+
+        $finger_joint_proceso->id_almacen = $request->almacen_destino;
+        $finger_joint_proceso->fecha = $request->fecha;
+        $finger_joint_proceso->id_producto_principal = $request->producto;
+        $finger_joint_proceso->cantidad = $request->cantidad_producto;
+        if($request->id == 0){
+            $finger_joint_proceso->codigo = $codigo_finger_joint_proceso[0]->codigo;
+        }else{
+            $finger_joint_proceso->codigo = $codigo_finger_joint_proceso;
+        }
 		$finger_joint_proceso->estado = 1;
         $finger_joint_proceso->id_usuario_inserta = $id_user;
 		$finger_joint_proceso->save();
 
-        return response()->json(['success' => 'Marca guardada exitosamente.']);
+        $id_finger_joint_proceso = $finger_joint_proceso->id;
+
+        foreach($descripcion as $index => $value) {
+            
+            if($id_finger_joint_proceso_detalle[$index] == 0){
+                $finger_joint_proceso_detalle = new FingerJointProcesoDetalle;
+            }else{
+                $finger_joint_proceso_detalle = FingerJointProcesoDetalle::find($id_finger_joint_proceso_detalle[$index]);
+            }
+            
+            $finger_joint_proceso_detalle->id_finger_joint_proceso = $id_finger_joint_proceso;
+            $finger_joint_proceso_detalle->id_producto = $descripcion[$index];
+            $finger_joint_proceso_detalle->cantidad = $cantidad_ingreso[$index];
+            $finger_joint_proceso_detalle->id_unidad_medida = $unidad[$index];
+            $finger_joint_proceso_detalle->estado = 1;
+            $finger_joint_proceso_detalle->id_usuario_inserta = $id_user;
+
+            $finger_joint_proceso_detalle->save();
+        }
+
+        return response()->json(['success' => 'Registro guardado exitosamente.']);
 
     }
 

@@ -1,4 +1,4 @@
-DROP FUNCTION public.sp_listar_dispensacion_reporte_paginado(varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, refcursor);
+-- DROP FUNCTION public.sp_listar_dispensacion_reporte_paginado(varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, refcursor);
 
 CREATE OR REPLACE FUNCTION public.sp_listar_dispensacion_reporte_paginado(p_tipo_documento character varying, p_fecha_desde character varying, p_fecha_hasta character varying, p_numero_dispensacion character varying, p_almacen character varying, p_sede character varying, p_centro_costo character varying, p_persona_recibe character varying, p_estado character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
  RETURNS refcursor
@@ -18,7 +18,7 @@ begin
 	p_pagina=(p_pagina::Integer-1)*p_limit::Integer;
 
 	v_campos=' dd.id, tm.denominacion tipo_movimiento, s.denominacion sede, cc.denominacion centro_costo, to_char(d.fecha, ''dd-mm-yyyy'') fecha, d.codigo codigo_dispensacion, a.denominacion almacen_salida, pe.nombres ||'' ''|| pe.apellido_paterno ||'' ''|| pe.apellido_materno usuario_recibe,
-	p.codigo codigo_producto, p.denominacion producto, dd.cantidad ';
+	p.codigo codigo_producto, p.denominacion producto, dd.cantidad, dd.lote ';
 
 	v_tabla=' from dispensaciones d
 	inner join dispensacion_detalles dd on dd.id_dispensacion = d.id 

@@ -1864,6 +1864,8 @@ class OrdenCompraController extends Controller
 
     public function listar_reporte_comercializacion_ajax(Request $request){
 
+        $id_user = Auth::user()->id;
+
 		$orden_compra_model = new OrdenCompra;
 		$p[]=$request->empresa_compra;
         $p[]=$request->fecha_inicio;
@@ -1879,6 +1881,7 @@ class OrdenCompraController extends Controller
         $p[]=$request->tipo_producto;
         $p[]=1;
         $p[]=$request->canal;
+        $p[]=$id_user;
         $p[]=$request->NumeroPagina;
 		$p[]=$request->NumeroRegistros;
 		$data = $orden_compra_model->listar_reporte_comercializacion_ajax($p);

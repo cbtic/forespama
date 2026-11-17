@@ -164,6 +164,19 @@ function fn_save_finger_joint(){
     if(cantidad_producto==""){msg+="Ingrese la Cantidad <br>";}
     if(almacen_destino==""){msg+="Ingrese Almacen Destino <br>";}
 
+    $('#tblFingerJointDetalle tbody tr').each(function(index, row) {
+
+        const id_finger_joint_detalle = parseInt($(row).find('input[name="id_finger_joint_detalle[]"]').val());
+        const cantidad_ingreso_producto = parseInt($(row).find('input[name="cantidad_ingreso[]"]').val());
+        const stock_actual = parseInt($(row).find('input[name="stock_actual[]"]').val());
+        const stock = isNaN(stock_actual) ? 0 : stock_actual;
+        const descripcion_producto = $(row).find('select[name="descripcion[]"] option:selected').text();
+        
+        if(stock < cantidad_ingreso_producto && id_finger_joint_detalle==0){
+            msg+="No hay stock para el producto "+descripcion_producto+" <br>";
+        }
+    });
+
     if ($('#tblFingerJointDetalle tbody tr').length == 0) {
         msg += "No se ha agregado ning&uacute;n producto <br>";
     }
@@ -222,11 +235,11 @@ function obtenerDetalle(){
                 const row = `
                     <tr>
                         <td>${n}</td>
-                        <td style="width: 800px !important;display:block"><input name="id_empaquetado_operacion_detalle[]" id="id_empaquetado_operacion_detalle${n}" class="form-control form-control-sm" value="0" type="hidden"><select name="descripcion_[]" id="descripcion_${n}" class="form-control form-control-sm" onChange="verificarProductoSeleccionado(this, ${n});">${productoOptions}</select><input name="descripcion[]" id="descripcion${n}" class="form-control form-control-sm" value="${empaquetado_operacion.id_producto}" type="hidden"></td>
+                        <td style="width: 800px !important;display:block"><input name="id_finger_joint_proceso_detalle[]" id="id_finger_joint_proceso_detalle${n}" class="form-control form-control-sm" value="0" type="hidden"><select name="descripcion_[]" id="descripcion_${n}" class="form-control form-control-sm" onChange="verificarProductoSeleccionado(this, ${n});">${productoOptions}</select><input name="descripcion[]" id="descripcion${n}" class="form-control form-control-sm" value="${empaquetado_operacion.id_producto}" type="hidden"></td>
                         <td><input name="cod_interno[]" id="cod_interno${n}" class="form-control form-control-sm" value="${empaquetado_operacion.codigo}" type="text"></td>
                         <td><select name="unidad_[]" id="unidad_${n}" class="form-control form-control-sm">${unidadMedidaOptions}</select><input name="unidad[]" id="unidad${n}" class="form-control form-control-sm" value="${empaquetado_operacion.id_unidad_medida}" type="hidden"></td>
-                        <td><input name="cantidad[]" id="cantidad${n}" class="form-control form-control-sm" value="${empaquetado_operacion.cantidad}" type="text" data-cantidad-base="${empaquetado_operacion.cantidad}" readonly="readonly"></td>
-                        <td><input name="stock[]" id="stock${n}" class="form-control form-control-sm" value="0" type="text" readonly="readonly"></td>
+                        <td><input name="cantidad_ingreso[]" id="cantidad_ingreso${n}" class="form-control form-control-sm" value="${empaquetado_operacion.cantidad}" type="text" data-cantidad-base="${empaquetado_operacion.cantidad}" readonly="readonly"></td>
+                        <td><input name="stock_actual[]" id="stock_actual${n}" class="form-control form-control-sm" value="0" type="text" readonly="readonly"></td>
                         <td><button type="button" class="btn btn-sm btn-clasico btn-eliminar" onclick="eliminarFila(this)"><i class="fas fa-trash" style="font-size:18px;"></i></button></td>
                     </tr>
                 `;

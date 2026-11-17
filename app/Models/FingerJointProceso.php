@@ -24,4 +24,14 @@ class FingerJointProceso extends Model
         return $data;
 
     }
+
+    function getCodigoFingerJoint(){
+
+        $cad = "select lpad(coalesce(max(fjp.codigo::int) + 1, 1)::varchar, 6, '0') codigo
+        from finger_joint_procesos fjp
+        where fjp.estado ='1'";
+
+		$data = DB::select($cad);
+        return $data;
+    }
 }
