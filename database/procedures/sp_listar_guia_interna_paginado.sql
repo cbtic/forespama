@@ -1,4 +1,4 @@
--- DROP FUNCTION public.sp_listar_guia_interna_paginado(varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, refcursor);
+-- DROP FUNCTION public.sp_listar_guia_interna_paginado(varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, refcursor);
 
 CREATE OR REPLACE FUNCTION public.sp_listar_guia_interna_paginado(p_fecha_emision character varying, p_numero_guia character varying, p_numero_documento character varying, p_empresa_destino character varying, p_persona_destino character varying, p_placa character varying, p_empresa_trasporte character varying, p_estado character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
  RETURNS refcursor
@@ -28,7 +28,7 @@ begin
 	else gi.ruc_destinatario
 	end ruc_destinatario, m.denominiacion marca, 
 	gi.placa, gi.constancia_inscripcion, gi.licencia_conducir, e2.razon_social id_transporte, gi.ruc_empresa_transporte ruc_transporte, tm1.denominacion tipo_documento, gi.numero_documento, 
-	tm2.denominacion motivo_traslado, gi.estado, gi.guia_serie, gi.guia_numero ';
+	tm2.denominacion motivo_traslado, gi.estado, gi.guia_serie, gi.guia_numero, gi.numero_orden_compra ';
 	
 	v_tabla=' from guia_internas gi 
 	left join marcas m on gi.marca::int = m.id

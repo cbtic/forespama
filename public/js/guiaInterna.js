@@ -203,12 +203,21 @@ function datatablenew(){
 				},
 				{
 					"mRender": function (data, type, row) {
+						var numero_orden_compra = "";
+						if(row.numero_orden_compra!= null)numero_orden_compra = row.numero_orden_compra;
+						return numero_orden_compra;
+					},
+					"bSortable": true,
+					"aTargets": [5]
+				},
+				{
+					"mRender": function (data, type, row) {
 						var destinatario = "";
 						if(row.destinatario!= null)destinatario = row.destinatario;
 						return destinatario;
 					},
 					"bSortable": true,
-					"aTargets": [5]
+					"aTargets": [6]
 				},
 				{
 					"mRender": function (data, type, row) {
@@ -217,7 +226,7 @@ function datatablenew(){
 						return placa;
 					},
 					"bSortable": true,
-					"aTargets": [6]
+					"aTargets": [7]
 				},
 
 				{
@@ -227,7 +236,7 @@ function datatablenew(){
 						return id_transporte;
 					},
 					"bSortable": true,
-					"aTargets": [7]
+					"aTargets": [8]
 				},
 
 				{
@@ -237,7 +246,7 @@ function datatablenew(){
 						return punto_partida;
 					},
 					"bSortable": true,
-					"aTargets": [8]
+					"aTargets": [9]
 				},
 
 				{
@@ -247,7 +256,7 @@ function datatablenew(){
 						return punto_llegada;
 					},
 					"bSortable": true,
-					"aTargets": [9]
+					"aTargets": [10]
 				},
 
 				{
@@ -262,7 +271,7 @@ function datatablenew(){
 						return estado;
 					},
 					"bSortable": false,
-					"aTargets": [10]
+					"aTargets": [11]
 				},
 				{
 					"mRender": function (data, type, row) {
@@ -287,7 +296,7 @@ function datatablenew(){
 						return html;
 					},
 					"bSortable": false,
-					"aTargets": [11],
+					"aTargets": [12],
 				},
             ]
     });

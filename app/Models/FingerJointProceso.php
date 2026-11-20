@@ -10,6 +10,28 @@ class FingerJointProceso extends Model
 {
     use HasFactory;
 
+    public function listar_finger_joint_proceso_ajax($p){
+
+        return $this->readFuntionPostgres('sp_listar_finger_joint_proceso_paginado',$p);
+
+    }
+
+    public function readFuntionPostgres($function, $parameters = null){
+
+        $_parameters = '';
+        if (count($parameters) > 0) {
+            $_parameters = implode("','", $parameters);
+            $_parameters = "'" . $_parameters . "',";
+        }
+        $data = DB::select("BEGIN;");
+        $cad = "select " . $function . "(" . $_parameters . "'ref_cursor');";
+        $data = DB::select($cad);
+        $cad = "FETCH ALL IN ref_cursor;";
+        $data = DB::select($cad);
+        return $data;
+
+    }
+
     function getDetalleFingerJointByProducto($id_producto){
 
         $cad = "select ed.id,  ROW_NUMBER() OVER (PARTITION BY ed.id_empaquetado) AS row_num, p.numero_serie item, ed.id_producto, p.codigo, ed.id_unidad_medida, ed.cantidad 

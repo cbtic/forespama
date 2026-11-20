@@ -325,7 +325,7 @@ label.form-control-sm{
         <div class="card-body">
 
             <form class="form-horizontal" method="post" action="" id="frmFingerJointProceso" autocomplete="off" enctype="multipart/form-data">
-				
+			
 			<div class="row">
 				<div class="col-lg-5 col-md-5 col-sm-12 col-xs-12" style="margin-top:15px">
 					<h4 class="card-title mb-0 text-primary" style="font-size:22px">
@@ -365,17 +365,17 @@ label.form-control-sm{
 									</select>
 								</div>
 
-								<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+								<!--<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
 									<select name="situacion_bus" id="situacion_bus" class="form-control form-control-sm filtro-select">
 										<option value="">--Seleccionar Situacion--</option>
 										<?php
-										foreach ($situacion as $row){?>
-											<option value="<?php echo $row->codigo ?>" <?php if($row->codigo=='1')echo "selected='selected'"?>><?php echo $row->denominacion ?></option>
+										//foreach ($situacion as $row){?>
+											<option value="<?php //echo $row->codigo ?>" <?php //if($row->codigo=='1')echo "selected='selected'"?>><?php //echo $row->denominacion ?></option>
 											<?php 
-										}
+										//}
 										?>
 									</select>
-								</div>
+								</div>-->
 								
 								<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
 									<select name="estado_bus" id="estado_bus" class="form-control form-control-sm filtro-select">
@@ -406,13 +406,18 @@ label.form-control-sm{
 							<thead>
 							<tr style="font-size:13px">
 								<th>Id</th>
-								<th>Denominaci&oacute;n</th>
-								<th>Tipo Marca</th>
+								<th>Codigo</th>
+								<th>Fecha</th>
+								<th>Almacen</th>
+								<th>Producto Ingresa</th>
+								<th>Cantidad</th>
+								<th>Producto Sale</th>
+								<th>Cantidad</th>
 								<th>Estado</th>
 								<th>Acciones</th>
 							</tr>
 							</thead>
-							<tbody>
+							<tbody style="font-size:13px">
 							</tbody>
 						</table>
 					</div><!--table-responsive-->

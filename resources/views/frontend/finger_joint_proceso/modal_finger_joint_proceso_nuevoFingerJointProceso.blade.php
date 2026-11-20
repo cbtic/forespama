@@ -16,7 +16,7 @@
 
 .modal-dialog {
 	width: 100%;
-	max-width:70%!important
+	max-width:65%!important
 }
 
 #tablemodal{
@@ -144,6 +144,7 @@ $('#openOverlayOpc').on('shown.bs.modal', function(){
 $(document).ready(function(){
 
     $('#producto').select2 ({ width : '100%' })
+    $('#operador').select2 ({ width : '100%' })
 
 });
 
@@ -156,47 +157,77 @@ function limpiar(){
 
 function fn_save_finger_joint(){
 	
+    var msg = "";
+
     var producto = $('#producto').val();
     var cantidad_producto = $('#cantidad_producto').val();
     var almacen_destino = $('#almacen_destino').val();
+    var operador = $('#operador').val();
+    var stock = Number($('#stock').val());
+    var cantidad_producto = Number($('#cantidad_producto').val());
+    const descripcion_producto = $('#producto option:selected').text();
+    var producto_repetido = false;
 
     if(producto==""){msg+="Ingrese el Producto <br>";}
     if(cantidad_producto==""){msg+="Ingrese la Cantidad <br>";}
-    if(almacen_destino==""){msg+="Ingrese Almacen Destino <br>";}
+    if(almacen_destino==""){msg+="Ingrese el Almacen Destino <br>";}
+    if(operador==""){msg+="Ingrese el Operador <br>";}
+    if(cantidad_producto <= 0){msg+="La cantidad debe ser mayor a cero <br>";}
+    if(cantidad_producto > stock){msg+="No hay stock para el producto " + descripcion_producto + " <br>";}
 
     $('#tblFingerJointDetalle tbody tr').each(function(index, row) {
 
-        const id_finger_joint_detalle = parseInt($(row).find('input[name="id_finger_joint_detalle[]"]').val());
-        const cantidad_ingreso_producto = parseInt($(row).find('input[name="cantidad_ingreso[]"]').val());
+        var id_producto_tabla = $(row).find('select[name="descripcion[]"]').val();
+
+        if (producto == id_producto_tabla) {
+            producto_repetido = true;
+            return false;
+        }
+    });
+
+    if (producto_repetido) {
+        msg += "El producto ya se encuentra agregado <br>";
+    }
+
+    /*$('#tblFingerJointDetalle tbody tr').each(function(index, row) {
+
+        const id_finger_joint_detalle = parseInt($(row).find('input[name="id_finger_joint_proceso_detalle[]"]').val());
+        const cantidad_ingreso = parseInt($(row).find('input[name="cantidad_ingreso[]"]').val());
         const stock_actual = parseInt($(row).find('input[name="stock_actual[]"]').val());
         const stock = isNaN(stock_actual) ? 0 : stock_actual;
         const descripcion_producto = $(row).find('select[name="descripcion[]"] option:selected').text();
         
-        if(stock < cantidad_ingreso_producto && id_finger_joint_detalle==0){
+        if(stock < cantidad_ingreso && id_finger_joint_detalle==0){
             msg+="No hay stock para el producto "+descripcion_producto+" <br>";
         }
-    });
+    });*/
 
     if ($('#tblFingerJointDetalle tbody tr').length == 0) {
         msg += "No se ha agregado ning&uacute;n producto <br>";
     }
 
-	$.ajax({
-        url: "/finger_joint_proceso/send_finger_joint_proceso",
-        type: "POST",
-        data : $("#frmFingerJointProceso").serialize(),
-        success: function (result){
+    if(msg!=""){
+        bootbox.alert(msg);
+        return false;
+    }else{
 
-            if(result.success){
-                bootbox.alert(result.success, function(){
-                    $('#openOverlayOpc').modal('hide');
-                    datatablenew();
-                });
-            }else if(result.error){
-                bootbox.alert(result.error);
-            }
-        },
-    });
+        $.ajax({
+            url: "/finger_joint_proceso/send_finger_joint_proceso",
+            type: "POST",
+            data : $("#frmFingerJointProceso").serialize(),
+            success: function (result){
+
+                if(result.success){
+                    bootbox.alert(result.success, function(){
+                        $('#openOverlayOpc').modal('hide');
+                        datatablenew();
+                    });
+                }else if(result.error){
+                    bootbox.alert(result.error);
+                }
+            },
+        });
+    }
 }
 
 function obtenerDetalle(){
@@ -239,7 +270,6 @@ function obtenerDetalle(){
                         <td><input name="cod_interno[]" id="cod_interno${n}" class="form-control form-control-sm" value="${empaquetado_operacion.codigo}" type="text"></td>
                         <td><select name="unidad_[]" id="unidad_${n}" class="form-control form-control-sm">${unidadMedidaOptions}</select><input name="unidad[]" id="unidad${n}" class="form-control form-control-sm" value="${empaquetado_operacion.id_unidad_medida}" type="hidden"></td>
                         <td><input name="cantidad_ingreso[]" id="cantidad_ingreso${n}" class="form-control form-control-sm" value="${empaquetado_operacion.cantidad}" type="text" data-cantidad-base="${empaquetado_operacion.cantidad}" readonly="readonly"></td>
-                        <td><input name="stock_actual[]" id="stock_actual${n}" class="form-control form-control-sm" value="0" type="text" readonly="readonly"></td>
                         <td><button type="button" class="btn btn-sm btn-clasico btn-eliminar" onclick="eliminarFila(this)"><i class="fas fa-trash" style="font-size:18px;"></i></button></td>
                     </tr>
                 `;
@@ -270,20 +300,18 @@ function agregarProducto(){
     var newRow = "";
     for (var i = 0; i < cantidad; i++) { 
         var n = $('#tblFingerJointDetalle tbody tr').length + 1;
-        var descripcion = '<input name="id_finger_joint_proceso_detalle[]" id="id_finger_joint_proceso_detalle${n}" class="form-control form-control-sm" value="${finger_joint_proceso.id}" type="hidden"><select name="descripcion[]" id="descripcion' + n + '" class="form-control form-control-sm" onChange="verificarProductoSeleccionado(this, ' + n + '); obtenerCodInterno(this, ' + n + ')"> '+ opcionesDescripcion +' </select>';
+        var descripcion = '<input name="id_finger_joint_proceso_detalle[]" id="id_finger_joint_proceso_detalle${n}" class="form-control form-control-sm" value="0" type="hidden"><select name="descripcion[]" id="descripcion' + n + '" class="form-control form-control-sm" onChange="verificarProductoSeleccionado(this, ' + n + '); obtenerCodInterno(this, ' + n + ')"> '+ opcionesDescripcion +' </select>';
         var descripcion_ant = '<input type="hidden" name="descripcion_ant[]" id="descripcion_ant' + n + '" class="form-control form-control-sm" />';
         var unidad = '<select name="unidad[]" id="unidad' + n + '" class="form-control form-control-sm" onchange=""> <option value="">--Seleccionar--</option> <?php foreach ($unidad as $row) {?> <option value="<?php echo $row->codigo?>"><?php echo $row->denominacion?></option> <?php } ?> </select>';
         var cantidad_ingreso = '<input name="cantidad_ingreso[]" id="cantidad_ingreso' + n + '" class="cantidad_ingreso form-control form-control-sm" value="" type="text" oninput="">';
-        var stock_actual = '<input name="stock_actual[]" id="stock_actual' + n + '" class="form-control form-control-sm" value="" type="text" readonly>';
         
         var btnEliminar = '<button type="button" class="btn btn-sm btn-clasico btn-eliminar" onclick="eliminarFila(this)"><i class="fas fa-trash" style="font-size:18px;"></i></button>';
 
         newRow += '<tr>';
         newRow += '<td>' + n + '</td>';
-        newRow += '<td style="width: 600px!important; display:block!important">' +descripcion_ant + descripcion + '</td>';
+        newRow += '<td style="width: 650px!important; display:block!important">' +descripcion_ant + descripcion + '</td>';
         newRow += '<td>' + unidad + '</td>';
         newRow += '<td>' + cantidad_ingreso + '</td>';
-        newRow += '<td>' + stock_actual + '</td>';
         newRow += '<td>' + btnEliminar + '</td>';
         newRow += '</tr>';
 
@@ -351,6 +379,23 @@ function obtenerStock(selectElement, n){
     });
 }
 
+function obtenerStock(){
+
+    var producto = $('#producto').val();
+    var almacen_destino = $('#almacen_destino').val();
+
+    $.ajax({
+        url: "/productos/obtener_stock_producto/"+almacen_destino+"/"+producto,
+        dataType: "json",
+        success: function(result){
+
+            var producto_stock = result.producto_stock[producto];
+            
+            $('#stock').val(producto_stock.saldos_cantidad);
+        }
+    });
+}
+
 function obtenerCodInterno(selectElement, n){
 
     var id_producto = $(selectElement).val();
@@ -398,32 +443,38 @@ function obtenerCodInterno(selectElement, n){
                             
                             <div class="row" style="padding-left:10px">
                                 <div class="col-lg-2">
+                                    C&oacute;digo de Operaci&oacute;n
+                                </div>
+                                <div class="col-lg-2">
+                                    <input id="codigo_finger" name="codigo_finger" on class="form-control form-control-sm"  value="<?php //if($id>0){echo $finger_joint_proceso->codigo;}?>" type="text" readonly ="readonly">
+                                </div>
+                                <div class="col-lg-2">
                                     Producto
                                 </div>
                                 <div class="col-lg-6">
-                                    <select name="producto" id="producto" class="form-control form-control-sm" onchange="//obtenerDetalle()">
+                                    <select name="producto" id="producto" class="producto form-control form-control-sm" onchange="obtenerStock()">
                                         <option value="">--Seleccionar--</option>
                                         <?php
                                         foreach ($producto as $row){?>
-                                            <option value="<?php echo $row->id ?>" <?php //if($row->id==$finger_joint_proceso->id_producto)echo "selected='selected'"?>><?php echo $row->codigo .' - '. $row->denominacion ?></option>
+                                            <option value="<?php echo $row->id ?>" <?php if($row->id==$finger_joint_proceso->id_producto_principal)echo "selected='selected'"?>><?php echo $row->codigo .' - '. $row->denominacion ?></option>
                                             <?php
                                         }
                                         ?>
                                     </select>
                                 </div>
+                            </div>
+                            <div class="row" style="padding-left:10px">
                                 <div class="col-lg-2">
                                     Cantidad
                                 </div>
                                 <div class="col-lg-2">
-                                    <input id="cantidad_producto" name="cantidad_producto" on class="form-control form-control-sm"  value="<?php //if($id>0){echo $finger_joint_proceso->cantidad;}?>" type="text" oninput="//calcularCantidades()">
-                                </div>
-                            </div>
-                            <div class="row" style="padding-left:10px">
-                                <div class="col-lg-2">
-                                    C&oacute;digo de Operaci&oacute;n
+                                    <input id="cantidad_producto" name="cantidad_producto" on class="form-control form-control-sm"  value="<?php if($id>0){echo $finger_joint_proceso->cantidad;}?>" type="text" oninput="//calcularCantidades()">
                                 </div>
                                 <div class="col-lg-2">
-                                    <input id="codigo_finger" name="codigo_finger" on class="form-control form-control-sm"  value="<?php //if($id>0){echo $finger_joint_proceso->codigo;}?>" type="text" readonly ="readonly">
+                                    Stock
+                                </div>
+                                <div class="col-lg-2">
+                                    <input id="stock" name="stock" on class="form-control form-control-sm"  value="<?php //if($id>0){echo $finger_joint_proceso->cantidad;}?>" type="text" oninput="//calcularCantidades()" readonly>
                                 </div>
                                 <div class="col-lg-2">
                                     Fecha
@@ -432,6 +483,8 @@ function obtenerCodInterno(selectElement, n){
                                     <input id="fecha_" name="fecha_" on class="form-control form-control-sm"  value="<?php echo isset($finger_joint_proceso) && $finger_joint_proceso->fecha ? $finger_joint_proceso->fecha : date('Y-m-d'); ?>" type="text" disabled='disabled'>
                                     <input type="hidden" name="fecha" id="fecha" value="<?php echo isset($finger_joint_proceso) && $finger_joint_proceso->fecha ? $finger_joint_proceso->fecha : date('Y-m-d'); ?>">
                                 </div>
+                            </div>
+                            <div class="row" style="padding-left:10px">
                                 <div class="col-lg-2" style="color:red; font-weight:bold">
                                     Almacen Destino
                                 </div>
@@ -445,6 +498,28 @@ function obtenerCodInterno(selectElement, n){
                                         }
                                         ?>
                                     </select>
+                                </div>
+                                <div class="col-lg-2">
+                                    Operador
+                                </div>
+                                <div class="col-lg-6">
+                                    <select name="operador" id="operador" class="form-control form-control-sm" onchange="//obtenerDetalle()">
+                                        <option value="">--Seleccionar--</option>
+                                        <?php
+                                        foreach ($responsable_atencion as $row){?>
+                                            <option value="<?php echo $row->id ?>" <?php if($row->id==$finger_joint_proceso->id_operador)echo "selected='selected'"?>><?php echo $row->name ?></option>
+                                            <?php
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row" style="padding-left:10px">
+                                <div class="col-lg-2">
+                                    Comentario
+                                </div>
+                                <div class="col-lg-10">
+                                    <textarea id="observacion" name="observacion" class="form-control form-control-sm"><?php echo $finger_joint_proceso->observacion?></textarea>
                                 </div>
                             </div>
                             <div style="margin-top:15px;" class="form-group">
@@ -476,7 +551,6 @@ function obtenerCodInterno(selectElement, n){
                                             <th>Descripci&oacute;n</th>
                                             <th>Unidad</th>
                                             <th>Cantidad</th>
-                                            <th>Stock</th>
                                             <th>Acciones</th>
                                             <!--<th>Cantidad</th>-->
                                         </tr>
@@ -508,7 +582,6 @@ function obtenerCodInterno(selectElement, n){
 <!-- /.content -->
 </div>
 <!-- /.content-wrapper -->
-
     
 <script type="text/javascript">
 $(document).ready(function () {
@@ -520,12 +593,7 @@ $(document).ready(function () {
 			}
 		//validaRuc(this.value);
 	});
-	
-	
-	
-	
 });
-
 
 </script>
 
@@ -537,9 +605,6 @@ $(document).ready(function() {
 	
 	
 });
-
-
-
 
 </script>
 

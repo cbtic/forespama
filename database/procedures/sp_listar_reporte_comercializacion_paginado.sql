@@ -1,6 +1,6 @@
--- DROP FUNCTION public.sp_listar_reporte_comercializacion_paginado(varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, refcursor);
+--DROP FUNCTION public.sp_listar_reporte_comercializacion_paginado(varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, varchar, refcursor);
 
-CREATE OR REPLACE FUNCTION public.sp_listar_reporte_comercializacion_paginado(p_empresa_compra character varying, p_fecha_desde character varying, p_fecha_hasta character varying, p_numero_orden_compra_cliente character varying, p_situacion character varying, p_codigo_producto character varying, p_producto character varying, p_vendedor character varying, p_estado_pedido character varying, p_tipo_producto character varying, p_estado character varying, p_canal character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
+CREATE OR REPLACE FUNCTION public.sp_listar_reporte_comercializacion_paginado(p_empresa_compra character varying, p_fecha_desde character varying, p_fecha_hasta character varying, p_numero_orden_compra_cliente character varying, p_situacion character varying, p_codigo_producto character varying, p_producto character varying, p_vendedor character varying, p_estado_pedido character varying, p_tipo_producto character varying, p_estado character varying, p_canal character varying, p_id_user character varying, p_pagina character varying, p_limit character varying, p_ref refcursor)
  RETURNS refcursor
  LANGUAGE plpgsql
 AS $function$
@@ -13,9 +13,24 @@ v_where varchar;
 v_count varchar;
 v_col_count varchar;
 v_id_rol integer;
+v_tiene_rol_7 boolean := false;
+v_tiene_rol_11 boolean := false;
 
 begin
 
+	select 
+	    exists(
+	        select 1
+	        from model_has_roles mhr
+	        where mhr.model_id::varchar = p_id_user
+	        and mhr.role_id = 7),
+	    exists(
+	        select 1
+	        from model_has_roles mhr
+	        where mhr.model_id::varchar = p_id_user
+	        and mhr.role_id = 11)
+	into v_tiene_rol_7, v_tiene_rol_11;
+	
 	p_pagina=(p_pagina::Integer-1)*p_limit::Integer;
 
 	v_campos=' distinct oc.id, 
@@ -85,6 +100,19 @@ begin
 		and ocd.estado = ''1''
 		and p.bien_servicio = '''||p_tipo_producto||''') ';
 	End If;
+
+	IF v_tiene_rol_11 THEN
+	    v_where := v_where || ' and (
+	        oc.id_vendedor = ''' || p_id_user || '''
+	        or oc.id_vendedor IN (
+	            select jvd.id_vendedor
+	            from jefe_vendedor_detalles jvd
+	            where jvd.id_jefe_vendedor = ' || p_id_user || ' and jvd.estado = ''1'' ))';
+	
+	ELSIF v_tiene_rol_7 THEN
+	    v_where := v_where || ' AND oc.id_vendedor = ''' || p_id_user || '''';
+	
+	END IF;
 	
 	If p_estado<>'' Then
 	 v_where:=v_where||'And oc.estado = '''||p_estado||''' ';

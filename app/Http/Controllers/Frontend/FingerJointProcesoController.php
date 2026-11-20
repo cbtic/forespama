@@ -35,7 +35,10 @@ class FingerJointProcesoController extends Controller
     public function listar_finger_joint_proceso_ajax(Request $request){
 
 		$finger_joint_proceso_model = new FingerJointProceso;
-		$p[]=$request->denominacion;
+		$p[]=$request->fecha_inicio;
+        $p[]=$request->fecha_fin;
+        //$p[]=$request->operador_bus;
+        //$p[]=$request->situacion;
         $p[]=$request->estado;
 		$p[]=$request->NumeroPagina;
 		$p[]=$request->NumeroRegistros;
@@ -59,6 +62,7 @@ class FingerJointProcesoController extends Controller
 		$tabla_maestra_model = new TablaMaestra;
 		$producto_model = new Producto;
 		$almacen_model = new Almacene;
+		$user_model = new User;
 
 		if($id>0){
 			$finger_joint_proceso = FingerJointProceso::find($id);
@@ -70,8 +74,9 @@ class FingerJointProcesoController extends Controller
         $producto = $producto_model->getProductoInterno();
         $almacen = $almacen_model->getAlmacenAll();
         $unidad = $tabla_maestra_model->getMaestroByTipo(43);
+        $responsable_atencion = $user_model->getUserAll();
 
-		return view('frontend.finger_joint_proceso.modal_finger_joint_proceso_nuevoFingerJointProceso',compact('id','finger_joint_proceso','producto','almacen','unidad'));
+		return view('frontend.finger_joint_proceso.modal_finger_joint_proceso_nuevoFingerJointProceso',compact('id','finger_joint_proceso','producto','almacen','unidad','responsable_atencion'));
 
     }
 
@@ -104,6 +109,8 @@ class FingerJointProcesoController extends Controller
         }else{
             $finger_joint_proceso->codigo = $codigo_finger_joint_proceso;
         }
+        $finger_joint_proceso->id_operador = $request->operador;
+        $finger_joint_proceso->observacion = $request->observacion;
 		$finger_joint_proceso->estado = 1;
         $finger_joint_proceso->id_usuario_inserta = $id_user;
 		$finger_joint_proceso->save();

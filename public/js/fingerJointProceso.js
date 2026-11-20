@@ -116,9 +116,9 @@ function datatablenew(){
 
 				{
 				"mRender": function (data, type, row) {
-					var denominiacion = "";
-					if(row.denominiacion!= null)denominiacion = row.denominiacion;
-					return denominiacion;
+					var codigo = "";
+					if(row.codigo!= null)codigo = row.codigo;
+					return codigo;
 				},
 				"bSortable": true,
 				"aTargets": [1]
@@ -126,12 +126,62 @@ function datatablenew(){
 
 				{
 				"mRender": function (data, type, row) {
-					var tipo_marca = "";
-					if(row.tipo_marca!= null)tipo_marca = row.tipo_marca;
-					return tipo_marca;
+					var fecha = "";
+					if(row.fecha!= null)fecha = row.fecha;
+					return fecha;
 				},
 				"bSortable": true,
 				"aTargets": [2]
+				},
+
+				{
+				"mRender": function (data, type, row) {
+					var almacen = "";
+					if(row.almacen!= null)almacen = row.almacen;
+					return almacen;
+				},
+				"bSortable": true,
+				"aTargets": [3]
+				},
+
+				{
+				"mRender": function (data, type, row) {
+					var producto_principal = "";
+					if(row.producto_principal!= null)producto_principal = row.producto_principal;
+					return producto_principal;
+				},
+				"bSortable": true,
+				"aTargets": [4]
+				},
+
+				{
+				"mRender": function (data, type, row) {
+					var cantidad_principal = "";
+					if(row.cantidad_principal!= null)cantidad_principal = row.cantidad_principal;
+					return cantidad_principal;
+				},
+				"bSortable": true,
+				"aTargets": [5]
+				},
+
+				{
+				"mRender": function (data, type, row) {
+					var producto_secundario = "";
+					if(row.producto_secundario!= null)producto_secundario = row.producto_secundario;
+					return producto_secundario;
+				},
+				"bSortable": true,
+				"aTargets": [6]
+				},
+
+				{
+				"mRender": function (data, type, row) {
+					var cantidad_secundario = "";
+					if(row.cantidad_secundario!= null)cantidad_secundario = row.cantidad_secundario;
+					return cantidad_secundario;
+				},
+				"bSortable": true,
+				"aTargets": [7]
 				},
 				
 				{
@@ -146,7 +196,7 @@ function datatablenew(){
 					return estado;
 				},
 				"bSortable": false,
-				"aTargets": [3]
+				"aTargets": [8]
 				},
 				{
 				"mRender": function (data, type, row) {
@@ -172,7 +222,7 @@ function datatablenew(){
 					return html;
 				},
 				"bSortable": false,
-				"aTargets": [4],
+				"aTargets": [9],
 				},
             ]
     });
