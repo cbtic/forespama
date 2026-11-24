@@ -578,9 +578,11 @@ label.form-control-sm{
 										<button type="button" onclick="window.location.href='/img/cubicaje/plantilla/Plantilla_cubicaje_4diametros_06092025.xlsx'" class="btn btn-sm btn-secondary pull-rigth icono-botones2" style="margin-left:10px;">
 											<i class="fas fa-file-excel" style="font-size:18px;"></i> Plantilla 4D
 										</button>
+										@endhasanyrole
 										<buttom class="btn btn-secondary btn-sm" type="button" id="btnDescargarExcel" style="margin-left:10px" />
 											<i class="fa fa-download" style="font-size:18px;"></i> Descarga Excel
 										</buttom>
+										@hasanyrole('Administrator|Encargado Cubicaje|Supervisor Cubicaje')
 										<buttom class="btn btn-secondary btn-sm" type="button" id="btnDescargarReporteAnual" style="margin-left:10px" />
 											<i class="fa fa-download" style="font-size:18px;"></i> Descarga Reporte Anual
 										</buttom>

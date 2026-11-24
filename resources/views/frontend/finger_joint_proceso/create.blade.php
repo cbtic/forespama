@@ -409,9 +409,8 @@ label.form-control-sm{
 								<th>Codigo</th>
 								<th>Fecha</th>
 								<th>Almacen</th>
-								<th>Producto Ingresa</th>
-								<th>Cantidad</th>
-								<th>Producto Sale</th>
+								<th>Operador</th>
+								<th>Producto</th>
 								<th>Cantidad</th>
 								<th>Estado</th>
 								<th>Acciones</th>

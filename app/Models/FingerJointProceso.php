@@ -32,13 +32,13 @@ class FingerJointProceso extends Model
 
     }
 
-    function getDetalleFingerJointByProducto($id_producto){
+    function getDetalleFingerJointById($id){
 
         $cad = "select ed.id,  ROW_NUMBER() OVER (PARTITION BY ed.id_empaquetado) AS row_num, p.numero_serie item, ed.id_producto, p.codigo, ed.id_unidad_medida, ed.cantidad 
         from empaquetado_detalle ed
         inner join productos p on ed.id_producto = p.id
         inner join empaquetado e on ed.id_empaquetado = e.id
-        where e.id_producto ='".$id_producto."'
+        where e.id ='".$id."'
         and ed.estado='1'
         and e.estado ='1' ";
 

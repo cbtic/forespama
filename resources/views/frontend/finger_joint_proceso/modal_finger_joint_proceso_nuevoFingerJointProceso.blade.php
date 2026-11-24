@@ -146,6 +146,10 @@ $(document).ready(function(){
     $('#producto').select2 ({ width : '100%' })
     $('#operador').select2 ({ width : '100%' })
 
+    if($('#id').val() > 0){
+        cargarDetalle();
+    }
+
 });
 
 function limpiar(){
@@ -230,46 +234,46 @@ function fn_save_finger_joint(){
     }
 }
 
-function obtenerDetalle(){
+function cargarDetalle(){
 
-    var id_producto = $('#producto').val();
+    var id = $("#id").val();
 
     const tbody = $('#divFingerJointDetalle');
 
     tbody.empty();
 
     $.ajax({
-        url: "/finger_joint_proceso/obtenerDetalle/"+id_producto,
+        url: "/finger_joint_proceso/cargar_detalle/"+id,
         type: "GET",
         success: function (result){
             let n = 1;
 
-            result.empaquetado_operacion.forEach(empaquetado_operacion => {
+            result.finger_joint_proceso.forEach(finger_joint_proceso => {
 
                 let productoOptions = '<option value="">--Seleccionar--</option>';
                 let unidadMedidaOptions = '<option value="">--Seleccionar--</option>';
 
                 result.producto.forEach(producto => {
-                    let selected = (producto.id == empaquetado_operacion.id_producto) ? 'selected' : '';
+                    let selected = (producto.id == finger_joint_proceso.id_producto) ? 'selected' : '';
                     productoOptions += `<option value="${producto.id}" ${selected}>${producto.codigo} - ${producto.denominacion}</option>`;
                 });
 
                 result.unidad_medida.forEach(unidad_medida => {
-                    let selected = (unidad_medida.codigo == empaquetado_operacion.id_unidad_medida) ? 'selected' : '';
+                    let selected = (unidad_medida.codigo == finger_joint_proceso.id_unidad_medida) ? 'selected' : '';
                     unidadMedidaOptions += `<option value="${unidad_medida.codigo}" ${selected}>${unidad_medida.denominacion}</option>`;
                 });
 
-                if (empaquetado_operacion.id_producto) {
-                    productosSeleccionados.push(empaquetado_operacion.id_producto);
+                if (finger_joint_proceso.id_producto) {
+                    productosSeleccionados.push(finger_joint_proceso.id_producto);
                 }
                
                 const row = `
                     <tr>
                         <td>${n}</td>
-                        <td style="width: 800px !important;display:block"><input name="id_finger_joint_proceso_detalle[]" id="id_finger_joint_proceso_detalle${n}" class="form-control form-control-sm" value="0" type="hidden"><select name="descripcion_[]" id="descripcion_${n}" class="form-control form-control-sm" onChange="verificarProductoSeleccionado(this, ${n});">${productoOptions}</select><input name="descripcion[]" id="descripcion${n}" class="form-control form-control-sm" value="${empaquetado_operacion.id_producto}" type="hidden"></td>
-                        <td><input name="cod_interno[]" id="cod_interno${n}" class="form-control form-control-sm" value="${empaquetado_operacion.codigo}" type="text"></td>
-                        <td><select name="unidad_[]" id="unidad_${n}" class="form-control form-control-sm">${unidadMedidaOptions}</select><input name="unidad[]" id="unidad${n}" class="form-control form-control-sm" value="${empaquetado_operacion.id_unidad_medida}" type="hidden"></td>
-                        <td><input name="cantidad_ingreso[]" id="cantidad_ingreso${n}" class="form-control form-control-sm" value="${empaquetado_operacion.cantidad}" type="text" data-cantidad-base="${empaquetado_operacion.cantidad}" readonly="readonly"></td>
+                        <td style="width: 800px !important;display:block"><input name="id_finger_joint_proceso_detalle[]" id="id_finger_joint_proceso_detalle${n}" class="form-control form-control-sm" value="0" type="hidden"><select name="descripcion_[]" id="descripcion_${n}" class="form-control form-control-sm" onChange="verificarProductoSeleccionado(this, ${n});">${productoOptions}</select><input name="descripcion[]" id="descripcion${n}" class="form-control form-control-sm" value="${finger_joint_proceso.id_producto}" type="hidden"></td>
+                        <td><input name="cod_interno[]" id="cod_interno${n}" class="form-control form-control-sm" value="${finger_joint_proceso.codigo}" type="text"></td>
+                        <td><select name="unidad_[]" id="unidad_${n}" class="form-control form-control-sm">${unidadMedidaOptions}</select><input name="unidad[]" id="unidad${n}" class="form-control form-control-sm" value="${finger_joint_proceso.id_unidad_medida}" type="hidden"></td>
+                        <td><input name="cantidad_ingreso[]" id="cantidad_ingreso${n}" class="form-control form-control-sm" value="${finger_joint_proceso.cantidad}" type="text" data-cantidad-base="${finger_joint_proceso.cantidad}" readonly="readonly"></td>
                         <td><button type="button" class="btn btn-sm btn-clasico btn-eliminar" onclick="eliminarFila(this)"><i class="fas fa-trash" style="font-size:18px;"></i></button></td>
                     </tr>
                 `;
@@ -446,7 +450,7 @@ function obtenerCodInterno(selectElement, n){
                                     C&oacute;digo de Operaci&oacute;n
                                 </div>
                                 <div class="col-lg-2">
-                                    <input id="codigo_finger" name="codigo_finger" on class="form-control form-control-sm"  value="<?php //if($id>0){echo $finger_joint_proceso->codigo;}?>" type="text" readonly ="readonly">
+                                    <input id="codigo_finger" name="codigo_finger" on class="form-control form-control-sm"  value="<?php if($id>0){echo $finger_joint_proceso->codigo;}?>" type="text" readonly ="readonly">
                                 </div>
                                 <div class="col-lg-2">
                                     Producto

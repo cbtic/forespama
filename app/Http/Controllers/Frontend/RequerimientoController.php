@@ -116,7 +116,6 @@ class RequerimientoController extends Controller
         $persona_model = new Persona;
 		
 		if($id>0){
-
             $requerimiento = Requerimiento::find($id);
 		}else{
 			$requerimiento = new Requerimiento;
@@ -226,6 +225,8 @@ class RequerimientoController extends Controller
                 }
             }
         }
+
+        
 
         return response()->json(['id' => $requerimiento->id]);
     }

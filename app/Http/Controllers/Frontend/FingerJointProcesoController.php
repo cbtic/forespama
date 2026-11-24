@@ -117,6 +117,26 @@ class FingerJointProcesoController extends Controller
 
         $id_finger_joint_proceso = $finger_joint_proceso->id;
 
+        $producto = Producto::find($descripcion[$index]);
+
+        $kardex_buscar = Kardex::where("id_producto",$descripcion[$index])->where("id_almacen_destino",$request->almacen_destino)->orderBy('id', 'desc')->first();
+        $kardex = new Kardex;
+        $kardex->id_producto = $descripcion[$index];
+        $kardex->salidas_cantidad = $cantidad_producto[$index];
+        if($kardex_buscar){
+            $cantidad_saldo = $kardex_buscar->saldos_cantidad - $cantidad_producto[$index];
+            $kardex->saldos_cantidad = $cantidad_saldo;
+        }else{
+            $kardex->saldos_cantidad = $cantidad_producto[$index];
+        }
+        $kardex->id_almacen_destino = $request->almacen_destino;
+        $kardex->fecha = $request->fecha;
+        $kardex->id_usuario_inserta = $id_user;
+        $kardex->id_tipo_movimiento = 32;
+        $kardex->id_movimiento = $finger_joint_proceso->id;
+        $kardex->codigo_movimiento = $finger_joint_proceso->codigo;
+        $kardex->save();
+        
         foreach($descripcion as $index => $value) {
             
             if($id_finger_joint_proceso_detalle[$index] == 0){
@@ -133,6 +153,26 @@ class FingerJointProcesoController extends Controller
             $finger_joint_proceso_detalle->id_usuario_inserta = $id_user;
 
             $finger_joint_proceso_detalle->save();
+
+            $producto = Producto::find($request->producto);
+
+            $kardex_buscar = Kardex::where("id_producto",$request->producto)->where("id_almacen_destino",$request->almacen_destino)->orderBy('id', 'desc')->first();
+            $kardex = new Kardex;
+            $kardex->id_producto = $request->producto;
+            $kardex->entradas_cantidad = $request->cantidad_producto;
+            if($kardex_buscar){
+                $cantidad_saldo = $kardex_buscar->saldos_cantidad + $request->cantidad_producto;
+                $kardex->saldos_cantidad = $cantidad_saldo;
+            }else{
+                $kardex->saldos_cantidad = $request->cantidad_producto;
+            }
+            $kardex->id_almacen_destino = $request->almacen_destino;
+            $kardex->fecha = $request->fecha;
+            $kardex->id_usuario_inserta = $id_user;
+            $kardex->id_tipo_movimiento = 2;
+            $kardex->id_movimiento = $empaquetado_operacion->id;
+            $kardex->codigo_movimiento = $empaquetado_operacion->codigo;
+            $kardex->save();
         }
 
         return response()->json(['success' => 'Registro guardado exitosamente.']);
@@ -149,14 +189,14 @@ class FingerJointProcesoController extends Controller
 		echo $finger_joint_proceso->id;
     }
 
-    public function obtenerDetalle($id_producto)
+    public function cargar_detalle($id)
     {
 
         $finger_joint_model = new FingerJointProceso;
         $producto_model = new Producto;
         $tablaMaestra_model = new TablaMaestra;
 
-        $finger_joint_proceso = $finger_joint_model->getDetalleFingerJointByProducto($id_producto);
+        $finger_joint_proceso = $finger_joint_model->getDetalleFingerJointById($id);
         $producto = $producto_model->getProductoAll();
         $unidad_medida = $tablaMaestra_model->getMaestroByTipo(43);
 

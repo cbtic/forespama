@@ -146,12 +146,22 @@ function datatablenew(){
 
 				{
 				"mRender": function (data, type, row) {
+					var operador = "";
+					if(row.operador!= null)operador = row.operador;
+					return operador;
+				},
+				"bSortable": true,
+				"aTargets": [4]
+				},
+
+				{
+				"mRender": function (data, type, row) {
 					var producto_principal = "";
 					if(row.producto_principal!= null)producto_principal = row.producto_principal;
 					return producto_principal;
 				},
 				"bSortable": true,
-				"aTargets": [4]
+				"aTargets": [5]
 				},
 
 				{
@@ -161,27 +171,7 @@ function datatablenew(){
 					return cantidad_principal;
 				},
 				"bSortable": true,
-				"aTargets": [5]
-				},
-
-				{
-				"mRender": function (data, type, row) {
-					var producto_secundario = "";
-					if(row.producto_secundario!= null)producto_secundario = row.producto_secundario;
-					return producto_secundario;
-				},
-				"bSortable": true,
 				"aTargets": [6]
-				},
-
-				{
-				"mRender": function (data, type, row) {
-					var cantidad_secundario = "";
-					if(row.cantidad_secundario!= null)cantidad_secundario = row.cantidad_secundario;
-					return cantidad_secundario;
-				},
-				"bSortable": true,
-				"aTargets": [7]
 				},
 				
 				{
@@ -196,7 +186,7 @@ function datatablenew(){
 					return estado;
 				},
 				"bSortable": false,
-				"aTargets": [8]
+				"aTargets": [7]
 				},
 				{
 				"mRender": function (data, type, row) {
@@ -222,13 +212,13 @@ function datatablenew(){
 					return html;
 				},
 				"bSortable": false,
-				"aTargets": [9],
+				"aTargets": [8],
 				},
             ]
     });
 }
 
-function fn_ListarBusqueda() {
+function fn_ListarBusqueda(){
     datatablenew();
 };
 

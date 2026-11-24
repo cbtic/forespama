@@ -1111,7 +1111,7 @@ Route::get('finger_joint_proceso/create', [FingerJointProcesoController::class, 
 Route::post('finger_joint_proceso/listar_finger_joint_proceso_ajax', [FingerJointProcesoController::class, 'listar_finger_joint_proceso_ajax'])->name('finger_joint_proceso.listar_finger_joint_proceso_ajax');
 Route::post('finger_joint_proceso/send_finger_joint_proceso', [FingerJointProcesoController::class, 'send_finger_joint_proceso'])->name('finger_joint_proceso.send_finger_joint_proceso');
 Route::get('finger_joint_proceso/modal_finger_joint_proceso/{id}', [FingerJointProcesoController::class, 'modal_finger_joint_proceso'])->name('finger_joint_proceso.modal_finger_joint_proceso');
-
+Route::get('finger_joint_proceso/cargar_detalle/{id_producto}', [FingerJointProcesoController::class, 'cargar_detalle'])->name('finger_joint_proceso.cargar_detalle');
 
 // Rutas para modo desarrollador
 Route::middleware(['auth', 'throttle:5,1'])->group(function () {
